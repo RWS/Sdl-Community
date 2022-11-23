@@ -3,126 +3,181 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:viewModels="clr-namespace:GoogleTranslatorProvider.ViewModels"
-			 xmlns:googleTP="clr-namespace:GoogleTranslatorProvider"
-             xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
+			 xmlns:root="clr-namespace:GoogleTranslatorProvider"
              xmlns:uiHelpers ="clr-namespace:GoogleTranslatorProvider.UiHelpers"
+             xmlns:viewModels="clr-namespace:GoogleTranslatorProvider.ViewModels"
              xmlns:converters ="clr-namespace:GoogleTranslatorProvider.Converters"
+             xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
              d:DataContext="{d:DesignInstance viewModels:ProviderControlViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="850" d:DesignWidth="800">
+             d:DesignHeight="850"
+			 d:DesignWidth="800"
+			 Background="White">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="../Styles/GroupBox.xaml" />
 				<ResourceDictionary Source="../UiHelpers/WatermarkTextBoxResources.xaml" />
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/BindablePasswordBoxStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
-			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter"/>
+
 			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter"/>
+			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter"/>
 		</ResourceDictionary>
 	</UserControl.Resources>
+
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
-		<StackPanel Grid.Row="0">
-			<DockPanel Margin="10,0,0,5">
-				<Button Style="{StaticResource TransparentButtonStyle}"
-						Command="{Binding ShowSettingsCommand}">
-					<DockPanel>
-						<Image Source="../Resources/Setting.png" Width="auto" Height="15"/>
-						<TextBlock Text="{x:Static googleTP:PluginResources.SettingsText}" FontSize="12" Margin="5,0,0,0"/>
-					</DockPanel>
-				</Button>
-			</DockPanel>
-		</StackPanel>
-		<!--Google API Options-->
-		<StackPanel Grid.Row="1">
-			<TextBlock Margin="10,10, 0,5"
-					   Text="{x:Static googleTP:PluginResources.GoogleApiDescription}"/>
-			<ComboBox
-				ItemsSource="{Binding GoogleApiVersions}"
-				SelectedItem="{Binding SelectedGoogleApiVersion}"
-				DisplayMemberPath="Name"
-				HorizontalAlignment="Left"
-				Margin="10, 0,0,5"
-				Width="200"/>
-			<!--Google API V2-->
-			<TextBlock
-				Margin="10,10,0,5"
-				Text="{x:Static googleTP:PluginResources.GoogleApiKeyDescription}"
-				Visibility="{Binding IsV2Checked,Converter={StaticResource InvertableBooleanToVisibilityConverter}}"/>
-			<controls:BindablePasswordBox
-				Visibility="{Binding IsV2Checked,Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-				HorizontalAlignment="Left"
-				Margin="10 0 0 5"
-				Width="400"
-				Style="{DynamicResource Sdl.BindablePasswordBox.GenericStyle}" 
-				Password="{Binding ApiKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
-			<CheckBox
-				IsChecked="{Binding PersistGoogleKey}"
-				Visibility="{Binding IsV2Checked,Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-				Content="{x:Static googleTP:PluginResources.PersistGoogle}"
-				Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-				Margin="10 0"/>
-			<!--Google API V3-->
-			<StackPanel Visibility="{Binding IsV2Checked,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBooleanToVisibilityConverter},ConverterParameter=Inverted}">
-				<TextBlock 
-					Margin="10, 5, 0, 5" 
-					Text="{x:Static googleTP:PluginResources.V3JsonPathDescription}"/>
-				<TextBox Style="{StaticResource WatermarkTextBox}"
-				         uiHelpers:TextBoxWatermarkHelper.WatermarkText="Json file path"
-				         uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="JsonFilePath"
-				         uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-				         Margin="10 0"
-				         Text="{Binding JsonFilePath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-				<TextBlock 
-					Margin="10 10,0,5" 
-					Text="{x:Static googleTP:PluginResources.V3ProjectNameDescription}"/>
-				<TextBox Style="{StaticResource WatermarkTextBox}"
-				         uiHelpers:TextBoxWatermarkHelper.WatermarkText="Project name"
-				         uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="ProjectName"
-				         uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-				         Margin="10 0"
-				         Text="{Binding ProjectName}"/>
-				<TextBlock 
-					Margin="10 10,0,5" 
-					Text="{x:Static googleTP:PluginResources.GoogleProjectLocation}"/>
-				<TextBox Style="{StaticResource WatermarkTextBox}"
-				         uiHelpers:TextBoxWatermarkHelper.WatermarkText="Project location"
-				         uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="ProjectLocation"
-				         uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-				         Margin="10 0"
-				         Text="{Binding ProjectLocation}"/>
-				<TextBlock 
-					Margin="10 10,0,5" 
-					Text="{x:Static googleTP:PluginResources.GoogleEngineModelDescription}"/>
-				<TextBox Style="{StaticResource WatermarkTextBox}"
+		<TextBlock Text="{x:Static root:PluginResources.GoogleApiDescription}"
+				   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
+				   FontSize="14"
+				   DockPanel.Dock="Bottom"
+				   Margin="16 16 0 0"/>
+
+		<GroupBox Header="Google API Version"
+				  Style="{StaticResource DefaultGroupBox}"
+				  Grid.Row="1"
+				  Padding="10"
+				  Margin="10 20">
+			<StackPanel>
+				<!-- API VERSION SELECTOR -->
+				<ComboBox ItemsSource="{Binding GoogleApiVersions}"
+						  SelectedItem="{Binding SelectedGoogleApiVersion}"
+						  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+						  DisplayMemberPath="Name"
+						  HorizontalAlignment="Stretch"
+						  VerticalAlignment="Stretch"
+						  Cursor="Hand"
+						  Width="Auto"/>
+				<!-- API VERSION SELECTOR -->
+
+				<!-- GOOGLE API V2 -->
+				<StackPanel Visibility="{Binding IsV2Checked,Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+							Margin="0 24 0 0">
+					<TextBlock Text="{x:Static root:PluginResources.GoogleApiKeyDescription}"
+							   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
+							   HorizontalAlignment="Left"
+							   Margin="0"/>
+					<controls:BindablePasswordBox Password="{Binding ApiKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+												  Style="{DynamicResource Sdl.BindablePasswordBox.GenericStyle}"
+												  HorizontalAlignment="Left"
+												  Width="290"
+												  Margin="0 4"/>
+					<CheckBox Content="{x:Static root:PluginResources.PersistGoogle}"
+							  IsChecked="{Binding PersistGoogleKey}"
+							  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+							  Cursor="Hand"
+							  Margin="0"/>
+
+					<TextBlock Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
+							   HorizontalAlignment="Right"
+							   VerticalAlignment="Bottom"
+							   Cursor="Hand">
+					<Hyperlink NavigateUri="https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/6547/google-translator-provider/"
+							   Command="{Binding NavigateToCommand}"
+							   CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource Self}}">
+						<TextBlock Text="Learn more about Google V2"
+								   Style="{StaticResource Sdl.TextBlock.InformationTextEmphasisStyle}"
+								   Margin="0"/>
+					</Hyperlink>
+					</TextBlock>
+				</StackPanel>
+				<!-- GOOGLE API V2 -->
+
+				<!-- GOOGLE API V3 -->
+				<StackPanel Visibility="{Binding IsV2Checked,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBooleanToVisibilityConverter},ConverterParameter=Inverted}"
+							Margin="0 16 0 0">
+					<StackPanel HorizontalAlignment="Center">
+						<TextBlock Text="{x:Static root:PluginResources.V3JsonPathDescription}"
+								   Style="{StaticResource Sdl.TextBlock.GenericTitleTextStyle}"/>
+						<Button Content="Browse"
+								Command="{Binding BrowseJsonFileCommand}"
+								Style="{StaticResource Sdl.Button.DialogStyle}"
+								Cursor="Hand"
+								Width="240"/>
+					</StackPanel>
+
+					<GroupBox Header=" Project details " Style="{StaticResource DefaultGroupBox}"
+							  Padding="4"
+							  Margin="0 16 0 8">
+						<StackPanel HorizontalAlignment="Left"
+								Orientation="Vertical"
+								Margin="0 0 0 0">
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Text="Project ID: "
+									   Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"/>
+								<TextBox Text="{Binding ProjectName}"
+										 Style="{StaticResource Sdl.ComboBox.Generic.EditableTextBox}"
+										 TextWrapping="Wrap"
+										 IsReadOnly="True"/>
+							</StackPanel>
+
+							<StackPanel Orientation="Horizontal"
+										Margin="0 3 0 0">
+								<TextBlock Text="Local path: "
+									   Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"/>
+								<TextBox Text="{Binding VisibleJsonPath}"
+										 Style="{StaticResource Sdl.ComboBox.Generic.EditableTextBox}"
+										 TextWrapping="Wrap"
+										 IsReadOnly="True"/>
+							</StackPanel>
+						</StackPanel>
+					</GroupBox>
+
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="Location: "
+								   VerticalAlignment="Center"/>
+						<ComboBox ItemsSource="{Binding Locations}"
+								  SelectedItem="{Binding ProjectL}"
+								  DisplayMemberPath="DisplayName"
+								  IsSynchronizedWithCurrentItem="True"
+								  SelectedIndex="0"
+								  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+								  HorizontalAlignment="Left"
+								  MinWidth="0" Width="160"
+								  Cursor="Hand"/>
+					</StackPanel>
+
+					<StackPanel Orientation="Horizontal"
+								Margin="0 16">
+						<TextBlock Text="AutoML"
+							   VerticalAlignment="Center"
+							   Margin="0 0 9 0"/>
+						<TextBox Text="{Binding GoogleEngineModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						 Style="{StaticResource WatermarkTextBox}"
 				         uiHelpers:TextBoxWatermarkHelper.WatermarkText="Engine name"
 				         uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="GoogleEngineModel"
 				         uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-				         Margin="10 0"
-				         Text="{Binding GoogleEngineModel}"/>
-				<TextBlock 
-					Margin="10 10,0,5" 
-					Text="{x:Static googleTP:PluginResources.V3Glossary}"/>
-				<TextBox Style="{StaticResource WatermarkTextBox}"
+								 Width="160"/>
+					</StackPanel>
+
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="Glossary"
+								   VerticalAlignment="Center"
+								   Margin="0 0 7 0"/>
+						<TextBox Text="{Binding GlossaryPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						 Style="{StaticResource WatermarkTextBox}"
 				         uiHelpers:TextBoxWatermarkHelper.WatermarkText="Glossary Uri"
 				         uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="GlossaryPath"
 				         uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-				         Margin="10 0"
-				         Text="{Binding GlossaryPath}"/>
-				<CheckBox
-					IsChecked="{Binding BasicCsvGlossary}"
-					Content="{x:Static googleTP:PluginResources.UnidirectionalGlossary}"
-					Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-					Margin="10 5"/>
+								 Width="160"/>
+					</StackPanel>
+						<CheckBox  Content="{x:Static root:PluginResources.UnidirectionalGlossary}"
+						   Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+						   IsChecked="{Binding BasicCsvGlossary}"
+								   Margin="0"/>
+				</StackPanel>
+				<!-- GOOGLE API V3 -->
 			</StackPanel>
-		</StackPanel>
+		</GroupBox>
 	</Grid>
 </UserControl>

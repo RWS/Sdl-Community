@@ -1,44 +1,44 @@
-﻿using GoogleTranslatorProvider.Commands;
-using GoogleTranslatorProvider.Interfaces;
-using GoogleTranslatorProvider.Models;
-using NLog;
-using System;
+﻿using System;
 using System.Reflection;
 using System.Windows.Input;
 using System.Xml.Serialization;
+using GoogleTranslatorProvider.Commands;
+using GoogleTranslatorProvider.Interfaces;
+using GoogleTranslatorProvider.Models;
+using GoogleTranslatorProvider.Service;
+using NLog;
 
 namespace GoogleTranslatorProvider.ViewModels
 {
 	public class SettingsControlViewModel : BaseModel, ISettingsControlViewModel
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-		private readonly ITranslationOptions _options;
 		private readonly IOpenFileDialogService _openFileDialogService;
-		private ICommand _clearCommand;
-		private bool _reSendDraft;
-		private bool _sendPlainText;
-		private bool _doPreLookup;
-		private bool _doPostLookup;
+		private readonly ITranslationOptions _options;
+
 		private bool _isTellMeAction;
+		private bool _sendPlainText;
+		private bool _doPostLookup;
+		private bool _doPreLookup;
+		private bool _reSendDraft;
+
 		private string _preLookupFileName;
 		private string _postLookupFileName;
 		private string _errorMessage;
 
-		public SettingsControlViewModel(ITranslationOptions options, IOpenFileDialogService openFileDialogService, bool isTellMeAction)
+		private ICommand _clearCommand;
+		private ICommand _browseCommand;
+
+		public SettingsControlViewModel(ITranslationOptions options, bool isTellMeAction = false)
 		{
 			ViewModel = this;
-			_options = options;
 			IsTellMeAction = isTellMeAction;
-			BrowseCommand = new RelayCommand(Browse);
-			_openFileDialogService = openFileDialogService;
-
+			_options = options;
+			_openFileDialogService = new OpenFileDialogService();
 			SetSavedSettings();
 		}
 
 		public BaseModel ViewModel { get; set; }
-		public ICommand ShowMainWindowCommand { get; set; }
-		public ICommand BrowseCommand { get; set; }
-		public ICommand ShowSettingsCommand { get; set; }
 
 		public bool ReSendDraft
 		{
@@ -73,8 +73,9 @@ namespace GoogleTranslatorProvider.ViewModels
 				_doPreLookup = value;
 				if (!_doPreLookup)
 				{
-					PreLookupFileName = string.Empty;
+					Clear("PreLookupFileName");
 				}
+
 				ErrorMessage = string.Empty;
 				OnPropertyChanged(nameof(DoPreLookup));
 			}
@@ -89,8 +90,9 @@ namespace GoogleTranslatorProvider.ViewModels
 				_doPostLookup = value;
 				if (!_doPostLookup)
 				{
-					PostLookupFileName = string.Empty;
+					Clear("PostLookupFileName");
 				}
+
 				OnPropertyChanged(nameof(DoPostLookup));
 			}
 		}
@@ -142,7 +144,11 @@ namespace GoogleTranslatorProvider.ViewModels
 				OnPropertyChanged(nameof(IsTellMeAction));
 			}
 		}
-		public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new RelayCommand(Clear));
+
+		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
+		public ICommand BrowseCommand => _browseCommand ??= new RelayCommand(Browse);
+		public ICommand ShowSettingsCommand { get; set; }
+		public ICommand ShowMainWindowCommand { get; set; }
 
 		private void SetSavedSettings()
 		{
@@ -156,7 +162,10 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		private void Clear(object obj)
 		{
-			if (!(obj is string objectName)) return;
+			if (obj is not string objectName)
+			{
+				return;
+			}
 
 			switch (objectName)
 			{
@@ -172,35 +181,36 @@ namespace GoogleTranslatorProvider.ViewModels
 		private void Browse(object commandParameter)
 		{
 			ErrorMessage = string.Empty;
-			if (!string.IsNullOrEmpty(commandParameter.ToString()))
+			if (string.IsNullOrEmpty(commandParameter.ToString()))
 			{
-				var selectedFile = _openFileDialogService.ShowDialog("XML Files(*.xml) | *.xml");
-				if (!string.IsNullOrEmpty(selectedFile))
-				{
-					if (commandParameter.Equals(PluginResources.PreLookBrowse))
-					{
-						PreLookupFileName = selectedFile;
-						CheckIfIsValidLookupFile(PreLookupFileName);
-					}
-					if (commandParameter.Equals(PluginResources.PostLookupBrowse))
-					{
-						PostLookupFileName = selectedFile;
-						CheckIfIsValidLookupFile(PostLookupFileName);
-					}
-				}
+				return;
+			}
+
+			var selectedFile = _openFileDialogService.ShowDialog("XML Files(*.xml) | *.xml");
+			if (string.IsNullOrEmpty(selectedFile))
+			{
+				return;
+			}
+
+			if (commandParameter.Equals(PluginResources.PreLookBrowse))
+			{
+				PreLookupFileName = selectedFile;
+				CheckIfIsValidLookupFile(PreLookupFileName);
+			}
+			else if (commandParameter.Equals(PluginResources.PostLookupBrowse))
+			{
+				PostLookupFileName = selectedFile;
+				CheckIfIsValidLookupFile(PostLookupFileName);
 			}
 		}
-
 
 		private void CheckIfIsValidLookupFile(string filePath)
 		{
 			try
 			{
-				using (var reader = new System.IO.StreamReader(filePath))
-				{
-					var serializer = new XmlSerializer(typeof(EditCollection));
-					var edcoll = (EditCollection)serializer.Deserialize(reader);
-				}
+				using var reader = new System.IO.StreamReader(filePath);
+				var serializer = new XmlSerializer(typeof(EditCollection));
+				var edcoll = (EditCollection)serializer.Deserialize(reader);
 			}
 			catch (InvalidOperationException ex) //invalid operation is what happens when the xml can't be parsed into the objects correctly
 			{
@@ -213,6 +223,5 @@ namespace GoogleTranslatorProvider.ViewModels
 				//ErrorMessage = $"{MtProviderConfDialogResources.lookupFileStructureCheckGenericErrorMessage} {exp.Message}";
 			}
 		}
-
 	}
 }

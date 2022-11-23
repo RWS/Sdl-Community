@@ -1,12 +1,15 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Input;
 using GoogleTranslatorProvider.Commands;
 using GoogleTranslatorProvider.GoogleAPI;
 using GoogleTranslatorProvider.Interfaces;
 using GoogleTranslatorProvider.Models;
 using GoogleTranslatorProvider.Service;
+using GoogleTranslatorProvider.Views;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -25,10 +28,21 @@ namespace GoogleTranslatorProvider.ViewModels
 		private readonly HtmlUtil _htmlUtil;
 		
 		private ViewDetails _selectedView;
+
 		private string _translatorErrorResponse;
 		private string _errorMessage;
+		private bool _isSettingsViewSelected;
 		private bool _dialogResult;
 
+		private ICommand _showSettingsViewCommand;
+		private ICommand _showMainViewCommand;
+		private ICommand _saveCommand;
+
+		public ICommand ShowSettingsViewCommand => _showSettingsViewCommand ??= new RelayCommand(ShowSettingsPage);
+
+		public ICommand ShowProviderViewCommand => _showMainViewCommand ??= new RelayCommand(ShowProvidersPage);
+
+		public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save);
 
 		public MainWindowViewModel(ITranslationOptions options,
 								   IProviderControlViewModel providerControlViewModel,
@@ -44,13 +58,8 @@ namespace GoogleTranslatorProvider.ViewModels
 			_languagePairs = languagePairs;
 			_htmlUtil = htmlUtil;
 
-			SaveCommand = new RelayCommand(Save);
-			ShowSettingsViewCommand = new CommandHandler(ShowSettingsPage, true);
-			ShowMainViewCommand = new CommandHandler(ShowProvidersPage, true);
-
-			providerControlViewModel.ShowSettingsCommand = ShowSettingsViewCommand;
 			providerControlViewModel.ClearMessageRaised += ClearMessageRaised;
-			settingsControlViewModel.ShowMainWindowCommand = ShowMainViewCommand;
+			settingsControlViewModel.ShowMainWindowCommand = ShowProviderViewCommand;
 
 			_availableViews = new List<ViewDetails>
 			{
@@ -66,7 +75,7 @@ namespace GoogleTranslatorProvider.ViewModels
 				}
 			};
 
-			ShowProvidersPage();
+			ShowProvidersPage(null);
 		}
 
 		public MainWindowViewModel(ITranslationOptions options, ISettingsControlViewModel settingsControlViewModel, bool isTellMeAction)
@@ -74,7 +83,6 @@ namespace GoogleTranslatorProvider.ViewModels
 			Options = options;
 			_isTellMeAction = isTellMeAction;
 			_settingsControlViewModel = settingsControlViewModel;
-			SaveCommand = new RelayCommand(Save);
 
 			_availableViews = new List<ViewDetails>
 			{
@@ -87,6 +95,7 @@ namespace GoogleTranslatorProvider.ViewModels
 
 			if (_isTellMeAction)
 			{
+				IsSettingsViewSelected = true;
 				SelectedView = _availableViews[0];
 			}
 		}
@@ -117,6 +126,17 @@ namespace GoogleTranslatorProvider.ViewModels
 			}
 		}
 
+		public bool IsSettingsViewSelected
+		{
+			get => _isSettingsViewSelected;
+			set
+			{
+				if (_isSettingsViewSelected == value) return;
+				_isSettingsViewSelected = value;
+				OnPropertyChanged(nameof(IsSettingsViewSelected));
+			}
+		}
+
 		public string ErrorMessage
 		{
 			get => _errorMessage;
@@ -133,7 +153,7 @@ namespace GoogleTranslatorProvider.ViewModels
 			get => _translatorErrorResponse;
 			set
 			{
-				if (_translatorErrorResponse == value) return;
+			if (_translatorErrorResponse == value) return;
 				_translatorErrorResponse = value;
 				OnPropertyChanged(nameof(TranslatorErrorResponse));
 			}
@@ -143,13 +163,6 @@ namespace GoogleTranslatorProvider.ViewModels
 		public delegate void CloseWindowEventRaiser();
 
 		public event CloseWindowEventRaiser CloseEventRaised;
-
-
-		public ICommand ShowSettingsViewCommand { get; set; }
-
-		public ICommand ShowMainViewCommand { get; set; }
-
-		public ICommand SaveCommand { get; set; }
 
 
 		public bool IsWindowValid()
@@ -307,7 +320,7 @@ namespace GoogleTranslatorProvider.ViewModels
 			return true;
 		}
 
-		private void Save(object window)
+		private void Save(object o)
 		{
 			if (_isTellMeAction)
 			{
@@ -342,6 +355,7 @@ namespace GoogleTranslatorProvider.ViewModels
 			Options.GlossaryPath = _providerControlViewModel.GlossaryPath;
 			Options.BasicCsv = _providerControlViewModel.BasicCsvGlossary;
 		}
+
 		private void SetGeneralProviderOptions()
 		{
 			if (_settingsControlViewModel is not null)
@@ -393,14 +407,16 @@ namespace GoogleTranslatorProvider.ViewModels
 			TranslatorErrorResponse = "<html><body></html></body>";
 		}
 
-		private void ShowSettingsPage()
+		private void ShowSettingsPage(object o)
 		{
-			SelectedView = _availableViews[1];
+			IsSettingsViewSelected = true;
+			SelectedView = _availableViews.FirstOrDefault(x => x.ViewModel.GetType() == typeof(SettingsControlViewModel));
 		}
 
-		private void ShowProvidersPage()
+		private void ShowProvidersPage(object o)
 		{
-			SelectedView = _availableViews[0];
+			IsSettingsViewSelected = false;
+			SelectedView = _availableViews.FirstOrDefault(x => x.ViewModel.GetType() == typeof(ProviderControlViewModel));
 		}
 
 		private void AddEncriptionMetaToResponse(string errorMessage)

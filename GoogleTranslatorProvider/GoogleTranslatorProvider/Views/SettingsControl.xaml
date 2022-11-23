@@ -3,13 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:googleTP="clr-namespace:GoogleTranslatorProvider"
+             xmlns:root="clr-namespace:GoogleTranslatorProvider"
+             xmlns:uiHelpers ="clr-namespace:GoogleTranslatorProvider.UiHelpers"
              xmlns:viewModels="clr-namespace:GoogleTranslatorProvider.ViewModels"
              xmlns:converters="clr-namespace:GoogleTranslatorProvider.Converters"
-             xmlns:uiHelpers ="clr-namespace:GoogleTranslatorProvider.UiHelpers"
              d:DataContext="{d:DesignInstance viewModels:SettingsControlViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+			 Background="White">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -31,89 +32,101 @@
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 
-		<!--Grid's allow objects to be placed on top of each other-->
-		<Grid Grid.Row="0">
+		<Grid Grid.Row="0"
+			  Margin="12 24 12 24">
 			<Button Style="{StaticResource TransparentButtonStyle}"
-			        HorizontalAlignment="Left"
 					Visibility="{Binding IsTellMeAction, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
-			        Command="{Binding ShowMainWindowCommand}">
-				<DockPanel>
-					<Image Source="../Resources/backImg.png" Width="auto" Height="15"/>
-					<TextBlock Text="{x:Static googleTP:PluginResources.BackBtnText}" FontSize="12" Margin="5,0,0,0"/>
-				</DockPanel>
+			        Command="{Binding ShowMainWindowCommand}"
+			        HorizontalAlignment="Left">
+				<Image Source="../Resources/backImg.png"
+					   Cursor="Hand"
+					   Height="16"/>
 			</Button>
-			<TextBlock Style="{StaticResource Sdl.TextBlock.TitleStyle}"
-			           Text="{x:Static googleTP:PluginResources.SettingsViewTitle}"
-			           HorizontalAlignment="Center"
-			           FontSize="14"/>
 		</Grid>
-		<StackPanel Grid.Row="1" Margin="10">
-			<CheckBox
-				Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-				IsChecked="{Binding ReSendDraft}"
-				Content="{x:Static googleTP:PluginResources.ReSendDescription}"
-				Margin="10 10"/>
-			<CheckBox
-				Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-				IsChecked="{Binding SendPlainText}"
-				Content="{x:Static googleTP:PluginResources.SendPlainDescription}"
-				Margin="10 10"/>
-			<CheckBox
-				Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-				IsChecked="{Binding DoPreLookup}"
-				Content="{x:Static googleTP:PluginResources.PreLookDescription}"
-				Margin="10 10"/>
-			<DockPanel Margin="10,0,10,0" >
-				<Button 
-					Style="{StaticResource Sdl.Button.DialogStyle}"
-					Content="{x:Static googleTP:PluginResources.BrowseBtn}"
-					Cursor="Hand"
-					Command="{Binding BrowseCommand}"
-					IsEnabled="{Binding DoPreLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
-					CommandParameter="{x:Static googleTP:PluginResources.PreLookBrowse}"
-					Margin="10 0 0 0"
-					DockPanel.Dock="Right"/>
-				<TextBox
-					Style="{StaticResource WatermarkTextBox}"
-					uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static googleTP:PluginResources.PreLookupWaterMark}"
-					uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="PreLookupFileName"
-					uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-					IsEnabled="{Binding DoPreLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
-					Text="{Binding PreLookupFileName}"
-					VerticalContentAlignment="Center"/>
-			</DockPanel>
-			<CheckBox
-				Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-				IsChecked="{Binding DoPostLookup}"
-				Content="{x:Static googleTP:PluginResources.PostLookupDescription}"
-				Margin="10 10"/>
-			<DockPanel Margin="10,0,10,0" >
-				<Button 
-					Style="{StaticResource Sdl.Button.DialogStyle}"
-					Content="{x:Static googleTP:PluginResources.BrowseBtn}"
-					Command="{Binding BrowseCommand}"
-					CommandParameter="{x:Static googleTP:PluginResources.PostLookupBrowse}"
-					IsEnabled="{Binding DoPostLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
-					Cursor="Hand"
-					Margin="10 0 0 0"
-					DockPanel.Dock="Right"/>
-				<TextBox
-					Style="{StaticResource WatermarkTextBox}"
-					uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static googleTP:PluginResources.PostLookupWaterMark}"
-					uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="PostLookupFileName"
-					uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-					Text="{Binding PostLookupFileName}"
-					IsEnabled="{Binding DoPostLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
-					VerticalContentAlignment="Center"/>
-			</DockPanel>
-		</StackPanel>
-		<StackPanel Grid.Row="2">
-			<TextBlock
-				Margin="20 10 10 10"
-				TextWrapping="WrapWithOverflow"
-				Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}"
-				Text="{Binding ErrorMessage, UpdateSourceTrigger=PropertyChanged}"/>
-		</StackPanel>
 
+
+		<GroupBox Grid.Row="1"
+				  Padding="0 12 0 12">
+			<GroupBox.Header>
+				<TextBlock Text="{x:Static root:PluginResources.SettingsViewTitle}"
+						   Style="{StaticResource Sdl.TextBlock.TitleStyle}"
+						   HorizontalAlignment="Center"
+						   Padding="12 0 12 0"
+						   FontSize="14"/>
+			</GroupBox.Header>
+			
+			<StackPanel Margin="24 0 24 0">
+
+				<CheckBox Content="{x:Static root:PluginResources.ReSendDescription}"
+					  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+					  IsChecked="{Binding ReSendDraft}"
+					  Margin="0 0 0 12"/>
+
+				<CheckBox Content="{x:Static root:PluginResources.SendPlainDescription}"
+					  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+					  IsChecked="{Binding SendPlainText}"
+					  Margin="0 0 0 12"/>
+
+				<CheckBox Content="{x:Static root:PluginResources.PreLookDescription}"
+					  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+					  IsChecked="{Binding DoPreLookup}"
+					  Margin="0 0 0 0"/>
+
+				<StackPanel Margin="0 4 0 0"
+							Orientation="Horizontal"
+						   Visibility="{Binding DoPreLookup, Converter={StaticResource InvertableBooleanToVisibilityConverter}}">
+					<TextBox Text="{Binding PreLookupFileName}"
+							 Style="{StaticResource WatermarkTextBox}"
+							 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.PreLookupWaterMark}"
+							 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+							 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="PreLookupFileName"
+							 IsEnabled="{Binding DoPreLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
+							 VerticalContentAlignment="Center"
+							 Width="300"
+							 Margin="0 0 10 0"/>
+					<Button Content="{x:Static root:PluginResources.BrowseBtn}"
+							Style="{StaticResource Sdl.Button.DialogStyle}"
+							Command="{Binding BrowseCommand}"
+							CommandParameter="{x:Static root:PluginResources.PreLookBrowse}"
+							IsEnabled="{Binding DoPreLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
+							DockPanel.Dock="Left"
+							Cursor="Hand"
+							Width="80"/>
+				</StackPanel>
+
+				<CheckBox Content="{x:Static root:PluginResources.PostLookupDescription}"
+						  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+						  IsChecked="{Binding DoPostLookup}"
+						  Margin="0 12 0 4"/>
+				
+				<StackPanel Visibility="{Binding DoPostLookup, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+							Orientation="Horizontal">
+					<TextBox Text="{Binding PostLookupFileName}"
+							 Style="{StaticResource WatermarkTextBox}"
+							 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.PostLookupWaterMark}"
+							 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+							 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="PostLookupFileName"
+							 IsEnabled="{Binding DoPostLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
+							 VerticalContentAlignment="Center"
+							 Width="300"
+							 Margin="0 0 10 0"/>
+					<Button Content="{x:Static root:PluginResources.BrowseBtn}"
+							Style="{StaticResource Sdl.Button.DialogStyle}"
+							Command="{Binding BrowseCommand}"
+							CommandParameter="{x:Static root:PluginResources.PostLookupBrowse}"
+							IsEnabled="{Binding DoPostLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
+							DockPanel.Dock="Right"
+							Cursor="Hand"
+							Width="80"/>
+				</StackPanel>
+				
+			</StackPanel>
+		</GroupBox>
+
+		<StackPanel Grid.Row="2">
+			<TextBlock Text="{Binding ErrorMessage, UpdateSourceTrigger=PropertyChanged}"
+					   Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}"
+					   TextWrapping="WrapWithOverflow"/>
+		</StackPanel>
 	</Grid>
 </UserControl>

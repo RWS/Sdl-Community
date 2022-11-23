@@ -1,21 +1,37 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows.Input;
+using Google.Api.Gax.ResourceNames;
+using Google.Cloud.Translate.V3;
 using GoogleTranslatorProvider.Commands;
+using GoogleTranslatorProvider.Extensions;
 using GoogleTranslatorProvider.Interfaces;
 using GoogleTranslatorProvider.Models;
+using GoogleTranslatorProvider.Service;
+using Newtonsoft.Json;
+using static Google.Rpc.Context.AttributeContext.Types;
+using Path = System.IO.Path;
 
 namespace GoogleTranslatorProvider.ViewModels
 {
 	public class ProviderControlViewModel : BaseModel, IProviderControlViewModel
 	{
 		private readonly ITranslationOptions _options;
+		private readonly IOpenFileDialogService _openFileDialogService;
 
 		private GoogleApiVersion _selectedGoogleApiVersion;
-		private string _googleEngineModel;
+
+		private List<Location> _locations;
 		private string _projectLocation;
+
+		private string _googleEngineModel;
 		private string _glossaryPath;
 		private string _jsonFilePath;
+		private string _visibleJsonPath;
 		private string _projectName;
 		private string _glossaryId;
 		private string _apiKey;
@@ -24,23 +40,18 @@ namespace GoogleTranslatorProvider.ViewModels
 		private bool _basicCsvGlossary;
 		private bool _isTellMeAction;
 
+
 		private ICommand _clearCommand;
+		private ICommand _navigateToCommand;
+		private ICommand _browseJsonFileCommand;
 
 		public ProviderControlViewModel(ITranslationOptions options)
 		{
 			ViewModel = this;
 			_options = options;
+			_openFileDialogService = new OpenFileDialogService();
 			InitializeComponent();
 		}
-
-		////TODO: If is tell me action hide back button(first page) we need to show only the settings page
-		//public ProviderControlViewModel(IMtTranslationOptions options,bool isTellMeAction)
-		//{
-		//	_options = options;
-		//	_isTellMeAction = isTellMeAction;
-		//	InitializeComponent();
-
-		//}
 
 		public BaseModel ViewModel { get; set; }
 
@@ -72,6 +83,14 @@ namespace GoogleTranslatorProvider.ViewModels
 			}
 		}
 
+		public Location ProjectL
+		{
+			set
+			{
+				ProjectLocation = value.Key;
+			}
+		}
+
 		public string GlossaryId
 		{
 			get => _glossaryId;
@@ -95,7 +114,6 @@ namespace GoogleTranslatorProvider.ViewModels
 				ClearMessageRaised?.Invoke();
 			}
 		}
-
 
 		public GoogleApiVersion SelectedGoogleApiVersion
 		{
@@ -138,6 +156,17 @@ namespace GoogleTranslatorProvider.ViewModels
 			}
 		}
 
+		public string VisibleJsonPath
+		{
+			get => _visibleJsonPath;
+			set
+			{
+				if (_visibleJsonPath == value) return;
+				_visibleJsonPath = value;
+				OnPropertyChanged(nameof(VisibleJsonPath));
+			}
+		}
+
 		public string ProjectName
 		{
 			get => _projectName;
@@ -157,6 +186,7 @@ namespace GoogleTranslatorProvider.ViewModels
 			{
 				if (_persistGoogleKey == value) return;
 				_persistGoogleKey = value;
+				_options.PersistGoogleKey = value;
 				OnPropertyChanged(nameof(PersistGoogleKey));
 			}
 		}
@@ -183,9 +213,22 @@ namespace GoogleTranslatorProvider.ViewModels
 			}
 		}
 
+		public List<Location> Locations
+		{
+			get => _locations;
+			set
+			{
+				if (_locations == value) return;
+				_locations = value;
+				OnPropertyChanged(nameof(Locations));
+			}
+		}
+
 		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
 
-		public ICommand ShowSettingsCommand { get; set; }
+		public ICommand NavigateToCommand => _navigateToCommand ??= new RelayCommand(NavigateTo);
+
+		public ICommand BrowseJsonFileCommand => _browseJsonFileCommand ??= new RelayCommand(BrowseJsonFile);
 
 		public event ClearMessageEventRaiser ClearMessageRaised;
 
@@ -214,10 +257,32 @@ namespace GoogleTranslatorProvider.ViewModels
 				}
 			};
 
+			Locations = new List<Location>
+			{
+				new Location()
+				{
+					DisplayName = "Global",
+					Key = "global"
+				},
+
+				new Location()
+				{
+					DisplayName = "Europe",
+					Key = "europe-west1"
+				},
+
+				new Location()
+				{
+					DisplayName = "US",
+					Key = "us-central1"
+				}
+			};
+			ProjectLocation = Locations.First().Key;
+
 			if (_options is not null)
 			{
-				ApiKey = _options.ApiKey;
 				PersistGoogleKey = _options.PersistGoogleKey;
+				ApiKey = PersistGoogleKey ? _options.ApiKey : string.Empty;
 				JsonFilePath = _options.JsonFilePath;
 				ProjectName = _options.ProjectName;
 				GoogleEngineModel = _options.GoogleEngineModel;
@@ -270,9 +335,35 @@ namespace GoogleTranslatorProvider.ViewModels
 			SelectedGoogleApiVersion = GoogleApiVersions[0];
 		}
 
-		private void Clear(object obj)
+		private void BrowseJsonFile(object o)
 		{
-			if (obj is not string objectName) return;
+			var selectedFile = _openFileDialogService.ShowDialog("JSON File|*.json");
+			if (string.IsNullOrEmpty(selectedFile))
+			{
+				return;
+			}
+
+			if (!selectedFile.ToLower().EndsWith(".json"))
+			{
+				return;
+			}
+
+			JsonFilePath = selectedFile;
+			VisibleJsonPath = string.Format(@"...\{0}\{1}",
+				Path.GetFileName(Path.GetDirectoryName(JsonFilePath)),
+				Path.GetFileName(JsonFilePath));
+
+			var json = new StreamReader(JsonFilePath).ReadToEnd();
+			dynamic temp = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+			ProjectName = temp["project_id"];
+		}
+
+		private void Clear(object o)
+		{
+			if (o is not string objectName)
+			{
+				return;
+			}
 
 			switch (objectName)
 			{
@@ -292,6 +383,17 @@ namespace GoogleTranslatorProvider.ViewModels
 					GlossaryPath = string.Empty;
 					break;
 			}
+		}
+
+		private void NavigateTo(object o)
+		{
+			var value = o.ToString().Trim();
+			if (string.IsNullOrEmpty(value))
+			{
+				return;
+			}
+
+			Process.Start(value);
 		}
 	}
 }

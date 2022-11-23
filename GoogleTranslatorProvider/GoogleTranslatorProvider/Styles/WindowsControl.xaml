@@ -3,9 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-			 Background="White">
+             mc:Ignorable="d">
 
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -20,52 +18,41 @@
 			</Style>
 		</ResourceDictionary>
 	</UserControl.Resources>
-	
-	<DockPanel>
-		<Grid DockPanel.Dock="Top"
-			  x:Name="WindowTitleBar"
-			  Background="Transparent"
-			  MouseLeftButtonDown="TitleBarMouseLeftButtonDown">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*" />
-				<ColumnDefinition Width="Auto" />
-			</Grid.ColumnDefinitions>
 
-			<Grid Grid.Column="0">
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="*"/>
-				</Grid.RowDefinitions>
-				
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="Auto" />
-					<ColumnDefinition Width="Auto" />
-					<ColumnDefinition Width="*" />
-				</Grid.ColumnDefinitions>
+	<Grid x:Name="WindowTitleBar"
+		  DockPanel.Dock="Top"
+		  MouseLeftButtonDown="TitleBarMouseLeftButtonDown">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="Auto" />
+		</Grid.ColumnDefinitions>
 
-				<!-- ICON TBD -->
-				<Image Source="../Resources/gtplogo.png"
-					   Grid.Row="1"
-					   Grid.ColumnSpan="3"
-					   HorizontalAlignment="Center"
-					   VerticalAlignment="Top"
-					   Width="450"
-					   Margin="10 20 10 10"/>
-
-				<!-- TITLE -->
-			</Grid>
-
-			<!-- WINDOW COMMAND BUTTONS -->
-			<Button Style="{StaticResource WindowControlButtonStyle}" x:Name="CloseButton" Width="34" Height="26"
-                            ToolTip="Close"  
-                            IsEnabled="True" Click="CloseButton_OnClick"
-						Grid.Row="0"
-					HorizontalAlignment="Right"
-					VerticalAlignment="Top">
-				<Path SnapsToDevicePixels="True"
-                            Data="M 10.009,1.704 L 8.331,0.026 5.03,3.327 1.703,0 0,1.704 3.326,5.031 0.025,8.332 1.703,10.009 5.004,6.708 8.305,10.009 10.009,8.305 6.708,5.005"
-                            Fill="{Binding Foreground, ElementName=CloseButton}" />
-			</Button>
+		<Grid Grid.Column="0">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
 		</Grid>
-	</DockPanel>
+
+		<Button x:Name="CloseButton"
+				Click="CloseButton_OnClick"
+				Style="{StaticResource TransparentButtonStyle}"
+				ToolTip="Close"  
+				IsEnabled="True"
+				Grid.Row="0"
+				HorizontalAlignment="Right"
+				VerticalAlignment="Top"
+				Margin="0 10 10 0">
+			<Path SnapsToDevicePixels="True"
+				  Data="M 10.009,1.704 L 8.331,0.026 5.03,3.327 1.703,0 0,1.704 3.326,5.031 0.025,8.332 1.703,10.009 5.004,6.708 8.305,10.009 10.009,8.305 6.708,5.005"
+				  Fill="{Binding Foreground, ElementName=CloseButton}" />
+		</Button>
+
+		<DockPanel Grid.Row="1">
+			<Image Source="../Resources/GoogleTranslatorProvider.png"
+				   DockPanel.Dock="Top"
+				   Width="450"
+				   Margin="0 20 0 0"/>
+		</DockPanel>
+	</Grid>
 </UserControl>
