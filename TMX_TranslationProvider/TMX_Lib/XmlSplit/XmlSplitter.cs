@@ -23,7 +23,7 @@ namespace TMX_Lib.XmlSplit
 		// in that case, we simply need a few extra bytes, so that the last UTF8 char is fully read
 		private int PAD_EXTRA = 128;
 
-		public int SplitSize = 2 * 1024 * 1024;
+		public int SplitSize = 64 * 1024 * 1024;
 
 		private XmlDocument _document;
 
