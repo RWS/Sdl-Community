@@ -11,7 +11,6 @@ namespace GoogleTranslatorProvider.Helpers
 		public static void Setup()
 		{
 			LogManager.Configuration ??= new LoggingConfiguration();
-
 			var logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), PluginResources.LogsFolderPath, PluginResources.AppLogFolder);
 			if (!Directory.Exists(logPath))
 			{

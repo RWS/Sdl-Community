@@ -14,7 +14,6 @@
     <None Remove="Resources\Download.ico" />
     <None Remove="Resources\ForumIcon.ico" />
     <None Remove="Resources\GoogleTranslatorProvider.png" />
-    <None Remove="Resources\microsoft_image.png" />
     <None Remove="Resources\my_icon.ico" />
     <None Remove="Resources\my_image.png" />
     <None Remove="Resources\Question.ico" />
@@ -110,7 +109,6 @@
     <Resource Include="Resources\Download.ico" />
     <Resource Include="Resources\ForumIcon.ico" />
     <Resource Include="Resources\GoogleTranslatorProvider.png" />
-    <Resource Include="Resources\microsoft_image.png" />
     <Resource Include="Resources\my_icon.ico" />
     <Resource Include="Resources\my_image.png" />
     <Resource Include="Resources\Question.ico" />

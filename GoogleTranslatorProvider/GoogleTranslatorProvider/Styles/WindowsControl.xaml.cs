@@ -14,37 +14,47 @@ namespace GoogleTranslatorProvider.Styles
 		/// <summary>
 		///     Identifies the <see cref="ControlHelp" /> property.
 		/// </summary>
-		public static readonly DependencyProperty HelpProperty =
-			DependencyProperty.Register("ControlHelp", typeof(string), typeof(WindowsControl),
-				new PropertyMetadata(string.Empty));
+		public static readonly DependencyProperty HelpProperty = DependencyProperty.Register(
+			"ControlHelp",
+			typeof(string),
+			typeof(WindowsControl),
+			new PropertyMetadata(string.Empty));
 
 		/// <summary>
 		///     Identifies the <see cref="ControlClose" /> property.
 		/// </summary>
-		public static readonly DependencyProperty CloseProperty =
-			DependencyProperty.Register("ControlClose", typeof(string), typeof(WindowsControl),
-				new PropertyMetadata(string.Empty));
+		public static readonly DependencyProperty CloseProperty = DependencyProperty.Register(
+			"ControlClose",
+			typeof(string),
+			typeof(WindowsControl),
+			new PropertyMetadata(string.Empty));
 
 		/// <summary>
 		///     Identifies the <see cref="ControlMaximize" /> property.
 		/// </summary>
-		public static readonly DependencyProperty MaximizeProperty =
-			DependencyProperty.Register("ControlMaximize", typeof(string), typeof(WindowsControl),
-				new PropertyMetadata(string.Empty));
+		public static readonly DependencyProperty MaximizeProperty = DependencyProperty.Register(
+			"ControlMaximize",
+			typeof(string),
+			typeof(WindowsControl),
+			new PropertyMetadata(string.Empty));
 
 		/// <summary>
 		///     Identifies the <see cref="ControlMinimize" /> property.
 		/// </summary>
-		public static readonly DependencyProperty MinimizeProperty =
-			DependencyProperty.Register("ControlMinimize", typeof(string), typeof(WindowsControl),
-				new PropertyMetadata(string.Empty));
+		public static readonly DependencyProperty MinimizeProperty = DependencyProperty.Register(
+			"ControlMinimize",
+			typeof(string),
+			typeof(WindowsControl),
+			new PropertyMetadata(string.Empty));
 
 		/// <summary>
 		///     Identifies the <see cref="ControlRestore" /> property.
 		/// </summary>
-		public static readonly DependencyProperty RestoreProperty =
-			DependencyProperty.Register("ControlRestore", typeof(string), typeof(WindowsControl),
-				new PropertyMetadata(string.Empty));
+		public static readonly DependencyProperty RestoreProperty = DependencyProperty.Register(
+			"ControlRestore",
+			typeof(string),
+			typeof(WindowsControl),
+			new PropertyMetadata(string.Empty));
 
 
 		/// <summary>
@@ -95,22 +105,18 @@ namespace GoogleTranslatorProvider.Styles
 		public WindowsControl()
 		{
 			InitializeComponent();
-
 			Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() =>
 			{
 				if (string.IsNullOrWhiteSpace(ControlClose))
+				{
 					ControlClose = PluginResources.WindowsControl_Close;
+				}
 			}));
 		}
 
 		private void CloseButton_OnClick(object sender, RoutedEventArgs e)
 		{
 			sender.ForWindowFromFrameworkElement(w => w.Close());
-		}
-
-		private void MinButton_Click(object sender, RoutedEventArgs e)
-		{
-			sender.ForWindowFromFrameworkElement(w => w.WindowState = WindowState.Minimized);
 		}
 
 		private void MaxButton_Click(object sender, RoutedEventArgs e)

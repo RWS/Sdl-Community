@@ -93,7 +93,6 @@ namespace GoogleTranslatorProvider.Studio
 			mainWindowViewModel.CloseEventRaised += () =>
 			{
 				UpdateProviderCredentials(credentialStore, loadOptions);
-
 				mainWindow.Close();
 			};
 

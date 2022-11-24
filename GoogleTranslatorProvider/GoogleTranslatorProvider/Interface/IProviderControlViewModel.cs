@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Input;
 using GoogleTranslatorProvider.Models;
 
 namespace GoogleTranslatorProvider.Interfaces
@@ -10,35 +9,39 @@ namespace GoogleTranslatorProvider.Interfaces
 	{
 		BaseModel ViewModel { get; set; }
 
-		TranslationOption SelectedTranslationOption { get; }
-
 		List<TranslationOption> TranslationOptions { get; set; }
+
+		TranslationOption SelectedTranslationOption { get; }
 
 		List<GoogleApiVersion> GoogleApiVersions { get; set; }
 
-		GoogleApiVersion SelectedGoogleApiVersion { get; set; }
+		GoogleApiVersion SelectedGoogleApiVersion { get; }
 
-		bool IsV2Checked { get; }
+		bool BasicCsvGlossary { get; set; }
 
 		bool PersistGoogleKey { get; set; }
 
 		bool IsTellMeAction { get; set; }
 
-		string ApiKey { get; set; }
+		bool IsV2Checked { get; }
+
+		string GoogleEngineModel { get; set; }
+
+		string VisibleJsonPath { get; set; }
 
 		string JsonFilePath { get; set; }
 
 		string ProjectName { get; set; }
 
-		string GoogleEngineModel { get; set; }
+		string ApiKey { get; set; }
 
 		string ProjectLocation { get; set; }
 
-		string GlossaryId { get; set; }
+		ProjectLocation SelectedLocation { set; }
 
 		string GlossaryPath { get; set; }
 
-		bool BasicCsvGlossary { get; set; }
+		string GlossaryId { get; set; }
 
 		event ClearMessageEventRaiser ClearMessageRaised;
 	}

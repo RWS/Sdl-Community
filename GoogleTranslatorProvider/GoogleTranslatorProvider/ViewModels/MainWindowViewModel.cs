@@ -38,12 +38,6 @@ namespace GoogleTranslatorProvider.ViewModels
 		private ICommand _showMainViewCommand;
 		private ICommand _saveCommand;
 
-		public ICommand ShowSettingsViewCommand => _showSettingsViewCommand ??= new RelayCommand(ShowSettingsPage);
-
-		public ICommand ShowProviderViewCommand => _showMainViewCommand ??= new RelayCommand(ShowProvidersPage);
-
-		public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save);
-
 		public MainWindowViewModel(ITranslationOptions options,
 								   IProviderControlViewModel providerControlViewModel,
 								   ISettingsControlViewModel settingsControlViewModel,
@@ -153,12 +147,17 @@ namespace GoogleTranslatorProvider.ViewModels
 			get => _translatorErrorResponse;
 			set
 			{
-			if (_translatorErrorResponse == value) return;
+				if (_translatorErrorResponse == value) return;
 				_translatorErrorResponse = value;
 				OnPropertyChanged(nameof(TranslatorErrorResponse));
 			}
 		}
 
+		public ICommand ShowSettingsViewCommand => _showSettingsViewCommand ??= new RelayCommand(ShowSettingsPage);
+
+		public ICommand ShowProviderViewCommand => _showMainViewCommand ??= new RelayCommand(ShowProvidersPage);
+
+		public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save);
 
 		public delegate void CloseWindowEventRaiser();
 

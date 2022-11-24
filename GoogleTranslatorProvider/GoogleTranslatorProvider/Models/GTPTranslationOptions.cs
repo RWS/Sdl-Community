@@ -10,7 +10,6 @@ namespace GoogleTranslatorProvider.Models
 	public class GTPTranslationOptions : ITranslationOptions
 	{
 		private readonly TranslationProviderUriBuilder _uriBuilder;
-		public static readonly TranslationMethod ProviderTranslationMethod = TranslationMethod.MachineTranslation;
 		private string _apiKey;
 
 		public GTPTranslationOptions(Uri uri = null)
@@ -19,64 +18,45 @@ namespace GoogleTranslatorProvider.Models
 									  : new TranslationProviderUriBuilder(uri);
 		}
 
+		[JsonIgnore]
 		public Dictionary<string, string> LanguagesSupported { get; set; }
 
 		[JsonIgnore]
-		private string sendPlainTextOnly
+		public bool PersistGoogleKey { get; set; }
+
+		[JsonIgnore]
+		public bool SendPlainTextOnly
 		{
-			get => GetStringParameter("sendplaintextonly");
-			set => SetStringParameter("sendplaintextonly", value);
+			get => ToBoolean(GetStringParameter("sendplaintextonly"));
+			set => SetStringParameter("sendplaintextonly", value.ToString());
 		}
 
 		[JsonIgnore]
-		public string resendDrafts
+		public bool ResendDrafts
 		{
-			get => GetStringParameter("resenddrafts");
-			set => SetStringParameter("resenddrafts", value);
+			get => ToBoolean(GetStringParameter("resenddrafts")); 
+			set => SetStringParameter("resenddrafts", value.ToString());
+		}
+
+		[JsonIgnore]
+		public bool UsePostEdit
+		{
+			get => ToBoolean(GetStringParameter("usepostedit"));
+			set => SetStringParameter("usepostedit", value.ToString());
 		}
 
 		[JsonIgnore]
 		public bool UsePreEdit
 		{
-			get => ToBoolean(usePreEdit);
-			set => usePreEdit = value.ToString();
+			get => ToBoolean(GetStringParameter("usepreedit"));
+			set => SetStringParameter("usepreedit", value.ToString());
 		}
-		[JsonIgnore]
-		public bool UsePostEdit
-		{
-			get => ToBoolean(usePostEdit);
-			set => usePostEdit = value.ToString();
-		}
+
 		[JsonIgnore]
 		public bool BasicCsv
 		{
-			get => ToBoolean(SimpleCsv);
-			set => SimpleCsv = value.ToString();
-		}
-
-		[JsonIgnore]
-		private string usePreEdit
-		{
-			get => GetStringParameter("usepreedit");
-			set => SetStringParameter("usepreedit", value);
-		}
-		[JsonIgnore]
-		private string usePostEdit
-		{
-			get => GetStringParameter("usepostedit");
-			set => SetStringParameter("usepostedit", value);
-		}
-		[JsonIgnore]
-		public string PreLookupFilename
-		{
-			get => GetStringParameter("prelookupfilename");
-			set => SetStringParameter("prelookupfilename", value);
-		}
-
-		public string SimpleCsv
-		{
-			get => GetStringParameter("basiccsv");
-			set => SetStringParameter("basiccsv", value);
+			get => ToBoolean(GetStringParameter("basiccsv"));
+			set => SetStringParameter("basiccsv", value.ToString());
 		}
 
 		[JsonIgnore]
@@ -85,24 +65,12 @@ namespace GoogleTranslatorProvider.Models
 			get => GetStringParameter("postlookupfilename");
 			set => SetStringParameter("postlookupfilename", value);
 		}
-		[JsonIgnore]
-		public string JsonFilePath
-		{
-			get => GetStringParameter("jsonfilepath");
-			set => SetStringParameter("jsonfilepath", value);
-		}
-		[JsonIgnore]
-		public string ProjectName
-		{
-			get => GetStringParameter("projectname");
-			set => SetStringParameter("projectname", value);
-		}
 
 		[JsonIgnore]
-		public string GlossaryPath
+		public string PreLookupFilename
 		{
-			get => GetStringParameter("glossarypath");
-			set => SetStringParameter("glossarypath", value);
+			get => GetStringParameter("prelookupfilename");
+			set => SetStringParameter("prelookupfilename", value);
 		}
 
 		[JsonIgnore]
@@ -119,23 +87,36 @@ namespace GoogleTranslatorProvider.Models
 			set => SetStringParameter("projectlocation", value);
 		}
 
-		public static string GetProviderTypeDescription(ProviderType type)
+		[JsonIgnore]
+		public string JsonFilePath
 		{
-			return type switch
-			{
-				ProviderType.GoogleTranslate => Constants.GoogleTranslatorString,
-				_ => string.Empty
-			};
+			get => GetStringParameter("jsonfilepath");
+			set => SetStringParameter("jsonfilepath", value);
 		}
 
-		public static ProviderType GetProviderType(string typeString)
+		[JsonIgnore]
+		public string GlossaryPath
 		{
-			return typeString switch
-			{
-				Constants.GoogleTranslatorString => ProviderType.GoogleTranslate,
-				_ => ProviderType.None
-			};
+			get => GetStringParameter("glossarypath");
+			set => SetStringParameter("glossarypath", value);
 		}
+
+		[JsonIgnore]
+		public string ProjectName
+		{
+			get => GetStringParameter("projectname");
+			set => SetStringParameter("projectname", value);
+		}
+
+		[JsonIgnore]
+		public string ApiKey
+		{
+			get => _apiKey;
+			set => _apiKey = value;
+		}
+
+		[JsonIgnore]
+		public Uri Uri => _uriBuilder.Uri;
 
 		[JsonIgnore]
 		public ProviderType SelectedProvider
@@ -152,71 +133,44 @@ namespace GoogleTranslatorProvider.Models
 		public ApiVersion SelectedGoogleVersion
 		{
 			get => GetProviderGoogleApiVersion(GetStringParameter("selectedgoogleversion"));
-			set
+			set => SetStringParameter("selectedgoogleversion", GetProviderTypeDescription(value));
+		}
+
+
+		private string GetProviderTypeDescription(ProviderType type)
+		{
+			return type switch
 			{
-				var typestring = GetProviderTypeDescription(value);
-				SetStringParameter("selectedgoogleversion", typestring);
-			}
+				ProviderType.GoogleTranslate => Constants.GoogleTranslatorString,
+				_ => string.Empty
+			};
 		}
 
-		public static string GetProviderTypeDescription(ApiVersion googleVersion)
+		private static ProviderType GetProviderType(string typeString)
 		{
-			switch (googleVersion)
+			return typeString switch
 			{
-				case ApiVersion.V2:
-					return "V2";
-				case ApiVersion.V3:
-					return "V3";
-			}
-			return "V2";
+				Constants.GoogleTranslatorString => ProviderType.GoogleTranslate,
+				_ => ProviderType.None
+			};
 		}
 
-		public static ApiVersion GetProviderGoogleApiVersion(string version)
+		private static string GetProviderTypeDescription(ApiVersion googleVersion)
 		{
-			switch (version)
+			return googleVersion switch
 			{
-				case "V3":
-					return ApiVersion.V3;
-				default:
-					return ApiVersion.V2;
-			}
+				ApiVersion.V3 => "V3",
+				_ => "V2",
+			};
 		}
 
-		[JsonIgnore]
-		//User for Google authentication
-		//The apiKey is going to be held in a static variable so we don't have to get it from credential store all the time
-		public string ApiKey
+		private static ApiVersion GetProviderGoogleApiVersion(string version)
 		{
-			get => _apiKey;
-			set => _apiKey = value;
-		}
-
-		[JsonIgnore]
-		public string Region
-		{
-			get => GetStringParameter("region");
-			set => SetStringParameter("region", value);
-		}
-
-		[JsonIgnore]
-		public bool PersistGoogleKey
-		{
-			get;
-			set;
-		}
-
-		[JsonIgnore]
-		public bool ResendDrafts //we'll access this from other classes..converting to and from string for purposes of our uri setter/getter above
-		{
-			get => ToBoolean(resendDrafts);
-			set => resendDrafts = value.ToString();
-		}
-
-		[JsonIgnore]
-		public bool SendPlainTextOnly //we'll access this from other classes..converting to and from string for purposes of our uri setter/getter above
-		{
-			get => ToBoolean(sendPlainTextOnly);
-			set => sendPlainTextOnly = value.ToString();
+			return version switch
+			{
+				"V3" => ApiVersion.V3,
+				_ => ApiVersion.V2,
+			};
 		}
 
 		private void SetStringParameter(string p, string value)
@@ -226,21 +180,7 @@ namespace GoogleTranslatorProvider.Models
 
 		private string GetStringParameter(string p)
 		{
-			var paramString = _uriBuilder[p];
-			return paramString;
-		}
-
-		[JsonIgnore]
-		public Uri Uri => _uriBuilder.Uri;
-
-		ApiVersion ITranslationOptions.SelectedGoogleVersion
-		{
-			get => GetProviderGoogleApiVersion(GetStringParameter("selectedgoogleversion"));
-			set
-			{
-				var typestring = GetProviderTypeDescription(value);
-				SetStringParameter("selectedgoogleversion", typestring);
-			}
+			return _uriBuilder[p];
 		}
 	}
 }

@@ -137,7 +137,7 @@
 						<TextBlock Text="Location: "
 								   VerticalAlignment="Center"/>
 						<ComboBox ItemsSource="{Binding Locations}"
-								  SelectedItem="{Binding ProjectL}"
+								  SelectedItem="{Binding SelectedLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 								  DisplayMemberPath="DisplayName"
 								  IsSynchronizedWithCurrentItem="True"
 								  SelectedIndex="0"

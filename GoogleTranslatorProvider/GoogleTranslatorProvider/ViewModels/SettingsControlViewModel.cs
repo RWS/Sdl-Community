@@ -105,7 +105,6 @@ namespace GoogleTranslatorProvider.ViewModels
 				if (_preLookupFileName == value) return;
 				_preLookupFileName = value;
 				ErrorMessage = string.Empty;
-
 				OnPropertyChanged(nameof(PreLookupFileName));
 			}
 		}
@@ -212,7 +211,7 @@ namespace GoogleTranslatorProvider.ViewModels
 				var serializer = new XmlSerializer(typeof(EditCollection));
 				var edcoll = (EditCollection)serializer.Deserialize(reader);
 			}
-			catch (InvalidOperationException ex) //invalid operation is what happens when the xml can't be parsed into the objects correctly
+			catch (InvalidOperationException e) //invalid operation is what happens when the xml can't be parsed into the objects correctly
 			{
 				var fileName = System.IO.Path.GetFileName(filePath);
 				//ErrorMessage = $"{MtProviderConfDialogResources.lookupFileStructureCheckErrorCaption} {fileName}";

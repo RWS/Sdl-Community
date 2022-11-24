@@ -51,7 +51,7 @@ namespace GoogleTranslatorProvider.Studio
 		{
 			return new TranslationProviderInfo
 			{
-				TranslationMethod = GTPTranslationOptions.ProviderTranslationMethod,
+				TranslationMethod = TranslationMethod.MachineTranslation,
 				Name = PluginResources.Plugin_NiceName
 			};
 		}

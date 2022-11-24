@@ -49,7 +49,6 @@ namespace GoogleTranslatorProvider.TellMe
 			var settingsControlViewModel = new SettingsControlViewModel(translationOptions, true);
 			var mainWindowViewModel = new MainWindowViewModel(translationOptions, settingsControlViewModel, true);
 			var mainWindow = new MainWindow { DataContext = mainWindowViewModel };
-
 			mainWindowViewModel.CloseEventRaised += () =>
 			{
 				settings.Entries

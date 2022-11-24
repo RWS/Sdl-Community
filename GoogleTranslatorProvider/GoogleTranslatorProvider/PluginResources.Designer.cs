@@ -433,16 +433,6 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap microsoft_image {
-            get {
-                object obj = ResourceManager.GetObject("microsoft_image", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to MT Enhanced using Microsoft Translator.
         /// </summary>
         public static string Microsoft_Name {

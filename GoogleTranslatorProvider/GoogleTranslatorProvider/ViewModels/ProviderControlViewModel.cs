@@ -1,31 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
-using Google.Api.Gax.ResourceNames;
-using Google.Cloud.Translate.V3;
 using GoogleTranslatorProvider.Commands;
-using GoogleTranslatorProvider.Extensions;
 using GoogleTranslatorProvider.Interfaces;
 using GoogleTranslatorProvider.Models;
 using GoogleTranslatorProvider.Service;
 using Newtonsoft.Json;
-using static Google.Rpc.Context.AttributeContext.Types;
 using Path = System.IO.Path;
 
 namespace GoogleTranslatorProvider.ViewModels
 {
 	public class ProviderControlViewModel : BaseModel, IProviderControlViewModel
 	{
-		private readonly ITranslationOptions _options;
 		private readonly IOpenFileDialogService _openFileDialogService;
+		private readonly ITranslationOptions _options;
 
 		private GoogleApiVersion _selectedGoogleApiVersion;
-
-		private List<Location> _locations;
+		private List<ProjectLocation> _locations;
 		private string _projectLocation;
 
 		private string _googleEngineModel;
@@ -40,8 +33,6 @@ namespace GoogleTranslatorProvider.ViewModels
 		private bool _basicCsvGlossary;
 		private bool _isTellMeAction;
 
-
-		private ICommand _clearCommand;
 		private ICommand _navigateToCommand;
 		private ICommand _browseJsonFileCommand;
 
@@ -55,9 +46,72 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		public BaseModel ViewModel { get; set; }
 
+		public List<TranslationOption> TranslationOptions { get; set; }
+
+		public TranslationOption SelectedTranslationOption => TranslationOptions[0];
+
 		public List<GoogleApiVersion> GoogleApiVersions { get; set; }
 
-		public List<TranslationOption> TranslationOptions { get; set; }
+		public GoogleApiVersion SelectedGoogleApiVersion
+		{
+			get => _selectedGoogleApiVersion;
+			set
+			{
+				if (_selectedGoogleApiVersion == value) return;
+				_selectedGoogleApiVersion = value;
+				OnPropertyChanged(nameof(SelectedGoogleApiVersion));
+				OnPropertyChanged(nameof(IsV2Checked));
+				ClearMessageRaised?.Invoke();
+			}
+		}
+
+		public List<ProjectLocation> Locations
+		{
+			get => _locations;
+			set
+			{
+				if (_locations == value) return;
+				_locations = value;
+				OnPropertyChanged(nameof(Locations));
+				SelectedLocation = value.FirstOrDefault();
+			}
+		}
+
+		public bool BasicCsvGlossary
+		{
+			get => _basicCsvGlossary;
+			set
+			{
+				if (_basicCsvGlossary == value) return;
+				_basicCsvGlossary = value;
+				OnPropertyChanged(nameof(BasicCsvGlossary));
+			}
+		}
+
+		public bool PersistGoogleKey
+		{
+			get => _persistGoogleKey;
+			set
+			{
+				if (_persistGoogleKey == value) return;
+				_persistGoogleKey = value;
+				OnPropertyChanged(nameof(PersistGoogleKey));
+				_options.PersistGoogleKey = value;
+			}
+		}
+		
+		public bool IsTellMeAction
+		{
+			get => _isTellMeAction;
+			set
+			{
+				if (_isTellMeAction == value) return;
+				_isTellMeAction = value;
+				OnPropertyChanged(nameof(IsTellMeAction));
+			}
+		}
+
+		public bool IsV2Checked => SelectedGoogleApiVersion.Version == ApiVersion.V2;
 
 		public string GoogleEngineModel
 		{
@@ -71,6 +125,62 @@ namespace GoogleTranslatorProvider.ViewModels
 			}
 		}
 
+		public string VisibleJsonPath
+		{
+			get => _visibleJsonPath;
+			set
+			{
+				if (_visibleJsonPath == value) return;
+				_visibleJsonPath = value;
+				OnPropertyChanged(nameof(VisibleJsonPath));
+			}
+		}
+
+		public string JsonFilePath
+		{
+			get => _jsonFilePath;
+			set
+			{
+				if (_jsonFilePath == value) return;
+				_jsonFilePath = value;
+				OnPropertyChanged(nameof(JsonFilePath));
+				ClearMessageRaised?.Invoke();
+			}
+		}
+
+		public string ProjectName
+		{
+			get => _projectName;
+			set
+			{
+				if (_projectName == value) return;
+				_projectName = value;
+				OnPropertyChanged(nameof(ProjectName));
+				ClearMessageRaised?.Invoke();
+			}
+		}
+
+		public string ApiKey
+		{
+			get => _apiKey;
+			set
+			{
+				if (_apiKey == value) return;
+				_apiKey = value.Trim();
+				OnPropertyChanged(nameof(ApiKey));
+				ClearMessageRaised?.Invoke();
+			}
+		}
+
+		public ProjectLocation SelectedLocation
+		{
+			set
+			{
+				ProjectLocation = value.Key;
+				OnPropertyChanged(nameof(SelectedLocation));
+			}
+		}
+
 		public string ProjectLocation
 		{
 			get => _projectLocation;
@@ -79,26 +189,6 @@ namespace GoogleTranslatorProvider.ViewModels
 				if (_projectLocation == value) return;
 				_projectLocation = value;
 				OnPropertyChanged(nameof(ProjectLocation));
-				ClearMessageRaised?.Invoke();
-			}
-		}
-
-		public Location ProjectL
-		{
-			set
-			{
-				ProjectLocation = value.Key;
-			}
-		}
-
-		public string GlossaryId
-		{
-			get => _glossaryId;
-			set
-			{
-				if (_glossaryId == value) return;
-				_glossaryId = value;
-				OnPropertyChanged(nameof(GlossaryId));
 				ClearMessageRaised?.Invoke();
 			}
 		}
@@ -115,116 +205,17 @@ namespace GoogleTranslatorProvider.ViewModels
 			}
 		}
 
-		public GoogleApiVersion SelectedGoogleApiVersion
+		public string GlossaryId
 		{
-			get => _selectedGoogleApiVersion;
+			get => _glossaryId;
 			set
 			{
-				if (_selectedGoogleApiVersion == value) return;
-				_selectedGoogleApiVersion = value;
-				OnPropertyChanged(nameof(SelectedGoogleApiVersion));
-				OnPropertyChanged(nameof(IsV2Checked));
+				if (_glossaryId == value) return;
+				_glossaryId = value;
+				OnPropertyChanged(nameof(GlossaryId));
 				ClearMessageRaised?.Invoke();
 			}
 		}
-
-		public TranslationOption SelectedTranslationOption => TranslationOptions[0];
-
-		public bool IsV2Checked => SelectedGoogleApiVersion.Version == ApiVersion.V2;
-
-		public string ApiKey
-		{
-			get => _apiKey;
-			set
-			{
-				if (_apiKey == value) return;
-				_apiKey = value.Trim();
-				OnPropertyChanged(nameof(ApiKey));
-				ClearMessageRaised?.Invoke();
-			}
-		}
-
-		public string JsonFilePath
-		{
-			get => _jsonFilePath;
-			set
-			{
-				if (_jsonFilePath == value) return;
-				_jsonFilePath = value;
-				OnPropertyChanged(nameof(JsonFilePath));
-				ClearMessageRaised?.Invoke();
-			}
-		}
-
-		public string VisibleJsonPath
-		{
-			get => _visibleJsonPath;
-			set
-			{
-				if (_visibleJsonPath == value) return;
-				_visibleJsonPath = value;
-				OnPropertyChanged(nameof(VisibleJsonPath));
-			}
-		}
-
-		public string ProjectName
-		{
-			get => _projectName;
-			set
-			{
-				if (_projectName == value) return;
-				_projectName = value;
-				OnPropertyChanged(nameof(ProjectName));
-				ClearMessageRaised?.Invoke();
-			}
-		}
-
-		public bool PersistGoogleKey
-		{
-			get => _persistGoogleKey;
-			set
-			{
-				if (_persistGoogleKey == value) return;
-				_persistGoogleKey = value;
-				_options.PersistGoogleKey = value;
-				OnPropertyChanged(nameof(PersistGoogleKey));
-			}
-		}
-
-		public bool IsTellMeAction
-		{
-			get => _isTellMeAction;
-			set
-			{
-				if (_isTellMeAction == value) return;
-				_isTellMeAction = value;
-				OnPropertyChanged(nameof(IsTellMeAction));
-			}
-		}
-
-		public bool BasicCsvGlossary
-		{
-			get => _basicCsvGlossary;
-			set
-			{
-				if (_basicCsvGlossary == value) return;
-				_basicCsvGlossary = value;
-				OnPropertyChanged(nameof(BasicCsvGlossary));
-			}
-		}
-
-		public List<Location> Locations
-		{
-			get => _locations;
-			set
-			{
-				if (_locations == value) return;
-				_locations = value;
-				OnPropertyChanged(nameof(Locations));
-			}
-		}
-
-		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
 
 		public ICommand NavigateToCommand => _navigateToCommand ??= new RelayCommand(NavigateTo);
 
@@ -257,27 +248,26 @@ namespace GoogleTranslatorProvider.ViewModels
 				}
 			};
 
-			Locations = new List<Location>
+			Locations = new List<ProjectLocation>
 			{
-				new Location()
+				new ProjectLocation()
 				{
 					DisplayName = "Global",
 					Key = "global"
 				},
 
-				new Location()
+				new ProjectLocation()
 				{
 					DisplayName = "Europe",
 					Key = "europe-west1"
 				},
 
-				new Location()
+				new ProjectLocation()
 				{
 					DisplayName = "US",
 					Key = "us-central1"
 				}
 			};
-			ProjectLocation = Locations.First().Key;
 
 			if (_options is not null)
 			{
@@ -290,7 +280,6 @@ namespace GoogleTranslatorProvider.ViewModels
 				GlossaryPath = _options.GlossaryPath;
 				BasicCsvGlossary = _options.BasicCsv;
 			}
-
 
 			SetTranslationOption();
 			SetGoogleApiVersion();
@@ -338,20 +327,21 @@ namespace GoogleTranslatorProvider.ViewModels
 		private void BrowseJsonFile(object o)
 		{
 			var selectedFile = _openFileDialogService.ShowDialog("JSON File|*.json");
-			if (string.IsNullOrEmpty(selectedFile))
+			if (string.IsNullOrEmpty(selectedFile)
+			|| !selectedFile.ToLower().EndsWith(".json"))
 			{
 				return;
 			}
 
-			if (!selectedFile.ToLower().EndsWith(".json"))
-			{
-				return;
-			}
+			SetProjectDetails(selectedFile);
+		}
 
+		private void SetProjectDetails(string selectedFile)
+		{
 			JsonFilePath = selectedFile;
 			VisibleJsonPath = string.Format(@"...\{0}\{1}",
-				Path.GetFileName(Path.GetDirectoryName(JsonFilePath)),
-				Path.GetFileName(JsonFilePath));
+				Path.GetFileName(Path.GetDirectoryName(selectedFile)),
+				Path.GetFileName(selectedFile));
 
 			var json = new StreamReader(JsonFilePath).ReadToEnd();
 			dynamic temp = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
@@ -366,7 +356,7 @@ namespace GoogleTranslatorProvider.ViewModels
 			}
 
 			switch (objectName)
-			{
+		{
 				case "JsonFilePath":
 					JsonFilePath = string.Empty;
 					break;

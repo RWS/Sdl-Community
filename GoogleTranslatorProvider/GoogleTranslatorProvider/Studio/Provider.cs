@@ -66,7 +66,7 @@ namespace GoogleTranslatorProvider.Studio
 		
 		public bool SupportsUpdate => false;
 
-		public TranslationMethod TranslationMethod => GTPTranslationOptions.ProviderTranslationMethod;
+		public TranslationMethod TranslationMethod => TranslationMethod.MachineTranslation;
 
 		public Uri Uri => Options.Uri;
 
