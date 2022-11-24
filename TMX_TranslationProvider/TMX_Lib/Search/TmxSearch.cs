@@ -1,115 +1,206 @@
 ﻿using System;
-using System.Globalization;
-using TMX_Lib.Search.Result;
-using TMX_Lib.Search.SearchSegment;
-using TMX_Lib.TmxFormat;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Sdl.LanguagePlatform.Core;
+using Sdl.LanguagePlatform.TranslationMemory;
+using Sdl.ProjectAutomation.Settings;
+using TMX_Lib._obsolete_Search.SearchSegment;
+using TMX_Lib.Db;
 
 namespace TMX_Lib.Search
 {
-	public class TmxSearch : ISegmentPairSearch
+	public class TmxSearch
 	{
-		private TmxParser _parser;
+		// cap the results, make the searches faster
+		private const int MAX_RESULTS = 20;
 
-		private const int MAX_WORD_COUNT_FUZZY_SEARCH = 50000;
-		private bool _canDoFuzzySearch;
+		private readonly TmxMongoDb _db;
+		private IReadOnlyList<string> _supportedLanguages = new List<string>();
 
-		public TmxSearch(TmxParser parser)
+		private class SimpleResults
 		{
-			_parser = parser;
-			//_canDoFuzzySearch = _parser.TranslationUnits.Count <= MAX_WORD_COUNT_FUZZY_SEARCH;
+			public SearchResults ToSearchResults(string text, SearchSettings settings, LanguagePair language)
+			{
+				var source = new Segment();
+				source.Add(text);
+				var searchResults = new SearchResults
+				{
+					SourceSegment = source
+				};
+				foreach (var result in Results)
+					searchResults.Add(result.ToSearchResult(settings, language.SourceCulture, language.TargetCulture));
+				return searchResults;
+			}
+			public List<SimpleResult> Results = new List<SimpleResult>();
 		}
 
-		public bool SupportsSourceLanguage(CultureInfo language)
+		public TmxSearch(TmxMongoDb db)
 		{
-			// FIXME
-			return true;
+			_db = db;
 		}
 
-		public bool SupportsTargetLanguage(CultureInfo language)
+		public TranslationMemorySettings TMSettings { get; set; }
+
+		private int MaxResults(SearchSettings settings) => settings.IsConcordanceSearch
+			? (TMSettings?.ConcordanceMaximumResults ?? settings.MaxResults) : settings.MaxResults;
+
+		private int MinScore(SearchSettings settings) => settings.IsConcordanceSearch
+			? (TMSettings?.ConcordanceMinimumMatchValue ?? settings.MinScore)
+			: settings.MinScore;
+
+		private bool LookupMtEvenIfTmHasMatch => TMSettings?.GetSetting<bool>("LookupMtEvenIfTmHasMatch") ?? false;
+
+		// remove any extraneous results, if needed
+		private void CompleteSearch(SearchSettings settings, SimpleResults results)
 		{
-			// FIXME
-			return true;
+			// note: don't care about QuickInsertIds for now
+			SortSearchResults(settings, results);
+
+			// can happen if LookupMtEvenIfTmHasMatch is true
+			if (results.Results.Count >= MaxResults(settings))
+				results.Results = results.Results.Take(MaxResults(settings)).ToList();
+		}
+		private int SortSimpleResult(SimpleResult a, SimpleResult b, SortCriterium criteria)
+		{
+			var order = 0;
+			switch (criteria.FieldName)
+			{
+				case "sco": // "sco" = score
+					order = a.Score - b.Score;
+					break;
+				case "chd": // "chd" = chronological
+					order = (a.TranslateTime.Ticks < b.TranslateTime.Ticks) ? -1 : (a.TranslateTime.Ticks > b.TranslateTime.Ticks ? 1 : 0);
+					break;
+				case "usc": // "usc" - usage counter
+					// we don't record that
+					order = 0;
+					break;
+
+			}
+
+			if (criteria.Direction == SortDirection.Descending)
+				order = -order;
+			return 0;
 		}
 
-		// searchedText - the text I'm searching for
-		// tmxText - the text I have internally
-		private void ApplyPenalties(TextSegment searchedText, TextSegment tmxText)
+		private int SortSimpleResult(SimpleResult a, SimpleResult b, IReadOnlyList<SortCriterium> criteria)
 		{
-			// FIXME
+			foreach (var c in criteria)
+			{
+				var order = SortSimpleResult(a, b, c);
+				if (order != 0)
+					return order;
+			}
+
+			return 0;
+		}
+		private void SortSearchResults(SearchSettings settings, SimpleResults results)
+		{
+			// more about SortSpecification: TranslationMemorySettings.cs:596
+			results.Results.Sort((a, b) => SortSimpleResult(a, b, settings.SortSpecification.Criteria));
 		}
 
-		public int SegmentPairCount() => 0;// _parser.TranslationUnits.Count;
-		public SimpleResult TryTranslateExact(TextSegment sourceText, int segmentPairIndex, CultureInfo sourceLanguage, CultureInfo targetLaguage, int minScore)
+		private bool HaveEnoughResults(SimpleResults results, SearchSettings settings)
 		{
-			return null;
-			//if (segmentPairIndex < 0 || segmentPairIndex >= _parser.TranslationUnits.Count)
-			//	throw new ArgumentException($"Invalid index {segmentPairIndex}, should be in [0,{SegmentPairCount()}] range");
+			if (LookupMtEvenIfTmHasMatch)
+				// in this case, look through all the file
+				return false;
 
-			//var unit = _parser.TranslationUnits[segmentPairIndex];
-			//if (!unit.HasLanguage(sourceLanguage) || !unit.HasLanguage(targetLaguage))
-			//	return null;
+			if (results.Results.Count >= MaxResults(settings))
+				return true;
 
-
-			//SimpleResult result = null;
-			//var tmxText = unit.Text(sourceLanguage);
-			//if (tmxText.OriginalText == sourceText.OriginalText)
-			//{
-			//	result = unit.ToSimpleResult(sourceLanguage, targetLaguage);
-			//	ApplyPenalties(sourceText, tmxText);
-			//}
-
-			// care about penalties 
-			// TranslateTime -> Change or Create time
-
-			//return result;
+			// note: ignoring upLIFT
+			return false;
 		}
 
-		public SimpleResult TryTranslateFuzzy(TextSegment sourceText, int segmentPairIndex, CultureInfo sourceLanguage, CultureInfo targetLaguage, int minScore)
+		private void SearchExact(SearchSettings settings, TextSegment text, LanguagePair language, SimpleResults results)
 		{
-			return null;
-			//if (!_canDoFuzzySearch)
-			//	return null;
+			if (HaveEnoughResults(results, settings))
+				return;
 
-			//if (segmentPairIndex < 0 || segmentPairIndex >= _parser.TranslationUnits.Count)
-			//	throw new ArgumentException($"Invalid index {segmentPairIndex}, should be in [0,{SegmentPairCount()}] range");
-
-			//var unit = _parser.TranslationUnits[segmentPairIndex];
-			//if (!unit.HasLanguage(sourceLanguage) || !unit.HasLanguage(targetLaguage))
-			//	return null;
-
-			//SimpleResult result = null;
-			//var tmxText = unit.Text(sourceLanguage);
-			//if (TextSegment.CompareScore(sourceText, tmxText, minScore) >= minScore)
-			//{
-			//	result = unit.ToSimpleResult(sourceLanguage, targetLaguage);
-			//	ApplyPenalties(sourceText, tmxText);
-			//}
-
-			//return result;
 		}
 
-		public SimpleResult TryTranslateConcordance(TextSegment sourceText, int segmentPairIndex, CultureInfo sourceLanguage, CultureInfo targetLaguage,
-			bool sourceConcordance, int minScore)
+		private void SearchFuzzy(SearchSettings settings, TextSegment text, LanguagePair language, SimpleResults results)
 		{
-			return null;
-			//if (segmentPairIndex < 0 || segmentPairIndex >= _parser.TranslationUnits.Count)
-			//	throw new ArgumentException($"Invalid index {segmentPairIndex}, should be in [0,{SegmentPairCount()}] range");
+			if (HaveEnoughResults(results, settings))
+				return;
 
-			//var unit = _parser.TranslationUnits[segmentPairIndex];
-			//if (!unit.HasLanguage(sourceLanguage) || !unit.HasLanguage(targetLaguage))
-			//	return null;
-
-			//var tmxText = unit.Text(sourceConcordance ? sourceLanguage : targetLaguage);
-			//SimpleResult result = null;
-			//if (sourceText.ConcordanceSearchMatch(tmxText, minScore) >= minScore)
-			//{
-			//	result = unit.ToSimpleResult(sourceLanguage, targetLaguage);
-			//	ApplyPenalties(sourceText, tmxText);
-			//}
-			//return result;
 		}
 
+		private void SearchConcordance(SearchSettings settings, TextSegment text, LanguagePair language, SimpleResults results, bool sourceConcorance = true)
+		{
+			if (HaveEnoughResults(results, settings))
+				return;
 
+		}
+
+		public async Task LoadLanguagesAsync()
+		{
+			_supportedLanguages = (await _db.GetAllLanguagesAsync());
+		}
+
+		public SearchResults Search(SearchSettings settings, Segment segment, LanguagePair language)
+		{
+			if (_db.IsImportInProgress())
+				// while importing, don't do any searches
+				return new SearchResults();
+
+			if (!_provider.SupportsSourceLanguage(language.SourceCulture) || !_provider.SupportsTargetLanguage(language.TargetCulture))
+				return new SearchResults();
+
+			var text = new TextSegment(segment.ToPlain());
+			var results = new SimpleResults();
+			switch (settings.Mode)
+			{
+				// Performs only an exact search, without fuzzy search.
+				case SearchMode.ExactSearch:
+					SearchExact(settings, text, language, results);
+					break;
+
+				// Performs a normal search, i.e. a combined exact/fuzzy search. Fuzzy search is only triggered
+				// if no exact matches are found.
+				case SearchMode.NormalSearch:
+					SearchExact(settings, text, language, results);
+					var anyExactMatches = results.Results.Any(r => r.IsExactMatch);
+					if (!anyExactMatches)
+						SearchFuzzy(settings, text, language, results);
+					break;
+
+				// Performs a full search, i.e. a combined exact/fuzzy search. In contrast to NormalSearch, 
+				// fuzzy search is always triggered, even if exact matches are found.
+				case SearchMode.FullSearch:
+					SearchExact(settings, text, language, results);
+					SearchFuzzy(settings, text, language, results);
+					break;
+
+				// Performs a concordance search on the source segments, using the source character-based index if it exists or
+				// the default word-based index otherwise.
+				case SearchMode.ConcordanceSearch:
+					SearchConcordance(settings, text, language, results, sourceConcorance: true);
+					break;
+
+				// Performs a concordance search on the target segments, if the target character-based index exists.
+				case SearchMode.TargetConcordanceSearch:
+					SearchConcordance(settings, text, language, results, sourceConcorance: false);
+					break;
+
+				// Performs only a fuzzy search. 
+				case SearchMode.FuzzySearch:
+					SearchFuzzy(settings, text, language, results);
+					break;
+
+				// Performs a search on the source and target hashes for duplicate search during import (only used internally).
+				case SearchMode.DuplicateSearch:
+					throw new ArgumentOutOfRangeException(nameof(SearchMode));
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+
+			CompleteSearch(settings, results);
+			return results.ToSearchResults(text.OriginalText, settings, language);
+		}
 
 	}
 }

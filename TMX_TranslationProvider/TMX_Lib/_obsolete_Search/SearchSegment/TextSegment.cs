@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using TMX_Lib.Search.Compare;
+using TMX_Lib._obsolete_Search.Compare;
 using TMX_Lib.Utils;
 
-namespace TMX_Lib.Search.SearchSegment
+namespace TMX_Lib._obsolete_Search.SearchSegment
 {
 	// represents the text we're searching for, optimized for comparison
-	public class TextSegment
+	internal class TextSegment
 	{
 		private const int SMALL_WORD_MAX_LEN = 3;
 		

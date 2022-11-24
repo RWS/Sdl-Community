@@ -45,6 +45,9 @@ namespace TMX_Lib.XmlSplit
 		private Encoding _encoding;
 		public bool EndOfStreamReached  => _eofReached;
 
+		private long _blockCount;
+		private long _currentBlockIndex;
+
 		public XmlSplitter(string fileName, string rootXmlName = "tmx", string bodyXmlName = "body", string elementXmlName = "tu")
 		{
 			_fileName = fileName;
@@ -56,12 +59,25 @@ namespace TMX_Lib.XmlSplit
 
 			try
 			{
+				_blockCount = new FileInfo(fileName).Length / SplitSize;
 				_encoding = GetEncoding(fileName);
 				_stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 			}
 			catch (Exception e)
 			{
 				throw new TmxException($"can't open file for reading {fileName}");
+			}
+		}
+
+		// simple way to see where we are (0 to 1)
+		public double Progress()
+		{
+			lock (this)
+			{
+				if (_eofReached)
+					return 1;
+				var percent = (double)_currentBlockIndex / (double)_blockCount;
+				return Math.Min(percent, 1);
 			}
 		}
 
@@ -92,8 +108,13 @@ namespace TMX_Lib.XmlSplit
 		// if it returns null, there are no more sub-documents
 		public string TryGetNextString()
 		{
-			if (_eofReached)
-				return null;
+			lock (this)
+			{
+				if (_eofReached)
+					return null;
+
+				++_currentBlockIndex;
+			}
 
 			StringBuilder builder = new StringBuilder();
 			if (_firstBlock)
@@ -102,7 +123,8 @@ namespace TMX_Lib.XmlSplit
 			var readByteCount = _stream.Read(_buffer, 0, SplitSize);
 			if (readByteCount < 1)
 			{
-				_eofReached = true;
+				lock(this)
+					_eofReached = true;
 				return null;
 			}
 

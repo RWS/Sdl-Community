@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMX_Lib.Utils;
 
-namespace TMX_Lib.Search.Compare
+namespace TMX_Lib._obsolete_Search.Compare
 {
 	// compares two texts, returns a score 1-100
 	// this is a slow and detailed compare, to be run only after the fast searches have shown the probability for "sameness"

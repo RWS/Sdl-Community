@@ -9,7 +9,7 @@ using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.Settings;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using TMX_Lib.Search;
+using TMX_Lib._obsolete_Search;
 
 namespace TMX_TranslationProvider
 {

@@ -40,6 +40,8 @@ namespace TMX_Lib.TmxFormat
 			}
         }
 
+        public double Progress() => _splitter.Progress();
+
         public TmxParser(string fileName)
 		{
 			_fileName = fileName;
@@ -83,7 +85,7 @@ namespace TMX_Lib.TmxFormat
 			}
 		}
 
-        public IReadOnlyList<TmxTranslationUnit> TryReadNextTUs()
+        internal IReadOnlyList<TmxTranslationUnit> TryReadNextTUs()
         {
 	        var document = _headerDocument ?? _splitter.TryGetNextSubDocument();
 	        _headerDocument = null;
@@ -162,10 +164,7 @@ namespace TMX_Lib.TmxFormat
 
 		private TmxTranslationUnit NodeToTU(XmlNode xmlUnit)
 		{
-            var tu = new TmxTranslationUnit
-            {
-				SourceLanguage = _header.SourceLanguage, TargetLanguage = _header.TargetLanguage,
-            };
+            var tu = new TmxTranslationUnit();
             var properties = xmlUnit.SelectNodes("prop");
             if (properties != null)
 	            tu.XmlProperties = string.Join(" ", properties.OfType<XmlNode>().Select(p => p.OuterXml));

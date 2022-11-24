@@ -1,11 +1,11 @@
 ﻿using System.Globalization;
-using TMX_Lib.Search.Result;
-using TMX_Lib.Search.SearchSegment;
+using TMX_Lib._obsolete_Search.Result;
+using TMX_Lib._obsolete_Search.SearchSegment;
 
-namespace TMX_Lib.Search
+namespace TMX_Lib._obsolete_Search
 {
 	// if you have a provider that holds <source, target> pairs, implement this
-	public interface ISegmentPairSearch
+	internal interface ISegmentPairSearch
 	{
 		bool SupportsSourceLanguage(CultureInfo language);
 		bool SupportsTargetLanguage(CultureInfo language);

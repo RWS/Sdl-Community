@@ -6,9 +6,9 @@ using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 
-namespace TMX_Lib.Search.Result
+namespace TMX_Lib._obsolete_Search.Result
 {
-	public class SimpleResult
+	internal class SimpleResult
 	{
 		// if !minvalue -> it's the time when this was translated
 		public DateTime TranslateTime = DateTime.MinValue;

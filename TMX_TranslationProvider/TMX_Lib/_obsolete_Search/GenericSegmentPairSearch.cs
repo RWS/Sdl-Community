@@ -4,13 +4,13 @@ using System.Linq;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.ProjectAutomation.Settings;
-using TMX_Lib.Search.Result;
-using TMX_Lib.Search.SearchSegment;
+using TMX_Lib._obsolete_Search.Result;
+using TMX_Lib._obsolete_Search.SearchSegment;
 
-namespace TMX_Lib.Search
+namespace TMX_Lib._obsolete_Search
 {
 
-	public class GenericSegmentPairSearch
+	internal class GenericSegmentPairSearch
 	{
 		private ISegmentPairSearch _provider;
 
@@ -40,7 +40,7 @@ namespace TMX_Lib.Search
 			? (TMSettings?.ConcordanceMinimumMatchValue ?? settings.MinScore)
 			: settings.MinScore;
 
-		private bool LookupMtEvenIfTmHasMatch => TMSettings.GetSetting<bool>("LookupMtEvenIfTmHasMatch");
+		private bool LookupMtEvenIfTmHasMatch => TMSettings?.GetSetting<bool>("LookupMtEvenIfTmHasMatch") ?? false;
 
 		public GenericSegmentPairSearch(ISegmentPairSearch provider)
 		{
