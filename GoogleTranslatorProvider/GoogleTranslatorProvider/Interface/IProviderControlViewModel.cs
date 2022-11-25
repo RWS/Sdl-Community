@@ -37,7 +37,7 @@ namespace GoogleTranslatorProvider.Interfaces
 
 		string ProjectLocation { get; set; }
 
-		ProjectLocation SelectedLocation { set; }
+		ProjectLocation SelectedLocation { get; set; }
 
 		string GlossaryPath { get; set; }
 

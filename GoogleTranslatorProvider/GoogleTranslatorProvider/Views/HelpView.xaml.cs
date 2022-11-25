@@ -1,11 +1,11 @@
 ﻿namespace GoogleTranslatorProvider.Views
 {
 	/// <summary>
-	/// Interaction logic for MainWindow.xaml
+	/// Interaction logic for HelpView.xaml
 	/// </summary>
-	public partial class MainWindow
+	public partial class HelpView
 	{
-		public MainWindow()
+		public HelpView()
 		{
 			InitializeComponent();
 		}

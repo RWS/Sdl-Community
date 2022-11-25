@@ -13,6 +13,9 @@
 
 		public const string TellMe_HelpUrl = "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/6547/google-translator-provider";
 
+		public const string Views_Provider = "ProviderViewModel";
+		public const string Views_Settings = "SettingsViewModel";
+		public const string Views_Help = "HelpViewModel";
 		// TO BE EDITED
 		public const string TellMe_StoreUrl = "https://appstore.sdl.com/language/app/mt-enhanced-plugin-for-trados-studio/604/";
 		public const string TellMe_CommunityForumUrl = "https://community.sdl.com/product-groups/translationproductivity/f/160";

@@ -23,10 +23,8 @@ namespace GoogleTranslatorProvider.Interfaces
 		
 		string PostLookupFileName { get; set; }
 		
-		ICommand ShowMainWindowCommand { get; set; }
-		
-		ICommand ShowSettingsCommand { get; set; }
-		
 		ICommand BrowseCommand { get; }
+
+		ICommand ClearCommand { get; }
 	}
 }

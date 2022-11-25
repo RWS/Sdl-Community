@@ -86,10 +86,11 @@ namespace GoogleTranslatorProvider.Studio
 		private MainWindowViewModel ShowProviderWindow(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions)
 		{
 			SetSavedCredentialsOnUi(credentialStore, loadOptions);
-			var providerControlViewModel = new ProviderControlViewModel(loadOptions);
-			var settingsControlViewModel = new SettingsControlViewModel(loadOptions);
-			var mainWindowViewModel = new MainWindowViewModel(loadOptions, providerControlViewModel, settingsControlViewModel, credentialStore, languagePairs, new HtmlUtil());
-			var mainWindow = new MainWindow { DataContext = mainWindowViewModel };
+			var providerControlViewModel = new ProviderViewModel(loadOptions);
+			var settingsControlViewModel = new SettingsViewModel(loadOptions);
+			var helpViewModel = new HelpViewModel();
+			var mainWindowViewModel = new MainWindowViewModel(loadOptions, providerControlViewModel, settingsControlViewModel, helpViewModel, credentialStore, languagePairs, new HtmlUtil());
+			var mainWindow = new MainWindowView { DataContext = mainWindowViewModel };
 			mainWindowViewModel.CloseEventRaised += () =>
 			{
 				UpdateProviderCredentials(credentialStore, loadOptions);

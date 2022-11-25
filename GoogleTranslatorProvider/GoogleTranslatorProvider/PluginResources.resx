@@ -402,4 +402,7 @@
   <data name="GoogleApiKeyDescription" xml:space="preserve">
     <value>Please enter your Google Translate API Key</value>
   </data>
+  <data name="HelpView" xml:space="preserve">
+    <value>HelpView</value>
+  </data>
 </root>

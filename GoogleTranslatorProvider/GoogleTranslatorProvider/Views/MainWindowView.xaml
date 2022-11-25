@@ -1,13 +1,13 @@
-﻿<Window x:Class="GoogleTranslatorProvider.Views.MainWindow"
+﻿<Window x:Class="GoogleTranslatorProvider.Views.MainWindowView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:views="clr-namespace:GoogleTranslatorProvider.Views"
-		xmlns:styles ="clr-namespace:GoogleTranslatorProvider.Styles"
-		xmlns:viewModels ="clr-namespace:GoogleTranslatorProvider.ViewModels"
-        xmlns:behaviours ="clr-namespace:GoogleTranslatorProvider.Behaviours"
-		xmlns:converters ="clr-namespace:GoogleTranslatorProvider.Converters"
+		xmlns:styles="clr-namespace:GoogleTranslatorProvider.Styles"
+		xmlns:viewModels="clr-namespace:GoogleTranslatorProvider.ViewModels"
+        xmlns:behaviours="clr-namespace:GoogleTranslatorProvider.Behaviours"
+		xmlns:converters="clr-namespace:GoogleTranslatorProvider.Converters"
 		xmlns:root ="clr-namespace:GoogleTranslatorProvider"
 		mc:Ignorable="d"
         d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
@@ -15,10 +15,9 @@
 		ResizeMode="NoResize"
 		WindowStyle="None"
 		Height="600" Width="700"
-        d:DesignHeight="450" d:DesignWidth="800">
+        d:DesignHeight="850" d:DesignWidth="800">
 	<Window.Resources>
 		<ResourceDictionary>
-
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../Styles/Buttons.xaml"/>
 				<ResourceDictionary Source="../Styles/WindowsBorder.xaml" />
@@ -29,12 +28,16 @@
 			<converters:EmptyToVisibility x:Key="EmptyToVisibilityConverter"/>
 			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter"/>
 
-			<DataTemplate DataType="{x:Type viewModels:ProviderControlViewModel}">
-				<views:ProviderControl />
+			<DataTemplate DataType="{x:Type viewModels:ProviderViewModel}">
+				<views:ProviderView/>
 			</DataTemplate>
 
-			<DataTemplate DataType="{x:Type viewModels:SettingsControlViewModel}">
-				<views:SettingsControl/>
+			<DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
+				<views:SettingsView/>
+			</DataTemplate>
+
+			<DataTemplate DataType="{x:Type viewModels:HelpViewModel}">
+				<views:HelpView/>
 			</DataTemplate>
 
 			<Style TargetType="Image">
@@ -59,7 +62,23 @@
 
 			<!--<API Version Selector>-->
 			<StackPanel Grid.Row="1">
-				<ContentControl Content="{Binding SelectedView.ViewModel}" Margin="10"/>
+				<Button Style="{StaticResource TransparentButtonStyle}"
+						Visibility="{Binding BackButtonIsVisible, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+						Command="{Binding GoBackCommand}"
+						HorizontalAlignment="Left"
+						Margin="24 16 0 0">
+					<StackPanel>
+						<Image Source="../Resources/backImg.png"
+							   Cursor="Hand"
+							   Height="16"/>
+						<TextBlock Text="Back"
+								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"/>
+					</StackPanel>
+				</Button>
+				
+				<ContentControl Content="{Binding SelectedView.ViewModel}"
+								Margin="0"/>
+				
 				<TextBlock 
 					Text="{Binding ErrorMessage}"
 					Visibility="{Binding ErrorMessage,Converter={StaticResource EmptyToVisibilityConverter}}"
@@ -74,25 +93,36 @@
 			<!--</API Version Selector>-->
 
 			<!--<Footer>-->
-			<StackPanel Margin="0 0 24 20"
-						Orientation="Horizontal"
-						HorizontalAlignment="Right"
-						Grid.Row="3">
-				<Button Content="{x:Static root:PluginResources.SettingsText}"
+			<DockPanel Margin="20 0 24 20"
+					   HorizontalAlignment="Stretch"
+					   Grid.Row="3">
+				<Button Content="Help"
 						Style="{StaticResource Sdl.Button.SecondaryStyle}"
-						Command="{Binding ShowSettingsViewCommand}"
-						Visibility="{Binding IsSettingsViewSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+						Command="{Binding SwitchViewCommand}"
+						CommandParameter="HelpViewModel"
 						Cursor="Hand"
-						Width="140"
-						Margin="0 0 8 0"/>
+						Width="80">
+				</Button>
 
-				<Button Content="Confirm"
-						Style="{StaticResource Sdl.Button.PrimaryStyle}"
-						Command="{Binding SaveCommand}"
-						IsDefault="True"
-						Cursor="Hand"
-						Width="140"/>
-			</StackPanel>
+				<StackPanel HorizontalAlignment="Right"
+							Orientation="Horizontal">
+					<Button Content="{x:Static root:PluginResources.SettingsText}"
+							Style="{StaticResource Sdl.Button.SecondaryStyle}"
+							Command="{Binding SwitchViewCommand}"
+							CommandParameter="SettingsViewModel"
+							Visibility="{Binding IsSettingsViewSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+							Cursor="Hand"
+							Width="140"
+							Margin="0 0 8 0"/>
+
+					<Button Content="Confirm"
+							Style="{StaticResource Sdl.Button.PrimaryStyle}"
+							Command="{Binding SaveCommand}"
+							IsDefault="True"
+							Cursor="Hand"
+							Width="140"/>
+				</StackPanel>
+			</DockPanel>
 			<!--</Footer>-->
 		</Grid>
 	</Border>

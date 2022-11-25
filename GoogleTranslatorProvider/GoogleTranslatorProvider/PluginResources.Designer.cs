@@ -361,6 +361,15 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to HelpView.
+        /// </summary>
+        public static string HelpView {
+            get {
+                return ResourceManager.GetString("HelpView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid project name..
         /// </summary>
         public static string InvalidProjectName {

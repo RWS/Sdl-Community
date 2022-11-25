@@ -1,15 +1,14 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using GoogleTranslatorProvider.Commands;
 using GoogleTranslatorProvider.GoogleAPI;
+using GoogleTranslatorProvider.Interface;
 using GoogleTranslatorProvider.Interfaces;
 using GoogleTranslatorProvider.Models;
 using GoogleTranslatorProvider.Service;
-using GoogleTranslatorProvider.Views;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -19,8 +18,9 @@ namespace GoogleTranslatorProvider.ViewModels
 	{
 		
 		private readonly ITranslationProviderCredentialStore _credentialStore;
-		private readonly IProviderControlViewModel _providerControlViewModel;
-		private readonly ISettingsControlViewModel _settingsControlViewModel;
+		private readonly IProviderControlViewModel _providerViewModel;
+		private readonly ISettingsControlViewModel _settingsViewModel;
+		private readonly IHelpViewModel _helpViewModel;
 
 		private readonly bool _isTellMeAction;
 		private readonly List<ViewDetails> _availableViews;
@@ -28,62 +28,79 @@ namespace GoogleTranslatorProvider.ViewModels
 		private readonly HtmlUtil _htmlUtil;
 		
 		private ViewDetails _selectedView;
+		private ViewDetails _previousView;
 
 		private string _translatorErrorResponse;
 		private string _errorMessage;
-		private bool _isSettingsViewSelected;
 		private bool _dialogResult;
 
-		private ICommand _showSettingsViewCommand;
-		private ICommand _showMainViewCommand;
+		private bool _isProviderViewSelected;
+		private bool _isSettingsViewSelected;
+		private bool _isHelpViewSelected;
+		private bool _backButtonIsVisible;
+
+		private ICommand _switchViewCommand;
+		private ICommand _goBackCommand;
 		private ICommand _saveCommand;
 
 		public MainWindowViewModel(ITranslationOptions options,
-								   IProviderControlViewModel providerControlViewModel,
-								   ISettingsControlViewModel settingsControlViewModel,
+								   IProviderControlViewModel providerViewModel,
+								   ISettingsControlViewModel settingsViewModel,
+								   IHelpViewModel helpViewModel,
 								   ITranslationProviderCredentialStore credentialStore,
 								   LanguagePair[] languagePairs,
 								   HtmlUtil htmlUtil)
 		{
 			Options = options;
-			_providerControlViewModel = providerControlViewModel;
-			_settingsControlViewModel = settingsControlViewModel;
+			_providerViewModel = providerViewModel;
+			_settingsViewModel = settingsViewModel;
+			_helpViewModel = helpViewModel;
 			_credentialStore = credentialStore;
 			_languagePairs = languagePairs;
 			_htmlUtil = htmlUtil;
 
-			providerControlViewModel.ClearMessageRaised += ClearMessageRaised;
-			settingsControlViewModel.ShowMainWindowCommand = ShowProviderViewCommand;
+			providerViewModel.ClearMessageRaised += ClearMessageRaised;
 
 			_availableViews = new List<ViewDetails>
 			{
 				new ViewDetails
 				{
-					Name = PluginResources.PluginsView,
-					ViewModel = providerControlViewModel.ViewModel
+					Name = Constants.Views_Provider,
+					ViewModel = providerViewModel.ViewModel
 				},
 				new ViewDetails
 				{
-					Name = PluginResources.SettingsView,
-					ViewModel = settingsControlViewModel.ViewModel
+					Name = Constants.Views_Settings,
+					ViewModel = settingsViewModel.ViewModel
+				},
+				new ViewDetails()
+				{
+					Name = Constants.Views_Help,
+					ViewModel = helpViewModel.ViewModel
 				}
 			};
 
-			ShowProvidersPage(null);
+			TrySwitchView(Constants.Views_Provider);
 		}
 
-		public MainWindowViewModel(ITranslationOptions options, ISettingsControlViewModel settingsControlViewModel, bool isTellMeAction)
+		public MainWindowViewModel(ITranslationOptions options, ISettingsControlViewModel settingsControlViewModel, IHelpViewModel helpViewModel, bool isTellMeAction)
 		{
 			Options = options;
 			_isTellMeAction = isTellMeAction;
-			_settingsControlViewModel = settingsControlViewModel;
+			_settingsViewModel = settingsControlViewModel;
+			_helpViewModel = helpViewModel;
 
 			_availableViews = new List<ViewDetails>
 			{
 				new ViewDetails
 				{
-					Name = PluginResources.SettingsView,
+					Name = Constants.Views_Settings,
 					ViewModel = settingsControlViewModel.ViewModel
+				},
+				new ViewDetails()
+				{
+					Name = Constants.Views_Help,
+					ViewModel = helpViewModel.ViewModel
 				}
 			};
 
@@ -120,6 +137,17 @@ namespace GoogleTranslatorProvider.ViewModels
 			}
 		}
 
+		public bool BackButtonIsVisible
+		{
+			get => _backButtonIsVisible;
+			set
+			{
+				if (_backButtonIsVisible == value) return;
+				_backButtonIsVisible = value;
+				OnPropertyChanged(nameof(BackButtonIsVisible));
+			}
+		}
+
 		public bool IsSettingsViewSelected
 		{
 			get => _isSettingsViewSelected;
@@ -128,6 +156,28 @@ namespace GoogleTranslatorProvider.ViewModels
 				if (_isSettingsViewSelected == value) return;
 				_isSettingsViewSelected = value;
 				OnPropertyChanged(nameof(IsSettingsViewSelected));
+			}
+		}
+
+		public bool IsHelpViewSelected
+		{
+			get => _isHelpViewSelected;
+			set
+			{
+				if (_isHelpViewSelected == value) return;
+				_isHelpViewSelected = value;
+				OnPropertyChanged(nameof(IsHelpViewSelected));
+			}
+		}
+
+		public bool IsProviderViewSelected
+		{
+			get => _isProviderViewSelected;
+			set
+			{
+				if (_isProviderViewSelected == value) return;
+				_isProviderViewSelected = value;
+				OnPropertyChanged(nameof(IsProviderViewSelected));
 			}
 		}
 
@@ -153,9 +203,10 @@ namespace GoogleTranslatorProvider.ViewModels
 			}
 		}
 
-		public ICommand ShowSettingsViewCommand => _showSettingsViewCommand ??= new RelayCommand(ShowSettingsPage);
 
-		public ICommand ShowProviderViewCommand => _showMainViewCommand ??= new RelayCommand(ShowProvidersPage);
+		public ICommand SwitchViewCommand => _switchViewCommand ??= new RelayCommand(SwitchView);
+
+		public ICommand GoBackCommand => _goBackCommand ??= new RelayCommand(GoBack);
 
 		public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save);
 
@@ -167,7 +218,7 @@ namespace GoogleTranslatorProvider.ViewModels
 		public bool IsWindowValid()
 		{
 			ErrorMessage = string.Empty;
-			var isGoogleProvider = _providerControlViewModel.SelectedTranslationOption?.ProviderType == ProviderType.GoogleTranslate;
+			var isGoogleProvider = _providerViewModel.SelectedTranslationOption?.ProviderType == ProviderType.GoogleTranslate;
 			if (isGoogleProvider && !ValidGoogleOptions())
 			{
 				return false;
@@ -178,12 +229,12 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		private bool ValidGoogleOptions()
 		{
-			if (_providerControlViewModel.SelectedGoogleApiVersion.Version != ApiVersion.V2)
+			if (_providerViewModel.SelectedGoogleApiVersion.Version == ApiVersion.V3)
 			{
 				return GoogleV3OptionsAreSet() && AreGoogleV3CredentialsValid();
 			}
 
-			if (string.IsNullOrEmpty(_providerControlViewModel.ApiKey))
+			if (string.IsNullOrEmpty(_providerViewModel.ApiKey))
 			{
 				ErrorMessage = PluginResources.ApiKeyError;
 				return false;
@@ -194,25 +245,26 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		private bool GoogleV3OptionsAreSet()
 		{
-			if (string.IsNullOrEmpty(_providerControlViewModel.JsonFilePath))
+			if (string.IsNullOrEmpty(_providerViewModel.JsonFilePath))
 			{
 				ErrorMessage = PluginResources.EmptyJsonFilePathMsg;
 				return false;
 			}
 
-			if (!File.Exists(_providerControlViewModel.JsonFilePath))
+			if (!File.Exists(_providerViewModel.JsonFilePath))
 			{
 				ErrorMessage = PluginResources.WrongJsonFilePath;
 				return false;
 			}
 
-			if (string.IsNullOrEmpty(_providerControlViewModel.ProjectName))
+			if (string.IsNullOrEmpty(_providerViewModel.ProjectName))
 			{
 				ErrorMessage = PluginResources.InvalidProjectName;
 				return false;
 			}
 
-			if (string.IsNullOrEmpty(_providerControlViewModel.ProjectLocation))
+			var projectLocation = _providerViewModel.ProjectLocation ?? _providerViewModel.SelectedLocation.Key;
+			if (string.IsNullOrEmpty(projectLocation))
 			{
 				ErrorMessage = PluginResources.ProjectLocationValidation;
 				return false;
@@ -227,14 +279,14 @@ namespace GoogleTranslatorProvider.ViewModels
 			{
 				var providerOptions = new GTPTranslationOptions
 				{
-					ProjectName = _providerControlViewModel.ProjectName,
-					JsonFilePath = _providerControlViewModel.JsonFilePath,
-					GoogleEngineModel = _providerControlViewModel.GoogleEngineModel,
-					ProjectLocation = _providerControlViewModel.ProjectLocation,
-					GlossaryPath = _providerControlViewModel.GlossaryPath,
-					BasicCsv = _providerControlViewModel.BasicCsvGlossary,
-					SelectedProvider = _providerControlViewModel.SelectedTranslationOption.ProviderType,
-					SelectedGoogleVersion = _providerControlViewModel.SelectedGoogleApiVersion.Version
+					ProjectName = _providerViewModel.ProjectName,
+					JsonFilePath = _providerViewModel.JsonFilePath,
+					GoogleEngineModel = _providerViewModel.GoogleEngineModel,
+					ProjectLocation = _providerViewModel.ProjectLocation,
+					GlossaryPath = _providerViewModel.GlossaryPath,
+					BasicCsv = _providerViewModel.BasicCsvGlossary,
+					SelectedProvider = _providerViewModel.SelectedTranslationOption.ProviderType,
+					SelectedGoogleVersion = _providerViewModel.SelectedGoogleApiVersion.Version
 				};
 
 				var googleV3 = new V3Connector(providerOptions);
@@ -271,7 +323,7 @@ namespace GoogleTranslatorProvider.ViewModels
 		{
 			try
 			{
-				var v2Connector = new V2Connector(_providerControlViewModel.ApiKey, _htmlUtil);
+				var v2Connector = new V2Connector(_providerViewModel.ApiKey, _htmlUtil);
 				v2Connector.ValidateCredentials();
 				return true;
 			}
@@ -284,33 +336,33 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		private bool ValidSettingsPageOptions()
 		{
-			if (_settingsControlViewModel.DoPreLookup)
+			if (_settingsViewModel.DoPreLookup)
 			{
-				if (string.IsNullOrEmpty(_settingsControlViewModel.PreLookupFileName))
+				if (string.IsNullOrEmpty(_settingsViewModel.PreLookupFileName))
 				{
 					ErrorMessage = PluginResources.PreLookupEmptyMessage;
 					return false;
 				}
 
-				if (!File.Exists(_settingsControlViewModel.PreLookupFileName))
+				if (!File.Exists(_settingsViewModel.PreLookupFileName))
 				{
 					ErrorMessage = PluginResources.PreLookupWrongPathMessage;
 					return false;
 				}
 			}
 
-			if (!_settingsControlViewModel.DoPostLookup)
+			if (!_settingsViewModel.DoPostLookup)
 			{
 				return true;
 			}
 
-			if (string.IsNullOrEmpty(_settingsControlViewModel.PostLookupFileName))
+			if (string.IsNullOrEmpty(_settingsViewModel.PostLookupFileName))
 			{
 				ErrorMessage = PluginResources.PostLookupEmptyMessage;
 				return false;
 			}
 
-			if (!File.Exists(_settingsControlViewModel.PostLookupFileName))
+			if (!File.Exists(_settingsViewModel.PostLookupFileName))
 			{
 				ErrorMessage = PluginResources.PostLookupWrongPathMessage;
 				return false;
@@ -343,28 +395,28 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		private void SetGoogleProviderOptions()
 		{
-			Options.ApiKey = _providerControlViewModel.ApiKey;
-			Options.PersistGoogleKey = _providerControlViewModel.PersistGoogleKey;
-			Options.SelectedGoogleVersion = _providerControlViewModel.SelectedGoogleApiVersion.Version;
-			Options.JsonFilePath = _providerControlViewModel.JsonFilePath;
-			Options.ProjectName = _providerControlViewModel.ProjectName;
-			Options.SelectedProvider = _providerControlViewModel.SelectedTranslationOption.ProviderType;
-			Options.GoogleEngineModel = _providerControlViewModel.GoogleEngineModel;
-			Options.ProjectLocation = _providerControlViewModel.ProjectLocation;
-			Options.GlossaryPath = _providerControlViewModel.GlossaryPath;
-			Options.BasicCsv = _providerControlViewModel.BasicCsvGlossary;
+			Options.ApiKey = _providerViewModel.ApiKey;
+			Options.PersistGoogleKey = _providerViewModel.PersistGoogleKey;
+			Options.SelectedGoogleVersion = _providerViewModel.SelectedGoogleApiVersion.Version;
+			Options.JsonFilePath = _providerViewModel.JsonFilePath;
+			Options.ProjectName = _providerViewModel.ProjectName;
+			Options.SelectedProvider = _providerViewModel.SelectedTranslationOption.ProviderType;
+			Options.GoogleEngineModel = _providerViewModel.GoogleEngineModel;
+			Options.ProjectLocation = _providerViewModel.ProjectLocation;
+			Options.GlossaryPath = _providerViewModel.GlossaryPath;
+			Options.BasicCsv = _providerViewModel.BasicCsvGlossary;
 		}
 
 		private void SetGeneralProviderOptions()
 		{
-			if (_settingsControlViewModel is not null)
+			if (_settingsViewModel is not null)
 			{
-				Options.SendPlainTextOnly = _settingsControlViewModel.SendPlainText;
-				Options.ResendDrafts = _settingsControlViewModel.ReSendDraft;
-				Options.UsePreEdit = _settingsControlViewModel.DoPreLookup;
-				Options.PreLookupFilename = _settingsControlViewModel.PreLookupFileName;
-				Options.UsePostEdit = _settingsControlViewModel.DoPostLookup;
-				Options.PostLookupFilename = _settingsControlViewModel.PostLookupFileName;
+				Options.SendPlainTextOnly = _settingsViewModel.SendPlainText;
+				Options.ResendDrafts = _settingsViewModel.ReSendDraft;
+				Options.UsePreEdit = _settingsViewModel.DoPreLookup;
+				Options.PreLookupFilename = _settingsViewModel.PreLookupFileName;
+				Options.UsePostEdit = _settingsViewModel.DoPostLookup;
+				Options.PostLookupFilename = _settingsViewModel.PostLookupFileName;
 			}
 
 			if (Options is not null && Options.LanguagesSupported is null)
@@ -379,13 +431,13 @@ namespace GoogleTranslatorProvider.ViewModels
 
 			foreach (var languagePair in _languagePairs)
 			{
-				Options.LanguagesSupported.Add(languagePair.TargetCultureName, _providerControlViewModel.SelectedTranslationOption.Name);
+				Options.LanguagesSupported.Add(languagePair.TargetCultureName, _providerViewModel.SelectedTranslationOption.Name);
 			}
 		}
 
 		private void DeleteCredentialsIfNecessary()
 		{
-			var isGoogleProvider = _providerControlViewModel.SelectedTranslationOption.ProviderType == ProviderType.GoogleTranslate;
+			var isGoogleProvider = _providerViewModel.SelectedTranslationOption.ProviderType == ProviderType.GoogleTranslate;
 			if (isGoogleProvider && !Options.PersistGoogleKey)
 			{
 				RemoveCredentialsFromStore(new Uri(Constants.GoogleTranslationFullScheme));
@@ -406,16 +458,54 @@ namespace GoogleTranslatorProvider.ViewModels
 			TranslatorErrorResponse = "<html><body></html></body>";
 		}
 
-		private void ShowSettingsPage(object o)
+		private void SwitchView(object o)
 		{
-			IsSettingsViewSelected = true;
-			SelectedView = _availableViews.FirstOrDefault(x => x.ViewModel.GetType() == typeof(SettingsControlViewModel));
+			if (o is not string objectStr)
+			{
+				return;
+			}
+
+			try
+			{
+				TrySwitchView(objectStr, objectStr == Constants.Views_Help ? SelectedView : null);
+			}
+			catch { }
 		}
 
-		private void ShowProvidersPage(object o)
+		private void TrySwitchView(string requestedType, ViewDetails currentView = null)
 		{
-			IsSettingsViewSelected = false;
-			SelectedView = _availableViews.FirstOrDefault(x => x.ViewModel.GetType() == typeof(ProviderControlViewModel));
+			_previousView = currentView;
+			SelectedView = _availableViews.FirstOrDefault(x => x.Name == requestedType);
+			UpdateLayout(requestedType);
+		}
+
+		private void UpdateLayout(string selectedViewType)
+		{
+			IsProviderViewSelected = selectedViewType == Constants.Views_Provider;
+			IsSettingsViewSelected = selectedViewType == Constants.Views_Settings;
+			IsHelpViewSelected = selectedViewType == Constants.Views_Help;
+			BackButtonIsVisible = CanUseBackButtonV();
+		}
+
+		private void GoBack(object o)
+		{
+			if (_isTellMeAction || _previousView?.ViewModel.GetType() == typeof(SettingsViewModel))
+			{
+				TrySwitchView(Constants.Views_Settings);
+				return;
+			}
+
+			TrySwitchView(Constants.Views_Provider);
+		}
+
+		private bool CanUseBackButtonV()
+		{
+			if (_isTellMeAction)
+			{
+				return IsHelpViewSelected;
+			}
+
+			return IsSettingsViewSelected || IsHelpViewSelected;
 		}
 
 		private void AddEncriptionMetaToResponse(string errorMessage)

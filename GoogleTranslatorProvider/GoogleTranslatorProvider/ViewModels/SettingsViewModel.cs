@@ -10,7 +10,7 @@ using NLog;
 
 namespace GoogleTranslatorProvider.ViewModels
 {
-	public class SettingsControlViewModel : BaseModel, ISettingsControlViewModel
+	public class SettingsViewModel : BaseModel, ISettingsControlViewModel
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly IOpenFileDialogService _openFileDialogService;
@@ -29,7 +29,7 @@ namespace GoogleTranslatorProvider.ViewModels
 		private ICommand _clearCommand;
 		private ICommand _browseCommand;
 
-		public SettingsControlViewModel(ITranslationOptions options, bool isTellMeAction = false)
+		public SettingsViewModel(ITranslationOptions options, bool isTellMeAction = false)
 		{
 			ViewModel = this;
 			IsTellMeAction = isTellMeAction;
@@ -146,8 +146,6 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
 		public ICommand BrowseCommand => _browseCommand ??= new RelayCommand(Browse);
-		public ICommand ShowSettingsCommand { get; set; }
-		public ICommand ShowMainWindowCommand { get; set; }
 
 		private void SetSavedSettings()
 		{

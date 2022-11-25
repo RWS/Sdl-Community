@@ -1,11 +1,11 @@
 ﻿namespace GoogleTranslatorProvider.Views
 {
 	/// <summary>
-	/// Interaction logic for SettingsControl.xaml
+	/// Interaction logic for SettingsView.xaml
 	/// </summary>
-	public partial class SettingsControl
+	public partial class SettingsView
 	{
-		public SettingsControl()
+		public SettingsView()
 		{
 			InitializeComponent();
 		}

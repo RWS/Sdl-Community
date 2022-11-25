@@ -46,9 +46,10 @@ namespace GoogleTranslatorProvider.TellMe
 			}
 
 			var translationOptions = new GTPTranslationOptions(translationProvider.MainTranslationProvider.Uri);
-			var settingsControlViewModel = new SettingsControlViewModel(translationOptions, true);
-			var mainWindowViewModel = new MainWindowViewModel(translationOptions, settingsControlViewModel, true);
-			var mainWindow = new MainWindow { DataContext = mainWindowViewModel };
+			var settingsViewModel = new SettingsViewModel(translationOptions, true);
+			var helpViewModel = new HelpViewModel();
+			var mainWindowViewModel = new MainWindowViewModel(translationOptions, settingsViewModel, helpViewModel, true);
+			var mainWindow = new MainWindowView { DataContext = mainWindowViewModel };
 			mainWindowViewModel.CloseEventRaised += () =>
 			{
 				settings.Entries

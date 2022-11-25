@@ -1,11 +1,11 @@
 ﻿namespace GoogleTranslatorProvider.Views
 {
 	/// <summary>
-	/// Interaction logic for ProviderControl.xaml
+	/// Interaction logic for ProviderView.xaml
 	/// </summary>
-	public partial class ProviderControl
+	public partial class ProviderView
 	{
-		public ProviderControl()
+		public ProviderView()
 		{
 			InitializeComponent();
 		}

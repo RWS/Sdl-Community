@@ -8,7 +8,7 @@ namespace GoogleTranslatorProvider.Helpers
 {
 	public static class AssemblyResolver
 	{
-		private static List<string> assemblyFolders = new List<string>();
+		private static List<string> assemblyFolders = new();
 
 		public static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs e)
 		{

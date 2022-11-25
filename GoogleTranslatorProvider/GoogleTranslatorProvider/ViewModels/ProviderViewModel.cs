@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
+using Google.Cloud.Translate.V3;
 using GoogleTranslatorProvider.Commands;
 using GoogleTranslatorProvider.Interfaces;
 using GoogleTranslatorProvider.Models;
@@ -12,13 +13,14 @@ using Path = System.IO.Path;
 
 namespace GoogleTranslatorProvider.ViewModels
 {
-	public class ProviderControlViewModel : BaseModel, IProviderControlViewModel
+	public class ProviderViewModel : BaseModel, IProviderControlViewModel
 	{
 		private readonly IOpenFileDialogService _openFileDialogService;
 		private readonly ITranslationOptions _options;
 
 		private GoogleApiVersion _selectedGoogleApiVersion;
 		private List<ProjectLocation> _locations;
+		private ProjectLocation _selectedLocation;
 		private string _projectLocation;
 
 		private string _googleEngineModel;
@@ -35,8 +37,9 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		private ICommand _navigateToCommand;
 		private ICommand _browseJsonFileCommand;
+		private ICommand _clearCommand;
 
-		public ProviderControlViewModel(ITranslationOptions options)
+		public ProviderViewModel(ITranslationOptions options)
 		{
 			ViewModel = this;
 			_options = options;
@@ -74,6 +77,29 @@ namespace GoogleTranslatorProvider.ViewModels
 				_locations = value;
 				OnPropertyChanged(nameof(Locations));
 				SelectedLocation = value.FirstOrDefault();
+			}
+		}
+
+		public ProjectLocation SelectedLocation
+		{
+			get => _selectedLocation;
+			set
+			{
+				_selectedLocation = value;
+				OnPropertyChanged(nameof(SelectedLocation));
+				ProjectLocation = value.Key;
+			}
+		}
+
+		public string ProjectLocation
+		{
+			get => _projectLocation;
+			set
+			{
+				if (_projectLocation == value) return;
+				_projectLocation = value;
+				OnPropertyChanged(nameof(ProjectLocation));
+				ClearMessageRaised?.Invoke();
 			}
 		}
 
@@ -172,27 +198,6 @@ namespace GoogleTranslatorProvider.ViewModels
 			}
 		}
 
-		public ProjectLocation SelectedLocation
-		{
-			set
-			{
-				ProjectLocation = value.Key;
-				OnPropertyChanged(nameof(SelectedLocation));
-			}
-		}
-
-		public string ProjectLocation
-		{
-			get => _projectLocation;
-			set
-			{
-				if (_projectLocation == value) return;
-				_projectLocation = value;
-				OnPropertyChanged(nameof(ProjectLocation));
-				ClearMessageRaised?.Invoke();
-			}
-		}
-
 		public string GlossaryPath
 		{
 			get => _glossaryPath;
@@ -220,6 +225,8 @@ namespace GoogleTranslatorProvider.ViewModels
 		public ICommand NavigateToCommand => _navigateToCommand ??= new RelayCommand(NavigateTo);
 
 		public ICommand BrowseJsonFileCommand => _browseJsonFileCommand ??= new RelayCommand(BrowseJsonFile);
+
+		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
 
 		public event ClearMessageEventRaiser ClearMessageRaised;
 
@@ -276,7 +283,7 @@ namespace GoogleTranslatorProvider.ViewModels
 				JsonFilePath = _options.JsonFilePath;
 				ProjectName = _options.ProjectName;
 				GoogleEngineModel = _options.GoogleEngineModel;
-				ProjectLocation = _options.ProjectLocation;
+				ProjectLocation = _options.ProjectLocation ?? ProjectLocation ?? SelectedLocation.Key;
 				GlossaryPath = _options.GlossaryPath;
 				BasicCsvGlossary = _options.BasicCsv;
 			}
@@ -350,22 +357,8 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		private void Clear(object o)
 		{
-			if (o is not string objectName)
+			switch (o as string)
 			{
-				return;
-			}
-
-			switch (objectName)
-		{
-				case "JsonFilePath":
-					JsonFilePath = string.Empty;
-					break;
-				case "ProjectName":
-					ProjectName = string.Empty;
-					break;
-				case "ProjectLocation":
-					ProjectLocation = string.Empty;
-					break;
 				case "GoogleEngineModel":
 					GoogleEngineModel = string.Empty;
 					break;
