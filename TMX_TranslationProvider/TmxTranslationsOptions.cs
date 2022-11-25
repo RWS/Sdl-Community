@@ -11,6 +11,24 @@ namespace TMX_TranslationProvider
 {
 	public class TmxTranslationsOptions : ISearchServiceParameters
 	{
+		protected bool Equals(TmxTranslationsOptions other)
+		{
+			return Equals(_uriBuilder, other._uriBuilder);
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj)) return false;
+			if (ReferenceEquals(this, obj)) return true;
+			if (obj.GetType() != this.GetType()) return false;
+			return Equals((TmxTranslationsOptions)obj);
+		}
+
+		public override int GetHashCode()
+		{
+			return (_uriBuilder != null ? _uriBuilder.GetHashCode() : 0);
+		}
+
 		private readonly TranslationProviderUriBuilder _uriBuilder;
 		public static readonly TranslationMethod ProviderTranslationMethod = TranslationMethod.TranslationMemory;
 
@@ -50,11 +68,6 @@ namespace TMX_TranslationProvider
 			set => SetStringParameter("DbConnection", value);
 		}
 
-		public string Username
-		{
-			get => GetStringParameter("Username");
-			set => SetStringParameter("Username", value);
-		}
 		// FIXME I should use Sdl.LanguagePlatform.TranslationMemoryApi.ITranslationProviderCredentialStore
 		public string Password
 		{

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
 using Sdl.Core.Globalization;
+using TMX_Lib.Utils;
 using TMX_Lib.XmlSplit;
 
 namespace TMX_Lib.TmxFormat
@@ -27,11 +28,12 @@ namespace TMX_Lib.TmxFormat
 		public IReadOnlyList<string> Languages()
 		{
 			Debug.Assert(_splitter?.EndOfStreamReached ?? false);
-			return _languages.ToList();
+			return _languagesSet.ToList();
 		}
-        private HashSet<string> _languages = new HashSet<string>();
+        private HashSet<string> _languagesSet = new HashSet<string>();
+        private CultureDictionary _languages = new CultureDictionary();
 
-        private TmxHeader _header;
+		private TmxHeader _header;
         public TmxHeader Header {
 	        get
 	        {
@@ -85,7 +87,7 @@ namespace TMX_Lib.TmxFormat
 			}
 		}
 
-        internal IReadOnlyList<TmxTranslationUnit> TryReadNextTUs()
+        public IReadOnlyList<TmxTranslationUnit> TryReadNextTUs()
         {
 	        var document = _headerDocument ?? _splitter.TryGetNextSubDocument();
 	        _headerDocument = null;
@@ -152,7 +154,7 @@ namespace TMX_Lib.TmxFormat
         {
 	        var language = GetAttribute(xmlTuv, "xml:lang");
 	        var seg = xmlTuv.SelectSingleNode("seg");
-	        var text = seg.InnerText;
+	        var text = Util.TextToDbText(seg.InnerText, _languages.Culture(language)) ;
 	        var formattedText = seg.InnerXml;
 	        return new TmxText
 	        {
@@ -177,7 +179,7 @@ namespace TMX_Lib.TmxFormat
 				{
 					var text = TuvToText(item);
 					tu.Texts.Add(text);
-					_languages.Add(text.Language);
+					_languagesSet.Add(text.Language);
 				}
 
 			var creationDate = GetAttribute(xmlUnit, "creationdate");

@@ -9,7 +9,6 @@ using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.Settings;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using TMX_Lib._obsolete_Search;
 
 namespace TMX_TranslationProvider
 {
@@ -28,7 +27,6 @@ namespace TMX_TranslationProvider
 		public bool CanReverseLanguageDirection => false;
 
 		private ProjectsController _projectsController;
-		private GenericSegmentPairSearch _searcher;
 
 
 		public TmxTranslationProviderLanguageDirection(LanguagePair languagePair, TmxTranslationProvider provider)
@@ -37,23 +35,17 @@ namespace TMX_TranslationProvider
 			_provider = provider;
 
 			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-
-			CreateSearcher();
 		}
 
-		private void CreateSearcher()
-		{
-			if (_searcher == null)
-				_searcher = _provider?.Parser != null ? new GenericSegmentPairSearch(new TmxSearch(_provider.Parser)) : null;
-
-			if (_searcher != null && _searcher.TMSettings == null)
-				_searcher.TMSettings = _projectsController.CurrentProject.GetSettings().GetSettingsGroup<TranslationMemorySettings>();
-		}
 
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
 		{
-			CreateSearcher();
-			return _searcher?.Search(settings, segment, _languagePair) ?? new SearchResults();
+			var searcher = _provider.SearchService;
+			if (searcher == null)
+				return new SearchResults();
+			var task = searcher.Search(settings, segment, _languagePair);
+			task.Wait();
+			return task.Result;
 		}
 
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)

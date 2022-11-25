@@ -8,13 +8,14 @@ using TMX_Lib.Utils;
 
 namespace TMX_Lib.TmxFormat
 {
-	internal class TmxText
+	public class TmxText
 	{
 		public string Language;
 		public string Text;
 		public string FormattedText;
 	}
-	internal class TmxTranslationUnit
+
+	public class TmxTranslationUnit
 	{
 		public DateTime? CreationTime;
 		public string CreationAuthor;

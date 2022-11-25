@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -13,17 +14,16 @@ namespace TMX_Lib.Search
 {
 	internal class SimpleResult
 	{
-		public Db.TmxTranslationUnit TU;
-		public Db.TmxText SourceText, TargetText;
+		public readonly TmxSegment Segment;
 
 		// if !minvalue -> it's the time when this was translated
 		public DateTime TranslateTime
 		{
 			get
 			{
-				if (TU == null)
+				if (Segment.DbTU == null)
 					return DateTime.MinValue;
-				return TU.ChangeDate ?? TU.CreationDate ?? DateTime.MinValue;
+				return Segment.DbTU.ChangeDate ?? Segment.DbTU.CreationDate ?? DateTime.MinValue;
 			}
 		}
 
@@ -34,6 +34,12 @@ namespace TMX_Lib.Search
 		public bool IsExactMatch => Score >= 100;
 
 		public List<PenaltyType> Penalties = new List<PenaltyType>();
+
+		public SimpleResult(TmxSegment segment)
+		{
+			Debug.Assert(segment != null);
+			Segment = segment;
+		}
 
 		// more about Penalties: TranslationMemorySettings.cs:498
 		private void AddPenalty(SearchResult result, PenaltyType type, SearchSettings settings)
@@ -46,13 +52,13 @@ namespace TMX_Lib.Search
 		// FIXME tokenize it!
 		public SearchResult ToSearchResult(SearchSettings settings, CultureInfo sourceLanguage, CultureInfo targetLanguage)
 		{
-			if (SourceText == null || TargetText == null)
+			if (Segment.DbSourceText == null || Segment.DbTargetText == null)
 				throw new TmxException("Invalid simple result, bad source/target text");
 
 			var source = new Segment(sourceLanguage);
 			var target = new Segment(targetLanguage);
-			source.Add(SourceText.Text);
-			target.Add(TargetText.Text);
+			source.Add(Segment.SourceText);
+			target.Add(Segment.TargetText);
 			var tu = new TranslationUnit
 			{
 				SourceSegment = source,

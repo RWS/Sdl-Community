@@ -1,5 +1,8 @@
-﻿namespace TMX_Lib.Db
+﻿using MongoDB.Bson.Serialization.Attributes;
+
+namespace TMX_Lib.Db
 {
+	[BsonIgnoreExtraElements]
     public class TmxMeta
     {
         // example: "Header"

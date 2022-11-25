@@ -32,6 +32,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Newtonsoft.Json.dll</HintPath>
@@ -66,13 +72,17 @@
     <Compile Include="Db\TmxLanguage.cs" />
     <Compile Include="Db\TmxMeta.cs" />
     <Compile Include="Db\TmxMongoDb.cs" />
+    <Compile Include="Db\TmxSegment.cs" />
     <Compile Include="Db\TmxText.cs" />
     <Compile Include="Db\TmxTranslationUnit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Search\ISearchServiceParameters.cs" />
     <Compile Include="Search\SimpleResult.cs" />
+    <Compile Include="Search\SlowCompareTexts.cs" />
+    <Compile Include="Search\TextSegment.cs" />
     <Compile Include="Search\TmxSearch.cs" />
     <Compile Include="Search\TmxSearchService.cs" />
+    <Compile Include="Utils\CultureDictionary.cs" />
     <Compile Include="_obsolete_Search\Compare\SlowCompareTexts.cs" />
     <Compile Include="_obsolete_Search\GenericSegmentPairSearch.cs" />
     <Compile Include="_obsolete_Search\ISegmentPairSearch.cs" />
@@ -91,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MongoDB.Driver">

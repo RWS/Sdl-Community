@@ -6,18 +6,17 @@ using System.Threading.Tasks;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.ProjectAutomation.Settings;
-using TMX_Lib._obsolete_Search.SearchSegment;
 using TMX_Lib.Db;
+using TMX_Lib.Utils;
 
 namespace TMX_Lib.Search
 {
 	public class TmxSearch
 	{
-		// cap the results, make the searches faster
-		private const int MAX_RESULTS = 20;
 
 		private readonly TmxMongoDb _db;
 		private IReadOnlyList<string> _supportedLanguages = new List<string>();
+		private CultureDictionary _cultures = new CultureDictionary();
 
 		private class SimpleResults
 		{
@@ -115,21 +114,39 @@ namespace TMX_Lib.Search
 			return false;
 		}
 
-		private void SearchExact(SearchSettings settings, TextSegment text, LanguagePair language, SimpleResults results)
+		// searchedText - the text I'm searching for
+		// result - the text I have internally
+		private void ApplyPenalties(SimpleResult result, TextSegment searchedText)
+		{
+			// FIXME
+		}
+
+		private async Task SearchExact(SearchSettings settings, TextSegment text, LanguagePair language, SimpleResults results)
+		{
+			if (HaveEnoughResults(results, settings))
+				return;
+
+			var dbResults = await _db.ExactSearch(text.OriginalText, language.SourceCultureName, language.TargetCultureName);
+			foreach (var dbResult in dbResults)
+			{
+				var score = text.CompareScore(dbResult.SourceText, MinScore(settings));
+				if (score >= MinScore(settings))
+				{
+					var result = new SimpleResult(dbResult) { Score = score };
+					ApplyPenalties(result, text);
+					results.Results.Add(result);
+				}
+			}
+		}
+
+		private async Task SearchFuzzy(SearchSettings settings, TextSegment text, LanguagePair language, SimpleResults results)
 		{
 			if (HaveEnoughResults(results, settings))
 				return;
 
 		}
 
-		private void SearchFuzzy(SearchSettings settings, TextSegment text, LanguagePair language, SimpleResults results)
-		{
-			if (HaveEnoughResults(results, settings))
-				return;
-
-		}
-
-		private void SearchConcordance(SearchSettings settings, TextSegment text, LanguagePair language, SimpleResults results, bool sourceConcorance = true)
+		private async Task SearchConcordance(SearchSettings settings, TextSegment text, LanguagePair language, SimpleResults results, bool sourceConcorance = true)
 		{
 			if (HaveEnoughResults(results, settings))
 				return;
@@ -141,13 +158,19 @@ namespace TMX_Lib.Search
 			_supportedLanguages = (await _db.GetAllLanguagesAsync());
 		}
 
-		public SearchResults Search(SearchSettings settings, Segment segment, LanguagePair language)
+		public bool SupportsLanguage(string language)
 		{
-			if (_db.IsImportInProgress())
+			return _supportedLanguages.Any(l => l.Equals(language, StringComparison.OrdinalIgnoreCase));
+		}
+
+		public async Task<SearchResults> Search(SearchSettings settings, Segment segment, LanguagePair language)
+		{
+			if (_db.IsImportInProgress() && !_db.IsImportComplete())
 				// while importing, don't do any searches
 				return new SearchResults();
 
-			if (!_provider.SupportsSourceLanguage(language.SourceCulture) || !_provider.SupportsTargetLanguage(language.TargetCulture))
+			var hasLanguages = SupportsLanguage(language.SourceCultureName) && SupportsLanguage(language.TargetCultureName);
+			if (!hasLanguages)
 				return new SearchResults();
 
 			var text = new TextSegment(segment.ToPlain());
@@ -156,39 +179,39 @@ namespace TMX_Lib.Search
 			{
 				// Performs only an exact search, without fuzzy search.
 				case SearchMode.ExactSearch:
-					SearchExact(settings, text, language, results);
+					await SearchExact(settings, text, language, results);
 					break;
 
 				// Performs a normal search, i.e. a combined exact/fuzzy search. Fuzzy search is only triggered
 				// if no exact matches are found.
 				case SearchMode.NormalSearch:
-					SearchExact(settings, text, language, results);
+					await SearchExact(settings, text, language, results);
 					var anyExactMatches = results.Results.Any(r => r.IsExactMatch);
 					if (!anyExactMatches)
-						SearchFuzzy(settings, text, language, results);
+						await SearchFuzzy(settings, text, language, results);
 					break;
 
 				// Performs a full search, i.e. a combined exact/fuzzy search. In contrast to NormalSearch, 
 				// fuzzy search is always triggered, even if exact matches are found.
 				case SearchMode.FullSearch:
-					SearchExact(settings, text, language, results);
-					SearchFuzzy(settings, text, language, results);
+					await SearchExact(settings, text, language, results);
+					await SearchFuzzy(settings, text, language, results);
 					break;
 
 				// Performs a concordance search on the source segments, using the source character-based index if it exists or
 				// the default word-based index otherwise.
 				case SearchMode.ConcordanceSearch:
-					SearchConcordance(settings, text, language, results, sourceConcorance: true);
+					await SearchConcordance(settings, text, language, results, sourceConcorance: true);
 					break;
 
 				// Performs a concordance search on the target segments, if the target character-based index exists.
 				case SearchMode.TargetConcordanceSearch:
-					SearchConcordance(settings, text, language, results, sourceConcorance: false);
+					await SearchConcordance(settings, text, language, results, sourceConcorance: false);
 					break;
 
 				// Performs only a fuzzy search. 
 				case SearchMode.FuzzySearch:
-					SearchFuzzy(settings, text, language, results);
+					await SearchFuzzy(settings, text, language, results);
 					break;
 
 				// Performs a search on the source and target hashes for duplicate search during import (only used internally).

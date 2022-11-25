@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 using MongoDB.Driver;
+using Sdl.Core.Globalization.NumberMetadata;
 using TMX_Lib.TmxFormat;
+using TMX_Lib.Utils;
 
 namespace TMX_Lib.Db
 {
@@ -13,8 +17,14 @@ namespace TMX_Lib.Db
     // TmxMongoDb db = new TmxMongoDb("localhost:27017", "mydb");
     public class TmxMongoDb
     {
+	    // cap the results, make the searches faster
+	    //
+	    // the idea: we can end up with lots of results from the database - just process the first batch, since some results could be wrong
+	    // but we don't want to end up processing too many possible results either, since that could put a strain on both the db, and on us
+	    private const int MAX_RESULTS = 100;
+
         // FIXME test with Atlas credentials as well
-        private string _url;
+		private string _url;
         private string _databaseName;
         private bool _connected;
         private bool _initialized;
@@ -34,6 +44,7 @@ namespace TMX_Lib.Db
         private bool? _importComplete = null;
         private TmxParser _parser;
 
+        private CultureDictionary _cultures = new CultureDictionary();
 
 
 		public TmxMongoDb(string url, string databaseName)
@@ -181,9 +192,10 @@ namespace TMX_Lib.Db
 				var indexTU = Builders<TmxTranslationUnit>.IndexKeys.Ascending(i => i.ID);
 	            await _translationUnits.Indexes.CreateOneAsync(new CreateIndexModel<TmxTranslationUnit>(indexTU));
 
-	            var indexTextByLangText = Builders<TmxText>.IndexKeys.Ascending(i => i.Language).Ascending(i => i.Text);
+	            var indexTextByLangText = Builders<TmxText>.IndexKeys.Ascending(i => i.Language).Ascending(i => i.LocaseText);
 	            await _texts.Indexes.CreateOneAsync(new CreateIndexModel<TmxText>(indexTextByLangText));
-	            var indexTextByLangTU = Builders<TmxText>.IndexKeys.Ascending(i => i.Language).Ascending(i => i.TranslationUnitID);
+				// IMPORTANT: first, ID, then language, since when looking for a translation in a specific language, I already know the TU ID
+	            var indexTextByLangTU = Builders<TmxText>.IndexKeys.Ascending(i => i.TranslationUnitID).Ascending(i => i.Language);
 	            await _texts.Indexes.CreateOneAsync(new CreateIndexModel<TmxText>(indexTextByLangTU));
             }
 			catch (Exception e)
@@ -191,9 +203,75 @@ namespace TMX_Lib.Db
                 throw new TmxException("Can't create indexes", e);
             }
         }
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Start of FIND
+
+		private string XmlUnformatText(string formattedText)
+		{
+			XmlDocument doc = new XmlDocument();
+			formattedText = formattedText.Replace("<", "&lt;").Replace(">", "&gt;");
+			doc.LoadXml($"<tmx>{formattedText}</tmx>");
+			var unformatted = doc.SelectSingleNode("tmx").InnerText;
+			return unformatted;
+		}
+
+		// if not found, returns null
+		private async Task<TmxSegment> TryGetSegment(TmxText text, string targetLanguage)
+		{
+			var textFilter = Builders<TmxText>.Filter.Where(f => f.TranslationUnitID == text.TranslationUnitID && f.Language == targetLanguage );
+			var textCursor = await _texts.FindAsync(textFilter, new FindOptions<TmxText>() { Limit = 1 });
+			var targetTexts = new List<TmxText>();
+			await textCursor.ForEachAsync(t => targetTexts.Add(t));
+			if (targetTexts.Count == 0)
+				// we don't have a translation
+				return null;
+
+			var tuFilter = Builders<TmxTranslationUnit>.Filter.Where(f => f.ID == text.TranslationUnitID);
+			var tuCursor = await _translationUnits.FindAsync(tuFilter, new FindOptions<TmxTranslationUnit> { Limit = 1 });
+			var tus = new List<TmxTranslationUnit>();
+			await tuCursor.ForEachAsync(t => tus.Add(t));
+			if (tus.Count < 1)
+				throw new TmxException($"Can't find Translation Unit with ID {text.TranslationUnitID}");
+
+			var segment = new TmxSegment
+			{
+				DbTU = tus[0], 
+				DbSourceText = text, 
+				DbTargetText = targetTexts[0],
+				SourceText = XmlUnformatText(text.FormattedText),
+				TargetText = XmlUnformatText(targetTexts[0].FormattedText),
+			};
+
+			return segment;
+		}
+
+		// this just performs the search and returns the results -- does NOT perform any other analyses, like, compare score and such
+		public async Task<IReadOnlyList<TmxSegment>> ExactSearch(string text, string sourceLanguage, string targetLanguage)
+		{
+			text = Util.TextToDbText(text, _cultures.Culture(sourceLanguage));
+			// FIXME case-insensitive search!
+			var filter = Builders<TmxText>.Filter.Where(f => f.Language == sourceLanguage && f.LocaseText == text);
+			var cursor = await _texts.FindAsync(filter, new FindOptions<TmxText, TmxText>() { Limit = MAX_RESULTS });
+			var texts = new List<TmxText>();
+			await cursor.ForEachAsync(t => texts.Add(t));
+			var segments = new List<TmxSegment>();
+			foreach (var t in texts)
+			{
+				var segment = await TryGetSegment(t, targetLanguage);
+				if (segment != null)
+					segments.Add(segment);
+			}
+			return segments;
+		}
+
+		// End of FIND
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        public async Task AddMetasAsync(IEnumerable<TmxMeta> metas, CancellationToken token = default(CancellationToken))
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Start of ADDs
+
+		public async Task AddMetasAsync(IEnumerable<TmxMeta> metas, CancellationToken token = default(CancellationToken))
         {
             try
             {
@@ -237,33 +315,41 @@ namespace TMX_Lib.Db
                 throw new TmxException($"Can't add TranslationUnits", e);
             }
         }
+        // End of ADDs
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private static (IReadOnlyList<Db.TmxText> texts, Db.TmxTranslationUnit tu) TmxTranslationUnitToMongo(TmxFormat.TmxTranslationUnit tu, ulong id)
-        {
-	        Db.TmxTranslationUnit dbTU = new Db.TmxTranslationUnit
-	        {
-		        ID = id,
-		        CreationAuthor = tu.CreationAuthor,
-		        CreationDate = tu.CreationTime,
-		        ChangeAuthor = tu.ChangeAuthor,
-		        ChangeDate = tu.ChangeTime,
-		        XmlProperties = tu.XmlProperties,
-		        TuAttributes = tu.TuAttributes,
-	        };
 
-	        var texts = tu.Texts.Select(t => new Db.TmxText
-	        {
-		        TranslationUnitID = id,
-		        Language = t.Language,
-		        Text = t.Text,
-		        FormattedText = t.FormattedText,
-	        }).ToList();
 
-	        return (texts, dbTU);
-        }
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Start of IMPORT
+
+		private static (IReadOnlyList<Db.TmxText> texts, Db.TmxTranslationUnit tu) TmxTranslationUnitToMongo(TmxFormat.TmxTranslationUnit tu, ulong id)
+		{
+			Db.TmxTranslationUnit dbTU = new Db.TmxTranslationUnit
+			{
+				ID = id,
+				CreationAuthor = tu.CreationAuthor,
+				CreationDate = tu.CreationTime,
+				ChangeAuthor = tu.ChangeAuthor,
+				ChangeDate = tu.ChangeTime,
+				XmlProperties = tu.XmlProperties,
+				TuAttributes = tu.TuAttributes,
+			};
+
+			var texts = tu.Texts.Select(t => new Db.TmxText
+			{
+				TranslationUnitID = id,
+				Language = t.Language,
+				LocaseText = t.Text,
+				FormattedText = t.FormattedText,
+			}).ToList();
+
+			return (texts, dbTU);
+		}
 
 		// when i have a new database connection - this is the first question - have we already imported everything?
-        public async Task<bool> HasImportBeenDoneBeforeAsync()
+		public async Task<bool> HasImportBeenDoneBeforeAsync()
         {
 	        try
 	        {
@@ -395,5 +481,8 @@ namespace TMX_Lib.Db
 	        }
 	        Debug.WriteLine($"import complete, took {watch.ElapsedMilliseconds} ms");
 		}
-    }
+
+		// End of IMPORT
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	}
 }

@@ -5,6 +5,7 @@ using System.Text;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using TMX_Lib.Search;
 
 namespace TMX_TranslationProvider
 {
@@ -22,7 +23,9 @@ namespace TMX_TranslationProvider
 				throw new Exception($"Cannot handle URI. {translationProviderUri}");
 			}
 
-			return new TmxTranslationProvider(new TmxTranslationsOptions(translationProviderUri));
+			var options = new TmxTranslationsOptions(translationProviderUri);
+			var service = new TmxSearchService(options);
+			return new TmxTranslationProvider(options, service);
 		}
 
 		public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)

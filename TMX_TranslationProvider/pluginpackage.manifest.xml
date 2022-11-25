@@ -3,6 +3,23 @@
   <PlugInName>TMX Translation Provider</PlugInName>
   <Version>1.0.0.0</Version>
   <Description>Translation Provider based on .tmx files</Description>
-  <Author></Author>
+  <Author>Trados AppStore Team</Author>
   <RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
+	<Include>
+		<File>TMX_Lib.dll</File>
+		<File>DnsClient.dll</File>
+		<File>DocumentFormat.OpenXml.dll</File>
+		<File>ICSharpCode.SharpZipLib.dll</File>
+		<File>ManagedCompactEncodingDetector.dll</File>
+		<File>Microsoft.Extensions.Logging.Abstractions.dll</File>
+		<File>MongoDB.Bson.dll</File>
+		<File>MongoDB.Driver.Core.dll</File>
+		<File>MongoDB.Driver.dll</File>
+		<File>MongoDB.Libmongocrypt.dll</File>
+		<File>MurmurHash.dll</File>
+		<File>NLog.dll</File>
+		<File>SharpCompress.dll</File>
+		<File>Snappier.dll</File>
+		<File>ZstdSharp.dll</File>
+	</Include>
 </PluginPackage>

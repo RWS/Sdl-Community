@@ -1,6 +1,9 @@
-﻿namespace TMX_Lib.Db
+﻿using MongoDB.Bson.Serialization.Attributes;
+
+namespace TMX_Lib.Db
 {
-    public class TmxLanguage
+	[BsonIgnoreExtraElements]
+	public class TmxLanguage
     {
         // example: en-GB
         public string Language;

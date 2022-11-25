@@ -10,7 +10,6 @@ namespace TMX_Lib.Search
 	{
 		string FileName { get; set; }
 		string DbConnectionNoPassword { get; set; }
-		string Username { get; set; }
 		string Password { get; set; }
 		string DbName { get; set; }
 	}

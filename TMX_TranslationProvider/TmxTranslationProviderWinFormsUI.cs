@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using TMX_Lib.Search;
 
 namespace TMX_TranslationProvider
 {
@@ -18,10 +19,12 @@ namespace TMX_TranslationProvider
 
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
-			var form = new TmxOptionsForm(new TmxTranslationsOptions());
+			var options = new TmxTranslationsOptions();
+			var service = new TmxSearchService(options);
+			var form = new TmxOptionsForm(options, service);
 			if (form.ShowDialog(owner) != DialogResult.OK)
 				return null;
-			var provider = new TmxTranslationProvider(form.Options);
+			var provider = new TmxTranslationProvider(form.Options, form.SearchService);
 			return new []{ provider};
 		}
 
@@ -29,10 +32,10 @@ namespace TMX_TranslationProvider
 		{
 			if (translationProvider is TmxTranslationProvider tmxProvider)
 			{
-				var form = new TmxOptionsForm(tmxProvider.Options);
+				var form = new TmxOptionsForm(tmxProvider.Options, tmxProvider.SearchService);
 				if (form.ShowDialog(owner) == DialogResult.OK)
 				{
-					tmxProvider.Options = form.Options;
+					tmxProvider.SetSearchService(form.SearchService, form.Options);
 					return true;
 				}
 			}
