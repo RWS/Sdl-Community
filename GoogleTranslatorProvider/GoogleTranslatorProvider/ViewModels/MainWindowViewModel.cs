@@ -80,7 +80,7 @@ namespace GoogleTranslatorProvider.ViewModels
 				}
 			};
 
-			TrySwitchView(Constants.Views_Provider);
+			SwitchView(Constants.Views_Provider);
 		}
 
 		public MainWindowViewModel(ITranslationOptions options, ISettingsControlViewModel settingsControlViewModel, IHelpViewModel helpViewModel, bool isTellMeAction)
@@ -104,11 +104,7 @@ namespace GoogleTranslatorProvider.ViewModels
 				}
 			};
 
-			if (_isTellMeAction)
-			{
-				IsSettingsViewSelected = true;
-				SelectedView = _availableViews[0];
-			}
+			SwitchView(Constants.Views_Settings);
 		}
 
 

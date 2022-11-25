@@ -26,6 +26,7 @@
 			</ResourceDictionary.MergedDictionaries>
 
 			<converters:EmptyToVisibility x:Key="EmptyToVisibilityConverter"/>
+			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter"/>
 			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter"/>
 
 			<DataTemplate DataType="{x:Type viewModels:ProviderViewModel}">
@@ -100,6 +101,7 @@
 						Style="{StaticResource Sdl.Button.SecondaryStyle}"
 						Command="{Binding SwitchViewCommand}"
 						CommandParameter="HelpViewModel"
+						IsEnabled="{Binding IsHelpViewSelected, Converter={StaticResource InvertableBoolEnabledConverter}, ConverterParameter=Inverted}"
 						Cursor="Hand"
 						Width="80">
 				</Button>
@@ -110,7 +112,7 @@
 							Style="{StaticResource Sdl.Button.SecondaryStyle}"
 							Command="{Binding SwitchViewCommand}"
 							CommandParameter="SettingsViewModel"
-							Visibility="{Binding IsSettingsViewSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+							IsEnabled="{Binding IsProviderViewSelected, Converter={StaticResource InvertableBoolEnabledConverter}}"
 							Cursor="Hand"
 							Width="140"
 							Margin="0 0 8 0"/>
