@@ -13,6 +13,7 @@
 			<File>Google.Api.Gax.dll</File>
 			<File>Google.Api.Gax.Grpc.GrpcCore.dll</File>
 			<File>Google.Api.Gax.Rest.dll</File>
+			<File>Google.Apis.Auth.dll</File>
 			<File>Google.Apis.Core.dll</File>
 			<File>Google.Apis.dll</File>
 			<File>Google.Cloud.Translate.V3.dll</File>

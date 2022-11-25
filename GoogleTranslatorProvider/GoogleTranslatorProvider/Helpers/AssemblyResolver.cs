@@ -8,7 +8,7 @@ namespace GoogleTranslatorProvider.Helpers
 {
 	public static class AssemblyResolver
 	{
-		private static List<string> assemblyFolders;
+		private static List<string> assemblyFolders = new List<string>();
 
 		public static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs e)
 		{
@@ -43,8 +43,8 @@ namespace GoogleTranslatorProvider.Helpers
 				}
 				else if (assemblyName.Version < requestedAssembly.Version)
 				{
-                    continue;
-                }
+					continue;
+				}
 
 				asemblies.Add(Assembly.LoadFrom(file.FullName));
 			}
