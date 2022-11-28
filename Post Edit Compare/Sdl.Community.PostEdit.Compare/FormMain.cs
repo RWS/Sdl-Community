@@ -931,7 +931,7 @@ namespace PostEdit.Compare
 
         private void helpToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3190.post-edit-compare");
+            System.Diagnostics.Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3190/post-edit-compare");
         }
 
         private void toolStripComboBox_fileFilters_KeyPress(object sender, KeyPressEventArgs e)
