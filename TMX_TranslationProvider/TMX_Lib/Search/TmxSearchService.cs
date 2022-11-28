@@ -5,14 +5,18 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NLog;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using TMX_Lib.Db;
+using LogManager = NLog.LogManager;
 
 namespace TMX_Lib.Search
 {
 	public class TmxSearchService
 	{
+		private static readonly Logger log = LogManager.GetCurrentClassLogger();
+
 		private ISearchServiceParameters _options;
 		private TmxSearch _search;
 		private TmxMongoDb _db;
@@ -60,9 +64,11 @@ namespace TMX_Lib.Search
 			return search?.SupportsLanguage(language) ?? false;
 		}
 
+		// if it will start an import, this will return once the import is complete
 		public async Task SetOptionsAsync(ISearchServiceParameters newOptions)
 		{
 			Debug.Assert(newOptions != null);
+			log.Debug($"new options {newOptions.DbConnectionNoPassword} {newOptions.FileName} db={newOptions.DbName}");
 			ISearchServiceParameters oldOptions;
 			TmxMongoDb db;
 			lock (this)
@@ -85,44 +91,63 @@ namespace TMX_Lib.Search
 					_paramsOk = false;
 				return;
 			}
-			lock(this)
-				_paramsOk = true;
-			var needsReimport = oldOptions == null 
-			                    || (oldOptions.FileName != newOptions.FileName) 
-			                    || (newOptions.DbName == "")
-			                    || !isSameDb;
-			if (!isSameDb)
-			{
-				db = new TmxMongoDb(ConnectionStr(newOptions), DbName(newOptions));
-				await db.InitAsync();
-				_hasImportBeenDoneBefore = await db.HasImportBeenDoneBeforeAsync();
-				if (!_hasImportBeenDoneBefore)
-					// this is a fresh db
-					needsReimport = true;
-			}
 
-			var search = new TmxSearch(db);
-			await search.LoadLanguagesAsync();
-			bool continueImport;
-			lock (this)
+			try
 			{
-				// the idea - while we're initializing this asynchronously, we can have another call to change the params
-				continueImport = _options.Equals(newOptions);
-				if (continueImport)
+				lock (this)
+					_paramsOk = true;
+				var needsReimport = oldOptions == null
+				                    || (oldOptions.FileName != newOptions.FileName)
+				                    || (newOptions.DbName == "")
+				                    || !isSameDb;
+				if (!isSameDb)
 				{
-					_db = db;
-					_search = search;
+					db = new TmxMongoDb(ConnectionStr(newOptions), DbName(newOptions));
+					await db.InitAsync();
+					_hasImportBeenDoneBefore = await db.HasImportBeenDoneBeforeAsync();
+					if (_hasImportBeenDoneBefore)
+						needsReimport = Path.GetFileName(newOptions.FileName) != await db.ImportedFileNameAsync();
+					else 
+						// this is a fresh db
+						needsReimport = true;
 				}
-			}
 
-			if (continueImport && needsReimport)
-				// IMPORTANT: just start the import, this can take a lot of time, for big databases
-				Task.Run(async () =>
+				if (db == null)
 				{
-					await db.ImportToDbAsync(_options.FileName);
-					await search.LoadLanguagesAsync();
-				});
+					// no db connection yet
+					lock (this)
+						_paramsOk = false;
+					return;
+				}
 
+				var search = new TmxSearch(db);
+				await search.LoadLanguagesAsync();
+				bool continueImport;
+				lock (this)
+				{
+					// the idea - while we're initializing this asynchronously, we can have another call to change the params
+					continueImport = _options.Equals(newOptions);
+					if (continueImport)
+					{
+						_db = db;
+						_search = search;
+					}
+				}
+
+				if (continueImport && needsReimport)
+					// IMPORTANT: just start the import, this can take a lot of time, for big databases
+					await Task.Run(async () =>
+					{
+						await db.ImportToDbAsync(_options.FileName);
+						await search.LoadLanguagesAsync();
+					});
+			}
+			catch (Exception e)
+			{
+				lock (this)
+					_paramsOk = false;
+				throw;
+			}
 		}
 
 		public async Task<SearchResults> Search(SearchSettings settings, Segment segment, LanguagePair language)

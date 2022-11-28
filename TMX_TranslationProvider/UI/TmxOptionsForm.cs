@@ -8,20 +8,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NLog;
 using TMX_Lib.Search;
 
 namespace TMX_TranslationProvider
 {
 	public partial class TmxOptionsForm : Form
 	{
-		private TmxTranslationsOptions _options;
+		private static readonly Logger log = LogManager.GetCurrentClassLogger();
+
 		private TmxSearchService _oldSearchService;
 
 		// this can change, if the user updates the connection
 		// the idea -> don't modify the initial search service, just in case the user presses Cancel
 		private TmxSearchService _newSearchService = null;
 
-		public TmxTranslationsOptions Options => _options;
+		public TmxTranslationsOptions Options => _newOptions.ToOptions();
 		public TmxSearchService SearchService => _newSearchService ?? _oldSearchService;
 
 		private EditOptions _oldOptions, _newOptions;
@@ -29,21 +31,27 @@ namespace TMX_TranslationProvider
 
 		public TmxOptionsForm(TmxTranslationsOptions options, TmxSearchService searchService)
 		{
-			_options = options.Clone();
 			_oldSearchService = searchService;
 			_newSearchService = null;
 			InitializeComponent();
-			_initialized = true;
 			_oldOptions = EditOptions.FromTranslationOptions(options);
 			_newOptions = EditOptions.FromTranslationOptions(options);
+			var guid = options.Guid;
+			if (guid == "")
+				guid = System.Guid.NewGuid().ToString();
+			_oldOptions.Guid = guid;
+			_newOptions.Guid = guid;
 
 			fileName.Text = _newOptions.FileName ;
 			dbConnection.Text = _newOptions.Connection ;
 			dbPassword.Text = _newOptions.Password; 
 			dbName.Text = _newOptions.DatabaseName ;
 
+			_initialized = true;
+
 			UpdateUI();
 		}
+
 
 		private void UpdateSearchService()
 		{
@@ -66,6 +74,7 @@ namespace TMX_TranslationProvider
 
 		private void ok_Click(object sender, EventArgs e)
 		{
+			UpdateOptions();
 			DialogResult = DialogResult.OK;
 		}
 
@@ -77,13 +86,15 @@ namespace TMX_TranslationProvider
 		private void browse_Click(object sender, EventArgs e)
 		{
 			var dlg = new OpenFileDialog();
-			if (_options.FileName != "")
-				dlg.FileName = _options.FileName;
+			if (_newOptions.FileName != "")
+				dlg.FileName = _newOptions.FileName;
 			dlg.Filter = "TMX Files (*.tmx)|*.tmx|All files (*.*)|*.*";
 			if (dlg.ShowDialog() == DialogResult.OK)
 			{
-				_options.FileName = dlg.FileName;
+				_newOptions.FileName = dlg.FileName;
 				fileName.Text = dlg.FileName;
+				importStatus.Text = "";
+				importProgress.Visible = false;
 			}
 		}
 
@@ -100,6 +111,7 @@ namespace TMX_TranslationProvider
 			var (ok, errorStr) = await TmxSearchService.TryParametersAsync(_newOptions.ToOptions());
 			if (ok)
 			{
+				error.Visible = false;
 				error.Text = "";
 				importProgress.Visible = importStatus.Visible = true;
 				UpdateSearchService();
@@ -109,6 +121,7 @@ namespace TMX_TranslationProvider
 			}
 			else
 			{
+				error.Visible = true;
 				error.Text = errorStr;
 				importProgress.Visible = importStatus.Visible = false;
 				timerImportProgress.Enabled = false;

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using NLog;
 using TMX_Lib.Db;
 
 namespace TMX_Lib.XmlSplit
@@ -17,6 +18,8 @@ namespace TMX_Lib.XmlSplit
 	 */
 	public class XmlSplitter : IDisposable
 	{
+		private static readonly Logger log = LogManager.GetCurrentClassLogger();
+
 		private string _fileName;
 
 		// the idea for the pad extra - just in case we read, at the end a partial UTF8 char, decoding it can trigger an exception
@@ -62,6 +65,7 @@ namespace TMX_Lib.XmlSplit
 				_blockCount = new FileInfo(fileName).Length / SplitSize;
 				_encoding = GetEncoding(fileName);
 				_stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+				log.Debug($"splitting {fileName} - into {_blockCount}");
 			}
 			catch (Exception e)
 			{
@@ -108,6 +112,7 @@ namespace TMX_Lib.XmlSplit
 		// if it returns null, there are no more sub-documents
 		public string TryGetNextString()
 		{
+			log.Debug($"parsing {_fileName} - block {_currentBlockIndex} / {_blockCount}");
 			lock (this)
 			{
 				if (_eofReached)

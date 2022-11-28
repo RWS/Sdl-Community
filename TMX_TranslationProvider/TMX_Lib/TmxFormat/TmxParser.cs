@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
+using NLog;
 using Sdl.Core.Globalization;
 using TMX_Lib.Utils;
 using TMX_Lib.XmlSplit;
@@ -14,13 +15,20 @@ namespace TMX_Lib.TmxFormat
 	
 	public class TmxParser : IDisposable
 	{
+		private static readonly Logger log = LogManager.GetCurrentClassLogger();
 
 		private string _fileName;
 		// if non-empty -> error parsing the file
 		private string _error = "";
 
+		// simple mechanism to handle errors during parsing
+		// example: sometimes the language entry (xml:lang) is incorrect
+		private int _errorCount = 0;
+
+
 		public bool HasError => _error != "";
 		public string Error => _error;
+		public int ErrorCount => _errorCount;
 
 		private XmlSplitter _splitter;
 		private XmlDocument _headerDocument;
@@ -32,6 +40,8 @@ namespace TMX_Lib.TmxFormat
 		}
         private HashSet<string> _languagesSet = new HashSet<string>();
         private CultureDictionary _languages = new CultureDictionary();
+
+        public string FileName => _fileName;
 
 		private TmxHeader _header;
         public TmxHeader Header {
@@ -97,7 +107,14 @@ namespace TMX_Lib.TmxFormat
 
 	        List<TmxTranslationUnit> translations = new List<TmxTranslationUnit>();
 	        foreach (XmlNode item in document.SelectNodes("//tu"))
-		        translations.Add(NodeToTU(item));
+		        try
+		        {
+			        translations.Add(NodeToTU(item));
+		        }
+				catch (Exception e)
+				{
+					++_errorCount;
+				}
 	        return translations;
         }
 

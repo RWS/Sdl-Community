@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -50,7 +51,8 @@ namespace TMX_Lib.Db
 		public TmxMongoDb(string url, string databaseName)
         {
             _url = url;
-            _databaseName = databaseName;
+            var notAllowedChars = " \t\r\n:.()_";
+            _databaseName = new string(databaseName.Where(ch => !notAllowedChars.Contains(ch)).ToArray());
             Connect();
         }
 
@@ -163,6 +165,21 @@ namespace TMX_Lib.Db
                 throw new TmxException("Error accessing db - HasAnyData", e);
             }
         }
+
+        public async Task<string> ImportedFileNameAsync()
+        {
+	        try
+	        {
+		        var result = await _metas.FindAsync(Builders<TmxMeta>.Filter.Where(m => m.Type == "FileName"));
+		        var metas = new List<string>();
+		        await result.ForEachAsync(l => metas.Add(l.Value));
+		        return metas.Count > 0 ? metas[0] : "";
+	        }
+			catch (Exception e)
+	        {
+		        throw new TmxException("Can't get imported file name", e);
+	        }
+		}
 
         public async Task<IReadOnlyList<string>> GetAllLanguagesAsync()
         {
@@ -388,7 +405,7 @@ namespace TMX_Lib.Db
 		        var progress = _parser?.Progress() ?? 0d;
 				// the idea - once the parsing is complete, I'm creating the indexes. 
 				// I assume that will take some time as well
-		        return Math.Max(progress * 0.95, 0.95);
+		        return Math.Min(progress * 0.95, 0.95);
 	        }
         }
 
@@ -428,15 +445,6 @@ namespace TMX_Lib.Db
 	        {
 		        await ClearAsync();
 		        watch = Stopwatch.StartNew();
-		        await AddMetasAsync(new[]
-		        {
-			        new TmxMeta { Type = "Header", Value = parser.Header.Xml,},
-			        new TmxMeta { Type = "Source Language", Value = parser.Header.SourceLanguage,},
-			        new TmxMeta { Type = "Target Language", Value = parser.Header.TargetLanguage,},
-			        new TmxMeta { Type = "Domains", Value = string.Join(", ", parser.Header.Domains),},
-			        new TmxMeta { Type = "Creation Date", Value = parser.Header.CreationDate?.ToLongDateString() ?? "unknown",},
-			        new TmxMeta { Type = "Author", Value = parser.Header.Author,},
-		        }, token);
 
 		        ulong id = 1;
 		        while (true)
@@ -464,7 +472,19 @@ namespace TMX_Lib.Db
 		        var languages = parser.Languages().Select(l => new TmxLanguage { Language = l }).ToList();
 		        await AddLanguagesAsync(languages, token);
 
-		        // best practice - create indexes after everything has been imported
+				// the idea -> add them at the end, easily know if the import went to the end or not
+		        await AddMetasAsync(new[]
+		        {
+			        new TmxMeta { Type = "Header", Value = parser.Header.Xml,},
+			        new TmxMeta { Type = "Source Language", Value = parser.Header.SourceLanguage,},
+			        new TmxMeta { Type = "Target Language", Value = parser.Header.TargetLanguage,},
+			        new TmxMeta { Type = "Domains", Value = string.Join(", ", parser.Header.Domains),},
+			        new TmxMeta { Type = "Creation Date", Value = parser.Header.CreationDate?.ToLongDateString() ?? "unknown",},
+			        new TmxMeta { Type = "Author", Value = parser.Header.Author,},
+			        new TmxMeta { Type = "FileName", Value = Path.GetFileName(parser.FileName)},
+		        }, token);
+
+				// best practice - create indexes after everything has been imported
 				if (!token.IsCancellationRequested)
 					await CreateIndexesAsync();
 	        }

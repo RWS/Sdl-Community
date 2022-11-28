@@ -54,6 +54,9 @@
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>	
+    <Reference Include="Sdl.ProjectAutomation.Core">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.ProjectAutomation.Settings">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
@@ -89,7 +92,8 @@
     <None Include="pluginpackage.manifest.xml" />
   </ItemGroup>
   <ItemGroup>
-  	<PackageReference Include="MongoDB.Driver" Version="2.18.0" />
+  	<PackageReference Include="MongoDB.Driver.signed" Version="2.14.1" />
+  	<PackageReference Include="NLog" Version="5.1.0" />
   	<PackageReference Include="Sdl.Core.PluginFramework">
   		<Version>2.1.0</Version>
   	</PackageReference>

@@ -83,6 +83,7 @@
     <Compile Include="Search\TmxSearch.cs" />
     <Compile Include="Search\TmxSearchService.cs" />
     <Compile Include="Utils\CultureDictionary.cs" />
+    <Compile Include="Utils\Log.cs" />
     <Compile Include="_obsolete_Search\Compare\SlowCompareTexts.cs" />
     <Compile Include="_obsolete_Search\GenericSegmentPairSearch.cs" />
     <Compile Include="_obsolete_Search\ISegmentPairSearch.cs" />
@@ -104,8 +105,11 @@
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MongoDB.Driver">
-      <Version>2.18.0</Version>
+    <PackageReference Include="MongoDB.Driver.signed">
+      <Version>2.14.1</Version>
+    </PackageReference>
+    <PackageReference Include="NLog">
+      <Version>5.1.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup />

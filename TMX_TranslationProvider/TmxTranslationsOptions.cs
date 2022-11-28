@@ -50,6 +50,18 @@ namespace TMX_TranslationProvider
 		public override string ToString() => _uriBuilder.ToString();
 
 		public Uri Uri() => _uriBuilder.Uri;
+		
+		// the idea - each unique Tmx Provider is identified by a GUID -- you can edit its settings, and we'll reuse that provider
+		// this way, if I edit a Tmx Provider, change the settings, and end up with a large file that gets imported into a database (which could take a long time),
+		// I will preserve the same Tmx Provider between edits
+		//
+		// (by default, each new edit, if you change any setting, would create a new provider)
+		public string Guid
+		{
+			get => GetStringParameter("Guid");
+			set => SetStringParameter("Guid", value);
+		}
+
 
 		public string FileName
 		{

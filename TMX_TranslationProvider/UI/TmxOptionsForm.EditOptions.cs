@@ -4,9 +4,19 @@
 	{
 		private class EditOptions
 		{
+			public static bool operator ==(EditOptions left, EditOptions right)
+			{
+				return Equals(left, right);
+			}
+
+			public static bool operator !=(EditOptions left, EditOptions right)
+			{
+				return !Equals(left, right);
+			}
+
 			protected bool Equals(EditOptions other)
 			{
-				return FileName == other.FileName && Connection == other.Connection && Password == other.Password && DatabaseName == other.DatabaseName;
+				return Guid == other.Guid && FileName == other.FileName && Connection == other.Connection && Password == other.Password && DatabaseName == other.DatabaseName;
 			}
 
 			public override bool Equals(object obj)
@@ -21,7 +31,8 @@
 			{
 				unchecked
 				{
-					var hashCode = (FileName != null ? FileName.GetHashCode() : 0);
+					var hashCode = (Guid != null ? Guid.GetHashCode() : 0);
+					hashCode = (hashCode * 397) ^ (FileName != null ? FileName.GetHashCode() : 0);
 					hashCode = (hashCode * 397) ^ (Connection != null ? Connection.GetHashCode() : 0);
 					hashCode = (hashCode * 397) ^ (Password != null ? Password.GetHashCode() : 0);
 					hashCode = (hashCode * 397) ^ (DatabaseName != null ? DatabaseName.GetHashCode() : 0);
@@ -29,6 +40,7 @@
 				}
 			}
 
+			public string Guid = "";
 			public string FileName = "";
 			public string Connection = "";
 			public string Password = "";
@@ -42,6 +54,7 @@
 					Connection = options.DbConnectionNoPassword,
 					Password = options.Password,
 					DatabaseName = options.DbName,
+					Guid = options.Guid,
 				};
 			}
 
@@ -53,6 +66,7 @@
 					DbConnectionNoPassword = Connection,
 					Password = Password,
 					DbName = DatabaseName,
+					Guid = Guid,
 				};
 			}
 		}
