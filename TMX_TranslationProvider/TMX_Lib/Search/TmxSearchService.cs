@@ -20,7 +20,7 @@ namespace TMX_Lib.Search
 		private ISearchServiceParameters _options;
 		private TmxSearch _search;
 		private TmxMongoDb _db;
-		private bool _paramsOk = false;
+		private bool _paramsOk = true;
 		private bool _hasImportBeenDoneBefore;
 
 		public TmxSearchService(ISearchServiceParameters options)
@@ -61,7 +61,10 @@ namespace TMX_Lib.Search
 				search = _search;
 			}
 
-			return search?.SupportsLanguage(language) ?? false;
+			if (search == null)
+				// we haven't fully connected to the db yet
+				return true;
+			return search.SupportsLanguage(language);
 		}
 
 		// if it will start an import, this will return once the import is complete
@@ -85,15 +88,15 @@ namespace TMX_Lib.Search
 			if (!isSameDb)
 				db?.CancelImport();
 
-			if (!(await TryParametersAsync(newOptions)).ok)
-			{
-				lock(this)
-					_paramsOk = false;
-				return;
-			}
-
 			try
 			{
+				if (!(await TryParametersAsync(newOptions)).ok)
+				{
+					lock (this)
+						_paramsOk = false;
+					return;
+				}
+
 				lock (this)
 					_paramsOk = true;
 				var needsReimport = oldOptions == null

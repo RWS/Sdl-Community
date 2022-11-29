@@ -127,7 +127,7 @@ namespace TMX_TranslationProvider
 			};
 
 			tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
-			tu.Origin = TranslationUnitOrigin.Nmt;
+			tu.Origin = TranslationUnitOrigin.TM;
 
 			var sr = new SearchResult(tu)
 			{

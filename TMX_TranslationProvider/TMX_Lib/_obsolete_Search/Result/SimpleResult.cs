@@ -20,7 +20,7 @@ namespace TMX_Lib._obsolete_Search.Result
 		public string TargetText() => string.Join("", Target.Where(part => part.Text != "").Select(part => part.Text));
 
 		public ConfirmationLevel ConfirmationLevel = ConfirmationLevel.Draft;
-		public TranslationUnitOrigin Origin = TranslationUnitOrigin.Nmt;
+		public TranslationUnitOrigin Origin = TranslationUnitOrigin.TM;
 		public int Score = 100;
 
 		public bool IsExactMatch => Score >= 100;

@@ -42,14 +42,33 @@ namespace TMX_TranslationProvider
 			_oldOptions.Guid = guid;
 			_newOptions.Guid = guid;
 
+			if (_newOptions.Connection == "")
+				if (TryDetectLocalMongoDb())
+					_newOptions.Connection = "localhost:27017";
+
 			fileName.Text = _newOptions.FileName ;
 			dbConnection.Text = _newOptions.Connection ;
 			dbPassword.Text = _newOptions.Password; 
 			dbName.Text = _newOptions.DatabaseName ;
 
+
 			_initialized = true;
 
 			UpdateUI();
+		}
+
+		// very simple way to verify if user has Mongodb Community Server installed locally 
+		// obviously, it doesn't always work, but it's a very simple method that works probably 98% of the cases
+		private bool TryDetectLocalMongoDb()
+		{
+			var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+			if (programFiles.EndsWith("(x86)"))
+				// the idea - we can be run as a 32-bit plugin
+				programFiles = programFiles.Substring(0, programFiles.Length - 5).Trim();
+
+			var mongodbServer = $"{programFiles}\\MongoDB\\Server\\6.0\\bin\\mongod.exe";
+			var exists = File.Exists(mongodbServer);
+			return exists;
 		}
 
 
