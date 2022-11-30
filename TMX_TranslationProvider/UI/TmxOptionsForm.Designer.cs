@@ -42,12 +42,12 @@
             this.label12 = new System.Windows.Forms.Label();
             this.dbName = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
+            this.dbPasswordTip = new System.Windows.Forms.Label();
             this.dbPassword = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
+            this.dbPasswordLabel = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.downloadCommunityServer = new System.Windows.Forms.LinkLabel();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -133,12 +133,12 @@
             this.groupBox1.Controls.Add(this.label12);
             this.groupBox1.Controls.Add(this.dbName);
             this.groupBox1.Controls.Add(this.label11);
-            this.groupBox1.Controls.Add(this.label10);
+            this.groupBox1.Controls.Add(this.dbPasswordTip);
             this.groupBox1.Controls.Add(this.dbPassword);
-            this.groupBox1.Controls.Add(this.label9);
+            this.groupBox1.Controls.Add(this.dbPasswordLabel);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.linkLabel1);
+            this.groupBox1.Controls.Add(this.downloadCommunityServer);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.label4);
@@ -210,15 +210,15 @@
             this.label11.TabIndex = 12;
             this.label11.Text = "Database name";
             // 
-            // label10
+            // dbPasswordTip
             // 
-            this.label10.AutoSize = true;
-            this.label10.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.label10.Location = new System.Drawing.Point(288, 123);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(183, 13);
-            this.label10.TabIndex = 11;
-            this.label10.Text = "required only for AtlasDb connections";
+            this.dbPasswordTip.AutoSize = true;
+            this.dbPasswordTip.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.dbPasswordTip.Location = new System.Drawing.Point(288, 123);
+            this.dbPasswordTip.Name = "dbPasswordTip";
+            this.dbPasswordTip.Size = new System.Drawing.Size(183, 13);
+            this.dbPasswordTip.TabIndex = 11;
+            this.dbPasswordTip.Text = "required only for AtlasDb connections";
             // 
             // dbPassword
             // 
@@ -229,14 +229,14 @@
             this.dbPassword.TabIndex = 10;
             this.dbPassword.TextChanged += new System.EventHandler(this.dbPassword_TextChanged);
             // 
-            // label9
+            // dbPasswordLabel
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(91, 123);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(53, 13);
-            this.label9.TabIndex = 9;
-            this.label9.Text = "Password";
+            this.dbPasswordLabel.AutoSize = true;
+            this.dbPasswordLabel.Location = new System.Drawing.Point(91, 123);
+            this.dbPasswordLabel.Name = "dbPasswordLabel";
+            this.dbPasswordLabel.Size = new System.Drawing.Size(53, 13);
+            this.dbPasswordLabel.TabIndex = 9;
+            this.dbPasswordLabel.Text = "Password";
             // 
             // label8
             // 
@@ -259,17 +259,17 @@
             this.label7.TabIndex = 7;
             this.label7.Text = "AtlasDb connection:";
             // 
-            // linkLabel1
+            // downloadCommunityServer
             // 
-            this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(555, 81);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(143, 13);
-            this.linkLabel1.TabIndex = 6;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Tag = "https://www.mongodb.com/try/download/community";
-            this.linkLabel1.Text = "Download Community Server";
+            this.downloadCommunityServer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.downloadCommunityServer.AutoSize = true;
+            this.downloadCommunityServer.Location = new System.Drawing.Point(555, 81);
+            this.downloadCommunityServer.Name = "downloadCommunityServer";
+            this.downloadCommunityServer.Size = new System.Drawing.Size(143, 13);
+            this.downloadCommunityServer.TabIndex = 6;
+            this.downloadCommunityServer.TabStop = true;
+            this.downloadCommunityServer.Tag = "https://www.mongodb.com/try/download/community";
+            this.downloadCommunityServer.Text = "Download Community Server";
             // 
             // label6
             // 
@@ -374,14 +374,14 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.LinkLabel downloadCommunityServer;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox dbName;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label dbPasswordTip;
         private System.Windows.Forms.TextBox dbPassword;
-        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label dbPasswordLabel;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label importStatus;
         private System.Windows.Forms.ProgressBar importProgress;

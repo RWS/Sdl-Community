@@ -29,6 +29,8 @@ namespace TMX_TranslationProvider
 		private EditOptions _oldOptions, _newOptions;
 		private bool _initialized = false;
 
+		private bool _tryDetectLocalMongoDb;
+
 		public TmxOptionsForm(TmxTranslationsOptions options, TmxSearchService searchService)
 		{
 			_oldSearchService = searchService;
@@ -42,15 +44,15 @@ namespace TMX_TranslationProvider
 			_oldOptions.Guid = guid;
 			_newOptions.Guid = guid;
 
+			_tryDetectLocalMongoDb = TryDetectLocalMongoDb();
 			if (_newOptions.Connection == "")
-				if (TryDetectLocalMongoDb())
+				if (_tryDetectLocalMongoDb)
 					_newOptions.Connection = "localhost:27017";
 
 			fileName.Text = _newOptions.FileName ;
 			dbConnection.Text = _newOptions.Connection ;
 			dbPassword.Text = _newOptions.Password; 
 			dbName.Text = _newOptions.DatabaseName ;
-
 
 			_initialized = true;
 
@@ -59,7 +61,7 @@ namespace TMX_TranslationProvider
 
 		// very simple way to verify if user has Mongodb Community Server installed locally 
 		// obviously, it doesn't always work, but it's a very simple method that works probably 98% of the cases
-		private bool TryDetectLocalMongoDb()
+		private static bool TryDetectLocalMongoDb()
 		{
 			var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
 			if (programFiles.EndsWith("(x86)"))
@@ -188,16 +190,24 @@ namespace TMX_TranslationProvider
 			UpdateUI();
 		}
 
+		private bool IsLocalhostConnection() => _newOptions.Connection.StartsWith("localhost", StringComparison.CurrentCultureIgnoreCase);
+
 		private void UpdateUI()
 		{
 			if (!_initialized)
 				return;
 			UpdateOptions();
 
-			importProgress.Visible = SearchService.IsImporting() && !SearchService.ImportComplete();
-			importStatus.Visible = SearchService.IsImporting() || SearchService.ImportComplete();
+			var connectionChanged = SearchService.Options.DbConnectionNoPassword != _newOptions.Connection;
+			importProgress.Visible = SearchService.IsImporting() && !SearchService.ImportComplete() && !connectionChanged;
+			importStatus.Visible = SearchService.IsImporting() || SearchService.ImportComplete() && !connectionChanged;
 			importProgress.Value = (int)(SearchService.ImportProgress() * 100);
 			importStatus.Text = !SearchService.ImportComplete() ? "Importing Data..." : "Import Complete";
+
+			var isLocalhost = IsLocalhostConnection();
+			dbPassword.Visible = dbPasswordLabel.Visible = dbPasswordTip.Visible = !isLocalhost;
+			if (_tryDetectLocalMongoDb)
+				downloadCommunityServer.Visible = false;
 		}
 	}
 }

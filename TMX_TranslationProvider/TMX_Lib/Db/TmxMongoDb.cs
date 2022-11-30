@@ -83,7 +83,7 @@ namespace TMX_Lib.Db
             }
             catch (Exception e)
             {
-                throw new TmxException($"Can't connect to {_databaseName}", e);
+                throw new TmxException($"Can't connect to {_databaseName} database." , e);
             }
         }
 
@@ -482,6 +482,7 @@ namespace TMX_Lib.Db
 			        new TmxMeta { Type = "Creation Date", Value = parser.Header.CreationDate?.ToLongDateString() ?? "unknown",},
 			        new TmxMeta { Type = "Author", Value = parser.Header.Author,},
 			        new TmxMeta { Type = "FileName", Value = Path.GetFileName(parser.FileName)},
+			        new TmxMeta { Type = "FullFileName", Value = parser.FileName},
 		        }, token);
 
 				// best practice - create indexes after everything has been imported
