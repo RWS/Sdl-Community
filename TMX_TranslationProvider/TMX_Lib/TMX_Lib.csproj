@@ -82,6 +82,7 @@
     <Compile Include="Search\TextSegment.cs" />
     <Compile Include="Search\TmxSearch.cs" />
     <Compile Include="Search\TmxSearchService.cs" />
+    <Compile Include="Search\TmxSearchSettings.cs" />
     <Compile Include="Utils\CultureDictionary.cs" />
     <Compile Include="Utils\Log.cs" />
     <Compile Include="_obsolete_Search\Compare\SlowCompareTexts.cs" />

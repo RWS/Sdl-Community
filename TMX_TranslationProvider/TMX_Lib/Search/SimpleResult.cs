@@ -42,7 +42,7 @@ namespace TMX_Lib.Search
 		}
 
 		// more about Penalties: TranslationMemorySettings.cs:498
-		private void AddPenalty(SearchResult result, PenaltyType type, SearchSettings settings)
+		private void AddPenalty(SearchResult result, PenaltyType type, TmxSearchSettings settings)
 		{
 			var penalty = settings.FindPenalty(type);
 			if (penalty != null)
@@ -50,7 +50,7 @@ namespace TMX_Lib.Search
 		}
 
 		// FIXME tokenize it!
-		public SearchResult ToSearchResult(SearchSettings settings, CultureInfo sourceLanguage, CultureInfo targetLanguage)
+		public SearchResult ToSearchResult(TmxSearchSettings settings, CultureInfo sourceLanguage, CultureInfo targetLanguage)
 		{
 			if (Segment.DbSourceText == null || Segment.DbTargetText == null)
 				throw new TmxException("Invalid simple result, bad source/target text");

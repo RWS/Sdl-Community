@@ -22,7 +22,9 @@ namespace TMX_Lib.Db
 	    //
 	    // the idea: we can end up with lots of results from the database - just process the first batch, since some results could be wrong
 	    // but we don't want to end up processing too many possible results either, since that could put a strain on both the db, and on us
-	    private const int MAX_RESULTS = 100;
+		//
+		// this is especially true on fuzzy searches
+	    private const int MAX_RESULTS = 256;
 
         // FIXME test with Atlas credentials as well
 		private string _url;
@@ -209,10 +211,12 @@ namespace TMX_Lib.Db
 				var indexTU = Builders<TmxTranslationUnit>.IndexKeys.Ascending(i => i.ID);
 	            await _translationUnits.Indexes.CreateOneAsync(new CreateIndexModel<TmxTranslationUnit>(indexTU));
 
-	            var indexTextByLangText = Builders<TmxText>.IndexKeys.Ascending(i => i.Language).Ascending(i => i.LocaseText);
-	            await _texts.Indexes.CreateOneAsync(new CreateIndexModel<TmxText>(indexTextByLangText));
+				// at most one text index allowed
+	            var indexText = Builders<TmxText>.IndexKeys.Text(i => i.LocaseText).Ascending(i => i.NormalizedLanguage);
+	            await _texts.Indexes.CreateOneAsync(new CreateIndexModel<TmxText>(indexText));
+
 				// IMPORTANT: first, ID, then language, since when looking for a translation in a specific language, I already know the TU ID
-	            var indexTextByLangTU = Builders<TmxText>.IndexKeys.Ascending(i => i.TranslationUnitID).Ascending(i => i.Language);
+				var indexTextByLangTU = Builders<TmxText>.IndexKeys.Ascending(i => i.TranslationUnitID).Ascending(i => i.NormalizedLanguage);
 	            await _texts.Indexes.CreateOneAsync(new CreateIndexModel<TmxText>(indexTextByLangTU));
             }
 			catch (Exception e)
@@ -235,7 +239,7 @@ namespace TMX_Lib.Db
 		// if not found, returns null
 		private async Task<TmxSegment> TryGetSegment(TmxText text, string targetLanguage)
 		{
-			var textFilter = Builders<TmxText>.Filter.Where(f => f.TranslationUnitID == text.TranslationUnitID && f.Language == targetLanguage );
+			var textFilter = Builders<TmxText>.Filter.Where(f => f.TranslationUnitID == text.TranslationUnitID && f.NormalizedLanguage == targetLanguage );
 			var textCursor = await _texts.FindAsync(textFilter, new FindOptions<TmxText>() { Limit = 1 });
 			var targetTexts = new List<TmxText>();
 			await textCursor.ForEachAsync(t => targetTexts.Add(t));
@@ -266,11 +270,47 @@ namespace TMX_Lib.Db
 		public async Task<IReadOnlyList<TmxSegment>> ExactSearch(string text, string sourceLanguage, string targetLanguage)
 		{
 			text = Util.TextToDbText(text, _cultures.Culture(sourceLanguage));
-			// FIXME case-insensitive search!
-			var filter = Builders<TmxText>.Filter.Where(f => f.Language == sourceLanguage && f.LocaseText == text);
-			var cursor = await _texts.FindAsync(filter, new FindOptions<TmxText, TmxText>() { Limit = MAX_RESULTS });
+			sourceLanguage = Util.NormalizeLanguage(sourceLanguage);
+			targetLanguage = Util.NormalizeLanguage(targetLanguage);
+			// old:
+			//var filter = Builders<TmxText>.Filter.Where(f => f.NormalizedLanguage == sourceLanguage && f.LocaseText == text);
+
+			// surround text in quotes -> so that we perform an exact search
+			text = $"\"{text.Replace("\"", "\\\"")}\"" ;
+			var filter = Builders<TmxText>.Filter.Text(text , new TextSearchOptions { CaseSensitive = false, DiacriticSensitive = false,});
+			var cursor = await _texts.FindAsync(filter, new FindOptions<TmxText>() { Limit = MAX_RESULTS });
 			var texts = new List<TmxText>();
-			await cursor.ForEachAsync(t => texts.Add(t));
+			await cursor.ForEachAsync(t =>
+			{
+				if (t.NormalizedLanguage == sourceLanguage)
+					texts.Add(t);
+			});
+			var segments = new List<TmxSegment>();
+			foreach (var t in texts)
+			{
+				var segment = await TryGetSegment(t, targetLanguage);
+				if (segment != null)
+					segments.Add(segment);
+			}
+			return segments;
+		}
+		// this just performs the search and returns the results -- does NOT perform any other analyses, like, compare score and such
+		public async Task<IReadOnlyList<TmxSegment>> FuzzySearch(string text, string sourceLanguage, string targetLanguage)
+		{
+			text = Util.TextToDbText(text, _cultures.Culture(sourceLanguage));
+			sourceLanguage = Util.NormalizeLanguage(sourceLanguage);
+			targetLanguage = Util.NormalizeLanguage(targetLanguage);
+			var filter = Builders<TmxText>.Filter.Text(text, new TextSearchOptions { CaseSensitive = false, DiacriticSensitive = false, });
+
+			// FIXME use projection, to find out the textScore, and sort by it.
+
+			var cursor = await _texts.FindAsync(filter, new FindOptions<TmxText>() { Limit = MAX_RESULTS, });
+			var texts = new List<TmxText>();
+			await cursor.ForEachAsync(t =>
+			{
+				if (t.NormalizedLanguage == sourceLanguage)
+					texts.Add(t);
+			});
 			var segments = new List<TmxSegment>();
 			foreach (var t in texts)
 			{
@@ -357,7 +397,7 @@ namespace TMX_Lib.Db
 			var texts = tu.Texts.Select(t => new Db.TmxText
 			{
 				TranslationUnitID = id,
-				Language = t.Language,
+				NormalizedLanguage = Util.NormalizeLanguage(t.Language) ,
 				LocaseText = t.Text,
 				FormattedText = t.FormattedText,
 			}).ToList();
@@ -476,6 +516,10 @@ namespace TMX_Lib.Db
 		        await AddMetasAsync(new[]
 		        {
 			        new TmxMeta { Type = "Header", Value = parser.Header.Xml,},
+					// Version:
+					// 1 - initial version
+					// ... - increase this on each breaking change
+			        new TmxMeta { Type = "Version", Value = "1",},
 			        new TmxMeta { Type = "Source Language", Value = parser.Header.SourceLanguage,},
 			        new TmxMeta { Type = "Target Language", Value = parser.Header.TargetLanguage,},
 			        new TmxMeta { Type = "Domains", Value = string.Join(", ", parser.Header.Domains),},

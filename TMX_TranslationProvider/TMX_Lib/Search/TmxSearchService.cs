@@ -161,7 +161,7 @@ namespace TMX_Lib.Search
 			if (search == null)
 				return new SearchResults();
 
-			return await search.Search(settings, segment, language) ?? new SearchResults();
+			return await search.Search(TmxSearchSettings.FromSearchSettings(settings), segment, language) ?? new SearchResults();
 		}
 
 		// returns true if the given parameters are valid

@@ -20,7 +20,7 @@ namespace TMX_Lib.Search
 
 		private class SimpleResults
 		{
-			public SearchResults ToSearchResults(string text, SearchSettings settings, LanguagePair language)
+			public SearchResults ToSearchResults(string text, TmxSearchSettings settings, LanguagePair language)
 			{
 				var source = new Segment();
 				source.Add(text);
@@ -40,26 +40,18 @@ namespace TMX_Lib.Search
 			_db = db;
 		}
 
-		public TranslationMemorySettings TMSettings { get; set; }
 
-		private int MaxResults(SearchSettings settings) => settings.IsConcordanceSearch
-			? (TMSettings?.ConcordanceMaximumResults ?? settings.MaxResults) : settings.MaxResults;
-
-		private int MinScore(SearchSettings settings) => settings.IsConcordanceSearch
-			? (TMSettings?.ConcordanceMinimumMatchValue ?? settings.MinScore)
-			: settings.MinScore;
-
-		private bool LookupMtEvenIfTmHasMatch => TMSettings?.GetSetting<bool>("LookupMtEvenIfTmHasMatch") ?? false;
+		private bool LookupMtEvenIfTmHasMatch => true;
 
 		// remove any extraneous results, if needed
-		private void CompleteSearch(SearchSettings settings, SimpleResults results)
+		private void CompleteSearch(TmxSearchSettings settings, SimpleResults results)
 		{
 			// note: don't care about QuickInsertIds for now
 			SortSearchResults(settings, results);
 
 			// can happen if LookupMtEvenIfTmHasMatch is true
-			if (results.Results.Count >= MaxResults(settings))
-				results.Results = results.Results.Take(MaxResults(settings)).ToList();
+			if (results.Results.Count >= settings.MaxResults)
+				results.Results = results.Results.Take(settings.MaxResults).ToList();
 		}
 		private int SortSimpleResult(SimpleResult a, SimpleResult b, SortCriterium criteria)
 		{
@@ -95,19 +87,19 @@ namespace TMX_Lib.Search
 
 			return 0;
 		}
-		private void SortSearchResults(SearchSettings settings, SimpleResults results)
+		private void SortSearchResults(TmxSearchSettings settings, SimpleResults results)
 		{
 			// more about SortSpecification: TranslationMemorySettings.cs:596
 			results.Results.Sort((a, b) => SortSimpleResult(a, b, settings.SortSpecification.Criteria));
 		}
 
-		private bool HaveEnoughResults(SimpleResults results, SearchSettings settings)
+		private bool HaveEnoughResults(SimpleResults results, TmxSearchSettings settings)
 		{
 			if (LookupMtEvenIfTmHasMatch)
 				// in this case, look through all the file
 				return false;
 
-			if (results.Results.Count >= MaxResults(settings))
+			if (results.Results.Count >= settings.MaxResults)
 				return true;
 
 			// note: ignoring upLIFT
@@ -121,7 +113,7 @@ namespace TMX_Lib.Search
 			// FIXME
 		}
 
-		private async Task SearchExact(SearchSettings settings, TextSegment text, LanguagePair language, SimpleResults results)
+		private async Task SearchExact(TmxSearchSettings settings, TextSegment text, LanguagePair language, SimpleResults results)
 		{
 			if (HaveEnoughResults(results, settings))
 				return;
@@ -129,8 +121,8 @@ namespace TMX_Lib.Search
 			var dbResults = await _db.ExactSearch(text.OriginalText, language.SourceCultureName, language.TargetCultureName);
 			foreach (var dbResult in dbResults)
 			{
-				var score = text.CompareScore(dbResult.SourceText, MinScore(settings));
-				if (score >= MinScore(settings))
+				var score = text.CompareScore(dbResult.SourceText, settings.MinScore);
+				if (score >= settings.MinScore )
 				{
 					var result = new SimpleResult(dbResult) { Score = score };
 					ApplyPenalties(result, text);
@@ -139,14 +131,25 @@ namespace TMX_Lib.Search
 			}
 		}
 
-		private async Task SearchFuzzy(SearchSettings settings, TextSegment text, LanguagePair language, SimpleResults results)
+		private async Task SearchFuzzy(TmxSearchSettings settings, TextSegment text, LanguagePair language, SimpleResults results)
 		{
 			if (HaveEnoughResults(results, settings))
 				return;
 
+			var dbResults = await _db.FuzzySearch(text.OriginalText, language.SourceCultureName, language.TargetCultureName);
+			foreach (var dbResult in dbResults)
+			{
+				var score = text.CompareScore(dbResult.SourceText, settings.MinScore);
+				if (score >= settings.MinScore)
+				{
+					var result = new SimpleResult(dbResult) { Score = score };
+					ApplyPenalties(result, text);
+					results.Results.Add(result);
+				}
+			}
 		}
 
-		private async Task SearchConcordance(SearchSettings settings, TextSegment text, LanguagePair language, SimpleResults results, bool sourceConcorance = true)
+		private async Task SearchConcordance(TmxSearchSettings settings, TextSegment text, LanguagePair language, SimpleResults results, bool sourceConcorance = true)
 		{
 			if (HaveEnoughResults(results, settings))
 				return;
@@ -163,7 +166,7 @@ namespace TMX_Lib.Search
 			return _supportedLanguages.Any(l => l.Equals(language, StringComparison.OrdinalIgnoreCase));
 		}
 
-		public async Task<SearchResults> Search(SearchSettings settings, Segment segment, LanguagePair language)
+		public async Task<SearchResults> Search(TmxSearchSettings settings, Segment segment, LanguagePair language)
 		{
 			if (_db.IsImportInProgress() && !_db.IsImportComplete())
 				// while importing, don't do any searches

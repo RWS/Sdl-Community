@@ -37,5 +37,11 @@ namespace TMX_Lib.Utils
 			var result = noPunct.ToString().ToLower(language).Trim();
 			return result;
 		}
+
+		// normalize language, so we don't worry about "en-US", "en_us", "en-us"
+		public static string NormalizeLanguage(string language)
+		{
+			return language.Replace("_", "-").ToLowerInvariant();
+		}
 	}
 }
