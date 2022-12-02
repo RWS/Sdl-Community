@@ -12,5 +12,7 @@ namespace TMX_Lib.Db
 		public Db.TmxText DbSourceText, DbTargetText;
 		// note: the db text is in lower case. These contain the correct-case texts
 		public string SourceText, TargetText;
+
+		public double Score => DbSourceText?.Score ?? 0d;
 	}
 }

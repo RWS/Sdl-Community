@@ -77,18 +77,60 @@ namespace QuickTmxTesting
 			var result = await db.FuzzySearch("abc def", "en-GB", "es-MX");
 			Debug.Assert(result.Count == 0);
 
+			result = await db.FuzzySearch("This document contains both the Interserve Construction Health and Safety Code for Subcontractors and the Sustainability Code for Subcontractors.", "en-GB", "es-MX");
+			Debug.WriteLine($"best score:{result[0].Score}");
+			result = await db.FuzzySearch("En el cumplimiento de estas metas, lograr nuestra visión de ser el socio de confianza para todos aquellos con quienes tenemos una relación, accionistas, clientes, empleados, proveedores, miembros de la comunidad en la que estamos trabajando, o de cualquier otro grupo o persona.", "es-MX", "en-GB");
+			Debug.WriteLine($"best score:{result[0].Score}");
+
 			result = await db.FuzzySearch("This document Interserve Health Safety", "en-GB", "es-MX");
-			Debug.Assert(result.Count == 3 && result.Any(r => r.TargetText == "Este documento contiene el Interserve Construcción Código de Salud y Seguridad de los subcontratistas y la sostenibilidad Código de los subcontratistas.") );
+			Debug.Assert(result.Count >= 3 && result.Any(r => r.TargetText == "Este documento contiene el Interserve Construcción Código de Salud y Seguridad de los subcontratistas y la sostenibilidad Código de los subcontratistas.") );
 
 			result = await db.FuzzySearch("construction subcontractors", "en-GB", "es-MX");
-//			Debug.Assert(result.Count == 3 && result[0].TranslationProposal.TargetSegment.ToPlain() == "Este documento contiene el Interserve Construcción Código de Salud y Seguridad de los subcontratistas y la sostenibilidad Código de los subcontratistas.");
+			Debug.Assert(result.Count >= 3 
+			&& result.Any(r => r.SourceText == "This document contains both the Interserve Construction Health and Safety Code for Subcontractors and the Sustainability Code for Subcontractors.")
+			&& result.Any(r => r.SourceText == "These codes have been prepared to ensure that Interserve Construction and all subcontractors on Interserve Construction contracts operate to clear and consistent standards and in doing so assist us in meeting our goals of being accident free and reducing our environmental impact.")
+			&& result.Any(r => r.SourceText == "Subcontractors are required to assist and co-operate with Interserve Construction with health, safety and environmental related issues, including initiatives that may be operated from time to time.")
+			&& result.All(r => r.SourceText != "In meeting these goals we will achieve our vision of being the trusted Partner to all those with whom we have a relationship be they shareholders, customers, employees, suppliers, members of the community in which we are working, or any other group or individual.")
+			);
 
 			result = await db.FuzzySearch("construction health", "en-GB", "es-MX");
-	//		Debug.Assert(result.Count == 2 && result[0].TranslationProposal.TargetSegment.ToPlain() == "Este documento contiene el Interserve Construcción Código de Salud y Seguridad de los subcontratistas y la sostenibilidad Código de los subcontratistas.");
+			Debug.Assert(result.Count >= 2
+			             && result.Any(r => r.SourceText == "This document contains both the Interserve Construction Health and Safety Code for Subcontractors and the Sustainability Code for Subcontractors.")
+			             && result.Any(r => r.SourceText == "Subcontractors are required to assist and co-operate with Interserve Construction with health, safety and environmental related issues, including initiatives that may be operated from time to time.")
+			             && result.All(r => r.SourceText != "In meeting these goals we will achieve our vision of being the trusted Partner to all those with whom we have a relationship be they shareholders, customers, employees, suppliers, members of the community in which we are working, or any other group or individual.")
+			);
 
 			result = await db.FuzzySearch("construcción salud", "es-MX", "en-GB");
-		//	Debug.Assert(result.Count == 1 && result[0].TranslationProposal.TargetSegment.ToPlain() == "In meeting these goals we will achieve our vision of being the trusted Partner to all those with whom we have a relationship be they shareholders, customers, employees, suppliers, members of the community in which we are working, or any other group or individual.");
+			Debug.Assert(result.Count >= 2
+			             && result.Any(r => r.TargetText== "This document contains both the Interserve Construction Health and Safety Code for Subcontractors and the Sustainability Code for Subcontractors.")
+			             && result.Any(r => r.TargetText == "Subcontractors are required to assist and co-operate with Interserve Construction with health, safety and environmental related issues, including initiatives that may be operated from time to time.")
+			             && result.All(r => r.TargetText != "In meeting these goals we will achieve our vision of being the trusted Partner to all those with whom we have a relationship be they shareholders, customers, employees, suppliers, members of the community in which we are working, or any other group or individual.")
+			);
 		}
+
+		private static Segment TextToSegment(string text)
+		{
+			var s = new Segment();
+			s.Add(text);
+			return s;
+		}
+
+		private static async Task TestFuzzySimple4(string root)
+		{
+			var db = new TmxMongoDb("localhost:27017", "sample4");
+			await db.ImportToDbAsync($"{root}\\SampleTestFiles\\#4.tmx");
+			var search = new TmxSearch(db);
+			await search.LoadLanguagesAsync();
+
+			var fuzzy = TmxSearchSettings.Default();
+			fuzzy.Mode = SearchMode.FuzzySearch;
+			var en_sp = new LanguagePair("en-GB", "es-MX");
+			var sp_en = new LanguagePair("es-MX", "en-GB");
+			var results = await search.Search(fuzzy, TextToSegment("This document contains both the Interserve Construction Health and Safety Code for Subcontractors and the Sustainability Code"), en_sp);
+			results = await search.Search(fuzzy, TextToSegment("This document contains both Interserve Construction Health Safety Code for Subcontractors and Sustainability Code"), en_sp);
+			results = await search.Search(fuzzy, TextToSegment("This document contains both Interserve Construction Safety Code for and Code"), en_sp);
+		}
+
 
 		private static void SplitLargeXmlFile(string inputXmlFile, string outputPrefix)
 	    {
@@ -105,10 +147,11 @@ namespace QuickTmxTesting
 	    }
 
 		static void Main(string[] args)
-        {
+		{
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en(GB) - it(IT)_(DGT 2015, 2017).tmx", "C:\\john\\buff\\TMX Examples\\temp\\");
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en-fr (EU Bookshop v2_10.8M).tmx", "C:\\john\\buff\\TMX Examples\\temp2\\");
 			Console.WriteLine("test started");
+
 
 			var root = ".";
 	        if (args.Length > 0)
@@ -116,7 +159,8 @@ namespace QuickTmxTesting
 
 	        //Task.Run(() => TestImportSmallFile2(root)).Wait();
 	        //Task.Run(() => TestImportSample4(root)).Wait();
-	        Task.Run(() => TestDatabaseFuzzySimple4(root)).Wait();
+	        //Task.Run(() => TestDatabaseFuzzySimple4(root)).Wait();
+	        Task.Run(() => TestFuzzySimple4(root)).Wait();
 	        Console.ReadLine();
         }
     }

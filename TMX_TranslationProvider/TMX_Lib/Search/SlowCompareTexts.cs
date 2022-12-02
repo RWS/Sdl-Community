@@ -5,13 +5,13 @@ using TMX_Lib.Utils;
 
 namespace TMX_Lib.Search
 {
-	// compares two texts, returns a score 1-100
+	// compares two texts, returns a score 0-1
 	// this is a slow and detailed compare, to be run only after the fast searches have shown the probability for "sameness"
-	internal class SlowCompareTexts
+	public class SlowCompareTexts
 	{
 		private static Dictionary<string, int> StrToDictioary(string a)
 		{
-			Dictionary<string, int> dic = new Dictionary<string, int>();
+			var dic = new Dictionary<string, int>();
 			foreach (var word in a.Split(Constants.WORD_DELIMITERS, StringSplitOptions.RemoveEmptyEntries))
 			{
 				if (dic.ContainsKey(word))
@@ -70,10 +70,84 @@ namespace TMX_Lib.Search
 			return list;
 		}
 
+		private static (string noPunct, string punct) RemovePunctuation(string a)
+		{
+			var punct = "";
+			var noPunct = new string( a.Where(ch =>
+			{
+				if (Char.IsPunctuation(ch))
+				{
+					punct += ch;
+					return false;
+				}
+
+				return true;
+			}).ToArray());
+			return (noPunct, punct);
+		}
+
+		// returns a word penalty, based on the order of the words - if they don't match
+		private static double OrderPenalty(string a, string b)
+		{
+			// simple for now:
+			// - 3% for each order mismatch (word missing or extra word or different word)
+			// - 12% if two consecutive mismatches ("this is an interesting idea" vs "this interesting idea")
+			var aWords = a.Split(Constants.WORD_DELIMITERS, StringSplitOptions.RemoveEmptyEntries);
+			var bWords = b.Split(Constants.WORD_DELIMITERS, StringSplitOptions.RemoveEmptyEntries);
+			var aIdx = 0;
+			var bIdx = 0;
+			var penalty = 0d;
+			while (aIdx < aWords.Length && bIdx < bWords.Length)
+			{
+				if (a[aIdx] == b[bIdx])
+				{
+					aIdx++;
+					bIdx++;
+					continue;
+				}
+
+				penalty += 0.03;
+				if (aIdx + 1 >= aWords.Length || bIdx + 1 >= bWords.Length)
+					// can't compare against next word
+					break;
+
+				if (a[aIdx + 1] == b[bIdx + 1])
+				{
+					// word difference
+					aIdx++;
+					bIdx++;
+					continue;
+				}
+
+				if (a[aIdx + 1] == b[bIdx])
+				{
+					aIdx++;
+					continue;
+				}
+
+				if (a[aIdx] == b[bIdx + 1])
+				{
+					bIdx++;
+					continue;
+				}
+
+				// two consecutive differences
+				penalty = 0.12;
+				break;
+			}
+
+			return penalty;
+		}
+
 		// returns a 0-1 score (0-least , 1-best)
 		public static double Compare(string a, string b)
 		{
 			var charCount = Math.Min(a.Length, b.Length);
+
+			string aPunct, bPunct;
+			(a, aPunct) = RemovePunctuation(a);
+			(b, bPunct) = RemovePunctuation(b);
+
 			var aWordsDictionary = StrToDictioary(a);
 			var bWordsDictionary = StrToDictioary(b);
 
@@ -160,6 +234,11 @@ namespace TMX_Lib.Search
 			if (penalty >= charCount)
 				return 0;
 			var result = (double)(charCount - penalty) / (double)charCount;
+			if (aPunct != bPunct)
+				// if not same punctuation -> remove 4%
+				result = Math.Max(result - 0.04, 0);
+
+			result = Math.Max(result - OrderPenalty(a, b), 0);
 			return result;
 		}
 	}

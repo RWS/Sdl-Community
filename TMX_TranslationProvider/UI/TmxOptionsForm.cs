@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -191,6 +192,11 @@ namespace TMX_TranslationProvider
 		}
 
 		private bool IsLocalhostConnection() => _newOptions.Connection.StartsWith("localhost", StringComparison.CurrentCultureIgnoreCase);
+
+		private void downloadCommunityServer_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			Process.Start(downloadCommunityServer.Tag.ToString());
+		}
 
 		private void UpdateUI()
 		{

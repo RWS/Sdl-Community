@@ -6,7 +6,7 @@ namespace TMXTests
 	public class TestParser
 	{
 		[Fact]
-		public void Test1()
+		public void Test()
 		{
 			var parser = new TmxParser("..\\..\\..\\..\\SampleTestFiles\\#4.tmx");
 			Assert.Equal(false, parser.HasError);

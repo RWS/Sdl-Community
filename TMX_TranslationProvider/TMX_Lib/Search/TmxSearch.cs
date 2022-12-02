@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -108,20 +109,20 @@ namespace TMX_Lib.Search
 
 		// searchedText - the text I'm searching for
 		// result - the text I have internally
-		private void ApplyPenalties(SimpleResult result, TextSegment searchedText)
+		private void ApplyPenalties(SimpleResult result, string searchedText)
 		{
 			// FIXME
 		}
 
-		private async Task SearchExact(TmxSearchSettings settings, TextSegment text, LanguagePair language, SimpleResults results)
+		private async Task SearchExact(TmxSearchSettings settings, string text, LanguagePair language, SimpleResults results)
 		{
 			if (HaveEnoughResults(results, settings))
 				return;
 
-			var dbResults = await _db.ExactSearch(text.OriginalText, language.SourceCultureName, language.TargetCultureName);
+			var dbResults = await _db.ExactSearch(text, language.SourceCultureName, language.TargetCultureName);
 			foreach (var dbResult in dbResults)
 			{
-				var score = text.CompareScore(dbResult.SourceText, settings.MinScore);
+				var score = StringIntCompare(text, dbResult.SourceText);
 				if (score >= settings.MinScore )
 				{
 					var result = new SimpleResult(dbResult) { Score = score };
@@ -131,15 +132,38 @@ namespace TMX_Lib.Search
 			}
 		}
 
-		private async Task SearchFuzzy(TmxSearchSettings settings, TextSegment text, LanguagePair language, SimpleResults results)
+		// note: it's sorted by score
+		private IReadOnlyList<TmxSegment> FilterFuzzySearch(IReadOnlyList<TmxSegment> results)
+		{
+			if (results.Count < 2)
+				return results;
+
+			var diff = results.First().Score - results.Last().Score;
+			Debug.Assert(diff >= 0);
+			if (diff < 1)
+				return results;
+
+			// here, diff is > 1, note: I'm using the score from the mongodb
+			// and do a simple filtering: if score not in the top-third of the results, ignore it
+			var min = results.First().Score - diff / 3;
+			return results.Where(r => r.Score >= min).ToList();
+		}
+
+		private static int StringIntCompare(string a, string b)
+		{
+			return Math.Min((int)(SlowCompareTexts.Compare(a, b) * 100 + .5), 100);
+		}
+
+
+		private async Task SearchFuzzy(TmxSearchSettings settings, string text, LanguagePair language, SimpleResults results)
 		{
 			if (HaveEnoughResults(results, settings))
 				return;
 
-			var dbResults = await _db.FuzzySearch(text.OriginalText, language.SourceCultureName, language.TargetCultureName);
+			var dbResults = FilterFuzzySearch( await _db.FuzzySearch(text, language.SourceCultureName, language.TargetCultureName));
 			foreach (var dbResult in dbResults)
 			{
-				var score = text.CompareScore(dbResult.SourceText, settings.MinScore);
+				var score = StringIntCompare(text, dbResult.SourceText);
 				if (score >= settings.MinScore)
 				{
 					var result = new SimpleResult(dbResult) { Score = score };
@@ -149,7 +173,7 @@ namespace TMX_Lib.Search
 			}
 		}
 
-		private async Task SearchConcordance(TmxSearchSettings settings, TextSegment text, LanguagePair language, SimpleResults results, bool sourceConcorance = true)
+		private async Task SearchConcordance(TmxSearchSettings settings, string text, LanguagePair language, SimpleResults results, bool sourceConcorance = true)
 		{
 			if (HaveEnoughResults(results, settings))
 				return;
@@ -176,7 +200,7 @@ namespace TMX_Lib.Search
 			if (!hasLanguages)
 				return new SearchResults();
 
-			var text = new TextSegment(segment.ToPlain());
+			var text = segment.ToPlain();
 			var results = new SimpleResults();
 			switch (settings.Mode)
 			{
@@ -225,7 +249,7 @@ namespace TMX_Lib.Search
 			}
 
 			CompleteSearch(settings, results);
-			return results.ToSearchResults(text.OriginalText, settings, language);
+			return results.ToSearchResults(text, settings, language);
 		}
 
 	}

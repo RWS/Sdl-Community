@@ -7,7 +7,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using Sdl.Core.Globalization.NumberMetadata;
 using TMX_Lib.TmxFormat;
 using TMX_Lib.Utils;
@@ -302,18 +305,32 @@ namespace TMX_Lib.Db
 			targetLanguage = Util.NormalizeLanguage(targetLanguage);
 			var filter = Builders<TmxText>.Filter.Text(text, new TextSearchOptions { CaseSensitive = false, DiacriticSensitive = false, });
 
-			// FIXME use projection, to find out the textScore, and sort by it.
+			var projection = Builders<TmxText>.Projection.MetaTextScore("Score")
+				.Include(p => p.LocaseText).Include(p => p.NormalizedLanguage).Include(p => p.TranslationUnitID).Include(p => p.FormattedText);
+			var sort = Builders<TmxText>.Sort.MetaTextScore("Score");
 
-			var cursor = await _texts.FindAsync(filter, new FindOptions<TmxText>() { Limit = MAX_RESULTS, });
-			var texts = new List<TmxText>();
-			await cursor.ForEachAsync(t =>
-			{
-				if (t.NormalizedLanguage == sourceLanguage)
-					texts.Add(t);
-			});
+			var cursor = await _texts
+				.Aggregate()
+				.Match(filter)
+				.Sort(sort)
+				.Limit(MAX_RESULTS)
+				.Project(projection)
+				.ToListAsync();
+
+			// note: this works, but would not expose the sort, so we would not know the score differences between results
+			//
+			//var cursor = await _texts.Aggregate()
+			//	.Match(filter)
+			//	.Sort(Builders<TmxText>.Sort.MetaTextScore("Score"))
+			//	.Limit(MAX_RESULTS)
+			//	.ToListAsync();
+
 			var segments = new List<TmxSegment>();
-			foreach (var t in texts)
+			foreach (var p in cursor)
 			{
+				var t = BsonSerializer.Deserialize<TmxText>(p);
+				if (t.NormalizedLanguage != sourceLanguage)
+					continue;
 				var segment = await TryGetSegment(t, targetLanguage);
 				if (segment != null)
 					segments.Add(segment);

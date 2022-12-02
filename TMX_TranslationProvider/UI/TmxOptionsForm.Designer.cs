@@ -270,6 +270,7 @@
             this.downloadCommunityServer.TabStop = true;
             this.downloadCommunityServer.Tag = "https://www.mongodb.com/try/download/community";
             this.downloadCommunityServer.Text = "Download Community Server";
+            this.downloadCommunityServer.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.downloadCommunityServer_LinkClicked);
             // 
             // label6
             // 

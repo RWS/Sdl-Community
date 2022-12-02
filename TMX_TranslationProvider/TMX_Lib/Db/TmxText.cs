@@ -19,5 +19,9 @@ namespace TMX_Lib.Db
         public string LocaseText;
 
         public string FormattedText;
+
+        [BsonIgnoreIfNull]
+        public double? Score { get; set; }
     }
+
 }
