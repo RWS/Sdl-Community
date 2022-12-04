@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -23,7 +24,6 @@ using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.ProjectAutomation.FileBased.Reports.Operations;
-using MessageLevel = Sdl.ProjectAutomation.Core.MessageLevel;
 
 namespace Multilingual.Excel.FileType.BatchTasks
 {
@@ -243,8 +243,6 @@ namespace Multilingual.Excel.FileType.BatchTasks
 					continue;
 				}
 
-
-
 				var i = 0;
 				foreach (var paragraphUnitInfo in originalMultilingualParagraphUnit.ParagraphUnitInfos)
 				{
@@ -269,7 +267,9 @@ namespace Multilingual.Excel.FileType.BatchTasks
 						multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelCharacterLimitationTarget, targetMultilingualContextInfo.ExcelCharacterLimitation.ToString());
 						multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelPixelLimitationTarget, targetMultilingualContextInfo.ExcelPixelLimitation.ToString());
 						multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelPixelFontNameTarget, targetMultilingualContextInfo.ExcelPixelFontName);
-						multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelPixelFontSizeTarget, targetMultilingualContextInfo.ExcelPixelFontSize.ToString());
+						multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelPixelFontSizeTarget, targetMultilingualContextInfo.ExcelPixelFontSize.ToString(CultureInfo.InvariantCulture));
+						multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelFilterBackgroundColorTarget, targetMultilingualContextInfo.ExcelFilterBackgroundColor);
+						multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelFilterScopeTarget, targetMultilingualContextInfo.ExcelFilterScope);
 					}
 
 					AddContextInfo(updatedParagraphUnitInfo, newParagraphUnit);

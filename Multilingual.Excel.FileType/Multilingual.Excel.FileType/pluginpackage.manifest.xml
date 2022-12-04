@@ -7,5 +7,6 @@
 	<RequiredProduct name="TradosStudio" minversion="17.0.1" maxversion="17.9"/>
   <Include>
 	  <File>Rws.MultiSelectComboBox.dll</File>
+	  <File>Xceed.Wpf.Toolkit.dll</File>
   </Include>
 </PluginPackage>

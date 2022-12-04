@@ -98,11 +98,15 @@ namespace Multilingual.Excel.FileType.Services
 					var pixelLimitation = targetMultilingualContextInfo.GetMetaData(FiletypeConstants.MultilingualExcelPixelLimitationTarget) ?? "0";
 					var pixelFontName = targetMultilingualContextInfo.GetMetaData(FiletypeConstants.MultilingualExcelPixelFontNameTarget) ?? string.Empty;
 					var pixelFontSize = targetMultilingualContextInfo.GetMetaData(FiletypeConstants.MultilingualExcelPixelFontSizeTarget) ?? "0";
+					var filterBackgroundColor = targetMultilingualContextInfo.GetMetaData(FiletypeConstants.MultilingualExcelFilterBackgroundColorTarget) ?? "0";
+					var filterScope = targetMultilingualContextInfo.GetMetaData(FiletypeConstants.MultilingualExcelFilterScopeTarget) ?? string.Empty;
 
 					multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelCharacterLimitationTarget, characterLimitation);
 					multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelPixelLimitationTarget, pixelLimitation);
 					multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelPixelFontNameTarget, pixelFontName);
 					multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelPixelFontSizeTarget, pixelFontSize);
+					multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelFilterBackgroundColorTarget, filterBackgroundColor);
+					multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelFilterScopeTarget, filterScope);
 				}
 
 				if (paragraphUnit.SegmentPairs.Any())

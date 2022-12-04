@@ -1,5 +1,4 @@
-﻿using Sdl.FileTypeSupport.Framework.BilingualApi;
-using Sdl.FileTypeSupport.Framework.IntegrationApi;
+﻿using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.Verification.Api;
 
 namespace Multilingual.Excel.FileType.Verifier.MessageUI

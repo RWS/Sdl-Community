@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Multilingual.Excel.FileType.Constants;
 using Multilingual.Excel.FileType.Services;
-using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace Multilingual.Excel.FileType.FileType.Processors

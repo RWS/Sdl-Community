@@ -147,7 +147,45 @@ namespace Multilingual.Excel.FileType.Services
 				foreach (var excelRow in excelSheet.Rows)
 				{
 					// Create Paragraph from excelRow
-					var content = excelRow.Cells.FirstOrDefault(a => a.Column.Name == _sourceLanguageMapping.ContentColumn);
+					var content =
+						excelRow.Cells.FirstOrDefault(a => a.Column.Name == _sourceLanguageMapping.ContentColumn);
+
+					//TODO: 
+					//TODO: apply filter on background color
+					if (_sourceLanguageMapping.FilterBackgroundColorChecked)
+					{
+						var filterBackgroundColor = _sourceLanguageMapping.FilterBackgroundColor.Trim('#', ';');
+						var excelCellBackgroundColor = content?.Background.Trim('#', ';');
+
+						if (string.Compare(
+							    filterBackgroundColor,excelCellBackgroundColor, StringComparison.InvariantCultureIgnoreCase) == 0)
+						{
+							if (string.Compare(_sourceLanguageMapping.FilterScope, Common.Enumerators.FilterScope.Ignore.ToString(),
+									StringComparison.InvariantCultureIgnoreCase) == 0)
+							{
+
+							}
+							else if (string.Compare(_sourceLanguageMapping.FilterScope, Common.Enumerators.FilterScope.Lock.ToString(),
+										 StringComparison.InvariantCultureIgnoreCase) == 0)
+							{
+
+							}
+
+							Console.WriteLine(@"Ignored: Color {0} Sheet {1} Row {2}, Column {3} Content {4}",
+								content?.Background.Trim('#', ';'),
+								excelSheet.Name,
+								excelRow.Index,
+								content?.Column.Name,
+								content?.Value);
+							continue;
+						}
+						else
+						{
+
+						}
+					}
+
+
 
 					//if (!string.IsNullOrEmpty(content?.Value))
 					//{
@@ -437,6 +475,7 @@ namespace Multilingual.Excel.FileType.Services
 
 			structureParagraphUnit.Properties.Contexts = contextProperties;
 
+			var content = excelRow.Cells.FirstOrDefault(a => a.Column.Name == _sourceLanguageMapping.ContentColumn);
 			var charLimit = excelRow.Cells.FirstOrDefault(a => a.Column.Name == _sourceLanguageMapping.CharacterLimitationColumn);
 			var pixelLimit = excelRow.Cells.FirstOrDefault(a => a.Column.Name == _sourceLanguageMapping.PixelLimitationColumn);
 			var pixelFontName = excelRow.Cells.FirstOrDefault(a => a.Column.Name == _sourceLanguageMapping.PixelFontFamilyColumn);
@@ -450,6 +489,8 @@ namespace Multilingual.Excel.FileType.Services
 			multilingualParagraphContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelPixelFontNameSource, pixelFontName?.Value ?? string.Empty);
 			multilingualParagraphContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelPixelFontSizeSource, pixelFontSize?.Value ?? "0");
 			multilingualParagraphContextInfo.SetMetaData(FiletypeConstants.IsCDATA, IsCDATA.ToString());
+			multilingualParagraphContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelFilterBackgroundColorSource, content?.Background ?? "0");
+			multilingualParagraphContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelFilterScopeSource, _sourceLanguageMapping.FilterScope ?? string.Empty);
 
 			return structureParagraphUnit;
 		}
