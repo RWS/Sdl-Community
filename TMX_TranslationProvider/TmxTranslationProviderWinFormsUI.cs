@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -58,10 +59,12 @@ namespace TMX_TranslationProvider
 				var folder = Path.GetDirectoryName(fullFileName);
 				friendly = $" - {fileName} ({folder})";
 			}
+
+			var icon = PluginResources.TMX_TM_Provider;
 			return new TranslationProviderDisplayInfo
 			{
 				Name = $"{PluginResources.Plugin_NiceName} {friendly}",
-				TranslationProviderIcon = null,
+				TranslationProviderIcon = icon,
 				TooltipText = PluginResources.Plugin_Tooltip,
 				SearchResultImage = null,
 			};
