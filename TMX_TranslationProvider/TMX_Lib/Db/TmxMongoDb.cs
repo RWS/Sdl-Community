@@ -11,6 +11,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using NLog;
 using Sdl.Core.Globalization.NumberMetadata;
 using TMX_Lib.TmxFormat;
 using TMX_Lib.Utils;
@@ -21,13 +22,15 @@ namespace TMX_Lib.Db
     // TmxMongoDb db = new TmxMongoDb("localhost:27017", "mydb");
     public class TmxMongoDb
     {
+	    private static readonly Logger log = NLog.LogManager.GetCurrentClassLogger();
+
 	    // cap the results, make the searches faster
-	    //
-	    // the idea: we can end up with lots of results from the database - just process the first batch, since some results could be wrong
-	    // but we don't want to end up processing too many possible results either, since that could put a strain on both the db, and on us
+		//
+		// the idea: we can end up with lots of results from the database - just process the first batch, since some results could be wrong
+		// but we don't want to end up processing too many possible results either, since that could put a strain on both the db, and on us
 		//
 		// this is especially true on fuzzy searches
-	    private const int MAX_RESULTS = 256;
+		private const int MAX_RESULTS = 256;
 
         // FIXME test with Atlas credentials as well
 		private string _url;
@@ -42,6 +45,8 @@ namespace TMX_Lib.Db
         private IMongoCollection<TmxLanguage> _languages;
         private IMongoCollection<TmxTranslationUnit> _translationUnits;
         private IMongoCollection<TmxText> _texts;
+
+        private string _importError = "";
 
         private Task _importTask;
         private CancellationTokenSource _importTokenSource = new CancellationTokenSource();
@@ -62,6 +67,8 @@ namespace TMX_Lib.Db
         }
 
 		private bool IsLocalConnection() => _url.StartsWith("mongodb://");
+
+		public string ImportError() => _importError;
 
         private void Connect()
         {
@@ -494,12 +501,15 @@ namespace TMX_Lib.Db
 	        await import;
         }
 
-
+		// does NOT throw
 		private async Task ImportToDbAsyncImpl(TmxParser parser, CancellationToken token)
         {
-	        Stopwatch watch;
+	        Stopwatch watch = null;
 	        try
 	        {
+		        lock (this)
+			        _importError = "";
+
 		        await ClearAsync();
 		        watch = Stopwatch.StartNew();
 
@@ -529,39 +539,42 @@ namespace TMX_Lib.Db
 		        var languages = parser.Languages().Select(l => new TmxLanguage { Language = l }).ToList();
 		        await AddLanguagesAsync(languages, token);
 
-				// the idea -> add them at the end, easily know if the import went to the end or not
+		        // the idea -> add them at the end, easily know if the import went to the end or not
 		        await AddMetasAsync(new[]
 		        {
-			        new TmxMeta { Type = "Header", Value = parser.Header.Xml,},
-					// Version:
-					// 1 - initial version
-					// ... - increase this on each breaking change
-			        new TmxMeta { Type = "Version", Value = "1",},
-			        new TmxMeta { Type = "Source Language", Value = parser.Header.SourceLanguage,},
-			        new TmxMeta { Type = "Target Language", Value = parser.Header.TargetLanguage,},
-			        new TmxMeta { Type = "Domains", Value = string.Join(", ", parser.Header.Domains),},
-			        new TmxMeta { Type = "Creation Date", Value = parser.Header.CreationDate?.ToLongDateString() ?? "unknown",},
-			        new TmxMeta { Type = "Author", Value = parser.Header.Author,},
-			        new TmxMeta { Type = "FileName", Value = Path.GetFileName(parser.FileName)},
-			        new TmxMeta { Type = "FullFileName", Value = parser.FileName},
+			        new TmxMeta { Type = "Header", Value = parser.Header.Xml, },
+			        // Version:
+			        // 1 - initial version
+			        // ... - increase this on each breaking change
+			        new TmxMeta { Type = "Version", Value = "1", }, new TmxMeta { Type = "Source Language", Value = parser.Header.SourceLanguage, },
+			        new TmxMeta { Type = "Target Language", Value = parser.Header.TargetLanguage, },
+			        new TmxMeta { Type = "Domains", Value = string.Join(", ", parser.Header.Domains), },
+			        new TmxMeta { Type = "Creation Date", Value = parser.Header.CreationDate?.ToLongDateString() ?? "unknown", },
+			        new TmxMeta { Type = "Author", Value = parser.Header.Author, }, new TmxMeta { Type = "FileName", Value = Path.GetFileName(parser.FileName) },
+			        new TmxMeta { Type = "FullFileName", Value = parser.FileName },
 		        }, token);
 
-				// best practice - create indexes after everything has been imported
-				if (!token.IsCancellationRequested)
-					await CreateIndexesAsync();
+		        // best practice - create indexes after everything has been imported
+		        if (!token.IsCancellationRequested)
+			        await CreateIndexesAsync();
 	        }
 	        catch (Exception e)
 	        {
-		        throw new TmxException("Import to db failed", e);
+				log.Error($"Import to db failed: {e}");
+				lock(this)
+					_importError = e.Message;
+	        }
+	        finally
+	        {
+		        lock (this)
+		        {
+			        _importComplete = true;
+			        _importTask = null;
+			        _importTokenSource = new CancellationTokenSource();
+		        }
 	        }
 
-	        lock (this)
-	        {
-		        _importComplete = true;
-		        _importTask = null;
-		        _importTokenSource = new CancellationTokenSource();
-	        }
-	        Debug.WriteLine($"import complete, took {watch.ElapsedMilliseconds} ms");
+			log.Debug($"import complete, took {watch?.ElapsedMilliseconds} ms");
 		}
 
 		// End of IMPORT

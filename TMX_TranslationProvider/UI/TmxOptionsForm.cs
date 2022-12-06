@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using NLog;
 using TMX_Lib.Search;
+using TMX_Lib.Utils;
 
 namespace TMX_TranslationProvider
 {
@@ -117,6 +118,8 @@ namespace TMX_TranslationProvider
 				fileName.Text = dlg.FileName;
 				importStatus.Text = "";
 				importProgress.Visible = false;
+				error.Visible = false;
+				error.Text = "";
 			}
 		}
 
@@ -155,7 +158,9 @@ namespace TMX_TranslationProvider
 		private void UpdateTryConnectEnabled()
 		{
 			bool same = SearchService.Options.Equals(_newOptions.ToOptions());
-			tryConnect.Enabled = !same || error.Visible;
+			tryConnect.Enabled = !same || error.Visible 
+			                           // ... or, there was no import in this database
+			                           || (!SearchService.HasImportBeenDoneBefore() && !SearchService.IsImporting());
 		}
 
 		private void UpdateOptions()
@@ -198,6 +203,12 @@ namespace TMX_TranslationProvider
 			Process.Start(downloadCommunityServer.Tag.ToString());
 		}
 
+		private void viewLog_Click(object sender, EventArgs e)
+		{
+			Clipboard.SetText(LogUtil.LogFileName);
+			Process.Start(LogUtil.LogFileName);
+		}
+
 		private void UpdateUI()
 		{
 			if (!_initialized)
@@ -208,12 +219,18 @@ namespace TMX_TranslationProvider
 			importProgress.Visible = SearchService.IsImporting() && !SearchService.ImportComplete() && !connectionChanged;
 			importStatus.Visible = SearchService.IsImporting() || SearchService.ImportComplete() && !connectionChanged;
 			importProgress.Value = (int)(SearchService.ImportProgress() * 100);
-			importStatus.Text = !SearchService.ImportComplete() ? "Importing Data..." : "Import Complete";
+			importStatus.Text = !SearchService.ImportComplete() ? "Importing Data..." : (SearchService.ImportError() == "" ? "Import Complete" : "Import Failed");
 
 			var isLocalhost = IsLocalhostConnection();
 			dbPassword.Visible = dbPasswordLabel.Visible = dbPasswordTip.Visible = !isLocalhost;
 			if (_tryDetectLocalMongoDb)
 				downloadCommunityServer.Visible = false;
+
+			if (SearchService.ImportError() != "")
+			{
+				error.Visible = true;
+				error.Text = SearchService.ImportError();
+			}
 		}
 	}
 }

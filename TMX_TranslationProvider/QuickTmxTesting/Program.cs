@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NLog;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using TMX_Lib.Db;
@@ -12,12 +13,15 @@ using TMX_Lib.Search;
 using TMX_Lib.TmxFormat;
 using TMX_Lib.Utils;
 using TMX_Lib.XmlSplit;
+using LogManager = Sdl.LanguagePlatform.TranslationMemory.LogManager;
 
 namespace QuickTmxTesting
 {
 	// quick and dirty tests
     internal class Program
     {
+	    private static readonly Logger log = NLog.LogManager.GetCurrentClassLogger();
+
 	    private static async Task TestImportLargeFile(string root)
 	    {
 		    var db = new TmxMongoDb("localhost:27017", "large_db");
@@ -133,7 +137,8 @@ namespace QuickTmxTesting
 
 
 		private static void SplitLargeXmlFile(string inputXmlFile, string outputPrefix)
-	    {
+		{
+			Directory.CreateDirectory(outputPrefix);
 		    var splitter = new XmlSplitter(inputXmlFile);
 		    var idx = 0;
 		    while (true)
@@ -148,19 +153,24 @@ namespace QuickTmxTesting
 
 		static void Main(string[] args)
 		{
+			LogUtil.Setup();
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en(GB) - it(IT)_(DGT 2015, 2017).tmx", "C:\\john\\buff\\TMX Examples\\temp\\");
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en-fr (EU Bookshop v2_10.8M).tmx", "C:\\john\\buff\\TMX Examples\\temp2\\");
-			Console.WriteLine("test started");
+			log.Debug("test started");
+			SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\fails\\opensubtitlingformat.tmx", "C:\\john\\buff\\TMX Examples\\temp3\\");
 
 
 			var root = ".";
 	        if (args.Length > 0)
 		        root = args[0];
 
-	        //Task.Run(() => TestImportSmallFile2(root)).Wait();
-	        //Task.Run(() => TestImportSample4(root)).Wait();
-	        //Task.Run(() => TestDatabaseFuzzySimple4(root)).Wait();
-	        Task.Run(() => TestFuzzySimple4(root)).Wait();
+			//Task.Run(() => TestImportSmallFile2(root)).Wait();
+			//Task.Run(() => TestImportSample4(root)).Wait();
+			//Task.Run(() => TestDatabaseFuzzySimple4(root)).Wait();
+
+			//Task.Run(() => TestFuzzySimple4(root)).Wait();
+
+			log.Debug("test complete");
 	        Console.ReadLine();
         }
     }

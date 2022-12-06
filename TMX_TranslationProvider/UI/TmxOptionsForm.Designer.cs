@@ -55,15 +55,17 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.timerImportProgress = new System.Windows.Forms.Timer(this.components);
+            this.viewLog = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // cancel
             // 
             this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancel.Location = new System.Drawing.Point(649, 285);
+            this.cancel.Location = new System.Drawing.Point(649, 279);
             this.cancel.Name = "cancel";
-            this.cancel.Size = new System.Drawing.Size(90, 23);
+            this.cancel.Size = new System.Drawing.Size(90, 28);
             this.cancel.TabIndex = 0;
             this.cancel.Text = "&Cancel";
             this.cancel.UseVisualStyleBackColor = true;
@@ -72,9 +74,9 @@
             // ok
             // 
             this.ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ok.Location = new System.Drawing.Point(553, 285);
+            this.ok.Location = new System.Drawing.Point(553, 279);
             this.ok.Name = "ok";
-            this.ok.Size = new System.Drawing.Size(90, 23);
+            this.ok.Size = new System.Drawing.Size(90, 28);
             this.ok.TabIndex = 1;
             this.ok.Text = "&OK";
             this.ok.UseVisualStyleBackColor = true;
@@ -180,6 +182,8 @@
             this.tryConnect.Size = new System.Drawing.Size(84, 25);
             this.tryConnect.TabIndex = 15;
             this.tryConnect.Text = "&Try Connect";
+            this.toolTip1.SetToolTip(this.tryConnect, "Try to connect to this database.  Assuming the connection works, we\'ll automatica" +
+        "lly import your TMX file");
             this.tryConnect.UseVisualStyleBackColor = true;
             this.tryConnect.Click += new System.EventHandler(this.tryConnect_Click);
             // 
@@ -270,6 +274,7 @@
             this.downloadCommunityServer.TabStop = true;
             this.downloadCommunityServer.Tag = "https://www.mongodb.com/try/download/community";
             this.downloadCommunityServer.Text = "Download Community Server";
+            this.toolTip1.SetToolTip(this.downloadCommunityServer, "Click to Download the kit to install MongoDB locally");
             this.downloadCommunityServer.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.downloadCommunityServer_LinkClicked);
             // 
             // label6
@@ -336,11 +341,26 @@
             this.timerImportProgress.Interval = 500;
             this.timerImportProgress.Tick += new System.EventHandler(this.timerImportProgress_Tick);
             // 
+            // viewLog
+            // 
+            this.viewLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.viewLog.Image = global::TMX_TranslationProvider.PluginResources.wrench;
+            this.viewLog.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.viewLog.Location = new System.Drawing.Point(5, 279);
+            this.viewLog.Margin = new System.Windows.Forms.Padding(0);
+            this.viewLog.Name = "viewLog";
+            this.viewLog.Size = new System.Drawing.Size(28, 28);
+            this.viewLog.TabIndex = 7;
+            this.toolTip1.SetToolTip(this.viewLog, "View Log");
+            this.viewLog.UseVisualStyleBackColor = true;
+            this.viewLog.Click += new System.EventHandler(this.viewLog_Click);
+            // 
             // TmxOptionsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(745, 315);
+            this.Controls.Add(this.viewLog);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.error);
             this.Controls.Add(this.browse);
@@ -388,5 +408,7 @@
         private System.Windows.Forms.ProgressBar importProgress;
         private System.Windows.Forms.Button tryConnect;
         private System.Windows.Forms.Timer timerImportProgress;
+        private System.Windows.Forms.Button viewLog;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

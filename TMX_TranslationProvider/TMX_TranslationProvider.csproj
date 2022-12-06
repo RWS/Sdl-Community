@@ -21,6 +21,14 @@
     <None Remove="TMX_Lib\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="UI\wrench.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="UI\wrench.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Newtonsoft.Json.dll</HintPath>
     </Reference>

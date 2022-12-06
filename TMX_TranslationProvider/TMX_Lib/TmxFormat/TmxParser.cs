@@ -52,7 +52,7 @@ namespace TMX_Lib.TmxFormat
 			}
         }
 
-        public double Progress() => _splitter.Progress();
+        public double Progress() => _splitter?.Progress() ?? 0;
 
         public TmxParser(string fileName)
 		{
@@ -93,13 +93,14 @@ namespace TMX_Lib.TmxFormat
 			}
 			catch (Exception e)
 			{
+				log.Error($"There has been an error parsing {_fileName}: {e.Message}");
 				_error = $"There has been an error parsing {_fileName}: {e.Message}";
 			}
 		}
 
         public IReadOnlyList<TmxTranslationUnit> TryReadNextTUs()
         {
-	        var document = _headerDocument ?? _splitter.TryGetNextSubDocument();
+	        var document = _headerDocument ?? _splitter?.TryGetNextSubDocument();
 	        _headerDocument = null;
 
 	        if (document == null)

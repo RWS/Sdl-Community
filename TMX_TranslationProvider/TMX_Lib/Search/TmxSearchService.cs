@@ -39,6 +39,10 @@ namespace TMX_Lib.Search
 		public bool IsImporting() => _paramsOk && (_db?.IsImportInProgress() ?? false);
 		public double ImportProgress() => _db?.ImportProgress() ?? 0d;
 		public bool ImportComplete() => _hasImportBeenDoneBefore || (_db != null && _db.IsImportComplete());
+		public bool HasImportBeenDoneBefore() => _hasImportBeenDoneBefore;
+
+		// if non empty, an error happened while import
+		public string ImportError() => _db?.ImportError() ?? "";
 
 		public bool SupportsLanguage(LanguagePair language)
 		{

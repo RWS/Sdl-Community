@@ -65,7 +65,7 @@ namespace TMX_Lib.XmlSplit
 				_blockCount = new FileInfo(fileName).Length / SplitSize;
 				_encoding = GetEncoding(fileName);
 				_stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-				log.Debug($"splitting {fileName} - into {_blockCount}");
+				log.Debug($"splitting {fileName} - into {_blockCount}, found encoding {_encoding.ToString()}");
 			}
 			catch (Exception e)
 			{
@@ -124,6 +124,39 @@ namespace TMX_Lib.XmlSplit
 			StringBuilder builder = new StringBuilder();
 			if (_firstBlock)
 				_buffer = new byte[SplitSize + PAD_EXTRA];
+
+			if (_firstBlock && ReferenceEquals(_encoding, Encoding.ASCII))
+			{
+				// in this case, read the header
+				var headerSize = _stream.Read(_buffer, 0, 1024);
+				var headerString = _encoding.GetString(_buffer, 0, headerSize);
+				if (headerString.StartsWith("<?"))
+				{
+					var encodingStart = headerString.IndexOf("encoding=\"", StringComparison.InvariantCultureIgnoreCase);
+					if (encodingStart >= 0)
+					{
+						encodingStart += "encoding=\"".Length;
+						var encodingEnd = headerString.IndexOf("\"", encodingStart);
+						if (encodingEnd >= 0)
+						{
+							var encodingStr = headerString.Substring(encodingStart, encodingEnd - encodingStart).ToLower();
+							switch (encodingStr)
+							{
+								case "utf-8": _encoding = Encoding.UTF8; break;
+								case "utf-7": _encoding = Encoding.UTF7; break;
+								case "utf-16": _encoding = Encoding.Unicode; break;
+								case "utf-32": _encoding = Encoding.UTF32; break;
+								default:
+									throw new TmxException($"Invalid .tmx Encoding: {encodingStr}");
+									break;
+							}
+						}
+					}
+				}
+
+				_stream.Seek(0, SeekOrigin.Begin);
+				log.Debug($"Encoding for {_fileName} overridden : {_encoding.ToString()}");
+			}
 
 			var readByteCount = _stream.Read(_buffer, 0, SplitSize);
 			if (readByteCount < 1)
@@ -202,7 +235,7 @@ namespace TMX_Lib.XmlSplit
 				settings.XmlResolver = null;
 				settings.DtdProcessing = DtdProcessing.Ignore;
 
-				var bytes = _encoding.GetBytes(str);
+				var bytes = Encoding.UTF8.GetBytes(str);
 				using (var memoryStream = new MemoryStream(bytes))
 				using (var reader = new StreamReader(memoryStream))
 				using (var xmlReader = XmlTextReader.Create(reader, settings))
@@ -214,7 +247,7 @@ namespace TMX_Lib.XmlSplit
 			}
 			catch (Exception e)
 			{
-				throw new TmxException($"Error getting sub-document", e);
+				throw new TmxException($"Invalid .tmx file [{Path.GetFileNameWithoutExtension(_fileName)}], while parsing sub-block {_currentBlockIndex} of {_currentBlockIndex}", e);
 			}
 		}
 

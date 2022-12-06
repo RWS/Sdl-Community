@@ -7,17 +7,62 @@ using NLog.Targets;
 
 namespace TMX_Lib.Utils
 {
+	public sealed class LogDebugTarget : TargetWithLayout
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LogDebugTarget" /> class.
+		/// </summary>
+		/// <remarks>
+		/// The default value of the layout is: <code>${longdate}|${level:uppercase=true}|${logger}|${message:withexception=true}</code>
+		/// </remarks>
+		public LogDebugTarget()
+		{
+			LastMessage = string.Empty;
+			Counter = 0;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LogDebugTarget" /> class.
+		/// </summary>
+		/// <remarks>
+		/// The default value of the layout is: <code>${longdate}|${level:uppercase=true}|${logger}|${message:withexception=true}</code>
+		/// </remarks>
+		/// <param name="name">Name of the target.</param>
+		public LogDebugTarget(string name) : this()
+		{
+			Name = name;
+		}
+
+		/// <summary>
+		/// Gets the number of times this target has been called.
+		/// </summary>
+		/// <docgen category='Debugging Options' order='10' />
+		public int Counter { get; private set; }
+
+		/// <summary>
+		/// Gets the last message rendered by this target.
+		/// </summary>
+		/// <docgen category='Debugging Options' order='10' />
+		public string LastMessage { get; private set; }
+
+		/// <inheritdoc/>
+		protected override void Write(LogEventInfo logEvent)
+		{
+			Counter++;
+			LastMessage = RenderLogEvent(Layout, logEvent);
+			Debug.WriteLine(LastMessage);
+		}
+	}
+
 	public static class LogUtil
 	{
+		private static string LogDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "TMX_lib");
+		public static string LogFileName => Path.Combine(LogDirectory, "TMX_lib.txt");
 		public static void Setup()
 		{
-			if (LogManager.Configuration == null)
-			{
-				LogManager.Configuration = new LoggingConfiguration();
-			}
+			var config = new LoggingConfiguration();
 
-			var config = LogManager.Configuration;
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "TMX_lib");
+			var logDirectoryPath = LogDirectory;
 			Directory.CreateDirectory(logDirectoryPath);
 
 			var target = new FileTarget
@@ -26,19 +71,27 @@ namespace TMX_Lib.Utils
 				FileName = Path.Combine(logDirectoryPath, "TMX_lib.txt"),
 				Layout = "${logger}: ${longdate} ${level} ${message}  ${exception}"
 			};
-			var debugTarget = new DebugTarget
+			var debugTarget = new LogDebugTarget
 			{
 				Layout = "${logger}: ${longdate} ${level} ${message}  ${exception}", 
 				Name = "debug",
 			};
 
 			config.AddTarget(target);
+			config.AddRuleForAllLevels(target);
 			if (Debugger.IsAttached)
+			{
 				config.AddTarget(debugTarget);
-			config.AddRuleForAllLevels(target, "*Sdl.Community.BackupService*");
+				config.AddRuleForAllLevels(debugTarget);
+			}
 
+			LogManager.Configuration = config;
 			//NLog object
 			LogManager.ReconfigExistingLoggers();
+
+			var logger = LogManager.GetCurrentClassLogger();
+		    logger.Info("Logging initialized");
+		    LogManager.Flush();
 		}
 	}
 }

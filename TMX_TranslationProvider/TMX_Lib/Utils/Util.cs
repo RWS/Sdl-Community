@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NLog;
 using TMX_Lib.Db;
 using TMX_Lib.TmxFormat;
 
@@ -10,6 +11,8 @@ namespace TMX_Lib.Utils
 {
 	public static class Util
 	{
+		private static readonly Logger log = LogManager.GetCurrentClassLogger();
+
 		// strips punctuation + transforms it to lower case, for exact-search 
 		// 
 		// the idea for lower case: mongodb does have lower-case search feature, but it requires a locale
@@ -42,6 +45,17 @@ namespace TMX_Lib.Utils
 		public static string NormalizeLanguage(string language)
 		{
 			return language.Replace("_", "-").ToLowerInvariant();
+		}
+
+		public static void ThrowTmxException(string msg, Exception e = null)
+		{
+			log.Error($"Exception {msg} : {(e != null ? "original msg:" + e.ToString() : "")}");
+			LogManager.Flush();
+
+			if (e != null)
+				throw new TmxException(msg);
+			else
+				throw new TmxException(msg, e);
 		}
 	}
 }
