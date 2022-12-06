@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
@@ -93,14 +94,19 @@ namespace TMX_Lib.TmxFormat
 			}
 			catch (Exception e)
 			{
+				_splitter = null;
 				log.Error($"There has been an error parsing {_fileName}: {e.Message}");
-				_error = $"There has been an error parsing {_fileName}: {e.Message}";
+				_error = $"There has been an error parsing {Path.GetFileName(_fileName)}: {e.Message}";
 			}
 		}
 
         public IReadOnlyList<TmxTranslationUnit> TryReadNextTUs()
         {
-	        var document = _headerDocument ?? _splitter?.TryGetNextSubDocument();
+	        if (_splitter == null)
+				// if splitter was null, there was an error parsing the header
+		        return null;
+
+	        var document = _headerDocument ?? _splitter.TryGetNextSubDocument();
 	        _headerDocument = null;
 
 	        if (document == null)
@@ -122,7 +128,9 @@ namespace TMX_Lib.TmxFormat
 
 		// if not found, returns ""
 		private static string GetAttribute(XmlNode node, string attributeName)
-        {
+		{
+			if (node == null)
+				return "";
             var found = node.Attributes?.OfType<XmlAttribute>().FirstOrDefault(a => a.Name.Equals(attributeName, StringComparison.OrdinalIgnoreCase));
             var value = found?.Value;
             return value ?? "";

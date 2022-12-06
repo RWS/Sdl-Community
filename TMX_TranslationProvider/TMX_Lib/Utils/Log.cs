@@ -56,13 +56,13 @@ namespace TMX_Lib.Utils
 
 	public static class LogUtil
 	{
-		private static string LogDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "TMX_lib");
-		public static string LogFileName => Path.Combine(LogDirectory, "TMX_lib.txt");
+		public static string PluginDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "TMX_lib");
+		public static string LogFileName => Path.Combine(PluginDirectory, "TMX_lib.txt");
 		public static void Setup()
 		{
 			var config = new LoggingConfiguration();
 
-			var logDirectoryPath = LogDirectory;
+			var logDirectoryPath = PluginDirectory;
 			Directory.CreateDirectory(logDirectoryPath);
 
 			var target = new FileTarget

@@ -118,9 +118,23 @@ namespace TMX_TranslationProvider
 				fileName.Text = dlg.FileName;
 				importStatus.Text = "";
 				importProgress.Visible = false;
-				error.Visible = false;
-				error.Text = "";
+				ClearError();
 			}
+		}
+
+		private void ClearError()
+		{
+			error.Visible = false;
+			error.Text = "";
+		}
+		private void SetError(string errorText)
+		{
+			Debug.Assert(errorText != "");
+			const int MAX_ERR_LEN = 70;
+			var text = errorText.Length <= MAX_ERR_LEN ? errorText : errorText.Substring(0, MAX_ERR_LEN) + " ...";
+			error.Text = text;
+			toolTip1.SetToolTip(error, errorText);
+			error.Visible = true;
 		}
 
 		private void fileName_TextChanged(object sender, EventArgs e)
@@ -136,8 +150,7 @@ namespace TMX_TranslationProvider
 			var (ok, errorStr) = await TmxSearchService.TryParametersAsync(_newOptions.ToOptions());
 			if (ok)
 			{
-				error.Visible = false;
-				error.Text = "";
+				ClearError();
 				importProgress.Visible = importStatus.Visible = true;
 				UpdateSearchService();
 				importProgress.Value = (int)(SearchService.ImportProgress() * 100);
@@ -146,8 +159,7 @@ namespace TMX_TranslationProvider
 			}
 			else
 			{
-				error.Visible = true;
-				error.Text = errorStr;
+				SetError(errorStr);
 				importProgress.Visible = importStatus.Visible = false;
 				timerImportProgress.Enabled = false;
 			}
@@ -228,8 +240,7 @@ namespace TMX_TranslationProvider
 
 			if (SearchService.ImportError() != "")
 			{
-				error.Visible = true;
-				error.Text = SearchService.ImportError();
+				SetError(SearchService.ImportError());
 			}
 		}
 	}

@@ -535,28 +535,34 @@ namespace TMX_Lib.Db
 			        await AddTextsAsync(dbTexts, token);
 		        }
 
-		        // languages are known only after everything has been imported
-		        var languages = parser.Languages().Select(l => new TmxLanguage { Language = l }).ToList();
-		        await AddLanguagesAsync(languages, token);
-
-		        // the idea -> add them at the end, easily know if the import went to the end or not
-		        await AddMetasAsync(new[]
+		        if (!parser.HasError)
 		        {
-			        new TmxMeta { Type = "Header", Value = parser.Header.Xml, },
-			        // Version:
-			        // 1 - initial version
-			        // ... - increase this on each breaking change
-			        new TmxMeta { Type = "Version", Value = "1", }, new TmxMeta { Type = "Source Language", Value = parser.Header.SourceLanguage, },
-			        new TmxMeta { Type = "Target Language", Value = parser.Header.TargetLanguage, },
-			        new TmxMeta { Type = "Domains", Value = string.Join(", ", parser.Header.Domains), },
-			        new TmxMeta { Type = "Creation Date", Value = parser.Header.CreationDate?.ToLongDateString() ?? "unknown", },
-			        new TmxMeta { Type = "Author", Value = parser.Header.Author, }, new TmxMeta { Type = "FileName", Value = Path.GetFileName(parser.FileName) },
-			        new TmxMeta { Type = "FullFileName", Value = parser.FileName },
-		        }, token);
+			        // languages are known only after everything has been imported
+			        var languages = parser.Languages().Select(l => new TmxLanguage { Language = l }).ToList();
+			        await AddLanguagesAsync(languages, token);
 
-		        // best practice - create indexes after everything has been imported
-		        if (!token.IsCancellationRequested)
-			        await CreateIndexesAsync();
+			        // the idea -> add them at the end, easily know if the import went to the end or not
+			        await AddMetasAsync(new[]
+			        {
+				        new TmxMeta { Type = "Header", Value = parser.Header.Xml, },
+				        // Version:
+				        // 1 - initial version
+				        // ... - increase this on each breaking change
+				        new TmxMeta { Type = "Version", Value = "1", }, new TmxMeta { Type = "Source Language", Value = parser.Header.SourceLanguage, },
+				        new TmxMeta { Type = "Target Language", Value = parser.Header.TargetLanguage, },
+				        new TmxMeta { Type = "Domains", Value = string.Join(", ", parser.Header.Domains), },
+				        new TmxMeta { Type = "Creation Date", Value = parser.Header.CreationDate?.ToLongDateString() ?? "unknown", },
+				        new TmxMeta { Type = "Author", Value = parser.Header.Author, }, new TmxMeta { Type = "FileName", Value = Path.GetFileName(parser.FileName) },
+				        new TmxMeta { Type = "FullFileName", Value = parser.FileName },
+			        }, token);
+
+			        // best practice - create indexes after everything has been imported
+			        if (!token.IsCancellationRequested)
+				        await CreateIndexesAsync();
+		        }
+		        else
+					lock(this)
+						_importError = parser.Error;
 	        }
 	        catch (Exception e)
 	        {

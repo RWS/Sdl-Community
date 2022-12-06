@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using NLog;
 using TMX_Lib.Db;
+using TMX_Lib.Utils;
 
 namespace TMX_Lib.XmlSplit
 {
@@ -247,6 +248,14 @@ namespace TMX_Lib.XmlSplit
 			}
 			catch (Exception e)
 			{
+				// the idea -- write the bad file, so we can analyze it
+				try
+				{
+					var tempFile = $"{LogUtil.PluginDirectory}\\bad-{Path.GetFileNameWithoutExtension(_fileName)}.txt";
+					File.WriteAllText(tempFile, str);
+				}
+				catch 
+				{ }
 				throw new TmxException($"Invalid .tmx file [{Path.GetFileNameWithoutExtension(_fileName)}], while parsing sub-block {_currentBlockIndex} of {_currentBlockIndex}", e);
 			}
 		}
