@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -22,6 +23,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
 		public DeepLTranslationProviderConnecter(string key, Formality formality = Formality.Default)
 		{
+			ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
 			ApiKey = key;
 			Formality = formality != Formality.Default ? formality : Formality;
 		}
