@@ -81,6 +81,7 @@ namespace Multilingual.Excel.FileType.FileType
 
 			return quickTagsFactory;
 		}
+		
 
 		public INativeFileSniffer BuildFileSniffer(string name)
 		{
@@ -98,8 +99,8 @@ namespace Multilingual.Excel.FileType.FileType
 			var entityService = new EntityService(entityContext, sdlFrameworkService, entityMarkerConversionService);
 
 			var segmentBuilder = new SegmentBuilder(entityService);
-
-			var excelReader = new ExcelReader();
+			var colorService = new ColorService();
+			var excelReader = new ExcelReader(colorService);
 
 			var parser = new BilingualParser(segmentBuilder,
 				entityContext,
@@ -126,7 +127,8 @@ namespace Multilingual.Excel.FileType.FileType
 			var entityService = new EntityService(entityContext, sdlFrameworkService, entityMarkerConversionService);
 
 			var segmentBuilder = new SegmentBuilder(entityService);
-			var excelReader = new ExcelReader();
+			var colorService = new ColorService();
+			var excelReader = new ExcelReader(colorService);
 			var excelWriter = new ExcelWriter();
 			
 			var writer = new BilingualWriter(segmentBuilder, entityContext,
@@ -161,7 +163,8 @@ namespace Multilingual.Excel.FileType.FileType
 				var alternativeInputFileGenerator = new AlternativeInputFileGenerator(fileSystemService);
 
 				var segmentBuilder = new SegmentBuilder(entityService);
-				var excelReader = new ExcelReader();
+				var colorService = new ColorService();
+				var excelReader = new ExcelReader(colorService);
 				var excelWriter = new ExcelWriter();
 
 				var writer = new BilingualWriter(segmentBuilder, entityContext,
@@ -190,7 +193,8 @@ namespace Multilingual.Excel.FileType.FileType
 
 
 				var segmentBuilder = new SegmentBuilder(entityService);
-				var excelReader = new ExcelReader();
+				var colorService = new ColorService();
+				var excelReader = new ExcelReader(colorService);
 				var excelWriter = new ExcelWriter();
 
 				var writer = new BilingualWriter(segmentBuilder, entityContext,

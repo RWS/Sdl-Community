@@ -1,0 +1,155 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Multilingual.Excel.FileType.Constants;
+using Multilingual.Excel.FileType.FileType.Settings;
+using Multilingual.Excel.FileType.Models;
+using Multilingual.Excel.FileType.Services;
+using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.FileTypeSupport.Framework.NativeApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
+
+namespace Multilingual.Excel.FileType.FileType.Processors
+{
+	public class DocumentProcessor
+	{
+		private readonly EditorController _editorController;
+		private readonly SegmentBuilder _segmentBuilder;
+
+		public DocumentProcessor(EditorController editorController, SegmentBuilder segmentBuilder)
+		{
+			_editorController = editorController;
+			_segmentBuilder = segmentBuilder;
+			
+			editorController.Opening += EditorController_Opening;
+		}
+
+		private class ParagraphUnit
+		{
+			public string ParagraphUnitId { get; set; }
+
+			public List<ISegmentPair> SegmentPairs { get; set; }
+
+			public IParagraphUnitProperties ParagraphUnitProperties { get; set; }
+		}
+
+		private void EditorController_Opening(object sender, CancelDocumentEventArgs e)
+		{
+			if (e.Document == null)
+			{
+				return;
+			}
+
+			var project = e.Document.Project;
+			var projectInfo = project.GetProjectInfo();
+
+			if (string.Compare(e.Document.ActiveFile.FileTypeId, FiletypeConstants.FileTypeDefinitionId,
+					StringComparison.OrdinalIgnoreCase) != 0)
+			{
+				return;
+			}
+
+			var documentIsLoadedOnce = DocumentIsLoadedOnce(e.Document);
+			if (documentIsLoadedOnce)
+			{
+				return;
+			}
+
+			var settings = project.GetSettings();
+
+			var documentSettings = new DocumentInfoSettings();
+			documentSettings.PopulateFromSettingsBundle(settings, FiletypeConstants.FileTypeDefinitionId);
+
+			var firstDocumenet = e.Document.Files.FirstOrDefault();
+			if (firstDocumenet != null && documentSettings.DocumentInfo.Any())
+			{
+				var documentInfo =
+					documentSettings.DocumentInfo.FirstOrDefault(a =>
+						string.Compare(a.Id, firstDocumenet.Id.ToString(), StringComparison.InvariantCultureIgnoreCase) == 0 &&
+						string.Compare(a.Language, firstDocumenet.Language.CultureInfo.Name, StringComparison.InvariantCultureIgnoreCase) == 0 &&
+						string.Compare(a.Name, firstDocumenet.Name, StringComparison.InvariantCultureIgnoreCase) == 0);
+
+				if (documentInfo != null && documentInfo.IsLoadedOnce)
+				{
+					return;
+				}
+
+				documentSettings.DocumentInfo.Add(new DocumentInfo
+				{
+					Id = firstDocumenet.Id.ToString(),
+					IsLoadedOnce = true,
+					Name = firstDocumenet.Name,
+					Language = firstDocumenet.Language.CultureInfo.Name
+				});
+
+				documentSettings.SaveToSettingsBundle(settings, FiletypeConstants.FileTypeDefinitionId);
+				project.UpdateSettings(settings);
+				project.Save();
+			}
+
+			var languageMappingSettings = new LanguageMappingSettings();
+			languageMappingSettings.PopulateFromSettingsBundle(settings, FiletypeConstants.FileTypeDefinitionId);
+
+			var sourceLanguage = languageMappingSettings.LanguageMappingLanguages.FirstOrDefault(a =>
+				string.Compare(a.LanguageId, projectInfo.SourceLanguage.CultureInfo.Name, StringComparison.InvariantCultureIgnoreCase) == 0);
+
+			if (sourceLanguage != null &&
+				sourceLanguage.FilterBackgroundColorChecked && sourceLanguage.FilterScope == Common.Enumerators.FilterScope.Lock.ToString())
+			{
+				var paragraphUnits = new List<ParagraphUnit>();
+
+				foreach (var segmentPair in e.Document.SegmentPairs)
+				{
+					var paragraphUnitProperties = segmentPair.GetParagraphUnitProperties();
+					var multilingualContextInfo = paragraphUnitProperties.Contexts?.Contexts?.FirstOrDefault(a => a.ContextType == FiletypeConstants.MultilingualParagraphUnit);
+					if (multilingualContextInfo != null)
+					{
+						var lockSegments = Convert.ToBoolean(multilingualContextInfo.GetMetaData(FiletypeConstants.MultilingualExcelFilterLockSegmentsSource) ?? "false");
+						if (lockSegments)
+						{
+							segmentPair.Properties.IsLocked = true;
+
+							var paragraphUnit = paragraphUnits.FirstOrDefault(a =>
+								a.ParagraphUnitId == paragraphUnitProperties.ParagraphUnitId.Id);
+
+							if (paragraphUnit != null)
+							{
+								paragraphUnit.SegmentPairs.Add(segmentPair);
+							}
+							else
+							{
+								var newParagraphUnit = new ParagraphUnit
+								{
+									ParagraphUnitId = paragraphUnitProperties.ParagraphUnitId.Id,
+									ParagraphUnitProperties = paragraphUnitProperties,
+									SegmentPairs = new List<ISegmentPair> { segmentPair }
+								};
+								paragraphUnits.Add(newParagraphUnit);
+							}
+						}
+					}
+				}
+
+				foreach (var paragraphUnit in paragraphUnits)
+				{
+					foreach (var segmentPair in paragraphUnit.SegmentPairs)
+					{
+						e.Document.UpdateSegmentPairProperties(segmentPair, segmentPair.Properties);
+					}
+
+					e.Document.UpdateParagraphUnitProperties(paragraphUnit.ParagraphUnitProperties);
+				}
+
+				_editorController.Save(e.Document);
+				project.Save();
+			}
+		}
+
+		private static bool DocumentIsLoadedOnce(IStudioDocument document)
+		{
+			return document?.ActiveFileProperties?.Comments?.Comments != null &&
+				   document.ActiveFileProperties.Comments.Comments.Any(
+					   commentProperty => commentProperty.Author == "[MultilingualExcelLoaded]");
+		}
+	}
+}

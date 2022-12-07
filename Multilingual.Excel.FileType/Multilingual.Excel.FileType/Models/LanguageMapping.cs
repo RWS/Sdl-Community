@@ -31,6 +31,13 @@ namespace Multilingual.Excel.FileType.Models
 
 		public bool ExcludeTranslations { get; set; }
 
+		public bool FilterBackgroundColorChecked { get; set; }
+
+		public string FilterBackgroundColor { get; set; }
+
+		public string FilterScope { get; set; }
+
+
 		[JsonIgnore]
 		public string DisplayName { get; set; }
 
@@ -53,6 +60,9 @@ namespace Multilingual.Excel.FileType.Models
 				PixelFontSize = PixelFontSize,
 				IsDefault = IsDefault,
 				ExcludeTranslations = ExcludeTranslations,
+				FilterBackgroundColor = FilterBackgroundColor,
+				FilterBackgroundColorChecked = FilterBackgroundColorChecked,
+				FilterScope = FilterScope,
 				Image = Image?.Clone(),
 				DisplayName = !string.IsNullOrEmpty(LanguageId) ? new CultureInfo(LanguageId).DisplayName : string.Empty
 			};

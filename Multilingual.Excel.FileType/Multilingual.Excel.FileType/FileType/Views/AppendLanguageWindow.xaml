@@ -8,13 +8,14 @@
         xmlns:viewModels="clr-namespace:Multilingual.Excel.FileType.FileType.ViewModels"
         xmlns:resources="clr-namespace:Multilingual.Excel.FileType"
         xmlns:controls="clr-namespace:Multilingual.Excel.FileType.Controls"
+		xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         WindowStyle="ThreeDBorderWindow"
 		WindowStartupLocation="CenterScreen"
         AllowsTransparency="False" 
         ResizeMode="CanResize"
 		mc:Ignorable="d" 
         Title ="{Binding WindowTitle, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-         MinWidth="650"  Width="650" MinHeight="600" Height="600"
+         MinWidth="650"  Width="650" MinHeight="700" Height="700"
 		d:DataContext="{d:DesignInstance viewModels:AppendLanguageViewModel}">
 	<Window.Resources>
 		<ResourceDictionary>
@@ -117,6 +118,76 @@
 				          Content="Exclude content during import"/>
 			</Grid>
 
+			<GroupBox Grid.Row="2"  Margin="0,5,0,0" Header="Filters">
+				<Grid  Margin="10">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+
+					
+
+					<Grid Grid.Row="1" Margin="0,5,0,0">
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="*"/>
+						</Grid.RowDefinitions>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="Auto"/>
+						</Grid.ColumnDefinitions>
+
+						<CheckBox Grid.Row="0" Grid.Column="1"  Margin="3,5,5,5" MinWidth="85"
+						          IsChecked="{Binding FilterBackgroundColorChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" 
+						          Content="Fill Color:"/>
+						<!--<Label Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"  Margin="0,0,5,0" MinWidth="120"
+						       Content="Background Color:"/>-->
+						<xctk:ColorPicker Grid.Row="0" Grid.Column="2" Width="250" DisplayColorAndName="True" 
+										  IsEnabled="{Binding FilterBackgroundColorChecked}"
+						                  SelectedColor="{Binding SelectedFilterBackgroundColor, UpdateSourceTrigger=PropertyChanged}" />
+
+						<Image Grid.Row="0" Grid.Column="3" Source="../../Resources/Information.png" Height="16"
+						       RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased"
+						       HorizontalAlignment="Left" Margin="5,0,0,0"
+						       ToolTip="Filter on content that matches the fill color of the cell, in the excel worksheet"/>
+
+						<Label Grid.Row="0" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Stretch"  
+						       Margin="25,0,5,0" 
+						       IsEnabled="{Binding FilterBackgroundColorChecked}"
+						       Content="Action:"/>
+						<ComboBox  Grid.Row="0" Grid.Column="5"
+						           IsEnabled="{Binding FilterBackgroundColorChecked}"
+						           ItemsSource="{Binding FilterScopes, Mode=OneWay }" 
+						           SelectedItem="{Binding SelectedFilterScope, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+						<Image Grid.Row="0" Grid.Column="6" Source="../../Resources/Information.png" Height="16"
+						       RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased"
+						       HorizontalAlignment="Left" Margin="5,0,5,0"
+						       ToolTip="Import: Content from cells that match the color are imported.&#10;Ignore: Content from cells that match the color are not imported.&#10;Lock: Content from cells that match the color are imported &amp; locked."/>
+					</Grid>
+
+					<Grid Grid.Row="2" Margin="0,5,0,0">
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="*"/>
+						</Grid.RowDefinitions>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+
+					</Grid>
+				</Grid>
+			</GroupBox>
 
 			<GroupBox Grid.Row="3"  Margin="0,5,0,0" Header="Context Information / Comments">
 				<Grid  Margin="10">

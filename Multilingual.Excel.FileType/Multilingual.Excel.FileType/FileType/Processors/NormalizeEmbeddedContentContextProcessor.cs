@@ -1,6 +1,4 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
+﻿using System.Linq;
 using Multilingual.Excel.FileType.Constants;
 using Multilingual.Excel.FileType.Services;
 using Sdl.FileTypeSupport.Framework.BilingualApi;

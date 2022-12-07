@@ -23,6 +23,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 	public class LanguageMappingViewModel : BaseModel
 	{
 		private readonly ImageService _imageService;
+		private readonly ColorService _colorService;
 		private int _firstRowIndex;
 		private bool _firstRowIsHeading;
 		private bool _readAllWorkSheets;
@@ -39,10 +40,12 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 		private ICommand _dragDropCommand;
 		private ICommand _mouseDoubleClick;
 
-		public LanguageMappingViewModel(LanguageMappingSettings settings, ImageService imageService, IFilterService languageLanguageFilterService)
+		public LanguageMappingViewModel(LanguageMappingSettings settings, ImageService imageService, 
+			ColorService colorService, IFilterService languageLanguageFilterService)
 		{
 			Settings = settings;
 			_imageService = imageService;
+			_colorService = colorService;
 			LanguageFilterService = languageLanguageFilterService;
 
 			FirstRowIndex = Settings.LanguageMappingFirstRowIndex;
@@ -203,13 +206,16 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 					languageMapping.PixelFontSizeColumn = defaultLanguageMapping.PixelFontSizeColumn;
 					languageMapping.PixelFontFamilyName = defaultLanguageMapping.PixelFontFamilyName;
 					languageMapping.PixelFontSize = defaultLanguageMapping.PixelFontSize;
+					languageMapping.FilterBackgroundColor = defaultLanguageMapping.FilterBackgroundColor;
+					languageMapping.FilterBackgroundColorChecked = defaultLanguageMapping.FilterBackgroundColorChecked;
+					languageMapping.FilterScope = defaultLanguageMapping.FilterScope;
 				}
 			}
 
 			var languageMappingClone = languageMapping.Clone() as LanguageMapping;
 
 			var viewModel = new AppendLanguageViewModel(languageMapping,
-				_languageMappings.ToList(), _imageService, LanguageFilterService, isEditMode);
+				_languageMappings.ToList(), _imageService, LanguageFilterService, _colorService, isEditMode);
 
 			var window = new AppendLanguageWindow(viewModel, null);
 
@@ -237,6 +243,9 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 							mapping.LanguageId = cultureInfo.Name;
 							mapping.DisplayName = cultureInfo.DisplayName;
 							mapping.Image = _imageService.GetImage(cultureInfo.Name);
+							mapping.FilterBackgroundColor = _colorService.GetColorHexCode(viewModel.SelectedFilterBackgroundColor);
+							mapping.FilterBackgroundColorChecked = viewModel.FilterBackgroundColorChecked;
+							mapping.FilterScope = viewModel.SelectedFilterScope;
 						}
 					}
 				}
@@ -259,8 +268,11 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 							PixelFontSize = viewModel.PixelFontSize,
 							LanguageId = cultureInfo.Name,
 							DisplayName = cultureInfo.DisplayName,
-							Image = _imageService.GetImage(cultureInfo.Name)
-						});
+							Image = _imageService.GetImage(cultureInfo.Name),
+							FilterBackgroundColor = _colorService.GetColorHexCode(viewModel.SelectedFilterBackgroundColor),
+							FilterBackgroundColorChecked = viewModel.FilterBackgroundColorChecked,
+							FilterScope = viewModel.SelectedFilterScope
+					});
 					}
 				}
 
@@ -284,6 +296,9 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 				languageMapping.LanguageId = languageMappingClone.LanguageId;
 				languageMapping.DisplayName = languageMappingClone.DisplayName;
 				languageMapping.Image = languageMappingClone.Image;
+				languageMapping.FilterBackgroundColor = languageMappingClone.FilterBackgroundColor;
+				languageMapping.FilterBackgroundColorChecked = languageMappingClone.FilterBackgroundColorChecked;
+				languageMapping.FilterScope = languageMappingClone.FilterScope;
 			}
 		}
 

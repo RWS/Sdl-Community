@@ -73,6 +73,13 @@ namespace Multilingual.Excel.FileType.Common
 			Text
 		}
 
+		public enum FilterScope
+		{
+			Import,
+			Ignore,
+			Lock
+		}
+
 		public static string GetTranslationOriginType(ITranslationOrigin translationOrigin, List<AnalysisBand> analysisBands)
 		{
 			if (translationOrigin != null)

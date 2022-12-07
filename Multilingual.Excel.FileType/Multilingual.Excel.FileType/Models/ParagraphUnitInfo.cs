@@ -19,6 +19,10 @@ namespace Multilingual.Excel.FileType.Models
 
 		public float ExcelPixelFontSize { get; set; }
 
+		public string ExcelFilterBackgroundColor { get; set; }
+
+		public bool ExcelFilterLockSegments { get; set; }
+
 		public bool IsCDATA { get; set; }
 
 		public string ParagraphUnitId { get; set; }
