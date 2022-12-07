@@ -225,6 +225,7 @@ namespace TMX_Lib.XmlSplit
 			return curString;
 		}
 
+
 		// tries to get the same sub-document
 		// if it returns null, there are no more sub-documents
 		public XmlDocument TryGetNextSubDocument()
@@ -238,6 +239,8 @@ namespace TMX_Lib.XmlSplit
 				XmlReaderSettings settings = new XmlReaderSettings();
 				settings.XmlResolver = null;
 				settings.DtdProcessing = DtdProcessing.Ignore;
+				settings.CheckCharacters = false;
+				settings.ValidationType = ValidationType.None;
 
 				var bytes = Encoding.UTF8.GetBytes(str);
 				using (var memoryStream = new MemoryStream(bytes))

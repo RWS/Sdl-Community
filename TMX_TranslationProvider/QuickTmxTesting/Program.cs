@@ -25,7 +25,7 @@ namespace QuickTmxTesting
 	    private static async Task TestImportLargeFile(string root)
 	    {
 		    var db = new TmxMongoDb("localhost:27017", "large_db");
-		    await db.ImportToDbAsync("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en-fr (EU Bookshop v2_10.8M).tmx");
+		    await db.ImportToDbAsync("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\ko-zh.tmx");
 	    }
 		private static async Task TestImportLargeFile2(string root)
 	    {
@@ -151,18 +151,22 @@ namespace QuickTmxTesting
 		    }
 	    }
 
+
 		static void Main(string[] args)
 		{
 			LogUtil.Setup();
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en(GB) - it(IT)_(DGT 2015, 2017).tmx", "C:\\john\\buff\\TMX Examples\\temp\\");
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en-fr (EU Bookshop v2_10.8M).tmx", "C:\\john\\buff\\TMX Examples\\temp2\\");
 			log.Debug("test started");
-			SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\fails\\opensubtitlingformat.tmx", "C:\\john\\buff\\TMX Examples\\temp3\\");
+			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\fails\\opensubtitlingformat.tmx", "C:\\john\\buff\\TMX Examples\\temp3\\");
 
 
 			var root = ".";
 	        if (args.Length > 0)
 		        root = args[0];
+			return;
+
+	        Task.Run(() => TestImportLargeFile(root)).Wait();
 
 			//Task.Run(() => TestImportSmallFile2(root)).Wait();
 			//Task.Run(() => TestImportSample4(root)).Wait();
