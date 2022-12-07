@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using Multilingual.Excel.FileType.Common;
 using Multilingual.Excel.FileType.Constants;
 using Multilingual.Excel.FileType.EmbeddedContent;
 using Multilingual.Excel.FileType.Extensions;
@@ -150,42 +151,45 @@ namespace Multilingual.Excel.FileType.Services
 					var content =
 						excelRow.Cells.FirstOrDefault(a => a.Column.Name == _sourceLanguageMapping.ContentColumn);
 
-					//TODO: 
+					
 					//TODO: apply filter on background color
+					var lockSegments = false;
 					if (_sourceLanguageMapping.FilterBackgroundColorChecked)
 					{
-						var filterBackgroundColor = _sourceLanguageMapping.FilterBackgroundColor.Trim('#', ';');
-						var excelCellBackgroundColor = content?.Background.Trim('#', ';');
+						var filterBackgroundColor = _sourceLanguageMapping.FilterBackgroundColor?.Trim('#', ';');
+						var excelCellBackgroundColor = content?.Background?.Trim('#', ';');
+						var action = (Common.Enumerators.FilterScope)Enum.Parse(typeof(Common.Enumerators.FilterScope),
+							_sourceLanguageMapping.FilterScope, true);
 
-						if (string.Compare(
-							    filterBackgroundColor,excelCellBackgroundColor, StringComparison.InvariantCultureIgnoreCase) == 0)
+						if (string.Compare(filterBackgroundColor,excelCellBackgroundColor, StringComparison.InvariantCultureIgnoreCase) == 0)
 						{
-							if (string.Compare(_sourceLanguageMapping.FilterScope, Common.Enumerators.FilterScope.Ignore.ToString(),
-									StringComparison.InvariantCultureIgnoreCase) == 0)
+							switch (action)
 							{
-
+								case Enumerators.FilterScope.Ignore:
+									Console.WriteLine(@"Ignored: Color {0} Sheet {1} Row {2}, Column {3} Content {4}",
+										excelCellBackgroundColor,
+										excelSheet.Name,
+										excelRow.Index,
+										content?.Column.Name,
+										content?.Value);
+									continue;
+								case Enumerators.FilterScope.Lock:
+									lockSegments = true;
+									break;
 							}
-							else if (string.Compare(_sourceLanguageMapping.FilterScope, Common.Enumerators.FilterScope.Lock.ToString(),
-										 StringComparison.InvariantCultureIgnoreCase) == 0)
-							{
-
-							}
-
-							Console.WriteLine(@"Ignored: Color {0} Sheet {1} Row {2}, Column {3} Content {4}",
-								content?.Background.Trim('#', ';'),
+						}
+						else if (action == Enumerators.FilterScope.Import)
+						{
+							Console.WriteLine(@"Not Imported: Color {0} Sheet {1} Row {2}, Column {3} Content {4}",
+								excelCellBackgroundColor,
 								excelSheet.Name,
 								excelRow.Index,
 								content?.Column.Name,
 								content?.Value);
+
 							continue;
 						}
-						else
-						{
-
-						}
 					}
-
-
 
 					//if (!string.IsNullOrEmpty(content?.Value))
 					//{
@@ -203,7 +207,7 @@ namespace Multilingual.Excel.FileType.Services
 						(EmbeddedContentSettings.EmbeddedContentFoundIn == EmbeddedContentSettings.FoundIn.All ||
 						 (IsCDATA && EmbeddedContentSettings.EmbeddedContentFoundIn == EmbeddedContentSettings.FoundIn.CDATA)))
 					{
-						var paragraphUnit = AddStructureParagraph(excelSheet, excelRow, IsCDATA);
+						var paragraphUnit = AddStructureParagraph(excelSheet, excelRow, IsCDATA, lockSegments);
 						if (!structureInfoAddedToFirstParagraph)
 						{
 							paragraphUnit.Properties.Contexts.StructureInfo = GetStructureInfo(excelSheet);
@@ -217,7 +221,7 @@ namespace Multilingual.Excel.FileType.Services
 					}
 					else
 					{
-						var paragraphUnit = CreateParagraphUnit(excelSheet, excelRow);
+						var paragraphUnit = CreateParagraphUnit(excelSheet, excelRow, lockSegments);
 						if (!structureInfoAddedToFirstParagraph)
 						{
 							paragraphUnit.Properties.Contexts.StructureInfo = GetStructureInfo(excelSheet);
@@ -345,18 +349,20 @@ namespace Multilingual.Excel.FileType.Services
 			return columns;
 		}
 
-		private IParagraphUnit CreateParagraphUnit(ExcelSheet excelSheet, ExcelRow excelRow)
+		private IParagraphUnit CreateParagraphUnit(ExcelSheet excelSheet, ExcelRow excelRow, bool lockSegments)
 		{
 			var content = excelRow.Cells.FirstOrDefault(a => a.Column.Name == _sourceLanguageMapping.ContentColumn);
-
-			var structureParagraphUnit = GetStructureParagraphUnit(excelSheet, excelRow, LockTypeFlags.Unlocked, false);
+			//var lockType = (lockSegments ? LockTypeFlags.Manual : LockTypeFlags.Unlocked);
+			var structureParagraphUnit = GetStructureParagraphUnit(excelSheet, excelRow, LockTypeFlags.Unlocked, false, lockSegments);
 			var segmentPairProperties = ItemFactory.CreateSegmentPairProperties();
+			segmentPairProperties.IsLocked = lockSegments;
 			if (_sourceLanguageMapping == null)
 			{
 				return structureParagraphUnit;
 			}
 
 			var segment = GetSegment(content, segmentPairProperties);
+			segment.Properties.IsLocked = lockSegments;
 
 			IAbstractMarkupDataContainer currentContainer = structureParagraphUnit.Source;
 			IAbstractMarkupDataContainer previousContainer = null;
@@ -450,17 +456,17 @@ namespace Multilingual.Excel.FileType.Services
 			return null;
 		}
 
-		private IParagraphUnit AddStructureParagraph(ExcelSheet excelSheet, ExcelRow excelRow, bool isCDATA)
+		private IParagraphUnit AddStructureParagraph(ExcelSheet excelSheet, ExcelRow excelRow, bool isCDATA, bool lockSegments)
 		{
-			var structureParagraphUnit = GetStructureParagraphUnit(excelSheet, excelRow, LockTypeFlags.Structure, isCDATA);
-
+			var structureParagraphUnit = GetStructureParagraphUnit(excelSheet, excelRow, LockTypeFlags.Structure, isCDATA, lockSegments);
+			
 			AddContextToParagraph(excelRow, structureParagraphUnit);
 			AddCommentsToParagraph(excelRow, structureParagraphUnit);
 
 			return structureParagraphUnit;
 		}
 
-		private IParagraphUnit GetStructureParagraphUnit(ExcelSheet excelSheet, ExcelRow excelRow, LockTypeFlags lockType, bool IsCDATA)
+		private IParagraphUnit GetStructureParagraphUnit(ExcelSheet excelSheet, ExcelRow excelRow, LockTypeFlags lockType, bool IsCDATA, bool lockSegments)
 		{
 			var structureParagraphUnit = ItemFactory.CreateParagraphUnit(lockType);
 			structureParagraphUnit.Properties.Comments = PropertiesFactory.CreateCommentProperties();
@@ -490,7 +496,7 @@ namespace Multilingual.Excel.FileType.Services
 			multilingualParagraphContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelPixelFontSizeSource, pixelFontSize?.Value ?? "0");
 			multilingualParagraphContextInfo.SetMetaData(FiletypeConstants.IsCDATA, IsCDATA.ToString());
 			multilingualParagraphContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelFilterBackgroundColorSource, content?.Background ?? "0");
-			multilingualParagraphContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelFilterScopeSource, _sourceLanguageMapping.FilterScope ?? string.Empty);
+			multilingualParagraphContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelFilterLockSegmentsSource, lockSegments.ToString());
 
 			return structureParagraphUnit;
 		}

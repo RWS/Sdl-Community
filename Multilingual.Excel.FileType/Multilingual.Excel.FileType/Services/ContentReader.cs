@@ -16,7 +16,6 @@ namespace Multilingual.Excel.FileType.Services
 
 		private IParagraphUnit _paragraphUnit;
 
-
 		private int _excelSheetIndex;
 		private string _excelSheetName;
 		private uint _excelRowIndex;
@@ -26,6 +25,7 @@ namespace Multilingual.Excel.FileType.Services
 		private float _excelPixelFontSizeSource;
 		private bool _isCATA;
 		private string _excelFilterBackgroundColorSource;
+		private bool _excelFilterLockSegments;
 
 		public ContentReader()
 		{
@@ -72,6 +72,7 @@ namespace Multilingual.Excel.FileType.Services
 				_excelPixelFontSizeSource = Convert.ToSingle(multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelPixelFontSizeSource) ?? "0");
 				_isCATA = Convert.ToBoolean(multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.IsCDATA));
 				_excelFilterBackgroundColorSource = multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelFilterBackgroundColorSource ?? string.Empty);
+				_excelFilterLockSegments = Convert.ToBoolean(multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelFilterLockSegmentsSource));
 			}
 
 			if (paragraphUnit.IsStructure)
@@ -90,6 +91,7 @@ namespace Multilingual.Excel.FileType.Services
 				ExcelPixelFontName = _excelPixelFontNameSource,
 				ExcelPixelFontSize = _excelPixelFontSizeSource,
 				ExcelFilterBackgroundColor = _excelFilterBackgroundColorSource,
+				ExcelFilterLockSegments = _excelFilterLockSegments,
 				IsCDATA = _isCATA,
 				ParagraphUnit = paragraphUnit,
 				ParagraphUnitId = paragraphUnit.Properties.ParagraphUnitId.Id,
@@ -136,6 +138,7 @@ namespace Multilingual.Excel.FileType.Services
 					ExcelPixelFontName = _excelPixelFontNameSource,
 					ExcelPixelFontSize = _excelPixelFontSizeSource,
 					ExcelFilterBackgroundColor = _excelFilterBackgroundColorSource,
+					ExcelFilterLockSegments = _excelFilterLockSegments,
 					IsCDATA = _isCATA,
 					ParagraphUnit = _paragraphUnit,
 					ParagraphUnitId = _paragraphUnit.Properties.ParagraphUnitId.Id,
@@ -145,7 +148,6 @@ namespace Multilingual.Excel.FileType.Services
 
 				ParagraphUnitInfos.Add(paragraphUnitInfo);
 			}
-
 		}
 	}
 }

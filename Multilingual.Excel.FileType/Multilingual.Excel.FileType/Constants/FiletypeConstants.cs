@@ -38,8 +38,8 @@ namespace Multilingual.Excel.FileType.Constants
 
 		public const string MultilingualExcelFilterBackgroundColorSource = "MultilingualExcelFilterBackgroundColorSource";
 		public const string MultilingualExcelFilterBackgroundColorTarget = "MultilingualExcelFilterBackgroundColorTarget";
-		public const string MultilingualExcelFilterScopeSource = "MultilingualExcelFilterScopeSource";
-		public const string MultilingualExcelFilterScopeTarget = "MultilingualExcelFilterScopeTarget";
+		public const string MultilingualExcelFilterLockSegmentsSource = "MultilingualExcelFilterLockSegmentsSource";
+		public const string MultilingualExcelFilterLockSegmentsTarget = "MultilingualExcelFilterLockSegmentsTarget";
 
 		public const string MultilingualExcelCharacterLimitationSource = "MultilingualExcelCharacterLimitationSource";
 		public const string MultilingualExcelPixelLimitationSource = "MultilingualExcelPixelLimitationSource";

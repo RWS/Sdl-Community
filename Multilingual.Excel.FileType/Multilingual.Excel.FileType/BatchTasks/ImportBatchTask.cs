@@ -128,7 +128,7 @@ namespace Multilingual.Excel.FileType.BatchTasks
 			EnsureDocumentSegmented(projectFile);
 
 			// TODO remove excess comment containers
-			
+
 			//var sdlxliffUpdater = new SdlxliffUpdater(new NormalizeParagraphCommentsProcessor());
 			//UpdateFile(projectFile, sdlxliffUpdater);
 
@@ -260,21 +260,41 @@ namespace Multilingual.Excel.FileType.BatchTasks
 					//}
 					i++;
 
+
+					var lockSegments = false;
+
 					var multilingualContextInfo = newParagraphUnit.Properties.Contexts?.Contexts?.FirstOrDefault(a => a.ContextType == FiletypeConstants.MultilingualParagraphUnit);
 					var targetMultilingualContextInfo = updatedParagraphUnitInfo ?? targetMultilingualParagraphUnit?.ParagraphUnitInfos?.FirstOrDefault();
 					if (targetMultilingualContextInfo != null)
 					{
+						// TODO: this should not be needed; instead take it from the individual segment pair properties
+						if (multilingualContextInfo.MetaDataContainsKey(FiletypeConstants.MultilingualExcelFilterLockSegmentsSource))
+						{
+							lockSegments = Convert.ToBoolean(multilingualContextInfo.GetMetaData(FiletypeConstants.MultilingualExcelFilterLockSegmentsSource));
+						}
+
+						if (!lockSegments)
+						{
+							lockSegments = targetMultilingualContextInfo.ExcelFilterLockSegments;
+						}
+
+
 						multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelCharacterLimitationTarget, targetMultilingualContextInfo.ExcelCharacterLimitation.ToString());
 						multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelPixelLimitationTarget, targetMultilingualContextInfo.ExcelPixelLimitation.ToString());
 						multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelPixelFontNameTarget, targetMultilingualContextInfo.ExcelPixelFontName);
 						multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelPixelFontSizeTarget, targetMultilingualContextInfo.ExcelPixelFontSize.ToString(CultureInfo.InvariantCulture));
 						multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelFilterBackgroundColorTarget, targetMultilingualContextInfo.ExcelFilterBackgroundColor);
-						multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelFilterScopeTarget, targetMultilingualContextInfo.ExcelFilterScope);
+						multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelFilterLockSegmentsTarget, targetMultilingualContextInfo.ExcelFilterLockSegments.ToString());
+					}
+
+					if (lockSegments)
+					{
+						newParagraphUnit.Properties.LockType = LockTypeFlags.Manual;
 					}
 
 					AddContextInfo(updatedParagraphUnitInfo, newParagraphUnit);
 					AddComments(updatedParagraphUnitInfo, newParagraphUnit);
-					
+
 					if (paragraphUnitInfo.SegmentPairs.Count == 0 && updatedParagraphUnitInfo?.SegmentPairs?.Count == 0)
 					{
 						// Both source and target are NOT segmented!
@@ -296,6 +316,8 @@ namespace Multilingual.Excel.FileType.BatchTasks
 						{
 							var originalSegmentPairInfo = paragraphUnitInfo.SegmentPairs[m];
 							var segmentPairProperties = originalSegmentPairInfo.SegmentPair.Properties.Clone() as ISegmentPairProperties;
+							segmentPairProperties.IsLocked = lockSegments;
+
 							var sourceSegment = _segmentBuilder.CreateSegment(segmentPairProperties);
 							var targetSegment = sourceSegment.Clone() as ISegment;
 
@@ -339,8 +361,11 @@ namespace Multilingual.Excel.FileType.BatchTasks
 						j++;
 
 						var segmentPairProperties = originalSegmentPair.SegmentPair.Properties.Clone() as ISegmentPairProperties;
+						segmentPairProperties.IsLocked = lockSegments;
+
 						var sourceSegment = _segmentBuilder.CreateSegment(segmentPairProperties);
 						var targetSegment = sourceSegment.Clone() as ISegment;
+
 
 						foreach (var item in originalSegmentPair.SegmentPair.Source)
 						{

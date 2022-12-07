@@ -141,6 +141,7 @@
     <Compile Include="Controls\NumericUpDown.cs" />
     <Compile Include="Converters\CommentNameToNameAndDescriptionConverter.cs" />
     <Compile Include="Constants\EntityConstants.cs" />
+    <Compile Include="FileType\Processors\DocumentProcessor.cs" />
     <Compile Include="FileType\Pages\CommentMappingsPage.cs" />
     <Compile Include="FileType\Preview\InternalPreviewControl.cs">
       <SubType>UserControl</SubType>
@@ -151,6 +152,7 @@
     <Compile Include="FileType\Preview\InternalPreviewController.cs" />
     <Compile Include="FileType\Preview\InternalPreviewFileTweaker.cs" />
     <Compile Include="FileType\Preview\StringExtensions.cs" />
+    <Compile Include="FileType\Processors\DocumentPostTweaker.cs" />
     <Compile Include="FileType\Processors\EmptyTargetProcessor.cs" />
     <Compile Include="FileType\Processors\CopySourceToEmptyTargetProcessor.cs" />
     <Compile Include="FileType\Processors\EntitiesProcessor.cs" />
@@ -159,6 +161,7 @@
     <Compile Include="FileType\Processors\CommentsRemovalProcessor.cs" />
     <Compile Include="FileType\Processors\SegmentRenumberingBilingualProcessor.cs" />
     <Compile Include="FileType\Processors\SegmentRenumberingTrigger.cs" />
+    <Compile Include="FileType\Settings\DocumentSettings.cs" />
     <Compile Include="FileType\Settings\Entities\EntityMapping.cs" />
     <Compile Include="FileType\Settings\Entities\EntitySet.cs" />
     <Compile Include="FileType\Settings\Entities\EntitySetBuilder.cs" />
@@ -179,6 +182,7 @@
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\CommentPropertyMapping.cs" />
     <Compile Include="Models\CommentProperty.cs" />
+    <Compile Include="Models\DocumentInfo.cs" />
     <Compile Include="Models\ElementTags.cs" />
     <Compile Include="Models\FontFamilyItem.cs" />
     <Compile Include="Models\MultilingualComment.cs" />

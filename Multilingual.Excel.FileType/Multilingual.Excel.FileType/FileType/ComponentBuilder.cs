@@ -81,6 +81,7 @@ namespace Multilingual.Excel.FileType.FileType
 
 			return quickTagsFactory;
 		}
+		
 
 		public INativeFileSniffer BuildFileSniffer(string name)
 		{

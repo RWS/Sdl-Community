@@ -394,6 +394,11 @@ namespace Multilingual.Excel.FileType.Services
 			return comment;
 		}
 
+		public ICommentProperties CreateCommentProperties()
+		{
+			return PropertiesFactory.CreateCommentProperties();
+		}
+
 		public IAbstractMarkupData CreateCommentContainer(string text, string author, Severity severity, DateTime dateTime, string version)
 		{
 			var comment = CreateComment(text, author, severity, dateTime, version);

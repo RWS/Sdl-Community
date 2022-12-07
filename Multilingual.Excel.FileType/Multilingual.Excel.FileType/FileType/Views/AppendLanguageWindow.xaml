@@ -138,22 +138,39 @@
 							<ColumnDefinition Width="Auto"/>
 							<ColumnDefinition Width="Auto"/>
 							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="Auto"/>
 							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="Auto"/>
 						</Grid.ColumnDefinitions>
 
-						<CheckBox Grid.Row="0" Grid.Column="1"  Margin="3,5,5,5" MinWidth="120"
+						<CheckBox Grid.Row="0" Grid.Column="1"  Margin="3,5,5,5" MinWidth="85"
 						          IsChecked="{Binding FilterBackgroundColorChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" 
-						          Content="Background Color:"/>
+						          Content="Fill Color:"/>
 						<!--<Label Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"  Margin="0,0,5,0" MinWidth="120"
 						       Content="Background Color:"/>-->
-						<xctk:ColorPicker Grid.Row="0" Grid.Column="2" Width="200" DisplayColorAndName="True" 
+						<xctk:ColorPicker Grid.Row="0" Grid.Column="2" Width="250" DisplayColorAndName="True" 
 										  IsEnabled="{Binding FilterBackgroundColorChecked}"
 						                  SelectedColor="{Binding SelectedFilterBackgroundColor, UpdateSourceTrigger=PropertyChanged}" />
 
 						<Image Grid.Row="0" Grid.Column="3" Source="../../Resources/Information.png" Height="16"
 						       RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased"
 						       HorizontalAlignment="Left" Margin="5,0,0,0"
-						       ToolTip="Filter content that matches the background color of the cell, in the excel worksheet"/>
+						       ToolTip="Filter on content that matches the fill color of the cell, in the excel worksheet"/>
+
+						<Label Grid.Row="0" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Stretch"  
+						       Margin="25,0,5,0" 
+						       IsEnabled="{Binding FilterBackgroundColorChecked}"
+						       Content="Action:"/>
+						<ComboBox  Grid.Row="0" Grid.Column="5"
+						           IsEnabled="{Binding FilterBackgroundColorChecked}"
+						           ItemsSource="{Binding FilterScopes, Mode=OneWay }" 
+						           SelectedItem="{Binding SelectedFilterScope, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+						<Image Grid.Row="0" Grid.Column="6" Source="../../Resources/Information.png" Height="16"
+						       RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased"
+						       HorizontalAlignment="Left" Margin="5,0,5,0"
+						       ToolTip="Import: Content from cells that match the color are imported.&#10;Ignore: Content from cells that match the color are not imported.&#10;Lock: Content from cells that match the color are imported &amp; locked."/>
 					</Grid>
 
 					<Grid Grid.Row="2" Margin="0,5,0,0">

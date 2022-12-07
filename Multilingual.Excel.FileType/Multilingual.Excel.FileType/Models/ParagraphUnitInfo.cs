@@ -21,7 +21,7 @@ namespace Multilingual.Excel.FileType.Models
 
 		public string ExcelFilterBackgroundColor { get; set; }
 
-		public string ExcelFilterScope { get; set; }
+		public bool ExcelFilterLockSegments { get; set; }
 
 		public bool IsCDATA { get; set; }
 
