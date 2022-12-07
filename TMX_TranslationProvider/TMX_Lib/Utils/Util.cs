@@ -57,5 +57,12 @@ namespace TMX_Lib.Utils
 			else
 				throw new TmxException(msg, e);
 		}
+
+#if DEBUG
+		public static bool IsDebug = true;
+#else
+		public static bool IsDebug = false;
+#endif
+
 	}
 }

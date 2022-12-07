@@ -27,7 +27,8 @@ namespace TMX_Lib.XmlSplit
 		// in that case, we simply need a few extra bytes, so that the last UTF8 char is fully read
 		private int PAD_EXTRA = 128;
 
-		public int SplitSize = 64 * 1024 * 1024;
+		// ... in debug, make things easier :)
+		public int SplitSize = Util.IsDebug ? 2 * 1024 * 1024  :  64 * 1024 * 1024;
 
 		private XmlDocument _document;
 
@@ -44,6 +45,8 @@ namespace TMX_Lib.XmlSplit
 
 		private bool _eofReached = false;
 		private byte[] _buffer;
+		// ... only for testing/debugging - in the possibility something goes wrong with decoding
+		private int _readByteCount;
 		private int _offset;
 
 		private Encoding _encoding;
@@ -159,27 +162,27 @@ namespace TMX_Lib.XmlSplit
 				log.Debug($"Encoding for {_fileName} overridden : {_encoding.ToString()}");
 			}
 
-			var readByteCount = _stream.Read(_buffer, 0, SplitSize);
-			if (readByteCount < 1)
+			_readByteCount = _stream.Read(_buffer, 0, SplitSize);
+			if (_readByteCount < 1)
 			{
 				lock(this)
 					_eofReached = true;
 				return null;
 			}
 
-			_offset += readByteCount;
+			_offset += _readByteCount;
 			string curString = "";
 			while(true)
 				try
 				{
 					// this can throw if the last char hasn't been fully read
-					curString = _encoding.GetString(_buffer, 0, readByteCount);
+					curString = _encoding.GetString(_buffer, 0, _readByteCount);
 					break;
 				}
 				catch
 				{
-					var readByte = _stream.Read(_buffer, readByteCount, 1);
-					++readByteCount;
+					var readByte = _stream.Read(_buffer, _readByteCount, 1);
+					++_readByteCount;
 					++_offset;
 					if (readByte != 1)
 						throw new TmxException($"The file {_fileName} contains invalid characters");
@@ -251,12 +254,20 @@ namespace TMX_Lib.XmlSplit
 				// the idea -- write the bad file, so we can analyze it
 				try
 				{
-					var tempFile = $"{LogUtil.PluginDirectory}\\bad-{Path.GetFileNameWithoutExtension(_fileName)}.txt";
+					var tempFile = $"{LogUtil.PluginDirectory}\\bad-{Path.GetFileNameWithoutExtension(_fileName)}-text.txt";
 					File.WriteAllText(tempFile, str);
+					tempFile = $"{LogUtil.PluginDirectory}\\bad-{Path.GetFileNameWithoutExtension(_fileName)}-binary.txt";
+					var subBuffer = new byte[_readByteCount];
+					Array.Copy(_buffer, subBuffer, _readByteCount);
+					File.WriteAllBytes(tempFile, subBuffer);
 				}
 				catch 
 				{ }
-				throw new TmxException($"Invalid .tmx file [{Path.GetFileNameWithoutExtension(_fileName)}], while parsing sub-block {_currentBlockIndex} of {_currentBlockIndex}", e);
+
+				var extraInfo = "";
+				if (e is XmlException xe)
+					extraInfo = $"\r\n(extra info: Position= {xe.LineNumber}:{xe.LinePosition})";
+				throw new TmxException($"Invalid .tmx file [{Path.GetFileNameWithoutExtension(_fileName)}], while parsing sub-block {_currentBlockIndex} of {_currentBlockIndex} {extraInfo}", e);
 			}
 		}
 
