@@ -26,6 +26,7 @@ namespace TMX_Lib.TmxFormat
 		// example: sometimes the language entry (xml:lang) is incorrect
 		private int _errorCount = 0;
 
+		public int QuickImportSplitSize = 16 * 1024 * 1024;
 
 		public bool HasError => _error != "";
 		public string Error => _error;
@@ -41,6 +42,7 @@ namespace TMX_Lib.TmxFormat
 		}
         private HashSet<string> _languagesSet = new HashSet<string>();
         private CultureDictionary _languages = new CultureDictionary();
+        private bool _quickImport;
 
         public string FileName => _fileName;
 
@@ -55,9 +57,10 @@ namespace TMX_Lib.TmxFormat
 
         public double Progress() => _splitter?.Progress() ?? 0;
 
-        public TmxParser(string fileName)
+        public TmxParser(string fileName, bool quickImport = false)
 		{
 			_fileName = fileName;
+			_quickImport = quickImport;
 			// note: loading async is a really bad idea, since all calls to the language direction are sync
 			// processing the nodes is async, but at the end of this function, we'll know the source + target languages
 			LoadHeader();
@@ -88,7 +91,9 @@ namespace TMX_Lib.TmxFormat
 			_error = "";
 			try
 			{
-				_splitter = new XmlSplitter(_fileName);
+				_splitter = new XmlSplitter(_fileName) { QuickImport = _quickImport };
+				if (_quickImport)
+					_splitter.SplitSize = QuickImportSplitSize;
 				_headerDocument = _splitter.TryGetNextSubDocument();
 				ParseHeader(_headerDocument);
 			}

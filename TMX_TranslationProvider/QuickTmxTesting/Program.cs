@@ -22,53 +22,11 @@ namespace QuickTmxTesting
     {
 	    private static readonly Logger log = NLog.LogManager.GetCurrentClassLogger();
 
-	    private static async Task TestImportLargeFile(string root)
+	    private static async Task TestImportFile(string file, string dbName, bool quickImport = false)
 	    {
-		    var db = new TmxMongoDb("localhost:27017", "large_db");
-		    await db.ImportToDbAsync("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\ko-zh.tmx");
+		    var db = new TmxMongoDb("localhost:27017", dbName);
+		    await db.ImportToDbAsync(file, quickImport);
 	    }
-		private static async Task TestImportLargeFile2(string root)
-	    {
-		    var db = new TmxMongoDb("localhost:27017", "large2_db");
-		    await db.ImportToDbAsync("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en-fr (DGT 2019_5.0M).tmx");
-	    }
-
-		private static async Task TestImportSmallFile(string root)
-	    {
-		    var db = new TmxMongoDb("localhost:27017", "small_db");
-		    await db.ImportToDbAsync("C:\\john\\buff\\TMX Examples\\cy-GB to en-US.tmx");
-	    }
-		private static async Task TestImportSmallFile2(string root)
-	    {
-		    var db = new TmxMongoDb("localhost:27017", "small2_db");
-		    await db.ImportToDbAsync("C:\\john\\buff\\TMX Examples\\#2 - TUs with a different single field.tmx");
-	    }
-		private static async Task TestImportMultilingual(string root)
-	    {
-		    var db = new TmxMongoDb("localhost:27017", "multilingual_db");
-		    await db.ImportToDbAsync("C:\\john\\buff\\TMX Examples\\TMX Test Files\\multilingual\\4 - multilingual_TMX.tmx");
-	    }
-		private static async Task TestImportMultilingual2(string root)
-	    {
-		    var db = new TmxMongoDb("localhost:27017", "multilingual_big_db");
-		    await db.ImportToDbAsync("C:\\john\\buff\\TMX Examples\\TMX Test Files\\multilingual\\ecdc.tmx");
-	    }
-		private static async Task TestImportSample4(string root)
-		{
-			var db = new TmxMongoDb("localhost:27017", "sample4");
-			await db.ImportToDbAsync($"{root}\\SampleTestFiles\\#4.tmx");
-			var search = new TmxSearch(db);
-			await search.LoadLanguagesAsync();
-			var segment = new Segment();
-			segment.Add("This document contains both the Interserve Construction Health and Safety Code for Subcontractors and the Sustainability Code for Subcontractors.");
-			var result = await search.Search(TmxSearchSettings.Default(), segment, new LanguagePair("en-GB","es-MX"));
-			Debug.Assert(result.Count == 1 && result[0].TranslationProposal.TargetSegment.ToPlain() == "Este documento contiene el Interserve Construcción Código de Salud y Seguridad de los subcontratistas y la sostenibilidad Código de los subcontratistas.");
-
-			segment = new Segment();
-			segment.Add("En el cumplimiento de estas metas, lograr nuestra visión de ser el socio de confianza para todos aquellos con quienes tenemos una relación, accionistas, clientes, empleados, proveedores, miembros de la comunidad en la que estamos trabajando, o de cualquier otro grupo o persona.");
-			result = await search.Search(TmxSearchSettings.Default(), segment, new LanguagePair("es-MX", "en-GB"));
-			Debug.Assert(result.Count == 1 && result[0].TranslationProposal.TargetSegment.ToPlain() == "In meeting these goals we will achieve our vision of being the trusted Partner to all those with whom we have a relationship be they shareholders, customers, employees, suppliers, members of the community in which we are working, or any other group or individual.");
-		}
 
 		// performs the database fuzzy-search, not our Fuzzy-search (our fuzzy search is more constraining)
 		private static async Task TestDatabaseFuzzySimple4(string root)
@@ -151,6 +109,56 @@ namespace QuickTmxTesting
 		    }
 	    }
 
+		private static bool ContainsSource(SearchResults sr, string text)
+		{
+			return sr.Results.Any(r => r.TranslationProposal.SourceSegment.ToPlain() == text);
+		}
+		private static bool ContainsTarget(SearchResults sr, string text)
+		{
+			return sr.Results.Any(r => r.TranslationProposal.TargetSegment.ToPlain() == text);
+		}
+
+		private static async Task<bool> ExpectInSearch(string source, string target, TmxSearch search, string sourceLanguage, string targetLanguage)
+		{
+			var result = await search.Search(TmxSearchSettings.Default(), TextToSegment(source), new LanguagePair(sourceLanguage, targetLanguage));
+			return (ContainsTarget(result, target));
+		}
+
+		private static async Task TestEnRoImport()
+		{
+			// run it after:
+			// Task.Run(() => TestImportFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro", quickImport: true)).Wait();
+			var db = new TmxMongoDb("localhost:27017", "en-ro");
+			await db.InitAsync();
+			var search = new TmxSearch(db);
+			await search.LoadLanguagesAsync();
+
+			Debug.Assert(await ExpectInSearch(  "We might call them the words of \"unforgiveness.\"", 
+												"Le putem numi cuvintele „ne-iertării”.", 
+												search, "en-GB", "ro-RO"));
+			Debug.Assert(await ExpectInSearch("When in doubt, tell the truth.",
+				"„Când ai dubii, spune adevărul.”",
+				search, "en-GB", "ro-RO"));
+			Debug.Assert(await ExpectInSearch("Yes, even between the land and the ship.”",
+				"Da, chiar şi între pământ şi navă\".",
+				search, "en-GB", "ro-RO"));
+			Debug.Assert(await ExpectInSearch("The Scriptures show that the first stage of our Lord's parousia, presence, will be secret",
+				"Scripturile arată că prima etapă a parousiei sau prezenţei Domnului nostru va fi secretă.",
+				search, "en-GB", "ro-RO"));
+			Debug.Assert(await ExpectInSearch("I know the Three Kings do not exist but I give you this great present",
+				"Stiu ca cei trei regi nu exista, dar iti ofer acest mare cadou.”",
+				search, "en-GB", "ro-RO"));
+
+			Debug.Assert(await ExpectInSearch("Stiu ca cei trei regi nu exista, dar iti ofer acest mare cadou",
+				"I know the Three Kings do not exist but I give you this great present.”",
+				search, "ro-ro", "en-US"));
+			Debug.Assert(await ExpectInSearch("Ați fost învățați de cunoaștere că fericirea oamenilor depinde de ceea ce au creat cu propriile lor mâini",
+				"Were you taught by knowledge that people’s happiness depended on what they created with their own hands?",
+				search, "ro-ro", "en-US"));
+			Debug.Assert(await ExpectInSearch("În trecut nu prea exista ocazie ca poporul Domnului să vegheze la împlinirea Scripturii; pentru că aceste împliniri erau departe unele de altele",
+				"In the past there was little opportunity for the Lord's people to watch the fulfilments of Scripture; for these fulfilments were far apart.",
+				search, "ro-ro", "en-US"));
+		}
 
 		static void Main(string[] args)
 		{
@@ -160,13 +168,14 @@ namespace QuickTmxTesting
 			log.Debug("test started");
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\fails\\opensubtitlingformat.tmx", "C:\\john\\buff\\TMX Examples\\temp3\\");
 
+			TestEnRoImport().Wait();
+			return;
 
 			var root = ".";
 	        if (args.Length > 0)
 		        root = args[0];
-			return;
 
-	        Task.Run(() => TestImportLargeFile(root)).Wait();
+	        Task.Run(() => TestImportFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro", quickImport: true)).Wait();
 
 			//Task.Run(() => TestImportSmallFile2(root)).Wait();
 			//Task.Run(() => TestImportSample4(root)).Wait();

@@ -57,13 +57,14 @@
             this.timerImportProgress = new System.Windows.Forms.Timer(this.components);
             this.viewLog = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.quickImport = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // cancel
             // 
             this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancel.Location = new System.Drawing.Point(649, 279);
+            this.cancel.Location = new System.Drawing.Point(649, 294);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(90, 28);
             this.cancel.TabIndex = 0;
@@ -74,7 +75,7 @@
             // ok
             // 
             this.ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ok.Location = new System.Drawing.Point(553, 279);
+            this.ok.Location = new System.Drawing.Point(553, 294);
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(90, 28);
             this.ok.TabIndex = 1;
@@ -117,7 +118,7 @@
             this.error.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.error.AutoSize = true;
             this.error.ForeColor = System.Drawing.Color.Red;
-            this.error.Location = new System.Drawing.Point(93, 290);
+            this.error.Location = new System.Drawing.Point(93, 305);
             this.error.Name = "error";
             this.error.Size = new System.Drawing.Size(95, 13);
             this.error.TabIndex = 5;
@@ -129,6 +130,7 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.quickImport);
             this.groupBox1.Controls.Add(this.importStatus);
             this.groupBox1.Controls.Add(this.importProgress);
             this.groupBox1.Controls.Add(this.tryConnect);
@@ -149,7 +151,7 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Location = new System.Drawing.Point(5, 53);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(734, 221);
+            this.groupBox1.Size = new System.Drawing.Size(734, 236);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "MongoDb Database";
@@ -158,7 +160,7 @@
             // 
             this.importStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.importStatus.AutoSize = true;
-            this.importStatus.Location = new System.Drawing.Point(91, 196);
+            this.importStatus.Location = new System.Drawing.Point(91, 211);
             this.importStatus.Name = "importStatus";
             this.importStatus.Size = new System.Drawing.Size(41, 13);
             this.importStatus.TabIndex = 17;
@@ -168,7 +170,7 @@
             // 
             this.importProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.importProgress.Location = new System.Drawing.Point(90, 190);
+            this.importProgress.Location = new System.Drawing.Point(90, 205);
             this.importProgress.Name = "importProgress";
             this.importProgress.Size = new System.Drawing.Size(548, 23);
             this.importProgress.TabIndex = 16;
@@ -177,7 +179,7 @@
             // tryConnect
             // 
             this.tryConnect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.tryConnect.Location = new System.Drawing.Point(644, 190);
+            this.tryConnect.Location = new System.Drawing.Point(644, 205);
             this.tryConnect.Name = "tryConnect";
             this.tryConnect.Size = new System.Drawing.Size(84, 25);
             this.tryConnect.TabIndex = 15;
@@ -346,7 +348,7 @@
             this.viewLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.viewLog.Image = global::TMX_TranslationProvider.PluginResources.wrench;
             this.viewLog.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.viewLog.Location = new System.Drawing.Point(5, 279);
+            this.viewLog.Location = new System.Drawing.Point(5, 294);
             this.viewLog.Margin = new System.Windows.Forms.Padding(0);
             this.viewLog.Name = "viewLog";
             this.viewLog.Size = new System.Drawing.Size(28, 28);
@@ -355,11 +357,23 @@
             this.viewLog.UseVisualStyleBackColor = true;
             this.viewLog.Click += new System.EventHandler(this.viewLog_Click);
             // 
+            // quickImport
+            // 
+            this.quickImport.AutoSize = true;
+            this.quickImport.Location = new System.Drawing.Point(203, 184);
+            this.quickImport.Name = "quickImport";
+            this.quickImport.Size = new System.Drawing.Size(86, 17);
+            this.quickImport.TabIndex = 18;
+            this.quickImport.Text = "Quick Import";
+            this.toolTip1.SetToolTip(this.quickImport, "If selected, we\'ll only be importing a small portion of your file, so you can qui" +
+        "ckly test it");
+            this.quickImport.UseVisualStyleBackColor = true;
+            // 
             // TmxOptionsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(745, 315);
+            this.ClientSize = new System.Drawing.Size(745, 330);
             this.Controls.Add(this.viewLog);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.error);
@@ -410,5 +424,6 @@
         private System.Windows.Forms.Timer timerImportProgress;
         private System.Windows.Forms.Button viewLog;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.CheckBox quickImport;
     }
 }

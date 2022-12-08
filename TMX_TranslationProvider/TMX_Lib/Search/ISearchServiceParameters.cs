@@ -12,5 +12,6 @@ namespace TMX_Lib.Search
 		string DbConnectionNoPassword { get; set; }
 		string Password { get; set; }
 		string DbName { get; set; }
+		bool QuickImport { get; set; }
 	}
 }

@@ -93,6 +93,12 @@ namespace TMX_TranslationProvider
 			set => SetStringParameter("DbName", value);
 		}
 
+		public bool QuickImport
+		{
+			get => GetStringParameter("QuickImport") == "1";
+			set => SetStringParameter("QuickImport", value ? "1" : "0");
+		}
+
 		private string GetStringParameter(string p)
 		{
 			var paramString = _uriBuilder[p] ?? "";

@@ -183,6 +183,7 @@ namespace TMX_TranslationProvider
 			_newOptions.Connection = dbConnection.Text;
 			_newOptions.Password = dbPassword.Text;
 			_newOptions.DatabaseName = dbName.Text;
+			_newOptions.QuickImport = quickImport.Checked;
 			UpdateTryConnectEnabled();
 		}
 

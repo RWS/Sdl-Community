@@ -37,7 +37,7 @@ namespace TMX_Lib.Search
 				Mode = sett.Mode,
 				MaxResults = sett.MaxResults,
 				MinScore = sett.MinScore,
-				SortSpecification = sett.SortSpecification,
+				SortSpecification = sett.SortSpecification ?? new SortSpecification(),
 			};
 		}
 	}

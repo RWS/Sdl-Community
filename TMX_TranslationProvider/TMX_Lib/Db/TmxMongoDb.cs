@@ -484,7 +484,7 @@ namespace TMX_Lib.Db
 	        _importTokenSource.Cancel();
         }
 
-        public async Task ImportToDbAsync(string fileName)
+        public async Task ImportToDbAsync(string fileName, bool quickImport = false)
         {
 	        Task import;
 	        lock (this)
@@ -492,7 +492,7 @@ namespace TMX_Lib.Db
 		        if (_importComplete != null)
 			        throw new TmxException("Import already in progress");
 		        if (_importTask == null)
-			        _importTask = Task.Run(() => ImportToDbAsyncImpl(_parser = new TmxParser(fileName), _importTokenSource.Token));
+			        _importTask = Task.Run(() => ImportToDbAsyncImpl(_parser = new TmxParser(fileName, quickImport) , _importTokenSource.Token));
 
 		        import = _importTask;
 		        _importComplete = false;

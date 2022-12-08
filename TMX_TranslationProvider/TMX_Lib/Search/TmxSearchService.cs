@@ -145,8 +145,10 @@ namespace TMX_Lib.Search
 					// IMPORTANT: just start the import, this can take a lot of time, for big databases
 					await Task.Run(async () =>
 					{
-						await db.ImportToDbAsync(_options.FileName);
+						var watch = Stopwatch.StartNew();
+						await db.ImportToDbAsync(_options.FileName, _options.QuickImport);
 						await search.LoadLanguagesAsync();
+						log.Debug($"import {_options.FileName} took {watch.ElapsedMilliseconds / 1000} secs.");
 					});
 			}
 			catch (Exception e)

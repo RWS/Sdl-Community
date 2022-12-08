@@ -28,7 +28,12 @@ namespace TMX_Lib.XmlSplit
 		private int PAD_EXTRA = 128;
 
 		// ... in debug, make things easier :)
-		public int SplitSize = Util.IsDebug ? 2 * 1024 * 1024  :  64 * 1024 * 1024;
+		//     in release -- not much bigger, because in case of invalid characters, when we need to find chars + remove xml segments, 
+		//                   that should be fast
+		public int SplitSize = Util.IsDebug ? 2 * 1024 * 1024  :  4 * 1024 * 1024;
+
+		// if true, import only the first segment (for speed + testing, of course)
+		public bool QuickImport = false;
 
 		private XmlDocument _document;
 
@@ -116,6 +121,13 @@ namespace TMX_Lib.XmlSplit
 		// if it returns null, there are no more sub-documents
 		public string TryGetNextString()
 		{
+			if (!_firstBlock && QuickImport)
+			{
+				lock (this)
+					_eofReached = true;
+				return null;
+			}
+
 			log.Debug($"parsing {_fileName} - block {_currentBlockIndex} / {_blockCount}");
 			lock (this)
 			{
@@ -225,7 +237,24 @@ namespace TMX_Lib.XmlSplit
 			return curString;
 		}
 
+		private void WriteBadSegmentToDisk(string badSegment)
+		{
+			// the idea -- write the bad file, so we can analyze it
+			try
+			{
+				var tempFile = $"{LogUtil.PluginDirectory}\\bad-{Path.GetFileNameWithoutExtension(_fileName)}-text.txt";
+				File.WriteAllText(tempFile, badSegment);
+				tempFile = $"{LogUtil.PluginDirectory}\\bad-{Path.GetFileNameWithoutExtension(_fileName)}-binary.txt";
+				var subBuffer = new byte[_readByteCount];
+				Array.Copy(_buffer, subBuffer, _readByteCount);
+				File.WriteAllBytes(tempFile, subBuffer);
+			}
+			catch
+			{ }
 
+		}
+
+		private HashSet<char> _invalidChars = new HashSet<char>();
 		// tries to get the same sub-document
 		// if it returns null, there are no more sub-documents
 		public XmlDocument TryGetNextSubDocument()
@@ -234,44 +263,70 @@ namespace TMX_Lib.XmlSplit
 			if (str == null)
 				return null;
 
-			try
-			{
-				XmlReaderSettings settings = new XmlReaderSettings();
-				settings.XmlResolver = null;
-				settings.DtdProcessing = DtdProcessing.Ignore;
-				settings.CheckCharacters = false;
-				settings.ValidationType = ValidationType.None;
-
-				var bytes = Encoding.UTF8.GetBytes(str);
-				using (var memoryStream = new MemoryStream(bytes))
-				using (var reader = new StreamReader(memoryStream))
-				using (var xmlReader = XmlTextReader.Create(reader, settings))
-				{
-					var document = new XmlDocument();
-					document.Load(xmlReader);
-					return document;
-				}
-			}
-			catch (Exception e)
-			{
-				// the idea -- write the bad file, so we can analyze it
+			const int MAX_ERROR_COUNT = 5;
+			List<string> lastErrors = new List<string>();
+			while (true)
 				try
 				{
-					var tempFile = $"{LogUtil.PluginDirectory}\\bad-{Path.GetFileNameWithoutExtension(_fileName)}-text.txt";
-					File.WriteAllText(tempFile, str);
-					tempFile = $"{LogUtil.PluginDirectory}\\bad-{Path.GetFileNameWithoutExtension(_fileName)}-binary.txt";
-					var subBuffer = new byte[_readByteCount];
-					Array.Copy(_buffer, subBuffer, _readByteCount);
-					File.WriteAllBytes(tempFile, subBuffer);
-				}
-				catch 
-				{ }
+					XmlReaderSettings settings = new XmlReaderSettings();
+					settings.XmlResolver = null;
+					settings.DtdProcessing = DtdProcessing.Ignore;
+					settings.CheckCharacters = false;
+					settings.ValidationType = ValidationType.None;
 
-				var extraInfo = "";
-				if (e is XmlException xe)
-					extraInfo = $"\r\n(extra info: Position= {xe.LineNumber}:{xe.LinePosition})";
-				throw new TmxException($"Invalid .tmx file [{Path.GetFileNameWithoutExtension(_fileName)}], while parsing sub-block {_currentBlockIndex} of {_currentBlockIndex} {extraInfo}", e);
-			}
+					var bytes = Encoding.UTF8.GetBytes(str);
+					using (var memoryStream = new MemoryStream(bytes))
+					using (var reader = new StreamReader(memoryStream))
+					using (var xmlReader = XmlTextReader.Create(reader, settings))
+					{
+						var document = new XmlDocument();
+						document.Load(xmlReader);
+						return document;
+					}
+				}
+				catch (XmlException e)
+				{
+					var canRetry = false;
+					if (e.LineNumber > 0)
+						try
+						{
+							var charAt = Util.StringCharAt(str, e.LineNumber - 1, e.LinePosition - 1);
+							log.Error($"invalid char at {e.LineNumber}:{e.LinePosition}: {(int)charAt.ch:X4}");
+							if (Util.TryRemoveXmlNodeContainingChar(ref str, charAt.pos, "tu"))
+							{
+								_invalidChars.Add(charAt.ch);
+								canRetry = true;
+							}
+						}
+						catch 
+						{ }
+
+					if (canRetry)
+					{
+						lastErrors.Add(e.Message);
+						while (lastErrors.Count > MAX_ERROR_COUNT)
+							lastErrors.RemoveAt(0);
+
+						var firstMessage = lastErrors[0];
+						var allSame = lastErrors.Count == MAX_ERROR_COUNT && lastErrors.All(le => le == firstMessage);
+						if (allSame)
+							// handle the unlikely case where the error is actually different, and we can't really fix it
+							// (thus, we could enter an infinite loop)
+							canRetry = false;
+					}
+
+					if (!canRetry)
+					{
+						WriteBadSegmentToDisk(str);
+						var extraInfo = $"\r\n(extra info: Position= {e.LineNumber}:{e.LinePosition})";
+						throw new TmxException($"Invalid .tmx file [{Path.GetFileNameWithoutExtension(_fileName)}], while parsing sub-block {_currentBlockIndex} of {_currentBlockIndex} {extraInfo}", e);
+					}
+				}
+				catch (Exception e)
+				{
+					WriteBadSegmentToDisk(str);
+					throw new TmxException($"Invalid .tmx file [{Path.GetFileNameWithoutExtension(_fileName)}], while parsing sub-block {_currentBlockIndex} of {_currentBlockIndex}", e);
+				}
 		}
 
 		public void Dispose()

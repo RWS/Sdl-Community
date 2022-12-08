@@ -16,7 +16,7 @@ namespace TMX_Lib.Search
 	{
 
 		private readonly TmxMongoDb _db;
-		private IReadOnlyList<string> _supportedLanguages = new List<string>();
+		private LanguageArray _supportedLanguages = new LanguageArray();
 		private CultureDictionary _cultures = new CultureDictionary();
 
 		private class SimpleResults
@@ -114,12 +114,15 @@ namespace TMX_Lib.Search
 			// FIXME
 		}
 
+		private string SourceLanguage(LanguagePair pair) => _supportedLanguages.TryGetEquivalentLanguage(pair.SourceCultureName);
+		private string TargetLanguage(LanguagePair pair) => _supportedLanguages.TryGetEquivalentLanguage(pair.TargetCultureName);
+
 		private async Task SearchExact(TmxSearchSettings settings, string text, LanguagePair language, SimpleResults results)
 		{
 			if (HaveEnoughResults(results, settings))
 				return;
 
-			var dbResults = await _db.ExactSearch(text, language.SourceCultureName, language.TargetCultureName);
+			var dbResults = await _db.ExactSearch(text, SourceLanguage(language), TargetLanguage(language));
 			foreach (var dbResult in dbResults)
 			{
 				var score = StringIntCompare(text, dbResult.SourceText);
@@ -160,7 +163,7 @@ namespace TMX_Lib.Search
 			if (HaveEnoughResults(results, settings))
 				return;
 
-			var dbResults = FilterFuzzySearch( await _db.FuzzySearch(text, language.SourceCultureName, language.TargetCultureName));
+			var dbResults = FilterFuzzySearch( await _db.FuzzySearch(text, SourceLanguage(language), TargetLanguage(language)));
 			foreach (var dbResult in dbResults)
 			{
 				var score = StringIntCompare(text, dbResult.SourceText);
@@ -173,21 +176,21 @@ namespace TMX_Lib.Search
 			}
 		}
 
-		private async Task SearchConcordance(TmxSearchSettings settings, string text, LanguagePair language, SimpleResults results, bool sourceConcorance = true)
+		private async Task SearchConcordance(TmxSearchSettings settings, string text, LanguagePair language, SimpleResults results, bool sourceConcordance = true)
 		{
 			if (HaveEnoughResults(results, settings))
 				return;
-
+			// SourceLanguage(language), TargetLanguage(language)
 		}
 
 		public async Task LoadLanguagesAsync()
 		{
-			_supportedLanguages = (await _db.GetAllLanguagesAsync());
+			_supportedLanguages.Languages = (await _db.GetAllLanguagesAsync());
 		}
 
 		public bool SupportsLanguage(string language)
 		{
-			return _supportedLanguages.Any(l => l.Equals(language, StringComparison.OrdinalIgnoreCase));
+			return _supportedLanguages.TryGetEquivalentLanguage(language) != null;
 		}
 
 		public async Task<SearchResults> Search(TmxSearchSettings settings, Segment segment, LanguagePair language)
@@ -228,12 +231,12 @@ namespace TMX_Lib.Search
 				// Performs a concordance search on the source segments, using the source character-based index if it exists or
 				// the default word-based index otherwise.
 				case SearchMode.ConcordanceSearch:
-					await SearchConcordance(settings, text, language, results, sourceConcorance: true);
+					await SearchConcordance(settings, text, language, results, sourceConcordance: true);
 					break;
 
 				// Performs a concordance search on the target segments, if the target character-based index exists.
 				case SearchMode.TargetConcordanceSearch:
-					await SearchConcordance(settings, text, language, results, sourceConcorance: false);
+					await SearchConcordance(settings, text, language, results, sourceConcordance: false);
 					break;
 
 				// Performs only a fuzzy search. 

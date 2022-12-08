@@ -10,7 +10,7 @@ namespace TMXTests
 		[Fact]
 		public void Test()
 		{
-			var parser = new TmxParser("..\\..\\..\\..\\SampleTestFiles\\#4.tmx");
+			var parser = new TmxParser("..\\..\\..\\..\\SampleTestFiles\\#4.tmx", quickImport:false);
 			Assert.Equal(false, parser.HasError);
 			var source = new CultureInfo(parser.Header.SourceLanguage);
 			var target = new CultureInfo(parser.Header.TargetLanguage);

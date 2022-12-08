@@ -16,7 +16,7 @@
 
 			protected bool Equals(EditOptions other)
 			{
-				return Guid == other.Guid && FileName == other.FileName && Connection == other.Connection && Password == other.Password && DatabaseName == other.DatabaseName;
+				return Guid == other.Guid && FileName == other.FileName && Connection == other.Connection && Password == other.Password && DatabaseName == other.DatabaseName && QuickImport == other.QuickImport;
 			}
 
 			public override bool Equals(object obj)
@@ -36,6 +36,7 @@
 					hashCode = (hashCode * 397) ^ (Connection != null ? Connection.GetHashCode() : 0);
 					hashCode = (hashCode * 397) ^ (Password != null ? Password.GetHashCode() : 0);
 					hashCode = (hashCode * 397) ^ (DatabaseName != null ? DatabaseName.GetHashCode() : 0);
+					hashCode = (hashCode * 397) ^ QuickImport.GetHashCode();
 					return hashCode;
 				}
 			}
@@ -45,6 +46,7 @@
 			public string Connection = "";
 			public string Password = "";
 			public string DatabaseName = "";
+			public bool QuickImport = false;
 
 			public static EditOptions FromTranslationOptions(TmxTranslationsOptions options)
 			{
@@ -55,6 +57,7 @@
 					Password = options.Password,
 					DatabaseName = options.DbName,
 					Guid = options.Guid,
+					QuickImport = options.QuickImport,
 				};
 			}
 
@@ -67,6 +70,7 @@
 					Password = Password,
 					DbName = DatabaseName,
 					Guid = Guid,
+					QuickImport = QuickImport,
 				};
 			}
 		}
