@@ -3,19 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:root="clr-namespace:GoogleTranslatorProvider"
         xmlns:views="clr-namespace:GoogleTranslatorProvider.Views"
 		xmlns:styles="clr-namespace:GoogleTranslatorProvider.Styles"
 		xmlns:viewModels="clr-namespace:GoogleTranslatorProvider.ViewModels"
         xmlns:behaviours="clr-namespace:GoogleTranslatorProvider.Behaviours"
 		xmlns:converters="clr-namespace:GoogleTranslatorProvider.Converters"
-		xmlns:root ="clr-namespace:GoogleTranslatorProvider"
 		mc:Ignorable="d"
         d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
 		WindowStartupLocation="CenterScreen"
+		Icon="../Resources/appicon.ico"
+		Title="Google TP"
 		ResizeMode="NoResize"
 		WindowStyle="None"
-		Height="600" Width="700"
-        d:DesignHeight="850" d:DesignWidth="800">
+		Height="700" Width="600"
+        d:DesignHeight="700" d:DesignWidth="800">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -37,16 +39,11 @@
 				<views:SettingsView/>
 			</DataTemplate>
 
-			<DataTemplate DataType="{x:Type viewModels:HelpViewModel}">
-				<views:HelpView/>
-			</DataTemplate>
-
 			<Style TargetType="Image">
 				<Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality" />
 			</Style>
 		</ResourceDictionary>
 	</Window.Resources>
-
 
 	<Border Style="{StaticResource WindowControlBorderStyle}">
 		<Grid>
@@ -58,71 +55,54 @@
 			</Grid.RowDefinitions>
 
 			<!--<Top bar>-->
-			<styles:WindowsControl DockPanel.Dock="Top" />
+			<styles:WindowsControl Grid.Row="0"/>
 			<!--</Top bar>-->
 
 			<!--<API Version Selector>-->
-			<StackPanel Grid.Row="1">
-				<Button Style="{StaticResource TransparentButtonStyle}"
-						Visibility="{Binding BackButtonIsVisible, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-						Command="{Binding GoBackCommand}"
-						HorizontalAlignment="Left"
-						Margin="24 16 0 0">
-					<StackPanel>
-						<Image Source="../Resources/backImg.png"
-							   Cursor="Hand"
-							   Height="16"/>
-						<TextBlock Text="Back"
-								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"/>
-					</StackPanel>
-				</Button>
-				
-				<ContentControl Content="{Binding SelectedView.ViewModel}"
-								Margin="0"/>
-				
-				<TextBlock 
-					Text="{Binding ErrorMessage}"
-					Visibility="{Binding ErrorMessage,Converter={StaticResource EmptyToVisibilityConverter}}"
-					Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}"
-					FontSize="12"/>
-				<WebBrowser
-					Margin="5"
-					Height="30" 
-					behaviours:WebBrowserContentSource.Html ="{Binding TranslatorErrorResponse,UpdateSourceTrigger=PropertyChanged}"
-					Visibility="{Binding TranslatorErrorResponse,Converter={StaticResource EmptyToVisibilityConverter}}"/>
-			</StackPanel>
+			<ContentControl Grid.Row="1"
+							Content="{Binding SelectedView.ViewModel}"
+							Margin="0"/>
 			<!--</API Version Selector>-->
 
+			<!--<Error log & html>-->
+			<StackPanel Grid.Row="2" Margin="24 0 24 0">
+				<TextBlock Text="{Binding ErrorMessage}"
+						   Visibility="{Binding ErrorMessage,Converter={StaticResource EmptyToVisibilityConverter}}"
+						   Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}"
+						   FontSize="12"/>
+				<WebBrowser behaviours:WebBrowserContentSource.Html ="{Binding TranslatorErrorResponse,UpdateSourceTrigger=PropertyChanged}"
+							Visibility="{Binding TranslatorErrorResponse,Converter={StaticResource EmptyToVisibilityConverter}}"
+							Height="60"
+							Margin="5"/>
+			</StackPanel>
+			<!--<Error log & html>-->
+
 			<!--<Footer>-->
-			<DockPanel Margin="20 0 24 20"
-					   HorizontalAlignment="Stretch"
-					   Grid.Row="3">
-				<Button Content="Help"
+			<DockPanel Grid.Row="3"
+					   Margin="24 0 24 20">
+				<Button Content="{x:Static root:PluginResources.MainView_HelpButton}"
 						Style="{StaticResource Sdl.Button.SecondaryStyle}"
-						Command="{Binding SwitchViewCommand}"
-						CommandParameter="HelpViewModel"
-						IsEnabled="{Binding IsHelpViewSelected, Converter={StaticResource InvertableBoolEnabledConverter}, ConverterParameter=Inverted}"
+						Command="{Binding NavigateToCommand}"
 						Cursor="Hand"
 						Width="80">
 				</Button>
 
 				<StackPanel HorizontalAlignment="Right"
 							Orientation="Horizontal">
-					<Button Content="{x:Static root:PluginResources.SettingsText}"
+					<Button Content="{Binding MultiButtonContent}"
 							Style="{StaticResource Sdl.Button.SecondaryStyle}"
 							Command="{Binding SwitchViewCommand}"
-							CommandParameter="SettingsViewModel"
-							IsEnabled="{Binding IsProviderViewSelected, Converter={StaticResource InvertableBoolEnabledConverter}}"
+							Visibility="{Binding IsTellMeAction, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
 							Cursor="Hand"
-							Width="140"
-							Margin="0 0 8 0"/>
+							Width="80"/>
 
-					<Button Content="Confirm"
+					<Button Content="{x:Static root:PluginResources.MainView_ConfirmButton}"
 							Style="{StaticResource Sdl.Button.PrimaryStyle}"
 							Command="{Binding SaveCommand}"
 							IsDefault="True"
 							Cursor="Hand"
-							Width="140"/>
+							Width="160"
+							Margin="8 0 0 0"/>
 				</StackPanel>
 			</DockPanel>
 			<!--</Footer>-->

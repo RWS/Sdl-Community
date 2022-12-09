@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Forms;
 using GoogleTranslatorProvider.Models;
+using GoogleTranslatorProvider.Studio;
 using GoogleTranslatorProvider.ViewModels;
 using GoogleTranslatorProvider.Views;
 using Sdl.TellMe.ProviderApi;
@@ -25,7 +26,6 @@ namespace GoogleTranslatorProvider.TellMe
 		public override void Execute()
 		{
 			var currentProject = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
-
 			if (currentProject is null)
 			{
 				MessageBox.Show("No project is set as active");
@@ -47,15 +47,13 @@ namespace GoogleTranslatorProvider.TellMe
 
 			var translationOptions = new GTPTranslationOptions(translationProvider.MainTranslationProvider.Uri);
 			var settingsViewModel = new SettingsViewModel(translationOptions, true);
-			var helpViewModel = new HelpViewModel();
-			var mainWindowViewModel = new MainWindowViewModel(translationOptions, settingsViewModel, helpViewModel, true);
+			var mainWindowViewModel = new MainWindowViewModel(translationOptions, settingsViewModel, true);
 			var mainWindow = new MainWindowView { DataContext = mainWindowViewModel };
 			mainWindowViewModel.CloseEventRaised += () =>
 			{
-				settings.Entries
-						.Find(entry => entry.MainTranslationProvider.Uri.ToString().Contains(Constants.GoogleTranslationScheme))
-						.MainTranslationProvider.Uri = translationOptions.Uri;
+				translationProvider.MainTranslationProvider.Uri = translationOptions.Uri;
 				currentProject.UpdateTranslationProviderConfiguration(settings);
+				currentProject.Save();
 				mainWindow.Close();
 			};
 

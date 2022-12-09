@@ -4,7 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:root="clr-namespace:GoogleTranslatorProvider"
+             xmlns:views="clr-namespace:GoogleTranslatorProvider.Views"
+             xmlns:helpers="clr-namespace:GoogleTranslatorProvider.Helpers"
              xmlns:uiHelpers="clr-namespace:GoogleTranslatorProvider.UiHelpers"
+			 xmlns:behaviours="clr-namespace:GoogleTranslatorProvider.Behaviours"
              xmlns:viewModels="clr-namespace:GoogleTranslatorProvider.ViewModels"
              xmlns:converters="clr-namespace:GoogleTranslatorProvider.Converters"
              xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
@@ -18,6 +21,7 @@
 				<ResourceDictionary Source="../Styles/Buttons.xaml"/>
 				<ResourceDictionary Source="../Styles/GroupBox.xaml" />
 				<ResourceDictionary Source="../UiHelpers/WatermarkTextBoxResources.xaml" />
+				<ResourceDictionary Source="../UiHelpers/WatermarkPasswordBoxResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml"/>
@@ -36,19 +40,14 @@
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
-		<TextBlock Text="{x:Static root:PluginResources.GoogleApiDescription}"
-				   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
-				   FontSize="14"
-				   DockPanel.Dock="Bottom"
-				   Margin="16 16 0 0"/>
-
-		<GroupBox Header="Google API Version"
+		<GroupBox Header=" Google API Version "
 				  Style="{StaticResource DefaultGroupBox}"
+				  MinHeight="430"
 				  Grid.Row="1"
 				  Padding="10"
 				  Margin="24 24 24 0">
 			<StackPanel>
-				<!-- API VERSION SELECTOR -->
+				<!--<API VERSION SELECTOR>-->
 				<ComboBox ItemsSource="{Binding GoogleApiVersions}"
 						  SelectedItem="{Binding SelectedGoogleApiVersion}"
 						  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
@@ -57,123 +56,236 @@
 						  VerticalAlignment="Stretch"
 						  Cursor="Hand"
 						  Width="Auto"/>
-				<!-- API VERSION SELECTOR -->
+				<!--</API VERSION SELECTOR>-->
 
-				<!-- GOOGLE API V2 -->
-				<StackPanel Visibility="{Binding IsV2Checked,Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-							Margin="0 24 0 0">
-					<TextBlock Text="{x:Static root:PluginResources.GoogleApiKeyDescription}"
-							   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
-							   HorizontalAlignment="Left"
-							   Margin="0"/>
+				<!--<GOOGLE API V2>-->
+				<StackPanel Visibility="{Binding IsV2Checked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+							Margin="16 24 16 0">
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="{x:Static root:PluginResources.ProviderView_V2_ApiKey_Description}"
+								   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
+								   HorizontalAlignment="Left"
+								   Margin="0 0 4 0"/>
+						<Image Source="../Resources/Information.png"
+							   Width="15">
+							<Image.ToolTip>
+								<ToolTip>
+									<TextBlock Text="{x:Static root:PluginResources.ProviderView_V2_ApiKey_Tooltip}"/>
+								</ToolTip>
+							</Image.ToolTip>
+						</Image>
+					</StackPanel>
 					<controls:BindablePasswordBox Password="{Binding ApiKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
 												  Style="{DynamicResource Sdl.BindablePasswordBox.GenericStyle}"
 												  HorizontalAlignment="Left"
-												  Width="290"
+												  Width="320"
 												  Margin="0 4"/>
-					<CheckBox Content="{x:Static root:PluginResources.PersistGoogle}"
+					<CheckBox Content="{x:Static root:PluginResources.ProviderView_V2_RememberKey}"
 							  IsChecked="{Binding PersistGoogleKey}"
 							  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 							  Cursor="Hand"
 							  Margin="0"/>
-
-					<TextBlock Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
-							   HorizontalAlignment="Right"
-							   VerticalAlignment="Bottom"
-							   Cursor="Hand">
-					<Hyperlink NavigateUri="https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/6547/google-translator-provider/"
-							   Command="{Binding NavigateToCommand}"
-							   CommandParameter="{Binding NavigateUri, RelativeSource={RelativeSource Self}}">
-						<TextBlock Text="Learn more about Google V2"
-								   Style="{StaticResource Sdl.TextBlock.InformationTextEmphasisStyle}"
-								   Margin="0"/>
-					</Hyperlink>
-					</TextBlock>
 				</StackPanel>
-				<!-- GOOGLE API V2 -->
+				<!--</GOOGLE API V2>-->
 
-				<!-- GOOGLE API V3 -->
-				<StackPanel Visibility="{Binding IsV2Checked,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertableBooleanToVisibilityConverter},ConverterParameter=Inverted}"
+				<!--<GOOGLE API V3>-->
+				<StackPanel Visibility="{Binding IsV3Checked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 							Margin="0 16 0 0">
-					<StackPanel HorizontalAlignment="Center">
-						<TextBlock Text="{x:Static root:PluginResources.V3JsonPathDescription}"
-								   Style="{StaticResource Sdl.TextBlock.GenericTitleTextStyle}"/>
-						<Button Content="Browse"
-								Command="{Binding BrowseJsonFileCommand}"
-								Style="{StaticResource Sdl.Button.DialogStyle}"
-								Cursor="Hand"
-								Width="240"/>
-					</StackPanel>
 
-					<GroupBox Header=" Project details " Style="{StaticResource DefaultGroupBox}"
-							  Padding="4"
-							  Margin="0 16 0 8">
-						<StackPanel HorizontalAlignment="Left"
-								Orientation="Vertical"
-								Margin="0 0 0 0">
-							<StackPanel Orientation="Horizontal">
-								<TextBlock Text="Project ID: "
-									   Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"/>
-								<TextBox Text="{Binding ProjectName}"
-										 Style="{StaticResource Sdl.ComboBox.Generic.EditableTextBox}"
-										 TextWrapping="Wrap"
-										 IsReadOnly="True"/>
-							</StackPanel>
-
-							<StackPanel Orientation="Horizontal"
-										Margin="0 3 0 0">
-								<TextBlock Text="Local path: "
-									   Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"/>
-								<TextBox Text="{Binding VisibleJsonPath}"
-										 Style="{StaticResource Sdl.ComboBox.Generic.EditableTextBox}"
-										 TextWrapping="Wrap"
-										 IsReadOnly="True"/>
-							</StackPanel>
+					<!--<DRAG AND DROP-->
+					<Border Background="White"
+							AllowDrop="True"
+							behaviours:DragDropBehaviour.DragDrop="{Binding DragDropCommand}"
+							BorderBrush="LightGray"
+							BorderThickness="1"
+							CornerRadius="8"
+							Margin="16 0">
+						<StackPanel HorizontalAlignment="Center"
+									Margin="0 8">
+							<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_File_DragAndDrop}"
+									   Style="{StaticResource Sdl.TextBlock.GenericTitleTextStyle}"
+									   HorizontalAlignment="Center"
+									   Margin="0"/>
+							<Button Content="{x:Static root:PluginResources.ProviderView_V3_File_Browse}"
+									HorizontalAlignment="Center"
+									Command="{Binding BrowseJsonFileCommand}"
+									Style="{StaticResource TransparentButtonStyle}"
+									AllowDrop="True"
+									Margin="0"
+									Cursor="Hand"/>
 						</StackPanel>
-					</GroupBox>
+					</Border>
+					<!--</DRAG AND DROP-->
 
-					<StackPanel Orientation="Horizontal">
-						<TextBlock Text="Location: "
-								   VerticalAlignment="Center"/>
+					<StackPanel Margin="16 8 16 0">
+						<!--<PROJECT PATH>-->
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_LocalPath_Description}"
+								   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
+								   HorizontalAlignment="Left"
+									   Margin="0 0 4 0"/>
+							<Image Source="../Resources/Information.png"
+								   Width="15">
+								<Image.ToolTip>
+									<ToolTip>
+										<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_LocalPath_Tooltip}"/>
+									</ToolTip>
+								</Image.ToolTip>
+							</Image>
+						</StackPanel>
+						
+						<TextBox Text="{Binding VisibleJsonPath}"
+								 Style="{StaticResource Sdl.ComboBox.Generic.EditableTextBox}"
+								 HorizontalAlignment="Stretch"
+								 Padding="8 3 8 2"
+								 Height="24"
+								 IsReadOnly="True"
+								 Margin="0 0 0 8"/>
+						<!--</PROJECT PATH>-->
+
+						<!--<PROJECT ID>-->
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_ProjectID_Description}"
+									   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
+									   HorizontalAlignment="Left"
+									   Margin="0 0 4 0"/>
+							<Image Source="../Resources/Information.png"
+								   Width="15">
+								<Image.ToolTip>
+									<ToolTip>
+										<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_ProjectID_Tooltip}"/>
+									</ToolTip>
+								</Image.ToolTip>
+							</Image>
+						</StackPanel>
+						<StackPanel Orientation="Horizontal">
+							<TextBox Text="{Binding ProjectId, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+									 HorizontalAlignment="Stretch"
+									 VerticalContentAlignment="Center"
+									 Padding="8 0"
+									 Width="320" Height="24"
+									 Margin="0 2 8 0"/>
+							<Image Source="../Resources/warning.png"
+								   Visibility="{Binding ProjectIdIsCorrupt, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+								   Height="26"
+								   Margin="0 2 0 0">
+								<Image.ToolTip>
+									<ToolTip>
+										<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_ProjectID_Warning}"/>
+									</ToolTip>
+								</Image.ToolTip>
+							</Image>
+						</StackPanel>
+						<!--</PROJECT ID>-->
+
+						<!--<PROJECT LOCATION>-->
+						<StackPanel Orientation="Horizontal"
+									Margin="0 12 0 0">
+							<CheckBox Content="{x:Static root:PluginResources.ProviderView_V3_Location_Description}"
+									  HorizontalAlignment="Left"
+									  VerticalContentAlignment="Center"
+									  Style="{StaticResource Sdl.Checkbox.NoHighlightStyle}"
+									  IsChecked="{Binding UseCustomLocation}"
+									  Margin="0 0 4 0"/>
+							<Image Source="../Resources/Information.png"
+								   Width="15">
+								<Image.ToolTip>
+									<ToolTip>
+										<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_Location_Tooltip}"/>
+									</ToolTip>
+								</Image.ToolTip>
+							</Image>
+						</StackPanel>
+
 						<ComboBox ItemsSource="{Binding Locations}"
 								  SelectedItem="{Binding SelectedLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 								  DisplayMemberPath="DisplayName"
+								  Visibility="{Binding UseCustomLocation, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
 								  IsSynchronizedWithCurrentItem="True"
 								  SelectedIndex="0"
 								  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
 								  HorizontalAlignment="Left"
-								  MinWidth="0" Width="160"
-								  Cursor="Hand"/>
-					</StackPanel>
-
-					<StackPanel Orientation="Horizontal"
-								Margin="0 16">
-						<TextBlock Text="AutoML"
-							   VerticalAlignment="Center"
-							   Margin="0 0 9 0"/>
+								  MinWidth="0" Width="160" Height="24"
+								  Cursor="Hand"
+								  Margin="0 2 0 0"/>
+						<TextBox Text="{Binding ProjectLocation, UpdateSourceTrigger=PropertyChanged}"
+								 Style="{StaticResource WatermarkTextBox}"
+								 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.ProviderView_V3_Location_Watermark}"
+								 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=ProjectLocation, Type={x:Type viewModels:ProviderViewModel}}"
+								 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+								 Visibility="{Binding UseCustomLocation, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+								 HorizontalAlignment="Left"
+								 Width="320" Height="24"/>
+						<!--</PROJECT LOCATION>-->
+						
+						<!--<CUSTOM MODEL / AutoML>-->
+						<StackPanel Orientation="Horizontal"
+									Margin="0 12 0 0">
+							<CheckBox IsChecked="{Binding UseCustomModel}"
+									  VerticalAlignment="Center"
+									  VerticalContentAlignment="Center">
+								<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_CustomModel_Description}"
+										   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
+										   HorizontalAlignment="Left"
+										   Margin="0 0 4 0"/>
+							</CheckBox>
+							<Image Source="../Resources/Information.png"
+								   Width="15">
+								<Image.ToolTip>
+									<ToolTip>
+										<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_CustomModel_Tooltip}"/>
+									</ToolTip>
+								</Image.ToolTip>
+							</Image>
+						</StackPanel>
 						<TextBox Text="{Binding GoogleEngineModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-						 Style="{StaticResource WatermarkTextBox}"
-				         uiHelpers:TextBoxWatermarkHelper.WatermarkText="Engine name"
-				         uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="GoogleEngineModel"
-				         uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-								 Width="160"/>
-					</StackPanel>
+								 Style="{StaticResource WatermarkTextBox}"
+								 Visibility="{Binding UseCustomModel,Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+								 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.ProviderView_V3_CustomModel_Watermark}"
+								 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=GoogleEngineModel, Type={x:Type viewModels:ProviderViewModel}}"
+								 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+								 HorizontalAlignment="Left"
+								 Margin="0 4 0 0"
+								 Width="320"/>
+						<!--</CUSTOM MODEL / AutoML>-->
 
-					<StackPanel Orientation="Horizontal">
-						<TextBlock Text="Glossary"
-								   VerticalAlignment="Center"
-								   Margin="0 0 7 0"/>
+						<!--<GLOSSARY>-->
+						<StackPanel Orientation="Horizontal"
+									Margin="0 12 0 0">
+							<CheckBox IsChecked="{Binding UseGlossary}"
+									  VerticalAlignment="Center"
+									  VerticalContentAlignment="Center">
+								<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_Glossary_Description}"
+										   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
+										   Margin="0 0 4 0"/>
+							</CheckBox>
+							<Image Source="../Resources/Information.png"
+								   Width="15">
+								<Image.ToolTip>
+									<ToolTip>
+										<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_Glossary_Tooltip}"/>
+									</ToolTip>
+								</Image.ToolTip>
+							</Image>
+						</StackPanel>
 						<TextBox Text="{Binding GlossaryPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-						 Style="{StaticResource WatermarkTextBox}"
-				         uiHelpers:TextBoxWatermarkHelper.WatermarkText="Glossary Uri"
-				         uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="GlossaryPath"
-				         uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-								 Width="160"/>
+								 Style="{StaticResource WatermarkTextBox}"
+								 Visibility="{Binding UseGlossary, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+								 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.ProviderView_V3_Glossary_Watermark}"
+								 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=GlossaryPath, Type={x:Type viewModels:ProviderViewModel}}"
+								 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+								 HorizontalAlignment="Left"
+								 Width="320"
+								 Margin="0 4 0 2"/>
+						<CheckBox  Content="{x:Static root:PluginResources.ProviderView_V3_Glossary_UseUnidirectional}"
+								   Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+								   IsChecked="{Binding BasicCsvGlossary}"
+								   Visibility="{Binding UseGlossary, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+								   HorizontalAlignment="Left"
+								   Margin="16 0 0 12"/>
+						<!--<GLOSSARY>-->
+
 					</StackPanel>
-						<CheckBox  Content="{x:Static root:PluginResources.UnidirectionalGlossary}"
-						   Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-						   IsChecked="{Binding BasicCsvGlossary}"
-								   Margin="0"/>
 				</StackPanel>
 				<!-- GOOGLE API V3 -->
 			</StackPanel>

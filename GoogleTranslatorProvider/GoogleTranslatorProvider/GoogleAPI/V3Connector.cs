@@ -34,7 +34,7 @@ namespace GoogleTranslatorProvider.GoogleAPI
 
 			try
 			{
-				Environment.SetEnvironmentVariable(PluginResources.GoogleApiEnvironmentVariableName, _options.JsonFilePath);
+				Environment.SetEnvironmentVariable(Constants.GoogleApiEnvironmentVariableName, _options.JsonFilePath);
 				_translationServiceClient = TranslationServiceClient.Create();
 			}
 			catch (Exception e)
@@ -45,14 +45,7 @@ namespace GoogleTranslatorProvider.GoogleAPI
 
 		public void TryToAuthenticateUser()
 		{
-			var request = new TranslateTextRequest
-			{
-				Contents = { "test" },
-				TargetLanguageCode = "fr-FR",
-				Parent = new ProjectName(_options.ProjectName).ToString()
-			};
-
-			_translationServiceClient.TranslateText(request);
+			TranslateText(new CultureInfo("en-US"), new CultureInfo("fr-FR"), "test", "text");
 		}
 
 		public string TranslateText(CultureInfo sourceLanguage, CultureInfo targetLanguage, string sourceText, string format)
@@ -64,7 +57,7 @@ namespace GoogleTranslatorProvider.GoogleAPI
 			catch (Exception e)
 			{
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name}: {e}");
-				throw;
+				throw e;
 			}
 		}
 
@@ -106,7 +99,7 @@ namespace GoogleTranslatorProvider.GoogleAPI
 				Model = _modelPath,
 				TargetLanguageCode = targetLanguage.TwoLetterISOLanguageName,
 				SourceLanguageCode = sourceLanguage.TwoLetterISOLanguageName,
-				Parent = new ProjectName(_options.ProjectName).ToString(),
+				Parent = new ProjectName(_options.ProjectId).ToString(),
 				MimeType = format == "text" ? "text/plain" : "text/html"
 			};
 
@@ -140,7 +133,7 @@ namespace GoogleTranslatorProvider.GoogleAPI
 
 		private void TrySetGoogleAvailableLanguages()
 		{
-			var locationName = new LocationName(_options.ProjectName, "global");
+			var locationName = new LocationName(_options.ProjectId, "global");
 			var request = new GetSupportedLanguagesRequest { ParentAsLocationName = locationName };
 			var response = _translationServiceClient.GetSupportedLanguages(request);
 
@@ -168,7 +161,7 @@ namespace GoogleTranslatorProvider.GoogleAPI
 				glossary = CreatetCsvGlossary(glossaryLanguages);
 			}
 
-			_ = _translationServiceClient.CreateGlossary(new LocationName(_options.ProjectName, _options.ProjectLocation).ToString(),
+			_ = _translationServiceClient.CreateGlossary(new LocationName(_options.ProjectId, _options.ProjectLocation).ToString(),
 														 glossary);
 		}
 
@@ -176,7 +169,7 @@ namespace GoogleTranslatorProvider.GoogleAPI
 		{
 			var glossary = new Glossary
 			{
-				Name = new GlossaryName(_options.ProjectName, _options.ProjectLocation, _glossaryID).ToString(),
+				Name = new GlossaryName(_options.ProjectId, _options.ProjectLocation, _glossaryID).ToString(),
 				LanguageCodesSet = new Glossary.Types.LanguageCodesSet(),
 				InputConfig = new GlossaryInputConfig
 				{
@@ -210,7 +203,7 @@ namespace GoogleTranslatorProvider.GoogleAPI
 		{
 			return new Glossary
 			{
-				Name = new GlossaryName(_options.ProjectName, _options.ProjectLocation, _glossaryID).ToString(),
+				Name = new GlossaryName(_options.ProjectId, _options.ProjectLocation, _glossaryID).ToString(),
 				LanguagePair = new Glossary.Types.LanguageCodePair
 				{
 					SourceLanguageCode = sourceLanguage,
@@ -231,7 +224,7 @@ namespace GoogleTranslatorProvider.GoogleAPI
 			const string defaultModel = "general/nmt";
 			return string.Format(
 				"projects/{0}/locations/{1}/models/{2}",
-				_options.ProjectName,
+				_options.ProjectId,
 				_options.ProjectLocation,
 				string.IsNullOrEmpty(_options.GoogleEngineModel) ? defaultModel : _options.GoogleEngineModel);
 		}
@@ -246,7 +239,7 @@ namespace GoogleTranslatorProvider.GoogleAPI
 			_glossaryID = Path.GetFileNameWithoutExtension(_options.GlossaryPath).Replace(" ", string.Empty);
 			return string.Format(
 				"projects/{0}/locations/{1}/glossaries/{2}",
-				_options.ProjectName,
+				_options.ProjectId,
 				_options.ProjectLocation,
 				_glossaryID);
 		}

@@ -10,15 +10,19 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Resources\%24this.Icon.ico" />
+    <None Remove="Resources\appicon.ico" />
+    <None Remove="Resources\appicon.png" />
     <None Remove="Resources\backImg.png" />
     <None Remove="Resources\Download.ico" />
     <None Remove="Resources\ForumIcon.ico" />
     <None Remove="Resources\GoogleTranslatorProvider.png" />
+    <None Remove="Resources\Information.png" />
     <None Remove="Resources\my_icon.ico" />
     <None Remove="Resources\my_image.png" />
     <None Remove="Resources\Question.ico" />
     <None Remove="Resources\Setting.png" />
     <None Remove="Resources\Settings.ico" />
+    <None Remove="Resources\warning.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
@@ -105,15 +109,19 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\$this.Icon.ico" />
+    <Resource Include="Resources\appicon.ico" />
+    <Resource Include="Resources\appicon.png" />
     <Resource Include="Resources\backImg.png" />
     <Resource Include="Resources\Download.ico" />
     <Resource Include="Resources\ForumIcon.ico" />
     <Resource Include="Resources\GoogleTranslatorProvider.png" />
+    <Resource Include="Resources\Information.png" />
     <Resource Include="Resources\my_icon.ico" />
     <Resource Include="Resources\my_image.png" />
     <Resource Include="Resources\Question.ico" />
     <Resource Include="Resources\Setting.png" />
     <Resource Include="Resources\Settings.ico" />
+    <Resource Include="Resources\warning.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="PluginResources.Designer.cs">

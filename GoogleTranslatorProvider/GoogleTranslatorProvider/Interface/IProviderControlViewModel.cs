@@ -25,13 +25,17 @@ namespace GoogleTranslatorProvider.Interfaces
 
 		bool IsV2Checked { get; }
 
+		bool UseCustomModel { get; set; }
+
+		bool UseGlossary { get; set; }
+
 		string GoogleEngineModel { get; set; }
 
 		string VisibleJsonPath { get; set; }
 
 		string JsonFilePath { get; set; }
 
-		string ProjectName { get; set; }
+		string ProjectId { get; set; }
 
 		string ApiKey { get; set; }
 

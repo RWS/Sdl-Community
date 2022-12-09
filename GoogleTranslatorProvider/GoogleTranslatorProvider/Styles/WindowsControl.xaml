@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:root="clr-namespace:GoogleTranslatorProvider"
              mc:Ignorable="d">
 
 	<UserControl.Resources>
@@ -37,7 +38,6 @@
 		<Button x:Name="CloseButton"
 				Click="CloseButton_OnClick"
 				Style="{StaticResource TransparentButtonStyle}"
-				ToolTip="Close"  
 				IsEnabled="True"
 				Grid.Row="0"
 				HorizontalAlignment="Right"
@@ -46,6 +46,11 @@
 			<Path SnapsToDevicePixels="True"
 				  Data="M 10.009,1.704 L 8.331,0.026 5.03,3.327 1.703,0 0,1.704 3.326,5.031 0.025,8.332 1.703,10.009 5.004,6.708 8.305,10.009 10.009,8.305 6.708,5.005"
 				  Fill="{Binding Foreground, ElementName=CloseButton}" />
+			<Button.ToolTip>
+				<ToolTip>
+					<TextBlock Text="{x:Static root:PluginResources.MainView_CloseButton}"/>
+				</ToolTip>
+			</Button.ToolTip>
 		</Button>
 
 		<DockPanel Grid.Row="1">

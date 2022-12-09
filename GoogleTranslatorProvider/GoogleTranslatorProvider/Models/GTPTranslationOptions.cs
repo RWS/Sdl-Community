@@ -102,10 +102,10 @@ namespace GoogleTranslatorProvider.Models
 		}
 
 		[JsonIgnore]
-		public string ProjectName
+		public string ProjectId
 		{
-			get => GetStringParameter("projectname");
-			set => SetStringParameter("projectname", value);
+			get => GetStringParameter("projectid");
+			set => SetStringParameter("projectid", value);
 		}
 
 		[JsonIgnore]

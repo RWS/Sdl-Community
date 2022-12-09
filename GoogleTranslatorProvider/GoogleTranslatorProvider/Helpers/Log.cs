@@ -8,10 +8,14 @@ namespace GoogleTranslatorProvider.Helpers
 {
 	public static class Log
 	{
+		private const string LogsFolderPath = "RWS AppStore";
+		private const string AppLogFolder = "GoogleTranslatorProvider";
+		private const string LogsFileName = "GoogleTPLogs.txt";
+
 		public static void Setup()
 		{
 			LogManager.Configuration ??= new LoggingConfiguration();
-			var logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), PluginResources.LogsFolderPath, PluginResources.AppLogFolder);
+			var logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), LogsFolderPath, AppLogFolder);
 			if (!Directory.Exists(logPath))
 			{
 				Directory.CreateDirectory(logPath);
@@ -20,7 +24,7 @@ namespace GoogleTranslatorProvider.Helpers
 			var target = new FileTarget
 			{
 				Name = "GoogleTranslatorProvider",
-				FileName = Path.Combine(logPath, PluginResources.LogsFileName),
+				FileName = Path.Combine(logPath, LogsFileName),
 				Layout = "${logger}: ${longdate} ${level} ${message}  ${exception}"
 			};
 

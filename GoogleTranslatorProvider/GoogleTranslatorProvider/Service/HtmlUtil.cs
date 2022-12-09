@@ -5,7 +5,6 @@ using System.Web;
 
 namespace GoogleTranslatorProvider.Service
 {
-
 	public class HtmlUtil
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
@@ -19,9 +18,8 @@ namespace GoogleTranslatorProvider.Service
 			catch (Exception e)
 			{
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {e.Message}\n {e.StackTrace}");
+				return input;
 			}
-
-			return input;
 		}
 	}
 }

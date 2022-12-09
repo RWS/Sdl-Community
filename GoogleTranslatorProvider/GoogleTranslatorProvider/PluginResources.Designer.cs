@@ -70,47 +70,12 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There was a problem getting the translation..
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static string ApiConnectorGoogleAuthErrorMsg1 {
+        public static System.Drawing.Icon appicon {
             get {
-                return ResourceManager.GetString("ApiConnectorGoogleAuthErrorMsg1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please verify that you have entered the correct API key and that your language pair is supported..
-        /// </summary>
-        public static string ApiConnectorGoogleAuthErrorMsg2 {
-            get {
-                return ResourceManager.GetString("ApiConnectorGoogleAuthErrorMsg2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please add API key..
-        /// </summary>
-        public static string ApiKeyError {
-            get {
-                return ResourceManager.GetString("ApiKeyError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to GoogleTranslatorProvider.
-        /// </summary>
-        public static string AppLogFolder {
-            get {
-                return ResourceManager.GetString("AppLogFolder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Translation Provider.
-        /// </summary>
-        public static string BackBtnText {
-            get {
-                return ResourceManager.GetString("BackBtnText", resourceCulture);
+                object obj = ResourceManager.GetObject("appicon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -121,33 +86,6 @@ namespace GoogleTranslatorProvider {
             get {
                 object obj = ResourceManager.GetObject("backImg", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Browse.
-        /// </summary>
-        public static string BrowseBtn {
-            get {
-                return ResourceManager.GetString("BrowseBtn", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Use Category Id.
-        /// </summary>
-        public static string CatIdDescription {
-            get {
-                return ResourceManager.GetString("CatIdDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please add Category Id otherwise uncheck CategoryId checbox..
-        /// </summary>
-        public static string CatIdError {
-            get {
-                return ResourceManager.GetString("CatIdError", resourceCulture);
             }
         }
         
@@ -189,24 +127,6 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The local path to json file cannot be empty..
-        /// </summary>
-        public static string EmptyJsonFilePathMsg {
-            get {
-                return ResourceManager.GetString("EmptyJsonFilePathMsg", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Project name cannot be empty..
-        /// </summary>
-        public static string EmptyProjectNameMsd {
-            get {
-                return ResourceManager.GetString("EmptyProjectNameMsd", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon ForumIcon {
@@ -217,7 +137,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Google Translator.
+        ///   Looks up a localized string similar to Google Translator - What is this.
         /// </summary>
         public static string Google {
             get {
@@ -226,7 +146,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Google Translate.
+        ///   Looks up a localized string similar to Google Translate G_Description.
         /// </summary>
         public static string Google_Description {
             get {
@@ -235,7 +155,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Google Translate.
+        ///   Looks up a localized string similar to Google Translate G_Name.
         /// </summary>
         public static string Google_Name {
             get {
@@ -244,7 +164,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Google Translate.
+        ///   Looks up a localized string similar to Google Translate G_NiceName.
         /// </summary>
         public static string Google_NiceName {
             get {
@@ -253,7 +173,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Google Translate.
+        ///   Looks up a localized string similar to Google Translate G_ToolTip.
         /// </summary>
         public static string Google_Tooltip {
             get {
@@ -276,24 +196,6 @@ namespace GoogleTranslatorProvider {
         public static string GoogleApiDescription {
             get {
                 return ResourceManager.GetString("GoogleApiDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to GOOGLE_APPLICATION_CREDENTIALS.
-        /// </summary>
-        public static string GoogleApiEnvironmentVariableName {
-            get {
-                return ResourceManager.GetString("GoogleApiEnvironmentVariableName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please enter your Google Translate API Key.
-        /// </summary>
-        public static string GoogleApiKeyDescription {
-            get {
-                return ResourceManager.GetString("GoogleApiKeyDescription", resourceCulture);
             }
         }
         
@@ -334,15 +236,6 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid model name.
-        /// </summary>
-        public static string GoogleInvalidEngine {
-            get {
-                return ResourceManager.GetString("GoogleInvalidEngine", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Please add project location:.
         /// </summary>
         public static string GoogleProjectLocation {
@@ -357,24 +250,6 @@ namespace GoogleTranslatorProvider {
         public static string GoogleResponseDescription {
             get {
                 return ResourceManager.GetString("GoogleResponseDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to HelpView.
-        /// </summary>
-        public static string HelpView {
-            get {
-                return ResourceManager.GetString("HelpView", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid project name..
-        /// </summary>
-        public static string InvalidProjectName {
-            get {
-                return ResourceManager.GetString("InvalidProjectName", resourceCulture);
             }
         }
         
@@ -406,119 +281,47 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MTEnhancedLogs.txt.
+        ///   Looks up a localized string similar to Close app.
         /// </summary>
-        public static string LogsFileName {
+        public static string MainView_CloseButton {
             get {
-                return ResourceManager.GetString("LogsFileName", resourceCulture);
+                return ResourceManager.GetString("MainView_CloseButton", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to RWS AppStore.
+        ///   Looks up a localized string similar to Confirm.
         /// </summary>
-        public static string LogsFolderPath {
+        public static string MainView_ConfirmButton {
             get {
-                return ResourceManager.GetString("LogsFolderPath", resourceCulture);
+                return ResourceManager.GetString("MainView_ConfirmButton", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Microsoft Translator.
+        ///   Looks up a localized string similar to Help.
         /// </summary>
-        public static string Microsoft {
+        public static string MainView_HelpButton {
             get {
-                return ResourceManager.GetString("Microsoft", resourceCulture);
+                return ResourceManager.GetString("MainView_HelpButton", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced using Microsoft Translator.
+        ///   Looks up a localized string similar to Provider.
         /// </summary>
-        public static string Microsoft_Description {
+        public static string MultiButton_Provider {
             get {
-                return ResourceManager.GetString("Microsoft_Description", resourceCulture);
+                return ResourceManager.GetString("MultiButton_Provider", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced using Microsoft Translator.
+        ///   Looks up a localized string similar to Settings.
         /// </summary>
-        public static string Microsoft_Name {
+        public static string MultiButton_Settings {
             get {
-                return ResourceManager.GetString("Microsoft_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced using Microsoft Translator.
-        /// </summary>
-        public static string Microsoft_NiceName {
-            get {
-                return ResourceManager.GetString("Microsoft_NiceName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to MT Enhanced using Microsoft Translator.
-        /// </summary>
-        public static string Microsoft_Tooltip {
-            get {
-                return ResourceManager.GetString("Microsoft_Tooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please enter your Microsoft Translate API Key.
-        /// </summary>
-        public static string MicrosoftApiDescription {
-            get {
-                return ResourceManager.GetString("MicrosoftApiDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Authentication error: bad credentials.
-        /// </summary>
-        public static string MsApiBadCredentialsMessage {
-            get {
-                return ResourceManager.GetString("MsApiBadCredentialsMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid category ID. Use a valid category ID or disable category ID in settings..
-        /// </summary>
-        public static string MsApiCategoryIdErrorMessage {
-            get {
-                return ResourceManager.GetString("MsApiCategoryIdErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Failed to get languages for translation.
-        /// </summary>
-        public static string MsApiFailedGetLanguagesMessage {
-            get {
-                return ResourceManager.GetString("MsApiFailedGetLanguagesMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Failed to translate.
-        /// </summary>
-        public static string MsApiFailedToTranslateMessage {
-            get {
-                return ResourceManager.GetString("MsApiFailedToTranslateMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Subscription Region:.
-        /// </summary>
-        public static string MSSubscriptionRegionLabel {
-            get {
-                return ResourceManager.GetString("MSSubscriptionRegionLabel", resourceCulture);
+                return ResourceManager.GetString("MultiButton_Settings", resourceCulture);
             }
         }
         
@@ -543,25 +346,27 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save Google key.
+        ///   Looks up a localized string similar to Syntax for the NameOf is:
+        ///&quot;{[location_of_NameOf]:NameOf Member=[PropertyName], Type={x:Type[classLocation:ClassName]}}&quot;
+        ///Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId.
         /// </summary>
-        public static string PersistGoogle {
+        public static string NameOf_CommandParameter_Syntax {
             get {
-                return ResourceManager.GetString("PersistGoogle", resourceCulture);
+                return ResourceManager.GetString("NameOf_CommandParameter_Syntax", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save Microsoft key.
+        ///   Looks up a localized string similar to Could not find the property [&apos;{0}&apos;] in [&apos;{1}&apos;], please check the spelling for both the property and the class or if any of the two had its name changed in both C# class and XAML..
         /// </summary>
-        public static string PersistMicrosoft {
+        public static string NameOf_CommandParameterI_MissingComponent {
             get {
-                return ResourceManager.GetString("PersistMicrosoft", resourceCulture);
+                return ResourceManager.GetString("NameOf_CommandParameterI_MissingComponent", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Google Translator Provider Plugin - Choose between V2 or V3.
+        ///   Looks up a localized string similar to Google Translator Provider Plugin - Choose between V2 or V3 - Description.
         /// </summary>
         public static string Plugin_Description {
             get {
@@ -570,7 +375,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Google Translator Provider Plugin.
+        ///   Looks up a localized string similar to Google Translator Provider - Plugin_Name.
         /// </summary>
         public static string Plugin_Name {
             get {
@@ -579,7 +384,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Google Translator Provider Plugin.
+        ///   Looks up a localized string similar to Google Translator Provider - Plugin_NiceName.
         /// </summary>
         public static string Plugin_NiceName {
             get {
@@ -588,38 +393,11 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Google Translator Provider Plugin - Choose between V2 or V3.
+        ///   Looks up a localized string similar to Google Translator Provider Plugin - Choose between V2 or V3 - ToolTip.
         /// </summary>
         public static string Plugin_Tooltip {
             get {
                 return ResourceManager.GetString("Plugin_Tooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to PluginsView.
-        /// </summary>
-        public static string PluginsView {
-            get {
-                return ResourceManager.GetString("PluginsView", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to PostLookup.
-        /// </summary>
-        public static string PostLookupBrowse {
-            get {
-                return ResourceManager.GetString("PostLookupBrowse", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Do post-lookup find/replace.
-        /// </summary>
-        public static string PostLookupDescription {
-            get {
-                return ResourceManager.GetString("PostLookupDescription", resourceCulture);
             }
         }
         
@@ -642,47 +420,11 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Browse or type the location of the post-lookup file.
-        /// </summary>
-        public static string PostLookupWaterMark {
-            get {
-                return ResourceManager.GetString("PostLookupWaterMark", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Post-lookup file could not be found at the specified path..
         /// </summary>
         public static string PostLookupWrongPathMessage {
             get {
                 return ResourceManager.GetString("PostLookupWrongPathMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to PreLookup.
-        /// </summary>
-        public static string PreLookBrowse {
-            get {
-                return ResourceManager.GetString("PreLookBrowse", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Do pre-lookup find/replace.
-        /// </summary>
-        public static string PreLookDescription {
-            get {
-                return ResourceManager.GetString("PreLookDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Do pre-lookup find/replace name:.
-        /// </summary>
-        public static string PreLookFileName {
-            get {
-                return ResourceManager.GetString("PreLookFileName", resourceCulture);
             }
         }
         
@@ -696,29 +438,11 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Browse or type the location of the pre-lookup file.
-        /// </summary>
-        public static string PreLookupWaterMark {
-            get {
-                return ResourceManager.GetString("PreLookupWaterMark", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Pre-lookup file could not be found at the specified path..
         /// </summary>
         public static string PreLookupWrongPathMessage {
             get {
                 return ResourceManager.GetString("PreLookupWrongPathMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Project location value is required.
-        /// </summary>
-        public static string ProjectLocationValidation {
-            get {
-                return ResourceManager.GetString("ProjectLocationValidation", resourceCulture);
             }
         }
         
@@ -732,11 +456,182 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Credentials for Microsoft Translator....
+        ///   Looks up a localized string similar to Google Cloud API Key.
         /// </summary>
-        public static string PromptForCredentialsCaption_Microsoft {
+        public static string ProviderView_V2_ApiKey_Description {
             get {
-                return ResourceManager.GetString("PromptForCredentialsCaption_Microsoft", resourceCulture);
+                return ResourceManager.GetString("ProviderView_V2_ApiKey_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to API Key Tooltip placeholder.
+        /// </summary>
+        public static string ProviderView_V2_ApiKey_Tooltip {
+            get {
+                return ResourceManager.GetString("ProviderView_V2_ApiKey_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remember key.
+        /// </summary>
+        public static string ProviderView_V2_RememberKey {
+            get {
+                return ResourceManager.GetString("ProviderView_V2_RememberKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use custom model (AutoML).
+        /// </summary>
+        public static string ProviderView_V3_CustomModel_Description {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_CustomModel_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom Model (AutoML) Tooltip placeholder.
+        /// </summary>
+        public static string ProviderView_V3_CustomModel_Tooltip {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_CustomModel_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Engine name here.
+        /// </summary>
+        public static string ProviderView_V3_CustomModel_Watermark {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_CustomModel_Watermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to or browse for it on your machine.
+        /// </summary>
+        public static string ProviderView_V3_File_Browse {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_File_Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drop your JSON file here.
+        /// </summary>
+        public static string ProviderView_V3_File_DragAndDrop {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_File_DragAndDrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use glossary.
+        /// </summary>
+        public static string ProviderView_V3_Glossary_Description {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_Glossary_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Glossary Tooltip placeholder.
+        /// </summary>
+        public static string ProviderView_V3_Glossary_Tooltip {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_Glossary_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unidirectional glossaries.
+        /// </summary>
+        public static string ProviderView_V3_Glossary_UseUnidirectional {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_Glossary_UseUnidirectional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Glossary name here.
+        /// </summary>
+        public static string ProviderView_V3_Glossary_Watermark {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_Glossary_Watermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local path.
+        /// </summary>
+        public static string ProviderView_V3_LocalPath_Description {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_LocalPath_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This field can not be edited manualy, you need to use the -Drag and Drop- or -Browse- feature.
+        /// </summary>
+        public static string ProviderView_V3_LocalPath_Tooltip {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_LocalPath_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use custom location.
+        /// </summary>
+        public static string ProviderView_V3_Location_Description {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_Location_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project Location Tooltip placeholder.
+        /// </summary>
+        public static string ProviderView_V3_Location_Tooltip {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_Location_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project location here.
+        /// </summary>
+        public static string ProviderView_V3_Location_Watermark {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_Location_Watermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project ID.
+        /// </summary>
+        public static string ProviderView_V3_ProjectID_Description {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_ProjectID_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project ID Tooltip placeholder.
+        /// </summary>
+        public static string ProviderView_V3_ProjectID_Tooltip {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_ProjectID_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to JSON file is corrupted, the ProjectID is either missing or incorrect..
+        /// </summary>
+        public static string ProviderView_V3_ProjectID_Warning {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_ProjectID_Warning", resourceCulture);
             }
         }
         
@@ -747,24 +642,6 @@ namespace GoogleTranslatorProvider {
             get {
                 object obj = ResourceManager.GetObject("Question", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Re-send draft and translated segments.
-        /// </summary>
-        public static string ReSendDescription {
-            get {
-                return ResourceManager.GetString("ReSendDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Send plain text only (not tags).
-        /// </summary>
-        public static string SendPlainDescription {
-            get {
-                return ResourceManager.GetString("SendPlainDescription", resourceCulture);
             }
         }
         
@@ -789,29 +666,74 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Advanced settings.
+        ///   Looks up a localized string similar to Browse.
         /// </summary>
-        public static string SettingsText {
+        public static string SettingsView_BrowseButton {
             get {
-                return ResourceManager.GetString("SettingsText", resourceCulture);
+                return ResourceManager.GetString("SettingsView_BrowseButton", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SettingsView.
+        ///   Looks up a localized string similar to Do post-lookup find/replace.
         /// </summary>
-        public static string SettingsView {
+        public static string SettingsView_PostLookup_Description {
             get {
-                return ResourceManager.GetString("SettingsView", resourceCulture);
+                return ResourceManager.GetString("SettingsView_PostLookup_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browse or type the location of the post-lookup file.
+        /// </summary>
+        public static string SettingsView_PostLookup_WaterMark {
+            get {
+                return ResourceManager.GetString("SettingsView_PostLookup_WaterMark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do pre-lookup find/replace.
+        /// </summary>
+        public static string SettingsView_PreLookup_Description {
+            get {
+                return ResourceManager.GetString("SettingsView_PreLookup_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browse or type the location of the pre-lookup file.
+        /// </summary>
+        public static string SettingsView_PreLookup_WaterMark {
+            get {
+                return ResourceManager.GetString("SettingsView_PreLookup_WaterMark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Re-send draft and translated segments.
+        /// </summary>
+        public static string SettingsView_ResendDraft_Description {
+            get {
+                return ResourceManager.GetString("SettingsView_ResendDraft_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send plain text only (not tags).
+        /// </summary>
+        public static string SettingsView_TextOnly_Description {
+            get {
+                return ResourceManager.GetString("SettingsView_TextOnly_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
-        public static string SettingsViewTitle {
+        public static string SettingsView_Title {
             get {
-                return ResourceManager.GetString("SettingsViewTitle", resourceCulture);
+                return ResourceManager.GetString("SettingsView_Title", resourceCulture);
             }
         }
         
@@ -825,33 +747,6 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unidirectional glossaries.
-        /// </summary>
-        public static string UnidirectionalGlossary {
-            get {
-                return ResourceManager.GetString("UnidirectionalGlossary", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to mtenhancedprovidergt:///.
-        /// </summary>
-        public static string UriGt {
-            get {
-                return ResourceManager.GetString("UriGt", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to mtenhancedprovidermst:///.
-        /// </summary>
-        public static string UriMs {
-            get {
-                return ResourceManager.GetString("UriMs", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Translation provider URI not supported..
         /// </summary>
         public static string UriNotSupportedMessage {
@@ -861,56 +756,101 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter the URI where the glossary is stored:.
+        ///   Looks up a localized string similar to Can not connect to the service without an API Key..
         /// </summary>
-        public static string V3Glossary {
+        public static string Validation_ApiKey {
             get {
-                return ResourceManager.GetString("V3Glossary", resourceCulture);
+                return ResourceManager.GetString("Validation_ApiKey", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select the JSON file from your machine.
+        ///   Looks up a localized string similar to The options &quot;Use custom model&quot; is enabled but the field is empty. Please add your custom model name or disable the options..
         /// </summary>
-        public static string V3JsonPathDescription {
+        public static string Validation_CustomModel_EnabledEmpty {
             get {
-                return ResourceManager.GetString("V3JsonPathDescription", resourceCulture);
+                return ResourceManager.GetString("Validation_CustomModel_EnabledEmpty", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter the project name for this file from your Google account:.
+        ///   Looks up a localized string similar to The local path to the JSON file cannot be empty, please browse for your file from your machine..
         /// </summary>
-        public static string V3ProjectNameDescription {
+        public static string Validation_EmptyJsonFilePath {
             get {
-                return ResourceManager.GetString("V3ProjectNameDescription", resourceCulture);
+                return ResourceManager.GetString("Validation_EmptyJsonFilePath", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please choose which MT Provider you want to use:.
+        ///   Looks up a localized string similar to The options &quot;Use glossary&quot; is enabled but the field is empty. Please add your glossary name or disable the options..
         /// </summary>
-        public static string WindowDescription {
+        public static string Validation_Glossaries_EnabledEmpty {
             get {
-                return ResourceManager.GetString("WindowDescription", resourceCulture);
+                return ResourceManager.GetString("Validation_Glossaries_EnabledEmpty", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Close.
+        ///   Looks up a localized string similar to The project location can not be empty. Please select an option from the drop down menu or select &quot;Use custom location&quot; and write the project location..
         /// </summary>
-        public static string WindowsControl_Close {
+        public static string Validation_Location_Empty {
             get {
-                return ResourceManager.GetString("WindowsControl_Close", resourceCulture);
+                return ResourceManager.GetString("Validation_Location_Empty", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Json file could not be found at the specified path..
+        ///   Looks up a localized string similar to The project location is invalid. This project is available only on the next location(s): {0}..
         /// </summary>
-        public static string WrongJsonFilePath {
+        public static string Validation_Location_Failed {
             get {
-                return ResourceManager.GetString("WrongJsonFilePath", resourceCulture);
+                return ResourceManager.GetString("Validation_Location_Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The JSON file could not be found, the file could be either renamed, moved or deleted, please browse again for you file..
+        /// </summary>
+        public static string Validation_MissingJsonFile {
+            get {
+                return ResourceManager.GetString("Validation_MissingJsonFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The model name is invalid, it might be misspelled or it doesn&apos;t exists..
+        /// </summary>
+        public static string Validation_ModelName_Invalid {
+            get {
+                return ResourceManager.GetString("Validation_ModelName_Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Permission denied, could not connect to the server using the provided credentials.
+        /// </summary>
+        public static string Validation_PermissionDenied {
+            get {
+                return ResourceManager.GetString("Validation_PermissionDenied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The ProjectID can not be empty. Please write the ProjectID or browse for your file, if the JSON file contains it, the ProjectID will be completed automatically..
+        /// </summary>
+        public static string Validation_ProjectID_Empty {
+            get {
+                return ResourceManager.GetString("Validation_ProjectID_Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The ProjectID was not correct. Please write the ProjectID or browse for your file, if the JSON file contains it, the ProjectID will be completed automatically..
+        /// </summary>
+        public static string Validation_ProjectID_Failed {
+            get {
+                return ResourceManager.GetString("Validation_ProjectID_Failed", resourceCulture);
             }
         }
     }

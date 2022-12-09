@@ -126,71 +126,39 @@
     <comment>Line1</comment>
   </data>
   <data name="Plugin_NiceName" xml:space="preserve">
-    <value>Google Translator Provider Plugin</value>
+    <value>Google Translator Provider - Plugin_NiceName</value>
   </data>
   <data name="Plugin_Tooltip" xml:space="preserve">
-    <value>Google Translator Provider Plugin - Choose between V2 or V3</value>
-  </data>
-  <data name="ApiConnectorGoogleAuthErrorMsg2" xml:space="preserve">
-    <value>Please verify that you have entered the correct API key and that your language pair is supported.</value>
-    <comment>Line2</comment>
+    <value>Google Translator Provider Plugin - Choose between V2 or V3 - ToolTip</value>
   </data>
   <data name="Google_Name" xml:space="preserve">
-    <value>Google Translate</value>
-  </data>
-  <data name="MsApiBadCredentialsMessage" xml:space="preserve">
-    <value>Authentication error: bad credentials</value>
+    <value>Google Translate G_Name</value>
   </data>
   <data name="Google_Tooltip" xml:space="preserve">
-    <value>Google Translate</value>
-  </data>
-  <data name="Microsoft_Description" xml:space="preserve">
-    <value>MT Enhanced using Microsoft Translator</value>
+    <value>Google Translate G_ToolTip</value>
   </data>
   <data name="LangPairAuthErrorMsg2" xml:space="preserve">
     <value>Please verify that you have entered the correct API key.</value>
     <comment>Line2</comment>
   </data>
   <data name="Google_Description" xml:space="preserve">
-    <value>Google Translate</value>
-  </data>
-  <data name="Microsoft_Tooltip" xml:space="preserve">
-    <value>MT Enhanced using Microsoft Translator</value>
+    <value>Google Translate G_Description</value>
   </data>
   <data name="Google_NiceName" xml:space="preserve">
-    <value>Google Translate</value>
-  </data>
-  <data name="ApiConnectorGoogleAuthErrorMsg1" xml:space="preserve">
-    <value>There was a problem getting the translation.</value>
-    <comment>Line1</comment>
-  </data>
-  <data name="MsApiFailedGetLanguagesMessage" xml:space="preserve">
-    <value>Failed to get languages for translation</value>
+    <value>Google Translate G_NiceName</value>
   </data>
   <data name="LangPairAuthErrorMsg3" xml:space="preserve">
     <value>If the problem persists, close/reopen the current dialog and try again</value>
     <comment>Line3</comment>
   </data>
-  <data name="MsApiCategoryIdErrorMessage" xml:space="preserve">
-    <value>Invalid category ID. Use a valid category ID or disable category ID in settings.</value>
-  </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>Google Translator Provider Plugin</value>
+    <value>Google Translator Provider - Plugin_Name</value>
   </data>
   <data name="Plugin_Description" xml:space="preserve">
-    <value>Google Translator Provider Plugin - Choose between V2 or V3</value>
-  </data>
-  <data name="Microsoft_Name" xml:space="preserve">
-    <value>MT Enhanced using Microsoft Translator</value>
+    <value>Google Translator Provider Plugin - Choose between V2 or V3 - Description</value>
   </data>
   <data name="my_image" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\my_image.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Microsoft_NiceName" xml:space="preserve">
-    <value>MT Enhanced using Microsoft Translator</value>
-  </data>
-  <data name="MsApiFailedToTranslateMessage" xml:space="preserve">
-    <value>Failed to translate</value>
   </data>
   <data name="ApiConnectionGoogleNoKeyErrorMessage" xml:space="preserve">
     <value>No API key has been set.  Please open the plugin settings form and enter a valid API key</value>
@@ -203,9 +171,6 @@
   </data>
   <data name="PromptForCredentialsCaption_Google" xml:space="preserve">
     <value>Credentials for Google Translate...</value>
-  </data>
-  <data name="PromptForCredentialsCaption_Microsoft" xml:space="preserve">
-    <value>Credentials for Microsoft Translator...</value>
   </data>
   <data name="TranslationLookupDraftNotResentMessage" xml:space="preserve">
     <value>[segment already translated...source not re-sent]</value>
@@ -228,82 +193,46 @@
   <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Download.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BackBtnText" xml:space="preserve">
-    <value>Translation Provider</value>
-  </data>
   <data name="backImg" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\backImg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Google" xml:space="preserve">
-    <value>Google Translator</value>
-  </data>
-  <data name="Microsoft" xml:space="preserve">
-    <value>Microsoft Translator</value>
-  </data>
-  <data name="PluginsView" xml:space="preserve">
-    <value>PluginsView</value>
+    <value>Google Translator - What is this</value>
   </data>
   <data name="Setting" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Setting.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="SettingsText" xml:space="preserve">
-    <value>Advanced settings</value>
-  </data>
-  <data name="SettingsView" xml:space="preserve">
-    <value>SettingsView</value>
-  </data>
-  <data name="SettingsViewTitle" xml:space="preserve">
+  <data name="MultiButton_Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
-  <data name="WindowDescription" xml:space="preserve">
-    <value>Please choose which MT Provider you want to use:</value>
+  <data name="SettingsView_Title" xml:space="preserve">
+    <value>Settings</value>
   </data>
-  <data name="WindowsControl_Close" xml:space="preserve">
-    <value>Close</value>
+  <data name="MainView_CloseButton" xml:space="preserve">
+    <value>Close app</value>
   </data>
-  <data name="ApiKeyError" xml:space="preserve">
-    <value>Please add API key.</value>
+  <data name="Validation_ApiKey" xml:space="preserve">
+    <value>Can not connect to the service without an API Key.</value>
   </data>
-  <data name="BrowseBtn" xml:space="preserve">
+  <data name="SettingsView_BrowseButton" xml:space="preserve">
     <value>Browse</value>
   </data>
-  <data name="CatIdDescription" xml:space="preserve">
-    <value>Use Category Id</value>
-  </data>
-  <data name="CatIdError" xml:space="preserve">
-    <value>Please add Category Id otherwise uncheck CategoryId checbox.</value>
-  </data>
-  <data name="EmptyJsonFilePathMsg" xml:space="preserve">
-    <value>The local path to json file cannot be empty.</value>
-  </data>
-  <data name="EmptyProjectNameMsd" xml:space="preserve">
-    <value>Project name cannot be empty.</value>
+  <data name="Validation_EmptyJsonFilePath" xml:space="preserve">
+    <value>The local path to the JSON file cannot be empty, please browse for your file from your machine.</value>
   </data>
   <data name="GoogleApiDescription" xml:space="preserve">
     <value>Select the version of the Google TP and sign in using your credentials</value>
   </data>
-  <data name="GoogleApiEnvironmentVariableName" xml:space="preserve">
-    <value>GOOGLE_APPLICATION_CREDENTIALS</value>
-  </data>
   <data name="GoogleResponseDescription" xml:space="preserve">
     <value>Google Response</value>
   </data>
-  <data name="InvalidProjectName" xml:space="preserve">
-    <value>Invalid project name.</value>
+  <data name="Validation_ProjectID_Empty" xml:space="preserve">
+    <value>The ProjectID can not be empty. Please write the ProjectID or browse for your file, if the JSON file contains it, the ProjectID will be completed automatically.</value>
   </data>
-  <data name="MicrosoftApiDescription" xml:space="preserve">
-    <value>Please enter your Microsoft Translate API Key</value>
+  <data name="ProviderView_V2_RememberKey" xml:space="preserve">
+    <value>Remember key</value>
   </data>
-  <data name="PersistGoogle" xml:space="preserve">
-    <value>Save Google key</value>
-  </data>
-  <data name="PersistMicrosoft" xml:space="preserve">
-    <value>Save Microsoft key</value>
-  </data>
-  <data name="PostLookupBrowse" xml:space="preserve">
-    <value>PostLookup</value>
-  </data>
-  <data name="PostLookupDescription" xml:space="preserve">
+  <data name="SettingsView_PostLookup_Description" xml:space="preserve">
     <value>Do post-lookup find/replace</value>
   </data>
   <data name="PostLookupEmptyMessage" xml:space="preserve">
@@ -312,50 +241,32 @@
   <data name="PostLookupFileName" xml:space="preserve">
     <value>Do post-lookup find/replace filename:</value>
   </data>
-  <data name="PostLookupWaterMark" xml:space="preserve">
+  <data name="SettingsView_PostLookup_WaterMark" xml:space="preserve">
     <value>Browse or type the location of the post-lookup file</value>
   </data>
   <data name="PostLookupWrongPathMessage" xml:space="preserve">
     <value>Post-lookup file could not be found at the specified path.</value>
   </data>
-  <data name="PreLookBrowse" xml:space="preserve">
-    <value>PreLookup</value>
-  </data>
-  <data name="PreLookDescription" xml:space="preserve">
+  <data name="SettingsView_PreLookup_Description" xml:space="preserve">
     <value>Do pre-lookup find/replace</value>
-  </data>
-  <data name="PreLookFileName" xml:space="preserve">
-    <value>Do pre-lookup find/replace name:</value>
   </data>
   <data name="PreLookupEmptyMessage" xml:space="preserve">
     <value>Pre-lookup filepath cannot be empty. Please add a valid path otherwise uncheck "Do pre-lookup checkbox".</value>
   </data>
-  <data name="PreLookupWaterMark" xml:space="preserve">
+  <data name="SettingsView_PreLookup_WaterMark" xml:space="preserve">
     <value>Browse or type the location of the pre-lookup file</value>
   </data>
   <data name="PreLookupWrongPathMessage" xml:space="preserve">
     <value>Pre-lookup file could not be found at the specified path.</value>
   </data>
-  <data name="ReSendDescription" xml:space="preserve">
+  <data name="SettingsView_ResendDraft_Description" xml:space="preserve">
     <value>Re-send draft and translated segments</value>
   </data>
-  <data name="SendPlainDescription" xml:space="preserve">
+  <data name="SettingsView_TextOnly_Description" xml:space="preserve">
     <value>Send plain text only (not tags)</value>
   </data>
-  <data name="UriGt" xml:space="preserve">
-    <value>mtenhancedprovidergt:///</value>
-  </data>
-  <data name="UriMs" xml:space="preserve">
-    <value>mtenhancedprovidermst:///</value>
-  </data>
-  <data name="V3JsonPathDescription" xml:space="preserve">
-    <value>Select the JSON file from your machine</value>
-  </data>
-  <data name="V3ProjectNameDescription" xml:space="preserve">
-    <value>Enter the project name for this file from your Google account:</value>
-  </data>
-  <data name="WrongJsonFilePath" xml:space="preserve">
-    <value>Json file could not be found at the specified path.</value>
+  <data name="Validation_MissingJsonFile" xml:space="preserve">
+    <value>The JSON file could not be found, the file could be either renamed, moved or deleted, please browse again for you file.</value>
   </data>
   <data name="GoogleApiVersionV2Description" xml:space="preserve">
     <value>V2 - Basic Translation</value>
@@ -372,37 +283,105 @@
   <data name="GoogleEngineModelDescription" xml:space="preserve">
     <value>Enter AutoML Translation model:</value>
   </data>
-  <data name="GoogleInvalidEngine" xml:space="preserve">
-    <value>Invalid model name</value>
+  <data name="Validation_ModelName_Invalid" xml:space="preserve">
+    <value>The model name is invalid, it might be misspelled or it doesn't exists.</value>
   </data>
   <data name="GoogleProjectLocation" xml:space="preserve">
     <value>Please add project location:</value>
   </data>
-  <data name="ProjectLocationValidation" xml:space="preserve">
-    <value>Project location value is required</value>
+  <data name="Validation_Location_Empty" xml:space="preserve">
+    <value>The project location can not be empty. Please select an option from the drop down menu or select "Use custom location" and write the project location.</value>
   </data>
-  <data name="V3Glossary" xml:space="preserve">
-    <value>Enter the URI where the glossary is stored:</value>
+  <data name="ProviderView_V2_ApiKey_Description" xml:space="preserve">
+    <value>Google Cloud API Key</value>
   </data>
-  <data name="UnidirectionalGlossary" xml:space="preserve">
+  <data name="MultiButton_Provider" xml:space="preserve">
+    <value>Provider</value>
+  </data>
+  <data name="Validation_CustomModel_EnabledEmpty" xml:space="preserve">
+    <value>The options "Use custom model" is enabled but the field is empty. Please add your custom model name or disable the options.</value>
+  </data>
+  <data name="Validation_Glossaries_EnabledEmpty" xml:space="preserve">
+    <value>The options "Use glossary" is enabled but the field is empty. Please add your glossary name or disable the options.</value>
+  </data>
+  <data name="Validation_ProjectID_Failed" xml:space="preserve">
+    <value>The ProjectID was not correct. Please write the ProjectID or browse for your file, if the JSON file contains it, the ProjectID will be completed automatically.</value>
+  </data>
+  <data name="appicon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\appicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="NameOf_CommandParameter_Syntax" xml:space="preserve">
+    <value>Syntax for the NameOf is:
+"{[location_of_NameOf]:NameOf Member=[PropertyName], Type={x:Type[classLocation:ClassName]}}"
+Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
+  </data>
+  <data name="NameOf_CommandParameterI_MissingComponent" xml:space="preserve">
+    <value>Could not find the property ['{0}'] in ['{1}'], please check the spelling for both the property and the class or if any of the two had its name changed in both C# class and XAML.</value>
+  </data>
+  <data name="ProviderView_V3_CustomModel_Watermark" xml:space="preserve">
+    <value>Engine name here</value>
+  </data>
+  <data name="ProviderView_V3_Glossary_Watermark" xml:space="preserve">
+    <value>Glossary name here</value>
+  </data>
+  <data name="ProviderView_V3_Location_Watermark" xml:space="preserve">
+    <value>Project location here</value>
+  </data>
+  <data name="MainView_ConfirmButton" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="MainView_HelpButton" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="ProviderView_V3_File_Browse" xml:space="preserve">
+    <value>or browse for it on your machine</value>
+  </data>
+  <data name="ProviderView_V3_File_DragAndDrop" xml:space="preserve">
+    <value>Drop your JSON file here</value>
+  </data>
+  <data name="ProviderView_V2_ApiKey_Tooltip" xml:space="preserve">
+    <value>API Key Tooltip placeholder</value>
+  </data>
+  <data name="ProviderView_V3_LocalPath_Description" xml:space="preserve">
+    <value>Local path</value>
+  </data>
+  <data name="ProviderView_V3_LocalPath_Tooltip" xml:space="preserve">
+    <value>This field can not be edited manualy, you need to use the -Drag and Drop- or -Browse- feature</value>
+  </data>
+  <data name="ProviderView_V3_Location_Description" xml:space="preserve">
+    <value>Use custom location</value>
+  </data>
+  <data name="ProviderView_V3_Location_Tooltip" xml:space="preserve">
+    <value>Project Location Tooltip placeholder</value>
+  </data>
+  <data name="ProviderView_V3_ProjectID_Description" xml:space="preserve">
+    <value>Project ID</value>
+  </data>
+  <data name="ProviderView_V3_ProjectID_Tooltip" xml:space="preserve">
+    <value>Project ID Tooltip placeholder</value>
+  </data>
+  <data name="ProviderView_V3_ProjectID_Warning" xml:space="preserve">
+    <value>JSON file is corrupted, the ProjectID is either missing or incorrect.</value>
+  </data>
+  <data name="ProviderView_V3_CustomModel_Description" xml:space="preserve">
+    <value>Use custom model (AutoML)</value>
+  </data>
+  <data name="ProviderView_V3_CustomModel_Tooltip" xml:space="preserve">
+    <value>Custom Model (AutoML) Tooltip placeholder</value>
+  </data>
+  <data name="ProviderView_V3_Glossary_Description" xml:space="preserve">
+    <value>Use glossary</value>
+  </data>
+  <data name="ProviderView_V3_Glossary_Tooltip" xml:space="preserve">
+    <value>Glossary Tooltip placeholder</value>
+  </data>
+  <data name="ProviderView_V3_Glossary_UseUnidirectional" xml:space="preserve">
     <value>Unidirectional glossaries</value>
   </data>
-  <data name="MSSubscriptionRegionLabel" xml:space="preserve">
-    <value>Subscription Region:</value>
+  <data name="Validation_PermissionDenied" xml:space="preserve">
+    <value>Permission denied, could not connect to the server using the provided credentials</value>
   </data>
-  <data name="AppLogFolder" xml:space="preserve">
-    <value>GoogleTranslatorProvider</value>
-  </data>
-  <data name="LogsFileName" xml:space="preserve">
-    <value>MTEnhancedLogs.txt</value>
-  </data>
-  <data name="LogsFolderPath" xml:space="preserve">
-    <value>RWS AppStore</value>
-  </data>
-  <data name="GoogleApiKeyDescription" xml:space="preserve">
-    <value>Please enter your Google Translate API Key</value>
-  </data>
-  <data name="HelpView" xml:space="preserve">
-    <value>HelpView</value>
+  <data name="Validation_Location_Failed" xml:space="preserve">
+    <value>The project location is invalid. This project is available only on the next location(s): {0}.</value>
   </data>
 </root>

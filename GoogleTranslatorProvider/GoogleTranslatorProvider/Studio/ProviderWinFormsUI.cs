@@ -4,7 +4,6 @@ using System.Windows.Forms;
 using GoogleTranslatorProvider.Interfaces;
 using GoogleTranslatorProvider.Models;
 using GoogleTranslatorProvider.Service;
-using GoogleTranslatorProvider.TellMe;
 using GoogleTranslatorProvider.ViewModels;
 using GoogleTranslatorProvider.Views;
 using Sdl.LanguagePlatform.Core;
@@ -27,26 +26,20 @@ namespace GoogleTranslatorProvider.Studio
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
 			var options = new GTPTranslationOptions();
-			var mainWindowViewModel = ShowProviderWindow(languagePairs, credentialStore, options);
-
-			return mainWindowViewModel.DialogResult ? new ITranslationProvider[] { new Provider(options, new HtmlUtil()) }
+			var mainWindowViewModel = ShowRequestedView(languagePairs, credentialStore, options);
+			return mainWindowViewModel.DialogResult ? new ITranslationProvider[] { new Provider(options) }
 													: null;
 		}
 
 		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
-			if (translationProvider is not Provider provider)
+			if (translationProvider is not Provider editProvider)
 			{
 				return false;
 			}
 
-			try
-			{
-				new SettingsAction().Execute();
-				return true;
-			}
-			catch { }
-			return false;
+			var mainWindowViewModel = ShowRequestedView(languagePairs, credentialStore, editProvider.Options, true);
+			return mainWindowViewModel.DialogResult;
 		}
 
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
@@ -56,7 +49,7 @@ namespace GoogleTranslatorProvider.Studio
 			{
 				return new TranslationProviderDisplayInfo
 				{
-					TranslationProviderIcon = PluginResources.my_icon,
+					TranslationProviderIcon = PluginResources.appicon,
 					Name = PluginResources.Plugin_NiceName,
 					TooltipText = PluginResources.Plugin_Tooltip
 				};
@@ -67,7 +60,7 @@ namespace GoogleTranslatorProvider.Studio
 			return new TranslationProviderDisplayInfo()
 			{
 				SearchResultImage = PluginResources.my_image,
-				TranslationProviderIcon = PluginResources.my_icon,
+				TranslationProviderIcon = PluginResources.appicon,
 				TooltipText = versionString,
 				Name = versionString
 			};
@@ -75,47 +68,48 @@ namespace GoogleTranslatorProvider.Studio
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
 		{
-			if (translationProviderUri is null)
+			return translationProviderUri switch
 			{
-				throw new ArgumentNullException(PluginResources.UriNotSupportedMessage);
-			}
-
-			return string.Equals(translationProviderUri.Scheme, Constants.GoogleTranslationScheme, StringComparison.CurrentCultureIgnoreCase);
+				null => throw new ArgumentNullException(PluginResources.UriNotSupportedMessage),
+				_ => string.Equals(translationProviderUri.Scheme, Constants.GoogleTranslationScheme, StringComparison.CurrentCultureIgnoreCase)
+			};
 		}
 
-		private MainWindowViewModel ShowProviderWindow(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions)
+		private MainWindowViewModel ShowRequestedView(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, bool showSettingsView = false)
 		{
 			SetSavedCredentialsOnUi(credentialStore, loadOptions);
-			var providerControlViewModel = new ProviderViewModel(loadOptions);
-			var settingsControlViewModel = new SettingsViewModel(loadOptions);
-			var helpViewModel = new HelpViewModel();
-			var mainWindowViewModel = new MainWindowViewModel(loadOptions, providerControlViewModel, settingsControlViewModel, helpViewModel, credentialStore, languagePairs, new HtmlUtil());
-			var mainWindow = new MainWindowView { DataContext = mainWindowViewModel };
+			var mainWindowViewModel = new MainWindowViewModel(loadOptions, credentialStore, languagePairs, showSettingsView);
+			var mainWindowView = new MainWindowView { DataContext = mainWindowViewModel };
 			mainWindowViewModel.CloseEventRaised += () =>
 			{
 				UpdateProviderCredentials(credentialStore, loadOptions);
-				mainWindow.Close();
+				mainWindowView.Close();
 			};
 
-			mainWindow.ShowDialog();
+			mainWindowView.ShowDialog();
 			return mainWindowViewModel;
 		}
 
 		private void UpdateProviderCredentials(ITranslationProviderCredentialStore credentialStore, ITranslationOptions options)
 		{
-			if (options.SelectedProvider == ProviderType.GoogleTranslate)
+			if (options.SelectedProvider != ProviderType.GoogleTranslate)
 			{
-				SetCredentialsOnCredentialStore(credentialStore, Constants.GoogleTranslationFullScheme, options.ApiKey, options.PersistGoogleKey);
+				return;
 			}
+
+			SetCredentialsOnCredentialStore(credentialStore, Constants.GoogleTranslationFullScheme, options.ApiKey, options.PersistGoogleKey);
 		}
 
 		private void SetSavedCredentialsOnUi(ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions)
 		{
-			if (GetCredentialsFromStore(credentialStore, Constants.GoogleTranslationFullScheme) is TranslationProviderCredential googleCredentials)
+			var credentials = GetCredentialsFromStore(credentialStore, Constants.GoogleTranslationFullScheme);
+			if (credentials is null)
 			{
-				loadOptions.ApiKey = googleCredentials.Credential;
-				loadOptions.PersistGoogleKey = googleCredentials.Persist;
+				return;
 			}
+
+			loadOptions.ApiKey = credentials.Credential;
+			loadOptions.PersistGoogleKey = credentials.Persist;
 		}
 
 		private TranslationProviderCredential GetCredentialsFromStore(ITranslationProviderCredentialStore credentialStore, string uri)
@@ -156,7 +150,7 @@ namespace GoogleTranslatorProvider.Studio
 			}
 
 			var options = new GTPTranslationOptions();
-			var mainWindowViewModel = ShowProviderWindow(languagePairs.ToArray(), credentialStore, options);
+			var mainWindowViewModel = ShowRequestedView(languagePairs.ToArray(), credentialStore, options);
 			return mainWindowViewModel.DialogResult;
 		}
 	}

@@ -109,7 +109,7 @@ namespace GoogleTranslatorProvider.Styles
 			{
 				if (string.IsNullOrWhiteSpace(ControlClose))
 				{
-					ControlClose = PluginResources.WindowsControl_Close;
+					ControlClose = PluginResources.MainView_CloseButton;
 				}
 			}));
 		}

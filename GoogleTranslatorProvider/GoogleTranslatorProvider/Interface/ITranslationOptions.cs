@@ -29,7 +29,7 @@ namespace GoogleTranslatorProvider.Interfaces
 
 		string GlossaryPath { get; set; }
 
-		string ProjectName { get; set; }
+		string ProjectId { get; set; }
 
 		string ApiKey { get; set; }
 

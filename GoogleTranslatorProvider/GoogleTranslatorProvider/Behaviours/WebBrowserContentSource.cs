@@ -26,7 +26,7 @@ namespace GoogleTranslatorProvider.Behaviours
 		{
 			var eNewValue = e.NewValue.ToString();
 			if (obj is WebBrowser webBrowser
-				&& !string.IsNullOrEmpty(eNewValue))
+			&& !string.IsNullOrEmpty(eNewValue))
 			{
 				webBrowser.NavigateToString(eNewValue);
 			}

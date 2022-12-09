@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Windows.Input;
 using System.Xml.Serialization;
@@ -47,8 +48,8 @@ namespace GoogleTranslatorProvider.ViewModels
 			{
 				if (_reSendDraft == value) return;
 				_reSendDraft = value;
-				ErrorMessage = string.Empty;
 				OnPropertyChanged(nameof(ReSendDraft));
+				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -59,8 +60,8 @@ namespace GoogleTranslatorProvider.ViewModels
 			{
 				if (_sendPlainText == value) return;
 				_sendPlainText = value;
-				ErrorMessage = string.Empty;
 				OnPropertyChanged(nameof(SendPlainText));
+				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -73,11 +74,11 @@ namespace GoogleTranslatorProvider.ViewModels
 				_doPreLookup = value;
 				if (!_doPreLookup)
 				{
-					Clear("PreLookupFileName");
+					Clear(nameof(PreLookupFileName));
 				}
 
-				ErrorMessage = string.Empty;
 				OnPropertyChanged(nameof(DoPreLookup));
+				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -90,10 +91,11 @@ namespace GoogleTranslatorProvider.ViewModels
 				_doPostLookup = value;
 				if (!_doPostLookup)
 				{
-					Clear("PostLookupFileName");
+					Clear(nameof(PostLookupFileName));
 				}
 
 				OnPropertyChanged(nameof(DoPostLookup));
+				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -104,8 +106,8 @@ namespace GoogleTranslatorProvider.ViewModels
 			{
 				if (_preLookupFileName == value) return;
 				_preLookupFileName = value;
-				ErrorMessage = string.Empty;
 				OnPropertyChanged(nameof(PreLookupFileName));
+				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -116,9 +118,8 @@ namespace GoogleTranslatorProvider.ViewModels
 			{
 				if (_postLookupFileName == value) return;
 				_postLookupFileName = value;
-				ErrorMessage = string.Empty;
-
 				OnPropertyChanged(nameof(PostLookupFileName));
+				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -157,44 +158,36 @@ namespace GoogleTranslatorProvider.ViewModels
 			PostLookupFileName = _options.PostLookupFilename;
 		}
 
-		private void Clear(object obj)
+		private void Clear(object parameter)
 		{
-			if (obj is not string objectName)
+			switch (parameter as string)
 			{
-				return;
-			}
-
-			switch (objectName)
-			{
-				case "PreLookupFileName":
+				case nameof(PreLookupFileName):
 					PreLookupFileName = string.Empty;
 					break;
-				case "PostLookupFileName":
+				case nameof(PostLookupFileName):
 					PostLookupFileName = string.Empty;
 					break;
 			}
 		}
 
-		private void Browse(object commandParameter)
+		private void Browse(object parameter)
 		{
-			ErrorMessage = string.Empty;
-			if (string.IsNullOrEmpty(commandParameter.ToString()))
-			{
-				return;
-			}
+			const string Browse_XmlFiles = "XML Files|*.xml";
 
-			var selectedFile = _openFileDialogService.ShowDialog("XML Files(*.xml) | *.xml");
+			ErrorMessage = string.Empty;
+			var selectedFile = _openFileDialogService.ShowDialog(Browse_XmlFiles);
 			if (string.IsNullOrEmpty(selectedFile))
 			{
 				return;
 			}
 
-			if (commandParameter.Equals(PluginResources.PreLookBrowse))
+			if (parameter.Equals(nameof(PreLookupFileName)))
 			{
 				PreLookupFileName = selectedFile;
 				CheckIfIsValidLookupFile(PreLookupFileName);
 			}
-			else if (commandParameter.Equals(PluginResources.PostLookupBrowse))
+			else if (parameter.Equals(nameof(PostLookupFileName)))
 			{
 				PostLookupFileName = selectedFile;
 				CheckIfIsValidLookupFile(PostLookupFileName);
@@ -205,18 +198,18 @@ namespace GoogleTranslatorProvider.ViewModels
 		{
 			try
 			{
-				using var reader = new System.IO.StreamReader(filePath);
+				using var reader = new StreamReader(filePath);
 				var serializer = new XmlSerializer(typeof(EditCollection));
 				var edcoll = (EditCollection)serializer.Deserialize(reader);
 			}
-			catch (InvalidOperationException e) //invalid operation is what happens when the xml can't be parsed into the objects correctly
-			{
-				var fileName = System.IO.Path.GetFileName(filePath);
+			catch (InvalidOperationException)
+			{ //invalid operation is what happens when the xml can't be parsed into the objects correctly
+				var fileName = Path.GetFileName(filePath);
 				//ErrorMessage = $"{MtProviderConfDialogResources.lookupFileStructureCheckErrorCaption} {fileName}";
 			}
-			catch (Exception exp) //catch-all for any other kind of error...passes up a general message with the error description
-			{
-				_logger.Error($"{MethodBase.GetCurrentMethod().Name}: {exp}");
+			catch (Exception e)
+			{ //catch-all for any other kind of error...passes up a general message with the error description
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name}: {e}");
 				//ErrorMessage = $"{MtProviderConfDialogResources.lookupFileStructureCheckGenericErrorMessage} {exp.Message}";
 			}
 		}

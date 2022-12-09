@@ -16,10 +16,10 @@ namespace GoogleTranslatorProvider.Studio
 		private V2Connector _googleV2Api;
 		private V3Connector _googleV3Api;
 
-		public Provider(ITranslationOptions options, HtmlUtil htmlUtil)
+		public Provider(ITranslationOptions options)
 		{
 			Options = options;
-			_htmlUtil = htmlUtil;
+			_htmlUtil = new HtmlUtil();
 		}
 
 		public ITranslationOptions Options { get; set; }

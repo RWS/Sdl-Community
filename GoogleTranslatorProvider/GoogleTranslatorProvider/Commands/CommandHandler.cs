@@ -5,9 +5,10 @@ namespace GoogleTranslatorProvider.Commands
 {
 	public class CommandHandler : ICommand
 	{
-		public event EventHandler CanExecuteChanged;
 		private readonly Action _action;
 		private readonly bool _canExecute;
+
+		public event EventHandler CanExecuteChanged;
 
 		public CommandHandler(Action action, bool canExecute)
 		{
