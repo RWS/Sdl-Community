@@ -97,8 +97,8 @@ namespace GoogleTranslatorProvider.GoogleAPI
 			{
 				Contents = { sourceText },
 				Model = _modelPath,
-				TargetLanguageCode = targetLanguage.TwoLetterISOLanguageName,
-				SourceLanguageCode = sourceLanguage.TwoLetterISOLanguageName,
+				TargetLanguageCode = GetLanguageCode(targetLanguage),
+				SourceLanguageCode = GetLanguageCode(sourceLanguage),
 				Parent = new ProjectName(_options.ProjectId).ToString(),
 				MimeType = format == "text" ? "text/plain" : "text/html"
 			};
@@ -242,6 +242,23 @@ namespace GoogleTranslatorProvider.GoogleAPI
 				_options.ProjectId,
 				_options.ProjectLocation,
 				_glossaryID);
+		}
+
+		private string GetLanguageCode(CultureInfo cultureInfo)
+		{
+			if (cultureInfo.Name == "fr-HT") { return "ht"; }
+			if (cultureInfo.Name == "zh-TW" || cultureInfo.Name == "zh-CN") { return cultureInfo.Name; } //just get the name for zh-TW which Google can process..google can also process simplified when specifying target as zh-CN but it breaks when you specify that as source??
+			if (cultureInfo.Name.Equals("nb-NO") || cultureInfo.Name.Equals("nn-NO")) return "no";
+			if (cultureInfo.TwoLetterISOLanguageName.Equals("sr") && cultureInfo.DisplayName.ToLower().Contains("latin")) return "sr-Latn";
+
+			if (cultureInfo.DisplayName == "Samoan") { return "sm"; }
+
+			var isoLanguageName = cultureInfo.TwoLetterISOLanguageName; //if not chinese trad or norweigian get 2 letter code
+																		//convert tagalog and hebrew for Google
+			if (isoLanguageName == "fil") { isoLanguageName = "tl"; }
+			if (isoLanguageName == "he") { isoLanguageName = "iw"; }
+
+			return isoLanguageName;
 		}
 	}
 }
