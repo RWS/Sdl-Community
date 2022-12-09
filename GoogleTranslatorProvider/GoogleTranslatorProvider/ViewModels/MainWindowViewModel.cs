@@ -312,10 +312,11 @@ namespace GoogleTranslatorProvider.ViewModels
 				else if (e.Message.Contains("Unsupported location"))
 				{
 					// NOTE: Confirm if we are going to let the user know the available locations for his account.
-					var availableLocations = e.Message.Substring(e.Message.LastIndexOf("Must be"));
+					/*var availableLocations = e.Message.Substring(e.Message.LastIndexOf("Must be"));
 					availableLocations = availableLocations.Substring(availableLocations.IndexOf('\''));
 					availableLocations = availableLocations.Substring(0, availableLocations.IndexOf('.')).Replace("\'", "");
-					message = string.Format(PluginResources.Validation_Location_Failed, availableLocations);
+					message = string.Format(PluginResources.Validation_Location_Failed, availableLocations);*/
+					message = "This location is not valid for your project.";
 				}
 				else
 				{
