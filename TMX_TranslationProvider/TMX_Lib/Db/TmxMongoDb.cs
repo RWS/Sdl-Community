@@ -99,6 +99,32 @@ namespace TMX_Lib.Db
             }
         }
 
+        public static async Task<IReadOnlyList<string>> GetLocalDatabaseNamesAsync()
+        {
+	        List<string> names = new List<string>();
+	        await Task.Run(async () =>
+	        {
+		        try
+		        {
+			        var url = new MongoUrl("mongodb://localhost:27017");
+			        var client = new MongoClient(url);
+			        var list = await client.ListDatabaseNamesAsync();
+			        var defaultNames = new[] { "admin", "config", "local"};
+			        await list.ForEachAsync(n =>
+			        {
+						if (!defaultNames.Contains(n))
+							names.Add(n);
+			        });
+
+		        }
+		        catch (Exception e)
+		        {
+					log.Error($"can't get local db names : {e}");
+		        }
+	        });
+	        return names;
+        }
+
         public async Task InitAsync()
         {
 	        try
@@ -288,7 +314,9 @@ namespace TMX_Lib.Db
 			// surround text in quotes -> so that we perform an exact search
 			text = $"\"{text.Replace("\"", "\\\"")}\"" ;
 			var filter = Builders<TmxText>.Filter.Text(text , new TextSearchOptions { CaseSensitive = false, DiacriticSensitive = false,});
+			log.Debug($"START Exact search for {text} {sourceLanguage} to {targetLanguage}");
 			var cursor = await _texts.FindAsync(filter, new FindOptions<TmxText>() { Limit = MAX_RESULTS });
+			log.Debug($"END Exact search for {text} {sourceLanguage} to {targetLanguage}");
 			var texts = new List<TmxText>();
 			await cursor.ForEachAsync(t =>
 			{
@@ -316,6 +344,7 @@ namespace TMX_Lib.Db
 				.Include(p => p.LocaseText).Include(p => p.NormalizedLanguage).Include(p => p.TranslationUnitID).Include(p => p.FormattedText);
 			var sort = Builders<TmxText>.Sort.MetaTextScore("Score");
 
+			log.Debug($"START Fuzzy search for {text} {sourceLanguage} to {targetLanguage}");
 			var cursor = await _texts
 				.Aggregate()
 				.Match(filter)
@@ -323,6 +352,7 @@ namespace TMX_Lib.Db
 				.Limit(MAX_RESULTS)
 				.Project(projection)
 				.ToListAsync();
+			log.Debug($"END Fuzzy search for {text} {sourceLanguage} to {targetLanguage}");
 
 			// note: this works, but would not expose the sort, so we would not know the score differences between results
 			//
@@ -342,6 +372,16 @@ namespace TMX_Lib.Db
 				if (segment != null)
 					segments.Add(segment);
 			}
+			return segments;
+		}
+
+		public async Task<IReadOnlyList<TmxSegment>> ConcordanceSearch(string text, string sourceLanguage, string targetLanguage)
+		{
+			log.Debug($"START Concordance search for {text} {sourceLanguage} to {targetLanguage}");
+
+			log.Debug($"END Concordance search for {text} {sourceLanguage} to {targetLanguage}");
+
+			var segments = new List<TmxSegment>();
 			return segments;
 		}
 

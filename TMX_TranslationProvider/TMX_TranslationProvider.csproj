@@ -11,14 +11,17 @@
     <Compile Remove="QuickTmxTesting\**" />
     <Compile Remove="TMXTests\**" />
     <Compile Remove="TMX_Lib\**" />
+    <Compile Remove="TMX_SimpleSearch\**" />
     <EmbeddedResource Remove="packages\**" />
     <EmbeddedResource Remove="QuickTmxTesting\**" />
     <EmbeddedResource Remove="TMXTests\**" />
     <EmbeddedResource Remove="TMX_Lib\**" />
+    <EmbeddedResource Remove="TMX_SimpleSearch\**" />
     <None Remove="packages\**" />
     <None Remove="QuickTmxTesting\**" />
     <None Remove="TMXTests\**" />
     <None Remove="TMX_Lib\**" />
+    <None Remove="TMX_SimpleSearch\**" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">

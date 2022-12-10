@@ -93,6 +93,37 @@ namespace QuickTmxTesting
 			results = await search.Search(fuzzy, TextToSegment("This document contains both Interserve Construction Safety Code for and Code"), en_sp);
 		}
 
+		public enum SearchType
+		{
+			Exact, Fuzzy, Concordance,
+		}
+
+		private static async Task TestSimpleSearch(string dbName, string text, SearchType searchType, string sourceLanguage, string targetLanguage)
+		{
+			var db = new TmxMongoDb("localhost:27017", dbName);
+			var search = new TmxSearch(db);
+			await search.LoadLanguagesAsync();
+
+			log.Debug($"search [{text}] - started");
+			var watch = Stopwatch.StartNew();
+			IReadOnlyList<TmxSegment> result;
+			switch (searchType)
+			{
+				case SearchType.Exact:
+					result = await db.ExactSearch(text, sourceLanguage, targetLanguage);
+					break;
+				case SearchType.Fuzzy:
+					result = await db.FuzzySearch(text, sourceLanguage, targetLanguage);
+					break;
+				case SearchType.Concordance:
+					result = await db.ConcordanceSearch(text, sourceLanguage, targetLanguage);
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(searchType), searchType, null);
+			}
+			log.Debug($"search [{text}] - {result.Count} results - took {watch.ElapsedMilliseconds} ms");
+		}
+
 
 		private static void SplitLargeXmlFile(string inputXmlFile, string outputPrefix)
 		{
@@ -168,7 +199,13 @@ namespace QuickTmxTesting
 			log.Debug("test started");
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\fails\\opensubtitlingformat.tmx", "C:\\john\\buff\\TMX Examples\\temp3\\");
 
-			TestEnRoImport().Wait();
+
+			Task.Run(() => TestImportFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro-2", quickImport: true)).Wait();
+
+			//TestEnRoImport().Wait();
+			//TestSimpleSearch("sample4", "introduction", SearchType.Exact, "en-gb", "es-mx").Wait();
+			//TestSimpleSearch("en-frEUBookshopv2108M", "The European Social Fund in French Guiana", SearchType.Exact, "en", "fr").Wait();
+			//TestSimpleSearch("en-ro", "We might call them the words of \"unforgiveness", SearchType.Exact, "en", "ro").Wait();
 			return;
 
 			var root = ".";

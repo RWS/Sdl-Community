@@ -41,6 +41,7 @@ namespace TMX_Lib.Search
 			_db = db;
 		}
 
+		public IReadOnlyList<string> SupportedLanguages() => _supportedLanguages?.Languages ?? new List<string>();
 
 		private bool LookupMtEvenIfTmHasMatch => true;
 
