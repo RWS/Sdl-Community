@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -9,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Newtonsoft.Json;
+using Sdl.LanguagePlatform.Core;
+using Sdl.LanguagePlatform.TranslationMemory;
 using TMX_Lib.Db;
 using TMX_Lib.Search;
 
@@ -28,9 +31,33 @@ namespace TMX_SimpleSearch
 	public class MainWindowViewModel : INotifyPropertyChanged
 	{
 		private bool _loaded;
+		private bool _ignoreUpdate;
 		private IReadOnlyList<string> _databases = new List<string>();
+		private int _lastSearchIndex = 0;
+		private int _selectedTargetLanguageIndex = -1;
+		private int _selectedSourceLanguageIndex = -1;
+		private int _selectedDbIndex = -1;
+		private IReadOnlyList<SimpleSearchResult> _results = new List<SimpleSearchResult>();
+		private int _searchTypeIdx = 0;
+
+		private TmxSearch _searcher;
+		private IReadOnlyList<string> _languages = new List<string>();
+		private string _searchText = "";
+		private bool _isSearching = false;
+
+		private string _settingsFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "TMX_lib", "simple_search_settings.txt");
+		private string _error = "";
+		private long _searchTimeMs = 0;
+		private long _searchTimeSeconds = 0;
+		private string _status = "";
+
+		private const int MAX_SAVE_SEARCH_COUNT = 20;
+
+		private string DefaultSourceLanguage() => Languages.Count > 0 ? Languages[0] : "";
+		private string DefaultTargetLanguage() => Languages.Count > 1 ? Languages[1] : "";
 
 		public double ItemHeight => 30;
+		public ObservableCollection<SearchItem> LastSearches { get; } = new ObservableCollection<SearchItem>();
 
 		public IReadOnlyList<string> Databases
 		{
@@ -43,6 +70,8 @@ namespace TMX_SimpleSearch
 			}
 		}
 		public IReadOnlyList<string> SearchTypes => Enum.GetValues(typeof(SearchType)).OfType<SearchType>().Select(st => st.ToString()).ToList();
+
+		public SearchType Type() => (SearchType)SearchTypeIdx;
 
 		public int SearchTypeIdx
 		{
@@ -99,7 +128,6 @@ namespace TMX_SimpleSearch
 			}
 		}
 
-		public ObservableCollection<SearchItem> LastSearches { get; } = new ObservableCollection<SearchItem>();
 
 		public int LastSearchIndex
 		{
@@ -108,6 +136,28 @@ namespace TMX_SimpleSearch
 			{
 				if (value == _lastSearchIndex) return;
 				_lastSearchIndex = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string Error
+		{
+			get => _error;
+			set
+			{
+				if (value == _error) return;
+				_error = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string Status
+		{
+			get => _status;
+			set
+			{
+				if (value == _status) return;
+				_status = value;
 				OnPropertyChanged();
 			}
 		}
@@ -134,6 +184,17 @@ namespace TMX_SimpleSearch
 			}
 		}
 
+		public long SearchTimeSeconds
+		{
+			get => _searchTimeSeconds;
+			set
+			{
+				if (value == _searchTimeSeconds) return;
+				_searchTimeSeconds = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public bool IsSearching
 		{
 			get => _isSearching;
@@ -145,26 +206,11 @@ namespace TMX_SimpleSearch
 			}
 		}
 
-		private string FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "TMX_lib", "simple_search_settings.txt");
-		private int _lastSearchIndex = 0;
-		private int _selectedTargetLanguageIndex = -1;
-		private int _selectedSourceLanguageIndex = -1;
-		private int _selectedDbIndex = -1;
-		private IReadOnlyList<SimpleSearchResult> _results = new List<SimpleSearchResult>();
-		private int _searchTypeIdx = 0;
-
-		private TmxSearch searcher_;
-		private IReadOnlyList<string> _languages = new List<string>();
-		private string _searchText = "";
-		private bool _isSearching = false;
-
-		private string DefaultSourceLanguage() => Languages.Count > 0 ? Languages[0] : "";
-		private string DefaultTargetLanguage() => Languages.Count > 1 ? Languages[1] : "";
 		private void LoadLastSearches()
 		{
-			if (File.Exists(FileName))
+			if (File.Exists(_settingsFileName))
 			{
-				var list = JsonConvert.DeserializeObject< List<SearchItem>>(File.ReadAllText(FileName));
+				var list = JsonConvert.DeserializeObject< List<SearchItem>>(File.ReadAllText(_settingsFileName));
 				foreach (var item in list)
 					LastSearches.Add(item);
 			}
@@ -184,9 +230,10 @@ namespace TMX_SimpleSearch
 			_loaded = true;
 		}
 
-		public void SaveLastSearches()
+		private void SaveLastSearches()
 		{
-
+			var str = JsonConvert.SerializeObject(LastSearches);
+			File.WriteAllText(_settingsFileName, str);
 		}
 
 		public async Task InitAsync()
@@ -200,14 +247,79 @@ namespace TMX_SimpleSearch
 
 		public async Task DoSearchNow()
 		{
+			if (_searcher == null || SearchText == "" || SelectedSourceLanguageIndex < 0 || SelectedTargetLanguageIndex < 0)
+				return;// can't search
+
+			var segment = new Segment();
+			segment.Add(SearchText);
+			var sourceLangugage = Languages[SelectedSourceLanguageIndex];
+			var targetLanguage = Languages[SelectedTargetLanguageIndex];
+			var settings = TmxSearchSettings.Default();
+			switch ((SearchType)SearchTypeIdx)
+			{
+				case SearchType.Exact:
+					settings.Mode = SearchMode.ExactSearch;
+					break;
+				case SearchType.Fuzzy:
+					settings.Mode = SearchMode.FuzzySearch;
+					break;
+				case SearchType.Concordance:
+					settings.Mode = SearchMode.ConcordanceSearch;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+
+			// the idea: save this, just in case search takes too long, and user cancels/closes app
+			_searchTimeMs = -1;
+			SaveSearch();
+
+			var watch = Stopwatch.StartNew();
+			Error = "";
+			Status = "Searching...";
+			try
+			{
+				var results = await _searcher.Search(settings, segment, new LanguagePair(sourceLangugage, targetLanguage));
+				Results = results.Select(r => new SimpleSearchResult { Text = r.TranslationProposal.TargetSegment.ToPlain(), Score = r.ScoringResult.BaseScore, })
+					.ToList();
+				Status = $"{Results.Count} results.";
+			}
+			catch (Exception e)
+			{
+				Error = e.Message;
+			}
+
+			_searchTimeMs = watch.ElapsedMilliseconds;
+			SaveSearch();
+		}
+
+		private void SaveSearch()
+		{
 			// if anything in the text changed + old text not same -> create a copy of this search
+			var oldText = LastSearchIndex >= 0 && LastSearchIndex < LastSearches.Count ? LastSearches[LastSearchIndex].Text : "";
+			var same = SearchText == oldText;
+			var sourceLangugage = Languages[SelectedSourceLanguageIndex];
+			var targetLanguage = Languages[SelectedTargetLanguageIndex];
 
-			// if current search text != existing search -> create new entry
-			// otherwise, save here
+			// note: if old text is "" -> override that
+			if (!same && oldText != "")
+			{
+				_ignoreUpdate = true;
+				LastSearches.Add(new SearchItem());
+				if (LastSearches.Count > MAX_SAVE_SEARCH_COUNT)
+					LastSearches.RemoveAt(0);
+				LastSearchIndex = LastSearches.Count - 1;
+				_ignoreUpdate = false;
+			}
 
-			// care about max no of search items
+			var curSearch = LastSearches[LastSearchIndex];
+			curSearch.SourceLanguage = sourceLangugage;
+			curSearch.TargetLanguage = targetLanguage;
+			curSearch.SearchType = Type();
+			curSearch.Text = SearchText;
+			SearchTimeSeconds = curSearch.SearchTimeSeconds = (int)(_searchTimeMs / 1000);
 
-			// update results
+			SaveLastSearches();
 		}
 
 		private void LoadSearch()
@@ -215,24 +327,38 @@ namespace TMX_SimpleSearch
 			if (LastSearchIndex < 0)
 				return;
 			var info = LastSearches[LastSearchIndex];
-			var sourceLangIdx = Languages.ToList().IndexOf(info.SourceLanguage);
-			var targetLangIdx = Languages.ToList().IndexOf(info.TargetLanguage);
-			SelectedSourceLanguageIndex = sourceLangIdx >= 0 ? sourceLangIdx : 0;
-			SelectedTargetLanguageIndex = targetLangIdx >= 0 ? targetLangIdx : 0;
+			SearchTypeIdx = (int)info.SearchType;
+			SearchTimeSeconds = info.SearchTimeSeconds;
 			SearchText = info.Text;
+			LoadLanguages();
+		}
+
+		private void LoadLanguages()
+		{
+			if (LastSearchIndex < 0)
+				return;
+			var info = LastSearches[LastSearchIndex];
+			if (Languages.Count > 0)
+			{
+				var sourceLangIdx = Languages.ToList().IndexOf(info.SourceLanguage);
+				var targetLangIdx = Languages.ToList().IndexOf(info.TargetLanguage);
+				SelectedSourceLanguageIndex = sourceLangIdx >= 0 ? sourceLangIdx : 0;
+				SelectedTargetLanguageIndex = targetLangIdx >= 0 ? targetLangIdx : 0;
+			}
 		}
 
 		private async void VmPropertyChanged(string name)
 		{
-			if (!_loaded)
+			if (!_loaded || _ignoreUpdate)
 				return;
 			switch (name)
 			{
 				case nameof(SelectedDbIndex):
 					if (SelectedDbIndex >= 0)
-						searcher_ = new TmxSearch(new TmxMongoDb("localhost:27017", Databases[SelectedDbIndex]));
-					await searcher_.LoadLanguagesAsync();
-					Languages = searcher_.SupportedLanguages();
+						_searcher = new TmxSearch(new TmxMongoDb("localhost:27017", Databases[SelectedDbIndex]));
+					await _searcher.LoadLanguagesAsync();
+					Languages = _searcher.SupportedLanguages();
+					LoadLanguages();
 					break;
 
 				case nameof(LastSearchIndex):

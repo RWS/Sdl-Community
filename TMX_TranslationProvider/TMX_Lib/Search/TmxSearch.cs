@@ -152,6 +152,22 @@ namespace TMX_Lib.Search
 			var min = results.First().Score - diff / 3;
 			return results.Where(r => r.Score >= min).ToList();
 		}
+		// note: it's sorted by score
+		private IReadOnlyList<TmxSegment> FilterConcordanceSearch(IReadOnlyList<TmxSegment> results)
+		{
+			if (results.Count < 2)
+				return results;
+
+			var diff = results.First().Score - results.Last().Score;
+			Debug.Assert(diff >= 0);
+			if (diff < 1)
+				return results;
+
+			// here, diff is > 1, note: I'm using the score from the mongodb
+			// and do a simple filtering: if score not in the top-third of the results, ignore it
+			var min = results.First().Score - diff / 3;
+			return results.Where(r => r.Score >= min).ToList();
+		}
 
 		private static int StringIntCompare(string a, string b)
 		{
@@ -181,7 +197,17 @@ namespace TMX_Lib.Search
 		{
 			if (HaveEnoughResults(results, settings))
 				return;
-			// SourceLanguage(language), TargetLanguage(language)
+			var dbResults = FilterConcordanceSearch(await _db.ConcordanceSearch(text, SourceLanguage(language), TargetLanguage(language)));
+			foreach (var dbResult in dbResults)
+			{
+				var score = StringIntCompare(text, dbResult.SourceText);
+				if (score >= settings.MinScore)
+				{
+					var result = new SimpleResult(dbResult) { Score = score };
+					ApplyPenalties(result, text);
+					results.Results.Add(result);
+				}
+			}
 		}
 
 		public async Task LoadLanguagesAsync()

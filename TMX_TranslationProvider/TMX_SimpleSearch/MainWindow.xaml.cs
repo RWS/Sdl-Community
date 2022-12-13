@@ -41,9 +41,9 @@ namespace TMX_SimpleSearch
 		{
 			if (searchText.Text == "")
 				return;
-			searchCmd.IsEnabled = false;
+			this.IsEnabled = false;
 			await vm.DoSearchNow();
-			searchCmd.IsEnabled = true;
+			this.IsEnabled = true;
 		}
 
 		private void SearchText_OnKeyDown(object sender, KeyEventArgs e)

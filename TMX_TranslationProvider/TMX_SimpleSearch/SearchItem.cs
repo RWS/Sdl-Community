@@ -11,7 +11,7 @@ namespace TMX_SimpleSearch
 		private string _targetLanguage;
 		private string _sourceLanguage;
 		private SearchType _searchType = SearchType.Exact;
-		private string _text;
+		private string _text = "";
 		private int _searchTimeSeconds = -1;
 
 		public SearchItem Copy()

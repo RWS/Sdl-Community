@@ -58,15 +58,25 @@
 		<TextBox Text="{Binding SearchText,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
 		         Grid.Column="1" Grid.Row="4" VerticalAlignment="Center"
 				 x:Name="searchText"
-				 KeyDown="SearchText_OnKeyDown"
+				 KeyDown="SearchText_OnKeyDown" Margin="0 0 10 0"
 
 		/>
 		<TextBlock Text="Search Time" VerticalAlignment="Center"
 		           Grid.Column="0" Grid.Row="5" Margin="10 0" 
 		/>
+		<StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="5" >
+			<TextBlock Text="{Binding SearchTimeSeconds}" VerticalAlignment="Center"/>
+			<TextBlock Text="seconds" Margin="10 0" VerticalAlignment="Center"/>
+		</StackPanel>
 		<Button Content="Go!" 
 		        Grid.Column="1" Grid.Row="6" 
 		        HorizontalAlignment="Left" Padding="10 3" VerticalAlignment="Center" Click="search_click" x:Name="searchCmd"/>
+		<TextBlock Text="{Binding Status}" VerticalAlignment="Center"
+		           Grid.Column="1" Grid.Row="6" Margin="50 0 0 0"
+		/>
+		<TextBlock Text="{Binding Error}" VerticalAlignment="Center"
+		           Grid.Column="1" Grid.Row="6" Margin="50 0 0 0" Foreground="Red"
+		/>
 
 		<ListBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding Results}">
 			<ListBox.ItemsPanel><ItemsPanelTemplate>
