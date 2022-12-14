@@ -349,7 +349,7 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
     <value>This field can not be edited manualy, you need to use the -Drag and Drop- or -Browse- feature</value>
   </data>
   <data name="ProviderView_V3_Location_Description" xml:space="preserve">
-    <value>Use custom location</value>
+    <value>Location</value>
   </data>
   <data name="ProviderView_V3_Location_Tooltip" xml:space="preserve">
     <value>Project Location Tooltip placeholder</value>
@@ -370,7 +370,7 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
     <value>Custom Model (AutoML) Tooltip placeholder</value>
   </data>
   <data name="ProviderView_V3_Glossary_Description" xml:space="preserve">
-    <value>Use glossary</value>
+    <value>Glossary</value>
   </data>
   <data name="ProviderView_V3_Glossary_Tooltip" xml:space="preserve">
     <value>Glossary Tooltip placeholder</value>

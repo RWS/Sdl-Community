@@ -1,10 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Web.UI.WebControls;
 using System.Windows;
 using System.Windows.Input;
+using Google.Api.Gax.ResourceNames;
+using Google.Cloud.Translate.V3;
+using Google.Protobuf.WellKnownTypes;
 using GoogleTranslatorProvider.Commands;
+using GoogleTranslatorProvider.GoogleAPI;
 using GoogleTranslatorProvider.Interfaces;
 using GoogleTranslatorProvider.Models;
 using GoogleTranslatorProvider.Service;
@@ -19,8 +25,7 @@ namespace GoogleTranslatorProvider.ViewModels
 		private readonly ITranslationOptions _options;
 
 		private GoogleApiVersion _selectedGoogleApiVersion;
-		private List<ProjectLocation> _locations;
-		private ProjectLocation _selectedLocation;
+		private List<string> _locations;
 		private string _projectLocation;
 
 		private string _googleEngineModel;
@@ -32,12 +37,10 @@ namespace GoogleTranslatorProvider.ViewModels
 		private string _apiKey;
 
 		private bool _projectIdIsCorrupt;
-		private bool _useCustomLocation;
 		private bool _persistGoogleKey;
 		private bool _basicCsvGlossary;
 		private bool _isTellMeAction;
 		private bool _useCustomModel;
-		private bool _useGlossary;
 
 		private ICommand _browseJsonFileCommand;
 		private ICommand _navigateToCommand;
@@ -49,8 +52,8 @@ namespace GoogleTranslatorProvider.ViewModels
 			ViewModel = this;
 			_options = options;
 			_openFileDialogService = new OpenFileDialogService();
-			_projectId = string.Empty;
-			_projectLocation = string.Empty;
+			_projectId = _options.ProjectId ?? string.Empty;
+			_projectLocation = _options.ProjectLocation ?? string.Empty;
 			InitializeComponent();
 		}
 
@@ -64,17 +67,6 @@ namespace GoogleTranslatorProvider.ViewModels
 				if (_useCustomModel == value) return;
 				_useCustomModel = value;
 				OnPropertyChanged(nameof(UseCustomModel));
-			}
-		}
-
-		public bool UseGlossary
-		{
-			get => _useGlossary;
-			set
-			{
-				if (_useGlossary == value) return;
-				_useGlossary = value;
-				OnPropertyChanged(nameof(UseGlossary));
 			}
 		}
 
@@ -98,25 +90,14 @@ namespace GoogleTranslatorProvider.ViewModels
 			}
 		}
 
-		public List<ProjectLocation> Locations
+		public List<string> Locations
 		{
-			get => _locations;
+			get => _locations ??= new();
 			set
 			{
 				if (_locations == value) return;
 				_locations = value;
 				OnPropertyChanged(nameof(Locations));
-			}
-		}
-
-		public ProjectLocation SelectedLocation
-		{
-			get => _selectedLocation;
-			set
-			{
-				_selectedLocation = value;
-				OnPropertyChanged(nameof(SelectedLocation));
-				ProjectLocation = value.Key;
 			}
 		}
 
@@ -128,27 +109,8 @@ namespace GoogleTranslatorProvider.ViewModels
 				if (_projectLocation == value) return;
 				_projectLocation = value;
 				OnPropertyChanged(nameof(ProjectLocation));
+				GetProjectGlossaries();
 				ClearMessageRaised?.Invoke();
-			}
-		}
-
-		public bool UseCustomLocation
-		{
-			get => _useCustomLocation;
-			set
-			{
-				if (_useCustomLocation == value) return;
-				_useCustomLocation = value;
-				OnPropertyChanged(nameof(UseCustomLocation));
-
-				if (!value)
-				{
-					SelectedLocation = Locations.First();
-				}
-				else
-				{
-					Clear(nameof(ProjectLocation));
-				}
 			}
 		}
 
@@ -323,27 +285,6 @@ namespace GoogleTranslatorProvider.ViewModels
 				}
 			};
 
-			Locations = new List<ProjectLocation>
-			{
-				new ProjectLocation()
-				{
-					DisplayName = "global",
-					Key = "global"
-				},
-
-				new ProjectLocation()
-				{
-					DisplayName = "europe-west1",
-					Key = "europe-west1"
-				},
-
-				new ProjectLocation()
-				{
-					DisplayName = "us-central1",
-					Key = "us-central1"
-				}
-			};
-
 			if (_options is not null)
 			{
 				PersistGoogleKey = _options.PersistGoogleKey;
@@ -353,15 +294,7 @@ namespace GoogleTranslatorProvider.ViewModels
 				GoogleEngineModel = _options.GoogleEngineModel;
 				UseCustomModel = !string.IsNullOrEmpty(GoogleEngineModel);
 				GlossaryPath = _options.GlossaryPath;
-				UseGlossary = !string.IsNullOrEmpty(GlossaryPath);
 				BasicCsvGlossary = _options.BasicCsv;
-				SelectedLocation = Locations.FirstOrDefault(x => x.Key == _options.ProjectLocation)
-								?? Locations.FirstOrDefault(x => x.Key == ProjectLocation)
-								?? Locations.First();
-			}
-			else
-			{
-				SelectedLocation = Locations.First();
 			}
 
 			SetTranslationOption();
@@ -434,10 +367,87 @@ namespace GoogleTranslatorProvider.ViewModels
 				return;
 			}
 
-			SetProjectDetails(selectedFile);
+			GetJsonDetails(selectedFile);
+			GetProjectLocations();
 		}
 
-		private void SetProjectDetails(string selectedFile)
+		private void GetProjectGlossaries()
+		{
+			var tempList = new List<RetrievedGlossary>();
+			var tempOptions = new GTPTranslationOptions
+			{
+				ProjectId = _projectId,
+				JsonFilePath = _jsonFilePath,
+				ProjectLocation = _projectLocation
+			};
+
+			try
+			{
+				var v3Connector = new V3Connector(tempOptions);
+				v3Connector.TryToAuthenticateUser();
+				var myGlossaries = v3Connector.GetGlossaries(_projectLocation);
+				tempList.Add(new(new()));
+				tempList.AddRange(myGlossaries.Select(retrievedGlossary => new RetrievedGlossary(retrievedGlossary)));
+			}
+			catch
+			{
+				tempList.Clear();
+				tempList.Add(new(null));
+			}
+
+			AvailableGlossaries = tempList;
+			SelectedGlossary = _availableGlossaries.First();
+		}
+
+		private List<RetrievedGlossary> _availableGlossaries;
+		public List<RetrievedGlossary> AvailableGlossaries
+		{
+			get => _availableGlossaries;
+			set
+			{
+				if (_availableGlossaries == value) return;
+				_availableGlossaries = value;
+				OnPropertyChanged(nameof(AvailableGlossaries));
+			}
+		}
+
+		private RetrievedGlossary _selectedGlossary;
+		public RetrievedGlossary SelectedGlossary
+		{
+			get => _selectedGlossary;
+			set
+			{
+				if (_selectedGlossary == value) return;
+				_selectedGlossary = value;
+				OnPropertyChanged(nameof(SelectedGlossary));
+			}
+		}
+		private void GetProjectLocations()
+		{
+			var tempOptions = new GTPTranslationOptions
+			{
+				ProjectId = _projectId,
+				JsonFilePath = _jsonFilePath,
+				ProjectLocation = "gctp-test"
+			};
+
+			try
+			{
+				var v3Connector = new V3Connector(tempOptions);
+				v3Connector.TryToAuthenticateUser();
+			}
+			catch (Exception e)
+			{
+				var availableLocationsStr = e.Message.Substring(e.Message.LastIndexOf("Must be"));
+				availableLocationsStr = availableLocationsStr.Substring(availableLocationsStr.IndexOf('\''));
+				availableLocationsStr = availableLocationsStr.Substring(0, availableLocationsStr.IndexOf('.')).Replace("\'", "").Replace(" ", "");
+				Locations.Clear();
+				Locations.AddRange(availableLocationsStr.Split(','));
+				ProjectLocation = Locations.First();
+			}
+		}
+
+		private void GetJsonDetails(string selectedFile)
 		{
 			JsonFilePath = selectedFile;
 			VisibleJsonPath = string.Format(@"...\{0}\{1}",

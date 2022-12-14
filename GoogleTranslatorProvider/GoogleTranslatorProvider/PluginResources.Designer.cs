@@ -528,7 +528,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use glossary.
+        ///   Looks up a localized string similar to Glossary.
         /// </summary>
         public static string ProviderView_V3_Glossary_Description {
             get {
@@ -582,7 +582,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use custom location.
+        ///   Looks up a localized string similar to Location.
         /// </summary>
         public static string ProviderView_V3_Location_Description {
             get {

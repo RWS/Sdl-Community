@@ -247,12 +247,6 @@ namespace GoogleTranslatorProvider.ViewModels
 				ErrorMessage = PluginResources.Validation_CustomModel_EnabledEmpty;
 				return false;
 			}
-			else if (_providerViewModel.UseGlossary
-				  && string.IsNullOrEmpty(_providerViewModel.GlossaryPath?.Trim()))
-			{
-				ErrorMessage = PluginResources.Validation_Glossaries_EnabledEmpty;
-				return false;
-			}
 
 			return true;
 		}
@@ -262,27 +256,20 @@ namespace GoogleTranslatorProvider.ViewModels
 			try
 			{
 				var customModel = _providerViewModel.UseCustomModel ? _providerViewModel.GoogleEngineModel : null;
-				var glossaryPath = _providerViewModel.UseGlossary ? _providerViewModel.GlossaryPath : null;
-				var basicGlossary = _providerViewModel.UseGlossary && _providerViewModel.BasicCsvGlossary;
 				var providerOptions = new GTPTranslationOptions
 				{
 					ProjectId = _providerViewModel.ProjectId,
 					JsonFilePath = _providerViewModel.JsonFilePath,
 					GoogleEngineModel = customModel,
 					ProjectLocation = _providerViewModel.ProjectLocation,
-					GlossaryPath = glossaryPath,
-					BasicCsv = basicGlossary,
+					GlossaryPath = _providerViewModel?.SelectedGlossary?.GlossaryID,
+					BasicCsv = _providerViewModel.BasicCsvGlossary,
 					SelectedProvider = _providerViewModel.SelectedTranslationOption.ProviderType,
 					SelectedGoogleVersion = _providerViewModel.SelectedGoogleApiVersion.Version
 				};
 
 				var googleV3 = new V3Connector(providerOptions);
-				googleV3.TryToAuthenticateUser();
-				if (!string.IsNullOrEmpty(providerOptions.GlossaryPath) && _languagePairs is not null)
-				{
-					googleV3.CreateGoogleGlossary(_languagePairs);
-				}
-
+				googleV3.TryToAuthenticateUser(_languagePairs);
 				return true;
 			}
 			catch (Exception e)
@@ -307,15 +294,6 @@ namespace GoogleTranslatorProvider.ViewModels
 				else if (e.Message.Contains("PermissionDenied"))
 				{
 					message = PluginResources.Validation_PermissionDenied;
-				}
-				else if (e.Message.Contains("Unsupported location"))
-				{
-					// NOTE: Confirm if we are going to let the user know the available locations for his account.
-					/*var availableLocations = e.Message.Substring(e.Message.LastIndexOf("Must be"));
-					availableLocations = availableLocations.Substring(availableLocations.IndexOf('\''));
-					availableLocations = availableLocations.Substring(0, availableLocations.IndexOf('.')).Replace("\'", "");
-					message = string.Format(PluginResources.Validation_Location_Failed, availableLocations);*/
-					message = "This location is not valid for your project.";
 				}
 				else
 				{
@@ -403,8 +381,6 @@ namespace GoogleTranslatorProvider.ViewModels
 		private void SetGoogleProviderOptions()
 		{
 			var customModel = _providerViewModel.UseCustomModel ? _providerViewModel.GoogleEngineModel : null;
-			var glossaryPath = _providerViewModel.UseGlossary ? _providerViewModel.GlossaryPath : null;
-			var basicGlossary = _providerViewModel.UseGlossary && _providerViewModel.BasicCsvGlossary;
 			Options.ApiKey = _providerViewModel.ApiKey;
 			Options.PersistGoogleKey = _providerViewModel.PersistGoogleKey;
 			Options.SelectedGoogleVersion = _providerViewModel.SelectedGoogleApiVersion.Version;
@@ -413,8 +389,8 @@ namespace GoogleTranslatorProvider.ViewModels
 			Options.SelectedProvider = _providerViewModel.SelectedTranslationOption.ProviderType;
 			Options.GoogleEngineModel = customModel;
 			Options.ProjectLocation = _providerViewModel.ProjectLocation;
-			Options.GlossaryPath = glossaryPath;
-			Options.BasicCsv = basicGlossary;
+			Options.GlossaryPath = _providerViewModel.SelectedGlossary.GlossaryID;
+			Options.BasicCsv = _providerViewModel.BasicCsvGlossary;
 		}
 
 		private void SetGeneralProviderOptions()

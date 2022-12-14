@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Web.UI.WebControls;
 using Google.Api.Gax.ResourceNames;
 using Google.Cloud.Translate.V3;
 using GoogleTranslatorProvider.Interfaces;
@@ -18,20 +18,23 @@ namespace GoogleTranslatorProvider.GoogleAPI
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		private readonly ITranslationOptions _options;
-		private readonly TranslationServiceClient _translationServiceClient;
 		private readonly List<V3LanguageModel> _supportedLanguages;
-		private readonly string _glossaryResourceLocation;
 		private readonly string _modelPath;
 
-		private string _glossaryID;
+		private RetrievedGlossary _glossary;
+		private TranslationServiceClient _translationServiceClient;
 
 		public V3Connector(ITranslationOptions options)
 		{
 			_supportedLanguages = new List<V3LanguageModel>();
 			_options = options;
+			ConnectToApi();
 			_modelPath = SetModelPath();
-			_glossaryResourceLocation = SetGlossary();
+			SetGlossary();
+		}
 
+		public void ConnectToApi()
+		{
 			try
 			{
 				Environment.SetEnvironmentVariable(Constants.GoogleApiEnvironmentVariableName, _options.JsonFilePath);
@@ -43,9 +46,25 @@ namespace GoogleTranslatorProvider.GoogleAPI
 			}
 		}
 
-		public void TryToAuthenticateUser()
+		public List<Glossary> GetGlossaries(string location = null)
 		{
-			TranslateText(new CultureInfo("en-US"), new CultureInfo("fr-FR"), "test", "text");
+			var locationName = LocationName.FromProjectLocation(_options.ProjectId, location ?? _options.ProjectLocation);
+			var glossariesRequest = new ListGlossariesRequest { ParentAsLocationName = locationName };
+
+			return _translationServiceClient.ListGlossaries(glossariesRequest).ToList();
+		}
+
+		public void TryToAuthenticateUser(LanguagePair[] languagePair = null)
+		{
+			languagePair ??= new LanguagePair[]
+				{
+					new LanguagePair("en-US", "fr-FR")
+				};
+
+			foreach (var pair in languagePair)
+			{
+				TranslateText(pair.SourceCulture, pair.TargetCulture, "test", "text");
+			}
 		}
 
 		public string TranslateText(CultureInfo sourceLanguage, CultureInfo targetLanguage, string sourceText, string format)
@@ -73,27 +92,22 @@ namespace GoogleTranslatorProvider.GoogleAPI
 
 			return searchedSource.SupportSource && searchedTarget.SupportTarget;
 		}
-		
-		public void CreateGoogleGlossary(LanguagePair[] languagePairs)
-		{
-			if (string.IsNullOrEmpty(_options.GlossaryPath))
-			{
-				return;
-			}
-
-			try
-			{
-				TryCreateGoogleGlossary(languagePairs);
-			}
-			catch (Exception e)
-			{
-				_logger.Error($"{MethodBase.GetCurrentMethod().Name}: {e}");
-			}
-		}
 
 		private string TryTranslateText(CultureInfo sourceLanguage, CultureInfo targetLanguage, string sourceText, string format)
 		{
-			var request = new TranslateTextRequest
+			var request = CreateTranslationRequest(sourceLanguage, targetLanguage, sourceText, format);
+			if (_translationServiceClient.TranslateText(request) is not TranslateTextResponse translationResponse)
+			{
+				return string.Empty;
+			}
+
+			return request.GlossaryConfig is null ? translationResponse.Translations[0].TranslatedText
+												  : translationResponse.GlossaryTranslations[0].TranslatedText;
+		}
+
+		private TranslateTextRequest CreateTranslationRequest(CultureInfo sourceLanguage, CultureInfo targetLanguage, string sourceText, string format)
+		{
+			var translateTextRequest = new TranslateTextRequest
 			{
 				Contents = { sourceText },
 				Model = _modelPath,
@@ -103,20 +117,34 @@ namespace GoogleTranslatorProvider.GoogleAPI
 				MimeType = format == "text" ? "text/plain" : "text/html"
 			};
 
-			if (!string.IsNullOrEmpty(_glossaryResourceLocation))
+			if (CanUseGlossary(sourceLanguage, targetLanguage))
 			{
-				request.GlossaryConfig = new TranslateTextGlossaryConfig
+				translateTextRequest.GlossaryConfig = new TranslateTextGlossaryConfig
 				{
-					Glossary = _glossaryResourceLocation,
+					Glossary = _glossary.GlossaryResourceLocation,
 					IgnoreCase = true
 				};
 			}
 
-			var translationResponse = _translationServiceClient.TranslateText(request);
-			return translationResponse is null
-				? string.Empty
-				: string.IsNullOrEmpty(_glossaryResourceLocation) ? translationResponse.Translations?[0].TranslatedText
-																  : translationResponse.GlossaryTranslations[0].TranslatedText;
+			return translateTextRequest;
+		}
+
+		private bool CanUseGlossary(CultureInfo sourceLanguage, CultureInfo targetLanguage)
+		{
+			if (_glossary?.GlossaryID is null)
+			{
+				return false;
+			}
+
+			if (_glossary.SourceLanguage is not null
+			 && _glossary.TargetLanguage is not null
+			 && _glossary.SourceLanguage.Equals(sourceLanguage)
+			 && _glossary.TargetLanguage.Equals(targetLanguage))
+			{
+				return true;
+			}
+
+			return _glossary.Languages.Intersect(new List<CultureInfo>() { sourceLanguage, targetLanguage }).Count() == 2;
 		}
 
 		private void SetGoogleAvailableLanguages()
@@ -146,79 +174,6 @@ namespace GoogleTranslatorProvider.GoogleAPI
 			}));
 		}
 
-		private void TryCreateGoogleGlossary(LanguagePair[] languagePairs)
-		{
-			Glossary glossary;
-			if (_options.BasicCsv)
-			{
-				var sourceLang = languagePairs[0].SourceCultureName;
-				var targetLang = languagePairs[0].TargetCultureName;
-				glossary = CreateUnidirectionalCsvGlossary(sourceLang, targetLang);
-			}
-			else
-			{
-				var glossaryLanguages = GetGlossaryLanguages(languagePairs);
-				glossary = CreatetCsvGlossary(glossaryLanguages);
-			}
-
-			_ = _translationServiceClient.CreateGlossary(new LocationName(_options.ProjectId, _options.ProjectLocation).ToString(),
-														 glossary);
-		}
-
-		private Glossary CreatetCsvGlossary(List<string> glossaryLanguages)
-		{
-			var glossary = new Glossary
-			{
-				Name = new GlossaryName(_options.ProjectId, _options.ProjectLocation, _glossaryID).ToString(),
-				LanguageCodesSet = new Glossary.Types.LanguageCodesSet(),
-				InputConfig = new GlossaryInputConfig
-				{
-					GcsSource = new GcsSource
-					{
-						InputUri = _options.GlossaryPath
-					}
-				}
-			};
-
-			glossary.LanguageCodesSet.LanguageCodes.AddRange(glossaryLanguages);
-			return glossary;
-		}
-
-		private static List<string> GetGlossaryLanguages(LanguagePair[] languagePairs)
-		{
-			var glossaryLanguages = new List<string>
-			{
-				languagePairs[0].SourceCulture.TwoLetterISOLanguageName
-			};
-
-			foreach (var languagePair in languagePairs)
-			{
-				glossaryLanguages.Add(languagePair.TargetCulture.TwoLetterISOLanguageName);
-			}
-
-			return glossaryLanguages;
-		}
-
-		private Glossary CreateUnidirectionalCsvGlossary(string sourceLanguage, string targetLanguage)
-		{
-			return new Glossary
-			{
-				Name = new GlossaryName(_options.ProjectId, _options.ProjectLocation, _glossaryID).ToString(),
-				LanguagePair = new Glossary.Types.LanguageCodePair
-				{
-					SourceLanguageCode = sourceLanguage,
-					TargetLanguageCode = targetLanguage
-				},
-				InputConfig = new GlossaryInputConfig
-				{
-					GcsSource = new GcsSource
-					{
-						InputUri = _options.GlossaryPath
-					}
-				}
-			};
-		}
-
 		private string SetModelPath()
 		{
 			const string defaultModel = "general/nmt";
@@ -229,19 +184,15 @@ namespace GoogleTranslatorProvider.GoogleAPI
 				string.IsNullOrEmpty(_options.GoogleEngineModel) ? defaultModel : _options.GoogleEngineModel);
 		}
 
-		private string SetGlossary()
+		private void SetGlossary()
 		{
 			if (string.IsNullOrEmpty(_options.GlossaryPath))
 			{
-				return null;
+				return;
 			}
 
-			_glossaryID = Path.GetFileNameWithoutExtension(_options.GlossaryPath).Replace(" ", string.Empty);
-			return string.Format(
-				"projects/{0}/locations/{1}/glossaries/{2}",
-				_options.ProjectId,
-				_options.ProjectLocation,
-				_glossaryID);
+			var glossaryFound = GetGlossaries().FirstOrDefault(x => x.GlossaryName.GlossaryId.Equals(_options.GlossaryPath));
+			_glossary = new(glossaryFound, _options.ProjectId, _options.ProjectLocation);
 		}
 
 		private string GetLanguageCode(CultureInfo cultureInfo)

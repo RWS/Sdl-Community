@@ -17,6 +17,8 @@ namespace GoogleTranslatorProvider.Interfaces
 
 		GoogleApiVersion SelectedGoogleApiVersion { get; }
 
+		RetrievedGlossary SelectedGlossary { get; }
+
 		bool BasicCsvGlossary { get; set; }
 
 		bool PersistGoogleKey { get; set; }
@@ -26,8 +28,6 @@ namespace GoogleTranslatorProvider.Interfaces
 		bool IsV2Checked { get; }
 
 		bool UseCustomModel { get; set; }
-
-		bool UseGlossary { get; set; }
 
 		string GoogleEngineModel { get; set; }
 
@@ -40,8 +40,6 @@ namespace GoogleTranslatorProvider.Interfaces
 		string ApiKey { get; set; }
 
 		string ProjectLocation { get; set; }
-
-		ProjectLocation SelectedLocation { get; set; }
 
 		string GlossaryPath { get; set; }
 
