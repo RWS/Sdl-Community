@@ -524,15 +524,20 @@ namespace TMX_Lib.Db
 	        _importTokenSource.Cancel();
         }
 
-        public async Task ImportToDbAsync(string fileName, bool quickImport = false)
+        public async Task ImportToDbAsync(string fileName, Action<TmxImportReport> updateReport = null, bool quickImport = false)
         {
 	        Task import;
 	        lock (this)
 	        {
 		        if (_importComplete != null)
-			        throw new TmxException("Import already in progress");
-		        if (_importTask == null)
-			        _importTask = Task.Run(() => ImportToDbAsyncImpl(_parser = new TmxParser(fileName, quickImport) , _importTokenSource.Token));
+		        {
+			        if (_importComplete == true)
+				        return;
+					else
+						throw new TmxException("Import already in progress");
+		        }
+				if (_importTask == null)
+			        _importTask = Task.Run(() => ImportToDbAsyncImpl(_parser = new TmxParser(fileName, quickImport) , updateReport, _importTokenSource.Token));
 
 		        import = _importTask;
 		        _importComplete = false;
@@ -542,13 +547,18 @@ namespace TMX_Lib.Db
         }
 
 		// does NOT throw
-		private async Task ImportToDbAsyncImpl(TmxParser parser, CancellationToken token)
+		private async Task ImportToDbAsyncImpl(TmxParser parser, Action<TmxImportReport> updateReport , CancellationToken token)
         {
 	        Stopwatch watch = null;
 	        try
 	        {
 		        lock (this)
 			        _importError = "";
+
+		        var report = TmxImportReport.StartNow();
+		        var headerInvalidChars = parser.InvalidCharsNodeCount;
+		        report.TUsWithInvalidChars += headerInvalidChars;
+		        report.TUsRead += headerInvalidChars;
 
 		        await ClearAsync();
 		        watch = Stopwatch.StartNew();
@@ -558,7 +568,18 @@ namespace TMX_Lib.Db
 		        {
 			        if (token.IsCancellationRequested)
 				        break;
+			        var oldInvalidCharsNodeCount = parser.InvalidCharsNodeCount;
+			        var oldInvalidNodeCount = parser.InvalidNodeCount;
+			        var oldSuccessCount = parser.SuccessCount;
 			        var TUs = parser.TryReadNextTUs();
+			        var invalidCharsCount = (parser.InvalidCharsNodeCount - oldInvalidCharsNodeCount);
+			        var ignored = (parser.InvalidNodeCount - oldInvalidNodeCount);
+			        var success = parser.SuccessCount - oldSuccessCount;
+
+					report.TUsWithInvalidChars += invalidCharsCount;
+			        report.TUsWithSyntaxErrors += ignored;
+			        report.TUsRead += success + ignored + invalidCharsCount;
+			        report.TUsImportedSuccessfully += success;
 			        if (TUs == null)
 				        break;
 
@@ -573,13 +594,15 @@ namespace TMX_Lib.Db
 
 			        await AddTranslationUnitsAsync(dbTUs, token);
 			        await AddTextsAsync(dbTexts, token);
+			        updateReport?.Invoke(report);
 		        }
 
-		        if (!parser.HasError)
+				if (!parser.HasError)
 		        {
 			        // languages are known only after everything has been imported
 			        var languages = parser.Languages().Select(l => new TmxLanguage { Language = l }).ToList();
 			        await AddLanguagesAsync(languages, token);
+			        report.LanguageCount = languages.Count;
 
 			        // the idea -> add them at the end, easily know if the import went to the end or not
 			        await AddMetasAsync(new[]
@@ -595,16 +618,24 @@ namespace TMX_Lib.Db
 				        new TmxMeta { Type = "Author", Value = parser.Header.Author, }, new TmxMeta { Type = "FileName", Value = Path.GetFileName(parser.FileName) },
 				        new TmxMeta { Type = "FullFileName", Value = parser.FileName },
 			        }, token);
+			        updateReport?.Invoke(report);
 
-			        // best practice - create indexes after everything has been imported
-			        if (!token.IsCancellationRequested)
+					// best practice - create indexes after everything has been imported
+					// note: still, this may take a LOOONG time
+					if (!token.IsCancellationRequested)
 				        await CreateIndexesAsync();
 		        }
 		        else
-					lock(this)
-						_importError = parser.Error;
+		        {
+			        lock (this)
+				        _importError = parser.Error;
+			        report.FatalError = parser.Error;
+		        }
+
+		        report.EndTime = DateTime.Now;
+		        updateReport?.Invoke(report);
 	        }
-	        catch (Exception e)
+			catch (Exception e)
 	        {
 				log.Error($"Import to db failed: {e}");
 				lock(this)

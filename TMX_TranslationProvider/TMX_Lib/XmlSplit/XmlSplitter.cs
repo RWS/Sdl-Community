@@ -59,6 +59,9 @@ namespace TMX_Lib.XmlSplit
 
 		private long _blockCount;
 		private long _currentBlockIndex;
+		private int _invalidCharsNodeCount = 0;
+
+		public int InvalidCharsNodeCount => _invalidCharsNodeCount;
 
 		public XmlSplitter(string fileName, string rootXmlName = "tmx", string bodyXmlName = "body", string elementXmlName = "tu")
 		{
@@ -295,6 +298,7 @@ namespace TMX_Lib.XmlSplit
 							if (Util.TryRemoveXmlNodeContainingChar(ref str, charAt.pos, "tu"))
 							{
 								_invalidChars.Add(charAt.ch);
+								_invalidCharsNodeCount++;
 								canRetry = true;
 							}
 						}

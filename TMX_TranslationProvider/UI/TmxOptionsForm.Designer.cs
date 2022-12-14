@@ -36,6 +36,7 @@
             this.browse = new System.Windows.Forms.Button();
             this.error = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.quickImport = new System.Windows.Forms.CheckBox();
             this.importStatus = new System.Windows.Forms.Label();
             this.importProgress = new System.Windows.Forms.ProgressBar();
             this.tryConnect = new System.Windows.Forms.Button();
@@ -57,7 +58,7 @@
             this.timerImportProgress = new System.Windows.Forms.Timer(this.components);
             this.viewLog = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.quickImport = new System.Windows.Forms.CheckBox();
+            this.viewReport = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -130,6 +131,7 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.viewReport);
             this.groupBox1.Controls.Add(this.quickImport);
             this.groupBox1.Controls.Add(this.importStatus);
             this.groupBox1.Controls.Add(this.importProgress);
@@ -156,6 +158,18 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "MongoDb Database";
             // 
+            // quickImport
+            // 
+            this.quickImport.AutoSize = true;
+            this.quickImport.Location = new System.Drawing.Point(203, 184);
+            this.quickImport.Name = "quickImport";
+            this.quickImport.Size = new System.Drawing.Size(86, 17);
+            this.quickImport.TabIndex = 18;
+            this.quickImport.Text = "Quick Import";
+            this.toolTip1.SetToolTip(this.quickImport, "If selected, we\'ll only be importing a small portion of your file, so you can qui" +
+        "ckly test it");
+            this.quickImport.UseVisualStyleBackColor = true;
+            // 
             // importStatus
             // 
             this.importStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -172,13 +186,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.importProgress.Location = new System.Drawing.Point(90, 205);
             this.importProgress.Name = "importProgress";
-            this.importProgress.Size = new System.Drawing.Size(548, 23);
+            this.importProgress.Size = new System.Drawing.Size(458, 23);
             this.importProgress.TabIndex = 16;
             this.importProgress.Visible = false;
             // 
             // tryConnect
             // 
             this.tryConnect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.tryConnect.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.tryConnect.Location = new System.Drawing.Point(644, 205);
             this.tryConnect.Name = "tryConnect";
             this.tryConnect.Size = new System.Drawing.Size(84, 25);
@@ -357,17 +372,20 @@
             this.viewLog.UseVisualStyleBackColor = true;
             this.viewLog.Click += new System.EventHandler(this.viewLog_Click);
             // 
-            // quickImport
+            // viewReport
             // 
-            this.quickImport.AutoSize = true;
-            this.quickImport.Location = new System.Drawing.Point(203, 184);
-            this.quickImport.Name = "quickImport";
-            this.quickImport.Size = new System.Drawing.Size(86, 17);
-            this.quickImport.TabIndex = 18;
-            this.quickImport.Text = "Quick Import";
-            this.toolTip1.SetToolTip(this.quickImport, "If selected, we\'ll only be importing a small portion of your file, so you can qui" +
-        "ckly test it");
-            this.quickImport.UseVisualStyleBackColor = true;
+            this.viewReport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.viewReport.Enabled = false;
+            this.viewReport.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.viewReport.Location = new System.Drawing.Point(554, 205);
+            this.viewReport.Name = "viewReport";
+            this.viewReport.Size = new System.Drawing.Size(84, 25);
+            this.viewReport.TabIndex = 19;
+            this.viewReport.Text = "&View Report";
+            this.toolTip1.SetToolTip(this.viewReport, "Try to connect to this database.  Assuming the connection works, we\'ll automatica" +
+        "lly import your TMX file");
+            this.viewReport.UseVisualStyleBackColor = true;
+            this.viewReport.Click += new System.EventHandler(this.viewReport_Click);
             // 
             // TmxOptionsForm
             // 
@@ -425,5 +443,6 @@
         private System.Windows.Forms.Button viewLog;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.CheckBox quickImport;
+        private System.Windows.Forms.Button viewReport;
     }
 }

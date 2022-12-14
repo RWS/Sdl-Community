@@ -24,13 +24,20 @@ namespace TMX_Lib.TmxFormat
 
 		// simple mechanism to handle errors during parsing
 		// example: sometimes the language entry (xml:lang) is incorrect
-		private int _errorCount = 0;
+		private int _invalidNodeCount = 0;
+
+		private int _successCount = 0;
 
 		public int QuickImportSplitSize = 16 * 1024 * 1024;
 
 		public bool HasError => _error != "";
 		public string Error => _error;
-		public int ErrorCount => _errorCount;
+
+		// invalid nodes
+		public int InvalidNodeCount => _invalidNodeCount;
+		// nodes with invalid chars
+		public int InvalidCharsNodeCount => _splitter?.InvalidCharsNodeCount ?? 0;
+		public int SuccessCount => _successCount;
 
 		private XmlSplitter _splitter;
 		private XmlDocument _headerDocument;
@@ -122,10 +129,11 @@ namespace TMX_Lib.TmxFormat
 		        try
 		        {
 			        translations.Add(NodeToTU(item));
+			        ++_successCount;
 		        }
 				catch (Exception e)
 				{
-					++_errorCount;
+					++_invalidNodeCount;
 				}
 	        return translations;
         }

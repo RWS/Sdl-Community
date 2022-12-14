@@ -25,7 +25,10 @@ namespace QuickTmxTesting
 	    private static async Task TestImportFile(string file, string dbName, bool quickImport = false)
 	    {
 		    var db = new TmxMongoDb("localhost:27017", dbName);
-		    await db.ImportToDbAsync(file, quickImport);
+		    await db.ImportToDbAsync(file, (r) =>
+		    {
+				log.Debug($"report: read {r.TUsRead}, ignored {r.TUsWithSyntaxErrors}, success={r.TUsImportedSuccessfully}, invalid={r.TUsWithInvalidChars}, spent={r.ReportTimeSecs} secs");
+		    }, quickImport);
 	    }
 
 		// performs the database fuzzy-search, not our Fuzzy-search (our fuzzy search is more constraining)
@@ -200,7 +203,8 @@ namespace QuickTmxTesting
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\fails\\opensubtitlingformat.tmx", "C:\\john\\buff\\TMX Examples\\temp3\\");
 
 
-			Task.Run(() => TestImportFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro-2", quickImport: true)).Wait();
+			//Task.Run(() => TestImportFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro-3", quickImport: true)).Wait();
+			Task.Run(() => TestImportFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\ko-zh.tmx", "kozh", quickImport: false)).Wait();
 
 			//TestEnRoImport().Wait();
 			//TestSimpleSearch("sample4", "introduction", SearchType.Exact, "en-gb", "es-mx").Wait();

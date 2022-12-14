@@ -22,6 +22,7 @@ namespace TMX_Lib.Search
 		private TmxMongoDb _db;
 		private bool _paramsOk = true;
 		private bool _hasImportBeenDoneBefore;
+		private TmxImportReport _report = new TmxImportReport();
 
 		public TmxSearchService(ISearchServiceParameters options)
 		{
@@ -31,6 +32,8 @@ namespace TMX_Lib.Search
 
 		public ISearchServiceParameters Options => _options;
 		public bool OptionsOk => _paramsOk;
+		// report about the current import
+		public TmxImportReport Report => _report;
 
 		private static string ConnectionStr(ISearchServiceParameters parameters) => parameters.DbConnectionNoPassword.Replace("<password>", parameters.Password);
 		private static string DbName(ISearchServiceParameters parameters) 
@@ -146,7 +149,16 @@ namespace TMX_Lib.Search
 					await Task.Run(async () =>
 					{
 						var watch = Stopwatch.StartNew();
-						await db.ImportToDbAsync(_options.FileName, _options.QuickImport);
+						lock (this)
+							_report = TmxImportReport.StartNow();
+						await db.ImportToDbAsync(
+							_options.FileName,
+							report =>
+							{
+								lock (this) _report.CopyFrom(report);
+							},
+							_options.QuickImport
+							);
 						await search.LoadLanguagesAsync();
 						log.Debug($"import {_options.FileName} took {watch.ElapsedMilliseconds / 1000} secs.");
 					});

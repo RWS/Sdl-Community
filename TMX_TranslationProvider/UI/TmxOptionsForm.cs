@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using NLog;
 using TMX_Lib.Search;
 using TMX_Lib.Utils;
+using TMX_TranslationProvider.UI;
 
 namespace TMX_TranslationProvider
 {
@@ -222,6 +223,13 @@ namespace TMX_TranslationProvider
 			Process.Start(LogUtil.LogFileName);
 		}
 
+		private void viewReport_Click(object sender, EventArgs e)
+		{
+			var view = new TmxViewReport(SearchService.Report);
+			view.Show();
+			view.Activate();
+		}
+
 		private void UpdateUI()
 		{
 			if (!_initialized)
@@ -233,6 +241,7 @@ namespace TMX_TranslationProvider
 			importStatus.Visible = SearchService.IsImporting() || SearchService.ImportComplete() && !connectionChanged;
 			importProgress.Value = (int)(SearchService.ImportProgress() * 100);
 			importStatus.Text = !SearchService.ImportComplete() ? "Importing Data..." : (SearchService.ImportError() == "" ? "Import Complete" : "Import Failed");
+			viewReport.Enabled = SearchService.Report.IsStarted;
 
 			var isLocalhost = IsLocalhostConnection();
 			dbPassword.Visible = dbPasswordLabel.Visible = dbPasswordTip.Visible = !isLocalhost;
