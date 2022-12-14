@@ -174,7 +174,6 @@ namespace GoogleTranslatorProvider.ViewModels
 				if (_errorMessage == value) return;
 				_errorMessage = value;
 				OnPropertyChanged(nameof(ErrorMessage));
-				ErrorMessage = string.Empty;
 			}
 		}
 
