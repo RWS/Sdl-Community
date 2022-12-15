@@ -24,7 +24,8 @@ namespace TMX_SimpleSearch
 
 	public class SimpleSearchResult 
 	{
-		public string Text { get; set; }
+		public string SourceText { get; set; }
+		public string TargetText { get; set; }
 		public int Score { get; set; }
 	}
 
@@ -280,7 +281,12 @@ namespace TMX_SimpleSearch
 			try
 			{
 				var results = await _searcher.Search(settings, segment, new LanguagePair(sourceLangugage, targetLanguage));
-				Results = results.Select(r => new SimpleSearchResult { Text = r.TranslationProposal.TargetSegment.ToPlain(), Score = r.ScoringResult.BaseScore, })
+				Results = results.Select(r => new SimpleSearchResult
+					{
+						Score = r.ScoringResult.BaseScore,
+						SourceText = r.TranslationProposal.SourceSegment.ToPlain(),
+						TargetText = r.TranslationProposal.TargetSegment.ToPlain(),
+					})
 					.ToList();
 				Status = $"{Results.Count} results.";
 			}

@@ -120,19 +120,18 @@ namespace TMX_TranslationProvider
 		public bool SupportsWordCounts => false;
 		public bool SupportsUpdate => false;
 
-		// FIXME -> true
-		public bool SupportsConcordanceSearch => false;
-		public bool SupportsDocumentSearches => false;
-		public bool SupportsFuzzySearch => false;
-		public bool SupportsMultipleResults => false;
+		public bool SupportsConcordanceSearch => true;
+		public bool SupportsDocumentSearches => true;
+		public bool SupportsFuzzySearch => true;
+		public bool SupportsMultipleResults => true;
 		public bool SupportsPenalties => true;
-		public bool SupportsPlaceables => false;
-		public bool SupportsScoring => false;
+		public bool SupportsPlaceables => true;
+		public bool SupportsScoring => true;
 		public bool SupportsSearchForTranslationUnits => true;
-		public bool SupportsSourceConcordanceSearch => false;
-		public bool SupportsStructureContext => false;
+		public bool SupportsSourceConcordanceSearch => true;
+		public bool SupportsStructureContext => true;
 		public bool SupportsTaggedInput => true;
-		public bool SupportsTargetConcordanceSearch => false;
+		public bool SupportsTargetConcordanceSearch => true;
 		public bool SupportsTranslation => true;
 
 

@@ -55,12 +55,21 @@
 		<TextBlock Text="Search " VerticalAlignment="Center"
 		           Grid.Column="0" Grid.Row="4" Margin="10 0"
 		/>
+
+		<ComboBox ItemsSource="{Binding LastSearches}" SelectedIndex="{Binding LastSearchIndex,Mode=TwoWay}"
+		          Grid.Column="1" Grid.Row="4" VerticalAlignment="Center"
+				  DisplayMemberPath="Text"
+		          Margin="0 0 10 0"
+		/>
 		<TextBox Text="{Binding SearchText,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
 		         Grid.Column="1" Grid.Row="4" VerticalAlignment="Center"
-				 x:Name="searchText"
-				 KeyDown="SearchText_OnKeyDown" Margin="0 0 10 0"
+		         x:Name="searchText"
+		         KeyDown="SearchText_OnKeyDown" Margin="0 0 30 0"
 
 		/>
+
+
+
 		<TextBlock Text="Search Time" VerticalAlignment="Center"
 		           Grid.Column="0" Grid.Row="5" Margin="10 0" 
 		/>
@@ -78,20 +87,20 @@
 		           Grid.Column="1" Grid.Row="6" Margin="50 0 0 0" Foreground="Red"
 		/>
 
-		<ListBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding Results}">
+		<ListBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding Results}" x:Name="listCtrl">
 			<ListBox.ItemsPanel><ItemsPanelTemplate>
 				<VirtualizingStackPanel Orientation="Vertical"/>
 			</ItemsPanelTemplate></ListBox.ItemsPanel>
 			<ListBox.ItemTemplate><DataTemplate>
-				<Grid>
+				<Grid Width="{Binding ElementName=listCtrl,Path=ActualWidth}">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="Auto"/>
-						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="*"/>
 						<ColumnDefinition Width="*"/>
 					</Grid.ColumnDefinitions>
-					<TextBlock Text="Score: " Grid.Column="0"/>
-					<TextBlock Text="{Binding Score}" Width="100" Grid.Column="1"/>
-					<TextBlock Text="{Binding Text}" TextWrapping="Wrap" Grid.Column="2"/>
+					<TextBlock Text="{Binding Score}" Width="100" Grid.Column="0"/>
+					<TextBlock Text="{Binding SourceText}" TextWrapping="Wrap" Grid.Column="1"/>
+					<TextBlock Text="{Binding TargetText}" TextWrapping="Wrap" Grid.Column="2"/>
 				</Grid>
 			</DataTemplate></ListBox.ItemTemplate>
 		</ListBox>

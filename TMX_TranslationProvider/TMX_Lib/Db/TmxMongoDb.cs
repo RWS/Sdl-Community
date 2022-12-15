@@ -377,11 +377,23 @@ namespace TMX_Lib.Db
 
 		public async Task<IReadOnlyList<TmxSegment>> ConcordanceSearch(string text, string sourceLanguage, string targetLanguage)
 		{
+			var filter = Builders<TmxText>.Filter.Text(text, new TextSearchOptions { CaseSensitive = false, DiacriticSensitive = false, });
 			log.Debug($"START Concordance search for {text} {sourceLanguage} to {targetLanguage}");
-
+			var cursor = await _texts.FindAsync(filter, new FindOptions<TmxText>() { Limit = MAX_RESULTS });
 			log.Debug($"END Concordance search for {text} {sourceLanguage} to {targetLanguage}");
-
+			var texts = new List<TmxText>();
+			await cursor.ForEachAsync(t =>
+			{
+				if (t.NormalizedLanguage == sourceLanguage)
+					texts.Add(t);
+			});
 			var segments = new List<TmxSegment>();
+			foreach (var t in texts)
+			{
+				var segment = await TryGetSegment(t, targetLanguage);
+				if (segment != null)
+					segments.Add(segment);
+			}
 			return segments;
 		}
 

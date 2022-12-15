@@ -101,7 +101,7 @@ namespace QuickTmxTesting
 			Exact, Fuzzy, Concordance,
 		}
 
-		private static async Task TestSimpleSearch(string dbName, string text, SearchType searchType, string sourceLanguage, string targetLanguage)
+		private static async Task TestDbSearch(string dbName, string text, SearchType searchType, string sourceLanguage, string targetLanguage)
 		{
 			var db = new TmxMongoDb("localhost:27017", dbName);
 			var search = new TmxSearch(db);
@@ -125,6 +125,41 @@ namespace QuickTmxTesting
 					throw new ArgumentOutOfRangeException(nameof(searchType), searchType, null);
 			}
 			log.Debug($"search [{text}] - {result.Count} results - took {watch.ElapsedMilliseconds} ms");
+		}
+
+		private static async Task TestSearcherSearch(string dbName, string text, SearchType searchType, string sourceLanguage, string targetLanguage)
+		{
+			var db = new TmxMongoDb("localhost:27017", dbName);
+			var search = new TmxSearch(db);
+			await search.LoadLanguagesAsync();
+
+			log.Debug($"search [{text}] - started");
+			var watch = Stopwatch.StartNew();
+			var settings = TmxSearchSettings.Default();
+			switch (searchType)
+			{
+				case SearchType.Exact:
+					settings.Mode = SearchMode.ExactSearch;
+					break;
+				case SearchType.Fuzzy:
+					settings.Mode = SearchMode.FuzzySearch;
+					break;
+				case SearchType.Concordance:
+					settings.Mode = SearchMode.ConcordanceSearch;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(searchType), searchType, null);
+			}
+
+			var results = await search.Search(settings, TextToSegment(text), new LanguagePair(sourceLanguage, targetLanguage));
+			log.Debug($"search [{text}] - {results.Count} results - took {watch.ElapsedMilliseconds} ms");
+			foreach (var result in results.Results)
+			{
+				log.Debug($"    score={result.ScoringResult.BaseScore}");
+				log.Debug($"    {result.TranslationProposal.SourceSegment.ToPlain()}");
+				log.Debug($"    {result.TranslationProposal.TargetSegment.ToPlain()}");
+				log.Debug("");
+			}
 		}
 
 
@@ -203,13 +238,16 @@ namespace QuickTmxTesting
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\fails\\opensubtitlingformat.tmx", "C:\\john\\buff\\TMX Examples\\temp3\\");
 
 
-			//Task.Run(() => TestImportFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro-3", quickImport: true)).Wait();
-			Task.Run(() => TestImportFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\ko-zh.tmx", "kozh", quickImport: false)).Wait();
+			Task.Run(() => TestImportFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro-2", quickImport: true)).Wait();
+			//Task.Run(() => TestImportFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\ko-zh.tmx", "kozh", quickImport: false)).Wait();
 
 			//TestEnRoImport().Wait();
-			//TestSimpleSearch("sample4", "introduction", SearchType.Exact, "en-gb", "es-mx").Wait();
-			//TestSimpleSearch("en-frEUBookshopv2108M", "The European Social Fund in French Guiana", SearchType.Exact, "en", "fr").Wait();
-			//TestSimpleSearch("en-ro", "We might call them the words of \"unforgiveness", SearchType.Exact, "en", "ro").Wait();
+			//TestDbSearch("sample4", "introduction", SearchType.Exact, "en-gb", "es-mx").Wait();
+			//TestDbSearch("en-frEUBookshopv2108M", "The European Social Fund in French Guiana", SearchType.Exact, "en", "fr").Wait();
+			//TestDbSearch("en-ro", "We might call them the words of \"unforgiveness", SearchType.Exact, "en", "ro").Wait();
+
+			//TestSearcherSearch("en-ro-2", "we call them", SearchType.Concordance, "en-US", "ro-RO").Wait();
+			//TestSearcherSearch("en-ro-2", "taught Happiness knowledge", SearchType.Concordance, "en-US", "ro-RO").Wait();
 			return;
 
 			var root = ".";

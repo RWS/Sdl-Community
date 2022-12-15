@@ -80,6 +80,8 @@
     <Compile Include="Search\ISearchServiceParameters.cs" />
     <Compile Include="Search\SimpleResult.cs" />
     <Compile Include="Search\SlowCompareTexts.cs" />
+    <Compile Include="Search\SlowCompareUtil.cs" />
+    <Compile Include="Search\SlowConcordanceCompareTexts.cs" />
     <Compile Include="Search\TmxSearch.cs" />
     <Compile Include="Search\TmxSearchService.cs" />
     <Compile Include="Search\TmxSearchSettings.cs" />

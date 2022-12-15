@@ -75,7 +75,7 @@ namespace TMX_Lib.Search
 
 			if (criteria.Direction == SortDirection.Descending)
 				order = -order;
-			return 0;
+			return order;
 		}
 
 		private int SortSimpleResult(SimpleResult a, SimpleResult b, IReadOnlyList<SortCriterium> criteria)
@@ -86,6 +86,9 @@ namespace TMX_Lib.Search
 				if (order != 0)
 					return order;
 			}
+
+			if (criteria.Count == 0)
+				return b.Score - a.Score; // by default, by score, descending
 
 			return 0;
 		}
@@ -152,28 +155,17 @@ namespace TMX_Lib.Search
 			var min = results.First().Score - diff / 3;
 			return results.Where(r => r.Score >= min).ToList();
 		}
-		// note: it's sorted by score
-		private IReadOnlyList<TmxSegment> FilterConcordanceSearch(IReadOnlyList<TmxSegment> results)
-		{
-			if (results.Count < 2)
-				return results;
 
-			var diff = results.First().Score - results.Last().Score;
-			Debug.Assert(diff >= 0);
-			if (diff < 1)
-				return results;
-
-			// here, diff is > 1, note: I'm using the score from the mongodb
-			// and do a simple filtering: if score not in the top-third of the results, ignore it
-			var min = results.First().Score - diff / 3;
-			return results.Where(r => r.Score >= min).ToList();
-		}
 
 		private static int StringIntCompare(string a, string b)
 		{
 			return Math.Min((int)(SlowCompareTexts.Compare(a, b) * 100 + .5), 100);
 		}
 
+		private static int StringIntConcordanceCompare(string searchFor, string foundText)
+		{
+			return Math.Min((int)(SlowConcordanceCompareTexts.Compare(searchFor, foundText) * 100 + .5), 100);
+		}
 
 		private async Task SearchFuzzy(TmxSearchSettings settings, string text, LanguagePair language, SimpleResults results)
 		{
@@ -197,10 +189,13 @@ namespace TMX_Lib.Search
 		{
 			if (HaveEnoughResults(results, settings))
 				return;
-			var dbResults = FilterConcordanceSearch(await _db.ConcordanceSearch(text, SourceLanguage(language), TargetLanguage(language)));
+
+			var sourceLanguage = sourceConcordance ? SourceLanguage(language) : TargetLanguage(language);
+			var targetLanguage = sourceConcordance ? TargetLanguage(language) : SourceLanguage(language);
+			var dbResults = await _db.ConcordanceSearch(text, sourceLanguage, targetLanguage);
 			foreach (var dbResult in dbResults)
 			{
-				var score = StringIntCompare(text, dbResult.SourceText);
+				var score = StringIntConcordanceCompare(text, dbResult.SourceText);
 				if (score >= settings.MinScore)
 				{
 					var result = new SimpleResult(dbResult) { Score = score };
@@ -232,50 +227,58 @@ namespace TMX_Lib.Search
 
 			var text = segment.ToPlain();
 			var results = new SimpleResults();
-			switch (settings.Mode)
+
+			try
 			{
-				// Performs only an exact search, without fuzzy search.
-				case SearchMode.ExactSearch:
-					await SearchExact(settings, text, language, results);
-					break;
+				switch (settings.Mode)
+				{
+					// Performs only an exact search, without fuzzy search.
+					case SearchMode.ExactSearch:
+						await SearchExact(settings, text, language, results);
+						break;
 
-				// Performs a normal search, i.e. a combined exact/fuzzy search. Fuzzy search is only triggered
-				// if no exact matches are found.
-				case SearchMode.NormalSearch:
-					await SearchExact(settings, text, language, results);
-					var anyExactMatches = results.Results.Any(r => r.IsExactMatch);
-					if (!anyExactMatches)
+					// Performs a normal search, i.e. a combined exact/fuzzy search. Fuzzy search is only triggered
+					// if no exact matches are found.
+					case SearchMode.NormalSearch:
+						await SearchExact(settings, text, language, results);
+						var anyExactMatches = results.Results.Any(r => r.IsExactMatch);
+						if (!anyExactMatches)
+							await SearchFuzzy(settings, text, language, results);
+						break;
+
+					// Performs a full search, i.e. a combined exact/fuzzy search. In contrast to NormalSearch, 
+					// fuzzy search is always triggered, even if exact matches are found.
+					case SearchMode.FullSearch:
+						await SearchExact(settings, text, language, results);
 						await SearchFuzzy(settings, text, language, results);
-					break;
+						break;
 
-				// Performs a full search, i.e. a combined exact/fuzzy search. In contrast to NormalSearch, 
-				// fuzzy search is always triggered, even if exact matches are found.
-				case SearchMode.FullSearch:
-					await SearchExact(settings, text, language, results);
-					await SearchFuzzy(settings, text, language, results);
-					break;
+					// Performs a concordance search on the source segments, using the source character-based index if it exists or
+					// the default word-based index otherwise.
+					case SearchMode.ConcordanceSearch:
+						await SearchConcordance(settings, text, language, results, sourceConcordance: true);
+						break;
 
-				// Performs a concordance search on the source segments, using the source character-based index if it exists or
-				// the default word-based index otherwise.
-				case SearchMode.ConcordanceSearch:
-					await SearchConcordance(settings, text, language, results, sourceConcordance: true);
-					break;
+					// Performs a concordance search on the target segments, if the target character-based index exists.
+					case SearchMode.TargetConcordanceSearch:
+						await SearchConcordance(settings, text, language, results, sourceConcordance: false);
+						break;
 
-				// Performs a concordance search on the target segments, if the target character-based index exists.
-				case SearchMode.TargetConcordanceSearch:
-					await SearchConcordance(settings, text, language, results, sourceConcordance: false);
-					break;
+					// Performs only a fuzzy search. 
+					case SearchMode.FuzzySearch:
+						await SearchFuzzy(settings, text, language, results);
+						break;
 
-				// Performs only a fuzzy search. 
-				case SearchMode.FuzzySearch:
-					await SearchFuzzy(settings, text, language, results);
-					break;
-
-				// Performs a search on the source and target hashes for duplicate search during import (only used internally).
-				case SearchMode.DuplicateSearch:
-					throw new ArgumentOutOfRangeException(nameof(SearchMode));
-				default:
-					throw new ArgumentOutOfRangeException();
+					// Performs a search on the source and target hashes for duplicate search during import (only used internally).
+					case SearchMode.DuplicateSearch:
+						throw new ArgumentOutOfRangeException(nameof(SearchMode));
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
+			catch (Exception e)
+			{
+				throw new TmxException($"Search for '{segment.ToPlain()}' failed: {e.Message}", e);
 			}
 
 			CompleteSearch(settings, results);

@@ -9,19 +9,6 @@ namespace TMX_Lib.Search
 	// this is a slow and detailed compare, to be run only after the fast searches have shown the probability for "sameness"
 	public class SlowCompareTexts
 	{
-		private static Dictionary<string, int> StrToDictioary(string a)
-		{
-			var dic = new Dictionary<string, int>();
-			foreach (var word in a.Split(Constants.WORD_DELIMITERS, StringSplitOptions.RemoveEmptyEntries))
-			{
-				if (dic.ContainsKey(word))
-					dic[word]++;
-				else 
-					dic.Add(word, 1);
-			}
-
-			return dic;
-		}
 
 		private class CharAndIndex
 		{
@@ -70,73 +57,14 @@ namespace TMX_Lib.Search
 			return list;
 		}
 
-		private static (string noPunct, string punct) RemovePunctuation(string a)
-		{
-			var punct = "";
-			var noPunct = new string( a.Where(ch =>
-			{
-				if (Char.IsPunctuation(ch))
-				{
-					punct += ch;
-					return false;
-				}
-
-				return true;
-			}).ToArray());
-			return (noPunct, punct);
-		}
 
 		// returns a word penalty, based on the order of the words - if they don't match
 		private static double OrderPenalty(string a, string b)
 		{
+			return SlowCompareUtil.OrderPenalty(a, b, 0.03, 0.12);
 			// simple for now:
 			// - 3% for each order mismatch (word missing or extra word or different word)
 			// - 12% if two consecutive mismatches ("this is an interesting idea" vs "this interesting idea")
-			var aWords = a.Split(Constants.WORD_DELIMITERS, StringSplitOptions.RemoveEmptyEntries);
-			var bWords = b.Split(Constants.WORD_DELIMITERS, StringSplitOptions.RemoveEmptyEntries);
-			var aIdx = 0;
-			var bIdx = 0;
-			var penalty = 0d;
-			while (aIdx < aWords.Length && bIdx < bWords.Length)
-			{
-				if (a[aIdx] == b[bIdx])
-				{
-					aIdx++;
-					bIdx++;
-					continue;
-				}
-
-				penalty += 0.03;
-				if (aIdx + 1 >= aWords.Length || bIdx + 1 >= bWords.Length)
-					// can't compare against next word
-					break;
-
-				if (a[aIdx + 1] == b[bIdx + 1])
-				{
-					// word difference
-					aIdx++;
-					bIdx++;
-					continue;
-				}
-
-				if (a[aIdx + 1] == b[bIdx])
-				{
-					aIdx++;
-					continue;
-				}
-
-				if (a[aIdx] == b[bIdx + 1])
-				{
-					bIdx++;
-					continue;
-				}
-
-				// two consecutive differences
-				penalty = 0.12;
-				break;
-			}
-
-			return penalty;
 		}
 
 		// returns a 0-1 score (0-least , 1-best)
@@ -145,11 +73,11 @@ namespace TMX_Lib.Search
 			var charCount = Math.Min(a.Length, b.Length);
 
 			string aPunct, bPunct;
-			(a, aPunct) = RemovePunctuation(a);
-			(b, bPunct) = RemovePunctuation(b);
+			(a, aPunct) = SlowCompareUtil.RemovePunctuation(a);
+			(b, bPunct) = SlowCompareUtil.RemovePunctuation(b);
 
-			var aWordsDictionary = StrToDictioary(a);
-			var bWordsDictionary = StrToDictioary(b);
+			var aWordsDictionary = SlowCompareUtil.StrToDictioary(a);
+			var bWordsDictionary = SlowCompareUtil.StrToDictioary(b);
 
 			var penalty = 0d;
 
@@ -204,7 +132,7 @@ namespace TMX_Lib.Search
 
 				// words are similar in length
 				var idx = 0;
-				// ... the idea -> Except deals with sets, so i want to make each char unique, like "a 0" (first a), "a 1" (second a) and so on
+				// ... the idea -> Except() deals with sets, so i want to make each char unique, like "a 0" (first a), "a 1" (second a) and so on
 				//     (otherwise, 'a' would be counted only once, no matter how many times it exists)
 				var aChars = WordToChars(aWord);
 				var bChars = WordToChars(bWord);
