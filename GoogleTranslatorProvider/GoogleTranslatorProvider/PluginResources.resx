@@ -384,4 +384,16 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
   <data name="Validation_Location_Failed" xml:space="preserve">
     <value>The project location is invalid. This project is available only on the next location(s): {0}.</value>
   </data>
+  <data name="ProviderViewModel_PathNotSpecified" xml:space="preserve">
+    <value>Not specified</value>
+  </data>
+  <data name="ProviderView_V3_File_DownloadButton" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="ProviderView_V3_Url_Watermark" xml:space="preserve">
+    <value>Type your url here</value>
+  </data>
+  <data name="ProviderView_V3_UseUrl" xml:space="preserve">
+    <value>Use URL</value>
+  </data>
 </root>

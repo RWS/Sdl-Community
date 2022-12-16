@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using GoogleTranslatorProvider.Models;
+using GoogleTranslatorProvider.Service;
+using Sdl.LanguagePlatform.Core;
 
 namespace GoogleTranslatorProvider.Interfaces
 {
@@ -46,5 +48,8 @@ namespace GoogleTranslatorProvider.Interfaces
 		string GlossaryId { get; set; }
 
 		event ClearMessageEventRaiser ClearMessageRaised;
+
+		bool CanConnectToGoogleV2(HtmlUtil htmlUtil);
+		bool CanConnectToGoogleV3(LanguagePair[] languagePairs);
 	}
 }

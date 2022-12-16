@@ -148,6 +148,35 @@ namespace GoogleTranslatorProvider.ViewModels
 		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
 		public ICommand BrowseCommand => _browseCommand ??= new RelayCommand(Browse);
 
+		public bool SettingsAreValid()
+		{
+			if (DoPreLookup && string.IsNullOrEmpty(PreLookupFileName))
+			{
+				ErrorMessage = PluginResources.PreLookupEmptyMessage;
+				return false;
+			}
+
+			if (DoPreLookup && !File.Exists(PreLookupFileName))
+			{
+				ErrorMessage = PluginResources.PreLookupWrongPathMessage;
+				return false;
+			}
+
+			if (DoPostLookup && string.IsNullOrEmpty(PostLookupFileName))
+			{
+				ErrorMessage = PluginResources.PostLookupEmptyMessage;
+				return false;
+			}
+
+			if (DoPostLookup && !File.Exists(PostLookupFileName))
+			{
+				ErrorMessage = PluginResources.PostLookupWrongPathMessage;
+				return false;
+			}
+
+			return true;
+		}
+
 		private void SetSavedSettings()
 		{
 			ReSendDraft = _options.ResendDrafts;

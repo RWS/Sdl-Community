@@ -3,9 +3,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Reflection;
+using System.Runtime.Remoting.Contexts;
+using System.Security.Policy;
 using System.Web.UI.WebControls;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Shapes;
 using Google.Api.Gax.ResourceNames;
 using Google.Cloud.Translate.V3;
 using Google.Protobuf.WellKnownTypes;
@@ -15,6 +21,9 @@ using GoogleTranslatorProvider.Interfaces;
 using GoogleTranslatorProvider.Models;
 using GoogleTranslatorProvider.Service;
 using Newtonsoft.Json;
+using Sdl.LanguagePlatform.Core;
+using Sdl.ProjectAutomation.Core;
+using static Google.Rpc.Context.AttributeContext.Types;
 using Path = System.IO.Path;
 
 namespace GoogleTranslatorProvider.ViewModels
@@ -25,15 +34,21 @@ namespace GoogleTranslatorProvider.ViewModels
 		private readonly ITranslationOptions _options;
 
 		private GoogleApiVersion _selectedGoogleApiVersion;
+
+		private List<RetrievedGlossary> _availableGlossaries;
+		private RetrievedGlossary _selectedGlossary;
+
 		private List<string> _locations;
 		private string _projectLocation;
 
+		private string _errorMessage;
 		private string _googleEngineModel;
 		private string _glossaryPath;
 		private string _visibleJsonPath;
 		private string _jsonFilePath;
 		private string _projectId;
 		private string _glossaryId;
+		private string _urlPath;
 		private string _apiKey;
 
 		private bool _projectIdIsCorrupt;
@@ -41,10 +56,13 @@ namespace GoogleTranslatorProvider.ViewModels
 		private bool _basicCsvGlossary;
 		private bool _isTellMeAction;
 		private bool _useCustomModel;
+		private bool _useUrlPath;
 
+		private ICommand _downloadJsonFileCommand;
+		private ICommand _dragDropJsonFileCommand;
 		private ICommand _browseJsonFileCommand;
+		private ICommand _openLocalPathCommand;
 		private ICommand _navigateToCommand;
-		private ICommand _dragDropCommand;
 		private ICommand _clearCommand;
 
 		public ProviderViewModel(ITranslationOptions options)
@@ -52,12 +70,21 @@ namespace GoogleTranslatorProvider.ViewModels
 			ViewModel = this;
 			_options = options;
 			_openFileDialogService = new OpenFileDialogService();
-			_projectId = _options.ProjectId ?? string.Empty;
-			_projectLocation = _options.ProjectLocation ?? string.Empty;
 			InitializeComponent();
 		}
 
 		public BaseModel ViewModel { get; set; }
+
+		public string ErrorMessage
+		{
+			get => _errorMessage;
+			set
+			{
+				if (_errorMessage == value) return;
+				_errorMessage = value;
+				OnPropertyChanged(nameof(ErrorMessage));
+			}
+		}
 
 		public bool UseCustomModel
 		{
@@ -67,6 +94,29 @@ namespace GoogleTranslatorProvider.ViewModels
 				if (_useCustomModel == value) return;
 				_useCustomModel = value;
 				OnPropertyChanged(nameof(UseCustomModel));
+				ErrorMessage = string.Empty;
+			}
+		}
+
+		public List<RetrievedGlossary> AvailableGlossaries
+		{
+			get => _availableGlossaries;
+			set
+			{
+				if (_availableGlossaries == value) return;
+				_availableGlossaries = value;
+				OnPropertyChanged(nameof(AvailableGlossaries));
+			}
+		}
+
+		public RetrievedGlossary SelectedGlossary
+		{
+			get => _selectedGlossary;
+			set
+			{
+				if (_selectedGlossary == value) return;
+				_selectedGlossary = value;
+				OnPropertyChanged(nameof(SelectedGlossary));
 			}
 		}
 
@@ -86,6 +136,7 @@ namespace GoogleTranslatorProvider.ViewModels
 				OnPropertyChanged(nameof(SelectedGoogleApiVersion));
 				OnPropertyChanged(nameof(IsV2Checked));
 				OnPropertyChanged(nameof(IsV3Checked));
+				ErrorMessage = string.Empty;
 				ClearMessageRaised?.Invoke();
 			}
 		}
@@ -111,6 +162,7 @@ namespace GoogleTranslatorProvider.ViewModels
 				OnPropertyChanged(nameof(ProjectLocation));
 				GetProjectGlossaries();
 				ClearMessageRaised?.Invoke();
+				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -122,6 +174,7 @@ namespace GoogleTranslatorProvider.ViewModels
 				if (_basicCsvGlossary == value) return;
 				_basicCsvGlossary = value;
 				OnPropertyChanged(nameof(BasicCsvGlossary));
+				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -134,9 +187,10 @@ namespace GoogleTranslatorProvider.ViewModels
 				_persistGoogleKey = value;
 				OnPropertyChanged(nameof(PersistGoogleKey));
 				_options.PersistGoogleKey = value;
+				ErrorMessage = string.Empty;
 			}
 		}
-		
+
 		public bool IsTellMeAction
 		{
 			get => _isTellMeAction;
@@ -161,17 +215,19 @@ namespace GoogleTranslatorProvider.ViewModels
 				_googleEngineModel = value;
 				OnPropertyChanged(nameof(GoogleEngineModel));
 				ClearMessageRaised?.Invoke();
+				ErrorMessage = string.Empty;
 			}
 		}
 
 		public string VisibleJsonPath
 		{
-			get => _visibleJsonPath ?? "Not specified";
+			get => _visibleJsonPath ?? PluginResources.ProviderViewModel_PathNotSpecified;
 			set
 			{
 				if (_visibleJsonPath == value) return;
 				_visibleJsonPath = value;
 				OnPropertyChanged(nameof(VisibleJsonPath));
+				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -184,6 +240,7 @@ namespace GoogleTranslatorProvider.ViewModels
 				_jsonFilePath = value;
 				OnPropertyChanged(nameof(JsonFilePath));
 				ClearMessageRaised?.Invoke();
+				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -200,6 +257,7 @@ namespace GoogleTranslatorProvider.ViewModels
 				{
 					ProjectIdIsCorrupt = false;
 				}
+				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -211,6 +269,7 @@ namespace GoogleTranslatorProvider.ViewModels
 				if (_projectIdIsCorrupt == value) return;
 				_projectIdIsCorrupt = value;
 				OnPropertyChanged(nameof(ProjectIdIsCorrupt));
+				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -223,6 +282,7 @@ namespace GoogleTranslatorProvider.ViewModels
 				_apiKey = value.Trim();
 				OnPropertyChanged(nameof(ApiKey));
 				ClearMessageRaised?.Invoke();
+				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -235,6 +295,7 @@ namespace GoogleTranslatorProvider.ViewModels
 				_glossaryPath = value;
 				OnPropertyChanged(nameof(GlossaryPath));
 				ClearMessageRaised?.Invoke();
+				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -247,21 +308,151 @@ namespace GoogleTranslatorProvider.ViewModels
 				_glossaryId = value;
 				OnPropertyChanged(nameof(GlossaryId));
 				ClearMessageRaised?.Invoke();
+				ErrorMessage = string.Empty;
 			}
 		}
 
-		public ICommand NavigateToCommand => _navigateToCommand ??= new RelayCommand(NavigateTo);
+		public bool UseUrlPath
+		{
+			get => _useUrlPath;
+			set
+			{
+				if (_useUrlPath == value) return;
+				_useUrlPath = value;
+				OnPropertyChanged(nameof(UseUrlPath));
+			}
+		}
 
-		public ICommand DragDropCommand => _dragDropCommand ??= new RelayCommand(DragAndDrop);
+		public string UrlPath
+		{
+			get => _urlPath;
+			set
+			{
+				if (_urlPath == value) return;
+				_urlPath = value;
+				OnPropertyChanged(nameof(UrlPath));
+			}
+		}
 
+		public ICommand DragDropJsonFileCommand => _dragDropJsonFileCommand ??= new RelayCommand(DragAndDropJsonFile);
+		public ICommand DownloadJsonFileCommand => _downloadJsonFileCommand ??= new RelayCommand(DownloadJsonFile);
 		public ICommand BrowseJsonFileCommand => _browseJsonFileCommand ??= new RelayCommand(BrowseJsonFile);
-
+		public ICommand OpenLocalPathCommand => _openLocalPathCommand ??= new RelayCommand(OpenLocalPath);
+		public ICommand NavigateToCommand => _navigateToCommand ??= new RelayCommand(NavigateTo);
 		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
 
 		public event ClearMessageEventRaiser ClearMessageRaised;
 
+		public bool CanConnectToGoogleV2(HtmlUtil htmlUtil)
+		{
+			if (string.IsNullOrEmpty(ApiKey))
+			{
+				ErrorMessage = PluginResources.Validation_ApiKey;
+				return false;
+			}
+
+			try
+			{
+				var v2Connector = new V2Connector(ApiKey, htmlUtil);
+				v2Connector.ValidateCredentials();
+				return true;
+			}
+			catch (Exception e)
+			{
+				ErrorMessage = e.Message;
+				return false;
+			}
+		}
+
+		public bool CanConnectToGoogleV3(LanguagePair[] languagePairs)
+		{
+			return GoogleV3OptionsAreSet() && GoogleV3CredentialsAreValid(languagePairs);
+		}
+
+		private bool GoogleV3OptionsAreSet()
+		{
+			if (string.IsNullOrEmpty(JsonFilePath))
+			{
+				ErrorMessage = PluginResources.Validation_EmptyJsonFilePath;
+				return false;
+			}
+			else if (!File.Exists(JsonFilePath))
+			{
+				ErrorMessage = PluginResources.Validation_MissingJsonFile;
+				return false;
+			}
+			else if (string.IsNullOrEmpty(ProjectId))
+			{
+				ErrorMessage = PluginResources.Validation_ProjectID_Empty;
+				return false;
+			}
+			else if (string.IsNullOrEmpty(ProjectLocation))
+			{
+				ErrorMessage = PluginResources.Validation_Location_Empty;
+				return false;
+			}
+			else if (UseCustomModel
+				  && string.IsNullOrEmpty(GoogleEngineModel?.Trim()))
+			{
+				ErrorMessage = PluginResources.Validation_CustomModel_EnabledEmpty;
+				return false;
+			}
+
+			return true;
+		}
+
+		private bool GoogleV3CredentialsAreValid(LanguagePair[] languagePairs)
+		{
+			try
+			{
+				var customModel = UseCustomModel ? GoogleEngineModel : null;
+				var providerOptions = new GTPTranslationOptions
+				{
+					ProjectId = ProjectId,
+					JsonFilePath = JsonFilePath,
+					GoogleEngineModel = customModel,
+					ProjectLocation = ProjectLocation,
+					GlossaryPath = SelectedGlossary?.GlossaryID,
+					BasicCsv = BasicCsvGlossary,
+					SelectedProvider = SelectedTranslationOption.ProviderType,
+					SelectedGoogleVersion = SelectedGoogleApiVersion.Version
+				};
+
+				var googleV3 = new V3Connector(providerOptions);
+				googleV3.TryToAuthenticateUser(languagePairs);
+				return true;
+			}
+			catch (Exception e)
+			{
+				if (e.Message.Contains("Resource type: models") || e.Message.Contains("The model"))
+				{
+					ErrorMessage = PluginResources.Validation_ModelName_Invalid;
+				}
+				else if (e.Message.Contains("Invalid resource name"))
+				{
+					ErrorMessage = PluginResources.Validation_ProjectID_Failed;
+				}
+				else if (e.Message.Contains("Glossary not found"))
+				{
+					ErrorMessage = "Wrong glossary";
+				}
+				else if (e.Message.Contains("PermissionDenied"))
+				{
+					ErrorMessage = PluginResources.Validation_PermissionDenied;
+				}
+				else
+				{
+					ErrorMessage = e.Message;
+				}
+
+				return false;
+			}
+		}
+
 		private void InitializeComponent()
 		{
+			_projectId = _options.ProjectId ?? string.Empty;
+			_projectLocation = _options.ProjectLocation ?? string.Empty;
 			TranslationOptions = new List<TranslationOption>
 			{
 				new TranslationOption
@@ -340,7 +531,7 @@ namespace GoogleTranslatorProvider.ViewModels
 			SelectedGoogleApiVersion = GoogleApiVersions.First(x => x.Version == ApiVersion.V2);
 		}
 
-		private void DragAndDrop(object parameter)
+		private void DragAndDropJsonFile(object parameter)
 		{
 			if (parameter is not DragEventArgs eventArgs)
 			{
@@ -348,27 +539,105 @@ namespace GoogleTranslatorProvider.ViewModels
 			}
 
 			var fileDrop = eventArgs.Data.GetData(DataFormats.FileDrop, true) as string[];
-			if (fileDrop.Length != 1)
+			if (fileDrop?.Length != 1)
 			{
 				return;
 			}
 
-			BrowseJsonFile(fileDrop.First());
+			var fileDropped = fileDrop.First();
+			if (!fileDropped.EndsWith(".json"))
+			{
+				return;
+			}
+
+			GetJsonDetails(fileDrop.First());
+			GetProjectLocations();
+		}
+
+		private void DownloadJsonFile(object parameter)
+		{
+			ErrorMessage = string.Empty;
+			UrlPath ??= string.Empty;
+			try
+			{
+				using var webClient = new WebClient();
+				var uri = new Uri(UrlPath.Trim());
+				if (!Directory.Exists(Constants.DefaultDownloadableLocation))
+				{
+					Directory.CreateDirectory(Constants.DefaultDownloadableLocation);
+				}
+
+				var filePath = Constants.DefaultDownloadableLocation + Constants.DefaultDownloadedJsonFileName;
+				if (File.Exists(filePath))
+				{
+					File.Delete(filePath);
+				}
+
+				webClient.DownloadFile(uri, filePath);
+				BrowseJsonFile(filePath);
+				GetProjectLocations();
+			}
+			catch (Exception e)
+			{
+				ErrorMessage = e.Message;
+				return;
+			}
 		}
 
 		private void BrowseJsonFile(object o)
 		{
 			const string Browse_JsonFiles = "JSON File|*.json";
-
 			var selectedFile = o as string ?? _openFileDialogService.ShowDialog(Browse_JsonFiles);
 			if (string.IsNullOrEmpty(selectedFile)
 			|| !selectedFile.ToLower().EndsWith(".json"))
 			{
+				ErrorMessage = "The selected file it is not JSON type.";
 				return;
 			}
 
 			GetJsonDetails(selectedFile);
 			GetProjectLocations();
+		}
+
+		private void GetJsonDetails(string selectedFile)
+		{
+			JsonFilePath = selectedFile;
+			VisibleJsonPath = string.Format(@"...\{0}\{1}",
+				Path.GetFileName(Path.GetDirectoryName(selectedFile)),
+				Path.GetFileName(selectedFile));
+			var projectJson = new StreamReader(JsonFilePath).ReadToEnd();
+			var projectDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(projectJson);
+			if (!projectDictionary.TryGetValue("project_id", out var value))
+			{
+				ProjectIdIsCorrupt = true;
+			}
+
+			ProjectId = value;
+		}
+
+		private void GetProjectLocations()
+		{
+			var tempOptions = new GTPTranslationOptions
+			{
+				ProjectId = _projectId,
+				JsonFilePath = _jsonFilePath,
+				ProjectLocation = "gctp-test"
+			};
+
+			try
+			{
+				var v3Connector = new V3Connector(tempOptions);
+				v3Connector.TryToAuthenticateUser();
+			}
+			catch (Exception e)
+			{
+				var availableLocationsStr = e.Message.Substring(e.Message.LastIndexOf("Must be"));
+				availableLocationsStr = availableLocationsStr.Substring(availableLocationsStr.IndexOf('\''));
+				availableLocationsStr = availableLocationsStr.Substring(0, availableLocationsStr.IndexOf('.')).Replace("\'", "").Replace(" ", "");
+				Locations.Clear();
+				Locations.AddRange(availableLocationsStr.Split(','));
+				ProjectLocation = Locations.First();
+			}
 		}
 
 		private void GetProjectGlossaries()
@@ -399,94 +668,29 @@ namespace GoogleTranslatorProvider.ViewModels
 			SelectedGlossary = _availableGlossaries.First();
 		}
 
-		private List<RetrievedGlossary> _availableGlossaries;
-		public List<RetrievedGlossary> AvailableGlossaries
+		private void OpenLocalPath(object parameter)
 		{
-			get => _availableGlossaries;
-			set
-			{
-				if (_availableGlossaries == value) return;
-				_availableGlossaries = value;
-				OnPropertyChanged(nameof(AvailableGlossaries));
-			}
+			Process.Start("explorer.exe", Path.GetDirectoryName(JsonFilePath));
 		}
 
-		private RetrievedGlossary _selectedGlossary;
-		public RetrievedGlossary SelectedGlossary
+		private void NavigateTo(object parameter)
 		{
-			get => _selectedGlossary;
-			set
+			if (parameter is string target)
 			{
-				if (_selectedGlossary == value) return;
-				_selectedGlossary = value;
-				OnPropertyChanged(nameof(SelectedGlossary));
+				Process.Start(target);
 			}
-		}
-		private void GetProjectLocations()
-		{
-			var tempOptions = new GTPTranslationOptions
-			{
-				ProjectId = _projectId,
-				JsonFilePath = _jsonFilePath,
-				ProjectLocation = "gctp-test"
-			};
-
-			try
-			{
-				var v3Connector = new V3Connector(tempOptions);
-				v3Connector.TryToAuthenticateUser();
-			}
-			catch (Exception e)
-			{
-				var availableLocationsStr = e.Message.Substring(e.Message.LastIndexOf("Must be"));
-				availableLocationsStr = availableLocationsStr.Substring(availableLocationsStr.IndexOf('\''));
-				availableLocationsStr = availableLocationsStr.Substring(0, availableLocationsStr.IndexOf('.')).Replace("\'", "").Replace(" ", "");
-				Locations.Clear();
-				Locations.AddRange(availableLocationsStr.Split(','));
-				ProjectLocation = Locations.First();
-			}
-		}
-
-		private void GetJsonDetails(string selectedFile)
-		{
-			JsonFilePath = selectedFile;
-			VisibleJsonPath = string.Format(@"...\{0}\{1}",
-				Path.GetFileName(Path.GetDirectoryName(selectedFile)),
-				Path.GetFileName(selectedFile));
-			var projectJson = new StreamReader(JsonFilePath).ReadToEnd();
-			var projectDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(projectJson);
-			if (!projectDictionary.TryGetValue("project_id", out var value))
-			{
-				ProjectIdIsCorrupt = true;
-			}
-
-			ProjectId = value;
 		}
 
 		private void Clear(object parameter)
 		{
 			switch (parameter as string)
 			{
-				case nameof(ProjectId):
-					ProjectId = string.Empty;
-					break;
-				case nameof(ProjectLocation):
-					ProjectLocation = string.Empty;
-					break;
 				case nameof(GoogleEngineModel):
 					GoogleEngineModel = string.Empty;
 					break;
-				case nameof(GlossaryPath):
-					GlossaryPath = string.Empty;
+				case nameof(UrlPath):
+					UrlPath = string.Empty;
 					break;
-			}
-		}
-
-		private void NavigateTo(object o)
-		{
-			if (o is string target)
-			{
-				Process.Start(target);
 			}
 		}
 	}

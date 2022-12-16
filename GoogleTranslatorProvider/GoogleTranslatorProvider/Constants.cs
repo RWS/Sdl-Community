@@ -1,7 +1,12 @@
-﻿namespace GoogleTranslatorProvider
+﻿using System;
+
+namespace GoogleTranslatorProvider
 {
 	public static class Constants
 	{
+		public static readonly string DefaultDownloadableLocation = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Trados AppStore\\Google Cloud TP\\";
+		public const string DefaultDownloadedJsonFileName = "\\downloadedProject.json";
+
 		public const string GoogleTranslatorString = "Google Translate";
 		public const string GooglePluginName = "Google Translator Provider";
 
@@ -12,6 +17,7 @@
 		public const string TranslationUri = "https://translation.googleapis.com/language/translate/v2";
 
 		public const string TellMe_HelpUrl = "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/6547/google-translator-provider";
+
 
 		// TO BE EDITED
 		public const string TellMe_StoreUrl = "https://appstore.sdl.com/language/app/mt-enhanced-plugin-for-trados-studio/604/";

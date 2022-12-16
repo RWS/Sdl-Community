@@ -64,19 +64,6 @@
 							Margin="0"/>
 			<!--</API Version Selector>-->
 
-			<!--<Error log & html>-->
-			<StackPanel Grid.Row="2" Margin="24 0 24 0">
-				<TextBlock Text="{Binding ErrorMessage}"
-						   Visibility="{Binding ErrorMessage,Converter={StaticResource EmptyToVisibilityConverter}}"
-						   Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}"
-						   FontSize="12"/>
-				<WebBrowser behaviours:WebBrowserContentSource.Html ="{Binding TranslatorErrorResponse,UpdateSourceTrigger=PropertyChanged}"
-							Visibility="{Binding TranslatorErrorResponse,Converter={StaticResource EmptyToVisibilityConverter}}"
-							Height="60"
-							Margin="5"/>
-			</StackPanel>
-			<!--<Error log & html>-->
-
 			<!--<Footer>-->
 			<DockPanel Grid.Row="3"
 					   Margin="24 0 24 20">
@@ -86,7 +73,6 @@
 						Cursor="Hand"
 						Width="80">
 				</Button>
-
 				<StackPanel HorizontalAlignment="Right"
 							Orientation="Horizontal">
 					<Button Content="{Binding MultiButtonContent}"

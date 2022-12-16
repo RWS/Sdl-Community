@@ -26,5 +26,7 @@ namespace GoogleTranslatorProvider.Interfaces
 		ICommand BrowseCommand { get; }
 
 		ICommand ClearCommand { get; }
+
+		bool SettingsAreValid();
 	}
 }

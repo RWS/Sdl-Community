@@ -519,6 +519,15 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download.
+        /// </summary>
+        public static string ProviderView_V3_File_DownloadButton {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_File_DownloadButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Drop your JSON file here.
         /// </summary>
         public static string ProviderView_V3_File_DragAndDrop {
@@ -632,6 +641,33 @@ namespace GoogleTranslatorProvider {
         public static string ProviderView_V3_ProjectID_Warning {
             get {
                 return ResourceManager.GetString("ProviderView_V3_ProjectID_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type your url here.
+        /// </summary>
+        public static string ProviderView_V3_Url_Watermark {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_Url_Watermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use URL.
+        /// </summary>
+        public static string ProviderView_V3_UseUrl {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_UseUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not specified.
+        /// </summary>
+        public static string ProviderViewModel_PathNotSpecified {
+            get {
+                return ResourceManager.GetString("ProviderViewModel_PathNotSpecified", resourceCulture);
             }
         }
         

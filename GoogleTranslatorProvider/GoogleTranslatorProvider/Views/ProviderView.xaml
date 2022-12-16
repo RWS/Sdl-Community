@@ -29,6 +29,7 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/BindablePasswordBoxStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 
+			<converters:EmptyToVisibility x:Key="EmptyToVisibility"/>
 			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter"/>
 			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter"/>
 		</ResourceDictionary>
@@ -42,7 +43,7 @@
 
 		<GroupBox Header=" Google API Version "
 				  Style="{StaticResource DefaultGroupBox}"
-				  MinHeight="430"
+				  MinHeight="530"
 				  Grid.Row="1"
 				  Padding="10"
 				  Margin="24 24 24 0">
@@ -93,38 +94,71 @@
 				<!--<GOOGLE API V3>-->
 				<StackPanel Visibility="{Binding IsV3Checked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 							Margin="0 16 0 0">
-
-					<!--<DRAG AND DROP-->
-					<Border Background="White"
+					<!--<JSON File Selector>-->
+					<Border Background="Transparent"
 							AllowDrop="True"
-							behaviours:DragDropBehaviour.DragDrop="{Binding DragDropCommand}"
+							behaviours:DragDropBehaviour.DragDrop="{Binding DragDropJsonFileCommand}"
 							BorderBrush="LightGray"
 							BorderThickness="1"
 							CornerRadius="8"
+							Height="80"
 							Margin="16 0">
-						<StackPanel HorizontalAlignment="Center"
-									Margin="0 8">
-							<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_File_DragAndDrop}"
-									   Style="{StaticResource Sdl.TextBlock.GenericTitleTextStyle}"
-									   HorizontalAlignment="Center"
-									   Margin="0"/>
-							<Button Content="{x:Static root:PluginResources.ProviderView_V3_File_Browse}"
-									HorizontalAlignment="Center"
-									Command="{Binding BrowseJsonFileCommand}"
-									Style="{StaticResource TransparentButtonStyle}"
-									AllowDrop="True"
-									Margin="0"
-									Cursor="Hand"/>
+						<StackPanel Margin="0 8" VerticalAlignment="Center">
+							<!--<Local Path>-->
+							<StackPanel Visibility="{Binding UseUrlPath, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}">
+								<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_File_DragAndDrop}"
+										   Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"
+										   FontSize="16"
+										   FontWeight="DemiBold"
+										   HorizontalAlignment="Center"
+										   Margin="0"/>
+								<Button Content="{x:Static root:PluginResources.ProviderView_V3_File_Browse}"
+										HorizontalAlignment="Center"
+										Command="{Binding BrowseJsonFileCommand}"
+										Style="{StaticResource TransparentButtonStyle}"
+										FontWeight="DemiBold"
+										AllowDrop="True"
+										Margin="0"
+										Cursor="Hand"/>
+							</StackPanel>
+							<!--</Local Path>-->
+
+							<!--<Web Path>-->
+							<StackPanel Visibility="{Binding UseUrlPath, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}">
+								<StackPanel Orientation="Horizontal"
+											HorizontalAlignment="Center">
+									<TextBox Text="{Binding UrlPath, UpdateSourceTrigger=PropertyChanged}"
+											 Style="{StaticResource WatermarkTextBox}"
+											 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.ProviderView_V3_Url_Watermark}"
+											 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=UrlPath, Type={x:Type viewModels:ProviderViewModel}}"
+											 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+											 Width="360"/>
+									<Button Content="{x:Static root:PluginResources.ProviderView_V3_File_DownloadButton}"
+											Command="{Binding DownloadJsonFileCommand}"
+											Style="{StaticResource Sdl.Button.PrimaryStyle}"
+											Margin="8 0 0 0" Padding="0"
+											Width="90" Height="24"
+											Cursor="Hand"/>
+								</StackPanel>
+							</StackPanel>
+							<!--</Web Path>-->
 						</StackPanel>
 					</Border>
-					<!--</DRAG AND DROP-->
+					
+					<CheckBox Content="{x:Static root:PluginResources.ProviderView_V3_UseUrl}"
+							  IsChecked="{Binding UseUrlPath}"
+							  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+							  HorizontalAlignment="Right"
+							  Margin="0 -20 24 0"
+							  Cursor="Hand"/>
+					<!--</JSON File Selector>-->
 
 					<StackPanel Margin="16 8 16 0">
 						<!--<PROJECT PATH>-->
 						<StackPanel Orientation="Horizontal">
 							<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_LocalPath_Description}"
-								   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
-								   HorizontalAlignment="Left"
+									   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
+									   HorizontalAlignment="Left"
 									   Margin="0 0 4 0"/>
 							<Image Source="../Resources/Information.png"
 								   Width="15">
@@ -135,14 +169,23 @@
 								</Image.ToolTip>
 							</Image>
 						</StackPanel>
-						
-						<TextBox Text="{Binding VisibleJsonPath}"
-								 Style="{StaticResource Sdl.ComboBox.Generic.EditableTextBox}"
-								 HorizontalAlignment="Left"
-								 Padding="8 3 8 2"
-								 Height="24"
-								 IsReadOnly="True"
-								 Margin="0 0 0 8"/>
+
+						<StackPanel Orientation="Horizontal" Margin="0 0 0 8">
+							<TextBox Text="{Binding VisibleJsonPath}"
+									 Style="{StaticResource Sdl.ComboBox.Generic.EditableTextBox}"
+									 ToolTip="{Binding JsonFilePath}"
+									 HorizontalAlignment="Left"
+									 IsReadOnly="True"
+									 Padding="0 3"
+									 Height="24"/>
+							<Button Style="{StaticResource TransparentButtonStyle}"
+									Visibility="{Binding JsonFilePath, Converter={StaticResource EmptyToVisibility}}"
+									Command="{Binding OpenLocalPathCommand}"
+									Width="20" Height="20"
+									Cursor="Hand">
+								<Image Source="../Resources/Folder.png"/>
+							</Button>
+						</StackPanel>
 						<!--</PROJECT PATH>-->
 
 						<!--<PROJECT ID>-->
@@ -273,6 +316,12 @@
 					</StackPanel>
 				</StackPanel>
 				<!-- GOOGLE API V3 -->
+
+				<TextBox Text="{Binding ErrorMessage}"
+						 Style="{StaticResource Sdl.ComboBox.Generic.EditableTextBox}"
+						 TextWrapping="Wrap"
+						 Foreground="Red"
+						 Margin="24 40 24 8"/>
 			</StackPanel>
 		</GroupBox>
 	</Grid>

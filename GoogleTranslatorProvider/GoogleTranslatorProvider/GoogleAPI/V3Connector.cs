@@ -144,7 +144,8 @@ namespace GoogleTranslatorProvider.GoogleAPI
 				return true;
 			}
 
-			return _glossary.Languages.Intersect(new List<CultureInfo>() { sourceLanguage, targetLanguage }).Count() == 2;
+			return _glossary.Languages.TryGetValue(GetLanguageCode(sourceLanguage), out _)
+				&& _glossary.Languages.TryGetValue(GetLanguageCode(targetLanguage), out _);
 		}
 
 		private void SetGoogleAvailableLanguages()
