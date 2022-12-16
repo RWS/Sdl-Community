@@ -148,26 +148,24 @@ namespace Multilingual.Excel.FileType.Services
 				foreach (var excelRow in excelSheet.Rows)
 				{
 					// Create Paragraph from excelRow
-					var content =
-						excelRow.Cells.FirstOrDefault(a => a.Column.Name == _sourceLanguageMapping.ContentColumn);
+					var content = excelRow.Cells.FirstOrDefault(a => a.Column.Name == _sourceLanguageMapping.ContentColumn);
 
-					
-					//TODO: apply filter on background color
+					// Apply filter on fill color
 					var lockSegments = false;
-					if (_sourceLanguageMapping.FilterBackgroundColorChecked)
+					if (_sourceLanguageMapping.FilterFillColorChecked)
 					{
-						var filterBackgroundColor = _sourceLanguageMapping.FilterBackgroundColor?.Trim('#', ';');
-						var excelCellBackgroundColor = content?.Background?.Trim('#', ';');
-						var action = (Common.Enumerators.FilterScope)Enum.Parse(typeof(Common.Enumerators.FilterScope),
-							_sourceLanguageMapping.FilterScope, true);
+						var filterFillColors = FilterFillColors(_sourceLanguageMapping.FilterFillColor);
+						var excelCellFillColor = NormalizeHexCode(content?.Background);
+						var action = (Common.Enumerators.FilterScope)Enum.Parse(typeof(Common.Enumerators.FilterScope), _sourceLanguageMapping.FilterScope, true);
 
-						if (string.Compare(filterBackgroundColor,excelCellBackgroundColor, StringComparison.InvariantCultureIgnoreCase) == 0)
+						var containsColor = ContainsColor(filterFillColors, excelCellFillColor);
+						if (containsColor)
 						{
 							switch (action)
 							{
 								case Enumerators.FilterScope.Ignore:
 									Console.WriteLine(@"Ignored: Color {0} Sheet {1} Row {2}, Column {3} Content {4}",
-										excelCellBackgroundColor,
+										excelCellFillColor,
 										excelSheet.Name,
 										excelRow.Index,
 										content?.Column.Name,
@@ -181,7 +179,7 @@ namespace Multilingual.Excel.FileType.Services
 						else if (action == Enumerators.FilterScope.Import)
 						{
 							Console.WriteLine(@"Not Imported: Color {0} Sheet {1} Row {2}, Column {3} Content {4}",
-								excelCellBackgroundColor,
+								excelCellFillColor,
 								excelSheet.Name,
 								excelRow.Index,
 								content?.Column.Name,
@@ -238,6 +236,52 @@ namespace Multilingual.Excel.FileType.Services
 			}
 
 			return false;
+		}
+
+		private List<string> FilterFillColors(string fillColors)
+		{
+			if (fillColors == null)
+			{
+				return null;
+			}
+
+			var filterFillColors = new List<string>();
+			foreach (var fillColor in fillColors.Split(';'))
+			{
+				var hexCode = NormalizeHexCode(fillColor);
+				if (!string.IsNullOrEmpty(hexCode))
+				{
+					filterFillColors.Add(hexCode);
+				}
+			}
+
+			return filterFillColors;
+		}
+
+		private static bool ContainsColor(IReadOnlyCollection<string> filterFillColors, string excelCellFillColor)
+		{
+			if (filterFillColors == null || excelCellFillColor == null)
+			{
+				return false;
+			}
+
+			return filterFillColors.Any(
+				fillColor => string.Compare(fillColor, excelCellFillColor, StringComparison.InvariantCultureIgnoreCase) == 0);
+		}
+
+		private static string NormalizeHexCode(string fillColor)
+		{
+			var hexCode = fillColor?.Replace("#", string.Empty);
+			hexCode = hexCode?.Replace(";", string.Empty);
+			hexCode = hexCode?.Trim();
+
+			if (hexCode == null || hexCode.Length < 6)
+			{
+				return null;
+			}
+
+			// compare only the rgb hex code
+			return hexCode.Substring(hexCode.Length - 6);
 		}
 
 		private IStructureInfo GetStructureInfo(ExcelSheet excelSheet)
@@ -459,7 +503,7 @@ namespace Multilingual.Excel.FileType.Services
 		private IParagraphUnit AddStructureParagraph(ExcelSheet excelSheet, ExcelRow excelRow, bool isCDATA, bool lockSegments)
 		{
 			var structureParagraphUnit = GetStructureParagraphUnit(excelSheet, excelRow, LockTypeFlags.Structure, isCDATA, lockSegments);
-			
+
 			AddContextToParagraph(excelRow, structureParagraphUnit);
 			AddCommentsToParagraph(excelRow, structureParagraphUnit);
 

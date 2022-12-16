@@ -145,26 +145,27 @@
 						</Grid.ColumnDefinitions>
 
 						<CheckBox Grid.Row="0" Grid.Column="1"  Margin="3,5,5,5" MinWidth="85"
-						          IsChecked="{Binding FilterBackgroundColorChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" 
+						          IsChecked="{Binding FilterFillColorChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" 
 						          Content="Fill Color:"/>
 						<!--<Label Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"  Margin="0,0,5,0" MinWidth="120"
 						       Content="Background Color:"/>-->
-						<xctk:ColorPicker Grid.Row="0" Grid.Column="2" Width="250" DisplayColorAndName="True" 
-										  IsEnabled="{Binding FilterBackgroundColorChecked}"
-						                  SelectedColor="{Binding SelectedFilterBackgroundColor, UpdateSourceTrigger=PropertyChanged}" />
+						<TextBox Grid.Row="0" Grid.Column="2" Width="220" Height="30" VerticalContentAlignment="Center"
+						         IsEnabled="{Binding FilterFillColorChecked}"
+						         Text="{Binding SelectedFilterFillColors, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
 						<Image Grid.Row="0" Grid.Column="3" Source="../../Resources/Information.png" Height="16"
 						       RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased"
 						       HorizontalAlignment="Left" Margin="5,0,0,0"
-						       ToolTip="Filter on content that matches the fill color of the cell, in the excel worksheet"/>
+						       ToolTip="The color hex-codes, separated by a semicolon (e.g. #FFFF00; #FFC000;)"/>
 
 						<Label Grid.Row="0" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Stretch"  
 						       Margin="25,0,5,0" 
-						       IsEnabled="{Binding FilterBackgroundColorChecked}"
+						       IsEnabled="{Binding FilterFillColorChecked}"
 						       Content="Action:"/>
 						<ComboBox  Grid.Row="0" Grid.Column="5"
-						           IsEnabled="{Binding FilterBackgroundColorChecked}"
+						           IsEnabled="{Binding FilterFillColorChecked}"
 						           ItemsSource="{Binding FilterScopes, Mode=OneWay }" 
+								   VerticalContentAlignment="Center"
 						           SelectedItem="{Binding SelectedFilterScope, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
 						<Image Grid.Row="0" Grid.Column="6" Source="../../Resources/Information.png" Height="16"

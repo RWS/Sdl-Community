@@ -35,15 +35,14 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 		private bool _isDefault;
 		private bool _excludeTranslations;
 		private bool _isEditMode;
-		private Color _selectedFilterBackgroundColor;
-		private bool _filterBackgroundColorChecked;
+		private string _selectedFilterFillColors;
+		private bool _filterFillColorChecked;
 		private string _filterScope;
 
 		private List<string> _filterScopes;
 		private readonly List<LanguageMapping> _languageMappings;
 		private readonly ImageService _imageService;
 		private readonly LanguageMapping _languageMapping;
-		private readonly ColorService _colorService;
 
 		private List<LanguageItem> _languageItems;
 		private List<LanguageItem> _selectedLanguageItems;
@@ -54,12 +53,11 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 
 		public AppendLanguageViewModel(LanguageMapping languageMapping,
 			List<LanguageMapping> languageMappings, ImageService imageService,
-			IFilterService languageLanguageFilterService, ColorService colorService, bool isEditMode)
+			IFilterService languageLanguageFilterService,  bool isEditMode)
 		{
 			_languageMapping = languageMapping ?? new LanguageMapping();
 			_languageMappings = languageMappings ?? new List<LanguageMapping>();
-
-			_colorService = colorService;
+			
 			_imageService = imageService;
 			IsEditMode = isEditMode;
 			LanguageFilterService = languageLanguageFilterService;
@@ -75,8 +73,8 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 			PixelFontSizeColumn = languageMapping?.PixelFontSizeColumn;
 			PixelFontSize = languageMapping?.PixelFontSize ?? 0;
 
-			SelectedFilterBackgroundColor = _colorService.GetColor(languageMapping?.FilterBackgroundColor);
-			FilterBackgroundColorChecked = languageMapping?.FilterBackgroundColorChecked ?? false;
+			SelectedFilterFillColors = languageMapping?.FilterFillColor;
+			FilterFillColorChecked = languageMapping?.FilterFillColorChecked ?? false;
 
 			FilterScopes = Enum.GetNames(typeof(FilterScope)).ToList();
 			SelectedFilterScope = string.IsNullOrEmpty(languageMapping?.FilterScope) ? FilterScope.Import.ToString() : languageMapping.FilterScope;
@@ -389,34 +387,34 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 			}
 		}
 
-		public Color SelectedFilterBackgroundColor
+		public string SelectedFilterFillColors
 		{
-			get => _selectedFilterBackgroundColor;
+			get => _selectedFilterFillColors;
 			set
 			{
-				if (Equals(_selectedFilterBackgroundColor, value))
+				if (Equals(_selectedFilterFillColors, value))
 				{
 					return;
 				}
 
-				_selectedFilterBackgroundColor = value;
-				OnPropertyChanged(nameof(SelectedFilterBackgroundColor));
+				_selectedFilterFillColors = value;
+				OnPropertyChanged(nameof(SelectedFilterFillColors));
 				OnPropertyChanged(nameof(IsValid));
 			}
 		}
 
-		public bool FilterBackgroundColorChecked
+		public bool FilterFillColorChecked
 		{
-			get => _filterBackgroundColorChecked;
+			get => _filterFillColorChecked;
 			set
 			{
-				if (_filterBackgroundColorChecked == value)
+				if (_filterFillColorChecked == value)
 				{
 					return;
 				}
 
-				_filterBackgroundColorChecked = value;
-				OnPropertyChanged(nameof(FilterBackgroundColorChecked));
+				_filterFillColorChecked = value;
+				OnPropertyChanged(nameof(FilterFillColorChecked));
 				OnPropertyChanged(nameof(IsValid));
 			}
 		}

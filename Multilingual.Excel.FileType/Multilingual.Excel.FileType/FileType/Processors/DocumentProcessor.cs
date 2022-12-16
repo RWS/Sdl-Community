@@ -94,7 +94,7 @@ namespace Multilingual.Excel.FileType.FileType.Processors
 				string.Compare(a.LanguageId, projectInfo.SourceLanguage.CultureInfo.Name, StringComparison.InvariantCultureIgnoreCase) == 0);
 
 			if (sourceLanguage != null &&
-				sourceLanguage.FilterBackgroundColorChecked && sourceLanguage.FilterScope == Common.Enumerators.FilterScope.Lock.ToString())
+				sourceLanguage.FilterFillColorChecked && sourceLanguage.FilterScope == Common.Enumerators.FilterScope.Lock.ToString())
 			{
 				var paragraphUnits = new List<ParagraphUnit>();
 
