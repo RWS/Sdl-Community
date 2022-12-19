@@ -42,15 +42,14 @@ namespace Multilingual.Excel.FileType.FileType.Processors
 
 			var project = e.Document.Project;
 			var projectInfo = project.GetProjectInfo();
-
-			if (string.Compare(e.Document.ActiveFile.FileTypeId, FiletypeConstants.FileTypeDefinitionId,
-					StringComparison.OrdinalIgnoreCase) != 0)
+			var firstDocument = e.Document.Files?.FirstOrDefault();
+			if (firstDocument == null)
 			{
 				return;
 			}
 
-			var documentIsLoadedOnce = DocumentIsLoadedOnce(e.Document);
-			if (documentIsLoadedOnce)
+			if (string.Compare(firstDocument.FileTypeId, FiletypeConstants.FileTypeDefinitionId,
+					StringComparison.OrdinalIgnoreCase) != 0)
 			{
 				return;
 			}
@@ -60,14 +59,13 @@ namespace Multilingual.Excel.FileType.FileType.Processors
 			var documentSettings = new DocumentInfoSettings();
 			documentSettings.PopulateFromSettingsBundle(settings, FiletypeConstants.FileTypeDefinitionId);
 
-			var firstDocumenet = e.Document.Files.FirstOrDefault();
-			if (firstDocumenet != null && documentSettings.DocumentInfo.Any())
+			if (documentSettings.DocumentInfo.Any())
 			{
 				var documentInfo =
 					documentSettings.DocumentInfo.FirstOrDefault(a =>
-						string.Compare(a.Id, firstDocumenet.Id.ToString(), StringComparison.InvariantCultureIgnoreCase) == 0 &&
-						string.Compare(a.Language, firstDocumenet.Language.CultureInfo.Name, StringComparison.InvariantCultureIgnoreCase) == 0 &&
-						string.Compare(a.Name, firstDocumenet.Name, StringComparison.InvariantCultureIgnoreCase) == 0);
+						string.Compare(a.Id, firstDocument.Id.ToString(), StringComparison.InvariantCultureIgnoreCase) == 0 &&
+						string.Compare(a.Language, firstDocument.Language.CultureInfo.Name, StringComparison.InvariantCultureIgnoreCase) == 0 &&
+						string.Compare(a.Name, firstDocument.Name, StringComparison.InvariantCultureIgnoreCase) == 0);
 
 				if (documentInfo != null && documentInfo.IsLoadedOnce)
 				{
@@ -76,10 +74,10 @@ namespace Multilingual.Excel.FileType.FileType.Processors
 
 				documentSettings.DocumentInfo.Add(new DocumentInfo
 				{
-					Id = firstDocumenet.Id.ToString(),
+					Id = firstDocument.Id.ToString(),
 					IsLoadedOnce = true,
-					Name = firstDocumenet.Name,
-					Language = firstDocumenet.Language.CultureInfo.Name
+					Name = firstDocument.Name,
+					Language = firstDocument.Language.CultureInfo.Name
 				});
 
 				documentSettings.SaveToSettingsBundle(settings, FiletypeConstants.FileTypeDefinitionId);
@@ -143,13 +141,6 @@ namespace Multilingual.Excel.FileType.FileType.Processors
 				_editorController.Save(e.Document);
 				project.Save();
 			}
-		}
-
-		private static bool DocumentIsLoadedOnce(IStudioDocument document)
-		{
-			return document?.ActiveFileProperties?.Comments?.Comments != null &&
-				   document.ActiveFileProperties.Comments.Comments.Any(
-					   commentProperty => commentProperty.Author == "[MultilingualExcelLoaded]");
 		}
 	}
 }
