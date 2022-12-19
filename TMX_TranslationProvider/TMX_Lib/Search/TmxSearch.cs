@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.ProjectAutomation.Settings;
+using TMX_Lib.Concordance;
 using TMX_Lib.Db;
 using TMX_Lib.Utils;
 
@@ -30,7 +31,13 @@ namespace TMX_Lib.Search
 					SourceSegment = source
 				};
 				foreach (var result in Results)
-					searchResults.Add(result.ToSearchResult(settings, language.SourceCulture, language.TargetCulture));
+				{
+					if (settings.IsConcordanceSearch)
+						searchResults.Add(new ConcordanceTokenizer(result, settings, language.SourceCulture, language.TargetCulture, text).Result);
+					else 
+						searchResults.Add(result.ToSearchResult(settings, language.SourceCulture, language.TargetCulture));
+
+				}
 				return searchResults;
 			}
 			public List<SimpleResult> Results = new List<SimpleResult>();

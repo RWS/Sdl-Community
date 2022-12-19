@@ -16,6 +16,8 @@ namespace TMX_Lib.Search
 
 		private SearchSettings _sett;
 
+		public bool IsConcordanceSearch => Mode == SearchMode.ConcordanceSearch || Mode == SearchMode.TargetConcordanceSearch;
+
 		public Penalty FindPenalty(PenaltyType pt) => _sett.FindPenalty(pt);
 
 		private TmxSearchSettings()

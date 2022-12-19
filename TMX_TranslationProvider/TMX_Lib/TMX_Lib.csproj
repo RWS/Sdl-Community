@@ -68,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Concordance\ConcordanceTokenizer.cs" />
     <Compile Include="Db\TmxException.cs" />
     <Compile Include="Db\TmxImportReport.cs" />
     <Compile Include="Db\TmxLanguage.cs" />

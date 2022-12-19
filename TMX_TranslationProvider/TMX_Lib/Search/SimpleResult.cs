@@ -26,6 +26,15 @@ namespace TMX_Lib.Search
 				return Segment.DbTU.ChangeDate ?? Segment.DbTU.CreationDate ?? DateTime.MinValue;
 			}
 		}
+		public DateTime CreateTime
+		{
+			get
+			{
+				if (Segment.DbTU == null)
+					return DateTime.MinValue;
+				return Segment.DbTU.CreationDate ?? DateTime.MinValue;
+			}
+		}
 
 		public ConfirmationLevel ConfirmationLevel = ConfirmationLevel.Draft;
 		public TranslationUnitOrigin Origin = TranslationUnitOrigin.TM;
@@ -49,8 +58,39 @@ namespace TMX_Lib.Search
 				result.ScoringResult.ApplyPenalty(penalty);
 		}
 
+		private void UpdateTU(TranslationUnit tu)
+		{
+			tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
+			tu.Origin = Origin;
+
+			var createddAt = CreateTime;
+			var modifiedAt = TranslateTime;
+
+			tu.SystemFields.CreationDate = createddAt;
+			tu.SystemFields.CreationUser = Segment.DbTU.CreationAuthor;
+
+			if (modifiedAt != DateTime.MinValue)
+			{
+				var fieldValue = new MultiplePicklistFieldValue("modifiedAt");
+				fieldValue.Add(modifiedAt.ToString(CultureInfo.InvariantCulture));
+				tu.FieldValues.Add(fieldValue);
+			}
+
+			tu.SystemFields.ChangeDate = modifiedAt;
+			tu.SystemFields.ChangeUser = Segment.DbTU.ChangeAuthor;
+		}
+
 		// FIXME tokenize it!
 		public SearchResult ToSearchResult(TmxSearchSettings settings, CultureInfo sourceLanguage, CultureInfo targetLanguage)
+		{
+			var isTargetConcordance = settings.Mode == SearchMode.TargetConcordanceSearch;
+			if (!isTargetConcordance)
+				return ToNormalSearchResult(settings, sourceLanguage, targetLanguage);
+			else
+				return ToReverseSearchResult(settings, sourceLanguage, targetLanguage);
+		}
+
+		private SearchResult ToNormalSearchResult(TmxSearchSettings settings, CultureInfo sourceLanguage, CultureInfo targetLanguage)
 		{
 			if (Segment.DbSourceText == null || Segment.DbTargetText == null)
 				throw new TmxException("Invalid simple result, bad source/target text");
@@ -65,9 +105,7 @@ namespace TMX_Lib.Search
 				TargetSegment = target,
 				ConfirmationLevel = ConfirmationLevel,
 			};
-			tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
-			tu.Origin = Origin;
-
+			UpdateTU(tu);
 			var sr = new SearchResult(tu)
 			{
 				ScoringResult = new ScoringResult
@@ -81,6 +119,38 @@ namespace TMX_Lib.Search
 				AddPenalty(sr, penalty, settings);
 
 			return sr;
+		}
+
+		private SearchResult ToReverseSearchResult(TmxSearchSettings settings, CultureInfo sourceLanguage, CultureInfo targetLanguage)
+		{
+			if (Segment.DbSourceText == null || Segment.DbTargetText == null)
+				throw new TmxException("Invalid simple result, bad source/target text");
+
+			var source = new Segment(targetLanguage);
+			var target = new Segment(sourceLanguage);
+			source.Add(Segment.TargetText);
+			target.Add(Segment.SourceText);
+			var tu = new TranslationUnit
+			{
+				SourceSegment = source,
+				TargetSegment = target,
+				ConfirmationLevel = ConfirmationLevel,
+			};
+			UpdateTU(tu);
+			var sr = new SearchResult(tu)
+			{
+				ScoringResult = new ScoringResult
+				{
+					BaseScore = Score,
+				},
+				TranslationProposal = tu,
+			};
+
+			foreach (var penalty in Penalties)
+				AddPenalty(sr, penalty, settings);
+
+			return sr;
+
 		}
 	}
 }
