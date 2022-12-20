@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Web;
 using System.Windows.Input;
 using GoogleTranslatorProvider.Commands;
 using GoogleTranslatorProvider.Interfaces;
@@ -33,6 +34,13 @@ namespace GoogleTranslatorProvider.ViewModels
 		private bool _isTellMeAction;
 		private bool _isProviderViewSelected;
 		private bool _isSettingsViewSelected;
+		private bool _showSettingsView;
+
+		private string _jsonFilePath;
+		private string _projectId;
+		private string _projectLocation;
+		private string _glossary;
+		private string _customModel;
 
 		private ICommand _navigateToCommand;
 		private ICommand _switchViewCommand;
@@ -44,33 +52,85 @@ namespace GoogleTranslatorProvider.ViewModels
 								   bool showSettingsView = false)
 		{
 			Options = options;
+			ShowSettingsView = showSettingsView;
 			_credentialStore = credentialStore;
 			_languagePairs = languagePairs;
 			_htmlUtil = new HtmlUtil();
-
 			InitializeViews();
 			SwitchView(showSettingsView ? ViewDetails_Settings : ViewDetails_Provider);
 			_providerViewModel.ClearMessageRaised += ClearMessageRaised;
 		}
 
-		private void InitializeViews()
+		public string JsonFilePath
 		{
-			_providerViewModel = new ProviderViewModel(Options);
-			_settingsViewModel = new SettingsViewModel(Options);
-
-			_availableViews = new List<ViewDetails>
+			get => _jsonFilePath;
+			set
 			{
-				new ViewDetails
-				{
-					Name = ViewDetails_Provider,
-					ViewModel = _providerViewModel.ViewModel
-				},
-				new ViewDetails
-				{
-					Name = ViewDetails_Settings,
-					ViewModel = _settingsViewModel.ViewModel
-				}
-			};
+				if (_jsonFilePath == value) return;
+				_jsonFilePath = value;
+				OnPropertyChanged(nameof(JsonFilePath));
+			}
+		}
+		public string ProjectId
+		{
+			get => _projectId;
+			set
+			{
+				if (_projectId == value) return;
+				_projectId = value;
+				OnPropertyChanged(nameof(ProjectId));
+			}
+		}
+		public string ProjectLocation
+		{
+			get => _projectLocation;
+			set
+			{
+				if (_projectLocation == value) return;
+				_projectLocation = value;
+				OnPropertyChanged(nameof(ProjectLocation));
+			}
+		}
+		public string Glossary
+		{
+			get => _glossary;
+			set
+            {
+                if (_glossary == value) return;
+                _glossary = value;
+				OnPropertyChanged(nameof(Glossary));
+            }
+		}
+		public string CustomModel
+		{
+			get => _customModel;
+			set
+			{
+				if (_customModel == value) return;
+				_customModel = value;
+				OnPropertyChanged(nameof(CustomModel));
+			}
+		}
+		public bool ShowSettingsView
+		{
+			get => _showSettingsView;
+			set
+			{
+				if (_showSettingsView == value) return;
+				_showSettingsView = value;
+				OnPropertyChanged(nameof(ShowSettingsView));
+			}
+		}
+		private bool _showProjectInfo;
+		public bool ShowProjectInfo
+		{
+			get => _showProjectInfo;
+			set
+			{
+				if (_showProjectInfo == value) return;
+				_showProjectInfo = value;
+				OnPropertyChanged(nameof(ShowProjectInfo));
+			}
 		}
 
 		public MainWindowViewModel(ITranslationOptions options, ISettingsControlViewModel settingsControlViewModel, bool isTellMeAction)
@@ -89,17 +149,6 @@ namespace GoogleTranslatorProvider.ViewModels
 			};
 
 			SwitchView(ViewDetails_Settings);
-		}
-
-		public bool IsTellMeAction
-		{
-			get => _isTellMeAction;
-			set
-			{
-				if (_isTellMeAction == value) return;
-				_isTellMeAction = value;
-				OnPropertyChanged(nameof(IsTellMeAction));
-			}
 		}
 
 		public ITranslationOptions Options { get; set; }
@@ -198,6 +247,38 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		public event CloseWindowEventRaiser CloseEventRaised;
 
+		private void InitializeViews()
+		{
+			_providerViewModel = new ProviderViewModel(Options);
+			_settingsViewModel = new SettingsViewModel(Options);
+			ShowProjectInfo = _showSettingsView && (_providerViewModel.SelectedGoogleApiVersion.Version == ApiVersion.V3);
+
+			_availableViews = new List<ViewDetails>
+			{
+				new ViewDetails
+				{
+					Name = ViewDetails_Provider,
+					ViewModel = _providerViewModel.ViewModel
+				},
+				new ViewDetails
+				{
+					Name = ViewDetails_Settings,
+					ViewModel = _settingsViewModel.ViewModel
+				}
+			};
+
+			if (!_showProjectInfo)
+			{
+				return;
+			}
+
+			var uriQuery = HttpUtility.ParseQueryString(Options.Uri.OriginalString);
+			JsonFilePath = uriQuery.Get("jsonfilepath") ?? "Couldn't determine the json file path. The project might be corrupted.";
+			ProjectId = uriQuery.Get("projectid") ?? "Couldn't determine the json file path. The project might be corrupted.";
+			ProjectLocation = uriQuery.Get("projectlocation") ?? "Couldn't determine the json file path. The project might be corrupted.";
+			Glossary = uriQuery.Get("glossarypath") ?? "This project doesn't use any glossary.";
+			CustomModel = uriQuery.Get("googleenginemodel") ??  "This project doesn't use any custom model.";
+		}
 
 		public bool IsWindowValid()
 		{
@@ -241,16 +322,15 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		private void SetGoogleProviderOptions()
 		{
-			var customModel = _providerViewModel.UseCustomModel ? _providerViewModel.GoogleEngineModel : null;
 			Options.ApiKey = _providerViewModel.ApiKey;
 			Options.PersistGoogleKey = _providerViewModel.PersistGoogleKey;
 			Options.SelectedGoogleVersion = _providerViewModel.SelectedGoogleApiVersion.Version;
 			Options.JsonFilePath = _providerViewModel.JsonFilePath;
 			Options.ProjectId = _providerViewModel.ProjectId;
 			Options.SelectedProvider = _providerViewModel.SelectedTranslationOption.ProviderType;
-			Options.GoogleEngineModel = customModel;
+			Options.GoogleEngineModel = _providerViewModel.GoogleEngineModel;
 			Options.ProjectLocation = _providerViewModel.ProjectLocation;
-			Options.GlossaryPath = _providerViewModel?.SelectedGlossary?.GlossaryID;
+			Options.GlossaryPath = _providerViewModel.GlossaryPath;
 			Options.BasicCsv = _providerViewModel.BasicCsvGlossary;
 		}
 
@@ -334,11 +414,7 @@ namespace GoogleTranslatorProvider.ViewModels
 		{
 			string uriTarget;
 			var currentVersion = _providerViewModel?.SelectedGoogleApiVersion?.Version;
-			if (IsTellMeAction)
-			{
-				uriTarget = Constants.SettingsDocumentation;
-			}
-			else if (currentVersion == ApiVersion.V2)
+			if (currentVersion == ApiVersion.V2)
 			{
 				uriTarget = Constants.V2Documentation;
 			}

@@ -9,8 +9,7 @@
              xmlns:viewModels="clr-namespace:GoogleTranslatorProvider.ViewModels"
              xmlns:converters="clr-namespace:GoogleTranslatorProvider.Converters"
              d:DataContext="{d:DesignInstance viewModels:SettingsViewModel}"
-             mc:Ignorable="d" 
-             d:DesignHeight="850" d:DesignWidth="800">
+             mc:Ignorable="d">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -26,38 +25,30 @@
 			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter"/>
 		</ResourceDictionary>
 	</UserControl.Resources>
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
-			<RowDefinition Height="Auto"/>
-		</Grid.RowDefinitions>
 
-		<GroupBox Header="{x:Static root:PluginResources.SettingsView_Title}"
+	<GroupBox Header="{x:Static root:PluginResources.GroupboxHeaders_Settings}"
 				  Style="{StaticResource DefaultGroupBox}"
-				  Grid.Row="1"
-				  Margin="24 14 24 0"
-				  Padding="0 12 0 12">
-
-			<StackPanel Margin="24 0 24 0">
-				<CheckBox Content="{x:Static root:PluginResources.SettingsView_ResendDraft_Description}"
+				  Margin="24 24 24 0"
+				  Padding="0 12">
+		<StackPanel Margin="24 0">
+			<CheckBox Content="{x:Static root:PluginResources.SettingsView_ResendDraft_Description}"
 						  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 						  IsChecked="{Binding ReSendDraft}"
 						  Margin="0 0 0 12"/>
 
-				<CheckBox Content="{x:Static root:PluginResources.SettingsView_TextOnly_Description}"
+			<CheckBox Content="{x:Static root:PluginResources.SettingsView_TextOnly_Description}"
 						  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 						  IsChecked="{Binding SendPlainText}"
 						  Margin="0 0 0 12"/>
 
-				<CheckBox Content="{x:Static root:PluginResources.SettingsView_PreLookup_Description}"
+			<CheckBox Content="{x:Static root:PluginResources.SettingsView_PreLookup_Description}"
 						  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 						  IsChecked="{Binding DoPreLookup}"
 						  Margin="0"/>
-				<StackPanel Margin="0 2 0 0"
+			<StackPanel Margin="0 2 0 0"
 							Orientation="Horizontal"
-						   Visibility="{Binding DoPreLookup, Converter={StaticResource InvertableBooleanToVisibilityConverter}}">
-					<TextBox Text="{Binding PreLookupFileName}"
+							Visibility="{Binding DoPreLookup, Converter={StaticResource InvertableBooleanToVisibilityConverter}}">
+				<TextBox Text="{Binding PreLookupFileName}"
 							 Style="{StaticResource WatermarkTextBox}"
 							 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.SettingsView_PreLookup_WaterMark}"
 							 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
@@ -66,7 +57,7 @@
 							 VerticalContentAlignment="Center"
 							 Width="300"
 							 Margin="0 0 10 0"/>
-					<Button Content="{x:Static root:PluginResources.SettingsView_BrowseButton}"
+				<Button Content="{x:Static root:PluginResources.SettingsView_BrowseButton}"
 							Style="{StaticResource Sdl.Button.DialogStyle}"
 							Command="{Binding BrowseCommand}"
 							CommandParameter="{uiHelpers:NameOf Member=PreLookupFileName, Type={x:Type viewModels:SettingsViewModel}}"
@@ -74,15 +65,15 @@
 							DockPanel.Dock="Left"
 							Cursor="Hand"
 							Width="80"/>
-				</StackPanel>
+			</StackPanel>
 
-				<CheckBox Content="{x:Static root:PluginResources.SettingsView_PostLookup_Description}"
+			<CheckBox Content="{x:Static root:PluginResources.SettingsView_PostLookup_Description}"
 						  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 						  IsChecked="{Binding DoPostLookup}"
 						  Margin="0 12 0 2"/>
-				<StackPanel Visibility="{Binding DoPostLookup, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+			<StackPanel Visibility="{Binding DoPostLookup, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 							Orientation="Horizontal">
-					<TextBox Text="{Binding PostLookupFileName}"
+				<TextBox Text="{Binding PostLookupFileName}"
 							 Style="{StaticResource WatermarkTextBox}"
 							 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.SettingsView_PostLookup_WaterMark}"
 							 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
@@ -91,7 +82,7 @@
 							 VerticalContentAlignment="Center"
 							 Width="300"
 							 Margin="0 0 10 0"/>
-					<Button Content="{x:Static root:PluginResources.SettingsView_BrowseButton}"
+				<Button Content="{x:Static root:PluginResources.SettingsView_BrowseButton}"
 							Style="{StaticResource Sdl.Button.DialogStyle}"
 							Command="{Binding BrowseCommand}"
 							CommandParameter="{uiHelpers:NameOf Member=PostLookupFileName, Type={x:Type viewModels:SettingsViewModel}}"
@@ -99,15 +90,12 @@
 							DockPanel.Dock="Right"
 							Cursor="Hand"
 							Width="80"/>
-				</StackPanel>
-				
 			</StackPanel>
-		</GroupBox>
 
-		<StackPanel Grid.Row="2">
 			<TextBlock Text="{Binding ErrorMessage, UpdateSourceTrigger=PropertyChanged}"
-					   Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}"
-					   TextWrapping="WrapWithOverflow"/>
+						   Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}"
+						   Margin="24 40 24 8"
+						   TextWrapping="Wrap"/>
 		</StackPanel>
-	</Grid>
+	</GroupBox>
 </UserControl>

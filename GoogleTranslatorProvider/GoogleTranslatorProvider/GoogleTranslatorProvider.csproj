@@ -99,6 +99,7 @@
     <None Include="pluginpackage.manifest.xml" />
   </ItemGroup>
   <ItemGroup>
+  	<PackageReference Include="Google.Cloud.AutoML.V1" Version="2.4.0" />
   	<PackageReference Include="Google.Cloud.Translate.V3" Version="2.4.0" />
   	<PackageReference Include="RestSharp" Version="108.0.2" />
   	<PackageReference Include="Sdl.Core.PluginFramework">

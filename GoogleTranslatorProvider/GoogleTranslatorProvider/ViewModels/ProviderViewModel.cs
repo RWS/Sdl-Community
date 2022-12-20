@@ -4,17 +4,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Reflection;
-using System.Runtime.Remoting.Contexts;
-using System.Security.Policy;
-using System.Web.UI.WebControls;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Shapes;
-using Google.Api.Gax.ResourceNames;
-using Google.Cloud.Translate.V3;
-using Google.Protobuf.WellKnownTypes;
 using GoogleTranslatorProvider.Commands;
 using GoogleTranslatorProvider.GoogleAPI;
 using GoogleTranslatorProvider.Interfaces;
@@ -22,8 +13,6 @@ using GoogleTranslatorProvider.Models;
 using GoogleTranslatorProvider.Service;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
-using Sdl.ProjectAutomation.Core;
-using static Google.Rpc.Context.AttributeContext.Types;
 using Path = System.IO.Path;
 
 namespace GoogleTranslatorProvider.ViewModels
@@ -37,6 +26,8 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		private List<RetrievedGlossary> _availableGlossaries;
 		private RetrievedGlossary _selectedGlossary;
+		private List<RetrievedCustomModel> _availableCustomModels;
+		private RetrievedCustomModel _selectedCustomModel;
 
 		private List<string> _locations;
 		private string _projectLocation;
@@ -55,7 +46,6 @@ namespace GoogleTranslatorProvider.ViewModels
 		private bool _persistGoogleKey;
 		private bool _basicCsvGlossary;
 		private bool _isTellMeAction;
-		private bool _useCustomModel;
 		private bool _useUrlPath;
 
 		private ICommand _downloadJsonFileCommand;
@@ -86,18 +76,6 @@ namespace GoogleTranslatorProvider.ViewModels
 			}
 		}
 
-		public bool UseCustomModel
-		{
-			get => _useCustomModel;
-			set
-			{
-				if (_useCustomModel == value) return;
-				_useCustomModel = value;
-				OnPropertyChanged(nameof(UseCustomModel));
-				ErrorMessage = string.Empty;
-			}
-		}
-
 		public List<RetrievedGlossary> AvailableGlossaries
 		{
 			get => _availableGlossaries;
@@ -117,6 +95,30 @@ namespace GoogleTranslatorProvider.ViewModels
 				if (_selectedGlossary == value) return;
 				_selectedGlossary = value;
 				OnPropertyChanged(nameof(SelectedGlossary));
+				GlossaryPath = value.GlossaryID;
+			}
+		}
+
+		public List<RetrievedCustomModel> AvailableCustomModels
+		{
+			get => _availableCustomModels;
+			set
+			{
+				if (_availableCustomModels == value) return;
+				_availableCustomModels = value;
+				OnPropertyChanged(nameof(AvailableCustomModels));
+			}
+		}
+
+		public RetrievedCustomModel SelectedCustomModel
+		{
+			get => _selectedCustomModel;
+			set
+			{
+				if (_selectedCustomModel == value) return;
+				_selectedCustomModel = value;
+				OnPropertyChanged(nameof(SelectedCustomModel));
+				GoogleEngineModel = value?.DatasetId;
 			}
 		}
 
@@ -391,12 +393,6 @@ namespace GoogleTranslatorProvider.ViewModels
 				ErrorMessage = PluginResources.Validation_Location_Empty;
 				return false;
 			}
-			else if (UseCustomModel
-				  && string.IsNullOrEmpty(GoogleEngineModel?.Trim()))
-			{
-				ErrorMessage = PluginResources.Validation_CustomModel_EnabledEmpty;
-				return false;
-			}
 
 			return true;
 		}
@@ -404,15 +400,14 @@ namespace GoogleTranslatorProvider.ViewModels
 		private bool GoogleV3CredentialsAreValid(LanguagePair[] languagePairs)
 		{
 			try
-			{
-				var customModel = UseCustomModel ? GoogleEngineModel : null;
+			{;
 				var providerOptions = new GTPTranslationOptions
 				{
 					ProjectId = ProjectId,
 					JsonFilePath = JsonFilePath,
-					GoogleEngineModel = customModel,
+					GoogleEngineModel = GoogleEngineModel,
 					ProjectLocation = ProjectLocation,
-					GlossaryPath = SelectedGlossary?.GlossaryID,
+					GlossaryPath = GlossaryPath,
 					BasicCsv = BasicCsvGlossary,
 					SelectedProvider = SelectedTranslationOption.ProviderType,
 					SelectedGoogleVersion = SelectedGoogleApiVersion.Version
@@ -483,7 +478,6 @@ namespace GoogleTranslatorProvider.ViewModels
 				JsonFilePath = _options.JsonFilePath;
 				ProjectId = _options.ProjectId;
 				GoogleEngineModel = _options.GoogleEngineModel;
-				UseCustomModel = !string.IsNullOrEmpty(GoogleEngineModel);
 				GlossaryPath = _options.GlossaryPath;
 				BasicCsvGlossary = _options.BasicCsv;
 			}
@@ -642,7 +636,8 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		private void GetProjectGlossaries()
 		{
-			var tempList = new List<RetrievedGlossary>();
+			var tempGlossariesList = new List<RetrievedGlossary>();
+			var tempCustomModelsList = new List<RetrievedCustomModel>();
 			var tempOptions = new GTPTranslationOptions
 			{
 				ProjectId = _projectId,
@@ -654,18 +649,27 @@ namespace GoogleTranslatorProvider.ViewModels
 			{
 				var v3Connector = new V3Connector(tempOptions);
 				v3Connector.TryToAuthenticateUser();
-				var myGlossaries = v3Connector.GetGlossaries(_projectLocation);
-				tempList.Add(new(new()));
-				tempList.AddRange(myGlossaries.Select(retrievedGlossary => new RetrievedGlossary(retrievedGlossary)));
+
+				tempGlossariesList.Add(new(new()));
+				tempGlossariesList.AddRange(v3Connector.GetGlossaries(_projectLocation).Select(retrievedGlossary => new RetrievedGlossary(retrievedGlossary)));
+
+				tempCustomModelsList.Add(new(new()));
+				tempCustomModelsList.AddRange(v3Connector.GetCustomModels().Select(retrievedCustomModel => new RetrievedCustomModel(retrievedCustomModel)));
 			}
 			catch
 			{
-				tempList.Clear();
-				tempList.Add(new(null));
+				tempGlossariesList.Clear();
+				tempGlossariesList.Add(new(null));
+
+				tempCustomModelsList.Clear();
+				tempCustomModelsList.Add(new(null));
 			}
 
-			AvailableGlossaries = tempList;
+			AvailableGlossaries = tempGlossariesList;
 			SelectedGlossary = _availableGlossaries.First();
+
+			AvailableCustomModels = tempCustomModelsList;
+			SelectedCustomModel = _availableCustomModels.First();
 		}
 
 		private void OpenLocalPath(object parameter)

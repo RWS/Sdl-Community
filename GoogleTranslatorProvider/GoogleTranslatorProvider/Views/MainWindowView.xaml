@@ -22,6 +22,7 @@
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="../Styles/GroupBox.xaml" />
 				<ResourceDictionary Source="../Styles/WindowsBorder.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
@@ -58,15 +59,62 @@
 			<styles:WindowsControl Grid.Row="0"/>
 			<!--</Top bar>-->
 
+			<GroupBox Header="{x:Static root:PluginResources.GroupboxHeaders_ProjectInfo}"
+					  Style="{StaticResource DefaultGroupBox}"
+					  Visibility="{Binding ShowProjectInfo, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+					  Grid.Row="1"
+					  Margin="24 10 24 20"
+					  Padding="12">
+				<DockPanel>
+					<StackPanel DockPanel.Dock="Left"
+								Margin="0 0 8 0">
+						<TextBlock Text="Local path"
+								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
+								   HorizontalAlignment="Right"/>
+						
+						<TextBlock Text="Project ID"
+								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
+								   HorizontalAlignment="Right"/>
+						
+						<TextBlock Text="Location"
+								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
+								   HorizontalAlignment="Right"/>
+						
+						<TextBlock Text="Glossary"
+								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
+								   HorizontalAlignment="Right"/>
+						
+						<TextBlock Text="Custom Model"
+								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
+								   HorizontalAlignment="Right"/>
+					</StackPanel>
+					
+					<StackPanel DockPanel.Dock="Right"
+								Margin="8 0 0 0">
+						<TextBlock Text="{Binding JsonFilePath}"
+								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"/>
+						<TextBlock Text="{Binding ProjectId}"
+								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"/>
+						<TextBlock Text="{Binding ProjectLocation}"
+								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"/>
+						<TextBlock Text="{Binding Glossary}"
+								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"/>
+						<TextBlock Text="{Binding CustomModel}"
+								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"/>
+					</StackPanel>
+				</DockPanel>
+			</GroupBox>
+
+
 			<!--<API Version Selector>-->
-			<ContentControl Grid.Row="1"
+			<ContentControl Grid.Row="2"
 							Content="{Binding SelectedView.ViewModel}"
 							Margin="0"/>
 			<!--</API Version Selector>-->
 
 			<!--<Footer>-->
 			<DockPanel Grid.Row="3"
-					   Margin="24 0 24 20">
+					   Margin="24 20">
 				<Button Content="{x:Static root:PluginResources.MainView_HelpButton}"
 						Style="{StaticResource Sdl.Button.SecondaryStyle}"
 						Command="{Binding NavigateToCommand}"
@@ -78,7 +126,7 @@
 					<Button Content="{Binding MultiButtonContent}"
 							Style="{StaticResource Sdl.Button.SecondaryStyle}"
 							Command="{Binding SwitchViewCommand}"
-							Visibility="{Binding IsTellMeAction, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+							Visibility="{Binding ShowSettingsView, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
 							Cursor="Hand"
 							Width="80"/>
 

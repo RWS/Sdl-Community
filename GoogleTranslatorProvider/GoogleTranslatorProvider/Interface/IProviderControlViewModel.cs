@@ -29,8 +29,6 @@ namespace GoogleTranslatorProvider.Interfaces
 
 		bool IsV2Checked { get; }
 
-		bool UseCustomModel { get; set; }
-
 		string GoogleEngineModel { get; set; }
 
 		string VisibleJsonPath { get; set; }

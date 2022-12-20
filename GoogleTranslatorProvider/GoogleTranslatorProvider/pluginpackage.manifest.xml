@@ -17,6 +17,7 @@
 			<File>Google.Apis.Core.dll</File>
 			<File>Google.Api.CommonProtos</File>
 			<File>Google.Apis.dll</File>
+			<File>Google.Cloud.AutoML.V1.dll</File>
 			<File>Google.Cloud.Translate.V3.dll</File>
 			<File>Google.LongRunning.dll</File>
 			<File>Google.Protobuf.dll</File>

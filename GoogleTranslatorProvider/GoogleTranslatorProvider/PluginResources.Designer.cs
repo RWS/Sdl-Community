@@ -254,6 +254,33 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Google API Version.
+        /// </summary>
+        public static string GroupboxHeaders_GoogleApi {
+            get {
+                return ResourceManager.GetString("GroupboxHeaders_GoogleApi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project info.
+        /// </summary>
+        public static string GroupboxHeaders_ProjectInfo {
+            get {
+                return ResourceManager.GetString("GroupboxHeaders_ProjectInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string GroupboxHeaders_Settings {
+            get {
+                return ResourceManager.GetString("GroupboxHeaders_Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There was a problem checking language pair support..
         /// </summary>
         public static string LangPairAuthErrorMsg1 {
@@ -761,15 +788,6 @@ namespace GoogleTranslatorProvider {
         public static string SettingsView_TextOnly_Description {
             get {
                 return ResourceManager.GetString("SettingsView_TextOnly_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Settings.
-        /// </summary>
-        public static string SettingsView_Title {
-            get {
-                return ResourceManager.GetString("SettingsView_Title", resourceCulture);
             }
         }
         

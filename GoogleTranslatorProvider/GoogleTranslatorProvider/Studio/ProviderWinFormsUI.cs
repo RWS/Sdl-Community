@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using GoogleTranslatorProvider.Interfaces;
 using GoogleTranslatorProvider.Models;
-using GoogleTranslatorProvider.Service;
 using GoogleTranslatorProvider.ViewModels;
 using GoogleTranslatorProvider.Views;
 using Sdl.LanguagePlatform.Core;
@@ -82,6 +81,8 @@ namespace GoogleTranslatorProvider.Studio
 			var mainWindowView = new MainWindowView { DataContext = mainWindowViewModel };
 			mainWindowViewModel.CloseEventRaised += () =>
 			{
+				loadOptions.GoogleEngineModel ??= mainWindowViewModel.CustomModel;
+				loadOptions.GlossaryPath ??= mainWindowViewModel.Glossary;
 				UpdateProviderCredentials(credentialStore, loadOptions);
 				mainWindowView.Close();
 			};

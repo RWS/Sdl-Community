@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Windows.Forms;
 using GoogleTranslatorProvider.Models;
-using GoogleTranslatorProvider.Studio;
 using GoogleTranslatorProvider.ViewModels;
 using GoogleTranslatorProvider.Views;
 using Sdl.TellMe.ProviderApi;
