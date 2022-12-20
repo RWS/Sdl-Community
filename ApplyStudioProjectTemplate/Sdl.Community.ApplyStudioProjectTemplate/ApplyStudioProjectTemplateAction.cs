@@ -164,10 +164,10 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 						{
 							// Update the "all languages" node
 							TranslationProviderConfiguration sourceProviderConfig = sourceProject.GetTranslationProviderConfiguration();
-							if (selectedTemplate.TranslationProvidersAllLanguages == ApplyTemplateOptions.Merge)
+							if (selectedTemplate.TranslationProvidersAllLanguages != ApplyTemplateOptions.Overwrite)
 							{
 								TranslationProviderConfiguration targetProviderConfig = targetProject.GetTranslationProviderConfiguration();
-								MergeTranslationProviders(sourceProviderConfig, targetProviderConfig);
+								MergeTranslationProviders(sourceProviderConfig, targetProviderConfig, selectedTemplate.TranslationProvidersAllLanguages);
 								ValidateTranslationProviderConfiguration(targetProviderConfig);
 								targetProject.UpdateTranslationProviderConfiguration(targetProviderConfig);
 							}
@@ -198,10 +198,10 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 										{
 											// Copy translation providers
 											TranslationProviderConfiguration sourceProviderConfig = sourceProject.GetTranslationProviderConfiguration(sourceTargetLanguage);
-											if (selectedTemplate.TranslationProvidersSpecificLanguages == ApplyTemplateOptions.Merge)
+											if (selectedTemplate.TranslationProvidersSpecificLanguages != ApplyTemplateOptions.Overwrite)
 											{
 												TranslationProviderConfiguration targetProviderConfig = targetProject.GetTranslationProviderConfiguration(targetTargetLanguage);
-												MergeTranslationProviders(sourceProviderConfig, targetProviderConfig);
+												MergeTranslationProviders(sourceProviderConfig, targetProviderConfig, selectedTemplate.TranslationProvidersSpecificLanguages);
 												ValidateTranslationProviderConfiguration(targetProviderConfig);
 												targetProject.UpdateTranslationProviderConfiguration(targetTargetLanguage, targetProviderConfig);
 											}
@@ -269,7 +269,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 						var sourceTermbaseConfig = sourceProject.GetTermbaseConfiguration();
 						var targetTermbaseConfig = targetProject.GetTermbaseConfiguration();
 
-						if (selectedTemplate.TerminologyTermbases == ApplyTemplateOptions.Merge)
+						if (selectedTemplate.TerminologyTermbases != ApplyTemplateOptions.Overwrite)
 						{
 							if (targetTermbaseConfig.TermbaseServerUri is null)
 							{
@@ -279,14 +279,14 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 							{
 								targetTermbaseConfig.Termbases?.AddRange(sourceTermbaseConfig.Termbases);
 							}
-							MergeTermbases(sourceTermbaseConfig, targetTermbaseConfig);
+							MergeTermbases(sourceTermbaseConfig, targetTermbaseConfig, selectedTemplate.TerminologyTermbases);
 						}
 						else
 						{
 							targetTermbaseConfig.TermbaseServerUri = sourceTermbaseConfig.TermbaseServerUri;
 							targetTermbaseConfig.Termbases.Clear();
 							targetTermbaseConfig.LanguageIndexes.Clear();
-							MergeTermbases(sourceTermbaseConfig, targetTermbaseConfig);
+							MergeTermbases(sourceTermbaseConfig, targetTermbaseConfig, ApplyTemplateOptions.Merge);
 						}
 
 						// Updating with zero termbases throws an exception
@@ -677,10 +677,10 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 		/// </summary>
 		/// <param name="sourceProviderConfig">The source provider configuration.</param>
 		/// <param name="targetProviderConfig">The target provider configuration.</param>
-		private void MergeTranslationProviders(TranslationProviderConfiguration sourceProviderConfig, TranslationProviderConfiguration targetProviderConfig)
+		private void MergeTranslationProviders(TranslationProviderConfiguration sourceProviderConfig, TranslationProviderConfiguration targetProviderConfig, ApplyTemplateOptions mergeType)
 		{
 			// Remember where we're going to insert the translation providers
-			var indexToInsert = 0;
+			var indexToInsert = mergeType == ApplyTemplateOptions.Merge ? 0 : targetProviderConfig.Entries.Count;
 
 			// Look at each translation provider in the source project
 			foreach (var sourceCascadeEntry in sourceProviderConfig.Entries)
@@ -701,8 +701,10 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 		/// </summary>
 		/// <param name="sourceTermbaseConfig">The source terminology database configuration.</param>
 		/// <param name="targetTermbaseConfig">The target terminology database configuration.</param>
-		private void MergeTermbases(TermbaseConfiguration sourceTermbaseConfig, TermbaseConfiguration targetTermbaseConfig)
+		private void MergeTermbases(TermbaseConfiguration sourceTermbaseConfig, TermbaseConfiguration targetTermbaseConfig, ApplyTemplateOptions mergeType)
 		{
+			var indexToInsert = mergeType == ApplyTemplateOptions.Merge ? targetTermbaseConfig.Termbases.Count : 0;
+
 			// Look at each termbase in the source project
 			foreach (var sourceTermbase in sourceTermbaseConfig.Termbases)
 			{
@@ -759,7 +761,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 				// If we didn't find the current termbase then add it to the target project
 				if (!foundEntry)
 				{
-					targetTermbaseConfig.Termbases.Add(sourceTermbase);
+					targetTermbaseConfig.Termbases.Insert(indexToInsert, sourceTermbase);
 				}
 			}
 

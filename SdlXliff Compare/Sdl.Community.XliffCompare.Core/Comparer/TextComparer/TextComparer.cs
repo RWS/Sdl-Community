@@ -332,13 +332,19 @@ namespace Sdl.Community.XliffCompare.Core.Comparer.TextComparer
                         while (curPos < xSegmentSection.Content.Length)
                         {
                             var prevPos = curPos;
-                            while (curPos < xSegmentSection.Content.Length &&
-                               (char.IsControl(xSegmentSection.Content[curPos])
-                               || char.IsWhiteSpace(xSegmentSection.Content[curPos])))
-                            {
-                                curPos++;
-                            }
-                            prefix += xSegmentSection.Content.Substring(prevPos, curPos - prevPos);
+							if (xSegmentSection.Content[curPos] == '\xa0') // make nbsp a word
+							{
+								words.Add(new Word("\xa0", string.Empty, string.Empty));
+								curPos++;
+								continue;
+							}
+							while (curPos < xSegmentSection.Content.Length &&
+							   (char.IsControl(xSegmentSection.Content[curPos])
+							   || char.IsWhiteSpace(xSegmentSection.Content[curPos])))
+							{
+								curPos++;
+							}
+							prefix += xSegmentSection.Content.Substring(prevPos, curPos - prevPos);
 
                             if (curPos == xSegmentSection.Content.Length)
                             {
@@ -362,7 +368,8 @@ namespace Sdl.Community.XliffCompare.Core.Comparer.TextComparer
 
                             prevPos = curPos;
                             while (curPos < xSegmentSection.Content.Length &&
-                                (char.IsControl(xSegmentSection.Content[curPos]) ||
+								xSegmentSection.Content[curPos] != '\xa0' && // stop at nbsp
+								(char.IsControl(xSegmentSection.Content[curPos]) ||
                                 char.IsWhiteSpace(xSegmentSection.Content[curPos])))
                             {
                                 curPos++;
