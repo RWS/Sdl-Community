@@ -90,13 +90,6 @@
     <Compile Include="Utils\CultureDictionary.cs" />
     <Compile Include="Utils\LanguageArray.cs" />
     <Compile Include="Utils\Log.cs" />
-    <Compile Include="_obsolete_Search\Compare\SlowCompareTexts.cs" />
-    <Compile Include="_obsolete_Search\GenericSegmentPairSearch.cs" />
-    <Compile Include="_obsolete_Search\ISegmentPairSearch.cs" />
-    <Compile Include="_obsolete_Search\Result\SimpleResult.cs" />
-    <Compile Include="_obsolete_Search\Result\TextPart.cs" />
-    <Compile Include="_obsolete_Search\SearchSegment\TextSegment.cs" />
-    <Compile Include="_obsolete_Search\TmxSearch.cs" />
     <Compile Include="TmxFormat\TmxHeader.cs" />
     <Compile Include="TmxFormat\TmxParser.cs" />
     <Compile Include="TmxFormat\TmxTranslationUnit.cs" />
