@@ -412,20 +412,12 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		private void NavigateTo(object o)
 		{
-			string uriTarget;
 			var currentVersion = _providerViewModel?.SelectedGoogleApiVersion?.Version;
-			if (currentVersion == ApiVersion.V2)
+			var uriTarget = currentVersion switch
 			{
-				uriTarget = Constants.V2Documentation;
-			}
-			else if (currentVersion == ApiVersion.V3)
-			{
-				uriTarget = Constants.V3Documentation;
-			}
-			else
-			{
-				uriTarget = Constants.FullDocumentation;
-			}
+				ApiVersion.V3 => Constants.V3Documentation,
+				_ => Constants.FullDocumentation,
+			};
 
 			Process.Start(uriTarget);
 		}
