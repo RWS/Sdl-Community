@@ -13,10 +13,6 @@ namespace GoogleTranslatorProvider.TellMe
 			{
 				Keywords = HelpKeywords
 			},
-			new SettingsAction()
-			{
-				Keywords = SettingsKeywords
-			},
 			new CommunityForumAction()
 			{
 				Keywords = CommunityKeywords

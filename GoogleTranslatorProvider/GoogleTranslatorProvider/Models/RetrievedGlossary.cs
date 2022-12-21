@@ -23,7 +23,7 @@ namespace GoogleTranslatorProvider.Models
 			var languageSet = Glossary?.LanguageCodesSet;
 			if (languagePair is null && languageSet is null)
 			{
-				_displayName = _glossary is null ? "No glossaries available" : "No glossary selected";
+				_displayName = _glossary is null ? "> No glossaries available" : "> No glossary selected";
 				return;
 			}
 

@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using GoogleTranslatorProvider.Commands;
+using GoogleTranslatorProvider.Extensions;
 using GoogleTranslatorProvider.GoogleAPI;
 using GoogleTranslatorProvider.Interfaces;
 using GoogleTranslatorProvider.Models;
 using GoogleTranslatorProvider.Service;
-using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
-using Path = System.IO.Path;
 
 namespace GoogleTranslatorProvider.ViewModels
 {
 	public class ProviderViewModel : BaseModel, IProviderControlViewModel
 	{
+		private const string DummyLocation = "gctp-sdl";
 		private readonly IOpenFileDialogService _openFileDialogService;
 		private readonly ITranslationOptions _options;
 
@@ -39,7 +39,7 @@ namespace GoogleTranslatorProvider.ViewModels
 		private string _jsonFilePath;
 		private string _projectId;
 		private string _glossaryId;
-		private string _urlPath;
+		private string _urlToDownload;
 		private string _apiKey;
 
 		private bool _projectIdIsCorrupt;
@@ -162,7 +162,7 @@ namespace GoogleTranslatorProvider.ViewModels
 				if (_projectLocation == value) return;
 				_projectLocation = value;
 				OnPropertyChanged(nameof(ProjectLocation));
-				GetProjectGlossaries();
+				GetProjectResources();
 				ClearMessageRaised?.Invoke();
 				ErrorMessage = string.Empty;
 			}
@@ -325,14 +325,14 @@ namespace GoogleTranslatorProvider.ViewModels
 			}
 		}
 
-		public string UrlPath
+		public string UrlToDownload
 		{
-			get => _urlPath;
+			get => _urlToDownload;
 			set
 			{
-				if (_urlPath == value) return;
-				_urlPath = value;
-				OnPropertyChanged(nameof(UrlPath));
+				if (_urlToDownload == value) return;
+				_urlToDownload = value;
+				OnPropertyChanged(nameof(UrlToDownload));
 			}
 		}
 
@@ -446,8 +446,6 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		private void InitializeComponent()
 		{
-			_projectId = _options.ProjectId ?? string.Empty;
-			_projectLocation = _options.ProjectLocation ?? string.Empty;
 			TranslationOptions = new List<TranslationOption>
 			{
 				new TranslationOption
@@ -476,12 +474,13 @@ namespace GoogleTranslatorProvider.ViewModels
 				PersistGoogleKey = _options.PersistGoogleKey;
 				ApiKey = PersistGoogleKey ? _options.ApiKey : string.Empty;
 				JsonFilePath = _options.JsonFilePath;
-				ProjectId = _options.ProjectId;
 				GoogleEngineModel = _options.GoogleEngineModel;
 				GlossaryPath = _options.GlossaryPath;
 				BasicCsvGlossary = _options.BasicCsv;
 			}
 
+			ProjectId = _options?.ProjectId ?? string.Empty;
+			ProjectLocation = _options?.ProjectLocation ?? string.Empty;
 			SetTranslationOption();
 			SetGoogleApiVersion();
 		}
@@ -527,86 +526,70 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		private void DragAndDropJsonFile(object parameter)
 		{
+			ErrorMessage = string.Empty;
 			if (parameter is not DragEventArgs eventArgs)
 			{
 				return;
 			}
 
-			var fileDrop = eventArgs.Data.GetData(DataFormats.FileDrop, true) as string[];
-			if (fileDrop?.Length != 1)
+			if (eventArgs.Data.GetData(DataFormats.FileDrop, true) is not string[] fileDrop
+			 || fileDrop?.Length < 1)
 			{
 				return;
 			}
 
-			var fileDropped = fileDrop.First();
-			if (!fileDropped.EndsWith(".json"))
+			if (fileDrop.Length > 1)
 			{
+				ErrorMessage = "Only one file can be dropped to be used on the authentication process.";
 				return;
 			}
 
-			GetJsonDetails(fileDrop.First());
-			GetProjectLocations();
+			ReadJsonFile(fileDrop.First());
 		}
 
 		private void DownloadJsonFile(object parameter)
 		{
 			ErrorMessage = string.Empty;
-			UrlPath ??= string.Empty;
-			try
+			UrlToDownload ??= string.Empty;
+			var operation = UrlToDownload.VerifyAndDownloadJsonFile(Constants.DefaultDownloadableLocation + Constants.DefaultDownloadedJsonFileName);
+			if (operation.Success)
 			{
-				using var webClient = new WebClient();
-				var uri = new Uri(UrlPath.Trim());
-				if (!Directory.Exists(Constants.DefaultDownloadableLocation))
-				{
-					Directory.CreateDirectory(Constants.DefaultDownloadableLocation);
-				}
-
-				var filePath = Constants.DefaultDownloadableLocation + Constants.DefaultDownloadedJsonFileName;
-				if (File.Exists(filePath))
-				{
-					File.Delete(filePath);
-				}
-
-				webClient.DownloadFile(uri, filePath);
-				BrowseJsonFile(filePath);
-				GetProjectLocations();
-			}
-			catch (Exception e)
-			{
-				ErrorMessage = e.Message;
+				ReadJsonFile(Constants.DefaultDownloadableLocation + Constants.DefaultDownloadedJsonFileName);
 				return;
+			}
+
+			ErrorMessage = operation.ErrorMessage;
+		}
+
+		private void BrowseJsonFile(object parameter)
+		{
+			const string Browse_JsonFiles = "JSON File|*.json";
+			var selectedFile = _openFileDialogService.ShowDialog(Browse_JsonFiles);
+			if (!string.IsNullOrEmpty(selectedFile))
+			{
+				ReadJsonFile(selectedFile);
 			}
 		}
 
-		private void BrowseJsonFile(object o)
+		private void ReadJsonFile(string filePath)
 		{
-			const string Browse_JsonFiles = "JSON File|*.json";
-			var selectedFile = o as string ?? _openFileDialogService.ShowDialog(Browse_JsonFiles);
-			if (string.IsNullOrEmpty(selectedFile)
-			|| !selectedFile.ToLower().EndsWith(".json"))
-			{
-				ErrorMessage = "The selected file it is not JSON type.";
-				return;
-			}
-
-			GetJsonDetails(selectedFile);
+			GetJsonDetails(filePath);
 			GetProjectLocations();
 		}
 
 		private void GetJsonDetails(string selectedFile)
 		{
-			JsonFilePath = selectedFile;
-			VisibleJsonPath = string.Format(@"...\{0}\{1}",
-				Path.GetFileName(Path.GetDirectoryName(selectedFile)),
-				Path.GetFileName(selectedFile));
-			var projectJson = new StreamReader(JsonFilePath).ReadToEnd();
-			var projectDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(projectJson);
-			if (!projectDictionary.TryGetValue("project_id", out var value))
+			ErrorMessage = string.Empty;
+			var (success, operationResult) = selectedFile.VerifyPathAndReadJsonFile();
+			if (!success)
 			{
-				ProjectIdIsCorrupt = true;
+				ErrorMessage = operationResult as string;
+				return;
 			}
 
-			ProjectId = value;
+			JsonFilePath = selectedFile;
+			VisibleJsonPath = selectedFile.ShortenFilePath();
+			ProjectId = (operationResult as Dictionary<string, string>)["project_id"];
 		}
 
 		private void GetProjectLocations()
@@ -615,29 +598,54 @@ namespace GoogleTranslatorProvider.ViewModels
 			{
 				ProjectId = _projectId,
 				JsonFilePath = _jsonFilePath,
-				ProjectLocation = "gctp-test"
+				ProjectLocation = DummyLocation
 			};
 
+			string errorMessage;
 			try
 			{
 				var v3Connector = new V3Connector(tempOptions);
 				v3Connector.TryToAuthenticateUser();
+				errorMessage = string.Empty;
 			}
 			catch (Exception e)
 			{
-				var availableLocationsStr = e.Message.Substring(e.Message.LastIndexOf("Must be"));
-				availableLocationsStr = availableLocationsStr.Substring(availableLocationsStr.IndexOf('\''));
-				availableLocationsStr = availableLocationsStr.Substring(0, availableLocationsStr.IndexOf('.')).Replace("\'", "").Replace(" ", "");
-				Locations.Clear();
-				Locations.AddRange(availableLocationsStr.Split(','));
-				ProjectLocation = Locations.First();
+				errorMessage = e.Message;
 			}
+
+			if (string.IsNullOrEmpty(errorMessage))
+			{
+				return;
+			}
+
+			if (!errorMessage.Contains("Unsupported location"))
+			{
+				ErrorMessage = "Could not authenticate the user with the ProjectID provided in the JSON file.";
+				return;
+			}
+
+			var matches = new Regex(@"(['])(?:(?=(\\?))\2.)*?\1").Matches(errorMessage);
+			Locations.AddRange(from object match in matches
+							   let locationValue = match.ToString().Replace("\'", "")
+							   where !Locations.Contains(locationValue) && !locationValue.Equals(DummyLocation)
+							   select locationValue);
+			ProjectLocation = Locations.First();
+		}
+
+		public void GetProjectResources()
+		{
+			if (string.IsNullOrEmpty(_projectLocation) || _projectLocation.Equals(DummyLocation))
+			{
+				return;
+			}
+
+			GetProjectGlossaries();
+			GetProjectCustomModels();
 		}
 
 		private void GetProjectGlossaries()
 		{
 			var tempGlossariesList = new List<RetrievedGlossary>();
-			var tempCustomModelsList = new List<RetrievedCustomModel>();
 			var tempOptions = new GTPTranslationOptions
 			{
 				ProjectId = _projectId,
@@ -652,21 +660,40 @@ namespace GoogleTranslatorProvider.ViewModels
 
 				tempGlossariesList.Add(new(new()));
 				tempGlossariesList.AddRange(v3Connector.GetGlossaries(_projectLocation).Select(retrievedGlossary => new RetrievedGlossary(retrievedGlossary)));
+			}
+			catch
+			{
+				tempGlossariesList.Clear();
+				tempGlossariesList.Add(new(null));
+			}
+
+			AvailableGlossaries = tempGlossariesList;
+			SelectedGlossary = _availableGlossaries.First();
+		}
+
+		private void GetProjectCustomModels()
+		{
+			var tempCustomModelsList = new List<RetrievedCustomModel>();
+			var tempOptions = new GTPTranslationOptions
+			{
+				ProjectId = _projectId,
+				JsonFilePath = _jsonFilePath,
+				ProjectLocation = _projectLocation
+			};
+
+			try
+			{
+				var v3Connector = new V3Connector(tempOptions);
+				v3Connector.TryToAuthenticateUser();
 
 				tempCustomModelsList.Add(new(new()));
 				tempCustomModelsList.AddRange(v3Connector.GetCustomModels().Select(retrievedCustomModel => new RetrievedCustomModel(retrievedCustomModel)));
 			}
 			catch
 			{
-				tempGlossariesList.Clear();
-				tempGlossariesList.Add(new(null));
-
 				tempCustomModelsList.Clear();
 				tempCustomModelsList.Add(new(null));
 			}
-
-			AvailableGlossaries = tempGlossariesList;
-			SelectedGlossary = _availableGlossaries.First();
 
 			AvailableCustomModels = tempCustomModelsList;
 			SelectedCustomModel = _availableCustomModels.First();
@@ -674,7 +701,11 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		private void OpenLocalPath(object parameter)
 		{
-			Process.Start("explorer.exe", Path.GetDirectoryName(JsonFilePath));
+			var operation = JsonFilePath.OpenFolderAndSelectFile();
+			if (!operation.Success)
+			{
+				ErrorMessage = operation.ErrorMessage;
+			}
 		}
 
 		private void NavigateTo(object parameter)
@@ -692,8 +723,8 @@ namespace GoogleTranslatorProvider.ViewModels
 				case nameof(GoogleEngineModel):
 					GoogleEngineModel = string.Empty;
 					break;
-				case nameof(UrlPath):
-					UrlPath = string.Empty;
+				case nameof(UrlToDownload):
+					UrlToDownload = string.Empty;
 					break;
 			}
 		}

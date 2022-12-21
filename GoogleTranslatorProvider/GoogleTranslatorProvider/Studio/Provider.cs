@@ -24,7 +24,6 @@ namespace GoogleTranslatorProvider.Studio
 
 		public ITranslationOptions Options { get; set; }
 
-
 		public string Name => Options.SelectedProvider == ProviderType.GoogleTranslate
 							? Options.SelectedGoogleVersion == ApiVersion.V2 ? PluginResources.GoogleBasic
 																			 : PluginResources.GoogleAdvanced

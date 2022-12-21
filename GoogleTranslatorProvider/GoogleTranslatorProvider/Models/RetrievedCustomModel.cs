@@ -10,13 +10,13 @@ namespace GoogleTranslatorProvider.Models
 			Model = model;
 			if (model is null)
 			{
-				DisplayName = "No custom models available.";
+				DisplayName = "> No custom models available";
 				return;
 			}
 
 			if (string.IsNullOrEmpty(model?.DatasetId))
 			{
-				DisplayName = "No custom model selected.";
+				DisplayName = "> No custom model selected";
 				return;
 			}
 

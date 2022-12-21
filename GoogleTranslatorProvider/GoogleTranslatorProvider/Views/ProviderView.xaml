@@ -96,7 +96,7 @@
 							Margin="0 16 0 0">
 					<!--<JSON File Selector>-->
 					<Border Background="Transparent"
-							AllowDrop="True"
+							AllowDrop="{Binding UseUrlPath, Converter={StaticResource InvertableBoolEnabledConverter}, ConverterParameter=Inverted}"
 							behaviours:DragDropBehaviour.DragDrop="{Binding DragDropJsonFileCommand}"
 							BorderBrush="LightGray"
 							BorderThickness="1"
@@ -127,10 +127,10 @@
 							<StackPanel Visibility="{Binding UseUrlPath, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}">
 								<StackPanel Orientation="Horizontal"
 											HorizontalAlignment="Center">
-									<TextBox Text="{Binding UrlPath, UpdateSourceTrigger=PropertyChanged}"
+									<TextBox Text="{Binding UrlToDownload, UpdateSourceTrigger=PropertyChanged}"
 											 Style="{StaticResource WatermarkTextBox}"
 											 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.ProviderView_V3_Url_Watermark}"
-											 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=UrlPath, Type={x:Type viewModels:ProviderViewModel}}"
+											 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=UrlToDownload, Type={x:Type viewModels:ProviderViewModel}}"
 											 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
 											 Width="360"/>
 									<Button Content="{x:Static root:PluginResources.ProviderView_V3_File_DownloadButton}"
@@ -203,25 +203,13 @@
 								</Image.ToolTip>
 							</Image>
 						</StackPanel>
-						
-						<StackPanel Orientation="Horizontal">
-							<TextBox Text="{Binding ProjectId, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-									 HorizontalAlignment="Stretch"
-									 VerticalContentAlignment="Center"
-									 Padding="8 0"
-									 Width="320" Height="24"
-									 Margin="0 2 8 0"/>
-							<Image Source="../Resources/warning.png"
-								   Visibility="{Binding ProjectIdIsCorrupt, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-								   Height="26"
-								   Margin="0 2 0 0">
-								<Image.ToolTip>
-									<ToolTip>
-										<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_ProjectID_Warning}"/>
-									</ToolTip>
-								</Image.ToolTip>
-							</Image>
-						</StackPanel>
+
+						<TextBox Text="{Binding ProjectId, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+								 VerticalContentAlignment="Center"
+								 HorizontalAlignment="Left"
+								 Padding="4 0"
+								 Width="320" Height="24"
+								 Margin="0 2 8 0"/>
 						<!--</PROJECT ID>-->
 
 						<!--<PROJECT LOCATION>-->
@@ -316,6 +304,7 @@
 
 				<TextBox Text="{Binding ErrorMessage}"
 						 Style="{StaticResource Sdl.ComboBox.Generic.EditableTextBox}"
+						 IsReadOnly="True"
 						 TextWrapping="Wrap"
 						 Foreground="Red"
 						 Margin="24 40 24 8"/>

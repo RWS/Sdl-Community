@@ -54,10 +54,10 @@
 		</Button>
 
 		<DockPanel Grid.Row="1">
-			<Image Source="../Resources/GoogleTranslatorProvider.png"
+			<Image Source="../Resources/gctpLogo.png"
 				   DockPanel.Dock="Top"
-				   Width="450"
-				   Margin="0 20 0 0"/>
+				   Width="500"
+				   Margin="0 30 0 0"/>
 		</DockPanel>
 	</Grid>
 </UserControl>

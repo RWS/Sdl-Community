@@ -16,12 +16,11 @@
     <None Remove="Resources\Download.ico" />
     <None Remove="Resources\Folder.png" />
     <None Remove="Resources\ForumIcon.ico" />
-    <None Remove="Resources\GoogleTranslatorProvider.png" />
+    <None Remove="Resources\gctpLogo.png" />
     <None Remove="Resources\Information.png" />
     <None Remove="Resources\my_icon.ico" />
     <None Remove="Resources\my_image.png" />
     <None Remove="Resources\Question.ico" />
-    <None Remove="Resources\Setting.png" />
     <None Remove="Resources\Settings.ico" />
     <None Remove="Resources\warning.png" />
   </ItemGroup>
@@ -117,12 +116,11 @@
     <Resource Include="Resources\Download.ico" />
     <Resource Include="Resources\Folder.png" />
     <Resource Include="Resources\ForumIcon.ico" />
-    <Resource Include="Resources\GoogleTranslatorProvider.png" />
+    <Resource Include="Resources\gctpLogo.png" />
     <Resource Include="Resources\Information.png" />
     <Resource Include="Resources\my_icon.ico" />
     <Resource Include="Resources\my_image.png" />
     <Resource Include="Resources\Question.ico" />
-    <Resource Include="Resources\Setting.png" />
     <Resource Include="Resources\Settings.ico" />
     <Resource Include="Resources\warning.png" />
   </ItemGroup>
