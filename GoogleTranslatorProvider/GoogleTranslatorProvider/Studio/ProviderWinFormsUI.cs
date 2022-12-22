@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using GoogleTranslatorProvider.Extensions;
 using GoogleTranslatorProvider.Interfaces;
 using GoogleTranslatorProvider.Models;
 using GoogleTranslatorProvider.ViewModels;
@@ -18,7 +19,7 @@ namespace GoogleTranslatorProvider.Studio
 	{
 		public string TypeDescription => PluginResources.Plugin_Description;
 
-		public string TypeName => PluginResources.Plugin_NiceName;
+		public string TypeName => Constants.GoogleNaming_FullName;
 
 		public bool SupportsEditing => true;
 
@@ -44,24 +45,16 @@ namespace GoogleTranslatorProvider.Studio
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
 		{
 			var options = new GTPTranslationOptions(translationProviderUri);
-			if (options.SelectedProvider != ProviderType.GoogleTranslate)
-			{
-				return new TranslationProviderDisplayInfo
-				{
-					TranslationProviderIcon = PluginResources.appicon,
-					Name = PluginResources.Plugin_NiceName,
-					TooltipText = PluginResources.Plugin_Tooltip
-				};
-			}
-
-			var isV2 = options.SelectedGoogleVersion == ApiVersion.V2;
-			var versionString = isV2 ? PluginResources.GoogleBasic : PluginResources.GoogleAdvanced;
+			var customName = options.CustomProviderName;
+			var useCustomName = options.UseCustomProviderName;
+			var selectedVersion = options.SelectedGoogleVersion;
+			var providerName = customName.SetProviderName(useCustomName, selectedVersion);
 			return new TranslationProviderDisplayInfo()
 			{
 				SearchResultImage = PluginResources.my_image,
 				TranslationProviderIcon = PluginResources.appicon,
-				TooltipText = versionString,
-				Name = versionString
+				TooltipText = providerName,
+				Name = providerName
 			};
 		}
 

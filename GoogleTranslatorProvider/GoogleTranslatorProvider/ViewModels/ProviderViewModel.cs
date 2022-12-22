@@ -469,20 +469,29 @@ namespace GoogleTranslatorProvider.ViewModels
 				}
 			};
 
+			ProjectId = string.Empty;
+			ProjectLocation = string.Empty;
 			if (_options is not null)
 			{
 				PersistGoogleKey = _options.PersistGoogleKey;
 				ApiKey = PersistGoogleKey ? _options.ApiKey : string.Empty;
 				JsonFilePath = _options.JsonFilePath;
+				ProjectId = _options.ProjectId;
+				ProjectLocation = _options.ProjectLocation;
 				GoogleEngineModel = _options.GoogleEngineModel;
 				GlossaryPath = _options.GlossaryPath;
 				BasicCsvGlossary = _options.BasicCsv;
 			}
 
-			ProjectId = _options?.ProjectId ?? string.Empty;
-			ProjectLocation = _options?.ProjectLocation ?? string.Empty;
+
 			SetTranslationOption();
 			SetGoogleApiVersion();
+			if (!string.IsNullOrEmpty(_projectId)
+			 && !string.IsNullOrEmpty(_projectLocation))
+			{
+				Locations.Clear();
+				Locations.Add(_projectLocation);
+			}
 		}
 
 		private void SetTranslationOption()
@@ -625,6 +634,7 @@ namespace GoogleTranslatorProvider.ViewModels
 			}
 
 			var matches = new Regex(@"(['])(?:(?=(\\?))\2.)*?\1").Matches(errorMessage);
+			Locations.Clear();
 			Locations.AddRange(from object match in matches
 							   let locationValue = match.ToString().Replace("\'", "")
 							   where !Locations.Contains(locationValue) && !locationValue.Equals(DummyLocation)

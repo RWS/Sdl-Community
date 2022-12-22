@@ -22,9 +22,11 @@ namespace GoogleTranslatorProvider.ViewModels
 		private bool _doPostLookup;
 		private bool _doPreLookup;
 		private bool _reSendDraft;
+		private bool _useCustomProviderName;
 
 		private string _preLookupFileName;
 		private string _postLookupFileName;
+		private string _customProviderName;
 		private string _errorMessage;
 
 		private ICommand _clearCommand;
@@ -99,6 +101,17 @@ namespace GoogleTranslatorProvider.ViewModels
 			}
 		}
 
+		public bool UseCustomProviderName
+		{
+			get => _useCustomProviderName;
+			set
+			{
+				if (_useCustomProviderName == value) return;
+				_useCustomProviderName = value;
+				OnPropertyChanged(nameof(UseCustomProviderName));
+			}
+		}
+
 		public string PreLookupFileName
 		{
 			get => _preLookupFileName;
@@ -120,6 +133,17 @@ namespace GoogleTranslatorProvider.ViewModels
 				_postLookupFileName = value;
 				OnPropertyChanged(nameof(PostLookupFileName));
 				ErrorMessage = string.Empty;
+			}
+		}
+
+		public string CustomProviderName
+		{
+			get => _customProviderName;
+			set
+			{
+				if (_customProviderName == value) return;
+				_customProviderName = value;
+				OnPropertyChanged(nameof(CustomProviderName));
 			}
 		}
 
@@ -185,6 +209,8 @@ namespace GoogleTranslatorProvider.ViewModels
 			PreLookupFileName = _options.PreLookupFilename;
 			DoPostLookup = _options.UsePostEdit;
 			PostLookupFileName = _options.PostLookupFilename;
+			CustomProviderName = _options.CustomProviderName;
+			UseCustomProviderName = _options.UseCustomProviderName;
 		}
 
 		private void Clear(object parameter)
@@ -196,6 +222,9 @@ namespace GoogleTranslatorProvider.ViewModels
 					break;
 				case nameof(PostLookupFileName):
 					PostLookupFileName = string.Empty;
+					break;
+				case nameof(CustomProviderName):
+					CustomProviderName = string.Empty;
 					break;
 			}
 		}

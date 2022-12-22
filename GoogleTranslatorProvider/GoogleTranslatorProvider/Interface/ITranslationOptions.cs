@@ -17,6 +17,10 @@ namespace GoogleTranslatorProvider.Interfaces
 
 		bool BasicCsv { get; set; }
 
+		bool UseCustomProviderName { get; set; }
+
+		string CustomProviderName { get; set; }
+
 		string PostLookupFilename { get; set; }
 
 		string PreLookupFilename { get; set; }

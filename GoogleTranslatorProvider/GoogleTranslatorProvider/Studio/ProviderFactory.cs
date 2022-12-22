@@ -49,7 +49,7 @@ namespace GoogleTranslatorProvider.Studio
 			return new TranslationProviderInfo
 			{
 				TranslationMethod = TranslationMethod.MachineTranslation,
-				Name = PluginResources.Plugin_NiceName
+				Name = Constants.GoogleNaming_FullName
 			};
 		}
 	}

@@ -63,7 +63,7 @@
 					  Style="{StaticResource DefaultGroupBox}"
 					  Visibility="{Binding ShowProjectInfo, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 					  Grid.Row="1"
-					  Margin="24 10 24 20"
+					  Margin="24 20"
 					  Padding="12">
 				<DockPanel>
 					<StackPanel DockPanel.Dock="Left"
@@ -126,7 +126,6 @@
 					<Button Content="{Binding MultiButtonContent}"
 							Style="{StaticResource Sdl.Button.SecondaryStyle}"
 							Command="{Binding SwitchViewCommand}"
-							Visibility="{Binding ShowSettingsView, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
 							Cursor="Hand"
 							Width="80"/>
 

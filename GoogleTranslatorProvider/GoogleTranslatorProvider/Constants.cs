@@ -4,6 +4,13 @@ namespace GoogleTranslatorProvider
 {
 	public static class Constants
 	{
+		public const string GoogleNaming_FullName = "Google Cloud Translation Provider";
+		public const string GoogleNaming_ShortName = "Google Cloud TP";
+		public const string GoogleVersion_V2_FullName = "V2 Basic Translation";
+		public const string GoogleVersion_V2_ShortName = "V2";
+		public const string GoogleVersion_V3_FullName = "V3 Advanced Translation";
+		public const string GoogleVersion_V3_ShortName = "V3";
+
 		public static readonly string DefaultDownloadableLocation = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Trados AppStore\\Google Cloud TP\\";
 		public const string DefaultDownloadedJsonFileName = "\\downloadedProject.json";
 

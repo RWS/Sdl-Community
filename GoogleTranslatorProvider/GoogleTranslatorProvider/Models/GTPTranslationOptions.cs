@@ -60,6 +60,13 @@ namespace GoogleTranslatorProvider.Models
 		}
 
 		[JsonIgnore]
+		public bool UseCustomProviderName
+		{
+			get => ToBoolean(GetStringParameter("useCustomModelName"));
+			set => SetStringParameter("useCustomModelName", value.ToString());
+		}
+
+		[JsonIgnore]
 		public string PostLookupFilename
 		{
 			get => GetStringParameter("postlookupfilename");
@@ -109,6 +116,13 @@ namespace GoogleTranslatorProvider.Models
 		}
 
 		[JsonIgnore]
+		public string CustomProviderName
+		{
+			get => GetStringParameter("customProviderName");
+			set => SetStringParameter("customProviderName", value);
+		}
+
+		[JsonIgnore]
 		public string ApiKey
 		{
 			get => _apiKey;
@@ -135,7 +149,6 @@ namespace GoogleTranslatorProvider.Models
 			get => GetProviderGoogleApiVersion(GetStringParameter("selectedgoogleversion"));
 			set => SetStringParameter("selectedgoogleversion", GetProviderTypeDescription(value));
 		}
-
 
 		private string GetProviderTypeDescription(ProviderType type)
 		{

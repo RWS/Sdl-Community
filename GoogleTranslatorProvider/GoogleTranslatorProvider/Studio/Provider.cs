@@ -1,4 +1,5 @@
 ﻿using System;
+using GoogleTranslatorProvider.Extensions;
 using GoogleTranslatorProvider.GoogleAPI;
 using GoogleTranslatorProvider.Interfaces;
 using GoogleTranslatorProvider.Models;
@@ -24,12 +25,19 @@ namespace GoogleTranslatorProvider.Studio
 
 		public ITranslationOptions Options { get; set; }
 
-		public string Name => Options.SelectedProvider == ProviderType.GoogleTranslate
-							? Options.SelectedGoogleVersion == ApiVersion.V2 ? PluginResources.GoogleBasic
-																			 : PluginResources.GoogleAdvanced
-							: PluginResources.Plugin_Name;
+		public string Name
+		{
+			get
+			{
+				var customName = Options.CustomProviderName;
+				var useCustomName = Options.UseCustomProviderName;
+				var selectedVersion = Options.SelectedGoogleVersion;
+				var providerName = customName.SetProviderName(useCustomName, selectedVersion);
+				return providerName;
+			}
+		}
 
-		public ProviderStatusInfo StatusInfo => new(true, PluginResources.Plugin_NiceName);
+		public ProviderStatusInfo StatusInfo => new(true, Constants.GoogleNaming_FullName);
 		
 		public bool SupportsSearchForTranslationUnits => true;
 		

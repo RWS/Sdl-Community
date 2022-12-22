@@ -16,12 +16,16 @@ namespace GoogleTranslatorProvider.Interfaces
 		bool SendPlainText { get; set; }
 		
 		bool IsTellMeAction { get; set; }
-		
+
+		bool UseCustomProviderName { get; set; }
+
 		string ErrorMessage { get; set; }
 		
 		string PreLookupFileName { get; set; }
 		
 		string PostLookupFileName { get; set; }
+
+		string CustomProviderName { get; set; }
 		
 		ICommand BrowseCommand { get; }
 
