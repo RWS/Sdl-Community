@@ -284,19 +284,13 @@
     <value>Please add project location:</value>
   </data>
   <data name="Validation_Location_Empty" xml:space="preserve">
-    <value>The project location can not be empty. Please select an option from the drop down menu or select "Use custom location" and write the project location.</value>
+    <value>The project location can not be empty. Please select an option from the drop down menu.</value>
   </data>
   <data name="ProviderView_V2_ApiKey_Description" xml:space="preserve">
     <value>Google Cloud API Key</value>
   </data>
   <data name="MultiButton_Provider" xml:space="preserve">
     <value>Provider</value>
-  </data>
-  <data name="Validation_CustomModel_EnabledEmpty" xml:space="preserve">
-    <value>The options "Use custom model" is enabled but the field is empty. Please add your custom model name or disable the options.</value>
-  </data>
-  <data name="Validation_Glossaries_EnabledEmpty" xml:space="preserve">
-    <value>The options "Use glossary" is enabled but the field is empty. Please add your glossary name or disable the options.</value>
   </data>
   <data name="Validation_ProjectID_Failed" xml:space="preserve">
     <value>The ProjectID was not correct. Please write the ProjectID or browse for your file, if the JSON file contains it, the ProjectID will be completed automatically.</value>
@@ -398,5 +392,72 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
   </data>
   <data name="GroupboxHeaders_Settings" xml:space="preserve">
     <value>Settings</value>
+  </data>
+  <data name="FileValidation_DownloadFailed" xml:space="preserve">
+    <value>An unexpected error occured while downloading the file.</value>
+  </data>
+  <data name="FileValidation_EmptyUri" xml:space="preserve">
+    <value>The url can not be empty.</value>
+  </data>
+  <data name="FileValidation_MissingJsonFile" xml:space="preserve">
+    <value>Could not find a valid JSON file that could be downloaded.</value>
+  </data>
+  <data name="FileValidation_FileDoesNotExists" xml:space="preserve">
+    <value>The file {0} could not be found at the selected location. The file could have been renamed, deleted or moved from when it was loaded.</value>
+  </data>
+  <data name="FileValidation_JsonFileFields" xml:space="preserve">
+    <value>The selected json file has {0} fields than it is supposed to have. Please download the file again and use an unedited file.</value>
+  </data>
+  <data name="FileValidation_NotJsonType" xml:space="preserve">
+    <value>The selected file must be of .json type.</value>
+  </data>
+  <data name="FileValidation_PathDoesNotExists" xml:space="preserve">
+    <value>The selected path does not exists.
+Path: {0}</value>
+  </data>
+  <data name="FileValidation_ReadingJsonFailed" xml:space="preserve">
+    <value>An unexpected error occured while trying to read the file. The file might be corrupted.</value>
+  </data>
+  <data name="FileValidation_UnsetFilePath" xml:space="preserve">
+    <value>The file path must be set.</value>
+  </data>
+  <data name="RetrievedResources_CustomModels_Unavailable" xml:space="preserve">
+    <value>&gt; No custom models available</value>
+  </data>
+  <data name="RetrievedResources_CustomModels_Unselected" xml:space="preserve">
+    <value>&gt; No custom model selected</value>
+  </data>
+  <data name="RetrievedResources_Glossaries_Unavailable" xml:space="preserve">
+    <value>&gt; No glossaries available</value>
+  </data>
+  <data name="RetrievedResources_Glossaries_Unselected" xml:space="preserve">
+    <value>&gt; No glossary selected</value>
+  </data>
+  <data name="V2Api_CharacterLimit" xml:space="preserve">
+    <value>The Google Cloud API it is limited to 5000 characters per segment. Characters count: {0}</value>
+  </data>
+  <data name="ProjectInfo_CustomModelNotUsed" xml:space="preserve">
+    <value>This project does not use a custom model.</value>
+  </data>
+  <data name="ProjectInfo_GlossaryNotUsed" xml:space="preserve">
+    <value>This project does not use a glossary.</value>
+  </data>
+  <data name="ProjectInfo_LocationMissing" xml:space="preserve">
+    <value>Couldn't determine the location of the project.</value>
+  </data>
+  <data name="ProjectInfo_PathCorrupted" xml:space="preserve">
+    <value>Couldn't determine the json file path. The file was moved, renamed or deleted.</value>
+  </data>
+  <data name="ProjectInfo_ProjectIdMissing" xml:space="preserve">
+    <value>Couldn't determine the project id. The field is probably missing on the json file or the json file is corrupted.</value>
+  </data>
+  <data name="Validation_AuthenticationFailed" xml:space="preserve">
+    <value>Could not authenticate the user with the ProjectID provided in the JSON file.</value>
+  </data>
+  <data name="Validation_Glossary_Invalid" xml:space="preserve">
+    <value>The selected glossary is no longer available.</value>
+  </data>
+  <data name="Validation_MultipleFiles" xml:space="preserve">
+    <value>Only one file can be dropped to be used on the authentication process.</value>
   </data>
 </root>

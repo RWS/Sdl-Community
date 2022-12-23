@@ -47,12 +47,12 @@ namespace GoogleTranslatorProvider.Extensions
 		{
 			if (string.IsNullOrEmpty(uri))
 			{
-				return (false, "The URL can not be empty");
+				return (false, PluginResources.FileValidation_EmptyUri);
 			}
 
 			if (!OnlineJsonFileIsValid(uri))
 			{
-				return (false, "There is no valid json file that could be downloaded.");
+				return (false, PluginResources.FileValidation_MissingJsonFile);
 			}
 
 			try
@@ -74,7 +74,7 @@ namespace GoogleTranslatorProvider.Extensions
 			}
 			catch
 			{
-				return (false, "An error occured while downloading the file");
+				return (false, PluginResources.FileValidation_DownloadFailed);
 			}
 		}
 
@@ -106,7 +106,7 @@ namespace GoogleTranslatorProvider.Extensions
 			}
 			catch
 			{
-				return (false, "Unexpected error while reading the json file. The file might be corrupted.");
+				return (false, PluginResources.FileValidation_ReadingJsonFailed);
 			}
 		}
 
@@ -137,11 +137,11 @@ namespace GoogleTranslatorProvider.Extensions
 				}
 
 				var difference = fileKeys.Count > jsonContentDictionary.Count ? "more" : "less";
-				return (success, $"The selected json file has {difference} fields than it is supposed to have. Please download the file again and use an unedited file.");
+				return (success, string.Format(PluginResources.FileValidation_JsonFileFields, difference));
 			}
 			catch
 			{
-				return (false, "Unexpected error while reading the json file. The file might be corrupted.");
+				return (false, PluginResources.FileValidation_ReadingJsonFailed);
 			}
 		}
 
@@ -149,24 +149,24 @@ namespace GoogleTranslatorProvider.Extensions
 		{
 			if (string.IsNullOrEmpty(filePath))
 			{
-				return (false, "The json file path was not set.");
+				return (false, PluginResources.FileValidation_UnsetFilePath);
 			}
 
 			var selectedDirectory = Path.GetDirectoryName(filePath);
 			if (!Directory.Exists(selectedDirectory))
 			{
-				return (false, $"The path does not exists\nPath: {selectedDirectory}.");
+				return (false, string.Format(PluginResources.FileValidation_PathDoesNotExists, selectedDirectory));
 			}
 
 			if (!File.Exists(filePath))
 			{
 				var selectedFile = Path.GetFileName(filePath);
-				return (false, $"The file {selectedFile} could not be found at location {selectedDirectory}.");
+				return (false, string.Format(PluginResources.FileValidation_FileDoesNotExists, selectedFile));
 			}
 
 			if (!Path.GetExtension(filePath).Equals(".json"))
 			{
-				return (false, "The selected file is not json type.");
+				return (false, PluginResources.FileValidation_NotJsonType);
 			}
 
 			return (true, null);

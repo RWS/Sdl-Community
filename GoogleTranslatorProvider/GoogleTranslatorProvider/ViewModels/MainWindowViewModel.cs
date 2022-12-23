@@ -273,11 +273,11 @@ namespace GoogleTranslatorProvider.ViewModels
 			}
 
 			var uriQuery = HttpUtility.ParseQueryString(Options.Uri.OriginalString);
-			JsonFilePath = uriQuery.Get("jsonfilepath") ?? "Couldn't determine the json file path. The project might be corrupted.";
-			ProjectId = uriQuery.Get("projectid") ?? "Couldn't determine the json file path. The project might be corrupted.";
-			ProjectLocation = uriQuery.Get("projectlocation") ?? "Couldn't determine the json file path. The project might be corrupted.";
-			Glossary = uriQuery.Get("glossarypath") ?? "This project doesn't use any glossary.";
-			CustomModel = uriQuery.Get("googleenginemodel") ??  "This project doesn't use any custom model.";
+			JsonFilePath = uriQuery.Get("jsonfilepath") ?? PluginResources.ProjectInfo_PathCorrupted;
+			ProjectId = uriQuery.Get("projectid") ?? PluginResources.ProjectInfo_ProjectIdMissing;
+			ProjectLocation = uriQuery.Get("projectlocation") ?? PluginResources.ProjectInfo_LocationMissing;
+			Glossary = uriQuery.Get("glossarypath") ?? PluginResources.ProjectInfo_GlossaryNotUsed;
+			CustomModel = uriQuery.Get("googleenginemodel") ?? PluginResources.ProjectInfo_CustomModelNotUsed;
 		}
 
 		public bool IsWindowValid()

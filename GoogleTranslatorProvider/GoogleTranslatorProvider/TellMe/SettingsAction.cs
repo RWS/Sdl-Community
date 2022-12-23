@@ -9,6 +9,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace GoogleTranslatorProvider.TellMe
 {
+	// TODO: If we keep this class, add the errors to PluginResources
 	public class SettingsAction : AbstractTellMeAction
 	{
 		public SettingsAction()

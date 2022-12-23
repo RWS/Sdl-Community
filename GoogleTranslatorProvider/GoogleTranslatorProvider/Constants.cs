@@ -4,6 +4,8 @@ namespace GoogleTranslatorProvider
 {
 	public static class Constants
 	{
+		public const string Provider_TranslationProviderFactory = "GoogleCloudTranslationProvider_Factory";
+		public const string Provider_TranslationProviderWinFormsUi = "GoogleCloudTranslationProvider_WinFormsUI";
 		public const string GoogleNaming_FullName = "Google Cloud Translation Provider";
 		public const string GoogleNaming_ShortName = "Google Cloud TP";
 		public const string GoogleVersion_V2_FullName = "V2 Basic Translation";

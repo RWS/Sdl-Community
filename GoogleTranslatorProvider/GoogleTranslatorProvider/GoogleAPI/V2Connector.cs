@@ -112,7 +112,7 @@ namespace GoogleTranslatorProvider.GoogleAPI
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {e.Message}\n {e.StackTrace}");
 				if (text.Length >= 5000)
 				{
-					throw new Exception($"The Google Cloud API it is limited to 5000 characters per segment. Characters count: {text.Length}");
+					throw new Exception(string.Format(PluginResources.V2Api_CharacterLimit, text.Length));
 				}
 
 				throw new Exception(e.Message);

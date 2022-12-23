@@ -12,9 +12,9 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace GoogleTranslatorProvider.Studio
 {
-	[TranslationProviderWinFormsUi(Id = "GoogleTranslatorProviderPlugin_WinFormsUI",
-								   Name = "GoogleTranslatorProviderPlugin_WinFormsUI",
-								   Description = "GoogleTranslatorProviderPlugin_WinFormsUI")]
+	[TranslationProviderWinFormsUi(Id = Constants.Provider_TranslationProviderWinFormsUi,
+								   Name = Constants.Provider_TranslationProviderWinFormsUi,
+								   Description = Constants.Provider_TranslationProviderWinFormsUi)]
 	public class ProviderWinFormsUI : ITranslationProviderWinFormsUI
 	{
 		public string TypeDescription => PluginResources.Plugin_Description;

@@ -8,9 +8,10 @@ namespace GoogleTranslatorProvider.Helpers
 {
 	public static class Log
 	{
-		private const string LogsFolderPath = "RWS AppStore";
-		private const string AppLogFolder = "GoogleTranslatorProvider";
-		private const string LogsFileName = "GoogleTPLogs.txt";
+		// Modify this to Constants.DefaultDownloadableLocation or similar
+		private const string LogsFolderPath = "Trados AppStore";
+		private const string AppLogFolder = "GoogleCloudTranslationProvider";
+		private const string LogsFileName = "GoogleCloudTPLogs.txt";
 
 		public static void Setup()
 		{
@@ -23,14 +24,14 @@ namespace GoogleTranslatorProvider.Helpers
 
 			var target = new FileTarget
 			{
-				Name = "GoogleTranslatorProvider",
+				Name = "GoogleCloudTranslationProvider",
 				FileName = Path.Combine(logPath, LogsFileName),
 				Layout = "${logger}: ${longdate} ${level} ${message}  ${exception}"
 			};
 
 			var config = LogManager.Configuration;
 			config.AddTarget(target);
-			config.AddRuleForAllLevels(target, "*GoogleTranslatorProvider*");
+			config.AddRuleForAllLevels(target, "*GoogleCloudTranslationProvider*");
 			LogManager.ReconfigExistingLoggers();
 		}
 	}

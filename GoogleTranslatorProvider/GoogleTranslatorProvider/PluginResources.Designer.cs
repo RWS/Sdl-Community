@@ -127,6 +127,88 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An unexpected error occured while downloading the file..
+        /// </summary>
+        public static string FileValidation_DownloadFailed {
+            get {
+                return ResourceManager.GetString("FileValidation_DownloadFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The url can not be empty..
+        /// </summary>
+        public static string FileValidation_EmptyUri {
+            get {
+                return ResourceManager.GetString("FileValidation_EmptyUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file {0} could not be found at the selected location. The file could have been renamed, deleted or moved from when it was loaded..
+        /// </summary>
+        public static string FileValidation_FileDoesNotExists {
+            get {
+                return ResourceManager.GetString("FileValidation_FileDoesNotExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The selected json file has {0} fields than it is supposed to have. Please download the file again and use an unedited file..
+        /// </summary>
+        public static string FileValidation_JsonFileFields {
+            get {
+                return ResourceManager.GetString("FileValidation_JsonFileFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find a valid JSON file that could be downloaded..
+        /// </summary>
+        public static string FileValidation_MissingJsonFile {
+            get {
+                return ResourceManager.GetString("FileValidation_MissingJsonFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The selected file must be of .json type..
+        /// </summary>
+        public static string FileValidation_NotJsonType {
+            get {
+                return ResourceManager.GetString("FileValidation_NotJsonType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The selected path does not exists.
+        ///Path: {0}.
+        /// </summary>
+        public static string FileValidation_PathDoesNotExists {
+            get {
+                return ResourceManager.GetString("FileValidation_PathDoesNotExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An unexpected error occured while trying to read the file. The file might be corrupted..
+        /// </summary>
+        public static string FileValidation_ReadingJsonFailed {
+            get {
+                return ResourceManager.GetString("FileValidation_ReadingJsonFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file path must be set..
+        /// </summary>
+        public static string FileValidation_UnsetFilePath {
+            get {
+                return ResourceManager.GetString("FileValidation_UnsetFilePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon ForumIcon {
@@ -474,6 +556,51 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This project does not use a custom model..
+        /// </summary>
+        public static string ProjectInfo_CustomModelNotUsed {
+            get {
+                return ResourceManager.GetString("ProjectInfo_CustomModelNotUsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This project does not use a glossary..
+        /// </summary>
+        public static string ProjectInfo_GlossaryNotUsed {
+            get {
+                return ResourceManager.GetString("ProjectInfo_GlossaryNotUsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Couldn&apos;t determine the location of the project..
+        /// </summary>
+        public static string ProjectInfo_LocationMissing {
+            get {
+                return ResourceManager.GetString("ProjectInfo_LocationMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Couldn&apos;t determine the json file path. The file was moved, renamed or deleted..
+        /// </summary>
+        public static string ProjectInfo_PathCorrupted {
+            get {
+                return ResourceManager.GetString("ProjectInfo_PathCorrupted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Couldn&apos;t determine the project id. The field is probably missing on the json file or the json file is corrupted..
+        /// </summary>
+        public static string ProjectInfo_ProjectIdMissing {
+            get {
+                return ResourceManager.GetString("ProjectInfo_ProjectIdMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Credentials for Google Translate....
         /// </summary>
         public static string PromptForCredentialsCaption_Google {
@@ -709,6 +836,42 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &gt; No custom models available.
+        /// </summary>
+        public static string RetrievedResources_CustomModels_Unavailable {
+            get {
+                return ResourceManager.GetString("RetrievedResources_CustomModels_Unavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &gt; No custom model selected.
+        /// </summary>
+        public static string RetrievedResources_CustomModels_Unselected {
+            get {
+                return ResourceManager.GetString("RetrievedResources_CustomModels_Unselected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &gt; No glossaries available.
+        /// </summary>
+        public static string RetrievedResources_Glossaries_Unavailable {
+            get {
+                return ResourceManager.GetString("RetrievedResources_Glossaries_Unavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &gt; No glossary selected.
+        /// </summary>
+        public static string RetrievedResources_Glossaries_Unselected {
+            get {
+                return ResourceManager.GetString("RetrievedResources_Glossaries_Unselected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Settings {
@@ -800,6 +963,15 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Google Cloud API it is limited to 5000 characters per segment. Characters count: {0}.
+        /// </summary>
+        public static string V2Api_CharacterLimit {
+            get {
+                return ResourceManager.GetString("V2Api_CharacterLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can not connect to the service without an API Key..
         /// </summary>
         public static string Validation_ApiKey {
@@ -809,11 +981,11 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The options &quot;Use custom model&quot; is enabled but the field is empty. Please add your custom model name or disable the options..
+        ///   Looks up a localized string similar to Could not authenticate the user with the ProjectID provided in the JSON file..
         /// </summary>
-        public static string Validation_CustomModel_EnabledEmpty {
+        public static string Validation_AuthenticationFailed {
             get {
-                return ResourceManager.GetString("Validation_CustomModel_EnabledEmpty", resourceCulture);
+                return ResourceManager.GetString("Validation_AuthenticationFailed", resourceCulture);
             }
         }
         
@@ -827,16 +999,16 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The options &quot;Use glossary&quot; is enabled but the field is empty. Please add your glossary name or disable the options..
+        ///   Looks up a localized string similar to The selected glossary is no longer available..
         /// </summary>
-        public static string Validation_Glossaries_EnabledEmpty {
+        public static string Validation_Glossary_Invalid {
             get {
-                return ResourceManager.GetString("Validation_Glossaries_EnabledEmpty", resourceCulture);
+                return ResourceManager.GetString("Validation_Glossary_Invalid", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The project location can not be empty. Please select an option from the drop down menu or select &quot;Use custom location&quot; and write the project location..
+        ///   Looks up a localized string similar to The project location can not be empty. Please select an option from the drop down menu..
         /// </summary>
         public static string Validation_Location_Empty {
             get {
@@ -868,6 +1040,15 @@ namespace GoogleTranslatorProvider {
         public static string Validation_ModelName_Invalid {
             get {
                 return ResourceManager.GetString("Validation_ModelName_Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only one file can be dropped to be used on the authentication process..
+        /// </summary>
+        public static string Validation_MultipleFiles {
+            get {
+                return ResourceManager.GetString("Validation_MultipleFiles", resourceCulture);
             }
         }
         

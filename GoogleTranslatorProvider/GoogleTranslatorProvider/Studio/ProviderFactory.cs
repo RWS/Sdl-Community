@@ -4,9 +4,9 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace GoogleTranslatorProvider.Studio
 {
-	[TranslationProviderFactory(Id = "GoogleTranslatorProviderPlugin_Factory",
-								Name = "GoogleTranslatorProviderPlugin_Factory",
-								Description = "GoogleTranslatorProviderPlugin_Factory")]
+	[TranslationProviderFactory(Id = Constants.Provider_TranslationProviderFactory,
+								Name = Constants.Provider_TranslationProviderFactory,
+								Description = Constants.Provider_TranslationProviderFactory)]
 	public class ProviderFactory : ITranslationProviderFactory
 	{
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)

@@ -424,7 +424,7 @@ namespace GoogleTranslatorProvider.ViewModels
 				}
 				else if (e.Message.Contains("Glossary not found"))
 				{
-					ErrorMessage = "Wrong glossary";
+					ErrorMessage = PluginResources.Validation_Glossary_Invalid;
 				}
 				else if (e.Message.Contains("PermissionDenied"))
 				{
@@ -547,7 +547,7 @@ namespace GoogleTranslatorProvider.ViewModels
 
 			if (fileDrop.Length > 1)
 			{
-				ErrorMessage = "Only one file can be dropped to be used on the authentication process.";
+				ErrorMessage = PluginResources.Validation_MultipleFiles;
 				return;
 			}
 
@@ -627,7 +627,7 @@ namespace GoogleTranslatorProvider.ViewModels
 
 			if (!errorMessage.Contains("Unsupported location"))
 			{
-				ErrorMessage = "Could not authenticate the user with the ProjectID provided in the JSON file.";
+				ErrorMessage = PluginResources.Validation_AuthenticationFailed;
 				return;
 			}
 
