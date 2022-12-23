@@ -32,9 +32,10 @@
 			  Padding="0 12">
 		<StackPanel Margin="24 12">
 
-			<CheckBox Content="Use custom name for the provider"
+			<CheckBox Content="Use custom name for this provider"
 					  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 					  IsChecked="{Binding UseCustomProviderName}"
+					  Cursor="Hand"
 					  Margin="0"/>
 			<TextBox Text="{Binding CustomProviderName, UpdateSourceTrigger=PropertyChanged}"
 					 Style="{StaticResource WatermarkTextBox}"
@@ -45,21 +46,24 @@
 					 IsEnabled="{Binding UseCustomProviderName,Converter={StaticResource InvertableBoolEnabledConverter}}"
 					 HorizontalAlignment="Left"
 					 Width="300"
-					 Margin="0 0 10 0"/>
+					 Margin="0 2 10 0"/>
 
 			<CheckBox Content="{x:Static root:PluginResources.SettingsView_ResendDraft_Description}"
 						  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 						  IsChecked="{Binding ReSendDraft}"
+					  Cursor="Hand"
 						  Margin="0 12"/>
 
 			<CheckBox Content="{x:Static root:PluginResources.SettingsView_TextOnly_Description}"
 						  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 						  IsChecked="{Binding SendPlainText}"
+					  Cursor="Hand"
 						  Margin="0 0 0 12"/>
 
 			<CheckBox Content="{x:Static root:PluginResources.SettingsView_PreLookup_Description}"
 						  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 						  IsChecked="{Binding DoPreLookup}"
+					  Cursor="Hand"
 						  Margin="0"/>
 			<StackPanel Margin="0 2 0 0"
 							Orientation="Horizontal"
@@ -86,6 +90,7 @@
 			<CheckBox Content="{x:Static root:PluginResources.SettingsView_PostLookup_Description}"
 						  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 						  IsChecked="{Binding DoPostLookup}"
+					  Cursor="Hand"
 						  Margin="0 12 0 2"/>
 			<StackPanel Visibility="{Binding DoPostLookup, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 							Orientation="Horizontal">

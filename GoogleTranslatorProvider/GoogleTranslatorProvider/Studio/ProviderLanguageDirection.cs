@@ -55,7 +55,7 @@ namespace GoogleTranslatorProvider.Studio
 
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
 		{
-			var translation = new Segment(_languageDirection.TargetCulture);
+		var translation = new Segment(_languageDirection.TargetCulture);
 			var searchResults = new SearchResults { SourceSegment = segment.Duplicate() };
 			if (!_options.ResendDrafts && _currentTranslationUnit.ConfirmationLevel != ConfirmationLevel.Unspecified)
 			{

@@ -344,7 +344,7 @@ namespace GoogleTranslatorProvider.ViewModels
 				Options.PreLookupFilename = _settingsViewModel.PreLookupFileName;
 				Options.UsePostEdit = _settingsViewModel.DoPostLookup;
 				Options.PostLookupFilename = _settingsViewModel.PostLookupFileName;
-				Options.CustomProviderName = _settingsViewModel.CustomProviderName.Trim();
+				Options.CustomProviderName = _settingsViewModel.CustomProviderName?.Trim();
 				Options.UseCustomProviderName = _settingsViewModel.UseCustomProviderName && !string.IsNullOrEmpty(Options.CustomProviderName);
 			}
 

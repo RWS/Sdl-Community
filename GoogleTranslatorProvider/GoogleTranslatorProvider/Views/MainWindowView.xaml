@@ -63,7 +63,7 @@
 					  Style="{StaticResource DefaultGroupBox}"
 					  Visibility="{Binding ShowProjectInfo, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 					  Grid.Row="1"
-					  Margin="24 20"
+					  Margin="24 20 24 0"
 					  Padding="12">
 				<DockPanel>
 					<StackPanel DockPanel.Dock="Left"

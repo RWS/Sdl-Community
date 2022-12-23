@@ -43,25 +43,27 @@
 
 		<GroupBox Header="{x:Static root:PluginResources.GroupboxHeaders_GoogleApi}"
 				  Style="{StaticResource DefaultGroupBox}"
-				  MinHeight="530"
+				  HorizontalContentAlignment="Center"
+				  VerticalContentAlignment="Center"
 				  Grid.Row="1"
-				  Padding="10"
 				  Margin="24 24 24 0">
 			<StackPanel>
 				<!--<API VERSION SELECTOR>-->
 				<ComboBox ItemsSource="{Binding GoogleApiVersions}"
 						  SelectedItem="{Binding SelectedGoogleApiVersion}"
 						  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+						  IsEnabled="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBoolEnabledConverter}, ConverterParameter=Inverted}"
 						  DisplayMemberPath="Name"
 						  HorizontalAlignment="Stretch"
 						  VerticalAlignment="Stretch"
+						  HorizontalContentAlignment="Center"
 						  Cursor="Hand"
-						  Width="Auto"/>
+						  Margin="16 12"/>
 				<!--</API VERSION SELECTOR>-->
 
 				<!--<GOOGLE API V2>-->
 				<StackPanel Visibility="{Binding IsV2Checked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-							Margin="16 24 16 0">
+							Margin="16 0">
 					<StackPanel Orientation="Horizontal">
 						<TextBlock Text="{x:Static root:PluginResources.ProviderView_V2_ApiKey_Description}"
 								   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
@@ -92,17 +94,17 @@
 				<!--</GOOGLE API V2>-->
 
 				<!--<GOOGLE API V3>-->
-				<StackPanel Visibility="{Binding IsV3Checked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-							Margin="0 16 0 0">
+				<StackPanel Visibility="{Binding IsV3Checked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}">
 					<!--<JSON File Selector>-->
 					<Border Background="Transparent"
 							AllowDrop="{Binding UseUrlPath, Converter={StaticResource InvertableBoolEnabledConverter}, ConverterParameter=Inverted}"
+						    Visibility="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
 							behaviours:DragDropBehaviour.DragDrop="{Binding DragDropJsonFileCommand}"
 							BorderBrush="LightGray"
 							BorderThickness="1"
 							CornerRadius="8"
 							Height="80"
-							Margin="16 0">
+							Margin="16 12 16 0">
 						<StackPanel Margin="0 8" VerticalAlignment="Center">
 							<!--<Local Path>-->
 							<StackPanel Visibility="{Binding UseUrlPath, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}">
@@ -147,15 +149,18 @@
 					
 					<CheckBox Content="{x:Static root:PluginResources.ProviderView_V3_UseUrl}"
 							  IsChecked="{Binding UseUrlPath}"
+							  Visibility="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
 							  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 							  HorizontalAlignment="Right"
-							  Margin="0 -20 24 0"
+							  Margin="0 -22 24 0"
 							  Cursor="Hand"/>
 					<!--</JSON File Selector>-->
 
-					<StackPanel Margin="16 8 16 0">
+					<StackPanel Margin="16 0">
 						<!--<PROJECT PATH>-->
-						<StackPanel Orientation="Horizontal">
+						<StackPanel Orientation="Horizontal"
+									Visibility="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+									Margin="0 24 0 0">
 							<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_LocalPath_Description}"
 									   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
 									   HorizontalAlignment="Left"
@@ -170,7 +175,8 @@
 							</Image>
 						</StackPanel>
 
-						<StackPanel Orientation="Horizontal" Margin="0 0 0 8">
+						<StackPanel Orientation="Horizontal" Margin="0 0 0 12"
+									Visibility="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}">
 							<TextBox Text="{Binding VisibleJsonPath}"
 									 Style="{StaticResource Sdl.ComboBox.Generic.EditableTextBox}"
 									 ToolTip="{Binding JsonFilePath}"
@@ -189,7 +195,8 @@
 						<!--</PROJECT PATH>-->
 
 						<!--<PROJECT ID>-->
-						<StackPanel Orientation="Horizontal">
+						<StackPanel Orientation="Horizontal"
+									Visibility="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}">
 							<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_ProjectID_Description}"
 									   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
 									   HorizontalAlignment="Left"
@@ -205,16 +212,17 @@
 						</StackPanel>
 
 						<TextBox Text="{Binding ProjectId, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+								 Visibility="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
 								 VerticalContentAlignment="Center"
 								 HorizontalAlignment="Left"
 								 Padding="4 0"
 								 Width="320" Height="24"
-								 Margin="0 2 8 0"/>
+								 Margin="0 0 0 12"/>
 						<!--</PROJECT ID>-->
 
 						<!--<PROJECT LOCATION>-->
 						<StackPanel Orientation="Horizontal"
-									Margin="0 12 0 0">
+									Visibility="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}">
 							<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_Location_Description}"
 									   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
 									   HorizontalAlignment="Left"
@@ -231,18 +239,18 @@
 
 						<ComboBox ItemsSource="{Binding Locations}"
 								  SelectedItem="{Binding ProjectLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								  Visibility="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
 								  IsSynchronizedWithCurrentItem="True"
 								  SelectedIndex="0"
 								  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
 								  HorizontalAlignment="Left"
 								  MinWidth="0" Width="320" Height="24"
 								  Cursor="Hand"
-								  Margin="0 2 0 0"/>
+								  Margin="0 0 0 12"/>
 						<!--</PROJECT LOCATION>-->
 						
 						<!--<GLOSSARY>-->
-						<StackPanel Orientation="Horizontal"
-									Margin="0 12 0 0">
+						<StackPanel Orientation="Horizontal">
 							<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_Glossary_Description}"
 									   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
 									   HorizontalAlignment="Left"
@@ -265,13 +273,21 @@
 								  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
 								  HorizontalAlignment="Left"
 								  MinWidth="0" Width="320" Height="24"
-								  Cursor="Hand"
-								  Margin="0 2 0 0"/>
+								  Cursor="Hand"/>
+						<Button Content="Navigate to your glossaries"
+								Command="{Binding NavigateToCommand}"
+								CommandParameter="https://console.cloud.google.com/storage/browser"
+								Style="{StaticResource Sdl.Button.HyperLinkStyle}"
+								HorizontalAlignment="Left"
+								FontSize="12"
+								FontStyle="Italic"
+								Padding="0"
+								Cursor="Hand"
+								Margin="4 0 0 12"/>
 						<!--<GLOSSARY>-->
 						
 						<!--<CUSTOM MODEL / AutoML>-->
-						<StackPanel Orientation="Horizontal"
-									Margin="0 12 0 0">
+						<StackPanel Orientation="Horizontal">
 							<TextBlock Text="Custom Model (AutoML)"
 									   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
 									   HorizontalAlignment="Left"
@@ -294,8 +310,17 @@
 								  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
 								  HorizontalAlignment="Left"
 								  MinWidth="0" Width="320" Height="24"
-								  Cursor="Hand"
-								  Margin="0 2 0 0"/>
+								  Cursor="Hand"/>
+						<Button Content="Navigate to your custom models"
+								Command="{Binding NavigateToCommand}"
+								CommandParameter="https://console.cloud.google.com/translation/datasets"
+								Style="{StaticResource Sdl.Button.HyperLinkStyle}"
+								HorizontalAlignment="Left"
+								FontSize="12"
+								FontStyle="Italic"
+								Padding="0"
+								Cursor="Hand"
+								Margin="4 0 0 12"/>
 						<!--</CUSTOM MODEL / AutoML>-->
 						
 					</StackPanel>

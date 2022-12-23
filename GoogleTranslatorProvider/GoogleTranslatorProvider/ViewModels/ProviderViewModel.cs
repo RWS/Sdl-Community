@@ -42,7 +42,7 @@ namespace GoogleTranslatorProvider.ViewModels
 		private string _urlToDownload;
 		private string _apiKey;
 
-		private bool _projectIdIsCorrupt;
+		private bool _canModifyExistingFields;
 		private bool _persistGoogleKey;
 		private bool _basicCsvGlossary;
 		private bool _isTellMeAction;
@@ -208,6 +208,17 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		public bool IsV3Checked => SelectedGoogleApiVersion.Version == ApiVersion.V3;
 
+		public bool CanChangeProviderResources
+		{
+			get => _canModifyExistingFields;
+			set
+			{
+				if (_canModifyExistingFields == value) return;
+				_canModifyExistingFields = value;
+				OnPropertyChanged(nameof(CanChangeProviderResources));
+			}
+		}
+
 		public string GoogleEngineModel
 		{
 			get => _googleEngineModel;
@@ -255,22 +266,6 @@ namespace GoogleTranslatorProvider.ViewModels
 				_projectId = value;
 				OnPropertyChanged(nameof(ProjectId));
 				ClearMessageRaised?.Invoke();
-				if (ProjectIdIsCorrupt)
-				{
-					ProjectIdIsCorrupt = false;
-				}
-				ErrorMessage = string.Empty;
-			}
-		}
-
-		public bool ProjectIdIsCorrupt
-		{
-			get => _projectIdIsCorrupt;
-			set
-			{
-				if (_projectIdIsCorrupt == value) return;
-				_projectIdIsCorrupt = value;
-				OnPropertyChanged(nameof(ProjectIdIsCorrupt));
 				ErrorMessage = string.Empty;
 			}
 		}
@@ -400,7 +395,7 @@ namespace GoogleTranslatorProvider.ViewModels
 		private bool GoogleV3CredentialsAreValid(LanguagePair[] languagePairs)
 		{
 			try
-			{;
+			{
 				var providerOptions = new GTPTranslationOptions
 				{
 					ProjectId = ProjectId,
@@ -489,8 +484,11 @@ namespace GoogleTranslatorProvider.ViewModels
 			if (!string.IsNullOrEmpty(_projectId)
 			 && !string.IsNullOrEmpty(_projectLocation))
 			{
+				CanChangeProviderResources = true;
 				Locations.Clear();
 				Locations.Add(_projectLocation);
+				SelectedGlossary = _availableGlossaries.FirstOrDefault(x => x.GlossaryID == _options.GlossaryPath) ?? _availableGlossaries.First();
+				SelectedCustomModel = _availableCustomModels.FirstOrDefault(x => x.DatasetId == _options.GoogleEngineModel) ?? _availableCustomModels.First();
 			}
 		}
 

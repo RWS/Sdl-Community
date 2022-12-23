@@ -74,8 +74,6 @@ namespace GoogleTranslatorProvider.Studio
 			var mainWindowView = new MainWindowView { DataContext = mainWindowViewModel };
 			mainWindowViewModel.CloseEventRaised += () =>
 			{
-				loadOptions.GoogleEngineModel ??= mainWindowViewModel.CustomModel;
-				loadOptions.GlossaryPath ??= mainWindowViewModel.Glossary;
 				UpdateProviderCredentials(credentialStore, loadOptions);
 				mainWindowView.Close();
 			};
