@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GoogleTranslatorProvider {
+namespace GoogleCloudTranslationProvider {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace GoogleTranslatorProvider {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GoogleTranslatorProvider.PluginResources", typeof(PluginResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GoogleCloudTranslationProvider.PluginResources", typeof(PluginResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -795,6 +795,15 @@ namespace GoogleTranslatorProvider {
         public static string ProviderView_V3_Location_Watermark {
             get {
                 return ResourceManager.GetString("ProviderView_V3_Location_Watermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Navigate to your project.
+        /// </summary>
+        public static string ProviderView_V3_Project_Navigate {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_Project_Navigate", resourceCulture);
             }
         }
         

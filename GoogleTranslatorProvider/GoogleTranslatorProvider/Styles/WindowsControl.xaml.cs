@@ -4,7 +4,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using Sdl.Desktop.Platform.Controls.Controls;
 
-namespace GoogleTranslatorProvider.Styles
+namespace GoogleCloudTranslationProvider.Styles
 {
 	/// <summary>
 	/// Interaction logic for WindowsControl.xaml

@@ -3,13 +3,13 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Input;
 using System.Xml.Serialization;
-using GoogleTranslatorProvider.Commands;
-using GoogleTranslatorProvider.Interfaces;
-using GoogleTranslatorProvider.Models;
-using GoogleTranslatorProvider.Service;
+using GoogleCloudTranslationProvider.Commands;
+using GoogleCloudTranslationProvider.Interfaces;
+using GoogleCloudTranslationProvider.Models;
+using GoogleCloudTranslationProvider.Service;
 using NLog;
 
-namespace GoogleTranslatorProvider.ViewModels
+namespace GoogleCloudTranslationProvider.ViewModels
 {
 	public class SettingsViewModel : BaseModel, ISettingsControlViewModel
 	{

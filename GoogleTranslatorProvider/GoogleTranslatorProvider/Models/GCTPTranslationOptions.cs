@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using GoogleTranslatorProvider.Interfaces;
+using GoogleCloudTranslationProvider.Interfaces;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using static System.Convert;
 
-namespace GoogleTranslatorProvider.Models
+namespace GoogleCloudTranslationProvider.Models
 {
 	public class GCTPTranslationOptions : ITranslationOptions
 	{

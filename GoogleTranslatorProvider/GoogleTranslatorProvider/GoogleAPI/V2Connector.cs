@@ -6,14 +6,14 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Web;
-using GoogleTranslatorProvider.Extensions;
-using GoogleTranslatorProvider.Service;
+using GoogleCloudTranslationProvider.Extensions;
+using GoogleCloudTranslationProvider.Service;
 using Newtonsoft.Json.Linq;
 using NLog;
 using Sdl.LanguagePlatform.Core;
 using LogManager = NLog.LogManager;
 
-namespace GoogleTranslatorProvider.GoogleAPI
+namespace GoogleCloudTranslationProvider.GoogleAPI
 {
 	public class V2Connector
 	{

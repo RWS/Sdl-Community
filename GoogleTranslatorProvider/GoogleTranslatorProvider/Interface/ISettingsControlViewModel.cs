@@ -1,7 +1,7 @@
 ﻿using System.Windows.Input;
-using GoogleTranslatorProvider.Models;
+using GoogleCloudTranslationProvider.Models;
 
-namespace GoogleTranslatorProvider.Interfaces
+namespace GoogleCloudTranslationProvider.Interfaces
 {
 	public interface ISettingsControlViewModel
 	{

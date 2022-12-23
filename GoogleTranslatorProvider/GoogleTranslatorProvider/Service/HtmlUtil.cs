@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Web;
 using NLog;
 
-namespace GoogleTranslatorProvider.Service
+namespace GoogleCloudTranslationProvider.Service
 {
 	public class HtmlUtil
 	{

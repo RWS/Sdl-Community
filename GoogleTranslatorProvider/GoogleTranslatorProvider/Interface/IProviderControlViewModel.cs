@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using GoogleTranslatorProvider.Models;
-using GoogleTranslatorProvider.Service;
+using GoogleCloudTranslationProvider.Models;
+using GoogleCloudTranslationProvider.Service;
 using Sdl.LanguagePlatform.Core;
 
-namespace GoogleTranslatorProvider.Interfaces
+namespace GoogleCloudTranslationProvider.Interfaces
 {
 	public delegate void ClearMessageEventRaiser();
 

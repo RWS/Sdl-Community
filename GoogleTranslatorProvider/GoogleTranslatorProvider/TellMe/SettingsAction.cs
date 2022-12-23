@@ -1,13 +1,13 @@
 ﻿using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using GoogleTranslatorProvider.Models;
-using GoogleTranslatorProvider.ViewModels;
-using GoogleTranslatorProvider.Views;
+using GoogleCloudTranslationProvider.Models;
+using GoogleCloudTranslationProvider.ViewModels;
+using GoogleCloudTranslationProvider.Views;
 using Sdl.TellMe.ProviderApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace GoogleTranslatorProvider.TellMe
+namespace GoogleCloudTranslationProvider.TellMe
 {
 	// TODO: If we keep this class, add the errors to PluginResources
 	public class SettingsAction : AbstractTellMeAction

@@ -1,6 +1,6 @@
 ﻿using Google.Cloud.AutoML.V1;
 
-namespace GoogleTranslatorProvider.Models
+namespace GoogleCloudTranslationProvider.Models
 {
 	public class RetrievedCustomModel
 	{

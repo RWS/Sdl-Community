@@ -5,10 +5,10 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Serialization;
-using GoogleTranslatorProvider.Studio;
+using GoogleCloudTranslationProvider.Studio;
 using NLog;
 
-namespace GoogleTranslatorProvider.Models
+namespace GoogleCloudTranslationProvider.Models
 {
 	public class GCTPSegmentEditor
 	{

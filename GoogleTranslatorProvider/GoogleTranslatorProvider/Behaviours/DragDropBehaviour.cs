@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using Sdl.Desktop.Platform.Controls.Behaviours;
 
-namespace GoogleTranslatorProvider.Behaviours
+namespace GoogleCloudTranslationProvider.Behaviours
 {
 	public static class DragDropBehaviour
 	{

@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace GoogleTranslatorProvider.UiHelpers
+namespace GoogleCloudTranslationProvider.UiHelpers
 {
 	public class PasswordBoxWatermarkHelper : DependencyObject
 	{

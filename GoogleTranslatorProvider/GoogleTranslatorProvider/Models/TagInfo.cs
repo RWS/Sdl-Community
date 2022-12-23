@@ -1,6 +1,6 @@
 ﻿using Sdl.LanguagePlatform.Core;
 
-namespace GoogleTranslatorProvider.Models
+namespace GoogleCloudTranslationProvider.Models
 {
 	public class TagInfo
 	{

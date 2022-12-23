@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GoogleTranslatorProvider
+namespace GoogleCloudTranslationProvider
 {
 	public static class Constants
 	{
@@ -13,7 +13,7 @@ namespace GoogleTranslatorProvider
 		public const string GoogleVersion_V3_FullName = "V3 Advanced Translation";
 		public const string GoogleVersion_V3_ShortName = "V3";
 
-		public static readonly string DefaultDownloadableLocation = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Trados AppStore\\Google Cloud TP\\";
+		public static readonly string AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Trados AppStore\\Google Cloud TP\\";
 		public const string DefaultDownloadedJsonFileName = "\\downloadedProject.json";
 
 		public const string GoogleTranslatorString = "Google Translate";
@@ -31,6 +31,7 @@ namespace GoogleTranslatorProvider
 		public const string TranslationUri = "https://translation.googleapis.com/language/translate/v2";
 		public const string GlossariesUri = "https://console.cloud.google.com/storage/browser";
 		public const string CustomModelsUri = "https://console.cloud.google.com/translation/datasets";
+		public const string ProjectUri = "https://console.cloud.google.com/home/dashboard";
 
 		// Documentation
 		public const string V3Documentation = "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/6575/v3-advanced-translation";

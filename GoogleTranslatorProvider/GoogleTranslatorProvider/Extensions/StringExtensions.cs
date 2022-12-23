@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace GoogleTranslatorProvider.Extensions
+namespace GoogleCloudTranslationProvider.Extensions
 {
 	public static class StringExtensions
 	{

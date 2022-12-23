@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace GoogleTranslatorProvider.Models
+namespace GoogleCloudTranslationProvider.Models
 {
 	public class BaseModel : INotifyPropertyChanged
 	{

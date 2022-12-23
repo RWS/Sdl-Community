@@ -7,12 +7,12 @@ using System.Web.UI.WebControls;
 using Google.Api.Gax.ResourceNames;
 using Google.Cloud.AutoML.V1;
 using Google.Cloud.Translate.V3;
-using GoogleTranslatorProvider.Interfaces;
-using GoogleTranslatorProvider.Models;
+using GoogleCloudTranslationProvider.Interfaces;
+using GoogleCloudTranslationProvider.Models;
 using NLog;
 using Sdl.LanguagePlatform.Core;
 
-namespace GoogleTranslatorProvider.GoogleAPI
+namespace GoogleCloudTranslationProvider.GoogleAPI
 {
 	public class V3Connector
 	{

@@ -1,14 +1,14 @@
 ﻿using System;
-using GoogleTranslatorProvider.Extensions;
-using GoogleTranslatorProvider.GoogleAPI;
-using GoogleTranslatorProvider.Interfaces;
-using GoogleTranslatorProvider.Models;
-using GoogleTranslatorProvider.Service;
+using GoogleCloudTranslationProvider.Extensions;
+using GoogleCloudTranslationProvider.GoogleAPI;
+using GoogleCloudTranslationProvider.Interfaces;
+using GoogleCloudTranslationProvider.Models;
+using GoogleCloudTranslationProvider.Service;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace GoogleTranslatorProvider.Studio
+namespace GoogleCloudTranslationProvider.Studio
 {
 	public class Provider : ITranslationProvider
 	{

@@ -6,15 +6,15 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
-using GoogleTranslatorProvider.Commands;
-using GoogleTranslatorProvider.Extensions;
-using GoogleTranslatorProvider.GoogleAPI;
-using GoogleTranslatorProvider.Interfaces;
-using GoogleTranslatorProvider.Models;
-using GoogleTranslatorProvider.Service;
+using GoogleCloudTranslationProvider.Commands;
+using GoogleCloudTranslationProvider.Extensions;
+using GoogleCloudTranslationProvider.GoogleAPI;
+using GoogleCloudTranslationProvider.Interfaces;
+using GoogleCloudTranslationProvider.Models;
+using GoogleCloudTranslationProvider.Service;
 using Sdl.LanguagePlatform.Core;
 
-namespace GoogleTranslatorProvider.ViewModels
+namespace GoogleCloudTranslationProvider.ViewModels
 {
 	public class ProviderViewModel : BaseModel, IProviderControlViewModel
 	{
@@ -43,6 +43,7 @@ namespace GoogleTranslatorProvider.ViewModels
 		private string _apiKey;
 
 		private bool _canModifyExistingFields;
+		private bool _projectResourcesLoaded;
 		private bool _persistGoogleKey;
 		private bool _basicCsvGlossary;
 		private bool _isTellMeAction;
@@ -216,6 +217,17 @@ namespace GoogleTranslatorProvider.ViewModels
 				if (_canModifyExistingFields == value) return;
 				_canModifyExistingFields = value;
 				OnPropertyChanged(nameof(CanChangeProviderResources));
+			}
+		}
+
+		public bool ProjectResourcesLoaded
+		{
+			get => _projectResourcesLoaded;
+			set
+			{
+				if (_projectResourcesLoaded == value) return;
+				_projectResourcesLoaded = value;
+				OnPropertyChanged(nameof(ProjectResourcesLoaded));
 			}
 		}
 
@@ -558,10 +570,10 @@ namespace GoogleTranslatorProvider.ViewModels
 		{
 			ErrorMessage = string.Empty;
 			UrlToDownload ??= string.Empty;
-			var operation = UrlToDownload.VerifyAndDownloadJsonFile(Constants.DefaultDownloadableLocation + Constants.DefaultDownloadedJsonFileName);
+			var operation = UrlToDownload.VerifyAndDownloadJsonFile(Constants.AppDataFolder + Constants.DefaultDownloadedJsonFileName);
 			if (operation.Success)
 			{
-				ReadJsonFile(Constants.DefaultDownloadableLocation + Constants.DefaultDownloadedJsonFileName);
+				ReadJsonFile(Constants.AppDataFolder + Constants.DefaultDownloadedJsonFileName);
 				return;
 			}
 
@@ -649,19 +661,13 @@ namespace GoogleTranslatorProvider.ViewModels
 
 			GetProjectGlossaries();
 			GetProjectCustomModels();
-		}
 
-		private bool _projectResourcesLoaded;
-		public bool ProjectResourcesLoaded
-		{
-			get => _projectResourcesLoaded;
-			set
+			if (_availableGlossaries.Any() && _availableCustomModels.Any())
 			{
-				if (_projectResourcesLoaded == value) return;
-				_projectResourcesLoaded = value;
-				OnPropertyChanged(nameof(ProjectResourcesLoaded));
+				ProjectResourcesLoaded = true;
 			}
 		}
+
 		private void GetProjectGlossaries()
 		{
 			var tempGlossariesList = new List<RetrievedGlossary>();
@@ -679,13 +685,11 @@ namespace GoogleTranslatorProvider.ViewModels
 
 				tempGlossariesList.Add(new(new()));
 				tempGlossariesList.AddRange(v3Connector.GetGlossaries(_projectLocation).Select(retrievedGlossary => new RetrievedGlossary(retrievedGlossary)));
-				ProjectResourcesLoaded = true;
 			}
 			catch
 			{
 				tempGlossariesList.Clear();
 				tempGlossariesList.Add(new(null));
-				ProjectResourcesLoaded = false;
 			}
 
 			AvailableGlossaries = tempGlossariesList;
@@ -733,9 +737,8 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		private void NavigateTo(object parameter)
 		{
-			if (parameter is string target)
+			if (parameter is string target && !string.IsNullOrEmpty(target))
 			{
-				if (target == "-testing-") return;
 				target += $"?project={_projectId}";
 				Process.Start(target);
 			}

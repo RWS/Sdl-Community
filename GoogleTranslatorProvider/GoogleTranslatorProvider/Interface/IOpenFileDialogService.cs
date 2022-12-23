@@ -1,4 +1,4 @@
-﻿namespace GoogleTranslatorProvider.Interfaces
+﻿namespace GoogleCloudTranslationProvider.Interfaces
 {
 	public interface IOpenFileDialogService
 	{

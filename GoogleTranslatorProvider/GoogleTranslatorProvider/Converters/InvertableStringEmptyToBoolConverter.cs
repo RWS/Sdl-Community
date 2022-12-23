@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace GoogleTranslatorProvider.Converters
+namespace GoogleCloudTranslationProvider.Converters
 {
 	public class InvertableStringEmptyToBoolConverter : IValueConverter
 	{

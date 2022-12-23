@@ -2,7 +2,7 @@
 using System.Drawing;
 using Sdl.TellMe.ProviderApi;
 
-namespace GoogleTranslatorProvider.TellMe
+namespace GoogleCloudTranslationProvider.TellMe
 {
 	public class HelpAction : AbstractTellMeAction
 	{

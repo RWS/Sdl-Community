@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace GoogleTranslatorProvider.Commands
+namespace GoogleCloudTranslationProvider.Commands
 {
 	public class CommandHandler : ICommand
 	{

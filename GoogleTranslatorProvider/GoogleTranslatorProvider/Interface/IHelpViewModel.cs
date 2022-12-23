@@ -1,6 +1,6 @@
-﻿using GoogleTranslatorProvider.Models;
+﻿using GoogleCloudTranslationProvider.Models;
 
-namespace GoogleTranslatorProvider.Interface
+namespace GoogleCloudTranslationProvider.Interface
 {
 	public interface IHelpViewModel
 	{

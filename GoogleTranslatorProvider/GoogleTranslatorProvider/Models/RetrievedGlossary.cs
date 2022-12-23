@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using Google.Cloud.Translate.V3;
 
-namespace GoogleTranslatorProvider.Models
+namespace GoogleCloudTranslationProvider.Models
 {
 	public class RetrievedGlossary
 	{

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GoogleTranslatorProvider.Models
+namespace GoogleCloudTranslationProvider.Models
 {
 	public class EditCollection
 	{

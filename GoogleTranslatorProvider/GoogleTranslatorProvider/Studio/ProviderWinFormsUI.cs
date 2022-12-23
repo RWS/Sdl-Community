@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using GoogleTranslatorProvider.Extensions;
-using GoogleTranslatorProvider.Interfaces;
-using GoogleTranslatorProvider.Models;
-using GoogleTranslatorProvider.ViewModels;
-using GoogleTranslatorProvider.Views;
+using GoogleCloudTranslationProvider.Extensions;
+using GoogleCloudTranslationProvider.Interfaces;
+using GoogleCloudTranslationProvider.Models;
+using GoogleCloudTranslationProvider.ViewModels;
+using GoogleCloudTranslationProvider.Views;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace GoogleTranslatorProvider.Studio
+namespace GoogleCloudTranslationProvider.Studio
 {
 	[TranslationProviderWinFormsUi(Id = Constants.Provider_TranslationProviderWinFormsUi,
 								   Name = Constants.Provider_TranslationProviderWinFormsUi,

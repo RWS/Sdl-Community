@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace GoogleTranslatorProvider.Behaviours
+namespace GoogleCloudTranslationProvider.Behaviours
 {
 	public static class WebBrowserContentSource
 	{

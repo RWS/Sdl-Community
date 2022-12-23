@@ -1,7 +1,7 @@
-﻿using GoogleTranslatorProvider.Interfaces;
+﻿using GoogleCloudTranslationProvider.Interfaces;
 using Microsoft.Win32;
 
-namespace GoogleTranslatorProvider.Service
+namespace GoogleCloudTranslationProvider.Service
 {
 	public class OpenFileDialogService : IOpenFileDialogService
 	{

@@ -1,8 +1,8 @@
 ﻿using System;
-using GoogleTranslatorProvider.Models;
+using GoogleCloudTranslationProvider.Models;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace GoogleTranslatorProvider.Studio
+namespace GoogleCloudTranslationProvider.Studio
 {
 	[TranslationProviderFactory(Id = Constants.Provider_TranslationProviderFactory,
 								Name = Constants.Provider_TranslationProviderFactory,

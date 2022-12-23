@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Markup;
 
-namespace GoogleTranslatorProvider.UiHelpers
+namespace GoogleCloudTranslationProvider.UiHelpers
 {
 	[ContentProperty(nameof(Member))]
 	public class NameOf : MarkupExtension

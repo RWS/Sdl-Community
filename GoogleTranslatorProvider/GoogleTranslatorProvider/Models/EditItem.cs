@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace GoogleTranslatorProvider.Models
+namespace GoogleCloudTranslationProvider.Models
 {
 	public class EditItem
 	{

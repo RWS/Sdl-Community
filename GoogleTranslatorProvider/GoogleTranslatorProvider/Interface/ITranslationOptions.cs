@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GoogleTranslatorProvider.Interfaces
+namespace GoogleCloudTranslationProvider.Interfaces
 {
 	public interface ITranslationOptions
 	{

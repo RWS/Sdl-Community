@@ -1,9 +1,9 @@
 ﻿using System;
-using GoogleTranslatorProvider.Helpers;
+using GoogleCloudTranslationProvider.Helpers;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 
-namespace GoogleTranslatorProvider
+namespace GoogleCloudTranslationProvider
 {
 	[ApplicationInitializer]
 	public class AppInitializer : IApplicationInitializer

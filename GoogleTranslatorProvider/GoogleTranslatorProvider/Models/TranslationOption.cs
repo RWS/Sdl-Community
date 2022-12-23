@@ -1,4 +1,4 @@
-﻿namespace GoogleTranslatorProvider.Models
+﻿namespace GoogleCloudTranslationProvider.Models
 {
 	public class TranslationOption
 	{

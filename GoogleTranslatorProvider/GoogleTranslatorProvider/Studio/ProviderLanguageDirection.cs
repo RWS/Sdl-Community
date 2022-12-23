@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Globalization;
-using GoogleTranslatorProvider.GoogleAPI;
-using GoogleTranslatorProvider.Helpers;
-using GoogleTranslatorProvider.Interfaces;
-using GoogleTranslatorProvider.Models;
-using GoogleTranslatorProvider.Service;
+using GoogleCloudTranslationProvider.GoogleAPI;
+using GoogleCloudTranslationProvider.Helpers;
+using GoogleCloudTranslationProvider.Interfaces;
+using GoogleCloudTranslationProvider.Models;
+using GoogleCloudTranslationProvider.Service;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace GoogleTranslatorProvider.Studio
+namespace GoogleCloudTranslationProvider.Studio
 {
 	public class ProviderLanguageDirection : ITranslationProviderLanguageDirection
 	{

@@ -4,8 +4,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("GoogleTranslatorProvider")]
-[assembly: AssemblyProduct("GoogleTranslatorProvider")]
+[assembly: AssemblyTitle("GoogleCloudTranslationProvider")]
+[assembly: AssemblyProduct("GoogleCloudTranslationProvider")]
 [assembly: AssemblyCompany("SDL Limited as part of the RWS Holdings Plc group of companies")]
 [assembly: AssemblyCopyright("Copyright © 2011 - 2022 SDL Limited as part of the RWS Holdings Plc group of companies (\"RWS Group\").")]
 

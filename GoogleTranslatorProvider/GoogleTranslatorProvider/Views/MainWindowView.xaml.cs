@@ -1,4 +1,4 @@
-﻿namespace GoogleTranslatorProvider.Views
+﻿namespace GoogleCloudTranslationProvider.Views
 {
 	/// <summary>
 	/// Interaction logic for MainWindowView.xaml

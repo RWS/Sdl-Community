@@ -475,4 +475,7 @@ Path: {0}</value>
   <data name="ProjectInfo_CustomModel" xml:space="preserve">
     <value>Custom Model</value>
   </data>
+  <data name="ProviderView_V3_Project_Navigate" xml:space="preserve">
+    <value>Navigate to your project</value>
+  </data>
 </root>

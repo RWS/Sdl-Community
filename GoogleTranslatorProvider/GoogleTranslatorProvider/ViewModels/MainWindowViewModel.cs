@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Windows.Input;
-using GoogleTranslatorProvider.Commands;
-using GoogleTranslatorProvider.Interfaces;
-using GoogleTranslatorProvider.Models;
-using GoogleTranslatorProvider.Service;
+using GoogleCloudTranslationProvider.Commands;
+using GoogleCloudTranslationProvider.Interfaces;
+using GoogleCloudTranslationProvider.Models;
+using GoogleCloudTranslationProvider.Service;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace GoogleTranslatorProvider.ViewModels
+namespace GoogleCloudTranslationProvider.ViewModels
 {
 	public class MainWindowViewModel : BaseModel
 	{

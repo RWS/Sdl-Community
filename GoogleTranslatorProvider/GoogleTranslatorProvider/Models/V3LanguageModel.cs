@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace GoogleTranslatorProvider.Models
+namespace GoogleCloudTranslationProvider.Models
 {
 	public class V3LanguageModel
 	{

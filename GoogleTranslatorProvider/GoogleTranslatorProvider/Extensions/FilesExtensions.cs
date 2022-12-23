@@ -6,7 +6,7 @@ using System.Net;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 
-namespace GoogleTranslatorProvider.Extensions
+namespace GoogleCloudTranslationProvider.Extensions
 {
 	public static class FilesExtensions
 	{
@@ -58,9 +58,9 @@ namespace GoogleTranslatorProvider.Extensions
 			try
 			{
 				using var webClient = new WebClient();
-				if (!Directory.Exists(Constants.DefaultDownloadableLocation))
+				if (!Directory.Exists(Constants.AppDataFolder))
 				{
-					Directory.CreateDirectory(Constants.DefaultDownloadableLocation);
+					Directory.CreateDirectory(Constants.AppDataFolder);
 				}
 
 				var filePath = location;

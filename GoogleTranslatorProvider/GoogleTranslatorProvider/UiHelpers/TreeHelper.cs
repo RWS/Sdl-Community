@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Media;
 
-namespace GoogleTranslatorProvider.UiHelpers
+namespace GoogleCloudTranslationProvider.UiHelpers
 {
 	public static class TreeHelper
 	{
