@@ -132,7 +132,7 @@
     </Compile>
   </ItemGroup>
   <PropertyGroup>
-		<AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+		<AssemblyOriginatorKeyFile>..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
 		<CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
   </Project>
