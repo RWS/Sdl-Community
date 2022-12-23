@@ -14,8 +14,7 @@ namespace GoogleTranslatorProvider.Models
 		public RetrievedCustomModel(Model model)
 		{
 			_model = model;
-			if (_model is null
-			 || string.IsNullOrEmpty(_model?.DatasetId))
+			if (_model is null || string.IsNullOrEmpty(_model?.DatasetId))
 			{
 				_displayName = _model is null ? PluginResources.RetrievedResources_CustomModels_Unavailable
 											  : PluginResources.RetrievedResources_CustomModels_Unselected;

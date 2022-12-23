@@ -18,9 +18,9 @@ namespace GoogleTranslatorProvider.Helpers
 		private readonly Segment _sourceSegment;
 		private readonly HtmlUtil _htmlUtil;
 
-		private Dictionary<string, GTPTag> _tagsDictionary;
+		private Dictionary<string, GCTPTag> _tagsDictionary;
 		private string _returnedText;
-		private GTPTag _currentTag;
+		private GCTPTag _currentTag;
 
 		public TagPlacer(Segment sourceSegment, HtmlUtil htmlUtil)
 		{
@@ -150,7 +150,7 @@ namespace GoogleTranslatorProvider.Helpers
 
 		private void TryGetSourceTagsDictionary()
 		{
-			_tagsDictionary = new Dictionary<string, GTPTag>();
+			_tagsDictionary = new Dictionary<string, GCTPTag>();
 			var elements = _sourceSegment?.Elements;
 			if (elements is null || !elements.Any())
 			{
@@ -165,7 +165,7 @@ namespace GoogleTranslatorProvider.Helpers
 					continue;
 				}
 
-				_currentTag = new GTPTag((Tag)elements[i].Duplicate());
+				_currentTag = new GCTPTag((Tag)elements[i].Duplicate());
 				UpdateTagsInfo(i);
 				var tagText = ConvertTagToString();
 				PreparedSourceText += tagText;

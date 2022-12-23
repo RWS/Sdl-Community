@@ -25,7 +25,7 @@ namespace GoogleTranslatorProvider.Studio
 
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
-			var options = new GTPTranslationOptions();
+			var options = new GCTPTranslationOptions();
 			var mainWindowViewModel = ShowRequestedView(languagePairs, credentialStore, options);
 			return mainWindowViewModel.DialogResult ? new ITranslationProvider[] { new Provider(options) }
 													: null;
@@ -44,7 +44,7 @@ namespace GoogleTranslatorProvider.Studio
 
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
 		{
-			var options = new GTPTranslationOptions(translationProviderUri);
+			var options = new GCTPTranslationOptions(translationProviderUri);
 			var customName = options.CustomProviderName;
 			var useCustomName = options.UseCustomProviderName;
 			var selectedVersion = options.SelectedGoogleVersion;
@@ -141,7 +141,7 @@ namespace GoogleTranslatorProvider.Studio
 				}
 			}
 
-			var options = new GTPTranslationOptions();
+			var options = new GCTPTranslationOptions();
 			var mainWindowViewModel = ShowRequestedView(languagePairs.ToArray(), credentialStore, options);
 			return mainWindowViewModel.DialogResult;
 		}

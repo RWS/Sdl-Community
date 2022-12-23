@@ -2,9 +2,9 @@
 
 namespace GoogleTranslatorProvider.Models
 {
-	public class GTPTag
+	public class GCTPTag
 	{
-		public GTPTag(Tag tag)
+		public GCTPTag(Tag tag)
 		{
 			SdlTag = tag;
 			PadLeft = string.Empty;

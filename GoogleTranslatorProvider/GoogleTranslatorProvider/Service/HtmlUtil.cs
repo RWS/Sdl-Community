@@ -1,7 +1,7 @@
-﻿using NLog;
-using System;
+﻿using System;
 using System.Reflection;
 using System.Web;
+using NLog;
 
 namespace GoogleTranslatorProvider.Service
 {

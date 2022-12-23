@@ -8,14 +8,14 @@ namespace GoogleTranslatorProvider.TellMe
 	{
 		public StoreAction()
 		{
-			Name = $"{Constants.GooglePluginName} - AppStore";
+			Name = $"{Constants.GoogleNaming_FullName} - AppStore";
 		}
 
 		public override bool IsAvailable => true;
 
 		public override Icon Icon => PluginResources.Download;
 
-		public override string Category => Constants.GooglePluginName;
+		public override string Category => Constants.GoogleNaming_FullName;
 
 		public override void Execute()
 		{

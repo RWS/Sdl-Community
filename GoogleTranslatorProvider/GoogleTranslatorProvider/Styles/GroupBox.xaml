@@ -6,7 +6,7 @@
 		<Setter Property="HeaderTemplate">
 			<Setter.Value>
 				<DataTemplate>
-					<TextBlock Text="{Binding}" FontFamily="Segoe UI" Foreground="#636463" FontWeight="Normal" FontSize="13" HorizontalAlignment="Center"/>
+					<TextBlock Text="{Binding}" FontFamily="Segoe UI" Foreground="#636463" FontWeight="Normal" FontSize="13" HorizontalAlignment="Center" Padding="4 0"/>
 				</DataTemplate>
 			</Setter.Value>
 		</Setter>

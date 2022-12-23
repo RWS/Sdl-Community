@@ -68,23 +68,23 @@
 				<DockPanel>
 					<StackPanel DockPanel.Dock="Left"
 								Margin="0 0 8 0">
-						<TextBlock Text="Local path"
+						<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_LocalPath_Description}"
 								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
 								   HorizontalAlignment="Right"/>
-						
-						<TextBlock Text="Project ID"
+
+						<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_ProjectID_Description}"
 								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
 								   HorizontalAlignment="Right"/>
-						
-						<TextBlock Text="Location"
+
+						<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_Location_Description}"
 								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
 								   HorizontalAlignment="Right"/>
-						
-						<TextBlock Text="Glossary"
+
+						<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_Glossary_Description}"
 								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
 								   HorizontalAlignment="Right"/>
-						
-						<TextBlock Text="Custom Model"
+
+						<TextBlock Text="{x:Static root:PluginResources.ProjectInfo_CustomModel}"
 								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
 								   HorizontalAlignment="Right"/>
 					</StackPanel>
@@ -125,6 +125,7 @@
 							Orientation="Horizontal">
 					<Button Content="{Binding MultiButtonContent}"
 							Style="{StaticResource Sdl.Button.SecondaryStyle}"
+							Visibility="{Binding ShowMultiButton, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 							Command="{Binding SwitchViewCommand}"
 							Cursor="Hand"
 							Width="80"/>

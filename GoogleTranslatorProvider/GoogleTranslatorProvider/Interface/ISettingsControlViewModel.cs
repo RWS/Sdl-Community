@@ -1,5 +1,5 @@
-﻿using GoogleTranslatorProvider.Models;
-using System.Windows.Input;
+﻿using System.Windows.Input;
+using GoogleTranslatorProvider.Models;
 
 namespace GoogleTranslatorProvider.Interfaces
 {

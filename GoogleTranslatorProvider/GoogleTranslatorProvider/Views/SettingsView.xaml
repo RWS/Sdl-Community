@@ -32,7 +32,7 @@
 			  Padding="0 12">
 		<StackPanel Margin="24 12">
 
-			<CheckBox Content="Use custom name for this provider"
+			<CheckBox Content="{x:Static root:PluginResources.SettingsView_CustomName_Description}"
 					  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 					  IsChecked="{Binding UseCustomProviderName}"
 					  Cursor="Hand"
@@ -40,7 +40,7 @@
 			<TextBox Text="{Binding CustomProviderName, UpdateSourceTrigger=PropertyChanged}"
 					 Style="{StaticResource WatermarkTextBox}"
 					 Visibility="{Binding UseCustomProviderName, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-					 uiHelpers:TextBoxWatermarkHelper.WatermarkText="Type your custom name here"
+					 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.SettingsView_CustomName_Watermark}"
 					 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
 					 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=CustomProviderName, Type={x:Type viewModels:SettingsViewModel}}"
 					 IsEnabled="{Binding UseCustomProviderName,Converter={StaticResource InvertableBoolEnabledConverter}}"

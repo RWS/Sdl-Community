@@ -556,6 +556,15 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom Model.
+        /// </summary>
+        public static string ProjectInfo_CustomModel {
+            get {
+                return ResourceManager.GetString("ProjectInfo_CustomModel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This project does not use a custom model..
         /// </summary>
         public static string ProjectInfo_CustomModelNotUsed {
@@ -637,11 +646,20 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use custom model (AutoML).
+        ///   Looks up a localized string similar to Custom model (AutoML).
         /// </summary>
         public static string ProviderView_V3_CustomModel_Description {
             get {
                 return ResourceManager.GetString("ProviderView_V3_CustomModel_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Navigate to your custom models.
+        /// </summary>
+        public static string ProviderView_V3_CustomModel_Navigate {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_CustomModel_Navigate", resourceCulture);
             }
         }
         
@@ -664,7 +682,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to or browse for it on your machine.
+        ///   Looks up a localized string similar to or click here browse for it on your machine.
         /// </summary>
         public static string ProviderView_V3_File_Browse {
             get {
@@ -682,7 +700,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Drop your JSON file here.
+        ///   Looks up a localized string similar to Drop your JSON file.
         /// </summary>
         public static string ProviderView_V3_File_DragAndDrop {
             get {
@@ -696,6 +714,15 @@ namespace GoogleTranslatorProvider {
         public static string ProviderView_V3_Glossary_Description {
             get {
                 return ResourceManager.GetString("ProviderView_V3_Glossary_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Navigate to your glossaries.
+        /// </summary>
+        public static string ProviderView_V3_Glossary_Navigate {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_Glossary_Navigate", resourceCulture);
             }
         }
         
@@ -799,7 +826,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type your url here.
+        ///   Looks up a localized string similar to Type/paste your url here.
         /// </summary>
         public static string ProviderView_V3_Url_Watermark {
             get {
@@ -891,6 +918,24 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use custom name for this provider.
+        /// </summary>
+        public static string SettingsView_CustomName_Description {
+            get {
+                return ResourceManager.GetString("SettingsView_CustomName_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type your custom name here.
+        /// </summary>
+        public static string SettingsView_CustomName_Watermark {
+            get {
+                return ResourceManager.GetString("SettingsView_CustomName_Watermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do post-lookup find/replace.
         /// </summary>
         public static string SettingsView_PostLookup_Description {
@@ -900,7 +945,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Browse or type the location of the post-lookup file.
+        ///   Looks up a localized string similar to Type the location of the post-lookup file or browse.
         /// </summary>
         public static string SettingsView_PostLookup_WaterMark {
             get {
@@ -918,7 +963,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Browse or type the location of the pre-lookup file.
+        ///   Looks up a localized string similar to Type the location of the pre-lookup file or browse.
         /// </summary>
         public static string SettingsView_PreLookup_WaterMark {
             get {
@@ -936,7 +981,7 @@ namespace GoogleTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Send plain text only (not tags).
+        ///   Looks up a localized string similar to Do not include tags in the translated segments.
         /// </summary>
         public static string SettingsView_TextOnly_Description {
             get {

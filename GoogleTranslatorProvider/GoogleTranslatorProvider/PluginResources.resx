@@ -236,7 +236,7 @@
     <value>Do post-lookup find/replace filename:</value>
   </data>
   <data name="SettingsView_PostLookup_WaterMark" xml:space="preserve">
-    <value>Browse or type the location of the post-lookup file</value>
+    <value>Type the location of the post-lookup file or browse</value>
   </data>
   <data name="PostLookupWrongPathMessage" xml:space="preserve">
     <value>Post-lookup file could not be found at the specified path.</value>
@@ -248,7 +248,7 @@
     <value>Pre-lookup filepath cannot be empty. Please add a valid path otherwise uncheck "Do pre-lookup checkbox".</value>
   </data>
   <data name="SettingsView_PreLookup_WaterMark" xml:space="preserve">
-    <value>Browse or type the location of the pre-lookup file</value>
+    <value>Type the location of the pre-lookup file or browse</value>
   </data>
   <data name="PreLookupWrongPathMessage" xml:space="preserve">
     <value>Pre-lookup file could not be found at the specified path.</value>
@@ -257,7 +257,7 @@
     <value>Re-send draft and translated segments</value>
   </data>
   <data name="SettingsView_TextOnly_Description" xml:space="preserve">
-    <value>Send plain text only (not tags)</value>
+    <value>Do not include tags in the translated segments</value>
   </data>
   <data name="Validation_MissingJsonFile" xml:space="preserve">
     <value>The JSON file could not be found, the file could be either renamed, moved or deleted, please browse again for you file.</value>
@@ -322,10 +322,10 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
     <value>Help</value>
   </data>
   <data name="ProviderView_V3_File_Browse" xml:space="preserve">
-    <value>or browse for it on your machine</value>
+    <value>or click here browse for it on your machine</value>
   </data>
   <data name="ProviderView_V3_File_DragAndDrop" xml:space="preserve">
-    <value>Drop your JSON file here</value>
+    <value>Drop your JSON file</value>
   </data>
   <data name="ProviderView_V2_ApiKey_Tooltip" xml:space="preserve">
     <value>API Key Tooltip placeholder</value>
@@ -352,7 +352,7 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
     <value>JSON file is corrupted, the ProjectID is either missing or incorrect.</value>
   </data>
   <data name="ProviderView_V3_CustomModel_Description" xml:space="preserve">
-    <value>Use custom model (AutoML)</value>
+    <value>Custom model (AutoML)</value>
   </data>
   <data name="ProviderView_V3_CustomModel_Tooltip" xml:space="preserve">
     <value>Custom Model (AutoML) Tooltip placeholder</value>
@@ -379,7 +379,7 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
     <value>Download</value>
   </data>
   <data name="ProviderView_V3_Url_Watermark" xml:space="preserve">
-    <value>Type your url here</value>
+    <value>Type/paste your url here</value>
   </data>
   <data name="ProviderView_V3_UseUrl" xml:space="preserve">
     <value>Use URL</value>
@@ -451,6 +451,18 @@ Path: {0}</value>
   <data name="ProjectInfo_ProjectIdMissing" xml:space="preserve">
     <value>Couldn't determine the project id. The field is probably missing on the json file or the json file is corrupted.</value>
   </data>
+  <data name="ProviderView_V3_CustomModel_Navigate" xml:space="preserve">
+    <value>Navigate to your custom models</value>
+  </data>
+  <data name="ProviderView_V3_Glossary_Navigate" xml:space="preserve">
+    <value>Navigate to your glossaries</value>
+  </data>
+  <data name="SettingsView_CustomName_Description" xml:space="preserve">
+    <value>Use custom name for this provider</value>
+  </data>
+  <data name="SettingsView_CustomName_Watermark" xml:space="preserve">
+    <value>Type your custom name here</value>
+  </data>
   <data name="Validation_AuthenticationFailed" xml:space="preserve">
     <value>Could not authenticate the user with the ProjectID provided in the JSON file.</value>
   </data>
@@ -459,5 +471,8 @@ Path: {0}</value>
   </data>
   <data name="Validation_MultipleFiles" xml:space="preserve">
     <value>Only one file can be dropped to be used on the authentication process.</value>
+  </data>
+  <data name="ProjectInfo_CustomModel" xml:space="preserve">
+    <value>Custom Model</value>
   </data>
 </root>

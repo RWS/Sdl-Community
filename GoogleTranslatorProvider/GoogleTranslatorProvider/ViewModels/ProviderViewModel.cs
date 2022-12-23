@@ -259,7 +259,7 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		public string ProjectId
 		{
-			get => _projectId;
+			get => _projectId ?? PluginResources.ProviderViewModel_PathNotSpecified;
 			set
 			{
 				if (_projectId == value) return;
@@ -396,7 +396,7 @@ namespace GoogleTranslatorProvider.ViewModels
 		{
 			try
 			{
-				var providerOptions = new GTPTranslationOptions
+				var providerOptions = new GCTPTranslationOptions
 				{
 					ProjectId = ProjectId,
 					JsonFilePath = JsonFilePath,
@@ -601,7 +601,7 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		private void GetProjectLocations()
 		{
-			var tempOptions = new GTPTranslationOptions
+			var tempOptions = new GCTPTranslationOptions
 			{
 				ProjectId = _projectId,
 				JsonFilePath = _jsonFilePath,
@@ -651,10 +651,21 @@ namespace GoogleTranslatorProvider.ViewModels
 			GetProjectCustomModels();
 		}
 
+		private bool _projectResourcesLoaded;
+		public bool ProjectResourcesLoaded
+		{
+			get => _projectResourcesLoaded;
+			set
+			{
+				if (_projectResourcesLoaded == value) return;
+				_projectResourcesLoaded = value;
+				OnPropertyChanged(nameof(ProjectResourcesLoaded));
+			}
+		}
 		private void GetProjectGlossaries()
 		{
 			var tempGlossariesList = new List<RetrievedGlossary>();
-			var tempOptions = new GTPTranslationOptions
+			var tempOptions = new GCTPTranslationOptions
 			{
 				ProjectId = _projectId,
 				JsonFilePath = _jsonFilePath,
@@ -668,11 +679,13 @@ namespace GoogleTranslatorProvider.ViewModels
 
 				tempGlossariesList.Add(new(new()));
 				tempGlossariesList.AddRange(v3Connector.GetGlossaries(_projectLocation).Select(retrievedGlossary => new RetrievedGlossary(retrievedGlossary)));
+				ProjectResourcesLoaded = true;
 			}
 			catch
 			{
 				tempGlossariesList.Clear();
 				tempGlossariesList.Add(new(null));
+				ProjectResourcesLoaded = false;
 			}
 
 			AvailableGlossaries = tempGlossariesList;
@@ -682,7 +695,7 @@ namespace GoogleTranslatorProvider.ViewModels
 		private void GetProjectCustomModels()
 		{
 			var tempCustomModelsList = new List<RetrievedCustomModel>();
-			var tempOptions = new GTPTranslationOptions
+			var tempOptions = new GCTPTranslationOptions
 			{
 				ProjectId = _projectId,
 				JsonFilePath = _jsonFilePath,
@@ -696,11 +709,13 @@ namespace GoogleTranslatorProvider.ViewModels
 
 				tempCustomModelsList.Add(new(new()));
 				tempCustomModelsList.AddRange(v3Connector.GetCustomModels().Select(retrievedCustomModel => new RetrievedCustomModel(retrievedCustomModel)));
+				ProjectResourcesLoaded = true;
 			}
 			catch
 			{
 				tempCustomModelsList.Clear();
 				tempCustomModelsList.Add(new(null));
+				ProjectResourcesLoaded = false;
 			}
 
 			AvailableCustomModels = tempCustomModelsList;
@@ -720,6 +735,8 @@ namespace GoogleTranslatorProvider.ViewModels
 		{
 			if (parameter is string target)
 			{
+				if (target == "-testing-") return;
+				target += $"?project={_projectId}";
 				Process.Start(target);
 			}
 		}

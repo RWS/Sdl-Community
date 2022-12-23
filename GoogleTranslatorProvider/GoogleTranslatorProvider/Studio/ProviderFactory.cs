@@ -16,7 +16,7 @@ namespace GoogleTranslatorProvider.Studio
 				throw new Exception(PluginResources.UriNotSupportedMessage);
 			}
 
-			var translationOptions = new GTPTranslationOptions(translationProviderUri);
+			var translationOptions = new GCTPTranslationOptions(translationProviderUri);
 			if (translationOptions.SelectedGoogleVersion is not ApiVersion.V2)
 			{
 				return new Provider(translationOptions);

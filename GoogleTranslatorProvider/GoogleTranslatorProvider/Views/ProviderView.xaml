@@ -111,7 +111,6 @@
 								<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_File_DragAndDrop}"
 										   Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"
 										   FontSize="16"
-										   FontWeight="DemiBold"
 										   HorizontalAlignment="Center"
 										   Margin="0"/>
 								<Button Content="{x:Static root:PluginResources.ProviderView_V3_File_Browse}"
@@ -175,14 +174,13 @@
 							</Image>
 						</StackPanel>
 
-						<StackPanel Orientation="Horizontal" Margin="0 0 0 12"
+						<StackPanel Orientation="Horizontal" Margin="0 0 0 8"
 									Visibility="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}">
 							<TextBox Text="{Binding VisibleJsonPath}"
 									 Style="{StaticResource Sdl.ComboBox.Generic.EditableTextBox}"
 									 ToolTip="{Binding JsonFilePath}"
 									 HorizontalAlignment="Left"
 									 IsReadOnly="True"
-									 Padding="0 3"
 									 Height="24"/>
 							<Button Style="{StaticResource TransparentButtonStyle}"
 									Visibility="{Binding JsonFilePath, Converter={StaticResource EmptyToVisibility}}"
@@ -213,13 +211,13 @@
 
 						<TextBox Text="{Binding ProjectId, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
 								 Visibility="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
-								 VerticalContentAlignment="Center"
+								 Style="{StaticResource Sdl.ComboBox.Generic.EditableTextBox}"
 								 HorizontalAlignment="Left"
-								 Padding="4 0"
-								 Width="320" Height="24"
+								 IsReadOnly="True"
+								 Height="24"
 								 Margin="0 0 0 12"/>
 						<!--</PROJECT ID>-->
-
+						
 						<!--<PROJECT LOCATION>-->
 						<StackPanel Orientation="Horizontal"
 									Visibility="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}">
@@ -245,8 +243,18 @@
 								  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
 								  HorizontalAlignment="Left"
 								  MinWidth="0" Width="320" Height="24"
-								  Cursor="Hand"
-								  Margin="0 0 0 12"/>
+								  Cursor="Hand"/>
+						<Button Content="Navigate to your -"
+								Command="{Binding NavigateToCommand}"
+								CommandParameter="-testing-"
+								Style="{StaticResource Sdl.Button.HyperLinkStyle}"
+								IsEnabled="{Binding ProjectResourcesLoaded}"
+								HorizontalAlignment="Left"
+								FontSize="12"
+								FontStyle="Italic"
+								Padding="0"
+								Cursor="Hand"
+								Margin="4 0 0 12"/>
 						<!--</PROJECT LOCATION>-->
 						
 						<!--<GLOSSARY>-->
@@ -274,10 +282,11 @@
 								  HorizontalAlignment="Left"
 								  MinWidth="0" Width="320" Height="24"
 								  Cursor="Hand"/>
-						<Button Content="Navigate to your glossaries"
+						<Button Content="{x:Static root:PluginResources.ProviderView_V3_Glossary_Navigate}"
 								Command="{Binding NavigateToCommand}"
-								CommandParameter="https://console.cloud.google.com/storage/browser"
+								CommandParameter="{x:Static root:Constants.GlossariesUri}"
 								Style="{StaticResource Sdl.Button.HyperLinkStyle}"
+								IsEnabled="{Binding ProjectResourcesLoaded}"
 								HorizontalAlignment="Left"
 								FontSize="12"
 								FontStyle="Italic"
@@ -288,7 +297,7 @@
 						
 						<!--<CUSTOM MODEL / AutoML>-->
 						<StackPanel Orientation="Horizontal">
-							<TextBlock Text="Custom Model (AutoML)"
+							<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_CustomModel_Description}"
 									   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
 									   HorizontalAlignment="Left"
 									   Margin="0 0 4 0"/>
@@ -311,10 +320,11 @@
 								  HorizontalAlignment="Left"
 								  MinWidth="0" Width="320" Height="24"
 								  Cursor="Hand"/>
-						<Button Content="Navigate to your custom models"
+						<Button Content="{x:Static root:PluginResources.ProviderView_V3_CustomModel_Navigate}"
 								Command="{Binding NavigateToCommand}"
-								CommandParameter="https://console.cloud.google.com/translation/datasets"
+								CommandParameter="{x:Static root:Constants.CustomModelsUri}"
 								Style="{StaticResource Sdl.Button.HyperLinkStyle}"
+								IsEnabled="{Binding ProjectResourcesLoaded}"
 								HorizontalAlignment="Left"
 								FontSize="12"
 								FontStyle="Italic"

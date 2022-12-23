@@ -99,7 +99,7 @@ namespace GoogleTranslatorProvider.Studio
 
 		public void LoadState(string translationProviderState)
 		{
-			Options = JsonConvert.DeserializeObject<GTPTranslationOptions>(translationProviderState);
+			Options = JsonConvert.DeserializeObject<GCTPTranslationOptions>(translationProviderState);
 		}
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)

@@ -8,14 +8,14 @@ namespace GoogleTranslatorProvider.TellMe
 	{
 		public CommunityForumAction()
 		{
-			Name = $"{Constants.GooglePluginName} - Forum";
+			Name = $"{Constants.GoogleNaming_FullName} - Forum";
 		}
 
 		public override bool IsAvailable => true;
 
 		public override Icon Icon => PluginResources.ForumIcon;
 
-		public override string Category => Constants.GooglePluginName;
+		public override string Category => Constants.GoogleNaming_FullName;
 
 		public override void Execute()
 		{

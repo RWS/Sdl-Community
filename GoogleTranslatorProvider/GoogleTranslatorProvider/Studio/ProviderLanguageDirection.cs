@@ -22,8 +22,8 @@ namespace GoogleTranslatorProvider.Studio
 		private V2Connector _googleV2Api;
 		private V3Connector _googleV3Api;
 
-		private GTPSegmentEditor _postLookupSegmentEditor;
-		private GTPSegmentEditor _preLookupSegmentEditor;
+		private GCTPSegmentEditor _postLookupSegmentEditor;
+		private GCTPSegmentEditor _preLookupSegmentEditor;
 		private TranslationUnit _currentTranslationUnit;
 
 		public ProviderLanguageDirection(Provider provider, LanguagePair languages, HtmlUtil htmlUtil)
@@ -74,7 +74,7 @@ namespace GoogleTranslatorProvider.Studio
 
 			if (_options.UsePreEdit)
 			{
-				_preLookupSegmentEditor ??= new GTPSegmentEditor(_options.PreLookupFilename);
+				_preLookupSegmentEditor ??= new GCTPSegmentEditor(_options.PreLookupFilename);
 				newSegment = GetEditedSegment(_preLookupSegmentEditor, newSegment);
 			}
 
@@ -83,7 +83,7 @@ namespace GoogleTranslatorProvider.Studio
 			translation = tagplacer.GetTaggedSegment(translatedText).Duplicate();
 			if (_options.UsePostEdit)
 			{
-				_postLookupSegmentEditor ??= new GTPSegmentEditor(_options.PostLookupFilename);
+				_postLookupSegmentEditor ??= new GCTPSegmentEditor(_options.PostLookupFilename);
 				translation = GetEditedSegment(_postLookupSegmentEditor, translation);
 			}
 
@@ -159,7 +159,7 @@ namespace GoogleTranslatorProvider.Studio
 			var sourcetext = segment.ToPlain();
 			if (_options.UsePreEdit)
 			{
-				_preLookupSegmentEditor ??= new GTPSegmentEditor(_options.PreLookupFilename);
+				_preLookupSegmentEditor ??= new GCTPSegmentEditor(_options.PreLookupFilename);
 				sourcetext = GetEditedString(_preLookupSegmentEditor, sourcetext);
 				segment.Clear();
 				segment.Add(sourcetext);
@@ -168,7 +168,7 @@ namespace GoogleTranslatorProvider.Studio
 			var translatedText = Lookup(sourcetext, _options, "text");
 			if (_options.UsePostEdit)
 			{
-				_postLookupSegmentEditor ??= new GTPSegmentEditor(_options.PostLookupFilename);
+				_postLookupSegmentEditor ??= new GCTPSegmentEditor(_options.PostLookupFilename);
 				translatedText = GetEditedString(_postLookupSegmentEditor, translatedText);
 			}
 
@@ -193,12 +193,12 @@ namespace GoogleTranslatorProvider.Studio
 			};
 		}
 
-		private string GetEditedString(GTPSegmentEditor editor, string sourcetext)
+		private string GetEditedString(GCTPSegmentEditor editor, string sourcetext)
 		{
 			return editor.EditText(sourcetext);
 		}
 
-		private Segment GetEditedSegment(GTPSegmentEditor editor, Segment inSegment)
+		private Segment GetEditedSegment(GCTPSegmentEditor editor, Segment inSegment)
 		{
 			var segment = new Segment(inSegment.Culture);
 			foreach (var element in inSegment.Elements)

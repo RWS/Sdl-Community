@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Windows.Input;
 using GoogleTranslatorProvider.Commands;
@@ -35,6 +36,17 @@ namespace GoogleTranslatorProvider.ViewModels
 		private bool _isProviderViewSelected;
 		private bool _isSettingsViewSelected;
 		private bool _showSettingsView;
+		private bool _showMultiButton;
+		public bool ShowMultiButton
+		{
+			get => _showMultiButton;
+			set
+			{
+				if (_showMultiButton == value) return;
+				_showMultiButton = value;
+				OnPropertyChanged(nameof(ShowMultiButton));
+			}
+		}
 
 		private string _jsonFilePath;
 		private string _projectId;
@@ -249,6 +261,7 @@ namespace GoogleTranslatorProvider.ViewModels
 
 		private void InitializeViews()
 		{
+			ShowMultiButton = true;
 			_providerViewModel = new ProviderViewModel(Options);
 			_settingsViewModel = new SettingsViewModel(Options);
 			ShowProjectInfo = _showSettingsView && (_providerViewModel.SelectedGoogleApiVersion.Version == ApiVersion.V3);
@@ -266,6 +279,11 @@ namespace GoogleTranslatorProvider.ViewModels
 					ViewModel = _settingsViewModel.ViewModel
 				}
 			};
+
+			if (_showSettingsView && _providerViewModel.SelectedGoogleApiVersion.Version == ApiVersion.V2)
+			{
+				ShowMultiButton = false;
+			}
 
 			if (!_showProjectInfo)
 			{
@@ -338,13 +356,14 @@ namespace GoogleTranslatorProvider.ViewModels
 		{
 			if (_settingsViewModel is not null)
 			{
+				var providerName = Regex.Replace(_settingsViewModel.CustomProviderName?.Trim(), @"\s+", " ");
 				Options.SendPlainTextOnly = _settingsViewModel.SendPlainText;
 				Options.ResendDrafts = _settingsViewModel.ReSendDraft;
 				Options.UsePreEdit = _settingsViewModel.DoPreLookup;
 				Options.PreLookupFilename = _settingsViewModel.PreLookupFileName;
 				Options.UsePostEdit = _settingsViewModel.DoPostLookup;
 				Options.PostLookupFilename = _settingsViewModel.PostLookupFileName;
-				Options.CustomProviderName = _settingsViewModel.CustomProviderName?.Trim();
+				Options.CustomProviderName = providerName;
 				Options.UseCustomProviderName = _settingsViewModel.UseCustomProviderName && !string.IsNullOrEmpty(Options.CustomProviderName);
 			}
 

@@ -7,12 +7,12 @@ using static System.Convert;
 
 namespace GoogleTranslatorProvider.Models
 {
-	public class GTPTranslationOptions : ITranslationOptions
+	public class GCTPTranslationOptions : ITranslationOptions
 	{
 		private readonly TranslationProviderUriBuilder _uriBuilder;
 		private string _apiKey;
 
-		public GTPTranslationOptions(Uri uri = null)
+		public GCTPTranslationOptions(Uri uri = null)
 		{
 			_uriBuilder = uri is null ? new TranslationProviderUriBuilder(Constants.GoogleTranslationScheme)
 									  : new TranslationProviderUriBuilder(uri);

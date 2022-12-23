@@ -14,14 +14,14 @@ namespace GoogleTranslatorProvider.TellMe
 	{
 		public SettingsAction()
 		{
-			Name = $"{Constants.GooglePluginName} - Settings";
+			Name = $"{Constants.GoogleNaming_FullName} - Settings";
 		}
 
 		public override bool IsAvailable => true;
 
 		public override Icon Icon => PluginResources.Settings;
 
-		public override string Category => Constants.GooglePluginName;
+		public override string Category => Constants.GoogleNaming_FullName;
 
 		public override void Execute()
 		{
@@ -35,7 +35,7 @@ namespace GoogleTranslatorProvider.TellMe
 			var settings = currentProject.GetTranslationProviderConfiguration();
 			if (!settings.Entries.Any(entry => entry.MainTranslationProvider.Uri.OriginalString.Contains(Constants.GoogleTranslationScheme)))
 			{
-				MessageBox.Show($"{Constants.GooglePluginName} is not set on this project\nPlease set it in project settings before using TellMe to access it");
+				MessageBox.Show($"{Constants.GoogleNaming_FullName} is not set on this project\nPlease set it in project settings before using TellMe to access it");
 				return;
 			}
 
@@ -45,7 +45,7 @@ namespace GoogleTranslatorProvider.TellMe
 				return;
 			}
 
-			var translationOptions = new GTPTranslationOptions(translationProvider.MainTranslationProvider.Uri);
+			var translationOptions = new GCTPTranslationOptions(translationProvider.MainTranslationProvider.Uri);
 			var settingsViewModel = new SettingsViewModel(translationOptions, true);
 			var mainWindowViewModel = new MainWindowViewModel(translationOptions, settingsViewModel, true);
 			var mainWindow = new MainWindowView { DataContext = mainWindowViewModel };

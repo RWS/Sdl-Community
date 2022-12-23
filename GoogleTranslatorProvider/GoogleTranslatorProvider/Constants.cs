@@ -4,8 +4,8 @@ namespace GoogleTranslatorProvider
 {
 	public static class Constants
 	{
-		public const string Provider_TranslationProviderFactory = "GoogleCloudTranslationProvider_Factory";
-		public const string Provider_TranslationProviderWinFormsUi = "GoogleCloudTranslationProvider_WinFormsUI";
+
+
 		public const string GoogleNaming_FullName = "Google Cloud Translation Provider";
 		public const string GoogleNaming_ShortName = "Google Cloud TP";
 		public const string GoogleVersion_V2_FullName = "V2 Basic Translation";
@@ -17,13 +17,20 @@ namespace GoogleTranslatorProvider
 		public const string DefaultDownloadedJsonFileName = "\\downloadedProject.json";
 
 		public const string GoogleTranslatorString = "Google Translate";
-		public const string GooglePluginName = "Google Translator Provider";
 
 		public const string GoogleTranslationScheme = "googletranslationprovider";
 		public const string GoogleTranslationFullScheme = "googletranslationprovider:///";
 		public const string GoogleApiEnvironmentVariableName = "GOOGLE_APPLICATION_CREDENTIALS";
+
+		// Provider
+		public const string Provider_TranslationProviderFactory = "GoogleCloudTranslationProvider_Factory";
+		public const string Provider_TranslationProviderWinFormsUi = "GoogleCloudTranslationProvider_WinFormsUI";
+
+		// Google URIs
 		public const string LanguagesUri = "https://www.googleapis.com/language/translate/v2/languages";
 		public const string TranslationUri = "https://translation.googleapis.com/language/translate/v2";
+		public const string GlossariesUri = "https://console.cloud.google.com/storage/browser";
+		public const string CustomModelsUri = "https://console.cloud.google.com/translation/datasets";
 
 		// Documentation
 		public const string V3Documentation = "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/6575/v3-advanced-translation";
