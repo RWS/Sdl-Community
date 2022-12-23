@@ -322,7 +322,7 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
     <value>Help</value>
   </data>
   <data name="ProviderView_V3_File_Browse" xml:space="preserve">
-    <value>or click here browse for it on your machine</value>
+    <value>or click here to browse for it on your machine</value>
   </data>
   <data name="ProviderView_V3_File_DragAndDrop" xml:space="preserve">
     <value>Drop your JSON file</value>

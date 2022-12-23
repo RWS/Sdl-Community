@@ -682,7 +682,7 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to or click here browse for it on your machine.
+        ///   Looks up a localized string similar to or click here to browse for it on your machine.
         /// </summary>
         public static string ProviderView_V3_File_Browse {
             get {
