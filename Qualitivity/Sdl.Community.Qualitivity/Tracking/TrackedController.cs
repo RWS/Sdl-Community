@@ -30,7 +30,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 {
 	public class TrackedController
 	{
-
+		private static string _productName = "Studio 2022";
 
 		private static ContentGenerator _contentProcessor;
 
@@ -107,6 +107,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 				{
 					Id = file.Id.ToString(),
 					Name = file.Name,
+					ProductName = _productName,
 					SourceLanguage = project.SourceLanguage,
 					TargetLanguage = doc.ActiveFile.Language.CultureInfo.Name
 				};
@@ -507,8 +508,9 @@ namespace Sdl.Community.Qualitivity.Tracking
 			var sourceLanguage = doc.ActiveFileProperties.FileConversionProperties.SourceLanguage.CultureInfo;
 			var targetLanguage = doc.ActiveFileProperties.FileConversionProperties.TargetLanguage.CultureInfo;
 
+			var pathInfo = new Trados.Community.Toolkit.LanguagePlatform.Models.PathInfo(_productName);
 			var segmentPairProcessor = new SegmentPairProcessor(
-				new Trados.Community.Toolkit.LanguagePlatform.Models.Settings(sourceLanguage, targetLanguage), new Trados.Community.Toolkit.LanguagePlatform.Models.PathInfo());
+				new Trados.Community.Toolkit.LanguagePlatform.Models.Settings(sourceLanguage, targetLanguage), pathInfo);
 
 			var parser = new ContentGenerator();
 
