@@ -49,7 +49,23 @@ After the list of EditItems nodes, the other nodes are closed with the correspon
 
 ## Example
 
-The following is a complete example of the content for a find/replace list file: ![](https://raw.githubusercontent.com/sdl/Sdl-Community/master/EditCollection2.PNG)
+The following is a complete example of the content for a find/replace list file: 
+
+```
+<EditCollection>
+<Items>
+<EditItem Enabled="true" EditItemType="plain_text">
+<FindText>Hello World</FindText>
+<ReplaceText>Hello world!</ReplaceText>
+</EditItem>
+<EditItem Enabled="true" EditItemType="regular_expression">
+<FindText>\bhello\b</FindText>
+<ReplaceText>Hello!</ReplaceText>
+</EditItem>
+</Items>
+</EditCollection>
+```
+
 
 Here, there is one plain text pair specifying to find the string “Hello World” and replace it with “Hello world!”.
 There is also a regular expression pair specifying to find the regular expression “\bhello\b” (a whole-word match for “hello”) and replace it with “Hello!”.
