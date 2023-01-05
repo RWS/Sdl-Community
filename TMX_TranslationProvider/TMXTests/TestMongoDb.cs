@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NLog.Fluent;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using TMX_Lib.Db;
@@ -69,6 +70,60 @@ namespace TMXTests
 						 && result.Any(r => r.TargetText == "Subcontractors are required to assist and co-operate with Interserve Construction with health, safety and environmental related issues, including initiatives that may be operated from time to time.")
 						 && result.All(r => r.TargetText != "In meeting these goals we will achieve our vision of being the trusted Partner to all those with whom we have a relationship be they shareholders, customers, employees, suppliers, members of the community in which we are working, or any other group or individual.")
 			);
+		}
+
+
+		private static async Task DbImportFileAsync(string file, string dbName, bool quickImport = false)
+		{
+			var db = new TmxMongoDb("localhost:27017", dbName);
+			await db.ImportToDbAsync(file, (r) => { }, quickImport);
+		}
+		private static (TranslationUnit tu, LanguagePair lp) SimpleTU(string sourceText, string targetText, string sourceLanguage, string targetLanguage, ulong id = 0)
+		{
+			LanguagePair lp = new LanguagePair(sourceLanguage, targetLanguage);
+
+			var source = new Segment(lp.SourceCulture);
+			source.Add(sourceText);
+			var target = new Segment(lp.TargetCulture);
+			target.Add(targetText);
+			var tu = new TranslationUnit
+			{
+				SourceSegment = source,
+				TargetSegment = target,
+			};
+
+			tu.ResourceId = new PersistentObjectToken((int)id, Guid.Empty);
+			tu.Origin = TranslationUnitOrigin.TM;
+			return (tu, lp);
+		}
+		[Fact]
+		public async Task TestAddAndUpdateTUs()
+		{
+			// the idea - #4 is almost empty (very very small) - thus, easy to test adding/updating
+			var root = "..\\..\\..\\..";
+			await DbImportFileAsync($"{root}\\SampleTestFiles\\#4.tmx", "add-update");
+			var db = new TmxMongoDb("localhost:27017", "add-update");
+			await db.InitAsync();
+			var search = new TmxSearch(db);
+			await search.LoadLanguagesAsync();
+
+			var (tu, lp) = SimpleTU("this is an interesting recipe", "asta e o reteta interesanta", "en-US", "ro-RO");
+			var tuID = await search.AddAsync(tu, lp);
+			(tu, lp) = SimpleTU("this is an amazingly interesting recipe", "asta e o reteta super interesanta", "en-US", "ro-RO", tuID);
+			await search.UpdateAsync(tu, lp);
+			// here, I'm actually adding a new language (spanish)
+			(tu, lp) = SimpleTU("this is an amazingly interesting recipe", "esta muchacha con tigo", "en-US", "es-ES", tuID);
+			await search.UpdateAsync(tu, lp);
+
+			var dbTU = await db.FindTranslationUnitAsync(tuID);
+			var dbTexts = await db.FindTextsAsync(tuID);
+			Assert.True(dbTU.NormalizedLanguages.Count == 3 && dbTexts.Count == 3);
+			Assert.True(dbTU.NormalizedLanguages.Contains("en-us"));
+			Assert.True(dbTU.NormalizedLanguages.Contains("ro-ro"));
+			Assert.True(dbTU.NormalizedLanguages.Contains("es-es"));
+			Assert.True(dbTexts.Any(t => t.LocaseText == "this is an amazingly interesting recipe"));
+			Assert.True(dbTexts.Any(t => t.LocaseText == "asta e o reteta super interesanta"));
+			Assert.True(dbTexts.Any(t => t.LocaseText == "esta muchacha con tigo"));
 		}
 	}
 }

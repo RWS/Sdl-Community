@@ -60,7 +60,9 @@ namespace TMX_Lib.Search
 
 		private void UpdateTU(TranslationUnit tu)
 		{
-			tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
+			// this is useful when I want to update the translation unit
+			var uniqueId = (int)Segment.DbTU.TranslationUnitID;
+			tu.ResourceId = new PersistentObjectToken(uniqueId, Guid.Empty);
 			tu.Origin = Origin;
 
 			var createddAt = CreateTime;

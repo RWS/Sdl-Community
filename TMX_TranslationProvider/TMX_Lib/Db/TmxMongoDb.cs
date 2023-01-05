@@ -46,6 +46,9 @@ namespace TMX_Lib.Db
         private IMongoCollection<TmxTranslationUnit> _translationUnits;
         private IMongoCollection<TmxText> _texts;
 
+        private TmxMeta _translationUnitMeta;
+        private ulong _nextTranslationUnitID = 0;
+
         private string _importError = "";
 
         private Task _importTask;
@@ -84,7 +87,7 @@ namespace TMX_Lib.Db
 				// if local -> fast connection
                 if (IsLocalConnection())
                 {
-	                Initialize();
+	                InitializeImpl();
 	                lock (this)
 						_initialized = true;
                 }
@@ -125,6 +128,7 @@ namespace TMX_Lib.Db
 	        return names;
         }
 
+        private Task _initTask;
         public async Task InitAsync()
         {
 	        try
@@ -133,7 +137,9 @@ namespace TMX_Lib.Db
 					if (_initialized)
 						return;
 
-		        await Task.Run(Initialize);
+				if (_initTask == null)
+					_initTask = Task.Run(async () => await InitializeImpl());
+		        await _initTask;
 	        }
 			finally
 	        {
@@ -143,7 +149,7 @@ namespace TMX_Lib.Db
         }
 
 		// this connects to the server, be it local or remote - which can block the current thread
-        private void Initialize()
+        private async Task InitializeImpl()
         {
             if (!_connected)
                 return;
@@ -162,6 +168,14 @@ namespace TMX_Lib.Db
 	            _languages = _database.GetCollection<TmxLanguage>("languages");
 	            _translationUnits = _database.GetCollection<TmxTranslationUnit>("translation_units");
 	            _texts = _database.GetCollection<TmxText>("texts");
+
+	            var filter = Builders<TmxMeta>.Filter.Where(m => m.Type == "TranslationUnitNextID");
+	            var cursor = await _metas.FindAsync(filter);
+	            await cursor.ForEachAsync(m => _translationUnitMeta = m);
+	            if (_translationUnitMeta != null)
+		            _nextTranslationUnitID = ulong.Parse(_translationUnitMeta.Value);
+	            else
+		            _nextTranslationUnitID = 1;
             }
             catch (TimeoutException te)
             {
@@ -244,7 +258,7 @@ namespace TMX_Lib.Db
 	            if (count > 1)
 		            return;
 
-				var indexTU = Builders<TmxTranslationUnit>.IndexKeys.Ascending(i => i.ID);
+				var indexTU = Builders<TmxTranslationUnit>.IndexKeys.Ascending(i => i.TranslationUnitID);
 	            await _translationUnits.Indexes.CreateOneAsync(new CreateIndexModel<TmxTranslationUnit>(indexTU));
 
 				// at most one text index allowed
@@ -283,7 +297,7 @@ namespace TMX_Lib.Db
 				// we don't have a translation
 				return null;
 
-			var tuFilter = Builders<TmxTranslationUnit>.Filter.Where(f => f.ID == text.TranslationUnitID);
+			var tuFilter = Builders<TmxTranslationUnit>.Filter.Where(f => f.TranslationUnitID == text.TranslationUnitID);
 			var tuCursor = await _translationUnits.FindAsync(tuFilter, new FindOptions<TmxTranslationUnit> { Limit = 1 });
 			var tus = new List<TmxTranslationUnit>();
 			await tuCursor.ForEachAsync(t => tus.Add(t));
@@ -397,6 +411,34 @@ namespace TMX_Lib.Db
 			return segments;
 		}
 
+		public async Task<TmxTranslationUnit> FindTranslationUnitAsync(ulong id)
+		{
+			var filter = Builders<TmxTranslationUnit>.Filter.Where(tu => tu.TranslationUnitID == id);
+			var cursor = await _translationUnits.FindAsync(filter);
+			TmxTranslationUnit result = null;
+			await cursor.ForEachAsync(t =>
+			{
+				result = t;
+			});
+			if (result == null)
+				throw new TmxException($"Translation Unit {id} not found");
+			return result;
+		}
+
+		public async Task<IReadOnlyList<TmxText>> FindTextsAsync(ulong id)
+		{
+			var filter = Builders<TmxText>.Filter.Where(tu => tu.TranslationUnitID == id);
+			var cursor = await _texts.FindAsync(filter);
+			List<TmxText> texts = new List<TmxText>();
+			await cursor.ForEachAsync(t =>
+			{
+				texts.Add(t);
+			});
+			return texts;
+
+		}
+
+
 		// End of FIND
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -448,9 +490,78 @@ namespace TMX_Lib.Db
                 throw new TmxException($"Can't add TranslationUnits", e);
             }
         }
-        // End of ADDs
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+		// at end of function, the translation unit ID is set
+        public async Task AddSingleTranslationUnitAsync(TmxTranslationUnit translationUnit, CancellationToken token = default(CancellationToken))
+        {
+	        try
+	        {
+				Debug.Assert(translationUnit.TranslationUnitID == 0);
+				lock (this)
+				{
+					translationUnit.TranslationUnitID = _nextTranslationUnitID++;
+					if (_translationUnitMeta == null)
+						_translationUnitMeta = new TmxMeta { Type = "TranslationUnitNextID" };
+					_translationUnitMeta.Value = _nextTranslationUnitID.ToString();
+				}
+				await AddTranslationUnitsAsync(new[] { translationUnit }, token);
+				await UpdateMetaAsync(_translationUnitMeta, token);
+	        }
+	        catch (Exception e)
+	        {
+		        throw new TmxException($"Can't add TranslationUnits", e);
+	        }
+        }
+
+		// End of ADDs
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Start of UPDATE
+
+		public async Task UpdateTextAsync(TmxText text, CancellationToken token = default(CancellationToken))
+		{
+			try
+			{
+				var filter = Builders<TmxText>.Filter.Where(t => t.TranslationUnitID == text.TranslationUnitID && t.NormalizedLanguage == text.NormalizedLanguage);
+				await _texts.FindOneAndReplaceAsync(filter, text, cancellationToken: token);
+			}
+			catch (Exception e)
+			{
+				throw new TmxException($"Can't update text", e);
+			}
+		}
+
+		public async Task UpdateTranslationUnitAsync(TmxTranslationUnit translationUnit, CancellationToken token = default(CancellationToken))
+		{
+			try
+			{
+				var filter = Builders<TmxTranslationUnit>.Filter.Where(t => t.TranslationUnitID == translationUnit.TranslationUnitID);
+				await _translationUnits.FindOneAndReplaceAsync(filter, translationUnit, cancellationToken: token);
+			}
+			catch (Exception e)
+			{
+				throw new TmxException($"Can't update TranslationUnit", e);
+			}
+		}
+
+		public async Task UpdateMetaAsync(TmxMeta meta, CancellationToken token = default(CancellationToken))
+		{
+			try
+			{
+				var filter = Builders<TmxMeta>.Filter.Where(t => t.Type == meta.Type);
+				await _metas.FindOneAndReplaceAsync(filter, meta, cancellationToken: token);
+			}
+			catch (Exception e)
+			{
+				throw new TmxException($"Can't update Meta", e);
+			}
+		}
+
+		// End of UPDATE
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -459,22 +570,23 @@ namespace TMX_Lib.Db
 
 		private static (IReadOnlyList<Db.TmxText> texts, Db.TmxTranslationUnit tu) TmxTranslationUnitToMongo(TmxFormat.TmxTranslationUnit tu, ulong id)
 		{
-			Db.TmxTranslationUnit dbTU = new Db.TmxTranslationUnit
+			var dbTU = new Db.TmxTranslationUnit
 			{
-				ID = id,
+				TranslationUnitID = id,
 				CreationAuthor = tu.CreationAuthor,
 				CreationDate = tu.CreationTime,
 				ChangeAuthor = tu.ChangeAuthor,
 				ChangeDate = tu.ChangeTime,
 				XmlProperties = tu.XmlProperties,
 				TuAttributes = tu.TuAttributes,
+				NormalizedLanguages = tu.Texts.Select(t => Util.NormalizeLanguage(t.Language)).ToList(),
 			};
 
 			var texts = tu.Texts.Select(t => new Db.TmxText
 			{
 				TranslationUnitID = id,
 				NormalizedLanguage = Util.NormalizeLanguage(t.Language) ,
-				LocaseText = t.Text,
+				LocaseText = t.LocaseText,
 				FormattedText = t.FormattedText,
 			}).ToList();
 
@@ -615,6 +727,7 @@ namespace TMX_Lib.Db
 			        var languages = parser.Languages().Select(l => new TmxLanguage { Language = l }).ToList();
 			        await AddLanguagesAsync(languages, token);
 			        report.LanguageCount = languages.Count;
+			        _nextTranslationUnitID = id;
 
 			        // the idea -> add them at the end, easily know if the import went to the end or not
 			        await AddMetasAsync(new[]
@@ -622,13 +735,17 @@ namespace TMX_Lib.Db
 				        new TmxMeta { Type = "Header", Value = parser.Header.Xml, },
 				        // Version:
 				        // 1 - initial version
+						// 2 - added TranslationUnitNextID + TU.NormalizedLanguages array
 				        // ... - increase this on each breaking change
-				        new TmxMeta { Type = "Version", Value = "1", }, new TmxMeta { Type = "Source Language", Value = parser.Header.SourceLanguage, },
+				        new TmxMeta { Type = "Version", Value = "2", }, 
+				        new TmxMeta { Type = "Source Language", Value = parser.Header.SourceLanguage, },
 				        new TmxMeta { Type = "Target Language", Value = parser.Header.TargetLanguage, },
 				        new TmxMeta { Type = "Domains", Value = string.Join(", ", parser.Header.Domains), },
 				        new TmxMeta { Type = "Creation Date", Value = parser.Header.CreationDate?.ToLongDateString() ?? "unknown", },
-				        new TmxMeta { Type = "Author", Value = parser.Header.Author, }, new TmxMeta { Type = "FileName", Value = Path.GetFileName(parser.FileName) },
+				        new TmxMeta { Type = "Author", Value = parser.Header.Author, }, 
+				        new TmxMeta { Type = "FileName", Value = Path.GetFileName(parser.FileName) },
 				        new TmxMeta { Type = "FullFileName", Value = parser.FileName },
+				        new TmxMeta { Type = "TranslationUnitNextID", Value = id.ToString() },
 			        }, token);
 			        updateReport?.Invoke(report);
 

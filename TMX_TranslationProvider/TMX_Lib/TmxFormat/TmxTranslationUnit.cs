@@ -11,7 +11,7 @@ namespace TMX_Lib.TmxFormat
 	public class TmxText
 	{
 		public string Language;
-		public string Text;
+		public string LocaseText;
 		public string FormattedText;
 	}
 

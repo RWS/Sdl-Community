@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -291,6 +292,98 @@ namespace TMX_Lib.Search
 			CompleteSearch(settings, results);
 			return results.ToSearchResults(text, settings, language);
 		}
+
+		// for now, I use the Id - unfortunately, this is just an 'int' 
+		private static ulong TranslationUnitDbID(TranslationUnit tu)
+		{
+			var id = tu.ResourceId.Id;
+			if (id <= 0)
+				throw new TmxException($"Invalid Translation Unit ID {id}");
+
+			return (ulong)id;
+		}
+
+		private TmxTranslationUnit ToDb(TranslationUnit tu, LanguagePair languagePair)
+		{
+			var author = tu.FieldValues.FirstOrDefault(f => f.Name == "last_modified_by")?.GetValueString() ?? "unknown";
+			var tmx = new TmxTranslationUnit
+			{
+				CreationDate = DateTime.Now,
+				CreationAuthor = author,
+				ChangeDate = DateTime.Now,
+				ChangeAuthor = author,
+				XmlProperties = "",
+				TuAttributes = "",
+				NormalizedLanguages = new List<string>
+				{
+					Util.NormalizeLanguage(languagePair.SourceCultureName),
+					Util.NormalizeLanguage(languagePair.TargetCultureName),
+				},
+			};
+			return tmx;
+		}
+
+		private TmxText ToDb(Segment segment, ulong tuID, CultureInfo language)
+		{
+			return new TmxText
+			{
+				TranslationUnitID = tuID, 
+				NormalizedLanguage = Util.NormalizeLanguage(language.IsoLanguageName()),
+				LocaseText = Util.TextToDbText(segment.ToPlain(), language),
+				FormattedText = segment.ToString(), 
+			};
+		}
+
+		public async Task UpdateAsync(TranslationUnit tu, LanguagePair languagePair)
+		{
+			// find in db, see which languages i have
+			var id = TranslationUnitDbID(tu);
+			var dbTU = await _db.FindTranslationUnitAsync(id);
+
+			var sourceLanguage = Util.NormalizeLanguage(languagePair.SourceCultureName);
+			var targetLanguage = Util.NormalizeLanguage(languagePair.TargetCultureName);
+			var hasSource = dbTU.NormalizedLanguages.Contains(sourceLanguage);
+			var hasTarget = dbTU.NormalizedLanguages.Contains(targetLanguage);
+
+			if (!hasSource)
+				dbTU.NormalizedLanguages.Add(sourceLanguage);
+			if (!hasTarget)
+				dbTU.NormalizedLanguages.Add(targetLanguage);
+			if (!hasSource || !hasTarget)
+				await _db.UpdateTranslationUnitAsync(dbTU);
+
+			var source = ToDb(tu.SourceSegment, dbTU.TranslationUnitID, languagePair.SourceCulture);
+			var target = ToDb(tu.TargetSegment, dbTU.TranslationUnitID, languagePair.TargetCulture);
+
+			if (!hasSource || !hasTarget)
+			{
+				var texts = new List<TmxText>();
+				if (!hasSource)
+					texts.Add(source);
+				if (!hasTarget)
+					texts.Add(target);
+				await _db.AddTextsAsync(texts);
+			}
+
+			if (hasSource)
+				await _db.UpdateTextAsync(source);
+			if (hasTarget)
+				await _db.UpdateTextAsync(target);
+		}
+
+		// returns the ID of the newly added translation unit
+		public async Task<ulong> AddAsync(TranslationUnit tu, LanguagePair languagePair)
+		{
+			var tmx = ToDb(tu, languagePair);
+			await _db.AddSingleTranslationUnitAsync(tmx);
+			// here, I know the translation unit ID, so I can create the texts
+
+			var source = ToDb(tu.SourceSegment, tmx.TranslationUnitID, languagePair.SourceCulture);
+			var target = ToDb(tu.TargetSegment, tmx.TranslationUnitID, languagePair.TargetCulture);
+			await _db.AddTextsAsync(new[] { source, target });
+			return tmx.TranslationUnitID;
+		}
+
 
 	}
 }

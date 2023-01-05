@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Newtonsoft.Json;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.Settings;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -113,33 +115,6 @@ namespace TMX_TranslationProvider
 			return results;
 		}
 
-		private SearchResults EmptyTU()
-		{
-			var result = new SearchResults();
-			var source = new Segment(SourceLanguage);
-			var target = new Segment(TargetLanguage);
-			result.SourceSegment = source;
-			var tu = new TranslationUnit
-			{
-				SourceSegment = source,
-				TargetSegment = target,
-				ConfirmationLevel = ConfirmationLevel.Draft,
-			};
-
-			tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
-			tu.Origin = TranslationUnitOrigin.TM;
-
-			var sr = new SearchResult(tu)
-			{
-				ScoringResult = new ScoringResult
-				{
-					BaseScore = 0,
-				},
-				TranslationProposal = tu,
-			};
-			result.Add(sr);
-			return result;
-		}
 		public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
 		{
 			var sr = SearchTranslationUnits(settings, translationUnits);
@@ -149,37 +124,111 @@ namespace TMX_TranslationProvider
 
 		public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
 		{
-			throw new NotImplementedException();
+			System.Threading.Tasks.Task.Run(async () =>
+			{
+				foreach (var tu in translationUnits)
+				{
+					var isUpdate = previousTranslationHashes?.Contains(tu.ResourceId.Id) ?? false;
+					if (isUpdate)
+						await _provider.SearchService.UpdateAsync(tu, _languagePair);
+					else
+						await _provider.SearchService.AddAsync(tu, _languagePair);
+				}
+			});
+			var result = new ImportResult[translationUnits.Length];
+			for (int i = 0; i < result.Length; ++i)
+				result[i] = new ImportResult();
+			return result;
 		}
 
 		public ImportResult[] AddOrUpdateTranslationUnitsMasked(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings, bool[] mask)
 		{
-			throw new NotImplementedException();
+			System.Threading.Tasks.Task.Run(async () =>
+			{
+				for (var index = 0; index < translationUnits.Length; index++)
+				{
+					var tu = translationUnits[index];
+					if (!mask[index])
+						continue;
+					var isUpdate = previousTranslationHashes?.Contains(tu.ResourceId.Id) ?? false;
+					if (isUpdate)
+						await _provider.SearchService.UpdateAsync(tu, _languagePair);
+					else
+						await _provider.SearchService.AddAsync(tu, _languagePair);
+				}
+			});
+			var result = new ImportResult[translationUnits.Length];
+			for (int i = 0; i < result.Length; ++i)
+				result[i] = new ImportResult();
+			return result;
 		}
 
 		public ImportResult AddTranslationUnit(TranslationUnit translationUnit, ImportSettings settings)
 		{
-			throw new NotImplementedException();
+			System.Threading.Tasks.Task.Run(async () =>
+			{
+				await _provider.SearchService.AddAsync(translationUnit, _languagePair);
+			});
+			return new ImportResult();
 		}
 
 		public ImportResult[] AddTranslationUnits(TranslationUnit[] translationUnits, ImportSettings settings)
 		{
-			throw new NotImplementedException();
+			System.Threading.Tasks.Task.Run(async () =>
+			{
+				for (var index = 0; index < translationUnits.Length; index++)
+				{
+					var tu = translationUnits[index];
+					await _provider.SearchService.AddAsync(tu, _languagePair);
+				}
+			});
+
+			var result = new ImportResult[translationUnits.Length];
+			for (int i = 0; i < result.Length; ++i)
+				result[i] = new ImportResult();
+			return result;
 		}
 
 		public ImportResult[] AddTranslationUnitsMasked(TranslationUnit[] translationUnits, ImportSettings settings, bool[] mask)
 		{
-			throw new NotImplementedException();
+			System.Threading.Tasks.Task.Run(async () =>
+			{
+				for (var index = 0; index < translationUnits.Length; index++)
+				{
+					var tu = translationUnits[index];
+					if (!mask[index])
+						continue;
+					await _provider.SearchService.AddAsync(tu, _languagePair);
+				}
+			});
+			var result = new ImportResult[translationUnits.Length];
+			for (int i = 0; i < result.Length; ++i)
+				result[i] = new ImportResult();
+			return result;
 		}
 
 		public ImportResult UpdateTranslationUnit(TranslationUnit translationUnit)
 		{
-			throw new NotImplementedException();
+			System.Threading.Tasks.Task.Run(async () =>
+			{
+				await _provider.SearchService.UpdateAsync(translationUnit, _languagePair);
+			});
+			return new ImportResult();
 		}
 
 		public ImportResult[] UpdateTranslationUnits(TranslationUnit[] translationUnits)
 		{
-			throw new NotImplementedException();
+			System.Threading.Tasks.Task.Run(async () =>
+			{
+				foreach (var tu in translationUnits)
+				{
+					await _provider.SearchService.UpdateAsync(tu, _languagePair);
+				}
+			});
+			var result = new ImportResult[translationUnits.Length];
+			for (int i = 0; i < result.Length; ++i)
+				result[i] = new ImportResult();
+			return result;
 		}
 
 		#endregion

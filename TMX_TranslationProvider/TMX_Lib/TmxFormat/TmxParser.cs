@@ -193,12 +193,13 @@ namespace TMX_Lib.TmxFormat
         {
 	        var language = GetAttribute(xmlTuv, "xml:lang");
 	        var seg = xmlTuv.SelectSingleNode("seg");
-	        var text = Util.TextToDbText(seg.InnerText, _languages.Culture(language)) ;
+			// note: the TextToDbText will also convert to lower-case
+			var text = Util.TextToDbText(seg.InnerText, _languages.Culture(language)) ;
 	        var formattedText = seg.InnerXml;
 	        return new TmxText
 	        {
 				Language = language,
-				Text = text,
+				LocaseText = text,
 				FormattedText = formattedText,
 	        };
         }

@@ -5,7 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using NLog;
+using NLog.Targets;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using TMX_Lib.Db;
@@ -13,6 +15,8 @@ using TMX_Lib.Search;
 using TMX_Lib.TmxFormat;
 using TMX_Lib.Utils;
 using TMX_Lib.XmlSplit;
+using static System.Net.WebRequestMethods;
+using File = System.IO.File;
 using LogManager = Sdl.LanguagePlatform.TranslationMemory.LogManager;
 
 namespace QuickTmxTesting
@@ -22,7 +26,7 @@ namespace QuickTmxTesting
     {
 	    private static readonly Logger log = NLog.LogManager.GetCurrentClassLogger();
 
-	    private static async Task TestImportFile(string file, string dbName, bool quickImport = false)
+	    private static async Task TestImportFileAsync(string file, string dbName, bool quickImport = false)
 	    {
 		    var db = new TmxMongoDb("localhost:27017", dbName);
 		    await db.ImportToDbAsync(file, (r) =>
@@ -174,7 +178,7 @@ namespace QuickTmxTesting
 			    if (str == null)
 				    return;
 			    var outFile = $"{outputPrefix}{++idx:D3}.xml";
-				File.WriteAllText(outFile, str);
+			    File.WriteAllText(outFile, str);
 		    }
 	    }
 
@@ -229,6 +233,25 @@ namespace QuickTmxTesting
 				search, "ro-ro", "en-US"));
 		}
 
+		private static (TranslationUnit tu, LanguagePair lp) SimpleTU(string sourceText, string targetText, string sourceLanguage, string targetLanguage, ulong id = 0)
+		{
+			LanguagePair lp = new LanguagePair(sourceLanguage, targetLanguage);
+
+			var source = new Segment(lp.SourceCulture);
+			source.Add(sourceText);
+			var target = new Segment(lp.TargetCulture);
+			target.Add(targetText);
+			var tu = new TranslationUnit
+			{
+				SourceSegment = source,
+				TargetSegment = target,
+			};
+
+			tu.ResourceId = new PersistentObjectToken((int)id, Guid.Empty);
+			tu.Origin = TranslationUnitOrigin.TM;
+			return (tu, lp);
+		}
+
 		static void Main(string[] args)
 		{
 			LogUtil.Setup();
@@ -237,8 +260,9 @@ namespace QuickTmxTesting
 			log.Debug("test started");
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\fails\\opensubtitlingformat.tmx", "C:\\john\\buff\\TMX Examples\\temp3\\");
 
+			//Task.Run(() => await TestImportFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro-2", quickImport: true)).Wait();
 
-			Task.Run(() => TestImportFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro-2", quickImport: true)).Wait();
+			//Task.Run(() => TestImportFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro-2", quickImport: true)).Wait();
 			//Task.Run(() => TestImportFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\ko-zh.tmx", "kozh", quickImport: false)).Wait();
 
 			//TestEnRoImport().Wait();
@@ -254,7 +278,7 @@ namespace QuickTmxTesting
 	        if (args.Length > 0)
 		        root = args[0];
 
-	        Task.Run(() => TestImportFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro", quickImport: true)).Wait();
+	        Task.Run(() => TestImportFileAsync("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro", quickImport: true)).Wait();
 
 			//Task.Run(() => TestImportSmallFile2(root)).Wait();
 			//Task.Run(() => TestImportSample4(root)).Wait();

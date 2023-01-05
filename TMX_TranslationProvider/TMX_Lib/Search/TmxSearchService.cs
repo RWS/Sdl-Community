@@ -182,6 +182,25 @@ namespace TMX_Lib.Search
 			return await search.Search(TmxSearchSettings.FromSearchSettings(settings), segment, language) ?? new SearchResults();
 		}
 
+		public async Task UpdateAsync(TranslationUnit tu, LanguagePair languagePair)
+		{
+			TmxSearch search;
+			lock (this)
+				search = _search;
+			if (search == null)
+				return ;
+			await search.UpdateAsync(tu, languagePair);
+		}
+		public async Task AddAsync(TranslationUnit tu, LanguagePair languagePair)
+		{
+			TmxSearch search;
+			lock (this)
+				search = _search;
+			if (search == null)
+				return;
+			await search.AddAsync(tu, languagePair);
+		}
+
 		// returns true if the given parameters are valid
 		public static async Task<(bool ok,string error)> TryParametersAsync(ISearchServiceParameters parameters)
 		{
