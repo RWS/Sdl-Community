@@ -13,6 +13,7 @@
     <None Remove="Resources\appicon.ico" />
     <None Remove="Resources\appicon.png" />
     <None Remove="Resources\backImg.png" />
+    <None Remove="Resources\defaultSettings.png" />
     <None Remove="Resources\Download.ico" />
     <None Remove="Resources\Folder.png" />
     <None Remove="Resources\ForumIcon.ico" />
@@ -113,6 +114,7 @@
     <Resource Include="Resources\appicon.ico" />
     <Resource Include="Resources\appicon.png" />
     <Resource Include="Resources\backImg.png" />
+    <Resource Include="Resources\defaultSettings.png" />
     <Resource Include="Resources\Download.ico" />
     <Resource Include="Resources\Folder.png" />
     <Resource Include="Resources\ForumIcon.ico" />

@@ -27,7 +27,7 @@ namespace GoogleCloudTranslationProvider.Interfaces
 
 		string CustomProviderName { get; set; }
 		
-		ICommand BrowseCommand { get; }
+		ICommand BrowseFileCommand { get; }
 
 		ICommand ClearCommand { get; }
 

@@ -64,6 +64,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 								   bool showSettingsView = false)
 		{
 			Options = options;
+			Options.AdvancedSettings ??= new();
 			ShowSettingsView = showSettingsView;
 			_credentialStore = credentialStore;
 			_languagePairs = languagePairs;
@@ -263,7 +264,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		{
 			ShowMultiButton = true;
 			_providerViewModel = new ProviderViewModel(Options);
-			_settingsViewModel = new SettingsViewModel(Options);
+			_settingsViewModel = new SettingsViewModel(Options, !_showSettingsView);
 			ShowProjectInfo = _showSettingsView && (_providerViewModel.SelectedGoogleApiVersion.Version == ApiVersion.V3);
 
 			_availableViews = new List<ViewDetails>
@@ -284,6 +285,8 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			{
 				ShowMultiButton = false;
 			}
+
+
 
 			if (!_showProjectInfo)
 			{
@@ -356,7 +359,8 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		{
 			if (_settingsViewModel is not null)
 			{
-				var providerName = Regex.Replace(_settingsViewModel.CustomProviderName?.Trim(), @"\s+", " ");
+				var providerName = _settingsViewModel.CustomProviderName;
+				providerName = providerName is null ? null : Regex.Replace(providerName.Trim(), @"\s+", " ");
 				Options.SendPlainTextOnly = _settingsViewModel.SendPlainText;
 				Options.ResendDrafts = _settingsViewModel.ReSendDraft;
 				Options.UsePreEdit = _settingsViewModel.DoPreLookup;

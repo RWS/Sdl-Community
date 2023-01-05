@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using GoogleCloudTranslationProvider.Models;
 
 namespace GoogleCloudTranslationProvider.Interfaces
 {
 	public interface ITranslationOptions
 	{
+
+		GCTPAdvancedSettings AdvancedSettings { get; set; }
+
 		bool SendPlainTextOnly { get; set; }
 
 		bool PersistGoogleKey { get; set; }

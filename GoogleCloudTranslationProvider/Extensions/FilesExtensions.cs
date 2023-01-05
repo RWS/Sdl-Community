@@ -43,7 +43,7 @@ namespace GoogleCloudTranslationProvider.Extensions
 			return filePath.ReadJsonFileOnPath();
 		}
 
-		public static (bool Success, string ErrorMessage) VerifyAndDownloadJsonFile(this string uri, string location)
+		public static (bool Success, string ErrorMessage) VerifyAndDownloadJsonFile(this string uri, string filePath, string fileName)
 		{
 			if (string.IsNullOrEmpty(uri))
 			{
@@ -58,18 +58,18 @@ namespace GoogleCloudTranslationProvider.Extensions
 			try
 			{
 				using var webClient = new WebClient();
-				if (!Directory.Exists(Constants.AppDataFolder))
+				if (!Directory.Exists(filePath))
 				{
-					Directory.CreateDirectory(Constants.AppDataFolder);
+					Directory.CreateDirectory(filePath);
 				}
 
-				var filePath = location;
-				if (File.Exists(filePath))
+				var fullPath = Path.Combine(filePath, fileName.EndsWith(".json") ? fileName : $"{fileName}.json");
+				if (File.Exists(fullPath))
 				{
-					File.Delete(filePath);
+					File.Delete(fullPath);
 				}
 
-				webClient.DownloadFile(uri, filePath);
+				webClient.DownloadFile(uri, fullPath);
 				return (true, string.Empty);
 			}
 			catch

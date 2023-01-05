@@ -14,7 +14,9 @@ namespace GoogleCloudTranslationProvider
 		public const string GoogleVersion_V3_ShortName = "V3";
 
 		public static readonly string AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Trados AppStore\\Google Cloud TP\\";
-		public const string DefaultDownloadedJsonFileName = "\\downloadedProject.json";
+		public const string DefaultDownloadedJsonFileName = "downloadedProject.json";
+		public const string AdvancedSettingsFileName = "gctpOptions.json";
+		public static readonly string AdvancedSettingsOnPath = AppDataFolder + AdvancedSettingsFileName;
 
 		public const string GoogleTranslatorString = "Google Translate";
 

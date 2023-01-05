@@ -88,7 +88,7 @@
 								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
 								   HorizontalAlignment="Right"/>
 					</StackPanel>
-					
+
 					<StackPanel DockPanel.Dock="Right"
 								Margin="8 0 0 0">
 						<TextBlock Text="{Binding JsonFilePath}"
@@ -104,7 +104,6 @@
 					</StackPanel>
 				</DockPanel>
 			</GroupBox>
-
 
 			<!--<API Version Selector>-->
 			<ContentControl Grid.Row="2"
@@ -123,19 +122,21 @@
 				</Button>
 				<StackPanel HorizontalAlignment="Right"
 							Orientation="Horizontal">
+
+
 					<Button Content="{Binding MultiButtonContent}"
 							Style="{StaticResource Sdl.Button.SecondaryStyle}"
 							Visibility="{Binding ShowMultiButton, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 							Command="{Binding SwitchViewCommand}"
 							Cursor="Hand"
-							Width="80"/>
+							Width="120"/>
 
 					<Button Content="{x:Static root:PluginResources.MainView_ConfirmButton}"
 							Style="{StaticResource Sdl.Button.PrimaryStyle}"
 							Command="{Binding SaveCommand}"
 							IsDefault="True"
 							Cursor="Hand"
-							Width="160"
+							Width="120"
 							Margin="8 0 0 0"/>
 				</StackPanel>
 			</DockPanel>

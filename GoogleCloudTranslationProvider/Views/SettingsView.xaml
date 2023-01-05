@@ -10,12 +10,14 @@
              xmlns:converters="clr-namespace:GoogleCloudTranslationProvider.Converters"
              d:DataContext="{d:DesignInstance viewModels:SettingsViewModel}"
              mc:Ignorable="d">
+
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../Styles/Buttons.xaml"/>
 				<ResourceDictionary Source="../Styles/GroupBox.xaml" />
 				<ResourceDictionary Source="../UiHelpers/WatermarkTextBoxResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ComboBoxResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
@@ -26,18 +28,20 @@
 		</ResourceDictionary>
 	</UserControl.Resources>
 
-	<GroupBox Header="{x:Static root:PluginResources.GroupboxHeaders_Settings}"
-			  Style="{StaticResource DefaultGroupBox}"
-			  Margin="24 24 24 0"
-			  Padding="0 12">
-		<StackPanel Margin="24 12">
-
-			<CheckBox Content="{x:Static root:PluginResources.SettingsView_CustomName_Description}"
+	<ScrollViewer Height="550"
+				  VerticalScrollBarVisibility="Auto"
+				  Margin="16 16 0 0">
+		<StackPanel>
+			<StackPanel Margin="12 0">
+				<TextBlock Text="Session settings"
+				   Style="{StaticResource Sdl.TextBlock.TitleStyle}"
+				   Margin="0 0 0 12"/>
+				<CheckBox Content="{x:Static root:PluginResources.SettingsView_CustomName_Description}"
 					  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 					  IsChecked="{Binding UseCustomProviderName}"
 					  Cursor="Hand"
 					  Margin="0"/>
-			<TextBox Text="{Binding CustomProviderName, UpdateSourceTrigger=PropertyChanged}"
+				<TextBox Text="{Binding CustomProviderName, UpdateSourceTrigger=PropertyChanged}"
 					 Style="{StaticResource WatermarkTextBox}"
 					 Visibility="{Binding UseCustomProviderName, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 					 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.SettingsView_CustomName_Watermark}"
@@ -45,78 +49,151 @@
 					 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=CustomProviderName, Type={x:Type viewModels:SettingsViewModel}}"
 					 IsEnabled="{Binding UseCustomProviderName,Converter={StaticResource InvertableBoolEnabledConverter}}"
 					 HorizontalAlignment="Left"
-					 Width="300"
+					 Width="494"
 					 Margin="0 2 10 0"/>
 
-			<CheckBox Content="{x:Static root:PluginResources.SettingsView_ResendDraft_Description}"
+				<CheckBox Content="{x:Static root:PluginResources.SettingsView_ResendDraft_Description}"
 						  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 						  IsChecked="{Binding ReSendDraft}"
 					  Cursor="Hand"
 						  Margin="0 12"/>
 
-			<CheckBox Content="{x:Static root:PluginResources.SettingsView_TextOnly_Description}"
-						  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-						  IsChecked="{Binding SendPlainText}"
+				<CheckBox Content="{x:Static root:PluginResources.SettingsView_TextOnly_Description}"
+					  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+					  IsChecked="{Binding SendPlainText}"
 					  Cursor="Hand"
-						  Margin="0 0 0 12"/>
+					  Margin="0 0 0 12"/>
 
-			<CheckBox Content="{x:Static root:PluginResources.SettingsView_PreLookup_Description}"
+				<CheckBox Content="{x:Static root:PluginResources.SettingsView_PreLookup_Description}"
 						  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 						  IsChecked="{Binding DoPreLookup}"
 					  Cursor="Hand"
 						  Margin="0"/>
-			<StackPanel Margin="0 2 0 0"
+				<StackPanel Margin="0 2 0 0"
 							Orientation="Horizontal"
 							Visibility="{Binding DoPreLookup, Converter={StaticResource InvertableBooleanToVisibilityConverter}}">
-				<TextBox Text="{Binding PreLookupFileName}"
-							 Style="{StaticResource WatermarkTextBox}"
-							 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.SettingsView_PreLookup_WaterMark}"
-							 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-							 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=PreLookupFileName, Type={x:Type viewModels:SettingsViewModel}}"
-							 IsEnabled="{Binding DoPreLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
-							 VerticalContentAlignment="Center"
-							 Width="300"
-							 Margin="0 0 10 0"/>
-				<Button Content="{x:Static root:PluginResources.SettingsView_BrowseButton}"
+					<Button Content="{x:Static root:PluginResources.SettingsView_BrowseButton}"
 							Style="{StaticResource Sdl.Button.DialogStyle}"
-							Command="{Binding BrowseCommand}"
+							Command="{Binding BrowseFileCommand}"
 							CommandParameter="{uiHelpers:NameOf Member=PreLookupFileName, Type={x:Type viewModels:SettingsViewModel}}"
 							IsEnabled="{Binding DoPreLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
 							DockPanel.Dock="Left"
 							Cursor="Hand"
 							Width="80"/>
-			</StackPanel>
+					<TextBox Text="{Binding PreLookupFileName}"
+							 Style="{StaticResource WatermarkTextBox}"
+							 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.SettingsView_PreLookup_WaterMark}"
+							 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+							 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=PreLookupFileName, Type={x:Type viewModels:SettingsViewModel}}"
+							 IsEnabled="{Binding DoPreLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
+							 Width="400"
+							 Margin="12 0 0 0"/>
+				</StackPanel>
 
-			<CheckBox Content="{x:Static root:PluginResources.SettingsView_PostLookup_Description}"
+				<CheckBox Content="{x:Static root:PluginResources.SettingsView_PostLookup_Description}"
 						  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 						  IsChecked="{Binding DoPostLookup}"
 					  Cursor="Hand"
 						  Margin="0 12 0 2"/>
-			<StackPanel Visibility="{Binding DoPostLookup, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+				<StackPanel Visibility="{Binding DoPostLookup, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 							Orientation="Horizontal">
-				<TextBox Text="{Binding PostLookupFileName}"
-							 Style="{StaticResource WatermarkTextBox}"
-							 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.SettingsView_PostLookup_WaterMark}"
-							 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-							 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=PostLookupFileName, Type={x:Type viewModels:SettingsViewModel}}"
-							 IsEnabled="{Binding DoPostLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
-							 VerticalContentAlignment="Center"
-							 Width="300"
-							 Margin="0 0 10 0"/>
-				<Button Content="{x:Static root:PluginResources.SettingsView_BrowseButton}"
+					<Button Content="{x:Static root:PluginResources.SettingsView_BrowseButton}"
 							Style="{StaticResource Sdl.Button.DialogStyle}"
-							Command="{Binding BrowseCommand}"
+							Command="{Binding BrowseFileCommand}"
 							CommandParameter="{uiHelpers:NameOf Member=PostLookupFileName, Type={x:Type viewModels:SettingsViewModel}}"
 							IsEnabled="{Binding DoPostLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
 							DockPanel.Dock="Right"
 							Cursor="Hand"
 							Width="80"/>
+					<TextBox Text="{Binding PostLookupFileName}"
+							 Style="{StaticResource WatermarkTextBox}"
+							 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.SettingsView_PostLookup_WaterMark}"
+							 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+							 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=PostLookupFileName, Type={x:Type viewModels:SettingsViewModel}}"
+							 IsEnabled="{Binding DoPostLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
+							 Width="400"
+							 Margin="12 0 0 0"/>
+				</StackPanel>
+			</StackPanel>
+
+			<Button Style="{StaticResource Sdl.Button.SecondaryStyle}"
+					Visibility="{Binding ShowAdvancedSettingsButton, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+					Command="{Binding ShowAdvancedSettingsCommand}"
+					HorizontalAlignment="Left"
+					Height="28"
+					Cursor="Hand"
+					Margin="12 12 0 0">
+				<Button.Content>
+					<StackPanel Orientation="Horizontal">
+						<Image Source="../Resources/defaultSettings.png" Width="16" Margin="0 0 8 0"/>
+						<TextBlock Text="Advanced Settings"/>
+					</StackPanel>
+				</Button.Content>
+			</Button>
+
+			<StackPanel Visibility="{Binding ShowAdvancedSettings, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+						Margin="12 0">
+				<TextBlock Text="Advanced settings"
+					   Style="{StaticResource Sdl.TextBlock.TitleStyle}"
+					   Margin="0 24 0 12"/>
+
+				<TextBlock Text="Download location"/>
+				<StackPanel Orientation="Horizontal"
+							Margin="0 0 0 12">
+					<Button Content="{x:Static root:PluginResources.SettingsView_BrowseButton}"
+							Style="{StaticResource Sdl.Button.DialogStyle}"
+							Command="{Binding BrowseFolderCommand}"
+							CommandParameter="{uiHelpers:NameOf Member=DownloadPath, Type={x:Type viewModels:SettingsViewModel}}"
+							DockPanel.Dock="Left"
+							Cursor="Hand"
+							Width="80"/>
+					<TextBox Text="{Binding DownloadPath, UpdateSourceTrigger=PropertyChanged}"
+							 Style="{StaticResource WatermarkTextBox}"
+							 uiHelpers:TextBoxWatermarkHelper.WatermarkText=""
+							 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+							 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=DownloadPath, Type={x:Type viewModels:SettingsViewModel}}"
+							 VerticalContentAlignment="Center"
+							 FontSize="10"
+							 Width="400"
+							 Margin="12 0 0 0"/>
+				</StackPanel>
+
+				<TextBlock Text="Downloaded file name"/>
+				<TextBox Text="{Binding DownloadFileName, UpdateSourceTrigger=PropertyChanged}"
+							 Style="{StaticResource WatermarkTextBox}"
+							 uiHelpers:TextBoxWatermarkHelper.WatermarkText=""
+							 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+							 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=DownloadFileName, Type={x:Type viewModels:SettingsViewModel}}"
+							 HorizontalAlignment="Left"
+						 VerticalContentAlignment="Center"
+							 Width="494"
+						 Margin="0 0 0 12"/>
+
+				<CheckBox Content="Re-send drafts and translated segments as default"
+						  Cursor="Hand" IsChecked="{Binding AlwaysResendDrafts}"
+						  Margin="0 0 0 12"/>
+
+				<CheckBox Content="Do not incluide tags in translated segments as default"
+						  Cursor="Hand" IsChecked="{Binding AlwaysSendPlainText}"
+						  Margin="0 0 0 12"/>
+				<StackPanel Orientation="Horizontal"
+						Margin="0 12 0 0">
+					<Button Content="Reset to default"
+							Command="{Binding ResetAdvancedSettingsCommand}"
+						Style="{StaticResource Sdl.Button.SecondaryStyle}"
+						Width="140"
+						Margin="0 0 4 0"/>
+					<Button Content="Save"
+							Command="{Binding SaveAdvancedSettingsCommand}"
+						Style="{StaticResource Sdl.Button.PrimaryStyle}"
+						Width="7"/>
+				</StackPanel>
 			</StackPanel>
 
 			<TextBlock Text="{Binding ErrorMessage, UpdateSourceTrigger=PropertyChanged}"
-						   Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}"
-						   Margin="24 40 24 8"
-						   TextWrapping="Wrap"/>
+					   Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}"
+					   TextWrapping="Wrap"
+					   Margin="24 40 24 8"/>
 		</StackPanel>
-	</GroupBox>
+	</ScrollViewer>
 </UserControl>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Xml.Serialization;
 using GoogleCloudTranslationProvider.Commands;
@@ -24,18 +25,42 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private bool _reSendDraft;
 		private bool _useCustomProviderName;
 
+		private bool _showAdvancedSettingsButton;
+		public bool ShowAdvancedSettingsButton
+		{
+			get => _showAdvancedSettingsButton;
+			set
+			{
+				if (_showAdvancedSettingsButton == value) return;
+				_showAdvancedSettingsButton = value;
+				OnPropertyChanged(nameof(ShowAdvancedSettingsButton));
+			}
+		}
+		private bool _showAdvancedSettings;
+		private bool _persistV3Project;
+		private string _v3Path;
+		private string _downloadPath;
+		private string _downloadFileName;
+		private bool _alwaysResendDrafts;
+		private bool _alwaysSendPlainText;
+
+
 		private string _preLookupFileName;
 		private string _postLookupFileName;
 		private string _customProviderName;
 		private string _errorMessage;
 
 		private ICommand _clearCommand;
-		private ICommand _browseCommand;
+		private ICommand _browseFileCommand;
+		private ICommand _browseFolderCommand;
+		private ICommand _showAdvancedSettingsCommand;
+		private ICommand _saveAdvancedSettingsCommand;
+		private ICommand _resetAdvancedSettingsCommand;
 
-		public SettingsViewModel(ITranslationOptions options, bool isTellMeAction = false)
+		public SettingsViewModel(ITranslationOptions options, bool hideAdvancedSettings = false)
 		{
 			ViewModel = this;
-			IsTellMeAction = isTellMeAction;
+			ShowAdvancedSettingsButton = !hideAdvancedSettings;
 			_options = options;
 			_openFileDialogService = new OpenFileDialogService();
 			SetSavedSettings();
@@ -112,6 +137,17 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			}
 		}
 
+		public bool ShowAdvancedSettings
+		{
+			get => _showAdvancedSettings;
+			set
+			{
+				if (_showAdvancedSettings == value) return;
+				_showAdvancedSettings = value;
+				OnPropertyChanged(nameof(ShowAdvancedSettings));
+			}
+		}
+
 		public string PreLookupFileName
 		{
 			get => _preLookupFileName;
@@ -169,8 +205,84 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			}
 		}
 
+		public bool PersistV3Project
+		{
+			get => _persistV3Project;
+			set
+			{
+				if (_persistV3Project == value) return;
+				_persistV3Project = value;
+				_options.AdvancedSettings.PersistV3Project = value;
+				OnPropertyChanged(nameof(PersistV3Project));
+			}
+		}
+
+		public string V3Path
+		{
+			get => _v3Path;
+			set
+			{
+				if (_v3Path == value) return;
+				_v3Path = value;
+				_options.AdvancedSettings.V3Path = value;
+				OnPropertyChanged(nameof(V3Path));
+			}
+		}
+
+		public string DownloadPath
+		{
+			get => _downloadPath;
+			set
+			{
+				if (_downloadPath == value) return;
+				_downloadPath = value;
+				_options.AdvancedSettings.DownloadPath = value;
+				OnPropertyChanged(nameof(DownloadPath));
+			}
+		}
+
+		public string DownloadFileName
+		{
+			get => _downloadFileName;
+			set
+			{
+				if (_downloadFileName == value) return;
+				_downloadFileName = value;
+				_options.AdvancedSettings.DownloadFileName = value;
+				OnPropertyChanged(nameof(DownloadFileName));
+			}
+		}
+
+		public bool AlwaysResendDrafts
+		{
+			get => _alwaysResendDrafts;
+			set
+            {
+                if (_alwaysResendDrafts == value) return;
+                _alwaysResendDrafts = value;
+				_options.AdvancedSettings.AlwaysResendDrafts = value;
+				OnPropertyChanged(nameof(AlwaysResendDrafts));
+            }
+		}
+
+		public bool AlwaysSendPlainText
+		{
+			get => _alwaysSendPlainText;
+			set
+            {
+                if (_alwaysSendPlainText == value) return;
+                _alwaysSendPlainText = value;
+				_options.AdvancedSettings.AlwaysSendPlainText = value;
+				OnPropertyChanged(nameof(AlwaysSendPlainText));
+            }
+		}
+
 		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
-		public ICommand BrowseCommand => _browseCommand ??= new RelayCommand(Browse);
+		public ICommand BrowseFileCommand => _browseFileCommand ??= new RelayCommand(BrowseFile);
+		public ICommand BrowseFolderCommand => _browseFolderCommand ??= new RelayCommand(BrowseFolder);
+		public ICommand ShowAdvancedSettingsCommand => _showAdvancedSettingsCommand ??= new RelayCommand(ChangeAdvancedSettingsVisibility);
+		public ICommand SaveAdvancedSettingsCommand => _saveAdvancedSettingsCommand ??= new RelayCommand(SaveAdvancedSettings);
+		public ICommand ResetAdvancedSettingsCommand => _resetAdvancedSettingsCommand ??= new RelayCommand(ResetAdvancedSettings);
 
 		public bool SettingsAreValid()
 		{
@@ -211,6 +323,14 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			PostLookupFileName = _options.PostLookupFilename;
 			CustomProviderName = _options.CustomProviderName;
 			UseCustomProviderName = _options.UseCustomProviderName;
+
+			_options.AdvancedSettings ??= new();
+			PersistV3Project = _options.AdvancedSettings.PersistV3Project;
+			V3Path = _options.AdvancedSettings.V3Path;
+			DownloadPath = _options.AdvancedSettings.DownloadPath;
+			DownloadFileName = _options.AdvancedSettings.DownloadFileName;
+			AlwaysResendDrafts = _options.AdvancedSettings.AlwaysResendDrafts;
+			AlwaysSendPlainText = _options.AdvancedSettings.AlwaysSendPlainText;
 		}
 
 		private void Clear(object parameter)
@@ -226,10 +346,27 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				case nameof(CustomProviderName):
 					CustomProviderName = string.Empty;
 					break;
+				case nameof(DownloadPath):
+					DownloadPath = Constants.AppDataFolder;
+					break;
+				case nameof(DownloadFileName):
+					DownloadFileName = "downloadedProject";
+					break;
 			}
 		}
 
-		private void Browse(object parameter)
+		private void BrowseFolder(object parameter)
+		{
+			using var folderBrowserDialog = new FolderBrowserDialog();
+			if (folderBrowserDialog.ShowDialog() != DialogResult.OK)
+			{
+				return;
+			}
+
+			DownloadPath = folderBrowserDialog.SelectedPath;
+		}
+
+		private void BrowseFile(object parameter)
 		{
 			const string Browse_XmlFiles = "XML Files|*.xml";
 
@@ -270,6 +407,25 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name}: {e}");
 				//ErrorMessage = $"{MtProviderConfDialogResources.lookupFileStructureCheckGenericErrorMessage} {exp.Message}";
 			}
+		}
+
+		private void ChangeAdvancedSettingsVisibility(object parameter)
+		{
+			ShowAdvancedSettings = !ShowAdvancedSettings;
+		}
+
+		private void SaveAdvancedSettings(object parameter)
+		{
+			_options.AdvancedSettings.SaveState();
+		}
+
+		private void ResetAdvancedSettings(object parameter)
+		{
+			_options.AdvancedSettings.Clear();
+			DownloadPath = _options.AdvancedSettings.DownloadPath;
+			DownloadFileName = _options.AdvancedSettings.DownloadFileName;
+			AlwaysResendDrafts = _options.AdvancedSettings.AlwaysResendDrafts;
+			AlwaysSendPlainText = _options.AdvancedSettings.AlwaysSendPlainText;
 		}
 	}
 }
