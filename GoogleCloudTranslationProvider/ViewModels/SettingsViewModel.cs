@@ -60,7 +60,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		public SettingsViewModel(ITranslationOptions options, bool hideAdvancedSettings = false)
 		{
 			ViewModel = this;
-			ShowAdvancedSettingsButton = !hideAdvancedSettings;
+			ShowAdvancedSettingsButton = hideAdvancedSettings;
 			_options = options;
 			_openFileDialogService = new OpenFileDialogService();
 			SetSavedSettings();
