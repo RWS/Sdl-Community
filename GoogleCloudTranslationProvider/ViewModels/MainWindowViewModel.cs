@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Windows.Input;
 using GoogleCloudTranslationProvider.Commands;
+using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
 using GoogleCloudTranslationProvider.Service;
@@ -174,7 +175,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				if (_selectedView == value) return;
 				_selectedView = value;
 				OnPropertyChanged(nameof(SelectedView));
-				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -186,7 +186,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				if (_dialogResult == value) return;
 				_dialogResult = value;
 				OnPropertyChanged(nameof(DialogResult));
-				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -198,7 +197,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				if (_multiButtonContent == value) return;
 				_multiButtonContent = value;
 				OnPropertyChanged(nameof(MultiButtonContent));
-				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -210,7 +208,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				if (_isSettingsViewSelected == value) return;
 				_isSettingsViewSelected = value;
 				OnPropertyChanged(nameof(IsSettingsViewSelected));
-				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -222,18 +219,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				if (_isProviderViewSelected == value) return;
 				_isProviderViewSelected = value;
 				OnPropertyChanged(nameof(IsProviderViewSelected));
-				ErrorMessage = string.Empty;
-			}
-		}
-
-		public string ErrorMessage
-		{
-			get => _errorMessage;
-			set
-			{
-				if (_errorMessage == value) return;
-				_errorMessage = value;
-				OnPropertyChanged(nameof(ErrorMessage));
 			}
 		}
 
@@ -245,7 +230,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				if (_translatorErrorResponse == value) return;
 				_translatorErrorResponse = value;
 				OnPropertyChanged(nameof(TranslatorErrorResponse));
-				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -303,7 +287,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		public bool IsWindowValid()
 		{
-			ErrorMessage = string.Empty;
 			var isGoogleProvider = _providerViewModel?.SelectedTranslationOption?.ProviderType == ProviderType.GoogleTranslate;
 			if (isGoogleProvider && !ValidGoogleOptions())
 			{
@@ -406,7 +389,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		private void ClearMessageRaised()
 		{
-			ErrorMessage = string.Empty;
 			TranslatorErrorResponse = "<html><body></html></body>";
 		}
 
@@ -418,7 +400,10 @@ namespace GoogleCloudTranslationProvider.ViewModels
 														 : ViewDetails_Provider;
 				TrySwitchView(o as string ?? destination);
 			}
-			catch { }
+			catch (Exception e)
+			{
+				ErrorHandler.HandleError(e);
+			}
 		}
 
 		private void TrySwitchView(string requestedType)

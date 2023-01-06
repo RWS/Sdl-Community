@@ -6,9 +6,11 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
+using Google.LongRunning;
 using GoogleCloudTranslationProvider.Commands;
 using GoogleCloudTranslationProvider.Extensions;
 using GoogleCloudTranslationProvider.GoogleAPI;
+using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
 using GoogleCloudTranslationProvider.Service;
@@ -32,7 +34,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private List<string> _locations;
 		private string _projectLocation;
 
-		private string _errorMessage;
 		private string _googleEngineModel;
 		private string _glossaryPath;
 		private string _visibleJsonPath;
@@ -65,17 +66,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		}
 
 		public BaseModel ViewModel { get; set; }
-
-		public string ErrorMessage
-		{
-			get => _errorMessage;
-			set
-			{
-				if (_errorMessage == value) return;
-				_errorMessage = value;
-				OnPropertyChanged(nameof(ErrorMessage));
-			}
-		}
 
 		public List<RetrievedGlossary> AvailableGlossaries
 		{
@@ -139,7 +129,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				OnPropertyChanged(nameof(SelectedGoogleApiVersion));
 				OnPropertyChanged(nameof(IsV2Checked));
 				OnPropertyChanged(nameof(IsV3Checked));
-				ErrorMessage = string.Empty;
 				ClearMessageRaised?.Invoke();
 			}
 		}
@@ -165,7 +154,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				OnPropertyChanged(nameof(ProjectLocation));
 				GetProjectResources();
 				ClearMessageRaised?.Invoke();
-				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -177,7 +165,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				if (_basicCsvGlossary == value) return;
 				_basicCsvGlossary = value;
 				OnPropertyChanged(nameof(BasicCsvGlossary));
-				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -190,7 +177,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				_persistGoogleKey = value;
 				OnPropertyChanged(nameof(PersistGoogleKey));
 				_options.PersistGoogleKey = value;
-				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -240,7 +226,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				_googleEngineModel = value;
 				OnPropertyChanged(nameof(GoogleEngineModel));
 				ClearMessageRaised?.Invoke();
-				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -252,7 +237,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				if (_visibleJsonPath == value) return;
 				_visibleJsonPath = value;
 				OnPropertyChanged(nameof(VisibleJsonPath));
-				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -265,7 +249,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				_jsonFilePath = value;
 				OnPropertyChanged(nameof(JsonFilePath));
 				ClearMessageRaised?.Invoke();
-				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -278,7 +261,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				_projectId = value;
 				OnPropertyChanged(nameof(ProjectId));
 				ClearMessageRaised?.Invoke();
-				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -291,7 +273,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				_apiKey = value.Trim();
 				OnPropertyChanged(nameof(ApiKey));
 				ClearMessageRaised?.Invoke();
-				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -304,7 +285,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				_glossaryPath = value;
 				OnPropertyChanged(nameof(GlossaryPath));
 				ClearMessageRaised?.Invoke();
-				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -317,7 +297,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				_glossaryId = value;
 				OnPropertyChanged(nameof(GlossaryId));
 				ClearMessageRaised?.Invoke();
-				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -356,7 +335,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		{
 			if (string.IsNullOrEmpty(ApiKey))
 			{
-				ErrorMessage = PluginResources.Validation_ApiKey;
+				ErrorHandler.HandleError(PluginResources.Validation_ApiKey, "Invalid key");
 				return false;
 			}
 
@@ -368,7 +347,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			}
 			catch (Exception e)
 			{
-				ErrorMessage = e.Message;
+				ErrorHandler.HandleError(e);
 				return false;
 			}
 		}
@@ -382,22 +361,22 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		{
 			if (string.IsNullOrEmpty(JsonFilePath))
 			{
-				ErrorMessage = PluginResources.Validation_EmptyJsonFilePath;
+				ErrorHandler.HandleError(PluginResources.Validation_EmptyJsonFilePath, nameof(JsonFilePath));
 				return false;
 			}
 			else if (!File.Exists(JsonFilePath))
 			{
-				ErrorMessage = PluginResources.Validation_MissingJsonFile;
+				ErrorHandler.HandleError(PluginResources.Validation_MissingJsonFile, nameof(JsonFilePath));
 				return false;
 			}
 			else if (string.IsNullOrEmpty(ProjectId))
 			{
-				ErrorMessage = PluginResources.Validation_ProjectID_Empty;
+				ErrorHandler.HandleError(PluginResources.Validation_ProjectID_Empty, nameof(ProjectId));
 				return false;
 			}
 			else if (string.IsNullOrEmpty(ProjectLocation))
 			{
-				ErrorMessage = PluginResources.Validation_Location_Empty;
+				ErrorHandler.HandleError(PluginResources.Validation_Location_Empty, nameof(ProjectLocation));
 				return false;
 			}
 
@@ -428,23 +407,23 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			{
 				if (e.Message.Contains("Resource type: models") || e.Message.Contains("The model"))
 				{
-					ErrorMessage = PluginResources.Validation_ModelName_Invalid;
+					ErrorHandler.HandleError(PluginResources.Validation_ModelName_Invalid, "Custom Models");
 				}
 				else if (e.Message.Contains("Invalid resource name"))
 				{
-					ErrorMessage = PluginResources.Validation_ProjectID_Failed;
+					ErrorHandler.HandleError(PluginResources.Validation_ProjectID_Failed, nameof(ProjectId));
 				}
 				else if (e.Message.Contains("Glossary not found"))
 				{
-					ErrorMessage = PluginResources.Validation_Glossary_Invalid;
+					ErrorHandler.HandleError(PluginResources.Validation_Glossary_Invalid, nameof(GlossaryPath));
 				}
 				else if (e.Message.Contains("PermissionDenied"))
 				{
-					ErrorMessage = PluginResources.Validation_PermissionDenied;
+					ErrorHandler.HandleError(PluginResources.Validation_PermissionDenied, "Permission Denied");
 				}
 				else
 				{
-					ErrorMessage = e.Message;
+					ErrorHandler.HandleError(e);
 				}
 
 				return false;
@@ -545,7 +524,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		private void DragAndDropJsonFile(object parameter)
 		{
-			ErrorMessage = string.Empty;
 			if (parameter is not DragEventArgs eventArgs)
 			{
 				return;
@@ -559,7 +537,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 			if (fileDrop.Length > 1)
 			{
-				ErrorMessage = PluginResources.Validation_MultipleFiles;
+				ErrorHandler.HandleError(PluginResources.Validation_MultipleFiles, "Multiple files");
 				return;
 			}
 
@@ -568,12 +546,11 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		private void DownloadJsonFile(object parameter)
 		{
-			ErrorMessage = string.Empty;
 			UrlToDownload ??= string.Empty;
 			var operation = UrlToDownload.VerifyAndDownloadJsonFile(_options.AdvancedSettings.DownloadPath, _options.AdvancedSettings.DownloadFileName);
 			if (!operation.Success)
 			{
-				ErrorMessage = operation.ErrorMessage;
+				ErrorHandler.HandleError(operation.ErrorMessage, "Download failed");
 				return;
 			}
 
@@ -600,11 +577,10 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		private void GetJsonDetails(string selectedFile)
 		{
-			ErrorMessage = string.Empty;
 			var (success, operationResult) = selectedFile.VerifyPathAndReadJsonFile();
 			if (!success)
 			{
-				ErrorMessage = operationResult as string;
+				ErrorHandler.HandleError(operationResult as string, "Reading failed");
 				return;
 			}
 
@@ -641,7 +617,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 			if (!errorMessage.Contains("Unsupported location"))
 			{
-				ErrorMessage = PluginResources.Validation_AuthenticationFailed;
+				ErrorHandler.HandleError(PluginResources.Validation_AuthenticationFailed, "Authentication failed");
 				return;
 			}
 
@@ -733,7 +709,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			var operation = JsonFilePath.OpenFolderAndSelectFile();
 			if (!operation.Success)
 			{
-				ErrorMessage = operation.ErrorMessage;
+				ErrorHandler.HandleError(operation.ErrorMessage, "Authentication failed");
 			}
 		}
 

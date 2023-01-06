@@ -18,8 +18,6 @@ namespace GoogleCloudTranslationProvider.Interfaces
 		bool IsTellMeAction { get; set; }
 
 		bool UseCustomProviderName { get; set; }
-
-		string ErrorMessage { get; set; }
 		
 		string PreLookupFileName { get; set; }
 		

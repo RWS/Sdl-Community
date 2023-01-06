@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using Google.Api.Gax.ResourceNames;
 using Google.Cloud.AutoML.V1;
 using Google.Cloud.Translate.V3;
+using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
 using NLog;
@@ -22,7 +23,6 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 		private TranslationServiceClient _translationServiceClient;
 		private List<V3LanguageModel> _supportedLanguages;
 		private RetrievedCustomModel _customModel;
-		private RetrievedGlossary _glossary;
 
 		public V3Connector(ITranslationOptions options, bool authenticateUser = false)
 		{
@@ -40,6 +40,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 			catch (Exception e)
 			{
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name}: {e}");
+				ErrorHandler.HandleError(e);
 			}
 		}
 
@@ -97,6 +98,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 			catch (Exception e)
 			{
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name}: {e}");
+				ErrorHandler.HandleError(e);
 				throw e;
 			}
 		}

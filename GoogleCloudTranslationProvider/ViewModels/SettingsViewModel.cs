@@ -4,7 +4,9 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Xml.Serialization;
+using Google.LongRunning;
 using GoogleCloudTranslationProvider.Commands;
+using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
 using GoogleCloudTranslationProvider.Service;
@@ -38,7 +40,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private string _preLookupFileName;
 		private string _postLookupFileName;
 		private string _customProviderName;
-		private string _errorMessage;
 
 		private ICommand _clearCommand;
 		private ICommand _browseFileCommand;
@@ -66,7 +67,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				if (_reSendDraft == value) return;
 				_reSendDraft = value;
 				OnPropertyChanged(nameof(ReSendDraft));
-				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -78,7 +78,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				if (_sendPlainText == value) return;
 				_sendPlainText = value;
 				OnPropertyChanged(nameof(SendPlainText));
-				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -95,7 +94,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				}
 
 				OnPropertyChanged(nameof(DoPreLookup));
-				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -112,7 +110,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				}
 
 				OnPropertyChanged(nameof(DoPostLookup));
-				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -157,7 +154,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				if (_preLookupFileName == value) return;
 				_preLookupFileName = value;
 				OnPropertyChanged(nameof(PreLookupFileName));
-				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -169,7 +165,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				if (_postLookupFileName == value) return;
 				_postLookupFileName = value;
 				OnPropertyChanged(nameof(PostLookupFileName));
-				ErrorMessage = string.Empty;
 			}
 		}
 
@@ -184,16 +179,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			}
 		}
 
-		public string ErrorMessage
-		{
-			get => _errorMessage;
-			set
-			{
-				if (_errorMessage == value) return;
-				_errorMessage = value;
-				OnPropertyChanged(nameof(ErrorMessage));
-			}
-		}
 
 		public bool IsTellMeAction
 		{
@@ -292,25 +277,25 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		{
 			if (DoPreLookup && string.IsNullOrEmpty(PreLookupFileName))
 			{
-				ErrorMessage = PluginResources.PreLookupEmptyMessage;
+				ErrorHandler.HandleError(PluginResources.PreLookupEmptyMessage, nameof(PreLookupFileName));
 				return false;
 			}
 
 			if (DoPreLookup && !File.Exists(PreLookupFileName))
 			{
-				ErrorMessage = PluginResources.PreLookupWrongPathMessage;
+				ErrorHandler.HandleError(PluginResources.PreLookupWrongPathMessage, nameof(PreLookupFileName));
 				return false;
 			}
 
 			if (DoPostLookup && string.IsNullOrEmpty(PostLookupFileName))
 			{
-				ErrorMessage = PluginResources.PostLookupEmptyMessage;
+				ErrorHandler.HandleError(PluginResources.PostLookupEmptyMessage, nameof(PostLookupFileName));
 				return false;
 			}
 
 			if (DoPostLookup && !File.Exists(PostLookupFileName))
 			{
-				ErrorMessage = PluginResources.PostLookupWrongPathMessage;
+				ErrorHandler.HandleError(PluginResources.PostLookupWrongPathMessage, nameof(PostLookupFileName));
 				return false;
 			}
 
@@ -372,7 +357,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		{
 			const string Browse_XmlFiles = "XML Files|*.xml";
 
-			ErrorMessage = string.Empty;
 			var selectedFile = _openFileDialogService.ShowDialog(Browse_XmlFiles);
 			if (string.IsNullOrEmpty(selectedFile))
 			{

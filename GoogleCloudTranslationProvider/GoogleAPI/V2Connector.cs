@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Web;
 using GoogleCloudTranslationProvider.Extensions;
+using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Service;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -84,6 +85,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 			catch (Exception e)
 			{
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {e.Message}\n {e.StackTrace}");
+				ErrorHandler.HandleError(e);
 			}
 
 			return new List<string>();
