@@ -239,6 +239,7 @@
 						<ComboBox ItemsSource="{Binding Locations}"
 								  SelectedItem="{Binding ProjectLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 								  Visibility="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+								  IsEnabled="{Binding ProjectResourcesLoaded}"
 								  IsSynchronizedWithCurrentItem="True"
 								  SelectedIndex="0"
 								  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
@@ -277,6 +278,7 @@
 
 						<ComboBox ItemsSource="{Binding AvailableGlossaries}"
 								  SelectedItem="{Binding SelectedGlossary, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								  IsEnabled="{Binding ProjectResourcesLoaded}"
 								  DisplayMemberPath="DisplayName"
 								  IsSynchronizedWithCurrentItem="True"
 								  SelectedIndex="0"
@@ -315,6 +317,7 @@
 
 						<ComboBox ItemsSource="{Binding AvailableCustomModels}"
 								  SelectedItem="{Binding SelectedCustomModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								  IsEnabled="{Binding ProjectResourcesLoaded}"
 								  DisplayMemberPath="DisplayName"
 								  IsSynchronizedWithCurrentItem="True"
 								  SelectedIndex="0"
