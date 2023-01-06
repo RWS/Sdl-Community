@@ -98,7 +98,6 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 			catch (Exception e)
 			{
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name}: {e}");
-				ErrorHandler.HandleError(e);
 				throw e;
 			}
 		}

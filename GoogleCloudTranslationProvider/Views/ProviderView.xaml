@@ -185,7 +185,8 @@
 							<Button Style="{StaticResource TransparentButtonStyle}"
 									Visibility="{Binding JsonFilePath, Converter={StaticResource EmptyToVisibility}}"
 									Command="{Binding OpenLocalPathCommand}"
-									Width="20" Height="20"
+									VerticalAlignment="Top"
+									Width="20"
 									Cursor="Hand">
 								<Image Source="../Resources/Folder.png"/>
 							</Button>
