@@ -4,8 +4,8 @@ namespace GoogleCloudTranslationProvider
 {
 	public static class Constants
 	{
-
-
+		// Plugin naming
+		public const string GoogleTranslatorString = "Google Translate";
 		public const string GoogleNaming_FullName = "Google Cloud Translation Provider";
 		public const string GoogleNaming_ShortName = "Google Cloud TP";
 		public const string GoogleVersion_V2_FullName = "V2 Basic Translation";
@@ -13,13 +13,15 @@ namespace GoogleCloudTranslationProvider
 		public const string GoogleVersion_V3_FullName = "V3 Advanced Translation";
 		public const string GoogleVersion_V3_ShortName = "V3";
 
-		public static readonly string AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Trados AppStore\\Google Cloud TP\\";
+		// Paths and files
+		private const string PluginInAppData = "\\Trados AppStore\\Google Cloud TP";
 		public const string DefaultDownloadedJsonFileName = "downloadedProject.json";
 		public const string AdvancedSettingsFileName = "gctpOptions.json";
+		public static readonly string AppDataFolder = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}{PluginInAppData}";
 		public static readonly string AdvancedSettingsOnPath = AppDataFolder + AdvancedSettingsFileName;
 
-		public const string GoogleTranslatorString = "Google Translate";
 
+		// Plugin connection
 		public const string GoogleTranslationScheme = "googletranslationprovider";
 		public const string GoogleTranslationFullScheme = "googletranslationprovider:///";
 		public const string GoogleApiEnvironmentVariableName = "GOOGLE_APPLICATION_CREDENTIALS";
@@ -40,8 +42,8 @@ namespace GoogleCloudTranslationProvider
 		public const string FullDocumentation = "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/6547/google-cloud-translation-provider";
 
 		// Tell Me
-		public const string TellMe_HelpUrl = "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/6547/google-translator-provider";
 		public const string TellMe_StoreUrl = "https://appstore.rws.com/plugin/174/";
 		public const string TellMe_CommunityForumUrl = "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/";
+		public const string TellMe_HelpUrl = "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/6547/google-translator-provider";
 	}
 }

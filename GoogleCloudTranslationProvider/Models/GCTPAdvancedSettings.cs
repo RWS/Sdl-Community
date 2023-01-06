@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using Google.Protobuf.WellKnownTypes;
 using Newtonsoft.Json;
 
 namespace GoogleCloudTranslationProvider.Models
@@ -11,9 +10,6 @@ namespace GoogleCloudTranslationProvider.Models
 			LoadState();
 		}
 
-		public bool PersistV3Project { get; set; }
-		public string V3Path { get; set; } = Constants.AppDataFolder;
-
 		public string DownloadPath { get; set; }
 
 		public string DownloadFileName { get; set; }
@@ -21,9 +17,6 @@ namespace GoogleCloudTranslationProvider.Models
 		public bool AlwaysResendDrafts { get; set; }
 
 		public bool AlwaysSendPlainText { get; set; }
-
-		[JsonIgnore]
-		public string ErrorMessage { get; private set; }
 
 		public void SaveState()
 		{
@@ -37,7 +30,7 @@ namespace GoogleCloudTranslationProvider.Models
 			EnsureFileExists();
 			var jsonContent = new StreamReader(Constants.AdvancedSettingsOnPath).ReadToEnd();
 			dynamic savedSettings = JsonConvert.DeserializeObject(jsonContent);
-
+			var errorMessage = string.Empty;
 			foreach (var savedSetting in savedSettings)
 			{
 				try
@@ -60,17 +53,20 @@ namespace GoogleCloudTranslationProvider.Models
 				}
 				catch
 				{
-					ErrorMessage = "The file that contains the default settings have been corrupted.";
+					errorMessage = PluginResources.AdvancedSettings_CorruptedFile;
 				}
 			}
+
+			/*if (errorMessage == string.Empty)
+			{
+
+			}*/
 		}
 
 		public void Clear()
 		{
-			PersistV3Project = false;
-			V3Path = null;
 			DownloadPath = Constants.AppDataFolder;
-			DownloadFileName = "downloadedProject";
+			DownloadFileName = Constants.DefaultDownloadedJsonFileName.Substring(0, Constants.DefaultDownloadedJsonFileName.IndexOf(".json"));
 			AlwaysResendDrafts = false;
 			AlwaysSendPlainText = false;
 		}

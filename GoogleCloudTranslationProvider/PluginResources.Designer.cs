@@ -61,6 +61,78 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The file that contains the default settings have been corrupted, some saved settings might have been lost..
+        /// </summary>
+        public static string AdvancedSettings_CorruptedFile {
+            get {
+                return ResourceManager.GetString("AdvancedSettings_CorruptedFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloaded JSON file name.
+        /// </summary>
+        public static string AdvancedSettings_DownloadFile_Description {
+            get {
+                return ResourceManager.GetString("AdvancedSettings_DownloadFile_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please write the name of the file that will be downloaded.
+        /// </summary>
+        public static string AdvancedSettings_DownloadFile_Watermark {
+            get {
+                return ResourceManager.GetString("AdvancedSettings_DownloadFile_Watermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download location.
+        /// </summary>
+        public static string AdvancedSettings_DownloadPath_Description {
+            get {
+                return ResourceManager.GetString("AdvancedSettings_DownloadPath_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select the path where the JSON files should be saved.
+        /// </summary>
+        public static string AdvancedSettings_DownloadPath_Watermark {
+            get {
+                return ResourceManager.GetString("AdvancedSettings_DownloadPath_Watermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not include tags in translated segments as default for every new project.
+        /// </summary>
+        public static string AdvancedSettings_NoTags {
+            get {
+                return ResourceManager.GetString("AdvancedSettings_NoTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Re-send drafts and translated segments as default for every new project.
+        /// </summary>
+        public static string AdvancedSettings_ResendDrafts {
+            get {
+                return ResourceManager.GetString("AdvancedSettings_ResendDrafts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Advanced settings.
+        /// </summary>
+        public static string AdvancedSettings_Title {
+            get {
+                return ResourceManager.GetString("AdvancedSettings_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No API key has been set.  Please open the plugin settings form and enter a valid API key.
         /// </summary>
         public static string ApiConnectionGoogleNoKeyErrorMessage {
@@ -350,15 +422,6 @@ namespace GoogleCloudTranslationProvider {
         public static string GroupboxHeaders_ProjectInfo {
             get {
                 return ResourceManager.GetString("GroupboxHeaders_ProjectInfo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Settings.
-        /// </summary>
-        public static string GroupboxHeaders_Settings {
-            get {
-                return ResourceManager.GetString("GroupboxHeaders_Settings", resourceCulture);
             }
         }
         
@@ -986,6 +1049,15 @@ namespace GoogleCloudTranslationProvider {
         public static string SettingsView_ResendDraft_Description {
             get {
                 return ResourceManager.GetString("SettingsView_ResendDraft_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Session settings.
+        /// </summary>
+        public static string SettingsView_SessionSettingsTitle {
+            get {
+                return ResourceManager.GetString("SettingsView_SessionSettingsTitle", resourceCulture);
             }
         }
         

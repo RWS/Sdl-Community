@@ -390,9 +390,6 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
   <data name="GroupboxHeaders_ProjectInfo" xml:space="preserve">
     <value>Project info</value>
   </data>
-  <data name="GroupboxHeaders_Settings" xml:space="preserve">
-    <value>Settings</value>
-  </data>
   <data name="FileValidation_DownloadFailed" xml:space="preserve">
     <value>An unexpected error occured while downloading the file.</value>
   </data>
@@ -477,5 +474,32 @@ Path: {0}</value>
   </data>
   <data name="ProviderView_V3_Project_Navigate" xml:space="preserve">
     <value>Navigate to your project</value>
+  </data>
+  <data name="AdvancedSettings_DownloadFile_Description" xml:space="preserve">
+    <value>Downloaded JSON file name</value>
+  </data>
+  <data name="AdvancedSettings_DownloadFile_Watermark" xml:space="preserve">
+    <value>Please write the name of the file that will be downloaded</value>
+  </data>
+  <data name="AdvancedSettings_DownloadPath_Description" xml:space="preserve">
+    <value>Download location</value>
+  </data>
+  <data name="AdvancedSettings_DownloadPath_Watermark" xml:space="preserve">
+    <value>Please select the path where the JSON files should be saved</value>
+  </data>
+  <data name="AdvancedSettings_NoTags" xml:space="preserve">
+    <value>Do not include tags in translated segments as default for every new project</value>
+  </data>
+  <data name="AdvancedSettings_ResendDrafts" xml:space="preserve">
+    <value>Re-send drafts and translated segments as default for every new project</value>
+  </data>
+  <data name="AdvancedSettings_Title" xml:space="preserve">
+    <value>Advanced settings</value>
+  </data>
+  <data name="SettingsView_SessionSettingsTitle" xml:space="preserve">
+    <value>Session settings</value>
+  </data>
+  <data name="AdvancedSettings_CorruptedFile" xml:space="preserve">
+    <value>The file that contains the default settings have been corrupted, some saved settings might have been lost.</value>
   </data>
 </root>

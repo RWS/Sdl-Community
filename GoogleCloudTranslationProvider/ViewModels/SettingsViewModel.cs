@@ -26,16 +26,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private bool _useCustomProviderName;
 
 		private bool _showAdvancedSettingsButton;
-		public bool ShowAdvancedSettingsButton
-		{
-			get => _showAdvancedSettingsButton;
-			set
-			{
-				if (_showAdvancedSettingsButton == value) return;
-				_showAdvancedSettingsButton = value;
-				OnPropertyChanged(nameof(ShowAdvancedSettingsButton));
-			}
-		}
 		private bool _showAdvancedSettings;
 		private bool _persistV3Project;
 		private string _v3Path;
@@ -137,6 +127,17 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			}
 		}
 
+		public bool ShowAdvancedSettingsButton
+		{
+			get => _showAdvancedSettingsButton;
+			set
+			{
+				if (_showAdvancedSettingsButton == value) return;
+				_showAdvancedSettingsButton = value;
+				OnPropertyChanged(nameof(ShowAdvancedSettingsButton));
+			}
+		}
+
 		public bool ShowAdvancedSettings
 		{
 			get => _showAdvancedSettings;
@@ -212,7 +213,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			{
 				if (_persistV3Project == value) return;
 				_persistV3Project = value;
-				_options.AdvancedSettings.PersistV3Project = value;
 				OnPropertyChanged(nameof(PersistV3Project));
 			}
 		}
@@ -224,7 +224,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			{
 				if (_v3Path == value) return;
 				_v3Path = value;
-				_options.AdvancedSettings.V3Path = value;
 				OnPropertyChanged(nameof(V3Path));
 			}
 		}
@@ -278,10 +277,15 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		}
 
 		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
+
 		public ICommand BrowseFileCommand => _browseFileCommand ??= new RelayCommand(BrowseFile);
+
 		public ICommand BrowseFolderCommand => _browseFolderCommand ??= new RelayCommand(BrowseFolder);
+
 		public ICommand ShowAdvancedSettingsCommand => _showAdvancedSettingsCommand ??= new RelayCommand(ChangeAdvancedSettingsVisibility);
+
 		public ICommand SaveAdvancedSettingsCommand => _saveAdvancedSettingsCommand ??= new RelayCommand(SaveAdvancedSettings);
+
 		public ICommand ResetAdvancedSettingsCommand => _resetAdvancedSettingsCommand ??= new RelayCommand(ResetAdvancedSettings);
 
 		public bool SettingsAreValid()
@@ -325,8 +329,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			UseCustomProviderName = _options.UseCustomProviderName;
 
 			_options.AdvancedSettings ??= new();
-			PersistV3Project = _options.AdvancedSettings.PersistV3Project;
-			V3Path = _options.AdvancedSettings.V3Path;
 			DownloadPath = _options.AdvancedSettings.DownloadPath;
 			DownloadFileName = _options.AdvancedSettings.DownloadFileName;
 			AlwaysResendDrafts = _options.AdvancedSettings.AlwaysResendDrafts;
