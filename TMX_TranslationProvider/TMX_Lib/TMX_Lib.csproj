@@ -97,6 +97,7 @@
     <Compile Include="Utils\DummyTranslate.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\Util.cs" />
+    <Compile Include="Writer\TmxWriter.cs" />
     <Compile Include="XmlSplit\XmlSplitter.cs" />
   </ItemGroup>
   <ItemGroup>

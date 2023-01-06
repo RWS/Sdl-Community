@@ -9,6 +9,8 @@ using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using TMX_Lib.Db;
 using TMX_Lib.Search;
+using TMX_Lib.Utils;
+using TMX_Lib.Writer;
 
 namespace TMXTests
 {
@@ -125,5 +127,23 @@ namespace TMXTests
 			Assert.True(dbTexts.Any(t => t.LocaseText == "asta e o reteta super interesanta"));
 			Assert.True(dbTexts.Any(t => t.LocaseText == "esta muchacha con tigo"));
 		}
+
+		[Fact]
+		public async Task TestExportToXml()
+		{
+			var folder = "..\\..\\..\\..\\SampleTestFiles\\";
+			var originalFile = "#4";
+			await DbImportFileAsync($"{folder}{originalFile}.tmx", "sample4");
+			var db = new TmxMongoDb("sample4");
+			await db.InitAsync();
+			var writer = new TmxWriter($"{folder}{originalFile}-copy.tmx") { Indent = true };
+			await writer.WriteAsync(db);
+			writer.Dispose();
+
+			var oldContent = File.ReadAllText($"{folder}{originalFile}.tmx");
+			var newContent = File.ReadAllText($"{folder}{originalFile}-copy.tmx");
+			Assert.True(Util.SimpleIsXmlEquivalent(oldContent, newContent));
+		}
+
 	}
 }

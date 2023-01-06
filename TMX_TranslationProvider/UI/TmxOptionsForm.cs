@@ -230,6 +230,19 @@ namespace TMX_TranslationProvider
 			view.Activate();
 		}
 
+		private void exportToTmx_Click(object sender, EventArgs e)
+		{
+			var dlg = new SaveFileDialog();
+			if (_newOptions.FileName != "")
+				dlg.FileName = Path.GetDirectoryName(_newOptions.FileName) + "\\" + Path.GetFileNameWithoutExtension(_newOptions.FileName)  + "-copy.tmx";
+			dlg.Filter = "TMX Files (*.tmx)|*.tmx|All files (*.*)|*.*";
+			if (dlg.ShowDialog() == DialogResult.OK)
+			{
+				var exportForm = new TmxExportForm(SearchService, dlg.FileName);
+				exportForm.ShowAndStart();
+			}
+		}
+
 		private void UpdateUI()
 		{
 			if (!_initialized)
@@ -242,6 +255,7 @@ namespace TMX_TranslationProvider
 			importProgress.Value = (int)(SearchService.ImportProgress() * 100);
 			importStatus.Text = !SearchService.ImportComplete() ? "Importing Data..." : (SearchService.ImportError() == "" ? "Import Complete" : "Import Failed");
 			viewReport.Enabled = SearchService.Report.IsStarted;
+			exportToTmx.Enabled = SearchService.HasImportBeenDoneBefore() || SearchService.ImportComplete() ;
 
 			var isLocalhost = IsLocalhostConnection();
 			dbPassword.Visible = dbPasswordLabel.Visible = dbPasswordTip.Visible = !isLocalhost;

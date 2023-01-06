@@ -209,9 +209,9 @@ namespace TMX_Lib.TmxFormat
             var tu = new TmxTranslationUnit();
             var properties = xmlUnit.SelectNodes("prop");
             if (properties != null)
-	            tu.XmlProperties = string.Join(" ", properties.OfType<XmlNode>().Select(p => p.OuterXml));
+	            tu.XmlProperties = string.Join("\r\n", properties.OfType<XmlNode>().Select(p => p.OuterXml));
             if (xmlUnit.Attributes != null)
-	            tu.TuAttributes = string.Join("\r\n", xmlUnit.Attributes.OfType<XmlAttribute>().Select(a => $"{a.Name}=\"{a.Value}\""));
+	            tu.TuAttributes = string.Join(" ", xmlUnit.Attributes.OfType<XmlAttribute>().Select(a => $"{a.Name}=\"{Util.XmlAttribute(a.Value)}\""));
 
             var tuv = xmlUnit.SelectNodes("tuv");
 			if (tuv != null)

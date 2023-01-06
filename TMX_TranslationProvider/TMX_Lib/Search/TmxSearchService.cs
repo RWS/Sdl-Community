@@ -9,6 +9,7 @@ using NLog;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using TMX_Lib.Db;
+using TMX_Lib.Writer;
 using LogManager = NLog.LogManager;
 
 namespace TMX_Lib.Search
@@ -229,6 +230,15 @@ namespace TMX_Lib.Search
 			{
 				error = e.Message;
 				return (false, error);
+			}
+		}
+
+		public async Task ExportToFileAsync(string fileName, Func<double, bool> continueFunc)
+		{
+			using (var writer = new TmxWriter(fileName))
+			{
+				ulong writeBlock = 100;
+				await writer.WriteAsync(_db, continueFunc, writeBlock);
 			}
 		}
 	}

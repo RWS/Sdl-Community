@@ -17,11 +17,11 @@ namespace TMX_Lib.Db
 		public ulong TranslationUnitID;
 
         public DateTime? CreationDate;
-        public string CreationAuthor;
+        public string CreationAuthor = "";
         public DateTime? ChangeDate;
-        public string ChangeAuthor;
-        public string XmlProperties;
-        public string TuAttributes;
+        public string ChangeAuthor = "";
+        public string XmlProperties = "";
+        public string TuAttributes = "";
 
 		// helper - so I know -> when an update of a Translation Unit happens,
 		// when updating the texts -> are they adds or updates

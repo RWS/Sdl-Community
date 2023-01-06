@@ -36,6 +36,7 @@
             this.browse = new System.Windows.Forms.Button();
             this.error = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.viewReport = new System.Windows.Forms.Button();
             this.quickImport = new System.Windows.Forms.CheckBox();
             this.importStatus = new System.Windows.Forms.Label();
             this.importProgress = new System.Windows.Forms.ProgressBar();
@@ -58,7 +59,7 @@
             this.timerImportProgress = new System.Windows.Forms.Timer(this.components);
             this.viewLog = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.viewReport = new System.Windows.Forms.Button();
+            this.exportToTmx = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -157,6 +158,21 @@
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "MongoDb Database";
+            // 
+            // viewReport
+            // 
+            this.viewReport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.viewReport.Enabled = false;
+            this.viewReport.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.viewReport.Location = new System.Drawing.Point(554, 205);
+            this.viewReport.Name = "viewReport";
+            this.viewReport.Size = new System.Drawing.Size(84, 25);
+            this.viewReport.TabIndex = 19;
+            this.viewReport.Text = "&View Report";
+            this.toolTip1.SetToolTip(this.viewReport, "Try to connect to this database.  Assuming the connection works, we\'ll automatica" +
+        "lly import your TMX file");
+            this.viewReport.UseVisualStyleBackColor = true;
+            this.viewReport.Click += new System.EventHandler(this.viewReport_Click);
             // 
             // quickImport
             // 
@@ -372,26 +388,24 @@
             this.viewLog.UseVisualStyleBackColor = true;
             this.viewLog.Click += new System.EventHandler(this.viewLog_Click);
             // 
-            // viewReport
+            // exportToTmx
             // 
-            this.viewReport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.viewReport.Enabled = false;
-            this.viewReport.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.viewReport.Location = new System.Drawing.Point(554, 205);
-            this.viewReport.Name = "viewReport";
-            this.viewReport.Size = new System.Drawing.Size(84, 25);
-            this.viewReport.TabIndex = 19;
-            this.viewReport.Text = "&View Report";
-            this.toolTip1.SetToolTip(this.viewReport, "Try to connect to this database.  Assuming the connection works, we\'ll automatica" +
-        "lly import your TMX file");
-            this.viewReport.UseVisualStyleBackColor = true;
-            this.viewReport.Click += new System.EventHandler(this.viewReport_Click);
+            this.exportToTmx.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.exportToTmx.Location = new System.Drawing.Point(457, 294);
+            this.exportToTmx.Name = "exportToTmx";
+            this.exportToTmx.Size = new System.Drawing.Size(90, 28);
+            this.exportToTmx.TabIndex = 8;
+            this.exportToTmx.Text = "&Export To TMX";
+            this.toolTip1.SetToolTip(this.exportToTmx, "Exports this database back to a .tmx file");
+            this.exportToTmx.UseVisualStyleBackColor = true;
+            this.exportToTmx.Click += new System.EventHandler(this.exportToTmx_Click);
             // 
             // TmxOptionsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(745, 330);
+            this.Controls.Add(this.exportToTmx);
             this.Controls.Add(this.viewLog);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.error);
@@ -444,5 +458,6 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.CheckBox quickImport;
         private System.Windows.Forms.Button viewReport;
+        private System.Windows.Forms.Button exportToTmx;
     }
 }

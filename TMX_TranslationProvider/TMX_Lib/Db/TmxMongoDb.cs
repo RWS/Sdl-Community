@@ -69,9 +69,19 @@ namespace TMX_Lib.Db
             Connect();
         }
 
+		public TmxMongoDb(string databaseName) : this("localhost:27017", databaseName)
+		{
+		}
+
 		private bool IsLocalConnection() => _url.StartsWith("mongodb://");
 
 		public string ImportError() => _importError;
+
+		public ulong MaxTranslationId()
+		{
+			lock (this)
+				return _nextTranslationUnitID ;
+		}
 
         private void Connect()
         {
@@ -275,7 +285,7 @@ namespace TMX_Lib.Db
             }
         }
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		// Start of FIND
+		// Start of SEARCH
 
 		private string XmlUnformatText(string formattedText)
 		{
@@ -410,8 +420,15 @@ namespace TMX_Lib.Db
 			}
 			return segments;
 		}
+		// End of SEARCH
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
 
-		public async Task<TmxTranslationUnit> FindTranslationUnitAsync(ulong id)
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Start of FIND
+
+		public async Task<TmxTranslationUnit> TryFindTranslationUnitAsync(ulong id)
 		{
 			var filter = Builders<TmxTranslationUnit>.Filter.Where(tu => tu.TranslationUnitID == id);
 			var cursor = await _translationUnits.FindAsync(filter);
@@ -420,6 +437,12 @@ namespace TMX_Lib.Db
 			{
 				result = t;
 			});
+			return result;
+		}
+
+		public async Task<TmxTranslationUnit> FindTranslationUnitAsync(ulong id)
+		{
+			var result = await TryFindTranslationUnitAsync(id);
 			if (result == null)
 				throw new TmxException($"Translation Unit {id} not found");
 			return result;
@@ -435,9 +458,27 @@ namespace TMX_Lib.Db
 				texts.Add(t);
 			});
 			return texts;
-
 		}
 
+		public async Task<TmxMeta> TryFindMetaAsync(string type)
+		{
+			var filter = Builders<TmxMeta>.Filter.Where(m => m.Type == type);
+			var cursor = await _metas.FindAsync(filter);
+			TmxMeta meta = null;
+			await cursor.ForEachAsync(m =>
+			{
+				meta = m;
+			});
+			return meta;
+		}
+
+		public async Task<TmxMeta> FindMetaAsync(string type)
+		{
+			var result = await TryFindMetaAsync(type);
+			if (result == null)
+				throw new TmxException($"Meta {type} not found");
+			return result;
+		}
 
 		// End of FIND
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

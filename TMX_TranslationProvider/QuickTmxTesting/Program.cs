@@ -14,6 +14,7 @@ using TMX_Lib.Db;
 using TMX_Lib.Search;
 using TMX_Lib.TmxFormat;
 using TMX_Lib.Utils;
+using TMX_Lib.Writer;
 using TMX_Lib.XmlSplit;
 using static System.Net.WebRequestMethods;
 using File = System.IO.File;
@@ -26,9 +27,9 @@ namespace QuickTmxTesting
     {
 	    private static readonly Logger log = NLog.LogManager.GetCurrentClassLogger();
 
-	    private static async Task TestImportFileAsync(string file, string dbName, bool quickImport = false)
+	    private static async Task ImportFileAsync(string file, string dbName, bool quickImport = false)
 	    {
-		    var db = new TmxMongoDb("localhost:27017", dbName);
+		    var db = new TmxMongoDb(dbName);
 		    await db.ImportToDbAsync(file, (r) =>
 		    {
 				log.Debug($"report: read {r.TUsRead}, ignored {r.TUsWithSyntaxErrors}, success={r.TUsImportedSuccessfully}, invalid={r.TUsWithInvalidChars}, spent={r.ReportTimeSecs} secs");
@@ -252,12 +253,30 @@ namespace QuickTmxTesting
 			return (tu, lp);
 		}
 
+		private static async Task TestExportToXml()
+		{
+			var folder = "C:\\john\\buff\\TMX Examples\\";
+			var originalFile = "#4";
+			await ImportFileAsync($"{folder}{originalFile}.tmx", "sample4");
+			var db = new TmxMongoDb("sample4");
+			await db.InitAsync();
+			var writer = new TmxWriter($"{folder}{originalFile}-copy.tmx") { Indent = true };
+			await writer.WriteAsync(db);
+			writer.Dispose();
+
+			var oldContent = File.ReadAllText($"{folder}{originalFile}.tmx");
+			var newContent = File.ReadAllText($"{folder}{originalFile}-copy.tmx");
+			Debug.Assert(Util.SimpleIsXmlEquivalent(oldContent, newContent));
+		}
+
 		static void Main(string[] args)
 		{
 			LogUtil.Setup();
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en(GB) - it(IT)_(DGT 2015, 2017).tmx", "C:\\john\\buff\\TMX Examples\\temp\\");
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en-fr (EU Bookshop v2_10.8M).tmx", "C:\\john\\buff\\TMX Examples\\temp2\\");
 			log.Debug("test started");
+
+			Task.Run(async () => await TestExportToXml()).Wait();
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\fails\\opensubtitlingformat.tmx", "C:\\john\\buff\\TMX Examples\\temp3\\");
 
 			//Task.Run(() => await TestImportFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro-2", quickImport: true)).Wait();
@@ -278,7 +297,7 @@ namespace QuickTmxTesting
 	        if (args.Length > 0)
 		        root = args[0];
 
-	        Task.Run(() => TestImportFileAsync("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro", quickImport: true)).Wait();
+	        Task.Run(() => ImportFileAsync("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro", quickImport: true)).Wait();
 
 			//Task.Run(() => TestImportSmallFile2(root)).Wait();
 			//Task.Run(() => TestImportSample4(root)).Wait();

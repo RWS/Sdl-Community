@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using NLog;
 using TMX_Lib.Db;
 using TMX_Lib.TmxFormat;
@@ -118,5 +119,41 @@ namespace TMX_Lib.Utils
 			return true;
 		}
 
+		// https://weblog.west-wind.com/posts/2018/Nov/30/Returning-an-XML-Encoded-String-in-NET
+		// ^ inspired by, pretty efficient
+		public static string XmlValue(string text)
+		{
+			if (string.IsNullOrEmpty(text))
+				return text;
+
+			return new XAttribute("__n", text).ToString().Substring(5).TrimEnd('\"');
+		}
+		// https://weblog.west-wind.com/posts/2018/Nov/30/Returning-an-XML-Encoded-String-in-NET
+		// ^ inspired by, pretty efficient
+		public static string XmlAttribute(string text)
+		{
+			if (string.IsNullOrEmpty(text))
+				return text;
+
+			return new XAttribute("__n", text).ToString().Substring(5).TrimEnd('\"');
+		}
+
+		private static string RemoveWhitespace(string s)
+		{
+			StringBuilder builder = new StringBuilder();
+			foreach (var ch in s)
+				if (!Char.IsWhiteSpace(ch))
+					builder.Append(ch);
+			return builder.ToString();
+		}
+
+		// simple method for testing for 2 xml documents being equivalent. Obviously, it doesn't account for a lot of stuff, but if this returns false,
+		// they are definitely different
+		//
+		// for more complicated scenarios -- https://github.com/microsoft/XmlNotepad
+		public static bool SimpleIsXmlEquivalent(string xmlA, string xmlB)
+		{
+			return RemoveWhitespace(xmlA) == RemoveWhitespace(xmlB);
+		}
 	}
 }
