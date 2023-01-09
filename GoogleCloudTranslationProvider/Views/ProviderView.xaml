@@ -98,21 +98,22 @@
 					<!--<JSON File Selector>-->
 					<Border Background="Transparent"
 							AllowDrop="{Binding UseUrlPath, Converter={StaticResource InvertableBoolEnabledConverter}, ConverterParameter=Inverted}"
-						    Visibility="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+							Visibility="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
 							behaviours:DragDropBehaviour.DragDrop="{Binding DragDropJsonFileCommand}"
 							BorderBrush="LightGray"
 							BorderThickness="1"
 							CornerRadius="8"
 							Height="80"
 							Margin="16 12 16 0">
-						<StackPanel Margin="0 8" VerticalAlignment="Center">
+						<StackPanel Margin="0 8"
+									VerticalAlignment="Center">
 							<!--<Local Path>-->
 							<StackPanel Visibility="{Binding UseUrlPath, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}">
 								<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_File_DragAndDrop}"
 										   Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"
 										   FontSize="16"
 										   HorizontalAlignment="Center"
-										   Margin="0"/>
+										   Margin="0" />
 								<Button Content="{x:Static root:PluginResources.ProviderView_V3_File_Browse}"
 										HorizontalAlignment="Center"
 										Command="{Binding BrowseJsonFileCommand}"
@@ -120,32 +121,40 @@
 										FontWeight="DemiBold"
 										AllowDrop="True"
 										Margin="0"
-										Cursor="Hand"/>
+										Cursor="Hand" />
 							</StackPanel>
 							<!--</Local Path>-->
 
 							<!--<Web Path>-->
 							<StackPanel Visibility="{Binding UseUrlPath, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}">
+								<TextBox Text="{Binding UrlToDownload, UpdateSourceTrigger=PropertyChanged}"
+										 Style="{StaticResource WatermarkTextBox}"
+										 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.ProviderView_V3_Url_Watermark}"
+										 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=UrlToDownload, Type={x:Type viewModels:ProviderViewModel}}"
+										 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+										 Width="480" />
 								<StackPanel Orientation="Horizontal"
-											HorizontalAlignment="Center">
-									<TextBox Text="{Binding UrlToDownload, UpdateSourceTrigger=PropertyChanged}"
-											 Style="{StaticResource WatermarkTextBox}"
-											 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.ProviderView_V3_Url_Watermark}"
-											 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=UrlToDownload, Type={x:Type viewModels:ProviderViewModel}}"
-											 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-											 Width="360"/>
+											HorizontalAlignment="Left"
+											Margin="16 8 0 0">
+									<Button Content="Validate url"
+											Command="{Binding VerifyOnlineJsonFileCommand}"
+											Style="{StaticResource Sdl.Button.SecondaryStyle}"
+											Width="120"
+											Cursor="Hand"/>
 									<Button Content="{x:Static root:PluginResources.ProviderView_V3_File_DownloadButton}"
 											Command="{Binding DownloadJsonFileCommand}"
 											Style="{StaticResource Sdl.Button.PrimaryStyle}"
-											Margin="8 0 0 0" Padding="0"
-											Width="90" Height="24"
-											Cursor="Hand"/>
+											Margin="8 0 0 0"
+											Padding="0"
+											Width="120"
+											Height="24"
+											Cursor="Hand" />
 								</StackPanel>
 							</StackPanel>
 							<!--</Web Path>-->
 						</StackPanel>
 					</Border>
-					
+
 					<CheckBox Content="{x:Static root:PluginResources.ProviderView_V3_UseUrl}"
 							  IsChecked="{Binding UseUrlPath}"
 							  Visibility="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
@@ -341,13 +350,6 @@
 					</StackPanel>
 				</StackPanel>
 				<!-- GOOGLE API V3 -->
-
-				<TextBox Text="{Binding ErrorMessage}"
-						 Style="{StaticResource Sdl.ComboBox.Generic.EditableTextBox}"
-						 IsReadOnly="True"
-						 TextWrapping="Wrap"
-						 Foreground="Red"
-						 Margin="24 40 24 8"/>
 			</StackPanel>
 		</GroupBox>
 	</Grid>

@@ -30,12 +30,41 @@
 
 	<ScrollViewer Height="550"
 				  VerticalScrollBarVisibility="Auto"
-				  Margin="16 16 0 0">
+				  Margin="16 16 16 0">
 		<StackPanel>
-			<StackPanel Margin="12 0">
-				<TextBlock Text="{x:Static root:PluginResources.SettingsView_SessionSettingsTitle}"
+			<!--<Title>-->
+			<DockPanel Margin="0">
+				<TextBlock Text="Settings"
 						   Style="{StaticResource Sdl.TextBlock.TitleStyle}"
-						   Margin="0 0 0 12" />
+						   Visibility="{Binding ShowAdvancedSettings, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"/>
+				
+				<TextBlock Text="{x:Static root:PluginResources.AdvancedSettings_Title}"
+						   Style="{StaticResource Sdl.TextBlock.TitleStyle}"
+						   Visibility="{Binding ShowAdvancedSettings, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"/>
+				
+				<Button Style="{StaticResource Sdl.Button.SecondaryStyle}"
+						Visibility="{Binding ShowAdvancedSettingsButton, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+						Command="{Binding ShowAdvancedSettingsCommand}"
+						HorizontalAlignment="Right"
+						DockPanel.Dock="Right"
+						Width="160"
+						Height="28"
+						Cursor="Hand">
+					<Button.Content>
+						<StackPanel Orientation="Horizontal">
+							<Image Source="../Resources/defaultSettings.png"
+								   Width="16"
+								   Margin="0 0 8 0" />
+							<TextBlock Text="Advanced Settings" />
+						</StackPanel>
+					</Button.Content>
+				</Button>
+			</DockPanel>
+			<!--</Title>-->
+
+			<!--<Project settings>-->
+			<StackPanel Margin="12"
+						Visibility="{Binding ShowAdvancedSettings, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}">
 				<CheckBox Content="{x:Static root:PluginResources.SettingsView_CustomName_Description}"
 						  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 						  IsChecked="{Binding UseCustomProviderName}"
@@ -115,30 +144,20 @@
 							 Margin="12 0 0 0" />
 				</StackPanel>
 			</StackPanel>
-
-			<Button Style="{StaticResource Sdl.Button.SecondaryStyle}"
-					Visibility="{Binding ShowAdvancedSettingsButton, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-					Command="{Binding ShowAdvancedSettingsCommand}"
-					HorizontalAlignment="Left"
-					Height="28"
-					Cursor="Hand"
-					Margin="12 24 0 0">
-				<Button.Content>
-					<StackPanel Orientation="Horizontal">
-						<Image Source="../Resources/defaultSettings.png"
-							   Width="16"
-							   Margin="0 0 8 0" />
-						<TextBlock Text="Advanced Settings" />
-					</StackPanel>
-				</Button.Content>
-			</Button>
-
+			<!--</Project settings>-->
+			
+			<!--<Advanced settings>-->
 			<StackPanel Visibility="{Binding ShowAdvancedSettings, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-						Margin="12 0">
-				<TextBlock Text="{x:Static root:PluginResources.AdvancedSettings_Title}"
-						   Style="{StaticResource Sdl.TextBlock.TitleStyle}"
-						   Margin="0 0 0 12" />
+						Margin="12">
+				<CheckBox Content="{x:Static root:PluginResources.AdvancedSettings_ResendDrafts}"
+						  Cursor="Hand"
+						  IsChecked="{Binding AlwaysResendDrafts}"
+						  Margin="0 0 0 12" />
 
+				<CheckBox Content="{x:Static root:PluginResources.AdvancedSettings_NoTags}"
+						  Cursor="Hand"
+						  IsChecked="{Binding AlwaysSendPlainText}"
+						  Margin="0 0 0 12" />
 				<TextBlock Text="{x:Static root:PluginResources.AdvancedSettings_DownloadPath_Description}" />
 				<StackPanel Orientation="Horizontal"
 							Margin="0 0 0 12">
@@ -159,7 +178,7 @@
 							 Width="400"
 							 Margin="12 0 0 0" />
 				</StackPanel>
-
+				
 				<TextBlock Text="{x:Static root:PluginResources.AdvancedSettings_DownloadFile_Description}" />
 				<TextBox Text="{Binding DownloadFileName, UpdateSourceTrigger=PropertyChanged}"
 						 Style="{StaticResource WatermarkTextBox}"
@@ -169,18 +188,14 @@
 						 FontSize="10"
 						 HorizontalAlignment="Left"
 						 VerticalContentAlignment="Center"
-						 Width="494"
+						 Width="492"
 						 Margin="0 0 0 12" />
 
-				<CheckBox Content="{x:Static root:PluginResources.AdvancedSettings_ResendDrafts}"
-						  Cursor="Hand"
-						  IsChecked="{Binding AlwaysResendDrafts}"
-						  Margin="0 0 0 12" />
-
-				<CheckBox Content="{x:Static root:PluginResources.AdvancedSettings_NoTags}"
-						  Cursor="Hand"
-						  IsChecked="{Binding AlwaysSendPlainText}"
-						  Margin="0 0 0 12" />
+				
+				<TextBlock TextWrapping="Wrap"
+						   Margin="0 24 56 0 "
+						   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}">These settings won't affect the current session/project. Any changes applied here will change how the application will behave when the next instance is opened. To save any change please press on the Save button bellow.</TextBlock>
+				
 				<StackPanel Orientation="Horizontal"
 							Margin="0 12 0 0">
 					<Button Content="Reset to default"
@@ -194,11 +209,7 @@
 							Width="7" />
 				</StackPanel>
 			</StackPanel>
-
-			<TextBlock Text="{Binding ErrorMessage, UpdateSourceTrigger=PropertyChanged}"
-					   Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}"
-					   TextWrapping="Wrap"
-					   Margin="24 40 24 8" />
+			<!--</Advanced settings>-->
 		</StackPanel>
 	</ScrollViewer>
 </UserControl>

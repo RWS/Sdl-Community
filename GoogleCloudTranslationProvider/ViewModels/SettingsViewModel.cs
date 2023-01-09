@@ -403,6 +403,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private void SaveAdvancedSettings(object parameter)
 		{
 			_options.AdvancedSettings.SaveState();
+			ChangeAdvancedSettingsVisibility(parameter);
 		}
 
 		private void ResetAdvancedSettings(object parameter)
