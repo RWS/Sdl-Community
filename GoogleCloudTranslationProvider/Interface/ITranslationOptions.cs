@@ -6,9 +6,6 @@ namespace GoogleCloudTranslationProvider.Interfaces
 {
 	public interface ITranslationOptions
 	{
-
-		GCTPAdvancedSettings AdvancedSettings { get; set; }
-
 		bool SendPlainTextOnly { get; set; }
 
 		bool PersistGoogleKey { get; set; }
@@ -40,6 +37,8 @@ namespace GoogleCloudTranslationProvider.Interfaces
 		string ProjectId { get; set; }
 
 		string ApiKey { get; set; }
+
+		string DownloadPath { get; set; }
 
 		Dictionary<string, string> LanguagesSupported { get; set; }
 

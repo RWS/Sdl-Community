@@ -139,14 +139,14 @@
 									<Button Content="Validate url"
 											Command="{Binding VerifyOnlineJsonFileCommand}"
 											Style="{StaticResource Sdl.Button.SecondaryStyle}"
-											Width="120"
+											Margin="0 0 8 0"
+											Width="130"
 											Cursor="Hand"/>
 									<Button Content="{x:Static root:PluginResources.ProviderView_V3_File_DownloadButton}"
 											Command="{Binding DownloadJsonFileCommand}"
 											Style="{StaticResource Sdl.Button.PrimaryStyle}"
-											Margin="8 0 0 0"
 											Padding="0"
-											Width="120"
+											Width="130"
 											Height="24"
 											Cursor="Hand" />
 								</StackPanel>

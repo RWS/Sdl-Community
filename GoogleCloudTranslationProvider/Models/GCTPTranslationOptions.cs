@@ -10,23 +10,13 @@ namespace GoogleCloudTranslationProvider.Models
 	public class GCTPTranslationOptions : ITranslationOptions
 	{
 		private readonly TranslationProviderUriBuilder _uriBuilder;
-		private readonly GCTPAdvancedSettings _advancedSettings;
 		private string _apiKey;
 
 		public GCTPTranslationOptions(Uri uri = null)
 		{
-			_advancedSettings = new();
 			_uriBuilder = uri is null ? new TranslationProviderUriBuilder(Constants.GoogleTranslationScheme)
 									  : new TranslationProviderUriBuilder(uri);
-			if (uri is null)
-			{
-				SendPlainTextOnly = _advancedSettings.AlwaysSendPlainText;
-				ResendDrafts = _advancedSettings.AlwaysResendDrafts;
-			}
 		}
-
-		[JsonIgnore]
-		public GCTPAdvancedSettings AdvancedSettings { get; set; }
 
 		[JsonIgnore]
 		public Dictionary<string, string> LanguagesSupported { get; set; }
@@ -138,6 +128,9 @@ namespace GoogleCloudTranslationProvider.Models
 			get => _apiKey;
 			set => _apiKey = value;
 		}
+
+		[JsonIgnore]
+		public string DownloadPath { get; set; }
 
 		[JsonIgnore]
 		public Uri Uri => _uriBuilder.Uri;

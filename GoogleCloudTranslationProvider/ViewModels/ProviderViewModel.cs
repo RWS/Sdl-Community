@@ -553,16 +553,14 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private void DownloadJsonFile(object parameter)
 		{
 			UrlToDownload ??= string.Empty;
-			var operation = UrlToDownload.VerifyAndDownloadJsonFile(_options.AdvancedSettings.DownloadPath, _options.AdvancedSettings.DownloadFileName);
+			var operation = UrlToDownload.VerifyAndDownloadJsonFile(_options.DownloadPath, Constants.DefaultDownloadedJsonFileName);
 			if (!operation.Success)
 			{
 				ErrorHandler.HandleError(operation.ErrorMessage, "Download failed");
 				return;
 			}
 
-			var path = $"{_options.AdvancedSettings.DownloadPath}\\{_options.AdvancedSettings.DownloadFileName}";
-			path += path.EndsWith(".json") ? string.Empty : ".json";
-			ReadJsonFile(path.EndsWith(".json") ? path : $"{path}.json");
+			ReadJsonFile($"{_options.DownloadPath}\\{Constants.DefaultDownloadedJsonFileName}");
 		}
 
 		private void BrowseJsonFile(object parameter)

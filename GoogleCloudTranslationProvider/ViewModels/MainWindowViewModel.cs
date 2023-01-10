@@ -65,7 +65,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 								   bool showSettingsView = false)
 		{
 			Options = options;
-			Options.AdvancedSettings ??= new();
 			ShowSettingsView = showSettingsView;
 			_credentialStore = credentialStore;
 			_languagePairs = languagePairs;

@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Xml.Serialization;
-using Google.LongRunning;
 using GoogleCloudTranslationProvider.Commands;
 using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
@@ -27,15 +26,10 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private bool _reSendDraft;
 		private bool _useCustomProviderName;
 
-		private bool _showAdvancedSettingsButton;
-		private bool _showAdvancedSettings;
 		private bool _persistV3Project;
 		private string _v3Path;
 		private string _downloadPath;
 		private string _downloadFileName;
-		private bool _alwaysResendDrafts;
-		private bool _alwaysSendPlainText;
-
 
 		private string _preLookupFileName;
 		private string _postLookupFileName;
@@ -44,14 +38,10 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private ICommand _clearCommand;
 		private ICommand _browseFileCommand;
 		private ICommand _browseFolderCommand;
-		private ICommand _showAdvancedSettingsCommand;
-		private ICommand _saveAdvancedSettingsCommand;
-		private ICommand _resetAdvancedSettingsCommand;
 
 		public SettingsViewModel(ITranslationOptions options, bool hideAdvancedSettings = false)
 		{
 			ViewModel = this;
-			ShowAdvancedSettingsButton = hideAdvancedSettings;
 			_options = options;
 			_openFileDialogService = new OpenFileDialogService();
 			SetSavedSettings();
@@ -121,28 +111,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				if (_useCustomProviderName == value) return;
 				_useCustomProviderName = value;
 				OnPropertyChanged(nameof(UseCustomProviderName));
-			}
-		}
-
-		public bool ShowAdvancedSettingsButton
-		{
-			get => _showAdvancedSettingsButton;
-			set
-			{
-				if (_showAdvancedSettingsButton == value) return;
-				_showAdvancedSettingsButton = value;
-				OnPropertyChanged(nameof(ShowAdvancedSettingsButton));
-			}
-		}
-
-		public bool ShowAdvancedSettings
-		{
-			get => _showAdvancedSettings;
-			set
-			{
-				if (_showAdvancedSettings == value) return;
-				_showAdvancedSettings = value;
-				OnPropertyChanged(nameof(ShowAdvancedSettings));
 			}
 		}
 
@@ -220,45 +188,9 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			{
 				if (_downloadPath == value) return;
 				_downloadPath = value;
-				_options.AdvancedSettings.DownloadPath = value;
+				_options.DownloadPath = value;
 				OnPropertyChanged(nameof(DownloadPath));
 			}
-		}
-
-		public string DownloadFileName
-		{
-			get => _downloadFileName;
-			set
-			{
-				if (_downloadFileName == value) return;
-				_downloadFileName = value;
-				_options.AdvancedSettings.DownloadFileName = value;
-				OnPropertyChanged(nameof(DownloadFileName));
-			}
-		}
-
-		public bool AlwaysResendDrafts
-		{
-			get => _alwaysResendDrafts;
-			set
-            {
-                if (_alwaysResendDrafts == value) return;
-                _alwaysResendDrafts = value;
-				_options.AdvancedSettings.AlwaysResendDrafts = value;
-				OnPropertyChanged(nameof(AlwaysResendDrafts));
-            }
-		}
-
-		public bool AlwaysSendPlainText
-		{
-			get => _alwaysSendPlainText;
-			set
-            {
-                if (_alwaysSendPlainText == value) return;
-                _alwaysSendPlainText = value;
-				_options.AdvancedSettings.AlwaysSendPlainText = value;
-				OnPropertyChanged(nameof(AlwaysSendPlainText));
-            }
 		}
 
 		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
@@ -266,12 +198,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		public ICommand BrowseFileCommand => _browseFileCommand ??= new RelayCommand(BrowseFile);
 
 		public ICommand BrowseFolderCommand => _browseFolderCommand ??= new RelayCommand(BrowseFolder);
-
-		public ICommand ShowAdvancedSettingsCommand => _showAdvancedSettingsCommand ??= new RelayCommand(ChangeAdvancedSettingsVisibility);
-
-		public ICommand SaveAdvancedSettingsCommand => _saveAdvancedSettingsCommand ??= new RelayCommand(SaveAdvancedSettings);
-
-		public ICommand ResetAdvancedSettingsCommand => _resetAdvancedSettingsCommand ??= new RelayCommand(ResetAdvancedSettings);
 
 		public bool SettingsAreValid()
 		{
@@ -312,12 +238,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			PostLookupFileName = _options.PostLookupFilename;
 			CustomProviderName = _options.CustomProviderName;
 			UseCustomProviderName = _options.UseCustomProviderName;
-
-			_options.AdvancedSettings ??= new();
-			DownloadPath = _options.AdvancedSettings.DownloadPath;
-			DownloadFileName = _options.AdvancedSettings.DownloadFileName;
-			AlwaysResendDrafts = _options.AdvancedSettings.AlwaysResendDrafts;
-			AlwaysSendPlainText = _options.AdvancedSettings.AlwaysSendPlainText;
+			DownloadPath ??= Constants.AppDataFolder;
 		}
 
 		private void Clear(object parameter)
@@ -335,9 +256,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 					break;
 				case nameof(DownloadPath):
 					DownloadPath = Constants.AppDataFolder;
-					break;
-				case nameof(DownloadFileName):
-					DownloadFileName = "downloadedProject";
 					break;
 			}
 		}
@@ -393,26 +311,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name}: {e}");
 				//ErrorMessage = $"{MtProviderConfDialogResources.lookupFileStructureCheckGenericErrorMessage} {exp.Message}";
 			}
-		}
-
-		private void ChangeAdvancedSettingsVisibility(object parameter)
-		{
-			ShowAdvancedSettings = !ShowAdvancedSettings;
-		}
-
-		private void SaveAdvancedSettings(object parameter)
-		{
-			_options.AdvancedSettings.SaveState();
-			ChangeAdvancedSettingsVisibility(parameter);
-		}
-
-		private void ResetAdvancedSettings(object parameter)
-		{
-			_options.AdvancedSettings.Clear();
-			DownloadPath = _options.AdvancedSettings.DownloadPath;
-			DownloadFileName = _options.AdvancedSettings.DownloadFileName;
-			AlwaysResendDrafts = _options.AdvancedSettings.AlwaysResendDrafts;
-			AlwaysSendPlainText = _options.AdvancedSettings.AlwaysSendPlainText;
 		}
 	}
 }
