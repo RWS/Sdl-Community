@@ -81,7 +81,7 @@ namespace GoogleCloudTranslationProvider.Studio
 		{
 			if (Options.SelectedGoogleVersion is not ApiVersion.V2)
 			{
-				_googleV3Api = new V3Connector(Options);
+				_googleV3Api ??= new V3Connector(Options);
 				return _googleV3Api.IsSupportedLanguage(languageDirection.SourceCulture, languageDirection.TargetCulture);
 			}
 

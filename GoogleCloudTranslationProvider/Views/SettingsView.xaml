@@ -38,7 +38,7 @@
 						   Style="{StaticResource Sdl.TextBlock.TitleStyle}"
 						   Visibility="{Binding ShowAdvancedSettings, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"/>
 				
-				<TextBlock Text="{x:Static root:PluginResources.AdvancedSettings_Title}"
+				<TextBlock Text="Default settings"
 						   Style="{StaticResource Sdl.TextBlock.TitleStyle}"
 						   Visibility="{Binding ShowAdvancedSettings, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"/>
 				
@@ -47,15 +47,16 @@
 						Command="{Binding ShowAdvancedSettingsCommand}"
 						HorizontalAlignment="Right"
 						DockPanel.Dock="Right"
-						Width="160"
+						Width="140"
 						Height="28"
+						Padding="0 3 0 0"
 						Cursor="Hand">
 					<Button.Content>
 						<StackPanel Orientation="Horizontal">
 							<Image Source="../Resources/defaultSettings.png"
 								   Width="16"
 								   Margin="0 0 8 0" />
-							<TextBlock Text="Advanced Settings" />
+							<TextBlock Text="Default settings" />
 						</StackPanel>
 					</Button.Content>
 				</Button>
@@ -65,11 +66,22 @@
 			<!--<Project settings>-->
 			<StackPanel Margin="12"
 						Visibility="{Binding ShowAdvancedSettings, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}">
-				<CheckBox Content="{x:Static root:PluginResources.SettingsView_CustomName_Description}"
-						  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-						  IsChecked="{Binding UseCustomProviderName}"
-						  Cursor="Hand"
-						  Margin="0" />
+				<StackPanel Orientation="Horizontal">
+					<CheckBox Content="{x:Static root:PluginResources.SettingsView_CustomName_Description}"
+							  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+							  IsChecked="{Binding UseCustomProviderName}"
+							  Cursor="Hand"
+							  Margin="0" />
+					<ComboBox Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+							  Margin="4 -4 0 0">
+						<ComboBoxItem IsSelected="True">
+							For session
+						</ComboBoxItem>
+						<ComboBoxItem>
+							For default
+						</ComboBoxItem>
+					</ComboBox>
+				</StackPanel>
 				<TextBox Text="{Binding CustomProviderName, UpdateSourceTrigger=PropertyChanged}"
 						 Style="{StaticResource WatermarkTextBox}"
 						 Visibility="{Binding UseCustomProviderName, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
@@ -81,17 +93,41 @@
 						 Width="494"
 						 Margin="0 2 10 0" />
 
-				<CheckBox Content="{x:Static root:PluginResources.SettingsView_ResendDraft_Description}"
-						  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-						  IsChecked="{Binding ReSendDraft}"
-						  Cursor="Hand"
-						  Margin="0 12" />
+				<StackPanel Orientation="Horizontal"
+							Margin="0 12">
+					<CheckBox Content="{x:Static root:PluginResources.SettingsView_ResendDraft_Description}"
+							  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+							  IsChecked="{Binding ReSendDraft}"
+							  Cursor="Hand"
+							  Margin="0" />
+					<ComboBox Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+							  Margin="4 -4 0 0">
+						<ComboBoxItem IsSelected="True">
+							For session
+						</ComboBoxItem>
+						<ComboBoxItem>
+							For default
+						</ComboBoxItem>
+					</ComboBox>
+				</StackPanel>
 
-				<CheckBox Content="{x:Static root:PluginResources.SettingsView_TextOnly_Description}"
-						  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-						  IsChecked="{Binding SendPlainText}"
-						  Cursor="Hand"
-						  Margin="0 0 0 12" />
+				<StackPanel Orientation="Horizontal"
+							Margin="0 0 0 12">
+					<CheckBox Content="{x:Static root:PluginResources.SettingsView_TextOnly_Description}"
+							  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+							  IsChecked="{Binding SendPlainText}"
+							  Cursor="Hand"
+							  Margin="0" />
+					<ComboBox Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+							  Margin="4 -4 0 0">
+						<ComboBoxItem IsSelected="True">
+							For session
+						</ComboBoxItem>
+						<ComboBoxItem>
+							For default
+						</ComboBoxItem>
+					</ComboBox>
+				</StackPanel>
 
 				<CheckBox Content="{x:Static root:PluginResources.SettingsView_PreLookup_Description}"
 						  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
@@ -146,7 +182,7 @@
 			</StackPanel>
 			<!--</Project settings>-->
 			
-			<!--<Advanced settings>-->
+			<!--<Default settings>-->
 			<StackPanel Visibility="{Binding ShowAdvancedSettings, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 						Margin="12">
 				<CheckBox Content="{x:Static root:PluginResources.AdvancedSettings_ResendDrafts}"
@@ -209,7 +245,7 @@
 							Width="7" />
 				</StackPanel>
 			</StackPanel>
-			<!--</Advanced settings>-->
+			<!--</Default settings>-->
 		</StackPanel>
 	</ScrollViewer>
 </UserControl>

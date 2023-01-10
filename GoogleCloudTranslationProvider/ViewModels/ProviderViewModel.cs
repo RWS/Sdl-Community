@@ -423,6 +423,10 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				{
 					ErrorHandler.HandleError(PluginResources.Validation_PermissionDenied, "Permission Denied");
 				}
+				else if (e.Message.Contains("project number"))
+				{
+					ErrorHandler.HandleError("The ProjectID is not valid", "ProjectID");
+				}
 				else
 				{
 					ErrorHandler.HandleError(e);
@@ -627,7 +631,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			Locations.Clear();
 			Locations.AddRange(from object match in matches
 							   let locationValue = match.ToString().Replace("\'", "")
-							   where !Locations.Contains(locationValue) && !locationValue.Equals(DummyLocation)
+							   where !Locations.Contains(locationValue) && !locationValue.Equals(DummyLocation) && !locationValue.Equals("parent")
 							   select locationValue);
 			ProjectLocation = Locations.First();
 		}

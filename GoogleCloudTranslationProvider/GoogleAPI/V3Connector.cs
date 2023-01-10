@@ -121,7 +121,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 				Contents = { sourceText },
 				TargetLanguageCode = GetLanguageCode(targetLanguage),
 				SourceLanguageCode = GetLanguageCode(sourceLanguage),
-				Parent = new ProjectName(_options.ProjectId).ToString(),
+				ParentAsLocationName = new LocationName(_options.ProjectId, _options.ProjectLocation),
 				MimeType = format == "text" ? "text/plain" : "text/html",
 				Model = SetCustomModel(sourceLanguage, targetLanguage),
 				GlossaryConfig = SetGlossary(sourceLanguage, targetLanguage)
