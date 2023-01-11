@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using InterpretBank.Service;
+using InterpretBank.GlossaryService;
+using InterpretBank.SqlBuilder;
 using Xunit;
 
 namespace InterpretBankTests
