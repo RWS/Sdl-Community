@@ -411,7 +411,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				{
 					ErrorHandler.HandleError(PluginResources.Validation_ModelName_Invalid, "Custom Models");
 				}
-				else if (e.Message.Contains("Invalid resource name"))
+				else if (e.Message.Contains("Invalid resource name") || e.Message.Contains("project number"))
 				{
 					ErrorHandler.HandleError(PluginResources.Validation_ProjectID_Failed, nameof(ProjectId));
 				}
@@ -422,10 +422,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				else if (e.Message.Contains("PermissionDenied"))
 				{
 					ErrorHandler.HandleError(PluginResources.Validation_PermissionDenied, "Permission Denied");
-				}
-				else if (e.Message.Contains("project number"))
-				{
-					ErrorHandler.HandleError("The ProjectID is not valid", "ProjectID");
 				}
 				else
 				{

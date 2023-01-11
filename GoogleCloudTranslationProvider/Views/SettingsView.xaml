@@ -17,11 +17,10 @@
 				<ResourceDictionary Source="../Styles/Buttons.xaml" />
 				<ResourceDictionary Source="../Styles/GroupBox.xaml" />
 				<ResourceDictionary Source="../UiHelpers/WatermarkTextBoxResources.xaml" />
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ComboBoxResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml" />
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBoxResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter" />
 			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
@@ -32,7 +31,7 @@
 				  VerticalScrollBarVisibility="Auto"
 				  Margin="16 16 16 0">
 		<StackPanel>
-			<TextBlock Text="Settings"
+			<TextBlock Text="{x:Static root:PluginResources.SettingsView_Title}"
 					   Style="{StaticResource Sdl.TextBlock.TitleStyle}" />
 
 			<!--<Project settings>-->
@@ -116,10 +115,12 @@
 							 Margin="12 0 0 0" />
 				</StackPanel>
 
-				<TextBlock Text="{x:Static root:PluginResources.AdvancedSettings_DownloadPath_Description}"
-						   Margin="0 12 0 4" />
+				<TextBlock Text="{x:Static root:PluginResources.SettingsView_DownloadPath_Description}"
+						   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
+						   HorizontalAlignment="Left"
+						   Margin="0 12 0 0" />
 				<StackPanel Orientation="Horizontal"
-							Margin="0 0 0 12">
+							Margin="0 2 0 12">
 					<Button Content="{x:Static root:PluginResources.SettingsView_BrowseButton}"
 							Style="{StaticResource Sdl.Button.DialogStyle}"
 							Command="{Binding BrowseFolderCommand}"
@@ -129,7 +130,7 @@
 							Width="80" />
 					<TextBox Text="{Binding DownloadPath, UpdateSourceTrigger=PropertyChanged}"
 							 Style="{StaticResource Sdl.TextBox.BorderlessReadOnlyStyle}"
-							 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.AdvancedSettings_DownloadPath_Watermark}"
+							 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.SettingsView_DownloadPath_Watermark}"
 							 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
 							 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=DownloadPath, Type={x:Type viewModels:SettingsViewModel}}"
 							 VerticalContentAlignment="Center"

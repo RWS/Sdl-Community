@@ -61,78 +61,6 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The file that contains the default settings have been corrupted, some saved settings might have been lost..
-        /// </summary>
-        public static string AdvancedSettings_CorruptedFile {
-            get {
-                return ResourceManager.GetString("AdvancedSettings_CorruptedFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Downloaded JSON file name.
-        /// </summary>
-        public static string AdvancedSettings_DownloadFile_Description {
-            get {
-                return ResourceManager.GetString("AdvancedSettings_DownloadFile_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please write the name of the file that will be downloaded.
-        /// </summary>
-        public static string AdvancedSettings_DownloadFile_Watermark {
-            get {
-                return ResourceManager.GetString("AdvancedSettings_DownloadFile_Watermark", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Download location.
-        /// </summary>
-        public static string AdvancedSettings_DownloadPath_Description {
-            get {
-                return ResourceManager.GetString("AdvancedSettings_DownloadPath_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please select the path where the JSON files should be saved.
-        /// </summary>
-        public static string AdvancedSettings_DownloadPath_Watermark {
-            get {
-                return ResourceManager.GetString("AdvancedSettings_DownloadPath_Watermark", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Do not include tags in translated segments as default for every new project.
-        /// </summary>
-        public static string AdvancedSettings_NoTags {
-            get {
-                return ResourceManager.GetString("AdvancedSettings_NoTags", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Re-send drafts and translated segments as default for every new project.
-        /// </summary>
-        public static string AdvancedSettings_ResendDrafts {
-            get {
-                return ResourceManager.GetString("AdvancedSettings_ResendDrafts", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Advanced settings.
-        /// </summary>
-        public static string AdvancedSettings_Title {
-            get {
-                return ResourceManager.GetString("AdvancedSettings_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to No API key has been set.  Please open the plugin settings form and enter a valid API key.
         /// </summary>
         public static string ApiConnectionGoogleNoKeyErrorMessage {
@@ -772,6 +700,15 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Validate URL.
+        /// </summary>
+        public static string ProviderView_V3_File_ValidateUrl {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_File_ValidateUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Glossary.
         /// </summary>
         public static string ProviderView_V3_Glossary_Description {
@@ -1008,6 +945,24 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download location.
+        /// </summary>
+        public static string SettingsView_DownloadPath_Description {
+            get {
+                return ResourceManager.GetString("SettingsView_DownloadPath_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select the path where the JSON files should be saved.
+        /// </summary>
+        public static string SettingsView_DownloadPath_Watermark {
+            get {
+                return ResourceManager.GetString("SettingsView_DownloadPath_Watermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do post-lookup find/replace.
         /// </summary>
         public static string SettingsView_PostLookup_Description {
@@ -1067,6 +1022,15 @@ namespace GoogleCloudTranslationProvider {
         public static string SettingsView_TextOnly_Description {
             get {
                 return ResourceManager.GetString("SettingsView_TextOnly_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string SettingsView_Title {
+            get {
+                return ResourceManager.GetString("SettingsView_Title", resourceCulture);
             }
         }
         
@@ -1188,7 +1152,7 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The ProjectID can not be empty. Please write the ProjectID or browse for your file, if the JSON file contains it, the ProjectID will be completed automatically..
+        ///   Looks up a localized string similar to The ProjectID can not be empty. The JSON file might be corrupted..
         /// </summary>
         public static string Validation_ProjectID_Empty {
             get {
@@ -1197,7 +1161,7 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The ProjectID was not correct. Please write the ProjectID or browse for your file, if the JSON file contains it, the ProjectID will be completed automatically..
+        ///   Looks up a localized string similar to The ProjectID was not valid. The JSON file might be corrupted..
         /// </summary>
         public static string Validation_ProjectID_Failed {
             get {

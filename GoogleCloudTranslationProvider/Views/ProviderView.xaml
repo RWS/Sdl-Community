@@ -54,8 +54,6 @@
 						  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
 						  IsEnabled="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBoolEnabledConverter}, ConverterParameter=Inverted}"
 						  DisplayMemberPath="Name"
-						  HorizontalAlignment="Stretch"
-						  VerticalAlignment="Stretch"
 						  HorizontalContentAlignment="Center"
 						  Cursor="Hand"
 						  Margin="16 12"/>
@@ -67,8 +65,7 @@
 					<StackPanel Orientation="Horizontal">
 						<TextBlock Text="{x:Static root:PluginResources.ProviderView_V2_ApiKey_Description}"
 								   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
-								   HorizontalAlignment="Left"
-								   Margin="0 0 4 0"/>
+								   Margin="0 0 4 0" />
 						<Image Source="../Resources/Information.png"
 							   Width="15">
 							<Image.ToolTip>
@@ -83,7 +80,7 @@
 												  Style="{DynamicResource Sdl.BindablePasswordBox.GenericStyle}"
 												  HorizontalAlignment="Left"
 												  Width="320"
-												  Margin="0 4"/>
+												  Margin="0 2"/>
 					
 					<CheckBox Content="{x:Static root:PluginResources.ProviderView_V2_RememberKey}"
 							  IsChecked="{Binding PersistGoogleKey}"
@@ -100,7 +97,7 @@
 							AllowDrop="{Binding UseUrlPath, Converter={StaticResource InvertableBoolEnabledConverter}, ConverterParameter=Inverted}"
 							Visibility="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
 							behaviours:DragDropBehaviour.DragDrop="{Binding DragDropJsonFileCommand}"
-							BorderBrush="LightGray"
+							BorderBrush="#D3D3D3"
 							BorderThickness="1"
 							CornerRadius="8"
 							Height="80"
@@ -136,7 +133,7 @@
 								<StackPanel Orientation="Horizontal"
 											HorizontalAlignment="Left"
 											Margin="16 8 0 0">
-									<Button Content="Validate url"
+									<Button Content="{x:Static root:PluginResources.ProviderView_V3_File_ValidateUrl}"
 											Command="{Binding VerifyOnlineJsonFileCommand}"
 											Style="{StaticResource Sdl.Button.SecondaryStyle}"
 											Margin="0 0 8 0"
@@ -236,7 +233,8 @@
 									   HorizontalAlignment="Left"
 									   Margin="0 0 4 0"/>
 							<Image Source="../Resources/Information.png"
-								   Width="15">
+								   Width="15"
+								   Margin="0 0 0 2">
 								<Image.ToolTip>
 									<ToolTip>
 										<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_Location_Tooltip}"/>
@@ -276,7 +274,8 @@
 									   HorizontalAlignment="Left"
 									   Margin="0 0 4 0"/>
 							<Image Source="../Resources/Information.png"
-								   Width="15">
+								   Width="15"
+								   Margin="0 0 0 2">
 								<Image.ToolTip>
 									<ToolTip>
 										<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_Glossary_Tooltip}"/>
@@ -315,7 +314,8 @@
 									   HorizontalAlignment="Left"
 									   Margin="0 0 4 0"/>
 							<Image Source="../Resources/Information.png"
-								   Width="15">
+								   Width="15"
+								   Margin="0 0 0 2">
 								<Image.ToolTip>
 									<ToolTip>
 										<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_CustomModel_Tooltip}"/>

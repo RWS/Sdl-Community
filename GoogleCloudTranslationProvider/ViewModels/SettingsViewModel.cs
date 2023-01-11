@@ -238,7 +238,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			PostLookupFileName = _options.PostLookupFilename;
 			CustomProviderName = _options.CustomProviderName;
 			UseCustomProviderName = _options.UseCustomProviderName;
-			DownloadPath ??= Constants.AppDataFolder;
+			DownloadPath ??= _options.DownloadPath ?? Constants.AppDataFolder;
 		}
 
 		private void Clear(object parameter)
