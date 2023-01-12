@@ -8,18 +8,18 @@ namespace MicrosoftTranslatorProvider.TellMe
 	{
 		public StoreAction()
 		{
-			Name = "Download MT Enhanced Provider from the AppStore";
+			Name = $"{Constants.MicrosoftNaming_FullName} - AppStore";
 		}
 
 		public override bool IsAvailable => true;
 
-		public override string Category => "MT Enhanced Provider";
+		public override string Category => $"{Constants.MicrosoftNaming_FullName}";
 
 		public override Icon Icon => PluginResources.Download;
 
 		public override void Execute()
 		{
-			Process.Start("https://appstore.sdl.com/language/app/mt-enhanced-plugin-for-trados-studio/604/");
+			Process.Start(Constants.TellMe_StoreUrl);
 		}
 	}
 }

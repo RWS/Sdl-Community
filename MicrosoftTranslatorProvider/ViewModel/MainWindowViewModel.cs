@@ -249,7 +249,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			var isMicrosoftProvider = _providerControlViewModel.SelectedTranslationOption.ProviderType == MTETranslationOptions.ProviderType.MicrosoftTranslator;
 			if (isMicrosoftProvider && !Options.PersistMicrosoftCredentials)
 			{
-				RemoveCredentialsFromStore(new Uri(Constants.MicrosoftProviderUriScheme));
+				RemoveCredentialsFromStore(new Uri(Constants.MicrosoftProviderFullScheme));
 			}
 		}
 

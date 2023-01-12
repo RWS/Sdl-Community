@@ -96,7 +96,7 @@ namespace MicrosoftTranslatorProvider.Studio
 				throw new ArgumentNullException(PluginResources.UriNotSupportedMessage);
 			}
 
-			return string.Equals(translationProviderUri.Scheme, Provider.ListTranslationProviderScheme, StringComparison.CurrentCultureIgnoreCase);
+			return string.Equals(translationProviderUri.Scheme, Constants.MicrosoftProviderScheme, StringComparison.CurrentCultureIgnoreCase);
 		}
 
 		private MainWindowViewModel ShowProviderWindow(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, RegionsProvider regionsProvider)
@@ -133,7 +133,7 @@ namespace MicrosoftTranslatorProvider.Studio
 
 		private void SetSavedCredentialsOnUi(ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions)
 		{
-			if (GetCredentialsFromStore(credentialStore, Constants.MicrosoftProviderUriScheme)
+			if (GetCredentialsFromStore(credentialStore, Constants.MicrosoftProviderFullScheme)
 				is not TranslationProviderCredential providerCredentials)
 			{
 				return;
@@ -160,7 +160,7 @@ namespace MicrosoftTranslatorProvider.Studio
 
 		private void SetCredentialsOnCredentialStore(ITranslationProviderCredentialStore credentialStore, string apiKey, bool persistKey)
 		{
-			var uri = new Uri(Constants.MicrosoftProviderUriScheme);
+			var uri = new Uri(Constants.MicrosoftProviderFullScheme);
 			var proiderCredentials = new TranslationProviderCredential(apiKey, persistKey);
 			credentialStore.RemoveCredential(uri);
 			credentialStore.AddCredential(uri, proiderCredentials);
