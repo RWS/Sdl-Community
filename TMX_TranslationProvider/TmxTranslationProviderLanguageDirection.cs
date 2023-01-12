@@ -150,7 +150,7 @@ namespace TMX_TranslationProvider
 					var tu = translationUnits[index];
 					if (!mask[index])
 						continue;
-					var isUpdate = previousTranslationHashes?.Contains(tu.ResourceId.Id) ?? false;
+					var isUpdate = tu.ResourceId.Id > 0 && (previousTranslationHashes?.Contains(tu.ResourceId.Id) ?? false);
 					if (isUpdate)
 						await _provider.SearchService.UpdateAsync(tu, _languagePair);
 					else

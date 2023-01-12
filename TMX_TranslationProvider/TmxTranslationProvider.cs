@@ -95,7 +95,7 @@ namespace TMX_TranslationProvider
 				return null;
 		}
 
-		public bool IsReadOnly => true;
+		public bool IsReadOnly => false;
 
 		public void LoadState(string translationProviderState)
 		{
@@ -118,7 +118,7 @@ namespace TMX_TranslationProvider
 
 		public bool SupportsFilters => false;
 		public bool SupportsWordCounts => false;
-		public bool SupportsUpdate => false;
+		public bool SupportsUpdate => true;
 
 		public bool SupportsConcordanceSearch => true;
 		public bool SupportsDocumentSearches => true;
