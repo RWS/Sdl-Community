@@ -55,7 +55,7 @@
             // cancel
             // 
             this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancel.Location = new System.Drawing.Point(640, 224);
+            this.cancel.Location = new System.Drawing.Point(640, 185);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(90, 28);
             this.cancel.TabIndex = 0;
@@ -66,7 +66,7 @@
             // ok
             // 
             this.ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ok.Location = new System.Drawing.Point(544, 224);
+            this.ok.Location = new System.Drawing.Point(544, 185);
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(90, 28);
             this.ok.TabIndex = 1;
@@ -99,7 +99,7 @@
             this.error.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.error.AutoSize = true;
             this.error.ForeColor = System.Drawing.Color.Red;
-            this.error.Location = new System.Drawing.Point(93, 235);
+            this.error.Location = new System.Drawing.Point(93, 196);
             this.error.Name = "error";
             this.error.Size = new System.Drawing.Size(95, 13);
             this.error.TabIndex = 5;
@@ -118,7 +118,7 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.dbConnection);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Location = new System.Drawing.Point(5, 73);
+            this.groupBox1.Location = new System.Drawing.Point(5, 56);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(725, 120);
             this.groupBox1.TabIndex = 6;
@@ -236,7 +236,7 @@
             this.viewLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.viewLog.Image = global::TMX_TranslationProvider.PluginResources.wrench;
             this.viewLog.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.viewLog.Location = new System.Drawing.Point(5, 224);
+            this.viewLog.Location = new System.Drawing.Point(5, 185);
             this.viewLog.Margin = new System.Windows.Forms.Padding(0);
             this.viewLog.Name = "viewLog";
             this.viewLog.Size = new System.Drawing.Size(28, 28);
@@ -248,7 +248,7 @@
             // exportToTmx
             // 
             this.exportToTmx.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.exportToTmx.Location = new System.Drawing.Point(448, 224);
+            this.exportToTmx.Location = new System.Drawing.Point(448, 185);
             this.exportToTmx.Name = "exportToTmx";
             this.exportToTmx.Size = new System.Drawing.Size(90, 28);
             this.exportToTmx.TabIndex = 8;
@@ -273,7 +273,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(736, 260);
+            this.ClientSize = new System.Drawing.Size(736, 221);
             this.Controls.Add(this.dbNames);
             this.Controls.Add(this.exportToTmx);
             this.Controls.Add(this.viewLog);

@@ -42,7 +42,7 @@ namespace TMX_Lib.Utils
 
 		private static GlobalSettings Load()
 		{
-			if (File.Exists(Util.PluginDirectory))
+			if (File.Exists(FileName))
 			{
 				var inst = JsonConvert.DeserializeObject<GlobalSettings>(File.ReadAllText(FileName));
 				return inst;

@@ -151,7 +151,8 @@ namespace TMX_TranslationProvider
 			if (dlg.ShowDialog() == DialogResult.OK)
 			{
 				_newOptions.FileName = dlg.FileName;
-				var (_, idx) = BrowsedFileToDbInfo(dlg.FileName);
+				var (db, idx) = BrowsedFileToDbInfo(dlg.FileName);
+				GlobalSettings.Inst.AddTmxDatabase(db);
 				dbNames.SelectedIndex = idx;
 				importStatus.Text = "";
 				importProgress.Visible = false;
@@ -218,7 +219,7 @@ namespace TMX_TranslationProvider
 				return;
 			if (dbNames.SelectedIndex >= 0)
 			{
-				_newOptions.FileName = _databases[dbNames.SelectedIndex].FileName;
+				_newOptions.FileName = _databases[dbNames.SelectedIndex].FullFileName;
 				_newOptions.DatabaseName = _databases[dbNames.SelectedIndex].DbName;
 			}
 
