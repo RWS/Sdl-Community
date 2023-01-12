@@ -88,6 +88,7 @@
     <Compile Include="Search\TmxSearchSettings.cs" />
     <Compile Include="Utils\CompareLanguages.cs" />
     <Compile Include="Utils\CultureDictionary.cs" />
+    <Compile Include="Utils\GlobalSettings.cs" />
     <Compile Include="Utils\LanguageArray.cs" />
     <Compile Include="Utils\Log.cs" />
     <Compile Include="TmxFormat\TmxHeader.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Utils\Constants.cs" />
     <Compile Include="Utils\DummyTranslate.cs" />
     <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Utils\TmxDbInfo.cs" />
     <Compile Include="Utils\Util.cs" />
     <Compile Include="Writer\TmxWriter.cs" />
     <Compile Include="XmlSplit\XmlSplitter.cs" />

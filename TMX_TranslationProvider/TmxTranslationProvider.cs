@@ -104,7 +104,7 @@ namespace TMX_TranslationProvider
 			_languageDirections.Clear();
 		}
 
-		public string Name => PluginResources.Plugin_NiceName;
+		public string Name => $"TMX Translation: {_options.FriendlyName}";
 		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, Name);
 
 		public void RefreshStatusInfo()

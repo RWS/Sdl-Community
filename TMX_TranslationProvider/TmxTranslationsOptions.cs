@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,6 +63,7 @@ namespace TMX_TranslationProvider
 			set => SetStringParameter("Guid", value);
 		}
 
+		public string FriendlyName => DbName != "" ? DbName : Path.GetFileName( FileName);
 
 		public string FileName
 		{

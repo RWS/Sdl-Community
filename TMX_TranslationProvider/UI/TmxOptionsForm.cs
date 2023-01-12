@@ -34,6 +34,9 @@ namespace TMX_TranslationProvider
 
 		private bool _tryDetectLocalMongoDb;
 
+		private List<TmxDbInfo> _databases;
+		private int _databaseIdx = -1;
+
 		public TmxOptionsForm(TmxTranslationsOptions options, TmxSearchService searchService)
 		{
 			_oldSearchService = searchService;
@@ -52,15 +55,17 @@ namespace TMX_TranslationProvider
 				if (_tryDetectLocalMongoDb)
 					_newOptions.Connection = "localhost:27017";
 
-			fileName.Text = _newOptions.FileName ;
-			dbConnection.Text = _newOptions.Connection ;
-			dbPassword.Text = _newOptions.Password; 
-			dbName.Text = _newOptions.DatabaseName ;
+			_databases = GlobalSettings.Inst.LocalTmxDatabases.ToList();
+			_databaseIdx = _databases.FindIndex(db => db.FullFileName.Equals(_newOptions.FileName, StringComparison.InvariantCultureIgnoreCase));
+			foreach (var db in _databases)
+				dbNames.Items.Add(FriendlyDbInfo(db));
+			dbNames.SelectedIndex = _databaseIdx;
 
 			_initialized = true;
-
 			UpdateUI();
 		}
+
+		private static string FriendlyDbInfo(TmxDbInfo info) => $"{info.DbName} (File: {info.FileName})";
 
 		// very simple way to verify if user has Mongodb Community Server installed locally 
 		// obviously, it doesn't always work, but it's a very simple method that works probably 98% of the cases
@@ -99,12 +104,42 @@ namespace TMX_TranslationProvider
 		private void ok_Click(object sender, EventArgs e)
 		{
 			UpdateOptions();
+			GlobalSettings.Inst.Save();
 			DialogResult = DialogResult.OK;
 		}
 
 		private void cancel_Click(object sender, EventArgs e)
 		{
 			DialogResult = DialogResult.Cancel;
+		}
+
+		private string NewDbName(string wantName)
+		{
+			for (int idx = 0; ; ++idx)
+			{
+				var name = wantName;
+				if (idx > 0)
+					wantName += $" ({idx+1})";
+				if (_databases.All(db => db.DbName != name))
+					return name;
+			}
+		}
+
+		private (TmxDbInfo db,int index) BrowsedFileToDbInfo(string fileName)
+		{
+			var index = _databases.FindIndex(db => db.FullFileName.Equals(fileName, StringComparison.InvariantCultureIgnoreCase));
+			if (index >= 0)
+				return (_databases[index], index);
+
+			// new file
+			var newDb = new TmxDbInfo { 
+				FullFileName = fileName,
+				DbName = NewDbName( Path.GetFileName(fileName)),
+			};
+			_databases.Add(newDb);
+			index = _databases.Count - 1;
+			dbNames.Items.Add(FriendlyDbInfo(newDb));
+			return (newDb, index);
 		}
 
 		private void browse_Click(object sender, EventArgs e)
@@ -116,7 +151,8 @@ namespace TMX_TranslationProvider
 			if (dlg.ShowDialog() == DialogResult.OK)
 			{
 				_newOptions.FileName = dlg.FileName;
-				fileName.Text = dlg.FileName;
+				var (_, idx) = BrowsedFileToDbInfo(dlg.FileName);
+				dbNames.SelectedIndex = idx;
 				importStatus.Text = "";
 				importProgress.Visible = false;
 				ClearError();
@@ -180,10 +216,12 @@ namespace TMX_TranslationProvider
 		{
 			if (!_initialized)
 				return;
-			_newOptions.FileName = fileName.Text;
-			_newOptions.Connection = dbConnection.Text;
-			_newOptions.Password = dbPassword.Text;
-			_newOptions.DatabaseName = dbName.Text;
+			if (dbNames.SelectedIndex >= 0)
+			{
+				_newOptions.FileName = _databases[dbNames.SelectedIndex].FileName;
+				_newOptions.DatabaseName = _databases[dbNames.SelectedIndex].DbName;
+			}
+
 			_newOptions.QuickImport = quickImport.Checked;
 			UpdateTryConnectEnabled();
 		}
@@ -243,6 +281,14 @@ namespace TMX_TranslationProvider
 			}
 		}
 
+		private void dbNames_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (_initialized && dbNames.SelectedIndex >= 0)
+			{
+				UpdateOptions();
+			}
+		}
+
 		private void UpdateUI()
 		{
 			if (!_initialized)
@@ -258,7 +304,6 @@ namespace TMX_TranslationProvider
 			exportToTmx.Enabled = SearchService.HasImportBeenDoneBefore() || SearchService.ImportComplete() ;
 
 			var isLocalhost = IsLocalhostConnection();
-			dbPassword.Visible = dbPasswordLabel.Visible = dbPasswordTip.Visible = !isLocalhost;
 			if (_tryDetectLocalMongoDb)
 				downloadCommunityServer.Visible = false;
 

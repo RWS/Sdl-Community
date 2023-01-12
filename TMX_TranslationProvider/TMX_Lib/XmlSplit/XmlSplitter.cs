@@ -245,9 +245,9 @@ namespace TMX_Lib.XmlSplit
 			// the idea -- write the bad file, so we can analyze it
 			try
 			{
-				var tempFile = $"{LogUtil.PluginDirectory}\\bad-{Path.GetFileNameWithoutExtension(_fileName)}-text.txt";
+				var tempFile = $"{Util.PluginDirectory}\\bad-{Path.GetFileNameWithoutExtension(_fileName)}-text.txt";
 				File.WriteAllText(tempFile, badSegment);
-				tempFile = $"{LogUtil.PluginDirectory}\\bad-{Path.GetFileNameWithoutExtension(_fileName)}-binary.txt";
+				tempFile = $"{Util.PluginDirectory}\\bad-{Path.GetFileNameWithoutExtension(_fileName)}-binary.txt";
 				var subBuffer = new byte[_readByteCount];
 				Array.Copy(_buffer, subBuffer, _readByteCount);
 				File.WriteAllBytes(tempFile, subBuffer);
