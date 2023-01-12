@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows.Input;
 using MicrosoftTranslatorProvider.Commands;
 using MicrosoftTranslatorProvider.Interfaces;
@@ -14,6 +16,9 @@ namespace MicrosoftTranslatorProvider.ViewModel
 {
 	public class MainWindowViewModel : BaseModel, IMainWindow
 	{
+		private const string ViewDetails_Provider = nameof(ProviderControlViewModel);
+		private const string ViewDetails_Settings = nameof(SettingsControlViewModel);
+
 		private readonly ISettingsControlViewModel _settingsControlViewModel;
 		private readonly IProviderControlViewModel _providerControlViewModel;
 		private readonly ITranslationProviderCredentialStore _credentialStore;
@@ -25,13 +30,22 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		private ViewDetails _selectedView;
 		private string _errorMessage;
 		private bool _dialogResult;
+		private string _multiButtonContent;
+
+		private ICommand _saveCommand;
+		private ICommand _navigateToCommand;
+		private ICommand _switchViewCommand;
 
 		public event CloseWindowEventRaiser CloseEventRaised;
 		public delegate void CloseWindowEventRaiser();
 
-		public MainWindowViewModel(ITranslationOptions options, IProviderControlViewModel providerControlViewModel,
-			ISettingsControlViewModel settingsControlViewModel,
-			ITranslationProviderCredentialStore credentialStore, LanguagePair[] languagePairs, HtmlUtil htmlUtil)
+		public MainWindowViewModel(ITranslationOptions options,
+								   IProviderControlViewModel providerControlViewModel,
+								   ISettingsControlViewModel settingsControlViewModel,
+								   ITranslationProviderCredentialStore credentialStore,
+								   LanguagePair[] languagePairs,
+								   HtmlUtil htmlUtil,
+								   bool showSettingsView = false)
 		{
 			Options = options;
 			_providerControlViewModel = providerControlViewModel;
@@ -40,50 +54,32 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			_languagePairs = languagePairs;
 			_htmlUtil = htmlUtil;
 
-			SaveCommand = new RelayCommand(Save);
-			ShowSettingsViewCommand = new CommandHandler(ShowSettingsPage, true);
-			ShowMainViewCommand = new CommandHandler(ShowProvidersPage, true);
-
-			providerControlViewModel.ShowSettingsCommand = ShowSettingsViewCommand;
-			providerControlViewModel.ClearMessageRaised += ClearMessageRaised;
-			settingsControlViewModel.ShowMainWindowCommand = ShowMainViewCommand;
-
 			AvailableViews = new List<ViewDetails>
 			{
 				new ViewDetails
 				{
-					Name = PluginResources.PluginsView,
+					Name = nameof(ProviderControlViewModel),
 					ViewModel = providerControlViewModel.ViewModel
 				},
 				new ViewDetails
 				{
-					Name = PluginResources.SettingsView,
+					Name = nameof(SettingsControlViewModel),
 					ViewModel = settingsControlViewModel.ViewModel
 				}
 			};
 
+			SwitchView(showSettingsView ? ViewDetails_Provider : ViewDetails_Settings);
 			ShowProvidersPage();
 		}
 
-		public MainWindowViewModel(ITranslationOptions options, ISettingsControlViewModel settingsControlViewModel, bool isTellMeAction)
+		public string MultiButtonContent
 		{
-			Options = options;
-			_isTellMeAction = isTellMeAction;
-			_settingsControlViewModel = settingsControlViewModel;
-			SaveCommand = new RelayCommand(Save);
-
-			AvailableViews = new List<ViewDetails>
+			get => _multiButtonContent;
+			set
 			{
-				new ViewDetails
-				{
-					Name = PluginResources.SettingsView,
-					ViewModel = settingsControlViewModel.ViewModel
-				}
-			};
-
-			if (_isTellMeAction)
-			{
-				SelectedView = AvailableViews[0];
+				if (_multiButtonContent == value) return;
+				_multiButtonContent = value;
+				OnPropertyChanged(nameof(MultiButtonContent));
 			}
 		}
 
@@ -99,10 +95,11 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		}
 
 		public List<ViewDetails> AvailableViews { get; set; }
-		public ICommand ShowSettingsViewCommand { get; set; }
-		public ICommand ShowMainViewCommand { get; set; }
-		public ICommand SaveCommand { get; set; }
 		public ITranslationOptions Options { get; set; }
+
+		public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save);
+		public ICommand NavigateToCommand => _navigateToCommand ??= new RelayCommand(NavigateTo);
+		public ICommand SwitchViewCommand => _switchViewCommand ??= new RelayCommand(SwitchView);
 
 		public bool DialogResult
 		{
@@ -196,7 +193,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				ErrorMessage = PluginResources.ApiKeyError;
 				return false;
 			}
-			
+
 			if (_providerControlViewModel.UseCategoryID && string.IsNullOrEmpty(_providerControlViewModel.CategoryID))
 			{
 				ErrorMessage = PluginResources.CatIdError;
@@ -214,12 +211,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		private void ShowProvidersPage()
 		{
 			SelectedView = AvailableViews[0];
-		}
-
-		private void ClearMessageRaised()
-		{
-			ErrorMessage = string.Empty;
-			TranslatorErrorResponse = "<html><body></html></body>";
 		}
 
 		private void Save(object window)
@@ -315,6 +306,25 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			Options.UseCategoryID = _providerControlViewModel.UseCategoryID;
 			Options.CategoryID = _providerControlViewModel.CategoryID;
 			Options.PersistMicrosoftCredentials = _providerControlViewModel.PersistMicrosoftKey;
+		}
+
+		private void NavigateTo(object parameter)
+		{
+			Process.Start(parameter as string);
+		}
+
+		private void SwitchView(object parameter)
+		{
+
+			try
+			{
+				var requestedType = parameter is not null ? parameter as string
+														  : SelectedView.Name != ViewDetails_Provider ? ViewDetails_Provider
+																									  : ViewDetails_Settings;
+				MultiButtonContent = MultiButtonContent == "Provider" ? "Settings" : "Provider";
+				SelectedView = AvailableViews.FirstOrDefault(x => x.Name == requestedType);
+			}
+			catch { }
 		}
 	}
 }

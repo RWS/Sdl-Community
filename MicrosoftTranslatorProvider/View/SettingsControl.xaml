@@ -8,10 +8,7 @@
 			 xmlns:converters="clr-namespace:MicrosoftTranslatorProvider.Converters"
 			 xmlns:uiHelpers="clr-namespace:MicrosoftTranslatorProvider.UiHelpers"
 			 d:DataContext="{d:DesignInstance viewModels:SettingsControlViewModel}"
-			 mc:Ignorable="d"
-			 Height="450"
-			 Width="800"
-			 Background="White">
+			 mc:Ignorable="d">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -25,53 +22,30 @@
 			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter" />
 		</ResourceDictionary>
 	</UserControl.Resources>
-	<Grid Margin="20 40 20 20">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="*" />
-			<RowDefinition Height="Auto" />
-		</Grid.RowDefinitions>
-
-		<!--Grid's allow objects to be placed on top of each other-->
-		<Grid Grid.Row="0">
-			<Button Style="{StaticResource TransparentButtonStyle}"
-					HorizontalAlignment="Left"
-					IsEnabled="{Binding IsTellMeAction, Converter={StaticResource InvertableBoolEnabledConverter},ConverterParameter=Inverted}"
-					Command="{Binding ShowMainWindowCommand}">
-				<DockPanel>
-					<Image Source="../Resources/backImg.png"
-						   Width="auto"
-						   Height="15" />
-					<TextBlock Text="{x:Static root:PluginResources.BackBtnText}"
-							   FontSize="12"
-							   Margin="5,0,0,0" />
-				</DockPanel>
-			</Button>
-		</Grid>
-
-		<StackPanel Grid.Row="1"
-					Margin="10">
+	<Grid Margin="24 42 24 0">
+		<StackPanel>
 			<CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 					  IsChecked="{Binding ReSendDraft}"
 					  Content="{x:Static root:PluginResources.ReSendDescription}"
-					  Margin="10 10" />
+					  Margin="0 12 0 0" />
+
 			<CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 					  IsChecked="{Binding SendPlainText}"
 					  Content="{x:Static root:PluginResources.SendPlainDescription}"
-					  Margin="10 10" />
+					  Margin="0 12 0 0" />
+
 			<CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 					  IsChecked="{Binding DoPreLookup}"
 					  Content="{x:Static root:PluginResources.PreLookDescription}"
-					  Margin="10 10" />
-			<DockPanel Margin="10,0,10,0">
+					  Margin="0 12 0 0" />
+			<StackPanel Orientation="Horizontal">
 				<Button Style="{StaticResource Sdl.Button.DialogStyle}"
 						Content="{x:Static root:PluginResources.BrowseBtn}"
 						Cursor="Hand"
 						Command="{Binding BrowseCommand}"
 						IsEnabled="{Binding DoPreLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
 						CommandParameter="{x:Static root:PluginResources.PreLookBrowse}"
-						Margin="10 0 0 0"
-						DockPanel.Dock="Right" />
+						Margin="0 2 8 0"/>
 				<TextBox Style="{StaticResource WatermarkTextBox}"
 						 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.PreLookupWaterMark}"
 						 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="PreLookupFileName"
@@ -79,20 +53,20 @@
 						 IsEnabled="{Binding DoPreLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
 						 Text="{Binding PreLookupFileName}"
 						 VerticalContentAlignment="Center" />
-			</DockPanel>
+			</StackPanel>
+
 			<CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 					  IsChecked="{Binding DoPostLookup}"
 					  Content="{x:Static root:PluginResources.PostLookupDescription}"
-					  Margin="10 10" />
-			<DockPanel Margin="10,0,10,0">
+					  Margin="0 12 0 0" />
+			<StackPanel Orientation="Horizontal">
 				<Button Style="{StaticResource Sdl.Button.DialogStyle}"
 						Content="{x:Static root:PluginResources.BrowseBtn}"
 						Command="{Binding BrowseCommand}"
 						CommandParameter="{x:Static root:PluginResources.PostLookupBrowse}"
 						IsEnabled="{Binding DoPostLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
-						Cursor="Hand"
-						Margin="10 0 0 0"
-						DockPanel.Dock="Right" />
+						Cursor="Hand" 
+						Margin="0 2 8 0"/>
 				<TextBox Style="{StaticResource WatermarkTextBox}"
 						 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.PostLookupWaterMark}"
 						 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="PostLookupFileName"
@@ -100,14 +74,7 @@
 						 Text="{Binding PostLookupFileName}"
 						 IsEnabled="{Binding DoPostLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
 						 VerticalContentAlignment="Center" />
-			</DockPanel>
-		</StackPanel>
-
-		<StackPanel Grid.Row="2">
-			<TextBlock Margin="20 10 10 10"
-					   TextWrapping="WrapWithOverflow"
-					   Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}"
-					   Text="{Binding ErrorMessage, UpdateSourceTrigger=PropertyChanged}" />
+			</StackPanel>
 		</StackPanel>
 	</Grid>
 </UserControl>

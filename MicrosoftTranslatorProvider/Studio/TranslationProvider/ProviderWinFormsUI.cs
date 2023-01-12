@@ -30,7 +30,7 @@ namespace MicrosoftTranslatorProvider.Studio
 		{
 			var options = new MTETranslationOptions();
 			var regionsProvider = new RegionsProvider();
-			var mainWindowDialogResult = ShowProviderWindow(languagePairs, credentialStore, options, regionsProvider).DialogResult;
+			var mainWindowDialogResult = ShowProviderWindow(languagePairs, credentialStore, options, regionsProvider, true).DialogResult;
 
 			var htmlUtil = new HtmlUtil();
 			return mainWindowDialogResult ? new ITranslationProvider[] { new Provider(options, regionsProvider, htmlUtil) }
@@ -82,7 +82,7 @@ namespace MicrosoftTranslatorProvider.Studio
 
 			return new TranslationProviderDisplayInfo
 			{
-				TranslationProviderIcon = PluginResources.my_icon,
+				TranslationProviderIcon = PluginResources.mstp_icon,
 				Name = PluginResources.Microsoft_NiceName,
 				TooltipText = PluginResources.Microsoft_Tooltip,
 				SearchResultImage = isMicrosoftProvider ? PluginResources.microsoft_image : default
@@ -99,7 +99,7 @@ namespace MicrosoftTranslatorProvider.Studio
 			return string.Equals(translationProviderUri.Scheme, Constants.MicrosoftProviderScheme, StringComparison.CurrentCultureIgnoreCase);
 		}
 
-		private MainWindowViewModel ShowProviderWindow(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, RegionsProvider regionsProvider)
+		private MainWindowViewModel ShowProviderWindow(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, RegionsProvider regionsProvider, bool showSettingsView = false)
 		{
 			SetSavedCredentialsOnUi(credentialStore, loadOptions);
 			var dialogService = new OpenFileDialogService();
@@ -107,8 +107,12 @@ namespace MicrosoftTranslatorProvider.Studio
 			var settingsControlViewModel = new SettingsControlViewModel(loadOptions, dialogService, false);
 			var htmlUtil = new HtmlUtil();
 			var mainWindowViewModel = new MainWindowViewModel(loadOptions,
-															  providerControlViewModel, settingsControlViewModel,
-															  credentialStore, languagePairs, htmlUtil);
+															  providerControlViewModel,
+															  settingsControlViewModel,
+															  credentialStore,
+															  languagePairs,
+															  htmlUtil,
+															  showSettingsView);
 			var mainWindow = new MainWindow
 			{
 				DataContext = mainWindowViewModel

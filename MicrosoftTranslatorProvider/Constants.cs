@@ -14,5 +14,8 @@
 		public const string TellMe_StoreUrl = "https://appstore.rws.com/plugin/179/";
 		public const string TellMe_HelpUrl = "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/6546/microsoft-machine-translation-provider";
 		public const string TellMe_CommunityForumUrl = "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/";
+
+		public const string LearnMore_Regions = "https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/change-organization-location?view=azure-devops/";
+		public const string LearnMore_Category = "https://learn.microsoft.com/en-us/azure/cognitive-services/translator/custom-translator/overview/";
 	}
 }

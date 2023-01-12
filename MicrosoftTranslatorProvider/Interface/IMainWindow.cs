@@ -18,12 +18,6 @@ namespace MicrosoftTranslatorProvider.Interfaces
 		
 		ITranslationOptions Options { get; set; }
 		
-		ICommand ShowSettingsViewCommand { get; set; }
-		
-		ICommand ShowMainViewCommand { get; set; }
-		
-		ICommand SaveCommand { get; set; }
-		
 		void AddEncriptionMetaToResponse(string response);
 
 		bool IsWindowValid();

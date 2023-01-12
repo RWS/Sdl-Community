@@ -380,6 +380,16 @@ namespace MicrosoftTranslatorProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon mstp_icon {
+            get {
+                object obj = ResourceManager.GetObject("mstp_icon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This parameter is used to get translations from a customized system built with custom translator.
         ///
         ///Add the Category ID from your Custom Translator project details to this parameter to use your deployed customized system. If you didn&apos;t created such thing, leave it empty..
@@ -402,16 +412,6 @@ namespace MicrosoftTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon my_icon {
-            get {
-                object obj = ResourceManager.GetObject("my_icon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap my_image {
@@ -422,7 +422,7 @@ namespace MicrosoftTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save key.
+        ///   Looks up a localized string similar to Remember key.
         /// </summary>
         public static string PersistMicrosoft {
             get {

@@ -40,8 +40,6 @@ namespace MicrosoftTranslatorProvider.Interfaces
 		
 		TranslationOption SelectedTranslationOption { get; set; }
 		
-		ICommand ShowSettingsCommand { get; set; }
-		
 		event ClearMessageEventRaiser ClearMessageRaised;
 	}
 }
