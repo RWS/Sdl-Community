@@ -20,43 +20,27 @@ namespace TMX_TranslationProvider
 	{
 		private static readonly Logger log = LogManager.GetCurrentClassLogger();
 
-		private TmxSearchService _oldSearchService;
+		public ISearchServiceParameters Options => _newOptions;
+		public TmxSearchService SearchService => TmxSearchServiceProvider.GetSearchService(_newOptions);
 
-		// this can change, if the user updates the connection
-		// the idea -> don't modify the initial search service, just in case the user presses Cancel
-		private TmxSearchService _newSearchService = null;
-
-		public TmxTranslationsOptions Options => _newOptions.ToOptions();
-		public TmxSearchService SearchService => _newSearchService ?? _oldSearchService;
-
-		private EditOptions _oldOptions, _newOptions;
+		private SearchServiceParameters _oldOptions, _newOptions;
 		private bool _initialized = false;
 
 		private bool _tryDetectLocalMongoDb;
 
-		private List<TmxDbInfo> _databases;
+		private List<SearchServiceParameters> _databases;
 		private int _databaseIdx = -1;
 
-		public TmxOptionsForm(TmxTranslationsOptions options, TmxSearchService searchService)
+		public TmxOptionsForm(TmxSearchService searchService)
 		{
-			_oldSearchService = searchService;
-			_newSearchService = null;
 			InitializeComponent();
-			_oldOptions = EditOptions.FromTranslationOptions(options);
-			_newOptions = EditOptions.FromTranslationOptions(options);
-			var guid = options.Guid;
-			if (guid == "")
-				guid = System.Guid.NewGuid().ToString();
-			_oldOptions.Guid = guid;
-			_newOptions.Guid = guid;
+			_oldOptions = SearchServiceParameters.Copy(searchService.Options);
+			_newOptions = SearchServiceParameters.Copy(searchService.Options);
 
 			_tryDetectLocalMongoDb = TryDetectLocalMongoDb();
-			if (_newOptions.Connection == "")
-				if (_tryDetectLocalMongoDb)
-					_newOptions.Connection = "localhost:27017";
 
 			_databases = GlobalSettings.Inst.LocalTmxDatabases.ToList();
-			_databaseIdx = _databases.FindIndex(db => db.FullFileName.Equals(_newOptions.FileName, StringComparison.InvariantCultureIgnoreCase));
+			_databaseIdx = _databases.FindIndex(db => db.FullFileName.Equals(_newOptions.FullFileName, StringComparison.InvariantCultureIgnoreCase));
 			foreach (var db in _databases)
 				dbNames.Items.Add(FriendlyDbInfo(db));
 			dbNames.SelectedIndex = _databaseIdx;
@@ -65,7 +49,7 @@ namespace TMX_TranslationProvider
 			UpdateUI();
 		}
 
-		private static string FriendlyDbInfo(TmxDbInfo info) => $"{info.DbName} (File: {info.FileName})";
+		private static string FriendlyDbInfo(SearchServiceParameters info) => $"{info.DbName} (File: {info.FileName})";
 
 		// very simple way to verify if user has Mongodb Community Server installed locally 
 		// obviously, it doesn't always work, but it's a very simple method that works probably 98% of the cases
@@ -79,26 +63,6 @@ namespace TMX_TranslationProvider
 			var mongodbServer = $"{programFiles}\\MongoDB\\Server\\6.0\\bin\\mongod.exe";
 			var exists = File.Exists(mongodbServer);
 			return exists;
-		}
-
-
-		private void UpdateSearchService()
-		{
-			var same = _oldOptions == _newOptions;
-			if (!same)
-			{
-				if (_newSearchService == null)
-					_newSearchService = new TmxSearchService(_newOptions.ToOptions());
-			}
-
-			if (_newSearchService == null)
-				return ;
-
-			// update options
-			var sameNewOptions = _newSearchService.Options.Equals(_newOptions.ToOptions());
-			if (!sameNewOptions)
-				// async call
-				_newSearchService.SetOptionsAsync(_newOptions.ToOptions());
 		}
 
 		private void ok_Click(object sender, EventArgs e)
@@ -125,14 +89,15 @@ namespace TMX_TranslationProvider
 			}
 		}
 
-		private (TmxDbInfo db,int index) BrowsedFileToDbInfo(string fileName)
+		private (SearchServiceParameters db,int index) BrowsedFileToDbInfo(string fileName)
 		{
 			var index = _databases.FindIndex(db => db.FullFileName.Equals(fileName, StringComparison.InvariantCultureIgnoreCase));
 			if (index >= 0)
 				return (_databases[index], index);
 
 			// new file
-			var newDb = new TmxDbInfo { 
+			var newDb = new SearchServiceParameters
+			{ 
 				FullFileName = fileName,
 				DbName = NewDbName( Path.GetFileName(fileName)),
 			};
@@ -145,12 +110,12 @@ namespace TMX_TranslationProvider
 		private void browse_Click(object sender, EventArgs e)
 		{
 			var dlg = new OpenFileDialog();
-			if (_newOptions.FileName != "")
-				dlg.FileName = _newOptions.FileName;
+			if (_newOptions.FullFileName != "")
+				dlg.FileName = _newOptions.FullFileName;
 			dlg.Filter = "TMX Files (*.tmx)|*.tmx|All files (*.*)|*.*";
 			if (dlg.ShowDialog() == DialogResult.OK)
 			{
-				_newOptions.FileName = dlg.FileName;
+				_newOptions.FullFileName = dlg.FileName;
 				var (db, idx) = BrowsedFileToDbInfo(dlg.FileName);
 				GlobalSettings.Inst.AddTmxDatabase(db);
 				dbNames.SelectedIndex = idx;
@@ -185,12 +150,11 @@ namespace TMX_TranslationProvider
 			UpdateOptions();
 			Enabled = false;
 			Cursor = Cursors.WaitCursor;
-			var (ok, errorStr) = await TmxSearchService.TryParametersAsync(_newOptions.ToOptions());
+			var (ok, errorStr) = await TmxSearchService.TryParametersAsync(_newOptions);
 			if (ok)
 			{
 				ClearError();
 				importProgress.Visible = importStatus.Visible = true;
-				UpdateSearchService();
 				importProgress.Value = (int)(SearchService.ImportProgress() * 100);
 				importStatus.Text = "Importing Data...";
 				timerImportProgress.Enabled = true;
@@ -207,7 +171,7 @@ namespace TMX_TranslationProvider
 
 		private void UpdateTryConnectEnabled()
 		{
-			bool same = SearchService.Options.Equals(_newOptions.ToOptions());
+			bool same = _oldOptions.Equals(_newOptions);
 			tryConnect.Enabled = !same || error.Visible 
 			                           // ... or, there was no import in this database
 			                           || (!SearchService.HasImportBeenDoneBefore() && !SearchService.IsImporting());
@@ -219,8 +183,8 @@ namespace TMX_TranslationProvider
 				return;
 			if (dbNames.SelectedIndex >= 0)
 			{
-				_newOptions.FileName = _databases[dbNames.SelectedIndex].FullFileName;
-				_newOptions.DatabaseName = _databases[dbNames.SelectedIndex].DbName;
+				_newOptions.FullFileName = _databases[dbNames.SelectedIndex].FullFileName;
+				_newOptions.DbName = _databases[dbNames.SelectedIndex].DbName;
 			}
 
 			_newOptions.QuickImport = quickImport.Checked;
@@ -249,7 +213,7 @@ namespace TMX_TranslationProvider
 			UpdateUI();
 		}
 
-		private bool IsLocalhostConnection() => _newOptions.Connection.StartsWith("localhost", StringComparison.CurrentCultureIgnoreCase);
+		private bool IsLocalhostConnection() => _newOptions.DbConnectionNoPassword.StartsWith("localhost", StringComparison.CurrentCultureIgnoreCase);
 
 		private void downloadCommunityServer_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
@@ -272,8 +236,8 @@ namespace TMX_TranslationProvider
 		private void exportToTmx_Click(object sender, EventArgs e)
 		{
 			var dlg = new SaveFileDialog();
-			if (_newOptions.FileName != "")
-				dlg.FileName = Path.GetDirectoryName(_newOptions.FileName) + "\\" + Path.GetFileNameWithoutExtension(_newOptions.FileName)  + "-copy.tmx";
+			if (_newOptions.FullFileName != "")
+				dlg.FileName = Path.GetDirectoryName(_newOptions.FullFileName) + "\\" + Path.GetFileNameWithoutExtension(_newOptions.FullFileName)  + "-copy.tmx";
 			dlg.Filter = "TMX Files (*.tmx)|*.tmx|All files (*.*)|*.*";
 			if (dlg.ShowDialog() == DialogResult.OK)
 			{
@@ -296,7 +260,7 @@ namespace TMX_TranslationProvider
 				return;
 			UpdateOptions();
 
-			var connectionChanged = SearchService.Options.DbConnectionNoPassword != _newOptions.Connection;
+			var connectionChanged = SearchService.Options.DbConnectionNoPassword != _newOptions.DbConnectionNoPassword;
 			importProgress.Visible = SearchService.IsImporting() && !SearchService.ImportComplete() && !connectionChanged;
 			importStatus.Visible = SearchService.IsImporting() || SearchService.ImportComplete() && !connectionChanged;
 			importProgress.Value = (int)(SearchService.ImportProgress() * 100);

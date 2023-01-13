@@ -18,12 +18,13 @@ namespace TMX_Lib.Search
 	{
 		private static readonly Logger log = LogManager.GetCurrentClassLogger();
 
-		private ISearchServiceParameters _options;
+		private SearchServiceParameters _options;
 		private TmxSearch _search;
 		private TmxMongoDb _db;
 		private bool _paramsOk = true;
 		private bool _hasImportBeenDoneBefore;
 		private TmxImportReport _report = new TmxImportReport();
+
 
 		public TmxSearchService(ISearchServiceParameters options)
 		{
@@ -36,9 +37,9 @@ namespace TMX_Lib.Search
 		// report about the current import
 		public TmxImportReport Report => _report;
 
-		private static string ConnectionStr(ISearchServiceParameters parameters) => parameters.DbConnectionNoPassword.Replace("<password>", parameters.Password);
+		private static string ConnectionStr(ISearchServiceParameters parameters) => parameters.DbConnectionNoPassword;
 		private static string DbName(ISearchServiceParameters parameters) 
-			=> parameters == null ? "" : (parameters.DbName != "" ? parameters.DbName : Path.GetFileNameWithoutExtension(parameters.FileName));
+			=> parameters == null ? "" : (parameters.DbName != "" ? parameters.DbName : Path.GetFileNameWithoutExtension(parameters.FullFileName));
 
 		public bool IsImporting() => _paramsOk && (_db?.IsImportInProgress() ?? false);
 		public double ImportProgress() => _db?.ImportProgress() ?? 0d;
@@ -76,19 +77,19 @@ namespace TMX_Lib.Search
 		}
 
 		// if it will start an import, this will return once the import is complete
-		public async Task SetOptionsAsync(ISearchServiceParameters newOptions)
+		private async Task SetOptionsAsync(ISearchServiceParameters newOptions)
 		{
 			Debug.Assert(newOptions != null);
-			log.Debug($"new options {newOptions.DbConnectionNoPassword} {newOptions.FileName} db={newOptions.DbName}");
-			ISearchServiceParameters oldOptions;
+			log.Debug($"new options {newOptions.DbConnectionNoPassword} {newOptions.FullFileName} db={newOptions.DbName}");
+			SearchServiceParameters oldOptions;
 			TmxMongoDb db;
 			lock (this)
 			{
-				if (newOptions.Equals(_options))
+				if (_options?.Equals(newOptions) ?? false)
 					return;
 
 				oldOptions = _options;
-				_options = newOptions;
+				_options = SearchServiceParameters.Copy(newOptions);
 				db = _db;
 			}
 
@@ -108,7 +109,7 @@ namespace TMX_Lib.Search
 				lock (this)
 					_paramsOk = true;
 				var needsReimport = oldOptions == null
-				                    || (oldOptions.FileName != newOptions.FileName)
+				                    || (oldOptions.FullFileName != newOptions.FullFileName)
 				                    || (newOptions.DbName == "")
 				                    || !isSameDb;
 				if (!isSameDb)
@@ -117,7 +118,7 @@ namespace TMX_Lib.Search
 					await db.InitAsync();
 					_hasImportBeenDoneBefore = await db.HasImportBeenDoneBeforeAsync();
 					if (_hasImportBeenDoneBefore)
-						needsReimport = Path.GetFileName(newOptions.FileName) != await db.ImportedFileNameAsync();
+						needsReimport = Path.GetFileName(newOptions.FullFileName) != await db.ImportedFileNameAsync();
 					else 
 						// this is a fresh db
 						needsReimport = true;
@@ -153,7 +154,7 @@ namespace TMX_Lib.Search
 						lock (this)
 							_report = TmxImportReport.StartNow();
 						await db.ImportToDbAsync(
-							_options.FileName,
+							_options.FullFileName,
 							report =>
 							{
 								lock (this) _report.CopyFrom(report);
@@ -161,7 +162,7 @@ namespace TMX_Lib.Search
 							_options.QuickImport
 							);
 						await search.LoadLanguagesAsync();
-						log.Debug($"import {_options.FileName} took {watch.ElapsedMilliseconds / 1000} secs.");
+						log.Debug($"import {_options.FullFileName} took {watch.ElapsedMilliseconds / 1000} secs.");
 					});
 			}
 			catch (Exception e)
@@ -208,9 +209,9 @@ namespace TMX_Lib.Search
 			string error = "";
 			try
 			{
-				if (!File.Exists(parameters.FileName))
+				if (!File.Exists(parameters.FullFileName))
 				{
-					error = $"File not found: {parameters.FileName}";
+					error = $"File not found: {parameters.FullFileName}";
 					return (false, error);
 				}
 

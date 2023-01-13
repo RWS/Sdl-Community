@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NLog;
+using TMX_Lib.Search;
 
 namespace TMX_Lib.Utils
 {
@@ -14,7 +15,7 @@ namespace TMX_Lib.Utils
 		private static readonly Logger log = NLog.LogManager.GetCurrentClassLogger();
 
 		[JsonProperty]
-		private List<TmxDbInfo> _localTmxDatabases = new List<TmxDbInfo>();
+		private List<SearchServiceParameters> _localTmxDatabases = new List<SearchServiceParameters>();
 
 		private bool _needsSave;
 
@@ -27,9 +28,9 @@ namespace TMX_Lib.Utils
 		private static string FileName => $"{Util.PluginDirectory}\\tmx_settings.txt";
 
 		[JsonIgnore]
-		public IReadOnlyList<TmxDbInfo> LocalTmxDatabases => _localTmxDatabases;
+		public IReadOnlyList<SearchServiceParameters> LocalTmxDatabases => _localTmxDatabases;
 
-		public void AddTmxDatabase(TmxDbInfo dbInfo)
+		public void AddTmxDatabase(SearchServiceParameters dbInfo)
 		{
 			lock (this)
 			{

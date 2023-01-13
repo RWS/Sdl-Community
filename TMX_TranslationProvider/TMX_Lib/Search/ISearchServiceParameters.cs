@@ -8,10 +8,9 @@ namespace TMX_Lib.Search
 {
 	public interface ISearchServiceParameters
 	{
-		string FileName { get; set; }
-		string DbConnectionNoPassword { get; set; }
-		string Password { get; set; }
-		string DbName { get; set; }
-		bool QuickImport { get; set; }
+		string FullFileName { get;  }
+		string DbConnectionNoPassword { get;  }
+		string DbName { get;  }
+		bool QuickImport { get; }
 	}
 }

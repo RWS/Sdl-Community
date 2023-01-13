@@ -29,26 +29,21 @@ namespace TMX_TranslationProvider
 
 		private TmxTranslationsOptions _options;
 		private Dictionary<LanguagePair, TmxTranslationProviderLanguageDirection> _languageDirections = new Dictionary<LanguagePair, TmxTranslationProviderLanguageDirection>();
-		private TmxSearchService _searchService;
 
-		public TmxTranslationProvider(TmxTranslationsOptions options, TmxSearchService service)
+		public TmxTranslationProvider(TmxTranslationsOptions options)
 		{
 			_options = options;
-			_searchService = service;
 		}
 
 		public TmxTranslationsOptions Options => _options;
-		public TmxSearchService SearchService => _searchService;
-		public void SetSearchService(TmxSearchService service, TmxTranslationsOptions options)
+		public TmxSearchService SearchService => TmxSearchServiceProvider.GetSearchService(_options);
+		public void UpdateOptions(ISearchServiceParameters options)
 		{
-			Debug.Assert(options.Guid != "");
 			lock (this)
 			{
-				_options = options;
-				_searchService = service;
+				_options.CopyFrom(options);
 				_languageDirections.Clear();
 			}
-			TmxTranslationProviderFactory.ReplaceSearchService(_options.Guid, service);
 
 			SaveState();
 		}
@@ -75,7 +70,7 @@ namespace TMX_TranslationProvider
 			{
 				if (_languageDirections.TryGetValue(pair, out var ld))
 					return ld;
-				searchService = _searchService;
+				searchService = SearchService;
 			}
 
 			if (searchService?.SupportsLanguage(pair) ?? false)
@@ -100,7 +95,6 @@ namespace TMX_TranslationProvider
 		public void LoadState(string translationProviderState)
 		{
 			_options = JsonConvert.DeserializeObject<TmxTranslationsOptions>(translationProviderState);
-			_searchService = new TmxSearchService(_options);
 			_languageDirections.Clear();
 		}
 
@@ -139,7 +133,7 @@ namespace TMX_TranslationProvider
 		{
 			TmxSearchService searchService;
 			lock (this)
-				searchService = _searchService;
+				searchService = SearchService;
 			return (searchService?.SupportsLanguage(pair) ?? false);
 		}
 

@@ -20,12 +20,11 @@ namespace TMX_TranslationProvider
 
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
-			var options = new TmxTranslationsOptions();
-			var service = new TmxSearchService(options);
-			var form = new TmxOptionsForm(options, service);
+			var form = new TmxOptionsForm(TmxSearchServiceProvider.EmptySearchService);
 			if (form.ShowDialog(owner) != DialogResult.OK)
 				return null;
-			var provider = new TmxTranslationProvider(form.Options, form.SearchService);
+			var options = new TmxTranslationsOptions(form.Options);
+			var provider = new TmxTranslationProvider(options);
 			return new []{ provider};
 		}
 
@@ -33,10 +32,10 @@ namespace TMX_TranslationProvider
 		{
 			if (translationProvider is TmxTranslationProvider tmxProvider)
 			{
-				var form = new TmxOptionsForm(tmxProvider.Options, tmxProvider.SearchService);
+				var form = new TmxOptionsForm(tmxProvider.SearchService);
 				if (form.ShowDialog(owner) == DialogResult.OK)
 				{
-					tmxProvider.SetSearchService(form.SearchService, form.Options);
+					tmxProvider.UpdateOptions(form.Options);
 					return true;
 				}
 			}
@@ -51,7 +50,7 @@ namespace TMX_TranslationProvider
 
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
 		{
-			var fullFileName = new TmxTranslationsOptions(translationProviderUri).FileName;
+			var fullFileName = new TmxTranslationsOptions(translationProviderUri).FullFileName;
 			var friendly = "";
 			if (File.Exists(fullFileName))
 			{

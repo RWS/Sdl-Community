@@ -33,15 +33,22 @@ namespace TMX_TranslationProvider
 		private readonly TranslationProviderUriBuilder _uriBuilder;
 		public static readonly TranslationMethod ProviderTranslationMethod = TranslationMethod.TranslationMemory;
 
-		public TmxTranslationsOptions(Uri uri )
+		public TmxTranslationsOptions(Uri uri)
 		{
 			_uriBuilder = new TranslationProviderUriBuilder(uri);
+			if (OptionsGuid == "")
+				OptionsGuid = Guid.NewGuid().ToString();
 		}
 
 		public TmxTranslationsOptions()
 		{
 			_uriBuilder = new TranslationProviderUriBuilder(new Uri($"{TmxTranslationProvider.ProviderScheme}://"));
-			FileName = ""; // just make sure file name is not null
+			FullFileName = ""; // just make sure file name is not null
+			OptionsGuid = Guid.NewGuid().ToString();
+		}
+		public TmxTranslationsOptions(ISearchServiceParameters args) : this()
+		{
+			CopyFrom(args);
 		}
 
 		[JsonIgnore]
@@ -51,21 +58,26 @@ namespace TMX_TranslationProvider
 		public override string ToString() => _uriBuilder.ToString();
 
 		public Uri Uri() => _uriBuilder.Uri;
+
+		public void CopyFrom(ISearchServiceParameters other)
+		{
+			FullFileName = other.FullFileName;
+			DbConnectionNoPassword = other.DbConnectionNoPassword;
+			DbName = other.DbName;
+			QuickImport = other.QuickImport;
+		}
 		
-		// the idea - each unique Tmx Provider is identified by a GUID -- you can edit its settings, and we'll reuse that provider
-		// this way, if I edit a Tmx Provider, change the settings, and end up with a large file that gets imported into a database (which could take a long time),
-		// I will preserve the same Tmx Provider between edits
-		//
-		// (by default, each new edit, if you change any setting, would create a new provider)
-		public string Guid
+		// the idea - each URI should be unique, or we'd get exceptions from Trados.
+		// the easiest way to do this is to generate a unique GUID on construction, and never change it
+		public string OptionsGuid
 		{
 			get => GetStringParameter("Guid");
-			set => SetStringParameter("Guid", value);
+			private set => SetStringParameter("Guid", value);
 		}
 
-		public string FriendlyName => DbName != "" ? DbName : Path.GetFileName( FileName);
+		public string FriendlyName => DbName != "" ? DbName : Path.GetFileName( FullFileName);
 
-		public string FileName
+		public string FullFileName
 		{
 			get => GetStringParameter("FileName");
 			set => SetStringParameter("FileName", value);
@@ -76,18 +88,14 @@ namespace TMX_TranslationProvider
 		//
 		// note: this is exactly what mongodb atlas gives us, so <password> will be exactly the "<password>" string
 		// (which we'll replace with the real password)
+		//
+		// the password will be kept using Sdl.LanguagePlatform.TranslationMemoryApi.ITranslationProviderCredentialStore
 		public string DbConnectionNoPassword
 		{
 			get => GetStringParameter("DbConnection");
 			set => SetStringParameter("DbConnection", value);
 		}
 
-		// FIXME I should use Sdl.LanguagePlatform.TranslationMemoryApi.ITranslationProviderCredentialStore
-		public string Password
-		{
-			get => GetStringParameter("Password");
-			set => SetStringParameter("Password", value);
-		}
 		// the database name - if empty, we'll use the filename, by default
 		public string DbName
 		{

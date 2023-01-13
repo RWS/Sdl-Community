@@ -20,8 +20,6 @@ namespace TMX_TranslationProvider
 
 		#region ITranslationProviderFactory Members
 
-		private static object _lock = new object();
-		private static Dictionary<string, TmxSearchService> _services = new Dictionary<string, TmxSearchService>();
 
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
 		{
@@ -31,40 +29,9 @@ namespace TMX_TranslationProvider
 			}
 
 			var options = new TmxTranslationsOptions(translationProviderUri);
-			if (options.Guid == "")
-			{
-				// i don't know the GUID - can't cache
-				var service = new TmxSearchService(options);
-				return new TmxTranslationProvider(options, service);
-			}
-
-			lock (_lock)
-			{
-				if (_services.TryGetValue(options.Guid, out var existingService))
-				{
-					// async call
-					existingService.SetOptionsAsync(options);
-					return new TmxTranslationProvider(options, existingService);
-				}
-				else
-				{
-					var service = new TmxSearchService(options);
-					_services.Add(options.Guid, service);
-					return new TmxTranslationProvider(options, service);
-				}
-			}
+			return new TmxTranslationProvider( options );
 		}
 
-		public static void ReplaceSearchService(string guid, TmxSearchService service)
-		{
-			lock (_lock)
-			{
-				if (_services.ContainsKey(guid))
-					_services[guid] = service;
-				else 
-					_services.Add(guid, service);
-			}
-		}
 
 		public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
 		{
