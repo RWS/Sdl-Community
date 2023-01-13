@@ -61,7 +61,7 @@ namespace MicrosoftTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please add API key..
+        ///   Looks up a localized string similar to Can not connect without an API key..
         /// </summary>
         public static string ApiKeyError {
             get {

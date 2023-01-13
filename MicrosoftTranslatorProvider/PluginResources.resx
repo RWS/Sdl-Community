@@ -233,7 +233,7 @@
     <value>Close</value>
   </data>
   <data name="ApiKeyError" xml:space="preserve">
-    <value>Please add API key.</value>
+    <value>Can not connect without an API key.</value>
   </data>
   <data name="BrowseBtn" xml:space="preserve">
     <value>Browse</value>

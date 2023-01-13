@@ -55,7 +55,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				if (_projectLocation == value) return;
 				_projectLocation = value;
 				OnPropertyChanged(nameof(ProjectLocation));
-				ClearMessageRaised?.Invoke();
 			}
 		}
 
@@ -67,7 +66,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				if (_glossaryId == value) return;
 				_glossaryId = value;
 				OnPropertyChanged(nameof(GlossaryId));
-				ClearMessageRaised?.Invoke();
 			}
 		}
 
@@ -79,11 +77,8 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				if (_glossaryPath == value) return;
 				_glossaryPath = value;
 				OnPropertyChanged(nameof(GlossaryPath));
-				ClearMessageRaised?.Invoke();
 			}
 		}
-
-		public event ClearMessageEventRaiser ClearMessageRaised;
 
 		public TranslationOption SelectedTranslationOption
 		{
@@ -94,7 +89,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				_selectedTranslationOption = value;
 				IsMicrosoftSelected = value.ProviderType == MTETranslationOptions.ProviderType.MicrosoftTranslator;
 				OnPropertyChanged(nameof(SelectedTranslationOption));
-				ClearMessageRaised?.Invoke();
 			}
 		}
 
@@ -106,7 +100,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				if (_isMicrosoftSelected == value) return;
 				_isMicrosoftSelected = value;
 				OnPropertyChanged(nameof(IsMicrosoftSelected));
-				ClearMessageRaised?.Invoke();
 			}
 		}
 		public string ClientID
@@ -117,7 +110,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				if (_clientId == value) return;
 				_clientId = value.Trim();
 				OnPropertyChanged(nameof(ClientID));
-				ClearMessageRaised?.Invoke();
 			}
 		}
 
@@ -129,7 +121,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				if (_region == value) return;
 				_region = value;
 				OnPropertyChanged(nameof(Region));
-				ClearMessageRaised?.Invoke();
 			}
 		}
 
@@ -155,7 +146,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				if (_jsonFilePath == value) return;
 				_jsonFilePath = value;
 				OnPropertyChanged(nameof(JsonFilePath));
-				ClearMessageRaised?.Invoke();
 			}
 		}
 
@@ -167,7 +157,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				if (_projectName == value) return;
 				_projectName = value;
 				OnPropertyChanged(nameof(ProjectName));
-				ClearMessageRaised?.Invoke();
 			}
 		}
 

@@ -39,7 +39,5 @@ namespace MicrosoftTranslatorProvider.Interfaces
 		List<TranslationOption> TranslationOptions { get; set; }
 		
 		TranslationOption SelectedTranslationOption { get; set; }
-		
-		event ClearMessageEventRaiser ClearMessageRaised;
 	}
 }

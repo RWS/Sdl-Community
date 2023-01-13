@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using MicrosoftTranslatorProvider.Commands;
+using MicrosoftTranslatorProvider.Helpers;
 using MicrosoftTranslatorProvider.Interfaces;
 using MicrosoftTranslatorProvider.Model;
 using MicrosoftTranslatorProvider.Service;
@@ -26,9 +27,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		private readonly HtmlUtil _htmlUtil;
 		private readonly bool _isTellMeAction;
 
-		private string _translatorErrorResponse;
 		private ViewDetails _selectedView;
-		private string _errorMessage;
 		private bool _dialogResult;
 		private string _multiButtonContent;
 
@@ -89,7 +88,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			set
 			{
 				_selectedView = value;
-				ErrorMessage = string.Empty;
 				OnPropertyChanged(nameof(SelectedView));
 			}
 		}
@@ -112,74 +110,35 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			}
 		}
 
-		public string ErrorMessage
-		{
-			get => _errorMessage;
-			set
-			{
-				if (_errorMessage == value) return;
-				_errorMessage = value;
-				OnPropertyChanged(nameof(ErrorMessage));
-			}
-		}
-
-		public string TranslatorErrorResponse
-		{
-			get => _translatorErrorResponse;
-			set
-			{
-				if (_translatorErrorResponse == value) return;
-				_translatorErrorResponse = value;
-				OnPropertyChanged(nameof(TranslatorErrorResponse));
-			}
-		}
-
-		public void AddEncriptionMetaToResponse(string errorMessage)
-		{
-			const string htmlStart = @"<html>
-<meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
-<body style=""font-family:Segoe Ui!important;color:red!important;font-size:13px!important"">";
-			TranslatorErrorResponse = $"{errorMessage.Insert(0, htmlStart)}\n</body></html>";
-		}
-
 		public bool IsWindowValid()
 		{
-			ErrorMessage = string.Empty;
 			var microsoftOptions = ValidMicrosoftOptions();
 			return microsoftOptions ? ValidSettingsPageOptions() : microsoftOptions;
 		}
 
 		private bool ValidSettingsPageOptions()
 		{
-			if (_settingsControlViewModel.DoPreLookup)
+			if (_settingsControlViewModel.DoPreLookup && string.IsNullOrEmpty(_settingsControlViewModel.PreLookupFileName))
 			{
-				if (string.IsNullOrEmpty(_settingsControlViewModel.PreLookupFileName))
-				{
-					ErrorMessage = PluginResources.PreLookupEmptyMessage;
-					return false;
-				}
-
-				if (!File.Exists(_settingsControlViewModel.PreLookupFileName))
-				{
-					ErrorMessage = PluginResources.PreLookupWrongPathMessage;
-					return false;
-				}
-			}
-
-			if (!_settingsControlViewModel.DoPostLookup)
-			{
-				return true;
-			}
-
-			if (string.IsNullOrEmpty(_settingsControlViewModel.PostLookupFileName))
-			{
-				ErrorMessage = PluginResources.PostLookupEmptyMessage;
+				ErrorHandler.HandleError(PluginResources.PreLookupEmptyMessage, "Pre-lookup");
 				return false;
 			}
 
-			if (!File.Exists(_settingsControlViewModel.PostLookupFileName))
+			if (_settingsControlViewModel.DoPreLookup && !File.Exists(_settingsControlViewModel.PreLookupFileName))
 			{
-				ErrorMessage = PluginResources.PostLookupWrongPathMessage;
+				ErrorHandler.HandleError(PluginResources.PreLookupWrongPathMessage, "Pre-lookup");
+				return false;
+			}
+
+			if (_settingsControlViewModel.DoPostLookup && string.IsNullOrEmpty(_settingsControlViewModel.PostLookupFileName))
+			{
+				ErrorHandler.HandleError(PluginResources.PostLookupEmptyMessage, "Post-lookup");
+				return false;
+			}
+
+			if (_settingsControlViewModel.DoPostLookup && !File.Exists(_settingsControlViewModel.PostLookupFileName))
+			{
+				ErrorHandler.HandleError(PluginResources.PostLookupWrongPathMessage, "Post-lookup");
 				return false;
 			}
 
@@ -190,13 +149,13 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		{
 			if (string.IsNullOrEmpty(_providerControlViewModel.ClientID))
 			{
-				ErrorMessage = PluginResources.ApiKeyError;
+				ErrorHandler.HandleError(PluginResources.ApiKeyError, "API Key");
 				return false;
 			}
 
 			if (_providerControlViewModel.UseCategoryID && string.IsNullOrEmpty(_providerControlViewModel.CategoryID))
 			{
-				ErrorMessage = PluginResources.CatIdError;
+				ErrorHandler.HandleError(PluginResources.CatIdError, "CategoryID");
 				return false;
 			}
 
@@ -265,7 +224,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			}
 			catch (Exception e)
 			{
-				AddEncriptionMetaToResponse(e.Message);
+				ErrorHandler.HandleError(e);
 			}
 
 			return false;
