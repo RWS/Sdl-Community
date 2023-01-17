@@ -8,18 +8,18 @@ namespace MicrosoftTranslatorProvider.TellMe
 	{
 		public CommunityForumAction()
 		{
-			Name = "RWS Community AppStore forum";
+			Name = $"{Constants.MicrosoftNaming_FullName} - Forum";
 		}
 
 		public override bool IsAvailable => true;
 
-		public override string Category => "MT Enhanced Provider";
+		public override string Category => $"{Constants.MicrosoftNaming_FullName}";
 
 		public override Icon Icon => PluginResources.ForumIcon;
 
 		public override void Execute()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/f/160");
+			Process.Start(Constants.TellMe_CommunityForumUrl);
 		}
 	}
 }

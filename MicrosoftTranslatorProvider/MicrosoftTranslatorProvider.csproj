@@ -13,8 +13,7 @@
 	  <None Remove="Resources\Download.ico" />
 	  <None Remove="Resources\ForumIcon.ico" />
 	  <None Remove="Resources\Information.png" />
-	  <None Remove="Resources\microsofttranslatorproviderlogo.png" />
-	  <None Remove="Resources\my_icon.ico" />
+	  <None Remove="Resources\mtp_logo.png" />
 	  <None Remove="Resources\Question.ico" />
 	  <None Remove="Resources\rwslogo.png" />
 	  <None Remove="Resources\Setting.png" />
@@ -145,10 +144,7 @@
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Resource>
 	  <Resource Include="Resources\Information.png" />
-	  <Resource Include="Resources\microsofttranslatorproviderlogo.png" />
-	  <Resource Include="Resources\my_icon.ico">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Resource>
+	  <Resource Include="Resources\mtp_logo.png" />
 	  <Resource Include="Resources\Question.ico">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Resource>

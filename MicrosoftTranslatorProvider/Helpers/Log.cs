@@ -29,7 +29,7 @@ namespace MicrosoftTranslatorProvider.Helpers
 			};
 
 			LogManager.Configuration.AddTarget(target);
-			LogManager.Configuration.AddRuleForAllLevels(target, "*MtEnhanced*");
+			LogManager.Configuration.AddRuleForAllLevels(target, "*MicrosoftTranslatorProvider*");
 			LogManager.ReconfigExistingLoggers();
 		}
 	}

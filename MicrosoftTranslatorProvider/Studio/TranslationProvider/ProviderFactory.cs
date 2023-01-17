@@ -17,7 +17,7 @@ namespace MicrosoftTranslatorProvider
 				throw new Exception(PluginResources.UriNotSupportedMessage);
 			}
 
-			var credential = credentialStore.GetCredential(new Uri(Constants.MicrosoftProviderUriScheme))
+			var credential = credentialStore.GetCredential(new Uri(Constants.MicrosoftProviderFullScheme))
 						  ?? credentialStore.GetCredential(translationProviderUri)
 						  ?? credentialStore.GetCredential(new Uri(translationProviderUri.Scheme + ":///"));
 			if (credential is null)
@@ -42,7 +42,7 @@ namespace MicrosoftTranslatorProvider
 				throw new ArgumentNullException(PluginResources.UriNotSupportedMessage);
 			}
 
-			return string.Equals(translationProviderUri.Scheme, Provider.ListTranslationProviderScheme, StringComparison.OrdinalIgnoreCase);
+			return string.Equals(translationProviderUri.Scheme, Constants.MicrosoftProviderScheme, StringComparison.OrdinalIgnoreCase);
 		}
 
 		public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)

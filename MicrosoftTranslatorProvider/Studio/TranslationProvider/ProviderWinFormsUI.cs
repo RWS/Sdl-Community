@@ -30,7 +30,7 @@ namespace MicrosoftTranslatorProvider.Studio
 		{
 			var options = new MTETranslationOptions();
 			var regionsProvider = new RegionsProvider();
-			var mainWindowDialogResult = ShowProviderWindow(languagePairs, credentialStore, options, regionsProvider).DialogResult;
+			var mainWindowDialogResult = ShowProviderWindow(languagePairs, credentialStore, options, regionsProvider, true).DialogResult;
 
 			var htmlUtil = new HtmlUtil();
 			return mainWindowDialogResult ? new ITranslationProvider[] { new Provider(options, regionsProvider, htmlUtil) }
@@ -82,7 +82,7 @@ namespace MicrosoftTranslatorProvider.Studio
 
 			return new TranslationProviderDisplayInfo
 			{
-				TranslationProviderIcon = PluginResources.my_icon,
+				TranslationProviderIcon = PluginResources.mstp_icon,
 				Name = PluginResources.Microsoft_NiceName,
 				TooltipText = PluginResources.Microsoft_Tooltip,
 				SearchResultImage = isMicrosoftProvider ? PluginResources.microsoft_image : default
@@ -96,10 +96,10 @@ namespace MicrosoftTranslatorProvider.Studio
 				throw new ArgumentNullException(PluginResources.UriNotSupportedMessage);
 			}
 
-			return string.Equals(translationProviderUri.Scheme, Provider.ListTranslationProviderScheme, StringComparison.CurrentCultureIgnoreCase);
+			return string.Equals(translationProviderUri.Scheme, Constants.MicrosoftProviderScheme, StringComparison.CurrentCultureIgnoreCase);
 		}
 
-		private MainWindowViewModel ShowProviderWindow(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, RegionsProvider regionsProvider)
+		private MainWindowViewModel ShowProviderWindow(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, RegionsProvider regionsProvider, bool showSettingsView = false)
 		{
 			SetSavedCredentialsOnUi(credentialStore, loadOptions);
 			var dialogService = new OpenFileDialogService();
@@ -107,8 +107,12 @@ namespace MicrosoftTranslatorProvider.Studio
 			var settingsControlViewModel = new SettingsControlViewModel(loadOptions, dialogService, false);
 			var htmlUtil = new HtmlUtil();
 			var mainWindowViewModel = new MainWindowViewModel(loadOptions,
-															  providerControlViewModel, settingsControlViewModel,
-															  credentialStore, languagePairs, htmlUtil);
+															  providerControlViewModel,
+															  settingsControlViewModel,
+															  credentialStore,
+															  languagePairs,
+															  htmlUtil,
+															  showSettingsView);
 			var mainWindow = new MainWindow
 			{
 				DataContext = mainWindowViewModel
@@ -133,7 +137,7 @@ namespace MicrosoftTranslatorProvider.Studio
 
 		private void SetSavedCredentialsOnUi(ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions)
 		{
-			if (GetCredentialsFromStore(credentialStore, Constants.MicrosoftProviderUriScheme)
+			if (GetCredentialsFromStore(credentialStore, Constants.MicrosoftProviderFullScheme)
 				is not TranslationProviderCredential providerCredentials)
 			{
 				return;
@@ -160,7 +164,7 @@ namespace MicrosoftTranslatorProvider.Studio
 
 		private void SetCredentialsOnCredentialStore(ITranslationProviderCredentialStore credentialStore, string apiKey, bool persistKey)
 		{
-			var uri = new Uri(Constants.MicrosoftProviderUriScheme);
+			var uri = new Uri(Constants.MicrosoftProviderFullScheme);
 			var proiderCredentials = new TranslationProviderCredential(apiKey, persistKey);
 			credentialStore.RemoveCredential(uri);
 			credentialStore.AddCredential(uri, proiderCredentials);

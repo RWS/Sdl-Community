@@ -39,9 +39,5 @@ namespace MicrosoftTranslatorProvider.Interfaces
 		List<TranslationOption> TranslationOptions { get; set; }
 		
 		TranslationOption SelectedTranslationOption { get; set; }
-		
-		ICommand ShowSettingsCommand { get; set; }
-		
-		event ClearMessageEventRaiser ClearMessageRaised;
 	}
 }
