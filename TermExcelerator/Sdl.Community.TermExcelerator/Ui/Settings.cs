@@ -19,6 +19,11 @@ namespace Sdl.Community.TermExcelerator.Ui
 		
 		protected override void OnLoad(EventArgs e)
 		{
+			if (_providerSettings is not null)
+			{
+				return;
+			}
+
 			sourceBox.Text = @"A";
 			targetBox.Text = @"B";
 			approvedBox.Text = @"C";
@@ -103,5 +108,29 @@ namespace Sdl.Community.TermExcelerator.Ui
 			return _providerSettings;
 		}
 
+		public void SetSettings(ProviderSettings settings)
+		{
+			_providerSettings = settings;
+			sourceBox.Text = settings.SourceColumn;
+			targetBox.Text = settings.TargetColumn;
+			approvedBox.Text = settings.ApprovedColumn;
+			separatorTextBox.Text = settings.Separator.ToString();
+
+			var source = GetCultureNames();
+			sourceLanguageComboBox.DataSource = source;
+			sourceLanguageComboBox.DisplayMember = "DisplayName";
+			sourceLanguageComboBox.ValueMember = "Name";
+			var selectedSourceItem = source.Where(s => s.Name == settings.SourceLanguage.Name);
+			sourceLanguageComboBox.SelectedItem = selectedSourceItem.FirstOrDefault();
+
+			var target = GetCultureNames();
+			targetLanguageComboBox.DataSource = target;
+			targetLanguageComboBox.DisplayMember = "DisplayName";
+			targetLanguageComboBox.ValueMember = "Name";
+			var selectedTargetItem = target.Where(s => s.Name == settings.TargetLanguage.Name);
+			targetLanguageComboBox.SelectedItem = selectedTargetItem.FirstOrDefault();
+
+			pathTextBox.Text = settings.TermFilePath;
+		}
 	}
 }
