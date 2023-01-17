@@ -61,10 +61,11 @@ namespace Sdl.Community.TermExcelerator
 
 		public TerminologyProviderDisplayInfo GetDisplayInfo(Uri terminologyProviderUri)
 		{
+			var name = terminologyProviderUri.AbsolutePath.Replace(TerminologyProviderExcel.ExcelUriTemplate, "").Replace("/", "");
 			return new TerminologyProviderDisplayInfo
 			{
-				Name = "Excel",
-				TooltipText = "excel"
+				Name = name,
+				TooltipText = name
 			};
 		}
 	}
