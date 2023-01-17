@@ -56,7 +56,7 @@ namespace Sdl.Community.TermExcelerator
 
 		public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
 		{
-			if (terminologyProvider is not TerminologyProviderExcel provider)
+			if (!(terminologyProvider is TerminologyProviderExcel provider))
 			{
 				return false;
 			}

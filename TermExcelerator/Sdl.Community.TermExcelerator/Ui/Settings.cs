@@ -19,7 +19,7 @@ namespace Sdl.Community.TermExcelerator.Ui
 
 		protected override void OnLoad(EventArgs e)
 		{
-			if (_providerSettings is not null)
+			if (!(_providerSettings is null))
 			{
 				return;
 			}
