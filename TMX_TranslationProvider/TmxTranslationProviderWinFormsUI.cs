@@ -25,6 +25,7 @@ namespace TMX_TranslationProvider
 				return null;
 			var options = new TmxTranslationsOptions(form.Options);
 			var provider = new TmxTranslationProvider(options);
+			provider.UpdateOptions(form.Options);
 			return new []{ provider};
 		}
 

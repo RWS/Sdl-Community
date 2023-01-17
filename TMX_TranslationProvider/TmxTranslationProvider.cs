@@ -50,16 +50,22 @@ namespace TMX_TranslationProvider
 
 		public void SaveState()
 		{
-			// FIXME this can be problematic if we have several TMX providers
 			var currentProject = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
 			var settings = currentProject.GetTranslationProviderConfiguration();
 			var translationProvider = settings.Entries.FirstOrDefault(entry =>
-				entry.MainTranslationProvider.Uri.OriginalString.Contains(TmxTranslationProvider.ProviderScheme));
+				entry.MainTranslationProvider.Uri.OriginalString.StartsWith(TmxTranslationProvider.ProviderScheme)
+				&& new TmxTranslationsOptions(entry.MainTranslationProvider.Uri).OptionsGuid == this.Options.OptionsGuid
+				);
 
 			if (translationProvider != null)
 			{
 				translationProvider.MainTranslationProvider.Uri = _options.Uri();
 				currentProject.UpdateTranslationProviderConfiguration(settings);
+			}
+			else
+			{
+				var newEntry = new TranslationProviderCascadeEntry(new TranslationProviderReference(this.Options.Uri()), true, true, true, 0);
+				settings.Entries.Add(newEntry);
 			}
 		}
 
