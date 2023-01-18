@@ -101,7 +101,7 @@ namespace TMX_Lib.Search
 				break;
 			}
 
-			return Math.Max(penalty, twoConsecutiveMismatchesPenalty) ;
+			return penalty == 0d ? penalty : Math.Max(penalty, twoConsecutiveMismatchesPenalty) ;
 		}
 	}
 }

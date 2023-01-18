@@ -276,7 +276,9 @@ namespace QuickTmxTesting
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en-fr (EU Bookshop v2_10.8M).tmx", "C:\\john\\buff\\TMX Examples\\temp2\\");
 			log.Debug("test started");
 
-			Task.Run(async () => await TestExportToXml()).Wait();
+			Task.Run(async () => await TestSearcherSearch("en-ro-2-copytmx", "You will not know fresh air and flying", SearchType.Exact, "en", "ro")).Wait();
+
+			//Task.Run(async () => await TestExportToXml()).Wait();
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\fails\\opensubtitlingformat.tmx", "C:\\john\\buff\\TMX Examples\\temp3\\");
 
 			//Task.Run(() => await TestImportFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro-2", quickImport: true)).Wait();
