@@ -88,6 +88,8 @@
     <Compile Include="Search\TmxSearchService.cs" />
     <Compile Include="Search\TmxSearchServiceProvider.cs" />
     <Compile Include="Search\TmxSearchSettings.cs" />
+    <Compile Include="TokenizeUtil\ComputeEditDistance.cs" />
+    <Compile Include="TokenizeUtil\TokenizeText.cs" />
     <Compile Include="Utils\CompareLanguages.cs" />
     <Compile Include="Utils\CultureDictionary.cs" />
     <Compile Include="Utils\GlobalSettings.cs" />

@@ -10,6 +10,7 @@ using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.ProjectAutomation.Settings;
 using TMX_Lib.Concordance;
 using TMX_Lib.Db;
+using TMX_Lib.TokenizeUtil;
 using TMX_Lib.Utils;
 
 namespace TMX_Lib.Search
@@ -21,27 +22,45 @@ namespace TMX_Lib.Search
 		private LanguageArray _supportedLanguages = new LanguageArray();
 		private CultureDictionary _cultures = new CultureDictionary();
 
+
 		private class SimpleResults
 		{
+			private TokenizeText _tokenizeText = new TokenizeText();
+			public List<SimpleResult> Results = new List<SimpleResult>();
+
+
+			private Segment CreateTokenizedSegment(string text, CultureInfo language) => _tokenizeText.CreateTokenizedSegment(text, language);
+			private Segment CreateSimpleSegment(string text, CultureInfo language)
+			{
+				var segment = new Segment(language);
+				segment.Add(text);
+				return segment;
+			}
+
+			private Segment CreateSourceSegment(string text, LanguagePair pair, SearchMode mode)
+			{
+				var language = mode == SearchMode.TargetConcordanceSearch ? pair.TargetCulture : pair.SourceCulture;
+				var isConcordance = mode == SearchMode.ConcordanceSearch || mode == SearchMode.TargetConcordanceSearch;
+				var segment = isConcordance ? CreateSimpleSegment(text, language) : CreateTokenizedSegment(text, language);
+				return segment;
+			}
+
 			public SearchResults ToSearchResults(string text, TmxSearchSettings settings, LanguagePair language)
 			{
-				var source = new Segment();
-				source.Add(text);
 				var searchResults = new SearchResults
 				{
-					SourceSegment = source
+					SourceSegment = CreateSourceSegment(text, language, settings.Mode),
 				};
 				foreach (var result in Results)
 				{
 					if (settings.IsConcordanceSearch)
 						searchResults.Add(new ConcordanceTokenizer(result, settings, language.SourceCulture, language.TargetCulture, text).Result);
 					else 
-						searchResults.Add(result.ToSearchResult(settings, language.SourceCulture, language.TargetCulture));
+						searchResults.Add(result.ToSearchResult(text, settings, language.SourceCulture, language.TargetCulture));
 
 				}
 				return searchResults;
 			}
-			public List<SimpleResult> Results = new List<SimpleResult>();
 		}
 
 		public TmxSearch(TmxMongoDb db)

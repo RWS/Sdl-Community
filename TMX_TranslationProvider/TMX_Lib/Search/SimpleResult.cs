@@ -9,6 +9,7 @@ using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using TMX_Lib.Db;
+using TMX_Lib.TokenizeUtil;
 
 namespace TMX_Lib.Search
 {
@@ -43,6 +44,17 @@ namespace TMX_Lib.Search
 		public bool IsExactMatch => Score >= 100;
 
 		public List<PenaltyType> Penalties = new List<PenaltyType>();
+
+		private TokenizeText _tokenizeText = new TokenizeText();
+		private ComputeEditDistance _computeEditDistance = new ComputeEditDistance();
+
+		private Segment CreateTokenizedSegment(string text, CultureInfo language) => _tokenizeText.CreateTokenizedSegment(text, language);
+		private Segment CreateSimpleSegment(string text, CultureInfo language)
+		{
+			var segment = new Segment(language);
+			segment.Add(text);
+			return segment;
+		}
 
 		public SimpleResult(TmxSegment segment)
 		{
@@ -82,25 +94,23 @@ namespace TMX_Lib.Search
 			tu.SystemFields.ChangeUser = Segment.DbTU.ChangeAuthor;
 		}
 
-		// FIXME tokenize it!
-		public SearchResult ToSearchResult(TmxSearchSettings settings, CultureInfo sourceLanguage, CultureInfo targetLanguage)
+		public SearchResult ToSearchResult(string originalText, TmxSearchSettings settings, CultureInfo sourceLanguage, CultureInfo targetLanguage)
 		{
 			var isTargetConcordance = settings.Mode == SearchMode.TargetConcordanceSearch;
 			if (!isTargetConcordance)
-				return ToNormalSearchResult(settings, sourceLanguage, targetLanguage);
+				return ToNormalSearchResult(originalText, settings, sourceLanguage, targetLanguage);
 			else
-				return ToReverseSearchResult(settings, sourceLanguage, targetLanguage);
+				return ToReverseSearchResult(originalText, settings, sourceLanguage, targetLanguage);
 		}
 
-		private SearchResult ToNormalSearchResult(TmxSearchSettings settings, CultureInfo sourceLanguage, CultureInfo targetLanguage)
+		private SearchResult ToNormalSearchResult(string originalText, TmxSearchSettings settings, CultureInfo sourceLanguage, CultureInfo targetLanguage)
 		{
 			if (Segment.DbSourceText == null || Segment.DbTargetText == null)
 				throw new TmxException("Invalid simple result, bad source/target text");
 
-			var source = new Segment(sourceLanguage);
-			var target = new Segment(targetLanguage);
-			source.Add(Segment.SourceText);
-			target.Add(Segment.TargetText);
+			var isConcordance = settings.Mode == SearchMode.ConcordanceSearch || settings.Mode == SearchMode.TargetConcordanceSearch;
+			var source = isConcordance ? CreateSimpleSegment(Segment.SourceText, sourceLanguage) :  CreateTokenizedSegment(Segment.SourceText, sourceLanguage);
+			var target = CreateSimpleSegment(Segment.TargetText, targetLanguage);
 			var tu = new TranslationUnit
 			{
 				SourceSegment = source,
@@ -116,6 +126,8 @@ namespace TMX_Lib.Search
 				},
 				TranslationProposal = tu,
 			};
+			if (!isConcordance)
+				sr.ScoringResult.EditDistance = _computeEditDistance.Compute(originalText, Segment.SourceText);
 
 			foreach (var penalty in Penalties)
 				AddPenalty(sr, penalty, settings);
@@ -123,15 +135,13 @@ namespace TMX_Lib.Search
 			return sr;
 		}
 
-		private SearchResult ToReverseSearchResult(TmxSearchSettings settings, CultureInfo sourceLanguage, CultureInfo targetLanguage)
+		private SearchResult ToReverseSearchResult(string originalText, TmxSearchSettings settings, CultureInfo sourceLanguage, CultureInfo targetLanguage)
 		{
 			if (Segment.DbSourceText == null || Segment.DbTargetText == null)
 				throw new TmxException("Invalid simple result, bad source/target text");
 
-			var source = new Segment(targetLanguage);
-			var target = new Segment(sourceLanguage);
-			source.Add(Segment.TargetText);
-			target.Add(Segment.SourceText);
+			var source = CreateTokenizedSegment(Segment.TargetText, targetLanguage);
+			var target = CreateSimpleSegment(Segment.SourceText, sourceLanguage);
 			var tu = new TranslationUnit
 			{
 				SourceSegment = source,
@@ -139,11 +149,13 @@ namespace TMX_Lib.Search
 				ConfirmationLevel = ConfirmationLevel,
 			};
 			UpdateTU(tu);
+			var distance = _computeEditDistance.Compute(originalText, Segment.TargetText);
 			var sr = new SearchResult(tu)
 			{
 				ScoringResult = new ScoringResult
 				{
 					BaseScore = Score,
+					EditDistance = distance,
 				},
 				TranslationProposal = tu,
 			};

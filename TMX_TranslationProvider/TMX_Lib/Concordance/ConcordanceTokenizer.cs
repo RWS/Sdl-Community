@@ -37,7 +37,7 @@ namespace TMX_Lib.Concordance
 		private void ComputeSearchResult()
 		{
 			var isSourceConcordance = _settings.Mode == SearchMode.ConcordanceSearch;
-			var searchResult = _simpleResult.ToSearchResult(_settings, _sourceLanguage, _targetLanguage);
+			var searchResult = _simpleResult.ToSearchResult(_searchText, _settings, _sourceLanguage, _targetLanguage);
 			var tu = searchResult.TranslationProposal;
 			if (isSourceConcordance)
 			{
