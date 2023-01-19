@@ -31,7 +31,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private ICommand _saveCommand;
 		private ICommand _resetToDefaultsCommand;
 		private ICommand _viewLanguageMappingsCommand;
-		private ICommand _navigateToWikiCommand;
+		private ICommand _navigateToCommand;
 
 		private bool _reSendChecked;
 		private LanguageMappingModel _selectedLanguageMappingModel;
@@ -52,20 +52,12 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			LoadLanguageMappings();
 		}
 
-		public ICommand SaveCommand => _saveCommand ?? (_saveCommand = new RelayCommand(Save));
-		public ICommand NavigateToWikiCommand => _navigateToWikiCommand ?? (_navigateToWikiCommand = new RelayCommand(NavigateToWiki));
+		public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save);
+		public ICommand NavigateToCommand => _navigateToCommand ??= new RelayCommand(NavigateTo);
 
-		private void NavigateToWiki(object obj)
-		{
-			Process.Start(
-				"https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/5561/rating-translations");
-		}
+		public ICommand ResetToDefaultsCommand => _resetToDefaultsCommand ??= new RelayCommand(ResetToDefaults);
 
-		public ICommand ResetToDefaultsCommand => _resetToDefaultsCommand
-														?? (_resetToDefaultsCommand = new RelayCommand(ResetToDefaults));
-
-		public ICommand ViewLanguageMappingsCommand => _viewLanguageMappingsCommand
-														?? (_viewLanguageMappingsCommand = new RelayCommand(ViewLanguageMappings));
+		public ICommand ViewLanguageMappingsCommand => _viewLanguageMappingsCommand ??= new RelayCommand(ViewLanguageMappings);
 
 		public Window Owner { get; }
 
@@ -298,6 +290,26 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				{
 					Mouse.OverrideCursor = Cursors.Arrow;
 				}
+			}
+		}
+
+		private void NavigateTo(object parameter)
+		{
+			const string WikiUrl = "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/5561/rating-translations";
+			const string AccountUrl = "https://portal.languageweaver.com/settings/account";
+
+			switch (parameter as string)
+			{
+				case "wiki":
+					Process.Start(WikiUrl);
+					break;
+
+				case "account":
+					Process.Start(AccountUrl);
+					break;
+
+				default:
+					break;
 			}
 		}
 
