@@ -66,10 +66,11 @@
 						<TextBlock Text="{x:Static root:PluginResources.ProviderControl_RegionFieldName}"
 								   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
 								   FontSize="14"
-								   Margin="0" />
+								   Margin="0 0 2 2" />
 						<Image Source="../Resources/Information.png"
-							   Width="15"
-							   ToolTip="{x:Static root:PluginResources.ProviderControl_RegionToolTip}" />
+							   Width="14"
+							   ToolTip="{x:Static root:PluginResources.ProviderControl_RegionToolTip}"
+							   Margin="0"/>
 					</StackPanel>
 
 					<StackPanel HorizontalAlignment="Stretch"
@@ -104,13 +105,13 @@
 								<TextBlock Text="{x:Static root:PluginResources.CatIdDescription}"
 										   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
 										   FontSize="14"
-										   Margin="0" />
+										   Margin="0 0 2 2" />
 							</CheckBox.Content>
 						</CheckBox>
 
 						<Image Source="../Resources/Information.png"
 							   Width="14"
-							   Margin="0"
+							   Margin="0 0 0 2"
 							   ToolTip="{x:Static root:PluginResources.ProviderControl_CategoryToolTip}" />
 					</StackPanel>
 
