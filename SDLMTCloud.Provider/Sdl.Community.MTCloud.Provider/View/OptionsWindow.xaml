@@ -1,23 +1,27 @@
 ﻿<Window x:Class="Sdl.Community.MTCloud.Provider.View.OptionsWindow"
-			xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-			xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-			xmlns:helpers="clr-namespace:Sdl.Community.MTCloud.Provider.Helpers"
-			xmlns:converters="clr-namespace:Sdl.Community.MTCloud.Provider.Converters"		
-			xmlns:viewModel="clr-namespace:Sdl.Community.MTCloud.Provider.ViewModel"
-			xmlns:controls="clr-namespace:Sdl.Community.MTCloud.Provider.Controls"
-			xmlns:model="clr-namespace:Sdl.Community.MTCloud.Provider.Model"
-			xmlns:rsx ="clr-namespace:Sdl.Community.MTCloud.Provider"
-			xmlns:provider="clr-namespace:Sdl.Community.MTCloud.Languages.Provider;assembly=Sdl.Community.MTCloud.Languages.Provider"
-			helpers:WindowCloser.DialogResult="{Binding DialogResult}"
-			WindowStartupLocation="CenterScreen" 
-			mc:Ignorable="d"
-			WindowStyle="None" 
-			AllowsTransparency="True"
-			ResizeMode="CanResizeWithGrip"
-			d:DesignHeight="450" Height="570" Width="920" MinHeight="500" MinWidth="900"
-			d:DataContext="{d:DesignInstance viewModel:OptionsViewModel}">
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:helpers="clr-namespace:Sdl.Community.MTCloud.Provider.Helpers"
+		xmlns:converters="clr-namespace:Sdl.Community.MTCloud.Provider.Converters"
+		xmlns:viewModel="clr-namespace:Sdl.Community.MTCloud.Provider.ViewModel"
+		xmlns:controls="clr-namespace:Sdl.Community.MTCloud.Provider.Controls"
+		xmlns:model="clr-namespace:Sdl.Community.MTCloud.Provider.Model"
+		xmlns:rsx="clr-namespace:Sdl.Community.MTCloud.Provider"
+		xmlns:provider="clr-namespace:Sdl.Community.MTCloud.Languages.Provider;assembly=Sdl.Community.MTCloud.Languages.Provider"
+		helpers:WindowCloser.DialogResult="{Binding DialogResult}"
+		WindowStartupLocation="CenterScreen"
+		mc:Ignorable="d"
+		WindowStyle="None"
+		AllowsTransparency="True"
+		ResizeMode="CanResizeWithGrip"
+		d:DesignHeight="450"
+		Height="570"
+		Width="920"
+		MinHeight="500"
+		MinWidth="900"
+		d:DataContext="{d:DesignInstance viewModel:OptionsViewModel}">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -66,13 +70,20 @@
 			</Grid.RowDefinitions>
 
 			<!-- BORDER CONTROL -->
-			<controls:WindowsControl Grid.Column="0" Grid.Row="0" DockPanel.Dock="Top"/>
-			<Image Grid.Row="0" Grid.Column="0" Height="40" Stretch="Uniform" HorizontalAlignment="Center" Margin="0 10 0 0"
-			       RenderOptions.BitmapScalingMode="HighQuality"
-			       RenderOptions.EdgeMode="Aliased"
-			       VerticalAlignment="Top"  IsHitTestVisible="False"
-			       Source="pack://application:,,,/LanguageWeaver;component/Resources/LWLogo.png"/>
-			
+			<controls:WindowsControl Grid.Column="0"
+									 Grid.Row="0"
+									 DockPanel.Dock="Top" />
+			<Image Grid.Row="0"
+				   Grid.Column="0"
+				   Height="40"
+				   Stretch="Uniform"
+				   HorizontalAlignment="Center"
+				   Margin="0 10 0 0"
+				   RenderOptions.BitmapScalingMode="HighQuality"
+				   RenderOptions.EdgeMode="Aliased"
+				   VerticalAlignment="Top"
+				   IsHitTestVisible="False"
+				   Source="pack://application:,,,/LanguageWeaver;component/Resources/LWLogo.png" />
 
 			<Border Background="White"
 					Grid.Column="0"
@@ -354,7 +365,6 @@
 								Margin="15,0,15,0" />
 					</StackPanel>
 				</Grid>
-
 			</Border>
 		</Grid>
 	</Border>

@@ -296,8 +296,10 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private void NavigateTo(object parameter)
 		{
 			const string WikiUrl = "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/5561/rating-translations";
-			const string AccountUrl = "https://portal.languageweaver.com/settings/account";
+			const string AccountUrl_UE = "https://portal.languageweaver.com/settings/account";
+			const string AccountUrl_US = "https://us.portal.languageweaver.com/settings/account";
 
+			var region = _provider.TranslationService.ConnectionService.Credential.AccountRegion.ToString().ToLower();
 			switch (parameter as string)
 			{
 				case "wiki":
@@ -305,7 +307,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					break;
 
 				case "account":
-					Process.Start(AccountUrl);
+					Process.Start(region.Contains("us") ? AccountUrl_US : AccountUrl_UE);
 					break;
 
 				default:
