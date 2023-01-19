@@ -11,14 +11,13 @@ using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Model;
-using Sdl.Community.MTCloud.Provider.Studio;
 using Sdl.Community.MTCloud.Provider.Studio.TranslationProvider;
 using Sdl.Community.MTCloud.Provider.View;
 using Sdl.LanguagePlatform.Core;
 using Application = System.Windows.Forms.Application;
 using Cursors = System.Windows.Input.Cursors;
-using MessageBox = System.Windows.Forms.MessageBox;
 using LogManager = NLog.LogManager;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
@@ -118,7 +117,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			get => _sendFeedback;
 			set
 			{
-				_sendFeedback = value; 
+				_sendFeedback = value;
 				OnPropertyChanged(nameof(SendFeedback));
 			}
 		}
