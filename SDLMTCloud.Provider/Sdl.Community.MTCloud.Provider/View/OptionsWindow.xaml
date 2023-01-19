@@ -319,16 +319,7 @@
 					<StackPanel Orientation="Horizontal"
 								HorizontalAlignment="Left"
 								VerticalAlignment="Bottom">
-						
-						<Button Content="Manage Account"
-								Style="{StaticResource Sdl.Button.PrimaryStyle}"
-								Command="{Binding NavigateToCommand}"
-								CommandParameter="account"
-								VerticalAlignment="Bottom"
-								Margin="0 0 15 0"
-								Padding="16 0"
-								Height="26" />
-						
+
 						<Button Style="{StaticResource ButtonStyleShadowless}"
 								VerticalAlignment="Bottom"
 								Margin="0,0,15,0"
@@ -340,6 +331,15 @@
 								Margin="0,0,15,0"
 								Content="View Language Mapping"
 								Command="{Binding ViewLanguageMappingsCommand}" />
+
+						<Button Content="Manage Account"
+								Style="{StaticResource Sdl.Button.PrimaryStyle}"
+								Command="{Binding NavigateToCommand}"
+								CommandParameter="account"
+								VerticalAlignment="Bottom"
+								Margin="0 0 15 0"
+								Padding="16 0"
+								Height="26" />
 					</StackPanel>
 
 					<StackPanel Orientation="Horizontal"
