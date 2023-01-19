@@ -27,9 +27,9 @@ namespace QuickTmxTesting
     {
 	    private static readonly Logger log = NLog.LogManager.GetCurrentClassLogger();
 
-	    private static async Task ImportFileAsync(string file, string dbName, bool quickImport = false)
+	    private static async Task ImportFileAsync(string file, string dbName, bool quickImport = false, int entryiesPerTextTable = TmxMongoDb.DEFAULT_ENTRIES_PER_TEXT_TABLE)
 	    {
-		    var db = new TmxMongoDb(dbName);
+		    var db = new TmxMongoDb(dbName, entryiesPerTextTable);
 		    await db.ImportToDbAsync(file, (r) =>
 		    {
 				log.Debug($"report: read {r.TUsRead}, ignored {r.TUsWithSyntaxErrors}, success={r.TUsImportedSuccessfully}, invalid={r.TUsWithInvalidChars}, spent={r.ReportTimeSecs} secs");
@@ -276,12 +276,12 @@ namespace QuickTmxTesting
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en-fr (EU Bookshop v2_10.8M).tmx", "C:\\john\\buff\\TMX Examples\\temp2\\");
 			log.Debug("test started");
 
-			Task.Run(async () => await TestSearcherSearch("en-ro-2-copytmx", "You will not know fresh air and flying", SearchType.Exact, "en", "ro")).Wait();
+			//Task.Run(async () => await TestSearcherSearch("en-ro-2-copytmx", "You will not know fresh air and flying", SearchType.Exact, "en", "ro")).Wait();
 
 			//Task.Run(async () => await TestExportToXml()).Wait();
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\fails\\opensubtitlingformat.tmx", "C:\\john\\buff\\TMX Examples\\temp3\\");
 
-			//Task.Run(() => await TestImportFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro-2", quickImport: true)).Wait();
+			Task.Run(async() => await ImportFileAsync("C:\\john\\buff\\TMX Examples\\en-ro-2-copy.tmx", "en-ro-2-test2", entryiesPerTextTable: 100000)).Wait();
 
 			//Task.Run(() => TestImportFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro-2", quickImport: true)).Wait();
 			//Task.Run(() => TestImportFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\ko-zh.tmx", "kozh", quickImport: false)).Wait();

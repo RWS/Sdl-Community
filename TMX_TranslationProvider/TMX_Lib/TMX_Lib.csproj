@@ -76,6 +76,7 @@
     <Compile Include="Db\TmxMongoDb.cs" />
     <Compile Include="Db\TmxSegment.cs" />
     <Compile Include="Db\TmxText.cs" />
+    <Compile Include="Db\TmxTextsArray.cs" />
     <Compile Include="Db\TmxTranslationUnit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Search\ISearchServiceParameters.cs" />

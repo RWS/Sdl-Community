@@ -26,7 +26,7 @@ namespace TMX_TranslationProvider
 			var options = new TmxTranslationsOptions(form.Options);
 			var provider = new TmxTranslationProvider(options);
 			provider.UpdateOptions(form.Options);
-			return new []{ provider};
+			return new []{ provider };
 		}
 
 		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
