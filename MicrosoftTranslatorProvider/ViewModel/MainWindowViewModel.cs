@@ -280,7 +280,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				var requestedType = parameter is not null ? parameter as string
 														  : SelectedView.Name != ViewDetails_Provider ? ViewDetails_Provider
 																									  : ViewDetails_Settings;
-				MultiButtonContent = MultiButtonContent == "Provider" ? "Settings" : "Provider";
+				MultiButtonContent = requestedType == ViewDetails_Provider ? "Settings" : "Provider";
 				SelectedView = AvailableViews.FirstOrDefault(x => x.Name == requestedType);
 			}
 			catch { }
