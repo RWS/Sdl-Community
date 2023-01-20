@@ -17,9 +17,9 @@
 		ResizeMode="CanResizeWithGrip"
 		d:DesignHeight="450"
 		Height="570"
-		Width="920"
+		Width="1200"
 		MinHeight="500"
-		MinWidth="900"
+		MinWidth="1200"
 		d:DataContext="{d:DesignInstance viewModel:OptionsViewModel}">
 	<Window.Resources>
 		<ResourceDictionary>
@@ -127,7 +127,7 @@
 												CanUserSort="True"
 												IsReadOnly="True"
 												SortMemberPath="ProjectLanguagePair"
-												HeaderStyle="{StaticResource NoRightBorderColumnHeaderStyle}">
+												HeaderStyle="{StaticResource StandardColumnHeaderStyle}">
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate DataType="model:LanguageMappingModel">
 									<StackPanel Orientation="Horizontal">
@@ -144,7 +144,7 @@
 						<DataGridTemplateColumn Header="Source"
 												CanUserSort="True"
 												SortMemberPath="SelectedMTCodeSource.CodeName"
-												HeaderStyle="{StaticResource NoRightBorderColumnHeaderStyle}">
+												HeaderStyle="{StaticResource StandardColumnHeaderStyle}">
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate DataType="model:LanguageMappingModel">
 									<ComboBox ItemsSource="{Binding SourceLanguages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -184,7 +184,7 @@
 						<DataGridTemplateColumn Header="Target"
 												CanUserSort="True"
 												SortMemberPath="SelectedMTCodeTarget.CodeName"
-												HeaderStyle="{StaticResource NoRightBorderColumnHeaderStyle}">
+												HeaderStyle="{StaticResource StandardColumnHeaderStyle}">
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate DataType="model:LanguageMappingModel">
 									<ComboBox ItemsSource="{Binding TargetLanguages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -224,7 +224,7 @@
 						<DataGridTemplateColumn Header="Model"
 												CanUserSort="True"
 												SortMemberPath="SelectedModelOption.DisplayName"
-												HeaderStyle="{StaticResource NoRightBorderColumnHeaderStyle}">
+												HeaderStyle="{StaticResource StandardColumnHeaderStyle}">
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate DataType="model:LanguageMappingModel">
 									<ComboBox ItemsSource="{Binding Models, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
@@ -266,8 +266,7 @@
 												CanUserSort="True"
 												SortMemberPath="SelectedMTCloudDictionary.Name"
 												IsReadOnly="True"
-												Width="*"
-												HeaderStyle="{StaticResource NoRightBorderColumnHeaderStyle}">
+												HeaderStyle="{StaticResource StandardColumnHeaderStyle}">
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate DataType="model:LanguageMappingModel">
 									<ComboBox  ItemsSource="{Binding Dictionaries,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
@@ -305,7 +304,50 @@
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
+						<DataGridTemplateColumn Header="Formality"
+												IsReadOnly="True"
+												Width="*"
+												HeaderStyle="{StaticResource StandardColumnHeaderStyle}">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate DataType="model:LanguageMappingModel">
+									<ComboBox  ItemsSource="{Binding Formalities,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+											   Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
+											   IsReadOnly="True"
+											   SelectedItem="{Binding SelectedFormality, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+											   Cursor="Hand"
+											   Background="Transparent"
+											   BorderThickness="1"
+											   BorderBrush="Transparent">
+										<ComboBox.ItemContainerStyle>
+											<Style TargetType="ComboBoxItem">
+												<Setter Property="Background"
+														Value="Transparent" />
+												<Setter Property="BorderBrush"
+														Value="Transparent" />
+											</Style>
+										</ComboBox.ItemContainerStyle>
+										<ComboBox.ItemTemplate>
+											<DataTemplate>
+												<StackPanel Orientation="Horizontal">
+													<Image Source="../Resources/dictionaryIcon.ico"
+														   Width="15"
+														   Height="15"
+														   Margin="6,3,5,0" />
+													<TextBlock Text="{Binding Name}"
+															   ToolTip="{Binding Name}"
+															   Margin="15,2,0,0"
+															   FontFamily="Calibri"
+															   VerticalAlignment="Center" />
+												</StackPanel>
+											</DataTemplate>
+										</ComboBox.ItemTemplate>
+									</ComboBox>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
 					</DataGrid.Columns>
+					
+					
 				</controls:SortAwareDataGrid>
 				<StackPanel Grid.Row="1">
 					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}"

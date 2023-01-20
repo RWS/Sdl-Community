@@ -55,52 +55,61 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			var cloudDictionaries = new List<MTCloudDictionary>();
 
-			if (Dictionaries != null)
+			if (Dictionaries == null)
 			{
-				var dictionaries = Dictionaries.Where(a =>
-					a.Source.Equals(mtCloudSource.CodeName, StringComparison.InvariantCultureIgnoreCase) &&
-						a.Target.Equals(mtCloudTarget.CodeName, StringComparison.InvariantCultureIgnoreCase)).ToList();
+				return cloudDictionaries;
+			}
 
-				if (dictionaries.Any())
-				{
-					cloudDictionaries.AddRange(dictionaries);
-				}
+			var dictionaries = Dictionaries.Where(a =>
+				a.Source.Equals(mtCloudSource.CodeName, StringComparison.InvariantCultureIgnoreCase)
+			 && a.Target.Equals(mtCloudTarget.CodeName, StringComparison.InvariantCultureIgnoreCase))
+				.ToList();
 
-				if (cloudDictionaries.Count == 0)
-				{
-					cloudDictionaries.Add(new MTCloudDictionary { Name = PluginResources.Message_No_dictionary_available, DictionaryId = string.Empty });
-				}
-				else if (!cloudDictionaries.Exists(a => a.Name == PluginResources.Message_No_dictionary))
-				{
-					cloudDictionaries.Insert(0, new MTCloudDictionary { Name = PluginResources.Message_No_dictionary, DictionaryId = string.Empty });
-				}
+			if (dictionaries.Any())
+			{
+				cloudDictionaries.AddRange(dictionaries);
+			}
+
+			if (cloudDictionaries.Count == 0)
+			{
+				cloudDictionaries.Add(new MTCloudDictionary { Name = PluginResources.Message_No_dictionary_available, DictionaryId = string.Empty });
+			}
+			else if (!cloudDictionaries.Exists(a => a.Name == PluginResources.Message_No_dictionary))
+			{
+				cloudDictionaries.Insert(0, new MTCloudDictionary { Name = PluginResources.Message_No_dictionary, DictionaryId = string.Empty });
 			}
 
 			return cloudDictionaries;
 		}
 
+		public List<Formality> GetFormalities()
+		{
+			return new List<Formality>() { new Formality { Name = "!TEST! Not implemented yet" } };
+		}
+
 		public List<MTCloudLanguage> GetMTCloudLanguages(MappedLanguage mappedLanguage, CultureInfo cultureInfo)
 		{
 			var languageMappings = new List<MTCloudLanguage>();
+			if (mappedLanguage == null)
+			{
+				return languageMappings;
+			}
 
-			if (mappedLanguage != null)
+			languageMappings.Add(new MTCloudLanguage
+			{
+				CodeName = mappedLanguage.MTCode,
+				IsLocale = false,
+				Flag = SetLanguageFlag(cultureInfo)
+			});
+
+			if (!string.IsNullOrEmpty(mappedLanguage.MTCodeLocale))
 			{
 				languageMappings.Add(new MTCloudLanguage
 				{
-					CodeName = mappedLanguage.MTCode,
-					IsLocale = false,
+					CodeName = mappedLanguage.MTCodeLocale,
+					IsLocale = true,
 					Flag = SetLanguageFlag(cultureInfo)
 				});
-
-				if (!string.IsNullOrEmpty(mappedLanguage.MTCodeLocale))
-				{
-					languageMappings.Add(new MTCloudLanguage
-					{
-						CodeName = mappedLanguage.MTCodeLocale,
-						IsLocale = true,
-						Flag = SetLanguageFlag(cultureInfo)
-					});
-				}
 			}
 
 			return languageMappings;

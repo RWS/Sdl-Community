@@ -6,16 +6,18 @@ namespace Sdl.Community.MTCloud.Provider.Model
 {
 	[DataContract]
 	public class LanguageMappingModel : BaseViewModel
-	{	
+	{
 		private MTCloudLanguage _selectedSource;
 		private MTCloudLanguage _selectedTarget;
-		private TranslationModel _selectedModel;		
+		private TranslationModel _selectedModel;
 		private MTCloudDictionary _selectedDictionary;
+		private Formality _selectedFormality;
 
 		private List<MTCloudLanguage> _sourceLanguages;
 		private List<MTCloudLanguage> _targetLanguages;
-		private List<TranslationModel> _models;	
+		private List<TranslationModel> _models;
 		private List<MTCloudDictionary> _dictionaries;
+		private List<Formality> _formalities;
 
 		[DataMember]
 		public string Name { get; set; }
@@ -81,6 +83,17 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		}
 
 		[DataMember]
+		public Formality SelectedFormality
+		{
+			get => _selectedFormality;
+			set
+			{
+				_selectedFormality = value;
+				OnPropertyChanged(nameof(SelectedFormality));
+			}
+		}
+
+		[DataMember]
 		public List<MTCloudLanguage> SourceLanguages
 		{
 			get => _sourceLanguages;
@@ -102,7 +115,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			}
 		}
 
-		
+
 		public List<TranslationModel> Models
 		{
 			get => _models;
@@ -113,7 +126,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			}
 		}
 
-		
+
 		public List<MTCloudDictionary> Dictionaries
 		{
 			get => _dictionaries;
@@ -122,6 +135,17 @@ namespace Sdl.Community.MTCloud.Provider.Model
 				_dictionaries = value;
 				OnPropertyChanged(nameof(Dictionaries));
 			}
-		}		
+		}
+
+		[DataMember]
+		public List<Formality> Formalities
+		{
+			get => _formalities;
+			set
+			{
+				_formalities = value;
+				OnPropertyChanged(nameof(Formalities));
+			}
+		}
 	}
 }

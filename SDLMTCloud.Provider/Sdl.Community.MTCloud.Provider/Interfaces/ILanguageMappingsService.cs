@@ -31,5 +31,7 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 
 
 		List<MTCloudLanguage> GetMTCloudLanguages(MappedLanguage mappedLanguage, CultureInfo cultureInfo);
+
+		List<Formality> GetFormalities();
 	}
 }

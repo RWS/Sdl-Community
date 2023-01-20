@@ -233,6 +233,11 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				dictionaries.FirstOrDefault(a => a.Name.Equals(mapping.SavedLanguageMappingModel?.SelectedDictionary?.Name))
 				?? dictionaries[0];
 
+			var formalities = LanguageMappingsService.GetFormalities();
+			var selectedFormality =
+				formalities.FirstOrDefault(x => x.Name.Equals(mapping?.SavedLanguageMappingModel?.SelectedFormality?.Name))
+			 ?? formalities.FirstOrDefault();
+
 			var languageMappingModel = new LanguageMappingModel
 			{
 				Name = mapping.Name,
@@ -245,7 +250,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				Models = mapping.EngineModels,
 				SelectedModel = selectedModel,
 				Dictionaries = dictionaries,
-				SelectedDictionary = selectedDictionary
+				SelectedDictionary = selectedDictionary,
+				Formalities = formalities,
+				SelectedFormality = selectedFormality
 			};
 
 			return languageMappingModel;
