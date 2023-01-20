@@ -57,7 +57,7 @@ namespace TMX_Lib.Utils
 	public static class LogUtil
 	{
 		public static string LogFileName => Path.Combine(Util.PluginDirectory, "TMX_lib.txt");
-		public static void Setup()
+		public static void Setup(bool logToConsole = false)
 		{
 			var config = new LoggingConfiguration();
 
@@ -75,6 +75,10 @@ namespace TMX_Lib.Utils
 				Layout = "${logger}: ${longdate} ${level} ${message}  ${exception}", 
 				Name = "debug",
 			};
+			var consoleTarget = new ConsoleTarget {
+				Layout = "${longdate} ${level} ${message}  ${exception}",
+				Name = "console",
+			};
 
 			config.AddTarget(target);
 			config.AddRuleForAllLevels(target);
@@ -82,6 +86,10 @@ namespace TMX_Lib.Utils
 			{
 				config.AddTarget(debugTarget);
 				config.AddRuleForAllLevels(debugTarget);
+			}
+			if (logToConsole) {
+				config.AddTarget(consoleTarget);
+				config.AddRuleForAllLevels(consoleTarget);
 			}
 
 			LogManager.Configuration = config;

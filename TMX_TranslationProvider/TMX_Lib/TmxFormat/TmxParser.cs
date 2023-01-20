@@ -44,7 +44,6 @@ namespace TMX_Lib.TmxFormat
 
 		public IReadOnlyList<string> Languages()
 		{
-			Debug.Assert(_splitter?.EndOfStreamReached ?? false);
 			return _languagesSet.ToList();
 		}
         private HashSet<string> _languagesSet = new HashSet<string>();

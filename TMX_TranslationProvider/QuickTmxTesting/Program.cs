@@ -16,6 +16,7 @@ using TMX_Lib.TmxFormat;
 using TMX_Lib.Utils;
 using TMX_Lib.Writer;
 using TMX_Lib.XmlSplit;
+using static System.Net.Mime.MediaTypeNames;
 using static System.Net.WebRequestMethods;
 using File = System.IO.File;
 using LogManager = Sdl.LanguagePlatform.TranslationMemory.LogManager;
@@ -27,13 +28,13 @@ namespace QuickTmxTesting
     {
 	    private static readonly Logger log = NLog.LogManager.GetCurrentClassLogger();
 
-	    private static async Task ImportFileAsync(string file, string dbName, bool quickImport = false, int entryiesPerTextTable = TmxMongoDb.DEFAULT_ENTRIES_PER_TEXT_TABLE)
+	    private static async Task ImportFileAsync(string file, string dbName, bool quickImport = false, int entryiesPerTextTable = TmxMongoDb.DEFAULT_ENTRIES_PER_TEXT_TABLE, int maxImportTUCount = -1)
 	    {
-		    var db = new TmxMongoDb(dbName, entryiesPerTextTable);
+		    var db = new TmxMongoDb(dbName);
 		    await db.ImportToDbAsync(file, (r) =>
 		    {
 				log.Debug($"report: read {r.TUsRead}, ignored {r.TUsWithSyntaxErrors}, success={r.TUsImportedSuccessfully}, invalid={r.TUsWithInvalidChars}, spent={r.ReportTimeSecs} secs");
-		    }, quickImport);
+		    }, quickImport, entryiesPerTextTable, maxImportTUCount);
 	    }
 
 		// performs the database fuzzy-search, not our Fuzzy-search (our fuzzy search is more constraining)
@@ -167,6 +168,39 @@ namespace QuickTmxTesting
 			}
 		}
 
+		private static string Expand(string text, int size)
+		{
+			var expandSize = size - text.Length;
+			return text + new string(' ', expandSize);
+		}
+		private static string AtMost(string text, int size) { 
+			if (text.Length > size)
+				return text.Substring(0,size - 3) + "...";
+			else 
+				return Expand(text, size);
+		}
+
+		private static async Task TestSearcherSearch(string dbName, IReadOnlyList<string> texts, string sourceLanguage, string targetLanguage) {
+			var db = new TmxMongoDb("localhost:27017", dbName) { LogSearches = false};
+			await db.InitAsync();
+			var search = new TmxSearch(db);
+			await search.LoadLanguagesAsync();
+			log.Debug($"search started {dbName}");
+			var watchAll = Stopwatch.StartNew();
+			var settings = TmxSearchSettings.Default();
+			foreach (var text in texts) {
+				var watch = Stopwatch.StartNew();
+				settings.Mode = SearchMode.ExactSearch;
+				var results = await search.Search(settings, TextToSegment(text), new LanguagePair(sourceLanguage, targetLanguage));
+				var trimmedText = AtMost(text,40);
+				log.Debug($"search exact [{trimmedText}] - {results.Count} results - took {watch.ElapsedMilliseconds} ms");
+
+				settings.Mode = SearchMode.FuzzySearch;
+				results = await search.Search(settings, TextToSegment(text), new LanguagePair(sourceLanguage, targetLanguage));
+				log.Debug($"search fuzzy [{trimmedText}] - {results.Count} results - took {watch.ElapsedMilliseconds} ms");
+			}
+			log.Debug($"search complete- took {watchAll.ElapsedMilliseconds} ms");
+		}
 
 		private static void SplitLargeXmlFile(string inputXmlFile, string outputPrefix)
 		{
@@ -271,17 +305,38 @@ namespace QuickTmxTesting
 
 		static void Main(string[] args)
 		{
-			LogUtil.Setup();
+			LogUtil.Setup( logToConsole: true);
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en(GB) - it(IT)_(DGT 2015, 2017).tmx", "C:\\john\\buff\\TMX Examples\\temp\\");
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en-fr (EU Bookshop v2_10.8M).tmx", "C:\\john\\buff\\TMX Examples\\temp2\\");
 			log.Debug("test started");
+			//Task.Run(async() => await ImportFileAsync("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro-1M-b", entryiesPerTextTable: 10000, maxImportTUCount: 1000000)).Wait();
+			//return;
 
-			//Task.Run(async () => await TestSearcherSearch("en-ro-2-copytmx", "You will not know fresh air and flying", SearchType.Exact, "en", "ro")).Wait();
+			//Task.Run(async() => await ImportFileAsync("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro-10M-c", entryiesPerTextTable: 400000, maxImportTUCount: 10000000)).Wait();
+			Task.Run(async () => await TestSearcherSearch("en-ro-10M-c",
+				new[] { 
+					"The playing time was also reduced by half comparison to Rugby games",
+					"This was the main expectation of the European partners of our mandate",
+					"She listened to our fears and concerns with sympathy",
+					"Christians often try to serve God and own desires",
+					"Somebody said to Hudson You are a man of very great" ,
+
+					"It is there at least on paper because from it has been actually active in a very visible way",
+					"Furthermore, as the Swiss points out, account should be taken of the fact that some States bound by the Convention do not apply Directive",
+					"He brought many factories to Macedonia as well as investments and new companies to the point that unemployment fell to 12% – this is progress.",
+					"Broadcasters argue that the revenue in the EU every year by TV ads for children's products - between euros and 1 billion euros - is essential for the creation of quality children's programming",
+					"Simultaneous Visitors – Do you have a site with hits and want to have no errors when 10, 20 or even arrive on the platform you are managing",
+					"Also, when we talk about the Eastern, we see the political changes taking place here and we are confident that at level too, EU policy will change in the near future.",
+					"It is important to clarify the content of such agreements, in particular for an action that are implemented by the third country under indirect management.",
+					"The event will be prepared in close cooperation with the European, as well as organisers of similar events in the previous period (the Luxembourg and Dutch EU Presidency).",
+					"Also, Grace has to make difficult decisions that could have life or death consequences for people, and Liam reunite under surprising circumstances.",
+					"The first edition of a new online communication tool gives examples of judgments from the Court of Rights and how their implementation has improved people’s lives across Europe.",
+					"The conflict proceeded, as suggested when the Bible came into great prominence, nearly all of our great Bible Societies of today having been organized within fifteen years after that date.",
+				}, "en", "ro")).Wait();
 
 			//Task.Run(async () => await TestExportToXml()).Wait();
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\fails\\opensubtitlingformat.tmx", "C:\\john\\buff\\TMX Examples\\temp3\\");
 
-			Task.Run(async() => await ImportFileAsync("C:\\john\\buff\\TMX Examples\\en-ro-2-copy.tmx", "en-ro-2-test2", entryiesPerTextTable: 100000)).Wait();
 
 			//Task.Run(() => TestImportFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro-2", quickImport: true)).Wait();
 			//Task.Run(() => TestImportFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\ko-zh.tmx", "kozh", quickImport: false)).Wait();
@@ -293,19 +348,6 @@ namespace QuickTmxTesting
 
 			//TestSearcherSearch("en-ro-2", "we call them", SearchType.Concordance, "en-US", "ro-RO").Wait();
 			//TestSearcherSearch("en-ro-2", "taught Happiness knowledge", SearchType.Concordance, "en-US", "ro-RO").Wait();
-			return;
-
-			var root = ".";
-	        if (args.Length > 0)
-		        root = args[0];
-
-	        Task.Run(() => ImportFileAsync("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro", quickImport: true)).Wait();
-
-			//Task.Run(() => TestImportSmallFile2(root)).Wait();
-			//Task.Run(() => TestImportSample4(root)).Wait();
-			//Task.Run(() => TestDatabaseFuzzySimple4(root)).Wait();
-
-			//Task.Run(() => TestFuzzySimple4(root)).Wait();
 
 			log.Debug("test complete");
 	        Console.ReadLine();

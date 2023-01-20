@@ -14,7 +14,7 @@ using TMX_Lib.Utils;
 
 namespace TMX_Lib.Db
 {
-	public class TmxTextsArray
+	internal class TmxTextsArray
 	{
 		private static readonly Logger log = NLog.LogManager.GetCurrentClassLogger();
 
@@ -24,25 +24,26 @@ namespace TMX_Lib.Db
 		// but we don't want to end up processing too many possible results either, since that could put a strain on both the db, and on us
 		//
 		// this is especially true on fuzzy searches
-		private const int MAX_RESULTS = 256;
+		private const int MAX_RESULTS_PER_TASK = 32;
+		private const int MAX_RESULTS = 128;
 
 		private const string TABLE_PREFIX = "text-";
 
-		private MongoClient _client;
-
 		private IMongoDatabase _database;
-		private int _entriesPerTable;
+		public int EntriesPerTable = TmxMongoDb.DEFAULT_ENTRIES_PER_TEXT_TABLE;
 
 		private IMongoCollection<TmxMeta> _metas;
 
 		// Key: language.<tableindex>
 		private Dictionary< string, IMongoCollection<TmxText>> _texts = new Dictionary<string, IMongoCollection<TmxText>>();
 
-		public TmxTextsArray(MongoClient client, IMongoDatabase database, int entriesPerTable)
+		// for debugging
+		private bool _logSearches;
+
+		public TmxTextsArray(IMongoDatabase database, bool logSearches)
 		{
-			_client = client;
 			_database = database;
-			_entriesPerTable = entriesPerTable;
+			_logSearches = logSearches;
 			Load();
 		}
 
@@ -52,7 +53,21 @@ namespace TMX_Lib.Db
 			var names = _database.ListCollectionNames().ToList();
 			foreach (var name in names.Where(n => n.StartsWith(TABLE_PREFIX)))
 				_texts.Add( name.Substring(TABLE_PREFIX.Length), _database.GetCollection<TmxText>(name) );
+
 		}
+
+		public async Task InitAsync()
+		{
+			// the idea: on the first import, i set the entries per table
+			var filter = Builders<TmxMeta>.Filter.Empty;
+			var cursor = await _metas.FindAsync(filter);
+			await cursor.ForEachAsync(m =>
+			{
+				if (m.Type == "Entries Per Table")
+					EntriesPerTable = int.Parse(m.Value);
+			});
+		}
+
 		public async Task ClearAsync()
 		{
 			foreach (var textTable in _texts.Values)
@@ -80,25 +95,55 @@ namespace TMX_Lib.Db
 				var task = Task.Run(async() => await CreateIndexesAsyncForTable(copy.Value, copy.Key));
 				tasks.Add(task);
 			}
-			await Task.WhenAll(tasks);
+			// the idea - creating too many indexes at the same time can simply end up in timeout exceptions
+			const int CONCURRENT_INDEX_COUNT = 5;
+			for (int i = 0; i < tasks.Count; ++i) {
+				var countNow = i + CONCURRENT_INDEX_COUNT < tasks.Count ? CONCURRENT_INDEX_COUNT : tasks.Count - i;
+				var tasksNow = tasks.GetRange(i, countNow);
+				await Task.WhenAll(tasksNow);
+			}
 		}
 		private async Task CreateIndexesAsyncForTable(IMongoCollection<TmxText> textTable, string name)
 		{
-			// at most one text index allowed
-			var indexText = Builders<TmxText>.IndexKeys.Text(i => i.LocaseText).Ascending(i => i.NormalizedLanguage);
-			await textTable.Indexes.CreateOneAsync(new CreateIndexModel<TmxText>(indexText));
+			const int RETRY_COUNT = 10;
+			const int SLEEP_ON_FAIL_MS = 30000;
+			var step = 0;
+			for (int idx = 0; idx < RETRY_COUNT; ++idx) {
+				try
+				{
+					// at most one text index allowed
+					if (step == 0)
+					{
+						var indexText = Builders<TmxText>.IndexKeys.Text(i => i.LocaseText);
+						await textTable.Indexes.CreateOneAsync(new CreateIndexModel<TmxText>(indexText));
+						step = 1;
+					}
 
-			// IMPORTANT: first, ID, then language, since when looking for a translation in a specific language, I already know the TU ID
-			var indexTextByLangTU = Builders<TmxText>.IndexKeys.Ascending(i => i.TranslationUnitID).Ascending(i => i.NormalizedLanguage);
-			await textTable.Indexes.CreateOneAsync(new CreateIndexModel<TmxText>(indexTextByLangTU));
+					if (step == 1) {
+						var indexTextByLangTU = Builders<TmxText>.IndexKeys.Ascending(i => i.TranslationUnitID);
+						await textTable.Indexes.CreateOneAsync(new CreateIndexModel<TmxText>(indexTextByLangTU));
+						step = 2;
+					}
 
-			await _metas.InsertOneAsync(new TmxMeta { 
-				Type = name, Value = "language-table",
-			}, null);
+					if (step == 2) {
+						await _metas.InsertOneAsync(new TmxMeta
+						{
+							Type = name,
+							Value = "language-table",
+						}, null);
+					}
+					log.Debug($"indexes for language {name} created");
+					break;
+				}
+				catch {
+					// timeout
+					await Task.Delay(SLEEP_ON_FAIL_MS);
+				}
+			}
 		}
 
 		private string LanguageKey(ulong translationID, string language) {
-			var languageSuffix = translationID / (ulong)_entriesPerTable;
+			var languageSuffix = translationID / (ulong)EntriesPerTable;
 			var languageKey = $"{language}.{languageSuffix}";
 			return languageKey;
 		}
@@ -118,7 +163,7 @@ namespace TMX_Lib.Db
 		}
 		private IReadOnlyList<IMongoCollection<TmxText>> GetTextTablesForTU(ulong translationID)
 		{
-			var languageSuffixIndex = translationID % (ulong)_entriesPerTable;
+			var languageSuffixIndex = translationID % (ulong)EntriesPerTable;
 			var languageSuffix = $".{languageSuffixIndex}";
 			lock (this)
 				return _texts.Where(l => l.Key.EndsWith(languageSuffix)).Select(l => l.Value).ToList();
@@ -151,7 +196,8 @@ namespace TMX_Lib.Db
 			// surround text in quotes -> so that we perform an exact search
 			text = $"\"{text.Replace("\"", "\\\"")}\"";
 			var filter = Builders<TmxText>.Filter.Text(text, new TextSearchOptions { CaseSensitive = false, DiacriticSensitive = false, });
-			log.Debug($"START Exact search for {text} {sourceLanguage} ");
+			if (_logSearches)
+				log.Debug($"START Exact search for {text} {sourceLanguage} ");
 			var textTables = GetTextTables(sourceLanguage);
 			var tasks = new List<Task>();
 			var texts = new List<TmxText>();
@@ -159,7 +205,7 @@ namespace TMX_Lib.Db
 			{
 				var copy = tt;
 				var task = Task.Run(async () => {
-					var cursor = await copy.FindAsync(filter, new FindOptions<TmxText>() { Limit = MAX_RESULTS });
+					var cursor = await copy.FindAsync(filter, new FindOptions<TmxText>() { Limit = MAX_RESULTS_PER_TASK });
 					var taskTexts = new List<TmxText>();
 					await cursor.ForEachAsync(t =>
 					{
@@ -173,7 +219,8 @@ namespace TMX_Lib.Db
 			}
 			await Task.WhenAll(tasks);
 
-			log.Debug($"END Exact search for {text} {sourceLanguage} ");
+			if (_logSearches)
+				log.Debug($"END Exact search for {text} {sourceLanguage} ");
 			return texts;
 		}
 
@@ -184,7 +231,8 @@ namespace TMX_Lib.Db
 				.Include(p => p.LocaseText).Include(p => p.NormalizedLanguage).Include(p => p.TranslationUnitID).Include(p => p.FormattedText);
 			var sort = Builders<TmxText>.Sort.MetaTextScore("Score");
 
-			log.Debug($"START Fuzzy search for {text} {sourceLanguage} ");
+			if (_logSearches)
+				log.Debug($"START Fuzzy search for {text} {sourceLanguage} ");
 			var textTables = GetTextTables(sourceLanguage);
 			var tasks = new List<Task>();
 			var texts = new List<TmxText>();
@@ -203,7 +251,7 @@ namespace TMX_Lib.Db
 						.Aggregate()
 						.Match(filter)
 						.Sort(sort)
-						.Limit(MAX_RESULTS)
+						.Limit(MAX_RESULTS_PER_TASK)
 						.Project(projection)
 						.ToListAsync();
 					var taskTexts = new List<TmxText>();
@@ -220,8 +268,9 @@ namespace TMX_Lib.Db
 			}
 			await Task.WhenAll(tasks);
 
-			texts = texts.OrderByDescending(t => t.Score).ToList();
-			log.Debug($"END Fuzzy search for {text} {sourceLanguage} ");
+			texts = texts.OrderByDescending(t => t.Score).Take(MAX_RESULTS).ToList();
+			if (_logSearches)
+				log.Debug($"END Fuzzy search for {text} {sourceLanguage} ");
 
 			return texts;
 		}
@@ -229,7 +278,8 @@ namespace TMX_Lib.Db
 		public async Task<IReadOnlyList<TmxText>> ConcordanceSearch(string text, string sourceLanguage)
 		{
 			var filter = Builders<TmxText>.Filter.Text(text, new TextSearchOptions { CaseSensitive = false, DiacriticSensitive = false, });
-			log.Debug($"START Concordance search for {text} {sourceLanguage} ");
+			if (_logSearches)
+				log.Debug($"START Concordance search for {text} {sourceLanguage} ");
 			var textTables = GetTextTables(sourceLanguage);
 			var tasks = new List<Task>();
 			var texts = new List<TmxText>();
@@ -237,7 +287,7 @@ namespace TMX_Lib.Db
 			{
 				var copy = tt;
 				var task = Task.Run(async () => {
-					var cursor = await copy.FindAsync(filter, new FindOptions<TmxText>() { Limit = MAX_RESULTS });
+					var cursor = await copy.FindAsync(filter, new FindOptions<TmxText>() { Limit = MAX_RESULTS_PER_TASK });
 					var taskTexts = new List<TmxText>();
 					await cursor.ForEachAsync(t =>
 					{
@@ -251,7 +301,9 @@ namespace TMX_Lib.Db
 			}
 			await Task.WhenAll(tasks);
 
-			log.Debug($"END Concordance search for {text} {sourceLanguage} ");
+			texts = texts.Take(MAX_RESULTS).ToList();
+			if (_logSearches)
+				log.Debug($"END Concordance search for {text} {sourceLanguage} ");
 			return texts;
 		}
 
@@ -334,7 +386,7 @@ namespace TMX_Lib.Db
 					var copy = tt;
 					var task = Task.Run(async() => {
 						var table = await GetOrInsertTextTableAsync(copy.Key);
-						await table.InsertManyAsync(texts, null, token);
+						await table.InsertManyAsync(copy.Value, null, token);
 					});
 					tasks.Add(task);
 				}

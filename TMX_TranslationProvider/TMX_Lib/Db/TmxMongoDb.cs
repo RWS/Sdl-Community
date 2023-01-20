@@ -24,7 +24,6 @@ namespace TMX_Lib.Db
     {
 	    private static readonly Logger log = NLog.LogManager.GetCurrentClassLogger();
 
-
 		public const int DEFAULT_ENTRIES_PER_TEXT_TABLE = 50000;
 
         // FIXME test with Atlas credentials as well
@@ -55,18 +54,18 @@ namespace TMX_Lib.Db
 
         private CultureDictionary _cultures = new CultureDictionary();
 
-		private int _entriesPerTextTable;
+		// for testing/debugging
+		public bool LogSearches = true;
 
-		public TmxMongoDb(string url, string databaseName, int entriesPerTextTable = DEFAULT_ENTRIES_PER_TEXT_TABLE)
+		public TmxMongoDb(string url, string databaseName)
 		{
 			_url = url;
 			var notAllowedChars = " \t\r\n:.()_";
 			_databaseName = new string(databaseName.Where(ch => !notAllowedChars.Contains(ch)).ToArray());
-			_entriesPerTextTable = entriesPerTextTable;
 			Connect();
 		}
 
-		public TmxMongoDb(string databaseName, int entriesPerTextTable = DEFAULT_ENTRIES_PER_TEXT_TABLE) : this("localhost:27017", databaseName, entriesPerTextTable)
+		public TmxMongoDb(string databaseName) : this("localhost:27017", databaseName)
 		{
 		}
 
@@ -91,13 +90,6 @@ namespace TMX_Lib.Db
                 _client = new MongoClient(url);
                 _database = _client.GetDatabase(_databaseName);
                 _connected = true;
-				// if local -> fast connection
-                if (IsLocalConnection())
-                {
-	                InitializeImpl();
-	                lock (this)
-						_initialized = true;
-                }
 			}
             catch (TimeoutException e)
             {
@@ -173,7 +165,8 @@ namespace TMX_Lib.Db
 	            _metas = _database.GetCollection<TmxMeta>("meta");
 	            _languages = _database.GetCollection<TmxLanguage>("languages");
 	            _translationUnits = _database.GetCollection<TmxTranslationUnit>("translation_units");
-	            _texts = new TmxTextsArray(_client, _database, _entriesPerTextTable);
+	            _texts = new TmxTextsArray(_database, LogSearches);
+				await _texts.InitAsync();
 
 	            var filter = Builders<TmxMeta>.Filter.Where(m => m.Type == "TranslationUnitNextID");
 	            var cursor = await _metas.FindAsync(filter);
@@ -258,6 +251,7 @@ namespace TMX_Lib.Db
         {
             try
             {
+				log.Debug("Creating indexes");
 	            var list = await _translationUnits.Indexes.ListAsync();
 	            int count = 0;
 	            await list.ForEachAsync(c => ++count);
@@ -268,7 +262,8 @@ namespace TMX_Lib.Db
 	            await _translationUnits.Indexes.CreateOneAsync(new CreateIndexModel<TmxTranslationUnit>(indexTU));
 
 				await _texts.CreateIndexesAsync();
-            }
+				log.Debug("Creating indexes COMPLETE");
+			}
 			catch (Exception e)
             {
                 throw new TmxException("Can't create indexes", e);
@@ -290,6 +285,8 @@ namespace TMX_Lib.Db
 		private async Task<TmxSegment> TryGetSegment(TmxText text, string targetLanguage)
 		{
 			var targetText = await _texts.TryFindTranslation(text.TranslationUnitID, targetLanguage);
+			if(targetText == null)
+				return null;
 
 			var tuFilter = Builders<TmxTranslationUnit>.Filter.Where(f => f.TranslationUnitID == text.TranslationUnitID);
 			var tuCursor = await _translationUnits.FindAsync(tuFilter, new FindOptions<TmxTranslationUnit> { Limit = 1 });
@@ -615,7 +612,9 @@ namespace TMX_Lib.Db
 	        _importTokenSource.Cancel();
         }
 
-        public async Task ImportToDbAsync(string fileName, Action<TmxImportReport> updateReport = null, bool quickImport = false)
+		// maxImportTUCount - if >= 0, max number of TUs to import
+		// this is only for testing/debugging, to test speeds at different number of TUs per database
+        public async Task ImportToDbAsync(string fileName, Action<TmxImportReport> updateReport = null, bool quickImport = false, int entriesPerTable = DEFAULT_ENTRIES_PER_TEXT_TABLE, int maxImportTUCount = -1)
         {
 	        Task import;
 	        lock (this)
@@ -628,7 +627,7 @@ namespace TMX_Lib.Db
 						throw new TmxException("Import already in progress");
 		        }
 				if (_importTask == null)
-			        _importTask = Task.Run(() => ImportToDbAsyncImpl(_parser = new TmxParser(fileName, quickImport) , updateReport, _importTokenSource.Token));
+			        _importTask = Task.Run(() => ImportToDbAsyncImpl(_parser = new TmxParser(fileName, quickImport) , updateReport, entriesPerTable, maxImportTUCount, _importTokenSource.Token));
 
 		        import = _importTask;
 		        _importComplete = false;
@@ -638,13 +637,16 @@ namespace TMX_Lib.Db
         }
 
 		// does NOT throw
-		private async Task ImportToDbAsyncImpl(TmxParser parser, Action<TmxImportReport> updateReport , CancellationToken token)
+		private async Task ImportToDbAsyncImpl(TmxParser parser, Action<TmxImportReport> updateReport, int entriesPerTable, int maxImportTUCount,  CancellationToken token)
         {
 	        Stopwatch watch = null;
 	        try
 	        {
 		        lock (this)
 			        _importError = "";
+
+				await InitAsync();
+				_texts.EntriesPerTable = entriesPerTable;
 
 		        var report = TmxImportReport.StartNow();
 		        var headerInvalidChars = parser.InvalidCharsNodeCount;
@@ -655,7 +657,8 @@ namespace TMX_Lib.Db
 		        watch = Stopwatch.StartNew();
 
 		        ulong id = 1;
-		        while (true)
+				var reachedMaxTUCount = false;
+		        while (!reachedMaxTUCount)
 		        {
 			        if (token.IsCancellationRequested)
 				        break;
@@ -679,11 +682,15 @@ namespace TMX_Lib.Db
 			        foreach (var tu in TUs)
 			        {
 				        var dbTU = TmxTranslationUnitToMongo(tu, id++);
+						if (maxImportTUCount >= 0 && (int)id >= maxImportTUCount)
+							reachedMaxTUCount = true;
 				        dbTexts.AddRange(dbTU.texts);
 				        dbTUs.Add(dbTU.tu);
-			        }
+						if (reachedMaxTUCount)
+							break;
+					}
 
-			        await AddTranslationUnitsAsync(dbTUs, token);
+					await AddTranslationUnitsAsync(dbTUs, token);
 			        await AddTextsAsync(dbTexts, token);
 			        updateReport?.Invoke(report);
 		        }
@@ -705,8 +712,9 @@ namespace TMX_Lib.Db
 						// 2 - added TranslationUnitNextID + TU.NormalizedLanguages array
 						// 3 - different tables for each language + each language can have more than one text table
 				        // ... - increase this on each breaking change
-				        new TmxMeta { Type = "Version", Value = "3", }, 
-				        new TmxMeta { Type = "Source Language", Value = parser.Header.SourceLanguage, },
+				        new TmxMeta { Type = "Version", Value = "3", },
+						new TmxMeta { Type = "Entries Per Table", Value = entriesPerTable.ToString(), },
+						new TmxMeta { Type = "Source Language", Value = parser.Header.SourceLanguage, },
 				        new TmxMeta { Type = "Target Language", Value = parser.Header.TargetLanguage, },
 				        new TmxMeta { Type = "Domains", Value = string.Join(", ", parser.Header.Domains), },
 				        new TmxMeta { Type = "Creation Date", Value = parser.Header.CreationDate?.ToLongDateString() ?? "unknown", },
@@ -749,7 +757,6 @@ namespace TMX_Lib.Db
 	        }
 
 			log.Debug($"import complete, took {watch?.ElapsedMilliseconds} ms");
-			Console.WriteLine($"import complete, took {watch?.ElapsedMilliseconds} ms");
 		}
 
 		// End of IMPORT
