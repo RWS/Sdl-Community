@@ -13,6 +13,7 @@ using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Model.RateIt;
 using Sdl.Community.MTCloud.Provider.Service.Interface;
+using Sdl.FileTypeSupport.Framework;
 using Sdl.LanguagePlatform.Core;
 using Converter = Sdl.Community.MTCloud.Provider.XliffConverter.Converter.Converter;
 using LogManager = NLog.LogManager;
@@ -104,9 +105,24 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			var uri = new Uri($"{ConnectionService.CurrentWorkingPortalAddress}/v4/accounts/{ConnectionService.Credential.AccountId}/subscriptions/language-pairs");
 			var request = GetRequestMessage(HttpMethod.Get, uri);
-
 			var response = await _httpClient.SendRequest(request);
 			return await _httpClient.GetResult<SubscriptionInfo>(response);
+		}
+
+		public async Task<dynamic> GetLinguisticOptions(string pair = null)
+		{
+			CheckConnection();
+
+			var uri = new Uri($"{ConnectionService.CurrentWorkingPortalAddress}/v4/accounts/{ConnectionService.Credential.AccountId}/subscriptions/language-pairs/{pair}/linguistic-options");
+			var request = GetRequestMessage(HttpMethod.Get, uri);
+			var response = await _httpClient.SendRequest(request);
+			if (!response.IsSuccessStatusCode)
+			{
+				return null;
+			}
+
+			var result = await _httpClient.GetResult<dynamic>(response);
+			return result;
 		}
 
 		public async Task<HttpResponseMessage> SendFeedback(FeedbackInfo feedbackInfo)

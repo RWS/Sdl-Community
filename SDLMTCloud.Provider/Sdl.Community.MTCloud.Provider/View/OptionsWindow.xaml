@@ -227,10 +227,10 @@
 												HeaderStyle="{StaticResource StandardColumnHeaderStyle}">
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate DataType="model:LanguageMappingModel">
-									<ComboBox ItemsSource="{Binding Models, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+									<ComboBox ItemsSource="{Binding Models, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+											  SelectedItem="{Binding SelectedModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 											  Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
 											  IsReadOnly="True"
-											  SelectedItem="{Binding SelectedModel, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
 											  Cursor="Hand"
 											  Background="Transparent"
 											  BorderThickness="1"
@@ -304,16 +304,17 @@
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
-						<DataGridTemplateColumn Header="Formality"
+						<DataGridTemplateColumn Header="Linguistic Options"
+												SortMemberPath="SelectedLinguisticOption.Name"
 												IsReadOnly="True"
 												Width="*"
 												HeaderStyle="{StaticResource StandardColumnHeaderStyle}">
 							<DataGridTemplateColumn.CellTemplate>
-								<DataTemplate DataType="model:LanguageMappingModel">
-									<ComboBox  ItemsSource="{Binding Formalities,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+								<DataTemplate DataType="model:LanguageMappingModel.LinguisticOptions">
+									<ComboBox  ItemsSource="{Binding AvailableLinguisticOptions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+											   SelectedItem="{Binding LinguisticOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 											   Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
 											   IsReadOnly="True"
-											   SelectedItem="{Binding SelectedFormality, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
 											   Cursor="Hand"
 											   Background="Transparent"
 											   BorderThickness="1"
@@ -326,21 +327,6 @@
 														Value="Transparent" />
 											</Style>
 										</ComboBox.ItemContainerStyle>
-										<ComboBox.ItemTemplate>
-											<DataTemplate>
-												<StackPanel Orientation="Horizontal">
-													<Image Source="../Resources/dictionaryIcon.ico"
-														   Width="15"
-														   Height="15"
-														   Margin="6,3,5,0" />
-													<TextBlock Text="{Binding Name}"
-															   ToolTip="{Binding Name}"
-															   Margin="15,2,0,0"
-															   FontFamily="Calibri"
-															   VerticalAlignment="Center" />
-												</StackPanel>
-											</DataTemplate>
-										</ComboBox.ItemTemplate>
 									</ComboBox>
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>

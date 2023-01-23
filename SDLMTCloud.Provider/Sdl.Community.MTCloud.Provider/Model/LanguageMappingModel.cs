@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 
@@ -11,13 +12,15 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		private MTCloudLanguage _selectedTarget;
 		private TranslationModel _selectedModel;
 		private MTCloudDictionary _selectedDictionary;
-		private Formality _selectedFormality;
 
 		private List<MTCloudLanguage> _sourceLanguages;
 		private List<MTCloudLanguage> _targetLanguages;
 		private List<TranslationModel> _models;
 		private List<MTCloudDictionary> _dictionaries;
-		private List<Formality> _formalities;
+
+		private LinguisticOptions _selectedLinguisticOptions;
+		private List<LinguisticOptions> _linguisticOptions;
+		private List<string> _availableLinguisticOptions;
 
 		[DataMember]
 		public string Name { get; set; }
@@ -68,6 +71,12 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			{
 				_selectedModel = value;
 				OnPropertyChanged(nameof(SelectedModel));
+				if (LinguisticOptions is null)
+				{
+					return;
+				}
+
+				AvailableLinguisticOptions = LinguisticOptions.FirstOrDefault(x => x.ModelName == value.MTCloudLanguagePair.Name).Values.ToList();
 			}
 		}
 
@@ -83,13 +92,14 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		}
 
 		[DataMember]
-		public Formality SelectedFormality
+		public LinguisticOptions SelectedLinguisticOption
 		{
-			get => _selectedFormality;
+			get => _selectedLinguisticOptions;
 			set
 			{
-				_selectedFormality = value;
-				OnPropertyChanged(nameof(SelectedFormality));
+				_selectedLinguisticOptions = value;
+				OnPropertyChanged(nameof(SelectedLinguisticOption));
+				AvailableLinguisticOptions = LinguisticOptions.FirstOrDefault(x => x.ModelName.Equals(SelectedModel.MTCloudLanguagePair.Name)).Values.ToList();
 			}
 		}
 
@@ -138,13 +148,37 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		}
 
 		[DataMember]
-		public List<Formality> Formalities
+		public List<LinguisticOptions> LinguisticOptions
 		{
-			get => _formalities;
+			get => _linguisticOptions;
 			set
 			{
-				_formalities = value;
-				OnPropertyChanged(nameof(Formalities));
+				_linguisticOptions = value;
+				OnPropertyChanged(nameof(LinguisticOptions));
+			}
+		}
+
+		[DataMember]
+		public List<string> AvailableLinguisticOptions
+		{
+			get => _availableLinguisticOptions;
+			set
+			{
+				_availableLinguisticOptions = value;
+				OnPropertyChanged(nameof(AvailableLinguisticOptions));
+				LinguisticOption = value.FirstOrDefault(x => x.Equals(SelectedLinguisticOption.SystemDefault))
+								?? value.FirstOrDefault();
+			}
+		}
+
+		private string _linguisticOption;
+		public string LinguisticOption
+		{
+			get => _linguisticOption;
+			set
+			{
+				_linguisticOption = value;
+				OnPropertyChanged(nameof(LinguisticOption));
 			}
 		}
 	}

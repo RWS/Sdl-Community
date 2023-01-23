@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.ServiceModel.Description;
 using System.Threading.Tasks;
+using Microsoft.Office.Interop.Excel;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Sdl.Community.MTCloud.Languages.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
@@ -45,6 +49,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
+		public List<LinguisticOptions> LinguisticOptions { get; private set; } = new();
+
 		/// <summary>
 		/// Gets a list of available dictionaries for the MT Cloud langauge pair
 		/// </summary>
@@ -82,9 +88,29 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return cloudDictionaries;
 		}
 
-		public List<Formality> GetFormalities()
+		public LinguisticOptions GetLinguisticOptions(string modelName)
 		{
-			return new List<Formality>() { new Formality { Name = "!TEST! Not implemented yet" } };
+			var jObject = Task.Run(async () => await _translationService.GetLinguisticOptions(modelName)).Result["linguisticOptions"];
+			if (jObject is null
+				|| jObject.Count == 0
+				|| jObject.Last["id"] == "QualityEstimation")
+			{
+				return new()
+				{
+					Values = new List<string>() { "No LC available" },
+					ModelName = modelName
+				};
+			}
+
+			string json = JsonConvert.SerializeObject(jObject);
+			if (json.StartsWith("[") && json.EndsWith("]"))
+			{
+				json = json.Substring(1, json.Length - 2);
+			}
+
+			var linguisticOptions = JsonConvert.DeserializeObject<LinguisticOptions>(json);
+			linguisticOptions.ModelName = modelName;
+			return linguisticOptions;
 		}
 
 		public List<MTCloudLanguage> GetMTCloudLanguages(MappedLanguage mappedLanguage, CultureInfo cultureInfo)
@@ -135,6 +161,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			var models = SubscriptionInfo?.LanguagePairs.Where(a => mtCloudSource.CodeName.Equals(a.SourceLanguageId, StringComparison.InvariantCultureIgnoreCase)
 														 && mtCloudTarget.CodeName.Equals(a.TargetLanguageId, StringComparison.InvariantCultureIgnoreCase));
 
+			LinguisticOptions ??= new();
 			foreach (var model in models)
 			{
 				translationModels.Add(new TranslationModel
