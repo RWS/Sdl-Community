@@ -242,6 +242,21 @@ namespace TMX_Lib.Search
 			return _supportedLanguages.TryGetEquivalentLanguage(language) != null;
 		}
 
+		private async Task OptimizedNormalSearch(TmxSearchSettings settings, string text, LanguagePair language, SimpleResults results) {
+			// the idea - run exact and fuzzy in parallel
+			// if we get exact match, I don't care about fuzzy
+			SimpleResults fuzzyResults = new SimpleResults();
+			var exact = Task.Run(async() => await SearchExact(settings, text, language, results));
+			var fuzzy = Task.Run(async () => await SearchFuzzy(settings, text, language, fuzzyResults));
+			await exact;
+			var anyExactMatches = results.Results.Any(r => r.IsExactMatch);
+			if (!anyExactMatches) {
+				await fuzzy;
+				results.Results = fuzzyResults.Results;
+			}
+		}
+
+
 		public async Task<SearchResults> Search(TmxSearchSettings settings, Segment segment, LanguagePair language)
 		{
 			if (_db.IsImportInProgress() && !_db.IsImportComplete())
@@ -267,10 +282,13 @@ namespace TMX_Lib.Search
 					// Performs a normal search, i.e. a combined exact/fuzzy search. Fuzzy search is only triggered
 					// if no exact matches are found.
 					case SearchMode.NormalSearch:
+						/* OLD code
 						await SearchExact(settings, text, language, results);
 						var anyExactMatches = results.Results.Any(r => r.IsExactMatch);
 						if (!anyExactMatches)
 							await SearchFuzzy(settings, text, language, results);
+						 */
+						await OptimizedNormalSearch(settings, text, language, results);
 						break;
 
 					// Performs a full search, i.e. a combined exact/fuzzy search. In contrast to NormalSearch, 

@@ -189,17 +189,193 @@ namespace QuickTmxTesting
 			var watchAll = Stopwatch.StartNew();
 			var settings = TmxSearchSettings.Default();
 			foreach (var text in texts) {
+				var trimmedText = AtMost(text, 40);
 				var watch = Stopwatch.StartNew();
+
 				settings.Mode = SearchMode.ExactSearch;
 				var results = await search.Search(settings, TextToSegment(text), new LanguagePair(sourceLanguage, targetLanguage));
-				var trimmedText = AtMost(text,40);
+				var ellapsedExact = watch.ElapsedMilliseconds;
 				log.Debug($"search exact [{trimmedText}] - {results.Count} results - took {watch.ElapsedMilliseconds} ms");
 
+				watch = Stopwatch.StartNew();
 				settings.Mode = SearchMode.FuzzySearch;
 				results = await search.Search(settings, TextToSegment(text), new LanguagePair(sourceLanguage, targetLanguage));
+				var ellapsedFuzzy = watch.ElapsedMilliseconds;
 				log.Debug($"search fuzzy [{trimmedText}] - {results.Count} results - took {watch.ElapsedMilliseconds} ms");
+
+				watch = Stopwatch.StartNew();
+				settings.Mode = SearchMode.NormalSearch;
+				results = await search.Search(settings, TextToSegment(text), new LanguagePair(sourceLanguage, targetLanguage));
+				var ellapsedNormal = watch.ElapsedMilliseconds;
+				var percent = (int)((1d - (double)ellapsedNormal / ((double)ellapsedExact + (double)ellapsedFuzzy)) * 100);
+				log.Debug($"search norm  [{trimmedText}] - {results.Count} results - took {watch.ElapsedMilliseconds} ms, improve={percent}%");
 			}
 			log.Debug($"search complete- took {watchAll.ElapsedMilliseconds} ms");
+		}
+
+		private class TestResults {
+			public List<long> Normal = new List<long>();
+			public List<long> Exact = new List<long>();
+			public List<long> Fuzzy = new List<long>();
+
+			public long NormalAvg => (long)Normal.Average();
+			public long NormalMin => (long)Normal.Min();
+			public long NormalMax => (long)Normal.Max();
+
+			public long ExactAvg => (long)Exact.Average();
+			public long ExactMin => (long)Exact.Min();
+			public long ExactMax => (long)Exact.Max();
+
+			public long FuzzyAvg => (long)Fuzzy.Average();
+			public long FuzzyMin => (long)Fuzzy.Min();
+			public long FuzzyMax => (long)Fuzzy.Max();
+		}
+
+		private static async Task TestAvgExactAndFuzzySearcherSearch(string dbName, IReadOnlyList<string> texts, string sourceLanguage, string targetLanguage, int ignoreTimes, int runTimes)
+		{
+			var db = new TmxMongoDb("localhost:27017", dbName) { LogSearches = false };
+			await db.InitAsync();
+			var search = new TmxSearch(db);
+			await search.LoadLanguagesAsync();
+			log.Debug($"search started {dbName}");
+			var settings = TmxSearchSettings.Default();
+
+			for (int i = 0; i < ignoreTimes; ++i)
+			{
+				for (var idx = 0; idx < texts.Count; idx++)
+				{
+					Console.Write($"Ignore {i + 1}/{ignoreTimes}, Text {idx+1}/{texts.Count}       \r");
+					var text = texts[idx];
+					settings.Mode = SearchMode.ExactSearch;
+					await search.Search(settings, TextToSegment(text), new LanguagePair(sourceLanguage, targetLanguage));
+
+					settings.Mode = SearchMode.FuzzySearch;
+					await search.Search(settings, TextToSegment(text), new LanguagePair(sourceLanguage, targetLanguage));
+				}
+			}
+
+			var results = new TestResults[texts.Count];
+			for (int i = 0; i < results.Length; ++i)
+				results[i] = new TestResults();
+
+			var watchAll = Stopwatch.StartNew();
+
+			for (int runIndex = 0; runIndex < runTimes; ++runIndex) 
+			{
+				for (var idx = 0; idx < texts.Count; idx++)
+				{
+					Console.Write($"Test {runIndex + 1}/{runTimes}, Text {idx + 1}/{texts.Count}      \r");
+					var text = texts[idx];
+					var watch = Stopwatch.StartNew();
+					settings.Mode = SearchMode.ExactSearch;
+					await search.Search(settings, TextToSegment(text), new LanguagePair(sourceLanguage, targetLanguage));
+					results[idx].Exact.Add(watch.ElapsedMilliseconds);
+
+					settings.Mode = SearchMode.FuzzySearch;
+					watch = Stopwatch.StartNew();
+					await search.Search(settings, TextToSegment(text), new LanguagePair(sourceLanguage, targetLanguage));
+					results[idx].Fuzzy.Add(watch.ElapsedMilliseconds);
+				}
+			}
+
+			Console.WriteLine($"\r\n\r\n*** Database {dbName}: Results");
+			for (int i = 0; i < results.Length; ++i)
+			{
+				var result = results[i];
+				Console.WriteLine($"Text {i + 1:D2}: Exact  Avg={result.ExactAvg:D5}, Min={result.ExactMin:D5} Max={result.ExactMax:D5} | Fuzzy Avg = {result.FuzzyAvg:D5}, Min ={result.FuzzyMin:D5} Max ={result.FuzzyMax:D5}");
+			}
+			var sum = results.Sum(x => x.ExactAvg) + results.Sum(x => x.FuzzyAvg);
+			var avg = results.Average(x => x.ExactAvg + x.FuzzyAvg);
+			Console.WriteLine($"search complete- took {watchAll.ElapsedMilliseconds} ms, Avg sum (E+F): {sum}, Avg avg (E+F): {avg}");
+		}
+
+		private static async Task TestAvgNormalSearcherSearch(string dbName, IReadOnlyList<string> texts, string sourceLanguage, string targetLanguage, int ignoreTimes, int runTimes)
+		{
+			var db = new TmxMongoDb("localhost:27017", dbName) { LogSearches = false };
+			await db.InitAsync();
+			var search = new TmxSearch(db);
+			await search.LoadLanguagesAsync();
+			log.Debug($"search started {dbName}");
+			var settings = TmxSearchSettings.Default();
+
+			for (int i = 0; i < ignoreTimes; ++i)
+			{
+				for (var idx = 0; idx < texts.Count; idx++)
+				{
+					Console.Write($"Ignore {i + 1}/{ignoreTimes}, Text {idx + 1}/{texts.Count}       \r");
+					var text = texts[idx];
+					settings.Mode = SearchMode.NormalSearch;
+					await search.Search(settings, TextToSegment(text), new LanguagePair(sourceLanguage, targetLanguage));
+				}
+			}
+
+			var results = new TestResults[texts.Count];
+			for (int i = 0; i < results.Length; ++i)
+				results[i] = new TestResults();
+
+			var watchAll = Stopwatch.StartNew();
+
+			for (int runIndex = 0; runIndex < runTimes; ++runIndex)
+			{
+				for (var idx = 0; idx < texts.Count; idx++)
+				{
+					Console.Write($"Test {runIndex + 1}/{runTimes}, Text {idx + 1}/{texts.Count}      \r");
+					var text = texts[idx];
+					var watch = Stopwatch.StartNew();
+					settings.Mode = SearchMode.NormalSearch;
+					await search.Search(settings, TextToSegment(text), new LanguagePair(sourceLanguage, targetLanguage));
+					results[idx].Normal.Add(watch.ElapsedMilliseconds);
+				}
+			}
+
+			Console.WriteLine($"\r\n\r\n*** Database {dbName}: Results");
+			for (int i = 0; i < results.Length; ++i)
+			{
+				var result = results[i];
+				Console.WriteLine($"Text {i + 1:D2}: Normal  Avg={result.NormalAvg:D5}, Min={result.NormalMin:D5} Max={result.NormalMax:D5} ");
+			}
+			var sum = results.Sum(x => x.NormalAvg);
+			var avg = results.Average(x => x.NormalAvg);
+			Console.WriteLine($"search complete- took {watchAll.ElapsedMilliseconds} ms, Avg sum (E+F): {sum}, Avg avg (E+F): {avg}");
+		}
+
+		// the idea - while warming up (after connecting to the database), tests take a lot longer than once the DB has loaded up all its indexes and so on
+		// lets see how much time that is
+		private static async Task TestWarmupTimesNormalSearcherSearch(string dbName, IReadOnlyList<string> texts, string sourceLanguage, string targetLanguage, int runTimes)
+		{
+			var db = new TmxMongoDb("localhost:27017", dbName) { LogSearches = false };
+			await db.InitAsync();
+			var search = new TmxSearch(db);
+			await search.LoadLanguagesAsync();
+			log.Debug($"search started {dbName}");
+			var settings = TmxSearchSettings.Default();
+
+			var results = new TestResults[texts.Count];
+			for (int i = 0; i < results.Length; ++i)
+				results[i] = new TestResults();
+
+			var watchAll = Stopwatch.StartNew();
+
+			for (int runIndex = 0; runIndex < runTimes; ++runIndex)
+			{
+				for (var idx = 0; idx < texts.Count; idx++)
+				{
+					Console.Write($"Test {runIndex + 1}/{runTimes}, Text {idx + 1}/{texts.Count}      \r");
+					var text = texts[idx];
+					var watch = Stopwatch.StartNew();
+					settings.Mode = SearchMode.NormalSearch;
+					await search.Search(settings, TextToSegment(text), new LanguagePair(sourceLanguage, targetLanguage));
+					results[idx].Normal.Add(watch.ElapsedMilliseconds);
+				}
+			}
+
+			Console.WriteLine($"\r\n\r\n*** Database {dbName}: Results");
+			for (int i = 0; i < results.Length; ++i)
+			{
+				var result = results[i];
+				Console.WriteLine($"Text {i + 1:D2}: Normal ={string.Join(" ", result.Normal.Select(n => n.ToString("D5")))}");
+			}
+			Console.WriteLine($"search complete- took {watchAll.ElapsedMilliseconds} ms");
 		}
 
 		private static void SplitLargeXmlFile(string inputXmlFile, string outputPrefix)
@@ -309,30 +485,38 @@ namespace QuickTmxTesting
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en(GB) - it(IT)_(DGT 2015, 2017).tmx", "C:\\john\\buff\\TMX Examples\\temp\\");
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en-fr (EU Bookshop v2_10.8M).tmx", "C:\\john\\buff\\TMX Examples\\temp2\\");
 			log.Debug("test started");
+
+			var TEST_TEXTS = new[] {
+				"The playing time was also reduced by half comparison to Rugby games",
+				"This was the main expectation of the European partners of our mandate",
+				"She listened to our fears and concerns with sympathy",
+				"Christians often try to serve God and own desires",
+				"Somebody said to Hudson You are a man of very great" ,
+
+				"It is there at least on paper because from it has been actually active in a very visible way",
+				"Furthermore, as the Swiss points out, account should be taken of the fact that some States bound by the Convention do not apply Directive",
+				"He brought many factories to Macedonia as well as investments and new companies to the point that unemployment fell to 12% – this is progress.",
+				"Broadcasters argue that the revenue in the EU every year by TV ads for children's products - between euros and 1 billion euros - is essential for the creation of quality children's programming",
+				"Simultaneous Visitors – Do you have a site with hits and want to have no errors when 10, 20 or even arrive on the platform you are managing",
+				"Also, when we talk about the Eastern, we see the political changes taking place here and we are confident that at level too, EU policy will change in the near future.",
+				"It is important to clarify the content of such agreements, in particular for an action that are implemented by the third country under indirect management.",
+				"The event will be prepared in close cooperation with the European, as well as organisers of similar events in the previous period (the Luxembourg and Dutch EU Presidency).",
+				"Also, Grace has to make difficult decisions that could have life or death consequences for people, and Liam reunite under surprising circumstances.",
+				"The first edition of a new online communication tool gives examples of judgments from the Court of Rights and how their implementation has improved people’s lives across Europe.",
+				"The conflict proceeded, as suggested when the Bible came into great prominence, nearly all of our great Bible Societies of today having been organized within fifteen years after that date.",
+			};
 			//Task.Run(async() => await ImportFileAsync("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro-1M-b", entryiesPerTextTable: 10000, maxImportTUCount: 1000000)).Wait();
 			//return;
 
-			//Task.Run(async() => await ImportFileAsync("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro-10M-c", entryiesPerTextTable: 400000, maxImportTUCount: 10000000)).Wait();
-			Task.Run(async () => await TestSearcherSearch("en-ro-10M-c",
-				new[] { 
-					"The playing time was also reduced by half comparison to Rugby games",
-					"This was the main expectation of the European partners of our mandate",
-					"She listened to our fears and concerns with sympathy",
-					"Christians often try to serve God and own desires",
-					"Somebody said to Hudson You are a man of very great" ,
+			//Task.Run(async() => await ImportFileAsync("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro-10M-f", entryiesPerTextTable: 40000, maxImportTUCount: 10000000)).Wait();
+			//return;
 
-					"It is there at least on paper because from it has been actually active in a very visible way",
-					"Furthermore, as the Swiss points out, account should be taken of the fact that some States bound by the Convention do not apply Directive",
-					"He brought many factories to Macedonia as well as investments and new companies to the point that unemployment fell to 12% – this is progress.",
-					"Broadcasters argue that the revenue in the EU every year by TV ads for children's products - between euros and 1 billion euros - is essential for the creation of quality children's programming",
-					"Simultaneous Visitors – Do you have a site with hits and want to have no errors when 10, 20 or even arrive on the platform you are managing",
-					"Also, when we talk about the Eastern, we see the political changes taking place here and we are confident that at level too, EU policy will change in the near future.",
-					"It is important to clarify the content of such agreements, in particular for an action that are implemented by the third country under indirect management.",
-					"The event will be prepared in close cooperation with the European, as well as organisers of similar events in the previous period (the Luxembourg and Dutch EU Presidency).",
-					"Also, Grace has to make difficult decisions that could have life or death consequences for people, and Liam reunite under surprising circumstances.",
-					"The first edition of a new online communication tool gives examples of judgments from the Court of Rights and how their implementation has improved people’s lives across Europe.",
-					"The conflict proceeded, as suggested when the Bible came into great prominence, nearly all of our great Bible Societies of today having been organized within fifteen years after that date.",
-				}, "en", "ro")).Wait();
+
+			var TEST_TABLE = "en-ro-10M-f";
+			//Task.Run(async () => await TestAvgExactAndFuzzySearcherSearch(TEST_TABLE, TEST_TEXTS, "en", "ro", 5, 15)).Wait();
+			//Task.Run(async () => await TestAvgNormalSearcherSearch(TEST_TABLE, TEST_TEXTS, "en", "ro", 5, 15)).Wait();
+			Task.Run(async () => await TestWarmupTimesNormalSearcherSearch(TEST_TABLE, TEST_TEXTS, "en", "ro", 15)).Wait();
+			
 
 			//Task.Run(async () => await TestExportToXml()).Wait();
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\fails\\opensubtitlingformat.tmx", "C:\\john\\buff\\TMX Examples\\temp3\\");

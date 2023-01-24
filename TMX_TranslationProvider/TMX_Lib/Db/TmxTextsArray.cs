@@ -24,6 +24,8 @@ namespace TMX_Lib.Db
 		// but we don't want to end up processing too many possible results either, since that could put a strain on both the db, and on us
 		//
 		// this is especially true on fuzzy searches
+		//
+		// IMPORTANT: I played with certain less values (16, 24 -- they almost made no difference)
 		private const int MAX_RESULTS_PER_TASK = 32;
 		private const int MAX_RESULTS = 128;
 
@@ -219,6 +221,8 @@ namespace TMX_Lib.Db
 			}
 			await Task.WhenAll(tasks);
 
+			// note: I won't filter out any texts (thus, no limiting to MAX_RESULTS), because the search doesn't include the Score
+			// also, obviously, exact searches will return very few results
 			if (_logSearches)
 				log.Debug($"END Exact search for {text} {sourceLanguage} ");
 			return texts;
@@ -301,7 +305,7 @@ namespace TMX_Lib.Db
 			}
 			await Task.WhenAll(tasks);
 
-			texts = texts.Take(MAX_RESULTS).ToList();
+			// note: I won't filter out any texts (thus, no limiting to MAX_RESULTS), because the search doesn't include the Score
 			if (_logSearches)
 				log.Debug($"END Concordance search for {text} {sourceLanguage} ");
 			return texts;
