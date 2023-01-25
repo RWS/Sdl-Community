@@ -13,7 +13,7 @@ namespace GoogleCloudTranslationProvider.Helpers
 
 		public static void HandleError(Exception exception)
 		{
-			HandleError($"The error was also logged on the AppData folder.\n\n{exception.Message}\n{exception.StackTrace}", "Unexpected error");
+			HandleError($"An unexpected error occured.\nThe error was logged at {Constants.AppDataFolder}.\n\n{exception.Message}", "Unexpected error");
 		}
 	}
 }

@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
-using Google.LongRunning;
 using GoogleCloudTranslationProvider.Commands;
 using GoogleCloudTranslationProvider.Extensions;
 using GoogleCloudTranslationProvider.GoogleAPI;
@@ -15,6 +14,8 @@ using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
 using GoogleCloudTranslationProvider.Service;
 using Sdl.LanguagePlatform.Core;
+using Sdl.Platform.UI.ExceptionsUI;
+using Sdl.Desktop.Platform.Implementation;
 
 namespace GoogleCloudTranslationProvider.ViewModels
 {
@@ -349,6 +350,12 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			}
 			catch (Exception e)
 			{
+				if (e.Message.Contains("(400) Bad Request"))
+				{
+					ErrorHandler.HandleError("The API Key is not valid", "API Key");
+					return false;
+				}
+
 				ErrorHandler.HandleError(e);
 				return false;
 			}
