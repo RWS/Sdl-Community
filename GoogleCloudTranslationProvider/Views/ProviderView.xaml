@@ -87,6 +87,18 @@
 							  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 							  Cursor="Hand"
 							  Margin="0"/>
+
+					<Button Content="{x:Static root:PluginResources.ProviderView_V2_ApiKey_Navigate}"
+							Command="{Binding NavigateToCommand}"
+							CommandParameter="{x:Static root:Constants.ProjectUri}"
+							Visibility="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+							Style="{StaticResource Sdl.Button.HyperLinkStyle}"
+							HorizontalAlignment="Left"
+							FontSize="12"
+							FontStyle="Italic"
+							Padding="0"
+							Cursor="Hand"
+							Margin="4 0 0 12" />
 				</StackPanel>
 				<!--</GOOGLE API V2>-->
 

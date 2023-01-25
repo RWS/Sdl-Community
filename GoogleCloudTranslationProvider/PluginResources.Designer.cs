@@ -619,7 +619,16 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to API Key Tooltip placeholder.
+        ///   Looks up a localized string similar to Navigate to your account.
+        /// </summary>
+        public static string ProviderView_V2_ApiKey_Navigate {
+            get {
+                return ResourceManager.GetString("ProviderView_V2_ApiKey_Navigate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to API Key associated with Google Cloud project.
         /// </summary>
         public static string ProviderView_V2_ApiKey_Tooltip {
             get {

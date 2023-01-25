@@ -543,7 +543,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				return;
 			}
 
-			ReadJsonFile(fileDrop.First());
+			ReadJsonFile(fileDrop.FirstOrDefault());
 		}
 
 		private void DownloadJsonFile(object parameter)
@@ -715,10 +715,10 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		private void NavigateTo(object parameter)
 		{
+			var query = IsV2Checked ? string.Empty : $"?project={_projectId}";
 			if (parameter is string target && !string.IsNullOrEmpty(target))
 			{
-				target += $"?project={_projectId}";
-				Process.Start(target);
+				Process.Start($"{target}{query}");
 			}
 		}
 

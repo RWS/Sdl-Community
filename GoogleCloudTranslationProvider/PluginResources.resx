@@ -328,7 +328,7 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
     <value>Drop your JSON file</value>
   </data>
   <data name="ProviderView_V2_ApiKey_Tooltip" xml:space="preserve">
-    <value>API Key Tooltip placeholder</value>
+    <value>API Key associated with Google Cloud project</value>
   </data>
   <data name="ProviderView_V3_LocalPath_Description" xml:space="preserve">
     <value>Local path</value>
@@ -489,5 +489,8 @@ Path: {0}</value>
   </data>
   <data name="ProviderView_V3_File_ValidateUrl" xml:space="preserve">
     <value>Validate URL</value>
+  </data>
+  <data name="ProviderView_V2_ApiKey_Navigate" xml:space="preserve">
+    <value>Navigate to your account</value>
   </data>
 </root>
