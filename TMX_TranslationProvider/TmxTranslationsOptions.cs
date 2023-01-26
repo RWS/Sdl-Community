@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using TMX_Lib.Search;
+using TMX_UI.ViewModel;
 
 namespace TMX_TranslationProvider
 {
-	public class TmxTranslationsOptions : ISearchServiceParameters
+	public class TmxTranslationsOptions 
 	{
 		protected bool Equals(TmxTranslationsOptions other)
 		{
@@ -43,12 +44,12 @@ namespace TMX_TranslationProvider
 		public TmxTranslationsOptions()
 		{
 			_uriBuilder = new TranslationProviderUriBuilder(new Uri($"{TmxTranslationProvider.ProviderScheme}://"));
-			FullFileName = ""; // just make sure file name is not null
 			OptionsGuid = Guid.NewGuid().ToString();
 		}
-		public TmxTranslationsOptions(ISearchServiceParameters args) : this()
+		public TmxTranslationsOptions(TmxTranslationsOptions args) : this()
 		{
-			CopyFrom(args);
+			OptionsGuid = args.OptionsGuid;
+			Databases = args.Databases.ToList();
 		}
 
 		[JsonIgnore]
@@ -59,12 +60,11 @@ namespace TMX_TranslationProvider
 
 		public Uri Uri() => _uriBuilder.Uri;
 
-		public void CopyFrom(ISearchServiceParameters other)
+		public string FriendlyName => string.Join(", ", Databases);
+
+		public void CopyFrom(OptionsViewModel other)
 		{
-			FullFileName = other.FullFileName;
-			DbConnectionNoPassword = other.DbConnectionNoPassword;
-			DbName = other.DbName;
-			QuickImport = other.QuickImport;
+			Databases = other.Databases.Select(db => db.Name).ToList();
 		}
 		
 		// the idea - each URI should be unique, or we'd get exceptions from Trados.
@@ -75,38 +75,10 @@ namespace TMX_TranslationProvider
 			private set => SetStringParameter("Guid", value);
 		}
 
-		public string FriendlyName => DbName != "" ? DbName : Path.GetFileName( FullFileName);
-
-		public string FullFileName
+		public IReadOnlyList<string> Databases
 		{
-			get => GetStringParameter("FileName");
-			set => SetStringParameter("FileName", value);
-		}
-
-		// example:
-		// mongodb+srv://jtorjo_rws:<password>@cluster0.mbqowvc.mongodb.net/?retryWrites=true&w=majority
-		//
-		// note: this is exactly what mongodb atlas gives us, so <password> will be exactly the "<password>" string
-		// (which we'll replace with the real password)
-		//
-		// the password will be kept using Sdl.LanguagePlatform.TranslationMemoryApi.ITranslationProviderCredentialStore
-		public string DbConnectionNoPassword
-		{
-			get => GetStringParameter("DbConnection");
-			set => SetStringParameter("DbConnection", value);
-		}
-
-		// the database name - if empty, we'll use the filename, by default
-		public string DbName
-		{
-			get => GetStringParameter("DbName"); 
-			set => SetStringParameter("DbName", value);
-		}
-
-		public bool QuickImport
-		{
-			get => GetStringParameter("QuickImport") == "1";
-			set => SetStringParameter("QuickImport", value ? "1" : "0");
+			get => GetStringParameter("Databases").Split(',');
+			set => SetStringParameter("Databases", string.Join(",",value));
 		}
 
 		private string GetStringParameter(string p)

@@ -145,6 +145,8 @@ namespace TMX_Lib.Search
 			// FIXME
 		}
 
+		public IReadOnlyList<string> Languages => _supportedLanguages.Languages;
+
 		private string SourceLanguage(LanguagePair pair) => _supportedLanguages.TryGetEquivalentLanguage(pair.SourceCultureName);
 		private string TargetLanguage(LanguagePair pair) => _supportedLanguages.TryGetEquivalentLanguage(pair.TargetCultureName);
 

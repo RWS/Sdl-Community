@@ -15,20 +15,16 @@ namespace TMX_Lib.Search
 
 		private Dictionary<string, TmxSearchService> _services = new Dictionary<string, TmxSearchService>();
 
-		private static string Key(ISearchServiceParameters args) => $"{args.DbName}-{args.DbConnectionNoPassword}";
+		private static string Key(string name) => name;
 
-		private SearchServiceParameters empty = new SearchServiceParameters();
-		// this service basically can't search anything
-		public static TmxSearchService EmptySearchService => GetSearchService(Instance.empty);
-
-		public static TmxSearchService GetSearchService(ISearchServiceParameters args)
+		public static TmxSearchService GetSearchService(string name)
 		{
-			var key = Key(args);
+			var key = Key(name);
 			lock (Instance) {
 				if (Instance._services.TryGetValue(key, out var service))
 					return service;
 
-				var newService = new TmxSearchService(args);
+				var newService = new TmxSearchService(name);
 				Instance._services.Add(key, newService);
 				return newService;
 			}

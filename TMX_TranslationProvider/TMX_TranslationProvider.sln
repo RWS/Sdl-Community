@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickTmxTesting", "QuickTmx
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TMX_SimpleSearch", "TMX_SimpleSearch\TMX_SimpleSearch.csproj", "{0C972442-9821-4ADF-A908-F023A6D3C588}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TMX_UI", "TMX_UI\TMX_UI.csproj", "{C4B3CA58-40F6-4132-95A5-6E2CBD50112B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TMX_UI_Test", "TMX_UI_Test\TMX_UI_Test.csproj", "{2977EB97-E793-4AA8-A824-FA8B744B9BC0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{0C972442-9821-4ADF-A908-F023A6D3C588}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C972442-9821-4ADF-A908-F023A6D3C588}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C972442-9821-4ADF-A908-F023A6D3C588}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4B3CA58-40F6-4132-95A5-6E2CBD50112B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4B3CA58-40F6-4132-95A5-6E2CBD50112B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4B3CA58-40F6-4132-95A5-6E2CBD50112B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4B3CA58-40F6-4132-95A5-6E2CBD50112B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2977EB97-E793-4AA8-A824-FA8B744B9BC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2977EB97-E793-4AA8-A824-FA8B744B9BC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2977EB97-E793-4AA8-A824-FA8B744B9BC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2977EB97-E793-4AA8-A824-FA8B744B9BC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

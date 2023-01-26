@@ -4,6 +4,7 @@
   	<TargetFramework>net48</TargetFramework>
   	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   	<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
+    <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
   <ItemGroup>
@@ -12,16 +13,38 @@
     <Compile Remove="TMXTests\**" />
     <Compile Remove="TMX_Lib\**" />
     <Compile Remove="TMX_SimpleSearch\**" />
+    <Compile Remove="TMX_UI\**" />
+    <Compile Remove="TMX_UI_Test\**" />
     <EmbeddedResource Remove="packages\**" />
     <EmbeddedResource Remove="QuickTmxTesting\**" />
     <EmbeddedResource Remove="TMXTests\**" />
     <EmbeddedResource Remove="TMX_Lib\**" />
     <EmbeddedResource Remove="TMX_SimpleSearch\**" />
+    <EmbeddedResource Remove="TMX_UI\**" />
+    <EmbeddedResource Remove="TMX_UI_Test\**" />
     <None Remove="packages\**" />
     <None Remove="QuickTmxTesting\**" />
     <None Remove="TMXTests\**" />
     <None Remove="TMX_Lib\**" />
     <None Remove="TMX_SimpleSearch\**" />
+    <None Remove="TMX_UI\**" />
+    <None Remove="TMX_UI_Test\**" />
+    <Page Remove="TMX_SimpleSearch\**" />
+    <Page Remove="TMX_UI\**" />
+    <Page Remove="TMX_UI_Test\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="UI\TmxExportForm.cs" />
+    <Compile Remove="UI\TmxExportForm.Designer.cs" />
+    <Compile Remove="UI\TmxOptionsForm.cs" />
+    <Compile Remove="UI\TmxOptionsForm.Designer.cs" />
+    <Compile Remove="UI\TmxViewReport.cs" />
+    <Compile Remove="UI\TmxViewReport.Designer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="UI\TmxExportForm.resx" />
+    <EmbeddedResource Remove="UI\TmxOptionsForm.resx" />
+    <EmbeddedResource Remove="UI\TmxViewReport.resx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
@@ -106,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="TMX_Lib\TMX_Lib.csproj" />
+    <ProjectReference Include="TMX_UI\TMX_UI.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="PluginResources.Designer.cs">

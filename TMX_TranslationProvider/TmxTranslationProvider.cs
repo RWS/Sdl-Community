@@ -15,6 +15,7 @@ using TMX_Lib.TmxFormat;
 using TMX_Lib.Utils;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using MongoDB.Driver;
+using TMX_UI.ViewModel;
 
 namespace TMX_TranslationProvider
 {
@@ -36,8 +37,10 @@ namespace TMX_TranslationProvider
 		}
 
 		public TmxTranslationsOptions Options => _options;
-		public TmxSearchService SearchService => TmxSearchServiceProvider.GetSearchService(_options);
-		public void UpdateOptions(ISearchServiceParameters options)
+
+		//FIXME + implement caching on databases' names
+		public TmxSearchService SearchService => TmxSearchServiceProvider.GetSearchService(_options.Databases[0]);
+		public void UpdateOptions(OptionsViewModel options)
 		{
 			lock (this)
 			{

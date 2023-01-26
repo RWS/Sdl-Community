@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ namespace TMX_Lib.Utils
 		private static readonly Logger log = NLog.LogManager.GetCurrentClassLogger();
 
 		[JsonProperty]
-		private List<SearchServiceParameters> _localTmxDatabases = new List<SearchServiceParameters>();
+		private List<string> _localTmxDatabases = new List<string>();
 
 		private bool _needsSave;
 
@@ -28,13 +29,13 @@ namespace TMX_Lib.Utils
 		private static string FileName => $"{Util.PluginDirectory}\\tmx_settings.txt";
 
 		[JsonIgnore]
-		public IReadOnlyList<SearchServiceParameters> LocalTmxDatabases => _localTmxDatabases;
+		public IReadOnlyList<string> LocalTmxDatabases => _localTmxDatabases;
 
-		public void AddTmxDatabase(SearchServiceParameters dbInfo)
+		public void AddTmxDatabase(string dbInfo)
 		{
 			lock (this)
 			{
-				if (_localTmxDatabases.Any(db => db.DbName == dbInfo.DbName))
+				if (_localTmxDatabases.Any(db => db == dbInfo))
 					return; // already have it
 				_localTmxDatabases.Add(dbInfo);
 				_needsSave = true;

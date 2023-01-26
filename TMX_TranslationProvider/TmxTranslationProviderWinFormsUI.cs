@@ -9,6 +9,9 @@ using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using TMX_Lib.Search;
+using TMX_UI.View;
+using TMX_UI.ViewModel;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace TMX_TranslationProvider
 {
@@ -20,12 +23,15 @@ namespace TMX_TranslationProvider
 
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
-			var form = new TmxOptionsForm(TmxSearchServiceProvider.EmptySearchService);
-			if (form.ShowDialog(owner) != DialogResult.OK)
+			var form = new OptionsView();
+			var interopHelper = new System.Windows.Interop.WindowInteropHelper(form);
+			interopHelper.Owner = owner.Handle;
+
+			if (form.ShowDialog() != true)
 				return null;
-			var options = new TmxTranslationsOptions(form.Options);
+			var options = new TmxTranslationsOptions();
 			var provider = new TmxTranslationProvider(options);
-			provider.UpdateOptions(form.Options);
+			provider.UpdateOptions(form.ViewModel);
 			return new []{ provider };
 		}
 
@@ -33,10 +39,13 @@ namespace TMX_TranslationProvider
 		{
 			if (translationProvider is TmxTranslationProvider tmxProvider)
 			{
-				var form = new TmxOptionsForm(tmxProvider.SearchService);
-				if (form.ShowDialog(owner) == DialogResult.OK)
+				var form = new OptionsView(tmxProvider.Options.Databases);
+				var interopHelper = new System.Windows.Interop.WindowInteropHelper(form);
+				interopHelper.Owner = owner.Handle;
+
+				if (form.ShowDialog() == true)
 				{
-					tmxProvider.UpdateOptions(form.Options);
+					tmxProvider.UpdateOptions(form.ViewModel);
 					return true;
 				}
 			}
@@ -51,14 +60,7 @@ namespace TMX_TranslationProvider
 
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
 		{
-			var fullFileName = new TmxTranslationsOptions(translationProviderUri).FullFileName;
-			var friendly = "";
-			if (File.Exists(fullFileName))
-			{
-				var fileName = Path.GetFileName(fullFileName);
-				var folder = Path.GetDirectoryName(fullFileName);
-				friendly = $" - {fileName} ({folder})";
-			}
+			var friendly = new TmxTranslationsOptions(translationProviderUri).FriendlyName;
 
 			var icon = PluginResources.TMX_TM_Provider;
 			return new TranslationProviderDisplayInfo

@@ -57,7 +57,7 @@ namespace TMX_Lib.Db
 		// for testing/debugging
 		public bool LogSearches = true;
 
-		public TmxMongoDb(string url, string databaseName)
+		private TmxMongoDb(string url, string databaseName)
 		{
 			_url = url;
 			var notAllowedChars = " \t\r\n:.()_";
@@ -68,8 +68,6 @@ namespace TMX_Lib.Db
 		public TmxMongoDb(string databaseName) : this("localhost:27017", databaseName)
 		{
 		}
-
-		private bool IsLocalConnection() => _url.StartsWith("mongodb://");
 
 		public string ImportError() => _importError;
 

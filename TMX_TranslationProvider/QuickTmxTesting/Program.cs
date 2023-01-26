@@ -40,7 +40,7 @@ namespace QuickTmxTesting
 		// performs the database fuzzy-search, not our Fuzzy-search (our fuzzy search is more constraining)
 		private static async Task TestDatabaseFuzzySimple4(string root)
 		{
-			var db = new TmxMongoDb("localhost:27017", "sample4");
+			var db = new TmxMongoDb("sample4");
 			await db.ImportToDbAsync($"{root}\\SampleTestFiles\\#4.tmx");
 			var search = new TmxSearch(db);
 			await search.LoadLanguagesAsync();
@@ -88,7 +88,7 @@ namespace QuickTmxTesting
 
 		private static async Task TestFuzzySimple4(string root)
 		{
-			var db = new TmxMongoDb("localhost:27017", "sample4");
+			var db = new TmxMongoDb( "sample4");
 			await db.ImportToDbAsync($"{root}\\SampleTestFiles\\#4.tmx");
 			var search = new TmxSearch(db);
 			await search.LoadLanguagesAsync();
@@ -109,7 +109,7 @@ namespace QuickTmxTesting
 
 		private static async Task TestDbSearch(string dbName, string text, SearchType searchType, string sourceLanguage, string targetLanguage)
 		{
-			var db = new TmxMongoDb("localhost:27017", dbName);
+			var db = new TmxMongoDb( dbName);
 			var search = new TmxSearch(db);
 			await search.LoadLanguagesAsync();
 
@@ -135,7 +135,7 @@ namespace QuickTmxTesting
 
 		private static async Task TestSearcherSearch(string dbName, string text, SearchType searchType, string sourceLanguage, string targetLanguage)
 		{
-			var db = new TmxMongoDb("localhost:27017", dbName);
+			var db = new TmxMongoDb( dbName);
 			var search = new TmxSearch(db);
 			await search.LoadLanguagesAsync();
 
@@ -181,7 +181,7 @@ namespace QuickTmxTesting
 		}
 
 		private static async Task TestSearcherSearch(string dbName, IReadOnlyList<string> texts, string sourceLanguage, string targetLanguage) {
-			var db = new TmxMongoDb("localhost:27017", dbName) { LogSearches = false};
+			var db = new TmxMongoDb( dbName) { LogSearches = false};
 			await db.InitAsync();
 			var search = new TmxSearch(db);
 			await search.LoadLanguagesAsync();
@@ -233,7 +233,7 @@ namespace QuickTmxTesting
 
 		private static async Task TestAvgExactAndFuzzySearcherSearch(string dbName, IReadOnlyList<string> texts, string sourceLanguage, string targetLanguage, int ignoreTimes, int runTimes)
 		{
-			var db = new TmxMongoDb("localhost:27017", dbName) { LogSearches = false };
+			var db = new TmxMongoDb( dbName) { LogSearches = false };
 			await db.InitAsync();
 			var search = new TmxSearch(db);
 			await search.LoadLanguagesAsync();
@@ -291,7 +291,7 @@ namespace QuickTmxTesting
 
 		private static async Task TestAvgNormalSearcherSearch(string dbName, IReadOnlyList<string> texts, string sourceLanguage, string targetLanguage, int ignoreTimes, int runTimes)
 		{
-			var db = new TmxMongoDb("localhost:27017", dbName) { LogSearches = false };
+			var db = new TmxMongoDb( dbName) { LogSearches = false };
 			await db.InitAsync();
 			var search = new TmxSearch(db);
 			await search.LoadLanguagesAsync();
@@ -343,7 +343,7 @@ namespace QuickTmxTesting
 		// lets see how much time that is
 		private static async Task TestWarmupTimesNormalSearcherSearch(string dbName, IReadOnlyList<string> texts, string sourceLanguage, string targetLanguage, int runTimes)
 		{
-			var db = new TmxMongoDb("localhost:27017", dbName) { LogSearches = false };
+			var db = new TmxMongoDb( dbName) { LogSearches = false };
 			await db.InitAsync();
 			var search = new TmxSearch(db);
 			await search.LoadLanguagesAsync();
@@ -412,7 +412,7 @@ namespace QuickTmxTesting
 		{
 			// run it after:
 			// Task.Run(() => TestImportFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro", quickImport: true)).Wait();
-			var db = new TmxMongoDb("localhost:27017", "en-ro");
+			var db = new TmxMongoDb( "en-ro");
 			await db.InitAsync();
 			var search = new TmxSearch(db);
 			await search.LoadLanguagesAsync();

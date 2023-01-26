@@ -361,7 +361,7 @@ namespace TMX_SimpleSearch
 			{
 				case nameof(SelectedDbIndex):
 					if (SelectedDbIndex >= 0)
-						_searcher = new TmxSearch(new TmxMongoDb("localhost:27017", Databases[SelectedDbIndex]));
+						_searcher = new TmxSearch(new TmxMongoDb(Databases[SelectedDbIndex]));
 					await _searcher.LoadLanguagesAsync();
 					Languages = _searcher.SupportedLanguages();
 					LoadLanguages();

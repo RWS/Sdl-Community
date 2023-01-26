@@ -18,36 +18,35 @@ namespace TMX_Lib.Search
 	{
 		private static readonly Logger log = LogManager.GetCurrentClassLogger();
 
-		private SearchServiceParameters _options;
+		private string _dbName;
+
 		private TmxSearch _search;
 		private TmxMongoDb _db;
-		private bool _paramsOk = true;
 		private bool _hasImportBeenDoneBefore;
 		private TmxImportReport _report = new TmxImportReport();
 
-
-		public TmxSearchService(ISearchServiceParameters options)
+		Task _initTask;
+		public TmxSearchService(string dbName)
 		{
 			// async call
-			SetOptionsAsync(options);
+			_initTask = SetOptionsAsync(dbName);
 		}
 
-		public ISearchServiceParameters Options => _options;
-		public bool OptionsOk => _paramsOk;
 		// report about the current import
 		public TmxImportReport Report => _report;
 
-		private static string ConnectionStr(ISearchServiceParameters parameters) => parameters.DbConnectionNoPassword;
-		private static string DbName(ISearchServiceParameters parameters) 
-			=> parameters == null ? "" : (parameters.DbName != "" ? parameters.DbName : Path.GetFileNameWithoutExtension(parameters.FullFileName));
 
-		public bool IsImporting() => _paramsOk && (_db?.IsImportInProgress() ?? false);
+		public bool IsImporting() => (_db?.IsImportInProgress() ?? false);
 		public double ImportProgress() => _db?.ImportProgress() ?? 0d;
 		public bool ImportComplete() => _hasImportBeenDoneBefore || (_db != null && _db.IsImportComplete());
 		public bool HasImportBeenDoneBefore() => _hasImportBeenDoneBefore;
 
 		// if non empty, an error happened while import
 		public string ImportError() => _db?.ImportError() ?? "";
+
+		public async Task InitAsync() => await _initTask;
+
+		public IReadOnlyList<string> Languages => _search?.Languages ?? new List<string>();
 
 		public bool SupportsLanguage(LanguagePair language)
 		{
@@ -60,9 +59,6 @@ namespace TMX_Lib.Search
 			TmxSearch search;
 			lock (this)
 			{
-				if (!_paramsOk)
-					return false;
-
 				if (IsImporting())
 					// during import, we don't know what languages we support
 					return true;
@@ -77,98 +73,29 @@ namespace TMX_Lib.Search
 		}
 
 		// if it will start an import, this will return once the import is complete
-		private async Task SetOptionsAsync(ISearchServiceParameters newOptions)
+		private async Task SetOptionsAsync(string dbName)
 		{
-			Debug.Assert(newOptions != null);
-			log.Debug($"new options {newOptions.DbConnectionNoPassword} {newOptions.FullFileName} db={newOptions.DbName}");
-			SearchServiceParameters oldOptions;
+			log.Debug($"search service {dbName} ");
 			TmxMongoDb db;
 			lock (this)
 			{
-				if (_options?.Equals(newOptions) ?? false)
-					return;
+				if (_dbName == dbName)
+					return; // same db
 
-				oldOptions = _options;
-				_options = SearchServiceParameters.Copy(newOptions);
+				_dbName = dbName;
 				db = _db;
 			}
 
-			var isSameDb = DbName(oldOptions) == DbName(newOptions);
-			if (!isSameDb)
-				db?.CancelImport();
-
 			try
 			{
-				if (!(await TryParametersAsync(newOptions)).ok)
-				{
-					lock (this)
-						_paramsOk = false;
-					return;
-				}
-
-				lock (this)
-					_paramsOk = true;
-				var needsReimport = oldOptions == null
-				                    || (oldOptions.FullFileName != newOptions.FullFileName)
-				                    || (newOptions.DbName == "")
-				                    || !isSameDb;
-				if (!isSameDb)
-				{
-					db = new TmxMongoDb(ConnectionStr(newOptions), DbName(newOptions));
-					await db.InitAsync();
-					_hasImportBeenDoneBefore = await db.HasImportBeenDoneBeforeAsync();
-					if (_hasImportBeenDoneBefore)
-						needsReimport = Path.GetFileName(newOptions.FullFileName) != await db.ImportedFileNameAsync();
-					else 
-						// this is a fresh db
-						needsReimport = true;
-				}
-
-				if (db == null)
-				{
-					// no db connection yet
-					lock (this)
-						_paramsOk = false;
-					return;
-				}
+				db = new TmxMongoDb(dbName);
+				await db.InitAsync();
 
 				var search = new TmxSearch(db);
 				await search.LoadLanguagesAsync();
-				bool continueImport;
-				lock (this)
-				{
-					// the idea - while we're initializing this asynchronously, we can have another call to change the params
-					continueImport = _options.Equals(newOptions);
-					if (continueImport)
-					{
-						_db = db;
-						_search = search;
-					}
-				}
-
-				if (continueImport && needsReimport)
-					// IMPORTANT: just start the import, this can take a lot of time, for big databases
-					await Task.Run(async () =>
-					{
-						var watch = Stopwatch.StartNew();
-						lock (this)
-							_report = TmxImportReport.StartNow();
-						await db.ImportToDbAsync(
-							_options.FullFileName,
-							report =>
-							{
-								lock (this) _report.CopyFrom(report);
-							},
-							_options.QuickImport
-							);
-						await search.LoadLanguagesAsync();
-						log.Debug($"import {_options.FullFileName} took {watch.ElapsedMilliseconds / 1000} secs.");
-					});
 			}
 			catch (Exception e)
 			{
-				lock (this)
-					_paramsOk = false;
 				throw;
 			}
 		}
@@ -203,36 +130,6 @@ namespace TMX_Lib.Search
 			await search.AddAsync(tu, languagePair);
 		}
 
-		// returns true if the given parameters are valid
-		public static async Task<(bool ok,string error)> TryParametersAsync(ISearchServiceParameters parameters)
-		{
-			string error = "";
-			try
-			{
-				if (!File.Exists(parameters.FullFileName))
-				{
-					error = $"File not found: {parameters.FullFileName}";
-					return (false, error);
-				}
-
-				if (ConnectionStr(parameters) == "")
-				{
-					error = $"Please set the connection.";
-					return (false, error);
-				}
-
-				var db = new TmxMongoDb(ConnectionStr(parameters), DbName(parameters));
-				// this throws on connection failure
-				await db.InitAsync();
-
-				return (true, "");
-			}
-			catch (Exception e)
-			{
-				error = e.Message;
-				return (false, error);
-			}
-		}
 
 		public async Task ExportToFileAsync(string fileName, Func<double, bool> continueFunc)
 		{

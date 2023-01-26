@@ -79,8 +79,6 @@
     <Compile Include="Db\TmxTextsArray.cs" />
     <Compile Include="Db\TmxTranslationUnit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Search\ISearchServiceParameters.cs" />
-    <Compile Include="Search\SearchServiceParameters.cs" />
     <Compile Include="Search\SimpleResult.cs" />
     <Compile Include="Search\SlowCompareTexts.cs" />
     <Compile Include="Search\SlowCompareUtil.cs" />
