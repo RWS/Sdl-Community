@@ -146,12 +146,6 @@
 											HorizontalAlignment="Left"
 											Margin="16 8 0 0">
 									<Button Content="{x:Static root:PluginResources.ProviderView_V3_File_ValidateUrl}"
-											Command="{Binding VerifyOnlineJsonFileCommand}"
-											Style="{StaticResource Sdl.Button.SecondaryStyle}"
-											Margin="0 0 8 0"
-											Width="130"
-											Cursor="Hand"/>
-									<Button Content="{x:Static root:PluginResources.ProviderView_V3_File_DownloadButton}"
 											Command="{Binding DownloadJsonFileCommand}"
 											Style="{StaticResource Sdl.Button.PrimaryStyle}"
 											Padding="0"

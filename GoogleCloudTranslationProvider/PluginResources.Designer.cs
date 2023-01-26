@@ -954,7 +954,7 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download location.
+        ///   Looks up a localized string similar to JSON Location.
         /// </summary>
         public static string SettingsView_DownloadPath_Description {
             get {
@@ -963,11 +963,11 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please select the path where the JSON files should be saved.
+        ///   Looks up a localized string similar to Location for downloaded JSON files.
         /// </summary>
-        public static string SettingsView_DownloadPath_Watermark {
+        public static string SettingsView_DownloadPath_ToolTip {
             get {
-                return ResourceManager.GetString("SettingsView_DownloadPath_Watermark", resourceCulture);
+                return ResourceManager.GetString("SettingsView_DownloadPath_ToolTip", resourceCulture);
             }
         }
         
@@ -1089,7 +1089,7 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The local path to the JSON file cannot be empty, please browse for your file from your machine..
+        ///   Looks up a localized string similar to The local path to the JSON file cannot be empty..
         /// </summary>
         public static string Validation_EmptyJsonFilePath {
             get {
@@ -1098,7 +1098,7 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The selected glossary is no longer available..
+        ///   Looks up a localized string similar to The location path to the JSON file cannot be empty.
         /// </summary>
         public static string Validation_Glossary_Invalid {
             get {

@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 using GoogleCloudTranslationProvider.Commands;
 using GoogleCloudTranslationProvider.Extensions;
@@ -14,8 +14,6 @@ using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
 using GoogleCloudTranslationProvider.Service;
 using Sdl.LanguagePlatform.Core;
-using Sdl.Platform.UI.ExceptionsUI;
-using Sdl.Desktop.Platform.Implementation;
 
 namespace GoogleCloudTranslationProvider.ViewModels
 {
@@ -51,7 +49,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private bool _isTellMeAction;
 		private bool _useUrlPath;
 
-		private ICommand _verifyOnlineJsonFileCommand;
 		private ICommand _downloadJsonFileCommand;
 		private ICommand _dragDropJsonFileCommand;
 		private ICommand _browseJsonFileCommand;
@@ -324,7 +321,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			}
 		}
 
-		public ICommand VerifyOnlineJsonFileCommand => _verifyOnlineJsonFileCommand ??= new RelayCommand(VerifyOnlineJsonFile);
 		public ICommand DragDropJsonFileCommand => _dragDropJsonFileCommand ??= new RelayCommand(DragAndDropJsonFile);
 		public ICommand DownloadJsonFileCommand => _downloadJsonFileCommand ??= new RelayCommand(DownloadJsonFile);
 		public ICommand BrowseJsonFileCommand => _browseJsonFileCommand ??= new RelayCommand(BrowseJsonFile);
@@ -740,20 +736,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 					UrlToDownload = string.Empty;
 					break;
 			}
-		}
-
-		private void VerifyOnlineJsonFile(object parameter)
-		{
-			UrlToDownload ??= string.Empty;
-			if (UrlToDownload.OnlineJsonFileIsValid())
-			{
-				MessageBox.Show($"The json file can be used\n\nThe check was performed on the next URI {UrlToDownload}", "File verification");
-			}
-			else
-			{
-				MessageBox.Show($"No valid json file found at {UrlToDownload}", "File verification");
-			}
-
 		}
 	}
 }

@@ -115,10 +115,20 @@
 							 Margin="12 0 0 0" />
 				</StackPanel>
 
-				<TextBlock Text="{x:Static root:PluginResources.SettingsView_DownloadPath_Description}"
-						   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
-						   HorizontalAlignment="Left"
-						   Margin="0 12 0 0" />
+				<StackPanel Orientation="Horizontal"
+							Margin="0 12 0 0">
+					<TextBlock Text="{x:Static root:PluginResources.SettingsView_DownloadPath_Description}"
+							   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
+							   Margin="2 0 2 2"/>
+					<Image Source="../Resources/Information.png"
+						   Width="15">
+						<Image.ToolTip>
+							<ToolTip>
+								<TextBlock Text="{x:Static root:PluginResources.SettingsView_DownloadPath_ToolTip}" />
+							</ToolTip>
+						</Image.ToolTip>
+					</Image>
+				</StackPanel>
 				<StackPanel Orientation="Horizontal"
 							Margin="0 2 0 12">
 					<Button Content="{x:Static root:PluginResources.SettingsView_BrowseButton}"
@@ -130,7 +140,7 @@
 							Width="80" />
 					<TextBox Text="{Binding DownloadPath, UpdateSourceTrigger=PropertyChanged}"
 							 Style="{StaticResource Sdl.TextBox.BorderlessReadOnlyStyle}"
-							 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.SettingsView_DownloadPath_Watermark}"
+							 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.SettingsView_DownloadPath_ToolTip}"
 							 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
 							 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=DownloadPath, Type={x:Type viewModels:SettingsViewModel}}"
 							 VerticalContentAlignment="Center"

@@ -212,7 +212,7 @@
     <value>Browse</value>
   </data>
   <data name="Validation_EmptyJsonFilePath" xml:space="preserve">
-    <value>The local path to the JSON file cannot be empty, please browse for your file from your machine.</value>
+    <value>The local path to the JSON file cannot be empty.</value>
   </data>
   <data name="GoogleApiDescription" xml:space="preserve">
     <value>Select the version of the Google TP and sign in using your credentials</value>
@@ -464,7 +464,7 @@ Path: {0}</value>
     <value>Could not authenticate the user with the ProjectID provided in the JSON file.</value>
   </data>
   <data name="Validation_Glossary_Invalid" xml:space="preserve">
-    <value>The selected glossary is no longer available.</value>
+    <value>The location path to the JSON file cannot be empty</value>
   </data>
   <data name="Validation_MultipleFiles" xml:space="preserve">
     <value>Only one file can be dropped to be used on the authentication process.</value>
@@ -476,10 +476,10 @@ Path: {0}</value>
     <value>Navigate to your project</value>
   </data>
   <data name="SettingsView_DownloadPath_Description" xml:space="preserve">
-    <value>Download location</value>
+    <value>JSON Location</value>
   </data>
-  <data name="SettingsView_DownloadPath_Watermark" xml:space="preserve">
-    <value>Please select the path where the JSON files should be saved</value>
+  <data name="SettingsView_DownloadPath_ToolTip" xml:space="preserve">
+    <value>Location for downloaded JSON files</value>
   </data>
   <data name="SettingsView_SessionSettingsTitle" xml:space="preserve">
     <value>Session settings</value>

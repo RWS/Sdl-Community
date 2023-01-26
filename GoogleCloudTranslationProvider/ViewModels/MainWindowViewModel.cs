@@ -38,16 +38,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private bool _isSettingsViewSelected;
 		private bool _showSettingsView;
 		private bool _showMultiButton;
-		public bool ShowMultiButton
-		{
-			get => _showMultiButton;
-			set
-			{
-				if (_showMultiButton == value) return;
-				_showMultiButton = value;
-				OnPropertyChanged(nameof(ShowMultiButton));
-			}
-		}
 
 		private string _jsonFilePath;
 		private string _projectId;
@@ -229,6 +219,17 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				if (_translatorErrorResponse == value) return;
 				_translatorErrorResponse = value;
 				OnPropertyChanged(nameof(TranslatorErrorResponse));
+			}
+		}
+
+		public bool ShowMultiButton
+		{
+			get => _showMultiButton;
+			set
+			{
+				if (_showMultiButton == value) return;
+				_showMultiButton = value;
+				OnPropertyChanged(nameof(ShowMultiButton));
 			}
 		}
 

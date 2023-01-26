@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
-using System.Windows;
+using System.Windows.Forms;
 
 namespace GoogleCloudTranslationProvider.Helpers
 {
@@ -8,7 +7,11 @@ namespace GoogleCloudTranslationProvider.Helpers
 	{
 		public static void HandleError(string errorMessage, string source)
 		{
-			Task.Run(() => { var dialogResult = MessageBox.Show(errorMessage, source); });
+			MessageBox.Show(errorMessage,
+							source,
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Error,
+							MessageBoxDefaultButton.Button1);
 		}
 
 		public static void HandleError(Exception exception)
