@@ -53,6 +53,7 @@ namespace GoogleCloudTranslationProvider.Extensions
 				return (false, PluginResources.FileValidation_EmptyUri);
 			}
 
+			uri = uri.EnsureUriIsValid();
 			if (!OnlineJsonFileIsValid(uri))
 			{
 				return (false, PluginResources.FileValidation_MissingJsonFile);
@@ -98,6 +99,28 @@ namespace GoogleCloudTranslationProvider.Extensions
 			{
 				return false;
 			}
+		}
+
+		private static string EnsureUriIsValid(this string uri)
+		{
+			try
+			{
+				var targetUri = new Uri(uri);
+				if (targetUri.Host.Contains("dropbox") && targetUri.Query != "?dl=1")
+				{
+					uri = uri.Substring(0, uri.Length - targetUri.Query.Length) + "?dl=1";
+				}
+				else if (targetUri.Host.Contains("dropbox"))
+				{
+
+
+				}
+
+				_ = new Uri(uri);
+			}
+			catch { }
+
+			return uri;
 		}
 
 		private static (bool Success, object OperationResult) ReadJsonFileOnPath(this string filePath)

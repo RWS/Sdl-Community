@@ -31,9 +31,11 @@ namespace GoogleCloudTranslationProvider
 		// Google URIs
 		public const string LanguagesUri = "https://www.googleapis.com/language/translate/v2/languages";
 		public const string TranslationUri = "https://translation.googleapis.com/language/translate/v2";
-		public const string GlossariesUri = "https://console.cloud.google.com/storage/browser";
+		public const string GlossariesUri = "https://console.cloud.google.com/storage";
 		public const string CustomModelsUri = "https://console.cloud.google.com/translation/datasets";
 		public const string ProjectUri = "https://console.cloud.google.com/home/dashboard";
+		public const string ResourceManagerUri = "https://console.cloud.google.com/cloud-resource-manager";
+
 
 		// Documentation
 		public const string V3Documentation = "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/6575/v3-advanced-translation";

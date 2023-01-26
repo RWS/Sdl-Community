@@ -718,8 +718,13 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		private void NavigateTo(object parameter)
 		{
-			var query = IsV2Checked ? string.Empty : $"?project={_projectId}";
-			if (parameter is string target && !string.IsNullOrEmpty(target))
+			if (parameter is not string target)
+			{
+				return;
+			}
+
+			var query = IsV2Checked || target.Contains("cloud-resource-manager") ? string.Empty : $"?project={_projectId}";
+			if (!string.IsNullOrEmpty(target))
 			{
 				Process.Start($"{target}{query}");
 			}

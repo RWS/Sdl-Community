@@ -211,12 +211,12 @@
 							<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_ProjectID_Description}"
 									   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
 									   HorizontalAlignment="Left"
-									   Margin="0 0 4 0"/>
+									   Margin="0 0 4 0" />
 							<Image Source="../Resources/Information.png"
 								   Width="15">
 								<Image.ToolTip>
 									<ToolTip>
-										<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_ProjectID_Tooltip}"/>
+										<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_ProjectID_Tooltip}" />
 									</ToolTip>
 								</Image.ToolTip>
 							</Image>
@@ -228,7 +228,20 @@
 								 HorizontalAlignment="Left"
 								 IsReadOnly="True"
 								 Height="24"
-								 Margin="0 0 0 12"/>
+								 Margin="0 0 0 0"/>
+						
+						<Button Content="Navigate to Resource Manager"
+								Command="{Binding NavigateToCommand}"
+								CommandParameter="{x:Static root:Constants.ResourceManagerUri}"
+								Visibility="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+								Style="{StaticResource Sdl.Button.HyperLinkStyle}"
+								IsEnabled="{Binding ProjectResourcesLoaded}"
+								HorizontalAlignment="Left"
+								FontSize="12"
+								FontStyle="Italic"
+								Padding="0"
+								Cursor="Hand"
+								Margin="4 -4 0 12" />
 						<!--</PROJECT ID>-->
 						
 						<!--<PROJECT LOCATION>-->

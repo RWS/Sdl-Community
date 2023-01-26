@@ -334,19 +334,19 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
     <value>Local path</value>
   </data>
   <data name="ProviderView_V3_LocalPath_Tooltip" xml:space="preserve">
-    <value>This field can not be edited manualy, you need to use the -Drag and Drop- or -Browse- feature</value>
+    <value>Stored JSON file location</value>
   </data>
   <data name="ProviderView_V3_Location_Description" xml:space="preserve">
     <value>Location</value>
   </data>
   <data name="ProviderView_V3_Location_Tooltip" xml:space="preserve">
-    <value>Project Location Tooltip placeholder</value>
+    <value>You permanently set a location for storing your data when you create a bucket.</value>
   </data>
   <data name="ProviderView_V3_ProjectID_Description" xml:space="preserve">
     <value>Project ID</value>
   </data>
   <data name="ProviderView_V3_ProjectID_Tooltip" xml:space="preserve">
-    <value>Project ID Tooltip placeholder</value>
+    <value>A globally unique identifier for your project.</value>
   </data>
   <data name="ProviderView_V3_ProjectID_Warning" xml:space="preserve">
     <value>JSON file is corrupted, the ProjectID is either missing or incorrect.</value>
@@ -355,13 +355,13 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
     <value>Custom model (AutoML)</value>
   </data>
   <data name="ProviderView_V3_CustomModel_Tooltip" xml:space="preserve">
-    <value>Custom Model (AutoML) Tooltip placeholder</value>
+    <value>AutoML, a custom machine learning model</value>
   </data>
   <data name="ProviderView_V3_Glossary_Description" xml:space="preserve">
     <value>Glossary</value>
   </data>
   <data name="ProviderView_V3_Glossary_Tooltip" xml:space="preserve">
-    <value>Glossary Tooltip placeholder</value>
+    <value>A glossary is a custom dictionary</value>
   </data>
   <data name="ProviderView_V3_Glossary_UseUnidirectional" xml:space="preserve">
     <value>Unidirectional glossaries</value>

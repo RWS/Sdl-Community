@@ -664,7 +664,7 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Custom Model (AutoML) Tooltip placeholder.
+        ///   Looks up a localized string similar to AutoML, a custom machine learning model.
         /// </summary>
         public static string ProviderView_V3_CustomModel_Tooltip {
             get {
@@ -736,7 +736,7 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Glossary Tooltip placeholder.
+        ///   Looks up a localized string similar to A glossary is a custom dictionary.
         /// </summary>
         public static string ProviderView_V3_Glossary_Tooltip {
             get {
@@ -772,7 +772,7 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This field can not be edited manualy, you need to use the -Drag and Drop- or -Browse- feature.
+        ///   Looks up a localized string similar to Stored JSON file location.
         /// </summary>
         public static string ProviderView_V3_LocalPath_Tooltip {
             get {
@@ -790,7 +790,7 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Project Location Tooltip placeholder.
+        ///   Looks up a localized string similar to You permanently set a location for storing your data when you create a bucket..
         /// </summary>
         public static string ProviderView_V3_Location_Tooltip {
             get {
@@ -826,7 +826,7 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Project ID Tooltip placeholder.
+        ///   Looks up a localized string similar to A globally unique identifier for your project..
         /// </summary>
         public static string ProviderView_V3_ProjectID_Tooltip {
             get {
