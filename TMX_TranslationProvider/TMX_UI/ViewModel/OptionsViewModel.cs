@@ -41,6 +41,8 @@ namespace TMX_UI.ViewModel
 		public bool IsSelectDatabases => State == StateType.SelectDatabases;
 		public bool IsImportTmxFile => State == StateType.ImportTmxFile;
 		public bool IsExportToTmx => State == StateType.ExportToTmx;
+		public bool HasAnyDatabase => Databases.Count > 0;
+		public bool HasNoDatabase => Databases.Count == 0;
 
 		private IReadOnlyList<DatabaseItem> _databases = new List<DatabaseItem>();
 		public IReadOnlyList<DatabaseItem> Databases { 
@@ -48,9 +50,28 @@ namespace TMX_UI.ViewModel
 			set {
 				_databases = value;
 				OnPropertyChanged();
-			} 
+				OnPropertyChanged(nameof(HasAnyDatabase));
+				OnPropertyChanged(nameof(HasNoDatabase));
+				OnPropertyChanged(nameof(IsMongoDbNotInstalled));
+			}
 		}
 
+		// very simple way to verify if user has Mongodb Community Server installed locally 
+		// obviously, it doesn't always work, but it's a very simple method that works probably 98% of the cases
+		private static bool TryDetectLocalMongoDb()
+		{
+			return false;
+			var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+			if (programFiles.EndsWith("(x86)"))
+				// the idea - we can be run as a 32-bit plugin
+				programFiles = programFiles.Substring(0, programFiles.Length - 5).Trim();
+
+			var mongodbServer = $"{programFiles}\\MongoDB\\Server\\6.0\\bin\\mongod.exe";
+			var exists = System.IO.File.Exists(mongodbServer);
+			return exists;
+		}
+
+		public bool IsMongoDbNotInstalled => TryDetectLocalMongoDb() == false && Databases.Count == 0;
 
 		public ExportToTmxViewModel ExportToTmx { get; } = new ExportToTmxViewModel();
 		public ImportTmxFileViewModel ImportFromTmxFile { get; } = new ImportTmxFileViewModel();

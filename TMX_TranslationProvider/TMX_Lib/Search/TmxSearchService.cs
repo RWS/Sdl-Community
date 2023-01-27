@@ -21,28 +21,25 @@ namespace TMX_Lib.Search
 		private string _dbName;
 
 		private TmxSearch _search;
-		private TmxMongoDb _db;
+		
+		private IReadOnlyList<TmxMongoDb> _databases;
+
 		private bool _hasImportBeenDoneBefore;
 		private TmxImportReport _report = new TmxImportReport();
 
 		Task _initTask;
-		public TmxSearchService(string dbName)
+		public TmxSearchService(IReadOnlyList<TmxMongoDb> databases)
 		{
 			// async call
-			_initTask = SetOptionsAsync(dbName);
+			_initTask = SetOptionsAsync(databases);
 		}
 
 		// report about the current import
 		public TmxImportReport Report => _report;
 
 
-		public bool IsImporting() => (_db?.IsImportInProgress() ?? false);
-		public double ImportProgress() => _db?.ImportProgress() ?? 0d;
-		public bool ImportComplete() => _hasImportBeenDoneBefore || (_db != null && _db.IsImportComplete());
-		public bool HasImportBeenDoneBefore() => _hasImportBeenDoneBefore;
+		public bool IsImporting() => _databases.Any(db => db.IsImportInProgress());
 
-		// if non empty, an error happened while import
-		public string ImportError() => _db?.ImportError() ?? "";
 
 		public async Task InitAsync() => await _initTask;
 
@@ -73,30 +70,20 @@ namespace TMX_Lib.Search
 		}
 
 		// if it will start an import, this will return once the import is complete
-		private async Task SetOptionsAsync(string dbName)
+		private async Task SetOptionsAsync(IReadOnlyList<TmxMongoDb> databases)
 		{
-			log.Debug($"search service {dbName} ");
-			TmxMongoDb db;
-			lock (this)
-			{
-				if (_dbName == dbName)
-					return; // same db
-
-				_dbName = dbName;
-				db = _db;
-			}
-
 			try
 			{
-				db = new TmxMongoDb(dbName);
-				await db.InitAsync();
+				foreach (var db in databases)
+					await db.InitAsync();
 
-				var search = new TmxSearch(db);
+				var search = new TmxSearch(databases);
 				await search.LoadLanguagesAsync();
 			}
 			catch (Exception e)
 			{
-				throw;
+				// note: we can't throw here, it would end the application
+				log.Fatal($"can't initialize the search service {e.Message}");
 			}
 		}
 
@@ -133,10 +120,13 @@ namespace TMX_Lib.Search
 
 		public async Task ExportToFileAsync(string fileName, Func<double, bool> continueFunc)
 		{
+			if (_databases.Count != 1)
+				throw new TmxException("Export can only be done from a single database");
+
 			using (var writer = new TmxWriter(fileName))
 			{
 				ulong writeBlock = 100;
-				await writer.WriteAsync(_db, continueFunc, writeBlock);
+				await writer.WriteAsync(_databases[0], continueFunc, writeBlock);
 			}
 		}
 	}

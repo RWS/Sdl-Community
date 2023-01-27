@@ -63,7 +63,7 @@
 
 			<TextBlock Text="Select the TMX databases to use in your project." Style="{StaticResource SubHeaderTitle}" Margin="0 5 0 0"
 				   Grid.Row="0" 
-					Visibility="{Binding IsSelectDatabases,Converter={StaticResource BooleanToVisibilityConverter}}"
+					Visibility="{Binding HasAnyDatabase,Converter={StaticResource BooleanToVisibilityConverter}}"
 				   />
 
 			<DataGrid	Grid.Row="1"
@@ -78,14 +78,14 @@
 					SelectionMode="Single"
 					SelectionUnit="FullRow"		
 					AutoGenerateColumns="False"	
-					Margin="0 10"
-					Visibility="{Binding IsSelectDatabases,Converter={StaticResource BooleanToVisibilityConverter}}"
+					Margin="0 10" CanUserAddRows="False"
+					Visibility="{Binding HasAnyDatabase,Converter={StaticResource BooleanToVisibilityConverter}}"
 					>
 				<DataGrid.Columns>
-					<DataGridTemplateColumn MinWidth="70" IsReadOnly="True" Width="Auto" SortMemberPath="Selected" Header="Select">
+					<DataGridTemplateColumn MinWidth="70" IsReadOnly="True" Width="Auto" Header="Select">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
-								<CheckBox IsChecked="{Binding Selected, Mode=TwoWay}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+								<CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
@@ -93,6 +93,14 @@
 					<DataGridTextColumn Header="Languages" Binding="{Binding LanguagesText, Mode=OneWay}" IsReadOnly="True" MinWidth="110" Width="*"  />
 				</DataGrid.Columns>
 			</DataGrid>
+
+			<StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 0 20"
+						Visibility="{Binding HasNoDatabase,Converter={StaticResource BooleanToVisibilityConverter}}" >
+				<Button Content="Download MongoDb Community Server" Width="200" Height="40" Click="download_mongodb_click"
+						Visibility="{Binding IsMongoDbNotInstalled,Converter={StaticResource BooleanToVisibilityConverter}}"
+						/>
+				<Button Content="Create new database from TMX File" Width="200" Height="40" Margin="10 0 0 0" Click="import_new_tmx_file"/>
+			</StackPanel>
 		</Grid>
 
 
@@ -105,6 +113,7 @@
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="32"/>
+				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
 
@@ -152,6 +161,13 @@
 					IsEnabled="{Binding ImportFromTmxFile.CanImport}"
 					/>
 
+			<TextBlock Text="Import Complete" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="5" Margin="0 20 0 0"
+					   FontSize="24" FontWeight="Bold"
+					   HorizontalAlignment="Center"
+					   Visibility="{Binding ImportFromTmxFile.ImportComplete,Converter={StaticResource BooleanToVisibilityConverter}}"
+					   />
+
+
 			<Grid Grid.Row="0" Grid.Column="0" 
 				  Grid.ColumnSpan="3" Grid.RowSpan="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
 				  Background="{StaticResource BackgroundColor}"
@@ -177,6 +193,7 @@
 			  Visibility="{Binding IsExportToTmx,Converter={StaticResource BooleanToVisibilityConverter}}"
 			  >
 			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
@@ -213,6 +230,11 @@
 					IsEnabled="{Binding ExportToTmx.CanExport}"
 					Click="start_export_click"
 					/>
+			<TextBlock Text="Export Complete" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="4" Margin="0 20 0 0"
+					   FontSize="24" FontWeight="Bold"
+					   HorizontalAlignment="Center"
+					   Visibility="{Binding ExportToTmx.ExportComplete,Converter={StaticResource BooleanToVisibilityConverter}}"
+					   />
 
 			<Grid Grid.Row="0" Grid.Column="0" 
 				  Grid.ColumnSpan="3" Grid.RowSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
@@ -227,7 +249,7 @@
 								 />
 						<TextBlock Text="Export In Progress..." VerticalAlignment="Center" Margin="10 0 0 0"/>
 					</Grid>
-					<TextBlock Text="You can close the window, the Export will continue in the background..." TextWrapping="Wrap" 
+					<TextBlock Text="You can close the window, the Export will continue in the background. When the export is complete, we'll open the exported file." TextWrapping="Wrap" 
 						   VerticalAlignment="Bottom"/>
 				</Grid>
 			</Grid>

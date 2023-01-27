@@ -47,7 +47,20 @@ namespace TMX_UI.ViewModel
 			}
 		}
 
-		public bool CanExport => FileName != "" && FileName.IndexOfAny(Path.GetInvalidFileNameChars()) < 0 && DatabaseIdx >= 0 && !IsExporting;
+		private bool _exportComplete = false;
+		public bool ExportComplete
+		{
+			get => _exportComplete;
+			set
+			{
+				_exportComplete = value;
+				OnPropertyChanged();
+			}
+		}
+
+		// FileName.IndexOfAny(Path.GetInvalidFileNameChars()) < 0 &&  -> note: to make this 100% correct, I need to account for "\\" which is valid in the path,
+		// and for the second char to be colon (:), in case it's a full name
+		public bool CanExport => FileName != "" && DatabaseIdx >= 0 && !IsExporting;
 
 		public bool IsExporting => ExportService.Instance.IsExporting();
 		public double ExportProgress => ExportService.Instance.ExportProgress();

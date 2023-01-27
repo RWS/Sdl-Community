@@ -58,11 +58,22 @@ namespace TMX_UI.ViewModel
 			}
 		}
 
+		private bool _importComplete = false;
+		public bool ImportComplete { 
+			get => _importComplete; 
+			set {
+				_importComplete = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public bool CanImport => FileName != "" && File.Exists(FileName) && DatabaseIdx >= 0 
 			&& (DatabaseIdx > 0 || NewDatabaseName != "") && !ImportService.Instance.IsImporting();
 
 		public bool IsImporting => ImportService.Instance.IsImporting();
 		public double ImportProgress => ImportService.Instance.ImportProgress();
+
+		public string ImportDatabaseName() => DatabaseIdx == 0 ? NewDatabaseName : Databases[DatabaseIdx].Name;
 
 		public void RefreshProgress()
 		{

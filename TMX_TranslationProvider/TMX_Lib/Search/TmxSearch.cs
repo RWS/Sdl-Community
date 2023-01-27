@@ -63,6 +63,11 @@ namespace TMX_Lib.Search
 			}
 		}
 
+		public TmxSearch(IReadOnlyList<TmxMongoDb> dbs) {
+			// FIXME keep all databases
+			_db = dbs[0];
+		}
+
 		public TmxSearch(TmxMongoDb db)
 		{
 			_db = db;

@@ -15,6 +15,7 @@ using NLog;
 using Sdl.Core.Globalization.NumberMetadata;
 using TMX_Lib.TmxFormat;
 using TMX_Lib.Utils;
+using TMX_Lib.Writer;
 
 namespace TMX_Lib.Db
 {
@@ -56,6 +57,8 @@ namespace TMX_Lib.Db
 
 		// for testing/debugging
 		public bool LogSearches = true;
+
+		public string Name => _databaseName;
 
 		private TmxMongoDb(string url, string databaseName)
 		{
@@ -759,5 +762,14 @@ namespace TMX_Lib.Db
 
 		// End of IMPORT
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		public async Task ExportToFileAsync(string fileName, Func<double, bool> continueFunc)
+		{
+			using (var writer = new TmxWriter(fileName))
+			{
+				ulong writeBlock = 100;
+				await writer.WriteAsync(this, continueFunc, writeBlock);
+			}
+		}
+
 	}
 }

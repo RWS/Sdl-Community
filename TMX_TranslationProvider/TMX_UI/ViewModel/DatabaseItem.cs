@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using TMX_UI.Properties;
 
 namespace TMX_UI.ViewModel
 {

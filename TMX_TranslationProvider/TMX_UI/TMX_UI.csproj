@@ -59,8 +59,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Services\ExportService.cs" />
-    <Compile Include="Services\ImportService.cs" />
     <Compile Include="ViewModel\DatabaseItem.cs" />
     <Compile Include="ViewModel\ExportToTmxViewModel.cs" />
     <Compile Include="ViewModel\ImportTmxFileViewModel.cs" />
