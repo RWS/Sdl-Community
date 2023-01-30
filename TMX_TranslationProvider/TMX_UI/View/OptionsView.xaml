@@ -96,10 +96,10 @@
 
 			<StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 0 20"
 						Visibility="{Binding HasNoDatabase,Converter={StaticResource BooleanToVisibilityConverter}}" >
-				<Button Content="Download MongoDb Community Server" Width="200" Height="40" Click="download_mongodb_click"
-						Visibility="{Binding IsMongoDbNotInstalled,Converter={StaticResource BooleanToVisibilityConverter}}"
-						/>
-				<Button Content="Create new database from TMX File" Width="200" Height="40" Margin="10 0 0 0" Click="import_new_tmx_file"/>
+				<TextBlock Visibility="{Binding IsMongoDbNotInstalled,Converter={StaticResource BooleanToVisibilityConverter}}" VerticalAlignment="Center" FontWeight="Bold">
+					<Hyperlink NavigateUri="https://www.mongodb.com/try/download/community" Click="download_mongodb_click">Download MongoDb Community Server</Hyperlink>
+				</TextBlock>
+				<Button Content="Import TMX File" Width="200" Height="40" Margin="10 0 0 0" Click="import_new_tmx_file"/>
 			</StackPanel>
 		</Grid>
 
