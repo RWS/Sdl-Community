@@ -316,6 +316,7 @@
 											   Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
 											   IsReadOnly="True"
 											   Cursor="Hand"
+											   Margin="10 0"
 											   Background="Transparent"
 											   BorderThickness="1"
 											   BorderBrush="Transparent">
