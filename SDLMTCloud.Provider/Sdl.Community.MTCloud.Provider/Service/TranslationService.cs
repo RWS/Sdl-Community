@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using NLog;
 using Sdl.Community.MTCloud.Provider.Events;
@@ -158,6 +159,17 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				&& !model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary))
 			{
 				translationRequestModel.Dictionaries = new[] { model.SelectedDictionary?.DictionaryId };
+			}
+
+			if (model.LinguisticOption != Constants.LinguisticOptionsUnavailable
+			 && !string.IsNullOrEmpty(model.LinguisticOption))
+			{
+				translationRequestModel.LinguisticOptions = new Dictionary<string, string>
+				{
+					{
+						model.SelectedLinguisticOption.Id, model.LinguisticOption
+					}
+				};
 			}
 
 			var content = JsonConvert.SerializeObject(translationRequestModel);

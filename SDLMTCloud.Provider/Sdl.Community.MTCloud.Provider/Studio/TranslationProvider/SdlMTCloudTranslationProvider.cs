@@ -241,7 +241,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 
 			var selectedLinguisticOption =
 				mapping.LinguisticOptions?.FirstOrDefault(x => x.Equals(mapping?.SavedLanguageMappingModel?.SelectedLinguisticOption))
-			 ?? mapping.LinguisticOptions?.FirstOrDefault();
+			 ?? mapping.LinguisticOptions?.FirstOrDefault()
+			 ?? new();
+			selectedLinguisticOption.SystemDefault = mapping.SavedLanguageMappingModel?.LinguisticOption;
 
 			var languageMappingModel = new LanguageMappingModel
 			{

@@ -166,7 +166,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			{
 				_availableLinguisticOptions = value;
 				OnPropertyChanged(nameof(AvailableLinguisticOptions));
-				LinguisticOption = value.FirstOrDefault(x => x.Equals(SelectedLinguisticOption.SystemDefault))
+				LinguisticOption = value.FirstOrDefault(x => x.Equals(SelectedLinguisticOption?.SystemDefault))
 								?? value.FirstOrDefault();
 			}
 		}

@@ -92,12 +92,12 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			var jObject = Task.Run(async () => await _translationService.GetLinguisticOptions(modelName)).Result["linguisticOptions"];
 			if (jObject is null
-				|| jObject.Count == 0
-				|| jObject.Last["id"] == "QualityEstimation")
+			 || jObject.Count == 0
+			 || jObject.Last["id"] == "QualityEstimation")
 			{
 				return new()
 				{
-					Values = new List<string>() { "No LC available" },
+					Values = new List<string>() { Constants.LinguisticOptionsUnavailable },
 					ModelName = modelName
 				};
 			}
