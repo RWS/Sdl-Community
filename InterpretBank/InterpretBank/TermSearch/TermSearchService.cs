@@ -14,7 +14,7 @@ namespace InterpretBank.TermSearch
 		private IGlossaryService GlossaryService { get; }
 		private ISettingsService SettingsService { get; }
 
-		public List<string> GetExactTerms(string word, string name1, string name2)
+		public List<TermEntry> GetExactTerms(string word, string name1, string name2)
 		{
 			var termEntries = GlossaryService.GetTerms(word, SettingsService.LanguageIndices, SettingsService.GlossaryNames,
 				SettingsService.Tags);
@@ -22,7 +22,7 @@ namespace InterpretBank.TermSearch
 			return null;
 		}
 
-		public List<string> GetFuzzyTerms(string word, string sourceLanguage, string targetLanguage)
+		public List<TermEntry> GetFuzzyTerms(string word, string sourceLanguage, string targetLanguage)
 		{
 			var termEntries = GlossaryService.GetTerms(word, SettingsService.LanguageIndices, SettingsService.GlossaryNames,
 				SettingsService.Tags);

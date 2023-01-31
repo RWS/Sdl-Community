@@ -21,7 +21,7 @@ namespace InterpretBank.Studio
 
 		public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
 		{
-			var provider = Common.GetInterpretBankProvider();
+			var provider = InterpretBankProviderFactory.GetInterpretBankProvider();
 			return new ITerminologyProvider[] { provider };
 		}
 

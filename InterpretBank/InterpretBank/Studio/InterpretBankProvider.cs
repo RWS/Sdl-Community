@@ -52,7 +52,7 @@ namespace InterpretBank.Studio
 			}
 		}
 
-		private List<IEntry> Entries { get; } = new();
+		private HashSet<IEntry> Entries { get; } = new();
 
 		private int TermIndex { get; set; }
 		private ITermSearchService TermSearchService { get; }
@@ -68,7 +68,7 @@ namespace InterpretBank.Studio
 		{
 			var languages = new List<ILanguage>();
 
-			var currentProject = Common.ProjectsController.CurrentProject;
+			var currentProject = StudioContext.ProjectsController.CurrentProject;
 			if (currentProject == null) return null;
 
 			var projectInfo = currentProject.GetProjectInfo();
@@ -99,7 +99,7 @@ namespace InterpretBank.Studio
 			var results = new List<ISearchResult>();
 			foreach (var word in words)
 			{
-				var term = mode switch
+				var terms = mode switch
 				{
 					SearchMode.Fuzzy => TermSearchService.GetFuzzyTerms(word, source.Name, destination.Name),
 					SearchMode.Normal => TermSearchService.GetExactTerms(word, source.Name, destination.Name),
@@ -115,35 +115,32 @@ namespace InterpretBank.Studio
 					Text = word
 				});
 
-				Entries.Add(CreateEntry(id, term[0], destination.Name));
-
-				//results.Add(new SearchResult
-				//{
-				//	Id = TermIndex++,
-				//	Language = destination,
-				//	Score = 100,
-				//	Text = word
-				//});
+				if (terms.Count > 0)
+				{
+					Entries.Add(CreateEntry(id, terms, destination.Name));
+				}
 			}
 
 			return results;
 		}
 
-		private IEntry CreateEntry(int id,string target, string targetLanguage)
+		private IEntry CreateEntry(int id, List<TermEntry> targetTerms, string targetLanguage)
 		{
-			var entryTerm = new EntryTerm { Value = target };
+			var entryTargetLanguage = new EntryLanguage { Name = targetLanguage };
+			foreach (var targetTerm in targetTerms)
+			{
+				var entryTerm = new EntryTerm { Value = targetTerm.Text };
 
-			var entryField1 = new EntryField { Name = "Extra1", Value = "Abreviere" };
-			var entryField2 = new EntryField { Name = "Extra2", Value = "Abreviere2" };
-			
-			entryTerm.Fields.Add(entryField1);
-			entryTerm.Fields.Add(entryField2);
+				var entryField1 = new EntryField { Name = "Extra1", Value = targetTerm.Extra1 };
+				var entryField2 = new EntryField { Name = "Extra2", Value = targetTerm.Extra2 };
+
+				entryTerm.Fields.Add(entryField1);
+				entryTerm.Fields.Add(entryField2);
+
+				entryTargetLanguage.Terms.Add(entryTerm);
+			}
 
 			var entry = new Entry { Id = id, };
-
-			var entryTargetLanguage = new EntryLanguage { Name = targetLanguage };
-			entryTargetLanguage.Terms.Add(entryTerm);
-
 			entry.Languages.Add(entryTargetLanguage);
 
 			return entry;
