@@ -71,6 +71,15 @@ namespace InterpretBank {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to InterpretBank description.
+        /// </summary>
+        public static string Plugin_Description {
+            get {
+                return ResourceManager.GetString("Plugin_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to InterpretBank.
         /// </summary>
         public static string Plugin_Name {

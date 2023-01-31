@@ -27,7 +27,6 @@ namespace InterpretBank.GlossaryExchangeService
 
 		public IEnumerable<string[]> ImportTerms(string path)
 		{
-			//TODO: Try to handle/catch all exceptions
 			var extension = Path.GetExtension(path).TrimStart('.');
 
 			IImport import = extension switch

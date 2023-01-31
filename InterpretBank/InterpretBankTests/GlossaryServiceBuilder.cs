@@ -1,7 +1,7 @@
 ﻿using InterpretBank.GlossaryService;
 using InterpretBank.GlossaryService.Interface;
-using InterpretBank.SqlBuilder;
-using InterpretBank.SqlBuilder.Interface;
+using InterpretBank.SQLBuilder;
+using InterpretBank.SQLBuilder.Interface;
 using NSubstitute;
 
 namespace InterpretBankTests
@@ -20,7 +20,7 @@ namespace InterpretBankTests
 
 		public IGlossaryService Build()
 		{
-			var glossaryService = new GlossaryService(DatabaseConnection, SqlBuilder);
+			var glossaryService = new SqlGlossaryService(DatabaseConnection, SqlBuilder);
 
 			ResetFields();
 

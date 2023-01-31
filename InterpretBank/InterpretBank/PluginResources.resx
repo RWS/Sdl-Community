@@ -121,6 +121,9 @@
     <value>InterpretBank</value>
   </data>
   <data name="GlossaryExchangeServiceManager_CreateFileReader_The_file_type__0__is_not_supported" xml:space="preserve">
-	  <value>The file type {0} is not supported</value>
+    <value>The file type {0} is not supported</value>
+  </data>
+  <data name="Plugin_Description" xml:space="preserve">
+    <value>InterpretBank description</value>
   </data>
 </root>

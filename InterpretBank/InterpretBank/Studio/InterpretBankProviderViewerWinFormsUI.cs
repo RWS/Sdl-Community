@@ -16,7 +16,7 @@ namespace InterpretBank.Studio
 		{
 			get
 			{
-				throw new NotImplementedException();
+				return new Control();
 			}
 		}
 
@@ -24,22 +24,11 @@ namespace InterpretBank.Studio
 		{
 			get
 			{
-				throw new NotImplementedException();
+				return true;
 			}
 		}
 
-		public IEntry SelectedTerm
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-
-			set
-			{
-				throw new NotImplementedException();
-			}
-		}
+		public IEntry SelectedTerm { get; set; }
 
 		public void AddAndEditTerm(IEntry term, string source, string target)
 		{
@@ -58,7 +47,6 @@ namespace InterpretBank.Studio
 
 		public void Initialize(ITerminologyProvider terminologyProvider, CultureInfo source, CultureInfo target)
 		{
-			throw new NotImplementedException();
 		}
 
 		public void JumpToTerm(IEntry entry)
@@ -68,12 +56,12 @@ namespace InterpretBank.Studio
 
 		public void Release()
 		{
-			throw new NotImplementedException();
+			
 		}
 
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
 		{
-			throw new NotImplementedException();
+			return terminologyProviderUri == new Uri(Constants.InterpretBankUri);
 		}
 	}
 }

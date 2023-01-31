@@ -8,6 +8,12 @@
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
   <ItemGroup>
+    <Reference Include="Sdl.Core.Globalization">
+      <HintPath>..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Terminology.TerminologyProvider.Core">
+      <HintPath>..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Terminology.TerminologyProvider.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

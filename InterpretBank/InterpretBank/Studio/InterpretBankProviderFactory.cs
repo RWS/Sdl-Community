@@ -10,12 +10,12 @@ namespace InterpretBank.Studio
 	{
 		public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri, ITerminologyProviderCredentialStore credentials)
 		{
-			throw new NotImplementedException();
+			return Common.GetInterpretBankProvider();
 		}
 
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
 		{
-			throw new NotImplementedException();
+			return terminologyProviderUri == new Uri(Constants.InterpretBankUri);
 		}
 	}
 }

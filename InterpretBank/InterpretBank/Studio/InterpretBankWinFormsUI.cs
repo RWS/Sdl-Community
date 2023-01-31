@@ -11,38 +11,33 @@ namespace InterpretBank.Studio
 		{
 			get
 			{
-				throw new NotImplementedException();
+				return true;
 			}
 		}
 
-		public string TypeDescription
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
+		public string TypeDescription => PluginResources.Plugin_Description;
 
 		public string TypeName => PluginResources.Plugin_Name;
 
 		public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
 		{
-			throw new NotImplementedException();
+			var provider = Common.GetInterpretBankProvider();
+			return new ITerminologyProvider[] { provider };
 		}
 
 		public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
 		{
-			throw new NotImplementedException();
+			return true;
 		}
 
 		public TerminologyProviderDisplayInfo GetDisplayInfo(Uri terminologyProviderUri)
 		{
-			throw new NotImplementedException();
+			return new TerminologyProviderDisplayInfo { Name = "Interpret Bank", };
 		}
 
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
 		{
-			throw new NotImplementedException();
+			return terminologyProviderUri == new Uri(Constants.InterpretBankUri);
 		}
 	}
 }
