@@ -295,6 +295,7 @@ namespace TMX_Lib.Search
 		public async Task LoadLanguagesAsync()
 		{
 			foreach (var db in _dbs) {
+				await db.InitAsync();
 				var la = new LanguageArray();
 				la.LoadLanguages(await db.GetAllLanguagesAsync());
 				_supportedLanguages.Add(la);

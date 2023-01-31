@@ -167,6 +167,10 @@ namespace QuickTmxTesting
 				log.Debug("");
 			}
 		}
+		private static async Task TestSearcherSearch(string dbName, IReadOnlyList<string> texts, SearchType searchType, string sourceLanguage, string targetLanguage) {
+			foreach (var text in texts)
+				await TestSearcherSearch(dbName, text, searchType, sourceLanguage, targetLanguage);
+		}
 
 		private static string Expand(string text, int size)
 		{
@@ -180,7 +184,7 @@ namespace QuickTmxTesting
 				return Expand(text, size);
 		}
 
-		private static async Task TestSearcherSearch(string dbName, IReadOnlyList<string> texts, string sourceLanguage, string targetLanguage) {
+		private static async Task TestSearcherSearchDumpResults(string dbName, IReadOnlyList<string> texts, string sourceLanguage, string targetLanguage) {
 			var db = new TmxMongoDb( dbName) { LogSearches = false};
 			await db.InitAsync();
 			var search = new TmxSearch(db);
@@ -485,8 +489,6 @@ namespace QuickTmxTesting
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en(GB) - it(IT)_(DGT 2015, 2017).tmx", "C:\\john\\buff\\TMX Examples\\temp\\");
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en-fr (EU Bookshop v2_10.8M).tmx", "C:\\john\\buff\\TMX Examples\\temp2\\");
 			log.Debug("test started");
-			Task.Run(async () => await TestExportToXml()).Wait();
-			return;
 
 			var TEST_TEXTS = new[] {
 				"The playing time was also reduced by half comparison to Rugby games",
@@ -514,11 +516,17 @@ namespace QuickTmxTesting
 			//return;
 
 
-			var TEST_TABLE = "en-ro-10M-f";
+			//var TEST_TABLE = "en-ro-10M-f";
+			var TEST_TABLE = "en-ro-2-copy";
+
+			//Task.Run(async () => await TestSearcherSearch(TEST_TABLE, TEST_TEXTS, SearchType.Exact, "en", "ro")).Wait();
+			//Task.Run(async () => await TestSearcherSearch(TEST_TABLE, TEST_TEXTS, SearchType.Fuzzy, "en", "ro")).Wait();
+			Task.Run(async () => await TestSearcherSearchDumpResults(TEST_TABLE, TEST_TEXTS, "en", "ro")).Wait();
+
 			//Task.Run(async () => await TestAvgExactAndFuzzySearcherSearch(TEST_TABLE, TEST_TEXTS, "en", "ro", 5, 15)).Wait();
 			//Task.Run(async () => await TestAvgNormalSearcherSearch(TEST_TABLE, TEST_TEXTS, "en", "ro", 5, 15)).Wait();
-			Task.Run(async () => await TestWarmupTimesNormalSearcherSearch(TEST_TABLE, TEST_TEXTS, "en", "ro", 15)).Wait();
-			
+			//Task.Run(async () => await TestWarmupTimesNormalSearcherSearch(TEST_TABLE, TEST_TEXTS, "en", "ro", 15)).Wait();
+
 
 			//Task.Run(async () => await TestExportToXml()).Wait();
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\fails\\opensubtitlingformat.tmx", "C:\\john\\buff\\TMX Examples\\temp3\\");

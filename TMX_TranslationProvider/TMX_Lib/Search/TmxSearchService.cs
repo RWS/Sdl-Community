@@ -80,6 +80,8 @@ namespace TMX_Lib.Search
 
 				var search = new TmxSearch(databases);
 				await search.LoadLanguagesAsync();
+				lock(this)
+					_search = search;
 			}
 			catch (Exception e)
 			{
