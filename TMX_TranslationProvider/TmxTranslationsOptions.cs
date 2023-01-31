@@ -65,6 +65,7 @@ namespace TMX_TranslationProvider
 		public void CopyFrom(OptionsViewModel other)
 		{
 			Databases = other.Databases.Where(db => db.IsSelected).Select(db => db.Name).ToList();
+			CareForLocale = other.CareForLocale;
 		}
 		
 		// the idea - each URI should be unique, or we'd get exceptions from Trados.

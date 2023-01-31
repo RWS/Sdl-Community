@@ -56,6 +56,15 @@ namespace TMX_UI.ViewModel
 			}
 		}
 
+		private bool _careForLocale = false;
+		public bool CareForLocale { 
+			get => _careForLocale;
+			set {
+				_careForLocale = value;
+				OnPropertyChanged();
+			} 
+		}
+
 		// very simple way to verify if user has Mongodb Community Server installed locally 
 		// obviously, it doesn't always work, but it's a very simple method that works probably 98% of the cases
 		private static bool TryDetectLocalMongoDb()

@@ -42,9 +42,10 @@ namespace TMX_UI.View
 			_refreshTimer.Tick += (s, a) => RefreshImportExport();
 		}
 
-		public OptionsView(IReadOnlyList<string> selectedDbNames) : this()
+		public OptionsView(IReadOnlyList<string> selectedDbNames, bool careForLocale) : this()
 		{
 			_initialSelection = selectedDbNames;
+			ViewModel.CareForLocale = careForLocale;
 		}
 
 		private void RefreshImportExport() {

@@ -13,6 +13,8 @@ using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using NLog;
 using Sdl.Core.Globalization.NumberMetadata;
+using Sdl.LanguagePlatform.Core.Tokenization;
+using Sdl.LanguagePlatform.TranslationMemory;
 using TMX_Lib.TmxFormat;
 using TMX_Lib.Utils;
 using TMX_Lib.Writer;
@@ -254,11 +256,10 @@ namespace TMX_Lib.Db
 	            var list = await _translationUnits.Indexes.ListAsync();
 	            int count = 0;
 	            await list.ForEachAsync(c => ++count);
-	            if (count > 1)
-		            return;
-
-				var indexTU = Builders<TmxTranslationUnit>.IndexKeys.Ascending(i => i.TranslationUnitID);
-	            await _translationUnits.Indexes.CreateOneAsync(new CreateIndexModel<TmxTranslationUnit>(indexTU));
+				if (count < 1) {
+					var indexTU = Builders<TmxTranslationUnit>.IndexKeys.Ascending(i => i.TranslationUnitID);
+					await _translationUnits.Indexes.CreateOneAsync(new CreateIndexModel<TmxTranslationUnit>(indexTU));
+				}
 
 				await _texts.CreateIndexesAsync();
 				log.Debug("Creating indexes COMPLETE");
@@ -463,20 +464,33 @@ namespace TMX_Lib.Db
 	        {
 				Debug.Assert(translationUnit.TranslationUnitID == 0);
 				lock (this)
-				{
 					translationUnit.TranslationUnitID = _nextTranslationUnitID++;
-					if (_translationUnitMeta == null)
-						_translationUnitMeta = new TmxMeta { Type = "TranslationUnitNextID" };
-					_translationUnitMeta.Value = _nextTranslationUnitID.ToString();
-				}
 				await AddTranslationUnitsAsync(new[] { translationUnit }, token);
-				await UpdateMetaAsync(_translationUnitMeta, token);
+				await UpdateNextTranslationUnitIDMetaAsync(token);
 	        }
 	        catch (Exception e)
 	        {
 		        throw new TmxException($"Can't add TranslationUnits", e);
 	        }
-        }
+		}
+
+		private async Task UpdateNextTranslationUnitIDMetaAsync(CancellationToken token = default(CancellationToken))
+		{
+			try
+			{
+				lock (this)
+				{
+					if (_translationUnitMeta == null)
+						_translationUnitMeta = new TmxMeta { Type = "TranslationUnitNextID" };
+					_translationUnitMeta.Value = _nextTranslationUnitID.ToString();
+				}
+				await UpdateMetaAsync(_translationUnitMeta, token);
+			}
+			catch (Exception e)
+			{
+				throw new TmxException($"Can't add TranslationUnits", e);
+			}
+		}
 
 		// End of ADDs
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -626,20 +640,23 @@ namespace TMX_Lib.Db
 
 		// maxImportTUCount - if >= 0, max number of TUs to import
 		// this is only for testing/debugging, to test speeds at different number of TUs per database
-        public async Task ImportToDbAsync(string fileName, Action<TmxImportReport> updateReport = null, bool quickImport = false, int entriesPerTable = DEFAULT_ENTRIES_PER_TEXT_TABLE, int maxImportTUCount = -1)
+        public async Task ImportToDbAsync(string fileName, Action<TmxImportReport> updateReport = null, 
+														   bool quickImport = false, 
+														   int entriesPerTable = DEFAULT_ENTRIES_PER_TEXT_TABLE, 
+														   int maxImportTUCount = -1)
         {
 	        Task import;
 	        lock (this)
 	        {
 		        if (_importComplete != null)
 		        {
-			        if (_importComplete == true)
-				        return;
-					else
+			        if (_importComplete != true)
 						throw new TmxException("Import already in progress");
 		        }
+				_importComplete = false;
 				if (_importTask == null)
-			        _importTask = Task.Run(() => ImportToDbAsyncImpl(_parser = new TmxParser(fileName, quickImport) , updateReport, entriesPerTable, maxImportTUCount, _importTokenSource.Token));
+			        _importTask = Task.Run(() => ImportToDbAsyncImpl(_parser = new TmxParser(fileName, quickImport) , updateReport, 
+																							 entriesPerTable, maxImportTUCount, _importTokenSource.Token));
 
 		        import = _importTask;
 		        _importComplete = false;
@@ -648,8 +665,9 @@ namespace TMX_Lib.Db
 	        await import;
         }
 
+
 		// does NOT throw
-		private async Task ImportToDbAsyncImpl(TmxParser parser, Action<TmxImportReport> updateReport, int entriesPerTable, int maxImportTUCount,  CancellationToken token)
+		private async Task ImportToDbAsyncImpl(TmxParser parser, Action<TmxImportReport> updateReport, int entriesPerTable, int maxImportTUCount, CancellationToken token)
         {
 	        Stopwatch watch = null;
 	        try
@@ -665,10 +683,12 @@ namespace TMX_Lib.Db
 		        report.TUsWithInvalidChars += headerInvalidChars;
 		        report.TUsRead += headerInvalidChars;
 
-		        await ClearAsync();
+				bool appendToExisting = _nextTranslationUnitID > 1;
+				if (!appendToExisting)
+					await ClearAsync();
 		        watch = Stopwatch.StartNew();
 
-		        ulong id = 1;
+		        ulong id = appendToExisting ? _nextTranslationUnitID : 1;
 				var reachedMaxTUCount = false;
 		        while (!reachedMaxTUCount)
 		        {
@@ -716,26 +736,29 @@ namespace TMX_Lib.Db
 			        _nextTranslationUnitID = id;
 
 			        // the idea -> add them at the end, easily know if the import went to the end or not
-			        await AddMetasAsync(new[]
-			        {
-				        new TmxMeta { Type = "Header", Value = parser.Header.Xml, },
-				        // Version:
-				        // 1 - initial version
-						// 2 - added TranslationUnitNextID + TU.NormalizedLanguages array
-						// 3 - different tables for each language + each language can have more than one text table
-						// 4 - locales
-				        // ... - increase this on each breaking change
-				        new TmxMeta { Type = "Version", Value = "4", },
-						new TmxMeta { Type = "Entries Per Table", Value = entriesPerTable.ToString(), },
-						new TmxMeta { Type = "Text Languages", Value = string.Join(",",languages), },
-						new TmxMeta { Type = "Domains", Value = string.Join(", ", parser.Header.Domains), },
-				        new TmxMeta { Type = "Creation Date", Value = parser.Header.CreationDate?.ToLongDateString() ?? "unknown", },
-				        new TmxMeta { Type = "Author", Value = parser.Header.Author, }, 
-				        new TmxMeta { Type = "FileName", Value = Path.GetFileName(parser.FileName) },
-				        new TmxMeta { Type = "FullFileName", Value = parser.FileName },
-				        new TmxMeta { Type = "TranslationUnitNextID", Value = id.ToString() },
-			        }, token);
-			        updateReport?.Invoke(report);
+					if (!appendToExisting)
+						await AddMetasAsync(new[]
+						{
+							new TmxMeta { Type = "Header", Value = parser.Header.Xml, },
+							// Version:
+							// 1 - initial version
+							// 2 - added TranslationUnitNextID + TU.NormalizedLanguages array
+							// 3 - different tables for each language + each language can have more than one text table
+							// 4 - locales
+							// ... - increase this on each breaking change
+							new TmxMeta { Type = "Version", Value = "4", },
+							new TmxMeta { Type = "Entries Per Table", Value = entriesPerTable.ToString(), },
+							new TmxMeta { Type = "Text Languages", Value = string.Join(",",languages), },
+							new TmxMeta { Type = "Domains", Value = string.Join(", ", parser.Header.Domains), },
+							new TmxMeta { Type = "Creation Date", Value = parser.Header.CreationDate?.ToLongDateString() ?? "unknown", },
+							new TmxMeta { Type = "Author", Value = parser.Header.Author, }, 
+							new TmxMeta { Type = "FileName", Value = Path.GetFileName(parser.FileName) },
+							new TmxMeta { Type = "FullFileName", Value = parser.FileName },
+							new TmxMeta { Type = "TranslationUnitNextID", Value = id.ToString() },
+						}, token);
+					else
+						await UpdateNextTranslationUnitIDMetaAsync(token);
+					updateReport?.Invoke(report);
 
 					// best practice - create indexes after everything has been imported
 					// note: still, this may take a LOOONG time

@@ -36,6 +36,15 @@ namespace QuickTmxTesting
 				log.Debug($"report: read {r.TUsRead}, ignored {r.TUsWithSyntaxErrors}, success={r.TUsImportedSuccessfully}, invalid={r.TUsWithInvalidChars}, spent={r.ReportTimeSecs} secs");
 		    }, quickImport, entryiesPerTextTable, maxImportTUCount);
 	    }
+		private static async Task ImportFilesAsync(IReadOnlyList< string> files, string dbName)
+		{
+			var db = new TmxMongoDb(dbName);
+			foreach (var file in files)
+				await db.ImportToDbAsync(file, (r) =>
+				{
+					log.Debug($"report: read {r.TUsRead}, ignored {r.TUsWithSyntaxErrors}, success={r.TUsImportedSuccessfully}, invalid={r.TUsWithInvalidChars}, spent={r.ReportTimeSecs} secs");
+				});
+		}
 
 		// performs the database fuzzy-search, not our Fuzzy-search (our fuzzy search is more constraining)
 		private static async Task TestDatabaseFuzzySimple4(string root)
@@ -489,6 +498,20 @@ namespace QuickTmxTesting
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en(GB) - it(IT)_(DGT 2015, 2017).tmx", "C:\\john\\buff\\TMX Examples\\temp\\");
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en-fr (EU Bookshop v2_10.8M).tmx", "C:\\john\\buff\\TMX Examples\\temp2\\");
 			log.Debug("test started");
+			var root = "C:\\john\\buff\\TMX Examples";
+			Task.Run(async () => await ImportFilesAsync(new[] { 
+				$"{root}\\Banking TextBase.tmx" ,
+				$"{root}\\EAC_FORMS.tmx" ,
+				$"{root}\\Master TM cy(UK) - en(US)_00000_0000.tmx" ,
+				$"{root}\\Master TM cy(UK) - en(US)_Trados2007.tmx" ,
+				$"{root}\\002 - Glossary.tmx" ,
+				$"{root}\\CAT Fight TM de-DE - en-US.tmx" ,
+				$"{root}\\clean_Roman Weaponry.tmx" ,
+			}, "multi-files")).Wait();
+			Task.Run(async () => await ImportFilesAsync(new[] {
+				$"{root}\\clean_Roman Weaponry.tmx" ,
+			}, "multi-files3")).Wait();
+			return;
 
 			var TEST_TEXTS = new[] {
 				"The playing time was also reduced by half comparison to Rugby games",

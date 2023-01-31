@@ -218,7 +218,7 @@ namespace TMX_Lib.TmxFormat
 				{
 					var text = TuvToText(item);
 					tu.Texts.Add(text);
-					_languagesSet.Add(text.Language);
+					_languagesSet.Add(text.Language.ToLowerInvariant());
 				}
 
 			var creationDate = GetAttribute(xmlUnit, "creationdate");

@@ -39,7 +39,7 @@ namespace TMX_TranslationProvider
 		{
 			if (translationProvider is TmxTranslationProvider tmxProvider)
 			{
-				var form = new OptionsView(tmxProvider.Options.Databases);
+				var form = new OptionsView(tmxProvider.Options.Databases, tmxProvider.Options.CareForLocale);
 				var interopHelper = new System.Windows.Interop.WindowInteropHelper(form);
 				interopHelper.Owner = owner.Handle;
 
