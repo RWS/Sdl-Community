@@ -31,6 +31,7 @@ namespace TMX_Lib.Search
 		public TmxSearchService(IReadOnlyList<TmxMongoDb> databases)
 		{
 			// async call
+			_databases = databases;
 			_initTask = SetOptionsAsync(databases);
 		}
 
@@ -43,14 +44,14 @@ namespace TMX_Lib.Search
 
 		public async Task InitAsync() => await _initTask;
 
-		public IReadOnlyList<string> Languages => _search?.Languages ?? new List<string>();
+		public IReadOnlyList<string> Languages => _search?.SupportedLanguages() ?? new List<string>();
 
-		public bool SupportsLanguage(LanguagePair language)
+		public bool SupportsLanguage(LanguagePair language, bool careForeLocale)
 		{
-			return SupportsLanguage(language.SourceCultureName) && SupportsLanguage(language.TargetCultureName);
+			return SupportsLanguage(language.SourceCultureName, careForeLocale) && SupportsLanguage(language.TargetCultureName, careForeLocale);
 		}
 
-		public bool SupportsLanguage(string language)
+		public bool SupportsLanguage(string language, bool careForeLocale)
 		{
 			// if not fully loaded, return true
 			TmxSearch search;
@@ -66,7 +67,7 @@ namespace TMX_Lib.Search
 			if (search == null)
 				// we haven't fully connected to the db yet
 				return true;
-			return search.SupportsLanguage(language);
+			return search.SupportsLanguage(language, careForeLocale);
 		}
 
 		// if it will start an import, this will return once the import is complete
@@ -87,7 +88,7 @@ namespace TMX_Lib.Search
 			}
 		}
 
-		public async Task<SearchResults> Search(SearchSettings settings, Segment segment, LanguagePair language)
+		public async Task<SearchResults> Search(SearchSettings settings, Segment segment, LanguagePair language, bool careForeLocale)
 		{
 			TmxSearch search;
 			lock (this)
@@ -95,7 +96,7 @@ namespace TMX_Lib.Search
 			if (search == null)
 				return new SearchResults();
 
-			return await search.Search(TmxSearchSettings.FromSearchSettings(settings), segment, language) ?? new SearchResults();
+			return await search.Search(TmxSearchSettings.FromSearchSettings(settings), segment, language, careForeLocale) ?? new SearchResults();
 		}
 
 		public async Task UpdateAsync(TranslationUnit tu, LanguagePair languagePair)

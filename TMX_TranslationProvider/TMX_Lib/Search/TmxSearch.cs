@@ -18,10 +18,13 @@ namespace TMX_Lib.Search
 	public class TmxSearch
 	{
 
-		private readonly TmxMongoDb _db;
-		private LanguageArray _supportedLanguages = new LanguageArray();
+		private readonly IReadOnlyList< TmxMongoDb> _dbs;
+		private List<LanguageArray> _supportedLanguages = new List<LanguageArray>();
 		private CultureDictionary _cultures = new CultureDictionary();
 
+		private enum SearchType { 
+			Exact, Fuzzy, Concordance, TargetConcordance,
+		}
 
 		private class SimpleResults
 		{
@@ -64,16 +67,21 @@ namespace TMX_Lib.Search
 		}
 
 		public TmxSearch(IReadOnlyList<TmxMongoDb> dbs) {
-			// FIXME keep all databases
-			_db = dbs[0];
+			_dbs = dbs;
 		}
 
 		public TmxSearch(TmxMongoDb db)
 		{
-			_db = db;
+			_dbs = new List<TmxMongoDb> { db };
 		}
 
-		public IReadOnlyList<string> SupportedLanguages() => _supportedLanguages?.Languages ?? new List<string>();
+		public IReadOnlyList<string> SupportedLanguages() {
+			var supported = new HashSet<string>();
+			foreach (var sl in _supportedLanguages)
+				foreach (var l in sl.LanguageAndLocaleArray())
+				supported.Add(l);
+			return supported.ToList();
+		}
 
 		private bool LookupMtEvenIfTmHasMatch => true;
 
@@ -150,17 +158,64 @@ namespace TMX_Lib.Search
 			// FIXME
 		}
 
-		public IReadOnlyList<string> Languages => _supportedLanguages.Languages;
+		private string SourceLanguage(LanguagePair pair) => pair.SourceCultureName;
+		private string TargetLanguage(LanguagePair pair) => pair.TargetCultureName;
 
-		private string SourceLanguage(LanguagePair pair) => _supportedLanguages.TryGetEquivalentLanguage(pair.SourceCultureName);
-		private string TargetLanguage(LanguagePair pair) => _supportedLanguages.TryGetEquivalentLanguage(pair.TargetCultureName);
+		// returns the databases that match this language pair
+		private IEnumerable<TmxMongoDb> MatchingDbs(LanguagePair language, bool careForLocale) {
+			for (var i = 0; i < _dbs.Count; i++) {
+				var la = _supportedLanguages[i];
+				if (la.SupportsLanguage(language.SourceCultureName, careForLocale) && la.SupportsLanguage(language.TargetCultureName, careForLocale))
+					yield return _dbs[i];
+			}
+		}
 
-		private async Task SearchExact(TmxSearchSettings settings, string text, LanguagePair language, SimpleResults results)
+		private async Task<IReadOnlyList<TmxSegment>> ParallelSearch(SearchType searchType, string text, LanguagePair language, bool careForLocale) {
+			var dbs = MatchingDbs(language, careForLocale).ToList();
+			List<TmxSegment> segments = new List<TmxSegment>();
+			var tasks = dbs.Select(db => {
+				var dbCopy = db;
+				return Task.Run(async () => {
+					switch (searchType)
+					{
+						case SearchType.Exact:{
+								var dbResults = await dbCopy.ExactSearch(text, SourceLanguage(language), TargetLanguage(language), careForLocale);
+								lock (this)
+									segments.AddRange(dbResults);
+							}
+							break;
+						case SearchType.Fuzzy:{
+								var dbResults = await dbCopy.FuzzySearch(text, SourceLanguage(language), TargetLanguage(language), careForLocale);
+								lock (this)
+									segments.AddRange(dbResults);
+							}
+							break;
+						case SearchType.Concordance:{
+								var dbResults = await dbCopy.ConcordanceSearch(text, SourceLanguage(language), TargetLanguage(language), careForLocale);
+								lock (this)
+									segments.AddRange(dbResults);
+							}
+							break;
+						case SearchType.TargetConcordance: {
+								var dbResults = await dbCopy.ConcordanceSearch(text, TargetLanguage(language), SourceLanguage(language), careForLocale);
+								lock (this)
+									segments.AddRange(dbResults);
+							}
+							break;
+					}
+				});
+			}).ToList();
+			if (tasks.Count > 0)
+				await Task.WhenAll(tasks);
+			return segments;
+		}
+
+		private async Task SearchExact(TmxSearchSettings settings, string text, LanguagePair language, SimpleResults results, bool careForLocale)
 		{
 			if (HaveEnoughResults(results, settings))
 				return;
 
-			var dbResults = await _db.ExactSearch(text, SourceLanguage(language), TargetLanguage(language));
+			var dbResults = await ParallelSearch(SearchType.Exact, text, language, careForLocale);
 			foreach (var dbResult in dbResults)
 			{
 				var score = StringIntCompare(text, dbResult.SourceText);
@@ -201,12 +256,12 @@ namespace TMX_Lib.Search
 			return Math.Min((int)(SlowConcordanceCompareTexts.Compare(searchFor, foundText) * 100 + .5), 100);
 		}
 
-		private async Task SearchFuzzy(TmxSearchSettings settings, string text, LanguagePair language, SimpleResults results)
+		private async Task SearchFuzzy(TmxSearchSettings settings, string text, LanguagePair language, SimpleResults results, bool careForLocale)
 		{
 			if (HaveEnoughResults(results, settings))
 				return;
 
-			var dbResults = FilterFuzzySearch( await _db.FuzzySearch(text, SourceLanguage(language), TargetLanguage(language)));
+			var dbResults = FilterFuzzySearch(await ParallelSearch(SearchType.Fuzzy, text, language, careForLocale));
 			foreach (var dbResult in dbResults)
 			{
 				var score = StringIntCompare(text, dbResult.SourceText);
@@ -219,14 +274,12 @@ namespace TMX_Lib.Search
 			}
 		}
 
-		private async Task SearchConcordance(TmxSearchSettings settings, string text, LanguagePair language, SimpleResults results, bool sourceConcordance = true)
+		private async Task SearchConcordance(TmxSearchSettings settings, string text, LanguagePair language, SimpleResults results, bool sourceConcordance , bool careForLocale)
 		{
 			if (HaveEnoughResults(results, settings))
 				return;
 
-			var sourceLanguage = sourceConcordance ? SourceLanguage(language) : TargetLanguage(language);
-			var targetLanguage = sourceConcordance ? TargetLanguage(language) : SourceLanguage(language);
-			var dbResults = await _db.ConcordanceSearch(text, sourceLanguage, targetLanguage);
+			var dbResults = await ParallelSearch(sourceConcordance ? SearchType.Concordance : SearchType.TargetConcordance, text, language, careForLocale);
 			foreach (var dbResult in dbResults)
 			{
 				var score = StringIntConcordanceCompare(text, dbResult.SourceText);
@@ -241,20 +294,24 @@ namespace TMX_Lib.Search
 
 		public async Task LoadLanguagesAsync()
 		{
-			_supportedLanguages.Languages = (await _db.GetAllLanguagesAsync());
+			foreach (var db in _dbs) {
+				var la = new LanguageArray();
+				la.LoadLanguages(await db.GetAllLanguagesAsync());
+				_supportedLanguages.Add(la);
+			}
 		}
 
-		public bool SupportsLanguage(string language)
+		public bool SupportsLanguage(string language, bool careForLocale)
 		{
-			return _supportedLanguages.TryGetEquivalentLanguage(language) != null;
+			return _supportedLanguages.Any(sl => sl.SupportsLanguage(language, careForLocale));
 		}
 
-		private async Task OptimizedNormalSearch(TmxSearchSettings settings, string text, LanguagePair language, SimpleResults results) {
+		private async Task OptimizedNormalSearch(TmxSearchSettings settings, string text, LanguagePair language, SimpleResults results, bool careForLocale) {
 			// the idea - run exact and fuzzy in parallel
 			// if we get exact match, I don't care about fuzzy
 			SimpleResults fuzzyResults = new SimpleResults();
-			var exact = Task.Run(async() => await SearchExact(settings, text, language, results));
-			var fuzzy = Task.Run(async () => await SearchFuzzy(settings, text, language, fuzzyResults));
+			var exact = Task.Run(async() => await SearchExact(settings, text, language, results, careForLocale));
+			var fuzzy = Task.Run(async () => await SearchFuzzy(settings, text, language, fuzzyResults, careForLocale));
 			await exact;
 			var anyExactMatches = results.Results.Any(r => r.IsExactMatch);
 			if (!anyExactMatches) {
@@ -264,14 +321,14 @@ namespace TMX_Lib.Search
 		}
 
 
-		public async Task<SearchResults> Search(TmxSearchSettings settings, Segment segment, LanguagePair language)
+		public async Task<SearchResults> Search(TmxSearchSettings settings, Segment segment, LanguagePair language, bool careForLocale = false)
 		{
-			if (_db.IsImportInProgress() && !_db.IsImportComplete())
+			if (_dbs.Any(db => db.IsImportInProgress()) && _dbs.Any(db => !db.IsImportComplete()))
 				// while importing, don't do any searches
 				return new SearchResults();
 
-			var hasLanguages = SupportsLanguage(language.SourceCultureName) && SupportsLanguage(language.TargetCultureName);
-			if (!hasLanguages)
+			var supportsLanguages = SupportsLanguage(language.SourceCultureName, careForLocale) && SupportsLanguage(language.TargetCultureName, careForLocale);
+			if (!supportsLanguages)
 				return new SearchResults();
 
 			var text = segment.ToPlain();
@@ -283,42 +340,36 @@ namespace TMX_Lib.Search
 				{
 					// Performs only an exact search, without fuzzy search.
 					case SearchMode.ExactSearch:
-						await SearchExact(settings, text, language, results);
+						await SearchExact(settings, text, language, results, careForLocale);
 						break;
 
 					// Performs a normal search, i.e. a combined exact/fuzzy search. Fuzzy search is only triggered
 					// if no exact matches are found.
 					case SearchMode.NormalSearch:
-						/* OLD code
-						await SearchExact(settings, text, language, results);
-						var anyExactMatches = results.Results.Any(r => r.IsExactMatch);
-						if (!anyExactMatches)
-							await SearchFuzzy(settings, text, language, results);
-						 */
-						await OptimizedNormalSearch(settings, text, language, results);
+						await OptimizedNormalSearch(settings, text, language, results, careForLocale);
 						break;
 
 					// Performs a full search, i.e. a combined exact/fuzzy search. In contrast to NormalSearch, 
 					// fuzzy search is always triggered, even if exact matches are found.
 					case SearchMode.FullSearch:
-						await SearchExact(settings, text, language, results);
-						await SearchFuzzy(settings, text, language, results);
+						await SearchExact(settings, text, language, results, careForLocale);
+						await SearchFuzzy(settings, text, language, results, careForLocale);
 						break;
 
 					// Performs a concordance search on the source segments, using the source character-based index if it exists or
 					// the default word-based index otherwise.
 					case SearchMode.ConcordanceSearch:
-						await SearchConcordance(settings, text, language, results, sourceConcordance: true);
+						await SearchConcordance(settings, text, language, results, sourceConcordance: true, careForLocale);
 						break;
 
 					// Performs a concordance search on the target segments, if the target character-based index exists.
 					case SearchMode.TargetConcordanceSearch:
-						await SearchConcordance(settings, text, language, results, sourceConcordance: false);
+						await SearchConcordance(settings, text, language, results, sourceConcordance: false, careForLocale);
 						break;
 
 					// Performs only a fuzzy search. 
 					case SearchMode.FuzzySearch:
-						await SearchFuzzy(settings, text, language, results);
+						await SearchFuzzy(settings, text, language, results, careForLocale);
 						break;
 
 					// Performs a search on the source and target hashes for duplicate search during import (only used internally).
@@ -360,32 +411,69 @@ namespace TMX_Lib.Search
 				TuAttributes = "",
 				NormalizedLanguages = new List<string>
 				{
-					Util.NormalizeLanguage(languagePair.SourceCultureName),
-					Util.NormalizeLanguage(languagePair.TargetCultureName),
+					Util.ToLocaseLanguage(languagePair.SourceCultureName),
+					Util.ToLocaseLanguage(languagePair.TargetCultureName),
 				},
 			};
 			return tmx;
 		}
 
-		private TmxText ToDb(Segment segment, ulong tuID, CultureInfo language)
+
+		private TmxText ToDb(Segment segment, ulong tuID, CultureInfo fullLanguageName)
 		{
+			var (language, locale) = Util.NormalizeLanguage(fullLanguageName.IsoLanguageName());
 			return new TmxText
 			{
 				TranslationUnitID = tuID, 
-				NormalizedLanguage = Util.NormalizeLanguage(language.IsoLanguageName()),
-				LocaseText = Util.TextToDbText(segment.ToPlain(), language),
+				NormalizedLanguage = language,
+				NormalizedLocale = locale,
+				LocaseText = Util.TextToDbText(segment.ToPlain(), fullLanguageName),
 				FormattedText = segment.ToString(), 
 			};
+		}
+
+		// the idea: when we have several databases, we'll need to guess the best one when we need to add or update a TU
+		private TmxMongoDb GuessBestTranslationUnitDb(LanguagePair languagePair) {
+			if (_dbs.Count == 1)
+				return _dbs[0];
+
+			for (int i = 0; i < _dbs.Count; ++i) {
+				var sl = _supportedLanguages[i];
+				if (sl.SupportsLanguage(languagePair.SourceCultureName, careForLocale: true) && sl.SupportsLanguage(languagePair.TargetCultureName, careForLocale: true))
+					return _dbs[i];
+			}
+			for (int i = 0; i < _dbs.Count; ++i)
+			{
+				var sl = _supportedLanguages[i];
+				if (sl.SupportsLanguage(languagePair.SourceCultureName, careForLocale: false) && sl.SupportsLanguage(languagePair.TargetCultureName, careForLocale: false))
+					return _dbs[i];
+			}
+
+			for (int i = 0; i < _dbs.Count; ++i)
+			{
+				var sl = _supportedLanguages[i];
+				if (sl.SupportsLanguage(languagePair.SourceCultureName, careForLocale: true) )
+					return _dbs[i];
+			}
+			for (int i = 0; i < _dbs.Count; ++i)
+			{
+				var sl = _supportedLanguages[i];
+				if (sl.SupportsLanguage(languagePair.SourceCultureName, careForLocale: false))
+					return _dbs[i];
+			}
+
+			return _dbs[0];
 		}
 
 		public async Task UpdateAsync(TranslationUnit tu, LanguagePair languagePair)
 		{
 			// find in db, see which languages i have
 			var id = TranslationUnitDbID(tu);
-			var dbTU = await _db.FindTranslationUnitAsync(id);
+			var db = GuessBestTranslationUnitDb(languagePair);
+			var dbTU = await db.FindTranslationUnitAsync(id);
 
-			var sourceLanguage = Util.NormalizeLanguage(languagePair.SourceCultureName);
-			var targetLanguage = Util.NormalizeLanguage(languagePair.TargetCultureName);
+			var sourceLanguage = Util.ToLocaseLanguage(languagePair.SourceCultureName);
+			var targetLanguage = Util.ToLocaseLanguage(languagePair.TargetCultureName);
 			var hasSource = dbTU.NormalizedLanguages.Contains(sourceLanguage);
 			var hasTarget = dbTU.NormalizedLanguages.Contains(targetLanguage);
 
@@ -394,7 +482,7 @@ namespace TMX_Lib.Search
 			if (!hasTarget)
 				dbTU.NormalizedLanguages.Add(targetLanguage);
 			if (!hasSource || !hasTarget)
-				await _db.UpdateTranslationUnitAsync(dbTU);
+				await db.UpdateTranslationUnitAsync(dbTU);
 
 			var source = ToDb(tu.SourceSegment, dbTU.TranslationUnitID, languagePair.SourceCulture);
 			var target = ToDb(tu.TargetSegment, dbTU.TranslationUnitID, languagePair.TargetCulture);
@@ -406,25 +494,26 @@ namespace TMX_Lib.Search
 					texts.Add(source);
 				if (!hasTarget)
 					texts.Add(target);
-				await _db.AddTextsAsync(texts);
+				await db.AddTextsAsync(texts);
 			}
 
 			if (hasSource)
-				await _db.UpdateTextAsync(source);
+				await db.UpdateTextAsync(source);
 			if (hasTarget)
-				await _db.UpdateTextAsync(target);
+				await db.UpdateTextAsync(target);
 		}
 
 		// returns the ID of the newly added translation unit
 		public async Task<ulong> AddAsync(TranslationUnit tu, LanguagePair languagePair)
 		{
 			var tmx = ToDb(tu, languagePair);
-			await _db.AddSingleTranslationUnitAsync(tmx);
+			var db = GuessBestTranslationUnitDb(languagePair);
+			await db.AddSingleTranslationUnitAsync(tmx);
 			// here, I know the translation unit ID, so I can create the texts
 
 			var source = ToDb(tu.SourceSegment, tmx.TranslationUnitID, languagePair.SourceCulture);
 			var target = ToDb(tu.TargetSegment, tmx.TranslationUnitID, languagePair.TargetCulture);
-			await _db.AddTextsAsync(new[] { source, target });
+			await db.AddTextsAsync(new[] { source, target });
 			return tmx.TranslationUnitID;
 		}
 

@@ -165,20 +165,22 @@ namespace TMX_Lib.Db
 		}
 		private IReadOnlyList<IMongoCollection<TmxText>> GetTextTablesForTU(ulong translationID)
 		{
-			var languageSuffixIndex = translationID % (ulong)EntriesPerTable;
+			var languageSuffixIndex = translationID / (ulong)EntriesPerTable;
 			var languageSuffix = $".{languageSuffixIndex}";
 			lock (this)
 				return _texts.Where(l => l.Key.EndsWith(languageSuffix)).Select(l => l.Value).ToList();
 		}
 
 
-		public async Task<TmxText> TryFindTranslation(ulong translationID, string targetLanguage)
+		public async Task<TmxText> TryFindTranslation(ulong translationID, string targetLanguage, string targetLocale, bool careForLocale)
 		{
 			var textTable = GetTextTable(translationID, targetLanguage);
 			if (textTable == null)
 				return null;
 
-			var textFilter = Builders<TmxText>.Filter.Where(f => f.TranslationUnitID == translationID && f.NormalizedLanguage == targetLanguage);
+			var textFilter = Builders<TmxText>.Filter.Where(f => f.TranslationUnitID == translationID 
+														    && f.NormalizedLanguage == targetLanguage 
+															&& (!careForLocale || f.NormalizedLocale == targetLocale));
 			var textCursor = await textTable.FindAsync(textFilter, new FindOptions<TmxText>() { Limit = 1 });
 			var targetTexts = new List<TmxText>();
 			await textCursor.ForEachAsync(t => targetTexts.Add(t));
@@ -189,9 +191,8 @@ namespace TMX_Lib.Db
 		}
 
 		// this just performs the search and returns the results -- does NOT perform any other analyses, like, compare score and such
-		public async Task<IReadOnlyList<TmxText>> ExactSearch(string text, string sourceLanguage)
+		public async Task<IReadOnlyList<TmxText>> ExactSearch(string text, string sourceLanguage, string sourceLocale, bool careForLocale)
 		{
-			sourceLanguage = Util.NormalizeLanguage(sourceLanguage);
 			// old:
 			//var filter = Builders<TmxText>.Filter.Where(f => f.NormalizedLanguage == sourceLanguage && f.LocaseText == text);
 
@@ -211,7 +212,8 @@ namespace TMX_Lib.Db
 					var taskTexts = new List<TmxText>();
 					await cursor.ForEachAsync(t =>
 					{
-						if (t.NormalizedLanguage == sourceLanguage)
+						var matches = !careForLocale || t.NormalizedLocale == sourceLocale;
+						if (matches)
 							taskTexts.Add(t);
 					});
 					lock (this)
@@ -228,7 +230,7 @@ namespace TMX_Lib.Db
 			return texts;
 		}
 
-		public async Task<IReadOnlyList<TmxText>> FuzzySearch(string text, string sourceLanguage) {
+		public async Task<IReadOnlyList<TmxText>> FuzzySearch(string text, string sourceLanguage, string sourceLocale, bool careForLocale) {
 			var filter = Builders<TmxText>.Filter.Text(text, new TextSearchOptions { CaseSensitive = false, DiacriticSensitive = false, });
 
 			var projection = Builders<TmxText>.Projection.MetaTextScore("Score")
@@ -262,7 +264,8 @@ namespace TMX_Lib.Db
 					foreach (var p in cursor)
 					{
 						var t = BsonSerializer.Deserialize<TmxText>(p);
-						if (t.NormalizedLanguage == sourceLanguage)
+						var matches = !careForLocale || t.NormalizedLocale == sourceLocale;
+						if (matches)
 							taskTexts.Add(t);
 					}
 					lock (this)
@@ -279,7 +282,7 @@ namespace TMX_Lib.Db
 			return texts;
 		}
 
-		public async Task<IReadOnlyList<TmxText>> ConcordanceSearch(string text, string sourceLanguage)
+		public async Task<IReadOnlyList<TmxText>> ConcordanceSearch(string text, string sourceLanguage, string sourceLocale, bool careForLocale)
 		{
 			var filter = Builders<TmxText>.Filter.Text(text, new TextSearchOptions { CaseSensitive = false, DiacriticSensitive = false, });
 			if (_logSearches)
@@ -295,7 +298,8 @@ namespace TMX_Lib.Db
 					var taskTexts = new List<TmxText>();
 					await cursor.ForEachAsync(t =>
 					{
-						if (t.NormalizedLanguage == sourceLanguage)
+						var matches = !careForLocale || t.NormalizedLocale == sourceLocale;
+						if (matches)
 							taskTexts.Add(t);
 					});
 					lock (this)

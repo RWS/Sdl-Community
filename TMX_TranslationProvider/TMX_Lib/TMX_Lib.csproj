@@ -71,7 +71,6 @@
     <Compile Include="Concordance\ConcordanceTokenizer.cs" />
     <Compile Include="Db\TmxException.cs" />
     <Compile Include="Db\TmxImportReport.cs" />
-    <Compile Include="Db\TmxLanguage.cs" />
     <Compile Include="Db\TmxMeta.cs" />
     <Compile Include="Db\TmxMongoDb.cs" />
     <Compile Include="Db\TmxSegment.cs" />

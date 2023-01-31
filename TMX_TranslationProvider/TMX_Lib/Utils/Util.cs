@@ -52,9 +52,16 @@ namespace TMX_Lib.Utils
 		}
 
 		// normalize language, so we don't worry about "en-US", "en_us", "en-us"
-		public static string NormalizeLanguage(string language)
+		public static (string language,string locale) NormalizeLanguage(string fullLanguageName)
 		{
-			return language.Replace("_", "-").ToLowerInvariant();
+			fullLanguageName = ToLocaseLanguage(fullLanguageName);
+			if (fullLanguageName.Length == 2)
+				return (fullLanguageName, "");
+			return (fullLanguageName.Substring(0, 2), fullLanguageName.Substring(3));
+		}
+		public static string ToLocaseLanguage(string fullLanguageName) {
+			fullLanguageName = fullLanguageName.Replace("_", "-").ToLowerInvariant();
+			return fullLanguageName;
 		}
 
 		public static void ThrowTmxException(string msg, Exception e = null)

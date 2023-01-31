@@ -78,18 +78,18 @@
 					SelectionMode="Single"
 					SelectionUnit="FullRow"		
 					AutoGenerateColumns="False"	
-					Margin="0 10" CanUserAddRows="False"
+					Margin="0 10" CanUserAddRows="False" 
 					Visibility="{Binding HasAnyDatabase,Converter={StaticResource BooleanToVisibilityConverter}}"
 					>
 				<DataGrid.Columns>
-					<DataGridTemplateColumn MinWidth="70" IsReadOnly="True" Width="Auto" Header="Select">
+					<DataGridTemplateColumn MinWidth="70" IsReadOnly="False" Width="Auto" Header="Select">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
-								<CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+								<CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
-					<DataGridTextColumn Header="Name" Binding="{Binding Name, Mode=OneWay}" IsReadOnly="True" MinWidth="120" />
+					<DataGridTextColumn Header="Name" Binding="{Binding Name, Mode=TwoWay}" IsReadOnly="True" MinWidth="120" />
 					<DataGridTextColumn Header="Languages" Binding="{Binding LanguagesText, Mode=OneWay}" IsReadOnly="True" MinWidth="110" Width="*"  />
 				</DataGrid.Columns>
 			</DataGrid>

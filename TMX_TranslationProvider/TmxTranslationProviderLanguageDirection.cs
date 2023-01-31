@@ -45,7 +45,7 @@ namespace TMX_TranslationProvider
 			var searcher = _provider.SearchService;
 			if (searcher == null)
 				return new SearchResults();
-			var task = searcher.Search(settings, segment, _languagePair);
+			var task = searcher.Search(settings, segment, _languagePair, _provider.Options.CareForLocale);
 			task.Wait();
 			return task.Result;
 		}

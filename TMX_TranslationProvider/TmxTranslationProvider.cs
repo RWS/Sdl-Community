@@ -38,8 +38,7 @@ namespace TMX_TranslationProvider
 
 		public TmxTranslationsOptions Options => _options;
 
-		//FIXME + implement caching on databases' names
-		public TmxSearchService SearchService => TmxSearchServiceProvider.GetSearchService(_options.Databases[0]);
+		public TmxSearchService SearchService => TmxSearchServiceProvider.GetSearchService(_options.Databases);
 		public void UpdateOptions(OptionsViewModel options)
 		{
 			lock (this)
@@ -82,7 +81,7 @@ namespace TMX_TranslationProvider
 				searchService = SearchService;
 			}
 
-			if (searchService?.SupportsLanguage(pair) ?? false)
+			if (searchService?.SupportsLanguage(pair, Options.CareForLocale) ?? false)
 			{
 				var ld = new TmxTranslationProviderLanguageDirection(pair, this);
 				lock (this)
@@ -143,7 +142,7 @@ namespace TMX_TranslationProvider
 			TmxSearchService searchService;
 			lock (this)
 				searchService = SearchService;
-			return (searchService?.SupportsLanguage(pair) ?? false);
+			return (searchService?.SupportsLanguage(pair, _options.CareForLocale) ?? false);
 		}
 
 

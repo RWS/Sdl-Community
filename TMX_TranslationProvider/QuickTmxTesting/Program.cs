@@ -485,6 +485,8 @@ namespace QuickTmxTesting
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en(GB) - it(IT)_(DGT 2015, 2017).tmx", "C:\\john\\buff\\TMX Examples\\temp\\");
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en-fr (EU Bookshop v2_10.8M).tmx", "C:\\john\\buff\\TMX Examples\\temp2\\");
 			log.Debug("test started");
+			Task.Run(async () => await TestExportToXml()).Wait();
+			return;
 
 			var TEST_TEXTS = new[] {
 				"The playing time was also reduced by half comparison to Rugby games",

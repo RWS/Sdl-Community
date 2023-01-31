@@ -27,7 +27,6 @@ namespace TMX_Lib.Db
 
 		public const int DEFAULT_ENTRIES_PER_TEXT_TABLE = 50000;
 
-        // FIXME test with Atlas credentials as well
 		private string _url;
         private string _databaseName;
         private bool _connected;
@@ -37,7 +36,6 @@ namespace TMX_Lib.Db
         private IMongoDatabase _database;
 
         private IMongoCollection<TmxMeta> _metas;
-        private IMongoCollection<TmxLanguage> _languages;
         private IMongoCollection<TmxTranslationUnit> _translationUnits;
         private TmxTextsArray _texts;
 
@@ -133,13 +131,15 @@ namespace TMX_Lib.Db
         {
 	        try
 	        {
-				lock(this)
+				lock (this)
+				{
 					if (_initialized)
 						return;
+					if (_initTask == null)
+						_initTask = Task.Run(async () => await InitializeImpl());
+				}
 
-				if (_initTask == null)
-					_initTask = Task.Run(async () => await InitializeImpl());
-		        await _initTask;
+				await _initTask;
 	        }
 			finally
 	        {
@@ -158,13 +158,11 @@ namespace TMX_Lib.Db
 	            var names = _database.ListCollectionNames().ToList();
 	            if (!names.Any())
 	            {
-		            _database.CreateCollection("languages");
 		            _database.CreateCollection("meta");
 		            _database.CreateCollection("translation_units");
 	            }
 
 	            _metas = _database.GetCollection<TmxMeta>("meta");
-	            _languages = _database.GetCollection<TmxLanguage>("languages");
 	            _translationUnits = _database.GetCollection<TmxTranslationUnit>("translation_units");
 	            _texts = new TmxTextsArray(_database, LogSearches);
 				await _texts.InitAsync();
@@ -195,7 +193,6 @@ namespace TMX_Lib.Db
                 {
                     // remove everything, we'll restart the import from scratch
                     await _metas.DeleteManyAsync(Builders<TmxMeta>.Filter.Empty);
-                    await _languages.DeleteManyAsync(Builders<TmxLanguage>.Filter.Empty);
                     await _translationUnits.DeleteManyAsync(Builders<TmxTranslationUnit>.Filter.Empty);
                     await _texts.ClearAsync();
                 }
@@ -237,10 +234,11 @@ namespace TMX_Lib.Db
         {
 	        try
 	        {
-		        var result = await _languages.FindAsync(Builders<TmxLanguage>.Filter.Empty);
-		        var languages = new List<string>();
-		        await result.ForEachAsync(l => languages.Add(l.Language));
-		        return languages;
+		        var result = await _metas.FindAsync(Builders<TmxMeta>.Filter.Where(m => m.Type == "Text Languages"));
+				var allLanguages = "";
+				await result.ForEachAsync(m => allLanguages = m.Value);
+				var languages = new List<string>();
+		        return allLanguages.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 	        }
 	        catch (Exception e)
 	        {
@@ -283,9 +281,9 @@ namespace TMX_Lib.Db
 		}
 
 		// if not found, returns null
-		private async Task<TmxSegment> TryGetSegment(TmxText text, string targetLanguage)
+		private async Task<TmxSegment> TryGetSegment(TmxText text, string targetLanguage, string targetLocale, bool careForLocale)
 		{
-			var targetText = await _texts.TryFindTranslation(text.TranslationUnitID, targetLanguage);
+			var targetText = await _texts.TryFindTranslation(text.TranslationUnitID, targetLanguage, targetLocale, careForLocale);
 			if(targetText == null)
 				return null;
 
@@ -309,49 +307,49 @@ namespace TMX_Lib.Db
 		}
 
 		// this just performs the search and returns the results -- does NOT perform any other analyses, like, compare score and such
-		public async Task<IReadOnlyList<TmxSegment>> ExactSearch(string text, string sourceLanguage, string targetLanguage)
+		public async Task<IReadOnlyList<TmxSegment>> ExactSearch(string text, string sourceLanguageAndLocale, string targetLanguageAndLocale, bool careForLocale = false)
 		{
-			text = Util.TextToDbText(text, _cultures.Culture(sourceLanguage));
-			sourceLanguage = Util.NormalizeLanguage(sourceLanguage);
-			targetLanguage = Util.NormalizeLanguage(targetLanguage);
+			text = Util.TextToDbText(text, _cultures.Culture(sourceLanguageAndLocale));
+			var (sourceLanguage, sourceLocale) = Util.NormalizeLanguage(sourceLanguageAndLocale);
+			var (targetLanguage, targetLocale) = Util.NormalizeLanguage(targetLanguageAndLocale);
 
-			var texts = await _texts.ExactSearch(text, sourceLanguage);
+			var texts = await _texts.ExactSearch(text, sourceLanguage, sourceLocale, careForLocale);
 			var segments = new List<TmxSegment>();
 			foreach (var t in texts)
 			{
-				var segment = await TryGetSegment(t, targetLanguage);
+				var segment = await TryGetSegment(t, targetLanguage, targetLocale, careForLocale);
 				if (segment != null)
 					segments.Add(segment);
 			}
 			return segments;
 		}
 		// this just performs the search and returns the results -- does NOT perform any other analyses, like, compare score and such
-		public async Task<IReadOnlyList<TmxSegment>> FuzzySearch(string text, string sourceLanguage, string targetLanguage)
+		public async Task<IReadOnlyList<TmxSegment>> FuzzySearch(string text, string sourceLanguageAndLocale, string targetLanguageAndLocale, bool careForLocale = false)
 		{
-			text = Util.TextToDbText(text, _cultures.Culture(sourceLanguage));
-			sourceLanguage = Util.NormalizeLanguage(sourceLanguage);
-			targetLanguage = Util.NormalizeLanguage(targetLanguage);
+			text = Util.TextToDbText(text, _cultures.Culture(sourceLanguageAndLocale));
+			var (sourceLanguage, sourceLocale) = Util.NormalizeLanguage(sourceLanguageAndLocale);
+			var (targetLanguage, targetLocale) = Util.NormalizeLanguage(targetLanguageAndLocale);
 
-			var texts = await _texts.FuzzySearch(text, sourceLanguage);
+			var texts = await _texts.FuzzySearch(text, sourceLanguage, sourceLocale, careForLocale);
 			var segments = new List<TmxSegment>();
 			foreach (var t in texts)
 			{
-				var segment = await TryGetSegment(t, targetLanguage);
+				var segment = await TryGetSegment(t, targetLanguage, targetLocale, careForLocale);
 				if (segment != null)
 					segments.Add(segment);
 			}
 			return segments;
 		}
 
-		public async Task<IReadOnlyList<TmxSegment>> ConcordanceSearch(string text, string sourceLanguage, string targetLanguage)
+		public async Task<IReadOnlyList<TmxSegment>> ConcordanceSearch(string text, string sourceLanguageAndLocale, string targetLanguageAndLocale, bool careForLocale = false)
 		{
-			sourceLanguage = Util.NormalizeLanguage(sourceLanguage);
-			targetLanguage = Util.NormalizeLanguage(targetLanguage);
-			var texts = await _texts.ConcordanceSearch(text, sourceLanguage);
+			var (sourceLanguage, sourceLocale) = Util.NormalizeLanguage(sourceLanguageAndLocale);
+			var (targetLanguage, targetLocale) = Util.NormalizeLanguage(targetLanguageAndLocale);
+			var texts = await _texts.ConcordanceSearch(text, sourceLanguage, sourceLocale, careForLocale);
 			var segments = new List<TmxSegment>();
 			foreach (var t in texts)
 			{
-				var segment = await TryGetSegment(t, targetLanguage);
+				var segment = await TryGetSegment(t, targetLanguage, targetLocale, careForLocale);
 				if (segment != null)
 					segments.Add(segment);
 			}
@@ -428,11 +426,14 @@ namespace TMX_Lib.Db
                 throw new TmxException($"Can't add Metas", e);
             }
         }
-        public async Task AddLanguagesAsync(IEnumerable<TmxLanguage> languages, CancellationToken token = default(CancellationToken))
+        public async Task AddLanguagesAsync(IEnumerable<string> languages, CancellationToken token = default(CancellationToken))
         {
             try
             {
-                await _languages.InsertManyAsync(languages, null, token);
+				var existingLanguages = new HashSet<string>( await GetAllLanguagesAsync());
+				foreach (var language in languages)
+					existingLanguages.Add(Util.ToLocaseLanguage(language));
+				await SetAllLanguagesAsync(existingLanguages.ToList());
             }
             catch (Exception e)
             {
@@ -524,6 +525,14 @@ namespace TMX_Lib.Db
 				throw new TmxException($"Can't update Meta", e);
 			}
 		}
+		public async Task SetAllLanguagesAsync(IReadOnlyList<string> languages)
+		{
+			var all = string.Join(",", languages);
+			await UpdateMetaAsync(new TmxMeta
+			{
+				Type = "Text Languages", Value = all,
+			}); 
+		}
 
 		// End of UPDATE
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -535,6 +544,7 @@ namespace TMX_Lib.Db
 
 		private static (IReadOnlyList<Db.TmxText> texts, Db.TmxTranslationUnit tu) TmxTranslationUnitToMongo(TmxFormat.TmxTranslationUnit tu, ulong id)
 		{
+
 			var dbTU = new Db.TmxTranslationUnit
 			{
 				TranslationUnitID = id,
@@ -544,13 +554,14 @@ namespace TMX_Lib.Db
 				ChangeDate = tu.ChangeTime,
 				XmlProperties = tu.XmlProperties,
 				TuAttributes = tu.TuAttributes,
-				NormalizedLanguages = tu.Texts.Select(t => Util.NormalizeLanguage(t.Language)).ToList(),
+				NormalizedLanguages = tu.Texts.Select(t => Util.ToLocaseLanguage(t.Language)).ToList(),
 			};
 
 			var texts = tu.Texts.Select(t => new Db.TmxText
 			{
 				TranslationUnitID = id,
-				NormalizedLanguage = Util.NormalizeLanguage(t.Language) ,
+				NormalizedLanguage = Util.NormalizeLanguage(t.Language).language ,
+				NormalizedLocale = Util.NormalizeLanguage(t.Language).locale ,
 				LocaseText = t.LocaseText,
 				FormattedText = t.FormattedText,
 			}).ToList();
@@ -699,7 +710,7 @@ namespace TMX_Lib.Db
 				if (!parser.HasError)
 		        {
 			        // languages are known only after everything has been imported
-			        var languages = parser.Languages().Select(l => new TmxLanguage { Language = l }).ToList();
+			        var languages = parser.Languages();
 			        await AddLanguagesAsync(languages, token);
 			        report.LanguageCount = languages.Count;
 			        _nextTranslationUnitID = id;
@@ -712,12 +723,12 @@ namespace TMX_Lib.Db
 				        // 1 - initial version
 						// 2 - added TranslationUnitNextID + TU.NormalizedLanguages array
 						// 3 - different tables for each language + each language can have more than one text table
+						// 4 - locales
 				        // ... - increase this on each breaking change
-				        new TmxMeta { Type = "Version", Value = "3", },
+				        new TmxMeta { Type = "Version", Value = "4", },
 						new TmxMeta { Type = "Entries Per Table", Value = entriesPerTable.ToString(), },
-						new TmxMeta { Type = "Source Language", Value = parser.Header.SourceLanguage, },
-				        new TmxMeta { Type = "Target Language", Value = parser.Header.TargetLanguage, },
-				        new TmxMeta { Type = "Domains", Value = string.Join(", ", parser.Header.Domains), },
+						new TmxMeta { Type = "Text Languages", Value = string.Join(",",languages), },
+						new TmxMeta { Type = "Domains", Value = string.Join(", ", parser.Header.Domains), },
 				        new TmxMeta { Type = "Creation Date", Value = parser.Header.CreationDate?.ToLongDateString() ?? "unknown", },
 				        new TmxMeta { Type = "Author", Value = parser.Header.Author, }, 
 				        new TmxMeta { Type = "FileName", Value = Path.GetFileName(parser.FileName) },

@@ -52,7 +52,7 @@ namespace TMX_Lib.Search
 			List<TmxMongoDb> newDatabases = new List<TmxMongoDb>();
 			lock (Instance) {
 				foreach (var name in databaseNames)
-					if (Instance._databases.ContainsKey(name))
+					if (!Instance._databases.ContainsKey(name))
 						try
 						{
 							var db = new TmxMongoDb(name);

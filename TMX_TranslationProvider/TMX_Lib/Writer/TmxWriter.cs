@@ -53,7 +53,7 @@ namespace TMX_Lib.Writer
 
 		private void Write(TmxText text)
 		{
-			var language = _languageArray.TryGetEquivalentLanguage(text.NormalizedLanguage) ?? text.NormalizedLanguage;
+			var language = text.LanguageAndLocale();
 			_writer.Write($"{IndentStr(3)}<tuv xml:lang=\"{language}\">\r\n");
 			_writer.Write($"{IndentStr(4)}<seg>{Util.XmlValue(text.FormattedText)}</seg>\r\n");
 			_writer.Write($"{IndentStr(3)}</tuv>\r\n");
@@ -114,7 +114,9 @@ namespace TMX_Lib.Writer
 		// writeBlock - after writing a block, we'll ask if we should continue or not
 		public async Task WriteAsync(TmxMongoDb db, Func<double, bool> continueFunc = null, ulong writeBlock = 100)
 		{
-			_languageArray = new LanguageArray { Languages = await db.GetAllLanguagesAsync() };
+			_languageArray = new LanguageArray(); 
+			_languageArray.LoadLanguages(await db.GetAllLanguagesAsync());
+
 			var headerMeta = await db.TryFindMetaAsync("Header");
 			WriteStart(headerMeta?.Value);
 			var maxId = db.MaxTranslationId();

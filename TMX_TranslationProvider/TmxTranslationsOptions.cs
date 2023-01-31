@@ -81,6 +81,11 @@ namespace TMX_TranslationProvider
 			set => SetStringParameter("Databases", string.Join(",",value));
 		}
 
+		public bool CareForLocale {
+			get => GetStringParameter("CareForLocale") == "1";
+			set => SetStringParameter("CareForeLocale", value ? "1" : "0");
+		}
+
 		private string GetStringParameter(string p)
 		{
 			var paramString = _uriBuilder[p] ?? "";
