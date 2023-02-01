@@ -86,7 +86,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				if (_selectedGlossary == value) return;
 				_selectedGlossary = value;
 				OnPropertyChanged(nameof(SelectedGlossary));
-				GlossaryPath = value.GlossaryID;
+				GlossaryPath = value?.GlossaryID;
 			}
 		}
 
@@ -321,6 +321,25 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				OnPropertyChanged(nameof(UrlToDownload));
 			}
 		}
+		private void ResetFields()
+		{
+			AvailableCustomModels = null;
+			AvailableGlossaries = null;
+			BasicCsvGlossary = false;
+			CanChangeProviderResources = false;
+			GlossaryId = null;
+			GlossaryPath = null;
+			GoogleEngineModel = null;
+			JsonFilePath = null;
+			Locations = new();
+			ProjectId = null;
+			ProjectLocation = null;
+			ProjectResourcesLoaded = false;
+			SelectedCustomModel = null;
+			SelectedGlossary = null;
+			UrlToDownload = null;
+			VisibleJsonPath = null;
+		}
 
 		public ICommand DragDropJsonFileCommand => _dragDropJsonFileCommand ??= new RelayCommand(DragAndDropJsonFile);
 		public ICommand DownloadJsonFileCommand => _downloadJsonFileCommand ??= new RelayCommand(DownloadJsonFile);
@@ -549,7 +568,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private void DownloadJsonFile(object parameter)
 		{
 			UrlToDownload ??= string.Empty;
-			var operation = UrlToDownload.VerifyAndDownloadJsonFile(_options.DownloadPath, Constants.DefaultDownloadedJsonFileName);
+			var operation = UrlToDownload.Trim().VerifyAndDownloadJsonFile(_options.DownloadPath, Constants.DefaultDownloadedJsonFileName);
 			if (!operation.Success)
 			{
 				ErrorHandler.HandleError(operation.ErrorMessage, "Download failed");
@@ -736,8 +755,10 @@ namespace GoogleCloudTranslationProvider.ViewModels
 					break;
 				case nameof(UrlToDownload):
 					UrlToDownload = string.Empty;
+					ResetFields();
 					break;
 			}
 		}
+
 	}
 }
