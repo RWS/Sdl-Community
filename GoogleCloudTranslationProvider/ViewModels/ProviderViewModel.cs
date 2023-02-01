@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using System.Windows.Input;
 using GoogleCloudTranslationProvider.Commands;
 using GoogleCloudTranslationProvider.Extensions;
@@ -14,6 +13,8 @@ using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
 using GoogleCloudTranslationProvider.Service;
 using Sdl.LanguagePlatform.Core;
+using DataFormats = System.Windows.DataFormats;
+using DragEventArgs = System.Windows.DragEventArgs;
 
 namespace GoogleCloudTranslationProvider.ViewModels
 {
@@ -529,18 +530,14 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		private void DragAndDropJsonFile(object parameter)
 		{
-			if (parameter is not DragEventArgs eventArgs)
-			{
-				return;
-			}
-
-			if (eventArgs.Data.GetData(DataFormats.FileDrop, true) is not string[] fileDrop
+			if (parameter is not DragEventArgs eventArgs
+			 || eventArgs.Data.GetData(DataFormats.FileDrop, true) is not string[] fileDrop
 			 || fileDrop?.Length < 1)
 			{
 				return;
 			}
 
-			if (fileDrop.Length > 1)
+			if (fileDrop.Length != 1)
 			{
 				ErrorHandler.HandleError(PluginResources.Validation_MultipleFiles, "Multiple files");
 				return;
