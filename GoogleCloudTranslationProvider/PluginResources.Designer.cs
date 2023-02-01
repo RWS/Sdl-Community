@@ -963,7 +963,7 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Location for downloaded JSON files.
+        ///   Looks up a localized string similar to Location for downloaded JSON files for V3 projects.
         /// </summary>
         public static string SettingsView_DownloadPath_ToolTip {
             get {

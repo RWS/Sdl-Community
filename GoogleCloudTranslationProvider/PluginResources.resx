@@ -479,7 +479,7 @@ Path: {0}</value>
     <value>JSON Location</value>
   </data>
   <data name="SettingsView_DownloadPath_ToolTip" xml:space="preserve">
-    <value>Location for downloaded JSON files</value>
+    <value>Location for downloaded JSON files for V3 projects</value>
   </data>
   <data name="SettingsView_SessionSettingsTitle" xml:space="preserve">
     <value>Session settings</value>
