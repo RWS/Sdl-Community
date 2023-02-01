@@ -205,8 +205,13 @@ namespace TMX_Lib.Search
 					}
 				});
 			}).ToList();
+
 			if (tasks.Count > 0)
 				await Task.WhenAll(tasks);
+
+			var needsResort = searchType == SearchType.Fuzzy;
+			if (needsResort)
+				segments = segments.OrderByDescending(s => s.Score).ToList();
 			return segments;
 		}
 

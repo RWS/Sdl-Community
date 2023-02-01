@@ -239,3 +239,4 @@ IATETerminologyProvider/IATETerminologyProvider/pluginpackage.manifest_LOCAL_178
 /TM Optimizer/Sdl.Community.TMOptimizer/Properties/launchSettings.json
 
 *.json
+TMX_TranslationProvider/TMX_TranslationProviderWithUITest.sln

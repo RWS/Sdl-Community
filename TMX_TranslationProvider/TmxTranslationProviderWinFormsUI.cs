@@ -21,11 +21,29 @@ namespace TMX_TranslationProvider
 	public class TmxTranslationProviderWinFormsUI : ITranslationProviderWinFormsUI
 	{
 
+		private static Form GetParentForm()
+		{
+			Form parentForm = null;
+			foreach (Control form in Application.OpenForms)
+			{
+				if (string.Compare(form.Name, "SettingsDialogForm", StringComparison.InvariantCultureIgnoreCase) == 0)
+				{
+					return form as Form;
+				}
+				if (string.Compare(form.Name, "StudioWindowForm", StringComparison.InvariantCultureIgnoreCase) == 0)
+				{
+					parentForm = form as Form;
+				}
+			}
+
+			return parentForm;
+		}
+
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
 			var form = new OptionsView();
 			var interopHelper = new System.Windows.Interop.WindowInteropHelper(form);
-			interopHelper.Owner = owner.Handle;
+			interopHelper.Owner = GetParentForm().Handle;
 
 			if (form.ShowDialog() != true)
 				return null;
@@ -41,7 +59,7 @@ namespace TMX_TranslationProvider
 			{
 				var form = new OptionsView(tmxProvider.Options.Databases, tmxProvider.Options.CareForLocale);
 				var interopHelper = new System.Windows.Interop.WindowInteropHelper(form);
-				interopHelper.Owner = owner.Handle;
+				interopHelper.Owner = GetParentForm().Handle;
 
 				if (form.ShowDialog() == true)
 				{

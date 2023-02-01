@@ -120,7 +120,6 @@
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="32"/>
 				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
 
 			<Grid.ColumnDefinitions>
@@ -167,11 +166,6 @@
 					IsEnabled="{Binding ImportFromTmxFile.CanImport}"
 					/>
 
-			<TextBlock Text="Import Complete" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="5" Margin="0 20 0 0"
-					   FontSize="24" FontWeight="Bold"
-					   HorizontalAlignment="Center"
-					   Visibility="{Binding ImportFromTmxFile.ImportComplete,Converter={StaticResource BooleanToVisibilityConverter}}"
-					   />
 
 
 			<Grid Grid.Row="0" Grid.Column="0" 
@@ -191,6 +185,18 @@
 						   VerticalAlignment="Bottom"/>
 				</Grid>
 			</Grid>
+
+			<Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="5" 
+				  Visibility="{Binding ImportFromTmxFile.ImportComplete,Converter={StaticResource BooleanToVisibilityConverter}}"
+				  Background="{StaticResource BackgroundColor}"
+				  >
+				<TextBlock Text="Import Complete"  
+						   FontSize="24" FontWeight="Bold"
+						   HorizontalAlignment="Center"					  
+						   VerticalAlignment="Center"
+						   />
+			</Grid>
+
 		</Grid>
 
 		
@@ -199,7 +205,6 @@
 			  Visibility="{Binding IsExportToTmx,Converter={StaticResource BooleanToVisibilityConverter}}"
 			  >
 			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
@@ -236,11 +241,6 @@
 					IsEnabled="{Binding ExportToTmx.CanExport}"
 					Click="start_export_click"
 					/>
-			<TextBlock Text="Export Complete" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="4" Margin="0 20 0 0"
-					   FontSize="24" FontWeight="Bold"
-					   HorizontalAlignment="Center"
-					   Visibility="{Binding ExportToTmx.ExportComplete,Converter={StaticResource BooleanToVisibilityConverter}}"
-					   />
 
 			<Grid Grid.Row="0" Grid.Column="0" 
 				  Grid.ColumnSpan="3" Grid.RowSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
@@ -260,6 +260,16 @@
 				</Grid>
 			</Grid>
 
+			<Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="4" 
+				  Visibility="{Binding ExportToTmx.ExportComplete,Converter={StaticResource BooleanToVisibilityConverter}}"
+				  Background="{StaticResource BackgroundColor}"
+				  >
+				<TextBlock Text="Export Complete" 
+					    FontSize="24" FontWeight="Bold"
+					    HorizontalAlignment="Center"
+						VerticalAlignment="Center"
+					   />
+			</Grid>
 
 		</Grid>
 
