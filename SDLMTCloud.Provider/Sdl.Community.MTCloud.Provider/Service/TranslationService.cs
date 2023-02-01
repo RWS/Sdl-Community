@@ -161,7 +161,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				translationRequestModel.Dictionaries = new[] { model.SelectedDictionary?.DictionaryId };
 			}
 
-			if (model.LinguisticOption != Constants.LinguisticOptionsUnavailable
+			if (model.LinguisticOption != PluginResources.Message_No_LO_available
 			 && !string.IsNullOrEmpty(model.LinguisticOption))
 			{
 				translationRequestModel.LinguisticOptions = new Dictionary<string, string>

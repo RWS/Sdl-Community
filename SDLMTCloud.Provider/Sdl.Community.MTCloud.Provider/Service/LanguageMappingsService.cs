@@ -97,7 +97,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			{
 				return new()
 				{
-					Values = new List<string>() { Constants.LinguisticOptionsUnavailable },
+					Values = new List<string>() { PluginResources.Message_No_LO_available },
 					ModelName = modelName
 				};
 			}

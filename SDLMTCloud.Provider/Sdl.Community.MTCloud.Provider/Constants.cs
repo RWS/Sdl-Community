@@ -23,8 +23,6 @@
 		public static string UserAuthentication = $"User credentials - {PluginResources.SDLMTCloud_Provider_Name}";
 		public static string ClientAuthentication = $"Client credentials - {PluginResources.SDLMTCloud_Provider_Name}";
 
-		public static string LinguisticOptionsUnavailable = "No linguistic options available";
-
 		// TODO confirm if some or all of these should be managed in a resource file		
 		public static string SDLMachineTranslationCloud = "Language Weaver";
 		public static string RWSAppStore = "RWS AppStore";
