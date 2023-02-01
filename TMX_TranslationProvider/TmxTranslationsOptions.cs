@@ -84,7 +84,7 @@ namespace TMX_TranslationProvider
 
 		public bool CareForLocale {
 			get => GetStringParameter("CareForLocale") == "1";
-			set => SetStringParameter("CareForeLocale", value ? "1" : "0");
+			set => SetStringParameter("CareForLocale", value ? "1" : "0");
 		}
 
 		private string GetStringParameter(string p)
