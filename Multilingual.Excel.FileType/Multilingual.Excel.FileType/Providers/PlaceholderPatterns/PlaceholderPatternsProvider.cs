@@ -7,6 +7,7 @@ using Multilingual.Excel.FileType.Models;
 using Multilingual.Excel.FileType.Providers.OpenXml;
 using Multilingual.Excel.FileType.Providers.OpenXml.Model;
 using Multilingual.Excel.FileType.Providers.PlaceholderPatterns.Interfaces;
+using Multilingual.Excel.FileType.Services;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace Multilingual.Excel.FileType.Providers.PlaceholderPatterns
@@ -29,8 +30,8 @@ namespace Multilingual.Excel.FileType.Providers.PlaceholderPatterns
 			};
 
 			var excelColumns = common.GetDefaultExcelColumns();
-
-			var reader = new ExcelReader();
+			var colorService = new ColorService();
+			var reader = new ExcelReader(colorService);
 			var excelSheets = reader.GetExcelSheets(path, excelOptions, excelColumns);
 			var patterns = GetPlaceholderPatterns(excelSheets?.FirstOrDefault()?.Rows);
 

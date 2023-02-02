@@ -43,82 +43,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			InitializeComponent();
 		}
 
-		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
-		public ICommand LearnMoreCommand => _learnMoreCommand ??= new RelayCommand(NavigateTo);
-
-		private void InitializeComponent()
-		{
-			TranslationOptions = new List<TranslationOption>
-			{
-				new TranslationOption
-				{
-					Name = PluginResources.Microsoft,
-					ProviderType = MTETranslationOptions.ProviderType.MicrosoftTranslator
-				}
-			};
-
-			Region = Regions.FirstOrDefault(a => a.Key == "");
-			if (_options == null)
-			{
-				SetTranslationOption();
-				return;
-			}
-
-			BasicCsvGlossary = _options.BasicCsv;
-			CategoryID = _options.CategoryID;
-			ClientID = _options.ClientID;
-			GlossaryPath = _options.GlossaryPath;
-			JsonFilePath = _options.JsonFilePath;
-			PersistMicrosoftKey = _options.PersistMicrosoftCredentials;
-			ProjectLocation = _options.ProjectLocation;
-			ProjectName = _options.ProjectName;
-			UseCategoryID = _options.UseCategoryID;
-
-			Region = Regions.FirstOrDefault(a => a.Key == (_options.Region ?? ""));
-			SetTranslationOption();
-		}
-
-		private void Clear(object obj)
-		{
-			if (obj is not string objectName)
-			{
-				return;
-			}
-
-			switch (objectName)
-			{
-				case "CategoryId":
-					CategoryID = string.Empty;
-					break;
-				case "JsonFilePath":
-					JsonFilePath = string.Empty;
-					break;
-				case "ProjectName":
-					ProjectName = string.Empty;
-					break;
-				case "ProjectLocation":
-					ProjectLocation = string.Empty;
-					break;
-				case "GlossaryPath":
-					GlossaryPath = string.Empty;
-					break;
-			}
-		}
-
-		private void NavigateTo(object obj)
-		{
-			var value = obj.ToString().Trim();
-			if (string.IsNullOrEmpty(value))
-			{
-				return;
-			}
-
-			Process.Start(value);
-		}
-
 		public BaseModel ViewModel { get; set; }
-
-		public ICommand ShowSettingsCommand { get; set; }
 
 		public List<TranslationOption> TranslationOptions { get; set; }
 
@@ -130,7 +55,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				if (_projectLocation == value) return;
 				_projectLocation = value;
 				OnPropertyChanged(nameof(ProjectLocation));
-				ClearMessageRaised?.Invoke();
 			}
 		}
 
@@ -142,7 +66,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				if (_glossaryId == value) return;
 				_glossaryId = value;
 				OnPropertyChanged(nameof(GlossaryId));
-				ClearMessageRaised?.Invoke();
 			}
 		}
 
@@ -154,11 +77,8 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				if (_glossaryPath == value) return;
 				_glossaryPath = value;
 				OnPropertyChanged(nameof(GlossaryPath));
-				ClearMessageRaised?.Invoke();
 			}
 		}
-
-		public event ClearMessageEventRaiser ClearMessageRaised;
 
 		public TranslationOption SelectedTranslationOption
 		{
@@ -169,7 +89,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				_selectedTranslationOption = value;
 				IsMicrosoftSelected = value.ProviderType == MTETranslationOptions.ProviderType.MicrosoftTranslator;
 				OnPropertyChanged(nameof(SelectedTranslationOption));
-				ClearMessageRaised?.Invoke();
 			}
 		}
 
@@ -181,7 +100,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				if (_isMicrosoftSelected == value) return;
 				_isMicrosoftSelected = value;
 				OnPropertyChanged(nameof(IsMicrosoftSelected));
-				ClearMessageRaised?.Invoke();
 			}
 		}
 		public string ClientID
@@ -192,7 +110,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				if (_clientId == value) return;
 				_clientId = value.Trim();
 				OnPropertyChanged(nameof(ClientID));
-				ClearMessageRaised?.Invoke();
 			}
 		}
 
@@ -204,7 +121,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				if (_region == value) return;
 				_region = value;
 				OnPropertyChanged(nameof(Region));
-				ClearMessageRaised?.Invoke();
 			}
 		}
 
@@ -230,7 +146,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				if (_jsonFilePath == value) return;
 				_jsonFilePath = value;
 				OnPropertyChanged(nameof(JsonFilePath));
-				ClearMessageRaised?.Invoke();
 			}
 		}
 
@@ -242,7 +157,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				if (_projectName == value) return;
 				_projectName = value;
 				OnPropertyChanged(nameof(ProjectName));
-				ClearMessageRaised?.Invoke();
 			}
 		}
 
@@ -306,6 +220,41 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			}
 		}
 
+		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
+
+		public ICommand LearnMoreCommand => _learnMoreCommand ??= new RelayCommand(NavigateTo);
+
+		private void InitializeComponent()
+		{
+			TranslationOptions = new List<TranslationOption>
+			{
+				new TranslationOption
+				{
+					Name = PluginResources.Microsoft,
+					ProviderType = MTETranslationOptions.ProviderType.MicrosoftTranslator
+				}
+			};
+
+			Region = Regions.FirstOrDefault(a => a.Key == "");
+			if (_options == null)
+			{
+				SetTranslationOption();
+				return;
+			}
+
+			BasicCsvGlossary = _options.BasicCsv;
+			CategoryID = _options.CategoryID;
+			ClientID = _options.ClientID;
+			GlossaryPath = _options.GlossaryPath;
+			JsonFilePath = _options.JsonFilePath;
+			PersistMicrosoftKey = _options.PersistMicrosoftCredentials;
+			ProjectLocation = _options.ProjectLocation;
+			ProjectName = _options.ProjectName;
+			UseCategoryID = _options.UseCategoryID;
+			Region = Regions.FirstOrDefault(a => a.Key == (_options.Region ?? ""));
+			SetTranslationOption();
+		}
+
 		private void SetTranslationOption()
 		{
 			IsMicrosoftSelected = true;
@@ -316,6 +265,33 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		{
 			SelectedTranslationOption = TranslationOptions[0];
 			IsMicrosoftSelected = true;
+		}
+
+		private void Clear(object parameter)
+		{
+			switch (parameter as string)
+			{
+				case "CategoryId":
+					CategoryID = string.Empty;
+					break;
+				case "JsonFilePath":
+					JsonFilePath = string.Empty;
+					break;
+				case "ProjectName":
+					ProjectName = string.Empty;
+					break;
+				case "ProjectLocation":
+					ProjectLocation = string.Empty;
+					break;
+				case "GlossaryPath":
+					GlossaryPath = string.Empty;
+					break;
+			}
+		}
+
+		private void NavigateTo(object parameter)
+		{
+			Process.Start(parameter as string);
 		}
 	}
 }

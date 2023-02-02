@@ -35,10 +35,17 @@ namespace Multilingual.Excel.FileType.Constants
 		public const string MultilingualExcelRowIndex = "MultilingualExcelRowIndex";
 		public const string MultilingualSegment = "MultilingualSegment";
 		public const string MultilingualExcelContextInformation = "MultilingualExcelContextInformation";
+
+		public const string MultilingualExcelFilterBackgroundColorSource = "MultilingualExcelFilterBackgroundColorSource";
+		public const string MultilingualExcelFilterBackgroundColorTarget = "MultilingualExcelFilterBackgroundColorTarget";
+		public const string MultilingualExcelFilterLockSegmentsSource = "MultilingualExcelFilterLockSegmentsSource";
+		public const string MultilingualExcelFilterLockSegmentsTarget = "MultilingualExcelFilterLockSegmentsTarget";
+
 		public const string MultilingualExcelCharacterLimitationSource = "MultilingualExcelCharacterLimitationSource";
 		public const string MultilingualExcelPixelLimitationSource = "MultilingualExcelPixelLimitationSource";
 		public const string MultilingualExcelPixelFontNameSource = "MultilingualExcelPixelFontNameSource";
 		public const string MultilingualExcelPixelFontSizeSource = "MultilingualExcelPixelFontSizeSource";
+
 		public const string MultilingualExcelCharacterLimitationTarget = "MultilingualExcelCharacterLimitationTarget";
 		public const string MultilingualExcelPixelLimitationTarget = "MultilingualExcelPixelLimitationTarget";
 		public const string MultilingualExcelPixelFontNameTarget = "MultilingualExcelPixelFontNameTarget";

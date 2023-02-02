@@ -240,3 +240,5 @@ IATETerminologyProvider/IATETerminologyProvider/pluginpackage.manifest_LOCAL_178
 
 *.json
 TMX_TranslationProvider/TMX_TranslationProviderWithUITest.sln
+/InterpretBank/InterpretBankTests/Resources/SavedGlossary.xlsx
+/InterpretBank/InterpretBankTests/Resources/exp2.tbx

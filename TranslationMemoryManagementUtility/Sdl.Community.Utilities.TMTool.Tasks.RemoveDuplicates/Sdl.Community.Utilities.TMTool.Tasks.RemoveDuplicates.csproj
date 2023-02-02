@@ -37,7 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

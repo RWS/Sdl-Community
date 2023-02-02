@@ -15,7 +15,7 @@ namespace MicrosoftTranslatorProvider.Model
 
 		public MTETranslationOptions()
 		{
-			_uriBuilder = new TranslationProviderUriBuilder(Provider.ListTranslationProviderScheme);
+			_uriBuilder = new TranslationProviderUriBuilder(Constants.MicrosoftProviderScheme);
 		}
 
 		public MTETranslationOptions(Uri uri)

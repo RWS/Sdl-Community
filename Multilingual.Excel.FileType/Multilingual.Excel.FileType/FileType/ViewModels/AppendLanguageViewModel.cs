@@ -6,12 +6,15 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
+using System.Windows.Media;
 using Multilingual.Excel.FileType.Commands;
+using Multilingual.Excel.FileType.Common;
 using Multilingual.Excel.FileType.Models;
 using Multilingual.Excel.FileType.Services;
 using Rws.MultiSelectComboBox.API;
 using Rws.MultiSelectComboBox.EventArgs;
 using Sdl.Core.Globalization;
+using static Multilingual.Excel.FileType.Common.Enumerators;
 
 namespace Multilingual.Excel.FileType.FileType.ViewModels
 {
@@ -32,6 +35,11 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 		private bool _isDefault;
 		private bool _excludeTranslations;
 		private bool _isEditMode;
+		private string _selectedFilterFillColors;
+		private bool _filterFillColorChecked;
+		private string _filterScope;
+
+		private List<string> _filterScopes;
 		private readonly List<LanguageMapping> _languageMappings;
 		private readonly ImageService _imageService;
 		private readonly LanguageMapping _languageMapping;
@@ -45,11 +53,11 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 
 		public AppendLanguageViewModel(LanguageMapping languageMapping,
 			List<LanguageMapping> languageMappings, ImageService imageService,
-			IFilterService languageLanguageFilterService, bool isEditMode)
+			IFilterService languageLanguageFilterService,  bool isEditMode)
 		{
 			_languageMapping = languageMapping ?? new LanguageMapping();
 			_languageMappings = languageMappings ?? new List<LanguageMapping>();
-
+			
 			_imageService = imageService;
 			IsEditMode = isEditMode;
 			LanguageFilterService = languageLanguageFilterService;
@@ -64,6 +72,12 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 			PixelFontFamilyColumn = languageMapping?.PixelFontFamilyColumn;
 			PixelFontSizeColumn = languageMapping?.PixelFontSizeColumn;
 			PixelFontSize = languageMapping?.PixelFontSize ?? 0;
+
+			SelectedFilterFillColors = languageMapping?.FilterFillColor;
+			FilterFillColorChecked = languageMapping?.FilterFillColorChecked ?? false;
+
+			FilterScopes = Enum.GetNames(typeof(FilterScope)).ToList();
+			SelectedFilterScope = string.IsNullOrEmpty(languageMapping?.FilterScope) ? FilterScope.Import.ToString() : languageMapping.FilterScope;
 
 			IsDefault = languageMapping?.IsDefault ?? false;
 
@@ -373,6 +387,65 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 			}
 		}
 
+		public string SelectedFilterFillColors
+		{
+			get => _selectedFilterFillColors;
+			set
+			{
+				if (Equals(_selectedFilterFillColors, value))
+				{
+					return;
+				}
+
+				_selectedFilterFillColors = value;
+				OnPropertyChanged(nameof(SelectedFilterFillColors));
+				OnPropertyChanged(nameof(IsValid));
+			}
+		}
+
+		public bool FilterFillColorChecked
+		{
+			get => _filterFillColorChecked;
+			set
+			{
+				if (_filterFillColorChecked == value)
+				{
+					return;
+				}
+
+				_filterFillColorChecked = value;
+				OnPropertyChanged(nameof(FilterFillColorChecked));
+				OnPropertyChanged(nameof(IsValid));
+			}
+		}
+
+		public List<string> FilterScopes
+		{
+			get => _filterScopes;
+			set
+			{
+				_filterScopes = value;
+				OnPropertyChanged(nameof(FilterScopes));
+				OnPropertyChanged(nameof(IsValid));
+			}
+		}
+
+		public string SelectedFilterScope
+		{
+			get => _filterScope;
+			set
+			{
+				if (Equals(_filterScope, value))
+				{
+					return;
+				}
+
+				_filterScope = value;
+				OnPropertyChanged(nameof(SelectedFilterScope));
+				OnPropertyChanged(nameof(IsValid));
+			}
+		}
+
 		public bool IsDefault
 		{
 			get => _isDefault;
@@ -556,7 +629,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 								a.CharacterLimitationColumn == ContentColumn ||
 								a.PixelLimitationColumn == ContentColumn ||
 								a.PixelFontFamilyColumn == ContentColumn ||
-						        a.PixelFontSizeColumn == ContentColumn)
+								a.PixelFontSizeColumn == ContentColumn)
 						);
 
 						if (mapping != null)
@@ -746,11 +819,11 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 						}
 
 						if (PixelFontFamilyColumn == ContentColumn ||
-						    GetColumnNames(ContextColumn).Contains(PixelFontFamilyColumn) ||
-						    GetColumnNames(CommentColumn).Contains(PixelFontFamilyColumn) ||
-						    PixelFontFamilyColumn == PixelLimitationColumn ||
-						    PixelFontFamilyColumn == CharacterLimitationColumn ||
-						    PixelFontFamilyColumn == PixelFontSizeColumn)
+							GetColumnNames(ContextColumn).Contains(PixelFontFamilyColumn) ||
+							GetColumnNames(CommentColumn).Contains(PixelFontFamilyColumn) ||
+							PixelFontFamilyColumn == PixelLimitationColumn ||
+							PixelFontFamilyColumn == CharacterLimitationColumn ||
+							PixelFontFamilyColumn == PixelFontSizeColumn)
 						{
 							validationMessage = string.Format(PluginResources.ValidationMessage_Column_Is_Defined_For_Current_Language, PixelFontFamilyColumn);
 						}
@@ -780,11 +853,11 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 						}
 
 						if (PixelFontSizeColumn == ContentColumn ||
-						    GetColumnNames(ContextColumn).Contains(PixelFontSizeColumn) ||
-						    GetColumnNames(CommentColumn).Contains(PixelFontSizeColumn) ||
-						    PixelFontSizeColumn == PixelLimitationColumn ||
-						    PixelFontSizeColumn == CharacterLimitationColumn ||
-						    PixelFontSizeColumn == PixelFontFamilyColumn)
+							GetColumnNames(ContextColumn).Contains(PixelFontSizeColumn) ||
+							GetColumnNames(CommentColumn).Contains(PixelFontSizeColumn) ||
+							PixelFontSizeColumn == PixelLimitationColumn ||
+							PixelFontSizeColumn == CharacterLimitationColumn ||
+							PixelFontSizeColumn == PixelFontFamilyColumn)
 						{
 							validationMessage = string.Format(PluginResources.ValidationMessage_Column_Is_Defined_For_Current_Language, PixelFontSizeColumn);
 						}

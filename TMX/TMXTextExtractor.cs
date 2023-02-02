@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Xml;
@@ -58,7 +59,9 @@ namespace Sdl.Community.FileType.TMX
         public DateTime? TryGetModifiedDate(ISegment segment)
         {
 	        var modifiedDateStr = TryGetMetadata(segment, "modified_on");
-	        if (modifiedDateStr != null && DateTime.TryParse(modifiedDateStr, out var modifiedDate))
+			// IMPORTANT: the format date type is hardcoded ("MM/dd/yyyy HH:mm:ss"), because we need to properly parse on different machines as well
+			if (modifiedDateStr != null && DateTime.TryParseExact(  modifiedDateStr, "MM/dd/yyyy HH:mm:ss", 
+																	CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out var modifiedDate))
 		        return modifiedDate;
 	        else
 		        return null;

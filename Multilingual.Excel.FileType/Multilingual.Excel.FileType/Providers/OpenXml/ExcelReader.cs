@@ -7,6 +7,8 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Multilingual.Excel.FileType.Providers.OpenXml.Model;
+using Multilingual.Excel.FileType.Services;
+using Fill = DocumentFormat.OpenXml.Spreadsheet.Fill;
 
 namespace Multilingual.Excel.FileType.Providers.OpenXml
 {
@@ -15,6 +17,12 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 		private List<ExcelColumn> _excelColumns;
 		private ExcelOptions _excelOptions;
 		private readonly object _lockObject = new object();
+		private readonly ColorService _colorService;
+
+		public ExcelReader(ColorService colorService)
+		{
+			_colorService = colorService;
+		}
 
 		public List<ExcelSheet> GetExcelSheets(string path, ExcelOptions excelOptions, List<ExcelColumn> excelColumns)
 		{
@@ -130,11 +138,14 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 				excelColumn.Index = columnIndex;
 
 				var cell = row.Descendants<Cell>().FirstOrDefault(a => a.CellReference?.Value == excelColumn.Name + excelRow.Index);
+				var cellValue = GetCellValue(cell, spreadsheetDocument);
+				var cellBackgroundColor = GetCellBackgroundColor(cell, spreadsheetDocument);
 
 				var excelCell = new ExcelCell
 				{
 					Column = excelColumn,
-					Value = (cell == null ? null : GetCellValue(cell, spreadsheetDocument))
+					Value = cellValue,
+					Background = cellBackgroundColor
 				};
 
 				excelRow.Cells.Add(excelCell);
@@ -158,6 +169,7 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 
 				var cell = row.Descendants<Cell>()
 					.FirstOrDefault(a => a.CellReference?.Value == excelColumn.Name + xmlRow.RowIndex);
+
 				if (cell != null)
 				{
 					var cellValue = GetCellValue(cell, spreadsheetDocument);
@@ -166,11 +178,81 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 			}
 		}
 
+		private string GetCellBackgroundColor(CellType cell, SpreadsheetDocument spreadsheetDocument)
+		{
+			var styles = spreadsheetDocument.WorkbookPart?.WorkbookStylesPart;
+
+			var cellStyleIndex = GetCellStyleIndex(cell);
+			var cellFormat = (CellFormat)styles?.Stylesheet.CellFormats?.ChildElements[cellStyleIndex];
+			if (cellFormat?.FillId == null)
+			{
+				return null;
+			}
+
+			var fill = (Fill)styles.Stylesheet.Fills?.ChildElements[(int)cellFormat.FillId.Value];
+			var ct = fill?.PatternFill?.ForegroundColor;
+			if (ct == null)
+			{
+				return null;
+			}
+
+			if (ct.Auto != null)
+			{
+				Console.Out.WriteLine("System auto color");
+			}
+
+			if (ct.Rgb != null)
+			{
+				Console.Out.WriteLine("RGB value -> {0}", ct.Rgb.Value);
+				return ct.Rgb.Value;
+			}
+		
+			var themeValue = ct.Theme;
+			if (themeValue != null)
+			{
+				//var ee = spreadsheetDocument.WorkbookPart?.ThemePart?.Theme.ThemeElements?.ColorScheme?.ChildElements;
+				//var c2t = (Color2Type)spreadsheetDocument.WorkbookPart?.ThemePart?.Theme.ThemeElements?.ColorScheme?.ChildElements[(int)themeValue.Value-1];
+				//Console.Out.WriteLine("RGB color model hex -> {0}", c2t.RgbColorModelHex.Val);
+
+				var colorValue = _colorService.GetColor(ct, Convert.ToInt32(themeValue.Value));
+				return colorValue;
+			}
+
+			if (ct.Indexed != null)
+			{
+				Console.Out.WriteLine("Indexed color -> {0}", ct.Indexed.Value);
+
+				var ic = (IndexedColors)styles.Stylesheet.Colors.IndexedColors.ChildElements[(int)ct.Indexed.Value];
+				return ic.ToString();
+			}
+
+			return null;
+		}
+
+		private static int GetCellStyleIndex(CellType cell)
+		{
+			int cellStyleIndex;
+			if (cell?.StyleIndex == null)
+			{
+				cellStyleIndex = 0;
+			}
+			else
+			{
+				cellStyleIndex = (int)cell.StyleIndex.Value;
+			}
+
+			return cellStyleIndex;
+		}
+
 		private static string GetCellValue(CellType cell, SpreadsheetDocument spreadsheetDocument)
 		{
-			var value = cell?.CellValue?.Text;
+			if (cell == null)
+			{
+				return null;
+			}
 
-			if (cell?.DataType?.Value == CellValues.SharedString)
+			var value = cell.CellValue?.Text;
+			if (cell.DataType?.Value == CellValues.SharedString)
 			{
 				return spreadsheetDocument.WorkbookPart.SharedStringTablePart.
 					SharedStringTable.ChildElements.GetItem(int.Parse(value)).InnerText;

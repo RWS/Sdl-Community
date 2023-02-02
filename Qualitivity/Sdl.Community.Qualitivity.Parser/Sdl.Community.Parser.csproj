@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.Parser</RootNamespace>
-    <AssemblyName>Sdl.Community.Qualitivity.Parser</AssemblyName>
+    <AssemblyName>Qualitivity.Parser</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

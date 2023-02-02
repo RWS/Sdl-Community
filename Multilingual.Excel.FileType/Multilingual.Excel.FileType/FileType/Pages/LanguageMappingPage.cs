@@ -20,6 +20,7 @@ namespace Multilingual.Excel.FileType.FileType.Pages
 		private LanguageMappingView _languageMappingView;
 		private LanguageMappingViewModel _languageMappingViewModel;
 		private ImageService _imageService;
+		private ColorService _colorService;
 		private LanguageFilterService _languageFilterService;
 
 		public override object GetControl()
@@ -35,9 +36,10 @@ namespace Multilingual.Excel.FileType.FileType.Pages
 				if (_languageMappingView != null)
 				{
 					_imageService = new ImageService();
+					_colorService = new ColorService();
 					_languageFilterService = new LanguageFilterService();
 
-					_languageMappingViewModel = new LanguageMappingViewModel(Settings, _imageService, _languageFilterService);
+					_languageMappingViewModel = new LanguageMappingViewModel(Settings, _imageService, _colorService, _languageFilterService);
 					_languageMappingView.Loaded += LanguageMappingViewOnLoaded;
 				}
 			}));

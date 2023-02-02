@@ -27,7 +27,30 @@ variables:
   value: '**/Sdl.Community.DsiViewer.sln'
 - name: pathToPublish
   value: 'DSI Viewer\Sdl.Community.SdiViewer\bin\Release\Sdl.Community.DsiViewer.sdlplugin'
+- name : SonarID
+  value : AppStore_DSI_Viewer
+- name : SonarName
+  value : 'DSI Viewer'
+- name : ProjectVersion
+  value : 4.0.1.0
 
 steps:
+  - task: SonarCloudPrepare@1
+    inputs:
+      SonarCloud: 'SonarCloud'
+      organization: 'sdl'
+      scannerMode: 'MSBuild'
+      projectKey: $(SonarId)
+      projectName: $(SonarName)
+      projectVersion: $(ProjectVersion)
+
   - template: jobs/build-sdlplugin.yml
+  - task: SonarCloudAnalyze@1
+    displayName: 'Run Code Analysis'
+
+  - task: SonarCloudPublish@1
+    inputs:
+      pollingTimeoutSec: '300'
+    displayName: 'Publish Quality Gate Result'
+
   - template: jobs/publish-build-artifact-task.yml

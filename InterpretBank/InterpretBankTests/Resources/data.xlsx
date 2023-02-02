@@ -1,0 +1,21 @@
+[
+	{
+		"CommentAll": "",
+		"LanguageEquivalents": [
+			{
+				"CommentA": "",
+				"CommentB": "",
+				"LanguageIndex": 1,
+				"Term": "subTerm"
+			},
+			{
+				"CommentA": "",
+				"CommentB": "",
+				"LanguageIndex": 2,
+				"Term": "Unterbegriff"
+			}
+		],
+		"Tag1": "Test3",
+		"Tag2": "SubTest3Glossary1"
+	}
+]

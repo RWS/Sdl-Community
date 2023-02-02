@@ -45,7 +45,8 @@ namespace Multilingual.Excel.FileType.BatchTasks
 		{
 			var settings = Project.GetSettings();
 
-			_excelReader = new ExcelReader();
+			var colorService = new ColorService();
+			_excelReader = new ExcelReader(colorService);
 			_excelWriter = new ExcelWriter();
 
 			_languageMappingSettings = new LanguageMappingSettings();

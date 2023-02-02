@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows.Input;
 using MicrosoftTranslatorProvider.Commands;
+using MicrosoftTranslatorProvider.Helpers;
 using MicrosoftTranslatorProvider.Interfaces;
 using MicrosoftTranslatorProvider.Model;
 using MicrosoftTranslatorProvider.Service;
@@ -14,6 +17,9 @@ namespace MicrosoftTranslatorProvider.ViewModel
 {
 	public class MainWindowViewModel : BaseModel, IMainWindow
 	{
+		private const string ViewDetails_Provider = nameof(ProviderControlViewModel);
+		private const string ViewDetails_Settings = nameof(SettingsControlViewModel);
+
 		private readonly ISettingsControlViewModel _settingsControlViewModel;
 		private readonly IProviderControlViewModel _providerControlViewModel;
 		private readonly ITranslationProviderCredentialStore _credentialStore;
@@ -21,17 +27,24 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		private readonly HtmlUtil _htmlUtil;
 		private readonly bool _isTellMeAction;
 
-		private string _translatorErrorResponse;
 		private ViewDetails _selectedView;
-		private string _errorMessage;
 		private bool _dialogResult;
+		private string _multiButtonContent;
+
+		private ICommand _saveCommand;
+		private ICommand _navigateToCommand;
+		private ICommand _switchViewCommand;
 
 		public event CloseWindowEventRaiser CloseEventRaised;
 		public delegate void CloseWindowEventRaiser();
 
-		public MainWindowViewModel(ITranslationOptions options, IProviderControlViewModel providerControlViewModel,
-			ISettingsControlViewModel settingsControlViewModel,
-			ITranslationProviderCredentialStore credentialStore, LanguagePair[] languagePairs, HtmlUtil htmlUtil)
+		public MainWindowViewModel(ITranslationOptions options,
+								   IProviderControlViewModel providerControlViewModel,
+								   ISettingsControlViewModel settingsControlViewModel,
+								   ITranslationProviderCredentialStore credentialStore,
+								   LanguagePair[] languagePairs,
+								   HtmlUtil htmlUtil,
+								   bool showSettingsView = false)
 		{
 			Options = options;
 			_providerControlViewModel = providerControlViewModel;
@@ -40,50 +53,32 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			_languagePairs = languagePairs;
 			_htmlUtil = htmlUtil;
 
-			SaveCommand = new RelayCommand(Save);
-			ShowSettingsViewCommand = new CommandHandler(ShowSettingsPage, true);
-			ShowMainViewCommand = new CommandHandler(ShowProvidersPage, true);
-
-			providerControlViewModel.ShowSettingsCommand = ShowSettingsViewCommand;
-			providerControlViewModel.ClearMessageRaised += ClearMessageRaised;
-			settingsControlViewModel.ShowMainWindowCommand = ShowMainViewCommand;
-
 			AvailableViews = new List<ViewDetails>
 			{
 				new ViewDetails
 				{
-					Name = PluginResources.PluginsView,
+					Name = nameof(ProviderControlViewModel),
 					ViewModel = providerControlViewModel.ViewModel
 				},
 				new ViewDetails
 				{
-					Name = PluginResources.SettingsView,
+					Name = nameof(SettingsControlViewModel),
 					ViewModel = settingsControlViewModel.ViewModel
 				}
 			};
 
+			SwitchView(showSettingsView ? ViewDetails_Provider : ViewDetails_Settings);
 			ShowProvidersPage();
 		}
 
-		public MainWindowViewModel(ITranslationOptions options, ISettingsControlViewModel settingsControlViewModel, bool isTellMeAction)
+		public string MultiButtonContent
 		{
-			Options = options;
-			_isTellMeAction = isTellMeAction;
-			_settingsControlViewModel = settingsControlViewModel;
-			SaveCommand = new RelayCommand(Save);
-
-			AvailableViews = new List<ViewDetails>
+			get => _multiButtonContent;
+			set
 			{
-				new ViewDetails
-				{
-					Name = PluginResources.SettingsView,
-					ViewModel = settingsControlViewModel.ViewModel
-				}
-			};
-
-			if (_isTellMeAction)
-			{
-				SelectedView = AvailableViews[0];
+				if (_multiButtonContent == value) return;
+				_multiButtonContent = value;
+				OnPropertyChanged(nameof(MultiButtonContent));
 			}
 		}
 
@@ -93,16 +88,16 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			set
 			{
 				_selectedView = value;
-				ErrorMessage = string.Empty;
 				OnPropertyChanged(nameof(SelectedView));
 			}
 		}
 
 		public List<ViewDetails> AvailableViews { get; set; }
-		public ICommand ShowSettingsViewCommand { get; set; }
-		public ICommand ShowMainViewCommand { get; set; }
-		public ICommand SaveCommand { get; set; }
 		public ITranslationOptions Options { get; set; }
+
+		public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save);
+		public ICommand NavigateToCommand => _navigateToCommand ??= new RelayCommand(NavigateTo);
+		public ICommand SwitchViewCommand => _switchViewCommand ??= new RelayCommand(SwitchView);
 
 		public bool DialogResult
 		{
@@ -115,74 +110,35 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			}
 		}
 
-		public string ErrorMessage
-		{
-			get => _errorMessage;
-			set
-			{
-				if (_errorMessage == value) return;
-				_errorMessage = value;
-				OnPropertyChanged(nameof(ErrorMessage));
-			}
-		}
-
-		public string TranslatorErrorResponse
-		{
-			get => _translatorErrorResponse;
-			set
-			{
-				if (_translatorErrorResponse == value) return;
-				_translatorErrorResponse = value;
-				OnPropertyChanged(nameof(TranslatorErrorResponse));
-			}
-		}
-
-		public void AddEncriptionMetaToResponse(string errorMessage)
-		{
-			const string htmlStart = @"<html>
-<meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
-<body style=""font-family:Segoe Ui!important;color:red!important;font-size:13px!important"">";
-			TranslatorErrorResponse = $"{errorMessage.Insert(0, htmlStart)}\n</body></html>";
-		}
-
 		public bool IsWindowValid()
 		{
-			ErrorMessage = string.Empty;
 			var microsoftOptions = ValidMicrosoftOptions();
 			return microsoftOptions ? ValidSettingsPageOptions() : microsoftOptions;
 		}
 
 		private bool ValidSettingsPageOptions()
 		{
-			if (_settingsControlViewModel.DoPreLookup)
+			if (_settingsControlViewModel.DoPreLookup && string.IsNullOrEmpty(_settingsControlViewModel.PreLookupFileName))
 			{
-				if (string.IsNullOrEmpty(_settingsControlViewModel.PreLookupFileName))
-				{
-					ErrorMessage = PluginResources.PreLookupEmptyMessage;
-					return false;
-				}
-
-				if (!File.Exists(_settingsControlViewModel.PreLookupFileName))
-				{
-					ErrorMessage = PluginResources.PreLookupWrongPathMessage;
-					return false;
-				}
-			}
-
-			if (!_settingsControlViewModel.DoPostLookup)
-			{
-				return true;
-			}
-
-			if (string.IsNullOrEmpty(_settingsControlViewModel.PostLookupFileName))
-			{
-				ErrorMessage = PluginResources.PostLookupEmptyMessage;
+				ErrorHandler.HandleError(PluginResources.PreLookupEmptyMessage, "Pre-lookup");
 				return false;
 			}
 
-			if (!File.Exists(_settingsControlViewModel.PostLookupFileName))
+			if (_settingsControlViewModel.DoPreLookup && !File.Exists(_settingsControlViewModel.PreLookupFileName))
 			{
-				ErrorMessage = PluginResources.PostLookupWrongPathMessage;
+				ErrorHandler.HandleError(PluginResources.PreLookupWrongPathMessage, "Pre-lookup");
+				return false;
+			}
+
+			if (_settingsControlViewModel.DoPostLookup && string.IsNullOrEmpty(_settingsControlViewModel.PostLookupFileName))
+			{
+				ErrorHandler.HandleError(PluginResources.PostLookupEmptyMessage, "Post-lookup");
+				return false;
+			}
+
+			if (_settingsControlViewModel.DoPostLookup && !File.Exists(_settingsControlViewModel.PostLookupFileName))
+			{
+				ErrorHandler.HandleError(PluginResources.PostLookupWrongPathMessage, "Post-lookup");
 				return false;
 			}
 
@@ -193,13 +149,13 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		{
 			if (string.IsNullOrEmpty(_providerControlViewModel.ClientID))
 			{
-				ErrorMessage = PluginResources.ApiKeyError;
+				ErrorHandler.HandleError(PluginResources.ApiKeyError, "API Key");
 				return false;
 			}
-			
+
 			if (_providerControlViewModel.UseCategoryID && string.IsNullOrEmpty(_providerControlViewModel.CategoryID))
 			{
-				ErrorMessage = PluginResources.CatIdError;
+				ErrorHandler.HandleError(PluginResources.CatIdError, "CategoryID");
 				return false;
 			}
 
@@ -214,12 +170,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		private void ShowProvidersPage()
 		{
 			SelectedView = AvailableViews[0];
-		}
-
-		private void ClearMessageRaised()
-		{
-			ErrorMessage = string.Empty;
-			TranslatorErrorResponse = "<html><body></html></body>";
 		}
 
 		private void Save(object window)
@@ -249,7 +199,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			var isMicrosoftProvider = _providerControlViewModel.SelectedTranslationOption.ProviderType == MTETranslationOptions.ProviderType.MicrosoftTranslator;
 			if (isMicrosoftProvider && !Options.PersistMicrosoftCredentials)
 			{
-				RemoveCredentialsFromStore(new Uri(Constants.MicrosoftProviderUriScheme));
+				RemoveCredentialsFromStore(new Uri(Constants.MicrosoftProviderFullScheme));
 			}
 		}
 
@@ -274,7 +224,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			}
 			catch (Exception e)
 			{
-				AddEncriptionMetaToResponse(e.Message);
+				ErrorHandler.HandleError(e);
 			}
 
 			return false;
@@ -315,6 +265,25 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			Options.UseCategoryID = _providerControlViewModel.UseCategoryID;
 			Options.CategoryID = _providerControlViewModel.CategoryID;
 			Options.PersistMicrosoftCredentials = _providerControlViewModel.PersistMicrosoftKey;
+		}
+
+		private void NavigateTo(object parameter)
+		{
+			Process.Start(parameter as string);
+		}
+
+		private void SwitchView(object parameter)
+		{
+
+			try
+			{
+				var requestedType = parameter is not null ? parameter as string
+														  : SelectedView.Name != ViewDetails_Provider ? ViewDetails_Provider
+																									  : ViewDetails_Settings;
+				MultiButtonContent = requestedType == ViewDetails_Provider ? "Settings" : "Provider";
+				SelectedView = AvailableViews.FirstOrDefault(x => x.Name == requestedType);
+			}
+			catch { }
 		}
 	}
 }

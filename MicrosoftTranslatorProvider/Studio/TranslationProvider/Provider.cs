@@ -11,7 +11,6 @@ namespace MicrosoftTranslatorProvider
 {
 	public class Provider : ITranslationProvider
     {
-		public static readonly string ListTranslationProviderScheme = "mtenhancedprovider";
 		private readonly HtmlUtil _htmlUtil;
 
 		private ProviderConnecter _providerConnecter;

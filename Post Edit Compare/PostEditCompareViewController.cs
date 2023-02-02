@@ -351,7 +351,7 @@ namespace Sdl.Community.PostEdit.Versions
 
         public void ViewOnlineHelp()
         {
-            Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3190.post-edit-compare");
+            Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3190/post-edit-compare");
         }
 
         public void LoadConfigurationSettings()

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
@@ -11,6 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MicrosoftTranslatorProvider.Extensions;
+using MicrosoftTranslatorProvider.Helpers;
 using MicrosoftTranslatorProvider.Model;
 using MicrosoftTranslatorProvider.Service;
 using Newtonsoft.Json;
@@ -303,6 +303,7 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 				strResponse = sr.ReadToEnd();
 			}
 
+			ErrorHandler.HandleError(strResponse, message);
 			return $"Http status code={e.Status}, error message={strResponse}";
 		}
 

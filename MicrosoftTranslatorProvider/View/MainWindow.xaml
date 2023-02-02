@@ -1,74 +1,91 @@
 ﻿<Window x:Class="MicrosoftTranslatorProvider.View.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-        xmlns:ui="clr-namespace:MicrosoftTranslatorProvider.View"
-		xmlns:styles ="clr-namespace:MicrosoftTranslatorProvider.Styles"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:root="clr-namespace:MicrosoftTranslatorProvider"
+		xmlns:ui="clr-namespace:MicrosoftTranslatorProvider.View"
+		xmlns:styles="clr-namespace:MicrosoftTranslatorProvider.Styles"
 		xmlns:viewModels="clr-namespace:MicrosoftTranslatorProvider.ViewModel"
+		xmlns:converters="clr-namespace:MicrosoftTranslatorProvider.Converters"
+		xmlns:behaviours="clr-namespace:MicrosoftTranslatorProvider.Behaviours"
 		mc:Ignorable="d"
 		WindowStartupLocation="CenterScreen"
-        d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
-        xmlns:behaviours ="clr-namespace:MicrosoftTranslatorProvider.Behaviours"
-		xmlns:converters ="clr-namespace:MicrosoftTranslatorProvider.Converters"
-        Icon="../Resources/my_icon.ico"
-		WindowStyle="None" ResizeMode="NoResize"
+		d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
+		WindowStyle="None"
+		ResizeMode="NoResize"
 		Title="Microsoft Translator Provider"
-        Height="550" Width="800">
+		Height="700"
+		Width="600"
+		d:DesignHeight="700"
+		d:DesignWidth="800">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="../Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="../Styles/Buttons.xaml" />
 				<ResourceDictionary Source="../Styles/WindowsBorder.xaml" />
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
-			<converters:EmptyToVisibility x:Key="EmptyToVisibilityConverter"/>
+			<converters:EmptyToVisibility x:Key="EmptyToVisibilityConverter" />
+			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
 			<DataTemplate DataType="{x:Type viewModels:ProviderControlViewModel}">
 				<ui:ProviderControl />
 			</DataTemplate>
-			
+
 			<DataTemplate DataType="{x:Type viewModels:SettingsControlViewModel}">
-				<ui:SettingsControl/>
+				<ui:SettingsControl />
 			</DataTemplate>
 		</ResourceDictionary>
-		
+
 	</Window.Resources>
-	
+
 	<Border Style="{StaticResource WindowControlBorderStyle}">
 		<Grid Margin="0,0,0,0">
 			<Grid.RowDefinitions>
-				<RowDefinition Height="35" />
-				<RowDefinition Height="auto"/>
-				<RowDefinition Height="*"/> <!--used to show validation and api response-->
-				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto" />
+				<RowDefinition Height="auto" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="auto" />
 			</Grid.RowDefinitions>
 			<!-- BORDER CONTROL -->
-			<styles:WindowsControl Grid.Row="0" Background="White" />
-			
-			<StackPanel Grid.Row="1">
-				<ContentControl Content="{Binding SelectedView.ViewModel}"/>
-				<TextBlock 
-					Text="{Binding ErrorMessage}"
-					Visibility="{Binding ErrorMessage,Converter={StaticResource EmptyToVisibilityConverter}}"
-					Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}"
-					FontSize="12"/>
-				<WebBrowser
-					Height="30" 
-					behaviours:WebBrowserContentSource.Html ="{Binding TranslatorErrorResponse,UpdateSourceTrigger=PropertyChanged}"
-					Visibility="{Binding TranslatorErrorResponse,Converter={StaticResource EmptyToVisibilityConverter}}"/>
-			</StackPanel>
+			<styles:WindowsControl Grid.Row="0"
+								   Background="White" />
 
-			<Button
-				Style="{StaticResource Sdl.Button.PrimaryStyle}"
-				Command="{Binding SaveCommand}" 
-				Cursor="Hand"
-				Grid.Row="3"
-				IsDefault="True"
-				Content="OK"
-				Margin="10 0 20 10"
-				HorizontalAlignment="Right"
-				Width="100"/>
+
+			<ContentControl Content="{Binding SelectedView.ViewModel}"
+							Grid.Row="2" />
+			<Button Content="Help"
+					Style="{StaticResource Sdl.Button.SecondaryStyle}"
+					Command="{Binding NavigateToCommand}"
+					CommandParameter="{x:Static root:Constants.TellMe_HelpUrl}"
+					Cursor="Hand"
+					Width="120"
+					Height="30"
+					Grid.Row="3"
+					HorizontalAlignment="Left"
+					Margin="24"/>
+			
+			<StackPanel HorizontalAlignment="Right"
+						Orientation="Horizontal"
+						Grid.Row="3"
+						Margin="24">
+				<Button Content="{Binding MultiButtonContent}"
+						Style="{StaticResource Sdl.Button.SecondaryStyle}"
+						Command="{Binding SwitchViewCommand}"
+						Cursor="Hand"
+						Width="120" 
+						Height="30"/>
+
+				<Button Content="Confirm"
+						Style="{StaticResource Sdl.Button.PrimaryStyle}"
+						Command="{Binding SaveCommand}"
+						IsDefault="True"
+						Cursor="Hand"
+						Width="120"
+						Height="30"
+						Margin="8 0 0 0" />
+			</StackPanel>
 		</Grid>
-   </Border>
+	</Border>
 </Window>

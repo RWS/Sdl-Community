@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -198,24 +200,52 @@ namespace Sdl.Community.FileType.TMX
             return matchValue;
         }
 
-        // helper function for creating segment objects
-        private ISegment CreateSegment(XmlNode segNode, ISegmentPairProperties pair)
+        // if not found, returns ""
+        private static string GetAttribute(XmlNode node, string attributeName)
         {
-            int i = 1;
+	        var found = node.Attributes?.OfType<XmlAttribute>().FirstOrDefault(a => a.Name.Equals(attributeName, StringComparison.OrdinalIgnoreCase));
+	        var value = found?.Value;
+	        return value ?? "";
+        }
 
+        // helper function for creating segment objects
+		private ISegment CreateSegment(XmlNode segNode, ISegmentPairProperties pair)
+        {
             ISegment segment = ItemFactory.CreateSegment(pair);
 
+            var startId = -1;
             foreach (XmlNode item in segNode.ChildNodes)
             {
                 if (item.NodeType == XmlNodeType.Text)
                 {
-                    segment.Add(CreateText(item.InnerText));
+					if (startId >= 0)
+						segment.Add(CreateTagPair(item.InnerText, startId, "bpt", "ept"));
+					else 
+						segment.Add(CreateText(item.InnerText));
+					startId = -1;
                 }
 
                 if (item.NodeType == XmlNodeType.Element)
                 {
-                    segment.Add(CreatePhTag(item.Name, item, i));
-                    i++;
+	                switch (item.Name)
+	                {
+						case "bpt": // start tag 
+						{
+							var idStr = GetAttribute(item, "type");
+							startId = -1;
+							if (int.TryParse(idStr, out var n))
+								startId = n;
+							break;
+						}
+						case "ept": // end tag
+							startId = -1;
+							break;
+						default:
+							startId = -1;
+							segment.Add(CreatePhTag(item.Name, item));
+							break;
+	                }
+
                 }
             }
             return segment;
@@ -230,25 +260,31 @@ namespace Sdl.Community.FileType.TMX
             return textContent;
         }
 
-        private IPlaceholderTag CreatePhTag(string tagContent, XmlNode item, int tagNo)
+        private ITagPair CreateTagPair(string text, int id, string tagStart, string tagEnd)
         {
-            IPlaceholderTagProperties phTagProperties = PropertiesFactory.CreatePlaceholderTagProperties(tagContent);
-            IPlaceholderTag phTag = ItemFactory.CreatePlaceholderTag(phTagProperties);
-
-            string cont;
-            if (item.NextSibling == null)
-                cont = "";
-            else
-                cont = item.NextSibling.Value;
-
-            phTagProperties.TagContent = item.OuterXml;
-            phTagProperties.DisplayText = item.Name;
-            phTagProperties.CanHide = false;
-
-            return phTag;
+	        var pair = ItemFactory.CreateTagPair(
+									PropertiesFactory.CreateStartTagProperties(tagStart), 
+									PropertiesFactory.CreateEndTagProperties(tagEnd));
+	        var textElement = ItemFactory.CreateText(PropertiesFactory.CreateTextProperties(text));
+			pair.Add(textElement);
+			pair.StartTagProperties.TagId = new TagId(id.ToString());
+			return pair;
         }
 
-        private IContextProperties CreateContext(string spec, string unitID)
+        private IPlaceholderTag CreatePhTag(string tagContent, XmlNode item)
+        {
+
+	        var phTagProperties = PropertiesFactory.CreatePlaceholderTagProperties(tagContent);
+
+			phTagProperties.TagContent = item.OuterXml;
+			phTagProperties.DisplayText = item.Name;
+			phTagProperties.CanHide = false;
+
+			IPlaceholderTag phTag = ItemFactory.CreatePlaceholderTag(phTagProperties);
+			return phTag;
+        }
+
+		private IContextProperties CreateContext(string spec, string unitID)
         {
             IContextProperties contextProperties = PropertiesFactory.CreateContextProperties();
             IContextInfo contextInfo = PropertiesFactory.CreateContextInfo(StandardContextTypes.TranslatableContent);

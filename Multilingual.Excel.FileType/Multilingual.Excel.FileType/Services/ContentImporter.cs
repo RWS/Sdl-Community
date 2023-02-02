@@ -98,17 +98,22 @@ namespace Multilingual.Excel.FileType.Services
 					var pixelLimitation = targetMultilingualContextInfo.GetMetaData(FiletypeConstants.MultilingualExcelPixelLimitationTarget) ?? "0";
 					var pixelFontName = targetMultilingualContextInfo.GetMetaData(FiletypeConstants.MultilingualExcelPixelFontNameTarget) ?? string.Empty;
 					var pixelFontSize = targetMultilingualContextInfo.GetMetaData(FiletypeConstants.MultilingualExcelPixelFontSizeTarget) ?? "0";
+					var filterBackgroundColor = targetMultilingualContextInfo.GetMetaData(FiletypeConstants.MultilingualExcelFilterBackgroundColorTarget) ?? "0";
+					var lockSegments = targetMultilingualContextInfo.GetMetaData(FiletypeConstants.MultilingualExcelFilterLockSegmentsTarget) ?? string.Empty;
 
 					multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelCharacterLimitationTarget, characterLimitation);
 					multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelPixelLimitationTarget, pixelLimitation);
 					multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelPixelFontNameTarget, pixelFontName);
 					multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelPixelFontSizeTarget, pixelFontSize);
+					multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelFilterBackgroundColorTarget, filterBackgroundColor);
+					multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelFilterLockSegmentsTarget, lockSegments);
 				}
 
 				if (paragraphUnit.SegmentPairs.Any())
 				{
 					// source is segmented; target is not!
 					var firstSegmentPair = paragraphUnit.SegmentPairs.First();
+					var firstUpdatedSegmentPair = updatedParagraphUnit.SegmentPairs.First();
 
 					var isExcluded = SegmentIsExcluded(_settings.ExcludeFilterIds, firstSegmentPair);
 
@@ -127,7 +132,8 @@ namespace Multilingual.Excel.FileType.Services
 
 						SetTranslationOrigin(firstSegmentPair, _settings.OriginSystem);
 						SetConfirmationLevel(firstSegmentPair, _settings.StatusTranslationUpdatedId);
-						SetIsLocked(firstSegmentPair);
+
+						SetIsLocked(firstSegmentPair, firstUpdatedSegmentPair, paragraphUnit.SegmentPairs);
 						ImportTargetContent(firstSegmentPair.Target, updatedTargetSegment);
 						UpdateContextInfo(paragraphUnit, updatedParagraphUnit);
 						//UpdateComments(paragraphUnit, updatedParagraphUnit);
@@ -257,9 +263,19 @@ namespace Multilingual.Excel.FileType.Services
 			return segment;
 		}
 
-		private static void SetIsLocked(ISegmentPair firstSegmentPair)
+		private static void SetIsLocked(ISegmentPair firstSegmentPair, ISegmentPair firstUpdatedSegmentPair, IEnumerable<ISegmentPair> segmentPairs)
 		{
-			firstSegmentPair.Target.Properties.IsLocked = firstSegmentPair.Properties.IsLocked;
+			if (firstUpdatedSegmentPair.Properties.IsLocked)
+			{
+				foreach (var segmentPair in segmentPairs)
+				{
+					segmentPair.Properties.IsLocked = true;
+				}
+			}
+			else
+			{
+				firstSegmentPair.Target.Properties.IsLocked = firstSegmentPair.Properties.IsLocked;
+			}
 		}
 
 		private void SetConfirmationLevel(ISegmentPair firstSegmentPair, string statusTranslationUpdatedId)
