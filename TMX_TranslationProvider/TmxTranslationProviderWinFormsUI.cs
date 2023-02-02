@@ -21,7 +21,7 @@ namespace TMX_TranslationProvider
 	public class TmxTranslationProviderWinFormsUI : ITranslationProviderWinFormsUI
 	{
 
-		private static Form GetParentForm()
+		internal static Form GetParentForm()
 		{
 			Form parentForm = null;
 			foreach (Control form in Application.OpenForms)

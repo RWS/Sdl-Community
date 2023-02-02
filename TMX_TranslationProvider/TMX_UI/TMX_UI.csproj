@@ -110,5 +110,13 @@
       <Name>TMX_Lib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\ForumIcon.ico" />
+    <Resource Include="Assets\Question.ico" />
+    <Resource Include="Assets\Settings.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Download.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -47,6 +47,18 @@
     <EmbeddedResource Remove="UI\TmxViewReport.resx" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="TMX_UI\Assets\Settings.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TMX_UI\Assets\Question.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TMX_UI\Assets\ForumIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TMX_UI\Assets\Download.ico" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -94,6 +106,9 @@
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
 	
     <Reference Include="System" />
