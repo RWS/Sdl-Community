@@ -193,12 +193,18 @@ namespace QuickTmxTesting
 				return Expand(text, size);
 		}
 
-		private static async Task TestSearcherSearchDumpResults(string dbName, IReadOnlyList<string> texts, string sourceLanguage, string targetLanguage) {
-			var db = new TmxMongoDb( dbName) { LogSearches = false};
-			await db.InitAsync();
-			var search = new TmxSearch(db);
+		private static async Task TestSearcherSearchDumpResults(string dbName, IReadOnlyList<string> texts, string sourceLanguage, string targetLanguage, bool careForLocale = false)
+		{
+			await TestSearcherSearchDumpResults(new[] { dbName }, texts, sourceLanguage, targetLanguage, careForLocale);
+		}
+		private static async Task TestSearcherSearchDumpResults(IReadOnlyList< string> dbNames, IReadOnlyList<string> texts, string sourceLanguage, string targetLanguage, bool careForLocale = false) {
+			var databases = dbNames.Select(dbName => new TmxMongoDb( dbName) { LogSearches = false}).ToList();
+			foreach (var db in databases)
+				await db.InitAsync();
+			var search = new TmxSearch(databases);
 			await search.LoadLanguagesAsync();
-			log.Debug($"search started {dbName}");
+
+			log.Debug($"search started {string.Join(",",dbNames)}");
 			var watchAll = Stopwatch.StartNew();
 			var settings = TmxSearchSettings.Default();
 			foreach (var text in texts) {
@@ -206,19 +212,19 @@ namespace QuickTmxTesting
 				var watch = Stopwatch.StartNew();
 
 				settings.Mode = SearchMode.ExactSearch;
-				var results = await search.Search(settings, TextToSegment(text), new LanguagePair(sourceLanguage, targetLanguage));
+				var results = await search.Search(settings, TextToSegment(text), new LanguagePair(sourceLanguage, targetLanguage), careForLocale);
 				var ellapsedExact = watch.ElapsedMilliseconds;
 				log.Debug($"search exact [{trimmedText}] - {results.Count} results - took {watch.ElapsedMilliseconds} ms");
 
 				watch = Stopwatch.StartNew();
 				settings.Mode = SearchMode.FuzzySearch;
-				results = await search.Search(settings, TextToSegment(text), new LanguagePair(sourceLanguage, targetLanguage));
+				results = await search.Search(settings, TextToSegment(text), new LanguagePair(sourceLanguage, targetLanguage), careForLocale);
 				var ellapsedFuzzy = watch.ElapsedMilliseconds;
 				log.Debug($"search fuzzy [{trimmedText}] - {results.Count} results - took {watch.ElapsedMilliseconds} ms");
 
 				watch = Stopwatch.StartNew();
 				settings.Mode = SearchMode.NormalSearch;
-				results = await search.Search(settings, TextToSegment(text), new LanguagePair(sourceLanguage, targetLanguage));
+				results = await search.Search(settings, TextToSegment(text), new LanguagePair(sourceLanguage, targetLanguage), careForLocale);
 				var ellapsedNormal = watch.ElapsedMilliseconds;
 				var percent = (int)((1d - (double)ellapsedNormal / ((double)ellapsedExact + (double)ellapsedFuzzy)) * 100);
 				log.Debug($"search norm  [{trimmedText}] - {results.Count} results - took {watch.ElapsedMilliseconds} ms, improve={percent}%");
@@ -498,20 +504,19 @@ namespace QuickTmxTesting
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en(GB) - it(IT)_(DGT 2015, 2017).tmx", "C:\\john\\buff\\TMX Examples\\temp\\");
 			//SplitLargeXmlFile("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large\\en-fr (EU Bookshop v2_10.8M).tmx", "C:\\john\\buff\\TMX Examples\\temp2\\");
 			log.Debug("test started");
-			var root = "C:\\john\\buff\\TMX Examples";
-			Task.Run(async () => await ImportFilesAsync(new[] { 
-				$"{root}\\Banking TextBase.tmx" ,
-				$"{root}\\EAC_FORMS.tmx" ,
-				$"{root}\\Master TM cy(UK) - en(US)_00000_0000.tmx" ,
-				$"{root}\\Master TM cy(UK) - en(US)_Trados2007.tmx" ,
-				$"{root}\\002 - Glossary.tmx" ,
-				$"{root}\\CAT Fight TM de-DE - en-US.tmx" ,
-				$"{root}\\clean_Roman Weaponry.tmx" ,
-			}, "multi-files")).Wait();
-			Task.Run(async () => await ImportFilesAsync(new[] {
-				$"{root}\\clean_Roman Weaponry.tmx" ,
-			}, "multi-files3")).Wait();
-			return;
+			//var root = "C:\\john\\buff\\TMX Examples";
+			//Task.Run(async () => await ImportFilesAsync(new[] { 
+			//	$"{root}\\Banking TextBase.tmx" ,
+			//	$"{root}\\EAC_FORMS.tmx" ,
+			//	$"{root}\\Master TM cy(UK) - en(US)_00000_0000.tmx" ,
+			//	$"{root}\\Master TM cy(UK) - en(US)_Trados2007.tmx" ,
+			//	$"{root}\\002 - Glossary.tmx" ,
+			//	$"{root}\\CAT Fight TM de-DE - en-US.tmx" ,
+			//	$"{root}\\clean_Roman Weaponry.tmx" ,
+			//}, "multi-files")).Wait();
+			//Task.Run(async () => await ImportFilesAsync(new[] {
+			//	$"{root}\\clean_Roman Weaponry.tmx" ,
+			//}, "multi-files3")).Wait();
 
 			var TEST_TEXTS = new[] {
 				"The playing time was also reduced by half comparison to Rugby games",
@@ -532,6 +537,16 @@ namespace QuickTmxTesting
 				"The first edition of a new online communication tool gives examples of judgments from the Court of Rights and how their implementation has improved people’s lives across Europe.",
 				"The conflict proceeded, as suggested when the Bible came into great prominence, nearly all of our great Bible Societies of today having been organized within fifteen years after that date.",
 			};
+
+			TEST_TEXTS = new[] {
+				//"I know, I know, this is not a car, it’s a horse carriage — but we needed a reference point.",
+				"Stanley were twins born in Kingsland, Maine, on June 1",
+				"In 1911 Austro-Daimler began producing the Prinz (in English: Prince Henry) model this car  an overhead cam 5,714-cc four-cylinder engine.",
+				"In this case, the moon has to be enough to cast shadow",
+				"Such locations as this are seldom missed by the inexperienced navigators and are dangerous places for soldiers to occupy",
+				"There are few or features to navigate by, making dead reckoning or navigation by stars the only technique for movement",
+			};
+
 			//Task.Run(async() => await ImportFileAsync("C:\\john\\buff\\TMX Examples\\TMX Test Files\\large2\\en-ro.tmx", "en-ro-1M-b", entryiesPerTextTable: 10000, maxImportTUCount: 1000000)).Wait();
 			//return;
 
@@ -544,7 +559,10 @@ namespace QuickTmxTesting
 
 			//Task.Run(async () => await TestSearcherSearch(TEST_TABLE, TEST_TEXTS, SearchType.Exact, "en", "ro")).Wait();
 			//Task.Run(async () => await TestSearcherSearch(TEST_TABLE, TEST_TEXTS, SearchType.Fuzzy, "en", "ro")).Wait();
-			Task.Run(async () => await TestSearcherSearchDumpResults(TEST_TABLE, TEST_TEXTS, "en", "ro")).Wait();
+			//Task.Run(async () => await TestSearcherSearchDumpResults(TEST_TABLE, TEST_TEXTS, "en", "ro")).Wait();
+
+			//Task.Run(async () => await TestSearcherSearchDumpResults(new[] { "ende-1",  }, TEST_TEXTS, "en-us", "de-de", careForLocale: true)).Wait();
+			Task.Run(async () => await TestSearcherSearchDumpResults(new[] { "ende-1","ende-2" }, TEST_TEXTS, "en-us", "de-us", careForLocale: true)).Wait();
 
 			//Task.Run(async () => await TestAvgExactAndFuzzySearcherSearch(TEST_TABLE, TEST_TEXTS, "en", "ro", 5, 15)).Wait();
 			//Task.Run(async () => await TestAvgNormalSearcherSearch(TEST_TABLE, TEST_TEXTS, "en", "ro", 5, 15)).Wait();

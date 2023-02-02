@@ -234,7 +234,7 @@ namespace TMX_Lib.Db
 			var filter = Builders<TmxText>.Filter.Text(text, new TextSearchOptions { CaseSensitive = false, DiacriticSensitive = false, });
 
 			var projection = Builders<TmxText>.Projection.MetaTextScore("Score")
-				.Include(p => p.LocaseText).Include(p => p.NormalizedLanguage).Include(p => p.TranslationUnitID).Include(p => p.FormattedText);
+				.Include(p => p.LocaseText).Include(p => p.NormalizedLanguage).Include(p => p.NormalizedLocale).Include(p => p.TranslationUnitID).Include(p => p.FormattedText);
 			var sort = Builders<TmxText>.Sort.MetaTextScore("Score");
 
 			if (_logSearches)
