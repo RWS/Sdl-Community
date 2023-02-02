@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.Qualitivity</RootNamespace>
-    <AssemblyName>Sdl.Community.Qualitivity</AssemblyName>
+    <AssemblyName>Qualitivity</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -193,12 +193,6 @@
       <DependentUpon>QualityMetricWeightsAppend.cs</DependentUpon>
     </Compile>
     <Compile Include="EditDistance.cs" />
-    <Compile Include="Dialogs\About.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\About.Designer.cs">
-      <DependentUpon>About.cs</DependentUpon>
-    </Compile>
     <Compile Include="Dialogs\AddressDetails.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -391,10 +385,6 @@
     <Content Include="Resources\Timer.ico" />
     <Content Include="Resources\Timetable.ico" />
     <Content Include="Resources\Users-simple.ico" />
-    <EmbeddedResource Include="Dialogs\About.resx">
-      <DependentUpon>About.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\ActivityReportWizard.resx">
       <DependentUpon>ActivityReportWizard.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -546,6 +536,7 @@
     <None Include="..\..\SdlCommunity.snk">
       <Link>SdlCommunity.snk</Link>
     </None>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

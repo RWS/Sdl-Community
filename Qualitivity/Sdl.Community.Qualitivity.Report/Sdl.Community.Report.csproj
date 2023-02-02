@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.Report</RootNamespace>
-    <AssemblyName>Sdl.Community.Qualitivity.Report</AssemblyName>
+    <AssemblyName>Qualitivity.Report</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

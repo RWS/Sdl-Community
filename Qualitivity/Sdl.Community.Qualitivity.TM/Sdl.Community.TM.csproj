@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.TM</RootNamespace>
-    <AssemblyName>Sdl.Community.Qualitivity.TM</AssemblyName>
+    <AssemblyName>Qualitivity.TM</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
