@@ -71,16 +71,16 @@ namespace GoogleCloudTranslationProvider.Helpers
 
 		private string[] GetTargetElements()
 		{
-			const string SimplePattern = "tg[0-9]*";
+			const string SimplePattern = "0tg[0-9]*";
 			const string SimpleTagRegex = $@"(<{SimplePattern}\>)|(<\/{SimplePattern}\>)|(\<{SimplePattern}/\>)";
 
-			const string GuidPattern = "tg[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}";
+			const string GuidPattern = "0tg[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}";
 			const string GuidTagIdRegex = $@"(<{GuidPattern}/>)|(<\\/{GuidPattern}\\>)|(<{GuidPattern}>)";
 
-			const string AlphanumericPattern = "tgpt[0-9]*";
+			const string AlphanumericPattern = "0tgpt[0-9]*";
 			const string AlphanumericTagRegex = $@"(<{AlphanumericPattern}\>)|(<\/{AlphanumericPattern}\>)|(\<{AlphanumericPattern}/\>)";
 
-			const string DecimalsPattern = @"tg[0-9,\.]*";
+			const string DecimalsPattern = @"0tg[0-9,\.]*";
 			const string DecimalsTagRegex = $@"(<{DecimalsPattern}\>)|(<\/{DecimalsPattern}\>)|(\<{DecimalsPattern}/\>)";
 
 			var translation = _returnedText;
@@ -158,7 +158,7 @@ namespace GoogleCloudTranslationProvider.Helpers
 			}
 
 			for (var i = 0; i < elements.Count; i++)
-			{
+			{    
 				if (elements[i].GetType() != typeof(Tag))
 				{
 					PreparedSourceText += elements[i].ToString();
@@ -199,11 +199,11 @@ namespace GoogleCloudTranslationProvider.Helpers
 
 			return _currentTag.SdlTag.Type switch
 			{ // Undefined, UnmatchedStart, UnmatchedEnd ?
-				TagType.Start => $"<tg{tagInfo.TagId}>",
-				TagType.End => $"</tg{tagInfo.TagId}>",
-				TagType.Standalone => $"<tg{tagInfo.TagId}/>",
-				TagType.TextPlaceholder => $"<tg{tagInfo.TagId}/>",
-				TagType.LockedContent => $"<tg{tagInfo.TagId}/>",
+				TagType.Start => $"<0tg{tagInfo.TagId}>",
+				TagType.End => $"</0tg{tagInfo.TagId}>",
+				TagType.Standalone => $"<0tg{tagInfo.TagId}/>",
+				TagType.TextPlaceholder => $"<0tg{tagInfo.TagId}/>",
+				TagType.LockedContent => $"<0tg{tagInfo.TagId}/>",
 				_ => string.Empty,
 			};
 		}
