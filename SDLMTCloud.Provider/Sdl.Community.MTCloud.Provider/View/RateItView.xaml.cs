@@ -1,4 +1,6 @@
 ﻿using System.Windows.Controls;
+using Sdl.Community.MTCloud.Provider.UiHelpers.Watermark;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace Sdl.Community.MTCloud.Provider.View
 {
@@ -10,6 +12,7 @@ namespace Sdl.Community.MTCloud.Provider.View
 		public RateItView()
 		{
 			InitializeComponent();
+			WatermarkHandler.Handle(FeedbackTextBox);
 		}
 
 		public void FocusFeedbackTextBox()
