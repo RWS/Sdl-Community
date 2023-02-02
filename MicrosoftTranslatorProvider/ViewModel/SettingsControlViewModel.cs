@@ -24,6 +24,9 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		private string _postLookupFileName;
 		private string _errorMessage;
 
+		private bool _useCustomProviderName;
+		private string _customProviderName;
+
 		private ICommand _clearCommand;
 
 		public SettingsControlViewModel(ITranslationOptions options, IOpenFileDialogService openFileDialogService,bool isTellMeAction)
@@ -145,6 +148,29 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			}
 		}
 
+		public bool UseCustomProviderName
+		{
+			get => _useCustomProviderName;
+			set
+			{
+				if (_useCustomProviderName == value) return;
+				_useCustomProviderName = value;
+				OnPropertyChanged(nameof(UseCustomProviderName));
+			}
+		}
+
+
+		public string CustomProviderName
+		{
+			get => _customProviderName;
+			set
+			{
+				if (_customProviderName == value) return;
+				_customProviderName = value;
+				OnPropertyChanged(nameof(CustomProviderName));
+			}
+		}
+
 		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
 		
 		private void SetSavedSettings()
@@ -155,6 +181,8 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			PreLookupFileName = _options.PreLookupFilename;
 			DoPostLookup = _options.UsePostEdit;
 			PostLookupFileName = _options.PostLookupFilename;
+			CustomProviderName = _options.CustomProviderName;
+			UseCustomProviderName = _options.UseCustomProviderName;
 		}
 
 		private void Clear(object obj)
@@ -171,6 +199,9 @@ namespace MicrosoftTranslatorProvider.ViewModel
 					break;
 				case "PostLookupFileName":
 					PostLookupFileName = string.Empty;
+					break;
+				case "CustomProviderName":
+					CustomProviderName = string.Empty;
 					break;
 			}
 		}

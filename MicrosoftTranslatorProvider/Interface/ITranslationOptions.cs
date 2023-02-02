@@ -37,6 +37,10 @@ namespace MicrosoftTranslatorProvider.Interfaces
 
 		string ProjectLocation { get; set; }
 
+		string CustomProviderName { get; set; }
+
+		bool UseCustomProviderName { get; set; }
+
 		Uri Uri { get; }
 
 		Dictionary<string, string> LanguagesSupported { get; set; }
