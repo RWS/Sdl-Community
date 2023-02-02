@@ -1029,3 +1029,5 @@ IATETerminologyProvider/IATETerminologyProvider/pluginpackage.manifest_LOCAL_178
 /Code samples/PretranslateInLoopWithFailSafeAction/Properties/launchSettings.json
 /MT Enhanced Provider/Sdl.Community.MtEnhancedProvider/Properties/launchSettings.json
 /Code samples/StandAloneConsoleApp_PretranslateUsingProvider/Properties/launchSettings.json
+/MT Enhanced Provider/Sdl.Community.MtEnhancedProvider.Tests/Properties/launchSettings.json
+/GoogleTranslatorProvider/GoogleTranslatorProvider/Properties/launchSettings.json
