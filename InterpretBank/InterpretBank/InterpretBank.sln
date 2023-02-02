@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterpretBank", "InterpretBank.csproj", "{19D8220F-9CAB-418E-8664-BA8E86A936B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterpretBank", "InterpretBank.csproj", "{19D8220F-9CAB-418E-8664-BA8E86A936B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterpretBankTests", "..\InterpretBankTests\InterpretBankTests.csproj", "{BCB3209F-0C2C-4AD4-81FF-9C94F7FC3A4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterpretBankTests", "..\InterpretBankTests\InterpretBankTests.csproj", "{BCB3209F-0C2C-4AD4-81FF-9C94F7FC3A4C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

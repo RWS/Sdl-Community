@@ -31,12 +31,9 @@ namespace InterpretBankTests
 			var sqlConnection = new SQLiteConnection($"Data Source='{filePath}'");
 			var interpretBankDataContext = new InterpretBankDataContext(sqlConnection);
 
-			var sut = new TerminologyService(interpretBankDataContext, new SettingsService());
+			var sut = new TerminologyService(interpretBankDataContext);
 
 			sut.GetFuzzyTerms("english", "english", "italian");
-
-			sut.GetLanguages();
-
 		}
 
 

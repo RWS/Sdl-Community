@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using InterpretBank.GlossaryService.DAL;
 
 namespace InterpretBank.TermSearch
 {
@@ -6,6 +7,6 @@ namespace InterpretBank.TermSearch
 	{
 		List<int> LanguageIndices { get; set; }
 		List<string> GlossaryNames { get; set; }
-		List<string> Tags { get; set; }
+		List<DbTag> Tags { get; set; }
 	}
 }

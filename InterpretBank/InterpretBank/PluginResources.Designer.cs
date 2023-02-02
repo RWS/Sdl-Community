@@ -87,5 +87,41 @@ namespace InterpretBank {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interpret Bank Settings.
+        /// </summary>
+        public static string SettingsWindow_GroupBox_Header {
+            get {
+                return ResourceManager.GetString("SettingsWindow_GroupBox_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Database Filepath.
+        /// </summary>
+        public static string SettingsWindow_TextBlock_DBFilepath {
+            get {
+                return ResourceManager.GetString("SettingsWindow_TextBlock_DBFilepath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use the following glossaries:.
+        /// </summary>
+        public static string SettingsWindow_TextBlock_Glossaries {
+            get {
+                return ResourceManager.GetString("SettingsWindow_TextBlock_Glossaries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use the glossaries tagged with the following:.
+        /// </summary>
+        public static string SettingsWindow_TextBlock_Tags {
+            get {
+                return ResourceManager.GetString("SettingsWindow_TextBlock_Tags", resourceCulture);
+            }
+        }
     }
 }

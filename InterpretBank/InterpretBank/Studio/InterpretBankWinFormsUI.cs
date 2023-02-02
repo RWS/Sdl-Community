@@ -1,43 +1,45 @@
 ﻿using System;
 using System.Windows.Forms;
+using InterpretBank.UI;
 using Sdl.Terminology.TerminologyProvider.Core;
 
-namespace InterpretBank.Studio
+namespace InterpretBank.Studio;
+
+[TerminologyProviderWinFormsUI]
+internal class InterpretBankWinFormsUI : ITerminologyProviderWinFormsUI
 {
-	[TerminologyProviderWinFormsUI]
-	internal class InterpretBankWinFormsUI : ITerminologyProviderWinFormsUI
+	public bool SupportsEditing => true;
+
+	public string TypeDescription => PluginResources.Plugin_Description;
+
+	public string TypeName => PluginResources.Plugin_Name;
+
+	public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
 	{
-		public bool SupportsEditing
-		{
-			get
-			{
-				return true;
-			}
-		}
+		var provider = InterpretBankProviderFactory.GetInterpretBankProvider();
 
-		public string TypeDescription => PluginResources.Plugin_Description;
+		var settingsUi = new SettingsWindow { DataContext = provider.SettingsService };
 
-		public string TypeName => PluginResources.Plugin_Name;
-
-		public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
-		{
-			var provider = InterpretBankProviderFactory.GetInterpretBankProvider();
+		if (settingsUi.ShowDialog() ?? false)
 			return new ITerminologyProvider[] { provider };
-		}
 
-		public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
-		{
-			return true;
-		}
+		return null;
+	}
 
-		public TerminologyProviderDisplayInfo GetDisplayInfo(Uri terminologyProviderUri)
-		{
-			return new TerminologyProviderDisplayInfo { Name = "Interpret Bank", };
-		}
+	public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
+	{
+		return true;
 
-		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
-		{
-			return terminologyProviderUri == new Uri(Constants.InterpretBankUri);
-		}
+		//return dialogResult
+	}
+
+	public TerminologyProviderDisplayInfo GetDisplayInfo(Uri terminologyProviderUri)
+	{
+		return new TerminologyProviderDisplayInfo { Name = PluginResources.Plugin_Description };
+	}
+
+	public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
+	{
+		return terminologyProviderUri == new Uri(Constants.InterpretBankUri);
 	}
 }

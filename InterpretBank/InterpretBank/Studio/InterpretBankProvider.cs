@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using InterpretBank.TermSearch;
@@ -9,9 +10,10 @@ namespace InterpretBank.Studio
 {
 	public class InterpretBankProvider : AbstractTerminologyProvider
 	{
-		public InterpretBankProvider(ITermSearchService termSearchService)
+		public InterpretBankProvider(ITermSearchService termSearchService, ISettingsService settingsService)
 		{
 			TermSearchService = termSearchService;
+			SettingsService = settingsService;
 		}
 
 		public override IDefinition Definition
@@ -44,6 +46,8 @@ namespace InterpretBank.Studio
 			}
 		}
 
+		public ISettingsService SettingsService { get; }
+
 		public override Uri Uri
 		{
 			get
@@ -68,24 +72,28 @@ namespace InterpretBank.Studio
 		{
 			var languages = new List<ILanguage>();
 
-			var currentProject = StudioContext.ProjectsController.CurrentProject;
-			if (currentProject == null) return null;
+			var interpretBankLanguages = TermSearchService.GetLanguages();
 
-			var projectInfo = currentProject.GetProjectInfo();
+			//var currentProject = StudioContext.ProjectsController.CurrentProject;
+			//if (currentProject == null) return null;
 
-			languages.Add(new DefinitionLanguage
+			//var projectInfo = currentProject.GetProjectInfo();
+
+			//languages.Add(new DefinitionLanguage
+			//{
+			//	IsBidirectional = true,
+			//	Locale = projectInfo.SourceLanguage.CultureInfo,
+			//	Name = projectInfo.SourceLanguage.DisplayName,
+			//	TargetOnly = false
+			//});
+
+			var cultures = CultureInfo.GetCultures(CultureTypes.NeutralCultures);
+
+			languages.AddRange(interpretBankLanguages.Select(lang => new DefinitionLanguage
 			{
 				IsBidirectional = true,
-				Locale = projectInfo.SourceLanguage.CultureInfo,
-				Name = projectInfo.SourceLanguage.DisplayName,
-				TargetOnly = false
-			});
-
-			languages.AddRange(projectInfo.TargetLanguages.Select(targetLanguage => new DefinitionLanguage
-			{
-				IsBidirectional = true,
-				Locale = targetLanguage.CultureInfo,
-				Name = targetLanguage.DisplayName,
+				Locale = cultures.FirstOrDefault(cult => cult.EnglishName == lang.Name),
+				Name = lang.Name,
 				TargetOnly = false
 			}));
 
@@ -108,23 +116,23 @@ namespace InterpretBank.Studio
 
 				var id = TermIndex++;
 				//TODO: calculate score instead of hardcoding "100"
+
+				if (terms.Count <= 0)
+					continue;
+
 				results.Add(new SearchResult
 				{
 					Id = id,
 					Score = 100,
 					Text = word
 				});
-
-				if (terms.Count > 0)
-				{
-					Entries.Add(CreateEntry(id, terms, destination.Name));
-				}
+				Entries.Add(CreateEntry(id, terms, destination.Name));
 			}
 
 			return results;
 		}
 
-		private IEntry CreateEntry(int id, List<TermEntry> targetTerms, string targetLanguage)
+		private IEntry CreateEntry(int id, List<StudioTermEntry> targetTerms, string targetLanguage)
 		{
 			var entryTargetLanguage = new EntryLanguage { Name = targetLanguage };
 			foreach (var targetTerm in targetTerms)

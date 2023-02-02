@@ -126,4 +126,16 @@
   <data name="Plugin_Description" xml:space="preserve">
     <value>InterpretBank description</value>
   </data>
+  <data name="SettingsWindow_GroupBox_Header" xml:space="preserve">
+    <value>Interpret Bank Settings</value>
+  </data>
+  <data name="SettingsWindow_TextBlock_DBFilepath" xml:space="preserve">
+    <value>Database Filepath</value>
+  </data>
+  <data name="SettingsWindow_TextBlock_Tags" xml:space="preserve">
+    <value>Use the glossaries tagged with the following:</value>
+  </data>
+  <data name="SettingsWindow_TextBlock_Glossaries" xml:space="preserve">
+    <value>Use the following glossaries:</value>
+  </data>
 </root>
