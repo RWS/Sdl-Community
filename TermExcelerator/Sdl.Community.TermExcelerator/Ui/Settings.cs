@@ -111,24 +111,31 @@ namespace Sdl.Community.TermExcelerator.Ui
 		public void SetSettings(ProviderSettings settings)
 		{
 			_providerSettings = settings;
+
+			descriptionLbl.Text = @"From this screen you can fill your settings from your excel document.";
+
+			hasHeader.Checked = _providerSettings.HasHeader;
+			chkIsReadOnly.Checked = _providerSettings.IsReadOnly;
+
 			sourceBox.Text = settings.SourceColumn;
 			targetBox.Text = settings.TargetColumn;
 			approvedBox.Text = settings.ApprovedColumn;
 			separatorTextBox.Text = settings.Separator.ToString();
 
-			var source = GetCultureNames();
-			sourceLanguageComboBox.DataSource = source;
+			var cultureNames = GetCultureNames();
+			var hashSet = new HashSet<CultureInfo>(cultureNames);
+			hashSet.TryGetValue(new CultureInfo(settings.SourceLanguage.Name), out var sourceCulture);
+			hashSet.TryGetValue(new CultureInfo(settings.TargetLanguage.Name), out var targetCulture);
+
+			sourceLanguageComboBox.DataSource = cultureNames;
 			sourceLanguageComboBox.DisplayMember = "DisplayName";
 			sourceLanguageComboBox.ValueMember = "Name";
-			var selectedSourceItem = source.Where(s => s.Name == settings.SourceLanguage.Name);
-			sourceLanguageComboBox.SelectedItem = selectedSourceItem.FirstOrDefault();
+			sourceLanguageComboBox.SelectedItem = sourceCulture;
 
-			var target = GetCultureNames();
-			targetLanguageComboBox.DataSource = target;
+			targetLanguageComboBox.DataSource = cultureNames;
 			targetLanguageComboBox.DisplayMember = "DisplayName";
 			targetLanguageComboBox.ValueMember = "Name";
-			var selectedTargetItem = target.Where(s => s.Name == settings.TargetLanguage.Name);
-			targetLanguageComboBox.SelectedItem = selectedTargetItem.FirstOrDefault();
+			targetLanguageComboBox.SelectedItem = targetCulture;
 
 			pathTextBox.Text = settings.TermFilePath;
 		}
