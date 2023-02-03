@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 
@@ -6,16 +7,20 @@ namespace Sdl.Community.MTCloud.Provider.Model
 {
 	[DataContract]
 	public class LanguageMappingModel : BaseViewModel
-	{	
+	{
 		private MTCloudLanguage _selectedSource;
 		private MTCloudLanguage _selectedTarget;
-		private TranslationModel _selectedModel;		
+		private TranslationModel _selectedModel;
 		private MTCloudDictionary _selectedDictionary;
 
 		private List<MTCloudLanguage> _sourceLanguages;
 		private List<MTCloudLanguage> _targetLanguages;
-		private List<TranslationModel> _models;	
+		private List<TranslationModel> _models;
 		private List<MTCloudDictionary> _dictionaries;
+
+		private LinguisticOptions _selectedLinguisticOptions;
+		private List<LinguisticOptions> _linguisticOptions;
+		private List<string> _availableLinguisticOptions;
 
 		[DataMember]
 		public string Name { get; set; }
@@ -66,6 +71,12 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			{
 				_selectedModel = value;
 				OnPropertyChanged(nameof(SelectedModel));
+				if (LinguisticOptions is null)
+				{
+					return;
+				}
+
+				AvailableLinguisticOptions = LinguisticOptions.FirstOrDefault(x => x.ModelName == value.MTCloudLanguagePair.Name).Values.ToList();
 			}
 		}
 
@@ -77,6 +88,18 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			{
 				_selectedDictionary = value;
 				OnPropertyChanged(nameof(SelectedDictionary));
+			}
+		}
+
+		[DataMember]
+		public LinguisticOptions SelectedLinguisticOption
+		{
+			get => _selectedLinguisticOptions;
+			set
+			{
+				_selectedLinguisticOptions = value;
+				OnPropertyChanged(nameof(SelectedLinguisticOption));
+				AvailableLinguisticOptions = LinguisticOptions.FirstOrDefault(x => x.ModelName.Equals(SelectedModel.MTCloudLanguagePair.Name)).Values.ToList();
 			}
 		}
 
@@ -102,7 +125,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			}
 		}
 
-		
+
 		public List<TranslationModel> Models
 		{
 			get => _models;
@@ -113,7 +136,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			}
 		}
 
-		
+
 		public List<MTCloudDictionary> Dictionaries
 		{
 			get => _dictionaries;
@@ -122,6 +145,41 @@ namespace Sdl.Community.MTCloud.Provider.Model
 				_dictionaries = value;
 				OnPropertyChanged(nameof(Dictionaries));
 			}
-		}		
+		}
+
+		[DataMember]
+		public List<LinguisticOptions> LinguisticOptions
+		{
+			get => _linguisticOptions;
+			set
+			{
+				_linguisticOptions = value;
+				OnPropertyChanged(nameof(LinguisticOptions));
+			}
+		}
+
+		[DataMember]
+		public List<string> AvailableLinguisticOptions
+		{
+			get => _availableLinguisticOptions;
+			set
+			{
+				_availableLinguisticOptions = value;
+				OnPropertyChanged(nameof(AvailableLinguisticOptions));
+				LinguisticOption = value.FirstOrDefault(x => x.Equals(SelectedLinguisticOption?.SystemDefault))
+								?? value.FirstOrDefault();
+			}
+		}
+
+		private string _linguisticOption;
+		public string LinguisticOption
+		{
+			get => _linguisticOption;
+			set
+			{
+				_linguisticOption = value;
+				OnPropertyChanged(nameof(LinguisticOption));
+			}
+		}
 	}
 }

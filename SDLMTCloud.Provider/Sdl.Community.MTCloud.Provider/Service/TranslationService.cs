@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using NLog;
 using Sdl.Community.MTCloud.Provider.Events;
@@ -13,6 +14,7 @@ using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Model.RateIt;
 using Sdl.Community.MTCloud.Provider.Service.Interface;
+using Sdl.FileTypeSupport.Framework;
 using Sdl.LanguagePlatform.Core;
 using Converter = Sdl.Community.MTCloud.Provider.XliffConverter.Converter.Converter;
 using LogManager = NLog.LogManager;
@@ -104,9 +106,24 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			var uri = new Uri($"{ConnectionService.CurrentWorkingPortalAddress}/v4/accounts/{ConnectionService.Credential.AccountId}/subscriptions/language-pairs");
 			var request = GetRequestMessage(HttpMethod.Get, uri);
-
 			var response = await _httpClient.SendRequest(request);
 			return await _httpClient.GetResult<SubscriptionInfo>(response);
+		}
+
+		public async Task<dynamic> GetLinguisticOptions(string pair = null)
+		{
+			CheckConnection();
+
+			var uri = new Uri($"{ConnectionService.CurrentWorkingPortalAddress}/v4/accounts/{ConnectionService.Credential.AccountId}/subscriptions/language-pairs/{pair}/linguistic-options");
+			var request = GetRequestMessage(HttpMethod.Get, uri);
+			var response = await _httpClient.SendRequest(request);
+			if (!response.IsSuccessStatusCode)
+			{
+				return null;
+			}
+
+			var result = await _httpClient.GetResult<dynamic>(response);
+			return result;
 		}
 
 		public async Task<HttpResponseMessage> SendFeedback(FeedbackInfo feedbackInfo)
@@ -142,6 +159,17 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				&& !model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary))
 			{
 				translationRequestModel.Dictionaries = new[] { model.SelectedDictionary?.DictionaryId };
+			}
+
+			if (model.LinguisticOption != PluginResources.Message_No_LO_available
+			 && !string.IsNullOrEmpty(model.LinguisticOption))
+			{
+				translationRequestModel.LinguisticOptions = new Dictionary<string, string>
+				{
+					{
+						model.SelectedLinguisticOption.Id, model.LinguisticOption
+					}
+				};
 			}
 
 			var content = JsonConvert.SerializeObject(translationRequestModel);

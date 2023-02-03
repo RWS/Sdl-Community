@@ -74,7 +74,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				}
 
 				_languageMappingModels = value;
-
 				if (_languageMappingModels != null)
 				{
 					foreach (var languageMappingModel in _languageMappingModels)
@@ -138,9 +137,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			{
 				return;
 			}
+
 			var languages = _provider.LanguageProvider.GetMappedLanguages();
 			var languageMappingModels = new List<LanguageMappingModel>();
-
 			foreach (var languagePair in _languagePairs)
 			{
 				var languageMappingModel = _provider.GetLanguageMappingModel(languagePair, languages);
