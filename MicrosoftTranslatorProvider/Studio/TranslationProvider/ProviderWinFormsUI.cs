@@ -79,14 +79,12 @@ namespace MicrosoftTranslatorProvider.Studio
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
 		{
 			var options = new MTETranslationOptions(translationProviderUri);
-			var isMicrosoftProvider = options.SelectedProvider == MTETranslationOptions.ProviderType.MicrosoftTranslator;
-
 			var customName = options.CustomProviderName;
 			var useCustomName = options.UseCustomProviderName;
 			var providerName = customName.SetProviderName(useCustomName);
 			return new TranslationProviderDisplayInfo()
 			{
-				SearchResultImage = PluginResources.my_image,
+				SearchResultImage = PluginResources.microsoft_image,
 				TranslationProviderIcon = PluginResources.mstp_icon,
 				TooltipText = providerName,
 				Name = providerName
