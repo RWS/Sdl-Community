@@ -1,4 +1,5 @@
 ﻿using System;
+using MicrosoftTranslatorProvider.Extensions;
 using MicrosoftTranslatorProvider.Interfaces;
 using MicrosoftTranslatorProvider.Model;
 using MicrosoftTranslatorProvider.Service;
@@ -10,7 +11,7 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 namespace MicrosoftTranslatorProvider
 {
 	public class Provider : ITranslationProvider
-    {
+	{
 		private readonly HtmlUtil _htmlUtil;
 
 		private ProviderConnecter _providerConnecter;
@@ -22,7 +23,18 @@ namespace MicrosoftTranslatorProvider
 			RegionsProvider = regionProvider;
 		}
 
-		public string Name => PluginResources.Plugin_Name;
+		public string Name
+		{
+
+			get
+			{
+				var customName = Options.CustomProviderName;
+				var useCustomName = Options.UseCustomProviderName;
+				var providerName = customName.SetProviderName(useCustomName);
+				return providerName;
+			}
+
+		}
 
 		public RegionsProvider RegionsProvider { get; }
 
