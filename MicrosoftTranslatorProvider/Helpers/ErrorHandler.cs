@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Threading.Tasks;
-using System.Windows;
+using System.IO;
+using System.Windows.Forms;
 
 namespace MicrosoftTranslatorProvider.Helpers
 {
@@ -8,12 +8,16 @@ namespace MicrosoftTranslatorProvider.Helpers
 	{
 		public static void HandleError(string errorMessage, string source)
 		{
-			Task.Run(() => { var dialogResult = MessageBox.Show(errorMessage, source); });
+			MessageBox.Show(errorMessage,
+							source,
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Error,
+							MessageBoxDefaultButton.Button1);
 		}
 
 		public static void HandleError(Exception exception)
 		{
-			HandleError($"The error was also logged on the AppData folder.\n\n{exception.Message}\n{exception.StackTrace}", "Unexpected error");
+			HandleError($"An unexpected error occured.\nThe error was logged at {Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), PluginResources.LogsFolderPath, PluginResources.AppLogFolder)}.\n\n{exception.Message}", "Unexpected error");
 		}
 	}
 }

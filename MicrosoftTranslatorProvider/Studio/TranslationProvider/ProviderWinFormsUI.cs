@@ -12,6 +12,7 @@ using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.ProjectAutomation.Core;
+using MicrosoftTranslatorProvider.Extensions;
 
 namespace MicrosoftTranslatorProvider.Studio
 {
@@ -80,12 +81,15 @@ namespace MicrosoftTranslatorProvider.Studio
 			var options = new MTETranslationOptions(translationProviderUri);
 			var isMicrosoftProvider = options.SelectedProvider == MTETranslationOptions.ProviderType.MicrosoftTranslator;
 
-			return new TranslationProviderDisplayInfo
+			var customName = options.CustomProviderName;
+			var useCustomName = options.UseCustomProviderName;
+			var providerName = customName.SetProviderName(useCustomName);
+			return new TranslationProviderDisplayInfo()
 			{
+				SearchResultImage = PluginResources.my_image,
 				TranslationProviderIcon = PluginResources.mstp_icon,
-				Name = PluginResources.Microsoft_NiceName,
-				TooltipText = PluginResources.Microsoft_Tooltip,
-				SearchResultImage = isMicrosoftProvider ? PluginResources.microsoft_image : default
+				TooltipText = providerName,
+				Name = providerName
 			};
 		}
 

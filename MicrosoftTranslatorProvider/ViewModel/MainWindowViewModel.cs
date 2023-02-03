@@ -240,6 +240,8 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				Options.PreLookupFilename = _settingsControlViewModel.PreLookupFileName;
 				Options.UsePostEdit = _settingsControlViewModel.DoPostLookup;
 				Options.PostLookupFilename = _settingsControlViewModel.PostLookupFileName;
+				Options.CustomProviderName = _settingsControlViewModel.CustomProviderName;
+				Options.UseCustomProviderName = _settingsControlViewModel.UseCustomProviderName;
 			}
 
 			if (Options != null && Options.LanguagesSupported == null)
