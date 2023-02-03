@@ -1242,7 +1242,7 @@ namespace Sdl.Community.Qualitivity.Panels.Document_Reports
         {
             try
             {
-                if (QualitivityViewTrackChangesController.NavigationTreeView.SelectedNode != null &&
+                if (QualitivityViewTrackChangesController.NavigationTreeView?.SelectedNode != null &&
                     QualitivityViewTrackChangesController.ObjectListView.SelectedObjects.Count != 0) return;
                 webBrowser2.BringToFront();
                 webBrowser4.BringToFront();
