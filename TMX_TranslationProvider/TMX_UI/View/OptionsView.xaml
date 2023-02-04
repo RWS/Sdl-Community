@@ -103,7 +103,7 @@
 				<Button Content="Import TMX File" Width="200" Height="40" Margin="10 0 0 0" Click="import_new_tmx_file"/>
 			</StackPanel>
 
-			<CheckBox Content="Care for Locale when searching" IsChecked="{Binding CareForLocale,Mode=TwoWay}" 
+			<CheckBox Content="Use specific locale when searching" IsChecked="{Binding CareForLocale,Mode=TwoWay}" 
 					  Grid.Row="2"
 					  Visibility="{Binding HasAnyDatabase,Converter={StaticResource BooleanToVisibilityConverter}}"
 					  HorizontalAlignment="Right"/>
@@ -120,6 +120,7 @@
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="32"/>
 				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
 
 			<Grid.ColumnDefinitions>
@@ -186,7 +187,17 @@
 				</Grid>
 			</Grid>
 
-			<Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="5" 
+			<Grid Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="3">
+
+				<StackPanel Orientation="Vertical" VerticalAlignment="Bottom">
+					<TextBlock Text="Last Report" 
+							   FontSize="20" FontWeight="Bold"
+							   Visibility="{Binding ElementName=reportCtrl,Path=DataContext.HasFinished,Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0 5"/>
+					<local:ReportView x:Name="reportCtrl" Margin="0 0 0 15"/>
+				</StackPanel>
+			</Grid>
+			
+			<Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="6" 
 				  Visibility="{Binding ImportFromTmxFile.ImportComplete,Converter={StaticResource BooleanToVisibilityConverter}}"
 				  Background="{StaticResource BackgroundColor}"
 				  >

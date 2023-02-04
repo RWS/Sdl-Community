@@ -55,7 +55,7 @@ namespace TMX_Lib.Utils
 		public static (string language,string locale) NormalizeLanguage(string fullLanguageName)
 		{
 			fullLanguageName = ToLocaseLanguage(fullLanguageName);
-			if (fullLanguageName.Length == 2)
+			if (fullLanguageName.Length <= 3)
 				return (fullLanguageName, "");
 			return (fullLanguageName.Substring(0, 2), fullLanguageName.Substring(3));
 		}

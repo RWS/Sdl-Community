@@ -40,6 +40,11 @@ namespace TMX_UI.View
 			DataContext = vm;
 
 			_refreshTimer.Tick += (s, a) => RefreshImportExport();
+
+#if DEBUG
+			// debug - make it easy to drag it
+			WindowStyle = WindowStyle.ThreeDBorderWindow;
+#endif
 		}
 
 		public OptionsView(IReadOnlyList<string> selectedDbNames, bool careForLocale) : this()
@@ -51,6 +56,7 @@ namespace TMX_UI.View
 		private void RefreshImportExport() {
 			ViewModel.ImportFromTmxFile.RefreshProgress();
 			ViewModel.ExportToTmx.RefreshProgress();
+			ImportService.Instance.GetImportReport(reportCtrl.ViewModel);
 			GlobalSettings.Inst.Save();
 		}
 

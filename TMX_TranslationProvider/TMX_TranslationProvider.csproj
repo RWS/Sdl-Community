@@ -8,6 +8,7 @@
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="MongoSchema\**" />
     <Compile Remove="packages\**" />
     <Compile Remove="QuickTmxTesting\**" />
     <Compile Remove="TMXTests\**" />
@@ -15,6 +16,7 @@
     <Compile Remove="TMX_SimpleSearch\**" />
     <Compile Remove="TMX_UI\**" />
     <Compile Remove="TMX_UI_Test\**" />
+    <EmbeddedResource Remove="MongoSchema\**" />
     <EmbeddedResource Remove="packages\**" />
     <EmbeddedResource Remove="QuickTmxTesting\**" />
     <EmbeddedResource Remove="TMXTests\**" />
@@ -22,6 +24,7 @@
     <EmbeddedResource Remove="TMX_SimpleSearch\**" />
     <EmbeddedResource Remove="TMX_UI\**" />
     <EmbeddedResource Remove="TMX_UI_Test\**" />
+    <None Remove="MongoSchema\**" />
     <None Remove="packages\**" />
     <None Remove="QuickTmxTesting\**" />
     <None Remove="TMXTests\**" />
@@ -29,6 +32,7 @@
     <None Remove="TMX_SimpleSearch\**" />
     <None Remove="TMX_UI\**" />
     <None Remove="TMX_UI_Test\**" />
+    <Page Remove="MongoSchema\**" />
     <Page Remove="TMX_SimpleSearch\**" />
     <Page Remove="TMX_UI\**" />
     <Page Remove="TMX_UI_Test\**" />

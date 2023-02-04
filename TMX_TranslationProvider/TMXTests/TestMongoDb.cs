@@ -20,7 +20,7 @@ namespace TMXTests
 		public async Task TestSample4()
 		{
 			var root = "..\\..\\..\\..";
-			var db = new TmxMongoDb("localhost:27017", "sample4");
+			var db = new TmxMongoDb( "sample4");
 			await db.ImportToDbAsync($"{root}\\SampleTestFiles\\#4.tmx");
 			var search = new TmxSearch(db);
 			await search.LoadLanguagesAsync();
@@ -40,7 +40,7 @@ namespace TMXTests
 		public async Task TestDatabaseFuzzySimple4()
 		{
 			var root = "..\\..\\..\\..";
-			var db = new TmxMongoDb("localhost:27017", "sample4");
+			var db = new TmxMongoDb( "sample4");
 			await db.ImportToDbAsync($"{root}\\SampleTestFiles\\#4.tmx");
 			var search = new TmxSearch(db);
 			await search.LoadLanguagesAsync();
@@ -77,7 +77,7 @@ namespace TMXTests
 
 		private static async Task DbImportFileAsync(string file, string dbName, bool quickImport = false)
 		{
-			var db = new TmxMongoDb("localhost:27017", dbName);
+			var db = new TmxMongoDb( dbName);
 			await db.ImportToDbAsync(file, (r) => { }, quickImport);
 		}
 		private static (TranslationUnit tu, LanguagePair lp) SimpleTU(string sourceText, string targetText, string sourceLanguage, string targetLanguage, ulong id = 0)
@@ -104,7 +104,7 @@ namespace TMXTests
 			// the idea - #4 is almost empty (very very small) - thus, easy to test adding/updating
 			var root = "..\\..\\..\\..";
 			await DbImportFileAsync($"{root}\\SampleTestFiles\\#4.tmx", "add-update");
-			var db = new TmxMongoDb("localhost:27017", "add-update");
+			var db = new TmxMongoDb( "add-update");
 			await db.InitAsync();
 			var search = new TmxSearch(db);
 			await search.LoadLanguagesAsync();
