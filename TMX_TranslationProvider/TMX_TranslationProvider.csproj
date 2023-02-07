@@ -11,6 +11,7 @@
     <Compile Remove="MongoSchema\**" />
     <Compile Remove="packages\**" />
     <Compile Remove="QuickTmxTesting\**" />
+    <Compile Remove="Resources\**" />
     <Compile Remove="TMXTests\**" />
     <Compile Remove="TMX_Lib\**" />
     <Compile Remove="TMX_SimpleSearch\**" />
@@ -19,6 +20,7 @@
     <EmbeddedResource Remove="MongoSchema\**" />
     <EmbeddedResource Remove="packages\**" />
     <EmbeddedResource Remove="QuickTmxTesting\**" />
+    <EmbeddedResource Remove="Resources\**" />
     <EmbeddedResource Remove="TMXTests\**" />
     <EmbeddedResource Remove="TMX_Lib\**" />
     <EmbeddedResource Remove="TMX_SimpleSearch\**" />
@@ -27,12 +29,14 @@
     <None Remove="MongoSchema\**" />
     <None Remove="packages\**" />
     <None Remove="QuickTmxTesting\**" />
+    <None Remove="Resources\**" />
     <None Remove="TMXTests\**" />
     <None Remove="TMX_Lib\**" />
     <None Remove="TMX_SimpleSearch\**" />
     <None Remove="TMX_UI\**" />
     <None Remove="TMX_UI_Test\**" />
     <Page Remove="MongoSchema\**" />
+    <Page Remove="Resources\**" />
     <Page Remove="TMX_SimpleSearch\**" />
     <Page Remove="TMX_UI\**" />
     <Page Remove="TMX_UI_Test\**" />
@@ -162,9 +166,6 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
     <None Update="UI\wrench.png">

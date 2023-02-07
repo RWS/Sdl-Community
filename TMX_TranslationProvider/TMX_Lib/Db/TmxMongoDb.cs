@@ -322,6 +322,8 @@ namespace TMX_Lib.Db
 				if (segment != null)
 					segments.Add(segment);
 			}
+			foreach (var segment in segments)
+				segment.DatabaseName = Name;
 			return segments;
 		}
 		// this just performs the search and returns the results -- does NOT perform any other analyses, like, compare score and such
@@ -339,6 +341,8 @@ namespace TMX_Lib.Db
 				if (segment != null)
 					segments.Add(segment);
 			}
+			foreach (var segment in segments)
+				segment.DatabaseName = Name;
 			return segments;
 		}
 
@@ -354,6 +358,8 @@ namespace TMX_Lib.Db
 				if (segment != null)
 					segments.Add(segment);
 			}
+			foreach (var segment in segments)
+				segment.DatabaseName = Name;
 			return segments;
 		}
 		// End of SEARCH

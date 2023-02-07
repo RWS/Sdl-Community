@@ -41,6 +41,9 @@ namespace TMX_Lib.Search
 		public TranslationUnitOrigin Origin = TranslationUnitOrigin.TM;
 		public int Score = 100;
 
+		// what DB is this result coming from? (we can pull results from several databases at the same time)
+		public string DatabaseName => Segment.DatabaseName;
+
 		public bool IsExactMatch => Score >= 100;
 
 		public List<PenaltyType> Penalties = new List<PenaltyType>();
@@ -85,13 +88,15 @@ namespace TMX_Lib.Search
 
 			if (modifiedAt != DateTime.MinValue)
 			{
-				var fieldValue = new MultiplePicklistFieldValue("modifiedAt");
-				fieldValue.Add(modifiedAt.ToString(CultureInfo.InvariantCulture));
-				tu.FieldValues.Add(fieldValue);
+				var fieldModifiedAt = new SingleStringFieldValue("Modified At", modifiedAt.ToString(CultureInfo.InvariantCulture));
+				tu.FieldValues.Add(fieldModifiedAt);
 			}
 
 			tu.SystemFields.ChangeDate = modifiedAt;
 			tu.SystemFields.ChangeUser = Segment.DbTU.ChangeAuthor;
+
+			var field = new SingleStringFieldValue("Database", DatabaseName);
+			tu.FieldValues.Add(field);
 		}
 
 		public SearchResult ToSearchResult(string originalText, TmxSearchSettings settings, CultureInfo sourceLanguage, CultureInfo targetLanguage)

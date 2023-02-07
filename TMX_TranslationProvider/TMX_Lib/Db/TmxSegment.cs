@@ -13,6 +13,9 @@ namespace TMX_Lib.Db
 		// note: the db text is in lower case. These contain the correct-case texts
 		public string SourceText, TargetText;
 
+		// the database this is coming from
+		public string DatabaseName;
+
 		public double Score => DbSourceText?.Score ?? 0d;
 	}
 }
