@@ -1,4 +1,4 @@
-﻿namespace InterpretBank.SQLBuilder
+﻿namespace InterpretBank.SqlBuilder
 {
 	public class Expression
 	{

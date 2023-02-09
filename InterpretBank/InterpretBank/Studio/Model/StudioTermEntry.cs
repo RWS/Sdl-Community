@@ -1,4 +1,4 @@
-﻿namespace InterpretBank.TermSearch
+﻿namespace InterpretBank.Studio.Model
 {
 	public class StudioTermEntry
 	{

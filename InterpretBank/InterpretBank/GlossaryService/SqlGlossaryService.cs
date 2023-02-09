@@ -5,7 +5,7 @@ using System.Data.SQLite;
 using System.Linq;
 using InterpretBank.GlossaryService.Interface;
 using InterpretBank.GlossaryService.Model;
-using InterpretBank.SQLBuilder.Interface;
+using InterpretBank.SqlBuilder.Interface;
 
 namespace InterpretBank.GlossaryService
 {

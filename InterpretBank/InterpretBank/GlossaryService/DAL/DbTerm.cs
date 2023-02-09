@@ -2,6 +2,7 @@
 using System.Data.Linq.Mapping;
 using System.Reflection;
 using InterpretBank.GlossaryService.DAL.Interface;
+using InterpretBank.GlossaryService.Interface;
 using InterpretBank.GlossaryService.Model;
 
 namespace InterpretBank.GlossaryService.DAL;

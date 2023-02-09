@@ -130,7 +130,7 @@
     <value>Interpret Bank Settings</value>
   </data>
   <data name="SettingsWindow_TextBlock_DBFilepath" xml:space="preserve">
-    <value>Database Filepath</value>
+    <value>Database filepath:</value>
   </data>
   <data name="SettingsWindow_TextBlock_Tags" xml:space="preserve">
     <value>Use the glossaries tagged with the following:</value>

@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using InterpretBank.TermSearch;
+using InterpretBank.Studio.Model;
+using InterpretBank.TerminologyService;
+using InterpretBank.TerminologyService.Interface;
 using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace InterpretBank.Studio
 {
 	public class InterpretBankProvider : AbstractTerminologyProvider
 	{
-		public InterpretBankProvider(ITermSearchService termSearchService, ISettingsService settingsService)
+		public InterpretBankProvider(ITerminologyService termSearchService, ISettingsService settingsService)
 		{
 			TermSearchService = termSearchService;
 			SettingsService = settingsService;
@@ -59,7 +61,7 @@ namespace InterpretBank.Studio
 		private HashSet<IEntry> Entries { get; } = new();
 
 		private int TermIndex { get; set; }
-		private ITermSearchService TermSearchService { get; }
+		private ITerminologyService TermSearchService { get; }
 
 		public override IEntry GetEntry(int id) => Entries.FirstOrDefault(e => e.Id == id);
 

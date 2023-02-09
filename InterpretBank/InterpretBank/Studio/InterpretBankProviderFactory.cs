@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.SQLite;
-using InterpretBank.TermSearch;
+using InterpretBank.GlossaryService;
+using InterpretBank.TerminologyService;
+using InterpretBank.Wrappers;
 using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace InterpretBank.Studio
@@ -16,9 +18,9 @@ namespace InterpretBank.Studio
 			var sqLiteConnection = new SQLiteConnection($"Data Source={filepath}");
 
 			var interpretBankDataContext = new InterpretBankDataContext(sqLiteConnection);
-			var settingsService = new SettingsService(new OpenFileDialog(), interpretBankDataContext);
+			var settingsService = new SettingsService.SettingsService(new OpenFileDialog(), interpretBankDataContext);
 
-			var termSearchService = new TerminologyService(interpretBankDataContext);
+			var termSearchService = new TerminologyService.TerminologyService(interpretBankDataContext);
 			return new InterpretBankProvider(termSearchService, settingsService);
 		}
 

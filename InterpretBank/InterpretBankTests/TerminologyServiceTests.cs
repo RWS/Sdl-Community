@@ -6,7 +6,7 @@ using InterpretBank.GlossaryService;
 using InterpretBank.GlossaryService.DAL;
 using InterpretBank.GlossaryService.Interface;
 using InterpretBank.GlossaryService.Model;
-using InterpretBank.TermSearch;
+using InterpretBank.TerminologyService;
 using NSubstitute;
 using Xunit;
 using DbTerm = InterpretBank.GlossaryService.DAL.DbTerm;

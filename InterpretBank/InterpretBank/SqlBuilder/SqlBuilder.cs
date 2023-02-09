@@ -2,9 +2,9 @@
 using System.Data;
 using System.Data.SQLite;
 using System.Linq;
-using InterpretBank.SQLBuilder.Interface;
+using InterpretBank.SqlBuilder.Interface;
 
-namespace InterpretBank.SQLBuilder
+namespace InterpretBank.SqlBuilder
 {
 	public class SqlBuilder : ISqlBuilder, IConditionBuilder
 	{

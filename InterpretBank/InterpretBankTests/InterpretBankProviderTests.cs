@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Data.SQLite;
+using InterpretBank.GlossaryService;
+using InterpretBank.SettingsService;
 using InterpretBank.Studio;
-using InterpretBank.TermSearch;
+using InterpretBank.TerminologyService;
+using InterpretBank.TerminologyService.Interface;
+using InterpretBank.Wrappers.Interface;
 using NSubstitute;
 using Sdl.Terminology.TerminologyProvider.Core;
 using Xunit;
@@ -15,7 +19,7 @@ namespace InterpretBankTests
 			//var mockGenerator = new MockGenerator();
 		}
 
-		private ITermSearchService TermSearchService { get; }
+		private ITerminologyService TermSearchService { get; }
 
 		[Fact]
 		public void SearchTermTest()

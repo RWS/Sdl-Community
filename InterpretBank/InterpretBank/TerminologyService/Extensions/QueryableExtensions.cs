@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace InterpretBank.TermSearch.Extensions
+namespace InterpretBank.TerminologyService.Extensions
 {
 	public static class QueryableExtensions
 	{
@@ -16,11 +16,5 @@ namespace InterpretBank.TermSearch.Extensions
 
 			return source.Where(lambda);
 		}
-
-		//...
-
-		//var terms = DataContext.GetTable<GlossaryData>();
-		//var result = terms.WherePropertyContains("Term1", word);
-
 	}
 }

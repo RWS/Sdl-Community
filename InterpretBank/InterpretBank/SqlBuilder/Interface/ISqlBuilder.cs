@@ -2,7 +2,7 @@
 using System.Data;
 using System.Data.SQLite;
 
-namespace InterpretBank.SQLBuilder.Interface
+namespace InterpretBank.SqlBuilder.Interface
 {
 	public interface ISqlBuilder
 	{

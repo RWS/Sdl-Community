@@ -1,6 +1,7 @@
 ﻿using System.Windows.Forms;
+using InterpretBank.Wrappers.Interface;
 
-namespace InterpretBank.TermSearch
+namespace InterpretBank.Wrappers
 {
 	public class OpenFileDialog : IOpenFileDialog
 	{

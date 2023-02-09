@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data.SQLite;
 
-namespace InterpretBank.SQLBuilder.Interface
+namespace InterpretBank.SqlBuilder.Interface
 {
 	public interface IConditionBuilder
 	{

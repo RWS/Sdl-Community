@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using InterpretBank.GlossaryService;
 using InterpretBank.GlossaryService.DAL;
-using InterpretBank.TermSearch.Extensions;
-using InterpretBank.TermSearch.Model;
+using InterpretBank.GlossaryService.Interface;
+using InterpretBank.Model;
+using InterpretBank.Studio.Model;
+using InterpretBank.TerminologyService.Extensions;
+using InterpretBank.TerminologyService.Interface;
 
-namespace InterpretBank.TermSearch;
+namespace InterpretBank.TerminologyService;
 
-public class TerminologyService : ITermSearchService
+public class TerminologyService : ITerminologyService
 {
 	public TerminologyService(IInterpretBankDataContext interpretBankDataContext)
 	{
@@ -15,7 +19,6 @@ public class TerminologyService : ITermSearchService
 	}
 
 	private IInterpretBankDataContext InterpretBankDataContext { get; }
-	private List<Language> Languages { get; set; }
 
 	public List<StudioTermEntry> GetExactTerms(string word, string name1, string name2)
 	{
@@ -45,30 +48,7 @@ public class TerminologyService : ITermSearchService
 		return studioTerms;
 	}
 
-	public List<Language> GetLanguages()
-	{
-		//TODO: Update this when settings change
-		//Create property that just returns the list
-		//Method will be called when settings change to repopulate list
-		if (Languages != null)
-			return Languages;
-
-		Languages = new List<Language>();
-
-		var dbInfo = InterpretBankDataContext.GetRows<DatabaseInfo>().ToList()[0];
-
-		var dbInfoProperties = dbInfo.GetType().GetProperties();
-
-		foreach (var prop in dbInfoProperties)
-			if (prop.Name.Contains("LanguageName"))
-				Languages.Add(new Language
-				{
-					Name = prop.GetValue(dbInfo).ToString(), Index = int.Parse(prop.Name.Substring(12))
-				});
-
-		Languages.RemoveAll(l => l.Name is null or "undef");
-		return Languages;
-	}
+	public List<Language> GetLanguages() => InterpretBankDataContext.GetLanguages();
 
 	private static List<string> GetTargetLanguageColumns(int languageIndex)
 	{

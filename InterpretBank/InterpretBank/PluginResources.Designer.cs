@@ -98,7 +98,7 @@ namespace InterpretBank {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Database Filepath.
+        ///   Looks up a localized string similar to Database filepath:.
         /// </summary>
         public static string SettingsWindow_TextBlock_DBFilepath {
             get {

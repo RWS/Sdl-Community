@@ -1,5 +1,6 @@
 ﻿using System.Data.Linq.Mapping;
 using InterpretBank.GlossaryService.DAL.Interface;
+using InterpretBank.GlossaryService.Interface;
 
 namespace InterpretBank.GlossaryService.DAL
 {

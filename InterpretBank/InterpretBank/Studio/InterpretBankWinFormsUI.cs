@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using InterpretBank.UI;
+using InterpretBank.SettingsService.UI;
 using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace InterpretBank.Studio;

@@ -1,4 +1,4 @@
-﻿namespace InterpretBank.TermSearch.Model
+﻿namespace InterpretBank.Model
 {
 	public class Language
 	{

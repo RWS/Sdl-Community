@@ -1,7 +1,7 @@
 ﻿using InterpretBank.GlossaryService;
 using InterpretBank.GlossaryService.Interface;
-using InterpretBank.SQLBuilder;
-using InterpretBank.SQLBuilder.Interface;
+using InterpretBank.SqlBuilder;
+using InterpretBank.SqlBuilder.Interface;
 using NSubstitute;
 
 namespace InterpretBankTests
