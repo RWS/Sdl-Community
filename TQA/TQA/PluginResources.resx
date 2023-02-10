@@ -185,7 +185,7 @@
     <value>Resources\RWS-5-401-F002-MQM QE Form-XXX_XXXXXX_XXX.xlsm;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="SDL_5_401_F001_QE_Form_XXX_XXXXXX_XXX_XX" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\SDL-5-401-F001-QE Form_XXX_XXXXXX_XXX_XX.XLSM;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>Resources\RWS-5-401-F001-J2450 QE Form_XXX_XXXXXX_XXX_XX.XLSM;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="tqa3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\tqa3.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
