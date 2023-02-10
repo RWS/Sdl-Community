@@ -52,30 +52,33 @@ namespace TMX_Lib.TokenizeUtil
             
             _tokenizerGetTokens = tokenizerType.GetMethod("GetTokens", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(Segment), typeof(bool) }, null);
         }
+        public void TokenizeSegment(Segment result, CultureInfo language)
+        {
+	        // var setup = TokenizerSetupFactory.Create(CultureInfo.CurrentCulture);
+	        var setup = _createTokenizerSetup.Invoke(null, new[] { language });
 
-        public Segment CreateTokenizedSegment(string text, CultureInfo language)
+	        // setup.BuiltinRecognizers = BuiltinRecognizers.RecognizeAll;
+	        _builtinRecognizerProp.SetValue(setup, _builtinRecognizeAllEnumValue);
+
+	        // setup.CreateWhitespaceTokens = true;
+	        setup.GetType().GetField("CreateWhitespaceTokens").SetValue(setup, true);
+
+	        // var tokenizerParameters = new TokenizerParameters(setup, null);
+	        var tokenizerParams = _tokenizerParamsCtor.Invoke(new object[] { setup, null });
+
+	        // var tokenizer = new Tokenizer(tokenizerParameters);
+	        var tokenizer = _tokenizerCtor.Invoke(new object[] { tokenizerParams });
+
+	        // result.Tokens = tokenizer.GetTokens(segment, true);
+	        var tokens = _tokenizerGetTokens.Invoke(tokenizer, new object[] { result, true });
+	        result.Tokens = (List<Token>)tokens;
+        }
+
+		public Segment CreateTokenizedSegment(string text, CultureInfo language)
         {
             var result = new Segment(language);
             result.Add(text);
-
-            // var setup = TokenizerSetupFactory.Create(CultureInfo.CurrentCulture);
-            var setup = _createTokenizerSetup.Invoke(null, new[] { language });
-
-            // setup.BuiltinRecognizers = BuiltinRecognizers.RecognizeAll;
-            _builtinRecognizerProp.SetValue(setup, _builtinRecognizeAllEnumValue);
-
-            // setup.CreateWhitespaceTokens = true;
-            setup.GetType().GetField("CreateWhitespaceTokens").SetValue(setup, true);
-
-            // var tokenizerParameters = new TokenizerParameters(setup, null);
-            var tokenizerParams = _tokenizerParamsCtor.Invoke(new object[] { setup, null });
-
-            // var tokenizer = new Tokenizer(tokenizerParameters);
-            var tokenizer = _tokenizerCtor.Invoke(new object[] { tokenizerParams });
-
-            // result.Tokens = tokenizer.GetTokens(segment, true);
-            var tokens = _tokenizerGetTokens.Invoke(tokenizer, new object[] { result, true });
-            result.Tokens = (List<Token>)tokens;
+            TokenizeSegment(result, language);
             return result;
         }
     }
