@@ -174,7 +174,7 @@
       <SubType>Designer</SubType>
     </Content>
     <None Include="Resources\RWS-5-401-F002-MQM QE Form-XXX_XXXXXX_XXX.xlsm" />
-    <None Include="Resources\SDL-5-401-F001-QE Form_XXX_XXXXXX_XXX_XX.xlsm" />
+    <None Include="Resources\RWS-5-401-F001-QE Form_XXX_XXXXXX_XXX_XX.xlsm" />
     <None Include="Resources\tqa3.ico" />
     <None Include="Resources\Help.ico" />
   </ItemGroup>
