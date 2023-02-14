@@ -47,11 +47,23 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 			// keypress (as that was causing massive lag).
 			lpPopulationTimer.AutoReset = false;
 			lpPopulationTimer.Elapsed += lpPopulationTimer_Elapsed;
+
+			AddErrorIconsToTabControl();
+
+			LPTab.VisibleChanged += LPTab_Click;
+		}
+
+		private void AddErrorIconsToTabControl()
+		{
+			var errorIcons = new ImageList();
+			errorIcons.Images.Add(SystemIcons.Warning);
+			errorIcons.ImageSize = new Size(13, 13);
+			tabControl.ImageList = errorIcons;
 		}
 
 		private void LPTab_Click(object sender, EventArgs e)
 		{
-			ValidateMappings();
+			ValidateDataGridLanguageMappings();
 		}
 
 		public void DisplayForCredentialsOnly()
@@ -340,9 +352,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 		void TradosLPs_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
 		{
 			AddColumnsToDataGridView();
-
-			if (!CheckMappings())
-				LPTab.ImageIndex = 0;
+			ValidateTabLanguageMappings();
 
 			if (inRemoveLanguagesPreferencesTab)
 				return;
@@ -402,7 +412,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 
 		private void OKClicked(object sender, EventArgs e)
 		{
-			DialogResult = ValidateLanguageMappings();
+			DialogResult = ValidateSettingsLanguageMappings();
 			if (DialogResult == DialogResult.None)
 				return;
 
@@ -442,7 +452,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 
 		}
 
-		private DialogResult ValidateLanguageMappings()
+		private DialogResult ValidateSettingsLanguageMappings()
 		{
 			var unmappedTargetLanguages = GetUnmappedTargetLanguages();
 			var unmappedTargetLanguagesString =
@@ -456,7 +466,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 			return dialogResult == DialogResult.Yes ? DialogResult.OK : DialogResult.None;
 		}
 
-		public bool CheckMappings()
+		private void ValidateTabLanguageMappings()
 		{
 			var rows = TradosLPs.Rows;
 
@@ -464,17 +474,15 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 			{
 				var columnIndex = TradosLPs.Columns[WeaverEdgeResource.WeaverEdge_LanguagePairColumnName].Index;
 				var lpCell = row.Cells[columnIndex];
-				if (lpCell.Value is null)
-				{
-					return false;
+				if (!(lpCell.Value is null)) continue;
 
-				}
+				LPTab.ImageIndex = 0;
+				return;
 			}
-
-			return true;
+			LPTab.ImageIndex = -1;
 		}
 
-		private void ValidateMappings()
+		private void ValidateDataGridLanguageMappings()
 		{
 			var rows = TradosLPs.Rows;
 
@@ -482,10 +490,8 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 			{
 				var columnIndex = TradosLPs.Columns[WeaverEdgeResource.WeaverEdge_LanguagePairColumnName].Index;
 				var lpCell = row.Cells[columnIndex];
-				if (lpCell.Value is null)
-				{
-					lpCell.ErrorText = "Missing mapping";
-				}
+
+				lpCell.ErrorText = lpCell.Value is null ? "Missing mapping" : "";
 			}
 		}
 
@@ -494,7 +500,6 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 		{
 			var rows = TradosLPs.Rows;
 			var unmappedTargetLanguages = new List<string>();
-			var lpColumnIndex = TradosLPs.Columns[WeaverEdgeResource.WeaverEdge_LanguagePairColumnName].Index;
 
 			foreach (DataGridViewRow row in rows)
 			{
@@ -569,20 +574,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 						{
 							if (LPTab != null)
 							{
-								if (!CheckMappings())
-								{
-									LPTab.ImageIndex = 0;
-								}
-
-								var errorIcons = new ImageList();
-
-								errorIcons.Images.Add(SystemIcons.Warning);
-								errorIcons.ImageSize = new Size(13, 13);
-
-								tabControl.ImageList = errorIcons;
-
 								tabControl.Controls.Add(LPTab);
-								LPTab.VisibleChanged += LPTab_Click;
 							}
 						}));
 					}
