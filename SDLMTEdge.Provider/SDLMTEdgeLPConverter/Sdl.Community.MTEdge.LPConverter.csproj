@@ -60,6 +60,7 @@
     <EmbeddedResource Include="MTEdgeLanguages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>MTEdgeLanguages.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
