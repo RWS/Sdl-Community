@@ -51,6 +51,13 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 			AddErrorIconsToTabControl();
 
 			LPTab.VisibleChanged += LPTab_Click;
+			tabControl.Selecting += TabControl_Selecting;
+		}
+
+		private void TabControl_Selecting(object sender, TabControlCancelEventArgs e)
+		{
+			//if (e.TabPage.Name == nameof(LPTab) && e.TabPage.Tag.ToString() == "Disabled") e.Cancel = true;
+			if (e.TabPage.Name == nameof(LPTab) && !e.TabPage.Enabled) e.Cancel = true;
 		}
 
 		private void AddErrorIconsToTabControl()
@@ -184,8 +191,6 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 		private void SetTradosLPs(
 			TradosToMTEdgeLP[] languagePairChoices)
 		{
-
-
 			TradosLPs.Invoke(new Action(() =>
 			{
 				// This gets called multiple times, so let's clear out the old contents
@@ -234,8 +239,8 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 
 			var targetColumn = new DataGridViewTextBoxColumn
 			{
-				Name = "Target Language",
-				DataPropertyName = nameof(TradosToMTEdgeLP.TradosCulture),
+				Name = "Language Pair",
+				DataPropertyName = nameof(TradosToMTEdgeLP.LanguagePair),
 				ReadOnly = true
 			};
 
@@ -351,6 +356,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 
 		void TradosLPs_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
 		{
+			LPTab.Enabled = true;
 			AddColumnsToDataGridView();
 			ValidateTabLanguageMappings();
 
@@ -574,6 +580,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 						{
 							if (LPTab != null)
 							{
+								LPTab.Enabled = false;
 								tabControl.Controls.Add(LPTab);
 							}
 						}));

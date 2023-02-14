@@ -138,7 +138,7 @@ namespace Sdl.Community.MTEdge.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The following target languages are not mapped to a Language Weaver Engine. Results will not be provided for them: {0}{1}{2}{3}Do you wish to continue with these settings?.
+        ///   Looks up a localized string similar to The following Trados language pairs were not mapped to Language Weaver language pairs. Results will not be provided for them: {0}{1}{2}{3}Do you wish to continue with these settings?.
         /// </summary>
         internal static string MissingMappings_DialogMessage {
             get {

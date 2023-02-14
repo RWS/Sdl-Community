@@ -88,6 +88,7 @@ namespace Sdl.Community.MTEdge.Provider
 					},
 				(requestedLP, installedLP) =>
 					new TradosToMTEdgeLP(
+						requestedLP.ToString(),
 						tradosCulture: requestedLP.TargetCulture,
 						mtEdgeLPs: installedLP.OrderBy(lp => lp.LanguagePairId).ToList())
 			).ToList();
