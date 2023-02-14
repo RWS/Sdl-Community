@@ -19,7 +19,7 @@ namespace Sdl.Community.MTEdge.Provider {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class PluginResources {
@@ -125,6 +125,24 @@ namespace Sdl.Community.MTEdge.Provider {
             get {
                 object obj = ResourceManager.GetObject("LanguagePairsIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Missing mappings.
+        /// </summary>
+        internal static string MissingMapings_DialogTitle {
+            get {
+                return ResourceManager.GetString("MissingMapings_DialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The following target languages are not mapped to a Language Weaver Engine. Results will not be provided for them: {0}{1}{2}{3}Do you wish to continue with these settings?.
+        /// </summary>
+        internal static string MissingMappings_DialogMessage {
+            get {
+                return ResourceManager.GetString("MissingMappings_DialogMessage", resourceCulture);
             }
         }
         
