@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Model;
@@ -20,6 +21,8 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 		Task<MTCloudDictionaryInfo> GetDictionaries();
 
 		Task<SubscriptionInfo> GetLanguagePairs();
+
+		Task<LinguisticOptions> GetLinguisticOptions(string modelName);
 
 		Task<HttpResponseMessage> SendFeedback(FeedbackInfo feedbackInfo);
 

@@ -16,6 +16,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		private List<MTCloudLanguage> _targetLanguages;
 		private List<TranslationModel> _models;	
 		private List<MTCloudDictionary> _dictionaries;
+		private List<LinguisticOption> _linguisticOptions;
 
 		[DataMember]
 		public string Name { get; set; }
@@ -66,6 +67,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			{
 				_selectedModel = value;
 				OnPropertyChanged(nameof(SelectedModel));
+				LinguisticOptions = value?.LinguisticOptions;
 			}
 		}
 
@@ -122,6 +124,17 @@ namespace Sdl.Community.MTCloud.Provider.Model
 				_dictionaries = value;
 				OnPropertyChanged(nameof(Dictionaries));
 			}
-		}		
+		}
+
+		public List<LinguisticOption> LinguisticOptions
+		{
+			get => _linguisticOptions;
+			set
+			{
+				_linguisticOptions = value;
+				OnPropertyChanged(nameof(LinguisticOptions));
+			}
+		}
+
 	}
 }

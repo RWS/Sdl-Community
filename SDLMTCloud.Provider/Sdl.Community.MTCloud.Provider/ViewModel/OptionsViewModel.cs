@@ -52,6 +52,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		}
 
 		public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save);
+
 		public ICommand NavigateToCommand => _navigateToCommand ??= new RelayCommand(NavigateTo);
 
 		public ICommand ResetToDefaultsCommand => _resetToDefaultsCommand ??= new RelayCommand(ResetToDefaults);
@@ -74,7 +75,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				}
 
 				_languageMappingModels = value;
-
 				if (_languageMappingModels != null)
 				{
 					foreach (var languageMappingModel in _languageMappingModels)

@@ -109,6 +109,17 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return await _httpClient.GetResult<SubscriptionInfo>(response);
 		}
 
+		public async Task<LinguisticOptions> GetLinguisticOptions(string modelName)
+		{
+			CheckConnection();
+
+			var uri = new Uri($"{ConnectionService.CurrentWorkingPortalAddress}/v4/accounts/{ConnectionService.Credential.AccountId}/subscriptions/language-pairs/{modelName}/linguistic-options");
+			var request = GetRequestMessage(HttpMethod.Get, uri);
+
+			var response = await _httpClient.SendRequest(request);
+			return await _httpClient.GetResult<LinguisticOptions>(response);
+		}
+
 		public async Task<HttpResponseMessage> SendFeedback(FeedbackInfo feedbackInfo)
 		{
 			var feedbackRequest = CreateFeedbackRequest(feedbackInfo);
