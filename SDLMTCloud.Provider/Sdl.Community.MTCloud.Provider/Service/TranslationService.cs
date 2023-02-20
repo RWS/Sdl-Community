@@ -149,6 +149,16 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				QualityEstimation = engineModel.ToLower().Contains("qe") ? 1 : 0
 			};
 
+			if (model.SelectedModel.LinguisticOptions is not null
+			 && model.SelectedModel.LinguisticOptions.Count >= 1)
+			{
+				translationRequestModel.LinguisticOptions ??= new();
+				foreach (var linguisticOption in model.SelectedModel.LinguisticOptions)
+				{
+					translationRequestModel.LinguisticOptions.Add(linguisticOption.Name, linguisticOption.SelectedValue);
+				}
+			}
+
 			if (!model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary_available)
 				&& !model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary))
 			{

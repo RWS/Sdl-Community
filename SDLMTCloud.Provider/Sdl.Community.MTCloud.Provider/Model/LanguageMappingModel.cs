@@ -133,8 +133,10 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			{
 				_linguisticOptions = value;
 				OnPropertyChanged(nameof(LinguisticOptions));
+				OnPropertyChanged(nameof(HasLinguisticOptions));
 			}
 		}
 
+		public bool HasLinguisticOptions => LinguisticOptions?.Count >= 1;
 	}
 }
