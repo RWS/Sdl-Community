@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -157,9 +158,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			try
 			{
-				ReSendChecked = true;
-				SendFeedback = true;
-
 				_provider.Options = new Options();
 
 				IsWaiting = true;
@@ -168,16 +166,23 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					Mouse.OverrideCursor = Cursors.Wait;
 				}
 
-				if (LanguageMappingModels != null)
+				if (LanguageMappingModels is null)
 				{
-					LanguageMappingModels.Clear();
-					LoadLanguageMappings();
+					return;
+				}
 
-					if (Owner != null)
-					{
-						System.Windows.MessageBox.Show(PluginResources.Message_Successfully_reset_to_defaults,
-							Application.ProductName, MessageBoxButton.OK, MessageBoxImage.Information);
-					}
+				var selectedLanguageMappingModelName = SelectedLanguageMappingModel.Name;
+				var originalLanguageMappingModels = LanguageMappingModels.Where(x => x.Name != SelectedLanguageMappingModel.Name).ToList();
+				LanguageMappingModels.Clear();
+				LoadLanguageMappings();
+
+				originalLanguageMappingModels.Add(LanguageMappingModels.FirstOrDefault(x => x.Name.Equals(selectedLanguageMappingModelName)));
+				LanguageMappingModels = new(originalLanguageMappingModels);
+				SelectedLanguageMappingModel = LanguageMappingModels.FirstOrDefault(x => x.Name.Equals(selectedLanguageMappingModelName));
+				if (Owner != null)
+				{
+					System.Windows.MessageBox.Show(PluginResources.Message_Successfully_reset_to_defaults,
+						Application.ProductName, MessageBoxButton.OK, MessageBoxImage.Information);
 				}
 			}
 			catch (Exception ex)
