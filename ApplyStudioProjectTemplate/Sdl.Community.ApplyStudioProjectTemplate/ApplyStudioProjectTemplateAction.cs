@@ -492,6 +492,9 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					// Use reflection to synch the project to the server
 					try
 					{
+						// re-analyze files, otherwise, everything would be "n/a" (SDLCOM-4268)
+						var targetIds = targetProject.GetTargetLanguageFiles().Select(f => f.Id).ToArray();
+						targetProject.RunAutomaticTask(targetIds, AutomaticTaskTemplateIds.AnalyzeFiles);
 						targetProject.Save();
 
 						var project = typeof(FileBasedProject).GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(targetProject);
