@@ -85,7 +85,6 @@
 				   IsHitTestVisible="False"
 				   Source="pack://application:,,,/LanguageWeaver;component/Resources/LWLogo.png" />
 
-
 			<Border Background="White"
 					Grid.Column="0"
 					Grid.Row="2">
@@ -127,7 +126,7 @@
 													CanUserSort="True"
 													IsReadOnly="True"
 													SortMemberPath="ProjectLanguagePair"
-													HeaderStyle="{StaticResource NoRightBorderColumnHeaderStyle}">
+													HeaderStyle="{StaticResource Sdl.DataGridColumnHeader.GenericStyle}">
 								<DataGridTemplateColumn.CellTemplate>
 									<DataTemplate DataType="model:LanguageMappingModel">
 										<StackPanel Orientation="Horizontal">
@@ -144,7 +143,7 @@
 							<DataGridTemplateColumn Header="Source"
 													CanUserSort="True"
 													SortMemberPath="SelectedMTCodeSource.CodeName"
-													HeaderStyle="{StaticResource NoRightBorderColumnHeaderStyle}">
+													HeaderStyle="{StaticResource Sdl.DataGridColumnHeader.GenericStyle}">
 								<DataGridTemplateColumn.CellTemplate>
 									<DataTemplate DataType="model:LanguageMappingModel">
 										<ComboBox ItemsSource="{Binding SourceLanguages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -184,7 +183,7 @@
 							<DataGridTemplateColumn Header="Target"
 													CanUserSort="True"
 													SortMemberPath="SelectedMTCodeTarget.CodeName"
-													HeaderStyle="{StaticResource NoRightBorderColumnHeaderStyle}">
+													HeaderStyle="{StaticResource Sdl.DataGridColumnHeader.GenericStyle}">
 								<DataGridTemplateColumn.CellTemplate>
 									<DataTemplate DataType="model:LanguageMappingModel">
 										<ComboBox ItemsSource="{Binding TargetLanguages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -224,7 +223,7 @@
 							<DataGridTemplateColumn Header="Model"
 													CanUserSort="True"
 													SortMemberPath="SelectedModelOption.DisplayName"
-													HeaderStyle="{StaticResource NoRightBorderColumnHeaderStyle}">
+													HeaderStyle="{StaticResource Sdl.DataGridColumnHeader.GenericStyle}">
 								<DataGridTemplateColumn.CellTemplate>
 									<DataTemplate DataType="model:LanguageMappingModel">
 										<ComboBox ItemsSource="{Binding Models, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
@@ -267,13 +266,13 @@
 													SortMemberPath="SelectedMTCloudDictionary.Name"
 													IsReadOnly="True"
 													Width="*"
-													HeaderStyle="{StaticResource NoRightBorderColumnHeaderStyle}">
+													HeaderStyle="{StaticResource Sdl.DataGridColumnHeader.GenericStyle}">
 								<DataGridTemplateColumn.CellTemplate>
 									<DataTemplate DataType="model:LanguageMappingModel">
-									<ComboBox  ItemsSource="{Binding Dictionaries,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+										<ComboBox  ItemsSource="{Binding Dictionaries,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
 												   Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
 												   IsReadOnly="True"
-											   SelectedItem="{Binding SelectedDictionary, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+												   SelectedItem="{Binding SelectedDictionary, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
 												   Cursor="Hand"
 												   Background="Transparent"
 												   BorderThickness="1"
@@ -317,10 +316,9 @@
 													   HorizontalAlignment="Center"
 													   Visibility="{Binding HasLinguisticOptions, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}" />
 
-											<ListBox  ItemsSource="{Binding LinguisticOptions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+											<ListBox  x:Name="linguisticOptionsList"
+													  ItemsSource="{Binding LinguisticOptions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 													  Visibility="{Binding HasLinguisticOptions, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-													  HorizontalContentAlignment="Stretch"
-													  VerticalContentAlignment="Center"
 													  BorderThickness="0"
 													  Background="Transparent"
 													  Padding="0">
@@ -329,14 +327,26 @@
 														<Setter Property="Background"
 																Value="Transparent" />
 													</Style>
-
 													<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
 																	 Color="Transparent" />
 												</ListBox.Resources>
+
 												<ListBox.ItemContainerStyle>
 													<Style TargetType="ListBoxItem">
 														<Setter Property="IsTabStop"
 																Value="False" />
+														<Setter Property="Focusable"
+																Value="False" />
+														<Setter Property="Template">
+															<Setter.Value>
+																<ControlTemplate TargetType="ListBoxItem">
+																	<Border Background="Transparent">
+																		<ContentPresenter HorizontalAlignment="Stretch"
+																						  VerticalAlignment="Center" />
+																	</Border>
+																</ControlTemplate>
+															</Setter.Value>
+														</Setter>
 													</Style>
 												</ListBox.ItemContainerStyle>
 												<ListBox.ItemTemplate>
@@ -361,7 +371,7 @@
 						</DataGrid.Columns>
 					</controls:SortAwareDataGrid>
 				</StackPanel>
-				
+
 				<StackPanel Grid.Row="1">
 					<CheckBox Style="{StaticResource OptionsCheckboxesStyle}"
 							  IsChecked="{Binding ReSendChecked}"
