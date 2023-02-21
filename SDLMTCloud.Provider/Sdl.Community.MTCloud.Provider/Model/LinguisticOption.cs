@@ -7,6 +7,14 @@ namespace Sdl.Community.MTCloud.Provider.Model
 	{
 		private string _selectedValue;
 
+		[JsonIgnore]
+		public string DispayName => Name.Length switch
+		{
+			>= 13 => Name.Substring(0, 10) + "...",
+			_ => Name
+		};
+
+		[JsonIgnore]
 		public string SelectedValue
 		{
 			get => _selectedValue ??= SystemDefault;

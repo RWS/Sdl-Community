@@ -349,18 +349,24 @@
 														</Setter>
 													</Style>
 												</ListBox.ItemContainerStyle>
+												
 												<ListBox.ItemTemplate>
 													<DataTemplate>
-														<StackPanel HorizontalAlignment="Stretch"
-																	VerticalAlignment="Center">
-															<TextBlock Text="{Binding Name}"
+														<DockPanel Margin="4 0">
+															<TextBlock Text="{Binding DispayName}"
 																	   ToolTip="{Binding Name}"
-																	   Style="{StaticResource CellInformationText}" />
+																	   Style="{StaticResource CellInformationText}"
+																	   DockPanel.Dock="Left"
+																	   MinWidth="85"
+																	   Margin="0" />
+															
 															<ComboBox ItemsSource="{Binding Values}"
 																	  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
 																	  SelectedValue="{Binding SelectedValue}"
+																	  DockPanel.Dock="Right"
+																	  HorizontalAlignment="Stretch"
 																	  Cursor="Hand" />
-														</StackPanel>
+														</DockPanel>
 													</DataTemplate>
 												</ListBox.ItemTemplate>
 											</ListBox>
