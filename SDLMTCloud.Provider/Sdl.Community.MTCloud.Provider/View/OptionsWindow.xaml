@@ -402,19 +402,61 @@
 					BorderBrush="#ABB0B3">
 				<Grid VerticalAlignment="Center"
 					  Margin="15,15,0,15">
+
 					<StackPanel Orientation="Horizontal"
 								HorizontalAlignment="Left"
 								VerticalAlignment="Bottom">
 
-						<Button Style="{StaticResource ButtonStyleShadowless}"
-								VerticalAlignment="Bottom"
-								Margin="0,0,15,0"
-								Content="Reset to Defaults"
-								Command="{Binding ResetToDefaultsCommand}" />
+						<Grid Margin="0 0 15 0">
+							<ComboBox x:Name="Reset_ComboBox"
+									  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+									  BorderThickness="0"
+									  Cursor="Hand">
+
+								<ComboBoxItem HorizontalContentAlignment="Stretch"
+											  Width="120">
+									<Button Content="Reset all"
+											Style="{StaticResource Sdl.Button.SecondaryStyle}"
+											Command="{Binding ResetToDefaultsCommand}"
+											CommandParameter="ResetAll"
+											Margin="-10 -5 -10 0" />
+								</ComboBoxItem>
+
+								<ComboBoxItem HorizontalContentAlignment="Stretch"
+											  Width="120">
+									<Button Content="Reset selected"
+											Style="{StaticResource Sdl.Button.SecondaryStyle}"
+											Command="{Binding ResetToDefaultsCommand}"
+											CommandParameter="ResetSelected"
+											Margin="-10 -5 -10 -5" />
+								</ComboBoxItem>
+							</ComboBox>
+
+							<Button x:Name="Reset_Button"
+									Style="{StaticResource ButtonStyleShadowless}"
+									Width="130"
+									Height="30"
+									HorizontalAlignment="Center"
+									VerticalAlignment="Center"
+									Click="Reset_Button_Click"
+									Padding="0">
+								<Button.Content>
+									<DockPanel>
+										<TextBlock Text="Reset to default" />
+										<Image Source="../Resources/dropdownarrow.png"
+											   DockPanel.Dock="Right"
+											   Width="15"
+											   Height="15"
+											   Margin="8 -5 -18 0"/>
+									</DockPanel>
+								</Button.Content>
+							</Button>
+						</Grid>
 
 						<Button Style="{StaticResource ButtonStyleShadowless}"
 								VerticalAlignment="Bottom"
 								Margin="0,0,15,0"
+								Height="30"
 								Content="View Language Mapping"
 								Command="{Binding ViewLanguageMappingsCommand}" />
 
@@ -424,8 +466,8 @@
 								CommandParameter="account"
 								VerticalAlignment="Bottom"
 								Margin="0 0 15 0"
-								Padding="16 0"
-								Height="26" />
+								Height="30"
+								Padding="16 0"/>
 					</StackPanel>
 
 					<StackPanel Orientation="Horizontal"

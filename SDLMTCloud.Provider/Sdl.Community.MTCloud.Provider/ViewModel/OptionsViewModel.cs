@@ -171,14 +171,23 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					return;
 				}
 
-				var selectedLanguageMappingModelName = SelectedLanguageMappingModel.Name;
-				var originalLanguageMappingModels = LanguageMappingModels.Where(x => x.Name != SelectedLanguageMappingModel.Name).ToList();
-				LanguageMappingModels.Clear();
-				LoadLanguageMappings();
+				if ((parameter as string) == "ResetSelected" && SelectedLanguageMappingModel is not null)
+				{
+					var selectedLanguageMappingModelName = SelectedLanguageMappingModel.Name;
+					var originalLanguageMappingModels = LanguageMappingModels.Where(x => x.Name != SelectedLanguageMappingModel.Name).ToList();
+					LanguageMappingModels.Clear();
+					LoadLanguageMappings();
 
-				originalLanguageMappingModels.Add(LanguageMappingModels.FirstOrDefault(x => x.Name.Equals(selectedLanguageMappingModelName)));
-				LanguageMappingModels = new(originalLanguageMappingModels);
-				SelectedLanguageMappingModel = LanguageMappingModels.FirstOrDefault(x => x.Name.Equals(selectedLanguageMappingModelName));
+					originalLanguageMappingModels.Add(LanguageMappingModels.FirstOrDefault(x => x.Name.Equals(selectedLanguageMappingModelName)));
+					LanguageMappingModels = new(originalLanguageMappingModels);
+					SelectedLanguageMappingModel = LanguageMappingModels.FirstOrDefault(x => x.Name.Equals(selectedLanguageMappingModelName));
+				}
+				else
+				{
+					LanguageMappingModels.Clear();
+					LoadLanguageMappings();
+				}
+
 				if (Owner != null)
 				{
 					System.Windows.MessageBox.Show(PluginResources.Message_Successfully_reset_to_defaults,
