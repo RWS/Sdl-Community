@@ -14,5 +14,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		public List<MTCloudLanguage> TargetLanguageMappings { get; set; }
 		public LanguageMappingModel SavedLanguageMappingModel { get; set; }
 		public List<TranslationModel> EngineModels { get; set; }
+		public List<LinguisticOptions> LinguisticOptions { get; set; }
+		public string LinguisticOption { get; set; }
 	}
 }

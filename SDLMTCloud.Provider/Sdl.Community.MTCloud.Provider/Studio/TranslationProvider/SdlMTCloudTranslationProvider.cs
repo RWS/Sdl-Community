@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Office.Interop.Excel;
 using Newtonsoft.Json;
 using NLog;
 using Sdl.Community.MTCloud.Languages.Provider.Interfaces;
@@ -42,7 +43,20 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 
 		public ILanguageProvider LanguageProvider { get; }
 
-		public string Name => PluginResources.SDLMTCloud_Provider_Name;
+		public string Name
+		{
+			get
+			{
+				var selectedModelName = Options.LanguageMappings?
+											   .FirstOrDefault(x => x.TargetTradosCode.Equals(LanguageDirectionProvider?.TargetLanguage?.Name))
+											   .SelectedModel?
+											   .MTCloudLanguagePair
+											   .DisplayName;
+				return string.IsNullOrEmpty(selectedModelName)
+					 ? PluginResources.SDLMTCloud_Provider_Name
+					 : $"{PluginResources.SDLMTCloud_Provider_Name} - {selectedModelName}";
+			}
+		}
 
 		public Options Options
 		{
@@ -108,7 +122,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 		{
 			var mapping = new InternalLanguageMapping
 			{
-				SourceLanguageCode = mappedLanguages?.FirstOrDefault(s => s.TradosCode.Equals(languageDirection.SourceCulture?.Name))
+				SourceLanguageCode = mappedLanguages?.FirstOrDefault(s => s.TradosCode.Equals(languageDirection.SourceCulture?.Name)),
+				LinguisticOptions = new()
 			};
 
 			if (mapping.SourceLanguageCode == null)
@@ -228,16 +243,23 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 		private LanguageMappingModel GetLanguageMappingModel(InternalLanguageMapping mapping)
 		{
 			// assign the selected model
-			var selectedModel = mapping.EngineModels.FirstOrDefault(a => a.DisplayName.Equals(mapping.SavedLanguageMappingModel?.SelectedModel?.DisplayName, StringComparison.InvariantCultureIgnoreCase))
-								?? mapping.EngineModels.FirstOrDefault(a => a.Model != null && a.Model.Equals("generic", StringComparison.InvariantCultureIgnoreCase))
-								?? mapping.EngineModels[0];
+			var selectedModel =
+				mapping.EngineModels.FirstOrDefault(a => a.DisplayName.Equals(mapping.SavedLanguageMappingModel?.SelectedModel?.DisplayName, StringComparison.InvariantCultureIgnoreCase))
+			 ?? mapping.EngineModels.FirstOrDefault(a => a.Model != null && a.Model.Equals("generic", StringComparison.InvariantCultureIgnoreCase))
+			 ?? mapping.EngineModels[0];
 
 			var dictionaries = LanguageMappingsService.GetDictionaries(mapping.SelectedSourceLanguageMapping, mapping.SelectedTargetLanguageMapping);
 
 			// assign the selected dictionary
 			var selectedDictionary =
 				dictionaries.FirstOrDefault(a => a.Name.Equals(mapping.SavedLanguageMappingModel?.SelectedDictionary?.Name))
-				?? dictionaries[0];
+			 ?? dictionaries[0];
+
+			var selectedLinguisticOption =
+				mapping.LinguisticOptions?.FirstOrDefault(x => x.Equals(mapping?.SavedLanguageMappingModel?.SelectedLinguisticOption))
+			 ?? mapping.LinguisticOptions?.FirstOrDefault()
+			 ?? new();
+			selectedLinguisticOption.SystemDefault = mapping.SavedLanguageMappingModel?.LinguisticOption;
 
 			var languageMappingModel = new LanguageMappingModel
 			{

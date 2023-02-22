@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoogleCloudTranslationProvider", "GoogleCloudTranslationProvider.csproj", "{F8AFC14C-507A-4355-BC5F-69A340432FB3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F8AFC14C-507A-4355-BC5F-69A340432FB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8AFC14C-507A-4355-BC5F-69A340432FB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8AFC14C-507A-4355-BC5F-69A340432FB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8AFC14C-507A-4355-BC5F-69A340432FB3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E45FE6CD-A75E-4825-96EE-7F42F1A9E58E}
+	EndGlobalSection
+EndGlobal

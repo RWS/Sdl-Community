@@ -21,6 +21,10 @@ namespace MicrosoftTranslatorProvider.Interfaces
 
 		bool IsTellMeAction { get; set; }
 
+		string CustomProviderName { get; set; }
+
+		bool UseCustomProviderName { get; set; }
+
 		BaseModel ViewModel { get; set; }
 
 		ICommand ShowMainWindowCommand { get; set; }

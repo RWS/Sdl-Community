@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Net;
-using System.Resources;
 using System.Windows.Forms;
-using System.Windows.Threading;
-using Newtonsoft.Json;
 using NLog;
 using Sdl.Community.MTEdge.Provider.Helpers;
+using Sdl.Community.MTEdge.Provider.Properties;
 using Sdl.Community.MTEdge.Provider.SDLMTEdgeApi;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -39,7 +39,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 			setDefaultTM.Checked = PluginConfiguration.CurrentInstance.DefaultConnection.HasValue
 				&& PluginConfiguration.CurrentInstance.DefaultConnection.Value.Host == Options.Host
 				&& PluginConfiguration.CurrentInstance.DefaultConnection.Value.Port == Options.Port;
-		
+
 			UpdateDialog();
 			Text = Properties.WeaverEdgeResource.WeaverEdge_OptionsWindowTitle;
 
@@ -47,6 +47,30 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 			// keypress (as that was causing massive lag).
 			lpPopulationTimer.AutoReset = false;
 			lpPopulationTimer.Elapsed += lpPopulationTimer_Elapsed;
+
+			AddErrorIconsToTabControl();
+
+			LPTab.VisibleChanged += LPTab_Click;
+			tabControl.Selecting += TabControl_Selecting;
+		}
+
+		private void TabControl_Selecting(object sender, TabControlCancelEventArgs e)
+		{
+			//if (e.TabPage.Name == nameof(LPTab) && e.TabPage.Tag.ToString() == "Disabled") e.Cancel = true;
+			if (e.TabPage.Name == nameof(LPTab) && !e.TabPage.Enabled) e.Cancel = true;
+		}
+
+		private void AddErrorIconsToTabControl()
+		{
+			var errorIcons = new ImageList();
+			errorIcons.Images.Add(SystemIcons.Warning);
+			errorIcons.ImageSize = new Size(13, 13);
+			tabControl.ImageList = errorIcons;
+		}
+
+		private void LPTab_Click(object sender, EventArgs e)
+		{
+			ValidateDataGridLanguageMappings();
 		}
 
 		public void DisplayForCredentialsOnly()
@@ -152,10 +176,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 				Options.SetDictionaries(languagePairChoices);
 
 				// Since this is run on a separate thread, use invoke inside SetTradosLPs() to communicate with the master thread.
-				var lpChoicesColumn = new DataGridViewComboBoxColumn();
-				var lpDictionariesColumn = new DataGridViewComboBoxColumn();
-
-				SetTradosLPs(lpChoicesColumn, lpDictionariesColumn, languagePairChoices);
+				SetTradosLPs(languagePairChoices);
 			}
 			else
 			{
@@ -166,34 +187,13 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 		/// <summary>
 		/// Set the TradosLPs grid values
 		/// </summary>
-		/// <param name="lpChoicesColumn">lpChoicesColumn</param>
-		/// <param name="lpDictionariesColumn">lpDictionariesColumn</param>
-		/// <param name="languagePairChoices">languagePairChoicess</param>
+		/// <param name="languagePairChoices">languagePairChoices</param>
 		private void SetTradosLPs(
-			DataGridViewComboBoxColumn lpChoicesColumn,
-			DataGridViewComboBoxColumn lpDictionariesColumn,
 			TradosToMTEdgeLP[] languagePairChoices)
 		{
 			TradosLPs.Invoke(new Action(() =>
 			{
 				// This gets called multiple times, so let's clear out the old contents
-				TradosLPs.Columns.Clear();
-				TradosLPs.AutoGenerateColumns = false;
-
-				var targetColumn = new DataGridViewTextBoxColumn
-				{
-					Name = "Target Language",
-					DataPropertyName = "TradosCulture",
-					ReadOnly = true
-				};
-
-				lpChoicesColumn.Name = Properties.WeaverEdgeResource.WeaverEdge_LanguagePairColumnName;
-				lpChoicesColumn.FlatStyle = FlatStyle.Flat;
-
-				lpDictionariesColumn.Name = Properties.WeaverEdgeResource.WeaverEdge_DictionariesColumnName;
-				lpDictionariesColumn.FlatStyle = FlatStyle.Flat;
-
-				TradosLPs.Columns.AddRange(targetColumn, lpChoicesColumn, lpDictionariesColumn);
 
 				// Handler for populating combobox
 				TradosLPs.DataBindingComplete += TradosLPs_DataBindingComplete;
@@ -230,6 +230,31 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 					_logger.Error($"{e.Message}\n {e.StackTrace}");
 				}
 			}));
+		}
+
+		private void AddColumnsToDataGridView()
+		{
+			TradosLPs.Columns.Clear();
+			TradosLPs.AutoGenerateColumns = false;
+
+			var targetColumn = new DataGridViewTextBoxColumn
+			{
+				Name = "Language Pair",
+				DataPropertyName = nameof(TradosToMTEdgeLP.LanguagePair),
+				ReadOnly = true
+			};
+
+			var lpChoicesColumn = new DataGridViewComboBoxColumn
+			{
+				Name = WeaverEdgeResource.WeaverEdge_LanguagePairColumnName,
+				FlatStyle = FlatStyle.Flat,
+			};
+			var lpDictionariesColumn = new DataGridViewComboBoxColumn();
+
+			lpDictionariesColumn.Name = WeaverEdgeResource.WeaverEdge_DictionariesColumnName;
+			lpDictionariesColumn.FlatStyle = FlatStyle.Flat;
+
+			TradosLPs.Columns.AddRange(targetColumn, lpChoicesColumn, lpDictionariesColumn);
 		}
 
 		private void RemoveIncorrectLanguageSet()
@@ -308,7 +333,8 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 		{
 			const int languagePairColumnIndex = 1;
 			var languagePairComboBox = (DataGridViewComboBoxCell)TradosLPs.Rows[e.RowIndex].Cells[languagePairColumnIndex];
-			if (languagePairComboBox.Value == null) return;
+			if (languagePairComboBox.Value == null)
+				return;
 
 			//Valentin -> Only in the comboboxColumnIndex column the Tag it's bind with a TradosToMTEdgeLP correspondent object for the current row . olumn 2 or 3 have no bind in its Tag...
 			if (TradosLPs[languagePairColumnIndex, e.RowIndex].Tag is TradosToMTEdgeLP lpPairing)
@@ -323,20 +349,26 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 				//Valentin - each column with its calls. Otherwise it's a mess. for each cell from the grid will execute the same for X times. Sometimes  it will ruin what the previous call set in Options, just because now it's on another column another cell etc. ....
 				if (TradosLPs[e.ColumnIndex, e.RowIndex].OwningColumn.Name.Equals(Properties.WeaverEdgeResource.WeaverEdge_DictionariesColumnName))
 				{
-				
+
 					Options.LPPreferences[lpPairing.TradosCulture].DictionaryId = TradosLPs[e.ColumnIndex, e.RowIndex].Value as string;
 				}
 		}
 
 		void TradosLPs_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
 		{
-			if (inRemoveLanguagesPreferencesTab) return;
+			LPTab.Enabled = true;
+			AddColumnsToDataGridView();
+			ValidateTabLanguageMappings();
+
+			if (inRemoveLanguagesPreferencesTab)
+				return;
 			for (var i = 0; i < TradosLPs?.Rows.Count; i++)
 			{
 				var languagePairsComboCell = (DataGridViewComboBoxCell)TradosLPs.Rows[i].Cells[Properties.WeaverEdgeResource.WeaverEdge_LanguagePairColumnName];
 				var dictionariesComboCell = (DataGridViewComboBoxCell)TradosLPs.Rows[i].Cells[Properties.WeaverEdgeResource.WeaverEdge_DictionariesColumnName];
 				var entry = TradosLPs.Rows[i].DataBoundItem as TradosToMTEdgeLP;
-				if (entry == null) continue;
+				if (entry == null)
+					continue;
 
 				languagePairsComboCell.Tag = entry;
 				languagePairsComboCell.DataSource = entry.MtEdgeLPs.Select(lp => lp.LanguagePairId).ToList();
@@ -362,6 +394,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 				{
 					dictionariesComboCell.Value = Constants.NoDictionary;
 				}
+
 			}
 		}
 
@@ -385,6 +418,10 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 
 		private void OKClicked(object sender, EventArgs e)
 		{
+			DialogResult = ValidateSettingsLanguageMappings();
+			if (DialogResult == DialogResult.None)
+				return;
+
 			var port = GetPort();
 			if (!port.HasValue)
 			{
@@ -395,7 +432,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 			}
 
 			var credentials = GetCredentials();
-			
+
 			if (!AuthenticateCredentials(credentials))
 				return;
 
@@ -418,6 +455,71 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 				PluginConfiguration.CurrentInstance.DefaultConnection = null;
 				PluginConfiguration.CurrentInstance.SaveToFile();
 			}
+
+		}
+
+		private DialogResult ValidateSettingsLanguageMappings()
+		{
+			var unmappedTargetLanguages = GetUnmappedTargetLanguages();
+			var unmappedTargetLanguagesString =
+				unmappedTargetLanguages.Aggregate("", (current, tl) => current + $"{Environment.NewLine}• {tl}");
+
+			var dialogResult = MessageBox.Show(
+				string.Format(PluginResources.MissingMappings_DialogMessage, Environment.NewLine,
+					unmappedTargetLanguagesString, Environment.NewLine, Environment.NewLine),
+				PluginResources.MissingMapings_DialogTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+			return dialogResult == DialogResult.Yes ? DialogResult.OK : DialogResult.None;
+		}
+
+		private void ValidateTabLanguageMappings()
+		{
+			var rows = TradosLPs.Rows;
+
+			foreach (DataGridViewRow row in rows)
+			{
+				var columnIndex = TradosLPs.Columns[WeaverEdgeResource.WeaverEdge_LanguagePairColumnName].Index;
+				var lpCell = row.Cells[columnIndex];
+				if (!(lpCell.Value is null)) continue;
+
+				LPTab.ImageIndex = 0;
+				return;
+			}
+			LPTab.ImageIndex = -1;
+		}
+
+		private void ValidateDataGridLanguageMappings()
+		{
+			var rows = TradosLPs.Rows;
+
+			foreach (DataGridViewRow row in rows)
+			{
+				var columnIndex = TradosLPs.Columns[WeaverEdgeResource.WeaverEdge_LanguagePairColumnName].Index;
+				var lpCell = row.Cells[columnIndex];
+
+				lpCell.ErrorText = lpCell.Value is null ? "Missing mapping" : "";
+			}
+		}
+
+
+		private List<string> GetUnmappedTargetLanguages()
+		{
+			var rows = TradosLPs.Rows;
+			var unmappedTargetLanguages = new List<string>();
+
+			foreach (DataGridViewRow row in rows)
+			{
+				var item = TradosLPs.Rows[row.Index].DataBoundItem as TradosToMTEdgeLP;
+				if (!item.MtEdgeLPs.Any())
+				{
+					var unmappedTargetLanguage = row.Cells[0].Value.ToString();
+					if (!unmappedTargetLanguages.Contains(unmappedTargetLanguage))
+						unmappedTargetLanguages.Add(unmappedTargetLanguage);
+				}
+			}
+
+
+			return unmappedTargetLanguages;
 		}
 
 		private GenericCredentials GetCredentials()
@@ -478,6 +580,7 @@ namespace Sdl.Community.MTEdge.Provider.Dialogs
 						{
 							if (LPTab != null)
 							{
+								LPTab.Enabled = false;
 								tabControl.Controls.Add(LPTab);
 							}
 						}));

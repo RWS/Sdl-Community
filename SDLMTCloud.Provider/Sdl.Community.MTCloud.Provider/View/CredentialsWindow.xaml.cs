@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using Sdl.Community.MTCloud.Provider.UiHelpers.Watermark;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 
 namespace Sdl.Community.MTCloud.Provider.View
@@ -12,6 +13,8 @@ namespace Sdl.Community.MTCloud.Provider.View
 		public CredentialsWindow()
 		{
 			InitializeComponent();
+			WatermarkHandler.Handle(UserNameBox);
+			WatermarkHandler.Handle(UserPasswordBox);
 		}
 
 		private void CenterWindowOnScreen(double width, double height)

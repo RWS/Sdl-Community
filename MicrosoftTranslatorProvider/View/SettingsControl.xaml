@@ -20,10 +20,27 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBoxResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter" />
+			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<Grid Margin="24 42 24 0">
 		<StackPanel>
+			<CheckBox Content="Use custom name for this provider"
+					  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+					  IsChecked="{Binding UseCustomProviderName}"
+					  Cursor="Hand"
+					  Margin="0 12 0 0" />
+			<TextBox Text="{Binding CustomProviderName, UpdateSourceTrigger=PropertyChanged}"
+					 Style="{StaticResource WatermarkTextBox}"
+					 Visibility="{Binding UseCustomProviderName, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+					 uiHelpers:TextBoxWatermarkHelper.WatermarkText="Type your custom name clear"
+					 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+					 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="CustomProviderName"
+					 IsEnabled="{Binding UseCustomProviderName,Converter={StaticResource InvertableBoolEnabledConverter}}"
+					 HorizontalAlignment="Left"
+					 Width="494"
+					 Margin="0 2 0 0" />
+			
 			<CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 					  IsChecked="{Binding ReSendDraft}"
 					  Content="{x:Static root:PluginResources.ReSendDescription}"
@@ -38,19 +55,19 @@
 					  IsChecked="{Binding DoPreLookup}"
 					  Content="{x:Static root:PluginResources.PreLookDescription}"
 					  Margin="0 12 0 0" />
-			<StackPanel Orientation="Horizontal">
+			<StackPanel Orientation="Horizontal"
+						Visibility="{Binding DoPreLookup,Converter={StaticResource InvertableBooleanToVisibilityConverter}}">
 				<Button Style="{StaticResource Sdl.Button.DialogStyle}"
 						Content="{x:Static root:PluginResources.BrowseBtn}"
 						Cursor="Hand"
 						Command="{Binding BrowseCommand}"
-						IsEnabled="{Binding DoPreLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
 						CommandParameter="{x:Static root:PluginResources.PreLookBrowse}"
-						Margin="0 2 8 0"/>
+						Margin="0 2 8 0" />
 				<TextBox Style="{StaticResource WatermarkTextBox}"
 						 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.PreLookupWaterMark}"
 						 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="PreLookupFileName"
 						 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-						 IsEnabled="{Binding DoPreLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
+						 Width="450"
 						 Text="{Binding PreLookupFileName}"
 						 VerticalContentAlignment="Center" />
 			</StackPanel>
@@ -59,20 +76,20 @@
 					  IsChecked="{Binding DoPostLookup}"
 					  Content="{x:Static root:PluginResources.PostLookupDescription}"
 					  Margin="0 12 0 0" />
-			<StackPanel Orientation="Horizontal">
+			<StackPanel Orientation="Horizontal"
+						Visibility="{Binding DoPostLookup,Converter={StaticResource InvertableBooleanToVisibilityConverter}}">
 				<Button Style="{StaticResource Sdl.Button.DialogStyle}"
 						Content="{x:Static root:PluginResources.BrowseBtn}"
 						Command="{Binding BrowseCommand}"
 						CommandParameter="{x:Static root:PluginResources.PostLookupBrowse}"
-						IsEnabled="{Binding DoPostLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
-						Cursor="Hand" 
-						Margin="0 2 8 0"/>
+						Cursor="Hand"
+						Margin="0 2 8 0" />
 				<TextBox Style="{StaticResource WatermarkTextBox}"
 						 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.PostLookupWaterMark}"
 						 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="PostLookupFileName"
 						 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
 						 Text="{Binding PostLookupFileName}"
-						 IsEnabled="{Binding DoPostLookup,Converter={StaticResource InvertableBoolEnabledConverter}}"
+						 Width="450"
 						 VerticalContentAlignment="Center" />
 			</StackPanel>
 		</StackPanel>

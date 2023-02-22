@@ -16,10 +16,14 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -124,6 +128,12 @@
       <DependentUpon>ApplyTemplateForm.cs</DependentUpon>
     </Compile>
     <Compile Include="TemplateLanguageDetails.cs" />
+    <Compile Include="WarningForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WarningForm.Designer.cs">
+      <DependentUpon>WarningForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="TermbaseWarningForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -150,6 +160,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ApplyTemplateForm.resx">
       <DependentUpon>ApplyTemplateForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WarningForm.resx">
+      <DependentUpon>WarningForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TermbaseWarningForm.resx">
       <DependentUpon>TermbaseWarningForm.cs</DependentUpon>

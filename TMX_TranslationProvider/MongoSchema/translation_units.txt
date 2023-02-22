@@ -1,0 +1,205 @@
+{
+  "fields": [
+    {
+      "name": "_id",
+      "path": "_id",
+      "count": 2,
+      "types": [
+        {
+          "name": "ObjectID",
+          "bsonType": "ObjectID",
+          "path": "_id",
+          "count": 2,
+          "values": [
+            "6377b6ec7ac6e68ae3bfe617",
+            "6377b6ec7ac6e68ae3bfe616"
+          ],
+          "total_count": 0,
+          "probability": 1,
+          "unique": 2,
+          "has_duplicates": false
+        }
+      ],
+      "total_count": 2,
+      "type": "ObjectID",
+      "has_duplicates": false,
+      "probability": 1
+    },
+    {
+      "name": "Change Author",
+      "path": "Change Author",
+      "count": 2,
+      "types": [
+        {
+          "name": "String",
+          "bsonType": "String",
+          "path": "Change Author",
+          "count": 2,
+          "values": [
+            "Titi",
+            "Gigi"
+          ],
+          "total_count": 0,
+          "probability": 1,
+          "unique": 2,
+          "has_duplicates": false
+        }
+      ],
+      "total_count": 2,
+      "type": "String",
+      "has_duplicates": false,
+      "probability": 1
+    },
+    {
+      "name": "Change Date",
+      "path": "Change Date",
+      "count": 2,
+      "types": [
+        {
+          "name": "Date",
+          "bsonType": "Date",
+          "path": "Change Date",
+          "count": 2,
+          "values": [
+            "2022-10-01T21:03:00.000Z",
+            "2022-10-02T08:03:00.000Z"
+          ],
+          "total_count": 0,
+          "probability": 1,
+          "unique": 2,
+          "has_duplicates": false
+        }
+      ],
+      "total_count": 2,
+      "type": "Date",
+      "has_duplicates": false,
+      "probability": 1
+    },
+    {
+      "name": "Creation Author",
+      "path": "Creation Author",
+      "count": 2,
+      "types": [
+        {
+          "name": "String",
+          "bsonType": "String",
+          "path": "Creation Author",
+          "count": 2,
+          "values": [
+            "Gigi",
+            "John"
+          ],
+          "total_count": 0,
+          "probability": 1,
+          "unique": 2,
+          "has_duplicates": false
+        }
+      ],
+      "total_count": 2,
+      "type": "String",
+      "has_duplicates": false,
+      "probability": 1
+    },
+    {
+      "name": "Creation Date",
+      "path": "Creation Date",
+      "count": 2,
+      "types": [
+        {
+          "name": "Date",
+          "bsonType": "Date",
+          "path": "Creation Date",
+          "count": 2,
+          "values": [
+            "2022-09-21T07:02:00.000Z",
+            "2022-09-20T07:02:00.000Z"
+          ],
+          "total_count": 0,
+          "probability": 1,
+          "unique": 2,
+          "has_duplicates": false
+        }
+      ],
+      "total_count": 2,
+      "type": "Date",
+      "has_duplicates": false,
+      "probability": 1
+    },
+    {
+      "name": "ID",
+      "path": "ID",
+      "count": 2,
+      "types": [
+        {
+          "name": "Int32",
+          "bsonType": "Int32",
+          "path": "ID",
+          "count": 2,
+          "values": [
+            2,
+            1
+          ],
+          "total_count": 0,
+          "probability": 1,
+          "unique": 2,
+          "has_duplicates": false
+        }
+      ],
+      "total_count": 2,
+      "type": "Int32",
+      "has_duplicates": false,
+      "probability": 1
+    },
+    {
+      "name": "Tu Attributes",
+      "path": "Tu Attributes",
+      "count": 2,
+      "types": [
+        {
+          "name": "String",
+          "bsonType": "String",
+          "path": "Tu Attributes",
+          "count": 2,
+          "values": [
+            "<tu lastusagedate=\"20150326T170413Z\">",
+            "<tu lastusagedate=\"20150326T170412Z\">"
+          ],
+          "total_count": 0,
+          "probability": 1,
+          "unique": 2,
+          "has_duplicates": false
+        }
+      ],
+      "total_count": 2,
+      "type": "String",
+      "has_duplicates": false,
+      "probability": 1
+    },
+    {
+      "name": "Xml Properties",
+      "path": "Xml Properties",
+      "count": 2,
+      "types": [
+        {
+          "name": "String",
+          "bsonType": "String",
+          "path": "Xml Properties",
+          "count": 2,
+          "values": [
+            "<prop type=\"x-Domain:SinglePicklist\">Construction,Legal,Manuals,Misc</prop><prop type=\"x-Document:SingleString\"></prop>",
+            "<prop type=\"x-Domain:SinglePicklist\">Construction,Legal,Manuals,Misc</prop><prop type=\"x-Document:SingleString\"></prop>"
+          ],
+          "total_count": 0,
+          "probability": 1,
+          "unique": 1,
+          "has_duplicates": true
+        }
+      ],
+      "total_count": 2,
+      "type": "String",
+      "has_duplicates": true,
+      "probability": 1
+    }
+  ],
+  "count": 2
+}

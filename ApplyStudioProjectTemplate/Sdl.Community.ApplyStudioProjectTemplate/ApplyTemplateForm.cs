@@ -22,7 +22,9 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 		/// <summary>
 		/// Determines whether to show the warning about terminology
 		/// </summary>
-		private bool _showWarning = true;
+		private bool _showTermbaseWarning = true;
+
+		private bool _showDiffTemplateWarning = true;
 		private bool _languageMatches = true;
 
 		private readonly ProjectsController _projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
@@ -79,7 +81,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 						applyTemplate.Id.ToString("D"));
 				writer.WriteAttributeString("apply", (string)ApplyTo.SelectedItem);
 				writer.WriteAttributeString("tooltips", ShowToolTips.Checked ? "1" : "0");
-				writer.WriteAttributeString("warning", _showWarning ? "1" : "0");
+				writer.WriteAttributeString("warning", _showTermbaseWarning ? "1" : "0");
+				writer.WriteAttributeString("diff_template_warning", _showDiffTemplateWarning? "1" : "0");
 
 				if (SelectedTemplate?.Items != null)
 				{
@@ -144,7 +147,11 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 
 					if (templatesXml.DocumentElement != null && templatesXml.DocumentElement.HasAttribute("warning"))
 					{
-						_showWarning = templatesXml.DocumentElement.Attributes["warning"].Value == "1";
+						_showTermbaseWarning = templatesXml.DocumentElement.Attributes["warning"].Value == "1";
+					}
+					if (templatesXml.DocumentElement != null && templatesXml.DocumentElement.HasAttribute("diff_template_warning"))
+					{
+						_showDiffTemplateWarning = templatesXml.DocumentElement.Attributes["diff_template_warning"].Value == "1";
 					}
 
 					var xmlNodeList = templatesXml.SelectNodes("//template");
@@ -612,7 +619,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 		/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
 		private void OkButton_Click(object sender, EventArgs e)
 		{
-			if (_showWarning)
+			if (_showTermbaseWarning)
 			{
 				if (TerminologyTermbases.SelectedIndex > 0 || TerminologySearchSettings.SelectedIndex > 0)
 				{
@@ -622,17 +629,23 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 						TerminologyTermbases.SelectedIndex = 0;
 						TerminologySearchSettings.SelectedIndex = 0;
 					}
-					_showWarning = warningForm.ShowAgain;
+					_showTermbaseWarning = warningForm.ShowAgain;
 				}
 			}
 
 			_languageMatches = Helpers.Matches(_projectController.SelectedProjects.ToList(), ActiveTemplate);
-
 			if (!_languageMatches)
 			{
-				var result = MessageBox.Show(@"Selected template has different language directions, or language pairs, from the selected project.  Do you still wish to apply the settings from this template?", @"Warning",
-					MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-				DialogResult = result == DialogResult.Yes ? DialogResult.OK : DialogResult.None;
+				if (_showDiffTemplateWarning)
+				{
+					var warningForm = new WarningForm(
+						@"Selected template has different language directions, or language pairs, from the selected project.  Do you still wish to apply the settings from this template?");
+					var okPressed = warningForm.ShowDialog() == DialogResult.OK;
+					_showDiffTemplateWarning = warningForm.ShowAgain;
+					DialogResult = okPressed ? DialogResult.OK : DialogResult.None;
+				}
+				else
+					DialogResult = DialogResult.OK;
 			}
 			else
 			{

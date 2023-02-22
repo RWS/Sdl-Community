@@ -80,6 +80,13 @@ namespace MicrosoftTranslatorProvider.Model
 			get => GetStringParameter("usepostedit");
 			set => SetStringParameter("usepostedit", value);
 		}
+
+		[JsonIgnore]
+		private string useCustomProviderName
+		{
+			get => GetStringParameter("useCustomProviderName");
+			set => SetStringParameter("useCustomProviderName", value);
+		}
 		[JsonIgnore]
 
 		public string PreLookupFilename
@@ -129,6 +136,12 @@ namespace MicrosoftTranslatorProvider.Model
 			set => SetStringParameter("projectlocation", value);
 		}
 
+		public string CustomProviderName
+		{
+			get => GetStringParameter("customProviderName");
+			set => SetStringParameter("customProviderName", value);
+		}
+
 		public enum ProviderType
 		{
 			MicrosoftTranslator = 1,
@@ -172,6 +185,12 @@ namespace MicrosoftTranslatorProvider.Model
 		{
 			get => ToBoolean(resendDrafts);
 			set => resendDrafts = value.ToString();
+		}
+
+		public bool UseCustomProviderName
+		{
+			get => ToBoolean(useCustomProviderName);
+			set => useCustomProviderName = value.ToString();
 		}
 
 		[JsonIgnore]
