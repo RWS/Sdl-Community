@@ -419,6 +419,10 @@
 											Style="{StaticResource Sdl.Button.SecondaryStyle}"
 											Command="{Binding ResetToDefaultsCommand}"
 											CommandParameter="ResetAll"
+											HorizontalContentAlignment="Left"
+											FontFamily="Segoe UI"
+											FontSize="11"
+											Padding="10 8 8 8"
 											Margin="-10 -5 -10 0" />
 								</ComboBoxItem>
 
@@ -428,6 +432,10 @@
 											Style="{StaticResource Sdl.Button.SecondaryStyle}"
 											Command="{Binding ResetToDefaultsCommand}"
 											CommandParameter="ResetSelected"
+											HorizontalContentAlignment="Left"
+											FontFamily="Segoe UI"
+											FontSize="11"
+											Padding="10 8 8 8"
 											Margin="-10 -5 -10 -5" />
 								</ComboBoxItem>
 							</ComboBox>
