@@ -71,7 +71,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
 
 
 
-        private bool IsRevisionMarker { get; set; }
+        private bool IsRevisionMarker => RevisionMarker != null;
         public List< RevisionMarker> RevisionMarkers { get; set; }
         public RevisionMarker RevisionMarker { get; set; }
         
@@ -179,10 +179,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
             TagCounter++;
 
             SegmentSections.Add(IsRevisionMarker
-                ? new SegmentSection(SegmentSection.ContentType.LockedContent, string.Empty,
-                    lockedContent.Content.ToString(), RevisionMarker)
-                : new SegmentSection(SegmentSection.ContentType.LockedContent, string.Empty,
-                    lockedContent.Content.ToString()));
+                ? new SegmentSection(SegmentSection.ContentType.LockedContent, string.Empty, lockedContent.Content.ToString(), RevisionMarker)
+                : new SegmentSection(SegmentSection.ContentType.LockedContent, string.Empty, lockedContent.Content.ToString()));
 
             PlainText.Append(lockedContent.Content);
         }
@@ -208,10 +206,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
             if (tag.Properties.HasTextEquivalent && !IncludeTagText)
             {
                 SegmentSections.Add(IsRevisionMarker
-                    ? new SegmentSection(SegmentSection.ContentType.Placeholder, tag.TagProperties.TagId.Id,
-                        tag.Properties.TextEquivalent, RevisionMarker)
-                    : new SegmentSection(SegmentSection.ContentType.Placeholder, tag.TagProperties.TagId.Id,
-                        tag.Properties.TextEquivalent));
+                    ? new SegmentSection(SegmentSection.ContentType.Placeholder, tag.TagProperties.TagId.Id, tag.Properties.TextEquivalent, RevisionMarker)
+                    : new SegmentSection(SegmentSection.ContentType.Placeholder, tag.TagProperties.TagId.Id, tag.Properties.TextEquivalent));
 
 
                 PlainText.Append(tag.Properties.TextEquivalent);
@@ -219,10 +215,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
             else if (IncludeTagText)
             {
                 SegmentSections.Add(IsRevisionMarker
-                    ? new SegmentSection(SegmentSection.ContentType.Placeholder, tag.TagProperties.TagId.Id,
-                        tag.Properties.TagContent, RevisionMarker)
-                    : new SegmentSection(SegmentSection.ContentType.Placeholder, tag.TagProperties.TagId.Id,
-                        tag.Properties.TagContent));
+                    ? new SegmentSection(SegmentSection.ContentType.Placeholder, tag.TagProperties.TagId.Id, tag.Properties.TagContent, RevisionMarker)
+                    : new SegmentSection(SegmentSection.ContentType.Placeholder, tag.TagProperties.TagId.Id, tag.Properties.TagContent));
 
                 PlainText.Append(tag.TagProperties.TagContent);
             }
@@ -230,9 +224,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
 
         public void VisitRevisionMarker(IRevisionMarker revisionMarker)
         {
-            IsRevisionMarker = true;
-
-           
+            //IsRevisionMarker = true;
             switch (revisionMarker.Properties.RevisionType)
             {
                 case RevisionType.Delete:
@@ -262,7 +254,9 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            IsRevisionMarker = false;
+
+            RevisionMarker = null;
+            //IsRevisionMarker = false;
         }
 
         public void VisitSegment(ISegment segment)
@@ -277,11 +271,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
                 TagUnits.Add(new TagUnit(tagPair.TagProperties.TagId.Id, tagPair.TagProperties.DisplayText, tagPair.StartTagProperties.TagContent, TagUnit.TagUnitState.IsOpening, TagUnit.TagUnitType.IsTag));
 
                 SegmentSections.Add(IsRevisionMarker
-                    ? new SegmentSection(SegmentSection.ContentType.Tag, tagPair.TagProperties.TagId.Id,
-                        tagPair.StartTagProperties.TagContent, RevisionMarker)
-                    : new SegmentSection(SegmentSection.ContentType.Tag, tagPair.TagProperties.TagId.Id,
-                        tagPair.StartTagProperties.TagContent));
-
+                    ? new SegmentSection(SegmentSection.ContentType.Tag, tagPair.TagProperties.TagId.Id, tagPair.StartTagProperties.TagContent, RevisionMarker)
+                    : new SegmentSection(SegmentSection.ContentType.Tag, tagPair.TagProperties.TagId.Id, tagPair.StartTagProperties.TagContent));
 
                 PlainText.Append(tagPair.StartTagProperties.TagContent);
             }
@@ -319,10 +310,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
                 TagUnits.Add(new TagUnit(tagPair.TagProperties.TagId.Id, string.Empty, tagPair.EndTagProperties.TagContent, TagUnit.TagUnitState.IsClosing, TagUnit.TagUnitType.IsTag));
 
                 SegmentSections.Add(IsRevisionMarker
-                    ? new SegmentSection(SegmentSection.ContentType.TagClosing,
-                        tagPair.TagProperties.TagId.Id, tagPair.EndTagProperties.TagContent, RevisionMarker)
-                    : new SegmentSection(SegmentSection.ContentType.TagClosing,
-                        tagPair.TagProperties.TagId.Id, tagPair.EndTagProperties.TagContent));
+                    ? new SegmentSection(SegmentSection.ContentType.TagClosing, tagPair.TagProperties.TagId.Id, tagPair.EndTagProperties.TagContent, RevisionMarker)
+                    : new SegmentSection(SegmentSection.ContentType.TagClosing, tagPair.TagProperties.TagId.Id, tagPair.EndTagProperties.TagContent));
 
                 PlainText.Append(tagPair.EndTagProperties.TagContent);
             }
@@ -351,13 +340,11 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
             else
             {
                 SegmentSections.Add(IsRevisionMarker
-                    ? new SegmentSection(SegmentSection.ContentType.Text, string.Empty, text.Properties.Text,
-                        RevisionMarker)
+                    ? new SegmentSection(SegmentSection.ContentType.Text, string.Empty, text.Properties.Text, RevisionMarker)
                     : new SegmentSection(SegmentSection.ContentType.Text, string.Empty, text.Properties.Text));
             }
 
-            if ((!IsRevisionMarker || RevisionMarker.Type == RevisionMarker.RevisionType.Delete) &&
-                IsRevisionMarker) 
+            if (!IsRevisionMarker || RevisionMarker.Type == RevisionMarker.RevisionType.Delete) 
                 return;
 
             Segment.Add(text.Properties.Text);
