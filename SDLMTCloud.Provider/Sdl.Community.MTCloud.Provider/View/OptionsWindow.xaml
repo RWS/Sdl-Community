@@ -349,7 +349,7 @@
 														</Setter>
 													</Style>
 												</ListBox.ItemContainerStyle>
-												
+
 												<ListBox.ItemTemplate>
 													<DataTemplate>
 														<DockPanel Margin="4 0">
@@ -359,7 +359,7 @@
 																	   DockPanel.Dock="Left"
 																	   MinWidth="85"
 																	   Margin="0" />
-															
+
 															<ComboBox ItemsSource="{Binding Values}"
 																	  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
 																	  SelectedValue="{Binding SelectedValue}"
@@ -447,7 +447,7 @@
 											   DockPanel.Dock="Right"
 											   Width="15"
 											   Height="15"
-											   Margin="8 -5 -18 0"/>
+											   Margin="8 -5 -18 0" />
 									</DockPanel>
 								</Button.Content>
 							</Button>
@@ -467,7 +467,7 @@
 								VerticalAlignment="Bottom"
 								Margin="0 0 15 0"
 								Height="30"
-								Padding="16 0"/>
+								Padding="16 0" />
 					</StackPanel>
 
 					<StackPanel Orientation="Horizontal"

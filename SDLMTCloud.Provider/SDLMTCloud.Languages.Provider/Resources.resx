@@ -131,6 +131,6 @@
     <value>All the information from Rate It form is sent to the server</value>
   </data>
   <data name="OriginSystem_LWC" xml:space="preserve">
-    <value>Language Weaver provider</value>
+    <value>Language Weaver Provider</value>
   </data>
 </root>

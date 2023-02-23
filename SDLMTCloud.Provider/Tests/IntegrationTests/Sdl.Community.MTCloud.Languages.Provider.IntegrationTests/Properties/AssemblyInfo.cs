@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Language Weaver provider tests")]
+[assembly: AssemblyTitle("Language Weaver Provider tests")]
 [assembly: AssemblyProduct("Language weaver provider tests")]
 [assembly: AssemblyDescription("Language weaver provider integration tests")]
 

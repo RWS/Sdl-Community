@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 
@@ -18,10 +17,6 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		private List<TranslationModel> _models;
 		private List<MTCloudDictionary> _dictionaries;
 		private List<LinguisticOption> _linguisticOptions;
-
-		private LinguisticOptions _selectedLinguisticOptions;
-		private List<LinguisticOptions> _linguisticOptions;
-		private List<string> _availableLinguisticOptions;
 
 		[DataMember]
 		public string Name { get; set; }
@@ -88,18 +83,6 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		}
 
 		[DataMember]
-		public LinguisticOptions SelectedLinguisticOption
-		{
-			get => _selectedLinguisticOptions;
-			set
-			{
-				_selectedLinguisticOptions = value;
-				OnPropertyChanged(nameof(SelectedLinguisticOption));
-				AvailableLinguisticOptions = LinguisticOptions.FirstOrDefault(x => x.ModelName.Equals(SelectedModel.MTCloudLanguagePair.Name)).Values.ToList();
-			}
-		}
-
-		[DataMember]
 		public List<MTCloudLanguage> SourceLanguages
 		{
 			get => _sourceLanguages;
@@ -142,6 +125,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 				OnPropertyChanged(nameof(Dictionaries));
 			}
 		}
+
 		public List<LinguisticOption> LinguisticOptions
 		{
 			get => _linguisticOptions;

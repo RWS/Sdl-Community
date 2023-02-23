@@ -436,4 +436,7 @@ Response from Language Weaver:
   <data name="Message_No_LO_available" xml:space="preserve">
     <value>No linguistic options available</value>
   </data>
+  <data name="SDLMTCloud_Provider_OldName3" xml:space="preserve">
+    <value>Language Weaver provider</value>
+  </data>
 </root>

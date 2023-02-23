@@ -29,7 +29,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			_segmentMetadataCreator = segmentMetadataCreator;
 			_editorController = editorController;
 
-			_providerNames = new List<string> { PluginResources.SDLMTCloud_Provider_Name, PluginResources.SDLMTCloud_Provider_OldName, PluginResources.SDLMTCloud_Provider_OldName2 };
+			_providerNames = new List<string> { PluginResources.SDLMTCloud_Provider_Name, PluginResources.SDLMTCloud_Provider_OldName, PluginResources.SDLMTCloud_Provider_OldName2, PluginResources.SDLMTCloud_Provider_OldName3 };
 
 			_ = MtCloudApplicationInitializer
 				.Subscribe<RefreshQeStatus>(OnQeStatus);

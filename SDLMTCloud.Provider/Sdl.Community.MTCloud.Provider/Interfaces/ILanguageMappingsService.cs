@@ -11,8 +11,6 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 
 		List<MTCloudDictionary> Dictionaries { get; }
 
-		List<LinguisticOptions> LinguisticOptions { get; }
-
 		/// <summary>
 		/// Gets a list of the available translation models for the MT Cloud language pair
 		/// </summary>
@@ -33,7 +31,5 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 
 
 		List<MTCloudLanguage> GetMTCloudLanguages(MappedLanguage mappedLanguage, CultureInfo cultureInfo);
-
-		LinguisticOptions GetLinguisticOptions(string modelName);
 	}
 }

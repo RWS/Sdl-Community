@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.ServiceModel.Description;
 using System.Threading.Tasks;
-using Microsoft.Office.Interop.Excel;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Sdl.Community.MTCloud.Languages.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
@@ -49,8 +45,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
-		public List<LinguisticOptions> LinguisticOptions { get; private set; } = new();
-
 		/// <summary>
 		/// Gets a list of available dictionaries for the MT Cloud langauge pair
 		/// </summary>
@@ -61,81 +55,52 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			var cloudDictionaries = new List<MTCloudDictionary>();
 
-			if (Dictionaries == null)
+			if (Dictionaries != null)
 			{
-				return cloudDictionaries;
-			}
+				var dictionaries = Dictionaries.Where(a =>
+					a.Source.Equals(mtCloudSource.CodeName, StringComparison.InvariantCultureIgnoreCase) &&
+						a.Target.Equals(mtCloudTarget.CodeName, StringComparison.InvariantCultureIgnoreCase)).ToList();
 
-			var dictionaries = Dictionaries.Where(a =>
-				a.Source.Equals(mtCloudSource.CodeName, StringComparison.InvariantCultureIgnoreCase)
-			 && a.Target.Equals(mtCloudTarget.CodeName, StringComparison.InvariantCultureIgnoreCase))
-				.ToList();
+				if (dictionaries.Any())
+				{
+					cloudDictionaries.AddRange(dictionaries);
+				}
 
-			if (dictionaries.Any())
-			{
-				cloudDictionaries.AddRange(dictionaries);
-			}
-
-			if (cloudDictionaries.Count == 0)
-			{
-				cloudDictionaries.Add(new MTCloudDictionary { Name = PluginResources.Message_No_dictionary_available, DictionaryId = string.Empty });
-			}
-			else if (!cloudDictionaries.Exists(a => a.Name == PluginResources.Message_No_dictionary))
-			{
-				cloudDictionaries.Insert(0, new MTCloudDictionary { Name = PluginResources.Message_No_dictionary, DictionaryId = string.Empty });
+				if (cloudDictionaries.Count == 0)
+				{
+					cloudDictionaries.Add(new MTCloudDictionary { Name = PluginResources.Message_No_dictionary_available, DictionaryId = string.Empty });
+				}
+				else if (!cloudDictionaries.Exists(a => a.Name == PluginResources.Message_No_dictionary))
+				{
+					cloudDictionaries.Insert(0, new MTCloudDictionary { Name = PluginResources.Message_No_dictionary, DictionaryId = string.Empty });
+				}
 			}
 
 			return cloudDictionaries;
 		}
 
-		public LinguisticOptions GetLinguisticOptions(string modelName)
-		{
-			var jObject = Task.Run(async () => await _translationService.GetLinguisticOptions(modelName)).Result["linguisticOptions"];
-			if (jObject is null
-			 || jObject.Count == 0
-			 || jObject.Last["id"] == "QualityEstimation")
-			{
-				return new()
-				{
-					Values = new List<string>() { PluginResources.Message_No_LO_available },
-					ModelName = modelName
-				};
-			}
-
-			string json = JsonConvert.SerializeObject(jObject);
-			if (json.StartsWith("[") && json.EndsWith("]"))
-			{
-				json = json.Substring(1, json.Length - 2);
-			}
-
-			var linguisticOptions = JsonConvert.DeserializeObject<LinguisticOptions>(json);
-			linguisticOptions.ModelName = modelName;
-			return linguisticOptions;
-		}
-
 		public List<MTCloudLanguage> GetMTCloudLanguages(MappedLanguage mappedLanguage, CultureInfo cultureInfo)
 		{
 			var languageMappings = new List<MTCloudLanguage>();
-			if (mappedLanguage == null)
-			{
-				return languageMappings;
-			}
 
-			languageMappings.Add(new MTCloudLanguage
-			{
-				CodeName = mappedLanguage.MTCode,
-				IsLocale = false,
-				Flag = SetLanguageFlag(cultureInfo)
-			});
-
-			if (!string.IsNullOrEmpty(mappedLanguage.MTCodeLocale))
+			if (mappedLanguage != null)
 			{
 				languageMappings.Add(new MTCloudLanguage
 				{
-					CodeName = mappedLanguage.MTCodeLocale,
-					IsLocale = true,
+					CodeName = mappedLanguage.MTCode,
+					IsLocale = false,
 					Flag = SetLanguageFlag(cultureInfo)
 				});
+
+				if (!string.IsNullOrEmpty(mappedLanguage.MTCodeLocale))
+				{
+					languageMappings.Add(new MTCloudLanguage
+					{
+						CodeName = mappedLanguage.MTCodeLocale,
+						IsLocale = true,
+						Flag = SetLanguageFlag(cultureInfo)
+					});
+				}
 			}
 
 			return languageMappings;
@@ -161,7 +126,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			var models = SubscriptionInfo?.LanguagePairs.Where(a => mtCloudSource.CodeName.Equals(a.SourceLanguageId, StringComparison.InvariantCultureIgnoreCase)
 														 && mtCloudTarget.CodeName.Equals(a.TargetLanguageId, StringComparison.InvariantCultureIgnoreCase));
 
-			LinguisticOptions ??= new();
 			foreach (var model in models)
 			{
 				translationModels.Add(new TranslationModel
