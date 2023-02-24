@@ -138,6 +138,16 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				QualityEstimation = engineModel.ToLower().Contains("qe") ? 1 : 0
 			};
 
+			if (model.SelectedModel.LinguisticOptions is not null 
+			 && model.SelectedModel.LinguisticOptions.Count >= 1)
+			{
+				translationRequestModel.LinguisticOptions ??= new();
+				foreach (var linguisticOption in model.SelectedModel.LinguisticOptions)
+				{
+					translationRequestModel.LinguisticOptions.Add(linguisticOption.Name, linguisticOption.SelectedValue);
+				}
+			}
+
 			if (!model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary_available)
 				&& !model.SelectedDictionary.Name.Equals(PluginResources.Message_No_dictionary))
 			{
@@ -335,6 +345,17 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 			_logger.Info(PluginResources.SendFeedbackResponseFromServer, response?.StatusCode, responseAsString);
 			return response;
+		}
+
+		public async Task<LinguisticOptions> GetLinguisticOptions(string modelName)
+		{
+			CheckConnection();
+
+			var uri = new Uri($"{ConnectionService.CurrentWorkingPortalAddress}/v4/accounts/{ConnectionService.Credential.AccountId}/subscriptions/language-pairs/{modelName}/linguistic-options");
+			var request = GetRequestMessage(HttpMethod.Get, uri);
+
+			var response = await _httpClient.SendRequest(request);
+			return await _httpClient.GetResult<LinguisticOptions>(response);
 		}
 	}
 }

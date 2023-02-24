@@ -9,5 +9,10 @@
 		{
 			InitializeComponent();
 		}
+
+		private void Reset_Button_Click(object sender, System.Windows.RoutedEventArgs e)
+		{
+			Reset_ComboBox.IsDropDownOpen = true;
+		}
 	}
 }

@@ -24,5 +24,7 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 		Task<HttpResponseMessage> SendFeedback(FeedbackInfo feedbackInfo);
 
 		Task<Segment[]> TranslateText(string text, LanguageMappingModel model, FileAndSegmentIds fileAndSegmentIds);
+
+		Task<LinguisticOptions> GetLinguisticOptions(string modelName);
 	}
 }

@@ -143,13 +143,19 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				ValidateEngineExistence(mapping);
 			}
 
-			if (mapping.EngineModels.Any())
+			if (!mapping.EngineModels.Any())
 			{
-				var languageMappingModel = GetLanguageMappingModel(mapping);
-				return languageMappingModel;
+				return null;
 			}
 
-			return null;
+			var savedModels = mapping?.SavedLanguageMappingModel?.Models ?? new();
+			for (var i = 0; i < savedModels.Count; i++)
+			{
+				mapping.EngineModels[i].LinguisticOptions = savedModels[i].LinguisticOptions;
+			}
+
+			var languageMappingModel = GetLanguageMappingModel(mapping);
+			return languageMappingModel;
 		}
 
 		public void LoadState(string translationProviderState)
@@ -245,7 +251,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				Models = mapping.EngineModels,
 				SelectedModel = selectedModel,
 				Dictionaries = dictionaries,
-				SelectedDictionary = selectedDictionary
+				SelectedDictionary = selectedDictionary,
+				LinguisticOptions = mapping?.SavedLanguageMappingModel?.SelectedModel?.LinguisticOptions
 			};
 
 			return languageMappingModel;
