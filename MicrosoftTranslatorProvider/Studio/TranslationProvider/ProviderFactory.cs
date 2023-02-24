@@ -20,16 +20,19 @@ namespace MicrosoftTranslatorProvider
 			var credential = credentialStore.GetCredential(new Uri(Constants.MicrosoftProviderFullScheme))
 						  ?? credentialStore.GetCredential(translationProviderUri)
 						  ?? credentialStore.GetCredential(new Uri(translationProviderUri.Scheme + ":///"));
+
 			if (credential is null)
 			{
 				throw new TranslationProviderAuthenticationException();
 			}
 
-			var providerCredentials = new TranslationProviderCredential(credential.Credential, credential.Persist);
+			var privateEndpoint = credentialStore.GetCredential(new Uri(Constants.MicrosoftProviderPrivateEndpointScheme));
 			var loadOptions = new MTETranslationOptions(translationProviderUri)
 			{
-				ClientID = providerCredentials.Credential,
-				PersistMicrosoftCredentials = providerCredentials.Persist
+				ClientID = credential.Credential,
+				PersistMicrosoftCredentials = credential.Persist,
+				PrivateEndpoint = privateEndpoint.Credential,
+				PersistPrivateEndpoint = privateEndpoint.Persist
 			};
 
 			return new Provider(loadOptions, new RegionsProvider(), new HtmlUtil());

@@ -132,9 +132,8 @@ namespace MicrosoftTranslatorProvider.Studio
 
 		private void UpdateProviderCredentials(ITranslationProviderCredentialStore credentialStore, ITranslationOptions options)
 		{
-			var clientId = options.ClientID;
-			var microsoftCredentials = options.PersistMicrosoftCredentials;
-			SetCredentialsOnCredentialStore(credentialStore, clientId, microsoftCredentials);
+			SetCredentialsOnCredentialStore(credentialStore, options.ClientID, options.PersistMicrosoftCredentials);
+			SetPrivateEndpointOnCredentialStore(credentialStore, options.PrivateEndpoint, options.PersistPrivateEndpoint);
 		}
 
 		private void SetSavedCredentialsOnUi(ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions)
@@ -149,6 +148,14 @@ namespace MicrosoftTranslatorProvider.Studio
 			{
 				loadOptions.ClientID = providerCredentials.Credential;
 				loadOptions.PersistMicrosoftCredentials = providerCredentials.Persist;
+
+				if (GetCredentialsFromStore(credentialStore, Constants.MicrosoftProviderPrivateEndpointScheme)
+					is TranslationProviderCredential privateEndpoint)
+				{
+					loadOptions.PrivateEndpoint = privateEndpoint.Credential;
+					loadOptions.PersistPrivateEndpoint = privateEndpoint.Persist;
+				}
+
 			}
 			catch (Exception e)
 			{
@@ -168,6 +175,14 @@ namespace MicrosoftTranslatorProvider.Studio
 		{
 			var uri = new Uri(Constants.MicrosoftProviderFullScheme);
 			var proiderCredentials = new TranslationProviderCredential(apiKey, persistKey);
+			credentialStore.RemoveCredential(uri);
+			credentialStore.AddCredential(uri, proiderCredentials);
+		}
+
+		private void SetPrivateEndpointOnCredentialStore(ITranslationProviderCredentialStore credentialStore, string privateEndpoint, bool persist)
+		{
+			var uri = new Uri(Constants.MicrosoftProviderPrivateEndpointScheme);
+			var proiderCredentials = new TranslationProviderCredential(privateEndpoint, persist);
 			credentialStore.RemoveCredential(uri);
 			credentialStore.AddCredential(uri, proiderCredentials);
 		}

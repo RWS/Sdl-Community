@@ -40,6 +40,38 @@
 			<StackPanel>
 				<!--MTP API KEY-->
 				<StackPanel Margin="0 0 0 12">
+					<CheckBox IsChecked="{Binding UsePrivateEndpoint}"
+							  Style="{StaticResource Sdl.Checkbox.NoHighlightStyle}"
+							  FontSize="14"
+							  HorizontalAlignment="Left"
+							  Margin="0">
+						<CheckBox.Content>
+							<TextBlock Text="Use Private-Endpoint"
+									   Margin="0 -2 0 0" />
+						</CheckBox.Content>
+					</CheckBox>
+
+					<StackPanel HorizontalAlignment="Stretch"
+								VerticalAlignment="Stretch">
+						<TextBox Text="{Binding PrivateEndpoint, UpdateSourceTrigger=PropertyChanged}"
+								 Style="{StaticResource WatermarkTextBox}"
+								 Visibility="{Binding UsePrivateEndpoint, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+								 uiHelpers:TextBoxWatermarkHelper.WatermarkText="Private-endpoint url"
+								 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="PrivateEndpoint"
+								 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+								 VerticalContentAlignment="Center"
+								 Height="30"
+								 Padding="8 0"
+								 Margin="0 2" />
+						<CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+								  Visibility="{Binding UsePrivateEndpoint, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+								  IsChecked="{Binding PersistPrivateEndpoint}"
+								  Content="Remember URL"
+								  Margin="0 0 0 0" />
+					</StackPanel>
+				</StackPanel>
+
+				<StackPanel Margin="0 0 0 12">
 					<TextBlock Text="{x:Static root:PluginResources.MicrosoftApiDescription}"
 							   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
 							   FontSize="14"

@@ -159,6 +159,12 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				return false;
 			}
 
+			if (_providerControlViewModel.UsePrivateEndpoint && string.IsNullOrEmpty(_providerControlViewModel.PrivateEndpoint))
+			{
+				ErrorHandler.HandleError("Private endpoint can not be empty if is enabled", "Private-endpoint");
+				return false;
+			}
+
 			return AreMicrosoftCredentialsValid();
 		}
 
@@ -201,6 +207,11 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			{
 				RemoveCredentialsFromStore(new Uri(Constants.MicrosoftProviderFullScheme));
 			}
+
+			if (isMicrosoftProvider && !Options.PersistPrivateEndpoint)
+			{
+				RemoveCredentialsFromStore(new Uri(Constants.MicrosoftProviderPrivateEndpointScheme));
+			}
 		}
 
 		private void RemoveCredentialsFromStore(Uri providerUri)
@@ -217,7 +228,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		{
 			try
 			{
-				var apiConnecter = new ProviderConnecter(_providerControlViewModel.ClientID, _providerControlViewModel.Region?.Key, _htmlUtil);
+				var apiConnecter = new ProviderConnecter(_providerControlViewModel.ClientID, _providerControlViewModel.Region?.Key, _htmlUtil, _providerControlViewModel.PrivateEndpoint);
 				apiConnecter.RefreshAuthToken();
 
 				return true;
@@ -267,6 +278,8 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			Options.UseCategoryID = _providerControlViewModel.UseCategoryID;
 			Options.CategoryID = _providerControlViewModel.CategoryID;
 			Options.PersistMicrosoftCredentials = _providerControlViewModel.PersistMicrosoftKey;
+			Options.PersistPrivateEndpoint = _providerControlViewModel.PersistPrivateEndpoint;
+			Options.PrivateEndpoint = _providerControlViewModel.PrivateEndpoint;
 		}
 
 		private void NavigateTo(object parameter)

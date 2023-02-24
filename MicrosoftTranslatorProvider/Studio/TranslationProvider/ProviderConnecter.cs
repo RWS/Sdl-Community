@@ -24,17 +24,19 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly HtmlUtil _htmlUtil;
 
+		private string _endpoint;
 		private string _subscriptionKey;
 		private string _region;
 		private string _authToken;
 		private List<string> _supportedLanguages;
 
-		public ProviderConnecter(string subscriptionKey, string region, HtmlUtil htmlUtil)
+		public ProviderConnecter(string subscriptionKey, string region, HtmlUtil htmlUtil, string endpoint = null)
 		{
 			_subscriptionKey = subscriptionKey;
 			_region = region;
 			_htmlUtil = htmlUtil;
 			_authToken ??= GetAuthToken();
+			_endpoint = endpoint ?? $@"https://{Constants.MicrosoftProviderUriBase}";
 			_supportedLanguages ??= GetSupportedLanguages();
 		}
 
@@ -111,6 +113,24 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 
 		private string RequestTranslation(string sourceLanguage, string targetLanguage, string textToTranslate, string categoryID)
 		{
+			try
+			{
+				return TryRequestTranslation(sourceLanguage, targetLanguage, textToTranslate, categoryID);
+			}
+			catch (Exception ex)
+			{
+				if (ex.Message.Equals("The request is not authorized because credentials are missing or invalid."))
+				{
+					RefreshAuthToken();
+					return TryRequestTranslation(sourceLanguage, targetLanguage, textToTranslate, categoryID);
+				}
+
+				throw ex;
+			}
+		}
+
+		private string TryRequestTranslation(string sourceLanguage, string targetLanguage, string textToTranslate, string categoryID)
+		{
 			var body = new object[] { new { Text = textToTranslate } };
 			var requestBody = JsonConvert.SerializeObject(body);
 			var httpRequest = new HttpRequestMessage
@@ -137,10 +157,9 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 		private string BuildTranslationUri(string sourceLanguage, string targetLanguage, string category)
 		{
 			const string path = "/translate?api-version=3.0";
-			const string uri = $@"https://{Constants.MicrosoftProviderUriBase}";
 			var languageParams = $"&from={sourceLanguage}&to={targetLanguage}&textType=html&category={category}";
 
-			return string.Concat(uri, path, languageParams);
+			return string.Concat(_endpoint, path, languageParams);
 		}
 
 		private List<string> GetSupportedLanguages()
@@ -158,7 +177,7 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 
 		private List<string> TryGetSupportedLanguages()
 		{
-			var uri = new Uri("https://" + Constants.MicrosoftProviderUriBase);
+			var uri = new Uri(_endpoint);
 			var client = new RestClient(uri);
 
 			var request = new RestRequest("languages", Method.Get);

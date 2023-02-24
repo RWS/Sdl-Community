@@ -82,7 +82,7 @@ namespace MicrosoftTranslatorProvider
 
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
-			_providerConnecter ??= new ProviderConnecter(Options.ClientID, Options.Region, _htmlUtil);
+			_providerConnecter ??= new ProviderConnecter(Options.ClientID, Options.Region, _htmlUtil, Options.PrivateEndpoint);
 			_providerConnecter.ResetCredentials(Options.ClientID, Options.Region);
 			return _providerConnecter.IsSupportedLanguagePair(languageDirection.SourceCulture.Name, languageDirection.TargetCulture.Name);
 		}
