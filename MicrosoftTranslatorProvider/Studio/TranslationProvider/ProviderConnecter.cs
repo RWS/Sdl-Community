@@ -111,6 +111,24 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 
 		private string RequestTranslation(string sourceLanguage, string targetLanguage, string textToTranslate, string categoryID)
 		{
+			try
+			{
+				return TryRequestTranslation(sourceLanguage, targetLanguage, textToTranslate, categoryID);
+			}
+			catch (Exception ex)
+			{
+				if (ex.Message.Equals("The request is not authorized because credentials are missing or invalid."))
+				{
+					RefreshAuthToken();
+					return TryRequestTranslation(sourceLanguage, targetLanguage, textToTranslate, categoryID);
+				}
+
+				throw ex;
+			}
+		}
+
+		private string TryRequestTranslation(string sourceLanguage, string targetLanguage, string textToTranslate, string categoryID)
+		{
 			var body = new object[] { new { Text = textToTranslate } };
 			var requestBody = JsonConvert.SerializeObject(body);
 			var httpRequest = new HttpRequestMessage
