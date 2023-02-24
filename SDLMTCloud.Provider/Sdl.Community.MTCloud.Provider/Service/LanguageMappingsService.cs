@@ -134,7 +134,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					MTCloudLanguagePair = model,
 					DisplayName = $"{model.SourceLanguageId}-{model.TargetLanguageId} {model.DisplayName}",
 					Source = source,
-					Target = target
+					Target = target,
+					LinguisticOptions = SetLinguisticOptions(model.Name)
 				});
 			}
 
@@ -151,6 +152,24 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 
 			return translationModels;
+		}
+
+		private List<LinguisticOption> SetLinguisticOptions(string modelName)
+		{
+			var result = Task.Run(async () => await _translationService.GetLinguisticOptions(modelName)).Result;
+			var availableLinguisticOptions = result?.AvailableLinguisticOptions;
+			if (availableLinguisticOptions is null || !availableLinguisticOptions.Any())
+			{
+				return null;
+			}
+
+			availableLinguisticOptions = availableLinguisticOptions.Where(x => !x.Name.ToLower().Equals("qualityestimation")).ToList();
+			if (!availableLinguisticOptions.Any())
+			{
+				return null;
+			}
+
+			return availableLinguisticOptions;
 		}
 
 		private static Image SetLanguageFlag(CultureInfo cultureInfo)

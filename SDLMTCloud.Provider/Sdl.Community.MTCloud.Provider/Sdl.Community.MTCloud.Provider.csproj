@@ -12,6 +12,7 @@
 		<AssemblyName>LanguageWeaver</AssemblyName>
 	</PropertyGroup>
 	<ItemGroup>
+	  <None Remove="Resources\dropdownarrow.png" />
 	  <None Remove="Resources\Report.xsl" />
 	  <None Remove="UiHelpers\Watermark\WatermarkPasswordBoxResources.xaml" />
 	</ItemGroup>
@@ -140,6 +141,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\dropdownarrow.png" />
     <Resource Include="Resources\LWLogo.png" />
     <Resource Include="Resources\ReportExample.xml" />
     <Page Include="Styles\CustomProgressRing.xaml">

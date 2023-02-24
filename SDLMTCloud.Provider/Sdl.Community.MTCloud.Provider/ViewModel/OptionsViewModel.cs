@@ -169,16 +169,38 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					Mouse.OverrideCursor = Cursors.Wait;
 				}
 
-				if (LanguageMappingModels != null)
+				if (LanguageMappingModels == null)
+				{
+					return;
+				}
+
+
+				if ((parameter as string) == "ResetSelected" && SelectedLanguageMappingModel is not null)
+				{
+					var selectedLanguageMappingModelName = SelectedLanguageMappingModel.Name;
+					var originalLanguageMappingModels = LanguageMappingModels.Where(x => x.Name != SelectedLanguageMappingModel.Name).ToList();
+					LanguageMappingModels.Clear();
+					LoadLanguageMappings();
+
+					originalLanguageMappingModels.Add(LanguageMappingModels.FirstOrDefault(x => x.Name.Equals(selectedLanguageMappingModelName)));
+					LanguageMappingModels = new(originalLanguageMappingModels);
+					SelectedLanguageMappingModel = LanguageMappingModels.FirstOrDefault(x => x.Name.Equals(selectedLanguageMappingModelName));
+
+					System.Windows.MessageBox.Show($"{PluginResources.Message_Successfully_reset_to_defaults} the selected model",
+						Application.ProductName, MessageBoxButton.OK, MessageBoxImage.Information);
+				}
+				else if ((parameter as string) == "ResetSelected" && SelectedLanguageMappingModel is null)
+				{
+					System.Windows.MessageBox.Show("Please select a model to reset",
+						Application.ProductName, MessageBoxButton.OK, MessageBoxImage.Warning);
+				}
+				else
 				{
 					LanguageMappingModels.Clear();
 					LoadLanguageMappings();
 
-					if (Owner != null)
-					{
-						System.Windows.MessageBox.Show(PluginResources.Message_Successfully_reset_to_defaults,
-							Application.ProductName, MessageBoxButton.OK, MessageBoxImage.Information);
-					}
+					System.Windows.MessageBox.Show(PluginResources.Message_Successfully_reset_to_defaults,
+						Application.ProductName, MessageBoxButton.OK, MessageBoxImage.Information);
 				}
 			}
 			catch (Exception ex)
