@@ -4,8 +4,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Language Weaver provider tests")]
-[assembly: AssemblyProduct("Language Weaver provider tests")]
+[assembly: AssemblyTitle("Language Weaver Provider tests")]
+[assembly: AssemblyProduct("Language Weaver Provider tests")]
 
 
 // Setting ComVisible to false makes the types in this assembly not visible

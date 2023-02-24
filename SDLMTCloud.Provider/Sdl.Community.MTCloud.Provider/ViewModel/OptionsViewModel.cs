@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -52,6 +53,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		}
 
 		public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save);
+
 		public ICommand NavigateToCommand => _navigateToCommand ??= new RelayCommand(NavigateTo);
 
 		public ICommand ResetToDefaultsCommand => _resetToDefaultsCommand ??= new RelayCommand(ResetToDefaults);
@@ -137,9 +139,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			{
 				return;
 			}
-
 			var languages = _provider.LanguageProvider.GetMappedLanguages();
 			var languageMappingModels = new List<LanguageMappingModel>();
+
 			foreach (var languagePair in _languagePairs)
 			{
 				var languageMappingModel = _provider.GetLanguageMappingModel(languagePair, languages);
@@ -156,9 +158,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			try
 			{
-				ReSendChecked = true;
-				SendFeedback = true;
-
 				_provider.Options = new Options();
 
 				IsWaiting = true;
@@ -167,16 +166,32 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					Mouse.OverrideCursor = Cursors.Wait;
 				}
 
-				if (LanguageMappingModels != null)
+				if (LanguageMappingModels is null)
 				{
+					return;
+				}
+
+				if ((parameter as string) == "ResetSelected" && SelectedLanguageMappingModel is not null)
+				{
+					var selectedLanguageMappingModelName = SelectedLanguageMappingModel.Name;
+					var originalLanguageMappingModels = LanguageMappingModels.Where(x => x.Name != SelectedLanguageMappingModel.Name).ToList();
 					LanguageMappingModels.Clear();
 					LoadLanguageMappings();
 
-					if (Owner != null)
-					{
-						System.Windows.MessageBox.Show(PluginResources.Message_Successfully_reset_to_defaults,
-							Application.ProductName, MessageBoxButton.OK, MessageBoxImage.Information);
-					}
+					originalLanguageMappingModels.Add(LanguageMappingModels.FirstOrDefault(x => x.Name.Equals(selectedLanguageMappingModelName)));
+					LanguageMappingModels = new(originalLanguageMappingModels);
+					SelectedLanguageMappingModel = LanguageMappingModels.FirstOrDefault(x => x.Name.Equals(selectedLanguageMappingModelName));
+				}
+				else
+				{
+					LanguageMappingModels.Clear();
+					LoadLanguageMappings();
+				}
+
+				if (Owner != null)
+				{
+					System.Windows.MessageBox.Show(PluginResources.Message_Successfully_reset_to_defaults,
+						Application.ProductName, MessageBoxButton.OK, MessageBoxImage.Information);
 				}
 			}
 			catch (Exception ex)

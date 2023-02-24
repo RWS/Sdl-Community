@@ -29,7 +29,7 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 			_segmentMetadataCreator = segmentMetadataCreator;
 			_editorController = editorController;
 
-			_providerNames = new List<string> { PluginResources.SDLMTCloud_Provider_Name, PluginResources.SDLMTCloud_Provider_OldName, PluginResources.SDLMTCloud_Provider_OldName2 };
+			_providerNames = new List<string> { PluginResources.SDLMTCloud_Provider_Name, PluginResources.SDLMTCloud_Provider_OldName, PluginResources.SDLMTCloud_Provider_OldName2, PluginResources.SDLMTCloud_Provider_OldName3 };
 
 			_ = MtCloudApplicationInitializer
 				.Subscribe<RefreshQeStatus>(OnQeStatus);
@@ -135,19 +135,17 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 		private void AddToSegmentContextData()
 		{
 			var currentSegmentPair = ActiveDocument.ActiveSegmentPair;
-			var translationOrigin = currentSegmentPair.Properties.TranslationOrigin;
-
-			if (translationOrigin is null)
+			if (currentSegmentPair?.Properties?.TranslationOrigin is null
+			 || ActiveDocumentData is null)
+			{
 				return;
+			}
 
-			var currentSegmentId = currentSegmentPair.Properties.Id;
-
-			if (ActiveDocumentData is null) return;
-
-			if (ActiveDocumentData.TryGetValue(currentSegmentId, out var targetData))
+			if (ActiveDocumentData.TryGetValue(currentSegmentPair.Properties.Id, out var targetData))
 			{
 				_segmentMetadataCreator.AddToCurrentSegmentContextData(ActiveDocument, targetData);
 			}
+
 			SetCurrentSegmentEstimation(targetData?.QualityEstimation);
 		}
 
