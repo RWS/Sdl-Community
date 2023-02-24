@@ -36,6 +36,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
 
+		private ICommand _signInCommand;
+		private ICommand _signOutCommand;
 
 
 		private void Clear(object obj)
@@ -100,6 +102,10 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		public ICommand SignInCommand { get; }
 
 		public ICommand NavigateToCommand { get; }
+
+		public ICommand LoginCommand => _signInCommand ??= new RelayCommand(Signin);
+
+		public ICommand LogoutCommand => _signOutCommand ??= new RelayCommand(Signout);
 
 		public bool IsInProgress
 		{
@@ -457,87 +463,86 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		private void Signin(object parameter)
+		private void Signin(object o)
 		{
-			if (parameter.ToString() == "Sign out")
-			{
-				StudioSignOut();
-				return;
-			}
-
 			if (!CanAttemptSignIn())
 			{
 				return;
 			}
 
-			IsInProgress = true;
-
 			try
 			{
-				var message = string.Empty;
+				IsInProgress = true;
 				IsSignedIn = false;
-
-				if (SelectedAuthentication.Type == Authentication.AuthenticationType.Studio)
-				{
-					var result = _connectionService.Connect(
-						new Credential
-						{
-							Type = Authentication.AuthenticationType.Studio,
-							AccountRegion = SelectedWorkingPortal
-						}, parameter.ToString() != "Use");
-
-					IsSignedIn = result.Item1;
-					StudioIsSignedIn = result.Item1;
-					message = result.Item2;
-					StudioSignedInAs = _connectionService.Credential.Name;
-					SignInLabel = StudioIsSignedIn ? PluginResources.Label_SignOut : PluginResources.Label_Sign_In;
-				}
-				else if (SelectedAuthentication.Type == Authentication.AuthenticationType.User)
-				{
-					var serviceCredential = new Credential()
-					{
-						Type = Authentication.AuthenticationType.User,
-						Name = UserName,
-						Password = UserPassword,
-						AccountRegion = SelectedWorkingPortal
-					};
-					var result = _connectionService.Connect(serviceCredential);
-
-					IsSignedIn = result.Item1;
-					message = result.Item2;
-				}
-				else if (SelectedAuthentication.Type == Authentication.AuthenticationType.Client)
-				{
-					//var serviceCredential = _connectionService.Credential ?? new Credential();
-					var serviceCredential = new Credential
-					{
-						Type = Authentication.AuthenticationType.Client,
-						Name = ClientId,
-						Password = ClientSecret,
-						AccountRegion = SelectedWorkingPortal
-					};
-					var result = _connectionService.Connect(serviceCredential);
-
-					IsSignedIn = result.Item1;
-					message = result.Item2;
-				}
-
-				ExceptionMessage = IsSignedIn ? string.Empty : GetLoginFailMessagePlatformRelated(message);
+				TrySignin();
 			}
-			catch (Exception ex)
+			catch (Exception e)
 			{
-				ExceptionMessage = ex.Message;
+				ExceptionMessage = e.Message;
 			}
 			finally
 			{
 				IsInProgress = false;
-
-				if (IsSignedIn && _owner != null)
+				if (_owner is not null && IsSignedIn)
 				{
 					_owner.DialogResult = true;
 					_owner.Close();
 				}
 			}
+		}
+
+		private void TrySignin()
+		{
+			var credentials = GetCredentials();
+
+			var useSingleSignOn = SelectedAuthentication.Type == Authentication.AuthenticationType.Studio;
+			var showDialog = useSingleSignOn && !StudioIsSignedIn;
+
+			var (isSuccesful, responseMessage) = _connectionService.Connect(credentials, showDialog);
+			IsSignedIn = isSuccesful;
+			ExceptionMessage = IsSignedIn ? string.Empty : GetLoginFailMessagePlatformRelated(responseMessage);
+
+			if (credentials.Type == Authentication.AuthenticationType.Studio)
+			{
+				StudioIsSignedIn = IsSignedIn;
+				StudioSignedInAs = _connectionService.Credential.Name;
+			}
+		}
+
+		private void Signout(object o)
+		{
+			IsInProgress = true;
+			_connectionService.SignOut();
+			StudioSignedInAs = null;
+			StudioIsSignedIn = false;
+			IsInProgress = false;
+		}
+
+		private Credential GetCredentials()
+		{
+			return SelectedAuthentication.Type switch
+			{
+				Authentication.AuthenticationType.Studio => new Credential
+				{
+					Type = Authentication.AuthenticationType.Studio,
+					AccountRegion = SelectedWorkingPortal
+				},
+				Authentication.AuthenticationType.User => new Credential()
+				{
+					Type = Authentication.AuthenticationType.User,
+					Name = UserName,
+					Password = UserPassword,
+					AccountRegion = SelectedWorkingPortal
+				},
+				Authentication.AuthenticationType.Client => new Credential
+				{
+					Type = Authentication.AuthenticationType.Client,
+					Name = ClientId,
+					Password = ClientSecret,
+					AccountRegion = SelectedWorkingPortal
+				},
+				_ => null
+			};
 		}
 
 		private void StudioSignOut()
@@ -571,7 +576,18 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private void NavigateTo(object obj)
 		{
-			var value = obj.ToString().Trim();
+			if (obj is Uri uri)
+			{
+				Process.Start(uri.AbsoluteUri);
+				return;
+			}
+
+			if (obj is not string value)
+			{
+				return;
+			}
+
+			value = value.Trim();
 			if (!string.IsNullOrEmpty(value))
 			{
 				Process.Start(value);
