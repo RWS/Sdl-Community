@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TS22": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files (x86)\\Trados\\Trados Studio\\Studio17\\SDLTradosStudio.exe"
+    }
+  }
+}
