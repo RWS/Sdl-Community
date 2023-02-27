@@ -7,217 +7,249 @@ using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.AmazonTranslateTradosPlugin
 {
-    /// <summary>
-    /// Holds data on a source segment and the tags it contains, which can be used to insert the tags in the target segment
-    /// </summary>
-    public class MtTranslationProviderTagPlacer
-    {
-        private string _returnedText;
-        private string _preparedSourceText;
-        private readonly Segment _sourceSegment;
-        private Dictionary<string, MtTag> dict;
+	/// <summary>
+	/// Holds data on a source segment and the tags it contains, which can be used to insert the tags in the target segment
+	/// </summary>
+	public class MtTranslationProviderTagPlacer
+	{
+		private readonly Segment _sourceSegment;
 
-        public List<TagInfo> TagsInfo { get; set; }
-        public MtTranslationProviderTagPlacer(Segment sourceSegment)
-        {
-            _sourceSegment = sourceSegment;
-            TagsInfo = new List<TagInfo>();
-            dict = GetSourceTagsDict(); //fills the dictionary and populates our string to send to google
-        }
+		private Dictionary<string, MtTag> _tagsDictionary;
+		private string _returnedText;
+		private MtTag _currentTag;
 
-        /// <summary>
-        /// Returns the source text with markup replacing the tags in the source segment
-        /// </summary>
-        public string PreparedSourceText => _preparedSourceText;
+		public MtTranslationProviderTagPlacer(Segment sourceSegment)
+		{
+			_sourceSegment = sourceSegment;
+			TagsInfo = new List<TagInfo>();
+			GetSourceTagsDictionary();
+		}
 
-        private string DecodeReturnedText(string strInput)
-        {
-            strInput = HttpUtility.HtmlDecode(strInput);
-            //HtmlDecode takes care of everything we are doing now
-            return strInput;
-        }
+		public List<TagInfo> TagsInfo { get; set; } = new List<TagInfo>();
 
+		public string PreparedSourceText { get; private set; }
 
-        private Dictionary<string, MtTag> GetSourceTagsDict()
-        {
-            dict = new Dictionary<string, MtTag>(); //try this
-                                                    //build dict
-            for (var i = 0; i < _sourceSegment.Elements.Count; i++)
-            {
-                var elType = _sourceSegment.Elements[i].GetType();
+		public Segment GetTaggedSegment(string returnedText)
+		{
+			try
+			{
+				return TryGetTaggedSegment(returnedText);
+			}
+			catch (Exception e) { }
 
-                if (elType.ToString() == "Sdl.LanguagePlatform.Core.Tag") //if tag, add to dictionary
-                {
-                    var theTag = new MtTag((Tag)_sourceSegment.Elements[i].Duplicate());
-                    var tagText = string.Empty;
+			return new Segment();
+		}
 
-                    var tagInfo = new TagInfo
-                    {
-                        TagType = theTag.SdlTag.Type,
-                        Index = i,
-                        IsClosed = false,
-                        TagId = theTag.SdlTag.TagID
-                    };
-                    if (!TagsInfo.Any(n => n.TagId.Equals(tagInfo.TagId)))
-                    {
-                        TagsInfo.Add(tagInfo);
-                    }
+		private string AddSeparators(string text, MatchCollection matches)
+		{
+			foreach (Match match in matches)
+			{
+				text = text.Replace(match.Value, $"```{match.Value}```");
+			}
 
-                    var tag = GetCorrespondingTag(theTag.SdlTag.TagID);
-                    if (theTag.SdlTag.Type == TagType.Start)
-                    {
-                        if (tag != null)
-                        {
-                            tagText = "<tg" + tag.TagId + ">";
-                        }
-                    }
-                    if (theTag.SdlTag.Type == TagType.End)
-                    {
-                        if (tag != null)
-                        {
-                            tag.IsClosed = true;
-                            tagText = "</tg" + tag.TagId + ">";
-                        }
-                    }
-                    if (theTag.SdlTag.Type == TagType.Standalone || theTag.SdlTag.Type == TagType.TextPlaceholder)
-                    {
-                        if (tag != null)
-                        {
-                            tagText = "<tg" + tag.TagId + "/>";
-                        }
-                    }
-                    _preparedSourceText += tagText;
-                    //now we have to figure out whether this tag is preceded and/or followed by whitespace
-                    if (i > 0 && !_sourceSegment.Elements[i - 1].GetType().ToString().Equals("Sdl.LanguagePlatform.Core.Tag"))
-                    {
-                        var prevText = _sourceSegment.Elements[i - 1].ToString();
-                        if (!prevText.Trim().Equals(""))//and not just whitespace
-                        {
-                            //get number of trailing spaces for that segment
-                            var whitespace = prevText.Length - prevText.TrimEnd().Length;
-                            //add that trailing space to our tag as leading space
-                            theTag.PadLeft = prevText.Substring(prevText.Length - whitespace);
-                        }
-                    }
-                    if (i < _sourceSegment.Elements.Count - 1 && !_sourceSegment.Elements[i + 1].GetType().ToString().Equals("Sdl.LanguagePlatform.Core.Tag"))
-                    {
-                        //here we don't care whether it is only whitespace
-                        //get number of leading spaces for that segment
-                        var nextText = _sourceSegment.Elements[i + 1].ToString();
-                        var whitespace = nextText.Length - nextText.TrimStart().Length;
-                        //add that trailing space to our tag as leading space
-                        theTag.PadRight = nextText.Substring(0, whitespace);
-                    }
-                    dict.Add(tagText, theTag); //add our new tag code to the dict with the corresponding tag
-                }
-                else
-                {
-                    var str = HttpUtility.HtmlEncode(_sourceSegment.Elements[i].ToString()); //HtmlEncode our plain text to be better processed by google and add to string
-                                                                                             //_preparedSourceText += str;
-                    _preparedSourceText += _sourceSegment.Elements[i].ToString();
-                }
-            }
-            TagsInfo.Clear();
-            return dict;
-        }
+			return text;
+		}
 
-        private TagInfo GetCorrespondingTag(string tagId)
-        {
-            return TagsInfo.FirstOrDefault(t => t.TagId.Equals(tagId));
+		public string MarkTags(string translation, string pattern)
+		{
+			try
+			{
+				var matches = new Regex(pattern).Matches(translation);
+				if (matches.Count > 0)
+				{
+					return AddSeparators(translation, matches);
+				}
+			}
+			catch (Exception e) { }
 
-        }
-        /// <summary>
-        /// Returns a tagged segments from a target string containing markup, where the target string represents the translation of the class instance's source segment
-        /// </summary>
-        /// <param name="returnedText"></param>
-        /// <returns></returns>
-        public Segment GetTaggedSegment(string returnedText)
-        {
-            //decode the returned text
-            _returnedText = DecodeReturnedText(returnedText);
+			return translation;
+		}
 
-            //our dictionary, dict, is already built
-            var segment = new Segment(); //our segment to return
-            var targetElements = GetTargetElements();//get our array of elements..it will be array of tagtexts and text in the order received from google
+		private Segment TryGetTaggedSegment(string returnedText)
+		{
+			_returnedText = HtmlDecode(returnedText);
+			var segment = new Segment();
+			var targetElements = GetTargetElements();
+			for (var i = 0; i < targetElements.Length; i++)
+			{
+				var text = targetElements[i];
+				if (_tagsDictionary.ContainsKey(text))
+				{
+					AddTagPadding(segment, text);
+					continue;
+				}
 
-            //build our segment looping through elements
-            for (var i = 0; i < targetElements.Length; i++)
-            {
-                var text = targetElements[i]; //the text to be compared/added
-                if (dict.ContainsKey(text)) //if our text in question is in the tagtext list
-                {
-                    try
-                    {
-                        var padleft = dict[text].PadLeft;
-                        var padright = dict[text].PadRight;
-                        if (padleft.Length > 0) segment.Add(padleft); //add leading space if applicable in the source text
-                        segment.Add(dict[text].SdlTag); //add the actual tag element after casting it back to a Tag
-                        if (padright.Length > 0) segment.Add(padright); //add trailing space if applicable in the source text
-                    }
-                    catch
-                    { }
-                }
-                else
-                {   //if it is not in the list of tagtexts then the element is just the text
-                    if (text.Trim().Length > 0) //if the element is something other than whitespace, i.e. some text in addition
-                    {
-                        text = text.Trim(); //trim out extra spaces, since they are dealt with by associating them with the tags
-                        segment.Add(text); //add to the segment
-                    }
-                }
-            }
-            //Microsoft sends back closing tags that need to be removed
-            //   segment = RemoveTrailingClosingTags(segment);
+				if (text.Trim().Length > 0)
+				{
+					segment.Add(text.Trim());
+				}
+			}
 
-            return segment; //this will return a tagged segment
-        }
+			return segment;
+		}
 
-        /// <summary>
-        /// Microsoft always adds closing tags, but we don't keep track of our tags that way..so the segments always have garbage text at the end with the closing tag markup...this method removes them
-        /// </summary>
-        /// <param name="segment"></param>
-        /// <returns></returns>
-        public Segment RemoveTrailingClosingTags(Segment segment)
-        {
-            #region RemoveTrailingClosingTags
-            var element = segment.Elements[segment.Elements.Count - 1]; //get last element
-            var str = element.ToString();
-            var pattern = @"\</tg[0-9a-z]*\>"; //we want to find "</tg" + {any number} + ">"
-            var rgx = new Regex(pattern);
-            var elType = element.GetType();
-            var matches = rgx.Matches(str);
-            if (elType.ToString().Equals("Sdl.LanguagePlatform.Core.Text") && matches.Count > 0) //if a text element containing matches
-            {
-                foreach (Match myMatch in matches)
-                {
-                    str = str.Replace(myMatch.Value, ""); //puts our separator around tagtexts
-                }
-                segment.Elements.Remove(element);
-                segment.Add(str.TrimStart());
-            }
-            #endregion
-            return segment;
-        }
+		private string[] GetTargetElements()
+		{
+			const string SimplePattern = "tg[0-9]*";
+			const string GuidPattern = "tg[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}";
+			const string AlphanumericPattern = "tgpt[0-9]*";
+			const string DecimalsPattern = @"tg[0-9,\.]*";
 
-        /// <summary>
-        /// puts returned string into an array of elements
-        /// </summary>
-        /// <returns></returns>
-        private string[] GetTargetElements()
-        {
-            //first create a regex to put our array separators around the tags
-            var str = _returnedText;
-            var pattern = @"(<tg[0-9a-z]*\>)|(<\/tg[0-9a-z]*\>)|(\<tg[0-9a-z]*/\>)";
-            var rgx = new Regex(pattern);
-            var matches = rgx.Matches(_returnedText);
+			var simpleTagRegex = string.Format(@"(<{0}\>)|(<\/{0}\>)|(\<{0}/\>)", SimplePattern);
+			var guidTagIdRegex = string.Format(@"(<{0}/>)|(<\\/{0}\\>)|(<{0}>)", GuidPattern);
+			var alphanumericTagRegex = string.Format(@"(<{0}\>)|(<\/{0}\>)|(\<{0}/\>)", AlphanumericPattern);
+			var decimalsTagRegex = string.Format(@"(<{0}\>)|(<\/{0}\>)|(\<{0}/\>)", DecimalsPattern);
 
-            foreach (Match myMatch in matches)
-            {
-                str = str.Replace(myMatch.Value, "```" + myMatch.Value + "```"); //puts our separator around tagtexts
-            }
-            var stringSeparators = new[] { "```" }; //split at our inserted marker....is there a better way?
-            var strAr = str.Split(stringSeparators, StringSplitOptions.None);
-            return strAr;
-        }
-    }
+			var translation = _returnedText;
+			translation = MarkTags(translation, simpleTagRegex);
+			translation = MarkTags(translation, guidTagIdRegex);
+			translation = MarkTags(translation, alphanumericTagRegex);
+			translation = MarkTags(translation, decimalsTagRegex);
+
+			return translation.Split(new[] { "```" }, StringSplitOptions.None);
+		}
+
+		private void AddTagPadding(Segment segment, string text)
+		{
+			var (padLeft, padRight) = (_tagsDictionary[text].PadLeft, _tagsDictionary[text].PadRight);
+			if (padLeft.Length > 0)
+			{
+				segment.Add(padLeft);
+			}
+
+			segment.Add(_tagsDictionary[text].SdlTag);
+			if (padRight.Length > 0)
+			{
+				segment.Add(padRight);
+			}
+		}
+
+		private void GetSourceTagsDictionary()
+		{
+			try
+			{
+				TryGetSourceTagsDictionary();
+				TagsInfo.Clear();
+			}
+			catch (Exception e) { }
+		}
+
+		private void TryGetSourceTagsDictionary()
+		{
+			_tagsDictionary = new Dictionary<string, MtTag>();
+			var elements = _sourceSegment?.Elements;
+			if (elements is null || !elements.Any())
+			{
+				return;
+			}
+
+			for (var i = 0; i < elements.Count; i++)
+			{
+				if (elements[i].GetType() != typeof(Tag))
+				{
+					PreparedSourceText += elements[i].ToString();
+					continue;
+				}
+
+				_currentTag = new MtTag((Tag)elements[i].Duplicate());
+				UpdateTagsInfo(i);
+				var tagText = ConvertTagToString();
+				PreparedSourceText += tagText;
+				SetWhiteSpace(elements, i);
+				_tagsDictionary.Add(tagText, _currentTag);
+			}
+		}
+
+		private string ConvertTagToString()
+		{
+			if (!(GetCorrespondingTag(_currentTag.SdlTag.TagID) is TagInfo tagInfo))
+			{
+				return string.Empty;
+			}
+
+			switch (_currentTag.SdlTag.Type)
+			{
+				case (TagType.Start):
+					return $"<tg{tagInfo.TagId}>";
+				case TagType.End:
+					return $"</tg{tagInfo.TagId}>";
+				case TagType.Standalone:
+					return $"<tg{tagInfo.TagId}/>";
+				case TagType.TextPlaceholder:
+					return $"<tg{tagInfo.TagId}/>";
+				case TagType.LockedContent:
+					return $"<tg{tagInfo.TagId}/>";
+				default:
+					return string.Empty;
+			}
+		}
+
+		private TagInfo GetCorrespondingTag(string tagId)
+		{
+			return TagsInfo.FirstOrDefault(t => t.TagId.Equals(tagId));
+		}
+
+		private void SetWhiteSpace(List<SegmentElement> elements, int currentIndex)
+		{
+			SetTrailingWhitespaces(elements, currentIndex - 1);
+			SetLeadingWhitespaces(elements, currentIndex + 1);
+		}
+
+		private void SetLeadingWhitespaces(List<SegmentElement> elements, int nextIndex)
+		{
+			if (nextIndex >= elements.Count || elements[nextIndex].GetType() == typeof(Tag))
+			{
+				return;
+			}
+
+			var nextElement = elements[nextIndex].ToString();
+			var whitespace = nextElement.Length - nextElement.TrimStart().Length;
+			_currentTag.PadRight = nextElement.Substring(0, whitespace);
+		}
+
+		private void SetTrailingWhitespaces(List<SegmentElement> elements, int previousIndex)
+		{
+			if (previousIndex < 0 || elements[previousIndex].GetType() == typeof(Tag))
+			{
+				return;
+			}
+
+			var previousElement = elements[previousIndex].ToString();
+			if (previousElement.Trim().Equals(""))
+			{
+				return;
+			}
+
+			var whitespace = previousElement.Length - previousElement.TrimEnd().Length;
+			_currentTag.PadLeft = previousElement.Substring(previousElement.Length - whitespace);
+		}
+
+		private void UpdateTagsInfo(int index)
+		{
+			if (TagsInfo.Any(n => n.TagId.Equals(_currentTag.SdlTag.TagID)))
+			{
+				return;
+			}
+
+			TagsInfo.Add(new TagInfo
+			{
+				Index = index,
+				IsClosed = _currentTag.SdlTag.Type == TagType.End,
+				TagId = _currentTag.SdlTag.TagID,
+				TagType = _currentTag.SdlTag.Type,
+			});
+		}
+
+		public string HtmlDecode(string input)
+		{
+			try
+			{
+				return HttpUtility.HtmlDecode(input);
+			}
+			catch
+			{
+				return input;
+			}
+		}
+	}
 }
