@@ -220,9 +220,10 @@ namespace Sdl.Community.TQA.Providers
 						foreach (var revisedTranslation in revisedTranslations)
 						{
 							var translation = revisedTranslation.Element("item").Attribute("content").Value;
-							var categorySubCategory = revisedTranslation.Attribute("category").Value.Split('-');
-							var category = (categorySubCategory.Length > 0) ? categorySubCategory[0].Trim() : string.Empty;
-							var subcategory = (categorySubCategory.Length > 1) ? categorySubCategory[1].Trim() : string.Empty;
+							var categorySubCategory = revisedTranslation.Attribute("category").Value;
+							var subCategoryIdx = categorySubCategory.IndexOf("-");
+							var category = subCategoryIdx >= 0 ? categorySubCategory.Substring(0, subCategoryIdx).Trim() : "";
+							var subcategory = subCategoryIdx >= 0 ? categorySubCategory.Substring(subCategoryIdx + 1).Trim() : "";
 
 							var severity = revisedTranslation.Attribute("severity").Value;
 							var comment = revisedTranslation.Attribute("comment").Value;
