@@ -480,9 +480,20 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			CurrentWeaverWorkingPlatformsUriLogin = string.Empty;
 		}
 
-		private void NavigateTo(object o)
+		private void NavigateTo(object obj)
 		{
-			var value = (o as string)?.Trim();
+			if (obj is Uri uri)
+			{
+				Process.Start(uri.AbsoluteUri);
+				return;
+			}
+
+			if (obj is not string value)
+			{
+				return;
+			}
+
+			value = value.Trim();
 			if (!string.IsNullOrEmpty(value))
 			{
 				Process.Start(value);
