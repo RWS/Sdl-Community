@@ -43,11 +43,6 @@ namespace Sdl.Community.MTEdge.Provider.XliffConverter.Converter
 			using (var stream = new MemoryStream(byteArray))
 			{
 				var xliff = (Xliff)Serializer.Deserialize(stream);
-
-				// represents the Line Feed (new line: \n)
-				var softReturn = Convert.ToChar(10).ToString();
-				var regExPattern = new Regex("\r\n");
-
 				for (var i = 0; i < sourceText.Count; i++)
 				{
 					if (sourceText[i].Groups.Count < 2)
@@ -55,25 +50,11 @@ namespace Sdl.Community.MTEdge.Provider.XliffConverter.Converter
 						continue;
 					}
 
-					// if the target result contains Carriage Return and Line Feed characters(\r\n), replace it with a soft return
-					// (otherwise a hard return is added and might crash Studio, the hard return is used for a new paragraph and not to display a new line inside of a segment)
-					var translationOption = xliff.File.Body.TranslationUnits[i].TranslationList.FirstOrDefault();
-					if (translationOption != null)
-					{
-						if (targetText[i].Groups[1].Value.Contains("\r\n"))
-						{
-							translationOption.Translation.Text = regExPattern.Replace(targetText[i].Groups[1].Value, softReturn);
-						}
-						else
-						{
-
-							translationOption.Translation.Text = targetText[i].Groups[1].Value;
-						}
-						translationOption.Translation.TargetLanguage = xliff.File.TargetLanguage;
-					}
-
+					xliff.File.Body.TranslationUnits[i].TranslationList.First().Translation.Text = targetText[i].Groups[1].Value;
 					xliff.File.Body.TranslationUnits[i].SourceText = sourceText[i].Groups[1].Value;
+					xliff.File.Body.TranslationUnits[i].TranslationList.First().Translation.TargetLanguage = xliff.File.TargetLanguage;
 				}
+
 				return xliff;
 			}
 		}
