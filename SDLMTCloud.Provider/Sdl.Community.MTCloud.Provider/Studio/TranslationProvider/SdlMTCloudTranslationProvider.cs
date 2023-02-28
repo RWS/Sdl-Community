@@ -252,7 +252,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				SelectedModel = selectedModel,
 				Dictionaries = dictionaries,
 				SelectedDictionary = selectedDictionary,
-				LinguisticOptions = mapping?.SavedLanguageMappingModel?.SelectedModel?.LinguisticOptions
+				LinguisticOptions = mapping?.SavedLanguageMappingModel?.SelectedModel?.LinguisticOptions ?? selectedModel.LinguisticOptions
 			};
 
 			return languageMappingModel;
