@@ -50,6 +50,8 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 			Xliff xliffFile)
 		{
 			var text = xliffFile.ToString();
+			if (xliffFile.File.Body.TranslationUnits.Count == 0) return text;
+
 			var queryString = new Dictionary<string, string>();
 			var encodedInput = text.Base64Encode();
 
@@ -97,7 +99,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeApi
 			try
 			{
 				jsonResult = Translate(queryString, options, "translations/quick");
-			}
+			 }
 			catch (Exception e)
 			{
 				_logger.Error($"{Constants.Translation}: {e.Message}\n {e.StackTrace}\n Encoded Input: {encodedInput}");
