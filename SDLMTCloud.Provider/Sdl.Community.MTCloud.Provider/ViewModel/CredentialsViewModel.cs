@@ -31,7 +31,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private Authentication _selectedAuthentication;
 		private ICommand _clearCommand;
 		private WorkingPortal _selectedWorkingPortal;
-		private string _currentWeaverWorkingPlatformsUriLogin; 
+		private string _currentWeaverWorkingPlatformsUriLogin;
 		private string _currentWeaverClientWorkingPlatformsUri;
 
 		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
@@ -275,21 +275,15 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			get => _selectedWorkingPortal;
 			set
 			{
-				if (_selectedWorkingPortal == value)
-				{
-					return;
-				}
-
 				_selectedWorkingPortal = value;
 				_connectionService.Credential.AccountRegion = _selectedWorkingPortal;
-		
+
 				WeaverWorkingPlatformsUriLogin.TryGetValue(_selectedWorkingPortal,
 					out var currentWeaverWorkingPlatform);
 				CurrentWeaverClientWorkingPlatformsUri = currentWeaverWorkingPlatform;
 
 				ClearErrorMessageArea();
 				OnPropertyChanged(nameof(SelectedWorkingPortal));
-				
 			}
 		}
 
@@ -309,8 +303,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			get
 			{
 				if (!string.IsNullOrEmpty(ExceptionMessage) &&
-				    (ExceptionMessage.Equals(PluginResources.UnableToConnectToWorkingEUPortal) ||
-				     ExceptionMessage.Equals(PluginResources.UnableToConnectToWorkingUSPortal)))
+					(ExceptionMessage.Equals(PluginResources.UnableToConnectToWorkingEUPortal) ||
+					 ExceptionMessage.Equals(PluginResources.UnableToConnectToWorkingUSPortal)))
 
 					return _clickingHere;
 				return string.Empty;
@@ -354,7 +348,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			get
 			{
 				return _currentWeaverClientWorkingPlatformsUri;
-			
+
 			}
 			set
 			{
@@ -364,7 +358,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				}
 
 				_currentWeaverClientWorkingPlatformsUri = value;
-
 				OnPropertyChanged(nameof(CurrentWeaverClientWorkingPlatformsUri));
 			}
 		}
@@ -397,7 +390,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 				if (_selectedAuthentication.Type == Authentication.AuthenticationType.Studio)
 				{
-					(StudioIsSignedIn, var message) = _connectionService.Connect(new Credential{Type = Authentication.AuthenticationType.Studio});
+					(StudioIsSignedIn, var message) = _connectionService.Connect(new Credential { Type = Authentication.AuthenticationType.Studio });
 					StudioSignedInAs = StudioIsSignedIn ? _connectionService.Credential?.Name : string.Empty;
 					SignInLabel = StudioIsSignedIn ? PluginResources.Label_SignOut : PluginResources.Label_Sign_In;
 					ExceptionMessage = message != "OK" ? message : "";
@@ -414,7 +407,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			get => _auth0ViewModel;
 			set
 			{
-				_auth0ViewModel = value; 
+				_auth0ViewModel = value;
 				OnPropertyChanged();
 			}
 		}
@@ -600,8 +593,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			{
 					{WorkingPortal.UEPortal, Constants.MTCloudTranslateAPIUrlEULogin},
 					{WorkingPortal.USPortal, Constants.MTCloudTranslateAPIUrlUSLogin}
-				};
+			};
 		}
-
 	}
 }
