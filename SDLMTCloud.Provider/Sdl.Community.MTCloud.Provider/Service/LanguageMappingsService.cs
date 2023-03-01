@@ -163,7 +163,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				return null;
 			}
 
-			availableLinguisticOptions = availableLinguisticOptions.Where(x => !x.Name.ToLower().Equals("qualityestimation")).ToList();
 			if (!availableLinguisticOptions.Any())
 			{
 				return null;
