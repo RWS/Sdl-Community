@@ -61,9 +61,6 @@
     <Reference Include="Sdl.Desktop.Platform.Styles">
       <HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Styles.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.DesktopEditor.Control">
-      <HintPath>$(TradosFolder)\Sdl.DesktopEditor.Control.dll</HintPath>
-    </Reference>
     <Reference Include="Sdl.DesktopEditor.EditorApi">
       <HintPath>$(TradosFolder)\Sdl.DesktopEditor.EditorApi.dll</HintPath>
     </Reference>
