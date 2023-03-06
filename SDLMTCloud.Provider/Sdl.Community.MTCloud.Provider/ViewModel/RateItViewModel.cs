@@ -10,6 +10,7 @@ using System.Windows.Input;
 using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Events;
+using Sdl.Community.MTCloud.Provider.Extensions;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Model.RateIt;
@@ -385,19 +386,15 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private void MetadataSupervisor_ActiveSegmentQeChanged(ActiveSegmentQeChanged data)
 		{
 			AddEvaluationForCurrentSegment(data.Estimation);
+			if (!ActiveSegmentId.HasValue)
+			{
+				return;
+			}
 
-			if (!ActiveSegmentId.HasValue) return;
-
-			var currentSegmentEvaluation = ActiveDocumentEvaluations.EvaluationPerSegment.TryGetValue(
-				ActiveSegmentId.Value,
-				out var qualityEstimation);
-
-			ActiveDocumentEvaluations.CurrentSegmentEvaluation =
-				ActiveDocument.ActiveSegmentPair.Properties.TranslationOrigin.OriginSystem ==
-					Resources.OriginSystem_LWC && currentSegmentEvaluation
-					? qualityEstimation
-					: null;
-
+			var currentEvaluation = ActiveDocumentEvaluations.EvaluationPerSegment.TryGetValue(ActiveSegmentId.Value, out var qualityEstimation);
+			var isLwOrigin = ActiveDocument.ActiveSegmentPair.Properties.TranslationOrigin.OriginSystem.IsLanguageWeaverOrigin();
+			qualityEstimation = isLwOrigin && currentEvaluation ? qualityEstimation : null;
+			ActiveDocumentEvaluations.CurrentSegmentEvaluation = qualityEstimation;
 			OnPropertyChanged(nameof(ActiveDocumentEvaluations));
 		}
 
