@@ -163,11 +163,6 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				return null;
 			}
 
-			if (!availableLinguisticOptions.Any())
-			{
-				return null;
-			}
-
 			return availableLinguisticOptions;
 		}
 
