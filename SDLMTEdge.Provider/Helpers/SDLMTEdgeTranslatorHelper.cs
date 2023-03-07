@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using NLog;
+using Sdl.Community.MTEdge.Provider.Interface;
 using Sdl.Community.MTEdge.Provider.Model;
 using Sdl.Community.MTEdge.Provider.XliffConverter.Converter;
 using Sdl.LanguagePlatform.Core;
@@ -20,7 +21,7 @@ using System.Windows.Forms;
 namespace Sdl.Community.MTEdge.Provider.Helpers
 {
 
-    public static class SDLMTEdgeTranslatorHelper
+	public static class SDLMTEdgeTranslatorHelper
     {
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static readonly Func<Uri, HttpClient, HttpResponseMessage> _mtEdgeGet = (uri, client) => client.GetAsync(uri).Result;

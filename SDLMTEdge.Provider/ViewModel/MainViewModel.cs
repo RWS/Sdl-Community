@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Input;
 using Sdl.Community.MTEdge.Provider.Command;
+using Sdl.Community.MTEdge.Provider.Helpers;
 using Sdl.Community.MTEdge.Provider.Interface;
 using Sdl.Community.MTEdge.Provider.Model;
 using Sdl.LanguagePlatform.Core;
@@ -24,7 +25,7 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 		private bool _showSettingsView;
 
 		private ICommand _saveCommand;
-		private ICommand _switchViewCommand;
+		private ICommand _loginCommand;
 
         public MainViewModel(ITranslationOptions options,
                              ITranslationProviderCredentialStore credentialStore,
@@ -76,6 +77,8 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 
 		public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save);
 
+		public ICommand LoginCommand => _loginCommand ??= new RelayCommand(Login);
+
         public delegate void CloseWindowEventRaiser();
 
         public event CloseWindowEventRaiser CloseEventRaised;
@@ -102,5 +105,40 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
         {
             DialogResult = true;
         }
-    }
+
+		private void Login(object parameter)
+		{
+			string token;
+			try
+			{
+				if (_credentialsViewModel.UseRwsCredentials)
+				{
+					token = SDLMTEdgeTranslatorHelper.GetAuthToken(Options as TranslationOptions, GetCredentals());
+				}
+				else
+				{
+					token = _credentialsViewModel.ApiKey;
+					SDLMTEdgeTranslatorHelper.VerifyBasicAPIToken(Options as TranslationOptions, GetCredentals());
+				}
+
+				Options.ApiToken = token;
+				return;
+			}
+			catch
+			{
+				//return false;
+				return;
+			}
+		}
+
+		private GenericCredentials GetCredentals()
+		{
+			return new GenericCredentials(_credentialsViewModel.UserName, _credentialsViewModel.Password)
+			{
+				["API-Key"] = _credentialsViewModel.ApiKey,
+				["UseApiKey"] = _credentialsViewModel.UseRwsCredentials ? "false" : "true",
+				["RequiresSecureProtocol"] = _credentialsViewModel.RequiresSecureProtocol ? "true" : "false"
+			};
+		}
+	}
 }

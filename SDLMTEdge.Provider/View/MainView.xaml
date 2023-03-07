@@ -29,11 +29,11 @@
 			</ResourceDictionary.MergedDictionaries>
 
 			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
-			
+
 			<DataTemplate DataType="{x:Type viewModels:CredentialsViewModel}">
 				<views:CredentialsView />
 			</DataTemplate>
-			
+
 			<Style TargetType="Image">
 				<Setter Property="RenderOptions.BitmapScalingMode"
 						Value="HighQuality" />
@@ -60,18 +60,21 @@
 						Orientation="Horizontal"
 						HorizontalAlignment="Center"
 						Margin="0 0 0 16">
-				<Button Content="Login" Style="{StaticResource Sdl.Button.PrimaryStyle}" 
-						Visibility="Collapsed"
-						Width="160"
-						Height="32"/>
-				<Button Content="Confirm"
+				<Button Content="Login"
+						Command="{Binding LoginCommand}"
 						Style="{StaticResource Sdl.Button.PrimaryStyle}"
 						Width="160"
-						Height="32"/>
-				<Button Content="Cancel" Style="{StaticResource Sdl.Button.SecondaryStyle}"
+						Height="32" />
+				<Button Content="Confirm"
+						Style="{StaticResource Sdl.Button.PrimaryStyle}"
+						Visibility="Collapsed"
+						Width="160"
+						Height="32" />
+				<Button Content="Cancel"
+						Style="{StaticResource Sdl.Button.SecondaryStyle}"
 						Margin="16 0 0 0"
 						Width="160"
-						Height="32"/>
+						Height="32" />
 			</StackPanel>
 		</Grid>
 	</Border>
