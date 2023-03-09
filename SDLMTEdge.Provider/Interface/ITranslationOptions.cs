@@ -26,10 +26,14 @@ namespace Sdl.Community.MTEdge.Provider.Interface
 
 		public bool RequiresSecureProtocol { get; set; }
 
-		public Dictionary<CultureInfo, MTEdgeLanguagePair> LanguagePairPreferences { get; }
+		public Dictionary<CultureInfo, MTEdgeLanguagePair> LanguagePairPreferences { get; set; }
+
+		public List<TradosToMTEdgeLanguagePair> LanguageMapping { get; set; }
 
 		public void SetDictionaries(TradosToMTEdgeLanguagePair[] languagePairChoices);
 
 		public TradosToMTEdgeLanguagePair[] SetPreferredLanguages(LanguagePair[] languagePairs);
+
+		public void SetLanguageMapping(List<TradosToMTEdgeLanguagePair> languagePairChoices);
 	}
 }

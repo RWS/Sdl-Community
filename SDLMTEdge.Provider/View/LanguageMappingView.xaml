@@ -85,12 +85,16 @@
 								   Margin="0" />
 
 						<ComboBox ItemsSource="{Binding Dictionaries}"
+								  SelectedItem="{Binding SelectedDictionary}"
+								  SelectedIndex="0"
 								  DisplayMemberPath="DictionaryId"
 								  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
 								  HorizontalAlignment="Stretch"
 								  Cursor="Hand" />
 
 						<ComboBox ItemsSource="{Binding MtEdgeLanguagePairs}"
+								  SelectedItem="{Binding SelectedModel}"
+								  SelectedIndex="0"
 								  DisplayMemberPath="DisplayName"
 								  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
 								  HorizontalAlignment="Stretch"

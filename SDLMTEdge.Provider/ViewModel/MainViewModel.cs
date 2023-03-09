@@ -154,6 +154,8 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 		private void Save(object parameter)
         {
             DialogResult = true;
+			Options.LanguageMapping = _languageMappingViewModel.LanguageMapping;
+			Options.SetLanguageMapping(_languageMappingViewModel.LanguageMapping);
 			CloseEventRaised?.Invoke();
 		}
 

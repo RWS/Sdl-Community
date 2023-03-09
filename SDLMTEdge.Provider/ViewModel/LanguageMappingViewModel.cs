@@ -14,6 +14,7 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 		{
 			ViewModel = this;
 			_translationOptions = options;
+			LanguageMapping = options?.LanguageMapping;
 		}
 
 		public BaseModel ViewModel { get; set; }

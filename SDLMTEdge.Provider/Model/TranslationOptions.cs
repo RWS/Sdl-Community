@@ -20,7 +20,7 @@ namespace Sdl.Community.MTEdge.Provider.Model
 			UseBasicAuthentication = true;
 			RequiresSecureProtocol = false;
 			Port = 8001;
-			LanguagePairPreferences = new Dictionary<CultureInfo, MTEdgeLanguagePair>();
+			LanguagePairPreferences ??= new Dictionary<CultureInfo, MTEdgeLanguagePair>();
 		}
 
 		public TranslationOptions(Uri uri) : this()
@@ -30,7 +30,8 @@ namespace Sdl.Community.MTEdge.Provider.Model
 
 		public static readonly TranslationMethod ProviderTranslationMethod = TranslationMethod.MachineTranslation;
 
-		public Dictionary<CultureInfo, MTEdgeLanguagePair> LanguagePairPreferences { get; }
+		public Dictionary<CultureInfo, MTEdgeLanguagePair> LanguagePairPreferences { get; set; }
+		public List<TradosToMTEdgeLanguagePair> LanguageMapping { get; set; }
 
 		public int Port
 		{
@@ -61,6 +62,19 @@ namespace Sdl.Community.MTEdge.Provider.Model
 		public bool RequiresSecureProtocol { get; set; }
 
 		public Uri Uri => !string.IsNullOrWhiteSpace(_uriBuilder.HostName) ? _uriBuilder.Uri : null;
+
+		public void SetLanguageMapping(List<TradosToMTEdgeLanguagePair> languagePairChoices)
+		{
+			if (languagePairChoices is null || !languagePairChoices.Any())
+			{
+				return;
+			}
+
+			foreach (var languagePair in languagePairChoices)
+			{
+				LanguagePairPreferences[languagePair.TradosCulture] = languagePair.SelectedModel;
+			}
+		}
 
 		public void SetDictionaries(TradosToMTEdgeLanguagePair[] languagePairChoices)
 		{

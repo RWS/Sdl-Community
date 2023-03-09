@@ -1,5 +1,4 @@
 using System;
-using System.Security.Policy;
 using System.Windows.Forms;
 using NLog;
 using Sdl.Community.MTEdge.Provider.Model;
