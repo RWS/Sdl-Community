@@ -43,9 +43,14 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 
 		private string SetEndpoint(string endpoint)
 		{
-			if (endpoint is null)
+			if (string.IsNullOrEmpty(endpoint))
 			{
-				return $@"https://{Constants.MicrosoftProviderUriBase}";
+				return $@"{Constants.MicrosoftProviderUriBase}";
+			}
+
+			if (endpoint.EndsWith("/"))
+			{
+				endpoint.Substring(0, _endpoint.Length - 1);
 			}
 
 			_usePrivateEndpoint = true;
@@ -189,8 +194,8 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 		{
 			const string path = "/translate?api-version=3.0";
 			var languageParams = $"&from={sourceLanguage}&to={targetLanguage}&textType=html&category={category}";
-
-			return string.Concat(_endpoint, path, languageParams);
+			var targetUri = _endpoint.StartsWith("https://") ? _endpoint : $@"https://{_endpoint}";
+			return string.Concat(targetUri, path, languageParams);
 		}
 
 		private List<string> GetSupportedLanguages()
@@ -208,7 +213,8 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 
 		private List<string> TryGetSupportedLanguages()
 		{
-			var uri = new Uri(_endpoint);
+			var targetUri = _endpoint.StartsWith("https://") ? _endpoint : $@"https://{_endpoint}";
+			var uri = new Uri(targetUri);
 			var client = new RestClient(uri);
 
 			var request = new RestRequest("languages", Method.Get);
@@ -280,7 +286,7 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 			}
 
 			var region = string.IsNullOrEmpty(_region) ? "" : _region + ".";
-			var uriString = $"https://{region}{_endpoint}/sts/v1.0/issueToken";
+			var uriString = $"https://{region}{Constants.MicrosoftProviderServiceUriBase}/sts/v1.0/issueToken";
 			var uri = new Uri(uriString);
 			try
 			{
