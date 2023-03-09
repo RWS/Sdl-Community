@@ -23,8 +23,9 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly HtmlUtil _htmlUtil;
+		private readonly string _endpoint;
 
-		private string _endpoint;
+		private bool _usePrivateEndpoint;
 		private string _subscriptionKey;
 		private string _region;
 		private string _authToken;
@@ -35,9 +36,31 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 			_subscriptionKey = subscriptionKey;
 			_region = region;
 			_htmlUtil = htmlUtil;
+			_endpoint = SetEndpoint(endpoint);
 			_authToken ??= GetAuthToken();
-			_endpoint = endpoint ?? $@"https://{Constants.MicrosoftProviderUriBase}";
 			_supportedLanguages ??= GetSupportedLanguages();
+		}
+
+		private string SetEndpoint(string endpoint)
+		{
+			if (endpoint is null)
+			{
+				return $@"https://{Constants.MicrosoftProviderUriBase}";
+			}
+
+			_usePrivateEndpoint = true;
+			return !endpoint.StartsWith("http://") && !endpoint.StartsWith("https://")
+				 ? $@"https://{endpoint}"
+				 : endpoint;
+		}
+
+		public void EnsurePrivateEndpointConnectivity()
+		{
+			var result = Translate("en", "de", "Hello World", "");
+			if (string.IsNullOrEmpty(result))
+			{
+				throw new InvalidOperationException("No Connection could be established");
+			}
 		}
 
 		public void RefreshAuthToken()
@@ -139,7 +162,15 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 				Content = new StringContent(requestBody, Encoding.UTF8, "application/json"),
 				RequestUri = new Uri(BuildTranslationUri(sourceLanguage, targetLanguage, categoryID))
 			};
-			httpRequest.Headers.Add("Authorization", _authToken);
+
+			if (_usePrivateEndpoint)
+			{
+				httpRequest.Headers.Add(Constants.OcpApimSubscriptionKeyHeader, _subscriptionKey);
+			}
+			else
+			{
+				httpRequest.Headers.Add("Authorization", _authToken);
+			}
 
 			var httpClient = new HttpClient();
 			var response = httpClient.SendAsync(httpRequest).Result;
@@ -184,9 +215,18 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 			request.AddParameter("api-version", "3.0");
 			request.AddParameter("scope", "translation");
 
-			var languageResponse = client.ExecuteAsync(request).Result;
-			var languages = JsonConvert.DeserializeObject<LanguageResponse>(languageResponse.Content);
+			if (_usePrivateEndpoint)
+			{
+				request.AddHeader(Constants.OcpApimSubscriptionKeyHeader, _subscriptionKey);
+			}
 
+			var languageResponse = client.ExecuteAsync(request).Result;
+			if (_usePrivateEndpoint && !languageResponse.IsSuccessful)
+			{
+				throw new Exception("Error on connecting to translator. " + languageResponse.Content);
+			}
+
+			var languages = JsonConvert.DeserializeObject<LanguageResponse>(languageResponse.Content);
 			var languageCodeList = new List<string>();
 			foreach (var language in languages?.Translation)
 			{
@@ -198,6 +238,11 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 
 		private string GetAuthToken()
 		{
+			if (_usePrivateEndpoint)
+			{
+				return string.Empty;
+			}
+
 			string accessToken = null;
 			var task = Task.Run(async () =>
 			{
@@ -235,7 +280,7 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 			}
 
 			var region = string.IsNullOrEmpty(_region) ? "" : _region + ".";
-			var uriString = $"https://{region}{Constants.MicrosoftProviderServiceUriBase}/sts/v1.0/issueToken";
+			var uriString = $"https://{region}{_endpoint}/sts/v1.0/issueToken";
 			var uri = new Uri(uriString);
 			try
 			{

@@ -180,14 +180,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 		private void Save(object window)
 		{
-			if (_isTellMeAction)
-			{
-				SetGeneralProviderOptions();
-				DialogResult = true;
-				CloseEventRaised?.Invoke();
-				return;
-			}
-
 			if (!IsWindowValid())
 			{
 				return;
@@ -229,16 +221,22 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			try
 			{
 				var apiConnecter = new ProviderConnecter(_providerControlViewModel.ClientID, _providerControlViewModel.Region?.Key, _htmlUtil, _providerControlViewModel.PrivateEndpoint);
-				apiConnecter.RefreshAuthToken();
+				if (_providerControlViewModel.UsePrivateEndpoint)
+				{
+					apiConnecter.EnsurePrivateEndpointConnectivity();
+				}
+				else
+				{
+					apiConnecter.RefreshAuthToken();
+				}
 
 				return true;
 			}
 			catch (Exception e)
 			{
 				ErrorHandler.HandleError(e);
+				return false;
 			}
-
-			return false;
 		}
 
 		private void SetGeneralProviderOptions()
