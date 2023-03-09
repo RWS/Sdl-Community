@@ -25,7 +25,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		private readonly ITranslationProviderCredentialStore _credentialStore;
 		private readonly LanguagePair[] _languagePairs;
 		private readonly HtmlUtil _htmlUtil;
-		private readonly bool _isTellMeAction;
 
 		private ViewDetails _selectedView;
 		private bool _dialogResult;
