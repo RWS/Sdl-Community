@@ -10,6 +10,8 @@ namespace Sdl.Community.MTEdge.Provider
     {
         public const string TranslationProviderScheme = "sdlmtedge";
 
+		// URIs
+
         // Provider
         public const string Provider_TranslationProviderFactory = "MTEdge_Factory";
         public const string Provider_TranslationProviderWinFormsUi = "MTEdge_WinFormsUI";

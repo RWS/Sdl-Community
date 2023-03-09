@@ -17,5 +17,7 @@
         public string SourceLanguageId { get; set; }
 
         public string TargetLanguageId { get; set; }
+
+		public string DisplayName => $"{Domain} {Version}";
     }
 }

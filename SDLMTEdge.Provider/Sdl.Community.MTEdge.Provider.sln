@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.MTEdge.Provider", "Sdl.Community.MTEdge.Provider.csproj", "{2739687A-D9BA-45B4-B1C8-516886028468}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdl.Community.MTEdge.Provider", "Sdl.Community.MTEdge.Provider.csproj", "{2739687A-D9BA-45B4-B1C8-516886028468}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

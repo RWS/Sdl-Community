@@ -1,13 +1,7 @@
-﻿using Newtonsoft.Json;
-using NLog;
-using Sdl.Community.MTEdge.Provider.Interface;
-using Sdl.Community.MTEdge.Provider.Model;
-using Sdl.Community.MTEdge.Provider.XliffConverter.Converter;
-using Sdl.LanguagePlatform.Core;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -17,6 +11,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
+using Newtonsoft.Json;
+using NLog;
+using Sdl.Community.MTEdge.Provider.Model;
+using Sdl.Community.MTEdge.Provider.XliffConverter.Converter;
+using Sdl.LanguagePlatform.Core;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.MTEdge.Provider.Helpers
 {
@@ -30,11 +30,47 @@ namespace Sdl.Community.MTEdge.Provider.Helpers
 
         private static MTEdgeLanguagePair[] _languagePairsOnServer;
 
+		public static async Task<string> SignInAuthAsync(TranslationOptions translationOptions)
+		{
+			var baseUrl = $"https://{translationOptions.Host}:{translationOptions.Port}";
+			var uri2 = $"{baseUrl}/api/v2/auth/saml/init";
+			var uri3 = $"{baseUrl}/api/v2/auth/saml/wait";
 
-        /// <summary>
-        /// Get the translation of an xliff file using the MTEdge API.
-        /// </summary>
-        public static string GetTranslation(TranslationOptions options, LanguagePair languageDirection, Xliff xliffFile)
+			var httpRequest = new HttpRequestMessage(HttpMethod.Get, new Uri($"{baseUrl}/api/v2/auth/saml/gen-secret"));
+			using var httpClient = new HttpClient();
+			var response = await httpClient.SendAsync(httpRequest);
+
+			var secret = "";
+			if (response.IsSuccessStatusCode)
+			{
+				secret = await response.Content.ReadAsStringAsync();
+			}
+
+			var url = $"{uri2}?secret={secret}";
+			var ps = new ProcessStartInfo(url)
+			{
+				UseShellExecute = true,
+				Verb = "open"
+			};
+
+			Process.Start(ps);
+
+			httpRequest = new HttpRequestMessage(HttpMethod.Get, $"{uri3}?secret={secret}");
+			response = await httpClient.SendAsync(httpRequest);
+
+			var token = string.Empty;
+			if (response.IsSuccessStatusCode)
+			{
+				token = await response.Content.ReadAsStringAsync();
+			}
+
+			return token;
+		}
+
+		/// <summary>
+		/// Get the translation of an xliff file using the MTEdge API.
+		/// </summary>
+		public static string GetTranslation(TranslationOptions options, LanguagePair languageDirection, Xliff xliffFile)
         {
             var text = xliffFile.ToString();
             if (xliffFile.File.Body.TranslationUnits.Count == 0)
@@ -254,58 +290,56 @@ namespace Sdl.Community.MTEdge.Provider.Helpers
 
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.DefaultConnectionLimit = 9999;
-            using (var httpClient = new HttpClient())
-            {
-                httpClient.DefaultRequestHeaders.Authorization = options.UseBasicAuthentication
-                    ? new AuthenticationHeaderValue("Bearer", options.ApiToken)
-                    : new AuthenticationHeaderValue("Basic", (options.ApiToken + ":").Base64Encode());
+			using var httpClient = new HttpClient();
+			httpClient.DefaultRequestHeaders.Authorization = options.UseBasicAuthentication
+				? new AuthenticationHeaderValue("Bearer", options.ApiToken)
+				: new AuthenticationHeaderValue("Basic", (options.ApiToken + ":").Base64Encode());
 
-                var builder = new UriBuilder(options.Uri)
-                {
-                    Path = $"/api/{options.ApiVersionString}/{path}",
-                    Scheme = options.RequiresSecureProtocol ? Uri.UriSchemeHttps : Uri.UriSchemeHttp
-                };
+			var builder = new UriBuilder(options.Uri)
+			{
+				Path = $"/api/{options.ApiVersionString}/{path}",
+				Scheme = options.RequiresSecureProtocol ? Uri.UriSchemeHttps : Uri.UriSchemeHttp
+			};
 
-                if (parameters != null)
-                {
-                    builder.Query = parameters.ToString();
-                }
-                HttpResponseMessage httpResponse;
+			if (parameters != null)
+			{
+				builder.Query = parameters.ToString();
+			}
+			HttpResponseMessage httpResponse;
 
-                try
-                {
-                    httpResponse = mtEdgeHttpMethod(builder.Uri, httpClient);
-                }
-                catch (Exception e)
-                {
-                    while (e.InnerException != null)
-                    {
-                        e = e.InnerException;
-                    }
+			try
+			{
+				httpResponse = mtEdgeHttpMethod(builder.Uri, httpClient);
+			}
+			catch (Exception e)
+			{
+				while (e.InnerException != null)
+				{
+					e = e.InnerException;
+				}
 
-                    _logger.Error($"{Constants.MTEdgeServerContact}:\n {Constants.MtEdgeServerContactExResult} {e.HResult}\n {e.Message}\n {e.StackTrace}");
-                    throw TranslateAggregateException(e);
-                }
+				_logger.Error($"{Constants.MTEdgeServerContact}:\n {Constants.MtEdgeServerContactExResult} {e.HResult}\n {e.Message}\n {e.StackTrace}");
+				throw TranslateAggregateException(e);
+			}
 
-                if (httpResponse.Content != null && httpResponse.StatusCode == HttpStatusCode.OK)
-                {
-                    return httpResponse.Content.ReadAsStringAsync().Result;
-                }
+			if (httpResponse.Content != null && httpResponse.StatusCode == HttpStatusCode.OK)
+			{
+				return httpResponse.Content.ReadAsStringAsync().Result;
+			}
 
-                switch (httpResponse.StatusCode)
-                {
-                    case HttpStatusCode.Unauthorized:
-                        _logger.Error($"{Constants.MTEdgeServerContact}: {Constants.InvalidCredentials}");
-                        throw new UnauthorizedAccessException("The credentials provided are not authorized.");
-                    case HttpStatusCode.BadRequest:
-                        _logger.Error($"{Constants.MTEdgeServerContact}: {Constants.BadRequest} {0}", httpResponse.Content.ReadAsStringAsync().Result);
-                        throw new Exception($"There was a problem with the request: {httpResponse.Content.ReadAsStringAsync().Result}");
-                    default:
-                        _logger.Error($"{Constants.MTEdgeServerContact}: {(int)httpResponse.StatusCode} {Constants.StatusCode}");
-                        return null;
-                }
-            }
-        }
+			switch (httpResponse.StatusCode)
+			{
+				case HttpStatusCode.Unauthorized:
+					_logger.Error($"{Constants.MTEdgeServerContact}: {Constants.InvalidCredentials}");
+					throw new UnauthorizedAccessException("The credentials provided are not authorized.");
+				case HttpStatusCode.BadRequest:
+					_logger.Error($"{Constants.MTEdgeServerContact}: {Constants.BadRequest} {0}", httpResponse.Content.ReadAsStringAsync().Result);
+					throw new Exception($"There was a problem with the request: {httpResponse.Content.ReadAsStringAsync().Result}");
+				default:
+					_logger.Error($"{Constants.MTEdgeServerContact}: {(int)httpResponse.StatusCode} {Constants.StatusCode}");
+					return null;
+			}
+		}
 
         public static void SetMtEdgeApiVersion(TranslationOptions options)
         {

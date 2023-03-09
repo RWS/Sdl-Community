@@ -1,13 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Sdl.Community.MTEdge.Provider.Command;
+using Sdl.Community.MTEdge.Provider.Helpers;
 using Sdl.Community.MTEdge.Provider.Interface;
 using Sdl.Community.MTEdge.Provider.Model;
+using Sdl.LanguagePlatform.Core;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.MTEdge.Provider.ViewModel
 {
 	public class CredentialsViewModel : BaseModel, ICredentialsViewModel
 	{
+		private const string BasicCredentialsMethod = "Basic credentials";
+		private const string ApiKeyMethod = "API Key";
+		private const string Auth0SSOMethod = "SSO";
+
 		private readonly ITranslationOptions _translationOptions;
+		private LanguagePair[] _languagePairs;
 
 		private string _port;
 		private string _host;
@@ -20,12 +34,16 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 		private bool _persistsHost;
 		private bool _requiresSecureProtocol;
 		private bool _persistsCredentials;
-		private bool _useRwsCredentials;
+		private bool _useBasicCredentials;
+		private bool _useApiKey;
+		private bool _useAuth0SSO;
 
-		public CredentialsViewModel(ITranslationOptions options)
+		public CredentialsViewModel(ITranslationOptions options, LanguagePair[] languagePairs)
 		{
 			ViewModel = this;
 			_translationOptions = options;
+			_languagePairs = languagePairs;
+			RequiresSecureProtocol = true;
 			InitializeView();
 		}
 
@@ -39,6 +57,7 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 				if (_port == value) return;
 				_port = value;
 				OnPropertyChanged(nameof(Port));
+				_translationOptions.Port = Convert.ToInt32(value);
 			}
 		}
 
@@ -50,6 +69,7 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 				if (_host == value) return;
 				_host = value;
 				OnPropertyChanged(nameof(Host));
+				_translationOptions.Host = value.Replace("https://", string.Empty).Replace("http://", string.Empty);
 			}
 		}
 
@@ -102,9 +122,10 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 			get => _requiresSecureProtocol;
 			set
 			{
-				if (_requiresSecureProtocol== value) return;
+				if (_requiresSecureProtocol == value) return;
 				_requiresSecureProtocol = value;
 				OnPropertyChanged(nameof(RequiresSecureProtocol));
+				_translationOptions.RequiresSecureProtocol = value;
 			}
 		}
 
@@ -119,14 +140,36 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 			}
 		}
 
-		public bool UseRwsCredentials
+		public bool UseBasicCredentials
 		{
-			get => _useRwsCredentials;
+			get => _useBasicCredentials;
 			set
 			{
-				if (_useRwsCredentials == value) return;
-				_useRwsCredentials = value;
-				OnPropertyChanged(nameof(UseRwsCredentials));
+				if (_useBasicCredentials == value) return;
+				_useBasicCredentials = value;
+				OnPropertyChanged(nameof(UseBasicCredentials));
+			}
+		}
+
+		public bool UseApiKey
+		{
+			get => _useApiKey;
+			set
+			{
+				if (_useApiKey == value) return;
+				_useApiKey = value;
+				OnPropertyChanged(nameof(UseApiKey));
+			}
+		}
+
+		public bool UseAuth0SSO
+		{
+			get => _useAuth0SSO;
+			set
+			{
+				if (_useAuth0SSO == value) return;
+				_useAuth0SSO = value;
+				OnPropertyChanged(nameof(UseAuth0SSO));
 			}
 		}
 
@@ -148,16 +191,16 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 			{
 				if (_selectedAuthenticationMethod == value) return;
 				_selectedAuthenticationMethod = value;
-				OnPropertyChanged(nameof(SelectedAuthenticationMethod));
-				UseRwsCredentials = SelectedAuthenticationMethod.Contains("RWS");
+				UseBasicCredentials = _selectedAuthenticationMethod.Equals(BasicCredentialsMethod);
+				UseApiKey = _selectedAuthenticationMethod.Equals(ApiKeyMethod);
+				UseAuth0SSO = _selectedAuthenticationMethod.Equals(Auth0SSOMethod);
 			}
 		}
 
 		private void InitializeView()
 		{
-			AuthenticationMethods = new() { "RWS Credentials", "API Key" };
-			SelectedAuthenticationMethod = _autheticationMethods.First();
-			UseRwsCredentials = SelectedAuthenticationMethod.Contains("RWS");
+			AuthenticationMethods = new() { ApiKeyMethod, BasicCredentialsMethod, Auth0SSOMethod };
+			SelectedAuthenticationMethod = _autheticationMethods.First(x => x.Equals(BasicCredentialsMethod));
 		}
 	}
 }

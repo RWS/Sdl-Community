@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using Sdl.Community.MTEdge.Provider.Command;
@@ -13,7 +14,7 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 	public class MainViewModel : BaseModel
     {
 		private const string ViewsDetails_Credentials = nameof(CredentialsViewModel);
-		// private const string ViewsDetails_Settings = nameof(SettingsViewModel);
+		private const string ViewsDetails_LanguageMapping = nameof(LanguageMappingViewModel);
 
 		private readonly ITranslationProviderCredentialStore _credentialStore;
 
@@ -21,11 +22,13 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 		private ViewDetails _selectedView;
 		private List<ViewDetails> _availableViews;
 		private ICredentialsViewModel _credentialsViewModel;
+		private ILanguageMappingViewModel _languageMappingViewModel;
 
+		private LanguagePair[] _languagePairs;
 		private bool _showSettingsView;
 
 		private ICommand _saveCommand;
-		private ICommand _loginCommand;
+		private ICommand _signInCommand;
 
         public MainViewModel(ITranslationOptions options,
                              ITranslationProviderCredentialStore credentialStore,
@@ -35,9 +38,8 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 			Options = options;
 			ShowSettingsView = showSettingsView;
 			_credentialStore = credentialStore;
+			_languagePairs = languagePairs;
 			InitializeViews();
-			//SwitchView(_showSettingsView ? ViewsDetails_Settings : ViewsDetails_Credentials);
-			SwitchView(ViewsDetails_Credentials);
         }
 
 		public ITranslationOptions Options { get; set; }
@@ -77,7 +79,7 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 
 		public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save);
 
-		public ICommand LoginCommand => _loginCommand ??= new RelayCommand(Login);
+		public ICommand SignInCommand => _signInCommand ??= new RelayCommand(SignIn);
 
         public delegate void CloseWindowEventRaiser();
 
@@ -85,60 +87,81 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 
 		private void InitializeViews()
 		{
-			_credentialsViewModel = new CredentialsViewModel(Options);
+			_credentialsViewModel = new CredentialsViewModel(Options, _languagePairs);
+			_languageMappingViewModel = new LanguageMappingViewModel(Options);
 			_availableViews = new List<ViewDetails>()
 			{
 				new ViewDetails()
 				{
 					Name = ViewsDetails_Credentials,
 					ViewModel = _credentialsViewModel.ViewModel
+				},
+				new ViewDetails()
+				{
+					Name = ViewsDetails_LanguageMapping,
+					ViewModel = _languageMappingViewModel.ViewModel
 				}
 			};
+
+			SwitchView(_showSettingsView ? ViewsDetails_LanguageMapping : ViewsDetails_Credentials);
 		}
 
 		private void SwitchView(object parameter)
 		{
-			_selectedView = _availableViews.First();
+			SelectedView = _availableViews.FirstOrDefault(x => x.Name.Equals(parameter))
+						?? _availableViews.First();
 		}
 
-		private void Save(object parameter)
-        {
-            DialogResult = true;
-        }
-
-		private void Login(object parameter)
+		private async void SignIn(object parameter)
 		{
-			string token;
+			Options.ApiVersion = APIVersion.v2;
 			try
 			{
-				if (_credentialsViewModel.UseRwsCredentials)
+				if (_credentialsViewModel.UseBasicCredentials)
 				{
-					token = SDLMTEdgeTranslatorHelper.GetAuthToken(Options as TranslationOptions, GetCredentals());
+					Options.ApiToken = SDLMTEdgeTranslatorHelper.GetAuthToken(Options as TranslationOptions, GetCredentals());
 				}
-				else
+				else if (_credentialsViewModel.UseAuth0SSO)
 				{
-					token = _credentialsViewModel.ApiKey;
+					Options.ApiToken = await SDLMTEdgeTranslatorHelper.SignInAuthAsync(Options as TranslationOptions);
+				}
+				else if (_credentialsViewModel.UseApiKey)
+				{
+					Options.ApiToken = _credentialsViewModel.ApiKey;
 					SDLMTEdgeTranslatorHelper.VerifyBasicAPIToken(Options as TranslationOptions, GetCredentals());
 				}
 
-				Options.ApiToken = token;
-				return;
+				var languageMapping = Options.SetPreferredLanguages(_languagePairs);
+				Options.SetDictionaries(languageMapping);
+				_languageMappingViewModel.LanguageMapping = languageMapping.ToList();
+				SwitchView(ViewsDetails_LanguageMapping);
+				ShowSettingsView = true;
 			}
-			catch
+			catch (Exception ex)
 			{
-				//return false;
-				return;
+				throw ex;
 			}
 		}
 
 		private GenericCredentials GetCredentals()
-		{
-			return new GenericCredentials(_credentialsViewModel.UserName, _credentialsViewModel.Password)
+			=> new(_credentialsViewModel.UserName, _credentialsViewModel.Password)
 			{
 				["API-Key"] = _credentialsViewModel.ApiKey,
-				["UseApiKey"] = _credentialsViewModel.UseRwsCredentials ? "false" : "true",
+				["UseApiKey"] = _credentialsViewModel.UseBasicCredentials ? "false" : "true",
 				["RequiresSecureProtocol"] = _credentialsViewModel.RequiresSecureProtocol ? "true" : "false"
 			};
+
+		private void Save(object parameter)
+        {
+            DialogResult = true;
+			CloseEventRaised?.Invoke();
+		}
+
+		private ICommand _cancelCommand;
+		public ICommand CancelCommand => _cancelCommand ??= new RelayCommand(Cancel);
+		private void Cancel(object parameter)
+		{
+			CloseEventRaised?.Invoke();
 		}
 	}
 }
