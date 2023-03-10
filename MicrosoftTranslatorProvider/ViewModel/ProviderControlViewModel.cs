@@ -251,6 +251,9 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			ProjectLocation = _options.ProjectLocation;
 			ProjectName = _options.ProjectName;
 			UseCategoryID = _options.UseCategoryID;
+			PrivateEndpoint = _options.PrivateEndpoint;
+			PersistPrivateEndpoint = _options.PersistPrivateEndpoint;
+			UsePrivateEndpoint = !string.IsNullOrEmpty(PrivateEndpoint);
 			Region = Regions.FirstOrDefault(a => a.Key == (_options.Region ?? ""));
 			SetTranslationOption();
 		}
@@ -286,12 +289,52 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				case "GlossaryPath":
 					GlossaryPath = string.Empty;
 					break;
+				case "PrivateEndpoint":
+					PrivateEndpoint = string.Empty;
+					break;
 			}
 		}
 
 		private void NavigateTo(object parameter)
 		{
 			Process.Start(parameter as string);
+		}
+
+
+		private bool _usePrivateEndpoint;
+		public bool UsePrivateEndpoint
+		{
+			get => _usePrivateEndpoint;
+			set
+			{
+				if (_usePrivateEndpoint == value) return;
+				_usePrivateEndpoint = value;
+				OnPropertyChanged(nameof(UsePrivateEndpoint));
+			}
+		}
+
+		private string _privateEndpoint;
+		public string PrivateEndpoint
+		{
+			get => _privateEndpoint;
+			set
+			{
+				if (_privateEndpoint ==	value) return;
+				_privateEndpoint = value;
+				OnPropertyChanged(nameof(PrivateEndpoint));
+			}
+		}
+
+		private bool _persistPrivateEndpoint;
+		public bool PersistPrivateEndpoint
+		{
+			get => _persistPrivateEndpoint;
+			set
+			{
+				if (PersistPrivateEndpoint == value) return;
+				_persistPrivateEndpoint = value;
+				OnPropertyChanged(nameof(PersistPrivateEndpoint));
+			}
 		}
 	}
 }

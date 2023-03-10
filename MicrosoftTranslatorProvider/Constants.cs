@@ -7,6 +7,8 @@
 		public const string MicrosoftProviderScheme = "microsofttranslatorprovider";
 		public const string MicrosoftProviderFullScheme = "microsofttranslatorprovider:///";
 
+		public const string MicrosoftProviderPrivateEndpointScheme = "microsofttranslatorproviderprivateendpoint:///";
+
 		public const string MicrosoftNaming_FullName = "Microsoft Translator Provider";
 		public const string MicrosoftTranslatorString = "Microsoft Translator";
 		public const string OcpApimSubscriptionKeyHeader = "Ocp-Apim-Subscription-Key";

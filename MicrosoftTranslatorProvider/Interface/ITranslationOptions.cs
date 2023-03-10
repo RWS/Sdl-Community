@@ -41,6 +41,10 @@ namespace MicrosoftTranslatorProvider.Interfaces
 
 		bool UseCustomProviderName { get; set; }
 
+		string PrivateEndpoint { get; set; }
+
+		bool PersistPrivateEndpoint { get; set; }
+
 		Uri Uri { get; }
 
 		Dictionary<string, string> LanguagesSupported { get; set; }

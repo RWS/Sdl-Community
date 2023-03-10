@@ -12,6 +12,7 @@ namespace MicrosoftTranslatorProvider.Model
 		public static readonly TranslationMethod ProviderTranslationMethod = TranslationMethod.MachineTranslation;
 		private readonly TranslationProviderUriBuilder _uriBuilder;
 		private string _clientID;
+		private string _privateEndpoint;
 
 		public MTETranslationOptions()
 		{
@@ -212,6 +213,22 @@ namespace MicrosoftTranslatorProvider.Model
 		{
 			get => GetStringParameter("catid");
 			set => SetStringParameter("catid", value);
+		}
+
+		[JsonIgnore]
+		public bool PersistPrivateEndpoint { get; set; }
+
+		[JsonIgnore]
+		public string PrivateEndpoint
+		{
+			get => _privateEndpoint;
+			set => _privateEndpoint = value;
+		}
+
+		[JsonIgnore]
+		public bool UsePrivateEndpoint
+		{
+			get => !string.IsNullOrEmpty(PrivateEndpoint);
 		}
 
 		[JsonIgnore]

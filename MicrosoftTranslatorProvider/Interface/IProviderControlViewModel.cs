@@ -13,6 +13,10 @@ namespace MicrosoftTranslatorProvider.Interfaces
 		bool UseCategoryID { get; set; }
 		
 		bool PersistMicrosoftKey { get; set; }
+
+		bool PersistPrivateEndpoint { get; set; }
+
+		bool UsePrivateEndpoint { get; set; }
 		
 		bool IsTellMeAction { get; set; }
 		
@@ -31,6 +35,8 @@ namespace MicrosoftTranslatorProvider.Interfaces
 		string GlossaryId { get; set; }
 		
 		string GlossaryPath { get; set; }
+
+		string PrivateEndpoint { get; set; }
 
 		BaseModel ViewModel { get; set; }
 		

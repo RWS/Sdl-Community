@@ -228,7 +228,7 @@ namespace MicrosoftTranslatorProvider
 			switch (_providerConnecter)
 			{
 				case null:
-					_providerConnecter = new ProviderConnecter(_options.ClientID, options.Region, _htmlUtil);
+					_providerConnecter = new ProviderConnecter(_options.ClientID, options.Region, _htmlUtil, options.PrivateEndpoint);
 					break;
 				default:
 					_providerConnecter.ResetCredentials(options.ClientID, options.Region);
