@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Sdl.Community.MTEdge.Provider.Model;
 
 namespace Sdl.Community.MTEdge.Provider.Interface
@@ -7,6 +8,6 @@ namespace Sdl.Community.MTEdge.Provider.Interface
 	{
 		BaseModel ViewModel { get; set; }
 
-		List<TradosToMTEdgeLanguagePair> LanguageMapping { get; set; }
+		ObservableCollection<TradosToMTEdgeLanguagePair> LanguageMapping { get; set; }
 	}
 }

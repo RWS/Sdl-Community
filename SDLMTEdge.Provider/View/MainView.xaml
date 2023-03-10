@@ -69,14 +69,14 @@
 				<StackPanel>
 					<ContentControl Grid.Row="1"
 									Content="{Binding SelectedView.ViewModel}"
-									Margin="0" />
+									Margin="0"/>
 				</StackPanel>
 			</GroupBox>
 
 			<StackPanel Grid.Row="3"
 						Orientation="Horizontal"
 						HorizontalAlignment="Right"
-						Margin="0 16">
+						Margin="16">
 				<Button Content="Sign In"
 						Command="{Binding SignInCommand}"
 						Visibility="{Binding ShowSettingsView, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"

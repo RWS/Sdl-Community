@@ -42,7 +42,9 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 			InitializeViews();
         }
 
-		public ITranslationOptions Options { get; set; }
+		public ITranslationOptions Options {
+			get;
+			set; }
 
 		public ViewDetails SelectedView
 		{
@@ -94,12 +96,12 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 				new ViewDetails()
 				{
 					Name = ViewsDetails_Credentials,
-					ViewModel = _credentialsViewModel.ViewModel
+					ViewModel = _credentialsViewModel as BaseModel
 				},
 				new ViewDetails()
 				{
 					Name = ViewsDetails_LanguageMapping,
-					ViewModel = _languageMappingViewModel.ViewModel
+					ViewModel = _languageMappingViewModel as BaseModel
 				}
 			};
 
@@ -133,7 +135,7 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 
 				var languageMapping = Options.SetPreferredLanguages(_languagePairs);
 				Options.SetDictionaries(languageMapping);
-				_languageMappingViewModel.LanguageMapping = languageMapping.ToList();
+				_languageMappingViewModel.LanguageMapping = new(languageMapping);
 				SwitchView(ViewsDetails_LanguageMapping);
 				ShowSettingsView = true;
 			}
@@ -154,8 +156,8 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 		private void Save(object parameter)
         {
             DialogResult = true;
-			Options.LanguageMapping = _languageMappingViewModel.LanguageMapping;
-			Options.SetLanguageMapping(_languageMappingViewModel.LanguageMapping);
+			Options.LanguageMapping = new(_languageMappingViewModel.LanguageMapping);
+			Options.SetLanguageMapping(new(_languageMappingViewModel.LanguageMapping));
 			CloseEventRaised?.Invoke();
 		}
 

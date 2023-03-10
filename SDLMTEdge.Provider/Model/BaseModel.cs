@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace Sdl.Community.MTEdge.Provider.Model
 {
-    public class BaseModel : INotifyPropertyChanged
+	public class BaseModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

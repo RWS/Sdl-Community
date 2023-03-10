@@ -31,6 +31,7 @@ namespace Sdl.Community.MTEdge.Provider.Model
 		public static readonly TranslationMethod ProviderTranslationMethod = TranslationMethod.MachineTranslation;
 
 		public Dictionary<CultureInfo, MTEdgeLanguagePair> LanguagePairPreferences { get; set; }
+
 		public List<TradosToMTEdgeLanguagePair> LanguageMapping { get; set; }
 
 		public int Port

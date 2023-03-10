@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Sdl.Community.MTEdge.Provider.ViewModel;
 
 namespace Sdl.Community.MTEdge.Provider.View
 {
