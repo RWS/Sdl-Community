@@ -42,7 +42,20 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 
 		public ILanguageProvider LanguageProvider { get; }
 
-		public string Name => PluginResources.SDLMTCloud_Provider_Name;
+		public string Name
+		{
+			get
+			{
+				var selectedModelName = Options.LanguageMappings?
+											   .FirstOrDefault(x => x.TargetTradosCode.Equals(LanguageDirectionProvider?.TargetLanguage?.Name))
+											   .SelectedModel?
+											   .MTCloudLanguagePair
+											   .DisplayName;
+				return string.IsNullOrEmpty(selectedModelName)
+					 ? PluginResources.SDLMTCloud_Provider_Name
+					 : $"{PluginResources.SDLMTCloud_Provider_Name} - {selectedModelName}";
+			}
+		}
 
 		public Options Options
 		{
@@ -252,7 +265,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				SelectedModel = selectedModel,
 				Dictionaries = dictionaries,
 				SelectedDictionary = selectedDictionary,
-				LinguisticOptions = mapping?.SavedLanguageMappingModel?.SelectedModel?.LinguisticOptions
+				LinguisticOptions = mapping?.SavedLanguageMappingModel?.SelectedModel?.LinguisticOptions ?? selectedModel.LinguisticOptions
 			};
 
 			return languageMappingModel;
