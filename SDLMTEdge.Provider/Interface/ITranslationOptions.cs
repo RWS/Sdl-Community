@@ -24,6 +24,10 @@ namespace Sdl.Community.MTEdge.Provider.Interface
 
 		public bool UseBasicAuthentication { get; set; }
 
+		public bool UseApiKey { get; set; }
+
+		public bool UseAuth0SSO { get; set; }
+
 		public bool RequiresSecureProtocol { get; set; }
 
 		public Dictionary<CultureInfo, MTEdgeLanguagePair> LanguagePairPreferences { get; set; }

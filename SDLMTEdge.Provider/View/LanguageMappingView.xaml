@@ -131,7 +131,7 @@
 								Padding="1">
 
 							<ComboBox ItemsSource="{Binding Dictionaries}"
-									  SelectedItem="{Binding SelectedDictionary, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+									  SelectedIndex="{Binding SelectedDictionaryIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 									  DisplayMemberPath="DictionaryId"
 									  HorizontalAlignment="Stretch"
 									  MinWidth="120"
@@ -142,7 +142,7 @@
 								BorderThickness="0 0 1 1"
 								Padding="1">
 							<ComboBox ItemsSource="{Binding MtEdgeLanguagePairs}"
-									  SelectedItem="{Binding SelectedModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+									  SelectedIndex="{Binding SelectedModelIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 									  DisplayMemberPath="DisplayName"
 									  HorizontalAlignment="Stretch"
 									  MinWidth="120"

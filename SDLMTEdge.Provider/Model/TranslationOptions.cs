@@ -60,6 +60,10 @@ namespace Sdl.Community.MTEdge.Provider.Model
 
 		public bool UseBasicAuthentication { get; set; }
 
+		public bool UseApiKey { get; set; }
+
+		public bool UseAuth0SSO { get; set; }
+
 		public bool RequiresSecureProtocol { get; set; }
 
 		public Uri Uri => !string.IsNullOrWhiteSpace(_uriBuilder.HostName) ? _uriBuilder.Uri : null;
@@ -85,7 +89,7 @@ namespace Sdl.Community.MTEdge.Provider.Model
 			}
 		}
 
-		public TradosToMTEdgeLanguagePair[] SetPreferredLanguages(LanguagePair[] languagePairs)
+		public TradosToMTEdgeLanguagePair[] SetPreferredLanguages(LanguagePair[] languagePairs) 
 		{
 			var mtEdgeLanguagePairs = SDLMTEdgeTranslatorHelper.GetLanguagePairs(this);
 			if (!mtEdgeLanguagePairs.Any())

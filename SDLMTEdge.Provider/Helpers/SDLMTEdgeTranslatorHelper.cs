@@ -453,8 +453,7 @@ namespace Sdl.Community.MTEdge.Provider.Helpers
                         return GetAuthToken(options, credentials, true);
                     }
 
-                    _logger.Error($"{Constants.AuthToken}: {e.Message}\n {e.StackTrace}");
-                    throw TranslateAggregateException(e);
+					throw e;
                 }
             }
         }

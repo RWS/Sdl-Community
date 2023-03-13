@@ -28,5 +28,9 @@ namespace Sdl.Community.MTEdge.Provider.Interface
 		bool UseApiKey { get; set; }
 
 		bool UseAuth0SSO { get; set; }
+
+		bool CredentialsAreValid();
+
+		bool UriIsValid();
 	}
 }

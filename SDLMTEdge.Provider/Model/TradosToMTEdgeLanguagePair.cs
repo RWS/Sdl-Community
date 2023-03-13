@@ -11,7 +11,9 @@ namespace Sdl.Community.MTEdge.Provider.Model
 		private List<DictionaryModel> _dictionaries;
 		private List<MTEdgeLanguagePair> _mtEdgeLanguagePairs;
 		private DictionaryModel _selectedDictionary;
+		private int _selectedDictionaryIndex;
 		private MTEdgeLanguagePair _selectedModel;
+		private int _selectedModelIndex;
 
         public TradosToMTEdgeLanguagePair(string languagePair, CultureInfo tradosCulture, List<MTEdgeLanguagePair> languagePairs)
         {
@@ -62,21 +64,33 @@ namespace Sdl.Community.MTEdge.Provider.Model
 
 		public DictionaryModel SelectedDictionary
 		{
-			get => _selectedDictionary ??= Dictionaries.FirstOrDefault();
+			get => _selectedDictionary ??= Dictionaries[SelectedDictionaryIndex];
+		}
+
+		public int SelectedDictionaryIndex
+		{
+			get => _selectedDictionaryIndex;
 			set
 			{
-				_selectedDictionary = value;
-				OnPropertyChanged(nameof(SelectedDictionary));
+				if (_selectedDictionaryIndex == value) return;
+				_selectedDictionaryIndex = value;
+				OnPropertyChanged(nameof(SelectedDictionaryIndex));
 			}
 		}
 
 		public MTEdgeLanguagePair SelectedModel
 		{
-			get => _selectedModel ??= MtEdgeLanguagePairs.FirstOrDefault();
+			get => _selectedModel ??= MtEdgeLanguagePairs[SelectedModelIndex];
+		}
+
+		public int SelectedModelIndex
+		{
+			get => _selectedModelIndex;
 			set
 			{
-				_selectedModel = value;
-				OnPropertyChanged(nameof(SelectedModel));
+				if (_selectedModelIndex == value) return;
+				_selectedModelIndex = value;
+				OnPropertyChanged(nameof(SelectedModelIndex));
 			}
 		}
 	}

@@ -35,32 +35,5 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 				OnPropertyChanged(nameof(LanguageMapping));
 			}
 		}
-
-		/*public void linguisticOptionsList_Loaded(object sender, RoutedEventArgs e)
-		{
-			if (_translationOptions.LanguageMapping is null) return;
-			var languageMapping = new List<TradosToMTEdgeLanguagePair>();
-			var savedMapping = _translationOptions?.LanguageMapping;
-			LanguageMapping ??= new();
-			foreach (var mappedLanguage in savedMapping)
-			{
-				var languagePair = mappedLanguage.LanguagePair;
-				var culture = mappedLanguage.TradosCulture;
-				var models = mappedLanguage.MtEdgeLanguagePairs;
-				var dictionaries = mappedLanguage.Dictionaries;
-				var selectedDictionary = mappedLanguage.SelectedDictionary;
-				var selectedModel = mappedLanguage.SelectedModel;
-				var newMapped = new TradosToMTEdgeLanguagePair(languagePair, culture, models)
-				{
-					Dictionaries = dictionaries,
-					SelectedDictionary = selectedDictionary,
-					SelectedModel = selectedModel
-				};
-
-				languageMapping.Add(newMapped);
-			}
-
-			LanguageMapping = new(languageMapping);
-		}*/
 	}
 }

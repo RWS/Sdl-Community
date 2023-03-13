@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Sdl.Community.MTEdge.Provider.Command;
 using Sdl.Community.MTEdge.Provider.Helpers;
 using Sdl.Community.MTEdge.Provider.Interface;
 using Sdl.Community.MTEdge.Provider.Model;
 using Sdl.LanguagePlatform.Core;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.MTEdge.Provider.ViewModel
 {
@@ -51,10 +46,15 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 
 		public string Port
 		{
-			get => _port;
+			get => _port ??= _translationOptions.Port.ToString();
 			set
 			{
 				if (_port == value) return;
+				if (value.Any(x => !char.IsDigit(x)))
+				{
+					return;
+				}
+
 				_port = value;
 				OnPropertyChanged(nameof(Port));
 				_translationOptions.Port = Convert.ToInt32(value);
@@ -69,7 +69,6 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 				if (_host == value) return;
 				_host = value;
 				OnPropertyChanged(nameof(Host));
-				_translationOptions.Host = value.Replace("https://", string.Empty).Replace("http://", string.Empty);
 			}
 		}
 
@@ -137,6 +136,7 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 				if (_persistsCredentials == value) return;
 				_persistsCredentials = value;
 				OnPropertyChanged(nameof(PersistsCredentials));
+				_translationOptions.PersistCredentials = value;
 			}
 		}
 
@@ -148,6 +148,7 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 				if (_useBasicCredentials == value) return;
 				_useBasicCredentials = value;
 				OnPropertyChanged(nameof(UseBasicCredentials));
+				_translationOptions.UseBasicAuthentication = UseBasicCredentials;
 			}
 		}
 
@@ -159,6 +160,7 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 				if (_useApiKey == value) return;
 				_useApiKey = value;
 				OnPropertyChanged(nameof(UseApiKey));
+				_translationOptions.UseApiKey = value;
 			}
 		}
 
@@ -170,6 +172,7 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 				if (_useAuth0SSO == value) return;
 				_useAuth0SSO = value;
 				OnPropertyChanged(nameof(UseAuth0SSO));
+				_translationOptions.UseAuth0SSO = value;
 			}
 		}
 
@@ -195,6 +198,119 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 				UseApiKey = _selectedAuthenticationMethod.Equals(ApiKeyMethod);
 				UseAuth0SSO = _selectedAuthenticationMethod.Equals(Auth0SSOMethod);
 			}
+		}
+
+		public bool UriIsValid()
+		{
+			Host ??= string.Empty;
+			Port ??= string.Empty;
+			Host = Host.Trim();
+			Port = Port.Trim();
+			if (string.IsNullOrEmpty(Host))
+			{
+				ErrorHandler.HandleError("The Host field can not be empty.", "Host");
+				return false;
+			}
+
+			if (string.IsNullOrEmpty(Port))
+			{
+				ErrorHandler.HandleError("The Port field can not be empty.", "Port");
+				return false;
+			}
+
+			if (!int.TryParse(Port, out var portValue))
+			{
+				ErrorHandler.HandleError("The Port field is not valid", "Port");
+				return false;
+			}
+
+			Host = Host.Replace("https://", string.Empty).Replace("http://", string.Empty);
+			while (Host.EndsWith("/"))
+			{
+				Host = Host.Substring(0, Host.Length - 1);
+			}
+
+			var baseUrl = $"https://{Host}:{Port}";
+			var targetUri = new Uri(baseUrl);
+			if (targetUri is null)
+			{
+				ErrorHandler.HandleError("The URI couldn't be set", "URI");
+				return false;
+			}
+
+			try
+			{
+				using var httpClient = new HttpClient();
+				var httpResponse = httpClient.PostAsync(targetUri, null).Result;
+			}
+			catch
+			{
+				ErrorHandler.HandleError("Couldn't connect with the provided host, port and credentials", "Connection failed");
+				return false;
+			}
+
+			_translationOptions.Host = Host;
+			_translationOptions.Port = portValue;
+			return true;
+		}
+
+		public bool CredentialsAreValid()
+		{
+			try
+			{
+				if (UseBasicCredentials)
+				{
+					return BasicCredentialsAreSet();
+				}
+				else if (UseApiKey)
+				{
+					return ApiKeyIsValid();
+				}
+				else if (UseAuth0SSO)
+				{
+					return true;
+				}
+			}
+			catch (Exception ex)
+			{
+				ErrorHandler.HandleError(ex);
+			}
+
+			return false;
+		}
+
+		private bool BasicCredentialsAreSet()
+		{
+			UserName ??= string.Empty;
+			UserName = UserName.Trim();
+			if (string.IsNullOrEmpty(UserName))
+			{
+				ErrorHandler.HandleError("The UserName field can not be empty", "UserName");
+				return false;
+			}
+
+			Password ??= string.Empty;
+			Password = Password.Trim();
+			if (string.IsNullOrEmpty(Password))
+			{
+				ErrorHandler.HandleError("The Password field can not be empty", "Password");
+				return false;
+			}
+
+			return true;
+		}
+
+		private bool ApiKeyIsValid()
+		{
+			ApiKey ??= string.Empty;
+			ApiKey = ApiKey.Trim();
+			if (string.IsNullOrEmpty(ApiKey))
+			{
+				ErrorHandler.HandleError("The ApiKey field can not be empty", "ApiKey");
+				return false;
+			}
+
+			return true;
 		}
 
 		private void InitializeView()

@@ -29,8 +29,9 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 
 		private ICommand _saveCommand;
 		private ICommand _signInCommand;
+		private ICommand _cancelCommand;
 
-        public MainViewModel(ITranslationOptions options,
+		public MainViewModel(ITranslationOptions options,
                              ITranslationProviderCredentialStore credentialStore,
                              LanguagePair[] languagePairs,
                              bool showSettingsView = false)
@@ -81,9 +82,12 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 
 		public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save);
 
+		public ICommand CancelCommand => _cancelCommand ??= new RelayCommand(Cancel);
+
 		public ICommand SignInCommand => _signInCommand ??= new RelayCommand(SignIn);
 
-        public delegate void CloseWindowEventRaiser();
+
+		public delegate void CloseWindowEventRaiser();
 
         public event CloseWindowEventRaiser CloseEventRaised;
 
@@ -114,11 +118,37 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 						?? _availableViews.First();
 		}
 
+		private void Save(object parameter)
+        {
+			if (!_credentialsViewModel.UriIsValid()
+			 || !_credentialsViewModel.CredentialsAreValid())
+			{
+				return;
+			}
+
+            DialogResult = true;
+			Options.LanguageMapping = new(_languageMappingViewModel.LanguageMapping);
+			Options.SetLanguageMapping(new(_languageMappingViewModel.LanguageMapping));
+			CloseEventRaised?.Invoke();
+		}
+
+		private void Cancel(object parameter)
+		{
+			CloseEventRaised?.Invoke();
+		}
+
 		private async void SignIn(object parameter)
 		{
+
 			Options.ApiVersion = APIVersion.v2;
 			try
 			{
+				if (!_credentialsViewModel.UriIsValid()
+				 || !_credentialsViewModel.CredentialsAreValid())
+				{
+					return;
+				}
+
 				if (_credentialsViewModel.UseBasicCredentials)
 				{
 					Options.ApiToken = SDLMTEdgeTranslatorHelper.GetAuthToken(Options as TranslationOptions, GetCredentals());
@@ -141,7 +171,7 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 			}
 			catch (Exception ex)
 			{
-				throw ex;
+				ErrorHandler.HandleError(ex.Message, "Connection failed");
 			}
 		}
 
@@ -152,20 +182,5 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 				["UseApiKey"] = _credentialsViewModel.UseBasicCredentials ? "false" : "true",
 				["RequiresSecureProtocol"] = _credentialsViewModel.RequiresSecureProtocol ? "true" : "false"
 			};
-
-		private void Save(object parameter)
-        {
-            DialogResult = true;
-			Options.LanguageMapping = new(_languageMappingViewModel.LanguageMapping);
-			Options.SetLanguageMapping(new(_languageMappingViewModel.LanguageMapping));
-			CloseEventRaised?.Invoke();
-		}
-
-		private ICommand _cancelCommand;
-		public ICommand CancelCommand => _cancelCommand ??= new RelayCommand(Cancel);
-		private void Cancel(object parameter)
-		{
-			CloseEventRaised?.Invoke();
-		}
 	}
 }
