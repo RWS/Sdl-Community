@@ -1,6 +1,5 @@
 using System;
 using System.Windows.Forms;
-using NLog;
 using Sdl.Community.MTEdge.Provider.Model;
 using Sdl.Community.MTEdge.Provider.View;
 using Sdl.Community.MTEdge.Provider.ViewModel;
@@ -14,8 +13,6 @@ namespace Sdl.Community.MTEdge.Provider.Studio
 								   Description = Constants.Provider_TranslationProviderWinFormsUi)]
 	public class ProviderWinFormsUI : ITranslationProviderWinFormsUI
 	{
-		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-
 		public bool SupportsEditing => true;
 
 		public string TypeName => PluginResources.Plugin_NiceName;
@@ -43,7 +40,7 @@ namespace Sdl.Community.MTEdge.Provider.Studio
 
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
 		{
-			_logger.Trace("");
+			 
 			return new TranslationProviderDisplayInfo
 			{
 				Name = PluginResources.Plugin_NiceName,
@@ -55,40 +52,25 @@ namespace Sdl.Community.MTEdge.Provider.Studio
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
 		{
-			_logger.Trace("");
-			if (translationProviderUri is null)
+			return translationProviderUri switch
 			{
-				throw new ArgumentNullException("translationProviderUri", "URI not supported by the plug-in.");
-			}
-
-			return string.Equals(translationProviderUri.Scheme, Constants.TranslationProviderScheme, StringComparison.CurrentCultureIgnoreCase);
+				null => throw new ArgumentNullException("translationProviderUri", "URI not supported by the plug-in."),
+				_ => string.Equals(translationProviderUri.Scheme, Constants.TranslationProviderScheme, StringComparison.CurrentCultureIgnoreCase)
+			};
 		}
 
 		private MainViewModel ShowRequestedView(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, TranslationOptions loadOptions, bool showSettingsView = false)
 		{
-            LoadCredentialStore(credentialStore, loadOptions);
             var mainWindowViewModel = new MainViewModel(loadOptions, credentialStore, languagePairs, showSettingsView);
             var mainWindowView = new MainView { DataContext = mainWindowViewModel };
             mainWindowViewModel.CloseEventRaised += () =>
             {
-                UpdateCredentialStore(credentialStore, loadOptions);
                 mainWindowView.Close();
             };
 
             mainWindowView.ShowDialog();
             return mainWindowViewModel;
         }
-
-        private void LoadCredentialStore(ITranslationProviderCredentialStore credentialStore, TranslationOptions loadOptions)
-        {
-
-        }
-
-        private void UpdateCredentialStore(ITranslationProviderCredentialStore credentialStore, TranslationOptions loadOptions)
-		{
-
-		}
-
 
 		public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
 		{

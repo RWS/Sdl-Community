@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Windows.Input;
+using Sdl.Community.MTEdge.Provider.Command;
 using Sdl.Community.MTEdge.Provider.Helpers;
 using Sdl.Community.MTEdge.Provider.Interface;
 using Sdl.Community.MTEdge.Provider.Model;
@@ -28,10 +30,13 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 
 		private bool _persistsHost;
 		private bool _requiresSecureProtocol;
+		private bool _persistsApiKey;
 		private bool _persistsCredentials;
 		private bool _useBasicCredentials;
 		private bool _useApiKey;
 		private bool _useAuth0SSO;
+
+		private ICommand _clearCommand;
 
 		public CredentialsViewModel(ITranslationOptions options, LanguagePair[] languagePairs)
 		{
@@ -140,6 +145,17 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 			}
 		}
 
+		public bool PersistsApiKey
+		{
+			get => _persistsApiKey;
+			set
+			{
+				if (_persistsApiKey == value) return;
+				_persistsApiKey = value;
+				OnPropertyChanged(nameof(PersistsApiKey));
+			}
+		}
+
 		public bool UseBasicCredentials
 		{
 			get => _useBasicCredentials;
@@ -199,6 +215,8 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 				UseAuth0SSO = _selectedAuthenticationMethod.Equals(Auth0SSOMethod);
 			}
 		}
+
+		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
 
 		public bool UriIsValid()
 		{
@@ -317,6 +335,37 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 		{
 			AuthenticationMethods = new() { ApiKeyMethod, BasicCredentialsMethod, Auth0SSOMethod };
 			SelectedAuthenticationMethod = _autheticationMethods.First(x => x.Equals(BasicCredentialsMethod));
+		}
+
+		private void Clear(object parameter)
+		{
+			if (parameter is not string parameterString)
+			{
+				return;
+			}
+
+			switch (parameterString)
+			{
+				case "UserName":
+					UserName = string.Empty;
+					break;
+
+				case "Password":
+					Password = string.Empty;
+					break;
+			}
+		}
+
+		private string myPw;
+
+		public string MyPw
+		{
+			get => myPw;
+			set
+			{
+				myPw = value;
+				OnPropertyChanged(nameof(myPw));
+			}
 		}
 	}
 }

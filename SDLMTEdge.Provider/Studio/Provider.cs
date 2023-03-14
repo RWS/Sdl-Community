@@ -15,7 +15,7 @@ namespace Sdl.Community.MTEdge.Provider.Studio
 
 		public Provider(TranslationOptions options)
 		{
-			_logger.Trace("");
+			 
 			Options = options;
 		}
 
@@ -82,25 +82,25 @@ namespace Sdl.Community.MTEdge.Provider.Studio
 
         public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
         {
-            _logger.Trace("");
+             
             return new ProviderLanguageDirection(this, languageDirection);
         }
 
         public void LoadState(string translationProviderState)
         {
-            _logger.Trace("");
+             
             Options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
         }
 
         public string SerializeState()
         {
-            _logger.Trace("");
+             
             return JsonConvert.SerializeObject(Options);
         }
 
         public void RefreshStatusInfo()
         {
-            _logger.Trace("");
+             
         }
     }
 }

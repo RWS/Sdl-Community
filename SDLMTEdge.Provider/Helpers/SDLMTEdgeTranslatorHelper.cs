@@ -291,9 +291,9 @@ namespace Sdl.Community.MTEdge.Provider.Helpers
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.DefaultConnectionLimit = 9999;
 			using var httpClient = new HttpClient();
-			httpClient.DefaultRequestHeaders.Authorization = options.UseBasicAuthentication
-				? new AuthenticationHeaderValue("Bearer", options.ApiToken)
-				: new AuthenticationHeaderValue("Basic", (options.ApiToken + ":").Base64Encode());
+			httpClient.DefaultRequestHeaders.Authorization = options.UseApiKey
+				? new AuthenticationHeaderValue("Basic", (options.ApiToken + ":").Base64Encode())
+				: new AuthenticationHeaderValue("Bearer", options.ApiToken);
 
 			var builder = new UriBuilder(options.Uri)
 			{

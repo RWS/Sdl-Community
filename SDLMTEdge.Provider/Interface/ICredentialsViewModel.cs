@@ -23,6 +23,8 @@ namespace Sdl.Community.MTEdge.Provider.Interface
 		
 		bool PersistsCredentials { get; set; }
 
+		bool PersistsApiKey { get; set; }
+
 		bool UseBasicCredentials { get; set; }
 
 		bool UseApiKey { get; set; }

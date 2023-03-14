@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Windows;
+﻿using System.Collections.ObjectModel;
 using Sdl.Community.MTEdge.Provider.Interface;
 using Sdl.Community.MTEdge.Provider.Model;
 

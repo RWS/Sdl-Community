@@ -7,8 +7,7 @@
 			 xmlns:viewmodel="clr-namespace:Sdl.Community.MTEdge.Provider.ViewModel"
 			 xmlns:converters="clr-namespace:Sdl.Community.MTEdge.Provider.Converters"
 			 d:DataContext="{d:DesignInstance viewmodel:LanguageMappingViewModel}"
-			 mc:Ignorable="d"
-			 Loaded="UserControl_Loaded">
+			 mc:Ignorable="d">
 
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -123,7 +122,8 @@
 							<TextBlock Text="{Binding LanguagePair, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 									   MinWidth="120"
 									   MaxWidth="120"
-									   Margin="0" />
+									   Margin="0 0 0 0"
+									   Padding="8 3 0 0"/>
 						</Border>
 
 						<Border BorderBrush="Black"
@@ -132,6 +132,7 @@
 
 							<ComboBox ItemsSource="{Binding Dictionaries}"
 									  SelectedIndex="{Binding SelectedDictionaryIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+									  Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
 									  DisplayMemberPath="DictionaryId"
 									  HorizontalAlignment="Stretch"
 									  MinWidth="120"
@@ -143,6 +144,7 @@
 								Padding="1">
 							<ComboBox ItemsSource="{Binding MtEdgeLanguagePairs}"
 									  SelectedIndex="{Binding SelectedModelIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+									  Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
 									  DisplayMemberPath="DisplayName"
 									  HorizontalAlignment="Stretch"
 									  MinWidth="120"

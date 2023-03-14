@@ -121,6 +121,11 @@
       <LastGenOutput>WeaverEdgeResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Page Update="Style\General.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
   <PropertyGroup>
 	  <AssemblyOriginatorKeyFile>..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
 	  <CreatePluginPackage>true</CreatePluginPackage>

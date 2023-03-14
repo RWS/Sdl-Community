@@ -9,6 +9,8 @@
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="Buttons.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
 				<ResourceDictionary Source="General.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 
@@ -36,6 +38,7 @@
 
 		<Button x:Name="CloseButton"
 				Click="CloseButton_OnClick"
+				Style="{StaticResource TransparentButtonStyle}"
 				IsEnabled="True"
 				Grid.Row="0"
 				HorizontalAlignment="Right"
@@ -54,8 +57,8 @@
 		<DockPanel Grid.Row="1">
 			<Image Source="../Resources/lwEdgeLogo.png"
 				   DockPanel.Dock="Top"
-				   Width="500"
-				   Margin="0 30 0 20" />
+				   Width="440"
+				   Margin="0 24 0 8" />
 		</DockPanel>
 	</Grid>
 </UserControl>

@@ -11,14 +11,7 @@ namespace Sdl.Community.MTEdge.Provider.View
 	{
 		public LanguageMappingView()
 		{
-			var x = DataContext as LanguageMappingViewModel;
 			InitializeComponent();
-			var y = DataContext as LanguageMappingViewModel;
-		}
-
-		private void UserControl_Loaded(object sender, RoutedEventArgs e)
-		{
-			var z = DataContext as LanguageMappingViewModel;
 		}
 	}
 }
