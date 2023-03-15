@@ -167,25 +167,30 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 			}
 
 			var retrievedGlossary = new RetrievedGlossary(glossaryFound, _options.ProjectId, _options.ProjectLocation);
+			if (retrievedGlossary.Languages is not null
+			 && retrievedGlossary.Languages.Contains(sourceLanguage.TwoLetterISOLanguageName)
+			 && retrievedGlossary.Languages.Contains(targetLanguage.TwoLetterISOLanguageName))
+			{
+				return new TranslateTextGlossaryConfig
+				{
+					Glossary = retrievedGlossary.GlossaryResourceLocation,
+					IgnoreCase = true
+				};
+			}
+
 			if (retrievedGlossary.SourceLanguage is not null
 			 && retrievedGlossary.TargetLanguage is not null
-			 && retrievedGlossary.SourceLanguage.Equals(sourceLanguage)
-			 && retrievedGlossary.TargetLanguage.Equals(targetLanguage))
+			 && retrievedGlossary.SourceLanguage.TwoLetterISOLanguageName.Equals(sourceLanguage.TwoLetterISOLanguageName)
+			 && retrievedGlossary.TargetLanguage.TwoLetterISOLanguageName.Equals(targetLanguage.TwoLetterISOLanguageName))
 			{
-				return null;
+				return new TranslateTextGlossaryConfig
+				{
+					Glossary = retrievedGlossary.GlossaryResourceLocation,
+					IgnoreCase = true
+				};
 			}
 
-			if (!retrievedGlossary.Languages.TryGetValue(GetLanguageCode(sourceLanguage), out _)
-			 || !retrievedGlossary.Languages.TryGetValue(GetLanguageCode(targetLanguage), out _))
-			{
-				return null;
-			}
-
-			return new TranslateTextGlossaryConfig
-			{
-				Glossary = retrievedGlossary.GlossaryResourceLocation,
-				IgnoreCase = true
-			};
+			return null;
 		}
 
 		private void SetGoogleAvailableLanguages()
