@@ -19,7 +19,7 @@
 			"\n - Unpacked: sdlplugin files are essentially zip files and the unzipped versions and unpacked in this folder when Trados Studio starts" +
 			"\n If you want to replace all your plugins quickly then back up the content of your 'Packages' folder first so you only have to copy them back afterwards.  You don't need to, and in fact should not, back up the 'Unpacked' folder.";
 
-		public static string ProjectApiPath => "This folder contains one file, Sdl.ProjectApi.xml, which contains information relating to the location of local project folders. This is only the default since today Studio can be configured by the user to store projects wherever you like through the use of the project templates.  So unless you manually edited this file it seems unlikely that deleting it will cause any cause for concern.";
+		public static string ProjectApiPath => "The file Sdl.ProjectApi.xml contains information relating to the location of local project folders. This is only the default since today Studio can be configured by the user to store projects wherever you like through the use of the project templates.  So unless you manually edited this file it seems unlikely that deleting it will cause any cause for concern.";
 
 		public static string GeneralSettingsFolder =>
 			"This folder is the most likely reason for a fresh start when working with Trados Studio. It contains several things." +

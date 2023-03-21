@@ -83,12 +83,12 @@ namespace Sdl.Community.SdlFreshstart.Model
 			_logger.Info("Trying to get the Project API file path...");
 			var localProjectApiPath = Path.Combine(
 				Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				"SDL", "ProjectApi");
+				SdlFolder);
 
 			_logger.Info($"Local Project APi path: {localProjectApiPath}");
 			_logger.Info($"Major version: {MajorVersion}");
-			ProjectApiPath = Directory.GetDirectories(localProjectApiPath)
-				.FirstOrDefault(d => d.Contains(MajorVersion.ToString()));
+			ProjectApiPath = Directory.GetFiles(Path.Combine(localProjectApiPath, AppDataStudioFolder))
+				.FirstOrDefault(d => d.Contains("Sdl.ProjectApi.xml"));
 
 			_logger.Info($"Found ProjectAPI Path: {ProjectApiPath}");
 		}

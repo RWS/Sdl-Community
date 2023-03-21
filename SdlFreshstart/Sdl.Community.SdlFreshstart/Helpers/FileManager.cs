@@ -27,7 +27,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			{
 				foreach (var folder in foldersToBackup)
 				{
-					if (!folder.BackupFilePath.Contains("projects.xml"))
+					if (!folder.BackupFilePath.Contains("projects.xml") && !folder.BackupFilePath.Contains("Sdl.ProjectApi.xml"))
 					{
 						//creates original folders if doesn't exist
 						if (!Directory.Exists(folder.OriginalPath))
@@ -91,7 +91,13 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 			{
 				foreach (var folder in foldersToBackup)
 				{
-					if (!Directory.Exists(folder?.BackupFilePath))
+					if  (folder is null) continue;
+
+					if (folder.BackupFilePath.Contains("Sdl.ProjectApi.xml") && !File.Exists(folder.BackupFilePath))
+					{
+						File.Copy(folder.OriginalPath, folder.BackupFilePath);
+					}
+					else if (!Directory.Exists(folder.BackupFilePath))
 					{
 						if (folder.OriginalPath != null && !folder.OriginalPath.Contains("projects.xml"))
 						{
@@ -114,6 +120,11 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 						if (Directory.Exists(folder.OriginalPath))
 						{
 							CopyFiles(folder);
+						}
+
+						if (File.Exists(folder.OriginalPath))
+						{
+							File.Copy(folder.OriginalPath, folder.BackupFilePath);
 						}
 					}
 				}
