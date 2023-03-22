@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Windows.Forms;
-using NLog;
+using MicrosoftTranslatorProvider.Extensions;
 using MicrosoftTranslatorProvider.Interfaces;
 using MicrosoftTranslatorProvider.Model;
 using MicrosoftTranslatorProvider.Service;
@@ -10,9 +9,8 @@ using MicrosoftTranslatorProvider.View;
 using MicrosoftTranslatorProvider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.ProjectAutomation.Core;
-using MicrosoftTranslatorProvider.Extensions;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace MicrosoftTranslatorProvider.Studio
 {
@@ -21,8 +19,6 @@ namespace MicrosoftTranslatorProvider.Studio
                                    Description = "MicrosoftTranslatorProviderPlugin_WinFormsUI")]
     public class ProviderWinFormsUI : ITranslationProviderWinFormsUI
     {
-		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-
 		public string TypeDescription => PluginResources.Plugin_Description;
 		public string TypeName => PluginResources.Plugin_NiceName;
 		public bool SupportsEditing => true;
@@ -31,7 +27,7 @@ namespace MicrosoftTranslatorProvider.Studio
 		{
 			var options = new MTETranslationOptions();
 			var regionsProvider = new RegionsProvider();
-			var mainWindowDialogResult = ShowProviderWindow(languagePairs, credentialStore, options, regionsProvider, true).DialogResult;
+			var mainWindowDialogResult = ShowProviderWindow(languagePairs, credentialStore, options, regionsProvider).DialogResult;
 
 			var htmlUtil = new HtmlUtil();
 			return mainWindowDialogResult ? new ITranslationProvider[] { new Provider(options, regionsProvider, htmlUtil) }
@@ -45,35 +41,35 @@ namespace MicrosoftTranslatorProvider.Studio
 				return false;
 			}
 
-			var mainWindowViewModel = ShowProviderWindow(languagePairs, credentialStore, editProvider.Options, editProvider.RegionsProvider);
+			var mainWindowViewModel = ShowProviderWindow(languagePairs, credentialStore, editProvider.Options, editProvider.RegionsProvider, true);
 			return mainWindowViewModel.DialogResult;
 		}
 
-
-		//TODO PACH (06/04/2021): Confirm if this is still required/ remove if obsolete code
-		/// <summary>
-		/// This gets called when a TranslationProviderAuthenticationException is thrown
-		/// Since SDL Studio doesn't pass the provider instance here and even if we do a workaround...
-		/// any new options set in the form that comes up are never saved to the project XML...
-		/// so there is no way to change any options, only to provide the credentials
-		/// </summary>
-		public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
+		private MainWindowViewModel ShowProviderWindow(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, RegionsProvider regionsProvider, bool showSettingsView = false)
 		{
-			var languagePairs = new List<LanguagePair>();
-			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			if (projectController?.CurrentProject?.GetProjectInfo() is ProjectInfo projectInfo)
+			var dialogService = new OpenFileDialogService();
+			var providerControlViewModel = new ProviderControlViewModel(loadOptions, regionsProvider);
+			var settingsControlViewModel = new SettingsControlViewModel(loadOptions, dialogService, false);
+			var htmlUtil = new HtmlUtil();
+			var mainWindowViewModel = new MainWindowViewModel(loadOptions,
+															  providerControlViewModel,
+															  settingsControlViewModel,
+															  credentialStore,
+															  languagePairs,
+															  htmlUtil,
+															  showSettingsView);
+			var mainWindow = new MainWindow
 			{
-				foreach (var targetLanguage in projectInfo.TargetLanguages)
-				{
-					var languagePair = new LanguagePair(projectInfo.SourceLanguage.CultureInfo, targetLanguage.CultureInfo);
-					languagePairs.Add(languagePair);
-				}
-			}
+				DataContext = mainWindowViewModel
+			};
 
-			var options = new MTETranslationOptions();
-			var regionsProvider = new RegionsProvider();
-			var mainWindowViewModel = ShowProviderWindow(languagePairs.ToArray(), credentialStore, options, regionsProvider);
-			return mainWindowViewModel.DialogResult;
+			mainWindowViewModel.CloseEventRaised += () =>
+			{
+				mainWindow.Close();
+			};
+
+			mainWindow.ShowDialog();
+			return mainWindowViewModel;
 		}
 
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
@@ -101,90 +97,30 @@ namespace MicrosoftTranslatorProvider.Studio
 			return string.Equals(translationProviderUri.Scheme, Constants.MicrosoftProviderScheme, StringComparison.CurrentCultureIgnoreCase);
 		}
 
-		private MainWindowViewModel ShowProviderWindow(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, RegionsProvider regionsProvider, bool showSettingsView = false)
+		//TODO PACH (06/04/2021): Confirm if this is still required/ remove if obsolete code
+		/// <summary>
+		/// This gets called when a TranslationProviderAuthenticationException is thrown
+		/// Since SDL Studio doesn't pass the provider instance here and even if we do a workaround...
+		/// any new options set in the form that comes up are never saved to the project XML...
+		/// so there is no way to change any options, only to provide the credentials
+		/// </summary>
+		public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
 		{
-			SetSavedCredentialsOnUi(credentialStore, loadOptions);
-			var dialogService = new OpenFileDialogService();
-			var providerControlViewModel = new ProviderControlViewModel(loadOptions, regionsProvider);
-			var settingsControlViewModel = new SettingsControlViewModel(loadOptions, dialogService, false);
-			var htmlUtil = new HtmlUtil();
-			var mainWindowViewModel = new MainWindowViewModel(loadOptions,
-															  providerControlViewModel,
-															  settingsControlViewModel,
-															  credentialStore,
-															  languagePairs,
-															  htmlUtil,
-															  showSettingsView);
-			var mainWindow = new MainWindow
+			var languagePairs = new List<LanguagePair>();
+			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			if (projectController?.CurrentProject?.GetProjectInfo() is ProjectInfo projectInfo)
 			{
-				DataContext = mainWindowViewModel
-			};
-
-			mainWindowViewModel.CloseEventRaised += () =>
-			{
-				UpdateProviderCredentials(credentialStore, loadOptions);
-				mainWindow.Close();
-			};
-
-			mainWindow.ShowDialog();
-			return mainWindowViewModel;
-		}
-
-		private void UpdateProviderCredentials(ITranslationProviderCredentialStore credentialStore, ITranslationOptions options)
-		{
-			SetCredentialsOnCredentialStore(credentialStore, options.ClientID, options.PersistMicrosoftCredentials);
-			SetPrivateEndpointOnCredentialStore(credentialStore, options.PrivateEndpoint, options.PersistPrivateEndpoint);
-		}
-
-		private void SetSavedCredentialsOnUi(ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions)
-		{
-			if (GetCredentialsFromStore(credentialStore, Constants.MicrosoftProviderFullScheme)
-				is not TranslationProviderCredential providerCredentials)
-			{
-				return;
-			}
-
-			try
-			{
-				loadOptions.ClientID = providerCredentials.Credential;
-				loadOptions.PersistMicrosoftCredentials = providerCredentials.Persist;
-
-				if (GetCredentialsFromStore(credentialStore, Constants.MicrosoftProviderPrivateEndpointScheme)
-					is TranslationProviderCredential privateEndpoint)
+				foreach (var targetLanguage in projectInfo.TargetLanguages)
 				{
-					loadOptions.PrivateEndpoint = privateEndpoint.Credential;
-					loadOptions.PersistPrivateEndpoint = privateEndpoint.Persist;
+					var languagePair = new LanguagePair(projectInfo.SourceLanguage.CultureInfo, targetLanguage.CultureInfo);
+					languagePairs.Add(languagePair);
 				}
-
 			}
-			catch (Exception e)
-			{
-				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {e.Message}\n {e.StackTrace}");
-			}
-		}
 
-		private TranslationProviderCredential GetCredentialsFromStore(ITranslationProviderCredentialStore credentialStore, string uri)
-		{
-			var providerCredentials = credentialStore.GetCredential(new Uri(uri));
-			return providerCredentials != null
-				 ? new TranslationProviderCredential(providerCredentials.Credential, providerCredentials.Persist)
-				 : null;
-		}
-
-		private void SetCredentialsOnCredentialStore(ITranslationProviderCredentialStore credentialStore, string apiKey, bool persistKey)
-		{
-			var uri = new Uri(Constants.MicrosoftProviderFullScheme);
-			var proiderCredentials = new TranslationProviderCredential(apiKey, persistKey);
-			credentialStore.RemoveCredential(uri);
-			credentialStore.AddCredential(uri, proiderCredentials);
-		}
-
-		private void SetPrivateEndpointOnCredentialStore(ITranslationProviderCredentialStore credentialStore, string privateEndpoint, bool persist)
-		{
-			var uri = new Uri(Constants.MicrosoftProviderPrivateEndpointScheme);
-			var proiderCredentials = new TranslationProviderCredential(privateEndpoint, persist);
-			credentialStore.RemoveCredential(uri);
-			credentialStore.AddCredential(uri, proiderCredentials);
+			var options = new MTETranslationOptions();
+			var regionsProvider = new RegionsProvider();
+			var mainWindowViewModel = ShowProviderWindow(languagePairs.ToArray(), credentialStore, options, regionsProvider);
+			return mainWindowViewModel.DialogResult;
 		}
 	}
 }

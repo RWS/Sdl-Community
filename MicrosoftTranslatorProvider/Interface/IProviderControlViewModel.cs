@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using MicrosoftTranslatorProvider.Model;
 
@@ -41,7 +42,9 @@ namespace MicrosoftTranslatorProvider.Interfaces
 		BaseModel ViewModel { get; set; }
 		
 		RegionSubscription Region { get; set; }
-		
+
+		ObservableCollection<RegionSubscription> Regions { get; set; }
+
 		List<TranslationOption> TranslationOptions { get; set; }
 		
 		TranslationOption SelectedTranslationOption { get; set; }
