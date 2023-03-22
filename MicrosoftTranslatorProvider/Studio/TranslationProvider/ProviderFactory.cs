@@ -1,6 +1,8 @@
 ﻿using System;
+using MicrosoftTranslatorProvider.Interfaces;
 using MicrosoftTranslatorProvider.Model;
 using MicrosoftTranslatorProvider.Service;
+using Newtonsoft.Json;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace MicrosoftTranslatorProvider
@@ -17,25 +19,14 @@ namespace MicrosoftTranslatorProvider
 				throw new Exception(PluginResources.UriNotSupportedMessage);
 			}
 
-			var credential = credentialStore.GetCredential(new Uri(Constants.MicrosoftProviderFullScheme))
-						  ?? credentialStore.GetCredential(translationProviderUri)
-						  ?? credentialStore.GetCredential(new Uri(translationProviderUri.Scheme + ":///"));
-
+			var credential = credentialStore.GetCredential(new Uri(Constants.MicrosoftProviderFullScheme));
 			if (credential is null)
 			{
 				throw new TranslationProviderAuthenticationException();
 			}
 
-			var privateEndpoint = credentialStore.GetCredential(new Uri(Constants.MicrosoftProviderPrivateEndpointScheme));
-			var loadOptions = new MTETranslationOptions(translationProviderUri)
-			{
-				ClientID = credential.Credential,
-				PersistMicrosoftCredentials = credential.Persist,
-				PrivateEndpoint = privateEndpoint.Credential,
-				PersistPrivateEndpoint = privateEndpoint.Persist
-			};
-
-			return new Provider(loadOptions, new RegionsProvider(), new HtmlUtil());
+			var options = JsonConvert.DeserializeObject<MTETranslationOptions>(translationProviderState);
+			return new Provider(options, new RegionsProvider(), new HtmlUtil());
 		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)

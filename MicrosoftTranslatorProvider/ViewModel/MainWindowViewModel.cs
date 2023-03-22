@@ -25,6 +25,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		private readonly ITranslationProviderCredentialStore _credentialStore;
 		private readonly LanguagePair[] _languagePairs;
 		private readonly HtmlUtil _htmlUtil;
+		private readonly bool _showSettingsViews;
 
 		private ViewDetails _selectedView;
 		private bool _dialogResult;
@@ -51,6 +52,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			_credentialStore = credentialStore;
 			_languagePairs = languagePairs;
 			_htmlUtil = htmlUtil;
+			_showSettingsViews = showSettingsView;
 
 			AvailableViews = new List<ViewDetails>
 			{
@@ -68,6 +70,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 			SwitchView(showSettingsView ? ViewDetails_Provider : ViewDetails_Settings);
 			ShowProvidersPage();
+			SetCredentialsOnUI();
 		}
 
 		public string MultiButtonContent
@@ -187,6 +190,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			SetMicrosoftProviderOptions();
 			SetGeneralProviderOptions();
 			DeleteCredentialsIfNecessary();
+			SaveCredentials();
 			DialogResult = true;
 			CloseEventRaised?.Invoke();
 		}
@@ -264,7 +268,10 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 			foreach (var languagePair in _languagePairs)
 			{
-				Options?.LanguagesSupported.Add(languagePair.TargetCultureName, _providerControlViewModel.SelectedTranslationOption.Name);
+				if (!Options.LanguagesSupported.ContainsKey(languagePair.TargetCultureName))
+				{
+					Options?.LanguagesSupported?.Add(languagePair.TargetCultureName, _providerControlViewModel.SelectedTranslationOption.Name);
+				}
 			}
 		}
 
@@ -296,6 +303,77 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				SelectedView = AvailableViews.FirstOrDefault(x => x.Name == requestedType);
 			}
 			catch { }
+		}
+
+		private void SetCredentialsOnUI()
+		{
+			try
+			{
+				var uri = new TranslationProviderUriBuilder(Constants.MicrosoftProviderScheme);
+				var genericCredentials = new GenericCredentials(_credentialStore.GetCredential(uri.Uri).Credential);
+				if (genericCredentials is null)
+				{
+					return;
+				}
+
+				bool.TryParse(genericCredentials["Persist-ApiKey"], out var persistApiKey);
+				_providerControlViewModel.PersistMicrosoftKey = persistApiKey;
+				_providerControlViewModel.ClientID = persistApiKey ? genericCredentials["API-Key"] : string.Empty;
+
+				bool.TryParse(genericCredentials["Use-PrivateEndpoint"], out var usePrivateEndpoint);
+				bool.TryParse(genericCredentials["Persist-PrivateEndpoint"], out var persistsPrivateEndpoint);
+
+				_providerControlViewModel.UsePrivateEndpoint = usePrivateEndpoint;
+				_providerControlViewModel.PersistPrivateEndpoint = persistsPrivateEndpoint;
+				_providerControlViewModel.PrivateEndpoint = _showSettingsViews
+														  ? usePrivateEndpoint ? genericCredentials["PrivateEndpoint"]
+																			   : string.Empty
+														  : persistsPrivateEndpoint ? genericCredentials["PrivateEndpoint"]
+																					: string.Empty;
+
+
+
+				bool.TryParse(genericCredentials["UseCategoryID"], out var useCategoryId);
+				_providerControlViewModel.UseCategoryID = useCategoryId;
+				_providerControlViewModel.CategoryID = useCategoryId ? genericCredentials["CategoryID"] : string.Empty;
+
+				_providerControlViewModel.Region = _showSettingsViews
+												 ? _providerControlViewModel.Regions.FirstOrDefault(x => x.Name.Equals(genericCredentials["Region"])) ?? _providerControlViewModel.Regions.FirstOrDefault()
+												 : _providerControlViewModel.Regions.FirstOrDefault();
+			}
+			catch { }
+		}
+
+		private void SaveCredentials()
+		{
+			var uri = new TranslationProviderUriBuilder(Constants.MicrosoftProviderScheme);
+			_credentialStore.RemoveCredential(uri.Uri);
+
+			var persistApiKey = _providerControlViewModel.PersistMicrosoftKey;
+			var usePrivateEndpoint = _providerControlViewModel.UsePrivateEndpoint;
+			var persistPrivateEndpoint = _providerControlViewModel.PersistPrivateEndpoint;
+			var useCategoryId = _providerControlViewModel.UseCategoryID;
+			var currentCredentials = new GenericCredentials("mstpusername", "mstppassword")
+			{
+				["Persist-ApiKey"] = persistApiKey.ToString(),
+				["API-Key"] = persistApiKey
+							? _providerControlViewModel.ClientID
+							: string.Empty,
+
+				["Use-PrivateEndpoint"] = usePrivateEndpoint.ToString(),
+				["Persist-PrivateEndpoint"] = _providerControlViewModel.PersistPrivateEndpoint.ToString(),
+				["PrivateEndpoint"] = _providerControlViewModel.PrivateEndpoint,
+
+				["UseCategoryID"] = _providerControlViewModel.UseCategoryID.ToString(),
+				["CategoryID"] = useCategoryId
+							   ? _providerControlViewModel.CategoryID
+							   : string.Empty,
+
+				["Region"] = _providerControlViewModel.Region.Name
+			};
+
+			var credentials = new TranslationProviderCredential(currentCredentials.ToString(), true);
+			_credentialStore.AddCredential(uri.Uri, credentials);
 		}
 	}
 }
