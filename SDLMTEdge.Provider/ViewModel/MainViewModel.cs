@@ -186,58 +186,71 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 
 		private void SaveCredentials()
 		{
-			var uri = new TranslationProviderUriBuilder(Constants.TranslationProviderScheme);
-			_credentialStore.RemoveCredential(uri.Uri);
-
-			var persistsHost = _credentialsViewModel.PersistsHost;
-			var persistsCredentials = _credentialsViewModel.PersistsCredentials;
-			var persistsApiKey = _credentialsViewModel.PersistsApiKey;
-			var currentCredentials = new GenericCredentials(_credentialsViewModel.UserName, _credentialsViewModel.Password)
+			try
 			{
-				["Persists-Host"] = persistsHost.ToString().ToLower(),
-				["Host"] = persistsHost ? _credentialsViewModel.Host : string.Empty,
-				["Port"] = persistsHost ? _credentialsViewModel.Port : string.Empty,
+				var uri = new TranslationProviderUriBuilder(Constants.TranslationProviderScheme);
+				_credentialStore.RemoveCredential(uri.Uri);
 
-				["Persists-Credentials"] = persistsCredentials.ToString().ToLower(),
-				["UserName"] = persistsCredentials ? _credentialsViewModel.UserName : string.Empty,
-				["Password"] = persistsCredentials ? _credentialsViewModel.Password : string.Empty,
+				var persistsHost = _credentialsViewModel.PersistsHost;
+				var persistsCredentials = _credentialsViewModel.PersistsCredentials;
+				var persistsApiKey = _credentialsViewModel.PersistsApiKey;
+				var currentCredentials = new GenericCredentials(_credentialsViewModel.UserName, _credentialsViewModel.Password)
+				{
+					["Persists-Host"] = persistsHost.ToString().ToLower(),
+					["Host"] = persistsHost ? _credentialsViewModel.Host : string.Empty,
+					["Port"] = persistsHost ? _credentialsViewModel.Port : string.Empty,
 
-				["Persists-ApiKey"] = persistsApiKey.ToString().ToLower(),
-				["API-Key"] = _credentialsViewModel.ApiKey,
+					["Persists-Credentials"] = persistsCredentials.ToString().ToLower(),
+					["UserName"] = persistsCredentials ? _credentialsViewModel.UserName : string.Empty,
+					["Password"] = persistsCredentials ? _credentialsViewModel.Password : string.Empty,
 
-				["UseApiKey"] = _credentialsViewModel.UseApiKey.ToString().ToLower(),
-				["RequiresSecureProtocol"] = _credentialsViewModel.RequiresSecureProtocol.ToString().ToLower()
-			};
+					["Persists-ApiKey"] = persistsApiKey.ToString().ToLower(),
+					["API-Key"] = _credentialsViewModel.ApiKey,
 
-			var credentials = new TranslationProviderCredential(currentCredentials.ToString(), true);
-			_credentialStore.AddCredential(uri.Uri, credentials);
+					["UseApiKey"] = _credentialsViewModel.UseApiKey.ToString().ToLower(),
+					["RequiresSecureProtocol"] = _credentialsViewModel.RequiresSecureProtocol.ToString().ToLower(),
+
+					["Token"] = Options.ApiToken
+
+				};
+
+				var credentials = new TranslationProviderCredential(currentCredentials.ToString(), true);
+				_credentialStore.AddCredential(uri.Uri, credentials);
+			}
+			catch { }
 		}
 
 		private void SetCredentialsOnUI()
 		{
-			var uri = new TranslationProviderUriBuilder(Constants.TranslationProviderScheme);
-			var genericCredentials = new GenericCredentials(_credentialStore.GetCredential(uri.Uri).Credential);
-			if (genericCredentials is null)
+			try
 			{
-				return;
+				var uri = new TranslationProviderUriBuilder(Constants.TranslationProviderScheme);
+				var genericCredentials = new GenericCredentials(_credentialStore.GetCredential(uri.Uri).Credential);
+				if (genericCredentials is null)
+				{
+					return;
+				}
+
+				bool.TryParse(genericCredentials["Persists-Host"], out var persistsHost);
+				_credentialsViewModel.PersistsHost = persistsHost;
+				_credentialsViewModel.Host = persistsHost ? genericCredentials["Host"] : string.Empty;
+				_credentialsViewModel.Port = persistsHost ? genericCredentials["Port"] : string.Empty;
+
+				bool.TryParse(genericCredentials["Persists-Credentials"], out var persistsCredentials);
+				_credentialsViewModel.PersistsCredentials = persistsCredentials;
+				_credentialsViewModel.UserName = persistsCredentials ? genericCredentials["UserName"] : string.Empty;
+				_credentialsViewModel.Password = persistsCredentials ? genericCredentials["Password"] : string.Empty;
+
+				bool.TryParse(genericCredentials["Persists-ApiKey"], out var persistsApiKey);
+				_credentialsViewModel.PersistsApiKey = persistsApiKey;
+				_credentialsViewModel.ApiKey = persistsApiKey ? genericCredentials["API-Key"] : string.Empty;
+
+				bool.TryParse(genericCredentials["RequiresSecureProtocol"], out var requiresSecureProtocol);
+				_credentialsViewModel.RequiresSecureProtocol = requiresSecureProtocol;
+
+				Options.ApiToken = genericCredentials["Token"];
 			}
-
-			bool.TryParse(genericCredentials["Persists-Host"], out var persistsHost);
-			_credentialsViewModel.PersistsHost = persistsHost;
-			_credentialsViewModel.Host = persistsHost ? genericCredentials["Host"] : string.Empty;
-			_credentialsViewModel.Port = persistsHost ? genericCredentials["Port"] : string.Empty;
-
-			bool.TryParse(genericCredentials["Persists-Credentials"], out var persistsCredentials);
-			_credentialsViewModel.PersistsCredentials = persistsCredentials;
-			_credentialsViewModel.UserName = persistsCredentials ? genericCredentials["UserName"] : string.Empty;
-			_credentialsViewModel.Password = persistsCredentials ? genericCredentials["Password"] : string.Empty;
-
-			bool.TryParse(genericCredentials["Persists-ApiKey"], out var persistsApiKey);
-			_credentialsViewModel.PersistsApiKey = persistsApiKey;
-			_credentialsViewModel.ApiKey = persistsApiKey ? genericCredentials["API-Key"] : string.Empty;
-
-			bool.TryParse(genericCredentials["RequiresSecureProtocol"], out var requiresSecureProtocol);
-			_credentialsViewModel.RequiresSecureProtocol = requiresSecureProtocol;
+			catch { }
 		}
 	}
 }
