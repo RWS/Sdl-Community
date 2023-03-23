@@ -9,11 +9,13 @@ namespace Sdl.Community.MTEdge.Provider
     public static class Constants
     {
         public const string TranslationProviderScheme = "sdlmtedge";
-
+		public const string BasicCredentialsMethod = "Basic credentials";
+		public const string ApiKeyMethod = "API Key";
+		public const string Auth0SSOMethod = "SSO";
 		// URIs
 
-        // Provider
-        public const string Provider_TranslationProviderFactory = "MTEdge_Factory";
+		// Provider
+		public const string Provider_TranslationProviderFactory = "MTEdge_Factory";
         public const string Provider_TranslationProviderWinFormsUi = "MTEdge_WinFormsUI";
 
         // Logging messages

@@ -93,7 +93,7 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 
 		private void InitializeViews()
 		{
-			_credentialsViewModel = new CredentialsViewModel(Options, _languagePairs);
+			_credentialsViewModel = new CredentialsViewModel(Options);
 			_languageMappingViewModel = new LanguageMappingViewModel(Options);
 			_availableViews = new List<ViewDetails>()
 			{
@@ -149,15 +149,15 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 					return;
 				}
 
-				if (_credentialsViewModel.UseBasicCredentials)
+				if (Options.UseBasicAuthentication)
 				{
 					Options.ApiToken = SDLMTEdgeTranslatorHelper.GetAuthToken(Options as TranslationOptions, GetCredentals());
 				}
-				else if (_credentialsViewModel.UseAuth0SSO)
+				else if (Options.UseAuth0SSO)
 				{
 					Options.ApiToken = await SDLMTEdgeTranslatorHelper.SignInAuthAsync(Options as TranslationOptions);
 				}
-				else if (_credentialsViewModel.UseApiKey)
+				else if (Options.UseApiKey)
 				{
 					Options.ApiToken = _credentialsViewModel.ApiKey;
 					SDLMTEdgeTranslatorHelper.VerifyBasicAPIToken(Options as TranslationOptions, GetCredentals());
@@ -248,7 +248,7 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 				bool.TryParse(genericCredentials["RequiresSecureProtocol"], out var requiresSecureProtocol);
 				_credentialsViewModel.RequiresSecureProtocol = requiresSecureProtocol;
 
-				Options.ApiToken = genericCredentials["Token"];
+				Options.ApiToken = _showSettingsView ? genericCredentials["Token"] : string.Empty;
 			}
 			catch { }
 		}

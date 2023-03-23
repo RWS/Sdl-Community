@@ -13,12 +13,7 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 {
 	public class CredentialsViewModel : BaseModel, ICredentialsViewModel
 	{
-		private const string BasicCredentialsMethod = "Basic credentials";
-		private const string ApiKeyMethod = "API Key";
-		private const string Auth0SSOMethod = "SSO";
-
 		private readonly ITranslationOptions _translationOptions;
-		private LanguagePair[] _languagePairs;
 
 		private string _port;
 		private string _host;
@@ -38,11 +33,10 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 
 		private ICommand _clearCommand;
 
-		public CredentialsViewModel(ITranslationOptions options, LanguagePair[] languagePairs)
+		public CredentialsViewModel(ITranslationOptions options)
 		{
 			ViewModel = this;
 			_translationOptions = options;
-			_languagePairs = languagePairs;
 			RequiresSecureProtocol = true;
 			InitializeView();
 		}
@@ -210,9 +204,10 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 			{
 				if (_selectedAuthenticationMethod == value) return;
 				_selectedAuthenticationMethod = value;
-				UseBasicCredentials = _selectedAuthenticationMethod.Equals(BasicCredentialsMethod);
-				UseApiKey = _selectedAuthenticationMethod.Equals(ApiKeyMethod);
-				UseAuth0SSO = _selectedAuthenticationMethod.Equals(Auth0SSOMethod);
+				_translationOptions.SelectedAuthenticationMethod = value;
+				UseBasicCredentials = _selectedAuthenticationMethod.Equals(Constants.BasicCredentialsMethod);
+				UseApiKey = _selectedAuthenticationMethod.Equals(Constants.ApiKeyMethod);
+				UseAuth0SSO = _selectedAuthenticationMethod.Equals(Constants.Auth0SSOMethod);
 			}
 		}
 
@@ -276,6 +271,11 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 		{
 			try
 			{
+				if (!string.IsNullOrEmpty(_translationOptions.ApiToken))
+				{
+					return true;
+				}
+
 				if (UseBasicCredentials)
 				{
 					return BasicCredentialsAreSet();
@@ -333,8 +333,9 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 
 		private void InitializeView()
 		{
-			AuthenticationMethods = new() { ApiKeyMethod, BasicCredentialsMethod, Auth0SSOMethod };
-			SelectedAuthenticationMethod = _autheticationMethods.First(x => x.Equals(BasicCredentialsMethod));
+			AuthenticationMethods = new() { Constants.ApiKeyMethod, Constants.BasicCredentialsMethod, Constants.Auth0SSOMethod };
+			SelectedAuthenticationMethod = _translationOptions.SelectedAuthenticationMethod
+										?? _autheticationMethods.First(x => x.Equals(Constants.Auth0SSOMethod));
 		}
 
 		private void Clear(object parameter)

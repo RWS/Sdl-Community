@@ -14,6 +14,8 @@ namespace Sdl.Community.MTEdge.Provider.Model
 	{
 		private readonly TranslationProviderUriBuilder _uriBuilder;
 
+		private string _selectedAuthenticationMethod;
+
 		public TranslationOptions()
 		{
 			_uriBuilder = new TranslationProviderUriBuilder(Constants.TranslationProviderScheme);
@@ -65,6 +67,18 @@ namespace Sdl.Community.MTEdge.Provider.Model
 		public bool UseAuth0SSO { get; set; }
 
 		public bool RequiresSecureProtocol { get; set; }
+
+		public string SelectedAuthenticationMethod
+		{
+			get => _selectedAuthenticationMethod;
+			set
+			{
+				_selectedAuthenticationMethod = value;
+				UseBasicAuthentication = value.Equals(Constants.BasicCredentialsMethod);
+				UseApiKey = value.Equals(Constants.ApiKeyMethod);
+				UseAuth0SSO = value.Equals(Constants.Auth0SSOMethod);
+			}
+		}
 
 		public Uri Uri => !string.IsNullOrWhiteSpace(_uriBuilder.HostName) ? _uriBuilder.Uri : null;
 
