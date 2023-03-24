@@ -43,6 +43,12 @@ namespace Sdl.Community.SdlFreshstart.Model
 			var pluginPath = Path.Combine(SdlFolder, $"{MajorVersion}{Edition}");
 			var programDataStudioFolderPath = Path.Combine(SdlFolder, ProgramDataStudioFolder);
 
+			var srPathPart = ExecutableVersion.Minor > 0 ? $"SR{ExecutableVersion.Minor}" : "";
+			var betaPath = version.Edition.ToLower().Equals("beta") ? "_Beta" : "";
+
+			ProgramDataPackagePath = Path.Combine(
+				Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Package Cache", ExecutableVersion.Major < 17 ? "SDL" : "Trados", $"{CacheFolderName}{srPathPart}{betaPath}", @"Modules");
+
 			ProgramDataLicenseFolder = Path.Combine(
 				Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
 				programDataStudioFolderPath);
@@ -149,6 +155,7 @@ namespace Sdl.Community.SdlFreshstart.Model
 
 		public string ProgramDataPluginsFolder { get; set; }
 		public string ProgramDataUpdatesFolder { get; set; }
+		public string ProgramDataPackagePath { get; }
 		public string ProgramDataLicenseFolder { get; set; }
 		public string ProjectApiPath { get; set; }
 		public string ProjectsXmlPath { get; set; }
