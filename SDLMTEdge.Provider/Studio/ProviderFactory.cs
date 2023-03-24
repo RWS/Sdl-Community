@@ -26,23 +26,14 @@ namespace Sdl.Community.MTEdge.Provider.Studio
 				throw new Exception("Cannot handle URI.");
 			}
 
-			if (credentialStore.GetCredential(translationProviderUri) is not TranslationProviderCredential credentials)
+			if (credentialStore.GetCredential(new TranslationProviderUriBuilder(Constants.TranslationProviderScheme).Uri) is not TranslationProviderCredential credentials)
 			{
 				throw new TranslationProviderAuthenticationException();
 			}
 
-			var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
 			var genericCredentials = new GenericCredentials(credentials.Credential);
-			if (options.UseBasicAuthentication)
-			{
-				options.ApiToken = SDLMTEdgeTranslatorHelper.GetAuthToken(options, genericCredentials);
-			}
-			else
-			{
-				options.ApiToken = genericCredentials["API-Key"];
-				SDLMTEdgeTranslatorHelper.VerifyBasicAPIToken(options, genericCredentials);
-			}
-
+			var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
+			options.ApiToken = genericCredentials["Token"];
 			return new Provider(options);
 		}
 
