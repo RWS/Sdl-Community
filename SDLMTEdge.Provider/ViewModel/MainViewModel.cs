@@ -26,6 +26,7 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 		private ILanguageMappingViewModel _languageMappingViewModel;
 
 		private bool _showSettingsView;
+		private string _headerTitle;
 
 		private ICommand _saveCommand;
 		private ICommand _signInCommand;
@@ -64,6 +65,17 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 				if (_showSettingsView == value) return;
 				_showSettingsView = value;
 				OnPropertyChanged(nameof(ShowSettingsView));
+			}
+		}
+
+		public string HeaderTitle
+		{
+			get => _headerTitle;
+			set
+			{
+				if (_headerTitle == value) return;
+				_headerTitle = value;
+				OnPropertyChanged(nameof(HeaderTitle));
 			}
 		}
 
@@ -115,6 +127,7 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 		{
 			SelectedView = _availableViews.FirstOrDefault(x => x.Name.Equals(parameter))
 						?? _availableViews.First();
+			HeaderTitle = SelectedView.Name.Equals(ViewsDetails_Credentials) ? "Authentication" : "Language Pairs";
 		}
 
 		private void Save(object parameter)
