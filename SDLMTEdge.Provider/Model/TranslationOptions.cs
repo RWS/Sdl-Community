@@ -16,10 +16,13 @@ namespace Sdl.Community.MTEdge.Provider.Model
 
 		public TranslationOptions()
 		{
-			_uriBuilder = new TranslationProviderUriBuilder(Constants.TranslationProviderScheme);
+			_uriBuilder = new TranslationProviderUriBuilder(Constants.TranslationProviderScheme)
+			{
+				Port = 8001
+			};
+
 			UseBasicAuthentication = true;
 			RequiresSecureProtocol = false;
-			Port = 8001;
 			LanguagePairPreferences ??= new Dictionary<CultureInfo, MTEdgeLanguagePair>();
 		}
 
