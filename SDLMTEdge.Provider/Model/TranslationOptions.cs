@@ -81,6 +81,7 @@ namespace Sdl.Community.MTEdge.Provider.Model
 			foreach (var languagePair in languagePairChoices)
 			{
 				LanguagePairPreferences[languagePair.TradosCulture] = languagePair.SelectedModel;
+				LanguagePairPreferences[languagePair.TradosCulture].DictionaryId = languagePair.SelectedDictionary.DictionaryId;
 			}
 		}
 

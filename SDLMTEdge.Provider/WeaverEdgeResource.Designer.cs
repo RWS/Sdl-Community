@@ -106,7 +106,7 @@ namespace Sdl.Community.MTEdge.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download Language Weaver Edge provider from AppStore.
+        ///   Looks up a localized string similar to Download Language Weaver Edge from AppStore.
         /// </summary>
         public static string WeaverEdge_StoreAction {
             get {
@@ -241,7 +241,7 @@ namespace Sdl.Community.MTEdge.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Language Weaver Edge tell me provider.
+        ///   Looks up a localized string similar to Language Weaver Edge tell me.
         /// </summary>
         public static string WeaverEdge_TellMeProviderName {
             get {
