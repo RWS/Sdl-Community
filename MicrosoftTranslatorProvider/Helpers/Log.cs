@@ -10,11 +10,7 @@ namespace MicrosoftTranslatorProvider.Helpers
 	{
 		public static void Setup()
 		{
-			if (LogManager.Configuration is null)
-			{
-				LogManager.Configuration = new LoggingConfiguration();
-			}
-
+			LogManager.Configuration ??= new LoggingConfiguration();
 			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), PluginResources.LogsFolderPath, PluginResources.AppLogFolder);
 			if (!Directory.Exists(logDirectoryPath))
 			{
