@@ -103,7 +103,7 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 
 		private void InitializeViews()
 		{
-			_credentialsViewModel = new CredentialsViewModel(Options, _languagePairs);
+			_credentialsViewModel = new CredentialsViewModel(Options, ShowSettingsView);
 			_languageMappingViewModel = new LanguageMappingViewModel(Options);
 			_availableViews = new List<ViewDetails>()
 			{
@@ -132,9 +132,17 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 
 		private void Save(object parameter)
         {
-			if (!_credentialsViewModel.UriIsValid()
-			 || !_credentialsViewModel.CredentialsAreValid())
+			var uriIsValid = _credentialsViewModel.UriIsValid();
+			var credentialsAreValid = _credentialsViewModel.CredentialsAreValid(_showSettingsView);
+			if (!uriIsValid || !credentialsAreValid)
 			{
+				if (!credentialsAreValid)
+				{
+					Options.ApiToken = string.Empty;
+					ShowSettingsView = false;
+					SwitchView(ViewsDetails_Credentials);
+				}
+
 				return;
 			}
 
