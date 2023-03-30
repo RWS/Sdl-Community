@@ -216,22 +216,22 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 				var currentCredentials = new GenericCredentials(_credentialsViewModel.UserName, _credentialsViewModel.Password)
 				{
 					["Persists-Host"] = persistsHost.ToString().ToLower(),
-					["Host"] = _credentialsViewModel.Host ?? string.Empty,
-					["Port"] = _credentialsViewModel.Port ?? string.Empty,
+					["Host"] = persistsHost ? _credentialsViewModel.Host : string.Empty,
+					["Port"] = persistsHost ? _credentialsViewModel.Port : string.Empty,
 
 					["Persists-Credentials"] = persistsCredentials.ToString().ToLower(),
-					["UserName"] = _credentialsViewModel.UserName ?? string.Empty,
-					["Password"] = _credentialsViewModel.Password ?? string.Empty,
+					["UserName"] = persistsCredentials ? _credentialsViewModel.UserName : string.Empty,
+					["Password"] = persistsCredentials ? _credentialsViewModel.Password : string.Empty,
 
 					["Persists-ApiKey"] = persistsApiKey.ToString().ToLower(),
-					["API-Key"] = _credentialsViewModel.ApiKey ?? string.Empty,
+					["API-Key"] = _credentialsViewModel.ApiKey,
 
 					["UseApiKey"] = _credentialsViewModel.UseApiKey.ToString().ToLower(),
 					["RequiresSecureProtocol"] = _credentialsViewModel.RequiresSecureProtocol.ToString().ToLower(),
 
 					["Token"] = Options.ApiToken
 				};
-
+        
 				var credentials = new TranslationProviderCredential(currentCredentials.ToString(), true);
 				_credentialStore.AddCredential(uri.Uri, credentials);
 			}
@@ -248,7 +248,7 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 				{
 					return;
 				}
-
+        
 				bool.TryParse(genericCredentials["Persists-Host"], out var persistsHost);
 				_credentialsViewModel.PersistsHost = persistsHost;
 				_credentialsViewModel.Host = GetCredential(genericCredentials, "Host", persistsHost);
