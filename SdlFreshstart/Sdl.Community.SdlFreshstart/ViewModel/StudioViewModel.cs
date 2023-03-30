@@ -470,12 +470,9 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		{
 			var (unchangeableVersions, changeableVersions) = GetUnchangeableAndChangeableVersions();
 
-			if (Directory.Exists(_packageCache))
+			foreach (var version in changeableVersions)
 			{
-				foreach (var version in changeableVersions)
-				{
-					RunRepair(version);
-				}
+				RunRepair(version);
 			}
 
 			if (unchangeableVersions.Any())
@@ -547,12 +544,8 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			_logger.Info(
 				$"Selected Trados executable version: Minor - {version.ExecutableVersion.Minor}, Build - {version.ExecutableVersion.Build}");
 
-			var currentVersionFolder = _versionService.GetPackageCacheCurrentFolder(version.ExecutableVersion,
-				version.CacheFolderName, version.Edition.ToLower().Equals("beta"));
 			var msiName = GetMsiName(version);
-			var moduleDirectoryPath = Path.Combine(currentVersionFolder, "modules");
-
-			_versionService.RunRepairMsi(moduleDirectoryPath, msiName);
+			_versionService.RunRepairMsi(version.ProgramDataPackagePath, msiName);
 		}
 
 		private void SetButtonColors()
