@@ -8,12 +8,12 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 	{
 		public ApplyTMTemplateHelpAction()
 		{
-			Name = "Apply TM Template wiki in the SDL Community";
+			Name = "Apply TM Template wiki in the RWS Community";
 		}
 
 		public override void Execute()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/4567.applytm-template");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/4567/applytm-template");
 		}
 
 		public override bool IsAvailable => true;
