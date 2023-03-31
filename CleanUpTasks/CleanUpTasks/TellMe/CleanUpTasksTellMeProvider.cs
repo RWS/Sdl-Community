@@ -5,7 +5,7 @@ namespace SDLCommunityCleanUpTasks.TellMe
 	[TellMeProvider]
     public class CleanUpTasksTellMeProvider : ITellMeProvider
     {
-        public string Name => "CleanUpTasks tell me provider";
+        public string Name => "CleanUpTasks Tell Me provider";
 
         public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
         {

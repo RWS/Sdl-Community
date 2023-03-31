@@ -16,7 +16,7 @@ namespace SDLCommunityCleanUpTasks
 		{
 			var config = new LoggingConfiguration();
 			var assembly = Assembly.GetExecutingAssembly();
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL",
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Trados AppStore",
 				"CleanUpTasksLogs");
 			if (!Directory.Exists(logDirectoryPath))
 			{
