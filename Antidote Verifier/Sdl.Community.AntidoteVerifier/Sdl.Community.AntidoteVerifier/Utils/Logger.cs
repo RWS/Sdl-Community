@@ -20,7 +20,7 @@ namespace Sdl.Community.AntidoteVerifier.Utils
 	    private void Initialize()
 	    {
 		    var logFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-			    @"SDL Community\Antidote Verifier\logs\antidoteVerifier-{Date}.log");
+			    @"Trados AppStore\Antidote Verifier\logs\antidoteVerifier-{Date}.log");
 		    Log.Logger = new LoggerConfiguration()
 			    .WriteTo.RollingFile(logFilePath)
 			    .CreateLogger();
