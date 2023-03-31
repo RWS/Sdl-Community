@@ -5,7 +5,7 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 	[TellMeProvider]
 	public class ApplyTMTemplateTellMeProvider : ITellMeProvider
 	{
-		public string Name => "Apply TM Template tell me provider";
+		public string Name => "Apply TM Template Tell Me provider";
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
@@ -15,7 +15,7 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 			},
 			new ApplyTMCommunitySupportAction
 			{
-				Keywords = new[] {"apply tm template", "community", "support"}
+				Keywords = new[] {"apply tm template","forum", "community", "support"}
 			},
 			new ApplyTmTemplateAction
 			{
@@ -23,7 +23,7 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 			},
 			new ApplyTMTemplateHelpAction()
 			{
-				Keywords = new []{"apply tm template", "help"}
+				Keywords = new []{"apply tm template", "wiki", "help"}
 			}
 		};
 	}
