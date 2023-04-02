@@ -112,15 +112,13 @@ namespace Sdl.Community.MTEdge.Provider.Helpers
                 }
 
                 queryString["languagePairId"] = options.LanguagePairPreferences[languageDirection.TargetCulture].LanguagePairId;
-                if (options.LanguagePairPreferences[languageDirection.TargetCulture].DictionaryId != null)
-                {
-                    if (!options.LanguagePairPreferences[languageDirection.TargetCulture].DictionaryId.Equals(Constants.NoDictionary))
-                    {
-                        queryString["dictionaryIds"] = options.LanguagePairPreferences[languageDirection.TargetCulture].DictionaryId;
-                    }
-                }
+				if (options.LanguagePairPreferences[languageDirection.TargetCulture].DictionaryId is not null
+				&& !options.LanguagePairPreferences[languageDirection.TargetCulture].DictionaryId.Equals(Constants.NoDictionary))
+				{
+					queryString["dictionaryIds"] = options.LanguagePairPreferences[languageDirection.TargetCulture].DictionaryId;
+				}
 
-                queryString["input"] = encodedInput;
+				queryString["input"] = encodedInput;
             }
 
             queryString["inputFormat"] = "application/x-xliff";

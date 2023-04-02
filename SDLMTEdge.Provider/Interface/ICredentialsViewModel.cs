@@ -31,7 +31,7 @@ namespace Sdl.Community.MTEdge.Provider.Interface
 
 		bool UseAuth0SSO { get; set; }
 
-		bool CredentialsAreValid();
+		bool CredentialsAreValid(bool isSettingsView = false);
 
 		bool UriIsValid();
 	}

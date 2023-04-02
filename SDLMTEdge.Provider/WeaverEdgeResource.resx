@@ -133,14 +133,14 @@
     <value>Language Weaver Edge</value>
   </data>
   <data name="WeaverEdge_StoreAction" xml:space="preserve">
-    <value>Download Language Weaver Edge provider from AppStore</value>
+    <value>Download Language Weaver Edge from AppStore</value>
   </data>
   <data name="WeaverEdge_TellMeActions" xml:space="preserve">
     <value>sdlmtedge</value>
     <comment>don't translate it</comment>
   </data>
   <data name="WeaverEdge_TellMeProviderName" xml:space="preserve">
-    <value>Language Weaver Edge tell me provider</value>
+    <value>Language Weaver Edge tell me</value>
   </data>
   <data name="WeaverEdge_TellMe_EdgeActionKey" xml:space="preserve">
     <value>language weaver edge</value>
