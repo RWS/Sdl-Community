@@ -165,7 +165,7 @@ namespace Sdl.Community.MTEdge.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Language Weaver Edge provider.
+        ///   Looks up a localized string similar to Language Weaver Edge.
         /// </summary>
         public static string Plugin_NiceName {
             get {

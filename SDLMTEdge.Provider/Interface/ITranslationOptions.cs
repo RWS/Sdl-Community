@@ -30,8 +30,6 @@ namespace Sdl.Community.MTEdge.Provider.Interface
 
 		public bool RequiresSecureProtocol { get; set; }
 
-		public string SelectedAuthenticationMethod { get; set; }
-
 		public Dictionary<CultureInfo, MTEdgeLanguagePair> LanguagePairPreferences { get; set; }
 
 		public List<TradosToMTEdgeLanguagePair> LanguageMapping { get; set; }

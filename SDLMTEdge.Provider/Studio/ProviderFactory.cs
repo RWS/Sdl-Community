@@ -1,6 +1,4 @@
 using System;
-using System.Drawing;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NLog;
 using Sdl.Community.MTEdge.Provider.Helpers;

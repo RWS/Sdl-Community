@@ -140,7 +140,7 @@
     <value>Language Weaver Edge</value>
   </data>
   <data name="Plugin_NiceName" xml:space="preserve">
-    <value>Language Weaver Edge provider</value>
+    <value>Language Weaver Edge</value>
   </data>
   <data name="Plugin_Tooltip" xml:space="preserve">
     <value>Enterprise Translation Services translation provider</value>
@@ -161,6 +161,6 @@
     <value>Missing mappings</value>
   </data>
   <data name="MissingMappings_DialogMessage" xml:space="preserve">
-	  <value>The following Trados language pairs were not mapped to Language Weaver language pairs. Results will not be provided for them: {0}{1}{2}{3}Do you wish to continue with these settings?</value>
+    <value>The following Trados language pairs were not mapped to Language Weaver language pairs. Results will not be provided for them: {0}{1}{2}{3}Do you wish to continue with these settings?</value>
   </data>
 </root>

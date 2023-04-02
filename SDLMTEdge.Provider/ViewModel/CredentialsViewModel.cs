@@ -7,12 +7,15 @@ using Sdl.Community.MTEdge.Provider.Command;
 using Sdl.Community.MTEdge.Provider.Helpers;
 using Sdl.Community.MTEdge.Provider.Interface;
 using Sdl.Community.MTEdge.Provider.Model;
-using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.MTEdge.Provider.ViewModel
 {
 	public class CredentialsViewModel : BaseModel, ICredentialsViewModel
 	{
+		private const string BasicCredentialsMethod = "Basic credentials";
+		private const string ApiKeyMethod = "API Key";
+		private const string Auth0SSOMethod = "SSO";
+
 		private readonly ITranslationOptions _translationOptions;
 
 		private string _port;
@@ -33,7 +36,7 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 
 		private ICommand _clearCommand;
 
-		public CredentialsViewModel(ITranslationOptions options)
+		public CredentialsViewModel(ITranslationOptions options, bool showSettingsView = false)
 		{
 			ViewModel = this;
 			_translationOptions = options;
@@ -204,10 +207,12 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 			{
 				if (_selectedAuthenticationMethod == value) return;
 				_selectedAuthenticationMethod = value;
-				_translationOptions.SelectedAuthenticationMethod = value;
-				UseBasicCredentials = _selectedAuthenticationMethod.Equals(Constants.BasicCredentialsMethod);
-				UseApiKey = _selectedAuthenticationMethod.Equals(Constants.ApiKeyMethod);
-				UseAuth0SSO = _selectedAuthenticationMethod.Equals(Constants.Auth0SSOMethod);
+				UseBasicCredentials = _selectedAuthenticationMethod.Equals(BasicCredentialsMethod);
+				UseApiKey = _selectedAuthenticationMethod.Equals(ApiKeyMethod);
+				UseAuth0SSO = _selectedAuthenticationMethod.Equals(Auth0SSOMethod);
+				_translationOptions.UseBasicAuthentication = UseBasicCredentials;
+				_translationOptions.UseApiKey = UseApiKey;
+				_translationOptions.UseAuth0SSO = UseAuth0SSO;
 			}
 		}
 
@@ -243,7 +248,8 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 				Host = Host.Substring(0, Host.Length - 1);
 			}
 
-			var baseUrl = $"https://{Host}:{Port}";
+			var protocol = RequiresSecureProtocol ? Uri.UriSchemeHttps : Uri.UriSchemeHttp;
+			var baseUrl = $"{protocol}://{Host}:{Port}";
 			var targetUri = new Uri(baseUrl);
 			if (targetUri is null)
 			{
@@ -267,22 +273,17 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 			return true;
 		}
 
-		public bool CredentialsAreValid()
+		public bool CredentialsAreValid(bool isSettingsView = false)
 		{
 			try
 			{
-				if (!string.IsNullOrEmpty(_translationOptions.ApiToken))
-				{
-					return true;
-				}
-
 				if (UseBasicCredentials)
 				{
-					return BasicCredentialsAreSet();
+					return BasicCredentialsAreSet(isSettingsView);
 				}
 				else if (UseApiKey)
 				{
-					return ApiKeyIsValid();
+					return ApiKeyIsValid(isSettingsView);
 				}
 				else if (UseAuth0SSO)
 				{
@@ -297,12 +298,18 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 			return false;
 		}
 
-		private bool BasicCredentialsAreSet()
+		private bool BasicCredentialsAreSet(bool isSettingsView)
 		{
 			UserName ??= string.Empty;
 			UserName = UserName.Trim();
 			if (string.IsNullOrEmpty(UserName))
 			{
+				if (isSettingsView)
+				{
+					ErrorHandler.HandleError("The connection has been lost, please reconnect", "Connection Lost");
+					return false;
+				}
+				
 				ErrorHandler.HandleError("The UserName field can not be empty", "UserName");
 				return false;
 			}
@@ -311,6 +318,12 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 			Password = Password.Trim();
 			if (string.IsNullOrEmpty(Password))
 			{
+				if (isSettingsView)
+				{
+					ErrorHandler.HandleError("The connection has been lost, please reconnect", "Connection Lost");
+					return false;
+				}
+
 				ErrorHandler.HandleError("The Password field can not be empty", "Password");
 				return false;
 			}
@@ -318,12 +331,18 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 			return true;
 		}
 
-		private bool ApiKeyIsValid()
+		private bool ApiKeyIsValid(bool isSettingsView)
 		{
 			ApiKey ??= string.Empty;
 			ApiKey = ApiKey.Trim();
 			if (string.IsNullOrEmpty(ApiKey))
 			{
+				if (isSettingsView)
+                {
+                    ErrorHandler.HandleError("The connection has been lost, please reconnect", "Connection Lost");
+                    return false;
+                }
+          
 				ErrorHandler.HandleError("The ApiKey field can not be empty", "ApiKey");
 				return false;
 			}
@@ -333,9 +352,19 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 
 		private void InitializeView()
 		{
-			AuthenticationMethods = new() { Constants.ApiKeyMethod, Constants.BasicCredentialsMethod, Constants.Auth0SSOMethod };
-			SelectedAuthenticationMethod = _translationOptions.SelectedAuthenticationMethod
-										?? _autheticationMethods.First(x => x.Equals(Constants.Auth0SSOMethod));
+			AuthenticationMethods = new() { ApiKeyMethod, BasicCredentialsMethod, Auth0SSOMethod };
+			if (_translationOptions.UseApiKey)
+			{
+				SelectedAuthenticationMethod = ApiKeyMethod;
+			}
+			else if (_translationOptions.UseAuth0SSO)
+			{
+				SelectedAuthenticationMethod = Auth0SSOMethod;
+			}
+			else
+			{
+				SelectedAuthenticationMethod = BasicCredentialsMethod;
+			}
 		}
 
 		private void Clear(object parameter)
@@ -354,18 +383,6 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 				case "Password":
 					Password = string.Empty;
 					break;
-			}
-		}
-
-		private string myPw;
-
-		public string MyPw
-		{
-			get => myPw;
-			set
-			{
-				myPw = value;
-				OnPropertyChanged(nameof(myPw));
 			}
 		}
 	}
