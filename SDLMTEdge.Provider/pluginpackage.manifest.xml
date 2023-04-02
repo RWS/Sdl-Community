@@ -3,6 +3,6 @@
   <PlugInName>Sdl.Community.MTEdge.Provider</PlugInName>
   <Version>4.1.0.6</Version>
   <Description>Plugin description</Description>
-  <Author></Author>
+  <Author>Trados AppStore Team</Author>
   <RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
 </PluginPackage>
