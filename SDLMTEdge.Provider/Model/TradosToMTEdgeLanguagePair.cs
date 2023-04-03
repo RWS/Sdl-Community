@@ -64,7 +64,12 @@ namespace Sdl.Community.MTEdge.Provider.Model
 
 		public DictionaryModel SelectedDictionary
 		{
-			get => _selectedDictionary ??= Dictionaries[SelectedDictionaryIndex];
+			get
+			{
+				return IsSupported
+					? _selectedDictionary ??= Dictionaries?[SelectedDictionaryIndex]
+					: new();
+			}
 		}
 
 		public int SelectedDictionaryIndex
@@ -80,7 +85,12 @@ namespace Sdl.Community.MTEdge.Provider.Model
 
 		public MTEdgeLanguagePair SelectedModel
 		{
-			get => _selectedModel ??= MtEdgeLanguagePairs[SelectedModelIndex];
+			get
+			{
+				return IsSupported
+					? _selectedModel ??= MtEdgeLanguagePairs?[SelectedModelIndex]
+					: new();
+			}
 		}
 
 		public int SelectedModelIndex
@@ -93,5 +103,7 @@ namespace Sdl.Community.MTEdge.Provider.Model
 				OnPropertyChanged(nameof(SelectedModelIndex));
 			}
 		}
+
+		public bool IsSupported { get; set; } = true;
 	}
 }
