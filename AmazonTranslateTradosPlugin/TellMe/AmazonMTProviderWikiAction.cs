@@ -13,7 +13,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin.TellMe
 
 		public AmazonMTProviderWikiAction()
 		{
-			Name = "RWS Community Amazon Translate MT Provider Wiki";
+			Name = "Amazon Translate MT Provider Wiki";
 		}
 
 		public override void Execute()
