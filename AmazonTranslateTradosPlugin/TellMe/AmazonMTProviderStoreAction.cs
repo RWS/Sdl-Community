@@ -18,7 +18,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin.TellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://appstore.sdl.com/language/app/amazon-translate-mt-provider/925/");
+			Process.Start("https://appstore.rws.com/Plugin/18");
 		}
 	}
 }
