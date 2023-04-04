@@ -5,7 +5,7 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF.Utils
 {
 	public class Helper
 	{
-		private readonly string _communityFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "MXLIFF File Type Support", "Native MXLIFF Files");
+		private readonly string _communityFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Trados AppStore", "MXLIFF File Type Support", "Native MXLIFF Files");
 
 		// Backup the native .mxliff file locally
 		// When user creates a project using the new project wizard, the native file is used when user saves the translated file using "Save Target As" option
