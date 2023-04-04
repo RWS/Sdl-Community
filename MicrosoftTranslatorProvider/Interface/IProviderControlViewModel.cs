@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
 using MicrosoftTranslatorProvider.Model;
 
 namespace MicrosoftTranslatorProvider.Interfaces
@@ -21,21 +20,9 @@ namespace MicrosoftTranslatorProvider.Interfaces
 		
 		bool IsTellMeAction { get; set; }
 		
-		bool BasicCsvGlossary { get; set; }
-		
 		string CategoryID { get; set; }
 		
 		string ClientID { get; set; }
-
-		string JsonFilePath { get; set; }
-		
-		string ProjectName { get; set; }
-		
-		string ProjectLocation { get; set; }
-		
-		string GlossaryId { get; set; }
-		
-		string GlossaryPath { get; set; }
 
 		string PrivateEndpoint { get; set; }
 

@@ -108,7 +108,11 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 
 		public string Translate(string sourceLanguage, string targetLanguage, string textToTranslate, string categoryId)
 		{
-			_authToken ??= GetAuthToken();
+			if (string.IsNullOrEmpty(_authToken))
+			{
+				_authToken = GetAuthToken();
+			}
+
 			if (_authToken is null)
 			{
 				throw new Exception("Invalid credentials");
@@ -123,7 +127,8 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 			}
 			catch (WebException exception)
 			{
-				throw new Exception(LogWebException(exception));
+				ErrorHandler.HandleError(exception);
+				return null;
 			}
 		}
 
@@ -153,7 +158,8 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 					return TryRequestTranslation(sourceLanguage, targetLanguage, textToTranslate, categoryID);
 				}
 
-				throw ex;
+				ErrorHandler.HandleError(ex);
+				return null;
 			}
 		}
 
@@ -207,7 +213,8 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 			}
 			catch (WebException exception)
 			{
-				throw new Exception(LogWebException(exception));
+				ErrorHandler.HandleError(exception);
+				return null;
 			}
 		}
 

@@ -62,13 +62,6 @@ namespace MicrosoftTranslatorProvider.Model
 		}
 
 		[JsonIgnore]
-		public bool BasicCsv
-		{
-			get => ToBoolean(SimpleCsv);
-			set => SimpleCsv = value.ToString();
-		}
-
-		[JsonIgnore]
 		private string usePreEdit
 		{
 			get => GetStringParameter("usepreedit");
@@ -96,12 +89,6 @@ namespace MicrosoftTranslatorProvider.Model
 			set => SetStringParameter("prelookupfilename", value);
 		}
 
-		public string SimpleCsv
-		{
-			get => GetStringParameter("basiccsv");
-			set => SetStringParameter("basiccsv", value);
-		}
-
 		[JsonIgnore]
 		public string PostLookupFilename
 		{
@@ -110,24 +97,10 @@ namespace MicrosoftTranslatorProvider.Model
 		}
 
 		[JsonIgnore]
-		public string JsonFilePath
-		{
-			get => GetStringParameter("jsonfilepath");
-			set => SetStringParameter("jsonfilepath", value);
-		}
-
-		[JsonIgnore]
 		public string ProjectName
 		{
 			get => GetStringParameter("projectname");
 			set => SetStringParameter("projectname", value);
-		}
-
-		[JsonIgnore]
-		public string GlossaryPath
-		{
-			get => GetStringParameter("glossarypath");
-			set => SetStringParameter("glossarypath", value);
 		}
 
 		[JsonIgnore]

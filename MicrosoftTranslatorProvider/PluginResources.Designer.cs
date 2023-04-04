@@ -235,7 +235,7 @@ namespace MicrosoftTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to RWS AppStore.
+        ///   Looks up a localized string similar to Trados AppStore.
         /// </summary>
         public static string LogsFolderPath {
             get {

@@ -317,7 +317,7 @@
     <value>MicrosoftTranslatorProviderLogs.txt</value>
   </data>
   <data name="LogsFolderPath" xml:space="preserve">
-    <value>RWS AppStore</value>
+    <value>Trados AppStore</value>
   </data>
   <data name="MicrosoftTranslatorProviderPlugin_WinFormsUI" xml:space="preserve">
     <value>MT Microsoft Translation Provider</value>
