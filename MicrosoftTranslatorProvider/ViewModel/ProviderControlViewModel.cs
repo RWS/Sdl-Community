@@ -22,15 +22,9 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		private bool _useCategoryID;
 		private bool _persistMicrosoftKey;
 		private bool _isTellMeAction;
-		private bool _basicCsvGlossary;
 
 		private string _catId;
 		private string _clientId;
-		private string _jsonFilePath;
-		private string _projectName;
-		private string _projectLocation;
-		private string _glossaryId;
-		private string _glossaryPath;
 
 		private ICommand _clearCommand;
 		private ICommand _learnMoreCommand;
@@ -46,39 +40,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		public BaseModel ViewModel { get; set; }
 
 		public List<TranslationOption> TranslationOptions { get; set; }
-
-		public string ProjectLocation
-		{
-			get => _projectLocation;
-			set
-			{
-				if (_projectLocation == value) return;
-				_projectLocation = value;
-				OnPropertyChanged(nameof(ProjectLocation));
-			}
-		}
-
-		public string GlossaryId
-		{
-			get => _glossaryId;
-			set
-			{
-				if (_glossaryId == value) return;
-				_glossaryId = value;
-				OnPropertyChanged(nameof(GlossaryId));
-			}
-		}
-
-		public string GlossaryPath
-		{
-			get => _glossaryPath;
-			set
-			{
-				if (_glossaryPath == value) return;
-				_glossaryPath = value;
-				OnPropertyChanged(nameof(GlossaryPath));
-			}
-		}
 
 		public TranslationOption SelectedTranslationOption
 		{
@@ -102,6 +63,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				OnPropertyChanged(nameof(IsMicrosoftSelected));
 			}
 		}
+
 		public string ClientID
 		{
 			get => _clientId;
@@ -135,28 +97,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				if (_regions == value) return;
 				_regions = value;
 				OnPropertyChanged(nameof(Region));
-			}
-		}
-
-		public string JsonFilePath
-		{
-			get => _jsonFilePath;
-			set
-			{
-				if (_jsonFilePath == value) return;
-				_jsonFilePath = value;
-				OnPropertyChanged(nameof(JsonFilePath));
-			}
-		}
-
-		public string ProjectName
-		{
-			get => _projectName;
-			set
-			{
-				if (_projectName == value) return;
-				_projectName = value;
-				OnPropertyChanged(nameof(ProjectName));
 			}
 		}
 
@@ -198,17 +138,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			}
 		}
 
-		public bool BasicCsvGlossary
-		{
-			get => _basicCsvGlossary;
-			set
-			{
-				if (_basicCsvGlossary == value) return;
-				_basicCsvGlossary = value;
-				OnPropertyChanged(nameof(BasicCsvGlossary));
-			}
-		}
-
 		public string CategoryID
 		{
 			get => _catId;
@@ -242,14 +171,9 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				return;
 			}
 
-			BasicCsvGlossary = _options.BasicCsv;
 			CategoryID = _options.CategoryID;
 			ClientID = _options.ClientID;
-			GlossaryPath = _options.GlossaryPath;
-			JsonFilePath = _options.JsonFilePath;
 			PersistMicrosoftKey = _options.PersistMicrosoftCredentials;
-			ProjectLocation = _options.ProjectLocation;
-			ProjectName = _options.ProjectName;
 			UseCategoryID = _options.UseCategoryID;
 			PrivateEndpoint = _options.PrivateEndpoint;
 			PersistPrivateEndpoint = _options.PersistPrivateEndpoint;
@@ -276,18 +200,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			{
 				case "CategoryId":
 					CategoryID = string.Empty;
-					break;
-				case "JsonFilePath":
-					JsonFilePath = string.Empty;
-					break;
-				case "ProjectName":
-					ProjectName = string.Empty;
-					break;
-				case "ProjectLocation":
-					ProjectLocation = string.Empty;
-					break;
-				case "GlossaryPath":
-					GlossaryPath = string.Empty;
 					break;
 				case "PrivateEndpoint":
 					PrivateEndpoint = string.Empty;

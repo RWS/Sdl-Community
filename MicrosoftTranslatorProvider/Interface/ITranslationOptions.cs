@@ -17,25 +17,17 @@ namespace MicrosoftTranslatorProvider.Interfaces
 
 		bool UsePostEdit { get; set; }
 
-		bool BasicCsv { get; set; }
-
 		string CategoryID { get; set; }
 
 		string PreLookupFilename { get; set; }
 
 		string PostLookupFilename { get; set; }
 
-		string JsonFilePath { get; set; }
-
 		string ProjectName { get; set; }
-
-		string GlossaryPath { get; set; }
 
 		string ClientID { get; set; }
 
 		string Region { get; set; }
-
-		string ProjectLocation { get; set; }
 
 		string CustomProviderName { get; set; }
 
