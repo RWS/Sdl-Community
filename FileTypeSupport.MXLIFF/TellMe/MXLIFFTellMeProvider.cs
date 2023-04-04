@@ -5,7 +5,7 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF.TellMe
 	[TellMeProvider]
 	public class MXLIFFTellMeProvider : ITellMeProvider
 	{
-		public string Name => "MXLIFF tell me provider";
+		public string Name => "MXLIFF Tell Me provider";
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
