@@ -108,7 +108,11 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 
 		public string Translate(string sourceLanguage, string targetLanguage, string textToTranslate, string categoryId)
 		{
-			_authToken ??= GetAuthToken();
+			if (string.IsNullOrEmpty(_authToken))
+			{
+				_authToken = GetAuthToken();
+			}
+
 			if (_authToken is null)
 			{
 				throw new Exception("Invalid credentials");

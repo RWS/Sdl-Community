@@ -26,6 +26,7 @@ namespace MicrosoftTranslatorProvider
 			}
 
 			var options = JsonConvert.DeserializeObject<MTETranslationOptions>(translationProviderState);
+			options.ClientID = new GenericCredentials(credential.Credential)["API-Key"];
 			return new Provider(options, new RegionsProvider(), new HtmlUtil());
 		}
 
