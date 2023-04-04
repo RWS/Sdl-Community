@@ -13,7 +13,7 @@ namespace Sdl.Community.ExportAnalysisReports.TellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/5254/trados-export-analysis-reports");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/5254/trados-studio-export-analysis-reports");
 		}
 
 		public override bool IsAvailable => true;
