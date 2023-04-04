@@ -14,7 +14,7 @@ namespace Sdl.Community.ExportToExcel.TellMe
 		public override void Execute()
 		{
 			Process.Start(
-				"https://community.sdl.com/product-groups/translationproductivity/f/160");
+				"https://community.rws.com/product-groups/trados-portfolio/rws-appstore/f");
 		}
 
 		public override bool IsAvailable => true;

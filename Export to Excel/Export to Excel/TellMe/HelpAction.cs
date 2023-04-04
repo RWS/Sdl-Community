@@ -14,7 +14,7 @@ namespace Sdl.Community.ExportToExcel.TellMe
 		public override void Execute()
 		{
 			Process.Start(
-				"https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3397.export-to-excel");
+				"https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3397/export-to-excel");
 		}
 
 		public override bool IsAvailable => true;

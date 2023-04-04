@@ -5,7 +5,7 @@ namespace Sdl.Community.ExportToExcel.TellMe
 	[TellMeProvider]
 	public class ExportToExcelTellMeProvider : ITellMeProvider
 	{
-		public string Name => "ExportToExcel tell me provider";
+		public string Name => "ExportToExcel Tell Me provider";
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
