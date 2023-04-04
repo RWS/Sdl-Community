@@ -126,31 +126,43 @@
 									   Padding="8 3 0 0"/>
 						</Border>
 
-						<Border BorderBrush="Black"
-								BorderThickness="1 0 1 1"
-								Padding="1">
+						<StackPanel Visibility="{Binding IsSupported, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+									Orientation="Horizontal">
+							<Border BorderBrush="Black"
+									BorderThickness="1 0 1 1"
+									Padding="1">
 
-							<ComboBox ItemsSource="{Binding Dictionaries}"
-									  SelectedIndex="{Binding SelectedDictionaryIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-									  Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
-									  DisplayMemberPath="DictionaryId"
-									  HorizontalAlignment="Stretch"
-									  MinWidth="120"
-									  MaxWidth="120"
-									  Cursor="Hand" />
-						</Border>
-						<Border BorderBrush="Black"
-								BorderThickness="0 0 1 1"
-								Padding="1">
-							<ComboBox ItemsSource="{Binding MtEdgeLanguagePairs}"
-									  SelectedIndex="{Binding SelectedModelIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-									  Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
-									  DisplayMemberPath="DisplayName"
-									  HorizontalAlignment="Stretch"
-									  MinWidth="120"
-									  MaxWidth="120"
-									  Cursor="Hand" />
-						</Border>
+								<ComboBox ItemsSource="{Binding Dictionaries}"
+										  SelectedIndex="{Binding SelectedDictionaryIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+										  Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
+										  DisplayMemberPath="DictionaryId"
+										  HorizontalAlignment="Stretch"
+										  MinWidth="120"
+										  MaxWidth="120"
+										  Cursor="Hand" />
+							</Border>
+							<Border BorderBrush="Black"
+									BorderThickness="0 0 1 1"
+									Padding="1">
+								<ComboBox ItemsSource="{Binding MtEdgeLanguagePairs}"
+										  SelectedIndex="{Binding SelectedModelIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+										  Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
+										  DisplayMemberPath="DisplayName"
+										  HorizontalAlignment="Stretch"
+										  MinWidth="120"
+										  MaxWidth="120"
+										  Cursor="Hand" />
+							</Border>
+						</StackPanel>
+
+						<StackPanel Visibility="{Binding IsSupported, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}" Orientation="Horizontal">
+							<Border BorderBrush="Black"
+									BorderThickness="1 0 1 1"
+									Padding="1">
+								<TextBlock MinWidth="243" MaxHeight="243" Padding="4 0 0 0">Not supported</TextBlock>
+							</Border>
+						</StackPanel>
+
 					</StackPanel>
 				</DataTemplate>
 			</ListBox.ItemTemplate>
