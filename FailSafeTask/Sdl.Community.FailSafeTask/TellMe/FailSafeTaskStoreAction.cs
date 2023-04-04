@@ -17,7 +17,7 @@ namespace Sdl.Community.FailSafeTask.TellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://appstore.sdl.com/language/app/fail-safe-task/560/");
+			Process.Start("https://appstore.rws.com/Plugin/28");
 		}
 	}
 }
