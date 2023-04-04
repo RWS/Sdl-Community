@@ -45,14 +45,18 @@ namespace Sdl.Community.MTEdge.Provider.XliffConverter.Converter
                 if (sourceText[i].Groups.Count < 2)
                 {
                     continue;
-                }
+				}
 
-                xliff.File.Body.TranslationUnits[i].TranslationList.First().Translation.Text = targetText[i].Groups[1].Value;
-                xliff.File.Body.TranslationUnits[i].SourceText = sourceText[i].Groups[1].Value;
-                xliff.File.Body.TranslationUnits[i].TranslationList.First().Translation.TargetLanguage = xliff.File.TargetLanguage;
-            }
+				xliff.File.Body.TranslationUnits[i].SourceText = sourceText[i].Groups[1].Value;
+				xliff.File.Body.TranslationUnits[i].TranslationList.First().Translation.TargetLanguage = xliff.File.TargetLanguage;
+				try
+				{
+					xliff.File.Body.TranslationUnits[i].TranslationList.First().Translation.Text = targetText[i].Groups[1].Value;
+				}
+				catch { }
+			}
 
-            return xliff;
+			return xliff;
         }
 
 		public static string PrintXliff(Xliff xliff)

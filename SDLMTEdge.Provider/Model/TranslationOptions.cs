@@ -80,14 +80,17 @@ namespace Sdl.Community.MTEdge.Provider.Model
 
 			foreach (var languagePair in languagePairChoices)
 			{
-				LanguagePairPreferences[languagePair.TradosCulture] = languagePair.SelectedModel;
-				LanguagePairPreferences[languagePair.TradosCulture].DictionaryId = languagePair.SelectedDictionary.DictionaryId;
+				if (languagePair.IsSupported)
+				{
+					LanguagePairPreferences[languagePair.TradosCulture] = languagePair.SelectedModel;
+					LanguagePairPreferences[languagePair.TradosCulture].DictionaryId = languagePair.SelectedDictionary.DictionaryId;
+				}
 			}
 		}
 
 		public void SetDictionaries(TradosToMTEdgeLanguagePair[] languagePairChoices)
 		{
-			foreach (var languagePair in languagePairChoices)
+			foreach (var languagePair in languagePairChoices.Where(languagePair => languagePair.IsSupported))
 			{
 				SDLMTEdgeTranslatorHelper.GetDictionaries(languagePair, this);
 			}
@@ -115,6 +118,15 @@ namespace Sdl.Community.MTEdge.Provider.Model
 				 },
 				 (requestedLP, installedLP) => new TradosToMTEdgeLanguagePair(requestedLP.ToString(), requestedLP.TargetCulture, installedLP.OrderBy(lp => lp.LanguagePairId).ToList()))
 				.ToList();
+
+			foreach (var languagePair in languagePairChoices)
+			{
+				if (languagePair.MtEdgeLanguagePairs is null
+				|| !languagePair.MtEdgeLanguagePairs.Any())
+				{
+					languagePair.IsSupported = false;
+				}
+			}
 
 			//Fix for Spanish latin amerincan flavours
 			CheckLatinSpanish(languagePairs, languagePairChoices, mtEdgeLanguagePairs);
