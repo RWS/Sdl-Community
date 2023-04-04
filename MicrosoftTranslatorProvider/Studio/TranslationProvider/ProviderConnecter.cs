@@ -127,7 +127,8 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 			}
 			catch (WebException exception)
 			{
-				throw new Exception(LogWebException(exception));
+				ErrorHandler.HandleError(exception);
+				return null;
 			}
 		}
 
@@ -157,7 +158,8 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 					return TryRequestTranslation(sourceLanguage, targetLanguage, textToTranslate, categoryID);
 				}
 
-				throw ex;
+				ErrorHandler.HandleError(ex);
+				return null;
 			}
 		}
 
@@ -211,7 +213,8 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 			}
 			catch (WebException exception)
 			{
-				throw new Exception(LogWebException(exception));
+				ErrorHandler.HandleError(exception);
+				return null;
 			}
 		}
 
