@@ -16,7 +16,7 @@ namespace Sdl.Community.InvoiceAndQuotes.Templates
         public List<KeyValuePair<String, String>> GetAllTemplates()
         {
 	        var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var invoiceFolderPath = @"RWS AppStore\Invoice\Office Templates";
+            var invoiceFolderPath = @"Trados AppStore\Invoice\Office Templates";
             var path = Path.Combine(appDataPath, invoiceFolderPath);
            
             var files = Directory.GetFiles(path, String.Format("*.{0}*", _extention)).Where(file => !Path.GetFileName(file).StartsWith("~")).ToArray();
