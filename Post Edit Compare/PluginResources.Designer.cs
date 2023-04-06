@@ -19,7 +19,7 @@ namespace Sdl.Community.PostEdit.Versions {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class PluginResources {
@@ -241,6 +241,16 @@ namespace Sdl.Community.PostEdit.Versions {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Download {
+            get {
+                object obj = ResourceManager.GetObject("Download", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit the selected version information.
         /// </summary>
         internal static string EditProjectVersion_Description {
@@ -339,6 +349,16 @@ namespace Sdl.Community.PostEdit.Versions {
         internal static string Finished_Processing_without_errors {
             get {
                 return ResourceManager.GetString("Finished_Processing_without_errors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon ForumIcon {
+            get {
+                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -855,6 +875,16 @@ namespace Sdl.Community.PostEdit.Versions {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Question {
+            get {
+                object obj = ResourceManager.GetObject("Question", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to remove the selected project?
         ///
         ///Note: you will not be able to recover this information if you continue!
@@ -1018,6 +1048,24 @@ namespace Sdl.Community.PostEdit.Versions {
         internal static string Start_Processing_0 {
             get {
                 return ResourceManager.GetString("Start_Processing_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} TellMe provider.
+        /// </summary>
+        internal static string TellMe_Provider {
+            get {
+                return ResourceManager.GetString("TellMe_Provider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} results.
+        /// </summary>
+        internal static string TellMe_Provider_Results {
+            get {
+                return ResourceManager.GetString("TellMe_Provider_Results", resourceCulture);
             }
         }
         
