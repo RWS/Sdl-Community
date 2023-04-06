@@ -17,7 +17,7 @@ namespace Sdl.Community.NumberVerifier.TellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/4723/number-verifier");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/4723/trados-number-verifier");
 		}
 	}
 }

@@ -110,7 +110,7 @@ namespace Sdl.Community.NumberVerifier
 
 		/// <summary>
 		/// The following members set some general properties of the verification plug-in,
-		/// e.g. the plug-in name and the icon that are displayed in the user interface of SDL Trados Studio.
+		/// e.g. the plug-in name and the icon that are displayed in the user interface of Trados Studio.
 		/// </summary>
 
 		public string Description
@@ -155,7 +155,7 @@ namespace Sdl.Community.NumberVerifier
 		}
 
 		/// <summary>
-		/// This member is used to output any verification messages in the user interface of SDL Trados Studio.
+		/// This member is used to output any verification messages in the user interface of Trados Studio.
 		/// </summary>
 
 		public IBilingualContentMessageReporter MessageReporter
@@ -208,7 +208,7 @@ namespace Sdl.Community.NumberVerifier
 		/// and checks whether a particular segment has any numbers. It then determines whether
 		/// the target and the source contains the same numbers.
 		/// If not, a warning message will be generated, which is then displayed between the source and target segments,
-		/// and in the Messages window of SDL Trados Studio.
+		/// and in the Messages window of Trados Studio.
 		/// </summary>
 		/// <param name="paragraphUnit"></param>
 		public void CheckParagraphUnit(IParagraphUnit paragraphUnit)

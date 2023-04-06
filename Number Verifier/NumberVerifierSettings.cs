@@ -12,7 +12,7 @@ namespace Sdl.Community.NumberVerifier
 	/// <summary>
 	/// This class is used for reading and writing the plug-in setting(s) value(s).
 	/// The settings are physically stored in an (XML-compliant) *.sdlproj file, which
-	/// is generated for each project that is created in SDL Trados Studio or for 
+	/// is generated for each project that is created in Trados Studio or for 
 	/// each file that is opened and translated.
 	/// </summary>
 	public class NumberVerifierSettings : SettingsGroup, INumberVerifierSettings
