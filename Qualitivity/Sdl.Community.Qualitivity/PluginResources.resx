@@ -805,4 +805,19 @@ still associated with the client profile '{0}'</value>
   <data name="The_maximum_penalty_value_applied_cannot_be_greater_than_the_number_of_words_" xml:space="preserve">
     <value>The maximum penalty value applied cannot be greater than the number of words in the quality metrics settings!</value>
   </data>
+  <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\download.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\forumicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe_Provider" xml:space="preserve">
+    <value>{0} TellMe provider</value>
+  </data>
+  <data name="TellMe_Provider_Results" xml:space="preserve">
+    <value>{0} results</value>
+  </data>
 </root>
