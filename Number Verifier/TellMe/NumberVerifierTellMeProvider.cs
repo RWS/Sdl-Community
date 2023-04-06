@@ -5,7 +5,7 @@ namespace Sdl.Community.NumberVerifier.TellMe
 	[TellMeProvider]
 	public class NumberVerifierTellMeProvider : ITellMeProvider
 	{
-		public string Name => "Number Verifier tell me provider";
+		public string Name => "Number Verifier Tell Me provider";
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
