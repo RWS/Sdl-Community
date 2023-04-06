@@ -2811,7 +2811,7 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 
 		public void ViewOnlineHelp()
 		{
-			System.Diagnostics.Process.Start("https://community.sdl.com/solutions/language/translationproductivity/w/customer-experience/2251.qualitivity");
+			System.Diagnostics.Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/2251.qualitivity");
 		}
 
 		private static void LoadCurrencies()

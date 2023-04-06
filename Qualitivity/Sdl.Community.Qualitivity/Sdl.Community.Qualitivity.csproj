@@ -110,6 +110,9 @@
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -146,6 +149,10 @@
     <Compile Include="Custom\Accordion.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="TellMe\AppStoreDownloadAction.cs" />
+    <Compile Include="TellMe\AppStoreForumAction.cs" />
+    <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="Tracking\TrackedActions.cs" />
     <Compile Include="Tracking\Tracked.cs" />
     <Compile Include="Tracking\TrackedDocumentEvents.cs" />
@@ -334,12 +341,15 @@
     <Content Include="Resources\Coins.ico" />
     <Content Include="Resources\Document-Export.ico" />
     <Content Include="Resources\Document-Import.ico" />
+    <Content Include="Resources\Download.ico" />
     <Content Include="Resources\Edit-Yes.ico" />
     <Content Include="Resources\Export.ico" />
+    <Content Include="Resources\ForumIcon.ico" />
     <Content Include="Resources\Gnome-Bookmark-New.ico" />
     <Content Include="Resources\Ldap-Browser-Pgp.ico" />
     <Content Include="Resources\License.ico" />
     <Content Include="Resources\Question-type-drag-drop.ico" />
+    <Content Include="Resources\Question.ico" />
     <Content Include="Resources\Save-download.ico" />
     <Content Include="Resources\Tasks.ico" />
     <Content Include="Resources\tausdata_1tE_icon.ico" />
