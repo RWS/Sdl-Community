@@ -8,11 +8,11 @@ namespace Sdl.Community.RapidAddTerm.TellMe
 	{
 		public RapidAddTermHelpAction()
 		{
-			Name = "Rapid Add Term wiki in the SDL Community";
+			Name = "Rapid Add Term plugin wiki";
 		}
 		public override void Execute()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/5195/rapid-add-term");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/5195/rapid-add-term");
 		}
 		public override bool IsAvailable => true;
 		public override string Category => "Rapid Add Terms results";
