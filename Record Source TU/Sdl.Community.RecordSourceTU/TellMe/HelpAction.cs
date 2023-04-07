@@ -8,7 +8,7 @@ namespace Sdl.Community.RecordSourceTU.TellMe
 	{
 		public HelpAction()
 		{
-			Name = "Record Source TU wiki in the RWS Community";
+			Name = "Record Source TU plugin wiki";
 		}
 
 		public override bool IsAvailable => true;
