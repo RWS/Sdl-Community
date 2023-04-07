@@ -17,7 +17,7 @@ namespace Sdl.Community.SDLBatchAnonymize.TellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://appstore.sdl.com/language/app/trados-batch-anonymizer/1072/");
+			Process.Start("https://appstore.rws.com/Plugin/38");
 		}
 	}
 }
