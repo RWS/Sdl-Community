@@ -12,14 +12,14 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 namespace Sdl.Community.MTEdge.Provider.ViewModel
 {
 	public class MainViewModel : BaseModel
-    {
+	{
 		private const string ViewsDetails_Credentials = nameof(CredentialsViewModel);
 		private const string ViewsDetails_LanguageMapping = nameof(LanguageMappingViewModel);
 
 		private readonly ITranslationProviderCredentialStore _credentialStore;
 		private readonly LanguagePair[] _languagePairs;
 
-        private bool _dialogResult;
+		private bool _dialogResult;
 		private ViewDetails _selectedView;
 		private List<ViewDetails> _availableViews;
 		private ICredentialsViewModel _credentialsViewModel;
@@ -33,16 +33,16 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 		private ICommand _cancelCommand;
 
 		public MainViewModel(ITranslationOptions options,
-                             ITranslationProviderCredentialStore credentialStore,
-                             LanguagePair[] languagePairs,
-                             bool showSettingsView = false)
-        {
+							 ITranslationProviderCredentialStore credentialStore,
+							 LanguagePair[] languagePairs,
+							 bool showSettingsView = false)
+		{
 			Options = options;
 			ShowSettingsView = showSettingsView;
 			_credentialStore = credentialStore;
 			_languagePairs = languagePairs;
 			InitializeViews();
-        }
+		}
 
 		public ITranslationOptions Options { get; set; }
 
@@ -80,15 +80,15 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 		}
 
 		public bool DialogResult
-        {
-            get => _dialogResult;
-            set
-            {
-                if (_dialogResult == value) return;
-                _dialogResult = value;
-                OnPropertyChanged(nameof(DialogResult));
-            }
-        }
+		{
+			get => _dialogResult;
+			set
+			{
+				if (_dialogResult == value) return;
+				_dialogResult = value;
+				OnPropertyChanged(nameof(DialogResult));
+			}
+		}
 
 		public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save);
 
@@ -99,7 +99,7 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 
 		public delegate void CloseWindowEventRaiser();
 
-        public event CloseWindowEventRaiser CloseEventRaised;
+		public event CloseWindowEventRaiser CloseEventRaised;
 
 		private void InitializeViews()
 		{
@@ -131,7 +131,7 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 		}
 
 		private void Save(object parameter)
-        {
+		{
 			var uriIsValid = _credentialsViewModel.UriIsValid();
 			var credentialsAreValid = _credentialsViewModel.CredentialsAreValid(_showSettingsView);
 			if (!uriIsValid || !credentialsAreValid)
@@ -146,7 +146,7 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 				return;
 			}
 
-            DialogResult = true;
+			DialogResult = true;
 			Options.LanguageMapping = new(_languageMappingViewModel.LanguageMapping);
 			Options.SetLanguageMapping(new(_languageMappingViewModel.LanguageMapping));
 			CloseEventRaised?.Invoke();
@@ -183,10 +183,14 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 				}
 
 				var languageMapping = Options.SetPreferredLanguages(_languagePairs);
+				
 				Options.SetDictionaries(languageMapping);
 				_languageMappingViewModel.LanguageMapping = new(languageMapping);
+				
 				SwitchView(ViewsDetails_LanguageMapping);
+				
 				ShowSettingsView = true;
+				
 				SaveCredentials();
 			}
 			catch (Exception ex)
@@ -203,12 +207,17 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 				["RequiresSecureProtocol"] = _credentialsViewModel.RequiresSecureProtocol ? "true" : "false"
 			};
 
-		private void SaveCredentials()
+		private TranslationProviderCredential SaveCredentials()
 		{
 			try
 			{
 				var uri = new TranslationProviderUriBuilder(Constants.TranslationProviderScheme);
-				_credentialStore.RemoveCredential(uri.Uri);
+
+				var credential = _credentialStore.GetCredential(uri.Uri);
+				if (credential?.Credential != null)
+				{
+					_credentialStore.RemoveCredential(uri.Uri);
+				}
 
 				var persistsHost = _credentialsViewModel.PersistsHost;
 				var persistsCredentials = _credentialsViewModel.PersistsCredentials;
@@ -231,11 +240,18 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 
 					["Token"] = Options.ApiToken
 				};
-        
+
 				var credentials = new TranslationProviderCredential(currentCredentials.ToString(), true);
 				_credentialStore.AddCredential(uri.Uri, credentials);
+
+				return credential;
 			}
-			catch { }
+			catch
+			{
+				// catch all; ignore
+			}
+
+			return null;
 		}
 
 		private void SetCredentialsOnUI()
@@ -243,12 +259,19 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 			try
 			{
 				var uri = new TranslationProviderUriBuilder(Constants.TranslationProviderScheme);
-				var genericCredentials = new GenericCredentials(_credentialStore.GetCredential(uri.Uri).Credential);
-				if (genericCredentials is null)
+				var credential = _credentialStore.GetCredential(uri.Uri);
+				if (credential?.Credential == null)
 				{
-					return;
+					credential = SaveCredentials();
+
+					if (credential?.Credential == null)
+					{
+						return;
+					}
 				}
-        
+
+				var genericCredentials = new GenericCredentials(credential.Credential);
+
 				bool.TryParse(genericCredentials["Persists-Host"], out var persistsHost);
 				_credentialsViewModel.PersistsHost = persistsHost;
 				_credentialsViewModel.Host = GetCredential(genericCredentials, "Host", persistsHost);
@@ -269,7 +292,10 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 
 				Options.ApiToken = _showSettingsView ? genericCredentials["Token"] : string.Empty;
 			}
-			catch { }
+			catch
+			{
+				// catch all; ignore
+			}
 		}
 
 		private string GetCredential(GenericCredentials credentials, string target, bool persists)
