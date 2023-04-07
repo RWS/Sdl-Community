@@ -12,7 +12,7 @@ namespace Sdl.Community.RapidAddTerm.TellMe
 		}
 		public override void Execute()
 		{
-			Process.Start("https://appstore.sdl.com/language/app/rapid-add-term/1050/");
+			Process.Start("https://appstore.rws.com/Plugin/35");
 		}
 		public override bool IsAvailable => true;
 		public override string Category => "Rapid Add Terms results";
