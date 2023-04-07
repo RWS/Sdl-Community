@@ -16,7 +16,7 @@ namespace Sdl.Community.SDLBatchAnonymize.TellMe
 		}
 		public override void Execute()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/5249/trados-batch-anonymizer");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/5249/trados-batch-anonymizer");
 		}
 	}
 }
