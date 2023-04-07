@@ -19,7 +19,7 @@ namespace Sdl.Community.RecordSourceTU.TellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/4721/new-in-version-1-2-0-3");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/4720/recordsource-tu");
 		}
 	}
 }
