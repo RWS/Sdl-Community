@@ -19,7 +19,7 @@ namespace Trados.Transcreate.TellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://appstore.sdl.com/language/app/trados-transcreate/1188");
+			Process.Start("https://appstore.rws.com/Plugin/42");
 		}
 	}
 }

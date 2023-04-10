@@ -14,7 +14,7 @@ namespace Trados.Transcreate.FileTypeSupport.XLIFF.Model
 		// SDLXLIFF document id
 		public string DocumentId { get; set; }
 
-		/// SDL Studio Project Id
+		/// Trados Studio Project Id
 		public string ProjectId { get; set; }
 
 		/// Path to the binlingual SDLXLIFF documented used to create the XLIFF file
