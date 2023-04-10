@@ -4,7 +4,7 @@ namespace Trados.Transcreate.FileTypeSupport.MSOffice.Model
 {
     public class DocInfo
     {
-	    /// SDL Studio Project Id
+	    /// Trados Studio Project Id
 	    public string ProjectId { get; set; }
 
 	    /// Path to the binlingual SDLXLIFF documented used to create the XLIFF file

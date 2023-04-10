@@ -5,7 +5,7 @@ namespace Trados.Transcreate.TellMe
 	[TellMeProvider]
 	public class TellMeProvider: ITellMeProvider
 	{
-		public string Name => string.Format("{0} TellMe provider", PluginResources.Plugin_Name);
+		public string Name => string.Format("{0} Tell Me provider", PluginResources.Plugin_Name);
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
