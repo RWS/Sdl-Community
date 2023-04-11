@@ -17,7 +17,7 @@ namespace Sdl.Community.TermExcelerator.TellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://appstore.sdl.com/language/app/termexcelerator/534/");
+			Process.Start("https://appstore.rws.com/Plugin/59");
 		}
 	}
 }
