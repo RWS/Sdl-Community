@@ -19,7 +19,7 @@ namespace Sdl.Community.StudioViews.TellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://appstore.sdl.com/language/app/studioviews/1162");
+			Process.Start("https://appstore.rws.com/Plugin/12");
 		}
 	}
 }
