@@ -5,7 +5,7 @@ namespace Sdl.Community.StyleSheetVerifier.TellMe
 	[TellMeProvider]
 	public class StyleSheetVerifierProvider : ITellMeProvider
 	{
-		public string Name => "StyleSheet Verifier tell me provider";
+		public string Name => "StyleSheet Verifier Tell Me provider";
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
