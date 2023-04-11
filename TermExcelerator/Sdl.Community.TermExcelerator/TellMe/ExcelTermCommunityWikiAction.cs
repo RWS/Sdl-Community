@@ -17,7 +17,7 @@ namespace Sdl.Community.TermExcelerator.TellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/5067/excel-terminology-provider-termexcelerator");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/5067/excel-terminology-provider-termexcelerator");
 		}
 	}
 }
