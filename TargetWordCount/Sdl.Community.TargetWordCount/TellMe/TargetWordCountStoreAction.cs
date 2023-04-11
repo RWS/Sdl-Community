@@ -17,7 +17,7 @@ namespace Sdl.Community.TargetWordCount.TellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://appstore.sdl.com/language/app/target-word-count/965/");
+			Process.Start("https://appstore.rws.com/Plugin/74");
 		}
 	}
 }
