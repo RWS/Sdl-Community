@@ -129,8 +129,15 @@
   <data name="Delimiter" xml:space="preserve">
     <value>Delimiter:</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\download.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="EmptyPath" xml:space="preserve">
     <value>Path is empty.</value>
+  </data>
+  <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\forumicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="InvalidChars" xml:space="preserve">
     <value>Please do not use invalid characters.</value>
@@ -147,7 +154,6 @@
   <data name="OverwriteTargetFilesTooltip" xml:space="preserve">
     <value>Overwrites the generated target files if selected.</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -161,7 +167,7 @@
     <value>Reset to default</value>
   </data>
   <data name="RWSAppStoreTeam" xml:space="preserve">
-    <value />
+    <value>Trados AppStore</value>
   </data>
   <data name="SearchFor" xml:space="preserve">
     <value>Search for:</value>
@@ -189,5 +195,8 @@
   </data>
   <data name="TargetRenamer_Name" xml:space="preserve">
     <value>Trados Studio Target Renamer</value>
+  </data>
+  <data name="TellMe_Provider_Results" xml:space="preserve">
+    <value>{0} results</value>
   </data>
 </root>

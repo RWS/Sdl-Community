@@ -116,6 +116,8 @@
     <Compile Include="Services\ReportCreatorService.cs" />
     <Compile Include="TargetRenamer.cs" />
     <Compile Include="BatchTask\TargetRenamerSettings.cs" />
+    <Compile Include="TellMe\AppStoreDownloadAction.cs" />
+    <Compile Include="TellMe\AppStoreForumAction.cs" />
     <Compile Include="TellMe\HelpAction.cs" />
     <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="ViewModel\TargetRenamerSettingsViewModel.cs" />
@@ -127,6 +129,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Download.ico" />
+    <Content Include="Resources\ForumIcon.ico" />
     <Resource Include="Resources\Question.ico" />
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
