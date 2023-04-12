@@ -4,7 +4,7 @@
 		<TargetFramework>net48</TargetFramework>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<SignAssembly>True</SignAssembly>
-		<AssemblyOriginatorKeyFile>C:\Users\ftritean\source\repos\Sdl-Community\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+		<AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
 	<ItemGroup>
 	  <Compile Remove="Resources\**" />

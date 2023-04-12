@@ -94,6 +94,6 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>C:\Users\ftritean\source\repos\Sdl-Community\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 </Project>
