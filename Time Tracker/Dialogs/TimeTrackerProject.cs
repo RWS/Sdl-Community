@@ -157,7 +157,7 @@ namespace Sdl.Community.Studio.Time.Tracker.Dialogs
             }
             else
             {
-                MessageBox.Show(this, @"No new SDL Studio Project available!" + "\r\n\r\n"
+                MessageBox.Show(this, @"No new Trados Studio Project available!" + "\r\n\r\n"
                 + @"Note: All Studio Projects are currently listed in the navigation area", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 Close();
             }
