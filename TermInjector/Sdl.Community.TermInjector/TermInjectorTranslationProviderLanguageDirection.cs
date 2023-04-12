@@ -265,7 +265,7 @@ namespace Sdl.Community.TermInjector
 
 
         /// Creates the translation unit as it is later shown in the Translation Results
-        /// window of SDL Trados Studio.
+        /// window of Trados Studio.
 
         #region "CreateSearchResult"
         private SearchResult CreateSearchResult(Segment searchSegment, Segment translation)
