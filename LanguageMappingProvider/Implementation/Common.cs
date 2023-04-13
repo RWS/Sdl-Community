@@ -1,8 +1,9 @@
-﻿using LanguageMapping.Model;
+﻿using LanguageMapping;
+using LanguageMappingProvider.Model;
 
-namespace LanguageMapping
+namespace LanguageMappingProvider.Implementation
 {
-    public class Common
+	public class Common
 	{
 		/// <summary>
 		/// Save the default langauges document in the <param name="path">file path</param>

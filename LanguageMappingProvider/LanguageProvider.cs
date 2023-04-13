@@ -1,7 +1,8 @@
-﻿using LanguageMapping.Interfaces;
-using LanguageMapping.Model;
+﻿using LanguageMappingProvider.Implementation;
+using LanguageMappingProvider.Interfaces;
+using LanguageMappingProvider.Model;
 
-namespace LanguageMapping
+namespace LanguageMappingProvider
 {
 	public class LanguageProvider : ILanguageProvider
 	{

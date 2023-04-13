@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace LanguageMapping.Model
+namespace LanguageMappingProvider.Model
 {
-    public class MappedLanguage: INotifyPropertyChanged
+	public class MappedLanguage : INotifyPropertyChanged
 	{
 		private string _name;
 		private string _region;

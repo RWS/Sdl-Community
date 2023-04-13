@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using Sdl.Community.MTCloud.Languages.Provider.Model;
+﻿using LanguageMappingProvider.Model;
 
-namespace Sdl.Community.MTCloud.Languages.Provider.Interfaces
+namespace LanguageMappingProvider.Interfaces
 {
 	public interface ILanguageProvider
 	{
