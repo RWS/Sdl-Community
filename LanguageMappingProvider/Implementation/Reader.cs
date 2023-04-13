@@ -1,12 +1,12 @@
-﻿using DocumentFormat.OpenXml;
+﻿using System.Text.RegularExpressions;
+using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
-using LanguageMapping.Model;
-using System.Text.RegularExpressions;
+using LanguageMappingProvider.Model;
 
-namespace LanguageMapping
+namespace LanguageMappingProvider.Implementation
 {
-    internal class Reader
+	internal class Reader
 	{
 		private readonly Common _common;
 

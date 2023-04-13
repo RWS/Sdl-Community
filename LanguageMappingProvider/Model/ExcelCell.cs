@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.MTCloud.Languages.Provider.Model
+﻿namespace LanguageMappingProvider.Model
 {
 	public class ExcelCell
 	{

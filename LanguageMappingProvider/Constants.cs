@@ -1,11 +1,8 @@
-﻿using System;
-using System.IO;
-
-namespace Sdl.Community.MTCloud.Languages.Provider
+﻿namespace LanguageMappingProvider
 {
 	public class Constants
-	{				
-		public static string MTCloudFolderPath = 
+	{
+		public static string MTCloudFolderPath =
 			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RWS AppStore", "Language Weaver");
 		public static string MTLanguageCodesFilePath = Path.Combine(MTCloudFolderPath, "LanguageWeaverCodes.xlsx");
 

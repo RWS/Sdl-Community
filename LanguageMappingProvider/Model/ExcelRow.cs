@@ -1,6 +1,6 @@
-﻿namespace LanguageMapping.Model
+﻿namespace LanguageMappingProvider.Model
 {
-    public class ExcelRow
+	public class ExcelRow
 	{
 		public ExcelRow()
 		{

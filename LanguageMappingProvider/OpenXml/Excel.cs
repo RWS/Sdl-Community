@@ -1,11 +1,11 @@
-﻿using DocumentFormat.OpenXml;
+﻿using System.Globalization;
+using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
-using System.Globalization;
 
-namespace LanguageMapping.OpenXml
+namespace LanguageMappingProvider.OpenXml
 {
-    public class Excel
+	public class Excel
 	{
 		/// <summary>
 		/// Creates the workbook
@@ -220,7 +220,8 @@ namespace LanguageMapping.OpenXml
 		{
 			var sharedStringTable = spreadsheet.WorkbookPart.SharedStringTablePart.SharedStringTable;
 
-			if (0 != sharedStringTable.Count(item => item.InnerText == stringItem)) return true;
+			if (0 != sharedStringTable.Count(item => item.InnerText == stringItem))
+				return true;
 			sharedStringTable.AppendChild(
 				new SharedStringItem(
 					new Text(stringItem)));
@@ -251,7 +252,8 @@ namespace LanguageMapping.OpenXml
 				if (sharedString.InnerText == stringItem)
 				{
 					found = true;
-					break; ;
+					break;
+					;
 				}
 				index++;
 			}
