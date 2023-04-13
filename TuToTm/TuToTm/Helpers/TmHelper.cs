@@ -20,7 +20,7 @@ namespace Sdl.Community.TuToTm.Helpers
 			var studioService = new StudioVersionService();
 			var publicVersion = studioService.GetStudioVersion().ExecutableVersion.Major;
 			var localAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-			_tmsConfigPath = Path.Combine(localAppDataPath, $@"SDL\SDL Trados Studio\{publicVersion}.0.0.0\TranslationMemoryRepository.xml");
+			_tmsConfigPath = Path.Combine(localAppDataPath, $@"Trados\Trados Studio\Studio17\TranslationMemoryRepository.xml");
 		}
 
 		public List<TmDetails> LoadLocalUserTms()
