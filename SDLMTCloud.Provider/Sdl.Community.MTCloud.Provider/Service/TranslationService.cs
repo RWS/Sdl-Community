@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
@@ -171,21 +170,25 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			var response = await _httpClient.SendRequest(request);
 			var translationResponse = await _httpClient.GetResult<TranslationResponse>(response);
 
-			if (response is null) return null;
+			if (response is null)
+				return null;
 
 			var responseMessage = await CheckTranslationStatus(translationResponse?.RequestId);
 			var translations = await _httpClient.GetResult<TranslationResponse>(responseMessage);
 
 			var translation = translations?.Translation?.FirstOrDefault();
-			if (translation == null) return null;
+			if (translation == null)
+				return null;
 
 			var translatedXliff = Converter.ParseXliffString(translation);
-			if (translatedXliff == null) return null;
+			if (translatedXliff == null)
+				return null;
 
 			var targetSegments = translatedXliff.GetTargetSegments();
 			var segmentIds = fileAndSegments?.Segments.Keys.ToList();
 
-			if (segmentIds is null) return null;
+			if (segmentIds is null)
+				return null;
 
 			OnTranslationReceived(new TranslationData
 			{
@@ -217,11 +220,13 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private void CheckConnection()
 		{
-			if (ConnectionService.Credential.ValidTo >= DateTime.UtcNow) return;
+			if (ConnectionService.Credential.ValidTo >= DateTime.UtcNow)
+				return;
 
 			// attempt one connection
 			var success = ConnectionService.Connect(ConnectionService.Credential);
-			if (success.Item1) return;
+			if (success.Item1)
+				return;
 
 			_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " +
 						  $"{PluginResources.Message_Connection_token_has_expired}\n {ConnectionService.Credential.Token}");
@@ -241,12 +246,14 @@ namespace Sdl.Community.MTCloud.Provider.Service
 				var responseMessage = await _httpClient.SendRequest(request);
 				var responseStatus = await _httpClient.GetResult<TranslationResponseStatus>(responseMessage);
 
-				if (responseStatus is null) continue;
+				if (responseStatus is null)
+					continue;
 
 				WaitForTranslation(responseStatus);
 
 				translationStatus = responseStatus.TranslationStatus;
-				if (translationStatus.ToUpperInvariant() != Constants.FAILED) continue;
+				if (translationStatus.ToUpperInvariant() != Constants.FAILED)
+					continue;
 
 				var response = await _httpClient.GetResult<ResponseError>(responseMessage);
 
@@ -302,12 +309,14 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			var activeDocument = MtCloudApplicationInitializer.EditorController?.ActiveDocument;
 
-			if (activeDocument is null) return null;
+			if (activeDocument is null)
+				return null;
 
 			var currentProject = activeDocument.Project.GetProjectInfo();
 
 			var activeFileId = activeDocument.ActiveFile;
-			if (activeFileId is null) return null;
+			if (activeFileId is null)
+				return null;
 
 			var model = Options.LanguageMappings?.FirstOrDefault(l =>
 				l.SourceTradosCode.Equals(currentProject.SourceLanguage.IsoAbbreviation,

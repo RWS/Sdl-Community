@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Sdl.Community.MTCloud.Languages.Provider;
+using LanguageMapping;
 using Sdl.Community.MTCloud.Provider.Model.QELabelExtractorModel;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
@@ -41,7 +41,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio.QEReportBatchTask
 				{
 					qualityEstimation = translationOrigin.GetMetaData("quality_estimation");
 				}
-				if (string.IsNullOrEmpty(qualityEstimation)) continue;
+				if (string.IsNullOrEmpty(qualityEstimation))
+					continue;
 
 				var projectFileLocalFilePath = _projectFile.LocalFilePath;
 

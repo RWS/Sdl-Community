@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LanguageMappingProvider.Interfaces;
+using LanguageMappingProvider.Model;
 using Newtonsoft.Json;
 using NLog;
-using Sdl.Community.MTCloud.Languages.Provider.Interfaces;
-using Sdl.Community.MTCloud.Languages.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service;
@@ -173,7 +173,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 
 		public void LoadState(string translationProviderState)
 		{
-			if (string.IsNullOrWhiteSpace(translationProviderState)) return;
+			if (string.IsNullOrWhiteSpace(translationProviderState))
+				return;
 			try
 			{
 				Options = JsonConvert.DeserializeObject<Options>(translationProviderState);

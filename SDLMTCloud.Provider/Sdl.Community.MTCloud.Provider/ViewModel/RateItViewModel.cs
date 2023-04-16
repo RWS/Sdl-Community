@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Sdl.Community.MTCloud.Languages.Provider;
+using LanguageMapping;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Extensions;
@@ -55,7 +55,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			get
 			{
-				if (ActiveDocument == null) return null;
+				if (ActiveDocument == null)
+					return null;
 
 				var activeFileId = ActiveDocument.ActiveFile.Id;
 				if (!Evaluations.ContainsKey(activeFileId))
@@ -84,7 +85,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			get => _feedback ?? string.Empty;
 			set
 			{
-				if (_feedback == value) return;
+				if (_feedback == value)
+					return;
 				_feedback = value;
 				OnPropertyChanged(nameof(FeedbackMessage));
 			}
@@ -101,7 +103,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 			set
 			{
-				if (_translationService.Options.SendFeedback == value) return;
+				if (_translationService.Options.SendFeedback == value)
+					return;
 				_translationService.Options.SendFeedback = value;
 				OnPropertyChanged(nameof(IsSendFeedbackEnabled));
 			}
@@ -122,7 +125,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			get => _rating;
 			set
 			{
-				if (_rating == value) return;
+				if (_rating == value)
+					return;
 				_rating = value;
 
 				OnPropertyChanged(nameof(Rating));
@@ -164,8 +168,10 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		public void SetRateOptionFromShortcuts(string optionName)
 		{
-			if (!IsSendFeedbackEnabled) return;
-			if (string.IsNullOrWhiteSpace(optionName)) return;
+			if (!IsSendFeedbackEnabled)
+				return;
+			if (string.IsNullOrWhiteSpace(optionName))
+				return;
 
 			var option = FeedbackOptions.FirstOrDefault(fo => fo.OptionName == optionName);
 			if (option != null)
@@ -191,7 +197,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private void ActiveDocument_ActiveSegmentChanged(object sender, EventArgs e)
 		{
-			if (!IsSendFeedbackEnabled) return;
+			if (!IsSendFeedbackEnabled)
+				return;
 			if (AutoSendFeedback ?? false)
 			{
 				BackupFeedback();
@@ -204,7 +211,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private void AddEvaluationForCurrentSegment(string data)
 		{
-			if (!ActiveSegmentId.HasValue || string.IsNullOrWhiteSpace(data)) return;
+			if (!ActiveSegmentId.HasValue || string.IsNullOrWhiteSpace(data))
+				return;
 
 			var evaluationPerSegment = ActiveDocumentEvaluations.EvaluationPerSegment;
 			if (!evaluationPerSegment.TryGetValue(ActiveSegmentId.Value, out _))
@@ -258,10 +266,12 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		/// <param name="segmentPair">Segment pair to be processed</param>
 		private void EnsureFeedbackWillGetThrough(SegmentId? segmentId, FeedbackInfo feedbackInfo, ISegmentPair segmentPair)
 		{
-			if (feedbackInfo is null || feedbackInfo.Suggestion is not null) return;
+			if (feedbackInfo is null || feedbackInfo.Suggestion is not null)
+				return;
 
 			var activeDocument = _editorController?.ActiveDocument;
-			if (activeDocument is null) return;
+			if (activeDocument is null)
+				return;
 
 			if (segmentId == null)
 			{
@@ -296,14 +306,17 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			var isFeedbackForPreviousSegment = (AutoSendFeedback ?? false) && segmentId != null && segmentId != ActiveSegmentId;
 
 			var score = isFeedbackForPreviousSegment ? PreviousRating.Score : _rating;
-			if (score > 0) rating.Score = score;
+			if (score > 0)
+				rating.Score = score;
 
 			var comments = isFeedbackForPreviousSegment ? PreviousRating.Comments : GetCommentsAndFeedbackFromUi();
-			if (comments?.Count > 0) rating.Comments = comments;
+			if (comments?.Count > 0)
+				rating.Comments = comments;
 
 			PreviousRating.Empty();
 
-			if (!((ExpandoObject)rating).Any()) rating = null;
+			if (!((ExpandoObject)rating).Any())
+				rating = null;
 			return rating;
 		}
 
@@ -356,29 +369,29 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			switch (sender)
 			{
 				case FeedbackOption feedbackOption:
-				{
-					if (RateItControlProperties.Contains(feedbackOption.OptionName))
 					{
-						isResetNeeded = true;
+						if (RateItControlProperties.Contains(feedbackOption.OptionName))
+						{
+							isResetNeeded = true;
+						}
+						break;
 					}
-					break;
-				}
 				case RateItViewModel _:
-				{
-					if (RateItControlProperties.Contains(e.PropertyName))
 					{
-						isResetNeeded = true;
+						if (RateItControlProperties.Contains(e.PropertyName))
+						{
+							isResetNeeded = true;
+						}
+						break;
 					}
-					break;
-				}
 				case Document _:
-				{
-					if (e.PropertyName == nameof(Document.ActiveSegmentChanged))
 					{
-						isResetNeeded = true;
+						if (e.PropertyName == nameof(Document.ActiveSegmentChanged))
+						{
+							isResetNeeded = true;
+						}
+						break;
 					}
-					break;
-				}
 			}
 			return isResetNeeded;
 		}
@@ -406,7 +419,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private async void OnShouldSendFeedback(SegmentId confirmedSegment)
 		{
-			if (!IsSendFeedbackEnabled) return;
+			if (!IsSendFeedbackEnabled)
+				return;
 			await SendFeedback(confirmedSegment);
 		}
 
@@ -526,14 +540,16 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private void SetShortcutService()
 		{
-			if (_shortcutService == null) return;
+			if (_shortcutService == null)
+				return;
 			_shortcutService.StudioShortcutChanged -= _shortcutService_ShortcutChanged;
 			_shortcutService.StudioShortcutChanged += _shortcutService_ShortcutChanged;
 		}
 
 		private void StartSendingOnConfirmationLevelChanged()
 		{
-			if (_segmentSupervisor == null) return;
+			if (_segmentSupervisor == null)
+				return;
 
 			_segmentSupervisor.ShouldSendFeedback -= OnShouldSendFeedback;
 			_segmentSupervisor.ShouldSendFeedback += OnShouldSendFeedback;
@@ -541,7 +557,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private void StopSendingOnConfirmationLevelChanged()
 		{
-			if (_segmentSupervisor == null) return;
+			if (_segmentSupervisor == null)
+				return;
 			_segmentSupervisor.ShouldSendFeedback -= OnShouldSendFeedback;
 		}
 
@@ -582,7 +599,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 
 		private void UpdateActionTooltips()
 		{
-			if (_actions is null) return;
+			if (_actions is null)
+				return;
 			foreach (var feedbackOption in FeedbackOptions)
 			{
 				var tooltipText = _shortcutService.GetShortcutDetails(feedbackOption.StudioActionId);

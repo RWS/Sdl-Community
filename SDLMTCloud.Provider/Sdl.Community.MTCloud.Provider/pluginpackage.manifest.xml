@@ -11,6 +11,8 @@
 		<File>Microsoft.Office.Interop.Excel.dll</File>
 		<File>Sdl.Community.MTCloud.Languages.Provider.dll</File>
 		<File>Sdl.Community.RateItControl.dll</File>
+		<File>LanguageMappingProvider.dll</File>
+		<File>DocumentFormat.OpenXml.dll</File>
 	</Include>
 	<RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9"/>
 </PluginPackage>

@@ -1,6 +1,4 @@
-﻿using System.Windows.Controls;
-
-namespace Sdl.Community.MTCloud.Provider.View
+﻿namespace Sdl.Community.MTCloud.Provider.View
 {
 	/// <summary>
 	/// Interaction logic for BeGlobalWindow.xaml
