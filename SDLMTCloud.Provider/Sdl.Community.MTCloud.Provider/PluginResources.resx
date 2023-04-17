@@ -439,4 +439,10 @@ Response from Language Weaver:
   <data name="SDLMTCloud_Provider_OldName3" xml:space="preserve">
     <value>Language Weaver provider</value>
   </data>
+  <data name="OriginSystem_LWC" xml:space="preserve">
+    <value>Language Weaver Provider</value>
+  </data>
+  <data name="RateItViewModel_SetOptionTooltip_No_shortcut_was_set" xml:space="preserve">
+    <value>No shortcut was set in Studio for this option</value>
+  </data>
 </root>

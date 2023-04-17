@@ -534,7 +534,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				FeedbackOptions.FirstOrDefault(fo => fo.OptionName == mtCloudActionName);
 			if (feedBackOption != null)
 			{
-				feedBackOption.Tooltip = tooltipText ?? Resources.RateItViewModel_SetOptionTooltip_No_shortcut_was_set;
+				feedBackOption.Tooltip = tooltipText ?? PluginResources.RateItViewModel_SetOptionTooltip_No_shortcut_was_set;
 			}
 		}
 

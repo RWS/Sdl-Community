@@ -37,7 +37,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.QEReportBatchTask
 			{
 				string qualityEstimation = null;
 				var translationOrigin = segmentPair.Properties.TranslationOrigin;
-				if (translationOrigin.OriginSystem == Resources.OriginSystem_LWC)
+				if (translationOrigin.OriginSystem == PluginResources.OriginSystem_LWC)
 				{
 					qualityEstimation = translationOrigin.GetMetaData("quality_estimation");
 				}
