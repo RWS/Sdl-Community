@@ -78,7 +78,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			if (MtCloudApplicationInitializer.EditorController.ActiveDocument?.Project !=
 			    projectInProcessing) return;
 
-			var currentProvider = MtCloudApplicationInitializer.GetCurrentProjectProvider();
+			var currentProvider = MtCloudApplicationInitializer.GetCurrentTranslationProvider();
 
 			var visibility = currentProvider != null && currentProvider.Options.SendFeedback && (GetTpStatus() || providerAdded);
 			SwitchVisibility(visibility);

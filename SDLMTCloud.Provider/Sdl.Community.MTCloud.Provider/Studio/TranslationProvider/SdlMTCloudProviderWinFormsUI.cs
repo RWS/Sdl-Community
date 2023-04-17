@@ -29,7 +29,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 		[STAThread]
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
-			//TODO: Instantiate the new Rate it View part
 			try
 			{
 				var uri = new Uri($"{Constants.MTCloudUriScheme}://");
@@ -55,7 +54,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				optionsWindow.ShowDialog();
 				if (optionsWindow.DialogResult.HasValue && optionsWindow.DialogResult.Value)
 				{
-					MtCloudApplicationInitializer.AddCurrentProjectProvider(provider);
+					MtCloudApplicationInitializer.AddCurrentTranslationProvider(provider);
 					MtCloudApplicationInitializer.PublishEvent(new TranslationProviderAdded());
 
 					return new ITranslationProvider[] { provider };
