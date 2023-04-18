@@ -24,11 +24,17 @@ name: $(BuildDefinitionName).$(SourceBranchName)_$(Version.MajorMinor).$(Version
 
 
 steps:
+- task: UseDotNet@2
+  displayName: 'Use .NET sdk  3.1'
+  inputs:
+    version: '3.1.x'
+    packageType: runtime
+
 - task: DotNetCoreCLI@2
   displayName: 'dotnet restore'
   inputs:
     command: 'restore'
-    projects: 'LanguageMappingProvider/*.csproj'
+    projects: 'LanguageMappingProvider/*.sln'
     feedsToUse: 'select'
     vstsFeed: 'af66e256-9c46-4fba-ad75-09bf110ec1cc'
     includeNuGetOrg: false
@@ -47,13 +53,6 @@ steps:
     configuration: $(BuildConfiguration)
     msbuildArchitecture: x64
 
-- task: VersionNuspec@2
-  condition: and(succeeded(), eq('${{ parameters.PublishNuget }}', 'true'))
-  displayName: 'Version Nuspec'
-  inputs:
-    Filename: LanguageMappingProvider.nuspec
-    VersionRegex: '\d+\.\d+\.\d+'
-
 - task: DotNetCoreCLI@2
   condition: and(succeeded(), eq('${{ parameters.PublishNuget }}', 'true'))
   name: PackNuGet
@@ -64,6 +63,13 @@ steps:
 
 - task: PublishPipelineArtifact@1
   inputs:
-    targetPath: '$(Build.ArtifactStagingDirectory)'
-    artifact: 'Nuget'
+    targetPath: '$(Build.ArtifactStagingDirectory)/LanguageMappingProvider.$(Version.MajorMinor).$(Version.Revision).nupkg'
+    artifact: 'NugetPackage'
     publishLocation: 'pipeline'
+
+# - task: NuGetCommand@2
+#   inputs:
+#     command: 'push'
+#     packagesToPush: '$(Build.ArtifactStagingDirectory)/LanguageMappingProvider.$(Version.MajorMinor).$(Version.Revision).nupkg'
+#     nuGetFeedType: 'external'
+#     publishFeedCredentials: 'Nuget'
