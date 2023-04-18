@@ -1,0 +1,20 @@
+trigger: none
+
+pool: 
+  vmImage : 'windows-2022'
+
+parameters:
+- name : PublishNuget
+  type: boolean
+  displayName: 'Publish Nuget'
+  default: false
+
+variables:
+- name: Version.MajorMinor
+  value: 1.0
+- name: Version.Revision
+  value: $[counter(variables['Version.MajorMinor'], 0)]
+- name: PipelineVersion
+  value: $(Version.MajorMinor).$(Version.Revision)
+name: $(BuildDefinitionName).$(SourceBranchName)_$(Version.MajorMinor).$(Version.Revision)
+
