@@ -16,4 +16,54 @@ variables:
   value: $[counter(variables['Version.MajorMinor'], 0)]
 - name: PipelineVersion
   value: $(Version.MajorMinor).$(Version.Revision)
+- name: BuildPlatform
+  value: 'any cpu'
+- name: Configuration
+  value: 'release'
 name: $(BuildDefinitionName).$(SourceBranchName)_$(Version.MajorMinor).$(Version.Revision)
+
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet restore'
+  inputs:
+    command: 'restore'
+    projects: 'LanguageMappingProvider/*.csproj'
+    feedsToUse: 'select'
+    vstsFeed: 'af66e256-9c46-4fba-ad75-09bf110ec1cc'
+    includeNuGetOrg: false
+
+- task: VersionDotNetCoreAssemblies@1
+  displayName: 'Version .NET Core Assemblies - FileVersion'
+  inputs:
+    VersionRegex: '\d+\.\d+\.\d+'
+    Field: FileVersion
+
+- task: VSBuild@1
+  displayName: 'Build solution LanguageMappingProvider.sln'
+  inputs:
+    solution: LanguageMappingProvider\LanguageMappingProvider.sln
+    platform: $(BuildPlatform)
+    configuration: $(BuildConfiguration)
+    msbuildArchitecture: x64
+
+- task: VersionNuspec@2
+  condition: and(succeeded(), eq('${{ parameters.PublishNuget }}', 'true'))
+  displayName: 'Version Nuspec'
+  inputs:
+    Filename: LanguageMappingProvider.nuspec
+    VersionRegex: '\d+\.\d+\.\d+'
+
+- task: NuGetCommand@2
+  condition: and(succeeded(), eq('${{ parameters.PublishNuget }}', 'true'))
+  displayName: 'NuGet pack'
+  inputs:
+    command: pack
+    packagesToPack: LanguageMappingProvider/LanguageMappingProvider.nuspec
+    packDestination: '$(Build.ArtifactStagingDirectory)\packages'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)\packages\LanguageMappingProvider.nupkg'
+    artifact: 'Nuget'
+    publishLocation: 'pipeline'
