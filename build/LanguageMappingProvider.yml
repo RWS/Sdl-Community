@@ -61,7 +61,7 @@ steps:
     command: 'pack'
     packagesToPack: 'LanguageMappingProvider/LanguageMappingProvider.csproj'
     versioningScheme: 'byEnvVar'
-    versionEnvVar: '$(PipelineVersion)'
+    versionEnvVar: '$env:PipelineVersion'
 
 # - task: NuGetCommand@2
 #   condition: and(succeeded(), eq('${{ parameters.PublishNuget }}', 'true'))
