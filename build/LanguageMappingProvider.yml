@@ -66,10 +66,10 @@ steps:
     artifact: 'NugetPackage'
     publishLocation: 'pipeline'
 
-# - task: NuGetCommand@2
-#   condition: and(succeeded(), eq('${{ parameters.PublishNuget }}', 'true'))
-#   inputs:
-#     command: 'push'
-#     packagesToPush: '$(Build.ArtifactStagingDirectory)/LanguageMappingProvider.$(Version.MajorMinor).$(Version.Revision).nupkg'
-#     nuGetFeedType: 'external'
-#     publishFeedCredentials: 'Nuget'
+- task: NuGetCommand@2
+  condition: and(succeeded(), eq('${{ parameters.PublishNuget }}', 'true'))
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/LanguageMappingProvider.$(Version.MajorMinor).$(Version.Revision).nupkg'
+    nuGetFeedType: 'external'
+    publishFeedCredentials: 'Nuget'
