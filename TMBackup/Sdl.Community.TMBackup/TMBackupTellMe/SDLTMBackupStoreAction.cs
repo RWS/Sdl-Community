@@ -19,7 +19,7 @@ namespace Sdl.Community.TMBackup.TMBackupTellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://appstore.sdl.com/language/app/trados-tmbackup/869/");
+			Process.Start("https://appstore.rws.com/Plugin/71");
 		}
 	}
 }
