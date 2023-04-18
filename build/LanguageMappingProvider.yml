@@ -62,16 +62,8 @@ steps:
     packagesToPack: 'LanguageMappingProvider/LanguageMappingProvider.csproj'
     versioningScheme: 'byBuildNumber'
 
-# - task: NuGetCommand@2
-#   condition: and(succeeded(), eq('${{ parameters.PublishNuget }}', 'true'))
-#   displayName: 'NuGet pack'
-#   inputs:
-#     command: pack
-#     packagesToPack: LanguageMappingProvider/LanguageMappingProvider.nuspec
-#     packDestination: '$(Build.ArtifactStagingDirectory)\packages'
-
 - task: PublishPipelineArtifact@1
   inputs:
-    targetPath: '$(Build.ArtifactStagingDirectory)\packages\LanguageMappingProvider.nupkg'
+    targetPath: '$(Build.ArtifactStagingDirectory)'
     artifact: 'Nuget'
     publishLocation: 'pipeline'
