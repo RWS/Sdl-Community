@@ -60,8 +60,7 @@ steps:
   inputs:
     command: 'pack'
     packagesToPack: 'LanguageMappingProvider/LanguageMappingProvider.csproj'
-    versioningScheme: 'byEnvVar'
-    versionEnvVar: '$env:PipelineVersion'
+    versioningScheme: 'byBuildNumber'
 
 # - task: NuGetCommand@2
 #   condition: and(succeeded(), eq('${{ parameters.PublishNuget }}', 'true'))
