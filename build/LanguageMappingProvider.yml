@@ -17,4 +17,3 @@ variables:
 - name: PipelineVersion
   value: $(Version.MajorMinor).$(Version.Revision)
 name: $(BuildDefinitionName).$(SourceBranchName)_$(Version.MajorMinor).$(Version.Revision)
-
