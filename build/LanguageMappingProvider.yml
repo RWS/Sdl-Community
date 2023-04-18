@@ -14,8 +14,6 @@ variables:
   value: 1.0
 - name: Version.Revision
   value: $[counter(variables['Version.MajorMinor'], 0)]
-- name: PipelineVersion
-  value: $(Version.MajorMinor).$(Version.Revision)
 - name: BuildPlatform
   value: 'Any Cpu'
 - name: BuildConfiguration
