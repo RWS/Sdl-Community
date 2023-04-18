@@ -69,6 +69,9 @@
     <Reference Include="Sdl.ProjectAutomation.Settings">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -87,16 +90,23 @@
     </Compile>
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TellMe\AppStoreDownloadAction.cs" />
+    <Compile Include="TellMe\AppStoreForumAction.cs" />
+    <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="XmlReaderRibbonGroup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="PluginResources.resx">
+    <EmbeddedResource Include="PluginResources.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
-    </Content>
+    </EmbeddedResource>
     <Content Include="pluginpackage.manifest.xml" />
+    <Content Include="Resources\Download.ico" />
+    <Content Include="Resources\ForumIcon.ico" />
     <Content Include="Resources\logo.ico" />
+    <Content Include="Resources\Question.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\SdlCommunity.snk">
