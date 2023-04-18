@@ -99,6 +99,9 @@
     <Reference Include="Sdl.Versioning">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Versioning.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -301,6 +304,10 @@
     <Compile Include="Service\ProjectSettingsService.cs" />
     <Compile Include="Service\ReportService.cs" />
     <Compile Include="Service\WizardService.cs" />
+    <Compile Include="TellMe\AppStoreDownloadAction.cs" />
+    <Compile Include="TellMe\AppStoreForumAction.cs" />
+    <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
     <Compile Include="ViewModel\ReportViewModel.cs" />
     <Compile Include="View\SettingsWindow.xaml.cs">
@@ -550,6 +557,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Download.ico" />
     <Content Include="Resources\Refresh.ico" />
     <Resource Include="ThirdParty\Rws.MultiSelectComboBox.dll" />
     <Resource Include="Resources\LanguageMapping.ico" />

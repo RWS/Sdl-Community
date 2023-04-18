@@ -339,7 +339,7 @@ namespace Sdl.Community.XLIFF.Manager.Wizard.ViewModel.Import
 					return;
 				}
 
-				// Assign the SDL Studio language code
+				// Assign the Trados Studio language code
 				xliffTargetLanguage = mappedLanguage.LanguageCode;
 				var projectLanguages = GetProjectLanguages(xliff.DocInfo?.TargetLanguage);
 
