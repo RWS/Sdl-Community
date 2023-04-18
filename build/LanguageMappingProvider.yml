@@ -18,7 +18,7 @@ variables:
   value: $(Version.MajorMinor).$(Version.Revision)
 - name: BuildPlatform
   value: 'Any Cpu'
-- name: Configuration
+- name: BuildConfiguration
   value: 'Release'
 name: $(BuildDefinitionName).$(SourceBranchName)_$(Version.MajorMinor).$(Version.Revision)
 
