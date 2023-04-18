@@ -17,9 +17,9 @@ variables:
 - name: PipelineVersion
   value: $(Version.MajorMinor).$(Version.Revision)
 - name: BuildPlatform
-  value: 'any cpu'
+  value: 'Any Cpu'
 - name: Configuration
-  value: 'release'
+  value: 'Release'
 name: $(BuildDefinitionName).$(SourceBranchName)_$(Version.MajorMinor).$(Version.Revision)
 
 
