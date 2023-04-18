@@ -79,8 +79,8 @@ namespace Sdl.Community.TMBackup
 			var executableVersion = new StudioVersionService().GetStudioVersion()?.ExecutableVersion?.Major;
 			foreach (var pluginFolderLocation in _pluginFolderLocations)
 			{
-				var devUnpackedFolder = $@"{Environment.GetFolderPath(pluginFolderLocation)}\SDL\SDL Trados Studio\{executableVersion}\Plugins\Unpacked\Sdl.Community.TMBackup";
-				var productionUnpackedFolder = $@"{Environment.GetFolderPath(pluginFolderLocation)}\SDL\SDL Trados Studio\{executableVersion}\Plugins\Unpacked\{PluginResources.Plugin_Name}";
+				var devUnpackedFolder = $@"{Environment.GetFolderPath(pluginFolderLocation)}\Trados\Trados Studio\{executableVersion}\Plugins\Unpacked\Sdl.Community.TMBackup";
+				var productionUnpackedFolder = $@"{Environment.GetFolderPath(pluginFolderLocation)}\Trados\Trados Studio\{executableVersion}\Plugins\Unpacked\{PluginResources.Plugin_Name}";
 				
 				var unpackedFolder = Directory.Exists(devUnpackedFolder) ? devUnpackedFolder : productionUnpackedFolder;
 				if (Directory.Exists(unpackedFolder))
