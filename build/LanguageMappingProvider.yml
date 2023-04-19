@@ -1,0 +1,79 @@
+trigger:
+ branches:
+  include:
+    - master
+
+pool: 
+  vmImage : 'windows-2022'
+
+parameters:
+- name : PublishNuget
+  type: boolean
+  displayName: 'Publish Nuget'
+  default: false
+
+variables:
+- name: Version.MajorMinor
+  value: 1.0
+- name: Version.Revision
+  value: $[counter(variables['Version.MajorMinor'], 0)]
+- name: BuildPlatform
+  value: 'Any Cpu'
+- name: BuildConfiguration
+  value: 'Release'
+name: $(BuildDefinitionName).$(SourceBranchName)_$(Version.MajorMinor).$(Version.Revision)
+
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Use .NET sdk  3.1'
+  inputs:
+    version: '3.1.x'
+    packageType: runtime
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet restore'
+  inputs:
+    command: 'restore'
+    projects: 'LanguageMappingProvider/*.sln'
+    feedsToUse: 'select'
+    vstsFeed: 'af66e256-9c46-4fba-ad75-09bf110ec1cc'
+    includeNuGetOrg: false
+
+- task: VersionDotNetCoreAssemblies@1
+  displayName: 'Version .NET Core Assemblies - FileVersion'
+  inputs:
+    VersionRegex: '\d+\.\d+\.\d+'
+    Field: FileVersion
+
+- task: VSBuild@1
+  displayName: 'Build solution LanguageMappingProvider.sln'
+  inputs:
+    solution: LanguageMappingProvider\LanguageMappingProvider.sln
+    platform: $(BuildPlatform)
+    configuration: $(BuildConfiguration)
+    msbuildArchitecture: x64
+
+- task: DotNetCoreCLI@2
+  displayName: 'PackNuGet'
+  condition: and(succeeded(), eq('${{ parameters.PublishNuget }}', 'true'))
+  inputs:
+    command: 'pack'
+    packagesToPack: 'LanguageMappingProvider/LanguageMappingProvider.csproj'
+    versioningScheme: 'byBuildNumber'
+
+- task: PublishPipelineArtifact@1
+  condition: and(succeeded(), eq('${{ parameters.PublishNuget }}', 'true'))
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/LanguageMappingProvider.$(Version.MajorMinor).$(Version.Revision).nupkg'
+    artifact: 'NugetPackage'
+    publishLocation: 'pipeline'
+
+- task: NuGetCommand@2
+  displayName: 'Push NuGet on NuGet.org'
+  condition: and(succeeded(), eq('${{ parameters.PublishNuget }}', 'true'))
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/LanguageMappingProvider.$(Version.MajorMinor).$(Version.Revision).nupkg'
+    nuGetFeedType: 'external'
+    publishFeedCredentials: 'Nuget'
