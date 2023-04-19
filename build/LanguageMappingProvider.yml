@@ -1,4 +1,7 @@
-trigger: none
+trigger:
+ branches:
+  include:
+    - master
 
 pool: 
   vmImage : 'windows-2022'
@@ -52,8 +55,8 @@ steps:
     msbuildArchitecture: x64
 
 - task: DotNetCoreCLI@2
+  displayName: 'PackNuGet'
   condition: and(succeeded(), eq('${{ parameters.PublishNuget }}', 'true'))
-  name: PackNuGet
   inputs:
     command: 'pack'
     packagesToPack: 'LanguageMappingProvider/LanguageMappingProvider.csproj'
@@ -67,6 +70,7 @@ steps:
     publishLocation: 'pipeline'
 
 - task: NuGetCommand@2
+  displayName: 'Push NuGet on NuGet.org'
   condition: and(succeeded(), eq('${{ parameters.PublishNuget }}', 'true'))
   inputs:
     command: 'push'
