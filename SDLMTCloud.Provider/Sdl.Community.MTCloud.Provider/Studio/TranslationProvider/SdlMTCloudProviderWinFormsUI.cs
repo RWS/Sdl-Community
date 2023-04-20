@@ -32,11 +32,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 			try
 			{
 				var uri = new Uri($"{Constants.MTCloudUriScheme}://");
-				//var connectionService = new ConnectionService(owner, new VersionService(), MtCloudApplicationInitializer.Client);
 				var connectionService = MtCloudApplicationInitializer.ConnectionService;
 				connectionService.Owner = owner;
 
-				//var credential = connectionService.GetCredential(credentialStore);
 				var connectionResult = connectionService.EnsureSignedIn(credentialStore, true);
 
 				if (!connectionResult.Item1)
@@ -56,7 +54,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				optionsWindow.ShowDialog();
 				if (optionsWindow.DialogResult.HasValue && optionsWindow.DialogResult.Value)
 				{
-					//MtCloudApplicationInitializer.AddCurrentTranslationProvider(provider);
 					MtCloudApplicationInitializer.PublishEvent(new TranslationProviderAdded());
 
 					return new ITranslationProvider[] { provider };

@@ -86,7 +86,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			if (tpReference == null) return;
 
 			var currentProviderOptions = JsonConvert.DeserializeObject<Options>(tpReference.State);
-			//var currentProvider = MtCloudApplicationInitializer.GetCurrentTranslationProvider();
 
 			var visibility = currentProviderOptions != null && currentProviderOptions.SendFeedback && (GetTpStatus(tpReference) || providerAdded);
 			SwitchVisibility(visibility);
@@ -97,7 +96,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 				Application.Current?.Dispatcher?.Invoke(
 					() =>
 					{
-						//var translationService = MtCloudApplicationInitializer.GetCurrentTranslationService(currentProject);
 						var feedbackService = new FeedbackService(new FeedbackSettings
 							{
 								AutoSendFeedback = currentProviderOptions.AutoSendFeedback,

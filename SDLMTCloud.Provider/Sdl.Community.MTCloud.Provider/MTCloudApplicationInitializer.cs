@@ -28,7 +28,6 @@ namespace Sdl.Community.MTCloud.Provider
 		private const string BatchProcessing = "batch processing";
 		private const string CreateNewProject = "create a new project";
 
-		//private const string ProjectInProcessing = "ProjectInProcessing";
 		private static IStudioEventAggregator _eventAggregator;
 
 		private static bool? _isStudioRunning;
@@ -43,15 +42,6 @@ namespace Sdl.Community.MTCloud.Provider
 		public static ISegmentSupervisor SegmentSupervisor { get; set; }
 		public static ITranslationService TranslationService { get; private set; }
 
-		//private static string CurrentProjectId
-		//{
-		//	get
-		//	{
-		//		var currentProject = GetProjectInProcessing();
-		//		return currentProject is null ? ProjectInProcessing : currentProject.GetProjectInfo().Id.ToString();
-		//	}
-		//}
-
 		private static IStudioEventAggregator EventAggregator { get; } = _eventAggregator ??
 																		 (IsStudioRunning()
 																			 ? _eventAggregator = SdlTradosStudio.Application
@@ -59,21 +49,6 @@ namespace Sdl.Community.MTCloud.Provider
 																			 : null);
 
 		private static Dictionary<Guid, TranslationService> TranslationServices { get; set; } = new();
-
-		//public static void AddCurrentTranslationProvider(SdlMTCloudTranslationProvider provider)
-		//{
-		//	if (!IsStudioRunning()) return;
-
-		//	if (IsProjectCreationTime()) AttachToProjectCreatedEvent();
-
-		//	if (string.IsNullOrEmpty(CurrentProjectId)) return;
-
-		//	Providers[CurrentProjectId] = provider;
-		//}
-
-		//public static SdlMTCloudTranslationProvider GetCurrentTranslationProvider() =>
-		//	string.IsNullOrEmpty(CurrentProjectId) ? null :
-		//	Providers.ContainsKey(CurrentProjectId) ? Providers[CurrentProjectId] : null;
 
 		public static string EnsureValidPath(string filePath, string targetLanguage)
 		{
@@ -129,9 +104,6 @@ namespace Sdl.Community.MTCloud.Provider
 			return projectInProcessing;
 		}
 
-		//public static bool IsProjectCreationTime() => Application.Current.Dispatcher.Invoke(() =>
-		//	GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false);
-
 		public static bool IsStudioRunning()
 		{
 			if (_isStudioRunning is not null)
@@ -184,34 +156,5 @@ namespace Sdl.Community.MTCloud.Provider
 		}
 
 		public static ConnectionService ConnectionService { get; set; }
-
-		//private static void AttachToProjectCreatedEvent() =>
-		//	ProjectsController.CurrentProjectChanged += ProjectsController_CurrentProjectChanged;
-
-		//private static void ProjectsController_CurrentProjectChanged(object sender, EventArgs e)
-		//{
-		//	ProjectsController.CurrentProjectChanged -= ProjectsController_CurrentProjectChanged;
-
-		//	if (!Providers.ContainsKey(ProjectInProcessing)) return;
-
-		//	var currentProvider = Providers[ProjectInProcessing];
-		//	Providers.Remove(ProjectInProcessing);
-
-		//	var projectInCreation = ProjectsController.CurrentProject;
-
-		//	ProjectInCreationFilePath = projectInCreation.FilePath;
-		//	Providers[projectInCreation.GetProjectInfo().Id.ToString()] = currentProvider;
-		//}
-		//public static ITranslationService GetCurrentTranslationService(FileBasedProject currentProject)
-		//{
-		//	var currentProjectId = currentProject.GetProjectInfo().Id;
-
-		//	if (TranslationServices.TryGetValue(currentProjectId, out var translationService))
-		//		return translationService;
-
-		//	return null;
-
-		//	//TranslationServices[currentProjectId] = new TranslationService();
-		//}
 	}
 }

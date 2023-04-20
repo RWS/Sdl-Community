@@ -13,17 +13,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
 		{
-			//var currentProjProvider = MtCloudApplicationInitializer.GetCurrentTranslationProvider();
-			//if (currentProjProvider != null)
-			//{
-			//	MtCloudApplicationInitializer.SetTranslationService(null, currentProjProvider.TranslationService);
-			//	return currentProjProvider;
-			//}
-
-			//var connectionService = new ConnectionService(StudioInstance.GetActiveForm(), new VersionService(), MtCloudApplicationInitializer.Client);
 			var connectionService = MtCloudApplicationInitializer.ConnectionService;
 
-			//var credential = connectionService.GetCredential(credentialStore);
 			var connectionResult = connectionService.EnsureSignedIn(credentialStore);
 
 			if (!connectionResult.Item1)
@@ -35,8 +26,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 			var languageProvider = new LanguageProvider();
 			var provider = new SdlMTCloudTranslationProvider(translationProviderUri, translationProviderState,
 				MtCloudApplicationInitializer.TranslationService, languageProvider);
-
-			//MtCloudApplicationInitializer.AddCurrentTranslationProvider(provider);
 
 			return provider;
 		}
