@@ -34,6 +34,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\SDLMTCloud.Languages.Provider\Sdl.Community.MTCloud.Languages.Provider.csproj" />
+    <ProjectReference Include="..\..\..\..\LanguageMappingProvider\LanguageMappingProvider.csproj" />
   </ItemGroup>
 </Project>
