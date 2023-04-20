@@ -11,15 +11,15 @@ namespace Sdl.Community.TMRepair.TellMe
 		{
 			new CommunityWikiAction
 			{
-				Keywords = new[] { "repaire", "sdltm repair", "support", "wiki" }
+				Keywords = new[] { "sdltm", "repair", "support", "wiki" }
 			},
 			new AppStoreForumAction
 			{
-				Keywords = new[] { "repaire", "sdltm repair", "support", "forum" }
+				Keywords = new[] { "sdltm", "repair", "support", "forum" }
 			},
 			new AppStoreDownloadAction
 			{
-				Keywords = new[] { "repaire", "sdltm repair", "store", "download", "appstore" }}
+				Keywords = new[] { "sdltm", "repair", "store", "download", "appstore" }}
 		};
 	}
 }
