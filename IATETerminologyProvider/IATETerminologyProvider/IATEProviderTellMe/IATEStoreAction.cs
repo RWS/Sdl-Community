@@ -17,7 +17,7 @@ namespace Sdl.Community.IATETerminologyProvider.IATEProviderTellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://appstore.sdl.com/language/app/iate-terminology/950/");
+			Process.Start("https://appstore.rws.com/Plugin/30");
 		}
 	}
 }

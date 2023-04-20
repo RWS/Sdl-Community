@@ -12,12 +12,12 @@ namespace Sdl.Community.IATETerminologyProvider.IATEProviderTellMe
 
 		public IATECommunityForumAction()
 		{
-			Name = "SDL Community AppStore Forum";
+			Name = "RWS Community AppStore forum";
 		}
 
 		public override void Execute()
 		{
-			Process.Start("http://community.sdl.com/appsupport");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/");
 		}
 	}
 }
