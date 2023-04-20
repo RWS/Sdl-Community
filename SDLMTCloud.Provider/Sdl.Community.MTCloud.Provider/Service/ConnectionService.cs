@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -29,6 +30,21 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private string _currentWorkingPortalAddress;
 		private ITranslationProviderCredentialStore _credentialStore;
+
+		public void CheckConnection([CallerMemberName] string caller = null)
+		{
+			if (Credential.ValidTo >= DateTime.UtcNow)
+				return;
+
+			// attempt one connection
+			var success = Connect(Credential);
+			if (success.Item1)
+				return;
+
+			_logger.Error(caller + $"{PluginResources.Message_Connection_token_has_expired}\n {Credential.Token}");
+
+			throw new Exception(PluginResources.Message_Connection_token_has_expired);
+		}
 
 		public ConnectionService(IWin32Window owner, VersionService versionService, IHttpClient httpClient)
 		{
@@ -193,9 +209,9 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return "Type=" + Credential.Type + "; Name=" + Credential.Name + "; Password=" + Credential.Password + "; Token=" + Credential.Token + "; AccountId=" + Credential.AccountId + "; ValidTo=" + Credential.ValidTo.ToBinary() + "; AccountRegion=" + Credential.AccountRegion + "; RefreshToken=" + Credential.RefreshToken;
 		}
 
-		public (bool, string) EnsureSignedIn(ICredential credential, bool alwaysShowWindow = false)
+		public (bool, string) EnsureSignedIn(ITranslationProviderCredentialStore credentialStore, bool alwaysShowWindow = false)
 		{
-			Credential = credential;
+			Credential = SetCredential(credentialStore);
 
 			if (Credential == null)
 			{
@@ -204,7 +220,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 
 			CurrentWorkingPortalAddress = WorkingPortalsAddress.GetWorkingPortalAddress(Credential.AccountRegion);
-			var result = Connect(credential);
+			var result = Connect(Credential);
 			if (result.Item1 && !alwaysShowWindow)
 			{
 				return result;
@@ -381,7 +397,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return null;
 		}
 
-		public ICredential GetCredential(ITranslationProviderCredentialStore credentialStore)
+		private ICredential SetCredential(ITranslationProviderCredentialStore credentialStore)
 		{
 			_credentialStore = credentialStore;
 			var uri = new Uri($"{Constants.MTCloudUriScheme}://");
@@ -506,7 +522,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return credentialsWindow;
 		}
 
-		private HttpRequestMessage GetRequestMessage(HttpMethod httpMethod, Uri uri)
+		public HttpRequestMessage GetRequestMessage(HttpMethod httpMethod, Uri uri)
 		{
 			var request = new HttpRequestMessage(httpMethod, uri);
 			request.Headers.Add("Authorization", $"Bearer {Credential.Token}");

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Security.Policy;
 using System.Windows;
 using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Helpers;
@@ -26,8 +27,10 @@ namespace Sdl.Community.MTCloud.Provider
 	{
 		private const string BatchProcessing = "batch processing";
 		private const string CreateNewProject = "create a new project";
-		private const string ProjectInProcessing = "ProjectInProcessing";
+
+		//private const string ProjectInProcessing = "ProjectInProcessing";
 		private static IStudioEventAggregator _eventAggregator;
+
 		private static bool? _isStudioRunning;
 		public static IHttpClient Client { get; } = new HttpClient();
 
@@ -40,14 +43,14 @@ namespace Sdl.Community.MTCloud.Provider
 		public static ISegmentSupervisor SegmentSupervisor { get; set; }
 		public static ITranslationService TranslationService { get; private set; }
 
-		private static string CurrentProjectId
-		{
-			get
-			{
-				var currentProject = GetProjectInProcessing();
-				return currentProject is null ? ProjectInProcessing : currentProject.GetProjectInfo().Id.ToString();
-			}
-		}
+		//private static string CurrentProjectId
+		//{
+		//	get
+		//	{
+		//		var currentProject = GetProjectInProcessing();
+		//		return currentProject is null ? ProjectInProcessing : currentProject.GetProjectInfo().Id.ToString();
+		//	}
+		//}
 
 		private static IStudioEventAggregator EventAggregator { get; } = _eventAggregator ??
 																		 (IsStudioRunning()
@@ -55,33 +58,64 @@ namespace Sdl.Community.MTCloud.Provider
 																				 .GetService<IStudioEventAggregator>()
 																			 : null);
 
-		private static Dictionary<string, SdlMTCloudTranslationProvider> Providers { get; set; } = new();
+		private static Dictionary<Guid, TranslationService> TranslationServices { get; set; } = new();
 
-		public static void AddCurrentTranslationProvider(SdlMTCloudTranslationProvider provider)
+		//public static void AddCurrentTranslationProvider(SdlMTCloudTranslationProvider provider)
+		//{
+		//	if (!IsStudioRunning()) return;
+
+		//	if (IsProjectCreationTime()) AttachToProjectCreatedEvent();
+
+		//	if (string.IsNullOrEmpty(CurrentProjectId)) return;
+
+		//	Providers[CurrentProjectId] = provider;
+		//}
+
+		//public static SdlMTCloudTranslationProvider GetCurrentTranslationProvider() =>
+		//	string.IsNullOrEmpty(CurrentProjectId) ? null :
+		//	Providers.ContainsKey(CurrentProjectId) ? Providers[CurrentProjectId] : null;
+
+		public static string EnsureValidPath(string filePath, string targetLanguage)
 		{
-			if (!IsStudioRunning()) return;
+			if (File.Exists(filePath))
+				return filePath;
 
-			if (IsProjectCreationTime()) AttachToProjectCreatedEvent();
+			const string filenameExtension = ".sdlxliff";
+			var separatorTokens = new string[] { $@"{targetLanguage.ToLower()}\" };
+			var fileName = filePath.ToLower()
+								   .Split(separatorTokens, StringSplitOptions.RemoveEmptyEntries)
+								   .LastOrDefault();
+			fileName += !fileName.EndsWith(filenameExtension) ? filenameExtension : string.Empty;
+			var projectPath = Path.GetDirectoryName(ProjectInCreationFilePath) ??
+							  Path.GetDirectoryName(GetProjectInProcessing()?.FilePath);
+			var processedPath = $@"{projectPath}\{targetLanguage}\{fileName}";
 
-			if (string.IsNullOrEmpty(CurrentProjectId)) return;
+			if (File.Exists(processedPath))
+				return processedPath;
 
-			Providers[CurrentProjectId] = provider;
+			if (string.IsNullOrEmpty(projectPath))
+				return null;
+
+			var targetLanguageFiles = Directory.GetFiles(projectPath);
+			processedPath = targetLanguageFiles.FirstOrDefault(
+					file =>
+						Path.GetFileName(file).Contains(Path.GetFileNameWithoutExtension(filePath)) &&
+						Path.GetExtension(file) == filenameExtension);
+
+			return File.Exists(processedPath) ? processedPath : null;
 		}
-
-		public static SdlMTCloudTranslationProvider GetCurrentTranslationProvider() =>
-			Providers.ContainsKey(ProjectInProcessing)
-				? Providers[ProjectInProcessing]
-				: string.IsNullOrEmpty(CurrentProjectId) ? null : Providers.ContainsKey(CurrentProjectId) ? Providers[CurrentProjectId] : null;
 
 		public static Window GetCurrentWindow() => Application.Current.Windows.Cast<Window>().FirstOrDefault(
 					window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
 
 		public static FileBasedProject GetProjectInProcessing()
 		{
-			if (!IsStudioRunning()) return null;
+			if (!IsStudioRunning())
+				return null;
 
 			if (Application.Current.Dispatcher.Invoke(() =>
-				    GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false)) return null;
+					GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false))
+				return null;
 
 			var projectInProcessing = CurrentViewDetector.View
 				switch
@@ -95,8 +129,8 @@ namespace Sdl.Community.MTCloud.Provider
 			return projectInProcessing;
 		}
 
-		public static bool IsProjectCreationTime() => Application.Current.Dispatcher.Invoke(() =>
-			GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false);
+		//public static bool IsProjectCreationTime() => Application.Current.Dispatcher.Invoke(() =>
+		//	GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false);
 
 		public static bool IsStudioRunning()
 		{
@@ -135,6 +169,7 @@ namespace Sdl.Community.MTCloud.Provider
 
 		public void Execute()
 		{
+			ConnectionService = new ConnectionService(StudioInstance.GetActiveForm(), new VersionService(), Client);
 			Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
 			if (IsStudioRunning())
@@ -148,50 +183,35 @@ namespace Sdl.Community.MTCloud.Provider
 			}
 		}
 
-		public static string EnsureValidPath(string filePath, string targetLanguage)
-		{
-			if (File.Exists(filePath))
-				return filePath;
+		public static ConnectionService ConnectionService { get; set; }
 
-			const string filenameExtension = ".sdlxliff";
-			var separatorTokens = new string[] { $@"{targetLanguage.ToLower()}\" };
-			var fileName = filePath.ToLower()
-								   .Split(separatorTokens, StringSplitOptions.RemoveEmptyEntries)
-								   .LastOrDefault();
-			fileName += !fileName.EndsWith(filenameExtension) ? filenameExtension : string.Empty;
-			var projectPath = Path.GetDirectoryName(ProjectInCreationFilePath) ??
-							  Path.GetDirectoryName(GetProjectInProcessing()?.FilePath);
-			var processedPath = $@"{projectPath}\{targetLanguage}\{fileName}";
+		//private static void AttachToProjectCreatedEvent() =>
+		//	ProjectsController.CurrentProjectChanged += ProjectsController_CurrentProjectChanged;
 
-			if (File.Exists(processedPath)) return processedPath;
+		//private static void ProjectsController_CurrentProjectChanged(object sender, EventArgs e)
+		//{
+		//	ProjectsController.CurrentProjectChanged -= ProjectsController_CurrentProjectChanged;
 
-			if (string.IsNullOrEmpty(projectPath)) return null;
+		//	if (!Providers.ContainsKey(ProjectInProcessing)) return;
 
-			var targetLanguageFiles = Directory.GetFiles(projectPath);
-			processedPath = targetLanguageFiles.FirstOrDefault(
-					file =>
-						Path.GetFileName(file).Contains(Path.GetFileNameWithoutExtension(filePath)) &&
-						Path.GetExtension(file) == filenameExtension);
+		//	var currentProvider = Providers[ProjectInProcessing];
+		//	Providers.Remove(ProjectInProcessing);
 
-			return File.Exists(processedPath) ? processedPath : null;
-		}
+		//	var projectInCreation = ProjectsController.CurrentProject;
 
-		private static void AttachToProjectCreatedEvent() =>
-			ProjectsController.CurrentProjectChanged += ProjectsController_CurrentProjectChanged;
+		//	ProjectInCreationFilePath = projectInCreation.FilePath;
+		//	Providers[projectInCreation.GetProjectInfo().Id.ToString()] = currentProvider;
+		//}
+		//public static ITranslationService GetCurrentTranslationService(FileBasedProject currentProject)
+		//{
+		//	var currentProjectId = currentProject.GetProjectInfo().Id;
 
-		private static void ProjectsController_CurrentProjectChanged(object sender, EventArgs e)
-		{
-			ProjectsController.CurrentProjectChanged -= ProjectsController_CurrentProjectChanged;
+		//	if (TranslationServices.TryGetValue(currentProjectId, out var translationService))
+		//		return translationService;
 
-			if (!Providers.ContainsKey(ProjectInProcessing)) return;
+		//	return null;
 
-			var currentProvider = Providers[ProjectInProcessing];
-			Providers.Remove(ProjectInProcessing);
-
-			var projectInCreation = ProjectsController.CurrentProject;
-
-			ProjectInCreationFilePath = projectInCreation.FilePath;
-			Providers[projectInCreation.GetProjectInfo().Id.ToString()] = currentProvider;
-		}
+		//	//TranslationServices[currentProjectId] = new TranslationService();
+		//}
 	}
 }

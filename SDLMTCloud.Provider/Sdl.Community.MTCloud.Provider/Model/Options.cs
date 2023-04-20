@@ -27,7 +27,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			{
 				_sendFeedback = value;
 				OnPropertyChanged(nameof(SendFeedback));
-				MtCloudApplicationInitializer.PublishEvent(new TranslationProviderRateItOptionsChanged(value));
+//				MtCloudApplicationInitializer.PublishEvent(new TranslationProviderRateItOptionsChanged(value));
 			}
 		}
 	}

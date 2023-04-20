@@ -12,8 +12,9 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 		event TranslationReceivedEventHandler TranslationReceived;
 
 		IConnectionService ConnectionService { get; }
-		bool IsActiveModelQeEnabled { get; }
+		//bool IsActiveModelQeEnabled { get; }
 		Options Options { get; set; }
+		bool IsActiveModelQeEnabled { get; }
 
 		Task AddTermToDictionary(Term term);
 
@@ -23,7 +24,7 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 
 		Task<LinguisticOptions> GetLinguisticOptions(string modelName);
 
-		Task<HttpResponseMessage> SendFeedback(FeedbackInfo feedbackInfo);
+		//Task<HttpResponseMessage> SendFeedback(FeedbackInfo feedbackInfo);
 
 		Task<Segment[]> TranslateText(string text, LanguageMappingModel model, FileAndSegmentIds fileAndSegmentIds);
 	}

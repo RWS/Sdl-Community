@@ -14,6 +14,7 @@ using Sdl.Community.MTCloud.Provider.Extensions;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Model.RateIt;
+using Sdl.Community.MTCloud.Provider.Service.Interface;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -35,7 +36,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private bool _qeEnabled;
 		private int _rating;
 		private ICommand _sendFeedbackCommand;
-		private ITranslationService _translationService;
+		private IFeedbackService _feedbackService;
 
 		public RateItViewModel(IShortcutService shortcutService, IActionProvider actionProvider, ISegmentSupervisor segmentSupervisor, IMessageBoxService messageBoxService, EditorController editorController)
 		{
@@ -99,13 +100,13 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			get
 			{
-				return _translationService != null && _translationService.Options.SendFeedback;
+				return _feedbackService != null && _feedbackService.Settings.SendFeedback;
 			}
 			set
 			{
-				if (_translationService.Options.SendFeedback == value)
+				if (_feedbackService.Settings.SendFeedback == value)
 					return;
-				_translationService.Options.SendFeedback = value;
+				_feedbackService.Settings.SendFeedback = value;
 				OnPropertyChanged(nameof(IsSendFeedbackEnabled));
 			}
 		}
@@ -180,14 +181,14 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			}
 		}
 
-		public void SetTranslationService(ITranslationService translationService)
+		public void SetTranslationService(IFeedbackService feedbackService)
 		{
-			_translationService = translationService;
+			_feedbackService = feedbackService;
 
 			ToggleSupervisingQe();
 
 			OnPropertyChanged(nameof(IsSendFeedbackEnabled));
-			AutoSendFeedback ??= _translationService.Options.AutoSendFeedback;
+			AutoSendFeedback ??= _feedbackService.Settings.AutoSendFeedback;
 		}
 
 		private void _shortcutService_ShortcutChanged()
@@ -430,7 +431,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			{
 				if (_autoSendFeedback != null)
 				{
-					_translationService.Options.AutoSendFeedback = _autoSendFeedback.Value;
+					_feedbackService.Settings.AutoSendFeedback = _autoSendFeedback.Value;
 				}
 
 				if (AutoSendFeedback ?? false)
@@ -523,7 +524,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			};
 
 			EnsureFeedbackWillGetThrough(segmentId, feedbackInfo, segmentPairInProcessing);
-			var responseMessage = await _translationService.SendFeedback(feedbackInfo);
+			var responseMessage = await _feedbackService.SendFeedback(feedbackInfo);
 			await FeedbackSendingStatus.ChangeStatus(responseMessage);
 			OnFeedbackSendingStatusChanged();
 		}
@@ -580,7 +581,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private void ToggleSupervisingQe(object sender = null, EventArgs e = null)
 		{
 			_onActiveSegmentQeChangedHandler?.Dispose();
-			if (_translationService?.IsActiveModelQeEnabled ?? false)
+			if (_feedbackService?.IsActiveModelQeEnabled ?? false)
 			{
 				QeEnabled = true;
 				_onActiveSegmentQeChangedHandler = MtCloudApplicationInitializer.Subscribe<ActiveSegmentQeChanged>(MetadataSupervisor_ActiveSegmentQeChanged);

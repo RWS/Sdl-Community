@@ -2,12 +2,15 @@
 using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NLog;
 using Sdl.Community.MTCloud.Provider.Events;
+using Sdl.Community.MTCloud.Provider.Extensions;
+using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Model.RateIt;
@@ -46,7 +49,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		public IConnectionService ConnectionService { get; }
 
 		public bool IsActiveModelQeEnabled
-			=> GetCorrespondingLanguageMappingModel()?.SelectedModel.Model?.ToLower().Contains("qe") ?? false;
+			=> Options.LanguageMappings.IsActiveModelQeEnabled();
 
 		public Options Options { get; set; }
 
@@ -54,7 +57,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		{
 			CheckConnection();
 
-			var model = GetCorrespondingLanguageMappingModel();
+			var model = Options.LanguageMappings.GetCurrentLanguageMappingModel();
 			var dictionaryId = model.SelectedDictionary.DictionaryId;
 
 			if (string.IsNullOrWhiteSpace(dictionaryId))
@@ -119,11 +122,11 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return await _httpClient.GetResult<LinguisticOptions>(response);
 		}
 
-		public async Task<HttpResponseMessage> SendFeedback(FeedbackInfo feedbackInfo)
-		{
-			var feedbackRequest = CreateFeedbackRequest(feedbackInfo);
-			return await SendFeedback(feedbackRequest);
-		}
+		//public async Task<HttpResponseMessage> SendFeedback(FeedbackInfo feedbackInfo)
+		//{
+		//	var feedbackRequest = CreateFeedbackRequest(feedbackInfo);
+		//	return await SendFeedback(feedbackRequest);
+		//}
 
 		public async Task<Segment[]> TranslateText(string text, LanguageMappingModel model, FileAndSegmentIds fileAndSegments)
 		{
@@ -218,20 +221,9 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
-		private void CheckConnection()
+		private void CheckConnection([CallerMemberName] string caller = null)
 		{
-			if (ConnectionService.Credential.ValidTo >= DateTime.UtcNow)
-				return;
-
-			// attempt one connection
-			var success = ConnectionService.Connect(ConnectionService.Credential);
-			if (success.Item1)
-				return;
-
-			_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " +
-						  $"{PluginResources.Message_Connection_token_has_expired}\n {ConnectionService.Credential.Token}");
-
-			throw new Exception(PluginResources.Message_Connection_token_has_expired);
+			ConnectionService.CheckConnection();
 		}
 
 		private async Task<HttpResponseMessage> CheckTranslationStatus(string id)
@@ -273,65 +265,66 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			return await GetTranslationResult(id);
 		}
 
-		private dynamic CreateFeedbackRequest(FeedbackInfo feedbackInfo)
-		{
-			var model = GetCorrespondingLanguageMappingModel();
-			dynamic translationFeedbackRequest = new ExpandoObject();
-			translationFeedbackRequest.Model = model?.SelectedModel.Model;
-			translationFeedbackRequest.SourceLanguageId = model?.SelectedSource.CodeName;
-			translationFeedbackRequest.SourceText = feedbackInfo.SegmentSource;
-			translationFeedbackRequest.TargetLanguageId = model?.SelectedTarget.CodeName;
-			translationFeedbackRequest.TargetMTText = feedbackInfo.OriginalMtCloudTranslation;
+		//private dynamic CreateFeedbackRequest(FeedbackInfo feedbackInfo)
+		//{
+		//	var model = GetCorrespondingLanguageMappingModel();
+		//	dynamic translationFeedbackRequest = new ExpandoObject();
+		//	translationFeedbackRequest.Model = model?.SelectedModel.Model;
+		//	translationFeedbackRequest.SourceLanguageId = model?.SelectedSource.CodeName;
+		//	translationFeedbackRequest.SourceText = feedbackInfo.SegmentSource;
+		//	translationFeedbackRequest.TargetLanguageId = model?.SelectedTarget.CodeName;
+		//	translationFeedbackRequest.TargetMTText = feedbackInfo.OriginalMtCloudTranslation;
 
-			dynamic feedbackRequest = new ExpandoObject();
+		//	dynamic feedbackRequest = new ExpandoObject();
 
-			if (feedbackInfo.Evaluation?.UserChoseDifferently ?? false)
-			{
-				translationFeedbackRequest.QualityEstimationMT = feedbackInfo.Evaluation.OriginalEstimation.ToUpper();
-				feedbackRequest.QualityEstimation = feedbackInfo.Evaluation.UserEstimation.ToUpper();
-			}
+		//	if (feedbackInfo.Evaluation?.UserChoseDifferently ?? false)
+		//	{
+		//		translationFeedbackRequest.QualityEstimationMT = feedbackInfo.Evaluation.OriginalEstimation.ToUpper();
+		//		feedbackRequest.QualityEstimation = feedbackInfo.Evaluation.UserEstimation.ToUpper();
+		//	}
 
-			if (!string.IsNullOrWhiteSpace(feedbackInfo.Suggestion))
-			{
-				var improvementObject = new Improvement { Text = feedbackInfo.Suggestion };
-				feedbackRequest.Improvement = improvementObject;
-			}
-			if (feedbackInfo.Rating is not null)
-			{
-				feedbackRequest.Rating = feedbackInfo.Rating;
-			}
-			feedbackRequest.Translation = translationFeedbackRequest;
+		//	if (!string.IsNullOrWhiteSpace(feedbackInfo.Suggestion))
+		//	{
+		//		var improvementObject = new Improvement { Text = feedbackInfo.Suggestion };
+		//		feedbackRequest.Improvement = improvementObject;
+		//	}
+		//	if (feedbackInfo.Rating is not null)
+		//	{
+		//		feedbackRequest.Rating = feedbackInfo.Rating;
+		//	}
+		//	feedbackRequest.Translation = translationFeedbackRequest;
 
-			return feedbackRequest;
-		}
+		//	return feedbackRequest;
+		//}
 
-		private LanguageMappingModel GetCorrespondingLanguageMappingModel()
-		{
-			var activeDocument = MtCloudApplicationInitializer.EditorController?.ActiveDocument;
+		//private LanguageMappingModel GetCurrentLanguageMappingModel(Options options)
+		//{
+		//	var activeDocument = MtCloudApplicationInitializer.EditorController?.ActiveDocument;
 
-			if (activeDocument is null)
-				return null;
+		//	if (activeDocument is null)
+		//		return null;
 
-			var currentProject = activeDocument.Project.GetProjectInfo();
+		//	var currentProject = activeDocument.Project.GetProjectInfo();
 
-			var activeFileId = activeDocument.ActiveFile;
-			if (activeFileId is null)
-				return null;
+		//	var activeFileId = activeDocument.ActiveFile;
+		//	if (activeFileId is null)
+		//		return null;
 
-			var model = Options.LanguageMappings?.FirstOrDefault(l =>
-				l.SourceTradosCode.Equals(currentProject.SourceLanguage.IsoAbbreviation,
-					StringComparison.InvariantCultureIgnoreCase) &&
-				l.TargetTradosCode.Equals(activeFileId.Language.IsoAbbreviation,
-					StringComparison.InvariantCultureIgnoreCase));
-			return model;
-		}
+		//	var model = options.LanguageMappings?.FirstOrDefault(l =>
+		//		l.SourceTradosCode.Equals(currentProject.SourceLanguage.IsoAbbreviation,
+		//			StringComparison.InvariantCultureIgnoreCase) &&
+		//		l.TargetTradosCode.Equals(activeFileId.Language.IsoAbbreviation,
+		//			StringComparison.InvariantCultureIgnoreCase));
+		//	return model;
+		//}
 
 		private HttpRequestMessage GetRequestMessage(HttpMethod httpMethod, Uri uri)
 		{
-			var request = new HttpRequestMessage(httpMethod, uri);
-			request.Headers.Add("Authorization", $"Bearer {ConnectionService.Credential.Token}");
-			ConnectionService.AddTraceHeaders(request);
-			return request;
+			//var request = new HttpRequestMessage(httpMethod, uri);
+			//request.Headers.Add("Authorization", $"Bearer {ConnectionService.Credential.Token}");
+			//ConnectionService.AddTraceHeaders(request);
+			//return request;
+			return ConnectionService.GetRequestMessage(httpMethod, uri);
 		}
 
 		private async Task<HttpResponseMessage> GetTranslationResult(string id)
@@ -347,24 +340,24 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			TranslationReceived?.Invoke(translationData);
 		}
 
-		private async Task<HttpResponseMessage> SendFeedback(dynamic translationFeedback)
-		{
-			CheckConnection();
+		//private async Task<HttpResponseMessage> SendFeedback(dynamic translationFeedback)
+		//{
+		//	CheckConnection();
 
-			var uri = new Uri($"{ConnectionService.CurrentWorkingPortalAddress}/v4/accounts/{ConnectionService.Credential.AccountId}/feedback/translations");
+		//	var uri = new Uri($"{ConnectionService.CurrentWorkingPortalAddress}/v4/accounts/{ConnectionService.Credential.AccountId}/feedback/translations");
 
-			var request = GetRequestMessage(HttpMethod.Post, uri);
-			var serializerSettings =
-				new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
-			var content = JsonConvert.SerializeObject(translationFeedback, serializerSettings);
+		//	var request = GetRequestMessage(HttpMethod.Post, uri);
+		//	var serializerSettings =
+		//		new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+		//	var content = JsonConvert.SerializeObject(translationFeedback, serializerSettings);
 
-			request.Content = new StringContent(content, new UTF8Encoding(), "application/json");
+		//	request.Content = new StringContent(content, new UTF8Encoding(), "application/json");
 
-			var response = await _httpClient.SendRequest(request);
-			var responseAsString = await _httpClient.GetResponseAsString(response);
+		//	var response = await _httpClient.SendRequest(request);
+		//	var responseAsString = await _httpClient.GetResponseAsString(response);
 
-			_logger.Info(PluginResources.SendFeedbackResponseFromServer, response?.StatusCode, responseAsString);
-			return response;
-		}
+		//	_logger.Info(PluginResources.SendFeedbackResponseFromServer, response?.StatusCode, responseAsString);
+		//	return response;
+		//}
 	}
 }
