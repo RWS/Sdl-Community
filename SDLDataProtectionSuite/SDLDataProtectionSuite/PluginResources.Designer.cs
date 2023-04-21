@@ -22,7 +22,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class PluginResources {
+    public class PluginResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.SdlDataProtectionSuite.PluginResources", typeof(PluginResources).Assembly);
@@ -51,7 +51,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon ApplyChanges {
+        public static System.Drawing.Icon ApplyChanges {
             get {
                 object obj = ResourceManager.GetObject("ApplyChanges", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -73,7 +73,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Delete {
+        public static System.Drawing.Icon Delete {
             get {
                 object obj = ResourceManager.GetObject("Delete", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -83,7 +83,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Down {
+        public static System.Drawing.Icon Down {
             get {
                 object obj = ResourceManager.GetObject("Down", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -93,7 +93,17 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon ExportTo {
+        public static System.Drawing.Icon Download {
+            get {
+                object obj = ResourceManager.GetObject("Download", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon ExportTo {
             get {
                 object obj = ResourceManager.GetObject("ExportTo", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -103,7 +113,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized string similar to {0} was ignored by the parser because it was not in the correct format (.sdlxliff).
         /// </summary>
-        internal static string FileIgnoredByParser {
+        public static string FileIgnoredByParser {
             get {
                 return ResourceManager.GetString("FileIgnoredByParser", resourceCulture);
             }
@@ -116,7 +126,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         ///
         ///were ignored by the parser because they were not in the correct format (.sdlxliff).
         /// </summary>
-        internal static string FilesIgnoredByParser {
+        public static string FilesIgnoredByParser {
             get {
                 return ResourceManager.GetString("FilesIgnoredByParser", resourceCulture);
             }
@@ -125,7 +135,17 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon help {
+        public static System.Drawing.Icon ForumIcon {
+            get {
+                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon help {
             get {
                 object obj = ResourceManager.GetObject("help", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -135,7 +155,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon ImportFrom {
+        public static System.Drawing.Icon ImportFrom {
             get {
                 object obj = ResourceManager.GetObject("ImportFrom", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -145,7 +165,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon information {
+        public static System.Drawing.Icon information {
             get {
                 object obj = ResourceManager.GetObject("information", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -155,7 +175,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Lock {
+        public static System.Drawing.Bitmap Lock {
             get {
                 object obj = ResourceManager.GetObject("Lock", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -165,7 +185,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized string similar to Trados Data Protection Suite.
         /// </summary>
-        internal static string Plugin_Name {
+        public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
             }
@@ -174,7 +194,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Preview {
+        public static System.Drawing.Icon Preview {
             get {
                 object obj = ResourceManager.GetObject("Preview", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -184,7 +204,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon PreviewChanges {
+        public static System.Drawing.Icon PreviewChanges {
             get {
                 object obj = ResourceManager.GetObject("PreviewChanges", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -194,7 +214,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized string similar to Trados Studio.
         /// </summary>
-        internal static string ProductName {
+        public static string ProductName {
             get {
                 return ResourceManager.GetString("ProductName", resourceCulture);
             }
@@ -203,7 +223,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon question {
+        public static System.Drawing.Icon question {
             get {
                 object obj = ResourceManager.GetObject("question", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -213,7 +233,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Remove {
+        public static System.Drawing.Icon Remove {
             get {
                 object obj = ResourceManager.GetObject("Remove", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -223,7 +243,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon RemoveCache {
+        public static System.Drawing.Icon RemoveCache {
             get {
                 object obj = ResourceManager.GetObject("RemoveCache", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -233,7 +253,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Report {
+        public static System.Drawing.Icon Report {
             get {
                 object obj = ResourceManager.GetObject("Report", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -243,7 +263,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon ReportsView {
+        public static System.Drawing.Icon ReportsView {
             get {
                 object obj = ResourceManager.GetObject("ReportsView", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -253,7 +273,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized string similar to Trados Data Protection Suite.
         /// </summary>
-        internal static string SDLDataProtectionSuite {
+        public static string SDLDataProtectionSuite {
             get {
                 return ResourceManager.GetString("SDLDataProtectionSuite", resourceCulture);
             }
@@ -262,7 +282,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon SDLTMAnonymizer {
+        public static System.Drawing.Icon SDLTMAnonymizer {
             get {
                 object obj = ResourceManager.GetObject("SDLTMAnonymizer", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -272,7 +292,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon SDPS {
+        public static System.Drawing.Icon SDPS {
             get {
                 object obj = ResourceManager.GetObject("SDPS", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -282,7 +302,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon ServerBasedTranslationMemory {
+        public static System.Drawing.Icon ServerBasedTranslationMemory {
             get {
                 object obj = ResourceManager.GetObject("ServerBasedTranslationMemory", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -292,7 +312,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Settings {
+        public static System.Drawing.Icon Settings {
             get {
                 object obj = ResourceManager.GetObject("Settings", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -300,9 +320,27 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} TellMe provider.
+        /// </summary>
+        public static string TellMe_Provider {
+            get {
+                return ResourceManager.GetString("TellMe_Provider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} results.
+        /// </summary>
+        public static string TellMe_Provider_Results {
+            get {
+                return ResourceManager.GetString("TellMe_Provider_Results", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon TranslationMemoriesFolder_Open {
+        public static System.Drawing.Icon TranslationMemoriesFolder_Open {
             get {
                 object obj = ResourceManager.GetObject("TranslationMemoriesFolder_Open", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -312,7 +350,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon TranslationMemory {
+        public static System.Drawing.Icon TranslationMemory {
             get {
                 object obj = ResourceManager.GetObject("TranslationMemory", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -322,7 +360,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Up {
+        public static System.Drawing.Icon Up {
             get {
                 object obj = ResourceManager.GetObject("Up", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
