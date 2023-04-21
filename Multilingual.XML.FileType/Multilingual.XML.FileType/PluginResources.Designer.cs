@@ -19,7 +19,7 @@ namespace Multilingual.XML.FileType {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -76,6 +76,16 @@ namespace Multilingual.XML.FileType {
             get {
                 object obj = ResourceManager.GetObject("DefaultPlaceHolders", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Download {
+            get {
+                object obj = ResourceManager.GetObject("Download", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -157,6 +167,16 @@ namespace Multilingual.XML.FileType {
         public static string ExceptionMessage_UnableToLocateTheMappedLanguage_ {
             get {
                 return ResourceManager.GetString("ExceptionMessage_UnableToLocateTheMappedLanguage_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon ForumIcon {
+            get {
+                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -703,6 +723,16 @@ namespace Multilingual.XML.FileType {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Question {
+            get {
+                object obj = ResourceManager.GetObject("Question", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to reset all entities in this set to default values?.
         /// </summary>
         public static string ResetEntitySet {
@@ -717,6 +747,33 @@ namespace Multilingual.XML.FileType {
         public static string ResetEntitySetTitle {
             get {
                 return ResourceManager.GetString("ResetEntitySetTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download {0} from the AppStore.
+        /// </summary>
+        public static string TellMe_Download_Plugin_From_AppStore {
+            get {
+                return ResourceManager.GetString("TellMe_Download_Plugin_From_AppStore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} results.
+        /// </summary>
+        public static string TellMe_String_Results {
+            get {
+                return ResourceManager.GetString("TellMe_String_Results", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} TellMe provider.
+        /// </summary>
+        public static string TellMe_String_TellMe_Provider {
+            get {
+                return ResourceManager.GetString("TellMe_String_TellMe_Provider", resourceCulture);
             }
         }
         
