@@ -18,10 +18,8 @@ namespace Multilingual.Excel.FileType.TellMe
 		}
 
 		public override void Execute()
-		{
-			// TODO once it's available on the AppStore
-			// Example
-			//Process.Start("https://appstore.sdl.com/language/app/studioviews/1162");
+		{			
+			Process.Start("https://appstore.rws.com/Plugin/17");
 		}
 	}
 }

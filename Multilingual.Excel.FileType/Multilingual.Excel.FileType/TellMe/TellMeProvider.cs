@@ -16,12 +16,12 @@ namespace Multilingual.Excel.FileType.TellMe
 			new CommunityAppStoreForumAction
 			{
 				Keywords = new[] { "multi", "multilingual", "excel", "filetype", "file", "type", "support", "forum" }
-			}
-			//new CommunityAppStoreAction
-			//{
-			//	Keywords = new[] { "multi", "multilingual", "excel", "filetype", "file", "type", "store", "download", "appstore" }
+			},
+			new CommunityAppStoreAction
+			{
+				Keywords = new[] { "multi", "multilingual", "excel", "filetype", "file", "type", "store", "download", "appstore" }
 
-			//}
+			}
 		};
 	}
 }

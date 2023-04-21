@@ -159,7 +159,7 @@ namespace Multilingual.Excel.FileType.FileType.Preview
 		}
 
 		/// <summary>
-		/// called when segment is confirmed and SDL Trados Studio jumps into next segment
+		/// called when segment is confirmed and Trados Studio jumps into next segment
 		/// </summary>
 		[DebuggerHidden]
 		public void JumpToActiveElement()
