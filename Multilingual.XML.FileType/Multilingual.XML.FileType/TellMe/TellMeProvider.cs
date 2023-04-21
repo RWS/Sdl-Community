@@ -11,15 +11,15 @@ namespace Multilingual.XML.FileType
 		{
 			new CommunityWikiAction
 			{
-				Keywords = new[] { "multi", "multilingual", "excel", "filetype", "file", "type", "community", "support", "wiki" }
+				Keywords = new[] { "multi", "multilingual", "xml", "filetype", "file", "type", "community", "support", "wiki" }
 			},
 			new CommunityAppStoreForumAction
 			{
-				Keywords = new[] { "multi", "multilingual", "excel", "filetype", "file", "type", "support", "forum" }
+				Keywords = new[] { "multi", "multilingual", "xml", "filetype", "file", "type", "support", "forum" }
 			},
 			new CommunityAppStoreAction
 			{
-				Keywords = new[] { "multi", "multilingual", "excel", "filetype", "file", "type", "store", "download", "appstore" }
+				Keywords = new[] { "multi", "multilingual", "xml", "filetype", "file", "type", "store", "download", "appstore" }
 
 			}
 		};
