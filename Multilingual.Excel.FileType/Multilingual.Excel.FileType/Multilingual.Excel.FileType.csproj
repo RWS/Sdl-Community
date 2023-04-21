@@ -309,6 +309,7 @@
     <Compile Include="FileType\ViewModels\LanguageMappingViewModel.cs" />
     <Compile Include="Services\XmlReaderFactory.cs" />
     <Compile Include="Constants\XmlConstants.cs" />
+    <Compile Include="TellMe\CommunityAppStoreAction.cs" />
     <Compile Include="TellMe\CommunityAppStoreForumAction.cs" />
     <Compile Include="TellMe\CommunityWikiAction.cs" />
     <Compile Include="TellMe\TellMeProvider.cs" />
