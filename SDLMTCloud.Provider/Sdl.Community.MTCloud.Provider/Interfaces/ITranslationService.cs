@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Model;
@@ -13,8 +12,8 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 		event TranslationReceivedEventHandler TranslationReceived;
 
 		IConnectionService ConnectionService { get; }
-		bool IsActiveModelQeEnabled { get; }
 		Options Options { get; set; }
+		bool IsActiveModelQeEnabled { get; }
 
 		Task AddTermToDictionary(Term term);
 
@@ -23,8 +22,6 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 		Task<SubscriptionInfo> GetLanguagePairs();
 
 		Task<LinguisticOptions> GetLinguisticOptions(string modelName);
-
-		Task<HttpResponseMessage> SendFeedback(FeedbackInfo feedbackInfo);
 
 		Task<Segment[]> TranslateText(string text, LanguageMappingModel model, FileAndSegmentIds fileAndSegmentIds);
 	}

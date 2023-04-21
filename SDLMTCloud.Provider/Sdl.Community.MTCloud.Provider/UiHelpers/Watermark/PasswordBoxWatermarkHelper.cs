@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace Sdl.Community.MTCloud.Provider.UiHelpers.Watermark

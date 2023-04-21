@@ -527,6 +527,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Language Weaver Provider.
+        /// </summary>
+        public static string OriginSystem_LWC {
+            get {
+                return ResourceManager.GetString("OriginSystem_LWC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Poor.
         /// </summary>
         public static string PoorQuality {
@@ -651,6 +660,15 @@ namespace Sdl.Community.MTCloud.Provider {
         public static string RateIt_Option_WordsOmission {
             get {
                 return ResourceManager.GetString("RateIt_Option_WordsOmission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No shortcut was set in Studio for this option.
+        /// </summary>
+        public static string RateItViewModel_SetOptionTooltip_No_shortcut_was_set {
+            get {
+                return ResourceManager.GetString("RateItViewModel_SetOptionTooltip_No_shortcut_was_set", resourceCulture);
             }
         }
         

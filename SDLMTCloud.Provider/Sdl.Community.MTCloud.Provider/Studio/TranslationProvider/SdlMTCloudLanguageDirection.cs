@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service.RateIt;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
-using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
@@ -195,7 +192,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 			var segmentEntries = new List<(SegmentId, string)>();
 			foreach (var index in mtCloudSegments.Select(seg => seg.Index))
 			{
-				var segmentId = fileAndSegmentIds.Segments.Keys.ElementAt((int) index);
+				var segmentId = fileAndSegmentIds.Segments.Keys.ElementAt((int)index);
 				segmentEntries.Add((segmentId, fileAndSegmentIds.Segments[segmentId]));
 			}
 
@@ -272,7 +269,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 
 		private List<ISegment> GetAllSegments(string filePath)
 		{
-			if (Segments.ContainsKey(filePath)) return Segments[filePath];
+			if (Segments.ContainsKey(filePath))
+				return Segments[filePath];
 			var segmentRetriever = new SegmentRetriever();
 			var converter = MtCloudApplicationInitializer.FileTypeManager.GetConverterToDefaultBilingual(filePath, filePath, null);
 			converter?.AddBilingualProcessor(new BilingualContentHandlerAdapter(segmentRetriever));
@@ -390,14 +388,16 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				var insideRange = false;
 				foreach (var fileSegment in allFileSegments)
 				{
-					if (!insideRange && fileSegment.Id == tudRange.FirstLimit) insideRange = true;
+					if (!insideRange && fileSegment.Id == tudRange.FirstLimit)
+						insideRange = true;
 
 					if (insideRange)
 					{
 						correspondingSequence.Add(fileSegment.Id);
 					}
 
-					if (insideRange && fileSegment.Id != tudRange.SecondLimit) insideRange = false;
+					if (insideRange && fileSegment.Id != tudRange.SecondLimit)
+						insideRange = false;
 				}
 			}
 
@@ -422,7 +422,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 
 			return resolvedList;
 		}
-		
+
 		private static List<(string, int)> GetNullIdSegments((int Start, int End) adjNullSequence, List<(SegmentId Id, string Text)> translationUnitData)
 		{
 			var startIndex = adjNullSequence.Start < 0 ? 0 : adjNullSequence.Start;

@@ -61,48 +61,12 @@ namespace LanguageMapping
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If this option is enabled, feedback is sent when the segment is confirmed.
-        /// </summary>
-        public static string AutoSendFeedback_CheckBoxTooltip {
-            get {
-                return ResourceManager.GetString("AutoSendFeedback_CheckBoxTooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         public static byte[] DefaultMTLanguageCodes {
             get {
                 object obj = ResourceManager.GetObject("DefaultMTLanguageCodes", resourceCulture);
                 return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Language Weaver Provider.
-        /// </summary>
-        public static string OriginSystem_LWC {
-            get {
-                return ResourceManager.GetString("OriginSystem_LWC", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No shortcut was set in Studio for this option.
-        /// </summary>
-        public static string RateItViewModel_SetOptionTooltip_No_shortcut_was_set {
-            get {
-                return ResourceManager.GetString("RateItViewModel_SetOptionTooltip_No_shortcut_was_set", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to All the information from Rate It form is sent to the server.
-        /// </summary>
-        public static string SendFeedback_ButtonTooltip {
-            get {
-                return ResourceManager.GetString("SendFeedback_ButtonTooltip", resourceCulture);
             }
         }
     }

@@ -1,5 +1,5 @@
 ﻿using System;
-using Sdl.Community.MTCloud.Languages.Provider;
+using LanguageMappingProvider;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -13,31 +13,19 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
 		{
-			var currentProjProvider = MtCloudApplicationInitializer.GetCurrentProjectProvider();
-			if (currentProjProvider != null)
-			{
-				MtCloudApplicationInitializer.SetTranslationService(null, currentProjProvider.TranslationService);
-				return currentProjProvider;
-			}
+			var connectionService = MtCloudApplicationInitializer.ConnectionService;
 
-			var connectionService = new ConnectionService(StudioInstance.GetActiveForm(), new VersionService(), MtCloudApplicationInitializer.Client);
-
-			var credential = connectionService.GetCredential(credentialStore);
-			var connectionResult = connectionService.EnsureSignedIn(credential);
+			var connectionResult = connectionService.EnsureSignedIn(credentialStore);
 
 			if (!connectionResult.Item1)
-			{
 				throw new TranslationProviderAuthenticationException(PluginResources.Message_Invalid_credentials);
-			}
-			connectionService.SaveCredential();
 
+			connectionService.SaveCredential();
 			MtCloudApplicationInitializer.SetTranslationService(connectionService, null);
 
 			var languageProvider = new LanguageProvider();
 			var provider = new SdlMTCloudTranslationProvider(translationProviderUri, translationProviderState,
 				MtCloudApplicationInitializer.TranslationService, languageProvider);
-
-			MtCloudApplicationInitializer.AddCurrentProjectProvider(provider);
 
 			return provider;
 		}

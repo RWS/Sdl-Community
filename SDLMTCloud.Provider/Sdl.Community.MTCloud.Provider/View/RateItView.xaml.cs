@@ -1,6 +1,4 @@
-﻿using System.Windows.Controls;
-using Sdl.Community.MTCloud.Provider.UiHelpers.Watermark;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
+﻿using Sdl.Community.MTCloud.Provider.UiHelpers.Watermark;
 
 namespace Sdl.Community.MTCloud.Provider.View
 {

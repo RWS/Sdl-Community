@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Sdl.Community.MTCloud.Languages.Provider.Model;
+using LanguageMappingProvider.Model;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Core.Globalization;

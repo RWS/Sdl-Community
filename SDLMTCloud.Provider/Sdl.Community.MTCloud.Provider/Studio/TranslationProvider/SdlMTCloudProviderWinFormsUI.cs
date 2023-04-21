@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Interop;
+using LanguageMappingProvider;
 using NLog;
-using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Community.MTCloud.Provider.View;
@@ -29,14 +29,13 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 		[STAThread]
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
-			//TODO: Instantiate the new Rate it View part
 			try
 			{
 				var uri = new Uri($"{Constants.MTCloudUriScheme}://");
-				var connectionService = new ConnectionService(owner, new VersionService(), MtCloudApplicationInitializer.Client);
+				var connectionService = MtCloudApplicationInitializer.ConnectionService;
+				connectionService.Owner = owner;
 
-				var credential = connectionService.GetCredential(credentialStore);
-				var connectionResult = connectionService.EnsureSignedIn(credential, true);
+				var connectionResult = connectionService.EnsureSignedIn(credentialStore, true);
 
 				if (!connectionResult.Item1)
 				{
@@ -55,7 +54,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				optionsWindow.ShowDialog();
 				if (optionsWindow.DialogResult.HasValue && optionsWindow.DialogResult.Value)
 				{
-					MtCloudApplicationInitializer.AddCurrentProjectProvider(provider);
 					MtCloudApplicationInitializer.PublishEvent(new TranslationProviderAdded());
 
 					return new ITranslationProvider[] { provider };
@@ -80,7 +78,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				}
 
 				provider.TranslationService.ConnectionService.Owner = owner;
-				var connectionResult = provider.TranslationService.ConnectionService.EnsureSignedIn(provider.TranslationService.ConnectionService.Credential);
+				var connectionResult = provider.TranslationService.ConnectionService.EnsureSignedIn(credentialStore);
 
 				if (!connectionResult.Item1)
 				{
@@ -94,6 +92,11 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				optionsWindow.ShowDialog();
 				if (optionsWindow.DialogResult.HasValue && optionsWindow.DialogResult.Value)
 				{
+					var sendFeedback = false;
+					if (optionsWindow.DataContext is OptionsViewModel options)
+						sendFeedback = options.SendFeedback;
+
+					MtCloudApplicationInitializer.PublishEvent(new TranslationProviderRateItOptionsChanged(sendFeedback));
 					return true;
 				}
 			}

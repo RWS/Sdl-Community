@@ -92,10 +92,14 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 				ActiveDocument.SegmentsConfirmationLevelChanged += ActiveDocument_SegmentsConfirmationLevelChanged;
 			}
 
-			_translationService = translationService;
 			if (_translationService != null)
 			{
 				_translationService.TranslationReceived -= TranslationService_TranslationReceived;
+			}
+
+			if (translationService != null)
+			{
+				_translationService = translationService;
 				_translationService.TranslationReceived += TranslationService_TranslationReceived;
 			}
 

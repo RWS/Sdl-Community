@@ -1,11 +1,8 @@
 ﻿using System.Windows.Forms;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Service;
-using Sdl.Community.MTCloud.Provider.Service.RateIt;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 using Sdl.Desktop.IntegrationApi.Interfaces;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
-using Sdl.TranslationStudioAutomation.IntegrationApi.Internal;
 
 namespace Sdl.Community.MTCloud.Provider.View
 {
@@ -31,7 +28,7 @@ namespace Sdl.Community.MTCloud.Provider.View
 			var messageBoxService = new MessageBoxService();
 			var shortcutService = new ShortcutService(versionService, messageBoxService);
 			var actionProvider = new ActionProvider();
-			
+
 
 			var editorController = MtCloudApplicationInitializer.EditorController;
 

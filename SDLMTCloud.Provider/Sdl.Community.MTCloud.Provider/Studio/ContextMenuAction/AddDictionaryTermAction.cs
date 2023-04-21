@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Desktop.IntegrationApi;
@@ -48,7 +47,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ContextMenuAction
 		{
 			var currentProject = MtCloudApplicationInitializer.GetProjectInProcessing();
 			if (currentProject == null || currentProject.GetProjectInfo().Id !=
-				MtCloudApplicationInitializer.EditorController.ActiveDocument?.Project.GetProjectInfo().Id) return;
+				MtCloudApplicationInitializer.EditorController.ActiveDocument?.Project.GetProjectInfo().Id)
+				return;
 
 			bool? hasSdlMtAdded;
 			if (tpStatus == null)
@@ -63,7 +63,8 @@ namespace Sdl.Community.MTCloud.Provider.Studio.ContextMenuAction
 			}
 			else
 			{
-				if (!tpStatus.TpUri?.ToString().Contains(PluginResources.SDLMTCloudUri) ?? false) return;
+				if (!tpStatus.TpUri?.ToString().Contains(PluginResources.SDLMTCloudUri) ?? false)
+					return;
 				hasSdlMtAdded = tpStatus.NewStatus;
 			}
 
