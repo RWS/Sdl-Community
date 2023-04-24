@@ -52,14 +52,13 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 		public bool IsSupportedLanguagePair(CultureInfo sourceCulture, CultureInfo targetCulture)
 		{
 			supportedLanguages ??= new Dictionary<string, List<string>>();
-			var sourceLanguage = GetLanguageCode(sourceCulture);
-			var targetLanguage = GetLanguageCode(targetCulture);
+			var targetLanguage = targetCulture.ConvertLanguageCode();
 			if (!supportedLanguages.ContainsKey(targetLanguage))
 			{
 				UpdateSupportedLanguages(targetLanguage);
 			}
 
-			return supportedLanguages[targetLanguage].Any(source => source == sourceLanguage);
+			return supportedLanguages[targetLanguage].Any(source => source == sourceCulture.ConvertLanguageCode());
 		}
 
 		private void UpdateSupportedLanguages(string target)
@@ -128,7 +127,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 				throw new Exception(PluginResources.ApiConnectionGoogleNoKeyErrorMessage);
 			}
 
-			var targetLanguage = GetLanguageCode(languagePair.TargetCulture);
+			var targetLanguage = languagePair.TargetCulture.ConvertLanguageCode();
 			var result = DownloadRequest(Constants.TranslationUri, targetLanguage, text, format);
 			var returnedResult = GetTranslation(result);
 			var decodedResult = _htmlUtil.HtmlDecode(returnedResult).RemoveZeroWidthSpaces();
@@ -153,23 +152,6 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 		{
 			var jsonObject = JObject.Parse(input)["data"]["translations"];
 			return jsonObject[0]["translatedText"].ToString();
-		}
-
-		private string GetLanguageCode(CultureInfo cultureInfo)
-		{
-			if (cultureInfo.Name == "fr-HT") { return "ht"; }
-			if (cultureInfo.Name == "zh-TW" || cultureInfo.Name == "zh-CN") { return cultureInfo.Name; } //just get the name for zh-TW which Google can process..google can also process simplified when specifying target as zh-CN but it breaks when you specify that as source??
-			if (cultureInfo.Name.Equals("nb-NO") || cultureInfo.Name.Equals("nn-NO")) return "no";
-			if (cultureInfo.TwoLetterISOLanguageName.Equals("sr") && cultureInfo.DisplayName.ToLower().Contains("latin")) return "sr-Latn";
-
-			if (cultureInfo.DisplayName == "Samoan") { return "sm"; }
-
-			var isoLanguageName = cultureInfo.TwoLetterISOLanguageName; //if not chinese trad or norweigian get 2 letter code
-			//convert tagalog and hebrew for Google
-			if (isoLanguageName == "fil") { isoLanguageName = "tl"; }
-			if (isoLanguageName == "he") { isoLanguageName = "iw"; }
-
-			return isoLanguageName;
 		}
 	}
 }
