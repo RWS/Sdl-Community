@@ -119,8 +119,8 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 			return new TranslateTextRequest
 			{
 				Contents = { sourceText },
-				TargetLanguageCode = GetLanguageCode(targetLanguage),
-				SourceLanguageCode = GetLanguageCode(sourceLanguage),
+				SourceLanguageCode = sourceLanguage.ConvertLanguageCode(),
+				TargetLanguageCode =  targetLanguage.ConvertLanguageCode(),
 				ParentAsLocationName = new LocationName(_options.ProjectId, _options.ProjectLocation),
 				MimeType = format == "text" ? "text/plain" : "text/html",
 				Model = SetCustomModel(sourceLanguage, targetLanguage),
@@ -143,8 +143,8 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 			}
 
 			_customModel = new(customModelFound);
-			if (!_customModel.SourceLanguage.Equals(GetLanguageCode(sourceLanguage))
-			 || !_customModel.TargetLanguage.Equals(GetLanguageCode(targetLanguage)))
+			if (!_customModel.SourceLanguage.Equals(sourceLanguage.ConvertLanguageCode())
+			 || !_customModel.TargetLanguage.Equals(targetLanguage.ConvertLanguageCode()))
 			{
 				_customModel = null;
 				return defaultPath;
@@ -219,23 +219,6 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 				SupportTarget = language.SupportTarget,
 				CultureInfo = new CultureInfo(language.LanguageCode)
 			}));
-		}
-
-		private string GetLanguageCode(CultureInfo cultureInfo)
-		{
-			if (cultureInfo.Name == "fr-HT") { return "ht"; }
-			if (cultureInfo.Name == "zh-TW" || cultureInfo.Name == "zh-CN") { return cultureInfo.Name; } //just get the name for zh-TW which Google can process..google can also process simplified when specifying target as zh-CN but it breaks when you specify that as source??
-			if (cultureInfo.Name.Equals("nb-NO") || cultureInfo.Name.Equals("nn-NO")) return "no";
-			if (cultureInfo.TwoLetterISOLanguageName.Equals("sr") && cultureInfo.DisplayName.ToLower().Contains("latin")) return "sr-Latn";
-
-			if (cultureInfo.DisplayName == "Samoan") { return "sm"; }
-
-			var isoLanguageName = cultureInfo.TwoLetterISOLanguageName; //if not chinese trad or norweigian get 2 letter code
-																		//convert tagalog and hebrew for Google
-			if (isoLanguageName == "fil") { isoLanguageName = "tl"; }
-			if (isoLanguageName == "he") { isoLanguageName = "iw"; }
-
-			return isoLanguageName;
 		}
 	}
 }
