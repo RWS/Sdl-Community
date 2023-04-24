@@ -10,6 +10,10 @@
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
 		<LangVersion>latest</LangVersion>
+		<Authors>Trados AppStore Team</Authors>
+		<Company>RWS</Company>
+		<Product>Language Mapping Provider</Product>
+		<Description></Description>
 	</PropertyGroup>
 
 	<ItemGroup>
