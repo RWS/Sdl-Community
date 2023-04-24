@@ -127,7 +127,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 	        var ofd = new OpenFileDialog
 	        {
 		        CheckFileExists = true,
-		        Filter = @"SDL Trados Studio Templates|*.sdltpl|SDL Trados Studio Projects|*.sdlproj|All Files|*.*",
+		        Filter = @"Trados Studio Templates|*.sdltpl|Trados Studio Projects|*.sdlproj|All Files|*.*",
 		        FilterIndex = 1,
 		        Multiselect = false,
 		        Title = @"Add template"

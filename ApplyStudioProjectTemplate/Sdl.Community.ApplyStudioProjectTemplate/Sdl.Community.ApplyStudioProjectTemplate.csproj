@@ -91,6 +91,9 @@
     <Reference Include="Sdl.Verification.Api">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Verification.Api.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -127,6 +130,10 @@
     <Compile Include="ApplyTemplateForm.Designer.cs">
       <DependentUpon>ApplyTemplateForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TellMe\CommunityAppStoreAction.cs" />
+    <Compile Include="TellMe\CommunityAppStoreForumAction.cs" />
+    <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="TemplateLanguageDetails.cs" />
     <Compile Include="WarningForm.cs">
       <SubType>Form</SubType>
@@ -145,8 +152,11 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Resources\question.ico" />
-    <None Include="Resources\ASPT.ico" />
+    <Resource Include="Resources\QuestionIcon.ico" />
+    <Resource Include="Resources\Download.ico" />
+    <Resource Include="Resources\ForumIcon.ico" />
+    <Resource Include="Resources\question.ico" />
+    <Resource Include="Resources\ASPT.ico" />
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>

@@ -56,7 +56,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 
 		private string GetTemplatesPath()
 		{
-			var projectTemplatesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL\ASPT.xml");
+			var projectTemplatesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"Trados\ASPT.xml");
 			Directory.CreateDirectory( Path.GetDirectoryName(projectTemplatesPath) );
 			return projectTemplatesPath;
 		}
