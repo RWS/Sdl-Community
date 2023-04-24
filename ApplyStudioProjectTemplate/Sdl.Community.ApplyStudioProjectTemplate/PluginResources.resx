@@ -158,7 +158,7 @@
     <value>Failed to set Match Repair Settings</value>
   </data>
   <data name="question" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>Resources\question.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Plugin_Description" xml:space="preserve">
     <value>Applies settings from a project template to the current project</value>
@@ -187,7 +187,22 @@
   <data name="Settings_Applied" xml:space="preserve">
     <value>The selected settings have been applied to these projects:</value>
   </data>
-  <data name="question" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\question.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\download.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\forumicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe_Download_Plugin_From_AppStore" xml:space="preserve">
+    <value>Download {0} from the AppStore</value>
+  </data>
+  <data name="TellMe_String_Results" xml:space="preserve">
+    <value>{0} results</value>
+  </data>
+  <data name="TellMe_String_TellMe_Provider" xml:space="preserve">
+    <value>{0} TellMe provider</value>
+  </data>
+  <data name="QuestionIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\questionicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
