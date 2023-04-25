@@ -191,7 +191,7 @@ namespace Sdl.Community.TMOptimizer.Control
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             dlg.Title = "Select TM to optimize";
             dlg.DefaultExt = ".sdltm";
-            dlg.Filter = "SDL Trados Studio TMs (.sdltm)|*.sdltm";
+            dlg.Filter = "Trados Studio TMs (.sdltm)|*.sdltm";
 
             if (!String.IsNullOrEmpty(InputTranslationMemory.FilePath))
             {
@@ -264,7 +264,7 @@ namespace Sdl.Community.TMOptimizer.Control
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
             dlg.Title = "Specify output TM file name";
             dlg.DefaultExt = ".sdltm";
-            dlg.Filter = "SDL Trados Studio TMs (.sdltm)|*.sdltm";
+            dlg.Filter = "Trados Studio TMs (.sdltm)|*.sdltm";
 
             if (!String.IsNullOrEmpty(NewOutputTranslationMemoryFilePath))
             {
@@ -282,7 +282,7 @@ namespace Sdl.Community.TMOptimizer.Control
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             dlg.Title = "Select output TM";
             dlg.DefaultExt = ".sdltm";
-            dlg.Filter = "SDL Trados Studio TMs (.sdltm)|*.sdltm";
+            dlg.Filter = "Trados Studio TMs (.sdltm)|*.sdltm";
 
             if (!String.IsNullOrEmpty(OutputTranslationMemory.FilePath))
             {
