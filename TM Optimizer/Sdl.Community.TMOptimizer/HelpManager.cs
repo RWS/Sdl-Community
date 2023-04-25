@@ -4,7 +4,7 @@
     {
         public static void ShowHelp()
         {
-			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3720.tm-optimizer");
+			System.Diagnostics.Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3720/tm-optimizer");
 		}
     }
 }
