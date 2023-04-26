@@ -13,11 +13,11 @@ namespace ImportPackagesIntoOne
     {
         static void Main(string[] args)
         {
-	        var projectPackageFilePath = @"C:\Things\Work\Dev\Community\CRQ-33423\Project 1.sdlppx";
-	        var projectPackageFilePath2 = @"C:\Things\Work\Dev\Community\CRQ-33423\Project 2.sdlppx";
+	        var projectPackageFilePath = @"package1";
+	        var projectPackageFilePath2 = @"package2";
 
-	        var projectFolder = @"C:\Things\Work\Dev\Community\CRQ-33423\MergedFilesProject";
-	        var projectFolder2 = @"C:\Things\Work\Dev\Community\CRQ-33423\TemporaryProject";
+	        var projectFolder = @"MergedFilesProject";
+	        var projectFolder2 = @"TemporaryProject";
 
 	        if (Directory.Exists(projectFolder))
 	        {
