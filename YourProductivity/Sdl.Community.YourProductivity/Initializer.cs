@@ -62,7 +62,7 @@ namespace Sdl.Community.YourProductivity
             _loggingConfiguration.AddTarget("file", fileTarget);
             fileTarget.CreateDirs = true;
             fileTarget.FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                @"SDL Community\Productivity\Log\community-productivity.log");
+				@"Trados AppStore\Productivity\Log\community-productivity.log");
             fileTarget.Layout = "${longdate}|${level:uppercase=true}|${logger}|${message}|${exception:format=ToString}";
             
             var rule = new LoggingRule("*", LogLevel.Trace, fileTarget);

@@ -47,8 +47,8 @@ namespace Sdl.Community.YourProductivity.Persistance
         }
         private string GetWorkingDirectory()
         {
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
-                @"SDL Community\YourProductivity");
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+				@"Trados AppStore\YourProductivity");
         }
 
         public IDocumentSession CurrentSession
