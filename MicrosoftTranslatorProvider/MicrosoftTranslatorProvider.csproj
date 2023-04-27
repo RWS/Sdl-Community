@@ -28,13 +28,13 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="Microsoft.IdentityModel.Tokens">
-			<HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Microsoft.IdentityModel.Tokens.dll</HintPath>
+			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Microsoft.IdentityModel.Tokens.dll</HintPath>
 		</Reference>
 		<Reference Include="Newtonsoft.Json">
-		  <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Newtonsoft.Json.dll</HintPath>
+		  <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Newtonsoft.Json.dll</HintPath>
 		</Reference>
 		<Reference Include="NLog">
-			<HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\NLog.dll</HintPath>
+			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\NLog.dll</HintPath>
 		</Reference>
 		<Reference Include="PresentationCore" />
 		<Reference Include="PresentationFramework" />
@@ -43,16 +43,16 @@
 			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.Desktop.IntegrationApi">
-		  <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.dll</HintPath>
+		  <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-		  <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+		  <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.Desktop.Platform.Controls">
-		  <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.Controls.dll</HintPath>
+		  <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.Controls.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.Desktop.Platform.Styles">
-		  <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.Styles.dll</HintPath>
+		  <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.Styles.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.LanguagePlatform.Core">
 			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.Core.dll</HintPath>
@@ -64,30 +64,30 @@
 			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.ProjectAutomation.Core">
-		  <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Core.dll</HintPath>
+		  <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Core.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.ProjectAutomation.FileBased">
-		  <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+		  <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.FileBased.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.TellMe.ProviderApi">
-			<HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
+			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-			<HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
-			<HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
+			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
 		</Reference>
 		<Reference Include="System" />
 		<Reference Include="System.Core" />
 		<Reference Include="System.Drawing" />
 		<Reference Include="System.IdentityModel" />
 		<Reference Include="System.IdentityModel.Tokens.Jwt">
-		  <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+		  <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\System.IdentityModel.Tokens.Jwt.dll</HintPath>
 		</Reference>
 		<Reference Include="System.Net.Http" />
 		<Reference Include="System.Text.Json">
-		  <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\System.Text.Json.dll</HintPath>
+		  <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\System.Text.Json.dll</HintPath>
 		</Reference>
 		<Reference Include="System.Web" />
 		<Reference Include="System.Windows" />

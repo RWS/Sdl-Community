@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Windows.Input;
 using MicrosoftTranslatorProvider.Commands;
 using MicrosoftTranslatorProvider.Interfaces;
@@ -13,6 +14,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 	{
 		private readonly ITranslationOptions _options;
 		private readonly RegionsProvider _regionsProvider;
+		private readonly bool _showSettingsView;
 
 		private ObservableCollection<RegionSubscription> _regions;
 		private TranslationOption _selectedTranslationOption;

@@ -48,12 +48,17 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 				return $@"{Constants.MicrosoftProviderUriBase}";
 			}
 
+			if (endpoint.Equals(Constants.MicrosoftProviderServiceUriBase))
+			{
+				return string.Empty;
+			}
+
+			_usePrivateEndpoint = true;
 			if (endpoint.EndsWith("/"))
 			{
 				endpoint.Substring(0, _endpoint.Length - 1);
 			}
 
-			_usePrivateEndpoint = true;
 			return !endpoint.StartsWith("http://") && !endpoint.StartsWith("https://")
 				 ? $@"https://{endpoint}"
 				 : endpoint;
@@ -269,7 +274,7 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 
 			if (task.IsFaulted && task.Exception != null)
 			{
-				throw new Exception(task.Exception.InnerException?.Message);
+				throw task.Exception;
 			}
 
 			if (task.IsCanceled)
@@ -292,7 +297,7 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 				return string.Empty;
 			}
 
-			var region = string.IsNullOrEmpty(_region) ? "" : _region + ".";
+			var region = string.IsNullOrEmpty(_region) ? string.Empty : _region + ".";
 			var uriString = $"https://{region}{Constants.MicrosoftProviderServiceUriBase}/sts/v1.0/issueToken";
 			var uri = new Uri(uriString);
 			try
