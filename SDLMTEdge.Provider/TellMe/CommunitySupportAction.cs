@@ -17,7 +17,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeTellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3450.ets-mt-provider");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore");
 		}
 	}
 }

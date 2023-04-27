@@ -16,7 +16,7 @@ namespace Sdl.Community.MTEdge.Provider.Helpers
 			}
 
 			var config = LogManager.Configuration;
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "SDLMachineTranslationEdge");
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Trados AppStore", "SDLMachineTranslationEdge");
 			Directory.CreateDirectory(logDirectoryPath);
 			var target = new FileTarget
 			{
