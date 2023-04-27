@@ -13,12 +13,12 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeTellMe
 
         public OfficialWebAction()
 		{
-			Name = "Official SDL Machine Translation Edge documentation";
+			Name = "Official Language Weaver Edge Documentation";
 		}
 
 		public override void Execute()
 		{
-			Process.Start("https://docs.sdl.com/LiveContent/web/pub.xql?action=home&pub=SDL%20ETS%20Documentation-v4&lang=en-US#docid=GUID-6FD063FF-0947-4966-8190-5CAE05EF60CB&addHistory=true&query=&scope=&tid=&filename=&resource=&inner_id=&toc=false&eventType=lcContent.loadDocGUID-6FD063FF-0947-4966-8190-5CAE05EF60CB");
+			Process.Start("https://docs.rws.com/791581/396549/sdl-ets-documentation/welcome-to-the-------------sdl-ets-------------8-1-x-documentation");
 		}
 	}
 }

@@ -18,7 +18,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeTellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://appstore.sdl.com/language/app/sdl-ets/843/");
+			Process.Start("https://appstore.rws.com/Plugin/40");
 		}
 	}
 }

@@ -136,7 +136,7 @@
     <value>Download Language Weaver Edge from AppStore</value>
   </data>
   <data name="WeaverEdge_TellMeActions" xml:space="preserve">
-    <value>sdlmtedge</value>
+    <value>language weaver edge</value>
     <comment>don't translate it</comment>
   </data>
   <data name="WeaverEdge_TellMeProviderName" xml:space="preserve">

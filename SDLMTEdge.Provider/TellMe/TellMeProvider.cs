@@ -22,7 +22,7 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeTellMe
 			new TranslationServerAction
 			{
 				//old Keywords = new[] { "sdlmtedge", "sdl mt edge", "enterprise translation server", "enterprise translation server documentation", "enterprise translation server website" }
-				Keywords = new[] { WeaverEdgeResource.WeaverEdge_TellMeActions, "sdl mt edge",WeaverEdgeResource.WeaverEdge_TellMe_EdgeTranslationServerActionKey, WeaverEdgeResource.WeaverEdge_TellMe_EdgeTranslationServerActionOperationDoc, WeaverEdgeResource.WeaverEdge_TellMe_EdgeTranslationServerActionOperationWebServer }
+				Keywords = new[] { WeaverEdgeResource.WeaverEdge_TellMeActions, "language weaver edge", WeaverEdgeResource.WeaverEdge_TellMe_EdgeTranslationServerActionKey, WeaverEdgeResource.WeaverEdge_TellMe_EdgeTranslationServerActionOperationDoc, WeaverEdgeResource.WeaverEdge_TellMe_EdgeTranslationServerActionOperationWebServer }
 			},
 			new OfficialWebAction
 			{

@@ -232,7 +232,7 @@ namespace Sdl.Community.MTEdge.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to sdlmtedge.
+        ///   Looks up a localized string similar to language weaver edge.
         /// </summary>
         public static string WeaverEdge_TellMeActions {
             get {
