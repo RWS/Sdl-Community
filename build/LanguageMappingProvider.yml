@@ -64,19 +64,10 @@ steps:
     command: 'pack'
     packagesToPack: 'LanguageMappingProvider/LanguageMappingProvider.csproj'
     versioningScheme: 'byBuildNumber'
-
-- task: PublishPipelineArtifact@1
-  condition: and(succeeded(), eq('${{ parameters.PublishNuget }}', 'true'))
+    
+- task: PublishBuildArtifacts@1
+  name: PublishNuGet
   inputs:
-    targetPath: '$(Build.ArtifactStagingDirectory)/LanguageMappingProvider.$(Version.MajorMinor).$(Version.Revision).nupkg'
-    artifact: 'NugetPackage'
-    publishLocation: 'pipeline'
-
-- task: NuGetCommand@2
-  displayName: 'Push NuGet on NuGet.org'
-  condition: and(succeeded(), eq('${{ parameters.PublishNuget }}', 'true'))
-  inputs:
-    command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/LanguageMappingProvider.$(Version.MajorMinor).$(Version.Revision).nupkg'
-    nuGetFeedType: 'external'
-    publishFeedCredentials: 'Nuget'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'LanguageMappingProvider'
+    publishLocation: 'Container'
