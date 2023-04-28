@@ -18,7 +18,7 @@ namespace SdlXliff.Toolkit.Integration.Helpers
 			var config = LogManager.Configuration;
 
 			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				"SDL Community",
+				"Trados AppStore",
 				"SdlXliffToolkitLogs");
 			Directory.CreateDirectory(logDirectoryPath);
 
