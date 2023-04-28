@@ -91,6 +91,9 @@
     <Reference Include="Sdl.FileTypeSupport.Framework.PreviewControls">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.PreviewControls.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -114,6 +117,10 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Pages\WriterPage.cs" />
     <Compile Include="Settings\WriterSettings.cs" />
+    <Compile Include="TellMe\CommunityAppStoreAction.cs" />
+    <Compile Include="TellMe\CommunityAppStoreForumAction.cs" />
+    <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="TMXParser.cs" />
     <Compile Include="TMXSniffer.cs" />
     <Compile Include="TMXTextExtractor.cs" />
@@ -167,6 +174,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
+    <Resource Include="Resources\Download.ico" />
+    <Resource Include="Resources\ForumIcon.ico" />
+    <Resource Include="Resources\Question.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\SdlCommunity.snk">
