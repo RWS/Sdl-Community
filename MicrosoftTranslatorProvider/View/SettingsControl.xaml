@@ -37,10 +37,9 @@
 					 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
 					 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="CustomProviderName"
 					 IsEnabled="{Binding UseCustomProviderName,Converter={StaticResource InvertableBoolEnabledConverter}}"
-					 HorizontalAlignment="Left"
-					 Width="494"
+					 HorizontalAlignment="Stretch"
 					 Margin="0 2 0 0" />
-			
+
 			<CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 					  IsChecked="{Binding ReSendDraft}"
 					  Content="{x:Static root:PluginResources.ReSendDescription}"
@@ -55,43 +54,45 @@
 					  IsChecked="{Binding DoPreLookup}"
 					  Content="{x:Static root:PluginResources.PreLookDescription}"
 					  Margin="0 12 0 0" />
-			<StackPanel Orientation="Horizontal"
-						Visibility="{Binding DoPreLookup,Converter={StaticResource InvertableBooleanToVisibilityConverter}}">
-				<Button Style="{StaticResource Sdl.Button.DialogStyle}"
-						Content="{x:Static root:PluginResources.BrowseBtn}"
-						Cursor="Hand"
-						Command="{Binding BrowseCommand}"
-						CommandParameter="{x:Static root:PluginResources.PreLookBrowse}"
-						Margin="0 2 8 0" />
-				<TextBox Style="{StaticResource WatermarkTextBox}"
-						 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.PreLookupWaterMark}"
-						 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="PreLookupFileName"
-						 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-						 Width="450"
-						 Text="{Binding PreLookupFileName}"
-						 VerticalContentAlignment="Center" />
-			</StackPanel>
+			<TextBox Style="{StaticResource WatermarkTextBox}"
+					 Visibility="{Binding DoPreLookup,Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+					 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.PreLookupWaterMark}"
+					 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="PreLookupFileName"
+					 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+					 HorizontalAlignment="Stretch"
+					 Text="{Binding PreLookupFileName}"
+					 VerticalContentAlignment="Center" />
+			<Button Style="{StaticResource Sdl.Button.DialogStyle}"
+					Visibility="{Binding DoPreLookup,Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+					Content="{x:Static root:PluginResources.BrowseBtn}"
+					Cursor="Hand"
+					HorizontalAlignment="Left"
+					Width="120"
+					Command="{Binding BrowseCommand}"
+					CommandParameter="{x:Static root:PluginResources.PreLookBrowse}"
+					Margin="0 2 8 0" />
 
 			<CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 					  IsChecked="{Binding DoPostLookup}"
 					  Content="{x:Static root:PluginResources.PostLookupDescription}"
 					  Margin="0 12 0 0" />
-			<StackPanel Orientation="Horizontal"
-						Visibility="{Binding DoPostLookup,Converter={StaticResource InvertableBooleanToVisibilityConverter}}">
-				<Button Style="{StaticResource Sdl.Button.DialogStyle}"
-						Content="{x:Static root:PluginResources.BrowseBtn}"
-						Command="{Binding BrowseCommand}"
-						CommandParameter="{x:Static root:PluginResources.PostLookupBrowse}"
-						Cursor="Hand"
-						Margin="0 2 8 0" />
-				<TextBox Style="{StaticResource WatermarkTextBox}"
-						 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.PostLookupWaterMark}"
-						 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="PostLookupFileName"
-						 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-						 Text="{Binding PostLookupFileName}"
-						 Width="450"
-						 VerticalContentAlignment="Center" />
-			</StackPanel>
+			<TextBox Style="{StaticResource WatermarkTextBox}"
+					 Visibility="{Binding DoPostLookup,Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+					 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.PostLookupWaterMark}"
+					 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="PostLookupFileName"
+					 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+					 Text="{Binding PostLookupFileName}"
+					 HorizontalAlignment="Stretch"
+					 VerticalContentAlignment="Center" />
+			<Button Style="{StaticResource Sdl.Button.DialogStyle}"
+					HorizontalAlignment="Left"
+					Width="120"
+					Visibility="{Binding DoPostLookup,Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+					Content="{x:Static root:PluginResources.BrowseBtn}"
+					Command="{Binding BrowseCommand}"
+					CommandParameter="{x:Static root:PluginResources.PostLookupBrowse}"
+					Cursor="Hand"
+					Margin="0 2 8 0" />
 		</StackPanel>
 	</Grid>
 </UserControl>

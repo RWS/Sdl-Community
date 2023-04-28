@@ -13,10 +13,12 @@
 		WindowStartupLocation="CenterScreen"
 		d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
 		WindowStyle="None"
-		ResizeMode="NoResize"
+		ResizeMode="CanResize"
 		Title="Microsoft Translator Provider"
 		Height="700"
 		Width="600"
+		MinWidth="550"
+		MinHeight="550"
 		d:DesignHeight="700"
 		d:DesignWidth="800">
 	<Window.Resources>
