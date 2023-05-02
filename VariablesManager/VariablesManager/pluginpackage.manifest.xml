@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Variables Manager for Trados Studio</PlugInName>
-	<Version>3.0.2.0</Version>
+	<Version>3.0.3.0</Version>
 	<Description>This plugin enhances the use of variables in Studio by supporting editing, importing and exporting of a variable list in a translation memory.</Description>
 	<Author>Trados AppStore team</Author>
-	<RequiredProduct name="SDLTradosStudio" minversion="16.0" maxversion="16.9" />
+	<RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9"/>
 </PluginPackage>
