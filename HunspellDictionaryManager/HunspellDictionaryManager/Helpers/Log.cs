@@ -15,7 +15,7 @@ namespace Sdl.Community.HunspellDictionaryManager.Helpers
 		{
 			var config = new LoggingConfiguration();
 			var assembly = Assembly.GetExecutingAssembly();
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RWS AppStore", "HunspellDictionaryLogs");
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Trados AppStore", "HunspellDictionaryLogs");
 			if (!Directory.Exists(logDirectoryPath))
 			{
 				Directory.CreateDirectory(logDirectoryPath);
