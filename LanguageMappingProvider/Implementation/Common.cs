@@ -1,4 +1,5 @@
-﻿using LanguageMapping;
+﻿using System.Reflection;
+using LanguageMapping;
 using LanguageMappingProvider.Model;
 
 namespace LanguageMappingProvider.Implementation
@@ -39,9 +40,20 @@ namespace LanguageMappingProvider.Implementation
 				Directory.CreateDirectory(fileInfo.DirectoryName ?? throw new InvalidOperationException("Invalid file path!"));
 			}
 
-			File.WriteAllBytes(path, Resources.DefaultMTLanguageCodes);
-
+			File.WriteAllBytes(path, GetDefaultMtLanguageCodes());
 			return true;
+		}
+
+		private static byte[] GetDefaultMtLanguageCodes()
+		{
+			var assembly = Assembly.GetExecutingAssembly();
+
+			using var resourceStream =
+				assembly.GetManifestResourceStream(@"LanguageMappingProvider.Resources.DefaultMTLanguageCodes.xlsx");
+			using var memoryStream = new MemoryStream();
+			resourceStream?.CopyTo(memoryStream);
+			var defaultMtLanguageCodes = memoryStream.ToArray();
+			return defaultMtLanguageCodes;
 		}
 
 		/// <summary>
