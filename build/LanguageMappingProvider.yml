@@ -6,6 +6,14 @@ trigger:
   include:
     - LanguageMappingProvider/*
 
+pr:
+  branches:
+    include:
+     - master
+  paths:
+    include:
+     - LanguageMappingProvider/*
+
 pool: 
   vmImage : 'windows-2022'
 
