@@ -11,7 +11,6 @@ using Reports.Viewer.Plus.Commands;
 using Reports.Viewer.Plus.Model;
 using Reports.Viewer.Plus.Service;
 using Sdl.Core.Globalization;
-using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.MultiSelectComboBox.EventArgs;
 using Sdl.ProjectAutomation.Core;
 
@@ -54,7 +53,7 @@ namespace Reports.Viewer.Plus.ViewModel
 			var projectInfo = _project.GetProjectInfo();
 			var projectLanguages = projectInfo.TargetLanguages.ToList();
 
-			LanguageItems = LanguageRegistryApi.Instance.GetAllLanguages()
+			LanguageItems = Language.GetAllLanguages()
 				.Select(language => new LanguageItem
 				{
 					Name = language.DisplayName,
