@@ -41,7 +41,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
-    <Reference Include="Sdl.Core.Globalization.Async, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+    <Reference Include="Sdl.Core.Globalization.Async">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17Beta\Sdl.Core.Globalization.Async.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Styles">
