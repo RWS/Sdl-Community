@@ -6,6 +6,7 @@
   	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   	<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
 	  <LangVersion>latest</LangVersion>
+		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
 	  <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
