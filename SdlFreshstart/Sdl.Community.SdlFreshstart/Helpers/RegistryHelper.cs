@@ -10,8 +10,8 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 {
 	public class RegistryHelper : IRegistryHelper
 	{
-		private const string MultitermRegistryPath = @"Software\SDL\SDL MultiTerm";
-		private const string TradosStudioRegistryPath = @"Software\SDL\SDL Trados Studio";
+		private const string MultitermRegistryPath = @"Software\Trados\MultiTerm";
+		private const string TradosStudioRegistryPath = @"Software\Trados\Trados Studio";
 		private RegistryKey BaseKey { get; } = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Default);
 
 		public async Task BackupKeys(List<LocationDetails> locations)
