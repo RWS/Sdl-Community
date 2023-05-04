@@ -18,7 +18,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 
 			var config = LogManager.Configuration;
 
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RWS AppStore",
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Trados AppStore",
 				"TradosFreshstartLogs");
 
 			Directory.CreateDirectory(logDirectoryPath);
