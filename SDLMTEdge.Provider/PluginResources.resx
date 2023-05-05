@@ -163,4 +163,7 @@
   <data name="MissingMappings_DialogMessage" xml:space="preserve">
     <value>The following Trados language pairs were not mapped to Language Weaver language pairs. Results will not be provided for them: {0}{1}{2}{3}Do you wish to continue with these settings?</value>
   </data>
+  <data name="TellMe_Provider_Results" xml:space="preserve">
+    <value>{0} results</value>
+  </data>
 </root>
