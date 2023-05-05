@@ -193,6 +193,15 @@ namespace Sdl.Community.MTEdge.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} results.
+        /// </summary>
+        public static string TellMe_Provider_Results {
+            get {
+                return ResourceManager.GetString("TellMe_Provider_Results", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to URI exception.
         /// </summary>
         public static string URIException {

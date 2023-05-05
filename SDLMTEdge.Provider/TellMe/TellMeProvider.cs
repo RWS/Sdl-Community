@@ -9,6 +9,10 @@ namespace Sdl.Community.MTEdge.Provider.SDLMTEdgeTellMe
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
+			new CommunityWikiAction
+			{
+				Keywords = new[] { "language", "weaver", "edge", "community", "support", "wiki" }
+			},
 			new Action
 			{
 				//Old Keywords = new[] { "sdlmtedge", "sdl mt edge", "sdl mt edge documentation" }
