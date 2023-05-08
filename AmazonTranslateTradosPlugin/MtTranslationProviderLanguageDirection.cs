@@ -193,7 +193,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
         }
         /// <summary>
         /// Creates the translation unit as it is later shown in the Translation Results
-        /// window of SDL Trados Studio. This member also determines the match score
+        /// window of Trados Studio. This member also determines the match score
         /// (in our implementation always 100%, as only exact matches are supported)
         /// as well as the confirmation level, i.e. Translated.
         /// </summary>
