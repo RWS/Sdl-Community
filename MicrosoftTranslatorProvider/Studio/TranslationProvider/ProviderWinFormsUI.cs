@@ -49,7 +49,7 @@ namespace MicrosoftTranslatorProvider.Studio
 		{
 			var dialogService = new OpenFileDialogService();
 			var providerControlViewModel = new ProviderControlViewModel(loadOptions, regionsProvider);
-			var settingsControlViewModel = new SettingsControlViewModel(loadOptions, dialogService, false);
+			var settingsControlViewModel = new SettingsControlViewModel(loadOptions, credentialStore, dialogService, false);
 			var htmlUtil = new HtmlUtil();
 			var mainWindowViewModel = new MainWindowViewModel(loadOptions,
 															  providerControlViewModel,

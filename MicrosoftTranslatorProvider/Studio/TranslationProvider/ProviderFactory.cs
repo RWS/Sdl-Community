@@ -2,6 +2,7 @@
 using MicrosoftTranslatorProvider.Interfaces;
 using MicrosoftTranslatorProvider.Model;
 using MicrosoftTranslatorProvider.Service;
+using MicrosoftTranslatorProvider.ViewModel;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -19,14 +20,19 @@ namespace MicrosoftTranslatorProvider
 				throw new Exception(PluginResources.UriNotSupportedMessage);
 			}
 
-			var credential = credentialStore.GetCredential(new Uri(Constants.MicrosoftProviderFullScheme));
-			if (credential is null)
-			{
-				throw new TranslationProviderAuthenticationException();
-			}
-
+			var credential = credentialStore.GetCredential(new Uri(Constants.MicrosoftProviderFullScheme)) ?? throw new TranslationProviderAuthenticationException();
 			var options = JsonConvert.DeserializeObject<MTETranslationOptions>(translationProviderState);
-			options.ClientID = new GenericCredentials(credential.Credential)["API-Key"];
+			try
+			{
+				var genericCredentials = new GenericCredentials(credential.Credential);
+				options.ClientID = genericCredentials["API-Key"];
+				options.PrivateEndpoint = genericCredentials["PrivateEndpoint"];
+				bool.TryParse(genericCredentials["UseCategoryID"], out var useCategoryId);
+				options.UseCategoryID = useCategoryId;
+				options.CategoryID = useCategoryId ? genericCredentials["CategoryID"] : string.Empty;
+				options.Region = genericCredentials["Region"];
+			}
+			catch { }
 			return new Provider(options, new RegionsProvider(), new HtmlUtil());
 		}
 

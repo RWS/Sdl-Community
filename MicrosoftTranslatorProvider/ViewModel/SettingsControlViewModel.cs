@@ -6,6 +6,9 @@ using NLog;
 using MicrosoftTranslatorProvider.Commands;
 using MicrosoftTranslatorProvider.Model;
 using MicrosoftTranslatorProvider.Interfaces;
+using System.Windows;
+using System.Windows.Forms;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace MicrosoftTranslatorProvider.ViewModel
 {
@@ -14,6 +17,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly ITranslationOptions _options;
 		private readonly IOpenFileDialogService _openFileDialogService;
+		private readonly ITranslationProviderCredentialStore _credentialStore;
 
 		private bool _reSendDraft;
 		private bool _sendPlainText;
@@ -29,13 +33,14 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 		private ICommand _clearCommand;
 
-		public SettingsControlViewModel(ITranslationOptions options, IOpenFileDialogService openFileDialogService,bool isTellMeAction)
+		public SettingsControlViewModel(ITranslationOptions options, ITranslationProviderCredentialStore credentialStore, IOpenFileDialogService openFileDialogService, bool isTellMeAction)
 		{
 			ViewModel = this;
 			_options = options;
 			IsTellMeAction = isTellMeAction;
 			BrowseCommand = new RelayCommand(Browse);
 			_openFileDialogService = openFileDialogService;
+			_credentialStore = credentialStore;
 
 			SetSavedSettings();
 		}
@@ -185,14 +190,14 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			UseCustomProviderName = _options.UseCustomProviderName;
 		}
 
-		private void Clear(object obj)
+		private void Clear(object parameter)
 		{
-			if (obj is not string objectName)
+			if (parameter is not string fieldName)
 			{
 				return;
 			}
 
-			switch (objectName)
+			switch (fieldName)
 			{
 				case "PreLookupFileName":
 					PreLookupFileName = string.Empty;
