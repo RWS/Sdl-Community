@@ -36,7 +36,7 @@ namespace TMX_TranslationProvider.Tellme
                     entry.MainTranslationProvider.Uri.OriginalString.Contains(TmxTranslationProvider.ProviderScheme)))
                 {
                     MessageBox.Show(
-                        @"TmxProvider is not set on this project\nPlease set it in project settings before using TellMe to access it");
+                        @"TmxProvider is not set on this project\nPlease set it in project settings before using Tell Me to access it");
                 }
                 else
                 {

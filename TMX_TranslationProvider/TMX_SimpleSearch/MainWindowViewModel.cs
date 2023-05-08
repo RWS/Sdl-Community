@@ -46,7 +46,7 @@ namespace TMX_SimpleSearch
 		private string _searchText = "";
 		private bool _isSearching = false;
 
-		private string _settingsFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "TMX_lib", "simple_search_settings.txt");
+		private string _settingsFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Trados AppStore", "TMX_lib", "simple_search_settings.txt");
 		private string _error = "";
 		private long _searchTimeMs = 0;
 		private long _searchTimeSeconds = 0;
