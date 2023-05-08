@@ -232,7 +232,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Trados Studio  is not licensed on this computer. Activate it first before using this add-on..
+        ///   Looks up a localized string similar to Trados Studio  is not licensed on this computer. Activate it first before using this add-on..
         /// </summary>
         internal static string LicenseErrorMessage {
             get {
@@ -511,7 +511,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select SDL Trados Studio project file.
+        ///   Looks up a localized string similar to Select Trados Studio project file.
         /// </summary>
         internal static string ProjectFileDialogTitle {
             get {
