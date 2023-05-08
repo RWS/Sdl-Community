@@ -116,7 +116,6 @@ namespace Multilingual.Excel.FileType.Services
 		private string GetOriginalFilePath(IPersistentFileConversionProperties fileInfo)
 		{
 			var filePath = fileInfo.OriginalFilePath;
-
 			if (!File.Exists(filePath))
 			{
 				var languageParam = "\\" + fileInfo.SourceLanguage.IsoAbbreviation + "\\";
@@ -320,15 +319,14 @@ namespace Multilingual.Excel.FileType.Services
 
 			return segment;
 		}
-
+		
 		private string GetTargetSubContent(Stream subContentStream)
 		{
 			string subContent;
-			using (var reader = new StreamReader(subContentStream))
+			using (var reader = new StreamReader(subContentStream, _nativeFileProperties.Encoding.Encoding))
 			{
 				subContent = reader.ReadToEnd();
 			}
-
 
 			var segmentProperties = _segmentBuilder.CreateSegmentPairProperties();
 			var segment = GetSegment(subContent, segmentProperties);
