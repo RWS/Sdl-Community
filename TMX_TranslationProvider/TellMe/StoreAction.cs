@@ -8,7 +8,7 @@ namespace TMX_TranslationProvider.Tellme
     {
         public TmxProviderStoreAction()
         {
-            Name = "Download Tmx Provider from the AppStore";
+            Name = "Download Tmx Provider from RWS AppStore";
         }
 
         public override string Category => "TmxProvider results";
