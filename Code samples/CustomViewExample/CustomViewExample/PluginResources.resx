@@ -182,6 +182,15 @@
     <value>No useful tips removed.</value>
   </data>
   <data name="Restart_Trados_Studio_before_changes_are_applied" xml:space="preserve">
-	  <value>You will need to restart Trados Studio before you changes are applied.</value>
+    <value>You will need to restart Trados Studio before you changes are applied.</value>
+  </data>
+  <data name="CustomViewExample_EditorActionsGroup_Name" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="CustomViewExample_SelectSegmentAction_Description" xml:space="preserve">
+    <value>Test to confirm the 3rd segment from an embedded document is selected.</value>
+  </data>
+  <data name="CustomViewExample_SelectSegmentAction_Name" xml:space="preserve">
+    <value>Select 3rd Segment</value>
   </data>
 </root>
