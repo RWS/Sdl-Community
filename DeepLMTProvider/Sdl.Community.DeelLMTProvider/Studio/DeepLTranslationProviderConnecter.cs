@@ -21,6 +21,23 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 		private static string _apiKey;
 		private List<string> _supportedSourceLanguages;
 
+		/// <summary>
+		/// Maximum count of translation retries
+		/// </summary>
+		private const int TranslateMaxRetryCount = 3;
+		/// <summary>
+		/// Too Many Requests status code as it does not exists in <see cref="System.Net.HttpStatusCode"/>
+		/// </summary>
+		private const int HttpStatusCodeTooManyRequests = 429;
+		/// <summary>
+		/// The total count of translation retry attempts in a row. 
+		/// </summary>
+		private ulong _totalTranslationRetryAttemptInARowCount = 0;
+		/// <summary>
+		/// The maximum count of translation retry attempts in a row after which we give up executing retry routine.
+		/// </summary>
+		private const ulong MaxTranslationRetryAttemptInARowCount = TranslateMaxRetryCount * 5L;
+
 		public DeepLTranslationProviderConnecter(string key, Formality formality = Formality.Default)
 		{
 			ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
@@ -94,37 +111,128 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
 		public string Translate(LanguagePair languageDirection, string sourceText)
 		{
+			return TranslateWithRetry(languageDirection, AsEnumerable(sourceText)).First();
+		}
+
+		private static IEnumerable<TObject> AsEnumerable<TObject>(TObject value)
+		{
+			yield return value;
+		}
+
+		/// <summary>
+		/// Translate <paramref name="sourceTexts"/> in batch
+		/// </summary>
+		/// <param name="languageDirection"></param>
+		/// <param name="sourceTexts"></param>
+		/// <returns>Translated source texts in the same order</returns>
+		public string[] Translate(LanguagePair languageDirection, IEnumerable<string> sourceTexts)
+		{
+			return TranslateWithRetry(languageDirection, sourceTexts);
+		}
+
+		/// <summary>
+		/// Translate <paramref name="sourceTexts"/> in batch with retrying routine in case of errors 
+		/// that might occur temporary, eg. request timeout, bad gateway
+		/// </summary>
+		/// <param name="languageDirection"></param>
+		/// <param name="sourceTexts"></param>
+		/// <param name="retryAttemptCount"></param>
+		/// <returns></returns>
+		private string[] TranslateWithRetry(LanguagePair languageDirection, IEnumerable<string> sourceTexts, int retryAttemptCount = 0)
+		{
+			string[] translatedTexts = null;
+			try
+			{
+				translatedTexts = BatchTranslate(languageDirection, sourceTexts);
+			}
+			catch (HttpRequestException ex)
+			{
+				if (!ex.GetHttpStatusCode().HasValue || retryAttemptCount < TranslateMaxRetryCount || DoesDeepLServiceLooksLikeIsUnavailable())
+					throw;
+
+				switch (ex.GetHttpStatusCode().Value)
+				{
+					case System.Net.HttpStatusCode.RequestTimeout:
+					case System.Net.HttpStatusCode.GatewayTimeout:
+					case System.Net.HttpStatusCode.BadGateway:
+					case System.Net.HttpStatusCode.ServiceUnavailable:
+					case (System.Net.HttpStatusCode)HttpStatusCodeTooManyRequests:
+						++retryAttemptCount;
+						++_totalTranslationRetryAttemptInARowCount;
+						TimeSpan retryDelay = CalculateRetryDelayTimeSpan(retryAttemptCount);
+						_logger.Info($"Retrying translation ({retryAttemptCount}) in {retryDelay} because of: {ex.Message} ({ex.GetHttpStatusCode().Value}).");
+						translatedTexts = TranslateWithRetry(languageDirection, sourceTexts, retryAttemptCount);
+						break;
+					default:
+						throw;
+				}
+			}
+
+			_totalTranslationRetryAttemptInARowCount = 0;
+			return translatedTexts;
+		}
+
+		private TimeSpan CalculateRetryDelayTimeSpan(int retryAttemptCount)
+		{
+			return TimeSpan.FromSeconds(retryAttemptCount * 5);
+		}
+
+		/// <summary>
+		/// Does DeepL service looks like is unavailable for a while? We would like to prevent continuous and time consuming 
+		/// retrying routine in case of some serious problem on DeepL service side. If the service is unavailable for lets say few hours,
+		/// we would end up executing pre-translation task for very long.
+		/// </summary>
+		/// <returns></returns>
+		private bool DoesDeepLServiceLooksLikeIsUnavailable()
+		{
+			return _totalTranslationRetryAttemptInARowCount > MaxTranslationRetryAttemptInARowCount;
+		}
+
+		private string[] BatchTranslate(LanguagePair languageDirection, IEnumerable<string> sourceTexts)
+		{
 			var formality = GetFormality(languageDirection);
 
 			var targetLanguage = GetLanguage(languageDirection.TargetCulture, SupportedTargetLanguages);
 			var sourceLanguage = GetLanguage(languageDirection.SourceCulture, SupportedSourceLanguages);
-			var translatedText = string.Empty;
+
+			var translatedTexts = new string[sourceTexts.Count()];
 			var normalizeHelper = new NormalizeSourceTextHelper();
+			string stringContent = null;
+			HttpResponseMessage response = null;
 
 			try
 			{
-				sourceText = normalizeHelper.NormalizeText(sourceText);
+				stringContent = $"source_lang={sourceLanguage}" +
+								$"&target_lang={targetLanguage}" +
+								$"&formality={formality.ToString().ToLower()}" +
+								"&preserve_formatting=1" +
+								"&tag_handling=xml" +
+								$"&auth_key={ApiKey}";
 
-				var content = new StringContent($"text={sourceText}" +
-												$"&source_lang={sourceLanguage}" +
-												$"&target_lang={targetLanguage}" +
-												$"&formality={formality.ToString().ToLower()}" +
-												"&preserve_formatting=1" +
-												"&tag_handling=xml" +
-												$"&auth_key={ApiKey}",
-					Encoding.UTF8, "application/x-www-form-urlencoded");
 
-				var response = AppInitializer.Client.PostAsync("https://api.deepl.com/v1/translate", content).Result;
+				foreach (string sourceText in sourceTexts)
+				{
+					string normalizedSourceText = normalizeHelper.NormalizeText(sourceText);
+					stringContent += $"&text={normalizedSourceText}";
+				}
+
+				var content = new StringContent(stringContent, Encoding.UTF8, "application/x-www-form-urlencoded");
+				response = AppInitializer.Client.PostAsync("https://api.deepl.com/v1/translate", content).Result;
 				response.EnsureSuccessStatusCode();
 
 				var translationResponse = response.Content?.ReadAsStringAsync().Result;
 				var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(translationResponse);
 
-				if (translatedObject != null && translatedObject.Translations.Any())
+				if (translatedObject != null)
 				{
-					translatedText = translatedObject.Translations[0].Text;
-					translatedText = DecodeWhenNeeded(translatedText);
+					for (int i = 0; i < translatedObject.Translations.Count; i++)
+					{
+						translatedTexts[i] = translatedObject.Translations[i].Text;
+						translatedTexts[i] = DecodeWhenNeeded(translatedTexts[i]);
+
+					}
 				}
+
 			}
 			catch (AggregateException aEx)
 			{
@@ -132,6 +240,17 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 				{
 					_logger.Error(innerEx);
 				}
+				throw;
+			}
+			catch (HttpRequestException ex)
+			{
+				if (response != null)
+				{
+					ex.SetHttpStatusCode(response.StatusCode);
+				}
+
+				_logger.Error(ex);
+				throw;
 			}
 			catch (Exception ex)
 			{
@@ -139,7 +258,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 				throw;
 			}
 
-			return translatedText;
+			return translatedTexts;
 		}
 
 		private static string GetSupportedLanguages(string type, string apiKey)

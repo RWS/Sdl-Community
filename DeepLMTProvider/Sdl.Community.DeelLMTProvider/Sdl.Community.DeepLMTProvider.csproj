@@ -112,6 +112,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\ExceptionExtensions.cs" />
     <Compile Include="Studio\DeepLMtTranslationProvider.cs" />
     <Compile Include="Studio\DeepLMtTranslationProviderFactory.cs" />
     <Compile Include="Studio\DeepLMtTranslationProviderLanguageDirection.cs" />
