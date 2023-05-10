@@ -16,5 +16,42 @@ namespace InterpretBank.TerminologyService.Extensions
 
 			return source.Where(lambda);
 		}
+
+		public static bool FuzzyMatch(string str1, string str2, int tolerance)
+		{
+			if (Math.Abs(str1.Length - str2.Length) > tolerance)
+			{
+				// If the difference in length is greater than the tolerance, the strings cannot match
+				return false;
+			}
+
+			int[,] matrix = new int[str1.Length + 1, str2.Length + 1];
+
+			// Initialize the first row and column of the matrix
+			for (int i = 0; i <= str1.Length; i++)
+			{
+				matrix[i, 0] = i;
+			}
+
+			for (int j = 0; j <= str2.Length; j++)
+			{
+				matrix[0, j] = j;
+			}
+
+			// Fill in the rest of the matrix
+			for (int i = 1; i <= str1.Length; i++)
+			{
+				for (int j = 1; j <= str2.Length; j++)
+				{
+					int cost = (str1[i - 1] == str2[j - 1]) ? 0 : 1;
+					matrix[i, j] = Math.Min(Math.Min(matrix[i - 1, j] + 1, matrix[i, j - 1] + 1), matrix[i - 1, j - 1] + cost);
+				}
+			}
+
+			// The Levenshtein distance is the value in the bottom right corner of the matrix
+			int distance = matrix[str1.Length, str2.Length];
+
+			return (distance <= tolerance);
+		}
 	}
 }

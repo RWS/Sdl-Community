@@ -119,7 +119,7 @@ namespace InterpretBank.Studio
 				var id = TermIndex++;
 				//TODO: calculate score instead of hardcoding "100"
 
-				if (terms.Count <= 0)
+				if (terms is not { Count: > 0 })
 					continue;
 
 				results.Add(new SearchResult
@@ -152,7 +152,7 @@ namespace InterpretBank.Studio
 
 			var entry = new Entry { Id = id, };
 			entry.Languages.Add(entryTargetLanguage);
-
+			
 			return entry;
 		}
 	}

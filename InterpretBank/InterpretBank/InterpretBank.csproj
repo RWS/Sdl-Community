@@ -19,7 +19,6 @@
     <None Remove="Resources\Flag.png" />
     <None Remove="Resources\Glossary.png" />
     <None Remove="Resources\Tag.png" />
-    <None Remove="SettingsService\UI\SettingsWindow.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />

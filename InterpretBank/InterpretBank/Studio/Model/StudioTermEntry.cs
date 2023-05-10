@@ -5,5 +5,7 @@
 		public string Extra1 { get; set; }
 		public string Extra2 { get; set; }
 		public string Text { get; set; }
+
+		public string CommentAll { get; set; }
 	}
 }

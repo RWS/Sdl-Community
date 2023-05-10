@@ -6,7 +6,7 @@ namespace InterpretBank.TerminologyService
 {
 	public interface ISettingsService
 	{
-		List<string> GlossaryNames { get; set; }
-		List<TagModel> Tags { get; set; }
+		//List<string> GlossaryNames { get; set; }
+		//List<TagModel> Tags { get; set; }
 	}
 }

@@ -18,7 +18,7 @@ internal class InterpretBankWinFormsUI : ITerminologyProviderWinFormsUI
 	{
 		var provider = InterpretBankProviderFactory.GetInterpretBankProvider();
 
-		var settingsUi = new SettingsWindow { DataContext = provider.SettingsService };
+		var settingsUi = new SettingsMain { DataContext = provider.SettingsService };
 
 		if (settingsUi.ShowDialog() ?? false)
 			return new ITerminologyProvider[] { provider };

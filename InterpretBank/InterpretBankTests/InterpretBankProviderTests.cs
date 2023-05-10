@@ -2,6 +2,7 @@
 using System.Data.SQLite;
 using InterpretBank.GlossaryService;
 using InterpretBank.SettingsService;
+using InterpretBank.SettingsService.ViewModel;
 using InterpretBank.Studio;
 using InterpretBank.TerminologyService;
 using InterpretBank.TerminologyService.Interface;

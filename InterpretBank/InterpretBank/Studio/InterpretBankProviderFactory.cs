@@ -18,7 +18,7 @@ namespace InterpretBank.Studio
 			var sqLiteConnection = new SQLiteConnection($"Data Source={filepath}");
 
 			var interpretBankDataContext = new InterpretBankDataContext(sqLiteConnection);
-			var settingsService = new SettingsService.SettingsService(new OpenFileDialog(), interpretBankDataContext);
+			var settingsService = new SettingsService.ViewModel.SettingsService(new OpenFileDialog(), interpretBankDataContext);
 
 			var termSearchService = new TerminologyService.TerminologyService(interpretBankDataContext);
 			return new InterpretBankProvider(termSearchService, settingsService);

@@ -50,12 +50,7 @@
 				</Button.ToolTip>
 			</Button>
 
-			<DockPanel Grid.Row="1">
-				<Image Source="../Resources/mtp_logo.png"
-					   DockPanel.Dock="Top"
-					   Width="500"
-					   Margin="0 30 0 0" />
-			</DockPanel>
+			
 		</Grid>
 	</DockPanel>
 </UserControl>
