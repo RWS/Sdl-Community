@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using InterpretBank.Model;
 using InterpretBank.Studio.Model;
 
 namespace InterpretBank.TerminologyService.Interface
 {
-	public interface ITerminologyService
+	public interface ITerminologyService : IDisposable
 	{
 		List<StudioTermEntry> GetExactTerms(string word, string name1, string name2);
 		List<StudioTermEntry> GetFuzzyTerms(string word, string sourceLanguage, string targetLanguage);

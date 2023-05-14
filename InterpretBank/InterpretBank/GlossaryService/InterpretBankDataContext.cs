@@ -14,12 +14,15 @@ namespace InterpretBank.GlossaryService;
 
 public class InterpretBankDataContext : IInterpretBankDataContext
 {
-	public InterpretBankDataContext(SQLiteConnection sqLiteConnection)
-	{
-		DataContext = new DataContext(sqLiteConnection);
-	}
+	public SQLiteConnection SqLiteConnection { get; set; }
 
-	private DataContext DataContext { get; }
+	private DataContext DataContext { get; set; }
+
+	public void Dispose()
+	{
+		DataContext?.Dispose();
+		SqLiteConnection?.Dispose();
+	}
 
 	public List<GlossaryModel> GetGlossaries()
 	{
@@ -68,17 +71,6 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 	public List<TagLinkModel> GetLinks() => GetRows<DbTagLink>()
 		.Select(t => new TagLinkModel { GlossaryId = t.GlossaryId, TagName = t.TagName, TagId = t.TagId }).ToList();
 
-	public void RemoveTagFromGlossary(string tagName, string glossaryName)
-	{
-		var glossaryId = GetTable<DbGlossary>().ToList().FirstOrDefault(g => g.Tag1 == glossaryName)?.Id;
-		var tagLinks = GetTable<DbTagLink>();
-
-		var tagForRemoval =
-			tagLinks.ToList().FirstOrDefault(tl => tl.TagName == tagName && tl.GlossaryId == glossaryId);
-
-		if (tagForRemoval is not null) tagLinks.DeleteOnSubmit(tagForRemoval);
-	}
-
 	public IQueryable<T> GetRows<T>() where T : class, IInterpretBankTable
 	{
 		return DataContext.GetTable<T>();
@@ -101,8 +93,6 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 		var currentDateTime = DateTime.Now.ToString();
 
 		table.InsertOnSubmit(new DbGlossary { Tag1 = newGlossary.GlossaryName, Id = ++maxId, GlossarySetting = languages });
-
-		//SubmitData();
 	}
 
 	public void InsertTag(TagModel newTag)
@@ -111,8 +101,6 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 
 		var maxId = table.Select(r => r.TagId).Max();
 		table.InsertOnSubmit(new DbTag { TagName = newTag.TagName, TagId = ++maxId });
-
-		//SubmitData();
 	}
 
 	public void RemoveTag(string tagName)
@@ -127,6 +115,24 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 			tags.DeleteOnSubmit(tagMarkedForRemoval);
 		if (tagLinkMarkedForRemoval.Any())
 			tagLinks.DeleteAllOnSubmit(tagLinkMarkedForRemoval);
+	}
+
+	public void RemoveTagFromGlossary(string tagName, string glossaryName)
+	{
+		var glossaryId = GetTable<DbGlossary>().ToList().FirstOrDefault(g => g.Tag1 == glossaryName)?.Id;
+		var tagLinks = GetTable<DbTagLink>();
+
+		var tagForRemoval =
+			tagLinks.ToList().FirstOrDefault(tl => tl.TagName == tagName && tl.GlossaryId == glossaryId);
+
+		if (tagForRemoval is not null)
+			tagLinks.DeleteOnSubmit(tagForRemoval);
+	}
+
+	public void Setup(string filepath)
+	{
+		SqLiteConnection = new SQLiteConnection($"Data Source={filepath}");
+		DataContext = new DataContext(SqLiteConnection);
 	}
 
 	public void SubmitData()

@@ -41,7 +41,7 @@ public class TerminologyService : ITerminologyService
 			//TODO: Add CommentAll as an entry level field
 			studioTerms.Add(new StudioTermEntry
 			{
-				Text = term[columns[0]], Extra1 = term[columns[1]], Extra2 = term[columns[2]]
+				Text = term.Item1[columns[0]], Extra1 = term.Item1[columns[1]], Extra2 = term.Item1[columns[2]]
 			});
 
 		studioTerms.RemoveAll(term => string.IsNullOrEmpty(term.Text));
@@ -65,4 +65,8 @@ public class TerminologyService : ITerminologyService
 
 	//var terms = DataContext.GetTable<GlossaryData>();
 	//var result = terms.WherePropertyEquals("Term1", word);
+	public void Dispose()
+	{
+		InterpretBankDataContext?.Dispose();
+	}
 }

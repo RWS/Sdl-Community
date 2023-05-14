@@ -23,5 +23,11 @@ namespace InterpretBank.SettingsService.UI
 			if (e.ChangedButton == MouseButton.Left)
 				DragMove();
 		}
+
+
+		private void ClearFilepathButton(object sender, RoutedEventArgs e)
+		{
+			FilepathTextBox.Clear();
+		}
 	}
 }

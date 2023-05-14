@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Linq;
 using System.Linq;
 using InterpretBank.GlossaryService.DAL.Interface;
@@ -7,7 +8,7 @@ using InterpretBank.SettingsService.Model;
 
 namespace InterpretBank.GlossaryService.Interface;
 
-public interface IInterpretBankDataContext
+public interface IInterpretBankDataContext : IDisposable
 {
 	IQueryable<T> GetRows<T>() where T : class, IInterpretBankTable;
 	Table<T> GetTable<T>() where T : class, IInterpretBankTable;
@@ -20,4 +21,5 @@ public interface IInterpretBankDataContext
 	List<Language> GetLanguages();
 	List<TagLinkModel> GetLinks();
 	void RemoveTagFromGlossary(string tagName, string glossaryName);
+	void Setup(string filepath);
 }

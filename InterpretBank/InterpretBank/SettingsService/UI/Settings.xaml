@@ -11,7 +11,7 @@
              d:DesignHeight="450"
              d:DesignWidth="800">
 	<UserControl.Resources>
-		<ResourceDictionary Source="../UI helpers/SettingsResources.xaml" />
+		<ResourceDictionary Source="../Styles/SettingsResources.xaml" />
 	</UserControl.Resources>
 		<Grid>
 			<Grid VerticalAlignment="Top">
@@ -20,25 +20,6 @@
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="Auto" />
 				</Grid.RowDefinitions>
-
-				<DockPanel Grid.Row="0"
-						   HorizontalAlignment="Stretch"
-						   Margin="10 0"
-						   VerticalAlignment="Top">
-					<TextBlock Text="{x:Static interpretBank:PluginResources.SettingsWindow_TextBlock_DBFilepath}"
-							   DockPanel.Dock="Top" />
-					<TextBox DockPanel.Dock="Bottom"
-							 VerticalContentAlignment="Center"
-							 IsReadOnly="True"
-							 Text="{Binding Filepath}">
-						<TextBox.InputBindings>
-
-							<MouseBinding Command="{Binding ChooseFilePathCommand}"
-										  MouseAction="LeftClick" />
-						</TextBox.InputBindings>
-					</TextBox>
-				</DockPanel>
-
 				<DockPanel Grid.Row="1"
 						   Margin="10 0"
 						   HorizontalAlignment="Stretch">
@@ -47,7 +28,7 @@
 					<sdl:MultiSelectComboBox Margin="0 2 0 0"
 											 Height="64"
 											 SelectedItems="{Binding SelectedTags, Mode=OneWayToSource}"
-											 ItemsSource="{Binding Tags}"
+											 ItemsSource="{Binding Tags, UpdateSourceTrigger=PropertyChanged}"
 											 DropdownItemTemplate="{StaticResource TagTemplate}"
 											 SelectedItemTemplate="{StaticResource TagTemplate}" />
 				</DockPanel>

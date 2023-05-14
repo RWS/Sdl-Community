@@ -22,17 +22,10 @@ namespace InterpretBank.SettingsService.ViewModel
 		private TagModel _selectedTag;
 		private List<TagModel> _tags;
 
-		public SetupGlossariesViewModel(IInterpretBankDataContext interpretBankDataContext, List<GlossaryModel> glossaries, List<TagModel> tags)
+		public SetupGlossariesViewModel(IInterpretBankDataContext interpretBankDataContext)
 		{
 			InterpretBankDataContext = interpretBankDataContext;
-			Languages = InterpretBankDataContext.GetLanguages().Select(l => new LanguageModel { Name = l.Name }).ToList();
-
-			var tagGroup = new TagsGroup(1, "All tags");
-			Tags = tags;
-			Tags.ForEach(t => t.Group = tagGroup);
-
-			Glossaries = glossaries;
-			TagLinks = InterpretBankDataContext.GetLinks();
+			
 
 			PropertyChanged += SettingsService_PropertyChanged;
 		}
@@ -85,6 +78,17 @@ namespace InterpretBank.SettingsService.ViewModel
 		}
 
 		public string Name => "Tag/set up glossaries";
+		public void Setup(List<GlossaryModel> glossaries, List<TagModel> tags)
+		{
+			Tags = tags;
+			Glossaries = glossaries;
+
+			Languages = InterpretBankDataContext.GetLanguages().Select(l => new LanguageModel { Name = l.Name }).ToList();
+			TagLinks = InterpretBankDataContext.GetLinks();
+
+			var tagGroup = new TagsGroup(1, "All tags");
+			Tags.ForEach(t => t.Group = tagGroup);
+		}
 
 		public TagModel SelectedTag
 		{
@@ -92,7 +96,7 @@ namespace InterpretBank.SettingsService.ViewModel
 			set => SetField(ref _selectedTag, value);
 		}
 
-		public List<TagLinkModel> TagLinks { get; set; }
+		public List<TagLinkModel>TagLinks { get; set; }
 
 		public List<TagModel> Tags
 		{
@@ -104,11 +108,10 @@ namespace InterpretBank.SettingsService.ViewModel
 
 		private void DeleteTag(object parameter)
 		{
-			if (parameter is string tagName)
-			{
-				Tags.Remove(Tags.Single(t => t.TagName == tagName));
-				InterpretBankDataContext.RemoveTag(tagName);
-			}
+			if (parameter is not string tagName) return;
+
+			Tags.Remove(Tags.Single(t => t.TagName == tagName));
+			InterpretBankDataContext.RemoveTag(tagName);
 		}
 
 		private void EnterGlossary(object parameter)

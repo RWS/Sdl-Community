@@ -118,7 +118,7 @@ public class DbTerm : IInterpretBankTable
 
 	private static PropertyInfo[] Properties => _properties ??= typeof(TermEntry).GetProperties();
 
-	public string this[string property, int? index = null]
+	public string this[string property]
 	{
 		get
 		{

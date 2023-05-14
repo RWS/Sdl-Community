@@ -14,10 +14,7 @@ namespace InterpretBank.Studio
 	{
 		public static InterpretBankProvider GetInterpretBankProvider()
 		{
-			var filepath = "C:\\Code\\RWS Community\\InterpretBank\\InterpretBankTests\\Resources\\InterpretBankDatabaseV6.db";
-			var sqLiteConnection = new SQLiteConnection($"Data Source={filepath}");
-
-			var interpretBankDataContext = new InterpretBankDataContext(sqLiteConnection);
+			var interpretBankDataContext = new InterpretBankDataContext();
 			var settingsService = new SettingsService.ViewModel.SettingsService(new OpenFileDialog(), interpretBankDataContext);
 
 			var termSearchService = new TerminologyService.TerminologyService(interpretBankDataContext);
