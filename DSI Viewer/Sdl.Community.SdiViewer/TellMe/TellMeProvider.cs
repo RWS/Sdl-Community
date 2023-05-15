@@ -5,7 +5,7 @@ namespace Sdl.Community.DsiViewer.TellMe
 	[TellMeProvider]
 	public class TellMeProvider : ITellMeProvider
 	{
-		public string Name => "DSI Viewer tell me provider";
+		public string Name => "DSI Viewer Tell Me provider";
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
