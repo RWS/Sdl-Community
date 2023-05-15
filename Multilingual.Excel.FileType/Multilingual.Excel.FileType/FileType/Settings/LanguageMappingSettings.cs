@@ -4,6 +4,7 @@ using Multilingual.Excel.FileType.Models;
 using Multilingual.Excel.FileType.Services;
 using Newtonsoft.Json;
 using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.FileTypeSupport.Framework.Core.Settings.Serialization;
 
 namespace Multilingual.Excel.FileType.FileType.Settings
@@ -28,7 +29,7 @@ namespace Multilingual.Excel.FileType.FileType.Settings
 		public LanguageMappingSettings()
 		{
 			_imageService = new ImageService();
-			_allLanguages = Language.GetAllLanguages().ToList();
+			_allLanguages = LanguageRegistryApi.Instance.GetAllLanguages().ToList();
 
 			_languageMappingFirstRowIndexDefault = 1;
 			_languageMappingFirstRowIsHeadingDefault = true;
