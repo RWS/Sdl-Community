@@ -11,6 +11,7 @@ using Sdl.Community.StarTransit.Shared.Events;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
 
 namespace Sdl.Community.StarTransit.Shared.Services
 {
@@ -28,7 +29,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 		public PackageService()
 		{
-			_languagePlatformLanguages= Language.GetAllLanguages().ToList();
+			_languagePlatformLanguages= LanguageRegistryApi.Instance.GetAllLanguages().ToList();
 			_fileService = new FileService();
 			_pluginDictionary =
 				new Dictionary<string, List<KeyValuePair<string, string>>>();
