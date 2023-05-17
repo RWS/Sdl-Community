@@ -12,6 +12,7 @@ using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.ProjectAutomation.Settings;
@@ -134,7 +135,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			{
 				Name = transitPackage.Name,
 				LocalProjectFolder = transitPackage.Location,
-				SourceLanguage = new Language(transitPackage.LanguagePairs[0].SourceLanguage),
+				SourceLanguage = LanguageRegistryApi.Instance.GetLanguage(transitPackage.LanguagePairs[0].SourceLanguage.Name),
 				TargetLanguages = target,
 				DueDate = transitPackage.DueDate,
 				ProjectOrigin = Resources.ProjectOrigin,

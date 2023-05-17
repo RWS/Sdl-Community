@@ -7,6 +7,7 @@ using Sdl.Community.StarTransit.Shared.Events;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.LanguagePlatform.Core.Tokenization;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -98,12 +99,12 @@ namespace Sdl.Community.StarTransit.Shared.Import
 		private string CreateTemporarySdlXliffs(List<string> sourceTmFiles, List<string> targetTmFiles, CultureInfo targetCultureInfo, PackageModel package)
 		{
 			var pathToExtractFolder = CreateFolderToExtract(Path.GetDirectoryName(targetTmFiles[0]));
-			var targetLang = new Language(targetCultureInfo);
+			var targetLang = LanguageRegistryApi.Instance.GetLanguage(targetCultureInfo.Name);
 			var projectInfo = new ProjectInfo
 			{
 				Name = $"TMExtractProject_{Guid.NewGuid()}",
 				LocalProjectFolder = pathToExtractFolder,
-				SourceLanguage = new Language(package.LanguagePairs[0].SourceLanguage),
+				SourceLanguage = LanguageRegistryApi.Instance.GetLanguage(package.LanguagePairs[0].SourceLanguage.Name),
 				TargetLanguages = new[] {targetLang} 
 			};
 

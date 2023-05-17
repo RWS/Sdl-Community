@@ -44,7 +44,7 @@
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization.Async">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.Async.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.Async.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.dll</HintPath>
@@ -56,15 +56,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.LanguagePlatform.Core, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+    <Reference Include="Sdl.LanguagePlatform.Core">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.LanguagePlatform.TranslationMemory, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi, Version=16.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
     </Reference>
