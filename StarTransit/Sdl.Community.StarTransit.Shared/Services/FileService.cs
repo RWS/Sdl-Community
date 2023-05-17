@@ -7,6 +7,7 @@ using NLog;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services.Interfaces;
 using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
 
 namespace Sdl.Community.StarTransit.Shared.Services
 {
@@ -62,7 +63,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 		public Language[] GetStudioTargetLanguages(List<LanguagePair> languagePairs)
 		{
-			return languagePairs != null ? languagePairs.Select(pair => new Language(pair.TargetLanguage)).ToArray() : new List<Language>().ToArray();
+			return languagePairs != null ? languagePairs.Select(pair => LanguageRegistryApi.Instance.GetLanguage(pair.TargetLanguage.Name)).ToArray() : new List<Language>().ToArray();
 		}
 
 		public bool AreFilesExtensionsSupported(string sourceFileExtension, string targetFileExtension)

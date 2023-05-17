@@ -260,15 +260,15 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					{
 						var targetLanguageCode = int.Parse(language);
 						var targetCultureInfo = GetMappingCultureForLcId(targetLanguageCode, model.Name);
-						targetLanguages.Add(new Language(targetCultureInfo));
+						targetLanguages.Add(LanguageRegistryApi.Instance.GetLanguage(targetCultureInfo.Name));
 
 						var pair = new LanguagePair
 						{
 							LanguagePairId = Guid.NewGuid(),
 							SourceLanguage = sourceLanguageCultureInfo,
 							TargetLanguage = targetCultureInfo,
-							TargetFlag = new Language(targetCultureInfo).GetFlagImage(),
-							SourceFlag = new Language(sourceLanguageCultureInfo).GetFlagImage(),
+							TargetFlag = LanguageRegistryApi.Instance.GetLanguage(targetCultureInfo.Name).GetFlagImage(),
+							SourceFlag = LanguageRegistryApi.Instance.GetLanguage(sourceLanguageCultureInfo.Name).GetFlagImage(),
 							NoTm = true
 						};
 						model.LanguagePairs.Add(pair);
@@ -288,7 +288,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			}
 
 			model.SourceLanguage = model.LanguagePairs[0].SourceLanguage;
-			model.SourceFlag = new Language(model.SourceLanguage).GetFlagImage();
+			model.SourceFlag = LanguageRegistryApi.Instance.GetLanguage(model.SourceLanguage.Name).GetFlagImage();
 			model.TargetLanguages = targetLanguages.ToArray();
 			model.PackageContainsTms = PackageContainsTms(model);
 
