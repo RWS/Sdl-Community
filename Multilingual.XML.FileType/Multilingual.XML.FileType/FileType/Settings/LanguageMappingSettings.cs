@@ -4,6 +4,7 @@ using Multilingual.XML.FileType.Models;
 using Multilingual.XML.FileType.Services;
 using Newtonsoft.Json;
 using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.FileTypeSupport.Framework.Core.Settings.Serialization;
 
 namespace Multilingual.XML.FileType.FileType.Settings
@@ -28,7 +29,7 @@ namespace Multilingual.XML.FileType.FileType.Settings
 		public LanguageMappingSettings()
 		{
 			_imageService = new ImageService();
-			_allLanguages = Language.GetAllLanguages().ToList();
+			_allLanguages = LanguageRegistryApi.Instance.GetAllLanguages().ToList();
 
 			_languageMappingLanguagesXPathDefault = "/";
 			_languageMappingCommentsXPathDefault = "";
