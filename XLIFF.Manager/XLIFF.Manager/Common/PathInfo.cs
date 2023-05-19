@@ -5,7 +5,7 @@ namespace Sdl.Community.XLIFF.Manager.Common
 {
 	public class PathInfo: ICloneable
 	{
-		private const string SdlCommunityPathName = "RWS AppStore";
+		private const string SdlCommunityPathName = "Trados AppStore";
 		private const string ApplicationPathName = "XLIFF.Manager";
 		private const string SettingsPathName = "Settings";
 		private const string LogsPathName = "Logs";
