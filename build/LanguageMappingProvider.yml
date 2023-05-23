@@ -40,7 +40,7 @@ steps:
   displayName: 'dotnet restore'
   inputs:
     command: 'restore'
-    projects: 'LanguageMappingProvider/*.sln'
+    projects: 'LanguageMappingProvider/LanguageMappingProvider/*.sln'
     feedsToUse: 'select'
     vstsFeed: 'af66e256-9c46-4fba-ad75-09bf110ec1cc'
     includeNuGetOrg: false
@@ -54,7 +54,7 @@ steps:
 - task: VSBuild@1
   displayName: 'Build solution LanguageMappingProvider.sln'
   inputs:
-    solution: LanguageMappingProvider\LanguageMappingProvider.sln
+    solution: LanguageMappingProvider\LanguageMappingProvider\LanguageMappingProvider.sln
     platform: $(BuildPlatform)
     configuration: $(BuildConfiguration)
     msbuildArchitecture: x64
@@ -63,7 +63,7 @@ steps:
   displayName: 'PackNuGet'
   inputs:
     command: 'pack'
-    packagesToPack: 'LanguageMappingProvider/LanguageMappingProvider.csproj'
+    packagesToPack: 'LanguageMappingProvider/LanguageMappingProvider/LanguageMappingProvider.csproj'
     versioningScheme: 'byBuildNumber'
     
 - task: PublishBuildArtifacts@1
