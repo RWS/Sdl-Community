@@ -8,7 +8,7 @@ namespace Sdl.Community.ExportToExcel.TellMe
 	{
 		public CommunityForumAction()
 		{
-			Name = "SDL Community AppStore forum";
+			Name = "RWS Community AppStore forum";
 		}
 
 		public override void Execute()

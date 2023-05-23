@@ -36,7 +36,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
 
         /// <summary>
         /// Show the plug-in settings form when the user is adding the translation provider plug-in
-        /// through the GUI of SDL Trados Studio
+        /// through the GUI of Trados Studio
         /// </summary>
         /// <param name="owner"></param>
         /// <param name="languagePairs"></param>
@@ -125,7 +125,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
 
         /// <summary>
         /// Determines whether the plug-in settings can be changed
-        /// by displaying the Settings button in SDL Trados Studio.
+        /// by displaying the Settings button in Trados Studio.
         /// </summary>
 
         public bool SupportsEditing
@@ -135,7 +135,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
 
         /// <summary>
         /// If the plug-in settings can be changed by the user,
-        /// SDL Trados Studio will display a Settings button.
+        /// Trados Studio will display a Settings button.
         /// By clicking this button, users raise the plug-in user interface,
         /// in which they can modify any applicable settings, in our implementation
         /// the delimiter character and the list file name.
@@ -185,7 +185,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
 
         /// <summary>
         /// This gets called when a TranslationProviderAuthenticationException is thrown
-        /// Since SDL Studio doesn't pass the provider instance here and even if we do a workaround...
+        /// Since Trados Studio doesn't pass the provider instance here and even if we do a workaround...
         /// any new options set in the form that comes up are never saved to the project XML...
         /// so there is no way to change any options, only to provide the credentials
         /// </summary>

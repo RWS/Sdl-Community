@@ -23,7 +23,7 @@ namespace CustomViewExample.Ribbon.Actions
 		protected override void Execute()
 		{
 			var customViewPathInfo = new CustomViewPathInfo();
-			var pathInfo = new PathInfo(PluginResources.Plugin_Name, "16");
+			var pathInfo = new PathInfo(PluginResources.Plugin_Name, "17");
 			var tipsProvider = new TipsProvider(pathInfo);
 			var usefulTipsService = new UsefulTipsService(tipsProvider, customViewPathInfo);
 

@@ -379,11 +379,10 @@ namespace Multilingual.XML.FileType.Services
 		private string GetTargetSubContent(Stream subContentStream)
 		{
 			string subContent;
-			using (var reader = new StreamReader(subContentStream))
+			using (var reader = new StreamReader(subContentStream, _nativeFileProperties.Encoding.Encoding))
 			{
 				subContent = reader.ReadToEnd();
 			}
-
 
 			var segmentProperties = _segmentBuilder.CreateSegmentPairProperties();
 			var segment = GetSegment(subContent, segmentProperties);

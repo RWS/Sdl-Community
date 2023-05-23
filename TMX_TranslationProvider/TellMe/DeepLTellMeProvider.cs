@@ -5,7 +5,7 @@ namespace TMX_TranslationProvider.Tellme
 	[TellMeProvider]
     public class TmxProviderTellMeProvider : ITellMeProvider
     {
-        public string Name => "TmxProvider tell me provider";
+        public string Name => "TmxProvider Tell Me provider";
 
         public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
         {

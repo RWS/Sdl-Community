@@ -189,41 +189,16 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 			SetMicrosoftProviderOptions();
 			SetGeneralProviderOptions();
-			DeleteCredentialsIfNecessary();
 			SaveCredentials();
 			DialogResult = true;
 			CloseEventRaised?.Invoke();
-		}
-
-		private void DeleteCredentialsIfNecessary()
-		{
-			var isMicrosoftProvider = _providerControlViewModel.SelectedTranslationOption.ProviderType == MTETranslationOptions.ProviderType.MicrosoftTranslator;
-			if (isMicrosoftProvider && !Options.PersistMicrosoftCredentials)
-			{
-				RemoveCredentialsFromStore(new Uri(Constants.MicrosoftProviderFullScheme));
-			}
-
-			if (isMicrosoftProvider && !Options.PersistPrivateEndpoint)
-			{
-				RemoveCredentialsFromStore(new Uri(Constants.MicrosoftProviderPrivateEndpointScheme));
-			}
-		}
-
-		private void RemoveCredentialsFromStore(Uri providerUri)
-		{
-			if (_credentialStore.GetCredential(providerUri) is null)
-			{
-				return;
-			}
-
-			_credentialStore.RemoveCredential(providerUri);
 		}
 
 		private bool AreMicrosoftCredentialsValid()
 		{
 			try
 			{
-				var apiConnecter = new ProviderConnecter(_providerControlViewModel.ClientID, _providerControlViewModel.Region?.Key, _htmlUtil, _providerControlViewModel.PrivateEndpoint);
+				var apiConnecter = new ProviderConnecter(_providerControlViewModel.ClientID, _providerControlViewModel.Region?.Key, _htmlUtil, Options.PrivateEndpoint);
 				if (_providerControlViewModel.UsePrivateEndpoint)
 				{
 					apiConnecter.EnsurePrivateEndpointConnectivity();
@@ -237,7 +212,27 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			}
 			catch (Exception e)
 			{
-				ErrorHandler.HandleError(e);
+				const string AccessDeniedMessage = "401 (Access Denied)";
+				const string InvalidRegionMessage = "remote name could not be resolved";
+				var originalError = e;
+				do
+				{
+					if (e.Message.Contains(InvalidRegionMessage))
+					{
+						ErrorHandler.HandleError("Couldn't connect on the selected region, please try again using the region that is associated with your account.", "Connection failed");
+						return false;
+					}
+
+					if (e.Message.Contains(AccessDeniedMessage))
+					{
+						ErrorHandler.HandleError("Couldn't connect with the current configuration, please check your API Key and Region and try again.", "Connection failed");
+						return false;
+					}
+
+					e = e.InnerException;
+				} while (e is not null);
+
+				ErrorHandler.HandleError(originalError);
 				return false;
 			}
 		}
@@ -283,7 +278,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			Options.CategoryID = _providerControlViewModel.CategoryID;
 			Options.PersistMicrosoftCredentials = _providerControlViewModel.PersistMicrosoftKey;
 			Options.PersistPrivateEndpoint = _providerControlViewModel.PersistPrivateEndpoint;
-			Options.PrivateEndpoint = _providerControlViewModel.PrivateEndpoint;
+			Options.PrivateEndpoint = _providerControlViewModel.UsePrivateEndpoint ? _providerControlViewModel.PrivateEndpoint : string.Empty;
 		}
 
 		private void NavigateTo(object parameter)
@@ -331,14 +326,12 @@ namespace MicrosoftTranslatorProvider.ViewModel
 														  : persistsPrivateEndpoint ? genericCredentials["PrivateEndpoint"]
 																					: string.Empty;
 
-
-
 				bool.TryParse(genericCredentials["UseCategoryID"], out var useCategoryId);
 				_providerControlViewModel.UseCategoryID = useCategoryId;
 				_providerControlViewModel.CategoryID = useCategoryId ? genericCredentials["CategoryID"] : string.Empty;
 
 				_providerControlViewModel.Region = _showSettingsViews
-												 ? _providerControlViewModel.Regions.FirstOrDefault(x => x.Name.Equals(genericCredentials["Region"])) ?? _providerControlViewModel.Regions.FirstOrDefault()
+												 ? _providerControlViewModel.Regions.FirstOrDefault(x => x.Key.Equals(genericCredentials["Region"])) ?? _providerControlViewModel.Regions.FirstOrDefault()
 												 : _providerControlViewModel.Regions.FirstOrDefault();
 			}
 			catch { }
@@ -369,7 +362,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 							   ? _providerControlViewModel.CategoryID
 							   : string.Empty,
 
-				["Region"] = _providerControlViewModel.Region.Name
+				["Region"] = _providerControlViewModel.Region.Key
 			};
 
 			var credentials = new TranslationProviderCredential(currentCredentials.ToString(), true);

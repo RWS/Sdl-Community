@@ -14,6 +14,7 @@ using Multilingual.Excel.FileType.Services;
 using Rws.MultiSelectComboBox.API;
 using Rws.MultiSelectComboBox.EventArgs;
 using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
 using static Multilingual.Excel.FileType.Common.Enumerators;
 
 namespace Multilingual.Excel.FileType.FileType.ViewModels
@@ -81,7 +82,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 
 			IsDefault = languageMapping?.IsDefault ?? false;
 
-			LanguageItems = Language.GetAllLanguages()
+			LanguageItems = LanguageRegistryApi.Instance.GetAllLanguages()
 				.Select(language => new LanguageItem
 				{
 					Id = language.CultureInfo.Name,

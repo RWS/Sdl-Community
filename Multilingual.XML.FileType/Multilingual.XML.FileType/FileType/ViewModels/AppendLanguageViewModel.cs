@@ -10,6 +10,7 @@ using Multilingual.XML.FileType.Services;
 using Rws.MultiSelectComboBox.API;
 using Rws.MultiSelectComboBox.EventArgs;
 using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.Core.Settings;
 
 namespace Multilingual.XML.FileType.FileType.ViewModels
@@ -48,7 +49,7 @@ namespace Multilingual.XML.FileType.FileType.ViewModels
 			XPath = languageMapping?.XPath;
 			//CommentXPath = languageMapping?.CommentXPath;
 			
-			LanguageItems = Language.GetAllLanguages()
+			LanguageItems = LanguageRegistryApi.Instance.GetAllLanguages()
 				.Select(language => new LanguageItem
 				{
 					Id = language.CultureInfo.Name,

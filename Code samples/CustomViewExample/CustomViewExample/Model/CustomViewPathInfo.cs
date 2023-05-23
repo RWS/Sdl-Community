@@ -5,7 +5,7 @@ namespace CustomViewExample.Model
 {
 	public class CustomViewPathInfo
 	{
-		private const string AppStorePathName = "RWS AppStore";
+		private const string AppStorePathName = "Trados AppStore";
 		private const string ApplicationPathName = "CustomViewExample";
 		private const string SettingsPathName = "Settings";
 		private const string SettingsFileName = "Settings.json";

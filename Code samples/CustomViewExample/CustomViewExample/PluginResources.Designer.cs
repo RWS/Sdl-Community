@@ -125,6 +125,15 @@ namespace CustomViewExample {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Actions.
+        /// </summary>
+        internal static string CustomViewExample_EditorActionsGroup_Name {
+            get {
+                return ResourceManager.GetString("CustomViewExample_EditorActionsGroup_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon CustomViewExample_Icon {
@@ -196,6 +205,24 @@ namespace CustomViewExample {
         internal static string CustomViewExample_RemoveUsefulTipsAction_Name {
             get {
                 return ResourceManager.GetString("CustomViewExample_RemoveUsefulTipsAction_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test to confirm the 3rd segment from an embedded document is selected..
+        /// </summary>
+        internal static string CustomViewExample_SelectSegmentAction_Description {
+            get {
+                return ResourceManager.GetString("CustomViewExample_SelectSegmentAction_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select 3rd Segment.
+        /// </summary>
+        internal static string CustomViewExample_SelectSegmentAction_Name {
+            get {
+                return ResourceManager.GetString("CustomViewExample_SelectSegmentAction_Name", resourceCulture);
             }
         }
         
