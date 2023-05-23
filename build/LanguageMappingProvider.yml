@@ -15,7 +15,7 @@ pr:
      - LanguageMappingProvider/*
 
 pool: 
-  vmImage : 'windows-2022'
+  vmImage : '$(DefaultBuildVm)'
 
 variables:
 - name: Version.MajorMinor
