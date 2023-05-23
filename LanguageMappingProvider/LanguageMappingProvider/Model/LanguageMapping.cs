@@ -1,6 +1,6 @@
 ﻿namespace LanguageMappingProvider.Model
 {
-    public class LanguageMapping : BaseModel
+	public class LanguageMapping : BaseModel
     {
         private int _index;
         private string _name;

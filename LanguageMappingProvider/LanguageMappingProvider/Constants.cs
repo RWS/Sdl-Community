@@ -1,4 +1,7 @@
-﻿namespace LanguageMappingProvider
+﻿using System;
+using System.IO;
+
+namespace LanguageMappingProvider
 {
     public static class Constants
     {

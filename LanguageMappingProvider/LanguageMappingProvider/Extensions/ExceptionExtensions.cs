@@ -1,6 +1,8 @@
-﻿namespace LanguageMappingProvider.Extensions
+﻿using System;
+
+namespace LanguageMappingProvider.Extensions
 {
-    public class DatabaseInitializationException : Exception
+	public class DatabaseInitializationException : Exception
     {
         public DatabaseInitializationException()
             : base("The pluginSupportedLanguages collection must be provided and must contain at least one supported language in order to initialize this class and create the database.") { }

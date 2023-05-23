@@ -7,7 +7,6 @@
 		<Description>Language Mapping Provider is a library that provides functionality for managing language mappings in a database. It allows you to insert, update, and retrieve language mappings for various purposes, such as language code conversions or language-specific operations.</Description>
 
 		<OutputType>Library</OutputType>
-		<ImplicitUsings>enable</ImplicitUsings>
 		<TargetFramework>net6.0</TargetFramework>
 		
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
