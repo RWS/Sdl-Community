@@ -13,8 +13,8 @@ namespace LanguageMappingProvider.Database
     {
         private readonly string _filePath;
         private readonly SQLiteConnection _sqliteConnection;
-        private readonly IList<MappedLanguage> _pluginSupportedLanguages;
-        private readonly IDictionary<int, MappedLanguage> _mappedLanguagesDictionary;
+        private readonly IList<LanguageMapping> _pluginSupportedLanguages;
+        private readonly IDictionary<int, LanguageMapping> _mappedLanguagesDictionary;
 
         /// <summary>
         /// Initializes a new instance of the SQLiteDatabase class
@@ -34,18 +34,18 @@ namespace LanguageMappingProvider.Database
         /// </param>
         /// 
         /// <exception cref="DatabaseInitializationException">Thrown when the pluginSupportedLanguages is not set and the database doesn't exist.</exception>
-        public LanguageMappingDatabase(string pluginName, IList<MappedLanguage> pluginSupportedLanguages)
+        public LanguageMappingDatabase(string pluginName, IList<LanguageMapping> pluginSupportedLanguages)
         {
             _pluginSupportedLanguages = pluginSupportedLanguages;
             _filePath = string.Format(Constants.DatabaseFilePath, pluginName);
-            _mappedLanguagesDictionary = new Dictionary<int, MappedLanguage>();
+            _mappedLanguagesDictionary = new Dictionary<int, LanguageMapping>();
             _sqliteConnection = new SQLiteConnection($"Data Source={_filePath}");
             EnsureDatabaseFileExists();
             EnsureTableExists();
             LoadMappedLanguages();
         }
 
-        public void InsertLanguage(MappedLanguage mappedLanguage)
+        public void InsertLanguage(LanguageMapping mappedLanguage)
         {
             EnsureMappedLanguageIsValid(mappedLanguage);
             var syntax = string.Format(Constants.SQL_InsertData, mappedLanguage.Name, mappedLanguage.Region, mappedLanguage.TradosCode, mappedLanguage.LanguageCode);
@@ -53,7 +53,7 @@ namespace LanguageMappingProvider.Database
             LoadMappedLanguages();
         }
 
-        public void UpdateAll(IEnumerable<MappedLanguage> mappedLanguages)
+        public void UpdateAll(IEnumerable<LanguageMapping> mappedLanguages)
         {
             if (mappedLanguages is null || !mappedLanguages.Any())
             {
@@ -72,7 +72,7 @@ namespace LanguageMappingProvider.Database
             LoadMappedLanguages();
         }
 
-        public bool HasMappedLanguagesChanged(IEnumerable<MappedLanguage> mappedLanguages)
+        public bool HasMappedLanguagesChanged(IEnumerable<LanguageMapping> mappedLanguages)
         {
             if (mappedLanguages is null || !mappedLanguages.Any())
             {
@@ -84,9 +84,9 @@ namespace LanguageMappingProvider.Database
             return HasMappedLanguagesChanged(mappedLanguagesDictionary);
         }
 
-        public IEnumerable<MappedLanguage> GetMappedLanguages()
+        public IEnumerable<LanguageMapping> GetMappedLanguages()
         {
-            return _mappedLanguagesDictionary.Values.Select(mappedLanguage => new MappedLanguage
+            return _mappedLanguagesDictionary.Values.Select(mappedLanguage => new LanguageMapping
             {
                 Index = mappedLanguage.Index,
                 Name = mappedLanguage.Name,
@@ -111,7 +111,7 @@ namespace LanguageMappingProvider.Database
         private void LoadMappedLanguages()
         {
             IDbConnection connection = _sqliteConnection;
-            var databaseCollection = connection.Query<MappedLanguage>(Constants.SQL_SelectData, new DynamicParameters());
+            var databaseCollection = connection.Query<LanguageMapping>(Constants.SQL_SelectData, new DynamicParameters());
 
             _mappedLanguagesDictionary.Clear();
             foreach (var pair in databaseCollection)
@@ -180,10 +180,10 @@ namespace LanguageMappingProvider.Database
             InsertCollection(codes);
         }
 
-        private static IList<MappedLanguage> GetTradosLanguages()
+        private static IList<LanguageMapping> GetTradosLanguages()
         {
             var languages = LanguageRegistryApi.Instance.GetAllLanguages();
-            var mappedLanguages = new List<MappedLanguage>();
+            var mappedLanguages = new List<LanguageMapping>();
 
             foreach (var language in languages)
             {
@@ -197,7 +197,7 @@ namespace LanguageMappingProvider.Database
                 var regionStartIndex = languageName.IndexOf('(') + 1;
                 var regionEndIndex = languageName.Length - 1;
 
-                mappedLanguages.Add(new MappedLanguage
+                mappedLanguages.Add(new LanguageMapping
                 {
                     Name = languageName[..(regionStartIndex - 2)],
                     Region = languageName[regionStartIndex..regionEndIndex],
@@ -208,7 +208,7 @@ namespace LanguageMappingProvider.Database
             return mappedLanguages;
         }
 
-        public void UpdateMappingCodes(IEnumerable<MappedLanguage> mappingList)
+        public void UpdateMappingCodes(IEnumerable<LanguageMapping> mappingList)
         {
             var mappingDictionary = _pluginSupportedLanguages.ToDictionary(l => (l.Name, l.Region), l => l.LanguageCode);
             foreach (var mappedLanguage in mappingList)
@@ -222,7 +222,7 @@ namespace LanguageMappingProvider.Database
             }
         }
 
-        private void InsertCollection(IEnumerable<MappedLanguage> mappedLanguages)
+        private void InsertCollection(IEnumerable<LanguageMapping> mappedLanguages)
         {
             if (mappedLanguages is null
              || !mappedLanguages.Any())
@@ -234,12 +234,12 @@ namespace LanguageMappingProvider.Database
             ExecuteCommand(syntax);
         }
 
-        private static string GenerateInsertSyntax(IEnumerable<MappedLanguage> collection)
+        private static string GenerateInsertSyntax(IEnumerable<LanguageMapping> collection)
         {
             var syntaxBuilder = new StringBuilder();
             syntaxBuilder.AppendLine(Constants.SQL_InsertData_StringBuilder);
 
-            foreach (MappedLanguage item in collection)
+            foreach (LanguageMapping item in collection)
             {
                 syntaxBuilder.AppendLine($"(\"{item.Name}\", \"{item.Region}\", \"{item.TradosCode}\", \"{item.LanguageCode}\"),");
             }
@@ -249,7 +249,7 @@ namespace LanguageMappingProvider.Database
             return syntaxBuilder.ToString();
         }
 
-        private void UpdateAll(IDictionary<int, MappedLanguage> mappedLanguagesDictionary)
+        private void UpdateAll(IDictionary<int, LanguageMapping> mappedLanguagesDictionary)
         {
             foreach (var mappedLanguage in mappedLanguagesDictionary)
             {
@@ -257,7 +257,7 @@ namespace LanguageMappingProvider.Database
                 var index = mappedLanguage.Key;
                 var currentPair = mappedLanguage.Value;
 
-                if (!_mappedLanguagesDictionary.TryGetValue(index, out MappedLanguage originalPair)
+                if (!_mappedLanguagesDictionary.TryGetValue(index, out LanguageMapping originalPair)
                  || !string.Equals(currentPair.LanguageCode, originalPair.LanguageCode))
                 {
                     UpdateAt(index, nameof(currentPair.LanguageCode), currentPair.LanguageCode);
@@ -265,7 +265,7 @@ namespace LanguageMappingProvider.Database
             }
         }
 
-        private bool HasMappedLanguagesChanged(IDictionary<int, MappedLanguage> mappedLanguagesDictionary)
+        private bool HasMappedLanguagesChanged(IDictionary<int, LanguageMapping> mappedLanguagesDictionary)
         {
             foreach (var pair in _mappedLanguagesDictionary)
             {
@@ -282,7 +282,7 @@ namespace LanguageMappingProvider.Database
             return mappedLanguagesDictionary.Count != _mappedLanguagesDictionary.Count;
         }
 
-        private static void EnsurePluginSupportedLanguagesAreValid(IEnumerable<MappedLanguage> pluginSupportedLanguages)
+        private static void EnsurePluginSupportedLanguagesAreValid(IEnumerable<LanguageMapping> pluginSupportedLanguages)
         {
             if (pluginSupportedLanguages is null
              || !pluginSupportedLanguages.Any())
@@ -291,7 +291,7 @@ namespace LanguageMappingProvider.Database
             }
         }
 
-        private static void EnsureMappedLanguageIsValid(MappedLanguage mappedLanguage)
+        private static void EnsureMappedLanguageIsValid(LanguageMapping mappedLanguage)
         {
             if (mappedLanguage is null)
             {
@@ -327,7 +327,7 @@ namespace LanguageMappingProvider.Database
             }
         }
 
-        private static void EnsureCollectionIsValid(IEnumerable<MappedLanguage> collection)
+        private static void EnsureCollectionIsValid(IEnumerable<LanguageMapping> collection)
         {
             var indexSet = new HashSet<int>();
             foreach (var mappedLanguage in collection)

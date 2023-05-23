@@ -11,7 +11,7 @@ namespace LanguageMappingProvider.Database.Interface
         /// and inserts the corresponding data into the appropriate table in the database.
         /// </summary>
         /// <param name="mappedLanguage">A MappedLanguage object representing the language to be inserted into the database.</param>
-        void InsertLanguage(MappedLanguage mappedLanguage);
+        void InsertLanguage(LanguageMapping mappedLanguage);
 
         /// <summary>
         /// This function is responsible for updating all the 
@@ -21,7 +21,7 @@ namespace LanguageMappingProvider.Database.Interface
         /// and updates the corresponding records in the database.
         /// </summary>
         /// <param name="mappedLanguages">An enumerable collection of MappedLanguage objects that represent the modified language values to be updated in the database.</param>
-        void UpdateAll(IEnumerable<MappedLanguage> mappedLanguages);
+        void UpdateAll(IEnumerable<LanguageMapping> mappedLanguages);
 
         /// <summary>
         /// The updateAt function updates a specific field of a language record in the database at the given index.
@@ -38,7 +38,7 @@ namespace LanguageMappingProvider.Database.Interface
         /// </summary>
         /// <param name="mappedLanguages">An enumerable collection of MappedLanguage objects representing the languages to be checked for changes.</param>
         /// <returns>It returns a boolean value indicating whether the IEnumerable is different from the data stored in the database.</returns>
-        bool HasMappedLanguagesChanged(IEnumerable<MappedLanguage> mappedLanguages);
+        bool HasMappedLanguagesChanged(IEnumerable<LanguageMapping> mappedLanguages);
 
         /// <summary>
         /// Retrieves language data from the database and returns it as an IEnumerable of MappedLanguage objects.
@@ -46,7 +46,7 @@ namespace LanguageMappingProvider.Database.Interface
         /// <returns>
         /// An IEnumerable of MappedLanguage objects representing the language data from the database.
         /// </returns>
-        IEnumerable<MappedLanguage> GetMappedLanguages();
+        IEnumerable<LanguageMapping> GetMappedLanguages();
 
         /// <summary>
         /// This function sets all the values in the database to their default values.
