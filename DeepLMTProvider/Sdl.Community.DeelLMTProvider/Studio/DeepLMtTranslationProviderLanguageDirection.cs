@@ -29,11 +29,15 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         }
 
         public bool CanReverseLanguageDirection => throw new NotImplementedException();
-        public CultureInfo SourceLanguage => _languageDirection.SourceCulture;
-        public CultureInfo TargetLanguage => _languageDirection.TargetCulture;
+        //public CultureInfo SourceLanguage => _languageDirection.SourceCulture;
+        //public CultureInfo TargetLanguage => _languageDirection.TargetCulture;
         public ITranslationProvider TranslationProvider => _deepLMtTranslationProvider;
 
-        public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
+		CultureCode ITranslationProviderLanguageDirection.SourceLanguage => _languageDirection.SourceCulture;
+
+		CultureCode ITranslationProviderLanguageDirection.TargetLanguage => _languageDirection.TargetCulture;
+
+		public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
         {
             throw new NotImplementedException();
         }

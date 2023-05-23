@@ -91,7 +91,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         {
             foreach (var languagePair in languagePairs)
             {
-                var targetLanguage = languagePair.TargetCulture.TwoLetterISOLanguageName.ToUpper();
+                var targetLanguage = languagePair.TargetCulture.RegionNeutralName.ToUpper();
                 if (DeepLTranslationProviderConnecter.IsLanguagePairSupported(languagePair.SourceCulture, languagePair.TargetCulture) && !Options.LanguagesSupported.ContainsKey(targetLanguage))
                 {
                     if (!Options.LanguagesSupported.ContainsKey(languagePair.TargetCultureName))

@@ -204,7 +204,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 		private Formality GetFormality(LanguagePair languageDirection)
 		{
 			if (!SupportedTargetLanguagesAndFormalities.TryGetValue(
-							languageDirection.TargetCulture.TwoLetterISOLanguageName.ToUpper(), out var supportsFormality))
+							languageDirection.TargetCulture.RegionNeutralName.ToUpper(), out var supportsFormality))
 			{
 				SupportedTargetLanguagesAndFormalities.TryGetValue(languageDirection.TargetCulture.ToString().ToUpper(),
 					out supportsFormality);
