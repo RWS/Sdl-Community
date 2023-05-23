@@ -3,7 +3,7 @@ using System.IO;
 
 namespace LanguageMappingProvider
 {
-    public static class Constants
+	public static class Constants
     {
         private const string DatabaseFileName = "{0}data.sqlite3";
         public static string PluginAppDataLocation = $@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\Trados AppStore\Language Mapping Provider";
