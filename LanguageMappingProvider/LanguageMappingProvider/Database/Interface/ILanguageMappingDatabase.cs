@@ -3,7 +3,7 @@ using LanguageMappingProvider.Model;
 
 namespace LanguageMappingProvider.Database.Interface
 {
-    public interface ILanguageMappingDatabase
+	public interface ILanguageMappingDatabase
     {
         /// <summary>
         /// This function is responsible for adding a new MappedLanguage object to the database.

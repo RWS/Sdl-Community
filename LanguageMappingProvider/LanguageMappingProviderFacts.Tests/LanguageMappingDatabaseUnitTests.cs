@@ -5,7 +5,7 @@ using LanguageMappingProvider.Model;
 
 namespace LanguageMappingProviderFacts.Tests
 {
-    public class LanguageMappingDatabaseUnitTests
+	public class LanguageMappingDatabaseUnitTests
     {
         private readonly List<LanguageMapping> _mappedLanguages;
         private ILanguageMappingDatabase _database;
@@ -18,7 +18,7 @@ namespace LanguageMappingProviderFacts.Tests
                 new LanguageMapping { Name = "English", Region = "United States", LanguageCode = "en_US" },
             };
 
-            _database = new LanguageMappingDatabase("unittesting", _mappedLanguages);
+            _database = new LanguageMappingDatabase("unittesting2", _mappedLanguages);
         }
 
         [Fact]

@@ -1,19 +1,19 @@
-﻿using Dapper;
-using LanguageMappingProvider.Database.Interface;
-using LanguageMappingProvider.Model;
-using LanguageMappingProvider.Extensions;
-using Sdl.Core.Globalization.LanguageRegistry;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
-using System.Text;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Linq;
+using System.Text;
+using Dapper;
+using LanguageMappingProvider.Database.Interface;
+using LanguageMappingProvider.Extensions;
+using LanguageMappingProvider.Model;
+using Sdl.Core.Globalization.LanguageRegistry;
 
 namespace LanguageMappingProvider.Database
 {
-    public class LanguageMappingDatabase : ILanguageMappingDatabase, IDisposable
+	public class LanguageMappingDatabase : ILanguageMappingDatabase, IDisposable
     {
         private readonly string _filePath;
         private readonly SQLiteConnection _sqliteConnection;
@@ -71,7 +71,7 @@ namespace LanguageMappingProvider.Database
         public void UpdateAt(int index, string field, string value)
         {
             EnsureCanUpdate(index, field, value);
-            string syntax = string.Format(Constants.SQL_UpdateData, field, value, index);
+            var syntax = string.Format(Constants.SQL_UpdateData, field, value, index);
             ExecuteCommand(syntax);
             LoadMappedLanguages();
         }
@@ -203,8 +203,8 @@ namespace LanguageMappingProvider.Database
 
                 mappedLanguages.Add(new LanguageMapping
                 {
-                    Name = languageName[..(regionStartIndex - 2)],
-                    Region = languageName[regionStartIndex..regionEndIndex],
+                    Name = languageName.Substring(0, regionStartIndex - 2),
+                    Region = languageName.Substring(regionStartIndex, regionEndIndex - regionStartIndex - 1),
                     TradosCode = language.CultureInfo.Name
                 });
             }
@@ -243,7 +243,7 @@ namespace LanguageMappingProvider.Database
             var syntaxBuilder = new StringBuilder();
             syntaxBuilder.AppendLine(Constants.SQL_InsertData_StringBuilder);
 
-            foreach (LanguageMapping item in collection)
+            foreach (var item in collection)
             {
                 syntaxBuilder.AppendLine($"(\"{item.Name}\", \"{item.Region}\", \"{item.TradosCode}\", \"{item.LanguageCode}\"),");
             }
