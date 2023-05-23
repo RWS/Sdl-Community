@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MultiLMP\LanguageMappingProvider.csproj" />
+    <ProjectReference Include="..\LanguageMappingProvider\LanguageMappingProvider.csproj" />
   </ItemGroup>
 
 </Project>
