@@ -1,4 +1,5 @@
-﻿using LanguageMappingProvider.Model;
+using System.Collections.Generic;
+using LanguageMappingProvider.Model;
 
 namespace LanguageMappingProvider.Database.Interface
 {

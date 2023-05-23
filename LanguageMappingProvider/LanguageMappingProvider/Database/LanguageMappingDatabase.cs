@@ -6,6 +6,10 @@ using Sdl.Core.Globalization.LanguageRegistry;
 using System.Data;
 using System.Data.SQLite;
 using System.Text;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.IO;
 
 namespace LanguageMappingProvider.Database
 {
