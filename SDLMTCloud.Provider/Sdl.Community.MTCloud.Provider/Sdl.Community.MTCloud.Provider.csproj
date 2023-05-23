@@ -16,6 +16,7 @@
 	<ItemGroup>
 	  <None Remove="Resources\dropdownarrow.png" />
 	  <None Remove="Resources\Report.xsl" />
+	  <None Remove="Resources\rwslmplogo.png" />
 	  <None Remove="UiHelpers\Watermark\WatermarkPasswordBoxResources.xaml" />
 	</ItemGroup>
 	<ItemGroup>
@@ -148,6 +149,7 @@
     <Resource Include="Resources\checked.png" />
     <Resource Include="Resources\add_dictionary.ico" />
     <Resource Include="Resources\Additional logo.png" />
+    <Resource Include="Resources\rwslmplogo.png" />
     <Resource Include="Resources\soontobecome.png" />
     <Resource Include="Resources\success.png" />
     <Resource Include="Resources\Unchecked.ico" />
@@ -179,9 +181,8 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="LanguageMappingProvider" Version="1.0.36" />
     <PackageReference Include="Microsoft.Office.Interop.Excel">
-      <Version>15.0.4795.1000</Version>
+      <Version>15.0.4795.1001</Version>
     </PackageReference>
     <PackageReference Include="Sdl.Core.PluginFramework">
       <Version>2.1.0</Version>
@@ -194,6 +195,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Users\abirleanu\source\repos\ClassLibrary1\LanguageMappingProvider.csproj" />
     <ProjectReference Include="..\Auth0Service\Auth0Service.csproj" />
   </ItemGroup>
   <ItemGroup>

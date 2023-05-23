@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LanguageMapping;
+using LanguageMappingProvider;
 using Sdl.Community.MTCloud.Provider.Model.QELabelExtractorModel;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.ProjectAutomation.AutomaticTasks;

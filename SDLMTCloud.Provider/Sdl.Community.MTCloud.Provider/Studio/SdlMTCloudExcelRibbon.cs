@@ -37,8 +37,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 						};
 					}
 
-					var languages = new LanguageProvider();
-					var viewModel = new MTCodesViewModel(window, languages);
+					var viewModel = new MTCodesViewModel();
 					window.DataContext = viewModel;
 					window.ShowDialog();
 				}

@@ -9,13 +9,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 	public class MTCloudLanguage : BaseViewModel
 	{
 		private string _codeName;
-		private bool _isLocale;
 		private Image _flag;
-
-		public MTCloudLanguage()
-		{
-			IsLocale = false;
-		}
 		
 		[DataMember]
 		public string CodeName
@@ -24,18 +18,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			set
 			{
 				_codeName = value;
-				OnPropertyChanged(nameof(CodeName));
-			}
-		}
-
-		[DataMember]
-		public bool IsLocale
-		{
-			get => _isLocale;
-			set
-			{
-				_isLocale = value;
-				OnPropertyChanged(nameof(IsLocale));
+				OnPropertyChanged();
 			}
 		}
 
@@ -46,7 +29,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			set
 			{
 				_flag = value;
-				OnPropertyChanged(nameof(Flag));
+				OnPropertyChanged();
 			}
 		}
 	}

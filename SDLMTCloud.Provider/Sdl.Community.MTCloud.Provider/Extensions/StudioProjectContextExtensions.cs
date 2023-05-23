@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;

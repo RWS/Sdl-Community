@@ -219,6 +219,8 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 				SupportTarget = language.SupportTarget,
 				CultureInfo = new CultureInfo(language.LanguageCode)
 			}));
+
+			var cis = CultureInfo.GetCultures(CultureTypes.AllCultures);
 		}
 	}
 }

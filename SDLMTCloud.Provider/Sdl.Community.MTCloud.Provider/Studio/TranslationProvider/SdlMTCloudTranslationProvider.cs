@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LanguageMappingProvider.Interfaces;
+using LanguageMappingProvider.Database;
+using LanguageMappingProvider.Database.Interface;
 using LanguageMappingProvider.Model;
 using Newtonsoft.Json;
 using NLog;
+using Sdl.Community.MTCloud.Provider.Extensions;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service;
@@ -22,11 +24,10 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 		private LanguagePair _languageDirection;
 		private LanguageMappingsService _languageMappingsService;
 
-		public SdlMTCloudTranslationProvider(Uri uri, string translationProviderState, ITranslationService translationService,
-		 ILanguageProvider languageProvider)
+		public SdlMTCloudTranslationProvider(Uri uri, string translationProviderState, ITranslationService translationService)
 		{
 			Uri = uri;
-			LanguageProvider = languageProvider;
+			LanguageProvider = new LanguageMappingDatabase("testlw", DatabaseExtensions.GetLWSupportedLanguages());
 			TranslationService = translationService;
 
 			_editorController = MtCloudApplicationInitializer.EditorController;
@@ -40,7 +41,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 
 		public ILanguageMappingsService LanguageMappingsService => _languageMappingsService ??= new LanguageMappingsService(TranslationService);
 
-		public ILanguageProvider LanguageProvider { get; }
+		public ILanguageMappingDatabase LanguageProvider { get; }
 
 		public string Name
 		{
@@ -117,7 +118,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 			return LanguageDirectionProvider;
 		}
 
-		public LanguageMappingModel GetLanguageMappingModel(LanguagePair languageDirection, List<MappedLanguage> mappedLanguages)
+		public LanguageMappingModel GetLanguageMappingModel(LanguagePair languageDirection, IEnumerable<MappedLanguage> mappedLanguages)
 		{
 			var mapping = new InternalLanguageMapping
 			{
@@ -130,7 +131,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 			}
 
 			mapping.SourceLanguageMappings = LanguageMappingsService.GetMTCloudLanguages(mapping.SourceLanguageCode, languageDirection.SourceCulture);
-			mapping.SelectedSourceLanguageMapping = mapping.SourceLanguageMappings.FirstOrDefault(a => a.IsLocale) ?? mapping.SourceLanguageMappings[0];
+			mapping.SelectedSourceLanguageMapping = mapping.SourceLanguageMappings.FirstOrDefault();
 
 			mapping.TargetLanguageCode = mappedLanguages.FirstOrDefault(s => s.TradosCode.Equals(languageDirection.TargetCulture?.Name));
 			if (mapping.TargetLanguageCode == null)
@@ -142,7 +143,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 			mapping.SavedLanguageMappingModel = Options.LanguageMappings.FirstOrDefault(a => a.Name.Equals(mapping.Name, StringComparison.InvariantCultureIgnoreCase));
 
 			mapping.TargetLanguageMappings = LanguageMappingsService.GetMTCloudLanguages(mapping.TargetLanguageCode, languageDirection.TargetCulture);
-			mapping.SelectedTargetLanguageMapping = mapping.TargetLanguageMappings.FirstOrDefault(a => a.IsLocale) ?? mapping.TargetLanguageMappings[0];
+			mapping.SelectedTargetLanguageMapping = mapping.TargetLanguageMappings.FirstOrDefault();
 
 			// assign the selected target langauge
 			mapping.SelectedTargetLanguageMapping = mapping.TargetLanguageMappings.FirstOrDefault(a => a.CodeName.Equals(mapping.SavedLanguageMappingModel?.SelectedTarget?.CodeName))
@@ -279,7 +280,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 			if (languagePair != null && LanguageMappingsService.SubscriptionInfo.LanguagePairs?.Count > 0)
 			{
 				mtCloudLanguagePair = GetMTCloudLanguagePair();
-
 				var hasOptionsLanguageMapping = HasOptionsLanguageMapping(languagePair);
 				if (mtCloudLanguagePair != null && hasOptionsLanguageMapping)
 				{
@@ -287,7 +287,6 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				}
 
 				var languages = LanguageProvider.GetMappedLanguages();
-
 				var languageMappingModel = GetLanguageMappingModel(languagePair, languages);
 				if (languageMappingModel != null)
 				{

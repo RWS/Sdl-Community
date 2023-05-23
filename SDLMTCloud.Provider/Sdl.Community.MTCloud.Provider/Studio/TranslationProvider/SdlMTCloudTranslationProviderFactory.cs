@@ -23,9 +23,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 			connectionService.SaveCredential();
 			MtCloudApplicationInitializer.SetTranslationService(connectionService, null);
 
-			var languageProvider = new LanguageProvider();
-			var provider = new SdlMTCloudTranslationProvider(translationProviderUri, translationProviderState,
-				MtCloudApplicationInitializer.TranslationService, languageProvider);
+			var provider = new SdlMTCloudTranslationProvider(translationProviderUri, translationProviderState, MtCloudApplicationInitializer.TranslationService);
 
 			return provider;
 		}

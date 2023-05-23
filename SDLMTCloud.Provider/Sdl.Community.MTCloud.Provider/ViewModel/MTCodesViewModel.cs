@@ -1,66 +1,63 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
-using LanguageMappingProvider.Interfaces;
+using LanguageMappingProvider.Database;
+using LanguageMappingProvider.Database.Interface;
 using LanguageMappingProvider.Model;
 using Sdl.Community.MTCloud.Provider.Commands;
-using Sdl.Community.MTCloud.Provider.Helpers;
-using Sdl.Community.MTCloud.Provider.Service;
-using Application = System.Windows.Forms.Application;
+using Sdl.Community.MTCloud.Provider.Extensions;
+using Sdl.Core.Globalization;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
-	public class MTCodesViewModel : BaseViewModel
+	public class MTCodesViewModel : BaseModel
 	{
-		private readonly PrintService _printService;
-		private readonly ILanguageProvider _languageProvider;
+		private readonly ILanguageMappingDatabase _database;
 
-		private ICommand _saveCommand;
-		private ICommand _printCommand;
-		private ICommand _resetToDefaultsCommand;
-
+		private ObservableCollection<MappedLanguage> _filteredMappedLanguages;
+		private ObservableCollection<MappedLanguage> _mappedLanguages;
 		private MappedLanguage _selectedMappedLanguage;
-		private List<MappedLanguage> _mappedLanguages;
-		private string _message;
-		private string _messageColor;
-		private string _query;
-		private bool _isWaiting;
-		private string _itemsCountLabel;
 
-		public MTCodesViewModel(Window owner, ILanguageProvider languageProvider)
+		private string _filter;
+		private string _languagesCountMessage;
+
+		private ICommand _applyChangesCommand;
+		private ICommand _cancelChangesCommand;
+		private ICommand _resetToDefaultCommand;
+		private ICommand _clearCommand;
+
+		public MTCodesViewModel()
 		{
-			Owner = owner;
-			_languageProvider = languageProvider;
-
-			MappedLanguages = new List<MappedLanguage>(GetAllMappedLanguages(false));
-
-			_printService = new PrintService();
+			_database = new LanguageMappingDatabase("testlw", DatabaseExtensions.GetLWSupportedLanguages());
+			RetrieveMappedLanguagesFromDatabase();
+			FilteredMappedLanguages = MappedLanguages;
+			PropertyChanged += FilterPropertyChangedHandler;
 		}
 
-		public ICommand SaveCommand => _saveCommand ?? (_saveCommand = new RelayCommand(Save));
-
-		public ICommand PrintCommand
-			=> _printCommand ?? (_printCommand = new RelayCommand<DataGrid>(Print));
-
-		public ICommand ResetToDefaultsCommand => _resetToDefaultsCommand
-														?? (_resetToDefaultsCommand = new RelayCommand(ResetToDefaults));
-
-		public Window Owner { get; }
-
-		public List<MappedLanguage> MappedLanguages
+		public ObservableCollection<MappedLanguage> MappedLanguages
 		{
 			get => _mappedLanguages;
 			set
 			{
+				if (_mappedLanguages == value) return;
 				_mappedLanguages = value;
+				OnPropertyChanged();
+			}
+		}
 
-				OnPropertyChanged(nameof(MappedLanguages));
-				ItemsCountLabel = string.Format(PluginResources.Total_Languages, _mappedLanguages.Count);
+		public ObservableCollection<MappedLanguage> FilteredMappedLanguages
+		{
+			get => _filteredMappedLanguages;
+			set
+			{
+				if (_filteredMappedLanguages == value) return;
+				_filteredMappedLanguages = value;
+				OnPropertyChanged();
+				RefreshLanguagesCountMessage();
 			}
 		}
 
@@ -69,212 +66,141 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			get => _selectedMappedLanguage;
 			set
 			{
+				if (_selectedMappedLanguage == value) return;
 				_selectedMappedLanguage = value;
-				OnPropertyChanged(nameof(SelectedMappedLanguage));
+				OnPropertyChanged();
 			}
 		}
 
-		public string Message
+		public string Filter
 		{
-			get => _message;
+			get => _filter;
 			set
 			{
-				_message = value;
-				OnPropertyChanged(nameof(Message));
+				if (_filter == value) return;
+				_filter = value?.ToLower();
+				OnPropertyChanged();
+				ApplyFilter();
+				RefreshLanguagesCountMessage();
 			}
 		}
 
-		public string MessageColor
+		public string LanguagesCountMessage
 		{
-			get => _messageColor;
+			get => _languagesCountMessage;
 			set
 			{
-				_messageColor = value;
-				OnPropertyChanged(nameof(MessageColor));
+				if (_languagesCountMessage == value) return;
+				_languagesCountMessage = value;
+				OnPropertyChanged();
 			}
 		}
 
-		public string Query
+		public ICommand ApplyChangesCommand => _applyChangesCommand ??= new RelayCommand(ApplyChanges, CanApplyChanges);
+		public ICommand CancelChangesCommand => _cancelChangesCommand ??= new RelayCommand(CancelChanges);
+		public ICommand ResetToDefaultCommand => _resetToDefaultCommand ??= new RelayCommand(ResetToDefault);
+		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
+
+		private void RetrieveMappedLanguagesFromDatabase()
 		{
-			get => _query;
-			set
+			var mappedLanguages = _database.GetMappedLanguages();
+			MappedLanguages = new ObservableCollection<MappedLanguage>(mappedLanguages);
+			Filter = string.Empty;
+		}
+
+		private void RefreshLanguagesCountMessage()
+		{
+			var totalLanguagesCount = MappedLanguages.Count;
+			var filteredLanguagesCount = FilteredMappedLanguages.Count;
+			LanguagesCountMessage = string.IsNullOrWhiteSpace(Filter)
+								  ? $"Total languages: {totalLanguagesCount}"
+								  : $"Total languages: {totalLanguagesCount}; Filtered: {filteredLanguagesCount}";
+		}
+
+		private void ApplyFilter()
+		{
+			if (string.IsNullOrWhiteSpace(Filter))
 			{
-				if (_query == value)
-				{
+				FilteredMappedLanguages = new ObservableCollection<MappedLanguage>(MappedLanguages);
+				return;
+			}
+
+			var filterLower = Filter.ToLower();
+			var filteredContent = MappedLanguages.Where(
+				language => IsMatchingOnFilter(language.Name, filterLower)
+						 || IsMatchingOnFilter(language.Region, filterLower)
+						 || IsMatchingOnFilter(language.TradosCode, filterLower)
+						 || IsMatchingOnFilter(language.LanguageCode, filterLower));
+
+			FilteredMappedLanguages = new ObservableCollection<MappedLanguage>(filteredContent);
+		}
+
+		private bool IsMatchingOnFilter(string field, string filter)
+		{
+			return !string.IsNullOrEmpty(field) && field.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0;
+		}
+
+		private void ResetToDefault(object parameter)
+		{
+			if (ExecuteAction("Warning: Resetting to default values!\nAll changes will be lost and the database will be restored to its original state.\n\nThis action cannot be undone.", "Reset to default"))
+			{
+				_database.ResetToDefault();
+				RetrieveMappedLanguagesFromDatabase();
+			}
+		}
+
+		private bool ExecuteAction(string message, string title)
+		{
+			var dialogResult = MessageBox.Show(message, title, MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+			return dialogResult == MessageBoxResult.OK;
+		}
+
+		private void Clear(object parameter)
+		{
+			if (parameter is not string parameterString)
+			{
+				return;
+			}
+
+			switch (parameterString)
+			{
+				case "filter":
+					Filter = string.Empty;
 					return;
-				}
 
-				_query = value;
-				OnPropertyChanged(nameof(Query));
-
-				SearchLanguages(_query);
+				default:
+					break;
 			}
 		}
 
-		public bool IsWaiting
+		private void ApplyChanges(object parameter)
 		{
-			get => _isWaiting;
-			set
-			{
-				_isWaiting = value;
-				OnPropertyChanged(nameof(IsWaiting));
-			}
+			_database.UpdateAll(MappedLanguages);
+			RetrieveMappedLanguagesFromDatabase();
+			ShutDownApp();
 		}
 
-		public string ItemsCountLabel
+		private bool CanApplyChanges(object parameter)
 		{
-			get => _itemsCountLabel;
-			set
-			{
-				if (_itemsCountLabel == value)
-				{
-					return;
-				}
-
-				_itemsCountLabel = value;
-				OnPropertyChanged(nameof(ItemsCountLabel));
-			}
+			return _database.HasMappedLanguagesChanged(MappedLanguages);
 		}
 
-		public void SearchLanguages(string query)
+		private void CancelChanges(object parameter)
 		{
-			var collectionViewSource = CollectionViewSource.GetDefaultView(MappedLanguages);
-
-			if (!string.IsNullOrEmpty(query))
-			{
-				collectionViewSource.Filter = language =>
-				{
-					var mappedLanguage = language as MappedLanguage;
-
-					return (mappedLanguage != null && mappedLanguage.Name.ToLower().Contains(query.ToLower()))
-						|| (mappedLanguage != null && mappedLanguage.TradosCode.ToLower().Contains(query.ToLower()))
-						|| (mappedLanguage != null && mappedLanguage.Region.ToLower().Contains(query.ToLower()))
-						|| (mappedLanguage != null && mappedLanguage.MTCode.ToLower().Contains(query.ToLower()))
-						|| (mappedLanguage != null && mappedLanguage.MTCodeLocale.ToLower().Contains(query.ToLower()));
-				};
-
-				SelectedMappedLanguage = collectionViewSource.CurrentItem as MappedLanguage;
-			}
-			else
-			{
-				collectionViewSource.Filter = null;
-			}
-
-			var filtered = collectionViewSource.Cast<MappedLanguage>().ToList();
-			var filteredCount = filtered.Count;
-			var totalCount = MappedLanguages.Count;
-			ItemsCountLabel = filteredCount < totalCount
-				? string.Format(PluginResources.Total_And_Filtered_Languages, totalCount, filteredCount)
-				: string.Format(PluginResources.Total_Languages, totalCount);
+			ShutDownApp();
 		}
 
-		public void Print(DataGrid dataGrid)
+		private void ShutDownApp()
 		{
-			IsWaiting = true;
 
-			var collectionViewSource = CollectionViewSource.GetDefaultView(MappedLanguages);
-			var filtered = collectionViewSource.Cast<MappedLanguage>().ToList();
-			var filteredCount = filtered.Count;
-			var totalCount = MappedLanguages.Count;
-
-			if (filteredCount < totalCount)
-			{
-				var filteredFilePath = Path.Combine(LanguageMappingProvider.Constants.MTCloudFolderPath, "FilteredMTLanguageCodes.xlsx");
-				_languageProvider.SaveMappedLanguages(filtered, filteredFilePath);
-
-
-				IsWaiting = false;
-				_printService.PrintFile(filteredFilePath);
-			}
-			else
-			{
-				IsWaiting = false;
-				_printService.PrintFile(LanguageMappingProvider.Constants.MTLanguageCodesFilePath);
-			}
 		}
 
-		private IEnumerable<MappedLanguage> GetAllMappedLanguages(bool reset)
+		private void FilterPropertyChangedHandler(object sender, PropertyChangedEventArgs e)
 		{
-			var mappedLanguages = _languageProvider.GetMappedLanguages(reset);
-			if (AddStudioLanguages(mappedLanguages))
+			if (e.PropertyName == nameof(Filter))
 			{
-				_languageProvider.SaveMappedLanguages(mappedLanguages);
+				ApplyFilter();
 			}
-
-			return mappedLanguages;
-		}
-
-		private bool AddStudioLanguages(ICollection<MappedLanguage> mappedLanguages)
-		{
-			var updated = false;
-
-			var studioLanguages = Core.Globalization.Language.GetAllLanguages();
-
-			foreach (var studioLanguage in studioLanguages)
-			{
-				var mappedLanguage = mappedLanguages.FirstOrDefault(e => e.TradosCode.Equals(studioLanguage.CultureInfo.Name));
-				if (mappedLanguage == null)
-				{
-					var languageName = GetLanguageName(studioLanguage, out var region);
-
-					updated = true;
-					var language = new MappedLanguage
-					{
-						Index = mappedLanguages.Count,
-						Name = languageName,
-						Region = region,
-						TradosCode = studioLanguage.CultureInfo.Name,
-						MTCode = string.Empty,
-						MTCodeLocale = string.Empty
-					};
-
-					mappedLanguages.Add(language);
-				}
-			}
-
-			return updated;
-		}
-
-		private string GetLanguageName(Core.Globalization.Language language, out string region)
-		{
-			region = string.Empty;
-			if (language == null)
-			{
-				return null;
-			}
-
-			var languageName = language.DisplayName;
-			if (!string.IsNullOrEmpty(languageName))
-			{
-				var regexSplit = new Regex(@"(?<language>[^\(]*)\((?<region>[^\)]*)", RegexOptions.IgnoreCase);
-				if (languageName.Contains("(") && languageName.Contains(")"))
-				{
-					var match = regexSplit.Match(languageName);
-					if (match.Success)
-					{
-						languageName = match.Groups["language"].Value.Trim();
-						region = match.Groups["region"].Value.Trim();
-					}
-				}
-			}
-
-			return languageName;
-		}
-
-		private void ResetToDefaults(object obj)
-		{
-			MappedLanguages = new List<MappedLanguage>(GetAllMappedLanguages(true));
-
-			MessageBox.Show(PluginResources.Message_Successfully_reset_to_defaults,
-				Application.ProductName, MessageBoxButton.OK, MessageBoxImage.Information);
-		}
-
-		private void Save(object obj)
-		{
-			_languageProvider.SaveMappedLanguages(MappedLanguages.ToList());
-
-			WindowCloser.SetDialogResult(Owner, true);
-			Owner.Close();
 		}
 	}
 }

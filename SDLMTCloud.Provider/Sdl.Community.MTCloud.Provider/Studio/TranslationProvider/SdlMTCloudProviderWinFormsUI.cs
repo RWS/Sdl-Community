@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Windows.Interop;
 using LanguageMappingProvider;
+using LanguageMappingProvider.Database;
+using LanguageMappingProvider.Database.Interface;
 using NLog;
 using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Service;
@@ -45,9 +47,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 
 				MtCloudApplicationInitializer.SetTranslationService(connectionService, null);
 
-				var languageProvider = new LanguageProvider();
-				var provider = new SdlMTCloudTranslationProvider(uri, string.Empty, MtCloudApplicationInitializer.TranslationService,
-					languageProvider);
+				var provider = new SdlMTCloudTranslationProvider(uri, string.Empty, MtCloudApplicationInitializer.TranslationService);
 
 				var optionsWindow = GetOptionsWindow(owner, languagePairs, provider);
 

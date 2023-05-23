@@ -81,29 +81,19 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		public List<MTCloudLanguage> GetMTCloudLanguages(MappedLanguage mappedLanguage, CultureInfo cultureInfo)
 		{
-			var languageMappings = new List<MTCloudLanguage>();
-
-			if (mappedLanguage != null)
+			if (mappedLanguage is null)
 			{
-				languageMappings.Add(new MTCloudLanguage
-				{
-					CodeName = mappedLanguage.MTCode,
-					IsLocale = false,
-					Flag = SetLanguageFlag(cultureInfo)
-				});
-
-				if (!string.IsNullOrEmpty(mappedLanguage.MTCodeLocale))
-				{
-					languageMappings.Add(new MTCloudLanguage
-					{
-						CodeName = mappedLanguage.MTCodeLocale,
-						IsLocale = true,
-						Flag = SetLanguageFlag(cultureInfo)
-					});
-				}
+				return new();
 			}
 
-			return languageMappings;
+			return new List<MTCloudLanguage>
+			{
+				new MTCloudLanguage
+				{
+					CodeName = mappedLanguage.LanguageCode,
+					Flag = SetLanguageFlag(cultureInfo)
+				}
+			};
 		}
 
 		/// <summary>
