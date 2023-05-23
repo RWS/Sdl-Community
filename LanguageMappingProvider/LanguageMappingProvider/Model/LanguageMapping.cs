@@ -1,4 +1,4 @@
-﻿namespace LanguageMappingProvider.Model
+namespace LanguageMappingProvider.Model
 {
 	public class LanguageMapping : BaseModel
     {
