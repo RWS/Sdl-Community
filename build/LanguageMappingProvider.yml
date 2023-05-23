@@ -51,6 +51,13 @@ steps:
     VersionRegex: '\d+\.\d+\.\d+'
     Field: FileVersion
 
+- task: PowerShell@2
+  displayName: 'set x86path'
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "##vso[task.setvariable variable=x86path;]${Env:ProgramFiles(x86)}"
+
 - task: DownloadPipelineArtifact@2
   displayName: 'Download Trados Studio Binaries Pipeline Artifact'
   inputs:
@@ -59,7 +66,7 @@ steps:
     definition: '1258'
     artifactName: 'binaries'
     buildVersionToDownload: 'latestFromBranch'
-    targetPath: '$(ProgramFiles(x86))\Trados\Trados Studio\Studio17'
+    targetPath: '$(X86PATH)\Trados\Trados Studio\Studio17'
     runBranch: 'refs/heads/master'
     tags: 'Package'
 
