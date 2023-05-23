@@ -7,15 +7,15 @@ namespace LanguageMappingProviderFacts.Tests
 {
     public class LanguageMappingDatabaseUnitTests
     {
-        private readonly List<MappedLanguage> _mappedLanguages;
+        private readonly List<LanguageMapping> _mappedLanguages;
         private ILanguageMappingDatabase _database;
 
         public LanguageMappingDatabaseUnitTests()
         {
-            _mappedLanguages = new List<MappedLanguage>
+            _mappedLanguages = new List<LanguageMapping>
             {
-                new MappedLanguage { Name = "English", LanguageCode = "en_DEFAULT" },
-                new MappedLanguage { Name = "English", Region = "United States", LanguageCode = "en_US" },
+                new LanguageMapping { Name = "English", LanguageCode = "en_DEFAULT" },
+                new LanguageMapping { Name = "English", Region = "United States", LanguageCode = "en_US" },
             };
 
             _database = new LanguageMappingDatabase("unittesting", _mappedLanguages);
@@ -45,7 +45,7 @@ namespace LanguageMappingProviderFacts.Tests
         {
             var exception = Assert.Throws<DatabaseInitializationException>(() =>
             {
-                _database = new LanguageMappingDatabase("invalid", new List<MappedLanguage>());
+                _database = new LanguageMappingDatabase("invalid", new List<LanguageMapping>());
             });
 
             var expectedErrorMessage = "The pluginSupportedLanguages collection must be provided and must contain at least one supported language in order to initialize this class and create the database";
@@ -55,7 +55,7 @@ namespace LanguageMappingProviderFacts.Tests
         [Fact]
         public void InsertLanguage_CanInsertNewLanguages()
         {
-            _database.InsertLanguage(new MappedLanguage()
+            _database.InsertLanguage(new LanguageMapping()
             {
                 Name = "TestingName",
                 Region = "TestingRegion",
@@ -78,7 +78,7 @@ namespace LanguageMappingProviderFacts.Tests
         [Fact]
         public void InsertLanguage_CanInsertDuplicates()
         {
-            var newMapping = new MappedLanguage()
+            var newMapping = new LanguageMapping()
             {
                 Index = 999,
                 Name = "TestingName",
@@ -111,7 +111,7 @@ namespace LanguageMappingProviderFacts.Tests
         [InlineData("English", "", "TradosCode")]
         public void InsertLanguage_InvalidMappedLanguage_InvalidName_ThrowsException(string mappedName, string mappedCode, string property)
         {
-            var mapping = new MappedLanguage()
+            var mapping = new LanguageMapping()
             {
                 Name = mappedName,
                 TradosCode = mappedCode
@@ -150,7 +150,7 @@ namespace LanguageMappingProviderFacts.Tests
         public void UpdateAll_NullOrEmptyCollection_DoesNotThrowsExceptions()
         {
             _database.UpdateAll(null);
-            _database.UpdateAll(new List<MappedLanguage>());
+            _database.UpdateAll(new List<LanguageMapping>());
 
             // If this test passes, no errors were thrown above
             Assert.True(true);
@@ -209,7 +209,7 @@ namespace LanguageMappingProviderFacts.Tests
         public void HasMappedLanguagesChanged_InvalidMappedLanguages_ReturnsFalse()
         {
             Assert.False(_database.HasMappedLanguagesChanged(null));
-            Assert.False(_database.HasMappedLanguagesChanged(new List<MappedLanguage>()));
+            Assert.False(_database.HasMappedLanguagesChanged(new List<LanguageMapping>()));
         }
 
         [Theory]

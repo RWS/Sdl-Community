@@ -5,9 +5,7 @@ VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LanguageMappingProvider", "LanguageMappingProvider.csproj", "{5FECAF6D-2B3C-4852-952E-AB389776F5B7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleProgram", "..\MLP\ConsoleProgram.csproj", "{6FCD882D-A60A-4045-928F-70CC77376326}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LanguageMappingProviderFacts.Tests", "..\LanguageMappingProviderFacts.Tests\LanguageMappingProviderFacts.Tests.csproj", "{F777C386-C701-4C18-AE73-92BF0AC893AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LanguageMappingProviderFacts.Tests", "..\LanguageMappingProviderFacts.Tests\LanguageMappingProviderFacts.Tests.csproj", "{F777C386-C701-4C18-AE73-92BF0AC893AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +17,6 @@ Global
 		{5FECAF6D-2B3C-4852-952E-AB389776F5B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FECAF6D-2B3C-4852-952E-AB389776F5B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FECAF6D-2B3C-4852-952E-AB389776F5B7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6FCD882D-A60A-4045-928F-70CC77376326}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6FCD882D-A60A-4045-928F-70CC77376326}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6FCD882D-A60A-4045-928F-70CC77376326}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6FCD882D-A60A-4045-928F-70CC77376326}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F777C386-C701-4C18-AE73-92BF0AC893AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F777C386-C701-4C18-AE73-92BF0AC893AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F777C386-C701-4C18-AE73-92BF0AC893AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
