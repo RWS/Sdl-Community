@@ -731,7 +731,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Language Weaver Provider.
+        ///   Looks up a localized string similar to Language Weaver.
         /// </summary>
         public static string SDLMTCloud_Provider_Name {
             get {
@@ -763,6 +763,15 @@ namespace Sdl.Community.MTCloud.Provider {
         public static string SDLMTCloud_Provider_OldName3 {
             get {
                 return ResourceManager.GetString("SDLMTCloud_Provider_OldName3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language Weaver Provider.
+        /// </summary>
+        public static string SDLMTCloud_Provider_OldName4 {
+            get {
+                return ResourceManager.GetString("SDLMTCloud_Provider_OldName4", resourceCulture);
             }
         }
         

@@ -236,7 +236,7 @@
     <value>Language Weaver Provider</value>
   </data>
   <data name="SDLMTCloud_Provider_Name" xml:space="preserve">
-    <value>Language Weaver Provider</value>
+    <value>Language Weaver</value>
   </data>
   <data name="SDLMTCloud_RibbonGroup_Name" xml:space="preserve">
     <value>Language Weaver Provider</value>
@@ -444,5 +444,8 @@ Response from Language Weaver:
   </data>
   <data name="RateItViewModel_SetOptionTooltip_No_shortcut_was_set" xml:space="preserve">
     <value>No shortcut was set in Studio for this option</value>
+  </data>
+  <data name="SDLMTCloud_Provider_OldName4" xml:space="preserve">
+    <value>Language Weaver Provider</value>
   </data>
 </root>

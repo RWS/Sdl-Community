@@ -9,7 +9,8 @@ namespace Sdl.Community.MTCloud.Provider.Extensions
 			PluginResources.SDLMTCloud_Provider_Name,
 			PluginResources.SDLMTCloud_Provider_OldName,
 			PluginResources.SDLMTCloud_Provider_OldName2,
-			PluginResources.SDLMTCloud_Provider_OldName3
+			PluginResources.SDLMTCloud_Provider_OldName3,
+			PluginResources.SDLMTCloud_Provider_OldName4
 		};
 
 		public static bool IsLanguageWeaverOrigin(this string originSystem)
