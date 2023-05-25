@@ -31,7 +31,8 @@ namespace Sdl.Community.MtEnhancedProvider
         private string _apiKey;
         private string _clientid;
         const string MsTranslatorString = "Microsoft Translator"; //these strings should not be localized or changed and are therefore hard-coded as constants
-        const string GTranslateString = "Google Translate"; //these strings should not be localized or changed and are therefore hard-coded as constants
+		const string MsTranslatorWithPeString = "Microsoft Translator with Private Endpoint"; //these strings should not be localized or changed and are therefore hard-coded as constants
+		const string GTranslateString = "Google Translate"; //these strings should not be localized or changed and are therefore hard-coded as constants
 
         //The translation method affects when/if the plugin gets called by Studio
         public static readonly TranslationMethod ProviderTranslationMethod = TranslationMethod.MachineTranslation;
@@ -158,6 +159,7 @@ namespace Sdl.Community.MtEnhancedProvider
         {
             GoogleTranslate = 1,
             MicrosoftTranslator = 2,
+			MicrosoftTranslatorWithPe = 3,
             None = 0
         }
 
@@ -169,7 +171,9 @@ namespace Sdl.Community.MtEnhancedProvider
 			        return GTranslateString; //these strings should not be localized and are therefore hard-coded
 		        case ProviderType.MicrosoftTranslator:
 			        return MsTranslatorString; //these strings should not be localized and are therefore hard-coded
-	        }
+				case ProviderType.MicrosoftTranslatorWithPe:
+					return MsTranslatorWithPeString; //these strings should not be localized and are therefore hard-coded
+			}
 	        return "";
         }
 
@@ -185,7 +189,9 @@ namespace Sdl.Community.MtEnhancedProvider
 			        return ProviderType.GoogleTranslate;
 		        case MsTranslatorString:
 			        return ProviderType.MicrosoftTranslator;
-		        default:
+				case MsTranslatorWithPeString:
+					return ProviderType.MicrosoftTranslatorWithPe;
+				default:
 			        return ProviderType.None;
 	        }
         }
@@ -245,6 +251,13 @@ namespace Sdl.Community.MtEnhancedProvider
 		{
 			get => _apiKey;
 			set => _apiKey = value;
+		}
+
+		// The Microsoft private endpoint url
+		public string PeUrl
+		{
+			get => GetStringParameter("peurl");
+			set => SetStringParameter("peurl", value);
 		}
 
 		[JsonIgnore] 
