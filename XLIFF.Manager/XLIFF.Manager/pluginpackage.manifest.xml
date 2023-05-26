@@ -7,7 +7,7 @@
 	<RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9"/>
 	<Include>
 		<File>Rws.MultiSelectComboBox.dll</File>
-		<File>Sdl.Community.Toolkit.LanguagePlatform.dll</File>
-		<File>Sdl.Community.Toolkit.Core.dll</File>
+		<File>Trados.Community.Toolkit.LanguagePlatform.dll</File>
+		<File>Trados.Community.Toolkit.Core.dll</File>
 	</Include>
 </PluginPackage>
