@@ -42,6 +42,10 @@ namespace GoogleCloudTranslationProvider.Studio
 
 		public bool CanReverseLanguageDirection => false;
 
+		//CultureCode ITranslationProviderLanguageDirection.SourceLanguage => _languageDirection.SourceCulture;
+
+		//CultureCode ITranslationProviderLanguageDirection.TargetLanguage => _languageDirection.TargetCulture;
+
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
 		{
 			var searchResults = new SearchResults[segments.Length];
