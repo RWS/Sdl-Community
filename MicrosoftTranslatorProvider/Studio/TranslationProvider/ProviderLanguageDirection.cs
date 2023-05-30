@@ -39,6 +39,8 @@ namespace MicrosoftTranslatorProvider
 
 		public System.Globalization.CultureInfo TargetLanguage => _languagePair.TargetCulture;
 
+
+
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
 		{
 			var searchResults = new SearchResults[segments.Length];
