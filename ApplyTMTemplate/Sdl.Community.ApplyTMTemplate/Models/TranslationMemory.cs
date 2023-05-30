@@ -41,7 +41,7 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			get => LanguageDirection.SourceLanguage.Name;
 		}
 
-		public Image SourceLanguageFlag => new Language(LanguageDirection.SourceLanguage).GetFlagImage();
+		public Image SourceLanguageFlag => new Language(LanguageDirection.SourceLanguage.Name).GetFlagImage();
 
 		public bool? SourceModified
 		{
@@ -69,7 +69,7 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 
 		public string TargetLanguage => LanguageDirection.TargetLanguage.Name;
 
-		public Image TargetLanguageFlag => new Language(LanguageDirection.TargetLanguage).GetFlagImage();
+		public Image TargetLanguageFlag => new Language(LanguageDirection.TargetLanguage.Name).GetFlagImage();
 
 		public bool? TargetModified
 		{
