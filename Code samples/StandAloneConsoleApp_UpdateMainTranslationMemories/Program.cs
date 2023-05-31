@@ -20,7 +20,6 @@ namespace StandAloneConsoleApp_UpdateMainTranslationMemories
 			var tpCascadeEntry = new TranslationProviderCascadeEntry(tpReference, true, true, false);
 			tpConfig.Entries.Add(tpCascadeEntry);
 			project.UpdateTranslationProviderConfiguration(tpConfig);
-			project.Save();
 
 			project.RunAutomaticTasks(project.GetTargetLanguageFiles().GetIds(), new[]
 			{
