@@ -1,7 +1,6 @@
 ﻿using System;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
-using Sdl.ProjectAutomation.Settings;
 
 namespace StandAloneConsoleApp_UpdateMainTranslationMemories
 {
@@ -10,9 +9,6 @@ namespace StandAloneConsoleApp_UpdateMainTranslationMemories
 		private static void Main(string[] args)
 		{
 			var project = new FileBasedProject(@"<projectFilePath>");
-
-			UpdateProjectProviderSettings(project);
-
 			var tpConfig = project.GetTranslationProviderConfiguration();
 
 			var tpUriString = @"sdltm.file:///<TMPath>";
@@ -26,17 +22,6 @@ namespace StandAloneConsoleApp_UpdateMainTranslationMemories
 				AutomaticTaskTemplateIds.UpdateMainTranslationMemories
 			});
 
-			project.Save();
-		}
-
-		private static void UpdateProjectProviderSettings(FileBasedProject project)
-		{
-			var settings = project.GetSettings();
-			var preTranslateSettings = settings.GetSettingsGroup<TranslateTaskSettings>();
-			preTranslateSettings.NoTranslationMemoryMatchFoundAction.Value = NoTranslationMemoryMatchFoundAction.ApplyAutomatedTranslation;
-			preTranslateSettings.MinimumMatchScore.Value = 75;
-
-			project.UpdateSettings(settings);
 			project.Save();
 		}
 	}
