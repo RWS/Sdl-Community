@@ -18,7 +18,7 @@ public class TerminologyService : ITerminologyService
 		InterpretBankDataContext = interpretBankDataContext;
 	}
 
-	private IInterpretBankDataContext InterpretBankDataContext { get; }
+	public IInterpretBankDataContext InterpretBankDataContext { get; }
 
 	public List<StudioTermEntry> GetExactTerms(string word, string name1, string name2)
 	{
@@ -65,6 +65,7 @@ public class TerminologyService : ITerminologyService
 
 	//var terms = DataContext.GetTable<GlossaryData>();
 	//var result = terms.WherePropertyEquals("Term1", word);
+
 	public void Dispose()
 	{
 		InterpretBankDataContext?.Dispose();

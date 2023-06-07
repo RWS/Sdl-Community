@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.SQLite;
 using InterpretBank.GlossaryService;
+using InterpretBank.GlossaryService.Interface;
+using InterpretBank.SettingsService;
 using InterpretBank.TerminologyService;
 using InterpretBank.Wrappers;
 using Sdl.Terminology.TerminologyProvider.Core;
@@ -12,23 +14,37 @@ namespace InterpretBank.Studio
 								Description = "My_Terminology_Provider_Description")]
 	public class InterpretBankProviderFactory : ITerminologyProviderFactory
 	{
-		public static InterpretBankProvider GetInterpretBankProvider()
-		{
-			var interpretBankDataContext = new InterpretBankDataContext();
-			var settingsService = new SettingsService.ViewModel.SettingsService(new OpenFileDialog(), interpretBankDataContext);
+		//private static InterpretBankDataContext _interpretBankDataContext;
 
-			var termSearchService = new TerminologyService.TerminologyService(interpretBankDataContext);
-			return new InterpretBankProvider(termSearchService, settingsService);
-		}
+		//public static InterpretBankDataContext InterpretBankDataContext
+		//{
+		//	get => _interpretBankDataContext ??= new InterpretBankDataContext();
+		//	set => _interpretBankDataContext = value;
+		//}
+
+		//public static InterpretBankProvider GetInterpretBankProvider()
+		//{
+		//	var settingsService = new SettingsService.ViewModel.SettingsService(new OpenFileDialog(), InterpretBankDataContext);
+
+		//	var termSearchService = new TerminologyService.TerminologyService(InterpretBankDataContext);
+		//	return new InterpretBankProvider(termSearchService, settingsService);
+		//}
 
 		public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri, ITerminologyProviderCredentialStore credentials)
 		{
-			return GetInterpretBankProvider();
+			var settings = PersistenceService.PersistenceService.GetSettings(terminologyProviderUri.Scheme);
+
+			var interpretBankDataContext = new InterpretBankDataContext();
+			interpretBankDataContext.Setup(settings.DatabaseFilepath);
+
+			var termSearchService = new TerminologyService.TerminologyService(interpretBankDataContext);
+
+			var interpretBankProvider = new InterpretBankProvider(termSearchService, settings);
+
+			return interpretBankProvider;
 		}
 
-		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
-		{
-			return terminologyProviderUri == new Uri(Constants.InterpretBankUri);
-		}
+		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri) =>
+			PersistenceService.PersistenceService.GetSettings(terminologyProviderUri.Scheme) is not null;
 	}
 }

@@ -37,11 +37,11 @@ namespace InterpretBankTests
 			var filepath = "C:\\Code\\RWS Community\\InterpretBank\\InterpretBankTests\\Resources\\InterpretBankDatabaseV6.db";
 			var sqLiteConnection = new SQLiteConnection($"Data Source={filepath}");
 
-			var ibContext = new InterpretBankDataContext(sqLiteConnection);
+			var ibContext = new InterpretBankDataContext();
 
 			var termSearchService = new TerminologyService(ibContext);
 
-			var sut = new InterpretBankProvider(termSearchService, new SettingsService(openFileDialog, ibContext));
+			var sut = new InterpretBankProvider(termSearchService, new Settings());
 
 			var results = sut.Search("This is a text", language, language, 100, SearchMode.Fuzzy, true);
 		}

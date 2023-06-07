@@ -8,11 +8,13 @@ using InterpretBank.Commands;
 using InterpretBank.GlossaryService.Interface;
 using InterpretBank.SettingsService.Model;
 using InterpretBank.SettingsService.ViewModel.Interface;
+using InterpretBank.Wrappers.Interface;
 
 namespace InterpretBank.SettingsService.ViewModel
 {
-	public class SetupGlossariesViewModel : ViewModel, ISubViewModel
+	public class GlossarySetupViewModel : ViewModel
 	{
+		public IOpenFileDialog OpenFileDialog { get; }
 		private ICommand _deleteTagCommand;
 		private ICommand _enterGlossaryCommand;
 		private ICommand _enterTagCommand;
@@ -21,16 +23,44 @@ namespace InterpretBank.SettingsService.ViewModel
 		private List<LanguageModel> _languages;
 		private TagModel _selectedTag;
 		private List<TagModel> _tags;
+		private ICommand _chooseFilepathCommand;
+		private string _filepath;
+		private RelayCommand _saveCommand;
+		private List<LanguageModelsListBoxItem> _selectedLanguages;
 
-		public SetupGlossariesViewModel(IInterpretBankDataContext interpretBankDataContext)
+		public GlossarySetupViewModel(IOpenFileDialog openFileDialog)
 		{
-			InterpretBankDataContext = interpretBankDataContext;
-			
-
+			OpenFileDialog = openFileDialog;
 			PropertyChanged += SettingsService_PropertyChanged;
+
+			
+		}
+
+		public List<LanguageModelsListBoxItem> SelectedLanguages
+		{
+			get => _selectedLanguages;
+			set => SetField(ref _selectedLanguages, value);
 		}
 
 		public ICommand DeleteTagCommand => _deleteTagCommand ??= new RelayCommand(DeleteTag);
+		public ICommand ChooseFilePathCommand => _chooseFilepathCommand ??= new RelayCommand(ChooseFilePath);
+
+		public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save, o => !string.IsNullOrWhiteSpace(Filepath));
+
+		private void ChooseFilePath(object obj)
+		{
+			var filePath = OpenFileDialog.GetFilePath();
+
+			if (string.IsNullOrWhiteSpace(filePath))
+				return;
+			Filepath = filePath;
+		}
+
+		public string Filepath
+		{
+			get => _filepath;
+			set => SetField(ref _filepath, value);
+		}
 
 		public ICommand EnterGlossaryCommand => _enterGlossaryCommand ??= new RelayCommand(EnterGlossary);
 
@@ -78,16 +108,23 @@ namespace InterpretBank.SettingsService.ViewModel
 		}
 
 		public string Name => "Tag/set up glossaries";
-		public void Setup(List<GlossaryModel> glossaries, List<TagModel> tags)
+		private void Setup()
 		{
-			Tags = tags;
-			Glossaries = glossaries;
+			Tags = InterpretBankDataContext.GetTags();
+			Glossaries = InterpretBankDataContext.GetGlossaries();
 
 			Languages = InterpretBankDataContext.GetLanguages().Select(l => new LanguageModel { Name = l.Name }).ToList();
 			TagLinks = InterpretBankDataContext.GetLinks();
 
 			var tagGroup = new TagsGroup(1, "All tags");
 			Tags.ForEach(t => t.Group = tagGroup);
+
+			SelectedLanguages = new List<LanguageModelsListBoxItem>
+			{
+				new() { LanguageModels = Languages },
+				new() { LanguageModels = Languages },
+				new() { LanguageModels = Languages }
+			};
 		}
 
 		public TagModel SelectedTag
@@ -96,7 +133,7 @@ namespace InterpretBank.SettingsService.ViewModel
 			set => SetField(ref _selectedTag, value);
 		}
 
-		public List<TagLinkModel>TagLinks { get; set; }
+		public List<TagLinkModel> TagLinks { get; set; }
 
 		public List<TagModel> Tags
 		{
@@ -104,11 +141,12 @@ namespace InterpretBank.SettingsService.ViewModel
 			set => SetField(ref _tags, value);
 		}
 
-		private IInterpretBankDataContext InterpretBankDataContext { get; }
+		public IInterpretBankDataContext InterpretBankDataContext { get; set; }
 
 		private void DeleteTag(object parameter)
 		{
-			if (parameter is not string tagName) return;
+			if (parameter is not string tagName)
+				return;
 
 			Tags.Remove(Tags.Single(t => t.TagName == tagName));
 			InterpretBankDataContext.RemoveTag(tagName);
@@ -154,12 +192,23 @@ namespace InterpretBank.SettingsService.ViewModel
 			}
 		}
 
+		private void Save(object parameter)
+		{
+			InterpretBankDataContext.SubmitData();
+		}
+
 		private void SettingsService_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName == nameof(SelectedTag) && SelectedTag is not null)
 			{
 				var glossaryIdsOfTagged = TagLinks.Where(tl => tl.TagName == SelectedTag.TagName).Select(tl => tl.GlossaryId);
 				GlossariesTaggedWithSelected = Glossaries.Where(gl => glossaryIdsOfTagged.Contains(gl.Id)).ToList();
+			}
+
+			if (e.PropertyName == nameof(Filepath) && !string.IsNullOrWhiteSpace(Filepath))
+			{
+				InterpretBankDataContext.Setup(Filepath);
+				Setup();
 			}
 		}
 	}

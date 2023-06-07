@@ -1,7 +1,9 @@
 ﻿using System;
-using System.Windows.Forms;
+using InterpretBank.GlossaryService;
 using InterpretBank.SettingsService.UI;
 using Sdl.Terminology.TerminologyProvider.Core;
+using IWin32Window = System.Windows.Forms.IWin32Window;
+using Settings = InterpretBank.SettingsService.Settings;
 
 namespace InterpretBank.Studio;
 
@@ -16,21 +18,51 @@ internal class InterpretBankWinFormsUI : ITerminologyProviderWinFormsUI
 
 	public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
 	{
-		var provider = InterpretBankProviderFactory.GetInterpretBankProvider();
+		var interpretBankDataContext = new InterpretBankDataContext();
+		var settingsService =
+			new SettingsService.ViewModel.SettingsService(new Wrappers.OpenFileDialog(), interpretBankDataContext);
+		var settingsUi = new SettingsMain { DataContext = settingsService };
 
-		var settingsUi = new SettingsMain { DataContext = provider.SettingsService };
-
+		Settings settings;
 		if (settingsUi.ShowDialog() ?? false)
-			return new ITerminologyProvider[] { provider };
+			settings = settingsService.Settings;
+		else
+			return null;
 
-		return null;
+		//var settingsFilepath = Path.Combine(
+		//	Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+		//	$@"Trados AppStore\InterpretBank\{settingsId}.json");
+
+		var settingsId = GetSettingsId();
+		settings.SettingsId = settingsId;
+
+		PersistenceService.PersistenceService.SaveSettings(settings, settingsId);
+
+		var termSearchService = new TerminologyService.TerminologyService(interpretBankDataContext);
+		var provider = new InterpretBankProvider(termSearchService, settings);
+
+		return new ITerminologyProvider[] { provider };
 	}
 
 	public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
 	{
-		return true;
+		var provider = terminologyProvider as InterpretBankProvider;
+		if (provider == null)
+			return false;
 
-		//return dialogResult
+		var settingsService =
+			new SettingsService.ViewModel.SettingsService(new Wrappers.OpenFileDialog(), provider.TermSearchService.InterpretBankDataContext);
+		settingsService.Settings = provider.Settings;
+
+		var settingsUi = new SettingsMain { DataContext = settingsService };
+		var result = settingsUi.ShowDialog() ?? false;
+
+		if (!result) return false;
+
+		provider.Settings = settingsService.Settings;
+		PersistenceService.PersistenceService.SaveSettings(settingsService.Settings, provider.Settings.SettingsId);
+
+		return true;
 	}
 
 	public TerminologyProviderDisplayInfo GetDisplayInfo(Uri terminologyProviderUri)
@@ -40,6 +72,8 @@ internal class InterpretBankWinFormsUI : ITerminologyProviderWinFormsUI
 
 	public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
 	{
-		return terminologyProviderUri == new Uri(Constants.InterpretBankUri);
+		return true;
 	}
+
+	private static string GetSettingsId() => (Guid.NewGuid().ToString() + Guid.NewGuid() + Guid.NewGuid()).RemoveDashesAndDigits();
 }

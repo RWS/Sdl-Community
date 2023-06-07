@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using InterpretBank.SettingsService;
 using InterpretBank.Studio.Model;
 using InterpretBank.TerminologyService;
 using InterpretBank.TerminologyService.Interface;
@@ -12,10 +13,10 @@ namespace InterpretBank.Studio;
 
 public class InterpretBankProvider : AbstractTerminologyProvider
 {
-	public InterpretBankProvider(ITerminologyService termSearchService, ISettingsService settingsService)
+	public InterpretBankProvider(ITerminologyService termSearchService, Settings settings)
 	{
 		TermSearchService = termSearchService;
-		SettingsService = settingsService;
+		Settings = settings;
 	}
 
 	public override IDefinition Definition =>
@@ -31,19 +32,19 @@ public class InterpretBankProvider : AbstractTerminologyProvider
 
 	public override string Name => "Interpret Bank";
 
-	public ISettingsService SettingsService { get; }
+	public Settings Settings { get; set; }
 
-	public override Uri Uri => new(Constants.InterpretBankUri);
+	public override Uri Uri => new($"{Settings.SettingsId}://");
 
 	private HashSet<IEntry> Entries { get; } = new();
 
 	private int TermIndex { get; set; }
-	private ITerminologyService TermSearchService { get; }
+
+	public ITerminologyService TermSearchService { get; }
 
 	public override void Dispose()
 	{
 		TermSearchService.Dispose();
-		SettingsService.Dispose();
 		base.Dispose();
 	}
 
@@ -61,7 +62,7 @@ public class InterpretBankProvider : AbstractTerminologyProvider
 	{
 		var languages = new List<ILanguage>();
 
-		var interpretBankLanguages = TermSearchService.GetLanguages();
+		//var interpretBankLanguages = TermSearchService.GetLanguages();
 
 		//var currentProject = StudioContext.ProjectsController.CurrentProject;
 		//if (currentProject == null) return null;
@@ -78,13 +79,13 @@ public class InterpretBankProvider : AbstractTerminologyProvider
 
 		var cultures = CultureInfo.GetCultures(CultureTypes.NeutralCultures);
 
-		languages.AddRange(interpretBankLanguages.Select(lang => new DefinitionLanguage
-		{
-			IsBidirectional = true,
-			Locale = cultures.FirstOrDefault(cult => cult.EnglishName == lang.Name),
-			Name = lang.Name,
-			TargetOnly = false
-		}));
+		//languages.AddRange(interpretBankLanguages.Select(lang => new DefinitionLanguage
+		//{
+		//	IsBidirectional = true,
+		//	Locale = cultures.FirstOrDefault(cult => cult.EnglishName == lang.Name),
+		//	Name = lang.Name,
+		//	TargetOnly = false
+		//}));
 
 		return languages;
 	}

@@ -1,181 +1,259 @@
-﻿<UserControl x:Class="InterpretBank.SettingsService.UI.GlossarySetup"
-			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-			 xmlns:sdl="http://schemas.sdl.com/xaml"
-			 xmlns:viewModel="clr-namespace:InterpretBank.SettingsService.ViewModel"
-			 d:DataContext="{d:DesignInstance viewModel:SetupGlossariesViewModel}"
-			 mc:Ignorable="d"
-			 d:DesignHeight="450"
-			 d:DesignWidth="800">
-	<UserControl.Resources>
+﻿<Window x:Class="InterpretBank.SettingsService.UI.GlossarySetup"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:sdl="http://schemas.sdl.com/xaml"
+		WindowStartupLocation="CenterScreen"
+		xmlns:viewModel="clr-namespace:InterpretBank.SettingsService.ViewModel"
+		xmlns:ui="clr-namespace:InterpretBank.SettingsService.UI"
+		xmlns:interpretBank="clr-namespace:InterpretBank"
+		xmlns:converters="clr-namespace:InterpretBank.SettingsService.Converters"
+		xmlns:model="clr-namespace:InterpretBank.SettingsService.Model"
+		d:DataContext="{d:DesignInstance viewModel:GlossarySetupViewModel}"
+		mc:Ignorable="d"
+		Height="500"
+		Width="600">
+	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="../UI helpers/SettingsResources.xaml" />
-				<ResourceDictionary Source="../UI helpers/SetupGlossariesResources.xaml" />
+				<ResourceDictionary Source="../Styles/SettingsResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+				<ResourceDictionary Source="../Styles/SetupGlossariesResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
+			<converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
 		</ResourceDictionary>
-	</UserControl.Resources>
-	<TabControl Margin="10"
-				Background="#F6F6F6"
-				BorderThickness="1">
+	</Window.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		<DockPanel Grid.Row="0"
+				   HorizontalAlignment="Stretch"
+				   Margin="10 10 10 5"
+				   VerticalAlignment="Top">
 
-		<TabItem Header="Glossaries"
-				 Template="{StaticResource GlossarySetupTabItem}">
-			<Grid>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto" />
-					<RowDefinition Height="*" />
-				</Grid.RowDefinitions>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition />
-					<ColumnDefinition />
-				</Grid.ColumnDefinitions>
-
-				<DockPanel LastChildFill="False"
-						   Grid.Column="0"
-						   Grid.ColumnSpan="2"
-						   Grid.Row="0"
-						   DockPanel.Dock="Left">
-					<TextBox x:Name="ValueHolder"
-							 Visibility="Collapsed" />
-					<TextBlock Text="Type in a new glossary name then press enter:"
-							   Margin="0 5 0 1"
-							   DockPanel.Dock="Top" />
-					<TextBox DockPanel.Dock="Top"
-							 Margin="0 0 0 5"
-							 PreviewKeyDown="UIElement_OnKeyDown">
-						<TextBox.InputBindings>
-							<KeyBinding Key="Enter"
-										Command="{Binding EnterGlossaryCommand}"
-										CommandParameter="{Binding Text, ElementName=ValueHolder}" />
-						</TextBox.InputBindings>
-					</TextBox>
-				</DockPanel>
-
-				<ListBox DockPanel.Dock="Top"
-						 Grid.Column="0"
-						 Grid.Row="1"
-						 x:Name="GlossaryList"
-						 Validation.ErrorTemplate="{x:Null}"
-						 ItemsSource="{Binding Glossaries}"
-						 SelectedItem="{Binding GlossarySetupSelectedGlossary}"
-						 d:ItemsSource="{d:SampleData ItemCount=5}">
-					<ListBox.ItemTemplate>
-						<DataTemplate>
-							<DockPanel>
-								<Image Source="../../Resources/Glossary.png"
-									   DockPanel.Dock="Left"
-									   Height="17" />
-								<TextBlock Text="{Binding GlossaryName}"
-										   FontSize="10"
-										   VerticalAlignment="Center"
-										   DockPanel.Dock="Left" />
-							</DockPanel>
-						</DataTemplate>
-					</ListBox.ItemTemplate>
-				</ListBox>
-				<Grid Grid.Column="1"
-					  Grid.Row="1">
+			<TextBlock Text="{x:Static interpretBank:PluginResources.SettingsWindow_TextBlock_DBFilepath}"
+					   DockPanel.Dock="Top" />
+			<ui:ChooseFilepathControl />
+		</DockPanel>
+		<TabControl Margin="10"
+					Visibility="{Binding Filepath, Converter={StaticResource NullToVisibilityConverter}}"
+					Grid.Row="1"
+					Background="#F6F6F6"
+					BorderThickness="1">
+			<TabItem Header="Glossaries"
+					 Template="{StaticResource GlossarySetupTabItem}">
+				<Grid>
 					<Grid.RowDefinitions>
-						<RowDefinition />
-						<RowDefinition />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="*" />
 					</Grid.RowDefinitions>
-					<sdl:MultiSelectComboBox Grid.Row="0"
-											 DockPanel.Dock="Top"
-											 Margin="5 0 0 5"
-											 ItemsSource="{Binding Languages}"
-											 SelectedItems="{Binding SelectedItem.Languages, ElementName=GlossaryList, Mode=TwoWay}"
-											 DropdownItemTemplate="{StaticResource LanguageTemplate}"
-											 SelectedItemTemplate="{StaticResource LanguageTemplate}" />
-					<sdl:MultiSelectComboBox Grid.Row="1"
-											 DockPanel.Dock="Bottom"
-											 Margin="5 5 0 0"
-											 ItemsSource="{Binding Tags}"
-											 SelectedItems="{Binding SelectedItem.Tags, ElementName=GlossaryList}"
-											 DropdownItemTemplate="{StaticResource TagTemplate}"
-											 SelectedItemTemplate="{StaticResource TagTemplate}" />
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition />
+						<ColumnDefinition />
+					</Grid.ColumnDefinitions>
+
+					<DockPanel LastChildFill="False"
+							   Grid.Column="0"
+							   Grid.ColumnSpan="2"
+							   Grid.Row="0"
+							   DockPanel.Dock="Left">
+						<TextBox x:Name="ValueHolder"
+								 Visibility="Collapsed" />
+						<TextBlock Text="Type in a new glossary name then press enter:"
+								   Margin="0 5 0 1"
+								   DockPanel.Dock="Top" />
+						<TextBox DockPanel.Dock="Top"
+								 Margin="0 0 0 5"
+								 PreviewKeyDown="UIElement_OnKeyDown">
+							<TextBox.InputBindings>
+								<KeyBinding Key="Enter"
+											Command="{Binding EnterGlossaryCommand}"
+											CommandParameter="{Binding Text, ElementName=ValueHolder}" />
+							</TextBox.InputBindings>
+						</TextBox>
+					</DockPanel>
+
+					<ListBox DockPanel.Dock="Top"
+							 Grid.Column="0"
+							 Grid.Row="1"
+							 x:Name="GlossaryList"
+							 Validation.ErrorTemplate="{x:Null}"
+							 ItemsSource="{Binding Glossaries}"
+							 SelectedItem="{Binding GlossarySetupSelectedGlossary}"
+							 d:ItemsSource="{d:SampleData ItemCount=5}">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<DockPanel>
+									<Image Source="../../Resources/Glossary.png"
+										   DockPanel.Dock="Left"
+										   Height="17" />
+									<TextBlock Text="{Binding GlossaryName}"
+											   FontSize="10"
+											   VerticalAlignment="Center"
+											   DockPanel.Dock="Left" />
+								</DockPanel>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+					<Grid Grid.Column="1"
+						  Grid.Row="1">
+						<Grid.RowDefinitions>
+							<RowDefinition />
+							<RowDefinition />
+						</Grid.RowDefinitions>
+						<sdl:MultiSelectComboBox Grid.Row="0"
+												 DockPanel.Dock="Top"
+												 Margin="5 0 0 5"
+												 ItemsSource="{Binding Languages}"
+												 SelectedItems="{Binding SelectedItem.Languages, ElementName=GlossaryList, Mode=TwoWay}"
+												 DropdownItemTemplate="{StaticResource LanguageTemplate}"
+												 SelectedItemTemplate="{StaticResource LanguageTemplate}" />
+						<sdl:MultiSelectComboBox Grid.Row="1"
+												 DockPanel.Dock="Bottom"
+												 Margin="5 5 0 0"
+												 ItemsSource="{Binding Tags}"
+												 SelectedItems="{Binding SelectedItem.Tags, ElementName=GlossaryList}"
+												 DropdownItemTemplate="{StaticResource TagTemplate}"
+												 SelectedItemTemplate="{StaticResource TagTemplate}" />
+					</Grid>
 				</Grid>
-			</Grid>
-		</TabItem>
+			</TabItem>
 
-		<TabItem Header="Tags"
-				 Template="{StaticResource GlossarySetupTabItem}">
-			<Grid>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto" />
-					<RowDefinition Height="*" />
-				</Grid.RowDefinitions>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition />
-					<ColumnDefinition />
-				</Grid.ColumnDefinitions>
+			<!--Tags tab-->
+			<TabItem Header="Tags"
+					 Template="{StaticResource GlossarySetupTabItem}">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition />
+						<ColumnDefinition />
+					</Grid.ColumnDefinitions>
 
-				<DockPanel LastChildFill="False"
-						   Grid.Row="0"
-						   Grid.Column="0"
-						   Grid.ColumnSpan="2">
-					<TextBlock Text="Type in a new tag then press enter:"
-							   Margin="0 5 0 1"
-							   DockPanel.Dock="Top" />
-					<TextBox DockPanel.Dock="Top"
-							 Margin="0 0 0 5"
-							 PreviewKeyDown="UIElement_OnKeyDown">
-						<TextBox.InputBindings>
-							<KeyBinding Key="Enter"
-										Command="{Binding EnterTagCommand}"
-										CommandParameter="{Binding Text, ElementName=ValueHolder}" />
-						</TextBox.InputBindings>
-					</TextBox>
-				</DockPanel>
+					<DockPanel LastChildFill="False"
+							   Grid.Row="0"
+							   Grid.Column="0"
+							   Grid.ColumnSpan="2">
+						<TextBlock Text="Type in a new tag then press enter:"
+								   Margin="0 5 0 1"
+								   DockPanel.Dock="Top" />
+						<TextBox DockPanel.Dock="Top"
+								 Margin="0 0 0 5"
+								 PreviewKeyDown="UIElement_OnKeyDown">
+							<TextBox.InputBindings>
+								<KeyBinding Key="Enter"
+											Command="{Binding EnterTagCommand}"
+											CommandParameter="{Binding Text, ElementName=ValueHolder}" />
+							</TextBox.InputBindings>
+						</TextBox>
+					</DockPanel>
 
-				<ListBox DockPanel.Dock="Top"
-						 Grid.Row="1"
-						 x:Name="TagsList"
-						 Grid.Column="0"
-						 ItemsSource="{Binding Tags}"
-						 SelectedItem="{Binding SelectedTag}"
-						 d:ItemsSource="{d:SampleData ItemCount=5}">
+					<ListBox DockPanel.Dock="Top"
+							 Grid.Row="1"
+							 x:Name="TagsList"
+							 Grid.Column="0"
+							 ItemsSource="{Binding Tags}"
+							 SelectedItem="{Binding SelectedTag}"
+							 d:ItemsSource="{d:SampleData ItemCount=5}">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<DockPanel>
+									<Button Command="{Binding DataContext.DeleteTagCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+											CommandParameter="{Binding TagName}"
+											VerticalAlignment="Center"
+											DockPanel.Dock="Left"
+											Content="&#xE106;">
+										<Button.Template>
+											<ControlTemplate TargetType="Button">
+												<TextBlock FontFamily="Segoe MDL2 Assets"
+														   Text="{TemplateBinding Content}"
+														   Foreground="Red"
+														   HorizontalAlignment="Right"
+														   FontSize="7" />
+											</ControlTemplate>
+										</Button.Template>
+									</Button>
+									<Image Source="../../Resources/Tag.png"
+										   DockPanel.Dock="Left"
+										   Height="17" />
+									<TextBlock Text="{Binding TagName}"
+											   FontSize="10"
+											   VerticalAlignment="Center"
+											   DockPanel.Dock="Right" />
+								</DockPanel>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+
+
+					<sdl:MultiSelectComboBox Grid.Column="1"
+											 Grid.Row="1"
+											 Margin="5 0 0 5"
+											 ItemsSource="{Binding Glossaries}"
+											 DropdownItemTemplate="{StaticResource GlossaryTemplate}"
+											 SelectedItems="{Binding GlossariesTaggedWithSelected}"
+											 SelectedItemTemplate="{StaticResource GlossaryTemplate}" />
+				</Grid>
+			</TabItem>
+
+			<TabItem Header="Languages"
+					 Background="Red"
+					 Template="{StaticResource GlossarySetupTabItem}">
+
+				<DataGrid ItemsSource="{Binding SelectedLanguages}"
+						  AutoGenerateColumns="False"
+						  IsReadOnly="True">
+					<DataGrid.Columns>
+						<DataGridTemplateColumn Width="*">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<ComboBox ItemsSource="{Binding LanguageModels}"
+											  ItemTemplate="{StaticResource LanguageTemplate}" />
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+					</DataGrid.Columns>
+				</DataGrid>
+
+				<!--<ListBox ItemsSource="{Binding SelectedLanguages}" HorizontalAlignment="Left">
 					<ListBox.ItemTemplate>
 						<DataTemplate>
-							<DockPanel>
-								<Button Command="{Binding DataContext.DeleteTagCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
-										CommandParameter="{Binding TagName}"
-										VerticalAlignment="Center"
-										DockPanel.Dock="Left"
-										Content="&#xE106;">
-									<Button.Template>
-										<ControlTemplate TargetType="Button">
-											<TextBlock FontFamily="Segoe MDL2 Assets"
-													   Text="{TemplateBinding Content}"
-													   Foreground="Red"
-													   HorizontalAlignment="Right"
-													   FontSize="7" />
-										</ControlTemplate>
-									</Button.Template>
-								</Button>
-								<Image Source="../../Resources/Tag.png"
-									   DockPanel.Dock="Left"
-									   Height="17" />
-								<TextBlock Text="{Binding TagName}"
-										   FontSize="10"
-										   VerticalAlignment="Center"
-										   DockPanel.Dock="Right" />
-							</DockPanel>
+							<ComboBox ItemTemplate="{StaticResource LanguageTemplate}"
+							          ItemsSource="{Binding LanguageModels}"/>
 						</DataTemplate>
 					</ListBox.ItemTemplate>
-				</ListBox>
+				</ListBox>-->
 
+			</TabItem>
 
-				<sdl:MultiSelectComboBox Grid.Column="1"
-										 Grid.Row="1"
-										 Margin="5 0 0 5"
-										 ItemsSource="{Binding Glossaries}"
-										 DropdownItemTemplate="{StaticResource GlossaryTemplate}"
-										 SelectedItems="{Binding GlossariesTaggedWithSelected}"
-										 SelectedItemTemplate="{StaticResource GlossaryTemplate}" />
-			</Grid>
-		</TabItem>
-	</TabControl>
-</UserControl>
+		</TabControl>
+		<DockPanel Grid.Row="2"
+				   Margin="0 50 0 0"
+				   VerticalAlignment="Bottom"
+				   LastChildFill="False">
+			<Button Content="Cancel"
+					Cursor="Hand"
+					Width="120"
+					IsCancel="True"
+					Height="30"
+					Style="{StaticResource Sdl.Button.SecondaryStyle}"
+					DockPanel.Dock="Right"
+					Margin="0 0 10 10" />
+
+			<Button Content="Apply changes"
+					Cursor="Hand"
+					Width="120"
+					Command="{Binding SaveCommand}"
+					Height="30"
+					Style="{StaticResource Sdl.Button.PrimaryStyle}"
+					DockPanel.Dock="Right"
+					Margin="0 0 10 10" />
+		</DockPanel>
+	</Grid>
+</Window>

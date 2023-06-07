@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace InterpretBank.SettingsService.UI
@@ -6,7 +7,7 @@ namespace InterpretBank.SettingsService.UI
 	/// <summary>
 	/// Interaction logic for SetupGlossaries.xaml
 	/// </summary>
-	public partial class GlossarySetup : UserControl
+	public partial class GlossarySetup : Window
 	{
 		public GlossarySetup()
 		{
@@ -29,5 +30,5 @@ namespace InterpretBank.SettingsService.UI
 
 			MoveTextToValueHolder(sender);
 		}
-	}
+	}	
 }

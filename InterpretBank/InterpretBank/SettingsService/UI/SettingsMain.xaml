@@ -29,22 +29,12 @@
 			</ResourceDictionary.MergedDictionaries>
 
 			<converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
-
-			<DataTemplate DataType="{x:Type viewModel:SettingsViewModel}">
-				<ui:Settings />
-			</DataTemplate>
-
-			<DataTemplate DataType="{x:Type viewModel:SetupGlossariesViewModel}">
-				<ui:GlossarySetup />
-			</DataTemplate>
-            
-
 		</ResourceDictionary>
 	</Window.Resources>
 
 	<Border Style="{StaticResource WindowControlBorderStyle}">
 		<Grid Margin="0,0,0,0"
-		      Background="{StaticResource WindowsControl.Navigation.Backround}">
+			  Background="{StaticResource WindowsControl.Navigation.Backround}">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
@@ -55,41 +45,26 @@
 
 			<styles:WindowsControl Grid.Row="0" />
 
-			<Image Grid.Row="1" Height="50" Source="../../Resources/logo.png"/>
+			<Image Grid.Row="1"
+				   Height="50"
+				   Source="../../Resources/logo.png" />
 
+			<!--Filepath field-->
 			<DockPanel Grid.Row="2"
 					   HorizontalAlignment="Stretch"
 					   Margin="10 10 10 5"
 					   VerticalAlignment="Top">
 
 				<TextBlock Text="{x:Static interpretBank:PluginResources.SettingsWindow_TextBlock_DBFilepath}"
-				           DockPanel.Dock="Top" />
-				<Grid>
-					<TextBox Name="FilepathTextBox"
-							 DockPanel.Dock="Bottom"
-							 VerticalContentAlignment="Center"
-							 IsReadOnly="True"
-							 Text="{Binding Filepath, UpdateSourceTrigger=PropertyChanged}">
-						<TextBox.InputBindings>
-							<MouseBinding Command="{Binding ChooseFilePathCommand}"
-										  MouseAction="LeftClick" />
-						</TextBox.InputBindings>
-					</TextBox>
-					<Button Style="{StaticResource ClearTextButtonStyle}" 
-							Click="ClearFilepathButton"
-							BorderBrush="Transparent"
-							Background="Transparent"
-							Content="X"
-							Visibility="{Binding ElementName=FilepathTextBox, Path=Text, Converter={StaticResource NullToVisibilityConverter}}"
-							HorizontalAlignment="Right"
-							Margin="5"/>
-
-				</Grid>
+						   DockPanel.Dock="Top" />
+				<ui:ChooseFilepathControl/>
 			</DockPanel>
 
 			<ui:Settings Grid.Row="3"
+						 x:Name="SettingsUi"
+						 DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}"
 						 VerticalContentAlignment="top"
-						 Visibility="{Binding ElementName=FilepathTextBox, Path=Text, Converter={StaticResource NullToVisibilityConverter}}" />
+						 Visibility="{Binding Filepath, Converter={StaticResource NullToVisibilityConverter}}" />
 
 			<DockPanel Grid.Row="4"
 					   Margin="0 50 0 0"

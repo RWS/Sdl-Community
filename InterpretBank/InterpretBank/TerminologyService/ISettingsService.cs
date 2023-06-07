@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using InterpretBank.SettingsService.Model;
 
 namespace InterpretBank.TerminologyService
 {

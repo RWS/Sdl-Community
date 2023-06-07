@@ -16,7 +16,17 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 {
 	public SQLiteConnection SqLiteConnection { get; set; }
 
+
+	//TODO: Delete this; only used for debugging
+	public int Id { get; set; }
+
 	private DataContext DataContext { get; set; }
+
+
+	public InterpretBankDataContext()
+	{
+		Id = new Random().Next(100);
+	}
 
 	public void Dispose()
 	{
