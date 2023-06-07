@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DocumentFormat.OpenXml.Wordprocessing;
 using InterpretBank.GlossaryService;
 using InterpretBank.GlossaryService.DAL;
 using InterpretBank.GlossaryService.Interface;
@@ -48,7 +49,11 @@ public class TerminologyService : ITerminologyService
 		return studioTerms;
 	}
 
-	public List<Language> GetLanguages() => InterpretBankDataContext.GetLanguages();
+	public List<Language> GetLanguages()
+	{
+		var languages = InterpretBankDataContext.GetLanguages();
+		return languages;
+	}
 
 	private static List<string> GetTargetLanguageColumns(int languageIndex)
 	{

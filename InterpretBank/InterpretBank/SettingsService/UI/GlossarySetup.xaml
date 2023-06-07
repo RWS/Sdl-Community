@@ -19,9 +19,12 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../Styles/SettingsResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/datagridresources.xaml" />
 				<ResourceDictionary Source="../Styles/SetupGlossariesResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+			<converters:IntToBoolConverter x:Key="IntToBoolConverter" />
 		</ResourceDictionary>
 	</Window.Resources>
 	<Grid>
@@ -102,23 +105,37 @@
 					<Grid Grid.Column="1"
 						  Grid.Row="1">
 						<Grid.RowDefinitions>
-							<RowDefinition />
-							<RowDefinition />
+							<RowDefinition Height="*" />
+							<RowDefinition Height="*" />
 						</Grid.RowDefinitions>
-						<sdl:MultiSelectComboBox Grid.Row="0"
-												 DockPanel.Dock="Top"
-												 Margin="5 0 0 5"
-												 ItemsSource="{Binding Languages}"
-												 SelectedItems="{Binding SelectedItem.Languages, ElementName=GlossaryList, Mode=TwoWay}"
-												 DropdownItemTemplate="{StaticResource LanguageTemplate}"
-												 SelectedItemTemplate="{StaticResource LanguageTemplate}" />
-						<sdl:MultiSelectComboBox Grid.Row="1"
-												 DockPanel.Dock="Bottom"
-												 Margin="5 5 0 0"
-												 ItemsSource="{Binding Tags}"
-												 SelectedItems="{Binding SelectedItem.Tags, ElementName=GlossaryList}"
-												 DropdownItemTemplate="{StaticResource TagTemplate}"
-												 SelectedItemTemplate="{StaticResource TagTemplate}" />
+
+						<DockPanel>
+							<Label Content="Languages"
+								   Padding="5 0 0 5"
+								   DockPanel.Dock="Top"
+								   FontWeight="Light"
+								   FontSize="10" />
+							<sdl:MultiSelectComboBox DockPanel.Dock="Bottom"
+													 Margin="5 0 0 5"
+													 ItemsSource="{Binding Languages}"
+													 SelectedItems="{Binding SelectedItem.Languages, ElementName=GlossaryList, Mode=TwoWay}"
+													 DropdownItemTemplate="{StaticResource LanguageTemplate}"
+													 SelectedItemTemplate="{StaticResource LanguageTemplate}" />
+						</DockPanel>
+						<DockPanel Grid.Row="1">
+							<Label DockPanel.Dock="Top"
+								   Content="Tags"
+								   Padding="5 0 0 5"
+								   FontWeight="Light"
+								   FontSize="10" />
+							<sdl:MultiSelectComboBox Grid.Row="3"
+													 DockPanel.Dock="Bottom"
+													 Margin="5 0 0 0"
+													 ItemsSource="{Binding Tags}"
+													 SelectedItems="{Binding SelectedItem.Tags, ElementName=GlossaryList}"
+													 DropdownItemTemplate="{StaticResource TagTemplate}"
+													 SelectedItemTemplate="{StaticResource TagTemplate}" />
+						</DockPanel>
 					</Grid>
 				</Grid>
 			</TabItem>
@@ -194,7 +211,7 @@
 
 					<sdl:MultiSelectComboBox Grid.Column="1"
 											 Grid.Row="1"
-											 Margin="5 0 0 5"
+											 Margin="5 0 0 0"
 											 ItemsSource="{Binding Glossaries}"
 											 DropdownItemTemplate="{StaticResource GlossaryTemplate}"
 											 SelectedItems="{Binding GlossariesTaggedWithSelected}"
@@ -203,23 +220,44 @@
 			</TabItem>
 
 			<TabItem Header="Languages"
-					 Background="Red"
 					 Template="{StaticResource GlossarySetupTabItem}">
 
-				<DataGrid ItemsSource="{Binding SelectedLanguages}"
-						  AutoGenerateColumns="False"
-						  IsReadOnly="True">
-					<DataGrid.Columns>
-						<DataGridTemplateColumn Width="*">
-							<DataGridTemplateColumn.CellTemplate>
-								<DataTemplate>
-									<ComboBox ItemsSource="{Binding LanguageModels}"
-											  ItemTemplate="{StaticResource LanguageTemplate}" />
-								</DataTemplate>
-							</DataGridTemplateColumn.CellTemplate>
-						</DataGridTemplateColumn>
-					</DataGrid.Columns>
-				</DataGrid>
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="*" />
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
+
+					<DataGrid ItemsSource="{Binding SelectedLanguages}"
+							  Grid.Row="0"
+							  AutoGenerateColumns="False"
+							  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+							  SelectionMode="Single"
+							  IsReadOnly="True">
+						<DataGrid.Columns>
+							<DataGridTemplateColumn Width="*">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<ComboBox ItemsSource="{Binding LanguageModels}"
+												  SelectedIndex="{Binding SelectedIndex}"
+												  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+												  ItemTemplate="{StaticResource LanguageTemplate}"
+												  IsEnabled="{Binding SelectedIndex, Converter={StaticResource IntToBoolConverter}}" />
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+						</DataGrid.Columns>
+					</DataGrid>
+					<Button Content="Commit to database"
+							Grid.Row="1"
+							Cursor="Hand"
+							Width="Auto"
+							Height="30"
+							Style="{StaticResource Sdl.Button.GeneralStyle}"
+							HorizontalAlignment="Right"
+							Margin="0 10 0 0" />
+
+				</Grid>
 
 				<!--<ListBox ItemsSource="{Binding SelectedLanguages}" HorizontalAlignment="Left">
 					<ListBox.ItemTemplate>

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Data.Linq;
 using System.Data.SQLite;
 using System.Linq;
+using DocumentFormat.OpenXml.Wordprocessing;
 using InterpretBank.GlossaryService.DAL;
 using InterpretBank.GlossaryService.DAL.Interface;
 using InterpretBank.GlossaryService.Interface;
@@ -74,7 +75,6 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 				});
 
 		languages.RemoveAll(l => l.Name is null or "undef");
-
 		return languages;
 	}
 
@@ -153,6 +153,7 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 	private List<Language> GetLanguageNames(string languageSetting)
 	{
 		var languageModels = GetLanguages();
+
 		if (string.IsNullOrEmpty(languageSetting) || !languageSetting.Contains("#"))
 			return new List<Language>();
 

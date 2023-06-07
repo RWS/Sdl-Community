@@ -1,14 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace InterpretBank.SettingsService.Model
 {
-	public class LanguageModelsListBoxItem
+	public class LanguageModelsListBoxItem : ViewModel.ViewModel
 	{
-		public List<LanguageModel> LanguageModels { get; set; }
-		public int SelectedIndex { get; set; }
+		private List<LanguageModel> _languageModels;
+		private int _selectedIndex = -1;
+
+		public List<LanguageModel> LanguageModels
+		{
+			get => _languageModels;
+			set => SetField(ref _languageModels, value);
+		}
+
+		public int SelectedIndex
+		{
+			get => _selectedIndex;
+			set => SetField(ref _selectedIndex, value);
+		}
 	}
 }

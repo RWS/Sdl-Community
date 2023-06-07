@@ -68,7 +68,7 @@
 	</DataTemplate>
 
 	<DataTemplate x:Key="LanguageTemplate"
-				  DataType="{x:Type model:LanguageModel}">
+				  DataType="{x:Type generalModel:Language}">
 		<DockPanel>
 			<Image Source="../../Resources/Flag.png"
 				   DockPanel.Dock="Left"

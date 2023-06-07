@@ -4,8 +4,10 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using DocumentFormat.OpenXml.Wordprocessing;
 using InterpretBank.Commands;
 using InterpretBank.GlossaryService.Interface;
+using InterpretBank.Model;
 using InterpretBank.SettingsService.Model;
 using InterpretBank.SettingsService.ViewModel.Interface;
 using InterpretBank.Wrappers.Interface;
@@ -20,7 +22,7 @@ namespace InterpretBank.SettingsService.ViewModel
 		private ICommand _enterTagCommand;
 		private List<GlossaryModel> _glossaries;
 		private List<GlossaryModel> _glossariesTaggedWithSelected;
-		private List<LanguageModel> _languages;
+		private List<Language> _languages;
 		private TagModel _selectedTag;
 		private List<TagModel> _tags;
 		private ICommand _chooseFilepathCommand;
@@ -95,7 +97,7 @@ namespace InterpretBank.SettingsService.ViewModel
 
 		public GlossaryModel GlossarySetupSelectedGlossary { get; set; }
 
-		public List<LanguageModel> Languages
+		public List<Language> Languages
 		{
 			get => _languages;
 			set
@@ -113,18 +115,32 @@ namespace InterpretBank.SettingsService.ViewModel
 			Tags = InterpretBankDataContext.GetTags();
 			Glossaries = InterpretBankDataContext.GetGlossaries();
 
-			Languages = InterpretBankDataContext.GetLanguages().Select(l => new LanguageModel { Name = l.Name }).ToList();
+			var languages = InterpretBankDataContext.GetLanguages();
+
+			Languages = languages;
 			TagLinks = InterpretBankDataContext.GetLinks();
 
 			var tagGroup = new TagsGroup(1, "All tags");
 			Tags.ForEach(t => t.Group = tagGroup);
 
-			SelectedLanguages = new List<LanguageModelsListBoxItem>
+			var allLanguages = Constants.Languages.LanguagesList;
+
+			SelectedLanguages = new List<LanguageModelsListBoxItem>();
+			for (var i = 0; i < 10; i++)
 			{
-				new() { LanguageModels = Languages },
-				new() { LanguageModels = Languages },
-				new() { LanguageModels = Languages }
-			};
+				SelectedLanguages.Add(new LanguageModelsListBoxItem
+				{
+					LanguageModels = allLanguages.Select(l => new LanguageModel { Name = l }).ToList()
+				});
+			}
+
+			foreach (var language in Languages)
+			{
+				var selectedIndex = allLanguages.IndexOf(language.Name);
+				SelectedLanguages[language.Index - 1].SelectedIndex = selectedIndex;
+
+			}
+			
 		}
 
 		public TagModel SelectedTag
