@@ -25,18 +25,25 @@
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../Styles/Buttons.xaml" />
+				<ResourceDictionary Source="../Styles/GroupBox.xaml" />
 				<ResourceDictionary Source="../Styles/WindowsBorder.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ComboBoxResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<converters:EmptyToVisibility x:Key="EmptyToVisibilityConverter" />
 			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
+			
 			<DataTemplate DataType="{x:Type viewModels:ProviderControlViewModel}">
 				<ui:ProviderControl />
 			</DataTemplate>
 
 			<DataTemplate DataType="{x:Type viewModels:SettingsControlViewModel}">
 				<ui:SettingsControl />
+			</DataTemplate>
+
+			<DataTemplate DataType="{x:Type viewModels:PrivateEndpointViewModel}">
+				<ui:PrivateEndpointView />
 			</DataTemplate>
 		</ResourceDictionary>
 
@@ -54,9 +61,21 @@
 			<styles:WindowsControl Grid.Row="0"
 								   Background="White" />
 
-
-			<ContentControl Content="{Binding SelectedView.ViewModel}"
-							Grid.Row="2" />
+			<GroupBox Grid.Row="2"
+					  Margin="24 48 24 0"
+					  Padding="12"
+					  Header="Provider"
+					  Style="{StaticResource DefaultGroupBox}">
+				<StackPanel>
+					<ComboBox ItemsSource="{Binding Endpoints}"
+							  SelectedItem="{Binding SelectedEndpoint}"
+							  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+							  Margin="0 0 0 12"
+							  />
+					<ContentControl Content="{Binding SelectedView.ViewModel}" />
+				</StackPanel>
+			</GroupBox>
+			
 			<Button Content="Help"
 					Style="{StaticResource Sdl.Button.SecondaryStyle}"
 					Command="{Binding NavigateToCommand}"

@@ -50,7 +50,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			{
 				if (_selectedTranslationOption == value) return;
 				_selectedTranslationOption = value;
-				IsMicrosoftSelected = value.ProviderType == MTETranslationOptions.ProviderType.MicrosoftTranslator;
 				OnPropertyChanged(nameof(SelectedTranslationOption));
 			}
 		}
@@ -161,8 +160,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			{
 				new TranslationOption
 				{
-					Name = PluginResources.Microsoft,
-					ProviderType = MTETranslationOptions.ProviderType.MicrosoftTranslator
+					Name = PluginResources.Microsoft
 				}
 			};
 
@@ -177,9 +175,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			ClientID = _options.ClientID;
 			PersistMicrosoftKey = _options.PersistMicrosoftCredentials;
 			UseCategoryID = _options.UseCategoryID;
-			PrivateEndpoint = _options.PrivateEndpoint;
-			PersistPrivateEndpoint = _options.PersistPrivateEndpoint;
-			UsePrivateEndpoint = !string.IsNullOrEmpty(PrivateEndpoint);
 			Region = Regions.FirstOrDefault(a => a.Key == (_options.Region ?? ""));
 			SetTranslationOption();
 		}
@@ -203,52 +198,12 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				case "CategoryId":
 					CategoryID = string.Empty;
 					break;
-				case "PrivateEndpoint":
-					PrivateEndpoint = string.Empty;
-					break;
 			}
 		}
 
 		private void NavigateTo(object parameter)
 		{
 			Process.Start(parameter as string);
-		}
-
-
-		private bool _usePrivateEndpoint;
-		public bool UsePrivateEndpoint
-		{
-			get => _usePrivateEndpoint;
-			set
-			{
-				if (_usePrivateEndpoint == value) return;
-				_usePrivateEndpoint = value;
-				OnPropertyChanged(nameof(UsePrivateEndpoint));
-			}
-		}
-
-		private string _privateEndpoint;
-		public string PrivateEndpoint
-		{
-			get => _privateEndpoint;
-			set
-			{
-				if (_privateEndpoint ==	value) return;
-				_privateEndpoint = value;
-				OnPropertyChanged(nameof(PrivateEndpoint));
-			}
-		}
-
-		private bool _persistPrivateEndpoint;
-		public bool PersistPrivateEndpoint
-		{
-			get => _persistPrivateEndpoint;
-			set
-			{
-				if (PersistPrivateEndpoint == value) return;
-				_persistPrivateEndpoint = value;
-				OnPropertyChanged(nameof(PersistPrivateEndpoint));
-			}
 		}
 	}
 }

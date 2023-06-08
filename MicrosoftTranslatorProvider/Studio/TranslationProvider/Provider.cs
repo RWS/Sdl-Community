@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Windows.Documents;
+using MicrosoftTranslatorProvider.ApiService;
 using MicrosoftTranslatorProvider.Extensions;
 using MicrosoftTranslatorProvider.Interfaces;
 using MicrosoftTranslatorProvider.Model;
@@ -14,7 +17,7 @@ namespace MicrosoftTranslatorProvider
 	{
 		private readonly HtmlUtil _htmlUtil;
 
-		private ProviderConnecter _providerConnecter;
+		private MicrosoftApi _providerConnector;
 
 		public Provider(ITranslationOptions options, RegionsProvider regionProvider, HtmlUtil htmlUtil)
 		{
@@ -25,7 +28,6 @@ namespace MicrosoftTranslatorProvider
 
 		public string Name
 		{
-
 			get
 			{
 				var customName = Options.CustomProviderName;
@@ -33,8 +35,9 @@ namespace MicrosoftTranslatorProvider
 				var providerName = customName.SetProviderName(useCustomName);
 				return providerName;
 			}
-
 		}
+
+		public List<UrlMetadata> PrivateHeaders { get; set; }
 
 		public RegionsProvider RegionsProvider { get; }
 
@@ -82,9 +85,14 @@ namespace MicrosoftTranslatorProvider
 
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
-			_providerConnecter ??= new ProviderConnecter(Options.ClientID, Options.Region, _htmlUtil, Options.PrivateEndpoint);
-			_providerConnecter.ResetCredentials(Options.ClientID, Options.Region);
-			return _providerConnecter.IsSupportedLanguagePair(languageDirection.SourceCulture.Name, languageDirection.TargetCulture.Name);
+			if (Options.UsePrivateEndpoint)
+			{
+				return true;
+			}
+
+			_providerConnector ??= new MicrosoftApi(Options.ClientID, Options.Region, _htmlUtil);
+			_providerConnector.ResetCredentials(Options.ClientID, Options.Region);
+			return _providerConnector.IsSupportedLanguagePair(languageDirection.SourceCulture.Name, languageDirection.TargetCulture.Name);
 		}
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
