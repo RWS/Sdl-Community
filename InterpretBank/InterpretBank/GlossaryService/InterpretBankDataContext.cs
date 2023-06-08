@@ -4,7 +4,9 @@ using System.Collections.ObjectModel;
 using System.Data.Linq;
 using System.Data.SQLite;
 using System.Linq;
+using System.Text.RegularExpressions;
 using DocumentFormat.OpenXml.Wordprocessing;
+using InterpretBank.Constants;
 using InterpretBank.GlossaryService.DAL;
 using InterpretBank.GlossaryService.DAL.Interface;
 using InterpretBank.GlossaryService.Interface;
@@ -59,6 +61,20 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 		return glossaries;
 	}
 
+	public void InsertLanguage(Language language)
+	{
+
+		var dbInfo = GetTable<DatabaseInfo>().ToList()[0];
+
+		var dbInfoProperties = dbInfo.GetType().GetProperties().Where(p => p.Name.Contains("LanguageName"));
+
+		dbInfoProperties
+			.FirstOrDefault(p => int.Parse(p.Name.Substring(12)) == language.Index)?
+			.SetValue(dbInfo, language.Name);
+
+		SubmitData();
+	}
+
 	public List<Language> GetLanguages()
 	{
 		var dbInfo = GetRows<DatabaseInfo>().ToList()[0];
@@ -111,6 +127,8 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 
 		var maxId = table.Select(r => r.TagId).Max();
 		table.InsertOnSubmit(new DbTag { TagName = newTag.TagName, TagId = ++maxId });
+
+
 	}
 
 	public void RemoveTag(string tagName)

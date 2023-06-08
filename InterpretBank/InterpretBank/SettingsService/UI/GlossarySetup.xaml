@@ -244,7 +244,7 @@
 								<DataGridTemplateColumn.CellTemplate>
 									<DataTemplate>
 										<ComboBox ItemsSource="{Binding LanguageModels}"
-												  SelectedIndex="{Binding SelectedIndex}"
+												  SelectedIndex="{Binding SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 												  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
 												  ItemTemplate="{StaticResource LanguageTemplate}"
 												  IsEnabled="{Binding SelectedIndex, Converter={StaticResource IntToBoolConverter}}" />
@@ -292,6 +292,7 @@
 			<Button Content="Apply changes"
 					Cursor="Hand"
 					Width="120"
+					Click="ButtonBase_OnClick"
 					Command="{Binding SaveCommand}"
 					Height="30"
 					Style="{StaticResource Sdl.Button.PrimaryStyle}"

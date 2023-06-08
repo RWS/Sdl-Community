@@ -115,9 +115,7 @@ namespace InterpretBank.SettingsService.ViewModel
 			Tags = InterpretBankDataContext.GetTags();
 			Glossaries = InterpretBankDataContext.GetGlossaries();
 
-			var languages = InterpretBankDataContext.GetLanguages();
-
-			Languages = languages;
+			Languages = InterpretBankDataContext.GetLanguages();
 			TagLinks = InterpretBankDataContext.GetLinks();
 
 			var tagGroup = new TagsGroup(1, "All tags");
@@ -138,9 +136,22 @@ namespace InterpretBank.SettingsService.ViewModel
 			{
 				var selectedIndex = allLanguages.IndexOf(language.Name);
 				SelectedLanguages[language.Index - 1].SelectedIndex = selectedIndex;
-
 			}
-			
+
+			SelectedLanguages.ForEach(sl => sl.PropertyChanged += SelectedLanguagesChanged);
+		}
+
+		private void SelectedLanguagesChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (sender is not LanguageModelsListBoxItem languageModelsListBoxItem) return;
+			var newLanguage = new Language
+			{
+				Index = SelectedLanguages.IndexOf(languageModelsListBoxItem) + 1,
+				Name = Constants.Languages.LanguagesList[languageModelsListBoxItem.SelectedIndex]
+			};
+
+			Languages.Add(newLanguage);
+			InterpretBankDataContext.InsertLanguage(newLanguage);
 		}
 
 		public TagModel SelectedTag
@@ -189,6 +200,17 @@ namespace InterpretBank.SettingsService.ViewModel
 
 			InterpretBankDataContext.InsertTag(newTag);
 		}
+		
+		//private void EnterLanguage(object parameter)
+		//{
+		//	if (string.IsNullOrEmpty((string)parameter))
+		//		return;
+
+		//	var newTag = new LanguageModel() { TagName = (string)parameter };
+		//	Tags.Add(newTag);
+
+		//	InterpretBankDataContext.InsertTag(newTag);
+		//}
 
 		private void GlossarySetup_TagCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{

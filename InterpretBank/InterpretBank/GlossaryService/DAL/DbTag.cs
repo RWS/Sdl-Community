@@ -8,8 +8,7 @@ namespace InterpretBank.GlossaryService.DAL;
 [Table(Name = "TagList")]
 public class DbTag : IInterpretBankTable
 {
-	[Key]
-	[Column(Name = "TagID", IsPrimaryKey = true)] public int TagId { get; set; }
+	[Key] [Column(Name = "TagID", IsPrimaryKey = true)] public int TagId { get; set; }
 
 	[Column(Name = "TagName")] public string TagName { get; set; }
 

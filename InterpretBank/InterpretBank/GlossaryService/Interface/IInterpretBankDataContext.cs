@@ -22,4 +22,5 @@ public interface IInterpretBankDataContext : IDisposable
 	List<TagLinkModel> GetLinks();
 	void RemoveTagFromGlossary(string tagName, string glossaryName);
 	void Setup(string filepath);
+	void InsertLanguage(Language language);
 }

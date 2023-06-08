@@ -30,5 +30,10 @@ namespace InterpretBank.SettingsService.UI
 
 			MoveTextToValueHolder(sender);
 		}
+
+		private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+		{
+			DialogResult = true;
+		}
 	}	
 }
