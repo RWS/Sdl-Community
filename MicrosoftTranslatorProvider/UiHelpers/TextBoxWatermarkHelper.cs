@@ -1,30 +1,52 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace MicrosoftTranslatorProvider.UiHelpers
 {
 	public class TextBoxWatermarkHelper : DependencyObject
 	{
-		public static readonly DependencyProperty ButtonCommandParameterProperty = DependencyProperty.RegisterAttached("ButtonCommandParameter", typeof(object), typeof(TextBoxWatermarkHelper), new FrameworkPropertyMetadata(null));
+		public static readonly DependencyProperty ButtonCommandParameterProperty = DependencyProperty.RegisterAttached(
+			"ButtonCommandParameter",
+			typeof(object),
+			typeof(TextBoxWatermarkHelper),
+			new FrameworkPropertyMetadata(null));
 
-		public static readonly DependencyProperty ButtonCommandProperty = DependencyProperty.RegisterAttached("ButtonCommand", typeof(ICommand), typeof(TextBoxWatermarkHelper), new FrameworkPropertyMetadata(null, ButtonCommandOrClearTextChanged));
+		public static readonly DependencyProperty ButtonCommandProperty = DependencyProperty.RegisterAttached(
+			"ButtonCommand",
+			typeof(ICommand),
+			typeof(TextBoxWatermarkHelper),
+			new FrameworkPropertyMetadata(null, ButtonCommandOrClearTextChanged));
 
-		public static readonly DependencyProperty IsClearTextButtonBehaviorEnabledProperty = DependencyProperty.RegisterAttached("IsClearTextButtonBehaviorEnabled", typeof(bool), typeof(TextBoxWatermarkHelper), new FrameworkPropertyMetadata(false, IsClearTextButtonBehaviorEnabledChanged));
+		public static readonly DependencyProperty IsClearTextButtonBehaviorEnabledProperty = DependencyProperty.RegisterAttached(
+			"IsClearTextButtonBehaviorEnabled",
+			typeof(bool),
+			typeof(TextBoxWatermarkHelper),
+			new FrameworkPropertyMetadata(false, IsClearTextButtonBehaviorEnabledChanged));
 
-		public static readonly DependencyProperty IsWatermarkVisibleProperty = DependencyProperty.RegisterAttached("IsWatermarkVisible", typeof(bool), typeof(TextBoxWatermarkHelper));
+		public static readonly DependencyProperty IsWatermarkVisibleProperty = DependencyProperty.RegisterAttached(
+			"IsWatermarkVisible",
+			typeof(bool),
+			typeof(TextBoxWatermarkHelper));
 
-		public static readonly DependencyProperty WatermarkTextProperty = DependencyProperty.RegisterAttached("WatermarkText", typeof(string), typeof(TextBoxWatermarkHelper), new PropertyMetadata("Watermark", OnWatermarkTextChanged));
+		public static readonly DependencyProperty WatermarkTextProperty = DependencyProperty.RegisterAttached(
+			"WatermarkText",
+			typeof(string),
+			typeof(TextBoxWatermarkHelper),
+			new PropertyMetadata("Watermark", OnWatermarkTextChanged));
 
 		public static void ButtonClicked(object sender, RoutedEventArgs e)
 		{
 			var button = (Button)sender;
-			var parent = button.GetAncestors().FirstOrDefault(a => a is TextBox || a is PasswordBox || a is ComboBox);
+			var parent = GetAncestors(button).FirstOrDefault(a => a is TextBox || a is PasswordBox || a is ComboBox);
 			var command = GetButtonCommand(parent);
 			var commandParameter = GetButtonCommandParameter(parent) ?? parent;
-			if (command is not null && command.CanExecute(commandParameter))
+			if (command is not null
+			 && command.CanExecute(commandParameter))
 			{
 				command.Execute(commandParameter);
 			}
@@ -40,14 +62,14 @@ namespace MicrosoftTranslatorProvider.UiHelpers
 			return d.GetValue(ButtonCommandParameterProperty);
 		}
 
-		public static bool GetIsWatermarkVisible(DependencyObject control)
+		public static bool GetIsWatermarkVisible(DependencyObject d)
 		{
-			return (bool)control.GetValue(IsWatermarkVisibleProperty);
+			return (bool)d.GetValue(IsWatermarkVisibleProperty);
 		}
 
-		public static string GetWatermarkText(DependencyObject control)
+		public static string GetWatermarkText(DependencyObject d)
 		{
-			return (string)control.GetValue(WatermarkTextProperty);
+			return (string)d.GetValue(WatermarkTextProperty);
 		}
 
 		public static void SetButtonCommand(DependencyObject d, object value)
@@ -60,14 +82,14 @@ namespace MicrosoftTranslatorProvider.UiHelpers
 			d.SetValue(ButtonCommandParameterProperty, value);
 		}
 
-		public static void SetIsClearTextButtonBehaviorEnabled(Button obj, bool value)
+		public static void SetIsClearTextButtonBehaviorEnabled(Button button, bool value)
 		{
-			obj.SetValue(IsClearTextButtonBehaviorEnabledProperty, value);
+			button.SetValue(IsClearTextButtonBehaviorEnabledProperty, value);
 		}
 
-		public static void SetWatermarkText(DependencyObject control, string text)
+		public static void SetWatermarkText(DependencyObject d, string text)
 		{
-			control.SetValue(WatermarkTextProperty, text);
+			d.SetValue(WatermarkTextProperty, text);
 		}
 
 		private static void ButtonCommandOrClearTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -88,7 +110,7 @@ namespace MicrosoftTranslatorProvider.UiHelpers
 		private static void IsClearTextButtonBehaviorEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
 			if (e.OldValue == e.NewValue
-				|| d is not Button button)
+			 || d is not Button button)
 			{
 				return;
 			}
@@ -107,7 +129,8 @@ namespace MicrosoftTranslatorProvider.UiHelpers
 
 		private static void OnControlLostFocus(object sender, RoutedEventArgs e)
 		{
-			if (sender is TextBox control && string.IsNullOrEmpty(control.Text))
+			if (sender is TextBox control
+			 && string.IsNullOrEmpty(control.Text))
 			{
 				control.SetValue(IsWatermarkVisibleProperty, true);
 			}
@@ -116,22 +139,20 @@ namespace MicrosoftTranslatorProvider.UiHelpers
 		private static void OnWatermarkTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
 			d?.SetValue(IsWatermarkVisibleProperty, true);
-			if (d is TextBox textBox)
-			{
-				textBox.LostFocus += OnControlLostFocus;
-				textBox.GotFocus += OnControlGotFocus;
-			}
-		}
-
-		private static void SetTextLength<TDependencyObject>(TDependencyObject sender, Func<TDependencyObject, int> funcTextLength) where TDependencyObject : DependencyObject
-		{
-			if (sender == null || sender is not TextBox textBox)
+			if (d is not TextBox textBox)
 			{
 				return;
 			}
 
-			//var value = funcTextLength(sender);
-			if (!string.IsNullOrEmpty(textBox.Text))
+			textBox.LostFocus += OnControlLostFocus;
+			textBox.GotFocus += OnControlGotFocus;
+		}
+
+		private static void SetTextLength<TDependencyObject>(TDependencyObject sender, Func<TDependencyObject, int> funcTextLength) where TDependencyObject : DependencyObject
+		{
+			if (sender is not null
+			 && sender is TextBox textBox
+			 && !string.IsNullOrEmpty(textBox.Text))
 			{
 				textBox.SetValue(IsWatermarkVisibleProperty, false);
 			}
@@ -140,6 +161,16 @@ namespace MicrosoftTranslatorProvider.UiHelpers
 		private static void TextChanged(object sender, RoutedEventArgs e)
 		{
 			SetTextLength(sender as TextBox, textBox => textBox.Text.Length);
+		}
+
+		private static IEnumerable<DependencyObject> GetAncestors(DependencyObject child)
+		{
+			var parent = VisualTreeHelper.GetParent(child);
+			while (parent is not null)
+			{
+				yield return parent;
+				parent = VisualTreeHelper.GetParent(parent);
+			}
 		}
 	}
 }

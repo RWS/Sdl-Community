@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MicrosoftTranslatorProvider.Model;
 
 namespace MicrosoftTranslatorProvider.Interfaces
 {
@@ -33,9 +34,11 @@ namespace MicrosoftTranslatorProvider.Interfaces
 
 		bool UseCustomProviderName { get; set; }
 
+		bool UsePrivateEndpoint { get; set; }
+
 		string PrivateEndpoint { get; set; }
 
-		bool PersistPrivateEndpoint { get; set; }
+		List<UrlMetadata> Parameters { get; set; }
 
 		Uri Uri { get; }
 

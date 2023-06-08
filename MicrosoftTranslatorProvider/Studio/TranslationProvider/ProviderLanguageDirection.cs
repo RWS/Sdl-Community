@@ -9,6 +9,7 @@ using MicrosoftTranslatorProvider.Studio.TranslationProvider;
 using MicrosoftTranslatorProvider.Interfaces;
 using MicrosoftTranslatorProvider.Helpers;
 using MicrosoftTranslatorProvider.Model;
+using MicrosoftTranslatorProvider.ApiService;
 
 namespace MicrosoftTranslatorProvider
 {
@@ -18,7 +19,8 @@ namespace MicrosoftTranslatorProvider
 		private readonly LanguagePair _languagePair;
 		private readonly Provider _provider;
 		private readonly HtmlUtil _htmlUtil;
-		private ProviderConnecter _providerConnecter;
+		private MicrosoftApi _providerConnecter;
+		private PrivateEndpointApi _privateEndpoint;
 		private MTESegmentEditor _postLookupSegmentEditor;
 		private MTESegmentEditor _preLookupSegmentEditor;
 		private TranslationUnit _inputTu;
@@ -224,19 +226,25 @@ namespace MicrosoftTranslatorProvider
 
 		private string Lookup(string sourcetext, ITranslationOptions options)
 		{
+			var sourcelang = _languagePair.SourceCulture.ToString();
+			var targetlang = _languagePair.TargetCulture.ToString();
+			if (options.UsePrivateEndpoint)
+			{
+				_privateEndpoint = new(options.PrivateEndpoint, _provider.PrivateHeaders, options.Parameters, _htmlUtil);
+				return _privateEndpoint.Translate(sourcelang, targetlang, sourcetext);
+			}
+
 			var catId = options.UseCategoryID ? _options.CategoryID : string.Empty;
 			switch (_providerConnecter)
 			{
 				case null:
-					_providerConnecter = new ProviderConnecter(_options.ClientID, options.Region, _htmlUtil, options.PrivateEndpoint);
+					_providerConnecter = new MicrosoftApi(_options.ClientID, options.Region, _htmlUtil);
 					break;
 				default:
 					_providerConnecter.ResetCredentials(options.ClientID, options.Region);
 					break;
 			}
 
-			var sourcelang = _languagePair.SourceCulture.ToString();
-			var targetlang = _languagePair.TargetCulture.ToString();
 			return _providerConnecter.Translate(sourcelang, targetlang, sourcetext, catId);
 		}
 

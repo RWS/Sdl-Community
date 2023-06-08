@@ -7,6 +7,7 @@ using MicrosoftTranslatorProvider.Model;
 using MicrosoftTranslatorProvider.Service;
 using MicrosoftTranslatorProvider.View;
 using MicrosoftTranslatorProvider.ViewModel;
+using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.Core;
@@ -52,10 +53,9 @@ namespace MicrosoftTranslatorProvider.Studio
 			var settingsControlViewModel = new SettingsControlViewModel(loadOptions, credentialStore, dialogService, false);
 			var htmlUtil = new HtmlUtil();
 			var mainWindowViewModel = new MainWindowViewModel(loadOptions,
-															  providerControlViewModel,
-															  settingsControlViewModel,
 															  credentialStore,
 															  languagePairs,
+															  regionsProvider,
 															  htmlUtil,
 															  showSettingsView);
 			var mainWindow = new MainWindow
@@ -74,10 +74,19 @@ namespace MicrosoftTranslatorProvider.Studio
 
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
 		{
-			var options = new MTETranslationOptions(translationProviderUri);
-			var customName = options.CustomProviderName;
-			var useCustomName = options.UseCustomProviderName;
-			var providerName = customName.SetProviderName(useCustomName);
+			if (translationProviderState is null)
+			{
+				return new TranslationProviderDisplayInfo()
+				{
+					SearchResultImage = PluginResources.microsoft_image,
+					TranslationProviderIcon = PluginResources.mstp_icon,
+					TooltipText = PluginResources.Microsoft_NiceName,
+					Name = PluginResources.Microsoft_NiceName
+				};
+			}
+
+			var options = JsonConvert.DeserializeObject<MTETranslationOptions>(translationProviderState);
+			var providerName = options.CustomProviderName.SetProviderName(options.UseCustomProviderName);
 			return new TranslationProviderDisplayInfo()
 			{
 				SearchResultImage = PluginResources.microsoft_image,

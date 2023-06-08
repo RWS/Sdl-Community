@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
-using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
@@ -19,58 +18,23 @@ using RestSharp;
 
 namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 {
-	public class ProviderConnecter
+	public class MicrosoftApi
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly HtmlUtil _htmlUtil;
-		private readonly string _endpoint;
 
-		private bool _usePrivateEndpoint;
 		private string _subscriptionKey;
 		private string _region;
 		private string _authToken;
 		private List<string> _supportedLanguages;
 
-		public ProviderConnecter(string subscriptionKey, string region, HtmlUtil htmlUtil, string endpoint = null)
+		public MicrosoftApi(string subscriptionKey, string region, HtmlUtil htmlUtil)
 		{
 			_subscriptionKey = subscriptionKey;
 			_region = region;
 			_htmlUtil = htmlUtil;
-			_endpoint = SetEndpoint(endpoint);
 			_authToken ??= GetAuthToken();
 			_supportedLanguages ??= GetSupportedLanguages();
-		}
-
-		private string SetEndpoint(string endpoint)
-		{
-			if (string.IsNullOrEmpty(endpoint))
-			{
-				return $@"{Constants.MicrosoftProviderUriBase}";
-			}
-
-			if (endpoint.Equals(Constants.MicrosoftProviderServiceUriBase))
-			{
-				return string.Empty;
-			}
-
-			_usePrivateEndpoint = true;
-			if (endpoint.EndsWith("/"))
-			{
-				endpoint.Substring(0, _endpoint.Length - 1);
-			}
-
-			return !endpoint.StartsWith("http://") && !endpoint.StartsWith("https://")
-				 ? $@"https://{endpoint}"
-				 : endpoint;
-		}
-
-		public void EnsurePrivateEndpointConnectivity()
-		{
-			var result = Translate("en", "de", "Hello World", "");
-			if (string.IsNullOrEmpty(result))
-			{
-				throw new InvalidOperationException("No Connection could be established");
-			}
 		}
 
 		public void RefreshAuthToken()
@@ -82,7 +46,7 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 		public void ResetCredentials(string subscriptionKey, string region)
 		{
 			if (subscriptionKey == _subscriptionKey
-				&& region == _region)
+			 && region == _region)
 			{
 				return;
 			}
@@ -113,11 +77,7 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 
 		public string Translate(string sourceLanguage, string targetLanguage, string textToTranslate, string categoryId)
 		{
-			if (string.IsNullOrEmpty(_authToken))
-			{
-				_authToken = GetAuthToken();
-			}
-
+			_authToken ??= GetAuthToken();
 			if (_authToken is null)
 			{
 				throw new Exception("Invalid credentials");
@@ -151,25 +111,6 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 
 		private string RequestTranslation(string sourceLanguage, string targetLanguage, string textToTranslate, string categoryID)
 		{
-			try
-			{
-				return TryRequestTranslation(sourceLanguage, targetLanguage, textToTranslate, categoryID);
-			}
-			catch (Exception ex)
-			{
-				if (ex.Message.Equals("The request is not authorized because credentials are missing or invalid."))
-				{
-					RefreshAuthToken();
-					return TryRequestTranslation(sourceLanguage, targetLanguage, textToTranslate, categoryID);
-				}
-
-				ErrorHandler.HandleError(ex);
-				return null;
-			}
-		}
-
-		private string TryRequestTranslation(string sourceLanguage, string targetLanguage, string textToTranslate, string categoryID)
-		{
 			var body = new object[] { new { Text = textToTranslate } };
 			var requestBody = JsonConvert.SerializeObject(body);
 			var httpRequest = new HttpRequestMessage
@@ -178,15 +119,7 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 				Content = new StringContent(requestBody, Encoding.UTF8, "application/json"),
 				RequestUri = new Uri(BuildTranslationUri(sourceLanguage, targetLanguage, categoryID))
 			};
-
-			if (_usePrivateEndpoint)
-			{
-				httpRequest.Headers.Add(Constants.OcpApimSubscriptionKeyHeader, _subscriptionKey);
-			}
-			else
-			{
-				httpRequest.Headers.Add("Authorization", _authToken);
-			}
+			httpRequest.Headers.Add("Authorization", _authToken);
 
 			var httpClient = new HttpClient();
 			var response = httpClient.SendAsync(httpRequest).Result;
@@ -204,9 +137,10 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 		private string BuildTranslationUri(string sourceLanguage, string targetLanguage, string category)
 		{
 			const string path = "/translate?api-version=3.0";
+			const string uri = $@"https://{Constants.MicrosoftProviderUriBase}";
 			var languageParams = $"&from={sourceLanguage}&to={targetLanguage}&textType=html&category={category}";
-			var targetUri = _endpoint.StartsWith("https://") ? _endpoint : $@"https://{_endpoint}";
-			return string.Concat(targetUri, path, languageParams);
+
+			return string.Concat(uri, path, languageParams);
 		}
 
 		private List<string> GetSupportedLanguages()
@@ -225,26 +159,16 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 
 		private List<string> TryGetSupportedLanguages()
 		{
-			var targetUri = _endpoint.StartsWith("https://") ? _endpoint : $@"https://{_endpoint}";
-			var uri = new Uri(targetUri);
+			var uri = new Uri("https://" + Constants.MicrosoftProviderUriBase);
 			var client = new RestClient(uri);
 
 			var request = new RestRequest("languages", Method.Get);
 			request.AddParameter("api-version", "3.0");
 			request.AddParameter("scope", "translation");
 
-			if (_usePrivateEndpoint)
-			{
-				request.AddHeader(Constants.OcpApimSubscriptionKeyHeader, _subscriptionKey);
-			}
-
 			var languageResponse = client.ExecuteAsync(request).Result;
-			if (_usePrivateEndpoint && !languageResponse.IsSuccessful)
-			{
-				throw new Exception("Error on connecting to translator. " + languageResponse.Content);
-			}
-
 			var languages = JsonConvert.DeserializeObject<LanguageResponse>(languageResponse.Content);
+
 			var languageCodeList = new List<string>();
 			foreach (var language in languages?.Translation)
 			{
@@ -256,11 +180,6 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 
 		private string GetAuthToken()
 		{
-			if (_usePrivateEndpoint)
-			{
-				return string.Empty;
-			}
-
 			string accessToken = null;
 			var task = Task.Run(async () =>
 			{
@@ -274,7 +193,7 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 
 			if (task.IsFaulted && task.Exception != null)
 			{
-				throw task.Exception;
+				throw new Exception(task.Exception.InnerException?.Message);
 			}
 
 			if (task.IsCanceled)
@@ -297,7 +216,7 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 				return string.Empty;
 			}
 
-			var region = string.IsNullOrEmpty(_region) ? string.Empty : _region + ".";
+			var region = string.IsNullOrEmpty(_region) ? "" : _region + ".";
 			var uriString = $"https://{region}{Constants.MicrosoftProviderServiceUriBase}/sts/v1.0/issueToken";
 			var uri = new Uri(uriString);
 			try
@@ -371,29 +290,6 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 			}
 
 			return cultureInfo.TwoLetterISOLanguageName;
-		}
-
-		private string ProcessWebException(WebException e, string message)
-		{
-			_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n{e.Response}\n {message}");
-
-			string strResponse;
-			using (var response = (HttpWebResponse)e.Response)
-			{
-				using var responseStream = response.GetResponseStream();
-				using var sr = new StreamReader(responseStream, Encoding.ASCII);
-				strResponse = sr.ReadToEnd();
-			}
-
-			ErrorHandler.HandleError(strResponse, message);
-			return $"Http status code={e.Status}, error message={strResponse}";
-		}
-
-		private string LogWebException(WebException e)
-		{
-			var message = ProcessWebException(e, PluginResources.MsApiFailedGetLanguagesMessage);
-			_logger.Error($"{MethodBase.GetCurrentMethod().Name}\n{e.Message}\n {e.StackTrace}");
-			return message;
 		}
 	}
 }
