@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Web;
 using System.Windows.Input;
+using System.Xml.Linq;
 using MicrosoftTranslatorProvider.Commands;
 using MicrosoftTranslatorProvider.Helpers;
+using MicrosoftTranslatorProvider.Interface;
 using MicrosoftTranslatorProvider.Interfaces;
 using MicrosoftTranslatorProvider.Model;
 using MicrosoftTranslatorProvider.Service;
@@ -19,9 +24,11 @@ namespace MicrosoftTranslatorProvider.ViewModel
 	{
 		private const string ViewDetails_Provider = nameof(ProviderControlViewModel);
 		private const string ViewDetails_Settings = nameof(SettingsControlViewModel);
+		private const string ViewDetails_PrivateEndpoint = nameof(PrivateEndpointViewModel);
 
 		private readonly ISettingsControlViewModel _settingsControlViewModel;
 		private readonly IProviderControlViewModel _providerControlViewModel;
+		private readonly IPrivateEndpointViewModel _privateEndpointViewModel;
 		private readonly ITranslationProviderCredentialStore _credentialStore;
 		private readonly LanguagePair[] _languagePairs;
 		private readonly HtmlUtil _htmlUtil;
@@ -39,16 +46,16 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		public delegate void CloseWindowEventRaiser();
 
 		public MainWindowViewModel(ITranslationOptions options,
-								   IProviderControlViewModel providerControlViewModel,
-								   ISettingsControlViewModel settingsControlViewModel,
 								   ITranslationProviderCredentialStore credentialStore,
 								   LanguagePair[] languagePairs,
+								   RegionsProvider regionsProvider,
 								   HtmlUtil htmlUtil,
 								   bool showSettingsView = false)
 		{
 			Options = options;
-			_providerControlViewModel = providerControlViewModel;
-			_settingsControlViewModel = settingsControlViewModel;
+			_providerControlViewModel = new ProviderControlViewModel(options, regionsProvider);
+			_settingsControlViewModel = new SettingsControlViewModel(options, credentialStore, new OpenFileDialogService(), false);
+			_privateEndpointViewModel = new PrivateEndpointViewModel();
 			_credentialStore = credentialStore;
 			_languagePairs = languagePairs;
 			_htmlUtil = htmlUtil;
@@ -59,15 +66,22 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				new ViewDetails
 				{
 					Name = nameof(ProviderControlViewModel),
-					ViewModel = providerControlViewModel.ViewModel
+					ViewModel = _providerControlViewModel.ViewModel
 				},
 				new ViewDetails
 				{
 					Name = nameof(SettingsControlViewModel),
-					ViewModel = settingsControlViewModel.ViewModel
+					ViewModel = _settingsControlViewModel.ViewModel
+				},
+				new ViewDetails()
+				{
+					Name = nameof(PrivateEndpointViewModel),
+					ViewModel = _privateEndpointViewModel.ViewModel
 				}
 			};
 
+			Endpoints = new List<string>() { "Microsoft", "Private Endpoint" };
+			SelectedEndpoint = Endpoints.First();
 			SwitchView(showSettingsView ? ViewDetails_Provider : ViewDetails_Settings);
 			ShowProvidersPage();
 			SetCredentialsOnUI();
@@ -114,8 +128,14 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 		public bool IsWindowValid()
 		{
-			var microsoftOptions = ValidMicrosoftOptions();
-			return microsoftOptions ? ValidSettingsPageOptions() : microsoftOptions;
+			var settingsAreValid = ValidSettingsPageOptions();
+			return UsePrivateEndpoint ? settingsAreValid && ValidPrivateEndpointOptions()
+					                  : settingsAreValid && ValidMicrosoftOptions();		
+		}
+
+		private bool ValidPrivateEndpointOptions()
+		{
+			return !string.IsNullOrEmpty(_privateEndpointViewModel.Endpoint);
 		}
 
 		private bool ValidSettingsPageOptions()
@@ -161,12 +181,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				return false;
 			}
 
-			if (_providerControlViewModel.UsePrivateEndpoint && string.IsNullOrEmpty(_providerControlViewModel.PrivateEndpoint))
-			{
-				ErrorHandler.HandleError("Private endpoint can not be empty if is enabled", "Private-endpoint");
-				return false;
-			}
-
 			return AreMicrosoftCredentialsValid();
 		}
 
@@ -198,15 +212,13 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		{
 			try
 			{
-				var apiConnecter = new ProviderConnecter(_providerControlViewModel.ClientID, _providerControlViewModel.Region?.Key, _htmlUtil, Options.PrivateEndpoint);
-				if (_providerControlViewModel.UsePrivateEndpoint)
+				if (Options.UsePrivateEndpoint)
 				{
-					apiConnecter.EnsurePrivateEndpointConnectivity();
+					return true;
 				}
-				else
-				{
-					apiConnecter.RefreshAuthToken();
-				}
+
+				var apiConnecter = new MicrosoftApi(_providerControlViewModel.ClientID, _providerControlViewModel.Region?.Key, _htmlUtil);
+				apiConnecter.RefreshAuthToken();
 
 				return true;
 			}
@@ -277,8 +289,10 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			Options.UseCategoryID = _providerControlViewModel.UseCategoryID;
 			Options.CategoryID = _providerControlViewModel.CategoryID;
 			Options.PersistMicrosoftCredentials = _providerControlViewModel.PersistMicrosoftKey;
-			Options.PersistPrivateEndpoint = _providerControlViewModel.PersistPrivateEndpoint;
-			Options.PrivateEndpoint = _providerControlViewModel.UsePrivateEndpoint ? _providerControlViewModel.PrivateEndpoint : string.Empty;
+
+			Options.UsePrivateEndpoint = UsePrivateEndpoint;
+			Options.PrivateEndpoint = _privateEndpointViewModel.Endpoint;
+			Options.Parameters = _privateEndpointViewModel.Parameters.ToList();
 		}
 
 		private void NavigateTo(object parameter)
@@ -288,12 +302,11 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 		private void SwitchView(object parameter)
 		{
-
 			try
 			{
 				var requestedType = parameter is not null ? parameter as string
-														  : SelectedView.Name != ViewDetails_Provider ? ViewDetails_Provider
-																									  : ViewDetails_Settings;
+														  : SelectedView.Name == ViewDetails_Provider ? ViewDetails_Settings
+																									  : ViewDetails_Provider;
 				MultiButtonContent = requestedType == ViewDetails_Provider ? "Settings" : "Provider";
 				SelectedView = AvailableViews.FirstOrDefault(x => x.Name == requestedType);
 			}
@@ -318,14 +331,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				bool.TryParse(genericCredentials["Use-PrivateEndpoint"], out var usePrivateEndpoint);
 				bool.TryParse(genericCredentials["Persist-PrivateEndpoint"], out var persistsPrivateEndpoint);
 
-				_providerControlViewModel.UsePrivateEndpoint = usePrivateEndpoint;
-				_providerControlViewModel.PersistPrivateEndpoint = persistsPrivateEndpoint;
-				_providerControlViewModel.PrivateEndpoint = _showSettingsViews
-														  ? usePrivateEndpoint ? genericCredentials["PrivateEndpoint"]
-																			   : string.Empty
-														  : persistsPrivateEndpoint ? genericCredentials["PrivateEndpoint"]
-																					: string.Empty;
-
 				bool.TryParse(genericCredentials["UseCategoryID"], out var useCategoryId);
 				_providerControlViewModel.UseCategoryID = useCategoryId;
 				_providerControlViewModel.CategoryID = useCategoryId ? genericCredentials["CategoryID"] : string.Empty;
@@ -333,6 +338,42 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				_providerControlViewModel.Region = _showSettingsViews
 												 ? _providerControlViewModel.Regions.FirstOrDefault(x => x.Key.Equals(genericCredentials["Region"])) ?? _providerControlViewModel.Regions.FirstOrDefault()
 												 : _providerControlViewModel.Regions.FirstOrDefault();
+
+				_privateEndpointViewModel.Endpoint = genericCredentials["Endpoint"];
+
+				var headers = genericCredentials.ToCredentialString().Split(';').Where(x => x.StartsWith("header_"));
+				foreach (var header in headers)
+				{
+					var pair = header.Split('=');
+					_privateEndpointViewModel.Headers.Add(new()
+					{
+						
+						Key = HttpUtility.UrlDecode(pair[0].Replace("header_", string.Empty)),
+						Value = HttpUtility.UrlDecode(pair[1].Replace("header_", string.Empty))
+					});
+				}
+
+				var parameters = genericCredentials.ToCredentialString().Split(';').Where(x => x.StartsWith("parameter_"));
+				foreach (var parameter in parameters)
+				{
+					var pair = parameter.Split('=');
+					var key = pair[0].Replace("parameter_", string.Empty);
+					var value = pair[1];
+
+					if (key.StartsWith("from") || key.StartsWith("to"))
+					{
+						continue;
+					}
+
+					_privateEndpointViewModel.Parameters.Add(new()
+					{
+						Key = HttpUtility.UrlDecode(key),
+						Value = HttpUtility.UrlDecode(value)
+					});
+				}
+
+				_privateEndpointViewModel.Headers = new ObservableCollection<UrlMetadata>(_privateEndpointViewModel.Headers.Where(x => x.Key is not null && x.Value is not null));
+				_privateEndpointViewModel.Parameters = new ObservableCollection<UrlMetadata>(_privateEndpointViewModel.Parameters.Where(x => x.Key is not null && x.Value is not null));
 			}
 			catch { }
 		}
@@ -343,9 +384,8 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			_credentialStore.RemoveCredential(uri.Uri);
 
 			var persistApiKey = _providerControlViewModel.PersistMicrosoftKey;
-			var usePrivateEndpoint = _providerControlViewModel.UsePrivateEndpoint;
-			var persistPrivateEndpoint = _providerControlViewModel.PersistPrivateEndpoint;
 			var useCategoryId = _providerControlViewModel.UseCategoryID;
+
 			var currentCredentials = new GenericCredentials("mstpusername", "mstppassword")
 			{
 				["Persist-ApiKey"] = persistApiKey.ToString(),
@@ -353,20 +393,76 @@ namespace MicrosoftTranslatorProvider.ViewModel
 							? _providerControlViewModel.ClientID
 							: string.Empty,
 
-				["Use-PrivateEndpoint"] = usePrivateEndpoint.ToString(),
-				["Persist-PrivateEndpoint"] = _providerControlViewModel.PersistPrivateEndpoint.ToString(),
-				["PrivateEndpoint"] = _providerControlViewModel.PrivateEndpoint,
-
 				["UseCategoryID"] = _providerControlViewModel.UseCategoryID.ToString(),
 				["CategoryID"] = useCategoryId
 							   ? _providerControlViewModel.CategoryID
 							   : string.Empty,
 
-				["Region"] = _providerControlViewModel.Region.Key
+				["Region"] = _providerControlViewModel.Region.Key,
+
+				["Endpoint"] = _privateEndpointViewModel.Endpoint,
 			};
+
+			foreach (var header in _privateEndpointViewModel?.Headers)
+			{
+				if (header.Key is null || header.Value is null)
+				{
+					continue;
+				}
+
+				currentCredentials[$"header_{header.Key}"] = header.Value;
+			}
+
+			foreach (var parameter in _privateEndpointViewModel?.Parameters)
+			{
+				if (parameter.Key is null || parameter.Value is null)
+				{
+					continue;
+				}
+
+				currentCredentials[$"parameter_{parameter.Key}"] = parameter.Value;
+			}
 
 			var credentials = new TranslationProviderCredential(currentCredentials.ToString(), true);
 			_credentialStore.AddCredential(uri.Uri, credentials);
+		}
+
+		private bool _usePrivateEndpoint;
+		public bool UsePrivateEndpoint
+		{
+			get => _usePrivateEndpoint;
+			set
+			{
+				if (_usePrivateEndpoint == value) return;
+				_usePrivateEndpoint = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private List<string> _endpoints;
+		public List<string> Endpoints
+		{
+			get => _endpoints;
+			set
+			{
+				if (_endpoints == value) return;
+				_endpoints = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private string _selectedEndpoint;
+		public string SelectedEndpoint
+		{
+			get => _selectedEndpoint;
+			set
+			{
+				if (_selectedEndpoint == value) return;
+				_selectedEndpoint = value;
+				UsePrivateEndpoint = _selectedEndpoint.Equals("Private Endpoint");
+				SwitchView(_selectedEndpoint.Equals("Microsoft") ? nameof(ProviderControlViewModel) : nameof(PrivateEndpointViewModel));
+				OnPropertyChanged();
+			}
 		}
 	}
 }

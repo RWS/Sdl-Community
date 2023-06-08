@@ -13,18 +13,12 @@ namespace MicrosoftTranslatorProvider.Interfaces
 		bool UseCategoryID { get; set; }
 		
 		bool PersistMicrosoftKey { get; set; }
-
-		bool PersistPrivateEndpoint { get; set; }
-
-		bool UsePrivateEndpoint { get; set; }
 		
 		bool IsTellMeAction { get; set; }
 		
 		string CategoryID { get; set; }
 		
 		string ClientID { get; set; }
-
-		string PrivateEndpoint { get; set; }
 
 		BaseModel ViewModel { get; set; }
 		

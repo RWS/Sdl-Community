@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MicrosoftTranslatorProvider.Interfaces;
 using MicrosoftTranslatorProvider.Model;
 using MicrosoftTranslatorProvider.Service;
@@ -22,18 +23,33 @@ namespace MicrosoftTranslatorProvider
 
 			var credential = credentialStore.GetCredential(new Uri(Constants.MicrosoftProviderFullScheme)) ?? throw new TranslationProviderAuthenticationException();
 			var options = JsonConvert.DeserializeObject<MTETranslationOptions>(translationProviderState);
+			var privateHeaders = new List<UrlMetadata>();
 			try
 			{
 				var genericCredentials = new GenericCredentials(credential.Credential);
+				foreach (var credentialKey in genericCredentials.PropertyKeys)
+				{
+					if (!credentialKey.StartsWith("header_"))
+					{
+						continue;
+					}
+
+					privateHeaders.Add(new UrlMetadata()
+					{
+						Key = credentialKey.Replace("header_", string.Empty),
+						Value = genericCredentials[credentialKey]
+					});
+				}
 				options.ClientID = genericCredentials["API-Key"];
-				options.PrivateEndpoint = genericCredentials["PrivateEndpoint"];
+				options.PrivateEndpoint ??= genericCredentials["PrivateEndpoint"];
 				bool.TryParse(genericCredentials["UseCategoryID"], out var useCategoryId);
 				options.UseCategoryID = useCategoryId;
 				options.CategoryID = useCategoryId ? genericCredentials["CategoryID"] : string.Empty;
 				options.Region = genericCredentials["Region"];
 			}
 			catch { }
-			return new Provider(options, new RegionsProvider(), new HtmlUtil());
+
+			return new Provider(options, new RegionsProvider(), new HtmlUtil()) { PrivateHeaders = privateHeaders };
 		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
