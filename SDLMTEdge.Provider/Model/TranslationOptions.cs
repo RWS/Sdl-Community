@@ -5,6 +5,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Sdl.Community.MTEdge.Provider.Helpers;
 using Sdl.Community.MTEdge.Provider.Interface;
+using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -108,8 +109,8 @@ namespace Sdl.Community.MTEdge.Provider.Model
 				(mtEdgeLanguagePairs,
 				 requestedLP => new
 				 {
-					 SourceLanguageId = requestedLP.SourceCulture.ToMTEdgeCode(),
-					 TargetLanguageId = requestedLP.TargetCulture.ToMTEdgeCode()
+					 SourceLanguageId = LanguageRegistryApi.Instance.GetLanguage(requestedLP.SourceCulture).CultureInfo.ToMTEdgeCode(),
+					 TargetLanguageId = LanguageRegistryApi.Instance.GetLanguage(requestedLP.TargetCulture).CultureInfo.ToMTEdgeCode()
 				 },
 				 installedLP => new
 				 {
@@ -140,21 +141,21 @@ namespace Sdl.Community.MTEdge.Provider.Model
 
 		private void CheckForPtbSource(LanguagePair[] languagePairs, List<TradosToMTEdgeLanguagePair> languagePairChoices, MTEdgeLanguagePair[] mtEdgeLanguagePairs)
         {
-            if (languagePairs.FirstOrDefault(lp => lp.SourceCulture.ThreeLetterWindowsLanguageName.Equals("PTB")) is not LanguagePair ptbSource)
+            if (languagePairs.FirstOrDefault(lp => LanguageRegistryApi.Instance.GetLanguage(lp.SourceCulture).CultureInfo.ThreeLetterWindowsLanguageName.Equals("PTB")) is not LanguagePair ptbSource)
             {
                 return;
             }
 
             var mtEdgeLangPairEngines = mtEdgeLanguagePairs.Where(lp => lp.SourceLanguageId.Equals(new CustomEngines().PortugueseSourceEngineCode.ToLower())).ToList();
-            languagePairChoices.FirstOrDefault(s => s.TradosCulture.ThreeLetterWindowsLanguageName.Equals(ptbSource.TargetCulture.ThreeLetterWindowsLanguageName))?
+            languagePairChoices.FirstOrDefault(s => s.TradosCulture.ThreeLetterWindowsLanguageName.Equals(LanguageRegistryApi.Instance.GetLanguage(ptbSource.TargetCulture).CultureInfo.ThreeLetterWindowsLanguageName))?
 							   .MtEdgeLanguagePairs?
 							   .AddRange(mtEdgeLangPairEngines);
         }
 
         private void CheckForFrCanada(LanguagePair[] languagePairs, List<TradosToMTEdgeLanguagePair> languagePairChoices, MTEdgeLanguagePair[] mtEdgeLanguagePairs)
 		{
-            if (languagePairs.FirstOrDefault(lp => lp.SourceCulture.ThreeLetterWindowsLanguageName.Equals("FRC")
-                                                || lp.TargetCulture.ThreeLetterWindowsLanguageName.Equals("FRC"))
+            if (languagePairs.FirstOrDefault(lp => LanguageRegistryApi.Instance.GetLanguage(lp.SourceCulture).CultureInfo.ThreeLetterWindowsLanguageName.Equals("FRC")
+                                                || LanguageRegistryApi.Instance.GetLanguage(lp.TargetCulture).CultureInfo.ThreeLetterWindowsLanguageName.Equals("FRC"))
 				is not null)
 			{
 				var customEnginesMapping = new CustomEngines();
@@ -168,15 +169,15 @@ namespace Sdl.Community.MTEdge.Provider.Model
 			foreach (var languagePair in languagePairs)
 			{
 				var languageCode = string.Empty;
-				if (customEnginesMapping.LatinAmericanLanguageCodes.FirstOrDefault(x => x.Equals(languagePair.SourceCulture.ThreeLetterWindowsLanguageName))
+				if (customEnginesMapping.LatinAmericanLanguageCodes.FirstOrDefault(x => x.Equals(LanguageRegistryApi.Instance.GetLanguage(languagePair.SourceCulture).CultureInfo.ThreeLetterWindowsLanguageName))
 					is string sourceSpanish)
 				{
-					languageCode = languagePair.SourceCulture.ThreeLetterWindowsLanguageName;
+					languageCode = LanguageRegistryApi.Instance.GetLanguage(languagePair.SourceCulture).CultureInfo.ThreeLetterWindowsLanguageName;
 				}
-				else if (customEnginesMapping.LatinAmericanLanguageCodes.FirstOrDefault(x => x.Equals(languagePair.TargetCulture.ThreeLetterWindowsLanguageName))
+				else if (customEnginesMapping.LatinAmericanLanguageCodes.FirstOrDefault(x => x.Equals(LanguageRegistryApi.Instance.GetLanguage(languagePair.TargetCulture).CultureInfo.ThreeLetterWindowsLanguageName))
 					is string targetSpanish)
 				{
-					languageCode = languagePair.TargetCulture.ThreeLetterWindowsLanguageName;
+					languageCode = LanguageRegistryApi.Instance.GetLanguage(languagePair.TargetCulture).CultureInfo.ThreeLetterWindowsLanguageName;
 				}
 
                 if (string.IsNullOrEmpty(languageCode))

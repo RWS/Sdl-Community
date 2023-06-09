@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using NLog;
 using Sdl.Community.MTEdge.Provider.Helpers;
 using Sdl.Community.MTEdge.Provider.Model;
+using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
@@ -65,19 +66,21 @@ namespace Sdl.Community.MTEdge.Provider.Studio
 
         public bool SupportsLanguageDirection(LanguagePair languageDirection)
         {
-            // MtEdge doesn't have ptb as source language, we need to map it to por
-            if (languageDirection.SourceCulture.ToMTEdgeCode().Equals("ptb"))
+			var sourceCulture = LanguageRegistryApi.Instance.GetLanguage(languageDirection.SourceCulture);
+			var targetCulture = LanguageRegistryApi.Instance.GetLanguage(languageDirection.TargetCulture);
+			// MtEdge doesn't have ptb as source language, we need to map it to por
+			if (sourceCulture.CultureInfo.ToMTEdgeCode().Equals("ptb"))
             {
                 return SDLMTEdgeTranslatorHelper
                       .GetLanguagePairs(Options)
                       .Any(lp => lp.SourceLanguageId.Equals("por")
-                              && languageDirection.TargetCulture.ToMTEdgeCode().Equals(lp.TargetLanguageId));
+                              && targetCulture.CultureInfo.ToMTEdgeCode().Equals(lp.TargetLanguageId));
             }
 
             return SDLMTEdgeTranslatorHelper
                   .GetLanguagePairs(Options)
-                  .Any(lp => languageDirection.SourceCulture.ToMTEdgeCode().Equals(lp.SourceLanguageId)
-                          && languageDirection.TargetCulture.ToMTEdgeCode().Equals(lp.TargetLanguageId));
+                  .Any(lp => sourceCulture.CultureInfo.ToMTEdgeCode().Equals(lp.SourceLanguageId)
+                          && targetCulture.CultureInfo.ToMTEdgeCode().Equals(lp.TargetLanguageId));
         }
 
         public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
