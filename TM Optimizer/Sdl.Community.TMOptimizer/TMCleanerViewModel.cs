@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows;
 using Sdl.Community.TMOptimizerLib;
 using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -347,8 +348,8 @@ namespace Sdl.Community.TMOptimizer
                 return false;
             }
 
-            var sourceCulture = tm != null ? tm.LanguageDirection.SourceLanguage : InputTmxFiles.First().TmxFile.DetectInfo.SourceLanguage.CultureInfo;
-			var targetCulture = tm != null ? tm.LanguageDirection.TargetLanguage : InputTmxFiles.First().TmxFile.DetectInfo.TargetLanguage.CultureInfo;
+            var sourceCulture = tm != null ? tm.LanguageDirection.SourceLanguage : InputTmxFiles.First().TmxFile.DetectInfo.SourceLanguage;
+			var targetCulture = tm != null ? tm.LanguageDirection.TargetLanguage : InputTmxFiles.First().TmxFile.DetectInfo.TargetLanguage;
 
             foreach (var f in InputTmxFiles)
             {
@@ -362,8 +363,8 @@ namespace Sdl.Community.TMOptimizer
                 totalTuCount += f.TmxFile.GetDetectInfo().TuCount;
             }
 
-            SourceLanguage = new Language(sourceCulture);
-            TargetLanguage = new Language(targetCulture);
+            SourceLanguage = LanguageRegistryApi.Instance.GetLanguage(sourceCulture);
+            TargetLanguage = LanguageRegistryApi.Instance.GetLanguage(targetCulture);
 
             return true;
         }
@@ -422,8 +423,8 @@ namespace Sdl.Community.TMOptimizer
                         return false;
                     }
 
-                    SourceLanguage = new Language(tm.LanguageDirection.SourceLanguage);
-                    TargetLanguage = new Language(tm.LanguageDirection.TargetLanguage);
+                    SourceLanguage = LanguageRegistryApi.Instance.GetLanguage(tm.LanguageDirection.SourceLanguage);
+                    TargetLanguage = LanguageRegistryApi.Instance.GetLanguage(tm.LanguageDirection.TargetLanguage);
                 }
                 catch (Exception ex)
                 {
