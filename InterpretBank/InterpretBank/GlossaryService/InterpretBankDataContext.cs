@@ -63,16 +63,11 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 
 	public void InsertLanguage(Language language)
 	{
-
 		var dbInfo = GetTable<DatabaseInfo>().ToList()[0];
-
 		var dbInfoProperties = dbInfo.GetType().GetProperties().Where(p => p.Name.Contains("LanguageName"));
-
 		dbInfoProperties
 			.FirstOrDefault(p => int.Parse(p.Name.Substring(12)) == language.Index)?
 			.SetValue(dbInfo, language.Name);
-
-		SubmitData();
 	}
 
 	public List<Language> GetLanguages()

@@ -13,12 +13,13 @@
 		d:DataContext="{d:DesignInstance viewModel:GlossarySetupViewModel}"
 		SizeToContent="Height"
 		mc:Ignorable="d"
-		MaxHeight="1000"
+		MaxHeight="650"
 		Width="600">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../Styles/SettingsResources.xaml" />
+				<ResourceDictionary Source="../Styles/SettingsMainResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/datagridresources.xaml" />
@@ -35,8 +36,8 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 		<Image Grid.Row="0"
-		       Height="50"
-		       Source="../../Resources/logo.png" />
+			   Height="50"
+			   Source="../../Resources/logo.png" />
 		<DockPanel Grid.Row="1"
 				   HorizontalAlignment="Stretch"
 				   Margin="10 10 10 5"
@@ -226,43 +227,41 @@
 			<TabItem Header="Languages"
 					 Template="{StaticResource GlossarySetupTabItem}">
 
-				<Grid>
-					<Grid.RowDefinitions>
-						<RowDefinition Height="*" />
-						<RowDefinition Height="Auto" />
-					</Grid.RowDefinitions>
+				<DataGrid ItemsSource="{Binding SelectedLanguages}"
+						  Grid.Row="0"
+						  AutoGenerateColumns="False"
+						  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+						  SelectionMode="Single"
+						  IsReadOnly="True">
 
-					<DataGrid ItemsSource="{Binding SelectedLanguages}"
-							  Grid.Row="0"
-							  AutoGenerateColumns="False"
-							  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
-							  SelectionMode="Single"
-							  IsReadOnly="True">
-						
-						<DataGrid.Columns>
-							<DataGridTemplateColumn Width="*">
-								<DataGridTemplateColumn.CellTemplate>
-									<DataTemplate>
+					<DataGrid.Columns>
+						<DataGridTemplateColumn Width="*">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="Auto" />
+											<ColumnDefinition />
+										</Grid.ColumnDefinitions>
+										<Button Content="⟲"
+												FontSize="15"
+												Command="{Binding RestoreCommand}"
+												Background="Transparent"
+												HorizontalAlignment="Left"
+												BorderBrush="Transparent"
+												Style="{StaticResource ClearTextButtonStyle}" />
 										<ComboBox ItemsSource="{Binding LanguageModels}"
-												  SelectedIndex="{Binding SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+												  Grid.Column="1"
+												  SelectedIndex="{Binding SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
 												  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
 												  ItemTemplate="{StaticResource LanguageTemplate}"
 												  IsEnabled="{Binding IsEditable}" />
-									</DataTemplate>
-								</DataGridTemplateColumn.CellTemplate>
-							</DataGridTemplateColumn>
-						</DataGrid.Columns>
-					</DataGrid>
-					<Button Content="Commit to database"
-							Grid.Row="1"
-							Cursor="Hand"
-							Width="Auto"
-							Height="30"
-							Style="{StaticResource Sdl.Button.GeneralStyle}"
-							HorizontalAlignment="Right"
-							Margin="0 10 0 0" />
-
-				</Grid>
+									</Grid>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+					</DataGrid.Columns>
+				</DataGrid>
 			</TabItem>
 
 		</TabControl>

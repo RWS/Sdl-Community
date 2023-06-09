@@ -6,6 +6,7 @@ namespace InterpretBank.Constants
 	{
 		public static List<string> LanguagesList { get; set; } = new()
 		{
+			"undef",
 			"English",
 			"French",
 			"Italian",

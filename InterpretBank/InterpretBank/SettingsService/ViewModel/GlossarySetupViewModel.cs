@@ -27,7 +27,7 @@ namespace InterpretBank.SettingsService.ViewModel
 		private List<TagModel> _tags;
 		private ICommand _chooseFilepathCommand;
 		private string _filepath;
-		private RelayCommand _saveCommand;
+		private ICommand _saveCommand;
 		private List<LanguageModelsListBoxItem> _selectedLanguages;
 
 		public GlossarySetupViewModel(IOpenFileDialog openFileDialog)
@@ -35,7 +35,7 @@ namespace InterpretBank.SettingsService.ViewModel
 			OpenFileDialog = openFileDialog;
 			PropertyChanged += SettingsService_PropertyChanged;
 
-			
+
 		}
 
 		public List<LanguageModelsListBoxItem> SelectedLanguages
@@ -123,7 +123,7 @@ namespace InterpretBank.SettingsService.ViewModel
 
 			var allLanguages = Constants.Languages.LanguagesList;
 
-			SelectedLanguages = new List<LanguageModelsListBoxItem>();
+			SelectedLanguages = new List<LanguageModelsListBoxItem>(10);
 			for (var i = 0; i < 10; i++)
 			{
 				SelectedLanguages.Add(new LanguageModelsListBoxItem
@@ -131,28 +131,78 @@ namespace InterpretBank.SettingsService.ViewModel
 					LanguageModels = allLanguages.Select(l => new LanguageModel { Name = l }).ToList()
 				});
 			}
+			SelectedLanguages.ForEach(si => si.SelectedIndex = 0);
 
 			foreach (var language in Languages)
 			{
 				var selectedIndex = allLanguages.IndexOf(language.Name);
 				SelectedLanguages[language.Index - 1].SelectedIndex = selectedIndex;
-				if (selectedIndex != -1) SelectedLanguages[language.Index - 1].IsEditable = false;
+				SelectedLanguages[language.Index - 1].IsEditable = false;
 			}
 
-			SelectedLanguages.ForEach(sl => sl.PropertyChanged += SelectedLanguagesChanged);
+			SelectedLanguages.ForEach(sl => sl.PropertyChanged += LanguageListBoxItem_SelectedLanguagesChanged);
 		}
 
-		private void SelectedLanguagesChanged(object sender, PropertyChangedEventArgs e)
+		private void LanguageListBoxItem_SelectedLanguagesChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (sender is not LanguageModelsListBoxItem languageModelsListBoxItem) return;
+			var selectedIndexName = nameof(LanguageModelsListBoxItem.SelectedIndex);
+
+			if (e.PropertyName != selectedIndexName ||
+			    sender is not LanguageModelsListBoxItem languageModelsListBoxItem)
+				return;
+
 			var newLanguage = new Language
 			{
 				Index = SelectedLanguages.IndexOf(languageModelsListBoxItem) + 1,
 				Name = Constants.Languages.LanguagesList[languageModelsListBoxItem.SelectedIndex]
 			};
 
-			Languages.Add(newLanguage);
-			InterpretBankDataContext.InsertLanguage(newLanguage);
+			var duplicates = SelectedLanguages.GroupBy(sl => sl.SelectedIndex).Where(g => g.Count() > 1 && g.Key != 0).SelectMany(gr => gr).ToList();
+
+
+			var infiniteLoopFlag = true;
+			duplicates.ForEach(d =>
+			{
+				if (d[selectedIndexName] != "Duplicate value") infiniteLoopFlag = false;
+				d[selectedIndexName] = "Duplicate value";
+			});
+
+			var nonDuplicates = SelectedLanguages.Except(duplicates).ToList();
+			nonDuplicates.ForEach(nd =>
+			{
+				if (nd[selectedIndexName] != null) infiniteLoopFlag = false;
+				nd[selectedIndexName] = null;
+			});
+
+			if (!infiniteLoopFlag)
+				duplicates.Concat(nonDuplicates).ToList().ForEach(l => l.OnPropertyChanged(selectedIndexName));
+
+			//var duplicateIndexes = GetSelectedLanguagesDuplicates(languageModelsListBoxItem);
+			if (nonDuplicates.Contains(languageModelsListBoxItem))
+			{
+				Languages.Add(newLanguage);
+				InterpretBankDataContext.InsertLanguage(newLanguage);
+			}
+			//else
+			//{
+			//	duplicateIndexes.ForEach(di =>
+			//	{
+			//		SelectedLanguages[di][nameof(languageModelsListBoxItem.SelectedIndex)] = "Duplicate value";
+			//	});
+			//}
+		}
+
+		private List<int> GetSelectedLanguagesDuplicates(LanguageModelsListBoxItem languageModelsListBoxItem)
+		{
+			var indexes = new List<int>();
+			SelectedLanguages.Select((item, index) => (item, index)).ToList().ForEach(sl =>
+			{
+				if (sl.item.SelectedIndex == languageModelsListBoxItem.SelectedIndex &&
+					sl.item.LanguageModels[sl.item.SelectedIndex].Name != "undef")
+					indexes.Add(sl.index);
+			});
+
+			return indexes.Count > 1 ? indexes : null;
 		}
 
 		public TagModel SelectedTag
@@ -201,7 +251,7 @@ namespace InterpretBank.SettingsService.ViewModel
 
 			InterpretBankDataContext.InsertTag(newTag);
 		}
-		
+
 		//private void EnterLanguage(object parameter)
 		//{
 		//	if (string.IsNullOrEmpty((string)parameter))
