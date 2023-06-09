@@ -81,14 +81,14 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 
 		var dbInfoProperties = dbInfo.GetType().GetProperties();
 
-		var languages = new List<Language>();
-		foreach (var prop in dbInfoProperties)
-			if (prop.Name.Contains("LanguageName"))
-				languages.Add(new Language
+		var languages = dbInfoProperties
+			.Where(prop => prop.Name.Contains("LanguageName"))
+			.Select(prop =>
+				new Language
 				{
-					Name = prop.GetValue(dbInfo).ToString(),
-					Index = int.Parse(prop.Name.Substring(12))
-				});
+					Name = prop.GetValue(dbInfo).ToString(), Index = int.Parse(prop.Name.Substring(12))
+				})
+			.ToList();
 
 		languages.RemoveAll(l => l.Name is null or "undef");
 		return languages;

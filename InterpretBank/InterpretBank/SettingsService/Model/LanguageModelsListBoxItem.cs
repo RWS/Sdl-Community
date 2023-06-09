@@ -18,5 +18,7 @@ namespace InterpretBank.SettingsService.Model
 			get => _selectedIndex;
 			set => SetField(ref _selectedIndex, value);
 		}
+
+		public bool IsEditable { get; set; } = true;
 	}
 }

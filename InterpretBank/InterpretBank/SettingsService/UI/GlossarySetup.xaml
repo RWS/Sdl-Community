@@ -25,7 +25,6 @@
 				<ResourceDictionary Source="../Styles/SetupGlossariesResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
-			<converters:IntToBoolConverter x:Key="IntToBoolConverter" />
 		</ResourceDictionary>
 	</Window.Resources>
 	<Grid>
@@ -239,6 +238,7 @@
 							  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
 							  SelectionMode="Single"
 							  IsReadOnly="True">
+						
 						<DataGrid.Columns>
 							<DataGridTemplateColumn Width="*">
 								<DataGridTemplateColumn.CellTemplate>
@@ -247,7 +247,7 @@
 												  SelectedIndex="{Binding SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 												  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
 												  ItemTemplate="{StaticResource LanguageTemplate}"
-												  IsEnabled="{Binding SelectedIndex, Converter={StaticResource IntToBoolConverter}}" />
+												  IsEnabled="{Binding IsEditable}" />
 									</DataTemplate>
 								</DataGridTemplateColumn.CellTemplate>
 							</DataGridTemplateColumn>
@@ -263,16 +263,6 @@
 							Margin="0 10 0 0" />
 
 				</Grid>
-
-				<!--<ListBox ItemsSource="{Binding SelectedLanguages}" HorizontalAlignment="Left">
-					<ListBox.ItemTemplate>
-						<DataTemplate>
-							<ComboBox ItemTemplate="{StaticResource LanguageTemplate}"
-							          ItemsSource="{Binding LanguageModels}"/>
-						</DataTemplate>
-					</ListBox.ItemTemplate>
-				</ListBox>-->
-
 			</TabItem>
 
 		</TabControl>

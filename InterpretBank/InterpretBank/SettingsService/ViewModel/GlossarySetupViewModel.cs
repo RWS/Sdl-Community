@@ -136,6 +136,7 @@ namespace InterpretBank.SettingsService.ViewModel
 			{
 				var selectedIndex = allLanguages.IndexOf(language.Name);
 				SelectedLanguages[language.Index - 1].SelectedIndex = selectedIndex;
+				if (selectedIndex != -1) SelectedLanguages[language.Index - 1].IsEditable = false;
 			}
 
 			SelectedLanguages.ForEach(sl => sl.PropertyChanged += SelectedLanguagesChanged);
