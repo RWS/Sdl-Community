@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using NLog;
 using Sdl.Community.MTEdge.Provider.Model;
 using Sdl.Community.MTEdge.Provider.XliffConverter.Converter;
+using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -88,12 +89,12 @@ namespace Sdl.Community.MTEdge.Provider.Helpers
 
             var queryString = new Dictionary<string, string>();
             var encodedInput = text.Base64Encode();
-            if (options.ApiVersion == APIVersion.v1)
+			if (options.ApiVersion == APIVersion.v1)
             {
                 queryString = new Dictionary<string, string>
                 {
-                    { "sourceLanguageId", languageDirection.SourceCulture.ToMTEdgeCode() },
-                    { "targetLanguageId", languageDirection.TargetCulture.ToMTEdgeCode() },
+                    { "sourceLanguageId", LanguageRegistryApi.Instance.GetLanguage(languageDirection.SourceCulture).CultureInfo.ToMTEdgeCode() },
+                    { "targetLanguageId", LanguageRegistryApi.Instance.GetLanguage(languageDirection.TargetCulture).CultureInfo.ToMTEdgeCode() },
                     { "text", encodedInput }
                 };
             }
@@ -133,7 +134,9 @@ namespace Sdl.Community.MTEdge.Provider.Helpers
                 throw;
             }
 
-            var encodedTranslation = JsonConvert.DeserializeObject<MTEdgeTranslationOutput>(jsonResult).Translation;
+			var jsonTranslation = JsonConvert.DeserializeObject<MTEdgeTranslationOutput>(jsonResult);
+
+			var encodedTranslation = JsonConvert.DeserializeObject<MTEdgeTranslationOutput>(jsonResult).Translation;
             var decodedTranslation = encodedTranslation.Base64Decode();
             _logger.Debug("Resultant translation is: {0}", encodedTranslation);
             return decodedTranslation;
@@ -494,10 +497,10 @@ namespace Sdl.Community.MTEdge.Provider.Helpers
         private static string Base64Encode(this string text)
             => Convert.ToBase64String(Encoding.UTF8.GetBytes(text));
 
-        /// <summary>
-        /// Decode a base64 encoded string.
-        /// </summary>
-        private static string Base64Decode(this string encodedText)
+		/// <summary>
+		/// Decode a base64 encoded string.
+		/// </summary>
+		private static string Base64Decode(this string encodedText)
             => Encoding.UTF8.GetString(Convert.FromBase64String(encodedText));
     }
 }

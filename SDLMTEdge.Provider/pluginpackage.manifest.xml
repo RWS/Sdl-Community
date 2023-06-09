@@ -4,5 +4,5 @@
   <Version>4.1.1.0</Version>
   <Description>Plugin description</Description>
   <Author>Trados AppStore Team</Author>
-  <RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
+  <RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9" />
 </PluginPackage>
