@@ -76,7 +76,6 @@ namespace Sdl.Community.MTEdge.Provider.Studio
 		/// <returns></returns>
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments, bool[] mask)
 		{
-			 
 			var translations = TranslateSegments(segments.Where((seg, i) => mask is null || mask[i]).ToArray());
 			if (translations.All(translation => translation is null))
 			{
