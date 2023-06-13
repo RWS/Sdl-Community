@@ -11,6 +11,7 @@ using LanguageMappingProvider.Model;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Service;
+using Sdl.Core.Globalization.LanguageRegistry;
 using Application = System.Windows.Forms.Application;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
@@ -208,7 +209,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			var updated = false;
 
-			var studioLanguages = Core.Globalization.Language.GetAllLanguages();
+			var studioLanguages = LanguageRegistryApi.Instance.GetAllLanguages();
 
 			foreach (var studioLanguage in studioLanguages)
 			{
