@@ -48,6 +48,9 @@
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
+		<Reference Include="Sdl.Core.Globalization">
+			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
+		</Reference>
     <Reference Include="Sdl.Core.Settings">
       <HintPath>$(TradosFolder)\Sdl.Core.Settings.dll</HintPath>
     </Reference>

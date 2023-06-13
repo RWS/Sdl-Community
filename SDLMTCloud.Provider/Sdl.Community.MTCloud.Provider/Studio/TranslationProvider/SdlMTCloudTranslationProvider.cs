@@ -138,7 +138,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				return null;
 			}
 
-			mapping.Name = $"{languageDirection.SourceCulture?.DisplayName} - {languageDirection.TargetCulture?.DisplayName}";
+			mapping.Name = $"{languageDirection.SourceCulture?.Name} - {languageDirection.TargetCulture?.Name}";
 			mapping.SavedLanguageMappingModel = Options.LanguageMappings.FirstOrDefault(a => a.Name.Equals(mapping.Name, StringComparison.InvariantCultureIgnoreCase));
 
 			mapping.TargetLanguageMappings = LanguageMappingsService.GetMTCloudLanguages(mapping.TargetLanguageCode, languageDirection.TargetCulture);

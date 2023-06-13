@@ -1,6 +1,5 @@
 ﻿using System;
 using LanguageMappingProvider;
-using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
