@@ -392,7 +392,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				{
 					(StudioIsSignedIn, var message) = _connectionService.Connect(new Credential { Type = Authentication.AuthenticationType.Studio });
 					StudioSignedInAs = StudioIsSignedIn ? _connectionService.Credential?.Name : string.Empty;
-					SignInLabel = StudioIsSignedIn ? PluginResources.Label_SignOut : PluginResources.Label_Sign_In;
+					SignInLabel = StudioIsSignedIn ? PluginResources.Label_OK : PluginResources.Label_Sign_In;
 					ExceptionMessage = message != "OK" ? message : "";
 				}
 				else

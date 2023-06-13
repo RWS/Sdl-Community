@@ -257,9 +257,9 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to OK.
+        ///   Looks up a localized string similar to Sign out.
         /// </summary>
-        public static string Label_SignOut {
+        public static string Label_OK {
             get {
                 return ResourceManager.GetString("Label_OK", resourceCulture);
             }
@@ -704,7 +704,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Language Weaver provider.
+        ///   Looks up a localized string similar to Language Weaver.
         /// </summary>
         public static string SDLMTCloud_Provider_Name {
             get {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Sdl.Community.MTCloud.Provider.Extensions
 {
@@ -13,6 +14,6 @@ namespace Sdl.Community.MTCloud.Provider.Extensions
 
 		public static bool IsLanguageWeaverOrigin(this string originSystem)
 			=> originSystem is string originSystemString
-			&& (_providerNames.Contains(originSystemString) || originSystemString.ToLower().Contains(PluginResources.SDLMTCloud_Provider_Name.ToLower()));
+			&& _providerNames.Any(x => originSystem.ToLower().Contains(x.ToLower()));
 	}
 }
