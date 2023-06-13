@@ -91,7 +91,7 @@
 							 x:Name="GlossaryList"
 							 Validation.ErrorTemplate="{x:Null}"
 							 ItemsSource="{Binding Glossaries}"
-							 SelectedItem="{Binding GlossarySetupSelectedGlossary}"
+							 SelectedItem="{Binding SelectedGlossary}"
 							 d:ItemsSource="{d:SampleData ItemCount=5}">
 						<ListBox.ItemTemplate>
 							<DataTemplate>
@@ -123,7 +123,7 @@
 							<sdl:MultiSelectComboBox DockPanel.Dock="Bottom"
 													 Margin="5 0 0 5"
 													 ItemsSource="{Binding Languages}"
-													 SelectedItems="{Binding SelectedItem.Languages, ElementName=GlossaryList, Mode=TwoWay}"
+													 SelectedItems="{Binding SelectedItem.Languages, ElementName=GlossaryList}"
 													 DropdownItemTemplate="{StaticResource LanguageTemplate}"
 													 SelectedItemTemplate="{StaticResource LanguageTemplate}" />
 						</DockPanel>
@@ -133,8 +133,7 @@
 								   Padding="5 0 0 5"
 								   FontWeight="Light"
 								   FontSize="10" />
-							<sdl:MultiSelectComboBox Grid.Row="3"
-													 DockPanel.Dock="Bottom"
+							<sdl:MultiSelectComboBox DockPanel.Dock="Bottom"
 													 Margin="5 0 0 0"
 													 ItemsSource="{Binding Tags}"
 													 SelectedItems="{Binding SelectedItem.Tags, ElementName=GlossaryList}"

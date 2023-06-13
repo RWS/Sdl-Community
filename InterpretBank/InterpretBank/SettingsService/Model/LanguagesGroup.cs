@@ -2,9 +2,9 @@
 
 namespace InterpretBank.SettingsService.Model
 {
-	public class TagsGroup : IItemGroup
+	public class LanguageGroup : IItemGroup
 	{
-		public TagsGroup(int index, string name)
+		public LanguageGroup(int index, string name)
 		{
 			Order = index;
 			Name = name;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using InterpretBank.GlossaryService.Interface;
 using InterpretBank.Model;
+using InterpretBank.SettingsService.Model;
 using InterpretBank.Studio.Model;
 
 namespace InterpretBank.TerminologyService.Interface
@@ -14,6 +15,6 @@ namespace InterpretBank.TerminologyService.Interface
 
 		List<StudioTermEntry> GetFuzzyTerms(string word, string sourceLanguage, string targetLanguage);
 
-		List<Language> GetLanguages();
+		List<LanguageModel> GetLanguages();
 	}
 }

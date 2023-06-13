@@ -6,6 +6,7 @@ using InterpretBank.GlossaryService;
 using InterpretBank.GlossaryService.DAL;
 using InterpretBank.GlossaryService.Interface;
 using InterpretBank.Model;
+using InterpretBank.SettingsService.Model;
 using InterpretBank.Studio.Model;
 using InterpretBank.TerminologyService.Extensions;
 using InterpretBank.TerminologyService.Interface;
@@ -49,7 +50,7 @@ public class TerminologyService : ITerminologyService
 		return studioTerms;
 	}
 
-	public List<Language> GetLanguages()
+	public List<LanguageModel> GetLanguages()
 	{
 		var languages = InterpretBankDataContext.GetLanguages();
 		return languages;

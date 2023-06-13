@@ -4,7 +4,9 @@ using System.Collections.ObjectModel;
 using System.Data.Linq;
 using System.Data.SQLite;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Wordprocessing;
 using InterpretBank.Constants;
 using InterpretBank.GlossaryService.DAL;
@@ -52,7 +54,7 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 			glossaries.Add(new GlossaryModel
 			{
 				GlossaryName = dbGlossary.Tag1,
-				Languages = languages,
+				Languages = new ObservableCollection<LanguageModel>(languages),
 				Tags = new ObservableCollection<TagModel>(currentGlossaryLinks),
 				Id = dbGlossary.Id
 			});
@@ -61,7 +63,7 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 		return glossaries;
 	}
 
-	public void InsertLanguage(Language language)
+	public void InsertLanguage(LanguageModel language)
 	{
 		var dbInfo = GetTable<DatabaseInfo>().ToList()[0];
 		var dbInfoProperties = dbInfo.GetType().GetProperties().Where(p => p.Name.Contains("LanguageName"));
@@ -70,18 +72,47 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 			.SetValue(dbInfo, language.Name);
 	}
 
-	public List<Language> GetLanguages()
+	public void TagGlossary(TagModel newTag, string glossaryName)
+	{
+		var glossaryId = GetTable<DbGlossary>().ToList().FirstOrDefault(g => g.Tag1 == glossaryName)?.Id;
+		var tagId = GetTable<DbTag>().ToList().FirstOrDefault(t => t.TagName == newTag.TagName)?.TagId;
+		var tagLinks = GetTable<DbTagLink>();
+
+		if (tagId is null || glossaryId is null)
+			return;
+
+		var maxId = tagLinks.Select(tl => tl.TagId).Max();
+		tagLinks.InsertOnSubmit(new DbTagLink
+		{
+			GlossaryId = glossaryId.Value,
+			TagName = newTag.TagName,
+			TagId = ++maxId
+		});
+	}
+
+	public void AddLanguageToGlossary(LanguageModel newLanguage, string glossaryName)
+	{
+		var glossary = GetTable<DbGlossary>().ToList().FirstOrDefault(g => g.Tag1 == glossaryName);
+		var glossarySetting = glossary.GlossarySetting;
+		var indexToReplace = glossarySetting.IndexOf("0");
+
+		if (indexToReplace == -1) return;
+
+		glossary.GlossarySetting = glossarySetting.Substring(0, indexToReplace) + newLanguage.Index +
+		                           glossarySetting.Substring(indexToReplace + 0.ToString().Length);
+	}
+	public List<LanguageModel> GetLanguages()
 	{
 		var dbInfo = GetRows<DatabaseInfo>().ToList()[0];
-
 		var dbInfoProperties = dbInfo.GetType().GetProperties();
 
 		var languages = dbInfoProperties
 			.Where(prop => prop.Name.Contains("LanguageName"))
 			.Select(prop =>
-				new Language
+				new LanguageModel
 				{
-					Name = prop.GetValue(dbInfo).ToString(), Index = int.Parse(prop.Name.Substring(12))
+					Name = prop.GetValue(dbInfo).ToString(),
+					Index = int.Parse(prop.Name.Substring(12))
 				})
 			.ToList();
 
@@ -163,12 +194,12 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 		DataContext.SubmitChanges();
 	}
 
-	private List<Language> GetLanguageNames(string languageSetting)
+	private List<LanguageModel> GetLanguageNames(string languageSetting)
 	{
 		var languageModels = GetLanguages();
 
 		if (string.IsNullOrEmpty(languageSetting) || !languageSetting.Contains("#"))
-			return new List<Language>();
+			return new List<LanguageModel>();
 
 		var langIndicesStrings = languageSetting.Split('#');
 
