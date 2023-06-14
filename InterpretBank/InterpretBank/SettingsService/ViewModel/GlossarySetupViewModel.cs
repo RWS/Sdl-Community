@@ -13,7 +13,6 @@ namespace InterpretBank.SettingsService.ViewModel
 {
 	public class GlossarySetupViewModel : ViewModel
 	{
-		private ICommand _chooseFilepathCommand;
 		private ICommand _deleteTagCommand;
 		private ICommand _enterGlossaryCommand;
 		private ICommand _enterTagCommand;
@@ -28,12 +27,11 @@ namespace InterpretBank.SettingsService.ViewModel
 		private List<TagLinkModel> _tagLinks;
 		private List<TagModel> _tags;
 
-		public GlossarySetupViewModel(IOpenFileDialog openFileDialog)
+		public GlossarySetupViewModel(IDialog openFileDialog)
 		{
 			OpenFileDialog = openFileDialog;
 		}
 
-		public ICommand ChooseFilePathCommand => _chooseFilepathCommand ??= new RelayCommand(ChooseFilePath);
 		public ICommand DeleteTagCommand => _deleteTagCommand ??= new RelayCommand(DeleteTag);
 		public ICommand EnterGlossaryCommand => _enterGlossaryCommand ??= new RelayCommand(EnterGlossary);
 		public ICommand EnterTagCommand => _enterTagCommand ??= new RelayCommand(EnterTag);
@@ -73,8 +71,11 @@ namespace InterpretBank.SettingsService.ViewModel
 		{
 			get
 			{
-				var glossaryIdsOfTagged = TagLinks.Where(tl => tl.TagName == SelectedTag.TagName).Select(tl => tl.GlossaryId);
-				_glossariesTaggedWithSelected = Glossaries.Where(gl => glossaryIdsOfTagged.Contains(gl.Id)).ToList();
+				var idsOfTaggedGlossaries = TagLinks?.Where(tl => tl.TagName == SelectedTag.TagName).Select(tl => tl.GlossaryId);
+
+				if (idsOfTaggedGlossaries is null) return null;
+
+				_glossariesTaggedWithSelected = Glossaries?.Where(gl => idsOfTaggedGlossaries.Contains(gl.Id)).ToList();
 				return _glossariesTaggedWithSelected;
 			}
 			set => SetField(ref _glossariesTaggedWithSelected, value);
@@ -89,7 +90,8 @@ namespace InterpretBank.SettingsService.ViewModel
 		}
 
 		public string Name => "Tag/set up glossaries";
-		public IOpenFileDialog OpenFileDialog { get; }
+
+		public IDialog OpenFileDialog { get; }
 		public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save, o => !string.IsNullOrWhiteSpace(Filepath));
 
 		public GlossaryModel SelectedGlossary
@@ -124,6 +126,32 @@ namespace InterpretBank.SettingsService.ViewModel
 		{
 			get => _tags;
 			set => SetField(ref _tags, value);
+		}
+
+		private List<LanguageModelsListBoxItem> CheckForDuplicates(string selectedIndexName)
+		{
+			var duplicates = SelectedLanguages.GroupBy(sl => sl.SelectedIndex).Where(g => g.Count() > 1 && g.Key != 0)
+				.SelectMany(gr => gr).ToList();
+
+			var infiniteLoopFlag = true;
+			duplicates.ForEach(d =>
+			{
+				if (d[selectedIndexName] != "Duplicate value")
+					infiniteLoopFlag = false;
+				d[selectedIndexName] = "Duplicate value";
+			});
+
+			var nonDuplicates = SelectedLanguages.Except(duplicates).ToList();
+			nonDuplicates.ForEach(nd =>
+			{
+				if (nd[selectedIndexName] != null)
+					infiniteLoopFlag = false;
+				nd[selectedIndexName] = null;
+			});
+
+			if (!infiniteLoopFlag)
+				duplicates.Concat(nonDuplicates).ToList().ForEach(l => l.OnPropertyChanged(selectedIndexName));
+			return nonDuplicates;
 		}
 
 		private void ChooseFilePath(object obj)
@@ -239,32 +267,6 @@ namespace InterpretBank.SettingsService.ViewModel
 				Languages.Add(newLanguage);
 				InterpretBankDataContext.InsertLanguage(newLanguage);
 			}
-		}
-
-		private List<LanguageModelsListBoxItem> CheckForDuplicates(string selectedIndexName)
-		{
-			var duplicates = SelectedLanguages.GroupBy(sl => sl.SelectedIndex).Where(g => g.Count() > 1 && g.Key != 0)
-				.SelectMany(gr => gr).ToList();
-
-			var infiniteLoopFlag = true;
-			duplicates.ForEach(d =>
-			{
-				if (d[selectedIndexName] != "Duplicate value")
-					infiniteLoopFlag = false;
-				d[selectedIndexName] = "Duplicate value";
-			});
-
-			var nonDuplicates = SelectedLanguages.Except(duplicates).ToList();
-			nonDuplicates.ForEach(nd =>
-			{
-				if (nd[selectedIndexName] != null)
-					infiniteLoopFlag = false;
-				nd[selectedIndexName] = null;
-			});
-
-			if (!infiniteLoopFlag)
-				duplicates.Concat(nonDuplicates).ToList().ForEach(l => l.OnPropertyChanged(selectedIndexName));
-			return nonDuplicates;
 		}
 
 		private void Save(object parameter)

@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using InterpretBank.SettingsService.ViewModel;
 
 namespace InterpretBank.SettingsService.UI
 {
@@ -9,9 +10,15 @@ namespace InterpretBank.SettingsService.UI
 	/// </summary>
 	public partial class GlossarySetup : Window
 	{
-		public GlossarySetup()
+		public GlossarySetup(GlossarySetupViewModel glossarySetupViewModel)
 		{
+			DataContext = glossarySetupViewModel;
 			InitializeComponent();
+		}
+
+		private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+		{
+			DialogResult = true;
 		}
 
 		//This is used to hold the value as we clear the textbox
@@ -30,10 +37,5 @@ namespace InterpretBank.SettingsService.UI
 
 			MoveTextToValueHolder(sender);
 		}
-
-		private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-		{
-			DialogResult = true;
-		}
-	}	
+	}
 }

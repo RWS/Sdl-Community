@@ -3,14 +3,19 @@ using InterpretBank.Wrappers.Interface;
 
 namespace InterpretBank.Wrappers
 {
-	public class OpenFileDialog : IOpenFileDialog
+	public class Dialog : IDialog
 	{
-		private System.Windows.Forms.OpenFileDialog Dialog { get; set; } = new();
-
-		public string GetFilePath(string filter = ".db")
+		public string GetFilePath(string filter = "Interpret Bank Databases|*.db")
 		{
-			Dialog.Filter = filter;
-			return Dialog.ShowDialog() == DialogResult.OK ? Dialog.FileName : "";
+			using var dialog = new System.Windows.Forms.OpenFileDialog();
+			dialog.Filter = filter;
+			return dialog.ShowDialog() == DialogResult.OK ? dialog.FileName : "";
+		}
+
+		public bool Confirm(string message)
+		{
+			var dialogResult = MessageBox.Show(message, "Warning", MessageBoxButtons.YesNo);
+			return dialogResult == DialogResult.Yes;
 		}
 	}
 }

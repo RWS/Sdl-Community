@@ -45,7 +45,9 @@
 
 			<TextBlock Text="{x:Static interpretBank:PluginResources.SettingsWindow_TextBlock_DBFilepath}"
 					   DockPanel.Dock="Top" />
-			<ui:ChooseFilepathControl />
+
+			<ui:ChooseFilepathControl Filepath="{Binding Filepath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
 		</DockPanel>
 		<TabControl Margin="10"
 					Visibility="{Binding Filepath, Converter={StaticResource NullToVisibilityConverter}}"

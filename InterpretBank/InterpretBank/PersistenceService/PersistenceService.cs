@@ -1,25 +1,26 @@
 ﻿using System;
 using System.IO;
 using InterpretBank.SettingsService;
-using InterpretBank.Studio;
 using Newtonsoft.Json;
 
 namespace InterpretBank.PersistenceService
 {
 	public static class PersistenceService
 	{
-		private static string _settingsId;
+		private static string _settingsPath;
 
 		public static string SettingsPath
 		{
-			get => _settingsId;
-			set => _settingsId = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+			get => _settingsPath;
+			set => _settingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 				$@"Trados AppStore\InterpretBank\{value}.json");
 		}
 
 		public static Settings GetSettings(string settingsId)
 		{
 			SettingsPath = settingsId;
+			if (!File.Exists(SettingsPath))
+				SaveSettings(new Settings(), settingsId);
 			var settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(SettingsPath));
 			settings.SettingsId = settingsId;
 

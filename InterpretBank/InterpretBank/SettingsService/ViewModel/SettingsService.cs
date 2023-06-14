@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using InterpretBank.Commands;
 using InterpretBank.GlossaryService.Interface;
 using InterpretBank.SettingsService.Model;
-using InterpretBank.SettingsService.ViewModel.Interface;
 using InterpretBank.TerminologyService;
 using InterpretBank.Wrappers.Interface;
 
@@ -14,28 +12,26 @@ namespace InterpretBank.SettingsService.ViewModel;
 
 public class SettingsService : ViewModel, ISettingsService
 {
-	private RelayCommand _chooseFilePathCommand;
 	private string _filepath;
 	private List<GlossaryModel> _glossaries;
 	private ICommand _saveCommand;
+	private ObservableCollection<GlossaryModel> _selectedGlossaries = new();
+	private ObservableCollection<TagModel> _selectedTags = new();
 	private List<TagModel> _tags;
-	private List<GlossaryModel> _selectedGlossaries = new();
-	private IEnumerable<TagModel> _selectedTags;
 
-	public SettingsService(IOpenFileDialog openFileDialog, IInterpretBankDataContext interpretBankDataContext)
+	public SettingsService(IInterpretBankDataContext interpretBankDataContext)
 	{
 		InterpretBankDataContext = interpretBankDataContext;
-		OpenFileDialog = openFileDialog;
-
-		PropertyChanged += SettingsService_PropertyChanged;
 	}
-
-	public ICommand ChooseFilePathCommand => _chooseFilePathCommand ??= new RelayCommand(ChooseFilePath);
 
 	public string Filepath
 	{
 		get => _filepath;
-		set => SetField(ref _filepath, value);
+		set
+		{
+			var result = SetField(ref _filepath, value);
+			Setup(result);
+		}
 	}
 
 	public List<GlossaryModel> Glossaries
@@ -46,7 +42,7 @@ public class SettingsService : ViewModel, ISettingsService
 
 	public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save, o => !string.IsNullOrWhiteSpace(Filepath));
 
-	public List<GlossaryModel> SelectedGlossaries
+	public ObservableCollection<GlossaryModel> SelectedGlossaries
 	{
 		get => _selectedGlossaries;
 		set
@@ -58,7 +54,7 @@ public class SettingsService : ViewModel, ISettingsService
 		}
 	}
 
-	public IEnumerable<TagModel> SelectedTags
+	public ObservableCollection<TagModel> SelectedTags
 	{
 		get => _selectedTags;
 		set
@@ -77,10 +73,10 @@ public class SettingsService : ViewModel, ISettingsService
 			SettingsId = value.SettingsId;
 			Filepath = value.DatabaseFilepath;
 			if (value.Glossaries is not null)
-				SelectedGlossaries = Glossaries?.Where(g => value.Glossaries.Contains(g.GlossaryName)).ToList();
-			
+				SelectedGlossaries = new ObservableCollection<GlossaryModel>(Glossaries?.Where(g => value.Glossaries.Contains(g.GlossaryName)));
+
 			if (value.Tags is not null)
-				SelectedTags = Tags?.Where(t => value.Tags.Contains(t.TagName)).ToList();
+				SelectedTags = new ObservableCollection<TagModel>(Tags?.Where(t => value.Tags.Contains(t.TagName)));
 		}
 		get =>
 			new()
@@ -102,20 +98,9 @@ public class SettingsService : ViewModel, ISettingsService
 
 	private IInterpretBankDataContext InterpretBankDataContext { get; }
 
-	private IOpenFileDialog OpenFileDialog { get; }
-
 	public void Dispose()
 	{
 		InterpretBankDataContext?.Dispose();
-	}
-
-	private void ChooseFilePath(object obj)
-	{
-		var filePath = OpenFileDialog.GetFilePath();
-
-		if (string.IsNullOrWhiteSpace(filePath))
-			return;
-		Filepath = filePath;
 	}
 
 	private void Save(object parameter)
@@ -123,18 +108,7 @@ public class SettingsService : ViewModel, ISettingsService
 		InterpretBankDataContext.SubmitData();
 	}
 
-	private void SettingsService_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-	{
-		if (e.PropertyName != nameof(Filepath))
-			return;
-
-		Setup();
-
-		//GlossarySetupViewModel.SetDataContext(InterpretBankDataContext);
-		//GlossarySetupViewModel.Setup(Glossaries, Tags);
-	}
-
-	private void Setup()
+	private void Setup(bool reset = false)
 	{
 		InterpretBankDataContext?.Dispose();
 		if (!string.IsNullOrWhiteSpace(_filepath))
@@ -148,5 +122,11 @@ public class SettingsService : ViewModel, ISettingsService
 			Tags = null;
 			Glossaries = null;
 		}
+
+		if (!reset)
+			return;
+
+		SelectedGlossaries.Clear();
+		SelectedTags.Clear();
 	}
 }

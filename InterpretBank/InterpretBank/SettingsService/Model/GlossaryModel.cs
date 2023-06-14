@@ -20,5 +20,10 @@ namespace InterpretBank.SettingsService.Model
 			get => _tags;
 			set => SetField(ref _tags, value);
 		}
+
+		public override string ToString()
+		{
+			return GlossaryName;
+		}
 	}
 }

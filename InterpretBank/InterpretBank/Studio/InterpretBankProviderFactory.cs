@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Data.SQLite;
 using InterpretBank.GlossaryService;
-using InterpretBank.GlossaryService.Interface;
-using InterpretBank.SettingsService;
-using InterpretBank.TerminologyService;
-using InterpretBank.Wrappers;
 using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace InterpretBank.Studio
@@ -14,22 +9,6 @@ namespace InterpretBank.Studio
 								Description = "My_Terminology_Provider_Description")]
 	public class InterpretBankProviderFactory : ITerminologyProviderFactory
 	{
-		//private static InterpretBankDataContext _interpretBankDataContext;
-
-		//public static InterpretBankDataContext InterpretBankDataContext
-		//{
-		//	get => _interpretBankDataContext ??= new InterpretBankDataContext();
-		//	set => _interpretBankDataContext = value;
-		//}
-
-		//public static InterpretBankProvider GetInterpretBankProvider()
-		//{
-		//	var settingsService = new SettingsService.ViewModel.SettingsService(new OpenFileDialog(), InterpretBankDataContext);
-
-		//	var termSearchService = new TerminologyService.TerminologyService(InterpretBankDataContext);
-		//	return new InterpretBankProvider(termSearchService, settingsService);
-		//}
-
 		public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri, ITerminologyProviderCredentialStore credentials)
 		{
 			var settings = PersistenceService.PersistenceService.GetSettings(terminologyProviderUri.Scheme);

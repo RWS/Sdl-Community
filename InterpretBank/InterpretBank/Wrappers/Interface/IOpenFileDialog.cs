@@ -1,6 +1,7 @@
 ﻿namespace InterpretBank.Wrappers.Interface;
 
-public interface IOpenFileDialog
+public interface IDialog
 {
+	bool Confirm(string message);
 	string GetFilePath(string filter = null);
 }

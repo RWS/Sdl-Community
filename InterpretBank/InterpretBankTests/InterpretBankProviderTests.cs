@@ -32,7 +32,7 @@ namespace InterpretBankTests
 			//	.GetFuzzyTerms(default, default, default)
 			//	.ReturnsForAnyArgs(new List<string> { "firstTerm", "secondTerm" });
 
-			var openFileDialog = Substitute.For<IOpenFileDialog>();
+			var openFileDialog = Substitute.For<IDialog>();
 
 			var filepath = "C:\\Code\\RWS Community\\InterpretBank\\InterpretBankTests\\Resources\\InterpretBankDatabaseV6.db";
 			var sqLiteConnection = new SQLiteConnection($"Data Source={filepath}");

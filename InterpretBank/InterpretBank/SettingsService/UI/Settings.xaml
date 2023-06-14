@@ -27,7 +27,7 @@
 						   DockPanel.Dock="Top" />
 				<sdl:MultiSelectComboBox Margin="0 2 0 0"
 										 Height="64"
-										 SelectedItems="{Binding SelectedTags}"
+										 SelectedItems="{Binding SelectedTags, Mode=TwoWay}"
 										 ItemsSource="{Binding Tags, UpdateSourceTrigger=PropertyChanged}"
 										 DropdownItemTemplate="{StaticResource TagTemplate}"
 										 SelectedItemTemplate="{StaticResource TagTemplate}"/>
@@ -40,7 +40,7 @@
 						   DockPanel.Dock="Top" />
 				<sdl:MultiSelectComboBox Margin="0 2 0 0"
 										 Height="64"
-										 SelectedItems="{Binding SelectedGlossaries}"
+										 SelectedItems="{Binding SelectedGlossaries, Mode=TwoWay}"
 										 ItemsSource="{Binding Glossaries, UpdateSourceTrigger=PropertyChanged}"
 										 DropdownItemTemplate="{StaticResource GlossaryTemplate}"
 										 SelectedItemTemplate="{StaticResource GlossaryTemplate}"/>

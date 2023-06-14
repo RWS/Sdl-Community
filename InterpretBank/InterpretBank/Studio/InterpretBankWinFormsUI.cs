@@ -20,7 +20,7 @@ internal class InterpretBankWinFormsUI : ITerminologyProviderWinFormsUI
 	{
 		var interpretBankDataContext = new InterpretBankDataContext();
 		var settingsService =
-			new SettingsService.ViewModel.SettingsService(new Wrappers.OpenFileDialog(), interpretBankDataContext);
+			new SettingsService.ViewModel.SettingsService(interpretBankDataContext);
 		var settingsUi = new SettingsMain { DataContext = settingsService };
 
 		Settings settings;
@@ -28,10 +28,6 @@ internal class InterpretBankWinFormsUI : ITerminologyProviderWinFormsUI
 			settings = settingsService.Settings;
 		else
 			return null;
-
-		//var settingsFilepath = Path.Combine(
-		//	Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-		//	$@"Trados AppStore\InterpretBank\{settingsId}.json");
 
 		var settingsId = GetSettingsId();
 		settings.SettingsId = settingsId;
@@ -51,13 +47,14 @@ internal class InterpretBankWinFormsUI : ITerminologyProviderWinFormsUI
 			return false;
 
 		var settingsService =
-			new SettingsService.ViewModel.SettingsService(new Wrappers.OpenFileDialog(), provider.TermSearchService.InterpretBankDataContext);
+			new SettingsService.ViewModel.SettingsService(provider.TermSearchService.InterpretBankDataContext);
 		settingsService.Settings = provider.Settings;
 
 		var settingsUi = new SettingsMain { DataContext = settingsService };
 		var result = settingsUi.ShowDialog() ?? false;
 
-		if (!result) return false;
+		if (!result)
+			return false;
 
 		provider.Settings = settingsService.Settings;
 		PersistenceService.PersistenceService.SaveSettings(settingsService.Settings, provider.Settings.SettingsId);

@@ -52,7 +52,7 @@
 
 				<TextBlock Text="{x:Static interpretBank:PluginResources.SettingsWindow_TextBlock_DBFilepath}"
 						   DockPanel.Dock="Top" />
-				<ui:ChooseFilepathControl/>
+				<ui:ChooseFilepathControl Filepath="{Binding Filepath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 			</DockPanel>
 
 			<ui:Settings Grid.Row="3"
