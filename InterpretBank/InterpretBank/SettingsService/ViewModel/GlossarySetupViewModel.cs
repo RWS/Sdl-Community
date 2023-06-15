@@ -276,7 +276,7 @@ namespace InterpretBank.SettingsService.ViewModel
 
 		private void Setup()
 		{
-			Tags = InterpretBankDataContext.GetTags();
+			Tags = InterpretBankDataContext.GetTags().Distinct().ToList();
 			Languages = InterpretBankDataContext.GetLanguages();
 			Glossaries = InterpretBankDataContext.GetGlossaries();
 			TagLinks = InterpretBankDataContext.GetLinks();

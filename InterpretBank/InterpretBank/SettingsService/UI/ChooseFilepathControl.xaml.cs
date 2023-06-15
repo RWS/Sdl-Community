@@ -114,12 +114,6 @@ namespace InterpretBank.SettingsService.UI
 			AutoCompletePopup.IsOpen = !AutoCompletePopup.IsOpen;
 		}
 
-		//private void FilepathTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
-		//{
-		//	AutoCompleteOptions = DatabaseList.Where(fp => fp.Contains(Filepath)).ToList();
-		//	AutoCompletePopup.IsOpen = AutoCompleteOptions.Any();
-		//}
-
 		private void FilepathTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Key == Key.Escape)
@@ -150,7 +144,6 @@ namespace InterpretBank.SettingsService.UI
 			if (e.Key == Key.Down)
 			{
 				AutoCompletePopup.IsOpen = true;
-				// Move the selection down in the AutoCompleteList
 				if (AutoCompleteList.SelectedIndex < AutoCompleteList.Items.Count - 1)
 				{
 					AutoCompleteList.SelectedIndex++;
@@ -160,7 +153,6 @@ namespace InterpretBank.SettingsService.UI
 			}
 			else if (e.Key == Key.Up)
 			{
-				// Move the selection up in the AutoCompleteList
 				if (AutoCompleteList.SelectedIndex > 0)
 				{
 					AutoCompleteList.SelectedIndex--;

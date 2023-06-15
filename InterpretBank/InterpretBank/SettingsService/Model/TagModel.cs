@@ -12,6 +12,11 @@ public class TagModel : IItemGroupAware
 		return TagName;
 	}
 
+	public override int GetHashCode()
+	{
+		return TagName.GetHashCode();
+	}
+
 	public override bool Equals(object obj)
 	{
 		return ((TagModel)obj)?.TagName == TagName;

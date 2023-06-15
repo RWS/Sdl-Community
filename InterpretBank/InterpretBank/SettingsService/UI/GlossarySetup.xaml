@@ -93,6 +93,7 @@
 							 x:Name="GlossaryList"
 							 Validation.ErrorTemplate="{x:Null}"
 							 ItemsSource="{Binding Glossaries}"
+							 SelectedIndex="0"
 							 SelectedItem="{Binding SelectedGlossary}"
 							 d:ItemsSource="{d:SampleData ItemCount=5}">
 						<ListBox.ItemTemplate>
@@ -182,6 +183,7 @@
 							 x:Name="TagsList"
 							 Grid.Column="0"
 							 ItemsSource="{Binding Tags}"
+							 SelectedIndex="0"
 							 SelectedItem="{Binding SelectedTag}"
 							 d:ItemsSource="{d:SampleData ItemCount=5}">
 						<ListBox.ItemTemplate>

@@ -7,6 +7,7 @@ namespace InterpretBank.SettingsService.Model
 		private ObservableCollection<LanguageModel> _languages;
 		private ObservableCollection<TagModel> _tags;
 		public string GlossaryName { get; set; }
+		public string SubGlossaryName { get; set; }
 		public int Id { get; set; }
 
 		public ObservableCollection<LanguageModel> Languages
@@ -23,7 +24,7 @@ namespace InterpretBank.SettingsService.Model
 
 		public override string ToString()
 		{
-			return GlossaryName;
+			return $"{GlossaryName}{SubGlossaryName}";
 		}
 	}
 }
