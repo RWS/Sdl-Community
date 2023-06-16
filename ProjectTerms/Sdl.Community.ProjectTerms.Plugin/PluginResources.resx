@@ -290,4 +290,7 @@ Restart Studio and now you should be able to generate the new termbase.</value>
   <data name="TellMe_Provider_Results" xml:space="preserve">
     <value>{0} results</value>
   </data>
+  <data name="termbaseDefaultDefinitionFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\termbasedefaultdefinitionfile.xdt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

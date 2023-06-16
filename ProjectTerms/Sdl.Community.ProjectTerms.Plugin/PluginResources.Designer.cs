@@ -494,6 +494,16 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] termbaseDefaultDefinitionFile {
+            get {
+                object obj = ResourceManager.GetObject("termbaseDefaultDefinitionFile", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to projectTerms-sourcecloud.
         /// </summary>
         public static string WordCloudFileName {

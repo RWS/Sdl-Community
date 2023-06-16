@@ -25,9 +25,9 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 
 				var result = string.Empty;
 
-				using (Stream stream = typeof(TermbaseDefinitionFile).Assembly.GetManifestResourceStream("Sdl.Community.ProjectTerms.Plugin.Resources." + fileName))
+				using (var stream = new MemoryStream (PluginResources.termbaseDefaultDefinitionFile))
 				{
-					using (StreamReader sr = new StreamReader(stream))
+					using (var sr = new StreamReader(stream))
 					{
 						result = sr.ReadToEnd();
 					}
