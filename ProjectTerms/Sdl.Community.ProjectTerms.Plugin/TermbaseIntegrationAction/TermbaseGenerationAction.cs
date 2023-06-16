@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Sdl.Community.ProjectTerms.Plugin.Exceptions;
 using Sdl.Community.ProjectTerms.Telemetry;
 using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.MultiTerm.TMO.Interop;
@@ -138,7 +139,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
                 {
 	                foreach (var targetLanguage in targetLanguages.Keys)
 	                {
-		                termbaseConfig.LanguageIndexes.Add(new TermbaseLanguageIndex(new Language(CultureInfo.GetCultureInfo(targetLanguages[targetLanguage])), targetLanguage));
+		                termbaseConfig.LanguageIndexes.Add(new TermbaseLanguageIndex(LanguageRegistryApi.Instance.GetLanguage(CultureInfo.GetCultureInfo(targetLanguages[targetLanguage]).Name), targetLanguage));
 	                }
                 }
                 project.UpdateTermbaseConfiguration(termbaseConfig);
