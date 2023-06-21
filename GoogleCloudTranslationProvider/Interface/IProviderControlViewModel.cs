@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using GoogleCloudTranslationProvider.Models;
 using GoogleCloudTranslationProvider.Service;
+using GoogleCloudTranslationProvider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 
 namespace GoogleCloudTranslationProvider.Interfaces
@@ -9,7 +10,7 @@ namespace GoogleCloudTranslationProvider.Interfaces
 
 	public interface IProviderControlViewModel
 	{
-		BaseModel ViewModel { get; set; }
+		BaseViewModel ViewModel { get; set; }
 
 		List<TranslationOption> TranslationOptions { get; set; }
 

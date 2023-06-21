@@ -9,11 +9,12 @@ using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
 using GoogleCloudTranslationProvider.Service;
+using GoogleCloudTranslationProvider.ViewModel;
 using NLog;
 
 namespace GoogleCloudTranslationProvider.ViewModels
 {
-	public class SettingsViewModel : BaseModel, ISettingsControlViewModel
+	public class SettingsViewModel : BaseViewModel, ISettingsControlViewModel
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly IOpenFileDialogService _openFileDialogService;
@@ -47,7 +48,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			SetSavedSettings();
 		}
 
-		public BaseModel ViewModel { get; set; }
+		public BaseViewModel ViewModel { get; set; }
 
 		public bool ReSendDraft
 		{

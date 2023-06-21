@@ -10,12 +10,13 @@ using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
 using GoogleCloudTranslationProvider.Service;
+using GoogleCloudTranslationProvider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace GoogleCloudTranslationProvider.ViewModels
 {
-	public class MainWindowViewModel : BaseModel
+	public class MainWindowViewModel : BaseViewModel
 	{
 		private const string ViewDetails_Provider = nameof(ProviderViewModel);
 		private const string ViewDetails_Settings = nameof(SettingsViewModel);
@@ -30,7 +31,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private ISettingsControlViewModel _settingsViewModel;
 
 		private string _translatorErrorResponse;
-		private string _errorMessage;
 		private string _multiButtonContent;
 		private bool _dialogResult;
 		private bool _isTellMeAction;
@@ -247,7 +247,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private void InitializeViews()
 		{
 			ShowMultiButton = true;
-			_providerViewModel = new ProviderViewModel(Options);
+			_providerViewModel = new ProviderViewModel(Options, _languagePairs.ToList());
 			_settingsViewModel = new SettingsViewModel(Options, !_showSettingsView);
 			ShowProjectInfo = _showSettingsView && (_providerViewModel.SelectedGoogleApiVersion.Version == ApiVersion.V3);
 
@@ -378,8 +378,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			}
 
 			var providerUri = new Uri(Constants.GoogleTranslationFullScheme);
-			var credentials = _credentialStore.GetCredential(providerUri);
-			if (credentials is null)
+			if (_credentialStore.GetCredential(providerUri) is null)
 			{
 				return;
 			}

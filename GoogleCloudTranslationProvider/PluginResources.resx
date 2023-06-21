@@ -493,4 +493,16 @@ Path: {0}</value>
   <data name="ProviderView_V2_ApiKey_Navigate" xml:space="preserve">
     <value>Navigate to your account</value>
   </data>
+  <data name="JsonFile_Browse" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="JsonFile_Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="JsonFile_DragAndDrop" xml:space="preserve">
+    <value>DragAndDrop</value>
+  </data>
+  <data name="Validation_ApiKey_Invalid" xml:space="preserve">
+    <value>The API Key is not valid</value>
+  </data>
 </root>

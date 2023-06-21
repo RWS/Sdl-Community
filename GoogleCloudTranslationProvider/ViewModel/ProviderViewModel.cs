@@ -12,17 +12,19 @@ using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
 using GoogleCloudTranslationProvider.Service;
+using GoogleCloudTranslationProvider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 using DataFormats = System.Windows.DataFormats;
 using DragEventArgs = System.Windows.DragEventArgs;
 
 namespace GoogleCloudTranslationProvider.ViewModels
 {
-	public class ProviderViewModel : BaseModel, IProviderControlViewModel
+	public class ProviderViewModel : BaseViewModel, IProviderControlViewModel
 	{
 		private const string DummyLocation = "gctp-sdl";
 		private readonly IOpenFileDialogService _openFileDialogService;
 		private readonly ITranslationOptions _options;
+		private readonly IEnumerable<LanguagePair> _languagePairs;
 
 		private GoogleApiVersion _selectedGoogleApiVersion;
 
@@ -57,15 +59,16 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private ICommand _navigateToCommand;
 		private ICommand _clearCommand;
 
-		public ProviderViewModel(ITranslationOptions options)
+		public ProviderViewModel(ITranslationOptions options, List<LanguagePair> languagePairs)
 		{
 			ViewModel = this;
 			_options = options;
+			_languagePairs = languagePairs;
 			_openFileDialogService = new OpenFileDialogService();
 			InitializeComponent();
 		}
 
-		public BaseModel ViewModel { get; set; }
+		public BaseViewModel ViewModel { get; set; }
 
 		public List<RetrievedGlossary> AvailableGlossaries
 		{
@@ -344,6 +347,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		public ICommand DragDropJsonFileCommand => _dragDropJsonFileCommand ??= new RelayCommand(DragAndDropJsonFile);
 		public ICommand DownloadJsonFileCommand => _downloadJsonFileCommand ??= new RelayCommand(DownloadJsonFile);
 		public ICommand BrowseJsonFileCommand => _browseJsonFileCommand ??= new RelayCommand(BrowseJsonFile);
+
 		public ICommand OpenLocalPathCommand => _openLocalPathCommand ??= new RelayCommand(OpenLocalPath);
 		public ICommand NavigateToCommand => _navigateToCommand ??= new RelayCommand(NavigateTo);
 		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
@@ -367,7 +371,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			{
 				if (e.Message.Contains("(400) Bad Request"))
 				{
-					ErrorHandler.HandleError("The API Key is not valid", "API Key");
+					ErrorHandler.HandleError(PluginResources.Validation_ApiKey_Invalid, "API Key");
 					return false;
 				}
 
@@ -676,5 +680,8 @@ namespace GoogleCloudTranslationProvider.ViewModels
 					break;
 			}
 		}
+
+		#region JSON File Management
+		#endregion
 	}
 }

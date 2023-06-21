@@ -46,7 +46,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 			}
 			catch (Exception ex)
 			{
-				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {e.Message}\n {e.StackTrace}");
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
 				ErrorHandler.HandleError(ex);
 				return false;
 			}

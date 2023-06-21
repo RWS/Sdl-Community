@@ -1,11 +1,11 @@
 ﻿using System.Windows.Input;
-using GoogleCloudTranslationProvider.Models;
+using GoogleCloudTranslationProvider.ViewModel;
 
 namespace GoogleCloudTranslationProvider.Interfaces
 {
 	public interface ISettingsControlViewModel
 	{
-		BaseModel ViewModel { get; set; }
+		BaseViewModel ViewModel { get; set; }
 
 		bool ReSendDraft { get; set; }
 		

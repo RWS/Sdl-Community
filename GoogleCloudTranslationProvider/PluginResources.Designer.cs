@@ -354,6 +354,33 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Browse.
+        /// </summary>
+        public static string JsonFile_Browse {
+            get {
+                return ResourceManager.GetString("JsonFile_Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download.
+        /// </summary>
+        public static string JsonFile_Download {
+            get {
+                return ResourceManager.GetString("JsonFile_Download", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DragAndDrop.
+        /// </summary>
+        public static string JsonFile_DragAndDrop {
+            get {
+                return ResourceManager.GetString("JsonFile_DragAndDrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There was a problem checking language pair support..
         /// </summary>
         public static string LangPairAuthErrorMsg1 {
@@ -1076,6 +1103,15 @@ namespace GoogleCloudTranslationProvider {
         public static string Validation_ApiKey {
             get {
                 return ResourceManager.GetString("Validation_ApiKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The API Key is not valid.
+        /// </summary>
+        public static string Validation_ApiKey_Invalid {
+            get {
+                return ResourceManager.GetString("Validation_ApiKey_Invalid", resourceCulture);
             }
         }
         
