@@ -277,23 +277,16 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				return;
 			}
 
-			var uriQuery = HttpUtility.ParseQueryString(Options.Uri.OriginalString);
-			JsonFilePath = uriQuery.Get("jsonfilepath") ?? PluginResources.ProjectInfo_PathCorrupted;
-			ProjectId = uriQuery.Get("projectid") ?? PluginResources.ProjectInfo_ProjectIdMissing;
-			ProjectLocation = uriQuery.Get("projectlocation") ?? PluginResources.ProjectInfo_LocationMissing;
-			Glossary = uriQuery.Get("glossarypath") ?? PluginResources.ProjectInfo_GlossaryNotUsed;
-			CustomModel = uriQuery.Get("googleenginemodel") ?? PluginResources.ProjectInfo_CustomModelNotUsed;
+			JsonFilePath = Options.JsonFilePath ?? PluginResources.ProjectInfo_PathCorrupted;
+			ProjectId = Options.ProjectId ?? PluginResources.ProjectInfo_ProjectIdMissing;
+			ProjectLocation = Options.ProjectLocation ?? PluginResources.ProjectInfo_LocationMissing;
+			Glossary = string.Empty;
+			CustomModel = string.Empty;
 		}
 
 		public bool IsWindowValid()
 		{
-			var isGoogleProvider = _providerViewModel?.SelectedTranslationOption?.ProviderType == ProviderType.GoogleTranslate;
-			if (isGoogleProvider && !ValidGoogleOptions())
-			{
-				return false;
-			}
-
-			return _settingsViewModel.SettingsAreValid();
+			return ValidGoogleOptions() && _settingsViewModel.SettingsAreValid();
 		}
 
 		private bool ValidGoogleOptions()
@@ -304,14 +297,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		private void Save(object o)
 		{
-			if (_isTellMeAction)
-			{
-				SetGeneralProviderOptions();
-				DialogResult = true;
-				CloseEventRaised?.Invoke();
-				return;
-			}
-
 			if (!IsWindowValid())
 			{
 				return;
@@ -331,11 +316,9 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			Options.SelectedGoogleVersion = _providerViewModel.SelectedGoogleApiVersion.Version;
 			Options.JsonFilePath = _providerViewModel.JsonFilePath;
 			Options.ProjectId = _providerViewModel.ProjectId;
-			Options.SelectedProvider = _providerViewModel.SelectedTranslationOption.ProviderType;
 			Options.GoogleEngineModel = _providerViewModel.GoogleEngineModel;
 			Options.ProjectLocation = _providerViewModel.ProjectLocation;
 			Options.GlossaryPath = _providerViewModel.GlossaryPath;
-			Options.BasicCsv = _providerViewModel.BasicCsvGlossary;
 		}
 
 		private void SetGeneralProviderOptions()
@@ -366,6 +349,11 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 			foreach (var languagePair in _languagePairs)
 			{
+				if (Options.LanguagesSupported.ContainsKey(languagePair.TargetCultureName))
+				{
+					continue;
+				}
+
 				Options.LanguagesSupported.Add(languagePair.TargetCultureName, _providerViewModel.SelectedTranslationOption.Name);
 			}
 		}

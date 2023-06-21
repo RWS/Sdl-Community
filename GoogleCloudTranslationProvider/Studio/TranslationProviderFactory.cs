@@ -1,5 +1,6 @@
 ﻿using System;
 using GoogleCloudTranslationProvider.Models;
+using Newtonsoft.Json;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace GoogleCloudTranslationProvider.Studio
@@ -16,7 +17,7 @@ namespace GoogleCloudTranslationProvider.Studio
 				throw new Exception(PluginResources.UriNotSupportedMessage);
 			}
 
-			var translationOptions = new GCTPTranslationOptions(translationProviderUri);
+			var translationOptions = JsonConvert.DeserializeObject<GCTPTranslationOptions>(translationProviderState);
 			if (translationOptions.SelectedGoogleVersion is not ApiVersion.V2)
 			{
 				return new TranslationProvider(translationOptions);

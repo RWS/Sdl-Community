@@ -6,6 +6,7 @@ using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
 using GoogleCloudTranslationProvider.ViewModels;
 using GoogleCloudTranslationProvider.Views;
+using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -44,11 +45,19 @@ namespace GoogleCloudTranslationProvider.Studio
 
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
 		{
-			var options = new GCTPTranslationOptions(translationProviderUri);
-			var customName = options.CustomProviderName;
-			var useCustomName = options.UseCustomProviderName;
-			var selectedVersion = options.SelectedGoogleVersion;
-			var providerName = customName.SetProviderName(useCustomName, selectedVersion);
+			if (string.IsNullOrEmpty(translationProviderState))
+			{
+				return new TranslationProviderDisplayInfo()
+				{
+					SearchResultImage = PluginResources.my_image,
+					TranslationProviderIcon = PluginResources.appicon,
+					TooltipText = Constants.GoogleNaming_ShortName,
+					Name = Constants.GoogleNaming_ShortName
+				};
+			}
+
+			var options = JsonConvert.DeserializeObject<GCTPTranslationOptions>(translationProviderState);
+			var providerName = options.CustomProviderName.SetProviderName(options.UseCustomProviderName, options.SelectedGoogleVersion);
 			return new TranslationProviderDisplayInfo()
 			{
 				SearchResultImage = PluginResources.my_image,
@@ -84,11 +93,6 @@ namespace GoogleCloudTranslationProvider.Studio
 
 		private void UpdateProviderCredentials(ITranslationProviderCredentialStore credentialStore, ITranslationOptions options)
 		{
-			if (options.SelectedProvider != ProviderType.GoogleTranslate)
-			{
-				return;
-			}
-
 			SetCredentialsOnCredentialStore(credentialStore, Constants.GoogleTranslationFullScheme, options.ApiKey, options.PersistGoogleKey);
 		}
 

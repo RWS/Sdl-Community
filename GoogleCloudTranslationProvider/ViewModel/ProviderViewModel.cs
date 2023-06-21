@@ -422,8 +422,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 					GoogleEngineModel = GoogleEngineModel,
 					ProjectLocation = ProjectLocation,
 					GlossaryPath = GlossaryPath,
-					BasicCsv = BasicCsvGlossary,
-					SelectedProvider = SelectedTranslationOption.ProviderType,
 					SelectedGoogleVersion = SelectedGoogleApiVersion.Version
 				};
 
@@ -494,11 +492,8 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				ProjectLocation = _options.ProjectLocation;
 				GoogleEngineModel = _options.GoogleEngineModel;
 				GlossaryPath = _options.GlossaryPath;
-				BasicCsvGlossary = _options.BasicCsv;
 			}
 
-
-			SetTranslationOption();
 			SetGoogleApiVersion();
 			if (!string.IsNullOrEmpty(_projectId)
 			 && !string.IsNullOrEmpty(_projectLocation))
@@ -508,22 +503,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				Locations.Add(_projectLocation);
 				SelectedGlossary = _availableGlossaries.FirstOrDefault(x => x.GlossaryID == _options.GlossaryPath) ?? _availableGlossaries.First();
 				SelectedCustomModel = _availableCustomModels.FirstOrDefault(x => x.DatasetId == _options.GoogleEngineModel) ?? _availableCustomModels.First();
-			}
-		}
-
-		private void SetTranslationOption()
-		{
-			if (_options?.SelectedProvider is null)
-			{
-				SelectGoogleV2();
-				return;
-			}
-
-			var selectedProvider = TranslationOptions.FirstOrDefault(t => t.ProviderType.Equals(_options.SelectedProvider));
-			if (selectedProvider is null)
-			{
-				SelectGoogleV2();
-				return;
 			}
 		}
 
