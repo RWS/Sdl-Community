@@ -15,7 +15,7 @@ namespace GoogleCloudTranslationProvider.Studio
 	[TranslationProviderWinFormsUi(Id = Constants.Provider_TranslationProviderWinFormsUi,
 								   Name = Constants.Provider_TranslationProviderWinFormsUi,
 								   Description = Constants.Provider_TranslationProviderWinFormsUi)]
-	public class ProviderWinFormsUI : ITranslationProviderWinFormsUI
+	public class TranslationProviderWinFormsUI : ITranslationProviderWinFormsUI
 	{
 		public string TypeDescription => PluginResources.Plugin_Description;
 
@@ -27,13 +27,13 @@ namespace GoogleCloudTranslationProvider.Studio
 		{
 			var options = new GCTPTranslationOptions();
 			var mainWindowViewModel = ShowRequestedView(languagePairs, credentialStore, options);
-			return mainWindowViewModel.DialogResult ? new ITranslationProvider[] { new Provider(options) }
+			return mainWindowViewModel.DialogResult ? new ITranslationProvider[] { new TranslationProvider(options) }
 													: null;
 		}
 
 		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
-			if (translationProvider is not Provider editProvider)
+			if (translationProvider is not TranslationProvider editProvider)
 			{
 				return false;
 			}

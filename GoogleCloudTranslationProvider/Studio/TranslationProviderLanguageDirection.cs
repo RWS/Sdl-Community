@@ -12,11 +12,11 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace GoogleCloudTranslationProvider.Studio
 {
-	public class ProviderLanguageDirection : ITranslationProviderLanguageDirection
+	public class TranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
 	{
 		private readonly ITranslationOptions _options;
 		private readonly LanguagePair _languageDirection;
-		private readonly Provider _provider;
+		private readonly TranslationProvider _provider;
 		private readonly HtmlUtil _htmlUtil;
 
 		private V2Connector _googleV2Api;
@@ -26,7 +26,7 @@ namespace GoogleCloudTranslationProvider.Studio
 		private GCTPSegmentEditor _preLookupSegmentEditor;
 		private TranslationUnit _currentTranslationUnit;
 
-		public ProviderLanguageDirection(Provider provider, LanguagePair languages, HtmlUtil htmlUtil)
+		public TranslationProviderLanguageDirection(TranslationProvider provider, LanguagePair languages, HtmlUtil htmlUtil)
 		{
 			_provider = provider;
 			_languageDirection = languages;

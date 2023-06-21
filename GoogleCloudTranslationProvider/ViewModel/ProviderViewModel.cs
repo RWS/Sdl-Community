@@ -361,8 +361,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			try
 			{
 				var v2Connector = new V2Connector(ApiKey, htmlUtil);
-				v2Connector.ValidateCredentials();
-				return true;
+				return v2Connector.CredentialsAreValid();
 			}
 			catch (Exception e)
 			{
@@ -591,7 +590,15 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private void ReadJsonFile(string filePath)
 		{
 			GetJsonDetails(filePath);
-			GetProjectLocations();
+			var tempOptions = new GCTPTranslationOptions
+			{
+				ProjectId = _projectId,
+				JsonFilePath = _jsonFilePath,
+				ProjectLocation = DummyLocation
+			};
+
+			Locations = ProjectConnector.GetLocations(tempOptions);
+			ProjectLocation = Locations.First();
 		}
 
 		private void GetJsonDetails(string selectedFile)
@@ -608,47 +615,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			ProjectId = (operationResult as Dictionary<string, string>)["project_id"];
 		}
 
-		private void GetProjectLocations()
-		{
-			var tempOptions = new GCTPTranslationOptions
-			{
-				ProjectId = _projectId,
-				JsonFilePath = _jsonFilePath,
-				ProjectLocation = DummyLocation
-			};
-
-			string errorMessage;
-			try
-			{
-				var v3Connector = new V3Connector(tempOptions);
-				v3Connector.TryToAuthenticateUser();
-				errorMessage = string.Empty;
-			}
-			catch (Exception e)
-			{
-				errorMessage = e.Message;
-			}
-
-			if (string.IsNullOrEmpty(errorMessage))
-			{
-				return;
-			}
-
-			if (!errorMessage.Contains("Unsupported location"))
-			{
-				ErrorHandler.HandleError(PluginResources.Validation_AuthenticationFailed, "Authentication failed");
-				return;
-			}
-
-			var matches = new Regex(@"(['])(?:(?=(\\?))\2.)*?\1").Matches(errorMessage);
-			Locations.Clear();
-			Locations.AddRange(from object match in matches
-							   let locationValue = match.ToString().Replace("\'", "")
-							   where !Locations.Contains(locationValue) && !locationValue.Equals(DummyLocation) && !locationValue.Equals("parent")
-							   select locationValue);
-			ProjectLocation = Locations.First();
-		}
-
 		public void GetProjectResources()
 		{
 			if (string.IsNullOrEmpty(_projectLocation) || _projectLocation.Equals(DummyLocation))
@@ -656,71 +622,22 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				return;
 			}
 
-			GetProjectGlossaries();
-			GetProjectCustomModels();
+			var tempOptions = new GCTPTranslationOptions
+			{
+				ProjectId = _projectId,
+				JsonFilePath = _jsonFilePath,
+				ProjectLocation = _projectLocation
+			};
+
+			AvailableGlossaries = ProjectConnector.GetGlossaries(tempOptions);
+			SelectedGlossary = _availableGlossaries.First();
+			AvailableCustomModels = ProjectConnector.GetProjectCustomModels(tempOptions);
+			SelectedCustomModel = _availableCustomModels.First();
 
 			if (_availableGlossaries.Any() && _availableCustomModels.Any())
 			{
 				ProjectResourcesLoaded = true;
 			}
-		}
-
-		private void GetProjectGlossaries()
-		{
-			var tempGlossariesList = new List<RetrievedGlossary>();
-			var tempOptions = new GCTPTranslationOptions
-			{
-				ProjectId = _projectId,
-				JsonFilePath = _jsonFilePath,
-				ProjectLocation = _projectLocation
-			};
-
-			try
-			{
-				var v3Connector = new V3Connector(tempOptions);
-				v3Connector.TryToAuthenticateUser();
-
-				tempGlossariesList.Add(new(new()));
-				tempGlossariesList.AddRange(v3Connector.GetGlossaries(_projectLocation).Select(retrievedGlossary => new RetrievedGlossary(retrievedGlossary)));
-			}
-			catch
-			{
-				tempGlossariesList.Clear();
-				tempGlossariesList.Add(new(null));
-			}
-
-			AvailableGlossaries = tempGlossariesList;
-			SelectedGlossary = _availableGlossaries.First();
-		}
-
-		private void GetProjectCustomModels()
-		{
-			var tempCustomModelsList = new List<RetrievedCustomModel>();
-			var tempOptions = new GCTPTranslationOptions
-			{
-				ProjectId = _projectId,
-				JsonFilePath = _jsonFilePath,
-				ProjectLocation = _projectLocation
-			};
-
-			try
-			{
-				var v3Connector = new V3Connector(tempOptions);
-				v3Connector.TryToAuthenticateUser();
-
-				tempCustomModelsList.Add(new(new()));
-				tempCustomModelsList.AddRange(v3Connector.GetCustomModels().Select(retrievedCustomModel => new RetrievedCustomModel(retrievedCustomModel)));
-				ProjectResourcesLoaded = true;
-			}
-			catch
-			{
-				tempCustomModelsList.Clear();
-				tempCustomModelsList.Add(new(null));
-				ProjectResourcesLoaded = false;
-			}
-
-			AvailableCustomModels = tempCustomModelsList;
-			SelectedCustomModel = _availableCustomModels.First();
 		}
 
 		private void OpenLocalPath(object parameter)
@@ -759,6 +676,5 @@ namespace GoogleCloudTranslationProvider.ViewModels
 					break;
 			}
 		}
-
 	}
 }

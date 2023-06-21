@@ -7,7 +7,7 @@ namespace GoogleCloudTranslationProvider.Studio
 	[TranslationProviderFactory(Id = Constants.Provider_TranslationProviderFactory,
 								Name = Constants.Provider_TranslationProviderFactory,
 								Description = Constants.Provider_TranslationProviderFactory)]
-	public class ProviderFactory : ITranslationProviderFactory
+	public class TranslationProviderFactory : ITranslationProviderFactory
 	{
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
 		{
@@ -19,7 +19,7 @@ namespace GoogleCloudTranslationProvider.Studio
 			var translationOptions = new GCTPTranslationOptions(translationProviderUri);
 			if (translationOptions.SelectedGoogleVersion is not ApiVersion.V2)
 			{
-				return new Provider(translationOptions);
+				return new TranslationProvider(translationOptions);
 			}
 
 			if ((credentialStore.GetCredential(translationProviderUri) ??
@@ -32,7 +32,7 @@ namespace GoogleCloudTranslationProvider.Studio
 			credentials = new TranslationProviderCredential(credentials.Credential, credentials.Persist);
 			translationOptions.ApiKey = credentials.Credential;
 			translationOptions.PersistGoogleKey = credentials.Persist;
-			return new Provider(translationOptions);
+			return new TranslationProvider(translationOptions);
 		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
