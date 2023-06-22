@@ -163,6 +163,7 @@
     <Compile Include="Service\DialogService.cs" />
     <Compile Include="Service\StudioService.cs" />
     <Compile Include="StarTransitRibbon.cs" />
+    <Compile Include="TellMe\AppStoreDownloadAction.cs" />
     <Compile Include="TellMe\CommunitySupportAction.cs" />
     <Compile Include="TellMe\HelpAction.cs" />
     <Compile Include="TellMe\TellMeProvider.cs" />
