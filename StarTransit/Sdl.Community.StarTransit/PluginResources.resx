@@ -353,4 +353,7 @@ The selected Transit package doesn't contain any Translation Memories.</value>
   <data name="ReturnPackage_Encoding" xml:space="preserve">
     <value>Set encoding for return package files name</value>
   </data>
+  <data name="TellMe_Provider_Results" xml:space="preserve">
+    <value>{0} results</value>
+  </data>
 </root>
