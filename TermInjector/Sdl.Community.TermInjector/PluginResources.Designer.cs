@@ -379,7 +379,7 @@ namespace Sdl.Community.TermInjector {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A translation provider plug-in for inserting terms into new segments or fuzzy matches.
+        ///   Looks up a localized string similar to A plug-in for inserting terms into new segments or fuzzy matches.
         /// </summary>
         public static string Plugin_Description {
             get {
@@ -388,7 +388,7 @@ namespace Sdl.Community.TermInjector {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TermInjector translation provider.
+        ///   Looks up a localized string similar to TermInjector.
         /// </summary>
         public static string Plugin_Name {
             get {
@@ -397,7 +397,7 @@ namespace Sdl.Community.TermInjector {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TermInjector translation provider.
+        ///   Looks up a localized string similar to TermInjector.
         /// </summary>
         public static string Plugin_NiceName {
             get {
@@ -406,7 +406,7 @@ namespace Sdl.Community.TermInjector {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This provider insert terms into new segments or fuzzy matches.
+        ///   Looks up a localized string similar to This insert terms into new segments or fuzzy matches.
         /// </summary>
         public static string Plugin_Tooltip {
             get {
