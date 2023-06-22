@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
 
 namespace Sdl.Community.TMOptimizerLib
 {
@@ -76,15 +77,16 @@ namespace Sdl.Community.TMOptimizerLib
 
 		private Language ConvertToLanguage(string languageCode, DetectInfo.Versions tmxVersion)
 		{
+			var langcode= LanguageRegistryApi.Instance.GetLanguage(languageCode);
 			switch (tmxVersion)
 			{
 				case DetectInfo.Versions.Studio:
-					return new Language(languageCode);
+					return langcode;
 				case DetectInfo.Versions.Workbench:
 					int lcid = LegacyTradosLanguage.GetLcidFromIsoCode(languageCode);
-					return lcid > 0 ? new Language(CultureInfo.GetCultureInfo(lcid)) : new Language(languageCode);
+					return lcid > 0 ? LanguageRegistryApi.Instance.GetLanguage(CultureInfo.GetCultureInfo(lcid).Name) : langcode;
 				case DetectInfo.Versions.Unknown:
-					return new Language(languageCode);
+					return langcode;
 				default:
 					throw new ArgumentException("Unknown TMX version: " + tmxVersion);
 			}
