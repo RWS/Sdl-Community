@@ -8,7 +8,7 @@ namespace Sdl.Community.TMOptimizer.Control
 	/// <summary>
 	/// Interaction logic for InputWizardPageControl.xaml
 	/// </summary>
-	public partial class InputWizardPageControl : UserControl
+	public partial class InputWizardPageControl : UserControl, IWizardPageControl
     {
         public InputWizardPageControl()
         {

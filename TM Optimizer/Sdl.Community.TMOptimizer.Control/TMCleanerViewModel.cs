@@ -8,6 +8,7 @@ using System.Linq;
 using System.Windows;
 using Sdl.Community.TMOptimizerLib;
 using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -364,8 +365,8 @@ namespace Sdl.Community.TMOptimizer.Control
                 totalTuCount += f.TmxFile.GetDetectInfo().TuCount;
             }
 
-            SourceLanguage = new Language(sourceCulture);
-            TargetLanguage = new Language(targetCulture);
+            SourceLanguage = LanguageRegistryApi.Instance.GetLanguage(sourceCulture.Name);
+            TargetLanguage =LanguageRegistryApi.Instance.GetLanguage (targetCulture.Name);
 
             return true;
         }
