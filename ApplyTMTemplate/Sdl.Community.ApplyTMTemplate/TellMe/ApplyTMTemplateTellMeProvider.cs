@@ -11,19 +11,19 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 		{
 			new ApplyTMTemplateStoreAction
 			{
-				Keywords = new[] {"applytm", "apply tm store", "apply tm download"}
+				Keywords = new[] {  "ApplyTm", "applytm","apply", "tm", "template", "apply tm template", "apply tm store", "apply tm download"}
 			},
 			new ApplyTMCommunitySupportAction
 			{
-				Keywords = new[] {"apply tm template","forum", "community", "support"}
+				Keywords = new[] { "ApplyTm", "applytm", "apply", "tm", "template", "apply tm template","forum", "community", "support"}
 			},
 			new ApplyTmTemplateAction
 			{
-				Keywords = new[] {"apply tm template", "start"}
+				Keywords = new[] { "ApplyTm", "applytm", "apply", "tm", "template", "apply tm template", "start"}
 			},
 			new ApplyTMTemplateHelpAction()
 			{
-				Keywords = new []{"apply tm template", "wiki", "help"}
+				Keywords = new []{ "ApplyTm", "applytm", "apply", "tm", "template", "apply tm template", "wiki", "help"}
 			}
 		};
 	}
