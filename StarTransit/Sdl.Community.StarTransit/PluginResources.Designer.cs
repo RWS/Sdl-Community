@@ -441,7 +441,7 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sdl.Community.StarTransit.
+        ///   Looks up a localized string similar to StarTransit.
         /// </summary>
         public static string Plugin_Name {
             get {
