@@ -59,6 +59,7 @@ namespace Sdl.Community.TermInjector
         {
             get { return _provider; }
         }
+			
 
 		//CultureCode ITranslationProviderLanguageDirection.SourceLanguage => _languageDirection.SourceCulture;
 
