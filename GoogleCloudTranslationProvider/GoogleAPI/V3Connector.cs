@@ -145,7 +145,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 		#endregion
 
 		#region Glossaries
-		public List<Glossary> GetGlossaries(string location = null)
+		public List<Glossary> GetProjectGlossaries(string location = null)
 		{
 			var locationName = LocationName.FromProjectLocation(_options.ProjectId, location ?? _options.ProjectLocation);
 			var glossariesRequest = new ListGlossariesRequest { ParentAsLocationName = locationName };
@@ -160,7 +160,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 				return null;
 			}
 
-			var glossaryFound = GetGlossaries().FirstOrDefault(x => x.GlossaryName.GlossaryId.Equals(_options.GlossaryPath));
+			var glossaryFound = GetProjectGlossaries().FirstOrDefault(x => x.GlossaryName.GlossaryId.Equals(_options.GlossaryPath));
 			if (glossaryFound is null)
 			{
 				return null;
@@ -195,7 +195,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 		#endregion
 
 		#region AutoML
-		public List<Model> GetCustomModels()
+		public List<Model> GetProjectCustomModels()
 		{
 			var request = new ListModelsRequest
 			{
@@ -213,7 +213,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 				return defaultPath;
 			}
 
-			var customModelFound = GetCustomModels().FirstOrDefault(x => x.DatasetId == _options.GoogleEngineModel);
+			var customModelFound = GetProjectCustomModels().FirstOrDefault(x => x.DatasetId == _options.GoogleEngineModel);
 			if (customModelFound is null)
 			{
 				return defaultPath;

@@ -7,6 +7,7 @@ using System.Web.Caching;
 using GoogleCloudTranslationProvider.Helpers;
 using static Google.Protobuf.Reflection.SourceCodeInfo.Types;
 using System.Text.RegularExpressions;
+using Sdl.LanguagePlatform.Core;
 
 namespace GoogleCloudTranslationProvider.GoogleAPI
 {
@@ -58,7 +59,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 				v3Connector.TryToAuthenticateUser();
 
 				output.Add(new(new()));
-				output.AddRange(v3Connector.GetGlossaries(translationOptions.ProjectLocation).Select(retrievedGlossary => new RetrievedGlossary(retrievedGlossary)));
+				output.AddRange(v3Connector.GetProjectGlossaries(translationOptions.ProjectLocation).Select(retrievedGlossary => new RetrievedGlossary(retrievedGlossary)));
 			}
 			catch
 			{
@@ -69,7 +70,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 			return output;
 		}
 
-		public static List<RetrievedCustomModel> GetProjectCustomModels(GCTPTranslationOptions translationOptions)
+		public static List<RetrievedCustomModel> GetCustomModels(GCTPTranslationOptions translationOptions)
 		{
 			var output = new List<RetrievedCustomModel>();
 
@@ -79,7 +80,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 				v3Connector.TryToAuthenticateUser();
 
 				output.Add(new(new()));
-				output.AddRange(v3Connector.GetCustomModels().Select(retrievedCustomModel => new RetrievedCustomModel(retrievedCustomModel)));
+				output.AddRange(v3Connector.GetProjectCustomModels().Select(retrievedCustomModel => new RetrievedCustomModel(retrievedCustomModel)));
 			}
 			catch
 			{
@@ -87,6 +88,40 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 				output.Add(new(null));
 			}
 
+			return output;
+		}
+
+		public static List<RetrievedGlossary> GetPairGlossaries(LanguagePair languagePair, List<RetrievedGlossary> projectGlossaries)
+		{
+			var output = new List<RetrievedGlossary>();
+
+			foreach (var glossary in projectGlossaries)
+			{
+				if (languagePair.SourceCulture.IetfLanguageTag == glossary.SourceLanguage?.IetfLanguageTag
+				 && languagePair.TargetCulture.IetfLanguageTag == glossary.TargetLanguage?.IetfLanguageTag)
+				{
+					output.Add(glossary);
+				}
+				else if (glossary.Languages is not null
+					  && glossary.Languages.Contains(languagePair.SourceCulture.TwoLetterISOLanguageName)
+					  && glossary.Languages.Contains(languagePair.TargetCulture.TwoLetterISOLanguageName))
+				{
+					output.Add(glossary);
+				}
+			}
+
+			output.Insert(0, output.Count == 0 ? new(null) : projectGlossaries.First());
+			return output;
+		}
+
+		public static List<RetrievedCustomModel> GetPairModels(LanguagePair languagePair, List<RetrievedCustomModel> projectModels)
+		{
+			var output = projectModels.Where(model => model.SourceLanguage is not null
+												   && model.TargetLanguage is not null
+												   && model.SourceLanguage.Equals(languagePair.SourceCulture.TwoLetterISOLanguageName)
+												   && model.TargetLanguage.Equals(languagePair.TargetCulture.TwoLetterISOLanguageName))
+									  .ToList();
+			output.Insert(0, output.Count == 0 ? new(null) : projectModels.First());
 			return output;
 		}
 	}

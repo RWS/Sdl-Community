@@ -422,7 +422,8 @@ namespace GoogleCloudTranslationProvider.ViewModels
 					GoogleEngineModel = GoogleEngineModel,
 					ProjectLocation = ProjectLocation,
 					GlossaryPath = GlossaryPath,
-					SelectedGoogleVersion = SelectedGoogleApiVersion.Version
+					SelectedGoogleVersion = SelectedGoogleApiVersion.Version,
+					PairMappings = Mappings
 				};
 
 				var googleV3 = new V3Connector(providerOptions);
@@ -598,6 +599,31 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			ProjectId = (operationResult as Dictionary<string, string>)["project_id"];
 		}
 
+		private void CreateMapping()
+		{
+			var pairMapping = new List<PairMapping>();
+			foreach (var languagePair in _languagePairs)
+			{
+				var mapping = new PairMapping()
+				{
+					SourceDisplayName = languagePair.SourceCulture.DisplayName,
+					SourceLanguageCode = languagePair.SourceCultureName,
+					SourceCulture = languagePair.SourceCulture,
+					TargetDisplayName = languagePair.TargetCulture.DisplayName,
+					TargetLanguageCode = languagePair.TargetCultureName,
+					TargetCulture = languagePair.TargetCulture,
+					AvailableGlossaries = ProjectConnector.GetPairGlossaries(languagePair, _availableGlossaries),
+					AvailableModels = ProjectConnector.GetPairModels(languagePair, _availableCustomModels)
+				};
+
+				pairMapping.Add(mapping);
+
+
+			}
+
+			Mappings = pairMapping;
+		}
+
 		public void GetProjectResources()
 		{
 			if (string.IsNullOrEmpty(_projectLocation) || _projectLocation.Equals(DummyLocation))
@@ -614,13 +640,15 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 			AvailableGlossaries = ProjectConnector.GetGlossaries(tempOptions);
 			SelectedGlossary = _availableGlossaries.First();
-			AvailableCustomModels = ProjectConnector.GetProjectCustomModels(tempOptions);
+			AvailableCustomModels = ProjectConnector.GetCustomModels(tempOptions);
 			SelectedCustomModel = _availableCustomModels.First();
 
 			if (_availableGlossaries.Any() && _availableCustomModels.Any())
 			{
 				ProjectResourcesLoaded = true;
 			}
+
+			CreateMapping();
 		}
 
 		private void OpenLocalPath(object parameter)
@@ -662,5 +690,29 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		#region JSON File Management
 		#endregion
+
+		private List<PairMapping> _mappings;
+		public List<PairMapping> Mappings
+		{
+			get => _mappings;
+			set
+			{
+				if (_mappings == value) return;
+				_mappings = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private PairMapping _selectedMapping;
+		public PairMapping SelectedMapping
+		{
+			get => _selectedMapping;
+			set
+			{
+				if (_selectedMapping == value) return;
+				_selectedMapping = value;
+				OnPropertyChanged();
+			}
+		}
 	}
 }

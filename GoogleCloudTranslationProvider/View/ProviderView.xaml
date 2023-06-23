@@ -23,8 +23,9 @@
 				<ResourceDictionary Source="../UiHelpers/WatermarkTextBoxResources.xaml" />
 				<ResourceDictionary Source="../UiHelpers/WatermarkPasswordBoxResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/BindablePasswordBoxStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
@@ -166,6 +167,59 @@
 							  Margin="0 -22 24 0"
 							  Cursor="Hand"/>
 					<!--</JSON File Selector>-->
+					<StackPanel Margin="16 16 16 0"
+								Visibility="Collapsed">
+						<DataGrid ItemsSource="{Binding Mappings}"
+								  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+								  BorderBrush="#D3D3D3"
+								  AutoGenerateColumns="False"
+								  CanUserAddRows="False"
+								  MinHeight="50"
+								  Margin="0">
+							<DataGrid.Columns>
+								<DataGridTextColumn Header="Language pair"
+													Binding="{Binding DisplayName}"
+													IsReadOnly="True"
+													Width="1*" />
+								<DataGridTemplateColumn Header="Glossaries"
+														Width="1*">
+									<DataGridTemplateColumn.CellTemplate>
+										<DataTemplate>
+											<ComboBox ItemsSource="{Binding AvailableGlossaries}"
+													  SelectedItem="{Binding SelectedGlossary, UpdateSourceTrigger=PropertyChanged}"
+													  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+													  BorderThickness="0"
+													  IsSynchronizedWithCurrentItem="False">
+												<ComboBox.ItemTemplate>
+													<DataTemplate>
+														<TextBlock Text="{Binding DisplayName}" />
+													</DataTemplate>
+												</ComboBox.ItemTemplate>
+											</ComboBox>
+										</DataTemplate>
+									</DataGridTemplateColumn.CellTemplate>
+								</DataGridTemplateColumn>
+								<DataGridTemplateColumn Header="Models"
+														Width="1*">
+									<DataGridTemplateColumn.CellTemplate>
+										<DataTemplate>
+											<ComboBox ItemsSource="{Binding AvailableModels}"
+													  SelectedItem="{Binding SelectedModel, UpdateSourceTrigger=PropertyChanged}"
+													  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+													  BorderThickness="0"
+													  IsSynchronizedWithCurrentItem="False">
+												<ComboBox.ItemTemplate>
+													<DataTemplate>
+														<TextBlock Text="{Binding DisplayName}" />
+													</DataTemplate>
+												</ComboBox.ItemTemplate>
+											</ComboBox>
+										</DataTemplate>
+									</DataGridTemplateColumn.CellTemplate>
+								</DataGridTemplateColumn>
+							</DataGrid.Columns>
+						</DataGrid>
+					</StackPanel>
 
 					<StackPanel Margin="16 0">
 						<!--<PROJECT PATH>-->

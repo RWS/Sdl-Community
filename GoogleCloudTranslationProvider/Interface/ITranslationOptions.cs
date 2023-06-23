@@ -43,5 +43,7 @@ namespace GoogleCloudTranslationProvider.Interfaces
 		Uri Uri { get; }
 
 		ApiVersion SelectedGoogleVersion { get; set; }
+
+		List<PairMapping> PairMappings { get; set; }
 	}
 }

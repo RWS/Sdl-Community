@@ -57,7 +57,7 @@
 			<Image Source="../Resources/gctpLogo.png"
 				   DockPanel.Dock="Top"
 				   Width="500"
-				   Margin="0 30 0 0"/>
+				   Margin="0 16 0 0"/>
 		</DockPanel>
 	</Grid>
 </UserControl>

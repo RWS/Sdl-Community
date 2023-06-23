@@ -12,6 +12,8 @@ namespace GoogleCloudTranslationProvider.Interfaces
 	{
 		BaseViewModel ViewModel { get; set; }
 
+		List<PairMapping> Mappings { get; set; }
+
 		List<TranslationOption> TranslationOptions { get; set; }
 
 		TranslationOption SelectedTranslationOption { get; }

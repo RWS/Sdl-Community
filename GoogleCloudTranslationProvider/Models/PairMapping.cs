@@ -1,66 +1,34 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Windows.Documents;
 using GoogleCloudTranslationProvider.ViewModel;
+using Newtonsoft.Json;
 
 namespace GoogleCloudTranslationProvider.Models
 {
 	public class PairMapping : BaseViewModel
 	{
-		private string _sourceDisplayName;
-		private string _sourceLanguageCode;
-		
-		private string _targetDisplayName;
-		private string _targetLanguageCode;
-
 		private List<RetrievedGlossary> _availableGlossaries;
-		private RetrievedGlossary _selectedGlossary;
-
 		private List<RetrievedCustomModel> _availableModels;
+
+		private RetrievedGlossary _selectedGlossary;
 		private RetrievedCustomModel _selectedModel;
 
-		public string SourceDisplayName
-		{
-			get => _sourceDisplayName;
-			set
-			{
-				if (_sourceDisplayName == value) return;
-				_sourceDisplayName = value;
-				OnPropertyChanged();
-			}
-		}
+		[JsonIgnore]
+		public string DisplayName => $"{SourceDisplayName} - {TargetDisplayName}";
 
-		public string SourceLanguageCode
-		{
-			get => _sourceLanguageCode;
-			set
-			{
-				if (_sourceLanguageCode == value) return;
-				_sourceLanguageCode = value;
-				OnPropertyChanged();
-			}
-		}
+		public string SourceDisplayName { get; set; }
 
-		public string TargetDisplayName
-		{
-			get => _targetDisplayName;
-			set
-			{
-				if (_targetDisplayName == value) return;
-				_targetDisplayName = value;
-				OnPropertyChanged();
-			}
-		}
+		public string SourceLanguageCode { get; set; }
 
-		public string TargetLanguageCode
-		{
-			get => _targetLanguageCode;
-			set
-			{
-				if (value == _targetLanguageCode) return;
-				_targetLanguageCode = value;
-				OnPropertyChanged();
-			}
-		}
+		public CultureInfo SourceCulture { get; set; }
+
+		public string TargetDisplayName { get; set; }
+
+		public string TargetLanguageCode { get; set; }
+
+		public CultureInfo TargetCulture { get; set; }
 
 		public List<RetrievedGlossary> AvailableGlossaries
 		{
@@ -75,7 +43,7 @@ namespace GoogleCloudTranslationProvider.Models
 
 		public RetrievedGlossary SelectedGlossary
 		{
-			get => _selectedGlossary;
+			get => _selectedGlossary ??= AvailableGlossaries.First();
 			set
 			{
 				if (_selectedGlossary == value) return;
@@ -97,7 +65,7 @@ namespace GoogleCloudTranslationProvider.Models
 
 		public RetrievedCustomModel SelectedModel
 		{
-			get => _selectedModel;
+			get => _selectedModel ??= AvailableModels.First();
 			set
 			{
 				if (_selectedModel == value) return;

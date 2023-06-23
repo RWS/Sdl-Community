@@ -319,6 +319,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			Options.GoogleEngineModel = _providerViewModel.GoogleEngineModel;
 			Options.ProjectLocation = _providerViewModel.ProjectLocation;
 			Options.GlossaryPath = _providerViewModel.GlossaryPath;
+			Options.PairMappings = _providerViewModel.Mappings;
 		}
 
 		private void SetGeneralProviderOptions()
