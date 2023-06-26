@@ -84,6 +84,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				OnPropertyChanged(nameof(ProjectId));
 			}
 		}
+
 		public string ProjectLocation
 		{
 			get => _projectLocation;
@@ -94,26 +95,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				OnPropertyChanged(nameof(ProjectLocation));
 			}
 		}
-		public string Glossary
-		{
-			get => _glossary;
-			set
-            {
-                if (_glossary == value) return;
-                _glossary = value;
-				OnPropertyChanged(nameof(Glossary));
-            }
-		}
-		public string CustomModel
-		{
-			get => _customModel;
-			set
-			{
-				if (_customModel == value) return;
-				_customModel = value;
-				OnPropertyChanged(nameof(CustomModel));
-			}
-		}
+
 		public bool ShowSettingsView
 		{
 			get => _showSettingsView;
@@ -122,17 +104,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				if (_showSettingsView == value) return;
 				_showSettingsView = value;
 				OnPropertyChanged(nameof(ShowSettingsView));
-			}
-		}
-		private bool _showProjectInfo;
-		public bool ShowProjectInfo
-		{
-			get => _showProjectInfo;
-			set
-			{
-				if (_showProjectInfo == value) return;
-				_showProjectInfo = value;
-				OnPropertyChanged(nameof(ShowProjectInfo));
 			}
 		}
 
@@ -249,7 +220,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			ShowMultiButton = true;
 			_providerViewModel = new ProviderViewModel(Options, _languagePairs.ToList());
 			_settingsViewModel = new SettingsViewModel(Options, !_showSettingsView);
-			ShowProjectInfo = _showSettingsView && (_providerViewModel.SelectedGoogleApiVersion.Version == ApiVersion.V3);
 
 			_availableViews = new List<ViewDetails>
 			{
@@ -269,19 +239,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			{
 				ShowMultiButton = false;
 			}
-
-
-
-			if (!_showProjectInfo)
-			{
-				return;
-			}
-
-			JsonFilePath = Options.JsonFilePath ?? PluginResources.ProjectInfo_PathCorrupted;
-			ProjectId = Options.ProjectId ?? PluginResources.ProjectInfo_ProjectIdMissing;
-			ProjectLocation = Options.ProjectLocation ?? PluginResources.ProjectInfo_LocationMissing;
-			Glossary = string.Empty;
-			CustomModel = string.Empty;
 		}
 
 		public bool IsWindowValid()

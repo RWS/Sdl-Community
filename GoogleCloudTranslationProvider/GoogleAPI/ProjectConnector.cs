@@ -94,7 +94,6 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 		public static List<RetrievedGlossary> GetPairGlossaries(LanguagePair languagePair, List<RetrievedGlossary> projectGlossaries)
 		{
 			var output = new List<RetrievedGlossary>();
-
 			foreach (var glossary in projectGlossaries)
 			{
 				if (languagePair.SourceCulture.IetfLanguageTag == glossary.SourceLanguage?.IetfLanguageTag

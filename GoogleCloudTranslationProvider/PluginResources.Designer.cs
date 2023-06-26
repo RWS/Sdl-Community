@@ -790,7 +790,7 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Local path.
+        ///   Looks up a localized string similar to Local path: .
         /// </summary>
         public static string ProviderView_V3_LocalPath_Description {
             get {
@@ -844,7 +844,7 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Project ID.
+        ///   Looks up a localized string similar to Project ID: .
         /// </summary>
         public static string ProviderView_V3_ProjectID_Description {
             get {

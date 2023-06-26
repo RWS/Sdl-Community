@@ -64,6 +64,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			ViewModel = this;
 			_options = options;
 			_languagePairs = languagePairs;
+			CanChangeProviderResources = string.IsNullOrEmpty(JsonFilePath);
 			_openFileDialogService = new OpenFileDialogService();
 			InitializeComponent();
 		}
@@ -324,6 +325,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				OnPropertyChanged(nameof(UrlToDownload));
 			}
 		}
+
 		private void ResetFields()
 		{
 			AvailableCustomModels = null;
@@ -479,7 +481,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				{
 					Name = PluginResources.GoogleApiVersionV3Description,
 					Version = ApiVersion.V3
-				}
+				},
 			};
 
 			ProjectId = string.Empty;
@@ -495,39 +497,16 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				GlossaryPath = _options.GlossaryPath;
 			}
 
-			SetGoogleApiVersion();
+			SelectedGoogleApiVersion = GoogleApiVersions.FirstOrDefault(v => v.Version.Equals(_options.SelectedGoogleVersion))
+									?? GoogleApiVersions.First(x => x.Version == ApiVersion.V3);
 			if (!string.IsNullOrEmpty(_projectId)
 			 && !string.IsNullOrEmpty(_projectLocation))
 			{
-				CanChangeProviderResources = true;
 				Locations.Clear();
 				Locations.Add(_projectLocation);
 				SelectedGlossary = _availableGlossaries.FirstOrDefault(x => x.GlossaryID == _options.GlossaryPath) ?? _availableGlossaries.First();
 				SelectedCustomModel = _availableCustomModels.FirstOrDefault(x => x.DatasetId == _options.GoogleEngineModel) ?? _availableCustomModels.First();
 			}
-		}
-
-		private void SetGoogleApiVersion()
-		{
-			if (_options?.SelectedGoogleVersion is null)
-			{
-				SelectGoogleV2();
-				return;
-			}
-
-			var selectedVersion = GoogleApiVersions.FirstOrDefault(v => v.Version.Equals(_options.SelectedGoogleVersion));
-			if (selectedVersion is null)
-			{
-				SelectGoogleV2();
-				return;
-			}
-
-			SelectedGoogleApiVersion = selectedVersion;
-		}
-
-		private void SelectGoogleV2()
-		{
-			SelectedGoogleApiVersion = GoogleApiVersions.First(x => x.Version == ApiVersion.V2);
 		}
 
 		private void DragAndDropJsonFile(object parameter)
@@ -602,23 +581,18 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private void CreateMapping()
 		{
 			var pairMapping = new List<PairMapping>();
-			foreach (var languagePair in _languagePairs)
+			for (var i = 0; i < _languagePairs.Count(); i++)
 			{
+				var currentPair = _languagePairs.ElementAt(i);
 				var mapping = new PairMapping()
 				{
-					SourceDisplayName = languagePair.SourceCulture.DisplayName,
-					SourceLanguageCode = languagePair.SourceCultureName,
-					SourceCulture = languagePair.SourceCulture,
-					TargetDisplayName = languagePair.TargetCulture.DisplayName,
-					TargetLanguageCode = languagePair.TargetCultureName,
-					TargetCulture = languagePair.TargetCulture,
-					AvailableGlossaries = ProjectConnector.GetPairGlossaries(languagePair, _availableGlossaries),
-					AvailableModels = ProjectConnector.GetPairModels(languagePair, _availableCustomModels)
+					DisplayName = $"{currentPair.SourceCulture.DisplayName} - {currentPair.TargetCulture.DisplayName}",
+					LanguagePair = currentPair,
+					AvailableGlossaries = ProjectConnector.GetPairGlossaries(currentPair, _availableGlossaries),
+					AvailableModels = ProjectConnector.GetPairModels(currentPair, _availableCustomModels)
 				};
 
 				pairMapping.Add(mapping);
-
-
 			}
 
 			Mappings = pairMapping;
@@ -647,6 +621,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			{
 				ProjectResourcesLoaded = true;
 			}
+
 
 			CreateMapping();
 		}
@@ -687,9 +662,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 					break;
 			}
 		}
-
-		#region JSON File Management
-		#endregion
 
 		private List<PairMapping> _mappings;
 		public List<PairMapping> Mappings

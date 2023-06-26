@@ -331,7 +331,7 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
     <value>API Key associated with Google Cloud project</value>
   </data>
   <data name="ProviderView_V3_LocalPath_Description" xml:space="preserve">
-    <value>Local path</value>
+    <value>Local path: </value>
   </data>
   <data name="ProviderView_V3_LocalPath_Tooltip" xml:space="preserve">
     <value>Stored JSON file location</value>
@@ -343,7 +343,7 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
     <value>You permanently set a location for storing your data when you create a bucket.</value>
   </data>
   <data name="ProviderView_V3_ProjectID_Description" xml:space="preserve">
-    <value>Project ID</value>
+    <value>Project ID: </value>
   </data>
   <data name="ProviderView_V3_ProjectID_Tooltip" xml:space="preserve">
     <value>A globally unique identifier for your project.</value>

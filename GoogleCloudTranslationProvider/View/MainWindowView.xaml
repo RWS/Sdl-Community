@@ -58,52 +58,6 @@
 			<styles:WindowsControl Grid.Row="0"/>
 			<!--</Top bar>-->
 
-			<GroupBox Header="{x:Static root:PluginResources.GroupboxHeaders_ProjectInfo}"
-					  Style="{StaticResource DefaultGroupBox}"
-					  Visibility="{Binding ShowProjectInfo, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-					  Grid.Row="1"
-					  Margin="24 20 24 0"
-					  Padding="12">
-				<DockPanel>
-					<StackPanel DockPanel.Dock="Left"
-								Margin="0 0 8 0">
-						<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_LocalPath_Description}"
-								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
-								   HorizontalAlignment="Right"/>
-
-						<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_ProjectID_Description}"
-								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
-								   HorizontalAlignment="Right"/>
-
-						<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_Location_Description}"
-								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
-								   HorizontalAlignment="Right"/>
-
-						<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_Glossary_Description}"
-								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
-								   HorizontalAlignment="Right"/>
-
-						<TextBlock Text="{x:Static root:PluginResources.ProjectInfo_CustomModel}"
-								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
-								   HorizontalAlignment="Right"/>
-					</StackPanel>
-
-					<StackPanel DockPanel.Dock="Right"
-								Margin="8 0 0 0">
-						<TextBlock Text="{Binding JsonFilePath}"
-								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"/>
-						<TextBlock Text="{Binding ProjectId}"
-								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"/>
-						<TextBlock Text="{Binding ProjectLocation}"
-								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"/>
-						<TextBlock Text="{Binding Glossary}"
-								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"/>
-						<TextBlock Text="{Binding CustomModel}"
-								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"/>
-					</StackPanel>
-				</DockPanel>
-			</GroupBox>
-
 			<!--<API Version Selector>-->
 			<ContentControl Grid.Row="2"
 							Content="{Binding SelectedView.ViewModel}"

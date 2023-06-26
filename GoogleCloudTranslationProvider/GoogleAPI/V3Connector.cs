@@ -135,7 +135,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 			{
 				Contents = { sourceText },
 				SourceLanguageCode = sourceLanguage.ConvertLanguageCode(),
-				TargetLanguageCode =  targetLanguage.ConvertLanguageCode(),
+				TargetLanguageCode = targetLanguage.ConvertLanguageCode(),
 				ParentAsLocationName = new LocationName(_options.ProjectId, _options.ProjectLocation),
 				MimeType = format == "text" ? "text/plain" : "text/html",
 				Model = SetCustomModel(sourceLanguage, targetLanguage),
@@ -155,42 +155,21 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 
 		private TranslateTextGlossaryConfig SetGlossary(CultureInfo sourceLanguage, CultureInfo targetLanguage)
 		{
-			if (string.IsNullOrEmpty(_options.GlossaryPath))
+			var selectedGlossary = _options.PairMappings?
+										   .FirstOrDefault(x => x.LanguagePair.SourceCulture == sourceLanguage && x.LanguagePair.TargetCulture == targetLanguage)?
+										   .SelectedGlossary
+										   .Glossary;
+			
+			if (selectedGlossary is null)
 			{
 				return null;
 			}
 
-			var glossaryFound = GetProjectGlossaries().FirstOrDefault(x => x.GlossaryName.GlossaryId.Equals(_options.GlossaryPath));
-			if (glossaryFound is null)
+			return new TranslateTextGlossaryConfig
 			{
-				return null;
-			}
-
-			var retrievedGlossary = new RetrievedGlossary(glossaryFound, _options.ProjectId, _options.ProjectLocation);
-			if (retrievedGlossary.Languages is not null
-			 && retrievedGlossary.Languages.Contains(sourceLanguage.TwoLetterISOLanguageName)
-			 && retrievedGlossary.Languages.Contains(targetLanguage.TwoLetterISOLanguageName))
-			{
-				return new TranslateTextGlossaryConfig
-				{
-					Glossary = retrievedGlossary.GlossaryResourceLocation,
-					IgnoreCase = true
-				};
-			}
-
-			if (retrievedGlossary.SourceLanguage is not null
-			 && retrievedGlossary.TargetLanguage is not null
-			 && retrievedGlossary.SourceLanguage.TwoLetterISOLanguageName.Equals(sourceLanguage.TwoLetterISOLanguageName)
-			 && retrievedGlossary.TargetLanguage.TwoLetterISOLanguageName.Equals(targetLanguage.TwoLetterISOLanguageName))
-			{
-				return new TranslateTextGlossaryConfig
-				{
-					Glossary = retrievedGlossary.GlossaryResourceLocation,
-					IgnoreCase = true
-				};
-			}
-
-			return null;
+				Glossary = selectedGlossary.Name,
+				IgnoreCase = true
+			};
 		}
 		#endregion
 
@@ -208,26 +187,15 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 		private string SetCustomModel(CultureInfo sourceLanguage, CultureInfo targetLanguage)
 		{
 			var defaultPath = $"projects/{_options.ProjectId}/locations/{_options.ProjectLocation}/models/general/nmt";
-			if (string.IsNullOrEmpty(_options.GoogleEngineModel))
+			var selectedModel = _options.PairMappings?
+										   .FirstOrDefault(x => x.LanguagePair.SourceCulture == sourceLanguage && x.LanguagePair.TargetCulture == targetLanguage)?
+										   .SelectedModel?
+										   .ModelPath;
+			return selectedModel switch
 			{
-				return defaultPath;
-			}
-
-			var customModelFound = GetProjectCustomModels().FirstOrDefault(x => x.DatasetId == _options.GoogleEngineModel);
-			if (customModelFound is null)
-			{
-				return defaultPath;
-			}
-
-			_customModel = new(customModelFound);
-			if (!_customModel.SourceLanguage.Equals(sourceLanguage.ConvertLanguageCode())
-			 || !_customModel.TargetLanguage.Equals(targetLanguage.ConvertLanguageCode()))
-			{
-				_customModel = null;
-				return defaultPath;
-			}
-
-			return _customModel.ModelPath;
+				not null => selectedModel,
+				_ => defaultPath
+			};
 		}
 		#endregion
 	}

@@ -1,34 +1,20 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Windows.Documents;
 using GoogleCloudTranslationProvider.ViewModel;
-using Newtonsoft.Json;
+using Sdl.LanguagePlatform.Core;
 
 namespace GoogleCloudTranslationProvider.Models
 {
 	public class PairMapping : BaseViewModel
 	{
 		private List<RetrievedGlossary> _availableGlossaries;
-		private List<RetrievedCustomModel> _availableModels;
-
 		private RetrievedGlossary _selectedGlossary;
+		private List<RetrievedCustomModel> _availableModels;
 		private RetrievedCustomModel _selectedModel;
 
-		[JsonIgnore]
-		public string DisplayName => $"{SourceDisplayName} - {TargetDisplayName}";
+		public string DisplayName { get; set; }
 
-		public string SourceDisplayName { get; set; }
-
-		public string SourceLanguageCode { get; set; }
-
-		public CultureInfo SourceCulture { get; set; }
-
-		public string TargetDisplayName { get; set; }
-
-		public string TargetLanguageCode { get; set; }
-
-		public CultureInfo TargetCulture { get; set; }
+		public LanguagePair LanguagePair { get; set; }
 
 		public List<RetrievedGlossary> AvailableGlossaries
 		{
@@ -43,7 +29,7 @@ namespace GoogleCloudTranslationProvider.Models
 
 		public RetrievedGlossary SelectedGlossary
 		{
-			get => _selectedGlossary ??= AvailableGlossaries.First();
+			get => _selectedGlossary;
 			set
 			{
 				if (_selectedGlossary == value) return;
@@ -65,7 +51,7 @@ namespace GoogleCloudTranslationProvider.Models
 
 		public RetrievedCustomModel SelectedModel
 		{
-			get => _selectedModel ??= AvailableModels.First();
+			get => _selectedModel;
 			set
 			{
 				if (_selectedModel == value) return;
