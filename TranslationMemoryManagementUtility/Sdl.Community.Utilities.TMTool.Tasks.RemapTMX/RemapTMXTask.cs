@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Sdl.Community.Utilities.TMTool.Task;
+using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.Versioning;
@@ -129,13 +130,13 @@ namespace Sdl.Community.Utilities.TMTool.Tasks.RemapTMX
 
 				if (this.notSupportedCultures.Contains(tm.LanguageDirection.SourceLanguage.Name))
 				{
-					culture = tm.LanguageDirection.SourceLanguage.EnglishName;
+					culture = LanguageRegistryApi.Instance.GetLanguage(tm.LanguageDirection.SourceLanguage).CultureInfo.DisplayName;
 					containsUnsupported = true;
 				}
 
 				if (this.notSupportedCultures.Contains(tm.LanguageDirection.TargetLanguage.Name))
 				{
-					culture = tm.LanguageDirection.TargetLanguage.EnglishName;
+					culture = LanguageRegistryApi.Instance.GetLanguage(tm.LanguageDirection.TargetLanguage).CultureInfo.DisplayName;
 					containsUnsupported = true;
 				}
 
