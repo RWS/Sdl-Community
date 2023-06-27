@@ -263,7 +263,7 @@
 
 					<!--<MAPPING TABLE>-->
 					<DataGrid ItemsSource="{Binding Mappings}"
-							  SelectedItem="{Binding SelectedMapping}"
+							  SelectedItem="{Binding SelectedMapping, UpdateSourceTrigger=PropertyChanged}"
 							  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
 							  Visibility="{Binding ProjectResourcesLoaded, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 							  Grid.Row="2"
@@ -285,6 +285,7 @@
 										<ComboBox ItemsSource="{Binding AvailableGlossaries}"
 												  SelectedItem="{Binding SelectedGlossary, UpdateSourceTrigger=PropertyChanged}"
 												  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+												  SelectedIndex="0"
 												  BorderThickness="0"
 												  IsSynchronizedWithCurrentItem="True">
 											<ComboBox.ItemTemplate>
@@ -303,6 +304,7 @@
 										<ComboBox ItemsSource="{Binding AvailableModels}"
 												  SelectedItem="{Binding SelectedModel, UpdateSourceTrigger=PropertyChanged}"
 												  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+												  SelectedIndex="0"
 												  BorderThickness="0"
 												  IsSynchronizedWithCurrentItem="True">
 											<ComboBox.ItemTemplate>

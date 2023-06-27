@@ -491,10 +491,12 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				PersistGoogleKey = _options.PersistGoogleKey;
 				ApiKey = PersistGoogleKey ? _options.ApiKey : string.Empty;
 				JsonFilePath = _options.JsonFilePath;
+				VisibleJsonPath = JsonFilePath.ShortenFilePath();
 				ProjectId = _options.ProjectId;
 				ProjectLocation = _options.ProjectLocation;
 				GoogleEngineModel = _options.GoogleEngineModel;
 				GlossaryPath = _options.GlossaryPath;
+				Mappings = _options.PairMappings;
 			}
 
 			SelectedGoogleApiVersion = GoogleApiVersions.FirstOrDefault(v => v.Version.Equals(_options.SelectedGoogleVersion))

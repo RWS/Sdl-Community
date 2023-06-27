@@ -60,7 +60,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			_languagePairs = languagePairs;
 			_htmlUtil = new HtmlUtil();
 			InitializeViews();
-			SwitchView(showSettingsView ? ViewDetails_Settings : ViewDetails_Provider);
+			SwitchView(ViewDetails_Provider);
 			_providerViewModel.ClearMessageRaised += ClearMessageRaised;
 		}
 

@@ -160,7 +160,8 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 										   .SelectedGlossary
 										   .Glossary;
 			
-			if (selectedGlossary is null)
+			if (selectedGlossary is null
+			 || string.IsNullOrEmpty(selectedGlossary.Name))
 			{
 				return null;
 			}
