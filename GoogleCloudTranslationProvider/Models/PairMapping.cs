@@ -29,7 +29,7 @@ namespace GoogleCloudTranslationProvider.Models
 
 		public RetrievedGlossary SelectedGlossary
 		{
-			get => _selectedGlossary ??= AvailableGlossaries.FirstOrDefault();
+			get => _selectedGlossary;
 			set
 			{
 				if (_selectedGlossary == value) return;
@@ -51,7 +51,7 @@ namespace GoogleCloudTranslationProvider.Models
 
 		public RetrievedCustomModel SelectedModel
 		{
-			get => _selectedModel ??= AvailableModels.FirstOrDefault();
+			get => _selectedModel;
 			set
 			{
 				if (_selectedModel == value) return;

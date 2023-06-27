@@ -496,7 +496,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				ProjectLocation = _options.ProjectLocation;
 				GoogleEngineModel = _options.GoogleEngineModel;
 				GlossaryPath = _options.GlossaryPath;
-				Mappings = _options.PairMappings;
 			}
 
 			SelectedGoogleApiVersion = GoogleApiVersions.FirstOrDefault(v => v.Version.Equals(_options.SelectedGoogleVersion))
@@ -591,8 +590,24 @@ namespace GoogleCloudTranslationProvider.ViewModels
 					DisplayName = $"{currentPair.SourceCulture.DisplayName} - {currentPair.TargetCulture.DisplayName}",
 					LanguagePair = currentPair,
 					AvailableGlossaries = ProjectConnector.GetPairGlossaries(currentPair, _availableGlossaries),
-					AvailableModels = ProjectConnector.GetPairModels(currentPair, _availableCustomModels)
+					AvailableModels = ProjectConnector.GetPairModels(currentPair, _availableCustomModels),
 				};
+
+				if (_options.PairMappings is null)
+				{
+					mapping.SelectedModel = mapping.AvailableModels.FirstOrDefault();
+					mapping.SelectedGlossary = mapping.AvailableGlossaries.FirstOrDefault();
+				}
+				else
+				{
+					var model = _options.PairMappings[i].AvailableModels.FirstOrDefault(x => x.DisplayName == _options.PairMappings[i].SelectedModel.DisplayName);
+					var modelIndex = _options.PairMappings[i].AvailableModels.IndexOf(model);
+					mapping.SelectedModel = mapping.AvailableModels.ElementAtOrDefault(modelIndex) ?? mapping.AvailableModels.FirstOrDefault();
+
+					var glossary = _options.PairMappings[i].AvailableGlossaries.FirstOrDefault(x => x.DisplayName == _options.PairMappings[i].SelectedGlossary.DisplayName);
+					var glossaryIndex = _options.PairMappings[i].AvailableGlossaries.IndexOf(glossary);
+					mapping.SelectedGlossary = mapping.AvailableGlossaries.ElementAtOrDefault(glossaryIndex) ?? mapping.AvailableGlossaries.FirstOrDefault();
+				}
 
 				pairMapping.Add(mapping);
 			}

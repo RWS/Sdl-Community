@@ -10,16 +10,16 @@ namespace GoogleCloudTranslationProvider.Models
 		public RetrievedGlossary(Glossary glossary, string projectId = null, string projectLocation = null)
 		{
 			Glossary = glossary;
-			GlossaryID = Glossary?.GlossaryName?.GlossaryId;
 			var languagePair = Glossary?.LanguagePair;
 			var languageSet = Glossary?.LanguageCodesSet;
 			if (languagePair is null && languageSet is null)
 			{
 				DisplayName = Glossary is null ? PluginResources.RetrievedResources_Glossaries_Unavailable
-												 : PluginResources.RetrievedResources_Glossaries_Unselected;
+											   : PluginResources.RetrievedResources_Glossaries_Unselected;
 				return;
 			}
 
+			GlossaryID = Glossary?.GlossaryName?.GlossaryId;
 			GlossaryResourceLocation = string.Format(
 				"projects/{0}/locations/{1}/glossaries/{2}",
 				projectId, projectLocation, GlossaryID);
