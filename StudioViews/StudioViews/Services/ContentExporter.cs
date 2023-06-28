@@ -52,16 +52,15 @@ namespace Sdl.Community.StudioViews.Services
 		{
 			if (paragraphUnit.IsStructure)
 			{
-
-				UpdateParagraphUnit(paragraphUnit);
 				return;
 			}
 
 			if (!paragraphUnit.SegmentPairs.Any())
 			{
+				UpdateParagraphUnit(paragraphUnit);
 				return;
 			}
-
+			
 			var segmentPairs = new List<ISegmentPair>();
 			foreach (var segmentPair in paragraphUnit.SegmentPairs)
 			{
