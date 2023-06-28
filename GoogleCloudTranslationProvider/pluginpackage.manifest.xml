@@ -4,7 +4,7 @@
   <Version>1.0.3.0</Version>
   <Description>Google Cloud Translation Provider</Description>
   <Author>Trados AppStore Team</Author>
-  <RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
+  <RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.0.9" />
 		<Include>
 			<File>System.Net.Http.dll</File>
 			<File>RestSharp.dll</File>
