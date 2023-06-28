@@ -4,7 +4,7 @@
 	<Version>2.0.2.0</Version>
 	<Description>studioViews is a plugin that supports the ability to export/import files in a Studio project based on various filtering or selection criteria.</Description>
 	<Author>Trados AppStore Team</Author>
-	<RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.0.9"/>
+	<RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9"/>
 	<Include>
 		<File>Trados.Community.Toolkit.Core.dll</File>
 		<File>Trados.Community.Toolkit.LanguagePlatform.dll</File>
