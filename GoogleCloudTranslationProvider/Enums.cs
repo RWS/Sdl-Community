@@ -20,10 +20,4 @@ namespace GoogleCloudTranslationProvider
 	{
 		Inverted
 	}
-
-	public enum ProviderType
-	{
-		None,
-		GoogleTranslate
-	}
 }

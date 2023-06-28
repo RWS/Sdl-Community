@@ -15,8 +15,12 @@
 		Icon="../Resources/appicon.ico"
 		Title="Google TP"
 		WindowStyle="None"
-		Height="550" Width="1000"
-        d:DesignHeight="700" d:DesignWidth="800">
+		Height="550"
+		Width="1000"
+		MinHeight="500"
+		MinWidth="900"
+		d:DesignHeight="550"
+		d:DesignWidth="1000">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -67,29 +71,29 @@
 			<!--<Footer>-->
 			<DockPanel Grid.Row="3"
 					   Margin="24 20">
-				<Button Content="{x:Static root:PluginResources.MainView_HelpButton}"
-						Style="{StaticResource Sdl.Button.SecondaryStyle}"
-						Command="{Binding NavigateToCommand}"
-						Cursor="Hand"
-						Width="80">
-				</Button>
+				<StackPanel Orientation="Horizontal">
+					<Button Content="{x:Static root:PluginResources.MainView_HelpButton}"
+							Style="{StaticResource Sdl.Button.SecondaryStyle}"
+							Command="{Binding NavigateToCommand}"
+							Cursor="Hand"
+							Width="136" />
+				</StackPanel>
+				
 				<StackPanel HorizontalAlignment="Right"
 							Orientation="Horizontal">
-
-
 					<Button Content="{Binding MultiButtonContent}"
 							Style="{StaticResource Sdl.Button.SecondaryStyle}"
 							Visibility="{Binding ShowMultiButton, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 							Command="{Binding SwitchViewCommand}"
 							Cursor="Hand"
-							Width="120"/>
+							Width="136"/>
 
 					<Button Content="{x:Static root:PluginResources.MainView_ConfirmButton}"
 							Style="{StaticResource Sdl.Button.PrimaryStyle}"
 							Command="{Binding SaveCommand}"
 							IsDefault="True"
 							Cursor="Hand"
-							Width="120"
+							Width="136"
 							Margin="8 0 0 0"/>
 				</StackPanel>
 			</DockPanel>

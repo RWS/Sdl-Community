@@ -1,21 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System;
-using GoogleCloudTranslationProvider.Models;
-using System.Windows.Media;
-using System.Web.Caching;
-using GoogleCloudTranslationProvider.Helpers;
-using static Google.Protobuf.Reflection.SourceCodeInfo.Types;
 using System.Text.RegularExpressions;
+using GoogleCloudTranslationProvider.Helpers;
+using GoogleCloudTranslationProvider.Interfaces;
+using GoogleCloudTranslationProvider.Models;
 using Sdl.LanguagePlatform.Core;
 
 namespace GoogleCloudTranslationProvider.GoogleAPI
 {
-	public class ProjectConnector
+	public class V3ResourceManager
 	{
 		private static readonly string DummyLocation = "gctp-sdl";
 
-		public static List<string> GetLocations(GCTPTranslationOptions tempOptions)
+		public static List<string> GetLocations(ITranslationOptions tempOptions)
 		{
 			string errorMessage;
 			var output = new List<string>();
@@ -49,7 +47,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 						  .ToList();
 		}
 
-		public static List<RetrievedGlossary> GetGlossaries(GCTPTranslationOptions translationOptions)
+		public static List<RetrievedGlossary> GetGlossaries(TranslationOptions translationOptions)
 		{
 			var output = new List<RetrievedGlossary>();
 
@@ -70,7 +68,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 			return output;
 		}
 
-		public static List<RetrievedCustomModel> GetCustomModels(GCTPTranslationOptions translationOptions)
+		public static List<RetrievedCustomModel> GetCustomModels(TranslationOptions translationOptions)
 		{
 			var output = new List<RetrievedCustomModel>();
 

@@ -26,7 +26,7 @@ namespace GoogleCloudTranslationProvider.Studio
 
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
-			var options = new GCTPTranslationOptions();
+			var options = new TranslationOptions();
 			var mainWindowViewModel = ShowRequestedView(languagePairs, credentialStore, options);
 			return mainWindowViewModel.DialogResult ? new ITranslationProvider[] { new TranslationProvider(options) }
 													: null;
@@ -56,7 +56,7 @@ namespace GoogleCloudTranslationProvider.Studio
 				};
 			}
 
-			var options = JsonConvert.DeserializeObject<GCTPTranslationOptions>(translationProviderState);
+			var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
 			var providerName = options.CustomProviderName.SetProviderName(options.UseCustomProviderName, options.SelectedGoogleVersion);
 			return new TranslationProviderDisplayInfo()
 			{
@@ -76,10 +76,10 @@ namespace GoogleCloudTranslationProvider.Studio
 			};
 		}
 
-		private MainWindowViewModel ShowRequestedView(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, bool showSettingsView = false)
+		private MainWindowViewModel ShowRequestedView(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, bool editProvider = false)
 		{
 			SetSavedCredentialsOnUi(credentialStore, loadOptions);
-			var mainWindowViewModel = new MainWindowViewModel(loadOptions, credentialStore, languagePairs, showSettingsView);
+			var mainWindowViewModel = new MainWindowViewModel(loadOptions, credentialStore, languagePairs, editProvider);
 			var mainWindowView = new MainWindowView { DataContext = mainWindowViewModel };
 			mainWindowViewModel.CloseEventRaised += () =>
 			{
@@ -145,7 +145,7 @@ namespace GoogleCloudTranslationProvider.Studio
 				}
 			}
 
-			var options = new GCTPTranslationOptions();
+			var options = new TranslationOptions();
 			var mainWindowViewModel = ShowRequestedView(languagePairs.ToArray(), credentialStore, options);
 			return mainWindowViewModel.DialogResult;
 		}

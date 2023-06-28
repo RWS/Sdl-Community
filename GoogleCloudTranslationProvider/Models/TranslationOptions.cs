@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using GoogleCloudTranslationProvider.Interfaces;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using static System.Convert;
 
 namespace GoogleCloudTranslationProvider.Models
 {
-	public class GCTPTranslationOptions : ITranslationOptions
+	public class TranslationOptions : ITranslationOptions
 	{
 		private readonly TranslationProviderUriBuilder _uriBuilder;
 		private string _apiKey;
 
-		public GCTPTranslationOptions(Uri uri = null)
+		public TranslationOptions(Uri uri = null)
 		{
 			_uriBuilder = uri is null ? new TranslationProviderUriBuilder(Constants.GoogleTranslationScheme)
 									  : new TranslationProviderUriBuilder(uri);
@@ -36,15 +35,11 @@ namespace GoogleCloudTranslationProvider.Models
 
 		public string ProjectLocation { get; set; }
 
-		public List<PairMapping> PairMappings { get; set; }
-
-		public string GlossaryPath { get; set; }
-
-		public string GoogleEngineModel { get; set; }
+		public List<LanguagePairResources> LanguageMappingPairs { get; set; }
 		#endregion
 
 		#region Common
-		public Dictionary<string, string> LanguagesSupported { get; set; }
+		public List<string> LanguagesSupported { get; set; }
 
 		public ApiVersion SelectedGoogleVersion { get; set; }
 

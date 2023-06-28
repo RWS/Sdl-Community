@@ -9,7 +9,7 @@ namespace GoogleCloudTranslationProvider.Models
 			Model = model;
 			if (Model is null || string.IsNullOrEmpty(Model?.DatasetId))
 			{
-				DisplayName = Model is null ? PluginResources.RetrievedResources_CustomModels_Unavailable
+				DisplayName = Model is null ? PluginResources.RetrievedResources_NotAvailable
 											: PluginResources.RetrievedResources_CustomModels_Unselected;
 				return;
 			}

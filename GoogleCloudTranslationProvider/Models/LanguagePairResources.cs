@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GoogleCloudTranslationProvider.ViewModel;
+using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 
 namespace GoogleCloudTranslationProvider.Models
 {
-	public class PairMapping : BaseViewModel
+	public class LanguagePairResources : BaseViewModel
 	{
 		private List<RetrievedGlossary> _availableGlossaries;
 		private RetrievedGlossary _selectedGlossary;
@@ -59,5 +60,11 @@ namespace GoogleCloudTranslationProvider.Models
 				OnPropertyChanged();
 			}
 		}
+
+		[JsonIgnore]
+		public bool GlossariesAreAvailable => AvailableGlossaries.Any() && AvailableGlossaries[0].DisplayName != PluginResources.RetrievedResources_NotAvailable;
+
+		[JsonIgnore]
+		public bool ModelsAreAvailable => AvailableModels.Any() && AvailableModels[0].DisplayName != PluginResources.RetrievedResources_NotAvailable;
 	}
 }

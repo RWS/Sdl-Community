@@ -24,13 +24,9 @@ namespace GoogleCloudTranslationProvider.Interfaces
 
 		string PreLookupFilename { get; set; }
 
-		string GoogleEngineModel { get; set; }
-
 		string ProjectLocation { get; set; }
 
 		string JsonFilePath { get; set; }
-
-		string GlossaryPath { get; set; }
 
 		string DownloadPath { get; set; }
 
@@ -38,12 +34,12 @@ namespace GoogleCloudTranslationProvider.Interfaces
 
 		string ApiKey { get; set; }
 
-		Dictionary<string, string> LanguagesSupported { get; set; }
+		List<string> LanguagesSupported { get; set; }
 
 		Uri Uri { get; }
 
 		ApiVersion SelectedGoogleVersion { get; set; }
 
-		List<PairMapping> PairMappings { get; set; }
+		List<LanguagePairResources> LanguageMappingPairs { get; set; }
 	}
 }

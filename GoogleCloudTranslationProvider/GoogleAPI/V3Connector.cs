@@ -22,9 +22,8 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 
 		private TranslationServiceClient _translationServiceClient;
 		private List<V3LanguageModel> _supportedLanguages;
-		private RetrievedCustomModel _customModel;
 
-		public V3Connector(ITranslationOptions options, bool authenticateUser = false)
+		public V3Connector(ITranslationOptions options)
 		{
 			_options = options;
 			ConnectToApi();
@@ -155,7 +154,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 
 		private TranslateTextGlossaryConfig SetGlossary(CultureInfo sourceLanguage, CultureInfo targetLanguage)
 		{
-			var selectedGlossary = _options.PairMappings?
+			var selectedGlossary = _options.LanguageMappingPairs?
 										   .FirstOrDefault(x => x.LanguagePair.SourceCulture == sourceLanguage && x.LanguagePair.TargetCulture == targetLanguage)?
 										   .SelectedGlossary
 										   .Glossary;
@@ -188,7 +187,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 		private string SetCustomModel(CultureInfo sourceLanguage, CultureInfo targetLanguage)
 		{
 			var defaultPath = $"projects/{_options.ProjectId}/locations/{_options.ProjectLocation}/models/general/nmt";
-			var selectedModel = _options.PairMappings?
+			var selectedModel = _options.LanguageMappingPairs?
 										   .FirstOrDefault(x => x.LanguagePair.SourceCulture == sourceLanguage && x.LanguagePair.TargetCulture == targetLanguage)?
 										   .SelectedModel?
 										   .ModelPath;

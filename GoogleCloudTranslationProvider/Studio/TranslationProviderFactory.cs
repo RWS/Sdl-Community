@@ -17,7 +17,7 @@ namespace GoogleCloudTranslationProvider.Studio
 				throw new Exception(PluginResources.UriNotSupportedMessage);
 			}
 
-			var translationOptions = JsonConvert.DeserializeObject<GCTPTranslationOptions>(translationProviderState);
+			var translationOptions = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
 			if (translationOptions.SelectedGoogleVersion is not ApiVersion.V2)
 			{
 				return new TranslationProvider(translationOptions);

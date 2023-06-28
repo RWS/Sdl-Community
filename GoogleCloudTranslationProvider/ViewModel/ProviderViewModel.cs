@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows.Input;
 using GoogleCloudTranslationProvider.Commands;
-using GoogleCloudTranslationProvider.Extensions;
 using GoogleCloudTranslationProvider.GoogleAPI;
 using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
@@ -28,28 +26,21 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		private GoogleApiVersion _selectedGoogleApiVersion;
 
-		private List<RetrievedGlossary> _availableGlossaries;
-		private RetrievedGlossary _selectedGlossary;
-		private List<RetrievedCustomModel> _availableCustomModels;
-		private RetrievedCustomModel _selectedCustomModel;
+		private List<LanguagePairResources> _languageMappingPairs;
+		private LanguagePairResources _selectedMappedPair;
 
 		private List<string> _locations;
 		private string _projectLocation;
 
-		private string _googleEngineModel;
-		private string _glossaryPath;
 		private string _visibleJsonPath;
 		private string _jsonFilePath;
 		private string _projectId;
-		private string _glossaryId;
 		private string _urlToDownload;
 		private string _apiKey;
 
 		private bool _canModifyExistingFields;
 		private bool _projectResourcesLoaded;
 		private bool _persistGoogleKey;
-		private bool _basicCsvGlossary;
-		private bool _isTellMeAction;
 		private bool _useUrlPath;
 
 		private ICommand _downloadJsonFileCommand;
@@ -64,62 +55,12 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			ViewModel = this;
 			_options = options;
 			_languagePairs = languagePairs;
-			CanChangeProviderResources = string.IsNullOrEmpty(JsonFilePath);
+			CanChangeProviderResources = string.IsNullOrEmpty(_options.ProjectId);
 			_openFileDialogService = new OpenFileDialogService();
 			InitializeComponent();
 		}
 
 		public BaseViewModel ViewModel { get; set; }
-
-		public List<RetrievedGlossary> AvailableGlossaries
-		{
-			get => _availableGlossaries;
-			set
-			{
-				if (_availableGlossaries == value) return;
-				_availableGlossaries = value;
-				OnPropertyChanged(nameof(AvailableGlossaries));
-			}
-		}
-
-		public RetrievedGlossary SelectedGlossary
-		{
-			get => _selectedGlossary;
-			set
-			{
-				if (_selectedGlossary == value) return;
-				_selectedGlossary = value;
-				OnPropertyChanged(nameof(SelectedGlossary));
-				GlossaryPath = value?.GlossaryID;
-			}
-		}
-
-		public List<RetrievedCustomModel> AvailableCustomModels
-		{
-			get => _availableCustomModels;
-			set
-			{
-				if (_availableCustomModels == value) return;
-				_availableCustomModels = value;
-				OnPropertyChanged(nameof(AvailableCustomModels));
-			}
-		}
-
-		public RetrievedCustomModel SelectedCustomModel
-		{
-			get => _selectedCustomModel;
-			set
-			{
-				if (_selectedCustomModel == value) return;
-				_selectedCustomModel = value;
-				OnPropertyChanged(nameof(SelectedCustomModel));
-				GoogleEngineModel = value?.DatasetId;
-			}
-		}
-
-		public List<TranslationOption> TranslationOptions { get; set; }
-
-		public TranslationOption SelectedTranslationOption => TranslationOptions[0];
 
 		public List<GoogleApiVersion> GoogleApiVersions { get; set; }
 
@@ -130,10 +71,31 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			{
 				if (_selectedGoogleApiVersion == value) return;
 				_selectedGoogleApiVersion = value;
-				OnPropertyChanged(nameof(SelectedGoogleApiVersion));
+				OnPropertyChanged();
 				OnPropertyChanged(nameof(IsV2Checked));
 				OnPropertyChanged(nameof(IsV3Checked));
-				ClearMessageRaised?.Invoke();
+			}
+		}
+
+		public List<LanguagePairResources> LanguageMappingPairs
+		{
+			get => _languageMappingPairs;
+			set
+			{
+				if (_languageMappingPairs == value) return;
+				_languageMappingPairs = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public LanguagePairResources SelectedMappedPair
+		{
+			get => _selectedMappedPair;
+			set
+			{
+				if (_selectedMappedPair == value) return;
+				_selectedMappedPair = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -144,7 +106,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			{
 				if (_locations == value) return;
 				_locations = value;
-				OnPropertyChanged(nameof(Locations));
+				OnPropertyChanged();
 			}
 		}
 
@@ -155,20 +117,8 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			{
 				if (_projectLocation == value) return;
 				_projectLocation = value;
-				OnPropertyChanged(nameof(ProjectLocation));
+				OnPropertyChanged();
 				GetProjectResources();
-				ClearMessageRaised?.Invoke();
-			}
-		}
-
-		public bool BasicCsvGlossary
-		{
-			get => _basicCsvGlossary;
-			set
-			{
-				if (_basicCsvGlossary == value) return;
-				_basicCsvGlossary = value;
-				OnPropertyChanged(nameof(BasicCsvGlossary));
 			}
 		}
 
@@ -179,19 +129,8 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			{
 				if (_persistGoogleKey == value) return;
 				_persistGoogleKey = value;
-				OnPropertyChanged(nameof(PersistGoogleKey));
+				OnPropertyChanged();
 				_options.PersistGoogleKey = value;
-			}
-		}
-
-		public bool IsTellMeAction
-		{
-			get => _isTellMeAction;
-			set
-			{
-				if (_isTellMeAction == value) return;
-				_isTellMeAction = value;
-				OnPropertyChanged(nameof(IsTellMeAction));
 			}
 		}
 
@@ -206,7 +145,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			{
 				if (_canModifyExistingFields == value) return;
 				_canModifyExistingFields = value;
-				OnPropertyChanged(nameof(CanChangeProviderResources));
+				OnPropertyChanged();
 			}
 		}
 
@@ -217,19 +156,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			{
 				if (_projectResourcesLoaded == value) return;
 				_projectResourcesLoaded = value;
-				OnPropertyChanged(nameof(ProjectResourcesLoaded));
-			}
-		}
-
-		public string GoogleEngineModel
-		{
-			get => _googleEngineModel;
-			set
-			{
-				if (_googleEngineModel == value) return;
-				_googleEngineModel = value;
-				OnPropertyChanged(nameof(GoogleEngineModel));
-				ClearMessageRaised?.Invoke();
+				OnPropertyChanged();
 			}
 		}
 
@@ -240,7 +167,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			{
 				if (_visibleJsonPath == value) return;
 				_visibleJsonPath = value;
-				OnPropertyChanged(nameof(VisibleJsonPath));
+				OnPropertyChanged();
 			}
 		}
 
@@ -251,8 +178,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			{
 				if (_jsonFilePath == value) return;
 				_jsonFilePath = value;
-				OnPropertyChanged(nameof(JsonFilePath));
-				ClearMessageRaised?.Invoke();
+				OnPropertyChanged();
 			}
 		}
 
@@ -263,8 +189,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			{
 				if (_projectId == value) return;
 				_projectId = value;
-				OnPropertyChanged(nameof(ProjectId));
-				ClearMessageRaised?.Invoke();
+				OnPropertyChanged();
 			}
 		}
 
@@ -275,32 +200,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			{
 				if (_apiKey == value) return;
 				_apiKey = value.Trim();
-				OnPropertyChanged(nameof(ApiKey));
-				ClearMessageRaised?.Invoke();
-			}
-		}
-
-		public string GlossaryPath
-		{
-			get => _glossaryPath;
-			set
-			{
-				if (_glossaryPath == value) return;
-				_glossaryPath = value;
-				OnPropertyChanged(nameof(GlossaryPath));
-				ClearMessageRaised?.Invoke();
-			}
-		}
-
-		public string GlossaryId
-		{
-			get => _glossaryId;
-			set
-			{
-				if (_glossaryId == value) return;
-				_glossaryId = value;
-				OnPropertyChanged(nameof(GlossaryId));
-				ClearMessageRaised?.Invoke();
+				OnPropertyChanged();
 			}
 		}
 
@@ -311,7 +211,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			{
 				if (_useUrlPath == value) return;
 				_useUrlPath = value;
-				OnPropertyChanged(nameof(UseUrlPath));
+				OnPropertyChanged();
 			}
 		}
 
@@ -322,26 +222,17 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			{
 				if (_urlToDownload == value) return;
 				_urlToDownload = value;
-				OnPropertyChanged(nameof(UrlToDownload));
+				OnPropertyChanged();
 			}
 		}
 
 		private void ResetFields()
 		{
-			AvailableCustomModels = null;
-			AvailableGlossaries = null;
-			BasicCsvGlossary = false;
-			CanChangeProviderResources = false;
-			GlossaryId = null;
-			GlossaryPath = null;
-			GoogleEngineModel = null;
 			JsonFilePath = null;
 			Locations = new();
 			ProjectId = null;
 			ProjectLocation = null;
 			ProjectResourcesLoaded = false;
-			SelectedCustomModel = null;
-			SelectedGlossary = null;
 			UrlToDownload = null;
 			VisibleJsonPath = null;
 		}
@@ -353,8 +244,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		public ICommand OpenLocalPathCommand => _openLocalPathCommand ??= new RelayCommand(OpenLocalPath);
 		public ICommand NavigateToCommand => _navigateToCommand ??= new RelayCommand(NavigateTo);
 		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
-
-		public event ClearMessageEventRaiser ClearMessageRaised;
 
 		public bool CanConnectToGoogleV2(HtmlUtil htmlUtil)
 		{
@@ -417,15 +306,13 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		{
 			try
 			{
-				var providerOptions = new GCTPTranslationOptions
+				var providerOptions = new TranslationOptions
 				{
 					ProjectId = ProjectId,
 					JsonFilePath = JsonFilePath,
-					GoogleEngineModel = GoogleEngineModel,
 					ProjectLocation = ProjectLocation,
-					GlossaryPath = GlossaryPath,
 					SelectedGoogleVersion = SelectedGoogleApiVersion.Version,
-					PairMappings = Mappings
+					LanguageMappingPairs = LanguageMappingPairs
 				};
 
 				var googleV3 = new V3Connector(providerOptions);
@@ -442,10 +329,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				{
 					ErrorHandler.HandleError(PluginResources.Validation_ProjectID_Failed, nameof(ProjectId));
 				}
-				else if (e.Message.Contains("Glossary not found"))
-				{
-					ErrorHandler.HandleError(PluginResources.Validation_Glossary_Invalid, nameof(GlossaryPath));
-				}
 				else if (e.Message.Contains("PermissionDenied"))
 				{
 					ErrorHandler.HandleError(PluginResources.Validation_PermissionDenied, "Permission Denied");
@@ -461,15 +344,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		private void InitializeComponent()
 		{
-			TranslationOptions = new List<TranslationOption>
-			{
-				new TranslationOption
-				{
-					Name = PluginResources.Google,
-					ProviderType = ProviderType.GoogleTranslate
-				}
-			};
-
 			GoogleApiVersions = new List<GoogleApiVersion>
 			{
 				new GoogleApiVersion
@@ -484,29 +358,28 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				},
 			};
 
-			ProjectId = string.Empty;
-			ProjectLocation = string.Empty;
-			if (_options is not null)
-			{
-				PersistGoogleKey = _options.PersistGoogleKey;
-				ApiKey = PersistGoogleKey ? _options.ApiKey : string.Empty;
-				JsonFilePath = _options.JsonFilePath;
-				VisibleJsonPath = JsonFilePath.ShortenFilePath();
-				ProjectId = _options.ProjectId;
-				ProjectLocation = _options.ProjectLocation;
-				GoogleEngineModel = _options.GoogleEngineModel;
-				GlossaryPath = _options.GlossaryPath;
-			}
+			PersistGoogleKey = _options.PersistGoogleKey;
+			ApiKey = PersistGoogleKey ? _options.ApiKey : string.Empty;
+			JsonFilePath = _options.JsonFilePath;
+			VisibleJsonPath = JsonFilePath.ShortenFilePath();
+			ProjectId = _options.ProjectId;
+			ProjectLocation = _options.ProjectLocation;
 
 			SelectedGoogleApiVersion = GoogleApiVersions.FirstOrDefault(v => v.Version.Equals(_options.SelectedGoogleVersion))
 									?? GoogleApiVersions.First(x => x.Version == ApiVersion.V3);
-			if (!string.IsNullOrEmpty(_projectId)
-			 && !string.IsNullOrEmpty(_projectLocation))
+			if (!string.IsNullOrEmpty(_projectLocation))
 			{
-				Locations.Clear();
-				Locations.Add(_projectLocation);
-				SelectedGlossary = _availableGlossaries.FirstOrDefault(x => x.GlossaryID == _options.GlossaryPath) ?? _availableGlossaries.First();
-				SelectedCustomModel = _availableCustomModels.FirstOrDefault(x => x.DatasetId == _options.GoogleEngineModel) ?? _availableCustomModels.First();
+				Locations = V3ResourceManager.GetLocations(new TranslationOptions
+				{
+					ProjectId = _projectId,
+					JsonFilePath = _jsonFilePath,
+					ProjectLocation = DummyLocation
+				});
+			}
+
+			if (LanguageMappingPairs is not null && LanguageMappingPairs.Any())
+			{
+				ProjectResourcesLoaded = true;
 			}
 		}
 
@@ -531,10 +404,10 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private void DownloadJsonFile(object parameter)
 		{
 			UrlToDownload ??= string.Empty;
-			var operation = UrlToDownload.Trim().VerifyAndDownloadJsonFile(_options.DownloadPath, Constants.DefaultDownloadedJsonFileName);
-			if (!operation.Success)
+			var (Success, ErrorMessage) = UrlToDownload.Trim().VerifyAndDownloadJsonFile(_options.DownloadPath, Constants.DefaultDownloadedJsonFileName);
+			if (!Success)
 			{
-				ErrorHandler.HandleError(operation.ErrorMessage, "Download failed");
+				ErrorHandler.HandleError(ErrorMessage, "Download failed");
 				return;
 			}
 
@@ -554,14 +427,14 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private void ReadJsonFile(string filePath)
 		{
 			GetJsonDetails(filePath);
-			var tempOptions = new GCTPTranslationOptions
+			var tempOptions = new TranslationOptions
 			{
 				ProjectId = _projectId,
 				JsonFilePath = _jsonFilePath,
 				ProjectLocation = DummyLocation
 			};
 
-			Locations = ProjectConnector.GetLocations(tempOptions);
+			Locations = V3ResourceManager.GetLocations(tempOptions);
 			ProjectLocation = Locations.First();
 		}
 
@@ -579,76 +452,63 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			ProjectId = (operationResult as Dictionary<string, string>)["project_id"];
 		}
 
-		private void CreateMapping()
-		{
-			var pairMapping = new List<PairMapping>();
-			for (var i = 0; i < _languagePairs.Count(); i++)
-			{
-				var currentPair = _languagePairs.ElementAt(i);
-				var mapping = new PairMapping()
-				{
-					DisplayName = $"{currentPair.SourceCulture.DisplayName} - {currentPair.TargetCulture.DisplayName}",
-					LanguagePair = currentPair,
-					AvailableGlossaries = ProjectConnector.GetPairGlossaries(currentPair, _availableGlossaries),
-					AvailableModels = ProjectConnector.GetPairModels(currentPair, _availableCustomModels),
-				};
-
-				if (_options.PairMappings is null)
-				{
-					mapping.SelectedModel = mapping.AvailableModels.FirstOrDefault();
-					mapping.SelectedGlossary = mapping.AvailableGlossaries.FirstOrDefault();
-				}
-				else
-				{
-					var model = _options.PairMappings[i].AvailableModels.FirstOrDefault(x => x.DisplayName == _options.PairMappings[i].SelectedModel.DisplayName);
-					var modelIndex = _options.PairMappings[i].AvailableModels.IndexOf(model);
-					mapping.SelectedModel = mapping.AvailableModels.ElementAtOrDefault(modelIndex) ?? mapping.AvailableModels.FirstOrDefault();
-
-					var glossary = _options.PairMappings[i].AvailableGlossaries.FirstOrDefault(x => x.DisplayName == _options.PairMappings[i].SelectedGlossary.DisplayName);
-					var glossaryIndex = _options.PairMappings[i].AvailableGlossaries.IndexOf(glossary);
-					mapping.SelectedGlossary = mapping.AvailableGlossaries.ElementAtOrDefault(glossaryIndex) ?? mapping.AvailableGlossaries.FirstOrDefault();
-				}
-
-				pairMapping.Add(mapping);
-			}
-
-			Mappings = pairMapping;
-		}
-
-		public void GetProjectResources()
+		private void GetProjectResources()
 		{
 			if (string.IsNullOrEmpty(_projectLocation) || _projectLocation.Equals(DummyLocation))
 			{
 				return;
 			}
 
-			var tempOptions = new GCTPTranslationOptions
+			var pairMapping = new List<LanguagePairResources>();
+			var tempOptions = new TranslationOptions
 			{
 				ProjectId = _projectId,
 				JsonFilePath = _jsonFilePath,
 				ProjectLocation = _projectLocation
 			};
 
-			AvailableGlossaries = ProjectConnector.GetGlossaries(tempOptions);
-			SelectedGlossary = _availableGlossaries.First();
-			AvailableCustomModels = ProjectConnector.GetCustomModels(tempOptions);
-			SelectedCustomModel = _availableCustomModels.First();
-
-			if (_availableGlossaries.Any() && _availableCustomModels.Any())
+			var availableGlossaries = V3ResourceManager.GetGlossaries(tempOptions);
+			var availableCustomModels = V3ResourceManager.GetCustomModels(tempOptions);
+			for (var i = 0; i < _languagePairs.Count(); i++)
 			{
-				ProjectResourcesLoaded = true;
+				var currentPair = _languagePairs.ElementAt(i);
+				var mapping = new LanguagePairResources()
+				{
+					DisplayName = $"{currentPair.SourceCulture.DisplayName} - {currentPair.TargetCulture.DisplayName}",
+					LanguagePair = currentPair,
+					AvailableGlossaries = V3ResourceManager.GetPairGlossaries(currentPair, availableGlossaries),
+					AvailableModels = V3ResourceManager.GetPairModels(currentPair, availableCustomModels),
+				};
+
+				if (_options.LanguageMappingPairs is null)
+				{
+					mapping.SelectedModel = mapping.AvailableModels.FirstOrDefault();
+					mapping.SelectedGlossary = mapping.AvailableGlossaries.FirstOrDefault();
+				}
+				else
+				{
+					var model = _options.LanguageMappingPairs[i].AvailableModels.FirstOrDefault(x => x.DisplayName == _options.LanguageMappingPairs[i].SelectedModel.DisplayName);
+					var modelIndex = _options.LanguageMappingPairs[i].AvailableModels.IndexOf(model);
+					mapping.SelectedModel = mapping.AvailableModels.ElementAtOrDefault(modelIndex) ?? mapping.AvailableModels.FirstOrDefault();
+
+					var glossary = _options.LanguageMappingPairs[i].AvailableGlossaries.FirstOrDefault(x => x.DisplayName == _options.LanguageMappingPairs[i].SelectedGlossary.DisplayName);
+					var glossaryIndex = _options.LanguageMappingPairs[i].AvailableGlossaries.IndexOf(glossary);
+					mapping.SelectedGlossary = mapping.AvailableGlossaries.ElementAtOrDefault(glossaryIndex) ?? mapping.AvailableGlossaries.FirstOrDefault();
+				}
+
+				pairMapping.Add(mapping);
 			}
 
-
-			CreateMapping();
+			LanguageMappingPairs = pairMapping;
+			ProjectResourcesLoaded = true;
 		}
 
 		private void OpenLocalPath(object parameter)
 		{
-			var operation = JsonFilePath.OpenFolderAndSelectFile();
-			if (!operation.Success)
+			var (Success, ErrorMessage) = JsonFilePath.OpenFolderAndSelectFile();
+			if (!Success)
 			{
-				ErrorHandler.HandleError(operation.ErrorMessage, "Authentication failed");
+				ErrorHandler.HandleError(ErrorMessage, "Authentication failed");
 			}
 		}
 
@@ -670,37 +530,10 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		{
 			switch (parameter as string)
 			{
-				case nameof(GoogleEngineModel):
-					GoogleEngineModel = string.Empty;
-					break;
 				case nameof(UrlToDownload):
 					UrlToDownload = string.Empty;
 					ResetFields();
 					break;
-			}
-		}
-
-		private List<PairMapping> _mappings;
-		public List<PairMapping> Mappings
-		{
-			get => _mappings;
-			set
-			{
-				if (_mappings == value) return;
-				_mappings = value;
-				OnPropertyChanged();
-			}
-		}
-
-		private PairMapping _selectedMapping;
-		public PairMapping SelectedMapping
-		{
-			get => _selectedMapping;
-			set
-			{
-				if (_selectedMapping == value) return;
-				_selectedMapping = value;
-				OnPropertyChanged();
 			}
 		}
 	}

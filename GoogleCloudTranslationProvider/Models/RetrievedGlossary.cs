@@ -14,12 +14,13 @@ namespace GoogleCloudTranslationProvider.Models
 			var languageSet = Glossary?.LanguageCodesSet;
 			if (languagePair is null && languageSet is null)
 			{
-				DisplayName = Glossary is null ? PluginResources.RetrievedResources_Glossaries_Unavailable
+				DisplayName = Glossary is null ? PluginResources.RetrievedResources_NotAvailable
 											   : PluginResources.RetrievedResources_Glossaries_Unselected;
 				return;
 			}
 
 			GlossaryID = Glossary?.GlossaryName?.GlossaryId;
+			DisplayName = GlossaryID;
 			GlossaryResourceLocation = string.Format(
 				"projects/{0}/locations/{1}/glossaries/{2}",
 				projectId, projectLocation, GlossaryID);
@@ -28,13 +29,11 @@ namespace GoogleCloudTranslationProvider.Models
 			{
 				var sourceLanguage = languagePair.SourceLanguageCode;
 				var targetLanguage = languagePair.TargetLanguageCode;
-				DisplayName = $"{GlossaryID} : {sourceLanguage} - {targetLanguage}";
 				SourceLanguage = new CultureInfo(sourceLanguage);
 				TargetLanguage = new CultureInfo(targetLanguage);
 			}
 			else if (languageSet is not null)
 			{
-				DisplayName = $"{GlossaryID} : {languageSet.LanguageCodes.Count} languages";
 				Languages = languageSet.LanguageCodes.ToHashSet();
 			}
 		}

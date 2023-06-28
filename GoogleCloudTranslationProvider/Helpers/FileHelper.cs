@@ -3,16 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
-using System.Windows;
-using GoogleCloudTranslationProvider.Helpers;
 using Newtonsoft.Json;
 
-namespace GoogleCloudTranslationProvider.Extensions
+namespace GoogleCloudTranslationProvider.Helpers
 {
-	public static class FilesExtensions
+	public static class FileHelper
 	{
 		public static string ShortenFilePath(this string filePath)
 		{
@@ -55,7 +51,7 @@ namespace GoogleCloudTranslationProvider.Extensions
 			}
 
 			uri = uri.EnsureUriIsValid();
-			if (!OnlineJsonFileIsValid(uri))
+			if (!uri.OnlineJsonFileIsValid())
 			{
 				return (false, PluginResources.FileValidation_MissingJsonFile);
 			}
