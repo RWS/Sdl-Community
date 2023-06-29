@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Runtime;
 using System.Windows.Forms;
 using Sdl.Community.TermExcelerator.Model;
 
@@ -19,7 +20,7 @@ namespace Sdl.Community.TermExcelerator.Ui
 
 		protected override void OnLoad(EventArgs e)
 		{
-			if (!(_providerSettings is null))
+			if(!(_providerSettings is null))
 			{
 				return;
 			}
@@ -28,8 +29,9 @@ namespace Sdl.Community.TermExcelerator.Ui
 			targetBox.Text = @"B";
 			approvedBox.Text = @"C";
 			separatorTextBox.Text = @"|";
+
 			descriptionLbl.Text =
-				@"From this screen you can fill your settings from your excel document.";
+				@"From this screen you can fill your settings from your excel document."; 
 
 			var source = GetCultureNames();
 			sourceLanguageComboBox.DataSource = source;
@@ -44,6 +46,7 @@ namespace Sdl.Community.TermExcelerator.Ui
 			targetLanguageComboBox.ValueMember = "Name";
 			var selectedTargetItem = target.Where(t => t.Name == "de-DE");
 			targetLanguageComboBox.SelectedItem = selectedTargetItem.FirstOrDefault();
+			
 		}
 
 		private void browseBtn_Click(object sender, EventArgs e)
@@ -122,20 +125,21 @@ namespace Sdl.Community.TermExcelerator.Ui
 			approvedBox.Text = settings.ApprovedColumn;
 			separatorTextBox.Text = settings.Separator.ToString();
 
-			var cultureNames = GetCultureNames();
-			var hashSet = new HashSet<CultureInfo>(cultureNames);
-			hashSet.TryGetValue(new CultureInfo(settings.SourceLanguage.Name), out var sourceCulture);
-			hashSet.TryGetValue(new CultureInfo(settings.TargetLanguage.Name), out var targetCulture);
+			var sourceLanguages = GetCultureNames();
+			var targetLanguages = GetCultureNames();
 
-			sourceLanguageComboBox.DataSource = cultureNames;
+			var sourceLanguage = sourceLanguages.FirstOrDefault(x => x.Name.Equals(_providerSettings.SourceLanguage.Name));
+			var targetLanguage = targetLanguages.FirstOrDefault(x => x.Name.Equals(_providerSettings.TargetLanguage.Name));
+
+			sourceLanguageComboBox.DataSource = sourceLanguages;
 			sourceLanguageComboBox.DisplayMember = "DisplayName";
 			sourceLanguageComboBox.ValueMember = "Name";
-			sourceLanguageComboBox.SelectedItem = sourceCulture;
+			sourceLanguageComboBox.SelectedItem = sourceLanguage;
 
-			targetLanguageComboBox.DataSource = cultureNames;
+			targetLanguageComboBox.DataSource = targetLanguages;
 			targetLanguageComboBox.DisplayMember = "DisplayName";
 			targetLanguageComboBox.ValueMember = "Name";
-			targetLanguageComboBox.SelectedItem = targetCulture;
+			targetLanguageComboBox.SelectedItem = targetLanguage;
 
 			pathTextBox.Text = settings.TermFilePath;
 		}

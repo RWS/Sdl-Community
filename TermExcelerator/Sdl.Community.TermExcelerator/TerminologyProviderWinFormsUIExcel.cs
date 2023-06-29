@@ -25,6 +25,8 @@ namespace Sdl.Community.TermExcelerator
 			var result = new List<ITerminologyProvider>();
 			try
 			{
+				Allow.SetAccess(true);
+
 				var settingsDialog = new Settings();
 				var dialogResult = settingsDialog.ShowDialog();
 
@@ -36,30 +38,39 @@ namespace Sdl.Community.TermExcelerator
 					var persistenceService = new PersistenceService();
 
 					var provider = new TerminologyProviderExcel(settings);
+
 					settings.Uri = provider.Uri;
 					persistenceService.AddSettings(settings);
 					var providerSettings = persistenceService.Load(provider.Uri);
 					var termSearchService = new NormalTermSeachService(providerSettings);
-
-					var excelProvider = new TerminologyProviderExcel(providerSettings, termSearchService);
-
-					result.Add(excelProvider);
+				return new ITerminologyProvider[] { new TerminologyProviderExcel(providerSettings, termSearchService) };
 				}
+
+				return null;
 			}
 			catch (Exception ex)
 			{
 				Log.Logger.Error($"Browse method: {ex.Message}\n {ex.StackTrace}");
 				throw ex;
 			}
-			return result.ToArray();
 		}
 
 		public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
 		{
+
 			if (!(terminologyProvider is TerminologyProviderExcel provider))
 			{
 				return false;
 			}
+
+			if (Allow.GetAccess())
+			{
+				var persistenceService = new PersistenceService();
+
+				provider.ProviderSettings = persistenceService.Load(provider.Uri);
+			}
+
+			Allow.SetAccess(false);
 
 			var settingsDialog = new Settings();
 			settingsDialog.SetSettings(provider.ProviderSettings);
