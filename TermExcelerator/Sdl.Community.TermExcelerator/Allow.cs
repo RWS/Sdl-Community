@@ -9,14 +9,8 @@ namespace Sdl.Community.TermExcelerator
 	public class Allow
 	{
 		private static bool Access;
-		public Allow(bool access) 
-		{ 
-			Access = access;
-		}
 
 		public Allow() { }
-
-		public bool Allowaccess { get { return Access; } set {  Access = value; } }
 
 		public static bool GetAccess()
 		{
