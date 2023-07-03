@@ -58,9 +58,8 @@ namespace Sdl.Community.TranslationMemoryManagementUtility
 			{
 				return;
 			}
+			var targetPath = (settings as RemapTMXSettings)?.SaveIntoTargetFolder ?? false ? Path.GetDirectoryName(_files.FirstOrDefault()) : settings.TargetFolder;
 
-			var targetPath = ((RemapTMXSettings)settings).SaveIntoTargetFolder ? Path.GetDirectoryName(_files.FirstOrDefault())
-																			   : settings.TargetFolder;
 			settings.TargetFolder = targetPath;
 			if (!string.IsNullOrEmpty(settings.TargetFolder))
 			{
