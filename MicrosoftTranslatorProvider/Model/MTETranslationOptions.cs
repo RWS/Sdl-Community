@@ -32,5 +32,7 @@ namespace MicrosoftTranslatorProvider.Model
 		public Uri Uri => new TranslationProviderUriBuilder(Constants.MicrosoftProviderScheme).Uri;
 
 		public Dictionary<string, string> LanguagesSupported { get; set; }
+
+		public List<LanguageMapping> LanguageMappings { get; set; }
 	}
 }

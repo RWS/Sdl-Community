@@ -53,7 +53,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 								   bool showSettingsView = false)
 		{
 			Options = options;
-			_providerControlViewModel = new ProviderControlViewModel(options, regionsProvider);
+			_providerControlViewModel = new ProviderControlViewModel(options, regionsProvider, languagePairs);
 			_settingsControlViewModel = new SettingsControlViewModel(options, credentialStore, new OpenFileDialogService(), false);
 			_privateEndpointViewModel = new PrivateEndpointViewModel();
 			_credentialStore = credentialStore;
@@ -289,6 +289,8 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			Options.UseCategoryID = _providerControlViewModel.UseCategoryID;
 			Options.CategoryID = _providerControlViewModel.CategoryID;
 			Options.PersistMicrosoftCredentials = _providerControlViewModel.PersistMicrosoftKey;
+
+			Options.LanguageMappings = _providerControlViewModel.LanguageMappings;
 
 			Options.UsePrivateEndpoint = UsePrivateEndpoint;
 			Options.PrivateEndpoint = _privateEndpointViewModel.Endpoint;

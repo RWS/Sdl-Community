@@ -29,5 +29,7 @@ namespace MicrosoftTranslatorProvider.Interfaces
 		List<TranslationOption> TranslationOptions { get; set; }
 		
 		TranslationOption SelectedTranslationOption { get; set; }
+
+		List<LanguageMapping> LanguageMappings { get; set; }
 	}
 }

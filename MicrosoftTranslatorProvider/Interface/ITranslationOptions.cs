@@ -43,5 +43,7 @@ namespace MicrosoftTranslatorProvider.Interfaces
 		Uri Uri { get; }
 
 		Dictionary<string, string> LanguagesSupported { get; set; }
+
+		List<LanguageMapping> LanguageMappings { get; set; }
 	}
 }
