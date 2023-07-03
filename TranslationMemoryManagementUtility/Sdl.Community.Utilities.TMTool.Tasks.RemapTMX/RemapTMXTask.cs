@@ -130,13 +130,13 @@ namespace Sdl.Community.Utilities.TMTool.Tasks.RemapTMX
 
 				if (this.notSupportedCultures.Contains(tm.LanguageDirection.SourceLanguage.Name))
 				{
-					culture = LanguageRegistryApi.Instance.GetLanguage(tm.LanguageDirection.SourceLanguage).CultureInfo.DisplayName;
+					culture = tm.LanguageDirection.SourceLanguage.EnglishName;
 					containsUnsupported = true;
 				}
 
 				if (this.notSupportedCultures.Contains(tm.LanguageDirection.TargetLanguage.Name))
 				{
-					culture = LanguageRegistryApi.Instance.GetLanguage(tm.LanguageDirection.TargetLanguage).CultureInfo.DisplayName;
+					culture = tm.LanguageDirection.TargetLanguage.EnglishName;
 					containsUnsupported = true;
 				}
 
