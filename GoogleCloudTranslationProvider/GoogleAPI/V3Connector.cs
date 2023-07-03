@@ -11,6 +11,7 @@ using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
 using NLog;
+using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 
 namespace GoogleCloudTranslationProvider.GoogleAPI
@@ -22,14 +23,14 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 
 		private TranslationServiceClient _translationServiceClient;
 		private List<V3LanguageModel> _supportedLanguages;
-		private RetrievedCustomModel _customModel;
 
-		public V3Connector(ITranslationOptions options, bool authenticateUser = false)
+		public V3Connector(ITranslationOptions options)
 		{
 			_options = options;
 			ConnectToApi();
 		}
 
+		#region Connection
 		private void ConnectToApi()
 		{
 			try
@@ -44,24 +45,27 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 			}
 		}
 
-		public List<Glossary> GetGlossaries(string location = null)
+		public void TryAuthenticate(LanguagePair[] languagePair = null)
 		{
-			var locationName = LocationName.FromProjectLocation(_options.ProjectId, location ?? _options.ProjectLocation);
-			var glossariesRequest = new ListGlossariesRequest { ParentAsLocationName = locationName };
+			var sourceCultureInfo = new CultureInfo("en-GB");
+			var targetCultureInfo = new CultureInfo("de-DE");
 
-			return _translationServiceClient.ListGlossaries(glossariesRequest).ToList();
-		}
-
-		public List<Model> GetCustomModels()
-		{
-			var request = new ListModelsRequest
+			var request = new TranslateTextRequest
 			{
-				ParentAsLocationName = new LocationName(_options.ProjectId, _options.ProjectLocation)
+				Contents = { string.Empty },
+				SourceLanguageCode = "en",
+				TargetLanguageCode = "de",
+				ParentAsLocationName = new LocationName(_options.ProjectId, _options.ProjectLocation),
+				MimeType = "text/plain",
+				Model = SetCustomModel(sourceCultureInfo, targetCultureInfo),
+				GlossaryConfig = SetGlossary(sourceCultureInfo, targetCultureInfo)
 			};
 
-			return AutoMlClient.Create().ListModels(request).ToList();
+			_translationServiceClient.TranslateText(request);
 		}
+		#endregion
 
+		#region Languages
 		public bool IsSupportedLanguage(CultureInfo sourceLanguage, CultureInfo targetLanguage)
 		{
 			_supportedLanguages ??= new();
@@ -76,121 +80,18 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 			return searchedSource.SupportSource && searchedTarget.SupportTarget;
 		}
 
-		public void TryToAuthenticateUser(LanguagePair[] languagePair = null)
+		public List<V3LanguageModel> GetLanguages()
 		{
-			languagePair ??= new LanguagePair[]
-				{
-					new LanguagePair("en-US", "fr-FR")
-				};
-
-			foreach (var pair in languagePair)
+			var locationName = new LocationName(_options.ProjectId, "global");
+			var request = new GetSupportedLanguagesRequest { ParentAsLocationName = locationName };
+			var response = _translationServiceClient.GetSupportedLanguages(request);
+			return response.Languages.Select(language => new V3LanguageModel
 			{
-				TranslateText(pair.SourceCulture, pair.TargetCulture, "test", "text");
-			}
-		}
-
-		public string TranslateText(CultureInfo sourceLanguage, CultureInfo targetLanguage, string sourceText, string format)
-		{
-			try
-			{
-				return TryTranslateText(sourceLanguage, targetLanguage, sourceText, format);
-			}
-			catch (Exception e)
-			{
-				_logger.Error($"{MethodBase.GetCurrentMethod().Name}: {e}");
-				throw e;
-			}
-		}
-
-		private string TryTranslateText(CultureInfo sourceLanguage, CultureInfo targetLanguage, string sourceText, string format)
-		{
-			var request = CreateTranslationRequest(sourceLanguage, targetLanguage, sourceText, format);
-			if (_translationServiceClient.TranslateText(request) is not TranslateTextResponse translationResponse)
-			{
-				return string.Empty;
-			}
-
-			return request.GlossaryConfig is null ? translationResponse.Translations[0].TranslatedText
-												  : translationResponse.GlossaryTranslations[0].TranslatedText;
-		}
-
-		private TranslateTextRequest CreateTranslationRequest(CultureInfo sourceLanguage, CultureInfo targetLanguage, string sourceText, string format)
-		{
-			return new TranslateTextRequest
-			{
-				Contents = { sourceText },
-				SourceLanguageCode = sourceLanguage.ConvertLanguageCode(),
-				TargetLanguageCode =  targetLanguage.ConvertLanguageCode(),
-				ParentAsLocationName = new LocationName(_options.ProjectId, _options.ProjectLocation),
-				MimeType = format == "text" ? "text/plain" : "text/html",
-				Model = SetCustomModel(sourceLanguage, targetLanguage),
-				GlossaryConfig = SetGlossary(sourceLanguage, targetLanguage)
-			};
-		}
-
-		private string SetCustomModel(CultureInfo sourceLanguage, CultureInfo targetLanguage)
-		{
-			var defaultPath = $"projects/{_options.ProjectId}/locations/{_options.ProjectLocation}/models/general/nmt";
-			if (string.IsNullOrEmpty(_options.GoogleEngineModel))
-			{
-				return defaultPath;
-			}
-
-			var customModelFound = GetCustomModels().FirstOrDefault(x => x.DatasetId == _options.GoogleEngineModel);
-			if (customModelFound is null)
-			{
-				return defaultPath;
-			}
-
-			_customModel = new(customModelFound);
-			if (!_customModel.SourceLanguage.Equals(sourceLanguage.ConvertLanguageCode())
-			 || !_customModel.TargetLanguage.Equals(targetLanguage.ConvertLanguageCode()))
-			{
-				_customModel = null;
-				return defaultPath;
-			}
-
-			return _customModel.ModelPath;
-		}
-
-		private TranslateTextGlossaryConfig SetGlossary(CultureInfo sourceLanguage, CultureInfo targetLanguage)
-		{
-			if (string.IsNullOrEmpty(_options.GlossaryPath))
-			{
-				return null;
-			}
-
-			var glossaryFound = GetGlossaries().FirstOrDefault(x => x.GlossaryName.GlossaryId.Equals(_options.GlossaryPath));
-			if (glossaryFound is null)
-			{
-				return null;
-			}
-
-			var retrievedGlossary = new RetrievedGlossary(glossaryFound, _options.ProjectId, _options.ProjectLocation);
-			if (retrievedGlossary.Languages is not null
-			 && retrievedGlossary.Languages.Contains(sourceLanguage.TwoLetterISOLanguageName)
-			 && retrievedGlossary.Languages.Contains(targetLanguage.TwoLetterISOLanguageName))
-			{
-				return new TranslateTextGlossaryConfig
-				{
-					Glossary = retrievedGlossary.GlossaryResourceLocation,
-					IgnoreCase = true
-				};
-			}
-
-			if (retrievedGlossary.SourceLanguage is not null
-			 && retrievedGlossary.TargetLanguage is not null
-			 && retrievedGlossary.SourceLanguage.TwoLetterISOLanguageName.Equals(sourceLanguage.TwoLetterISOLanguageName)
-			 && retrievedGlossary.TargetLanguage.TwoLetterISOLanguageName.Equals(targetLanguage.TwoLetterISOLanguageName))
-			{
-				return new TranslateTextGlossaryConfig
-				{
-					Glossary = retrievedGlossary.GlossaryResourceLocation,
-					IgnoreCase = true
-				};
-			}
-
-			return null;
+				GoogleLanguageCode = language.LanguageCode,
+				SupportSource = language.SupportSource,
+				SupportTarget = language.SupportTarget,
+				CultureInfo = new CultureInfo(language.LanguageCode)
+			}).ToList();
 		}
 
 		private void SetGoogleAvailableLanguages()
@@ -220,5 +121,106 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 				CultureInfo = new CultureInfo(language.LanguageCode)
 			}));
 		}
+		#endregion
+
+		#region Translation
+		public string TranslateText(CultureCode sourceLanguage, CultureCode targetLanguage, string sourceText, string format)
+		{
+			try
+			{
+				return TryTranslateText(sourceLanguage, targetLanguage, sourceText, format);
+			}
+			catch (Exception e)
+			{
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name}: {e}");
+				throw e;
+			}
+		}
+
+		private string TryTranslateText(CultureCode sourceLanguage, CultureCode targetLanguage, string sourceText, string format)
+		{
+			var request = CreateTranslationRequest(sourceLanguage, targetLanguage, sourceText, format);
+			if (_translationServiceClient.TranslateText(request) is not TranslateTextResponse translationResponse)
+			{
+				return string.Empty;
+			}
+
+			return request.GlossaryConfig is null ? translationResponse.Translations[0].TranslatedText
+												  : translationResponse.GlossaryTranslations[0].TranslatedText;
+		}
+
+		private TranslateTextRequest CreateTranslationRequest(CultureCode sourceLanguage, CultureCode targetLanguage, string sourceText, string format)
+		{
+			var sourceCultureInfo = new CultureInfo(sourceLanguage.Name);
+			var targetCultureInfo = new CultureInfo(targetLanguage.Name);
+			return new TranslateTextRequest
+			{
+				Contents = { sourceText },
+				SourceLanguageCode = sourceCultureInfo.GetLanguageCode(ApiVersion.V3),
+				TargetLanguageCode = targetCultureInfo.GetLanguageCode(ApiVersion.V3),
+				ParentAsLocationName = new LocationName(_options.ProjectId, _options.ProjectLocation),
+				MimeType = format == "text" ? "text/plain" : "text/html",
+				Model = SetCustomModel(sourceLanguage, targetLanguage),
+				GlossaryConfig = SetGlossary(sourceLanguage, targetLanguage)
+			};
+		}
+		#endregion
+
+		#region Glossaries
+		public List<Glossary> GetProjectGlossaries(string location = null)
+		{
+			var locationName = LocationName.FromProjectLocation(_options.ProjectId, location ?? _options.ProjectLocation);
+			var glossariesRequest = new ListGlossariesRequest { ParentAsLocationName = locationName };
+
+			return _translationServiceClient.ListGlossaries(glossariesRequest).ToList();
+		}
+
+		private TranslateTextGlossaryConfig SetGlossary(CultureInfo sourceLanguage, CultureInfo targetLanguage)
+		{
+
+			var selectedGlossary = _options.LanguageMappingPairs?
+										   .FirstOrDefault(x => x.LanguagePair.SourceCulture.Name == sourceLanguage.Name && x.LanguagePair.TargetCulture.Name == targetLanguage.Name)?
+										   .SelectedGlossary
+										   .Glossary;
+			
+			if (selectedGlossary is null
+			 || string.IsNullOrEmpty(selectedGlossary.Name))
+			{
+				return null;
+			}
+
+			return new TranslateTextGlossaryConfig
+			{
+				Glossary = selectedGlossary.Name,
+				IgnoreCase = true
+			};
+		}
+		#endregion
+
+		#region AutoML
+		public List<Model> GetProjectCustomModels()
+		{
+			var request = new ListModelsRequest
+			{
+				ParentAsLocationName = new LocationName(_options.ProjectId, _options.ProjectLocation)
+			};
+
+			return AutoMlClient.Create().ListModels(request).ToList();
+		}
+
+		private string SetCustomModel(CultureInfo sourceLanguage, CultureInfo targetLanguage)
+		{
+			var defaultPath = $"projects/{_options.ProjectId}/locations/{_options.ProjectLocation}/models/general/nmt";
+			var selectedModel = _options.LanguageMappingPairs?
+										   .FirstOrDefault(x => x.LanguagePair.SourceCulture.Name == sourceLanguage.Name && x.LanguagePair.TargetCulture.Name == targetLanguage.Name)?
+										   .SelectedModel?
+										   .ModelPath;
+			return selectedModel switch
+			{
+				not null => selectedModel,
+				_ => defaultPath
+			};
+		}
+		#endregion
 	}
 }

@@ -1,4 +1,10 @@
-﻿using System.Globalization;
+﻿using System.Drawing;
+using System.Globalization;
+using System.Linq;
+using System.Text.RegularExpressions;
+using GoogleCloudTranslationProvider.Extensions;
+using GoogleCloudTranslationProvider.Models;
+using LanguageMappingProvider.Database;
 
 namespace GoogleCloudTranslationProvider.Helpers
 {
@@ -18,12 +24,31 @@ namespace GoogleCloudTranslationProvider.Helpers
 			if (cultureInfo.DisplayName == "Samoan") { return "sm"; }
 
 			var isoLanguageName = cultureInfo.TwoLetterISOLanguageName; //if not chinese trad or norweigian get 2 letter code
-			
+
 			//convert tagalog and hebrew for Google
 			if (isoLanguageName == "fil") { isoLanguageName = "tl"; }
 			if (isoLanguageName == "he") { isoLanguageName = "iw"; }
 
 			return isoLanguageName;
+		}
+
+		public static string GetLanguageCode(this CultureInfo cultureInfo, ApiVersion targetVersion)
+		{
+			var regex = new Regex(@"^(.*?)\s*(?:\((.*?)\))?$");
+			var match = regex.Match(cultureInfo.DisplayName);
+			var languageName = match.Groups[1].Value;
+			var languageRegion = match.Groups[2].Success ? match.Groups[2].Value : null;
+
+			var targetDatabase = targetVersion == ApiVersion.V2
+							   ? PluginResources.Database_PluginName_V2
+							   : PluginResources.Database_PluginName_V3;
+
+			var database = new LanguageMappingDatabase(targetDatabase, null);
+			var mappings = database.GetMappedLanguages();
+
+			var targetLanguage = mappings.FirstOrDefault(x => x.Name == languageName && x.Region == languageRegion);
+
+			return targetLanguage.LanguageCode;
 		}
 	}
 }

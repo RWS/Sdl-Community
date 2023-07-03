@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Web;
+using GoogleCloudTranslationProvider.Helpers;
 using NLog;
 
 namespace GoogleCloudTranslationProvider.Service
@@ -18,6 +19,7 @@ namespace GoogleCloudTranslationProvider.Service
 			catch (Exception e)
 			{
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {e.Message}\n {e.StackTrace}");
+				ErrorHandler.HandleError(e);
 				return input;
 			}
 		}

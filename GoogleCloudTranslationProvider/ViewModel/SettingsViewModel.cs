@@ -9,11 +9,12 @@ using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
 using GoogleCloudTranslationProvider.Service;
+using GoogleCloudTranslationProvider.ViewModel;
 using NLog;
 
 namespace GoogleCloudTranslationProvider.ViewModels
 {
-	public class SettingsViewModel : BaseModel, ISettingsControlViewModel
+	public class SettingsViewModel : BaseViewModel, ISettingsControlViewModel
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly IOpenFileDialogService _openFileDialogService;
@@ -25,11 +26,11 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private bool _doPreLookup;
 		private bool _reSendDraft;
 		private bool _useCustomProviderName;
+		private bool _useLanguageMappingProvider;
 
 		private bool _persistV3Project;
 		private string _v3Path;
 		private string _downloadPath;
-		private string _downloadFileName;
 
 		private string _preLookupFileName;
 		private string _postLookupFileName;
@@ -39,15 +40,16 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private ICommand _browseFileCommand;
 		private ICommand _browseFolderCommand;
 
-		public SettingsViewModel(ITranslationOptions options, bool hideAdvancedSettings = false)
+		public SettingsViewModel(ITranslationOptions options)
 		{
 			ViewModel = this;
 			_options = options;
 			_openFileDialogService = new OpenFileDialogService();
+			UseLanguageMappingProvider = true;
 			SetSavedSettings();
 		}
 
-		public BaseModel ViewModel { get; set; }
+		public BaseViewModel ViewModel { get; set; }
 
 		public bool ReSendDraft
 		{
@@ -190,6 +192,17 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				_downloadPath = value;
 				_options.DownloadPath = value;
 				OnPropertyChanged(nameof(DownloadPath));
+			}
+		}
+
+		public bool UseLanguageMappingProvider
+		{
+			get => _useLanguageMappingProvider;
+			set
+			{
+				if (_useLanguageMappingProvider == value) return;
+				_useLanguageMappingProvider = value;
+				OnPropertyChanged(nameof(UseLanguageMappingProvider));
 			}
 		}
 

@@ -14,10 +14,13 @@
 		WindowStartupLocation="CenterScreen"
 		Icon="../Resources/appicon.ico"
 		Title="Google TP"
-		ResizeMode="NoResize"
 		WindowStyle="None"
-		Height="700" Width="600"
-        d:DesignHeight="700" d:DesignWidth="800">
+		Height="550"
+		Width="1000"
+		MinHeight="500"
+		MinWidth="900"
+		d:DesignHeight="550"
+		d:DesignWidth="1000">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -59,52 +62,6 @@
 			<styles:WindowsControl Grid.Row="0"/>
 			<!--</Top bar>-->
 
-			<GroupBox Header="{x:Static root:PluginResources.GroupboxHeaders_ProjectInfo}"
-					  Style="{StaticResource DefaultGroupBox}"
-					  Visibility="{Binding ShowProjectInfo, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-					  Grid.Row="1"
-					  Margin="24 20 24 0"
-					  Padding="12">
-				<DockPanel>
-					<StackPanel DockPanel.Dock="Left"
-								Margin="0 0 8 0">
-						<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_LocalPath_Description}"
-								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
-								   HorizontalAlignment="Right"/>
-
-						<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_ProjectID_Description}"
-								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
-								   HorizontalAlignment="Right"/>
-
-						<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_Location_Description}"
-								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
-								   HorizontalAlignment="Right"/>
-
-						<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_Glossary_Description}"
-								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
-								   HorizontalAlignment="Right"/>
-
-						<TextBlock Text="{x:Static root:PluginResources.ProjectInfo_CustomModel}"
-								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
-								   HorizontalAlignment="Right"/>
-					</StackPanel>
-
-					<StackPanel DockPanel.Dock="Right"
-								Margin="8 0 0 0">
-						<TextBlock Text="{Binding JsonFilePath}"
-								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"/>
-						<TextBlock Text="{Binding ProjectId}"
-								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"/>
-						<TextBlock Text="{Binding ProjectLocation}"
-								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"/>
-						<TextBlock Text="{Binding Glossary}"
-								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"/>
-						<TextBlock Text="{Binding CustomModel}"
-								   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"/>
-					</StackPanel>
-				</DockPanel>
-			</GroupBox>
-
 			<!--<API Version Selector>-->
 			<ContentControl Grid.Row="2"
 							Content="{Binding SelectedView.ViewModel}"
@@ -114,29 +71,38 @@
 			<!--<Footer>-->
 			<DockPanel Grid.Row="3"
 					   Margin="24 20">
-				<Button Content="{x:Static root:PluginResources.MainView_HelpButton}"
-						Style="{StaticResource Sdl.Button.SecondaryStyle}"
-						Command="{Binding NavigateToCommand}"
-						Cursor="Hand"
-						Width="80">
-				</Button>
+				<StackPanel Orientation="Horizontal">
+					<Button Content="{x:Static root:PluginResources.MainView_HelpButton}"
+							Style="{StaticResource Sdl.Button.SecondaryStyle}"
+							Command="{Binding NavigateToCommand}"
+							Cursor="Hand"
+							Width="136" />
+
+					<Button Content="Language Mapping"
+							Style="{StaticResource Sdl.Button.PrimaryStyle}"
+							Command="{Binding OpenLanguageMappingCommand}"
+							IsEnabled="{Binding CanUseLanguageMappingProvider}"
+							IsDefault="True"
+							Cursor="Hand"
+							Width="136"
+							Margin="8 0 0 0" />
+				</StackPanel>
+				
 				<StackPanel HorizontalAlignment="Right"
 							Orientation="Horizontal">
-
-
 					<Button Content="{Binding MultiButtonContent}"
 							Style="{StaticResource Sdl.Button.SecondaryStyle}"
 							Visibility="{Binding ShowMultiButton, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 							Command="{Binding SwitchViewCommand}"
 							Cursor="Hand"
-							Width="120"/>
+							Width="136"/>
 
 					<Button Content="{x:Static root:PluginResources.MainView_ConfirmButton}"
 							Style="{StaticResource Sdl.Button.PrimaryStyle}"
 							Command="{Binding SaveCommand}"
 							IsDefault="True"
 							Cursor="Hand"
-							Width="120"
+							Width="136"
 							Margin="8 0 0 0"/>
 				</StackPanel>
 			</DockPanel>

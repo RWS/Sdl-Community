@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace GoogleCloudTranslationProvider.Models
+namespace GoogleCloudTranslationProvider.ViewModel
 {
-	public class BaseModel : INotifyPropertyChanged
+	public class BaseViewModel : INotifyPropertyChanged
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 

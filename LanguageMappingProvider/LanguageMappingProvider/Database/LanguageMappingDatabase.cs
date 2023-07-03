@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Dapper;
 using LanguageMappingProvider.Database.Interface;
 using LanguageMappingProvider.Extensions;
@@ -188,33 +190,32 @@ namespace LanguageMappingProvider.Database
         {
             var languages = LanguageRegistryApi.Instance.GetAllLanguages();
             var mappedLanguages = new List<LanguageMapping>();
+			foreach (var language in languages)
+			{
+				if (string.IsNullOrEmpty(language.DisplayName)
+				 || language.DefaultSpecificLanguageCode is not null
+				 || language.DisplayName.Contains("deprecated"))
+				{
+					continue;
+				}
 
-            foreach (var language in languages)
-            {
-                if (string.IsNullOrEmpty(language.DisplayName)
-                 || language.DefaultSpecificLanguageCode is not null)
-                {
-                    continue;
-                }
+				var regex = new Regex(@"^(.*?)\s*(?:\((.*?)\))?$");
+				var match = regex.Match(language.DisplayName);
 
-                var languageName = language.DisplayName;
-                var regionStartIndex = languageName.IndexOf('(') + 1;
-                var regionEndIndex = languageName.Length - 1;
+				mappedLanguages.Add(new LanguageMapping
+				{
+					Name = match.Groups[1].Value,
+					Region = match.Groups[2].Success ? match.Groups[2].Value : null,
+					TradosCode = language.CultureInfo.Name
+				});
+			}
 
-                mappedLanguages.Add(new LanguageMapping
-                {
-                    Name = languageName.Substring(0, regionStartIndex - 2),
-                    Region = languageName.Substring(regionStartIndex, regionEndIndex - regionStartIndex - 1),
-                    TradosCode = language.CultureInfo.Name
-                });
-            }
-
-            return mappedLanguages;
+			return mappedLanguages.OrderBy(x => x.Name).ThenBy(x => x.Region).ToList();
         }
 
         public void UpdateMappingCodes(IEnumerable<LanguageMapping> mappingList)
-        {
-            var mappingDictionary = _pluginSupportedLanguages.ToDictionary(l => (l.Name, l.Region), l => l.LanguageCode);
+		{
+			var mappingDictionary = _pluginSupportedLanguages?.ToDictionary(l => (l?.Name, l?.Region), l => l?.LanguageCode);
             foreach (var mappedLanguage in mappingList)
             {
                 if (mappingDictionary.TryGetValue((mappedLanguage.Name, mappedLanguage.Region), out var languageCode)

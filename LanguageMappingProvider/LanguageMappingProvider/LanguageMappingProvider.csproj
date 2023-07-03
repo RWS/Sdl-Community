@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17</TradosFolder>
+		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17Beta</TradosFolder>
 		<Company>RWS</Company>
 		<Authors>Trados AppStore Team</Authors>
 		<Product>Language Mapping Provider</Product>
@@ -23,11 +23,13 @@
 		<Reference Include="Sdl.Core.Globalization.Async">
 			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
 		</Reference>
+		<Reference Include="System.Data.SQLite">
+			<HintPath>$(TradosFolder)\System.Data.SQLite.dll</HintPath>
+		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Dapper.StrongName" Version="2.0.123" />
-		<PackageReference Include="System.Data.SQLite" Version="1.0.117" />
+		<PackageReference Include="Dapper.StrongName" Version="2.0.143" />
 	</ItemGroup>
 
 	<PropertyGroup>

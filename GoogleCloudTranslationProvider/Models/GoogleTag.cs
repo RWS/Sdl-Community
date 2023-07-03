@@ -2,9 +2,9 @@
 
 namespace GoogleCloudTranslationProvider.Models
 {
-	public class GCTPTag
+	public class GoogleTag
 	{
-		public GCTPTag(Tag tag)
+		public GoogleTag(Tag tag)
 		{
 			SdlTag = tag;
 			PadLeft = string.Empty;

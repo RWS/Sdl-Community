@@ -12,21 +12,21 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace GoogleCloudTranslationProvider.Studio
 {
-	public class ProviderLanguageDirection : ITranslationProviderLanguageDirection
+	public class TranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
 	{
 		private readonly ITranslationOptions _options;
 		private readonly LanguagePair _languageDirection;
-		private readonly Provider _provider;
+		private readonly TranslationProvider _provider;
 		private readonly HtmlUtil _htmlUtil;
 
 		private V2Connector _googleV2Api;
 		private V3Connector _googleV3Api;
 
-		private GCTPSegmentEditor _postLookupSegmentEditor;
-		private GCTPSegmentEditor _preLookupSegmentEditor;
+		private GoogleSegmentEditor _postLookupSegmentEditor;
+		private GoogleSegmentEditor _preLookupSegmentEditor;
 		private TranslationUnit _currentTranslationUnit;
 
-		public ProviderLanguageDirection(Provider provider, LanguagePair languages, HtmlUtil htmlUtil)
+		public TranslationProviderLanguageDirection(TranslationProvider provider, LanguagePair languages, HtmlUtil htmlUtil)
 		{
 			_provider = provider;
 			_languageDirection = languages;
@@ -42,9 +42,9 @@ namespace GoogleCloudTranslationProvider.Studio
 
 		public bool CanReverseLanguageDirection => false;
 
-		//CultureCode ITranslationProviderLanguageDirection.SourceLanguage => _languageDirection.SourceCulture;
+		CultureCode ITranslationProviderLanguageDirection.SourceLanguage => _languageDirection.SourceCulture;
 
-		//CultureCode ITranslationProviderLanguageDirection.TargetLanguage => _languageDirection.TargetCulture;
+		CultureCode ITranslationProviderLanguageDirection.TargetLanguage => _languageDirection.TargetCulture;
 
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
 		{
@@ -78,7 +78,7 @@ namespace GoogleCloudTranslationProvider.Studio
 
 			if (_options.UsePreEdit)
 			{
-				_preLookupSegmentEditor ??= new GCTPSegmentEditor(_options.PreLookupFilename);
+				_preLookupSegmentEditor ??= new GoogleSegmentEditor(_options.PreLookupFilename);
 				newSegment = GetEditedSegment(_preLookupSegmentEditor, newSegment);
 			}
 
@@ -87,7 +87,7 @@ namespace GoogleCloudTranslationProvider.Studio
 			translation = tagplacer.GetTaggedSegment(translatedText).Duplicate();
 			if (_options.UsePostEdit)
 			{
-				_postLookupSegmentEditor ??= new GCTPSegmentEditor(_options.PostLookupFilename);
+				_postLookupSegmentEditor ??= new GoogleSegmentEditor(_options.PostLookupFilename);
 				translation = GetEditedSegment(_postLookupSegmentEditor, translation);
 			}
 
@@ -163,7 +163,7 @@ namespace GoogleCloudTranslationProvider.Studio
 			var sourcetext = segment.ToPlain();
 			if (_options.UsePreEdit)
 			{
-				_preLookupSegmentEditor ??= new GCTPSegmentEditor(_options.PreLookupFilename);
+				_preLookupSegmentEditor ??= new GoogleSegmentEditor(_options.PreLookupFilename);
 				sourcetext = GetEditedString(_preLookupSegmentEditor, sourcetext);
 				segment.Clear();
 				segment.Add(sourcetext);
@@ -172,7 +172,7 @@ namespace GoogleCloudTranslationProvider.Studio
 			var translatedText = Lookup(sourcetext, _options, "text");
 			if (_options.UsePostEdit)
 			{
-				_postLookupSegmentEditor ??= new GCTPSegmentEditor(_options.PostLookupFilename);
+				_postLookupSegmentEditor ??= new GoogleSegmentEditor(_options.PostLookupFilename);
 				translatedText = GetEditedString(_postLookupSegmentEditor, translatedText);
 			}
 
@@ -197,12 +197,12 @@ namespace GoogleCloudTranslationProvider.Studio
 			};
 		}
 
-		private string GetEditedString(GCTPSegmentEditor editor, string sourcetext)
+		private string GetEditedString(GoogleSegmentEditor editor, string sourcetext)
 		{
 			return editor.EditText(sourcetext);
 		}
 
-		private Segment GetEditedSegment(GCTPSegmentEditor editor, Segment inSegment)
+		private Segment GetEditedSegment(GoogleSegmentEditor editor, Segment inSegment)
 		{
 			var segment = new Segment(inSegment.Culture);
 			foreach (var element in inSegment.Elements)
