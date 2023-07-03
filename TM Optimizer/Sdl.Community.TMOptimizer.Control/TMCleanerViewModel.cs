@@ -350,8 +350,8 @@ namespace Sdl.Community.TMOptimizer.Control
                 return false;
             }
 
-            CultureInfo sourceCulture = tm != null ? LanguageRegistryApi.Instance.GetLanguage(tm.LanguageDirection.SourceLanguage).CultureInfo : InputTmxFiles.First().TmxFile.DetectInfo.SourceLanguage.CultureInfo;
-            CultureInfo targetCulture = tm != null ? LanguageRegistryApi.Instance.GetLanguage(tm.LanguageDirection.TargetLanguage).CultureInfo : InputTmxFiles.First().TmxFile.DetectInfo.TargetLanguage.CultureInfo;
+            CultureInfo sourceCulture = tm != null ? new Language(tm.LanguageDirection.SourceLanguage).CultureInfo : InputTmxFiles.First().TmxFile.DetectInfo.SourceLanguage.CultureInfo;
+            CultureInfo targetCulture = tm != null ? new Language(tm.LanguageDirection.TargetLanguage).CultureInfo : InputTmxFiles.First().TmxFile.DetectInfo.TargetLanguage.CultureInfo;
 
             foreach (InputTmxFile f in InputTmxFiles)
             {
@@ -425,8 +425,8 @@ namespace Sdl.Community.TMOptimizer.Control
                         return false;
                     }
 
-                    SourceLanguage = LanguageRegistryApi.Instance.GetLanguage(tm.LanguageDirection.SourceLanguage);
-                    TargetLanguage = LanguageRegistryApi.Instance.GetLanguage(tm.LanguageDirection.TargetLanguage);
+                    SourceLanguage = new Language(tm.LanguageDirection.SourceLanguage);
+                    TargetLanguage = new Language(tm.LanguageDirection.TargetLanguage);
                 }
                 catch (Exception ex)
                 {
