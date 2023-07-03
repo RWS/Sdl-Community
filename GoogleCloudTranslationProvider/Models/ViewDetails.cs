@@ -1,9 +1,11 @@
-﻿namespace GoogleCloudTranslationProvider.Models
+﻿using GoogleCloudTranslationProvider.ViewModel;
+
+namespace GoogleCloudTranslationProvider.Models
 {
-	public class ViewDetails : BaseModel
+	public class ViewDetails : BaseViewModel
 	{
 		public string Name { get; set; }
 
-		public BaseModel ViewModel { get; set; }
+		public BaseViewModel ViewModel { get; set; }
 	}
 }

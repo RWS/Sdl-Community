@@ -10,7 +10,7 @@ using NLog;
 
 namespace GoogleCloudTranslationProvider.Models
 {
-	public class GCTPSegmentEditor
+	public class GoogleSegmentEditor
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly string _fileName;
@@ -18,7 +18,7 @@ namespace GoogleCloudTranslationProvider.Models
 		private EditCollection _editCollection;
 		private DateTime _lastVersion;
 
-		public GCTPSegmentEditor(string editCollectionFilename)
+		public GoogleSegmentEditor(string editCollectionFilename)
 		{
 			_fileName = editCollectionFilename;
 			_lastVersion = File.GetLastWriteTime(_fileName);

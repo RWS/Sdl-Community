@@ -3,7 +3,7 @@
 namespace GoogleCloudTranslationProvider.TellMe
 {
 	[TellMeProvider]
-	public class GCTPTellMeProvider : ITellMeProvider
+	public class TellMeProvider : ITellMeProvider
 	{
 		public string Name => $"{Constants.GoogleNaming_FullName} - TellMe";
 
@@ -24,7 +24,6 @@ namespace GoogleCloudTranslationProvider.TellMe
 		};
 
 		private readonly string[] HelpKeywords = { "gctp", "google cloud provider", "machine translation", "help", "guide" };
-		private readonly string[] SettingsKeywords = { "gctp", "google cloud provider", "machine translation", "settings", "options" };
 		private readonly string[] CommunityKeywords = { "gctp", "google cloud provider", "machine translation", "community", "support" };
 		private readonly string[] AppStoreKeywords = { "gctp", "google cloud provider", "machine translation", "store", "download", "appstore", "update" };
 	}

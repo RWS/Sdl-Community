@@ -90,10 +90,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
 	<ItemGroup>
-	  <None Include="Studio\ProviderWinFormsUI.cs" />
-	  <None Include="Studio\ProviderLanguageDirection.cs" />
-	  <None Include="Studio\Provider.cs" />
-	  <None Include="Studio\ProviderFactory.cs" />
+	  <None Include="Studio\TranslationProviderWinFormsUI.cs" />
+	  <None Include="Studio\TranslationProviderLanguageDirection.cs" />
+	  <None Include="Studio\TranslationProvider.cs" />
+	  <None Include="Studio\TranslationProviderFactory.cs" />
 	  <None Include="Properties\AssemblyInfo.cs" />
 	  <None Include="Properties\PluginProperties.cs" />
 	</ItemGroup>

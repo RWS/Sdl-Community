@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Web;
 using System.Windows.Input;
 using GoogleCloudTranslationProvider.Commands;
 using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
 using GoogleCloudTranslationProvider.Service;
+using GoogleCloudTranslationProvider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace GoogleCloudTranslationProvider.ViewModels
 {
-	public class MainWindowViewModel : BaseModel
+	public class MainWindowViewModel : BaseViewModel
 	{
 		private const string ViewDetails_Provider = nameof(ProviderViewModel);
 		private const string ViewDetails_Settings = nameof(SettingsViewModel);
@@ -30,10 +30,8 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private ISettingsControlViewModel _settingsViewModel;
 
 		private string _translatorErrorResponse;
-		private string _errorMessage;
 		private string _multiButtonContent;
 		private bool _dialogResult;
-		private bool _isTellMeAction;
 		private bool _isProviderViewSelected;
 		private bool _isSettingsViewSelected;
 		private bool _showSettingsView;
@@ -42,8 +40,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private string _jsonFilePath;
 		private string _projectId;
 		private string _projectLocation;
-		private string _glossary;
-		private string _customModel;
 
 		private ICommand _navigateToCommand;
 		private ICommand _switchViewCommand;
@@ -52,16 +48,16 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		public MainWindowViewModel(ITranslationOptions options,
 								   ITranslationProviderCredentialStore credentialStore,
 								   LanguagePair[] languagePairs,
-								   bool showSettingsView = false)
+								   bool editProvider = false)
 		{
 			Options = options;
-			ShowSettingsView = showSettingsView;
+			EditProvider = editProvider;
+			ShowMultiButton = !(EditProvider && Options.SelectedGoogleVersion == ApiVersion.V2);
 			_credentialStore = credentialStore;
 			_languagePairs = languagePairs;
 			_htmlUtil = new HtmlUtil();
 			InitializeViews();
-			SwitchView(showSettingsView ? ViewDetails_Settings : ViewDetails_Provider);
-			_providerViewModel.ClearMessageRaised += ClearMessageRaised;
+			SwitchView(ShowMultiButton ? ViewDetails_Provider : ViewDetails_Settings);
 		}
 
 		public string JsonFilePath
@@ -84,6 +80,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				OnPropertyChanged(nameof(ProjectId));
 			}
 		}
+
 		public string ProjectLocation
 		{
 			get => _projectLocation;
@@ -94,64 +91,16 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				OnPropertyChanged(nameof(ProjectLocation));
 			}
 		}
-		public string Glossary
-		{
-			get => _glossary;
-			set
-            {
-                if (_glossary == value) return;
-                _glossary = value;
-				OnPropertyChanged(nameof(Glossary));
-            }
-		}
-		public string CustomModel
-		{
-			get => _customModel;
-			set
-			{
-				if (_customModel == value) return;
-				_customModel = value;
-				OnPropertyChanged(nameof(CustomModel));
-			}
-		}
-		public bool ShowSettingsView
+
+		public bool EditProvider
 		{
 			get => _showSettingsView;
 			set
 			{
 				if (_showSettingsView == value) return;
 				_showSettingsView = value;
-				OnPropertyChanged(nameof(ShowSettingsView));
+				OnPropertyChanged(nameof(EditProvider));
 			}
-		}
-		private bool _showProjectInfo;
-		public bool ShowProjectInfo
-		{
-			get => _showProjectInfo;
-			set
-			{
-				if (_showProjectInfo == value) return;
-				_showProjectInfo = value;
-				OnPropertyChanged(nameof(ShowProjectInfo));
-			}
-		}
-
-		public MainWindowViewModel(ITranslationOptions options, ISettingsControlViewModel settingsControlViewModel, bool isTellMeAction)
-		{
-			Options = options;
-			_isTellMeAction = isTellMeAction;
-			_settingsViewModel = settingsControlViewModel;
-
-			_availableViews = new List<ViewDetails>
-			{
-				new ViewDetails
-				{
-					Name = ViewDetails_Settings,
-					ViewModel = settingsControlViewModel.ViewModel
-				}
-			};
-
-			SwitchView(ViewDetails_Settings);
 		}
 
 		public ITranslationOptions Options { get; set; }
@@ -246,10 +195,8 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		private void InitializeViews()
 		{
-			ShowMultiButton = true;
-			_providerViewModel = new ProviderViewModel(Options);
-			_settingsViewModel = new SettingsViewModel(Options, !_showSettingsView);
-			ShowProjectInfo = _showSettingsView && (_providerViewModel.SelectedGoogleApiVersion.Version == ApiVersion.V3);
+			_providerViewModel = new ProviderViewModel(Options, _languagePairs.ToList());
+			_settingsViewModel = new SettingsViewModel(Options);
 
 			_availableViews = new List<ViewDetails>
 			{
@@ -264,36 +211,11 @@ namespace GoogleCloudTranslationProvider.ViewModels
 					ViewModel = _settingsViewModel.ViewModel
 				}
 			};
-
-			if (_showSettingsView && _providerViewModel.SelectedGoogleApiVersion.Version == ApiVersion.V2)
-			{
-				ShowMultiButton = false;
-			}
-
-
-
-			if (!_showProjectInfo)
-			{
-				return;
-			}
-
-			var uriQuery = HttpUtility.ParseQueryString(Options.Uri.OriginalString);
-			JsonFilePath = uriQuery.Get("jsonfilepath") ?? PluginResources.ProjectInfo_PathCorrupted;
-			ProjectId = uriQuery.Get("projectid") ?? PluginResources.ProjectInfo_ProjectIdMissing;
-			ProjectLocation = uriQuery.Get("projectlocation") ?? PluginResources.ProjectInfo_LocationMissing;
-			Glossary = uriQuery.Get("glossarypath") ?? PluginResources.ProjectInfo_GlossaryNotUsed;
-			CustomModel = uriQuery.Get("googleenginemodel") ?? PluginResources.ProjectInfo_CustomModelNotUsed;
 		}
 
 		public bool IsWindowValid()
 		{
-			var isGoogleProvider = _providerViewModel?.SelectedTranslationOption?.ProviderType == ProviderType.GoogleTranslate;
-			if (isGoogleProvider && !ValidGoogleOptions())
-			{
-				return false;
-			}
-
-			return _settingsViewModel.SettingsAreValid();
+			return ValidGoogleOptions() && _settingsViewModel.SettingsAreValid();
 		}
 
 		private bool ValidGoogleOptions()
@@ -304,14 +226,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		private void Save(object o)
 		{
-			if (_isTellMeAction)
-			{
-				SetGeneralProviderOptions();
-				DialogResult = true;
-				CloseEventRaised?.Invoke();
-				return;
-			}
-
 			if (!IsWindowValid())
 			{
 				return;
@@ -331,11 +245,8 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			Options.SelectedGoogleVersion = _providerViewModel.SelectedGoogleApiVersion.Version;
 			Options.JsonFilePath = _providerViewModel.JsonFilePath;
 			Options.ProjectId = _providerViewModel.ProjectId;
-			Options.SelectedProvider = _providerViewModel.SelectedTranslationOption.ProviderType;
-			Options.GoogleEngineModel = _providerViewModel.GoogleEngineModel;
 			Options.ProjectLocation = _providerViewModel.ProjectLocation;
-			Options.GlossaryPath = _providerViewModel.GlossaryPath;
-			Options.BasicCsv = _providerViewModel.BasicCsvGlossary;
+			Options.LanguageMappingPairs = _providerViewModel.LanguageMappingPairs;
 		}
 
 		private void SetGeneralProviderOptions()
@@ -356,7 +267,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 			if (Options is not null && Options.LanguagesSupported is null)
 			{
-				Options.LanguagesSupported = new Dictionary<string, string>();
+				Options.LanguagesSupported = new();
 			}
 
 			if (_languagePairs is null)
@@ -366,7 +277,12 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 			foreach (var languagePair in _languagePairs)
 			{
-				Options.LanguagesSupported.Add(languagePair.TargetCultureName, _providerViewModel.SelectedTranslationOption.Name);
+				if (Options.LanguagesSupported.Contains(languagePair.TargetCultureName))
+				{
+					continue;
+				}
+
+				Options.LanguagesSupported.Add(languagePair.TargetCultureName);
 			}
 		}
 
@@ -378,8 +294,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			}
 
 			var providerUri = new Uri(Constants.GoogleTranslationFullScheme);
-			var credentials = _credentialStore.GetCredential(providerUri);
-			if (credentials is null)
+			if (_credentialStore.GetCredential(providerUri) is null)
 			{
 				return;
 			}

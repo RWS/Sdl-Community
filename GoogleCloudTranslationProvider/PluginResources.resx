@@ -131,21 +131,9 @@
   <data name="Plugin_Tooltip" xml:space="preserve">
     <value>Google Translator Provider Plugin - Choose between V2 or V3 - ToolTip</value>
   </data>
-  <data name="Google_Name" xml:space="preserve">
-    <value>Google Translate G_Name</value>
-  </data>
-  <data name="Google_Tooltip" xml:space="preserve">
-    <value>Google Translate G_ToolTip</value>
-  </data>
   <data name="LangPairAuthErrorMsg2" xml:space="preserve">
     <value>Please verify that you have entered the correct API key.</value>
     <comment>Line2</comment>
-  </data>
-  <data name="Google_Description" xml:space="preserve">
-    <value>Google Translate G_Description</value>
-  </data>
-  <data name="Google_NiceName" xml:space="preserve">
-    <value>Google Translate G_NiceName</value>
   </data>
   <data name="LangPairAuthErrorMsg3" xml:space="preserve">
     <value>If the problem persists, close/reopen the current dialog and try again</value>
@@ -195,9 +183,6 @@
   </data>
   <data name="backImg" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\backImg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Google" xml:space="preserve">
-    <value>Google Translator - What is this</value>
   </data>
   <data name="MultiButton_Settings" xml:space="preserve">
     <value>Settings</value>
@@ -331,7 +316,7 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
     <value>API Key associated with Google Cloud project</value>
   </data>
   <data name="ProviderView_V3_LocalPath_Description" xml:space="preserve">
-    <value>Local path</value>
+    <value>Local path: </value>
   </data>
   <data name="ProviderView_V3_LocalPath_Tooltip" xml:space="preserve">
     <value>Stored JSON file location</value>
@@ -343,7 +328,7 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
     <value>You permanently set a location for storing your data when you create a bucket.</value>
   </data>
   <data name="ProviderView_V3_ProjectID_Description" xml:space="preserve">
-    <value>Project ID</value>
+    <value>Project ID: </value>
   </data>
   <data name="ProviderView_V3_ProjectID_Tooltip" xml:space="preserve">
     <value>A globally unique identifier for your project.</value>
@@ -418,17 +403,11 @@ Path: {0}</value>
   <data name="FileValidation_UnsetFilePath" xml:space="preserve">
     <value>The file path must be set.</value>
   </data>
-  <data name="RetrievedResources_CustomModels_Unavailable" xml:space="preserve">
-    <value>&gt; No custom models available</value>
-  </data>
   <data name="RetrievedResources_CustomModels_Unselected" xml:space="preserve">
-    <value>&gt; No custom model selected</value>
-  </data>
-  <data name="RetrievedResources_Glossaries_Unavailable" xml:space="preserve">
-    <value>&gt; No glossaries available</value>
+    <value>No model selected</value>
   </data>
   <data name="RetrievedResources_Glossaries_Unselected" xml:space="preserve">
-    <value>&gt; No glossary selected</value>
+    <value>No glossary selected</value>
   </data>
   <data name="V2Api_CharacterLimit" xml:space="preserve">
     <value>The Google Cloud API it is limited to 5000 characters per segment. Characters count: {0}</value>
@@ -492,5 +471,32 @@ Path: {0}</value>
   </data>
   <data name="ProviderView_V2_ApiKey_Navigate" xml:space="preserve">
     <value>Navigate to your account</value>
+  </data>
+  <data name="JsonFile_Browse" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="JsonFile_Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="JsonFile_DragAndDrop" xml:space="preserve">
+    <value>DragAndDrop</value>
+  </data>
+  <data name="Validation_ApiKey_Invalid" xml:space="preserve">
+    <value>The API Key is not valid</value>
+  </data>
+  <data name="SettingsView_LanguageMapping_Description" xml:space="preserve">
+    <value>Use Language Mapping Provider</value>
+  </data>
+  <data name="ProviderView_V3_MappingTable_Glossaries" xml:space="preserve">
+    <value>Glossaries</value>
+  </data>
+  <data name="ProviderView_V3_MappingTable_Models" xml:space="preserve">
+    <value>Models</value>
+  </data>
+  <data name="ProviderView_V3_MappingTable_Pairs" xml:space="preserve">
+    <value>Language Pair</value>
+  </data>
+  <data name="RetrievedResources_NotAvailable" xml:space="preserve">
+    <value>Not available</value>
   </data>
 </root>

@@ -31,15 +31,25 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 
 		public string ApiKey { get; set; }
 
-		public void ValidateCredentials()
+		public bool CredentialsAreValid()
 		{
-			var languagePair = new LanguagePair
+			try
 			{
-				SourceCulture = new CultureInfo("en-us"),
-				TargetCulture = new CultureInfo("de-de")
-			};
+				var languagePair = new LanguagePair
+				{
+					SourceCulture = new CultureInfo("en-us"),
+					TargetCulture = new CultureInfo("de-de")
+				};
 
-			Translate(languagePair, string.Empty);
+				var translation = Translate(languagePair, string.Empty);
+				return true;
+			}
+			catch (Exception ex)
+			{
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				ErrorHandler.HandleError(ex);
+				return false;
+			}
 		}
 
 		public string Translate(LanguagePair languagePair, string text, string format = null)

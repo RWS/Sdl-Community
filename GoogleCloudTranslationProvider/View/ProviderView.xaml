@@ -1,0 +1,335 @@
+﻿<UserControl x:Class="GoogleCloudTranslationProvider.Views.ProviderView"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:root="clr-namespace:GoogleCloudTranslationProvider"
+			 xmlns:views="clr-namespace:GoogleCloudTranslationProvider.Views"
+			 xmlns:helpers="clr-namespace:GoogleCloudTranslationProvider.Helpers"
+			 xmlns:uiHelpers="clr-namespace:GoogleCloudTranslationProvider.UiHelpers"
+			 xmlns:behaviours="clr-namespace:GoogleCloudTranslationProvider.Behaviours"
+			 xmlns:viewModels="clr-namespace:GoogleCloudTranslationProvider.ViewModels"
+			 xmlns:converters="clr-namespace:GoogleCloudTranslationProvider.Converters"
+			 xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
+			 d:DataContext="{d:DesignInstance viewModels:ProviderViewModel}"
+			 mc:Ignorable="d"
+			 d:DesignHeight="850"
+			 d:DesignWidth="800">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../Styles/Buttons.xaml" />
+				<ResourceDictionary Source="../Styles/GroupBox.xaml" />
+				<ResourceDictionary Source="../UiHelpers/WatermarkTextBoxResources.xaml" />
+				<ResourceDictionary Source="../UiHelpers/WatermarkPasswordBoxResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/BindablePasswordBoxStyle.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+
+			<converters:EmptyToVisibility x:Key="EmptyToVisibility" />
+			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter" />
+			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
+
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+	<GroupBox Header="{x:Static root:PluginResources.GroupboxHeaders_GoogleApi}"
+			  Style="{StaticResource DefaultGroupBox}"
+			  HorizontalContentAlignment="Center"
+			  VerticalContentAlignment="Center"
+			  Grid.Row="1"
+			  Margin="24 24 24 0">
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+			<!--<API VERSION SELECTOR>-->
+			<ComboBox Grid.Row="0"
+					  ItemsSource="{Binding GoogleApiVersions}"
+					  SelectedItem="{Binding SelectedGoogleApiVersion}"
+					  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+					  Visibility="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+					  DisplayMemberPath="Name"
+					  HorizontalContentAlignment="Center"
+					  Cursor="Hand"
+					  Margin="16 12 16 0" />
+			<!--</API VERSION SELECTOR>-->
+
+			<!--<GOOGLE API V2>-->
+			<StackPanel Visibility="{Binding IsV2Checked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+						Margin="16 12 16 0"
+						Grid.Row="1">
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Text="{x:Static root:PluginResources.ProviderView_V2_ApiKey_Description}"
+							   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
+							   Margin="0 0 4 0" />
+					<Image Source="../Resources/Information.png"
+						   Width="15">
+						<Image.ToolTip>
+							<ToolTip>
+								<TextBlock Text="{x:Static root:PluginResources.ProviderView_V2_ApiKey_Tooltip}" />
+							</ToolTip>
+						</Image.ToolTip>
+					</Image>
+				</StackPanel>
+
+				<controls:BindablePasswordBox Password="{Binding ApiKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+											  Style="{DynamicResource Sdl.BindablePasswordBox.GenericStyle}"
+											  HorizontalAlignment="Left"
+											  Width="320"
+											  Margin="0 2" />
+
+				<CheckBox Content="{x:Static root:PluginResources.ProviderView_V2_RememberKey}"
+						  IsChecked="{Binding PersistGoogleKey}"
+						  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+						  Cursor="Hand"
+						  Margin="0" />
+
+				<Button Content="{x:Static root:PluginResources.ProviderView_V2_ApiKey_Navigate}"
+						Command="{Binding NavigateToCommand}"
+						CommandParameter="{x:Static root:Constants.ProjectUri}"
+						Visibility="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+						Style="{StaticResource Sdl.Button.HyperLinkStyle}"
+						HorizontalAlignment="Left"
+						FontSize="12"
+						FontStyle="Italic"
+						Padding="0"
+						Cursor="Hand"
+						Margin="4 0 0 12" />
+			</StackPanel>
+			<!--</GOOGLE API V2>-->
+
+			<!--<GOOGLE API V3>-->
+			<StackPanel Visibility="{Binding IsV3Checked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+						Grid.Row="1"
+						Margin="0 12 0 0">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+					<!--<JSON File Selector>-->
+					<Border Background="Transparent"
+							AllowDrop="{Binding UseUrlPath, Converter={StaticResource InvertableBoolEnabledConverter}, ConverterParameter=Inverted}"
+							Visibility="{Binding ProjectResourcesLoaded, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+							behaviours:DragDropBehaviour.DragDrop="{Binding DragDropJsonFileCommand}"
+							Grid.ColumnSpan="2"
+							VerticalAlignment="Stretch"
+							BorderBrush="#D3D3D3"
+							BorderThickness="1"
+							CornerRadius="8"
+							Margin="16 12 16 0">
+						<StackPanel Margin="0 8"
+									VerticalAlignment="Center">
+							<!--<Local Path>-->
+							<StackPanel>
+								<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_File_DragAndDrop}"
+										   Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"
+										   FontSize="16"
+										   HorizontalAlignment="Center"
+										   Margin="0" />
+								<Button Content="{x:Static root:PluginResources.ProviderView_V3_File_Browse}"
+										HorizontalAlignment="Center"
+										Command="{Binding BrowseJsonFileCommand}"
+										Style="{StaticResource TransparentButtonStyle}"
+										FontWeight="DemiBold"
+										AllowDrop="True"
+										Margin="0"
+										Cursor="Hand" />
+							</StackPanel>
+							<!--</Local Path>-->
+
+							<!--<Web Path>-->
+							<StackPanel>
+								<TextBox Text="{Binding UrlToDownload, UpdateSourceTrigger=PropertyChanged}"
+										 Style="{StaticResource WatermarkTextBox}"
+										 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.ProviderView_V3_Url_Watermark}"
+										 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=UrlToDownload, Type={x:Type viewModels:ProviderViewModel}}"
+										 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+										 Margin="16 0" />
+								<StackPanel Orientation="Horizontal"
+											HorizontalAlignment="Left"
+											Margin="16 8 0 0">
+									<Button Content="{x:Static root:PluginResources.ProviderView_V3_File_ValidateUrl}"
+											Command="{Binding DownloadJsonFileCommand}"
+											Style="{StaticResource Sdl.Button.PrimaryStyle}"
+											Padding="0"
+											Width="130"
+											Height="24"
+											Cursor="Hand" />
+								</StackPanel>
+							</StackPanel>
+							<CheckBox Content="{x:Static root:PluginResources.ProviderView_V3_UseUrl}"
+									  IsChecked="{Binding UseUrlPath}"
+									  Visibility="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+									  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+									  HorizontalAlignment="Right"
+									  Margin="0 -16 24 0"
+									  Cursor="Hand" />
+							<!--</Web Path>-->
+						</StackPanel>
+					</Border>
+
+					<!--<PROJECT ID>-->
+					<StackPanel Grid.Row="0"
+								Grid.Column="0"
+								Visibility="{Binding ProjectResourcesLoaded, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+								Orientation="Horizontal"
+								Margin="24 0">
+						<Image Source="../Resources/Information.png"
+							   Width="15"
+							   Margin="0 -8 3 0">
+							<Image.ToolTip>
+								<ToolTip>
+									<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_ProjectID_Tooltip}" />
+								</ToolTip>
+							</Image.ToolTip>
+						</Image>
+						<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_ProjectID_Description}"
+								   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
+								   HorizontalAlignment="Left"
+								   Margin="0 1 0 0" />
+						<TextBox Text="{Binding ProjectId, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+								 Style="{StaticResource Sdl.ComboBox.Generic.EditableTextBox}"
+								 HorizontalAlignment="Left"
+								 IsReadOnly="True"
+								 Height="24" />
+					</StackPanel>
+					<!--</PROJECT ID>-->
+
+					<!--<PROJECT PATH>-->
+					<StackPanel Grid.Row="1"
+								Grid.Column="0"
+								Visibility="{Binding ProjectResourcesLoaded, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+								Orientation="Horizontal"
+								Margin="24 0">
+						<Image Source="../Resources/Information.png"
+							   Width="15"
+							   Margin="0 -8 3 0">
+							<Image.ToolTip>
+								<ToolTip>
+									<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_LocalPath_Tooltip}" />
+								</ToolTip>
+							</Image.ToolTip>
+						</Image>
+						<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_LocalPath_Description}"
+								   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
+								   HorizontalAlignment="Left"
+								   Margin="0 1 0 0" />
+						<TextBox Text="{Binding VisibleJsonPath}"
+								 Style="{StaticResource Sdl.ComboBox.Generic.EditableTextBox}"
+								 ToolTip="{Binding JsonFilePath}"
+								 HorizontalAlignment="Left"
+								 IsReadOnly="True"
+								 Height="24"/>
+						<Button Style="{StaticResource TransparentButtonStyle}"
+								Visibility="{Binding JsonFilePath, Converter={StaticResource EmptyToVisibility}}"
+								Command="{Binding OpenLocalPathCommand}"
+								VerticalAlignment="Top"
+								Width="20"
+								Cursor="Hand"
+								Margin="0 -2 0 0">
+							<Image Source="../Resources/Folder.png" />
+						</Button>
+					</StackPanel>
+					<!--</PROJECT PATH>-->
+
+					<!--<PROJECT LOCATION>-->
+					<ComboBox Grid.Row="1"
+							  Grid.Column="1"
+							  ItemsSource="{Binding Locations}"
+							  SelectedItem="{Binding ProjectLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							  Visibility="{Binding ProjectResourcesLoaded, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+							  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+							  IsSynchronizedWithCurrentItem="True"
+							  HorizontalAlignment="Right"
+							  SelectedIndex="0"
+							  MinWidth="120"
+							  Width="120"
+							  Height="24"
+							  Cursor="Hand"
+							  Margin="0 -8 16 0" />
+					<!--</PROJECT LOCATION>-->
+
+					<!--<MAPPING TABLE>-->
+					<DataGrid Grid.Row="2"
+							  Grid.ColumnSpan="2"
+							  ItemsSource="{Binding LanguageMappingPairs}"
+							  SelectedItem="{Binding SelectedMappedPair, UpdateSourceTrigger=PropertyChanged}"
+							  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+							  Visibility="{Binding ProjectResourcesLoaded, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+							  CanUserSortColumns="True"
+							  BorderBrush="#D3D3D3"
+							  AutoGenerateColumns="False"
+							  CanUserAddRows="False"
+							  Margin="16 0">
+						<DataGrid.Columns>
+							<DataGridTextColumn Header="{x:Static root:PluginResources.ProviderView_V3_MappingTable_Pairs}"
+												Binding="{Binding DisplayName}"
+												IsReadOnly="True"
+												Width="1*" />
+							
+							<DataGridTemplateColumn Header="{x:Static root:PluginResources.ProviderView_V3_MappingTable_Glossaries}"
+													Width="1*">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<StackPanel>
+											<ComboBox ItemsSource="{Binding AvailableGlossaries}"
+													  SelectedItem="{Binding SelectedGlossary, UpdateSourceTrigger=PropertyChanged}"
+													  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+													  Visibility="{Binding GlossariesAreAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+													  DisplayMemberPath="DisplayName"
+													  SelectedIndex="0"
+													  BorderThickness="0"
+													  IsSynchronizedWithCurrentItem="True" />
+											<TextBlock Text="{x:Static root:PluginResources.RetrievedResources_NotAvailable}"
+													   Visibility="{Binding GlossariesAreAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+													   Margin="6 2 0 0"/>
+										</StackPanel>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+							
+							<DataGridTemplateColumn Header="{x:Static root:PluginResources.ProviderView_V3_MappingTable_Glossaries}"
+													Width="1*">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<StackPanel>
+											<ComboBox x:Name="GlossariesComboBox"
+													  ItemsSource="{Binding AvailableModels}"
+													  SelectedItem="{Binding SelectedModel, UpdateSourceTrigger=PropertyChanged}"
+													  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+													  Visibility="{Binding ModelsAreAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+													  DisplayMemberPath="DisplayName"
+													  SelectedIndex="0"
+													  BorderThickness="0"
+													  IsSynchronizedWithCurrentItem="True" />
+											<TextBlock Text="{x:Static root:PluginResources.RetrievedResources_NotAvailable}"
+													   Visibility="{Binding ModelsAreAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+													   Margin="6 2 0 0" />
+										</StackPanel>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+						</DataGrid.Columns>
+					</DataGrid>
+					<!--</MAPPING TABLE>-->
+				</Grid>
+			</StackPanel>
+			<!-- GOOGLE API V3 -->
+		</Grid>
+	</GroupBox>
+</UserControl>

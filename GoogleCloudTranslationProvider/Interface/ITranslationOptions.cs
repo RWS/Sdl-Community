@@ -16,8 +16,6 @@ namespace GoogleCloudTranslationProvider.Interfaces
 
 		bool UsePreEdit { get; set; }
 
-		bool BasicCsv { get; set; }
-
 		bool UseCustomProviderName { get; set; }
 
 		string CustomProviderName { get; set; }
@@ -26,26 +24,22 @@ namespace GoogleCloudTranslationProvider.Interfaces
 
 		string PreLookupFilename { get; set; }
 
-		string GoogleEngineModel { get; set; }
-
 		string ProjectLocation { get; set; }
 
 		string JsonFilePath { get; set; }
 
-		string GlossaryPath { get; set; }
+		string DownloadPath { get; set; }
 
 		string ProjectId { get; set; }
 
 		string ApiKey { get; set; }
 
-		string DownloadPath { get; set; }
-
-		Dictionary<string, string> LanguagesSupported { get; set; }
+		List<string> LanguagesSupported { get; set; }
 
 		Uri Uri { get; }
 
 		ApiVersion SelectedGoogleVersion { get; set; }
 
-		ProviderType SelectedProvider { get; set; }
+		List<LanguagePairResources> LanguageMappingPairs { get; set; }
 	}
 }
