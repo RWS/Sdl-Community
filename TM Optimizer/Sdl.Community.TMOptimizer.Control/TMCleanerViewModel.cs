@@ -350,8 +350,8 @@ namespace Sdl.Community.TMOptimizer.Control
                 return false;
             }
 
-            CultureInfo sourceCulture = tm != null ? tm.LanguageDirection.SourceLanguage : InputTmxFiles.First().TmxFile.DetectInfo.SourceLanguage.CultureInfo;
-            CultureInfo targetCulture = tm != null ? tm.LanguageDirection.TargetLanguage : InputTmxFiles.First().TmxFile.DetectInfo.TargetLanguage.CultureInfo;
+            CultureInfo sourceCulture = tm != null ? LanguageRegistryApi.Instance.GetLanguage(tm.LanguageDirection.SourceLanguage).CultureInfo : InputTmxFiles.First().TmxFile.DetectInfo.SourceLanguage.CultureInfo;
+            CultureInfo targetCulture = tm != null ? LanguageRegistryApi.Instance.GetLanguage(tm.LanguageDirection.TargetLanguage).CultureInfo : InputTmxFiles.First().TmxFile.DetectInfo.TargetLanguage.CultureInfo;
 
             foreach (InputTmxFile f in InputTmxFiles)
             {
@@ -425,8 +425,8 @@ namespace Sdl.Community.TMOptimizer.Control
                         return false;
                     }
 
-                    SourceLanguage = new Language(tm.LanguageDirection.SourceLanguage);
-                    TargetLanguage = new Language(tm.LanguageDirection.TargetLanguage);
+                    SourceLanguage = LanguageRegistryApi.Instance.GetLanguage(tm.LanguageDirection.SourceLanguage);
+                    TargetLanguage = LanguageRegistryApi.Instance.GetLanguage(tm.LanguageDirection.TargetLanguage);
                 }
                 catch (Exception ex)
                 {
@@ -439,9 +439,15 @@ namespace Sdl.Community.TMOptimizer.Control
                 // new TM
                 if (String.IsNullOrEmpty(NewOutputTranslationMemoryFilePath))
                 {
-                    ShowError("Select the location where the new translation memory should be created.");
+                    ShowError("Select from Browse the location where the new translation memory should be created, or provide full path to folder and add the name and .sdltm extension.");
                     return false;
                 }
+
+				if(!System.IO.Path.IsPathRooted(NewOutputTranslationMemoryFilePath))
+				{
+					ShowError("Select from Browse the location where the new translation memory should be created, or provide full path to folder and add the name and .sdltm extension.");
+					return false;
+				}
             }
 
             return true;
