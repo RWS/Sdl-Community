@@ -19,10 +19,10 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class PluginResources {
+    public class PluginResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.TranslationMemoryManagementUtility.PluginResources", typeof(PluginResources).Assembly);
@@ -51,7 +51,7 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         /// <summary>
         ///   Looks up a localized string similar to You do not have permission to modify TM &apos;{0}&apos;..
         /// </summary>
-        internal static string accessFileSkipped {
+        public static string accessFileSkipped {
             get {
                 return ResourceManager.GetString("accessFileSkipped", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         /// <summary>
         ///   Looks up a localized string similar to Translation memory &apos;{0}&apos; is password-protected. Please enter administrator level password to continue:.
         /// </summary>
-        internal static string accessSubTitle {
+        public static string accessSubTitle {
             get {
                 return ResourceManager.GetString("accessSubTitle", resourceCulture);
             }
@@ -81,16 +81,26 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         /// <summary>
         ///   Looks up a localized string similar to Task Assembly check..
         /// </summary>
-        internal static string AssemblyProblemTitle {
+        public static string AssemblyProblemTitle {
             get {
                 return ResourceManager.GetString("AssemblyProblemTitle", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Download {
+            get {
+                object obj = ResourceManager.GetObject("Download", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter password to continue..
         /// </summary>
-        internal static string errEmptyPsw {
+        public static string errEmptyPsw {
             get {
                 return ResourceManager.GetString("errEmptyPsw", resourceCulture);
             }
@@ -99,7 +109,7 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         /// <summary>
         ///   Looks up a localized string similar to \r\nCannot process file &apos;{0}&apos;.\r\nThis type of file is not supported.\r\n.
         /// </summary>
-        internal static string errFileNotSupported {
+        public static string errFileNotSupported {
             get {
                 return ResourceManager.GetString("errFileNotSupported", resourceCulture);
             }
@@ -108,7 +118,7 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         /// <summary>
         ///   Looks up a localized string similar to Invalid password..
         /// </summary>
-        internal static string errInvalidPsw {
+        public static string errInvalidPsw {
             get {
                 return ResourceManager.GetString("errInvalidPsw", resourceCulture);
             }
@@ -117,7 +127,7 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         /// <summary>
         ///   Looks up a localized string similar to Failed to remove duplicates in file &apos;{0}&apos;.\r\nDetails: {1}\r\n.
         /// </summary>
-        internal static string errRemDupTaskFailed {
+        public static string errRemDupTaskFailed {
             get {
                 return ResourceManager.GetString("errRemDupTaskFailed", resourceCulture);
             }
@@ -126,7 +136,7 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         /// <summary>
         ///   Looks up a localized string similar to No tasks were detected in directory &apos;{0}&apos;. Translation Memory Management tool cannot be loaded..
         /// </summary>
-        internal static string errTasksNotFound {
+        public static string errTasksNotFound {
             get {
                 return ResourceManager.GetString("errTasksNotFound", resourceCulture);
             }
@@ -135,7 +145,7 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         /// <summary>
         ///   Looks up a localized string similar to The list of files is empty..
         /// </summary>
-        internal static string filesEmptyList {
+        public static string filesEmptyList {
             get {
                 return ResourceManager.GetString("filesEmptyList", resourceCulture);
             }
@@ -144,7 +154,7 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         /// <summary>
         ///   Looks up a localized string similar to No files selected..
         /// </summary>
-        internal static string filesEmptySelectedList {
+        public static string filesEmptySelectedList {
             get {
                 return ResourceManager.GetString("filesEmptySelectedList", resourceCulture);
             }
@@ -153,7 +163,7 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         /// <summary>
         ///   Looks up a localized string similar to Select translation memory files to process..
         /// </summary>
-        internal static string filesFileDialogTitle {
+        public static string filesFileDialogTitle {
             get {
                 return ResourceManager.GetString("filesFileDialogTitle", resourceCulture);
             }
@@ -162,16 +172,26 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         /// <summary>
         ///   Looks up a localized string similar to Please go to Files tab and add files to process..
         /// </summary>
-        internal static string findFilesNotAdded {
+        public static string findFilesNotAdded {
             get {
                 return ResourceManager.GetString("findFilesNotAdded", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon ForumIcon {
+            get {
+                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Task finished successfully. \r\n.
         /// </summary>
-        internal static string logTaskFinished {
+        public static string logTaskFinished {
             get {
                 return ResourceManager.GetString("logTaskFinished", resourceCulture);
             }
@@ -180,7 +200,7 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         /// <summary>
         ///   Looks up a localized string similar to Started performing {0} task in file(s)...\r\n.
         /// </summary>
-        internal static string logTaskStarted {
+        public static string logTaskStarted {
             get {
                 return ResourceManager.GetString("logTaskStarted", resourceCulture);
             }
@@ -189,7 +209,7 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         /// <summary>
         ///   Looks up a localized string similar to Trados Translation Memory Management Utility.
         /// </summary>
-        internal static string Plugin_Name {
+        public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
             }
@@ -198,7 +218,7 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         /// <summary>
         ///   Looks up a localized string similar to Prerequisites check..
         /// </summary>
-        internal static string PrerequisitesProblemTitle {
+        public static string PrerequisitesProblemTitle {
             get {
                 return ResourceManager.GetString("PrerequisitesProblemTitle", resourceCulture);
             }
@@ -207,7 +227,7 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         /// <summary>
         ///   Looks up a localized string similar to File {0} of {1}:.
         /// </summary>
-        internal static string progressFile {
+        public static string progressFile {
             get {
                 return ResourceManager.GetString("progressFile", resourceCulture);
             }
@@ -216,16 +236,53 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         /// <summary>
         ///   Looks up a localized string similar to Finished processing files..
         /// </summary>
-        internal static string progressFileFinished {
+        public static string progressFileFinished {
             get {
                 return ResourceManager.GetString("progressFileFinished", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Question {
+            get {
+                object obj = ResourceManager.GetObject("Question", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download {0} from the AppStore.
+        /// </summary>
+        public static string TellMe_Download_Plugin_From_AppStore {
+            get {
+                return ResourceManager.GetString("TellMe_Download_Plugin_From_AppStore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} results.
+        /// </summary>
+        public static string TellMe_String_Results {
+            get {
+                return ResourceManager.GetString("TellMe_String_Results", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} TellMe provider.
+        /// </summary>
+        public static string TellMe_String_TellMe_Provider {
+            get {
+                return ResourceManager.GetString("TellMe_String_TellMe_Provider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Translation Memory Management.
         /// </summary>
-        internal static string Title {
+        public static string Title {
             get {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
@@ -234,7 +291,7 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon TM_icon {
+        public static System.Drawing.Icon TM_icon {
             get {
                 object obj = ResourceManager.GetObject("TM_icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -244,7 +301,7 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         /// <summary>
         ///   Looks up a localized string similar to Could not load task assembly &apos;{0}&apos;.\r\nDetails: {1}.
         /// </summary>
-        internal static string wrnTaskAssVersion {
+        public static string wrnTaskAssVersion {
             get {
                 return ResourceManager.GetString("wrnTaskAssVersion", resourceCulture);
             }
@@ -253,7 +310,7 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         /// <summary>
         ///   Looks up a localized string similar to Could not load task assembly &apos;{0}&apos;. It does not contain requited types..
         /// </summary>
-        internal static string wrnTaskTypesMissing {
+        public static string wrnTaskTypesMissing {
             get {
                 return ResourceManager.GetString("wrnTaskTypesMissing", resourceCulture);
             }
