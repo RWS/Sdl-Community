@@ -66,8 +66,8 @@ namespace Sdl.Community.MTEdge.Provider.Studio
 
         public bool SupportsLanguageDirection(LanguagePair languageDirection)
         {
-			var sourceCulture = LanguageRegistryApi.Instance.GetLanguage(languageDirection.SourceCulture);
-			var targetCulture = LanguageRegistryApi.Instance.GetLanguage(languageDirection.TargetCulture);
+			var sourceCulture = LanguageRegistryApi.Instance.GetLanguage(languageDirection.SourceCulture.Name);
+			var targetCulture = LanguageRegistryApi.Instance.GetLanguage(languageDirection.TargetCulture.Name);
 			// MtEdge doesn't have ptb as source language, we need to map it to por
 			if (sourceCulture.CultureInfo.ToMTEdgeCode().Equals("ptb"))
             {
