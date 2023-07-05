@@ -61,21 +61,17 @@
 			<styles:WindowsControl Grid.Row="0"
 								   Background="White" />
 
-			<GroupBox Grid.Row="2"
-					  Margin="24 48 24 0"
-					  Padding="12"
-					  Header="Provider"
-					  Style="{StaticResource DefaultGroupBox}">
-				<StackPanel>
-					<ComboBox ItemsSource="{Binding Endpoints}"
-							  SelectedItem="{Binding SelectedEndpoint}"
-							  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
-							  Margin="0 0 0 12"
-							  />
-					<ContentControl Content="{Binding SelectedView.ViewModel}" />
-				</StackPanel>
-			</GroupBox>
-			
+			<StackPanel Grid.Row="2"
+						Margin="24 48 24 0">
+				<ComboBox ItemsSource="{Binding Endpoints}"
+						  SelectedItem="{Binding SelectedEndpoint}"
+						  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+						  Visibility="{Binding CanSwitchProvider, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+						  Margin="0 0 0 12" />
+				<ContentControl Content="{Binding SelectedView.ViewModel}" />
+			</StackPanel>
+
+
 			<Button Content="Help"
 					Style="{StaticResource Sdl.Button.SecondaryStyle}"
 					Command="{Binding NavigateToCommand}"
@@ -86,11 +82,12 @@
 					Grid.Row="3"
 					HorizontalAlignment="Left"
 					Margin="24"/>
-			
+
 			<StackPanel HorizontalAlignment="Right"
 						Orientation="Horizontal"
 						Grid.Row="3"
 						Margin="24">
+
 				<Button Content="{Binding MultiButtonContent}"
 						Style="{StaticResource Sdl.Button.SecondaryStyle}"
 						Command="{Binding SwitchViewCommand}"

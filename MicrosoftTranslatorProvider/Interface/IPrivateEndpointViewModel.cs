@@ -8,7 +8,7 @@ namespace MicrosoftTranslatorProvider.Interface
 	{
 		public BaseModel ViewModel { get; }
 		public string Endpoint { get; set; }
-		public List<UrlMetadata> Headers { get; set; }
-		public List<UrlMetadata> Parameters { get; set; }
+		public ObservableCollection<UrlMetadata> Headers { get; set; }
+		public ObservableCollection<UrlMetadata> Parameters { get; set; }
 	}
 }

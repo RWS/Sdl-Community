@@ -99,6 +99,11 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 				ErrorHandler.HandleError(exception);
 				return null;
 			}
+			catch
+			{
+				ErrorHandler.HandleError("The Category ID is not valid for this language pair", "Category ID");
+				return null;
+			}
 		}
 
 		private string TryTranslate(string sourceLanguage, string targetLanguage, string textToTranslate, string categoryID)

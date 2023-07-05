@@ -23,6 +23,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		private string _apiKey;
 
 		private ICommand _learnMoreCommand;
+		private ICommand _testCommand;
 
 		public ProviderViewModel(ITranslationOptions options, LanguagePair[] languagePairs)
 		{

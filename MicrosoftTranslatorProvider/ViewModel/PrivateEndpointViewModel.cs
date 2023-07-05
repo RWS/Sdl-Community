@@ -1,18 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using MicrosoftTranslatorProvider.Commands;
 using MicrosoftTranslatorProvider.Interface;
 using MicrosoftTranslatorProvider.Model;
+using RestSharp;
 
 namespace MicrosoftTranslatorProvider.ViewModel
 {
 	public class PrivateEndpointViewModel : BaseModel, IPrivateEndpointViewModel
 	{
 		private string _endpoint;
-		private List<UrlMetadata> _headers;
-		private List<UrlMetadata> _parameters;
+		private ObservableCollection<UrlMetadata> _headers;
+		private ObservableCollection<UrlMetadata> _parameters;
 
 		private ICommand _clearCommand;
 		private ICommand _addHeaderCommand;
@@ -55,7 +57,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			}
 		}
 
-		public List<UrlMetadata> Headers
+		public ObservableCollection<UrlMetadata> Headers
 		{
 			get => _headers;
 			set
@@ -65,7 +67,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			}
 		}
 
-		public List<UrlMetadata> Parameters
+		public ObservableCollection<UrlMetadata> Parameters
 		{
 			get => _parameters;
 			set

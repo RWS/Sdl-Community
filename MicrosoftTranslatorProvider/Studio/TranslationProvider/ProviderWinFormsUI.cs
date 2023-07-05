@@ -42,14 +42,14 @@ namespace MicrosoftTranslatorProvider.Studio
 			return mainWindowViewModel.DialogResult;
 		}
 
-		private MainWindowViewModel ShowProviderWindow(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, bool showSettingsView = false)
+		private MainWindowViewModel ShowProviderWindow(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, bool editProvider = false)
 		{
 			var providerControlViewModel = new ProviderViewModel(loadOptions, languagePairs);
 			var settingsControlViewModel = new SettingsViewModel(loadOptions);
 			var mainWindowViewModel = new MainWindowViewModel(loadOptions,
 															  credentialStore,
 															  languagePairs,
-															  showSettingsView);
+															  editProvider);
 			var mainWindow = new MainWindow
 			{
 				DataContext = mainWindowViewModel

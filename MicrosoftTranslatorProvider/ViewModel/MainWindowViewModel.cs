@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -27,9 +28,10 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		private readonly IPrivateEndpointViewModel _privateEndpointViewModel;
 		private readonly ITranslationProviderCredentialStore _credentialStore;
 		private readonly LanguagePair[] _languagePairs;
-		private readonly bool _showSettingsViews;
+		private readonly bool _editProvider;
 
 		private bool _dialogResult;
+		private bool _canSwitchProvider;
 		private ViewDetails _selectedView;
 		private string _multiButtonContent;
 
@@ -43,7 +45,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		public MainWindowViewModel(ITranslationOptions options,
 								   ITranslationProviderCredentialStore credentialStore,
 								   LanguagePair[] languagePairs,
-								   bool showSettingsView = false)
+								   bool editProvider = false)
 		{
 			TranslationOptions = options;
 			_providerControlViewModel = new ProviderViewModel(options, languagePairs);
@@ -51,7 +53,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			_privateEndpointViewModel = new PrivateEndpointViewModel();
 			_credentialStore = credentialStore;
 			_languagePairs = languagePairs;
-			_showSettingsViews = showSettingsView;
+			_editProvider = editProvider;
 
 			AvailableViews = new List<ViewDetails>
 			{
@@ -74,7 +76,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 			Endpoints = new List<string>() { "Microsoft", "Private Endpoint" };
 			SelectedEndpoint = Endpoints.First();
-			SwitchView(showSettingsView ? ViewDetails_Provider : ViewDetails_Settings);
+			SwitchView(TranslationOptions.UsePrivateEndpoint ? ViewDetails_PrivateEndpoint : ViewDetails_Provider);
 			ShowProvidersPage();
 			SetCredentialsOnUI();
 		}
@@ -277,7 +279,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			TranslationOptions.LanguageMappings = _providerControlViewModel.LanguageMappings;
 			TranslationOptions.UsePrivateEndpoint = UsePrivateEndpoint;
 			TranslationOptions.PrivateEndpoint = _privateEndpointViewModel.Endpoint;
-			TranslationOptions.Parameters = _privateEndpointViewModel.Parameters;
+			TranslationOptions.Parameters = _privateEndpointViewModel.Parameters.ToList();
 		}
 
 		private void NavigateTo(object parameter)
@@ -292,8 +294,9 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				var requestedType = parameter is not null ? parameter as string
 														  : SelectedView.Name == ViewDetails_Provider ? ViewDetails_Settings
 																									  : ViewDetails_Provider;
-				MultiButtonContent = requestedType == ViewDetails_Provider ? "Settings" : "Provider";
+				MultiButtonContent = requestedType == ViewDetails_Provider || requestedType == ViewDetails_PrivateEndpoint ? "Settings" : "Provider";
 				SelectedView = AvailableViews.FirstOrDefault(x => x.Name == requestedType);
+				CanSwitchProvider = _editProvider || _canSwitchProvider || SelectedView.Name == ViewDetails_Settings;
 			}
 			catch { }
 		}
@@ -344,8 +347,8 @@ namespace MicrosoftTranslatorProvider.ViewModel
 					});
 				}
 
-				_privateEndpointViewModel.Headers = new List<UrlMetadata>(_privateEndpointViewModel.Headers.Where(x => x.Key is not null && x.Value is not null));
-				_privateEndpointViewModel.Parameters = new List<UrlMetadata>(_privateEndpointViewModel.Parameters.Where(x => x.Key is not null && x.Value is not null));
+				_privateEndpointViewModel.Headers = new ObservableCollection<UrlMetadata>(_privateEndpointViewModel.Headers.Where(x => x.Key is not null && x.Value is not null));
+				_privateEndpointViewModel.Parameters = new ObservableCollection<UrlMetadata>(_privateEndpointViewModel.Parameters.Where(x => x.Key is not null && x.Value is not null));
 			}
 			catch { }
 		}
@@ -424,6 +427,17 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				_selectedEndpoint = value;
 				UsePrivateEndpoint = _selectedEndpoint.Equals("Private Endpoint");
 				SwitchView(_selectedEndpoint.Equals("Microsoft") ? nameof(ProviderViewModel) : nameof(PrivateEndpointViewModel));
+				OnPropertyChanged();
+			}
+		}
+
+		public bool CanSwitchProvider
+		{
+			get => _canSwitchProvider;
+			set
+			{
+				if (value == _canSwitchProvider) return;
+				_canSwitchProvider = value;
 				OnPropertyChanged();
 			}
 		}
