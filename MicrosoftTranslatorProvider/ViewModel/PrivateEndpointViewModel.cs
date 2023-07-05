@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using MicrosoftTranslatorProvider.Commands;
@@ -10,8 +11,8 @@ namespace MicrosoftTranslatorProvider.ViewModel
 	public class PrivateEndpointViewModel : BaseModel, IPrivateEndpointViewModel
 	{
 		private string _endpoint;
-		private ObservableCollection<UrlMetadata> _headers;
-		private ObservableCollection<UrlMetadata> _parameters;
+		private List<UrlMetadata> _headers;
+		private List<UrlMetadata> _parameters;
 
 		private ICommand _clearCommand;
 		private ICommand _addHeaderCommand;
@@ -21,7 +22,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 		public PrivateEndpointViewModel()
 		{
-			ViewModel = this;
 			Headers = new();
 			Parameters = new();
 			Endpoint = string.Empty;
@@ -43,7 +43,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			});
 		}
 
-		public BaseModel ViewModel { get; set; }
+		public BaseModel ViewModel => this;
 
 		public string Endpoint
 		{
@@ -55,7 +55,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			}
 		}
 
-		public ObservableCollection<UrlMetadata> Headers
+		public List<UrlMetadata> Headers
 		{
 			get => _headers;
 			set
@@ -65,7 +65,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			}
 		}
 
-		public ObservableCollection<UrlMetadata> Parameters
+		public List<UrlMetadata> Parameters
 		{
 			get => _parameters;
 			set
@@ -76,9 +76,13 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		}
 
 		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
+
 		public ICommand AddHeaderCommand => _addHeaderCommand ??= new RelayCommand(AddHeader);
+
 		public ICommand AddParameterCommand => _addParameterCommand ??= new RelayCommand(AddParameter);
+
 		public ICommand DeletePairCommand => _deletePairCommand ??= new RelayCommand(DeletePair);
+
 		public ICommand SelectedItemChangedCommand => _selectedItemChangedCommand ??= new RelayCommand(SelectedItemChanged);
 
 		private void Clear(object parameter)

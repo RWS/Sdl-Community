@@ -7,7 +7,7 @@
 			 xmlns:viewModels="clr-namespace:MicrosoftTranslatorProvider.ViewModel"
 			 xmlns:converters="clr-namespace:MicrosoftTranslatorProvider.Converters"
 			 xmlns:uiHelpers="clr-namespace:MicrosoftTranslatorProvider.UiHelpers"
-			 d:DataContext="{d:DesignInstance viewModels:SettingsControlViewModel}"
+			 d:DataContext="{d:DesignInstance viewModels:SettingsViewModel}"
 			 mc:Ignorable="d">
 	<UserControl.Resources>
 		<ResourceDictionary>

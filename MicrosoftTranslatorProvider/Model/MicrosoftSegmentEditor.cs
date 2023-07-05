@@ -10,7 +10,7 @@ using NLog;
 
 namespace MicrosoftTranslatorProvider.Model
 {
-	public class MTESegmentEditor
+	public class MicrosoftSegmentEditor
 	{
 		private readonly string _fileName;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
@@ -18,7 +18,7 @@ namespace MicrosoftTranslatorProvider.Model
 		private EditCollection _editCollection;
 		private DateTime _lastVersion;
 
-		public MTESegmentEditor(string editCollectionFilename)
+		public MicrosoftSegmentEditor(string editCollectionFilename)
 		{
 			_fileName = editCollectionFilename;
 			_lastVersion = File.GetLastWriteTime(_fileName);
@@ -67,11 +67,11 @@ namespace MicrosoftTranslatorProvider.Model
 
 				var find = _editCollection.Items[i].FindText;
 				var replace = _editCollection.Items[i].ReplaceText;
-				if (_editCollection.Items[i].Type == EditItem.EditItemType.PlainText)
+				if (_editCollection.Items[i].Type == EditItemType.PlainText)
 				{
 					result = result.Replace(find, replace);
 				}
-				else if (_editCollection.Items[i].Type == EditItem.EditItemType.RegularExpression)
+				else if (_editCollection.Items[i].Type == EditItemType.RegularExpression)
 				{
 					var reg = new Regex(find);
 					result = reg.Replace(result, replace);

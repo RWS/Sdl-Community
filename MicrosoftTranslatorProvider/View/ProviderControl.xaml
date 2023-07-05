@@ -4,29 +4,32 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:root="clr-namespace:MicrosoftTranslatorProvider"
-             xmlns:uiHelpers="clr-namespace:MicrosoftTranslatorProvider.UiHelpers"
              xmlns:viewModels="clr-namespace:MicrosoftTranslatorProvider.ViewModel"
              xmlns:converters="clr-namespace:MicrosoftTranslatorProvider.Converters"
              xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
-             d:DataContext="{d:DesignInstance viewModels:ProviderControlViewModel}"
-             mc:Ignorable="d">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Styles/Buttons.xaml" />
-                <ResourceDictionary Source="../Styles/GroupBox.xaml" />
-                <ResourceDictionary Source="../UiHelpers/WatermarkTextBoxResources.xaml" />
-                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
-                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
-                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
-                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml" />
-                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/BindablePasswordBoxStyle.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
-            <converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter" />
-        </ResourceDictionary>
-    </UserControl.Resources>
-    <Grid>
+             d:DataContext="{d:DesignInstance viewModels:ProviderViewModel}"
+             mc:Ignorable="d"
+			 d:DesignHeight="600"
+			 d:DesignWidth="1000">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../Styles/Buttons.xaml" />
+				<ResourceDictionary Source="../Styles/GroupBox.xaml" />
+				<ResourceDictionary Source="../UiHelpers/WatermarkTextBoxResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/BindablePasswordBoxStyle.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
+			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter" />
+		</ResourceDictionary>
+	</UserControl.Resources>
+	
+	<Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -34,7 +37,7 @@
 
 		<StackPanel>
 			<!--MTP API KEY-->
-			<StackPanel Margin="0 0 0 12">
+			<StackPanel Margin="0 0 0 8">
 				<TextBlock Text="{x:Static root:PluginResources.MicrosoftApiDescription}"
 						   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
 						   FontSize="14"
@@ -43,7 +46,7 @@
 				<StackPanel HorizontalAlignment="Stretch"
 							VerticalAlignment="Stretch">
 					<controls:BindablePasswordBox Style="{DynamicResource Sdl.BindablePasswordBox.GenericStyle}"
-												  Password="{Binding ClientID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+												  Password="{Binding ApiKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
 												  VerticalContentAlignment="Center"
 												  Height="30"
 												  Padding="8 0 8 0" />
@@ -55,8 +58,8 @@
 			</StackPanel>
 			<!--MTP API KEY-->
 
-			<!--REGION-->
-			<StackPanel Margin="0 0 0 12">
+			<!--REGIONS-->
+			<StackPanel Margin="0 0 0 8">
 				<StackPanel Orientation="Horizontal">
 					<TextBlock Text="{x:Static root:PluginResources.ProviderControl_RegionFieldName}"
 							   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
@@ -68,13 +71,14 @@
 						   Margin="0" />
 				</StackPanel>
 
-				<StackPanel HorizontalAlignment="Stretch"
-							VerticalAlignment="Stretch">
+				<StackPanel>
 					<ComboBox ItemsSource="{Binding Regions, Mode=OneWay}"
-							  SelectedItem="{Binding Region, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							  SelectedItem="{Binding SelectedRegion, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 							  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
 							  DisplayMemberPath="Name"
-							  Height="30"
+							  Height="24"
+							  HorizontalAlignment="Left"
+							  MinWidth="160"
 							  VerticalContentAlignment="Center"
 							  Padding="8 0 8 0" />
 
@@ -89,51 +93,38 @@
 							Cursor="Hand" />
 				</StackPanel>
 			</StackPanel>
-			<!--REGION-->
+			<!--REGIONS-->
 
-			<!--CATEGORY ID-->
-			<StackPanel Margin="0 0 0 12">
-				<StackPanel Orientation="Horizontal">
-					<CheckBox IsChecked="{Binding UseCategoryID, Mode=TwoWay}"
-							  VerticalContentAlignment="Center">
-						<CheckBox.Content>
-							<TextBlock Text="{x:Static root:PluginResources.CatIdDescription}"
-									   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
-									   FontSize="14"
-									   Margin="0 0 2 2" />
-						</CheckBox.Content>
-					</CheckBox>
+			<!--MAPPING-->
+			<DataGrid ItemsSource="{Binding LanguageMappings}"
+					  SelectedItem="{Binding SelectedLanguageMapping}"
+					  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+					  CanUserSortColumns="True"
+					  BorderBrush="#D3D3D3"
+					  AutoGenerateColumns="False"
+					  CanUserAddRows="False"
+					  Margin="0">
+				<DataGrid.Columns>
+					<DataGridTextColumn Header="Language Pair"
+										Binding="{Binding DisplayName}"
+										IsReadOnly="True"
+										Width="1*" />
 
-					<Image Source="../Resources/Information.png"
-						   Width="14"
-						   Margin="0 0 0 2"
-						   ToolTip="{x:Static root:PluginResources.ProviderControl_CategoryToolTip}" />
-				</StackPanel>
+					<DataGridTemplateColumn Header="Category ID (Model)"
+											Width="2*">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<TextBox Text="{Binding CategoryID, UpdateSourceTrigger=PropertyChanged}"
+										 Style="{StaticResource Sdl.ComboBox.Generic.EditableTextBox}"
+										 VerticalContentAlignment="Center"
+										 BorderThickness="0" />
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+				</DataGrid.Columns>
+			</DataGrid>
+			<!--MAPPING-->
 
-				<StackPanel HorizontalAlignment="Stretch"
-							VerticalAlignment="Stretch">
-					<TextBox Text="{Binding CategoryID}"
-							 Style="{StaticResource WatermarkTextBox}"
-							 Visibility="{Binding UseCategoryID,Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-							 uiHelpers:TextBoxWatermarkHelper.WatermarkText="Category ID"
-							 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="CategoryID"
-							 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-							 Height="30"
-							 VerticalContentAlignment="Center"
-							 Padding="0" />
-
-					<Button Content="Learn more about categories"
-							Command="{Binding LearnMoreCommand}"
-							CommandParameter="{x:Static root:Constants.LearnMore_Category}"
-							Style="{StaticResource Sdl.Button.HyperLinkStyle}"
-							HorizontalAlignment="Left"
-							FontSize="12"
-							FontStyle="Italic"
-							Padding="0"
-							Cursor="Hand" />
-				</StackPanel>
-			</StackPanel>
-			<!--CATEGORY ID-->
 		</StackPanel>
 	</Grid>
 </UserControl>

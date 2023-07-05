@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using MicrosoftTranslatorProvider.Service;
+using MicrosoftTranslatorProvider.ApiService;
+using MicrosoftTranslatorProvider.Helpers;
+using MicrosoftTranslatorProvider.Interfaces;
+using MicrosoftTranslatorProvider.Model;
+using MicrosoftTranslatorProvider.Studio.TranslationProvider;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using MicrosoftTranslatorProvider.Studio.TranslationProvider;
-using MicrosoftTranslatorProvider.Interfaces;
-using MicrosoftTranslatorProvider.Helpers;
-using MicrosoftTranslatorProvider.Model;
-using MicrosoftTranslatorProvider.ApiService;
 
 namespace MicrosoftTranslatorProvider
 {
@@ -18,19 +17,17 @@ namespace MicrosoftTranslatorProvider
 		private readonly ITranslationOptions _options;
 		private readonly LanguagePair _languagePair;
 		private readonly Provider _provider;
-		private readonly HtmlUtil _htmlUtil;
 		private MicrosoftApi _providerConnecter;
 		private PrivateEndpointApi _privateEndpoint;
-		private MTESegmentEditor _postLookupSegmentEditor;
-		private MTESegmentEditor _preLookupSegmentEditor;
+		private MicrosoftSegmentEditor _postLookupSegmentEditor;
+		private MicrosoftSegmentEditor _preLookupSegmentEditor;
 		private TranslationUnit _inputTu;
 
-		public ProviderLanguageDirection(Provider provider, LanguagePair languagePair, HtmlUtil htmlUtil)
+		public ProviderLanguageDirection(Provider provider, LanguagePair languagePair)
 		{
 			_provider = provider;
 			_options = _provider.Options;
 			_languagePair = languagePair;
-			_htmlUtil = htmlUtil;
 		}
 
 		public ITranslationProvider TranslationProvider => _provider;
@@ -73,16 +70,16 @@ namespace MicrosoftTranslatorProvider
 
 			if (_options.UsePreEdit)
 			{
-				_preLookupSegmentEditor ??= new MTESegmentEditor(_options.PreLookupFilename);
+				_preLookupSegmentEditor ??= new MicrosoftSegmentEditor(_options.PreLookupFilename);
 				newSegment = GetEditedSegment(_preLookupSegmentEditor, newSegment);
 			}
 
-			var tagPlacer = new TagPlacer(newSegment, _htmlUtil);
+			var tagPlacer = new TagPlacer(newSegment);
 			var translatedText = Lookup(tagPlacer.PreparedSourceText, _options);
 			translation = tagPlacer.GetTaggedSegment(translatedText).Duplicate();
 			if (_options.UsePostEdit)
 			{
-				_postLookupSegmentEditor ??= new MTESegmentEditor(_options.PostLookupFilename);
+				_postLookupSegmentEditor ??= new MicrosoftSegmentEditor(_options.PostLookupFilename);
 				translation = GetEditedSegment(_postLookupSegmentEditor, translation);
 			}
 
@@ -168,7 +165,7 @@ namespace MicrosoftTranslatorProvider
 			var sourcetext = segment.ToPlain();
 			if (_options.UsePreEdit)
 			{
-				_preLookupSegmentEditor ??= new MTESegmentEditor(_options.PreLookupFilename);
+				_preLookupSegmentEditor ??= new MicrosoftSegmentEditor(_options.PreLookupFilename);
 				sourcetext = GetEditedString(_preLookupSegmentEditor, sourcetext);
 				segment.Clear();
 				segment.Add(sourcetext);
@@ -177,7 +174,7 @@ namespace MicrosoftTranslatorProvider
 			var translatedText = Lookup(sourcetext, _options);
 			if (_options.UsePostEdit)
 			{
-				_postLookupSegmentEditor ??= new MTESegmentEditor(_options.PostLookupFilename);
+				_postLookupSegmentEditor ??= new MicrosoftSegmentEditor(_options.PostLookupFilename);
 				translatedText = GetEditedString(_postLookupSegmentEditor, translatedText);
 			}
 
@@ -201,12 +198,12 @@ namespace MicrosoftTranslatorProvider
 			return searchResult;
 		}
 
-		private string GetEditedString(MTESegmentEditor editor, string sourcetext)
+		private string GetEditedString(MicrosoftSegmentEditor editor, string sourcetext)
 		{
 			return editor.EditText(sourcetext);
 		}
 
-		private Segment GetEditedSegment(MTESegmentEditor editor, Segment inSegment)
+		private Segment GetEditedSegment(MicrosoftSegmentEditor editor, Segment inSegment)
 		{
 			var newSegment = new Segment(inSegment.Culture);
 			foreach (var element in inSegment.Elements)
@@ -230,22 +227,21 @@ namespace MicrosoftTranslatorProvider
 			var targetlang = _languagePair.TargetCulture.ToString();
 			if (options.UsePrivateEndpoint)
 			{
-				_privateEndpoint = new(options.PrivateEndpoint, _provider.PrivateHeaders, options.Parameters, _htmlUtil);
+				_privateEndpoint = new(options.PrivateEndpoint, _provider.PrivateHeaders, options.Parameters);
 				return _privateEndpoint.Translate(sourcelang, targetlang, sourcetext);
 			}
 
-			var catId = options.UseCategoryID ? _options.CategoryID : string.Empty;
 			switch (_providerConnecter)
 			{
 				case null:
-					_providerConnecter = new MicrosoftApi(_options.ClientID, options.Region, _htmlUtil);
+					_providerConnecter = new MicrosoftApi(_options);
 					break;
 				default:
-					_providerConnecter.ResetCredentials(options.ClientID, options.Region);
+					_providerConnecter.ResetCredentials(options.ApiKey, options.Region);
 					break;
 			}
 
-			return _providerConnecter.Translate(sourcelang, targetlang, sourcetext, catId);
+			return _providerConnecter.Translate(_languagePair, sourcetext);
 		}
 
 
