@@ -2,28 +2,23 @@
 using System.Reflection;
 using System.Windows.Input;
 using System.Xml.Serialization;
-using NLog;
 using MicrosoftTranslatorProvider.Commands;
-using MicrosoftTranslatorProvider.Model;
+using MicrosoftTranslatorProvider.Helpers;
 using MicrosoftTranslatorProvider.Interfaces;
-using System.Windows;
-using System.Windows.Forms;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
+using MicrosoftTranslatorProvider.Model;
+using NLog;
 
 namespace MicrosoftTranslatorProvider.ViewModel
 {
-	public class SettingsControlViewModel: BaseModel, ISettingsControlViewModel
+	public class SettingsViewModel: BaseModel, ISettingsViewModel
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly ITranslationOptions _options;
-		private readonly IOpenFileDialogService _openFileDialogService;
-		private readonly ITranslationProviderCredentialStore _credentialStore;
 
 		private bool _reSendDraft;
 		private bool _sendPlainText;
 		private bool _doPreLookup;
 		private bool _doPostLookup;
-		private bool _isTellMeAction;
 		private string _preLookupFileName;
 		private string _postLookupFileName;
 		private string _errorMessage;
@@ -33,19 +28,14 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 		private ICommand _clearCommand;
 
-		public SettingsControlViewModel(ITranslationOptions options, ITranslationProviderCredentialStore credentialStore, IOpenFileDialogService openFileDialogService, bool isTellMeAction)
+		public SettingsViewModel(ITranslationOptions options)
 		{
-			ViewModel = this;
 			_options = options;
-			IsTellMeAction = isTellMeAction;
 			BrowseCommand = new RelayCommand(Browse);
-			_openFileDialogService = openFileDialogService;
-			_credentialStore = credentialStore;
-
 			SetSavedSettings();
 		}
-		
-		public BaseModel ViewModel { get; set; }
+
+		public BaseModel ViewModel => this;
 		public ICommand ShowMainWindowCommand { get; set; }
 		public ICommand BrowseCommand { get; set; }
 		public ICommand ShowSettingsCommand { get; set; }
@@ -142,17 +132,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			}
 		}
 
-		public bool IsTellMeAction
-		{
-			get => _isTellMeAction;
-			set
-			{
-				if (_isTellMeAction == value) return;
-				_isTellMeAction = value;
-				OnPropertyChanged(nameof(IsTellMeAction));
-			}
-		}
-
 		public bool UseCustomProviderName
 		{
 			get => _useCustomProviderName;
@@ -219,7 +198,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				return;
 			}
 
-			var selectedFile = _openFileDialogService.ShowDialog("XML Files(*.xml) | *.xml");
+			var selectedFile = new OpenFileDialogService().ShowDialog("XML Files(*.xml) | *.xml");
 			if (string.IsNullOrEmpty(selectedFile))
 			{
 				return;

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -9,7 +8,6 @@ using System.Text.RegularExpressions;
 using MicrosoftTranslatorProvider.Extensions;
 using MicrosoftTranslatorProvider.Helpers;
 using MicrosoftTranslatorProvider.Model;
-using MicrosoftTranslatorProvider.Service;
 using Newtonsoft.Json;
 
 namespace MicrosoftTranslatorProvider.ApiService
@@ -17,13 +15,11 @@ namespace MicrosoftTranslatorProvider.ApiService
 	class PrivateEndpointApi
     {
 		private readonly string _uri;
-		private readonly HtmlUtil _htmlUtil;
 		private readonly List<UrlMetadata> _headers;
 		private readonly List<UrlMetadata> _parameters;
 
-		public PrivateEndpointApi(string endpoint, List<UrlMetadata> headers, List<UrlMetadata> parameters, HtmlUtil htmlUtil)
+		public PrivateEndpointApi(string endpoint, List<UrlMetadata> headers, List<UrlMetadata> parameters)
 		{
-			_htmlUtil = htmlUtil;
 			_headers = headers;
 			_parameters = parameters;
 			_uri = BuildUri(endpoint);
@@ -113,7 +109,7 @@ namespace MicrosoftTranslatorProvider.ApiService
 			}
 
 			var responseTranslation = JsonConvert.DeserializeObject<List<TranslationResponse>>(responseBody);
-			return _htmlUtil.HtmlDecode(responseTranslation[0]?.Translations[0]?.Text);
+			return new HtmlUtil().HtmlDecode(responseTranslation[0]?.Translations[0]?.Text);
 		}
 
 		private string ConvertLanguageCode(string languageCode)

@@ -35,6 +35,9 @@ namespace MicrosoftTranslatorProvider.Model
 					Value = string.Empty;
 					OnPropertyChanged(nameof(Value));
 					break;
+
+				default:
+					break;
 			}
 		}
 	}

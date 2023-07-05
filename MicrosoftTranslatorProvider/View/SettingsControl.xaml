@@ -7,8 +7,9 @@
 			 xmlns:viewModels="clr-namespace:MicrosoftTranslatorProvider.ViewModel"
 			 xmlns:converters="clr-namespace:MicrosoftTranslatorProvider.Converters"
 			 xmlns:uiHelpers="clr-namespace:MicrosoftTranslatorProvider.UiHelpers"
-			 d:DataContext="{d:DesignInstance viewModels:SettingsControlViewModel}"
+			 d:DataContext="{d:DesignInstance viewModels:SettingsViewModel}"
 			 mc:Ignorable="d">
+	
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -23,8 +24,12 @@
 			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
 		</ResourceDictionary>
 	</UserControl.Resources>
-	<Grid Margin="24 42 24 0">
+	
+	<Grid Margin="24 12 24 0">
 		<StackPanel>
+			<TextBlock Text="Settings"
+					   Style="{StaticResource Sdl.TextBlock.TitleStyle}" />
+			
 			<CheckBox Content="Use custom name for this provider"
 					  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 					  IsChecked="{Binding UseCustomProviderName}"
