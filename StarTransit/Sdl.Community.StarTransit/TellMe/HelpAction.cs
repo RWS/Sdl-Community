@@ -17,7 +17,7 @@ namespace Sdl.Community.StarTransit.TellMe
 		}
 
 		public override bool IsAvailable => true;
-		public override string Category => "ExportAnalysisReports results";
+		public override string Category => "StarTransit results";
 		public override Icon Icon => PluginResources.Question;
 	}
 }
