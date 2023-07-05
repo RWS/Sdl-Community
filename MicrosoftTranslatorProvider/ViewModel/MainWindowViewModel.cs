@@ -30,6 +30,10 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		private readonly LanguagePair[] _languagePairs;
 		private readonly bool _editProvider;
 
+		private List<string> _endpoints;
+		private string _selectedEndpoint;
+		private bool _usePrivateEndpoint;
+
 		private bool _dialogResult;
 		private bool _canSwitchProvider;
 		private ViewDetails _selectedView;
@@ -77,7 +81,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			Endpoints = new List<string>() { "Microsoft", "Private Endpoint" };
 			SelectedEndpoint = Endpoints.First();
 			SwitchView(TranslationOptions.UsePrivateEndpoint ? ViewDetails_PrivateEndpoint : ViewDetails_Provider);
-			ShowProvidersPage();
 			SetCredentialsOnUI();
 		}
 
@@ -99,6 +102,52 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			{
 				_selectedView = value;
 				OnPropertyChanged(nameof(SelectedView));
+			}
+		}
+
+		public bool UsePrivateEndpoint
+		{
+			get => _usePrivateEndpoint;
+			set
+			{
+				if (_usePrivateEndpoint == value) return;
+				_usePrivateEndpoint = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public List<string> Endpoints
+		{
+			get => _endpoints;
+			set
+			{
+				if (_endpoints == value) return;
+				_endpoints = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string SelectedEndpoint
+		{
+			get => _selectedEndpoint;
+			set
+			{
+				if (_selectedEndpoint == value) return;
+				_selectedEndpoint = value;
+				UsePrivateEndpoint = _selectedEndpoint.Equals("Private Endpoint");
+				SwitchView(_selectedEndpoint.Equals("Microsoft") ? nameof(ProviderViewModel) : nameof(PrivateEndpointViewModel));
+				OnPropertyChanged();
+			}
+		}
+
+		public bool CanSwitchProvider
+		{
+			get => _canSwitchProvider;
+			set
+			{
+				if (value == _canSwitchProvider) return;
+				_canSwitchProvider = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -171,16 +220,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			}
 
 			return AreMicrosoftCredentialsValid();
-		}
-
-		private void ShowSettingsPage()
-		{
-			SelectedView = AvailableViews[1];
-		}
-
-		private void ShowProvidersPage()
-		{
-			SelectedView = AvailableViews[0];
 		}
 
 		private void Save(object window)
@@ -391,55 +430,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 			var credentials = new TranslationProviderCredential(currentCredentials.ToString(), true);
 			_credentialStore.AddCredential(uri.Uri, credentials);
-		}
-
-		private bool _usePrivateEndpoint;
-		public bool UsePrivateEndpoint
-		{
-			get => _usePrivateEndpoint;
-			set
-			{
-				if (_usePrivateEndpoint == value) return;
-				_usePrivateEndpoint = value;
-				OnPropertyChanged();
-			}
-		}
-
-		private List<string> _endpoints;
-		public List<string> Endpoints
-		{
-			get => _endpoints;
-			set
-			{
-				if (_endpoints == value) return;
-				_endpoints = value;
-				OnPropertyChanged();
-			}
-		}
-
-		private string _selectedEndpoint;
-		public string SelectedEndpoint
-		{
-			get => _selectedEndpoint;
-			set
-			{
-				if (_selectedEndpoint == value) return;
-				_selectedEndpoint = value;
-				UsePrivateEndpoint = _selectedEndpoint.Equals("Private Endpoint");
-				SwitchView(_selectedEndpoint.Equals("Microsoft") ? nameof(ProviderViewModel) : nameof(PrivateEndpointViewModel));
-				OnPropertyChanged();
-			}
-		}
-
-		public bool CanSwitchProvider
-		{
-			get => _canSwitchProvider;
-			set
-			{
-				if (value == _canSwitchProvider) return;
-				_canSwitchProvider = value;
-				OnPropertyChanged();
-			}
 		}
 	}
 }

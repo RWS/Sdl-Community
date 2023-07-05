@@ -1,10 +1,13 @@
-﻿using Sdl.LanguagePlatform.Core;
+﻿using System.Windows.Input;
+using MicrosoftTranslatorProvider.Commands;
+using Sdl.LanguagePlatform.Core;
 
 namespace MicrosoftTranslatorProvider.Model
 {
 	public class LanguageMapping : BaseModel
 	{
 		private string _categoryId;
+		private ICommand _clearCommand;
 
 		public LanguagePair LanguagePair { get; set; }
 
@@ -18,6 +21,13 @@ namespace MicrosoftTranslatorProvider.Model
 				_categoryId = value;
 				OnPropertyChanged();
 			}
+		}
+
+		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
+
+		private void Clear(object parameter)
+		{
+			CategoryID = string.Empty;
 		}
 	}
 }

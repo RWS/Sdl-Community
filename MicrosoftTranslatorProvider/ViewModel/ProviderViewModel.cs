@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using MicrosoftTranslatorProvider.Commands;
 using MicrosoftTranslatorProvider.Interfaces;
@@ -23,7 +24,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		private string _apiKey;
 
 		private ICommand _learnMoreCommand;
-		private ICommand _testCommand;
 
 		public ProviderViewModel(ITranslationOptions options, LanguagePair[] languagePairs)
 		{

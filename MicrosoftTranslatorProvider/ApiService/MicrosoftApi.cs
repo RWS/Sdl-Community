@@ -171,7 +171,7 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 			var uri = new Uri("https://" + Constants.MicrosoftProviderUriBase);
 			var client = new RestClient(uri);
 
-			var request = new RestRequest("languages", Method.Get);
+			var request = new RestSharp.RestRequest("languages", Method.Get);
 			request.AddParameter("api-version", "3.0");
 			request.AddParameter("scope", "translation");
 

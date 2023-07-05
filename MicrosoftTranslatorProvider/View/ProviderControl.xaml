@@ -4,6 +4,7 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:root="clr-namespace:MicrosoftTranslatorProvider"
+			 xmlns:uiHelpers="clr-namespace:MicrosoftTranslatorProvider.UiHelpers"
 			 xmlns:viewModels="clr-namespace:MicrosoftTranslatorProvider.ViewModel"
 			 xmlns:converters="clr-namespace:MicrosoftTranslatorProvider.Converters"
 			 xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
@@ -131,9 +132,11 @@
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<TextBox Text="{Binding CategoryID, UpdateSourceTrigger=PropertyChanged}"
-										 Style="{StaticResource Sdl.ComboBox.Generic.EditableTextBox}"
-										 VerticalContentAlignment="Center"
-										 BorderThickness="0" />
+										 Style="{StaticResource BorderlessWatermarkTextBox}"
+										 uiHelpers:TextBoxWatermarkHelper.WatermarkText="E.g.: f7a8b963-2c4e-47d1-9b22-68e2fd15ae4e-CAT"
+										 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+										 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{Binding}"
+										 VerticalContentAlignment="Center" />
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
