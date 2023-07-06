@@ -121,6 +121,10 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 
 			SwitchView(_showSettingsView ? ViewsDetails_LanguageMapping : ViewsDetails_Credentials);
 			SetCredentialsOnUI();
+			if (ShowSettingsView)
+			{
+				SignIn(null);
+			}
 		}
 
 		private void SwitchView(object parameter)
@@ -186,9 +190,19 @@ namespace Sdl.Community.MTEdge.Provider.ViewModel
 				
 				Options.SetDictionaries(languageMapping);
 				_languageMappingViewModel.LanguageMapping = new(languageMapping);
+				if (ShowSettingsView)
+				{
+					for (var i = 0; i < Options.LanguagePairPreferences.Count; i++)
+					{
+						var selectedModel = _languageMappingViewModel.LanguageMapping[i].MtEdgeLanguagePairs.First(x => x.LanguagePairId == Options.LanguagePairPreferences.Skip(i).First().Value.LanguagePairId);
+						_languageMappingViewModel.LanguageMapping[i].SelectedModelIndex = _languageMappingViewModel.LanguageMapping[i].MtEdgeLanguagePairs.IndexOf(selectedModel);
+
+						var selectedDictionary = _languageMappingViewModel.LanguageMapping[i].Dictionaries.First(x => x.DictionaryId == Options.LanguagePairPreferences.Skip(i).First().Value.DictionaryId);
+						_languageMappingViewModel.LanguageMapping[i].SelectedDictionaryIndex = _languageMappingViewModel.LanguageMapping[i].Dictionaries.IndexOf(selectedDictionary);
+					}
+				}
 				
 				SwitchView(ViewsDetails_LanguageMapping);
-				
 				ShowSettingsView = true;
 				
 				SaveCredentials();
