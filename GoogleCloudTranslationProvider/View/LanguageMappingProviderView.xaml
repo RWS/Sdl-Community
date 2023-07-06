@@ -54,7 +54,7 @@
 					 Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}"
 					 Style="{StaticResource WatermarkTextBox}"
 					 BorderBrush="#FFBFCDD4"
-					 uiHelpers:TextBoxWatermarkHelper.WatermarkText="Search languages..."
+					 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.LMP_Filter_Watermark}"
 					 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
 					 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=Filter, Type={x:Type viewmodel:LanguageMappingProviderViewModel}}"
 					 HorizontalAlignment="Right"
@@ -76,19 +76,19 @@
 					  CanUserDeleteRows="False"
 					  Margin="16 16 16 0">
 				<DataGrid.Columns>
-					<DataGridTextColumn Header="Language"
+					<DataGridTextColumn Header="{x:Static root:PluginResources.LMP_Table_Header_Language}"
 										Binding="{Binding Path=Name}"
 										IsReadOnly="True"
 										Width="2*" />
-					<DataGridTextColumn Header="Region"
+					<DataGridTextColumn Header="{x:Static root:PluginResources.LMP_Table_Header_Region}"
 										Binding="{Binding Path=Region}"
 										IsReadOnly="True"
 										Width="2*" />
-					<DataGridTextColumn Header="Trados Code"
+					<DataGridTextColumn Header="{x:Static root:PluginResources.LMP_Table_Header_TradosCode}"
 										Binding="{Binding Path=TradosCode}"
 										IsReadOnly="True"
 										Width="1*" />
-					<DataGridTextColumn Header="MT Code Locale"
+					<DataGridTextColumn Header="{x:Static root:PluginResources.LMP_Table_Header_LanguageCode}"
 										Binding="{Binding Path=LanguageCode}"
 										IsReadOnly="False"
 										Width="1*" />
@@ -104,7 +104,7 @@
 					   VerticalAlignment="Top"
 					   Background="#FFBFCDD4" />
 
-			<Button Content="Reset to default"
+			<Button Content="{x:Static root:PluginResources.LMP_Button_Reset}"
 					Command="{Binding ResetToDefaultCommand}"
 					Style="{StaticResource Sdl.Button.SecondaryStyle}"
 					Grid.Row="4"
@@ -117,14 +117,15 @@
 						Orientation="Horizontal"
 						HorizontalAlignment="Right"
 						Margin="16">
-				<Button Content="OK"
+				
+				<Button Content="{x:Static root:PluginResources.LMP_Button_Ok}"
 						Command="{Binding ApplyChangesCommand}"
 						Style="{StaticResource Sdl.Button.SecondaryStyle}"
 						Cursor="Hand"
 						Width="120"
 						Margin="0 0 16 0" />
 
-				<Button Content="Cancel"
+				<Button Content="{x:Static root:PluginResources.LMP_Button_Cancel}"
 						Command="{Binding CancelChangesCommand}"
 						Style="{StaticResource Sdl.Button.SecondaryStyle}"
 						Cursor="Hand"

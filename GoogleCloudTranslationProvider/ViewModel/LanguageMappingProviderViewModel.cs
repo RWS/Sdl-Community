@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Input;
 using GoogleCloudTranslationProvider.Commands;
 using GoogleCloudTranslationProvider.Extensions;

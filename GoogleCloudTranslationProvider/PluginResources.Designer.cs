@@ -381,6 +381,78 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string LMP_Button_Cancel {
+            get {
+                return ResourceManager.GetString("LMP_Button_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string LMP_Button_Ok {
+            get {
+                return ResourceManager.GetString("LMP_Button_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset to default.
+        /// </summary>
+        public static string LMP_Button_Reset {
+            get {
+                return ResourceManager.GetString("LMP_Button_Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search languages....
+        /// </summary>
+        public static string LMP_Filter_Watermark {
+            get {
+                return ResourceManager.GetString("LMP_Filter_Watermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        public static string LMP_Table_Header_Language {
+            get {
+                return ResourceManager.GetString("LMP_Table_Header_Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language Code.
+        /// </summary>
+        public static string LMP_Table_Header_LanguageCode {
+            get {
+                return ResourceManager.GetString("LMP_Table_Header_LanguageCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Region.
+        /// </summary>
+        public static string LMP_Table_Header_Region {
+            get {
+                return ResourceManager.GetString("LMP_Table_Header_Region", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trados Code.
+        /// </summary>
+        public static string LMP_Table_Header_TradosCode {
+            get {
+                return ResourceManager.GetString("LMP_Table_Header_TradosCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close app.
         /// </summary>
         public static string MainView_CloseButton {
