@@ -1,9 +1,9 @@
-﻿using GoogleCloudTranslationProvider.Models;
+﻿using GoogleCloudTranslationProvider.ViewModel;
 
 namespace GoogleCloudTranslationProvider.Interface
 {
 	public interface IHelpViewModel
 	{
-		BaseModel ViewModel { get; set; }
+		BaseViewModel ViewModel { get; set; }
 	}
 }

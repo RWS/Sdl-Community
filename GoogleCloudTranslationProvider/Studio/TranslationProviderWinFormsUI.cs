@@ -6,6 +6,7 @@ using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
 using GoogleCloudTranslationProvider.ViewModels;
 using GoogleCloudTranslationProvider.Views;
+using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -15,7 +16,7 @@ namespace GoogleCloudTranslationProvider.Studio
 	[TranslationProviderWinFormsUi(Id = Constants.Provider_TranslationProviderWinFormsUi,
 								   Name = Constants.Provider_TranslationProviderWinFormsUi,
 								   Description = Constants.Provider_TranslationProviderWinFormsUi)]
-	public class ProviderWinFormsUI : ITranslationProviderWinFormsUI
+	public class TranslationProviderWinFormsUI : ITranslationProviderWinFormsUI
 	{
 		public string TypeDescription => PluginResources.Plugin_Description;
 
@@ -25,15 +26,15 @@ namespace GoogleCloudTranslationProvider.Studio
 
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
-			var options = new GCTPTranslationOptions();
+			var options = new TranslationOptions();
 			var mainWindowViewModel = ShowRequestedView(languagePairs, credentialStore, options);
-			return mainWindowViewModel.DialogResult ? new ITranslationProvider[] { new Provider(options) }
+			return mainWindowViewModel.DialogResult ? new ITranslationProvider[] { new TranslationProvider(options) }
 													: null;
 		}
 
 		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
-			if (translationProvider is not Provider editProvider)
+			if (translationProvider is not TranslationProvider editProvider)
 			{
 				return false;
 			}
@@ -44,11 +45,19 @@ namespace GoogleCloudTranslationProvider.Studio
 
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
 		{
-			var options = new GCTPTranslationOptions(translationProviderUri);
-			var customName = options.CustomProviderName;
-			var useCustomName = options.UseCustomProviderName;
-			var selectedVersion = options.SelectedGoogleVersion;
-			var providerName = customName.SetProviderName(useCustomName, selectedVersion);
+			if (string.IsNullOrEmpty(translationProviderState))
+			{
+				return new TranslationProviderDisplayInfo()
+				{
+					SearchResultImage = PluginResources.my_image,
+					TranslationProviderIcon = PluginResources.appicon,
+					TooltipText = Constants.GoogleNaming_ShortName,
+					Name = Constants.GoogleNaming_ShortName
+				};
+			}
+
+			var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
+			var providerName = options.CustomProviderName.SetProviderName(options.UseCustomProviderName, options.SelectedGoogleVersion);
 			return new TranslationProviderDisplayInfo()
 			{
 				SearchResultImage = PluginResources.my_image,
@@ -67,10 +76,10 @@ namespace GoogleCloudTranslationProvider.Studio
 			};
 		}
 
-		private MainWindowViewModel ShowRequestedView(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, bool showSettingsView = false)
+		private MainWindowViewModel ShowRequestedView(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, bool editProvider = false)
 		{
 			SetSavedCredentialsOnUi(credentialStore, loadOptions);
-			var mainWindowViewModel = new MainWindowViewModel(loadOptions, credentialStore, languagePairs, showSettingsView);
+			var mainWindowViewModel = new MainWindowViewModel(loadOptions, credentialStore, languagePairs, editProvider);
 			var mainWindowView = new MainWindowView { DataContext = mainWindowViewModel };
 			mainWindowViewModel.CloseEventRaised += () =>
 			{
@@ -84,11 +93,6 @@ namespace GoogleCloudTranslationProvider.Studio
 
 		private void UpdateProviderCredentials(ITranslationProviderCredentialStore credentialStore, ITranslationOptions options)
 		{
-			if (options.SelectedProvider != ProviderType.GoogleTranslate)
-			{
-				return;
-			}
-
 			SetCredentialsOnCredentialStore(credentialStore, Constants.GoogleTranslationFullScheme, options.ApiKey, options.PersistGoogleKey);
 		}
 
@@ -141,7 +145,7 @@ namespace GoogleCloudTranslationProvider.Studio
 				}
 			}
 
-			var options = new GCTPTranslationOptions();
+			var options = new TranslationOptions();
 			var mainWindowViewModel = ShowRequestedView(languagePairs.ToArray(), credentialStore, options);
 			return mainWindowViewModel.DialogResult;
 		}

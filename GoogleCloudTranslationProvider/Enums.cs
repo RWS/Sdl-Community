@@ -4,8 +4,8 @@ namespace GoogleCloudTranslationProvider
 {
 	public enum ApiVersion
 	{
-		V2,
-		V3
+		V3,
+		V2
 	}
 
 	public enum EditItemType
@@ -19,11 +19,5 @@ namespace GoogleCloudTranslationProvider
 	public enum Parameters
 	{
 		Inverted
-	}
-
-	public enum ProviderType
-	{
-		None,
-		GoogleTranslate
 	}
 }

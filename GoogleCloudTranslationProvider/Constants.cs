@@ -1,9 +1,14 @@
 ﻿using System;
+using System.IO;
 
 namespace GoogleCloudTranslationProvider
 {
 	public static class Constants
 	{
+		// Database file
+		public static string DatabaseLocation = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Trados AppStore\\Language Mapping Provider";
+		public static string DatabaseFilePath = Path.Combine(DatabaseLocation, "{0}data.sqlite3");
+
 		// Plugin naming
 		public const string GoogleTranslatorString = "Google Translate";
 		public const string GoogleNaming_FullName = "Google Cloud Translation Provider";

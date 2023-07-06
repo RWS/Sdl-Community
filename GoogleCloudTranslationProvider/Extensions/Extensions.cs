@@ -2,7 +2,7 @@
 
 namespace GoogleCloudTranslationProvider.Extensions
 {
-	public static class StringExtensions
+	public static class Extensions
 	{
 		public static string SetProviderName(this string customName, bool useCustomName, ApiVersion currentVersion)
 		{

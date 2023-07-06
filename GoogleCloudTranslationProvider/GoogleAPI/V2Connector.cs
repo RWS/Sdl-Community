@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using GoogleCloudTranslationProvider.Extensions;
 using GoogleCloudTranslationProvider.Helpers;
+using GoogleCloudTranslationProvider.Models;
 using GoogleCloudTranslationProvider.Service;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using Sdl.LanguagePlatform.Core;
+using static System.Net.Mime.MediaTypeNames;
 using LogManager = NLog.LogManager;
 
 namespace GoogleCloudTranslationProvider.GoogleAPI
@@ -31,15 +36,51 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 
 		public string ApiKey { get; set; }
 
-		public void ValidateCredentials()
+		public async Task<List<V2LanguageModel>> GetLanguages()
 		{
-			var languagePair = new LanguagePair
-			{
-				SourceCulture = new CultureInfo("en-us"),
-				TargetCulture = new CultureInfo("de-de")
-			};
+			var url = $"https://translation.googleapis.com/language/translate/v2/languages?key={ApiKey}&target=en";
+			var httpClient = new HttpClient();
+			var response = httpClient.GetAsync(url).Result;
 
-			Translate(languagePair, string.Empty);
+			if (response.IsSuccessStatusCode)
+			{
+				var jsonResponse = response.Content.ReadAsStringAsync().Result;
+				var result = JsonConvert.DeserializeObject<dynamic>(jsonResponse);
+
+				var languages = result.data.languages;
+
+				var output = new List<V2LanguageModel>();
+				foreach (var language in languages)
+				{
+					output.Add(new()
+					{
+						LanguageCode = language.language,
+						LanguageName = language.name,
+					});
+				}
+
+				return output;
+			}
+			else
+			{
+				// Handle the case where the request was not successful
+				throw new Exception("Failed to retrieve the list of languages.");
+			}
+		}
+
+		public bool CredentialsAreValid()
+		{
+			try
+			{
+				DownloadRequest(Constants.TranslationUri, "de", "test");
+				return true;
+			}
+			catch (Exception ex)
+			{
+				_logger.Error($"{MethodBase.GetCurrentMethod().Name} {ex.Message}\n {ex.StackTrace}");
+				ErrorHandler.HandleError(ex);
+				return false;
+			}
 		}
 
 		public string Translate(LanguagePair languagePair, string text, string format = null)
@@ -59,6 +100,12 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 			}
 
 			return supportedLanguages[targetLanguage].Any(source => source == sourceCulture.ConvertLanguageCode());
+		}
+
+		public List<V2LanguageModel> GetSupportedLanguages()
+		{
+			var result = DownloadRequest(Constants.LanguagesUri, null);
+			return null;
 		}
 
 		private void UpdateSupportedLanguages(string target)
@@ -127,8 +174,8 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 				throw new Exception(PluginResources.ApiConnectionGoogleNoKeyErrorMessage);
 			}
 
-			var targetLanguage = languagePair.TargetCulture.ConvertLanguageCode();
-			var result = DownloadRequest(Constants.TranslationUri, targetLanguage, text, format);
+			var targetCode = new CultureInfo(languagePair.TargetCulture.Name).GetLanguageCode(ApiVersion.V2);
+			var result = DownloadRequest(Constants.TranslationUri, "de", text, format);
 			var returnedResult = GetTranslation(result);
 			var decodedResult = _htmlUtil.HtmlDecode(returnedResult).RemoveZeroWidthSpaces();
 			return decodedResult;

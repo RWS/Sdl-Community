@@ -90,6 +90,24 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to googlecloudbasic.
+        /// </summary>
+        public static string Database_PluginName_V2 {
+            get {
+                return ResourceManager.GetString("Database_PluginName_V2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to googlecloudadvanced.
+        /// </summary>
+        public static string Database_PluginName_V3 {
+            get {
+                return ResourceManager.GetString("Database_PluginName_V3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Download {
@@ -219,51 +237,6 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Google Translator - What is this.
-        /// </summary>
-        public static string Google {
-            get {
-                return ResourceManager.GetString("Google", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Google Translate G_Description.
-        /// </summary>
-        public static string Google_Description {
-            get {
-                return ResourceManager.GetString("Google_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Google Translate G_Name.
-        /// </summary>
-        public static string Google_Name {
-            get {
-                return ResourceManager.GetString("Google_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Google Translate G_NiceName.
-        /// </summary>
-        public static string Google_NiceName {
-            get {
-                return ResourceManager.GetString("Google_NiceName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Google Translate G_ToolTip.
-        /// </summary>
-        public static string Google_Tooltip {
-            get {
-                return ResourceManager.GetString("Google_Tooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Google Translate - V3 Advanced Translation.
         /// </summary>
         public static string GoogleAdvanced {
@@ -354,6 +327,33 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Browse.
+        /// </summary>
+        public static string JsonFile_Browse {
+            get {
+                return ResourceManager.GetString("JsonFile_Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download.
+        /// </summary>
+        public static string JsonFile_Download {
+            get {
+                return ResourceManager.GetString("JsonFile_Download", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DragAndDrop.
+        /// </summary>
+        public static string JsonFile_DragAndDrop {
+            get {
+                return ResourceManager.GetString("JsonFile_DragAndDrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There was a problem checking language pair support..
         /// </summary>
         public static string LangPairAuthErrorMsg1 {
@@ -377,6 +377,78 @@ namespace GoogleCloudTranslationProvider {
         public static string LangPairAuthErrorMsg3 {
             get {
                 return ResourceManager.GetString("LangPairAuthErrorMsg3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string LMP_Button_Cancel {
+            get {
+                return ResourceManager.GetString("LMP_Button_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string LMP_Button_Ok {
+            get {
+                return ResourceManager.GetString("LMP_Button_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset to default.
+        /// </summary>
+        public static string LMP_Button_Reset {
+            get {
+                return ResourceManager.GetString("LMP_Button_Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search languages....
+        /// </summary>
+        public static string LMP_Filter_Watermark {
+            get {
+                return ResourceManager.GetString("LMP_Filter_Watermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        public static string LMP_Table_Header_Language {
+            get {
+                return ResourceManager.GetString("LMP_Table_Header_Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language Code.
+        /// </summary>
+        public static string LMP_Table_Header_LanguageCode {
+            get {
+                return ResourceManager.GetString("LMP_Table_Header_LanguageCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Region.
+        /// </summary>
+        public static string LMP_Table_Header_Region {
+            get {
+                return ResourceManager.GetString("LMP_Table_Header_Region", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trados Code.
+        /// </summary>
+        public static string LMP_Table_Header_TradosCode {
+            get {
+                return ResourceManager.GetString("LMP_Table_Header_TradosCode", resourceCulture);
             }
         }
         
@@ -763,7 +835,7 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Local path.
+        ///   Looks up a localized string similar to Local path: .
         /// </summary>
         public static string ProviderView_V3_LocalPath_Description {
             get {
@@ -808,6 +880,33 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Glossaries.
+        /// </summary>
+        public static string ProviderView_V3_MappingTable_Glossaries {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_MappingTable_Glossaries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Models.
+        /// </summary>
+        public static string ProviderView_V3_MappingTable_Models {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_MappingTable_Models", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language Pair.
+        /// </summary>
+        public static string ProviderView_V3_MappingTable_Pairs {
+            get {
+                return ResourceManager.GetString("ProviderView_V3_MappingTable_Pairs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Navigate to your project.
         /// </summary>
         public static string ProviderView_V3_Project_Navigate {
@@ -817,7 +916,7 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Project ID.
+        ///   Looks up a localized string similar to Project ID: .
         /// </summary>
         public static string ProviderView_V3_ProjectID_Description {
             get {
@@ -881,16 +980,7 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &gt; No custom models available.
-        /// </summary>
-        public static string RetrievedResources_CustomModels_Unavailable {
-            get {
-                return ResourceManager.GetString("RetrievedResources_CustomModels_Unavailable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &gt; No custom model selected.
+        ///   Looks up a localized string similar to No model selected.
         /// </summary>
         public static string RetrievedResources_CustomModels_Unselected {
             get {
@@ -899,20 +989,20 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &gt; No glossaries available.
-        /// </summary>
-        public static string RetrievedResources_Glossaries_Unavailable {
-            get {
-                return ResourceManager.GetString("RetrievedResources_Glossaries_Unavailable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &gt; No glossary selected.
+        ///   Looks up a localized string similar to No glossary selected.
         /// </summary>
         public static string RetrievedResources_Glossaries_Unselected {
             get {
                 return ResourceManager.GetString("RetrievedResources_Glossaries_Unselected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not available.
+        /// </summary>
+        public static string RetrievedResources_NotAvailable {
+            get {
+                return ResourceManager.GetString("RetrievedResources_NotAvailable", resourceCulture);
             }
         }
         
@@ -968,6 +1058,15 @@ namespace GoogleCloudTranslationProvider {
         public static string SettingsView_DownloadPath_ToolTip {
             get {
                 return ResourceManager.GetString("SettingsView_DownloadPath_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Language Mapping Provider.
+        /// </summary>
+        public static string SettingsView_LanguageMapping_Description {
+            get {
+                return ResourceManager.GetString("SettingsView_LanguageMapping_Description", resourceCulture);
             }
         }
         
@@ -1076,6 +1175,15 @@ namespace GoogleCloudTranslationProvider {
         public static string Validation_ApiKey {
             get {
                 return ResourceManager.GetString("Validation_ApiKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The API Key is not valid.
+        /// </summary>
+        public static string Validation_ApiKey_Invalid {
+            get {
+                return ResourceManager.GetString("Validation_ApiKey_Invalid", resourceCulture);
             }
         }
         

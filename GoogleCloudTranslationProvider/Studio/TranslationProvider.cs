@@ -10,14 +10,14 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace GoogleCloudTranslationProvider.Studio
 {
-	public class Provider : ITranslationProvider
+	public class TranslationProvider : ITranslationProvider
 	{
 		private readonly HtmlUtil _htmlUtil;
 
 		private V2Connector _googleV2Api;
 		private V3Connector _googleV3Api;
 
-		public Provider(ITranslationOptions options)
+		public TranslationProvider(ITranslationOptions options)
 		{
 			Options = options;
 			_htmlUtil = new HtmlUtil();
@@ -99,12 +99,12 @@ namespace GoogleCloudTranslationProvider.Studio
 
 		public void LoadState(string translationProviderState)
 		{
-			Options = JsonConvert.DeserializeObject<GCTPTranslationOptions>(translationProviderState);
+			Options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
 		}
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
 		{
-			return new ProviderLanguageDirection(this, languageDirection, _htmlUtil);
+			return new TranslationProviderLanguageDirection(this, languageDirection, _htmlUtil);
 		}
 
 		public string SerializeState()

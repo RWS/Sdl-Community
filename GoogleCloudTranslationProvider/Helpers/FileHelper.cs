@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
-using System.Windows;
 using Newtonsoft.Json;
 
-namespace GoogleCloudTranslationProvider.Extensions
+namespace GoogleCloudTranslationProvider.Helpers
 {
-	public static class FilesExtensions
+	public static class FileHelper
 	{
 		public static string ShortenFilePath(this string filePath)
 		{
@@ -26,13 +23,13 @@ namespace GoogleCloudTranslationProvider.Extensions
 			var (success, errorMessage) = filePath.IsValidPath();
 			if (!success)
 			{
-				return (false, errorMessage);
+				return (success, errorMessage);
 			}
 
 			var pidl = ILCreateFromPathW(filePath);
 			SHOpenFolderAndSelectItems(pidl, 0, IntPtr.Zero, 0);
 			ILFree(pidl);
-			return (true, null);
+			return (success, null);
 		}
 
 		public static (bool Success, object OperationResult) VerifyPathAndReadJsonFile(this string filePath)
@@ -54,7 +51,7 @@ namespace GoogleCloudTranslationProvider.Extensions
 			}
 
 			uri = uri.EnsureUriIsValid();
-			if (!OnlineJsonFileIsValid(uri))
+			if (!uri.OnlineJsonFileIsValid())
 			{
 				return (false, PluginResources.FileValidation_MissingJsonFile);
 			}
@@ -109,11 +106,6 @@ namespace GoogleCloudTranslationProvider.Extensions
 				if (targetUri.Host.Contains("dropbox") && targetUri.Query != "?dl=1")
 				{
 					uri = uri.Substring(0, uri.Length - targetUri.Query.Length) + "?dl=1";
-				}
-				else if (targetUri.Host.Contains("dropbox"))
-				{
-
-
 				}
 
 				_ = new Uri(uri);
