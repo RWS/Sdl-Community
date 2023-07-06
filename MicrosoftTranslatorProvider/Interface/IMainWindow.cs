@@ -12,7 +12,7 @@ namespace MicrosoftTranslatorProvider.Interfaces
 
 		List<ViewDetails> AvailableViews { get; set; }
 		
-		ITranslationOptions Options { get; set; }
+		ITranslationOptions TranslationOptions { get; set; }
 
 		bool IsWindowValid();
 	}

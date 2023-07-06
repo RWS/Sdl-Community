@@ -148,7 +148,7 @@ namespace MicrosoftTranslatorProvider.UiHelpers
 			textBox.GotFocus += OnControlGotFocus;
 		}
 
-		private static void SetTextLength<TDependencyObject>(TDependencyObject sender, Func<TDependencyObject, int> funcTextLength) where TDependencyObject : DependencyObject
+		private static void SetTextLength<TDependencyObject>(TDependencyObject sender, Func<TDependencyObject, int> _) where TDependencyObject : DependencyObject
 		{
 			if (sender is not null
 			 && sender is TextBox textBox

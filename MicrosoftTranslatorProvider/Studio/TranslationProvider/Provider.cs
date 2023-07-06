@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Documents;
-using MicrosoftTranslatorProvider.ApiService;
 using MicrosoftTranslatorProvider.Extensions;
 using MicrosoftTranslatorProvider.Interfaces;
 using MicrosoftTranslatorProvider.Model;
-using MicrosoftTranslatorProvider.Service;
 using MicrosoftTranslatorProvider.Studio.TranslationProvider;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
@@ -15,15 +12,11 @@ namespace MicrosoftTranslatorProvider
 {
 	public class Provider : ITranslationProvider
 	{
-		private readonly HtmlUtil _htmlUtil;
-
 		private MicrosoftApi _providerConnector;
 
-		public Provider(ITranslationOptions options, RegionsProvider regionProvider, HtmlUtil htmlUtil)
+		public Provider(ITranslationOptions options)
 		{
-			_htmlUtil = htmlUtil;
 			Options = options;
-			RegionsProvider = regionProvider;
 		}
 
 		public string Name
@@ -90,14 +83,14 @@ namespace MicrosoftTranslatorProvider
 				return true;
 			}
 
-			_providerConnector ??= new MicrosoftApi(Options.ClientID, Options.Region, _htmlUtil);
-			_providerConnector.ResetCredentials(Options.ClientID, Options.Region);
+			_providerConnector ??= new MicrosoftApi(Options.ApiKey, Options.Region);
+			_providerConnector.ResetCredentials(Options.ApiKey, Options.Region);
 			return _providerConnector.IsSupportedLanguagePair(languageDirection.SourceCulture.Name, languageDirection.TargetCulture.Name);
 		}
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
 		{
-			return new ProviderLanguageDirection(this, languageDirection, _htmlUtil);
+			return new ProviderLanguageDirection(this, languageDirection);
 		}
 
 		public string SerializeState()
@@ -107,7 +100,7 @@ namespace MicrosoftTranslatorProvider
 
 		public void LoadState(string translationProviderState)
 		{
-			Options = JsonConvert.DeserializeObject<MTETranslationOptions>(translationProviderState);
+			Options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
 		}
 
 		public void RefreshStatusInfo() { }

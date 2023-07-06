@@ -1,7 +1,7 @@
 ﻿using Microsoft.Win32;
 using MicrosoftTranslatorProvider.Interfaces;
 
-namespace MicrosoftTranslatorProvider.Service
+namespace MicrosoftTranslatorProvider.Helpers
 {
 	public class OpenFileDialogService : IOpenFileDialogService
 	{
@@ -14,7 +14,7 @@ namespace MicrosoftTranslatorProvider.Service
 			};
 
 			return (bool)openFileDialog.ShowDialog() ? openFileDialog.FileName
-											         : string.Empty;
+													 : string.Empty;
 		}
 	}
 }

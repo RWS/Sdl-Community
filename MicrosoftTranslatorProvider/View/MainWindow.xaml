@@ -15,12 +15,12 @@
 		WindowStyle="None"
 		ResizeMode="CanResize"
 		Title="Microsoft Translator Provider"
-		Height="700"
-		Width="600"
-		MinWidth="550"
-		MinHeight="550"
-		d:DesignHeight="700"
-		d:DesignWidth="800">
+		Height="600"
+		Width="1000"
+		MinHeight="500"
+		MinWidth="900"
+		d:DesignHeight="600"
+		d:DesignWidth="1000">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -34,11 +34,11 @@
 			<converters:EmptyToVisibility x:Key="EmptyToVisibilityConverter" />
 			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
 			
-			<DataTemplate DataType="{x:Type viewModels:ProviderControlViewModel}">
+			<DataTemplate DataType="{x:Type viewModels:ProviderViewModel}">
 				<ui:ProviderControl />
 			</DataTemplate>
 
-			<DataTemplate DataType="{x:Type viewModels:SettingsControlViewModel}">
+			<DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
 				<ui:SettingsControl />
 			</DataTemplate>
 
@@ -61,21 +61,17 @@
 			<styles:WindowsControl Grid.Row="0"
 								   Background="White" />
 
-			<GroupBox Grid.Row="2"
-					  Margin="24 48 24 0"
-					  Padding="12"
-					  Header="Provider"
-					  Style="{StaticResource DefaultGroupBox}">
-				<StackPanel>
-					<ComboBox ItemsSource="{Binding Endpoints}"
-							  SelectedItem="{Binding SelectedEndpoint}"
-							  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
-							  Margin="0 0 0 12"
-							  />
-					<ContentControl Content="{Binding SelectedView.ViewModel}" />
-				</StackPanel>
-			</GroupBox>
-			
+			<StackPanel Grid.Row="2"
+						Margin="24 48 24 0">
+				<ComboBox ItemsSource="{Binding Endpoints}"
+						  SelectedItem="{Binding SelectedEndpoint}"
+						  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+						  Visibility="{Binding CanSwitchProvider, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+						  Margin="0 0 0 12" />
+				<ContentControl Content="{Binding SelectedView.ViewModel}" />
+			</StackPanel>
+
+
 			<Button Content="Help"
 					Style="{StaticResource Sdl.Button.SecondaryStyle}"
 					Command="{Binding NavigateToCommand}"
@@ -86,11 +82,12 @@
 					Grid.Row="3"
 					HorizontalAlignment="Left"
 					Margin="24"/>
-			
+
 			<StackPanel HorizontalAlignment="Right"
 						Orientation="Horizontal"
 						Grid.Row="3"
 						Margin="24">
+
 				<Button Content="{Binding MultiButtonContent}"
 						Style="{StaticResource Sdl.Button.SecondaryStyle}"
 						Command="{Binding SwitchViewCommand}"

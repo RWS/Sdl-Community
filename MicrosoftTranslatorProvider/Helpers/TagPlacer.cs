@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using MicrosoftTranslatorProvider.Model;
-using MicrosoftTranslatorProvider.Service;
 using NLog;
 using Sdl.LanguagePlatform.Core;
 
@@ -14,16 +13,14 @@ namespace MicrosoftTranslatorProvider.Helpers
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly Segment _sourceSegment;
-		private readonly HtmlUtil _htmlUtil;
 
-		private Dictionary<string, MTETag> _tagsDictionary;
+		private Dictionary<string, MicrosoftTag> _tagsDictionary;
 		private string _returnedText;
-		private MTETag _currentTag;
+		private MicrosoftTag _currentTag;
 
-		public TagPlacer(Segment sourceSegment, HtmlUtil htmlUtil)
+		public TagPlacer(Segment sourceSegment)
 		{
 			_sourceSegment = sourceSegment;
-			_htmlUtil = htmlUtil;
 			TagsInfo = new List<TagInfo>();
 			GetSourceTagsDictionary();
 		}
@@ -76,7 +73,7 @@ namespace MicrosoftTranslatorProvider.Helpers
 
 		private Segment TryGetTaggedSegment(string returnedText)
 		{
-			_returnedText = _htmlUtil.HtmlDecode(returnedText);
+			_returnedText = new HtmlUtil().HtmlDecode(returnedText);
 			var segment = new Segment();
 			var targetElements = GetTargetElements();
 			for (var i = 0; i < targetElements.Length; i++)
@@ -150,7 +147,7 @@ namespace MicrosoftTranslatorProvider.Helpers
 
 		private void TryGetSourceTagsDictionary()
 		{
-			_tagsDictionary = new Dictionary<string, MTETag>();
+			_tagsDictionary = new Dictionary<string, MicrosoftTag>();
 			var elements = _sourceSegment?.Elements;
 			if (elements is null || !elements.Any())
 			{
@@ -165,7 +162,7 @@ namespace MicrosoftTranslatorProvider.Helpers
 					continue;
 				}
 
-				_currentTag = new MTETag((Tag)elements[i].Duplicate());
+				_currentTag = new MicrosoftTag((Tag)elements[i].Duplicate());
 				UpdateTagsInfo(i);
 				var tagText = ConvertTagToString();
 				PreparedSourceText += tagText;

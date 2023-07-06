@@ -4,7 +4,6 @@ using System.Windows.Forms;
 using MicrosoftTranslatorProvider.Extensions;
 using MicrosoftTranslatorProvider.Interfaces;
 using MicrosoftTranslatorProvider.Model;
-using MicrosoftTranslatorProvider.Service;
 using MicrosoftTranslatorProvider.View;
 using MicrosoftTranslatorProvider.ViewModel;
 using Newtonsoft.Json;
@@ -26,12 +25,9 @@ namespace MicrosoftTranslatorProvider.Studio
 
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
-			var options = new MTETranslationOptions();
-			var regionsProvider = new RegionsProvider();
-			var mainWindowDialogResult = ShowProviderWindow(languagePairs, credentialStore, options, regionsProvider).DialogResult;
-
-			var htmlUtil = new HtmlUtil();
-			return mainWindowDialogResult ? new ITranslationProvider[] { new Provider(options, regionsProvider, htmlUtil) }
+			var options = new TranslationOptions();
+			var mainWindowDialogResult = ShowProviderWindow(languagePairs, credentialStore, options).DialogResult;
+			return mainWindowDialogResult ? new ITranslationProvider[] { new Provider(options) }
 										  : null;
 		}
 
@@ -42,22 +38,18 @@ namespace MicrosoftTranslatorProvider.Studio
 				return false;
 			}
 
-			var mainWindowViewModel = ShowProviderWindow(languagePairs, credentialStore, editProvider.Options, editProvider.RegionsProvider, true);
+			var mainWindowViewModel = ShowProviderWindow(languagePairs, credentialStore, editProvider.Options, true);
 			return mainWindowViewModel.DialogResult;
 		}
 
-		private MainWindowViewModel ShowProviderWindow(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, RegionsProvider regionsProvider, bool showSettingsView = false)
+		private MainWindowViewModel ShowProviderWindow(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, bool editProvider = false)
 		{
-			var dialogService = new OpenFileDialogService();
-			var providerControlViewModel = new ProviderControlViewModel(loadOptions, regionsProvider);
-			var settingsControlViewModel = new SettingsControlViewModel(loadOptions, credentialStore, dialogService, false);
-			var htmlUtil = new HtmlUtil();
+			var providerControlViewModel = new ProviderViewModel(loadOptions, languagePairs);
+			var settingsControlViewModel = new SettingsViewModel(loadOptions);
 			var mainWindowViewModel = new MainWindowViewModel(loadOptions,
 															  credentialStore,
 															  languagePairs,
-															  regionsProvider,
-															  htmlUtil,
-															  showSettingsView);
+															  editProvider);
 			var mainWindow = new MainWindow
 			{
 				DataContext = mainWindowViewModel
@@ -85,7 +77,7 @@ namespace MicrosoftTranslatorProvider.Studio
 				};
 			}
 
-			var options = JsonConvert.DeserializeObject<MTETranslationOptions>(translationProviderState);
+			var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
 			var providerName = options.CustomProviderName.SetProviderName(options.UseCustomProviderName);
 			return new TranslationProviderDisplayInfo()
 			{
@@ -126,9 +118,8 @@ namespace MicrosoftTranslatorProvider.Studio
 				}
 			}
 
-			var options = new MTETranslationOptions();
-			var regionsProvider = new RegionsProvider();
-			var mainWindowViewModel = ShowProviderWindow(languagePairs.ToArray(), credentialStore, options, regionsProvider);
+			var options = new TranslationOptions();
+			var mainWindowViewModel = ShowProviderWindow(languagePairs.ToArray(), credentialStore, options);
 			return mainWindowViewModel.DialogResult;
 		}
 	}
