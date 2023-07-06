@@ -17,6 +17,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Reference Include="System.Data.SQLite">
+			<HintPath>$(TradosFolder)\System.Data.SQLite.dll</HintPath>
+		</Reference>
 		<Reference Include="Sdl.Core.Globalization">
 			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
 		</Reference>
@@ -29,7 +32,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Dapper.StrongName" Version="2.0.143" />
+		<PackageReference Include="Dapper.StrongName" Version="2.0.123" />
 	</ItemGroup>
 
 	<PropertyGroup>

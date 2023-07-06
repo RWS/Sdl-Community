@@ -33,6 +33,10 @@ namespace Sdl.Community.MTEdge.Provider.Studio
 
         public ITranslationProvider TranslationProvider => _translationProvider;
 
+		//CultureCode ITranslationProviderLanguageDirection.SourceLanguage => _languagePair.SourceCulture;
+
+		//CultureCode ITranslationProviderLanguageDirection.TargetLanguage => _languagePair.TargetCulture;
+
 		/// <summary>
 		/// Used to translate a single segment.
 		/// </summary>

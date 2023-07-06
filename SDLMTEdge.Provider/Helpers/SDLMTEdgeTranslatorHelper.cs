@@ -93,8 +93,8 @@ namespace Sdl.Community.MTEdge.Provider.Helpers
             {
                 queryString = new Dictionary<string, string>
                 {
-                    { "sourceLanguageId", LanguageRegistryApi.Instance.GetLanguage(languageDirection.SourceCulture).CultureInfo.ToMTEdgeCode() },
-                    { "targetLanguageId", LanguageRegistryApi.Instance.GetLanguage(languageDirection.TargetCulture).CultureInfo.ToMTEdgeCode() },
+                    { "sourceLanguageId", LanguageRegistryApi.Instance.GetLanguage(languageDirection.SourceCulture.Name).CultureInfo.ToMTEdgeCode() },
+                    { "targetLanguageId", LanguageRegistryApi.Instance.GetLanguage(languageDirection.TargetCulture.Name).CultureInfo.ToMTEdgeCode() },
                     { "text", encodedInput }
                 };
             }
