@@ -7,11 +7,13 @@ using System.Linq;
 using System.Web;
 using System.Windows.Input;
 using MicrosoftTranslatorProvider.Commands;
+using MicrosoftTranslatorProvider.Extensions;
 using MicrosoftTranslatorProvider.Helpers;
 using MicrosoftTranslatorProvider.Interface;
 using MicrosoftTranslatorProvider.Interfaces;
 using MicrosoftTranslatorProvider.Model;
 using MicrosoftTranslatorProvider.Studio.TranslationProvider;
+using MicrosoftTranslatorProvider.View;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -38,10 +40,12 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		private bool _canSwitchProvider;
 		private ViewDetails _selectedView;
 		private string _multiButtonContent;
+		private bool _canAccessLanguageMappingProvider;
 
 		private ICommand _saveCommand;
 		private ICommand _navigateToCommand;
 		private ICommand _switchViewCommand;
+		private ICommand _openLanguageMappingProviderCommand;
 
 		public event CloseWindowEventRaiser CloseEventRaised;
 		public delegate void CloseWindowEventRaiser();
@@ -52,12 +56,14 @@ namespace MicrosoftTranslatorProvider.ViewModel
 								   bool editProvider = false)
 		{
 			TranslationOptions = options;
+			CanAccessLanguageMappingProvider = File.Exists(Constants.DatabaseFilePath);
 			_providerControlViewModel = new ProviderViewModel(options, languagePairs);
 			_settingsControlViewModel = new SettingsViewModel(options);
 			_privateEndpointViewModel = new PrivateEndpointViewModel();
 			_credentialStore = credentialStore;
 			_languagePairs = languagePairs;
 			_editProvider = editProvider;
+			
 
 			AvailableViews = new List<ViewDetails>
 			{
@@ -82,6 +88,23 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			SelectedEndpoint = Endpoints.First();
 			SwitchView(TranslationOptions.UsePrivateEndpoint ? ViewDetails_PrivateEndpoint : ViewDetails_Provider);
 			SetCredentialsOnUI();
+
+			if (_editProvider)
+			{
+				DatabaseExtensions.CreateDatabase(TranslationOptions);
+				CanAccessLanguageMappingProvider = File.Exists(Constants.DatabaseFilePath);
+			}
+		}
+
+		public bool DialogResult
+		{
+			get => _dialogResult;
+			set
+			{
+				if (_dialogResult == value) return;
+				_dialogResult = value;
+				OnPropertyChanged();
+			}
 		}
 
 		public string MultiButtonContent
@@ -91,7 +114,18 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			{
 				if (_multiButtonContent == value) return;
 				_multiButtonContent = value;
-				OnPropertyChanged(nameof(MultiButtonContent));
+				OnPropertyChanged();
+			}
+		}
+
+		public bool CanAccessLanguageMappingProvider
+		{
+			get => _canAccessLanguageMappingProvider;
+			set
+			{
+				if (_canAccessLanguageMappingProvider == value) return;
+				_canAccessLanguageMappingProvider = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -101,7 +135,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			set
 			{
 				_selectedView = value;
-				OnPropertyChanged(nameof(SelectedView));
+				OnPropertyChanged();
 			}
 		}
 
@@ -159,16 +193,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		public ICommand NavigateToCommand => _navigateToCommand ??= new RelayCommand(NavigateTo);
 		public ICommand SwitchViewCommand => _switchViewCommand ??= new RelayCommand(SwitchView);
 
-		public bool DialogResult
-		{
-			get => _dialogResult;
-			set
-			{
-				if (_dialogResult == value) return;
-				_dialogResult = value;
-				OnPropertyChanged(nameof(DialogResult));
-			}
-		}
+		public ICommand OpenLanguageMappingProviderCommand => _openLanguageMappingProviderCommand ??= new RelayCommand(OpenLanguageMappingProvider);
 
 		public bool IsWindowValid()
 		{
@@ -232,6 +257,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			SetMicrosoftProviderOptions();
 			SetGeneralProviderOptions();
 			SaveCredentials();
+			DatabaseExtensions.CreateDatabase(TranslationOptions);
 			DialogResult = true;
 			CloseEventRaised?.Invoke();
 		}
@@ -247,7 +273,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 				var apiConnecter = new MicrosoftApi(_providerControlViewModel.ApiKey, _providerControlViewModel.SelectedRegion?.Key);
 				apiConnecter.RefreshAuthToken();
-
 				return true;
 			}
 			catch (Exception e)
@@ -430,6 +455,18 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 			var credentials = new TranslationProviderCredential(currentCredentials.ToString(), true);
 			_credentialStore.AddCredential(uri.Uri, credentials);
+		}
+
+		private void OpenLanguageMappingProvider(object parameter)
+		{
+			var lmpViewModel = new LanguageMappingProviderViewModel(TranslationOptions);
+			var lmpView = new LanguageMappingProviderView() { DataContext = lmpViewModel };
+			lmpViewModel.CloseEventRaised += () =>
+			{
+				lmpView.Close();
+			};
+
+			var dialog = lmpView.ShowDialog();
 		}
 	}
 }

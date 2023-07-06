@@ -42,6 +42,6 @@ namespace MicrosoftTranslatorProvider.Interfaces
 
 		List<string> LanguagesSupported { get; set; }
 
-		List<LanguageMapping> LanguageMappings { get; set; }
+		List<PairMapping> LanguageMappings { get; set; }
 	}
 }

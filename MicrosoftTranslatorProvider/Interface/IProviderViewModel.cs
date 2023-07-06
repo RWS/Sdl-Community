@@ -20,6 +20,6 @@ namespace MicrosoftTranslatorProvider.Interfaces
 
 		List<RegionSubscription> Regions { get; set; }
 
-		List<LanguageMapping> LanguageMappings { get; set; }
+		List<PairMapping> LanguageMappings { get; set; }
 	}
 }
