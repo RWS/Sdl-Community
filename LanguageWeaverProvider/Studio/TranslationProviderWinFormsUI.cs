@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using LanguageWeaverProvider.Model.Options;
 using Sdl.LanguagePlatform.Core;
-using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace LanguageWeaverProvider
@@ -12,13 +9,13 @@ namespace LanguageWeaverProvider
 	[TranslationProviderWinFormsUi(Id = "Translation_Provider_Plug_inWinFormsUI",
 								   Name = "Translation_Provider_Plug_inWinFormsUI",
 								   Description = "Translation_Provider_Plug_inWinFormsUI")]
-	internal class MyTranslationProviderWinFormsUI : ITranslationProviderWinFormsUI
+	internal class TranslationProviderWinFormsUI : ITranslationProviderWinFormsUI
 	{
-		#region ITranslationProviderWinFormsUI Members
-
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
-			throw new NotImplementedException();
+			var options = new Options();
+			var translationProvider = new TranslationProvider(options);
+			return new ITranslationProvider[] { translationProvider };
 		}
 
 		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
@@ -55,7 +52,5 @@ namespace LanguageWeaverProvider
 		{
 			get { throw new NotImplementedException(); }
 		}
-
-		#endregion
 	}
 }

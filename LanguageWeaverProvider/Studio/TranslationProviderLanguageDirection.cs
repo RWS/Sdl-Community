@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace LanguageWeaverProvider
 {
-	internal class MyTranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
+	internal class TranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
 	{
-		#region ITranslationProviderLanguageDirection Members
-
 		public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
 		{
 			throw new NotImplementedException();
@@ -101,7 +96,5 @@ namespace LanguageWeaverProvider
 		{
 			throw new NotImplementedException();
 		}
-
-		#endregion
 	}
 }
