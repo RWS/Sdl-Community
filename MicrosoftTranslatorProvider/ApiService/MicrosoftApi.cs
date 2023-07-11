@@ -2,39 +2,52 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using LanguageMappingProvider.Model;
 using MicrosoftTranslatorProvider.Extensions;
 using MicrosoftTranslatorProvider.Helpers;
+using MicrosoftTranslatorProvider.Interfaces;
 using MicrosoftTranslatorProvider.Model;
-using MicrosoftTranslatorProvider.Service;
 using Newtonsoft.Json;
 using NLog;
 using RestSharp;
+using Sdl.LanguagePlatform.Core;
 
 namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 {
 	public class MicrosoftApi
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-		private readonly HtmlUtil _htmlUtil;
+		private readonly HtmlUtil _htmlUtil = new();
+
+		private readonly ITranslationOptions _options;
 
 		private string _subscriptionKey;
 		private string _region;
 		private string _authToken;
-		private List<string> _supportedLanguages;
+		private HashSet<string> _supportedLanguages;
 
-		public MicrosoftApi(string subscriptionKey, string region, HtmlUtil htmlUtil)
+		public MicrosoftApi(ITranslationOptions options)
+		{
+			_options = options;
+			_subscriptionKey = options.ApiKey;
+			_region = options.Region;
+			_authToken = GetAuthToken();
+			SetSupportedLanguages();
+		}
+
+		public MicrosoftApi(string subscriptionKey, string region)
 		{
 			_subscriptionKey = subscriptionKey;
 			_region = region;
-			_htmlUtil = htmlUtil;
-			_authToken ??= GetAuthToken();
-			_supportedLanguages ??= GetSupportedLanguages();
+			_authToken = GetAuthToken();
+			SetSupportedLanguages();
 		}
 
 		public void RefreshAuthToken()
@@ -54,28 +67,19 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 			_subscriptionKey = subscriptionKey;
 			_region = region;
 			_authToken = GetAuthToken();
-			_supportedLanguages = GetSupportedLanguages();
+			SetSupportedLanguages();
 		}
 
 		public bool IsSupportedLanguagePair(string sourceLanguage, string tarrgetLanguage)
 		{
-			sourceLanguage = ConvertLanguageCode(sourceLanguage);
-			tarrgetLanguage = ConvertLanguageCode(tarrgetLanguage);
-			var (sourceSupported, targetSupported) = (false, false);
-			foreach (var language in _supportedLanguages)
-			{
-				sourceSupported = sourceSupported ? sourceSupported : language.Equals(sourceLanguage);
-				targetSupported = targetSupported ? targetSupported : language.Equals(tarrgetLanguage);
-				if (sourceSupported && targetSupported)
-				{
-					return true;
-				}
-			}
-
-			return false;
+			var sourceCode = ConvertLanguageCode(sourceLanguage);
+			var targetCode = ConvertLanguageCode(tarrgetLanguage);
+			var sourceSupported = _supportedLanguages.TryGetValue(sourceCode, out _);
+			var targetSupported = _supportedLanguages.TryGetValue(targetCode, out _);
+			return sourceSupported && targetSupported;
 		}
 
-		public string Translate(string sourceLanguage, string targetLanguage, string textToTranslate, string categoryId)
+		public string Translate(LanguagePair languagepair, string textToTranslate)
 		{
 			_authToken ??= GetAuthToken();
 			if (_authToken is null)
@@ -85,14 +89,20 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 
 			try
 			{
-				sourceLanguage = ConvertLanguageCode(sourceLanguage);
-				targetLanguage = ConvertLanguageCode(targetLanguage);
-				categoryId = categoryId == "" ? "general" : categoryId;
+				var mapping = _options.LanguageMappings.FirstOrDefault(x => x.LanguagePair.TargetCultureName == languagepair.TargetCultureName);
+				var sourceLanguage = DatabaseExtensions.GetLanguageCode(new CultureInfo(languagepair.SourceCultureName));
+				var targetLanguage = DatabaseExtensions.GetLanguageCode(new CultureInfo(languagepair.TargetCultureName));
+				var categoryId = string.IsNullOrEmpty(mapping.CategoryID) ? "general" : mapping.CategoryID;
 				return TryTranslate(sourceLanguage, targetLanguage, textToTranslate, categoryId);
 			}
 			catch (WebException exception)
 			{
 				ErrorHandler.HandleError(exception);
+				return null;
+			}
+			catch (Exception exception)
+			{
+				ErrorHandler.HandleError("The Category ID is not valid for this language pair", "Category ID");
 				return null;
 			}
 		}
@@ -143,21 +153,21 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 			return string.Concat(uri, path, languageParams);
 		}
 
-		private List<string> GetSupportedLanguages()
+		public List<LanguageMapping> GetSupportedLanguages()
 		{
 			try
 			{
 				_authToken ??= GetAuthToken();
 				return TryGetSupportedLanguages();
 			}
-			catch (WebException exception)
+			catch (Exception ex) 
 			{
-				ErrorHandler.HandleError(exception);
+				ErrorHandler.HandleError(ex);
 				return null;
 			}
 		}
 
-		private List<string> TryGetSupportedLanguages()
+		private List<LanguageMapping> TryGetSupportedLanguages()
 		{
 			var uri = new Uri("https://" + Constants.MicrosoftProviderUriBase);
 			var client = new RestClient(uri);
@@ -167,15 +177,43 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 			request.AddParameter("scope", "translation");
 
 			var languageResponse = client.ExecuteAsync(request).Result;
-			var languages = JsonConvert.DeserializeObject<LanguageResponse>(languageResponse.Content);
+			var languages = JsonConvert.DeserializeObject<LanguageResponse>(languageResponse.Content)?.Translation?.Distinct();
 
-			var languageCodeList = new List<string>();
-			foreach (var language in languages?.Translation)
+			var output = new List<LanguageMapping>();
+			foreach (var language in languages)
 			{
-				languageCodeList.Add(language.Key);
+				output.Add(new()
+				{
+					Name = language.Value.Name,
+					LanguageCode = language.Key
+				});
 			}
 
-			return languageCodeList;
+			return output;
+		}
+
+		private void SetSupportedLanguages()
+		{
+			try
+			{
+				_authToken ??= GetAuthToken();
+				TrySetSupportedLanguages();
+			}
+			catch (Exception exception)
+			{
+				ErrorHandler.HandleError(exception);
+				return;
+			}
+		}
+
+		private void TrySetSupportedLanguages()
+		{
+			var languages = GetSupportedLanguages();
+			_supportedLanguages = new();
+			foreach (var language in languages)
+			{
+				_supportedLanguages.Add(language.LanguageCode);
+			}
 		}
 
 		private string GetAuthToken()

@@ -1,4 +1,7 @@
-﻿namespace MicrosoftTranslatorProvider
+﻿using System;
+using System.IO;
+
+namespace MicrosoftTranslatorProvider
 {
 	public static class Constants
 	{
@@ -18,6 +21,12 @@
 		public const string TellMe_CommunityForumUrl = "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/";
 
 		public const string LearnMore_Regions = "https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/change-organization-location?view=azure-devops/";
+		public const string Navigate_Categories = "https://portal.customtranslator.azure.ai/workspaces";
 		public const string LearnMore_Category = "https://learn.microsoft.com/en-us/azure/cognitive-services/translator/custom-translator/overview/";
+
+
+		public static string DatabaseLocation = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Trados AppStore\\Language Mapping Provider";
+		public static string DatabaseFilePath = Path.Combine(DatabaseLocation, $"{DatabaseName}data.sqlite3");
+		public const string DatabaseName = "microsofttp";
 	}
 }

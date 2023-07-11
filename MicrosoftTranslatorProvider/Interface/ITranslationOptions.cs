@@ -6,8 +6,6 @@ namespace MicrosoftTranslatorProvider.Interfaces
 {
 	public interface ITranslationOptions
 	{
-		bool UseCategoryID { get; set; }
-
 		bool PersistMicrosoftCredentials { get; set; }
 
 		bool SendPlainTextOnly { get; set; }
@@ -26,7 +24,7 @@ namespace MicrosoftTranslatorProvider.Interfaces
 
 		string ProjectName { get; set; }
 
-		string ClientID { get; set; }
+		string ApiKey { get; set; }
 
 		string Region { get; set; }
 
@@ -42,6 +40,8 @@ namespace MicrosoftTranslatorProvider.Interfaces
 
 		Uri Uri { get; }
 
-		Dictionary<string, string> LanguagesSupported { get; set; }
+		List<string> LanguagesSupported { get; set; }
+
+		List<PairMapping> LanguageMappings { get; set; }
 	}
 }

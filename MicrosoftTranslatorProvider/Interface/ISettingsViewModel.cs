@@ -3,7 +3,7 @@ using MicrosoftTranslatorProvider.Model;
 
 namespace MicrosoftTranslatorProvider.Interfaces
 {
-	public interface ISettingsControlViewModel
+	public interface ISettingsViewModel
 	{
 		bool ReSendDraft { get; set; }
 
@@ -19,13 +19,11 @@ namespace MicrosoftTranslatorProvider.Interfaces
 
 		string ErrorMessage { get; set; }
 
-		bool IsTellMeAction { get; set; }
-
 		string CustomProviderName { get; set; }
 
 		bool UseCustomProviderName { get; set; }
 
-		BaseModel ViewModel { get; set; }
+		BaseModel ViewModel { get; }
 
 		ICommand ShowMainWindowCommand { get; set; }
 

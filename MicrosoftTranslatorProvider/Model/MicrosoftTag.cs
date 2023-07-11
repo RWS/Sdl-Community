@@ -2,9 +2,9 @@
 
 namespace MicrosoftTranslatorProvider.Model
 {
-	public class MTETag
+	public class MicrosoftTag
 	{
-		public MTETag(Tag sdlTag)
+		public MicrosoftTag(Tag sdlTag)
 		{
 			SdlTag = sdlTag;
 		}

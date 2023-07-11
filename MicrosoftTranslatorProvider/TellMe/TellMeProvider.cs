@@ -3,7 +3,7 @@
 namespace MicrosoftTranslatorProvider.TellMe
 {
 	[TellMeProvider]
-	public class MTPTellMeProvider : ITellMeProvider
+	public class TellMeProvider : ITellMeProvider
 	{
 		public string Name => $"{Constants.MicrosoftNaming_FullName} - TellMe";
 

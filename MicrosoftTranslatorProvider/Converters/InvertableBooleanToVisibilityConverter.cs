@@ -17,13 +17,11 @@ namespace MicrosoftTranslatorProvider.Converters
 			}
 
 			var direction = (Parameters)Enum.Parse(typeof(Parameters), (string)parameter);
-			switch (direction)
+			return direction switch
 			{
-				case Parameters.Inverted:
-					return boolValue ? Visibility.Collapsed : Visibility.Visible;
-				default:
-					return boolValue ? Visibility.Visible : Visibility.Collapsed;
-			}
+				Parameters.Inverted => boolValue ? Visibility.Collapsed : Visibility.Visible,
+				_ => (object)(boolValue ? Visibility.Visible : Visibility.Collapsed),
+			};
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

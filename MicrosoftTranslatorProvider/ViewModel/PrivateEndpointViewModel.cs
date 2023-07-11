@@ -21,7 +21,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 		public PrivateEndpointViewModel()
 		{
-			ViewModel = this;
 			Headers = new();
 			Parameters = new();
 			Endpoint = string.Empty;
@@ -43,7 +42,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			});
 		}
 
-		public BaseModel ViewModel { get; set; }
+		public BaseModel ViewModel => this;
 
 		public string Endpoint
 		{
@@ -76,9 +75,13 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		}
 
 		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
+
 		public ICommand AddHeaderCommand => _addHeaderCommand ??= new RelayCommand(AddHeader);
+
 		public ICommand AddParameterCommand => _addParameterCommand ??= new RelayCommand(AddParameter);
+
 		public ICommand DeletePairCommand => _deletePairCommand ??= new RelayCommand(DeletePair);
+
 		public ICommand SelectedItemChangedCommand => _selectedItemChangedCommand ??= new RelayCommand(SelectedItemChanged);
 
 		private void Clear(object parameter)
