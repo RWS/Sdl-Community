@@ -23,6 +23,9 @@
 		<Reference Include="Sdl.Core.Globalization">
 			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
 		</Reference>
+		<Reference Include="Sdl.Core.Globalization.Async">
+		  <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
+		</Reference>
 		<Reference Include="Sdl.LanguagePlatform.Core">
 			<HintPath>$(TradosFolder)\Sdl.LanguagePlatform.Core.dll</HintPath>
 		</Reference>
@@ -33,7 +36,7 @@
 			<HintPath>$(TradosFolder)\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.TellMe.ProviderApi">
-		  <HintPath>..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
+		  <HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
 		</Reference>
 		<Reference Include="System" />
 		<Reference Include="System.Core" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -72,20 +73,14 @@ namespace LanguageWeaverProvider
 			throw new NotImplementedException();
 		}
 
-		public System.Globalization.CultureInfo SourceLanguage
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public System.Globalization.CultureInfo TargetLanguage
-		{
-			get { throw new NotImplementedException(); }
-		}
-
 		public ITranslationProvider TranslationProvider
 		{
 			get { throw new NotImplementedException(); }
 		}
+
+		public CultureCode SourceLanguage => throw new NotImplementedException();
+
+		public CultureCode TargetLanguage => throw new NotImplementedException();
 
 		public ImportResult UpdateTranslationUnit(TranslationUnit translationUnit)
 		{
