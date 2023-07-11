@@ -36,6 +36,7 @@ namespace Sdl.Community.MTEdge.Provider.Model
 
 		public Dictionary<CultureInfo, MTEdgeLanguagePair> LanguagePairPreferences { get; set; }
 
+		[JsonIgnore]
 		public List<TradosToMTEdgeLanguagePair> LanguageMapping { get; set; }
 
 		public int Port
