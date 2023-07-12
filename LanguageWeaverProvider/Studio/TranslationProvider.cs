@@ -7,12 +7,12 @@ namespace LanguageWeaverProvider
 {
 	internal class TranslationProvider : ITranslationProvider
 	{
-		public TranslationProvider(IOptions options)
+		public TranslationProvider(ITranslationOptions options)
 		{
 			Options = options;
 		}
 
-		public IOptions Options { get; set; }
+		public ITranslationOptions Options { get; set; }
 
 		public TranslationMethod TranslationMethod
 		{

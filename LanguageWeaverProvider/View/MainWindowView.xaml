@@ -13,31 +13,59 @@
 		WindowStyle="None"
 		Height="700"
 		Width="600"
-		d:DesignHeight="700"
-		d:DesignWidth="800">
+		d:DesignHeight="400"
+		d:DesignWidth="600">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../Style/GroupBox.xaml" />
 				<ResourceDictionary Source="../Style/WindowsBorder.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
-			
+
 			<Style TargetType="Image">
 				<Setter Property="RenderOptions.BitmapScalingMode"
 						Value="HighQuality" />
 			</Style>
 		</ResourceDictionary>
-
 	</Window.Resources>
 
 	<Border Style="{StaticResource WindowControlBorderStyle}">
 		<Grid>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto" />
-				<RowDefinition Height="Auto" />
 				<RowDefinition Height="*" />
 			</Grid.RowDefinitions>
 
 			<style:WindowsControl Grid.Row="0" />
+
+			<GroupBox Header="Language Weaver Providers" Style="{StaticResource DefaultGroupBox}"
+					  Grid.Row="1"
+					  Margin="24 0 24 24"
+					  Padding="12 24">
+				<StackPanel VerticalAlignment="Center">
+					<Button Content="Language Weaver"
+							Style="{StaticResource Sdl.Button.PrimaryStyle}"
+							Cursor="Hand"
+							Width="172"
+							Margin="0 8"/>
+					<Button Content="Language Weaver Edge"
+							Style="{StaticResource Sdl.Button.PrimaryStyle}"
+							Cursor="Hand"
+							Width="172"
+							Margin="0 8" />
+					<Button Content="Help"
+							Style="{StaticResource Sdl.Button.SecondaryStyle}"
+							Cursor="Hand"
+							Width="172"
+							Margin="0 8" />
+					<Button Content="Close"
+							Style="{StaticResource Sdl.Button.SecondaryStyle}"
+							Cursor="Hand"
+							Width="172"
+							Margin="0 8" />
+				</StackPanel>
+			</GroupBox>
 		</Grid>
 	</Border>
 </Window>
