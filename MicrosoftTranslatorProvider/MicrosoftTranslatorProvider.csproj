@@ -4,7 +4,6 @@
 		<TargetFramework>net48</TargetFramework>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
-		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17</TradosFolder>
 		<CreatePluginPackage>true</CreatePluginPackage>
 		<UseWPF>true</UseWPF>
 		<LangVersion>latest</LangVersion>
@@ -45,9 +44,6 @@
 		</Reference>
 		<Reference Include="Sdl.Core.Globalization.Async">
 		  <HintPath>..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.Async.dll</HintPath>
-		</Reference>
-		<Reference Include="Sdl.Core.Globalization.Async">
-		  <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.Desktop.IntegrationApi">
 		  <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.dll</HintPath>
@@ -118,7 +114,6 @@
 		<None Include="pluginpackage.manifest.xml" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="LanguageMappingProvider" Version="1.0.92" />
 		<PackageReference Include="RestSharp" Version="107.3.0" />
 		<PackageReference Include="Sdl.Core.PluginFramework">
 			<Version>2.1.0</Version>

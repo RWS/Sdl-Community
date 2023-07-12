@@ -4,7 +4,7 @@ using Sdl.LanguagePlatform.Core;
 
 namespace MicrosoftTranslatorProvider.Model
 {
-	public class PairMapping : BaseModel
+	public class LanguageMapping : BaseModel
 	{
 		private string _categoryId;
 		private ICommand _clearCommand;
