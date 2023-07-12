@@ -33,8 +33,7 @@
 			</ResourceDictionary.MergedDictionaries>
 			<converters:EmptyToVisibility x:Key="EmptyToVisibilityConverter" />
 			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
-			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter" />
-
+			
 			<DataTemplate DataType="{x:Type viewModels:ProviderViewModel}">
 				<ui:ProviderControl />
 			</DataTemplate>
@@ -72,25 +71,17 @@
 				<ContentControl Content="{Binding SelectedView.ViewModel}" />
 			</StackPanel>
 
-			<StackPanel Grid.Row="3"
-						Orientation="Horizontal"
-						HorizontalAlignment="Left"
-						Margin="24">
-				<Button Content="Help"
-						Style="{StaticResource Sdl.Button.SecondaryStyle}"
-						Command="{Binding NavigateToCommand}"
-						CommandParameter="{x:Static root:Constants.TellMe_HelpUrl}"
-						Cursor="Hand"
-						Width="120"
-						Height="30" />
-				
-				<Button Content="Language Mapping"
-						Style="{StaticResource Sdl.Button.SecondaryStyle}"
-						Command="{Binding OpenLanguageMappingProviderCommand}"
-						IsEnabled="{Binding CanAccessLanguageMappingProvider, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBoolEnabledConverter}}"
-						Cursor="Hand"
-						Margin="8 0 0 0"/>
-			</StackPanel>
+
+			<Button Content="Help"
+					Style="{StaticResource Sdl.Button.SecondaryStyle}"
+					Command="{Binding NavigateToCommand}"
+					CommandParameter="{x:Static root:Constants.TellMe_HelpUrl}"
+					Cursor="Hand"
+					Width="120"
+					Height="30"
+					Grid.Row="3"
+					HorizontalAlignment="Left"
+					Margin="24"/>
 
 			<StackPanel HorizontalAlignment="Right"
 						Orientation="Horizontal"

@@ -34,9 +34,9 @@ namespace MicrosoftTranslatorProvider
 
 		public bool CanReverseLanguageDirection => false;
 
-		CultureCode ITranslationProviderLanguageDirection.SourceLanguage => _languagePair.SourceCulture;
+		public CultureCode SourceLanguage => _languagePair.SourceCulture;
 
-		CultureCode ITranslationProviderLanguageDirection.TargetLanguage => _languagePair.TargetCulture;
+		public CultureCode TargetLanguage => _languagePair.TargetCulture;
 
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
 		{

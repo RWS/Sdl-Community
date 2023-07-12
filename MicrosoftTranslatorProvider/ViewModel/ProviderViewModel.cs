@@ -16,8 +16,8 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		private readonly LanguagePair[] _languagePairs;
 		private readonly ITranslationOptions _options;
 
-		private PairMapping _selectedLanguageMapping;
-		private List<PairMapping> _languageMappings;
+		private LanguageMapping _selectedLanguageMapping;
+		private List<LanguageMapping> _languageMappings;
 		private List<RegionSubscription> _regions;
 		private RegionSubscription _selectedRegion;
 
@@ -83,7 +83,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			}
 		}
 
-		public List<PairMapping> LanguageMappings
+		public List<LanguageMapping> LanguageMappings
 		{
 			get => _languageMappings;
 			set
@@ -94,7 +94,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			}
 		}
 
-		public PairMapping SelectedLanguageMapping
+		public LanguageMapping SelectedLanguageMapping
 		{
 			get => _selectedLanguageMapping;
 			set
@@ -122,7 +122,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				return;
 			}
 
-			var mapping = new List<PairMapping>();
+			var mapping = new List<LanguageMapping>();
 			foreach (var pair in _languagePairs)
 			{
 				var sourceCulture = new CultureInfo(pair.SourceCultureName);
@@ -140,10 +140,10 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 		private void LoadLanguageMappings()
 		{
-			var mapping = new List<PairMapping>();
+			var mapping = new List<LanguageMapping>();
 			foreach (var mappedLanguage in _options.LanguageMappings)
 			{
-				mapping.Add(new PairMapping()
+				mapping.Add(new LanguageMapping()
 				{
 					DisplayName = mappedLanguage.DisplayName,
 					CategoryID = mappedLanguage.CategoryID,
