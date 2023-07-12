@@ -26,6 +26,9 @@
 		<Reference Include="Sdl.Core.Globalization.Async">
 		  <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
 		</Reference>
+		<Reference Include="Sdl.Desktop.Platform.Controls">
+		  <HintPath>..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.Controls.dll</HintPath>
+		</Reference>
 		<Reference Include="Sdl.LanguagePlatform.Core">
 			<HintPath>$(TradosFolder)\Sdl.LanguagePlatform.Core.dll</HintPath>
 		</Reference>
@@ -59,7 +62,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="PluginResources.resx" />
+		<None Include="PluginResources.resx">
+		  <Generator>PublicResXFileCodeGenerator</Generator>
+		  <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+		</None>
 		<None Include="pluginpackage.manifest.xml" />
 	</ItemGroup>
 
@@ -74,10 +80,19 @@
 
 	<ItemGroup>
 		<Folder Include="Interface\" />
+		<Folder Include="Helpers\" />
 		<Folder Include="ViewModel\Cloud\" />
 		<Folder Include="ViewModel\Edge\" />
 		<Folder Include="ServiceClients\" />
 		<Folder Include="View\Cloud\" />
 		<Folder Include="View\Edge\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="PluginResources.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>PluginResources.resx</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 </Project>

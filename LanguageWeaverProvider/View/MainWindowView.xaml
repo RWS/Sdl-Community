@@ -3,12 +3,41 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:local="clr-namespace:LanguageWeaverProvider.View"
+		xmlns:viewModel="clr-namespace:LanguageWeaverProvider.ViewModel"
+		xmlns:style="clr-namespace:LanguageWeaverProvider.Style"
 		mc:Ignorable="d"
-		Title="MainWindowView"
-		Height="450"
-		Width="800">
-	<Grid>
+		d:DataContext="{d:DesignInstance viewModel:MainViewModel}"
+		WindowStartupLocation="CenterScreen"
+		Title="Google TP"
+		ResizeMode="NoResize"
+		WindowStyle="None"
+		Height="700"
+		Width="600"
+		d:DesignHeight="700"
+		d:DesignWidth="800">
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../Style/WindowsBorder.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+			
+			<Style TargetType="Image">
+				<Setter Property="RenderOptions.BitmapScalingMode"
+						Value="HighQuality" />
+			</Style>
+		</ResourceDictionary>
 
-	</Grid>
+	</Window.Resources>
+
+	<Border Style="{StaticResource WindowControlBorderStyle}">
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+
+			<style:WindowsControl Grid.Row="0" />
+		</Grid>
+	</Border>
 </Window>

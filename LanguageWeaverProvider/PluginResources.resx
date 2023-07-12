@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="MainView_CloseButton" xml:space="preserve">
+    <value>Close app</value>
+  </data>
+  <data name="MainView_ConfirmButton" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="MainView_HelpButton" xml:space="preserve">
+    <value>Help</value>
+  </data>
   <data name="Plugin_Name" xml:space="preserve">
     <value>Language Weaver Provider</value>
   </data>
