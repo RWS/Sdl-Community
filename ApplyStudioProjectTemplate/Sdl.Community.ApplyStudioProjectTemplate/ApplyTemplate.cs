@@ -50,7 +50,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 	        FileTypes = GetApplyTemplateOptions(sourceXml, "ftts");
 	        MatchRepairSettings = GetApplyTemplateOptions(sourceXml, "mrs");
 	        VerificationSpecificLanguages = GetApplyTemplateOptions(sourceXml, "vsl");
-        }
+		}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplyTemplate"/> class.
@@ -358,12 +358,12 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         {
             return Name;
         }
-
-        /// <summary>
-        /// Writes the XML.
-        /// </summary>
-        /// <param name="writer">The XML writer.</param>
-        public void WriteXml(XmlWriter writer)
+		
+		/// <summary>
+		/// Writes the XML.
+		/// </summary>
+		/// <param name="writer">The XML writer.</param>
+		public void WriteXml(XmlWriter writer)
         {
             writer.WriteStartElement("template");
             writer.WriteAttributeString("name", Name);
@@ -385,8 +385,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             writer.WriteAttributeString("btsl", BatchTasksSpecificLanguages.ToString());
             writer.WriteAttributeString("ftts", FileTypes.ToString());
 			writer.WriteAttributeString("mrs",MatchRepairSettings.ToString());
-			writer.WriteAttributeString("vsl", VerificationSpecificLanguages.ToString());
-            writer.WriteEndElement();
+			writer.WriteAttributeString("vsl", VerificationSpecificLanguages.ToString());			
+			writer.WriteEndElement();
         }
 
         /// <summary>
