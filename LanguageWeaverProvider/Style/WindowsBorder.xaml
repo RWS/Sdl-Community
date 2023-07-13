@@ -10,7 +10,7 @@
 		<Setter Property="BorderThickness"
 				Value="1" />
 		<Setter Property="BorderBrush"
-				Value="{StaticResource WindowsControl.Active.Border}" />
+				Value="Transparent" />
 		<Style.Triggers>
 			<DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
 						 Value="Maximized">
@@ -20,7 +20,7 @@
 			<DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=IsActive}"
 						 Value="False">
 				<Setter Property="BorderBrush"
-						Value="{DynamicResource WindowsControl.Inactive.Border}" />
+						Value="Transparent" />
 			</DataTrigger>
 		</Style.Triggers>
 	</Style>

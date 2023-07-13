@@ -1,4 +1,6 @@
 ﻿using System;
+using LanguageWeaverProvider.Model.Options;
+using Newtonsoft.Json;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace LanguageWeaverProvider
@@ -10,17 +12,26 @@ namespace LanguageWeaverProvider
 	{
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
 		{
-			throw new NotImplementedException();
+			var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
+			return new TranslationProvider(options);
 		}
 
 		public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
 		{
-			throw new NotImplementedException();
+			return new TranslationProviderInfo
+			{
+				TranslationMethod = TranslationMethod.MachineTranslation,
+				Name = Constants.PluginName
+			};
 		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
 		{
-			throw new NotImplementedException();
+			return translationProviderUri switch
+			{
+				null => throw new ArgumentNullException("Unsuported"),
+				_ => string.Equals(translationProviderUri.Scheme, Constants.TranslationScheme, StringComparison.OrdinalIgnoreCase)
+			};
 		}
 	}
 }

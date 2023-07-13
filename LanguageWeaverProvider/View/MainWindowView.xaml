@@ -3,18 +3,22 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:viewModel="clr-namespace:LanguageWeaverProvider.ViewModel"
 		xmlns:style="clr-namespace:LanguageWeaverProvider.Style"
+		xmlns:viewModel="clr-namespace:LanguageWeaverProvider.ViewModel"
+		xmlns:cloudView="clr-namespace:LanguageWeaverProvider.View.Cloud"
+		xmlns:cloudViewModel="clr-namespace:LanguageWeaverProvider.ViewModel.Cloud"
+		xmlns:converters="clr-namespace:LanguageWeaverProvider.Converters"
 		mc:Ignorable="d"
 		d:DataContext="{d:DesignInstance viewModel:MainViewModel}"
 		WindowStartupLocation="CenterScreen"
-		Title="Google TP"
-		ResizeMode="NoResize"
+		Title="Language Weaver Provider"
+		ResizeMode="CanResize"
 		WindowStyle="None"
-		Height="700"
+		Height="400"
 		Width="600"
 		d:DesignHeight="400"
 		d:DesignWidth="600">
+	
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -27,6 +31,12 @@
 				<Setter Property="RenderOptions.BitmapScalingMode"
 						Value="HighQuality" />
 			</Style>
+			
+			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
+
+			<DataTemplate DataType="{x:Type cloudViewModel:CloudMainViewModel}">
+				<cloudView:CloudMainView />
+			</DataTemplate>
 		</ResourceDictionary>
 	</Window.Resources>
 
@@ -39,27 +49,48 @@
 
 			<style:WindowsControl Grid.Row="0" />
 
-			<GroupBox Header="Language Weaver Providers" Style="{StaticResource DefaultGroupBox}"
-					  Grid.Row="1"
+			<GroupBox Grid.Row="1"
+					  Header="Language Weaver Providers"
+					  Visibility="{Binding IsServiceSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+					  Style="{StaticResource DefaultGroupBox}"
 					  Margin="24 0 24 24"
 					  Padding="12 24">
 				<StackPanel VerticalAlignment="Center">
 					<Button Content="Language Weaver"
 							Style="{StaticResource Sdl.Button.PrimaryStyle}"
-							Cursor="Hand"
-							Width="172"
-							Margin="0 8"/>
-					<Button Content="Language Weaver Edge"
-							Style="{StaticResource Sdl.Button.PrimaryStyle}"
+							Command="{Binding SelectLanguageWeaverServiceCommand}"
+							CommandParameter="Cloud"
 							Cursor="Hand"
 							Width="172"
 							Margin="0 8" />
-					<Button Content="Help"
+					<Button Content="Language Weaver Edge"
+							Style="{StaticResource Sdl.Button.PrimaryStyle}"
+							Command="{Binding SelectLanguageWeaverServiceCommand}"
+							CommandParameter="Edge"
+							Cursor="Hand"
+							Width="172"
+							Margin="0 8" />
+					<Button Content="Exit"
+							Command="{Binding CloseCommand}"
 							Style="{StaticResource Sdl.Button.SecondaryStyle}"
 							Cursor="Hand"
 							Width="172"
 							Margin="0 8" />
-					<Button Content="Close"
+				</StackPanel>
+			</GroupBox>
+
+			<GroupBox Grid.Row="1"
+					  Header="Authentication"
+					  Style="{StaticResource DefaultGroupBox}"
+					  Visibility="{Binding IsServiceSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+					  Margin="24 0 24 24"
+					  Padding="12 24">
+				<StackPanel VerticalAlignment="Center">
+					<ContentControl Content="{Binding ProviderView}"
+									Focusable="False"
+									Margin="0" />
+					<Button Content="Back"
+							Command="{Binding BackCommand}"
 							Style="{StaticResource Sdl.Button.SecondaryStyle}"
 							Cursor="Hand"
 							Width="172"

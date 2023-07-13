@@ -4,6 +4,7 @@ using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Model.Options.Interface;
 using LanguageWeaverProvider.View;
 using LanguageWeaverProvider.ViewModel;
+using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -14,13 +15,17 @@ namespace LanguageWeaverProvider
 								   Description = "Translation_Provider_Plug_inWinFormsUI")]
 	internal class TranslationProviderWinFormsUI : ITranslationProviderWinFormsUI
 	{
+		public bool SupportsEditing => true;
+
+		public string TypeName => Constants.PluginName;
+
+		public string TypeDescription => Constants.PluginName;
+
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
 			var options = new TranslationOptions();
-			var mainViewModel = new MainViewModel(options);
-			var mainView = new MainWindowView { DataContext = mainViewModel };
-			var dialogResult = mainView.ShowDialog();
-			if ((bool)dialogResult)
+			var mainWindowViewModel = ShowRequestedView(languagePairs, credentialStore, options);
+			if (!mainWindowViewModel.SaveChanges)
 			{
 				return null;
 			}
@@ -31,17 +36,22 @@ namespace LanguageWeaverProvider
 
 		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
-			throw new NotImplementedException();
+			if (translationProvider is not TranslationProvider editProvider)
+			{
+				return false;
+			}
+
+			var mainWindowViewModel = ShowRequestedView(languagePairs, credentialStore, editProvider.TranslationOptions, true);
+			return mainWindowViewModel.SaveChanges;
 		}
 
-		private MainWindowViewModel ShowRequestedView(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, bool showSettingsView = false)
+		private MainViewModel ShowRequestedView(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, bool editProvider = false)
 		{
-			SetSavedCredentialsOnUi(credentialStore, loadOptions);
-			var mainWindowViewModel = new MainWindowViewModel(loadOptions, credentialStore, languagePairs, showSettingsView);
+			var mainWindowViewModel = new MainViewModel(loadOptions, editProvider);
 			var mainWindowView = new MainWindowView { DataContext = mainWindowViewModel };
 			mainWindowViewModel.CloseEventRaised += () =>
 			{
-				UpdateProviderCredentials(credentialStore, loadOptions);
+				// UpdateProviderCredentials(credentialStore, loadOptions);
 				mainWindowView.Close();
 			};
 
@@ -49,34 +59,16 @@ namespace LanguageWeaverProvider
 			return mainWindowViewModel;
 		}
 
-		public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
-		{
-			throw new NotImplementedException();
-		}
-
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
 		{
-			throw new NotImplementedException();
-		}
-
-		public bool SupportsEditing
-		{
-			get { throw new NotImplementedException(); }
+			var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
+			return new TranslationProviderDisplayInfo();
 		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
-		{
-			throw new NotImplementedException();
-		}
+			=> translationProviderUri is not null;
 
-		public string TypeDescription
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public string TypeName
-		{
-			get { throw new NotImplementedException(); }
-		}
+		public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
+			=> false;
 	}
 }

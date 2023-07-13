@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="LanguageWeaverProvider.View.Cloud.CloudMainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:local="clr-namespace:LanguageWeaverProvider.View.Cloud"
+			 xmlns:viewModel="clr-namespace:LanguageWeaverProvider.ViewModel.Cloud"
+			 d:DataContext="{d:DesignInstance viewModel:CloudMainViewModel}"
+			 mc:Ignorable="d">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../../Style/GroupBox.xaml" />
+				<ResourceDictionary Source="../../Style/WindowsBorder.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+
+			<Style TargetType="Image">
+				<Setter Property="RenderOptions.BitmapScalingMode"
+						Value="HighQuality" />
+			</Style>
+
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+	<StackPanel>
+		<Button Content="User credentials"
+				Style="{StaticResource Sdl.Button.PrimaryStyle}"
+				Cursor="Hand"
+				Width="172"
+				Margin="0 8" />
+		<Button Content="User secret"
+				Style="{StaticResource Sdl.Button.PrimaryStyle}"
+				Cursor="Hand"
+				Width="172"
+				Margin="0 8" />
+	</StackPanel>
+</UserControl>

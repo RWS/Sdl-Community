@@ -24,6 +24,9 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+		<Reference Include="Newtonsoft.Json">
+		  <HintPath>..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Newtonsoft.Json.dll</HintPath>
+		</Reference>
 		<Reference Include="Sdl.Core.Globalization">
 			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
 		</Reference>
@@ -86,12 +89,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Interface\" />
 		<Folder Include="Helpers\" />
-		<Folder Include="ViewModel\Cloud\" />
-		<Folder Include="ViewModel\Edge\" />
+		<Folder Include="Interface\" />
 		<Folder Include="ServiceClients\" />
-		<Folder Include="View\Cloud\" />
+		<Folder Include="ViewModel\Edge\" />
 		<Folder Include="View\Edge\" />
 	</ItemGroup>
 

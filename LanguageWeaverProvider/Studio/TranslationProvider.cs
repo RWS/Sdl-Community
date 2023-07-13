@@ -1,5 +1,7 @@
 ﻿using System;
+using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Model.Options.Interface;
+using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -9,141 +11,55 @@ namespace LanguageWeaverProvider
 	{
 		public TranslationProvider(ITranslationOptions options)
 		{
-			Options = options;
+			TranslationOptions = options;
 		}
 
-		public ITranslationOptions Options { get; set; }
+		public ITranslationOptions TranslationOptions { get; set; }
 
-		public TranslationMethod TranslationMethod
-		{
-			get { throw new NotImplementedException(); }
-		}
+		public TranslationMethod TranslationMethod => TranslationMethod.MachineTranslation;
+		public string Name => Constants.PluginName;
 
-		public bool IsReadOnly
-		{
-			get { throw new NotImplementedException(); }
-		}
+		public bool SupportsSearchForTranslationUnits => true;
+		public bool SupportsTaggedInput => true;
+		public bool SupportsTranslation => true;
+		public bool SupportsPenalties => true;
+		public bool SupportsScoring => true;
+		public bool IsReadOnly => true;
+		public bool SupportsConcordanceSearch => false;
+		public bool SupportsDocumentSearches => false;
+		public bool SupportsSourceConcordanceSearch => false;
+		public bool SupportsTargetConcordanceSearch => false;
+		public bool SupportsStructureContext => false;
+		public bool SupportsMultipleResults => false;
+		public bool SupportsFuzzySearch => false;
+		public bool SupportsPlaceables => false;
+		public bool SupportsWordCounts => false;
+		public bool SupportsFilters => false;
+		public bool SupportsUpdate => false;
 
-		public bool SupportsConcordanceSearch
-		{
-			get { throw new NotImplementedException(); }
-		}
+		public ProviderStatusInfo StatusInfo => new(true, Constants.PluginName);
 
-		public bool SupportsDocumentSearches
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public bool SupportsFilters
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public bool SupportsFuzzySearch
-		{
-			get { throw new NotImplementedException(); }
-		}
-		public bool SupportsMultipleResults
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public bool SupportsPenalties
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public bool SupportsPlaceables
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public bool SupportsScoring
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public bool SupportsSearchForTranslationUnits
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public bool SupportsSourceConcordanceSearch
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public bool SupportsStructureContext
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public bool SupportsTaggedInput
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public bool SupportsTargetConcordanceSearch
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public bool SupportsTranslation
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public bool SupportsUpdate
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public bool SupportsWordCounts
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public string Name
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public ProviderStatusInfo StatusInfo
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public Uri Uri
-		{
-			get { throw new NotImplementedException(); }
-		}
+		public Uri Uri => TranslationOptions.Uri;
 
 		public void LoadState(string translationProviderState)
 		{
-			throw new NotImplementedException();
+			TranslationOptions = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
 		}
-
-		public void RefreshStatusInfo()
-		{
-			throw new NotImplementedException();
-		}
-
 		public string SerializeState()
 		{
-			throw new NotImplementedException();
+			return JsonConvert.SerializeObject(TranslationOptions);
 		}
-
 
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
-			throw new NotImplementedException();
+			return true;
 		}
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
 		{
-			throw new NotImplementedException();
+			return new TranslationProviderLanguageDirection();
 		}
 
-
+		public void RefreshStatusInfo() { }
 	}
 }
