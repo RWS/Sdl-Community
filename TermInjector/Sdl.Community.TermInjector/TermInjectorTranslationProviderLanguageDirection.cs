@@ -61,9 +61,9 @@ namespace Sdl.Community.TermInjector
         }
 			
 
-		//CultureCode ITranslationProviderLanguageDirection.SourceLanguage => _languageDirection.SourceCulture;
+		CultureCode ITranslationProviderLanguageDirection.SourceLanguage => _languageDirection.SourceCulture;
 
-		//CultureCode ITranslationProviderLanguageDirection.TargetLanguage => _languageDirection.TargetCulture;
+		CultureCode ITranslationProviderLanguageDirection.TargetLanguage => _languageDirection.TargetCulture;
 
 		private Boolean InjectTermsNoMatch(Segment segment, Segment blankSegment)
         {
