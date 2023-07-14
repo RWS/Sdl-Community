@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 
@@ -104,7 +105,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			}
 		}
 
-
+		[DataMember]
 		public List<TranslationModel> Models
 		{
 			get => _models;
@@ -116,6 +117,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 		}
 
 
+		[DataMember]
 		public List<MTCloudDictionary> Dictionaries
 		{
 			get => _dictionaries;
@@ -126,9 +128,27 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			}
 		}
 
+		[DataMember]
 		public List<LinguisticOption> LinguisticOptions
 		{
-			get => _linguisticOptions;
+			get
+			{
+				var output = new List<LinguisticOption>();
+				if (_linguisticOptions is null) return _linguisticOptions;
+				for (var i = _linguisticOptions.Count - 1; i >= 0; i--)
+				{
+					var lo = _linguisticOptions[i];
+					if (output.Any(x => x.Id == lo.Id))
+					{
+						continue;
+					}
+
+					output.Add(lo);
+				}
+
+				_linguisticOptions = output;
+				return _linguisticOptions;
+			}
 			set
 			{
 				_linguisticOptions = value;
@@ -137,6 +157,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			}
 		}
 
+		[DataMember]
 		public bool HasLinguisticOptions => LinguisticOptions?.Count >= 1;
 	}
 }

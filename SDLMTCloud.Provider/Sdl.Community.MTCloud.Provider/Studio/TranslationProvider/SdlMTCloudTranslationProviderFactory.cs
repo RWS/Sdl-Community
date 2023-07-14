@@ -1,5 +1,7 @@
 ﻿using System;
 using LanguageMappingProvider;
+using Newtonsoft.Json;
+using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -14,6 +16,12 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 			ITranslationProviderCredentialStore credentialStore)
 		{
 			var connectionService = MtCloudApplicationInitializer.ConnectionService;
+
+			try
+			{
+				var options = JsonConvert.DeserializeObject<Options>(translationProviderState);
+			}
+			catch { }
 
 			var connectionResult = connectionService.EnsureSignedIn(credentialStore);
 

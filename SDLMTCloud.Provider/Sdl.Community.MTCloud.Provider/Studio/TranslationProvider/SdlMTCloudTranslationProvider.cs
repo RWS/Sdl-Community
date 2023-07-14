@@ -119,7 +119,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 
 		public LanguageMappingModel GetLanguageMappingModel(LanguagePair languageDirection, List<MappedLanguage> mappedLanguages)
 		{
-			var mapping = new InternalLanguageMapping
+			 var mapping = new InternalLanguageMapping
 			{
 				SourceLanguageCode = mappedLanguages?.FirstOrDefault(s => s.TradosCode.Equals(languageDirection.SourceCulture?.Name))
 			};
@@ -162,9 +162,16 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 			}
 
 			var savedModels = mapping?.SavedLanguageMappingModel?.Models ?? new();
+			var currentLOIndex = 0;
 			for (var i = 0; i < savedModels.Count; i++)
 			{
-				mapping.EngineModels[i].LinguisticOptions = savedModels[i].LinguisticOptions;
+				if (savedModels[i].LinguisticOptions is null)
+				{
+					continue;
+				}
+
+				mapping.EngineModels[i].LinguisticOptions = mapping.SavedLanguageMappingModel.LinguisticOptions;
+				currentLOIndex++;
 			}
 
 			var languageMappingModel = GetLanguageMappingModel(mapping);
@@ -253,6 +260,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				dictionaries.FirstOrDefault(a => a.Name.Equals(mapping.SavedLanguageMappingModel?.SelectedDictionary?.Name))
 				?? dictionaries[0];
 
+
 			var languageMappingModel = new LanguageMappingModel
 			{
 				Name = mapping.Name,
@@ -266,7 +274,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				SelectedModel = selectedModel,
 				Dictionaries = dictionaries,
 				SelectedDictionary = selectedDictionary,
-				LinguisticOptions = mapping?.SavedLanguageMappingModel?.SelectedModel?.LinguisticOptions ?? selectedModel.LinguisticOptions
+				LinguisticOptions = selectedModel.LinguisticOptions
 			};
 
 			return languageMappingModel;
