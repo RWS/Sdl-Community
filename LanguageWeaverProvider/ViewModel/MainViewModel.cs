@@ -86,7 +86,7 @@ namespace LanguageWeaverProvider.ViewModel
 
 			IsCloudSelected = requestedService == "Cloud";
 			IsEdgeSelected = requestedService == "Edge";
-			ProviderView = IsCloudSelected ? new CloudMainViewModel() : null;
+			ProviderView = IsCloudSelected ? new CloudMainViewModel(TranslationOptions) : null;
 		}
 
 		private void CloseApplication(object parameter)

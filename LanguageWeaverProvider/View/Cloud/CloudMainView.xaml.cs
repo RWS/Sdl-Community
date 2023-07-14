@@ -24,5 +24,5 @@ namespace LanguageWeaverProvider.View.Cloud
 		{
 			InitializeComponent();
 		}
-	}
+    }
 }

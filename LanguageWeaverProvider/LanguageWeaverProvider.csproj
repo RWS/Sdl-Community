@@ -31,7 +31,7 @@
 			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.Core.Globalization.Async">
-		  <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
+		  <HintPath>..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.Async.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.Desktop.Platform.Controls">
 		  <HintPath>..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.Controls.dll</HintPath>
