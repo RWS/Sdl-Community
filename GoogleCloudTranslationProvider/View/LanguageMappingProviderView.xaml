@@ -89,7 +89,7 @@
 										IsReadOnly="True"
 										Width="1*" />
 					<DataGridTextColumn Header="{x:Static root:PluginResources.LMP_Table_Header_LanguageCode}"
-										Binding="{Binding Path=LanguageCode}"
+										Binding="{Binding Path=LanguageCode, UpdateSourceTrigger=PropertyChanged}"
 										IsReadOnly="False"
 										Width="1*" />
 				</DataGrid.Columns>
