@@ -107,6 +107,7 @@
 			<Button Content="{x:Static root:PluginResources.LMP_Button_Reset}"
 					Command="{Binding ResetToDefaultCommand}"
 					Style="{StaticResource Sdl.Button.SecondaryStyle}"
+					IsEnabled="{Binding CanResetToDefaults}"
 					Grid.Row="4"
 					HorizontalAlignment="Left"
 					Cursor="Hand"

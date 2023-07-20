@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Input;
 using GoogleCloudTranslationProvider.Models;
 using GoogleCloudTranslationProvider.Service;
 using GoogleCloudTranslationProvider.ViewModel;
@@ -35,6 +36,8 @@ namespace GoogleCloudTranslationProvider.Interfaces
 		string ApiKey { get; set; }
 
 		string ProjectLocation { get; set; }
+
+		ICommand SwitchViewExternal { get; set; }
 
 		bool CanConnectToGoogleV2(HtmlUtil htmlUtil);
 

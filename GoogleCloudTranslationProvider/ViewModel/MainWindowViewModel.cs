@@ -33,6 +33,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private List<ViewDetails> _availableViews;
 		private IProviderControlViewModel _providerViewModel;
 		private ISettingsControlViewModel _settingsViewModel;
+		private bool _isLanguageMappingProviderEnabled;
 
 		private string _translatorErrorResponse;
 		private string _multiButtonContent;
@@ -122,6 +123,17 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			}
 		}
 
+		public bool IsLanguageMappingProviderEnabled
+		{
+			get => _isLanguageMappingProviderEnabled;
+			set
+			{
+				if (_isLanguageMappingProviderEnabled == value) return;
+				_isLanguageMappingProviderEnabled = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public bool DialogResult
 		{
 			get => _dialogResult;
@@ -203,7 +215,8 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		private void InitializeViews()
 		{
-			_providerViewModel = new ProviderViewModel(TranslationOptions, _languagePairs.ToList());
+			_providerViewModel = new ProviderViewModel(TranslationOptions, _languagePairs.ToList())
+				{ SwitchViewExternal = new RelayCommand(SwitchView) };
 			_settingsViewModel = new SettingsViewModel(TranslationOptions);
 
 			_availableViews = new List<ViewDetails>
@@ -323,6 +336,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				var destination = IsProviderViewSelected ? ViewDetails_Settings
 														 : ViewDetails_Provider;
 				TrySwitchView(o as string ?? destination);
+				UpdateLanguageMappingButton();
 			}
 			catch (Exception e)
 			{
@@ -342,6 +356,21 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			IsSettingsViewSelected = selectedViewType == ViewDetails_Settings;
 			MultiButtonContent = IsProviderViewSelected ? PluginResources.MultiButton_Settings
 														: PluginResources.MultiButton_Provider;
+		}
+
+		private void UpdateLanguageMappingButton()
+		{
+			if (_providerViewModel.IsV2Checked)
+			{
+				IsLanguageMappingProviderEnabled = EditProvider || File.Exists(string.Format(Constants.DatabaseFilePath, PluginResources.Database_PluginName_V2));
+				return;
+			}
+
+			if (_providerViewModel.IsV3Checked)
+			{
+				IsLanguageMappingProviderEnabled = EditProvider || File.Exists(string.Format(Constants.DatabaseFilePath, PluginResources.Database_PluginName_V3));
+				return;
+			}
 		}
 
 		private void NavigateTo(object o)
@@ -368,9 +397,8 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				return;
 			}
 
-			SetGoogleProviderOptions();
-			SetGeneralProviderOptions();
-			var lmpViewModel = new LanguageMappingProviderViewModel(TranslationOptions);
+			TranslationOptions.SelectedGoogleVersion = _providerViewModel.IsV2Checked ? ApiVersion.V2 : ApiVersion.V3;
+			var lmpViewModel = new LanguageMappingProviderViewModel(TranslationOptions, EditProvider);
 			var lmpView = new LanguageMappingProviderView() { DataContext = lmpViewModel };
 			lmpViewModel.CloseEventRaised += () =>
 			{

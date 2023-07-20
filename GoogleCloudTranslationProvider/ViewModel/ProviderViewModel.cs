@@ -75,6 +75,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				OnPropertyChanged();
 				OnPropertyChanged(nameof(IsV2Checked));
 				OnPropertyChanged(nameof(IsV3Checked));
+				SwitchViewExternal?.Execute(nameof(ProviderViewModel));
 			}
 		}
 
@@ -246,6 +247,8 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		public ICommand NavigateToCommand => _navigateToCommand ??= new RelayCommand(NavigateTo);
 		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
 
+		public ICommand SwitchViewExternal { get; set; }
+
 		public bool CanConnectToGoogleV2(HtmlUtil htmlUtil)
 		{
 			if (string.IsNullOrEmpty(ApiKey))
@@ -364,7 +367,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			ProjectLocation = _options.ProjectLocation;
 
 			SelectedGoogleApiVersion = GoogleApiVersions.FirstOrDefault(v => v.Version.Equals(_options.SelectedGoogleVersion))
-									?? GoogleApiVersions.First(x => x.Version == ApiVersion.V3);
+									?? GoogleApiVersions.First(x => x.Version == ApiVersion.V2);
 			if (!string.IsNullOrEmpty(_projectLocation))
 			{
 				Locations = V3ResourceManager.GetLocations(new TranslationOptions
@@ -424,7 +427,11 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		private void ReadJsonFile(string filePath)
 		{
-			GetJsonDetails(filePath);
+			if (!GetJsonDetails(filePath).Success)
+			{
+				return;
+			}
+
 			var tempOptions = new TranslationOptions
 			{
 				ProjectId = _projectId,
@@ -436,18 +443,19 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			ProjectLocation = Locations.First();
 		}
 
-		private void GetJsonDetails(string selectedFile)
+		private (bool Success, object OperationResult) GetJsonDetails(string selectedFile)
 		{
 			var (success, operationResult) = selectedFile.VerifyPathAndReadJsonFile();
 			if (!success)
 			{
 				ErrorHandler.HandleError(operationResult as string, "Reading failed");
-				return;
+				return (success, operationResult);
 			}
 
 			JsonFilePath = selectedFile;
 			VisibleJsonPath = selectedFile.ShortenFilePath();
 			ProjectId = (operationResult as Dictionary<string, string>)["project_id"];
+			return (true, null);
 		}
 
 		private void GetProjectResources()
