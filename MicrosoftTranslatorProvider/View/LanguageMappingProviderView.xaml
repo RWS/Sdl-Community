@@ -107,6 +107,7 @@
 			<Button Content="Reset to default"
 					Command="{Binding ResetToDefaultCommand}"
 					Style="{StaticResource Sdl.Button.SecondaryStyle}"
+					IsEnabled="{Binding CanResetToDefaults}"
 					Grid.Row="4"
 					HorizontalAlignment="Left"
 					Cursor="Hand"
@@ -125,7 +126,7 @@
 						Width="120"
 						Margin="0 0 16 0" />
 
-				<Button Content="Cancel}"
+				<Button Content="Cancel"
 						Command="{Binding CancelChangesCommand}"
 						Style="{StaticResource Sdl.Button.SecondaryStyle}"
 						Cursor="Hand"

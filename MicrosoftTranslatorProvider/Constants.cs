@@ -27,6 +27,6 @@ namespace MicrosoftTranslatorProvider
 
 		public static string DatabaseLocation = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Trados AppStore\\Language Mapping Provider";
 		public static string DatabaseFilePath = Path.Combine(DatabaseLocation, $"{DatabaseName}data.sqlite3");
-		public const string DatabaseName = "microsofttp";
+		public const string DatabaseName = "microsoft";
 	}
 }

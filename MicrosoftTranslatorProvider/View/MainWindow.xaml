@@ -87,7 +87,7 @@
 				<Button Content="Language Mapping"
 						Style="{StaticResource Sdl.Button.SecondaryStyle}"
 						Command="{Binding OpenLanguageMappingProviderCommand}"
-						IsEnabled="{Binding CanAccessLanguageMappingProvider, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBoolEnabledConverter}}"
+						IsEnabled="{Binding CanAccessLanguageMappingProvider}"
 						Cursor="Hand"
 						Margin="8 0 0 0"/>
 			</StackPanel>

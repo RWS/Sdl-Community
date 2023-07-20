@@ -355,12 +355,20 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		{
 			try
 			{
-				var requestedType = parameter is not null ? parameter as string
-														  : SelectedView.Name == ViewDetails_Provider ? ViewDetails_Settings
-																									  : ViewDetails_Provider;
+				string requestedType;
+				if (parameter is string parameterString)
+				{
+					requestedType = parameterString;
+				}
+				else
+				{
+					requestedType = SelectedView.Name == ViewDetails_Provider || SelectedView.Name == ViewDetails_PrivateEndpoint
+						? ViewDetails_Settings
+						: SelectedEndpoint == "Microsoft" ? ViewDetails_Provider : ViewDetails_PrivateEndpoint;
+				}
 				MultiButtonContent = requestedType == ViewDetails_Provider || requestedType == ViewDetails_PrivateEndpoint ? "Settings" : "Provider";
 				SelectedView = AvailableViews.FirstOrDefault(x => x.Name == requestedType);
-				CanSwitchProvider = _editProvider || _canSwitchProvider || SelectedView.Name == ViewDetails_Settings;
+				CanSwitchProvider = _editProvider || SelectedView.Name == ViewDetails_Settings;
 			}
 			catch { }
 		}
@@ -459,7 +467,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 		private void OpenLanguageMappingProvider(object parameter)
 		{
-			var lmpViewModel = new LanguageMappingProviderViewModel(TranslationOptions);
+			var lmpViewModel = new LanguageMappingProviderViewModel(TranslationOptions, _editProvider);
 			var lmpView = new LanguageMappingProviderView() { DataContext = lmpViewModel };
 			lmpViewModel.CloseEventRaised += () =>
 			{

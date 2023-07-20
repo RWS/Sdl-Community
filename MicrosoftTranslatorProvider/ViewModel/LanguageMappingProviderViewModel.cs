@@ -25,6 +25,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		private LanguageMapping _selectedMappedLanguage;
 
 		private bool _dialogResult;
+		private bool _canResetToDefaults;
 
 		private string _filter;
 		private string _languagesCountMessage;
@@ -34,7 +35,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		private ICommand _resetToDefaultCommand;
 		private ICommand _clearCommand;
 
-		public LanguageMappingProviderViewModel(ITranslationOptions translationOptions)
+		public LanguageMappingProviderViewModel(ITranslationOptions translationOptions, bool editProvider)
 		{
 			_translationOptions = translationOptions;
 			var defaultMapping = DatabaseExtensions.GetDefaultMapping(_translationOptions);
@@ -110,6 +111,17 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				if (_dialogResult == value) return;
 				_dialogResult = value;
 				OnPropertyChanged(nameof(DialogResult));
+			}
+		}
+
+		public bool CanResetToDefaults
+		{
+			get => _canResetToDefaults;
+			set
+			{
+				if (_canResetToDefaults == value) return;
+				_canResetToDefaults = value;
+				OnPropertyChanged();
 			}
 		}
 
