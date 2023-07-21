@@ -1,0 +1,138 @@
+﻿<Window x:Class="MicrosoftTranslatorProvider.View.LanguageMappingProviderView"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:root="clr-namespace:MicrosoftTranslatorProvider"
+		xmlns:views="clr-namespace:MicrosoftTranslatorProvider.View"
+		xmlns:styles="clr-namespace:MicrosoftTranslatorProvider.Styles"
+		xmlns:helpers="clr-namespace:MicrosoftTranslatorProvider.Helpers"
+		xmlns:uiHelpers="clr-namespace:MicrosoftTranslatorProvider.UiHelpers"
+		xmlns:behaviours="clr-namespace:MicrosoftTranslatorProvider.Behaviours"
+		xmlns:converters="clr-namespace:MicrosoftTranslatorProvider.Converters"
+		xmlns:viewmodel="clr-namespace:MicrosoftTranslatorProvider.ViewModel"
+		mc:Ignorable="d"
+		d:DataContext="{d:DesignInstance viewmodel:LanguageMappingProviderViewModel}"
+		Title="LanguageMappingProviderView"
+		WindowStartupLocation="CenterScreen"
+		WindowStyle="None"
+		MinWidth="750"
+		Width="800"
+		MinHeight="420"
+		Height="600">
+	
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="../UiHelpers/WatermarkTextBoxResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+
+			<Style TargetType="Image">
+				<Setter Property="RenderOptions.BitmapScalingMode"
+						Value="HighQuality" />
+			</Style>
+
+		</ResourceDictionary>
+	</Window.Resources>
+
+	<Border Style="{StaticResource WindowControlBorderStyle}">
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+
+			<styles:WindowsControl Grid.Row="0" />
+
+			<TextBox Grid.Row="1"
+					 Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}"
+					 Style="{StaticResource WatermarkTextBox}"
+					 BorderBrush="#FFBFCDD4"
+					 uiHelpers:TextBoxWatermarkHelper.WatermarkText="Search languages..."
+					 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+					 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="Filter"
+					 HorizontalAlignment="Right"
+					 Width="232"
+					 Margin="16 12 16 0" />
+
+			<DataGrid ItemsSource="{Binding FilteredMappedLanguages}"
+					  SelectedItem="{Binding SelectedMappedLanguage}"
+					  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+					  BorderThickness="1"
+					  BorderBrush="#FFBFCDD4"
+					  AutoGenerateColumns="False"
+					  Grid.Row="2"
+					  HorizontalAlignment="Stretch"
+					  ScrollViewer.VerticalScrollBarVisibility="Auto"
+					  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+					  CanUserSortColumns="True"
+					  CanUserAddRows="False"
+					  CanUserDeleteRows="False"
+					  Margin="16 16 16 0">
+				<DataGrid.Columns>
+					<DataGridTextColumn Header="Language"
+										Binding="{Binding Path=Name}"
+										IsReadOnly="True"
+										Width="2*" />
+					<DataGridTextColumn Header="Region"
+										Binding="{Binding Path=Region}"
+										IsReadOnly="True"
+										Width="2*" />
+					<DataGridTextColumn Header="Trados Code"
+										Binding="{Binding Path=TradosCode}"
+										IsReadOnly="True"
+										Width="1*" />
+					<DataGridTextColumn Header="Language Code"
+										Binding="{Binding Path=LanguageCode, UpdateSourceTrigger=PropertyChanged}"
+										IsReadOnly="False"
+										Width="1*" />
+				</DataGrid.Columns>
+			</DataGrid>
+
+			<TextBlock Text="{Binding LanguagesCountMessage}"
+					   Grid.Row="3"
+					   VerticalAlignment="Top"
+					   Margin="16 5" />
+
+			<Separator Grid.Row="4"
+					   VerticalAlignment="Top"
+					   Background="#FFBFCDD4" />
+
+			<Button Content="Reset to default"
+					Command="{Binding ResetToDefaultCommand}"
+					Style="{StaticResource Sdl.Button.SecondaryStyle}"
+					IsEnabled="{Binding CanResetToDefaults}"
+					Grid.Row="4"
+					HorizontalAlignment="Left"
+					Cursor="Hand"
+					Width="120"
+					Margin="16" />
+
+			<StackPanel Grid.Row="4"
+						Orientation="Horizontal"
+						HorizontalAlignment="Right"
+						Margin="16">
+
+				<Button Content="OK"
+						Command="{Binding ApplyChangesCommand}"
+						Style="{StaticResource Sdl.Button.SecondaryStyle}"
+						Cursor="Hand"
+						Width="120"
+						Margin="0 0 16 0" />
+
+				<Button Content="Cancel"
+						Command="{Binding CancelChangesCommand}"
+						Style="{StaticResource Sdl.Button.SecondaryStyle}"
+						Cursor="Hand"
+						Width="120" />
+			</StackPanel>
+		</Grid>
+	</Border>
+
+</Window>

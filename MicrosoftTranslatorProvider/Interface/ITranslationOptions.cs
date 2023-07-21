@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using MicrosoftTranslatorProvider.Model;
 
@@ -42,6 +42,6 @@ namespace MicrosoftTranslatorProvider.Interfaces
 
 		List<string> LanguagesSupported { get; set; }
 
-		List<LanguageMapping> LanguageMappings { get; set; }
+		List<PairMapping> LanguageMappings { get; set; }
 	}
 }

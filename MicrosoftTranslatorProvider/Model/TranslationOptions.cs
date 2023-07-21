@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using MicrosoftTranslatorProvider.Interfaces;
 using Newtonsoft.Json;
@@ -32,6 +32,6 @@ namespace MicrosoftTranslatorProvider.Model
 
 		public List<string> LanguagesSupported { get; set; }
 
-		public List<LanguageMapping> LanguageMappings { get; set; }
+		public List<PairMapping> LanguageMappings { get; set; }
 	}
 }

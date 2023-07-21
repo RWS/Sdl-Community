@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MicrosoftTranslatorProvider.Model;
 using Newtonsoft.Json;
@@ -20,6 +20,6 @@ namespace MicrosoftTranslatorProvider.Interfaces
 
 		List<RegionSubscription> Regions { get; set; }
 
-		List<LanguageMapping> LanguageMappings { get; set; }
+		List<PairMapping> LanguageMappings { get; set; }
 	}
 }

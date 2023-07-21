@@ -19,7 +19,7 @@
 			<DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=IsActive}"
 						 Value="False">
 				<Setter Property="BorderBrush"
-						Value="{DynamicResource WindowsControl.Inactive.Border}" />
+						Value="Transparent" />
 			</DataTrigger>
 		</Style.Triggers>
 	</Style>

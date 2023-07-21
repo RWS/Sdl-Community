@@ -1,4 +1,4 @@
-﻿<Window x:Class="MicrosoftTranslatorProvider.View.MainWindow"
+<Window x:Class="MicrosoftTranslatorProvider.View.MainWindow"
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -33,7 +33,8 @@
 			</ResourceDictionary.MergedDictionaries>
 			<converters:EmptyToVisibility x:Key="EmptyToVisibilityConverter" />
 			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
-			
+			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter" />
+
 			<DataTemplate DataType="{x:Type viewModels:ProviderViewModel}">
 				<ui:ProviderControl />
 			</DataTemplate>
@@ -59,7 +60,7 @@
 			</Grid.RowDefinitions>
 			<!-- BORDER CONTROL -->
 			<styles:WindowsControl Grid.Row="0"
-								   Background="White" />
+								   Background="Transparent" />
 
 			<StackPanel Grid.Row="2"
 						Margin="24 48 24 0">
@@ -71,17 +72,25 @@
 				<ContentControl Content="{Binding SelectedView.ViewModel}" />
 			</StackPanel>
 
-
-			<Button Content="Help"
-					Style="{StaticResource Sdl.Button.SecondaryStyle}"
-					Command="{Binding NavigateToCommand}"
-					CommandParameter="{x:Static root:Constants.TellMe_HelpUrl}"
-					Cursor="Hand"
-					Width="120"
-					Height="30"
-					Grid.Row="3"
-					HorizontalAlignment="Left"
-					Margin="24"/>
+			<StackPanel Grid.Row="3"
+						Orientation="Horizontal"
+						HorizontalAlignment="Left"
+						Margin="24">
+				<Button Content="Help"
+						Style="{StaticResource Sdl.Button.SecondaryStyle}"
+						Command="{Binding NavigateToCommand}"
+						CommandParameter="{x:Static root:Constants.TellMe_HelpUrl}"
+						Cursor="Hand"
+						Width="120"
+						Height="30" />
+				
+				<Button Content="Language Mapping"
+						Style="{StaticResource Sdl.Button.SecondaryStyle}"
+						Command="{Binding OpenLanguageMappingProviderCommand}"
+						IsEnabled="{Binding CanAccessLanguageMappingProvider}"
+						Cursor="Hand"
+						Margin="8 0 0 0"/>
+			</StackPanel>
 
 			<StackPanel HorizontalAlignment="Right"
 						Orientation="Horizontal"

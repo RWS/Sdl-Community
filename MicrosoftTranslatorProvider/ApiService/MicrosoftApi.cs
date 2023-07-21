@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using LanguageMappingProvider.Model;
 using MicrosoftTranslatorProvider.Extensions;
 using MicrosoftTranslatorProvider.Helpers;
 using MicrosoftTranslatorProvider.Interfaces;
@@ -38,7 +39,7 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 			_subscriptionKey = options.ApiKey;
 			_region = options.Region;
 			_authToken = GetAuthToken();
-			GetSupportedLanguages();
+			SetSupportedLanguages();
 		}
 
 		public MicrosoftApi(string subscriptionKey, string region)
@@ -46,7 +47,7 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 			_subscriptionKey = subscriptionKey;
 			_region = region;
 			_authToken = GetAuthToken();
-			GetSupportedLanguages();
+			SetSupportedLanguages();
 		}
 
 		public void RefreshAuthToken()
@@ -66,7 +67,7 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 			_subscriptionKey = subscriptionKey;
 			_region = region;
 			_authToken = GetAuthToken();
-			GetSupportedLanguages();
+			SetSupportedLanguages();
 		}
 
 		public bool IsSupportedLanguagePair(string sourceLanguage, string tarrgetLanguage)
@@ -89,19 +90,25 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 			try
 			{
 				var mapping = _options.LanguageMappings.FirstOrDefault(x => x.LanguagePair.TargetCultureName == languagepair.TargetCultureName);
-				var sourceLanguage = ConvertLanguageCode(mapping.LanguagePair.SourceCultureName);
-				var targetLanguage = ConvertLanguageCode(mapping.LanguagePair.TargetCultureName);
+				var sourceLanguage = DatabaseExtensions.GetLanguageCode(new CultureInfo(languagepair.SourceCultureName));
+				var targetLanguage = DatabaseExtensions.GetLanguageCode(new CultureInfo(languagepair.TargetCultureName));
 				var categoryId = string.IsNullOrEmpty(mapping.CategoryID) ? "general" : mapping.CategoryID;
 				return TryTranslate(sourceLanguage, targetLanguage, textToTranslate, categoryId);
 			}
-			catch (WebException exception)
+			catch (WebException webException)
 			{
-				ErrorHandler.HandleError(exception);
+				ErrorHandler.HandleError(webException);
 				return null;
 			}
-			catch
+			catch (Exception exception)
 			{
-				ErrorHandler.HandleError("The Category ID is not valid for this language pair", "Category ID");
+				if (exception.Message.Contains("The category parameter is invalid"))
+				{
+					ErrorHandler.HandleError("The Category ID is not valid for this language pair", "Category ID");
+					return null;
+				}
+
+				ErrorHandler.HandleError(exception);
 				return null;
 			}
 		}
@@ -152,36 +159,66 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 			return string.Concat(uri, path, languageParams);
 		}
 
-		private void GetSupportedLanguages()
+		public List<LanguageMapping> GetSupportedLanguages()
 		{
 			try
 			{
 				_authToken ??= GetAuthToken();
-				TryGetSupportedLanguages();
+				return TryGetSupportedLanguages();
 			}
-			catch (WebException exception)
+			catch (Exception ex) 
 			{
-				ErrorHandler.HandleError(exception);
-				return;
+				ErrorHandler.HandleError(ex);
+				return null;
 			}
 		}
 
-		private void TryGetSupportedLanguages()
+		private List<LanguageMapping> TryGetSupportedLanguages()
 		{
 			var uri = new Uri("https://" + Constants.MicrosoftProviderUriBase);
 			var client = new RestClient(uri);
 
-			var request = new RestSharp.RestRequest("languages", Method.Get);
+			var request = new RestRequest("languages", Method.Get);
 			request.AddParameter("api-version", "3.0");
 			request.AddParameter("scope", "translation");
 
 			var languageResponse = client.ExecuteAsync(request).Result;
 			var languages = JsonConvert.DeserializeObject<LanguageResponse>(languageResponse.Content)?.Translation?.Distinct();
 
+			var output = new List<LanguageMapping>();
+			foreach (var language in languages)
+			{
+				output.Add(new()
+				{
+					Name = language.Value.Name,
+					LanguageCode = language.Key
+				});
+			}
+
+			return output;
+		}
+
+		private void SetSupportedLanguages()
+		{
+			try
+			{
+				_authToken ??= GetAuthToken();
+				TrySetSupportedLanguages();
+			}
+			catch (Exception exception)
+			{
+				ErrorHandler.HandleError(exception);
+				return;
+			}
+		}
+
+		private void TrySetSupportedLanguages()
+		{
+			var languages = GetSupportedLanguages();
 			_supportedLanguages = new();
 			foreach (var language in languages)
 			{
-				_supportedLanguages.Add(language.Key);
+				_supportedLanguages.Add(language.LanguageCode);
 			}
 		}
 

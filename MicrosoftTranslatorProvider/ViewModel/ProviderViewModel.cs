@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -16,8 +16,8 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		private readonly LanguagePair[] _languagePairs;
 		private readonly ITranslationOptions _options;
 
-		private LanguageMapping _selectedLanguageMapping;
-		private List<LanguageMapping> _languageMappings;
+		private PairMapping _selectedLanguageMapping;
+		private List<PairMapping> _languageMappings;
 		private List<RegionSubscription> _regions;
 		private RegionSubscription _selectedRegion;
 
@@ -83,7 +83,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			}
 		}
 
-		public List<LanguageMapping> LanguageMappings
+		public List<PairMapping> LanguageMappings
 		{
 			get => _languageMappings;
 			set
@@ -94,7 +94,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			}
 		}
 
-		public LanguageMapping SelectedLanguageMapping
+		public PairMapping SelectedLanguageMapping
 		{
 			get => _selectedLanguageMapping;
 			set
@@ -122,7 +122,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				return;
 			}
 
-			var mapping = new List<LanguageMapping>();
+			var mapping = new List<PairMapping>();
 			foreach (var pair in _languagePairs)
 			{
 				var sourceCulture = new CultureInfo(pair.SourceCultureName);
@@ -140,10 +140,10 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 		private void LoadLanguageMappings()
 		{
-			var mapping = new List<LanguageMapping>();
+			var mapping = new List<PairMapping>();
 			foreach (var mappedLanguage in _options.LanguageMappings)
 			{
-				mapping.Add(new LanguageMapping()
+				mapping.Add(new PairMapping()
 				{
 					DisplayName = mappedLanguage.DisplayName,
 					CategoryID = mappedLanguage.CategoryID,

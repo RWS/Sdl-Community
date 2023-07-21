@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using MicrosoftTranslatorProvider.ApiService;
 using MicrosoftTranslatorProvider.Helpers;
@@ -34,9 +34,9 @@ namespace MicrosoftTranslatorProvider
 
 		public bool CanReverseLanguageDirection => false;
 
-		public CultureCode SourceLanguage => _languagePair.SourceCulture;
+		CultureCode ITranslationProviderLanguageDirection.SourceLanguage => _languagePair.SourceCulture;
 
-		public CultureCode TargetLanguage => _languagePair.TargetCulture;
+		CultureCode ITranslationProviderLanguageDirection.TargetLanguage => _languagePair.TargetCulture;
 
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
 		{
