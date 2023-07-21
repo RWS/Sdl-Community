@@ -130,7 +130,7 @@ namespace GoogleCloudTranslationProvider.Helpers
 
 		private static (bool Success, object OperationResult) TryReadJsonContent(string jsonContent)
 		{
-			var JsonExpectedKeys = new HashSet<string>()
+			var jsonExpectedKeys = new HashSet<string>()
 			{
 				"auth_provider_x509_cert_url",
 				"auth_uri",
@@ -146,9 +146,9 @@ namespace GoogleCloudTranslationProvider.Helpers
 
 			try
 			{
-				var jsonContentDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonContent);
+				var jsonContentDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonContent).Where(x => jsonExpectedKeys.Contains(x.Key)).ToDictionary(x => x.Key, x => x.Value);
 				var fileKeys = new HashSet<string>(jsonContentDictionary.Keys);
-				var success = fileKeys.SetEquals(JsonExpectedKeys) && jsonContentDictionary.Values.All(value => !string.IsNullOrEmpty(value));
+				var success = fileKeys.SetEquals(jsonExpectedKeys) && jsonContentDictionary.Values.All(value => !string.IsNullOrEmpty(value));
 				if (success)
 				{
 					return (success, jsonContentDictionary);

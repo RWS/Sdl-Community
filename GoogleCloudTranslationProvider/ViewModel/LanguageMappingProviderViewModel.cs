@@ -25,6 +25,7 @@ namespace GoogleCloudTranslationProvider.ViewModel
 		private LanguageMapping _selectedMappedLanguage;
 
 		private bool _dialogResult;
+		private bool _canResetToDefaults;
 
 		private string _filter;
 		private string _languagesCountMessage;
@@ -34,10 +35,11 @@ namespace GoogleCloudTranslationProvider.ViewModel
 		private ICommand _resetToDefaultCommand;
 		private ICommand _clearCommand;
 
-		public LanguageMappingProviderViewModel(ITranslationOptions translationOptions)
+		public LanguageMappingProviderViewModel(ITranslationOptions translationOptions, bool editProvider)
 		{
 			_translationOptions = translationOptions;
-			var defaultMapping = DatabaseExtensions.GetGoogleDefaultMapping(translationOptions).Result;
+			CanResetToDefaults = editProvider;
+			var defaultMapping = editProvider ? DatabaseExtensions.GetGoogleDefaultMapping(translationOptions).Result : null;
 			_database = new LanguageMappingDatabase(GetDatabaseName(), defaultMapping);
 			RetrieveMappedLanguagesFromDatabase();
 			FilteredMappedLanguages = MappedLanguages;
@@ -109,7 +111,18 @@ namespace GoogleCloudTranslationProvider.ViewModel
 			{
 				if (_dialogResult == value) return;
 				_dialogResult = value;
-				OnPropertyChanged(nameof(DialogResult));
+				OnPropertyChanged();
+			}
+		}
+
+		public bool CanResetToDefaults
+		{
+			get => _canResetToDefaults;
+			set
+			{
+				if (_canResetToDefaults == value) return;
+				_canResetToDefaults = value;
+				OnPropertyChanged();
 			}
 		}
 

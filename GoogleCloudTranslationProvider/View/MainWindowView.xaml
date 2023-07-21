@@ -79,9 +79,9 @@
 							Width="136" />
 
 					<Button Content="Language Mapping"
-							Style="{StaticResource Sdl.Button.PrimaryStyle}"
+							Style="{StaticResource Sdl.Button.SecondaryStyle}"
 							Command="{Binding OpenLanguageMappingCommand}"
-							IsEnabled="{Binding CanUseLanguageMappingProvider}"
+							IsEnabled="{Binding IsLanguageMappingProviderEnabled}"
 							IsDefault="True"
 							Cursor="Hand"
 							Width="136"
