@@ -21,7 +21,8 @@
 	<DockPanel>
 		<Grid DockPanel.Dock="Top"
 			  x:Name="WindowTitleBar"
-			  MouseLeftButtonDown="TitleBarMouseLeftButtonDown">
+			  MouseLeftButtonDown="TitleBarMouseLeftButtonDown"
+			  Background="Transparent">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*" />
 				<ColumnDefinition Width="Auto" />
@@ -41,7 +42,7 @@
 					Grid.Row="0"
 					HorizontalAlignment="Right"
 					VerticalAlignment="Top"
-					Margin="0 10 10 0">
+					Margin="12 8">
 				<Path SnapsToDevicePixels="True"
 					  Data="M 10.009,1.704 L 8.331,0.026 5.03,3.327 1.703,0 0,1.704 3.326,5.031 0.025,8.332 1.703,10.009 5.004,6.708 8.305,10.009 10.009,8.305 6.708,5.005"
 					  Fill="{Binding Foreground, ElementName=CloseButton}" />

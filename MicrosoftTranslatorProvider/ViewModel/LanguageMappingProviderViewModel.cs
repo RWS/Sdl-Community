@@ -38,7 +38,8 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		public LanguageMappingProviderViewModel(ITranslationOptions translationOptions, bool editProvider)
 		{
 			_translationOptions = translationOptions;
-			var defaultMapping = DatabaseExtensions.GetDefaultMapping(_translationOptions);
+			CanResetToDefaults = editProvider;
+			var defaultMapping = CanResetToDefaults ? DatabaseExtensions.GetDefaultMapping(_translationOptions) : null;
 			_database = new LanguageMappingDatabase(Constants.DatabaseName, defaultMapping);
 			RetrieveMappedLanguagesFromDatabase();
 			FilteredMappedLanguages = MappedLanguages;
@@ -211,9 +212,10 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 		private void ApplyChanges(object parameter)
 		{
+			var originalFilter = Filter;
 			_database.UpdateAll(MappedLanguages);
 			RetrieveMappedLanguagesFromDatabase();
-			ShutDownApp();
+			Filter = originalFilter;
 		}
 
 		private bool CanApplyChanges(object parameter)

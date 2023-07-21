@@ -60,7 +60,7 @@
 			</Grid.RowDefinitions>
 			<!-- BORDER CONTROL -->
 			<styles:WindowsControl Grid.Row="0"
-								   Background="White" />
+								   Background="Transparent" />
 
 			<StackPanel Grid.Row="2"
 						Margin="24 48 24 0">

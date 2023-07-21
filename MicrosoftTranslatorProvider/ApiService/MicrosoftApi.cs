@@ -95,14 +95,20 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 				var categoryId = string.IsNullOrEmpty(mapping.CategoryID) ? "general" : mapping.CategoryID;
 				return TryTranslate(sourceLanguage, targetLanguage, textToTranslate, categoryId);
 			}
-			catch (WebException exception)
+			catch (WebException webException)
 			{
-				ErrorHandler.HandleError(exception);
+				ErrorHandler.HandleError(webException);
 				return null;
 			}
 			catch (Exception exception)
 			{
-				ErrorHandler.HandleError("The Category ID is not valid for this language pair", "Category ID");
+				if (exception.Message.Contains("The category parameter is invalid"))
+				{
+					ErrorHandler.HandleError("The Category ID is not valid for this language pair", "Category ID");
+					return null;
+				}
+
+				ErrorHandler.HandleError(exception);
 				return null;
 			}
 		}
