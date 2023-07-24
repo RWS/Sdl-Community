@@ -72,7 +72,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 		{
 			try
 			{
-				if (!(translationProvider is SdlMTCloudTranslationProvider provider))
+				if (translationProvider is not SdlMTCloudTranslationProvider provider)
 				{
 					return false;
 				}

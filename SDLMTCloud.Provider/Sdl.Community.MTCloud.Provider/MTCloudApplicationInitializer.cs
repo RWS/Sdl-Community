@@ -48,7 +48,6 @@ namespace Sdl.Community.MTCloud.Provider
 																				 .GetService<IStudioEventAggregator>()
 																			 : null);
 
-		private static Dictionary<Guid, TranslationService> TranslationServices { get; set; } = new();
 
 		public static string EnsureValidPath(string filePath, string targetLanguage)
 		{
