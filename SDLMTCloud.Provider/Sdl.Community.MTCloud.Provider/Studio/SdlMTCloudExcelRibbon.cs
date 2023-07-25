@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Interop;
-using LanguageMappingProvider;
 using NLog;
+using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.View;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 using Sdl.Desktop.IntegrationApi;

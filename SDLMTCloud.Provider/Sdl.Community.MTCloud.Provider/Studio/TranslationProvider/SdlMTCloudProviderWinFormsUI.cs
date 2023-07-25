@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Interop;
-using LanguageMappingProvider;
 using NLog;
+using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Events;
-using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Community.MTCloud.Provider.View;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 using Sdl.LanguagePlatform.Core;

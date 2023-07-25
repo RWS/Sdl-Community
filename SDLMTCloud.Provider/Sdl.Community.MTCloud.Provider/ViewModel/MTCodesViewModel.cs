@@ -1,16 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using LanguageMappingProvider.Interfaces;
-using LanguageMappingProvider.Model;
+using Sdl.Community.MTCloud.Languages.Provider.Interfaces;
+using Sdl.Community.MTCloud.Languages.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Helpers;
-using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Core.Globalization.LanguageRegistry;
 using Application = System.Windows.Forms.Application;
 

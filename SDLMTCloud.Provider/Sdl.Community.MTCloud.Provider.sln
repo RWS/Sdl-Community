@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assembly", "Assembly", "{A8
 		SolutionInfo.cs = SolutionInfo.cs
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdl.Community.MTCloud.Languages.Provider", "SDLMTCloud.Languages.Provider\Sdl.Community.MTCloud.Languages.Provider.csproj", "{49E6CC36-D74F-45DF-BF12-40D8754B7BFD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{62740C33-3280-49B5-9CEF-EA816B784B8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62740C33-3280-49B5-9CEF-EA816B784B8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62740C33-3280-49B5-9CEF-EA816B784B8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49E6CC36-D74F-45DF-BF12-40D8754B7BFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49E6CC36-D74F-45DF-BF12-40D8754B7BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49E6CC36-D74F-45DF-BF12-40D8754B7BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49E6CC36-D74F-45DF-BF12-40D8754B7BFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
