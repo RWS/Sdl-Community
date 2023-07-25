@@ -23,7 +23,7 @@
 	</ItemGroup>
   <ItemGroup>
     <Reference Include="DocumentFormat.OpenXml">
-      <HintPath>..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\DocumentFormat.OpenXml.dll</HintPath>
+      <HintPath>$(TradosFolder)\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNetCore.JsonPatch">
       <HintPath>$(TradosFolder)\Microsoft.AspNetCore.JsonPatch.dll</HintPath>
