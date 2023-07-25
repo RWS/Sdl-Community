@@ -57,7 +57,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		{
 			TranslationOptions = options;
 			CanAccessLanguageMappingProvider = File.Exists(Constants.DatabaseFilePath);
-			_providerControlViewModel = new ProviderViewModel(options, languagePairs);
+			_providerControlViewModel = new ProviderViewModel(options, languagePairs, editProvider);
 			_settingsControlViewModel = new SettingsViewModel(options);
 			_privateEndpointViewModel = new PrivateEndpointViewModel();
 			_credentialStore = credentialStore;

@@ -64,11 +64,14 @@
 
 			<StackPanel Grid.Row="2"
 						Margin="24 48 24 0">
-				<ComboBox ItemsSource="{Binding Endpoints}"
-						  SelectedItem="{Binding SelectedEndpoint}"
-						  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
-						  Visibility="{Binding CanSwitchProvider, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
-						  Margin="0 0 0 12" />
+				<GroupBox Header="Authentication type"
+						  Style="{StaticResource DefaultGroupBox}"
+						  Visibility="{Binding CanSwitchProvider, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}">
+					<ComboBox ItemsSource="{Binding Endpoints}"
+							  SelectedItem="{Binding SelectedEndpoint}"
+							  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+							  Margin="12" />
+				</GroupBox>
 				<ContentControl Content="{Binding SelectedView.ViewModel}" />
 			</StackPanel>
 
