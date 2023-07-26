@@ -62,8 +62,11 @@
     <ApplicationIcon>Trados DPI Scaler %281%29.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NLog">
+      <HintPath>$(MsBuildProgramFiles32)\Trados\Trados Studio\Studio17\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Versioning">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.Versioning.dll</HintPath>
+      <HintPath>$(MsBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Versioning.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -126,21 +129,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Trados DPI Scaler %281%29.ico" />
-    <EmbeddedResource Include="Resources\NLog.dll" />
-    <EmbeddedResource Include="Resources\ObjectListView.dll" />
-    <EmbeddedResource Include="Resources\Sdl.Versioning.dll" />
-    <EmbeddedResource Include="Resources\Trados.Community.Toolkit.Core.dll" />
     <Content Include="Trados DPI Scaler %281%29.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NLog">
-      <Version>5.0.1</Version>
-    </PackageReference>
     <PackageReference Include="ObjectListView.Official">
       <Version>2.9.1</Version>
     </PackageReference>
     <PackageReference Include="Trados.Community.Toolkit.Core">
-      <Version>4.0.6</Version>
+      <Version>4.1.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
