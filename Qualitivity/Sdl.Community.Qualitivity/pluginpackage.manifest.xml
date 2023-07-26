@@ -1,6 +1,6 @@
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 		<PlugInName>Qualitivity</PlugInName>
-		<Version>5.1.7.0</Version>
+		<Version>5.1.7.1</Version>
 		<Description>Qualitivity</Description>
 		<Author>Trados AppStore Team</Author>
 		<Include>
@@ -14,7 +14,6 @@
 				<File>Qualitivity.WPFListView.dll</File>
 				<File>Qualitivity.ObjectListView.dll</File>
 				<File>Trados.Community.Toolkit.LanguagePlatform.dll</File>
-				<File>Trados.Community.Toolkit.Core.dll</File>
 				<File>System.Data.SQLite.dll</File>
 		</Include>
 		<RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
