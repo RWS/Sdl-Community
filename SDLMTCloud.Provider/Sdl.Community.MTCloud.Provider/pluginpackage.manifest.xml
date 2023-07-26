@@ -1,18 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Language Weaver</PlugInName>
-	<Version>5.1.2.2</Version>
+	<Version>5.1.2.3</Version>
 	<Description>Language Weaver Provider</Description>
 	<Author>Trados AppStore Team</Author>
 	<Include>
 		<File>Auth0Service.dll</File>
 		<File>Auth0Service.dll.config</File>
 		<File>Trados.Community.Toolkit.Core.dll</File>
-		<File>Microsoft.Office.Interop.Excel.dll</File>
 		<File>Sdl.Community.MTCloud.Languages.Provider.dll</File>
 		<File>Sdl.Community.RateItControl.dll</File>
-		<File>LanguageMappingProvider.dll</File>
-		<File>DocumentFormat.OpenXml.dll</File>
 	</Include>
 	<RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9"/>
 </PluginPackage>
