@@ -20,6 +20,29 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
+	  <Compile Remove="Helpers\**" />
+	  <Compile Remove="Interface\**" />
+	  <Compile Remove="ServiceClients\**" />
+	  <Compile Remove="ViewModel\Edge\**" />
+	  <Compile Remove="View\Edge\**" />
+	  <EmbeddedResource Remove="Helpers\**" />
+	  <EmbeddedResource Remove="Interface\**" />
+	  <EmbeddedResource Remove="ServiceClients\**" />
+	  <EmbeddedResource Remove="ViewModel\Edge\**" />
+	  <EmbeddedResource Remove="View\Edge\**" />
+	  <None Remove="Helpers\**" />
+	  <None Remove="Interface\**" />
+	  <None Remove="ServiceClients\**" />
+	  <None Remove="ViewModel\Edge\**" />
+	  <None Remove="View\Edge\**" />
+	  <Page Remove="Helpers\**" />
+	  <Page Remove="Interface\**" />
+	  <Page Remove="ServiceClients\**" />
+	  <Page Remove="ViewModel\Edge\**" />
+	  <Page Remove="View\Edge\**" />
+	</ItemGroup>
+	
+	<ItemGroup>
 	  <None Remove="Resources\lwMainLogo.png" />
 	</ItemGroup>
 	
@@ -86,14 +109,6 @@
 		<PackageReference Include="Sdl.Core.PluginFramework.Build">
 			<Version>17.0.0</Version>
 		</PackageReference>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Helpers\" />
-		<Folder Include="Interface\" />
-		<Folder Include="ServiceClients\" />
-		<Folder Include="ViewModel\Edge\" />
-		<Folder Include="View\Edge\" />
 	</ItemGroup>
 
 	<ItemGroup>
