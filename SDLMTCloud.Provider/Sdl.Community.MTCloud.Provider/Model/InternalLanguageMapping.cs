@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using LanguageMappingProvider.Model;
+using Sdl.Community.MTCloud.Languages.Provider.Model;
 
 namespace Sdl.Community.MTCloud.Provider.Model
 {

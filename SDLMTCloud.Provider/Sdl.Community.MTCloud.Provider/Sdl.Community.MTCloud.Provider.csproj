@@ -182,7 +182,6 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="LanguageMappingProvider" Version="1.0.36" />
     <PackageReference Include="Microsoft.Office.Interop.Excel">
       <Version>15.0.4795.1000</Version>
     </PackageReference>
@@ -198,6 +197,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Auth0Service\Auth0Service.csproj" />
+    <ProjectReference Include="..\SDLMTCloud.Languages.Provider\Sdl.Community.MTCloud.Languages.Provider.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="PluginResources.Designer.cs">

@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using LanguageMappingProvider.Model;
+using Sdl.Community.MTCloud.Languages.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Core.Globalization;
@@ -167,6 +167,15 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			if (!availableLinguisticOptions.Any())
 			{
 				return null;
+			}
+
+			foreach (var linguisticOption in availableLinguisticOptions)
+			{
+				if (linguisticOption.Name == "QualityEstimation")
+				{
+					linguisticOption.SystemDefault = linguisticOption.Values.FirstOrDefault(x => x == "Enabled");
+					linguisticOption.SelectedValue = linguisticOption.Values.FirstOrDefault(x => x == "Enabled");
+				}
 			}
 
 			return availableLinguisticOptions;

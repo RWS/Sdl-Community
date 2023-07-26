@@ -1,16 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using LanguageMappingProvider.Interfaces;
-using LanguageMappingProvider.Model;
+using Sdl.Community.MTCloud.Languages.Provider.Interfaces;
+using Sdl.Community.MTCloud.Languages.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Helpers;
-using Sdl.Community.MTCloud.Provider.Service;
 using Sdl.Core.Globalization.LanguageRegistry;
 using Application = System.Windows.Forms.Application;
 
@@ -18,11 +15,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
 	public class MTCodesViewModel : BaseViewModel
 	{
-		private readonly PrintService _printService;
 		private readonly ILanguageProvider _languageProvider;
 
 		private ICommand _saveCommand;
-		private ICommand _printCommand;
 		private ICommand _resetToDefaultsCommand;
 
 		private MappedLanguage _selectedMappedLanguage;
@@ -37,19 +32,12 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			Owner = owner;
 			_languageProvider = languageProvider;
-
 			MappedLanguages = new List<MappedLanguage>(GetAllMappedLanguages(false));
-
-			_printService = new PrintService();
 		}
 
-		public ICommand SaveCommand => _saveCommand ?? (_saveCommand = new RelayCommand(Save));
+		public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save);
 
-		public ICommand PrintCommand
-			=> _printCommand ?? (_printCommand = new RelayCommand<DataGrid>(Print));
-
-		public ICommand ResetToDefaultsCommand => _resetToDefaultsCommand
-														?? (_resetToDefaultsCommand = new RelayCommand(ResetToDefaults));
+		public ICommand ResetToDefaultsCommand => _resetToDefaultsCommand ??= new RelayCommand(ResetToDefaults);
 
 		public Window Owner { get; }
 
@@ -167,31 +155,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			ItemsCountLabel = filteredCount < totalCount
 				? string.Format(PluginResources.Total_And_Filtered_Languages, totalCount, filteredCount)
 				: string.Format(PluginResources.Total_Languages, totalCount);
-		}
-
-		public void Print(DataGrid dataGrid)
-		{
-			IsWaiting = true;
-
-			var collectionViewSource = CollectionViewSource.GetDefaultView(MappedLanguages);
-			var filtered = collectionViewSource.Cast<MappedLanguage>().ToList();
-			var filteredCount = filtered.Count;
-			var totalCount = MappedLanguages.Count;
-
-			if (filteredCount < totalCount)
-			{
-				var filteredFilePath = Path.Combine(LanguageMappingProvider.Constants.MTCloudFolderPath, "FilteredMTLanguageCodes.xlsx");
-				_languageProvider.SaveMappedLanguages(filtered, filteredFilePath);
-
-
-				IsWaiting = false;
-				_printService.PrintFile(filteredFilePath);
-			}
-			else
-			{
-				IsWaiting = false;
-				_printService.PrintFile(LanguageMappingProvider.Constants.MTLanguageCodesFilePath);
-			}
 		}
 
 		private IEnumerable<MappedLanguage> GetAllMappedLanguages(bool reset)

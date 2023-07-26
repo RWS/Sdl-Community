@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using LanguageMappingProvider.Interfaces;
-using LanguageMappingProvider.Model;
 using Newtonsoft.Json;
 using NLog;
+using Sdl.Community.MTCloud.Languages.Provider.Interfaces;
+using Sdl.Community.MTCloud.Languages.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.Service;
@@ -138,7 +139,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 				return null;
 			}
 
-			mapping.Name = $"{languageDirection.SourceCulture?.Name} - {languageDirection.TargetCulture?.Name}";
+			var sourceCultureInfo = new CultureInfo(languageDirection.SourceCulture?.Name);
+			var targetCultureInfo = new CultureInfo(languageDirection.TargetCulture?.Name);
+			mapping.Name = $"{sourceCultureInfo?.DisplayName} - {targetCultureInfo?.DisplayName}";
 			mapping.SavedLanguageMappingModel = Options.LanguageMappings.FirstOrDefault(a => a.Name.Equals(mapping.Name, StringComparison.InvariantCultureIgnoreCase));
 
 			mapping.TargetLanguageMappings = LanguageMappingsService.GetMTCloudLanguages(mapping.TargetLanguageCode, languageDirection.TargetCulture);

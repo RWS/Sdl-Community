@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using LanguageMapping;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Extensions;
@@ -155,7 +154,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			if (_shortcutService != null)
 			{
-				_shortcutService.StudioShortcutChanged -= _shortcutService_ShortcutChanged;
+				_shortcutService.StudioShortcutChanged -= ShortcutService_ShortcutChanged;
 			}
 		}
 
@@ -191,7 +190,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			AutoSendFeedback ??= _feedbackService.Settings.AutoSendFeedback;
 		}
 
-		private void _shortcutService_ShortcutChanged()
+		private void ShortcutService_ShortcutChanged()
 		{
 			UpdateActionTooltips();
 		}
@@ -543,8 +542,8 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			if (_shortcutService == null)
 				return;
-			_shortcutService.StudioShortcutChanged -= _shortcutService_ShortcutChanged;
-			_shortcutService.StudioShortcutChanged += _shortcutService_ShortcutChanged;
+			_shortcutService.StudioShortcutChanged -= ShortcutService_ShortcutChanged;
+			_shortcutService.StudioShortcutChanged += ShortcutService_ShortcutChanged;
 		}
 
 		private void StartSendingOnConfirmationLevelChanged()

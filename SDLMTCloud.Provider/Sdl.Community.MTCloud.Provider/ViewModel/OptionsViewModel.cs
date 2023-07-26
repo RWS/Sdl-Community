@@ -6,8 +6,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
-using LanguageMappingProvider;
 using NLog;
+using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Model;
@@ -138,9 +138,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			{
 				return;
 			}
+
 			var languages = _provider.LanguageProvider.GetMappedLanguages();
 			var languageMappingModels = new List<LanguageMappingModel>();
-
 			foreach (var languagePair in _languagePairs)
 			{
 				var languageMappingModel = _provider.GetLanguageMappingModel(languagePair, languages);

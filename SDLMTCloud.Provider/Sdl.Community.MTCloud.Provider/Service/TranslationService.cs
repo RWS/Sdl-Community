@@ -215,7 +215,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 		}
 
-		private void CheckConnection([CallerMemberName] string caller = null)
+		private void CheckConnection()
 		{
 			ConnectionService.CheckConnection();
 		}
