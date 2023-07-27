@@ -24,7 +24,8 @@ namespace MicrosoftTranslatorProvider.Extensions
 			var database = new LanguageMappingDatabase(Constants.DatabaseName, null);
 			var mappings = database.GetMappedLanguages();
 
-			var targetLanguage = mappings.FirstOrDefault(x => x.Name == languageName && x.Region == languageRegion);
+			var targetLanguage = mappings.FirstOrDefault(x => x.Name == languageName && x.Region == languageRegion)
+							  ?? mappings.FirstOrDefault(x => x.TradosCode == cultureInfo.Name);
 
 			return targetLanguage.LanguageCode;
 		}
