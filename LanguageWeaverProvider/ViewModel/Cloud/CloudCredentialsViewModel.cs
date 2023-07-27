@@ -1,27 +1,38 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Model.Options.Interface;
+using LanguageWeaverProvider.ViewModel.Interface;
 
 namespace LanguageWeaverProvider.ViewModel.Cloud
 {
-	public class CloudCredentialsViewModel : BaseViewModel
+	public class CloudCredentialsViewModel : BaseViewModel, IMainProviderViewModel
 	{
+		private bool _isCredentialsSelected;
+
 		private string _userId;
 		private string _userPassword;
 		private string _clientId;
 		private string _clientSecret;
 
-		private ICommand _signInCommand;
-		private ICommand _signOutCommand;
-
-		public CloudCredentialsViewModel(ITranslationOptions translationOptions)
+		public CloudCredentialsViewModel(ITranslationOptions translationOptions, bool isCredentialsSelected)
 		{
+			IsCredentialsSelected = isCredentialsSelected;
 			TranslationOptions = translationOptions;
 			InitializeCommands();
 		}
 
 		public ITranslationOptions TranslationOptions { get; set; }
+
+		public bool IsCredentialsSelected
+		{
+			get => _isCredentialsSelected;
+			set
+			{
+				if (_isCredentialsSelected == value) return;
+				_isCredentialsSelected = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public string UserId
 		{

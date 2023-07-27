@@ -4,6 +4,7 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:local="clr-namespace:LanguageWeaverProvider.View.Cloud"
+			 xmlns:converters="clr-namespace:LanguageWeaverProvider.Converters"
 			 xmlns:viewModel="clr-namespace:LanguageWeaverProvider.ViewModel.Cloud"
 			 d:DataContext="{d:DesignInstance viewModel:CloudMainViewModel}"
 			 mc:Ignorable="d">
@@ -16,76 +17,48 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 
+			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
+
 			<Style TargetType="Image">
 				<Setter Property="RenderOptions.BitmapScalingMode"
 						Value="HighQuality" />
 			</Style>
 
+			<DataTemplate DataType="{x:Type viewModel:CloudCredentialsViewModel}">
+				<local:CloudCredentialsView />
+			</DataTemplate>
+
 		</ResourceDictionary>
 	</UserControl.Resources>
 
 	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="*" />
-			<RowDefinition Height="*" />
-			<RowDefinition Height="*" />
-			<RowDefinition Height="*" />
-			<RowDefinition Height="*" />
-		</Grid.RowDefinitions>
-
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*" />
 			<ColumnDefinition Width="4*" />
 		</Grid.ColumnDefinitions>
 
-		<StackPanel Grid.Row="0"
-					Grid.ColumnSpan="2">
+		<StackPanel Grid.ColumnSpan="2"
+					Visibility="{Binding IsAuthenticationTypeSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}">
 			<Button Content="User credentials"
 					Style="{StaticResource Sdl.Button.PrimaryStyle}"
+					Command="{Binding SelectAuthenticationTypeCommand}"
+					CommandParameter="Credentials"
 					Cursor="Hand"
 					Width="172"
 					Margin="0 8"/>
 			<Button Content="User secret"
 					Style="{StaticResource Sdl.Button.PrimaryStyle}"
+					Command="{Binding SelectAuthenticationTypeCommand}"
+					CommandParameter="Secret"
 					Cursor="Hand"
 					Width="172"
 					Margin="0 8" />
 		</StackPanel>
 
-		<TextBlock Grid.Row="1"
-				   Grid.Column="0"
-				   Text="User ID"
-				   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}" />
-
-		<TextBox Grid.Row="1"
-				 Grid.Column="1"
-				 Text="User ID" />
-
-		<TextBlock Grid.Row="2"
-				   Grid.Column="0"
-				   Text="Password"
-				   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}" />
-
-		<TextBox Grid.Row="2"
-				 Grid.Column="1"
-				 Text="Password" />
-
-		<TextBlock Grid.Row="3"
-				   Grid.Column="0"
-				   Text="Client ID"
-				   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}" />
-
-		<TextBox Grid.Row="3"
-				 Grid.Column="1"
-				 Text="Client ID" />
-
-		<TextBlock Grid.Row="4"
-				   Grid.Column="0"
-				   Text="Client Secret"
-				   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}" />
-
-		<TextBox Grid.Row="4"
-				 Grid.Column="1"
-				 Text="Client Secret" />
+		<ContentControl Content="{Binding AuthenticationView}"
+						Visibility="{Binding IsAuthenticationTypeSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+						Grid.ColumnSpan="2"
+						Focusable="False"
+						Margin="0" />
 	</Grid>
 </UserControl>
