@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DocumentFormat.OpenXml.Wordprocessing;
-using InterpretBank.GlossaryService;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Text;
+using System.Windows.Forms;
 using InterpretBank.GlossaryService.DAL;
 using InterpretBank.GlossaryService.Interface;
-using InterpretBank.Model;
 using InterpretBank.SettingsService.Model;
 using InterpretBank.Studio.Model;
+using InterpretBank.TermbaseViewer.Model;
 using InterpretBank.TerminologyService.Extensions;
 using InterpretBank.TerminologyService.Interface;
 
@@ -22,46 +24,116 @@ public class TerminologyService : ITerminologyService
 
 	public IInterpretBankDataContext InterpretBankDataContext { get; }
 
-	public List<StudioTermEntry> GetExactTerms(string word, string name1, string name2)
+	public void Dispose()
 	{
-		//var termEntries = GlossaryService.GetTerms(word, SettingsService.LanguageIndices, SettingsService.GlossaryNames,
-		//	SettingsService.Tags);
-
-		return null;
+		InterpretBankDataContext?.Dispose();
 	}
 
-	public List<StudioTermEntry> GetFuzzyTerms(string word, string sourceLanguage, string targetLanguage)
+	public List<StudioTermEntry> GetExactTerms(string word, string sourceLanguage, string targetLanguage, List<string> glossaries)
 	{
 		var sourceLanguageIndex = GetLanguageIndex(sourceLanguage);
 		var targetLanguageIndex = GetLanguageIndex(targetLanguage);
 		var columns = GetTargetLanguageColumns(targetLanguageIndex);
 
-		var filteredTerms = InterpretBankDataContext.GetRows<DbTerm>().WhereFuzzy($"Term{sourceLanguageIndex}", word);
+		var parameter = Expression.Parameter(typeof(DbTerm), "term");
+		var property = Expression.Property(parameter, $"Term{sourceLanguageIndex}");
+
+		var constant = Expression.Constant(word);
+		var comparison = Expression.Equal(property, constant);
+		
+		var filterExpression = Expression.Lambda<Func<DbTerm, bool>>(comparison, parameter);
+		var filteredTerms = InterpretBankDataContext
+			.GetRows<DbTerm>()
+			.Where(t => glossaries.Contains(t.Tag1))
+			.Where(filterExpression);
+			
+		var studioTerms = new List<StudioTermEntry>();
+		foreach (var term in filteredTerms)
+			//TODO: Add CommentAll as an entry level field
+			studioTerms.Add(new StudioTermEntry
+			{
+				Id = term.Id,
+				Text = term[columns[0]],
+				Extra1 = term[columns[1]],
+				Extra2 = term[columns[2]],
+				Score = 100,
+				SearchText = word
+			});
+
+		studioTerms.RemoveAll(term => string.IsNullOrEmpty(term.Text));
+
+		return studioTerms;
+	}
+
+	public List<StudioTermEntry> GetFuzzyTerms(string word, string sourceLanguage, string targetLanguage, List<string> glossaries)
+	{
+		var sourceLanguageIndex = GetLanguageIndex(sourceLanguage);
+
+		var filteredTerms = InterpretBankDataContext
+			.GetRows<DbTerm>()
+			.Where(t => glossaries.Contains(t.Tag1))
+			.WhereFuzzy($"Term{sourceLanguageIndex}", word);
+
+		var targetLanguageIndex = GetLanguageIndex(targetLanguage);
+
+		var columns = GetTargetLanguageColumns(targetLanguageIndex);
 
 		var studioTerms = new List<StudioTermEntry>();
 		foreach (var term in filteredTerms)
 			//TODO: Add CommentAll as an entry level field
 			studioTerms.Add(new StudioTermEntry
 			{
-				Text = term.Item1[columns[0]], Extra1 = term.Item1[columns[1]], Extra2 = term.Item1[columns[2]]
+				Id = term.Item1.Id,
+				Text = term.Item1[columns[0]],
+				Extra1 = term.Item1[columns[1]],
+				Extra2 = term.Item1[columns[2]],
+				Score = term.Item3,
+				SearchText = term.Item2
 			});
 
 		studioTerms.RemoveAll(term => string.IsNullOrEmpty(term.Text));
+
 		return studioTerms;
 	}
 
-	public List<LanguageModel> GetLanguages()
+	public List<LanguageModel> GetGlossaryLanguages(string glossaryName) =>
+		InterpretBankDataContext.GetGlossaryLanguages(glossaryName);
+
+	public List<TermModel> GetAllTerms(string source, string target, List<string> glossaries)
 	{
-		var languages = InterpretBankDataContext.GetLanguages();
-		return languages;
+		List<DbTerm> dbTerms = null;
+		try
+		{
+			dbTerms = InterpretBankDataContext
+				.GetRows<DbTerm>()
+				.Where(t => glossaries.Contains(t.Tag1))
+				.ToList();
+		}
+		catch { }
+
+		//TODO: optimize this to use IQueryable and not .ToList() (needed for virtualization)
+
+		var targetLanguageIndex = GetLanguageIndex(target);
+		var columns = GetTargetLanguageColumns(targetLanguageIndex);
+
+		var termbaseViewerTerms = new List<TermModel>();
+		dbTerms.ForEach(dbT => termbaseViewerTerms.Add(new TermModel
+		{
+			Id = dbT.Id,
+			Text = dbT[columns[0]],
+			Extra1 = dbT[columns[1]],
+			Extra2 = dbT[columns[2]],
+			CommentAll = dbT.CommentAll
+		}));
+
+		return termbaseViewerTerms;
 	}
 
-	private static List<string> GetTargetLanguageColumns(int languageIndex)
+	private static List<string> GetTargetLanguageColumns(int languageIndex) => new()
 	{
-		return new() { $"Term{languageIndex}", $"Comment{languageIndex}a", $"Comment{languageIndex}b" };
-	}
+		$"Term{languageIndex}", $"Comment{languageIndex}a", $"Comment{languageIndex}b"
+	};
 
-	//TODO: Change to use property when event is in place
 	private int GetLanguageIndex(string sourceLanguage)
 	{
 		return GetLanguages()
@@ -69,11 +141,9 @@ public class TerminologyService : ITerminologyService
 				string.Equals(lang.Name, sourceLanguage, StringComparison.CurrentCultureIgnoreCase)).Index;
 	}
 
-	//var terms = DataContext.GetTable<GlossaryData>();
-	//var result = terms.WherePropertyEquals("Term1", word);
-
-	public void Dispose()
+	private List<LanguageModel> GetLanguages()
 	{
-		InterpretBankDataContext?.Dispose();
+		var languages = InterpretBankDataContext.GetDbLanguages();
+		return languages;
 	}
 }

@@ -11,7 +11,7 @@ using InterpretBank.Wrappers.Interface;
 
 namespace InterpretBank.SettingsService.ViewModel
 {
-	public class GlossarySetupViewModel : ViewModel
+	public class GlossarySetupViewModel : ViewModelBase.ViewModel
 	{
 		private ICommand _deleteTagCommand;
 		private ICommand _enterGlossaryCommand;
@@ -277,7 +277,7 @@ namespace InterpretBank.SettingsService.ViewModel
 		private void Setup()
 		{
 			Tags = InterpretBankDataContext.GetTags().Distinct().ToList();
-			Languages = InterpretBankDataContext.GetLanguages();
+			Languages = InterpretBankDataContext.GetDbLanguages();
 			Glossaries = InterpretBankDataContext.GetGlossaries();
 			TagLinks = InterpretBankDataContext.GetLinks();
 

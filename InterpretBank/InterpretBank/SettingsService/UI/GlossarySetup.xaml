@@ -128,7 +128,7 @@
 													 ItemsSource="{Binding Languages}"
 													 SelectedItems="{Binding SelectedItem.Languages, ElementName=GlossaryList}"
 													 DropdownItemTemplate="{StaticResource LanguageTemplate}"
-													 SelectedItemTemplate="{StaticResource LanguageTemplate}" />
+													 SelectedItemTemplate="{StaticResource LanguageTemplate}"/>
 						</DockPanel>
 						<DockPanel Grid.Row="1">
 							<Label DockPanel.Dock="Top"

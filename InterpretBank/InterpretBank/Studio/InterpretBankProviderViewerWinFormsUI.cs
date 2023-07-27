@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Globalization;
+using System.Threading;
 using System.Windows.Forms;
+using System.Windows.Forms.Integration;
+using DocumentFormat.OpenXml.Bibliography;
+using InterpretBank.TermbaseViewer.UI;
+using InterpretBank.TermbaseViewer.ViewModel;
 using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace InterpretBank.Studio
@@ -16,7 +21,16 @@ namespace InterpretBank.Studio
 		{
 			get
 			{
-				return new Control();
+				var settingsId = InterpretBankProvider.Uri.AbsolutePath.Split('.')[0].TrimStart('/');
+				var settings = PersistenceService.PersistenceService.GetSettings(settingsId);
+				TermbaseViewerViewModel = new TermbaseViewerViewModel(InterpretBankProvider.TermSearchService);
+				TermbaseViewerViewModel.LoadTerms(SourceLanguage, TargetLanguage, settings.Glossaries);
+
+				var termbaseViewer = new TermbaseViewer.UI.TermbaseViewer { DataContext = TermbaseViewerViewModel };
+
+				var termbaseControl = new TermbaseViewerControl(termbaseViewer);
+
+				return termbaseControl;
 			}
 		}
 
@@ -29,6 +43,8 @@ namespace InterpretBank.Studio
 		}
 
 		public IEntry SelectedTerm { get; set; }
+		public InterpretBankProvider InterpretBankProvider { get; private set; }
+		public TermbaseViewerViewModel TermbaseViewerViewModel { get; private set; }
 
 		public void AddAndEditTerm(IEntry term, string source, string target)
 		{
@@ -47,21 +63,30 @@ namespace InterpretBank.Studio
 
 		public void Initialize(ITerminologyProvider terminologyProvider, CultureInfo source, CultureInfo target)
 		{
+			if (terminologyProvider is not InterpretBankProvider interpretBankProvider)
+				return;
+
+			InterpretBankProvider = interpretBankProvider;
+
+			SourceLanguage = source.DisplayName.Split(' ')[0];
+			TargetLanguage = target.DisplayName.Split(' ')[0];
 		}
+
+		public string TargetLanguage { get; set; }
+
+		public string SourceLanguage { get; set; }
 
 		public void JumpToTerm(IEntry entry)
 		{
-			throw new NotImplementedException();
+			TermbaseViewerViewModel.JumpToTerm(entry);
 		}
 
 		public void Release()
 		{
-			
+
 		}
 
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
-		{
-			return terminologyProviderUri == new Uri(Constants.InterpretBankUri);
-		}
+			=> terminologyProviderUri.ToString().Contains(Constants.InterpretBankUri);
 	}
 }

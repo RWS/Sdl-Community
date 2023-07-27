@@ -18,11 +18,12 @@ public interface IInterpretBankDataContext : IDisposable
 	List<GlossaryModel> GetGlossaries();
 	void InsertGlossary(GlossaryModel newGlossary);
 	void RemoveTag(string tagName);
-	List<LanguageModel> GetLanguages();
+	List<LanguageModel> GetDbLanguages();
 	List<TagLinkModel> GetLinks();
 	void RemoveTagFromGlossary(string tagName, string glossaryName);
 	void Setup(string filepath);
 	void InsertLanguage(LanguageModel language);
 	void TagGlossary(TagModel newTag, string glossaryName);
 	void AddLanguageToGlossary(LanguageModel newLanguage, string selectedGlossaryGlossaryName);
+	List<LanguageModel> GetGlossaryLanguages(string glossaryName);
 }

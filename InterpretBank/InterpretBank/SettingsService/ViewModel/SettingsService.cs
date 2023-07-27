@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 using InterpretBank.Commands;
@@ -10,7 +11,7 @@ using InterpretBank.Wrappers.Interface;
 
 namespace InterpretBank.SettingsService.ViewModel;
 
-public class SettingsService : ViewModel, ISettingsService
+public class SettingsService : ViewModelBase.ViewModel, ISettingsService, IDataErrorInfo
 {
 	private string _filepath;
 	private List<GlossaryModel> _glossaries;
@@ -40,17 +41,19 @@ public class SettingsService : ViewModel, ISettingsService
 		set => SetField(ref _glossaries, value);
 	}
 
-	public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save, o => !string.IsNullOrWhiteSpace(Filepath));
+	public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save, o => !string.IsNullOrWhiteSpace(Filepath) && this["SelectedTags"] == "" && this["SelectedGlossaries"] == "");
 
 	public ObservableCollection<GlossaryModel> SelectedGlossaries
 	{
 		get => _selectedGlossaries;
 		set
 		{
-			if (SetField(ref _selectedGlossaries, value))
+			SetField(ref _selectedGlossaries, value);
+			_selectedGlossaries.CollectionChanged += (s, e) =>
 			{
-				OnPropertyChanged(nameof(Settings));
-			}
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(SelectedTags));
+			};
 		}
 	}
 
@@ -59,10 +62,12 @@ public class SettingsService : ViewModel, ISettingsService
 		get => _selectedTags;
 		set
 		{
-			if (SetField(ref _selectedTags, value))
+			SetField(ref _selectedTags, value);
+			_selectedTags.CollectionChanged += (s, e) =>
 			{
-				OnPropertyChanged(nameof(Settings));
-			}
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(SelectedGlossaries));
+			};
 		}
 	}
 
@@ -105,6 +110,7 @@ public class SettingsService : ViewModel, ISettingsService
 
 	private void Save(object parameter)
 	{
+		if (Error != "") return;
 		InterpretBankDataContext.SubmitData();
 	}
 
@@ -114,7 +120,7 @@ public class SettingsService : ViewModel, ISettingsService
 		if (!string.IsNullOrWhiteSpace(_filepath))
 		{
 			InterpretBankDataContext.Setup(Filepath);
-			Tags = InterpretBankDataContext.GetTags();
+			Tags = InterpretBankDataContext.GetTags().Distinct().ToList();
 			Glossaries = InterpretBankDataContext.GetGlossaries();
 		}
 		else
@@ -128,5 +134,30 @@ public class SettingsService : ViewModel, ISettingsService
 
 		SelectedGlossaries.Clear();
 		SelectedTags.Clear();
+	}
+
+	public string this[string columnName] {
+		get
+		{
+			if (columnName is nameof(SelectedTags) or nameof(SelectedGlossaries))
+			{
+				if (!SelectedTags.Any() && !SelectedGlossaries.Any())
+				{
+					return "Please select some tags or glossaries";
+				}
+
+				
+			}
+
+			return string.Empty;
+		}
+	}
+
+	public string Error { get; set; }
+
+	public void Validate()
+	{
+		Error = !SelectedTags.Any() && !SelectedGlossaries.Any() ? "Please select some tags or glossaries" : "";
+		OnPropertyChanged(Error);
 	}
 }

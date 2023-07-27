@@ -7,5 +7,8 @@
 		public string Text { get; set; }
 
 		public string CommentAll { get; set; }
+		public int Score { get; set; }
+		public string SearchText { get; set; }
+		public long Id { get; set; }
 	}
 }

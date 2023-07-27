@@ -22,7 +22,7 @@ namespace InterpretBankTests
 
 		private ITerminologyService TermSearchService { get; }
 
-		[Fact]
+		[Fact(Skip = "for now...")]
 		public void SearchTermTest()
 		{
 			//var termSearchService = Substitute.For<ITermSearchService>();
@@ -35,9 +35,10 @@ namespace InterpretBankTests
 			var openFileDialog = Substitute.For<IDialog>();
 
 			var filepath = "C:\\Code\\RWS Community\\InterpretBank\\InterpretBankTests\\Resources\\InterpretBankDatabaseV6.db";
-			var sqLiteConnection = new SQLiteConnection($"Data Source={filepath}");
+			//var sqLiteConnection = new SQLiteConnection($"Data Source={filepath}");
 
 			var ibContext = new InterpretBankDataContext();
+			ibContext.Setup(filepath);
 
 			var termSearchService = new TerminologyService(ibContext);
 

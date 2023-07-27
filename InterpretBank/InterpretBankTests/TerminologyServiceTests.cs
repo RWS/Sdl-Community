@@ -28,8 +28,8 @@ namespace InterpretBankTests
 		{
 			var filePath = "C:\\Code\\RWS Community\\InterpretBank\\InterpretBankTests\\Resources\\InterpretBankDatabaseV6.db";
 
-			var sqlConnection = new SQLiteConnection($"Data Source='{filePath}'");
 			var interpretBankDataContext = new InterpretBankDataContext();
+			interpretBankDataContext.Setup(filePath);
 
 			var sut = new TerminologyService(interpretBankDataContext);
 

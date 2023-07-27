@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using InterpretBank.SettingsService.ViewModel.Interface;
 
-namespace InterpretBank.SettingsService.ViewModel
+namespace InterpretBank.ViewModelBase
 {
 	public class ViewModel : IViewModel
 	{

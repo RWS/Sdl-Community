@@ -102,7 +102,16 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 		glossary.GlossarySetting = glossarySetting.Substring(0, indexToReplace) + newLanguage.Index +
 		                           glossarySetting.Substring(indexToReplace + 0.ToString().Length);
 	}
-	public List<LanguageModel> GetLanguages()
+
+	public List<LanguageModel> GetGlossaryLanguages(string glossaryName)
+	{
+		var dbGlossary = DataContext.GetTable<DbGlossary>().ToList().FirstOrDefault(g=>g.Tag1 == glossaryName);
+		var settings = dbGlossary.GlossarySetting;
+
+		return GetLanguageNames(settings);
+	}
+
+	public List<LanguageModel> GetDbLanguages()
 	{
 		var dbInfo = GetRows<DatabaseInfo>().ToList()[0];
 		var dbInfoProperties = dbInfo.GetType().GetProperties();
@@ -197,7 +206,7 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 
 	private List<LanguageModel> GetLanguageNames(string languageSetting)
 	{
-		var languageModels = GetLanguages();
+		var languageModels = GetDbLanguages();
 
 		if (string.IsNullOrEmpty(languageSetting) || !languageSetting.Contains("#"))
 			return new List<LanguageModel>();

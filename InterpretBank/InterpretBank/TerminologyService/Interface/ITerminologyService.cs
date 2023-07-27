@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using InterpretBank.GlossaryService.Interface;
-using InterpretBank.Model;
 using InterpretBank.SettingsService.Model;
 using InterpretBank.Studio.Model;
+using InterpretBank.TermbaseViewer.Model;
 
 namespace InterpretBank.TerminologyService.Interface
 {
@@ -11,10 +11,11 @@ namespace InterpretBank.TerminologyService.Interface
 	{
 		IInterpretBankDataContext InterpretBankDataContext { get; }
 
-		List<StudioTermEntry> GetExactTerms(string word, string name1, string name2);
+		List<StudioTermEntry> GetExactTerms(string word, string name1, string name2, List<string> glossaries);
 
-		List<StudioTermEntry> GetFuzzyTerms(string word, string sourceLanguage, string targetLanguage);
+		List<StudioTermEntry> GetFuzzyTerms(string word, string sourceLanguage, string targetLanguage, List<string> glossaries);
 
-		List<LanguageModel> GetLanguages();
+		List<LanguageModel> GetGlossaryLanguages(string glossaryName);
+		List<TermModel> GetAllTerms(string source, string target, List<string> glossaries);
 	}
 }

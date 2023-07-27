@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using InterpretBank.SettingsService;
 using InterpretBank.Studio.Model;
-using InterpretBank.TerminologyService;
 using InterpretBank.TerminologyService.Interface;
 using Sdl.Terminology.TerminologyProvider.Core;
 
@@ -34,13 +33,12 @@ public class InterpretBankProvider : AbstractTerminologyProvider
 
 	public Settings Settings { get; set; }
 
-	public override Uri Uri => new($"{Settings.SettingsId}://");
+	public ITerminologyService TermSearchService { get; }
+	public override Uri Uri => new($"{Constants.InterpretBankUri}/{Settings.SettingsId}.json://");
 
 	private HashSet<IEntry> Entries { get; } = new();
 
 	private int TermIndex { get; set; }
-
-	public ITerminologyService TermSearchService { get; }
 
 	public override void Dispose()
 	{
@@ -60,32 +58,20 @@ public class InterpretBankProvider : AbstractTerminologyProvider
 
 	public override IList<ILanguage> GetLanguages()
 	{
+		if (Settings.Glossaries is null || !Settings.Glossaries.Any())
+			return null;
 		var languages = new List<ILanguage>();
-
-		//var interpretBankLanguages = TermSearchService.GetLanguages();
-
-		//var currentProject = StudioContext.ProjectsController.CurrentProject;
-		//if (currentProject == null) return null;
-
-		//var projectInfo = currentProject.GetProjectInfo();
-
-		//languages.Add(new DefinitionLanguage
-		//{
-		//	IsBidirectional = true,
-		//	Locale = projectInfo.SourceLanguage.CultureInfo,
-		//	Name = projectInfo.SourceLanguage.DisplayName,
-		//	TargetOnly = false
-		//});
-
 		var cultures = CultureInfo.GetCultures(CultureTypes.NeutralCultures);
-
-		//languages.AddRange(interpretBankLanguages.Select(lang => new DefinitionLanguage
-		//{
-		//	IsBidirectional = true,
-		//	Locale = cultures.FirstOrDefault(cult => cult.EnglishName == lang.Name),
-		//	Name = lang.Name,
-		//	TargetOnly = false
-		//}));
+		foreach (var glossary in Settings.Glossaries)
+		{
+			languages.AddRange(TermSearchService.GetGlossaryLanguages(glossary).Select(lang => new DefinitionLanguage
+			{
+				IsBidirectional = true,
+				Locale = cultures.FirstOrDefault(cult => cult.EnglishName == lang.Name),
+				Name = lang.Name,
+				TargetOnly = false
+			}));
+		}
 
 		return languages;
 	}
@@ -95,27 +81,36 @@ public class InterpretBankProvider : AbstractTerminologyProvider
 	{
 		var words = Regex.Split(text, "\\s+");
 
-		var results = new List<ISearchResult>();
+		List<ISearchResult> results = null;
 		foreach (var word in words)
 		{
-			var terms = mode switch
+			results = mode switch
 			{
-				SearchMode.Fuzzy => TermSearchService.GetFuzzyTerms(word, source.Name, destination.Name),
-				SearchMode.Normal => TermSearchService.GetExactTerms(word, source.Name, destination.Name),
+				SearchMode.Fuzzy => GetFuzzyTerms(source, destination, word),
+				SearchMode.Normal => GetExactTerms(source, destination, word),
 				SearchMode.FullText => throw new NotImplementedException()
 			};
-
-			var id = TermIndex++;
-			//TODO: calculate score instead of hardcoding "100"
-
-			if (terms is not { Count: > 0 })
-				continue;
-
-			results.Add(new SearchResult { Id = id, Score = 100, Text = word });
-			Entries.Add(CreateEntry(id, terms, destination.Name));
 		}
 
 		return results;
+	}
+
+
+	//TODO: simplify this; creates confusion
+	/// <summary>
+	/// Works differently for Fuzzy and Exact searches.
+	/// When the search is exact, we always add the same search text for each of the found terms, since there's only one (search text).
+	/// When the search is fuzzy, the search was done against the word itself and other similar words. In this case we add a search text for each of them.
+	/// </summary>
+	/// <param name="destination"></param>
+	/// <param name="results"></param>
+	/// <param name="terms"></param>
+	/// <param name="score"></param>
+	private void AddResultToList(ILanguage destination, List<ISearchResult> results, List<StudioTermEntry> terms, int score)
+	{
+		var id = GetIndex();
+		results.Add(new SearchResult { Id = (int)terms[0].Id, Score = score, Text = terms[0].SearchText });
+		Entries.Add(CreateEntry((int)terms[0].Id, terms, destination.Name));
 	}
 
 	private IEntry CreateEntry(int id, List<StudioTermEntry> targetTerms, string targetLanguage)
@@ -139,4 +134,29 @@ public class InterpretBankProvider : AbstractTerminologyProvider
 
 		return entry;
 	}
+
+	private List<ISearchResult> GetExactTerms(ILanguage source, ILanguage destination, string word)
+	{
+		var terms = TermSearchService.GetExactTerms(word, source.Name, destination.Name, Settings.Glossaries);
+
+		var results = new List<ISearchResult>();
+		AddResultToList(destination, results, terms, 100);
+
+		return results;
+	}
+
+	private List<ISearchResult> GetFuzzyTerms(ILanguage source, ILanguage destination, string word)
+	{
+		var terms = TermSearchService.GetFuzzyTerms(word, source.Name, destination.Name, Settings.Glossaries);
+
+		var results = new List<ISearchResult>();
+		foreach (var term in terms)
+		{
+			AddResultToList(destination, results, new List<StudioTermEntry> { term }, term.Score);
+		}
+
+		return results;
+	}
+
+	private int GetIndex() => TermIndex++;
 }

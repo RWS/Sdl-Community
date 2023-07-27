@@ -11,7 +11,8 @@ namespace InterpretBank.Studio
 	{
 		public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri, ITerminologyProviderCredentialStore credentials)
 		{
-			var settings = PersistenceService.PersistenceService.GetSettings(terminologyProviderUri.Scheme);
+			var settingsId = terminologyProviderUri.AbsolutePath.Split('.')[0].TrimStart('/');
+			var settings = PersistenceService.PersistenceService.GetSettings(settingsId);
 
 			var interpretBankDataContext = new InterpretBankDataContext();
 			interpretBankDataContext.Setup(settings.DatabaseFilepath);
@@ -24,6 +25,6 @@ namespace InterpretBank.Studio
 		}
 
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri) =>
-			PersistenceService.PersistenceService.GetSettings(terminologyProviderUri.Scheme) is not null;
+			terminologyProviderUri.ToString().Contains(Constants.InterpretBankUri);
 	}
 }

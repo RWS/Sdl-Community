@@ -67,10 +67,8 @@ internal class InterpretBankWinFormsUI : ITerminologyProviderWinFormsUI
 		return new TerminologyProviderDisplayInfo { Name = PluginResources.Plugin_Description };
 	}
 
-	public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
-	{
-		return true;
-	}
+	public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri) =>
+		terminologyProviderUri.ToString().Contains(Constants.InterpretBankUri);
 
-	private static string GetSettingsId() => (Guid.NewGuid().ToString() + Guid.NewGuid() + Guid.NewGuid()).RemoveDashesAndDigits();
+	private static string GetSettingsId() => (Guid.NewGuid().ToString());
 }

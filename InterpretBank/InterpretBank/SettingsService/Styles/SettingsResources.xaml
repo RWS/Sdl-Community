@@ -1,12 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:model="clr-namespace:InterpretBank.SettingsService.Model"
-                    xmlns:generalModel="clr-namespace:InterpretBank.Model">
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:model="clr-namespace:InterpretBank.SettingsService.Model"
+					xmlns:generalModel="clr-namespace:InterpretBank.Model">
 	<ResourceDictionary.MergedDictionaries>
 		<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
 	</ResourceDictionary.MergedDictionaries>
 	<Style TargetType="TabItem"
-	       BasedOn="{StaticResource {x:Type TabItem}}">
+		   BasedOn="{StaticResource {x:Type TabItem}}">
 		<Setter Property="BorderThickness"
 				Value="1" />
 	</Style>
@@ -61,8 +61,8 @@
 				   DockPanel.Dock="Left"
 				   Height="17" />
 			<TextBlock FontSize="10"
-			           VerticalAlignment="Center"
-			           DockPanel.Dock="Right" >
+					   VerticalAlignment="Center"
+					   DockPanel.Dock="Right">
 				<TextBlock.Text>
 					<MultiBinding StringFormat="{}{0} {1}">
 						<Binding Path="GlossaryName" />
@@ -74,7 +74,7 @@
 	</DataTemplate>
 
 	<DataTemplate x:Key="LanguageTemplate"
-				  DataType="{x:Type generalModel:Language}">
+				  DataType="{x:Type model:LanguageModel}">
 		<DockPanel>
 			<Image Source="../../Resources/Flag.png"
 				   DockPanel.Dock="Left"
