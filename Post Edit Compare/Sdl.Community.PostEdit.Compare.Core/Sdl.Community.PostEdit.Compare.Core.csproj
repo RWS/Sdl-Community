@@ -175,11 +175,8 @@
     <PackageReference Include="EPPlus">
       <Version>4.5.3.3</Version>
     </PackageReference>
-    <PackageReference Include="Trados.Community.Toolkit.Core">
-      <Version>4.0.6</Version>
-    </PackageReference>
     <PackageReference Include="Trados.Community.Toolkit.LanguagePlatform">
-      <Version>4.0.6</Version>
+      <Version>4.1.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
