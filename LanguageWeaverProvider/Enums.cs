@@ -6,6 +6,12 @@
 		LanguageWeaverEdge
 	}
 
+	public enum AuthenticationType
+	{
+		Credentials,
+		Secret
+	}
+
 	public enum Parameters
 	{
 		Inverted

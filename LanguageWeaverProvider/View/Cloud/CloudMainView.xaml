@@ -32,12 +32,18 @@
 	</UserControl.Resources>
 
 	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*" />
 			<ColumnDefinition Width="4*" />
 		</Grid.ColumnDefinitions>
 
-		<StackPanel Grid.ColumnSpan="2"
+		<StackPanel Grid.Row="0"
+					Grid.ColumnSpan="2"
 					Visibility="{Binding IsAuthenticationTypeSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}">
 			<Button Content="User credentials"
 					Style="{StaticResource Sdl.Button.PrimaryStyle}"
@@ -45,7 +51,7 @@
 					CommandParameter="Credentials"
 					Cursor="Hand"
 					Width="172"
-					Margin="0 8"/>
+					Margin="0 8" />
 			<Button Content="User secret"
 					Style="{StaticResource Sdl.Button.PrimaryStyle}"
 					Command="{Binding SelectAuthenticationTypeCommand}"
@@ -55,9 +61,20 @@
 					Margin="0 8" />
 		</StackPanel>
 
-		<ContentControl Content="{Binding AuthenticationView}"
-						Visibility="{Binding IsAuthenticationTypeSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+		<Button Grid.Row="1"
+				Grid.ColumnSpan="2"
+				Content="Sign in"
+				Style="{StaticResource Sdl.Button.PrimaryStyle}"
+				CommandParameter="Secret"
+				Visibility="{Binding IsAuthenticationTypeSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+				Cursor="Hand"
+				Width="172"
+				Margin="0 8" />
+
+		<ContentControl Grid.Row="0"
 						Grid.ColumnSpan="2"
+						Content="{Binding AuthenticationView}"
+						Visibility="{Binding IsAuthenticationTypeSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 						Focusable="False"
 						Margin="0" />
 	</Grid>

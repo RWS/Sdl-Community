@@ -7,32 +7,34 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 {
 	public class CloudCredentialsViewModel : BaseViewModel, IMainProviderViewModel
 	{
-		private bool _isCredentialsSelected;
+		private AuthenticationType _authenticationType;
 
 		private string _userId;
 		private string _userPassword;
 		private string _clientId;
 		private string _clientSecret;
 
-		public CloudCredentialsViewModel(ITranslationOptions translationOptions, bool isCredentialsSelected)
+		public CloudCredentialsViewModel(ITranslationOptions translationOptions, AuthenticationType authenticationType)
 		{
-			IsCredentialsSelected = isCredentialsSelected;
+			AuthenticationType = authenticationType;
 			TranslationOptions = translationOptions;
 			InitializeCommands();
 		}
 
-		public ITranslationOptions TranslationOptions { get; set; }
-
-		public bool IsCredentialsSelected
+		public AuthenticationType AuthenticationType
 		{
-			get => _isCredentialsSelected;
+			get => _authenticationType;
 			set
 			{
-				if (_isCredentialsSelected == value) return;
-				_isCredentialsSelected = value;
+				_authenticationType = value;
 				OnPropertyChanged();
+				OnPropertyChanged(nameof(AuthenticationType));
 			}
 		}
+
+		public bool IsCredentialsSelected => AuthenticationType == AuthenticationType.Credentials;
+
+		public ITranslationOptions TranslationOptions { get; set; }
 
 		public string UserId
 		{

@@ -73,7 +73,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 			IsCredentialsSelected = requestedAuthenticationType == "Credentials";
 			IsSecretSelected = requestedAuthenticationType == "Secret";
-			AuthenticationView = new CloudCredentialsViewModel(TranslationOptions, IsCredentialsSelected);
+			AuthenticationView = new CloudCredentialsViewModel(TranslationOptions, IsCredentialsSelected ? AuthenticationType.Credentials : AuthenticationType.Secret);
 		}
 	}
 }
