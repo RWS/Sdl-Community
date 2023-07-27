@@ -11,6 +11,7 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 	{
 		public string[] GetFilePathInputFromUser(string title = "", string initialDirectory = "", string filter = "", bool multiselect = false)
 		{
+			initialDirectory = "";
 			GetInitialPath(initialDirectory);
 			var dlg = new OpenFileDialog
 			{
@@ -18,6 +19,7 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 				Filter = filter,
 				InitialDirectory = GetInitialPath(initialDirectory),
 				Multiselect = multiselect,
+				RestoreDirectory = true,
 			};
 
 			var result = dlg.ShowDialog();
