@@ -75,15 +75,19 @@ namespace Sdl.Community.MTEdge.Provider.Studio
                       .GetLanguagePairs(Options)
                       .Any(lp => lp.SourceLanguageId.Equals("por")
                               && targetCulture.CultureInfo.ToMTEdgeCode().Equals(lp.TargetLanguageId));
-            }
+			}
 
-            return SDLMTEdgeTranslatorHelper
-                  .GetLanguagePairs(Options)
-                  .Any(lp => sourceCulture.CultureInfo.ToMTEdgeCode().Equals(lp.SourceLanguageId)
-                          && targetCulture.CultureInfo.ToMTEdgeCode().Equals(lp.TargetLanguageId));
-        }
+			try
+			{
+				return Options.SetPreferredLanguages(new LanguagePair[] { languageDirection })[0].IsSupported;
+			}
+			catch
+			{
+				return false;
+			}
+		}
 
-        public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
+		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
         {
              
             return new ProviderLanguageDirection(this, languageDirection);
