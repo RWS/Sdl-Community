@@ -5,28 +5,155 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:model="clr-namespace:InterpretBank.TermbaseViewer.Model"
 			 xmlns:viewModel="clr-namespace:InterpretBank.TermbaseViewer.ViewModel"
+			 xmlns:converters="clr-namespace:InterpretBank.TermbaseViewer.UI.Converters"
 			 mc:Ignorable="d"
 			 d:DataContext="{d:DesignInstance viewModel:TermbaseViewerViewModel}"
 			 d:DesignHeight="450"
 			 d:DesignWidth="800">
-	<Grid>
+	<UserControl.Resources>
+		<converters:ImageToBitmapImageConverter x:Key="ImageConverter" />
+	</UserControl.Resources>
+	<Grid Background="LightGray">
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*"/>
-			<ColumnDefinition Width="3*"/>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="3*" />
 		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
 
-		<ListBox ItemsSource="{Binding Terms}"
+
+
+		<ListBox Grid.Row="1"
+				 Background="#f5f8fa"
+				 Grid.Column="0"
+				 Margin="0"
+				 BorderThickness="0"
+				 ItemsSource="{Binding Terms}"
 				 SelectedItem="{Binding SelectedItem}">
 			<ListBox.ItemTemplate>
 				<DataTemplate DataType="{x:Type model:TermModel}">
 					<DockPanel>
-						<TextBlock Text="{Binding Text}" />
+						<TextBlock Text="{Binding TargetTerm}" />
 					</DockPanel>
 				</DataTemplate>
 			</ListBox.ItemTemplate>
 		</ListBox>
-		<DockPanel Grid.Column="1">
 
-		</DockPanel>
+		<!--<Border Background="White"
+		        Margin="0"
+		        Grid.Row="1"
+		        Grid.Column="1">-->
+		<Grid Margin="0"
+			  Background="White"
+			  Grid.Row="1"
+			  Grid.Column="1">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+
+
+			<DockPanel Grid.Row="0"
+					   Margin="2 0 0 0"
+					   Grid.Column="0"
+					   VerticalAlignment="Top">
+				<StackPanel Orientation="Horizontal"
+							DockPanel.Dock="Top">
+					<Image Source="{Binding SourceLanguageFlag, Converter={StaticResource ImageConverter}}"
+						   Width="19"
+						   Height="19" />
+					<TextBlock Text="{Binding SourceLanguage.DisplayName}"
+							   VerticalAlignment="Center"
+							   FontWeight="Light"
+							   FontSize="17" />
+				</StackPanel>
+
+				<StackPanel DockPanel.Dock="Bottom"
+							Margin="10 5 0 0">
+					<TextBlock Name="SourceTermComment1_TextBlock"
+					           Text="{Binding SelectedItem.SourceTermComment1}" />
+					<TextBlock Name="SourceTermComment2_TextBlock"
+					           Text="{Binding SelectedItem.SourceTermComment2}" />
+				</StackPanel>
+
+				<Grid DockPanel.Dock="Bottom">
+					<TextBlock Name="SourceTerm_TextBlock"
+							   Margin="5 5 0 0"
+							   FontSize="15"
+							   FontWeight="Black"
+							   Text="{Binding SelectedItem.SourceTerm}" />
+
+					<TextBox Name="SourceTerm_TextBox"
+							 Margin="5 5 0 0"
+							 IsReadOnly="True"
+							 FontSize="15"
+							 FontWeight="Black"
+							 Text="{Binding SelectedItem.SourceTerm}" />
+				</Grid>
+			</DockPanel>
+
+			<DockPanel Grid.Row="0"
+					   Grid.Column="1"
+					   VerticalAlignment="Top">
+				<StackPanel Orientation="Horizontal"
+							DockPanel.Dock="Top">
+					<Image Source="{Binding TargetLanguageFlag, Converter={StaticResource ImageConverter}}"
+						   Width="19"
+						   Height="19" />
+					<TextBlock Text="{Binding TargetLanguage.DisplayName}"
+							   VerticalAlignment="Center"
+							   FontWeight="Light"
+							   FontSize="17" />
+				</StackPanel>
+
+				<StackPanel DockPanel.Dock="Bottom"
+							Margin="10 5 0 0">
+					<TextBlock Name="TargetTermComment1_TextBlock"
+					           Text="{Binding SelectedItem.TargetTermComment1}" />
+					<TextBlock Name="TargetTermComment2_TextBlock"
+					           Text="{Binding SelectedItem.TargetTermComment2}" />
+				</StackPanel>
+
+				<TextBlock Name="TargetTerm_TextBlock" DockPanel.Dock="Bottom"
+						   Margin="5 5 0 0"
+						   FontSize="15"
+						   FontWeight="Black"
+						   Text="{Binding SelectedItem.TargetTerm}" />
+			</DockPanel>
+
+			<TextBlock Name="CommentAll_TextBlock" Grid.Row="1"
+					   Margin="7 10 0 0"
+					   Grid.Column="0"
+					   Grid.ColumnSpan="2"
+					   FontSize="15"
+					   Text="{Binding SelectedItem.CommentAll}" />
+
+
+			<StackPanel Grid.Row="1"
+						HorizontalAlignment="Right"
+						Grid.Column="1"
+						Orientation="Horizontal">
+				<Button VerticalAlignment="Bottom"
+						Content="Add" />
+
+				<Button VerticalAlignment="Bottom"
+						Margin="2 0 0 0"
+						Content="Remove" />
+
+				<Button VerticalAlignment="Bottom"
+						Margin="2 0 0 0"
+						Click="EditButton_Click"
+						Content="Edit" />
+			</StackPanel>
+
+		</Grid>
+		<!--</Border>-->
+
 	</Grid>
 </UserControl>

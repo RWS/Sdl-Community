@@ -33,7 +33,7 @@ public class TerminologyService : ITerminologyService
 	{
 		var sourceLanguageIndex = GetLanguageIndex(sourceLanguage);
 		var targetLanguageIndex = GetLanguageIndex(targetLanguage);
-		var columns = GetTargetLanguageColumns(targetLanguageIndex);
+		var columns = GetTermColumns(targetLanguageIndex);
 
 		var parameter = Expression.Parameter(typeof(DbTerm), "term");
 		var property = Expression.Property(parameter, $"Term{sourceLanguageIndex}");
@@ -76,7 +76,7 @@ public class TerminologyService : ITerminologyService
 
 		var targetLanguageIndex = GetLanguageIndex(targetLanguage);
 
-		var columns = GetTargetLanguageColumns(targetLanguageIndex);
+		var columns = GetTermColumns(targetLanguageIndex);
 
 		var studioTerms = new List<StudioTermEntry>();
 		foreach (var term in filteredTerms)
@@ -113,32 +113,49 @@ public class TerminologyService : ITerminologyService
 
 		//TODO: optimize this to use IQueryable and not .ToList() (needed for virtualization)
 
+		var sourceLanguageIndex = GetLanguageIndex(source);
 		var targetLanguageIndex = GetLanguageIndex(target);
-		var columns = GetTargetLanguageColumns(targetLanguageIndex);
+		var columns = GetTermColumns(targetLanguageIndex, sourceLanguageIndex);
 
 		var termbaseViewerTerms = new List<TermModel>();
 		dbTerms.ForEach(dbT => termbaseViewerTerms.Add(new TermModel
 		{
 			Id = dbT.Id,
-			Text = dbT[columns[0]],
-			Extra1 = dbT[columns[1]],
-			Extra2 = dbT[columns[2]],
+			TargetTerm = dbT[columns[0]],
+			TargetTermComment1 = dbT[columns[1]],
+			TargetTermComment2 = dbT[columns[2]],
+			SourceTerm = dbT[columns[3]],
+			SourceTermComment1 = dbT[columns[4]],
+			SourceTermComment2 = dbT[columns[5]],
 			CommentAll = dbT.CommentAll
 		}));
 
 		return termbaseViewerTerms;
 	}
 
-	private static List<string> GetTargetLanguageColumns(int languageIndex) => new()
+	private static List<string> GetTermColumns(int targetLanguageIndex, int sourceLanguageIndex = -1)
 	{
-		$"Term{languageIndex}", $"Comment{languageIndex}a", $"Comment{languageIndex}b"
-	};
+		var columns =  new List<string>
+		{
+			$"Term{targetLanguageIndex}",
+			$"Comment{targetLanguageIndex}a",
+			$"Comment{targetLanguageIndex}b"
+		};
 
-	private int GetLanguageIndex(string sourceLanguage)
+		if (sourceLanguageIndex > -1)
+		{
+			columns.Add($"Term{sourceLanguageIndex}");
+			columns.Add($"Comment{sourceLanguageIndex}a");
+			columns.Add($"Comment{sourceLanguageIndex}b");
+		}
+		return columns;
+	}
+
+	private int GetLanguageIndex(string language)
 	{
 		return GetLanguages()
 			.First(lang =>
-				string.Equals(lang.Name, sourceLanguage, StringComparison.CurrentCultureIgnoreCase)).Index;
+				string.Equals(lang.Name, language, StringComparison.CurrentCultureIgnoreCase)).Index;
 	}
 
 	private List<LanguageModel> GetLanguages()

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio17</TradosFolder>
+		<TradosFolder>C:\Code\Studio2\Bin\Mixed Platforms\Debug</TradosFolder>
 		<TargetFramework>net48</TargetFramework>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -16,6 +16,16 @@
     <CleanSQLiteInteropFiles>false</CleanSQLiteInteropFiles>
     <CollectSQLiteInteropFiles>false</CollectSQLiteInteropFiles>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="NewFolder\**" />
+    <Compile Remove="TermbaseViewer\Converters\**" />
+    <EmbeddedResource Remove="NewFolder\**" />
+    <EmbeddedResource Remove="TermbaseViewer\Converters\**" />
+    <None Remove="NewFolder\**" />
+    <None Remove="TermbaseViewer\Converters\**" />
+    <Page Remove="NewFolder\**" />
+    <Page Remove="TermbaseViewer\Converters\**" />
+  </ItemGroup>
   <ItemGroup>
     <None Remove="Resources\Flag.png" />
     <None Remove="Resources\Glossary.png" />
@@ -32,6 +42,9 @@
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.Globalization.Async">
+      <HintPath>..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.Async.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
@@ -125,6 +138,9 @@
     <Resource Include="Resources\logo.ico" />
     <Resource Include="Resources\logo.png" />
     <Resource Include="Resources\Tag.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TermbaseViewer\UI\Converters\" />
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
