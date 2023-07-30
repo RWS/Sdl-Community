@@ -6,27 +6,30 @@
 			 xmlns:model="clr-namespace:InterpretBank.TermbaseViewer.Model"
 			 xmlns:viewModel="clr-namespace:InterpretBank.TermbaseViewer.ViewModel"
 			 xmlns:converters="clr-namespace:InterpretBank.TermbaseViewer.UI.Converters"
+			 xmlns:controls="clr-namespace:InterpretBank.TermbaseViewer.UI.Controls"
 			 mc:Ignorable="d"
 			 d:DataContext="{d:DesignInstance viewModel:TermbaseViewerViewModel}"
 			 d:DesignHeight="450"
 			 d:DesignWidth="800">
 	<UserControl.Resources>
-		<converters:ImageToBitmapImageConverter x:Key="ImageConverter" />
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
+				<ResourceDictionary Source="../../Styles/ButtonStyles.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+
+			<converters:ImageToBitmapImageConverter x:Key="ImageConverter" />
+
+			<!--<Style TargetType="Button" BasedOn="{StaticResource Sdl.Button.GeneralStyle}"/>-->
+		</ResourceDictionary>
 	</UserControl.Resources>
 	<Grid Background="LightGray">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*" />
 			<ColumnDefinition Width="3*" />
 		</Grid.ColumnDefinitions>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="*" />
-		</Grid.RowDefinitions>
 
-
-
-		<ListBox Grid.Row="1"
-				 Background="#f5f8fa"
+		<ListBox Background="#f5f8fa"
 				 Grid.Column="0"
 				 Margin="0"
 				 BorderThickness="0"
@@ -34,20 +37,42 @@
 				 SelectedItem="{Binding SelectedItem}">
 			<ListBox.ItemTemplate>
 				<DataTemplate DataType="{x:Type model:TermModel}">
-					<DockPanel>
-						<TextBlock Text="{Binding TargetTerm}" />
-					</DockPanel>
+
+					<Grid Width="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}}">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition />
+							<ColumnDefinition />
+						</Grid.ColumnDefinitions>
+
+						<TextBlock DockPanel.Dock="Left"
+								   Grid.Column="0"
+								   Text="{Binding TargetTerm}" />
+						<Button DockPanel.Dock="Right"
+								Grid.Column="1"
+								Style="{StaticResource GlyphButtonStyle}"
+								FontSize="5"
+								Content="❌" />
+					</Grid>
+
 				</DataTemplate>
 			</ListBox.ItemTemplate>
 		</ListBox>
 
+		<Button DockPanel.Dock="Right"
+				Grid.Column="0"
+				Style="{StaticResource GlyphButtonStyle}"
+				VerticalAlignment="Bottom"
+				HorizontalAlignment="Left"
+				Margin="2 0 0 0"
+				Content="➕" />
+
+
+
 		<!--<Border Background="White"
 		        Margin="0"
-		        Grid.Row="1"
-		        Grid.Column="1">-->
+		              Grid.Column="1">-->
 		<Grid Margin="0"
 			  Background="White"
-			  Grid.Row="1"
 			  Grid.Column="1">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition />
@@ -76,26 +101,33 @@
 
 				<StackPanel DockPanel.Dock="Bottom"
 							Margin="10 5 0 0">
-					<TextBlock Name="SourceTermComment1_TextBlock"
-					           Text="{Binding SelectedItem.SourceTermComment1}" />
-					<TextBlock Name="SourceTermComment2_TextBlock"
-					           Text="{Binding SelectedItem.SourceTermComment2}" />
+					<!--<TextBlock Text="{Binding SelectedItem.SourceTermComment1}" />-->
+					<controls:EditableTextBlock Text="{Binding SelectedItem.SourceTermComment1}"
+												x:Name="SourceTermComment1_EditableTextBlock" />
+					<controls:EditableTextBlock Text="{Binding SelectedItem.SourceTermComment2}"
+												Margin="0 2 0 0"
+												x:Name="SourceTermComment2_EditableTextBlock" />
 				</StackPanel>
 
-				<Grid DockPanel.Dock="Bottom">
-					<TextBlock Name="SourceTerm_TextBlock"
-							   Margin="5 5 0 0"
-							   FontSize="15"
-							   FontWeight="Black"
-							   Text="{Binding SelectedItem.SourceTerm}" />
+				<!--<TextBlock DockPanel.Dock="Bottom"
+					           Margin="5 5 0 0"
+					           FontSize="15"
+					           FontWeight="Black"
+					           Text="{Binding SelectedItem.SourceTerm}" />-->
 
-					<TextBox Name="SourceTerm_TextBox"
-							 Margin="5 5 0 0"
-							 IsReadOnly="True"
-							 FontSize="15"
-							 FontWeight="Black"
-							 Text="{Binding SelectedItem.SourceTerm}" />
-				</Grid>
+				<!--<TextBox DockPanel.Dock="Bottom"
+					           Margin="5 5 0 0"
+							   IsReadOnly="True"
+					           FontSize="15"
+					           FontWeight="Black"
+					           Text="{Binding SelectedItem.SourceTerm}" />-->
+
+				<controls:EditableTextBlock Margin="5 5 0 0"
+											FontSize="15"
+											FontWeight="Black"
+											x:Name="SourceTerm_EditableTextBlock"
+											Text="{Binding SelectedItem.SourceTerm}" />
+
 			</DockPanel>
 
 			<DockPanel Grid.Row="0"
@@ -114,43 +146,55 @@
 
 				<StackPanel DockPanel.Dock="Bottom"
 							Margin="10 5 0 0">
-					<TextBlock Name="TargetTermComment1_TextBlock"
-					           Text="{Binding SelectedItem.TargetTermComment1}" />
-					<TextBlock Name="TargetTermComment2_TextBlock"
-					           Text="{Binding SelectedItem.TargetTermComment2}" />
+					<controls:EditableTextBlock Text="{Binding SelectedItem.TargetTermComment1}"
+												x:Name="TargetTermComment1_EditableTextBlock" />
+					<controls:EditableTextBlock Text="{Binding SelectedItem.TargetTermComment2}"
+												Margin="0 2 0 0"
+												x:Name="TargetTermComment2_EditableTextBlock" />
 				</StackPanel>
 
-				<TextBlock Name="TargetTerm_TextBlock" DockPanel.Dock="Bottom"
-						   Margin="5 5 0 0"
-						   FontSize="15"
-						   FontWeight="Black"
-						   Text="{Binding SelectedItem.TargetTerm}" />
+				<controls:EditableTextBlock DockPanel.Dock="Bottom"
+											x:Name="TargetTerm_EditableTextBlock"
+											Margin="5 5 0 0"
+											FontSize="15"
+											FontWeight="Black"
+											Text="{Binding SelectedItem.TargetTerm}" />
 			</DockPanel>
 
-			<TextBlock Name="CommentAll_TextBlock" Grid.Row="1"
-					   Margin="7 10 0 0"
+			<controls:EditableTextBlock Grid.Row="1"
+										VerticalAlignment="Top"
+										x:Name="CommentAll_EditableTextBlock"
+										Margin="7 10 0 0"
+										Grid.Column="0"
+										Grid.ColumnSpan="2"
+										FontSize="15"
+										Text="{Binding SelectedItem.CommentAll}" />
+
+
+			<DockPanel Grid.Row="1"
+					   VerticalAlignment="Bottom"
+					   LastChildFill="False"
 					   Grid.Column="0"
-					   Grid.ColumnSpan="2"
-					   FontSize="15"
-					   Text="{Binding SelectedItem.CommentAll}" />
+					   Grid.ColumnSpan="2">
 
 
-			<StackPanel Grid.Row="1"
-						HorizontalAlignment="Right"
-						Grid.Column="1"
-						Orientation="Horizontal">
-				<Button VerticalAlignment="Bottom"
-						Content="Add" />
 
-				<Button VerticalAlignment="Bottom"
+
+				<Button Click="EditButton_Click"
+						Style="{StaticResource GlyphButtonStyle}"
+						FontSize="15"
+						DockPanel.Dock="Right"
 						Margin="2 0 0 0"
-						Content="Remove" />
+						Content="📝" />
 
-				<Button VerticalAlignment="Bottom"
-						Margin="2 0 0 0"
-						Click="EditButton_Click"
-						Content="Edit" />
-			</StackPanel>
+
+
+				<Button DockPanel.Dock="Left"
+						Click="SaveChanges_Click"
+						Style="{StaticResource GlyphButtonStyle}"
+						FontSize="15"
+						Content="💾" />
+			</DockPanel>
 
 		</Grid>
 		<!--</Border>-->

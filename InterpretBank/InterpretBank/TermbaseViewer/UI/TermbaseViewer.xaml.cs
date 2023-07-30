@@ -13,20 +13,27 @@ namespace InterpretBank.TermbaseViewer.UI
 			InitializeComponent();
 		}
 
+		public void SetEditing(bool editing)
+		{
+			SourceTerm_EditableTextBlock.IsEditing = editing;
+			SourceTermComment1_EditableTextBlock.IsEditing = editing;
+			SourceTermComment2_EditableTextBlock.IsEditing = editing;
+
+			TargetTerm_EditableTextBlock.IsEditing = editing;
+			TargetTermComment1_EditableTextBlock.IsEditing = editing;
+			TargetTermComment2_EditableTextBlock.IsEditing = editing;
+
+			CommentAll_EditableTextBlock.IsEditing = editing;
+		}
 
 		private void EditButton_Click(object sender, RoutedEventArgs e)
 		{
-			SourceTerm_TextBlock.Visibility = Visibility.Collapsed;
-			SourceTermComment1_TextBlock.Visibility = Visibility.Collapsed;
-			SourceTermComment2_TextBlock.Visibility = Visibility.Collapsed;
+			SetEditing(true);
+		}
 
-			TargetTerm_TextBlock.Visibility = Visibility.Collapsed;
-			TargetTermComment1_TextBlock.Visibility = Visibility.Collapsed;
-			TargetTermComment2_TextBlock.Visibility = Visibility.Collapsed;
-
-			CommentAll_TextBlock.Visibility = Visibility.Collapsed;
-
-			
+		private void SaveChanges_Click(object sender, RoutedEventArgs e)
+		{
+			SetEditing(false);
 		}
 	}
 }
