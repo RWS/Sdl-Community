@@ -123,8 +123,6 @@ namespace Sdl.Community.MTEdge.Provider.Model
 
 			//Fix for Spanish latin amerincan flavours
 			CheckLatinSpanish(languagePairs, languagePairChoices, mtEdgeLanguagePairs);
-			// Fix for French Canada engine	 which has language code on server frc
-			CheckForFrCanada(languagePairs, languagePairChoices, mtEdgeLanguagePairs);
 			//there is no engine which has ptb as source, we need to map it to por engine
 			CheckForPtbSource(languagePairs, languagePairChoices, mtEdgeLanguagePairs);
 			foreach (var languagePair in languagePairChoices)

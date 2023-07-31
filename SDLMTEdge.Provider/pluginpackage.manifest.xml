@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Language Weaver Edge</PlugInName>
-  <Version>4.2.2.1</Version>
+  <Version>4.2.2.2</Version>
   <Description>Plugin description</Description>
   <Author>Trados AppStore Team</Author>
   <RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9" />
