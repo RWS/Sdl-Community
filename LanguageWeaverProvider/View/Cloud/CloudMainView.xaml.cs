@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using LanguageWeaverProvider.ViewModel.Cloud;
 
 namespace LanguageWeaverProvider.View.Cloud
 {
@@ -24,5 +13,20 @@ namespace LanguageWeaverProvider.View.Cloud
 		{
 			InitializeComponent();
 		}
-    }
+
+		private void UserPassword_Changed(object sender, RoutedEventArgs e)
+		{
+			(DataContext as CloudMainViewModel).UserPassword = (sender as PasswordBox).Password;
+        }
+
+		private void ClientID_Changed(object sender, RoutedEventArgs e)
+		{
+			(DataContext as CloudMainViewModel).ClientId = (sender as PasswordBox).Password;
+		}
+
+		private void ClientSecret_Changed(object sender, RoutedEventArgs e)
+		{
+			(DataContext as CloudMainViewModel).ClientSecret = (sender as PasswordBox).Password;
+		}
+	}
 }

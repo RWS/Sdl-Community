@@ -3,6 +3,7 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:controls="clr-namespace:LanguageWeaverProvider.Controls"
 			 xmlns:local="clr-namespace:LanguageWeaverProvider.View.Cloud"
 			 xmlns:converters="clr-namespace:LanguageWeaverProvider.Converters"
 			 xmlns:viewModel="clr-namespace:LanguageWeaverProvider.ViewModel.Cloud"
@@ -13,6 +14,8 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../../Style/GroupBox.xaml" />
 				<ResourceDictionary Source="../../Style/WindowsBorder.xaml" />
+				<ResourceDictionary Source="../../Controls/WatermarkTextBoxResources.xaml" />
+				<ResourceDictionary Source="../../Controls/WatermarkPasswordBoxResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
@@ -24,10 +27,6 @@
 						Value="HighQuality" />
 			</Style>
 
-			<DataTemplate DataType="{x:Type viewModel:CloudCredentialsViewModel}">
-				<local:CloudCredentialsView />
-			</DataTemplate>
-
 		</ResourceDictionary>
 	</UserControl.Resources>
 
@@ -37,6 +36,7 @@
 			<RowDefinition Height="*" />
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
+
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*" />
 			<ColumnDefinition Width="4*" />
@@ -61,21 +61,85 @@
 					Margin="0 8" />
 		</StackPanel>
 
-		<Button Grid.Row="1"
+		<Grid Grid.Row="1"
+			  Grid.ColumnSpan="2"
+			  Margin="24 0">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="6*" />
+			</Grid.ColumnDefinitions>
+
+			<!-- User ID -->
+			<TextBlock Grid.Row="0"
+					   Grid.Column="0"
+					   Text="User ID"
+					   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
+					   Visibility="{Binding IsCredentialsSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}" />
+
+			<TextBox Grid.Row="0"
+					 Grid.Column="1"
+					 Text="{Binding UserId}"
+					 Style="{StaticResource WatermarkTextBox}"
+					 Visibility="{Binding IsCredentialsSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}" />
+			<!-- User ID -->
+
+			<!-- Password -->
+			<TextBlock Grid.Row="1"
+					   Grid.Column="0"
+					   Text="Password"
+					   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
+					   Visibility="{Binding IsCredentialsSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}" />
+
+			<PasswordBox Grid.Row="1"
+						 Grid.Column="1"
+						 PasswordChanged="ClientSecret_Changed"
+						 Style="{StaticResource WatermarkPasswordBox}"
+						 Visibility="{Binding IsCredentialsSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}" />
+			<!-- Password -->
+
+			<!-- Client ID -->
+			<TextBlock Grid.Row="2"
+					   Grid.Column="0"
+					   Text="Client ID"
+					   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
+					   Visibility="{Binding IsSecretSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}" />
+			<PasswordBox Grid.Row="2"
+						 Grid.Column="1"
+						 PasswordChanged="ClientID_Changed"
+						 Visibility="{Binding IsSecretSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}" />
+			<!-- Client ID -->
+
+			<!-- Client Secret -->
+			<TextBlock Grid.Row="3"
+					   Grid.Column="0"
+					   Text="Client Secret"
+					   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
+					   Visibility="{Binding IsSecretSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}" />
+
+			<PasswordBox Grid.Row="3"
+						 Grid.Column="1"
+						 PasswordChanged="ClientSecret_Changed"
+						 Style="{StaticResource WatermarkPasswordBox}"
+						 Visibility="{Binding IsSecretSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}" />
+			<!-- Client Secret -->
+		</Grid>
+
+		<Button Grid.Row="2"
 				Grid.ColumnSpan="2"
 				Content="Sign in"
+				Command="{Binding SignInCommand}"
 				Style="{StaticResource Sdl.Button.PrimaryStyle}"
-				CommandParameter="Secret"
 				Visibility="{Binding IsAuthenticationTypeSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 				Cursor="Hand"
 				Width="172"
 				Margin="0 8" />
-
-		<ContentControl Grid.Row="0"
-						Grid.ColumnSpan="2"
-						Content="{Binding AuthenticationView}"
-						Visibility="{Binding IsAuthenticationTypeSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-						Focusable="False"
-						Margin="0" />
 	</Grid>
 </UserControl>

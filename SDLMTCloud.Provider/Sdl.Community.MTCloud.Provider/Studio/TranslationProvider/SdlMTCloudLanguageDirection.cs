@@ -267,6 +267,10 @@ namespace Sdl.Community.MTCloud.Provider.Studio.TranslationProvider
 
 		public Dictionary<string, List<ISegment>> Segments { get; set; } = new();
 
+		CultureCode ITranslationProviderLanguageDirection.SourceLanguage => throw new NotImplementedException();
+
+		CultureCode ITranslationProviderLanguageDirection.TargetLanguage => throw new NotImplementedException();
+
 		private List<ISegment> GetAllSegments(string filePath)
 		{
 			if (Segments.ContainsKey(filePath))

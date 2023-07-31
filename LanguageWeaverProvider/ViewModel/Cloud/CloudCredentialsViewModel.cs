@@ -1,6 +1,8 @@
 ﻿using System.Windows.Input;
 using LanguageWeaverProvider.Command;
+using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Options.Interface;
+using LanguageWeaverProvider.NewFolder;
 using LanguageWeaverProvider.ViewModel.Interface;
 
 namespace LanguageWeaverProvider.ViewModel.Cloud
@@ -92,7 +94,15 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		private void SignIn(object parameter)
 		{
+			var cloudCredentials = new CloudCredentials()
+			{
+				UserID = IsCredentialsSelected ? _userId : null,
+				UserPassword = IsCredentialsSelected ? _userPassword : null,
+				ClientID = IsCredentialsSelected ? null : _clientId,
+				ClientSecret = IsCredentialsSelected ? null :_clientSecret
+			};
 
+			CloudService.Authenticate(cloudCredentials);
 		}
 
 		private void SignOut(object parameter)
