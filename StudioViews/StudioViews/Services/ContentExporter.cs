@@ -52,13 +52,12 @@ namespace Sdl.Community.StudioViews.Services
 		{
 			if (paragraphUnit.IsStructure)
 			{
-
-				UpdateParagraphUnit(paragraphUnit);
 				return;
 			}
 
 			if (!paragraphUnit.SegmentPairs.Any())
 			{
+				UpdateParagraphUnit(paragraphUnit);
 				return;
 			}
 
