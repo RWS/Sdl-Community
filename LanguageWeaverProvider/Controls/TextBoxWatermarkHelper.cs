@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace LanguageWeaverProvider.Controls
@@ -21,7 +22,9 @@ namespace LanguageWeaverProvider.Controls
 			"IsWatermarkVisible", typeof(bool), typeof(TextBoxWatermarkHelper));
 
 		public static readonly DependencyProperty WatermarkTextProperty = DependencyProperty.RegisterAttached(
-			"WatermarkText", typeof(string), typeof(TextBoxWatermarkHelper), new PropertyMetadata("Watermark"));
+			"WatermarkText", typeof(string), typeof(TextBoxWatermarkHelper), new PropertyMetadata("Watermark", OnWatermarkTextChanged));
+
+
 
 		public static void ButtonClicked(object sender, RoutedEventArgs e)
 		{
@@ -98,8 +101,6 @@ namespace LanguageWeaverProvider.Controls
 				button.Click += ButtonClicked;
 			}
 		}
-
-
 
 		private static void SetTextLength<TDependencyObject>(TDependencyObject sender, Func<TDependencyObject, int> funcTextLength) where TDependencyObject : DependencyObject
 		{

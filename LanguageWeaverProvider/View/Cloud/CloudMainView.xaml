@@ -88,6 +88,9 @@
 					 Grid.Column="1"
 					 Text="{Binding UserId}"
 					 Style="{StaticResource WatermarkTextBox}"
+					 controls:TextBoxWatermarkHelper.WatermarkText="User ID"
+					 controls:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+					 controls:TextBoxWatermarkHelper.ButtonCommandParameter="UserID"
 					 Visibility="{Binding IsCredentialsSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}" />
 			<!-- User ID -->
 
@@ -102,6 +105,7 @@
 						 Grid.Column="1"
 						 PasswordChanged="ClientSecret_Changed"
 						 Style="{StaticResource WatermarkPasswordBox}"
+						 controls:PasswordBoxWatermarkHelper.WatermarkText="Password"
 						 Visibility="{Binding IsCredentialsSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}" />
 			<!-- Password -->
 
@@ -114,6 +118,8 @@
 			<PasswordBox Grid.Row="2"
 						 Grid.Column="1"
 						 PasswordChanged="ClientID_Changed"
+						 Style="{StaticResource WatermarkPasswordBox}"
+						 controls:PasswordBoxWatermarkHelper.WatermarkText="Client ID"
 						 Visibility="{Binding IsSecretSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}" />
 			<!-- Client ID -->
 
@@ -128,6 +134,7 @@
 						 Grid.Column="1"
 						 PasswordChanged="ClientSecret_Changed"
 						 Style="{StaticResource WatermarkPasswordBox}"
+						 controls:PasswordBoxWatermarkHelper.WatermarkText="Client Secret"
 						 Visibility="{Binding IsSecretSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}" />
 			<!-- Client Secret -->
 		</Grid>

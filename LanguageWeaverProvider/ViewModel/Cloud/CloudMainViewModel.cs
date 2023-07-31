@@ -101,10 +101,13 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		public ICommand SignInCommand { get; private set; }
 
+		public ICommand ClearCommand { get; private set; }
+
 		private void InitializeCommands()
 		{
 			SelectAuthenticationTypeCommand = new RelayCommand(SelectAuthenticationType);
 			SignInCommand = new RelayCommand(SignIn);
+			ClearCommand = new RelayCommand(Clear);
 		}
 
 		private void SelectAuthenticationType(object parameter)
@@ -140,6 +143,24 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			}
 
 			cloudCredentials.Token = CloudService.Authenticate(cloudCredentials).Result;
+		}
+
+		private void Clear(object parameter)
+		{
+			if (parameter is not string parameterString)
+			{
+				return;
+			}
+
+			switch (parameterString)
+			{
+				case "UserID":
+					UserId = string.Empty;
+					break;
+
+				default:
+					break;
+			}
 		}
 	}
 }
