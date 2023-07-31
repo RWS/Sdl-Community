@@ -136,6 +136,7 @@
     <Compile Include="Controls\CustomProgressRing.cs" />
     <Compile Include="EventArgs\TermEntryModelChanged.cs" />
     <Compile Include="Helpers\CurrentViewDetector.cs" />
+    <Compile Include="Interface\IEUProvider.cs" />
     <Compile Include="Model\CollectionModel.cs" />
     <Compile Include="Model\InstitutionModel.cs" />
     <Compile Include="Model\Primarities.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="Model\ResponseModels\IateLanguage.cs" />
     <Compile Include="Model\ResponseModels\IateName.cs" />
     <Compile Include="Model\ResponseModels\IateInstitution.cs" />
+    <Compile Include="Service\EUProvider.cs" />
     <Compile Include="Service\SettingsService.cs" />
     <Compile Include="ViewModel\FineGrainedFilterViewModel.cs" />
     <Compile Include="Helpers\ApiUrls.cs" />

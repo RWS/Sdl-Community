@@ -25,20 +25,20 @@ namespace Sdl.Community.IATETerminologyProvider
 		private IList<EntryModel> _entryModels;
 		private TermSearchService _searchService;
 		private EditorController _editorController;
-
+		private IEUProvider _euProvider;
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
 		public SettingsModel ProviderSettings { get; set; }
 
 		public IATETerminologyProvider(SettingsModel providerSettings, ConnectionProvider connectionProvider,
-			InventoriesProvider inventoriesProvider, ICacheProvider cacheProvider)
+			InventoriesProvider inventoriesProvider, ICacheProvider cacheProvider,IEUProvider eUProvider)
 		{
 			ProviderSettings = providerSettings;
 			ConnectionProvider = connectionProvider;
 			InventoriesProvider = inventoriesProvider;
 			CacheProvider = cacheProvider;
-
-			Task.Run(async () => await Setup());
+			_euProvider=eUProvider;
+			Task.Run(async () => await Setup());			
 		}
 
 		private async Task Setup()
@@ -50,7 +50,7 @@ namespace Sdl.Community.IATETerminologyProvider
 
 			_entryModels = new List<EntryModel>();
 			_searchService = new TermSearchService(ConnectionProvider, InventoriesProvider);
-
+			
 			InitializeEditorController();
 		}
 
@@ -87,6 +87,12 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage target, int maxResultsCount, SearchMode mode, bool targetRequired)
 		{
+			// Prevent the empty query
+			if (string.IsNullOrEmpty(text) || string.IsNullOrWhiteSpace(text)) return null;
+			if (text == "\" \"" || text == "") return null;
+			// Limit to EU languages
+			if (!_euProvider.IsEULanguages(source, target)) { return null; }
+
 			ClearEntries();
 			_logger.Info("--> Try searching for segment");
 
