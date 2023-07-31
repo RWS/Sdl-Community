@@ -11,7 +11,13 @@ namespace InterpretBank.TermbaseViewer.UI.Controls
 	public partial class EditableTextBlock : UserControl
 	{
 		public static readonly DependencyProperty IsEditingProperty =
-			DependencyProperty.Register(nameof(IsEditing), typeof(bool), typeof(EditableTextBlock), new PropertyMetadata(false));
+			DependencyProperty.Register(nameof(IsEditing), typeof(bool), typeof(EditableTextBlock), new PropertyMetadata(false, OnIsEditingPropertyChanged));
+
+		private static void OnIsEditingPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		{
+			var control = (EditableTextBlock)d;
+			control.SetEditing();
+		}
 
 		public static readonly DependencyProperty TextProperty =
 					DependencyProperty.Register(nameof(Text), typeof(string), typeof(EditableTextBlock), new PropertyMetadata(""));
@@ -27,7 +33,6 @@ namespace InterpretBank.TermbaseViewer.UI.Controls
 			set
 			{
 				SetValue(IsEditingProperty, value);
-				SetEditing();
 			}
 		}
 

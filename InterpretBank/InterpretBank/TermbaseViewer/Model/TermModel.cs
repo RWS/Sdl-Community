@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
+using InterpretBank.Commands;
 
 namespace InterpretBank.TermbaseViewer.Model
 {
@@ -15,6 +17,7 @@ namespace InterpretBank.TermbaseViewer.Model
 		private string _targetTerm;
 		private string _targetTermComment1;
 		private string _targetTermComment2;
+		private bool _isEditing;
 
 		public TermModel()
 		{ }
@@ -99,6 +102,17 @@ namespace InterpretBank.TermbaseViewer.Model
 		}
 
 		private TermModel OriginalTerm { get; set; }
+
+		public bool IsEditing
+		{
+			get => _isEditing;
+			set
+			{
+				if (value == _isEditing) return;
+				_isEditing = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public override bool Equals(object obj)
 		{

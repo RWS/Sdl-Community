@@ -22,6 +22,10 @@
 			<BooleanToVisibilityConverter x:Key="BoolToVis" />
 			<converters:InvertVisibilityConverter x:Key="InvertVisibilityConverter"/>
 
+			<Style TargetType="controls:EditableTextBlock">
+				<Setter Property="IsEditing" Value="{Binding SelectedItem.IsEditing}"/>
+			</Style>
+
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<Grid Background="LightGray">

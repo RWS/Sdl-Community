@@ -16,15 +16,7 @@ namespace InterpretBank.TermbaseViewer.UI
 
 		public void SetEditing(bool editing)
 		{
-			SourceTerm_EditableTextBlock.IsEditing = editing;
-			SourceTermComment1_EditableTextBlock.IsEditing = editing;
-			SourceTermComment2_EditableTextBlock.IsEditing = editing;
-
-			TargetTerm_EditableTextBlock.IsEditing = editing;
-			TargetTermComment1_EditableTextBlock.IsEditing = editing;
-			TargetTermComment2_EditableTextBlock.IsEditing = editing;
-
-			CommentAll_EditableTextBlock.IsEditing = editing;
+			((TermModel)Term_ListBox.SelectedItem).IsEditing = editing;
 		}
 
 		private void EditButton_Click(object sender, RoutedEventArgs e)
