@@ -119,16 +119,16 @@ public class TerminologyService : ITerminologyService
 
 		var termbaseViewerTerms = new List<TermModel>();
 		dbTerms.ForEach(dbT => termbaseViewerTerms.Add(new TermModel
-		{
-			Id = dbT.Id,
-			TargetTerm = dbT[columns[0]],
-			TargetTermComment1 = dbT[columns[1]],
-			TargetTermComment2 = dbT[columns[2]],
-			SourceTerm = dbT[columns[3]],
-			SourceTermComment1 = dbT[columns[4]],
-			SourceTermComment2 = dbT[columns[5]],
-			CommentAll = dbT.CommentAll
-		}));
+		(
+			dbT.Id,
+			dbT[columns[0]],
+			dbT[columns[1]],
+			dbT[columns[2]],
+			dbT[columns[3]],
+			dbT[columns[4]],
+			dbT[columns[5]],
+			dbT.CommentAll
+		)));
 
 		return termbaseViewerTerms;
 	}

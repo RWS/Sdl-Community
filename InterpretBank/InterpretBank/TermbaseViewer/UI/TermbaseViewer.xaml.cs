@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using InterpretBank.TermbaseViewer.Model;
 
 namespace InterpretBank.TermbaseViewer.UI
 {
@@ -31,7 +32,7 @@ namespace InterpretBank.TermbaseViewer.UI
 			SetEditing(true);
 		}
 
-		private void SaveChanges_Click(object sender, RoutedEventArgs e)
+		private void StopEdit_Button_OnClick(object sender, RoutedEventArgs e)
 		{
 			SetEditing(false);
 		}

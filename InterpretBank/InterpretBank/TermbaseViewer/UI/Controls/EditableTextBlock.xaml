@@ -17,8 +17,10 @@
 	<Grid>
 		<TextBlock Name="TextBlock"
 				   Visibility="Visible"
+				   TextWrapping="Wrap"
 		           Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}}" />
 		<TextBox Name="TextBox"
+				 TextWrapping="Wrap"
 				 Visibility="Collapsed"
 		         Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}}" />
 	</Grid>

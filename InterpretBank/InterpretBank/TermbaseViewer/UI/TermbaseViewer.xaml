@@ -19,8 +19,8 @@
 			</ResourceDictionary.MergedDictionaries>
 
 			<converters:ImageToBitmapImageConverter x:Key="ImageConverter" />
+			<BooleanToVisibilityConverter x:Key="BoolToVis" />
 
-			<!--<Style TargetType="Button" BasedOn="{StaticResource Sdl.Button.GeneralStyle}"/>-->
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<Grid Background="LightGray">
@@ -30,6 +30,7 @@
 		</Grid.ColumnDefinitions>
 
 		<ListBox Background="#f5f8fa"
+				 Name="Term_ListBox"
 				 Grid.Column="0"
 				 Margin="0"
 				 BorderThickness="0"
@@ -38,19 +39,22 @@
 			<ListBox.ItemTemplate>
 				<DataTemplate DataType="{x:Type model:TermModel}">
 
-					<Grid Width="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}}">
+					<Grid>
 						<Grid.ColumnDefinitions>
-							<ColumnDefinition />
-							<ColumnDefinition />
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
 						</Grid.ColumnDefinitions>
 
-						<TextBlock DockPanel.Dock="Left"
-								   Grid.Column="0"
+						<TextBlock DockPanel.Dock="Right"
+								   HorizontalAlignment="Left"
+								   VerticalAlignment="Center"
+								   Grid.Column="1"
 								   Text="{Binding TargetTerm}" />
-						<Button DockPanel.Dock="Right"
-								Grid.Column="1"
-								Style="{StaticResource GlyphButtonStyle}"
-								FontSize="5"
+						<Button DockPanel.Dock="Left"
+								HorizontalAlignment="Left"
+								Grid.Column="0"
+								Style="{StaticResource GlyphButtonStyle2}"
+								FontSize="8"
 								Content="❌" />
 					</Grid>
 
@@ -58,19 +62,13 @@
 			</ListBox.ItemTemplate>
 		</ListBox>
 
-		<Button DockPanel.Dock="Right"
-				Grid.Column="0"
-				Style="{StaticResource GlyphButtonStyle}"
-				VerticalAlignment="Bottom"
-				HorizontalAlignment="Left"
-				Margin="2 0 0 0"
-				Content="➕" />
+		<Button Grid.Column="0"
+		        Style="{StaticResource GlyphButtonStyle3}"
+		        VerticalAlignment="Bottom"
+		        HorizontalAlignment="Right"
+		        Margin="2 0 0 0"
+		        Content="➕" />
 
-
-
-		<!--<Border Background="White"
-		        Margin="0"
-		              Grid.Column="1">-->
 		<Grid Margin="0"
 			  Background="White"
 			  Grid.Column="1">
@@ -101,26 +99,12 @@
 
 				<StackPanel DockPanel.Dock="Bottom"
 							Margin="10 5 0 0">
-					<!--<TextBlock Text="{Binding SelectedItem.SourceTermComment1}" />-->
 					<controls:EditableTextBlock Text="{Binding SelectedItem.SourceTermComment1}"
 												x:Name="SourceTermComment1_EditableTextBlock" />
 					<controls:EditableTextBlock Text="{Binding SelectedItem.SourceTermComment2}"
 												Margin="0 2 0 0"
 												x:Name="SourceTermComment2_EditableTextBlock" />
 				</StackPanel>
-
-				<!--<TextBlock DockPanel.Dock="Bottom"
-					           Margin="5 5 0 0"
-					           FontSize="15"
-					           FontWeight="Black"
-					           Text="{Binding SelectedItem.SourceTerm}" />-->
-
-				<!--<TextBox DockPanel.Dock="Bottom"
-					           Margin="5 5 0 0"
-							   IsReadOnly="True"
-					           FontSize="15"
-					           FontWeight="Black"
-					           Text="{Binding SelectedItem.SourceTerm}" />-->
 
 				<controls:EditableTextBlock Margin="5 5 0 0"
 											FontSize="15"
@@ -180,20 +164,33 @@
 
 
 
-				<Button Click="EditButton_Click"
-						Style="{StaticResource GlyphButtonStyle}"
-						FontSize="15"
-						DockPanel.Dock="Right"
-						Margin="2 0 0 0"
-						Content="📝" />
+				<Button Style="{StaticResource GlyphButtonStyle}"
+						Name="EditTerm_Button"
+						Click="EditButton_Click"
+				        FontSize="15"
+				        DockPanel.Dock="Right"
+				        Margin="2 0 0 0"
+				        Content="📝" />
 
 
+				<StackPanel Orientation="Horizontal" DockPanel.Dock="Right"
+				            Visibility="{Binding IsEditing, ElementName=SourceTerm_EditableTextBlock, Converter={StaticResource BoolToVis}}">
+					<Button DockPanel.Dock="Right"
+							Name="SaveEdits_Button"
+							Foreground="LimeGreen"
+							Click="StopEdit_Button_OnClick"
+					        Style="{StaticResource GlyphButtonStyle}"
+					        FontSize="15"
+					        Content="✓" />
 
-				<Button DockPanel.Dock="Left"
-						Click="SaveChanges_Click"
-						Style="{StaticResource GlyphButtonStyle}"
-						FontSize="15"
-						Content="💾" />
+					<Button DockPanel.Dock="Right"
+							Foreground="Red"
+							Name="DiscardEdits_Button"
+							Click="StopEdit_Button_OnClick"
+					        Style="{StaticResource GlyphButtonStyle}"
+					        FontSize="15"
+					        Content="X" />
+				</StackPanel>
 			</DockPanel>
 
 		</Grid>
