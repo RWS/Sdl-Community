@@ -29,6 +29,7 @@ namespace Sdl.Community.IATETerminologyProvider
 		public static MainWindow MainWindow { get; set; }
 
 		public static IMessageBoxService MessageBoxService { get; set; } = new MessageBoxService();
+		public static IEUProvider EUProvider { get; set; } = new EUProvider();
 
 		public static ProjectsController ProjectsController
 			=> _projectsController ??= SdlTradosStudio.Application?.GetController<ProjectsController>();

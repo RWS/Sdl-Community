@@ -45,7 +45,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			var cacheProvider = new CacheProvider(sqlDatabaseProvider);
 
 			var terminologyProvider = new IATETerminologyProvider(savedSettings,
-				IATEApplication.ConnectionProvider, IATEApplication.InventoriesProvider, cacheProvider);
+				IATEApplication.ConnectionProvider, IATEApplication.InventoriesProvider, cacheProvider,IATEApplication.EUProvider);
 
 			return terminologyProvider;
 		}

@@ -29,7 +29,7 @@ namespace Sdl.Community.IATETerminologyProvider
                 }
 
                 var provider = new IATETerminologyProvider(_mainWindow.ProviderSettings, IATEApplication.ConnectionProvider,
-                    IATEApplication.InventoriesProvider, IATEApplication.CacheProvider);
+                    IATEApplication.InventoriesProvider, IATEApplication.CacheProvider,IATEApplication.EUProvider);
 
                 return new ITerminologyProvider[] { provider };
             }
