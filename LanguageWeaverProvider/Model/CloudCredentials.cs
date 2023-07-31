@@ -10,6 +10,6 @@
 
 		public string ClientSecret { get; set; }
 
-		public string Token { get; set; }
+		public AccessToken AccessToken { get; set; }
     }
 }

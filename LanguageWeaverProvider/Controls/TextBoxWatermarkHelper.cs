@@ -4,6 +4,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Newtonsoft.Json.Linq;
+using Button = System.Windows.Controls.Button;
+using ComboBox = System.Windows.Controls.ComboBox;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace LanguageWeaverProvider.Controls
 {
@@ -24,7 +28,35 @@ namespace LanguageWeaverProvider.Controls
 		public static readonly DependencyProperty WatermarkTextProperty = DependencyProperty.RegisterAttached(
 			"WatermarkText", typeof(string), typeof(TextBoxWatermarkHelper), new PropertyMetadata("Watermark", OnWatermarkTextChanged));
 
+		private static void OnWatermarkTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		{
+			var textBox = d as TextBox;
+			textBox.SetValue(IsWatermarkVisibleProperty, !string.IsNullOrEmpty(textBox.Text));
+			textBox.LostFocus += OnControlLostFocus;
+			textBox.GotFocus += OnControlGotFocus;
+			textBox.Loaded -= TextChanged;
+			textBox.Loaded += TextChanged;
 
+			if (textBox.IsLoaded)
+			{
+				TextChanged(textBox, null);
+			}
+		}
+
+
+		private static void OnControlGotFocus(object sender, RoutedEventArgs e)
+		{
+			SetIsWatermarkVisible(sender as TextBox, false);
+		}
+
+		private static void OnControlLostFocus(object sender, RoutedEventArgs e)
+		{
+			var textBox = sender as TextBox;
+			SetIsWatermarkVisible(textBox, string.IsNullOrEmpty(textBox.Text));
+		}
+
+		public static void SetIsWatermarkVisible(DependencyObject control, bool value)
+			=> control.SetValue(IsWatermarkVisibleProperty, value);
 
 		public static void ButtonClicked(object sender, RoutedEventArgs e)
 		{

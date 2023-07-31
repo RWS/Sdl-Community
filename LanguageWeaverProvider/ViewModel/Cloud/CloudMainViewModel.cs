@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Security;
+using System.Security.Principal;
 using System.Windows.Input;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Options.Interface;
 using LanguageWeaverProvider.NewFolder;
 using LanguageWeaverProvider.ViewModel.Interface;
+using Newtonsoft.Json;
 
 namespace LanguageWeaverProvider.ViewModel.Cloud
 {
@@ -121,7 +123,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			IsSecretSelected = requestedAuthenticationType == "Secret";
 		}
 
-		private void SignIn(object parameter)
+		private async void SignIn(object parameter)
 		{
 			var cloudCredentials = new CloudCredentials();
 			if (IsCredentialsSelected)
@@ -142,7 +144,8 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				};
 			}
 
-			cloudCredentials.Token = CloudService.Authenticate(cloudCredentials).Result;
+			var response = await CloudService.AuthenticateUser(cloudCredentials, IsCredentialsSelected);
+			cloudCredentials.AccessToken = JsonConvert.DeserializeObject<AccessToken>(response);
 		}
 
 		private void Clear(object parameter)

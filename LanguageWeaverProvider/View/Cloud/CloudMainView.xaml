@@ -91,6 +91,7 @@
 					 controls:TextBoxWatermarkHelper.WatermarkText="User ID"
 					 controls:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
 					 controls:TextBoxWatermarkHelper.ButtonCommandParameter="UserID"
+					 controls:TextBoxWatermarkHelper.IsWatermarkVisible="True"
 					 Visibility="{Binding IsCredentialsSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}" />
 			<!-- User ID -->
 
@@ -103,7 +104,7 @@
 
 			<PasswordBox Grid.Row="1"
 						 Grid.Column="1"
-						 PasswordChanged="ClientSecret_Changed"
+						 PasswordChanged="UserPassword_Changed"
 						 Style="{StaticResource WatermarkPasswordBox}"
 						 controls:PasswordBoxWatermarkHelper.WatermarkText="Password"
 						 Visibility="{Binding IsCredentialsSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}" />
