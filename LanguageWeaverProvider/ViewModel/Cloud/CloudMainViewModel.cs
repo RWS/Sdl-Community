@@ -1,7 +1,4 @@
-﻿using System;
-using System.Security;
-using System.Security.Principal;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Options.Interface;
@@ -105,11 +102,14 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		public ICommand ClearCommand { get; private set; }
 
+		public ICommand BackCommand { get; private set; }
+
 		private void InitializeCommands()
 		{
 			SelectAuthenticationTypeCommand = new RelayCommand(SelectAuthenticationType);
 			SignInCommand = new RelayCommand(SignIn);
 			ClearCommand = new RelayCommand(Clear);
+			BackCommand = new RelayCommand(Back);
 		}
 
 		private void SelectAuthenticationType(object parameter)
@@ -125,6 +125,10 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		private async void SignIn(object parameter)
 		{
+			if (!CredentialsAreSet())
+			{
+				return;
+			}
 			var cloudCredentials = new CloudCredentials();
 			if (IsCredentialsSelected)
 			{
@@ -136,7 +140,6 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			}
 			else if (IsSecretSelected)
 			{
-
 				cloudCredentials = new CloudCredentials()
 				{
 					ClientID = _clientId,
@@ -146,6 +149,24 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 			var response = await CloudService.AuthenticateUser(cloudCredentials, IsCredentialsSelected);
 			cloudCredentials.AccessToken = JsonConvert.DeserializeObject<AccessToken>(response);
+		}
+
+		private bool CredentialsAreSet()
+		{
+			if (IsCredentialsSelected
+			 && string.IsNullOrEmpty(UserId)
+			 && string.IsNullOrEmpty(UserPassword))
+			{
+				return false;
+			}
+			else if (IsSecretSelected
+				  && string.IsNullOrEmpty(ClientId)
+				  && string.IsNullOrEmpty(ClientSecret))
+			{
+				return false;
+			}
+
+			return true;
 		}
 
 		private void Clear(object parameter)
@@ -164,6 +185,12 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				default:
 					break;
 			}
+		}
+
+		private void Back(object parameter)
+		{
+			IsCredentialsSelected = false;
+			IsSecretSelected = false;
 		}
 	}
 }

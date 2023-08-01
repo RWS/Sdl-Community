@@ -18,20 +18,21 @@
 		Width="600"
 		d:DesignHeight="400"
 		d:DesignWidth="600">
-	
+
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../Style/GroupBox.xaml" />
 				<ResourceDictionary Source="../Style/WindowsBorder.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBoxResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 
 			<Style TargetType="Image">
 				<Setter Property="RenderOptions.BitmapScalingMode"
 						Value="HighQuality" />
 			</Style>
-			
+
 			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
 
 			<DataTemplate DataType="{x:Type cloudViewModel:CloudMainViewModel}">
@@ -54,29 +55,89 @@
 					  Visibility="{Binding IsServiceSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
 					  Style="{StaticResource DefaultGroupBox}"
 					  Margin="24 0 24 24"
-					  Padding="12 24">
-				<StackPanel VerticalAlignment="Center">
-					<Button Content="Language Weaver"
-							Style="{StaticResource Sdl.Button.PrimaryStyle}"
-							Command="{Binding SelectLanguageWeaverServiceCommand}"
-							CommandParameter="Cloud"
-							Cursor="Hand"
-							Width="172"
-							Margin="0 8" />
-					<Button Content="Language Weaver Edge"
-							Style="{StaticResource Sdl.Button.PrimaryStyle}"
-							Command="{Binding SelectLanguageWeaverServiceCommand}"
-							CommandParameter="Edge"
-							Cursor="Hand"
-							Width="172"
-							Margin="0 8" />
-					<Button Content="Exit"
-							Command="{Binding CloseCommand}"
-							Style="{StaticResource Sdl.Button.SecondaryStyle}"
-							Cursor="Hand"
-							Width="172"
-							Margin="0 8" />
-				</StackPanel>
+					  Padding="12 24 12 12">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+
+					<TextBox Grid.Row="0"
+							 Style="{StaticResource Sdl.TextBox.BorderlessReadOnlyStyle}"
+							 IsReadOnly="True"
+							 Text="Tap the button below to choose between Language Weaver, designed for general translation needs, and Language Weaver Edge, specialized for enhanced business translation." />
+
+					<StackPanel Grid.Row="1"
+								VerticalAlignment="Bottom">
+						<Button Content="Language Weaver"
+								Style="{StaticResource Sdl.Button.PrimaryStyle}"
+								Command="{Binding SelectLanguageWeaverServiceCommand}"
+								CommandParameter="Cloud"
+								Cursor="Hand"
+								Width="188"
+								Margin="0 8" />
+
+						<Button Content="Language Weaver Edge"
+								Style="{StaticResource Sdl.Button.PrimaryStyle}"
+								Command="{Binding SelectLanguageWeaverServiceCommand}"
+								CommandParameter="Edge"
+								Cursor="Hand"
+								Width="188"
+								Margin="0 8" />
+
+						<Button Content="Exit"
+								Command="{Binding CloseCommand}"
+								Style="{StaticResource Sdl.Button.SecondaryStyle}"
+								Cursor="Hand"
+								Width="188"
+								Margin="0 8" />
+					</StackPanel>
+				</Grid>
+			</GroupBox>
+
+			<GroupBox Grid.Row="1"
+					  Header="Language Weaver Providers"
+					  Visibility="{Binding IsServiceSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+					  Style="{StaticResource DefaultGroupBox}"
+					  Margin="24 0 24 24"
+					  Padding="12 24 12 12">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+
+					<TextBox Grid.Row="0"
+							 Style="{StaticResource Sdl.TextBox.BorderlessReadOnlyStyle}"
+							 Cursor="Arrow"
+							 Text="Tap the button below to choose between Language Weaver, designed for general translation needs, and Language Weaver Edge, specialized for enhanced business translation." />
+
+					<StackPanel Grid.Row="1"
+								VerticalAlignment="Bottom">
+						<Button Content="Language Weaver"
+								Style="{StaticResource Sdl.Button.PrimaryStyle}"
+								Command="{Binding SelectLanguageWeaverServiceCommand}"
+								CommandParameter="Cloud"
+								Cursor="Hand"
+								Width="188"
+								Margin="0 8" />
+
+						<Button Content="Language Weaver Edge"
+								Style="{StaticResource Sdl.Button.PrimaryStyle}"
+								Command="{Binding SelectLanguageWeaverServiceCommand}"
+								CommandParameter="Edge"
+								Cursor="Hand"
+								Width="188"
+								Margin="0 8" />
+
+						<Button Content="Exit"
+								Command="{Binding CloseCommand}"
+								Style="{StaticResource Sdl.Button.SecondaryStyle}"
+								Cursor="Hand"
+								Width="188"
+								Margin="0 8" />
+					</StackPanel>
+				</Grid>
 			</GroupBox>
 
 			<GroupBox Grid.Row="1"
@@ -84,18 +145,34 @@
 					  Style="{StaticResource DefaultGroupBox}"
 					  Visibility="{Binding IsServiceSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 					  Margin="24 0 24 24"
-					  Padding="12 24">
-				<StackPanel VerticalAlignment="Center">
+					  Padding="12 24 12 12">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="*" />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+
+					<TextBox Grid.Row="0"
+							 Style="{StaticResource Sdl.TextBox.BorderlessReadOnlyStyle}"
+							 Cursor="Arrow"
+							 Text="Placeholder text" />
+
 					<ContentControl Content="{Binding ProviderView}"
 									Focusable="False"
-									Margin="0" />
+									Margin="0 8" 
+									Grid.Row="1"
+									VerticalAlignment="Bottom"/>
+					
 					<Button Content="Back"
 							Command="{Binding BackCommand}"
 							Style="{StaticResource Sdl.Button.SecondaryStyle}"
 							Cursor="Hand"
-							Width="172"
-							Margin="0 8" />
-				</StackPanel>
+							Width="188"
+							Grid.Row="2"
+							VerticalAlignment="Bottom"
+							Margin="0 8"/>
+				</Grid>
 			</GroupBox>
 		</Grid>
 	</Border>
