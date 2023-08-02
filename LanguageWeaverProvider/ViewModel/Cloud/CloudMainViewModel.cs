@@ -149,6 +149,8 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 			var response = await CloudService.AuthenticateUser(cloudCredentials, IsCredentialsSelected);
 			cloudCredentials.AccessToken = JsonConvert.DeserializeObject<AccessToken>(response);
+
+			TranslationOptions.CloudCredentials = cloudCredentials;
 		}
 
 		private bool CredentialsAreSet()
