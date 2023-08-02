@@ -10,7 +10,20 @@
 			 mc:Ignorable="d"
 			 d:DataContext="{d:DesignInstance viewModel:TermbaseViewerViewModel}"
 			 d:DesignHeight="450"
-			 d:DesignWidth="800">
+			 d:DesignWidth="800"
+			 Name="TermbaseViewer_UserControl">
+	<UserControl.InputBindings>
+		<KeyBinding Key="E"
+					Modifiers="Alt+Shift"
+					CommandParameter="True"
+					Command="{Binding SetEditingFromKeyboardCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+		<KeyBinding Key="Enter"
+					CommandParameter="False"
+					Command="{Binding SetEditingFromKeyboardCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+		<KeyBinding Key="Escape"
+					CommandParameter="Reverse"
+					Command="{Binding SetEditingFromKeyboardCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+	</UserControl.InputBindings>
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -19,6 +32,7 @@
 			</ResourceDictionary.MergedDictionaries>
 
 			<converters:ImageToBitmapImageConverter x:Key="ImageConverter" />
+			<converters:WidthToThirdConverter x:Key="WidthToThirdConverter"/>
 			<BooleanToVisibilityConverter x:Key="BoolToVis" />
 			<converters:InvertVisibilityConverter x:Key="InvertVisibilityConverter" />
 
@@ -76,132 +90,51 @@
 				ToolTip="Add new term"
 				Margin="2 0 0 0"
 				Content="➕" />
-		
+
 		<Button Grid.Column="0"
-		        Style="{StaticResource GlyphButtonStyle4}"
+				Style="{StaticResource GlyphButtonStyle4}"
 				Visibility="{Binding AnyEditedTerms, Converter={StaticResource BoolToVis}}"
 				Command="{Binding CommitAllToDatabaseCommand}"
-		        VerticalAlignment="Bottom"
-		        HorizontalAlignment="Left"
+				VerticalAlignment="Bottom"
+				HorizontalAlignment="Left"
 				FontSize="13"
 				FontWeight="Black"
-		        ToolTip="Commit all changes to the database"
+				ToolTip="Commit all changes to the database"
 				Content="🗄️" />
 
-		<Grid Margin="0"
+		<Grid Margin="0" Name="TermPart_Grid"
 			  Background="White"
 			  Grid.Column="1">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition />
-				<ColumnDefinition />
-			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="*" />
 			</Grid.RowDefinitions>
 
-
-			<DockPanel Grid.Row="0"
-					   Margin="2 0 0 0"
-					   Grid.Column="0"
-					   VerticalAlignment="Top">
-				<StackPanel Orientation="Horizontal"
-							DockPanel.Dock="Top">
-					<Image Source="{Binding SourceLanguageFlag, Converter={StaticResource ImageConverter}}"
-						   Width="19"
-						   Height="19" />
-					<TextBlock Text="{Binding SourceLanguage.DisplayName}"
-							   VerticalAlignment="Center"
-							   FontWeight="Light"
-							   FontSize="17" />
-				</StackPanel>
-
-				<StackPanel DockPanel.Dock="Bottom"
-							Margin="10 5 0 0">
-					<controls:EditableTextBlock Text="{Binding SelectedItem.SourceTermComment1, Mode=TwoWay}"
-												x:Name="SourceTermComment1_EditableTextBlock" />
-					<controls:EditableTextBlock Text="{Binding SelectedItem.SourceTermComment2, Mode=TwoWay}"
-												Margin="0 2 0 0"
-												x:Name="SourceTermComment2_EditableTextBlock" />
-				</StackPanel>
-
-				<controls:EditableTextBlock Margin="5 5 0 0"
-											FontSize="15"
-											FontWeight="Black"
-											x:Name="SourceTerm_EditableTextBlock"
-											Text="{Binding SelectedItem.SourceTerm, Mode=TwoWay}" />
-
-			</DockPanel>
-
-			<DockPanel Grid.Row="0"
-					   Grid.Column="1"
-					   VerticalAlignment="Top">
-				<StackPanel Orientation="Horizontal"
-							DockPanel.Dock="Top">
-					<Image Source="{Binding TargetLanguageFlag, Converter={StaticResource ImageConverter}}"
-						   Width="19"
-						   Height="19" />
-					<TextBlock Text="{Binding TargetLanguage.DisplayName}"
-							   VerticalAlignment="Center"
-							   FontWeight="Light"
-							   FontSize="17" />
-				</StackPanel>
-
-				<StackPanel DockPanel.Dock="Bottom"
-							Margin="10 5 0 0">
-					<controls:EditableTextBlock Text="{Binding SelectedItem.TargetTermComment1, Mode=TwoWay}"
-												x:Name="TargetTermComment1_EditableTextBlock" />
-					<controls:EditableTextBlock Text="{Binding SelectedItem.TargetTermComment2, Mode=TwoWay}"
-												Margin="0 2 0 0"
-												x:Name="TargetTermComment2_EditableTextBlock" />
-				</StackPanel>
-
-				<controls:EditableTextBlock DockPanel.Dock="Bottom"
-											x:Name="TargetTerm_EditableTextBlock"
-											Margin="5 5 0 0"
-											FontSize="15"
-											FontWeight="Black"
-											Text="{Binding SelectedItem.TargetTerm, Mode=TwoWay}" />
-			</DockPanel>
-
-			<controls:EditableTextBlock Grid.Row="1"
-										VerticalAlignment="Top"
-										x:Name="CommentAll_EditableTextBlock"
-										Margin="7 10 0 0"
-										Grid.Column="0"
-										Grid.ColumnSpan="2"
-										FontSize="15"
-										Text="{Binding SelectedItem.CommentAll, Mode=TwoWay}" />
-
-
 			<DockPanel Grid.Row="1"
+					   Name="TermMenu_DockPanel"
 					   VerticalAlignment="Bottom"
 					   LastChildFill="False"
 					   Grid.Column="0"
 					   Grid.ColumnSpan="2">
 
-
-
-
-
 				<Button Style="{StaticResource GlyphButtonStyle}"
-				        Name="EditTerm_Button"
-				        ToolTip="Edit"
-				        Click="EditButton_Click"
-				        FontSize="13"
-				        Visibility="{Binding Visibility, ElementName=ConfirmEdit_StackPanel, Converter={StaticResource InvertVisibilityConverter}}"
-				        DockPanel.Dock="Right"
-				        Margin="2 0 0 0"
-				        Content="📝" />
+						Name="EditTerm_Button"
+						ToolTip="Edit"
+						Click="EditButton_Click"
+						FontSize="13"
+						Visibility="{Binding Visibility, ElementName=ConfirmEdit_StackPanel, Converter={StaticResource InvertVisibilityConverter}}"
+						DockPanel.Dock="Right"
+						Margin="2 0 0 0"
+						Content="📝" />
 
 				<Button Content="↶"
-				        Name="RevertChanges_Button"
-				        FontSize="15"
-				        Command="{Binding SelectedItem.RevertCommand}"
-				        Visibility="{Binding SelectedItem.Edited, Mode=TwoWay, Converter={StaticResource BoolToVis}, NotifyOnSourceUpdated=True}"
-				        FontWeight="Bold"
-				        ToolTip="Revert"
-				        Style="{StaticResource GlyphButtonStyle}" />
+						Name="RevertChanges_Button"
+						FontSize="15"
+						Command="{Binding SelectedItem.RevertCommand}"
+						Visibility="{Binding SelectedItem.Edited, Mode=TwoWay, Converter={StaticResource BoolToVis}, NotifyOnSourceUpdated=True}"
+						FontWeight="Bold"
+						ToolTip="Revert"
+						Style="{StaticResource GlyphButtonStyle}" />
 
 
 
@@ -233,11 +166,93 @@
 
 				</StackPanel>
 
-				
+
 			</DockPanel>
 
-		</Grid>
-		<!--</Border>-->
+			<DockPanel Grid.Row="0" Margin="20"
+					   LastChildFill="False"
+					   Name="TermWithComment_DockPanel">
+				<StackPanel Orientation="Horizontal"
+							DockPanel.Dock="Top">
+					<DockPanel Name="SourceTerm_DockPanel"
+							   Margin="2 0 0 0"
+							   VerticalAlignment="Top">
 
+
+						<StackPanel Orientation="Horizontal"
+									DockPanel.Dock="Top">
+							<Image Source="{Binding SourceLanguageFlag, Converter={StaticResource ImageConverter}}"
+								   Width="19"
+								   Height="19" />
+							<TextBlock Text="{Binding SourceLanguage.DisplayName}"
+									   VerticalAlignment="Center"
+									   FontWeight="Light"
+									   FontSize="17" />
+						</StackPanel>
+
+						<controls:EditableTextBlock Margin="5 5 0 0"
+													DockPanel.Dock="Top"
+													FontSize="15"
+													FontWeight="Black"
+													x:Name="SourceTerm_EditableTextBlock"
+													Text="{Binding SelectedItem.SourceTerm, Mode=TwoWay}" />
+
+						<StackPanel DockPanel.Dock="Bottom"
+									Margin="10 5 0 0">
+							<controls:EditableTextBlock Text="{Binding SelectedItem.SourceTermComment1, Mode=TwoWay}"
+														MaxWidth="{Binding ActualWidth, ElementName=TermbaseViewer_UserControl, Converter={StaticResource WidthToThirdConverter}}"
+														x:Name="SourceTermComment1_EditableTextBlock" />
+							<controls:EditableTextBlock Text="{Binding SelectedItem.SourceTermComment2, Mode=TwoWay}"
+														Margin="0 2 0 0"
+														x:Name="SourceTermComment2_EditableTextBlock" />
+						</StackPanel>
+
+
+					</DockPanel>
+
+					<DockPanel Name="TargetTerm_DockPanel" Margin="10 0 0 0"
+							   VerticalAlignment="Top">
+						<StackPanel Orientation="Horizontal"
+									DockPanel.Dock="Top">
+							<Image Source="{Binding TargetLanguageFlag, Converter={StaticResource ImageConverter}}"
+								   Width="19"
+								   Height="19" />
+							<TextBlock Text="{Binding TargetLanguage.DisplayName}"
+									   VerticalAlignment="Center"
+									   FontWeight="Light"
+									   FontSize="17" />
+						</StackPanel>
+
+						<controls:EditableTextBlock DockPanel.Dock="Top"
+													x:Name="TargetTerm_EditableTextBlock"
+													Margin="5 5 0 0"
+													FontSize="15"
+													FontWeight="Black"
+													Text="{Binding SelectedItem.TargetTerm, Mode=TwoWay}" />
+
+						<StackPanel DockPanel.Dock="Bottom"
+									Margin="10 5 0 0">
+							<controls:EditableTextBlock Text="{Binding SelectedItem.TargetTermComment1, Mode=TwoWay}"
+														x:Name="TargetTermComment1_EditableTextBlock" />
+							<controls:EditableTextBlock Text="{Binding SelectedItem.TargetTermComment2, Mode=TwoWay}"
+														Margin="0 2 0 0"
+														x:Name="TargetTermComment2_EditableTextBlock" />
+						</StackPanel>
+
+					</DockPanel>
+				</StackPanel>
+
+				<controls:EditableTextBlock x:Name="CommentAll_EditableTextBlock"
+											Margin="7 10 0 0"
+											DockPanel.Dock="Top"
+											FontSize="15"
+											Text="{Binding SelectedItem.CommentAll, Mode=TwoWay}" />
+
+			</DockPanel>
+
+
+
+
+		</Grid>
 	</Grid>
 </UserControl>

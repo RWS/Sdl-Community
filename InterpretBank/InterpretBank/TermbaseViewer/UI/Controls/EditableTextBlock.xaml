@@ -11,17 +11,34 @@
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/textblockresources.xaml" />
+				<ResourceDictionary Source="Resources/EditBoxResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
+            
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<Grid>
 		<TextBlock Name="TextBlock"
 				   Visibility="Visible"
 				   TextWrapping="Wrap"
-		           Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}}" />
-		<TextBox Name="TextBox"
+				   Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+
+		<!--<Border Visibility="Collapsed"
+				Background="#f5f8fa"
+				Name="EditBox">
+
+			<TextBox Name="TextBox"
+					 Background="White"
+					 TextWrapping="Wrap"
+					 Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+
+		</Border>-->
+
+		<TextBox Style="{StaticResource EditBox_Template}" Name="EditBox"
+				 Foreground="SlateGray"
+				 GotFocus="EditBox_OnGotFocus"
+				 LostFocus="EditBox_OnLostFocus"
 				 TextWrapping="Wrap"
 				 Visibility="Collapsed"
-		         Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+				 Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}" />
 	</Grid>
 </UserControl>

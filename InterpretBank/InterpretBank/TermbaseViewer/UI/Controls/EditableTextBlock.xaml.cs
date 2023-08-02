@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Media;
+using TextBox = System.Windows.Controls.TextBox;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace InterpretBank.TermbaseViewer.UI.Controls
@@ -18,6 +20,7 @@ namespace InterpretBank.TermbaseViewer.UI.Controls
 			var control = (EditableTextBlock)d;
 			control.SetEditing();
 		}
+
 
 		public static readonly DependencyProperty TextProperty =
 					DependencyProperty.Register(nameof(Text), typeof(string), typeof(EditableTextBlock), new PropertyMetadata(""));
@@ -46,14 +49,26 @@ namespace InterpretBank.TermbaseViewer.UI.Controls
 		{
 			if (IsEditing)
 			{
-				TextBox.Visibility = Visibility.Visible;
+				EditBox.Visibility = Visibility.Visible;
 				TextBlock.Visibility = Visibility.Collapsed;
 			}
 			else
 			{
-				TextBox.Visibility = Visibility.Collapsed;
+				EditBox.Visibility = Visibility.Collapsed;
 				TextBlock.Visibility = Visibility.Visible;
 			}
+		}
+
+		private void EditBox_OnGotFocus(object sender, RoutedEventArgs e)
+		{
+			var hexColor = "#bed7e8";
+			var color = (Color)ColorConverter.ConvertFromString(hexColor);
+			EditBox.Background = new SolidColorBrush(color);
+		}
+
+		private void EditBox_OnLostFocus(object sender, RoutedEventArgs e)
+		{
+			EditBox.Background = new SolidColorBrush(Colors.Transparent);
 		}
 	}
 }
