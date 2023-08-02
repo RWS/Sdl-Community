@@ -1,10 +1,9 @@
 ﻿<UserControl x:Class="InterpretBank.TermbaseViewer.UI.Controls.EditableTextBlock"
-			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-			 xmlns:local="clr-namespace:InterpretBank.TermbaseViewer.UI.Controls"
-			 mc:Ignorable="d"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
 			 d:DesignHeight="450"
 			 d:DesignWidth="800">
 	<UserControl.Resources>
@@ -13,7 +12,6 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/textblockresources.xaml" />
 				<ResourceDictionary Source="Resources/EditBoxResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
-            
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<Grid>
@@ -22,18 +20,8 @@
 				   TextWrapping="Wrap"
 				   Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}}" />
 
-		<!--<Border Visibility="Collapsed"
-				Background="#f5f8fa"
-				Name="EditBox">
-
-			<TextBox Name="TextBox"
-					 Background="White"
-					 TextWrapping="Wrap"
-					 Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}}" />
-
-		</Border>-->
-
-		<TextBox Style="{StaticResource EditBox_Template}" Name="EditBox"
+		<TextBox Style="{StaticResource EditBox_Template}"
+				 Name="EditBox"
 				 Foreground="SlateGray"
 				 GotFocus="EditBox_OnGotFocus"
 				 LostFocus="EditBox_OnLostFocus"
