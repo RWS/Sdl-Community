@@ -20,10 +20,11 @@
 
 			<converters:ImageToBitmapImageConverter x:Key="ImageConverter" />
 			<BooleanToVisibilityConverter x:Key="BoolToVis" />
-			<converters:InvertVisibilityConverter x:Key="InvertVisibilityConverter"/>
+			<converters:InvertVisibilityConverter x:Key="InvertVisibilityConverter" />
 
 			<Style TargetType="controls:EditableTextBlock">
-				<Setter Property="IsEditing" Value="{Binding SelectedItem.IsEditing}"/>
+				<Setter Property="IsEditing"
+						Value="{Binding SelectedItem.IsEditing}" />
 			</Style>
 
 		</ResourceDictionary>
@@ -46,8 +47,8 @@
 
 					<Grid>
 						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="Auto"/>
-							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="Auto" />
+							<ColumnDefinition Width="*" />
 						</Grid.ColumnDefinitions>
 
 						<TextBlock DockPanel.Dock="Right"
@@ -69,12 +70,23 @@
 		</ListBox>
 
 		<Button Grid.Column="0"
-		        Style="{StaticResource GlyphButtonStyle3}"
-		        VerticalAlignment="Bottom"
-		        HorizontalAlignment="Right"
+				Style="{StaticResource GlyphButtonStyle3}"
+				VerticalAlignment="Bottom"
+				HorizontalAlignment="Right"
 				ToolTip="Add new term"
-		        Margin="2 0 0 0"
+				Margin="2 0 0 0"
 				Content="➕" />
+		
+		<Button Grid.Column="0"
+		        Style="{StaticResource GlyphButtonStyle4}"
+				Visibility="{Binding AnyEditedTerms, Converter={StaticResource BoolToVis}}"
+				Command="{Binding CommitAllToDatabaseCommand}"
+		        VerticalAlignment="Bottom"
+		        HorizontalAlignment="Left"
+				FontSize="13"
+				FontWeight="Black"
+		        ToolTip="Commit all changes to the database"
+				Content="🗄️" />
 
 		<Grid Margin="0"
 			  Background="White"
@@ -106,9 +118,9 @@
 
 				<StackPanel DockPanel.Dock="Bottom"
 							Margin="10 5 0 0">
-					<controls:EditableTextBlock Text="{Binding SelectedItem.SourceTermComment1}"
+					<controls:EditableTextBlock Text="{Binding SelectedItem.SourceTermComment1, Mode=TwoWay}"
 												x:Name="SourceTermComment1_EditableTextBlock" />
-					<controls:EditableTextBlock Text="{Binding SelectedItem.SourceTermComment2}"
+					<controls:EditableTextBlock Text="{Binding SelectedItem.SourceTermComment2, Mode=TwoWay}"
 												Margin="0 2 0 0"
 												x:Name="SourceTermComment2_EditableTextBlock" />
 				</StackPanel>
@@ -117,7 +129,7 @@
 											FontSize="15"
 											FontWeight="Black"
 											x:Name="SourceTerm_EditableTextBlock"
-											Text="{Binding SelectedItem.SourceTerm}" />
+											Text="{Binding SelectedItem.SourceTerm, Mode=TwoWay}" />
 
 			</DockPanel>
 
@@ -137,9 +149,9 @@
 
 				<StackPanel DockPanel.Dock="Bottom"
 							Margin="10 5 0 0">
-					<controls:EditableTextBlock Text="{Binding SelectedItem.TargetTermComment1}"
+					<controls:EditableTextBlock Text="{Binding SelectedItem.TargetTermComment1, Mode=TwoWay}"
 												x:Name="TargetTermComment1_EditableTextBlock" />
-					<controls:EditableTextBlock Text="{Binding SelectedItem.TargetTermComment2}"
+					<controls:EditableTextBlock Text="{Binding SelectedItem.TargetTermComment2, Mode=TwoWay}"
 												Margin="0 2 0 0"
 												x:Name="TargetTermComment2_EditableTextBlock" />
 				</StackPanel>
@@ -149,7 +161,7 @@
 											Margin="5 5 0 0"
 											FontSize="15"
 											FontWeight="Black"
-											Text="{Binding SelectedItem.TargetTerm}" />
+											Text="{Binding SelectedItem.TargetTerm, Mode=TwoWay}" />
 			</DockPanel>
 
 			<controls:EditableTextBlock Grid.Row="1"
@@ -159,7 +171,7 @@
 										Grid.Column="0"
 										Grid.ColumnSpan="2"
 										FontSize="15"
-										Text="{Binding SelectedItem.CommentAll}" />
+										Text="{Binding SelectedItem.CommentAll, Mode=TwoWay}" />
 
 
 			<DockPanel Grid.Row="1"
@@ -171,40 +183,57 @@
 
 
 
+
 				<Button Style="{StaticResource GlyphButtonStyle}"
-						Name="EditTerm_Button"
-						ToolTip="Edit"
-						Click="EditButton_Click"
-				        FontSize="15"
-						Visibility="{Binding Visibility, ElementName=ConfirmEdit_StackPanel, Converter={StaticResource InvertVisibilityConverter}}"
+				        Name="EditTerm_Button"
+				        ToolTip="Edit"
+				        Click="EditButton_Click"
+				        FontSize="13"
+				        Visibility="{Binding Visibility, ElementName=ConfirmEdit_StackPanel, Converter={StaticResource InvertVisibilityConverter}}"
 				        DockPanel.Dock="Right"
 				        Margin="2 0 0 0"
 				        Content="📝" />
 
+				<Button Content="↶"
+				        Name="RevertChanges_Button"
+				        FontSize="15"
+				        Command="{Binding SelectedItem.RevertCommand}"
+				        Visibility="{Binding SelectedItem.Edited, Mode=TwoWay, Converter={StaticResource BoolToVis}, NotifyOnSourceUpdated=True}"
+				        FontWeight="Bold"
+				        ToolTip="Revert"
+				        Style="{StaticResource GlyphButtonStyle}" />
 
-				<StackPanel Orientation="Horizontal" DockPanel.Dock="Right"
+
+
+				<StackPanel Orientation="Horizontal"
+							DockPanel.Dock="Right"
 							Name="ConfirmEdit_StackPanel"
-				            Visibility="{Binding IsEditing, ElementName=SourceTerm_EditableTextBlock, Converter={StaticResource BoolToVis}}">
+							Visibility="{Binding IsEditing, ElementName=SourceTerm_EditableTextBlock, Converter={StaticResource BoolToVis}}">
+
 					<Button DockPanel.Dock="Right"
 							Name="SaveEdits_Button"
 							Foreground="LimeGreen"
 							ToolTip="Save edit"
-							Click="StopEdit_Button_OnClick"
-					        Style="{StaticResource GlyphButtonStyle}"
-					        FontSize="15"
+							Click="SaveEdit_Button_OnClick"
+							Style="{StaticResource GlyphButtonStyle}"
+							FontSize="15"
 							FontWeight="Bold"
-					        Content="✓" />
+							Content="✓" />
 
 					<Button DockPanel.Dock="Right"
 							Foreground="Red"
 							ToolTip="Discard changes"
+							Command="{Binding SelectedItem.RevertCommand}"
 							Name="DiscardEdits_Button"
-							Click="StopEdit_Button_OnClick"
-					        Style="{StaticResource GlyphButtonStyle}"
-					        FontSize="15"
+							Click="SaveEdit_Button_OnClick"
+							Style="{StaticResource GlyphButtonStyle}"
+							FontSize="15"
 							FontWeight="Bold"
-					        Content="X" />
+							Content="X" />
+
 				</StackPanel>
+
+				
 			</DockPanel>
 
 		</Grid>

@@ -127,10 +127,17 @@ public class TerminologyService : ITerminologyService
 			dbT[columns[3]],
 			dbT[columns[4]],
 			dbT[columns[5]],
-			dbT.CommentAll
+			dbT.CommentAll,
+			sourceLanguageIndex,
+			targetLanguageIndex
 		)));
 
 		return termbaseViewerTerms;
+	}
+
+	public void SaveAllTerms(IEnumerable<TermModel> changedTerms)
+	{
+		InterpretBankDataContext.UpdateTerms(changedTerms);
 	}
 
 	private static List<string> GetTermColumns(int targetLanguageIndex, int sourceLanguageIndex = -1)

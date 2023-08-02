@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using InterpretBank.TermbaseViewer.Model;
 
 namespace InterpretBank.TermbaseViewer.UI
@@ -12,7 +13,19 @@ namespace InterpretBank.TermbaseViewer.UI
 		public TermbaseViewer()
 		{
 			InitializeComponent();
+			PreviewKeyDown += TermbaseViewer_KeyUp;
 		}
+
+		private void TermbaseViewer_KeyUp(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Enter)
+			{
+				SetEditing(false);
+			}
+
+			
+		}
+
 
 		public void SetEditing(bool editing)
 		{
@@ -24,7 +37,7 @@ namespace InterpretBank.TermbaseViewer.UI
 			SetEditing(true);
 		}
 
-		private void StopEdit_Button_OnClick(object sender, RoutedEventArgs e)
+		private void SaveEdit_Button_OnClick(object sender, RoutedEventArgs e)
 		{
 			SetEditing(false);
 		}

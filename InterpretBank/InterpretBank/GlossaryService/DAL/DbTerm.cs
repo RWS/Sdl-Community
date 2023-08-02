@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Data.Linq.Mapping;
+﻿using System.Data.Linq.Mapping;
 using System.Reflection;
 using InterpretBank.GlossaryService.DAL.Interface;
-using InterpretBank.GlossaryService.Interface;
 using InterpretBank.GlossaryService.Model;
 
 namespace InterpretBank.GlossaryService.DAL;
@@ -54,7 +52,7 @@ public class DbTerm : IInterpretBankTable
 
 	[Column(Name = "CommentAll")] public string CommentAll { get; set; }
 
-	[Key] [Column(Name = "ID")] public long Id { get; set; }
+	[Column(Name = "ID", IsPrimaryKey = true)] public long Id { get; set; }
 
 	[Column(Name = "Memorization")] public string Memorization { get; set; }
 
@@ -124,6 +122,11 @@ public class DbTerm : IInterpretBankTable
 		{
 			var propertyInfo = GetType().GetProperty(property);
 			return propertyInfo?.GetValue(this, null)?.ToString();
+		}
+		set
+		{
+			var propertyInfo = GetType().GetProperty(property);
+			propertyInfo.SetValue(this, value, null);
 		}
 	}
 }

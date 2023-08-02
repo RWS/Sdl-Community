@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using InterpretBank.Commands;
@@ -11,18 +10,21 @@ namespace InterpretBank.TermbaseViewer.Model
 	public class TermModel : INotifyPropertyChanged
 	{
 		private string _commentAll;
+		private bool _edited;
+		private bool _isEditing;
+		private int _sourceLanguageIndex;
 		private string _sourceTerm;
 		private string _sourceTermComment1;
 		private string _sourceTermComment2;
+		private int _targetLanguageIndex;
 		private string _targetTerm;
 		private string _targetTermComment1;
 		private string _targetTermComment2;
-		private bool _isEditing;
 
 		public TermModel()
 		{ }
 
-		public TermModel(long id, string targetTerm, string targetTermComment1, string targetTermComment2, string sourceTerm, string sourceTermComment1, string sourceTermComment2, string commentAll)
+		public TermModel(long id, string targetTerm, string targetTermComment1, string targetTermComment2, string sourceTerm, string sourceTermComment1, string sourceTermComment2, string commentAll, int sourceLanguageIndex, int targetLanguageIndex)
 		{
 			Id = id;
 			_targetTerm = targetTerm;
@@ -32,18 +34,12 @@ namespace InterpretBank.TermbaseViewer.Model
 			_sourceTermComment1 = sourceTermComment1;
 			_sourceTermComment2 = sourceTermComment2;
 			_commentAll = commentAll;
+			_sourceLanguageIndex = sourceLanguageIndex;
+			_targetLanguageIndex = targetLanguageIndex;
 
-			OriginalTerm = new TermModel()
-			{
-				Id = id,
-				TargetTerm = targetTerm,
-				TargetTermComment1 = targetTermComment1,
-				TargetTermComment2 = targetTermComment2,
-				SourceTerm = sourceTerm,
-				SourceTermComment1 = sourceTermComment1,
-				SourceTermComment2 = sourceTermComment2,
-				CommentAll = commentAll
-			};
+			SetOriginalTerm();
+
+			_edited = false;
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -58,13 +54,45 @@ namespace InterpretBank.TermbaseViewer.Model
 		{
 			get
 			{
-				var properties = GetType().GetProperties(BindingFlags.Public);
-				return properties.Any(propertyInfo => !propertyInfo.GetValue(this).Equals(propertyInfo.GetValue(OriginalTerm)));
+				var properties = GetType().GetProperties().Where(p => p.Name.ToLower().Contains("term") || p.Name == "CommentAll");
+				var x = properties.Any(propertyInfo => !propertyInfo.GetValue(this).Equals(propertyInfo.GetValue(OriginalTerm)));
+				return _edited = x;
+			}
+			set
+			{
+				SetField(ref _edited, value);
 			}
 		}
 
 		public long Id { get; set; }
 
+		public bool IsEditing
+		{
+			get => _isEditing;
+			set
+			{
+				if (value == _isEditing)
+					return;
+				_isEditing = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public ICommand RevertCommand => new RelayCommand(Revert);
+
+		public int SourceLanguageIndex
+		{
+			get => _sourceLanguageIndex;
+			set => _sourceLanguageIndex = value;
+		}
+
+		// {
+		// 	get
+		// 	{
+		// 		var properties = GetType().GetProperties().Where(p => p.Name.ToLower().Contains("term") || p.Name == "CommentAll");
+		// 		return properties.Any(propertyInfo => !propertyInfo.GetValue(this).Equals(propertyInfo.GetValue(OriginalTerm)));
+		// 	}
+		// }
 		public string SourceTerm
 		{
 			get => _sourceTerm;
@@ -81,6 +109,12 @@ namespace InterpretBank.TermbaseViewer.Model
 		{
 			get => _sourceTermComment2;
 			set => SetField(ref _sourceTermComment2, value);
+		}
+
+		public int TargetLanguageIndex
+		{
+			get => _targetLanguageIndex;
+			set => _targetLanguageIndex = value;
 		}
 
 		public string TargetTerm
@@ -103,17 +137,6 @@ namespace InterpretBank.TermbaseViewer.Model
 
 		private TermModel OriginalTerm { get; set; }
 
-		public bool IsEditing
-		{
-			get => _isEditing;
-			set
-			{
-				if (value == _isEditing) return;
-				_isEditing = value;
-				OnPropertyChanged();
-			}
-		}
-
 		public override bool Equals(object obj)
 		{
 			return obj is TermModel other && Id == other.Id && CommentAll == other.CommentAll && TargetTermComment1 == other.TargetTermComment1 && TargetTermComment2 == other.TargetTermComment2 && TargetTerm == other.TargetTerm && SourceTerm == other.SourceTerm && SourceTermComment1 == other.SourceTermComment1 && SourceTermComment2 == other.SourceTermComment2;
@@ -135,6 +158,20 @@ namespace InterpretBank.TermbaseViewer.Model
 			}
 		}
 
+		public void SetOriginalTerm()
+		{
+			OriginalTerm = new TermModel
+			{
+				TargetTerm = TargetTerm,
+				TargetTermComment1 = TargetTermComment1,
+				TargetTermComment2 = TargetTermComment2,
+				SourceTerm = SourceTerm,
+				SourceTermComment1 = SourceTermComment1,
+				SourceTermComment2 = SourceTermComment2,
+				CommentAll = CommentAll
+			};
+		}
+
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -149,6 +186,21 @@ namespace InterpretBank.TermbaseViewer.Model
 			OnPropertyChanged(propertyName);
 			OnPropertyChanged(nameof(Edited));
 			return true;
+		}
+
+		private void Revert(object obj)
+		{
+			SourceTerm = OriginalTerm.SourceTerm;
+			SourceTermComment1 = OriginalTerm.SourceTermComment1;
+			SourceTermComment2 = OriginalTerm.SourceTermComment2;
+
+			TargetTerm = OriginalTerm.TargetTerm;
+			TargetTermComment1 = OriginalTerm.TargetTermComment1;
+			TargetTermComment2 = OriginalTerm.TargetTermComment2;
+
+			CommentAll = OriginalTerm.CommentAll;
+
+			OnPropertyChanged(nameof(Edited));
 		}
 	}
 }

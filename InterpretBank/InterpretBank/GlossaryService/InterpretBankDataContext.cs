@@ -9,11 +9,13 @@ using System.Text.RegularExpressions;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Wordprocessing;
 using InterpretBank.Constants;
+using InterpretBank.Extensions;
 using InterpretBank.GlossaryService.DAL;
 using InterpretBank.GlossaryService.DAL.Interface;
 using InterpretBank.GlossaryService.Interface;
 using InterpretBank.Model;
 using InterpretBank.SettingsService.Model;
+using InterpretBank.TermbaseViewer.Model;
 
 namespace InterpretBank.GlossaryService;
 
@@ -97,7 +99,8 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 		var glossarySetting = glossary.GlossarySetting;
 		var indexToReplace = glossarySetting.IndexOf("0");
 
-		if (indexToReplace == -1) return;
+		if (indexToReplace == -1)
+			return;
 
 		glossary.GlossarySetting = glossarySetting.Substring(0, indexToReplace) + newLanguage.Index +
 		                           glossarySetting.Substring(indexToReplace + 0.ToString().Length);
@@ -105,10 +108,32 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 
 	public List<LanguageModel> GetGlossaryLanguages(string glossaryName)
 	{
-		var dbGlossary = DataContext.GetTable<DbGlossary>().ToList().FirstOrDefault(g=>g.Tag1 == glossaryName);
+		var dbGlossary = DataContext.GetTable<DbGlossary>().ToList().FirstOrDefault(g => g.Tag1 == glossaryName);
 		var settings = dbGlossary.GlossarySetting;
 
 		return GetLanguageNames(settings);
+	}
+
+	public void UpdateTerms(IEnumerable<TermModel> changedTerms)
+	{
+		changedTerms.ForEach(UpdateTerm);
+		SubmitData();
+	}
+	
+	public void UpdateTerm(TermModel term)
+	{
+		var dbTerm = DataContext.GetTable<DbTerm>().ToList().FirstOrDefault(t => t.Id == term.Id);
+		if (dbTerm == null) return;
+
+		dbTerm[$"Term{term.SourceLanguageIndex}"] = term.SourceTerm;
+		dbTerm[$"Comment{term.SourceLanguageIndex}a"] = term.SourceTermComment1;
+		dbTerm[$"Comment{term.SourceLanguageIndex}b"] = term.SourceTermComment2;
+		
+		dbTerm[$"Term{term.TargetLanguageIndex}"] = term.TargetTerm;
+		dbTerm[$"Comment{term.TargetLanguageIndex}a"] = term.TargetTermComment1;
+		dbTerm[$"Comment{term.TargetLanguageIndex}b"] = term.TargetTermComment2;
+
+		dbTerm["CommentAll"] = term.CommentAll;
 	}
 
 	public List<LanguageModel> GetDbLanguages()

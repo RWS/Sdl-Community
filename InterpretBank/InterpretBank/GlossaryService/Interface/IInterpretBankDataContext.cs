@@ -5,6 +5,7 @@ using System.Linq;
 using InterpretBank.GlossaryService.DAL.Interface;
 using InterpretBank.Model;
 using InterpretBank.SettingsService.Model;
+using InterpretBank.TermbaseViewer.Model;
 
 namespace InterpretBank.GlossaryService.Interface;
 
@@ -26,4 +27,5 @@ public interface IInterpretBankDataContext : IDisposable
 	void TagGlossary(TagModel newTag, string glossaryName);
 	void AddLanguageToGlossary(LanguageModel newLanguage, string selectedGlossaryGlossaryName);
 	List<LanguageModel> GetGlossaryLanguages(string glossaryName);
+	void UpdateTerms(IEnumerable<TermModel> changedTerms);
 }

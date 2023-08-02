@@ -17,13 +17,9 @@
     <CollectSQLiteInteropFiles>false</CollectSQLiteInteropFiles>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="NewFolder\**" />
     <Compile Remove="TermbaseViewer\Converters\**" />
-    <EmbeddedResource Remove="NewFolder\**" />
     <EmbeddedResource Remove="TermbaseViewer\Converters\**" />
-    <None Remove="NewFolder\**" />
     <None Remove="TermbaseViewer\Converters\**" />
-    <Page Remove="NewFolder\**" />
     <Page Remove="TermbaseViewer\Converters\**" />
   </ItemGroup>
   <ItemGroup>

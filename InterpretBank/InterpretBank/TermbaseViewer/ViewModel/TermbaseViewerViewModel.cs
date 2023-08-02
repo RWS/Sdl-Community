@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Input;
+using InterpretBank.Commands;
 using InterpretBank.TermbaseViewer.Model;
 using InterpretBank.TerminologyService.Interface;
 using Sdl.Core.Globalization;
@@ -48,11 +50,36 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 			var targetLanguage = target.DisplayName.Split(' ')[0];
 
 			Terms = TerminologyService.GetAllTerms(sourceLanguage, targetLanguage, glossaries);
+
+			foreach (var termModel in Terms)
+			{
+				termModel.PropertyChanged += (sender, args) => OnPropertyChanged(nameof(AnyEditedTerms));
+			}
+
+			SelectedItem = Terms.FirstOrDefault();
 		}
 
 		public Image TargetLanguageFlag { get; set; }
 
 		public Image SourceLanguageFlag { get; set; }
+		public bool AnyEditedTerms => Terms.Any(t => t.Edited);
+		public ICommand CommitAllToDatabaseCommand => new RelayCommand(CommitAllToDatabase);
+
+		private void CommitAllToDatabase(object obj)
+		{
+			var changedTerms = Terms.Where(t => t.Edited);
+			
+			TerminologyService.SaveAllTerms(changedTerms);
+
+			foreach (var changedTerm in changedTerms)
+			{
+				//setting edited to false may not be needed if we are setting original term 
+				changedTerm.Edited = false;
+				changedTerm.SetOriginalTerm();
+			}
+
+			OnPropertyChanged(nameof(AnyEditedTerms));
+		}
 
 		public void JumpToTerm(IEntry entry)
 		{
