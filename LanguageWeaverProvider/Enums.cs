@@ -8,6 +8,7 @@
 
 	public enum AuthenticationType
 	{
+		None,
 		Credentials,
 		Secret
 	}

@@ -35,8 +35,8 @@
 
 			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
 
-			<DataTemplate DataType="{x:Type cloudViewModel:CloudMainViewModel}">
-				<cloudView:CloudMainView />
+			<DataTemplate DataType="{x:Type cloudViewModel:CloudCredentialsViewModel}">
+				<cloudView:CloudCredentialsView />
 			</DataTemplate>
 		</ResourceDictionary>
 	</Window.Resources>

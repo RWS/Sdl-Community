@@ -7,26 +7,26 @@ namespace LanguageWeaverProvider.View.Cloud
 	/// <summary>
 	/// Interaction logic for CloudMainView.xaml
 	/// </summary>
-	public partial class CloudMainView : UserControl
+	public partial class CloudCredentialsView : UserControl
 	{
-		public CloudMainView()
+		public CloudCredentialsView()
 		{
 			InitializeComponent();
 		}
 
 		private void UserPassword_Changed(object sender, RoutedEventArgs e)
 		{
-			(DataContext as CloudMainViewModel).UserPassword = (sender as PasswordBox).Password;
+			(DataContext as CloudCredentialsViewModel).UserPassword = (sender as PasswordBox).Password;
         }
 
 		private void ClientID_Changed(object sender, RoutedEventArgs e)
 		{
-			(DataContext as CloudMainViewModel).ClientId = (sender as PasswordBox).Password;
+			(DataContext as CloudCredentialsViewModel).ClientId = (sender as PasswordBox).Password;
 		}
 
 		private void ClientSecret_Changed(object sender, RoutedEventArgs e)
 		{
-			(DataContext as CloudMainViewModel).ClientSecret = (sender as PasswordBox).Password;
+			(DataContext as CloudCredentialsViewModel).ClientSecret = (sender as PasswordBox).Password;
 		}
 	}
 }

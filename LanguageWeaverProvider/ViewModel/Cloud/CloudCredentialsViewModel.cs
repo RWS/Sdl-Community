@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Options.Interface;
@@ -8,23 +9,39 @@ using Newtonsoft.Json;
 
 namespace LanguageWeaverProvider.ViewModel.Cloud
 {
-	public class CloudMainViewModel : BaseViewModel, IMainProviderViewModel
+	public class CloudCredentialsViewModel : BaseViewModel, ICredentialsViewModel
 	{
+		private AuthenticationType _authenticationType;
+
 		private string _userId;
 		private string _userPassword;
 		private string _clientId;
 		private string _clientSecret;
 
-		private bool _isCredentialsSelected;
 		private bool _isSecretSelected;
+		private bool _isCredentialsSelected;
 
-		public CloudMainViewModel(ITranslationOptions translationOptions)
+		public CloudCredentialsViewModel(ITranslationOptions translationOptions)
 		{
 			TranslationOptions = translationOptions;
 			InitializeCommands();
 		}
 
 		public ITranslationOptions TranslationOptions { get; set; }
+
+		public AuthenticationType AuthenticationType
+		{
+			get => _authenticationType;
+			set
+			{
+				if (_authenticationType == value) return;
+				_authenticationType = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(IsAuthenticationTypeSelected));
+				IsCredentialsSelected = value == AuthenticationType.Credentials;
+				IsSecretSelected = value == AuthenticationType.Secret;
+			}
+		}
 
 		public bool IsCredentialsSelected
 		{
@@ -34,7 +51,6 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				if (_isCredentialsSelected == value) return;
 				_isCredentialsSelected = value;
 				OnPropertyChanged();
-				OnPropertyChanged(nameof(IsAuthenticationTypeSelected));
 			}
 		}
 
@@ -46,11 +62,10 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				if (_isSecretSelected == value) return;
 				_isSecretSelected = value;
 				OnPropertyChanged();
-				OnPropertyChanged(nameof(IsAuthenticationTypeSelected));
 			}
 		}
 
-		public bool IsAuthenticationTypeSelected => IsCredentialsSelected || IsSecretSelected;
+		public bool IsAuthenticationTypeSelected => AuthenticationType != AuthenticationType.None;
 
 		public string UserId
 		{
@@ -104,6 +119,8 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		public ICommand BackCommand { get; private set; }
 
+		public event EventHandler CloseRequested;
+
 		private void InitializeCommands()
 		{
 			SelectAuthenticationTypeCommand = new RelayCommand(SelectAuthenticationType);
@@ -114,43 +131,40 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		private void SelectAuthenticationType(object parameter)
 		{
-			if (parameter is not string requestedAuthenticationType)
+			if (parameter is not AuthenticationType authenticationType)
 			{
 				return;
 			}
 
-			IsCredentialsSelected = requestedAuthenticationType == "Credentials";
-			IsSecretSelected = requestedAuthenticationType == "Secret";
+			AuthenticationType = authenticationType;
 		}
 
 		private async void SignIn(object parameter)
 		{
-			if (!CredentialsAreSet())
+			if (AuthenticationType == AuthenticationType.None
+			 ||!CredentialsAreSet())
 			{
 				return;
 			}
-			var cloudCredentials = new CloudCredentials();
-			if (IsCredentialsSelected)
+
+			var cloudCredentials = new CloudCredentials()
 			{
-				cloudCredentials = new CloudCredentials()
-				{
-					UserID = _userId,
-					UserPassword = _userPassword
-				};
-			}
-			else if (IsSecretSelected)
+				UserID = _userId,
+				UserPassword = _userPassword,
+				ClientID = _clientId,
+				ClientSecret = _clientSecret
+			};
+
+			var (response, success) = await CloudService.AuthenticateUser(cloudCredentials, AuthenticationType);
+			if (!success)
 			{
-				cloudCredentials = new CloudCredentials()
-				{
-					ClientID = _clientId,
-					ClientSecret = _clientSecret
-				};
+				// TO DO: Implement error/bad request/exceptions handling
+				return;
 			}
 
-			var response = await CloudService.AuthenticateUser(cloudCredentials, IsCredentialsSelected);
 			cloudCredentials.AccessToken = JsonConvert.DeserializeObject<AccessToken>(response);
-
 			TranslationOptions.CloudCredentials = cloudCredentials;
+			CloseWindow();
 		}
 
 		private bool CredentialsAreSet()
@@ -168,7 +182,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				return false;
 			}
 
-			return true;
+			return AuthenticationType != AuthenticationType.None;
 		}
 
 		private void Clear(object parameter)
@@ -191,8 +205,12 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		private void Back(object parameter)
 		{
-			IsCredentialsSelected = false;
-			IsSecretSelected = false;
+			AuthenticationType = AuthenticationType.None;
+		}
+
+		private void CloseWindow()
+		{
+			CloseRequested?.Invoke(this, EventArgs.Empty);
 		}
 	}
 }

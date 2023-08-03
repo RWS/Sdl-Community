@@ -5,6 +5,6 @@ namespace LanguageWeaverProvider.Model
 	public class ViewModelController
 	{
 		public string Name { get; set; }
-		public IMainProviderViewModel Provider { get; set; }
+		public ICredentialsViewModel Provider { get; set; }
 	}
 }

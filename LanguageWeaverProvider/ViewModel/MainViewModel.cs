@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Model.Options.Interface;
 using LanguageWeaverProvider.ViewModel.Cloud;
@@ -8,12 +9,12 @@ namespace LanguageWeaverProvider.ViewModel
 {
 	public class MainViewModel : BaseViewModel
 	{
-		private IMainProviderViewModel _providerView;
+		private ICredentialsViewModel _providerView;
 
 		private bool _isEdgeSelected;
 		private bool _isCloudSelected;
 
-		public MainViewModel(ITranslationOptions options, bool editProvider = false)
+		public MainViewModel(ITranslationOptions options)
 		{
 			TranslationOptions = options;
 			InitializeCommands();
@@ -49,7 +50,7 @@ namespace LanguageWeaverProvider.ViewModel
 
 		public bool IsServiceSelected => IsCloudSelected || IsEdgeSelected;
 
-		public IMainProviderViewModel ProviderView
+		public ICredentialsViewModel ProviderView
 		{
 			get => _providerView;
 			set
@@ -86,7 +87,16 @@ namespace LanguageWeaverProvider.ViewModel
 
 			IsCloudSelected = requestedService == "Cloud";
 			IsEdgeSelected = requestedService == "Edge";
-			ProviderView = IsCloudSelected ? new CloudMainViewModel(TranslationOptions) : null;
+			var selectedViewModel = IsCloudSelected ? new CloudCredentialsViewModel(TranslationOptions) : null;
+			selectedViewModel.CloseRequested += CloseSecondaryViewRequested;
+			ProviderView = selectedViewModel;
+		}
+
+		private void CloseSecondaryViewRequested(object sender, EventArgs e)
+		{
+			ProviderView = null;
+			SaveChanges = true;
+			CloseEventRaised?.Invoke();
 		}
 
 		private void CloseApplication(object parameter)

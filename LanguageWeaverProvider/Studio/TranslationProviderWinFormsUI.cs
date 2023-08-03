@@ -4,7 +4,6 @@ using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Model.Options.Interface;
 using LanguageWeaverProvider.View;
 using LanguageWeaverProvider.ViewModel;
-using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -47,7 +46,7 @@ namespace LanguageWeaverProvider
 
 		private MainViewModel ShowRequestedView(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, bool editProvider = false)
 		{
-			var mainWindowViewModel = new MainViewModel(loadOptions, editProvider);
+			var mainWindowViewModel = new MainViewModel(loadOptions);
 			var mainWindowView = new MainWindowView { DataContext = mainWindowViewModel };
 			mainWindowViewModel.CloseEventRaised += () =>
 			{
@@ -61,8 +60,15 @@ namespace LanguageWeaverProvider
 
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
 		{
-			var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
-			return new TranslationProviderDisplayInfo();
+			var displayInfo = new TranslationProviderDisplayInfo()
+			{
+				Name = PluginResources.Plugin_Name,
+				TooltipText = PluginResources.Plugin_Name,
+				TranslationProviderIcon = PluginResources.lwLogoIco,
+				SearchResultImage = PluginResources.lwLogoPng
+			};
+
+			return displayInfo;
 		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)

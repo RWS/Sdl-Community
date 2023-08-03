@@ -8,6 +8,6 @@ namespace LanguageWeaverProvider.Model.Options.Interface
 
 		public PluginVersion Version { get; set; }
 
-		Uri Uri { get; set; }
+		Uri Uri { get; }
 	}
 }
