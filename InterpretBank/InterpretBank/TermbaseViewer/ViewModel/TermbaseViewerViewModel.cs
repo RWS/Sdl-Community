@@ -87,6 +87,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 			};
 
 			Terms.Add(termModel);
+			termModel.SetOriginalTerm();
 
 			SelectedItem = termModel;
 		}
@@ -97,8 +98,6 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
 			TerminologyService.SaveAllTerms(changedTerms);
 			changedTerms.ForEach(t => t.SetOriginalTerm(true));
-
-			//OnPropertyChanged(nameof(AnyEditedTerms));
 		}
 
 		private void RevertChanges(object obj)

@@ -18,7 +18,7 @@
 		<TextBlock Name="TextBlock"
 				   Visibility="Visible"
 				   TextWrapping="Wrap"
-				   Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+				   Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" />
 
 		<TextBox Style="{StaticResource EditBox_Template}"
 				 Name="EditBox"
@@ -27,6 +27,6 @@
 				 LostFocus="EditBox_OnLostFocus"
 				 TextWrapping="Wrap"
 				 Visibility="Collapsed"
-				 Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}" />
+				 Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 	</Grid>
 </UserControl>
