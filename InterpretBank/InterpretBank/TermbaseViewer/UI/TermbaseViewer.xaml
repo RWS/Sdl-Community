@@ -38,7 +38,7 @@
 
 			<Style TargetType="controls:EditableTextBlock">
 				<Setter Property="IsEditing"
-						Value="{Binding SelectedItem.IsEditing}" />
+						Value="{Binding SelectedItem.IsEditing, Mode=TwoWay}" />
 				<Setter Property="MaxWidth"
 						Value="{Binding ActualWidth, ElementName=TermbaseViewer_UserControl, Converter={StaticResource WidthToThirdConverter}}" />
 			</Style>
@@ -56,62 +56,67 @@
 			<ColumnDefinition Width="3*" />
 		</Grid.ColumnDefinitions>
 
-		<ListBox Background="#f5f8fa"
-				 Name="Term_ListBox"
-				 Grid.Column="0"
-				 Margin="0"
-				 BorderThickness="0"
-				 ItemsSource="{Binding Terms}"
-				 SelectedItem="{Binding SelectedItem}">
-			<ListBox.ItemTemplate>
-				<DataTemplate DataType="{x:Type model:TermModel}">
+		<Grid Grid.Column="0"
+			  Name="TermListPart_Grid">
+			<ListBox Background="#f5f8fa"
+					 Name="Term_ListBox"
+					 Grid.Column="0"
+					 Margin="0"
+					 BorderThickness="0"
+					 ItemsSource="{Binding Terms}"
+					 SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+				<ListBox.ItemTemplate>
+					<DataTemplate DataType="{x:Type model:TermModel}">
 
-					<Grid>
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="Auto" />
-							<ColumnDefinition Width="*" />
-						</Grid.ColumnDefinitions>
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="Auto" />
+								<ColumnDefinition Width="*" />
+							</Grid.ColumnDefinitions>
 
-						<TextBlock DockPanel.Dock="Right"
-								   HorizontalAlignment="Left"
-								   VerticalAlignment="Center"
-								   Grid.Column="1"
-								   Text="{Binding TargetTerm}" />
-						<Button DockPanel.Dock="Left"
-								HorizontalAlignment="Left"
-								ToolTip="Remove term"
-								Grid.Column="0"
-								Style="{StaticResource GlyphButtonStyle2}"
-								FontSize="8"
-								Content="❌" />
-					</Grid>
-				</DataTemplate>
-			</ListBox.ItemTemplate>
-		</ListBox>
+							<TextBlock DockPanel.Dock="Right"
+									   HorizontalAlignment="Left"
+									   VerticalAlignment="Center"
+									   Grid.Column="1"
+									   Text="{Binding TargetTerm}" />
+							<Button DockPanel.Dock="Left"
+									HorizontalAlignment="Left"
+									ToolTip="Remove term"
+									Grid.Column="0"
+									Style="{StaticResource GlyphButtonStyle2}"
+									FontSize="8"
+									Content="❌" />
+						</Grid>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
 
-		<Button Grid.Column="0"
-				Style="{StaticResource GlyphButtonStyle3}"
-				VerticalAlignment="Bottom"
-				HorizontalAlignment="Right"
-				ToolTip="Add new term"
-				Margin="2 0 0 0"
-				Content="➕" />
+			<Button Grid.Column="0"
+					Style="{StaticResource GlyphButtonStyle3}"
+					Command="{Binding AddNewTermCommand}"
+					VerticalAlignment="Bottom"
+					HorizontalAlignment="Right"
+					ToolTip="Add new term"
+					Margin="2 0 0 0"
+					Content="➕" />
 
-		<Button Grid.Column="0"
-				Style="{StaticResource GlyphButtonStyle4}"
-				Visibility="{Binding AnyEditedTerms, Converter={StaticResource BoolToVis}}"
-				Command="{Binding CommitAllToDatabaseCommand}"
-				VerticalAlignment="Bottom"
-				HorizontalAlignment="Left"
-				FontSize="13"
-				FontWeight="Black"
-				ToolTip="Commit all changes to the database"
-				Content="🗄️" />
+			<Button Grid.Column="0"
+					Style="{StaticResource GlyphButtonStyle4}"
+					Visibility="{Binding AnyEditedTerms, Converter={StaticResource BoolToVis}}"
+					Command="{Binding CommitAllToDatabaseCommand}"
+					VerticalAlignment="Bottom"
+					Click="SaveEdit_Button_OnClick"
+					HorizontalAlignment="Left"
+					FontSize="13"
+					FontWeight="Black"
+					ToolTip="Commit all changes to the database"
+					Content="🗄️" />
+		</Grid>
 
 		<Grid Name="TermPart_Grid"
-		      Margin="0"
-		      Background="White"
-		      Grid.Column="1">
+			  Margin="0"
+			  Background="White"
+			  Grid.Column="1">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="*" />
@@ -223,11 +228,29 @@
 				<Button Content="↶"
 						Name="RevertChanges_Button"
 						FontSize="15"
-						Command="{Binding SelectedItem.RevertCommand}"
-						Visibility="{Binding SelectedItem.Edited, Mode=TwoWay, Converter={StaticResource BoolToVis}, NotifyOnSourceUpdated=True}"
+						Command="{Binding RevertCommand}"
 						FontWeight="Bold"
-						ToolTip="Revert"
-						Style="{StaticResource GlyphButtonStyle}" />
+						ToolTip="Undo">
+					<Button.Style>
+						<Style TargetType="Button"
+							   BasedOn="{StaticResource GlyphButtonStyle}">
+							<Setter Property="Visibility"
+									Value="Collapsed" />
+							<Style.Triggers>
+								<MultiDataTrigger>
+									<MultiDataTrigger.Conditions>
+										<Condition Binding="{Binding SelectedItem.Edited}"
+												   Value="True" />
+										<Condition Binding="{Binding SelectedItem.IsEditing}"
+												   Value="False" />
+									</MultiDataTrigger.Conditions>
+									<Setter Property="Visibility"
+											Value="Visible" />
+								</MultiDataTrigger>
+							</Style.Triggers>
+						</Style>
+					</Button.Style>
+				</Button>
 
 				<StackPanel Orientation="Horizontal"
 							DockPanel.Dock="Right"
@@ -247,7 +270,7 @@
 					<Button DockPanel.Dock="Right"
 							Foreground="Red"
 							ToolTip="Discard changes"
-							Command="{Binding SelectedItem.RevertCommand}"
+							Command="{Binding RevertCommand}"
 							Name="DiscardEdits_Button"
 							Click="SaveEdit_Button_OnClick"
 							Style="{StaticResource GlyphButtonStyle}"

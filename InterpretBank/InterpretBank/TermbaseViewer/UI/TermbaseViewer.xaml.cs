@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using InterpretBank.Commands;
 using InterpretBank.TermbaseViewer.Model;
+using InterpretBank.TermbaseViewer.ViewModel;
 
 namespace InterpretBank.TermbaseViewer.UI
 {
@@ -21,7 +22,7 @@ namespace InterpretBank.TermbaseViewer.UI
 			if (!bool.TryParse(parameter.ToString(), out var editing))
 			{
 				editing = false;
-				((TermModel)Term_ListBox.SelectedItem).RevertCommand.Execute(null);
+				((TermbaseViewerViewModel)DataContext).RevertCommand.Execute(null);
 			}
 			
 			SetEditing(editing);
