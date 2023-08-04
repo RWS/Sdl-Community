@@ -93,7 +93,7 @@
 
 			<Button Grid.Column="0"
 					Style="{StaticResource GlyphButtonStyle3}"
-					Command="{Binding AddNewTermCommand}"
+					Click="AddNewTermButton_Click"
 					VerticalAlignment="Bottom"
 					HorizontalAlignment="Right"
 					ToolTip="Add new term"
@@ -161,6 +161,7 @@
 												Margin="0 2 0 0"
 												x:Name="SourceTermComment2_EditableTextBlock" />
 				</StackPanel>
+
 			</DockPanel>
 
 			<DockPanel Name="TargetTerm_DockPanel"

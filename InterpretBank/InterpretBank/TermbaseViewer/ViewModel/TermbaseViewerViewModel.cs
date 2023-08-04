@@ -60,7 +60,8 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 				if (value == _selectedIndex) return;
 				_selectedIndex = value;
 
-				SelectedItem = Terms[value == -1 ? 0 : value];
+				//SelectedItem = Terms[value == -1 ? 0 : value];
+				SelectedItem = value == -1 ? null : Terms[value];
 
 				OnPropertyChanged();
 			}
@@ -114,7 +115,10 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
 		private void AddNewTerm(object obj)
 		{
-			var termModel = new TermModel();
+			var termModel = new TermModel
+			{
+				IsEditing = true
+			};
 
 			Terms.Add(termModel);
 			termModel.SetOriginalTerm();
@@ -135,9 +139,9 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 			if (SelectedItem.Id == -1)
 			{
 				var selectedItem = SelectedItem;
-				SelectedItem = Terms.FirstOrDefault();
-
 				Terms.Remove(selectedItem);
+
+				SelectedIndex = Terms.Any() ? Terms.Count - 1: -1;
 			}
 			else
 				SelectedItem.Revert();

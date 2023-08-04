@@ -1,8 +1,5 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Windows.Media;
-using TextBox = System.Windows.Controls.TextBox;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace InterpretBank.TermbaseViewer.UI.Controls
@@ -14,13 +11,6 @@ namespace InterpretBank.TermbaseViewer.UI.Controls
 	{
 		public static readonly DependencyProperty IsEditingProperty =
 			DependencyProperty.Register(nameof(IsEditing), typeof(bool), typeof(EditableTextBlock), new PropertyMetadata(false, OnIsEditingPropertyChanged));
-
-		private static void OnIsEditingPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-		{
-			var control = (EditableTextBlock)d;
-			control.SetEditing();
-		}
-
 
 		public static readonly DependencyProperty TextProperty =
 					DependencyProperty.Register(nameof(Text), typeof(string), typeof(EditableTextBlock), new PropertyMetadata(""));
@@ -45,18 +35,10 @@ namespace InterpretBank.TermbaseViewer.UI.Controls
 			set { SetValue(TextProperty, value); }
 		}
 
-		private void SetEditing()
+		private static void OnIsEditingPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			if (IsEditing)
-			{
-				EditBox.Visibility = Visibility.Visible;
-				TextBlock.Visibility = Visibility.Collapsed;
-			}
-			else
-			{
-				EditBox.Visibility = Visibility.Collapsed;
-				TextBlock.Visibility = Visibility.Visible;
-			}
+			var control = (EditableTextBlock)d;
+			control.SetEditing();
 		}
 
 		private void EditBox_OnGotFocus(object sender, RoutedEventArgs e)
@@ -69,6 +51,20 @@ namespace InterpretBank.TermbaseViewer.UI.Controls
 		private void EditBox_OnLostFocus(object sender, RoutedEventArgs e)
 		{
 			EditBox.Background = new SolidColorBrush(Colors.Transparent);
+		}
+
+		private void SetEditing()
+		{
+			if (IsEditing)
+			{
+				EditBox.Visibility = Visibility.Visible;
+				TextBlock.Visibility = Visibility.Collapsed;
+			}
+			else
+			{
+				EditBox.Visibility = Visibility.Collapsed;
+				TextBlock.Visibility = Visibility.Visible;
+			}
 		}
 	}
 }
