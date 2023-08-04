@@ -64,7 +64,7 @@
 					 Margin="0"
 					 BorderThickness="0"
 					 ItemsSource="{Binding Terms}"
-					 SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+					 SelectedIndex="{Binding SelectedIndex}">
 				<ListBox.ItemTemplate>
 					<DataTemplate DataType="{x:Type model:TermModel}">
 

@@ -17,6 +17,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 		private TermModel _selectedItem;
 
 		private ObservableCollection<TermModel> _terms;
+		private int _selectedIndex;
 
 		public TermbaseViewerViewModel(ITerminologyService termSearchService)
 		{
@@ -47,6 +48,20 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 			{
 				if (SetField(ref _terms, value))
 					OnPropertyChanged(nameof(AnyEditedTerms));
+			}
+		}
+
+		public int SelectedIndex
+		{
+			get => _selectedIndex;
+			set
+			{
+				if (value == _selectedIndex) return;
+				_selectedIndex = value;
+
+				SelectedItem = Terms[value];
+
+				OnPropertyChanged();
 			}
 		}
 

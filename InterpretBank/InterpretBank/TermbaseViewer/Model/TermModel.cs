@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.Entity.Core.Metadata.Edm;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
@@ -48,7 +49,7 @@ namespace InterpretBank.TermbaseViewer.Model
 			set => SetField(ref _commentAll, value);
 		}
 
-		public bool Edited => !Equals(OriginalTerm);
+		public bool Edited => !ContentEquals(OriginalTerm);
 
 		public long Id { get; set; }
 
@@ -114,44 +115,45 @@ namespace InterpretBank.TermbaseViewer.Model
 
 		private TermModel OriginalTerm { get; set; }
 
-		public override bool Equals(object other)
+		public bool ContentEquals(TermModel other)
 		{
-			var termModel = other as TermModel;
-			if (termModel is null) return false;
-
-			return _commentAll == termModel._commentAll && _sourceTerm == termModel._sourceTerm && _sourceTermComment1 == termModel._sourceTermComment1 && _sourceTermComment2 == termModel._sourceTermComment2 && _targetTerm == termModel._targetTerm && _targetTermComment1 == termModel._targetTermComment1 && _targetTermComment2 == termModel._targetTermComment2;
+			return _commentAll == other._commentAll && _sourceTerm == other._sourceTerm && _sourceTermComment1 == other._sourceTermComment1 && _sourceTermComment2 == other._sourceTermComment2 && _targetTerm == other._targetTerm && _targetTermComment1 == other._targetTermComment1 && _targetTermComment2 == other._targetTermComment2;
 		}
 
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				var hashCode = (_commentAll != null ? _commentAll.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (_sourceTerm != null ? _sourceTerm.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (_sourceTermComment1 != null ? _sourceTermComment1.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (_sourceTermComment2 != null ? _sourceTermComment2.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (_targetTerm != null ? _targetTerm.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (_targetTermComment1 != null ? _targetTermComment1.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (_targetTermComment2 != null ? _targetTermComment2.GetHashCode() : 0);
-				return hashCode;
-			}
-		}
+		//public override bool Equals(object other)
+		//{
+		//	var termModel = other as TermModel;
+		//	if (termModel is null) return false;
+
+		//	return _commentAll == termModel._commentAll && _sourceTerm == termModel._sourceTerm && _sourceTermComment1 == termModel._sourceTermComment1 && _sourceTermComment2 == termModel._sourceTermComment2 && _targetTerm == termModel._targetTerm && _targetTermComment1 == termModel._targetTermComment1 && _targetTermComment2 == termModel._targetTermComment2;
+		//}
+
+		//public override int GetHashCode()
+		//{
+		//	unchecked
+		//	{
+		//		var hashCode = (_commentAll != null ? _commentAll.GetHashCode() : 0);
+		//		hashCode = (hashCode * 397) ^ (_sourceTerm != null ? _sourceTerm.GetHashCode() : 0);
+		//		hashCode = (hashCode * 397) ^ (_sourceTermComment1 != null ? _sourceTermComment1.GetHashCode() : 0);
+		//		hashCode = (hashCode * 397) ^ (_sourceTermComment2 != null ? _sourceTermComment2.GetHashCode() : 0);
+		//		hashCode = (hashCode * 397) ^ (_targetTerm != null ? _targetTerm.GetHashCode() : 0);
+		//		hashCode = (hashCode * 397) ^ (_targetTermComment1 != null ? _targetTermComment1.GetHashCode() : 0);
+		//		hashCode = (hashCode * 397) ^ (_targetTermComment2 != null ? _targetTermComment2.GetHashCode() : 0);
+		//		return hashCode;
+		//	}
+		//}
 
 		public void Revert()
 		{
 			if (OriginalTerm == null)
 				return;
-
 			SourceTerm = OriginalTerm.SourceTerm;
 			SourceTermComment1 = OriginalTerm.SourceTermComment1;
 			SourceTermComment2 = OriginalTerm.SourceTermComment2;
-
 			TargetTerm = OriginalTerm.TargetTerm;
 			TargetTermComment1 = OriginalTerm.TargetTermComment1;
 			TargetTermComment2 = OriginalTerm.TargetTermComment2;
-
 			CommentAll = OriginalTerm.CommentAll;
-
 			OnPropertyChanged(nameof(Edited));
 		}
 
