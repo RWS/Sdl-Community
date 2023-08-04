@@ -21,7 +21,7 @@
 					CommandParameter="False"
 					Command="{Binding SetEditingFromKeyboardCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
 		<KeyBinding Key="Escape"
-					CommandParameter="Reverse"
+					CommandParameter="Revert"
 					Command="{Binding SetEditingFromKeyboardCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
 	</UserControl.InputBindings>
 	<UserControl.Resources>
