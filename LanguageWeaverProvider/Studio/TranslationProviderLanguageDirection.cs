@@ -61,12 +61,13 @@ namespace LanguageWeaverProvider
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
 		{
 			var searchResults = new SearchResults { SourceSegment = segment.Duplicate() };
-			var source = searchResults.SourceSegment.ToString();
 			var cloudService = new CloudService();
 
 			var xliff = CreateXliffFile(segment);
-			var translation = cloudService.Translate(_translationOptions.CloudCredentials, xliff.ToString()).Result;
-			var newSegment = segment.Duplicate();
+			var translation = cloudService.Translate(_translationOptions.CloudCredentials, xliff).Result;
+			var translatedSegment = translation.GetTargetSegments();
+
+			searchResults.Add(CreateSearchResult(segment, translatedSegment[0].Segment));
 			return searchResults;
 		}
 
@@ -74,8 +75,8 @@ namespace LanguageWeaverProvider
 		{
 			var file = new File
 			{
-				SourceCulture = new CultureInfo("en-GB"),
-				TargetCulture = new CultureInfo("ro-RO")
+				SourceCulture = _languagePair.SourceCulture,
+				TargetCulture = _languagePair.TargetCulture
 			};
 
 			var xliffDocument = new Xliff

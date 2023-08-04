@@ -49,39 +49,38 @@ namespace LanguageWeaverProvider.NewFolder
 			}
 		}
 
-		public async Task<(string Response, bool Success)> Translate(CloudCredentials cloudCredentials, string text)
+		public async Task<Xliff> Translate(CloudCredentials cloudCredentials, Xliff sourceXliff)
 		{
 			_httpClient = new();
 			try
 			{
-				var translationRequestResponse = await SendTranslationRequest(cloudCredentials, text);
+				var translationRequestResponse = await SendTranslationRequest(cloudCredentials, sourceXliff);
 				var translationRequest = JsonConvert.DeserializeObject<TranslationRequest>(translationRequestResponse);
 
 				var translationStatusReponse = await GetTranslationStatus(cloudCredentials, translationRequest.RequestId);
 				var translationStatus = JsonConvert.DeserializeObject<TranslationStatus>(translationStatusReponse);
 				while (translationStatus.Status != "DONE")
 				{
-					Thread.Sleep(300);
+					if (translationStatus.Status == "FAILED")
+					{
+						return null;
+					}
+
+					Thread.Sleep(500);
 					translationStatusReponse = await GetTranslationStatus(cloudCredentials, translationRequest.RequestId);
 					translationStatus = JsonConvert.DeserializeObject<TranslationStatus>(translationStatusReponse);
-				}
-
-				if (translationStatus.Status == "FAILED")
-				{
-					return (null, false);
 				}
 
 				var translationResponse = await GetTranslation(cloudCredentials, translationRequest.RequestId);
 				var translation = JsonConvert.DeserializeObject<TranslationResponse>(translationResponse);
 
 				var translatedSegment = translation.Translation.First();
-
-				var x = Converter.ParseXliffString(translatedSegment);
-				return (translation.Translation[0], true);
+				var translatedXliffSegment = Converter.ParseXliffString(translatedSegment);
+				return translatedXliffSegment;
 			}
 			catch
 			{
-				return (null, false);
+				return null;
 			}
 		}
 
@@ -100,17 +99,19 @@ namespace LanguageWeaverProvider.NewFolder
 			return await response.Content.ReadAsStringAsync();
 		}
 
-		private async Task<string> SendTranslationRequest(CloudCredentials cloudCredentials, string text)
+		private async Task<string> SendTranslationRequest(CloudCredentials cloudCredentials, Xliff sourceXliff)
 		{
 			_httpClient = new();
+
+			var sourceXliffText = sourceXliff.ToString();
 			var translationData = new
 			{
-				sourceLanguageId = "eng",
-				targetLanguageId = "rum",
-				submissionType = "text",
+				sourceLanguageId = sourceXliff.File.SourceCulture.ThreeLetterISOLanguageName,
+				targetLanguageId = sourceXliff.File.TargetCulture.ThreeLetterISOLanguageName,
+				submissionType = "text", 
 				model = "generic",
-				inputFormat = "plain",
-				input = new[] { text },
+				inputFormat = "xliff",
+				input = new[] { sourceXliffText },
 				dictionaries = new object[] { }
 			};
 
