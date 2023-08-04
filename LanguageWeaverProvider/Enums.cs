@@ -2,15 +2,18 @@
 {
 	public enum PluginVersion
 	{
-		LanguageWeaver,
+		None,
+		LanguageWeaverCloud,
 		LanguageWeaverEdge
 	}
 
 	public enum AuthenticationType
 	{
 		None,
-		Credentials,
-		Secret
+		CloudCredentials,
+		CloudSecret,
+		EdgeCredentials,
+		EdgeApiKey
 	}
 
 	public enum Parameters

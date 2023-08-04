@@ -3,13 +3,16 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:root="clr-namespace:LanguageWeaverProvider"
 		xmlns:style="clr-namespace:LanguageWeaverProvider.Style"
-		xmlns:viewModel="clr-namespace:LanguageWeaverProvider.ViewModel"
+		xmlns:local="clr-namespace:LanguageWeaverProvider.ViewModel"
+		xmlns:edgeView="clr-namespace:LanguageWeaverProvider.View.Edge"
 		xmlns:cloudView="clr-namespace:LanguageWeaverProvider.View.Cloud"
+		xmlns:edgeViewModel="clr-namespace:LanguageWeaverProvider.ViewModel.Edge"
 		xmlns:cloudViewModel="clr-namespace:LanguageWeaverProvider.ViewModel.Cloud"
 		xmlns:converters="clr-namespace:LanguageWeaverProvider.Converters"
 		mc:Ignorable="d"
-		d:DataContext="{d:DesignInstance viewModel:MainViewModel}"
+		d:DataContext="{d:DesignInstance local:MainViewModel}"
 		WindowStartupLocation="CenterScreen"
 		Title="Language Weaver Provider"
 		ResizeMode="CanResize"
@@ -22,10 +25,10 @@
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="../Style/GroupBox.xaml" />
-				<ResourceDictionary Source="../Style/WindowsBorder.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBoxResources.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/LanguageWeaverProvider;component/Style/GroupBox.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/LanguageWeaverProvider;component/Style/WindowsBorder.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 
 			<Style TargetType="Image">
@@ -37,6 +40,10 @@
 
 			<DataTemplate DataType="{x:Type cloudViewModel:CloudCredentialsViewModel}">
 				<cloudView:CloudCredentialsView />
+			</DataTemplate>
+
+			<DataTemplate DataType="{x:Type edgeViewModel:EdgeCredentialsViewModel}">
+				<edgeView:EdgeCredentialsView />
 			</DataTemplate>
 		</ResourceDictionary>
 	</Window.Resources>

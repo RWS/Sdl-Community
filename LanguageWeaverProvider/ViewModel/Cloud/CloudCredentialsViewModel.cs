@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Model;
-using LanguageWeaverProvider.Model.Options.Interface;
+using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.NewFolder;
 using LanguageWeaverProvider.ViewModel.Interface;
 using Newtonsoft.Json;
@@ -11,6 +11,8 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 {
 	public class CloudCredentialsViewModel : BaseViewModel, ICredentialsViewModel
 	{
+		private readonly CloudService _cloudService = new();
+
 		private AuthenticationType _authenticationType;
 
 		private string _userId;
@@ -38,8 +40,8 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				_authenticationType = value;
 				OnPropertyChanged();
 				OnPropertyChanged(nameof(IsAuthenticationTypeSelected));
-				IsCredentialsSelected = value == AuthenticationType.Credentials;
-				IsSecretSelected = value == AuthenticationType.Secret;
+				IsCredentialsSelected = value == AuthenticationType.CloudCredentials;
+				IsSecretSelected = value == AuthenticationType.CloudSecret;
 			}
 		}
 
@@ -111,22 +113,24 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			}
 		}
 
-		public ICommand SelectAuthenticationTypeCommand { get; private set; }
-
-		public ICommand SignInCommand { get; private set; }
+		public ICommand BackCommand { get; private set; }
 
 		public ICommand ClearCommand { get; private set; }
 
-		public ICommand BackCommand { get; private set; }
+		public ICommand SignInCommand { get; private set; }
+
+		public ICommand SelectAuthenticationTypeCommand { get; private set; }
 
 		public event EventHandler CloseRequested;
 
+		public void CloseWindow() => CloseRequested?.Invoke(this, EventArgs.Empty);
+
 		private void InitializeCommands()
 		{
-			SelectAuthenticationTypeCommand = new RelayCommand(SelectAuthenticationType);
-			SignInCommand = new RelayCommand(SignIn);
-			ClearCommand = new RelayCommand(Clear);
 			BackCommand = new RelayCommand(Back);
+			ClearCommand = new RelayCommand(Clear);
+			SignInCommand = new RelayCommand(SignIn);
+			SelectAuthenticationTypeCommand = new RelayCommand(SelectAuthenticationType);
 		}
 
 		private void SelectAuthenticationType(object parameter)
@@ -155,15 +159,15 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				ClientSecret = _clientSecret
 			};
 
-			var (response, success) = await CloudService.AuthenticateUser(cloudCredentials, AuthenticationType);
+			var success = await _cloudService.AuthenticateUser(cloudCredentials, AuthenticationType);
 			if (!success)
 			{
 				// TO DO: Implement error/bad request/exceptions handling
 				return;
 			}
 
-			cloudCredentials.AccessToken = JsonConvert.DeserializeObject<AccessToken>(response);
 			TranslationOptions.CloudCredentials = cloudCredentials;
+			TranslationOptions.AuthenticationType = _authenticationType;
 			CloseWindow();
 		}
 
@@ -206,11 +210,6 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 		private void Back(object parameter)
 		{
 			AuthenticationType = AuthenticationType.None;
-		}
-
-		private void CloseWindow()
-		{
-			CloseRequested?.Invoke(this, EventArgs.Empty);
 		}
 	}
 }

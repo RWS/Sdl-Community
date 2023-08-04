@@ -1,6 +1,6 @@
 ﻿using System;
+using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
-using LanguageWeaverProvider.Model.Options.Interface;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -14,27 +14,44 @@ namespace LanguageWeaverProvider
 			TranslationOptions = options;
 		}
 
+		public string Name => Constants.PluginName;
+
 		public ITranslationOptions TranslationOptions { get; set; }
 
 		public TranslationMethod TranslationMethod => TranslationMethod.MachineTranslation;
-		public string Name => Constants.PluginName;
 
 		public bool SupportsSearchForTranslationUnits => true;
+		
 		public bool SupportsTaggedInput => true;
+		
 		public bool SupportsTranslation => true;
+		
 		public bool SupportsPenalties => true;
+		
 		public bool SupportsScoring => true;
+		
 		public bool IsReadOnly => true;
+		
 		public bool SupportsConcordanceSearch => false;
+		
 		public bool SupportsDocumentSearches => false;
+		
 		public bool SupportsSourceConcordanceSearch => false;
+		
 		public bool SupportsTargetConcordanceSearch => false;
+		
 		public bool SupportsStructureContext => false;
+		
 		public bool SupportsMultipleResults => false;
+		
 		public bool SupportsFuzzySearch => false;
+		
 		public bool SupportsPlaceables => false;
+		
 		public bool SupportsWordCounts => false;
+		
 		public bool SupportsFilters => false;
+		
 		public bool SupportsUpdate => false;
 
 		public ProviderStatusInfo StatusInfo => new(true, Constants.PluginName);
@@ -57,7 +74,7 @@ namespace LanguageWeaverProvider
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
 		{
-			return new TranslationProviderLanguageDirection();
+			return new TranslationProviderLanguageDirection(this, TranslationOptions, languageDirection);
 		}
 
 		public void RefreshStatusInfo() { }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
+using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
-using LanguageWeaverProvider.Model.Options.Interface;
 using LanguageWeaverProvider.View;
 using LanguageWeaverProvider.ViewModel;
 using Sdl.LanguagePlatform.Core;

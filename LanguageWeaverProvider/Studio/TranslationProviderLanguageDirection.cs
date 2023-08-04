@@ -1,4 +1,6 @@
 ﻿using System;
+using LanguageWeaverProvider.Model.Interface;
+using LanguageWeaverProvider.NewFolder;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
@@ -6,8 +8,27 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace LanguageWeaverProvider
 {
-	internal class TranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
+	public class TranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
 	{
+		private readonly ITranslationOptions _translationOptions;
+		private readonly LanguagePair _languagePair;
+		private TranslationUnit _currentTranslationUnit;
+
+		public TranslationProviderLanguageDirection(ITranslationProvider translationProvider, ITranslationOptions translationOptions, LanguagePair languagePair)
+		{
+			TranslationProvider = translationProvider;
+			_translationOptions = translationOptions;
+			_languagePair = languagePair;
+		}
+
+		public ITranslationProvider TranslationProvider { get; private set; }
+
+		public CultureCode SourceLanguage => _languagePair.SourceCulture;
+
+		public CultureCode TargetLanguage => _languagePair.TargetCulture;
+
+		public bool CanReverseLanguageDirection => false;
+
 		public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
 		{
 			throw new NotImplementedException();
@@ -33,19 +54,25 @@ namespace LanguageWeaverProvider
 			throw new NotImplementedException();
 		}
 
-		public bool CanReverseLanguageDirection
-		{
-			get { throw new NotImplementedException(); }
-		}
-
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
 		{
-			throw new NotImplementedException();
+			var searchResults = new SearchResults { SourceSegment = segment.Duplicate() };
+			var source = searchResults.SourceSegment.ToString();
+			var cloudService = new CloudService();
+			var translation = cloudService.Translate(_translationOptions.CloudCredentials, source).Result;
+			var newSegment = segment.Duplicate();
+			return searchResults;
 		}
 
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
 		{
-			throw new NotImplementedException();
+			var searchResults = new SearchResults[segments.Length];
+			for (var i = 0; i < segments.Length; ++i)
+			{
+				searchResults[i] = SearchSegment(settings, segments[i]);
+			}
+
+			return searchResults;
 		}
 
 		public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
@@ -60,7 +87,8 @@ namespace LanguageWeaverProvider
 
 		public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
 		{
-			throw new NotImplementedException();
+			_currentTranslationUnit = translationUnit;
+			return SearchSegment(settings, translationUnit.SourceSegment);
 		}
 
 		public SearchResults[] SearchTranslationUnits(SearchSettings settings, TranslationUnit[] translationUnits)
@@ -70,17 +98,16 @@ namespace LanguageWeaverProvider
 
 		public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
 		{
-			throw new NotImplementedException();
+			var searchResults = new SearchResults[mask.Length];
+			for (var i = 0; i < translationUnits.Length; i++)
+			{
+				searchResults[i] = mask[i] ? SearchTranslationUnit(settings, translationUnits[i])
+										   : null;
+			}
+
+			return searchResults;
 		}
 
-		public ITranslationProvider TranslationProvider
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public CultureCode SourceLanguage => throw new NotImplementedException();
-
-		public CultureCode TargetLanguage => throw new NotImplementedException();
 
 		public ImportResult UpdateTranslationUnit(TranslationUnit translationUnit)
 		{
@@ -90,6 +117,24 @@ namespace LanguageWeaverProvider
 		public ImportResult[] UpdateTranslationUnits(TranslationUnit[] translationUnits)
 		{
 			throw new NotImplementedException();
+		}
+
+		private SearchResult CreateSearchResult(Segment searchSegment, Segment translation)
+		{
+			var translationUnit = new TranslationUnit
+			{
+				ConfirmationLevel = ConfirmationLevel.Draft,
+				Origin = TranslationUnitOrigin.Nmt,
+				SourceSegment = searchSegment.Duplicate(),
+				TargetSegment = translation
+			};
+
+			translationUnit.ResourceId = new PersistentObjectToken(translationUnit.GetHashCode(), Guid.Empty);
+			return new SearchResult(translationUnit)
+			{
+				ScoringResult = new ScoringResult { BaseScore = 0 },
+				TranslationProposal = new TranslationUnit(translationUnit)
+			};
 		}
 	}
 }

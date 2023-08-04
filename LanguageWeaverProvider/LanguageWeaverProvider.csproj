@@ -115,8 +115,4 @@
 	    <DependentUpon>PluginResources.resx</DependentUpon>
 	  </Compile>
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="View\Edge\" />
-	</ItemGroup>
 </Project>

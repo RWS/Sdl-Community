@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Windows.Input;
 using LanguageWeaverProvider.Command;
-using LanguageWeaverProvider.Model.Options.Interface;
+using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.ViewModel.Cloud;
+using LanguageWeaverProvider.ViewModel.Edge;
 using LanguageWeaverProvider.ViewModel.Interface;
 
 namespace LanguageWeaverProvider.ViewModel
@@ -87,12 +88,14 @@ namespace LanguageWeaverProvider.ViewModel
 
 			IsCloudSelected = requestedService == "Cloud";
 			IsEdgeSelected = requestedService == "Edge";
-			var selectedViewModel = IsCloudSelected ? new CloudCredentialsViewModel(TranslationOptions) : null;
-			selectedViewModel.CloseRequested += CloseSecondaryViewRequested;
+			var selectedViewModel = IsCloudSelected
+								  ? (ICredentialsViewModel)new CloudCredentialsViewModel(TranslationOptions)
+								  : (ICredentialsViewModel)new EdgeCredentialsViewModel(TranslationOptions);
+			selectedViewModel.CloseRequested += CloseCredentialsViewRequest;
 			ProviderView = selectedViewModel;
 		}
 
-		private void CloseSecondaryViewRequested(object sender, EventArgs e)
+		private void CloseCredentialsViewRequest(object sender, EventArgs e)
 		{
 			ProviderView = null;
 			SaveChanges = true;
