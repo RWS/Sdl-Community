@@ -22,18 +22,24 @@ namespace InterpretBank.TermbaseViewer.Model
 			Id = -1;
 		}
 
-		public TermModel(long id, string targetTerm, string targetTermComment1, string targetTermComment2, string sourceTerm, string sourceTermComment1, string sourceTermComment2, string commentAll, int sourceLanguageIndex, int targetLanguageIndex)
+		public TermModel(long id, string targetTerm, string targetTermComment1, string targetTermComment2, string sourceTerm, string sourceTermComment1, string sourceTermComment2, string commentAll, int sourceLanguageIndex, int targetLanguageIndex, string glossaryName)
 		{
 			Id = id;
+
 			_targetTerm = targetTerm;
 			_targetTermComment1 = targetTermComment1;
 			_targetTermComment2 = targetTermComment2;
+
 			_sourceTerm = sourceTerm;
 			_sourceTermComment1 = sourceTermComment1;
 			_sourceTermComment2 = sourceTermComment2;
+
 			_commentAll = commentAll;
+
 			_sourceLanguageIndex = sourceLanguageIndex;
 			_targetLanguageIndex = targetLanguageIndex;
+
+			GlossaryName = glossaryName;
 
 			SetOriginalTerm();
 		}
@@ -47,7 +53,7 @@ namespace InterpretBank.TermbaseViewer.Model
 		}
 
 		public bool Edited => !ContentEquals(OriginalTerm);
-
+		public string GlossaryName { get; set; }
 		public long Id { get; set; }
 
 		public bool IsEditing

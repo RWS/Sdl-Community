@@ -4,16 +4,9 @@ using System.Collections.ObjectModel;
 using System.Data.Linq;
 using System.Data.SQLite;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text.RegularExpressions;
-using DocumentFormat.OpenXml.Drawing.Charts;
-using DocumentFormat.OpenXml.Wordprocessing;
-using InterpretBank.Constants;
-using InterpretBank.Extensions;
 using InterpretBank.GlossaryService.DAL;
 using InterpretBank.GlossaryService.DAL.Interface;
 using InterpretBank.GlossaryService.Interface;
-using InterpretBank.Model;
 using InterpretBank.SettingsService.Model;
 using InterpretBank.TermbaseViewer.Model;
 
@@ -21,24 +14,64 @@ namespace InterpretBank.GlossaryService;
 
 public class InterpretBankDataContext : IInterpretBankDataContext
 {
-	public SQLiteConnection SqLiteConnection { get; set; }
-
+	public InterpretBankDataContext()
+	{
+		Id = new Random().Next(100);
+	}
 
 	//TODO: Delete this; only used for debugging
 	public int Id { get; set; }
 
+	public SQLiteConnection SqLiteConnection { get; set; }
 	private DataContext DataContext { get; set; }
 
-
-	public InterpretBankDataContext()
+	public void AddLanguageToGlossary(LanguageModel newLanguage, string glossaryName)
 	{
-		Id = new Random().Next(100);
+		var glossary = GetTable<DbGlossary>().ToList().FirstOrDefault(g => g.Tag1 == glossaryName);
+		var glossarySetting = glossary.GlossarySetting;
+		var indexToReplace = glossarySetting.IndexOf("0");
+
+		if (indexToReplace == -1)
+			return;
+
+		glossary.GlossarySetting = glossarySetting.Substring(0, indexToReplace) + newLanguage.Index +
+								   glossarySetting.Substring(indexToReplace + 0.ToString().Length);
+	}
+
+	public void CommitAllChanges(IEnumerable<TermModel> changedTerms)
+	{
+		var addedTerms = changedTerms.Where(t => t.Id == -1).ToList();
+		var updatedTerms = changedTerms.Except(addedTerms).ToList();
+
+		AddTerms(addedTerms);
+		UpdateTerms(updatedTerms);
+
+		SubmitData();
 	}
 
 	public void Dispose()
 	{
 		DataContext?.Dispose();
 		SqLiteConnection?.Dispose();
+	}
+
+	public List<LanguageModel> GetDbLanguages()
+	{
+		var dbInfo = GetRows<DatabaseInfo>().ToList()[0];
+		var dbInfoProperties = dbInfo.GetType().GetProperties();
+
+		var languages = dbInfoProperties
+			.Where(prop => prop.Name.Contains("LanguageName"))
+			.Select(prop =>
+				new LanguageModel
+				{
+					Name = prop.GetValue(dbInfo).ToString(),
+					Index = int.Parse(prop.Name.Substring(12))
+				})
+			.ToList();
+
+		languages.RemoveAll(l => l.Name is null or "undef");
+		return languages;
 	}
 
 	public List<GlossaryModel> GetGlossaries()
@@ -66,121 +99,12 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 		return glossaries;
 	}
 
-	public void InsertLanguage(LanguageModel language)
-	{
-		var dbInfo = GetTable<DatabaseInfo>().ToList()[0];
-		var dbInfoProperties = dbInfo.GetType().GetProperties().Where(p => p.Name.Contains("LanguageName"));
-		dbInfoProperties
-			.FirstOrDefault(p => int.Parse(p.Name.Substring(12)) == language.Index)?
-			.SetValue(dbInfo, language.Name);
-	}
-
-	public void TagGlossary(TagModel newTag, string glossaryName)
-	{
-		var glossaryId = GetTable<DbGlossary>().ToList().FirstOrDefault(g => g.Tag1 == glossaryName)?.Id;
-		var tagId = GetTable<DbTag>().ToList().FirstOrDefault(t => t.TagName == newTag.TagName)?.TagId;
-		var tagLinks = GetTable<DbTagLink>();
-
-		if (tagId is null || glossaryId is null)
-			return;
-
-		var maxId = tagLinks.Select(tl => tl.TagId).Max();
-		tagLinks.InsertOnSubmit(new DbTagLink
-		{
-			GlossaryId = glossaryId.Value,
-			TagName = newTag.TagName,
-			TagId = ++maxId
-		});
-	}
-
-	public void AddLanguageToGlossary(LanguageModel newLanguage, string glossaryName)
-	{
-		var glossary = GetTable<DbGlossary>().ToList().FirstOrDefault(g => g.Tag1 == glossaryName);
-		var glossarySetting = glossary.GlossarySetting;
-		var indexToReplace = glossarySetting.IndexOf("0");
-
-		if (indexToReplace == -1)
-			return;
-
-		glossary.GlossarySetting = glossarySetting.Substring(0, indexToReplace) + newLanguage.Index +
-		                           glossarySetting.Substring(indexToReplace + 0.ToString().Length);
-	}
-
 	public List<LanguageModel> GetGlossaryLanguages(string glossaryName)
 	{
 		var dbGlossary = DataContext.GetTable<DbGlossary>().ToList().FirstOrDefault(g => g.Tag1 == glossaryName);
 		var settings = dbGlossary.GlossarySetting;
 
 		return GetLanguageNames(settings);
-	}
-
-	public void CommitAllChanges(IEnumerable<TermModel> changedTerms)
-	{
-		var addedTerms = changedTerms.Where(t => t.Id == -1).ToList();
-		var updatedTerms = changedTerms.Except(addedTerms).ToList();
-
-		AddTerms(addedTerms);
-		UpdateTerms(updatedTerms);
-
-		SubmitData();
-	}
-
-	private void AddTerms(List<TermModel> newTerms)
-	{
-		var dbTerms = DataContext.GetTable<DbTerm>();
-
-		newTerms.ForEach(t => dbTerms.InsertOnSubmit(new DbTerm
-		{
-			[$"Term{t.SourceLanguageIndex}"] = t.SourceTerm,
-			[$"Comment{t.SourceLanguageIndex}a"] = t.SourceTermComment1,
-			[$"Comment{t.SourceLanguageIndex}b"] = t.SourceTermComment2,
-
-			[$"Term{t.TargetLanguageIndex}"] = t.TargetTerm,
-			[$"Comment{t.TargetLanguageIndex}a"] = t.TargetTermComment1,
-			[$"Comment{t.TargetLanguageIndex}b"] = t.TargetTermComment2,
-
-			["CommentAll"] = t.CommentAll,
-		}));
-	}
-
-	public void UpdateTerms(List<TermModel> terms)
-	{
-		var termsIds = terms.Select(t => t.Id).ToList();
-		var dbTerms = DataContext.GetTable<DbTerm>().ToList().Where(t => termsIds.Contains(t.Id));
-
-		foreach (var term in terms)
-		{
-			var dbTerm = dbTerms.FirstOrDefault(t => t.Id == term.Id);
-
-			dbTerm[$"Term{term.SourceLanguageIndex}"] = term.SourceTerm;
-			dbTerm[$"Comment{term.SourceLanguageIndex}a"] = term.SourceTermComment1;
-			dbTerm[$"Comment{term.SourceLanguageIndex}b"] = term.SourceTermComment2;
-
-			dbTerm[$"Term{term.TargetLanguageIndex}"] = term.TargetTerm;
-			dbTerm[$"Comment{term.TargetLanguageIndex}a"] = term.TargetTermComment1;
-			dbTerm[$"Comment{term.TargetLanguageIndex}b"] = term.TargetTermComment2;
-
-			dbTerm["CommentAll"] = term.CommentAll;
-		}
-	}
-
-	public List<LanguageModel> GetDbLanguages()
-	{
-		var dbInfo = GetRows<DatabaseInfo>().ToList()[0];
-		var dbInfoProperties = dbInfo.GetType().GetProperties();
-
-		var languages = dbInfoProperties
-			.Where(prop => prop.Name.Contains("LanguageName"))
-			.Select(prop =>
-				new LanguageModel
-				{
-					Name = prop.GetValue(dbInfo).ToString(),
-					Index = int.Parse(prop.Name.Substring(12))
-				})
-			.ToList();
-
-		languages.RemoveAll(l => l.Name is null or "undef");
-		return languages;
 	}
 
 	public List<TagLinkModel> GetLinks() => GetRows<DbTagLink>()
@@ -210,14 +134,21 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 		table.InsertOnSubmit(new DbGlossary { Tag1 = newGlossary.GlossaryName, Id = ++maxId, GlossarySetting = languages });
 	}
 
+	public void InsertLanguage(LanguageModel language)
+	{
+		var dbInfo = GetTable<DatabaseInfo>().ToList()[0];
+		var dbInfoProperties = dbInfo.GetType().GetProperties().Where(p => p.Name.Contains("LanguageName"));
+		dbInfoProperties
+			.FirstOrDefault(p => int.Parse(p.Name.Substring(12)) == language.Index)?
+			.SetValue(dbInfo, language.Name);
+	}
+
 	public void InsertTag(TagModel newTag)
 	{
 		var table = GetTable<DbTag>();
 
 		var maxId = table.Select(r => r.TagId).Max();
 		table.InsertOnSubmit(new DbTag { TagName = newTag.TagName, TagId = ++maxId });
-
-
 	}
 
 	public void RemoveTag(string tagName)
@@ -255,6 +186,66 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 	public void SubmitData()
 	{
 		DataContext.SubmitChanges();
+	}
+
+	public void TagGlossary(TagModel newTag, string glossaryName)
+	{
+		var glossaryId = GetTable<DbGlossary>().ToList().FirstOrDefault(g => g.Tag1 == glossaryName)?.Id;
+		var tagId = GetTable<DbTag>().ToList().FirstOrDefault(t => t.TagName == newTag.TagName)?.TagId;
+		var tagLinks = GetTable<DbTagLink>();
+
+		if (tagId is null || glossaryId is null)
+			return;
+
+		var maxId = tagLinks.Select(tl => tl.TagId).Max();
+		tagLinks.InsertOnSubmit(new DbTagLink
+		{
+			GlossaryId = glossaryId.Value,
+			TagName = newTag.TagName,
+			TagId = ++maxId
+		});
+	}
+
+	public void UpdateTerms(List<TermModel> terms)
+	{
+		var termsIds = terms.Select(t => t.Id).ToList();
+		var dbTerms = DataContext.GetTable<DbTerm>().ToList().Where(t => termsIds.Contains(t.Id));
+
+		foreach (var term in terms)
+		{
+			var dbTerm = dbTerms.FirstOrDefault(t => t.Id == term.Id);
+
+			dbTerm[$"Term{term.SourceLanguageIndex}"] = term.SourceTerm;
+			dbTerm[$"Comment{term.SourceLanguageIndex}a"] = term.SourceTermComment1;
+			dbTerm[$"Comment{term.SourceLanguageIndex}b"] = term.SourceTermComment2;
+
+			dbTerm[$"Term{term.TargetLanguageIndex}"] = term.TargetTerm;
+			dbTerm[$"Comment{term.TargetLanguageIndex}a"] = term.TargetTermComment1;
+			dbTerm[$"Comment{term.TargetLanguageIndex}b"] = term.TargetTermComment2;
+
+			dbTerm["CommentAll"] = term.CommentAll;
+		}
+	}
+
+	private void AddTerms(List<TermModel> newTerms)
+	{
+		var dbTerms = DataContext.GetTable<DbTerm>();
+
+		//TODO Add full index, maybe other missing fields
+		newTerms.ForEach(t => dbTerms.InsertOnSubmit(new DbTerm
+		{
+			Id = dbTerms.Select(dbT => dbT.Id).Max() + 1,
+			Tag1 = t.GlossaryName,
+			[$"Term{t.SourceLanguageIndex}"] = t.SourceTerm,
+			[$"Comment{t.SourceLanguageIndex}a"] = t.SourceTermComment1,
+			[$"Comment{t.SourceLanguageIndex}b"] = t.SourceTermComment2,
+
+			[$"Term{t.TargetLanguageIndex}"] = t.TargetTerm,
+			[$"Comment{t.TargetLanguageIndex}a"] = t.TargetTermComment1,
+			[$"Comment{t.TargetLanguageIndex}b"] = t.TargetTermComment2,
+
+			["CommentAll"] = t.CommentAll,
+		}));
 	}
 
 	private List<LanguageModel> GetLanguageNames(string languageSetting)

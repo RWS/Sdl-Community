@@ -129,7 +129,8 @@ public class TerminologyService : ITerminologyService
 			dbT[columns[5]],
 			dbT.CommentAll,
 			sourceLanguageIndex,
-			targetLanguageIndex
+			targetLanguageIndex,
+			dbT.Tag1
 		)));
 
 		return termbaseViewerTerms;

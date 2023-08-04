@@ -107,8 +107,6 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 			Terms.ForEach(t => t.PropertyChanged -= OnTermModelOnPropertyChanged);
 			LoadTermsFromDb(SourceLanguage, TargetLanguage, Glossaries);
 			Terms.ForEach(t => t.PropertyChanged += OnTermModelOnPropertyChanged);
-
-			//SelectedIndex = Terms.Count - 1;
 		}
 
 		private List<string> Glossaries { get; set; }
@@ -121,7 +119,17 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 			};
 
 			Terms.Add(termModel);
+
+			
+			termModel.PropertyChanged += OnTermModelOnPropertyChanged;
 			termModel.SetOriginalTerm();
+
+			//TODO Find another method of taking the indices: the list may be empty
+			termModel.SourceLanguageIndex = Terms[0].SourceLanguageIndex;
+			termModel.TargetLanguageIndex= Terms[0].TargetLanguageIndex;
+			termModel.GlossaryName = Terms[0].GlossaryName;
+
+			
 
 			SelectedIndex = Terms.IndexOf(termModel);
 		}
@@ -132,6 +140,10 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
 			TerminologyService.SaveAllTerms(changedTerms);
 			changedTerms.ForEach(t => t.SetOriginalTerm(true));
+
+			ReloadTerms();
+
+			SelectedIndex = Terms.Count - 1;
 		}
 
 		private void RevertChanges(object obj)
