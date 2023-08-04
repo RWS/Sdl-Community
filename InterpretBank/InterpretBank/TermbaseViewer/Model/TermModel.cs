@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data.Entity.Core.Metadata.Edm;
-using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace InterpretBank.TermbaseViewer.Model
@@ -56,13 +53,7 @@ namespace InterpretBank.TermbaseViewer.Model
 		public bool IsEditing
 		{
 			get => _isEditing;
-			set
-			{
-				if (value == _isEditing)
-					return;
-				_isEditing = value;
-				OnPropertyChanged();
-			}
+			set => SetField(ref _isEditing, value);
 		}
 
 		public int SourceLanguageIndex

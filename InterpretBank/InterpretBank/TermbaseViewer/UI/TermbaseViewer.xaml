@@ -161,7 +161,6 @@
 												Margin="0 2 0 0"
 												x:Name="SourceTermComment2_EditableTextBlock" />
 				</StackPanel>
-
 			</DockPanel>
 
 			<DockPanel Name="TargetTerm_DockPanel"
@@ -256,7 +255,7 @@
 				<StackPanel Orientation="Horizontal"
 							DockPanel.Dock="Right"
 							Name="ConfirmEdit_StackPanel"
-							Visibility="{Binding IsEditing, ElementName=SourceTerm_EditableTextBlock, Converter={StaticResource BoolToVis}}">
+							Visibility="{Binding SelectedItem.IsEditing, Converter={StaticResource BoolToVis}}">
 
 					<Button DockPanel.Dock="Right"
 							Name="SaveEdits_Button"
