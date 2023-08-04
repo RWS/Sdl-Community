@@ -114,26 +114,54 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 		return GetLanguageNames(settings);
 	}
 
-	public void UpdateTerms(IEnumerable<TermModel> changedTerms)
+	public void CommitAllChanges(IEnumerable<TermModel> changedTerms)
 	{
-		changedTerms.ForEach(UpdateTerm);
+		var addedTerms = changedTerms.Where(t => t.Id == -1).ToList();
+		var updatedTerms = changedTerms.Except(addedTerms).ToList();
+
+		AddTerms(addedTerms);
+		UpdateTerms(updatedTerms);
+
 		SubmitData();
 	}
-	
-	public void UpdateTerm(TermModel term)
+
+	private void AddTerms(List<TermModel> newTerms)
 	{
-		var dbTerm = DataContext.GetTable<DbTerm>().ToList().FirstOrDefault(t => t.Id == term.Id);
-		if (dbTerm == null) return;
+		var dbTerms = DataContext.GetTable<DbTerm>();
 
-		dbTerm[$"Term{term.SourceLanguageIndex}"] = term.SourceTerm;
-		dbTerm[$"Comment{term.SourceLanguageIndex}a"] = term.SourceTermComment1;
-		dbTerm[$"Comment{term.SourceLanguageIndex}b"] = term.SourceTermComment2;
-		
-		dbTerm[$"Term{term.TargetLanguageIndex}"] = term.TargetTerm;
-		dbTerm[$"Comment{term.TargetLanguageIndex}a"] = term.TargetTermComment1;
-		dbTerm[$"Comment{term.TargetLanguageIndex}b"] = term.TargetTermComment2;
+		newTerms.ForEach(t => dbTerms.InsertOnSubmit(new DbTerm
+		{
+			[$"Term{t.SourceLanguageIndex}"] = t.SourceTerm,
+			[$"Comment{t.SourceLanguageIndex}a"] = t.SourceTermComment1,
+			[$"Comment{t.SourceLanguageIndex}b"] = t.SourceTermComment2,
 
-		dbTerm["CommentAll"] = term.CommentAll;
+			[$"Term{t.TargetLanguageIndex}"] = t.TargetTerm,
+			[$"Comment{t.TargetLanguageIndex}a"] = t.TargetTermComment1,
+			[$"Comment{t.TargetLanguageIndex}b"] = t.TargetTermComment2,
+
+			["CommentAll"] = t.CommentAll,
+		}));
+	}
+
+	public void UpdateTerms(List<TermModel> terms)
+	{
+		var termsIds = terms.Select(t => t.Id).ToList();
+		var dbTerms = DataContext.GetTable<DbTerm>().ToList().Where(t => termsIds.Contains(t.Id));
+
+		foreach (var term in terms)
+		{
+			var dbTerm = dbTerms.FirstOrDefault(t => t.Id == term.Id);
+
+			dbTerm[$"Term{term.SourceLanguageIndex}"] = term.SourceTerm;
+			dbTerm[$"Comment{term.SourceLanguageIndex}a"] = term.SourceTermComment1;
+			dbTerm[$"Comment{term.SourceLanguageIndex}b"] = term.SourceTermComment2;
+
+			dbTerm[$"Term{term.TargetLanguageIndex}"] = term.TargetTerm;
+			dbTerm[$"Comment{term.TargetLanguageIndex}a"] = term.TargetTermComment1;
+			dbTerm[$"Comment{term.TargetLanguageIndex}b"] = term.TargetTermComment2;
+
+			dbTerm["CommentAll"] = term.CommentAll;
+		}
 	}
 
 	public List<LanguageModel> GetDbLanguages()

@@ -137,7 +137,7 @@ public class TerminologyService : ITerminologyService
 
 	public void SaveAllTerms(IEnumerable<TermModel> changedTerms)
 	{
-		InterpretBankDataContext.UpdateTerms(changedTerms);
+		InterpretBankDataContext.CommitAllChanges(changedTerms);
 	}
 
 	private static List<string> GetTermColumns(int targetLanguageIndex, int sourceLanguageIndex = -1)

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Input;
@@ -59,7 +60,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 				if (value == _selectedIndex) return;
 				_selectedIndex = value;
 
-				SelectedItem = Terms[value];
+				SelectedItem = Terms[value == -1 ? 0 : value];
 
 				OnPropertyChanged();
 			}
@@ -72,39 +73,53 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
 		public void LoadTerms(Language source, Language target, List<string> glossaries)
 		{
+			Glossaries = glossaries;
 			SourceLanguage = source;
 			TargetLanguage = target;
 
 			SourceLanguageFlag = source.GetFlagImage();
 			TargetLanguageFlag = target.GetFlagImage();
 
+			LoadTermsFromDb(source, target, glossaries);
+			Terms.ForEach(t => t.PropertyChanged += OnTermModelOnPropertyChanged);
+
+			SelectedIndex = 1;
+			SelectedIndex = 0;
+		}
+
+		private void LoadTermsFromDb(Language source, Language target, List<string> glossaries)
+		{
 			var sourceLanguage = source.DisplayName.Split(' ')[0];
 			var targetLanguage = target.DisplayName.Split(' ')[0];
 
-			Terms = new ObservableCollection<TermModel>(TerminologyService.GetAllTerms(sourceLanguage, targetLanguage, glossaries));
-
-			foreach (var termModel in Terms)
-			{
-				termModel.PropertyChanged += (_, _) =>
-				{
-					OnPropertyChanged(nameof(AnyEditedTerms));
-				};
-			}
-
-			SelectedItem = Terms.FirstOrDefault();
+			Terms = new ObservableCollection<TermModel>(TerminologyService.GetAllTerms(sourceLanguage, targetLanguage,
+				glossaries));
 		}
+
+		private void OnTermModelOnPropertyChanged(object o, PropertyChangedEventArgs propertyChangedEventArgs)
+		{
+			OnPropertyChanged(nameof(AnyEditedTerms));
+		}
+
+		private void ReloadTerms()
+		{
+			Terms.ForEach(t => t.PropertyChanged -= OnTermModelOnPropertyChanged);
+			LoadTermsFromDb(SourceLanguage, TargetLanguage, Glossaries);
+			Terms.ForEach(t => t.PropertyChanged += OnTermModelOnPropertyChanged);
+
+			//SelectedIndex = Terms.Count - 1;
+		}
+
+		private List<string> Glossaries { get; set; }
 
 		private void AddNewTerm(object obj)
 		{
-			var termModel = new TermModel
-			{
-				IsEditing = true
-			};
+			var termModel = new TermModel();
 
 			Terms.Add(termModel);
 			termModel.SetOriginalTerm();
 
-			SelectedItem = termModel;
+			SelectedIndex = Terms.IndexOf(termModel);
 		}
 
 		private void CommitAllToDatabase(object obj)
