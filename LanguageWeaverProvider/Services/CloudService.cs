@@ -8,6 +8,7 @@ using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Services.Interface;
 using LanguageWeaverProvider.XliffConverter.Converter;
 using Newtonsoft.Json;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace LanguageWeaverProvider.NewFolder
 {
@@ -73,7 +74,9 @@ namespace LanguageWeaverProvider.NewFolder
 				var translationResponse = await GetTranslation(cloudCredentials, translationRequest.RequestId);
 				var translation = JsonConvert.DeserializeObject<TranslationResponse>(translationResponse);
 
-				var x = Converter.ParseXliffString(translation.Translation.FirstOrDefault());
+				var translatedSegment = translation.Translation.First();
+
+				var x = Converter.ParseXliffString(translatedSegment);
 				return (translation.Translation[0], true);
 			}
 			catch

@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Globalization;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.NewFolder;
+using LanguageWeaverProvider.XliffConverter.Converter;
+using LanguageWeaverProvider.XliffConverter.Models;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using TranslationUnit = Sdl.LanguagePlatform.TranslationMemory.TranslationUnit;
 
 namespace LanguageWeaverProvider
 {
@@ -59,9 +63,32 @@ namespace LanguageWeaverProvider
 			var searchResults = new SearchResults { SourceSegment = segment.Duplicate() };
 			var source = searchResults.SourceSegment.ToString();
 			var cloudService = new CloudService();
-			var translation = cloudService.Translate(_translationOptions.CloudCredentials, source).Result;
+
+			var xliff = CreateXliffFile(segment);
+			var translation = cloudService.Translate(_translationOptions.CloudCredentials, xliff.ToString()).Result;
 			var newSegment = segment.Duplicate();
 			return searchResults;
+		}
+
+		public Xliff CreateXliffFile(Segment segment)
+		{
+			var file = new File
+			{
+				SourceCulture = new CultureInfo("en-GB"),
+				TargetCulture = new CultureInfo("ro-RO")
+			};
+
+			var xliffDocument = new Xliff
+			{
+				File = file
+			};
+
+			if (segment != null)
+			{
+				xliffDocument.AddSourceSegment(segment);
+			}
+
+			return xliffDocument;
 		}
 
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
