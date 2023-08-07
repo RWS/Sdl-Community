@@ -36,9 +36,9 @@ namespace InterpretBank.TermbaseViewer.UI
 		/// This requires the command
 		/// to be executed before focusing the EditableTextBlock.
 		/// </summary>
-		private void AddNewTermButton_Click(object sender, RoutedEventArgs e)
+		public void AddNewTermButton_Click(object sender, RoutedEventArgs e)
 		{
-			((TermbaseViewerViewModel)DataContext).AddNewTermCommand.Execute(null);
+			((TermbaseViewerViewModel)DataContext).AddNewTermCommand.Execute(sender is TermModel ? sender : null);
 			SourceTerm_EditableTextBlock.EditBox.Focus();
 		}
 

@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using DocumentFormat.OpenXml.Bibliography;
+using InterpretBank.TermbaseViewer.Model;
 using InterpretBank.TermbaseViewer.UI;
 using InterpretBank.TermbaseViewer.ViewModel;
 using Sdl.Core.Globalization;
@@ -15,6 +16,7 @@ namespace InterpretBank.Studio
 	[TerminologyProviderViewerWinFormsUI]
 	internal class InterpretBankProviderViewerWinFormsUI : ITerminologyProviderViewerWinFormsUI
 	{
+		private TermbaseViewerControl _termbaseControl;
 		public event EventHandler<EntryEventArgs> SelectedTermChanged;
 
 		public event EventHandler TermChanged;
@@ -23,6 +25,8 @@ namespace InterpretBank.Studio
 		{
 			get
 			{
+				if (_termbaseControl is not null) return _termbaseControl;
+
 				var settingsId = InterpretBankProvider.Uri.AbsolutePath.Split('.')[0].TrimStart('/');
 				var settings = PersistenceService.PersistenceService.GetSettings(settingsId);
 				TermbaseViewerViewModel = new TermbaseViewerViewModel(InterpretBankProvider.TermSearchService);
@@ -31,9 +35,8 @@ namespace InterpretBank.Studio
 
 				var termbaseViewer = new TermbaseViewer.UI.TermbaseViewer { DataContext = TermbaseViewerViewModel };
 
-				var termbaseControl = new TermbaseViewerControl(termbaseViewer);
-
-				return termbaseControl;
+				_termbaseControl = new TermbaseViewerControl(termbaseViewer);
+				return _termbaseControl;
 			}
 		}
 
@@ -51,17 +54,18 @@ namespace InterpretBank.Studio
 
 		public void AddAndEditTerm(IEntry term, string source, string target)
 		{
-			throw new NotImplementedException();
+			
 		}
 
 		public void AddTerm(string source, string target)
 		{
-			throw new NotImplementedException();
+			((TermbaseViewerControl)Control).TermbaseViewer.AddNewTermButton_Click(
+				new TermModel { SourceTerm = source, TargetTerm = target }, null);
 		}
 
 		public void EditTerm(IEntry term)
 		{
-			throw new NotImplementedException();
+			TermbaseViewerViewModel.EditTerm(term);
 		}
 
 		public void Initialize(ITerminologyProvider terminologyProvider, CultureInfo source, CultureInfo target)
@@ -76,9 +80,6 @@ namespace InterpretBank.Studio
 
 			TargetLanguage = targetLanguages.FirstOrDefault(l => l.CultureInfo.Equals(target));
 			SourceLanguage = currentProject.GetProjectInfo().SourceLanguage;
-
-			var y = source.DisplayName.Split(' ')[0];
-			var z = target.DisplayName.Split(' ')[0];
 		}
 
 		public Language TargetLanguage { get; set; }
@@ -92,7 +93,7 @@ namespace InterpretBank.Studio
 
 		public void Release()
 		{
-
+			
 		}
 
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)

@@ -15,6 +15,10 @@ namespace InterpretBank.TermbaseViewer.UI
 			};
 			Controls.Add(elementHost);
 			elementHost.Child = termbaseViewer;
+
+			TermbaseViewer = termbaseViewer;
 		}
+
+		public TermbaseViewer TermbaseViewer { get; private set; }
 	}
 }

@@ -18,6 +18,8 @@ public class InterpretBankProvider : AbstractTerminologyProvider
 		Settings = settings;
 	}
 
+	public override bool IsReadOnly => false;
+
 	public override IDefinition Definition =>
 		//TODO: take name of these fields from Settings
 		new Definition(

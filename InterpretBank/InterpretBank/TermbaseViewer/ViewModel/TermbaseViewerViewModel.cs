@@ -72,7 +72,8 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
 		public void JumpToTerm(IEntry entry)
 		{
-			SelectedItem = Terms.FirstOrDefault(t => t.Id == entry.Id);
+			var term = Terms.FirstOrDefault(t => t.Id == entry.Id);
+			SelectedIndex = Terms.IndexOf(term);
 		}
 
 		public void LoadTerms(Language source, Language target, List<string> glossaries)
@@ -93,10 +94,8 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
 		private void AddNewTerm(object obj)
 		{
-			var termModel = new TermModel
-			{
-				IsEditing = true
-			};
+			var termModel = obj as TermModel ?? new TermModel();
+			termModel.IsEditing = true;
 
 			Terms.Add(termModel);
 
@@ -158,6 +157,12 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 				SelectedItem.Revert();
 
 			OnPropertyChanged(nameof(AnyEditedTerms));
+		}
+
+		public void EditTerm(IEntry term)
+		{
+			JumpToTerm(term);
+			SelectedItem.IsEditing = true;
 		}
 	}
 }
