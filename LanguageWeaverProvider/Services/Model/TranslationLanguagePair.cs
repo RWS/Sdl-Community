@@ -1,9 +1,11 @@
-﻿namespace LanguageWeaverProvider.Model
+﻿namespace LanguageWeaverProvider.Services.Model
 {
 	public class TranslationLanguagePair
 	{
-		public string SourceLanguageId { get; set; }
-		public string TargetLanguageId { get; set; }
 		public string Model { get; set; }
+
+		public string SourceLanguageId { get; set; }
+
+		public string TargetLanguageId { get; set; }
 	}
 }

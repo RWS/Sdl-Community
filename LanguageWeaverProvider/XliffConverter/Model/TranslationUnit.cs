@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace LanguageWeaverProvider.XliffConverter.Models
+namespace LanguageWeaverProvider.XliffConverter.Model
 {
 	public class TranslationUnit
 	{

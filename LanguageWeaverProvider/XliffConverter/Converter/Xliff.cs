@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
-using LanguageWeaverProvider.XliffConverter.Models;
+using LanguageWeaverProvider.XliffConverter.Model;
 using Sdl.LanguagePlatform.Core;
 using TranslationUnit = Sdl.LanguagePlatform.TranslationMemory.TranslationUnit;
 
@@ -17,22 +17,9 @@ namespace LanguageWeaverProvider.XliffConverter.Converter
 		[XmlElement("file")]
 		public File File { get; set; }
 
-
 		public void AddTranslationUnit(TranslationUnit translationUnit, string toolId)
 		{
 			File?.Body?.Add(translationUnit?.SourceSegment, translationUnit?.TargetSegment, toolId);
-		}
-
-		public void AddSourceText(string sourceText)
-		{
-			if (sourceText == null)
-			{
-				throw new NullReferenceException("Source text cannot be null");
-			}
-
-			var seg = new Segment();
-			seg.Add(sourceText);
-			File?.Body?.Add(seg);
 		}
 
 		public void AddSourceSegment(Segment sourceSegment)
@@ -45,15 +32,25 @@ namespace LanguageWeaverProvider.XliffConverter.Converter
 			File?.Body?.Add(sourceSegment, targetSegment, toolId);
 		}
 
+		public void AddSourceText(string sourceText)
+		{
+			if (sourceText is null)
+			{
+				throw new NullReferenceException("Source text cannot be null");
+			}
+
+			var seg = new Segment();
+			seg.Add(sourceText);
+			File?.Body?.Add(seg);
+		}
+
 		public List<EvaluatedSegment> GetTargetSegments()
 		{
 			var segments = new List<EvaluatedSegment>();
 			foreach (var tu in File.Body.TranslationUnits)
 			{
 				var option = tu.TranslationList?.FirstOrDefault();
-				var segment = option?.Translation?.TargetSegment;
-
-				if (segment == null)
+				if (option?.Translation?.TargetSegment is not Segment segment)
 				{
 					return null;
 				}
@@ -73,11 +70,5 @@ namespace LanguageWeaverProvider.XliffConverter.Converter
 		{
 			return Converter.PrintXliff(this);
 		}
-	}
-
-	public class EvaluatedSegment
-	{
-		public Segment Segment { get; set; }
-		public string QualityEstimation { get; set; }
 	}
 }

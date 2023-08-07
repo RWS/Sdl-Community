@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 using LanguageWeaverProvider.XliffConverter.SegmentParser;
 using Sdl.LanguagePlatform.Core;
 
-namespace LanguageWeaverProvider.XliffConverter.Models
+namespace LanguageWeaverProvider.XliffConverter.Model
 {
 	public class TargetTranslation
 	{		

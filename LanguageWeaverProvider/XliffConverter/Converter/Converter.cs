@@ -39,35 +39,33 @@ namespace LanguageWeaverProvider.XliffConverter.Converter
 			text = Regex.Replace(text, targetTextRegex, emptyTargetTextRegex, RegexOptions.Singleline);
 
 			var byteArray = Encoding.Unicode.GetBytes(text);
-			using (var stream = new MemoryStream(byteArray))
+			using var stream = new MemoryStream(byteArray);
+			var xliff = (Xliff)Serializer.Deserialize(stream);
+
+			for (var i = 0; i < sourceText.Count; i++)
 			{
-				var xliff = (Xliff)Serializer.Deserialize(stream);
-
-				for (var i = 0; i < sourceText.Count; i++)
+				if (sourceText[i].Groups.Count < 2)
 				{
-					if (sourceText[i].Groups.Count < 2)
-					{
-						continue;
-					}
-
-					xliff.File.Body.TranslationUnits[i].TranslationList.First().Translation.Text = targetText[i].Groups[1].Value;
-					xliff.File.Body.TranslationUnits[i].SourceText = sourceText[i].Groups[1].Value;
-					xliff.File.Body.TranslationUnits[i].TranslationList.First().Translation.TargetLanguage = xliff.File.TargetLanguage;
+					continue;
 				}
-				return xliff;
+
+				xliff.File.Body.TranslationUnits[i].TranslationList.First().Translation.Text = targetText[i].Groups[1].Value;
+				xliff.File.Body.TranslationUnits[i].SourceText = sourceText[i].Groups[1].Value;
+				xliff.File.Body.TranslationUnits[i].TranslationList.First().Translation.TargetLanguage = xliff.File.TargetLanguage;
 			}
+
+			return xliff;
 		}
 
 		public static string PrintXliff(Xliff xliff)
 		{
-			using (var writer = new StringWriter())
+			using var writer = new StringWriter();
+			using (var tw = XmlWriter.Create(writer, new XmlWriterSettings { Indent = true }))
 			{
-				using (var tw = XmlWriter.Create(writer, new XmlWriterSettings { Indent = true }))
-				{
-					Serializer.Serialize(tw, xliff);
-				}
-				return writer.ToString().Replace("&lt;", "<").Replace("&gt;", ">").Replace("&amp;lt;", "&lt;");
+				Serializer.Serialize(tw, xliff);
 			}
+
+			return writer.ToString().Replace("&lt;", "<").Replace("&gt;", ">").Replace("&amp;lt;", "&lt;");
 		}
 
 		internal static string RemoveXliffTags(string xliffString)

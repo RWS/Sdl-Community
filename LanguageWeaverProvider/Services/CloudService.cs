@@ -6,9 +6,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Services.Interface;
+using LanguageWeaverProvider.Services.Model;
 using LanguageWeaverProvider.XliffConverter.Converter;
 using Newtonsoft.Json;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace LanguageWeaverProvider.NewFolder
 {
@@ -84,15 +84,14 @@ namespace LanguageWeaverProvider.NewFolder
 			}
 		}
 
-		public async Task<string> GetTranslationStatus(CloudCredentials cloudCredentials, string requestId)
+		private async Task<string> GetTranslationStatus(CloudCredentials cloudCredentials, string requestId)
 		{
 			_httpClient = new();
-			var endpoint = $"https://api.languageweaver.com/v4/mt/translations/async/{requestId}?includeProgressInfo=true";
+			var endpoint = $"{TranslationEndpoint}/{requestId}?includeProgressInfo=true";
 
 			_httpClient.DefaultRequestHeaders.Add("Authorization", $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
 
 			var request = new HttpRequestMessage(HttpMethod.Get, endpoint);
-
 			var response = await _httpClient.SendAsync(request);
 			response.EnsureSuccessStatusCode();
 
@@ -102,13 +101,12 @@ namespace LanguageWeaverProvider.NewFolder
 		private async Task<string> SendTranslationRequest(CloudCredentials cloudCredentials, Xliff sourceXliff)
 		{
 			_httpClient = new();
-
 			var sourceXliffText = sourceXliff.ToString();
 			var translationData = new
 			{
 				sourceLanguageId = sourceXliff.File.SourceCulture.ThreeLetterISOLanguageName,
 				targetLanguageId = sourceXliff.File.TargetCulture.ThreeLetterISOLanguageName,
-				submissionType = "text", 
+				submissionType = "text",
 				model = "generic",
 				inputFormat = "xliff",
 				input = new[] { sourceXliffText },
@@ -118,26 +116,18 @@ namespace LanguageWeaverProvider.NewFolder
 			var jsonContent = JsonConvert.SerializeObject(translationData);
 			var stringContent = new StringContent(jsonContent, Encoding.UTF8, MediaType);
 
-			try
-			{
+			_httpClient.DefaultRequestHeaders.Add("Authorization", $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
 
-				_httpClient.DefaultRequestHeaders.Add("Authorization", $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
+			var response = await _httpClient.PostAsync(TranslationEndpoint, stringContent);
+			response.EnsureSuccessStatusCode();
 
-				var response = await _httpClient.PostAsync(TranslationEndpoint, stringContent);
-				response.EnsureSuccessStatusCode();
-
-				return await response.Content.ReadAsStringAsync();
-			}
-			catch
-			{
-				return null;
-			}
+			return await response.Content.ReadAsStringAsync();
 		}
 
-		public async Task<string> GetTranslation(CloudCredentials cloudCredentials, string requestId)
+		private async Task<string> GetTranslation(CloudCredentials cloudCredentials, string requestId)
 		{
 			_httpClient = new();
-			var endpoint = $"https://api.languageweaver.com/v4/mt/translations/async/{requestId}/content";
+			var endpoint = $"{TranslationEndpoint}/{requestId}/content";
 
 			_httpClient.DefaultRequestHeaders.Add("Authorization", $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
 

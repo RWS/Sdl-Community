@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Globalization;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.NewFolder;
 using LanguageWeaverProvider.XliffConverter.Converter;
-using LanguageWeaverProvider.XliffConverter.Models;
+using LanguageWeaverProvider.XliffConverter.Model;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;

@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 using LanguageWeaverProvider.XliffConverter.Converter;
 using Sdl.LanguagePlatform.Core;
 
-namespace LanguageWeaverProvider.XliffConverter.Models
+namespace LanguageWeaverProvider.XliffConverter.Model
 {
 	public class Body
 	{		
