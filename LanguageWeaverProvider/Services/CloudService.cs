@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using LanguageWeaverProvider.Services.Interface;
 using LanguageWeaverProvider.Services.Model;
 using LanguageWeaverProvider.XliffConverter.Converter;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace LanguageWeaverProvider.NewFolder
 {
@@ -16,9 +18,10 @@ namespace LanguageWeaverProvider.NewFolder
 	{
 		private static HttpClient _httpClient;
 
-		private const string TranslationEndpoint = "https://api.languageweaver.com/v4/mt/translations/async";
-		private const string UserCredentialsEndpoint = "https://api.languageweaver.com/v4/token/user";
 		private const string ClientSecretsEndpoint = "https://api.languageweaver.com/v4/token";
+		private const string UserCredentialsEndpoint = "https://api.languageweaver.com/v4/token/user";
+		private const string AccountInfoEndpoint = "https://api.languageweaver.com/v4/accounts/users/self";
+		private const string TranslationEndpoint = "https://api.languageweaver.com/v4/mt/translations/async";
 		private const string MediaType = "application/json";
 
 		public async Task<bool> AuthenticateUser(CloudCredentials cloudCredentials, AuthenticationType authenticationType)
@@ -41,6 +44,7 @@ namespace LanguageWeaverProvider.NewFolder
 
 				var accessToken = await response.Content.ReadAsStringAsync();
 				cloudCredentials.AccessToken = JsonConvert.DeserializeObject<AccessToken>(accessToken);
+				cloudCredentials.AccountId = await GetUserSelfInfo(cloudCredentials);
 				return true;
 			}
 			catch
@@ -48,6 +52,46 @@ namespace LanguageWeaverProvider.NewFolder
 				return false;
 			}
 		}
+
+		public async Task<string> GetSupportedLanguages(CloudCredentials cloudCredentials)
+		{
+			_httpClient = new();
+			try
+			{
+				var endpoint = $"https://api.languageweaver.com/v4/accounts/{cloudCredentials.AccountId}/subscriptions/language-pairs?includeChained=true";
+
+				_httpClient.DefaultRequestHeaders.Add("Authorization", $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
+
+				var request = new HttpRequestMessage(HttpMethod.Get, endpoint);
+
+				var response = await _httpClient.SendAsync(request);
+				response.EnsureSuccessStatusCode();
+
+				return await response.Content.ReadAsStringAsync();
+			}
+			catch (Exception exception)
+			{
+				return null;
+			}
+		}
+
+		private async Task<string> GetUserSelfInfo(CloudCredentials cloudCredentials)
+		{
+			_httpClient = new();
+			try
+			{
+				var request = new HttpRequestMessage(HttpMethod.Get, "https://api.languageweaver.com/v4/accounts/users/self");
+				request.Headers.Add("Authorization", $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
+				var response = await _httpClient.SendAsync(request);
+				response.EnsureSuccessStatusCode();
+				return await response.Content.ReadAsStringAsync();
+			}
+			catch (Exception exception)
+			{
+				return null;
+			}
+		}
+
 
 		public async Task<Xliff> Translate(CloudCredentials cloudCredentials, Xliff sourceXliff)
 		{

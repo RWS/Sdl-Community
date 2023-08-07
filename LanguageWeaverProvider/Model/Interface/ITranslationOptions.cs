@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Windows.Documents;
 
 namespace LanguageWeaverProvider.Model.Interface
 {
@@ -9,6 +11,8 @@ namespace LanguageWeaverProvider.Model.Interface
 		PluginVersion Version { get; set; }
 
 		AuthenticationType AuthenticationType { get; set; }
+
+		List<PairMapping> PairMappings { get; set; }
 
 		Uri Uri { get; }
 	}

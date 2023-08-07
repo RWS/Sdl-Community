@@ -2,6 +2,8 @@
 {
 	public class CloudCredentials
     {
+		public string AccountId { get; set; }
+
 		public string UserID { get; set; }
 
 		public string UserPassword { get; set; }
