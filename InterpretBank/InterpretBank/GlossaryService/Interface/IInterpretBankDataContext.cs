@@ -27,5 +27,5 @@ public interface IInterpretBankDataContext : IDisposable
 	void TagGlossary(TagModel newTag, string glossaryName);
 	void AddLanguageToGlossary(LanguageModel newLanguage, string selectedGlossaryGlossaryName);
 	List<LanguageModel> GetGlossaryLanguages(string glossaryName);
-	void CommitAllChanges(IEnumerable<TermModel> changedTerms);
+	void CommitAllChanges(List<TermModel> changedTerms);
 }

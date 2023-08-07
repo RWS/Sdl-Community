@@ -41,12 +41,28 @@
 						Value="{Binding SelectedItem.IsEditing, Mode=TwoWay}" />
 				<Setter Property="MaxWidth"
 						Value="{Binding ActualWidth, ElementName=TermbaseViewer_UserControl, Converter={StaticResource WidthToThirdConverter}}" />
+				<Style.Triggers>
+					<DataTrigger Binding="{Binding SelectedItem.IsRemoved}"
+								 Value="True">
+						<Setter Property="Foreground"
+								Value="Gray" />
+					</DataTrigger>
+				</Style.Triggers>
 			</Style>
 
 			<Style TargetType="controls:EditableTextBlock"
 				   x:Key="CommentAll_EditableTextBlockStyle">
 				<Setter Property="IsEditing"
 						Value="{Binding SelectedItem.IsEditing}" />
+				<Setter Property="IsEnabled"
+						Value="{Binding SelectedItem.IsRemoved}" />
+				<Style.Triggers>
+					<DataTrigger Binding="{Binding SelectedItem.IsRemoved}"
+								 Value="True">
+						<Setter Property="Foreground"
+								Value="Gray" />
+					</DataTrigger>
+				</Style.Triggers>
 			</Style>
 		</ResourceDictionary>
 	</UserControl.Resources>
@@ -68,24 +84,56 @@
 				<ListBox.ItemTemplate>
 					<DataTemplate DataType="{x:Type model:TermModel}">
 
-						<Grid>
+						<Grid Name="Term_Grid">
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="Auto" />
 								<ColumnDefinition Width="*" />
 							</Grid.ColumnDefinitions>
 
 							<TextBlock DockPanel.Dock="Right"
+									   Name="TermName_TextBlock"
 									   HorizontalAlignment="Left"
 									   VerticalAlignment="Center"
 									   Grid.Column="1"
-									   Text="{Binding TargetTerm}" />
+									   Text="{Binding TargetTerm}">
+								<TextBlock.Style>
+									<Style TargetType="TextBlock"
+										   BasedOn="{StaticResource {x:Type TextBlock}}">
+										<Style.Triggers>
+											<DataTrigger Binding="{Binding IsRemoved}"
+														 Value="True">
+												<Setter Property="TextDecorations"
+														Value="Strikethrough" />
+											</DataTrigger>
+										</Style.Triggers>
+
+									</Style>
+								</TextBlock.Style>
+							</TextBlock>
 							<Button DockPanel.Dock="Left"
+									Command="{Binding RemoveTermCommand}"
+									Name="RemoveTerm_Button"
 									HorizontalAlignment="Left"
 									ToolTip="Remove term"
-									Grid.Column="0"
-									Style="{StaticResource GlyphButtonStyle2}"
-									FontSize="8"
-									Content="❌" />
+									Grid.Column="0">
+								<Button.Style>
+									<Style TargetType="Button"
+										   BasedOn="{StaticResource GlyphButtonStyle2}">
+										<Setter Property="Content"
+												Value="❌" />
+										<Setter Property="FontSize"
+												Value="8" />
+										<Style.Triggers>
+											<DataTrigger Binding="{Binding IsRemoved}"
+														 Value="True">
+												<Setter Property="Content"
+														Value="↶" />
+											</DataTrigger>
+										</Style.Triggers>
+
+									</Style>
+								</Button.Style>
+							</Button>
 						</Grid>
 					</DataTemplate>
 				</ListBox.ItemTemplate>
@@ -117,6 +165,7 @@
 			  Margin="0"
 			  Background="White"
 			  Grid.Column="1">
+
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="*" />
@@ -215,15 +264,26 @@
 					   Grid.Column="0"
 					   Grid.ColumnSpan="2">
 
-				<Button Style="{StaticResource GlyphButtonStyle}"
-						Name="EditTerm_Button"
-						ToolTip="Edit"
-						Click="EditButton_Click"
-						FontSize="13"
-						Visibility="{Binding Visibility, ElementName=ConfirmEdit_StackPanel, Converter={StaticResource InvertVisibilityConverter}}"
-						DockPanel.Dock="Right"
-						Margin="2 0 0 0"
-						Content="📝" />
+				<Button Name="EditTerm_Button"
+				        ToolTip="Edit"
+				        Click="EditButton_Click"
+				        FontSize="13"
+				        DockPanel.Dock="Right"
+				        Margin="2 0 0 0"
+				        Content="📝" >
+					<Button.Style>
+						<Style TargetType="Button" BasedOn="{StaticResource GlyphButtonStyle}">
+							<Setter Property="Visibility"
+									Value="{Binding Visibility, ElementName=ConfirmEdit_StackPanel, Converter={StaticResource InvertVisibilityConverter}}"/>
+							<Style.Triggers>
+								<DataTrigger Binding="{Binding SelectedItem.IsRemoved}"
+								             Value="True">
+									<Setter Property="Visibility" Value="Collapsed"/>
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</Button.Style>
+				</Button>
 
 				<Button Content="↶"
 						Name="RevertChanges_Button"
@@ -247,6 +307,7 @@
 									<Setter Property="Visibility"
 											Value="Visible" />
 								</MultiDataTrigger>
+
 							</Style.Triggers>
 						</Style>
 					</Button.Style>

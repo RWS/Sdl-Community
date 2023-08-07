@@ -17,6 +17,6 @@ namespace InterpretBank.TerminologyService.Interface
 
 		List<LanguageModel> GetGlossaryLanguages(string glossaryName);
 		List<TermModel> GetAllTerms(string source, string target, List<string> glossaries);
-		void SaveAllTerms(IEnumerable<TermModel> changedTerms);
+		void SaveAllTerms(List<TermModel> changedTerms);
 	}
 }

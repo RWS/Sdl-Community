@@ -19,6 +19,8 @@ namespace InterpretBank.TermbaseViewer.UI
 		public void SetEditing(bool editing)
 		{
 			((TermModel)Term_ListBox.SelectedItem).IsEditing = editing;
+
+			//Focusing cannot be done very easily through XAML without it looking like an ugly workaround
 			if (editing)
 				SourceTerm_EditableTextBlock.EditBox.Focus();
 		}
@@ -54,7 +56,7 @@ namespace InterpretBank.TermbaseViewer.UI
 		/// Here, we are invoking a command from code-behind for two reasons: firstly, the same reason mentioned above
 		/// but in regards to another command and secondly, because multiple keyboard modifiers
 		/// cannot be specified in code-behind, so PreviewKeyDown cannot be used in all cases.
-		/// In order to not use PreviewKeyDown event for some of the keys and commands for the others, we'll use just one.
+		/// In order to not use PreviewKeyDown event for some of the keys and KeyBindings for others, we'll just use KeyBindings.
 		/// </summary>
 		private void SetEditingFromKeyboard(object parameter)
 		{

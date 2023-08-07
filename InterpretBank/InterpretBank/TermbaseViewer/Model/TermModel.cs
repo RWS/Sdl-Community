@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
+using InterpretBank.Commands;
 
 namespace InterpretBank.TermbaseViewer.Model
 {
@@ -16,6 +18,7 @@ namespace InterpretBank.TermbaseViewer.Model
 		private string _targetTerm;
 		private string _targetTermComment1;
 		private string _targetTermComment2;
+		private bool _isRemoved;
 
 		public TermModel()
 		{
@@ -44,6 +47,18 @@ namespace InterpretBank.TermbaseViewer.Model
 			SetOriginalTerm();
 		}
 
+		public bool IsRemoved
+		{
+			get => _isRemoved;
+			set
+			{
+				if (value == _isRemoved) return;
+				_isRemoved = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(Edited));
+			}
+		}
+
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		public string CommentAll
@@ -52,7 +67,7 @@ namespace InterpretBank.TermbaseViewer.Model
 			set => SetField(ref _commentAll, value);
 		}
 
-		public bool Edited => !ContentEquals(OriginalTerm);
+		public bool Edited => !ContentEquals(OriginalTerm) || IsRemoved;
 		public string GlossaryName { get; set; }
 		public long Id { get; set; }
 
@@ -111,6 +126,12 @@ namespace InterpretBank.TermbaseViewer.Model
 		}
 
 		private TermModel OriginalTerm { get; set; }
+		public ICommand RemoveTermCommand => new RelayCommand(RemoveTerm);
+
+		private void RemoveTerm(object obj)
+		{
+			IsRemoved = !IsRemoved;
+		}
 
 		public bool ContentEquals(TermModel other)
 		{

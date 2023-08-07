@@ -14,14 +14,6 @@ namespace InterpretBank.GlossaryService;
 
 public class InterpretBankDataContext : IInterpretBankDataContext
 {
-	public InterpretBankDataContext()
-	{
-		Id = new Random().Next(100);
-	}
-
-	//TODO: Delete this; only used for debugging
-	public int Id { get; set; }
-
 	public SQLiteConnection SqLiteConnection { get; set; }
 	private DataContext DataContext { get; set; }
 
@@ -38,15 +30,27 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 								   glossarySetting.Substring(indexToReplace + 0.ToString().Length);
 	}
 
-	public void CommitAllChanges(IEnumerable<TermModel> changedTerms)
+	public void CommitAllChanges(List<TermModel> changedTerms)
 	{
 		var addedTerms = changedTerms.Where(t => t.Id == -1).ToList();
-		var updatedTerms = changedTerms.Except(addedTerms).ToList();
+		var removedTerms = changedTerms.Where(t => t.IsRemoved).ToList();
+		var updatedTerms = changedTerms.Except(addedTerms).Except(removedTerms).ToList();
 
 		AddTerms(addedTerms);
 		UpdateTerms(updatedTerms);
+		RemoveTerms(removedTerms);
 
 		SubmitData();
+	}
+
+	private void RemoveTerms(List<TermModel> removedTerms)
+	{
+		var dbTerms = DataContext.GetTable<DbTerm>();
+
+		var idsRemove = removedTerms.Select(rt => rt.Id);
+		var toRemove = dbTerms.Where(t => idsRemove.Contains(t.Id));
+
+		dbTerms.DeleteAllOnSubmit(toRemove);
 	}
 
 	public void Dispose()
@@ -209,22 +213,27 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 	public void UpdateTerms(List<TermModel> terms)
 	{
 		var termsIds = terms.Select(t => t.Id).ToList();
-		var dbTerms = DataContext.GetTable<DbTerm>().ToList().Where(t => termsIds.Contains(t.Id));
+		var dbTerms = DataContext.GetTable<DbTerm>()
+			.Where(t => termsIds.Contains(t.Id))
+			.ToList();
 
-		foreach (var term in terms)
+		terms.ForEach(term =>
 		{
 			var dbTerm = dbTerms.FirstOrDefault(t => t.Id == term.Id);
 
-			dbTerm[$"Term{term.SourceLanguageIndex}"] = term.SourceTerm;
-			dbTerm[$"Comment{term.SourceLanguageIndex}a"] = term.SourceTermComment1;
-			dbTerm[$"Comment{term.SourceLanguageIndex}b"] = term.SourceTermComment2;
+			if (dbTerm != null)
+			{
+				dbTerm[$"Term{term.SourceLanguageIndex}"] = term.SourceTerm;
+				dbTerm[$"Comment{term.SourceLanguageIndex}a"] = term.SourceTermComment1;
+				dbTerm[$"Comment{term.SourceLanguageIndex}b"] = term.SourceTermComment2;
 
-			dbTerm[$"Term{term.TargetLanguageIndex}"] = term.TargetTerm;
-			dbTerm[$"Comment{term.TargetLanguageIndex}a"] = term.TargetTermComment1;
-			dbTerm[$"Comment{term.TargetLanguageIndex}b"] = term.TargetTermComment2;
+				dbTerm[$"Term{term.TargetLanguageIndex}"] = term.TargetTerm;
+				dbTerm[$"Comment{term.TargetLanguageIndex}a"] = term.TargetTermComment1;
+				dbTerm[$"Comment{term.TargetLanguageIndex}b"] = term.TargetTermComment2;
 
-			dbTerm["CommentAll"] = term.CommentAll;
-		}
+				dbTerm["CommentAll"] = term.CommentAll;
+			}
+		});
 	}
 
 	private void AddTerms(List<TermModel> newTerms)

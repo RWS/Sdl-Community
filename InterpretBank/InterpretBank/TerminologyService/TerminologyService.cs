@@ -111,7 +111,7 @@ public class TerminologyService : ITerminologyService
 		}
 		catch { }
 
-		//TODO: optimize this to use IQueryable and not .ToList() (needed for virtualization)
+		//TODO: optimize this to use IQueryable and not .ToList() 
 
 		var sourceLanguageIndex = GetLanguageIndex(source);
 		var targetLanguageIndex = GetLanguageIndex(target);
@@ -136,7 +136,7 @@ public class TerminologyService : ITerminologyService
 		return termbaseViewerTerms;
 	}
 
-	public void SaveAllTerms(IEnumerable<TermModel> changedTerms)
+	public void SaveAllTerms(List<TermModel> changedTerms)
 	{
 		InterpretBankDataContext.CommitAllChanges(changedTerms);
 	}

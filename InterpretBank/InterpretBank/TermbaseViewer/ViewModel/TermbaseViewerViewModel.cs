@@ -136,7 +136,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
 		private void CommitAllToDatabase(object obj)
 		{
-			var changedTerms = Terms.Where(t => t.Edited);
+			var changedTerms = Terms.Where(t => t.Edited).ToList();
 
 			TerminologyService.SaveAllTerms(changedTerms);
 			changedTerms.ForEach(t => t.SetOriginalTerm(true));
@@ -148,6 +148,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
 		private void RevertChanges(object obj)
 		{
+			SelectedItem.IsRemoved = false;
 			if (SelectedItem.Id == -1)
 			{
 				var selectedItem = SelectedItem;
