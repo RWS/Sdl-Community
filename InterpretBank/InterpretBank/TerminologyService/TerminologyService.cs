@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
-using System.Windows.Forms;
 using InterpretBank.GlossaryService.DAL;
 using InterpretBank.GlossaryService.Interface;
 using InterpretBank.SettingsService.Model;
@@ -29,6 +26,43 @@ public class TerminologyService : ITerminologyService
 		InterpretBankDataContext?.Dispose();
 	}
 
+	public List<TermModel> GetAllTerms(string source, string target, List<string> glossaries)
+	{
+		List<DbTerm> dbTerms = null;
+		try
+		{
+			dbTerms = InterpretBankDataContext
+				.GetRows<DbTerm>()
+				.Where(t => glossaries.Contains(t.Tag1))
+				.ToList();
+		}
+		catch { }
+
+		//TODO: optimize this to use IQueryable and not .ToList()
+
+		var sourceLanguageIndex = GetLanguageIndex(source);
+		var targetLanguageIndex = GetLanguageIndex(target);
+		var columns = GetTermColumns(targetLanguageIndex, sourceLanguageIndex);
+
+		var termbaseViewerTerms = new List<TermModel>();
+		dbTerms.ForEach(dbT => termbaseViewerTerms.Add(new TermModel
+		(
+			dbT.Id,
+			dbT[columns[0]],
+			dbT[columns[1]],
+			dbT[columns[2]],
+			dbT[columns[3]],
+			dbT[columns[4]],
+			dbT[columns[5]],
+			dbT.CommentAll,
+			sourceLanguageIndex,
+			targetLanguageIndex,
+			dbT.Tag1
+		)));
+
+		return termbaseViewerTerms;
+	}
+
 	public List<StudioTermEntry> GetExactTerms(string word, string sourceLanguage, string targetLanguage, List<string> glossaries)
 	{
 		var sourceLanguageIndex = GetLanguageIndex(sourceLanguage);
@@ -40,13 +74,13 @@ public class TerminologyService : ITerminologyService
 
 		var constant = Expression.Constant(word);
 		var comparison = Expression.Equal(property, constant);
-		
+
 		var filterExpression = Expression.Lambda<Func<DbTerm, bool>>(comparison, parameter);
 		var filteredTerms = InterpretBankDataContext
 			.GetRows<DbTerm>()
 			.Where(t => glossaries.Contains(t.Tag1))
 			.Where(filterExpression);
-			
+
 		var studioTerms = new List<StudioTermEntry>();
 		foreach (var term in filteredTerms)
 			//TODO: Add CommentAll as an entry level field
@@ -99,43 +133,6 @@ public class TerminologyService : ITerminologyService
 	public List<LanguageModel> GetGlossaryLanguages(string glossaryName) =>
 		InterpretBankDataContext.GetGlossaryLanguages(glossaryName);
 
-	public List<TermModel> GetAllTerms(string source, string target, List<string> glossaries)
-	{
-		List<DbTerm> dbTerms = null;
-		try
-		{
-			dbTerms = InterpretBankDataContext
-				.GetRows<DbTerm>()
-				.Where(t => glossaries.Contains(t.Tag1))
-				.ToList();
-		}
-		catch { }
-
-		//TODO: optimize this to use IQueryable and not .ToList() 
-
-		var sourceLanguageIndex = GetLanguageIndex(source);
-		var targetLanguageIndex = GetLanguageIndex(target);
-		var columns = GetTermColumns(targetLanguageIndex, sourceLanguageIndex);
-
-		var termbaseViewerTerms = new List<TermModel>();
-		dbTerms.ForEach(dbT => termbaseViewerTerms.Add(new TermModel
-		(
-			dbT.Id,
-			dbT[columns[0]],
-			dbT[columns[1]],
-			dbT[columns[2]],
-			dbT[columns[3]],
-			dbT[columns[4]],
-			dbT[columns[5]],
-			dbT.CommentAll,
-			sourceLanguageIndex,
-			targetLanguageIndex,
-			dbT.Tag1
-		)));
-
-		return termbaseViewerTerms;
-	}
-
 	public void SaveAllTerms(List<TermModel> changedTerms)
 	{
 		InterpretBankDataContext.CommitAllChanges(changedTerms);
@@ -143,7 +140,7 @@ public class TerminologyService : ITerminologyService
 
 	private static List<string> GetTermColumns(int targetLanguageIndex, int sourceLanguageIndex = -1)
 	{
-		var columns =  new List<string>
+		var columns = new List<string>
 		{
 			$"Term{targetLanguageIndex}",
 			$"Comment{targetLanguageIndex}a",

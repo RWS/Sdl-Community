@@ -10,6 +10,7 @@ namespace InterpretBank.TermbaseViewer.Model
 	{
 		private string _commentAll;
 		private bool _isEditing;
+		private bool _isRemoved;
 		private int _sourceLanguageIndex;
 		private string _sourceTerm;
 		private string _sourceTermComment1;
@@ -18,7 +19,6 @@ namespace InterpretBank.TermbaseViewer.Model
 		private string _targetTerm;
 		private string _targetTermComment1;
 		private string _targetTermComment2;
-		private bool _isRemoved;
 
 		public TermModel()
 		{
@@ -47,18 +47,6 @@ namespace InterpretBank.TermbaseViewer.Model
 			SetOriginalTerm();
 		}
 
-		public bool IsRemoved
-		{
-			get => _isRemoved;
-			set
-			{
-				if (value == _isRemoved) return;
-				_isRemoved = value;
-				OnPropertyChanged();
-				OnPropertyChanged(nameof(Edited));
-			}
-		}
-
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		public string CommentAll
@@ -68,7 +56,9 @@ namespace InterpretBank.TermbaseViewer.Model
 		}
 
 		public bool Edited => !ContentEquals(OriginalTerm) || IsRemoved;
+
 		public string GlossaryName { get; set; }
+
 		public long Id { get; set; }
 
 		public bool IsEditing
@@ -76,6 +66,21 @@ namespace InterpretBank.TermbaseViewer.Model
 			get => _isEditing;
 			set => SetField(ref _isEditing, value);
 		}
+
+		public bool IsRemoved
+		{
+			get => _isRemoved;
+			set
+			{
+				if (value == _isRemoved)
+					return;
+				_isRemoved = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(Edited));
+			}
+		}
+
+		public ICommand RemoveTermCommand => new RelayCommand(RemoveTerm);
 
 		public int SourceLanguageIndex
 		{
@@ -126,12 +131,6 @@ namespace InterpretBank.TermbaseViewer.Model
 		}
 
 		private TermModel OriginalTerm { get; set; }
-		public ICommand RemoveTermCommand => new RelayCommand(RemoveTerm);
-
-		private void RemoveTerm(object obj)
-		{
-			IsRemoved = !IsRemoved;
-		}
 
 		public bool ContentEquals(TermModel other)
 		{
@@ -183,6 +182,11 @@ namespace InterpretBank.TermbaseViewer.Model
 			OnPropertyChanged(propertyName);
 			OnPropertyChanged(nameof(Edited));
 			return true;
+		}
+
+		private void RemoveTerm(object obj)
+		{
+			IsRemoved = !IsRemoved;
 		}
 	}
 }

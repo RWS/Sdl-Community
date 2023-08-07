@@ -43,16 +43,6 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 		SubmitData();
 	}
 
-	private void RemoveTerms(List<TermModel> removedTerms)
-	{
-		var dbTerms = DataContext.GetTable<DbTerm>();
-
-		var idsRemove = removedTerms.Select(rt => rt.Id);
-		var toRemove = dbTerms.Where(t => idsRemove.Contains(t.Id));
-
-		dbTerms.DeleteAllOnSubmit(toRemove);
-	}
-
 	public void Dispose()
 	{
 		DataContext?.Dispose();
@@ -273,5 +263,15 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 		}
 
 		return langIndices.Select(li => languageModels.FirstOrDefault(l => l.Index == li)).ToList();
+	}
+
+	private void RemoveTerms(List<TermModel> removedTerms)
+	{
+		var dbTerms = DataContext.GetTable<DbTerm>();
+
+		var idsRemove = removedTerms.Select(rt => rt.Id);
+		var toRemove = dbTerms.Where(t => idsRemove.Contains(t.Id));
+
+		dbTerms.DeleteAllOnSubmit(toRemove);
 	}
 }

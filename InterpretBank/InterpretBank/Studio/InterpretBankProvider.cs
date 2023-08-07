@@ -95,7 +95,6 @@ public class InterpretBankProvider : AbstractTerminologyProvider
 		return results;
 	}
 
-
 	//TODO: simplify this; creates confusion
 	/// <summary>
 	/// Works differently for Fuzzy and Exact searches.

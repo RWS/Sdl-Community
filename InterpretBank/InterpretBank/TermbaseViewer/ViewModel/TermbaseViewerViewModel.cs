@@ -15,10 +15,10 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 {
 	public class TermbaseViewerViewModel : ViewModelBase.ViewModel
 	{
+		private int _selectedIndex;
 		private TermModel _selectedItem;
 
 		private ObservableCollection<TermModel> _terms;
-		private int _selectedIndex;
 
 		public TermbaseViewerViewModel(ITerminologyService termSearchService)
 		{
@@ -29,6 +29,22 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 		public bool AnyEditedTerms => Terms.Any(t => t.Edited);
 		public ICommand CommitAllToDatabaseCommand => new RelayCommand(CommitAllToDatabase);
 		public ICommand RevertCommand => new RelayCommand(RevertChanges);
+
+		public int SelectedIndex
+		{
+			get => _selectedIndex;
+			set
+			{
+				if (value == _selectedIndex)
+					return;
+				_selectedIndex = value;
+
+				//SelectedItem = Terms[value == -1 ? 0 : value];
+				SelectedItem = value == -1 ? null : Terms[value];
+
+				OnPropertyChanged();
+			}
+		}
 
 		public TermModel SelectedItem
 		{
@@ -52,20 +68,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 			}
 		}
 
-		public int SelectedIndex
-		{
-			get => _selectedIndex;
-			set
-			{
-				if (value == _selectedIndex) return;
-				_selectedIndex = value;
-
-				//SelectedItem = Terms[value == -1 ? 0 : value];
-				SelectedItem = value == -1 ? null : Terms[value];
-
-				OnPropertyChanged();
-			}
-		}
+		private List<string> Glossaries { get; set; }
 
 		public void JumpToTerm(IEntry entry)
 		{
@@ -86,6 +89,38 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
 			SelectedIndex = 1;
 			SelectedIndex = 0;
+		}
+
+		private void AddNewTerm(object obj)
+		{
+			var termModel = new TermModel
+			{
+				IsEditing = true
+			};
+
+			Terms.Add(termModel);
+
+			termModel.PropertyChanged += OnTermModelOnPropertyChanged;
+			termModel.SetOriginalTerm();
+
+			//TODO Find another method of taking the indices: the list may be empty
+			termModel.SourceLanguageIndex = Terms[0].SourceLanguageIndex;
+			termModel.TargetLanguageIndex = Terms[0].TargetLanguageIndex;
+			termModel.GlossaryName = Terms[0].GlossaryName;
+
+			SelectedIndex = Terms.IndexOf(termModel);
+		}
+
+		private void CommitAllToDatabase(object obj)
+		{
+			var changedTerms = Terms.Where(t => t.Edited).ToList();
+
+			TerminologyService.SaveAllTerms(changedTerms);
+			changedTerms.ForEach(t => t.SetOriginalTerm(true));
+
+			ReloadTerms();
+
+			SelectedIndex = Terms.Count - 1;
 		}
 
 		private void LoadTermsFromDb(Language source, Language target, List<string> glossaries)
@@ -109,43 +144,6 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 			Terms.ForEach(t => t.PropertyChanged += OnTermModelOnPropertyChanged);
 		}
 
-		private List<string> Glossaries { get; set; }
-
-		private void AddNewTerm(object obj)
-		{
-			var termModel = new TermModel
-			{
-				IsEditing = true
-			};
-
-			Terms.Add(termModel);
-
-			
-			termModel.PropertyChanged += OnTermModelOnPropertyChanged;
-			termModel.SetOriginalTerm();
-
-			//TODO Find another method of taking the indices: the list may be empty
-			termModel.SourceLanguageIndex = Terms[0].SourceLanguageIndex;
-			termModel.TargetLanguageIndex= Terms[0].TargetLanguageIndex;
-			termModel.GlossaryName = Terms[0].GlossaryName;
-
-			
-
-			SelectedIndex = Terms.IndexOf(termModel);
-		}
-
-		private void CommitAllToDatabase(object obj)
-		{
-			var changedTerms = Terms.Where(t => t.Edited).ToList();
-
-			TerminologyService.SaveAllTerms(changedTerms);
-			changedTerms.ForEach(t => t.SetOriginalTerm(true));
-
-			ReloadTerms();
-
-			SelectedIndex = Terms.Count - 1;
-		}
-
 		private void RevertChanges(object obj)
 		{
 			SelectedItem.IsRemoved = false;
@@ -154,7 +152,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 				var selectedItem = SelectedItem;
 				Terms.Remove(selectedItem);
 
-				SelectedIndex = Terms.Any() ? Terms.Count - 1: -1;
+				SelectedIndex = Terms.Any() ? Terms.Count - 1 : -1;
 			}
 			else
 				SelectedItem.Revert();
