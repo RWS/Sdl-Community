@@ -123,13 +123,6 @@ namespace GoogleCloudTranslationProvider.Studio
 			credentialStore.AddCredential(uri, credentials);
 		}
 
-		//TODO PACH (06/04/2021): Confirm if this is still required/ remove if obsolete code
-		/// <summary>
-		/// This gets called when a TranslationProviderAuthenticationException is thrown
-		/// Since SDL Studio doesn't pass the provider instance here and even if we do a workaround...
-		/// any new options set in the form that comes up are never saved to the project XML...
-		/// so there is no way to change any options, only to provide the credentials
-		/// </summary>
 		public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState,
 			ITranslationProviderCredentialStore credentialStore)
 		{
@@ -145,7 +138,7 @@ namespace GoogleCloudTranslationProvider.Studio
 				}
 			}
 
-			var options = new TranslationOptions();
+			var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
 			var mainWindowViewModel = ShowRequestedView(languagePairs.ToArray(), credentialStore, options);
 			return mainWindowViewModel.DialogResult;
 		}
