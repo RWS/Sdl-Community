@@ -33,7 +33,8 @@ namespace Sdl.Community.MTEdge.Provider.Helpers
             }
 
             var bestMatch = string.Empty;
-            foreach (DictionaryEntry entry in MTEdgeLanguages.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true))
+			var entries = MTEdgeLanguages.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true);
+			foreach (DictionaryEntry entry in entries)
             {
                 var nonMTEdgeCode = (entry.Value as string).ToLower();
                 if (!languageCode.StartsWith(nonMTEdgeCode, StringComparison.OrdinalIgnoreCase))
@@ -48,6 +49,11 @@ namespace Sdl.Community.MTEdge.Provider.Helpers
                 {
                     bestMatch = entry.Key as string;
                 }
+				else if (languageCode == "fr-ca"
+					&& nonMTEdgeCode == languageCode)
+				{
+					return entry.Key as string;
+				}
             }
 
             return bestMatch;
