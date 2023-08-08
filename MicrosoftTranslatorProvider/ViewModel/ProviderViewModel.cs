@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using MicrosoftTranslatorProvider.Commands;
 using MicrosoftTranslatorProvider.Interfaces;
@@ -20,20 +19,33 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		private List<RegionSubscription> _regions;
 		private RegionSubscription _selectedRegion;
 
+		private bool _editProvider;
 		private bool _persistMicrosoftKey;
 		private string _apiKey;
 
 		private ICommand _learnMoreCommand;
 
-		public ProviderViewModel(ITranslationOptions options, LanguagePair[] languagePairs)
+		public ProviderViewModel(ITranslationOptions options, LanguagePair[] languagePairs, bool editProvider)
 		{
 			_options = options;
 			_languagePairs = languagePairs;
+			EditProvider = editProvider;
 			InitializeComponent();
 			CreateMapping();
 		}
 
 		public BaseModel ViewModel => this;
+
+		public bool EditProvider
+		{
+			get => _editProvider;
+			set
+			{
+				if (_editProvider == value) return;
+				_editProvider = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public string ApiKey
 		{

@@ -15,8 +15,8 @@
 		WindowStyle="None"
 		ResizeMode="CanResize"
 		Title="Microsoft Translator Provider"
-		Height="600"
-		Width="1000"
+		Height="800"
+		Width="1200"
 		MinHeight="500"
 		MinWidth="900"
 		d:DesignHeight="600"
@@ -59,29 +59,34 @@
 			</Grid.RowDefinitions>
 			<!-- BORDER CONTROL -->
 			<styles:WindowsControl Grid.Row="0"
-								   Background="White" />
+								   Background="Transparent" />
 
 			<StackPanel Grid.Row="2"
 						Margin="24 48 24 0">
-				<ComboBox ItemsSource="{Binding Endpoints}"
-						  SelectedItem="{Binding SelectedEndpoint}"
-						  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
-						  Visibility="{Binding CanSwitchProvider, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
-						  Margin="0 0 0 12" />
+				<GroupBox Header="Authentication type"
+						  Style="{StaticResource DefaultGroupBox}"
+						  Visibility="{Binding CanSwitchProvider, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}">
+					<ComboBox ItemsSource="{Binding Endpoints}"
+							  SelectedItem="{Binding SelectedEndpoint}"
+							  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+							  Margin="12" />
+				</GroupBox>
 				<ContentControl Content="{Binding SelectedView.ViewModel}" />
 			</StackPanel>
 
+			<StackPanel Grid.Row="3"
+						Orientation="Horizontal"
+						HorizontalAlignment="Left"
+						Margin="24">
+				<Button Content="Help"
+						Style="{StaticResource Sdl.Button.SecondaryStyle}"
+						Command="{Binding NavigateToCommand}"
+						CommandParameter="{x:Static root:Constants.TellMe_HelpUrl}"
+						Cursor="Hand"
+						Width="120"
+						Height="30" />
 
-			<Button Content="Help"
-					Style="{StaticResource Sdl.Button.SecondaryStyle}"
-					Command="{Binding NavigateToCommand}"
-					CommandParameter="{x:Static root:Constants.TellMe_HelpUrl}"
-					Cursor="Hand"
-					Width="120"
-					Height="30"
-					Grid.Row="3"
-					HorizontalAlignment="Left"
-					Margin="24"/>
+			</StackPanel>
 
 			<StackPanel HorizontalAlignment="Right"
 						Orientation="Horizontal"
@@ -92,8 +97,8 @@
 						Style="{StaticResource Sdl.Button.SecondaryStyle}"
 						Command="{Binding SwitchViewCommand}"
 						Cursor="Hand"
-						Width="120" 
-						Height="30"/>
+						Width="120"
+						Height="30" />
 
 				<Button Content="Confirm"
 						Style="{StaticResource Sdl.Button.PrimaryStyle}"
