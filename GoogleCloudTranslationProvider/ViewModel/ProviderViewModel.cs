@@ -24,6 +24,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private readonly IOpenFileDialogService _openFileDialogService;
 		private readonly ITranslationOptions _options;
 		private readonly IEnumerable<LanguagePair> _languagePairs;
+		private readonly bool _editProvider;
 
 		private GoogleApiVersion _selectedGoogleApiVersion;
 
@@ -42,8 +43,9 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private bool _canModifyExistingFields;
 		private bool _projectResourcesLoaded;
 		private bool _persistGoogleKey;
-		private bool _useUrlPath;
+		private bool _userLocalPath;
 
+		private ICommand _switchJsonLoadingPathCommand;
 		private ICommand _downloadJsonFileCommand;
 		private ICommand _dragDropJsonFileCommand;
 		private ICommand _browseJsonFileCommand;
@@ -51,9 +53,11 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private ICommand _navigateToCommand;
 		private ICommand _clearCommand;
 
-		public ProviderViewModel(ITranslationOptions options, List<LanguagePair> languagePairs)
+		public ProviderViewModel(ITranslationOptions options, List<LanguagePair> languagePairs, bool editProvider)
 		{
 			ViewModel = this;
+			UseLocalPath = true;
+			_editProvider = editProvider;
 			_options = options;
 			_languagePairs = languagePairs;
 			CanChangeProviderResources = string.IsNullOrEmpty(_options.ProjectId);
@@ -206,13 +210,13 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			}
 		}
 
-		public bool UseUrlPath
+		public bool UseLocalPath
 		{
-			get => _useUrlPath;
+			get => _userLocalPath;
 			set
 			{
-				if (_useUrlPath == value) return;
-				_useUrlPath = value;
+				if (_userLocalPath == value) return;
+				_userLocalPath = value;
 				OnPropertyChanged();
 			}
 		}
@@ -238,6 +242,8 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			UrlToDownload = null;
 			VisibleJsonPath = null;
 		}
+
+		public ICommand SwitchJsonLoadingPathCommand => _switchJsonLoadingPathCommand ??= new RelayCommand(action => { UseLocalPath = !UseLocalPath; });
 
 		public ICommand DragDropJsonFileCommand => _dragDropJsonFileCommand ??= new RelayCommand(DragAndDropJsonFile);
 		public ICommand DownloadJsonFileCommand => _downloadJsonFileCommand ??= new RelayCommand(DownloadJsonFile);
@@ -306,43 +312,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			return true;
 		}
 
-		private bool GoogleV3CredentialsAreValid(LanguagePair[] languagePairs)
-		{
-			try
-			{
-				var providerOptions = new TranslationOptions
-				{
-					ProjectId = ProjectId,
-					JsonFilePath = JsonFilePath,
-					ProjectLocation = ProjectLocation,
-					SelectedGoogleVersion = SelectedGoogleApiVersion.Version,
-					LanguageMappingPairs = LanguageMappingPairs
-				};
-				return true;
-			}
-			catch (Exception e)
-			{
-				if (e.Message.Contains("Resource type: models") || e.Message.Contains("The model"))
-				{
-					ErrorHandler.HandleError(PluginResources.Validation_ModelName_Invalid, "Custom Models");
-				}
-				else if (e.Message.Contains("Invalid resource name") || e.Message.Contains("project number"))
-				{
-					ErrorHandler.HandleError(PluginResources.Validation_ProjectID_Failed, nameof(ProjectId));
-				}
-				else if (e.Message.Contains("PermissionDenied"))
-				{
-					ErrorHandler.HandleError(PluginResources.Validation_PermissionDenied, "Permission Denied");
-				}
-				else
-				{
-					ErrorHandler.HandleError(e);
-				}
-
-				return false;
-			}
-		}
-
 		private void InitializeComponent()
 		{
 			GoogleApiVersions = new List<GoogleApiVersion>
@@ -360,7 +329,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			};
 
 			PersistGoogleKey = _options.PersistGoogleKey;
-			ApiKey = PersistGoogleKey ? _options.ApiKey : string.Empty;
+			ApiKey = PersistGoogleKey || _editProvider ? _options.ApiKey : string.Empty;
 			JsonFilePath = _options.JsonFilePath;
 			VisibleJsonPath = JsonFilePath.ShortenFilePath();
 			ProjectId = _options.ProjectId;

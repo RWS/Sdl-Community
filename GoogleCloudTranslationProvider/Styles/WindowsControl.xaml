@@ -22,7 +22,8 @@
 
 	<Grid x:Name="WindowTitleBar"
 		  DockPanel.Dock="Top"
-		  MouseLeftButtonDown="TitleBarMouseLeftButtonDown">
+		  MouseLeftButtonDown="TitleBarMouseLeftButtonDown"
+		  Background="Transparent">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*" />
 			<ColumnDefinition Width="Auto" />
