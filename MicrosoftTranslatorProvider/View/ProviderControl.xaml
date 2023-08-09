@@ -54,11 +54,13 @@
 							<controls:BindablePasswordBox Style="{DynamicResource Sdl.BindablePasswordBox.GenericStyle}"
 														  Password="{Binding ApiKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
 														  VerticalContentAlignment="Center"
+														  IsEnabled="{Binding EditProvider, Converter={StaticResource InvertableBoolEnabledConverter}, ConverterParameter=Inverted}"
 														  Height="30"
 														  Padding="8 0 8 0" />
 							<CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 									  IsChecked="{Binding PersistMicrosoftKey}"
 									  Content="{x:Static root:PluginResources.PersistMicrosoft}"
+									  Visibility="{Binding EditProvider, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
 									  Margin="0 0 0 0" />
 						</StackPanel>
 					</StackPanel>
