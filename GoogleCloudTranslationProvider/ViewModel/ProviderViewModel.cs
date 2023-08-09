@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
@@ -23,6 +24,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private readonly IOpenFileDialogService _openFileDialogService;
 		private readonly ITranslationOptions _options;
 		private readonly IEnumerable<LanguagePair> _languagePairs;
+		private readonly bool _editProvider;
 
 		private GoogleApiVersion _selectedGoogleApiVersion;
 
@@ -41,8 +43,9 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private bool _canModifyExistingFields;
 		private bool _projectResourcesLoaded;
 		private bool _persistGoogleKey;
-		private bool _useUrlPath;
+		private bool _useLocalPath;
 
+		private ICommand _switchJsonLoadingPathCommand;
 		private ICommand _downloadJsonFileCommand;
 		private ICommand _dragDropJsonFileCommand;
 		private ICommand _browseJsonFileCommand;
@@ -50,9 +53,11 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private ICommand _navigateToCommand;
 		private ICommand _clearCommand;
 
-		public ProviderViewModel(ITranslationOptions options, List<LanguagePair> languagePairs)
+		public ProviderViewModel(ITranslationOptions options, List<LanguagePair> languagePairs, bool editProvider)
 		{
 			ViewModel = this;
+			UseLocalPath = true;
+			_editProvider = editProvider;
 			_options = options;
 			_languagePairs = languagePairs;
 			CanChangeProviderResources = string.IsNullOrEmpty(_options.ProjectId);
@@ -204,13 +209,13 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			}
 		}
 
-		public bool UseUrlPath
+		public bool UseLocalPath
 		{
-			get => _useUrlPath;
+			get => _useLocalPath;
 			set
 			{
-				if (_useUrlPath == value) return;
-				_useUrlPath = value;
+				if (_useLocalPath == value) return;
+				_useLocalPath = value;
 				OnPropertyChanged();
 			}
 		}
@@ -245,6 +250,8 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		public ICommand NavigateToCommand => _navigateToCommand ??= new RelayCommand(NavigateTo);
 		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
 
+		public ICommand SwitchJsonLoadingPathCommand => _switchJsonLoadingPathCommand ??= new RelayCommand(action => { UseLocalPath = !UseLocalPath; });
+
 		public bool CanConnectToGoogleV2(HtmlUtil htmlUtil)
 		{
 			if (string.IsNullOrEmpty(ApiKey))
@@ -273,7 +280,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		public bool CanConnectToGoogleV3(LanguagePair[] languagePairs)
 		{
-			return GoogleV3OptionsAreSet() && GoogleV3CredentialsAreValid(languagePairs);
+			return GoogleV3OptionsAreSet();
 		}
 
 		private bool GoogleV3OptionsAreSet()
@@ -302,46 +309,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			return true;
 		}
 
-		private bool GoogleV3CredentialsAreValid(LanguagePair[] languagePairs)
-		{
-			try
-			{
-				var providerOptions = new TranslationOptions
-				{
-					ProjectId = ProjectId,
-					JsonFilePath = JsonFilePath,
-					ProjectLocation = ProjectLocation,
-					SelectedGoogleVersion = SelectedGoogleApiVersion.Version,
-					LanguageMappingPairs = LanguageMappingPairs
-				};
-
-				var googleV3 = new V3Connector(providerOptions);
-				googleV3.TryToAuthenticateUser(languagePairs);
-				return true;
-			}
-			catch (Exception e)
-			{
-				if (e.Message.Contains("Resource type: models") || e.Message.Contains("The model"))
-				{
-					ErrorHandler.HandleError(PluginResources.Validation_ModelName_Invalid, "Custom Models");
-				}
-				else if (e.Message.Contains("Invalid resource name") || e.Message.Contains("project number"))
-				{
-					ErrorHandler.HandleError(PluginResources.Validation_ProjectID_Failed, nameof(ProjectId));
-				}
-				else if (e.Message.Contains("PermissionDenied"))
-				{
-					ErrorHandler.HandleError(PluginResources.Validation_PermissionDenied, "Permission Denied");
-				}
-				else
-				{
-					ErrorHandler.HandleError(e);
-				}
-
-				return false;
-			}
-		}
-
 		private void InitializeComponent()
 		{
 			GoogleApiVersions = new List<GoogleApiVersion>
@@ -359,14 +326,14 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			};
 
 			PersistGoogleKey = _options.PersistGoogleKey;
-			ApiKey = PersistGoogleKey ? _options.ApiKey : string.Empty;
+			ApiKey = PersistGoogleKey || _editProvider ? _options.ApiKey : string.Empty;
 			JsonFilePath = _options.JsonFilePath;
 			VisibleJsonPath = JsonFilePath.ShortenFilePath();
 			ProjectId = _options.ProjectId;
 			ProjectLocation = _options.ProjectLocation;
 
 			SelectedGoogleApiVersion = GoogleApiVersions.FirstOrDefault(v => v.Version.Equals(_options.SelectedGoogleVersion))
-									?? GoogleApiVersions.First(x => x.Version == ApiVersion.V3);
+									?? GoogleApiVersions.First(x => x.Version == ApiVersion.V2);
 			if (!string.IsNullOrEmpty(_projectLocation))
 			{
 				Locations = V3ResourceManager.GetLocations(new TranslationOptions
@@ -426,7 +393,11 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		private void ReadJsonFile(string filePath)
 		{
-			GetJsonDetails(filePath);
+			if (!GetJsonDetails(filePath).Success)
+			{
+				return;
+			}
+
 			var tempOptions = new TranslationOptions
 			{
 				ProjectId = _projectId,
@@ -438,18 +409,19 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			ProjectLocation = Locations.First();
 		}
 
-		private void GetJsonDetails(string selectedFile)
+		private (bool Success, object OperationResult) GetJsonDetails(string selectedFile)
 		{
 			var (success, operationResult) = selectedFile.VerifyPathAndReadJsonFile();
 			if (!success)
 			{
 				ErrorHandler.HandleError(operationResult as string, "Reading failed");
-				return;
+				return (success, operationResult);
 			}
 
 			JsonFilePath = selectedFile;
 			VisibleJsonPath = selectedFile.ShortenFilePath();
 			ProjectId = (operationResult as Dictionary<string, string>)["project_id"];
+			return (true, null);
 		}
 
 		private void GetProjectResources()
@@ -472,9 +444,11 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			for (var i = 0; i < _languagePairs.Count(); i++)
 			{
 				var currentPair = _languagePairs.ElementAt(i);
+				var sourceDisplayName = new CultureInfo(currentPair.SourceCultureName).DisplayName;
+				var targetDisplayName = new CultureInfo(currentPair.TargetCultureName).DisplayName;
 				var mapping = new LanguagePairResources()
 				{
-					DisplayName = $"{currentPair.SourceCulture.DisplayName} - {currentPair.TargetCulture.DisplayName}",
+					DisplayName = $"{sourceDisplayName} - {targetDisplayName}",
 					LanguagePair = currentPair,
 					AvailableGlossaries = V3ResourceManager.GetPairGlossaries(currentPair, availableGlossaries),
 					AvailableModels = V3ResourceManager.GetPairModels(currentPair, availableCustomModels),

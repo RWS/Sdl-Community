@@ -195,7 +195,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		private void InitializeViews()
 		{
-			_providerViewModel = new ProviderViewModel(Options, _languagePairs.ToList());
+			_providerViewModel = new ProviderViewModel(Options, _languagePairs.ToList(), EditProvider);
 			_settingsViewModel = new SettingsViewModel(Options);
 
 			_availableViews = new List<ViewDetails>
