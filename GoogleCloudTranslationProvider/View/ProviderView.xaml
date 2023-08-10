@@ -49,7 +49,7 @@
 				<RowDefinition Height="*" />
 				<RowDefinition Height="Auto" />
 			</Grid.RowDefinitions>
-			<!--<API VERSION SELECTOR>-->
+
 			<ComboBox Grid.Row="0"
 					  ItemsSource="{Binding GoogleApiVersions}"
 					  SelectedItem="{Binding SelectedGoogleApiVersion}"
@@ -59,13 +59,20 @@
 					  HorizontalContentAlignment="Center"
 					  Cursor="Hand"
 					  Margin="16 12 16 0" />
-			<!--</API VERSION SELECTOR>-->
 
-			<!--<GOOGLE API V2>-->
-			<StackPanel Visibility="{Binding IsV2Checked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-						Margin="16 12 16 0"
-						Grid.Row="1">
-				<StackPanel Orientation="Horizontal">
+			<Grid Visibility="{Binding IsV2Checked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+				  Margin="16 12 16 0"
+				  Grid.Row="1">
+
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+
+				<StackPanel Orientation="Horizontal"
+							Grid.Row="0">
 					<TextBlock Text="{x:Static root:PluginResources.ProviderView_V2_ApiKey_Description}"
 							   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
 							   Margin="0 0 4 0" />
@@ -83,226 +90,306 @@
 											  Style="{DynamicResource Sdl.BindablePasswordBox.GenericStyle}"
 											  HorizontalAlignment="Left"
 											  Width="320"
-											  Margin="0 2" />
+											  Margin="0 2"
+											  Grid.Row="1" />
 
 				<CheckBox Content="{x:Static root:PluginResources.ProviderView_V2_RememberKey}"
 						  IsChecked="{Binding PersistGoogleKey}"
 						  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+						  VerticalContentAlignment="Center"
 						  Cursor="Hand"
-						  Margin="0" />
+						  Margin="0"
+						  Grid.Row="2" />
 
 				<Button Content="{x:Static root:PluginResources.ProviderView_V2_ApiKey_Navigate}"
 						Command="{Binding NavigateToCommand}"
 						CommandParameter="{x:Static root:Constants.ProjectUri}"
-						Visibility="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
 						Style="{StaticResource Sdl.Button.HyperLinkStyle}"
 						HorizontalAlignment="Left"
 						FontSize="12"
 						FontStyle="Italic"
 						Padding="0"
 						Cursor="Hand"
-						Margin="4 0 0 12" />
-			</StackPanel>
-			<!--</GOOGLE API V2>-->
+						Grid.Row="3" />
+			</Grid>
 
-			<!--<GOOGLE API V3>-->
-			<StackPanel Visibility="{Binding IsV3Checked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-						Grid.Row="1"
-						Margin="0 12 0 0">
-				<Grid>
-					<Grid.RowDefinitions>
-						<RowDefinition Height="Auto" />
-						<RowDefinition Height="Auto" />
-						<RowDefinition Height="Auto" />
-						<RowDefinition Height="*" />
-					</Grid.RowDefinitions>
+			<Grid Visibility="{Binding IsV3Checked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+				  Grid.Row="1"
+				  Margin="0 12 0 0">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="*" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
 
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="Auto" />
-						<ColumnDefinition Width="*" />
-					</Grid.ColumnDefinitions>
-					<!--<JSON File Selector>-->
-					<Border Background="Transparent"
-							AllowDrop="{Binding UseUrlPath, Converter={StaticResource InvertableBoolEnabledConverter}, ConverterParameter=Inverted}"
-							Visibility="{Binding ProjectResourcesLoaded, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
-							behaviours:DragDropBehaviour.DragDrop="{Binding DragDropJsonFileCommand}"
-							Grid.ColumnSpan="2"
-							VerticalAlignment="Stretch"
-							BorderBrush="#D3D3D3"
-							BorderThickness="1"
-							CornerRadius="8"
-							Margin="16 12 16 0">
-						<StackPanel Margin="0 8"
-									VerticalAlignment="Center">
-							<!--<Local Path>-->
-							<StackPanel>
-								<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_File_DragAndDrop}"
-										   Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"
-										   FontSize="16"
-										   HorizontalAlignment="Center"
-										   Margin="0" />
-								<Button Content="{x:Static root:PluginResources.ProviderView_V3_File_Browse}"
-										HorizontalAlignment="Center"
-										Command="{Binding BrowseJsonFileCommand}"
-										Style="{StaticResource TransparentButtonStyle}"
-										FontWeight="DemiBold"
-										AllowDrop="True"
-										Margin="0"
-										Cursor="Hand" />
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+
+				<Border Background="Transparent"
+						AllowDrop="{Binding UseLocalPath, Converter={StaticResource InvertableBoolEnabledConverter}}"
+						Visibility="{Binding ProjectResourcesLoaded, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+						behaviours:DragDropBehaviour.DragDrop="{Binding DragDropJsonFileCommand}"
+						Grid.ColumnSpan="2"
+						VerticalAlignment="Stretch"
+						BorderBrush="#D3D3D3"
+						BorderThickness="1"
+						CornerRadius="8"
+						Margin="16 12 16 0"
+						Padding="0 8 0 12"
+						Height="144">
+					<StackPanel Margin="0 8">
+						<Border HorizontalAlignment="Center"
+								Background="Transparent"
+								BorderThickness="0"
+								BorderBrush="#D3D3D3"
+								CornerRadius="8"
+								Margin="0 0 0 16">
+							<StackPanel Orientation="Horizontal">
+								<Button Content="Local path"
+										Command="{Binding SwitchJsonLoadingPathCommand}"
+										Style="{StaticResource LeftSwitchButton}"
+										IsEnabled="{Binding UseLocalPath, Converter={StaticResource InvertableBoolEnabledConverter}, ConverterParameter=Inverted}" />
+								<Button Content="Download file"
+										Command="{Binding SwitchJsonLoadingPathCommand}"
+										Style="{StaticResource RightSwitchButton}"
+										IsEnabled="{Binding UseLocalPath, Converter={StaticResource InvertableBoolEnabledConverter}}" />
 							</StackPanel>
-							<!--</Local Path>-->
+						</Border>
+
+						<StackPanel Visibility="{Binding UseLocalPath, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}">
+							<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_File_DragAndDrop}"
+									   Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"
+									   FontSize="16"
+									   HorizontalAlignment="Center"
+									   Margin="0" />
+							<Button Content="{x:Static root:PluginResources.ProviderView_V3_File_Browse}"
+									HorizontalAlignment="Center"
+									Command="{Binding BrowseJsonFileCommand}"
+									Style="{StaticResource TransparentButtonStyle}"
+									FontWeight="DemiBold"
+									AllowDrop="True"
+									Margin="0"
+									Cursor="Hand" />
 						</StackPanel>
-					</Border>
 
-					<!--<PROJECT ID>-->
-					<StackPanel Grid.Row="0"
-								Grid.Column="0"
-								Visibility="{Binding ProjectResourcesLoaded, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-								Orientation="Horizontal"
-								Margin="24 0">
-						<Image Source="../Resources/Information.png"
-							   Width="15"
-							   Margin="0 -8 3 0">
-							<Image.ToolTip>
-								<ToolTip>
-									<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_ProjectID_Tooltip}" />
-								</ToolTip>
-							</Image.ToolTip>
-						</Image>
-						<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_ProjectID_Description}"
-								   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
-								   HorizontalAlignment="Left"
-								   Margin="0 1 0 0" />
-						<TextBox Text="{Binding ProjectId, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-								 Style="{StaticResource Sdl.ComboBox.Generic.EditableTextBox}"
-								 HorizontalAlignment="Left"
-								 IsReadOnly="True"
-								 Height="24" />
+						<StackPanel Margin="16 0"
+									Visibility="{Binding UseLocalPath, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}">
+							<TextBox Text="{Binding UrlToDownload, UpdateSourceTrigger=PropertyChanged}"
+									 Style="{StaticResource WatermarkTextBox}"
+									 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.ProviderView_V3_Url_Watermark}"
+									 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=UrlToDownload, Type={x:Type viewModels:ProviderViewModel}}"
+									 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+									 Margin="0 8" />
+
+							<Button Content="{x:Static root:PluginResources.ProviderView_V3_File_ValidateUrl}"
+									Command="{Binding DownloadJsonFileCommand}"
+									Style="{StaticResource Sdl.Button.PrimaryStyle}"
+									Padding="0"
+									Width="130"
+									Height="24"
+									Cursor="Hand"
+									HorizontalAlignment="Left" />
+						</StackPanel>
 					</StackPanel>
-					<!--</PROJECT ID>-->
+				</Border>
 
-					<!--<PROJECT PATH>-->
-					<StackPanel Grid.Row="1"
-								Grid.Column="0"
-								Visibility="{Binding ProjectResourcesLoaded, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-								Orientation="Horizontal"
-								Margin="24 0">
-						<Image Source="../Resources/Information.png"
-							   Width="15"
-							   Margin="0 -8 3 0">
-							<Image.ToolTip>
-								<ToolTip>
-									<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_LocalPath_Tooltip}" />
-								</ToolTip>
-							</Image.ToolTip>
-						</Image>
-						<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_LocalPath_Description}"
-								   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
-								   HorizontalAlignment="Left"
-								   Margin="0 1 0 0" />
-						<TextBox Text="{Binding VisibleJsonPath}"
-								 Style="{StaticResource Sdl.ComboBox.Generic.EditableTextBox}"
-								 ToolTip="{Binding JsonFilePath}"
-								 HorizontalAlignment="Left"
-								 IsReadOnly="True"
-								 Height="24"/>
-						<Button Style="{StaticResource TransparentButtonStyle}"
-								Visibility="{Binding JsonFilePath, Converter={StaticResource EmptyToVisibility}}"
-								Command="{Binding OpenLocalPathCommand}"
-								VerticalAlignment="Top"
-								Width="20"
-								Cursor="Hand"
-								Margin="0 -2 0 0">
-							<Image Source="../Resources/Folder.png" />
-						</Button>
-					</StackPanel>
-					<!--</PROJECT PATH>-->
+				<StackPanel Grid.Row="0"
+							Grid.Column="0"
+							Visibility="{Binding ProjectResourcesLoaded, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+							Orientation="Horizontal"
+							Margin="24 0">
+					<Image Source="../Resources/Information.png"
+						   Width="15"
+						   Margin="0 -8 3 0">
+						<Image.ToolTip>
+							<ToolTip>
+								<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_ProjectID_Tooltip}" />
+							</ToolTip>
+						</Image.ToolTip>
+					</Image>
+					<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_ProjectID_Description}"
+							   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
+							   HorizontalAlignment="Left"
+							   Margin="0 1 0 0" />
+					<TextBox Text="{Binding ProjectId, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+							 Style="{StaticResource Sdl.ComboBox.Generic.EditableTextBox}"
+							 HorizontalAlignment="Left"
+							 IsReadOnly="True"
+							 Height="24" />
+				</StackPanel>
 
-					<!--<PROJECT LOCATION>-->
-					<ComboBox Grid.Row="1"
-							  Grid.Column="1"
-							  ItemsSource="{Binding Locations}"
-							  SelectedItem="{Binding ProjectLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-							  Visibility="{Binding ProjectResourcesLoaded, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-							  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
-							  ScrollViewer.VerticalScrollBarVisibility="Auto"
-							  ScrollViewer.HorizontalScrollBarVisibility="Auto"
-							  IsSynchronizedWithCurrentItem="True"
-							  HorizontalAlignment="Right"
-							  SelectedIndex="0"
-							  MinWidth="120"
-							  Width="120"
-							  Height="24"
-							  Cursor="Hand"
-							  Margin="0 -8 16 0" />
-					<!--</PROJECT LOCATION>-->
+				<StackPanel Grid.Row="1"
+							Grid.Column="0"
+							Visibility="{Binding ProjectResourcesLoaded, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+							Orientation="Horizontal"
+							Margin="24 0">
+					<Image Source="../Resources/Information.png"
+						   Width="15"
+						   Margin="0 -8 3 0">
+						<Image.ToolTip>
+							<ToolTip>
+								<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_LocalPath_Tooltip}" />
+							</ToolTip>
+						</Image.ToolTip>
+					</Image>
+					<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_LocalPath_Description}"
+							   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
+							   HorizontalAlignment="Left"
+							   Margin="0 1 0 0" />
+					<TextBox Text="{Binding VisibleJsonPath}"
+							 Style="{StaticResource Sdl.ComboBox.Generic.EditableTextBox}"
+							 ToolTip="{Binding JsonFilePath}"
+							 HorizontalAlignment="Left"
+							 IsReadOnly="True"
+							 Height="24" />
+					<Button Style="{StaticResource TransparentButtonStyle}"
+							Visibility="{Binding JsonFilePath, Converter={StaticResource EmptyToVisibility}}"
+							Command="{Binding OpenLocalPathCommand}"
+							VerticalAlignment="Top"
+							Width="20"
+							Cursor="Hand"
+							Margin="0 -2 0 0">
+						<Image Source="../Resources/Folder.png" />
+					</Button>
+				</StackPanel>
 
-					<!--<MAPPING TABLE>-->
-					<DataGrid Grid.Row="2"
-							  Grid.ColumnSpan="2"
-							  ItemsSource="{Binding LanguageMappingPairs}"
-							  SelectedItem="{Binding SelectedMappedPair, UpdateSourceTrigger=PropertyChanged}"
-							  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
-							  Visibility="{Binding ProjectResourcesLoaded, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-							  CanUserSortColumns="True"
-							  BorderBrush="#D3D3D3"
-							  AutoGenerateColumns="False"
-							  CanUserAddRows="False"
-							  Margin="16 0">
-						<DataGrid.Columns>
-							<DataGridTextColumn Header="{x:Static root:PluginResources.ProviderView_V3_MappingTable_Pairs}"
-												Binding="{Binding DisplayName}"
-												IsReadOnly="True"
-												Width="1*" />
-							
-							<DataGridTemplateColumn Header="{x:Static root:PluginResources.ProviderView_V3_MappingTable_Glossaries}"
-													Width="1*">
-								<DataGridTemplateColumn.CellTemplate>
-									<DataTemplate>
-										<StackPanel>
-											<ComboBox ItemsSource="{Binding AvailableGlossaries}"
-													  SelectedItem="{Binding SelectedGlossary, UpdateSourceTrigger=PropertyChanged}"
-													  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
-													  Visibility="{Binding GlossariesAreAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-													  DisplayMemberPath="DisplayName"
-													  SelectedIndex="0"
-													  BorderThickness="0"
-													  IsSynchronizedWithCurrentItem="True" />
-											<TextBlock Text="{x:Static root:PluginResources.RetrievedResources_NotAvailable}"
-													   Visibility="{Binding GlossariesAreAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
-													   Margin="6 2 0 0"/>
-										</StackPanel>
-									</DataTemplate>
-								</DataGridTemplateColumn.CellTemplate>
-							</DataGridTemplateColumn>
+				<ComboBox Grid.Row="0"
+						  Grid.RowSpan="2"
+						  Grid.Column="1"
+						  ItemsSource="{Binding Locations}"
+						  SelectedItem="{Binding ProjectLocation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						  Visibility="{Binding ProjectResourcesLoaded, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+						  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+						  IsSynchronizedWithCurrentItem="True"
+						  HorizontalAlignment="Right"
+						  SelectedIndex="0"
+						  MinWidth="160"
+						  MaxWidth="160"
+						  Height="24"
+						  Cursor="Hand"
+						  Margin="0 -12 16 0" />
 
-							<DataGridTemplateColumn Header="{x:Static root:PluginResources.ProviderView_V3_MappingTable_Models}"
-													Width="1*">
-								<DataGridTemplateColumn.CellTemplate>
-									<DataTemplate>
-										<StackPanel>
-											<ComboBox x:Name="GlossariesComboBox"
-													  ItemsSource="{Binding AvailableModels}"
-													  SelectedItem="{Binding SelectedModel, UpdateSourceTrigger=PropertyChanged}"
-													  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
-													  Visibility="{Binding ModelsAreAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-													  DisplayMemberPath="DisplayName"
-													  SelectedIndex="0"
-													  BorderThickness="0"
-													  IsSynchronizedWithCurrentItem="True" />
-											<TextBlock Text="{x:Static root:PluginResources.RetrievedResources_NotAvailable}"
-													   Visibility="{Binding ModelsAreAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
-													   Margin="6 2 0 0" />
-										</StackPanel>
-									</DataTemplate>
-								</DataGridTemplateColumn.CellTemplate>
-							</DataGridTemplateColumn>
-						</DataGrid.Columns>
-					</DataGrid>
-					<!--</MAPPING TABLE>-->
-				</Grid>
-			</StackPanel>
-			<!-- GOOGLE API V3 -->
+				<DataGrid Grid.Row="2"
+						  Grid.ColumnSpan="2"
+						  ItemsSource="{Binding LanguageMappingPairs}"
+						  SelectedItem="{Binding SelectedMappedPair, UpdateSourceTrigger=PropertyChanged}"
+						  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+						  Visibility="{Binding ProjectResourcesLoaded, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+						  CanUserSortColumns="True"
+						  BorderBrush="#D3D3D3"
+						  AutoGenerateColumns="False"
+						  CanUserAddRows="False"
+						  Margin="16 0">
+					<DataGrid.Columns>
+						<DataGridTextColumn Header="{x:Static root:PluginResources.ProviderView_V3_MappingTable_Pairs}"
+											Binding="{Binding DisplayName}"
+											IsReadOnly="True"
+											Width="1*" />
+
+						<DataGridTemplateColumn Header="{x:Static root:PluginResources.ProviderView_V3_MappingTable_Glossaries}"
+												Width="1*">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<StackPanel>
+										<ComboBox ItemsSource="{Binding AvailableGlossaries}"
+												  SelectedItem="{Binding SelectedGlossary, UpdateSourceTrigger=PropertyChanged}"
+												  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+												  Visibility="{Binding GlossariesAreAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+												  DisplayMemberPath="DisplayName"
+												  SelectedIndex="0"
+												  BorderThickness="0"
+												  IsSynchronizedWithCurrentItem="True" />
+										<TextBlock Text="{x:Static root:PluginResources.RetrievedResources_NotAvailable}"
+												   Visibility="{Binding GlossariesAreAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+												   Margin="6 2 0 0" />
+									</StackPanel>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+
+						<DataGridTemplateColumn Header="{x:Static root:PluginResources.ProviderView_V3_MappingTable_Models}"
+												Width="1*">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<StackPanel>
+										<ComboBox ItemsSource="{Binding AvailableModels}"
+												  SelectedItem="{Binding SelectedModel, UpdateSourceTrigger=PropertyChanged}"
+												  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+												  Visibility="{Binding ModelsAreAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+												  DisplayMemberPath="DisplayName"
+												  SelectedIndex="0"
+												  BorderThickness="0"
+												  IsSynchronizedWithCurrentItem="True" />
+										<TextBlock Text="{x:Static root:PluginResources.RetrievedResources_NotAvailable}"
+												   Visibility="{Binding ModelsAreAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+												   Margin="6 2 0 0" />
+									</StackPanel>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+					</DataGrid.Columns>
+				</DataGrid>
+
+				<StackPanel Grid.Row="3"
+							Grid.ColumnSpan="2"
+							Margin="16 4"
+							Orientation="Horizontal"
+							HorizontalAlignment="Center"
+							Visibility="{Binding ProjectResourcesLoaded, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}">
+
+					<TextBlock Text="|"
+							   Margin="8 0"
+							   Style="{StaticResource Sdl.TextBlock.InformationTextEmphasisStyle}" />
+
+					<Button Content="{x:Static root:PluginResources.ProviderView_V3_Project_Navigate}"
+							Command="{Binding NavigateToCommand}"
+							CommandParameter="{x:Static root:Constants.ProjectUri}"
+							Style="{StaticResource Sdl.Button.HyperLinkStyle}"
+							ToolTip="{x:Static root:Constants.ProjectUri}"
+							HorizontalAlignment="Left"
+							FontSize="12"
+							FontStyle="Italic"
+							Padding="0"
+							Cursor="Hand" />
+
+					<TextBlock Text="|"
+							   Margin="8 0"
+							   Style="{StaticResource Sdl.TextBlock.InformationTextEmphasisStyle}" />
+
+					<Button Content="{x:Static root:PluginResources.ProviderView_V3_Glossary_Navigate}"
+							Command="{Binding NavigateToCommand}"
+							CommandParameter="{x:Static root:Constants.GlossariesUri}"
+							Style="{StaticResource Sdl.Button.HyperLinkStyle}"
+							ToolTip="{x:Static root:Constants.GlossariesUri}"
+							HorizontalAlignment="Left"
+							FontSize="12"
+							FontStyle="Italic"
+							Padding="0"
+							Cursor="Hand" />
+
+					<TextBlock Text="|"
+							   Margin="8 0"
+							   Style="{StaticResource Sdl.TextBlock.InformationTextEmphasisStyle}" />
+
+					<Button Content="{x:Static root:PluginResources.ProviderView_V3_CustomModel_Navigate}"
+							Command="{Binding NavigateToCommand}"
+							CommandParameter="{x:Static root:Constants.CustomModelsUri}"
+							Style="{StaticResource Sdl.Button.HyperLinkStyle}"
+							ToolTip="{x:Static root:Constants.CustomModelsUri}"
+							HorizontalAlignment="Left"
+							FontSize="12"
+							FontStyle="Italic"
+							Padding="0"
+							Cursor="Hand" />
+
+					<TextBlock Text="|"
+							   Margin="8 0"
+							   Style="{StaticResource Sdl.TextBlock.InformationTextEmphasisStyle}" />
+				</StackPanel>
+			</Grid>
 		</Grid>
 	</GroupBox>
 </UserControl>
