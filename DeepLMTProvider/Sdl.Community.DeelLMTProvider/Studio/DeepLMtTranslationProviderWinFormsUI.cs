@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Community.DeepLMTProvider.UI;
+using Sdl.Community.DeepLMTProvider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -25,21 +26,22 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             //get credentials
             var credentials = GetCredentials(credentialStore, PluginResources.DeeplTranslationProviderScheme);
 
-            var dialog = new DeepLWindow(options, credentials, languagePairs);
+            var viewModel = new DeepLWindowViewModel(options, credentials, languagePairs);
+            var dialog = new DeepLWindow(viewModel);
+
             ElementHost.EnableModelessKeyboardInterop(dialog);
             dialog.ShowDialog();
 
-            if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
+            if (!dialog.DialogResult.HasValue || !dialog.DialogResult.Value) return null;
+
+            var provider = new DeepLMtTranslationProvider(options, new DeepLTranslationProviderConnecter(options.ApiKey, options.Formality), languagePairs)
             {
-                var provider = new DeepLMtTranslationProvider(options, new DeepLTranslationProviderConnecter(options.ApiKey, options.Formality), languagePairs)
-                {
-                    Options = dialog.Options
-                };
-                var apiKey = dialog.Options.ApiKey;
-                SetDeeplCredentials(credentialStore, apiKey, true);
-                return new ITranslationProvider[] { provider };
-            }
-            return null;
+	            Options = viewModel.Options
+            };
+            var apiKey = viewModel.Options.ApiKey;
+            SetDeeplCredentials(credentialStore, apiKey, true);
+
+            return new ITranslationProvider[] { provider };
         }
 
         public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
@@ -58,16 +60,18 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 editProvider.Options.ApiKey = savedCredentials.Credential;
             }
 
-            var dialog = new DeepLWindow(editProvider.Options, savedCredentials, languagePairs);
+            var viewModel = new DeepLWindowViewModel(editProvider.Options, savedCredentials, languagePairs);
+			var dialog = new DeepLWindow(viewModel);
+
             ElementHost.EnableModelessKeyboardInterop(dialog);
             dialog.ShowDialog();
-            if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
-            {
-                var apiKey = editProvider.Options.ApiKey;
-                SetDeeplCredentials(credentialStore, apiKey, true);
-                return true;
-            }
-            return false;
+
+            if (!dialog.DialogResult.HasValue || !dialog.DialogResult.Value) return false;
+
+            var apiKey = editProvider.Options.ApiKey;
+            SetDeeplCredentials(credentialStore, apiKey, true);
+
+            return true;
         }
 
         public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)

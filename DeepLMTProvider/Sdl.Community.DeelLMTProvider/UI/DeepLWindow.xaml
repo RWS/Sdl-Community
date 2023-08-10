@@ -6,80 +6,143 @@
 		xmlns:wpf="clr-namespace:Sdl.Community.DeepLMTProvider"
 		xmlns:uiHelpers="clr-namespace:Sdl.Community.DeepLMTProvider.UI.UiHelpers"
 		xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
+		xmlns:viewModel="clr-namespace:Sdl.Community.DeepLMTProvider.ViewModel"
 		mc:Ignorable="d"
+		d:DataContext="{d:DesignInstance Type=viewModel:DeepLWindowViewModel}"
 		Icon="../Resources/deepLIcon.ico"
-		WindowStyle="None" AllowsTransparency="False" ResizeMode="NoResize"
-        WindowStartupLocation="CenterScreen"
-        Title="DeepL Translation Provider" Height="320" Width="600">
+		WindowStyle="None"
+		AllowsTransparency="False"
+		ResizeMode="NoResize"
+		WindowStartupLocation="CenterScreen"
+		Title="DeepL Translation Provider"
+		Height="320"
+		Width="600">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="UiHelpers/TextBlockStyle.xaml" />
 				<ResourceDictionary Source="UiHelpers/TextBoxStyle.xaml" />
 				<ResourceDictionary Source="UiHelpers/WindowsBorder.xaml" />
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml"/>
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/BindablePasswordBoxStyle.xaml"/>
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/BindablePasswordBoxStyle.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>
 	<Border Style="{DynamicResource WindowControlBorderStyle}">
 		<DockPanel>
 			<uiHelpers:WindowsControl  DockPanel.Dock="Top" />
-				<TextBlock Style="{DynamicResource Sdl.TextBlock.TitleStyle}"
-				           DockPanel.Dock="Top"
-				           Margin="10,5,0,0"
-				           VerticalAlignment="Center" Text="Welcome to the DeepL Translation Provider. Please add your account and provider settings." FontSize="15" />
+			<TextBlock Style="{DynamicResource Sdl.TextBlock.TitleStyle}"
+					   DockPanel.Dock="Top"
+					   Margin="10,5,0,0"
+					   VerticalAlignment="Center"
+					   Text="Welcome to the DeepL Translation Provider. Please add your account and provider settings."
+					   FontSize="15" />
 			<StackPanel>
 				<TextBlock Margin="10,10,10,5"
-				           TextWrapping="WrapWithOverflow"
-				           FontSize="12"
-				           Text="The DeepL API is a paid machine translation service. Please purchase a DeepL Pro Subscription in order to get an API Key and use this service." />
-				<TextBlock Text="Please enter your API Key below:"  Margin="10,0,10,10" FontSize="12" />
-				<controls:BindablePasswordBox
-					Name="ApiKeyBox"
-					PasswordChanged="ApiKeyBox_PasswordChanged"
-					Margin="10,0,20,5"
-					Style="{StaticResource Sdl.BindablePasswordBox.GenericStyle}"/>
-				<TextBlock Name="ValidationBlock"  
-				           Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}" 
-				           VerticalAlignment="Center"
-				           Margin="10,0,0,0" Visibility="Collapsed"
-				           Text="API Key is required" />
-				<TextBlock Margin="10,0,0,5" FontSize="12"> This API Key will then be used in all projects where you will be using the DeepL Pro Translation plug-in.</TextBlock>
-				<TextBlock Margin="10,0,0,10" Style="{StaticResource Sdl.TextBlock.HyperLinkTextStyle}">
-					<Hyperlink NavigateUri="https://www.deepl.com/api-contact.html" RequestNavigate="Hyperlink_OnRequestNavigate">
+						   TextWrapping="WrapWithOverflow"
+						   FontSize="12"
+						   Text="The DeepL API is a paid machine translation service. Please purchase a DeepL Pro Subscription in order to get an API Key and use this service." />
+				<TextBlock Text="Please enter your API Key below:"
+						   Margin="10,0,10,10"
+						   FontSize="12" />
+				<controls:BindablePasswordBox Name="ApiKeyBox"
+											  Password="{Binding ApiKey, Mode=TwoWay}"
+											  IsEnabled="{Binding ApiKeyBoxEnabled}"
+											  Margin="10,0,20,5"
+											  Style="{StaticResource Sdl.BindablePasswordBox.GenericStyle}" />
+				<TextBlock Name="ApiKeyValidationBlock"
+						   VerticalAlignment="Center"
+						   Margin="10,0,0,0"
+						   Text="{Binding ApiKeyValidationMessage, Mode=TwoWay}">
+					<TextBlock.Style>
+						<Style TargetType="TextBlock"
+							   BasedOn="{StaticResource Sdl.TextBlock.ErrorTitleStyle}">
+							<Setter Property="Visibility" Value="Visible"/>
+							<Style.Triggers>
+								<Trigger Property="Text" Value="{x:Null}">
+									<Setter Property="Visibility" Value="Collapsed"/>
+								</Trigger>
+							</Style.Triggers>
+						</Style>
+					</TextBlock.Style>
+				</TextBlock>
+				<TextBlock Margin="10,0,0,5"
+						   FontSize="12"> This API Key will then be used in all projects where you will be using the DeepL Pro Translation plug-in.</TextBlock>
+				<TextBlock Margin="10,0,0,10"
+						   Style="{StaticResource Sdl.TextBlock.HyperLinkTextStyle}">
+					<Hyperlink NavigateUri="https://www.deepl.com/api-contact.html"
+							   RequestNavigate="Hyperlink_OnRequestNavigate">
 						Click here to obtain your API Key from DeepL
 					</Hyperlink>
 				</TextBlock>
-				<TextBlock Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}" Text="Translation options" Margin="10 0 0 5" />
+				<TextBlock Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}"
+						   Text="Translation options"
+						   Margin="10 0 0 5" />
 				<StackPanel>
-					<CheckBox 
-						Style="{StaticResource Sdl.Checkbox.GenericStyle}" VerticalContentAlignment="Center"
-						Name="PlainText" Content="Translate as plain text"  Margin="10,0,0,5"/>
-					<StackPanel Name="NotCompatibleStackPanel" Orientation="Horizontal" ToolTip="{x:Static wpf:PluginResources.FormalityNotAvailableReason}">
-						<TextBlock Name="FormalityLabel" Text="Formality: " Margin="10 0 0 0"  VerticalAlignment="Center"/>
-						<ComboBox Name="Formality" Margin="5,0,0,0" Foreground="#0C2D47" Width="100"
-							          HorizontalAlignment="Left">
+					<CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+							  VerticalContentAlignment="Center"
+							  Name="PlainText"
+							  IsChecked="{Binding SendPlainText}"
+							  Content="Translate as plain text"
+							  Margin="10,0,0,5" />
+					<StackPanel Name="NotCompatibleStackPanel"
+								Orientation="Horizontal"
+								ToolTip="{x:Static wpf:PluginResources.FormalityNotAvailableReason}">
+						<TextBlock Name="FormalityLabel"
+								   Text="Formality: "
+								   Margin="10 0 0 0"
+								   VerticalAlignment="Center" />
+						<ComboBox Name="Formality"
+								  Margin="5,0,0,0"
+								  SelectedIndex="{Binding FormalitySelectedIndex, Mode=TwoWay}"
+								  Foreground="#0C2D47"
+								  Width="100"
+								  HorizontalAlignment="Left">
 							<ComboBoxItem Content="Default" />
-							<ComboBoxItem Content="Less formal" ToolTip="- for a more informal language" />
-							<ComboBoxItem Content="More formal" ToolTip="- for a more formal language" />
+							<ComboBoxItem Content="Less formal"
+										  ToolTip="- for a more informal language" />
+							<ComboBoxItem Content="More formal"
+										  ToolTip="- for a more formal language" />
 						</ComboBox>
-						<TextBlock Name="NotCompatibleBlock" 
+						<TextBlock Name="NotCompatibleBlock"
 								   Margin="10 0 0 0"
 								   VerticalAlignment="Center"
 								   TextAlignment="Center"
-						           Style="{StaticResource Sdl.TextBlock.ErrorTitleStyle}"
-						           Visibility="Collapsed"
 								   TextWrapping="Wrap"
-						           Text="{x:Static wpf:PluginResources.FormalityNotAvailableText}"
-								   FontSize="12" />
+								   FontSize="12">
+							<TextBlock.Style>
+								<Style TargetType="TextBlock"
+									   BasedOn="{StaticResource Sdl.TextBlock.ErrorTitleStyle}">
+									<Setter Property="Text"
+									        Value="{x:Static wpf:PluginResources.FormalityNotAvailableText}" />
+									<Setter Property="Visibility" Value="Collapsed"/>
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding FormalityCompatible, Mode=TwoWay}" Value="False">
+											<Setter Property="Visibility" Value="Visible" />
+											<Setter Property="ToolTip" Value="Some languages are incompatible with this formality" />
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</TextBlock.Style>
+						</TextBlock>
 					</StackPanel>
 				</StackPanel>
-				<DockPanel LastChildFill="False" Margin="0 5 0 0">
-					<Button Style="{StaticResource Sdl.Button.SecondaryStyle}" IsCancel="True" Content="Cancel" DockPanel.Dock="Right"  Margin="10,0,5,0" Cursor="Hand" />
-					<Button Style="{StaticResource Sdl.Button.PrimaryStyle}" Content="OK" Click="Ok_Click" DockPanel.Dock="Right" Cursor="Hand"  />
+				<DockPanel LastChildFill="False"
+						   Margin="0 5 0 0">
+					<Button Style="{StaticResource Sdl.Button.SecondaryStyle}"
+							IsCancel="True"
+							Content="Cancel"
+							DockPanel.Dock="Right"
+							Margin="10,0,5,0"
+							Cursor="Hand" />
+					<Button Style="{StaticResource Sdl.Button.PrimaryStyle}"
+							Content="OK"
+							Command="{Binding OkCommand}"
+							Click="Ok_Click"
+							DockPanel.Dock="Right"
+							Cursor="Hand" />
 				</DockPanel>
 			</StackPanel>
 		</DockPanel>

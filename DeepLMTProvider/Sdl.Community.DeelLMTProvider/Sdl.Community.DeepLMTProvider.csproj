@@ -47,6 +47,9 @@
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.Core.Globalization.Async">
+      <HintPath>..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.Async.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.Settings">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Settings.dll</HintPath>
     </Reference>
@@ -112,6 +115,8 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Command\NoParameterCommand.cs" />
+    <Compile Include="Command\CommandWithParameter.cs" />
     <Compile Include="Studio\DeepLMtTranslationProvider.cs" />
     <Compile Include="Studio\DeepLMtTranslationProviderFactory.cs" />
     <Compile Include="Studio\DeepLMtTranslationProviderLanguageDirection.cs" />
@@ -153,6 +158,8 @@
     <Compile Include="UI\UiHelpers\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\DeepLWindowViewModel.cs" />
+    <Compile Include="ViewModel\ViewModel.cs" />
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>

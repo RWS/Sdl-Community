@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Threading.Tasks;
 using NLog;
 using Sdl.Community.DeepLMTProvider.Helpers;
@@ -18,7 +17,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         private readonly LanguagePair _languageDirection;
         private readonly Logger _logger = Log.GetLogger(nameof(DeepLMtTranslationProviderLanguageDirection));
         private readonly DeepLTranslationOptions _options;
-        private DeepLTranslationProviderConnecter _connecter;
+        private readonly DeepLTranslationProviderConnecter _connecter;
 
         public DeepLMtTranslationProviderLanguageDirection(DeepLMtTranslationProvider deepLMtTranslationProvider, LanguagePair languageDirection, DeepLTranslationProviderConnecter connecter)
         {
@@ -29,8 +28,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         }
 
         public bool CanReverseLanguageDirection => throw new NotImplementedException();
-        //public CultureInfo SourceLanguage => _languageDirection.SourceCulture;
-        //public CultureInfo TargetLanguage => _languageDirection.TargetCulture;
+
         public ITranslationProvider TranslationProvider => _deepLMtTranslationProvider;
 
 		CultureCode ITranslationProviderLanguageDirection.SourceLanguage => _languageDirection.SourceCulture;
