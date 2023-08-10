@@ -51,7 +51,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         public bool SupportsWordCounts => false;
         public TranslationMethod TranslationMethod => TranslationMethod.MachineTranslation;
         public Uri Uri => Options.Uri;
-        private DeepLTranslationProviderConnecter DeepLTranslationProviderConnecter { get; }
+        public DeepLTranslationProviderConnecter DeepLTranslationProviderConnecter { get; }
 
         public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
         {

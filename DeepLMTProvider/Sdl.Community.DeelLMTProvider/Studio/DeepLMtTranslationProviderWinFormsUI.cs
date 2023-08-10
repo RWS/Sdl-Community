@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
+using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Community.DeepLMTProvider.UI;
 using Sdl.Community.DeepLMTProvider.ViewModel;
@@ -26,7 +27,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             //get credentials
             var credentials = GetCredentials(credentialStore, PluginResources.DeeplTranslationProviderScheme);
 
-            var viewModel = new DeepLWindowViewModel(options, credentials, languagePairs);
+            var viewModel = new DeepLWindowViewModel(options, credentials, languagePairs, new DeepLGlossaryClient());
             var dialog = new DeepLWindow(viewModel);
 
             ElementHost.EnableModelessKeyboardInterop(dialog);
@@ -60,7 +61,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 editProvider.Options.ApiKey = savedCredentials.Credential;
             }
 
-            var viewModel = new DeepLWindowViewModel(editProvider.Options, savedCredentials, languagePairs);
+            var viewModel = new DeepLWindowViewModel(editProvider.Options, savedCredentials, languagePairs, new DeepLGlossaryClient());
 			var dialog = new DeepLWindow(viewModel);
 
             ElementHost.EnableModelessKeyboardInterop(dialog);

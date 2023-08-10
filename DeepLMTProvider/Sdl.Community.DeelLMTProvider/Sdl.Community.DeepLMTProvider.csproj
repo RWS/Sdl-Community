@@ -48,7 +48,7 @@
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization.Async">
-      <HintPath>..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.Async.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.Async.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Settings">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Settings.dll</HintPath>
@@ -115,8 +115,11 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\DeepLGlossaryClient.cs" />
     <Compile Include="Command\NoParameterCommand.cs" />
     <Compile Include="Command\CommandWithParameter.cs" />
+    <Compile Include="Model\Glossary.cs" />
+    <Compile Include="Model\LanguagePairOptions.cs" />
     <Compile Include="Studio\DeepLMtTranslationProvider.cs" />
     <Compile Include="Studio\DeepLMtTranslationProviderFactory.cs" />
     <Compile Include="Studio\DeepLMtTranslationProviderLanguageDirection.cs" />
@@ -127,7 +130,6 @@
     <Compile Include="DeepLTellMe\DeepLSettingsAction.cs" />
     <Compile Include="DeepLTellMe\DeepLStoreAction.cs" />
     <Compile Include="DeepLTellMe\DeepLTellMeProvider.cs" />
-    <Compile Include="Studio\DeepLTranslationProviderConnecter.cs" />
     <Compile Include="Helpers\DeepLTranslationProviderTagPlacer.cs" />
     <Compile Include="Model\DeepLTag.cs" />
     <Compile Include="Model\PreTranslateSegment.cs" />
@@ -149,6 +151,7 @@
     </Compile>
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="AppInitializer.cs" />
+    <Compile Include="Client\DeepLTranslationProviderConnecter.cs" />
     <Compile Include="UI\DeepLWindow.xaml.cs">
       <DependentUpon>DeepLWindow.xaml</DependentUpon>
     </Compile>

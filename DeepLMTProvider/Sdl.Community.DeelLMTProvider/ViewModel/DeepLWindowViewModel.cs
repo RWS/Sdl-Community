@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
+using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Command;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Community.DeepLMTProvider.Studio;
@@ -20,8 +23,9 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 		private string _apiKeyValidationMessage;
 		private bool _formalityCompatible = true;
 		private int _formalitySelectedIndex;
+		private ObservableCollection<LanguagePairOptions> _languagePairSettings = new();
 
-		public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, TranslationProviderCredential credentialStore = null, LanguagePair[] languagePairs = null, bool isTellMeAction = false)
+		public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, TranslationProviderCredential credentialStore = null, LanguagePair[] languagePairs = null, DeepLGlossaryClient glossaryClient = null, bool isTellMeAction = false)
 		{
 			LanguagePairs = languagePairs;
 			IsTellMeAction = isTellMeAction;
@@ -29,9 +33,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 			FormalitySelectedIndex = (int)deepLTranslationOptions.Formality;
 			SendPlainText = deepLTranslationOptions.SendPlainText;
 			Options = deepLTranslationOptions;
+			GlossaryClient = glossaryClient;
 
 			PasswordChangedTimer.Elapsed += OnPasswordChanged;
 			SetSettingsOnWindow(credentialStore, isTellMeAction);
+
+			LoadLanguagePairSettings();
 		}
 
 		public string ApiKey
@@ -51,7 +58,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 			get => _apiKeyValidationMessage;
 			set
 			{
-				SetField(ref _apiKeyValidationMessage, value); 
+				SetField(ref _apiKeyValidationMessage, value);
 				OnPropertyChanged(nameof(OkCommand));
 			}
 		}
@@ -68,11 +75,19 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 			set => SetField(ref _formalitySelectedIndex, value);
 		}
 
+		public ObservableCollection<LanguagePairOptions> LanguagePairOptions
+		{
+			get => _languagePairSettings;
+			set => SetField(ref _languagePairSettings, value);
+		}
+
 		public ICommand OkCommand => new NoParameterCommand(Save, () => ApiKeyValidationMessage == null);
 
 		public DeepLTranslationOptions Options { get; set; }
 
 		public bool SendPlainText { get; set; }
+
+		private DeepLGlossaryClient GlossaryClient { get; }
 
 		private bool IsTellMeAction { get; set; }
 
@@ -93,6 +108,23 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 			{
 				MessageBox.Show(PluginResources.SettingsUpdated_ReopenFilesForEditing,
 					PluginResources.SettingsUpdated, MessageBoxButton.OK, MessageBoxImage.Information);
+			}
+		}
+
+		private async void LoadLanguagePairSettings()
+		{
+			var glossaries = await GlossaryClient.GetGlossaries(ApiKey);
+			foreach (var languagePair in LanguagePairs)
+			{
+				var sourceLangCode = languagePair.SourceCultureName.Split('-')[0];
+				var targetLangCode = languagePair.TargetCultureName.Split('-')[0];
+				LanguagePairOptions.Add(new LanguagePairOptions
+				{
+					Formality = Formality.Default,
+					Glossaries = glossaries.Where(g => g.SourceLanguage == sourceLangCode && g.TargetLanguage == targetLangCode).ToList(),
+					SelectedGlossary = glossaries?.FirstOrDefault(),
+					LanguagePair = languagePair
+				});
 			}
 		}
 
