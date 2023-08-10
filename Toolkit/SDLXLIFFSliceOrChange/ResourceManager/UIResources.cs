@@ -202,7 +202,6 @@ namespace SDLXLIFFSliceOrChange.ResourceManager
 			_defaultValues.Add("Clear", "Clear");
 			_defaultValues.Add("Clearit", "Clearit!");
 			_defaultValues.Add("ClearitDescription", "Click Clearit! to clear all the translated segments based on your selection criteria.");
-
 		}
 
 		private void LoadResources()
@@ -220,11 +219,12 @@ namespace SDLXLIFFSliceOrChange.ResourceManager
 			try
 			{
 				var values = _resources.Tables["data"];
-				var rows = values.Select($"name = '{token}'");
-				if (rows.Length == 0)
+				var rows = values?.Select($"name = '{token}'");
+				if (rows == null || rows.Length == 0)
 				{
 					return GetDefault(token);
 				}
+
 				return rows[0]["Value"].ToString();
 
 			}
