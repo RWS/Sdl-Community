@@ -145,7 +145,7 @@ namespace GoogleCloudTranslationProvider.Studio
 				}
 			}
 
-			var options = new TranslationOptions();
+			var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
 			var mainWindowViewModel = ShowRequestedView(languagePairs.ToArray(), credentialStore, options);
 			return mainWindowViewModel.DialogResult;
 		}

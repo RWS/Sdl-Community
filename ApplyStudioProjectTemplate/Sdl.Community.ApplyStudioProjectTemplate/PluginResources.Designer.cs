@@ -61,6 +61,24 @@ namespace Sdl.Community.ApplyStudioProjectTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to set the Automation Analysis Batch Task.
+        /// </summary>
+        internal static string AABT_Failed {
+            get {
+                return ResourceManager.GetString("AABT_Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to set the Automation Pre-translate Batch Task.
+        /// </summary>
+        internal static string APTBT_Failed {
+            get {
+                return ResourceManager.GetString("APTBT_Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon ASPT {

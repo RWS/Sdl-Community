@@ -78,6 +78,8 @@
 			this.matchRepairBox = new System.Windows.Forms.ComboBox();
 			this.RunAnalysisBatchTask = new System.Windows.Forms.CheckBox();
 			this.RunPreTranslateBatchTask = new System.Windows.Forms.CheckBox();
+			this.AutomationAnalysisBatchTask = new System.Windows.Forms.ComboBox();
+			this.AutomationPreTranslateBatchTask = new System.Windows.Forms.ComboBox();
 			this.ShowToolTips = new System.Windows.Forms.CheckBox();
 			this.AboutButton = new System.Windows.Forms.Button();
 			this.QualityGroup = new System.Windows.Forms.GroupBox();
@@ -740,7 +742,7 @@
 			this.OkButton.Name = "OkButton";
 			this.OkButton.Size = new System.Drawing.Size(123, 35);
 			this.OkButton.TabIndex = 9;
-			this.OkButton.Text = "Ok";
+			this.OkButton.Text = "OK";
 			this.OkButton.UseVisualStyleBackColor = true;
 			this.OkButton.Click += new System.EventHandler(this.OkButton_Click);
 			// 
@@ -793,7 +795,7 @@
 			this.RunAnalysisBatchTask.Location = new System.Drawing.Point(20, 29);
 			this.RunAnalysisBatchTask.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.RunAnalysisBatchTask.Name = "RunAnalysisBatchTask";
-			this.RunAnalysisBatchTask.Size = new System.Drawing.Size(278, 35);
+			this.RunAnalysisBatchTask.Size = new System.Drawing.Size(255, 35);
 			this.RunAnalysisBatchTask.TabIndex = 8;
 			this.RunAnalysisBatchTask.Tag = "Automation";
 			this.RunAnalysisBatchTask.Text = "Run Analysis Batch Task";
@@ -805,10 +807,10 @@
 			// RunPreTranslateBatchTask
 			// 
 			this.RunPreTranslateBatchTask.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.RunPreTranslateBatchTask.Location = new System.Drawing.Point(20, 67);
+			this.RunPreTranslateBatchTask.Location = new System.Drawing.Point(20, 70);
 			this.RunPreTranslateBatchTask.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.RunPreTranslateBatchTask.Name = "RunPreTranslateBatchTask";
-			this.RunPreTranslateBatchTask.Size = new System.Drawing.Size(278, 35);
+			this.RunPreTranslateBatchTask.Size = new System.Drawing.Size(255, 35);
 			this.RunPreTranslateBatchTask.TabIndex = 9;
 			this.RunPreTranslateBatchTask.Tag = "Automation";
 			this.RunPreTranslateBatchTask.Text = "Run Pre-translate Batch Task";
@@ -816,6 +818,46 @@
 			this.RunPreTranslateBatchTask.UseVisualStyleBackColor = true;
 			this.RunPreTranslateBatchTask.CheckedChanged += new System.EventHandler(this.RunPreTranslateBatchTask_CheckedChanged);
 			this.RunPreTranslateBatchTask.MouseEnter += new System.EventHandler(this.ControlMouseEnter);
+			// 
+			// AutomationAnalysisBatchTask
+			// 
+			this.AutomationAnalysisBatchTask.DisplayMember = "Keep";
+			this.AutomationAnalysisBatchTask.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.AutomationAnalysisBatchTask.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.AutomationAnalysisBatchTask.FormattingEnabled = true;
+			this.AutomationAnalysisBatchTask.Items.AddRange(new object[] {
+            "Keep",
+            "Merge",
+            "Overwrite"});
+			this.AutomationAnalysisBatchTask.Location = new System.Drawing.Point(291, 31);
+			this.AutomationAnalysisBatchTask.Margin = new System.Windows.Forms.Padding(12, 6, 12, 6);
+			this.AutomationAnalysisBatchTask.Name = "AutomationAnalysisBatchTask";
+			this.AutomationAnalysisBatchTask.Size = new System.Drawing.Size(118, 28);
+			this.AutomationAnalysisBatchTask.TabIndex = 10;
+			this.AutomationAnalysisBatchTask.Tag = "Automation Analysis Batch Task";
+			this.FormToolTip.SetToolTip(this.AutomationAnalysisBatchTask, "Select the behaviour for applying the Automation Analysis Batch Task ");
+			this.AutomationAnalysisBatchTask.Visible = false;
+			this.AutomationAnalysisBatchTask.SelectedIndexChanged += new System.EventHandler(this.AutomationAnalysisBatchTask_SelectedIndexChanged);
+			// 
+			// AutomationPreTranslateBatchTask
+			// 
+			this.AutomationPreTranslateBatchTask.DisplayMember = "Keep";
+			this.AutomationPreTranslateBatchTask.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.AutomationPreTranslateBatchTask.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.AutomationPreTranslateBatchTask.FormattingEnabled = true;
+			this.AutomationPreTranslateBatchTask.Items.AddRange(new object[] {
+            "Keep",
+            "Merge",
+            "Overwrite"});
+			this.AutomationPreTranslateBatchTask.Location = new System.Drawing.Point(291, 77);
+			this.AutomationPreTranslateBatchTask.Margin = new System.Windows.Forms.Padding(12, 6, 12, 6);
+			this.AutomationPreTranslateBatchTask.Name = "AutomationPreTranslateBatchTask";
+			this.AutomationPreTranslateBatchTask.Size = new System.Drawing.Size(118, 28);
+			this.AutomationPreTranslateBatchTask.TabIndex = 11;
+			this.AutomationPreTranslateBatchTask.Tag = "Automation Pre-Translate Batch Task";
+			this.FormToolTip.SetToolTip(this.AutomationPreTranslateBatchTask, "Select the behaviour for applying the Automation Pre-Translate Batch Task");
+			this.AutomationPreTranslateBatchTask.Visible = false;
+			this.AutomationPreTranslateBatchTask.SelectedIndexChanged += new System.EventHandler(this.AutomationPreTranslateBatchTask_SelectedIndexChanged);
 			// 
 			// ShowToolTips
 			// 
@@ -891,6 +933,8 @@
 			// 
 			// AutomationGroup
 			// 
+			this.AutomationGroup.Controls.Add(this.AutomationPreTranslateBatchTask);
+			this.AutomationGroup.Controls.Add(this.AutomationAnalysisBatchTask);
 			this.AutomationGroup.Controls.Add(this.RunPreTranslateBatchTask);
 			this.AutomationGroup.Controls.Add(this.RunAnalysisBatchTask);
 			this.AutomationGroup.ForeColor = System.Drawing.SystemColors.HotTrack;
@@ -1000,5 +1044,7 @@
 		private System.Windows.Forms.GroupBox AutomationGroup;
 		private System.Windows.Forms.CheckBox RunAnalysisBatchTask;
 		private System.Windows.Forms.CheckBox RunPreTranslateBatchTask;
+		private System.Windows.Forms.ComboBox AutomationPreTranslateBatchTask;
+		private System.Windows.Forms.ComboBox AutomationAnalysisBatchTask;
 	}
 }

@@ -215,7 +215,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		private void InitializeViews()
 		{
-			_providerViewModel = new ProviderViewModel(TranslationOptions, _languagePairs.ToList())
+			_providerViewModel = new ProviderViewModel(TranslationOptions, _languagePairs.ToList(), _editProvider)
 				{ SwitchViewExternal = new RelayCommand(SwitchView) };
 			_settingsViewModel = new SettingsViewModel(TranslationOptions);
 

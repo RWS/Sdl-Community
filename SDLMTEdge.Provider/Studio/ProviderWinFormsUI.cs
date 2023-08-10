@@ -39,8 +39,8 @@ namespace Sdl.Community.MTEdge.Provider.Studio
         }
 
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
-		{
-			 
+		{ 
+
 			return new TranslationProviderDisplayInfo
 			{
 				Name = PluginResources.Plugin_NiceName,

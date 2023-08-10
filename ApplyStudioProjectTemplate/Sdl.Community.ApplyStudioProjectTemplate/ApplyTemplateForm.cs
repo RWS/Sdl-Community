@@ -202,7 +202,9 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 									thisTemplate.BatchTasksSpecificLanguages = newTemplate.BatchTasksSpecificLanguages;
 									thisTemplate.FileTypes = newTemplate.FileTypes;
 									thisTemplate.MatchRepairSettings = newTemplate.MatchRepairSettings;
-									thisTemplate.VerificationSpecificLanguages = newTemplate.VerificationSpecificLanguages;									
+									thisTemplate.VerificationSpecificLanguages = newTemplate.VerificationSpecificLanguages;	
+									thisTemplate.AnalysisBatchTask=newTemplate.AnalysisBatchTask;
+									thisTemplate.PreTranslateBatchTask=newTemplate.PreTranslateBatchTask;
 								}
 							}
 							else
@@ -274,6 +276,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 				FileTypes.SelectedItem = selectedTemplate.FileTypes.ToString();
 				matchRepairBox.SelectedItem = selectedTemplate.MatchRepairSettings.ToString();
 				VerificationSpecificLanguages.SelectedItem = selectedTemplate.VerificationSpecificLanguages.ToString();
+				AutomationAnalysisBatchTask.SelectedItem=selectedTemplate.AnalysisBatchTask.ToString();
+				AutomationPreTranslateBatchTask.SelectedItem=selectedTemplate.PreTranslateBatchTask.ToString();
 			}
 			CheckChanged();
 		}
@@ -719,11 +723,47 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 		private void RunAnalysisBatchTask_CheckedChanged(object sender, EventArgs e)
 		{
 			CheckChanged();
+			if (RunAnalysisBatchTask.Checked)
+			{
+				AutomationAnalysisBatchTask.Visible = true;				
+			}
+			else
+			{
+				AutomationAnalysisBatchTask.Visible = false;
+			}
 		}
 
 		private void RunPreTranslateBatchTask_CheckedChanged(object sender, EventArgs e)
 		{
 			CheckChanged();
+			if(RunPreTranslateBatchTask.Checked)
+			{
+				AutomationPreTranslateBatchTask.Visible=true;				
+			}
+			else
+			{
+				AutomationPreTranslateBatchTask.Visible = false;
+			}
+		}
+
+		private void AutomationAnalysisBatchTask_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (SelectedTemplate.SelectedItem is ApplyTemplate applyTemplate)
+			{
+				applyTemplate.AnalysisBatchTask =
+					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
+						AutomationAnalysisBatchTask.SelectedItem.ToString());
+			}
+		}
+
+		private void AutomationPreTranslateBatchTask_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (SelectedTemplate.SelectedItem is ApplyTemplate applyTemplate)
+			{
+				applyTemplate.PreTranslateBatchTask =
+					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
+						AutomationPreTranslateBatchTask.SelectedItem.ToString());
+			}
 		}
 	}
 }
