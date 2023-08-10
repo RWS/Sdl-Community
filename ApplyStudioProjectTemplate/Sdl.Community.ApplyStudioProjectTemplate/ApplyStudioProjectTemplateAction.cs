@@ -527,6 +527,18 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 								}
 								_logger.Info("Method: {methodName}, Analysis Automatic Task: {@objAnalysisAutomaticTask}",
 											methodName, objAnalysisAutomaticTask);
+								// Copy automation analysis batch task
+								if (selectedTemplate.AnalysisBatchTask != ApplyTemplateOptions.Keep)
+								{
+									try
+									{
+										CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "AnalysisTaskSettings", targetProject);
+									}
+									catch (Exception e)
+									{
+										MessageBox.Show(e.Message, PluginResources.AABT_Failed, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+									}
+								}
 							}
 							// run automatic task for pre translate files
 							if (applyTemplateForm.RunPreTranslateBatchTaskFlag)
@@ -543,7 +555,20 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 								}
 								_logger.Info("Method: {methodName}, Pre-Translate Automatic Task: {@objPreTranslateAutomaticTask}",
 										methodName, objPreTranslateAutomaticTask);
+								// Copy automation pre translate batch task
+								if (selectedTemplate.PreTranslateBatchTask != ApplyTemplateOptions.Keep)
+								{
+									try
+									{
+										CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "TranslateTaskSettings", targetProject);
+									}
+									catch (Exception e)
+									{
+										MessageBox.Show(e.Message, PluginResources.APTBT_Failed, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+									}
+								}
 							}
+
 						}
 
 						var project = typeof(FileBasedProject).GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(targetProject);
