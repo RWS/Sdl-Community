@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.DeepLMTProvider.Model
@@ -6,6 +7,7 @@ namespace Sdl.Community.DeepLMTProvider.Model
 	public class LanguagePairOptions : ViewModel.ViewModel
 	{
 		private Formality _formality;
+		private GlossaryInfo _selectedGlossary;
 
 		public Formality Formality
 		{
@@ -13,9 +15,14 @@ namespace Sdl.Community.DeepLMTProvider.Model
 			set => SetField(ref _formality, value);
 		}
 
-		public List<Glossary> Glossaries { get; set; }
+		[JsonIgnore]
+		public List<GlossaryInfo> Glossaries { get; set; }
 
-		public Glossary SelectedGlossary { get; set; }
+		public GlossaryInfo SelectedGlossary
+		{
+			get => _selectedGlossary;
+			set => SetField(ref _selectedGlossary, value);
+		}
 
 		public LanguagePair LanguagePair { get; set; }
 	}

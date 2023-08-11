@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Timers;
@@ -10,7 +9,6 @@ using System.Windows.Input;
 using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Command;
 using Sdl.Community.DeepLMTProvider.Model;
-using Sdl.Community.DeepLMTProvider.Studio;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -21,8 +19,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 	{
 		private string _apiKey;
 		private string _apiKeyValidationMessage;
-		private bool _formalityCompatible = true;
-		private int _formalitySelectedIndex;
 		private ObservableCollection<LanguagePairOptions> _languagePairSettings = new();
 
 		public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, TranslationProviderCredential credentialStore = null, LanguagePair[] languagePairs = null, DeepLGlossaryClient glossaryClient = null, bool isTellMeAction = false)
@@ -30,7 +26,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 			LanguagePairs = languagePairs;
 			IsTellMeAction = isTellMeAction;
 
-			FormalitySelectedIndex = (int)deepLTranslationOptions.Formality;
 			SendPlainText = deepLTranslationOptions.SendPlainText;
 			Options = deepLTranslationOptions;
 			GlossaryClient = glossaryClient;
@@ -61,18 +56,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 				SetField(ref _apiKeyValidationMessage, value);
 				OnPropertyChanged(nameof(OkCommand));
 			}
-		}
-
-		public bool FormalityCompatible
-		{
-			get => _formalityCompatible;
-			set => SetField(ref _formalityCompatible, value);
-		}
-
-		public int FormalitySelectedIndex
-		{
-			get => _formalitySelectedIndex;
-			set => SetField(ref _formalitySelectedIndex, value);
 		}
 
 		public ObservableCollection<LanguagePairOptions> LanguagePairOptions
@@ -114,44 +97,75 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 		private async void LoadLanguagePairSettings()
 		{
 			var glossaries = await GlossaryClient.GetGlossaries(ApiKey);
+			glossaries?.Add(new GlossaryInfo
+			{
+				Name = "No glossary"
+			});
+
 			foreach (var languagePair in LanguagePairs)
 			{
 				var sourceLangCode = languagePair.SourceCultureName.Split('-')[0];
 				var targetLangCode = languagePair.TargetCultureName.Split('-')[0];
-				LanguagePairOptions.Add(new LanguagePairOptions
+
+				var languageSavedOptions =
+					Options.LanguagePairOptions?.FirstOrDefault(lpo => lpo.LanguagePair.Equals(languagePair));
+
+				var selectedGlossary = GetSelectedGlossary(glossaries, languageSavedOptions, sourceLangCode, targetLangCode);
+
+				var languagePairOptions = new LanguagePairOptions
 				{
-					Formality = Formality.Default,
-					Glossaries = glossaries.Where(g => g.SourceLanguage == sourceLangCode && g.TargetLanguage == targetLangCode).ToList(),
-					SelectedGlossary = glossaries?.FirstOrDefault(),
+					Formality = languageSavedOptions?.Formality ?? Formality.Default,
+					Glossaries = glossaries?.Where(g => g.SourceLanguage == sourceLangCode && g.TargetLanguage == targetLangCode || g.Name == "No glossary").ToList(),
+					SelectedGlossary = selectedGlossary,
 					LanguagePair = languagePair
-				});
+				};
+
+				LanguagePairOptions.Add(languagePairOptions);
 			}
+		}
+
+		private static GlossaryInfo GetSelectedGlossary(List<GlossaryInfo> glossaries, LanguagePairOptions languageSavedOptions, string sourceLangCode, string targetLangCode)
+		{
+			if (languageSavedOptions == null)
+				return null;
+
+			if (languageSavedOptions.SelectedGlossary.Name == "No glossary")
+				return languageSavedOptions.SelectedGlossary;
+
+			GlossaryInfo selectedGlossary = null;
+			if ((glossaries?.Contains(languageSavedOptions.SelectedGlossary) ?? false)
+				&& languageSavedOptions.SelectedGlossary.SourceLanguage == sourceLangCode
+				&& languageSavedOptions.SelectedGlossary.TargetLanguage == targetLangCode)
+			{
+				selectedGlossary = languageSavedOptions.SelectedGlossary;
+			}
+
+			selectedGlossary ??= glossaries?.FirstOrDefault(g => g.Name == "No glossary");
+			return selectedGlossary;
 		}
 
 		private void OnPasswordChanged(object sender, EventArgs e)
 		{
 			Options.ApiKey = ApiKey.Trim();
 
-			DeepLTranslationProviderConnecter.ApiKey = Options.ApiKey;
+			DeepLTranslationProviderClient.ApiKey = Options.ApiKey;
 
 			SetApiKeyValidityLabel();
-			SetFormalityCompatibilityLabel();
 		}
 
 		private void Save()
 		{
-			DeepLTranslationProviderConnecter.ApiKey = Options.ApiKey;
+			DeepLTranslationProviderClient.ApiKey = Options.ApiKey;
 			SetApiKeyValidityLabel();
 
-			Enum.TryParse<Formality>(FormalitySelectedIndex.ToString(), out var formality);
-
-			Options.Formality = formality;
 			Options.SendPlainText = SendPlainText;
 
 			if (IsTellMeAction)
 			{
 				AskUserToRestart();
 			}
+
+			Options.LanguagePairOptions = new List<LanguagePairOptions>(LanguagePairOptions);
 		}
 
 		private void SetApiKeyValidityLabel()
@@ -160,7 +174,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 			{
 				ApiKeyValidationMessage = null;
 
-				var isApiKeyValidResponse = DeepLTranslationProviderConnecter.IsApiKeyValidResponse;
+				var isApiKeyValidResponse = DeepLTranslationProviderClient.IsApiKeyValidResponse;
 				if (isApiKeyValidResponse?.IsSuccessStatusCode ?? false)
 					return;
 
@@ -172,18 +186,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 			}
 
 			SetValidationBlockMessage(PluginResources.ApiKeyIsRequired_ValidationBlockMessage);
-		}
-
-		private void SetFormalityCompatibilityLabel()
-		{
-			var currentLanguagePairs = IsTellMeAction
-				? Options?.LanguagesSupported?.Keys.Select(key => new CultureInfo(key)).ToList()
-				: LanguagePairs?.Select(lp => new CultureInfo(lp.TargetCultureName)).ToList();
-
-			var formalityIncompatibleLanguages =
-				DeepLTranslationProviderConnecter.GetFormalityIncompatibleLanguages(currentLanguagePairs);
-
-			FormalityCompatible = formalityIncompatibleLanguages.Count == 0;
 		}
 
 		private void SetSettingsOnWindow(TranslationProviderCredential credentialStore, bool isTellMeAction)

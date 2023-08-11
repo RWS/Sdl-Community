@@ -13,11 +13,11 @@ namespace Sdl.Community.DeepLMTProvider.Client
 	{
 		private static readonly Logger Logger = Log.GetLogger(nameof(DeepLGlossaryClient));
 
-		private static List<Glossary> TryDeserializeGlossaries(string serializedGlossaries)
+		private static List<GlossaryInfo> TryDeserializeGlossaryInfo(string serializedGlossaries)
 		{
 			try
 			{
-				return JObject.Parse(serializedGlossaries)["glossaries"]?.ToObject<List<Glossary>>();
+				return JObject.Parse(serializedGlossaries)["glossaries"]?.ToObject<List<GlossaryInfo>>();
 			}
 			catch (Exception e)
 			{
@@ -28,7 +28,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
 			return null;
 		}
 
-		public async Task<List<Glossary>> GetGlossaries(string apiKey)
+		public async Task<List<GlossaryInfo>> GetGlossaries(string apiKey)
 		{
 			var request = new HttpRequestMessage
 			{
@@ -52,7 +52,11 @@ namespace Sdl.Community.DeepLMTProvider.Client
 			}
 			var body = await response.Content.ReadAsStringAsync();
 
-			return TryDeserializeGlossaries(body);
+			return TryDeserializeGlossaryInfo(body);
 		}
+
+		//public async Task ImportGlossary(Glossary)
+		//public async Task DeleteGlossary(GlossaryInfo);
+
 	}
 }

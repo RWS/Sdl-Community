@@ -32,7 +32,8 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
             }
             else
             {
-                var settings = currentProject.GetTranslationProviderConfiguration();
+				//TODO: Don't forget to fix this
+				var settings = currentProject.GetTranslationProviderConfiguration();
 
                 if (!settings.Entries.Any(entry =>
                     entry.MainTranslationProvider.Uri.OriginalString.Contains("deepltranslationprovider")))

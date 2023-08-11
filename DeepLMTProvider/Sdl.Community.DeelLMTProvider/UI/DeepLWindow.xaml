@@ -162,14 +162,14 @@
 								<ComboBox ItemsSource="{Binding Glossaries}"
 										  Cursor="Hand"
 										  HorizontalContentAlignment="Center"
-										  SelectedItem="{Binding SelectedGlossary}"
+										  SelectedItem="{Binding SelectedGlossary, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 										  DisplayMemberPath="Name" >
 									<ComboBox.Style>
 										<Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
 											<Setter Property="Visibility"
 											        Value="Visible" />
 											<Style.Triggers>
-												<DataTrigger Binding="{Binding Glossaries.Count}" Value="0">
+												<DataTrigger Binding="{Binding Glossaries.Count}" Value="1">
 													<Setter Property="Visibility" Value="Collapsed"/>
 												</DataTrigger>
 											</Style.Triggers>
@@ -185,7 +185,7 @@
 													Value="Collapsed" />
 											<Style.Triggers>
 												<DataTrigger Binding="{Binding Glossaries.Count}"
-															 Value="0">
+															 Value="1">
 													<Setter Property="Visibility"
 															Value="Visible" />
 												</DataTrigger>

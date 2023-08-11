@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using NLog;
+using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Helpers;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Core.Globalization;
@@ -17,14 +19,18 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         private readonly LanguagePair _languageDirection;
         private readonly Logger _logger = Log.GetLogger(nameof(DeepLMtTranslationProviderLanguageDirection));
         private readonly DeepLTranslationOptions _options;
-        private readonly DeepLTranslationProviderConnecter _connecter;
+        private readonly DeepLTranslationProviderClient _connecter;
+        private readonly LanguagePairOptions _languagePairOptions;
 
-        public DeepLMtTranslationProviderLanguageDirection(DeepLMtTranslationProvider deepLMtTranslationProvider, LanguagePair languageDirection, DeepLTranslationProviderConnecter connecter)
+        public DeepLMtTranslationProviderLanguageDirection(DeepLMtTranslationProvider deepLMtTranslationProvider, LanguagePair languageDirection, DeepLTranslationProviderClient connecter)
         {
             _deepLMtTranslationProvider = deepLMtTranslationProvider;
             _languageDirection = languageDirection;
             _options = deepLMtTranslationProvider.Options;
             _connecter = connecter;
+
+            _languagePairOptions =
+	            _options.LanguagePairOptions.FirstOrDefault(lpo => lpo.LanguagePair.Equals(languageDirection));
         }
 
         public bool CanReverseLanguageDirection => throw new NotImplementedException();
@@ -281,7 +287,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
         private string LookupDeepL(string sourceText)
         {
-            return _connecter.Translate(_languageDirection, sourceText);
+            return _connecter.Translate(_languageDirection, sourceText, _languagePairOptions.Formality, _languagePairOptions.SelectedGlossary.Id);
         }
 
         private async Task<List<PreTranslateSegment>> PrepareTempData(List<PreTranslateSegment> preTranslateSegments)
@@ -313,7 +319,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 {
                     if (segment != null)
                     {
-                        segment.PlainTranslation = _connecter.Translate(_languageDirection, segment.SourceText);
+                        segment.PlainTranslation = _connecter.Translate(_languageDirection, segment.SourceText, _languagePairOptions.Formality, _languagePairOptions.SelectedGlossary.Id);
                     }
                 })).ConfigureAwait(true);
 

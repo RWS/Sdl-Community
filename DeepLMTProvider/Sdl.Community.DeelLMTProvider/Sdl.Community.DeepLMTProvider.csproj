@@ -118,7 +118,7 @@
     <Compile Include="Client\DeepLGlossaryClient.cs" />
     <Compile Include="Command\NoParameterCommand.cs" />
     <Compile Include="Command\CommandWithParameter.cs" />
-    <Compile Include="Model\Glossary.cs" />
+    <Compile Include="Model\GlossaryInfo.cs" />
     <Compile Include="Model\LanguagePairOptions.cs" />
     <Compile Include="Studio\DeepLMtTranslationProvider.cs" />
     <Compile Include="Studio\DeepLMtTranslationProviderFactory.cs" />
@@ -151,7 +151,7 @@
     </Compile>
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="AppInitializer.cs" />
-    <Compile Include="Client\DeepLTranslationProviderConnecter.cs" />
+    <Compile Include="Client\DeepLTranslationProviderClient.cs" />
     <Compile Include="UI\DeepLWindow.xaml.cs">
       <DependentUpon>DeepLWindow.xaml</DependentUpon>
     </Compile>

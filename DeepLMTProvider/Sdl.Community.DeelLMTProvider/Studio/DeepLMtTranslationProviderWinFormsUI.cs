@@ -35,7 +35,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
             if (!dialog.DialogResult.HasValue || !dialog.DialogResult.Value) return null;
 
-            var provider = new DeepLMtTranslationProvider(options, new DeepLTranslationProviderConnecter(options.ApiKey, options.Formality), languagePairs)
+            var provider = new DeepLMtTranslationProvider(options, new DeepLTranslationProviderClient(options.ApiKey), languagePairs)
             {
 	            Options = viewModel.Options
             };
