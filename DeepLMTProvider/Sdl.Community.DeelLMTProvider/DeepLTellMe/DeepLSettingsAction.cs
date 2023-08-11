@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Community.DeepLMTProvider.UI;
 using Sdl.Community.DeepLMTProvider.ViewModel;
@@ -51,7 +52,7 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
                         var state = translationProvider.MainTranslationProvider.State;
                         var options = new DeepLTranslationOptions(uri, state);
 
-                        var viewModel = new DeepLWindowViewModel(options, isTellMeAction: true);
+                        var viewModel = new DeepLWindowViewModel(options, new DeepLGlossaryClient());
                         var dialog = new DeepLWindow(viewModel);
 
                         dialog.ShowDialog();

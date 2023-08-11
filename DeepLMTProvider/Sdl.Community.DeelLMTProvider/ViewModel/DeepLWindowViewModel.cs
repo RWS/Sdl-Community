@@ -12,7 +12,6 @@ using Sdl.Community.DeepLMTProvider.Extensions;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Sdl.TellMe.ProviderApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.DeepLMTProvider.ViewModel
@@ -25,24 +24,26 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
 		public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, DeepLGlossaryClient glossaryClient)
 		{
+			IsTellMeAction = true;
+
 			SendPlainText = deepLTranslationOptions.SendPlainText;
 			Options = deepLTranslationOptions;
 
-			SetSettingsOnWindow(null, true);
+			SetSettingsOnWindow(null);
 			LoadLanguagePairSettings(glossaryClient);
 		}
 
-		public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, TranslationProviderCredential credentialStore = null, LanguagePair[] languagePairs = null, DeepLGlossaryClient glossaryClient = null, bool isTellMeAction = false)
+		public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, DeepLGlossaryClient glossaryClient, TranslationProviderCredential credentialStore, LanguagePair[] languagePairs)
 		{
 			LanguagePairs = languagePairs;
-			IsTellMeAction = isTellMeAction;
+			IsTellMeAction = false;
 
 			SendPlainText = deepLTranslationOptions.SendPlainText;
 			Options = deepLTranslationOptions;
 
 			PasswordChangedTimer.Elapsed += OnPasswordChanged;
 
-			SetSettingsOnWindow(credentialStore, isTellMeAction);
+			SetSettingsOnWindow(credentialStore);
 			LoadLanguagePairSettings(glossaryClient);
 		}
 
@@ -80,9 +81,9 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
 		public bool SendPlainText { get; set; }
 
-		private bool IsTellMeAction { get; set; }
+		private bool IsTellMeAction { get; }
 
-		private LanguagePair[] LanguagePairs { get; set; }
+		private LanguagePair[] LanguagePairs { get; }
 
 		private Timer PasswordChangedTimer { get; } = new()
 		{
@@ -100,6 +101,22 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 				MessageBox.Show(PluginResources.SettingsUpdated_ReopenFilesForEditing,
 					PluginResources.SettingsUpdated, MessageBoxButton.OK, MessageBoxImage.Information);
 			}
+		}
+
+		private static GlossaryInfo GetSelectedGlossary(List<GlossaryInfo> glossaries, LanguagePairOptions languageSavedOptions, string sourceLangCode, string targetLangCode)
+		{
+			if (languageSavedOptions == null)
+				return GlossaryInfo.NoGlossary;
+
+			if (languageSavedOptions.SelectedGlossary.Name == PluginResources.NoGlossary)
+				return languageSavedOptions.SelectedGlossary;
+
+			if ((glossaries?.Contains(languageSavedOptions.SelectedGlossary) ?? false)
+					&& languageSavedOptions.SelectedGlossary.SourceLanguage == sourceLangCode
+					&& languageSavedOptions.SelectedGlossary.TargetLanguage == targetLangCode)
+				return languageSavedOptions.SelectedGlossary;
+
+			return GlossaryInfo.NoGlossary;
 		}
 
 		private async void LoadLanguagePairSettings(DeepLGlossaryClient glossaryClient)
@@ -129,22 +146,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 			}
 		}
 
-		private static GlossaryInfo GetSelectedGlossary(List<GlossaryInfo> glossaries, LanguagePairOptions languageSavedOptions, string sourceLangCode, string targetLangCode)
-		{
-			if (languageSavedOptions == null)
-				return GlossaryInfo.NoGlossary;
-
-			if (languageSavedOptions.SelectedGlossary.Name == PluginResources.NoGlossary)
-				return languageSavedOptions.SelectedGlossary;
-
-			if ((glossaries?.Contains(languageSavedOptions.SelectedGlossary) ?? false) 
-					&& languageSavedOptions.SelectedGlossary.SourceLanguage == sourceLangCode 
-					&& languageSavedOptions.SelectedGlossary.TargetLanguage == targetLangCode)
-				return languageSavedOptions.SelectedGlossary;
-
-			return GlossaryInfo.NoGlossary;
-		}
-
 		private void OnPasswordChanged(object sender, EventArgs e)
 		{
 			ApiKey = ApiKey.Trim();
@@ -165,7 +166,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 			{
 				AskUserToRestart();
 			}
-
 		}
 
 		private void SetApiKeyValidityLabel()
@@ -188,9 +188,9 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 			SetValidationBlockMessage(PluginResources.ApiKeyIsRequired_ValidationBlockMessage);
 		}
 
-		private void SetSettingsOnWindow(TranslationProviderCredential credentialStore, bool isTellMeAction)
+		private void SetSettingsOnWindow(TranslationProviderCredential credentialStore)
 		{
-			if (isTellMeAction)
+			if (IsTellMeAction)
 			{
 				ApiKeyBoxEnabled = false;
 			}
