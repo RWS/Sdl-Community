@@ -25,12 +25,6 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 credentialStore.AddCredential(originalUri, new TranslationProviderCredential(Guid.NewGuid().ToString(), true));
             }
 
-            //if (credentialStore.GetCredential(originalUri) != null)
-            //{
-            //    var credentials = credentialStore.GetCredential(originalUri);
-            //    options.Identifier = credentials.Credential;
-            //}
-
             return new DeepLMtTranslationProvider(options, new DeepLTranslationProviderClient(options.ApiKey));
         }
 

@@ -37,5 +37,8 @@ namespace Sdl.Community.DeepLMTProvider.Model
 				return hashCode;
 			}
 		}
+
+		[JsonIgnore]
+		public static GlossaryInfo NoGlossary { get; } = new() { Name = PluginResources.NoGlossary };
 	}
 }

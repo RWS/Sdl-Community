@@ -176,4 +176,7 @@ This feature currently works for all target languages except "ES" (Spanish), "JA
   <data name="DeeplTranslationProviderScheme" xml:space="preserve">
 	  <value>deepltranslationprovider:///</value>
   </data>
+  <data name="NoGlossary" xml:space="preserve">
+	  <value>No glossary</value>
+  </data>
 </root>

@@ -118,6 +118,7 @@
     <Compile Include="Client\DeepLGlossaryClient.cs" />
     <Compile Include="Command\NoParameterCommand.cs" />
     <Compile Include="Command\CommandWithParameter.cs" />
+    <Compile Include="Extensions\CultureNameExtensions.cs" />
     <Compile Include="Model\GlossaryInfo.cs" />
     <Compile Include="Model\LanguagePairOptions.cs" />
     <Compile Include="Studio\DeepLMtTranslationProvider.cs" />
