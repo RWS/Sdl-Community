@@ -1,8 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-  <PlugInName>LanguageWeaverProvider</PlugInName>
-  <Version>1.0.0.0</Version>
-  <Description>Plugin description</Description>
-  <Author></Author>
-  <RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
+	<PlugInName>LanguageWeaverProvider</PlugInName>
+	<Version>1.0.0.0</Version>
+	<Description>Plugin description</Description>
+	<Author></Author>
+	<RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
+
+	<Include>
+		<File>LanguageMappingProvider.dll</File>
+		<File>Dapper.StrongName.dll</File>
+	</Include>
 </PluginPackage>

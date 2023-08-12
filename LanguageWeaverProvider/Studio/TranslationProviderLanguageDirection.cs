@@ -65,11 +65,7 @@ namespace LanguageWeaverProvider
 			var cloudService = new CloudService();
 			var xliff = CreateXliffFile(segment);
 			var translation = cloudService.Translate(_translationOptions.CloudCredentials, xliff).Result;
-			var supported = cloudService.GetSupportedLanguages(_translationOptions.CloudCredentials).Result;
 			var translatedSegment = translation.GetTargetSegments();
-
-			CultureInfo cultureCode = new CultureInfo("rum");
-
 			searchResults.Add(CreateSearchResult(segment, translatedSegment[0].Segment));
 			return searchResults;
 		}

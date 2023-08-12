@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="LanguageWeaverProvider.View.Cloud.CloudMappingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LanguageWeaverProvider.View.Cloud"
+			 xmlns:root="clr-namespace:LanguageWeaverProvider"
+			 xmlns:controls="clr-namespace:LanguageWeaverProvider.Controls"
+			 xmlns:converters="clr-namespace:LanguageWeaverProvider.Converters"
+			 xmlns:viewModel="clr-namespace:LanguageWeaverProvider.ViewModel.Cloud"
+			 d:DataContext="{d:DesignInstance viewModel:CloudMappingViewModel}"
+			 mc:Ignorable="d">
+	
+    <Grid>
+		<DataGrid x:Name="myDataGrid"
+				  ItemsSource="{Binding PairMappings}"
+				  AutoGenerateColumns="False">
+			<DataGrid.Columns>
+				
+				<DataGridTextColumn Header="Language pair"
+									Binding="{Binding Path=DisplayName}"
+									IsReadOnly="True"/>
+				
+				<DataGridTextColumn Header="Source code"
+									Binding="{Binding Path=SourceCode}"
+									IsReadOnly="True"/>
+				
+				<DataGridTextColumn Header="Target code"
+									Binding="{Binding Path=TargetCode}"
+									IsReadOnly="True" />
+			</DataGrid.Columns>
+		</DataGrid>
+	</Grid>
+	
+</UserControl>

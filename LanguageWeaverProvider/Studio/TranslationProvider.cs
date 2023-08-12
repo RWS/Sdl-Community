@@ -1,4 +1,5 @@
 ﻿using System;
+using LanguageWeaverProvider.LanguageMappingProvider;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
 using Newtonsoft.Json;
@@ -9,9 +10,10 @@ namespace LanguageWeaverProvider
 {
 	internal class TranslationProvider : ITranslationProvider
 	{
-		public TranslationProvider(ITranslationOptions options)
+		public TranslationProvider(ITranslationOptions translationOptions)
 		{
-			TranslationOptions = options;
+			TranslationOptions = translationOptions;
+			DatabaseControl.InitializeDatabase(translationOptions.Version);
 		}
 
 		public string Name => Constants.PluginName;

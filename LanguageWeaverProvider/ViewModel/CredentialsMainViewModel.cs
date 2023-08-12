@@ -8,14 +8,14 @@ using LanguageWeaverProvider.ViewModel.Interface;
 
 namespace LanguageWeaverProvider.ViewModel
 {
-	public class MainViewModel : BaseViewModel
+	public class CredentialsMainViewModel : BaseViewModel
 	{
 		private ICredentialsViewModel _providerView;
 
 		private bool _isEdgeSelected;
 		private bool _isCloudSelected;
 
-		public MainViewModel(ITranslationOptions options)
+		public CredentialsMainViewModel(ITranslationOptions options)
 		{
 			TranslationOptions = options;
 			InitializeCommands();
@@ -88,9 +88,9 @@ namespace LanguageWeaverProvider.ViewModel
 
 			IsCloudSelected = requestedService == "Cloud";
 			IsEdgeSelected = requestedService == "Edge";
-			var selectedViewModel = IsCloudSelected
-								  ? (ICredentialsViewModel)new CloudCredentialsViewModel(TranslationOptions)
-								  : (ICredentialsViewModel)new EdgeCredentialsViewModel(TranslationOptions);
+			ICredentialsViewModel selectedViewModel = IsCloudSelected
+													? new CloudCredentialsViewModel(TranslationOptions)
+													: new EdgeCredentialsViewModel(TranslationOptions);
 			selectedViewModel.CloseRequested += CloseCredentialsViewRequest;
 			ProviderView = selectedViewModel;
 		}
@@ -99,6 +99,7 @@ namespace LanguageWeaverProvider.ViewModel
 		{
 			ProviderView = null;
 			SaveChanges = true;
+			TranslationOptions.Version = PluginVersion.LanguageWeaverCloud;
 			CloseEventRaised?.Invoke();
 		}
 

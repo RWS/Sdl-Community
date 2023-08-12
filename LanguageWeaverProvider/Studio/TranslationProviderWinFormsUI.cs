@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using LanguageWeaverProvider.LanguageMappingProvider;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.View;
@@ -22,14 +23,29 @@ namespace LanguageWeaverProvider
 
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
-			var options = new TranslationOptions();
-			var mainWindowViewModel = ShowRequestedView(languagePairs, credentialStore, options);
-			if (!mainWindowViewModel.SaveChanges)
+			var translationOptions = new TranslationOptions();
+
+			var CredentialsMainViewModel = new CredentialsMainViewModel(translationOptions);
+			var CredentialsMainView = new CredentialsMainView { DataContext = CredentialsMainViewModel };
+			CredentialsMainViewModel.CloseEventRaised += () =>
+			{
+				// UpdateProviderCredentials(credentialStore, loadOptions);
+				CredentialsMainView.Close();
+			};
+
+			CredentialsMainView.ShowDialog();
+			if (!CredentialsMainViewModel.SaveChanges)
 			{
 				return null;
 			}
 
-			var translationProvider = new TranslationProvider(options);
+			var pairMappingViewModel = ShowPairMappingView(languagePairs, credentialStore, translationOptions);
+			if (!pairMappingViewModel.SaveChanges)
+			{
+				return null;
+			}
+
+			var translationProvider = new TranslationProvider(translationOptions);
 			return new ITranslationProvider[] { translationProvider };
 		}
 
@@ -40,22 +56,17 @@ namespace LanguageWeaverProvider
 				return false;
 			}
 
-			var mainWindowViewModel = ShowRequestedView(languagePairs, credentialStore, editProvider.TranslationOptions, true);
-			return mainWindowViewModel.SaveChanges;
+			var pairMappingViewModel = ShowPairMappingView(languagePairs, credentialStore, editProvider.TranslationOptions, true);
+			return pairMappingViewModel.SaveChanges;
 		}
 
-		private MainViewModel ShowRequestedView(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, bool editProvider = false)
+		private PairMappingViewModel ShowPairMappingView(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions translationOptions, bool editProvider = false)
 		{
-			var mainWindowViewModel = new MainViewModel(loadOptions);
-			var mainWindowView = new MainWindowView { DataContext = mainWindowViewModel };
-			mainWindowViewModel.CloseEventRaised += () =>
-			{
-				// UpdateProviderCredentials(credentialStore, loadOptions);
-				mainWindowView.Close();
-			};
-
-			mainWindowView.ShowDialog();
-			return mainWindowViewModel;
+			var pairMappingViewModel = new PairMappingViewModel(translationOptions, languagePairs);
+			var pairMappingView = new PairMappingView() { DataContext = pairMappingViewModel };
+			pairMappingViewModel.CloseEventRaised += pairMappingView.Close;
+			pairMappingView.ShowDialog();
+			return pairMappingViewModel;
 		}
 
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)

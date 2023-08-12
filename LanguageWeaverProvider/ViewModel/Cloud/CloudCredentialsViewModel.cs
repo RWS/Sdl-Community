@@ -5,7 +5,6 @@ using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.NewFolder;
 using LanguageWeaverProvider.ViewModel.Interface;
-using Newtonsoft.Json;
 
 namespace LanguageWeaverProvider.ViewModel.Cloud
 {
