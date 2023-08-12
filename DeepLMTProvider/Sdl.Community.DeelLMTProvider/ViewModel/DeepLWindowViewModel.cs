@@ -22,10 +22,16 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 		private string _apiKeyValidationMessage;
 		private ObservableCollection<LanguagePairOptions> _languagePairSettings = new();
 
+		public string Title { get; set; } = "DeepL Translation Provider";
+
 		public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, DeepLGlossaryClient glossaryClient)
 		{
 			IsTellMeAction = true;
 
+			var currentProject = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
+			Title = $"{Title} - {currentProject.GetProjectInfo().Name}";
+
+			LanguagePairs = deepLTranslationOptions.LanguagePairOptions.Select(lpo => lpo.LanguagePair).ToArray();
 			SendPlainText = deepLTranslationOptions.SendPlainText;
 			Options = deepLTranslationOptions;
 
@@ -121,7 +127,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
 		private async void LoadLanguagePairSettings(DeepLGlossaryClient glossaryClient)
 		{
-			var glossaries = await glossaryClient.GetGlossaries(ApiKey);
+			var glossaries = await glossaryClient.GetGlossaries(DeepLTranslationProviderClient.ApiKey);
 			glossaries?.Add(GlossaryInfo.NoGlossary);
 
 			foreach (var languagePair in LanguagePairs)

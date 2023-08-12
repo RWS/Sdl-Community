@@ -15,7 +15,7 @@
 		MaxHeight="600"
 		AllowsTransparency="False"
 		WindowStartupLocation="CenterScreen"
-		Title="DeepL Translation Provider">
+		Title="{Binding Title}">
 
 	<Window.Resources>
 		<ResourceDictionary>
@@ -29,6 +29,7 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
+			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 		</ResourceDictionary>
 	</Window.Resources>
 
@@ -48,22 +49,24 @@
 				   DockPanel.Dock="Top"
 				   Margin="10,5,0,0"
 				   VerticalAlignment="Center"
-				   Text="Welcome to the DeepL Translation Provider. Please add your account and provider settings."
+				   Text="Welcome to the DeepL Translation Provider. Please add your provider settings."
 				   FontSize="15" />
 		<StackPanel DockPanel.Dock="Top"
 					Grid.Row="2">
 			<TextBlock Margin="10,10,10,5"
 					   TextWrapping="WrapWithOverflow"
 					   FontSize="12"
+					   Visibility="{Binding ApiKeyBoxEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
 					   Text="The DeepL API is a paid machine translation service. Please purchase a DeepL Pro Subscription in order to get an API Key and use this service." />
 			<TextBlock Text="Please enter your API Key below:"
 					   Margin="10,0,10,10"
+					   Visibility="{Binding ApiKeyBoxEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
 					   FontSize="12" />
 			<controls:BindablePasswordBox Name="ApiKeyBox"
 										  Password="{Binding ApiKey, Mode=TwoWay}"
-										  IsEnabled="{Binding ApiKeyBoxEnabled}"
-										  Margin="10,0,20,5"
-										  Style="{StaticResource Sdl.BindablePasswordBox.GenericStyle}" />
+										  Style="{StaticResource Sdl.BindablePasswordBox.GenericStyle}"
+										  Visibility="{Binding ApiKeyBoxEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
+										  Margin="10,0,20,5"/>
 			<TextBlock Name="ApiKeyValidationBlock"
 					   VerticalAlignment="Center"
 					   Margin="10,0,0,0"
@@ -84,6 +87,7 @@
 				</TextBlock.Style>
 			</TextBlock>
 			<TextBlock Margin="10,0,0,5"
+			           Visibility="{Binding ApiKeyBoxEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
 					   FontSize="12"> This API Key will then be used in all projects where you will be using the DeepL Pro Translation plug-in.</TextBlock>
 			<TextBlock Margin="10,0,0,10"
 					   Style="{StaticResource Sdl.TextBlock.HyperLinkTextStyle}">
@@ -163,21 +167,24 @@
 										  Cursor="Hand"
 										  HorizontalContentAlignment="Center"
 										  SelectedItem="{Binding SelectedGlossary, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-										  DisplayMemberPath="Name" >
+										  DisplayMemberPath="Name">
 									<ComboBox.Style>
-										<Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+										<Style TargetType="ComboBox"
+											   BasedOn="{StaticResource {x:Type ComboBox}}">
 											<Setter Property="Visibility"
-											        Value="Visible" />
+													Value="Visible" />
 											<Style.Triggers>
-												<DataTrigger Binding="{Binding Glossaries.Count}" Value="1">
-													<Setter Property="Visibility" Value="Collapsed"/>
+												<DataTrigger Binding="{Binding Glossaries.Count}"
+															 Value="1">
+													<Setter Property="Visibility"
+															Value="Collapsed" />
 												</DataTrigger>
 											</Style.Triggers>
 										</Style>
 									</ComboBox.Style>
 								</ComboBox>
 								<TextBlock Text="No glossary available"
-								           HorizontalAlignment="Center">
+										   HorizontalAlignment="Center">
 									<TextBlock.Style>
 										<Style TargetType="TextBlock"
 											   BasedOn="{StaticResource {x:Type TextBlock}}">

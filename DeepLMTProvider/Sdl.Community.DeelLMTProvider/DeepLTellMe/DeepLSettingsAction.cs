@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Community.DeepLMTProvider.UI;
@@ -60,7 +61,8 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
                         if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
                         {
                             translationProvider.MainTranslationProvider.Uri = options.Uri;
-                            currentProject.UpdateTranslationProviderConfiguration(settings);
+							translationProvider.MainTranslationProvider.State = JsonConvert.SerializeObject(options);
+							currentProject.UpdateTranslationProviderConfiguration(settings);
                         }
                     }
                 }
