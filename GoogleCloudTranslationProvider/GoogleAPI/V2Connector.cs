@@ -175,7 +175,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 			}
 
 			var targetCode = new CultureInfo(languagePair.TargetCulture.Name).GetLanguageCode(ApiVersion.V2);
-			var result = DownloadRequest(Constants.TranslationUri, "de", text, format);
+			var result = DownloadRequest(Constants.TranslationUri, targetCode, text, format);
 			var returnedResult = GetTranslation(result);
 			var decodedResult = _htmlUtil.HtmlDecode(returnedResult).RemoveZeroWidthSpaces();
 			return decodedResult;
