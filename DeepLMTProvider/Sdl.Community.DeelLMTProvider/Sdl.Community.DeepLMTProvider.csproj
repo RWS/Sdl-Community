@@ -123,6 +123,7 @@
     <Compile Include="Helpers\TsvReader.cs" />
     <Compile Include="Interface\IGlossaryBrowserService.cs" />
     <Compile Include="Interface\IMessageService.cs" />
+    <Compile Include="Interface\ITsvReader.cs" />
     <Compile Include="Model\Glossary.cs" />
     <Compile Include="Model\GlossaryEntry.cs" />
     <Compile Include="Model\GlossaryInfo.cs" />

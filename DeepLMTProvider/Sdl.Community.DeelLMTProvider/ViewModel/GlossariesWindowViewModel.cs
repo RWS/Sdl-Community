@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Command;
-using Sdl.Community.DeepLMTProvider.Helpers;
 using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Model;
-using Sdl.Community.DeepLMTProvider.UI;
 
 namespace Sdl.Community.DeepLMTProvider.ViewModel
 {
@@ -17,11 +15,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 	{
 		private ObservableCollection<GlossaryInfo> _glossaries;
 
-		public GlossariesWindowViewModel(DeepLGlossaryClient deepLGlossaryClient, IMessageService messageService, IGlossaryBrowserService glossaryBrowserService)
+		public GlossariesWindowViewModel(DeepLGlossaryClient deepLGlossaryClient, IMessageService messageService, IGlossaryBrowserService glossaryBrowserService, ITsvReader tsvReader)
 		{
 			DeepLGlossaryClient = deepLGlossaryClient;
 			MessageService = messageService;
 			GlossaryBrowserService = glossaryBrowserService;
+			TsvReader = tsvReader;
 			LoadGlossaries();
 		}
 
@@ -34,8 +33,9 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 		public ICommand ImportGlossaryCommand => new AsyncParameterlessCommand(ImportGlossary);
 
 		private DeepLGlossaryClient DeepLGlossaryClient { get; set; }
-		private IMessageService MessageService { get; }
 		private IGlossaryBrowserService GlossaryBrowserService { get; }
+		private IMessageService MessageService { get; }
+		private ITsvReader TsvReader { get; }
 
 		private void HandleError(string message, [CallerMemberName] string failingMethod = null)
 		{
@@ -44,8 +44,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
 		private async Task ImportGlossary()
 		{
-			var tsvReader = new TsvReader();
-
 			var (success, result, message) = await DeepLGlossaryClient.GetGlossarySupportedLanguagePairs(DeepLTranslationProviderClient.ApiKey);
 
 			if (!success)
@@ -58,7 +56,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 			if (GlossaryBrowserService.Browse(glossarySupportedLanguages, out var path, out var sourceLanguage, out var targetLanguage))
 			{
 				var selectedFilePath = path;
-				var glossaryFile = tsvReader.ReadTsvGlossary(selectedFilePath);
+				var glossaryFile = TsvReader.ReadTsvGlossary(selectedFilePath);
 
 				glossaryFile.SourceLanguage = sourceLanguage;
 				glossaryFile.TargetLanguage = targetLanguage;

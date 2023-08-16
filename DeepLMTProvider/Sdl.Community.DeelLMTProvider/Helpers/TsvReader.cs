@@ -1,9 +1,10 @@
 ﻿using System.IO;
+using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Model;
 
 namespace Sdl.Community.DeepLMTProvider.Helpers
 {
-	public class TsvReader
+	public class TsvReader : ITsvReader
 	{
 		public Glossary ReadTsvGlossary(string filename)
 		{
