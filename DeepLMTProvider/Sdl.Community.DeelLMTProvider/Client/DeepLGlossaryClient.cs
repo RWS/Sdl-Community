@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Model;
 
 namespace Sdl.Community.DeepLMTProvider.Client
 {
-	public class DeepLGlossaryClient
+	public class DeepLGlossaryClient : IDeepLGlossaryClient
 	{
 		private static readonly Logger Logger = Log.GetLogger(nameof(DeepLGlossaryClient));
 

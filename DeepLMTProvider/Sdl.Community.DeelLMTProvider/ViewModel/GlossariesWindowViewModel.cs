@@ -15,7 +15,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 	{
 		private ObservableCollection<GlossaryInfo> _glossaries;
 
-		public GlossariesWindowViewModel(DeepLGlossaryClient deepLGlossaryClient, IMessageService messageService, IGlossaryBrowserService glossaryBrowserService, ITsvReader tsvReader)
+		public GlossariesWindowViewModel(IDeepLGlossaryClient deepLGlossaryClient, IMessageService messageService, IGlossaryBrowserService glossaryBrowserService, ITsvReaderWriter tsvReader)
 		{
 			DeepLGlossaryClient = deepLGlossaryClient;
 			MessageService = messageService;
@@ -32,10 +32,10 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
 		public ICommand ImportGlossaryCommand => new AsyncParameterlessCommand(ImportGlossary);
 
-		private DeepLGlossaryClient DeepLGlossaryClient { get; set; }
+		private IDeepLGlossaryClient DeepLGlossaryClient { get; set; }
 		private IGlossaryBrowserService GlossaryBrowserService { get; }
 		private IMessageService MessageService { get; }
-		private ITsvReader TsvReader { get; }
+		private ITsvReaderWriter TsvReader { get; }
 
 		private void HandleError(string message, [CallerMemberName] string failingMethod = null)
 		{

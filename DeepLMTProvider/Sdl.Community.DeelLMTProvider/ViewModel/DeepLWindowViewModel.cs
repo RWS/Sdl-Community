@@ -23,7 +23,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 		private string _apiKeyValidationMessage;
 		private ObservableCollection<LanguagePairOptions> _languagePairSettings = new();
 
-		public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, DeepLGlossaryClient glossaryClient, IMessageService messageService)
+		public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, IMessageService messageService)
 		{
 			IsTellMeAction = true;
 			MessageService = messageService;
@@ -39,7 +39,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 			LoadLanguagePairSettings(glossaryClient);
 		}
 
-		public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, DeepLGlossaryClient glossaryClient, TranslationProviderCredential credentialStore, LanguagePair[] languagePairs, IMessageService messageService)
+		public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, TranslationProviderCredential credentialStore, LanguagePair[] languagePairs, IMessageService messageService)
 		{
 			MessageService = messageService;
 			LanguagePairs = languagePairs;
@@ -129,7 +129,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 			MessageService.ShowWarning(message, failingMethod);
 		}
 
-		private async void LoadLanguagePairSettings(DeepLGlossaryClient glossaryClient)
+		private async void LoadLanguagePairSettings(IDeepLGlossaryClient glossaryClient)
 		{
 			var (success, glossaries, message) = await glossaryClient.GetGlossaries(DeepLTranslationProviderClient.ApiKey);
 			if (!success)

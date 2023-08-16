@@ -4,7 +4,7 @@ using Sdl.Community.DeepLMTProvider.Model;
 
 namespace Sdl.Community.DeepLMTProvider.Helpers
 {
-	public class TsvReader : ITsvReader
+	public class TsvReaderWriter : ITsvReaderWriter
 	{
 		public Glossary ReadTsvGlossary(string filename)
 		{
@@ -22,6 +22,17 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
 			}
 
 			return glossary;
+		}
+
+		public void WriteTsvGlossary(Glossary glossary, string filename)
+		{
+			using var writer = new StreamWriter(filename);
+
+			foreach (var entry in glossary.Entries)
+			{
+				var line = $"{entry.SourceTerm}\t{entry.TargetTerm}";
+				writer.WriteLine(line);
+			}
 		}
 	}
 }

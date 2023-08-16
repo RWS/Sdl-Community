@@ -120,10 +120,11 @@
     <Compile Include="Command\NoParameterCommand.cs" />
     <Compile Include="Command\CommandWithParameter.cs" />
     <Compile Include="Extensions\CultureNameExtensions.cs" />
-    <Compile Include="Helpers\TsvReader.cs" />
+    <Compile Include="Helpers\TsvReaderWriter.cs" />
+    <Compile Include="Interface\IDeepLGlossaryClient.cs" />
     <Compile Include="Interface\IGlossaryBrowserService.cs" />
     <Compile Include="Interface\IMessageService.cs" />
-    <Compile Include="Interface\ITsvReader.cs" />
+    <Compile Include="Interface\ITsvReaderWriter.cs" />
     <Compile Include="Model\Glossary.cs" />
     <Compile Include="Model\GlossaryEntry.cs" />
     <Compile Include="Model\GlossaryInfo.cs" />

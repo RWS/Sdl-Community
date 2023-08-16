@@ -1,5 +1,6 @@
 ﻿using System;
 using Sdl.Community.DeepLMTProvider.Client;
+using Sdl.Community.DeepLMTProvider.Helpers;
 using Sdl.Community.DeepLMTProvider.Service;
 using Sdl.Community.DeepLMTProvider.UI;
 using Sdl.Community.DeepLMTProvider.ViewModel;
@@ -30,8 +31,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio.Actions
 
 		protected override void Execute()
 		{
-			var messageService = new MessageService();
-			var glossaryImportWindowViewModel = new GlossariesWindowViewModel(new DeepLGlossaryClient(), messageService, new GlossaryBrowserService());
+			var glossaryImportWindowViewModel = new GlossariesWindowViewModel(new DeepLGlossaryClient(), new MessageService(), new GlossaryBrowserService(), new TsvReaderWriter());
 			var glossaryImportWindow = new GlossariesWindow
 			{
 				DataContext = glossaryImportWindowViewModel
