@@ -15,8 +15,8 @@ using GoogleCloudTranslationProvider.Service;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
-using static System.Net.Mime.MediaTypeNames;
 using LogManager = NLog.LogManager;
 
 namespace GoogleCloudTranslationProvider.GoogleAPI
@@ -90,16 +90,23 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 			return DoTranslate(languagePair, text, format);
 		}
 
-		public bool IsSupportedLanguagePair(CultureInfo sourceCulture, CultureInfo targetCulture)
+		public bool IsSupportedLanguagePair(CultureCode sourceCulture, CultureCode targetCulture)
 		{
 			supportedLanguages ??= new Dictionary<string, List<string>>();
-			var targetLanguage = targetCulture.ConvertLanguageCode();
+			var sourceLanguage = new CultureInfo(sourceCulture.Name).GetLanguageCode(ApiVersion.V2);
+			var targetLanguage = new CultureInfo(targetCulture.Name).GetLanguageCode(ApiVersion.V2);
+
+			if (string.IsNullOrEmpty(sourceLanguage) || string.IsNullOrEmpty(targetLanguage))
+			{
+				return false;
+			}
+
 			if (!supportedLanguages.ContainsKey(targetLanguage))
 			{
 				UpdateSupportedLanguages(targetLanguage);
 			}
 
-			return supportedLanguages[targetLanguage].Any(source => source == sourceCulture.ConvertLanguageCode());
+			return supportedLanguages[targetLanguage].Any(source => source == sourceLanguage);
 		}
 
 		public List<V2LanguageModel> GetSupportedLanguages()

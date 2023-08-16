@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 using GoogleCloudTranslationProvider.Models;
 using GoogleCloudTranslationProvider.Service;
@@ -39,8 +40,12 @@ namespace GoogleCloudTranslationProvider.Interfaces
 
 		ICommand SwitchViewExternal { get; set; }
 
+		event EventHandler LanguageMappingLoaded;
+
 		bool CanConnectToGoogleV2(HtmlUtil htmlUtil);
 
 		bool CanConnectToGoogleV3(LanguagePair[] languagePairs);
+
+		void UpdateLanguageMapping();
 	}
 }

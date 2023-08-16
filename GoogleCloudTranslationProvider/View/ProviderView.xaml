@@ -11,6 +11,7 @@
 			 xmlns:viewModels="clr-namespace:GoogleCloudTranslationProvider.ViewModels"
 			 xmlns:converters="clr-namespace:GoogleCloudTranslationProvider.Converters"
 			 xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
+			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
 			 d:DataContext="{d:DesignInstance viewModels:ProviderViewModel}"
 			 mc:Ignorable="d"
 			 d:DesignHeight="850"
@@ -32,6 +33,7 @@
 
 			<converters:EmptyToVisibility x:Key="EmptyToVisibility" />
 			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter" />
+			<converters:InvertableStringEmptyToBoolConverter x:Key="InvertableStringEmptyToBoolConverter" />
 			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
 
 		</ResourceDictionary>
@@ -159,7 +161,8 @@
 							</StackPanel>
 						</Border>
 
-						<StackPanel Visibility="{Binding UseLocalPath, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}">
+						<StackPanel Visibility="{Binding UseLocalPath, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+									Margin="0 8">
 							<TextBlock Text="{x:Static root:PluginResources.ProviderView_V3_File_DragAndDrop}"
 									   Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"
 									   FontSize="16"
@@ -287,7 +290,44 @@
 						<DataGridTextColumn Header="{x:Static root:PluginResources.ProviderView_V3_MappingTable_Pairs}"
 											Binding="{Binding DisplayName}"
 											IsReadOnly="True"
-											Width="1*" />
+											Width="1.5*">
+							<DataGridTextColumn.ElementStyle>
+								<Style TargetType="TextBlock">
+									<Setter Property="Padding"
+											Value="6 0" />
+									<Setter Property="VerticalAlignment"
+											Value="Center" />
+								</Style>
+							</DataGridTextColumn.ElementStyle>
+						</DataGridTextColumn>
+
+						<DataGridTextColumn Header="Source"
+											Binding="{Binding SourceLanguageCode}"
+											IsReadOnly="True"
+											Width="64">
+							<DataGridTextColumn.ElementStyle>
+								<Style TargetType="TextBlock">
+									<Setter Property="Padding"
+											Value="6 0" />
+									<Setter Property="VerticalAlignment"
+											Value="Center" />
+								</Style>
+							</DataGridTextColumn.ElementStyle>
+						</DataGridTextColumn>
+
+						<DataGridTextColumn Header="Target"
+											Binding="{Binding TargetLanguageCode}"
+											IsReadOnly="True"
+											Width="64">
+							<DataGridTextColumn.ElementStyle>
+								<Style TargetType="TextBlock">
+									<Setter Property="Padding"
+											Value="6 0" />
+									<Setter Property="VerticalAlignment"
+											Value="Center" />
+								</Style>
+							</DataGridTextColumn.ElementStyle>
+						</DataGridTextColumn>
 
 						<DataGridTemplateColumn Header="{x:Static root:PluginResources.ProviderView_V3_MappingTable_Glossaries}"
 												Width="1*">
@@ -301,9 +341,11 @@
 												  DisplayMemberPath="DisplayName"
 												  SelectedIndex="0"
 												  BorderThickness="0"
-												  IsSynchronizedWithCurrentItem="True" />
+												  IsSynchronizedWithCurrentItem="True">
+										</ComboBox>
 										<TextBlock Text="{x:Static root:PluginResources.RetrievedResources_NotAvailable}"
 												   Visibility="{Binding GlossariesAreAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+												   VerticalAlignment="Center"
 												   Margin="6 2 0 0" />
 									</StackPanel>
 								</DataTemplate>
@@ -325,6 +367,7 @@
 												  IsSynchronizedWithCurrentItem="True" />
 										<TextBlock Text="{x:Static root:PluginResources.RetrievedResources_NotAvailable}"
 												   Visibility="{Binding ModelsAreAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+												   VerticalAlignment="Center"
 												   Margin="6 2 0 0" />
 									</StackPanel>
 								</DataTemplate>

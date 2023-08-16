@@ -45,11 +45,10 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 			}
 		}
 
-		public void TryAuthenticate(LanguagePair[] languagePair = null)
+		public void TryAuthenticate()
 		{
 			var sourceCultureInfo = new CultureInfo("en-GB");
 			var targetCultureInfo = new CultureInfo("de-DE");
-
 			var request = new TranslateTextRequest
 			{
 				Contents = { string.Empty },
@@ -66,18 +65,38 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 		#endregion
 
 		#region Languages
-		public bool IsSupportedLanguage(CultureInfo sourceLanguage, CultureInfo targetLanguage)
+		public bool IsSupportedLanguage(CultureCode sourceCulture, CultureCode targetCulture)
 		{
-			_supportedLanguages ??= new();
-			if (!_supportedLanguages.Any())
+			EnsureSupportedLanguagesInitialized();
+			var sourceLanguageCode = GetLanguageCode(sourceCulture.Name);
+			var targetLanguageCode = GetLanguageCode(targetCulture.Name);
+			if (string.IsNullOrEmpty(sourceLanguageCode) || string.IsNullOrEmpty(targetLanguageCode))
+			{
+				return false;
+			}
+
+			var sourceGoogleLanguage = GetSupportedLanguage(sourceLanguageCode);
+			var targetGoogleLanguage = GetSupportedLanguage(targetLanguageCode);
+			return sourceGoogleLanguage?.SupportSource is true
+				&& targetGoogleLanguage?.SupportTarget is true;
+		}
+
+		private void EnsureSupportedLanguagesInitialized()
+		{
+			if (_supportedLanguages is null || !_supportedLanguages.Any())
 			{
 				SetGoogleAvailableLanguages();
 			}
+		}
 
-			var searchedSource = _supportedLanguages.FirstOrDefault(x => x.CultureInfo.Name.Equals(sourceLanguage.TwoLetterISOLanguageName));
-			var searchedTarget = _supportedLanguages.FirstOrDefault(x => x.CultureInfo.Name.Equals(targetLanguage.TwoLetterISOLanguageName));
+		private string GetLanguageCode(string cultureCodeName)
+		{
+			return new CultureInfo(cultureCodeName).GetLanguageCode(ApiVersion.V3);
+		}
 
-			return searchedSource.SupportSource && searchedTarget.SupportTarget;
+		private V3LanguageModel GetSupportedLanguage(string languageCode)
+		{
+			return _supportedLanguages.FirstOrDefault(lang => lang.GoogleLanguageCode.Equals(languageCode));
 		}
 
 		public List<V3LanguageModel> GetLanguages()

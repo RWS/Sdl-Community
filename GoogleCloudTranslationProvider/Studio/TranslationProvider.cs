@@ -94,6 +94,7 @@ namespace GoogleCloudTranslationProvider.Studio
 				_googleV2Api.ApiKey = Options.ApiKey;
 			}
 
+			DatabaseExtensions.CreateDatabase(Options);
 			return _googleV2Api.IsSupportedLanguagePair(languageDirection.SourceCulture, languageDirection.TargetCulture);
 		}
 

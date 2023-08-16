@@ -79,6 +79,11 @@ namespace GoogleCloudTranslationProvider.Studio
 		private MainWindowViewModel ShowRequestedView(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, bool editProvider = false)
 		{
 			SetSavedCredentialsOnUi(credentialStore, loadOptions);
+			if (editProvider)
+			{
+				DatabaseExtensions.CreateDatabase(loadOptions);
+			}
+
 			var mainWindowViewModel = new MainWindowViewModel(loadOptions, credentialStore, languagePairs, editProvider);
 			var mainWindowView = new MainWindowView { DataContext = mainWindowViewModel };
 			mainWindowViewModel.CloseEventRaised += () =>

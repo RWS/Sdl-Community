@@ -216,9 +216,12 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private void InitializeViews()
 		{
 			_providerViewModel = new ProviderViewModel(TranslationOptions, _languagePairs.ToList(), _editProvider)
-				{ SwitchViewExternal = new RelayCommand(SwitchView) };
-			_settingsViewModel = new SettingsViewModel(TranslationOptions);
+			{
+				SwitchViewExternal = new RelayCommand(SwitchView)
+			};
+			_providerViewModel.LanguageMappingLoaded += LanguageMappingLoaded;
 
+			_settingsViewModel = new SettingsViewModel(TranslationOptions);
 			_availableViews = new List<ViewDetails>
 			{
 				new ViewDetails
@@ -245,7 +248,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 												  : _providerViewModel.CanConnectToGoogleV3(_languagePairs);
 		}
 
-		private async void Save(object o)
+		private void Save(object o)
 		{
 			if (!IsWindowValid())
 			{
@@ -255,7 +258,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			SetGoogleProviderOptions();
 			SetGeneralProviderOptions();
 			DeleteCredentialsIfNecessary();
-			CreateDatabase();
 			DialogResult = true;
 			CloseEventRaised?.Invoke();
 		}
@@ -324,11 +326,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			_credentialStore.RemoveCredential(providerUri);
 		}
 
-		private void ClearMessageRaised()
-		{
-			TranslatorErrorResponse = "<html><body></html></body>";
-		}
-
 		private void SwitchView(object o)
 		{
 			try
@@ -360,17 +357,9 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		private void UpdateLanguageMappingButton()
 		{
-			if (_providerViewModel.IsV2Checked)
-			{
-				IsLanguageMappingProviderEnabled = EditProvider || File.Exists(string.Format(Constants.DatabaseFilePath, PluginResources.Database_PluginName_V2));
-				return;
-			}
-
-			if (_providerViewModel.IsV3Checked)
-			{
-				IsLanguageMappingProviderEnabled = EditProvider || File.Exists(string.Format(Constants.DatabaseFilePath, PluginResources.Database_PluginName_V3));
-				return;
-			}
+			IsLanguageMappingProviderEnabled = _providerViewModel.IsV2Checked
+											 ? File.Exists(string.Format(Constants.DatabaseFilePath, PluginResources.Database_PluginName_V2))
+											 : File.Exists(string.Format(Constants.DatabaseFilePath, PluginResources.Database_PluginName_V3));
 		}
 
 		private void NavigateTo(object o)
@@ -387,30 +376,30 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		private void OpenLanguageMapping(object parameter)
 		{
-			if (_providerViewModel.IsV2Checked && !File.Exists(string.Format(Constants.DatabaseFilePath, PluginResources.Database_PluginName_V2)))
+			try
 			{
-				return;
+				DatabaseExtensions.CreateDatabase(TranslationOptions);
 			}
-
-			if (_providerViewModel.IsV3Checked && !File.Exists(string.Format(Constants.DatabaseFilePath, PluginResources.Database_PluginName_V3)))
-			{
-				return;
-			}
-
+			catch { }
 			TranslationOptions.SelectedGoogleVersion = _providerViewModel.IsV2Checked ? ApiVersion.V2 : ApiVersion.V3;
+
 			var lmpViewModel = new LanguageMappingProviderViewModel(TranslationOptions, EditProvider);
+			lmpViewModel.LanguageMappingUpdated += LanguageMappingUpdated;
+
 			var lmpView = new LanguageMappingProviderView() { DataContext = lmpViewModel };
-			lmpViewModel.CloseEventRaised += () =>
-			{
-				lmpView.Close();
-			};
+			lmpViewModel.CloseEventRaised += lmpView.Close;
 
 			var dialog = lmpView.ShowDialog();
 		}
 
-		private void CreateDatabase()
+		private void LanguageMappingUpdated(object sender, EventArgs e)
 		{
-			DatabaseExtensions.CreateDatabase(TranslationOptions);
+			_providerViewModel.UpdateLanguageMapping();
+		}
+
+		private void LanguageMappingLoaded(object sender, EventArgs e)
+		{
+			UpdateLanguageMappingButton();
 		}
 	}
 }

@@ -119,15 +119,15 @@
 						HorizontalAlignment="Right"
 						Margin="16">
 				
-				<Button Content="{x:Static root:PluginResources.LMP_Button_Ok}"
+				<Button Content="{x:Static root:PluginResources.LMP_Button_ApplyChanges}"
 						Command="{Binding ApplyChangesCommand}"
 						Style="{StaticResource Sdl.Button.SecondaryStyle}"
 						Cursor="Hand"
 						Width="120"
 						Margin="0 0 16 0" />
 
-				<Button Content="{x:Static root:PluginResources.LMP_Button_Cancel}"
-						Command="{Binding CancelChangesCommand}"
+				<Button Content="{x:Static root:PluginResources.LMP_Button_CloseApp}"
+						Command="{Binding CloseApplicationCommand}"
 						Style="{StaticResource Sdl.Button.SecondaryStyle}"
 						Cursor="Hand"
 						Width="120" />
