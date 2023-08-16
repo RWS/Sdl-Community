@@ -6,86 +6,93 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Command;
+using Sdl.Community.DeepLMTProvider.Extensions;
 using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Model;
 
 namespace Sdl.Community.DeepLMTProvider.ViewModel
 {
-	public class GlossariesWindowViewModel : ViewModel
-	{
-		private ObservableCollection<GlossaryInfo> _glossaries;
+    public class GlossariesWindowViewModel : ViewModel
+    {
+        private ObservableCollection<GlossaryInfo> _glossaries;
 
-		public GlossariesWindowViewModel(IDeepLGlossaryClient deepLGlossaryClient, IMessageService messageService, IGlossaryBrowserService glossaryBrowserService, ITsvReaderWriter tsvReader)
-		{
-			DeepLGlossaryClient = deepLGlossaryClient;
-			MessageService = messageService;
-			GlossaryBrowserService = glossaryBrowserService;
-			TsvReader = tsvReader;
-			LoadGlossaries();
-		}
+        public GlossariesWindowViewModel(IDeepLGlossaryClient deepLGlossaryClient, IMessageService messageService, IGlossaryBrowserService glossaryBrowserService, ITsvReaderWriter tsvReader)
+        {
+            DeepLGlossaryClient = deepLGlossaryClient;
+            MessageService = messageService;
+            GlossaryBrowserService = glossaryBrowserService;
+            TsvReader = tsvReader;
+            LoadGlossaries();
+        }
 
-		public ObservableCollection<GlossaryInfo> Glossaries
-		{
-			get => _glossaries;
-			set => SetField(ref _glossaries, value);
-		}
+        public ObservableCollection<GlossaryInfo> Glossaries
+        {
+            get => _glossaries;
+            set
+            {
+                SetField(ref _glossaries, value);
+                value.ForEach(gi => gi.PropertyChanged += (_, args) =>
+                {
+                    if (args.PropertyName == nameof(GlossaryInfo.IsChecked)) OnPropertyChanged(nameof(IsCheckAll));
+                });
+            }
+        }
 
-		public ICommand ImportGlossaryCommand => new AsyncParameterlessCommand(ImportGlossary);
+        public ICommand ImportGlossaryCommand => new AsyncParameterlessCommand(ImportGlossary);
 
-		private IDeepLGlossaryClient DeepLGlossaryClient { get; set; }
-		private IGlossaryBrowserService GlossaryBrowserService { get; }
-		private IMessageService MessageService { get; }
-		private ITsvReaderWriter TsvReader { get; }
+        private IDeepLGlossaryClient DeepLGlossaryClient { get; set; }
+        private IGlossaryBrowserService GlossaryBrowserService { get; }
+        private IMessageService MessageService { get; }
+        private ITsvReaderWriter TsvReader { get; }
 
-		private void HandleError(string message, [CallerMemberName] string failingMethod = null)
-		{
-			MessageService.ShowWarning(message, failingMethod);
-		}
+        public bool IsCheckAll
+        {
+            get => Glossaries.All(g => g.IsChecked);
+            set => Glossaries.ForEach(g => g.IsChecked = value);
+        }
 
-		private async Task ImportGlossary()
-		{
-			var (success, result, message) = await DeepLGlossaryClient.GetGlossarySupportedLanguagePairs(DeepLTranslationProviderClient.ApiKey);
+        private void HandleError(string message, [CallerMemberName] string failingMethod = null)
+        {
+            MessageService.ShowWarning(message, failingMethod);
+        }
 
-			if (!success)
-			{
-				HandleError(message);
-				return;
-			}
+        private bool HandleErrorIfFound(bool success, string message)
+        {
+            if (success) return false;
+            HandleError(message);
+            return true;
+        }
 
-			var glossarySupportedLanguages = result.Select(glp => glp.SourceLanguage).Distinct().ToList();
-			if (GlossaryBrowserService.Browse(glossarySupportedLanguages, out var path, out var sourceLanguage, out var targetLanguage))
-			{
-				var selectedFilePath = path;
-				var glossaryFile = TsvReader.ReadTsvGlossary(selectedFilePath);
+        private async Task ImportGlossary()
+        {
+            var (success, result, message) = await DeepLGlossaryClient.GetGlossarySupportedLanguagePairs(DeepLTranslationProviderClient.ApiKey);
 
-				glossaryFile.SourceLanguage = sourceLanguage;
-				glossaryFile.TargetLanguage = targetLanguage;
-				glossaryFile.Name = Path.GetFileNameWithoutExtension(selectedFilePath);
+            if (HandleErrorIfFound(success, message)) return;
 
-				GlossaryInfo glossary;
-				(success, glossary, message) = await DeepLGlossaryClient.ImportGlossary(glossaryFile, DeepLTranslationProviderClient.ApiKey);
+            var glossarySupportedLanguages = result.Select(glp => glp.SourceLanguage).Distinct().ToList();
+            if (GlossaryBrowserService.Browse(glossarySupportedLanguages, out var path, out var sourceLanguage, out var targetLanguage))
+            {
+                var selectedFilePath = path;
+                var glossaryFile = TsvReader.ReadTsvGlossary(selectedFilePath);
 
-				if (!success)
-				{
-					HandleError(message);
-					return;
-				}
+                glossaryFile.SourceLanguage = sourceLanguage;
+                glossaryFile.TargetLanguage = targetLanguage;
+                glossaryFile.Name = Path.GetFileNameWithoutExtension(selectedFilePath);
 
-				Glossaries.Add(glossary);
-			}
-		}
+                GlossaryInfo glossary;
+                (success, glossary, message) = await DeepLGlossaryClient.ImportGlossary(glossaryFile, DeepLTranslationProviderClient.ApiKey);
 
-		private async void LoadGlossaries()
-		{
-			var (success, result, message) = await DeepLGlossaryClient.GetGlossaries(DeepLTranslationProviderClient.ApiKey);
+                if (HandleErrorIfFound(success, message)) return;
 
-			if (!success)
-			{
-				HandleError(message);
-				return;
-			}
+                Glossaries.Add(glossary);
+            }
+        }
 
-			Glossaries = new ObservableCollection<GlossaryInfo>(result);
-		}
-	}
+        private async void LoadGlossaries()
+        {
+            var (success, result, message) = await DeepLGlossaryClient.GetGlossaries(DeepLTranslationProviderClient.ApiKey);
+            if (HandleErrorIfFound(success, message)) return;
+            Glossaries = new ObservableCollection<GlossaryInfo>(result);
+        }
+    }
 }
