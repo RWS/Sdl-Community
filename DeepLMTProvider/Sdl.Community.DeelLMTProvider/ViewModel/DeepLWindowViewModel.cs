@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Timers;
-using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Command;
 using Sdl.Community.DeepLMTProvider.Extensions;
+using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -22,11 +23,10 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 		private string _apiKeyValidationMessage;
 		private ObservableCollection<LanguagePairOptions> _languagePairSettings = new();
 
-		public string Title { get; set; } = "DeepL Translation Provider";
-
-		public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, DeepLGlossaryClient glossaryClient)
+		public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, DeepLGlossaryClient glossaryClient, IMessageService messageService)
 		{
 			IsTellMeAction = true;
+			MessageService = messageService;
 
 			var currentProject = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
 			Title = $"{Title} - {currentProject.GetProjectInfo().Name}";
@@ -39,8 +39,9 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 			LoadLanguagePairSettings(glossaryClient);
 		}
 
-		public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, DeepLGlossaryClient glossaryClient, TranslationProviderCredential credentialStore, LanguagePair[] languagePairs)
+		public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, DeepLGlossaryClient glossaryClient, TranslationProviderCredential credentialStore, LanguagePair[] languagePairs, IMessageService messageService)
 		{
+			MessageService = messageService;
 			LanguagePairs = languagePairs;
 			IsTellMeAction = false;
 
@@ -82,32 +83,18 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 		}
 
 		public ICommand OkCommand => new NoParameterCommand(Save, () => ApiKeyValidationMessage == null);
-
 		public DeepLTranslationOptions Options { get; set; }
-
 		public bool SendPlainText { get; set; }
-
+		public string Title { get; set; } = "DeepL Translation Provider";
 		private bool IsTellMeAction { get; }
-
 		private LanguagePair[] LanguagePairs { get; }
+		private IMessageService MessageService { get; }
 
 		private Timer PasswordChangedTimer { get; } = new()
 		{
 			Interval = 500,
 			AutoReset = false
 		};
-
-		private static void AskUserToRestart()
-		{
-			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-			var documentsOpened = editorController.GetDocuments().Any();
-
-			if (documentsOpened)
-			{
-				MessageBox.Show(PluginResources.SettingsUpdated_ReopenFilesForEditing,
-					PluginResources.SettingsUpdated, MessageBoxButton.OK, MessageBoxImage.Information);
-			}
-		}
 
 		private static GlossaryInfo GetSelectedGlossary(List<GlossaryInfo> glossaries, LanguagePairOptions languageSavedOptions, string sourceLangCode, string targetLangCode)
 		{
@@ -125,9 +112,32 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 			return GlossaryInfo.NoGlossary;
 		}
 
+		private void AskUserToRestart()
+		{
+			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
+			var documentsOpened = editorController.GetDocuments().Any();
+
+			if (documentsOpened)
+			{
+				MessageService.ShowWarning(PluginResources.SettingsUpdated_ReopenFilesForEditing,
+					PluginResources.SettingsUpdated);
+			}
+		}
+
+		private void HandleError(string message, [CallerMemberName] string failingMethod = null)
+		{
+			MessageService.ShowWarning(message, failingMethod);
+		}
+
 		private async void LoadLanguagePairSettings(DeepLGlossaryClient glossaryClient)
 		{
-			var glossaries = await glossaryClient.GetGlossaries(DeepLTranslationProviderClient.ApiKey);
+			var (success, glossaries, message) = await glossaryClient.GetGlossaries(DeepLTranslationProviderClient.ApiKey);
+			if (!success)
+			{
+				HandleError(message);
+				glossaries = new List<GlossaryInfo>();
+			}
+
 			glossaries?.Add(GlossaryInfo.NoGlossary);
 
 			foreach (var languagePair in LanguagePairs)

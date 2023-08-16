@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using Sdl.Community.DeepLMTProvider.Model;
@@ -13,27 +16,12 @@ namespace Sdl.Community.DeepLMTProvider.Client
 	{
 		private static readonly Logger Logger = Log.GetLogger(nameof(DeepLGlossaryClient));
 
-		private static List<GlossaryInfo> TryDeserializeGlossaryInfo(string serializedGlossaries)
-		{
-			try
-			{
-				return JObject.Parse(serializedGlossaries)["glossaries"]?.ToObject<List<GlossaryInfo>>();
-			}
-			catch (Exception e)
-			{
-				Logger.Warn(e);
-				MessageBox.Show($"Glossaries could not be retrieved: {e.Message}");
-			}
-
-			return null;
-		}
-
-		public async Task<List<GlossaryInfo>> GetGlossaries(string apiKey)
+		public async Task<(bool Success, List<GlossaryInfo> Result, string FailureMessage)> GetGlossaries(string apiKey)
 		{
 			var request = new HttpRequestMessage
 			{
 				Method = HttpMethod.Get,
-				RequestUri = new Uri("https://api.deepl.com/v2/glossaries"),
+				RequestUri = new Uri("https://api.deepl.com/v1/glossaries"),
 				Headers =
 				{
 					{ "Authorization", $"DeepL-Auth-Key {apiKey}" },
@@ -43,20 +31,101 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
 			if (!response.IsSuccessStatusCode)
 			{
-				var messageBoxText = $"Glossaries retrieval failed: {response.ReasonPhrase}";
-
-				Logger.Warn(messageBoxText);
-				MessageBox.Show(messageBoxText, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-
-				return null;
+				return (false, null, GetFailureMessage(response.ReasonPhrase));
 			}
-			var body = await response.Content.ReadAsStringAsync();
+			var serializedGlossaries = await response.Content.ReadAsStringAsync();
 
-			return TryDeserializeGlossaryInfo(body);
+			return WrapTryCatch(() =>
+				JObject.Parse(serializedGlossaries)["glossaries"]?.ToObject<List<GlossaryInfo>>());
 		}
 
-		//public async Task ImportGlossary(Glossary)
-		//public async Task DeleteGlossary(GlossaryInfo);
+		public async Task<(bool Success, List<GlossaryLanguagePair> Result, string FailureMessage)> GetGlossarySupportedLanguagePairs(string apiKey)
+		{
+			var request = new HttpRequestMessage
+			{
+				Method = HttpMethod.Get,
+				RequestUri = new Uri("https://api.deepl.com/v2/glossary-language-pairs"),
+				Headers =
+				{
+					{ "Authorization", $"DeepL-Auth-Key {apiKey}" },
+				},
+			};
 
+			using var response = await AppInitializer.Client.SendAsync(request);
+
+			if (!response.IsSuccessStatusCode)
+			{
+				return (false, null, GetFailureMessage(response.ReasonPhrase));
+			}
+
+			var serializedLanguagePairs = await response.Content.ReadAsStringAsync();
+
+			return WrapTryCatch(() => JObject.Parse(serializedLanguagePairs)["supported_languages"]
+				.ToObject<List<GlossaryLanguagePair>>());
+		}
+
+		public async Task<(bool Success, GlossaryInfo result, string FailureMessage)> ImportGlossary(Glossary glossary, string apiKey)
+		{
+			var glossaryEntriesBuilder = new StringBuilder();
+
+			foreach (var glossaryEntry in glossary.Entries)
+			{
+				glossaryEntriesBuilder.AppendLine($"{glossaryEntry.SourceTerm}\t{glossaryEntry.TargetTerm}");
+			}
+
+			var content = new
+			{
+				name = glossary.Name,
+				source_lang = glossary.SourceLanguage,
+				target_lang = glossary.TargetLanguage,
+				entries = glossaryEntriesBuilder.ToString(),
+				entries_format = "tsv"
+			};
+
+			 var request = new HttpRequestMessage
+			{
+				Method = HttpMethod.Post,
+				RequestUri = new Uri("https://api.deepl.com/v2/glossaries"),
+				Headers =
+				{
+					{ "Authorization", $"DeepL-Auth-Key {apiKey}" },
+				},
+				Content = new StringContent(JsonConvert.SerializeObject(content))
+				{
+					Headers =
+					{
+						ContentType = new MediaTypeHeaderValue("application/json")
+					}
+				}
+			};
+
+			using var response = await AppInitializer.Client.SendAsync(request);
+
+			if (!response.IsSuccessStatusCode)
+			{
+				HandleError("Glossary creation", response.ReasonPhrase);
+			}
+
+			var serializedCreatedGlossary = await response.Content.ReadAsStringAsync();
+			return WrapTryCatch(() => JObject.Parse(serializedCreatedGlossary).ToObject<GlossaryInfo>());
+		}
+
+		private string GetFailureMessage(string failureReason = null, [CallerMemberName] string failingMethod = null) =>
+			$@"""{failingMethod}"" failed: {failureReason}";
+
+		private void HandleError(string whatFailed, string whyItFailed) =>
+			Logger.Warn($"{whatFailed} failed: {whyItFailed}");
+
+		private (bool Success, T Result, string FailureMessage) WrapTryCatch<T>(Func<T> function, [CallerMemberName] string failingMethod = null)
+		{
+			try
+			{
+				return (true, function(), null);
+			}
+			catch (Exception e)
+			{
+				return (false, default, GetFailureMessage(failingMethod, e.Message));
+			}
+		}
 	}
 }

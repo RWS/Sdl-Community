@@ -21,6 +21,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
 		private static string _apiKey;
 		private List<string> _supportedSourceLanguages;
 
+		public static event EventHandler ApiKeyChanged;
+
 		public DeepLTranslationProviderClient(string key)
 		{
 			ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
@@ -178,6 +180,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
 			SupportedTargetLanguagesAndFormalities = GetSupportedTargetLanguages(ApiKey);
 			SupportedTargetLanguages = SupportedTargetLanguagesAndFormalities.Keys.ToList();
+
+			ApiKeyChanged?.Invoke(null, null);
 		}
 
 		private string DecodeWhenNeeded(string translatedText)

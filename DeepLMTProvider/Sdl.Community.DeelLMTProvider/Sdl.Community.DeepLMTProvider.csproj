@@ -116,11 +116,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\DeepLGlossaryClient.cs" />
+    <Compile Include="Command\AsyncParameterlessCommand.cs" />
     <Compile Include="Command\NoParameterCommand.cs" />
     <Compile Include="Command\CommandWithParameter.cs" />
     <Compile Include="Extensions\CultureNameExtensions.cs" />
+    <Compile Include="Helpers\TsvReader.cs" />
+    <Compile Include="Interface\IGlossaryBrowserService.cs" />
+    <Compile Include="Interface\IMessageService.cs" />
+    <Compile Include="Model\Glossary.cs" />
+    <Compile Include="Model\GlossaryEntry.cs" />
     <Compile Include="Model\GlossaryInfo.cs" />
+    <Compile Include="Model\GlossaryLanguagePair.cs" />
     <Compile Include="Model\LanguagePairOptions.cs" />
+    <Compile Include="Service\GlossaryBrowserService.cs" />
+    <Compile Include="Service\MessageService.cs" />
+    <Compile Include="Studio\Actions\ImportGlossaryAction.cs" />
     <Compile Include="Studio\DeepLMtTranslationProvider.cs" />
     <Compile Include="Studio\DeepLMtTranslationProviderFactory.cs" />
     <Compile Include="Studio\DeepLMtTranslationProviderLanguageDirection.cs" />
@@ -153,16 +163,26 @@
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="AppInitializer.cs" />
     <Compile Include="Client\DeepLTranslationProviderClient.cs" />
+    <Compile Include="UI\Controls\BrowsePathControl.xaml.cs">
+      <DependentUpon>BrowsePathControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\DeepLWindow.xaml.cs">
       <DependentUpon>DeepLWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Log.cs" />
     <Compile Include="Model\DeepLTranslationOptions.cs" />
     <Compile Include="Model\Formality.cs" />
+    <Compile Include="UI\GlossariesWindow.xaml.cs">
+      <DependentUpon>GlossariesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\BrowseGlossaryWindow.xaml.cs">
+      <DependentUpon>BrowseGlossaryWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\UiHelpers\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\DeepLWindowViewModel.cs" />
+    <Compile Include="ViewModel\GlossariesWindowViewModel.cs" />
     <Compile Include="ViewModel\ViewModel.cs" />
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
@@ -173,7 +193,7 @@
     <EmbeddedResource Include="Resources\Question.ico" />
     <Resource Include="Resources\deepLIcon.ico" />
     <Resource Include="Resources\deepLResized.png" />
-    <EmbeddedResource Include="Resources\deepL_logo_new.png" />
+    <Resource Include="Resources\deepL_logo_new.png" />
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
@@ -201,9 +221,21 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Page Include="UI\Controls\BrowsePathControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\DeepLWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\GlossariesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\BrowseGlossaryWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\UiHelpers\ButtonsStyle.xaml">
       <Generator>MSBuild:Compile</Generator>

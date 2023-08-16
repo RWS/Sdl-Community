@@ -1,0 +1,100 @@
+﻿<Window x:Class="Sdl.Community.DeepLMTProvider.UI.GlossariesWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:viewModel="clr-namespace:Sdl.Community.DeepLMTProvider.ViewModel"
+		xmlns:uiHelpers="clr-namespace:Sdl.Community.DeepLMTProvider.UI.UiHelpers"
+		mc:Ignorable="d"
+		d:DataContext="{d:DesignInstance Type=viewModel:GlossariesWindowViewModel}"
+		d:DesignHeight="450"
+		KeyDown="Window_KeyDown"
+		MaxWidth="600"
+		MaxHeight="600"
+		WindowStartupLocation="CenterScreen"
+		WindowStyle="None">
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="UiHelpers/TextBlockStyle.xaml" />
+				<ResourceDictionary Source="UiHelpers/TextBoxStyle.xaml" />
+				<ResourceDictionary Source="UiHelpers/WindowsBorder.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/datagridresources.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Window.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<uiHelpers:WindowsControl  DockPanel.Dock="Top"
+								   Grid.Row="0" />
+
+		<Image Source="../Resources/deepL_logo_new.png"
+			   Margin="5"
+			   Grid.Row="0"
+			   HorizontalAlignment="Left"
+			   Width="30" />
+
+		<DataGrid Grid.Row="1"
+				  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+				  AutoGenerateColumns="False"
+				  Margin="5"
+				  ItemsSource="{Binding Glossaries, Mode=TwoWay}"
+				  d:ItemsSource="{d:SampleData}">
+
+			<DataGrid.Columns>
+
+				<DataGridTemplateColumn Header="Glossary Name"
+										Width="*">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding Name}"/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+
+				<DataGridTemplateColumn Header="Source language"
+										Width="*">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding SourceLanguage}" />
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+
+				<DataGridTemplateColumn Header="Target language"
+										Width="*">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding TargetLanguage}"/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+
+			</DataGrid.Columns>
+		</DataGrid>
+		<StackPanel Grid.Row="2"
+					HorizontalAlignment="Right"
+					Margin="0 0 0 5"
+					Orientation="Horizontal">
+			<Button Content="Import glossary"
+					Margin="0 0 5 0"
+					Height="20"
+					Command="{Binding ImportGlossaryCommand}"
+					HorizontalAlignment="Center"
+					Style="{StaticResource Sdl.Button.EmbeddedStyle}" />
+			<Button Content="Ok"
+					Margin="0 0 5 0"
+					Click="OkButton_Click"
+					Style="{StaticResource Sdl.Button.PrimaryStyle}"
+					Height="25"
+					IsDefault="True" />
+		</StackPanel>
+
+	</Grid>
+</Window>

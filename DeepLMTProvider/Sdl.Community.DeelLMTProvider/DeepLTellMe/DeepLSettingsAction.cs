@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Newtonsoft.Json;
 using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Model;
+using Sdl.Community.DeepLMTProvider.Service;
 using Sdl.Community.DeepLMTProvider.UI;
 using Sdl.Community.DeepLMTProvider.ViewModel;
 using Sdl.TellMe.ProviderApi;
@@ -53,7 +54,7 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
                         var state = translationProvider.MainTranslationProvider.State;
                         var options = new DeepLTranslationOptions(uri, state);
 
-                        var viewModel = new DeepLWindowViewModel(options, new DeepLGlossaryClient());
+                        var viewModel = new DeepLWindowViewModel(options, new DeepLGlossaryClient(), new MessageService());
                         var dialog = new DeepLWindow(viewModel);
 
                         dialog.ShowDialog();
