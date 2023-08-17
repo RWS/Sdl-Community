@@ -31,4 +31,10 @@ namespace LanguageMappingProvider.Extensions
         public DuplicateIndexException()
             : base("Duplicate index detected in the provided collection.") { }
     }
+
+	public class LanguageNotFoundException : Exception
+	{
+		public LanguageNotFoundException()
+			: base("The specified language does not match any language in the database.") { }
+	}
 }

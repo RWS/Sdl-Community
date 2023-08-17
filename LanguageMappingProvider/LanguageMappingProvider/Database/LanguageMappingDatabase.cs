@@ -11,6 +11,7 @@ using Dapper;
 using LanguageMappingProvider.Database.Interface;
 using LanguageMappingProvider.Extensions;
 using LanguageMappingProvider.Model;
+using Sdl.Core.Globalization;
 using Sdl.Core.Globalization.LanguageRegistry;
 
 namespace LanguageMappingProvider.Database
@@ -23,7 +24,7 @@ namespace LanguageMappingProvider.Database
 		private readonly IDictionary<int, LanguageMapping> _mappedLanguagesDictionary;
 
 		/// <summary>
-		/// Initializes a new instance of the SQLiteDatabase class
+		/// Initializes a new instance of the <see cref="LanguageMappingDatabase"/> class
 		/// and establishes a connection to the SQLite database associated with the specified plugin.
 		/// </summary>
 		/// 
@@ -34,12 +35,12 @@ namespace LanguageMappingProvider.Database
 		/// If the corresponding database does not exist, a new database will be created.</param>
 		/// 
 		/// <param name="pluginSupportedLanguages">
-		/// A collection of `MappedLanguage` objects representing the supported languages for the plugin.
-		/// The `LanguageCode` values in the database will be updated accordingly when creating or resetting the database.
+		/// A collection of <see cref="LanguageMapping"/> objects representing the supported languages for the plugin.
+		/// The <see cref="LanguageMapping.LanguageCode"/> values in the database will be updated accordingly when creating or resetting the database.
 		/// This ensures seamless integration with the plugin's functionality, reflecting the accurate supported languages in the database.
 		/// </param>
 		/// 
-		/// <exception cref="DatabaseInitializationException">Thrown when the pluginSupportedLanguages is not set and the database doesn't exist.</exception>
+		/// <exception cref="DatabaseInitializationException">Thrown when the <paramref name="pluginSupportedLanguages"/> is not set and the database doesn't exist.</exception>
 		public LanguageMappingDatabase(string pluginName, IList<LanguageMapping> pluginSupportedLanguages)
 		{
 			_pluginSupportedLanguages = pluginSupportedLanguages;
@@ -51,12 +52,58 @@ namespace LanguageMappingProvider.Database
 			LoadMappedLanguages();
 		}
 
+		public int Count => _mappedLanguagesDictionary.Count;
+
+		public bool CanResetToDefaults => _pluginSupportedLanguages is not null && _pluginSupportedLanguages.Any();
+
 		public void InsertLanguage(LanguageMapping mappedLanguage)
 		{
 			EnsureMappedLanguageIsValid(mappedLanguage);
 			var syntax = string.Format(Constants.SQL_InsertData, mappedLanguage.Name, mappedLanguage.Region, mappedLanguage.TradosCode, mappedLanguage.LanguageCode);
 			ExecuteCommand(syntax);
 			LoadMappedLanguages();
+		}
+
+		public LanguageMapping GetLanguage(string languageCode)
+		{
+			var foundLanguage = _mappedLanguagesDictionary?.Values?.FirstOrDefault(x => x.TradosCode.Equals(languageCode));
+			return foundLanguage is not null
+				 ? foundLanguage
+				 : throw new LanguageNotFoundException();
+		}
+
+		public LanguageMapping GetLanguage(CultureInfo cultureInfo)
+		{
+			return GetLanguage(cultureInfo.Name);
+		}
+
+		public LanguageMapping GetLanguage(CultureCode cultureCode)
+		{
+			return GetLanguage(cultureCode.Name);
+		}
+
+		public bool TryGetLanguage(string languageCode, out LanguageMapping languageMapping)
+		{
+			languageMapping = null;
+			try
+			{
+				languageMapping = GetLanguage(languageCode);
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
+		public bool TryGetLanguage(CultureInfo cultureInfo, out LanguageMapping languageMapping)
+		{
+			return TryGetLanguage(cultureInfo.Name, out languageMapping);
+		}
+
+		public bool TryGetLanguage(CultureCode cultureCode, out LanguageMapping languageMapping)
+		{
+			return TryGetLanguage(cultureCode.Name, out languageMapping);
 		}
 
 		public void UpdateAll(IEnumerable<LanguageMapping> mappedLanguages)
@@ -104,6 +151,11 @@ namespace LanguageMappingProvider.Database
 
 		public void ResetToDefault()
 		{
+			if (!CanResetToDefaults)
+			{
+				return;
+			}
+
 			ExecuteCommand(Constants.SQL_DropTable);
 			CreateNewTable();
 			LoadMappedLanguages();
@@ -152,16 +204,18 @@ namespace LanguageMappingProvider.Database
 
 		private void EnsureDatabaseFileExists()
 		{
-			if (!File.Exists(_filePath))
+			if (File.Exists(_filePath))
 			{
-				if (!Directory.Exists(_filePath))
-				{
-					Directory.CreateDirectory(Constants.PluginAppDataLocation);
-				}
-
-				EnsurePluginSupportedLanguagesAreValid(_pluginSupportedLanguages);
-				SQLiteConnection.CreateFile(_filePath);
+				return;
 			}
+
+			if (!Directory.Exists(_filePath))
+			{
+				Directory.CreateDirectory(Constants.PluginAppDataLocation);
+			}
+
+			EnsurePluginSupportedLanguagesAreValid(_pluginSupportedLanguages);
+			SQLiteConnection.CreateFile(_filePath);
 		}
 
 		private void EnsureTableExists()
@@ -213,7 +267,7 @@ namespace LanguageMappingProvider.Database
 			return mappedLanguages.OrderBy(x => x.Name).ThenBy(x => x.Region).ToList();
 		}
 
-		public void UpdateMappingCodes(IEnumerable<LanguageMapping> mappingList)
+		private void UpdateMappingCodes(IEnumerable<LanguageMapping> mappingList)
 		{
 			var mappingDictionary = _pluginSupportedLanguages?.ToDictionary(l => (l?.Name, l?.Region), l => l?.LanguageCode);
 			foreach (var mappedLanguage in mappingList)
@@ -229,8 +283,7 @@ namespace LanguageMappingProvider.Database
 
 		private void InsertCollection(IEnumerable<LanguageMapping> mappedLanguages)
 		{
-			if (mappedLanguages is null
-			 || !mappedLanguages.Any())
+			if (mappedLanguages is null || !mappedLanguages.Any())
 			{
 				return;
 			}
@@ -262,7 +315,7 @@ namespace LanguageMappingProvider.Database
 				var index = mappedLanguage.Key;
 				var currentPair = mappedLanguage.Value;
 
-				if (!_mappedLanguagesDictionary.TryGetValue(index, out LanguageMapping originalPair)
+				if (!_mappedLanguagesDictionary.TryGetValue(index, out var originalPair)
 				 || !string.Equals(currentPair.LanguageCode, originalPair.LanguageCode))
 				{
 					UpdateAt(index, nameof(currentPair.LanguageCode), currentPair.LanguageCode);

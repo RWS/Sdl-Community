@@ -1,28 +1,80 @@
 using System.Collections.Generic;
+using System.Globalization;
+using LanguageMappingProvider.Extensions;
 using LanguageMappingProvider.Model;
+using Sdl.Core.Globalization;
 
 namespace LanguageMappingProvider.Database.Interface
 {
 	public interface ILanguageMappingDatabase
     {
-        /// <summary>
-        /// This function is responsible for adding a new MappedLanguage object to the database.
-        /// It accepts a MappedLanguage object as input,
-        /// representing the language to be inserted,
-        /// and inserts the corresponding data into the appropriate table in the database.
-        /// </summary>
-        /// <param name="mappedLanguage">A MappedLanguage object representing the language to be inserted into the database.</param>
-        void InsertLanguage(LanguageMapping mappedLanguage);
+		int Count { get; }
 
-        /// <summary>
-        /// This function is responsible for updating all the 
-        /// modified values of mapped languages in the database. 
-        /// It takes an enumerable collection of MappedLanguage objects as input, 
-        /// which contains the updated language values, 
-        /// and updates the corresponding records in the database.
-        /// </summary>
-        /// <param name="mappedLanguages">An enumerable collection of MappedLanguage objects that represent the modified language values to be updated in the database.</param>
-        void UpdateAll(IEnumerable<LanguageMapping> mappedLanguages);
+		bool CanResetToDefaults { get; }
+
+		/// <summary>
+		/// Adds a new <see cref="LanguageMapping"/> object to the database.
+		/// </summary>
+		/// <param name="mappedLanguage">The <see cref="LanguageMapping"/> object to be inserted into the database.</param>
+		void InsertLanguage(LanguageMapping mappedLanguage);
+
+		/// <summary>
+		/// Retrieves a <see cref="LanguageMapping"/> object based on the provided language code.
+		/// </summary>
+		/// <param name="languageCode">The language code in the format "xx-XX" representing the desired language.</param>
+		/// <returns>A <see cref="LanguageMapping"/> object containing the retrieved language data.</returns>
+		/// <exception cref="LanguageNotFoundException">Thrown if the requested language is not found.</exception>
+		LanguageMapping GetLanguage(string languageCode);
+
+		/// <summary>
+		/// Retrieves language data from the database using the provided CultureInfo and returns it as a LanguageMapping object.
+		/// </summary>
+		/// <param name="cultureInfo">The <see cref="CultureInfo"/> representing the desired language.</param>
+		/// <returns>A LanguageMapping object containing the retrieved language data</returns>
+		/// <exception cref="DatabaseInitializationException">Thrown when the pluginSupportedLanguages is not set and the database doesn't exist.</exception>
+		LanguageMapping GetLanguage(CultureInfo cultureInfo);
+
+		/// <summary>
+		/// Retrieves a <see cref="LanguageMapping"/> object based on the provided <see cref="CultureCode"/>.
+		/// </summary>
+		/// <param name="cultureCode">The <see cref="CultureCode"/> representing the desired language.</param>
+		/// <returns>A <see cref="LanguageMapping"/> object containing the retrieved language data.</returns>
+		/// <exception cref="LanguageNotFoundException">Thrown if the requested language is not found.</exception>
+		LanguageMapping GetLanguage(CultureCode cultureCode);
+
+		/// <summary>
+		/// Attempts to retrieve a <see cref="LanguageMapping"/> object based on a language code in format "xx-XX" and stores the result in the <paramref name="languageMapping"/> parameter.
+		/// </summary>
+		/// <param name="languageCode">The language code in the format "xx-XX" representing the desired language.</param>
+		/// <param name="languageMapping">An <see cref="LanguageMapping"/> object to store the retrieved language data.</param>
+		/// <returns><c>True</c> if the data was successfully retrieved, <c>False</c> otherwise.</returns>
+		bool TryGetLanguage(string languageCode, out LanguageMapping languageMapping);
+
+		/// <summary>
+		/// Tries to retrieve a <see cref="LanguageMapping"/> object using the given <see cref="CultureInfo"/> and stores the result in the <paramref name="languageMapping"/> parameter.
+		/// </summary>
+		/// <param name="cultureInfo">The culture and language information.</param>
+		/// <param name="languageMapping">An <see cref="LanguageMapping"/> object to store the retrieved language data.</param>
+		/// <returns><c>true</c> if the data was successfully retrieved, <c>false</c> otherwise.</returns>
+		bool TryGetLanguage(CultureInfo cultureInfo, out LanguageMapping languageMapping);
+
+		/// <summary>
+		/// Tries to obtain a <see cref="LanguageMapping"/> object using the provided <see cref="CultureCode"/> and saves the result in the <paramref name="languageMapping"/> parameter.
+		/// </summary>
+		/// <param name="cultureCode">The culture code in the format "xx-XX" representing the desired culture and language.</param>
+		/// <param name="languageMapping">An <see cref="LanguageMapping"/> object to store the retrieved language data.</param>
+		/// <returns><c>true</c> if the data was successfully retrieved, <c>false</c> otherwise.</returns>
+		bool TryGetLanguage(CultureCode cultureCode, out LanguageMapping languageMapping);
+
+		/// <summary>
+		/// This function is responsible for updating all the 
+		/// modified values of mapped languages in the database. 
+		/// It takes an enumerable collection of <see cref="LanguageMapping"/> objects as input, 
+		/// which contains the updated language values, 
+		/// and updates the corresponding records in the database.
+		/// </summary>
+		/// <param name="mappedLanguages">An enumerable collection of <see cref="LanguageMapping"/> objects that represent the modified language values to be updated in the database.</param>
+		void UpdateAll(IEnumerable<LanguageMapping> mappedLanguages);
 
         /// <summary>
         /// The updateAt function updates a specific field of a language record in the database at the given index.
@@ -33,21 +85,21 @@ namespace LanguageMappingProvider.Database.Interface
         /// <param name="value">The new value to be assigned to the specified field.</param>
         void UpdateAt(int index, string field, string value);
 
-        /// <summary>
-        /// This function compares an IEnumerable of MappedLanguage objects to the existing data in the database
-        /// and determines if any changes have been made.
-        /// </summary>
-        /// <param name="mappedLanguages">An enumerable collection of MappedLanguage objects representing the languages to be checked for changes.</param>
-        /// <returns>It returns a boolean value indicating whether the IEnumerable is different from the data stored in the database.</returns>
-        bool HasMappedLanguagesChanged(IEnumerable<LanguageMapping> mappedLanguages);
+		/// <summary>
+		/// This function compares an IEnumerable of <see cref="LanguageMapping"/> objects to the existing data in the database
+		/// and determines if any changes have been made.
+		/// </summary>
+		/// <param name="mappedLanguages">An enumerable collection of <see cref="LanguageMapping"/> objects representing the languages to be checked for changes.</param>
+		/// <returns>It returns a boolean value indicating whether the IEnumerable is different from the data stored in the database.</returns>
+		bool HasMappedLanguagesChanged(IEnumerable<LanguageMapping> mappedLanguages);
 
-        /// <summary>
-        /// Retrieves language data from the database and returns it as an IEnumerable of MappedLanguage objects.
-        /// </summary>
-        /// <returns>
-        /// An IEnumerable of MappedLanguage objects representing the language data from the database.
-        /// </returns>
-        IEnumerable<LanguageMapping> GetMappedLanguages();
+		/// <summary>
+		/// Retrieves language data from the database and returns it as an IEnumerable of <see cref="LanguageMapping"/> objects.
+		/// </summary>
+		/// <returns>
+		/// An IEnumerable of <see cref="LanguageMapping"/> objects representing the language data from the database.
+		/// </returns>
+		IEnumerable<LanguageMapping> GetMappedLanguages();
 
         /// <summary>
         /// This function sets all the values in the database to their default values.
