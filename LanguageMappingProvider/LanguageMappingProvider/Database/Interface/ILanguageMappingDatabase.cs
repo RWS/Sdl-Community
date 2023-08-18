@@ -27,14 +27,6 @@ namespace LanguageMappingProvider.Database.Interface
 		LanguageMapping GetLanguage(string languageCode);
 
 		/// <summary>
-		/// Retrieves language data from the database using the provided CultureInfo and returns it as a LanguageMapping object.
-		/// </summary>
-		/// <param name="cultureInfo">The <see cref="CultureInfo"/> representing the desired language.</param>
-		/// <returns>A LanguageMapping object containing the retrieved language data</returns>
-		/// <exception cref="DatabaseInitializationException">Thrown when the pluginSupportedLanguages is not set and the database doesn't exist.</exception>
-		LanguageMapping GetLanguage(CultureInfo cultureInfo);
-
-		/// <summary>
 		/// Retrieves a <see cref="LanguageMapping"/> object based on the provided <see cref="CultureCode"/>.
 		/// </summary>
 		/// <param name="cultureCode">The <see cref="CultureCode"/> representing the desired language.</param>
@@ -49,14 +41,6 @@ namespace LanguageMappingProvider.Database.Interface
 		/// <param name="languageMapping">An <see cref="LanguageMapping"/> object to store the retrieved language data.</param>
 		/// <returns><c>True</c> if the data was successfully retrieved, <c>False</c> otherwise.</returns>
 		bool TryGetLanguage(string languageCode, out LanguageMapping languageMapping);
-
-		/// <summary>
-		/// Tries to retrieve a <see cref="LanguageMapping"/> object using the given <see cref="CultureInfo"/> and stores the result in the <paramref name="languageMapping"/> parameter.
-		/// </summary>
-		/// <param name="cultureInfo">The culture and language information.</param>
-		/// <param name="languageMapping">An <see cref="LanguageMapping"/> object to store the retrieved language data.</param>
-		/// <returns><c>true</c> if the data was successfully retrieved, <c>false</c> otherwise.</returns>
-		bool TryGetLanguage(CultureInfo cultureInfo, out LanguageMapping languageMapping);
 
 		/// <summary>
 		/// Tries to obtain a <see cref="LanguageMapping"/> object using the provided <see cref="CultureCode"/> and saves the result in the <paramref name="languageMapping"/> parameter.

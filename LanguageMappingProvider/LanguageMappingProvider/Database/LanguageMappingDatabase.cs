@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -72,11 +71,6 @@ namespace LanguageMappingProvider.Database
 				 : throw new LanguageNotFoundException();
 		}
 
-		public LanguageMapping GetLanguage(CultureInfo cultureInfo)
-		{
-			return GetLanguage(cultureInfo.Name);
-		}
-
 		public LanguageMapping GetLanguage(CultureCode cultureCode)
 		{
 			return GetLanguage(cultureCode.Name);
@@ -94,11 +88,6 @@ namespace LanguageMappingProvider.Database
 			{
 				return false;
 			}
-		}
-
-		public bool TryGetLanguage(CultureInfo cultureInfo, out LanguageMapping languageMapping)
-		{
-			return TryGetLanguage(cultureInfo.Name, out languageMapping);
 		}
 
 		public bool TryGetLanguage(CultureCode cultureCode, out LanguageMapping languageMapping)
