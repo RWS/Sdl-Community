@@ -381,20 +381,20 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cancel.
+        ///   Looks up a localized string similar to Apply.
         /// </summary>
-        public static string LMP_Button_Cancel {
+        public static string LMP_Button_ApplyChanges {
             get {
-                return ResourceManager.GetString("LMP_Button_Cancel", resourceCulture);
+                return ResourceManager.GetString("LMP_Button_ApplyChanges", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to OK.
+        ///   Looks up a localized string similar to Close.
         /// </summary>
-        public static string LMP_Button_Ok {
+        public static string LMP_Button_CloseApp {
             get {
-                return ResourceManager.GetString("LMP_Button_Ok", resourceCulture);
+                return ResourceManager.GetString("LMP_Button_CloseApp", resourceCulture);
             }
         }
         

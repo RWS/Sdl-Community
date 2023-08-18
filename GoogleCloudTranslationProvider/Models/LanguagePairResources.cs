@@ -8,12 +8,36 @@ namespace GoogleCloudTranslationProvider.Models
 {
 	public class LanguagePairResources : BaseViewModel
 	{
+		private string _sourceLanguageCode;
+		private string _targetLanguageCode;
 		private List<RetrievedGlossary> _availableGlossaries;
 		private RetrievedGlossary _selectedGlossary;
 		private List<RetrievedCustomModel> _availableModels;
 		private RetrievedCustomModel _selectedModel;
 
 		public string DisplayName { get; set; }
+
+		public string SourceLanguageCode
+		{
+			get => _sourceLanguageCode;
+			set
+			{
+				if (_sourceLanguageCode == value) return;
+				_sourceLanguageCode = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string TargetLanguageCode
+		{
+			get => _targetLanguageCode;
+			set
+			{
+				if (_targetLanguageCode == value) return;
+				_targetLanguageCode = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public LanguagePair LanguagePair { get; set; }
 

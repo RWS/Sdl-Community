@@ -4,8 +4,10 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 using System.Windows.Input;
 using GoogleCloudTranslationProvider.Commands;
+using GoogleCloudTranslationProvider.Extensions;
 using GoogleCloudTranslationProvider.GoogleAPI;
 using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
@@ -255,6 +257,8 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		public ICommand SwitchViewExternal { get; set; }
 
+		public event EventHandler LanguageMappingLoaded;
+
 		public bool CanConnectToGoogleV2(HtmlUtil htmlUtil)
 		{
 			if (string.IsNullOrEmpty(ApiKey))
@@ -266,7 +270,31 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			try
 			{
 				var v2Connector = new V2Connector(ApiKey, htmlUtil);
-				return v2Connector.CredentialsAreValid();
+				var canConnect = v2Connector.CredentialsAreValid();
+
+				if (!canConnect)
+				{
+					return canConnect;
+				}
+
+				DatabaseExtensions.CreateDatabase(_options);
+				foreach (var languagePair in _languagePairs)
+				{
+					var sourceCultureInfo = new CultureInfo(languagePair.SourceCulture.Name);
+					var targetCultureInfo = new CultureInfo(languagePair.TargetCulture.Name);
+
+					if (string.IsNullOrEmpty(sourceCultureInfo.GetLanguageCode(ApiVersion.V2))
+					 || string.IsNullOrEmpty(targetCultureInfo.GetLanguageCode(ApiVersion.V2)))
+					{
+						var dialogResult = MessageBox.Show("Warning: One or more language pairs might not be fully supported or the language code was not set. Please set a valid language code using the Language Mapping button before performing language-specific operations.",
+				  "Invalid language pair",
+				  MessageBoxButtons.RetryCancel);
+						LanguageMappingLoaded?.Invoke(this, EventArgs.Empty);
+						return dialogResult != DialogResult.Retry;
+					}
+				}
+
+				return canConnect;
 			}
 			catch (Exception e)
 			{
@@ -283,7 +311,27 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		public bool CanConnectToGoogleV3(LanguagePair[] languagePairs)
 		{
-			return GoogleV3OptionsAreSet();
+			var optionsAreSet = GoogleV3OptionsAreSet();
+			if (!optionsAreSet)
+			{
+				return optionsAreSet;
+			}
+
+			foreach (var languagePair in LanguageMappingPairs)
+			{
+				if (string.IsNullOrEmpty(languagePair.SourceLanguageCode)
+				 || string.IsNullOrEmpty(languagePair.TargetLanguageCode))
+				{
+					var dialogResult = MessageBox.Show(
+						"Warning: One or more language pairs might not be fully supported or the language code was not set. Please set a valid language code using the Language Mapping button before performing language-specific operations.",
+						"Invalid language pair",
+						MessageBoxButtons.RetryCancel);
+					LanguageMappingLoaded?.Invoke(this, EventArgs.Empty);
+					return dialogResult != DialogResult.Retry;
+				}
+			}
+
+			return optionsAreSet;
 		}
 
 		private bool GoogleV3OptionsAreSet()
@@ -439,22 +487,30 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			{
 				ProjectId = _projectId,
 				JsonFilePath = _jsonFilePath,
-				ProjectLocation = _projectLocation
+				ProjectLocation = _projectLocation,
+				SelectedGoogleVersion = ApiVersion.V3
 			};
 
+			CreateV3Database(tempOptions);
 			var availableGlossaries = V3ResourceManager.GetGlossaries(tempOptions);
 			var availableCustomModels = V3ResourceManager.GetCustomModels(tempOptions);
 			for (var i = 0; i < _languagePairs.Count(); i++)
 			{
 				var currentPair = _languagePairs.ElementAt(i);
-				var sourceDisplayName = new CultureInfo(currentPair.SourceCultureName).DisplayName;
-				var targetDisplayName = new CultureInfo(currentPair.TargetCultureName).DisplayName;
+				var sourceCultureInfo = new CultureInfo(currentPair.SourceCultureName);
+				var targetCultureInfo = new CultureInfo(currentPair.TargetCultureName);
+
+				var sourceCode = sourceCultureInfo.GetLanguageCode(ApiVersion.V3);
+				var targetCode = targetCultureInfo.GetLanguageCode(ApiVersion.V3);
+
 				var mapping = new LanguagePairResources()
 				{
-					DisplayName = $"{sourceDisplayName} - {targetDisplayName}",
+					DisplayName = $"{sourceCultureInfo.DisplayName} - {targetCultureInfo.DisplayName}",
 					LanguagePair = currentPair,
 					AvailableGlossaries = V3ResourceManager.GetPairGlossaries(currentPair, availableGlossaries),
 					AvailableModels = V3ResourceManager.GetPairModels(currentPair, availableCustomModels),
+					SourceLanguageCode = sourceCode,
+					TargetLanguageCode = targetCode
 				};
 
 				if (_options.LanguageMappingPairs is null)
@@ -511,6 +567,44 @@ namespace GoogleCloudTranslationProvider.ViewModels
 					UrlToDownload = string.Empty;
 					ResetFields();
 					break;
+			}
+		}
+
+		private void CreateV3Database(TranslationOptions translationOptions)
+		{
+			if (File.Exists(string.Format(Constants.DatabaseFilePath, PluginResources.Database_PluginName_V3)))
+			{
+				return;
+			}
+
+			translationOptions.SelectedGoogleVersion = SelectedGoogleApiVersion.Version;
+			translationOptions.ProjectLocation = ProjectLocation;
+			translationOptions.LanguageMappingPairs = LanguageMappingPairs;
+
+			DatabaseExtensions.CreateDatabase(translationOptions);
+			LanguageMappingLoaded?.Invoke(this, EventArgs.Empty);
+		}
+
+		public void UpdateLanguageMapping()
+		{
+			if (IsV2Checked
+			 || LanguageMappingPairs is null
+			 || !LanguageMappingPairs.Any())
+			{
+				return;
+			}
+
+
+			foreach (var languagePair in LanguageMappingPairs)
+			{
+				var sourceCultureInfo = new CultureInfo(languagePair.LanguagePair.SourceCultureName);
+				var targetCultureInfo = new CultureInfo(languagePair.LanguagePair.TargetCultureName);
+
+				var sourceLanguageCode = sourceCultureInfo.GetLanguageCode(ApiVersion.V3);
+				var targetLanguageCode = targetCultureInfo.GetLanguageCode(ApiVersion.V3);
+
+				languagePair.SourceLanguageCode = sourceLanguageCode;
+				languagePair.TargetLanguageCode = targetLanguageCode;
 			}
 		}
 	}

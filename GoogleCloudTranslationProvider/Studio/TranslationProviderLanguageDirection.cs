@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using GoogleCloudTranslationProvider.Extensions;
 using GoogleCloudTranslationProvider.GoogleAPI;
 using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
@@ -14,7 +15,7 @@ namespace GoogleCloudTranslationProvider.Studio
 {
 	public class TranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
 	{
-		private readonly ITranslationOptions _options;
+		private readonly ITranslationOptions _translationOptions;
 		private readonly LanguagePair _languageDirection;
 		private readonly TranslationProvider _provider;
 		private readonly HtmlUtil _htmlUtil;
@@ -30,7 +31,7 @@ namespace GoogleCloudTranslationProvider.Studio
 		{
 			_provider = provider;
 			_languageDirection = languages;
-			_options = _provider.Options;
+			_translationOptions = _provider.Options;
 			_htmlUtil = htmlUtil;
 		}
 
@@ -59,9 +60,10 @@ namespace GoogleCloudTranslationProvider.Studio
 
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
 		{
+			DatabaseExtensions.CreateDatabase(_translationOptions);
 			var translation = new Segment(_languageDirection.TargetCulture);
 			var searchResults = new SearchResults { SourceSegment = segment.Duplicate() };
-			if (!_options.ResendDrafts && _currentTranslationUnit.ConfirmationLevel != ConfirmationLevel.Unspecified)
+			if (!_translationOptions.ResendDrafts && _currentTranslationUnit.ConfirmationLevel != ConfirmationLevel.Unspecified)
 			{
 				translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
 				searchResults.Add(CreateSearchResult(segment, translation));
@@ -69,25 +71,25 @@ namespace GoogleCloudTranslationProvider.Studio
 			}
 
 			var newSegment = segment.Duplicate();
-			if (_options.SendPlainTextOnly || !newSegment.HasTags)
+			if (_translationOptions.SendPlainTextOnly || !newSegment.HasTags)
 			{
 				translation.Add(SearchSegmentOnTextOnly(newSegment));
 				searchResults.Add(CreateSearchResult(newSegment, translation));
 				return searchResults;
 			}
 
-			if (_options.UsePreEdit)
+			if (_translationOptions.UsePreEdit)
 			{
-				_preLookupSegmentEditor ??= new GoogleSegmentEditor(_options.PreLookupFilename);
+				_preLookupSegmentEditor ??= new GoogleSegmentEditor(_translationOptions.PreLookupFilename);
 				newSegment = GetEditedSegment(_preLookupSegmentEditor, newSegment);
 			}
 
 			var tagplacer = new TagPlacer(newSegment, _htmlUtil);
-			var translatedText = Lookup(tagplacer.PreparedSourceText, _options, "html");
+			var translatedText = Lookup(tagplacer.PreparedSourceText, _translationOptions, "html");
 			translation = tagplacer.GetTaggedSegment(translatedText).Duplicate();
-			if (_options.UsePostEdit)
+			if (_translationOptions.UsePostEdit)
 			{
-				_postLookupSegmentEditor ??= new GoogleSegmentEditor(_options.PostLookupFilename);
+				_postLookupSegmentEditor ??= new GoogleSegmentEditor(_translationOptions.PostLookupFilename);
 				translation = GetEditedSegment(_postLookupSegmentEditor, translation);
 			}
 
@@ -161,18 +163,18 @@ namespace GoogleCloudTranslationProvider.Studio
 		private string SearchSegmentOnTextOnly(Segment segment)
 		{
 			var sourcetext = segment.ToPlain();
-			if (_options.UsePreEdit)
+			if (_translationOptions.UsePreEdit)
 			{
-				_preLookupSegmentEditor ??= new GoogleSegmentEditor(_options.PreLookupFilename);
+				_preLookupSegmentEditor ??= new GoogleSegmentEditor(_translationOptions.PreLookupFilename);
 				sourcetext = GetEditedString(_preLookupSegmentEditor, sourcetext);
 				segment.Clear();
 				segment.Add(sourcetext);
 			}
 
-			var translatedText = Lookup(sourcetext, _options, "text");
-			if (_options.UsePostEdit)
+			var translatedText = Lookup(sourcetext, _translationOptions, "text");
+			if (_translationOptions.UsePostEdit)
 			{
-				_postLookupSegmentEditor ??= new GoogleSegmentEditor(_options.PostLookupFilename);
+				_postLookupSegmentEditor ??= new GoogleSegmentEditor(_translationOptions.PostLookupFilename);
 				translatedText = GetEditedString(_postLookupSegmentEditor, translatedText);
 			}
 
