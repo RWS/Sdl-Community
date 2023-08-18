@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Input;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Model.Interface;
@@ -73,6 +74,7 @@ namespace LanguageWeaverProvider.ViewModel
 		private void Save(object parameter)
 		{
 			SaveChanges = true;
+			_translationOptions.PairMappings = PairMappingView.PairMappings.ToList();
 			CloseEventRaised.Invoke();
 		}
 

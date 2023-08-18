@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using LanguageMappingProvider.Model;
 using LanguageWeaverProvider.ViewModel;
 using Sdl.Core.Globalization;
 
@@ -6,25 +7,15 @@ namespace LanguageWeaverProvider.Model
 {
 	public class PairMapping : BaseViewModel
 	{
-		public PairMapping(CultureCode sourceCode, CultureCode targetCode)
+		public PairMapping(LanguageMapping sourceCode, LanguageMapping targetCode)
 		{
-			SourceCultureInfo = new CultureInfo(sourceCode.Name);
-			TargetCultureInfo = new CultureInfo(targetCode.Name);
+			DisplayName = $"{sourceCode.Name} ({sourceCode.Region} - {targetCode.Name} ({targetCode.Region}";
 
-			DisplayName = $"{SourceCultureInfo.DisplayName} - {TargetCultureInfo.DisplayName}";
-
-
-			// temp
-			SourceCode = SourceCultureInfo.ThreeLetterISOLanguageName;
-			TargetCode = TargetCultureInfo.ThreeLetterISOLanguageName;
-			// temp
+			SourceCode = sourceCode.LanguageCode;
+			TargetCode = targetCode.LanguageCode;
 		}
 
 		public string DisplayName { get; private set; }
-
-		public CultureInfo SourceCultureInfo { get; private set; }
-
-		public CultureInfo TargetCultureInfo { get; private set; }
 
 		public string SourceCode { get; set; }
 

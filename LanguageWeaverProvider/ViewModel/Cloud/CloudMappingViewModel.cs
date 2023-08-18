@@ -66,7 +66,11 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			var mappedLanguages = _languageMappingDatabase.GetMappedLanguages();
 			foreach (var languagePair in _langaugePairs)
 			{
-				PairMappings.Add(new(languagePair.SourceCulture, languagePair.TargetCulture));
+				var lps = mappedLanguages.Where(x => x.TradosCode.Equals(languagePair.SourceCultureName) || x.TradosCode.Equals(languagePair.TargetCultureName));
+
+				var source = lps.FirstOrDefault(x => x.TradosCode.Equals(languagePair.SourceCultureName));
+				var target = lps.FirstOrDefault(x => x.TradosCode.Equals(languagePair.TargetCultureName));
+				PairMappings.Add(new(source, target));
 			}
 		}
 

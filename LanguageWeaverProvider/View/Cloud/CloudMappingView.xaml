@@ -10,10 +10,20 @@
 			 xmlns:viewModel="clr-namespace:LanguageWeaverProvider.ViewModel.Cloud"
 			 d:DataContext="{d:DesignInstance viewModel:CloudMappingViewModel}"
 			 mc:Ignorable="d">
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
 	
     <Grid>
 		<DataGrid x:Name="myDataGrid"
 				  ItemsSource="{Binding PairMappings}"
+				  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
 				  AutoGenerateColumns="False">
 			<DataGrid.Columns>
 				
