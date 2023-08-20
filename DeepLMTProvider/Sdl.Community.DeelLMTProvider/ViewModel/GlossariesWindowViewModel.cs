@@ -1,29 +1,38 @@
-﻿using System.Collections.ObjectModel;
+﻿using Sdl.Community.DeepLMTProvider.Client;
+using Sdl.Community.DeepLMTProvider.Command;
+using Sdl.Community.DeepLMTProvider.Extensions;
+using Sdl.Community.DeepLMTProvider.Interface;
+using Sdl.Community.DeepLMTProvider.Model;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Sdl.Community.DeepLMTProvider.Client;
-using Sdl.Community.DeepLMTProvider.Command;
-using Sdl.Community.DeepLMTProvider.Extensions;
-using Sdl.Community.DeepLMTProvider.Interface;
-using Sdl.Community.DeepLMTProvider.Model;
 
 namespace Sdl.Community.DeepLMTProvider.ViewModel
 {
     public class GlossariesWindowViewModel : ViewModel
     {
         private ObservableCollection<GlossaryInfo> _glossaries;
+        private bool _isLoading;
 
-        public GlossariesWindowViewModel(IDeepLGlossaryClient deepLGlossaryClient, IMessageService messageService, IGlossaryBrowserService glossaryBrowserService, ITsvReaderWriter tsvReader)
+        public GlossariesWindowViewModel(IDeepLGlossaryClient deepLGlossaryClient, IMessageService messageService, IGlossaryBrowserService glossaryBrowserService, IGlossaryReaderWriterService glossaryReaderWriterService)
         {
             DeepLGlossaryClient = deepLGlossaryClient;
             MessageService = messageService;
             GlossaryBrowserService = glossaryBrowserService;
-            TsvReader = tsvReader;
+            GlossaryReaderWriterService = glossaryReaderWriterService;
             LoadGlossaries();
         }
+
+        public ICommand CancelCommand => new ParameterlessCommand(CancelOperation);
+        public bool CancellationRequested { get; set; }
+        public ICommand DeleteGlossariesCommand => new AsyncParameterlessCommand(async () => await ExecuteLongMethod(DeleteGlossaries));
+
+        public ICommand ExportGlossariesCommand => new ParameterlessCommand(ExportGlossaries);
 
         public ObservableCollection<GlossaryInfo> Glossaries
         {
@@ -38,12 +47,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             }
         }
 
-        public ICommand ImportGlossaryCommand => new AsyncParameterlessCommand(ImportGlossary);
-
-        private IDeepLGlossaryClient DeepLGlossaryClient { get; set; }
-        private IGlossaryBrowserService GlossaryBrowserService { get; }
-        private IMessageService MessageService { get; }
-        private ITsvReaderWriter TsvReader { get; }
+        public ICommand ImportGlossaryCommand => new AsyncParameterlessCommand(async () => await ExecuteLongMethod(ImportGlossaries));
 
         public bool IsCheckAll
         {
@@ -51,41 +55,111 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             set => Glossaries.ForEach(g => g.IsChecked = value);
         }
 
-        private void HandleError(string message, [CallerMemberName] string failingMethod = null)
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => SetField(ref _isLoading, value);
+        }
+
+        private IDeepLGlossaryClient DeepLGlossaryClient { get; set; }
+
+        private IGlossaryBrowserService GlossaryBrowserService { get; }
+        private IGlossaryReaderWriterService GlossaryReaderWriterService { get; }
+
+        private IMessageService MessageService { get; }
+        private List<GlossaryInfo> SelectedGlossaries => Glossaries.Where(g => g.IsChecked).ToList();
+
+        private void CancelOperation()
+        {
+            CancellationRequested = true;
+        }
+
+        private async Task DeleteGlossaries()
+        {
+            foreach (var glossaryInfo in SelectedGlossaries)
+            {
+                if (IsCancellationRequested()) break;
+
+                var (success, _, message) = await DeepLGlossaryClient.DeleteGlossary(DeepLTranslationProviderClient.ApiKey, glossaryInfo.Id);
+                if (HandleErrorIfFound(success, message)) continue;
+                Glossaries.Remove(glossaryInfo);
+            }
+        }
+
+        /// <summary>
+        /// Wrapper for executing methods that need a progress bar
+        /// </summary>
+        /// <param name="method"></param>
+        /// <returns></returns>
+        private async Task ExecuteLongMethod(Func<Task> method)
+        {
+            IsLoading = true;
+            await method.Invoke();
+            IsLoading = false;
+        }
+
+        private void ExportGlossaries()
+        {
+            foreach (var selectedGlossary in SelectedGlossaries)
+            {
+                GlossaryReaderWriterService.WriteGlossary(selectedGlossary);
+            }
+        }
+
+        private void HandleError(string message, string failingMethod)
         {
             MessageService.ShowWarning(message, failingMethod);
         }
 
-        private bool HandleErrorIfFound(bool success, string message)
+        private bool HandleErrorIfFound(bool success, string message, [CallerMemberName] string failingMethod = null)
         {
             if (success) return false;
-            HandleError(message);
+            HandleError(message, failingMethod);
             return true;
         }
 
-        private async Task ImportGlossary()
+        private async Task ImportGlossaries()
         {
             var (success, result, message) = await DeepLGlossaryClient.GetGlossarySupportedLanguagePairs(DeepLTranslationProviderClient.ApiKey);
 
-            if (HandleErrorIfFound(success, message)) return;
+            if (HandleErrorIfFound(success, message))
+            {
+                IsLoading = false;
+                return;
+            }
 
             var glossarySupportedLanguages = result.Select(glp => glp.SourceLanguage).Distinct().ToList();
-            if (GlossaryBrowserService.Browse(glossarySupportedLanguages, out var path, out var sourceLanguage, out var targetLanguage))
+
+            if (GlossaryBrowserService.Browse(glossarySupportedLanguages, out var glossaries))
             {
-                var selectedFilePath = path;
-                var glossaryFile = TsvReader.ReadTsvGlossary(selectedFilePath);
+                foreach (var glossaryItem in glossaries)
+                {
+                    if (IsCancellationRequested()) break;
 
-                glossaryFile.SourceLanguage = sourceLanguage;
-                glossaryFile.TargetLanguage = targetLanguage;
-                glossaryFile.Name = Path.GetFileNameWithoutExtension(selectedFilePath);
+                    var selectedFilePath = glossaryItem.Path;
+                    (success, var glossaryFile, message) = GlossaryReaderWriterService.ReadGlossary(selectedFilePath);
 
-                GlossaryInfo glossary;
-                (success, glossary, message) = await DeepLGlossaryClient.ImportGlossary(glossaryFile, DeepLTranslationProviderClient.ApiKey);
+                    if (HandleErrorIfFound(success, message)) continue;
 
-                if (HandleErrorIfFound(success, message)) return;
+                    glossaryFile.SourceLanguage = glossaryItem.SourceLanguage;
+                    glossaryFile.TargetLanguage = glossaryItem.TargetLanguage;
+                    glossaryFile.Name = Path.GetFileNameWithoutExtension(selectedFilePath);
 
-                Glossaries.Add(glossary);
+                    (success, var glossary, message) =
+                        await DeepLGlossaryClient.ImportGlossary(glossaryFile, DeepLTranslationProviderClient.ApiKey);
+
+                    if (HandleErrorIfFound(success, message)) continue;
+
+                    Glossaries.Add(glossary);
+                }
             }
+        }
+
+        private bool IsCancellationRequested()
+        {
+            if (!CancellationRequested) return false;
+            CancellationRequested = false;
+            return true;
         }
 
         private async void LoadGlossaries()

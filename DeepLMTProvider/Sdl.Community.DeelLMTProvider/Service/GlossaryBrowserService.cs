@@ -1,28 +1,32 @@
-﻿using System.Collections.Generic;
-using Sdl.Community.DeepLMTProvider.Interface;
+﻿using Sdl.Community.DeepLMTProvider.Interface;
+using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Community.DeepLMTProvider.UI;
+using System.Collections.Generic;
 
 namespace Sdl.Community.DeepLMTProvider.Service
 {
-	public class GlossaryBrowserService : IGlossaryBrowserService
-	{
-		public bool Browse(List<string> supportedLanguages, out string path, out string sourceLanguage, out string targetLanguage)
-		{
-			path = default;
-			sourceLanguage = default;
-			targetLanguage = default;
+    public class GlossaryBrowserService : IGlossaryBrowserService
+    {
+        public GlossaryBrowserService(IOpenFileDialog openFileDialog)
+        {
+            OpenFileDialog = openFileDialog;
+        }
 
-			var browseGlossaryWindow = new BrowseGlossaryWindow(supportedLanguages);
-			if (!(browseGlossaryWindow.ShowDialog() ?? false))
-				return false;
+        private IOpenFileDialog OpenFileDialog { get; }
 
-			path = browseGlossaryWindow.Path;
-			sourceLanguage =
-				browseGlossaryWindow.SupportedLanguages[browseGlossaryWindow.SelectedIndexSourceLanguage];
-			targetLanguage =
-				browseGlossaryWindow.SupportedLanguages[browseGlossaryWindow.SelectedIndexTargetLanguage];
+        public bool Browse(List<string> supportedLanguages, out List<GlossaryItem> glossaries)
+        {
+            glossaries = default;
 
-			return true;
-		}
-	}
+            if (OpenFileDialog.ShowDialog() != true) return false;
+
+            var browseGlossaryWindow = new BrowseGlossariesWindow(supportedLanguages, OpenFileDialog);
+            browseGlossaryWindow.AddGlossaries(OpenFileDialog.FileNames);
+            if (!(browseGlossaryWindow.ShowDialog() ?? false))
+                return false;
+
+            glossaries = new List<GlossaryItem>(browseGlossaryWindow.Glossaries);
+            return true;
+        }
+    }
 }

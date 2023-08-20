@@ -1,15 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Sdl.Community.DeepLMTProvider.Extensions;
 using Sdl.Community.DeepLMTProvider.Model;
 
 namespace Sdl.Community.DeepLMTProvider.Interface
 {
 	public interface IDeepLGlossaryClient
 	{
-		Task<(bool Success, List<GlossaryInfo> Result, string FailureMessage)> GetGlossaries(string apiKey);
+        Task<(bool Success, object Result, string FailureMessage)> DeleteGlossary(string apiKey, string glossaryId);
+        Task<ActionResult<List<GlossaryInfo>>> GetGlossaries(string apiKey);
 
-		Task<(bool Success, List<GlossaryLanguagePair> Result, string FailureMessage)> GetGlossarySupportedLanguagePairs(string apiKey);
+        Task<ActionResult<List<GlossaryLanguagePair>>> GetGlossarySupportedLanguagePairs(string apiKey);
 
-		Task<(bool Success, GlossaryInfo result, string FailureMessage)> ImportGlossary(Glossary glossary, string apiKey);
+        Task<ActionResult<GlossaryInfo>> ImportGlossary(Glossary glossary, string apiKey);
 	}
 }

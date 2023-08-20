@@ -12,15 +12,15 @@ namespace Sdl.Community.DeepLMTProvider.Extensions
 		/// Provides a static utility for wrapping functions in a try-catch block
 		/// and returning the result, success status, and failure message.
 		/// </summary>
-		public static (bool Success, T Result, string FailureMessage) WrapTryCatch<T>(Func<T> function, [CallerMemberName] string failingMethod = null)
+		public static ActionResult<T> WrapTryCatch<T>(Func<T> function, [CallerMemberName] string failingMethod = null)
 		{
 			try
 			{
-				return (true, function(), null);
+				return new(true, function(), null);
 			}
 			catch (Exception e)
 			{
-				return (false, default, GetFailureMessage(e.Message, failingMethod));
+				return new(false, default, GetFailureMessage(e.Message, failingMethod));
 			}
 		}
 

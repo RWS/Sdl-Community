@@ -82,7 +82,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 			set => SetField(ref _languagePairSettings, value);
 		}
 
-		public ICommand OkCommand => new NoParameterCommand(Save, () => ApiKeyValidationMessage == null);
+		public ICommand OkCommand => new ParameterlessCommand(Save, () => ApiKeyValidationMessage == null);
 		public DeepLTranslationOptions Options { get; set; }
 		public bool SendPlainText { get; set; }
 		public string Title { get; set; } = "DeepL Translation Provider";
