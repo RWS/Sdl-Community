@@ -61,8 +61,17 @@
         <DataGrid Grid.Row="2"
                   AutoGenerateColumns="False"
                   Margin="5 5 5 5"
+                  SelectedItem="{Binding SelectedGlossary}"
                   ItemsSource="{Binding Glossaries, Mode=TwoWay}"
                   d:ItemsSource="{d:SampleData}">
+
+            <DataGrid.ItemContainerStyle>
+                <Style TargetType="DataGridRow">
+                    <EventSetter Event="MouseDoubleClick"
+                                 Handler="GlossaryItem_DoubleClicked" />
+                </Style>
+            </DataGrid.ItemContainerStyle>
+
             <DataGrid.Style>
                 <Style TargetType="DataGrid"
                        BasedOn="{StaticResource Sdl.DataGrid.GenericStyle}">

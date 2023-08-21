@@ -22,9 +22,11 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private ObservableCollection<GlossaryInfo> _glossaries;
         private bool _isLoading;
         private GlossaryLanguagePair _selectedLanguagePair;
+        private GlossaryInfo _selectedGlossary;
 
         public GlossariesWindowViewModel(IDeepLGlossaryClient deepLGlossaryClient, IMessageService messageService, IGlossaryBrowserService glossaryBrowserService, IGlossaryReaderWriterService glossaryReaderWriterService, IProcessStarter processStarter)
         {
+            //TODO: remove peripheral dependencies -> use events to handle those interactions instead
             DeepLGlossaryClient = deepLGlossaryClient;
             MessageService = messageService;
             GlossaryBrowserService = glossaryBrowserService;
@@ -38,9 +40,19 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             SupportedLanguagePairs = result;
         }
 
+        public event Action<GlossaryInfo> EditGlossary;
+
         public ICommand CancelCommand => new ParameterlessCommand(CancelOperation);
         public bool CancellationRequested { get; set; }
         public ICommand DeleteGlossariesCommand => new AsyncParameterlessCommand(async () => await ExecuteLongMethod(DeleteGlossaries));
+        public ICommand EditGlossaryCommand => new ParameterlessCommand(() => EditGlossary?.Invoke(SelectedGlossary));
+
+        public GlossaryInfo SelectedGlossary
+        {
+            get => _selectedGlossary;
+            set => SetField(ref _selectedGlossary, value);
+        }
+
         public ICommand ExportGlossariesCommand => new AsyncCommandWithParameter(async f => await ExecuteLongMethod(() => ExportGlossaries(f)));
 
         public ObservableCollection<GlossaryInfo> Glossaries

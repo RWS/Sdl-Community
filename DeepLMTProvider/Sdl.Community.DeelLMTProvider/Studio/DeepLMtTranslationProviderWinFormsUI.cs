@@ -1,134 +1,151 @@
-﻿using System;
-using System.Windows.Forms;
-using System.Windows.Forms.Integration;
-using Sdl.Community.DeepLMTProvider.Client;
+﻿using Sdl.Community.DeepLMTProvider.Client;
+using Sdl.Community.DeepLMTProvider.Helpers;
+using Sdl.Community.DeepLMTProvider.Helpers.GlossaryReadersWriters;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Community.DeepLMTProvider.Service;
 using Sdl.Community.DeepLMTProvider.UI;
 using Sdl.Community.DeepLMTProvider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using System;
+using System.Linq;
+using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 
 namespace Sdl.Community.DeepLMTProvider.Studio
 {
-	[TranslationProviderWinFormsUi(
-		Id = "DeepLMtTranslationProviderWinFormsUI",
-		Name = "DeepLMtTranslationProviderWinFormsUI",
-		Description = "DeepLMtTranslationProviderWinFormsUI")]
-	public class DeepLMtTranslationProviderWinFormsUI : ITranslationProviderWinFormsUI
-	{
-		public bool SupportsEditing => true;
-		public string TypeDescription => "DeepL MT Translation Provider";
-		public string TypeName => "DeepL MT Translation Provider";
+    [TranslationProviderWinFormsUi(
+        Id = "DeepLMtTranslationProviderWinFormsUI",
+        Name = "DeepLMtTranslationProviderWinFormsUI",
+        Description = "DeepLMtTranslationProviderWinFormsUI")]
+    public class DeepLMtTranslationProviderWinFormsUI : ITranslationProviderWinFormsUI
+    {
+        public bool SupportsEditing => true;
+        public string TypeDescription => "DeepL MT Translation Provider";
+        public string TypeName => "DeepL MT Translation Provider";
 
-		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
-		{
-			var options = new DeepLTranslationOptions();
+        public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
+        {
+            var options = new DeepLTranslationOptions();
 
-			//get credentials
-			var credentials = GetCredentials(credentialStore, PluginResources.DeeplTranslationProviderScheme);
+            //get credentials
+            var credentials = GetCredentials(credentialStore, PluginResources.DeeplTranslationProviderScheme);
 
-			var viewModel = new DeepLWindowViewModel(options, new DeepLGlossaryClient(), credentials, languagePairs, new MessageService());
-			var dialog = new DeepLWindow(viewModel);
+            var viewModel = new DeepLWindowViewModel(options, new DeepLGlossaryClient(), credentials, languagePairs, new MessageService());
+            var dialog = new DeepLWindow(viewModel);
 
-			ElementHost.EnableModelessKeyboardInterop(dialog);
-			dialog.ShowDialog();
+            viewModel.ManageGlossaries += ViewModel_ManageGlossaries;
 
-			if (!dialog.DialogResult.HasValue || !dialog.DialogResult.Value)
-				return null;
+            ElementHost.EnableModelessKeyboardInterop(dialog);
+            dialog.ShowDialog();
 
-			var provider = new DeepLMtTranslationProvider(options, new DeepLTranslationProviderClient(options.ApiKey), languagePairs)
-			{
-				Options = viewModel.Options
-			};
-			var apiKey = viewModel.Options.ApiKey;
-			SetDeeplCredentials(credentialStore, apiKey, true);
+            if (!dialog.DialogResult.HasValue || !dialog.DialogResult.Value)
+                return null;
 
-			return new ITranslationProvider[] { provider };
-		}
+            var provider = new DeepLMtTranslationProvider(options, new DeepLTranslationProviderClient(options.ApiKey), languagePairs)
+            {
+                Options = viewModel.Options
+            };
+            var apiKey = viewModel.Options.ApiKey;
+            SetDeeplCredentials(credentialStore, apiKey, true);
 
-		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
-		{
-			var editProvider = translationProvider as DeepLMtTranslationProvider;
+            return new ITranslationProvider[] { provider };
+        }
 
-			if (editProvider == null)
-			{
-				return false;
-			}
+        public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
+        {
+            var editProvider = translationProvider as DeepLMtTranslationProvider;
 
-			//get saved key if there is one and put it into options
-			var savedCredentials = GetCredentials(credentialStore, PluginResources.DeeplTranslationProviderScheme);
-			if (savedCredentials != null)
-			{
-				editProvider.Options.ApiKey = savedCredentials.Credential;
-			}
+            if (editProvider == null)
+            {
+                return false;
+            }
 
-			var viewModel = new DeepLWindowViewModel(editProvider.Options, new DeepLGlossaryClient(), savedCredentials, languagePairs, new MessageService());
-			var dialog = new DeepLWindow(viewModel);
+            //get saved key if there is one and put it into options
+            var savedCredentials = GetCredentials(credentialStore, PluginResources.DeeplTranslationProviderScheme);
+            if (savedCredentials != null)
+            {
+                editProvider.Options.ApiKey = savedCredentials.Credential;
+            }
 
-			ElementHost.EnableModelessKeyboardInterop(dialog);
-			dialog.ShowDialog();
+            var viewModel = new DeepLWindowViewModel(editProvider.Options, new DeepLGlossaryClient(), savedCredentials, languagePairs, new MessageService());
+            var dialog = new DeepLWindow(viewModel);
 
-			if (!dialog.DialogResult.HasValue || !dialog.DialogResult.Value)
-				return false;
+            viewModel.ManageGlossaries += ViewModel_ManageGlossaries;
 
-			var apiKey = editProvider.Options.ApiKey;
-			SetDeeplCredentials(credentialStore, apiKey, true);
+            ElementHost.EnableModelessKeyboardInterop(dialog);
+            dialog.ShowDialog();
 
-			return true;
-		}
+            if (!dialog.DialogResult.HasValue || !dialog.DialogResult.Value)
+                return false;
 
-		public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
-		{
-			throw new NotImplementedException();
-		}
+            var apiKey = editProvider.Options.ApiKey;
+            SetDeeplCredentials(credentialStore, apiKey, true);
 
-		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
-		{
-			var info = new TranslationProviderDisplayInfo
-			{
-				Name = "DeepL Translation provider",
-				TooltipText = "DeepL Translation provider",
-				//SearchResultImage = PluginResources.DeepL,
-				TranslationProviderIcon = PluginResources.deepLIcon
-			};
-			return info;
-		}
+            return true;
+        }
 
-		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
-		{
-			if (translationProviderUri == null)
-			{
-				throw new ArgumentNullException(nameof(translationProviderUri));
-			}
+        public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
+        {
+            throw new NotImplementedException();
+        }
 
-			var supportsProvider = string.Equals(translationProviderUri.Scheme, DeepLMtTranslationProvider.ListTranslationProviderScheme,
-				StringComparison.OrdinalIgnoreCase);
-			return supportsProvider;
-		}
+        public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
+        {
+            var info = new TranslationProviderDisplayInfo
+            {
+                Name = "DeepL Translation provider",
+                TooltipText = "DeepL Translation provider",
+                //SearchResultImage = PluginResources.DeepL,
+                TranslationProviderIcon = PluginResources.deepLIcon
+            };
+            return info;
+        }
 
-		private TranslationProviderCredential GetCredentials(ITranslationProviderCredentialStore credentialStore, string uri)
-		{
-			var providerUri = new Uri(uri);
-			TranslationProviderCredential cred = null;
+        public bool SupportsTranslationProviderUri(Uri translationProviderUri)
+        {
+            if (translationProviderUri == null)
+            {
+                throw new ArgumentNullException(nameof(translationProviderUri));
+            }
 
-			if (credentialStore.GetCredential(providerUri) != null)
-			{
-				//get the credential to return
-				cred = new TranslationProviderCredential(credentialStore.GetCredential(providerUri).Credential, credentialStore.GetCredential(providerUri).Persist);
-			}
+            var supportsProvider = string.Equals(translationProviderUri.Scheme, DeepLMtTranslationProvider.ListTranslationProviderScheme,
+                StringComparison.OrdinalIgnoreCase);
+            return supportsProvider;
+        }
 
-			return cred;
-		}
+        private TranslationProviderCredential GetCredentials(ITranslationProviderCredentialStore credentialStore, string uri)
+        {
+            var providerUri = new Uri(uri);
+            TranslationProviderCredential cred = null;
 
-		private void SetDeeplCredentials(ITranslationProviderCredentialStore credentialStore, string apiKey, bool persistKey)
-		{
-			//used to set credentials
-			// we are only setting and getting credentials for the uri with no parameters...kind of like a master credential
-			var uri = new Uri(PluginResources.DeeplTranslationProviderScheme);
-			var credentials = new TranslationProviderCredential(apiKey, persistKey);
-			credentialStore.RemoveCredential(uri);
-			credentialStore.AddCredential(uri, credentials);
-		}
-	}
+            if (credentialStore.GetCredential(providerUri) != null)
+            {
+                //get the credential to return
+                cred = new TranslationProviderCredential(credentialStore.GetCredential(providerUri).Credential, credentialStore.GetCredential(providerUri).Persist);
+            }
+
+            return cred;
+        }
+
+        private void SetDeeplCredentials(ITranslationProviderCredentialStore credentialStore, string apiKey, bool persistKey)
+        {
+            //used to set credentials
+            // we are only setting and getting credentials for the uri with no parameters...kind of like a master credential
+            var uri = new Uri(PluginResources.DeeplTranslationProviderScheme);
+            var credentials = new TranslationProviderCredential(apiKey, persistKey);
+            credentialStore.RemoveCredential(uri);
+            credentialStore.AddCredential(uri, credentials);
+        }
+
+        private void ViewModel_ManageGlossaries()
+        {
+            var glossariesWindowViewModel = new GlossariesWindowViewModel(new DeepLGlossaryClient(),
+                new MessageService(), new GlossaryBrowserService(new DialogWrapper()),
+                new GlossaryReaderWriterService(new GlossaryReaderWriterFactory()), new ProcessStarter());
+
+            var glossariesWindow = new GlossariesWindow { DataContext = glossariesWindowViewModel };
+            glossariesWindow.ShowDialog();
+        }
+    }
 }

@@ -21,7 +21,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
 		private static string _apiKey;
 		private List<string> _supportedSourceLanguages;
 
-		public static event EventHandler ApiKeyChanged;
+		public static event Action ApiKeyChanged;
 
 		public DeepLTranslationProviderClient(string key)
 		{
@@ -181,7 +181,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
 			SupportedTargetLanguagesAndFormalities = GetSupportedTargetLanguages(ApiKey);
 			SupportedTargetLanguages = SupportedTargetLanguagesAndFormalities.Keys.ToList();
 
-			ApiKeyChanged?.Invoke(null, null);
+			ApiKeyChanged?.Invoke();
 		}
 
 		private string DecodeWhenNeeded(string translatedText)

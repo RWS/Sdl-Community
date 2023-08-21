@@ -26,7 +26,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio.Actions
         {
             Enabled = false;
             DeepLTranslationProviderClient.ApiKeyChanged +=
-                (_, _) => Enabled = DeepLTranslationProviderClient.ApiKey != null;
+                () => Enabled = DeepLTranslationProviderClient.ApiKey != null;
         }
 
         protected override void Execute()

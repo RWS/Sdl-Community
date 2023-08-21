@@ -26,7 +26,14 @@ namespace Sdl.Community.DeepLMTProvider.UI
         {
             if (e.Key != Key.Escape) return;
             if (ProgressBar.Visibility == Visibility.Visible) ((GlossariesWindowViewModel)DataContext).CancelCommand.Execute(null);
+
+            e.Handled = true;
             Close();
+        }
+
+        private void GlossaryItem_DoubleClicked(object sender, MouseButtonEventArgs e)
+        {
+            ((GlossariesWindowViewModel)DataContext).EditGlossaryCommand.Execute(null);
         }
     }
 }
