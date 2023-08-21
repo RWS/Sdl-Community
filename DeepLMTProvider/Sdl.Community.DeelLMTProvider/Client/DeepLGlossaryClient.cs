@@ -57,7 +57,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 JObject.Parse(serializedGlossaries)["glossaries"]?.ToObject<List<GlossaryInfo>>());
         }
 
-        public async Task<ActionResult<List<GlossaryLanguagePair>>> GetGlossarySupportedLanguagePairs(string apiKey)
+        public async Task<ActionResult<List<GlossaryLanguagePair>>> GetGlossarySupportedLanguagePairs(string apiKey, bool continueOnCapturedContext = true)
         {
             var request = new HttpRequestMessage
             {
@@ -69,7 +69,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 },
             };
 
-            using var response = await AppInitializer.Client.SendAsync(request);
+            using var response = await AppInitializer.Client.SendAsync(request).ConfigureAwait(continueOnCapturedContext);
 
             if (!response.IsSuccessStatusCode)
                 return new(false, null, ErrorHandler.GetFailureMessage(response.ReasonPhrase));

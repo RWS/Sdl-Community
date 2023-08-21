@@ -9,8 +9,7 @@ namespace Sdl.Community.DeepLMTProvider.Service
         public enum Format
         {
             TSV,
-            CSV,
-            XLSX
+            CSV
         }
         public GlossaryReaderWriterService(IGlossaryReaderWriterFactory glossaryReaderWriterFactory)
         {

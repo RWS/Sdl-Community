@@ -13,13 +13,8 @@ namespace Sdl.Community.DeepLMTProvider.Model
 
 	public static class FormalityEnumHelper
 	{
-		public static IEnumerable<Formality> Values
-		{
-			get
-			{
-				return Enum.GetValues(typeof(Formality))
-					.Cast<Formality>();
-			}
-		}
-	}
+		public static IEnumerable<Formality> Values =>
+            Enum.GetValues(typeof(Formality))
+                .Cast<Formality>();
+    }
 }

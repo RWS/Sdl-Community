@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:uiHelpers="clr-namespace:Sdl.Community.DeepLMTProvider.UI.UiHelpers"
         xmlns:viewModel="clr-namespace:Sdl.Community.DeepLMTProvider.ViewModel"
+        xmlns:converters="clr-namespace:Sdl.Community.DeepLMTProvider.UI.Converters"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewModel:GlossariesWindowViewModel}"
         d:DesignHeight="450"
@@ -27,8 +28,10 @@
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <Style TargetType="Image">
-                <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality"/>
+                <Setter Property="RenderOptions.BitmapScalingMode"
+                        Value="HighQuality" />
             </Style>
+            <converters:AddAllItemConverter x:Key="AddAllItemConverter" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -42,11 +45,22 @@
         <uiHelpers:WindowsControl  DockPanel.Dock="Top"
                                    Grid.Row="0" />
 
-        <ComboBox Grid.Row="1" HorizontalAlignment="Left"></ComboBox>
+        <StackPanel Grid.Row="1"
+                   HorizontalAlignment="Left"
+                   Margin="6 10 0 0"
+                   Orientation="Horizontal">
+
+            <TextBlock Text="Show only" VerticalAlignment="Top"/>
+            <ComboBox ItemsSource="{Binding SupportedLanguagePairs, Converter={StaticResource AddAllItemConverter}}"
+                      SelectedItem="{Binding SelectedLanguagePair}"
+                      VerticalAlignment="Top"
+                      DisplayMemberPath="." Margin="10 0 0 0"
+                       />
+        </StackPanel>
 
         <DataGrid Grid.Row="2"
                   AutoGenerateColumns="False"
-                  Margin="5"
+                  Margin="5 5 5 5"
                   ItemsSource="{Binding Glossaries, Mode=TwoWay}"
                   d:ItemsSource="{d:SampleData}">
             <DataGrid.Style>

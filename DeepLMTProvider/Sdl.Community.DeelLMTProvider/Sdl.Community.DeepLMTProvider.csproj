@@ -184,6 +184,7 @@
     <Compile Include="UI\Controls\BrowsePathControl.xaml.cs">
       <DependentUpon>BrowsePathControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Converters\AddAllItemConverter.cs" />
     <Compile Include="UI\DeepLWindow.xaml.cs">
       <DependentUpon>DeepLWindow.xaml</DependentUpon>
     </Compile>
