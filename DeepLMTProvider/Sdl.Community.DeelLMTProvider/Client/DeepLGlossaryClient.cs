@@ -16,7 +16,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
     {
         public const string BaseUrl = "https://api.deepl.com/v1";
 
-        public async Task<(bool Success, object Result, string FailureMessage)> DeleteGlossary(string apiKey, string glossaryId)
+        public async Task<ActionResult<GlossaryInfo>> DeleteGlossary(string apiKey, string glossaryId)
         {
             var request = new HttpRequestMessage
             {
@@ -30,9 +30,9 @@ namespace Sdl.Community.DeepLMTProvider.Client
             using var response = await AppInitializer.Client.SendAsync(request);
 
             if (!response.IsSuccessStatusCode)
-                return (false, null, ErrorHandler.GetFailureMessage(response.ReasonPhrase));
+                return new(false, null, ErrorHandler.GetFailureMessage(response.ReasonPhrase));
 
-            return (true, null, null);
+            return new(true, null, null);
         }
 
         public async Task<ActionResult<List<GlossaryInfo>>> GetGlossaries(string apiKey)
@@ -49,9 +49,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
             using var response = await AppInitializer.Client.SendAsync(request);
 
             if (!response.IsSuccessStatusCode)
-            {
                 return new(false, null, ErrorHandler.GetFailureMessage(response.ReasonPhrase));
-            }
+
             var serializedGlossaries = await response.Content.ReadAsStringAsync();
 
             return ErrorHandler.WrapTryCatch(() =>
@@ -115,12 +114,46 @@ namespace Sdl.Community.DeepLMTProvider.Client
             using var response = await AppInitializer.Client.SendAsync(request);
 
             if (!response.IsSuccessStatusCode)
-            {
                 return new(false, null, ErrorHandler.GetFailureMessage(response.ReasonPhrase));
-            }
 
             var serializedCreatedGlossary = await response.Content.ReadAsStringAsync();
-            return ErrorHandler.WrapTryCatch(() => JObject.Parse(serializedCreatedGlossary).ToObject<GlossaryInfo>());
+            return ErrorHandler.WrapTryCatch(
+                () => JObject.Parse(serializedCreatedGlossary).ToObject<GlossaryInfo>());
+        }
+
+        public async Task<ActionResult<List<GlossaryEntry>>> RetrieveGlossaryEntries(string glossaryId, string apiKey)
+        {
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri($"{BaseUrl}/glossaries/{glossaryId}/entries"),
+                Headers =
+                {
+                    { "Authorization", $"DeepL-Auth-Key {apiKey}" },
+                }
+            };
+
+            using var response = await AppInitializer.Client.SendAsync(request);
+
+            if (!response.IsSuccessStatusCode)
+                return new(false, null, ErrorHandler.GetFailureMessage(response.ReasonPhrase));
+
+            var serializedGlossaryEntries = await response.Content.ReadAsStringAsync();
+            return ErrorHandler.WrapTryCatch(
+                () =>
+                {
+                    var entriesList = serializedGlossaryEntries.Split('\n');
+                    var glossaryEntries = new List<GlossaryEntry>();
+
+                    entriesList.ForEach(e =>
+                    {
+                        var entryParts = e.Split('\t');
+                        glossaryEntries.Add(
+                            new GlossaryEntry { SourceTerm = entryParts[0], TargetTerm = entryParts[1] });
+                    });
+
+                    return glossaryEntries;
+                });
         }
     }
 }

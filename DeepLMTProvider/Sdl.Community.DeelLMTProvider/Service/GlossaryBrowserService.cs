@@ -7,12 +7,12 @@ namespace Sdl.Community.DeepLMTProvider.Service
 {
     public class GlossaryBrowserService : IGlossaryBrowserService
     {
-        public GlossaryBrowserService(IOpenFileDialog openFileDialog)
+        public GlossaryBrowserService(IBrowseDialog openFileDialog)
         {
             OpenFileDialog = openFileDialog;
         }
 
-        private IOpenFileDialog OpenFileDialog { get; }
+        private IBrowseDialog OpenFileDialog { get; }
 
         public bool Browse(List<string> supportedLanguages, out List<GlossaryItem> glossaries)
         {
@@ -27,6 +27,12 @@ namespace Sdl.Community.DeepLMTProvider.Service
 
             glossaries = new List<GlossaryItem>(browseGlossaryWindow.Glossaries);
             return true;
+        }
+
+        public (bool Success, string Path) OpenExportDialog()
+        {
+            var result = OpenFileDialog.ShowSaveDialog();
+            return result == null ? (false, null): (true, result);
         }
     }
 }

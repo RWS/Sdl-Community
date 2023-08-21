@@ -3,6 +3,7 @@ using Sdl.Community.DeepLMTProvider.Command;
 using Sdl.Community.DeepLMTProvider.Extensions;
 using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Model;
+using Sdl.Community.DeepLMTProvider.Service;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,6 +12,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using IMessageService = Sdl.Community.DeepLMTProvider.Interface.IMessageService;
 
 namespace Sdl.Community.DeepLMTProvider.ViewModel
 {
@@ -19,12 +21,13 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private ObservableCollection<GlossaryInfo> _glossaries;
         private bool _isLoading;
 
-        public GlossariesWindowViewModel(IDeepLGlossaryClient deepLGlossaryClient, IMessageService messageService, IGlossaryBrowserService glossaryBrowserService, IGlossaryReaderWriterService glossaryReaderWriterService)
+        public GlossariesWindowViewModel(IDeepLGlossaryClient deepLGlossaryClient, IMessageService messageService, IGlossaryBrowserService glossaryBrowserService, IGlossaryReaderWriterService glossaryReaderWriterService, IProcessStarter processStarter)
         {
             DeepLGlossaryClient = deepLGlossaryClient;
             MessageService = messageService;
             GlossaryBrowserService = glossaryBrowserService;
             GlossaryReaderWriterService = glossaryReaderWriterService;
+            ProcessStarter = processStarter;
             LoadGlossaries();
         }
 
@@ -32,7 +35,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         public bool CancellationRequested { get; set; }
         public ICommand DeleteGlossariesCommand => new AsyncParameterlessCommand(async () => await ExecuteLongMethod(DeleteGlossaries));
 
-        public ICommand ExportGlossariesCommand => new ParameterlessCommand(ExportGlossaries);
+        public ICommand ExportGlossariesCommand => new AsyncCommandWithParameter(async f => await ExecuteLongMethod(() => ExportGlossaries(f)));
 
         public ObservableCollection<GlossaryInfo> Glossaries
         {
@@ -65,8 +68,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         private IGlossaryBrowserService GlossaryBrowserService { get; }
         private IGlossaryReaderWriterService GlossaryReaderWriterService { get; }
-
         private IMessageService MessageService { get; }
+        private IProcessStarter ProcessStarter { get; }
         private List<GlossaryInfo> SelectedGlossaries => Glossaries.Where(g => g.IsChecked).ToList();
 
         private void CancelOperation()
@@ -89,8 +92,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         /// <summary>
         /// Wrapper for executing methods that need a progress bar
         /// </summary>
-        /// <param name="method"></param>
-        /// <returns></returns>
         private async Task ExecuteLongMethod(Func<Task> method)
         {
             IsLoading = true;
@@ -98,35 +99,42 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             IsLoading = false;
         }
 
-        private void ExportGlossaries()
+        private async Task ExportGlossaries(object parameter)
         {
+            if (!SelectedGlossaries.Any())
+            {
+                MessageService.ShowWarning("No glossaries selected");
+                return;
+            }
+
+            if (!Enum.TryParse<GlossaryReaderWriterService.Format>(parameter.ToString(), out var format)) return;
+
+            var (success, folderPath) = GlossaryBrowserService.OpenExportDialog();
+            if (!success) return;
+
             foreach (var selectedGlossary in SelectedGlossaries)
             {
-                GlossaryReaderWriterService.WriteGlossary(selectedGlossary);
-            }
-        }
+                (success, var entries, var message) = await DeepLGlossaryClient.RetrieveGlossaryEntries(selectedGlossary.Id, DeepLTranslationProviderClient.ApiKey);
+                if (HandleErrorIfFound(success, message)) continue;
 
-        private void HandleError(string message, string failingMethod)
-        {
-            MessageService.ShowWarning(message, failingMethod);
+                (success, _, message) = GlossaryReaderWriterService.WriteGlossary(new Glossary { Entries = entries }, format, $"{folderPath}\\{selectedGlossary.Name}.{parameter.ToString().ToLower()}");
+                if (HandleErrorIfFound(success, message)) return;
+
+                ProcessStarter.StartInFileExplorer(folderPath);
+            }
         }
 
         private bool HandleErrorIfFound(bool success, string message, [CallerMemberName] string failingMethod = null)
         {
             if (success) return false;
-            HandleError(message, failingMethod);
+            MessageService.ShowWarning(message, failingMethod);
             return true;
         }
 
         private async Task ImportGlossaries()
         {
             var (success, result, message) = await DeepLGlossaryClient.GetGlossarySupportedLanguagePairs(DeepLTranslationProviderClient.ApiKey);
-
-            if (HandleErrorIfFound(success, message))
-            {
-                IsLoading = false;
-                return;
-            }
+            if (HandleErrorIfFound(success, message)) return;
 
             var glossarySupportedLanguages = result.Select(glp => glp.SourceLanguage).Distinct().ToList();
 

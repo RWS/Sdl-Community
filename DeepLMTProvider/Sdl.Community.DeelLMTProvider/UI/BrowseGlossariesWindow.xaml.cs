@@ -18,7 +18,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
     {
         private ObservableCollection<GlossaryItem> _glossaries;
 
-        public BrowseGlossariesWindow(List<string> supportedLanguages, IOpenFileDialog openFileDialog)
+        public BrowseGlossariesWindow(List<string> supportedLanguages, IBrowseDialog openFileDialog)
         {
             Glossaries = new ObservableCollection<GlossaryItem>();
             Glossaries.CollectionChanged += Glossaries_CollectionChanged;
@@ -40,7 +40,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
         public bool IsImportEnabled => Glossaries.All(g => g.SourceLanguage != null && g.TargetLanguage != null);
 
         public List<string> SupportedLanguages { get; }
-        private IOpenFileDialog OpenFileDialog { get; }
+        private IBrowseDialog OpenFileDialog { get; }
 
         public void Browse()
         {

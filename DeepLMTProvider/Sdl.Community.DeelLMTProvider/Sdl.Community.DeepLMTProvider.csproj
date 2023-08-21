@@ -59,9 +59,6 @@
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Desktop.Platform">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.dll</HintPath>
-    </Reference>
     <Reference Include="Sdl.Desktop.Platform.Controls">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.Controls.dll</HintPath>
     </Reference>
@@ -116,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\DeepLGlossaryClient.cs" />
+    <Compile Include="Command\AsyncCommandWithParameter.cs" />
     <Compile Include="Command\AsyncParameterlessCommand.cs" />
     <Compile Include="Command\ParameterlessCommand.cs" />
     <Compile Include="Command\CommandWithParameter.cs" />
@@ -123,9 +121,11 @@
     <Compile Include="Extensions\CultureNameExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\ErrorHandler.cs" />
+    <Compile Include="Helpers\GlossaryReadersWriters\CsvGlossaryReaderWriter.cs" />
     <Compile Include="Helpers\GlossaryReadersWriters\GlossaryReaderWriterFactory.cs" />
     <Compile Include="Helpers\GlossaryReadersWriters\TsvGlossaryReaderWriter.cs" />
-    <Compile Include="Helpers\OpenFileDialogWrapper.cs" />
+    <Compile Include="Helpers\DialogWrapper.cs" />
+    <Compile Include="Helpers\ProcessStarter.cs" />
     <Compile Include="Helpers\TsvReaderWriter.cs" />
     <Compile Include="Interface\IDeepLGlossaryClient.cs" />
     <Compile Include="Interface\IGlossaryBrowserService.cs" />
@@ -133,7 +133,8 @@
     <Compile Include="Interface\IGlossaryReaderWriterFactory.cs" />
     <Compile Include="Interface\IGlossaryReaderWriterService.cs" />
     <Compile Include="Interface\IMessageService.cs" />
-    <Compile Include="Interface\IOpenFileDialog.cs" />
+    <Compile Include="Interface\IBrowseDialog.cs" />
+    <Compile Include="Interface\IProcessStarter.cs" />
     <Compile Include="Interface\ITsvReaderWriter.cs" />
     <Compile Include="Model\Glossary.cs" />
     <Compile Include="Model\GlossaryEntry.cs" />

@@ -10,6 +10,8 @@
         d:DesignHeight="450"
         KeyDown="Window_KeyDown"
         MaxWidth="600"
+        Title="DeepL Glossaries"
+        Icon="../Resources/deepL_logo_new.png"
         MaxHeight="600"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None">
@@ -24,10 +26,14 @@
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/datagridresources.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <Style TargetType="Image">
+                <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality"/>
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -36,13 +42,9 @@
         <uiHelpers:WindowsControl  DockPanel.Dock="Top"
                                    Grid.Row="0" />
 
-        <Image Source="../Resources/deepL_logo_new.png"
-               Margin="5"
-               Grid.Row="0"
-               HorizontalAlignment="Left"
-               Width="30" />
+        <ComboBox Grid.Row="1" HorizontalAlignment="Left"></ComboBox>
 
-        <DataGrid Grid.Row="1"
+        <DataGrid Grid.Row="2"
                   AutoGenerateColumns="False"
                   Margin="5"
                   ItemsSource="{Binding Glossaries, Mode=TwoWay}"
@@ -109,7 +111,7 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Row="2"
+        <StackPanel Grid.Row="3"
                     HorizontalAlignment="Left"
                     Margin="5 0 0 5"
                     Orientation="Horizontal">
@@ -124,10 +126,21 @@
 
             <Button Margin="0 0 5 0"
                     Height="25"
-                    Command="{Binding ExportGlossariesCommand}"
+                    Click="ExportButton_Click"
                     ToolTip="Export selected glossaries"
-                    HorizontalAlignment="Center"
                     Style="{StaticResource Sdl.Button.EmbeddedStyle}">
+
+                <Button.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="TSV"
+                                  Command="{Binding ExportGlossariesCommand}"
+                                  CommandParameter="TSV" />
+                        <MenuItem Header="CSV"
+                                  Command="{Binding ExportGlossariesCommand}"
+                                  CommandParameter="CSV" />
+                    </ContextMenu>
+                </Button.ContextMenu>
+
                 <Path Data="F1 M512,512z M0,0z M421.24,269.93L451.24,269.93 451.24,429.84A48.72,48.72,0,0,1,402.58,478.5L82.77,478.5A48.72,48.72,0,0,1,34.11,429.84L34.11,110A48.72,48.72,0,0,1,82.77,61.37L242.68,61.37 242.68,91.37 82.77,91.37A18.68,18.68,0,0,0,64.11,110L64.11,429.84A18.68,18.68,0,0,0,82.77,448.5L402.58,448.5A18.68,18.68,0,0,0,421.24,429.84z M352.24,33.5L352.24,63.5 426.64,63.5 249.5,240.68 270.71,261.89 447.89,84.71 447.89,159.11 477.89,159.11 477.89,33.5z"
                       Height="18"
                       Stretch="Uniform"
@@ -139,7 +152,8 @@
                             <Setter Property="Stroke"
                                     Value="Black" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Button}}" Value="True">
+                                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Button}}"
+                                             Value="True">
                                     <Setter Property="Fill"
                                             Value="Red" />
                                     <Setter Property="Stroke"
@@ -160,7 +174,7 @@
                     Style="{StaticResource Sdl.Button.EmbeddedStyle}" />
         </StackPanel>
 
-        <StackPanel Grid.Row="2"
+        <StackPanel Grid.Row="3"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right">
 
@@ -173,6 +187,7 @@
                         ToolTip="Cancel operation"
                         Style="{StaticResource Sdl.Button.EmbeddedStyle}" />
                 <ProgressBar HorizontalAlignment="Center"
+                             Name="ProgressBar"
                              VerticalContentAlignment="Center"
                              IsIndeterminate="True"
                              Foreground="Teal"

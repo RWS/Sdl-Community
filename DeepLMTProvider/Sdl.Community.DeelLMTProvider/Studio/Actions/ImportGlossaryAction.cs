@@ -32,8 +32,9 @@ namespace Sdl.Community.DeepLMTProvider.Studio.Actions
         protected override void Execute()
         {
             var glossaryImportWindowViewModel = new GlossariesWindowViewModel(new DeepLGlossaryClient(),
-                new MessageService(), new GlossaryBrowserService(new OpenFileDialogWrapper()),
-                new GlossaryReaderWriterService(new GlossaryReaderWriterFactory()));
+                new MessageService(), new GlossaryBrowserService(new DialogWrapper()),
+                new GlossaryReaderWriterService(new GlossaryReaderWriterFactory()),
+                new ProcessStarter());
             var glossaryImportWindow = new GlossariesWindow
             {
                 DataContext = glossaryImportWindowViewModel

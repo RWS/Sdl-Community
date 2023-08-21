@@ -57,7 +57,7 @@
 					   TextWrapping="WrapWithOverflow"
 					   FontSize="12"
 					   Visibility="{Binding ApiKeyBoxEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
-					   Text="The DeepL API is a paid machine translation service. Please purchase a DeepL Pro Subscription in order to get an API Key and use this service." />
+					   Text="The DeepL API is a paid machine translation service. Please purchase a DeepL subscription in order to get an API Key and use this service." />
 			<TextBlock Text="Please enter your API Key below:"
 					   Margin="10,0,10,10"
 					   Visibility="{Binding ApiKeyBoxEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -88,7 +88,7 @@
 			</TextBlock>
 			<TextBlock Margin="10,0,0,5"
 			           Visibility="{Binding ApiKeyBoxEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
-					   FontSize="12"> This API Key will then be used in all projects where you will be using the DeepL Pro Translation plug-in.</TextBlock>
+					   FontSize="12"> This API Key will then be used in all projects where you will be using the DeepL plug-in.</TextBlock>
 			<TextBlock Margin="10,0,0,10"
 					   Style="{StaticResource Sdl.TextBlock.HyperLinkTextStyle}">
 					<Hyperlink NavigateUri="https://www.deepl.com/api-contact.html"

@@ -1,5 +1,6 @@
 ﻿using Sdl.Community.DeepLMTProvider.Extensions;
 using Sdl.Community.DeepLMTProvider.Interface;
+using Sdl.Community.DeepLMTProvider.Service;
 using System;
 using System.IO;
 
@@ -15,11 +16,22 @@ namespace Sdl.Community.DeepLMTProvider.Helpers.GlossaryReadersWriters
             {
                 return fileExtension switch
                 {
-                    ".tv" => new TsvGlossaryReaderWriter(),
-                    ".csv" => throw new NotSupportedException("File type not supported."),
+                    ".tsv" => new TsvGlossaryReaderWriter(),
+                    ".csv" => new CsvGlossaryReaderWriter(),
                     _ => throw new NotSupportedException("File type not supported.")
                 };
             });
         }
+
+        public ActionResult<IGlossaryReaderWriter> CreateGlossaryWriter(GlossaryReaderWriterService.Format format) =>
+            ErrorHandler.WrapTryCatch<IGlossaryReaderWriter>(() =>
+            {
+                return format switch
+                {
+                    GlossaryReaderWriterService.Format.TSV => new TsvGlossaryReaderWriter(),
+                    GlossaryReaderWriterService.Format.CSV => new CsvGlossaryReaderWriter(),
+                    _ => throw new ArgumentOutOfRangeException(nameof(format), format, null)
+                };
+            });
     }
 }

@@ -6,6 +6,12 @@ namespace Sdl.Community.DeepLMTProvider.Service
 {
     public class GlossaryReaderWriterService : IGlossaryReaderWriterService
     {
+        public enum Format
+        {
+            TSV,
+            CSV,
+            XLSX
+        }
         public GlossaryReaderWriterService(IGlossaryReaderWriterFactory glossaryReaderWriterFactory)
         {
             GlossaryReaderWriterFactory = glossaryReaderWriterFactory;
@@ -19,9 +25,10 @@ namespace Sdl.Community.DeepLMTProvider.Service
             return !success ? new(false, null, message) : glossaryReaderWriter.ReadGlossary(filePath);
         }
 
-        public ActionResult<Glossary> WriteGlossary(GlossaryInfo selectedGlossary)
+        public ActionResult<Glossary> WriteGlossary(Glossary selectedGlossary, Format format, string filePath)
         {
-            throw new System.NotImplementedException();
+            var (success, glossaryReaderWriter, message) = GlossaryReaderWriterFactory.CreateGlossaryWriter(format);
+            return !success ? new(false, null, message) : glossaryReaderWriter.WriteGlossary(selectedGlossary, filePath);
         }
     }
 }
