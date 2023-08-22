@@ -179,4 +179,7 @@ This feature currently works for all target languages except "ES" (Spanish), "JA
   <data name="NoGlossary" xml:space="preserve">
 	  <value>No glossary</value>
   </data>
+  <data name="AllLanguagePairs_Label" xml:space="preserve">
+    <value>All language pairs</value>
+  </data>
 </root>

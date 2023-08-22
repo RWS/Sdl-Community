@@ -7,7 +7,11 @@ namespace Sdl.Community.DeepLMTProvider.UI
 {
     public partial class GlossariesWindow : Window
     {
-        public GlossariesWindow() => InitializeComponent();
+        public GlossariesWindow()
+        {
+            InitializeComponent();
+            SelectedLP_ComboBox.Loaded += SelectedLP_ComboBox_Loaded;
+        }
 
         private void ExportButton_Click(object sender, RoutedEventArgs e)
         {
@@ -20,7 +24,22 @@ namespace Sdl.Community.DeepLMTProvider.UI
             contextMenu.IsOpen = true;
         }
 
-        private void OkButton_Click(object sender, RoutedEventArgs e) => Close();
+        private void GlossaryItem_DoubleClicked(object sender, MouseButtonEventArgs e)
+        {
+            ((GlossariesWindowViewModel)DataContext).EditGlossaryCommand.Execute(null);
+        }
+
+        private void OkButton_Click(object sender, RoutedEventArgs e)
+        {
+            ((GlossariesWindowViewModel)DataContext).CancelCommand.Execute(null);
+            Close();
+        }
+
+        private void SelectedLP_ComboBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (SelectedLP_ComboBox.SelectedIndex == -1)
+                SelectedLP_ComboBox.SelectedIndex = 0;
+        }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
@@ -29,11 +48,6 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
             e.Handled = true;
             Close();
-        }
-
-        private void GlossaryItem_DoubleClicked(object sender, MouseButtonEventArgs e)
-        {
-            ((GlossariesWindowViewModel)DataContext).EditGlossaryCommand.Execute(null);
         }
     }
 }

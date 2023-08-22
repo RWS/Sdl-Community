@@ -11,7 +11,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
 		{
 			InitializeComponent();
 			DataContext = viewModel;
-		}
+        }
 
 		private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
 		{

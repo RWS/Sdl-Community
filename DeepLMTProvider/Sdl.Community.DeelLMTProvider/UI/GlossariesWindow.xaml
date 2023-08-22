@@ -50,9 +50,10 @@
                    Margin="6 10 0 0"
                    Orientation="Horizontal">
 
-            <TextBlock Text="Show only" VerticalAlignment="Top"/>
+            <TextBlock Text="Show" VerticalAlignment="Top"/>
             <ComboBox ItemsSource="{Binding SupportedLanguagePairs, Converter={StaticResource AddAllItemConverter}}"
                       SelectedItem="{Binding SelectedLanguagePair}"
+                      Name="SelectedLP_ComboBox"
                       VerticalAlignment="Top"
                       DisplayMemberPath="." Margin="10 0 0 0"
                        />

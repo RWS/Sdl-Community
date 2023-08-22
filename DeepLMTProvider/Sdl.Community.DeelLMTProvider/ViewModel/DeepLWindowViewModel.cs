@@ -27,6 +27,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         {
             IsTellMeAction = true;
             MessageService = messageService;
+            GlossaryClient = glossaryClient;
 
             var currentProject = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
             Title = $"{Title} - {currentProject.GetProjectInfo().Name}";
@@ -36,13 +37,14 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             Options = deepLTranslationOptions;
 
             SetSettingsOnWindow(null);
-            LoadLanguagePairSettings(glossaryClient);
+            LoadLanguagePairSettings();
         }
 
         public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, TranslationProviderCredential credentialStore, LanguagePair[] languagePairs, IMessageService messageService)
         {
             MessageService = messageService;
             LanguagePairs = languagePairs;
+            GlossaryClient = glossaryClient;
             IsTellMeAction = false;
 
             SendPlainText = deepLTranslationOptions.SendPlainText;
@@ -51,7 +53,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             PasswordChangedTimer.Elapsed += OnPasswordChanged;
 
             SetSettingsOnWindow(credentialStore);
-            LoadLanguagePairSettings(glossaryClient);
+            LoadLanguagePairSettings();
         }
 
         public event Action ManageGlossaries;
@@ -89,6 +91,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         public DeepLTranslationOptions Options { get; set; }
         public bool SendPlainText { get; set; }
         public string Title { get; set; } = "DeepL Translation Provider";
+        private IDeepLGlossaryClient GlossaryClient { get; set; }
         private bool IsTellMeAction { get; }
         private LanguagePair[] LanguagePairs { get; }
         private IMessageService MessageService { get; }
@@ -132,9 +135,9 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             MessageService.ShowWarning(message, failingMethod);
         }
 
-        private async void LoadLanguagePairSettings(IDeepLGlossaryClient glossaryClient)
+        public async void LoadLanguagePairSettings()
         {
-            var (success, glossaries, message) = await glossaryClient.GetGlossaries(DeepLTranslationProviderClient.ApiKey);
+            var (success, glossaries, message) = await GlossaryClient.GetGlossaries(DeepLTranslationProviderClient.ApiKey);
             if (!success)
             {
                 HandleError(message);
@@ -143,6 +146,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             glossaries?.Add(GlossaryInfo.NoGlossary);
 
+            LanguagePairOptions.Clear();
             foreach (var languagePair in LanguagePairs)
             {
                 var sourceLangCode = languagePair.GetSourceLanguageCode();

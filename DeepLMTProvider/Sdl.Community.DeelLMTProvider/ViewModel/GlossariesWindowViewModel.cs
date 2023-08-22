@@ -21,8 +21,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
     {
         private ObservableCollection<GlossaryInfo> _glossaries;
         private bool _isLoading;
-        private GlossaryLanguagePair _selectedLanguagePair;
         private GlossaryInfo _selectedGlossary;
+        private GlossaryLanguagePair _selectedLanguagePair;
 
         public GlossariesWindowViewModel(IDeepLGlossaryClient deepLGlossaryClient, IMessageService messageService, IGlossaryBrowserService glossaryBrowserService, IGlossaryReaderWriterService glossaryReaderWriterService, IProcessStarter processStarter)
         {
@@ -46,12 +46,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         public bool CancellationRequested { get; set; }
         public ICommand DeleteGlossariesCommand => new AsyncParameterlessCommand(async () => await ExecuteLongMethod(DeleteGlossaries));
         public ICommand EditGlossaryCommand => new ParameterlessCommand(() => EditGlossary?.Invoke(SelectedGlossary));
-
-        public GlossaryInfo SelectedGlossary
-        {
-            get => _selectedGlossary;
-            set => SetField(ref _selectedGlossary, value);
-        }
 
         public ICommand ExportGlossariesCommand => new AsyncCommandWithParameter(async f => await ExecuteLongMethod(() => ExportGlossaries(f)));
 
@@ -80,6 +74,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         {
             get => _isLoading;
             set => SetField(ref _isLoading, value);
+        }
+
+        public GlossaryInfo SelectedGlossary
+        {
+            get => _selectedGlossary;
+            set => SetField(ref _selectedGlossary, value);
         }
 
         public GlossaryLanguagePair SelectedLanguagePair
@@ -161,11 +161,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private void Filter(GlossaryLanguagePair value)
         {
             var collectionView = CollectionViewSource.GetDefaultView(Glossaries);
-            collectionView.Filter = value.Label == "All"
+            Predicate<object> collectionViewFilter = value.Label == PluginResources.AllLanguagePairs_Label
                 ? null
                 : gi =>
                     ((GlossaryInfo)gi).SourceLanguage == value.SourceLanguage &&
                     ((GlossaryInfo)gi).TargetLanguage == value.TargetLanguage;
+            collectionView.Filter = collectionViewFilter;
         }
 
         private bool HandleErrorIfFound(bool success, string message, [CallerMemberName] string failingMethod = null)

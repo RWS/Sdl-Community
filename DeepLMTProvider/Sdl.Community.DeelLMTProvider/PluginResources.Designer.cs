@@ -61,6 +61,15 @@ namespace Sdl.Community.DeepLMTProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All language pairs.
+        /// </summary>
+        public static string AllLanguagePairs_Label {
+            get {
+                return ResourceManager.GetString("AllLanguagePairs_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Api Key is required..
         /// </summary>
         public static string ApiKeyIsRequired_ValidationBlockMessage {

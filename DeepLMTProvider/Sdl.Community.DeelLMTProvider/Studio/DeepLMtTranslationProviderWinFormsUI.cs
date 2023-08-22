@@ -8,7 +8,6 @@ using Sdl.Community.DeepLMTProvider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
-using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 
@@ -24,6 +23,8 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         public string TypeDescription => "DeepL MT Translation Provider";
         public string TypeName => "DeepL MT Translation Provider";
 
+        private DeepLWindowViewModel ViewModel { get; set; }
+
         public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
         {
             var options = new DeepLTranslationOptions();
@@ -31,10 +32,10 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             //get credentials
             var credentials = GetCredentials(credentialStore, PluginResources.DeeplTranslationProviderScheme);
 
-            var viewModel = new DeepLWindowViewModel(options, new DeepLGlossaryClient(), credentials, languagePairs, new MessageService());
-            var dialog = new DeepLWindow(viewModel);
+            ViewModel = new DeepLWindowViewModel(options, new DeepLGlossaryClient(), credentials, languagePairs, new MessageService());
+            var dialog = new DeepLWindow(ViewModel);
 
-            viewModel.ManageGlossaries += ViewModel_ManageGlossaries;
+            ViewModel.ManageGlossaries += ViewModel_ManageGlossaries;
 
             ElementHost.EnableModelessKeyboardInterop(dialog);
             dialog.ShowDialog();
@@ -44,9 +45,9 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
             var provider = new DeepLMtTranslationProvider(options, new DeepLTranslationProviderClient(options.ApiKey), languagePairs)
             {
-                Options = viewModel.Options
+                Options = ViewModel.Options
             };
-            var apiKey = viewModel.Options.ApiKey;
+            var apiKey = ViewModel.Options.ApiKey;
             SetDeeplCredentials(credentialStore, apiKey, true);
 
             return new ITranslationProvider[] { provider };
@@ -68,10 +69,10 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 editProvider.Options.ApiKey = savedCredentials.Credential;
             }
 
-            var viewModel = new DeepLWindowViewModel(editProvider.Options, new DeepLGlossaryClient(), savedCredentials, languagePairs, new MessageService());
-            var dialog = new DeepLWindow(viewModel);
+            ViewModel = new DeepLWindowViewModel(editProvider.Options, new DeepLGlossaryClient(), savedCredentials, languagePairs, new MessageService());
+            var dialog = new DeepLWindow(ViewModel);
 
-            viewModel.ManageGlossaries += ViewModel_ManageGlossaries;
+            ViewModel.ManageGlossaries += ViewModel_ManageGlossaries;
 
             ElementHost.EnableModelessKeyboardInterop(dialog);
             dialog.ShowDialog();
@@ -146,6 +147,8 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
             var glossariesWindow = new GlossariesWindow { DataContext = glossariesWindowViewModel };
             glossariesWindow.ShowDialog();
+
+            ViewModel.LoadLanguagePairSettings();
         }
     }
 }
