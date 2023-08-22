@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -9,6 +10,8 @@ using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
 using LanguageMappingProvider.Database;
 using LanguageMappingProvider.Model;
+using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
 
 namespace GoogleCloudTranslationProvider.Extensions
 {
@@ -32,6 +35,7 @@ namespace GoogleCloudTranslationProvider.Extensions
 
 		public static void CreateDatabase(ITranslationOptions translationOptions)
 		{
+			var x = LanguageRegistryApi.Instance.GetAllLanguages();
 			var languageMappings = CreateLanguageMappings(translationOptions);
 			languageMappings = languageMappings.OrderBy(x => x.Name).ThenBy(x => x.Region).ToList();
 			var database = translationOptions.SelectedGoogleVersion == ApiVersion.V2
@@ -55,6 +59,7 @@ namespace GoogleCloudTranslationProvider.Extensions
 			return v2Languages
 				.Where(language => IsValidLanguage(translationOptions.SelectedGoogleVersion, language))
 				.Select(language => ParseLanguageMapping(language.LanguageName, language.LanguageCode))
+				.Union(CreateChineseMapping())
 				.ToList();
 		}
 
@@ -70,9 +75,39 @@ namespace GoogleCloudTranslationProvider.Extensions
 					Name = language.CultureInfo.DisplayName,
 					LanguageCode = language.GoogleLanguageCode
 				})
+				.Union(CreateChineseMapping())
 				.ToList());
 		}
 
+		private static List<LanguageMapping> CreateChineseMapping()
+		{
+			var tradosChinese = LanguageRegistryApi.Instance.GetAllLanguages().Where(x => x.EnglishName.StartsWith("Chinese")).ToList();
+			var chineseLanguageMapping = new List<LanguageMapping>();
+			foreach (var language in tradosChinese)
+			{
+				var regex = new Regex(@"^(.*?)\s*(?:\((.*?)\))?$");
+				var match = regex.Match(language.DisplayName);
+
+				var languageName = match.Groups[1].Value;
+				var languageRegion = match.Groups[2].Success ? match.Groups[2].Value : null;
+
+				if (chineseLanguageMapping.Any(x => x.Name == languageName && x.Region == languageRegion)
+				 || languageRegion is null)
+				{
+					continue;
+				}
+
+				var languageCode = languageRegion.StartsWith("Simplified") ? $"zh-CN" : languageRegion.StartsWith("Traditional") ? "zh-TW" : "zh";
+				chineseLanguageMapping.Add(new LanguageMapping
+				{
+					Name = languageName,
+					Region = languageRegion,
+					LanguageCode = languageCode
+				});
+			}
+
+			return chineseLanguageMapping;
+		}
 
 		private static List<LanguageMapping> CreateLanguageMappings(ITranslationOptions translationOptions)
 		{
@@ -96,7 +131,6 @@ namespace GoogleCloudTranslationProvider.Extensions
 			// Chinese languages will be handled differently due to their language codes and the presence
 			// of both traditional and simplified variations.
 			// Here we can also find some duplicates.
-
 			return apiVersion switch
 			{
 				ApiVersion.V2 when targetLanguage is V2LanguageModel v2Language =>
@@ -127,7 +161,7 @@ namespace GoogleCloudTranslationProvider.Extensions
 
 		private static string GetDatabaseFilePath(ApiVersion apiVersion)
 		{
-			string pluginName = apiVersion == ApiVersion.V2
+			var pluginName = apiVersion == ApiVersion.V2
 				? PluginResources.Database_PluginName_V2
 				: PluginResources.Database_PluginName_V3;
 			return string.Format(Constants.DatabaseFilePath, pluginName);

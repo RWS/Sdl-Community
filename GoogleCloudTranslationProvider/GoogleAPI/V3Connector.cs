@@ -68,8 +68,8 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 		public bool IsSupportedLanguage(CultureCode sourceCulture, CultureCode targetCulture)
 		{
 			EnsureSupportedLanguagesInitialized();
-			var sourceLanguageCode = GetLanguageCode(sourceCulture.Name);
-			var targetLanguageCode = GetLanguageCode(targetCulture.Name);
+			var sourceLanguageCode = sourceCulture.GetLanguageCode(ApiVersion.V3);
+			var targetLanguageCode = targetCulture.GetLanguageCode(ApiVersion.V3);
 			if (string.IsNullOrEmpty(sourceLanguageCode) || string.IsNullOrEmpty(targetLanguageCode))
 			{
 				return false;
@@ -87,11 +87,6 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 			{
 				SetGoogleAvailableLanguages();
 			}
-		}
-
-		private string GetLanguageCode(string cultureCodeName)
-		{
-			return new CultureInfo(cultureCodeName).GetLanguageCode(ApiVersion.V3);
 		}
 
 		private V3LanguageModel GetSupportedLanguage(string languageCode)
@@ -170,13 +165,11 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 
 		private TranslateTextRequest CreateTranslationRequest(CultureCode sourceLanguage, CultureCode targetLanguage, string sourceText, string format)
 		{
-			var sourceCultureInfo = new CultureInfo(sourceLanguage.Name);
-			var targetCultureInfo = new CultureInfo(targetLanguage.Name);
 			return new TranslateTextRequest
 			{
 				Contents = { sourceText },
-				SourceLanguageCode = sourceCultureInfo.GetLanguageCode(ApiVersion.V3),
-				TargetLanguageCode = targetCultureInfo.GetLanguageCode(ApiVersion.V3),
+				SourceLanguageCode = sourceLanguage.GetLanguageCode(ApiVersion.V3),
+				TargetLanguageCode = targetLanguage.GetLanguageCode(ApiVersion.V3),
 				ParentAsLocationName = new LocationName(_options.ProjectId, _options.ProjectLocation),
 				MimeType = format == "text" ? "text/plain" : "text/html",
 				Model = SetCustomModel(sourceLanguage, targetLanguage),

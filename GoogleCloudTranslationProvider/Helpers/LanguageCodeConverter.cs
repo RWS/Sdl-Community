@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using GoogleCloudTranslationProvider.Extensions;
 using GoogleCloudTranslationProvider.Models;
 using LanguageMappingProvider.Database;
+using Sdl.Core.Globalization;
 
 namespace GoogleCloudTranslationProvider.Helpers
 {
@@ -32,13 +33,8 @@ namespace GoogleCloudTranslationProvider.Helpers
 			return isoLanguageName;
 		}
 
-		public static string GetLanguageCode(this CultureInfo cultureInfo, ApiVersion targetVersion)
+		public static string GetLanguageCode(this CultureCode cultureInfo, ApiVersion targetVersion)
 		{
-			var regex = new Regex(@"^(.*?)\s*(?:\((.*?)\))?$");
-			var match = regex.Match(cultureInfo.DisplayName);
-			var languageName = match.Groups[1].Value;
-			var languageRegion = match.Groups[2].Success ? match.Groups[2].Value : null;
-
 			var targetDatabase = targetVersion == ApiVersion.V2
 							   ? PluginResources.Database_PluginName_V2
 							   : PluginResources.Database_PluginName_V3;
@@ -46,9 +42,8 @@ namespace GoogleCloudTranslationProvider.Helpers
 			var database = new LanguageMappingDatabase(targetDatabase, null);
 			var mappings = database.GetMappedLanguages();
 
-			var targetLanguage = mappings.FirstOrDefault(x => x.Name == languageName && x.Region == languageRegion);
-
-			return targetLanguage.LanguageCode;
+			var mappedLanguage = mappings.FirstOrDefault(x => x.TradosCode.ToLower().Equals(cultureInfo.Name.ToLower()));
+			return mappedLanguage?.LanguageCode;
 		}
 	}
 }

@@ -277,14 +277,12 @@ namespace GoogleCloudTranslationProvider.ViewModels
 					return canConnect;
 				}
 
+				_options.ApiKey ??= ApiKey;
 				DatabaseExtensions.CreateDatabase(_options);
 				foreach (var languagePair in _languagePairs)
 				{
-					var sourceCultureInfo = new CultureInfo(languagePair.SourceCulture.Name);
-					var targetCultureInfo = new CultureInfo(languagePair.TargetCulture.Name);
-
-					if (string.IsNullOrEmpty(sourceCultureInfo.GetLanguageCode(ApiVersion.V2))
-					 || string.IsNullOrEmpty(targetCultureInfo.GetLanguageCode(ApiVersion.V2)))
+					if (string.IsNullOrEmpty(languagePair.SourceCulture.GetLanguageCode(ApiVersion.V2))
+					 || string.IsNullOrEmpty(languagePair.TargetCulture.GetLanguageCode(ApiVersion.V2)))
 					{
 						var dialogResult = MessageBox.Show("Warning: One or more language pairs might not be fully supported or the language code was not set. Please set a valid language code using the Language Mapping button before performing language-specific operations.",
 				  "Invalid language pair",
@@ -500,8 +498,8 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				var sourceCultureInfo = new CultureInfo(currentPair.SourceCultureName);
 				var targetCultureInfo = new CultureInfo(currentPair.TargetCultureName);
 
-				var sourceCode = sourceCultureInfo.GetLanguageCode(ApiVersion.V3);
-				var targetCode = targetCultureInfo.GetLanguageCode(ApiVersion.V3);
+				var sourceCode = currentPair.SourceCulture.GetLanguageCode(ApiVersion.V3);
+				var targetCode = currentPair.TargetCulture.GetLanguageCode(ApiVersion.V3);
 
 				var mapping = new LanguagePairResources()
 				{
@@ -597,11 +595,8 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 			foreach (var languagePair in LanguageMappingPairs)
 			{
-				var sourceCultureInfo = new CultureInfo(languagePair.LanguagePair.SourceCultureName);
-				var targetCultureInfo = new CultureInfo(languagePair.LanguagePair.TargetCultureName);
-
-				var sourceLanguageCode = sourceCultureInfo.GetLanguageCode(ApiVersion.V3);
-				var targetLanguageCode = targetCultureInfo.GetLanguageCode(ApiVersion.V3);
+				var sourceLanguageCode = languagePair.LanguagePair.SourceCulture.GetLanguageCode(ApiVersion.V3);
+				var targetLanguageCode = languagePair.LanguagePair.TargetCulture.GetLanguageCode(ApiVersion.V3);
 
 				languagePair.SourceLanguageCode = sourceLanguageCode;
 				languagePair.TargetLanguageCode = targetLanguageCode;

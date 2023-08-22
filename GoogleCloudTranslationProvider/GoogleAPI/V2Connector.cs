@@ -93,8 +93,8 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 		public bool IsSupportedLanguagePair(CultureCode sourceCulture, CultureCode targetCulture)
 		{
 			supportedLanguages ??= new Dictionary<string, List<string>>();
-			var sourceLanguage = new CultureInfo(sourceCulture.Name).GetLanguageCode(ApiVersion.V2);
-			var targetLanguage = new CultureInfo(targetCulture.Name).GetLanguageCode(ApiVersion.V2);
+			var sourceLanguage = sourceCulture.GetLanguageCode(ApiVersion.V2);
+			var targetLanguage = targetCulture.GetLanguageCode(ApiVersion.V2);
 
 			if (string.IsNullOrEmpty(sourceLanguage) || string.IsNullOrEmpty(targetLanguage))
 			{
@@ -107,12 +107,6 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 			}
 
 			return supportedLanguages[targetLanguage].Any(source => source == sourceLanguage);
-		}
-
-		public List<V2LanguageModel> GetSupportedLanguages()
-		{
-			var result = DownloadRequest(Constants.LanguagesUri, null);
-			return null;
 		}
 
 		private void UpdateSupportedLanguages(string target)
@@ -181,7 +175,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 				throw new Exception(PluginResources.ApiConnectionGoogleNoKeyErrorMessage);
 			}
 
-			var targetCode = new CultureInfo(languagePair.TargetCulture.Name).GetLanguageCode(ApiVersion.V2);
+			var targetCode = languagePair.TargetCulture.GetLanguageCode(ApiVersion.V2);
 			var result = DownloadRequest(Constants.TranslationUri, targetCode, text, format);
 			var returnedResult = GetTranslation(result);
 			var decodedResult = _htmlUtil.HtmlDecode(returnedResult).RemoveZeroWidthSpaces();

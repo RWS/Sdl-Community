@@ -79,6 +79,7 @@ namespace GoogleCloudTranslationProvider.Studio
 
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
+			DatabaseExtensions.CreateDatabase(Options);
 			if (Options.SelectedGoogleVersion is not ApiVersion.V2)
 			{
 				_googleV3Api ??= new V3Connector(Options);
@@ -94,7 +95,6 @@ namespace GoogleCloudTranslationProvider.Studio
 				_googleV2Api.ApiKey = Options.ApiKey;
 			}
 
-			DatabaseExtensions.CreateDatabase(Options);
 			return _googleV2Api.IsSupportedLanguagePair(languageDirection.SourceCulture, languageDirection.TargetCulture);
 		}
 
