@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -10,7 +9,6 @@ using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
 using LanguageMappingProvider.Database;
 using LanguageMappingProvider.Model;
-using Sdl.Core.Globalization;
 using Sdl.Core.Globalization.LanguageRegistry;
 
 namespace GoogleCloudTranslationProvider.Extensions

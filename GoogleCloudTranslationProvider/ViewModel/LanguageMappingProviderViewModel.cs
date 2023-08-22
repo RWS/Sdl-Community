@@ -205,7 +205,7 @@ namespace GoogleCloudTranslationProvider.ViewModel
 
 		private void ResetToDefault(object parameter)
 		{
-			if (ExecuteAction("Warning: Resetting to default values!\nAll changes will be lost and the database will be restored to its original state.\n\nThis action cannot be undone.", "Reset to default"))
+			if (ExecuteAction(PluginResources.LMP_ResetToDefaults_Warning, PluginResources.LMP_Button_Reset))
 			{
 				_database.ResetToDefault();
 				RetrieveMappedLanguagesFromDatabase();

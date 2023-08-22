@@ -40,6 +40,7 @@ namespace GoogleCloudTranslationProvider
 		public const string CustomModelsUri = "https://console.cloud.google.com/translation/datasets";
 		public const string ProjectUri = "https://console.cloud.google.com/home/dashboard";
 		public const string ResourceManagerUri = "https://console.cloud.google.com/cloud-resource-manager";
+		public const string LanguageCodesUri = "https://cloud.google.com/translate/docs/languages";
 
 
 		// Documentation

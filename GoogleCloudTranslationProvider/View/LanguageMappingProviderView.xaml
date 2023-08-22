@@ -100,9 +100,9 @@
 					   VerticalAlignment="Top"
 					   Margin="16 5" />
 
-			<Button Content="Missing a language code? Click here to find them"
+			<Button Content="{x:Static root:PluginResources.LMP_NavigateToLanguageCodes_Message}"
 					Command="{Binding OpenHyperlinkCommand}"
-					CommandParameter="https://cloud.google.com/translate/docs/languages"
+					CommandParameter="{x:Static root:Constants.LanguageCodesUri}"
 					Style="{StaticResource Sdl.Button.HyperLinkStyle}"
 					Grid.Row="3"
 					VerticalAlignment="Top"
