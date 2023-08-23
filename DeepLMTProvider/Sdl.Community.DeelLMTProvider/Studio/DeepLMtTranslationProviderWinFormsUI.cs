@@ -8,6 +8,7 @@ using Sdl.Community.DeepLMTProvider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 
@@ -142,8 +143,9 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         private void ViewModel_ManageGlossaries()
         {
             var glossariesWindowViewModel = new GlossariesWindowViewModel(new DeepLGlossaryClient(),
-                new MessageService(), new GlossaryBrowserService(new DialogWrapper()),
-                new GlossaryReaderWriterService(new GlossaryReaderWriterFactory()), new ProcessStarter());
+                new MessageService(), new GlossaryImportExportService(new DialogWrapper()),
+                new GlossaryReaderWriterService(new GlossaryReaderWriterFactory()), new ProcessStarter(), new EditGlossaryService());
+
 
             var glossariesWindow = new GlossariesWindow { DataContext = glossariesWindowViewModel };
             glossariesWindow.ShowDialog();

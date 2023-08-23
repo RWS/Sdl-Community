@@ -35,7 +35,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
             return new(true, null, null);
         }
 
-        public async Task<ActionResult<List<GlossaryInfo>>> GetGlossaries(string apiKey)
+        public async Task<ActionResult<List<GlossaryInfo>>> GetGlossaries(string apiKey, bool continueOnCapturedContext = true)
         {
             var request = new HttpRequestMessage
             {
@@ -46,7 +46,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
                     { "Authorization", $"DeepL-Auth-Key {apiKey}" },
                 },
             };
-            using var response = await AppInitializer.Client.SendAsync(request);
+            using var response = await AppInitializer.Client.SendAsync(request).ConfigureAwait(continueOnCapturedContext);
 
             if (!response.IsSuccessStatusCode)
                 return new(false, null, ErrorHandler.GetFailureMessage(response.ReasonPhrase));
@@ -154,6 +154,14 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
                     return glossaryEntries;
                 });
+        }
+
+        public async Task<ActionResult<GlossaryInfo>> UpdateGlossary(Glossary glossary, string glossaryId, string apiKey)
+        {
+            var deleteGlossaryResult = await DeleteGlossary(apiKey, glossaryId);
+            if (!deleteGlossaryResult.Success) return deleteGlossaryResult;
+
+            return await ImportGlossary(glossary, apiKey);
         }
     }
 }

@@ -5,16 +5,16 @@ using System.Collections.Generic;
 
 namespace Sdl.Community.DeepLMTProvider.Service
 {
-    public class GlossaryBrowserService : IGlossaryBrowserService
+    public class GlossaryImportExportService : IGlossaryBrowserService
     {
-        public GlossaryBrowserService(IBrowseDialog browseDialog)
+        public GlossaryImportExportService(IBrowseDialog browseDialog)
         {
             BrowseDialog = browseDialog;
         }
 
         private IBrowseDialog BrowseDialog { get; }
 
-        public bool Browse(List<string> supportedLanguages, out List<GlossaryItem> glossaries)
+        public bool OpenImportDialog(List<string> supportedLanguages, out List<GlossaryItem> glossaries)
         {
             glossaries = default;
 

@@ -128,6 +128,7 @@
     <Compile Include="Helpers\ProcessStarter.cs" />
     <Compile Include="Helpers\TsvReaderWriter.cs" />
     <Compile Include="Interface\IDeepLGlossaryClient.cs" />
+    <Compile Include="Interface\IEditGlossaryService.cs" />
     <Compile Include="Interface\IGlossaryBrowserService.cs" />
     <Compile Include="Interface\IGlossaryReaderWriter.cs" />
     <Compile Include="Interface\IGlossaryReaderWriterFactory.cs" />
@@ -142,7 +143,8 @@
     <Compile Include="Model\GlossaryItem.cs" />
     <Compile Include="Model\GlossaryLanguagePair.cs" />
     <Compile Include="Model\LanguagePairOptions.cs" />
-    <Compile Include="Service\GlossaryBrowserService.cs" />
+    <Compile Include="Service\EditGlossaryService.cs" />
+    <Compile Include="Service\GlossaryImportExportService.cs" />
     <Compile Include="Service\GlossaryReaderWriterService.cs" />
     <Compile Include="Service\MessageService.cs" />
     <Compile Include="Studio\Actions\ImportGlossaryAction.cs" />
@@ -184,6 +186,9 @@
     <Compile Include="UI\Controls\BrowsePathControl.xaml.cs">
       <DependentUpon>BrowsePathControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Controls\EditableTextBlock.xaml.cs">
+      <DependentUpon>EditableTextBlock.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Converters\AddAllItemConverter.cs" />
     <Compile Include="UI\DeepLWindow.xaml.cs">
       <DependentUpon>DeepLWindow.xaml</DependentUpon>
@@ -191,6 +196,9 @@
     <Compile Include="Log.cs" />
     <Compile Include="Model\DeepLTranslationOptions.cs" />
     <Compile Include="Model\Formality.cs" />
+    <Compile Include="UI\EditGlossaryWindow.xaml.cs">
+      <DependentUpon>EditGlossaryWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\GlossariesWindow.xaml.cs">
       <DependentUpon>GlossariesWindow.xaml</DependentUpon>
     </Compile>
@@ -246,9 +254,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\Controls\EditableTextBlock.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\DeepLWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\EditGlossaryWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\GlossariesWindow.xaml">
       <SubType>Designer</SubType>

@@ -5,7 +5,7 @@ namespace Sdl.Community.DeepLMTProvider.Interface
 {
     public interface IGlossaryBrowserService
     {
-        bool Browse(List<string> supportedLanguages, out List<GlossaryItem> glossaries);
+        bool OpenImportDialog(List<string> supportedLanguages, out List<GlossaryItem> glossaries);
         (bool Success, string Path) OpenExportDialog();
     }
 }

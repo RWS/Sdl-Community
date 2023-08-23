@@ -24,7 +24,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private GlossaryInfo _selectedGlossary;
         private GlossaryLanguagePair _selectedLanguagePair;
 
-        public GlossariesWindowViewModel(IDeepLGlossaryClient deepLGlossaryClient, IMessageService messageService, IGlossaryBrowserService glossaryBrowserService, IGlossaryReaderWriterService glossaryReaderWriterService, IProcessStarter processStarter)
+        public GlossariesWindowViewModel(IDeepLGlossaryClient deepLGlossaryClient, IMessageService messageService, IGlossaryBrowserService glossaryBrowserService, IGlossaryReaderWriterService glossaryReaderWriterService, IProcessStarter processStarter, IEditGlossaryService editGlossaryService)
         {
             //TODO: remove peripheral dependencies -> use events to handle those interactions instead
             DeepLGlossaryClient = deepLGlossaryClient;
@@ -32,6 +32,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             GlossaryBrowserService = glossaryBrowserService;
             GlossaryReaderWriterService = glossaryReaderWriterService;
             ProcessStarter = processStarter;
+            EditGlossaryService = editGlossaryService;
             LoadGlossaries();
 
             var (success, result, message) = DeepLGlossaryClient.GetGlossarySupportedLanguagePairs(DeepLTranslationProviderClient.ApiKey, false).Result;
@@ -40,12 +41,10 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             SupportedLanguagePairs = result;
         }
 
-        public event Action<GlossaryInfo> EditGlossary;
-
         public ICommand CancelCommand => new ParameterlessCommand(CancelOperation);
         public bool CancellationRequested { get; set; }
         public ICommand DeleteGlossariesCommand => new AsyncParameterlessCommand(async () => await ExecuteLongMethod(DeleteGlossaries));
-        public ICommand EditGlossaryCommand => new ParameterlessCommand(() => EditGlossary?.Invoke(SelectedGlossary));
+        public ICommand EditGlossaryCommand => new ParameterlessCommand(EditGlossary);
 
         public ICommand ExportGlossariesCommand => new AsyncCommandWithParameter(async f => await ExecuteLongMethod(() => ExportGlossaries(f)));
 
@@ -96,6 +95,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         private IDeepLGlossaryClient DeepLGlossaryClient { get; set; }
 
+        private IEditGlossaryService EditGlossaryService { get; }
+
         private IGlossaryBrowserService GlossaryBrowserService { get; }
 
         private IGlossaryReaderWriterService GlossaryReaderWriterService { get; }
@@ -120,7 +121,33 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 var (success, _, message) = await DeepLGlossaryClient.DeleteGlossary(DeepLTranslationProviderClient.ApiKey, glossaryInfo.Id);
                 if (HandleErrorIfFound(success, message)) continue;
                 Glossaries.Remove(glossaryInfo);
+
             }
+            CollectionViewSource.GetDefaultView(Glossaries).MoveCurrentToFirst();
+        }
+
+        private async void EditGlossary()
+        {
+            var selectedGlossary = SelectedGlossary;
+
+            var (success, result, message) = await DeepLGlossaryClient.RetrieveGlossaryEntries(selectedGlossary.Id, DeepLTranslationProviderClient.ApiKey);
+
+            if (HandleErrorIfFound(success, message)) return;
+
+            if (!EditGlossaryService.EditGlossary(result)) return;
+            var newEntries = EditGlossaryService.GlossaryEntries;
+
+            (success, var glossaryInfo, message) = await DeepLGlossaryClient.UpdateGlossary(
+                new Glossary
+                {
+                    Name = selectedGlossary.Name,
+                    SourceLanguage = selectedGlossary.SourceLanguage,
+                    TargetLanguage = selectedGlossary.TargetLanguage,
+                    Entries = newEntries
+                }, selectedGlossary.Id, DeepLTranslationProviderClient.ApiKey);
+
+            if (HandleErrorIfFound(success, message)) return;
+            selectedGlossary.Id = glossaryInfo.Id;
         }
 
         /// <summary>
@@ -179,7 +206,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private async Task ImportGlossaries()
         {
             var glossarySupportedLanguages = SupportedLanguagePairs.Select(glp => glp.SourceLanguage).Distinct().ToList();
-            if (GlossaryBrowserService.Browse(glossarySupportedLanguages, out var glossaries))
+            if (GlossaryBrowserService.OpenImportDialog(glossarySupportedLanguages, out var glossaries))
             {
                 foreach (var glossaryItem in glossaries)
                 {
@@ -211,9 +238,9 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             return true;
         }
 
-        private async void LoadGlossaries()
+        private void LoadGlossaries()
         {
-            var (success, result, message) = await DeepLGlossaryClient.GetGlossaries(DeepLTranslationProviderClient.ApiKey);
+            var (success, result, message) = DeepLGlossaryClient.GetGlossaries(DeepLTranslationProviderClient.ApiKey, false).Result;
             if (HandleErrorIfFound(success, message)) return;
             Glossaries = new ObservableCollection<GlossaryInfo>(result);
         }
