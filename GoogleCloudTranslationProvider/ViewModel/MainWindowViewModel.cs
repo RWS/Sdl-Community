@@ -10,10 +10,8 @@ using GoogleCloudTranslationProvider.Extensions;
 using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
-using GoogleCloudTranslationProvider.Service;
 using GoogleCloudTranslationProvider.View;
 using GoogleCloudTranslationProvider.ViewModel;
-using LanguageMappingProvider.Database.Interface;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -24,7 +22,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private const string ViewDetails_Provider = nameof(ProviderViewModel);
 		private const string ViewDetails_Settings = nameof(SettingsViewModel);
 
-		private readonly ILanguageMappingDatabase _languageMappingDatabase;
 		private readonly ITranslationProviderCredentialStore _credentialStore;
 		private readonly LanguagePair[] _languagePairs;
 		private readonly HtmlUtil _htmlUtil;
@@ -376,11 +373,6 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		private void OpenLanguageMapping(object parameter)
 		{
-			try
-			{
-				DatabaseExtensions.CreateDatabase(TranslationOptions);
-			}
-			catch { }
 			TranslationOptions.SelectedGoogleVersion = _providerViewModel.IsV2Checked ? ApiVersion.V2 : ApiVersion.V3;
 
 			var lmpViewModel = new LanguageMappingProviderViewModel(TranslationOptions, EditProvider);

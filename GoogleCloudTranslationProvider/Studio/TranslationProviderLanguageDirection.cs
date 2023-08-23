@@ -5,7 +5,6 @@ using GoogleCloudTranslationProvider.GoogleAPI;
 using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
-using GoogleCloudTranslationProvider.Service;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;

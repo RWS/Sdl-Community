@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Input;
+using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Models;
-using GoogleCloudTranslationProvider.Service;
 using GoogleCloudTranslationProvider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 

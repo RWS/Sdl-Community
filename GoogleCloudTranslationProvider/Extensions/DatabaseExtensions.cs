@@ -33,12 +33,11 @@ namespace GoogleCloudTranslationProvider.Extensions
 
 		public static void CreateDatabase(ITranslationOptions translationOptions)
 		{
-			var x = LanguageRegistryApi.Instance.GetAllLanguages();
 			var languageMappings = CreateLanguageMappings(translationOptions);
 			languageMappings = languageMappings.OrderBy(x => x.Name).ThenBy(x => x.Region).ToList();
 			var database = translationOptions.SelectedGoogleVersion == ApiVersion.V2
-							? PluginResources.Database_PluginName_V2
-							: PluginResources.Database_PluginName_V3;
+						 ? PluginResources.Database_PluginName_V2
+						 : PluginResources.Database_PluginName_V3;
 
 			_ = new LanguageMappingDatabase(database, languageMappings);
 		}

@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Serialization;
-using GoogleCloudTranslationProvider.Studio;
 using NLog;
 
 namespace GoogleCloudTranslationProvider.Models

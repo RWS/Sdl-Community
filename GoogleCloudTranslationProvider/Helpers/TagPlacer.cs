@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using GoogleCloudTranslationProvider.Models;
-using GoogleCloudTranslationProvider.Service;
 using NLog;
 using Sdl.LanguagePlatform.Core;
 

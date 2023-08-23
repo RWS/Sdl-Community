@@ -1,9 +1,9 @@
 ﻿using System;
 using GoogleCloudTranslationProvider.Extensions;
 using GoogleCloudTranslationProvider.GoogleAPI;
+using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
-using GoogleCloudTranslationProvider.Service;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;

@@ -12,7 +12,6 @@ using GoogleCloudTranslationProvider.GoogleAPI;
 using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
-using GoogleCloudTranslationProvider.Service;
 using GoogleCloudTranslationProvider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 using DataFormats = System.Windows.DataFormats;
@@ -284,9 +283,10 @@ namespace GoogleCloudTranslationProvider.ViewModels
 					if (string.IsNullOrEmpty(languagePair.SourceCulture.GetLanguageCode(ApiVersion.V2))
 					 || string.IsNullOrEmpty(languagePair.TargetCulture.GetLanguageCode(ApiVersion.V2)))
 					{
-						var dialogResult = MessageBox.Show("Warning: One or more language pairs might not be fully supported or the language code was not set. Please set a valid language code using the Language Mapping button before performing language-specific operations.",
-				  "Invalid language pair",
-				  MessageBoxButtons.RetryCancel);
+						var dialogResult = MessageBox.Show(
+							"Warning: One or more language pairs might not be fully supported or the language code was not set. Please set a valid language code using the Language Mapping button before performing language-specific operations.",
+							"Invalid language pair",
+							MessageBoxButtons.RetryCancel);
 						LanguageMappingLoaded?.Invoke(this, EventArgs.Empty);
 						return dialogResult != DialogResult.Retry;
 					}

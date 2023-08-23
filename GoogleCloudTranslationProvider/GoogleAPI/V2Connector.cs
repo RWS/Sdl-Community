@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -11,7 +10,6 @@ using System.Web;
 using GoogleCloudTranslationProvider.Extensions;
 using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Models;
-using GoogleCloudTranslationProvider.Service;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -38,13 +36,13 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 
 		public async Task<List<V2LanguageModel>> GetLanguages()
 		{
-			var url = $"https://translation.googleapis.com/language/translate/v2/languages?key={ApiKey}&target=en";
+			var url = $"{Constants.TranslationUri}/languages?key={ApiKey}&target=en";
 			var httpClient = new HttpClient();
 			var response = httpClient.GetAsync(url).Result;
 
 			if (response.IsSuccessStatusCode)
 			{
-				var jsonResponse = response.Content.ReadAsStringAsync().Result;
+				var jsonResponse = await response.Content.ReadAsStringAsync();
 				var result = JsonConvert.DeserializeObject<dynamic>(jsonResponse);
 
 				var languages = result.data.languages;
