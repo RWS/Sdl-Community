@@ -34,17 +34,13 @@ namespace GoogleCloudTranslationProvider.Studio
 			_htmlUtil = htmlUtil;
 		}
 
-		public CultureInfo SourceLanguage => _languageDirection.SourceCulture;
-
-		public CultureInfo TargetLanguage => _languageDirection.TargetCulture;
-
 		public ITranslationProvider TranslationProvider => _provider;
 
 		public bool CanReverseLanguageDirection => false;
 
-		CultureCode ITranslationProviderLanguageDirection.SourceLanguage => _languageDirection.SourceCulture;
+		public CultureCode SourceLanguage => _languageDirection.SourceCulture;
 
-		CultureCode ITranslationProviderLanguageDirection.TargetLanguage => _languageDirection.TargetCulture;
+		public CultureCode TargetLanguage => _languageDirection.TargetCulture;
 
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
 		{

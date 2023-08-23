@@ -495,6 +495,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			for (var i = 0; i < _languagePairs.Count(); i++)
 			{
 				var currentPair = _languagePairs.ElementAt(i);
+
 				var sourceCultureInfo = new CultureInfo(currentPair.SourceCultureName);
 				var targetCultureInfo = new CultureInfo(currentPair.TargetCultureName);
 
