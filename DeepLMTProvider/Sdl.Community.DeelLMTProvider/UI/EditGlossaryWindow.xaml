@@ -1,13 +1,12 @@
 ﻿<Window x:Class="Sdl.Community.DeepLMTProvider.UI.EditGlossaryWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:Sdl.Community.DeepLMTProvider.UI"
-        xmlns:uiHelpers="clr-namespace:Sdl.Community.DeepLMTProvider.UI.UiHelpers"
         xmlns:controls="clr-namespace:Sdl.Community.DeepLMTProvider.UI.Controls"
+        xmlns:uiHelpers="clr-namespace:Sdl.Community.DeepLMTProvider.UI.UiHelpers"
         mc:Ignorable="d"
-        KeyDown="Window_KeyDown"
         MaxWidth="600"
         MaxHeight="900"
         MinHeight="600"
@@ -15,9 +14,37 @@
         Title="Edit glossary"
         WindowStyle="None"
         SizeToContent="WidthAndHeight"
-        d:DataContext="{d:DesignInstance Type=local:EditGlossaryWindow}"
+        d:DataContext="{d:DesignInstance Type=local:EditGlossaryWindow, IsDesignTimeCreatable=True}"
         d:DesignHeight="450"
         d:DesignWidth="800">
+
+    <Window.InputBindings>
+        <KeyBinding Key="E"
+                    Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="Edit"
+                    Modifiers="Control" />
+
+        <KeyBinding Key="Escape"
+                    Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="Escape" />
+
+        <KeyBinding Key="Delete"
+                    Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="Delete" />
+
+        <KeyBinding Key="Enter"
+                    Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="Enter" />
+
+        <KeyBinding Key="Up"
+                    Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="Up" />
+
+        <KeyBinding Key="Down"
+                    Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="Down" />
+    </Window.InputBindings>
+
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -47,7 +74,6 @@
 
         <uiHelpers:WindowsControl  DockPanel.Dock="Top"
                                    Grid.Row="0" />
-
         <DataGrid Grid.Row="1"
                   Focusable="False"
                   Name="Entries_DataGrid"
@@ -58,7 +84,6 @@
                   Style="{StaticResource Sdl.DataGrid.GenericStyle}"
                   IsReadOnly="False"
                   ItemsSource="{Binding GlossaryEntries, RelativeSource={RelativeSource AncestorType=Window}}">
-
             <DataGrid.Columns>
                 <DataGridTemplateColumn Width="*"
                                         Header="Source terms">
@@ -89,7 +114,6 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-
         <DockPanel Grid.Row="2"
                    LastChildFill="False">
             <Button DockPanel.Dock="Right"
@@ -99,21 +123,32 @@
                     Click="ApplyButton_Click"
                     Style="{StaticResource Sdl.Button.PrimaryStyle}"
                     Content="Apply" />
-
             <Button DockPanel.Dock="Left"
                     Margin="0 5"
                     Click="AddRowButton_Click"
                     ToolTip="Add new entry"
                     IsDefault="True"
                     Content="➕" />
-
-            <Button DockPanel.Dock="Left"
-                    Margin="0 5"
+            <Button Margin="0 5"
+                    DockPanel.Dock="Left"
                     Click="EditButton_Click"
                     ToolTip="Edit glossary"
-                    Content="📝"
-                    IsDefault="True"/>
+                    IsDefault="True">
+                <Button.Style>
+                    <Style TargetType="Button"
+                           BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Content"
+                                Value="📝" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEditing, Mode=TwoWay}"
+                                         Value="True">
+                                <Setter Property="Content"
+                                        Value="✓" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </DockPanel>
-
     </Grid>
 </Window>

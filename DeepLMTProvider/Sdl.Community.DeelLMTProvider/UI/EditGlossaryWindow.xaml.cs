@@ -38,6 +38,8 @@ namespace Sdl.Community.DeepLMTProvider.UI
             set => SetField(ref _isEditing, value);
         }
 
+        public ICommand KeyboardCommand => new CommandWithParameter(ExecuteKeyboardShortcut);
+
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -55,6 +57,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
         {
             var glossaryEntry = new GlossaryEntry();
             GlossaryEntries.Add(glossaryEntry);
+            IsEditing = true;
         }
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
@@ -67,29 +70,50 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
-            var button = ((Button)sender);
+            //var button = ((Button)sender);
 
             IsEditing = !IsEditing;
-            button.Content = IsEditing ? "✓" : "📝";
-            button.ToolTip = IsEditing ? "Finish editing" : "Edit glossary";
+            //button.Content = IsEditing ? "✓" : "📝";
+            //button.ToolTip = IsEditing ? "Finish editing" : "Edit glossary";
         }
 
-        private void Window_KeyDown(object sender, KeyEventArgs e)
+        private void ExecuteKeyboardShortcut(object parameter)
         {
-            switch (e.Key)
+            var command = parameter.ToString();
+
+            switch (command)
             {
-                case Key.Escape:
+                case "Edit":
+                    IsEditing = true;
+                    break;
 
-                    if (IsEditing) { IsEditing = false; break;}
-
+                case "Escape":
+                    if (IsEditing) { IsEditing = false; break; }
                     DialogResult = false;
-                    e.Handled = true;
                     Close();
                     break;
 
-                case Key.Delete:
+                case "Delete":
+                    var selectedIndex = Entries_DataGrid.SelectedIndex;
                     GlossaryEntries.Remove((GlossaryEntry)Entries_DataGrid.SelectedItem);
-                    e.Handled = true;
+
+                    if (Entries_DataGrid.Items.Count - 1 >= selectedIndex) Entries_DataGrid.SelectedIndex = selectedIndex;
+                    else if (Entries_DataGrid.Items.Count > 0) Entries_DataGrid.SelectedIndex = selectedIndex - 1;
+
+                    break;
+
+                case "Up":
+                    if (Entries_DataGrid.SelectedIndex > 0) Entries_DataGrid.SelectedIndex--;
+                    break;
+
+                case "Down":
+                    if (Entries_DataGrid.SelectedIndex < Entries_DataGrid.Items.Count - 1)
+                        Entries_DataGrid.SelectedIndex++;
+                    break;
+
+                case "Enter":
+                    DialogResult = true;
+                    Close();
                     break;
             }
         }

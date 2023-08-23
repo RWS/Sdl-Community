@@ -16,6 +16,11 @@
         MaxHeight="600"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None">
+
+    <Window.InputBindings>
+        <KeyBinding Key="E" Modifiers="Control" Command="{Binding EditGlossaryCommand}"/>
+    </Window.InputBindings>
+
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -46,17 +51,18 @@
                                    Grid.Row="0" />
 
         <StackPanel Grid.Row="1"
-                   HorizontalAlignment="Left"
-                   Margin="6 10 0 0"
-                   Orientation="Horizontal">
+                    HorizontalAlignment="Left"
+                    Margin="6 10 0 0"
+                    Orientation="Horizontal">
 
-            <TextBlock Text="Show" VerticalAlignment="Top"/>
+            <TextBlock Text="Show"
+                       VerticalAlignment="Top" />
             <ComboBox ItemsSource="{Binding SupportedLanguagePairs, Converter={StaticResource AddAllItemConverter}}"
                       SelectedItem="{Binding SelectedLanguagePair}"
                       Name="SelectedLP_ComboBox"
                       VerticalAlignment="Top"
-                      DisplayMemberPath="." Margin="10 0 0 0"
-                       />
+                      DisplayMemberPath="."
+                      Margin="10 0 0 0" />
         </StackPanel>
 
         <DataGrid Grid.Row="2"
@@ -65,14 +71,6 @@
                   SelectedItem="{Binding SelectedGlossary}"
                   ItemsSource="{Binding Glossaries, Mode=TwoWay}"
                   d:ItemsSource="{d:SampleData}">
-
-            <DataGrid.ItemContainerStyle>
-                <Style TargetType="DataGridRow">
-                    <EventSetter Event="MouseDoubleClick"
-                                 Handler="GlossaryItem_DoubleClicked" />
-                </Style>
-            </DataGrid.ItemContainerStyle>
-
             <DataGrid.Style>
                 <Style TargetType="DataGrid"
                        BasedOn="{StaticResource Sdl.DataGrid.GenericStyle}">
@@ -130,6 +128,16 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding TargetLanguage}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="📝"
+                                    Command="{Binding DataContext.EditGlossaryCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    Style="{StaticResource Sdl.Button.EmbeddedStyle}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

@@ -33,17 +33,14 @@ namespace Sdl.Community.DeepLMTProvider.UI.Controls
 
         public bool IsEditing
         {
-            get { return (bool)GetValue(IsEditingProperty); }
-            set
-            {
-                SetValue(IsEditingProperty, value);
-            }
+            get => (bool)GetValue(IsEditingProperty);
+            set => SetValue(IsEditingProperty, value);
         }
 
         public string Text
         {
-            get { return (string)GetValue(TextProperty); }
-            set { SetValue(TextProperty, value); }
+            get => (string)GetValue(TextProperty);
+            set => SetValue(TextProperty, value);
         }
 
         private static void OnIsEditingPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
