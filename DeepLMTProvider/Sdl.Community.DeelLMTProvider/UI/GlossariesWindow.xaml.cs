@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace Sdl.Community.DeepLMTProvider.UI
 {
-    public partial class GlossariesWindow : Window
+    public partial class GlossariesWindow
     {
         public GlossariesWindow()
         {
@@ -22,11 +22,6 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
             contextMenu.PlacementTarget = button;
             contextMenu.IsOpen = true;
-        }
-
-        private void GlossaryItem_DoubleClicked(object sender, MouseButtonEventArgs e)
-        {
-            ((GlossariesWindowViewModel)DataContext).EditGlossaryCommand.Execute(null);
         }
 
         private void OkButton_Click(object sender, RoutedEventArgs e)

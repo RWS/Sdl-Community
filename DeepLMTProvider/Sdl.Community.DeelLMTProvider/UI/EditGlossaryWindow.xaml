@@ -74,6 +74,7 @@
 
         <uiHelpers:WindowsControl  DockPanel.Dock="Top"
                                    Grid.Row="0" />
+
         <DataGrid Grid.Row="1"
                   Focusable="False"
                   Name="Entries_DataGrid"
@@ -130,25 +131,12 @@
                     IsDefault="True"
                     Content="➕" />
             <Button Margin="0 5"
+                    Name="Edit_Button"
                     DockPanel.Dock="Left"
+                    Content="📝"
                     Click="EditButton_Click"
                     ToolTip="Edit glossary"
-                    IsDefault="True">
-                <Button.Style>
-                    <Style TargetType="Button"
-                           BasedOn="{StaticResource {x:Type Button}}">
-                        <Setter Property="Content"
-                                Value="📝" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsEditing, Mode=TwoWay}"
-                                         Value="True">
-                                <Setter Property="Content"
-                                        Value="✓" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
+                    IsDefault="True" />
         </DockPanel>
     </Grid>
 </Window>

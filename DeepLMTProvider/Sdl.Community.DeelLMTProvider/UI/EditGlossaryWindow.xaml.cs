@@ -5,9 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace Sdl.Community.DeepLMTProvider.UI
 {
@@ -35,7 +33,11 @@ namespace Sdl.Community.DeepLMTProvider.UI
         public bool IsEditing
         {
             get => _isEditing;
-            set => SetField(ref _isEditing, value);
+            set
+            {
+                SetField(ref _isEditing, value);
+                Edit_Button.Content = value ? "✓" : "📝";
+            }
         }
 
         public ICommand KeyboardCommand => new CommandWithParameter(ExecuteKeyboardShortcut);
@@ -70,11 +72,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
-            //var button = ((Button)sender);
-
             IsEditing = !IsEditing;
-            //button.Content = IsEditing ? "✓" : "📝";
-            //button.ToolTip = IsEditing ? "Finish editing" : "Edit glossary";
         }
 
         private void ExecuteKeyboardShortcut(object parameter)
