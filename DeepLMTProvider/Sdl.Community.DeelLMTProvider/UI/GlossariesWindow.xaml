@@ -6,6 +6,7 @@
         xmlns:uiHelpers="clr-namespace:Sdl.Community.DeepLMTProvider.UI.UiHelpers"
         xmlns:viewModel="clr-namespace:Sdl.Community.DeepLMTProvider.ViewModel"
         xmlns:converters="clr-namespace:Sdl.Community.DeepLMTProvider.UI.Converters"
+        xmlns:controls="clr-namespace:Sdl.Community.DeepLMTProvider.UI.Controls"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewModel:GlossariesWindowViewModel}"
         d:DesignHeight="450"
@@ -18,7 +19,12 @@
         WindowStyle="None">
 
     <Window.InputBindings>
-        <KeyBinding Key="E" Modifiers="Control" Command="{Binding EditGlossaryCommand}"/>
+        <KeyBinding Key="E"
+                    Modifiers="Control"
+                    Command="{Binding EditGlossaryCommand}" />
+        <KeyBinding Key="Q"
+                    Modifiers="Control"
+                    Command="{Binding ImportGlossaryCommand}" />
     </Window.InputBindings>
 
     <Window.Resources>
@@ -106,10 +112,11 @@
                 </DataGridCheckBoxColumn>
 
                 <DataGridTemplateColumn Header="Glossary Name"
-                                        Width="*">
+                                        Width="3*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Name}" />
+                            <controls:EditableTextBlock Margin="5 0 0 0"
+                                                        Text="{Binding Name}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -136,6 +143,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Content="📝"
+                                    ToolTip="Edit glossary (Ctrl+E)"
                                     Command="{Binding DataContext.EditGlossaryCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Style="{StaticResource Sdl.Button.EmbeddedStyle}" />
                         </DataTemplate>
@@ -151,10 +159,17 @@
             <Button Content="📂"
                     Margin="0 0 5 0"
                     FontSize="18"
-                    ToolTip="Import glossaries"
                     Command="{Binding ImportGlossaryCommand}"
                     HorizontalAlignment="Center"
-                    Style="{StaticResource Sdl.Button.EmbeddedStyle}" />
+                    Style="{StaticResource Sdl.Button.EmbeddedStyle}">
+                <Button.ToolTip>
+                    <TextBlock>
+                         Import glossaries (Ctrl+Q)
+                         <LineBreak />
+                         While importing, ensure unique filenames to avoid duplicates, which will be ignored.
+                    </TextBlock>
+                </Button.ToolTip>
+            </Button>
 
             <Button Margin="0 0 5 0"
                     Height="25"
@@ -200,7 +215,7 @@
             <Button Content="🗑️"
                     Margin="0 0 5 0"
                     Command="{Binding DeleteGlossariesCommand}"
-                    ToolTip="Delete selected glossaries"
+                    ToolTip="Delete selected glossaries (Delete)"
                     FontSize="16"
                     HorizontalAlignment="Center"
                     Style="{StaticResource Sdl.Button.EmbeddedStyle}" />
@@ -211,11 +226,11 @@
                     HorizontalAlignment="Right">
 
             <StackPanel Orientation="Horizontal"
-                        Margin="0 0 5 0"
+                        Margin="0 0 5 5"
                         Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Button Content="🚫"
+                <Button Content="X"
+                        Margin="0 0 5 0"
                         Command="{Binding CancelCommand}"
-                        Foreground="Red"
                         ToolTip="Cancel operation"
                         Style="{StaticResource Sdl.Button.EmbeddedStyle}" />
                 <ProgressBar HorizontalAlignment="Center"
@@ -223,8 +238,8 @@
                              VerticalContentAlignment="Center"
                              IsIndeterminate="True"
                              Foreground="Teal"
-                             Height="10"
-                             Width="30" />
+                             Height="18"
+                             Width="100" />
             </StackPanel>
 
             <Button Content="Ok"

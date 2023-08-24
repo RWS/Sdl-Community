@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using Sdl.Community.DeepLMTProvider.Command;
+﻿using Sdl.Community.DeepLMTProvider.Command;
 using Sdl.Community.DeepLMTProvider.Extensions;
 using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Model;
@@ -17,6 +16,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
     public partial class BrowseGlossariesWindow : INotifyPropertyChanged
     {
         private ObservableCollection<GlossaryItem> _glossaries;
+        private bool _isEditing;
 
         public BrowseGlossariesWindow(List<string> supportedLanguages, IBrowseDialog openFileDialog)
         {
@@ -36,21 +36,31 @@ namespace Sdl.Community.DeepLMTProvider.UI
             set => SetField(ref _glossaries, value);
         }
 
-        public ICommand ImportGlossariesCommand => new ParameterlessCommand(ImportGlossaries);
+        public bool IsEditing
+        {
+            get => _isEditing;
+            set
+            {
+                SetField(ref _isEditing, value);
+                EditButton.Content = value ? "Done" : "Edit";
+            }
+        }
+
         public bool IsImportEnabled => Glossaries.All(g => g.SourceLanguage != null && g.TargetLanguage != null);
 
+        public ICommand KeyboardShortcutCommand => new CommandWithParameter(ExecuteKeyboardShortcut);
         public List<string> SupportedLanguages { get; }
         private IBrowseDialog OpenFileDialog { get; }
+
+        public void AddGlossaries(string[] importDialogFileNames)
+        {
+            importDialogFileNames.ForEach(AddNewGlossary);
+        }
 
         public void Browse()
         {
             if (OpenFileDialog.ShowDialog()) return;
             AddGlossaries(OpenFileDialog.FileNames);
-        }
-
-        public void AddGlossaries(string[] importDialogFileNames)
-        {
-            importDialogFileNames.ForEach(AddNewGlossary);
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -69,12 +79,42 @@ namespace Sdl.Community.DeepLMTProvider.UI
         private void AddNewGlossary(string fn)
         {
             //TODO Delete Source and Target (testing purposes)
-            if (Glossaries.All(g => g.Path != fn)) Glossaries.Add(new GlossaryItem { Path = fn, SourceLanguage = "EN", TargetLanguage = "DE"});
+            if (Glossaries.All(g => g.Path != fn)) Glossaries.Add(new GlossaryItem(fn) { SourceLanguage = "EN", TargetLanguage = "DE" });
         }
 
         private void BrowseButton_Click(object sender, RoutedEventArgs e)
         {
             Browse();
+        }
+
+        private void CancelImportGlossaries()
+        {
+            DialogResult = false;
+            Close();
+        }
+
+        private void EditButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            IsEditing = !IsEditing;
+        }
+
+        private void ExecuteKeyboardShortcut(object parameter)
+        {
+            switch (parameter.ToString())
+            {
+                case "Edit":
+                    IsEditing = true;
+                    break;
+
+                case "Escape":
+                    if (IsEditing) IsEditing = false;
+                    else CancelImportGlossaries();
+                    break;
+
+                case "ImportGlossaries":
+                    ImportGlossaries();
+                    break;
+            }
         }
 
         private void Glossaries_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

@@ -68,6 +68,7 @@
     <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -75,7 +76,17 @@
         <uiHelpers:WindowsControl  DockPanel.Dock="Top"
                                    Grid.Row="0" />
 
-        <DataGrid Grid.Row="1"
+        <DockPanel VerticalAlignment="Stretch"
+                   Margin="0 0 0 5"
+                   Grid.Row="1">
+
+            <controls:EditableTextBlock FontSize="12"
+                                        FontWeight="DemiBold"
+                                        IsEditing="{Binding IsEditing, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        Text="{Binding GlossaryName, RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay}" />
+        </DockPanel>
+
+        <DataGrid Grid.Row="2"
                   Focusable="False"
                   Name="Entries_DataGrid"
                   SelectionMode="Single"
@@ -115,7 +126,7 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <DockPanel Grid.Row="2"
+        <DockPanel Grid.Row="3"
                    LastChildFill="False">
             <Button DockPanel.Dock="Right"
                     Margin="0 5"
@@ -133,10 +144,9 @@
             <Button Margin="0 5"
                     Name="Edit_Button"
                     DockPanel.Dock="Left"
-                    Content="📝"
+                    Content="✏"
                     Click="EditButton_Click"
-                    ToolTip="Edit glossary"
-                    IsDefault="True" />
+                    ToolTip="Edit glossary"/>
         </DockPanel>
     </Grid>
 </Window>

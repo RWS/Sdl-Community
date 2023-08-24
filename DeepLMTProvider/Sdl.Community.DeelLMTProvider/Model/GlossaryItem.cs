@@ -2,11 +2,22 @@
 {
     public class GlossaryItem : ViewModel.ViewModel
     {
+        public GlossaryItem(string path)
+        {
+            Path = path;
+            Name = System.IO.Path.GetFileName(Path);
+        }
+
         private string _sourceLanguage;
         private string _targetLanguage;
+        private string _name;
         public string Path { get; set; }
 
-        public string Name => System.IO.Path.GetFileName(Path);
+        public string Name
+        {
+            get => _name;
+            set => SetField(ref _name, value);
+        }
 
         public string SourceLanguage
         {

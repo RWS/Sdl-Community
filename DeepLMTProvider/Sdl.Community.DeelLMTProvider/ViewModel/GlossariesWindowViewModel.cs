@@ -44,7 +44,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         public ICommand CancelCommand => new ParameterlessCommand(CancelOperation);
         public bool CancellationRequested { get; set; }
         public ICommand DeleteGlossariesCommand => new AsyncParameterlessCommand(async () => await ExecuteLongMethod(DeleteGlossaries));
-        public ICommand EditGlossaryCommand => new ParameterlessCommand(EditGlossary);
+        public ICommand EditGlossaryCommand => new AsyncParameterlessCommand(async () => await ExecuteLongMethod(EditGlossary));
 
         public ICommand ExportGlossariesCommand => new AsyncCommandWithParameter(async f => await ExecuteLongMethod(() => ExportGlossaries(f)));
 
@@ -121,12 +121,11 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 var (success, _, message) = await DeepLGlossaryClient.DeleteGlossary(DeepLTranslationProviderClient.ApiKey, glossaryInfo.Id);
                 if (HandleErrorIfFound(success, message)) continue;
                 Glossaries.Remove(glossaryInfo);
-
             }
             CollectionViewSource.GetDefaultView(Glossaries).MoveCurrentToFirst();
         }
 
-        private async void EditGlossary()
+        private async Task EditGlossary()
         {
             var selectedGlossary = SelectedGlossary;
 
@@ -134,13 +133,14 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             if (HandleErrorIfFound(success, message)) return;
 
-            if (!EditGlossaryService.EditGlossary(result)) return;
+            if (!EditGlossaryService.EditGlossary(result, SelectedGlossary.Name)) return;
             var newEntries = EditGlossaryService.GlossaryEntries;
+            var newGlossaryName = EditGlossaryService.GlossaryName;
 
             (success, var glossaryInfo, message) = await DeepLGlossaryClient.UpdateGlossary(
                 new Glossary
                 {
-                    Name = selectedGlossary.Name,
+                    Name = newGlossaryName,
                     SourceLanguage = selectedGlossary.SourceLanguage,
                     TargetLanguage = selectedGlossary.TargetLanguage,
                     Entries = newEntries
@@ -148,6 +148,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             if (HandleErrorIfFound(success, message)) return;
             selectedGlossary.Id = glossaryInfo.Id;
+            selectedGlossary.Name = newGlossaryName;
         }
 
         /// <summary>
@@ -213,13 +214,15 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                     if (IsCancellationRequested()) break;
 
                     var selectedFilePath = glossaryItem.Path;
+                    if (Glossaries.Select(g => g.Name).Contains(glossaryItem.Name)) continue;
+
                     var (success, glossaryFile, message) = GlossaryReaderWriterService.ReadGlossary(selectedFilePath);
 
                     if (HandleErrorIfFound(success, message)) continue;
 
                     glossaryFile.SourceLanguage = glossaryItem.SourceLanguage;
                     glossaryFile.TargetLanguage = glossaryItem.TargetLanguage;
-                    glossaryFile.Name = Path.GetFileNameWithoutExtension(selectedFilePath);
+                    glossaryFile.Name = glossaryItem.Name;
 
                     (success, var glossary, message) =
                         await DeepLGlossaryClient.ImportGlossary(glossaryFile, DeepLTranslationProviderClient.ApiKey);

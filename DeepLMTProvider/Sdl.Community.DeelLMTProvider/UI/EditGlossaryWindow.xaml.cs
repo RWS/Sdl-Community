@@ -12,10 +12,12 @@ namespace Sdl.Community.DeepLMTProvider.UI
     public partial class EditGlossaryWindow : INotifyPropertyChanged
     {
         private ObservableCollection<GlossaryEntry> _glossaryEntries;
+        private string _glossaryName;
         private bool _isEditing;
 
-        public EditGlossaryWindow(List<GlossaryEntry> glossaryEntries)
+        public EditGlossaryWindow(List<GlossaryEntry> glossaryEntries, string glossaryName)
         {
+            GlossaryName = glossaryName;
             GlossaryEntries = new ObservableCollection<GlossaryEntry>(glossaryEntries);
             InitializeComponent();
         }
@@ -30,13 +32,19 @@ namespace Sdl.Community.DeepLMTProvider.UI
             set => SetField(ref _glossaryEntries, value);
         }
 
+        public string GlossaryName
+        {
+            get => _glossaryName;
+            set => SetField(ref _glossaryName, value);
+        }
+
         public bool IsEditing
         {
             get => _isEditing;
             set
             {
                 SetField(ref _isEditing, value);
-                Edit_Button.Content = value ? "✓" : "📝";
+                Edit_Button.Content = value ? "✓" : "✏";
             }
         }
 
@@ -110,8 +118,13 @@ namespace Sdl.Community.DeepLMTProvider.UI
                     break;
 
                 case "Enter":
-                    DialogResult = true;
-                    Close();
+
+                    if (!IsEditing)
+                    {
+                        DialogResult = true;
+                        Close();
+                    }
+                    else IsEditing = false;
                     break;
             }
         }
