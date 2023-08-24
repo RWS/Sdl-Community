@@ -65,8 +65,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         private void AddRowButton_Click(object sender, RoutedEventArgs e)
         {
-            var glossaryEntry = new GlossaryEntry();
-            GlossaryEntries.Add(glossaryEntry);
+            GlossaryEntries.Add(new GlossaryEntry());
             IsEditing = true;
         }
 
@@ -125,6 +124,10 @@ namespace Sdl.Community.DeepLMTProvider.UI
                         Close();
                     }
                     else IsEditing = false;
+                    break;
+
+                case "Add":
+                    GlossaryEntries.Add(new GlossaryEntry());
                     break;
             }
         }

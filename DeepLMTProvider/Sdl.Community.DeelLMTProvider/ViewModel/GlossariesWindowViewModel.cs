@@ -114,7 +114,21 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         private async Task DeleteGlossaries()
         {
-            foreach (var glossaryInfo in SelectedGlossaries)
+            var selectedGlossaries = SelectedGlossaries.ToList();
+
+            if (!selectedGlossaries.Any())
+            {
+                if (SelectedGlossary != null) selectedGlossaries.Add(SelectedGlossary);
+                else
+                {
+                    MessageService.ShowWarning("No glossaries selected");
+                    return;
+                }
+            }
+
+            if (!MessageService.ShowDialog("Are you sure you want to delete the selected glossaries from DeepL?")) return;
+
+            foreach (var glossaryInfo in selectedGlossaries)
             {
                 if (IsCancellationRequested()) break;
 
@@ -122,18 +136,25 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 if (HandleErrorIfFound(success, message)) continue;
                 Glossaries.Remove(glossaryInfo);
             }
-            CollectionViewSource.GetDefaultView(Glossaries).MoveCurrentToFirst();
         }
 
         private async Task EditGlossary()
         {
-            var selectedGlossary = SelectedGlossary;
+            if (SelectedGlossary == null) return;
 
-            var (success, result, message) = await DeepLGlossaryClient.RetrieveGlossaryEntries(selectedGlossary.Id, DeepLTranslationProviderClient.ApiKey);
+            var (success, originalEntries, message) = await DeepLGlossaryClient.RetrieveGlossaryEntries(SelectedGlossary.Id, DeepLTranslationProviderClient.ApiKey);
 
             if (HandleErrorIfFound(success, message)) return;
 
-            if (!EditGlossaryService.EditGlossary(result, SelectedGlossary.Name)) return;
+            BackUp(new Glossary
+            {
+                Name = SelectedGlossary.Name,
+                Entries = originalEntries,
+                SourceLanguage = SelectedGlossary.SourceLanguage,
+                TargetLanguage = SelectedGlossary.TargetLanguage
+            });
+
+            if (!EditGlossaryService.EditGlossary(originalEntries, SelectedGlossary.Name)) return;
             var newEntries = EditGlossaryService.GlossaryEntries;
             var newGlossaryName = EditGlossaryService.GlossaryName;
 
@@ -141,14 +162,21 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 new Glossary
                 {
                     Name = newGlossaryName,
-                    SourceLanguage = selectedGlossary.SourceLanguage,
-                    TargetLanguage = selectedGlossary.TargetLanguage,
+                    SourceLanguage = SelectedGlossary.SourceLanguage,
+                    TargetLanguage = SelectedGlossary.TargetLanguage,
                     Entries = newEntries
-                }, selectedGlossary.Id, DeepLTranslationProviderClient.ApiKey);
+                }, SelectedGlossary.Id, DeepLTranslationProviderClient.ApiKey);
 
             if (HandleErrorIfFound(success, message)) return;
-            selectedGlossary.Id = glossaryInfo.Id;
-            selectedGlossary.Name = newGlossaryName;
+            
+            Glossaries.Remove(SelectedGlossary);
+            Glossaries.Add(glossaryInfo);
+            SelectedGlossary = glossaryInfo;
+        }
+
+        private void BackUp(Glossary glossary)
+        {
+            //BackUpService.BackUp(glossary);
         }
 
         /// <summary>

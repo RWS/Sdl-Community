@@ -4,6 +4,7 @@ namespace Sdl.Community.DeepLMTProvider.Interface
 {
 	public interface IMessageService
 	{
-		void ShowWarning(string message, [CallerMemberName] string failingMethod = null);
+        bool ShowDialog(string message, [CallerMemberName] string method = null);
+        void ShowWarning(string message, [CallerMemberName] string failingMethod = null);
 	}
 }

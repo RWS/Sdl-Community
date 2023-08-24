@@ -10,6 +10,7 @@
         MaxWidth="600"
         MaxHeight="900"
         MinHeight="600"
+        Icon="../Resources/deepL_logo_new.png"
         WindowStartupLocation="CenterScreen"
         Title="Edit glossary"
         WindowStyle="None"
@@ -19,11 +20,14 @@
         d:DesignWidth="800">
 
     <Window.InputBindings>
-        <KeyBinding Key="E"
+        <KeyBinding Key="A"
+                    Modifiers="Control"
                     Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                    CommandParameter="Edit"
-                    Modifiers="Control" />
-
+                    CommandParameter="Add"/>
+        <KeyBinding Key="E"
+                    Modifiers="Control"
+                    Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="Edit"/>
         <KeyBinding Key="Escape"
                     Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                     CommandParameter="Escape" />
@@ -51,6 +55,12 @@
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/datagridresources.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="Image">
+                <Setter Property="RenderOptions.BitmapScalingMode"
+                        Value="HighQuality" />
+            </Style>
+
             <Style x:Key="DataGridCell_Style"
                    TargetType="DataGridCell">
                 <Setter Property="Focusable"
@@ -96,6 +106,14 @@
                   Style="{StaticResource Sdl.DataGrid.GenericStyle}"
                   IsReadOnly="False"
                   ItemsSource="{Binding GlossaryEntries, RelativeSource={RelativeSource AncestorType=Window}}">
+
+            <DataGrid.InputBindings>
+                <KeyBinding Key="Enter"
+                            Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                            CommandParameter="Enter" />
+
+            </DataGrid.InputBindings>
+
             <DataGrid.Columns>
                 <DataGridTemplateColumn Width="*"
                                         Header="Source terms">
@@ -146,7 +164,7 @@
                     DockPanel.Dock="Left"
                     Content="✏"
                     Click="EditButton_Click"
-                    ToolTip="Edit glossary"/>
+                    ToolTip="Edit glossary (Ctrl+E)"/>
         </DockPanel>
     </Grid>
 </Window>

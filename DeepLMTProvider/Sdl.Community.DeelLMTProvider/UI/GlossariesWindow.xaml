@@ -7,10 +7,10 @@
         xmlns:viewModel="clr-namespace:Sdl.Community.DeepLMTProvider.ViewModel"
         xmlns:converters="clr-namespace:Sdl.Community.DeepLMTProvider.UI.Converters"
         xmlns:controls="clr-namespace:Sdl.Community.DeepLMTProvider.UI.Controls"
+        xmlns:tradosControls="http://schemas.trados.com/xaml"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewModel:GlossariesWindowViewModel}"
         d:DesignHeight="450"
-        KeyDown="Window_KeyDown"
         MaxWidth="600"
         Title="DeepL Glossaries"
         Icon="../Resources/deepL_logo_new.png"
@@ -25,6 +25,11 @@
         <KeyBinding Key="Q"
                     Modifiers="Control"
                     Command="{Binding ImportGlossaryCommand}" />
+        <KeyBinding Key="Delete"
+                    Command="{Binding DeleteGlossariesCommand}" />
+        <KeyBinding Key="Escape"
+                    Command="{Binding CancelCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+
     </Window.InputBindings>
 
     <Window.Resources>
@@ -42,6 +47,12 @@
                 <Setter Property="RenderOptions.BitmapScalingMode"
                         Value="HighQuality" />
             </Style>
+
+            <Style TargetType="Button">
+                <Setter Property="Focusable"
+                        Value="False" />
+            </Style>
+
             <converters:AddAllItemConverter x:Key="AddAllItemConverter" />
         </ResourceDictionary>
     </Window.Resources>
@@ -74,9 +85,18 @@
         <DataGrid Grid.Row="2"
                   AutoGenerateColumns="False"
                   Margin="5 5 5 5"
+                  CanUserDeleteRows="False"
+                  CanUserSortColumns="True"
+                  SelectionMode="Single"
                   SelectedItem="{Binding SelectedGlossary}"
                   ItemsSource="{Binding Glossaries, Mode=TwoWay}"
                   d:ItemsSource="{d:SampleData}">
+
+            <DataGrid.InputBindings>
+                <KeyBinding Key="Delete"
+                            Command="{Binding DeleteGlossariesCommand}" />
+            </DataGrid.InputBindings>
+
             <DataGrid.Style>
                 <Style TargetType="DataGrid"
                        BasedOn="{StaticResource Sdl.DataGrid.GenericStyle}">
@@ -112,6 +132,7 @@
                 </DataGridCheckBoxColumn>
 
                 <DataGridTemplateColumn Header="Glossary Name"
+                                        SortMemberPath="Name"
                                         Width="3*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -122,6 +143,7 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn Header="Source language"
+                                        SortMemberPath="SourceLanguage"
                                         Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -131,6 +153,7 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn Header="Target language"
+                                        SortMemberPath="TargetLanguage"
                                         Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -221,34 +244,32 @@
                     Style="{StaticResource Sdl.Button.EmbeddedStyle}" />
         </StackPanel>
 
-        <StackPanel Grid.Row="3"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Right">
+        <Button Content="Cancel"
+                Margin="0 0 5 0"
+                HorizontalAlignment="Center"
+                Grid.Row="3"
+                Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Command="{Binding CancelCommand}"
+                ToolTip="Cancel operation"
+                Style="{StaticResource Sdl.Button.EmbeddedStyle}" />
 
-            <StackPanel Orientation="Horizontal"
-                        Margin="0 0 5 5"
-                        Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Button Content="X"
-                        Margin="0 0 5 0"
-                        Command="{Binding CancelCommand}"
-                        ToolTip="Cancel operation"
-                        Style="{StaticResource Sdl.Button.EmbeddedStyle}" />
-                <ProgressBar HorizontalAlignment="Center"
-                             Name="ProgressBar"
-                             VerticalContentAlignment="Center"
-                             IsIndeterminate="True"
-                             Foreground="Teal"
-                             Height="18"
-                             Width="100" />
-            </StackPanel>
+        <Button Content="Ok"
+                Grid.Row="3"
+                HorizontalAlignment="Right"
+                Margin="0 0 5 5"
+                Click="OkButton_Click"
+                Style="{StaticResource Sdl.Button.PrimaryStyle}"
+                Height="25"
+                IsDefault="True" />
 
-            <Button Content="Ok"
-                    HorizontalAlignment="Right"
-                    Margin="0 0 5 5"
-                    Click="OkButton_Click"
-                    Style="{StaticResource Sdl.Button.PrimaryStyle}"
-                    Height="25"
-                    IsDefault="True" />
-        </StackPanel>
+        <tradosControls:CustomProgressRing Grid.Row="2"
+                                           HorizontalAlignment="Center"
+                                           Name="ProgressBar"
+                                           Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                           VerticalContentAlignment="Center"
+                                           Foreground="Teal"
+                                           Text=""
+                                           SpinnerThickness="10"
+                                           Width="100" />
     </Grid>
 </Window>
