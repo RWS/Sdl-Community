@@ -8,7 +8,6 @@ using GoogleCloudTranslationProvider.Commands;
 using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
-using GoogleCloudTranslationProvider.Service;
 using GoogleCloudTranslationProvider.ViewModel;
 using NLog;
 

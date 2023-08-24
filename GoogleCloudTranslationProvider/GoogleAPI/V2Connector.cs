@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -11,7 +10,6 @@ using System.Web;
 using GoogleCloudTranslationProvider.Extensions;
 using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Models;
-using GoogleCloudTranslationProvider.Service;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -38,13 +36,13 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 
 		public async Task<List<V2LanguageModel>> GetLanguages()
 		{
-			var url = $"https://translation.googleapis.com/language/translate/v2/languages?key={ApiKey}&target=en";
+			var url = $"{Constants.TranslationUri}/languages?key={ApiKey}&target=en";
 			var httpClient = new HttpClient();
 			var response = httpClient.GetAsync(url).Result;
 
 			if (response.IsSuccessStatusCode)
 			{
-				var jsonResponse = response.Content.ReadAsStringAsync().Result;
+				var jsonResponse = await response.Content.ReadAsStringAsync();
 				var result = JsonConvert.DeserializeObject<dynamic>(jsonResponse);
 
 				var languages = result.data.languages;
@@ -93,8 +91,8 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 		public bool IsSupportedLanguagePair(CultureCode sourceCulture, CultureCode targetCulture)
 		{
 			supportedLanguages ??= new Dictionary<string, List<string>>();
-			var sourceLanguage = new CultureInfo(sourceCulture.Name).GetLanguageCode(ApiVersion.V2);
-			var targetLanguage = new CultureInfo(targetCulture.Name).GetLanguageCode(ApiVersion.V2);
+			var sourceLanguage = sourceCulture.GetLanguageCode(ApiVersion.V2);
+			var targetLanguage = targetCulture.GetLanguageCode(ApiVersion.V2);
 
 			if (string.IsNullOrEmpty(sourceLanguage) || string.IsNullOrEmpty(targetLanguage))
 			{
@@ -107,12 +105,6 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 			}
 
 			return supportedLanguages[targetLanguage].Any(source => source == sourceLanguage);
-		}
-
-		public List<V2LanguageModel> GetSupportedLanguages()
-		{
-			var result = DownloadRequest(Constants.LanguagesUri, null);
-			return null;
 		}
 
 		private void UpdateSupportedLanguages(string target)
@@ -181,7 +173,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 				throw new Exception(PluginResources.ApiConnectionGoogleNoKeyErrorMessage);
 			}
 
-			var targetCode = new CultureInfo(languagePair.TargetCulture.Name).GetLanguageCode(ApiVersion.V2);
+			var targetCode = languagePair.TargetCulture.GetLanguageCode(ApiVersion.V2);
 			var result = DownloadRequest(Constants.TranslationUri, targetCode, text, format);
 			var returnedResult = GetTranslation(result);
 			var decodedResult = _htmlUtil.HtmlDecode(returnedResult).RemoveZeroWidthSpaces();

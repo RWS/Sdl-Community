@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Reflection;
 using System.Web;
-using GoogleCloudTranslationProvider.Helpers;
 using NLog;
 
-namespace GoogleCloudTranslationProvider.Service
+namespace GoogleCloudTranslationProvider.Helpers
 {
 	public class HtmlUtil
 	{

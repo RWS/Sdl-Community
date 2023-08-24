@@ -35,6 +35,7 @@
 			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter" />
 			<converters:InvertableStringEmptyToBoolConverter x:Key="InvertableStringEmptyToBoolConverter" />
 			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
+			<converters:InvertableStringEmptyToVisibilityConverter x:Key="InvertableStringEmptyToVisibilityConverter" />
 
 		</ResourceDictionary>
 	</UserControl.Resources>
@@ -301,33 +302,43 @@
 							</DataGridTextColumn.ElementStyle>
 						</DataGridTextColumn>
 
-						<DataGridTextColumn Header="Source"
-											Binding="{Binding SourceLanguageCode}"
-											IsReadOnly="True"
-											Width="64">
-							<DataGridTextColumn.ElementStyle>
-								<Style TargetType="TextBlock">
-									<Setter Property="Padding"
-											Value="6 0" />
-									<Setter Property="VerticalAlignment"
-											Value="Center" />
-								</Style>
-							</DataGridTextColumn.ElementStyle>
-						</DataGridTextColumn>
+						<DataGridTemplateColumn Header="Source"
+												MinWidth="64"
+												MaxWidth="64">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<StackPanel>
+										<TextBlock Text="{Binding SourceLanguageCode}"
+												   Visibility="{Binding SourceLanguageCode, Converter={StaticResource InvertableStringEmptyToVisibilityConverter}, ConverterParameter=Inverted}"
+												   Margin="3 2 0 0" />
+										<TextBlock Text="Not set"
+												   Visibility="{Binding SourceLanguageCode, Converter={StaticResource InvertableStringEmptyToVisibilityConverter}}"
+												   Foreground="#f24d41"
+												   FontWeight="SemiBold"
+												   Margin="3 2 0 0" />
+									</StackPanel>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
 
-						<DataGridTextColumn Header="Target"
-											Binding="{Binding TargetLanguageCode}"
-											IsReadOnly="True"
-											Width="64">
-							<DataGridTextColumn.ElementStyle>
-								<Style TargetType="TextBlock">
-									<Setter Property="Padding"
-											Value="6 0" />
-									<Setter Property="VerticalAlignment"
-											Value="Center" />
-								</Style>
-							</DataGridTextColumn.ElementStyle>
-						</DataGridTextColumn>
+						<DataGridTemplateColumn Header="Target"
+												MinWidth="64"
+												MaxWidth="64">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<StackPanel>
+										<TextBlock Text="{Binding TargetLanguageCode}"
+												   Visibility="{Binding TargetLanguageCode, Converter={StaticResource InvertableStringEmptyToVisibilityConverter}, ConverterParameter=Inverted}"
+												   Margin="3 2 0 0" />
+										<TextBlock Text="Not set"
+												   Visibility="{Binding TargetLanguageCode, Converter={StaticResource InvertableStringEmptyToVisibilityConverter}}"
+												   Foreground="#f24d41"
+												   FontWeight="SemiBold"
+												   Margin="3 2 0 0" />
+									</StackPanel>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
 
 						<DataGridTemplateColumn Header="{x:Static root:PluginResources.ProviderView_V3_MappingTable_Glossaries}"
 												Width="1*">
@@ -336,7 +347,7 @@
 									<StackPanel>
 										<ComboBox ItemsSource="{Binding AvailableGlossaries}"
 												  SelectedItem="{Binding SelectedGlossary, UpdateSourceTrigger=PropertyChanged}"
-												  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+												  Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
 												  Visibility="{Binding GlossariesAreAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 												  DisplayMemberPath="DisplayName"
 												  SelectedIndex="0"
@@ -345,8 +356,7 @@
 										</ComboBox>
 										<TextBlock Text="{x:Static root:PluginResources.RetrievedResources_NotAvailable}"
 												   Visibility="{Binding GlossariesAreAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
-												   VerticalAlignment="Center"
-												   Margin="6 2 0 0" />
+												   Margin="3 2 0 0" />
 									</StackPanel>
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
@@ -359,7 +369,7 @@
 									<StackPanel>
 										<ComboBox ItemsSource="{Binding AvailableModels}"
 												  SelectedItem="{Binding SelectedModel, UpdateSourceTrigger=PropertyChanged}"
-												  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+												  Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
 												  Visibility="{Binding ModelsAreAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 												  DisplayMemberPath="DisplayName"
 												  SelectedIndex="0"
@@ -368,7 +378,7 @@
 										<TextBlock Text="{x:Static root:PluginResources.RetrievedResources_NotAvailable}"
 												   Visibility="{Binding ModelsAreAvailable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
 												   VerticalAlignment="Center"
-												   Margin="6 2 0 0" />
+												   Margin="3 2 0 0" />
 									</StackPanel>
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>

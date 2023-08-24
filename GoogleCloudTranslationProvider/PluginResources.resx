@@ -529,4 +529,13 @@ Path: {0}</value>
   <data name="LMP_Table_Header_TradosCode" xml:space="preserve">
     <value>Trados Code</value>
   </data>
+  <data name="LMP_NavigateToLanguageCodes_Message" xml:space="preserve">
+    <value>Missing a language code? Click here to find it</value>
+  </data>
+  <data name="LMP_ResetToDefaults_Warning" xml:space="preserve">
+    <value>Warning: Resetting to default values!
+All changes will be lost and the database will be restored to its original state.
+
+This action cannot be undone.</value>
+  </data>
 </root>

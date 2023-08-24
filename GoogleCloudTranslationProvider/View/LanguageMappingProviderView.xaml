@@ -98,7 +98,17 @@
 			<TextBlock Text="{Binding LanguagesCountMessage}"
 					   Grid.Row="3"
 					   VerticalAlignment="Top"
-					   Margin="16 5" />
+					   Margin="16 6" />
+
+			<Button Content="{x:Static root:PluginResources.LMP_NavigateToLanguageCodes_Message}"
+					Command="{Binding OpenHyperlinkCommand}"
+					CommandParameter="{x:Static root:Constants.LanguageCodesUri}"
+					ToolTip="{x:Static root:Constants.LanguageCodesUri}"
+					Style="{StaticResource Sdl.Button.HyperLinkStyle}"
+					Grid.Row="3"
+					VerticalAlignment="Top"
+					HorizontalAlignment="Right"
+					Margin="16 6" />
 
 			<Separator Grid.Row="4"
 					   VerticalAlignment="Top"

@@ -417,6 +417,27 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Missing a language code? Click here to find it.
+        /// </summary>
+        public static string LMP_NavigateToLanguageCodes_Message {
+            get {
+                return ResourceManager.GetString("LMP_NavigateToLanguageCodes_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning: Resetting to default values!
+        ///All changes will be lost and the database will be restored to its original state.
+        ///
+        ///This action cannot be undone..
+        /// </summary>
+        public static string LMP_ResetToDefaults_Warning {
+            get {
+                return ResourceManager.GetString("LMP_ResetToDefaults_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language.
         /// </summary>
         public static string LMP_Table_Header_Language {

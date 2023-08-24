@@ -5,7 +5,6 @@ using GoogleCloudTranslationProvider.GoogleAPI;
 using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
-using GoogleCloudTranslationProvider.Service;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
@@ -35,17 +34,13 @@ namespace GoogleCloudTranslationProvider.Studio
 			_htmlUtil = htmlUtil;
 		}
 
-		public CultureInfo SourceLanguage => _languageDirection.SourceCulture;
-
-		public CultureInfo TargetLanguage => _languageDirection.TargetCulture;
-
 		public ITranslationProvider TranslationProvider => _provider;
 
 		public bool CanReverseLanguageDirection => false;
 
-		CultureCode ITranslationProviderLanguageDirection.SourceLanguage => _languageDirection.SourceCulture;
+		public CultureCode SourceLanguage => _languageDirection.SourceCulture;
 
-		CultureCode ITranslationProviderLanguageDirection.TargetLanguage => _languageDirection.TargetCulture;
+		public CultureCode TargetLanguage => _languageDirection.TargetCulture;
 
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
 		{

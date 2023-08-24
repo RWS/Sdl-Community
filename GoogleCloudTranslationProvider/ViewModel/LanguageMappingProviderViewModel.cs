@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -105,6 +106,7 @@ namespace GoogleCloudTranslationProvider.ViewModel
 
 		public ICommand ClearCommand { get; private set; }
 		public ICommand ApplyChangesCommand { get; private set; }
+		public ICommand OpenHyperlinkCommand { get; private set; }
 		public ICommand ResetToDefaultCommand { get; private set; }
 		public ICommand CloseApplicationCommand { get; private set; }
 
@@ -112,6 +114,7 @@ namespace GoogleCloudTranslationProvider.ViewModel
 		{
 			ClearCommand = new RelayCommand(Clear);
 			ApplyChangesCommand = new RelayCommand(ApplyChanges, CanApplyChanges);
+			OpenHyperlinkCommand = new RelayCommand(OpenHyperlink);
 			ResetToDefaultCommand = new RelayCommand(ResetToDefault, (predicate) => CanResetToDefaults);
 			CloseApplicationCommand = new RelayCommand(CloseApplication);
 		}
@@ -189,9 +192,20 @@ namespace GoogleCloudTranslationProvider.ViewModel
 			return _database.HasMappedLanguagesChanged(MappedLanguages);
 		}
 
+		private void OpenHyperlink(object parameter)
+		{
+			if (parameter is not string uri
+			 || string.IsNullOrEmpty(uri))
+			{
+				return;
+			}
+
+			Process.Start(uri);
+		}
+
 		private void ResetToDefault(object parameter)
 		{
-			if (ExecuteAction("Warning: Resetting to default values!\nAll changes will be lost and the database will be restored to its original state.\n\nThis action cannot be undone.", "Reset to default"))
+			if (ExecuteAction(PluginResources.LMP_ResetToDefaults_Warning, PluginResources.LMP_Button_Reset))
 			{
 				_database.ResetToDefault();
 				RetrieveMappedLanguagesFromDatabase();

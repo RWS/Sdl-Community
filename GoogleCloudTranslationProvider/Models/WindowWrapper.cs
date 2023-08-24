@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace GoogleCloudTranslationProvider.Studio
+namespace GoogleCloudTranslationProvider.Models
 {
 	class WindowWrapper : IWin32Window
 	{
