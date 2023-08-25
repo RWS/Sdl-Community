@@ -146,7 +146,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             if (HandleErrorIfFound(success, message)) return;
 
-            BackUp(new Glossary
+            RaiseBackUp(new Glossary
             {
                 Name = SelectedGlossary.Name,
                 Entries = originalEntries,
@@ -174,10 +174,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             SelectedGlossary = glossaryInfo;
         }
 
-        private void BackUp(Glossary glossary)
+        private void RaiseBackUp(Glossary glossary)
         {
-            //BackUpService.BackUp(glossary);
+            ShouldBackUp?.Invoke(glossary);
         }
+
+        public event Action<Glossary> ShouldBackUp;
 
         /// <summary>
         /// Wrapper for executing methods that need a progress bar
