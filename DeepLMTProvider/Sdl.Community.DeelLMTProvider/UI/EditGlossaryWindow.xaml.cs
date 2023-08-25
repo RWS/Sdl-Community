@@ -5,12 +5,14 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace Sdl.Community.DeepLMTProvider.UI
 {
     public partial class EditGlossaryWindow : INotifyPropertyChanged
     {
+        private string _filterQuery;
         private ObservableCollection<GlossaryEntry> _glossaryEntries;
         private string _glossaryName;
         private bool _isEditing;
@@ -25,6 +27,16 @@ namespace Sdl.Community.DeepLMTProvider.UI
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ICommand DeleteEntryCommand => new CommandWithParameter(DeleteEntry);
+
+        public string FilterQuery
+        {
+            get => _filterQuery;
+            set
+            {
+                SetField(ref _filterQuery, value);
+                Filter();
+            }
+        }
 
         public ObservableCollection<GlossaryEntry> GlossaryEntries
         {
@@ -77,6 +89,22 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         private void DeleteEntry(object glossaryEntry) => GlossaryEntries.Remove((GlossaryEntry)glossaryEntry);
 
+        private void Filter()
+        {
+            var collectionView = CollectionViewSource.GetDefaultView(GlossaryEntries);
+
+            if (string.IsNullOrWhiteSpace(FilterQuery))
+            {
+                collectionView.Filter = null;
+                return;
+            }
+
+            collectionView.Filter = null;
+            collectionView.Filter = entry =>
+                ((GlossaryEntry)entry).SourceTerm.Contains(FilterQuery) ||
+                ((GlossaryEntry)entry).TargetTerm.Contains(FilterQuery);
+        }
+
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
             IsEditing = !IsEditing;
@@ -94,6 +122,9 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
                 case "Escape":
                     if (IsEditing) { IsEditing = false; break; }
+
+                    if (ClearButtonTextBox.Filter_TextBox.IsFocused) { Keyboard.Focus(Apply_Button); break; }
+
                     DialogResult = false;
                     Close();
                     break;

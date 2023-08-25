@@ -1,4 +1,5 @@
 ﻿using Sdl.Community.DeepLMTProvider.Command;
+using Sdl.Community.DeepLMTProvider.UI.Controls;
 using Sdl.Community.DeepLMTProvider.ViewModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,9 +15,20 @@ namespace Sdl.Community.DeepLMTProvider.UI
             SelectedLP_ComboBox.Loaded += SelectedLP_ComboBox_Loaded;
         }
 
-        public ICommand CancelCommand => new ParameterlessCommand(Cancel);
+        public ICommand EscapeCommand => new ParameterlessCommand(EscapePressed);
 
-        private void Cancel()
+        private void EscapePressed()
+        {
+            if (Filter_TextBox.Filter_TextBox.IsFocused)
+            {
+                Keyboard.Focus(Ok_Button);
+                return;
+            }
+            CloseWindow();
+        }
+
+
+        private void CloseWindow()
         {
             if (ProgressBar.Visibility == Visibility.Visible) ((GlossariesWindowViewModel)DataContext).CancelCommand.Execute(null);
             else Close();
@@ -43,6 +55,12 @@ namespace Sdl.Community.DeepLMTProvider.UI
         {
             if (SelectedLP_ComboBox.SelectedIndex == -1)
                 SelectedLP_ComboBox.SelectedIndex = 0;
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            ((GlossariesWindowViewModel)DataContext).DeleteGlossariesCommand.Execute(null);
+            Keyboard.Focus(Ok_Button);
         }
     }
 }

@@ -114,7 +114,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
             using var response = await AppInitializer.Client.SendAsync(request);
 
             if (!response.IsSuccessStatusCode)
-                return new(false, null, ErrorHandler.GetFailureMessage(response.ReasonPhrase));
+                return new(false, null, ErrorHandler.GetFailureMessage($"{response.ReasonPhrase}: {await response.Content.ReadAsStringAsync()}"));
 
             var serializedCreatedGlossary = await response.Content.ReadAsStringAsync();
             return ErrorHandler.WrapTryCatch(

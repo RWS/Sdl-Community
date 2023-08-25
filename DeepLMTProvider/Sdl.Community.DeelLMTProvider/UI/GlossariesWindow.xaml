@@ -27,8 +27,8 @@
                     Command="{Binding ImportGlossaryCommand}" />
         <KeyBinding Key="Delete"
                     Command="{Binding DeleteGlossariesCommand}" />
-        <KeyBinding Key="Escape"
-                    Command="{Binding CancelCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+        <KeyBinding Key="Escape" Command="{Binding EscapeCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+
 
     </Window.InputBindings>
 
@@ -48,7 +48,12 @@
                         Value="HighQuality" />
             </Style>
 
-            <Style TargetType="Button">
+            <Style TargetType="Button" BasedOn="{StaticResource Sdl.Button.EmbeddedStyle}">
+                <Setter Property="Focusable"
+                        Value="False" />
+            </Style>
+            
+            <Style TargetType="DataGridCell">
                 <Setter Property="Focusable"
                         Value="False" />
             </Style>
@@ -56,7 +61,7 @@
             <converters:AddAllItemConverter x:Key="AddAllItemConverter" />
         </ResourceDictionary>
     </Window.Resources>
-    <Grid>
+    <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -82,9 +87,15 @@
                       Margin="10 0 0 0" />
         </StackPanel>
 
+        <controls:ClearButtonTextBox Grid.Row="1"
+                                     x:Name="Filter_TextBox"
+                                     Text="{Binding FilterQuery, Mode=TwoWay}"
+                                     Height="20"
+                                     HorizontalAlignment="Right" />
+
         <DataGrid Grid.Row="2"
                   AutoGenerateColumns="False"
-                  Margin="5 5 5 5"
+                  Margin="0 5 0 0"
                   CanUserDeleteRows="False"
                   CanUserSortColumns="True"
                   SelectionMode="Single"
@@ -167,8 +178,7 @@
                         <DataTemplate>
                             <Button Content="📝"
                                     ToolTip="Edit glossary (Ctrl+E)"
-                                    Command="{Binding DataContext.EditGlossaryCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                    Style="{StaticResource Sdl.Button.EmbeddedStyle}" />
+                                    Command="{Binding DataContext.EditGlossaryCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -176,15 +186,13 @@
         </DataGrid>
         <StackPanel Grid.Row="3"
                     HorizontalAlignment="Left"
-                    Margin="5 0 0 5"
                     Orientation="Horizontal">
 
             <Button Content="📂"
                     Margin="0 0 5 0"
                     FontSize="18"
                     Command="{Binding ImportGlossaryCommand}"
-                    HorizontalAlignment="Center"
-                    Style="{StaticResource Sdl.Button.EmbeddedStyle}">
+                    HorizontalAlignment="Center">
                 <Button.ToolTip>
                     <TextBlock>
                          Import glossaries (Ctrl+Q)
@@ -197,8 +205,7 @@
             <Button Margin="0 0 5 0"
                     Height="25"
                     Click="ExportButton_Click"
-                    ToolTip="Export selected glossaries"
-                    Style="{StaticResource Sdl.Button.EmbeddedStyle}">
+                    ToolTip="Export selected glossaries">
 
                 <Button.ContextMenu>
                     <ContextMenu>
@@ -237,11 +244,10 @@
 
             <Button Content="🗑️"
                     Margin="0 0 5 0"
-                    Command="{Binding DeleteGlossariesCommand}"
+                    Click="DeleteButton_Click"
                     ToolTip="Delete selected glossaries (Delete)"
                     FontSize="16"
-                    HorizontalAlignment="Center"
-                    Style="{StaticResource Sdl.Button.EmbeddedStyle}" />
+                    HorizontalAlignment="Center"/>
         </StackPanel>
 
         <Button Content="Cancel"
@@ -254,9 +260,9 @@
                 Style="{StaticResource Sdl.Button.EmbeddedStyle}" />
 
         <Button Content="Ok"
+                Name="Ok_Button"
                 Grid.Row="3"
                 HorizontalAlignment="Right"
-                Margin="0 0 5 5"
                 Click="OkButton_Click"
                 Style="{StaticResource Sdl.Button.PrimaryStyle}"
                 Height="25"

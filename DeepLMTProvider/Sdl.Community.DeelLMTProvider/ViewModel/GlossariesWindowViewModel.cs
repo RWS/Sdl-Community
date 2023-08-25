@@ -23,6 +23,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private bool _isLoading;
         private GlossaryInfo _selectedGlossary;
         private GlossaryLanguagePair _selectedLanguagePair;
+        private string _filterQuery;
 
         public GlossariesWindowViewModel(IDeepLGlossaryClient deepLGlossaryClient, IMessageService messageService, IGlossaryBrowserService glossaryBrowserService, IGlossaryReaderWriterService glossaryReaderWriterService, IProcessStarter processStarter, IEditGlossaryService editGlossaryService)
         {
@@ -107,6 +108,26 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         private List<GlossaryInfo> SelectedGlossaries => Glossaries.Where(g => g.IsChecked).ToList();
 
+        public string FilterQuery
+        {
+            get => _filterQuery;
+            set
+            {
+                SetField(ref _filterQuery, value);
+                FilterByQuery(value);
+            }
+        }
+
+        private void FilterByQuery(string value)
+        {
+            var collectionView = CollectionViewSource.GetDefaultView(Glossaries);
+            if (string.IsNullOrWhiteSpace(value)) { collectionView.Filter = null; return; }
+
+            collectionView.Filter = null;
+            collectionView.Filter = glossary =>
+                ((GlossaryInfo)glossary).Name.ToLower().Contains(value.ToLower());
+        }
+
         private void CancelOperation()
         {
             CancellationRequested = true;
@@ -168,7 +189,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 }, SelectedGlossary.Id, DeepLTranslationProviderClient.ApiKey);
 
             if (HandleErrorIfFound(success, message)) return;
-            
+
             Glossaries.Remove(SelectedGlossary);
             Glossaries.Add(glossaryInfo);
             SelectedGlossary = glossaryInfo;
@@ -224,6 +245,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 : gi =>
                     ((GlossaryInfo)gi).SourceLanguage == value.SourceLanguage &&
                     ((GlossaryInfo)gi).TargetLanguage == value.TargetLanguage;
+
+            collectionView.Filter = null;
             collectionView.Filter = collectionViewFilter;
         }
 

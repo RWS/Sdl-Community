@@ -186,6 +186,9 @@
     <Compile Include="UI\Controls\BrowsePathControl.xaml.cs">
       <DependentUpon>BrowsePathControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Controls\ClearButtonTextBox.xaml.cs">
+      <DependentUpon>ClearButtonTextBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Controls\EditableTextBlock.xaml.cs">
       <DependentUpon>EditableTextBlock.xaml</DependentUpon>
     </Compile>
@@ -251,6 +254,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\Controls\BrowsePathControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Controls\ClearButtonTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

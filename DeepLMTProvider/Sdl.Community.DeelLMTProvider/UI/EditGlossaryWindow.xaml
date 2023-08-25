@@ -15,7 +15,7 @@
         Title="Edit glossary"
         WindowStyle="None"
         SizeToContent="WidthAndHeight"
-        d:DataContext="{d:DesignInstance Type=local:EditGlossaryWindow, IsDesignTimeCreatable=True}"
+        d:DataContext="{d:DesignInstance Type=local:EditGlossaryWindow}"
         d:DesignHeight="450"
         d:DesignWidth="800">
 
@@ -23,11 +23,11 @@
         <KeyBinding Key="A"
                     Modifiers="Control"
                     Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                    CommandParameter="Add"/>
+                    CommandParameter="Add" />
         <KeyBinding Key="E"
                     Modifiers="Control"
                     Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                    CommandParameter="Edit"/>
+                    CommandParameter="Edit" />
         <KeyBinding Key="Escape"
                     Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                     CommandParameter="Escape" />
@@ -86,14 +86,20 @@
         <uiHelpers:WindowsControl  DockPanel.Dock="Top"
                                    Grid.Row="0" />
 
+
         <DockPanel VerticalAlignment="Stretch"
                    Margin="0 0 0 5"
                    Grid.Row="1">
 
             <controls:EditableTextBlock FontSize="12"
+                                        DockPanel.Dock="Left"
                                         FontWeight="DemiBold"
                                         IsEditing="{Binding IsEditing, RelativeSource={RelativeSource AncestorType=Window}}"
                                         Text="{Binding GlossaryName, RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay}" />
+
+            <controls:ClearButtonTextBox x:Name="ClearButtonTextBox"
+                                         Text="{Binding FilterQuery, RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         HorizontalAlignment="Right"/>
         </DockPanel>
 
         <DataGrid Grid.Row="2"
@@ -148,8 +154,9 @@
                    LastChildFill="False">
             <Button DockPanel.Dock="Right"
                     Margin="0 5"
+                    Name="Apply_Button"
                     IsDefault="True"
-                    Focusable="False"
+                    Focusable="True"
                     Click="ApplyButton_Click"
                     Style="{StaticResource Sdl.Button.PrimaryStyle}"
                     Content="Apply" />
@@ -164,7 +171,7 @@
                     DockPanel.Dock="Left"
                     Content="✏"
                     Click="EditButton_Click"
-                    ToolTip="Edit glossary (Ctrl+E)"/>
+                    ToolTip="Edit glossary (Ctrl+E)" />
         </DockPanel>
     </Grid>
 </Window>
