@@ -1,8 +1,10 @@
-﻿using Sdl.Community.DeepLMTProvider.Command;
+﻿using NLog;
+using Sdl.Community.DeepLMTProvider.Command;
 using Sdl.Community.DeepLMTProvider.Model;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Data;
@@ -77,12 +79,20 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         private void AddRowButton_Click(object sender, RoutedEventArgs e)
         {
-            GlossaryEntries.Add(new GlossaryEntry());
+            if (!GlossaryEntries.Any(ge => ge.IsEmpty())) GlossaryEntries.Add(new GlossaryEntry());
             IsEditing = true;
         }
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
+            FinishEditing();
+        }
+
+        private void FinishEditing()
+        {
+            var termsToBeRemoved = GlossaryEntries.Where(glossaryEntry => glossaryEntry.SourceTerm == null || glossaryEntry.TargetTerm == null).ToList();
+            termsToBeRemoved.ForEach(glossaryEntry => GlossaryEntries.Remove(glossaryEntry));
+
             DialogResult = true;
             Close();
         }
@@ -148,12 +158,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
                     break;
 
                 case "Enter":
-
-                    if (!IsEditing)
-                    {
-                        DialogResult = true;
-                        Close();
-                    }
+                    if (!IsEditing) FinishEditing();
                     else IsEditing = false;
                     break;
 

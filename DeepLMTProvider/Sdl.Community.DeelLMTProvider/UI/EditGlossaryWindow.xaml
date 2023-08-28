@@ -125,7 +125,7 @@
                                         Header="Source terms">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <controls:EditableTextBlock Text="{Binding SourceTerm, Mode=TwoWay}"
+                            <controls:EditableTextBlock Text="{Binding SourceTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                         IsEditing="{Binding IsEditing, RelativeSource={RelativeSource AncestorType=Window}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -134,7 +134,7 @@
                                         Header="Target terms">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <controls:EditableTextBlock Text="{Binding TargetTerm, Mode=TwoWay}"
+                            <controls:EditableTextBlock Text="{Binding TargetTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                         IsEditing="{Binding IsEditing, RelativeSource={RelativeSource AncestorType=Window}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

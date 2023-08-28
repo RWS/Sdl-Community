@@ -19,5 +19,7 @@ namespace Sdl.Community.DeepLMTProvider.Model
             get => _targetTerm;
             set => SetField(ref _targetTerm, value);
         }
+
+        public bool IsEmpty() => string.IsNullOrWhiteSpace(SourceTerm) && string.IsNullOrWhiteSpace(TargetTerm);
     }
 }
