@@ -1,0 +1,149 @@
+﻿<Window x:Class="Sdl.Community.DeepLMTProvider.UI.BrowseGlossariesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:uiHelpers="clr-namespace:Sdl.Community.DeepLMTProvider.UI.UiHelpers"
+        xmlns:controls="clr-namespace:Sdl.Community.DeepLMTProvider.UI.Controls"
+        SizeToContent="WidthAndHeight"
+        MinHeight="200"
+        MaxWidth="600"
+        MaxHeight="600"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        Title="Add glossaries' details"
+        mc:Ignorable="d">
+
+    <Window.InputBindings>
+        <KeyBinding Key="E"
+                    Modifiers="Control"
+                    CommandParameter="Edit"
+                    Command="{Binding KeyboardShortcutCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+        <KeyBinding Key="Enter"
+                    CommandParameter="ImportGlossaries"
+                    Command="{Binding KeyboardShortcutCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+
+        <KeyBinding Key="Escape"
+                    CommandParameter="Escape"
+                    Command="{Binding KeyboardShortcutCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+    </Window.InputBindings>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/datagridresources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="Button"
+                   BasedOn="{StaticResource Sdl.Button.GeneralStyle}">
+                <Setter Property="Focusable"
+                        Value="False" />
+            </Style>
+
+            <Style TargetType="ComboBox"
+                   BasedOn="{StaticResource {x:Type ComboBox}}">
+                <Setter Property="Cursor"
+                        Value="Hand" />
+                <Setter Property="HorizontalContentAlignment"
+                        Value="Center" />
+            </Style>
+            <Style x:Key="DataGridCell_Style"
+                   TargetType="DataGridCell">
+                <Setter Property="Focusable"
+                        Value="False" />
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <uiHelpers:WindowsControl  DockPanel.Dock="Top"
+                                   Width="Auto"
+                                   Grid.Row="0" />
+
+        <DataGrid Grid.Row="1"
+                  Focusable="False"
+                  CellStyle="{StaticResource DataGridCell_Style}"
+                  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+                  d:ItemsSource="{d:SampleData}"
+                  CanUserSortColumns="True"
+                  AutoGenerateColumns="False"
+                  ItemsSource="{Binding Glossaries, RelativeSource={RelativeSource AncestorType=Window}}">
+
+            <DataGrid.Columns>
+
+                <DataGridTemplateColumn Header="Name"
+                                        Width="Auto"
+                                        IsReadOnly="True"
+                                        SortMemberPath="Name">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <controls:EditableTextBlock Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        IsEditing="{Binding IsEditing, RelativeSource={RelativeSource AncestorType=Window}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Source language"
+                                        IsReadOnly="True"
+                                        SortMemberPath="SourceLanguage">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox SelectedItem="{Binding SourceLanguage, UpdateSourceTrigger=PropertyChanged}"
+                                      ItemsSource="{Binding SupportedLanguages, RelativeSource={RelativeSource AncestorType=Window}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Target language"
+                                        IsReadOnly="True"
+                                        SortMemberPath="TargetLanguage">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox SelectedItem="{Binding TargetLanguage,UpdateSourceTrigger=PropertyChanged}"
+                                      ItemsSource="{Binding SupportedLanguages, RelativeSource={RelativeSource AncestorType=Window}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <DockPanel LastChildFill="False"
+                   Margin="0 5 0 0"
+                   Grid.Row="2"
+                   DockPanel.Dock="Bottom"
+                   VerticalAlignment="Bottom">
+            <Button Content="Browse"
+                    Margin="0 0 5 0"
+                    Focusable="False"
+                    Click="BrowseButton_Click"
+                    DockPanel.Dock="Left"
+                    HorizontalAlignment="Left" />
+            
+            <Button Content="Edit"
+                    Margin="0 0 5 0"
+                    Name="EditButton"
+                    Focusable="False"
+                    Click="EditButton_OnClick"
+                    DockPanel.Dock="Left"
+                    HorizontalAlignment="Left" />
+            <Button Content="Cancel"
+                    IsCancel="True"
+                    DockPanel.Dock="Right"
+                    HorizontalAlignment="Right" />
+            <Button Content="Import glossaries"
+                    DockPanel.Dock="Right"
+                    IsDefault="True"
+                    Click="ImportButton_Click"
+                    Margin="0 0 5 0"
+                    IsEnabled="{Binding IsImportEnabled, RelativeSource={RelativeSource AncestorType=Window}}"
+                    HorizontalAlignment="Right" />
+        </DockPanel>
+    </Grid>
+</Window>

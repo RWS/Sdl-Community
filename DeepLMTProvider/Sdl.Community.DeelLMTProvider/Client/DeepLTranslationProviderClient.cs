@@ -13,19 +13,20 @@ using Sdl.Community.DeepLMTProvider.Helpers;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.LanguagePlatform.Core;
 
-namespace Sdl.Community.DeepLMTProvider.Studio
+namespace Sdl.Community.DeepLMTProvider.Client
 {
-	public class DeepLTranslationProviderConnecter
+	public class DeepLTranslationProviderClient
 	{
-		private static readonly Logger _logger = Log.GetLogger(nameof(DeepLTranslationProviderConnecter));
+		private static readonly Logger Logger = Log.GetLogger(nameof(DeepLTranslationProviderClient));
 		private static string _apiKey;
 		private List<string> _supportedSourceLanguages;
 
-		public DeepLTranslationProviderConnecter(string key, Formality formality = Formality.Default)
+		public static event Action ApiKeyChanged;
+
+		public DeepLTranslationProviderClient(string key)
 		{
 			ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
 			ApiKey = key;
-			Formality = formality != Formality.Default ? formality : Formality;
 		}
 
 		public static string ApiKey
@@ -41,7 +42,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 		public static HttpResponseMessage IsApiKeyValidResponse { get; private set; }
 		private static List<string> SupportedTargetLanguages { get; set; }
 		private static Dictionary<string, bool> SupportedTargetLanguagesAndFormalities { get; set; }
-		private Formality Formality { get; set; }
+
 		private List<string> SupportedSourceLanguages => _supportedSourceLanguages ??= GetSupportedSourceLanguages(ApiKey);
 
 		public static List<string> GetFormalityIncompatibleLanguages(List<CultureInfo> targetLanguages)
@@ -59,7 +60,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 			}
 			catch (Exception ex)
 			{
-				_logger.Error($"{ex}");
+				Logger.Error($"{ex}");
 			}
 
 			return supportedLanguages;
@@ -77,7 +78,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 			}
 			catch (Exception ex)
 			{
-				_logger.Error($"{ex}");
+				Logger.Error($"{ex}");
 			}
 
 			return supportedLanguages;
@@ -92,10 +93,8 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 			return !string.IsNullOrEmpty(supportedSourceLanguage) && !string.IsNullOrEmpty(supportedTargetLanguage);
 		}
 
-		public string Translate(LanguagePair languageDirection, string sourceText)
+		public string Translate(LanguagePair languageDirection, string sourceText, Formality formality, string glossaryId)
 		{
-			var formality = GetFormality(languageDirection);
-
 			var targetLanguage = GetLanguage(languageDirection.TargetCulture, SupportedTargetLanguages);
 			var sourceLanguage = GetLanguage(languageDirection.SourceCulture, SupportedSourceLanguages);
 			var translatedText = string.Empty;
@@ -111,7 +110,8 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 												$"&formality={formality.ToString().ToLower()}" +
 												"&preserve_formatting=1" +
 												"&tag_handling=xml" +
-												$"&auth_key={ApiKey}",
+												$"&auth_key={ApiKey}" +
+												$"&glossary_id={glossaryId}",
 					Encoding.UTF8, "application/x-www-form-urlencoded");
 
 				var response = AppInitializer.Client.PostAsync("https://api.deepl.com/v1/translate", content).Result;
@@ -130,12 +130,12 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 			{
 				foreach (var innerEx in aEx.InnerExceptions)
 				{
-					_logger.Error(innerEx);
+					Logger.Error(innerEx);
 				}
 			}
 			catch (Exception ex)
 			{
-				_logger.Error(ex);
+				Logger.Error(ex);
 				throw;
 			}
 
@@ -172,12 +172,16 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 		{
 			IsApiKeyValidResponse = IsValidApiKey(ApiKey);
 
-			if (!IsApiKeyValidResponse.IsSuccessStatusCode) return;
+			if (!IsApiKeyValidResponse.IsSuccessStatusCode)
+				return;
 
-			if (SupportedTargetLanguagesAndFormalities is { Count: not 0 }) return;
+			if (SupportedTargetLanguagesAndFormalities is { Count: not 0 })
+				return;
 
 			SupportedTargetLanguagesAndFormalities = GetSupportedTargetLanguages(ApiKey);
 			SupportedTargetLanguages = SupportedTargetLanguagesAndFormalities.Keys.ToList();
+
+			ApiKeyChanged?.Invoke();
 		}
 
 		private string DecodeWhenNeeded(string translatedText)
@@ -201,19 +205,19 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 			return translatedText;
 		}
 
-		private Formality GetFormality(LanguagePair languageDirection)
-		{
-			if (!SupportedTargetLanguagesAndFormalities.TryGetValue(
-							languageDirection.TargetCulture.RegionNeutralName.ToUpper(), out var supportsFormality))
-			{
-				SupportedTargetLanguagesAndFormalities.TryGetValue(languageDirection.TargetCulture.ToString().ToUpper(),
-					out supportsFormality);
-			}
+		//private Formality GetFormality(LanguagePair languageDirection)
+		//{
+		//	if (!SupportedTargetLanguagesAndFormalities.TryGetValue(
+		//					languageDirection.TargetCulture.RegionNeutralName.ToUpper(), out var supportsFormality))
+		//	{
+		//		SupportedTargetLanguagesAndFormalities.TryGetValue(languageDirection.TargetCulture.ToString().ToUpper(),
+		//			out supportsFormality);
+		//	}
 
-			return supportsFormality
-				? Formality
-				: Formality.Default;
-		}
+		//	return supportsFormality
+		//		? Formality
+		//		: Formality.Default;
+		//}
 
 		// Get the target language based on availability in DeepL; if we have a flavour use that, otherwise use general culture of that flavour (two letter iso) if available, otherwise return null
 		// (e.g. for Portuguese, the leftLanguageTag (pt-PT or pt-BR) should be used, so the translations will correspond to the specific language flavor)

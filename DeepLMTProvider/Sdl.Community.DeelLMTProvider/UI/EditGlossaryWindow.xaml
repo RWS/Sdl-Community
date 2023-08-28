@@ -1,0 +1,177 @@
+﻿<Window x:Class="Sdl.Community.DeepLMTProvider.UI.EditGlossaryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Sdl.Community.DeepLMTProvider.UI"
+        xmlns:controls="clr-namespace:Sdl.Community.DeepLMTProvider.UI.Controls"
+        xmlns:uiHelpers="clr-namespace:Sdl.Community.DeepLMTProvider.UI.UiHelpers"
+        mc:Ignorable="d"
+        MaxWidth="600"
+        MaxHeight="900"
+        MinHeight="600"
+        Icon="../Resources/deepL_logo_new.png"
+        WindowStartupLocation="CenterScreen"
+        Title="Edit glossary"
+        WindowStyle="None"
+        SizeToContent="WidthAndHeight"
+        d:DataContext="{d:DesignInstance Type=local:EditGlossaryWindow}"
+        d:DesignHeight="450"
+        d:DesignWidth="800">
+
+    <Window.InputBindings>
+        <KeyBinding Key="A"
+                    Modifiers="Control"
+                    Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="Add" />
+        <KeyBinding Key="E"
+                    Modifiers="Control"
+                    Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="Edit" />
+        <KeyBinding Key="Escape"
+                    Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="Escape" />
+
+        <KeyBinding Key="Delete"
+                    Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="Delete" />
+
+        <KeyBinding Key="Enter"
+                    Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="Enter" />
+
+        <KeyBinding Key="Up"
+                    Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="Up" />
+
+        <KeyBinding Key="Down"
+                    Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="Down" />
+    </Window.InputBindings>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/datagridresources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="Image">
+                <Setter Property="RenderOptions.BitmapScalingMode"
+                        Value="HighQuality" />
+            </Style>
+
+            <Style x:Key="DataGridCell_Style"
+                   TargetType="DataGridCell">
+                <Setter Property="Focusable"
+                        Value="False" />
+            </Style>
+
+            <Style TargetType="Button"
+                   BasedOn="{StaticResource Sdl.Button.EmbeddedStyle}">
+                <Setter Property="Focusable"
+                        Value="False" />
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <uiHelpers:WindowsControl  DockPanel.Dock="Top"
+                                   Grid.Row="0" />
+
+
+        <DockPanel VerticalAlignment="Stretch"
+                   Margin="0 0 0 5"
+                   Grid.Row="1">
+
+            <controls:EditableTextBlock FontSize="12"
+                                        DockPanel.Dock="Left"
+                                        FontWeight="DemiBold"
+                                        IsEditing="{Binding IsEditing, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        Text="{Binding GlossaryName, RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay}" />
+
+            <controls:ClearButtonTextBox x:Name="ClearButtonTextBox"
+                                         Text="{Binding FilterQuery, RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         HorizontalAlignment="Right"/>
+        </DockPanel>
+
+        <DataGrid Grid.Row="2"
+                  Focusable="False"
+                  Name="Entries_DataGrid"
+                  SelectionMode="Single"
+                  AutoGenerateColumns="False"
+                  d:ItemsSource="{d:SampleData}"
+                  CellStyle="{StaticResource DataGridCell_Style}"
+                  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+                  IsReadOnly="False"
+                  ItemsSource="{Binding GlossaryEntries, RelativeSource={RelativeSource AncestorType=Window}}">
+
+            <DataGrid.InputBindings>
+                <KeyBinding Key="Enter"
+                            Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                            CommandParameter="Enter" />
+
+            </DataGrid.InputBindings>
+
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="*"
+                                        Header="Source terms">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <controls:EditableTextBlock Text="{Binding SourceTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        IsEditing="{Binding IsEditing, RelativeSource={RelativeSource AncestorType=Window}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="*"
+                                        Header="Target terms">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <controls:EditableTextBlock Text="{Binding TargetTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        IsEditing="{Binding IsEditing, RelativeSource={RelativeSource AncestorType=Window}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="❌"
+                                    Command="{Binding DeleteEntryCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=DataGrid}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <DockPanel Grid.Row="3"
+                   LastChildFill="False">
+            <Button DockPanel.Dock="Right"
+                    Margin="0 5"
+                    Name="Apply_Button"
+                    IsDefault="True"
+                    Focusable="True"
+                    Click="ApplyButton_Click"
+                    Style="{StaticResource Sdl.Button.PrimaryStyle}"
+                    Content="Apply" />
+            <Button DockPanel.Dock="Left"
+                    Margin="0 5"
+                    Click="AddRowButton_Click"
+                    ToolTip="Add new entry"
+                    IsDefault="True"
+                    Content="➕" />
+            <Button Margin="0 5"
+                    Name="Edit_Button"
+                    DockPanel.Dock="Left"
+                    Content="✏"
+                    Click="EditButton_Click"
+                    ToolTip="Edit glossary (Ctrl+E)" />
+        </DockPanel>
+    </Grid>
+</Window>
