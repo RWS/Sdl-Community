@@ -95,6 +95,7 @@
 			           Visibility="{Binding ApiKeyBoxEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
 					   FontSize="12"> This API Key will then be used in all projects where you will be using the DeepL plug-in.</TextBlock>
 			<TextBlock Margin="10,0,0,10"
+                       Visibility="{Binding ApiKeyBoxEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
 					   Style="{StaticResource Sdl.TextBlock.HyperLinkTextStyle}">
 					<Hyperlink NavigateUri="https://www.deepl.com/api-contact.html"
 							   RequestNavigate="Hyperlink_OnRequestNavigate">
