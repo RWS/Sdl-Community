@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Model;
@@ -10,8 +11,6 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 {
 	public class CloudCredentialsViewModel : BaseViewModel, ICredentialsViewModel
 	{
-		private readonly CloudService _cloudService = new();
-
 		private AuthenticationType _authenticationType;
 
 		private string _userId;
@@ -118,6 +117,8 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		public ICommand SignInCommand { get; private set; }
 
+		public ICommand SignLoggedUserCommand { get; private set; }
+
 		public ICommand SelectAuthenticationTypeCommand { get; private set; }
 
 		public event EventHandler CloseRequested;
@@ -129,6 +130,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			BackCommand = new RelayCommand(Back);
 			ClearCommand = new RelayCommand(Clear);
 			SignInCommand = new RelayCommand(SignIn);
+			SignLoggedUserCommand = new RelayCommand(SignLoggedUser);
 			SelectAuthenticationTypeCommand = new RelayCommand(SelectAuthenticationType);
 		}
 
@@ -158,7 +160,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				ClientSecret = _clientSecret
 			};
 
-			var success = await _cloudService.AuthenticateUser(cloudCredentials, AuthenticationType);
+			var success = await CloudService.AuthenticateUser(cloudCredentials, AuthenticationType);
 			if (!success)
 			{
 				// TO DO: Implement error/bad request/exceptions handling
@@ -166,6 +168,20 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			}
 
 			TranslationOptions.CloudCredentials = cloudCredentials;
+			TranslationOptions.AuthenticationType = _authenticationType;
+			CloseWindow();
+		}
+
+		private async void SignLoggedUser(object parameter)
+		{
+			var success = await CloudService.AuthenticateUser(TranslationOptions.CloudCredentials, AuthenticationType.CloudCredentials);
+			if (!success)
+			{
+				// TO DO: Implement error/bad request/exceptions handling
+				return;
+			}
+
+			TranslationOptions.CloudCredentials = TranslationOptions.CloudCredentials;
 			TranslationOptions.AuthenticationType = _authenticationType;
 			CloseWindow();
 		}

@@ -5,5 +5,12 @@
 		public const string PluginName = "Language Weaver Provider";
 		public const string TranslationScheme = "languageweaver";
 		public const string TranslationFullScheme = "languageweaver:///";
+
+		public const string CloudFullScheme = "languageweavercloud:///";
+		public const string EdgeFullScheme = "languageweaveredge:///";
+
+		// Provider
+		public const string Provider_TranslationProviderFactory = "LanguageWeaverProvider_Factory";
+		public const string Provider_TranslationProviderWinFormsUi = "LanguageWeaverProvider_WinFormsUI";
 	}
 }

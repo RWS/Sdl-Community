@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Windows.Forms;
-using LanguageWeaverProvider.LanguageMappingProvider;
+using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.View;
 using LanguageWeaverProvider.ViewModel;
+using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace LanguageWeaverProvider
 {
-	[TranslationProviderWinFormsUi(Id = "Translation_Provider_Plug_inWinFormsUI",
-								   Name = "Translation_Provider_Plug_inWinFormsUI",
-								   Description = "Translation_Provider_Plug_inWinFormsUI")]
+	[TranslationProviderWinFormsUi(Id = Constants.Provider_TranslationProviderWinFormsUi,
+								   Name = Constants.Provider_TranslationProviderWinFormsUi,
+								   Description = Constants.Provider_TranslationProviderWinFormsUi)]
 	internal class TranslationProviderWinFormsUI : ITranslationProviderWinFormsUI
 	{
 		public bool SupportsEditing => true;
@@ -24,12 +25,12 @@ namespace LanguageWeaverProvider
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
 			var translationOptions = new TranslationOptions();
-
+			GetProviderCredentials(credentialStore, translationOptions);
 			var CredentialsMainViewModel = new CredentialsMainViewModel(translationOptions);
 			var CredentialsMainView = new CredentialsMainView { DataContext = CredentialsMainViewModel };
 			CredentialsMainViewModel.CloseEventRaised += () =>
 			{
-				// UpdateProviderCredentials(credentialStore, loadOptions);
+				UpdateProviderCredentials(credentialStore, translationOptions);
 				CredentialsMainView.Close();
 			};
 
@@ -39,7 +40,7 @@ namespace LanguageWeaverProvider
 				return null;
 			}
 
-			var pairMappingViewModel = ShowPairMappingView(languagePairs, credentialStore, translationOptions);
+			var pairMappingViewModel = ShowPairMappingView(languagePairs, translationOptions);
 			if (!pairMappingViewModel.SaveChanges)
 			{
 				return null;
@@ -56,11 +57,11 @@ namespace LanguageWeaverProvider
 				return false;
 			}
 
-			var pairMappingViewModel = ShowPairMappingView(languagePairs, credentialStore, editProvider.TranslationOptions, true);
+			var pairMappingViewModel = ShowPairMappingView(languagePairs, editProvider.TranslationOptions, true);
 			return pairMappingViewModel.SaveChanges;
 		}
 
-		private PairMappingViewModel ShowPairMappingView(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions translationOptions, bool editProvider = false)
+		private PairMappingViewModel ShowPairMappingView(LanguagePair[] languagePairs, ITranslationOptions translationOptions, bool editProvider = false)
 		{
 			var pairMappingViewModel = new PairMappingViewModel(translationOptions, languagePairs);
 			var pairMappingView = new PairMappingView() { DataContext = pairMappingViewModel };
@@ -80,6 +81,35 @@ namespace LanguageWeaverProvider
 			};
 
 			return displayInfo;
+		}
+
+		private void UpdateProviderCredentials(ITranslationProviderCredentialStore credentialStore, ITranslationOptions translationOptions)
+		{
+			var uri = new Uri(Constants.CloudFullScheme);
+			var cloudCredentials = new CloudCredentials()
+			{
+				UserID = translationOptions.CloudCredentials.UserID,
+				UserPassword = translationOptions.CloudCredentials.UserPassword
+			};
+
+			var cloudCredentialsJson = JsonConvert.SerializeObject(cloudCredentials);
+			var credentials = new TranslationProviderCredential(cloudCredentialsJson, true);
+
+			credentialStore.RemoveCredential(uri);
+			credentialStore.AddCredential(uri, credentials);
+		}
+
+		private void GetProviderCredentials(ITranslationProviderCredentialStore credentialStore, ITranslationOptions translationOptions)
+		{
+			var uri = new Uri(Constants.CloudFullScheme);
+			var credentials = credentialStore.GetCredential(uri);
+			if (credentials is null)
+			{
+				return;
+			}
+
+			var cloudCredentials = JsonConvert.DeserializeObject<CloudCredentials>(credentials.Credential);
+			translationOptions.CloudCredentials = cloudCredentials;
 		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)

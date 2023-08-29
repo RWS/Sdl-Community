@@ -16,7 +16,7 @@
 		EdgeApiKey
 	}
 
-	public enum Parameters
+	public enum Direction
 	{
 		Inverted
 	}

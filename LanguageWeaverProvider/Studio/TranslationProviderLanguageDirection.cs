@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Globalization;
+using System.Linq;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.NewFolder;
 using LanguageWeaverProvider.XliffConverter.Converter;
@@ -62,11 +62,16 @@ namespace LanguageWeaverProvider
 		{
 
 			var searchResults = new SearchResults { SourceSegment = segment.Duplicate() };
-			var cloudService = new CloudService();
 			var xliff = CreateXliffFile(segment);
-			var translation = cloudService.Translate(_translationOptions.CloudCredentials, xliff).Result;
+			var mappedPair = _translationOptions
+							 .PairMappings
+							 .FirstOrDefault(x => x.LanguagePair.SourceCultureName.Equals(SourceLanguage.Name)
+											   && x.LanguagePair.TargetCultureName.Equals(TargetLanguage.Name));
+			var translation = CloudService.Translate(_translationOptions.CloudCredentials, mappedPair, xliff).Result;
 			var translatedSegment = translation.GetTargetSegments();
-			searchResults.Add(CreateSearchResult(segment, translatedSegment[0].Segment));
+			var searchResult = CreateSearchResult(segment, translatedSegment[0].Segment);
+			searchResult.MetaData.Add("QualityEstimation", translatedSegment.First().QualityEstimation);
+			searchResults.Add(searchResult);
 			return searchResults;
 		}
 

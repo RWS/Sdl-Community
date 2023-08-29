@@ -62,11 +62,13 @@ namespace LanguageWeaverProvider
 
 		public void LoadState(string translationProviderState)
 		{
-			TranslationOptions = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
+			var translationOptions = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
+			TranslationOptions = translationOptions;
 		}
 		public string SerializeState()
 		{
-			return JsonConvert.SerializeObject(TranslationOptions);
+			var translationProviderState = JsonConvert.SerializeObject(TranslationOptions);
+			return translationProviderState;
 		}
 
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)

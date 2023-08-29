@@ -1,24 +1,50 @@
-﻿using System.Globalization;
-using LanguageMappingProvider.Model;
+﻿using System.Collections.Generic;
+using System.Linq;
 using LanguageWeaverProvider.ViewModel;
-using Sdl.Core.Globalization;
+using Newtonsoft.Json;
+using Sdl.LanguagePlatform.Core;
 
 namespace LanguageWeaverProvider.Model
 {
 	public class PairMapping : BaseViewModel
 	{
-		public PairMapping(LanguageMapping sourceCode, LanguageMapping targetCode)
-		{
-			DisplayName = $"{sourceCode.Name} ({sourceCode.Region} - {targetCode.Name} ({targetCode.Region}";
+		PairModel _selectedModel;
+		PairDictionary _selectedDictionary;
 
-			SourceCode = sourceCode.LanguageCode;
-			TargetCode = targetCode.LanguageCode;
-		}
-
-		public string DisplayName { get; private set; }
+		public string DisplayName { get; set; }
 
 		public string SourceCode { get; set; }
 
 		public string TargetCode { get; set; }
+
+		public LanguagePair LanguagePair { get; set; }
+
+		public List<PairModel> Models { get; set; }
+
+		public PairModel SelectedModel
+		{
+			get => _selectedModel;
+			set
+			{
+				_selectedModel = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(LinguisticOptions));
+			}
+		}
+
+		public List<PairDictionary> Dictionaries { get; set; }
+
+		public PairDictionary SelectedDictionary
+		{
+			get => _selectedDictionary;
+			set
+			{
+				_selectedDictionary = value;
+				OnPropertyChanged();
+			}
+		}
+
+		[JsonIgnore]
+		public List<LinguisticOption> LinguisticOptions => SelectedModel?.LinguisticOptions;
 	}
 }

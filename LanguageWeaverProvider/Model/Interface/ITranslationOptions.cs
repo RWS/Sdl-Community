@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Documents;
 
 namespace LanguageWeaverProvider.Model.Interface
 {
 	public interface ITranslationOptions
 	{
-		CloudCredentials CloudCredentials { get; set; }
+		Uri Uri { get; }
 
-		PluginVersion Version { get; set; }
+		ProviderSettings ProviderSettings { get; set; }
 
 		AuthenticationType AuthenticationType { get; set; }
 
-		List<PairMapping> PairMappings { get; set; }
+		PluginVersion Version { get; set; }
 
-		Uri Uri { get; }
+		CloudCredentials CloudCredentials { get; set; }
+
+		List<PairMapping> PairMappings { get; set; }
 	}
 }

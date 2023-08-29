@@ -5,9 +5,9 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace LanguageWeaverProvider
 {
-	[TranslationProviderFactory(Id = "Translation_Provider_Plug_inFactory",
-								Name = "Translation_Provider_Plug_inFactory",
-								Description = "Translation_Provider_Plug_inFactory")]
+	[TranslationProviderFactory(Id = Constants.Provider_TranslationProviderFactory,
+								Name = Constants.Provider_TranslationProviderFactory,
+								Description = Constants.Provider_TranslationProviderFactory)]
 	internal class TranslationProviderFactory : ITranslationProviderFactory
 	{
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)

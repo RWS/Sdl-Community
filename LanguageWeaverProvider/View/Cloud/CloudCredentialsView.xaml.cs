@@ -19,11 +19,6 @@ namespace LanguageWeaverProvider.View.Cloud
 			(DataContext as CloudCredentialsViewModel).UserPassword = (sender as PasswordBox).Password;
         }
 
-		private void ClientID_Changed(object sender, RoutedEventArgs e)
-		{
-			(DataContext as CloudCredentialsViewModel).ClientId = (sender as PasswordBox).Password;
-		}
-
 		private void ClientSecret_Changed(object sender, RoutedEventArgs e)
 		{
 			(DataContext as CloudCredentialsViewModel).ClientSecret = (sender as PasswordBox).Password;
