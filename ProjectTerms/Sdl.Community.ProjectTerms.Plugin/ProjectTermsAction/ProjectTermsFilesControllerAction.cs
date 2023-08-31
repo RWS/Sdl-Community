@@ -1,8 +1,11 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Sdl.Community.ProjectTerms.Plugin.Views;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
@@ -12,13 +15,16 @@ namespace Sdl.Community.ProjectTerms.Plugin.ProjectTermsAction
     [ActionLayout(typeof(TranslationStudioDefaultContextMenus.FilesContextMenuLocation), 2, DisplayType.Large)]
     public class ProjectTermsFilesControllerAction : AbstractViewControllerAction<FilesController>
     {
-	    public override void Initialize()
+		private FilesController _filesController;
+		public override void Initialize()
 	    {
 		    base.Initialize();
 		    Text = "Extract Project Terms";
-	    }
-    
-	    protected override void Execute()
+			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
+			_filesController.SelectedFilesChanged += _filesController_SelectedFilesChanged;
+		}
+				
+		protected override void Execute()
         {
             if (Utils.Utils.VerifySingleFileProjectType())
             {
@@ -31,5 +37,44 @@ namespace Sdl.Community.ProjectTerms.Plugin.ProjectTermsAction
             var parent = projectTermsView.ParentForm;
             projectTermsView.ShowDialog(parent);
         }
-    }
+		private void _filesController_SelectedFilesChanged(object sender, EventArgs e)
+		{
+			// check if selected project having files available or not 
+			var _selectedFiles = _filesController.SelectedFiles.FirstOrDefault();
+			if (_selectedFiles != null)
+			{
+				// check file available or not
+				if (File.Exists(_selectedFiles.LocalFilePath))
+				{
+					EnableAction(true);
+				}
+				else
+				{
+					EnableAction(false);
+				}
+
+			}
+			else
+			{
+				var _currentVisibleFiles = _filesController.CurrentVisibleFiles.FirstOrDefault();
+				if(_currentVisibleFiles != null )
+				{
+					// check file available or not
+					if (File.Exists(_currentVisibleFiles.LocalFilePath))
+					{
+						EnableAction(true);
+					}
+					else
+					{
+						EnableAction(false);
+					}
+
+				}
+			}
+		}
+		public void EnableAction(bool enable)
+		{
+			Enabled = enable;
+		}
+	}
 }
