@@ -362,5 +362,10 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
 			}
 		}
 		#endregion
+
+		private void ProjectTermsView_FormClosed(object sender, FormClosedEventArgs e)
+		{
+			viewModel.UpdateTerms(viewModel.Filters.Occurrences, viewModel.Filters.Length);
+		}
 	}
 }
