@@ -120,6 +120,7 @@
                    DockPanel.Dock="Bottom"
                    VerticalAlignment="Bottom">
             <Button Content="Browse"
+                    Name="Browse_Button"
                     Margin="0 0 5 0"
                     Focusable="False"
                     Click="BrowseButton_Click"
@@ -138,6 +139,7 @@
                     DockPanel.Dock="Right"
                     HorizontalAlignment="Right" />
             <Button Content="Import glossaries"
+                    Name="ImportGlossaries_Button"
                     DockPanel.Dock="Right"
                     IsDefault="True"
                     Click="ImportButton_Click"

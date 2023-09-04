@@ -18,14 +18,21 @@ namespace Sdl.Community.DeepLMTProvider.UI
         private ObservableCollection<GlossaryItem> _glossaries;
         private bool _isEditing;
 
-        public BrowseGlossariesWindow(List<string> supportedLanguages, IBrowseDialog openFileDialog)
+        public BrowseGlossariesWindow(List<string> supportedLanguages, IBrowseDialog openFileDialog, bool isAddNewGlossaryWindow = false)
         {
+
             Glossaries = new ObservableCollection<GlossaryItem>();
             Glossaries.CollectionChanged += Glossaries_CollectionChanged;
 
             SupportedLanguages = supportedLanguages;
             OpenFileDialog = openFileDialog;
             InitializeComponent();
+
+            if (isAddNewGlossaryWindow)
+            {
+                Browse_Button.Visibility = Visibility.Collapsed;
+                ImportGlossaries_Button.Content = "Add new glossary";
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -78,8 +85,8 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         private void AddNewGlossary(string fn)
         {
-            //TODO Delete Source and Target (testing purposes)
-            if (Glossaries.All(g => g.Path != fn)) Glossaries.Add(new GlossaryItem(fn) { SourceLanguage = "EN", TargetLanguage = "DE" });
+            if (Glossaries.All(g => g.Path != fn))
+                Glossaries.Add(new GlossaryItem(fn) /*{ SourceLanguage = "EN", TargetLanguage = "DE" }*/);
         }
 
         private void BrowseButton_Click(object sender, RoutedEventArgs e)

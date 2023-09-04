@@ -55,7 +55,7 @@
             
             <Style TargetType="DataGridCell">
                 <Setter Property="Focusable"
-                        Value="False" />
+                        Value="True" />
             </Style>
 
             <converters:AddAllItemConverter x:Key="AddAllItemConverter" />
@@ -188,6 +188,12 @@
                     HorizontalAlignment="Left"
                     Orientation="Horizontal">
 
+            <Button DockPanel.Dock="Left"
+                    Margin="0 0 2 0"
+                    ToolTip="Add new glossary"
+                    Command="{Binding AddNewGlossaryCommand}"
+                    Content="➕" />
+
             <Button Content="📂"
                     Margin="0 0 5 0"
                     FontSize="18"
@@ -220,6 +226,7 @@
 
                 <Path Data="F1 M512,512z M0,0z M421.24,269.93L451.24,269.93 451.24,429.84A48.72,48.72,0,0,1,402.58,478.5L82.77,478.5A48.72,48.72,0,0,1,34.11,429.84L34.11,110A48.72,48.72,0,0,1,82.77,61.37L242.68,61.37 242.68,91.37 82.77,91.37A18.68,18.68,0,0,0,64.11,110L64.11,429.84A18.68,18.68,0,0,0,82.77,448.5L402.58,448.5A18.68,18.68,0,0,0,421.24,429.84z M352.24,33.5L352.24,63.5 426.64,63.5 249.5,240.68 270.71,261.89 447.89,84.71 447.89,159.11 477.89,159.11 477.89,33.5z"
                       Height="18"
+                      Margin="0 0 5 -2"
                       Stretch="Uniform"
                       StrokeThickness="0.1">
                     <Path.Style>
@@ -243,7 +250,7 @@
             </Button>
 
             <Button Content="🗑️"
-                    Margin="0 0 5 0"
+                    Margin="-5 0 0 0"
                     Click="DeleteButton_Click"
                     ToolTip="Delete selected glossaries (Delete)"
                     FontSize="16"
