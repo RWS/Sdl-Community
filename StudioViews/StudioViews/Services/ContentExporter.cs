@@ -15,11 +15,12 @@ namespace Sdl.Community.StudioViews.Services
 		private readonly SegmentBuilder _segmentBuilder;
 		private readonly List<string> _projectFilesFiltered;
 		private readonly List<string> _subSegmentParagraphUnitIds;
+		private readonly Action<string, int, int> _progressLogger;
 		private IFileProperties _fileProperties;
 		private string _productName;
 		private SegmentPairProcessor _segmentPairProcessor;
-		
-		public ContentExporter(List<SegmentPairInfo> selectedSegments, SegmentBuilder segmentBuilder)
+
+		public ContentExporter(List<SegmentPairInfo> selectedSegments, SegmentBuilder segmentBuilder, Action<string, int, int> progressLogger)
 		{
 			_selectedSegments = selectedSegments;
 			_segmentBuilder = segmentBuilder;
@@ -27,6 +28,8 @@ namespace Sdl.Community.StudioViews.Services
 			_projectFilesFiltered = new List<string>();
 			_subSegmentParagraphUnitIds = new List<string>();
 			SegmentPairInfos = new List<SegmentPairInfo>();
+
+			_progressLogger = progressLogger;
 		}
 
 		public List<SegmentPairInfo> SegmentPairInfos { get; }
@@ -70,6 +73,8 @@ namespace Sdl.Community.StudioViews.Services
 					a.SegmentId == segmentPair.Properties.Id.Id))
 				{
 					segmentPairs.Add(segmentPair);
+					
+					_progressLogger.Invoke("Exporting segments", SegmentPairInfos.Count, _selectedSegments.Count);
 
 					var subSegmentParagraphUnitIds = GetSubSegmentParagraphUnitIds(segmentPair);
 					foreach (var paragraphUnitId in subSegmentParagraphUnitIds.Where(paragraphUnitId =>

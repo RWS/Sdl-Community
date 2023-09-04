@@ -410,7 +410,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 				if (exportResult.OutputFiles.Count > 1)
 				{
 					filePathOutput = _projectFileService.GetUniqueFileName(Path.Combine(ExportPath, "StudioViewsFile.sdlxliff"), "Filtered");
-					_sdlxliffMerger.MergeFiles(exportResult.OutputFiles.Select(a => a.FilePath).ToList(), filePathOutput, true);
+					_sdlxliffMerger.MergeFiles(exportResult.OutputFiles.Select(a => a.FilePath).ToList(), filePathOutput, true, ProgressLogger);
 
 					var outputFile = new OutputFile
 					{
@@ -439,6 +439,10 @@ namespace Sdl.Community.StudioViews.ViewModel
 			}
 		}
 
+		private void ProgressLogger(string message, int min, int max)
+		{
+			
+		}
 		private void Import(object param)
 		{
 			if (_activeDocument == null)
@@ -631,7 +635,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 			_activeDocument.Project.Save();
 			File.Copy(importResult.FilePath, importResult.BackupFilePath, true);
 
-			var updatedSegmentPairs = _sdlxliffReader.GetSegmentPairs(importFilePath);
+			var updatedSegmentPairs = _sdlxliffReader.GetSegmentPairs(importFilePath, false);
 
 			// If there are alignment differences, then the import needs to be performed after the document is closed
 			var alignmentDifferences = HasAlignmentDifferences(updatedSegmentPairs);
@@ -835,7 +839,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 				var filePathInputName = Path.GetFileName(filePathInput);
 				var filePathOutput = _projectFileService.GetUniqueFileName(Path.Combine(ExportPath, filePathInputName), "Filtered");
 
-				var outputFile = _sdlxliffExporter.ExportFile(segmentPairInfos, filePathInput, filePathOutput);
+				var outputFile = _sdlxliffExporter.ExportFile(segmentPairInfos, filePathInput, filePathOutput, ProgressLogger);
 				if (outputFile != null)
 				{
 					exportResult.OutputFiles.Add(outputFile);

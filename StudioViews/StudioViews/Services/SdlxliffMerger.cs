@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -14,8 +15,9 @@ namespace Sdl.Community.StudioViews.Services
 		/// <param name="files">List of files to merge</param>
 		/// <param name="mergeFilePath">The full path to the output merged systemFile</param>
 		/// <param name="cleanup">Deletes the input files if set to true</param>
+		/// <param name="progressLogger"></param>
 		/// <returns></returns>
-		public bool MergeFiles(IReadOnlyList<string> files, string mergeFilePath, bool cleanup)
+		public bool MergeFiles(IReadOnlyList<string> files, string mergeFilePath, bool cleanup, Action<string, int, int> progressLogger)
 		{
 			if (files.Count <= 1)
 			{
@@ -29,6 +31,8 @@ namespace Sdl.Community.StudioViews.Services
 
 			for (var i = 0; i < files.Count; i++)
 			{
+				progressLogger.Invoke("Merging files...", i + 1, files.Count);
+
 				string fileContent;
 				using (var reader = new StreamReader(files[i], Encoding.UTF8))
 				{
@@ -59,7 +63,7 @@ namespace Sdl.Community.StudioViews.Services
 				filesContent.Add(GetFileContent(fileContent));
 			}
 
-			var docInfoContent = BuildDocInfoContent(revDefsContent,  repDefsContent, cmtDefsContent);
+			var docInfoContent = BuildDocInfoContent(revDefsContent, repDefsContent, cmtDefsContent);
 			WriteMergedFile(mergeFilePath, docInfoContent, filesContent);
 
 			// cleanup individual export files
@@ -133,7 +137,7 @@ namespace Sdl.Community.StudioViews.Services
 				}
 				content.Append(@"</rev-defs>");
 			}
-			
+
 			if (repDefs.Count > 0)
 			{
 				content.Append(@"<rep-defs>");

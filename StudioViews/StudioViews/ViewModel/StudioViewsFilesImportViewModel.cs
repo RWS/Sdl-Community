@@ -20,18 +20,18 @@ using DataFormats = System.Windows.DataFormats;
 using DragEventArgs = System.Windows.DragEventArgs;
 using MessageBox = System.Windows.MessageBox;
 using Task = System.Threading.Tasks.Task;
+using System.Windows.Threading;
 
 namespace Sdl.Community.StudioViews.ViewModel
 {
 	public class StudioViewsFilesImportViewModel : BaseModel
 	{
-		private readonly Window _window;
+		private readonly Window _owner;
 		private readonly SdlxliffImporter _sdlxliffImporter;
 		private readonly SdlxliffReader _sdlxliffReader;
 		private readonly FilterItemService _filterItemService;
 		private readonly ProjectFileService _projectFileService;
 
-		private bool _progressIsVisible;
 		private FilesController _filesController;
 		private Language _language;
 		private ObservableCollection<SystemFileInfo> _files;
@@ -51,10 +51,18 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private ICommand _removeTemplateCommand;
 		private ICommand _dragDropCommand;
 
-		public StudioViewsFilesImportViewModel(Window window, FilesController filesController, Language language, ProjectFileService projectFileService,
+		private string _processingMessage;
+		private string _processingProgressMessage;
+		private string _processingFile;
+		private double _processingCurrentProgress;
+		private bool _processingIsIndeterminate;
+		private bool _processingShowPercentage;
+		private bool _progressIsVisible;
+
+		public StudioViewsFilesImportViewModel(Window owner, FilesController filesController, Language language, ProjectFileService projectFileService,
 			FilterItemService filterItemService, SdlxliffImporter sdlxliffImporter, SdlxliffReader sdlxliffReader)
 		{
-			_window = window;
+			_owner = owner;
 			_filterItemService = filterItemService;
 			_filesController = filesController;
 			_language = language;
@@ -165,6 +173,97 @@ namespace Sdl.Community.StudioViews.ViewModel
 			}
 		}
 
+		public string ProcessingFile
+		{
+			get => _processingFile;
+			set
+			{
+				if (Equals(value, _processingFile))
+				{
+					return;
+				}
+
+				_processingFile = value;
+				OnPropertyChanged(nameof(ProcessingFile));
+			}
+		}
+
+		public string ProcessingMessage
+		{
+			get => _processingMessage;
+			set
+			{
+				if (Equals(value, _processingMessage))
+				{
+					return;
+				}
+
+				_processingMessage = value;
+				OnPropertyChanged(nameof(ProcessingMessage));
+			}
+		}
+
+		public string ProcessingProgressMessage
+		{
+			get => _processingProgressMessage;
+			set
+			{
+				if (Equals(value, _processingProgressMessage))
+				{
+					return;
+				}
+
+				_processingProgressMessage = value;
+				OnPropertyChanged(nameof(ProcessingProgressMessage));
+			}
+		}
+
+		public double ProcessingCurrentProgress
+		{
+			get { return _processingCurrentProgress; }
+			set
+			{
+				if (Equals(value, _processingCurrentProgress))
+				{
+					return;
+				}
+
+				_processingCurrentProgress = value;
+				OnPropertyChanged("ProcessingCurrentProgress");
+			}
+		}
+
+		public bool ProcessingIsIndeterminate
+		{
+			get => _processingIsIndeterminate;
+			set
+			{
+				if (_processingIsIndeterminate == value)
+				{
+					return;
+				}
+
+				_processingIsIndeterminate = value;
+				OnPropertyChanged(nameof(ProcessingIsIndeterminate));
+				ProcessingShowPercentage = !_processingIsIndeterminate;
+			}
+		}
+
+		public bool ProcessingShowPercentage
+		{
+			get => _processingShowPercentage;
+			set
+			{
+				if (_processingShowPercentage == value)
+				{
+					return;
+				}
+
+				_processingShowPercentage = value;
+				OnPropertyChanged(nameof(ProcessingShowPercentage));
+			}
+		}
+
 		public bool ProgressIsVisible
 		{
 			get => _progressIsVisible;
@@ -249,13 +348,18 @@ namespace Sdl.Community.StudioViews.ViewModel
 		{
 			try
 			{
-				ProgressIsVisible = true;
+				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+					new Action(delegate
+					{
+						ProgressIsVisible = true;
+					}));
 
+				ProcessingDateTime = DateTime.Now;
 				var task = Task.Run(ImportFiles);
 				task.ContinueWith(t =>
 				{
 					ExportPath = Path.GetDirectoryName(task.Result.FirstOrDefault()?.FilePath);
-					ProcessingDateTime = DateTime.Now;
+					
 					var logFileName = "StudioViews_" + "Import" + "_" + _projectFileService.GetDateTimeToFilePartString(ProcessingDateTime) + ".log";
 					LogFilePath = Path.Combine(ExportPath, logFileName);
 
@@ -310,14 +414,20 @@ namespace Sdl.Community.StudioViews.ViewModel
 			catch (Exception e)
 			{
 				DialogResult = DialogResult.Abort;
-				ProgressIsVisible = false;
+
+				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+					new Action(delegate
+					{
+						ProgressIsVisible = false;
+					}));
+
 				MessageBox.Show(e.Message, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Error);
 			}
 		}
 
 		private void WriteLogFile(IReadOnlyCollection<ImportResult> importResults, List<SystemFileInfo> files, string logFilePath)
 		{
-			_window.Dispatcher.Invoke(
+			_owner.Dispatcher.Invoke(
 				delegate
 				{
 					using (var sr = new StreamWriter(logFilePath, false, Encoding.UTF8))
@@ -528,12 +638,32 @@ namespace Sdl.Community.StudioViews.ViewModel
 				throw new Exception(PluginResources.Message_Missing_Project_Files_Download_From_Server);
 			}
 
+			var fileIndex = 0;
 			foreach (var selectedFile in projectFiles)
 			{
+				fileIndex++;
+
+				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+					new Action(delegate
+					{
+						ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, fileIndex, projectFiles.Count());
+						ProcessingFile = Path.GetFileName(selectedFile.LocalFilePath);
+						ProcessingProgressMessage = "Updating segments...";
+						ProcessingCurrentProgress = 0;
+						ProcessingIsIndeterminate = true;
+					}));
+
 				var updatedFilePath = Path.GetTempFileName();
-				var importResult = _sdlxliffImporter.UpdateFile(updatedSegmentPairs, excludeFilterIds, selectedFile.LocalFilePath, updatedFilePath);
+				var importResult = _sdlxliffImporter.UpdateFile(updatedSegmentPairs, excludeFilterIds,
+					selectedFile.LocalFilePath, updatedFilePath);
 				importResults.Add(importResult);
 			}
+
+			_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+				new Action(delegate
+				{
+					ProgressIsVisible = false;
+				}));
 
 			return await Task.FromResult(new List<ImportResult>(importResults));
 		}
@@ -543,15 +673,29 @@ namespace Sdl.Community.StudioViews.ViewModel
 		{
 			var projectFiles = new List<ProjectFile>();
 			var project = _filesController.CurrentProject;
-			
-			foreach (var targetLanguageFile in project.GetTargetLanguageFiles(_language))
+
+			var targetLanguageFiles = project.GetTargetLanguageFiles(_language);
+			var fileIndex = 0;
+			foreach (var targetLanguageFile in targetLanguageFiles)
 			{
+				fileIndex++;
+
+				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+					new Action(delegate
+					{
+						ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, fileIndex, targetLanguageFiles.Length);
+						ProcessingFile = Path.GetFileName(targetLanguageFile.LocalFilePath);
+						ProcessingProgressMessage = "Loading project files...";
+						ProcessingCurrentProgress = 0;
+						ProcessingIsIndeterminate = true;
+					}));
+
 				if (targetLanguageFile.Role != FileRole.Translatable)
 				{
 					continue;
 				}
 
-				var segmentPairs = sdlXliffReader.GetSegmentPairs(targetLanguageFile.LocalFilePath);
+				var segmentPairs = sdlXliffReader.GetSegmentPairs(targetLanguageFile.LocalFilePath, true);
 				if (updatedSegmentPairs.Any(updatedSegmentPair => segmentPairs.Exists(a => a.ParagraphUnitId == updatedSegmentPair.ParagraphUnitId)))
 				{
 					projectFiles.Add(targetLanguageFile);
@@ -563,10 +707,23 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 		private List<SegmentPairInfo> GetUpdatedSegmentPairs(IEnumerable<string> importFiles, SdlxliffReader sdlXliffReader)
 		{
+
 			var updatedSegmentPairs = new List<SegmentPairInfo>();
+			var fileIndex = 0;
 			foreach (var importFile in importFiles)
 			{
-				var segmentPairs = sdlXliffReader.GetSegmentPairs(importFile);
+				fileIndex++;
+				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+					new Action(delegate
+					{
+						ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, fileIndex, importFiles.Count());
+						ProcessingFile = Path.GetFileName(importFile);
+						ProcessingProgressMessage = "Reading segments...";
+						ProcessingCurrentProgress = 0;
+						ProcessingIsIndeterminate = true;
+					}));
+
+				var segmentPairs = sdlXliffReader.GetSegmentPairs(importFile,  true);
 				foreach (var segmentPair in segmentPairs)
 				{
 					if (!updatedSegmentPairs.Exists(a => a.ParagraphUnitId == segmentPair.ParagraphUnitId &&
@@ -592,10 +749,10 @@ namespace Sdl.Community.StudioViews.ViewModel
 				delegate
 				{
 					ProgressIsVisible = false;
-					_window.Dispatcher.BeginInvoke(
+					_owner.Dispatcher.BeginInvoke(
 						new Action(delegate
 						{
-							_window?.Close();
+							_owner?.Close();
 						}));
 
 				}

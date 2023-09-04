@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Rws.MultiSelectComboBox.EventArgs;
 using Sdl.Community.StudioViews.Commands;
 using Sdl.Community.StudioViews.Controls.Folder;
@@ -26,7 +28,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 {
 	public class StudioViewsFilesSplitViewModel : BaseModel
 	{
-		private readonly Window _window;
+		private readonly Window _owner;
 		private readonly SdlxliffMerger _sdlxliffMerger;
 		private readonly SdlxliffExporter _sdlxliffExporter;
 		private readonly SdlxliffReader _sdlxliffReader;
@@ -34,7 +36,6 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private readonly FilterItemService _filterItemService;
 		private readonly ProjectFileService _projectFileService;
 		private readonly FileBasedProject _project;
-
 
 		private int _maxNumberOfWords;
 		private int _numberOfEqualParts;
@@ -46,11 +47,9 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private string _fileName;
 		private bool _exportPathIsValid;
 		private bool _fileNameIsValid;
-		private bool _progressIsVisible;
 
 		private List<FilterItem> _filterItems;
 		private ObservableCollection<FilterItem> _selectedExcludeFilterItems;
-
 
 		private ICommand _clearFiltersCommand;
 		private ICommand _selectedItemsChangedCommand;
@@ -60,10 +59,19 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private ICommand _exportPathBrowseCommand;
 		private ICommand _openFolderInExplorerCommand;
 
-		public StudioViewsFilesSplitViewModel(Window window, FileBasedProject project, List<ProjectFile> selectedFiles, ProjectFileService projectFileService,
+		private string _processingMessage;
+		private string _processingProgressMessage;
+		private string _processingFile;
+		private double _processingCurrentProgress;
+		private bool _processingIsIndeterminate;
+		private bool _processingShowPercentage;
+		private bool _progressIsVisible;
+		private bool _cancelIsVisible;
+
+		public StudioViewsFilesSplitViewModel(Window owner, FileBasedProject project, List<ProjectFile> selectedFiles, ProjectFileService projectFileService,
 			FilterItemService filterItemService, SdlxliffMerger sdlxliffMerger, SdlxliffExporter sdlxliffExporter, SdlxliffReader sdlxliffReader)
 		{
-			_window = window;
+			_owner = owner;
 			_project = project;
 			_selectedFiles = selectedFiles;
 			_projectFileService = projectFileService;
@@ -91,6 +99,128 @@ namespace Sdl.Community.StudioViews.ViewModel
 		public ICommand ResetCommand => _resetCommand ?? (_resetCommand = new CommandHandler(Reset));
 
 		public string WindowTitle { get; set; }
+
+		public string ProcessingFile
+		{
+			get => _processingFile;
+			set
+			{
+				if (Equals(value, _processingFile))
+				{
+					return;
+				}
+
+				_processingFile = value;
+				OnPropertyChanged(nameof(ProcessingFile));
+			}
+		}
+
+		public string ProcessingMessage
+		{
+			get => _processingMessage;
+			set
+			{
+				if (Equals(value, _processingMessage))
+				{
+					return;
+				}
+
+				_processingMessage = value;
+				OnPropertyChanged(nameof(ProcessingMessage));
+			}
+		}
+
+		public string ProcessingProgressMessage
+		{
+			get => _processingProgressMessage;
+			set
+			{
+				if (Equals(value, _processingProgressMessage))
+				{
+					return;
+				}
+
+				_processingProgressMessage = value;
+				OnPropertyChanged(nameof(ProcessingProgressMessage));
+			}
+		}
+
+		public double ProcessingCurrentProgress
+		{
+			get { return _processingCurrentProgress; }
+			set
+			{
+				if (Equals(value, _processingCurrentProgress))
+				{
+					return;
+				}
+
+				_processingCurrentProgress = value;
+				OnPropertyChanged("ProcessingCurrentProgress");
+			}
+		}
+
+		public bool ProcessingIsIndeterminate
+		{
+			get => _processingIsIndeterminate;
+			set
+			{
+				if (_processingIsIndeterminate == value)
+				{
+					return;
+				}
+
+				_processingIsIndeterminate = value;
+				OnPropertyChanged(nameof(ProcessingIsIndeterminate));
+				ProcessingShowPercentage = !_processingIsIndeterminate;
+			}
+		}
+
+		public bool ProcessingShowPercentage
+		{
+			get => _processingShowPercentage;
+			set
+			{
+				if (_processingShowPercentage == value)
+				{
+					return;
+				}
+
+				_processingShowPercentage = value;
+				OnPropertyChanged(nameof(ProcessingShowPercentage));
+			}
+		}
+
+		public bool ProgressIsVisible
+		{
+			get => _progressIsVisible;
+			set
+			{
+				if (_progressIsVisible == value)
+				{
+					return;
+				}
+
+				_progressIsVisible = value;
+				OnPropertyChanged(nameof(ProgressIsVisible));
+				OnPropertyChanged(nameof(IsEnabled));
+			}
+		}
+
+		public bool CancelIsVisible
+		{
+			get => _cancelIsVisible;
+			set
+			{
+				if (_cancelIsVisible == value)
+				{
+					return;
+				}
+
+				_cancelIsVisible = value;
+				OnPropertyChanged(nameof(CancelIsVisible));
+			}
+		}
 
 		public int MaxNumberOfWords
 		{
@@ -222,22 +352,6 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 				_selectedExcludeFilterItems = value;
 				OnPropertyChanged(nameof(SelectedExcludeFilterItems));
-			}
-		}
-
-		public bool ProgressIsVisible
-		{
-			get => _progressIsVisible;
-			set
-			{
-				if (_progressIsVisible == value)
-				{
-					return;
-				}
-
-				_progressIsVisible = value;
-				OnPropertyChanged(nameof(ProgressIsVisible));
-				OnPropertyChanged(nameof(IsEnabled));
 			}
 		}
 
@@ -388,13 +502,40 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 			try
 			{
-				ProgressIsVisible = true;
+
+				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+					new Action(delegate
+					{
+						ProgressIsVisible = true;
+					}));
+
+
 				ProcessingDateTime = DateTime.Now;
 				var logFileName = "StudioViews_" + "Split" + "_" + _projectFileService.GetDateTimeToFilePartString(ProcessingDateTime) + ".log";
 				LogFilePath = Path.Combine(ExportPath, logFileName);
 
+				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+					new Action(delegate
+					{
+						ProcessingMessage = "Identify segmentation markers...";
+						ProcessingFile = "...";
+						ProcessingProgressMessage = "...";
+						ProcessingCurrentProgress = 0;
+						ProcessingIsIndeterminate = true;
+					}));
+
 				if (!HasSegmentationMarkers())
 				{
+					_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+						new Action(delegate
+						{
+							ProcessingMessage = "Applying segmentation markers...";
+							ProcessingFile = "...";
+							ProcessingProgressMessage = "...";
+							ProcessingCurrentProgress = 0;
+							ProcessingIsIndeterminate = true;
+						}));
+
 					// needed to add segmentation markers to the files
 					RunPretranslateWithEmptyTm(_project, _selectedFiles.FirstOrDefault()?.Language);
 				}
@@ -415,7 +556,13 @@ namespace Sdl.Community.StudioViews.ViewModel
 			catch (Exception e)
 			{
 				DialogResult = DialogResult.Abort;
-				ProgressIsVisible = false;
+
+				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+					new Action(delegate
+					{
+						ProgressIsVisible = false;
+					}));
+
 				MessageBox.Show(e.Message, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Error);
 			}
 		}
@@ -423,7 +570,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private void RunPretranslateWithEmptyTm(FileBasedProject project, Language langauge)
 		{
 			var operations = new ProjectReportsOperations(project);
-			
+
 			var tmProviderConfigOrig = project.GetTranslationProviderConfiguration();
 			var tmProviderConfig = project.GetTranslationProviderConfiguration();
 
@@ -462,7 +609,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 		{
 			foreach (var selectedFile in _selectedFiles)
 			{
-				var segmentPairs = _sdlxliffReader.GetSegmentPairs(selectedFile?.LocalFilePath);
+				var segmentPairs = _sdlxliffReader.GetSegmentPairs(selectedFile?.LocalFilePath, true);
 				if (segmentPairs.Count > 0)
 				{
 					return true;
@@ -474,7 +621,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 		private void WriteLogFile(ExportResult exportResult, string logFilePath)
 		{
-			_window.Dispatcher.Invoke(
+			_owner.Dispatcher.Invoke(
 				delegate
 				{
 					using (var sr = new StreamWriter(logFilePath, false, Encoding.UTF8))
@@ -545,7 +692,17 @@ namespace Sdl.Community.StudioViews.ViewModel
 				var filePathOutput =
 					_projectFileService.GetUniqueFileName(Path.Combine(fileDirectory, "StudioViewsFile.sdlxliff"), string.Empty);
 
-				var mergedFile = _sdlxliffMerger.MergeFiles(files, filePathOutput, false);
+				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+					new Action(delegate
+					{
+						ProcessingMessage = "Merging selected files...";
+						ProcessingFile = Path.GetFileName(filePathOutput);
+						ProcessingProgressMessage = "...";
+						ProcessingCurrentProgress = 0;
+						ProcessingIsIndeterminate = false;
+					}));
+
+				var mergedFile = _sdlxliffMerger.MergeFiles(files, filePathOutput, false, ProgressLogger);
 				if (mergedFile)
 				{
 					filePathInput = filePathOutput;
@@ -558,7 +715,18 @@ namespace Sdl.Community.StudioViews.ViewModel
 				}
 			}
 
-			var segmentPairs = _sdlxliffReader.GetSegmentPairs(filePathInput);
+
+			_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+				new Action(delegate
+				{
+					ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, 1, 1);
+					ProcessingFile = Path.GetFileName(filePathInput);
+					ProcessingProgressMessage = "Reading segments & calculating word counts...";
+					ProcessingCurrentProgress = 0;
+					ProcessingIsIndeterminate = true;
+				}));
+
+			var segmentPairs = _sdlxliffReader.GetSegmentPairs(filePathInput, false);
 
 			var segmentPairSplits = GetSegmentPairSplits(segmentPairs);
 			if (segmentPairSplits == null)
@@ -573,7 +741,18 @@ namespace Sdl.Community.StudioViews.ViewModel
 			{
 				fileIndex++;
 				var filePathOutput = GetFilePathOutput(FileName, ExportPath, fileIndex);
-				var outputFile = _sdlxliffExporter.ExportFile(segmentPairSplit, filePathInput, filePathOutput);
+
+				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+				new Action(delegate
+				{
+					ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, fileIndex, segmentPairSplits.Count());
+					ProcessingFile = Path.GetFileName(filePathOutput);
+					ProcessingProgressMessage = "Exporting segments...";
+					ProcessingCurrentProgress = 0;
+					ProcessingIsIndeterminate = false;
+				}));
+
+				var outputFile = _sdlxliffExporter.ExportFile(segmentPairSplit, filePathInput, filePathOutput, ProgressLogger);
 
 				exportResult.OutputFiles.Add(outputFile);
 			}
@@ -592,6 +771,12 @@ namespace Sdl.Community.StudioViews.ViewModel
 			exportResult.Message += string.Format(PluginResources.Message_Exported_Segments_into_Files,
 				exportResult.OutputFiles.Sum(a => a.SegmentCount), fileIndex);
 
+
+			_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+				new Action(delegate
+				{
+					ProgressIsVisible = false;
+				}));
 
 			return await Task.FromResult(exportResult);
 		}
@@ -658,11 +843,11 @@ namespace Sdl.Community.StudioViews.ViewModel
 				// include the word count based on the segment status properties selected by the user
 				var status = segmentPairInfo.SegmentPair.Properties.ConfirmationLevel.ToString();
 				var match = _filterItemService.GetTranslationOriginType(segmentPairInfo.SegmentPair.Target.Properties.TranslationOrigin);
-				if ((!segmentPairInfo.SegmentPair.Properties.IsLocked || !excludeFilterIds.Exists(a => a == "Locked")) 
-				    && !excludeFilterIds.Exists(a => a == status) 
-				    && !excludeFilterIds.Exists(a => a == match))
+				if ((!segmentPairInfo.SegmentPair.Properties.IsLocked || !excludeFilterIds.Exists(a => a == "Locked"))
+					&& !excludeFilterIds.Exists(a => a == status)
+					&& !excludeFilterIds.Exists(a => a == match))
 				{
-					splitWordCount += segmentPairInfo.SourceWordCounts.Words;
+					splitWordCount += segmentPairInfo.SourceWordCounts?.Words ?? 0;
 				}
 
 				if (splitWordCount >= maxWordCount)
@@ -682,6 +867,35 @@ namespace Sdl.Community.StudioViews.ViewModel
 			return segmentPairsSplits;
 		}
 
+		private void ProgressLogger(string message, int min, int max)
+		{
+			if (ProcessingIsIndeterminate)
+			{
+				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+					new Action(delegate
+					{
+						ProcessingIsIndeterminate = false;
+					}));
+			}
+
+			_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+				new Action(delegate
+				{
+					ProcessingProgressMessage = message;
+					ProcessingCurrentProgress = GetPercentageValue(min, max);
+				}));
+		}
+
+		private int GetPercentageValue(int index, int total)
+		{
+			var currentIndex = Convert.ToDouble(index);
+			var totalItems = Convert.ToDouble(total);
+			var percentage = currentIndex / totalItems * 100;
+
+			var percentageValue = int.Parse(Math.Truncate(percentage).ToString(CultureInfo.InvariantCulture));
+			return percentageValue;
+		}
+
 		private void AttemptToCloseWindow()
 		{
 			var task = Task.Run(
@@ -694,10 +908,10 @@ namespace Sdl.Community.StudioViews.ViewModel
 				delegate
 				{
 					ProgressIsVisible = false;
-					_window.Dispatcher.BeginInvoke(
+					_owner.Dispatcher.BeginInvoke(
 						new Action(delegate
 						{
-							_window?.Close();
+							_owner?.Close();
 						}));
 				}
 			);
@@ -720,10 +934,10 @@ namespace Sdl.Community.StudioViews.ViewModel
 				var match = _filterItemService.GetTranslationOriginType(segmentPairInfo.SegmentPair.Target.Properties
 					.TranslationOrigin);
 				if ((!segmentPairInfo.SegmentPair.Properties.IsLocked || !excludeFilterIds.Exists(a => a == "Locked"))
-				    && !excludeFilterIds.Exists(a => a == status)
-				    && !excludeFilterIds.Exists(a => a == match))
+					&& !excludeFilterIds.Exists(a => a == status)
+					&& !excludeFilterIds.Exists(a => a == match))
 				{
-					splitWordCount += segmentPairInfo.SourceWordCounts.Words;
+					splitWordCount += segmentPairInfo.SourceWordCounts?.Words ?? 0;
 				}
 			}
 

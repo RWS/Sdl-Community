@@ -7,14 +7,17 @@ namespace Sdl.Community.StudioViews.Services
 {
 	public class SdlxliffReader
 	{
-		public List<SegmentPairInfo> GetSegmentPairs(string filePathInput)
+		public List<SegmentPairInfo> GetSegmentPairs(string filePathInput, bool ignoreWordCountInfo)
 		{
 			var dummyFile = Path.GetTempFileName();
 			
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePathInput, dummyFile, null);
 			
-			var contentReader = new ContentReader();
+			var contentReader = new ContentReader
+			{
+				IgnoreWordCountInfo = ignoreWordCountInfo
+			};
 
 			converter.AddBilingualProcessor(contentReader);
 			converter.SynchronizeDocumentProperties();

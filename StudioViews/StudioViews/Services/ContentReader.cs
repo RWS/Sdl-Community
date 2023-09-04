@@ -19,6 +19,7 @@ namespace Sdl.Community.StudioViews.Services
 		public ContentReader()
 		{
 			SegmentPairInfos = new List<SegmentPairInfo>();
+			IgnoreWordCountInfo = false;
 		}
 
 		public List<SegmentPairInfo> SegmentPairInfos { get; }
@@ -26,6 +27,8 @@ namespace Sdl.Community.StudioViews.Services
 		public CultureInfo SourceLanguage { get; private set; }
 
 		public CultureInfo TargetLanguage { get; private set; }
+
+		public bool IgnoreWordCountInfo { get; set; }
 
 		public override void Initialize(IDocumentProperties documentInfo)
 		{
@@ -63,7 +66,11 @@ namespace Sdl.Community.StudioViews.Services
 
 				try
 				{
-					segmentPairInfo.SourceWordCounts = SegmentPairProcessor.GetSegmentPairInfo(segmentPair)?.SourceWordCounts;
+					if (!IgnoreWordCountInfo)
+					{
+						segmentPairInfo.SourceWordCounts =
+							SegmentPairProcessor.GetSegmentPairInfo(segmentPair)?.SourceWordCounts;
+					}
 				}
 				catch
 				{
