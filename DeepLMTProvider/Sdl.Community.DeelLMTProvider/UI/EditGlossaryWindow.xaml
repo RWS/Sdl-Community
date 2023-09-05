@@ -164,7 +164,6 @@
                     Margin="0 5"
                     Click="AddRowButton_Click"
                     ToolTip="Add new entry"
-                    IsDefault="True"
                     Content="➕" />
             <Button Margin="0 5"
                     Name="Edit_Button"

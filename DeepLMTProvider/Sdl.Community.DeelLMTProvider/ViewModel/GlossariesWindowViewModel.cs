@@ -7,7 +7,6 @@ using Sdl.Community.DeepLMTProvider.Service;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -19,11 +18,11 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 {
     public class GlossariesWindowViewModel : ViewModel
     {
+        private string _filterQuery;
         private ObservableCollection<GlossaryInfo> _glossaries;
         private bool _isLoading;
         private GlossaryInfo _selectedGlossary;
         private GlossaryLanguagePair _selectedLanguagePair;
-        private string _filterQuery;
 
         public GlossariesWindowViewModel(IDeepLGlossaryClient deepLGlossaryClient, IMessageService messageService, IGlossaryBrowserService glossaryBrowserService, IGlossaryReaderWriterService glossaryReaderWriterService, IProcessStarter processStarter, IEditGlossaryService editGlossaryService)
         {
@@ -42,12 +41,25 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             SupportedLanguagePairs = result;
         }
 
+        public event Action<Glossary> ShouldBackUp;
+
+        public ICommand AddNewGlossaryCommand => new AsyncParameterlessCommand(AddNewGlossary);
         public ICommand CancelCommand => new ParameterlessCommand(CancelOperation);
         public bool CancellationRequested { get; set; }
         public ICommand DeleteGlossariesCommand => new AsyncParameterlessCommand(async () => await ExecuteLongMethod(DeleteGlossaries));
         public ICommand EditGlossaryCommand => new AsyncParameterlessCommand(async () => await ExecuteLongMethod(EditGlossary));
 
         public ICommand ExportGlossariesCommand => new AsyncCommandWithParameter(async f => await ExecuteLongMethod(() => ExportGlossaries(f)));
+
+        public string FilterQuery
+        {
+            get => _filterQuery;
+            set
+            {
+                SetField(ref _filterQuery, value);
+                FilterByQuery(value);
+            }
+        }
 
         public ObservableCollection<GlossaryInfo> Glossaries
         {
@@ -108,24 +120,25 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         private List<GlossaryInfo> SelectedGlossaries => Glossaries.Where(g => g.IsChecked).ToList();
 
-        public string FilterQuery
+        private async Task AddNewGlossary()
         {
-            get => _filterQuery;
-            set
+            var glossarySupportedLanguages = SupportedLanguagePairs.Select(glp => glp.SourceLanguage).Distinct().ToList();
+            var existingGlossaryNames = Glossaries.Select(g => g.Name).ToList();
+
+            if (GlossaryBrowserService.OpenNewGlossaryDialog(existingGlossaryNames, glossarySupportedLanguages, out var newGlossary))
             {
-                SetField(ref _filterQuery, value);
-                FilterByQuery(value);
+                var (success, glossary, message) =
+                    await DeepLGlossaryClient.ImportGlossary(
+                        new Glossary
+                        {
+                            Entries = new List<GlossaryEntry> { new() { SourceTerm = "new entry", TargetTerm = "new entry" } },
+                            Name = newGlossary.Name,
+                            SourceLanguage = newGlossary.SourceLanguage,
+                            TargetLanguage = newGlossary.TargetLanguage
+                        }, DeepLTranslationProviderClient.ApiKey);
+
+                if (!HandleErrorIfFound(success, message)) Glossaries.Add(glossary);
             }
-        }
-
-        private void FilterByQuery(string value)
-        {
-            var collectionView = CollectionViewSource.GetDefaultView(Glossaries);
-            if (string.IsNullOrWhiteSpace(value)) { collectionView.Filter = null; return; }
-
-            collectionView.Filter = null;
-            collectionView.Filter = glossary =>
-                ((GlossaryInfo)glossary).Name.ToLower().Contains(value.ToLower());
         }
 
         private void CancelOperation()
@@ -195,13 +208,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             SelectedGlossary = glossaryInfo;
         }
 
-        private void RaiseBackUp(Glossary glossary)
-        {
-            ShouldBackUp?.Invoke(glossary);
-        }
-
-        public event Action<Glossary> ShouldBackUp;
-
         /// <summary>
         /// Wrapper for executing methods that need a progress bar
         /// </summary>
@@ -248,6 +254,16 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             collectionView.Filter = null;
             collectionView.Filter = collectionViewFilter;
+        }
+
+        private void FilterByQuery(string value)
+        {
+            var collectionView = CollectionViewSource.GetDefaultView(Glossaries);
+            if (string.IsNullOrWhiteSpace(value)) { collectionView.Filter = null; return; }
+
+            collectionView.Filter = null;
+            collectionView.Filter = glossary =>
+                ((GlossaryInfo)glossary).Name.ToLower().Contains(value.ToLower());
         }
 
         private bool HandleErrorIfFound(bool success, string message, [CallerMemberName] string failingMethod = null)
@@ -299,6 +315,11 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             var (success, result, message) = DeepLGlossaryClient.GetGlossaries(DeepLTranslationProviderClient.ApiKey, false).Result;
             if (HandleErrorIfFound(success, message)) return;
             Glossaries = new ObservableCollection<GlossaryInfo>(result);
+        }
+
+        private void RaiseBackUp(Glossary glossary)
+        {
+            ShouldBackUp?.Invoke(glossary);
         }
     }
 }

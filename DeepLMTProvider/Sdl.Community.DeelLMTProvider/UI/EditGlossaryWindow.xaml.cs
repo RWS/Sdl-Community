@@ -1,8 +1,9 @@
-﻿using NLog;
-using Sdl.Community.DeepLMTProvider.Command;
+﻿using Sdl.Community.DeepLMTProvider.Command;
+using Sdl.Community.DeepLMTProvider.Extensions;
 using Sdl.Community.DeepLMTProvider.Model;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -43,7 +44,13 @@ namespace Sdl.Community.DeepLMTProvider.UI
         public ObservableCollection<GlossaryEntry> GlossaryEntries
         {
             get => _glossaryEntries;
-            set => SetField(ref _glossaryEntries, value);
+            set
+            {
+                SetField(ref _glossaryEntries, value);
+
+                _glossaryEntries.CollectionChanged += GlossaryEntries_CollectionChanged;
+                _glossaryEntries.ForEach(ge => ge.PropertyChanged += (_, _) => GlossaryEntries_CollectionChanged(null, null));
+            }
         }
 
         public string GlossaryName
@@ -77,43 +84,26 @@ namespace Sdl.Community.DeepLMTProvider.UI
             return true;
         }
 
-        private void AddRowButton_Click(object sender, RoutedEventArgs e)
+        private void AddRow()
         {
             if (!GlossaryEntries.Any(ge => ge.IsEmpty())) GlossaryEntries.Add(new GlossaryEntry());
+        }
+
+        private void AddRowButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddRow();
             IsEditing = true;
         }
 
-        private void ApplyButton_Click(object sender, RoutedEventArgs e)
-        {
-            FinishEditing();
-        }
+        private void ApplyButton_Click(object sender, RoutedEventArgs e) => CloseEditingWindow();
 
-        private void FinishEditing()
+        private void CloseEditingWindow()
         {
-            var termsToBeRemoved = GlossaryEntries.Where(glossaryEntry => glossaryEntry.SourceTerm == null || glossaryEntry.TargetTerm == null).ToList();
-            termsToBeRemoved.ForEach(glossaryEntry => GlossaryEntries.Remove(glossaryEntry));
-
             DialogResult = true;
             Close();
         }
 
         private void DeleteEntry(object glossaryEntry) => GlossaryEntries.Remove((GlossaryEntry)glossaryEntry);
-
-        private void Filter()
-        {
-            var collectionView = CollectionViewSource.GetDefaultView(GlossaryEntries);
-
-            if (string.IsNullOrWhiteSpace(FilterQuery))
-            {
-                collectionView.Filter = null;
-                return;
-            }
-
-            collectionView.Filter = null;
-            collectionView.Filter = entry =>
-                ((GlossaryEntry)entry).SourceTerm.Contains(FilterQuery) ||
-                ((GlossaryEntry)entry).TargetTerm.Contains(FilterQuery);
-        }
 
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
@@ -158,7 +148,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
                     break;
 
                 case "Enter":
-                    if (!IsEditing) FinishEditing();
+                    if (!IsEditing) CloseEditingWindow();
                     else IsEditing = false;
                     break;
 
@@ -166,6 +156,40 @@ namespace Sdl.Community.DeepLMTProvider.UI
                     GlossaryEntries.Add(new GlossaryEntry());
                     break;
             }
+        }
+
+        private void Filter()
+        {
+            var collectionView = CollectionViewSource.GetDefaultView(GlossaryEntries);
+
+            if (string.IsNullOrWhiteSpace(FilterQuery))
+            {
+                collectionView.Filter = null;
+                return;
+            }
+
+            collectionView.Filter = null;
+            collectionView.Filter = entry =>
+                ((GlossaryEntry)entry).SourceTerm.Contains(FilterQuery) ||
+                ((GlossaryEntry)entry).TargetTerm.Contains(FilterQuery);
+        }
+
+        private void GlossaryEntries_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e?.Action == NotifyCollectionChangedAction.Add)
+                ((GlossaryEntry)e.NewItems[0]).PropertyChanged +=
+                    (_, _) => GlossaryEntries_CollectionChanged(null, null);
+
+            var termsToBeRemoved = GlossaryEntries.Where(glossaryEntry =>
+                glossaryEntry.IsInvalid()).ToList();
+
+            var duplicates = GlossaryEntries
+                .GroupBy(ge => ge.SourceTerm)
+                .Where(g => g.Count() > 1)
+                .Select(g => g.Key)
+                .ToList();
+
+            Apply_Button.IsEnabled = !termsToBeRemoved.Any() && !duplicates.Any() && GlossaryEntries.Any();
         }
     }
 }
