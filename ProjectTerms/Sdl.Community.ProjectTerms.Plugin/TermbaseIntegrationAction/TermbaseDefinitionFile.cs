@@ -25,7 +25,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 
 				var result = string.Empty;
 
-				using (Stream stream = typeof(TermbaseDefinitionFile).Assembly.GetManifestResourceStream("Sdl.Community.ProjectTerms.Plugin.Resources." + fileName))
+				using (Stream stream = new MemoryStream(PluginResources.termbaseDefaultDefinitionFile))
 				{
 					using (StreamReader sr = new StreamReader(stream))
 					{
@@ -171,17 +171,17 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 
 				string longNameLanguages = string.Join("|", languages.Keys);
 				string shortNameLanguages = string.Join("|", languages.Values);
-				
+
 				XmlAttributeCollection attributeTypeAttributes = doc.GetElementsByTagName("AttributeType")[1].Attributes;
 
 				foreach (XmlAttribute attribute in attributeTypeAttributes)
 				{
-					if(attribute.Name == "values")
+					if (attribute.Name == "values")
 					{
 						attribute.Value = longNameLanguages;
 					}
 				}
-				
+
 				XmlAttributeCollection attributeTypeLangAttributes = doc.GetElementsByTagName("AttributeType")[2].Attributes;
 				foreach (XmlAttribute attribute in attributeTypeLangAttributes)
 				{
