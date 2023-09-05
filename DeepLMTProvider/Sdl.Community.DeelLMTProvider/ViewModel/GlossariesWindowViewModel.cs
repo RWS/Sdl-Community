@@ -131,7 +131,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                     await DeepLGlossaryClient.ImportGlossary(
                         new Glossary
                         {
-                            Entries = new List<GlossaryEntry>{new(){SourceTerm = "new entry", TargetTerm = "new entry"}},
+                            Entries = new List<GlossaryEntry> { new() { SourceTerm = "new entry", TargetTerm = "new entry" } },
                             Name = newGlossary.Name,
                             SourceLanguage = newGlossary.SourceLanguage,
                             TargetLanguage = newGlossary.TargetLanguage

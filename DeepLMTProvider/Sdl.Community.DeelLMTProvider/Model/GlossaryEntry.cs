@@ -21,5 +21,6 @@ namespace Sdl.Community.DeepLMTProvider.Model
         }
 
         public bool IsEmpty() => string.IsNullOrWhiteSpace(SourceTerm) && string.IsNullOrWhiteSpace(TargetTerm);
+        public bool IsInvalid() => string.IsNullOrWhiteSpace(SourceTerm) || string.IsNullOrWhiteSpace(TargetTerm);
     }
 }

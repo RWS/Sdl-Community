@@ -48,9 +48,11 @@ namespace Sdl.Community.DeepLMTProvider.Service
             return true;
         }
 
-        private string FindAvailableNewGlossaryName(List<string> existingGlossaryNames, int i = 0) =>
-            existingGlossaryNames.Any(gi => gi == $"New glossary {i}")
-                ? FindAvailableNewGlossaryName(existingGlossaryNames, i++)
+        private string FindAvailableNewGlossaryName(List<string> existingGlossaryNames, int i = 0)
+        {
+            return existingGlossaryNames.Any(gi => gi == $"New Glossary {i}")
+                ? FindAvailableNewGlossaryName(existingGlossaryNames, ++i)
                 : $"New Glossary {i}";
+        }
     }
 }
