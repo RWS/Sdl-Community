@@ -40,25 +40,18 @@ namespace Sdl.Community.ProjectTerms.Plugin.ProjectTermsAction
 		{
 			Enabled = false;
 			// check if selected project having files available or not 
-			var _selectedFiles = _filesController.SelectedFiles.FirstOrDefault();
-			if (_selectedFiles != null)
+			var _selectedFiles = _filesController.SelectedFiles.ToList();
+			if (_selectedFiles.Any(file => File.Exists(file.LocalFilePath)))
 			{
-				// check file available or not
-				if (File.Exists(_selectedFiles.LocalFilePath))
-				{
-					Enabled = true;
-				}
+				Enabled = true;
 			}
 			else
 			{
-				var _currentVisibleFiles = _filesController.CurrentVisibleFiles.FirstOrDefault();
-				if(_currentVisibleFiles != null )
+				var _currentVisibleFiles = _filesController.CurrentVisibleFiles.ToList();
+				// check file available or not
+				if (_currentVisibleFiles.Any(file => File.Exists(file.LocalFilePath)))
 				{
-					// check file available or not
-					if (File.Exists(_currentVisibleFiles.LocalFilePath))
-					{
-						Enabled = true;
-					}
+					Enabled = true;
 				}
 			}
 		}
