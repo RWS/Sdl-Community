@@ -19,7 +19,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.ProjectTermsAction
 		public override void Initialize()
 	    {
 		    base.Initialize();
-		    Text = "Extract Project Terms";
+		    Text = "Extract Project Terms";			
 			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
 			_filesController.SelectedFilesChanged += _filesController_SelectedFilesChanged;
 		}
@@ -39,6 +39,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.ProjectTermsAction
         }
 		private void _filesController_SelectedFilesChanged(object sender, EventArgs e)
 		{
+			Enabled = false;
 			// check if selected project having files available or not 
 			var _selectedFiles = _filesController.SelectedFiles.FirstOrDefault();
 			if (_selectedFiles != null)
@@ -46,13 +47,8 @@ namespace Sdl.Community.ProjectTerms.Plugin.ProjectTermsAction
 				// check file available or not
 				if (File.Exists(_selectedFiles.LocalFilePath))
 				{
-					EnableAction(true);
+					Enabled = true;
 				}
-				else
-				{
-					EnableAction(false);
-				}
-
 			}
 			else
 			{
@@ -62,19 +58,10 @@ namespace Sdl.Community.ProjectTerms.Plugin.ProjectTermsAction
 					// check file available or not
 					if (File.Exists(_currentVisibleFiles.LocalFilePath))
 					{
-						EnableAction(true);
+						Enabled = true;
 					}
-					else
-					{
-						EnableAction(false);
-					}
-
 				}
 			}
-		}
-		public void EnableAction(bool enable)
-		{
-			Enabled = enable;
 		}
 	}
 }

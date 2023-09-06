@@ -141,12 +141,20 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
 		#region Settings Group
 		private void numericUpDownTermsOccurrences_ValueChanged(object sender, EventArgs e)
 		{
-			viewModel.Filters.Occurrences = (int)numericUpDownTermsOccurrences.Value;
+			if(viewModel.Filters !=null)
+			{
+				viewModel.Filters.Occurrences = (int)numericUpDownTermsOccurrences.Value;
+			}
+			
 		}
 
 		private void numericUpDownTermsLength_ValueChanged(object sender, EventArgs e)
 		{
-			viewModel.Filters.Length = (int)numericUpDownTermsLength.Value;
+			if(viewModel.Filters != null)
+			{
+				viewModel.Filters.Length = (int)numericUpDownTermsLength.Value;
+			}
+			
 		}
 
 		private void AddTerm(string term)

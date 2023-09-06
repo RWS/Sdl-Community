@@ -35,11 +35,13 @@ namespace Sdl.Community.ProjectTerms.Plugin.ProjectTermsAction
         }
 		public override void Initialize()
 		{
-			_projectsController=SdlTradosStudio.Application.GetController<ProjectsController>();
+			
+			_projectsController =SdlTradosStudio.Application.GetController<ProjectsController>();
 			_projectsController.SelectedProjectsChanged += _projectsController_SelectedProjectsChanged;		
 		}
 		private void _projectsController_SelectedProjectsChanged(object sender, EventArgs e)
 		{
+			Enabled = false;
 			// check if selected project having files available or not 
 			var project = _projectsController.CurrentProject;			
 			if (project != null)
@@ -48,34 +50,16 @@ namespace Sdl.Community.ProjectTerms.Plugin.ProjectTermsAction
 				var files = GetFiles();
 				// check current project name and select project both should be same then option should be enabled
 				if (files != null && files.Count > 0 && _projectsController.SelectedProjects.Count() >0 && project.GetProjectInfo().Name== _projectsController.SelectedProjects.First().GetProjectInfo().Name)
-				{
-					bool isFileExist = false;
+				{					
 					foreach(ProjectFile file in files.ToList())
 					{
 						if(File.Exists(file.LocalFilePath))
 						{
-							isFileExist = true;
-							EnableAction(true);							
+							Enabled = true;
 						}
-					}		
-					if(!isFileExist)
-					{
-						EnableAction(false);
 					}
 				}
-				else
-				{
-					EnableAction(false);
-				}
 			}
-			else
-			{
-				EnableAction(false);
-			}
-		}
-		public void EnableAction(bool enable)
-		{
-			Enabled = enable;
 		}
 		private List<ProjectFile> GetFiles()
 		{
