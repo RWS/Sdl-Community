@@ -31,7 +31,6 @@ namespace Sdl.Community.ProjectTerms.Plugin.ProjectTermsAction
                 MessageBox.Show(PluginResources.Error_SingleFileProject, PluginResources.MessageType_Info);
                 return;
             }
-
             var projectTermsView = new ProjectTermsView();
             projectTermsView.ProjectSelected = false;
             var parent = projectTermsView.ParentForm;
