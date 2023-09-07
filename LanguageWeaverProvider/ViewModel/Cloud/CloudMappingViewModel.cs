@@ -6,7 +6,7 @@ using LanguageMappingProvider.Database.Interface;
 using LanguageWeaverProvider.LanguageMappingProvider;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
-using LanguageWeaverProvider.NewFolder;
+using LanguageWeaverProvider.Services;
 using LanguageWeaverProvider.ViewModel.Interface;
 using Sdl.LanguagePlatform.Core;
 
@@ -20,11 +20,11 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		private ObservableCollection<PairMapping> _pairMappings;
 
-		public CloudMappingViewModel(ITranslationOptions translationOptions, LanguagePair[] languagePairs)
+		public CloudMappingViewModel(ITranslationOptions translationOptions, ILanguageMappingDatabase languageMappingDatabse, LanguagePair[] languagePairs)
 		{
 			_langaugePairs = languagePairs;
 			_translationOptions = translationOptions;
-			_languageMappingDatabase = new LanguageMappingDatabase("cloud", DatabaseControl.GetCloudLanguageCodes());
+			_languageMappingDatabase = languageMappingDatabse;
 			_ = LoadPairMappingAsync();
 		}
 
@@ -77,6 +77,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		private async Task CreatePairMappingAsync()
 		{
+			var originalPairMappings = PairMappings;
 			PairMappings = new();
 			var mappedLanguages = _languageMappingDatabase.GetMappedLanguages();
 			var accountModels = await CloudService.GetSupportedLanguages(_translationOptions.CloudCredentials);
@@ -87,6 +88,16 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 				var source = lps.FirstOrDefault(x => x.TradosCode.Equals(languagePair.SourceCultureName));
 				var target = lps.FirstOrDefault(x => x.TradosCode.Equals(languagePair.TargetCultureName));
+				var displayName = $"{source.Name} ({source.Region}) - {target.Name} ({target.Region})";
+
+				var currentModel = originalPairMappings?.FirstOrDefault(x => x.DisplayName.Equals(displayName));
+				if (currentModel is not null
+				 && source.LanguageCode.Equals(currentModel.SourceCode)
+				 && target.LanguageCode.Equals(currentModel.TargetCode))
+				{
+					PairMappings.Add(currentModel);
+					continue;
+				}
 
 				var models = accountModels.Where(model => model.SourceLanguageId.Equals(source.LanguageCode) && model.TargetLanguageId.Equals(target.LanguageCode)).ToList();
 				if (!models.Any())
@@ -111,7 +122,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 				var newPairMapping = new PairMapping
 				{
-					DisplayName = $"{source.Name} ({source.Region}) - {target.Name} ({target.Region})",
+					DisplayName = displayName,
 					LanguagePair = languagePair,
 					SourceCode = source.LanguageCode,
 					TargetCode = target.LanguageCode,
@@ -124,5 +135,8 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				PairMappings.Add(newPairMapping);
 			}
 		}
+
+		public void UpdateLanguageMapping()
+			=> _ = CreatePairMappingAsync();
 	}
 }

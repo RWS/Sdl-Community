@@ -108,6 +108,26 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Syntax for the NameOf is:
+        ///&quot;{[location_of_NameOf]:NameOf Member=[PropertyName], Type={x:Type[classLocation:ClassName]}}&quot;
+        ///Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId.
+        /// </summary>
+        public static string NameOf_CommandParameter_Syntax {
+            get {
+                return ResourceManager.GetString("NameOf_CommandParameter_Syntax", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find the property [&apos;{0}&apos;] in [&apos;{1}&apos;], please check the spelling for both the property and the class or if any of the two had its name changed in both C# class and XAML..
+        /// </summary>
+        public static string NameOf_CommandParameterI_MissingComponent {
+            get {
+                return ResourceManager.GetString("NameOf_CommandParameterI_MissingComponent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language Weaver Provider.
         /// </summary>
         public static string Plugin_Name {

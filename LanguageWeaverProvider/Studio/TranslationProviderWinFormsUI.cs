@@ -85,6 +85,11 @@ namespace LanguageWeaverProvider
 
 		private void UpdateProviderCredentials(ITranslationProviderCredentialStore credentialStore, ITranslationOptions translationOptions)
 		{
+			if (translationOptions.AuthenticationType != AuthenticationType.CloudCredentials)
+			{
+				return;
+			}
+
 			var uri = new Uri(Constants.CloudFullScheme);
 			var cloudCredentials = new CloudCredentials()
 			{

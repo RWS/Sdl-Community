@@ -32,14 +32,14 @@
 								  Y1="0"
 								  Y2="1"
 								  X2="1"
-								  Stroke="Black"
+								  Stroke="#999999"
 								  Stretch="Fill" />
 							<Line x:Uid="Line_2"
 								  X1="0"
 								  Y1="1"
 								  X2="1"
 								  Y2="0"
-								  Stroke="Black"
+								  Stroke="#999999"
 								  Stretch="Fill" />
 						</Grid>
 					</Border>

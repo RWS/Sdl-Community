@@ -133,6 +133,14 @@
   <data name="MainView_HelpButton" xml:space="preserve">
     <value>Help</value>
   </data>
+  <data name="NameOf_CommandParameterI_MissingComponent" xml:space="preserve">
+    <value>Could not find the property ['{0}'] in ['{1}'], please check the spelling for both the property and the class or if any of the two had its name changed in both C# class and XAML.</value>
+  </data>
+  <data name="NameOf_CommandParameter_Syntax" xml:space="preserve">
+    <value>Syntax for the NameOf is:
+"{[location_of_NameOf]:NameOf Member=[PropertyName], Type={x:Type[classLocation:ClassName]}}"
+Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
+  </data>
   <data name="Plugin_Name" xml:space="preserve">
     <value>Language Weaver Provider</value>
   </data>

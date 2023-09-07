@@ -26,6 +26,11 @@ namespace LanguageWeaverProvider.Controls
 		public static readonly DependencyProperty WatermarkTextProperty = DependencyProperty.RegisterAttached(
 			"WatermarkText", typeof(string), typeof(TextBoxWatermarkHelper), new PropertyMetadata("Watermark", OnWatermarkTextChanged));
 
+		private static void OnAlignmentChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		{
+			var textBox = d as TextBox;
+		}
+
 		private static void OnWatermarkTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
 			var textBox = d as TextBox;

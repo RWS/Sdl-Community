@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using LanguageMappingProvider.Database;
 using LanguageMappingProvider.Model;
+using Sdl.Core.Globalization;
 
 namespace LanguageWeaverProvider.LanguageMappingProvider
 {
@@ -135,5 +137,14 @@ Yiddish 	yid 	yi";
 
 			return languageMappings;
 		}
-    }
+
+		public static string GetLanguageCode(this CultureCode cultureCode)
+		{
+			var languageMappingDatabase = new LanguageMappingDatabase("cloud", null);
+			var languageMappings = languageMappingDatabase.GetMappedLanguages();
+			var targetLanguage = languageMappings.FirstOrDefault(x => x.TradosCode == cultureCode.Name);
+			var languageCode = targetLanguage?.LanguageCode ?? string.Empty;
+			return languageCode;
+		}
+	}
 }

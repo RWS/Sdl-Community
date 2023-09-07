@@ -11,6 +11,7 @@
 		Title="Language Mapping"
 		WindowStartupLocation="CenterScreen"
 		WindowStyle="None"
+		ResizeMode="NoResize"
 		MinWidth="750"
 		Width="800"
 		MinHeight="420"
@@ -106,7 +107,10 @@
 					Grid.Row="4"
 					HorizontalAlignment="Left"
 					Cursor="Hand"
-					Width="120"
+					FontSize="11"
+					FontWeight="DemiBold"
+					Height="26"
+					Width="160"
 					Margin="16" />
 
 			<StackPanel Grid.Row="4"
@@ -123,6 +127,9 @@
 						Command="{Binding ApplyChangesCommand}"
 						Style="{StaticResource Sdl.Button.SecondaryStyle}"
 						Cursor="Hand"
+						FontSize="11"
+						FontWeight="DemiBold"
+						Height="26"
 						Width="120"
 						Margin="16 0" />
 
@@ -130,6 +137,9 @@
 						Command="{Binding CancelChangesCommand}"
 						Style="{StaticResource Sdl.Button.SecondaryStyle}"
 						Cursor="Hand"
+						FontSize="11"
+						FontWeight="DemiBold"
+						Height="26"
 						Width="120" />
 			</StackPanel>
 		</Grid>

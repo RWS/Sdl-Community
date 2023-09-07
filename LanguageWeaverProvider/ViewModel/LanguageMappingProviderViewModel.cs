@@ -17,8 +17,7 @@ namespace LanguageWeaverProvider.ViewModel
 {
 	public class LanguageMappingProviderViewModel : BaseViewModel
 	{
-		private readonly ILanguageMappingDatabase _database;
-		private readonly ITranslationOptions _translationOptions;
+		private readonly ILanguageMappingDatabase _languageMappingDatabase;
 
 		private ObservableCollection<LanguageMapping> _filteredMappedLanguages;
 		private ObservableCollection<LanguageMapping> _mappedLanguages;
@@ -35,10 +34,9 @@ namespace LanguageWeaverProvider.ViewModel
 		private ICommand _resetToDefaultCommand;
 		private ICommand _clearCommand;
 
-		public LanguageMappingProviderViewModel(ITranslationOptions translationOptions)
+		public LanguageMappingProviderViewModel(ILanguageMappingDatabase languageMappingDatabase)
 		{
-			_translationOptions = translationOptions;
-			_database = new LanguageMappingDatabase(GetDatabaseName(), DatabaseControl.GetCloudLanguageCodes());
+			_languageMappingDatabase = languageMappingDatabase;
 			RetrieveMappedLanguagesFromDatabase();
 			FilteredMappedLanguages = MappedLanguages;
 			PropertyChanged += FilterPropertyChangedHandler;
@@ -124,6 +122,8 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 		}
 
+		public event EventHandler LanguageMappingUpdated;
+
 		public event CloseWindowEventRaiser CloseEventRaised;
 
 		public ICommand ApplyChangesCommand => _applyChangesCommand ??= new RelayCommand(ApplyChanges, CanApplyChanges);
@@ -133,7 +133,7 @@ namespace LanguageWeaverProvider.ViewModel
 
 		private void RetrieveMappedLanguagesFromDatabase()
 		{
-			var mappedLanguages = _database.GetMappedLanguages();
+			var mappedLanguages = _languageMappingDatabase.GetMappedLanguages();
 			var newMappedLanguages = mappedLanguages.Select(pair => new LanguageMapping
 			{
 				Index = pair.Index,
@@ -144,8 +144,7 @@ namespace LanguageWeaverProvider.ViewModel
 			});
 
 			MappedLanguages = new ObservableCollection<LanguageMapping>(newMappedLanguages);
-			FilteredMappedLanguages = MappedLanguages;
-			Filter = string.Empty;
+			ApplyFilter();
 		}
 
 		private void RefreshLanguagesCountMessage()
@@ -179,8 +178,9 @@ namespace LanguageWeaverProvider.ViewModel
 		{
 			if (ExecuteAction("Warning: Resetting to default values!\nAll changes will be lost and the database will be restored to its original state.\n\nThis action cannot be undone.", "Reset to default"))
 			{
-				_database.ResetToDefault();
+				_languageMappingDatabase.ResetToDefault();
 				RetrieveMappedLanguagesFromDatabase();
+				LanguageMappingUpdated?.Invoke(this, EventArgs.Empty);
 			}
 		}
 
@@ -210,13 +210,14 @@ namespace LanguageWeaverProvider.ViewModel
 
 		private void ApplyChanges(object parameter)
 		{
-			_database.UpdateAll(MappedLanguages);
+			_languageMappingDatabase.UpdateAll(MappedLanguages);
 			RetrieveMappedLanguagesFromDatabase();
+			LanguageMappingUpdated?.Invoke(this, EventArgs.Empty);
 		}
 
 		private bool CanApplyChanges(object parameter)
 		{
-			return _database.HasMappedLanguagesChanged(MappedLanguages);
+			return _languageMappingDatabase.HasMappedLanguagesChanged(MappedLanguages);
 		}
 
 		private void CancelChanges(object parameter)
@@ -236,13 +237,6 @@ namespace LanguageWeaverProvider.ViewModel
 			{
 				ApplyFilter();
 			}
-		}
-
-		private string GetDatabaseName()
-		{
-			return _translationOptions.Version == PluginVersion.LanguageWeaverCloud
-				 ? "cloud"
-				 : "edge";
 		}
 	}
 }

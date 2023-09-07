@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using LanguageWeaverProvider.Command;
+using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
-using LanguageWeaverProvider.NewFolder;
+using LanguageWeaverProvider.Services;
 using LanguageWeaverProvider.ViewModel.Interface;
 
 namespace LanguageWeaverProvider.ViewModel.Cloud
@@ -94,7 +96,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			get => _clientId;
 			set
 			{
-				if (_userId == value) return;
+				if (_clientId == value) return;
 				_clientId = value;
 				OnPropertyChanged();
 			}
@@ -149,9 +151,12 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			if (AuthenticationType == AuthenticationType.None
 			 ||!CredentialsAreSet())
 			{
+				StopLoginProcess?.Invoke(this, EventArgs.Empty);
+				ErrorHandling.ShowDialog(null, "Credentials", "Please provide your credentials");
 				return;
 			}
 
+			StartLoginProcess?.Invoke(this, new LoginEventArgs("Connecting user..."));
 			var cloudCredentials = new CloudCredentials()
 			{
 				UserID = _userId,
@@ -160,11 +165,17 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				ClientSecret = _clientSecret
 			};
 
-			var success = await CloudService.AuthenticateUser(cloudCredentials, AuthenticationType);
-			if (!success)
+			var response = await CloudService.AuthenticateUser(cloudCredentials, AuthenticationType);
+			if (!response.Success)
 			{
-				// TO DO: Implement error/bad request/exceptions handling
-				return;
+				StartLoginProcess?.Invoke(this, new LoginEventArgs("Connection unsuccessful. Attempting retry..."));
+				response = await CloudService.AuthenticateUser(cloudCredentials, AuthenticationType);
+				StopLoginProcess?.Invoke(this, EventArgs.Empty);
+				if (!response.Success)
+				{
+					response.Error.ShowDialog("Authentication process failed", response.Error.Message, true);
+					return;
+				}
 			}
 
 			TranslationOptions.CloudCredentials = cloudCredentials;
@@ -174,10 +185,12 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		private async void SignLoggedUser(object parameter)
 		{
-			var success = await CloudService.AuthenticateUser(TranslationOptions.CloudCredentials, AuthenticationType.CloudCredentials);
-			if (!success)
+			StartLoginProcess?.Invoke(this, new LoginEventArgs("Connecting user..."));
+			var response = await CloudService.AuthenticateUser(TranslationOptions.CloudCredentials, AuthenticationType.CloudCredentials);
+			StopLoginProcess?.Invoke(this, EventArgs.Empty);
+			if (!response.Success)
 			{
-				// TO DO: Implement error/bad request/exceptions handling
+				response.Error.ShowDialog("Authentication process failed", response.Error.Message, true);
 				return;
 			}
 
@@ -189,14 +202,12 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 		private bool CredentialsAreSet()
 		{
 			if (IsCredentialsSelected
-			 && string.IsNullOrEmpty(UserId)
-			 && string.IsNullOrEmpty(UserPassword))
+			&& (string.IsNullOrEmpty(UserId) || string.IsNullOrEmpty(UserPassword)))
 			{
 				return false;
 			}
 			else if (IsSecretSelected
-				  && string.IsNullOrEmpty(ClientId)
-				  && string.IsNullOrEmpty(ClientSecret))
+				 && (string.IsNullOrEmpty(ClientId) || string.IsNullOrEmpty(ClientSecret)))
 			{
 				return false;
 			}
@@ -217,6 +228,10 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 					UserId = string.Empty;
 					break;
 
+				case "CliendId":
+					ClientId = string.Empty;
+					break;
+
 				default:
 					break;
 			}
@@ -226,5 +241,9 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 		{
 			AuthenticationType = AuthenticationType.None;
 		}
+
+		public event EventHandler StartLoginProcess;
+
+		public event EventHandler StopLoginProcess;
 	}
 }

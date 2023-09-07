@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Linq;
+using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
-using LanguageWeaverProvider.NewFolder;
+using LanguageWeaverProvider.Services;
 using LanguageWeaverProvider.XliffConverter.Converter;
 using LanguageWeaverProvider.XliffConverter.Model;
 using Sdl.Core.Globalization;
@@ -60,19 +61,53 @@ namespace LanguageWeaverProvider
 
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
 		{
+			if (!_translationOptions.ProviderSettings.ResendDrafts && _currentTranslationUnit.ConfirmationLevel != ConfirmationLevel.Unspecified)
+			{
+				var targetSegment = new Segment(TargetLanguage);
+				targetSegment.Add("[segment already translated...source not re-sent]");
+				return new SearchResults() { CreateSearchResult(segment, targetSegment) } ;
+			}
 
-			var searchResults = new SearchResults { SourceSegment = segment.Duplicate() };
-			var xliff = CreateXliffFile(segment);
-			var mappedPair = _translationOptions
-							 .PairMappings
-							 .FirstOrDefault(x => x.LanguagePair.SourceCultureName.Equals(SourceLanguage.Name)
-											   && x.LanguagePair.TargetCultureName.Equals(TargetLanguage.Name));
+			var sourceSegment = _translationOptions.ProviderSettings.IncludeTags
+							  ? segment.Duplicate()
+							  : RemoveTagsOnSegment(segment);
+			var searchResults = new SearchResults { SourceSegment = sourceSegment };
+			var searchResult = TranslateSegment(segment, sourceSegment);
+			searchResults.Add(searchResult);
+			return searchResults;
+		}
+
+		private SearchResult TranslateSegment(Segment segment, Segment sourceSegment)
+		{
+			var xliff = CreateXliffFile(sourceSegment);
+			var mappedPair = GetMappedPair();
 			var translation = CloudService.Translate(_translationOptions.CloudCredentials, mappedPair, xliff).Result;
 			var translatedSegment = translation.GetTargetSegments();
 			var searchResult = CreateSearchResult(segment, translatedSegment[0].Segment);
-			searchResult.MetaData.Add("QualityEstimation", translatedSegment.First().QualityEstimation);
-			searchResults.Add(searchResult);
-			return searchResults;
+			return searchResult;
+		}
+
+		private Segment RemoveTagsOnSegment(Segment segment)
+		{
+			var taglessSegment = segment.Duplicate();
+			var elements = segment.Duplicate().Elements;
+			foreach (var element in elements)
+			{
+				if (element.GetType() == typeof(Tag))
+				{
+					taglessSegment.Elements.Remove(element);
+				}
+			}
+
+			return taglessSegment;
+		}
+
+		private PairMapping GetMappedPair()
+		{
+			return _translationOptions
+				   .PairMappings
+				   .FirstOrDefault(x => x.LanguagePair.SourceCultureName.Equals(SourceLanguage.Name)
+									 && x.LanguagePair.TargetCultureName.Equals(TargetLanguage.Name));
 		}
 
 		public Xliff CreateXliffFile(Segment segment)
@@ -88,7 +123,7 @@ namespace LanguageWeaverProvider
 				File = file
 			};
 
-			if (segment != null)
+			if (segment is not null)
 			{
 				xliffDocument.AddSourceSegment(segment);
 			}

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using LanguageWeaverProvider.Command;
+using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.ViewModel.Cloud;
 using LanguageWeaverProvider.ViewModel.Edge;
@@ -10,14 +12,19 @@ namespace LanguageWeaverProvider.ViewModel
 {
 	public class CredentialsMainViewModel : BaseViewModel
 	{
-		private ICredentialsViewModel _providerView;
+		const string ProviderView_Cloud = nameof(CloudCredentialsViewModel);
+		const string ProviderView_Edge = nameof(EdgeCredentialsViewModel);
 
-		private bool _isEdgeSelected;
-		private bool _isCloudSelected;
+		bool _isEdgeSelected;
+		bool _isCloudSelected;
+		bool _isUserAttemptingLogin;
+		string _currentActionMessage;
+		ICredentialsViewModel _providerView;
 
 		public CredentialsMainViewModel(ITranslationOptions options)
 		{
 			TranslationOptions = options;
+			IsUserAttemptingLogin = false;
 			InitializeCommands();
 		}
 
@@ -51,6 +58,26 @@ namespace LanguageWeaverProvider.ViewModel
 
 		public bool IsServiceSelected => IsCloudSelected || IsEdgeSelected;
 
+		public bool IsUserAttemptingLogin
+		{
+			get => _isUserAttemptingLogin;
+			set
+			{
+				_isUserAttemptingLogin = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string CurrentActionMessage
+		{
+			get => _currentActionMessage;
+			set
+			{
+				_currentActionMessage = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public ICredentialsViewModel ProviderView
 		{
 			get => _providerView;
@@ -62,11 +89,11 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 		}
 
+		public ICommand BackCommand { get; private set; }
+
 		public ICommand CloseCommand { get; private set; }
 
 		public ICommand SelectLanguageWeaverServiceCommand { get; private set; }
-
-		public ICommand BackCommand { get; private set; }
 
 		public delegate void CloseWindowEventRaiser();
 
@@ -74,9 +101,21 @@ namespace LanguageWeaverProvider.ViewModel
 
 		private void InitializeCommands()
 		{
+			BackCommand = new RelayCommand(Back);
 			CloseCommand = new RelayCommand(CloseApplication);
 			SelectLanguageWeaverServiceCommand = new RelayCommand(SelectLanguageWeaverService);
-			BackCommand = new RelayCommand(Back);
+		}
+
+		private void Back(object parameter)
+		{
+			IsCloudSelected = false;
+			IsEdgeSelected = false;
+		}
+
+		private void CloseApplication(object parameter)
+		{
+			SaveChanges = false;
+			CloseEventRaised?.Invoke();
 		}
 
 		private void SelectLanguageWeaverService(object parameter)
@@ -86,12 +125,14 @@ namespace LanguageWeaverProvider.ViewModel
 				return;
 			}
 
-			IsCloudSelected = requestedService == "Cloud";
-			IsEdgeSelected = requestedService == "Edge";
+			IsCloudSelected = requestedService == Constants.CloudService;
+			IsEdgeSelected = requestedService == Constants.EdgeService;
 			ICredentialsViewModel selectedViewModel = IsCloudSelected
 													? new CloudCredentialsViewModel(TranslationOptions)
 													: new EdgeCredentialsViewModel(TranslationOptions);
 			selectedViewModel.CloseRequested += CloseCredentialsViewRequest;
+			selectedViewModel.StartLoginProcess += StartLoginProcess;
+			selectedViewModel.StopLoginProcess += StopLoginProcess;
 			ProviderView = selectedViewModel;
 		}
 
@@ -103,16 +144,26 @@ namespace LanguageWeaverProvider.ViewModel
 			CloseEventRaised?.Invoke();
 		}
 
-		private void CloseApplication(object parameter)
+		private async void StartLoginProcess(object sender, EventArgs e)
 		{
-			SaveChanges = false;
-			CloseEventRaised?.Invoke();
+			IsUserAttemptingLogin = true;
+			CurrentActionMessage = "Initiating...";
+			await Task.Delay(2000);
+			var loginEventArgs = e as LoginEventArgs;
+			CurrentActionMessage = loginEventArgs.Message;
 		}
 
-		private void Back(object parameter)
+		private async void StopLoginProcess(object sender, EventArgs e)
 		{
-			IsCloudSelected = false;
-			IsEdgeSelected = false;
+			if (e is not LoginEventArgs loginEventArgs)
+			{
+				IsUserAttemptingLogin = false;
+				return;
+			}
+
+			CurrentActionMessage = loginEventArgs.Message;
+			await Task.Delay(3000);
+			IsUserAttemptingLogin = false;
 		}
 	}
 }

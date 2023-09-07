@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Security.RightsManagement;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using LanguageWeaverProvider.Model;
-using LanguageWeaverProvider.Services.Interface;
 using LanguageWeaverProvider.Services.Model;
 using LanguageWeaverProvider.XliffConverter.Converter;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace LanguageWeaverProvider.NewFolder
+namespace LanguageWeaverProvider.Services
 {
 	public static class CloudService
 	{
@@ -25,7 +25,7 @@ namespace LanguageWeaverProvider.NewFolder
 		private const string TranslationEndpoint = "https://api.languageweaver.com/v4/mt/translations/async";
 		private const string MediaType = "application/json";
 
-		public static async Task<bool> AuthenticateUser(CloudCredentials cloudCredentials, AuthenticationType authenticationType)
+		public static async Task<(bool Success, Exception Error)> AuthenticateUser(CloudCredentials cloudCredentials, AuthenticationType authenticationType)
 		{
 			_httpClient = new();
 			var endpoint = authenticationType switch
@@ -47,11 +47,11 @@ namespace LanguageWeaverProvider.NewFolder
 
 				var selfEndpoint = authenticationType == AuthenticationType.CloudCredentials ? AccountInfoCredentialsEndpoint : AccountInfoApiEndpoint;
 				cloudCredentials.AccountId = await GetUserInfo(cloudCredentials, selfEndpoint);
-				return true;
+				return (true, null);
 			}
 			catch (Exception ex)
 			{
-				return false;
+				return (false, ex);
 			}
 		}
 
@@ -74,6 +74,8 @@ namespace LanguageWeaverProvider.NewFolder
 			request.Headers.Add("Authorization", $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
 
 			var response = await _httpClient.SendAsync(request);
+			response.EnsureSuccessStatusCode();
+
 			var userDetailsJson = await response.Content.ReadAsStringAsync();
 			var accountId = JObject.Parse(userDetailsJson)["accountId"].ToString();
 
@@ -82,43 +84,64 @@ namespace LanguageWeaverProvider.NewFolder
 
 		public static async Task<List<PairModel>> GetSupportedLanguages(CloudCredentials cloudCredentials)
 		{
+			await EnsureConnection(cloudCredentials);
 			_httpClient = new();
-			var uri = new Uri($"https://api.languageweaver.com/v4/accounts/{cloudCredentials.AccountId}/subscriptions/language-pairs?includeChained=true");
+			
+			try
+			{
+				var uri = new Uri($"https://api.languageweaver.com/v4/accounts/{cloudCredentials.AccountId}/subscriptions/language-pairs?includeChained=true");
 
-			var request = new HttpRequestMessage(HttpMethod.Get, uri);
-			request.Headers.Add("Authorization", $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
+				var request = new HttpRequestMessage(HttpMethod.Get, uri);
+				request.Headers.Add("Authorization", $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
 
-			var response = await _httpClient.SendAsync(request);
-			response.EnsureSuccessStatusCode();
+				var response = await _httpClient.SendAsync(request);
+				response.EnsureSuccessStatusCode();
 
-			var responseContent = await response.Content.ReadAsStringAsync();
-			var languagePairs = JObject.Parse(responseContent)["languagePairs"].ToString();
-			var languagePairsOutput = JsonConvert.DeserializeObject<List<PairModel>>(languagePairs);
+				var responseContent = await response.Content.ReadAsStringAsync();
+				var languagePairs = JObject.Parse(responseContent)["languagePairs"].ToString();
+				var languagePairsOutput = JsonConvert.DeserializeObject<List<PairModel>>(languagePairs);
 
-			return languagePairsOutput;
+				return languagePairsOutput;
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
 		}
 
 		public static async Task<List<PairDictionary>> GetDictionaries(CloudCredentials cloudCredentials)
 		{
-			_httpClient = new();
-			var uri = new Uri($"https://api.languageweaver.com/v4/accounts/{cloudCredentials.AccountId}/dictionaries");
+			await EnsureConnection(cloudCredentials);
+				_httpClient = new();
 
-			var request = new HttpRequestMessage(HttpMethod.Get, uri);
-			request.Headers.Add("Authorization", $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
+			try
+			{
 
-			var response = await _httpClient.SendAsync(request);
-			response.EnsureSuccessStatusCode();
+				var uri = new Uri($"https://api.languageweaver.com/v4/accounts/{cloudCredentials.AccountId}/dictionaries");
 
-			var responseContent = await response.Content.ReadAsStringAsync();
-			var dictionariesJson = JObject.Parse(responseContent)["dictionaries"].ToString();
-			var dictionariesOutput = JsonConvert.DeserializeObject<List<PairDictionary>>(dictionariesJson);
+				var request = new HttpRequestMessage(HttpMethod.Get, uri);
+				request.Headers.Add("Authorization", $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
 
-			return dictionariesOutput;
+				var response = await _httpClient.SendAsync(request);
+				response.EnsureSuccessStatusCode();
+
+				var responseContent = await response.Content.ReadAsStringAsync();
+				var dictionariesJson = JObject.Parse(responseContent)["dictionaries"].ToString();
+				var dictionariesOutput = JsonConvert.DeserializeObject<List<PairDictionary>>(dictionariesJson);
+
+				return dictionariesOutput;
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
 		}
 
-		public static async Task<Xliff> Translate(CloudCredentials cloudCredentials, PairMapping mappedPair, Xliff sourceXliff)
+		public static async Task<Xliff> Translate(CloudCredentials cloudCredentials, PairMapping mappedPair, Xliff sourceXliff, bool retry = true)
 		{
+			await EnsureConnection(cloudCredentials);
 			_httpClient = new();
+
 			try
 			{
 				var translationRequestResponse = await SendTranslationRequest(cloudCredentials, mappedPair, sourceXliff);
@@ -145,9 +168,9 @@ namespace LanguageWeaverProvider.NewFolder
 				var translatedXliffSegment = Converter.ParseXliffString(translatedSegment);
 				return translatedXliffSegment;
 			}
-			catch
+			catch (Exception ex)
 			{
-				return null;
+				throw ex;
 			}
 		}
 
@@ -172,22 +195,18 @@ namespace LanguageWeaverProvider.NewFolder
 				Input = new[] { sourceXliff.ToString() },
 				Model = mappedPair.SelectedModel.Model,
 				InputFormat = "xliff",
-				Dictionaries = string.IsNullOrEmpty(mappedPair.SelectedDictionary.DictionaryId) ? new string[] { } : new string[] { mappedPair.SelectedDictionary.DictionaryId },
+				Dictionaries = new object[] { },
+				QualityEstimation = mappedPair.SelectedModel.Model.ToLower().Contains("qe") ? 1 : 0,
 				LinguisticOptions = linguisticOptionsDictionary
 			};
 
 			_httpClient = new();
 			_httpClient.DefaultRequestHeaders.Add("Authorization", $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
-			var response = await _httpClient.PostAsync(TranslationEndpoint, new StringContent(JsonConvert.SerializeObject(translationRequestModel), Encoding.UTF8, MediaType));
+			var translationRequestModelJson = JsonConvert.SerializeObject(translationRequestModel);
+			var response = await _httpClient.PostAsync(TranslationEndpoint, new StringContent(translationRequestModelJson, Encoding.UTF8, MediaType));
 			response.EnsureSuccessStatusCode();
 
 			return await response.Content.ReadAsStringAsync();
-		}
-
-		private static string ConvertToCamelCase(string input)
-		{
-			var firstCharToLower = input.Substring(0, 1).ToLower();
-			return firstCharToLower + input.Substring(1);
 		}
 
 		private static async Task<string> GetTranslation(CloudCredentials cloudCredentials, string requestId)
@@ -203,5 +222,24 @@ namespace LanguageWeaverProvider.NewFolder
 			return await response.Content.ReadAsStringAsync();
 		}
 
+		private static async Task EnsureConnection(CloudCredentials cloudCredentials)
+		{
+			var authenticationType = string.IsNullOrEmpty(cloudCredentials.UserID) ? AuthenticationType.CloudSecret : AuthenticationType.CloudCredentials;
+
+			try
+			{
+				var selfEndpoint = authenticationType == AuthenticationType.CloudCredentials ? AccountInfoCredentialsEndpoint : AccountInfoApiEndpoint;
+				await GetUserInfo(cloudCredentials, selfEndpoint);
+			}
+			catch (Exception ex)
+			{
+				if (!ex.Message.Contains("401"))
+				{
+					return;
+				}
+
+				await AuthenticateUser(cloudCredentials, authenticationType);
+			}
+		}
 	}
 }

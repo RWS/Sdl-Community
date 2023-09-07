@@ -6,5 +6,7 @@ namespace LanguageWeaverProvider.ViewModel.Interface
 	public interface IPairMappingViewModel
 	{
 		ObservableCollection<PairMapping> PairMappings { get; set; }
+
+		void UpdateLanguageMapping();
 	}
 }

@@ -19,5 +19,9 @@ namespace LanguageWeaverProvider.ViewModel.Interface
 		ICommand SelectAuthenticationTypeCommand { get; }
 
 		event EventHandler CloseRequested;
+
+		event EventHandler StartLoginProcess;
+
+		event EventHandler StopLoginProcess;
 	}
 }

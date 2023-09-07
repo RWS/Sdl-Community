@@ -85,6 +85,8 @@ namespace LanguageWeaverProvider.ViewModel.Edge
 		public ICommand SelectAuthenticationTypeCommand { get; private set; }
 
 		public event EventHandler CloseRequested;
+		public event EventHandler StartLoginProcess;
+		public event EventHandler StopLoginProcess;
 
 		private void InitializeCommands()
 		{

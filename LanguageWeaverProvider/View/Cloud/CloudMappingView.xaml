@@ -26,8 +26,9 @@
 		<DataGrid x:Name="myDataGrid"
 				  ItemsSource="{Binding PairMappings}"
 				  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+				  BorderBrush="#d4d4d4"
 				  AutoGenerateColumns="False"
-				  Margin="-2 -6 -2 -11">
+				  Margin="16 0">
 			<DataGrid.Columns>
 				<DataGridTemplateColumn Header="Language pair"
 										Width="1.5*"

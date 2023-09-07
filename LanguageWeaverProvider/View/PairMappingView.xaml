@@ -4,6 +4,7 @@
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:root="clr-namespace:LanguageWeaverProvider"
+		xmlns:view="clr-namespace:LanguageWeaverProvider.View"
 		xmlns:style="clr-namespace:LanguageWeaverProvider.Style"
 		xmlns:local="clr-namespace:LanguageWeaverProvider.ViewModel"
 		xmlns:edgeView="clr-namespace:LanguageWeaverProvider.View.Edge"
@@ -44,6 +45,10 @@
 			<DataTemplate DataType="{x:Type cloudViewModel:CloudMappingViewModel}">
 				<cloudView:CloudMappingView />
 			</DataTemplate>
+
+			<DataTemplate DataType="{x:Type viewModel:SettingsViewModel}">
+				<view:SettingsView />
+			</DataTemplate>
 		</ResourceDictionary>
 	</Window.Resources>
 
@@ -55,69 +60,74 @@
 		</Grid.RowDefinitions>
 
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto" />
-			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="Auto"/>
 		</Grid.ColumnDefinitions>
 
 		<style:WindowsControl Grid.Row="0"
 							  Grid.ColumnSpan="2" />
 
-		<Separator Grid.Row="1"
-				   Grid.ColumnSpan="2"
-				   VerticalAlignment="Top" />
-
 		<ContentControl Content="{Binding PairMappingView}"
+						Visibility="{Binding ShowSettingsView, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverted}"
 						Focusable="False"
 						Margin="0 8"
 						Grid.Row="1"
 						Grid.ColumnSpan="2"
-						HorizontalAlignment="Stretch"/>
+						HorizontalAlignment="Stretch" />
 
-		<Separator Grid.Row="2"
-				   Grid.ColumnSpan="2"
-				   VerticalAlignment="Top" />
+		<ContentControl Content="{Binding SettingsView}"
+						Visibility="{Binding ShowSettingsView, Converter={StaticResource BooleanToVisibilityConverter}}"
+						Focusable="False"
+						Margin="0 8"
+						Grid.Row="1"
+						Grid.ColumnSpan="2"
+						HorizontalAlignment="Stretch" />
 
 		<StackPanel Grid.Row="2"
 					Grid.Column="0"
 					Orientation="Horizontal"
-					Margin="24 12">
-			<Button Content="Manage account"
-					Style="{StaticResource Sdl.Button.SecondaryStyle}"
-					Command="{Binding NavigateToCommand}"
-					FontSize="12"
-					Height="32"
-					Width="168" />
+					Margin="12">
 			<Button Content="Open Language Mapping"
 					Style="{StaticResource Sdl.Button.SecondaryStyle}"
 					Command="{Binding OpenLanguageMappingProviderViewCommand}"
-					FontSize="12"
-					Height="32"
-					Width="168"
+					FontSize="11"
+					FontWeight="DemiBold"
+					Height="26"
+					Width="174"
 					Margin="12 0 0 0" />
 			<Button Content="Settings"
 					Style="{StaticResource Sdl.Button.SecondaryStyle}"
 					Command="{Binding OpenSettingsViewCommand}"
-					Height="32"
-					Width="168"
+					Visibility="{Binding ShowSettingsView, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+					FontSize="11"
+					FontWeight="DemiBold"
+					Height="26"
+					Width="120"
 					Margin="12 0 0 0" />
+
+			<Button Content="feedback"
+					Command="{Binding OpenFeedbackCommand}" />
 		</StackPanel>
 
 		<StackPanel Grid.Row="2"
 					Grid.Column="1"
 					Orientation="Horizontal"
-					HorizontalAlignment="Right"
-					Margin="24 12">
+					Margin="12">
 			<Button Content="Cancel"
 					Style="{StaticResource Sdl.Button.SecondaryStyle}"
 					Command="{Binding CloseCommand}"
-					Height="32"
-					Width="168" />
+					FontSize="11"
+					FontWeight="DemiBold"
+					Height="26"
+					Width="120"/>
 
 			<Button Content="Confirm"
 					Style="{StaticResource Sdl.Button.PrimaryStyle}"
 					Command="{Binding SaveCommand}"
-					Height="32"
-					Width="168"
+					FontSize="11"
+					FontWeight="DemiBold"
+					Height="26"
+					Width="120"
 					Margin="12 0" />
 		</StackPanel>
 

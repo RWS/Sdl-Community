@@ -20,4 +20,14 @@
 	{
 		Inverted
 	}
+
+	public enum QualityEstimation
+	{
+		None,
+		VeryPoor,
+		Poor,
+		Adequate,
+		Good,
+		VeryGood
+	}
 }
