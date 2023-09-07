@@ -3,10 +3,13 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:root="clr-namespace:LanguageWeaverProvider"
 			 xmlns:converters="clr-namespace:LanguageWeaverProvider.Converters"
 			 xmlns:viewModel="clr-namespace:LanguageWeaverProvider.ViewModel.Cloud"
 			 d:DataContext="{d:DesignInstance viewModel:CloudMappingViewModel}"
-			 mc:Ignorable="d">
+			 mc:Ignorable="d"
+			 d:DesignHeight="200"
+			 d:DesignWidth="800">
 
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -30,7 +33,7 @@
 				  AutoGenerateColumns="False"
 				  Margin="16 0">
 			<DataGrid.Columns>
-				<DataGridTemplateColumn Header="Language pair"
+				<DataGridTemplateColumn Header="{x:Static root:PluginResources.CloudMappingView_Headers_Pairs}"
 										Width="1.5*"
 										IsReadOnly="True">
 					<DataGridTemplateColumn.CellTemplate>
@@ -43,7 +46,7 @@
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 
-				<DataGridTemplateColumn Header="Source"
+				<DataGridTemplateColumn Header="{x:Static root:PluginResources.CloudMappingView_Headers_Source}"
 										MinWidth="64">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
@@ -51,7 +54,7 @@
 										Margin="4 0">
 								<TextBlock Text="{Binding SourceCode}"
 										   Visibility="{Binding SourceCode, Converter={StaticResource EmptyStringToVisibilityConverter}, ConverterParameter=Inverted}" />
-								<TextBlock Text="Not set"
+								<TextBlock Text="{x:Static root:PluginResources.CloudMappingView_Values_NotSet}"
 										   Foreground="#f24d41"
 										   FontWeight="DemiBold"
 										   Visibility="{Binding SourceCode, Converter={StaticResource EmptyStringToVisibilityConverter}}" />
@@ -60,7 +63,7 @@
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 
-				<DataGridTemplateColumn Header="Target"
+				<DataGridTemplateColumn Header="{x:Static root:PluginResources.CloudMappingView_Headers_Target}"
 										MinWidth="64">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
@@ -68,7 +71,7 @@
 										Margin="4 0">
 								<TextBlock Text="{Binding TargetCode}"
 										   Visibility="{Binding TargetCode, Converter={StaticResource EmptyStringToVisibilityConverter}, ConverterParameter=Inverted}" />
-								<TextBlock Text="Not set"
+								<TextBlock Text="{x:Static root:PluginResources.CloudMappingView_Values_NotSet}"
 										   Foreground="#f24d41"
 										   FontWeight="DemiBold"
 										   Visibility="{Binding TargetCode, Converter={StaticResource EmptyStringToVisibilityConverter}}" />
@@ -77,7 +80,7 @@
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 
-				<DataGridTemplateColumn Header="Models"
+				<DataGridTemplateColumn Header="{x:Static root:PluginResources.CloudMappingView_Headers_Models}"
 										MinWidth="128">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
@@ -94,7 +97,7 @@
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 
-				<DataGridTemplateColumn Header="Dictionaries"
+				<DataGridTemplateColumn Header="{x:Static root:PluginResources.CloudMappingView_Headers_Dictionaries}"
 										MinWidth="172">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
@@ -111,7 +114,7 @@
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 
-				<DataGridTemplateColumn Header="Linguistic Options"
+				<DataGridTemplateColumn Header="{x:Static root:PluginResources.CloudMappingView_Headers_LOs}"
 										Width="1*">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model:PairMapping">
@@ -171,7 +174,7 @@
 									</ListBox.ItemTemplate>
 								</ListBox>
 
-								<TextBlock Text="Not available"
+								<TextBlock Text="{x:Static root:PluginResources.CloudMappingView_Values_Unavailable}"
 										   Visibility="{Binding LinguisticOptions, Converter={StaticResource EmptyCollectionToVisibilityConverter}, ConverterParameter=Inverted}" 
 										   Margin="4 0"/>
 							</StackPanel>

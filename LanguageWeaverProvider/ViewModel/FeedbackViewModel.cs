@@ -9,7 +9,7 @@ namespace LanguageWeaverProvider.ViewModel
 		string _feedbackMessage;
 		string _segmentContent;
 		int _rating;
-		QualityEstimation _quality;
+		QualityEstimations _quality;
 
 		public FeedbackViewModel()
 		{
@@ -47,7 +47,7 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 		}
 
-		public QualityEstimation UserEstimation => (QualityEstimation)Rating;
+		public QualityEstimations UserEstimation => (QualityEstimations)Rating;
 
 		public ICommand SendFeedbackCommand { get; private set; }
 
@@ -60,8 +60,8 @@ namespace LanguageWeaverProvider.ViewModel
 		{
 			var estimation = UserEstimation switch
 			{
-				QualityEstimation.VeryPoor => QualityEstimation.Poor,
-				QualityEstimation.VeryGood => QualityEstimation.Good,
+				QualityEstimations.VeryPoor => QualityEstimations.Poor,
+				QualityEstimations.VeryGood => QualityEstimations.Good,
 				_ => UserEstimation,
 			};
 		}

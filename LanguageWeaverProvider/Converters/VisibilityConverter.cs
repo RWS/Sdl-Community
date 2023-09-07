@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace LanguageWeaverProvider.Converters
 {
-	public static class ConverterExtensions
+	public static class VisibilityConveter
 	{
 		public static Visibility ToVisibility(this object parameter, bool isVisible)
 		{

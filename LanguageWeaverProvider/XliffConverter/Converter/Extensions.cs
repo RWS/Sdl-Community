@@ -57,7 +57,6 @@ namespace LanguageWeaverProvider.XliffConverter.Converter
 						break;
 
 					default:
-						Debug.Assert(false, "Unexpected tag type");
 						break;
 				}
 			}

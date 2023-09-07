@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows;
 using System.Windows.Data;
 
 namespace LanguageWeaverProvider.Converters
@@ -12,7 +11,7 @@ namespace LanguageWeaverProvider.Converters
 		{
 			if (value is null || value is not bool boolValue)
 			{
-				return true;
+				return false;
 			}
 
 			return !boolValue;

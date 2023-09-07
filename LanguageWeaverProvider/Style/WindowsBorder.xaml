@@ -8,9 +8,7 @@
 	<Style TargetType="{x:Type Border}"
 		   x:Key="WindowControlBorderStyle">
 		<Setter Property="BorderThickness"
-				Value="1" />
-		<Setter Property="BorderBrush"
-				Value="#b0b0b0" />
+				Value="0" />
 		<Style.Triggers>
 			<DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
 						 Value="Maximized">
@@ -21,8 +19,6 @@
 						 Value="False">
 				<Setter Property="BorderBrush"
 						Value="#c4c4c4" />
-				<Setter Property="BorderThickness"
-						Value="1" />
 			</DataTrigger>
 		</Style.Triggers>
 	</Style>

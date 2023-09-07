@@ -1,9 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using LanguageMappingProvider.Database;
 using LanguageMappingProvider.Database.Interface;
-using LanguageWeaverProvider.LanguageMappingProvider;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Services;
@@ -84,48 +82,48 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			var accountDictionaries = await CloudService.GetDictionaries(_translationOptions.CloudCredentials);
 			foreach (var languagePair in _langaugePairs)
 			{
-				var lps = mappedLanguages.Where(x => x.TradosCode.Equals(languagePair.SourceCultureName) || x.TradosCode.Equals(languagePair.TargetCultureName));
+				var mappedLanguagePairs = mappedLanguages.Where(mappedLang => mappedLang.TradosCode.Equals(languagePair.SourceCultureName) || mappedLang.TradosCode.Equals(languagePair.TargetCultureName));
 
-				var source = lps.FirstOrDefault(x => x.TradosCode.Equals(languagePair.SourceCultureName));
-				var target = lps.FirstOrDefault(x => x.TradosCode.Equals(languagePair.TargetCultureName));
-				var displayName = $"{source.Name} ({source.Region}) - {target.Name} ({target.Region})";
+				var mappedSource = mappedLanguagePairs.FirstOrDefault(mappedLang => mappedLang.TradosCode.Equals(languagePair.SourceCultureName));
+				var mappedTarget = mappedLanguagePairs.FirstOrDefault(mappedLang => mappedLang.TradosCode.Equals(languagePair.TargetCultureName));
+				var displayName = $"{mappedSource.Name} ({mappedSource.Region}) - {mappedTarget.Name} ({mappedTarget.Region})";
 
-				var currentModel = originalPairMappings?.FirstOrDefault(x => x.DisplayName.Equals(displayName));
+				var currentModel = originalPairMappings?.FirstOrDefault(pair => pair.DisplayName.Equals(displayName));
 				if (currentModel is not null
-				 && source.LanguageCode.Equals(currentModel.SourceCode)
-				 && target.LanguageCode.Equals(currentModel.TargetCode))
+				 && mappedSource.LanguageCode.Equals(currentModel.SourceCode)
+				 && mappedTarget.LanguageCode.Equals(currentModel.TargetCode))
 				{
 					PairMappings.Add(currentModel);
 					continue;
 				}
 
-				var models = accountModels.Where(model => model.SourceLanguageId.Equals(source.LanguageCode) && model.TargetLanguageId.Equals(target.LanguageCode)).ToList();
+				var models = accountModels.Where(model => model.SourceLanguageId.Equals(mappedSource.LanguageCode) && model.TargetLanguageId.Equals(mappedTarget.LanguageCode)).ToList();
 				if (!models.Any())
 				{
-					models.Add(new()
+					models.Add(new PairModel()
 					{
-						Name = "No model available",
-						DisplayName = "No model available",
-						SourceLanguageId = source.LanguageCode,
-						TargetLanguageId = target.LanguageCode
+						Name = PluginResources.PairModel_Model_Unavailable,
+						DisplayName = PluginResources.PairModel_Model_Unavailable,
+						SourceLanguageId = mappedSource.LanguageCode,
+						TargetLanguageId = mappedTarget.LanguageCode
 					});
 				}
 
-				var dictionaries = accountDictionaries.Where(dictionary => dictionary.Source.Equals(source.LanguageCode) && dictionary.Target.Equals(target.LanguageCode)).ToList();
-				dictionaries.Insert(0, new()
+				var dictionaries = accountDictionaries.Where(dictionary => dictionary.Source.Equals(mappedSource.LanguageCode) && dictionary.Target.Equals(mappedTarget.LanguageCode)).ToList();
+				dictionaries.Insert(0, new PairDictionary()
 				{
-					Name = dictionaries.Any() ? "No dictionary selected" : "No dictionary available",
+					Name = dictionaries.Any() ? PluginResources.PairModel_Dictionary_NotSelected : PluginResources.PairModel_Dictionary_Unavailable,
 					DictionaryId = string.Empty,
-					Source = source.LanguageCode,
-					Target = target.LanguageCode,
+					Source = mappedSource.LanguageCode,
+					Target = mappedTarget.LanguageCode,
 				});
 
 				var newPairMapping = new PairMapping
 				{
 					DisplayName = displayName,
 					LanguagePair = languagePair,
-					SourceCode = source.LanguageCode,
-					TargetCode = target.LanguageCode,
+					SourceCode = mappedSource.LanguageCode,
+					TargetCode = mappedTarget.LanguageCode,
 					Models = models,
 					SelectedModel = models.FirstOrDefault(),
 					Dictionaries = dictionaries,

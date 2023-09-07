@@ -3,6 +3,7 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:root="clr-namespace:LanguageWeaverProvider"
 			 xmlns:local="clr-namespace:LanguageWeaverProvider.View"
 			 xmlns:viewModel="clr-namespace:LanguageWeaverProvider.ViewModel"
 			 d:DataContext="{d:DesignInstance viewModel:SettingsViewModel}"
@@ -32,9 +33,9 @@
 				Margin="36 0 0 0">
 			<Button.Content>
 				<StackPanel Orientation="Horizontal">
-					<TextBlock Text="←"
+					<TextBlock Text="{x:Static root:PluginResources.SettingsView_BackButton_LeftContent}"
 							   Margin="0 0 8 0"/>
-					<TextBlock Text="Back"
+					<TextBlock Text="{x:Static root:PluginResources.SettingsView_BackButton_RightContent}"
 							   Margin="8 0 0 0" />
 				</StackPanel>
 			</Button.Content>
@@ -42,12 +43,12 @@
 		
 		<StackPanel Grid.Row="1"
 					Margin="72 32 0 0">
-			<CheckBox Content="Resend drafts for translation"
+			<CheckBox Content="{x:Static root:PluginResources.SettingsView_Drafts}"
 					  IsChecked="{Binding ResendDrafts}" 
 					  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 					  Margin="0 4"/>
-			
-			<CheckBox Content="Include tags in translation"
+
+			<CheckBox Content="{x:Static root:PluginResources.SettingsView_Tags}"
 					  IsChecked="{Binding IncludeTags}"
 					  Style="{StaticResource Sdl.Checkbox.GenericStyle}" 
 					  Margin="0 4"/>

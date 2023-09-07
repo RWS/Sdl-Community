@@ -1,4 +1,5 @@
-﻿using Sdl.LanguagePlatform.Core;
+﻿using System;
+using Sdl.LanguagePlatform.Core;
 
 namespace LanguageWeaverProvider.XliffConverter.Model
 {
@@ -7,5 +8,7 @@ namespace LanguageWeaverProvider.XliffConverter.Model
 		public Segment Segment { get; set; }
 
 		public string QualityEstimation { get; set; }
+
+		public QualityEstimations Estimation => Enum.TryParse(QualityEstimation, out QualityEstimations qualityEstimation) ? qualityEstimation : QualityEstimations.None;
 	}
 }

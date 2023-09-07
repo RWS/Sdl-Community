@@ -10,7 +10,12 @@ namespace LanguageWeaverProvider.XliffConverter.Converter
 {
 	public static class Converter
 	{
-		private static readonly XmlSerializer Serializer;
+		const string SourceTextRegex = "<source>(.*?)</source>|<source />";
+		const string TargetTextRegex = "<target xml:lang=\"[^\"]*\">(.*?)</target>";
+		const string EmptySourceTextRegex = "<source></source>";
+		const string EmptyTargetTextRegex = "<target></target>";
+
+		static readonly XmlSerializer Serializer;
 
 		static Converter()
 		{
@@ -24,19 +29,11 @@ namespace LanguageWeaverProvider.XliffConverter.Converter
 				return null;
 			}
 
-			// Since XML doesn't like tags, let's temporarily replace the sourceText and targetTranslation, then put
-			// them back in after the xml parser has parsed the text.
-			const string sourceTextRegex = "<source>(.*?)</source>|<source />";
-			const string targetTextRegex = "<target xml:lang=\"[^\"]*\">(.*?)</target>";
-			const string emptySourceTextRegex = "<source></source>";
-			const string emptyTargetTextRegex = "<target></target>";
+			var sourceText = Regex.Matches(text, SourceTextRegex, RegexOptions.Singleline);
+			text = Regex.Replace(text, SourceTextRegex, EmptySourceTextRegex, RegexOptions.Singleline);
 
-			// Make the regex span multiple lines in case the text includes a newline
-			var sourceText = Regex.Matches(text, sourceTextRegex, RegexOptions.Singleline);
-			text = Regex.Replace(text, sourceTextRegex, emptySourceTextRegex, RegexOptions.Singleline);
-
-			var targetText = Regex.Matches(text, targetTextRegex, RegexOptions.Singleline);
-			text = Regex.Replace(text, targetTextRegex, emptyTargetTextRegex, RegexOptions.Singleline);
+			var targetText = Regex.Matches(text, TargetTextRegex, RegexOptions.Singleline);
+			text = Regex.Replace(text, TargetTextRegex, EmptyTargetTextRegex, RegexOptions.Singleline);
 
 			var byteArray = Encoding.Unicode.GetBytes(text);
 			using var stream = new MemoryStream(byteArray);

@@ -10,4 +10,5 @@
 		<File>LanguageMappingProvider.dll</File>
 		<File>Dapper.StrongName.dll</File>
 	</Include>
+	
 </PluginPackage>

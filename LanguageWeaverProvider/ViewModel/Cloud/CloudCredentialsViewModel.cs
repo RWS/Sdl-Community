@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Extensions;
@@ -152,11 +150,11 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			 ||!CredentialsAreSet())
 			{
 				StopLoginProcess?.Invoke(this, EventArgs.Empty);
-				ErrorHandling.ShowDialog(null, "Credentials", "Please provide your credentials");
+				ErrorHandling.ShowDialog(null, PluginResources.Connection_Credentials, PluginResources.Connection_Error_NoCredentials);
 				return;
 			}
 
-			StartLoginProcess?.Invoke(this, new LoginEventArgs("Connecting user..."));
+			StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Connection_Loading_Connecting));
 			var cloudCredentials = new CloudCredentials()
 			{
 				UserID = _userId,
@@ -168,12 +166,12 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			var response = await CloudService.AuthenticateUser(cloudCredentials, AuthenticationType);
 			if (!response.Success)
 			{
-				StartLoginProcess?.Invoke(this, new LoginEventArgs("Connection unsuccessful. Attempting retry..."));
+				StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Connection_Error_FirstFail));
 				response = await CloudService.AuthenticateUser(cloudCredentials, AuthenticationType);
 				StopLoginProcess?.Invoke(this, EventArgs.Empty);
 				if (!response.Success)
 				{
-					response.Error.ShowDialog("Authentication process failed", response.Error.Message, true);
+					response.Error.ShowDialog(PluginResources.Connection_Error_Failed, response.Error.Message, true);
 					return;
 				}
 			}
@@ -185,12 +183,12 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		private async void SignLoggedUser(object parameter)
 		{
-			StartLoginProcess?.Invoke(this, new LoginEventArgs("Connecting user..."));
+			StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Connection_Loading_Connecting));
 			var response = await CloudService.AuthenticateUser(TranslationOptions.CloudCredentials, AuthenticationType.CloudCredentials);
 			StopLoginProcess?.Invoke(this, EventArgs.Empty);
 			if (!response.Success)
 			{
-				response.Error.ShowDialog("Authentication process failed", response.Error.Message, true);
+				response.Error.ShowDialog(PluginResources.Connection_Error_Failed, response.Error.Message, true);
 				return;
 			}
 
@@ -224,11 +222,11 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 			switch (parameterString)
 			{
-				case "UserID":
+				case nameof(UserId):
 					UserId = string.Empty;
 					break;
 
-				case "CliendId":
+				case nameof(ClientId):
 					ClientId = string.Empty;
 					break;
 

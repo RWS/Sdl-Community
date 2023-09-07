@@ -21,7 +21,7 @@
 		Inverted
 	}
 
-	public enum QualityEstimation
+	public enum QualityEstimations
 	{
 		None,
 		VeryPoor,

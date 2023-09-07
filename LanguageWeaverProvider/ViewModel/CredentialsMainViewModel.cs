@@ -147,7 +147,7 @@ namespace LanguageWeaverProvider.ViewModel
 		private async void StartLoginProcess(object sender, EventArgs e)
 		{
 			IsUserAttemptingLogin = true;
-			CurrentActionMessage = "Initiating...";
+			CurrentActionMessage = PluginResources.Connection_Loading_Initiating;
 			await Task.Delay(2000);
 			var loginEventArgs = e as LoginEventArgs;
 			CurrentActionMessage = loginEventArgs.Message;

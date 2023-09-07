@@ -87,7 +87,7 @@
 					Grid.Column="0"
 					Orientation="Horizontal"
 					Margin="12">
-			<Button Content="Open Language Mapping"
+			<Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_OpenLMP}"
 					Style="{StaticResource Sdl.Button.SecondaryStyle}"
 					Command="{Binding OpenLanguageMappingProviderViewCommand}"
 					FontSize="11"
@@ -95,7 +95,7 @@
 					Height="26"
 					Width="174"
 					Margin="12 0 0 0" />
-			<Button Content="Settings"
+			<Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Settings}"
 					Style="{StaticResource Sdl.Button.SecondaryStyle}"
 					Command="{Binding OpenSettingsViewCommand}"
 					Visibility="{Binding ShowSettingsView, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverted}"
@@ -113,7 +113,7 @@
 					Grid.Column="1"
 					Orientation="Horizontal"
 					Margin="12">
-			<Button Content="Cancel"
+			<Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Cancel}"
 					Style="{StaticResource Sdl.Button.SecondaryStyle}"
 					Command="{Binding CloseCommand}"
 					FontSize="11"
@@ -121,7 +121,7 @@
 					Height="26"
 					Width="120"/>
 
-			<Button Content="Confirm"
+			<Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Confirm}"
 					Style="{StaticResource Sdl.Button.PrimaryStyle}"
 					Command="{Binding SaveCommand}"
 					FontSize="11"

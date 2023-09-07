@@ -64,7 +64,7 @@ namespace LanguageWeaverProvider
 			if (!_translationOptions.ProviderSettings.ResendDrafts && _currentTranslationUnit.ConfirmationLevel != ConfirmationLevel.Unspecified)
 			{
 				var targetSegment = new Segment(TargetLanguage);
-				targetSegment.Add("[segment already translated...source not re-sent]");
+				targetSegment.Add(PluginResources.TranslationDraftNotResent);
 				return new SearchResults() { CreateSearchResult(segment, targetSegment) } ;
 			}
 

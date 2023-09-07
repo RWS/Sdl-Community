@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Security.RightsManagement;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,12 +17,12 @@ namespace LanguageWeaverProvider.Services
 	{
 		private static HttpClient _httpClient;
 
+		private const string HeaderNameAuth = "Authorization";
 		private const string ClientSecretsEndpoint = "https://api.languageweaver.com/v4/token";
 		private const string UserCredentialsEndpoint = "https://api.languageweaver.com/v4/token/user";
 		private const string AccountInfoApiEndpoint = "https://api.languageweaver.com/v4/accounts/api-credentials/self";
 		private const string AccountInfoCredentialsEndpoint = "https://api.languageweaver.com/v4/accounts/users/self";
 		private const string TranslationEndpoint = "https://api.languageweaver.com/v4/mt/translations/async";
-		private const string MediaType = "application/json";
 
 		public static async Task<(bool Success, Exception Error)> AuthenticateUser(CloudCredentials cloudCredentials, AuthenticationType authenticationType)
 		{
@@ -35,7 +34,7 @@ namespace LanguageWeaverProvider.Services
 			};
 
 			var content = GetAuthenticationContent(cloudCredentials, authenticationType);
-			var stringContent = new StringContent(content, null, MediaType);
+			var stringContent = new StringContent(content, null, "application/json");
 
 			try
 			{
@@ -71,7 +70,7 @@ namespace LanguageWeaverProvider.Services
 			_httpClient = new();
 			var uri = new Uri(endpoint);
 			var request = new HttpRequestMessage(HttpMethod.Get, uri);
-			request.Headers.Add("Authorization", $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
+			request.Headers.Add(HeaderNameAuth, $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
 
 			var response = await _httpClient.SendAsync(request);
 			response.EnsureSuccessStatusCode();
@@ -89,10 +88,12 @@ namespace LanguageWeaverProvider.Services
 			
 			try
 			{
-				var uri = new Uri($"https://api.languageweaver.com/v4/accounts/{cloudCredentials.AccountId}/subscriptions/language-pairs?includeChained=true");
+				const string UriPath = "subscriptions/language-pairs";
+				const string UriParameters = "includeChained=true";
+				var uri = new Uri($"https://api.languageweaver.com/v4/accounts/{cloudCredentials.AccountId}/{UriPath}?{UriParameters}");
 
 				var request = new HttpRequestMessage(HttpMethod.Get, uri);
-				request.Headers.Add("Authorization", $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
+				request.Headers.Add(HeaderNameAuth, $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
 
 				var response = await _httpClient.SendAsync(request);
 				response.EnsureSuccessStatusCode();
@@ -120,7 +121,7 @@ namespace LanguageWeaverProvider.Services
 				var uri = new Uri($"https://api.languageweaver.com/v4/accounts/{cloudCredentials.AccountId}/dictionaries");
 
 				var request = new HttpRequestMessage(HttpMethod.Get, uri);
-				request.Headers.Add("Authorization", $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
+				request.Headers.Add(HeaderNameAuth, $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
 
 				var response = await _httpClient.SendAsync(request);
 				response.EnsureSuccessStatusCode();
@@ -137,7 +138,7 @@ namespace LanguageWeaverProvider.Services
 			}
 		}
 
-		public static async Task<Xliff> Translate(CloudCredentials cloudCredentials, PairMapping mappedPair, Xliff sourceXliff, bool retry = true)
+		public static async Task<Xliff> Translate(CloudCredentials cloudCredentials, PairMapping mappedPair, Xliff sourceXliff)
 		{
 			await EnsureConnection(cloudCredentials);
 			_httpClient = new();
@@ -176,15 +177,20 @@ namespace LanguageWeaverProvider.Services
 
 		private static async Task<string> GetTranslationStatus(CloudCredentials cloudCredentials, string requestId)
 		{
+			const string UriParameters = "includeProgressInfo=true";
+
 			_httpClient = new();
-			var endpoint = $"{TranslationEndpoint}/{requestId}?includeProgressInfo=true";
-			_httpClient.DefaultRequestHeaders.Add("Authorization", $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
+			var endpoint = $"{TranslationEndpoint}/{requestId}?{UriParameters}";
+			_httpClient.DefaultRequestHeaders.Add(HeaderNameAuth, $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
 			var response = await _httpClient.GetStringAsync(endpoint);
 			return response;
 		}
 
 		private static async Task<string> SendTranslationRequest(CloudCredentials cloudCredentials, PairMapping mappedPair, Xliff sourceXliff)
 		{
+			const string InputFormat = "xliff";
+			const string QualityEstimationAbbreviation = "qe";
+
 			var sourceXliffText = sourceXliff.ToString();
 			var linguisticOptionsDictionary = mappedPair.LinguisticOptions?.ToDictionary(lo => lo.Id, lo => lo.SelectedValue);
 
@@ -194,16 +200,16 @@ namespace LanguageWeaverProvider.Services
 				TargetLanguageId = mappedPair.TargetCode,
 				Input = new[] { sourceXliff.ToString() },
 				Model = mappedPair.SelectedModel.Model,
-				InputFormat = "xliff",
+				InputFormat = InputFormat,
 				Dictionaries = new object[] { },
-				QualityEstimation = mappedPair.SelectedModel.Model.ToLower().Contains("qe") ? 1 : 0,
+				QualityEstimation = mappedPair.SelectedModel.Model.ToLower().Contains(QualityEstimationAbbreviation) ? 1 : 0,
 				LinguisticOptions = linguisticOptionsDictionary
 			};
 
 			_httpClient = new();
-			_httpClient.DefaultRequestHeaders.Add("Authorization", $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
+			_httpClient.DefaultRequestHeaders.Add(HeaderNameAuth, $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
 			var translationRequestModelJson = JsonConvert.SerializeObject(translationRequestModel);
-			var response = await _httpClient.PostAsync(TranslationEndpoint, new StringContent(translationRequestModelJson, Encoding.UTF8, MediaType));
+			var response = await _httpClient.PostAsync(TranslationEndpoint, new StringContent(translationRequestModelJson, Encoding.UTF8, "application/json"));
 			response.EnsureSuccessStatusCode();
 
 			return await response.Content.ReadAsStringAsync();
@@ -214,7 +220,7 @@ namespace LanguageWeaverProvider.Services
 			var endpoint = $"{TranslationEndpoint}/{requestId}/content";
 
 			_httpClient = new();
-			_httpClient.DefaultRequestHeaders.Add("Authorization", $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
+			_httpClient.DefaultRequestHeaders.Add(HeaderNameAuth, $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
 			using var request = new HttpRequestMessage(HttpMethod.Get, endpoint);
 			var response = await _httpClient.SendAsync(request);
 			response.EnsureSuccessStatusCode();

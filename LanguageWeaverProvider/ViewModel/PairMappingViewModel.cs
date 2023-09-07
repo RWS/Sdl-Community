@@ -110,7 +110,7 @@ namespace LanguageWeaverProvider.ViewModel
 		private ILanguageMappingDatabase SetDatabase()
 		{
 			var isCloudSelected = _translationOptions.Version == PluginVersion.LanguageWeaverCloud;
-			var targetDatabase = isCloudSelected ? "cloud" : "edge";
+			var targetDatabase = isCloudSelected ? Constants.CloudService : "edge";
 			var supportedLanguages = isCloudSelected ? DatabaseControl.GetCloudLanguageCodes() : null;
 			return new LanguageMappingDatabase(targetDatabase, supportedLanguages);
 		}

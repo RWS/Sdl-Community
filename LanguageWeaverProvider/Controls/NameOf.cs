@@ -9,6 +9,7 @@ namespace LanguageWeaverProvider.Controls
 	public class NameOf : MarkupExtension
 	{
 		public Type Type { get; set; }
+
 		public string Member { get; set; }
 
 		public override object ProvideValue(IServiceProvider serviceProvider)

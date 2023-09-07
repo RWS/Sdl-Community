@@ -13,14 +13,13 @@ namespace LanguageWeaverProvider.LanguageMappingProvider
 			if (pluginVersion == PluginVersion.LanguageWeaverCloud)
 			{
 				var languageMappings = GetCloudLanguageCodes();
-				_ = new LanguageMappingDatabase("cloud", languageMappings);
+				_ = new LanguageMappingDatabase(Constants.CloudService, languageMappings);
 				return;
 			}
 		}
 
 		public static List<LanguageMapping> GetCloudLanguageCodes()
-		{
-			// delete this method when they create the endpoint to retrieve this
+		{ // delete this method when they create the endpoint to retrieve this
 			var table = @"Afrikaans 	afr 	af
 Albanian 	alb 	sq
 Amharic 	amh 	am
@@ -140,7 +139,7 @@ Yiddish 	yid 	yi";
 
 		public static string GetLanguageCode(this CultureCode cultureCode)
 		{
-			var languageMappingDatabase = new LanguageMappingDatabase("cloud", null);
+			var languageMappingDatabase = new LanguageMappingDatabase(Constants.CloudService, null);
 			var languageMappings = languageMappingDatabase.GetMappedLanguages();
 			var targetLanguage = languageMappings.FirstOrDefault(x => x.TradosCode == cultureCode.Name);
 			var languageCode = targetLanguage?.LanguageCode ?? string.Empty;

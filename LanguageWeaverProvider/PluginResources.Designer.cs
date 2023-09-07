@@ -61,6 +61,360 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change authentication type.
+        /// </summary>
+        public static string Auth_ChangeAuthType {
+            get {
+                return ResourceManager.GetString("Auth_ChangeAuthType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cliend ID.
+        /// </summary>
+        public static string Auth_Cloud_ClientID {
+            get {
+                return ResourceManager.GetString("Auth_Cloud_ClientID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Client Secret.
+        /// </summary>
+        public static string Auth_Cloud_ClientSecret {
+            get {
+                return ResourceManager.GetString("Auth_Cloud_ClientSecret", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User credentials.
+        /// </summary>
+        public static string Auth_Cloud_Credentials {
+            get {
+                return ResourceManager.GetString("Auth_Cloud_Credentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User secrets.
+        /// </summary>
+        public static string Auth_Cloud_Secrets {
+            get {
+                return ResourceManager.GetString("Auth_Cloud_Secrets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Single sign-on.
+        /// </summary>
+        public static string Auth_Cloud_SSO {
+            get {
+                return ResourceManager.GetString("Auth_Cloud_SSO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User ID.
+        /// </summary>
+        public static string Auth_Cloud_UserID {
+            get {
+                return ResourceManager.GetString("Auth_Cloud_UserID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string Auth_Cloud_UserPw {
+            get {
+                return ResourceManager.GetString("Auth_Cloud_UserPw", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sign in.
+        /// </summary>
+        public static string Auth_SignIn {
+            get {
+                return ResourceManager.GetString("Auth_SignIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dictionary.
+        /// </summary>
+        public static string CloudMappingView_Headers_Dictionaries {
+            get {
+                return ResourceManager.GetString("CloudMappingView_Headers_Dictionaries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Linguistic options.
+        /// </summary>
+        public static string CloudMappingView_Headers_LOs {
+            get {
+                return ResourceManager.GetString("CloudMappingView_Headers_LOs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Model.
+        /// </summary>
+        public static string CloudMappingView_Headers_Models {
+            get {
+                return ResourceManager.GetString("CloudMappingView_Headers_Models", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language pair.
+        /// </summary>
+        public static string CloudMappingView_Headers_Pairs {
+            get {
+                return ResourceManager.GetString("CloudMappingView_Headers_Pairs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source.
+        /// </summary>
+        public static string CloudMappingView_Headers_Source {
+            get {
+                return ResourceManager.GetString("CloudMappingView_Headers_Source", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Target.
+        /// </summary>
+        public static string CloudMappingView_Headers_Target {
+            get {
+                return ResourceManager.GetString("CloudMappingView_Headers_Target", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not set.
+        /// </summary>
+        public static string CloudMappingView_Values_NotSet {
+            get {
+                return ResourceManager.GetString("CloudMappingView_Values_NotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not available.
+        /// </summary>
+        public static string CloudMappingView_Values_Unavailable {
+            get {
+                return ResourceManager.GetString("CloudMappingView_Values_Unavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Credentials.
+        /// </summary>
+        public static string Connection_Credentials {
+            get {
+                return ResourceManager.GetString("Connection_Credentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Authentication process failed.
+        /// </summary>
+        public static string Connection_Error_Failed {
+            get {
+                return ResourceManager.GetString("Connection_Error_Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection unsuccessful. Attempting retry....
+        /// </summary>
+        public static string Connection_Error_FirstFail {
+            get {
+                return ResourceManager.GetString("Connection_Error_FirstFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please provide your credentials.
+        /// </summary>
+        public static string Connection_Error_NoCredentials {
+            get {
+                return ResourceManager.GetString("Connection_Error_NoCredentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connecting user....
+        /// </summary>
+        public static string Connection_Loading_Connecting {
+            get {
+                return ResourceManager.GetString("Connection_Loading_Connecting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Initiating....
+        /// </summary>
+        public static string Connection_Loading_Initiating {
+            get {
+                return ResourceManager.GetString("Connection_Loading_Initiating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string ErrorView_Buttons_Close {
+            get {
+                return ResourceManager.GetString("ErrorView_Buttons_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide details.
+        /// </summary>
+        public static string ErrorView_Buttons_HideDetails {
+            get {
+                return ResourceManager.GetString("ErrorView_Buttons_HideDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save report.
+        /// </summary>
+        public static string ErrorView_Buttons_SaveReport {
+            get {
+                return ResourceManager.GetString("ErrorView_Buttons_SaveReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show details.
+        /// </summary>
+        public static string ErrorView_Buttons_ShowDetails {
+            get {
+                return ResourceManager.GetString("ErrorView_Buttons_ShowDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply.
+        /// </summary>
+        public static string LMPView_Buttons_ApplyChanges {
+            get {
+                return ResourceManager.GetString("LMPView_Buttons_ApplyChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string LMPView_Buttons_Close {
+            get {
+                return ResourceManager.GetString("LMPView_Buttons_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset to defaults.
+        /// </summary>
+        public static string LMPView_Buttons_Reset {
+            get {
+                return ResourceManager.GetString("LMPView_Buttons_Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        public static string LMPView_Headers_Language {
+            get {
+                return ResourceManager.GetString("LMPView_Headers_Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language code.
+        /// </summary>
+        public static string LMPView_Headers_LanguageCode {
+            get {
+                return ResourceManager.GetString("LMPView_Headers_LanguageCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Region.
+        /// </summary>
+        public static string LMPView_Headers_Region {
+            get {
+                return ResourceManager.GetString("LMPView_Headers_Region", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trados code.
+        /// </summary>
+        public static string LMPView_Headers_TradosCode {
+            get {
+                return ResourceManager.GetString("LMPView_Headers_TradosCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ; Filtered:.
+        /// </summary>
+        public static string LMPView_Languages_Filtered {
+            get {
+                return ResourceManager.GetString("LMPView_Languages_Filtered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total languages:.
+        /// </summary>
+        public static string LMPView_Languages_TotalCount {
+            get {
+                return ResourceManager.GetString("LMPView_Languages_TotalCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search language....
+        /// </summary>
+        public static string LMPView_SearchBox {
+            get {
+                return ResourceManager.GetString("LMPView_SearchBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset to defaults.
+        /// </summary>
+        public static string LMPViewModel_ResetTitle {
+            get {
+                return ResourceManager.GetString("LMPViewModel_ResetTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning: Resetting to default values!
+        ///All changes will be lost and the database will be restored to its original state.
+        ///
+        ///This action cannot be undone..
+        /// </summary>
+        public static string LMPViewModel_ResetWarning {
+            get {
+                return ResourceManager.GetString("LMPViewModel_ResetWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon lwLogoIco {
@@ -77,6 +431,51 @@ namespace LanguageWeaverProvider {
             get {
                 object obj = ResourceManager.GetObject("lwLogoPng", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back.
+        /// </summary>
+        public static string MainView_AuthMethods_BackBttn {
+            get {
+                return ResourceManager.GetString("MainView_AuthMethods_BackBttn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select the method you&apos;d like to use to log in. You might be asked to use your credentials into the next step..
+        /// </summary>
+        public static string MainView_AuthMethods_HelpMessage {
+            get {
+                return ResourceManager.GetString("MainView_AuthMethods_HelpMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        public static string MainView_Buttons_Exit {
+            get {
+                return ResourceManager.GetString("MainView_Buttons_Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language Weaver.
+        /// </summary>
+        public static string MainView_Buttons_LWCloud {
+            get {
+                return ResourceManager.GetString("MainView_Buttons_LWCloud", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LW Edge (coming soon).
+        /// </summary>
+        public static string MainView_Buttons_LWEdge {
+            get {
+                return ResourceManager.GetString("MainView_Buttons_LWEdge", resourceCulture);
             }
         }
         
@@ -99,11 +498,11 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Help.
+        ///   Looks up a localized string similar to Tap the button below to choose between Language Weaver, designed for general translation needs, and Language Weaver Edge, specialized for enhanced business translation..
         /// </summary>
-        public static string MainView_HelpButton {
+        public static string MainView_HelpMessage {
             get {
-                return ResourceManager.GetString("MainView_HelpButton", resourceCulture);
+                return ResourceManager.GetString("MainView_HelpMessage", resourceCulture);
             }
         }
         
@@ -128,11 +527,119 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string PairMappingView_Buttons_Cancel {
+            get {
+                return ResourceManager.GetString("PairMappingView_Buttons_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        public static string PairMappingView_Buttons_Confirm {
+            get {
+                return ResourceManager.GetString("PairMappingView_Buttons_Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Language Mapping.
+        /// </summary>
+        public static string PairMappingView_Buttons_OpenLMP {
+            get {
+                return ResourceManager.GetString("PairMappingView_Buttons_OpenLMP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string PairMappingView_Buttons_Settings {
+            get {
+                return ResourceManager.GetString("PairMappingView_Buttons_Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No dictionary selected.
+        /// </summary>
+        public static string PairModel_Dictionary_NotSelected {
+            get {
+                return ResourceManager.GetString("PairModel_Dictionary_NotSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No dictionary available.
+        /// </summary>
+        public static string PairModel_Dictionary_Unavailable {
+            get {
+                return ResourceManager.GetString("PairModel_Dictionary_Unavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No model available.
+        /// </summary>
+        public static string PairModel_Model_Unavailable {
+            get {
+                return ResourceManager.GetString("PairModel_Model_Unavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language Weaver Provider.
         /// </summary>
         public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ←.
+        /// </summary>
+        public static string SettingsView_BackButton_LeftContent {
+            get {
+                return ResourceManager.GetString("SettingsView_BackButton_LeftContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back.
+        /// </summary>
+        public static string SettingsView_BackButton_RightContent {
+            get {
+                return ResourceManager.GetString("SettingsView_BackButton_RightContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resend drafts for translation.
+        /// </summary>
+        public static string SettingsView_Drafts {
+            get {
+                return ResourceManager.GetString("SettingsView_Drafts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Include tags in translation.
+        /// </summary>
+        public static string SettingsView_Tags {
+            get {
+                return ResourceManager.GetString("SettingsView_Tags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [segment already translated...source not re-sent].
+        /// </summary>
+        public static string TranslationDraftNotResent {
+            get {
+                return ResourceManager.GetString("TranslationDraftNotResent", resourceCulture);
             }
         }
     }
