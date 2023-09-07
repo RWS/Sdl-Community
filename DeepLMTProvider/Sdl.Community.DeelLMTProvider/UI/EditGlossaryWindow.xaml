@@ -143,6 +143,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Content="❌"
+                                    AutomationProperties.Name="Delete entry button"
                                     Command="{Binding DeleteEntryCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                     CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=DataGrid}}" />
                         </DataTemplate>

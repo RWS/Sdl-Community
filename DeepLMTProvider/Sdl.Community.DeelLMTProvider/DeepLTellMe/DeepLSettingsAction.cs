@@ -109,7 +109,7 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
             }
         }
 
-        private void ViewModel_ManageGlossaries()
+        private void ViewModel_ManageGlossaries(bool easeOfAccess)
         {
             var glossaryReaderWriterFactory = new GlossaryReaderWriterFactory();
             var messageService = new MessageService();
