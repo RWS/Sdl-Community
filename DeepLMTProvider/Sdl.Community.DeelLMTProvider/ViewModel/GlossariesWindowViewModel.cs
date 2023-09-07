@@ -74,7 +74,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             }
         }
 
-        public ICommand ImportGlossaryCommand => new AsyncParameterlessCommand(async () => await ExecuteLongMethod(ImportGlossaries));
+        public ICommand ImportGlossariesCommand => new AsyncParameterlessCommand(async () => await ExecuteLongMethod(ImportGlossaries));
 
         public bool IsCheckAll
         {

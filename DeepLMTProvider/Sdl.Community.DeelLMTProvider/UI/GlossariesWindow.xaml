@@ -24,10 +24,14 @@
                     Command="{Binding EditGlossaryCommand}" />
         <KeyBinding Key="Q"
                     Modifiers="Control"
-                    Command="{Binding ImportGlossaryCommand}" />
+                    Command="{Binding ImportGlossariesCommand}" />
         <KeyBinding Key="Delete"
                     Command="{Binding DeleteGlossariesCommand}" />
-        <KeyBinding Key="Escape" Command="{Binding EscapeCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <KeyBinding Key="Escape"
+                    Command="{Binding EscapeCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+        <KeyBinding Key="A"
+                    Modifiers="Control"
+                    Command="{Binding AddNewGlossaryCommand}" />
 
 
     </Window.InputBindings>
@@ -96,6 +100,7 @@
         <DataGrid Grid.Row="2"
                   AutoGenerateColumns="False"
                   Margin="0 5 0 0"
+                  AutomationProperties.Name="Glossaries"
                   CanUserDeleteRows="False"
                   CanUserSortColumns="True"
                   SelectionMode="Single"
@@ -177,8 +182,9 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Content="📝"
+                                    AutomationProperties.Name="Edit glossary"
                                     ToolTip="Edit glossary (Ctrl+E)"
-                                    Command="{Binding DataContext.EditGlossaryCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                    Command="{Binding DataContext.EditGlossaryCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -190,14 +196,16 @@
 
             <Button DockPanel.Dock="Left"
                     Margin="0 0 2 0"
-                    ToolTip="Add new glossary"
+                    AutomationProperties.Name="Add new glossary"
+                    ToolTip="Add new glossary (Ctrl+A)"
                     Command="{Binding AddNewGlossaryCommand}"
                     Content="➕" />
 
             <Button Content="📂"
                     Margin="0 0 5 0"
+                    AutomationProperties.Name="Import glossaries"
                     FontSize="18"
-                    Command="{Binding ImportGlossaryCommand}"
+                    Command="{Binding ImportGlossariesCommand}"
                     HorizontalAlignment="Center">
                 <Button.ToolTip>
                     <TextBlock>
@@ -210,6 +218,7 @@
 
             <Button Margin="0 0 5 0"
                     Height="25"
+                    AutomationProperties.Name="Export glossaries"
                     Click="ExportButton_Click"
                     ToolTip="Export selected glossaries">
 
@@ -252,9 +261,10 @@
             <Button Content="🗑️"
                     Margin="-5 0 0 0"
                     Click="DeleteButton_Click"
+                    AutomationProperties.Name="Delete glossary"
                     ToolTip="Delete selected glossaries (Delete)"
                     FontSize="16"
-                    HorizontalAlignment="Center"/>
+                    HorizontalAlignment="Center" />
         </StackPanel>
 
         <Button Content="Cancel"
@@ -266,7 +276,7 @@
                 ToolTip="Cancel operation"
                 Style="{StaticResource Sdl.Button.EmbeddedStyle}" />
 
-        <Button Content="Ok"
+        <Button Content="OK"
                 Name="Ok_Button"
                 Grid.Row="3"
                 HorizontalAlignment="Right"
