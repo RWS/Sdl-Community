@@ -158,7 +158,7 @@
                     Margin="0 5"
                     Click="AddRowButton_Click"
                     AutomationProperties.Name="Add new entry"
-                    ToolTip="Add new entry"
+                    ToolTip="Add new entry (Alt+A)"
                     Content="➕" />
             <Button Margin="0 5"
                     Name="Edit_Button"
@@ -166,7 +166,7 @@
                     AutomationProperties.Name="Edit glossary"
                     Content="✏"
                     Click="EditButton_Click"
-                    ToolTip="Edit glossary (Ctrl+E)" />
+                    ToolTip="Edit glossary (Alt+E)" />
         </DockPanel>
     </Grid>
 </Window>
