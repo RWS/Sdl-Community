@@ -285,10 +285,8 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             return resultsList;
         }
 
-        private string LookupDeepL(string sourceText)
-        {
-            return _connecter.Translate(_languageDirection, sourceText, _languagePairOptions.Formality, _languagePairOptions.SelectedGlossary.Id);
-        }
+        private string LookupDeepL(string sourceText) => _connecter.Translate(_languageDirection, sourceText,
+            _languagePairOptions?.Formality ?? Formality.Default, _languagePairOptions?.SelectedGlossary.Id);
 
         private async Task<List<PreTranslateSegment>> PrepareTempData(List<PreTranslateSegment> preTranslateSegments)
         {

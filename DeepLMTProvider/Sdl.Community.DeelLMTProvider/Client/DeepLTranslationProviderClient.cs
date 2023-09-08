@@ -11,7 +11,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Sdl.Community.DeepLMTProvider.Client
 {
@@ -46,11 +45,6 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
         private List<string> SupportedSourceLanguages =>
             _supportedSourceLanguages ??= GetSupportedSourceLanguages(ApiKey);
-
-        public static List<string> GetFormalityIncompatibleLanguages(List<CultureInfo> targetLanguages)
-        {
-            return targetLanguages.Where(tl => !IsLanguageCompatible(tl)).Select(tl => tl.Name).ToList();
-        }
 
         public static List<string> GetSupportedSourceLanguages(string apiKey)
         {
@@ -129,10 +123,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(translationResponse);
 
                 if (translatedObject != null && translatedObject.Translations.Any())
-                {
                     translatedText = translatedObject.Translations[0].Text;
-                    translatedText = DecodeWhenNeeded(translatedText);
-                }
             }
             catch (AggregateException aEx)
             {
@@ -190,27 +181,6 @@ namespace Sdl.Community.DeepLMTProvider.Client
             SupportedTargetLanguages = SupportedTargetLanguagesAndFormalities.Keys.ToList();
 
             ApiKeyChanged?.Invoke();
-        }
-
-        private string DecodeWhenNeeded(string translatedText)
-        {
-            if (translatedText.Contains("%"))
-            {
-                translatedText = Uri.UnescapeDataString(translatedText);
-            }
-
-            var greater = new Regex(@"&gt;");
-            var less = new Regex(@"&lt;");
-
-            translatedText = greater.Replace(translatedText, ">");
-            translatedText = less.Replace(translatedText, "<");
-
-            //the only HTML encodings that appear to be used by DeepL
-            //besides the ones we're sending to escape tags
-            var amp = new Regex("&amp;|&amp");
-            translatedText = amp.Replace(translatedText, "&");
-
-            return translatedText;
         }
 
         private Formality GetFormality(LanguagePair languageDirection, Formality formality)
