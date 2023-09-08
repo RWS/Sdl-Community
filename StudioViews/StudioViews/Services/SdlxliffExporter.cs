@@ -15,12 +15,13 @@ namespace Sdl.Community.StudioViews.Services
 			_segmentBuilder = segmentBuilder;
 		}
 
-		public OutputFile ExportFile(List<SegmentPairInfo> selectedSegments, string filePathInput, string filePathOutput, Action<string, int, int> progressLogger)
+		public OutputFile ExportFile(List<SegmentPairInfo> selectedSegments, string filePathInput, string filePathOutput,
+			SegmentWordCounts segmentWordCounts, Action<string, int, int> progressLogger)
 		{
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePathInput, filePathOutput, null);
 
-			var contentWriter = new ContentExporter(selectedSegments, _segmentBuilder, progressLogger);
+			var contentWriter = new ContentExporter(selectedSegments, _segmentBuilder, segmentWordCounts, progressLogger);
 
 			converter.AddBilingualProcessor(contentWriter);
 			converter.SynchronizeDocumentProperties();

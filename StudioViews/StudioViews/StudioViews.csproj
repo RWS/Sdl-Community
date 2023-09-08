@@ -169,6 +169,7 @@
     <Compile Include="Services\SdlxliffImporter.cs" />
     <Compile Include="Services\SdlxliffExporter.cs" />
     <Compile Include="Services\SegmentVisitor.cs" />
+    <Compile Include="Services\SegmentWordCounts.cs" />
     <Compile Include="TellMe\CommunityAppStoreAction.cs" />
     <Compile Include="TellMe\CommunityAppStoreForumAction.cs" />
     <Compile Include="TellMe\CommunityWikiAction.cs" />

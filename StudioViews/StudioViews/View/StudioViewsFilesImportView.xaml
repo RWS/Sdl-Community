@@ -51,7 +51,7 @@
 		<Grid Canvas.ZIndex="110" HorizontalAlignment="Center" VerticalAlignment="Center"
 		      Visibility="{Binding ProgressIsVisible, Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisConv}}"
 		      Height="130"
-		      Width="450" Margin="10"
+		      Width="460" Margin="10"
 		      Background="White">
 			<Border BorderBrush="#727070" BorderThickness="1">
 				<Grid Margin="10">
@@ -67,12 +67,14 @@
                                VerticalAlignment="Center" HorizontalAlignment="Center"/>
 					<controls:TextBoxWithEllipsis Grid.Row="1" Margin="2, 5, 2, 5"
                                 TextWrapping="NoWrap"
+                                IsReadOnly="True"
                                 BorderThickness="0"
                                 Text="{Binding ProcessingFile, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
                                 VerticalAlignment="Center" HorizontalAlignment="Center"/>
 					<controls:TextBoxWithEllipsis Grid.Row="2" Margin="2"
                                 Text="{Binding ProcessingProgressMessage, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
                                 TextWrapping="NoWrap"
+                                IsReadOnly="True"
                                 BorderThickness="0"
                                 VerticalAlignment="Center" HorizontalAlignment="Center"/>
 					<ProgressBar Grid.Row="3" Margin="2" Minimum="0" Maximum="100" Height="20" 

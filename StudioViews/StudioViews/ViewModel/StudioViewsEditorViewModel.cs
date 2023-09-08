@@ -635,7 +635,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 			_activeDocument.Project.Save();
 			File.Copy(importResult.FilePath, importResult.BackupFilePath, true);
 
-			var updatedSegmentPairs = _sdlxliffReader.GetSegmentPairs(importFilePath, false);
+			var updatedSegmentPairs = _sdlxliffReader.GetSegmentPairs(importFilePath);
 
 			// If there are alignment differences, then the import needs to be performed after the document is closed
 			var alignmentDifferences = HasAlignmentDifferences(updatedSegmentPairs);
@@ -833,13 +833,17 @@ namespace Sdl.Community.StudioViews.ViewModel
 				InputFiles = new List<string>(projectFiles.Select(a => a.LocalFilePath))
 			};
 
+			var sourceLanguage = projectFiles.FirstOrDefault()?.SourceFile.Language.CultureInfo;
+			var targetLanguage = projectFiles.FirstOrDefault()?.Language.CultureInfo;
+			var segmentWordCounts = new SegmentWordCounts(sourceLanguage, targetLanguage);
+
 			foreach (var documentFile in projectFiles)
 			{
 				var filePathInput = documentFile.LocalFilePath;
 				var filePathInputName = Path.GetFileName(filePathInput);
 				var filePathOutput = _projectFileService.GetUniqueFileName(Path.Combine(ExportPath, filePathInputName), "Filtered");
 
-				var outputFile = _sdlxliffExporter.ExportFile(segmentPairInfos, filePathInput, filePathOutput, ProgressLogger);
+				var outputFile = _sdlxliffExporter.ExportFile(segmentPairInfos, filePathInput, filePathOutput, segmentWordCounts, ProgressLogger);
 				if (outputFile != null)
 				{
 					exportResult.OutputFiles.Add(outputFile);

@@ -609,7 +609,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 		{
 			foreach (var selectedFile in _selectedFiles)
 			{
-				var segmentPairs = _sdlxliffReader.GetSegmentPairs(selectedFile?.LocalFilePath, true);
+				var segmentPairs = _sdlxliffReader.GetSegmentPairs(selectedFile?.LocalFilePath);
 				if (segmentPairs.Count > 0)
 				{
 					return true;
@@ -721,12 +721,58 @@ namespace Sdl.Community.StudioViews.ViewModel
 				{
 					ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, 1, 1);
 					ProcessingFile = Path.GetFileName(filePathInput);
-					ProcessingProgressMessage = "Reading segments & calculating word counts...";
+					ProcessingProgressMessage = "Reading segments";
 					ProcessingCurrentProgress = 0;
 					ProcessingIsIndeterminate = true;
 				}));
 
-			var segmentPairs = _sdlxliffReader.GetSegmentPairs(filePathInput, false);
+
+			var segmentPairs = _sdlxliffReader.GetSegmentPairs(filePathInput);
+
+			_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+				new Action(delegate
+				{
+					ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, 1, 1);
+					ProcessingFile = Path.GetFileName(filePathInput);
+					ProcessingProgressMessage = "Generating segment word counts";
+					ProcessingCurrentProgress = 0;
+					ProcessingIsIndeterminate = false;
+				}));
+
+
+			var sourceLanguage = _selectedFiles.FirstOrDefault()?.SourceFile.Language.CultureInfo;
+			var targetLanguage = _selectedFiles.FirstOrDefault()?.Language.CultureInfo;
+			
+			var segmentWordCountService = new SegmentWordCounts(sourceLanguage, targetLanguage);
+
+			//var counter = 0;
+			//Parallel.For(0, segmentPairs.Count, 
+			//	new ParallelOptions { MaxDegreeOfParallelism = 5 }, index =>
+			//{
+
+			//	_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+			//		new Action(delegate
+			//		{
+			//			var segmentPairInfo = segmentPairs[index];
+			//			segmentPairInfo.SourceWordCounts = segmentWordCountService.GetWordCounts(segmentPairInfo.SegmentPair);
+
+			//			counter++;
+			//			ProcessingProgressMessage = "Generating segment word counts";
+			//			ProcessingCurrentProgress = GetPercentageValue(counter, segmentPairs.Count);
+			//		}));
+			//});
+
+			for (var index = 0; index < segmentPairs.Count; index++)
+			{
+				var segmentPairInfo = segmentPairs[index];
+				segmentPairInfo.SourceWordCounts = segmentWordCountService.GetWordCounts(segmentPairInfo.SegmentPair);
+				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+					new Action(delegate
+					{
+						ProcessingProgressMessage = "Generating segment word counts";
+						ProcessingCurrentProgress = GetPercentageValue(index + 1, segmentPairs.Count);
+					}));
+			}
 
 			var segmentPairSplits = GetSegmentPairSplits(segmentPairs);
 			if (segmentPairSplits == null)
@@ -752,7 +798,8 @@ namespace Sdl.Community.StudioViews.ViewModel
 					ProcessingIsIndeterminate = false;
 				}));
 
-				var outputFile = _sdlxliffExporter.ExportFile(segmentPairSplit, filePathInput, filePathOutput, ProgressLogger);
+				var outputFile = _sdlxliffExporter.ExportFile(segmentPairSplit, filePathInput, filePathOutput, 
+					segmentWordCountService, ProgressLogger);
 
 				exportResult.OutputFiles.Add(outputFile);
 			}

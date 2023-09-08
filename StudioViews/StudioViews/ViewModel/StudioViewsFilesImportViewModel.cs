@@ -695,7 +695,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 					continue;
 				}
 
-				var segmentPairs = sdlXliffReader.GetSegmentPairs(targetLanguageFile.LocalFilePath, true);
+				var segmentPairs = sdlXliffReader.GetSegmentPairs(targetLanguageFile.LocalFilePath);
 				if (updatedSegmentPairs.Any(updatedSegmentPair => segmentPairs.Exists(a => a.ParagraphUnitId == updatedSegmentPair.ParagraphUnitId)))
 				{
 					projectFiles.Add(targetLanguageFile);
@@ -723,7 +723,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 						ProcessingIsIndeterminate = true;
 					}));
 
-				var segmentPairs = sdlXliffReader.GetSegmentPairs(importFile,  true);
+				var segmentPairs = sdlXliffReader.GetSegmentPairs(importFile);
 				foreach (var segmentPair in segmentPairs)
 				{
 					if (!updatedSegmentPairs.Exists(a => a.ParagraphUnitId == segmentPair.ParagraphUnitId &&
