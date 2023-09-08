@@ -21,7 +21,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
     {
         private string _apiKey;
         private string _apiKeyValidationMessage;
-        private bool _easeOfAccessEnabled;
         private ObservableCollection<LanguagePairOptions> _languagePairSettings = new();
 
         public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, IMessageService messageService)

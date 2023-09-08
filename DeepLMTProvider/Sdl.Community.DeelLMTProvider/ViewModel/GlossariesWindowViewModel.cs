@@ -18,7 +18,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 {
     public class GlossariesWindowViewModel : ViewModel
     {
-        private bool _easeOfAccessEnabled;
         private string _filterQuery;
         private ObservableCollection<GlossaryInfo> _glossaries;
         private bool _isLoading;
