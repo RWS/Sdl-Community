@@ -1,6 +1,6 @@
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>projectTermExtract</PlugInName>
-  <Version>4.1.1.0</Version>
+  <Version>4.1.2.0</Version>
   <Description>Extract project terms and generate a termbase</Description>
   <Author>Trados AppStore Team</Author>
   <RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9" />
