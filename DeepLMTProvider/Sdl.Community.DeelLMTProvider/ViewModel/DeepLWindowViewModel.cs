@@ -57,7 +57,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             LoadLanguagePairSettings();
         }
 
-        public event Action<bool> ManageGlossaries;
+        public event Action ManageGlossaries;
 
         public string ApiKey
         {
@@ -81,19 +81,13 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             }
         }
 
-        public bool EaseOfAccessEnabled
-        {
-            get => _easeOfAccessEnabled;
-            set => SetField(ref _easeOfAccessEnabled, value);
-        }
-
         public ObservableCollection<LanguagePairOptions> LanguagePairOptions
         {
             get => _languagePairSettings;
             set => SetField(ref _languagePairSettings, value);
         }
 
-        public ICommand ManageGlossariesCommand => new ParameterlessCommand(() => ManageGlossaries?.Invoke(EaseOfAccessEnabled));
+        public ICommand ManageGlossariesCommand => new ParameterlessCommand(() => ManageGlossaries?.Invoke());
         public ICommand OkCommand => new ParameterlessCommand(Save, () => ApiKeyValidationMessage == null);
         public DeepLTranslationOptions Options { get; set; }
         public bool SendPlainText { get; set; }

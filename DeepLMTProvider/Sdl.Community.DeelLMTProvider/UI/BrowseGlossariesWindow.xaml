@@ -8,6 +8,7 @@
         SizeToContent="WidthAndHeight"
         MinHeight="200"
         MaxWidth="600"
+        Name="BrowseGlossaries_Window"
         MaxHeight="600"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
@@ -18,15 +19,15 @@
         <KeyBinding Key="E"
                     Modifiers="Control"
                     CommandParameter="Edit"
-                    Command="{Binding KeyboardShortcutCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                    Command="{Binding KeyboardShortcutCommand, ElementName=BrowseGlossaries_Window}"/>
 
         <KeyBinding Key="Enter"
                     CommandParameter="ImportGlossaries"
-                    Command="{Binding KeyboardShortcutCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                    Command="{Binding KeyboardShortcutCommand, ElementName=BrowseGlossaries_Window}" />
 
         <KeyBinding Key="Escape"
                     CommandParameter="Escape"
-                    Command="{Binding KeyboardShortcutCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                    Command="{Binding KeyboardShortcutCommand, ElementName=BrowseGlossaries_Window}"/>
     </Window.InputBindings>
 
     <Window.Resources>
@@ -73,7 +74,7 @@
                   d:ItemsSource="{d:SampleData}"
                   CanUserSortColumns="True"
                   AutoGenerateColumns="False"
-                  ItemsSource="{Binding Glossaries, RelativeSource={RelativeSource AncestorType=Window}}">
+                  ItemsSource="{Binding Glossaries, ElementName=BrowseGlossaries_Window}">
 
             <DataGrid.Columns>
 
@@ -84,7 +85,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <controls:EditableTextBlock Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                        IsEditing="{Binding IsEditing, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                                        IsEditing="{Binding IsEditing, ElementName=BrowseGlossaries_Window}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -95,7 +96,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ComboBox SelectedItem="{Binding SourceLanguage, UpdateSourceTrigger=PropertyChanged}"
-                                      ItemsSource="{Binding SupportedLanguages, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                      ItemsSource="{Binding SupportedLanguages, ElementName=BrowseGlossaries_Window}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -106,7 +107,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ComboBox SelectedItem="{Binding TargetLanguage,UpdateSourceTrigger=PropertyChanged}"
-                                      ItemsSource="{Binding SupportedLanguages, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                      ItemsSource="{Binding SupportedLanguages, ElementName=BrowseGlossaries_Window}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -144,7 +145,7 @@
                     IsDefault="True"
                     Click="ImportButton_Click"
                     Margin="0 0 5 0"
-                    IsEnabled="{Binding IsImportEnabled, RelativeSource={RelativeSource AncestorType=Window}}"
+                    IsEnabled="{Binding IsImportEnabled, ElementName=BrowseGlossaries_Window}"
                     HorizontalAlignment="Right" />
         </DockPanel>
     </Grid>

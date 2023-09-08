@@ -171,7 +171,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             credentialStore.AddCredential(uri, credentials);
         }
 
-        private void ViewModel_ManageGlossaries(bool easeOfAccess)
+        private void ViewModel_ManageGlossaries()
         {
             var glossaryReaderWriterFactory = new GlossaryReaderWriterFactory();
             var messageService = new MessageService();

@@ -121,6 +121,7 @@
         <DataGrid ItemsSource="{Binding LanguagePairOptions, Mode=TwoWay}"
                   CanUserAddRows="False"
                   DockPanel.Dock="Top"
+                  AutomationProperties.Name="Language Pair Options"
                   Margin="10 10"
                   Grid.Row="3"
                   Style="{StaticResource Sdl.DataGrid.GenericStyle}"

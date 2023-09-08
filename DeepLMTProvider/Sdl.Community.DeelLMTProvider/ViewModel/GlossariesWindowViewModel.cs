@@ -18,6 +18,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 {
     public class GlossariesWindowViewModel : ViewModel
     {
+        private bool _easeOfAccessEnabled;
         private string _filterQuery;
         private ObservableCollection<GlossaryInfo> _glossaries;
         private bool _isLoading;
@@ -47,6 +48,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         public ICommand CancelCommand => new ParameterlessCommand(CancelOperation);
         public bool CancellationRequested { get; set; }
         public ICommand DeleteGlossariesCommand => new AsyncParameterlessCommand(async () => await ExecuteLongMethod(DeleteGlossaries));
+
         public ICommand EditGlossaryCommand => new AsyncParameterlessCommand(async () => await ExecuteLongMethod(EditGlossary));
 
         public ICommand ExportGlossariesCommand => new AsyncCommandWithParameter(async f => await ExecuteLongMethod(() => ExportGlossaries(f)));

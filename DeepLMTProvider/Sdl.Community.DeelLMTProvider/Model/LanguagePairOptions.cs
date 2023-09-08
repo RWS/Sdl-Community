@@ -18,7 +18,9 @@ namespace Sdl.Community.DeepLMTProvider.Model
 		[JsonIgnore]
 		public List<GlossaryInfo> Glossaries { get; set; }
 
-		public GlossaryInfo SelectedGlossary
+        public override string ToString() => $"{nameof(LanguagePairOptions)}";
+
+        public GlossaryInfo SelectedGlossary
 		{
 			get => _selectedGlossary;
 			set => SetField(ref _selectedGlossary, value);

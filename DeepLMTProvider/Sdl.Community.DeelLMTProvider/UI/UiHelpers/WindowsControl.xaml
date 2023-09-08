@@ -80,32 +80,6 @@
                         Orientation="Horizontal"
                         VerticalAlignment="Top">
 
-                <ToggleButton Style="{DynamicResource ToggleButton_Style}"
-                              Background="Transparent"
-                              IsChecked="{Binding EaseOfAccessEnabled, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                              Height="25"
-                              Margin="0 0 5 0"
-                              AutomationProperties.Name="Ease of access"
-                              Name="EaseOfAccess_ToggleButton"
-                              BorderThickness="0">
-                    <Image Cursor="Hand">
-                        <Image.Style>
-                            <Style TargetType="Image"
-                                   BasedOn="{StaticResource {x:Type Image}}">
-                                <Setter Property="Source"
-                                        Value="../../Resources/Ease of access - black.png" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsChecked, ElementName=EaseOfAccess_ToggleButton}"
-                                                 Value="True">
-                                        <Setter Property="Source"
-                                                Value="../../Resources/Ease of access - blue.png" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Image.Style>
-                    </Image>
-                </ToggleButton>
-
                 <Button Style="{StaticResource WindowControlButtonStyle}"
                         x:Name="MinimizeButton"
                         Width="34"

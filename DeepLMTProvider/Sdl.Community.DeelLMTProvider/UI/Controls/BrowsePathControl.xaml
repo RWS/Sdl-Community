@@ -5,6 +5,7 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 mc:Ignorable="d"
 			 d:DesignHeight="450"
+			 Name="BrowsePath_UserControl"
 			 d:DesignWidth="800">
 	<UserControl.Resources>
 		<Style x:Key="FocusVisual">
@@ -116,7 +117,7 @@
 		</Style>
 	</UserControl.Resources>
 	<Grid>
-		<TextBox Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+        <TextBox Text="{Binding Text, ElementName=BrowsePath_UserControl}" />
 		<Button Style="{DynamicResource TransparentButton_Style}"
 				Content="📂"
 				HorizontalAlignment="Right"

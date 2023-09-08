@@ -10,14 +10,14 @@ namespace Sdl.Community.DeepLMTProvider.Model
         [JsonIgnore]
         public static GlossaryInfo NoGlossary { get; } = new() { Name = PluginResources.NoGlossary };
 
+        [JsonProperty("glossary_id")]
+        public string Id { get; set; }
+
         public bool IsChecked
         {
             get => _checked;
             set => SetField(ref _checked, value);
         }
-
-        [JsonProperty("glossary_id")]
-        public string Id { get; set; }
 
         public string Name
         {
@@ -50,6 +50,8 @@ namespace Sdl.Community.DeepLMTProvider.Model
                 return hashCode;
             }
         }
+
+        public override string ToString() => nameof(GlossaryInfo);
 
         protected bool Equals(GlossaryInfo other)
         {

@@ -3,37 +3,41 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:tradosControls="http://schemas.trados.com/xaml"
+        xmlns:controls="clr-namespace:Sdl.Community.DeepLMTProvider.UI.Controls"
+        xmlns:converters="clr-namespace:Sdl.Community.DeepLMTProvider.UI.Converters"
         xmlns:uiHelpers="clr-namespace:Sdl.Community.DeepLMTProvider.UI.UiHelpers"
         xmlns:viewModel="clr-namespace:Sdl.Community.DeepLMTProvider.ViewModel"
-        xmlns:converters="clr-namespace:Sdl.Community.DeepLMTProvider.UI.Converters"
-        xmlns:controls="clr-namespace:Sdl.Community.DeepLMTProvider.UI.Controls"
-        xmlns:tradosControls="http://schemas.trados.com/xaml"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewModel:GlossariesWindowViewModel}"
         d:DesignHeight="450"
-        MaxWidth="600"
         Title="DeepL Glossaries"
         Icon="../Resources/deepL_logo_new.png"
         MaxHeight="600"
+        MinWidth="425"
+        MinHeight="172"
+        Name="Glossaries_Window"
+        Width="435"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None">
 
     <Window.InputBindings>
         <KeyBinding Key="E"
-                    Modifiers="Control"
+                    Modifiers="Alt"
                     Command="{Binding EditGlossaryCommand}" />
         <KeyBinding Key="Q"
-                    Modifiers="Control"
+                    Modifiers="Alt"
                     Command="{Binding ImportGlossariesCommand}" />
         <KeyBinding Key="Delete"
                     Command="{Binding DeleteGlossariesCommand}" />
         <KeyBinding Key="Escape"
-                    Command="{Binding EscapeCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                    Command="{Binding EscapeCommand, ElementName=Glossaries_Window}" />
         <KeyBinding Key="A"
-                    Modifiers="Control"
+                    Modifiers="Alt"
                     Command="{Binding AddNewGlossaryCommand}" />
-
-
+        <KeyBinding Key="X"
+                    Modifiers="Alt"
+                    Command="{Binding ExportCommand, ElementName=Glossaries_Window}" />
     </Window.InputBindings>
 
     <Window.Resources>
@@ -52,14 +56,8 @@
                         Value="HighQuality" />
             </Style>
 
-            <Style TargetType="Button" BasedOn="{StaticResource Sdl.Button.EmbeddedStyle}">
-                <Setter Property="Focusable"
-                        Value="False" />
-            </Style>
-            
-            <Style TargetType="DataGridCell">
-                <Setter Property="Focusable"
-                        Value="True" />
+            <Style TargetType="Button"
+                   BasedOn="{StaticResource Sdl.Button.EmbeddedStyle}">
             </Style>
 
             <converters:AddAllItemConverter x:Key="AddAllItemConverter" />
@@ -95,6 +93,7 @@
                                      x:Name="Filter_TextBox"
                                      Text="{Binding FilterQuery, Mode=TwoWay}"
                                      Height="20"
+                                     Margin="0 0 0 -10"
                                      HorizontalAlignment="Right" />
 
         <DataGrid Grid.Row="2"
@@ -129,7 +128,7 @@
             <DataGrid.Resources>
                 <DataTemplate x:Key="CheckAllHeaderTemplate">
                     <CheckBox HorizontalContentAlignment="Center"
-                              IsChecked="{Binding DataContext.IsCheckAll, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}"
+                              IsChecked="{Binding DataContext.IsCheckAll, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ElementName=Glossaries_Window}"
                               VerticalAlignment="Center" />
                 </DataTemplate>
             </DataGrid.Resources>
@@ -183,8 +182,8 @@
                         <DataTemplate>
                             <Button Content="📝"
                                     AutomationProperties.Name="Edit glossary"
-                                    ToolTip="Edit glossary (Ctrl+E)"
-                                    Command="{Binding DataContext.EditGlossaryCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                    ToolTip="Edit glossary (Alt+E)"
+                                    Command="{Binding DataContext.EditGlossaryCommand, ElementName=Glossaries_Window}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -197,7 +196,7 @@
             <Button DockPanel.Dock="Left"
                     Margin="0 0 2 0"
                     AutomationProperties.Name="Add new glossary"
-                    ToolTip="Add new glossary (Ctrl+A)"
+                    ToolTip="Add new glossary (Alt+A)"
                     Command="{Binding AddNewGlossaryCommand}"
                     Content="➕" />
 
@@ -209,7 +208,7 @@
                     HorizontalAlignment="Center">
                 <Button.ToolTip>
                     <TextBlock>
-                         Import glossaries (Ctrl+Q)
+                         Import glossaries (Alt+Q)
                          <LineBreak />
                          While importing, ensure unique filenames to avoid duplicates, which will be ignored.
                     </TextBlock>
@@ -218,9 +217,10 @@
 
             <Button Margin="0 0 5 0"
                     Height="25"
+                    Name="Export_Button"
                     AutomationProperties.Name="Export glossaries"
                     Click="ExportButton_Click"
-                    ToolTip="Export selected glossaries">
+                    ToolTip="Export selected glossaries (Alt+X)">
 
                 <Button.ContextMenu>
                     <ContextMenu>
@@ -245,7 +245,7 @@
                             <Setter Property="Stroke"
                                     Value="Black" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Button}}"
+                                <DataTrigger Binding="{Binding IsMouseOver, ElementName=Export_Button}"
                                              Value="True">
                                     <Setter Property="Fill"
                                             Value="Red" />
@@ -273,8 +273,7 @@
                 Grid.Row="3"
                 Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
                 Command="{Binding CancelCommand}"
-                ToolTip="Cancel operation"
-                Style="{StaticResource Sdl.Button.EmbeddedStyle}" />
+                ToolTip="Cancel operation" />
 
         <Button Content="OK"
                 Name="Ok_Button"

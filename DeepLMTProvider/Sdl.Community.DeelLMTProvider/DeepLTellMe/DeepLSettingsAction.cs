@@ -109,14 +109,15 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
             }
         }
 
-        private void ViewModel_ManageGlossaries(bool easeOfAccess)
+        private void ViewModel_ManageGlossaries()
         {
             var glossaryReaderWriterFactory = new GlossaryReaderWriterFactory();
             var messageService = new MessageService();
 
             var glossariesWindowViewModel = new GlossariesWindowViewModel(new DeepLGlossaryClient(),
                 messageService, new GlossaryImportExportService(new DialogWrapper()),
-                new GlossaryReaderWriterService(glossaryReaderWriterFactory), new ProcessStarter(), new EditGlossaryService());
+                new GlossaryReaderWriterService(glossaryReaderWriterFactory), new ProcessStarter(),
+                new EditGlossaryService());
 
             var (success, glossaryWriter, _) = glossaryReaderWriterFactory.CreateGlossaryWriter(GlossaryReaderWriterService.Format.CSV);
             if (!success) messageService.ShowWarning("Backup service could not be initialized.\nUse glossary manager carefully!", "Manage glossaries");

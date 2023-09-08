@@ -13,6 +13,7 @@
         Icon="../Resources/deepL_logo_new.png"
         WindowStartupLocation="CenterScreen"
         Title="Edit glossary"
+        Name="EditGlossary_Window"
         WindowStyle="None"
         SizeToContent="WidthAndHeight"
         d:DataContext="{d:DesignInstance Type=local:EditGlossaryWindow}"
@@ -21,31 +22,31 @@
 
     <Window.InputBindings>
         <KeyBinding Key="A"
-                    Modifiers="Control"
-                    Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    Modifiers="Alt"
+                    Command="{Binding KeyboardCommand, ElementName=EditGlossary_Window}"
                     CommandParameter="Add" />
         <KeyBinding Key="E"
-                    Modifiers="Control"
-                    Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    Modifiers="Alt"
+                    Command="{Binding KeyboardCommand, ElementName=EditGlossary_Window}"
                     CommandParameter="Edit" />
         <KeyBinding Key="Escape"
-                    Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    Command="{Binding KeyboardCommand, ElementName=EditGlossary_Window}"
                     CommandParameter="Escape" />
 
         <KeyBinding Key="Delete"
-                    Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    Command="{Binding KeyboardCommand, ElementName=EditGlossary_Window}"
                     CommandParameter="Delete" />
 
         <KeyBinding Key="Enter"
-                    Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    Command="{Binding KeyboardCommand, ElementName=EditGlossary_Window}"
                     CommandParameter="Enter" />
 
         <KeyBinding Key="Up"
-                    Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    Command="{Binding KeyboardCommand, ElementName=EditGlossary_Window}"
                     CommandParameter="Up" />
 
         <KeyBinding Key="Down"
-                    Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    Command="{Binding KeyboardCommand, ElementName=EditGlossary_Window}"
                     CommandParameter="Down" />
     </Window.InputBindings>
 
@@ -61,16 +62,8 @@
                         Value="HighQuality" />
             </Style>
 
-            <Style x:Key="DataGridCell_Style"
-                   TargetType="DataGridCell">
-                <Setter Property="Focusable"
-                        Value="False" />
-            </Style>
-
             <Style TargetType="Button"
                    BasedOn="{StaticResource Sdl.Button.EmbeddedStyle}">
-                <Setter Property="Focusable"
-                        Value="False" />
             </Style>
         </ResourceDictionary>
     </Window.Resources>
@@ -93,29 +86,30 @@
 
             <controls:EditableTextBlock FontSize="12"
                                         DockPanel.Dock="Left"
+                                        AutomationProperties.Name="Glossary name"
                                         FontWeight="DemiBold"
-                                        IsEditing="{Binding IsEditing, RelativeSource={RelativeSource AncestorType=Window}}"
-                                        Text="{Binding GlossaryName, RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay}" />
+                                        IsEditing="{Binding IsEditing, ElementName=EditGlossary_Window}"
+                                        Text="{Binding GlossaryName, ElementName=EditGlossary_Window, Mode=TwoWay}" />
 
             <controls:ClearButtonTextBox x:Name="ClearButtonTextBox"
-                                         Text="{Binding FilterQuery, RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         Text="{Binding FilterQuery, ElementName=EditGlossary_Window, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                          HorizontalAlignment="Right"/>
         </DockPanel>
 
         <DataGrid Grid.Row="2"
                   Focusable="False"
                   Name="Entries_DataGrid"
+                  AutomationProperties.Name="Entries"
                   SelectionMode="Single"
                   AutoGenerateColumns="False"
                   d:ItemsSource="{d:SampleData}"
-                  CellStyle="{StaticResource DataGridCell_Style}"
                   Style="{StaticResource Sdl.DataGrid.GenericStyle}"
                   IsReadOnly="False"
-                  ItemsSource="{Binding GlossaryEntries, RelativeSource={RelativeSource AncestorType=Window}}">
+                  ItemsSource="{Binding GlossaryEntries, ElementName=EditGlossary_Window}">
 
             <DataGrid.InputBindings>
                 <KeyBinding Key="Enter"
-                            Command="{Binding KeyboardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                            Command="{Binding KeyboardCommand, ElementName=EditGlossary_Window}"
                             CommandParameter="Enter" />
 
             </DataGrid.InputBindings>
@@ -126,7 +120,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <controls:EditableTextBlock Text="{Binding SourceTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                        IsEditing="{Binding IsEditing, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                                        IsEditing="{Binding IsEditing, ElementName=EditGlossary_Window}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -135,7 +129,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <controls:EditableTextBlock Text="{Binding TargetTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                        IsEditing="{Binding IsEditing, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                                        IsEditing="{Binding IsEditing, ElementName=EditGlossary_Window}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -144,8 +138,8 @@
                         <DataTemplate>
                             <Button Content="❌"
                                     AutomationProperties.Name="Delete entry button"
-                                    Command="{Binding DeleteEntryCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                    CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=DataGrid}}" />
+                                    Command="{Binding DeleteEntryCommand, ElementName=EditGlossary_Window}"
+                                    CommandParameter="{Binding SelectedItem, ElementName=Entries_DataGrid}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -157,18 +151,19 @@
                     Margin="0 5"
                     Name="Apply_Button"
                     IsDefault="True"
-                    Focusable="True"
                     Click="ApplyButton_Click"
                     Style="{StaticResource Sdl.Button.PrimaryStyle}"
                     Content="Apply" />
             <Button DockPanel.Dock="Left"
                     Margin="0 5"
                     Click="AddRowButton_Click"
+                    AutomationProperties.Name="Add new entry"
                     ToolTip="Add new entry"
                     Content="➕" />
             <Button Margin="0 5"
                     Name="Edit_Button"
                     DockPanel.Dock="Left"
+                    AutomationProperties.Name="Edit glossary"
                     Content="✏"
                     Click="EditButton_Click"
                     ToolTip="Edit glossary (Ctrl+E)" />

@@ -213,8 +213,6 @@
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Ease of access - black.png" />
-    <Resource Include="Resources\Ease of access - blue.png" />
     <Resource Include="Resources\Export_64b.png" />
     <None Include="Resources\Settings.ico" />
     <EmbeddedResource Include="Resources\ForumIcon.ico" />
