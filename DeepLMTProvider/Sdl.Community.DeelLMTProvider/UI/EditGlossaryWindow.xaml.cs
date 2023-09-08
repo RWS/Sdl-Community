@@ -86,7 +86,13 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         private void AddRow()
         {
-            if (!GlossaryEntries.Any(ge => ge.IsEmpty())) GlossaryEntries.Add(new GlossaryEntry());
+            if (!GlossaryEntries.Any(ge => ge.IsEmpty()))
+            {
+                var glossaryEntry = new GlossaryEntry();
+                GlossaryEntries.Add(glossaryEntry);
+                Entries_DataGrid.ScrollIntoView(glossaryEntry);
+            }
+
         }
 
         private void AddRowButton_Click(object sender, RoutedEventArgs e)
