@@ -1,7 +1,4 @@
-﻿using Sdl.Community.DeepLMTProvider.Command;
-using System.Windows.Input;
-
-namespace Sdl.Community.DeepLMTProvider.Model
+﻿namespace Sdl.Community.DeepLMTProvider.Model
 {
     public class GlossaryEntry : ViewModel.ViewModel
     {
@@ -21,6 +18,9 @@ namespace Sdl.Community.DeepLMTProvider.Model
         }
 
         public bool IsEmpty() => string.IsNullOrWhiteSpace(SourceTerm) && string.IsNullOrWhiteSpace(TargetTerm);
+
         public bool IsInvalid() => string.IsNullOrWhiteSpace(SourceTerm) || string.IsNullOrWhiteSpace(TargetTerm);
+
+        public override string ToString() => nameof(GlossaryEntry);
     }
 }

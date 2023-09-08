@@ -117,7 +117,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
             switch (command)
             {
                 case "Edit":
-                    IsEditing = true;
+                    IsEditing = !IsEditing;
                     break;
 
                 case "Escape":
@@ -153,7 +153,8 @@ namespace Sdl.Community.DeepLMTProvider.UI
                     break;
 
                 case "Add":
-                    GlossaryEntries.Add(new GlossaryEntry());
+                    AddRow();
+                    IsEditing = true;
                     break;
             }
         }

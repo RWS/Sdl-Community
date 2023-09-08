@@ -21,6 +21,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
     {
         private string _apiKey;
         private string _apiKeyValidationMessage;
+        private bool _easeOfAccessEnabled;
         private ObservableCollection<LanguagePairOptions> _languagePairSettings = new();
 
         public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, IMessageService messageService)
@@ -102,39 +103,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             AutoReset = false
         };
 
-        private static GlossaryInfo GetSelectedGlossary(List<GlossaryInfo> glossaries, LanguagePairOptions languageSavedOptions, string sourceLangCode, string targetLangCode)
-        {
-            if (languageSavedOptions == null)
-                return GlossaryInfo.NoGlossary;
-
-            if (languageSavedOptions.SelectedGlossary.Name == PluginResources.NoGlossary)
-                return languageSavedOptions.SelectedGlossary;
-
-            if ((glossaries?.Contains(languageSavedOptions.SelectedGlossary) ?? false)
-                    && languageSavedOptions.SelectedGlossary.SourceLanguage == sourceLangCode
-                    && languageSavedOptions.SelectedGlossary.TargetLanguage == targetLangCode)
-                return languageSavedOptions.SelectedGlossary;
-
-            return GlossaryInfo.NoGlossary;
-        }
-
-        private void AskUserToRestart()
-        {
-            var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-            var documentsOpened = editorController.GetDocuments().Any();
-
-            if (documentsOpened)
-            {
-                MessageService.ShowWarning(PluginResources.SettingsUpdated_ReopenFilesForEditing,
-                    PluginResources.SettingsUpdated);
-            }
-        }
-
-        private void HandleError(string message, [CallerMemberName] string failingMethod = null)
-        {
-            MessageService.ShowWarning(message, failingMethod);
-        }
-
         public async void LoadLanguagePairSettings()
         {
             var (success, glossaries, message) = await GlossaryClient.GetGlossaries(DeepLTranslationProviderClient.ApiKey);
@@ -167,6 +135,39 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
                 LanguagePairOptions.Add(languagePairOptions);
             }
+        }
+
+        private static GlossaryInfo GetSelectedGlossary(List<GlossaryInfo> glossaries, LanguagePairOptions languageSavedOptions, string sourceLangCode, string targetLangCode)
+        {
+            if (languageSavedOptions == null)
+                return GlossaryInfo.NoGlossary;
+
+            if (languageSavedOptions.SelectedGlossary.Name == PluginResources.NoGlossary)
+                return languageSavedOptions.SelectedGlossary;
+
+            if ((glossaries?.Contains(languageSavedOptions.SelectedGlossary) ?? false)
+                    && languageSavedOptions.SelectedGlossary.SourceLanguage == sourceLangCode
+                    && languageSavedOptions.SelectedGlossary.TargetLanguage == targetLangCode)
+                return languageSavedOptions.SelectedGlossary;
+
+            return GlossaryInfo.NoGlossary;
+        }
+
+        private void AskUserToRestart()
+        {
+            var editorController = SdlTradosStudio.Application.GetController<EditorController>();
+            var documentsOpened = editorController.GetDocuments().Any();
+
+            if (documentsOpened)
+            {
+                MessageService.ShowWarning(PluginResources.SettingsUpdated_ReopenFilesForEditing,
+                    PluginResources.SettingsUpdated);
+            }
+        }
+
+        private void HandleError(string message, [CallerMemberName] string failingMethod = null)
+        {
+            MessageService.ShowWarning(message, failingMethod);
         }
 
         private void OnPasswordChanged(object sender, EventArgs e)

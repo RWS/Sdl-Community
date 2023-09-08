@@ -47,6 +47,8 @@ namespace Sdl.Community.DeepLMTProvider.UI.UiHelpers
             DependencyProperty.Register("ControlRestore", typeof(string), typeof(WindowsControl),
                 new PropertyMetadata(string.Empty));
 
+        public static readonly DependencyProperty EaseOfAccessEnabledProperty = DependencyProperty.Register(nameof(EaseOfAccessEnabled), typeof(bool), typeof(WindowsControl), new PropertyMetadata(default(bool)));
+
         public WindowsControl()
         {
             InitializeComponent();
@@ -103,6 +105,12 @@ namespace Sdl.Community.DeepLMTProvider.UI.UiHelpers
         {
             get => (string)GetValue(RestoreProperty);
             set => SetValue(RestoreProperty, value);
+        }
+
+        public bool EaseOfAccessEnabled
+        {
+            get => (bool)GetValue(EaseOfAccessEnabledProperty);
+            set => SetValue(EaseOfAccessEnabledProperty, value);
         }
 
         private void CloseButton_OnClick(object sender, RoutedEventArgs e)

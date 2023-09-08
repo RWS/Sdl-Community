@@ -16,7 +16,7 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
             var importDialog = new OpenFileDialog
             {
                 Filter = "All Supported Formats (*.tsv;*.csv;*.xlsx)|*.tsv;*.csv;*.xlsx|Tab-Separated Values (*.tsv)|*.tsv|Comma-Separated Values (*.csv)|*.csv",
-                Title = "Select TSV files",
+                Title = "Select files",
                 Multiselect = true
             };
 
