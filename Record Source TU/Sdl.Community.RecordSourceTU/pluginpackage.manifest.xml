@@ -1,10 +1,10 @@
 
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Record Source TU</PlugInName>
-  <Version>4.0.1.0</Version>
+  <Version>4.1.0.0</Version>
   <Description> TM provider that could use an TM that contained at least one field value called "Source File" and then automatically stamp into that field value the full path and the file name of the source file</Description>
   <Author>Trados AppStore Team</Author>
-  <RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
+  <RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9" />
   <Include>
     <File>Simple.Data.dll</File>
     <File>Simple.Data.Ado.dll</File>
