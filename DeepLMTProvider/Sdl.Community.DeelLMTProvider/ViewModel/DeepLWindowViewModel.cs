@@ -22,6 +22,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private string _apiKey;
         private string _apiKeyValidationMessage;
         private ObservableCollection<LanguagePairOptions> _languagePairSettings = new();
+        private bool _sendPlainText;
+        private bool _removeLockedContent;
 
         public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, IMessageService messageService)
         {
@@ -34,6 +36,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             LanguagePairs = deepLTranslationOptions.LanguagePairOptions.Select(lpo => lpo.LanguagePair).ToArray();
             SendPlainText = deepLTranslationOptions.SendPlainText;
+            RemoveLockedContent = deepLTranslationOptions.RemoveLockedContent;
             Options = deepLTranslationOptions;
 
             SetSettingsOnWindow(null);
@@ -48,6 +51,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             IsTellMeAction = false;
 
             SendPlainText = deepLTranslationOptions.SendPlainText;
+            RemoveLockedContent = deepLTranslationOptions.RemoveLockedContent;
             Options = deepLTranslationOptions;
 
             PasswordChangedTimer.Elapsed += OnPasswordChanged;
@@ -89,7 +93,17 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         public ICommand ManageGlossariesCommand => new ParameterlessCommand(() => ManageGlossaries?.Invoke());
         public ICommand OkCommand => new ParameterlessCommand(Save, () => ApiKeyValidationMessage == null);
         public DeepLTranslationOptions Options { get; set; }
-        public bool SendPlainText { get; set; }
+
+        public bool SendPlainText
+        {
+            get => _sendPlainText;
+            set
+            {
+                SetField(ref _sendPlainText, value);
+                if (!value) RemoveLockedContent = false;
+            }
+        }
+
         public string Title { get; set; } = "DeepL Translation Provider";
         private IDeepLGlossaryClient GlossaryClient { get; set; }
         private bool IsTellMeAction { get; }
@@ -101,6 +115,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             Interval = 500,
             AutoReset = false
         };
+
+        public bool RemoveLockedContent
+        {
+            get => _removeLockedContent;
+            set => SetField(ref _removeLockedContent, value);
+        }
 
         public async void LoadLanguagePairSettings()
         {
@@ -182,6 +202,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             SetApiKeyValidityLabel();
 
             Options.SendPlainText = SendPlainText;
+            Options.RemoveLockedContent = RemoveLockedContent;
             Options.ApiKey = ApiKey;
             Options.LanguagePairOptions = new List<LanguagePairOptions>(LanguagePairOptions);
 

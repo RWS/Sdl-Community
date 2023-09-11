@@ -31,6 +31,9 @@ namespace Sdl.Community.DeepLMTProvider.Model
 
 			SendPlainTextParameter = stateObject?["SendPlainTextParameter"]?.ToString();
 
+            if (bool.TryParse(stateObject?[nameof(RemoveLockedContent)]?.ToString(), out var removeLockedContent))
+                RemoveLockedContent = removeLockedContent;
+
 			LanguagePairOptions =
 				JsonConvert.DeserializeObject<List<LanguagePairOptions>>(stateObject?["LanguagePairOptions"]?.ToString());
 		}
@@ -53,7 +56,9 @@ namespace Sdl.Community.DeepLMTProvider.Model
 		[JsonIgnore]
 		public Uri Uri => _uriBuilder.Uri;
 
-		private bool TryParseJson(string state, out JObject jObject)
+        public bool RemoveLockedContent { get; set; }
+
+        private bool TryParseJson(string state, out JObject jObject)
 		{
 			bool successful;
 			try

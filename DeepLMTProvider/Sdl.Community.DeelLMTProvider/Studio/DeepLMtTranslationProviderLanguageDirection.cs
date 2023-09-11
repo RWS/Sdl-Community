@@ -1,26 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using NLog;
+﻿using NLog;
 using Sdl.Community.DeepLMTProvider.Client;
+using Sdl.Community.DeepLMTProvider.Extensions;
 using Sdl.Community.DeepLMTProvider.Helpers;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Sdl.Community.DeepLMTProvider.Studio
 {
-	public class DeepLMtTranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
+    public class DeepLMtTranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
     {
+        private readonly DeepLTranslationProviderClient _connecter;
         private readonly DeepLMtTranslationProvider _deepLMtTranslationProvider;
         private readonly LanguagePair _languageDirection;
+        private readonly LanguagePairOptions _languagePairOptions;
         private readonly Logger _logger = Log.GetLogger(nameof(DeepLMtTranslationProviderLanguageDirection));
         private readonly DeepLTranslationOptions _options;
-        private readonly DeepLTranslationProviderClient _connecter;
-        private readonly LanguagePairOptions _languagePairOptions;
 
         public DeepLMtTranslationProviderLanguageDirection(DeepLMtTranslationProvider deepLMtTranslationProvider, LanguagePair languageDirection, DeepLTranslationProviderClient connecter)
         {
@@ -30,18 +31,16 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             _connecter = connecter;
 
             _languagePairOptions =
-	            _options.LanguagePairOptions.FirstOrDefault(lpo => lpo.LanguagePair.Equals(languageDirection));
+                _options.LanguagePairOptions.FirstOrDefault(lpo => lpo.LanguagePair.Equals(languageDirection));
         }
 
         public bool CanReverseLanguageDirection => throw new NotImplementedException();
 
+        CultureCode ITranslationProviderLanguageDirection.SourceLanguage => _languageDirection.SourceCulture;
+        CultureCode ITranslationProviderLanguageDirection.TargetLanguage => _languageDirection.TargetCulture;
         public ITranslationProvider TranslationProvider => _deepLMtTranslationProvider;
 
-		CultureCode ITranslationProviderLanguageDirection.SourceLanguage => _languageDirection.SourceCulture;
-
-		CultureCode ITranslationProviderLanguageDirection.TargetLanguage => _languageDirection.TargetCulture;
-
-		public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
+        public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
         {
             throw new NotImplementedException();
         }
@@ -91,9 +90,10 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 }
                 else
                 {
-                    var sourcetext = newseg.ToPlain();
+                    var sourceText = newseg.ToPlain();
+                    if (_options.RemoveLockedContent) sourceText.RemoveTags(out sourceText);
 
-                    var translatedText = LookupDeepL(sourcetext);
+                    var translatedText = LookupDeepL(sourceText);
                     if (!string.IsNullOrEmpty(translatedText))
                     {
                         translation.Add(translatedText);
@@ -218,13 +218,13 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
         private SearchResult CreateSearchResult(Segment segment, Segment translation)
         {
-			var tu = new TranslationUnit
-			{
-				SourceSegment = segment.Duplicate(),//this makes the original source segment, with tags, appear in the search window
-				TargetSegment = translation
-			};
+            var tu = new TranslationUnit
+            {
+                SourceSegment = segment.Duplicate(),//this makes the original source segment, with tags, appear in the search window
+                TargetSegment = translation
+            };
 
-			tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
+            tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
 
             //maybe this we need to add the score which Christine  requested
             //
