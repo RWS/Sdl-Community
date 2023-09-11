@@ -120,17 +120,10 @@ namespace Sdl.Community.RecordSourceTU
 				settings,
                 translationUnits,
 				mask);
-        }
-
-		//public System.Globalization.CultureInfo SourceLanguage
-		//{
-		//	get { return _fileBasedTranslationProviderLanguageDirection.SourceLanguage; }
-		//}
-
-		//public System.Globalization.CultureInfo TargetLanguage
-		//{
-		//	get { return _fileBasedTranslationProviderLanguageDirection.TargetLanguage; }
-		//}
+        }		
+		
+		public CultureCode SourceLanguage => _fileBasedTranslationProviderLanguageDirection.SourceLanguage;
+		public CultureCode TargetLanguage => _fileBasedTranslationProviderLanguageDirection.TargetLanguage;
 
 		public ITranslationProvider TranslationProvider
         {
@@ -233,11 +226,7 @@ namespace Sdl.Community.RecordSourceTU
         {
             get { return _tmLanguageDirection.TranslationProvider; }
         }
-
-		public CultureCode SourceLanguage => _tmLanguageDirection.SourceLanguage; 
-
-		public CultureCode TargetLanguage => _tmLanguageDirection.TargetLanguage;
-
+			
 		public ImportResult[] UpdateTranslationUnitsMasked(TranslationUnit[] translationUnits, bool[] mask)
         {
             return _tmLanguageDirection.UpdateTranslationUnitsMasked(translationUnits, mask);
