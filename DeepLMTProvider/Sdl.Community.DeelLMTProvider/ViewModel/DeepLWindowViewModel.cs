@@ -67,7 +67,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             get => _apiKey;
             set
             {
-                SetField(ref _apiKey, value);
+                SetField(ref _apiKey, value?.Trim());
                 PasswordChangedTimer.Enabled = true;
             }
         }
@@ -191,7 +191,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         private void OnPasswordChanged(object sender, EventArgs e)
         {
-            ApiKey = ApiKey.Trim();
             DeepLTranslationProviderClient.ApiKey = ApiKey;
             SetApiKeyValidityLabel();
         }
@@ -214,7 +213,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         private void SetApiKeyValidityLabel()
         {
-            if (!string.IsNullOrEmpty(Options.ApiKey))
+            if (!string.IsNullOrEmpty(ApiKey))
             {
                 ApiKeyValidationMessage = null;
 
@@ -240,11 +239,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             }
             else
             {
-                if (credentialStore == null)
-                    return;
-
                 ApiKeyBoxEnabled = true;
-                ApiKey = credentialStore.Credential;
+                ApiKey = credentialStore?.Credential;
                 Options.ApiKey = ApiKey;
             }
         }
