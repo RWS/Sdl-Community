@@ -121,6 +121,7 @@
     <Compile Include="Extensions\CultureNameExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\ErrorHandler.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Helpers\GlossaryReadersWriters\CsvGlossaryReaderWriter.cs" />
     <Compile Include="Helpers\GlossaryReadersWriters\GlossaryReaderWriterFactory.cs" />
     <Compile Include="Helpers\GlossaryReadersWriters\TsvGlossaryReaderWriter.cs" />

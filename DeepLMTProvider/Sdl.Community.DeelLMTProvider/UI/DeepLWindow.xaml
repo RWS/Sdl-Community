@@ -116,6 +116,14 @@
                       IsChecked="{Binding SendPlainText}"
                       Content="Translate as plain text"
                       Margin="10,0,0,5" />
+            
+            <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+                      VerticalContentAlignment="Center"
+                      Name="LockedContent"
+                      IsEnabled="{Binding IsChecked, ElementName=PlainText}"
+                      IsChecked="{Binding RemoveLockedContent, Mode=TwoWay}"
+                      Content="Remove locked content"
+                      Margin="15,0,0,5" />
         </StackPanel>
 
         <DataGrid ItemsSource="{Binding LanguagePairOptions, Mode=TwoWay}"
