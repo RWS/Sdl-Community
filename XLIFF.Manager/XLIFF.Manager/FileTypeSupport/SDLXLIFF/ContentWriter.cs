@@ -333,12 +333,8 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 		private void UpdatePlaceholder(ElementPlaceholder elementPlaceholder, ISegment originalTarget, ISegment originalSource,
 			Stack<IAbstractMarkupDataContainer> containers)
 		{
-			var placeholder = GetElement(elementPlaceholder.TagId, originalTarget, originalSource, elementPlaceholder);
-			if (placeholder == null)
-			{
-				placeholder = _segmentBuilder.CreatePlaceholder(elementPlaceholder.TagId,
-					elementPlaceholder.TagContent);
-			}
+			var placeholder = GetElement(elementPlaceholder.TagId, originalTarget, originalSource, elementPlaceholder) 
+			                  ?? _segmentBuilder.CreatePlaceholder(elementPlaceholder.TagId, elementPlaceholder.DisplayText, elementPlaceholder.TagContent);
 
 			var container = containers.Peek();
 			container.Add(placeholder);
