@@ -21,10 +21,10 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 options.ApiKey = credentials.Credential;
 				DeepLTranslationProviderClient.ApiKey = credentials.Credential;
             }
-            else
-            {
-                credentialStore.AddCredential(originalUri, new TranslationProviderCredential(Guid.NewGuid().ToString(), true));
-            }
+            //else
+            //{
+            //    credentialStore.AddCredential(originalUri, new TranslationProviderCredential(Guid.NewGuid().ToString(), true));
+            //}
 
             return new DeepLMtTranslationProvider(options, new DeepLTranslationProviderClient(options.ApiKey));
         }
