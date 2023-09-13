@@ -175,7 +175,10 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 return;
 
             if (SupportedTargetLanguagesAndFormalities is { Count: not 0 })
+            {
+                ApiKeyChanged?.Invoke();
                 return;
+            }
 
             SupportedTargetLanguagesAndFormalities = GetSupportedTargetLanguages(ApiKey);
             SupportedTargetLanguages = SupportedTargetLanguagesAndFormalities.Keys.ToList();

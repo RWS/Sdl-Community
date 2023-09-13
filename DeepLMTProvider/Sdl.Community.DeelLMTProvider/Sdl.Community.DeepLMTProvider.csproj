@@ -145,6 +145,7 @@
     <Compile Include="Model\GlossaryLanguagePair.cs" />
     <Compile Include="Model\LanguagePairOptions.cs" />
     <Compile Include="Service\EditGlossaryService.cs" />
+    <Compile Include="Service\GlossaryBackupService.cs" />
     <Compile Include="Service\GlossaryImportExportService.cs" />
     <Compile Include="Service\GlossaryReaderWriterService.cs" />
     <Compile Include="Service\MessageService.cs" />
