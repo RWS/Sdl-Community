@@ -13,6 +13,7 @@ using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Timers;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Sdl.Community.DeepLMTProvider.ViewModel
@@ -22,8 +23,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private string _apiKey;
         private string _apiKeyValidationMessage;
         private ObservableCollection<LanguagePairOptions> _languagePairSettings = new();
-        private bool _sendPlainText;
         private bool _removeLockedContent;
+        private bool _sendPlainText;
 
         public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, IMessageService messageService)
         {
@@ -57,7 +58,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             PasswordChangedTimer.Elapsed += OnPasswordChanged;
 
             SetSettingsOnWindow(credentialStore);
-            LoadLanguagePairSettings();
+            DeepLTranslationProviderClient.ApiKeyChanged += Dispatcher_LoadLanguagePairSettings;
         }
 
         public event Action ManageGlossaries;
@@ -91,8 +92,16 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         }
 
         public ICommand ManageGlossariesCommand => new ParameterlessCommand(() => ManageGlossaries?.Invoke());
+
         public ICommand OkCommand => new ParameterlessCommand(Save, () => ApiKeyValidationMessage == null);
+
         public DeepLTranslationOptions Options { get; set; }
+
+        public bool RemoveLockedContent
+        {
+            get => _removeLockedContent;
+            set => SetField(ref _removeLockedContent, value);
+        }
 
         public bool SendPlainText
         {
@@ -105,9 +114,13 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         }
 
         public string Title { get; set; } = "DeepL Translation Provider";
+
         private IDeepLGlossaryClient GlossaryClient { get; set; }
+
         private bool IsTellMeAction { get; }
+
         private LanguagePair[] LanguagePairs { get; }
+
         private IMessageService MessageService { get; }
 
         private Timer PasswordChangedTimer { get; } = new()
@@ -115,12 +128,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             Interval = 500,
             AutoReset = false
         };
-
-        public bool RemoveLockedContent
-        {
-            get => _removeLockedContent;
-            set => SetField(ref _removeLockedContent, value);
-        }
 
         public async void LoadLanguagePairSettings()
         {
@@ -183,6 +190,9 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                     PluginResources.SettingsUpdated);
             }
         }
+
+        private void Dispatcher_LoadLanguagePairSettings() =>
+            Application.Current.Dispatcher.Invoke(LoadLanguagePairSettings);
 
         private void HandleError(string message, [CallerMemberName] string failingMethod = null)
         {

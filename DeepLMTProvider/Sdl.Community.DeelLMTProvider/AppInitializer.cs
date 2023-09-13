@@ -12,7 +12,7 @@ namespace Sdl.Community.DeepLMTProvider
 	[ApplicationInitializer]
     public class AppInitializer : IApplicationInitializer
     {
-        public static readonly HttpClient Client = new HttpClient();
+        public static readonly HttpClient Client = new();
 
         public void Execute()
         {
