@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -502,6 +503,12 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 			try
 			{
+
+				var path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+
+				var asm = Assembly.LoadFrom(Path.Combine(path, @"Sdl.LanguagePlatform.Lingua.dll"));
+				var t1 = asm.GetType("Sdl.LanguagePlatform.Lingua.LanguageTools");
+				
 
 				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
 					new Action(delegate

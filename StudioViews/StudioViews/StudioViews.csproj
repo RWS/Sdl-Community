@@ -47,6 +47,9 @@
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.Core.Globalization.Async">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.Async.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.Settings">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Settings.dll</HintPath>
     </Reference>
@@ -58,6 +61,12 @@
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Controls">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.Core">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
@@ -160,6 +169,7 @@
     <Compile Include="Model\TokenInfo.cs" />
     <Compile Include="Providers\DisplayFilter.cs" />
     <Compile Include="Providers\ParagraphUnitProvider.cs" />
+    <Compile Include="Services\SegmentGenerator.cs" />
     <Compile Include="Services\ProjectFileService.cs" />
     <Compile Include="Services\ContentExporter.cs" />
     <Compile Include="Services\FilterItemService.cs" />
@@ -170,6 +180,7 @@
     <Compile Include="Services\SdlxliffExporter.cs" />
     <Compile Include="Services\SegmentVisitor.cs" />
     <Compile Include="Services\SegmentWordCounts.cs" />
+    <Compile Include="Services\Tokenizer.cs" />
     <Compile Include="TellMe\CommunityAppStoreAction.cs" />
     <Compile Include="TellMe\CommunityAppStoreForumAction.cs" />
     <Compile Include="TellMe\CommunityWikiAction.cs" />

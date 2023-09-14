@@ -2,8 +2,10 @@
 using Trados.Community.Toolkit.LanguagePlatform;
 using Sdl.Versioning;
 using System.Globalization;
+using System.IO;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Trados.Community.Toolkit.LanguagePlatform.Models;
+using System.Reflection;
 
 namespace Sdl.Community.StudioViews.Services
 {
@@ -13,9 +15,13 @@ namespace Sdl.Community.StudioViews.Services
 		private SegmentPairProcessor _segmentPairProcessor;
 		private readonly CultureInfo _sourceLanguage;
 		private readonly CultureInfo _targetLanguage;
+		private Assembly asm;
+		private Type t;
 
 		public SegmentWordCounts(CultureInfo sourceLanguage, CultureInfo targetLanguage)
 		{
+		
+
 			_sourceLanguage = sourceLanguage;
 			_targetLanguage = targetLanguage;
 		}
