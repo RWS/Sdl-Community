@@ -15,13 +15,9 @@ namespace Sdl.Community.StudioViews.Services
 		private SegmentPairProcessor _segmentPairProcessor;
 		private readonly CultureInfo _sourceLanguage;
 		private readonly CultureInfo _targetLanguage;
-		private Assembly asm;
-		private Type t;
 
 		public SegmentWordCounts(CultureInfo sourceLanguage, CultureInfo targetLanguage)
 		{
-		
-
 			_sourceLanguage = sourceLanguage;
 			_targetLanguage = targetLanguage;
 		}
