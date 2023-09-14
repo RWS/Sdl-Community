@@ -71,10 +71,10 @@ namespace Sdl.Community.StudioViews.Services
 			// TODO: use SegmentGenerator to create the segment from Isegment
 
 			var result = new Segment(language);
-			foreach (var data in segment)
-			{
-				result.Add(data as IAbstractMarkupData);
-			}
+			//foreach (var data in segment)
+			//{
+			//	result.Add(data as IAbstractMarkupData);
+			//}
 			//result.Add(text);
 			TokenizeSegment(result, language);
 			return result;

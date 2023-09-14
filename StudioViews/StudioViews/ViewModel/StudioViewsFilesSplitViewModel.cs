@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -742,7 +741,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 			var sourceLanguage = _selectedFiles.FirstOrDefault()?.SourceFile.Language.CultureInfo;
 			var targetLanguage = _selectedFiles.FirstOrDefault()?.Language.CultureInfo;
-			
+
 			var segmentWordCountService = new SegmentWordCounts(sourceLanguage, targetLanguage);
 
 			//var counter = 0;
@@ -798,7 +797,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 					ProcessingIsIndeterminate = false;
 				}));
 
-				var outputFile = _sdlxliffExporter.ExportFile(segmentPairSplit, filePathInput, filePathOutput, 
+				var outputFile = _sdlxliffExporter.ExportFile(segmentPairSplit, filePathInput, filePathOutput,
 					segmentWordCountService, ProgressLogger);
 
 				exportResult.OutputFiles.Add(outputFile);
@@ -916,21 +915,17 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 		private void ProgressLogger(string message, int min, int max)
 		{
-			if (ProcessingIsIndeterminate)
+			var percentage = GetPercentageValue(min, max);
+			if (percentage > ProcessingCurrentProgress)
 			{
 				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
 					new Action(delegate
 					{
 						ProcessingIsIndeterminate = false;
+						ProcessingProgressMessage = message;
+						ProcessingCurrentProgress = percentage;
 					}));
 			}
-
-			_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
-				new Action(delegate
-				{
-					ProcessingProgressMessage = message;
-					ProcessingCurrentProgress = GetPercentageValue(min, max);
-				}));
 		}
 
 		private int GetPercentageValue(int index, int total)
