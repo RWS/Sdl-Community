@@ -22,6 +22,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         private readonly LanguagePairOptions _languagePairOptions;
         private readonly Logger _logger = Log.GetLogger(nameof(DeepLMtTranslationProviderLanguageDirection));
         private readonly DeepLTranslationOptions _options;
+        private readonly bool _decodeFromHtmlOrUrl;
 
         public DeepLMtTranslationProviderLanguageDirection(DeepLMtTranslationProvider deepLMtTranslationProvider, LanguagePair languageDirection, DeepLTranslationProviderClient connecter)
         {
@@ -29,6 +30,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             _languageDirection = languageDirection;
             _options = deepLMtTranslationProvider.Options;
             _connecter = connecter;
+            _decodeFromHtmlOrUrl = _options.DecodeFromHtmlOrUrl;
 
             _languagePairOptions =
                 _options.LanguagePairOptions.FirstOrDefault(lpo => lpo.LanguagePair.Equals(languageDirection));
@@ -286,7 +288,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         }
 
         private string LookupDeepL(string sourceText) => _connecter.Translate(_languageDirection, sourceText,
-            _languagePairOptions?.Formality ?? Formality.Default, _languagePairOptions?.SelectedGlossary.Id);
+            _languagePairOptions?.Formality ?? Formality.Default, _languagePairOptions?.SelectedGlossary.Id, _decodeFromHtmlOrUrl);
 
         private async Task<List<PreTranslateSegment>> PrepareTempData(List<PreTranslateSegment> preTranslateSegments)
         {
@@ -317,7 +319,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 {
                     if (segment != null)
                     {
-                        segment.PlainTranslation = _connecter.Translate(_languageDirection, segment.SourceText, _languagePairOptions.Formality, _languagePairOptions.SelectedGlossary.Id);
+                        segment.PlainTranslation = _connecter.Translate(_languageDirection, segment.SourceText, _languagePairOptions.Formality, _languagePairOptions.SelectedGlossary.Id, _decodeFromHtmlOrUrl);
                     }
                 })).ConfigureAwait(true);
 

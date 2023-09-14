@@ -38,6 +38,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             LanguagePairs = deepLTranslationOptions.LanguagePairOptions.Select(lpo => lpo.LanguagePair).ToArray();
             SendPlainText = deepLTranslationOptions.SendPlainText;
             RemoveLockedContent = deepLTranslationOptions.RemoveLockedContent;
+            DecodeHtmlOrUrl = deepLTranslationOptions.DecodeFromHtmlOrUrl;
             Options = deepLTranslationOptions;
 
             SetSettingsOnWindow(null);
@@ -53,6 +54,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             SendPlainText = deepLTranslationOptions.SendPlainText;
             RemoveLockedContent = deepLTranslationOptions.RemoveLockedContent;
+            DecodeHtmlOrUrl = deepLTranslationOptions.DecodeFromHtmlOrUrl;
             Options = deepLTranslationOptions;
 
             PasswordChangedTimer.Elapsed += OnPasswordChanged;
@@ -84,6 +86,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 OnPropertyChanged(nameof(OkCommand));
             }
         }
+
+        public bool DecodeHtmlOrUrl { get; set; }
 
         public ObservableCollection<LanguagePairOptions> LanguagePairOptions
         {

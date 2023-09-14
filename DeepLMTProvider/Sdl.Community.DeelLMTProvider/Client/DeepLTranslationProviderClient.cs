@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Sdl.Community.DeepLMTProvider.Client
 {
@@ -93,7 +94,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
             return !string.IsNullOrEmpty(supportedSourceLanguage) && !string.IsNullOrEmpty(supportedTargetLanguage);
         }
 
-        public string Translate(LanguagePair languageDirection, string sourceText, Formality formality, string glossaryId)
+        public string Translate(LanguagePair languageDirection, string sourceText, Formality formality, string glossaryId, bool decodeFromHtmlOrUrl)
         {
             formality = GetFormality(languageDirection, formality);
 
@@ -123,7 +124,10 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(translationResponse);
 
                 if (translatedObject != null && translatedObject.Translations.Any())
+                {
                     translatedText = translatedObject.Translations[0].Text;
+                    if (decodeFromHtmlOrUrl) translatedText = DecodeWhenNeeded(translatedText);
+                }
             }
             catch (AggregateException aEx)
             {
@@ -137,6 +141,27 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 Logger.Error(ex);
                 throw;
             }
+
+            return translatedText;
+        }
+
+        private string DecodeWhenNeeded(string translatedText)
+        {
+            if (translatedText.Contains("%"))
+            {
+                translatedText = Uri.UnescapeDataString(translatedText);
+            }
+
+            var greater = new Regex(@"&gt;");
+            var less = new Regex(@"&lt;");
+
+            translatedText = greater.Replace(translatedText, ">");
+            translatedText = less.Replace(translatedText, "<");
+
+            //the only HTML encodings that appear to be used by DeepL
+            //besides the ones we're sending to escape tags
+            var amp = new Regex("&amp;|&amp");
+            translatedText = amp.Replace(translatedText, "&");
 
             return translatedText;
         }
