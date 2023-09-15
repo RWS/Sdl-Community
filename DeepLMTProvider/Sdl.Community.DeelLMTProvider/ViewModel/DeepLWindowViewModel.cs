@@ -216,6 +216,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             Options.SendPlainText = SendPlainText;
             Options.RemoveLockedContent = RemoveLockedContent;
+            Options.DecodeFromHtmlOrUrl = DecodeHtmlOrUrl;
             Options.ApiKey = ApiKey;
             Options.LanguagePairOptions = new List<LanguagePairOptions>(LanguagePairOptions);
 
