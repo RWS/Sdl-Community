@@ -63,10 +63,8 @@ public class TerminologyService : ITerminologyService
 		return termbaseViewerTerms;
 	}
 
-	public List<StudioTermEntry> GetExactTerms(string word, string sourceLanguage, string targetLanguage, List<string> glossaries, List<string> tagList)
+	public List<StudioTermEntry> GetExactTerms(string word, string sourceLanguage, string targetLanguage, List<string> glossaries)
 	{
-		if (tagList?.Count > 0) glossaries.AddRange(GetTaggedGlossaries(tagList));
-
 		var sourceLanguageIndex = GetLanguageIndex(sourceLanguage);
 		var targetLanguageIndex = GetLanguageIndex(targetLanguage);
 		var columns = GetTermColumns(targetLanguageIndex);
@@ -101,9 +99,9 @@ public class TerminologyService : ITerminologyService
 		return studioTerms;
 	}
 
-	private List<string> GetTaggedGlossaries(List<string> tagList)
+	public List<string> GetTaggedGlossaries(List<string> tagList)
 	{
-		var glossaryIds = InterpretBankDataContext.GetLinks().Where(tl => tagList.Contains(tl.TagName)).Select(tl => tl.GlossaryId);
+		var glossaryIds = InterpretBankDataContext.GetLinks().Where(tl => tagList.Contains(tl.TagName)).Select(tl => tl.GlossaryId).ToList();
 		return InterpretBankDataContext.GetRows<DbGlossary>()
 			.Where(g => glossaryIds.Contains(g.Id)).Select(g => g.Tag1).ToList();
 	}

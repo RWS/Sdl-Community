@@ -96,7 +96,7 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 	public List<LanguageModel> GetGlossaryLanguages(string glossaryName)
 	{
 		var dbGlossary = DataContext.GetTable<DbGlossary>().ToList().FirstOrDefault(g => g.Tag1 == glossaryName);
-		var settings = dbGlossary.GlossarySetting;
+		var settings = dbGlossary?.GlossarySetting;
 
 		return GetLanguageNames(settings);
 	}

@@ -6,158 +6,172 @@ using System.Text.RegularExpressions;
 using InterpretBank.SettingsService;
 using InterpretBank.Studio.Model;
 using InterpretBank.TerminologyService.Interface;
+using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace InterpretBank.Studio;
 
 public class InterpretBankProvider : AbstractTerminologyProvider
 {
-	public InterpretBankProvider(ITerminologyService termSearchService, Settings settings)
-	{
-		TermSearchService = termSearchService;
-		Settings = settings;
-	}
+    public InterpretBankProvider(ITerminologyService termSearchService, Settings settings)
+    {
+        TermSearchService = termSearchService;
+        Settings = settings;
 
-	public override bool IsReadOnly => false;
+        if (Settings.Tags?.Count > 0)
+            Settings.Glossaries.AddRange(TermSearchService.GetTaggedGlossaries(Settings.Tags));
+    }
 
-	public override IDefinition Definition =>
-		//TODO: take name of these fields from Settings
-		new Definition(
-			new[]
-			{
-				new DescriptiveField { Label = "Extra1", Level = FieldLevel.TermLevel, Type = FieldType.String },
-				new DescriptiveField { Label = "Extra2", Level = FieldLevel.TermLevel, Type = FieldType.String }
-			}, GetLanguages().Cast<IDefinitionLanguage>());
+    public override bool IsReadOnly => false;
 
-	public override string Description => PluginResources.Plugin_Description;
+    public override IDefinition Definition =>
+        //TODO: take name of these fields from Settings
+        new Definition(
+            new[]
+            {
+                new DescriptiveField { Label = "Extra1", Level = FieldLevel.TermLevel, Type = FieldType.String },
+                new DescriptiveField { Label = "Extra2", Level = FieldLevel.TermLevel, Type = FieldType.String }
+            }, GetLanguages().Cast<IDefinitionLanguage>());
 
-	public override string Name => "Interpret Bank";
+    public override string Description => PluginResources.Plugin_Description;
 
-	public Settings Settings { get; set; }
+    public override string Name => "Interpret Bank";
 
-	public ITerminologyService TermSearchService { get; }
-	public override Uri Uri => new($"{Constants.InterpretBankUri}/{Settings.SettingsId}.json://");
+    public Settings Settings { get; set; }
 
-	private HashSet<IEntry> Entries { get; } = new();
+    public ITerminologyService TermSearchService { get; }
+    public override Uri Uri => new($"{Constants.InterpretBankUri}/{Settings.SettingsId}.json://");
 
-	private int TermIndex { get; set; }
+    private HashSet<IEntry> Entries { get; } = new();
 
-	public override void Dispose()
-	{
-		TermSearchService.Dispose();
-		base.Dispose();
-	}
+    private int TermIndex { get; set; }
 
-	public override IEntry GetEntry(int id)
-	{
-		return Entries.FirstOrDefault(e => e.Id == id);
-	}
+    public override void Dispose()
+    {
+        TermSearchService.Dispose();
+        base.Dispose();
+    }
 
-	public override IEntry GetEntry(int id, IEnumerable<ILanguage> languages)
-	{
-		throw new NotImplementedException();
-	}
+    public override IEntry GetEntry(int id)
+    {
+        return Entries.FirstOrDefault(e => e.Id == id);
+    }
 
-	public override IList<ILanguage> GetLanguages()
-	{
-		if (Settings.Glossaries is null || !Settings.Glossaries.Any())
-			return null;
-		var languages = new List<ILanguage>();
-		var cultures = CultureInfo.GetCultures(CultureTypes.NeutralCultures);
-		foreach (var glossary in Settings.Glossaries)
-		{
-			languages.AddRange(TermSearchService.GetGlossaryLanguages(glossary).Select(lang => new DefinitionLanguage
-			{
-				IsBidirectional = true,
-				Locale = cultures.FirstOrDefault(cult => cult.EnglishName == lang.Name),
-				Name = lang.Name,
-				TargetOnly = false
-			}));
-		}
+    public override IEntry GetEntry(int id, IEnumerable<ILanguage> languages)
+    {
+        throw new NotImplementedException();
+    }
 
-		return languages;
-	}
+    public override IList<ILanguage> GetLanguages()
+    {
+        if (Settings.Glossaries == null || !Settings.Glossaries.Any()) return null;
 
-	public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage destination,
-		int maxResultsCount, SearchMode mode, bool targetRequired)
-	{
-		var words = Regex.Split(text, "\\s+");
+        var languages = new List<ILanguage>();
 
-		List<ISearchResult> results = null;
-		foreach (var word in words)
-		{
-			results = mode switch
-			{
-				SearchMode.Fuzzy => GetFuzzyTerms(source, destination, word),
-				SearchMode.Normal => GetExactTerms(source, destination, word),
-				SearchMode.FullText => throw new NotImplementedException()
-			};
-		}
+        var cultures = LanguageRegistryApi.Instance.CultureMetadataManager.GetLanguagesAsync().Result.ToList();
+        foreach (var glossary in Settings.Glossaries)
+        {
+            var glossaryLanguages = TermSearchService.GetGlossaryLanguages(glossary);
+            glossaryLanguages.RemoveAll(l => l == null);
 
-		return results;
-	}
+            languages.AddRange(glossaryLanguages.Select(lang => new DefinitionLanguage
+            {
+                IsBidirectional = true,
+                Locale = LanguageRegistryApi
+                    .Instance
+                    .GetLanguage(cultures.FirstOrDefault(cult => cult.EnglishName == lang.Name)?.LanguageCode)
+                    .CultureInfo,
+                Name = lang.Name,
+                TargetOnly = false
+            }));
+        }
 
-	//TODO: simplify this; creates confusion
-	/// <summary>
-	/// Works differently for Fuzzy and Exact searches.
-	/// When the search is exact, we always add the same search text for each of the found terms, since there's only one (search text).
-	/// When the search is fuzzy, the search was done against the word itself and other similar words. In this case we add a search text for each of them.
-	/// </summary>
-	/// <param name="destination"></param>
-	/// <param name="results"></param>
-	/// <param name="terms"></param>
-	/// <param name="score"></param>
-	private void AddResultToList(ILanguage destination, List<ISearchResult> results, List<StudioTermEntry> terms, int score)
-	{
-		var id = GetIndex();
-		results.Add(new SearchResult { Id = (int)terms[0].Id, Score = score, Text = terms[0].SearchText });
-		Entries.Add(CreateEntry((int)terms[0].Id, terms, destination.Name));
-	}
+        return languages
+            .GroupBy(l => l.Name)
+            .Select(gr => gr.First())
+            .ToList();
+    }
 
-	private IEntry CreateEntry(int id, List<StudioTermEntry> targetTerms, string targetLanguage)
-	{
-		var entryTargetLanguage = new EntryLanguage { Name = targetLanguage };
-		foreach (var targetTerm in targetTerms)
-		{
-			var entryTerm = new EntryTerm { Value = targetTerm.Text };
+    public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage destination,
+        int maxResultsCount, SearchMode mode, bool targetRequired)
+    {
+        var words = Regex.Split(text, "\\s+");
 
-			var entryField1 = new EntryField { Name = "Extra1", Value = targetTerm.Extra1 };
-			var entryField2 = new EntryField { Name = "Extra2", Value = targetTerm.Extra2 };
+        List<ISearchResult> results = null;
+        foreach (var word in words)
+        {
+            results = mode switch
+            {
+                SearchMode.Fuzzy => GetFuzzyTerms(source, destination, word),
+                SearchMode.Normal => GetExactTerms(source, destination, word),
+                SearchMode.FullText => throw new NotImplementedException()
+            };
+        }
 
-			entryTerm.Fields.Add(entryField1);
-			entryTerm.Fields.Add(entryField2);
+        return results;
+    }
 
-			entryTargetLanguage.Terms.Add(entryTerm);
-		}
+    //TODO: simplify this; creates confusion
+    /// <summary>
+    /// Works differently for Fuzzy and Exact searches.
+    /// When the search is exact, we always add the same search text for each of the found terms, since there's only one (search text).
+    /// When the search is fuzzy, the search was done against the word itself and other similar words. In this case we add a search text for each of them.
+    /// </summary>
+    /// <param name="destination"></param>
+    /// <param name="results"></param>
+    /// <param name="terms"></param>
+    /// <param name="score"></param>
+    private void AddResultToList(ILanguage destination, List<ISearchResult> results, List<StudioTermEntry> terms, int score)
+    {
+        var id = GetIndex();
+        results.Add(new SearchResult { Id = (int)terms[0].Id, Score = score, Text = terms[0].SearchText });
+        Entries.Add(CreateEntry((int)terms[0].Id, terms, destination.Name));
+    }
 
-		var entry = new Entry { Id = id };
-		entry.Languages.Add(entryTargetLanguage);
+    private IEntry CreateEntry(int id, List<StudioTermEntry> targetTerms, string targetLanguage)
+    {
+        var entryTargetLanguage = new EntryLanguage { Name = targetLanguage };
+        foreach (var targetTerm in targetTerms)
+        {
+            var entryTerm = new EntryTerm { Value = targetTerm.Text };
 
-		return entry;
-	}
+            var entryField1 = new EntryField { Name = "Extra1", Value = targetTerm.Extra1 };
+            var entryField2 = new EntryField { Name = "Extra2", Value = targetTerm.Extra2 };
 
-	private List<ISearchResult> GetExactTerms(ILanguage source, ILanguage destination, string word)
-	{
-		var terms = TermSearchService.GetExactTerms(word, source.Name, destination.Name, Settings.Glossaries, Settings.Tags);
+            entryTerm.Fields.Add(entryField1);
+            entryTerm.Fields.Add(entryField2);
 
-		var results = new List<ISearchResult>();
-		AddResultToList(destination, results, terms, 100);
+            entryTargetLanguage.Terms.Add(entryTerm);
+        }
 
-		return results;
-	}
+        var entry = new Entry { Id = id };
+        entry.Languages.Add(entryTargetLanguage);
 
-	private List<ISearchResult> GetFuzzyTerms(ILanguage source, ILanguage destination, string word)
-	{
-		var terms = TermSearchService.GetFuzzyTerms(word, source.Name, destination.Name, Settings.Glossaries);
+        return entry;
+    }
 
-		var results = new List<ISearchResult>();
-		foreach (var term in terms)
-		{
-			AddResultToList(destination, results, new List<StudioTermEntry> { term }, term.Score);
-		}
+    private List<ISearchResult> GetExactTerms(ILanguage source, ILanguage destination, string word)
+    {
+        var terms = TermSearchService.GetExactTerms(word, source.Name, destination.Name, Settings.Glossaries);
 
-		return results;
-	}
+        var results = new List<ISearchResult>();
+        AddResultToList(destination, results, terms, 100);
 
-	private int GetIndex() => TermIndex++;
+        return results;
+    }
+
+    private List<ISearchResult> GetFuzzyTerms(ILanguage source, ILanguage destination, string word)
+    {
+        var terms = TermSearchService.GetFuzzyTerms(word, source.Name, destination.Name, Settings.Glossaries);
+
+        var results = new List<ISearchResult>();
+        foreach (var term in terms)
+        {
+            AddResultToList(destination, results, new List<StudioTermEntry> { term }, term.Score);
+        }
+
+        return results;
+    }
+
+    private int GetIndex() => TermIndex++;
 }
