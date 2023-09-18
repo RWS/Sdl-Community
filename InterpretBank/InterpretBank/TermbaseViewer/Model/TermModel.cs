@@ -20,10 +20,7 @@ namespace InterpretBank.TermbaseViewer.Model
 		private string _targetTermComment1;
 		private string _targetTermComment2;
 
-		public TermModel()
-		{
-			Id = -1;
-		}
+		public TermModel() => Id = -1;
 
 		public TermModel(long id, string targetTerm, string targetTermComment1, string targetTermComment2, string sourceTerm, string sourceTermComment1, string sourceTermComment2, string commentAll, int sourceLanguageIndex, int targetLanguageIndex, string glossaryName)
 		{
@@ -132,10 +129,11 @@ namespace InterpretBank.TermbaseViewer.Model
 
 		private TermModel OriginalTerm { get; set; }
 
-		public bool ContentEquals(TermModel other)
-		{
-			return _commentAll == other._commentAll && _sourceTerm == other._sourceTerm && _sourceTermComment1 == other._sourceTermComment1 && _sourceTermComment2 == other._sourceTermComment2 && _targetTerm == other._targetTerm && _targetTermComment1 == other._targetTermComment1 && _targetTermComment2 == other._targetTermComment2;
-		}
+		public bool ContentEquals(TermModel other) =>
+			_commentAll == other._commentAll && _sourceTerm == other._sourceTerm &&
+			_sourceTermComment1 == other._sourceTermComment1 &&
+			_sourceTermComment2 == other._sourceTermComment2 && _targetTerm == other._targetTerm &&
+			_targetTermComment1 == other._targetTermComment1 && _targetTermComment2 == other._targetTermComment2;
 
 		public void Revert()
 		{

@@ -54,8 +54,7 @@
 				   x:Key="CommentAll_EditableTextBlockStyle">
 				<Setter Property="IsEditing"
 						Value="{Binding SelectedItem.IsEditing}" />
-				<Setter Property="IsEnabled"
-						Value="{Binding SelectedItem.IsRemoved}" />
+			
 				<Style.Triggers>
 					<DataTrigger Binding="{Binding SelectedItem.IsRemoved}"
 								 Value="True">

@@ -40,7 +40,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 				_selectedIndex = value;
 
 				//SelectedItem = Terms[value == -1 ? 0 : value];
-				SelectedItem = value == -1 ? null : Terms[value];
+				if (Terms.Any()) SelectedItem = value == -1 ? null : Terms[value];
 
 				OnPropertyChanged();
 			}
@@ -94,6 +94,8 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
 		private void AddNewTerm(object obj)
 		{
+			if (Terms.Any(t => t.Id == -1 && !t.Edited)) return;
+
 			var termModel = obj as TermModel ?? new TermModel();
 			termModel.IsEditing = true;
 
