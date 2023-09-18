@@ -138,7 +138,7 @@ public class InterpretBankProvider : AbstractTerminologyProvider
 
 	private List<ISearchResult> GetExactTerms(ILanguage source, ILanguage destination, string word)
 	{
-		var terms = TermSearchService.GetExactTerms(word, source.Name, destination.Name, Settings.Glossaries);
+		var terms = TermSearchService.GetExactTerms(word, source.Name, destination.Name, Settings.Glossaries, Settings.Tags);
 
 		var results = new List<ISearchResult>();
 		AddResultToList(destination, results, terms, 100);
