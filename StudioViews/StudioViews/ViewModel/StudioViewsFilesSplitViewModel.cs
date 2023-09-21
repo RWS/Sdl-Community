@@ -918,7 +918,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 			var percentage = GetPercentageValue(min, max);
 			if (percentage > ProcessingCurrentProgress)
 			{
-				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+				_owner.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle,
 					new Action(delegate
 					{
 						ProcessingIsIndeterminate = false;
