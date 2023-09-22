@@ -114,14 +114,14 @@
                       VerticalContentAlignment="Center"
                       Name="DecodeHtmlAndUrl"
                       IsChecked="{Binding DecodeHtmlOrUrl}"
-                      Content="Decode HTML and URL encoding"
+                      Content="HTML/URL decode received translation"
                       Margin="10,0,0,5" />
             
             <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
                       VerticalContentAlignment="Center"
                       Name="PlainText"
                       IsChecked="{Binding SendPlainText}"
-                      Content="Translate as plain text"
+                      Content="Send source as plain text"
                       Margin="10,0,0,5" />
             
             <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"

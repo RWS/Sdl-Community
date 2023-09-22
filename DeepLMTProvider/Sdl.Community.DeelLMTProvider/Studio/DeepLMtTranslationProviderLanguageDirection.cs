@@ -22,7 +22,6 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         private readonly LanguagePairOptions _languagePairOptions;
         private readonly Logger _logger = Log.GetLogger(nameof(DeepLMtTranslationProviderLanguageDirection));
         private readonly DeepLTranslationOptions _options;
-        private readonly bool _decodeFromHtmlOrUrl;
 
         public DeepLMtTranslationProviderLanguageDirection(DeepLMtTranslationProvider deepLMtTranslationProvider, LanguagePair languageDirection, DeepLTranslationProviderClient connecter)
         {
@@ -30,7 +29,6 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             _languageDirection = languageDirection;
             _options = deepLMtTranslationProvider.Options;
             _connecter = connecter;
-            _decodeFromHtmlOrUrl = _options.DecodeFromHtmlOrUrl;
 
             _languagePairOptions =
                 _options.LanguagePairOptions.FirstOrDefault(lpo => lpo.LanguagePair.Equals(languageDirection));
@@ -77,30 +75,30 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
             try
             {
-                var newseg = segment.Duplicate();
-                if (newseg.HasTags && !_options.SendPlainText)
+                var newSeg = segment.Duplicate();
+                if (newSeg.HasTags && !_options.SendPlainText)
                 {
-                    var tagPlacer = new DeepLTranslationProviderTagPlacer(newseg);
+                    var tagPlacer = new DeepLTranslationProviderTagPlacer(newSeg);
                     var translatedText = LookupDeepL(tagPlacer.PreparedSourceText);
                     if (!string.IsNullOrEmpty(translatedText))
                     {
+                        if (_options.DecodeFromHtmlOrUrl) translatedText.DecodeText(out translatedText);
                         translation = tagPlacer.GetTaggedSegment(translatedText);
 
-                        results.Add(CreateSearchResult(newseg, translation));
+                        results.Add(CreateSearchResult(newSeg, translation));
                         return results;
                     }
                 }
                 else
                 {
-                    var sourceText = newseg.ToPlain();
-                    if (_options.RemoveLockedContent) sourceText.RemoveTags(out sourceText);
-
+                    var sourceText = ApplyPlainTextSettings(newSeg);
                     var translatedText = LookupDeepL(sourceText);
+                    if (_options.DecodeFromHtmlOrUrl) translatedText.DecodeText(out translatedText);
                     if (!string.IsNullOrEmpty(translatedText))
                     {
                         translation.Add(translatedText);
 
-                        results.Add(CreateSearchResult(newseg, translation));
+                        results.Add(CreateSearchResult(newSeg, translation));
                         return results;
                     }
                 }
@@ -111,6 +109,23 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 throw;
             }
             return results;
+        }
+
+        private string ApplyPlainTextSettings(Segment segment)
+        {
+            string sourceText;
+            if (_options.RemoveLockedContent)
+            {
+                segment.DeleteTags();
+                sourceText = segment.ToPlain();
+            }
+            else
+            {
+                sourceText = segment.ToPlain();
+                sourceText.RemoveTags(out sourceText);
+            }
+
+            return sourceText;
         }
 
         public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
@@ -174,21 +189,20 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                     }
                     i++;
                 }
-                if (preTranslateList.Count > 0)
-                {
-                    //Create temp file with translations
-                    var translatedSegments = PrepareTempData(preTranslateList).Result;
-                    var preTranslateSearchResults = GetPreTranslationSearchResults(translatedSegments);
 
-                    foreach (var result in preTranslateSearchResults)
-                    {
-                        if (result != null)
-                        {
-                            var index = preTranslateSearchResults.IndexOf(result);
-                            results.RemoveAt(index);
-                            results.Insert(index, result);
-                        }
-                    }
+                if (preTranslateList.Count <= 0) return results.ToArray();
+
+                //Create temp file with translations
+                var translatedSegments = TranslateSegments(preTranslateList).Result;
+                var preTranslateSearchResults = GetPreTranslationSearchResults(translatedSegments);
+
+                foreach (var result in preTranslateSearchResults)
+                {
+                    if (result == null) continue;
+
+                    var index = preTranslateSearchResults.IndexOf(result);
+                    results.RemoveAt(index);
+                    results.Insert(index, result);
                 }
             }
             else
@@ -198,7 +212,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 {
                     if (mask[i])
                     {
-                        var result = SearchTranslationUnit(settings, tu);
+                        var result = SearchSegment(settings, tu.SourceSegment);
                         results.RemoveAt(i);
                         results.Insert(i, result);
                     }
@@ -254,73 +268,62 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 resultsList.Add(null);
             }
 
-            foreach (var preTranslate in preTranslateList)
+            foreach (var preTranslate in preTranslateList.Where(preTranslate => preTranslate != null))
             {
-                if (preTranslate != null)
+                var plainTranslation = preTranslate.PlainTranslation;
+                if (_options.DecodeFromHtmlOrUrl) plainTranslation.DecodeText(out plainTranslation);
+
+                var translation = new Segment(_languageDirection.TargetCulture);
+                var sourceSegment = preTranslate.TranslationUnit.SourceSegment.Duplicate();
+                if (sourceSegment.HasTags && !_options.SendPlainText)
                 {
-                    var translation = new Segment(_languageDirection.TargetCulture);
-                    var newSeg = preTranslate.TranslationUnit.SourceSegment.Duplicate();
-                    if (newSeg.HasTags && !_options.SendPlainText)
-                    {
-                        var tagPlacer = new DeepLTranslationProviderTagPlacer(newSeg);
-
-                        translation = tagPlacer.GetTaggedSegment(preTranslate.PlainTranslation);
-                        preTranslate.TranslationSegment = translation;
-                    }
-                    else
-                    {
-                        translation.Add(preTranslate.PlainTranslation);
-                    }
-
-                    var searchResult = CreateSearchResult(newSeg, translation);
-                    var results = new SearchResults
-                    {
-                        SourceSegment = newSeg
-                    };
-                    results.Add(searchResult);
-
-                    var index = preTranslateList.IndexOf(preTranslate);
-                    resultsList.RemoveAt(index);
-                    resultsList.Insert(index, results);
+                    var tagPlacer = new DeepLTranslationProviderTagPlacer(sourceSegment);
+                    translation = tagPlacer.GetTaggedSegment(plainTranslation);
+                    preTranslate.TranslationSegment = translation;
                 }
+                else translation.Add(plainTranslation);
+
+                var searchResult = CreateSearchResult(sourceSegment, translation);
+                var results = new SearchResults
+                {
+                    SourceSegment = sourceSegment
+                };
+                results.Add(searchResult);
+
+                var index = preTranslateList.IndexOf(preTranslate);
+                resultsList.RemoveAt(index);
+                resultsList.Insert(index, results);
             }
+
             return resultsList;
         }
 
-        private string LookupDeepL(string sourceText) => _connecter.Translate(_languageDirection, sourceText,
-            _languagePairOptions?.Formality ?? Formality.Default, _languagePairOptions?.SelectedGlossary.Id, _decodeFromHtmlOrUrl);
+        private string LookupDeepL(string sourceText) =>
+            _connecter.Translate(_languageDirection, sourceText,
+                _languagePairOptions?.Formality ?? Formality.Default, _languagePairOptions?.SelectedGlossary.Id);
 
-        private async Task<List<PreTranslateSegment>> PrepareTempData(List<PreTranslateSegment> preTranslateSegments)
+        private async Task<List<PreTranslateSegment>> TranslateSegments(List<PreTranslateSegment> preTranslateSegments)
         {
             try
             {
-                for (var i = 0; i < preTranslateSegments.Count; i++)
+                foreach (var segment in preTranslateSegments.Where(segment => segment != null))
                 {
-                    if (preTranslateSegments[i] != null)
+                    string sourceText;
+                    var newSeg = segment.TranslationUnit.SourceSegment.Duplicate();
+
+                    if (newSeg.HasTags && !_options.SendPlainText)
                     {
-                        string sourceText;
-                        var newSeg = preTranslateSegments[i].TranslationUnit.SourceSegment.Duplicate();
-
-                        if (newSeg.HasTags)
-                        {
-                            var tagPlacer = new DeepLTranslationProviderTagPlacer(newSeg);
-                            sourceText = tagPlacer.PreparedSourceText;
-                        }
-                        else
-                        {
-                            sourceText = newSeg.ToPlain();
-                        }
-
-                        preTranslateSegments[i].SourceText = sourceText;
+                        var tagPlacer = new DeepLTranslationProviderTagPlacer(newSeg);
+                        sourceText = tagPlacer.PreparedSourceText;
                     }
+                    else sourceText = ApplyPlainTextSettings(newSeg);
+
+                    segment.SourceText = sourceText;
                 }
 
                 await Task.Run(() => Parallel.ForEach(preTranslateSegments, segment =>
                 {
-                    if (segment != null)
-                    {
-                        segment.PlainTranslation = _connecter.Translate(_languageDirection, segment.SourceText, _languagePairOptions.Formality, _languagePairOptions.SelectedGlossary.Id, _decodeFromHtmlOrUrl);
-                    }
+                    if (segment != null) segment.PlainTranslation = LookupDeepL(segment.SourceText);
                 })).ConfigureAwait(true);
 
                 return preTranslateSegments;
@@ -330,11 +333,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 _logger.Error($"{e.Message}\n {e.StackTrace}");
             }
 
-            preTranslateSegments.ForEach(seg =>
-            {
-                if (seg.PlainTranslation == null)
-                    seg.PlainTranslation = string.Empty;
-            });
+            preTranslateSegments.ForEach(seg => seg.PlainTranslation ??= string.Empty);
             return preTranslateSegments;
         }
     }
