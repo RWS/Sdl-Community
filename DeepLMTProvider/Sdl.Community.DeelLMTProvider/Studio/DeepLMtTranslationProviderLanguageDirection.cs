@@ -70,23 +70,6 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             throw new NotImplementedException();
         }
 
-        private string ApplyPlainTextSettings(Segment segment)
-        {
-            string sourceText;
-            if (_options.RemoveLockedContent)
-            {
-                segment.DeleteTags();
-                sourceText = segment.ToPlain();
-            }
-            else
-            {
-                sourceText = segment.ToPlain();
-                sourceText.RemoveTags(out sourceText);
-            }
-
-            return sourceText;
-        }
-
         public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
         {
             throw new NotImplementedException();
@@ -169,6 +152,27 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         public ImportResult[] UpdateTranslationUnits(TranslationUnit[] translationUnits)
         {
             throw new NotImplementedException();
+        }
+
+        private string ApplyAfterTranslationSettings(string plainTranslation)
+        {
+            if (_options.DecodeFromHtmlOrUrl) plainTranslation.DecodeText(out plainTranslation);
+            return plainTranslation;
+        }
+
+        private string ApplyBeforeTranslationSettings(Segment newSeg, DeepLTranslationProviderTagPlacer tagPlacer)
+        {
+            if (newSeg.HasTags && !_options.SendPlainText)
+                return tagPlacer.PreparedSourceText;
+
+            if (_options.RemoveLockedContent)
+            {
+                newSeg.DeleteTags();
+                return newSeg.ToPlain();
+            }
+
+            newSeg.ToPlain().RemoveTags(out var plainText);
+            return plainText;
         }
 
         private SearchResult CreateSearchResult(Segment segment, Segment translation)
@@ -270,27 +274,6 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
             preTranslateSegments.ForEach(seg => seg.PlainTranslation ??= string.Empty);
             return preTranslateSegments;
-        }
-
-        private string ApplyAfterTranslationSettings(string plainTranslation)
-        {
-            if (_options.DecodeFromHtmlOrUrl) plainTranslation.DecodeText(out plainTranslation);
-            return plainTranslation;
-        }
-
-        private string ApplyBeforeTranslationSettings(Segment newSeg, DeepLTranslationProviderTagPlacer tagPlacer)
-        {
-            if (newSeg.HasTags && !_options.SendPlainText)
-                return tagPlacer.PreparedSourceText;
-
-            if (_options.RemoveLockedContent)
-            {
-                newSeg.DeleteTags();
-                return newSeg.ToPlain();
-            }
-
-            newSeg.ToPlain().RemoveTags(out var plainText);
-            return plainText;
         }
     }
 }
