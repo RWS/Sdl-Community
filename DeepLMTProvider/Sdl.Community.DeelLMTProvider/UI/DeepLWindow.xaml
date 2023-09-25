@@ -36,7 +36,7 @@
                 <Setter Property="RenderOptions.BitmapScalingMode"
                         Value="HighQuality" />
             </Style>
-            
+
         </ResourceDictionary>
     </Window.Resources>
 
@@ -75,7 +75,7 @@
                                           Password="{Binding ApiKey, Mode=TwoWay}"
                                           Style="{StaticResource Sdl.BindablePasswordBox.GenericStyle}"
                                           Visibility="{Binding ApiKeyBoxEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                          Margin="10,0,20,5" />
+                                          Margin="10,0,10,5" />
             <TextBlock Name="ApiKeyValidationBlock"
                        VerticalAlignment="Center"
                        Margin="10,0,0,0"
@@ -106,31 +106,42 @@
 						Click here to obtain your API Key from DeepL
 					</Hyperlink>
             </TextBlock>
-            <TextBlock Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}"
+            <!--<TextBlock Style="{DynamicResource Sdl.TextBlock.InformationTitleStyle}"
                        Text="Translation options"
-                       Margin="10 0 0 5" />
+                       Margin="10 0 0 5" />-->
 
-            <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-                      VerticalContentAlignment="Center"
-                      Name="DecodeHtmlAndUrl"
-                      IsChecked="{Binding DecodeHtmlOrUrl}"
-                      Content="Decode HTML and URL encoding"
-                      Margin="10,0,0,5" />
-            
-            <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-                      VerticalContentAlignment="Center"
-                      Name="PlainText"
-                      IsChecked="{Binding SendPlainText}"
-                      Content="Translate as plain text"
-                      Margin="10,0,0,5" />
-            
-            <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-                      VerticalContentAlignment="Center"
-                      Name="LockedContent"
-                      IsEnabled="{Binding IsChecked, ElementName=PlainText}"
-                      IsChecked="{Binding RemoveLockedContent, Mode=TwoWay}"
-                      Content="Remove locked content"
-                      Margin="15,0,0,5" />
+            <GroupBox Header="Translation options" Margin="10 0 10 5">
+                <StackPanel Margin="0 5 0 5">
+                    <TextBlock Text="Before translation processing"
+                               Style="{StaticResource Sdl.TextBlock.SubtitleStyle}"
+                               Margin="10 0 0 5" />
+
+                    <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+                              VerticalContentAlignment="Center"
+                              Name="PlainText"
+                              IsChecked="{Binding SendPlainText}"
+                              Content="Send source as plain text"
+                              Margin="15,0,0,5" />
+
+                    <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+                              VerticalContentAlignment="Center"
+                              Name="LockedContent"
+                              IsEnabled="{Binding IsChecked, ElementName=PlainText}"
+                              IsChecked="{Binding RemoveLockedContent, Mode=TwoWay}"
+                              Content="Remove locked content"
+                              Margin="15,0,0,5" />
+
+                    <TextBlock Text="After translation processing"
+                               Style="{StaticResource Sdl.TextBlock.SubtitleStyle}"
+                               Margin="10 0 0 5" />
+
+                    <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+                              VerticalContentAlignment="Center"
+                              Name="DecodeHtmlAndUrl"
+                              IsChecked="{Binding DecodeHtmlOrUrl}"
+                              Content="HTML/URL decode received translation"
+                              Margin="15,0,0,5" />
+                </StackPanel></GroupBox>
         </StackPanel>
 
         <DataGrid ItemsSource="{Binding LanguagePairOptions, Mode=TwoWay}"
