@@ -248,7 +248,7 @@ This action cannot be undone.</value>
     <value>Back</value>
   </data>
   <data name="MainView_AuthMethods_HelpMessage" xml:space="preserve">
-    <value>Please select the method you'd like to use to log in. You might be asked to use your credentials into the next step.</value>
+    <value>Please choose your preferred login method. You may be required to enter your credentials in the next step.</value>
   </data>
   <data name="MainView_Buttons_Exit" xml:space="preserve">
     <value>Exit</value>

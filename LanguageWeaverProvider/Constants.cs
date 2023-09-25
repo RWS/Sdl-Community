@@ -16,5 +16,8 @@
 		// X
 		public const string CloudService = "Cloud";
 		public const string EdgeService = "Edge";
+
+		// LW Portal
+		public const string LanguageWeaverEUPortal = "https://portal.languageweaver.com/login";
 	}
 }

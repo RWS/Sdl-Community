@@ -8,6 +8,8 @@
 		xmlns:controls="clr-namespace:LanguageWeaverProvider.Controls"
 		xmlns:viewModel="clr-namespace:LanguageWeaverProvider.ViewModel"
 		d:DataContext="{d:DesignInstance viewModel:FeedbackViewModel}"
+		WindowStyle="None"
+		MouseLeftButtonDown="Window_MouseLeftButtonDown"
 		mc:Ignorable="d"
 		d:DesignHeight="450"
 		d:DesignWidth="800">

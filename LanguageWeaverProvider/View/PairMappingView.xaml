@@ -70,7 +70,7 @@
 		<ContentControl Content="{Binding PairMappingView}"
 						Visibility="{Binding ShowSettingsView, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverted}"
 						Focusable="False"
-						Margin="0 8"
+						Margin="8 0 8 16"
 						Grid.Row="1"
 						Grid.ColumnSpan="2"
 						HorizontalAlignment="Stretch" />
@@ -82,6 +82,10 @@
 						Grid.Row="1"
 						Grid.ColumnSpan="2"
 						HorizontalAlignment="Stretch" />
+
+		<Separator Grid.Row="2"
+				   Grid.ColumnSpan="2"
+				   VerticalAlignment="Top" />
 
 		<StackPanel Grid.Row="2"
 					Grid.Column="0"

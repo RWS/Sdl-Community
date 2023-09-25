@@ -83,5 +83,15 @@ namespace LanguageWeaverProvider.View
 			var starNumber = Convert.ToInt32(buttonName.Last().ToString());
 			return starNumber;
 		}
-	}
+
+		private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			if (Window.GetWindow(this) is not Window window)
+			{
+				return;
+			}
+
+			window.DragMove();
+		}
+    }
 }

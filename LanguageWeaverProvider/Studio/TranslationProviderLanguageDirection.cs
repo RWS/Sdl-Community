@@ -82,8 +82,14 @@ namespace LanguageWeaverProvider
 			var xliff = CreateXliffFile(sourceSegment);
 			var mappedPair = GetMappedPair();
 			var translation = CloudService.Translate(_translationOptions.CloudCredentials, mappedPair, xliff).Result;
-			var translatedSegment = translation.GetTargetSegments();
-			var searchResult = CreateSearchResult(segment, translatedSegment[0].Segment);
+			var translatedSegment = translation.GetTargetSegments().First();
+			var searchResult = CreateSearchResult(segment, translatedSegment.Segment);
+			if (translatedSegment.Estimation != QualityEstimations.None)
+			{
+				searchResult.MetaData.Add("QualityEstimation", translatedSegment.Estimation);
+			}
+
+			
 			return searchResult;
 		}
 

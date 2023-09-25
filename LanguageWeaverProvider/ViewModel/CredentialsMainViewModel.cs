@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using LanguageWeaverProvider.Command;
@@ -93,6 +94,8 @@ namespace LanguageWeaverProvider.ViewModel
 
 		public ICommand CloseCommand { get; private set; }
 
+		public ICommand OpenHyperlinkCommand { get; private set; }
+
 		public ICommand SelectLanguageWeaverServiceCommand { get; private set; }
 
 		public delegate void CloseWindowEventRaiser();
@@ -103,6 +106,7 @@ namespace LanguageWeaverProvider.ViewModel
 		{
 			BackCommand = new RelayCommand(Back);
 			CloseCommand = new RelayCommand(CloseApplication);
+			OpenHyperlinkCommand = new RelayCommand(OpenHyperlink);
 			SelectLanguageWeaverServiceCommand = new RelayCommand(SelectLanguageWeaverService);
 		}
 
@@ -116,6 +120,11 @@ namespace LanguageWeaverProvider.ViewModel
 		{
 			SaveChanges = false;
 			CloseEventRaised?.Invoke();
+		}
+
+		private void OpenHyperlink(object parameter)
+		{
+			Process.Start(parameter as string);
 		}
 
 		private void SelectLanguageWeaverService(object parameter)

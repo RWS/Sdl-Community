@@ -444,7 +444,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please select the method you&apos;d like to use to log in. You might be asked to use your credentials into the next step..
+        ///   Looks up a localized string similar to Please choose your preferred login method. You may be required to enter your credentials in the next step..
         /// </summary>
         public static string MainView_AuthMethods_HelpMessage {
             get {
