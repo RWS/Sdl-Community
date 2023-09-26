@@ -155,12 +155,20 @@
                     Style="{StaticResource Sdl.Button.PrimaryStyle}"
                     Content="Apply" />
             <Button DockPanel.Dock="Left"
-                    Margin="0 5"
+                    Margin="0 7 0 5"
                     Click="AddRowButton_Click"
                     AutomationProperties.Name="Add new entry"
                     ToolTip="Add new entry (Alt+A)"
                     Content="➕" />
-            <Button Margin="0 5"
+
+            <Button Content="📂"
+                    AutomationProperties.Name="Import glossaries"
+                    FontSize="18"
+                    Click="ImportButton_Click"
+                    HorizontalAlignment="Center"
+                    ToolTip="Import entries from another glossary"/>
+
+            <Button Margin="-2 2 0 0"
                     Name="Edit_Button"
                     DockPanel.Dock="Left"
                     AutomationProperties.Name="Edit glossary"

@@ -1,6 +1,7 @@
 ﻿using Sdl.Community.DeepLMTProvider.Command;
 using Sdl.Community.DeepLMTProvider.Extensions;
 using Sdl.Community.DeepLMTProvider.Model;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -20,12 +21,16 @@ namespace Sdl.Community.DeepLMTProvider.UI
         private string _glossaryName;
         private bool _isEditing;
 
-        public EditGlossaryWindow(List<GlossaryEntry> glossaryEntries, string glossaryName)
+        public EditGlossaryWindow(List<GlossaryEntry> glossaryEntries,
+            string glossaryName)
         {
             GlossaryName = glossaryName;
             GlossaryEntries = new ObservableCollection<GlossaryEntry>(glossaryEntries);
+
             InitializeComponent();
         }
+
+        public event Action ImportEntriesRequested;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -86,13 +91,11 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         private void AddRow()
         {
-            if (!GlossaryEntries.Any(ge => ge.IsEmpty()))
-            {
-                var glossaryEntry = new GlossaryEntry();
-                GlossaryEntries.Add(glossaryEntry);
-                Entries_DataGrid.ScrollIntoView(glossaryEntry);
-            }
+            if (GlossaryEntries.Any(ge => ge.IsEmpty())) return;
 
+            var glossaryEntry = new GlossaryEntry();
+            GlossaryEntries.Add(glossaryEntry);
+            Entries_DataGrid.ScrollIntoView(glossaryEntry);
         }
 
         private void AddRowButton_Click(object sender, RoutedEventArgs e)
@@ -198,5 +201,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
             Apply_Button.IsEnabled = !termsToBeRemoved.Any() && !duplicates.Any() && GlossaryEntries.Any();
         }
+
+        private void ImportButton_Click(object sender, RoutedEventArgs e) => ImportEntriesRequested?.Invoke();
     }
 }

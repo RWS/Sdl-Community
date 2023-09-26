@@ -46,10 +46,18 @@ namespace Sdl.Community.DeepLMTProvider.Service
         {
             var glossaryReaderWriterFactory = new GlossaryReaderWriterFactory();
             var messageService = new MessageService();
+            var glossaryImportExportService = new GlossaryImportExportService(new DialogWrapper());
+            var glossaryReaderWriterService = new GlossaryReaderWriterService(glossaryReaderWriterFactory);
+            var deepLGlossaryClient = new DeepLGlossaryClient();
 
-            var glossariesWindowViewModel = new GlossariesWindowViewModel(new DeepLGlossaryClient(),
-                messageService, new GlossaryImportExportService(new DialogWrapper()),
-                new GlossaryReaderWriterService(glossaryReaderWriterFactory), new ProcessStarter(), new EditGlossaryService());
+            var glossariesWindowViewModel =
+                new GlossariesWindowViewModel(
+                    deepLGlossaryClient,
+                    messageService,
+                    glossaryImportExportService,
+                    glossaryReaderWriterService,
+                    new ProcessStarter(),
+                    new EditGlossaryService(glossaryReaderWriterService, glossaryImportExportService, messageService));
 
             var (success, glossaryWriter, _) = glossaryReaderWriterFactory.CreateGlossaryWriter(GlossaryReaderWriterService.Format.CSV);
             if (!success) messageService.ShowWarning("Backup service could not be initialized.\nUse glossary manager carefully!", "Manage glossaries");

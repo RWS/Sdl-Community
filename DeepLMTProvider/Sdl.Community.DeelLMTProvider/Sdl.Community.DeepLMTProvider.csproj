@@ -117,6 +117,7 @@
     <Compile Include="Command\AsyncParameterlessCommand.cs" />
     <Compile Include="Command\ParameterlessCommand.cs" />
     <Compile Include="Command\CommandWithParameter.cs" />
+    <Compile Include="Common.cs" />
     <Compile Include="Extensions\ActionResult.cs" />
     <Compile Include="Extensions\CultureNameExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
