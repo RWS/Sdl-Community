@@ -24,7 +24,13 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private GlossaryInfo _selectedGlossary;
         private GlossaryLanguagePair _selectedLanguagePair;
 
-        public GlossariesWindowViewModel(IDeepLGlossaryClient deepLGlossaryClient, IMessageService messageService, IGlossaryBrowserService glossaryBrowserService, IGlossaryReaderWriterService glossaryReaderWriterService, IProcessStarter processStarter, IEditGlossaryService editGlossaryService)
+        public GlossariesWindowViewModel(
+            IDeepLGlossaryClient deepLGlossaryClient,
+            IMessageService messageService,
+            IGlossaryBrowserService glossaryBrowserService,
+            IGlossaryReaderWriterService glossaryReaderWriterService,
+            IProcessStarter processStarter,
+            IEditGlossaryService editGlossaryService)
         {
             //TODO: remove peripheral dependencies -> use events to handle those interactions instead
             DeepLGlossaryClient = deepLGlossaryClient;
@@ -33,6 +39,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             GlossaryReaderWriterService = glossaryReaderWriterService;
             ProcessStarter = processStarter;
             EditGlossaryService = editGlossaryService;
+
             LoadGlossaries();
 
             var (success, result, message) = DeepLGlossaryClient.GetGlossarySupportedLanguagePairs(DeepLTranslationProviderClient.ApiKey, false).Result;

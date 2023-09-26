@@ -29,6 +29,10 @@
                     Modifiers="Alt"
                     Command="{Binding KeyboardCommand, ElementName=EditGlossary_Window}"
                     CommandParameter="Edit" />
+        <KeyBinding Key="Q"
+                    Modifiers="Alt"
+                    Command="{Binding KeyboardCommand, ElementName=EditGlossary_Window}"
+                    CommandParameter="ImportEntries" />
         <KeyBinding Key="Escape"
                     Command="{Binding KeyboardCommand, ElementName=EditGlossary_Window}"
                     CommandParameter="Escape" />
@@ -101,6 +105,7 @@
                   Name="Entries_DataGrid"
                   AutomationProperties.Name="Entries"
                   SelectionMode="Single"
+                  MouseDoubleClick="Entries_DataGrid_OnMouseDoubleClick"
                   AutoGenerateColumns="False"
                   d:ItemsSource="{d:SampleData}"
                   Style="{StaticResource Sdl.DataGrid.GenericStyle}"
@@ -155,12 +160,20 @@
                     Style="{StaticResource Sdl.Button.PrimaryStyle}"
                     Content="Apply" />
             <Button DockPanel.Dock="Left"
-                    Margin="0 5"
+                    Margin="0 7 0 5"
                     Click="AddRowButton_Click"
                     AutomationProperties.Name="Add new entry"
                     ToolTip="Add new entry (Alt+A)"
                     Content="➕" />
-            <Button Margin="0 5"
+
+            <Button Content="📂"
+                    AutomationProperties.Name="Import glossaries"
+                    FontSize="18"
+                    Click="ImportButton_Click"
+                    HorizontalAlignment="Center"
+                    ToolTip="Import entries from another glossary (Alt+Q)"/>
+
+            <Button Margin="-2 2 0 0"
                     Name="Edit_Button"
                     DockPanel.Dock="Left"
                     AutomationProperties.Name="Edit glossary"

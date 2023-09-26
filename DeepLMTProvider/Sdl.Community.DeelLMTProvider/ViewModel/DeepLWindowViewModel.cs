@@ -144,7 +144,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             glossaries?.Add(GlossaryInfo.NoGlossary);
 
-            LanguagePairOptions.Clear();
             foreach (var languagePair in LanguagePairs)
             {
                 var sourceLangCode = languagePair.GetSourceLanguageCode();
@@ -153,9 +152,9 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 var languageSavedOptions =
                     Options.LanguagePairOptions?.FirstOrDefault(lpo => lpo.LanguagePair.Equals(languagePair));
 
-                var selectedGlossary = GetSelectedGlossary(glossaries, languageSavedOptions, sourceLangCode, targetLangCode);
+                var selectedGlossary = GetSelectedGlossaryFromSavedSetting(glossaries, languageSavedOptions, sourceLangCode, targetLangCode);
 
-                var languagePairOptions = new LanguagePairOptions
+                var newLanguagePairOptions = new LanguagePairOptions
                 {
                     Formality = languageSavedOptions?.Formality ?? Formality.Default,
                     Glossaries = glossaries?.Where(g => g.SourceLanguage == sourceLangCode && g.TargetLanguage == targetLangCode || g.Name == PluginResources.NoGlossary).ToList(),
@@ -163,11 +162,17 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                     LanguagePair = languagePair
                 };
 
-                LanguagePairOptions.Add(languagePairOptions);
+                var oldLanguagePairOption = LanguagePairOptions.FirstOrDefault(lpo => lpo.LanguagePair.Equals(languagePair));
+                if (oldLanguagePairOption != null && (newLanguagePairOptions.Glossaries?.Select(g => g.Name)
+                        .Contains(oldLanguagePairOption.SelectedGlossary.Name) ?? false))
+                    newLanguagePairOptions.SelectedGlossary = oldLanguagePairOption.SelectedGlossary;
+
+                LanguagePairOptions.Remove(oldLanguagePairOption);
+                LanguagePairOptions.Add(newLanguagePairOptions);
             }
         }
 
-        private static GlossaryInfo GetSelectedGlossary(List<GlossaryInfo> glossaries, LanguagePairOptions languageSavedOptions, string sourceLangCode, string targetLangCode)
+        private static GlossaryInfo GetSelectedGlossaryFromSavedSetting(List<GlossaryInfo> glossaries, LanguagePairOptions languageSavedOptions, string sourceLangCode, string targetLangCode)
         {
             if (languageSavedOptions == null)
                 return GlossaryInfo.NoGlossary;
