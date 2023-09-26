@@ -71,6 +71,14 @@ namespace Sdl.Community.DeepLMTProvider.UI
             {
                 SetField(ref _isEditing, value);
                 Edit_Button.Content = value ? "✓" : "✏";
+
+                if (value) return;
+                foreach (var glossaryEntry in GlossaryEntries)
+                {
+                    if (!glossaryEntry.IsEmpty()) continue;
+                    GlossaryEntries.Remove(glossaryEntry);
+                    break;
+                }
             }
         }
 
@@ -119,6 +127,11 @@ namespace Sdl.Community.DeepLMTProvider.UI
             IsEditing = !IsEditing;
         }
 
+        private void Entries_DataGrid_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            IsEditing = true;
+        }
+
         private void ExecuteKeyboardShortcut(object parameter)
         {
             var command = parameter.ToString();
@@ -164,6 +177,10 @@ namespace Sdl.Community.DeepLMTProvider.UI
                 case "Add":
                     AddRow();
                     IsEditing = true;
+                    break;
+                
+                case "ImportEntries":
+                    ImportButton_Click(null, null);
                     break;
             }
         }
