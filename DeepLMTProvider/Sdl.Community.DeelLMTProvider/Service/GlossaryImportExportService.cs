@@ -35,6 +35,15 @@ namespace Sdl.Community.DeepLMTProvider.Service
             return true;
         }
 
+        public bool OpenImportEntriesDialog(out List<string> fileNames)
+        {
+            fileNames = new List<string>();
+            if (BrowseDialog.ShowDialog() != true) return false;
+
+            fileNames = BrowseDialog.FileNames.ToList();
+            return true;
+        }
+
         public bool OpenNewGlossaryDialog(List<string> existingGlossaryNames, List<string> supportedLanguages, out GlossaryItem glossary)
         {
             glossary = default;
@@ -44,7 +53,7 @@ namespace Sdl.Community.DeepLMTProvider.Service
 
             if (!(browseGlossaryWindow.ShowDialog() ?? false)) return false;
             glossary = browseGlossaryWindow.Glossaries[0];
-            
+
             return true;
         }
 

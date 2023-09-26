@@ -3,6 +3,7 @@ using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Model;
 using System;
 using System.IO;
+using System.Text;
 
 namespace Sdl.Community.DeepLMTProvider.Helpers.GlossaryReadersWriters
 {
@@ -11,7 +12,7 @@ namespace Sdl.Community.DeepLMTProvider.Helpers.GlossaryReadersWriters
         public ActionResult<Glossary> ReadGlossary(string filePath) =>
             ErrorHandler.WrapTryCatch(() =>
             {
-                using var reader = new StreamReader(filePath);
+                using var reader = new StreamReader(filePath, Encoding.Default);
                 var glossary = new Glossary();
 
                 while (reader.ReadLine() is { } line)
@@ -22,6 +23,7 @@ namespace Sdl.Community.DeepLMTProvider.Helpers.GlossaryReadersWriters
 
                 return glossary;
             });
+
 
         public ActionResult<Glossary> WriteGlossary(Glossary glossary, string filePath) =>
             ErrorHandler.WrapTryCatch(() =>

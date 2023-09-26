@@ -12,26 +12,20 @@ namespace Sdl.Community.DeepLMTProvider.Helpers.GlossaryReadersWriters
         {
             var fileExtension = Path.GetExtension(filePath).ToLower();
 
-            return ErrorHandler.WrapTryCatch<IGlossaryReaderWriter>(() =>
+            return ErrorHandler.WrapTryCatch<IGlossaryReaderWriter>(() => fileExtension switch
             {
-                return fileExtension switch
-                {
-                    ".tsv" => new TsvGlossaryReaderWriter(),
-                    ".csv" => new CsvGlossaryReaderWriter(),
-                    _ => throw new NotSupportedException("File type not supported.")
-                };
+                ".tsv" => new TsvGlossaryReaderWriter(),
+                ".csv" => new CsvGlossaryReaderWriter(),
+                _ => throw new NotSupportedException("File type not supported.")
             });
         }
 
         public ActionResult<IGlossaryReaderWriter> CreateGlossaryWriter(GlossaryReaderWriterService.Format format) =>
-            ErrorHandler.WrapTryCatch<IGlossaryReaderWriter>(() =>
+            ErrorHandler.WrapTryCatch<IGlossaryReaderWriter>(() => format switch
             {
-                return format switch
-                {
-                    GlossaryReaderWriterService.Format.TSV => new TsvGlossaryReaderWriter(),
-                    GlossaryReaderWriterService.Format.CSV => new CsvGlossaryReaderWriter(),
-                    _ => throw new ArgumentOutOfRangeException(nameof(format), format, null)
-                };
+                GlossaryReaderWriterService.Format.TSV => new TsvGlossaryReaderWriter(),
+                GlossaryReaderWriterService.Format.CSV => new CsvGlossaryReaderWriter(),
+                _ => throw new ArgumentOutOfRangeException(nameof(format), format, null)
             });
     }
 }

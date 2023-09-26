@@ -30,15 +30,16 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
 
 		public List<TagInfo> TagsInfo { get; set; }
 
-		/// <summary>
-		/// Returns a tagged segments from a target string containing markup, where the target string represents the translation of the class instance's source segment
-		/// </summary>
-		/// <param name="returnedText"></param>
-		/// <returns></returns>
-		public Segment GetTaggedSegment(string returnedText)
+        /// <summary>
+        /// Returns a tagged segments from a target string containing markup, where the target string represents the translation of the class instance's source segment
+        /// </summary>
+        /// <param name="returnedText"></param>
+        /// <param name="decodeFromHtmlOrUrl"></param>
+        /// <returns></returns>
+        public Segment GetTaggedSegment(string returnedText)
 		{
 			//decode the returned text
-			_returnedText = DecodeReturnedText(returnedText);
+            _returnedText = returnedText;
 			//our dictionary, dict, is already built
 			var segment = new Segment(); //our segment to return
 										 //get our array of elements..it will be array of tagtexts and text in the order received from google
@@ -87,13 +88,7 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
 			return text;
 		}
 
-		private string DecodeReturnedText(string strInput)
-		{
-			strInput = HttpUtility.HtmlDecode(strInput);
-			//HtmlDecode takes care of everything we are doing now
-			//add others found in testing if necessary
-			return strInput;
-		}
+		
 
 		private Dictionary<string, DeepLTag> GetSourceTagsDict()
 		{
