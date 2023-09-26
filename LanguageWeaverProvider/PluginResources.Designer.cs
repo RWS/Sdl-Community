@@ -214,6 +214,17 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Welcome to the Language Weaver translation provider for Studio.
+        ///Language Weaver is our neural machine translation (NMT) cloud product for enterprises with various paid subscription models. Using our proprietary technology, customers can have the assurance of content privacy.
+        ///Language Weaver is powered by our state-of-the-art machine learning algorithms and supports a large number of languages..
+        /// </summary>
+        public static string CloudMappingView_WelcomeMessage {
+            get {
+                return ResourceManager.GetString("CloudMappingView_WelcomeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Credentials.
         /// </summary>
         public static string Connection_Credentials {

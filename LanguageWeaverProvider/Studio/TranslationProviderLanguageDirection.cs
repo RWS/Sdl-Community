@@ -89,7 +89,6 @@ namespace LanguageWeaverProvider
 				searchResult.MetaData.Add("QualityEstimation", translatedSegment.Estimation);
 			}
 
-			
 			return searchResult;
 		}
 

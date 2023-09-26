@@ -54,6 +54,9 @@
 		<Reference Include="Sdl.Desktop.Platform.Styles">
 		  <HintPath>..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.Styles.dll</HintPath>
 		</Reference>
+		<Reference Include="Sdl.FileTypeSupport.Framework.Core">
+		  <HintPath>..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+		</Reference>
 		<Reference Include="Sdl.LanguagePlatform.Core">
 			<HintPath>$(TradosFolder)\Sdl.LanguagePlatform.Core.dll</HintPath>
 		</Reference>

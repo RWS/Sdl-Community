@@ -26,12 +26,28 @@
 	</UserControl.Resources>
 
 	<Grid>
-		<DataGrid x:Name="myDataGrid"
+		<Grid.RowDefinitions>
+			<RowDefinition  Height="Auto" />
+			<RowDefinition  Height="*" />
+		</Grid.RowDefinitions>
+
+		<TextBlock Grid.Row="0"
+				   Text="{x:Static root:PluginResources.CloudMappingView_WelcomeMessage}"
+				   Foreground="#444444"
+				   FontSize="12"
+				   FontWeight="DemiBold"
+				   Focusable="True"
+				   Margin="16 0"
+				   TextWrapping="Wrap" />
+
+		<DataGrid Grid.Row="1" x:Name="myDataGrid"
 				  ItemsSource="{Binding PairMappings}"
 				  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+				  MinRowHeight="30"
 				  BorderBrush="#d4d4d4"
 				  AutoGenerateColumns="False"
-				  Margin="16 0">
+				  Margin="16 16 16 0">
+			
 			<DataGrid.Columns>
 				<DataGridTemplateColumn Header="{x:Static root:PluginResources.CloudMappingView_Headers_Pairs}"
 										Width="1.5*"
@@ -84,15 +100,15 @@
 										MinWidth="128">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<StackPanel>
-								<ComboBox ItemsSource="{Binding Models}"
-										  SelectedItem="{Binding SelectedModel, UpdateSourceTrigger=PropertyChanged}"
-										  Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
-										  DisplayMemberPath="DisplayName"
-										  SelectedIndex="0"
-										  BorderThickness="0">
-								</ComboBox>
-							</StackPanel>
+							<ComboBox ItemsSource="{Binding Models}"
+									  SelectedItem="{Binding SelectedModel, UpdateSourceTrigger=PropertyChanged}"
+									  Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
+									  DisplayMemberPath="DisplayName"
+									  VerticalAlignment="Stretch"
+									  Margin="-2"
+									  SelectedIndex="0"
+									  BorderThickness="0">
+							</ComboBox>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
@@ -101,15 +117,15 @@
 										MinWidth="172">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<StackPanel>
-								<ComboBox ItemsSource="{Binding Dictionaries}"
-										  SelectedItem="{Binding SelectedDictionary, UpdateSourceTrigger=PropertyChanged}"
-										  Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
-										  DisplayMemberPath="Name"
-										  SelectedIndex="0"
-										  BorderThickness="0">
-								</ComboBox>
-							</StackPanel>
+							<ComboBox ItemsSource="{Binding Dictionaries}"
+									  SelectedItem="{Binding SelectedDictionary, UpdateSourceTrigger=PropertyChanged}"
+									  Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
+									  DisplayMemberPath="Name"
+									  SelectedIndex="0"
+									  VerticalAlignment="Stretch"
+									  Margin="-2"
+									  BorderThickness="0">
+							</ComboBox>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>

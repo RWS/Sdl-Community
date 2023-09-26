@@ -70,7 +70,7 @@
 		<ContentControl Content="{Binding PairMappingView}"
 						Visibility="{Binding ShowSettingsView, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverted}"
 						Focusable="False"
-						Margin="8 0 8 16"
+						Margin="0 0 0 0"
 						Grid.Row="1"
 						Grid.ColumnSpan="2"
 						HorizontalAlignment="Stretch" />
@@ -83,22 +83,17 @@
 						Grid.ColumnSpan="2"
 						HorizontalAlignment="Stretch" />
 
-		<Separator Grid.Row="2"
-				   Grid.ColumnSpan="2"
-				   VerticalAlignment="Top" />
-
 		<StackPanel Grid.Row="2"
 					Grid.Column="0"
 					Orientation="Horizontal"
-					Margin="12">
+					Margin="16 0">
 			<Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_OpenLMP}"
 					Style="{StaticResource Sdl.Button.SecondaryStyle}"
 					Command="{Binding OpenLanguageMappingProviderViewCommand}"
 					FontSize="11"
 					FontWeight="DemiBold"
 					Height="26"
-					Width="174"
-					Margin="12 0 0 0" />
+					Width="174"/>
 			<Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Settings}"
 					Style="{StaticResource Sdl.Button.SecondaryStyle}"
 					Command="{Binding OpenSettingsViewCommand}"
@@ -107,23 +102,26 @@
 					FontWeight="DemiBold"
 					Height="26"
 					Width="120"
-					Margin="12 0 0 0" />
+					Margin="8 0"/>
 
 			<Button Content="feedback"
-					Command="{Binding OpenFeedbackCommand}" />
+					Command="{Binding OpenFeedbackCommand}" 
+					Style="{StaticResource Sdl.Button.SecondaryStyle}"
+					Height="26"/>
 		</StackPanel>
 
 		<StackPanel Grid.Row="2"
 					Grid.Column="1"
 					Orientation="Horizontal"
-					Margin="12">
+					Margin="16 0">
 			<Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Cancel}"
 					Style="{StaticResource Sdl.Button.SecondaryStyle}"
 					Command="{Binding CloseCommand}"
 					FontSize="11"
 					FontWeight="DemiBold"
 					Height="26"
-					Width="120"/>
+					Width="120"
+					Margin="8 0"/>
 
 			<Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Confirm}"
 					Style="{StaticResource Sdl.Button.PrimaryStyle}"
@@ -131,8 +129,7 @@
 					FontSize="11"
 					FontWeight="DemiBold"
 					Height="26"
-					Width="120"
-					Margin="12 0" />
+					Width="120"/>
 		</StackPanel>
 
 	</Grid>

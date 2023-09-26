@@ -168,6 +168,11 @@
   <data name="CloudMappingView_Values_Unavailable" xml:space="preserve">
     <value>Not available</value>
   </data>
+  <data name="CloudMappingView_WelcomeMessage" xml:space="preserve">
+    <value>Welcome to the Language Weaver translation provider for Studio.
+Language Weaver is our neural machine translation (NMT) cloud product for enterprises with various paid subscription models. Using our proprietary technology, customers can have the assurance of content privacy.
+Language Weaver is powered by our state-of-the-art machine learning algorithms and supports a large number of languages.</value>
+  </data>
   <data name="Connection_Credentials" xml:space="preserve">
     <value>Credentials</value>
   </data>
