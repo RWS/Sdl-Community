@@ -17,6 +17,14 @@
             set => SetField(ref _targetTerm, value);
         }
 
+        public void CleanTerm()
+        {
+            SourceTerm = "";
+            TargetTerm = "";
+        }
+
+        public bool IsDummyTerm() => SourceTerm == "new entry" && TargetTerm == "new entry";
+
         public bool IsEmpty() => string.IsNullOrWhiteSpace(SourceTerm) && string.IsNullOrWhiteSpace(TargetTerm);
 
         public bool IsInvalid() => string.IsNullOrWhiteSpace(SourceTerm) || string.IsNullOrWhiteSpace(TargetTerm);

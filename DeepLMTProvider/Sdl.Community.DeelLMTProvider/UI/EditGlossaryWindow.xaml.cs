@@ -70,7 +70,8 @@ namespace Sdl.Community.DeepLMTProvider.UI
             set
             {
                 SetField(ref _isEditing, value);
-                Edit_Button.Content = value ? "✓" : "✏";
+
+                ApplyEditModeUiChanges(value);
 
                 if (value) return;
                 foreach (var glossaryEntry in GlossaryEntries)
@@ -108,11 +109,23 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         private void AddRowButton_Click(object sender, RoutedEventArgs e)
         {
-            AddRow();
             IsEditing = true;
+            AddRow();
         }
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e) => CloseEditingWindow();
+
+        private void ApplyEditModeUiChanges(bool value)
+        {
+            Edit_Button.Content = value ? "✓" : "✏";
+            Edit_Button.ToolTip = value ? "Save" : "Edit glossary (Alt+E)";
+
+            if (!value) return;
+
+            if (GlossaryEntries.Count != 1) return;
+            var item = GlossaryEntries[0];
+            if (item.IsDummyTerm()) item.CleanTerm();
+        }
 
         private void CloseEditingWindow()
         {
@@ -178,7 +191,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
                     AddRow();
                     IsEditing = true;
                     break;
-                
+
                 case "ImportEntries":
                     ImportButton_Click(null, null);
                     break;
