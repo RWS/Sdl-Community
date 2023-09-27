@@ -1,6 +1,7 @@
 ﻿using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Command;
 using Sdl.Community.DeepLMTProvider.Extensions;
+using Sdl.Community.DeepLMTProvider.Helpers;
 using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Community.DeepLMTProvider.Service;
@@ -81,6 +82,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 });
             }
         }
+
+        public ICommand ImportEntriesCommand => new AsyncParameterlessCommand(async () => await ExecuteLongMethod(ImportEntries));
 
         public ICommand ImportGlossariesCommand => new AsyncParameterlessCommand(async () => await ExecuteLongMethod(ImportGlossaries));
 
@@ -279,6 +282,64 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             if (success) return false;
             MessageService.ShowWarning(message, failingMethod);
             return true;
+        }
+
+        private async Task ImportEntries()
+        {
+            GlossaryBrowserService.OpenImportEntriesDialog(out var filePaths);
+
+            foreach (var filePath in filePaths)
+            {
+                var (success, glossary, message) = GlossaryReaderWriterService.ReadGlossary(filePath);
+                if (HandleErrorIfFound(success, message)) continue;
+                await AddRangeOfEntriesToSelectedGlossaries(glossary.Entries);
+            }
+        }
+
+        private async Task AddRangeOfEntriesToSelectedGlossaries(List<GlossaryEntry> glossaryEntries)
+        {
+            ValidateEntriesList(glossaryEntries);
+
+            foreach (var selectedGlossary in SelectedGlossaries)
+            {
+                var (success, originalEntries, message) = await DeepLGlossaryClient.RetrieveGlossaryEntries(selectedGlossary.Id, DeepLTranslationProviderClient.ApiKey);
+                if (HandleErrorIfFound(success, message)) return;
+
+                originalEntries.AddRange(glossaryEntries);
+                RemoveDuplicates(originalEntries);
+
+                (success, var glossaryInfo, message) = await DeepLGlossaryClient.UpdateGlossary(
+                    new Glossary
+                    {
+                        Name = selectedGlossary.Name,
+                        SourceLanguage = selectedGlossary.SourceLanguage,
+                        TargetLanguage = selectedGlossary.TargetLanguage,
+                        Entries = originalEntries
+                    }, selectedGlossary.Id, DeepLTranslationProviderClient.ApiKey);
+
+                if (HandleErrorIfFound(success, message)) return;
+
+                Glossaries.Remove(selectedGlossary);
+                Glossaries.Add(glossaryInfo);
+            }
+        }
+
+        private void RemoveDuplicates(List<GlossaryEntry> originalEntries)
+        {
+            var duplicates = originalEntries.GetDuplicates();
+            duplicates.ForEach(d => originalEntries.Remove(originalEntries.FirstOrDefault(oe => oe.SourceTerm == d)));
+        }
+
+        private void ValidateEntriesList(List<GlossaryEntry> glossaryEntries)
+        {
+            var toBeRemoved = new List<GlossaryEntry>();
+            foreach (var glossaryEntry in glossaryEntries)
+            {
+                glossaryEntry.Trim();
+                if (glossaryEntry.IsInvalid()) toBeRemoved.Add(glossaryEntry);
+            }
+
+            glossaryEntries.RemoveAll(toBeRemoved.Contains);
         }
 
         private async Task ImportGlossaries()

@@ -28,6 +28,9 @@
         <KeyBinding Key="Q"
                     Modifiers="Alt"
                     Command="{Binding ImportGlossariesCommand}" />
+        <KeyBinding Key="D"
+                    Modifiers="Alt"
+                    Command="{Binding ImportEntriesCommand}" />
         <KeyBinding Key="Delete"
                     Command="{Binding DeleteGlossariesCommand}" />
         <KeyBinding Key="Escape"
@@ -215,8 +218,7 @@
                 </Button.ToolTip>
             </Button>
 
-            <Button Margin="0 0 5 0"
-                    Height="25"
+            <Button Height="25"
                     Name="Export_Button"
                     AutomationProperties.Name="Export glossaries"
                     Click="ExportButton_Click"
@@ -258,8 +260,14 @@
                 </Path>
             </Button>
 
+            <Button Content="⇑"
+                    Command="{Binding ImportEntriesCommand}"
+                    AutomationProperties.Name="Import entries into selected glossaries"
+                    ToolTip="Import entries into selected glossaries (Alt+D)"
+                    FontSize="24"
+                    HorizontalAlignment="Center" />
+            
             <Button Content="🗑️"
-                    Margin="-5 0 0 0"
                     Click="DeleteButton_Click"
                     AutomationProperties.Name="Delete glossary"
                     ToolTip="Delete selected glossaries (Delete)"

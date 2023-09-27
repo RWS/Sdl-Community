@@ -1,5 +1,6 @@
 ﻿using Sdl.Community.DeepLMTProvider.Command;
 using Sdl.Community.DeepLMTProvider.Extensions;
+using Sdl.Community.DeepLMTProvider.Helpers;
 using Sdl.Community.DeepLMTProvider.Model;
 using System;
 using System.Collections.Generic;
@@ -223,13 +224,9 @@ namespace Sdl.Community.DeepLMTProvider.UI
             var termsToBeRemoved = GlossaryEntries.Where(glossaryEntry =>
                 glossaryEntry.IsInvalid()).ToList();
 
-            var duplicates = GlossaryEntries
-                .GroupBy(ge => ge.SourceTerm)
-                .Where(g => g.Count() > 1)
-                .Select(g => g.Key)
-                .ToList();
 
-            Apply_Button.IsEnabled = !termsToBeRemoved.Any() && !duplicates.Any() && GlossaryEntries.Any();
+            Apply_Button.IsEnabled = !termsToBeRemoved.Any() && !GlossaryEntries
+                .GetDuplicates().Any() && GlossaryEntries.Any();
         }
 
         private void ImportButton_Click(object sender, RoutedEventArgs e) => ImportEntriesRequested?.Invoke();

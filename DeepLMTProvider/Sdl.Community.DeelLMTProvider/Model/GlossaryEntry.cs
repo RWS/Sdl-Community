@@ -30,5 +30,11 @@
         public bool IsInvalid() => string.IsNullOrWhiteSpace(SourceTerm) || string.IsNullOrWhiteSpace(TargetTerm);
 
         public override string ToString() => nameof(GlossaryEntry);
+
+        public void Trim()
+        {
+            SourceTerm = SourceTerm.Trim();
+            TargetTerm = TargetTerm.Trim();
+        }
     }
 }
