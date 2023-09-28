@@ -24,7 +24,7 @@ namespace MicrosoftTranslatorProvider
 			try
 			{
 				var genericCredentials = new GenericCredentials(credential.Credential);
-				foreach (var credentialKey in genericCredentials.PropertyKeys)
+				foreach (var credentialKey in genericCredentials.GetPropertyKeys())
 				{
 					if (!credentialKey.StartsWith("header_"))
 					{
