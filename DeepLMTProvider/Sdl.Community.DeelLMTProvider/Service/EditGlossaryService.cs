@@ -26,12 +26,7 @@ namespace Sdl.Community.DeepLMTProvider.Service
             get
             {
                 var entries = EditGlossaryWindow.GlossaryEntries;
-                entries.ForEach(e =>
-                {
-                    e.SourceTerm = e.SourceTerm.Trim();
-                    e.TargetTerm = e.TargetTerm.Trim();
-                });
-
+                entries.ForEach(e => e.Trim());
                 return new(entries);
             }
         }

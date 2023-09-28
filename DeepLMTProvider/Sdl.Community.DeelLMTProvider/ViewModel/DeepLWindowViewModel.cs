@@ -163,9 +163,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 };
 
                 var oldLanguagePairOption = LanguagePairOptions.FirstOrDefault(lpo => lpo.LanguagePair.Equals(languagePair));
-                if (oldLanguagePairOption != null && (newLanguagePairOptions.Glossaries?.Select(g => g.Name)
-                        .Contains(oldLanguagePairOption.SelectedGlossary.Name) ?? false))
-                    newLanguagePairOptions.SelectedGlossary = oldLanguagePairOption.SelectedGlossary;
+
+                RestorePreviouslySelectedGlossaryIfThereIsOne(oldLanguagePairOption, newLanguagePairOptions);
 
                 LanguagePairOptions.Remove(oldLanguagePairOption);
                 LanguagePairOptions.Add(newLanguagePairOptions);
@@ -186,6 +185,16 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 return languageSavedOptions.SelectedGlossary;
 
             return GlossaryInfo.NoGlossary;
+        }
+
+        private static void RestorePreviouslySelectedGlossaryIfThereIsOne(LanguagePairOptions oldLanguagePairOption,
+                    LanguagePairOptions newLanguagePairOptions)
+        {
+            if (oldLanguagePairOption != null && (newLanguagePairOptions.Glossaries?.Select(g => g.Name)
+                    .Contains(oldLanguagePairOption.SelectedGlossary.Name) ?? false))
+                newLanguagePairOptions.SelectedGlossary =
+                    newLanguagePairOptions.Glossaries.FirstOrDefault(g =>
+                        g.Name == oldLanguagePairOption.SelectedGlossary.Name);
         }
 
         private void AskUserToRestart()

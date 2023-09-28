@@ -1,5 +1,6 @@
 ﻿using Sdl.Community.DeepLMTProvider.Command;
 using Sdl.Community.DeepLMTProvider.Extensions;
+using Sdl.Community.DeepLMTProvider.Helpers;
 using Sdl.Community.DeepLMTProvider.Model;
 using System;
 using System.Collections.Generic;
@@ -55,6 +56,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
                 _glossaryEntries.CollectionChanged += GlossaryEntries_CollectionChanged;
                 _glossaryEntries.ForEach(ge => ge.PropertyChanged += (_, _) => GlossaryEntries_CollectionChanged(null, null));
+                GlossaryEntries_CollectionChanged(null, null);
             }
         }
 
@@ -70,7 +72,8 @@ namespace Sdl.Community.DeepLMTProvider.UI
             set
             {
                 SetField(ref _isEditing, value);
-                Edit_Button.Content = value ? "✓" : "✏";
+
+                ApplyEditModeUiChanges(value);
 
                 if (value) return;
                 foreach (var glossaryEntry in GlossaryEntries)
@@ -108,11 +111,23 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         private void AddRowButton_Click(object sender, RoutedEventArgs e)
         {
-            AddRow();
             IsEditing = true;
+            AddRow();
         }
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e) => CloseEditingWindow();
+
+        private void ApplyEditModeUiChanges(bool value)
+        {
+            Edit_Button.Content = value ? "✓" : "✏";
+            Edit_Button.ToolTip = value ? "Save" : "Edit glossary (Alt+E)";
+
+            if (!value) return;
+
+            if (GlossaryEntries.Count != 1) return;
+            var item = GlossaryEntries[0];
+            if (item.IsDummyTerm()) item.CleanTerm();
+        }
 
         private void CloseEditingWindow()
         {
@@ -178,7 +193,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
                     AddRow();
                     IsEditing = true;
                     break;
-                
+
                 case "ImportEntries":
                     ImportButton_Click(null, null);
                     break;
@@ -210,13 +225,9 @@ namespace Sdl.Community.DeepLMTProvider.UI
             var termsToBeRemoved = GlossaryEntries.Where(glossaryEntry =>
                 glossaryEntry.IsInvalid()).ToList();
 
-            var duplicates = GlossaryEntries
-                .GroupBy(ge => ge.SourceTerm)
-                .Where(g => g.Count() > 1)
-                .Select(g => g.Key)
-                .ToList();
-
-            Apply_Button.IsEnabled = !termsToBeRemoved.Any() && !duplicates.Any() && GlossaryEntries.Any();
+            if (Apply_Button is not null)
+                Apply_Button.IsEnabled = !termsToBeRemoved.Any() && !GlossaryEntries
+                    .GetDuplicates().Any() && GlossaryEntries.Any();
         }
 
         private void ImportButton_Click(object sender, RoutedEventArgs e) => ImportEntriesRequested?.Invoke();

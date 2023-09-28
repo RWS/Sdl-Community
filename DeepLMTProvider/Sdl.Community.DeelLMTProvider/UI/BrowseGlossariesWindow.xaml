@@ -21,9 +21,7 @@
                     CommandParameter="Edit"
                     Command="{Binding KeyboardShortcutCommand, ElementName=BrowseGlossaries_Window}"/>
 
-        <KeyBinding Key="Enter"
-                    CommandParameter="ImportGlossaries"
-                    Command="{Binding KeyboardShortcutCommand, ElementName=BrowseGlossaries_Window}" />
+        
 
         <KeyBinding Key="Escape"
                     CommandParameter="Escape"
@@ -38,8 +36,7 @@
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="Button"
                    BasedOn="{StaticResource Sdl.Button.GeneralStyle}">
-                <Setter Property="Focusable"
-                        Value="False" />
+               
             </Style>
 
             <Style TargetType="ComboBox"
@@ -68,13 +65,18 @@
                                    Grid.Row="0" />
 
         <DataGrid Grid.Row="1"
-                  Focusable="False"
                   CellStyle="{StaticResource DataGridCell_Style}"
+                  MouseDoubleClick="DataGrid_OnMouseDoubleClick"
                   Style="{StaticResource Sdl.DataGrid.GenericStyle}"
                   d:ItemsSource="{d:SampleData}"
                   CanUserSortColumns="True"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding Glossaries, ElementName=BrowseGlossaries_Window}">
+            <DataGrid.InputBindings>
+                <KeyBinding Key="Enter"
+                            CommandParameter="Enter"
+                            Command="{Binding KeyboardShortcutCommand, ElementName=BrowseGlossaries_Window}" />
+            </DataGrid.InputBindings>
 
             <DataGrid.Columns>
 
@@ -123,7 +125,6 @@
             <Button Content="Browse"
                     Name="Browse_Button"
                     Margin="0 0 5 0"
-                    Focusable="False"
                     Click="BrowseButton_Click"
                     DockPanel.Dock="Left"
                     HorizontalAlignment="Left" />
@@ -131,7 +132,6 @@
             <Button Content="Edit"
                     Margin="0 0 5 0"
                     Name="EditButton"
-                    Focusable="False"
                     Click="EditButton_OnClick"
                     DockPanel.Dock="Left"
                     HorizontalAlignment="Left" />
@@ -142,7 +142,6 @@
             <Button Content="Import glossaries"
                     Name="ImportGlossaries_Button"
                     DockPanel.Dock="Right"
-                    IsDefault="True"
                     Click="ImportButton_Click"
                     Margin="0 0 5 0"
                     IsEnabled="{Binding IsImportEnabled, ElementName=BrowseGlossaries_Window}"

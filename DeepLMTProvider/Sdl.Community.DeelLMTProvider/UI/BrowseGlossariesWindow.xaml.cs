@@ -118,8 +118,9 @@ namespace Sdl.Community.DeepLMTProvider.UI
                     else CancelImportGlossaries();
                     break;
 
-                case "ImportGlossaries":
-                    ImportGlossaries();
+                case "Enter":
+                    if (IsEditing) IsEditing = false;
+                    else if (ImportGlossaries_Button.IsEnabled) ImportGlossaries();
                     break;
             }
         }
@@ -145,6 +146,11 @@ namespace Sdl.Community.DeepLMTProvider.UI
         {
             DialogResult = true;
             Close();
+        }
+
+        private void DataGrid_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            IsEditing = true;
         }
     }
 }
