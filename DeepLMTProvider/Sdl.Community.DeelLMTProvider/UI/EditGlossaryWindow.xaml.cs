@@ -56,6 +56,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
                 _glossaryEntries.CollectionChanged += GlossaryEntries_CollectionChanged;
                 _glossaryEntries.ForEach(ge => ge.PropertyChanged += (_, _) => GlossaryEntries_CollectionChanged(null, null));
+                GlossaryEntries_CollectionChanged(null, null);
             }
         }
 
@@ -224,9 +225,9 @@ namespace Sdl.Community.DeepLMTProvider.UI
             var termsToBeRemoved = GlossaryEntries.Where(glossaryEntry =>
                 glossaryEntry.IsInvalid()).ToList();
 
-
-            Apply_Button.IsEnabled = !termsToBeRemoved.Any() && !GlossaryEntries
-                .GetDuplicates().Any() && GlossaryEntries.Any();
+            if (Apply_Button is not null)
+                Apply_Button.IsEnabled = !termsToBeRemoved.Any() && !GlossaryEntries
+                    .GetDuplicates().Any() && GlossaryEntries.Any();
         }
 
         private void ImportButton_Click(object sender, RoutedEventArgs e) => ImportEntriesRequested?.Invoke();
