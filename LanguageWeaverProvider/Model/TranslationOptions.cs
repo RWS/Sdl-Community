@@ -17,5 +17,7 @@ namespace LanguageWeaverProvider.Model.Options
 		public CloudCredentials CloudCredentials { get; set; }
 
 		public List<PairMapping> PairMappings { get; set; }
+
+		public List<RatedSegment> RatedSegments { get; set; }
 	}
 }

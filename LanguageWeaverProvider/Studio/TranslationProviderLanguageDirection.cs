@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Services;
@@ -9,6 +10,7 @@ using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 using TranslationUnit = Sdl.LanguagePlatform.TranslationMemory.TranslationUnit;
 
 namespace LanguageWeaverProvider
@@ -23,6 +25,7 @@ namespace LanguageWeaverProvider
 		{
 			TranslationProvider = translationProvider;
 			_translationOptions = translationOptions;
+			RatedSegments.Segments = _translationOptions.RatedSegments ??= new();
 			_languagePair = languagePair;
 		}
 
@@ -86,10 +89,41 @@ namespace LanguageWeaverProvider
 			var searchResult = CreateSearchResult(segment, translatedSegment.Segment);
 			if (translatedSegment.Estimation != QualityEstimations.None)
 			{
-				searchResult.MetaData.Add("QualityEstimation", translatedSegment.Estimation);
+				SetQualityEstimationOnSegment(translatedSegment, mappedPair);
 			}
 
 			return searchResult;
+		}
+
+		private void SetQualityEstimationOnSegment(EvaluatedSegment evaluatedSegment, PairMapping pairMapping)
+		{
+			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
+			var activeSegmentPair = editorController.ActiveDocument.ActiveSegmentPair;
+			activeSegmentPair.Properties.TranslationOrigin.SetMetaData("quality_estimation", evaluatedSegment.QualityEstimation);
+			activeSegmentPair.Properties.TranslationOrigin.SetMetaData("quality_estimation_model", pairMapping.SelectedModel.Model);
+			editorController.ActiveDocument.UpdateSegmentPairProperties(activeSegmentPair, activeSegmentPair.Properties);
+			return;
+
+			var existingSegment = _translationOptions.RatedSegments.FirstOrDefault(x => x.Id == activeSegmentPair.Properties.Id.Id);
+			if (existingSegment is not null)
+			{
+				existingSegment.QualityEstimation = evaluatedSegment.Estimation;
+				return;
+			}
+
+			var ratedSegment = new RatedSegment()
+			{
+				Id = activeSegmentPair.Properties.Id.Id,
+				QualityEstimation = evaluatedSegment.Estimation
+			};
+
+			RatedSegments.Segments.Add(ratedSegment);
+			var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			/*var x = projectsController.CurrentProject.GetTranslationProviderConfiguration().Entries.FirstOrDefault(e =>
+				e.MainTranslationProvider.Uri.ToString().Contains(Constants.CloudFullScheme))
+			?.MainTranslationProvider;*/
+
+			var currentProject = projectsController.CurrentProject.GetTranslationProviderConfiguration().Entries;
 		}
 
 		private Segment RemoveTagsOnSegment(Segment segment)

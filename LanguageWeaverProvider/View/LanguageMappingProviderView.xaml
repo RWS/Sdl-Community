@@ -38,7 +38,7 @@
 		</ResourceDictionary>
 	</Window.Resources>
 
-	<Border Style="{StaticResource WindowControlBorderStyle}">
+	<Border>
 		<Grid>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto" />
