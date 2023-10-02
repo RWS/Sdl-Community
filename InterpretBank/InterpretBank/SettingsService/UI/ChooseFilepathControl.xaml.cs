@@ -84,8 +84,6 @@ namespace InterpretBank.SettingsService.UI
 					DatabaseList.Remove(autoCompleteOption);
 					AutoCompleteOptions.Remove(autoCompleteOption);
 				}
-
-
 			}
 			else
 			{

@@ -1,170 +1,170 @@
-﻿using System.Collections.Generic;
+﻿using InterpretBank.Commands;
+using InterpretBank.Extensions;
+using InterpretBank.Interface;
+using InterpretBank.Model;
+using InterpretBank.TerminologyService.Interface;
+using Sdl.Core.Globalization;
+using Sdl.Terminology.TerminologyProvider.Core;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Input;
-using InterpretBank.Commands;
-using InterpretBank.Extensions;
-using InterpretBank.TermbaseViewer.Model;
-using InterpretBank.TerminologyService.Interface;
-using Sdl.Core.Globalization;
-using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace InterpretBank.TermbaseViewer.ViewModel
 {
-	public class TermbaseViewerViewModel : ViewModelBase.ViewModel
-	{
-		private int _selectedIndex;
-		private TermModel _selectedItem;
+    public class TermbaseViewerViewModel : ViewModelBase.ViewModel
+    {
+        private int _selectedIndex;
+        private TermModel _selectedItem;
 
-		private ObservableCollection<TermModel> _terms;
+        private ObservableCollection<TermModel> _terms;
 
-		public TermbaseViewerViewModel(ITerminologyService termSearchService)
-		{
-			TerminologyService = termSearchService;
-		}
+        public TermbaseViewerViewModel(ITerminologyService termSearchService, IDialogService dialogService)
+        {
+            TerminologyService = termSearchService;
+            DialogService = dialogService;
+        }
 
-		public ICommand AddNewTermCommand => new RelayCommand(AddNewTerm);
-		public bool AnyEditedTerms => Terms.Any(t => t.Edited);
-		public ICommand CommitAllToDatabaseCommand => new RelayCommand(CommitAllToDatabase);
-		public ICommand RevertCommand => new RelayCommand(RevertChanges);
+        public ICommand AddNewTermCommand => new RelayCommand(AddNewTerm);
+        public bool AnyEditedTerms => Terms.Any(t => t.Edited);
+        public ICommand CommitAllToDatabaseCommand => new RelayCommand(CommitAllToDatabase);
+        public ICommand RevertCommand => new RelayCommand(RevertChanges);
 
-		public int SelectedIndex
-		{
-			get => _selectedIndex;
-			set
-			{
-				if (value == _selectedIndex)
-					return;
-				_selectedIndex = value;
+        public int SelectedIndex
+        {
+            get => _selectedIndex;
+            set
+            {
+                if (value == _selectedIndex)
+                    return;
+                _selectedIndex = value;
 
-				//SelectedItem = Terms[value == -1 ? 0 : value];
-				if (Terms.Any()) SelectedItem = value == -1 ? null : Terms[value];
+                //SelectedItem = Terms[value == -1 ? 0 : value];
+                if (Terms.Any()) SelectedItem = value == -1 ? null : Terms[value];
 
-				OnPropertyChanged();
-			}
-		}
+                OnPropertyChanged();
+            }
+        }
 
-		public TermModel SelectedItem
-		{
-			get => _selectedItem;
-			set => SetField(ref _selectedItem, value);
-		}
+        public TermModel SelectedItem
+        {
+            get => _selectedItem;
+            set => SetField(ref _selectedItem, value);
+        }
 
-		public Language SourceLanguage { get; set; }
-		public Image SourceLanguageFlag { get; set; }
-		public Language TargetLanguage { get; set; }
-		public Image TargetLanguageFlag { get; set; }
-		public ITerminologyService TerminologyService { get; }
+        public string SourceLanguage { get; set; }
+        public Image SourceLanguageFlag { get; set; }
+        public string TargetLanguage { get; set; }
+        public Image TargetLanguageFlag { get; set; }
+        public ITerminologyService TerminologyService { get; }
+        private IDialogService DialogService { get; }
 
-		public ObservableCollection<TermModel> Terms
-		{
-			get => _terms;
-			set
-			{
-				if (SetField(ref _terms, value))
-					OnPropertyChanged(nameof(AnyEditedTerms));
-			}
-		}
+        public ObservableCollection<TermModel> Terms
+        {
+            get => _terms;
+            set
+            {
+                if (SetField(ref _terms, value))
+                    OnPropertyChanged(nameof(AnyEditedTerms));
+            }
+        }
 
-		private List<string> Glossaries { get; set; }
+        private List<string> Glossaries { get; set; }
 
-		public void JumpToTerm(IEntry entry)
-		{
-			var term = Terms.FirstOrDefault(t => t.Id == entry.Id);
-			SelectedIndex = Terms.IndexOf(term);
-		}
+        public void EditTerm(IEntry term)
+        {
+            JumpToTerm(term);
+            SelectedItem.IsEditing = true;
+        }
 
-		public void LoadTerms(Language source, Language target, List<string> glossaries)
-		{
-			Glossaries = glossaries;
-			SourceLanguage = source;
-			TargetLanguage = target;
+        public void JumpToTerm(IEntry entry)
+        {
+            var term = Terms.FirstOrDefault(t => t.Id == entry.Id);
+            SelectedIndex = Terms.IndexOf(term);
+        }
 
-			SourceLanguageFlag = source.GetFlagImage();
-			TargetLanguageFlag = target.GetFlagImage();
+        public void LoadTerms(Language source, Language target, List<string> glossaries)
+        {
+            Glossaries = glossaries;
 
-			LoadTermsFromDb(source, target, glossaries);
-			Terms.ForEach(t => t.PropertyChanged += OnTermModelOnPropertyChanged);
+            SourceLanguage = source.GetInterpretBankLanguageName();
+            TargetLanguage = target.GetInterpretBankLanguageName();
 
-			SelectedIndex = 1;
-			SelectedIndex = 0;
-		}
+            SourceLanguageFlag = source.GetFlagImage();
+            TargetLanguageFlag = target.GetFlagImage();
 
-		private void AddNewTerm(object obj)
-		{
-			if (Terms.Any(t => t.Id == -1 && !t.Edited)) return;
+            LoadTermsFromDb(SourceLanguage, TargetLanguage, glossaries);
+            Terms.ForEach(t => t.PropertyChanged += OnTermModelOnPropertyChanged);
 
-			var termModel = obj as TermModel ?? new TermModel();
-			termModel.IsEditing = true;
+            SelectedIndex = 1;
+            SelectedIndex = 0;
+        }
 
-			Terms.Add(termModel);
+        private void AddNewTerm(object obj)
+        {
+            //if (Terms.Any(t => t.Id == -1 && !t.Edited)) return;
 
-			termModel.PropertyChanged += OnTermModelOnPropertyChanged;
-			termModel.SetOriginalTerm();
+            var termModel = obj as TermModel ?? new TermModel();
+            termModel.IsEditing = true;
 
-			//TODO Find another method of taking the indices: the list may be empty
-			termModel.SourceLanguageIndex = Terms[0].SourceLanguageIndex;
-			termModel.TargetLanguageIndex = Terms[0].TargetLanguageIndex;
-			termModel.GlossaryName = Terms[0].GlossaryName;
+            termModel.PropertyChanged += OnTermModelOnPropertyChanged;
+            termModel.SetOriginalTerm();
 
-			SelectedIndex = Terms.IndexOf(termModel);
-		}
+            var sourceLanguageIndex = TerminologyService.GetLanguageIndex(SourceLanguage);
+            var targetLanguageIndex = TerminologyService.GetLanguageIndex(TargetLanguage);
 
-		private void CommitAllToDatabase(object obj)
-		{
-			var changedTerms = Terms.Where(t => t.Edited).ToList();
+            termModel.SourceLanguageIndex = sourceLanguageIndex;
+            termModel.TargetLanguageIndex = targetLanguageIndex;
 
-			TerminologyService.SaveAllTerms(changedTerms);
-			changedTerms.ForEach(t => t.SetOriginalTerm(true));
+            var glossaryNameFromUser = DialogService.GetGlossaryNameFromUser(Glossaries);
+            if (glossaryNameFromUser is null) return;
 
-			ReloadTerms();
+            termModel.GlossaryName = glossaryNameFromUser;
+            Terms.Add(termModel);
+            SelectedIndex = Terms.IndexOf(termModel);
+        }
 
-			SelectedIndex = Terms.Count - 1;
-		}
+        private void CommitAllToDatabase(object obj)
+        {
+            var changedTerms = Terms.Where(t => t.Edited).ToList();
 
-		private void LoadTermsFromDb(Language source, Language target, List<string> glossaries)
-		{
-			var sourceLanguage = source.DisplayName.Split(' ')[0];
-			var targetLanguage = target.DisplayName.Split(' ')[0];
+            TerminologyService.SaveAllTerms(changedTerms);
+            changedTerms.ForEach(t => t.SetOriginalTerm(true));
 
-			Terms = new ObservableCollection<TermModel>(TerminologyService.GetAllTerms(sourceLanguage, targetLanguage,
-				glossaries));
-		}
+            ReloadTerms();
 
-		private void OnTermModelOnPropertyChanged(object o, PropertyChangedEventArgs propertyChangedEventArgs)
-		{
-			OnPropertyChanged(nameof(AnyEditedTerms));
-		}
+            SelectedIndex = Terms.Count - 1;
+        }
 
-		private void ReloadTerms()
-		{
-			Terms.ForEach(t => t.PropertyChanged -= OnTermModelOnPropertyChanged);
-			LoadTermsFromDb(SourceLanguage, TargetLanguage, Glossaries);
-			Terms.ForEach(t => t.PropertyChanged += OnTermModelOnPropertyChanged);
-		}
+        private void LoadTermsFromDb(string source, string target, List<string> glossaries) =>
+            Terms = new ObservableCollection<TermModel>(TerminologyService.GetAllTerms(source, target,
+                glossaries));
 
-		private void RevertChanges(object obj)
-		{
-			SelectedItem.IsRemoved = false;
-			if (SelectedItem.Id == -1)
-			{
-				var selectedItem = SelectedItem;
-				Terms.Remove(selectedItem);
+        private void OnTermModelOnPropertyChanged(object o, PropertyChangedEventArgs propertyChangedEventArgs) => OnPropertyChanged(nameof(AnyEditedTerms));
 
-				SelectedIndex = Terms.Any() ? Terms.Count - 1 : -1;
-			}
-			else
-				SelectedItem.Revert();
+        private void ReloadTerms()
+        {
+            Terms.ForEach(t => t.PropertyChanged -= OnTermModelOnPropertyChanged);
+            LoadTermsFromDb(SourceLanguage, TargetLanguage, Glossaries);
+            Terms.ForEach(t => t.PropertyChanged += OnTermModelOnPropertyChanged);
+        }
 
-			OnPropertyChanged(nameof(AnyEditedTerms));
-		}
+        private void RevertChanges(object obj)
+        {
+            SelectedItem.IsRemoved = false;
+            if (SelectedItem.Id == -1)
+            {
+                var selectedItem = SelectedItem;
+                Terms.Remove(selectedItem);
 
-		public void EditTerm(IEntry term)
-		{
-			JumpToTerm(term);
-			SelectedItem.IsEditing = true;
-		}
-	}
+                SelectedIndex = Terms.Any() ? Terms.Count - 1 : -1;
+            }
+            else
+                SelectedItem.Revert();
+
+            OnPropertyChanged(nameof(AnyEditedTerms));
+        }
+    }
 }

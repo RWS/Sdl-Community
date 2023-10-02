@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using InterpretBank.GlossaryService.Interface;
+using InterpretBank.Model;
 using InterpretBank.SettingsService.Model;
 using InterpretBank.Studio.Model;
-using InterpretBank.TermbaseViewer.Model;
 
 namespace InterpretBank.TerminologyService.Interface
 {
@@ -19,5 +19,6 @@ namespace InterpretBank.TerminologyService.Interface
 		List<TermModel> GetAllTerms(string source, string target, List<string> glossaries);
 		void SaveAllTerms(List<TermModel> changedTerms);
 		List<string> GetTaggedGlossaries(List<string> tagList);
-	}
+        int GetLanguageIndex(string interpretBankLanguage);
+    }
 }

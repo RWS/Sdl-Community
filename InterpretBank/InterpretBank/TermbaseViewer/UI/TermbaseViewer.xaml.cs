@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using InterpretBank.Commands;
-using InterpretBank.TermbaseViewer.Model;
+using InterpretBank.Model;
 using InterpretBank.TermbaseViewer.ViewModel;
 
 namespace InterpretBank.TermbaseViewer.UI

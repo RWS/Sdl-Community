@@ -135,6 +135,9 @@
     <Resource Include="Resources\logo.png" />
     <Resource Include="Resources\Tag.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UI\" />
+  </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>

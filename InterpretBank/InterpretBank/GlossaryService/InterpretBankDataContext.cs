@@ -7,8 +7,8 @@ using System.Linq;
 using InterpretBank.GlossaryService.DAL;
 using InterpretBank.GlossaryService.DAL.Interface;
 using InterpretBank.GlossaryService.Interface;
+using InterpretBank.Model;
 using InterpretBank.SettingsService.Model;
-using InterpretBank.TermbaseViewer.Model;
 
 namespace InterpretBank.GlossaryService;
 

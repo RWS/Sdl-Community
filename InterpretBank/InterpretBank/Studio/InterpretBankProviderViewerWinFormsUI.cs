@@ -5,7 +5,8 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using DocumentFormat.OpenXml.Bibliography;
-using InterpretBank.TermbaseViewer.Model;
+using InterpretBank.Model;
+using InterpretBank.Service;
 using InterpretBank.TermbaseViewer.UI;
 using InterpretBank.TermbaseViewer.ViewModel;
 using Sdl.Core.Globalization;
@@ -27,15 +28,15 @@ namespace InterpretBank.Studio
 			{
 				if (_termbaseControl is not null) return _termbaseControl;
 
-				var settingsId = InterpretBankProvider.Uri.AbsolutePath.Split('.')[0].TrimStart('/');
-				var settings = PersistenceService.PersistenceService.GetSettings(settingsId);
-				TermbaseViewerViewModel = new TermbaseViewerViewModel(InterpretBankProvider.TermSearchService);
+				//var settingsId = InterpretBankProvider.Uri.AbsolutePath.Split('.')[0].TrimStart('/');
+				//var settings = PersistenceService.PersistenceService.GetSettings(settingsId);
 
-				TermbaseViewerViewModel.LoadTerms(SourceLanguage, TargetLanguage, settings.Glossaries);
+				TermbaseViewerViewModel = new TermbaseViewerViewModel(InterpretBankProvider.TermSearchService, Common.DialogService);
+				TermbaseViewerViewModel.LoadTerms(SourceLanguage, TargetLanguage, InterpretBankProvider.Settings.Glossaries);
 
 				var termbaseViewer = new TermbaseViewer.UI.TermbaseViewer { DataContext = TermbaseViewerViewModel };
-
 				_termbaseControl = new TermbaseViewerControl(termbaseViewer);
+
 				return _termbaseControl;
 			}
 		}

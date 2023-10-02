@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using InterpretBank.Commands;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using InterpretBank.Commands;
 
-namespace InterpretBank.TermbaseViewer.Model
+namespace InterpretBank.Model
 {
 	public class TermModel : INotifyPropertyChanged
 	{
