@@ -35,6 +35,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private readonly SdlxliffReader _sdlxliffReader;
 		private readonly ParagraphUnitProvider _paragraphUnitProvider;
 		private readonly DisplayFilter _displayFilter;
+		private readonly WordCountProvider _wordCountProvider;
 
 		private IStudioDocument _activeDocument;
 
@@ -62,7 +63,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 		public StudioViewsEditorViewModel(EditorController editorController,
 			FilterItemService filterItemService, ProjectFileService projectFileService,
 			SdlxliffMerger sdlxliffMerger, SdlxliffExporter sdlxliffExporter, SdlxliffReader sdlxliffReader,
-			ParagraphUnitProvider paragraphUnitProvider, DisplayFilter displayFilter)
+			ParagraphUnitProvider paragraphUnitProvider, DisplayFilter displayFilter, WordCountProvider wordCountProvider)
 		{
 			_filterItemService = filterItemService;
 			_projectFileService = projectFileService;
@@ -83,6 +84,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 			SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(
 				_filterItemService.GetFilterItems(FilterItems, new List<string> { "Locked" }));
 			SelectedTabItem = 0;
+			_wordCountProvider = wordCountProvider;
 		}
 
 		public ICommand OpenFolderInExplorerCommand => _openFolderInExplorerCommand ?? (_openFolderInExplorerCommand = new CommandHandler(OpenFolderInExplorer));
@@ -835,7 +837,6 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 			var sourceLanguage = projectFiles.FirstOrDefault()?.SourceFile.Language.CultureInfo;
 			var targetLanguage = projectFiles.FirstOrDefault()?.Language.CultureInfo;
-			var segmentWordCounts = new SegmentWordCounts(sourceLanguage, targetLanguage);
 
 			foreach (var documentFile in projectFiles)
 			{
@@ -843,7 +844,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 				var filePathInputName = Path.GetFileName(filePathInput);
 				var filePathOutput = _projectFileService.GetUniqueFileName(Path.Combine(ExportPath, filePathInputName), "Filtered");
 
-				var outputFile = _sdlxliffExporter.ExportFile(segmentPairInfos, filePathInput, filePathOutput, segmentWordCounts, ProgressLogger);
+				var outputFile = _sdlxliffExporter.ExportFile(segmentPairInfos, filePathInput, filePathOutput, _wordCountProvider, ProgressLogger);
 				if (outputFile != null)
 				{
 					exportResult.OutputFiles.Add(outputFile);

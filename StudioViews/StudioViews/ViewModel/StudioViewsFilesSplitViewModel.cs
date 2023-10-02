@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -36,6 +37,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private readonly FilterItemService _filterItemService;
 		private readonly ProjectFileService _projectFileService;
 		private readonly FileBasedProject _project;
+		private readonly WordCountProvider _wordCountProvider;
 
 		private int _maxNumberOfWords;
 		private int _numberOfEqualParts;
@@ -69,7 +71,8 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private bool _cancelIsVisible;
 
 		public StudioViewsFilesSplitViewModel(Window owner, FileBasedProject project, List<ProjectFile> selectedFiles, ProjectFileService projectFileService,
-			FilterItemService filterItemService, SdlxliffMerger sdlxliffMerger, SdlxliffExporter sdlxliffExporter, SdlxliffReader sdlxliffReader)
+			FilterItemService filterItemService, SdlxliffMerger sdlxliffMerger, SdlxliffExporter sdlxliffExporter, 
+			SdlxliffReader sdlxliffReader, WordCountProvider wordCountProvider)
 		{
 			_owner = owner;
 			_project = project;
@@ -84,6 +87,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 			DialogResult = DialogResult.None;
 			Reset(null);
+			_wordCountProvider = wordCountProvider;
 		}
 
 		public ICommand ClearFiltersCommand => _clearFiltersCommand ?? (_clearFiltersCommand = new CommandHandler(ClearFilters));
@@ -742,8 +746,6 @@ namespace Sdl.Community.StudioViews.ViewModel
 			var sourceLanguage = _selectedFiles.FirstOrDefault()?.SourceFile.Language.CultureInfo;
 			var targetLanguage = _selectedFiles.FirstOrDefault()?.Language.CultureInfo;
 
-			var segmentWordCountService = new SegmentWordCounts(sourceLanguage, targetLanguage);
-
 			//var counter = 0;
 			//Parallel.For(0, segmentPairs.Count, 
 			//	new ParallelOptions { MaxDegreeOfParallelism = 5 }, index =>
@@ -761,17 +763,26 @@ namespace Sdl.Community.StudioViews.ViewModel
 			//		}));
 			//});
 
-			for (var index = 0; index < segmentPairs.Count; index++)
+			var max = segmentPairs.Count;
+			var lastProgress = 0;
+			for (var index = 0; index < max; index++)
 			{
 				var segmentPairInfo = segmentPairs[index];
-				segmentPairInfo.SourceWordCounts = segmentWordCountService.GetWordCounts(segmentPairInfo.SegmentPair);
-				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
-					new Action(delegate
-					{
-						ProcessingProgressMessage = "Generating segment word counts";
-						ProcessingCurrentProgress = GetPercentageValue(index + 1, segmentPairs.Count);
-					}));
+				segmentPairInfo.SourceWordCounts = _wordCountProvider.GetWordCounts(segmentPairInfo.SegmentPair.Source, sourceLanguage);
+
+				var currentProgress = (int)((double)index / max * 100); // Calculate current progress percentage
+				if (currentProgress >= lastProgress + 1)
+				{
+					_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+						new Action(delegate
+						{
+							ProcessingProgressMessage = "Generating segment word counts";
+							ProcessingCurrentProgress = currentProgress;
+						}));
+					lastProgress = currentProgress; // Update lastProgress
+				}
 			}
+
 
 			var segmentPairSplits = GetSegmentPairSplits(segmentPairs);
 			if (segmentPairSplits == null)
@@ -798,7 +809,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 				}));
 
 				var outputFile = _sdlxliffExporter.ExportFile(segmentPairSplit, filePathInput, filePathOutput,
-					segmentWordCountService, ProgressLogger);
+					_wordCountProvider, ProgressLogger);
 
 				exportResult.OutputFiles.Add(outputFile);
 			}
@@ -915,28 +926,29 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 		private void ProgressLogger(string message, int min, int max)
 		{
-			var percentage = GetPercentageValue(min, max);
-			if (percentage > ProcessingCurrentProgress)
+			var currentProgress = (int)((double)min / max * 100);
+			if (currentProgress > ProcessingCurrentProgress)
 			{
-				_owner.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle,
+				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
 					new Action(delegate
 					{
 						ProcessingIsIndeterminate = false;
 						ProcessingProgressMessage = message;
-						ProcessingCurrentProgress = percentage;
+						ProcessingCurrentProgress = currentProgress;
 					}));
 			}
 		}
 
-		private int GetPercentageValue(int index, int total)
-		{
-			var currentIndex = Convert.ToDouble(index);
-			var totalItems = Convert.ToDouble(total);
-			var percentage = currentIndex / totalItems * 100;
+		//private int GetPercentageValue(int index, int total)
+		//{
+		//	var currentProgress = (int)((double)index / max * 100);
+		//	var currentIndex = Convert.ToDouble(index);
+		//	var totalItems = Convert.ToDouble(total);
+		//	var percentage = currentIndex / totalItems * 100;
 
-			var percentageValue = int.Parse(Math.Truncate(percentage).ToString(CultureInfo.InvariantCulture));
-			return percentageValue;
-		}
+		//	var percentageValue = int.Parse(Math.Truncate(percentage).ToString(CultureInfo.InvariantCulture));
+		//	return percentageValue;
+		//}
 
 		private void AttemptToCloseWindow()
 		{

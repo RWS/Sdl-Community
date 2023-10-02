@@ -16,12 +16,12 @@ namespace Sdl.Community.StudioViews.Services
 		}
 
 		public OutputFile ExportFile(List<SegmentPairInfo> selectedSegments, string filePathInput, string filePathOutput,
-			SegmentWordCounts segmentWordCounts, Action<string, int, int> progressLogger)
+			WordCountProvider wordCountProvider, Action<string, int, int> progressLogger)
 		{
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePathInput, filePathOutput, null);
 
-			var contentWriter = new ContentExporter(selectedSegments, _segmentBuilder, segmentWordCounts, progressLogger);
+			var contentWriter = new ContentExporter(selectedSegments, _segmentBuilder, wordCountProvider, progressLogger);
 
 			converter.AddBilingualProcessor(contentWriter);
 			converter.SynchronizeDocumentProperties();

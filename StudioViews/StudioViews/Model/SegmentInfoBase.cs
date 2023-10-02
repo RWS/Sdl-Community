@@ -1,5 +1,6 @@
 ﻿using Sdl.Community.StudioViews.Interfaces;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace Sdl.Community.StudioViews.Model
 {
@@ -13,6 +14,6 @@ namespace Sdl.Community.StudioViews.Model
 
 		public IParagraphUnit ParagraphUnit { get; set; }
 
-		public Trados.Community.Toolkit.LanguagePlatform.Models.WordCounts SourceWordCounts { get; set; }
+		public WordCounts SourceWordCounts { get; set; }
 	}
 }

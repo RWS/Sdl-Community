@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Sdl.Community.StudioViews.Model;
-using Trados.Community.Toolkit.LanguagePlatform;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.Versioning;
 
@@ -16,12 +15,12 @@ namespace Sdl.Community.StudioViews.Services
 		private readonly List<string> _projectFilesFiltered;
 		private readonly List<string> _subSegmentParagraphUnitIds;
 		private readonly Action<string, int, int> _progressLogger;
-		private readonly SegmentWordCounts _segmentWordCounts;
+		private readonly WordCountProvider _wordCountProvider;
 		private IFileProperties _fileProperties;
 	
 
-		public ContentExporter(List<SegmentPairInfo> selectedSegments, SegmentBuilder segmentBuilder, 
-			SegmentWordCounts segmentWordCounts, Action<string, int, int> progressLogger)
+		public ContentExporter(List<SegmentPairInfo> selectedSegments, SegmentBuilder segmentBuilder, WordCountProvider wordCountProvider,
+			 Action<string, int, int> progressLogger)
 		{
 			_selectedSegments = selectedSegments;
 			_segmentBuilder = segmentBuilder;
@@ -31,7 +30,7 @@ namespace Sdl.Community.StudioViews.Services
 			SegmentPairInfos = new List<SegmentPairInfo>();
 
 			_progressLogger = progressLogger;
-			_segmentWordCounts = segmentWordCounts;
+			_wordCountProvider = wordCountProvider;
 		}
 
 		public List<SegmentPairInfo> SegmentPairInfos { get; }
@@ -99,7 +98,7 @@ namespace Sdl.Community.StudioViews.Services
 					{
 						segmentPairInfo.SourceWordCounts = selectedSegment != null 
 							? selectedSegment.SourceWordCounts 
-							: _segmentWordCounts.GetWordCounts(segmentPair);
+							: _wordCountProvider.GetWordCounts(segmentPair.Source, SourceLanguage);
 					}
 					catch
 					{
