@@ -3,5 +3,5 @@
 public interface IDialog
 {
 	bool Confirm(string message);
-	string GetFilePath(string filter = null);
+	string GetFilePath(string filter);
 }

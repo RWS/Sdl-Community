@@ -2,7 +2,7 @@
 using InterpretBank.TermbaseViewer.UI;
 using System.Collections.Generic;
 
-namespace InterpretBank.Service
+namespace InterpretBank.CommonServices
 {
     public class DialogService : IDialogService
     {

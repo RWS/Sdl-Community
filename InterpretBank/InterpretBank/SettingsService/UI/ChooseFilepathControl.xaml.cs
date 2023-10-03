@@ -94,8 +94,8 @@ namespace InterpretBank.SettingsService.UI
 
 		private void BrowseButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			var filepath = OpenFileDialog.GetFilePath();
 
+			var filepath = OpenFileDialog.GetFilePath("Interpret Bank Databases (*.db)|*.db");
 			if (string.IsNullOrWhiteSpace(filepath))
 				return;
 			Filepath = filepath;

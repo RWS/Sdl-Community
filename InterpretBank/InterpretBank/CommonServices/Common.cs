@@ -1,4 +1,6 @@
-﻿namespace InterpretBank.Service
+﻿using InterpretBank.CommonServices;
+
+namespace InterpretBank.Service
 {
     public static class Common
     {

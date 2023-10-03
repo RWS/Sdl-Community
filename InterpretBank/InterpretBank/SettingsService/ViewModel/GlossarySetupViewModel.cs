@@ -154,15 +154,6 @@ namespace InterpretBank.SettingsService.ViewModel
 			return nonDuplicates;
 		}
 
-		private void ChooseFilePath(object obj)
-		{
-			var filePath = OpenFileDialog.GetFilePath();
-
-			if (string.IsNullOrWhiteSpace(filePath))
-				return;
-			Filepath = filePath;
-		}
-
 		private void DeleteTag(object parameter)
 		{
 			if (parameter is not string tagName)
