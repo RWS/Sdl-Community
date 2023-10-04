@@ -87,8 +87,6 @@ namespace LanguageWeaverProvider.ViewModel
 			NavigateToCommand = new RelayCommand(NavigateTo);
 			OpenSettingsViewCommand = new RelayCommand(OpenSettingsView);
 			OpenLanguageMappingProviderViewCommand = new RelayCommand(OpenLanguageMappingProviderView);
-
-			OpenFeedbackCommand = new RelayCommand(OpenFeedback);
 		}
 
 		private IPairMappingViewModel SetPairMappingView()
@@ -165,15 +163,6 @@ namespace LanguageWeaverProvider.ViewModel
 		private void ChangeSettingsViewState(object sender, EventArgs e)
 		{
 			ShowSettingsView = false;
-		}
-
-		public ICommand OpenFeedbackCommand { get; private set; }
-
-		private void OpenFeedback(object parameter)
-		{
-			var fbViewModel = new FeedbackViewModel();
-			var fbview = new FeedbackView() { DataContext = fbViewModel };
-			fbview.ShowDialog();
 		}
 	}
 }

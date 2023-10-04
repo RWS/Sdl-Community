@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
+using System.Windows.Documents;
 using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
@@ -98,32 +101,37 @@ namespace LanguageWeaverProvider
 		private void SetQualityEstimationOnSegment(EvaluatedSegment evaluatedSegment, PairMapping pairMapping)
 		{
 			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-			var activeSegmentPair = editorController.ActiveDocument.ActiveSegmentPair;
-			activeSegmentPair.Properties.TranslationOrigin.SetMetaData("quality_estimation", evaluatedSegment.QualityEstimation);
-			activeSegmentPair.Properties.TranslationOrigin.SetMetaData("quality_estimation_model", pairMapping.SelectedModel.Model);
-			editorController.ActiveDocument.UpdateSegmentPairProperties(activeSegmentPair, activeSegmentPair.Properties);
-			return;
-
-			var existingSegment = _translationOptions.RatedSegments.FirstOrDefault(x => x.Id == activeSegmentPair.Properties.Id.Id);
-			if (existingSegment is not null)
+			if (editorController.ActiveDocument is null)
 			{
-				existingSegment.QualityEstimation = evaluatedSegment.Estimation;
+				StoreMetadata(evaluatedSegment, pairMapping);
 				return;
 			}
 
+			var activeSegmentPair = editorController.ActiveDocument.ActiveSegmentPair;
+			if (activeSegmentPair is null)
+			{
+				return;
+			}
+
+			activeSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_QE, evaluatedSegment.QualityEstimation);
+			activeSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_ShortModelName, pairMapping.SelectedModel.Model);
+			activeSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_LongModelName, pairMapping.SelectedModel.Name);
+			activeSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_Translation, evaluatedSegment.Segment.ToString());
+			editorController.ActiveDocument.UpdateSegmentPairProperties(activeSegmentPair, activeSegmentPair.Properties);
+		}
+
+		private void StoreMetadata(EvaluatedSegment evaluatedSegment, PairMapping pairMapping)
+		{
+			RatedSegments.Segments ??= new List<RatedSegment>();
 			var ratedSegment = new RatedSegment()
 			{
-				Id = activeSegmentPair.Properties.Id.Id,
-				QualityEstimation = evaluatedSegment.Estimation
+				Id = _currentTranslationUnit.DocumentSegmentPair.Properties.Id.Id,
+				Model = pairMapping.SelectedModel.Model,
+				ModelName = pairMapping.SelectedModel.Name,
+				Translation = evaluatedSegment.Segment.ToString()
 			};
 
 			RatedSegments.Segments.Add(ratedSegment);
-			var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			/*var x = projectsController.CurrentProject.GetTranslationProviderConfiguration().Entries.FirstOrDefault(e =>
-				e.MainTranslationProvider.Uri.ToString().Contains(Constants.CloudFullScheme))
-			?.MainTranslationProvider;*/
-
-			var currentProject = projectsController.CurrentProject.GetTranslationProviderConfiguration().Entries;
 		}
 
 		private Segment RemoveTagsOnSegment(Segment segment)

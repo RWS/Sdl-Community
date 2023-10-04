@@ -19,5 +19,11 @@
 
 		// LW Portal
 		public const string LanguageWeaverEUPortal = "https://portal.languageweaver.com/login";
+
+		// Segment metadata
+		public const string SegmentMetadata_QE = "quality_estimation";
+		public const string SegmentMetadata_ShortModelName = "model";
+		public const string SegmentMetadata_LongModelName = "nmt_model";
+		public const string SegmentMetadata_Translation = "nmt_translation";
 	}
 }

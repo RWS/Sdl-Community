@@ -203,6 +203,27 @@ Language Weaver is powered by our state-of-the-art machine learning algorithms a
   <data name="ErrorView_Buttons_ShowDetails" xml:space="preserve">
     <value>Show details</value>
   </data>
+  <data name="FeedbackView_Button_SendFeedback" xml:space="preserve">
+    <value>Send feedback</value>
+  </data>
+  <data name="FeedbackView_GroupBox_Header" xml:space="preserve">
+    <value>Segment Details</value>
+  </data>
+  <data name="FeedbackView_GroupBox_QE" xml:space="preserve">
+    <value>Original QE:</value>
+  </data>
+  <data name="FeedbackView_GroupBox_Translation" xml:space="preserve">
+    <value>Original translation:</value>
+  </data>
+  <data name="FeedbackView_Message" xml:space="preserve">
+    <value>Let us know how we did!</value>
+  </data>
+  <data name="FeedbackView_OptionalMessage" xml:space="preserve">
+    <value>Leave a message (optional)</value>
+  </data>
+  <data name="FeedbackView_Title" xml:space="preserve">
+    <value>Give feedback!</value>
+  </data>
   <data name="LMPViewModel_ResetTitle" xml:space="preserve">
     <value>Reset to defaults</value>
   </data>

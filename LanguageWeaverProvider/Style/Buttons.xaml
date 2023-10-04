@@ -7,7 +7,8 @@
 
 	<!--Window Control Button Style-->
 	<Style x:Key="WindowControlButtonStyle" TargetType="{x:Type Button}">
-		<Setter Property="Foreground" Value="{DynamicResource WindowsControl.Command.Forground}"/>
+		<Setter Property="Foreground"
+				Value="#5D6E7F"/>
 		<Setter Property="FocusVisualStyle" Value="{x:Null}" />
 		<Setter Property="Focusable" Value="False" />
 		<Setter Property="IsTabStop" Value="False" />
@@ -22,10 +23,14 @@
 					</Border>
 					<ControlTemplate.Triggers>
 						<Trigger Property="IsMouseOver" Value="True">
-							<Setter TargetName="Border" Property="Background" Value="{DynamicResource WindowsControl.Command.Highlight}" />
+							<Setter TargetName="Border"
+									Property="Background"
+									Value="#F2F4FF" />
 						</Trigger>
 						<Trigger Property="IsPressed" Value="True">
-							<Setter TargetName="Border" Property="Background" Value="{DynamicResource WindowsControl.Command.Active}" />
+							<Setter TargetName="Border"
+									Property="Background"
+									Value="#ffe8a6" />
 						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>

@@ -315,6 +315,69 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send feedback.
+        /// </summary>
+        public static string FeedbackView_Button_SendFeedback {
+            get {
+                return ResourceManager.GetString("FeedbackView_Button_SendFeedback", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Segment Details.
+        /// </summary>
+        public static string FeedbackView_GroupBox_Header {
+            get {
+                return ResourceManager.GetString("FeedbackView_GroupBox_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original QE:.
+        /// </summary>
+        public static string FeedbackView_GroupBox_QE {
+            get {
+                return ResourceManager.GetString("FeedbackView_GroupBox_QE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original translation:.
+        /// </summary>
+        public static string FeedbackView_GroupBox_Translation {
+            get {
+                return ResourceManager.GetString("FeedbackView_GroupBox_Translation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Let us know how we did!.
+        /// </summary>
+        public static string FeedbackView_Message {
+            get {
+                return ResourceManager.GetString("FeedbackView_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Leave a message (optional).
+        /// </summary>
+        public static string FeedbackView_OptionalMessage {
+            get {
+                return ResourceManager.GetString("FeedbackView_OptionalMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Give feedback!.
+        /// </summary>
+        public static string FeedbackView_Title {
+            get {
+                return ResourceManager.GetString("FeedbackView_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apply.
         /// </summary>
         public static string LMPView_Buttons_ApplyChanges {

@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using LanguageWeaverProvider.ViewModel;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Color = System.Windows.Media.Color;
 using ColorConverter = System.Windows.Media.ColorConverter;
 
@@ -14,8 +15,8 @@ namespace LanguageWeaverProvider.View
 	/// <summary>
 	/// Interaction logic for FeedbackView.xaml
 	/// </summary>
-	public partial class FeedbackView : Window
-    {
+	public partial class FeedbackView : UserControl, IUIControl
+	{
 		private readonly List<string> HexCodes = new() { "#ff4545", "#ffa534", "#ffe234", "#b7dd29", "#57e32c" };
 		private int SelectedStar;
 
@@ -93,5 +94,7 @@ namespace LanguageWeaverProvider.View
 
 			window.DragMove();
 		}
-    }
+
+		public void Dispose() { }
+	}
 }

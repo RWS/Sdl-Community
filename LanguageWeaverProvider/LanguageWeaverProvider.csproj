@@ -39,6 +39,10 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <Page Remove="Style\Buttons.xaml" />
+	</ItemGroup>
+	
+	<ItemGroup>
 		<Reference Include="Newtonsoft.Json">
 		  <HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
 		</Reference>
@@ -126,6 +130,7 @@
 
 	<ItemGroup>
 	  <Resource Include="Resources\lwMainLogo.png" />
+	  <Resource Include="Style\Buttons.xaml" />
 	</ItemGroup>
 
 	<ItemGroup>

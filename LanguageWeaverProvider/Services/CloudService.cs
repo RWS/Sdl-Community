@@ -7,9 +7,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Services.Model;
+using LanguageWeaverProvider.Studio.FeedbackController.Model;
 using LanguageWeaverProvider.XliffConverter.Converter;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 
 namespace LanguageWeaverProvider.Services
 {
@@ -180,8 +182,9 @@ namespace LanguageWeaverProvider.Services
 			const string UriParameters = "includeProgressInfo=true";
 
 			_httpClient = new();
-			var endpoint = $"{TranslationEndpoint}/{requestId}?{UriParameters}";
 			_httpClient.DefaultRequestHeaders.Add(HeaderNameAuth, $"{cloudCredentials.AccessToken.TokenType} {cloudCredentials.AccessToken.Token}");
+
+			var endpoint = $"{TranslationEndpoint}/{requestId}?{UriParameters}";
 			var response = await _httpClient.GetStringAsync(endpoint);
 			return response;
 		}
@@ -246,6 +249,20 @@ namespace LanguageWeaverProvider.Services
 
 				await AuthenticateUser(cloudCredentials, authenticationType);
 			}
+		}
+
+		public static async Task CreateFeedback(CloudCredentials cloudCredentials, FeedbackRequest feedbackRequest)
+		{
+			var uri = $"https://api.languageweaver.com/v4/accounts/{cloudCredentials.AccountId}/feedback/translations";
+			var feedbackRequestJson = JsonConvert.SerializeObject(feedbackRequest);
+			var content = new StringContent(feedbackRequestJson, new UTF8Encoding(), "application/json");
+
+			var request = new HttpRequestMessage(HttpMethod.Post, uri);
+			request.Headers.Add("Authorization", $"Bearer {cloudCredentials.AccessToken.Token}");
+			request.Content = content;
+
+			_httpClient = new();
+			await _httpClient.SendAsync(request);
 		}
 	}
 }

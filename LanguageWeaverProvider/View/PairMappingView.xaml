@@ -97,12 +97,7 @@
 					FontWeight="DemiBold"
 					Height="26"
 					Width="120"
-					Margin="8 0"/>
-
-			<Button Content="feedback"
-					Command="{Binding OpenFeedbackCommand}" 
-					Style="{StaticResource Sdl.Button.SecondaryStyle}"
-					Height="26"/>
+					Margin="8 0" />
 		</StackPanel>
 
 		<StackPanel Grid.Row="2"

@@ -24,10 +24,8 @@
 	public enum QualityEstimations
 	{
 		None,
-		VeryPoor,
 		Poor,
 		Adequate,
-		Good,
-		VeryGood
+		Good
 	}
 }
