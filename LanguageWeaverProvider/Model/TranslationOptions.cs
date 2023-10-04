@@ -1,12 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Policy;
 using LanguageWeaverProvider.Model.Interface;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace LanguageWeaverProvider.Model.Options
 {
 	public class TranslationOptions : ITranslationOptions
 	{
-		public Uri Uri => new(Constants.TranslationFullScheme);
+		private readonly TranslationProviderUriBuilder _uriBuilder;
+
+		public TranslationOptions()
+		{
+			_uriBuilder = new TranslationProviderUriBuilder(Constants.TranslationScheme);
+		}
+
+		public Uri Uri => _uriBuilder.Uri;
 
 		public ProviderSettings ProviderSettings { get; set; }
 
