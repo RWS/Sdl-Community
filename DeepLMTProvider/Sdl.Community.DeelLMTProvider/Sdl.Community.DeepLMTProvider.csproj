@@ -117,7 +117,6 @@
     <Compile Include="Command\AsyncParameterlessCommand.cs" />
     <Compile Include="Command\ParameterlessCommand.cs" />
     <Compile Include="Command\CommandWithParameter.cs" />
-    <Compile Include="Common.cs" />
     <Compile Include="Extensions\ActionResult.cs" />
     <Compile Include="Extensions\CultureNameExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
@@ -130,9 +129,10 @@
     <Compile Include="Helpers\DialogWrapper.cs" />
     <Compile Include="Helpers\ProcessStarter.cs" />
     <Compile Include="Helpers\TsvReaderWriter.cs" />
+    <Compile Include="Interface\IGlossarySniffer.cs" />
     <Compile Include="Interface\IDeepLGlossaryClient.cs" />
     <Compile Include="Interface\IEditGlossaryService.cs" />
-    <Compile Include="Interface\IGlossaryBrowserService.cs" />
+    <Compile Include="Interface\IUserInteractionService.cs" />
     <Compile Include="Interface\IGlossaryReaderWriter.cs" />
     <Compile Include="Interface\IGlossaryReaderWriterFactory.cs" />
     <Compile Include="Interface\IGlossaryReaderWriterService.cs" />
@@ -146,9 +146,11 @@
     <Compile Include="Model\GlossaryItem.cs" />
     <Compile Include="Model\GlossaryLanguagePair.cs" />
     <Compile Include="Model\LanguagePairOptions.cs" />
+    <Compile Include="NameToBoolConverter.cs" />
     <Compile Include="Service\EditGlossaryService.cs" />
     <Compile Include="Service\GlossaryBackupService.cs" />
-    <Compile Include="Service\GlossaryImportExportService.cs" />
+    <Compile Include="Service\GlossarySniffer.cs" />
+    <Compile Include="Service\UserInteractionService.cs" />
     <Compile Include="Service\GlossaryReaderWriterService.cs" />
     <Compile Include="Service\MessageService.cs" />
     <Compile Include="Studio\DeepLMtTranslationProvider.cs" />
@@ -185,6 +187,9 @@
     <Compile Include="Client\DeepLTranslationProviderClient.cs" />
     <Compile Include="UI\BrowseGlossariesWindow.xaml.cs">
       <DependentUpon>BrowseGlossariesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ChooseDelimiterWindow.xaml.cs">
+      <DependentUpon>ChooseDelimiterWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\BrowsePathControl.xaml.cs">
       <DependentUpon>BrowsePathControl.xaml</DependentUpon>
@@ -253,6 +258,10 @@
   <ItemGroup />
   <ItemGroup>
     <Page Include="UI\BrowseGlossariesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ChooseDelimiterWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

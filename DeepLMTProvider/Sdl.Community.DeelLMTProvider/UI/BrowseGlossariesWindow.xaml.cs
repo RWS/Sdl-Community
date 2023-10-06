@@ -2,6 +2,7 @@
 using Sdl.Community.DeepLMTProvider.Extensions;
 using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Model;
+using Sdl.Community.DeepLMTProvider.Service;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -18,7 +19,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
         private ObservableCollection<GlossaryItem> _glossaries;
         private bool _isEditing;
 
-        public BrowseGlossariesWindow(List<string> supportedLanguages, IBrowseDialog openFileDialog, bool isAddNewGlossaryWindow = false)
+        public BrowseGlossariesWindow(List<string> supportedLanguages, IBrowseDialog openFileDialog, IGlossarySniffer glossarySniffer, bool isAddNewGlossaryWindow = false)
         {
 
             Glossaries = new ObservableCollection<GlossaryItem>();
@@ -26,6 +27,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
             SupportedLanguages = supportedLanguages;
             OpenFileDialog = openFileDialog;
+            GlossarySniffer = glossarySniffer;
             InitializeComponent();
 
             if (isAddNewGlossaryWindow)
@@ -58,6 +60,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
         public ICommand KeyboardShortcutCommand => new CommandWithParameter(ExecuteKeyboardShortcut);
         public List<string> SupportedLanguages { get; }
         private IBrowseDialog OpenFileDialog { get; }
+        private IGlossarySniffer GlossarySniffer { get; }
 
         public void AddGlossaries(string[] importDialogFileNames)
         {
@@ -85,8 +88,17 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         private void AddNewGlossary(string fn)
         {
-            if (Glossaries.All(g => g.Path != fn))
-                Glossaries.Add(new GlossaryItem(fn) /*{ SourceLanguage = "EN", TargetLanguage = "DE" }*/);
+            if (Glossaries.Any(g => g.Path == fn)) return;
+
+            var newGlossaryItem = new GlossaryItem(fn);
+            (string source, string target, char delimiter) metadata;
+            if (fn.ToLower().Contains(".csv"))
+            {
+                metadata = GlossarySniffer.GetGlossaryFileMetadata(fn, SupportedLanguages);
+                newGlossaryItem.Delimiter = metadata.delimiter.ToString();
+            }
+
+            Glossaries.Add(newGlossaryItem /*{ SourceLanguage = "EN", TargetLanguage = "DE" }*/);
         }
 
         private void BrowseButton_Click(object sender, RoutedEventArgs e)

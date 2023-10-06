@@ -46,7 +46,7 @@ namespace Sdl.Community.DeepLMTProvider.Service
         {
             var glossaryReaderWriterFactory = new GlossaryReaderWriterFactory();
             var messageService = new MessageService();
-            var glossaryImportExportService = new GlossaryImportExportService(new DialogWrapper());
+            var glossaryImportExportService = new UserInteractionService(new DialogWrapper());
             var glossaryReaderWriterService = new GlossaryReaderWriterService(glossaryReaderWriterFactory);
             var deepLGlossaryClient = new DeepLGlossaryClient();
 

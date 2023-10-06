@@ -234,10 +234,18 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             Options.ApiKey = ApiKey;
             Options.LanguagePairOptions = new List<LanguagePairOptions>(LanguagePairOptions);
 
+            DetachEvents();
+
             if (IsTellMeAction)
             {
                 AskUserToRestart();
             }
+        }
+
+        private void DetachEvents()
+        {
+            PasswordChangedTimer.Elapsed -= OnPasswordChanged;
+            DeepLTranslationProviderClient.ApiKeyChanged += Dispatcher_LoadLanguagePairSettings;
         }
 
         private void SetApiKeyValidityLabel()

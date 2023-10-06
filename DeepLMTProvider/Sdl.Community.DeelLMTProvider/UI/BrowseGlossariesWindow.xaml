@@ -5,6 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:uiHelpers="clr-namespace:Sdl.Community.DeepLMTProvider.UI.UiHelpers"
         xmlns:controls="clr-namespace:Sdl.Community.DeepLMTProvider.UI.Controls"
+        xmlns:deepLmtProvider="clr-namespace:Sdl.Community.DeepLMTProvider"
         SizeToContent="WidthAndHeight"
         MinHeight="200"
         MaxWidth="600"
@@ -51,6 +52,7 @@
                 <Setter Property="Focusable"
                         Value="False" />
             </Style>
+            <deepLmtProvider:NameToBoolConverter x:Key="NameToBoolConverter" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="5">
@@ -110,6 +112,18 @@
                         <DataTemplate>
                             <ComboBox SelectedItem="{Binding TargetLanguage,UpdateSourceTrigger=PropertyChanged}"
                                       ItemsSource="{Binding SupportedLanguages, ElementName=BrowseGlossaries_Window}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
+                <DataGridTemplateColumn Header="Delimiter"
+                                        IsReadOnly="True"
+                                        SortMemberPath="TargetLanguage">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox IsEnabled="{Binding Name, Converter={StaticResource NameToBoolConverter}}"
+                                     MaxLength="1"
+                                     Text="{Binding Delimiter, UpdateSourceTrigger=PropertyChanged}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

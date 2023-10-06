@@ -6,12 +6,17 @@
         {
             Path = path;
             Name = System.IO.Path.GetFileName(Path);
+            Delimiter = ",";
         }
 
         private string _sourceLanguage;
         private string _targetLanguage;
         private string _name;
         public string Path { get; set; }
+
+        public string Delimiter { get; set; }
+
+        public char GetDelimiter() => Delimiter.Length > 0 ? Delimiter[0] : ',';
 
         public string Name
         {
