@@ -27,7 +27,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         public GlossariesWindowViewModel(
             IDeepLGlossaryClient deepLGlossaryClient,
             IMessageService messageService,
-            IGlossaryBrowserService glossaryBrowserService,
+            IUserInteractionService glossaryBrowserService,
             IGlossaryReaderWriterService glossaryReaderWriterService,
             IProcessStarter processStarter,
             IEditGlossaryService editGlossaryService)
@@ -35,7 +35,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             //TODO: remove peripheral dependencies -> use events to handle those interactions instead
             DeepLGlossaryClient = deepLGlossaryClient;
             MessageService = messageService;
-            GlossaryBrowserService = glossaryBrowserService;
+            UserInteractionService = glossaryBrowserService;
             GlossaryReaderWriterService = glossaryReaderWriterService;
             ProcessStarter = processStarter;
             EditGlossaryService = editGlossaryService;
@@ -120,7 +120,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         private IEditGlossaryService EditGlossaryService { get; }
 
-        private IGlossaryBrowserService GlossaryBrowserService { get; }
+        private IUserInteractionService UserInteractionService { get; }
 
         private IGlossaryReaderWriterService GlossaryReaderWriterService { get; }
 
@@ -135,7 +135,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             var glossarySupportedLanguages = SupportedLanguagePairs.Select(glp => glp.SourceLanguage).Distinct().ToList();
             var existingGlossaryNames = Glossaries.Select(g => g.Name).ToList();
 
-            if (GlossaryBrowserService.OpenNewGlossaryDialog(existingGlossaryNames, glossarySupportedLanguages, out var newGlossary))
+            if (UserInteractionService.OpenNewGlossaryDialog(existingGlossaryNames, glossarySupportedLanguages, out var newGlossary))
             {
                 var (success, glossary, message) =
                     await DeepLGlossaryClient.ImportGlossary(
@@ -274,7 +274,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             if (!Enum.TryParse<GlossaryReaderWriterService.Format>(parameter.ToString(), out var format)) return;
 
-            var (success, folderPath) = GlossaryBrowserService.OpenExportDialog();
+            var (success, folderPath) = UserInteractionService.OpenExportDialog();
             if (!success) return;
 
             foreach (var selectedGlossary in SelectedGlossaries)
@@ -327,7 +327,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 return;
             }
 
-            GlossaryBrowserService.OpenImportEntriesDialog(out var filePaths);
+            UserInteractionService.OpenImportEntriesDialog(out var filePaths);
             foreach (var filePath in filePaths)
             {
                 var (success, glossary, message) = GlossaryReaderWriterService.ReadGlossary(filePath);
@@ -339,8 +339,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private async Task ImportGlossaries()
         {
             var glossarySupportedLanguages = SupportedLanguagePairs.Select(glp => glp.SourceLanguage).Distinct().ToList();
-            if (GlossaryBrowserService.OpenImportDialog(glossarySupportedLanguages, out var glossaries))
+            if (UserInteractionService.OpenImportDialog(glossarySupportedLanguages, out var glossaries))
             {
+                //var delimiter = glossaries.Any(g => g.Name.ToLower().EndsWith(".csv"))
+                //    ? GlossaryBrowserService.GetDelimiterFromUser()
+                //    : default;
+
                 foreach (var glossaryItem in glossaries)
                 {
                     if (IsCancellationRequested()) break;
@@ -348,7 +352,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                     var selectedFilePath = glossaryItem.Path;
                     if (Glossaries.Select(g => g.Name).Contains(glossaryItem.Name)) continue;
 
-                    var (success, glossaryFile, message) = GlossaryReaderWriterService.ReadGlossary(selectedFilePath);
+                    var (success, glossaryFile, message) = GlossaryReaderWriterService.ReadGlossary(selectedFilePath, glossaryItem.GetDelimiter());
                     if (HandleErrorIfFound(success, message)) continue;
 
                     ValidateEntriesList(glossaryFile.Entries);
