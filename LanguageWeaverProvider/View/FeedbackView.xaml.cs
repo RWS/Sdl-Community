@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using LanguageWeaverProvider.Studio.FeedbackController.Model;
 using LanguageWeaverProvider.ViewModel;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using Color = System.Windows.Media.Color;
@@ -23,7 +25,6 @@ namespace LanguageWeaverProvider.View
         public FeedbackView()
         {
             InitializeComponent();
-			SelectedStar = (DataContext as FeedbackViewModel)?.Rating ?? 0;
 		}
 
 		private void Star_MouseEnter(object sender, MouseEventArgs e)
@@ -96,5 +97,36 @@ namespace LanguageWeaverProvider.View
 		}
 
 		public void Dispose() { }
+
+		private void UserControl_Loaded(object sender, RoutedEventArgs e)
+		{
+			if (DataContext is not FeedbackViewModel viewModel)
+			{
+				return;
+			}
+
+			viewModel.PropertyChanged += ViewModel_PropertyChanged;
+		}
+
+
+		private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName != "OriginalQE")
+			{
+				return;
+			}
+
+			var qe = (DataContext as FeedbackViewModel).OriginalQE;
+			var rating = qe switch
+			{
+				QualityEstimations.Poor => 1,
+				QualityEstimations.Good => 5,
+				_ => 3
+			};
+
+			var button = (Button)FindName($"star_{rating}");
+			Star_Clicked(button, null);
+			Star_MouseLeave(button, null);
+		}
 	}
 }

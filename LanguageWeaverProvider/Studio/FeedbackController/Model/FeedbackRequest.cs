@@ -12,5 +12,8 @@ namespace LanguageWeaverProvider.Studio.FeedbackController.Model
 
 		[JsonProperty("rating")]
 		public Rating Rating { get; set; }
+
+		[JsonProperty("qualityEstimation")]
+		public string QualityEstimation { get; set; }
 	}
 }

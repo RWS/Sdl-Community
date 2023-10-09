@@ -118,7 +118,13 @@ namespace LanguageWeaverProvider
 		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
-			=> translationProviderUri is not null;
+		{
+			return translationProviderUri switch
+			{
+				null => throw new ArgumentNullException(),
+				_ => string.Equals(translationProviderUri.Scheme, Constants.TranslationScheme, StringComparison.CurrentCultureIgnoreCase)
+			};
+		}
 
 		public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
 			=> false;

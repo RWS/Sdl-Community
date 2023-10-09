@@ -262,7 +262,7 @@ namespace LanguageWeaverProvider.Services
 			request.Content = content;
 
 			_httpClient = new();
-			await _httpClient.SendAsync(request);
+			var result = await _httpClient.SendAsync(request);
 		}
 	}
 }

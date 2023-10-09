@@ -174,10 +174,10 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 
 			OriginalQE = currentQE;
-			SelectedQE = QualityEstimations.FirstOrDefault(x => x == OriginalQE);
+			SelectedQE = QualityEstimations.FirstOrDefault(qe => qe.Equals(currentQE));
 			Rating = SelectedQE switch
 			{
-				LanguageWeaverProvider.QualityEstimations.Poor => 2,
+				LanguageWeaverProvider.QualityEstimations.Poor => 1,
 				LanguageWeaverProvider.QualityEstimations.Good => 5,
 				_ => 3
 			};
@@ -210,6 +210,8 @@ namespace LanguageWeaverProvider.ViewModel
 				Model = mappedPair.SelectedModel.Model,
 				SourceText = _activeSegment.Source.ToString(),
 				TargetMTText = _activeSegment.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_Translation)
+							?? _activeSegment.Target.ToString(),
+				QualityEstimationMT = OriginalQE.ToString()
 			};
 
 			var improvement = new Improvement()
@@ -227,7 +229,8 @@ namespace LanguageWeaverProvider.ViewModel
 			{
 				Translation = translation,
 				Improvement = IsAdapted(_activeSegment.Properties) ? improvement : null,
-				Rating = rating
+				Rating = rating,
+				QualityEstimation = SelectedQE.ToString()
 			};
 
 			await CloudService.CreateFeedback(translationOptions.CloudCredentials, feedbackRequest);
@@ -241,7 +244,8 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 
 			var originSystem = translationOrigin.OriginBeforeAdaptation is null ? translationOrigin.OriginSystem : translationOrigin.OriginBeforeAdaptation.OriginSystem;
-			return string.Equals(originSystem, Constants.PluginName, StringComparison.OrdinalIgnoreCase);
+			return originSystem is not null
+				&& originSystem.ToLower().Contains(Constants.PluginShortName.ToLower());
 		}
 
 		private bool IsAdapted(ISegmentPairProperties segmentProperties)
@@ -250,13 +254,14 @@ namespace LanguageWeaverProvider.ViewModel
 			var translationOriginBeforeAdaption = translationOrigin?.OriginBeforeAdaptation;
 			return translationOrigin is not null
 				&& translationOriginBeforeAdaption is not null
-				&& string.Equals(translationOriginBeforeAdaption.OriginSystem, Constants.PluginName, StringComparison.OrdinalIgnoreCase);
+				&& translationOriginBeforeAdaption.OriginSystem.ToLower().Contains(Constants.PluginShortName.ToLower());
 		}
 
 		private bool IsQEEnabled(ISegmentPairProperties segmentProperties)
 		{
-			var nmtModel = segmentProperties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_LongModelName);
-			return nmtModel is not null && nmtModel.ToLower().Contains("qe");
+			var nmtModel = segmentProperties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_ShortModelName);
+			return nmtModel is not null
+				&& nmtModel.ToLower().Contains("qe");
 		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
@@ -20,13 +21,14 @@ namespace LanguageWeaverProvider
 	{
 		private readonly ITranslationOptions _translationOptions;
 		private readonly LanguagePair _languagePair;
+
 		private TranslationUnit _currentTranslationUnit;
+		private Window _batchTaskWindow;
 
 		public TranslationProviderLanguageDirection(ITranslationProvider translationProvider, ITranslationOptions translationOptions, LanguagePair languagePair)
 		{
 			TranslationProvider = translationProvider;
 			_translationOptions = translationOptions;
-			RatedSegments.Segments = _translationOptions.RatedSegments ??= new();
 			_languagePair = languagePair;
 		}
 
@@ -98,10 +100,15 @@ namespace LanguageWeaverProvider
 
 		private void SetQualityEstimationOnSegment(EvaluatedSegment evaluatedSegment, PairMapping pairMapping)
 		{
+			if (_batchTaskWindow is not null)
+			{
+				StoreMetadata(evaluatedSegment, pairMapping);
+				return;
+			}
+
 			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
 			if (editorController.ActiveDocument is null)
 			{
-				StoreMetadata(evaluatedSegment, pairMapping);
 				return;
 			}
 
@@ -123,10 +130,12 @@ namespace LanguageWeaverProvider
 			RatedSegments.Segments ??= new List<RatedSegment>();
 			var ratedSegment = new RatedSegment()
 			{
-				Id = _currentTranslationUnit.DocumentSegmentPair.Properties.Id.Id,
 				Model = pairMapping.SelectedModel.Model,
 				ModelName = pairMapping.SelectedModel.Name,
-				Translation = evaluatedSegment.Segment.ToString()
+				Translation = evaluatedSegment.Segment.ToString(),
+				QualityEstimation = evaluatedSegment.QualityEstimation,
+				SegmentId = _currentTranslationUnit.DocumentSegmentPair.Properties.Id,
+				TargetLanguageCode = pairMapping.TargetCode
 			};
 
 			RatedSegments.Segments.Add(ratedSegment);
@@ -210,6 +219,7 @@ namespace LanguageWeaverProvider
 
 		public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
 		{
+			_batchTaskWindow = Application.Current.Dispatcher.Invoke(ApplicationInitializer.GetBatchTaskWindow);
 			var searchResults = new SearchResults[mask.Length];
 			for (var i = 0; i < translationUnits.Length; i++)
 			{
@@ -217,9 +227,9 @@ namespace LanguageWeaverProvider
 										   : null;
 			}
 
+			_batchTaskWindow = null;
 			return searchResults;
 		}
-
 
 		public ImportResult UpdateTranslationUnit(TranslationUnit translationUnit)
 		{

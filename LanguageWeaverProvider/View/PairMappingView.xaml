@@ -15,6 +15,7 @@
 		xmlns:converters="clr-namespace:LanguageWeaverProvider.Converters"
 		mc:Ignorable="d"
 		d:DataContext="{d:DesignInstance local:PairMappingViewModel}"
+		MouseLeftButtonDown="Window_MouseLeftButtonDown"
 		WindowStartupLocation="CenterScreen"
 		Title="Language Weaver Provider"
 		ResizeMode="CanResize"

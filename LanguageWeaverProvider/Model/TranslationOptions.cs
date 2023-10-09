@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Policy;
 using LanguageWeaverProvider.Model.Interface;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -10,7 +9,7 @@ namespace LanguageWeaverProvider.Model.Options
 	{
 		private readonly TranslationProviderUriBuilder _uriBuilder;
 
-		public TranslationOptions()
+		public TranslationOptions(Uri uri = null)
 		{
 			_uriBuilder = new TranslationProviderUriBuilder(Constants.TranslationScheme);
 		}
@@ -26,7 +25,5 @@ namespace LanguageWeaverProvider.Model.Options
 		public CloudCredentials CloudCredentials { get; set; }
 
 		public List<PairMapping> PairMappings { get; set; }
-
-		public List<RatedSegment> RatedSegments { get; set; }
 	}
 }

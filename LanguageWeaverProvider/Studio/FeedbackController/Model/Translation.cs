@@ -18,5 +18,8 @@ namespace LanguageWeaverProvider.Studio.FeedbackController.Model
 
 		[JsonProperty("targetMTText")]
 		public string TargetMTText { get; set; }
+
+		[JsonProperty("qualityEstimationMT")]
+		public string QualityEstimationMT { get; set; }
 	}
 }
