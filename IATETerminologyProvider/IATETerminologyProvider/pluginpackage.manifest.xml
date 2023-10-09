@@ -6,6 +6,9 @@
   <Author>Trados AppStore Team</Author>
 	<Include>
 		<File>System.Data.SQLite.dll</File>
+		<File>Microsoft.Web.WebView2.Core.dll</File>
+		<File>Microsoft.Web.WebView2.Winforms.dll</File>
+		<File>Microsoft.Web.WebView2.Wpf.dll</File>
 	</Include>
   <RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9"/>
 </PluginPackage> 

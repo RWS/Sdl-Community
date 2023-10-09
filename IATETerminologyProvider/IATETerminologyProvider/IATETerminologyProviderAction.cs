@@ -64,9 +64,13 @@ namespace Sdl.Community.IATETerminologyProvider
 			var searchResultsController = GetSearchResultsController();
 
 			var browser = searchResultsController.Browser;
-			browser.ScriptErrorsSuppressed = true;
-			browser.Navigate(url, false);
+			browser.Source=new System.Uri(url);
+			//browser.ScriptErrorsSuppressed = true;
+			//browser.Navigate(url, false);
 			searchResultsController.Show();
+			//Form1 f=new Form1 ();
+			//f.webView21.Source= new System.Uri(url);
+			//f.Show();
 		}
 
 		[Action("IATESearchAllAction", Name = "Search IATE (all)", Icon = "Iate_logo")]

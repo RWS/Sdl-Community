@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Microsoft.Web.WebView2.WinForms;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.IATETerminologyProvider.View
@@ -10,6 +11,7 @@ namespace Sdl.Community.IATETerminologyProvider.View
 			InitializeComponent();
 		}
 
-		public WebBrowser Browser => searchResultsWebBrowser;
+		public WebView2 Browser => searchResultsWebBrowser;
+
 	}
 }

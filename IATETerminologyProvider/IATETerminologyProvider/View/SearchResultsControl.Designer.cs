@@ -28,32 +28,37 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-            this.searchResultsWebBrowser = new System.Windows.Forms.WebBrowser();
-            this.SuspendLayout();
-            // 
-            // searchResultsWebBrowser
-            // 
-            this.searchResultsWebBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.searchResultsWebBrowser.Location = new System.Drawing.Point(0, 0);
-            this.searchResultsWebBrowser.MinimumSize = new System.Drawing.Size(20, 20);
-            this.searchResultsWebBrowser.Name = "searchResultsWebBrowser";
-            this.searchResultsWebBrowser.Size = new System.Drawing.Size(992, 567);
-            this.searchResultsWebBrowser.TabIndex = 0;
-            this.searchResultsWebBrowser.Url = new System.Uri("", System.UriKind.Relative);
-            // 
-            // SearchResultsControl
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.searchResultsWebBrowser);
-            this.Name = "SearchResultsControl";
-            this.Size = new System.Drawing.Size(992, 567);
-            this.ResumeLayout(false);
+			this.searchResultsWebBrowser = new Microsoft.Web.WebView2.WinForms.WebView2();
+			((System.ComponentModel.ISupportInitialize)(this.searchResultsWebBrowser)).BeginInit();
+			this.SuspendLayout();
+			// 
+			// searchResultsWebBrowser
+			// 
+			this.searchResultsWebBrowser.AllowExternalDrop = true;
+			this.searchResultsWebBrowser.CreationProperties = null;
+			this.searchResultsWebBrowser.DefaultBackgroundColor = System.Drawing.Color.White;
+			this.searchResultsWebBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.searchResultsWebBrowser.Location = new System.Drawing.Point(0, 0);
+			this.searchResultsWebBrowser.Name = "searchResultsWebBrowser";
+			this.searchResultsWebBrowser.Size = new System.Drawing.Size(1488, 872);
+			this.searchResultsWebBrowser.TabIndex = 0;
+			this.searchResultsWebBrowser.ZoomFactor = 1D;
+			// 
+			// SearchResultsControl
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.searchResultsWebBrowser);
+			this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.Name = "SearchResultsControl";
+			this.Size = new System.Drawing.Size(1488, 872);
+			((System.ComponentModel.ISupportInitialize)(this.searchResultsWebBrowser)).EndInit();
+			this.ResumeLayout(false);
 
 		}
 
 		#endregion
 
-		private System.Windows.Forms.WebBrowser searchResultsWebBrowser;
+		public Microsoft.Web.WebView2.WinForms.WebView2 searchResultsWebBrowser;
 	}
 }

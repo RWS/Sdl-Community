@@ -45,6 +45,16 @@
     <Reference Include="Microsoft.IdentityModel.Tokens">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Microsoft.IdentityModel.Tokens.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Web.WebView2.Core">
+      <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Microsoft.Web.WebView2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.Winforms">
+      <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Microsoft.Web.WebView2.Winforms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.Wpf, Version=1.0.1774.30, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Microsoft.Web.WebView2.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -206,6 +216,12 @@
     <Compile Include="View\FineGrainedFilter.xaml.cs">
       <DependentUpon>FineGrainedFilter.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>
@@ -282,6 +298,9 @@
     <Resource Include="Resources\StarGrey.png" />
     <Resource Include="Resources\StarYellow.png" />
     <Resource Include="Resources\Question.ico" />
+    <EmbeddedResource Include="View\Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\SearchResultsControl.resx">
       <DependentUpon>SearchResultsControl.cs</DependentUpon>
     </EmbeddedResource>
