@@ -81,9 +81,9 @@ namespace Sdl.Community.ProjectTerms.Plugin.Utils
         public static bool VerifySingleFileProjectType()
         {
             var project = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
-            var projectVal = typeof(FileBasedProject).GetField(PluginResources.Constant_ProjectType, BindingFlags.NonPublic | BindingFlags.Instance);
+			var projectVal = typeof(FileBasedProject).GetProperty(PluginResources.Constant_ProjectType, BindingFlags.NonPublic | BindingFlags.Instance);
 
-            dynamic projectValDynamic = projectVal.GetValue(project);
+			dynamic projectValDynamic = projectVal.GetValue(project);
             dynamic projectType = projectValDynamic.ProjectType != null ? projectValDynamic.ProjectType : string.Empty;
 
             var projectTypeContent = Convert.ToString(projectType);
