@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Runtime.Remoting.Messaging;
 using System.Windows.Forms;
+using System.Windows.Media;
+using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
@@ -25,7 +28,7 @@ namespace LanguageWeaverProvider
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
 			var translationOptions = new TranslationOptions();
-			GetProviderCredentials(credentialStore, translationOptions);
+			CredentialManager.SetCredentials(credentialStore, translationOptions);
 			var CredentialsMainViewModel = new CredentialsMainViewModel(translationOptions);
 			var CredentialsMainView = new CredentialsMainView { DataContext = CredentialsMainViewModel };
 			CredentialsMainViewModel.CloseEventRaised += () =>
@@ -46,7 +49,7 @@ namespace LanguageWeaverProvider
 				return null;
 			}
 
-			var translationProvider = new TranslationProvider(translationOptions);
+			var translationProvider = new TranslationProvider(translationOptions, credentialStore);
 			return new ITranslationProvider[] { translationProvider };
 		}
 
@@ -91,30 +94,11 @@ namespace LanguageWeaverProvider
 			}
 
 			var uri = new Uri(Constants.CloudFullScheme);
-			var cloudCredentials = new CloudCredentials()
-			{
-				UserID = translationOptions.CloudCredentials.UserID,
-				UserPassword = translationOptions.CloudCredentials.UserPassword
-			};
-
-			var cloudCredentialsJson = JsonConvert.SerializeObject(cloudCredentials);
-			var credentials = new TranslationProviderCredential(cloudCredentialsJson, true);
+			var credentials = JsonConvert.SerializeObject(translationOptions.CloudCredentials);
+			var translationProviderCredential = new TranslationProviderCredential(credentials, true);
 
 			credentialStore.RemoveCredential(uri);
-			credentialStore.AddCredential(uri, credentials);
-		}
-
-		private void GetProviderCredentials(ITranslationProviderCredentialStore credentialStore, ITranslationOptions translationOptions)
-		{
-			var uri = new Uri(Constants.CloudFullScheme);
-			var credentials = credentialStore.GetCredential(uri);
-			if (credentials is null)
-			{
-				return;
-			}
-
-			var cloudCredentials = JsonConvert.DeserializeObject<CloudCredentials>(credentials.Credential);
-			translationOptions.CloudCredentials = cloudCredentials;
+			credentialStore.AddCredential(uri, translationProviderCredential);
 		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)

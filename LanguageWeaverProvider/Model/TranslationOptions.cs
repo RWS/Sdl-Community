@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using LanguageWeaverProvider.Model.Interface;
+using Newtonsoft.Json;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace LanguageWeaverProvider.Model.Options
@@ -22,8 +23,11 @@ namespace LanguageWeaverProvider.Model.Options
 
 		public PluginVersion Version { get; set; }
 
+		[JsonIgnore]
 		public CloudCredentials CloudCredentials { get; set; }
 
 		public List<PairMapping> PairMappings { get; set; }
+
+		public AccessToken AccessToken { get; set; }
 	}
 }

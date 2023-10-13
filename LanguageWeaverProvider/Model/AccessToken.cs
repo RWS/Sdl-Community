@@ -12,5 +12,7 @@ namespace LanguageWeaverProvider.Model
 		public long ValidityInSeconds { get; set; }
 
 		public long ExpiresAt { get; set; }
+
+		public string AccountId { get; set; }
 	}
 }

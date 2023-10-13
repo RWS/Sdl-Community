@@ -10,8 +10,10 @@ namespace LanguageWeaverProvider
 {
 	internal class TranslationProvider : ITranslationProvider
 	{
-		public TranslationProvider(ITranslationOptions translationOptions)
+		private readonly ITranslationProviderCredentialStore _credentialStore;
+		public TranslationProvider(ITranslationOptions translationOptions, ITranslationProviderCredentialStore credentialStore = null)
 		{
+			_credentialStore = credentialStore;
 			TranslationOptions = translationOptions;
 			DatabaseControl.InitializeDatabase(translationOptions.Version);
 		}
@@ -78,7 +80,7 @@ namespace LanguageWeaverProvider
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
 		{
-			return new TranslationProviderLanguageDirection(this, TranslationOptions, languageDirection);
+			return new TranslationProviderLanguageDirection(this, TranslationOptions, languageDirection, _credentialStore);
 		}
 
 		public void RefreshStatusInfo() { }

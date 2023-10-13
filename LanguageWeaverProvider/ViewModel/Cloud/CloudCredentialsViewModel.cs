@@ -34,7 +34,6 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			get => _authenticationType;
 			set
 			{
-				if (_authenticationType == value) return;
 				_authenticationType = value;
 				OnPropertyChanged();
 				OnPropertyChanged(nameof(IsAuthenticationTypeSelected));
@@ -48,7 +47,6 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			get => _isCredentialsSelected;
 			set
 			{
-				if (_isCredentialsSelected == value) return;
 				_isCredentialsSelected = value;
 				OnPropertyChanged();
 			}
@@ -59,7 +57,6 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			get => _isSecretSelected;
 			set
 			{
-				if (_isSecretSelected == value) return;
 				_isSecretSelected = value;
 				OnPropertyChanged();
 			}
@@ -72,7 +69,6 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			get => _userId;
 			set
 			{
-				if (_userId == value) return;
 				_userId = value;
 				OnPropertyChanged();
 			}
@@ -83,7 +79,6 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			get => _userPassword;
 			set
 			{
-				if (_userPassword == value) return;
 				_userPassword = value;
 				OnPropertyChanged();
 			}
@@ -94,7 +89,6 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			get => _clientId;
 			set
 			{
-				if (_clientId == value) return;
 				_clientId = value;
 				OnPropertyChanged();
 			}
@@ -105,7 +99,6 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			get => _clientSecret;
 			set
 			{
-				if (_clientSecret == value) return;
 				_clientSecret = value;
 				OnPropertyChanged();
 			}
@@ -122,6 +115,10 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 		public ICommand SelectAuthenticationTypeCommand { get; private set; }
 
 		public event EventHandler CloseRequested;
+
+		public event EventHandler StartLoginProcess;
+
+		public event EventHandler StopLoginProcess;
 
 		public void CloseWindow() => CloseRequested?.Invoke(this, EventArgs.Empty);
 
@@ -163,11 +160,11 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				ClientSecret = _clientSecret
 			};
 
-			var response = await CloudService.AuthenticateUser(cloudCredentials, AuthenticationType);
+			var response = await CloudService.AuthenticateUser(cloudCredentials, TranslationOptions, AuthenticationType);
 			if (!response.Success)
 			{
 				StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Connection_Error_FirstFail));
-				response = await CloudService.AuthenticateUser(cloudCredentials, AuthenticationType);
+				response = await CloudService.AuthenticateUser(cloudCredentials, TranslationOptions, AuthenticationType);
 				StopLoginProcess?.Invoke(this, EventArgs.Empty);
 				if (!response.Success)
 				{
@@ -177,14 +174,14 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			}
 
 			TranslationOptions.CloudCredentials = cloudCredentials;
-			TranslationOptions.AuthenticationType = _authenticationType;
+			TranslationOptions.AuthenticationType = AuthenticationType;
 			CloseWindow();
 		}
 
 		private async void SignLoggedUser(object parameter)
 		{
 			StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Connection_Loading_Connecting));
-			var response = await CloudService.AuthenticateUser(TranslationOptions.CloudCredentials, AuthenticationType.CloudCredentials);
+			var response = await CloudService.AuthenticateUser(TranslationOptions.CloudCredentials, TranslationOptions, AuthenticationType.CloudCredentials);
 			StopLoginProcess?.Invoke(this, EventArgs.Empty);
 			if (!response.Success)
 			{
@@ -193,7 +190,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			}
 
 			TranslationOptions.CloudCredentials = TranslationOptions.CloudCredentials;
-			TranslationOptions.AuthenticationType = _authenticationType;
+			TranslationOptions.AuthenticationType = AuthenticationType.CloudCredentials;
 			CloseWindow();
 		}
 
@@ -239,9 +236,5 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 		{
 			AuthenticationType = AuthenticationType.None;
 		}
-
-		public event EventHandler StartLoginProcess;
-
-		public event EventHandler StopLoginProcess;
 	}
 }

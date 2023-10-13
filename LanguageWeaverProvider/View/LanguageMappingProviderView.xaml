@@ -133,7 +133,6 @@
 						Orientation="Horizontal"
 						HorizontalAlignment="Right"
 						Margin="16">
-
 				<Button Content="{x:Static root:PluginResources.LMPView_Buttons_ApplyChanges}"
 						Command="{Binding ApplyChangesCommand}"
 						Style="{StaticResource Sdl.Button.SecondaryStyle}"

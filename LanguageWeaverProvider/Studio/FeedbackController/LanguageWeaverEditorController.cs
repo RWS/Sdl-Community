@@ -8,9 +8,9 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 namespace LanguageWeaverProvider.Studio.FeedbackController
 {
 	[ViewPart(
-		Id = "LanguageWeaverEditorController",
-		Name = "LanguageWeaverEditorController",
-		Description = "LanguageWeaverEditorController",
+		Id = "Language Weaver - Feedback",
+		Name = "Language Weaver - Feedback",
+		Description = "Send feedback for the translated content using Language Weaver with QE enabled.",
 		Icon = "lwLogoIco"
 	)]
 

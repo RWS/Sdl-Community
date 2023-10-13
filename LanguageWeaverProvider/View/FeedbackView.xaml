@@ -4,6 +4,7 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:root="clr-namespace:LanguageWeaverProvider"
+			 xmlns:converters="clr-namespace:LanguageWeaverProvider.Converters"
 			 xmlns:viewModel="clr-namespace:LanguageWeaverProvider.ViewModel"
 			 d:DataContext="{d:DesignInstance viewModel:FeedbackViewModel}"
 			 Loaded="UserControl_Loaded"
@@ -22,6 +23,9 @@
 				<ResourceDictionary Source="../Style/Buttons.xaml" />
 				<ResourceDictionary Source="../Controls/WatermarkTextBoxResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
+
+			<converters:BooleanToVisibilityConverter x:Key="BooleanVisibility" />
+
 		</ResourceDictionary>
 	</UserControl.Resources>
 
@@ -53,7 +57,8 @@
 		<StackPanel Grid.Row="2"
 					Orientation="Horizontal"
 					HorizontalAlignment="Center"
-					Margin="0 4">
+					Margin="0 4"
+					IsEnabled="{Binding CanSendFeedback}">
 			<Button x:Name="star_1"
 					Style="{StaticResource TransparentButtonStyle}"
 					MouseEnter="Star_MouseEnter"
@@ -139,7 +144,8 @@
 		<ComboBox Grid.Row="3"
 				  ItemsSource="{Binding QualityEstimations}"
 				  SelectedItem="{Binding SelectedQE, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-				  Style="{StaticResource Sdl.ComboBox.Generic.Style}" 
+				  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+				  IsEnabled="{Binding CanSendFeedback}"
 				  VerticalContentAlignment="Center"
 				  Width="160"
 				  Height="24"
@@ -216,6 +222,7 @@
 
 					<TextBox Grid.Row="1" Text="{Binding FeedbackMessage, UpdateSourceTrigger=PropertyChanged}"
 							 Style="{StaticResource Sdl.TextBox.BorderlessReadOnlyStyle}"
+							 IsEnabled="{Binding CanSendFeedback}"
 							 IsReadOnly="False"
 							 Padding="4 8" />
 				</Grid>
@@ -227,6 +234,7 @@
 				Content="{x:Static root:PluginResources.FeedbackView_Button_SendFeedback}"
 				Command="{Binding SendFeedbackCommand}"
 				Style="{StaticResource Sdl.Button.PrimaryStyle}"
+				IsEnabled="{Binding CanSendFeedback}"
 				Margin="8" />
 
 	</Grid>

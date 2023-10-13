@@ -214,9 +214,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Welcome to the Language Weaver translation provider for Studio.
-        ///Language Weaver is our neural machine translation (NMT) cloud product for enterprises with various paid subscription models. Using our proprietary technology, customers can have the assurance of content privacy.
-        ///Language Weaver is powered by our state-of-the-art machine learning algorithms and supports a large number of languages..
+        ///   Looks up a localized string similar to Welcome to the Language Weaver translation provider for Studio..
         /// </summary>
         public static string CloudMappingView_WelcomeMessage {
             get {
@@ -518,7 +516,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please choose your preferred login method. You may be required to enter your credentials in the next step..
+        ///   Looks up a localized string similar to Please choose your preferred login method..
         /// </summary>
         public static string MainView_AuthMethods_HelpMessage {
             get {
@@ -572,7 +570,9 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tap the button below to choose between Language Weaver, designed for general translation needs, and Language Weaver Edge, specialized for enhanced business translation..
+        ///   Looks up a localized string similar to Select your required Language Weaver Service Provider.
+        ///Language Weaver is a secure, adaptable, cloud-based enterprise machine translation API and portal for businesses that need to process high volumes of multilingual content quickly and effectively.
+        ///Language Weaver Edge is a secure, scalable and adaptable on-premises solution leveraging state-of-the-art neural technologies. All the features and functionality of Language Weaver is available behind your firewall..
         /// </summary>
         public static string MainView_HelpMessage {
             get {

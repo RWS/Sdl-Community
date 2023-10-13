@@ -13,7 +13,7 @@ namespace LanguageWeaverProvider
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
 		{
 			var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
-			return new TranslationProvider(options);
+			return new TranslationProvider(options, credentialStore);
 		}
 
 		public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)

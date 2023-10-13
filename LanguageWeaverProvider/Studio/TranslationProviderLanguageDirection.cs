@@ -25,11 +25,12 @@ namespace LanguageWeaverProvider
 		private TranslationUnit _currentTranslationUnit;
 		private Window _batchTaskWindow;
 
-		public TranslationProviderLanguageDirection(ITranslationProvider translationProvider, ITranslationOptions translationOptions, LanguagePair languagePair)
+		public TranslationProviderLanguageDirection(ITranslationProvider translationProvider, ITranslationOptions translationOptions, LanguagePair languagePair, ITranslationProviderCredentialStore credentialStore)
 		{
 			TranslationProvider = translationProvider;
 			_translationOptions = translationOptions;
 			_languagePair = languagePair;
+			CredentialManager.SetCredentials(credentialStore, translationOptions);
 		}
 
 		public ITranslationProvider TranslationProvider { get; private set; }
@@ -69,9 +70,12 @@ namespace LanguageWeaverProvider
 		{
 			if (!_translationOptions.ProviderSettings.ResendDrafts && _currentTranslationUnit.ConfirmationLevel != ConfirmationLevel.Unspecified)
 			{
-				var targetSegment = new Segment(TargetLanguage);
+				var targetSegment = new Segment(_languagePair.TargetCulture);
 				targetSegment.Add(PluginResources.TranslationDraftNotResent);
-				return new SearchResults() { CreateSearchResult(segment, targetSegment) } ;
+
+				var sR = new SearchResults { SourceSegment = segment.Duplicate() };
+				sR.Add(CreateSearchResult(segment, targetSegment));
+				return sR;
 			}
 
 			var sourceSegment = _translationOptions.ProviderSettings.IncludeTags
@@ -85,9 +89,10 @@ namespace LanguageWeaverProvider
 
 		private SearchResult TranslateSegment(Segment segment, Segment sourceSegment)
 		{
-			var xliff = CreateXliffFile(sourceSegment);
+			CredentialManager.ValidateToken(_translationOptions);
+			var xliff = CreateXliffFile(new Segment[] { sourceSegment });
 			var mappedPair = GetMappedPair();
-			var translation = CloudService.Translate(_translationOptions.CloudCredentials, mappedPair, xliff).Result;
+			var translation = CloudService.Translate(_translationOptions.AccessToken, mappedPair, xliff).Result;
 			var translatedSegment = translation.GetTargetSegments().First();
 			var searchResult = CreateSearchResult(segment, translatedSegment.Segment);
 			if (translatedSegment.Estimation != QualityEstimations.None)
@@ -164,7 +169,7 @@ namespace LanguageWeaverProvider
 									 && x.LanguagePair.TargetCultureName.Equals(TargetLanguage.Name));
 		}
 
-		public Xliff CreateXliffFile(Segment segment)
+		public Xliff CreateXliffFile(IEnumerable<Segment> segments)
 		{
 			var file = new File
 			{
@@ -177,9 +182,12 @@ namespace LanguageWeaverProvider
 				File = file
 			};
 
-			if (segment is not null)
+			foreach (var segment in segments)
 			{
-				xliffDocument.AddSourceSegment(segment);
+				if (segment is not null)
+				{
+					xliffDocument.AddSourceSegment(segment);
+				}
 			}
 
 			return xliffDocument;
@@ -221,10 +229,31 @@ namespace LanguageWeaverProvider
 		{
 			_batchTaskWindow = Application.Current.Dispatcher.Invoke(ApplicationInitializer.GetBatchTaskWindow);
 			var searchResults = new SearchResults[mask.Length];
-			for (var i = 0; i < translationUnits.Length; i++)
+			var segments = translationUnits.Select(x => x.SourceSegment);
+			var xliffFile = CreateXliffFile(segments);
+			var mappedPair = GetMappedPair();
+			var translation = CloudService.Translate(_translationOptions.AccessToken, mappedPair, xliffFile).Result;
+			var translatedSegments = translation.GetTargetSegments();
+
+			for (var i = 0; i < mask.Length; i++)
 			{
-				searchResults[i] = mask[i] ? SearchTranslationUnit(settings, translationUnits[i])
-										   : null;
+				_currentTranslationUnit = translationUnits[i];
+				searchResults[i] = new();
+				if (!mask[i]
+					|| segments.ElementAt(i) is null)
+				{
+					searchResults[i].SourceSegment = new Segment();
+					searchResults[i].Add(CreateSearchResult(new Segment(), new Segment()));
+					continue;
+				}
+
+				searchResults[i].SourceSegment = segments.ElementAt(i).Duplicate();
+				searchResults[i].Add(CreateSearchResult(segments.ElementAt(i), translatedSegments[i].Segment));
+
+				if (translatedSegments[i].Estimation != QualityEstimations.None)
+				{
+					SetQualityEstimationOnSegment(translatedSegments[i], mappedPair);
+				}
 			}
 
 			_batchTaskWindow = null;

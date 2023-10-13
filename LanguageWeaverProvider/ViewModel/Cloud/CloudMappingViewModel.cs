@@ -78,8 +78,8 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			var originalPairMappings = PairMappings;
 			PairMappings = new();
 			var mappedLanguages = _languageMappingDatabase.GetMappedLanguages();
-			var accountModels = await CloudService.GetSupportedLanguages(_translationOptions.CloudCredentials);
-			var accountDictionaries = await CloudService.GetDictionaries(_translationOptions.CloudCredentials);
+			var accountModels = await CloudService.GetSupportedLanguages(_translationOptions.AccessToken);
+			var accountDictionaries = await CloudService.GetDictionaries(_translationOptions.AccessToken);
 			foreach (var languagePair in _langaugePairs)
 			{
 				var mappedLanguagePairs = mappedLanguages.Where(mappedLang => mappedLang.TradosCode.Equals(languagePair.SourceCultureName) || mappedLang.TradosCode.Equals(languagePair.TargetCultureName));

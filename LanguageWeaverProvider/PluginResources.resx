@@ -169,9 +169,7 @@
     <value>Not available</value>
   </data>
   <data name="CloudMappingView_WelcomeMessage" xml:space="preserve">
-    <value>Welcome to the Language Weaver translation provider for Studio.
-Language Weaver is our neural machine translation (NMT) cloud product for enterprises with various paid subscription models. Using our proprietary technology, customers can have the assurance of content privacy.
-Language Weaver is powered by our state-of-the-art machine learning algorithms and supports a large number of languages.</value>
+    <value>Welcome to the Language Weaver translation provider for Studio.</value>
   </data>
   <data name="Connection_Credentials" xml:space="preserve">
     <value>Credentials</value>
@@ -274,7 +272,7 @@ This action cannot be undone.</value>
     <value>Back</value>
   </data>
   <data name="MainView_AuthMethods_HelpMessage" xml:space="preserve">
-    <value>Please choose your preferred login method. You may be required to enter your credentials in the next step.</value>
+    <value>Please choose your preferred login method.</value>
   </data>
   <data name="MainView_Buttons_Exit" xml:space="preserve">
     <value>Exit</value>
@@ -292,7 +290,9 @@ This action cannot be undone.</value>
     <value>Confirm</value>
   </data>
   <data name="MainView_HelpMessage" xml:space="preserve">
-    <value>Tap the button below to choose between Language Weaver, designed for general translation needs, and Language Weaver Edge, specialized for enhanced business translation.</value>
+    <value>Select your required Language Weaver Service Provider.
+Language Weaver is a secure, adaptable, cloud-based enterprise machine translation API and portal for businesses that need to process high volumes of multilingual content quickly and effectively.
+Language Weaver Edge is a secure, scalable and adaptable on-premises solution leveraging state-of-the-art neural technologies. All the features and functionality of Language Weaver is available behind your firewall.</value>
   </data>
   <data name="NameOf_CommandParameterI_MissingComponent" xml:space="preserve">
     <value>Could not find the property ['{0}'] in ['{1}'], please check the spelling for both the property and the class or if any of the two had its name changed in both C# class and XAML.</value>

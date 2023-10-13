@@ -16,5 +16,7 @@ namespace LanguageWeaverProvider.Model.Interface
 		CloudCredentials CloudCredentials { get; set; }
 
 		List<PairMapping> PairMappings { get; set; }
+
+		AccessToken AccessToken { get; set; }
 	}
 }

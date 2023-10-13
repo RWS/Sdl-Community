@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using LanguageWeaverProvider.Command;
+using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Services;
 using LanguageWeaverProvider.Studio.FeedbackController.Model;
@@ -25,6 +26,7 @@ namespace LanguageWeaverProvider.ViewModel
 		QualityEstimations _selectedQE;
 		string _feedbackMessage;
 		string _mtTranslation;
+		bool _canSendFeedback;
 		int _rating;
 
 		public FeedbackViewModel()
@@ -32,6 +34,7 @@ namespace LanguageWeaverProvider.ViewModel
 			_editController = SdlTradosStudio.Application.GetController<EditorController>();
 			_editController.ActiveDocumentChanged += ActiveDocumentChanged;
 			_projectController = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
+
 			InitializeControl();
 			InitializeCommands();
 		}
@@ -68,6 +71,16 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 		}
 
+		public bool CanSendFeedback
+		{
+			get => _canSendFeedback;
+			set
+			{
+				_canSendFeedback = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public string MTTranslation
 		{
 			get => _mtTranslation;
@@ -75,6 +88,7 @@ namespace LanguageWeaverProvider.ViewModel
 			{
 				_mtTranslation = value;
 				OnPropertyChanged();
+				CanSendFeedback = value is not null;
 			}
 		}
 
@@ -163,6 +177,8 @@ namespace LanguageWeaverProvider.ViewModel
 		{
 			if (segmentProperties is null || !IsLanguageWeaverSource(segmentProperties) || !IsQEEnabled(segmentProperties))
 			{
+				MTTranslation = null;
+				OriginalQE = LanguageWeaverProvider.QualityEstimations.None;
 				return;
 			}
 
@@ -199,15 +215,14 @@ namespace LanguageWeaverProvider.ViewModel
 				.MainTranslationProvider
 				.State;
 
-			var nmtModelName = _activeSegment.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_LongModelName);
 			var translationOptions = JsonConvert.DeserializeObject<TranslationOptions>(providerState);
-			var mappedPair = translationOptions.PairMappings.FirstOrDefault(x => x.SelectedModel.Name.Equals(nmtModelName));
+			var mappedPair = translationOptions.PairMappings.FirstOrDefault(x => x.LanguagePair.TargetCultureName.Equals(_editController.ActiveDocument.ActiveFile.Language.CultureInfo.Name));
 
 			var translation = new Translation()
 			{
 				SourceLanguageId = mappedPair.SourceCode,
 				TargetLanguageId = mappedPair.TargetCode,
-				Model = mappedPair.SelectedModel.Model,
+				Model = _activeSegment.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_ShortModelName),
 				SourceText = _activeSegment.Source.ToString(),
 				TargetMTText = _activeSegment.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_Translation)
 							?? _activeSegment.Target.ToString(),
@@ -233,7 +248,8 @@ namespace LanguageWeaverProvider.ViewModel
 				QualityEstimation = SelectedQE.ToString()
 			};
 
-			await CloudService.CreateFeedback(translationOptions.CloudCredentials, feedbackRequest);
+			CredentialManager.ValidateToken(translationOptions);
+			await CloudService.CreateFeedback(translationOptions.AccessToken, feedbackRequest);
 		}
 
 		private bool IsLanguageWeaverSource(ISegmentPairProperties segmentProperties)

@@ -53,7 +53,7 @@
 
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="72" />
+			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
 			<RowDefinition Height="64" />
 		</Grid.RowDefinitions>
@@ -62,6 +62,11 @@
 			<ColumnDefinition Width="*" />
 			<ColumnDefinition Width="Auto" />
 		</Grid.ColumnDefinitions>
+
+		<Image Source="../Resources/lwMainLogo.png" 
+			   Grid.ColumnSpan="2"
+			   Height="40"
+			   Margin="8 16"/>
 
 		<ContentControl Content="{Binding PairMappingView}"
 						Visibility="{Binding ShowSettingsView, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverted}"
@@ -105,18 +110,18 @@
 					Grid.Column="1"
 					Orientation="Horizontal"
 					Margin="16 0">
-			<Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Cancel}"
-					Style="{StaticResource Sdl.Button.SecondaryStyle}"
-					Command="{Binding CloseCommand}"
+			<Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Confirm}"
+					Style="{StaticResource Sdl.Button.PrimaryStyle}"
+					Command="{Binding SaveCommand}"
 					FontSize="11"
 					FontWeight="DemiBold"
 					Height="26"
 					Width="120"
 					Margin="8 0"/>
 
-			<Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Confirm}"
-					Style="{StaticResource Sdl.Button.PrimaryStyle}"
-					Command="{Binding SaveCommand}"
+			<Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Cancel}"
+					Style="{StaticResource Sdl.Button.SecondaryStyle}"
+					Command="{Binding CloseCommand}"
 					FontSize="11"
 					FontWeight="DemiBold"
 					Height="26"
