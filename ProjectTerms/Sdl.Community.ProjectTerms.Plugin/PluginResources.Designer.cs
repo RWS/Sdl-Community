@@ -98,7 +98,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _project.
+        ///   Looks up a localized string similar to InternalProject.
         /// </summary>
         public static string Constant_ProjectType {
             get {
