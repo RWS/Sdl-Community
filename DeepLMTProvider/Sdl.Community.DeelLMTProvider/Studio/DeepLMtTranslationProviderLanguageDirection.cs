@@ -165,12 +165,6 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             if (newSeg.HasTags && !_options.SendPlainText)
                 return tagPlacer.PreparedSourceText;
 
-            if (_options.RemoveLockedContent)
-            {
-                newSeg.DeleteTags();
-                return newSeg.ToPlain();
-            }
-
             newSeg.ToPlain().RemoveTags(out var plainText);
             return plainText;
         }
