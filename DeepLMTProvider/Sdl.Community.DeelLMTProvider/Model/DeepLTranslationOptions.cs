@@ -31,9 +31,6 @@ namespace Sdl.Community.DeepLMTProvider.Model
 
 			SendPlainTextParameter = stateObject?["SendPlainTextParameter"]?.ToString();
 
-            if (bool.TryParse(stateObject?[nameof(DecodeFromHtmlOrUrl)]?.ToString(), out var decode))
-                DecodeFromHtmlOrUrl = decode;
-
 			LanguagePairOptions =
 				JsonConvert.DeserializeObject<List<LanguagePairOptions>>(stateObject?["LanguagePairOptions"]?.ToString());
 		}
@@ -55,8 +52,6 @@ namespace Sdl.Community.DeepLMTProvider.Model
 
 		[JsonIgnore]
 		public Uri Uri => _uriBuilder.Uri;
-
-        public bool DecodeFromHtmlOrUrl { get; set; }
 
         private bool TryParseJson(string state, out JObject jObject)
 		{

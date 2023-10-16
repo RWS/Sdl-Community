@@ -37,7 +37,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             LanguagePairs = deepLTranslationOptions.LanguagePairOptions.Select(lpo => lpo.LanguagePair).ToArray();
             SendPlainText = deepLTranslationOptions.SendPlainText;
-            DecodeHtmlOrUrl = deepLTranslationOptions.DecodeFromHtmlOrUrl;
             Options = deepLTranslationOptions;
 
             SetSettingsOnWindow(null);
@@ -52,7 +51,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             IsTellMeAction = false;
 
             SendPlainText = deepLTranslationOptions.SendPlainText;
-            DecodeHtmlOrUrl = deepLTranslationOptions.DecodeFromHtmlOrUrl;
             Options = deepLTranslationOptions;
 
             PasswordChangedTimer.Elapsed += OnPasswordChanged;
@@ -84,8 +82,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 OnPropertyChanged(nameof(OkCommand));
             }
         }
-
-        public bool DecodeHtmlOrUrl { get; set; }
 
         public ObservableCollection<LanguagePairOptions> LanguagePairOptions
         {
@@ -217,7 +213,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             SetApiKeyValidityLabel();
 
             Options.SendPlainText = SendPlainText;
-            Options.DecodeFromHtmlOrUrl = DecodeHtmlOrUrl;
             Options.ApiKey = ApiKey;
             Options.LanguagePairOptions = new List<LanguagePairOptions>(LanguagePairOptions);
 

@@ -140,6 +140,7 @@
     <Compile Include="Interface\IBrowseDialog.cs" />
     <Compile Include="Interface\IProcessStarter.cs" />
     <Compile Include="Interface\ITsvReaderWriter.cs" />
+    <Compile Include="Model\DeepLRequestParameters.cs" />
     <Compile Include="Model\Glossary.cs" />
     <Compile Include="Model\GlossaryEntry.cs" />
     <Compile Include="Model\GlossaryInfo.cs" />

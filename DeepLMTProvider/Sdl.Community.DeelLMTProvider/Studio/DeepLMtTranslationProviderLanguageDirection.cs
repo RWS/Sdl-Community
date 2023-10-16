@@ -156,7 +156,6 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
         private string ApplyAfterTranslationSettings(string plainTranslation)
         {
-            if (_options.DecodeFromHtmlOrUrl) plainTranslation.DecodeText(out plainTranslation);
             return plainTranslation;
         }
 
