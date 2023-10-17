@@ -204,6 +204,8 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             foreach (var preTranslate in preTranslateList.Where(preTranslate => preTranslate != null))
             {
                 var plainTranslation = preTranslate.PlainTranslation;
+                if (plainTranslation == null) continue;
+
                 var translation = new Segment(_languageDirection.TargetCulture);
                 var sourceSegment = preTranslate.TranslationUnit.SourceSegment.Duplicate();
 
@@ -265,7 +267,6 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 _logger.Error($"{e.Message}\n {e.StackTrace}");
             }
 
-            preTranslateSegments.ForEach(seg => seg.PlainTranslation ??= string.Empty);
             return preTranslateSegments;
         }
     }
