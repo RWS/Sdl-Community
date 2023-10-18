@@ -1,5 +1,4 @@
-﻿using System.Windows.Forms;
-using Microsoft.Web.WebView2.WinForms;
+﻿using CefSharp.WinForms;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
@@ -26,6 +25,6 @@ namespace Sdl.Community.IATETerminologyProvider.View
 			return _control;
 		}
 
-		public WebView2 Browser => _control.Browser;
+		public ChromiumWebBrowser Browser => _control.Browser;
 	}
 }

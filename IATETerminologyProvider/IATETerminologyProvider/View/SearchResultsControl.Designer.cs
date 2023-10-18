@@ -28,21 +28,17 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.searchResultsWebBrowser = new Microsoft.Web.WebView2.WinForms.WebView2();
-			((System.ComponentModel.ISupportInitialize)(this.searchResultsWebBrowser)).BeginInit();
+			this.searchResultsWebBrowser = new CefSharp.WinForms.ChromiumWebBrowser();
 			this.SuspendLayout();
 			// 
 			// searchResultsWebBrowser
 			// 
-			this.searchResultsWebBrowser.AllowExternalDrop = true;
-			this.searchResultsWebBrowser.CreationProperties = null;
-			this.searchResultsWebBrowser.DefaultBackgroundColor = System.Drawing.Color.White;
+			this.searchResultsWebBrowser.ActivateBrowserOnCreation = false;
 			this.searchResultsWebBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.searchResultsWebBrowser.Location = new System.Drawing.Point(0, 0);
 			this.searchResultsWebBrowser.Name = "searchResultsWebBrowser";
 			this.searchResultsWebBrowser.Size = new System.Drawing.Size(1488, 872);
 			this.searchResultsWebBrowser.TabIndex = 0;
-			this.searchResultsWebBrowser.ZoomFactor = 1D;
 			// 
 			// SearchResultsControl
 			// 
@@ -52,13 +48,12 @@
 			this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.Name = "SearchResultsControl";
 			this.Size = new System.Drawing.Size(1488, 872);
-			((System.ComponentModel.ISupportInitialize)(this.searchResultsWebBrowser)).EndInit();
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
 
-		public Microsoft.Web.WebView2.WinForms.WebView2 searchResultsWebBrowser;
+		private CefSharp.WinForms.ChromiumWebBrowser searchResultsWebBrowser;
 	}
 }
