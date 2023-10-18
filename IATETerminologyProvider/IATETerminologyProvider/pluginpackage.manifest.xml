@@ -1,11 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>IATE Real-time Terminology</PlugInName>
-  <Version>4.1.2.0</Version>
+  <Version>4.1.3.0</Version>
   <Description>Integration with IATE European Union terminology</Description>
   <Author>Trados AppStore Team</Author>
 	<Include>
 		<File>System.Data.SQLite.dll</File>
+		
+		<File>CefSharp.WinForms.dll</File>
+		<File>CefSharp.Core.dll</File>
+		
+		<File>x86\CefSharp.dll</File>
+		<File>x86\CefSharp.Core.Runtime.dll</File>
+		<File>x86\CefSharp.BrowserSubprocess.Core.dll</File>
+		<File>x86\CefSharp.BrowserSubprocess.exe</File>
+
+		<File>x86\chrome_elf.dll</File>
+		<File>x86\libcef.dll</File>
+		<File>x86\icudtl.dat</File>
+		<File>x86\libEGL.dll</File>
+		<File>x86\libGLESv2.dll</File>
+
+		<File>x86\chrome_100_percent.pak</File>
+		<File>x86\chrome_200_percent.pak</File>
+		<File>x86\resources.pak</File>
+
+		<File>x86\snapshot_blob.bin</File>
+		<File>x86\v8_context_snapshot.bin</File>
 	</Include>
   <RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9"/>
 </PluginPackage> 

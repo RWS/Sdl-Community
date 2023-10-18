@@ -44,7 +44,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.IdentityModel.Tokens">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Microsoft.IdentityModel.Tokens.dll</HintPath>
-    </Reference>
+    </Reference>    
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -310,6 +310,9 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="CefSharp.WinForms">
+      <Version>117.2.40</Version>
+    </PackageReference>
     <PackageReference Include="Sdl.Core.PluginFramework">
       <Version>2.1.0</Version>
     </PackageReference>
