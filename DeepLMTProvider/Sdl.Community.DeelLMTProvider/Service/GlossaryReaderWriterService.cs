@@ -18,9 +18,9 @@ namespace Sdl.Community.DeepLMTProvider.Service
 
         private IGlossaryReaderWriterFactory GlossaryReaderWriterFactory { get; }
 
-        public ActionResult<Glossary> ReadGlossary(string filePath)
+        public ActionResult<Glossary> ReadGlossary(string filePath, char delimiter)
         {
-            var (success, glossaryReaderWriter, message) = GlossaryReaderWriterFactory.CreateFileReader(filePath);
+            var (success, glossaryReaderWriter, message) = GlossaryReaderWriterFactory.CreateFileReader(filePath, delimiter);
             return !success ? new(false, null, message) : glossaryReaderWriter.ReadGlossary(filePath);
         }
 

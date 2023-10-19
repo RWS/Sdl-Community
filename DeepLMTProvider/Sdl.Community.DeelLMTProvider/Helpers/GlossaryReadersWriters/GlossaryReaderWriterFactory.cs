@@ -8,14 +8,14 @@ namespace Sdl.Community.DeepLMTProvider.Helpers.GlossaryReadersWriters
 {
     public class GlossaryReaderWriterFactory : IGlossaryReaderWriterFactory
     {
-        public ActionResult<IGlossaryReaderWriter> CreateFileReader(string filePath)
+        public ActionResult<IGlossaryReaderWriter> CreateFileReader(string filePath, char delimiter = default)
         {
             var fileExtension = Path.GetExtension(filePath).ToLower();
 
             return ErrorHandler.WrapTryCatch<IGlossaryReaderWriter>(() => fileExtension switch
             {
                 ".tsv" => new TsvGlossaryReaderWriter(),
-                ".csv" => new CsvGlossaryReaderWriter(),
+                ".csv" => new CsvGlossaryReaderWriter(delimiter),
                 _ => throw new NotSupportedException("File type not supported.")
             });
         }

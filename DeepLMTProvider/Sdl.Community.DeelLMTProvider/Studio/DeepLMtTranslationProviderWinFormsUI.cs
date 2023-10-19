@@ -38,13 +38,14 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             ElementHost.EnableModelessKeyboardInterop(dialog);
             dialog.ShowDialog();
 
+            DeepLWindowViewModel.ManageGlossaries -= ViewModel_ManageGlossaries;
+
             if (!dialog.DialogResult.HasValue || !dialog.DialogResult.Value)
                 return null;
 
-            var provider = new DeepLMtTranslationProvider(options, new DeepLTranslationProviderClient(options.ApiKey), languagePairs)
-            {
-                Options = DeepLWindowViewModel.Options
-            };
+            var provider = new DeepLMtTranslationProvider(options, new DeepLTranslationProviderClient(options.ApiKey),
+                languagePairs);
+            
             var apiKey = DeepLWindowViewModel.Options.ApiKey;
             SetDeeplCredentials(credentialStore, apiKey, true);
 
@@ -74,6 +75,8 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
             ElementHost.EnableModelessKeyboardInterop(dialog);
             dialog.ShowDialog();
+
+            DeepLWindowViewModel.ManageGlossaries -= ViewModel_ManageGlossaries;
 
             if (!dialog.DialogResult.HasValue || !dialog.DialogResult.Value)
                 return false;

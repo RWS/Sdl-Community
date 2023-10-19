@@ -37,8 +37,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             LanguagePairs = deepLTranslationOptions.LanguagePairOptions.Select(lpo => lpo.LanguagePair).ToArray();
             SendPlainText = deepLTranslationOptions.SendPlainText;
-            RemoveLockedContent = deepLTranslationOptions.RemoveLockedContent;
-            DecodeHtmlOrUrl = deepLTranslationOptions.DecodeFromHtmlOrUrl;
             Options = deepLTranslationOptions;
 
             SetSettingsOnWindow(null);
@@ -53,8 +51,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             IsTellMeAction = false;
 
             SendPlainText = deepLTranslationOptions.SendPlainText;
-            RemoveLockedContent = deepLTranslationOptions.RemoveLockedContent;
-            DecodeHtmlOrUrl = deepLTranslationOptions.DecodeFromHtmlOrUrl;
             Options = deepLTranslationOptions;
 
             PasswordChangedTimer.Elapsed += OnPasswordChanged;
@@ -87,8 +83,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             }
         }
 
-        public bool DecodeHtmlOrUrl { get; set; }
-
         public ObservableCollection<LanguagePairOptions> LanguagePairOptions
         {
             get => _languagePairSettings;
@@ -101,20 +95,10 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         public DeepLTranslationOptions Options { get; set; }
 
-        public bool RemoveLockedContent
-        {
-            get => _removeLockedContent;
-            set => SetField(ref _removeLockedContent, value);
-        }
-
         public bool SendPlainText
         {
             get => _sendPlainText;
-            set
-            {
-                SetField(ref _sendPlainText, value);
-                if (!value) RemoveLockedContent = false;
-            }
+            set => SetField(ref _sendPlainText, value);
         }
 
         public string Title { get; set; } = "DeepL Translation Provider";
@@ -229,15 +213,21 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             SetApiKeyValidityLabel();
 
             Options.SendPlainText = SendPlainText;
-            Options.RemoveLockedContent = RemoveLockedContent;
-            Options.DecodeFromHtmlOrUrl = DecodeHtmlOrUrl;
             Options.ApiKey = ApiKey;
             Options.LanguagePairOptions = new List<LanguagePairOptions>(LanguagePairOptions);
+
+            DetachEvents();
 
             if (IsTellMeAction)
             {
                 AskUserToRestart();
             }
+        }
+
+        private void DetachEvents()
+        {
+            PasswordChangedTimer.Elapsed -= OnPasswordChanged;
+            DeepLTranslationProviderClient.ApiKeyChanged += Dispatcher_LoadLanguagePairSettings;
         }
 
         private void SetApiKeyValidityLabel()

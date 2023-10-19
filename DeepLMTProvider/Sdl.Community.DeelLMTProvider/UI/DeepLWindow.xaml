@@ -122,25 +122,7 @@
                               IsChecked="{Binding SendPlainText}"
                               Content="Send source as plain text"
                               Margin="15,0,0,5" />
-
-                    <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-                              VerticalContentAlignment="Center"
-                              Name="LockedContent"
-                              IsEnabled="{Binding IsChecked, ElementName=PlainText}"
-                              IsChecked="{Binding RemoveLockedContent, Mode=TwoWay}"
-                              Content="Remove locked content"
-                              Margin="15,0,0,5" />
-
-                    <TextBlock Text="After translation processing"
-                               Style="{StaticResource Sdl.TextBlock.SubtitleStyle}"
-                               Margin="10 0 0 5" />
-
-                    <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-                              VerticalContentAlignment="Center"
-                              Name="DecodeHtmlAndUrl"
-                              IsChecked="{Binding DecodeHtmlOrUrl}"
-                              Content="HTML/URL decode received translation"
-                              Margin="15,0,0,5" />
+                    
                 </StackPanel></GroupBox>
         </StackPanel>
 

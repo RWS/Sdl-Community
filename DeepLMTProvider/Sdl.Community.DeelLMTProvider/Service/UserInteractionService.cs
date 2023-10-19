@@ -6,9 +6,9 @@ using System.Linq;
 
 namespace Sdl.Community.DeepLMTProvider.Service
 {
-    public class GlossaryImportExportService : IGlossaryBrowserService
+    public class UserInteractionService : IUserInteractionService
     {
-        public GlossaryImportExportService(IBrowseDialog browseDialog)
+        public UserInteractionService(IBrowseDialog browseDialog)
         {
             BrowseDialog = browseDialog;
         }
@@ -26,7 +26,7 @@ namespace Sdl.Community.DeepLMTProvider.Service
             glossaries = default;
             if (BrowseDialog.ShowDialog() != true) return false;
 
-            var browseGlossaryWindow = new BrowseGlossariesWindow(supportedLanguages, BrowseDialog);
+            var browseGlossaryWindow = new BrowseGlossariesWindow(supportedLanguages, BrowseDialog, new GlossarySniffer());
             browseGlossaryWindow.AddGlossaries(BrowseDialog.FileNames);
             if (!(browseGlossaryWindow.ShowDialog() ?? false))
                 return false;
@@ -48,7 +48,7 @@ namespace Sdl.Community.DeepLMTProvider.Service
         {
             glossary = default;
 
-            var browseGlossaryWindow = new BrowseGlossariesWindow(supportedLanguages, null, true);
+            var browseGlossaryWindow = new BrowseGlossariesWindow(supportedLanguages, null, new GlossarySniffer(), true);
             browseGlossaryWindow.AddGlossaries(new[] { FindAvailableNewGlossaryName(existingGlossaryNames) });
 
             if (!(browseGlossaryWindow.ShowDialog() ?? false)) return false;

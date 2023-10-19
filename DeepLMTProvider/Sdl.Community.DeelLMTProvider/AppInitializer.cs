@@ -1,15 +1,13 @@
-﻿using System;
+﻿using Sdl.Desktop.IntegrationApi;
+using Sdl.Desktop.IntegrationApi.Extensions;
+using System;
 using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Xml;
-using Sdl.Community.DeepLMTProvider.Studio;
-using Sdl.Desktop.IntegrationApi;
-using Sdl.Desktop.IntegrationApi.Extensions;
 
 namespace Sdl.Community.DeepLMTProvider
 {
-	[ApplicationInitializer]
+    [ApplicationInitializer]
     public class AppInitializer : IApplicationInitializer
     {
         public static readonly HttpClient Client = new();

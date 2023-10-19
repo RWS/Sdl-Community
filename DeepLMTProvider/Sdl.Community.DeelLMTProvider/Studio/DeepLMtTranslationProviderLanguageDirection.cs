@@ -156,7 +156,6 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
         private string ApplyAfterTranslationSettings(string plainTranslation)
         {
-            if (_options.DecodeFromHtmlOrUrl) plainTranslation.DecodeText(out plainTranslation);
             return plainTranslation;
         }
 
@@ -164,12 +163,6 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         {
             if (newSeg.HasTags && !_options.SendPlainText)
                 return tagPlacer.PreparedSourceText;
-
-            if (_options.RemoveLockedContent)
-            {
-                newSeg.DeleteTags();
-                return newSeg.ToPlain();
-            }
 
             newSeg.ToPlain().RemoveTags(out var plainText);
             return plainText;
@@ -211,6 +204,8 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             foreach (var preTranslate in preTranslateList.Where(preTranslate => preTranslate != null))
             {
                 var plainTranslation = preTranslate.PlainTranslation;
+                if (plainTranslation == null) continue;
+
                 var translation = new Segment(_languageDirection.TargetCulture);
                 var sourceSegment = preTranslate.TranslationUnit.SourceSegment.Duplicate();
 
@@ -272,7 +267,6 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 _logger.Error($"{e.Message}\n {e.StackTrace}");
             }
 
-            preTranslateSegments.ForEach(seg => seg.PlainTranslation ??= string.Empty);
             return preTranslateSegments;
         }
     }
