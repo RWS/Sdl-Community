@@ -1,11 +1,11 @@
 ﻿<Window x:Class="Sdl.Community.DeepLMTProvider.UI.BrowseGlossariesWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:uiHelpers="clr-namespace:Sdl.Community.DeepLMTProvider.UI.UiHelpers"
         xmlns:controls="clr-namespace:Sdl.Community.DeepLMTProvider.UI.Controls"
-        xmlns:deepLmtProvider="clr-namespace:Sdl.Community.DeepLMTProvider"
+        xmlns:uiHelpers="clr-namespace:Sdl.Community.DeepLMTProvider.UI.UiHelpers"
+        xmlns:converters="clr-namespace:Sdl.Community.DeepLMTProvider.UI.Converters"
         SizeToContent="WidthAndHeight"
         MinHeight="200"
         MaxWidth="600"
@@ -13,6 +13,7 @@
         MaxHeight="600"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
+        Icon="../Resources/deepL_logo_new.png"
         Title="Add glossaries' details"
         mc:Ignorable="d">
 
@@ -20,13 +21,11 @@
         <KeyBinding Key="E"
                     Modifiers="Control"
                     CommandParameter="Edit"
-                    Command="{Binding KeyboardShortcutCommand, ElementName=BrowseGlossaries_Window}"/>
-
-        
+                    Command="{Binding KeyboardShortcutCommand, ElementName=BrowseGlossaries_Window}" />
 
         <KeyBinding Key="Escape"
                     CommandParameter="Escape"
-                    Command="{Binding KeyboardShortcutCommand, ElementName=BrowseGlossaries_Window}"/>
+                    Command="{Binding KeyboardShortcutCommand, ElementName=BrowseGlossaries_Window}" />
     </Window.InputBindings>
 
     <Window.Resources>
@@ -37,7 +36,6 @@
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="Button"
                    BasedOn="{StaticResource Sdl.Button.GeneralStyle}">
-               
             </Style>
 
             <Style TargetType="ComboBox"
@@ -52,7 +50,7 @@
                 <Setter Property="Focusable"
                         Value="False" />
             </Style>
-            <deepLmtProvider:NameToBoolConverter x:Key="NameToBoolConverter" />
+            <converters:NameToBoolConverter x:Key="NameToBoolConverter" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="5">
@@ -67,6 +65,7 @@
                                    Grid.Row="0" />
 
         <DataGrid Grid.Row="1"
+                  Margin="0 5 0 0"
                   CellStyle="{StaticResource DataGridCell_Style}"
                   MouseDoubleClick="DataGrid_OnMouseDoubleClick"
                   Style="{StaticResource Sdl.DataGrid.GenericStyle}"
@@ -115,7 +114,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                
+
                 <DataGridTemplateColumn Header="Delimiter"
                                         IsReadOnly="True"
                                         SortMemberPath="TargetLanguage">
@@ -123,11 +122,10 @@
                         <DataTemplate>
                             <TextBox IsEnabled="{Binding Name, Converter={StaticResource NameToBoolConverter}}"
                                      MaxLength="1"
-                                     Text="{Binding Delimiter, UpdateSourceTrigger=PropertyChanged}"/>
+                                     Text="{Binding Delimiter, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
             </DataGrid.Columns>
         </DataGrid>
 
@@ -142,7 +140,7 @@
                     Click="BrowseButton_Click"
                     DockPanel.Dock="Left"
                     HorizontalAlignment="Left" />
-            
+
             <Button Content="Edit"
                     Margin="0 0 5 0"
                     Name="EditButton"

@@ -3,12 +3,13 @@ using Sdl.Community.DeepLMTProvider.Interface;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Sdl.Community.DeepLMTProvider.Service
 {
     public class GlossarySniffer : IGlossarySniffer
     {
-        public (string source, string target, char delimiter) GetGlossaryFileMetadata(string filename, List<string> supportedLanguages)
+        public (string Source, string Target, string Delimiter) GetGlossaryFileMetadata(string filename, List<string> supportedLanguages = null)
         {
             var (success, result, _) = ErrorHandler.WrapTryCatch(() =>
             {
@@ -21,18 +22,18 @@ namespace Sdl.Community.DeepLMTProvider.Service
             return success ? result : default;
         }
 
-        private (string source, string target, char delimiter) GetMetadata(string line, List<string> supportedLanguages)
+        private (string source, string target, string delimiter) GetMetadata(string line, List<string> supportedLanguages)
         {
-            var possibleDelimiters = new List<char> { ',', ';' };
-            char delimiter = default;
+            var possibleDelimiters = new List<string> { ",", ";", "\\t" };
+            string delimiter = default;
 
             foreach (var d in possibleDelimiters)
             {
-                var split = line.ToLower().Split(d);
+                var split = Regex.Split(line.ToLower(), d);
 
                 if (split.Length is not (2 or 4)) continue;
 
-                if (split.Length == 4)
+                if (supportedLanguages != null && split.Length == 4)
                 {
                     if (supportedLanguages.Contains(split[2]) &&
                         supportedLanguages.Contains(split[3]))

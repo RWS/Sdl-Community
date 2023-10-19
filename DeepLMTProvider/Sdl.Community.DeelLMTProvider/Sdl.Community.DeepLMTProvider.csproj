@@ -142,12 +142,13 @@
     <Compile Include="Interface\ITsvReaderWriter.cs" />
     <Compile Include="Model\DeepLRequestParameters.cs" />
     <Compile Include="Model\Glossary.cs" />
+    <Compile Include="Model\GlossaryDelimiterItem.cs" />
     <Compile Include="Model\GlossaryEntry.cs" />
     <Compile Include="Model\GlossaryInfo.cs" />
     <Compile Include="Model\GlossaryItem.cs" />
     <Compile Include="Model\GlossaryLanguagePair.cs" />
     <Compile Include="Model\LanguagePairOptions.cs" />
-    <Compile Include="NameToBoolConverter.cs" />
+    <Compile Include="UI\Converters\NameToBoolConverter.cs" />
     <Compile Include="Service\EditGlossaryService.cs" />
     <Compile Include="Service\GlossaryBackupService.cs" />
     <Compile Include="Service\GlossarySniffer.cs" />
@@ -189,8 +190,8 @@
     <Compile Include="UI\BrowseGlossariesWindow.xaml.cs">
       <DependentUpon>BrowseGlossariesWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\ChooseDelimiterWindow.xaml.cs">
-      <DependentUpon>ChooseDelimiterWindow.xaml</DependentUpon>
+    <Compile Include="UI\ImportEntriesWindow.cs">
+      <DependentUpon>ImportEntriesWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\BrowsePathControl.xaml.cs">
       <DependentUpon>BrowsePathControl.xaml</DependentUpon>
@@ -266,7 +267,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\ChooseDelimiterWindow.xaml">
+    <Page Include="UI\ImportEntriesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
