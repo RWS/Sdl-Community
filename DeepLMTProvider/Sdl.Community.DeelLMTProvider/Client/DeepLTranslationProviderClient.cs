@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using NLog;
-using Sdl.Community.DeepLMTProvider.Helpers;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.LanguagePlatform.Core;
 using System;
@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace Sdl.Community.DeepLMTProvider.Client
@@ -100,21 +101,33 @@ namespace Sdl.Community.DeepLMTProvider.Client
             var targetLanguage = GetLanguage(languageDirection.TargetCulture, SupportedTargetLanguages);
             var sourceLanguage = GetLanguage(languageDirection.SourceCulture, SupportedSourceLanguages);
             var translatedText = string.Empty;
-            var normalizeHelper = new NormalizeSourceTextHelper();
 
             try
             {
-                sourceText = normalizeHelper.NormalizeText(sourceText);
+                var content = new StringContent(JsonConvert.SerializeObject(
+                    new DeeplRequestParameters
+                    {
+                        Text = new List<string> { sourceText },
+                        SourceLanguage = sourceLanguage,
+                        TargetLanguage = targetLanguage,
+                        Formality = formality.ToString().ToLower(),
+                        GlossaryId = glossaryId,
+                    },
+                    new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    }), Encoding.UTF8, "application/json");
 
-                var content = new StringContent($"text={sourceText}" +
-                                                $"&source_lang={sourceLanguage}" +
-                                                $"&target_lang={targetLanguage}" +
-                                                $"&formality={formality.ToString().ToLower()}" +
-                                                $"&auth_key={ApiKey}" +
-                                                $"&glossary_id={glossaryId}",
-                    Encoding.UTF8, "application/x-www-form-urlencoded");
+                var request = new HttpRequestMessage
+                {
+                    Content = content,
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri("https://api.deepl.com/v1/translate")
+                };
+                request.Headers.Authorization = new AuthenticationHeaderValue("DeepL-Auth-Key", ApiKey);
 
-                var response = AppInitializer.Client.PostAsync("https://api.deepl.com/v1/translate", content).Result;
+                var response = AppInitializer.Client.SendAsync(request).Result;
                 response.EnsureSuccessStatusCode();
 
                 var translationResponse = response.Content?.ReadAsStringAsync().Result;

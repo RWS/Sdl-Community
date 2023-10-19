@@ -63,6 +63,8 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 
                         dialog.ShowDialog();
 
+                        ViewModel.ManageGlossaries -= ViewModel_ManageGlossaries;
+
                         if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
                         {
                             translationProvider.MainTranslationProvider.Uri = options.Uri;

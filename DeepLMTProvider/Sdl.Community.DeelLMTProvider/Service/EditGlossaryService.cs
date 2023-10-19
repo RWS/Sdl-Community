@@ -13,7 +13,7 @@ namespace Sdl.Community.DeepLMTProvider.Service
     {
         public EditGlossaryService(
             IGlossaryReaderWriterService glossaryReaderWriterService,
-            IGlossaryBrowserService glossaryBrowserService,
+            IUserInteractionService glossaryBrowserService,
             IMessageService messageService)
         {
             GlossaryReaderWriterService = glossaryReaderWriterService;
@@ -33,7 +33,7 @@ namespace Sdl.Community.DeepLMTProvider.Service
 
         public string GlossaryName => EditGlossaryWindow.GlossaryName.Trim();
         private EditGlossaryWindow EditGlossaryWindow { get; set; }
-        private IGlossaryBrowserService GlossaryBrowserService { get; }
+        private IUserInteractionService GlossaryBrowserService { get; }
         private IGlossaryReaderWriterService GlossaryReaderWriterService { get; }
         private IMessageService MessageService { get; }
 

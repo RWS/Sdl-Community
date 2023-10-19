@@ -119,9 +119,6 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         private void ApplyEditModeUiChanges(bool value)
         {
-            Edit_Button.Content = value ? "✓" : "✏";
-            Edit_Button.ToolTip = value ? "Save" : "Edit glossary (Alt+E)";
-
             if (!value) return;
 
             if (GlossaryEntries.Count != 1) return;
@@ -136,11 +133,6 @@ namespace Sdl.Community.DeepLMTProvider.UI
         }
 
         private void DeleteEntry(object glossaryEntry) => GlossaryEntries.Remove((GlossaryEntry)glossaryEntry);
-
-        private void EditButton_Click(object sender, RoutedEventArgs e)
-        {
-            IsEditing = !IsEditing;
-        }
 
         private void Entries_DataGrid_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
