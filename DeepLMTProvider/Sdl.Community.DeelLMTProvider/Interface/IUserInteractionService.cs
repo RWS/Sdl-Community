@@ -9,7 +9,7 @@ namespace Sdl.Community.DeepLMTProvider.Interface
         (bool Success, string Path) OpenExportDialog();
         bool OpenNewGlossaryDialog(List<string> existingGlossaryNames, List<string> supportedLanguages, out GlossaryItem glossary);
 
-        bool OpenImportEntriesDialog(out List<string> fileNames);
+        bool OpenImportEntriesDialog(out List<GlossaryDelimiterItem> glossaryDelimiterItems);
         //char GetDelimiterFromUser();
     }
 }

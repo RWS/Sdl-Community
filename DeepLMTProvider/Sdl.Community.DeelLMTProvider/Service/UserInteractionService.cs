@@ -2,6 +2,7 @@
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Community.DeepLMTProvider.UI;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Sdl.Community.DeepLMTProvider.Service
@@ -35,20 +36,32 @@ namespace Sdl.Community.DeepLMTProvider.Service
             return true;
         }
 
-        public bool OpenImportEntriesDialog(out List<string> fileNames)
+        public bool OpenImportEntriesDialog(out List<GlossaryDelimiterItem> glossaryDelimiterItems)
         {
-            fileNames = new List<string>();
+            glossaryDelimiterItems = default;
+
             if (BrowseDialog.ShowDialog() != true) return false;
 
-            fileNames = BrowseDialog.FileNames.ToList();
-            return true;
+            var fileNames = BrowseDialog.FileNames.ToList();
+
+            var glossarySniffer = new GlossarySniffer();
+            var glossaryDelimiters = fileNames.Select(fn =>
+            {
+                var metadata = glossarySniffer.GetGlossaryFileMetadata(fn);
+                return new GlossaryDelimiterItem(fn, metadata.Delimiter);
+            }).ToList();
+
+            var importEntriesWindow = new ImportEntriesWindow(glossaryDelimiters);
+            glossaryDelimiterItems = importEntriesWindow.Glossaries;
+
+            return !(importEntriesWindow.ShowDialog() ?? false);
         }
 
         public bool OpenNewGlossaryDialog(List<string> existingGlossaryNames, List<string> supportedLanguages, out GlossaryItem glossary)
         {
             glossary = default;
 
-            var browseGlossaryWindow = new BrowseGlossariesWindow(supportedLanguages, null, new GlossarySniffer());
+            var browseGlossaryWindow = new BrowseGlossariesWindow(supportedLanguages, new GlossarySniffer());
             browseGlossaryWindow.AddGlossaries(new[] { FindAvailableNewGlossaryName(existingGlossaryNames) });
 
             if (!(browseGlossaryWindow.ShowDialog() ?? false)) return false;
@@ -57,12 +70,17 @@ namespace Sdl.Community.DeepLMTProvider.Service
             return true;
         }
 
-        private string FindAvailableNewGlossaryName(List<string> existingGlossaryNames, int i = 0)
+        private string FindAvailableNewGlossaryName(List<string> existingGlossaryNames)
         {
-            var newName = $"New Glossary {i}";
-            return existingGlossaryNames.Any(gi => gi == newName)
-                ? FindAvailableNewGlossaryName(existingGlossaryNames, ++i)
-                : newName;
+            var i = 0;
+            while (true)
+            {
+                var newName = $"New Glossary {i}";
+                if (existingGlossaryNames.All(gi => gi != newName))
+                    return newName;
+
+                ++i;
+            }
         }
     }
 }

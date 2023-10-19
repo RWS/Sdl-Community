@@ -15,26 +15,26 @@ namespace Sdl.Community.DeepLMTProvider.UI
 {
     public partial class BrowseGlossariesWindow : INotifyPropertyChanged
     {
-        private ObservableCollection<GlossaryItem> _glossaries;
+        private ObservableCollection<GlossaryItem> _glossaries = new();
         private bool _isEditing;
 
         public BrowseGlossariesWindow(List<string> supportedLanguages, IBrowseDialog openFileDialog, IGlossarySniffer glossarySniffer)
         {
-            Glossaries = new ObservableCollection<GlossaryItem>();
             Glossaries.CollectionChanged += Glossaries_CollectionChanged;
 
             SupportedLanguages = supportedLanguages;
             OpenFileDialog = openFileDialog;
             GlossarySniffer = glossarySniffer;
+
             InitializeComponent();
         }
 
-        public BrowseGlossariesWindow(IGlossarySniffer glossarySniffer)
+        public BrowseGlossariesWindow(List<string> supportedLanguages, IGlossarySniffer glossarySniffer)
         {
-            Glossaries = new ObservableCollection<GlossaryItem>();
-            InitializeComponent();
-
+            SupportedLanguages = supportedLanguages;
             GlossarySniffer = glossarySniffer;
+
+            InitializeComponent();
 
             Browse_Button.Visibility = Visibility.Collapsed;
             ImportGlossaries_Button.Content = "Add new glossary";
@@ -64,6 +64,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
         public List<string> SupportedLanguages { get; }
         private IGlossarySniffer GlossarySniffer { get; }
         private IBrowseDialog OpenFileDialog { get; }
+
         public void AddGlossaries(string[] importDialogFileNames)
         {
             importDialogFileNames.ForEach(AddNewGlossary);
@@ -71,7 +72,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         public void Browse()
         {
-            if (OpenFileDialog.ShowDialog()) return;
+            if (!OpenFileDialog.ShowDialog()) return;
             AddGlossaries(OpenFileDialog.FileNames);
         }
 
@@ -93,12 +94,14 @@ namespace Sdl.Community.DeepLMTProvider.UI
             if (Glossaries.Any(g => g.Path == fn)) return;
 
             var newGlossaryItem = new GlossaryItem(fn);
-            (string source, string target, char delimiter) metadata;
             var fnLower = fn.ToLower();
             if (fnLower.Contains(".csv"))
             {
-                metadata = GlossarySniffer.GetGlossaryFileMetadata(fn, SupportedLanguages);
-                newGlossaryItem.Delimiter = metadata.delimiter.ToString();
+                var metadata = GlossarySniffer.GetGlossaryFileMetadata(fn, SupportedLanguages);
+
+                newGlossaryItem.Delimiter = metadata.Delimiter.ToString();
+                newGlossaryItem.SourceLanguage = metadata.Source;
+                newGlossaryItem.TargetLanguage = metadata.Target;
             }
 
             Glossaries.Add(newGlossaryItem /*{ SourceLanguage = "EN", TargetLanguage = "DE" }*/);
