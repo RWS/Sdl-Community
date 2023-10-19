@@ -341,10 +341,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             var glossarySupportedLanguages = SupportedLanguagePairs.Select(glp => glp.SourceLanguage).Distinct().ToList();
             if (UserInteractionService.OpenImportDialog(glossarySupportedLanguages, out var glossaries))
             {
-                //var delimiter = glossaries.Any(g => g.Name.ToLower().EndsWith(".csv"))
-                //    ? GlossaryBrowserService.GetDelimiterFromUser()
-                //    : default;
-
                 foreach (var glossaryItem in glossaries)
                 {
                     if (IsCancellationRequested()) break;

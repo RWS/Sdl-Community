@@ -23,7 +23,7 @@ namespace Sdl.Community.DeepLMTProvider.Service
 
         private (string source, string target, char delimiter) GetMetadata(string line, List<string> supportedLanguages)
         {
-            var possibleDelimiters = new List<char> { ',', ';' };
+            var possibleDelimiters = new List<char> { ',', ';', '\t' };
             char delimiter = default;
 
             foreach (var d in possibleDelimiters)

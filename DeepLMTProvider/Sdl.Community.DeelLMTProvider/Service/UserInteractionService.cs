@@ -48,7 +48,7 @@ namespace Sdl.Community.DeepLMTProvider.Service
         {
             glossary = default;
 
-            var browseGlossaryWindow = new BrowseGlossariesWindow(supportedLanguages, null, new GlossarySniffer(), true);
+            var browseGlossaryWindow = new BrowseGlossariesWindow(supportedLanguages, null, new GlossarySniffer());
             browseGlossaryWindow.AddGlossaries(new[] { FindAvailableNewGlossaryName(existingGlossaryNames) });
 
             if (!(browseGlossaryWindow.ShowDialog() ?? false)) return false;
@@ -59,9 +59,10 @@ namespace Sdl.Community.DeepLMTProvider.Service
 
         private string FindAvailableNewGlossaryName(List<string> existingGlossaryNames, int i = 0)
         {
-            return existingGlossaryNames.Any(gi => gi == $"New Glossary {i}")
+            var newName = $"New Glossary {i}";
+            return existingGlossaryNames.Any(gi => gi == newName)
                 ? FindAvailableNewGlossaryName(existingGlossaryNames, ++i)
-                : $"New Glossary {i}";
+                : newName;
         }
     }
 }
