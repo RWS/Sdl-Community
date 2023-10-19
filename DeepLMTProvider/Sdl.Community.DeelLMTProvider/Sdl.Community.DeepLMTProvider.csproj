@@ -223,6 +223,10 @@
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\deepl_ExportGlossaries.ico" />
+    <Resource Include="Resources\deepl_Glossarytransfer.ico" />
+    <Resource Include="Resources\deepl_Importentries.ico" />
+    <Resource Include="Resources\deepl_ImportGlossaries.ico" />
     <Resource Include="Resources\Export_64b.png" />
     <None Include="Resources\Settings.ico" />
     <EmbeddedResource Include="Resources\ForumIcon.ico" />
