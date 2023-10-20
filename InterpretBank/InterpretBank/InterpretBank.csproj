@@ -40,7 +40,7 @@
       <HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization.Async">
-      <HintPath>..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.Async.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
@@ -134,9 +134,6 @@
     <Resource Include="Resources\logo.ico" />
     <Resource Include="Resources\logo.png" />
     <Resource Include="Resources\Tag.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UI\" />
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>

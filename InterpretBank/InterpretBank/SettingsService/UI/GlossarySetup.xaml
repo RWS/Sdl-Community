@@ -274,16 +274,17 @@
                    VerticalAlignment="Bottom"
                    LastChildFill="False">
 
-            <Button Content="⬆️ Import"
+            <Button Content="Import file"
                     x:Name="Import_Button"
                     DockPanel.Dock="Left"
+                    Visibility="{Binding Filepath, Converter={StaticResource NullToVisibilityConverter}}"
                     Style="{StaticResource Sdl.Button.EmbeddedStyle}"
                     Click="ImportButton_Click"
                     Margin="10 0 10 10"
                     Height="30">
                 <Button.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Into selected glossary"/>
+                        <MenuItem Header="Into selected glossary" Command="{Binding ImportIntoSelectedGlossaryCommand}"/>
                         <MenuItem Header="As a new glossary"/>
                     </ContextMenu>
                 </Button.ContextMenu>

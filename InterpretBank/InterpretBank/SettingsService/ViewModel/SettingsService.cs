@@ -7,7 +7,6 @@ using InterpretBank.Commands;
 using InterpretBank.GlossaryService.Interface;
 using InterpretBank.SettingsService.Model;
 using InterpretBank.TerminologyService;
-using InterpretBank.Wrappers.Interface;
 
 namespace InterpretBank.SettingsService.ViewModel;
 

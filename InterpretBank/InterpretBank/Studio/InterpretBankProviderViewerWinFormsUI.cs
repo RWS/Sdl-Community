@@ -6,7 +6,6 @@ using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using DocumentFormat.OpenXml.Bibliography;
 using InterpretBank.Model;
-using InterpretBank.Service;
 using InterpretBank.TermbaseViewer.UI;
 using InterpretBank.TermbaseViewer.ViewModel;
 using Sdl.Core.Globalization;
@@ -14,7 +13,7 @@ using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace InterpretBank.Studio
 {
-	[TerminologyProviderViewerWinFormsUI]
+    [TerminologyProviderViewerWinFormsUI]
 	internal class InterpretBankProviderViewerWinFormsUI : ITerminologyProviderViewerWinFormsUI
 	{
 		private TermbaseViewerControl _termbaseControl;
@@ -31,7 +30,7 @@ namespace InterpretBank.Studio
 				//var settingsId = InterpretBankProvider.Uri.AbsolutePath.Split('.')[0].TrimStart('/');
 				//var settings = PersistenceService.PersistenceService.GetSettings(settingsId);
 
-				TermbaseViewerViewModel = new TermbaseViewerViewModel(InterpretBankProvider.TermSearchService, Common.DialogService);
+				TermbaseViewerViewModel = new TermbaseViewerViewModel(InterpretBankProvider.TermSearchService, ServiceManager.DialogService);
 				TermbaseViewerViewModel.LoadTerms(SourceLanguage, TargetLanguage, InterpretBankProvider.Settings.Glossaries);
 
 				var termbaseViewer = new TermbaseViewer.UI.TermbaseViewer { DataContext = TermbaseViewerViewModel };

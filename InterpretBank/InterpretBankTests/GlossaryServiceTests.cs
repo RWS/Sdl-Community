@@ -10,12 +10,7 @@ namespace InterpretBankTests
 {
 	public class GlossaryServiceTests
 	{
-		private readonly GlossaryServiceBuilder _glossaryServiceBuilder;
-
-		public GlossaryServiceTests()
-		{
-			_glossaryServiceBuilder = new GlossaryServiceBuilder();
-		}
+		private readonly GlossaryServiceBuilder _glossaryServiceBuilder = new();
 
 		[Fact]
 		public void CreateDatabase_Test()

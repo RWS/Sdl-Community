@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Data.SQLite;
 using InterpretBank.GlossaryService;
+using InterpretBank.Interface;
 using InterpretBank.SettingsService;
 using InterpretBank.SettingsService.ViewModel;
 using InterpretBank.Studio;
 using InterpretBank.TerminologyService;
 using InterpretBank.TerminologyService.Interface;
-using InterpretBank.Wrappers.Interface;
 using NSubstitute;
 using Sdl.Terminology.TerminologyProvider.Core;
 using Xunit;
@@ -32,7 +32,7 @@ namespace InterpretBankTests
 			//	.GetFuzzyTerms(default, default, default)
 			//	.ReturnsForAnyArgs(new List<string> { "firstTerm", "secondTerm" });
 
-			var openFileDialog = Substitute.For<IDialog>();
+			var openFileDialog = Substitute.For<IUserInteractionService>();
 
 			var filepath = "C:\\Code\\RWS Community\\InterpretBank\\InterpretBankTests\\Resources\\InterpretBankDatabaseV6.db";
 			//var sqLiteConnection = new SQLiteConnection($"Data Source={filepath}");

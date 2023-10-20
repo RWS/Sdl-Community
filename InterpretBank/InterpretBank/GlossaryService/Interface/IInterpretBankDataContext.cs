@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Linq;
 using System.Linq;
+using InterpretBank.GlossaryService.DAL;
 using InterpretBank.GlossaryService.DAL.Interface;
 using InterpretBank.Model;
 using InterpretBank.SettingsService.Model;
@@ -27,4 +28,5 @@ public interface IInterpretBankDataContext : IDisposable
 	void AddLanguageToGlossary(LanguageModel newLanguage, string selectedGlossaryGlossaryName);
 	List<LanguageModel> GetGlossaryLanguages(string glossaryName);
 	void CommitAllChanges(List<TermModel> changedTerms);
+    void AddFullTerms(string[][] newTerms, int glossaryId);
 }

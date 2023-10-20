@@ -21,7 +21,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
         private ObservableCollection<TermModel> _terms;
 
-        public TermbaseViewerViewModel(ITerminologyService termSearchService, IDialogService dialogService)
+        public TermbaseViewerViewModel(ITerminologyService termSearchService, IUserInteractionService dialogService)
         {
             TerminologyService = termSearchService;
             DialogService = dialogService;
@@ -59,7 +59,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
         public string TargetLanguage { get; set; }
         public Image TargetLanguageFlag { get; set; }
         public ITerminologyService TerminologyService { get; }
-        private IDialogService DialogService { get; }
+        private IUserInteractionService DialogService { get; }
 
         public ObservableCollection<TermModel> Terms
         {
