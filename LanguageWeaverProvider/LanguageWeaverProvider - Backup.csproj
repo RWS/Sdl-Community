@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<UseWPF>true</UseWPF>
+		<LangVersion>latest</LangVersion>
+		<TargetFramework>net48</TargetFramework>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<SignAssembly>true</SignAssembly>
+		<CreatePluginPackage>true</CreatePluginPackage>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AssemblyOriginatorKeyFile>..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+	</PropertyGroup>
+	
+	<PropertyGroup>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
+		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17</TradosFolder>
+	</PropertyGroup>
+	
+	<ItemGroup>
+	  <Compile Remove="Helpers\**" />
+	  <Compile Remove="Interface\**" />
+	  <Compile Remove="ServiceClients\**" />
+	  <EmbeddedResource Remove="Helpers\**" />
+	  <EmbeddedResource Remove="Interface\**" />
+	  <EmbeddedResource Remove="ServiceClients\**" />
+	  <None Remove="Helpers\**" />
+	  <None Remove="Interface\**" />
+	  <None Remove="ServiceClients\**" />
+	  <Page Remove="Helpers\**" />
+	  <Page Remove="Interface\**" />
+	  <Page Remove="ServiceClients\**" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="Resources\lwMainLogo.png" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<Reference Include="Newtonsoft.Json">
+		  <HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Core.Globalization">
+			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Core.Globalization.Async">
+		  <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Desktop.IntegrationApi">
+		  <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
+		  <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Desktop.Platform.Controls">
+		  <HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Controls.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Desktop.Platform.Styles">
+		  <HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Styles.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.FileTypeSupport.Framework.Core">
+		  <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.LanguagePlatform.Core">
+			<HintPath>$(TradosFolder)\Sdl.LanguagePlatform.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.LanguagePlatform.TranslationMemory">
+			<HintPath>$(TradosFolder)\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
+			<HintPath>$(TradosFolder)\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.TellMe.ProviderApi">
+		  <HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
+		  <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+		</Reference>
+		<Reference Include="System" />
+		<Reference Include="System.Core" />
+		<Reference Include="System.Drawing" />
+		<Reference Include="System.Net.Http" />
+		<Reference Include="System.Windows.Forms" />
+		<Reference Include="System.Data" />
+		<Reference Include="System.Xml" />
+		<Reference Include="System.Xml.Linq" />
+		<Reference Include="System.Core" />
+		<Reference Include="WindowsBase" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="Studio\TranslationProviderWinFormsUI.cs" />
+		<None Include="Studio\TranslationProviderLanguageDirection.cs" />
+		<None Include="Studio\TranslationProvider.cs" />
+		<None Include="Studio\TranslationProviderFactory.cs" />
+		<None Include="Properties\AssemblyInfo.cs" />
+		<None Include="Properties\PluginProperties.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="PluginResources.resx">
+		  <Generator>PublicResXFileCodeGenerator</Generator>
+		  <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+		</None>
+		<None Include="pluginpackage.manifest.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="LanguageMappingProvider" Version="1.0.92" />
+		<PackageReference Include="Sdl.Core.PluginFramework">
+			<Version>2.1.0</Version>
+		</PackageReference>
+		<PackageReference Include="Sdl.Core.PluginFramework.Build">
+			<Version>17.0.0</Version>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Resources\lwMainLogo.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="PluginResources.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>PluginResources.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+</Project>

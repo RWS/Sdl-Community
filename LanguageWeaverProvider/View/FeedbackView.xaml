@@ -1,0 +1,241 @@
+﻿<UserControl x:Class="LanguageWeaverProvider.View.FeedbackView"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:root="clr-namespace:LanguageWeaverProvider"
+			 xmlns:converters="clr-namespace:LanguageWeaverProvider.Converters"
+			 xmlns:viewModel="clr-namespace:LanguageWeaverProvider.ViewModel"
+			 d:DataContext="{d:DesignInstance viewModel:FeedbackViewModel}"
+			 Loaded="UserControl_Loaded"
+			 MouseLeftButtonDown="Window_MouseLeftButtonDown"
+			 mc:Ignorable="d"
+			 d:DesignHeight="450"
+			 d:DesignWidth="800">
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ComboBoxResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBoxResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+				<ResourceDictionary Source="../Style/Buttons.xaml" />
+				<ResourceDictionary Source="../Controls/WatermarkTextBoxResources.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+
+			<converters:BooleanToVisibilityConverter x:Key="BooleanVisibility" />
+
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<TextBlock Grid.Row="0"
+				   Text="{x:Static root:PluginResources.FeedbackView_Title}"
+				   Style="{StaticResource Sdl.TextBlock.GenericTitleTextStyle}"
+				   HorizontalAlignment="Center"
+				   FontSize="20"
+				   Margin="0 8" />
+
+		<TextBlock Grid.Row="1"
+				   Text="{x:Static root:PluginResources.FeedbackView_Message}"
+				   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
+				   HorizontalAlignment="Center"
+				   Focusable="True"
+				   Margin="0" />
+
+		<StackPanel Grid.Row="2"
+					Orientation="Horizontal"
+					HorizontalAlignment="Center"
+					Margin="0 4"
+					IsEnabled="{Binding CanSendFeedback}">
+			<Button x:Name="star_1"
+					Style="{StaticResource TransparentButtonStyle}"
+					MouseEnter="Star_MouseEnter"
+					MouseLeave="Star_MouseLeave"
+					Click="Star_Clicked"
+					Height="22"
+					Margin="0"
+					Padding="0">
+				<Button.Content>
+					<TextBlock Text="★"
+							   FontSize="30"
+							   Foreground="#d4d4d4"
+							   HorizontalAlignment="Center"
+							   VerticalAlignment="Center" />
+				</Button.Content>
+			</Button>
+			<Button x:Name="star_2"
+					Style="{StaticResource TransparentButtonStyle}"
+					MouseEnter="Star_MouseEnter"
+					MouseLeave="Star_MouseLeave"
+					Click="Star_Clicked"
+					Height="22"
+					Margin="0"
+					Padding="0">
+				<Button.Content>
+					<TextBlock Text="★"
+							   FontSize="30"
+							   Foreground="#d4d4d4"
+							   HorizontalAlignment="Center"
+							   VerticalAlignment="Center" />
+				</Button.Content>
+			</Button>
+			<Button x:Name="star_3"
+					Style="{StaticResource TransparentButtonStyle}"
+					MouseEnter="Star_MouseEnter"
+					MouseLeave="Star_MouseLeave"
+					Click="Star_Clicked"
+					Height="22"
+					Margin="0"
+					Padding="0">
+				<Button.Content>
+					<TextBlock Text="★"
+							   FontSize="30"
+							   Foreground="#d4d4d4"
+							   HorizontalAlignment="Center"
+							   VerticalAlignment="Center" />
+				</Button.Content>
+			</Button>
+			<Button x:Name="star_4"
+					Style="{StaticResource TransparentButtonStyle}"
+					MouseEnter="Star_MouseEnter"
+					MouseLeave="Star_MouseLeave"
+					Click="Star_Clicked"
+					Height="22"
+					Margin="0"
+					Padding="0">
+				<Button.Content>
+					<TextBlock Text="★"
+							   FontSize="30"
+							   Foreground="#d4d4d4"
+							   HorizontalAlignment="Center"
+							   VerticalAlignment="Center" />
+				</Button.Content>
+			</Button>
+			<Button x:Name="star_5"
+					Style="{StaticResource TransparentButtonStyle}"
+					MouseEnter="Star_MouseEnter"
+					MouseLeave="Star_MouseLeave"
+					Click="Star_Clicked"
+					Height="22"
+					Margin="0"
+					Padding="0">
+				<Button.Content>
+					<TextBlock Text="★"
+							   FontSize="30"
+							   Foreground="#d4d4d4"
+							   HorizontalAlignment="Center"
+							   VerticalAlignment="Center" />
+				</Button.Content>
+			</Button>
+		</StackPanel>
+
+		<ComboBox Grid.Row="3"
+				  ItemsSource="{Binding QualityEstimations}"
+				  SelectedItem="{Binding SelectedQE, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+				  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+				  IsEnabled="{Binding CanSendFeedback}"
+				  VerticalContentAlignment="Center"
+				  Width="160"
+				  Height="24"
+				  Margin="0 8 0 0"/>
+
+		<GroupBox Grid.Row="4"
+				  Margin="24 8"
+				  Padding="8 16">
+			<GroupBox.Header>
+				<TextBlock Text="{x:Static root:PluginResources.FeedbackView_GroupBox_Header}"
+						   Margin="4 0" />
+			</GroupBox.Header>
+			
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+
+				<TextBlock Grid.Row="0"
+						   Grid.Column="0"
+						   Text="{x:Static root:PluginResources.FeedbackView_GroupBox_Translation}"
+						   Margin="0 2 2 2" />
+
+				<TextBlock Grid.Row="1"
+						   Grid.Column="0"
+						   Text="{x:Static root:PluginResources.FeedbackView_GroupBox_QE}"
+						   Margin="0 2 2 2"/>
+
+				<TextBlock Grid.Row="0"
+						   Grid.Column="1"
+						   Text="{Binding MTTranslation}"
+						   TextWrapping="Wrap"
+						   Margin="4 2" />
+
+				<TextBlock Grid.Row="1"
+						   Grid.Column="1"
+						   Text="{Binding OriginalQE}"
+						   Margin="4 2"/>
+			</Grid>
+		</GroupBox>
+
+		<Border Grid.Row="5"
+				Grid.ColumnSpan="2"
+				BorderBrush="#c0c0c0"
+				BorderThickness="1"
+				Margin="16">
+			<ScrollViewer Grid.Row="0"
+						  VerticalScrollBarVisibility="Auto">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+					
+
+					<Border Grid.Row="0"
+							BorderThickness="0 0 0 1"
+							HorizontalAlignment="Center"
+							BorderBrush="#d4d4d4"
+							Margin="16 0">
+						<TextBlock Text="{x:Static root:PluginResources.FeedbackView_OptionalMessage}"
+								   Focusable="True"
+								   TextWrapping="Wrap"
+								   Foreground="#c0c0c0"
+								   FontSize="18"
+								   FontWeight="DemiBold"
+								   Margin="16 0" />
+					</Border>
+
+					<TextBox Grid.Row="1" Text="{Binding FeedbackMessage, UpdateSourceTrigger=PropertyChanged}"
+							 Style="{StaticResource Sdl.TextBox.BorderlessReadOnlyStyle}"
+							 IsEnabled="{Binding CanSendFeedback}"
+							 IsReadOnly="False"
+							 Padding="4 8" />
+				</Grid>
+			</ScrollViewer>
+		</Border>
+
+		<Button Grid.Row="6"
+				Grid.ColumnSpan="2"
+				Content="{x:Static root:PluginResources.FeedbackView_Button_SendFeedback}"
+				Command="{Binding SendFeedbackCommand}"
+				Style="{StaticResource Sdl.Button.PrimaryStyle}"
+				IsEnabled="{Binding CanSendFeedback}"
+				Margin="8" />
+
+	</Grid>
+</UserControl>
