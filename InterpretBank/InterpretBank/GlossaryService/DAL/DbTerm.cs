@@ -52,7 +52,7 @@ public class DbTerm : IInterpretBankTable
 
 	[Column(Name = "CommentAll")] public string CommentAll { get; set; }
 
-	[Column(Name = "ID", IsPrimaryKey = true)] public long Id { get; set; }
+	[Column(Name = "ID", IsPrimaryKey = true)] public int Id { get; set; }
 
 	[Column(Name = "Memorization")] public string Memorization { get; set; }
 

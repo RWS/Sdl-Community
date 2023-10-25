@@ -124,6 +124,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             termModel.GlossaryName = glossaryNameFromUser;
             Terms.Add(termModel);
             SelectedIndex = Terms.IndexOf(termModel);
+            OnPropertyChanged(nameof(AnyEditedTerms));
         }
 
         private void CommitAllToDatabase(object obj)

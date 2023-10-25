@@ -14,7 +14,13 @@ namespace InterpretBank
         public static UserInteractionService DialogService { get; } = _dialogService ??= new UserInteractionService();
         public static ExchangeService GlossaryExchangeService { get; } = _glossaryExchangeService ??= new ExchangeService();
 
-        public static GlossarySetup GlossarySetup => new(GlossarySetupViewModel);
+        private static GlossarySetup GlossarySetup => new(GlossarySetupViewModel);
+
+        public static void ShowGlossarySetup()
+        {
+            GlossarySetupViewModel.Setup();
+            GlossarySetup.ShowDialog();
+        }
 
         private static GlossarySetupViewModel GlossarySetupViewModel { get; } = _glossarySetupViewModel ??=
                     new GlossarySetupViewModel(DialogService, GlossaryExchangeService, new InterpretBankDataContext());

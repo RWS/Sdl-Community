@@ -27,5 +27,7 @@ namespace InterpretBank.CommonServices
             var chooseGlossaryWindow = new ChooseGlossaryWindow(glossaries);
             return chooseGlossaryWindow.ShowDialog() ?? false ? chooseGlossaryWindow.SelectedGlossary : null;
         }
+
+        public void WarnUser(string message) => MessageBox.Show(message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
     }
 }

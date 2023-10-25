@@ -61,5 +61,10 @@ namespace InterpretBank.SettingsService.UI
 
             MoveTextToValueHolder(sender);
         }
+
+        private void CancelButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

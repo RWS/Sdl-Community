@@ -13,7 +13,7 @@ namespace InterpretBank.Studio
     [ActionLayout(typeof(InterpretBankRibbonGroup), 10, DisplayType.Large)]
     public class InterpretBankAction : AbstractAction
     {
-        protected override void Execute() => ServiceManager.GlossarySetup.ShowDialog();
+        protected override void Execute() => ServiceManager.ShowGlossarySetup();
     }
 
     [RibbonGroup("InterpretBankRibbonGroup", Name = "InterpretBank")]

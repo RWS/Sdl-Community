@@ -3,9 +3,9 @@
 namespace InterpretBank.SettingsService.Model
 {
 	public class GlossaryModel : ViewModelBase.ViewModel
-	{
-		private ObservableCollection<LanguageModel> _languages;
-		private ObservableCollection<TagModel> _tags;
+    {
+        private ObservableCollection<LanguageModel> _languages = new();
+		private ObservableCollection<TagModel> _tags = new();
 		public string GlossaryName { get; set; }
 		public string SubGlossaryName { get; set; }
 		public int Id { get; set; }
@@ -22,9 +22,6 @@ namespace InterpretBank.SettingsService.Model
 			set => SetField(ref _tags, value);
 		}
 
-		public override string ToString()
-		{
-			return $"{GlossaryName}{SubGlossaryName}";
-		}
-	}
+        public override string ToString() => $"{GlossaryName}{SubGlossaryName}";
+    }
 }
