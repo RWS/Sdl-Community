@@ -5,8 +5,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         xmlns:viewModel="clr-namespace:ChromiumBrowserSupport.ViewModel"
-        x:Class="ChromiumBrowserSupport.View.SettingsView"
-        x:Name="BrowserView"
+        x:Class="ChromiumBrowserSupport.View.BrowserView"
+        x:Name="BrowserWindow"
         WindowStartupLocation="CenterScreen"
         WindowState="Normal"
         WindowStyle="SingleBorderWindow"
@@ -35,7 +35,7 @@
 			<Grid Grid.Row="2">
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Height="24">
 					<Button Margin="0,0,10,0" Width="90" Command="{Binding SaveCommand}" 
-					        CommandParameter="{Binding ElementName=BrowserView}" IsDefault="True">
+					        CommandParameter="{Binding ElementName=BrowserWindow}" IsDefault="True">
 						<StackPanel Orientation="Horizontal">
 							<TextBlock><Run Text="OK"/></TextBlock>
 						</StackPanel>

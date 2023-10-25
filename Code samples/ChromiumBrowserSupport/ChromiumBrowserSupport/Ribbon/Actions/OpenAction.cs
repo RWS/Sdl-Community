@@ -24,7 +24,7 @@ namespace ChromiumBrowserSupport.Ribbon.Actions
 				NeedsClearingCookies = false
 			};
 
-			var view = new SettingsView {DataContext = viewModel};
+			var view = new BrowserView {DataContext = viewModel};
 
 			view.ShowDialog();
 		}

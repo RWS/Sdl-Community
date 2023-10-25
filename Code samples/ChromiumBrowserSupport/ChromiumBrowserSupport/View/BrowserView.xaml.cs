@@ -9,9 +9,9 @@ using Microsoft.Web.WebView2.Wpf;
 
 namespace ChromiumBrowserSupport.View
 {
-	public partial class SettingsView : Window
+	public partial class BrowserView : Window
 	{
-		public SettingsView()
+		public BrowserView()
 		{
 			InitializeComponent();
 		}
