@@ -50,7 +50,6 @@
       <HintPath>$(TradosFolder)\Sdl.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
-      <Private>True</Private>
       <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Controls">
@@ -60,31 +59,24 @@
       <HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Styles.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <Private>True</Private>
       <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
-      <Private>True</Private>
       <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
-      <Private>True</Private>
       <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
-      <Private>True</Private>
       <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
-      <Private>True</Private>
       <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Settings">
-      <Private>True</Private>
       <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TellMe.ProviderApi">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
