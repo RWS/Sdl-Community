@@ -1,5 +1,6 @@
 ﻿using InterpretBank.CommonServices;
 using InterpretBank.GlossaryService;
+using InterpretBank.GlossaryService.Interface;
 using InterpretBank.SettingsService.UI;
 using InterpretBank.SettingsService.ViewModel;
 using ExchangeService = InterpretBank.GlossaryExchangeService.GlossaryExchangeService;
@@ -20,9 +21,12 @@ namespace InterpretBank
         {
             GlossarySetupViewModel.Setup();
             GlossarySetup.ShowDialog();
+            InterpretBankDataContext.Dispose();
         }
 
         private static GlossarySetupViewModel GlossarySetupViewModel { get; } = _glossarySetupViewModel ??=
-                    new GlossarySetupViewModel(DialogService, GlossaryExchangeService, new InterpretBankDataContext());
+                    new GlossarySetupViewModel(DialogService, GlossaryExchangeService, InterpretBankDataContext);
+
+        private static IInterpretBankDataContext InterpretBankDataContext => new InterpretBankDataContext();
     }
 }

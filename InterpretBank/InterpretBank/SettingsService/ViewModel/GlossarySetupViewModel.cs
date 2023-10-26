@@ -189,10 +189,15 @@ public class GlossarySetupViewModel : ViewModelBase.ViewModel
 
     private void DeleteGlossary(object obj)
     {
+        if (!UserInteractionService.Confirm($@"Are you sure you want to delete the glossary ""{SelectedGlossary.GlossaryName}""?")) return;
+        InterpretBankDataContext.RemoveGlossary(SelectedGlossary.GlossaryName);
+        Glossaries.Remove(SelectedGlossary);
     }
 
     private void DeleteTag(object parameter)
     {
+        if (!UserInteractionService.Confirm($@"Are you sure you want to delete the tag ""{SelectedTag.TagName}""?")) return;
+
         if (parameter is not string tagName)
             return;
 
@@ -221,7 +226,7 @@ public class GlossarySetupViewModel : ViewModelBase.ViewModel
 
         if (Tags.Any(t => t.TagName == newTag.TagName))
         {
-            ServiceManager.DialogService.WarnUser("This tag already exists");
+            UserInteractionService.WarnUser("This tag already exists");
             return;
         }
         Tags.Add(newTag);

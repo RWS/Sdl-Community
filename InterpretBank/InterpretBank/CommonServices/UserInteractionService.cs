@@ -9,7 +9,7 @@ namespace InterpretBank.CommonServices
     {
         public bool Confirm(string message)
         {
-            var dialogResult = MessageBox.Show(message, "Warning", MessageBoxButtons.YesNo);
+            var dialogResult = MessageBox.Show(message, "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             return dialogResult == DialogResult.Yes;
         }
 

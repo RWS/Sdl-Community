@@ -113,10 +113,16 @@
                                     <Image Source="../../Resources/Glossary.png"
                                            DockPanel.Dock="Left"
                                            Height="17" />
-                                    <TextBlock Text="{Binding GlossaryName}"
-                                               FontSize="10"
+                                    <TextBlock FontSize="10"
                                                VerticalAlignment="Center"
-                                               DockPanel.Dock="Left" />
+                                               DockPanel.Dock="Left">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding Path="GlossaryName" />
+                                                <Binding Path="SubGlossaryName" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                 </DockPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>

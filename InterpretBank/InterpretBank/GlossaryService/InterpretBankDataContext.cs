@@ -1,4 +1,5 @@
-﻿using InterpretBank.GlossaryService.DAL;
+﻿using InterpretBank.Extensions;
+using InterpretBank.GlossaryService.DAL;
 using InterpretBank.GlossaryService.DAL.Interface;
 using InterpretBank.GlossaryService.Interface;
 using InterpretBank.Model;
@@ -107,7 +108,7 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         foreach (var dbGlossary in dbGlossaries)
         {
             var tagLinks = GetRows<DbTagLink>();
-            var currentGlossaryLinks = tagLinks.Where(tl => tl.Id == dbGlossary.Id)
+            var currentGlossaryLinks = tagLinks.Where(tl => tl.GlossaryId == dbGlossary.Id)
                 .Select(tm => new TagModel { TagName = tm.TagName }).ToList();
 
             var languages = GetLanguageNames(dbGlossary.GlossarySetting);
@@ -133,16 +134,13 @@ public class InterpretBankDataContext : IInterpretBankDataContext
     }
 
     public List<TagLinkModel> GetLinks() => GetRows<DbTagLink>()
-        .Select(t => new TagLinkModel { GlossaryId = t.Id, TagName = t.TagName, TagId = t.TagId }).ToList();
+        .Select(t => new TagLinkModel { GlossaryId = t.GlossaryId, TagName = t.TagName, TagId = t.Id }).ToList();
 
     public IQueryable<T> GetRows<T>() where T : class, IInterpretBankTable => DataContext.GetTable<T>();
 
     public Table<T> GetTable<T>() where T : class, IInterpretBankTable => DataContext.GetTable<T>();
 
     public List<TagModel> GetTags() => GetRows<DbTag>().Select(t => new TagModel { TagName = t.TagName }).ToList();
-
-    private int GetMaxId<T>() where T : class, IInterpretBankTable =>
-        (DataContext.GetChangeSet().Inserts.OfType<T>().Union(GetTable<T>())).Select(r => r.Id).Max();
 
     public void InsertGlossary(GlossaryModel newGlossary)
     {
@@ -165,20 +163,41 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 
     public void InsertTag(TagModel newTag)
     {
-        var table = GetTable<DbTag>();
+        var maxId = GetMaxId<DbTag>() + 1;
+        GetTable<DbTag>().InsertOnSubmit(new DbTag { TagName = newTag.TagName, Id = maxId });
+    }
 
-        var maxId = GetMaxId<DbTag>();
-        table.InsertOnSubmit(new DbTag { TagName = newTag.TagName, Id = ++maxId });
+    public void RemoveGlossary(string selectedGlossaryGlossaryName)
+    {
+        var dbGlossaries = GetTable<DbGlossary>();
+        var dbGlossariesWithPendingInserts = GetTableWithPendingInserts(dbGlossaries);
+
+        var glossary = dbGlossariesWithPendingInserts.FirstOrDefault(g => g.Tag1 == selectedGlossaryGlossaryName);
+        if (glossary is null) return;
+        dbGlossaries.DeleteOnSubmit(glossary);
+
+        var dbTerms = GetTable<DbTerm>();
+        var dbTermsWithPendingInserts = GetTableWithPendingInserts(dbTerms);
+
+        var glossaryTerms = dbTermsWithPendingInserts.Where(t => t.Tag1 == selectedGlossaryGlossaryName);
+        if (glossaryTerms.Any()) dbTerms.DeleteAllOnSubmit(glossaryTerms);
+
+        var dbTagLinks = GetTable<DbTagLink>();
+        var dbTagLinksWithPendingInserts = GetTableWithPendingInserts(dbTagLinks);
+
+        var glossaryTags = dbTagLinksWithPendingInserts.Where(tl => tl.GlossaryId == glossary.Id);
+        dbTagLinks.DeleteAllOnSubmit(glossaryTags);
     }
 
     public void RemoveTag(string tagName)
     {
         var tags = GetTable<DbTag>();
+        var tagsWithPendingInserts = GetTableWithPendingInserts(tags);
+
         var tagLinks = GetTable<DbTagLink>();
+        var tagLinksWithPendingInserts = GetTableWithPendingInserts(tagLinks);
 
-
-        var tagMarkedForRemoval = tags.ToList().FirstOrDefault(t => t.TagName == tagName);
-
+        var tagMarkedForRemoval = tagsWithPendingInserts.FirstOrDefault(t => t.TagName == tagName);
         if (tagMarkedForRemoval is null)
         {
             var pendingInserts = DataContext.GetChangeSet().Inserts;
@@ -186,7 +205,7 @@ public class InterpretBankDataContext : IInterpretBankDataContext
                 .FirstOrDefault(t => t.TagName == tagName);
         }
 
-        var tagLinkMarkedForRemoval = tagLinks.ToList().Where(t => t.TagName == tagName);
+        var tagLinkMarkedForRemoval = tagLinksWithPendingInserts.Where(t => t.TagName == tagName);
 
         if (tagMarkedForRemoval is not null)
             tags.DeleteOnSubmit(tagMarkedForRemoval);
@@ -196,19 +215,22 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 
     public void RemoveTagFromGlossary(string tagName, string glossaryName)
     {
-        var glossaryId = GetTable<DbGlossary>().ToList().FirstOrDefault(g => g.Tag1 == glossaryName)?.Id;
+        var dbGlossaries = GetTable<DbGlossary>();
+        var glossaryId = GetTableWithPendingInserts(dbGlossaries)
+            .FirstOrDefault(g => g.Tag1 == glossaryName)?.Id;
+
         var tagLinks = GetTable<DbTagLink>();
+        var tagLinksWithPendingInserts = GetTableWithPendingInserts(tagLinks);
 
         var tagForRemoval =
-            tagLinks.ToList().FirstOrDefault(tl => tl.TagName == tagName && tl.Id == glossaryId);
+            tagLinksWithPendingInserts.FirstOrDefault(tl => tl.TagName == tagName && tl.GlossaryId == glossaryId);
 
-        if (tagForRemoval is not null)
-            tagLinks.DeleteOnSubmit(tagForRemoval);
+        if (tagForRemoval is not null) tagLinks.DeleteOnSubmit(tagForRemoval);
     }
 
-    public void Setup(string filepath)
+    public void Setup(string filepath = null)
     {
-        SqLiteConnection = new SQLiteConnection($"Data Source={filepath}");
+        if (!string.IsNullOrWhiteSpace(filepath)) SqLiteConnection = new SQLiteConnection($"Data Source={filepath}");
         DataContext = new DataContext(SqLiteConnection);
     }
 
@@ -216,21 +238,23 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 
     public void TagGlossary(TagModel newTag, string glossaryName)
     {
-        var glossaryId = GetTable<DbGlossary>().ToList().FirstOrDefault(g => g.Tag1 == glossaryName)?.Id;
-        var tagId = GetTable<DbTag>().ToList().FirstOrDefault(t => t.TagName == newTag.TagName)?.Id;
+        var dbGlossaries = GetTable<DbGlossary>();
+        var glossaryId = GetTableWithPendingInserts(dbGlossaries)
+            .FirstOrDefault(g => g.Tag1 == glossaryName)?.Id;
 
-        var dbTagLinks = GetTable<DbTagLink>();
-        var tagLinks = DataContext.GetChangeSet().Inserts.OfType<DbTagLink>().Union(dbTagLinks);
+        var dbTags = GetTable<DbTag>();
+        var tagId = GetTableWithPendingInserts(dbTags).FirstOrDefault(t => t.TagName == newTag.TagName)?.Id;
 
         if (tagId is null || glossaryId is null)
             return;
 
-        var maxId = GetMaxId<DbTagLink>();
-        dbTagLinks.InsertOnSubmit(new DbTagLink
+        var maxId = GetMaxId<DbTagLink>() + 1;
+
+        GetTable<DbTagLink>().InsertOnSubmit(new DbTagLink
         {
-            Id = glossaryId.Value,
+            GlossaryId = glossaryId.Value,
             TagName = newTag.TagName,
-            TagId = ++maxId
+            Id = maxId
         });
     }
 
@@ -320,6 +344,12 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 
         return langIndices.Select(li => languageModels.FirstOrDefault(l => l.Index == li)).ToList();
     }
+
+    private int GetMaxId<T>() where T : class, IInterpretBankTable =>
+                                                (DataContext.GetChangeSet().Inserts.OfType<T>().Union(GetTable<T>())).Select(r => r.Id).Max();
+
+    private IEnumerable<T> GetTableWithPendingInserts<T>(Table<T> table) where T : class, IInterpretBankTable =>
+                                                        DataContext.GetTablePendingInserts<T>().Union(table);
 
     private void RemoveTerms(List<TermModel> removedTerms)
     {
