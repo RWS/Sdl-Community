@@ -1,6 +1,9 @@
 ﻿using System.Windows;
 using Sdl.Community.IATETerminologyProvider.Helpers;
+using Sdl.Community.IATETerminologyProvider.Interface;
+using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.Community.IATETerminologyProvider.View;
+using Sdl.Community.IATETerminologyProvider.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -60,10 +63,9 @@ namespace Sdl.Community.IATETerminologyProvider
 		}
 
 		private static void ShowBrowserResults(string url)
-		{
+		{	
 			var searchResultsController = GetSearchResultsController();
-			var browser = searchResultsController.Browser;
-			browser.LoadUrl(url);			
+			searchResultsController.Browser.Source = new System.Uri(url);
 			searchResultsController.Show();
 		}
 
