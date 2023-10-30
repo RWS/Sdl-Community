@@ -5,6 +5,7 @@ using InterpretBank.Model;
 using InterpretBank.TerminologyService.Interface;
 using Sdl.Core.Globalization;
 using Sdl.Terminology.TerminologyProvider.Core;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -27,6 +28,8 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             DialogService = dialogService;
         }
 
+        public event Action<bool> AnyEditedTermsChanged;
+
         public ICommand AddNewTermCommand => new RelayCommand(AddNewTerm);
         public bool AnyEditedTerms => Terms.Any(t => t.Edited);
         public ICommand CommitAllToDatabaseCommand => new RelayCommand(CommitAllToDatabase);
@@ -41,7 +44,6 @@ namespace InterpretBank.TermbaseViewer.ViewModel
                     return;
                 _selectedIndex = value;
 
-                //SelectedItem = Terms[value == -1 ? 0 : value];
                 if (Terms.Any()) SelectedItem = value == -1 ? null : Terms[value];
 
                 OnPropertyChanged();
@@ -59,7 +61,6 @@ namespace InterpretBank.TermbaseViewer.ViewModel
         public string TargetLanguage { get; set; }
         public Image TargetLanguageFlag { get; set; }
         public ITerminologyService TerminologyService { get; }
-        private IUserInteractionService DialogService { get; }
 
         public ObservableCollection<TermModel> Terms
         {
@@ -67,10 +68,11 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             set
             {
                 if (SetField(ref _terms, value))
-                    OnPropertyChanged(nameof(AnyEditedTerms));
+                    RaiseAnyEditedPropertyChanged();
             }
         }
 
+        private IUserInteractionService DialogService { get; }
         private List<string> Glossaries { get; set; }
 
         public void EditTerm(IEntry term)
@@ -124,7 +126,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             termModel.GlossaryName = glossaryNameFromUser;
             Terms.Add(termModel);
             SelectedIndex = Terms.IndexOf(termModel);
-            OnPropertyChanged(nameof(AnyEditedTerms));
+            RaiseAnyEditedPropertyChanged();
         }
 
         private void CommitAllToDatabase(object obj)
@@ -143,7 +145,13 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             Terms = new ObservableCollection<TermModel>(TerminologyService.GetAllTerms(source, target,
                 glossaries));
 
-        private void OnTermModelOnPropertyChanged(object o, PropertyChangedEventArgs propertyChangedEventArgs) => OnPropertyChanged(nameof(AnyEditedTerms));
+        private void OnTermModelOnPropertyChanged(object o, PropertyChangedEventArgs propertyChangedEventArgs) => RaiseAnyEditedPropertyChanged();
+
+        private void RaiseAnyEditedPropertyChanged()
+        {
+            OnPropertyChanged(nameof(AnyEditedTerms));
+            AnyEditedTermsChanged?.Invoke(AnyEditedTerms);
+        }
 
         private void ReloadTerms()
         {
@@ -165,7 +173,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             else
                 SelectedItem.Revert();
 
-            OnPropertyChanged(nameof(AnyEditedTerms));
+            RaiseAnyEditedPropertyChanged();
         }
     }
 }

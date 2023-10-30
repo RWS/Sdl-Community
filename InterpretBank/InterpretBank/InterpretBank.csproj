@@ -23,6 +23,8 @@
     <Page Remove="TermbaseViewer\Converters\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Resources\AddTerm.ico" />
+    <None Remove="Resources\AddTerm2.ico" />
     <None Remove="Resources\Flag.png" />
     <None Remove="Resources\Glossary.png" />
     <None Remove="Resources\logo.ico" />
@@ -129,6 +131,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\AddTerm.ico" />
     <Resource Include="Resources\Flag.png" />
     <Resource Include="Resources\Glossary.png" />
     <Resource Include="Resources\logo.ico" />
