@@ -22,7 +22,7 @@ namespace InterpretBank.Model
 
         public TermModel() => Id = -1;
 
-        public TermModel(long id, string targetTerm, string targetTermComment1, string targetTermComment2, string sourceTerm, string sourceTermComment1, string sourceTermComment2, string commentAll, int sourceLanguageIndex, int targetLanguageIndex, string glossaryName)
+        public TermModel(int id, string targetTerm, string targetTermComment1, string targetTermComment2, string sourceTerm, string sourceTermComment1, string sourceTermComment2, string commentAll, int sourceLanguageIndex, int targetLanguageIndex, string glossaryName)
         {
             Id = id;
 
@@ -56,7 +56,7 @@ namespace InterpretBank.Model
 
         public string GlossaryName { get; set; }
 
-        public long Id { get; set; }
+        public int Id { get; set; }
 
         public bool IsEditing
         {
