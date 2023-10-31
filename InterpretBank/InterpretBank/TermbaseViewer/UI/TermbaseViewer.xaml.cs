@@ -18,7 +18,9 @@ namespace InterpretBank.TermbaseViewer.UI
 
 		public void SetEditing(bool editing)
 		{
-			((TermModel)Term_ListBox.SelectedItem).IsEditing = editing;
+            var selectedItem = ((TermModel)Term_ListBox.SelectedItem);
+            if (selectedItem == null) return;
+            selectedItem.IsEditing = editing;
 
 			//Focusing cannot be done very easily through XAML without it looking like an ugly workaround
 			if (editing)

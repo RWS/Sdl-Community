@@ -11,7 +11,9 @@ namespace InterpretBank.TerminologyService.Interface
 	{
 		IInterpretBankDataContext InterpretBankDataContext { get; }
 
-		List<StudioTermEntry> GetExactTerms(string word, string name1, string name2, List<string> glossaries);
+        event Action ShouldReload;
+
+        List<StudioTermEntry> GetExactTerms(string word, string name1, string name2, List<string> glossaries);
 
 		List<StudioTermEntry> GetFuzzyTerms(string word, string sourceLanguage, string targetLanguage, List<string> glossaries);
 

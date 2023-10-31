@@ -18,7 +18,8 @@ public class TagModel : IItemGroupAware
 	}
 
 	public override bool Equals(object obj)
-	{
-		return ((TagModel)obj)?.TagName == TagName;
+    {
+        if (obj is not TagModel model) return false;
+		return model.TagName == TagName;
 	}
 }

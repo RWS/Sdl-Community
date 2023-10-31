@@ -9,8 +9,9 @@ namespace InterpretBank.SettingsService.Model
 		public string Name { get; set; }
 
 		public override bool Equals(object obj)
-		{
-			return ((LanguageModel)obj).Name == Name;
+        {
+            if (obj is not LanguageModel model) return false;
+			return model.Name == Name;
 		}
 
 		public override int GetHashCode()

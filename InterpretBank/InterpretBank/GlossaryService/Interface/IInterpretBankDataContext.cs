@@ -10,6 +10,8 @@ namespace InterpretBank.GlossaryService.Interface;
 
 public interface IInterpretBankDataContext : IDisposable
 {
+    event Action ShouldReloadEvent;
+
     void AddCompatibleLanguageEquivalentsFromImport(GlossaryImport glossaryImport, string glossaryName);
 
     void AddLanguageToGlossary(LanguageModel newLanguage, string selectedGlossaryGlossaryName);
@@ -44,7 +46,7 @@ public interface IInterpretBankDataContext : IDisposable
 
     void Setup(string filepath);
 
-    void SubmitData();
+    void SubmitData(bool notify = false);
 
     void TagGlossary(TagModel newTag, string glossaryName);
 }

@@ -5,33 +5,16 @@ using System;
 
 namespace InterpretBank.Studio.Actions
 {
-    [Action(nameof(CommitChangeToDb), Icon = "CommitChanges", Name = "Commit changes",
+    [Action(nameof(CommitChangeToDb), Icon = "CommitToDb", Name = "Commit changes",
         Description = "Commit changes to InterpretBank db", ContextByType = typeof(EditorController))]
     [ActionLayout(typeof(InterpretBankRibbonGroup), 10, DisplayType.Large)]
     public class CommitChangeToDb : AbstractAction
     {
+        protected override void Execute() => ActionManager.CurrentlyUsedTermbaseViewerControl.CommitToDatabase();
+
         public CommitChangeToDb()
         {
-            Enabled = false;
-            ServiceManager.TermbaseActiveEvent += ServiceManager_TermbaseActiveEvent;
+            ActionManager.CommitChangesActive += enabled => Enabled = enabled;
         }
-
-        private void ServiceManager_TermbaseActiveEvent(bool termbaseActive)
-        {
-            if (termbaseActive)
-            {
-                Enabled = ServiceManager.PreviouslyUsedTermbaseViewerControl.AnyEditedTerms;
-                ServiceManager.PreviouslyUsedTermbaseViewerControl.AnyEditedTermsChanged += PreviouslyUsedTermbaseViewerControl_AnyEditedTermsChanged;
-            }
-            else
-            {
-                Enabled = false;
-            }
-        }
-
-        private void PreviouslyUsedTermbaseViewerControl_AnyEditedTermsChanged(bool anyEditedTerms) =>
-            Enabled = anyEditedTerms;
-
-        protected override void Execute() => ServiceManager.PreviouslyUsedTermbaseViewerControl.CommitToDatabase();
     }
 }

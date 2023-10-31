@@ -26,6 +26,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
         {
             TerminologyService = termSearchService;
             DialogService = dialogService;
+            //TerminologyService.ShouldReload += () => LoadTerms();
         }
 
         public event Action<bool> AnyEditedTermsChanged;
@@ -86,6 +87,8 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             var term = Terms.FirstOrDefault(t => t.Id == entry.Id);
             SelectedIndex = Terms.IndexOf(term);
         }
+
+        //public void LoadTerms()
 
         public void LoadTerms(Language source, Language target, List<string> glossaries)
         {

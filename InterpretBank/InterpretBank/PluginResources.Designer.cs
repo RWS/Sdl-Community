@@ -71,6 +71,16 @@ namespace InterpretBank {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon CommitToDb {
+            get {
+                object obj = ResourceManager.GetObject("CommitToDb", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The file type {0} is not supported.
         /// </summary>
         public static string GlossaryExchangeServiceManager_CreateFileReader_The_file_type__0__is_not_supported {

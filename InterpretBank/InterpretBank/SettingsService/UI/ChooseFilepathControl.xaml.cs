@@ -1,4 +1,5 @@
-﻿using InterpretBank.Interface;
+﻿using InterpretBank.CommonServices;
+using InterpretBank.Interface;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -61,7 +62,7 @@ namespace InterpretBank.SettingsService.UI
         }
 
         public int SelectedIndex { get; set; }
-        private IUserInteractionService UserInteractionService => ServiceManager.DialogService;
+        private UserInteractionService UserInteractionService => UserInteractionService.Instance;
 
         private void AddToDatabaseList(string filepath)
         {

@@ -4,6 +4,7 @@ using InterpretBank.GlossaryService.DAL.Interface;
 using InterpretBank.GlossaryService.Interface;
 using InterpretBank.Model;
 using InterpretBank.SettingsService.Model;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Linq;
@@ -14,6 +15,8 @@ namespace InterpretBank.GlossaryService;
 
 public class InterpretBankDataContext : IInterpretBankDataContext
 {
+    public event Action ShouldReloadEvent;
+
     public SQLiteConnection SqLiteConnection { get; set; }
     private DataContext DataContext { get; set; }
 
@@ -234,7 +237,11 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         DataContext = new DataContext(SqLiteConnection);
     }
 
-    public void SubmitData() => DataContext.SubmitChanges();
+    public void SubmitData(bool notify = false)
+    {
+        DataContext.SubmitChanges();
+        ShouldReloadEvent?.Invoke();
+    }
 
     public void TagGlossary(TagModel newTag, string glossaryName)
     {

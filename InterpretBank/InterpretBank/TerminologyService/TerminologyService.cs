@@ -17,7 +17,10 @@ public class TerminologyService : ITerminologyService
     public TerminologyService(IInterpretBankDataContext interpretBankDataContext)
     {
         InterpretBankDataContext = interpretBankDataContext;
+        InterpretBankDataContext.ShouldReloadEvent += () => ShouldReload?.Invoke();
     }
+
+    public event Action ShouldReload;
 
     public IInterpretBankDataContext InterpretBankDataContext { get; }
 

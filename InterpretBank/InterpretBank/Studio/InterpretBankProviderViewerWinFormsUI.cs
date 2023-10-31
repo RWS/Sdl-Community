@@ -1,4 +1,7 @@
-﻿using InterpretBank.TermbaseViewer.UI;
+﻿using InterpretBank.CommonServices;
+using InterpretBank.Studio.Actions;
+using InterpretBank.TermbaseViewer.UI;
+using InterpretBank.TermbaseViewer.ViewModel;
 using Sdl.Core.Globalization;
 using Sdl.Terminology.TerminologyProvider.Core;
 using System;
@@ -17,9 +20,23 @@ namespace InterpretBank.Studio
 
         public event EventHandler TermChanged;
 
-        public Control Control =>
-            _termbaseControl ??=
-                ServiceManager.GetTermbaseControl(InterpretBankProvider, SourceLanguage, TargetLanguage);
+        public Control Control
+        {
+            get
+            {
+                ActionManager.CurrentlyUsedTermbaseViewerControl = _termbaseControl;
+                if (_termbaseControl is not null) return _termbaseControl;
+
+                var termbaseViewerViewModel = new TermbaseViewerViewModel(InterpretBankProvider.TermSearchService, UserInteractionService.Instance);
+                termbaseViewerViewModel.LoadTerms(SourceLanguage, TargetLanguage, InterpretBankProvider.Settings.Glossaries);
+
+                var termbaseViewer = new TermbaseViewer.UI.TermbaseViewer { DataContext = termbaseViewerViewModel };
+
+                _termbaseControl = new TermbaseViewerControl(termbaseViewer);
+                ActionManager.CurrentlyUsedTermbaseViewerControl = _termbaseControl;
+                return _termbaseControl;
+            }
+        }
 
         public bool Initialized => true;
         public IEntry SelectedTerm { get; set; }
