@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Extensions;
@@ -242,22 +243,31 @@ namespace LanguageWeaverProvider.ViewModel
 
 		private async void SendFeedback(object parameter)
 		{
+			if (parameter is not string parameterString)
+			{
+				return;
+			}
+
 			_activeSegment = _editController?.ActiveDocument?.ActiveSegmentPair;
+			if (parameterString.Equals(Constants.CloudService))
+			{
+				await SendCloudFeedback();
+			}
+			else if (parameterString.Equals(Constants.EdgeService))
+			{
+				await SendEdgeFeedback();
+			}
+		}
+
+		private async Task SendCloudFeedback()
+		{
 			if (!IsLanguageWeaverSource(_activeSegment?.Properties)
 			 || !IsQEEnabled(_activeSegment?.Properties))
 			{
 				return;
 			}
 
-			var providerState = _projectController
-				.GetTranslationProviderConfiguration()
-				.Entries
-				.FirstOrDefault(x => x.MainTranslationProvider.Uri.AbsoluteUri.Equals(Constants.TranslationFullScheme))
-				.MainTranslationProvider
-				.State;
-
-			var translationOptions = JsonConvert.DeserializeObject<TranslationOptions>(providerState);
-			var mappedPair = translationOptions.PairMappings.FirstOrDefault(x => x.LanguagePair.TargetCultureName.Equals(_editController.ActiveDocument.ActiveFile.Language.CultureInfo.Name));
+			var mappedPair = SelectedProvider.PairMappings.FirstOrDefault(x => x.LanguagePair.TargetCultureName.Equals(_editController.ActiveDocument.ActiveFile.Language.CultureInfo.Name));
 
 			var translation = new Translation()
 			{
@@ -289,8 +299,31 @@ namespace LanguageWeaverProvider.ViewModel
 				QualityEstimation = SelectedQE.ToString()
 			};
 
-			CredentialManager.ValidateToken(translationOptions);
-			await CloudService.CreateFeedback(translationOptions.AccessToken, feedbackRequest);
+			CredentialManager.ValidateToken(SelectedProvider);
+			await CloudService.CreateFeedback(SelectedProvider.AccessToken, feedbackRequest);
+		}
+
+		private async Task SendEdgeFeedback()
+		{
+			if (!IsLanguageWeaverSource(_activeSegment?.Properties))
+			{
+				return;
+			}
+
+			var mappedPair = SelectedProvider.PairMappings.FirstOrDefault(x => x.LanguagePair.TargetCultureName.Equals(_editController.ActiveDocument.ActiveFile.Language.CultureInfo.Name));
+			var collection = new List<KeyValuePair<string, string>>
+			{
+				new("sourceText", _activeSegment.Source.ToString()),
+				new("languagePairId", _activeSegment.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_ShortModelName)),
+				new("machineTranslation", _activeSegment.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_Translation))
+			};
+
+			if (IsAdapted(_activeSegment.Properties))
+			{
+				collection.Add(new("suggestedTranslation", _activeSegment.Target.ToString()));
+			}
+
+			await EdgeService.SendFeedback(SelectedProvider.AccessToken, collection);
 		}
 
 		private bool IsLanguageWeaverSource(ISegmentPairProperties segmentProperties)

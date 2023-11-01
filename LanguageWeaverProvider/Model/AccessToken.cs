@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace LanguageWeaverProvider.Model
 {
@@ -14,5 +15,7 @@ namespace LanguageWeaverProvider.Model
 		public long ExpiresAt { get; set; }
 
 		public string AccountId { get; set; }
+
+		public Uri EdgeUri { get; set; }
 	}
 }

@@ -41,7 +41,7 @@ namespace LanguageWeaverProvider.Services
 				var httpResponse = httpClient.PostAsync(builder.Uri, null).Result;
 				httpResponse.EnsureSuccessStatusCode();
 				var responseContent = httpResponse.Content.ReadAsStringAsync().Result;
-				translationOptions.AccessToken = new() { Token = responseContent, TokenType = "Bearer" };
+				translationOptions.AccessToken = new() { Token = responseContent, TokenType = "Bearer", EdgeUri = edgeCredentials.Uri };
 				return (true, null);
 			}
 			catch (Exception ex)
@@ -67,7 +67,7 @@ namespace LanguageWeaverProvider.Services
 
 				var response = await httpClient.GetAsync(uriBuilder.Uri);
 				response.EnsureSuccessStatusCode();
-				translationOptions.AccessToken = new() { Token = encodedApiKey, TokenType = "Basic" };
+				translationOptions.AccessToken = new() { Token = encodedApiKey, TokenType = "Basic", EdgeUri = edgeCredentials.Uri };
 				return (true, null);
 			}
 			catch (Exception ex)
@@ -112,7 +112,7 @@ namespace LanguageWeaverProvider.Services
 					token = await response.Content.ReadAsStringAsync();
 				}
 
-				translationOptions.AccessToken = new() { Token = token, TokenType = "Bearer" };
+				translationOptions.AccessToken = new() { Token = token, TokenType = "Bearer", EdgeUri = edgeCredentials.Uri };
 				return (true, null);
 			}
 			catch (Exception ex)
@@ -146,6 +146,7 @@ namespace LanguageWeaverProvider.Services
 					SourceLanguageId = lp.SourceLanguageId,
 					TargetLanguageId = lp.TargetLanguageId,
 					LinguisticOptions = lp.LinguisticOptions,
+					Name = lp.LanguagePairId,
 					Model = lp.LanguagePairId
 				}).ToList();
 
@@ -261,13 +262,12 @@ namespace LanguageWeaverProvider.Services
 
 		private static async Task<string> SendTranslationRequest(ITranslationOptions translationOptions, PairMapping pairMapping, Xliff sourceXliff)
 		{
-			var edgeCredentials = translationOptions.EdgeCredentials;
 			var accessToken = translationOptions.AccessToken;
 
 			var query = BuildQuery(pairMapping, sourceXliff);
 
 			var client = new HttpClient();
-			var request = new HttpRequestMessage(HttpMethod.Post, $"{edgeCredentials.Uri}api/v2/translations");
+			var request = new HttpRequestMessage(HttpMethod.Post, $"{accessToken.EdgeUri}api/v2/translations");
 			request.Headers.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
 			request.Content = new FormUrlEncodedContent(query);
 			var response = await client.SendAsync(request);
@@ -306,6 +306,17 @@ namespace LanguageWeaverProvider.Services
 			}
 
 			return queryString;
+		}
+
+		public static async Task SendFeedback(AccessToken accessToken, List<KeyValuePair<string, string>> collection)
+		{
+			var client = new HttpClient();
+			var request = new HttpRequestMessage(HttpMethod.Post, $"{accessToken.EdgeUri}api/v2/feedback");
+			request.Headers.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
+			var content = new FormUrlEncodedContent(collection);
+			request.Content = content;
+			var response = await client.SendAsync(request);
+			response.EnsureSuccessStatusCode();
 		}
 
 		private static string Base64Encode(this string text)

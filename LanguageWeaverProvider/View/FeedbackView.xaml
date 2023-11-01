@@ -251,6 +251,7 @@
 					Grid.ColumnSpan="2"
 					Content="{x:Static root:PluginResources.FeedbackView_Button_SendFeedback}"
 					Command="{Binding SendFeedbackCommand}"
+					CommandParameter="{x:Static root:Constants.CloudService}"
 					Style="{StaticResource Sdl.Button.PrimaryStyle}"
 					IsEnabled="{Binding CanSendFeedback}"
 					Margin="8" />
@@ -298,6 +299,7 @@
 			<Button Grid.Row="1"
 					Content="{x:Static root:PluginResources.FeedbackView_Button_SendFeedback}"
 					Command="{Binding SendFeedbackCommand}"
+					CommandParameter="{x:Static root:Constants.EdgeService}"
 					Style="{StaticResource Sdl.Button.PrimaryStyle}"
 					Margin="8" />
 		</Grid>

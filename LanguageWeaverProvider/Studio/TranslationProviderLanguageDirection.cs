@@ -108,7 +108,7 @@ namespace LanguageWeaverProvider
 			var searchResult = CreateSearchResult(segment, translatedSegment.Segment);
 			if (translatedSegment.Estimation != QualityEstimations.None)
 			{
-				SetQualityEstimationOnSegment(translatedSegment, mappedPair);
+				SetMetadata(translatedSegment, mappedPair);
 			}
 
 			return searchResult;
@@ -194,9 +194,10 @@ namespace LanguageWeaverProvider
 				};
 				
 				searchResults[i].Add(CreateSearchResult(currentSegment, translatedSegment.Segment));
-				if (translatedSegment.Estimation != QualityEstimations.None)
+				if (translatedSegment.Estimation != QualityEstimations.None
+				 || _translationOptions.Version == PluginVersion.LanguageWeaverEdge)
 				{
-					SetQualityEstimationOnSegment(translatedSegment, mappedPair);
+					SetMetadata(translatedSegment, mappedPair);
 				}
 			}
 
@@ -204,7 +205,7 @@ namespace LanguageWeaverProvider
 			return searchResults;
 		}
 
-		private void SetQualityEstimationOnSegment(EvaluatedSegment evaluatedSegment, PairMapping pairMapping)
+		private void SetMetadata(EvaluatedSegment evaluatedSegment, PairMapping pairMapping)
 		{
 			if (_batchTaskWindow is not null)
 			{
@@ -224,9 +225,13 @@ namespace LanguageWeaverProvider
 				return;
 			}
 
-			activeSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_QE, evaluatedSegment.QualityEstimation);
+			if (_translationOptions.Version == PluginVersion.LanguageWeaverCloud)
+			{
+				activeSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_QE, evaluatedSegment.QualityEstimation);
+				activeSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_LongModelName, pairMapping.SelectedModel.Name);
+			}
+
 			activeSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_ShortModelName, pairMapping.SelectedModel.Model);
-			activeSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_LongModelName, pairMapping.SelectedModel.Name);
 			activeSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_Translation, evaluatedSegment.Segment.ToString());
 			editorController.ActiveDocument.UpdateSegmentPairProperties(activeSegmentPair, activeSegmentPair.Properties);
 		}
