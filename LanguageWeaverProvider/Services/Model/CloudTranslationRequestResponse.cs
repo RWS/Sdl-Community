@@ -1,6 +1,6 @@
 ﻿namespace LanguageWeaverProvider.Services.Model
 {
-	public class TranslationRequestResponse
+	public class CloudTranslationRequestResponse
 	{
 		public string Model { get; set; }
 		

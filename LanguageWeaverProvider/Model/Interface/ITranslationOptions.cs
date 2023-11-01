@@ -15,8 +15,18 @@ namespace LanguageWeaverProvider.Model.Interface
 
 		CloudCredentials CloudCredentials { get; set; }
 
+		EdgeCredentials EdgeCredentials { get; set; }
+
 		List<PairMapping> PairMappings { get; set; }
 
 		AccessToken AccessToken { get; set; }
+
+		void UpdateUri();
+
+		void UpdateUri(Uri uri);
+
+		void UpdateUri(string uriString);
+
+		void UpdateUri(PluginVersion pluginVersion);
 	}
 }

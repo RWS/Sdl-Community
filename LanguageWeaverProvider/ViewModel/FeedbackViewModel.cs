@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Extensions;
+using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Services;
 using LanguageWeaverProvider.Studio.FeedbackController.Model;
@@ -20,8 +22,10 @@ namespace LanguageWeaverProvider.ViewModel
 		readonly EditorController _editController;
 		readonly FileBasedProject _projectController;
 
-		ISegmentPair _activeSegment;
+		ObservableCollection<ITranslationOptions> _providers;
+		ITranslationOptions _selectedProvider;
 
+		ISegmentPair _activeSegment;
 		QualityEstimations _originalQE;
 		QualityEstimations _selectedQE;
 		string _feedbackMessage;
@@ -37,6 +41,32 @@ namespace LanguageWeaverProvider.ViewModel
 
 			InitializeControl();
 			InitializeCommands();
+		}
+
+		public bool IsCloudServiceSelected => SelectedProvider?.Version == PluginVersion.LanguageWeaverCloud;
+
+		public bool MultipleProvidersActive => Providers?.Count > 1;
+
+		public ObservableCollection<ITranslationOptions> Providers
+		{
+			get => _providers;
+			set
+			{
+				_providers = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(MultipleProvidersActive));
+			}
+		}
+
+		public ITranslationOptions SelectedProvider
+		{
+			get => _selectedProvider;
+			set
+			{
+				_selectedProvider = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(IsCloudServiceSelected));
+			}
 		}
 
 		public IEnumerable<QualityEstimations> QualityEstimations => Enum.GetValues(typeof(QualityEstimations)).Cast<QualityEstimations>().Skip(1);
@@ -116,6 +146,7 @@ namespace LanguageWeaverProvider.ViewModel
 
 		private void InitializeControl()
 		{
+			SetTranslationOptions();
 			if (_editController.ActiveDocument is null)
 			{
 				return;
@@ -127,6 +158,15 @@ namespace LanguageWeaverProvider.ViewModel
 			GetSegmentMetadata(_activeSegment);
 		}
 
+		private void SetTranslationOptions()
+		{
+			Providers = new(_projectController.GetTranslationProviderConfiguration()
+											  .Entries
+											  .Where(entry => entry.MainTranslationProvider.Uri.AbsoluteUri.StartsWith(Constants.TranslationScheme))
+											  .Select(entry => JsonConvert.DeserializeObject<TranslationOptions>(entry.MainTranslationProvider.State)));
+			SelectedProvider = Providers.First();
+		}
+
 		private void ActiveSegmentChanged(object sender, EventArgs e)
 		{
 			if ((sender as Document).ActiveSegmentPair is not ISegmentPair segmentPair)
@@ -134,6 +174,7 @@ namespace LanguageWeaverProvider.ViewModel
 				return;
 			}
 
+			SetTranslationOptions();
 			_activeSegment = segmentPair;
 			GetSegmentMetadata(_activeSegment);
 		}

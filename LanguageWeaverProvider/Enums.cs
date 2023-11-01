@@ -12,8 +12,10 @@
 		None,
 		CloudCredentials,
 		CloudSecret,
+		CloudSSO,
 		EdgeCredentials,
-		EdgeApiKey
+		EdgeApiKey,
+		EdgeSSO
 	}
 
 	public enum Direction

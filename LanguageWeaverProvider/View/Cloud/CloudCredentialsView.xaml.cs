@@ -23,5 +23,16 @@ namespace LanguageWeaverProvider.View.Cloud
 		{
 			(DataContext as CloudCredentialsViewModel).ClientSecret = (sender as PasswordBox).Password;
 		}
-	}
+
+		private void ViewLoaded(object sender, RoutedEventArgs e)
+		{
+			if (DataContext is not CloudCredentialsViewModel dataContext || dataContext.TranslationOptions is null)
+			{
+				return;
+			}
+
+			userPwBox.Password = dataContext.UserPassword;
+			clientSecretBox.Password = dataContext.ClientSecret;
+		}
+    }
 }

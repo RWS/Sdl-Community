@@ -19,6 +19,8 @@ namespace LanguageWeaverProvider.Services
 	{
 		public static async Task<(bool Success, Exception Error)> AuthenticateUser(CloudCredentials cloudCredentials, ITranslationOptions translationOptions, AuthenticationType authenticationType)
 		{
+			try
+			{
 			var endpoint = authenticationType switch
 			{
 				AuthenticationType.CloudCredentials => "https://api.languageweaver.com/v4/token/user",
@@ -28,8 +30,6 @@ namespace LanguageWeaverProvider.Services
 			var content = GetAuthenticationContent(cloudCredentials, authenticationType);
 			var stringContent = new StringContent(content, null, "application/json");
 
-			try
-			{
 				var response = await new HttpClient().PostAsync(endpoint, stringContent);
 				response.EnsureSuccessStatusCode();
 
@@ -105,8 +105,7 @@ namespace LanguageWeaverProvider.Services
 		{
 			try
 			{
-
-				var uri = new Uri($"https://api.languageweaver.com/v4/accounts/{accessToken.AccountId}/dictionaries");
+				var uri = new Uri($"https://api.languageweaver.com/v4/accounts/{accessToken.AccountId}/dictionaries?source=eng&target=ger");
 
 				var request = new HttpRequestMessage(HttpMethod.Get, uri);
 				request.Headers.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
@@ -131,10 +130,10 @@ namespace LanguageWeaverProvider.Services
 			try
 			{
 				var translationRequestResponse = await SendTranslationRequest(accessToken, mappedPair, sourceXliff);
-				var translationRequest = JsonConvert.DeserializeObject<TranslationRequestResponse>(translationRequestResponse);
+				var translationRequest = JsonConvert.DeserializeObject<CloudTranslationRequestResponse>(translationRequestResponse);
 
 				var translationStatusReponse = await GetTranslationStatus(accessToken, translationRequest.RequestId);
-				var translationStatus = JsonConvert.DeserializeObject<TranslationStatus>(translationStatusReponse);
+				var translationStatus = JsonConvert.DeserializeObject<CloudTranslationStatus>(translationStatusReponse);
 				while (translationStatus.Status != "DONE")
 				{
 					if (translationStatus.Status == "FAILED")
@@ -144,11 +143,11 @@ namespace LanguageWeaverProvider.Services
 
 					Thread.Sleep(500);
 					translationStatusReponse = await GetTranslationStatus(accessToken, translationRequest.RequestId);
-					translationStatus = JsonConvert.DeserializeObject<TranslationStatus>(translationStatusReponse);
+					translationStatus = JsonConvert.DeserializeObject<CloudTranslationStatus>(translationStatusReponse);
 				}
 
 				var translationResponse = await GetTranslation(accessToken, translationRequest.RequestId);
-				var translation = JsonConvert.DeserializeObject<TranslationResponse>(translationResponse);
+				var translation = JsonConvert.DeserializeObject<CloudTranslationResponse>(translationResponse);
 
 				var translatedSegment = translation.Translation.First();
 				var translatedXliffSegment = Converter.ParseXliffString(translatedSegment);
@@ -177,7 +176,7 @@ namespace LanguageWeaverProvider.Services
 			var sourceXliffText = sourceXliff.ToString();
 			var linguisticOptionsDictionary = mappedPair.LinguisticOptions?.ToDictionary(lo => lo.Id, lo => lo.SelectedValue);
 
-			var translationRequestModel = new TranslationRequest
+			var translationRequestModel = new CloudTranslationRequest
 			{
 				SourceLanguageId = mappedPair.SourceCode,
 				TargetLanguageId = mappedPair.TargetCode,

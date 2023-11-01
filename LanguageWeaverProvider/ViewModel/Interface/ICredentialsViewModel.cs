@@ -6,6 +6,12 @@ namespace LanguageWeaverProvider.ViewModel.Interface
 {
 	public interface ICredentialsViewModel
 	{
+		bool IsAuthenticationTypeSelected { get; }
+
+		bool IsCredentialsSelected { get; }
+
+		bool IsApiKeySelected { get; }
+
 		ITranslationOptions TranslationOptions { get; set; }
 
 		AuthenticationType AuthenticationType { get; set; }
@@ -23,5 +29,7 @@ namespace LanguageWeaverProvider.ViewModel.Interface
 		event EventHandler StartLoginProcess;
 
 		event EventHandler StopLoginProcess;
+
+		void CloseWindow();
 	}
 }

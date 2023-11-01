@@ -12,8 +12,15 @@ namespace LanguageWeaverProvider
 	{
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
 		{
-			var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
-			return new TranslationProvider(options, credentialStore);
+			try
+			{
+				var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
+				return new TranslationProvider(options, credentialStore);
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
 		}
 
 		public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
@@ -27,11 +34,13 @@ namespace LanguageWeaverProvider
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
 		{
-			return translationProviderUri switch
+			var supportsTranslationProviderUri = translationProviderUri switch
 			{
 				null => throw new ArgumentNullException("Unsuported"),
-				_ => string.Equals(translationProviderUri.Scheme, Constants.TranslationScheme, StringComparison.OrdinalIgnoreCase)
+				_ => translationProviderUri.Scheme.StartsWith(Constants.TranslationScheme)
 			};
+
+			return supportsTranslationProviderUri;
 		}
 	}
 }

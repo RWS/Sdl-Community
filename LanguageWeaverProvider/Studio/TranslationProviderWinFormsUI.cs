@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Remoting.Messaging;
+using System.Security.Policy;
 using System.Windows.Forms;
 using System.Windows.Media;
 using LanguageWeaverProvider.Extensions;
@@ -28,12 +29,12 @@ namespace LanguageWeaverProvider
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
 			var translationOptions = new TranslationOptions();
-			CredentialManager.SetCredentials(credentialStore, translationOptions);
+			CredentialManager.GetCredentials(credentialStore, translationOptions);
 			var CredentialsMainViewModel = new CredentialsMainViewModel(translationOptions);
 			var CredentialsMainView = new CredentialsMainView { DataContext = CredentialsMainViewModel };
 			CredentialsMainViewModel.CloseEventRaised += () =>
 			{
-				UpdateProviderCredentials(credentialStore, translationOptions);
+				CredentialManager.UpdateCredentials(credentialStore, translationOptions);
 				CredentialsMainView.Close();
 			};
 
@@ -86,28 +87,15 @@ namespace LanguageWeaverProvider
 			return displayInfo;
 		}
 
-		private void UpdateProviderCredentials(ITranslationProviderCredentialStore credentialStore, ITranslationOptions translationOptions)
-		{
-			if (translationOptions.AuthenticationType != AuthenticationType.CloudCredentials)
-			{
-				return;
-			}
-
-			var uri = new Uri(Constants.CloudFullScheme);
-			var credentials = JsonConvert.SerializeObject(translationOptions.CloudCredentials);
-			var translationProviderCredential = new TranslationProviderCredential(credentials, true);
-
-			credentialStore.RemoveCredential(uri);
-			credentialStore.AddCredential(uri, translationProviderCredential);
-		}
-
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
 		{
-			return translationProviderUri switch
+			var supportsTranslationProviderUri = translationProviderUri switch
 			{
-				null => throw new ArgumentNullException(),
-				_ => string.Equals(translationProviderUri.Scheme, Constants.TranslationScheme, StringComparison.CurrentCultureIgnoreCase)
+				null => throw new ArgumentNullException("Unsuported"),
+				_ => translationProviderUri.Scheme.StartsWith(Constants.TranslationScheme)
 			};
+
+			return supportsTranslationProviderUri;
 		}
 
 		public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)

@@ -8,14 +8,7 @@ namespace LanguageWeaverProvider.Model.Options
 {
 	public class TranslationOptions : ITranslationOptions
 	{
-		private readonly TranslationProviderUriBuilder _uriBuilder;
-
-		public TranslationOptions(Uri uri = null)
-		{
-			_uriBuilder = new TranslationProviderUriBuilder(Constants.TranslationScheme);
-		}
-
-		public Uri Uri => _uriBuilder.Uri;
+		public Uri Uri { get; set; }
 
 		public ProviderSettings ProviderSettings { get; set; }
 
@@ -26,8 +19,41 @@ namespace LanguageWeaverProvider.Model.Options
 		[JsonIgnore]
 		public CloudCredentials CloudCredentials { get; set; }
 
+		[JsonIgnore]
+		public EdgeCredentials EdgeCredentials { get; set; }
+
 		public List<PairMapping> PairMappings { get; set; }
 
 		public AccessToken AccessToken { get; set; }
+
+		public void UpdateUri(string uriString)
+		{
+			Uri = new Uri(uriString);
+		}
+
+		public void UpdateUri(Uri uri)
+		{
+			UpdateUri(uri.AbsoluteUri);
+		}
+
+		public void UpdateUri()
+		{
+			UpdateUri(Version);
+		}
+
+		public void UpdateUri(PluginVersion pluginVersion)
+		{
+			switch (pluginVersion)
+			{
+				case PluginVersion.LanguageWeaverCloud:
+					UpdateUri(Constants.CloudFullScheme);
+					break;
+				case PluginVersion.LanguageWeaverEdge:
+					UpdateUri(Constants.EdgeFullScheme);
+					break;
+				default:
+					break;
+			}
+		}
 	}
 }

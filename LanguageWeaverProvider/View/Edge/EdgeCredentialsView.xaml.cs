@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using LanguageWeaverProvider.ViewModel.Edge;
 
 namespace LanguageWeaverProvider.View.Edge
 {
@@ -23,6 +12,34 @@ namespace LanguageWeaverProvider.View.Edge
 		public EdgeCredentialsView()
 		{
 			InitializeComponent();
+		}
+
+		private void UserPassword_Changed(object sender, RoutedEventArgs e)
+		{
+			if (DataContext is not null && DataContext is EdgeCredentialsViewModel viewModel)
+			{
+				viewModel.Password = (sender as PasswordBox).Password;
+			}
+
+		}
+
+		private void ApiKey_Changed(object sender, RoutedEventArgs e)
+		{
+			if (DataContext is not null && DataContext is EdgeCredentialsViewModel viewModel)
+			{
+				viewModel.ApiKey = (sender as PasswordBox).Password;
+			}
+		}
+
+		private void ViewLoaded(object sender, RoutedEventArgs e)
+		{
+			if (DataContext is not EdgeCredentialsViewModel dataContext || dataContext.TranslationOptions is null)
+			{
+				return;
+			}
+
+			userPwBox.Password = dataContext.Password;
+			apiKeyBox.Password = dataContext.ApiKey;
 		}
 	}
 }

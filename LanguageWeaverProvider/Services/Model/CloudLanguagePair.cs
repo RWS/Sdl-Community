@@ -1,6 +1,6 @@
 ﻿namespace LanguageWeaverProvider.Services.Model
 {
-	public class TranslationLanguagePair
+	public class CloudLanguagePair
 	{
 		public string Model { get; set; }
 

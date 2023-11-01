@@ -1,6 +1,6 @@
 ﻿namespace LanguageWeaverProvider.Services.Model
 {
-	public class TranslationStats
+	public class CloudTranslationStats
 	{
 		public int InputWordCount { get; set; }
 

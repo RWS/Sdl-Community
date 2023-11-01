@@ -30,7 +30,7 @@ namespace LanguageWeaverProvider
 			TranslationProvider = translationProvider;
 			_translationOptions = translationOptions;
 			_languagePair = languagePair;
-			CredentialManager.SetCredentials(credentialStore, translationOptions);
+			CredentialManager.GetCredentials(credentialStore, translationOptions);
 		}
 
 		public ITranslationProvider TranslationProvider { get; private set; }
@@ -161,10 +161,13 @@ namespace LanguageWeaverProvider
 				return searchResults;
 			}
 
-			CredentialManager.ValidateToken(_translationOptions);
+			//CredentialManager.ValidateToken(_translationOptions);
 			var mappedPair = GetMappedPair();
 			var xliffFile = CreateXliffFile(translatableSegments);
-			var translation = CloudService.Translate(_translationOptions.AccessToken, mappedPair, xliffFile).Result;
+			var translation = _translationOptions.Version == PluginVersion.LanguageWeaverCloud
+							? CloudService.Translate(_translationOptions.AccessToken, mappedPair, xliffFile).Result
+							: EdgeService.Translate(_translationOptions, mappedPair, xliffFile).Result;
+
 			var translatedSegments = translation.GetTargetSegments();
 			var translatedSegmentsIndex = 0;
 			for (var i = 0; i < mask.Length; i++)

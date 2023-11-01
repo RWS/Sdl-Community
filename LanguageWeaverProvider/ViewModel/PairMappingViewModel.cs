@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
@@ -6,10 +7,10 @@ using LanguageMappingProvider.Database;
 using LanguageMappingProvider.Database.Interface;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.LanguageMappingProvider;
+using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
+using LanguageWeaverProvider.Services;
 using LanguageWeaverProvider.View;
-using LanguageWeaverProvider.ViewModel.Cloud;
-using LanguageWeaverProvider.ViewModel.Interface;
 using Sdl.LanguagePlatform.Core;
 
 namespace LanguageWeaverProvider.ViewModel
@@ -20,28 +21,19 @@ namespace LanguageWeaverProvider.ViewModel
 		private readonly ILanguageMappingDatabase _languageMappingDatabase;
 		private readonly LanguagePair[] _languagePairs;
 
-		private IPairMappingViewModel _pairMappingView;
 		private SettingsViewModel _settingsView;
 		private bool _showSettingsView;
+
+		private ObservableCollection<PairMapping> _pairMappings;
 
 		public PairMappingViewModel(ITranslationOptions translationOptions, LanguagePair[] languagePairs)
 		{
 			_languagePairs = languagePairs;
 			_translationOptions = translationOptions;
-			_languageMappingDatabase = SetDatabase();
-			_pairMappingView = SetPairMappingView();
-			_settingsView = SetSettingsView();
+			_languageMappingDatabase = DatabaseControl.InitializeDatabase(translationOptions.Version);
+			InitializeSettingsView();
 			InitializeCommands();
-		}
-
-		public IPairMappingViewModel PairMappingView
-		{
-			get => _pairMappingView;
-			set
-			{
-				_pairMappingView = value;
-				OnPropertyChanged();
-			}
+			LoadPairMapping();
 		}
 
 		public SettingsViewModel SettingsView
@@ -60,6 +52,17 @@ namespace LanguageWeaverProvider.ViewModel
 			set
 			{
 				_showSettingsView = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public ObservableCollection<PairMapping> PairMappings
+		{
+			get => _pairMappings;
+			set
+			{
+				if (_pairMappings == value) return;
+				_pairMappings = value;
 				OnPropertyChanged();
 			}
 		}
@@ -89,34 +92,17 @@ namespace LanguageWeaverProvider.ViewModel
 			OpenLanguageMappingProviderViewCommand = new RelayCommand(OpenLanguageMappingProviderView);
 		}
 
-		private IPairMappingViewModel SetPairMappingView()
-		{
-			var isCloudSelected = _translationOptions.Version == PluginVersion.LanguageWeaverCloud;
-			IPairMappingViewModel pairMappingView = isCloudSelected
-												  ? new CloudMappingViewModel(_translationOptions, _languageMappingDatabase, _languagePairs)
-												  : null; // modify this to add EdgeVM
-			return pairMappingView;
-		}
-
-		private SettingsViewModel SetSettingsView()
+		private void InitializeSettingsView()
 		{
 			var settingsViewModel = new SettingsViewModel(_translationOptions);
 			settingsViewModel.BackCommandExecuted += ChangeSettingsViewState;
-			return settingsViewModel;
-		}
-
-		private ILanguageMappingDatabase SetDatabase()
-		{
-			var isCloudSelected = _translationOptions.Version == PluginVersion.LanguageWeaverCloud;
-			var targetDatabase = isCloudSelected ? Constants.CloudService : "edge";
-			var supportedLanguages = isCloudSelected ? DatabaseControl.GetCloudLanguageCodes() : null;
-			return new LanguageMappingDatabase(targetDatabase, supportedLanguages);
+			_settingsView = settingsViewModel;
 		}
 
 		private void Save(object parameter)
 		{
 			SaveChanges = true;
-			_translationOptions.PairMappings = PairMappingView.PairMappings.ToList();
+			_translationOptions.PairMappings = PairMappings.ToList();
 			_translationOptions.ProviderSettings.ResendDrafts = SettingsView.ResendDrafts;
 			_translationOptions.ProviderSettings.IncludeTags = SettingsView.IncludeTags;
 			CloseEventRaised.Invoke();
@@ -138,10 +124,14 @@ namespace LanguageWeaverProvider.ViewModel
 			Process.Start(uriTarget);
 		}
 
-
 		private void OpenSettingsView(object parameter)
 		{
-			ShowSettingsView = true;
+			ChangeSettingsViewState(null, null);
+		}
+
+		private void ChangeSettingsViewState(object sender, EventArgs e)
+		{
+			ShowSettingsView = !ShowSettingsView;
 		}
 
 		private void OpenLanguageMappingProviderView(object parameter)
@@ -157,12 +147,108 @@ namespace LanguageWeaverProvider.ViewModel
 
 		private void LanguageMappingUpdated(object sender, EventArgs e)
 		{
-			_pairMappingView.UpdateLanguageMapping();
+			CreatePairMappings();
 		}
 
-		private void ChangeSettingsViewState(object sender, EventArgs e)
+		private void LoadPairMapping()
 		{
-			ShowSettingsView = false;
+			if (_translationOptions.PairMappings is null || !_translationOptions.PairMappings.Any())
+			{
+				CreatePairMappings();
+				return;
+			}
+
+			var pairMappings = new ObservableCollection<PairMapping>();
+			foreach (var pairMapping in _translationOptions.PairMappings)
+			{
+				var selectedModelName = pairMapping.SelectedModel.Name;
+				var selectedModel = pairMapping.Models.FirstOrDefault(x => x.Name == selectedModelName);
+
+				var selectedDictionaryId = pairMapping.SelectedDictionary.DictionaryId;
+				var selectedDictionary = pairMapping.Dictionaries.FirstOrDefault(x => x?.DictionaryId == selectedDictionaryId);
+
+				var newPairMapping = new PairMapping()
+				{
+					DisplayName = pairMapping.DisplayName,
+					SourceCode = pairMapping.SourceCode,
+					TargetCode = pairMapping.TargetCode,
+					LanguagePair = pairMapping.LanguagePair,
+					Models = pairMapping.Models,
+					SelectedModel = selectedModel,
+					Dictionaries = pairMapping.Dictionaries,
+					SelectedDictionary = selectedDictionary,
+				};
+
+				pairMappings.Add(newPairMapping);
+			}
+
+			PairMappings = pairMappings;
+		}
+
+		private async void CreatePairMappings()
+		{
+			var originalPairMappings = PairMappings;
+			PairMappings = new();
+			var mappedLanguages = _languageMappingDatabase.GetMappedLanguages();
+			var accountModels = _translationOptions.Version == PluginVersion.LanguageWeaverCloud
+							  ? await CloudService.GetSupportedLanguages(_translationOptions.AccessToken)
+							  : await EdgeService.GetLanguagePairs(_translationOptions);
+			var accountDictionaries = _translationOptions.Version == PluginVersion.LanguageWeaverCloud
+									? await CloudService.GetDictionaries(_translationOptions.AccessToken)
+									: await EdgeService.GetDictionaries(_translationOptions);
+
+			foreach (var languagePair in _languagePairs)
+			{
+				var mappedLanguagePairs = mappedLanguages.Where(mappedLang => mappedLang.TradosCode.Equals(languagePair.SourceCultureName) || mappedLang.TradosCode.Equals(languagePair.TargetCultureName));
+
+				var mappedSource = mappedLanguagePairs.FirstOrDefault(mappedLang => mappedLang.TradosCode.Equals(languagePair.SourceCultureName));
+				var mappedTarget = mappedLanguagePairs.FirstOrDefault(mappedLang => mappedLang.TradosCode.Equals(languagePair.TargetCultureName));
+				var displayName = $"{mappedSource.Name} ({mappedSource.Region}) - {mappedTarget.Name} ({mappedTarget.Region})";
+
+				var currentModel = originalPairMappings?.FirstOrDefault(pair => pair.DisplayName.Equals(displayName));
+				if (currentModel is not null
+				 && mappedSource.LanguageCode.Equals(currentModel.SourceCode)
+				 && mappedTarget.LanguageCode.Equals(currentModel.TargetCode))
+				{
+					PairMappings.Add(currentModel);
+					continue;
+				}
+
+				var models = accountModels.Where(model => model.SourceLanguageId.Equals(mappedSource.LanguageCode) && model.TargetLanguageId.Equals(mappedTarget.LanguageCode)).ToList();
+				if (!models.Any())
+				{
+					models.Add(new PairModel()
+					{
+						Name = PluginResources.PairModel_Model_Unavailable,
+						DisplayName = PluginResources.PairModel_Model_Unavailable,
+						SourceLanguageId = mappedSource.LanguageCode,
+						TargetLanguageId = mappedTarget.LanguageCode
+					});
+				}
+
+				var dictionaries = accountDictionaries.Where(dictionary => dictionary.Source.Equals(mappedSource.LanguageCode) && dictionary.Target.Equals(mappedTarget.LanguageCode)).ToList();
+				dictionaries.Insert(0, new PairDictionary()
+				{
+					Name = dictionaries.Any() ? PluginResources.PairModel_Dictionary_NotSelected : PluginResources.PairModel_Dictionary_Unavailable,
+					DictionaryId = string.Empty,
+					Source = mappedSource.LanguageCode,
+					Target = mappedTarget.LanguageCode,
+				});
+
+				var newPairMapping = new PairMapping
+				{
+					DisplayName = displayName,
+					SourceCode = mappedSource.LanguageCode,
+					TargetCode = mappedTarget.LanguageCode,
+					LanguagePair = languagePair,
+					Models = models,
+					SelectedModel = models.FirstOrDefault(),
+					Dictionaries = dictionaries,
+					SelectedDictionary = dictionaries.FirstOrDefault()
+				};
+
+				PairMappings.Add(newPairMapping);
+			}
 		}
 	}
 }

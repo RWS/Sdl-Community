@@ -2,7 +2,6 @@
 using System.Windows.Input;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Extensions;
-using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Services;
 using LanguageWeaverProvider.ViewModel.Interface;
@@ -18,13 +17,11 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 		private string _clientId;
 		private string _clientSecret;
 
-		private bool _isSecretSelected;
-		private bool _isCredentialsSelected;
-
 		public CloudCredentialsViewModel(ITranslationOptions translationOptions)
 		{
 			TranslationOptions = translationOptions;
 			InitializeCommands();
+			LoadCredentials();
 		}
 
 		public ITranslationOptions TranslationOptions { get; set; }
@@ -37,32 +34,16 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				_authenticationType = value;
 				OnPropertyChanged();
 				OnPropertyChanged(nameof(IsAuthenticationTypeSelected));
-				IsCredentialsSelected = value == AuthenticationType.CloudCredentials;
-				IsSecretSelected = value == AuthenticationType.CloudSecret;
+				OnPropertyChanged(nameof(IsCredentialsSelected));
+				OnPropertyChanged(nameof(IsApiKeySelected));
 			}
 		}
 
-		public bool IsCredentialsSelected
-		{
-			get => _isCredentialsSelected;
-			set
-			{
-				_isCredentialsSelected = value;
-				OnPropertyChanged();
-			}
-		}
+		public bool IsCredentialsSelected => AuthenticationType == AuthenticationType.CloudCredentials;
 
-		public bool IsSecretSelected
-		{
-			get => _isSecretSelected;
-			set
-			{
-				_isSecretSelected = value;
-				OnPropertyChanged();
-			}
-		}
+		public bool IsApiKeySelected => AuthenticationType == AuthenticationType.CloudSecret;
 
-		public bool IsAuthenticationTypeSelected => AuthenticationType != AuthenticationType.None;
+		public bool IsAuthenticationTypeSelected => IsApiKeySelected || IsCredentialsSelected;
 
 		public string UserId
 		{
@@ -110,8 +91,6 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		public ICommand SignInCommand { get; private set; }
 
-		public ICommand SignLoggedUserCommand { get; private set; }
-
 		public ICommand SelectAuthenticationTypeCommand { get; private set; }
 
 		public event EventHandler CloseRequested;
@@ -120,15 +99,25 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		public event EventHandler StopLoginProcess;
 
-		public void CloseWindow() => CloseRequested?.Invoke(this, EventArgs.Empty);
-
 		private void InitializeCommands()
 		{
 			BackCommand = new RelayCommand(Back);
 			ClearCommand = new RelayCommand(Clear);
 			SignInCommand = new RelayCommand(SignIn);
-			SignLoggedUserCommand = new RelayCommand(SignLoggedUser);
 			SelectAuthenticationTypeCommand = new RelayCommand(SelectAuthenticationType);
+		}
+
+		private void LoadCredentials()
+		{
+			if (TranslationOptions.CloudCredentials is null)
+			{
+				return;
+			}
+
+			UserId = TranslationOptions.CloudCredentials.UserID;
+			UserPassword = TranslationOptions.CloudCredentials.UserPassword;
+			ClientId = TranslationOptions.CloudCredentials.ClientID;
+			ClientSecret = TranslationOptions.CloudCredentials.ClientSecret;
 		}
 
 		private void SelectAuthenticationType(object parameter)
@@ -152,19 +141,23 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			}
 
 			StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Connection_Loading_Connecting));
-			var cloudCredentials = new CloudCredentials()
+			TranslationOptions.CloudCredentials ??= new();
+			if (AuthenticationType == AuthenticationType.CloudCredentials)
 			{
-				UserID = _userId,
-				UserPassword = _userPassword,
-				ClientID = _clientId,
-				ClientSecret = _clientSecret
-			};
+				TranslationOptions.CloudCredentials.UserID = UserId;
+				TranslationOptions.CloudCredentials.UserPassword = UserPassword;
+			}
+			else if (AuthenticationType == AuthenticationType.CloudSecret)
+			{
+				TranslationOptions.CloudCredentials.ClientID = ClientId;
+				TranslationOptions.CloudCredentials.ClientSecret = ClientSecret;
+			}
 
-			var response = await CloudService.AuthenticateUser(cloudCredentials, TranslationOptions, AuthenticationType);
+			var response = await CloudService.AuthenticateUser(TranslationOptions.CloudCredentials, TranslationOptions, AuthenticationType);
 			if (!response.Success)
 			{
 				StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Connection_Error_FirstFail));
-				response = await CloudService.AuthenticateUser(cloudCredentials, TranslationOptions, AuthenticationType);
+				response = await CloudService.AuthenticateUser(TranslationOptions.CloudCredentials, TranslationOptions, AuthenticationType);
 				StopLoginProcess?.Invoke(this, EventArgs.Empty);
 				if (!response.Success)
 				{
@@ -173,24 +166,6 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				}
 			}
 
-			TranslationOptions.CloudCredentials = cloudCredentials;
-			TranslationOptions.AuthenticationType = AuthenticationType;
-			CloseWindow();
-		}
-
-		private async void SignLoggedUser(object parameter)
-		{
-			StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Connection_Loading_Connecting));
-			var response = await CloudService.AuthenticateUser(TranslationOptions.CloudCredentials, TranslationOptions, AuthenticationType.CloudCredentials);
-			StopLoginProcess?.Invoke(this, EventArgs.Empty);
-			if (!response.Success)
-			{
-				response.Error.ShowDialog(PluginResources.Connection_Error_Failed, response.Error.Message, true);
-				return;
-			}
-
-			TranslationOptions.CloudCredentials = TranslationOptions.CloudCredentials;
-			TranslationOptions.AuthenticationType = AuthenticationType.CloudCredentials;
 			CloseWindow();
 		}
 
@@ -201,7 +176,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			{
 				return false;
 			}
-			else if (IsSecretSelected
+			else if (IsApiKeySelected
 				 && (string.IsNullOrEmpty(ClientId) || string.IsNullOrEmpty(ClientSecret)))
 			{
 				return false;
@@ -235,6 +210,14 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 		private void Back(object parameter)
 		{
 			AuthenticationType = AuthenticationType.None;
+		}
+
+		public void CloseWindow()
+		{
+			TranslationOptions.AuthenticationType = AuthenticationType;
+			TranslationOptions.Version = PluginVersion.LanguageWeaverCloud;
+			TranslationOptions.UpdateUri();
+			CloseRequested?.Invoke(this, EventArgs.Empty);
 		}
 	}
 }

@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using LanguageWeaverProvider.BatchTask.Model;
-using LanguageWeaverProvider.Extensions;
-using LanguageWeaverProvider.Model;
-using LanguageWeaverProvider.XliffConverter.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 

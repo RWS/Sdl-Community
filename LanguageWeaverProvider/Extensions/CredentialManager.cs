@@ -1,41 +1,73 @@
-﻿using LanguageWeaverProvider.Model;
-using System;
+﻿using System;
+using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
+using LanguageWeaverProvider.Services;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using LanguageWeaverProvider.Services;
-using System.Threading.Tasks;
 
 namespace LanguageWeaverProvider.Extensions
 {
 	public static class CredentialManager
 	{
-		public static void SetCredentials(ITranslationProviderCredentialStore credentialStore, ITranslationOptions translationOptions)
+		public static void GetCredentials(ITranslationProviderCredentialStore credentialStore, ITranslationOptions translationOptions)
 		{
-			var uri = new Uri(Constants.CloudFullScheme);
-			var translationProviderCredential = credentialStore.GetCredential(uri);
-			if (translationProviderCredential is null
-			 || translationProviderCredential.Credential is null)
+			GetCredentials(credentialStore, translationOptions, PluginVersion.LanguageWeaverCloud);
+			GetCredentials(credentialStore, translationOptions, PluginVersion.LanguageWeaverEdge);
+		}
+
+		public static void GetCredentials(ITranslationProviderCredentialStore credentialStore, ITranslationOptions translationOptions, PluginVersion pluginVersion)
+		{
+			if (pluginVersion == PluginVersion.None)
 			{
 				return;
 			}
 
-			var cloudCredentials = JsonConvert.DeserializeObject<CloudCredentials>(translationProviderCredential.Credential);
-			translationOptions.CloudCredentials = cloudCredentials;
+			var isCloudService = pluginVersion == PluginVersion.LanguageWeaverCloud;
+			var scheme = isCloudService ? Constants.CloudFullScheme : Constants.EdgeFullScheme;
+			var uri = new Uri(scheme);
+			var translationProviderCredential = credentialStore.GetCredential(uri);
+			if (isCloudService)
+			{
+				var cloudCredentials = JsonConvert.DeserializeObject<CloudCredentials>(translationProviderCredential.Credential);
+				translationOptions.CloudCredentials = cloudCredentials;
+			}
+			else
+			{
+				var edgeCredentials = JsonConvert.DeserializeObject<EdgeCredentials>(translationProviderCredential.Credential);
+				translationOptions.EdgeCredentials = edgeCredentials;
+			}
+		}
+
+		public static void UpdateCredentials(ITranslationProviderCredentialStore credentialStore, ITranslationOptions translationOptions)
+		{
+			if (translationOptions.Version == PluginVersion.None)
+			{
+				return;
+			}
+
+			var credentials = translationOptions.Version == PluginVersion.LanguageWeaverCloud
+							? JsonConvert.SerializeObject(translationOptions.CloudCredentials)
+							: JsonConvert.SerializeObject(translationOptions.EdgeCredentials);
+			var translationProviderCredential = new TranslationProviderCredential(credentials, true);
+
+			credentialStore.RemoveCredential(translationOptions.Uri);
+			credentialStore.AddCredential(translationOptions.Uri, translationProviderCredential);
 		}
 
 		public static async void ValidateToken(ITranslationOptions translationOptions)
 		{
-			if (IsTimestampExpired(translationOptions.AccessToken.ExpiresAt))
+			if (translationOptions.Version == PluginVersion.LanguageWeaverCloud
+			 && IsTimestampExpired(translationOptions.AccessToken.ExpiresAt))
 			{
 				await CloudService.AuthenticateUser(translationOptions.CloudCredentials, translationOptions, translationOptions.AuthenticationType);
+				return;
 			}
 		}
 
-		static bool IsTimestampExpired(double unixTimeStamp)
+		private static bool IsTimestampExpired(double unixTimeStamp)
 		{
-			DateTimeOffset expirationTime = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero).AddMilliseconds(unixTimeStamp);
-			DateTimeOffset currentTime = DateTimeOffset.UtcNow;
+			var expirationTime = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero).AddMilliseconds(unixTimeStamp);
+			var currentTime = DateTimeOffset.UtcNow;
 
 			return expirationTime <= currentTime;
 		}

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace LanguageWeaverProvider.Services.Model
 {
-	public class TranslationRequest
+	public class CloudTranslationRequest
 	{
 		[JsonProperty("dictionaries")]
 		public object[] Dictionaries { get; set; }
@@ -16,9 +16,6 @@ namespace LanguageWeaverProvider.Services.Model
 
 		[JsonProperty("model")]
 		public string Model { get; set; }
-
-		[JsonProperty("qualityEstimation")]
-		public int QualityEstimation { get; set; }
 
 		[JsonProperty("sourceLanguageId")]
 		public string SourceLanguageId { get; set; }

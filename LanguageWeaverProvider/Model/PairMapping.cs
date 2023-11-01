@@ -53,7 +53,6 @@ namespace LanguageWeaverProvider.Model
 			}
 		}
 
-
 		public PairDictionary SelectedDictionary
 		{
 			get => _selectedDictionary;

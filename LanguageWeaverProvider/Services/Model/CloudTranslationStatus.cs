@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace LanguageWeaverProvider.Services.Model
 {
-	public class TranslationStatus
+	public class CloudTranslationStatus
 	{
 		[JsonProperty("translationStatus")]
 		public string Status { get; set; }
@@ -14,8 +14,8 @@ namespace LanguageWeaverProvider.Services.Model
 
 		public int TranslationProgressPercent { get; set; }
 
-		public TranslationStats TranslationStats { get; set; }
+		public CloudTranslationStats TranslationStats { get; set; }
 
-		public List<TranslationLanguagePair> TranslationLanguagePairs { get; set; }
+		public List<CloudLanguagePair> TranslationLanguagePairs { get; set; }
 	}
 }

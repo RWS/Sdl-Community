@@ -149,7 +149,6 @@ namespace LanguageWeaverProvider.ViewModel
 		{
 			ProviderView = null;
 			SaveChanges = true;
-			TranslationOptions.Version = PluginVersion.LanguageWeaverCloud;
 			CloseEventRaised?.Invoke();
 		}
 

@@ -7,7 +7,9 @@
 		public const string TranslationScheme = "languageweaver";
 		public const string TranslationFullScheme = "languageweaver:///";
 
+		public const string CloudScheme = "languageweavercloud";
 		public const string CloudFullScheme = "languageweavercloud:///";
+		public const string EdgeScheme = "languageweaveredge";
 		public const string EdgeFullScheme = "languageweaveredge:///";
 
 		// Provider

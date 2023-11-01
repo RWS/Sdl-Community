@@ -16,7 +16,7 @@ namespace LanguageWeaverProvider
 		{
 			_credentialStore = credentialStore;
 			TranslationOptions = translationOptions;
-			DatabaseControl.InitializeDatabase(translationOptions.Version);
+			_ = DatabaseControl.InitializeDatabase(translationOptions.Version);
 		}
 
 		public string Name => Constants.PluginName;
@@ -77,12 +77,12 @@ namespace LanguageWeaverProvider
 		public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
 			var currentPair = TranslationOptions.PairMappings.FirstOrDefault(pair => pair.LanguagePair.SourceCulture.Name == languageDirection.SourceCulture.Name
-																				  && pair.LanguagePair.TargetCulture.Name ==  languageDirection.TargetCulture.Name);
+																				  && pair.LanguagePair.TargetCulture.Name == languageDirection.TargetCulture.Name);
 			try
 			{
 				return !string.IsNullOrEmpty(currentPair.SourceCode)
 					&& !string.IsNullOrEmpty(currentPair.TargetCode)
-					&& !currentPair.SelectedModel.Name.Equals(PluginResources.PairModel_Model_Unavailable);
+					&& !currentPair.SelectedModel.DisplayName.Equals(PluginResources.PairModel_Model_Unavailable);
 			}
 			catch
 			{

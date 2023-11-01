@@ -5,13 +5,8 @@
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:root="clr-namespace:LanguageWeaverProvider"
 		xmlns:view="clr-namespace:LanguageWeaverProvider.View"
-		xmlns:style="clr-namespace:LanguageWeaverProvider.Style"
 		xmlns:local="clr-namespace:LanguageWeaverProvider.ViewModel"
-		xmlns:edgeView="clr-namespace:LanguageWeaverProvider.View.Edge"
-		xmlns:cloudView="clr-namespace:LanguageWeaverProvider.View.Cloud"
 		xmlns:viewModel="clr-namespace:LanguageWeaverProvider.ViewModel"
-		xmlns:edgeViewModel="clr-namespace:LanguageWeaverProvider.ViewModel.Edge"
-		xmlns:cloudViewModel="clr-namespace:LanguageWeaverProvider.ViewModel.Cloud"
 		xmlns:converters="clr-namespace:LanguageWeaverProvider.Converters"
 		mc:Ignorable="d"
 		d:DataContext="{d:DesignInstance local:PairMappingViewModel}"
@@ -32,6 +27,8 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBoxResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 
 			<Style TargetType="Image">
@@ -40,11 +37,9 @@
 			</Style>
 
 			<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-
-			<DataTemplate DataType="{x:Type cloudViewModel:CloudMappingViewModel}">
-				<cloudView:CloudMappingView />
-			</DataTemplate>
-
+			<converters:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter" />
+			<converters:EmptyCollectionToVisibilityConverter x:Key="EmptyCollectionToVisibilityConverter" />
+			
 			<DataTemplate DataType="{x:Type viewModel:SettingsViewModel}">
 				<view:SettingsView />
 			</DataTemplate>
@@ -63,18 +58,192 @@
 			<ColumnDefinition Width="Auto" />
 		</Grid.ColumnDefinitions>
 
-		<Image Source="../Resources/lwMainLogo.png" 
+		<Image Source="../Resources/lwMainLogo.png"
 			   Grid.ColumnSpan="2"
 			   Height="40"
-			   Margin="8 16"/>
+			   Margin="8 16" />
 
-		<ContentControl Content="{Binding PairMappingView}"
-						Visibility="{Binding ShowSettingsView, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverted}"
-						Focusable="False"
-						Margin="0 0 0 0"
-						Grid.Row="1"
-						Grid.ColumnSpan="2"
-						HorizontalAlignment="Stretch" />
+		<Grid Visibility="{Binding ShowSettingsView, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+			  Focusable="False"
+			  Margin="0 0 0 0"
+			  Grid.Row="1"
+			  Grid.ColumnSpan="2"
+			  HorizontalAlignment="Stretch">
+			<Grid.RowDefinitions>
+				<RowDefinition  Height="Auto" />
+				<RowDefinition  Height="*" />
+			</Grid.RowDefinitions>
+
+			<TextBlock Grid.Row="0"
+					   Text="{x:Static root:PluginResources.CloudMappingView_WelcomeMessage}"
+					   Foreground="#444444"
+					   FontSize="12"
+					   FontWeight="DemiBold"
+					   Focusable="True"
+					   Margin="16 0"
+					   TextWrapping="Wrap" />
+
+			<DataGrid Grid.Row="1"
+					  x:Name="myDataGrid"
+					  ItemsSource="{Binding PairMappings}"
+					  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+					  MinRowHeight="30"
+					  BorderBrush="#d4d4d4"
+					  AutoGenerateColumns="False"
+					  Margin="16 16 16 0">
+
+				<DataGrid.Columns>
+					<DataGridTemplateColumn Header="{x:Static root:PluginResources.CloudMappingView_Headers_Pairs}"
+											Width="1.5*"
+											IsReadOnly="True">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding DisplayName}"
+										   Visibility="{Binding SourceCode, Converter={StaticResource EmptyStringToVisibilityConverter}, ConverterParameter=Inverted}"
+										   VerticalAlignment="Center"
+										   Margin="4 0" />
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+
+					<DataGridTemplateColumn Header="{x:Static root:PluginResources.CloudMappingView_Headers_Source}"
+											MinWidth="64">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<StackPanel VerticalAlignment="Center"
+											Margin="4 0">
+									<TextBlock Text="{Binding SourceCode}"
+											   Visibility="{Binding SourceCode, Converter={StaticResource EmptyStringToVisibilityConverter}, ConverterParameter=Inverted}" />
+									<TextBlock Text="{x:Static root:PluginResources.CloudMappingView_Values_NotSet}"
+											   Foreground="#f24d41"
+											   FontWeight="DemiBold"
+											   Visibility="{Binding SourceCode, Converter={StaticResource EmptyStringToVisibilityConverter}}" />
+								</StackPanel>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+
+					<DataGridTemplateColumn Header="{x:Static root:PluginResources.CloudMappingView_Headers_Target}"
+											MinWidth="64">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<StackPanel VerticalAlignment="Center"
+											Margin="4 0">
+									<TextBlock Text="{Binding TargetCode}"
+											   Visibility="{Binding TargetCode, Converter={StaticResource EmptyStringToVisibilityConverter}, ConverterParameter=Inverted}" />
+									<TextBlock Text="{x:Static root:PluginResources.CloudMappingView_Values_NotSet}"
+											   Foreground="#f24d41"
+											   FontWeight="DemiBold"
+											   Visibility="{Binding TargetCode, Converter={StaticResource EmptyStringToVisibilityConverter}}" />
+								</StackPanel>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+
+					<DataGridTemplateColumn Header="{x:Static root:PluginResources.CloudMappingView_Headers_Models}"
+											MinWidth="128">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<ComboBox ItemsSource="{Binding Models}"
+										  SelectedItem="{Binding SelectedModel, UpdateSourceTrigger=PropertyChanged}"
+										  Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
+										  DisplayMemberPath="DisplayName"
+										  VerticalAlignment="Stretch"
+										  Margin="-2"
+										  SelectedIndex="0"
+										  BorderThickness="0">
+								</ComboBox>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+
+					<DataGridTemplateColumn Header="{x:Static root:PluginResources.CloudMappingView_Headers_Dictionaries}"
+											MinWidth="172">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<ComboBox ItemsSource="{Binding Dictionaries}"
+										  SelectedItem="{Binding SelectedDictionary, UpdateSourceTrigger=PropertyChanged}"
+										  Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
+										  DisplayMemberPath="Name"
+										  SelectedIndex="0"
+										  VerticalAlignment="Stretch"
+										  Margin="-2"
+										  BorderThickness="0">
+								</ComboBox>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+
+					<DataGridTemplateColumn Header="{x:Static root:PluginResources.CloudMappingView_Headers_LOs}"
+											Width="1*">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate DataType="model:PairMapping">
+								<StackPanel VerticalAlignment="Center">
+									<ListBox  x:Name="linguisticOptionsList"
+											  ItemsSource="{Binding LinguisticOptions, UpdateSourceTrigger=PropertyChanged}"
+											  Visibility="{Binding LinguisticOptions, Converter={StaticResource EmptyCollectionToVisibilityConverter}}"
+											  BorderThickness="0"
+											  Background="Transparent"
+											  Padding="0">
+										<ListBox.Resources>
+											<Style TargetType="{x:Type ListBoxItem}">
+												<Setter Property="Background"
+														Value="Transparent" />
+											</Style>
+											<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+															 Color="Transparent" />
+										</ListBox.Resources>
+
+										<ListBox.ItemContainerStyle>
+											<Style TargetType="ListBoxItem">
+												<Setter Property="IsTabStop"
+														Value="False" />
+												<Setter Property="Focusable"
+														Value="False" />
+												<Setter Property="Template">
+													<Setter.Value>
+														<ControlTemplate TargetType="ListBoxItem">
+															<Border Background="Transparent">
+																<ContentPresenter HorizontalAlignment="Stretch"
+																				  VerticalAlignment="Center" />
+															</Border>
+														</ControlTemplate>
+													</Setter.Value>
+												</Setter>
+											</Style>
+										</ListBox.ItemContainerStyle>
+
+										<ListBox.ItemTemplate>
+											<DataTemplate>
+												<DockPanel Margin="4 0">
+													<TextBlock Text="{Binding DispayName}"
+															   ToolTip="{Binding Name}"
+															   VerticalAlignment="Center"
+															   DockPanel.Dock="Left"
+															   MinWidth="85"
+															   Margin="0" />
+
+													<ComboBox ItemsSource="{Binding Values}"
+															  SelectedValue="{Binding SelectedValue}"
+															  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+															  DockPanel.Dock="Right"
+															  HorizontalAlignment="Stretch"
+															  Cursor="Hand" />
+												</DockPanel>
+											</DataTemplate>
+										</ListBox.ItemTemplate>
+									</ListBox>
+
+									<TextBlock Text="{x:Static root:PluginResources.CloudMappingView_Values_Unavailable}"
+											   Visibility="{Binding LinguisticOptions, Converter={StaticResource EmptyCollectionToVisibilityConverter}, ConverterParameter=Inverted}"
+											   Margin="4 0" />
+								</StackPanel>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+				</DataGrid.Columns>
+			</DataGrid>
+		</Grid>
 
 		<ContentControl Content="{Binding SettingsView}"
 						Visibility="{Binding ShowSettingsView, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -94,7 +263,7 @@
 					FontSize="11"
 					FontWeight="DemiBold"
 					Height="26"
-					Width="174"/>
+					Width="174" />
 			<Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Settings}"
 					Style="{StaticResource Sdl.Button.SecondaryStyle}"
 					Command="{Binding OpenSettingsViewCommand}"
@@ -117,7 +286,7 @@
 					FontWeight="DemiBold"
 					Height="26"
 					Width="120"
-					Margin="8 0"/>
+					Margin="8 0" />
 
 			<Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Cancel}"
 					Style="{StaticResource Sdl.Button.SecondaryStyle}"
@@ -125,8 +294,9 @@
 					FontSize="11"
 					FontWeight="DemiBold"
 					Height="26"
-					Width="120"/>
+					Width="120" />
 		</StackPanel>
 
 	</Grid>
+
 </Window>
