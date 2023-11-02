@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using LanguageWeaverProvider.Model.Interface;
 using Newtonsoft.Json;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace LanguageWeaverProvider.Model.Options
 {

@@ -10,6 +10,8 @@ namespace LanguageWeaverProvider.View
 	/// </summary>
 	public partial class PairMappingView : Window
 	{
+		bool _selectionChanged;
+
 		public PairMappingView()
 		{
 			InitializeComponent();
@@ -23,6 +25,21 @@ namespace LanguageWeaverProvider.View
 			}
 
 			window.DragMove();
+		}
+
+		private void ComboBox_DropDownClosed(object sender, System.EventArgs e)
+		{
+			if (_selectionChanged)
+			{
+				var comboBox = (ComboBox)sender;
+				comboBox.IsDropDownOpen = true;
+				_selectionChanged = false;
+			}
+		}
+
+		private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			_selectionChanged = true;
 		}
 	}
 }

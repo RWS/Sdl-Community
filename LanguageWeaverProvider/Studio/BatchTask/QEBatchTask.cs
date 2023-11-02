@@ -26,7 +26,7 @@ namespace LanguageWeaverProvider.BatchTask
 			var filePath = projectFile.LocalFilePath;
 
 			var languageCode = GetCurrentProjectLanguageCode(projectFile.Language.CultureInfo);
-			var ratedSegments = RatedSegments.Segments.Where(x => x.TargetLanguageCode == languageCode);
+			var ratedSegments = ApplicationInitializer.RatedSegments.Where(x => x.TargetLanguageCode == languageCode);
 
 			var translationOriginData = new TranslationOriginData()
 			{
@@ -56,7 +56,7 @@ namespace LanguageWeaverProvider.BatchTask
 			var contentProcessor = new MetaDataProcessor(mtoList);
 			converter?.AddBilingualProcessor(new BilingualContentHandlerAdapter(contentProcessor));
 			converter?.Parse();
-			RatedSegments.Segments = new List<RatedSegment>();
+			ApplicationInitializer.RatedSegments = new List<RatedSegment>();
 		}
 
 		private string GetCurrentProjectLanguageCode(CultureInfo cultureInfo)

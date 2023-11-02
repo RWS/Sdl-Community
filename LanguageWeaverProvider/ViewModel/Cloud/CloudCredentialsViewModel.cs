@@ -4,6 +4,7 @@ using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Services;
+using LanguageWeaverProvider.View.Cloud;
 using LanguageWeaverProvider.ViewModel.Interface;
 
 namespace LanguageWeaverProvider.ViewModel.Cloud
@@ -128,6 +129,10 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			}
 
 			AuthenticationType = authenticationType;
+			if (AuthenticationType == AuthenticationType.CloudSSO)
+			{
+				Auth0SignIn();
+			}
 		}
 
 		private async void SignIn(object parameter)
@@ -167,6 +172,14 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			}
 
 			CloseWindow();
+		}
+
+		private void Auth0SignIn()
+		{
+			var cloudAuth0ViewModel = new CloudAuth0ViewModel(TranslationOptions);
+			var cloudAuth0View = new CloudAuth0View() { DataContext = cloudAuth0ViewModel };
+			cloudAuth0ViewModel.CloseAuth0Raised += () => { cloudAuth0View.Close(); CloseWindow(); };
+			cloudAuth0View.ShowDialog();
 		}
 
 		private bool CredentialsAreSet()

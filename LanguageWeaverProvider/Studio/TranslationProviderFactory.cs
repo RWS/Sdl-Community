@@ -37,7 +37,7 @@ namespace LanguageWeaverProvider
 			var supportsTranslationProviderUri = translationProviderUri switch
 			{
 				null => throw new ArgumentNullException("Unsuported"),
-				_ => translationProviderUri.Scheme.StartsWith(Constants.TranslationScheme)
+				_ => translationProviderUri.Scheme.StartsWith(Constants.BaseTranslationScheme)
 			};
 
 			return supportsTranslationProviderUri;

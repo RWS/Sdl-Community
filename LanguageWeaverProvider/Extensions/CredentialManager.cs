@@ -22,20 +22,24 @@ namespace LanguageWeaverProvider.Extensions
 				return;
 			}
 
-			var isCloudService = pluginVersion == PluginVersion.LanguageWeaverCloud;
-			var scheme = isCloudService ? Constants.CloudFullScheme : Constants.EdgeFullScheme;
-			var uri = new Uri(scheme);
-			var translationProviderCredential = credentialStore.GetCredential(uri);
-			if (isCloudService)
+			try
 			{
-				var cloudCredentials = JsonConvert.DeserializeObject<CloudCredentials>(translationProviderCredential.Credential);
-				translationOptions.CloudCredentials = cloudCredentials;
+				var isCloudService = pluginVersion == PluginVersion.LanguageWeaverCloud;
+				var scheme = isCloudService ? Constants.CloudFullScheme : Constants.EdgeFullScheme;
+				var uri = new Uri(scheme);
+				var translationProviderCredential = credentialStore.GetCredential(uri);
+				if (isCloudService)
+				{
+					var cloudCredentials = JsonConvert.DeserializeObject<CloudCredentials>(translationProviderCredential.Credential);
+					translationOptions.CloudCredentials = cloudCredentials;
+				}
+				else
+				{
+					var edgeCredentials = JsonConvert.DeserializeObject<EdgeCredentials>(translationProviderCredential.Credential);
+					translationOptions.EdgeCredentials = edgeCredentials;
+				}
 			}
-			else
-			{
-				var edgeCredentials = JsonConvert.DeserializeObject<EdgeCredentials>(translationProviderCredential.Credential);
-				translationOptions.EdgeCredentials = edgeCredentials;
-			}
+			catch { }
 		}
 
 		public static void UpdateCredentials(ITranslationProviderCredentialStore credentialStore, ITranslationOptions translationOptions)
@@ -56,6 +60,17 @@ namespace LanguageWeaverProvider.Extensions
 
 		public static async void ValidateToken(ITranslationOptions translationOptions)
 		{
+			if (translationOptions.AuthenticationType == AuthenticationType.CloudSSO
+			 && IsTimestampExpired(translationOptions.AccessToken.ExpiresAt))
+			{
+				await CloudService.RefreshToken(translationOptions.AccessToken);
+				return;
+			}
+
+			// delete this
+			await CloudService.RefreshToken(translationOptions.AccessToken);
+			// delete this
+
 			if (translationOptions.Version == PluginVersion.LanguageWeaverCloud
 			 && IsTimestampExpired(translationOptions.AccessToken.ExpiresAt))
 			{

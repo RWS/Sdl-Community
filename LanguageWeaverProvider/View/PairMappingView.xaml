@@ -173,7 +173,6 @@
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
-
 					<DataGridTemplateColumn Header="{x:Static root:PluginResources.CloudMappingView_Headers_LOs}"
 											Width="1*">
 						<DataGridTemplateColumn.CellTemplate>

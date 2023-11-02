@@ -7,8 +7,11 @@ namespace LanguageWeaverProvider.ViewModel
 {
 	public class SettingsViewModel : BaseViewModel
 	{
-		private bool _resendDrafts;
-		private bool _includeTags;
+		bool _resendDrafts;
+		bool _includeTags;
+		bool _useCustomName;
+
+		string _customName;
 
 		public SettingsViewModel(ITranslationOptions translationOptions)
 		{
@@ -41,13 +44,36 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 		}
 
+		public bool UseCustomName
+		{
+			get => _useCustomName;
+			set
+			{
+				_useCustomName = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string CustomName
+		{
+			get => _customName;
+			set
+			{
+				_customName = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public ICommand BackCommand { get; private set; }
+
+		public ICommand ClearCommand { get; private set; }
 
 		public event EventHandler BackCommandExecuted;
 
 		private void InitializeCommands()
 		{
 			BackCommand = new RelayCommand(Back);
+			ClearCommand = new RelayCommand(Clear);
 		}
 
 		private void SetSettings()
@@ -55,11 +81,28 @@ namespace LanguageWeaverProvider.ViewModel
 			TranslationOptions.ProviderSettings ??= new();
 			ResendDrafts = TranslationOptions.ProviderSettings.ResendDrafts;
 			IncludeTags = TranslationOptions.ProviderSettings.IncludeTags;
+			UseCustomName = TranslationOptions.ProviderSettings.UseCustomName;
+			CustomName = TranslationOptions.ProviderSettings.CustomName;
 		}
 
 		private void Back(object parameter)
 		{
 			BackCommandExecuted?.Invoke(this, EventArgs.Empty);
+		}
+
+		private void Clear(object parameter)
+		{
+			if (parameter is not string parameterString)
+			{
+				return;
+			}
+
+			switch (parameterString)
+			{
+				case nameof(CustomName):
+					CustomName = string.Empty;
+					break;
+			}
 		}
 	}
 }

@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Security.Policy;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Services.Model;
@@ -12,11 +17,58 @@ using LanguageWeaverProvider.Studio.FeedbackController.Model;
 using LanguageWeaverProvider.XliffConverter.Converter;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Sdl.LanguagePlatform.Core.Tokenization;
 
 namespace LanguageWeaverProvider.Services
 {
 	public static class CloudService
 	{
+		public static async Task<(bool Success, Exception Error)> AuthenticateSSOUser(ITranslationOptions translationOptions, Auth0Config auth0Config, Uri uri)
+		{
+			try
+			{
+				var uriParams = uri.PathAndQuery.TrimStart('/');
+				var parameters = HttpUtility.ParseQueryString(uriParams);
+				var param = HttpUtility.ParseQueryString(uriParams).AllKeys.ToDictionary(x => x, x => parameters[x]);
+				param.Add("client_id", auth0Config.ClientId);
+				param.Add("redirect_uri", auth0Config.RedirectUri);
+				param.Add("code_verifier", auth0Config.CodeVerifier);
+				param.Add("grant_type", "authorization_code");
+
+				var endpoint = new Uri("https://sdl-prod.eu.auth0.com/oauth/token");
+
+				var httpClient = new HttpClient();
+				using var httpRequest = new HttpRequestMessage()
+				{
+					Method = HttpMethod.Post,
+					RequestUri = endpoint,
+					Content = new FormUrlEncodedContent(param)
+				};
+
+				var result = await httpClient.SendAsync(httpRequest);
+				var content = result.Content.ReadAsStringAsync().Result;
+				var ssoToken = JsonConvert.DeserializeObject<CloudAuth0Response>(content);
+				var currentDate = DateTime.UtcNow;
+
+				translationOptions.AccessToken = new AccessToken
+				{
+					Token = ssoToken.AccessToken,
+					TokenType = ssoToken.TokenType,
+					RefreshToken = ssoToken.RefreshToken,
+					ExpiresAt = (long)(currentDate.AddSeconds(ssoToken.ExpiresIn) - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalMilliseconds
+				};
+
+				translationOptions.AccessToken.AccountId = await GetUserInfo(translationOptions.AccessToken, "https://api.languageweaver.com/v4/accounts/users/self", "accountId");
+				translationOptions.AccessToken.AccountNickname = await GetUserInfo(translationOptions.AccessToken, "https://sdl-prod.eu.auth0.com/userinfo", "nickname");
+				return (true, null);
+			}
+			catch (Exception ex)
+			{
+				return (false, ex);
+			}
+		}
+
+
 		public static async Task<(bool Success, Exception Error)> AuthenticateUser(CloudCredentials cloudCredentials, ITranslationOptions translationOptions, AuthenticationType authenticationType)
 		{
 			try
@@ -39,7 +91,7 @@ namespace LanguageWeaverProvider.Services
 				var selfEndpoint = authenticationType == AuthenticationType.CloudCredentials
 								 ? "https://api.languageweaver.com/v4/accounts/users/self"
 								 : "https://api.languageweaver.com/v4/accounts/api-credentials/self";
-				cloudCredentials.AccountId = await GetUserInfo(translationOptions.AccessToken, selfEndpoint);
+				cloudCredentials.AccountId = await GetUserInfo(translationOptions.AccessToken, selfEndpoint, "accountId");
 				translationOptions.AccessToken.AccountId = cloudCredentials.AccountId;
 				return (true, null);
 			}
@@ -60,7 +112,7 @@ namespace LanguageWeaverProvider.Services
 			return $"\r\n{{\r\n    \"{idKey}\": \"{idValue}\",\r\n    \"{secretKey}\": \"{secretValue}\"\r\n}}";
 		}
 
-		private static async Task<string> GetUserInfo(AccessToken accessToken, string endpoint)
+		private static async Task<string> GetUserInfo(AccessToken accessToken, string endpoint, string property)
 		{
 			var uri = new Uri(endpoint);
 			var request = new HttpRequestMessage(HttpMethod.Get, uri);
@@ -70,7 +122,7 @@ namespace LanguageWeaverProvider.Services
 			response.EnsureSuccessStatusCode();
 
 			var userDetailsJson = await response.Content.ReadAsStringAsync();
-			var accountId = JObject.Parse(userDetailsJson)["accountId"].ToString();
+			var accountId = JObject.Parse(userDetailsJson)[property].ToString();
 
 			return accountId;
 		}
@@ -175,7 +227,6 @@ namespace LanguageWeaverProvider.Services
 
 			var sourceXliffText = sourceXliff.ToString();
 			var linguisticOptionsDictionary = mappedPair.LinguisticOptions?.ToDictionary(lo => lo.Id, lo => lo.SelectedValue);
-
 			var translationRequestModel = new CloudTranslationRequest
 			{
 				SourceLanguageId = mappedPair.SourceCode,
@@ -186,6 +237,11 @@ namespace LanguageWeaverProvider.Services
 				Dictionaries = new object[] { },
 				LinguisticOptions = linguisticOptionsDictionary
 			};
+
+			if (!string.IsNullOrEmpty(mappedPair.SelectedDictionary.DictionaryId))
+			{
+				translationRequestModel.Dictionaries = new object[] { mappedPair.SelectedDictionary.DictionaryId };
+			}
 
 			var httpClient = new HttpClient();
 			httpClient.DefaultRequestHeaders.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
@@ -221,6 +277,27 @@ namespace LanguageWeaverProvider.Services
 
 			var httpClient = new HttpClient();
 			await httpClient.SendAsync(request);
+		}
+
+		public static async Task RefreshToken(AccessToken accessToken)
+		{
+			try
+			{
+
+				var parameters = new Dictionary<string, string>
+				{
+					{ "grant_type", "refresh_token" },
+					{ "refresh_token", accessToken.RefreshToken }
+				};
+				using var httpRequest = new HttpRequestMessage
+				{
+					Method = HttpMethod.Post,
+					RequestUri = new Uri("https://sdl-prod.eu.auth0.com/"),
+					Content = new FormUrlEncodedContent(parameters)
+				};
+				var result = await new HttpClient().SendAsync(httpRequest);
+			}
+			catch { }
 		}
 	}
 }

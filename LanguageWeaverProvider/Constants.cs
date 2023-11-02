@@ -2,11 +2,14 @@
 {
 	public class Constants
 	{
+		// Plugin Name
 		public const string PluginShortName = "Language Weaver";
 		public const string PluginName = "Language Weaver Provider";
-		public const string TranslationScheme = "languageweaver";
-		public const string TranslationFullScheme = "languageweaver:///";
+		public const string PluginNameCloud = "Language Weaver Cloud";
+		public const string PluginNameEdge = "Language Weaver Edge";
 
+
+		public const string BaseTranslationScheme = "languageweaver";
 		public const string CloudScheme = "languageweavercloud";
 		public const string CloudFullScheme = "languageweavercloud:///";
 		public const string EdgeScheme = "languageweaveredge";

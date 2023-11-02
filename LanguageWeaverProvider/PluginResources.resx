@@ -295,7 +295,7 @@ Language Weaver is a secure, adaptable, cloud-based enterprise machine translati
 Language Weaver Edge is a secure, scalable and adaptable on-premises solution leveraging state-of-the-art neural technologies. All the features and functionality of Language Weaver is available behind your firewall.</value>
   </data>
   <data name="NameOf_CommandParameterI_MissingComponent" xml:space="preserve">
-    <value>Could not find the property ['{0}'] in ['{1}'], please check the spelling for both the property and the class or if any of the two had its name changed in both C# class and XAML.</value>
+    <value>Could not find the property '{0}' in '{1}', please check the spelling for both the property and the class or if any of the two had its name changed in both C# class and XAML.</value>
   </data>
   <data name="NameOf_CommandParameter_Syntax" xml:space="preserve">
     <value>Syntax for the NameOf is:

@@ -163,7 +163,7 @@ namespace LanguageWeaverProvider.ViewModel
 		{
 			Providers = new(_projectController.GetTranslationProviderConfiguration()
 											  .Entries
-											  .Where(entry => entry.MainTranslationProvider.Uri.AbsoluteUri.StartsWith(Constants.TranslationScheme))
+											  .Where(entry => entry.MainTranslationProvider.Uri.AbsoluteUri.StartsWith(Constants.BaseTranslationScheme))
 											  .Select(entry => JsonConvert.DeserializeObject<TranslationOptions>(entry.MainTranslationProvider.State)));
 			SelectedProvider = Providers.First();
 		}

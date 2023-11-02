@@ -592,7 +592,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Could not find the property [&apos;{0}&apos;] in [&apos;{1}&apos;], please check the spelling for both the property and the class or if any of the two had its name changed in both C# class and XAML..
+        ///   Looks up a localized string similar to Could not find the property &apos;{0}&apos; in &apos;{1}&apos;, please check the spelling for both the property and the class or if any of the two had its name changed in both C# class and XAML..
         /// </summary>
         public static string NameOf_CommandParameterI_MissingComponent {
             get {

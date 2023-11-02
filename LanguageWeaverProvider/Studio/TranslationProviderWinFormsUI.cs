@@ -76,23 +76,39 @@ namespace LanguageWeaverProvider
 
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
 		{
-			var displayInfo = new TranslationProviderDisplayInfo()
+			if (string.IsNullOrEmpty(translationProviderState))
 			{
-				Name = PluginResources.Plugin_Name,
-				TooltipText = PluginResources.Plugin_Name,
+				return new TranslationProviderDisplayInfo()
+				{
+					Name = PluginResources.Plugin_Name,
+					TooltipText = PluginResources.Plugin_Name,
+					TranslationProviderIcon = PluginResources.lwLogoIco,
+					SearchResultImage = PluginResources.lwLogoPng
+				};
+
+			}
+
+			var translationOptions = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
+			var pluginName = translationOptions.Version == PluginVersion.LanguageWeaverCloud ? Constants.PluginNameCloud : Constants.PluginNameEdge;
+			if (!string.IsNullOrEmpty(translationOptions.ProviderSettings.CustomName) && translationOptions.ProviderSettings.UseCustomName)
+			{
+				pluginName += $" - {translationOptions.ProviderSettings.CustomName}";
+			}
+
+			return new TranslationProviderDisplayInfo()
+			{
+				Name = pluginName,
+				TooltipText = pluginName,
 				TranslationProviderIcon = PluginResources.lwLogoIco,
 				SearchResultImage = PluginResources.lwLogoPng
 			};
-
-			return displayInfo;
 		}
-
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
 		{
 			var supportsTranslationProviderUri = translationProviderUri switch
 			{
 				null => throw new ArgumentNullException("Unsuported"),
-				_ => translationProviderUri.Scheme.StartsWith(Constants.TranslationScheme)
+				_ => translationProviderUri.Scheme.StartsWith(Constants.BaseTranslationScheme)
 			};
 
 			return supportsTranslationProviderUri;

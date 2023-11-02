@@ -24,6 +24,7 @@ namespace GoogleCloudTranslationProvider.Extensions
 
 			return $"{providerNamePrefix} - {providerNameSufix}";
 		}
+
 		public static string EncodeSpecialChars(this string text)
 		{
 			text = text.Replace("#", "%23");

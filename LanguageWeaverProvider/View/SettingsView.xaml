@@ -5,7 +5,9 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:root="clr-namespace:LanguageWeaverProvider"
 			 xmlns:local="clr-namespace:LanguageWeaverProvider.View"
+			 xmlns:controls="clr-namespace:LanguageWeaverProvider.Controls"
 			 xmlns:viewModel="clr-namespace:LanguageWeaverProvider.ViewModel"
+			 xmlns:converters="clr-namespace:LanguageWeaverProvider.Converters"
 			 d:DataContext="{d:DesignInstance viewModel:SettingsViewModel}"
 			 mc:Ignorable="d"
 			 d:DesignHeight="450"
@@ -15,7 +17,11 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/CheckBoxResources.xaml" />
+				<ResourceDictionary Source="../Controls/WatermarkTextBoxResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
+			
+			<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
 		</ResourceDictionary>
 	</UserControl.Resources>
 
@@ -42,7 +48,7 @@
 		</Button>
 		
 		<StackPanel Grid.Row="1"
-					Margin="72 32 0 0">
+					Margin="72 32 72 0">
 			<CheckBox Content="{x:Static root:PluginResources.SettingsView_Drafts}"
 					  IsChecked="{Binding ResendDrafts}" 
 					  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
@@ -52,6 +58,19 @@
 					  IsChecked="{Binding IncludeTags}"
 					  Style="{StaticResource Sdl.Checkbox.GenericStyle}" 
 					  Margin="0 4"/>
+
+			<CheckBox Content="Use custom name"
+					  IsChecked="{Binding UseCustomName}"
+					  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+					  Margin="0 4" />
+
+			<TextBox Text="{Binding CustomName}"
+					 Style="{StaticResource WatermarkTextBox}"
+					 Visibility="{Binding UseCustomName, Converter={StaticResource BooleanToVisibilityConverter}}"
+					 controls:TextBoxWatermarkHelper.WatermarkText="Custom name"
+					 controls:TextBoxWatermarkHelper.IsWatermarkVisible="True"
+					 controls:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+					 controls:TextBoxWatermarkHelper.ButtonCommandParameter="{controls:NameOf Member=CustomName, Type={x:Type viewModel:SettingsViewModel}}" />
 		</StackPanel>
 		
 	</Grid>

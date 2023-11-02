@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.AccessControl;
 using LanguageWeaverProvider.LanguageMappingProvider;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
@@ -19,7 +20,19 @@ namespace LanguageWeaverProvider
 			_ = DatabaseControl.InitializeDatabase(translationOptions.Version);
 		}
 
-		public string Name => Constants.PluginName;
+		public string Name
+		{
+			get
+			{
+				var pluginName = TranslationOptions.Version == PluginVersion.LanguageWeaverCloud ? Constants.PluginNameCloud : Constants.PluginNameEdge;
+				if (!string.IsNullOrEmpty(TranslationOptions.ProviderSettings.CustomName) && TranslationOptions.ProviderSettings.UseCustomName)
+				{
+					pluginName += $" - {TranslationOptions.ProviderSettings.CustomName}";
+				}
+
+				return pluginName;
+			}
+		}
 
 		public ITranslationOptions TranslationOptions { get; set; }
 

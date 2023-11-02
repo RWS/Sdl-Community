@@ -105,6 +105,8 @@ namespace LanguageWeaverProvider.ViewModel
 			_translationOptions.PairMappings = PairMappings.ToList();
 			_translationOptions.ProviderSettings.ResendDrafts = SettingsView.ResendDrafts;
 			_translationOptions.ProviderSettings.IncludeTags = SettingsView.IncludeTags;
+			_translationOptions.ProviderSettings.UseCustomName = SettingsView.UseCustomName;
+			_translationOptions.ProviderSettings.CustomName = SettingsView.CustomName;
 			CloseEventRaised.Invoke();
 		}
 

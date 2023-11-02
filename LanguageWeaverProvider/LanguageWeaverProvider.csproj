@@ -43,6 +43,12 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+		<Reference Include="Microsoft.Web.WebView2.Core">
+		  <HintPath>..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Microsoft.Web.WebView2.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Microsoft.Web.WebView2.Wpf">
+		  <HintPath>..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Microsoft.Web.WebView2.WPF.dll</HintPath>
+		</Reference>
 		<Reference Include="Newtonsoft.Json">
 		  <HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
 		</Reference>

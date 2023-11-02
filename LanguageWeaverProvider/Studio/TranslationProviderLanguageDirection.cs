@@ -117,7 +117,7 @@ namespace LanguageWeaverProvider
 		public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
 		{
 			_batchTaskWindow = Application.Current.Dispatcher.Invoke(ApplicationInitializer.GetBatchTaskWindow);
-
+			CredentialManager.ValidateToken(_translationOptions);
 			var searchResults = new SearchResults[mask.Length];
 			var segments = translationUnits.Select(x => x.SourceSegment).ToList();
 			var translatableSegments = new List<Segment>();
@@ -238,7 +238,7 @@ namespace LanguageWeaverProvider
 
 		private void StoreMetadata(EvaluatedSegment evaluatedSegment, PairMapping pairMapping)
 		{
-			RatedSegments.Segments ??= new List<RatedSegment>();
+			ApplicationInitializer.RatedSegments ??= new List<RatedSegment>();
 			var ratedSegment = new RatedSegment()
 			{
 				Model = pairMapping.SelectedModel.Model,
@@ -249,7 +249,7 @@ namespace LanguageWeaverProvider
 				TargetLanguageCode = pairMapping.TargetCode
 			};
 
-			RatedSegments.Segments.Add(ratedSegment);
+			ApplicationInitializer.RatedSegments.Add(ratedSegment);
 		}
 
 		private Segment RemoveTagsOnSegment(Segment segment)
