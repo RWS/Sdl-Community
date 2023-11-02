@@ -37,7 +37,9 @@ namespace InterpretBank
         {
             Builder.RegisterType<InterpretBankDataContext>().As<IInterpretBankDataContext>().InstancePerLifetimeScope();
             Builder.RegisterType<TerminologyService.TerminologyService>().As<ITerminologyService>().InstancePerLifetimeScope();
+
             Builder.RegisterType<UserInteractionService>().As<IUserInteractionService>().SingleInstance();
+            Builder.RegisterType<PersistenceService.PersistenceService>().SingleInstance();
         }
 
         private void RegisterInterpretBankProvider()

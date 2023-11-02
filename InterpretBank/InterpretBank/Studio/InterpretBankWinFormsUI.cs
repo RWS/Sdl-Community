@@ -1,4 +1,5 @@
-﻿using InterpretBank.GlossaryService;
+﻿using Autofac;
+using InterpretBank.GlossaryService;
 using InterpretBank.SettingsService.UI;
 using Sdl.Terminology.TerminologyProvider.Core;
 using System;
@@ -16,6 +17,8 @@ internal class InterpretBankWinFormsUI : ITerminologyProviderWinFormsUI
 
     public string TypeName => PluginResources.Plugin_Name;
 
+    private PersistenceService.PersistenceService PersistenceService { get; } = ApplicationInitializer.Container.Resolve<PersistenceService.PersistenceService>();
+
     public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
     {
         var interpretBankDataContext = new InterpretBankDataContext();
@@ -32,7 +35,7 @@ internal class InterpretBankWinFormsUI : ITerminologyProviderWinFormsUI
         var settingsId = GetSettingsId();
         settings.SettingsId = settingsId;
 
-        PersistenceService.PersistenceService.SaveSettings(settings, settingsId);
+        PersistenceService.SaveSettings(settings, settingsId);
 
         var termSearchService = new TerminologyService.TerminologyService(interpretBankDataContext);
         var provider = new InterpretBankProvider(termSearchService);
@@ -58,7 +61,7 @@ internal class InterpretBankWinFormsUI : ITerminologyProviderWinFormsUI
             return false;
 
         provider.Settings = settingsService.Settings;
-        PersistenceService.PersistenceService.SaveSettings(settingsService.Settings, provider.Settings.SettingsId);
+        PersistenceService.SaveSettings(settingsService.Settings, provider.Settings.SettingsId);
 
         provider.RaiseProviderSettingsChanged();
         return true;

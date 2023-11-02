@@ -42,7 +42,7 @@ namespace InterpretBankTests
 
 			var termSearchService = new TerminologyService(ibContext);
 
-			var sut = new InterpretBankProvider(termSearchService, new Settings());
+			var sut = new InterpretBankProvider(termSearchService);
 
 			var results = sut.Search("This is a text", language, language, 100, SearchMode.Fuzzy, true);
 		}

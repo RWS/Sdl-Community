@@ -5,18 +5,18 @@ using Newtonsoft.Json;
 
 namespace InterpretBank.PersistenceService
 {
-	public static class PersistenceService
+	public class PersistenceService
 	{
-		private static string _settingsPath;
+		private string _settingsPath;
 
-		public static string SettingsPath
+		public string SettingsPath
 		{
 			get => _settingsPath;
 			set => _settingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 				$@"Trados AppStore\InterpretBank\{value}.json");
 		}
 
-		public static Settings GetSettings(string settingsId)
+		public Settings GetSettings(string settingsId)
 		{
 			SettingsPath = settingsId;
 			if (!File.Exists(SettingsPath))
@@ -27,7 +27,7 @@ namespace InterpretBank.PersistenceService
 			return settings;
 		}
 
-		public static void SaveSettings(Settings settings, string settingsId)
+		public void SaveSettings(Settings settings, string settingsId)
 		{
 			SettingsPath = settingsId;
 
