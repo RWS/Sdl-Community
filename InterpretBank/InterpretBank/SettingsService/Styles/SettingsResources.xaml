@@ -76,9 +76,6 @@
 	<DataTemplate x:Key="LanguageTemplate"
 				  DataType="{x:Type model:LanguageModel}">
 		<DockPanel>
-			<Image Source="../../Resources/Flag.png"
-				   DockPanel.Dock="Left"
-				   Height="17" />
 			<TextBlock Text="{Binding Name}"
 					   FontSize="10"
 					   DockPanel.Dock="Right" />

@@ -32,6 +32,9 @@
     <None Remove="Resources\Tag.png" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>$(TradosFolder)\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
     </Reference>

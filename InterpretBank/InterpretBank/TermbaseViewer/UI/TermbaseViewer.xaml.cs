@@ -4,13 +4,17 @@ using System.Windows.Input;
 using InterpretBank.Commands;
 using InterpretBank.Model;
 using InterpretBank.TermbaseViewer.ViewModel;
+using InterpretBank.TerminologyService.Interface;
+using Sdl.Core.Globalization;
+using System.Collections.Generic;
 
 namespace InterpretBank.TermbaseViewer.UI
 {
-	public partial class TermbaseViewer : UserControl
+	public partial class TermbaseViewer
 	{
-		public TermbaseViewer()
-		{
+		public TermbaseViewer(TermbaseViewerViewModel viewModel)
+        {
+            DataContext = viewModel;
 			InitializeComponent();
 		}
 
@@ -40,9 +44,11 @@ namespace InterpretBank.TermbaseViewer.UI
 		/// </summary>
 		public void AddNewTermButton_Click(object sender, RoutedEventArgs e)
 		{
-			((TermbaseViewerViewModel)DataContext).AddNewTermCommand.Execute(sender is TermModel ? sender : null);
+			ViewModel.AddNewTermCommand.Execute(sender is TermModel ? sender : null);
 			SourceTerm_EditableTextBlock.EditBox.Focus();
 		}
+
+        private TermbaseViewerViewModel ViewModel => (TermbaseViewerViewModel)DataContext;
 
 		private void EditButton_Click(object sender, RoutedEventArgs e)
 		{
@@ -65,10 +71,20 @@ namespace InterpretBank.TermbaseViewer.UI
 			if (!bool.TryParse(parameter.ToString(), out var editing))
 			{
 				editing = false;
-				((TermbaseViewerViewModel)DataContext).RevertCommand.Execute(null);
+				ViewModel.RevertCommand.Execute(null);
 			}
 
 			SetEditing(editing);
 		}
-	}
+
+        public void LoadTerms(Language sourceLanguage, Language targetLanguage, List<string> glossaries, ITerminologyService terminologyService)
+        {
+            ViewModel.LoadTerms(sourceLanguage, targetLanguage, glossaries, terminologyService);
+        }
+
+        public void ReloadTerms(Language sourceLanguage, Language targetLanguage)
+        {
+            ViewModel.ReloadTerms(sourceLanguage, targetLanguage);
+        }
+    }
 }

@@ -7,8 +7,8 @@ namespace InterpretBank.CommonServices
 {
     public class UserInteractionService : IUserInteractionService
     {
-        private static UserInteractionService _dialogService;
-        public static UserInteractionService Instance { get; set; } = _dialogService ??= new UserInteractionService();
+        //private static UserInteractionService _dialogService;
+        //public static UserInteractionService Instance { get; set; } = _dialogService ??= new UserInteractionService();
         public bool Confirm(string message)
         {
             var dialogResult = MessageBox.Show(message, "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);

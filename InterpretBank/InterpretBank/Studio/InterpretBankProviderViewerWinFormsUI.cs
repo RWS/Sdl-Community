@@ -1,7 +1,5 @@
-﻿using InterpretBank.CommonServices;
-using InterpretBank.Studio.Actions;
+﻿using Autofac;
 using InterpretBank.TermbaseViewer.UI;
-using InterpretBank.TermbaseViewer.ViewModel;
 using Sdl.Core.Globalization;
 using Sdl.Terminology.TerminologyProvider.Core;
 using System;
@@ -24,25 +22,22 @@ namespace InterpretBank.Studio
         {
             get
             {
-                ActionManager.CurrentlyUsedTermbaseViewerControl = _termbaseControl;
-                if (_termbaseControl is not null) return _termbaseControl;
-
-                var termbaseViewerViewModel = new TermbaseViewerViewModel(InterpretBankProvider.TermSearchService, UserInteractionService.Instance);
-                termbaseViewerViewModel.LoadTerms(SourceLanguage, TargetLanguage, InterpretBankProvider.Settings.Glossaries);
-
-                var termbaseViewer = new TermbaseViewer.UI.TermbaseViewer { DataContext = termbaseViewerViewModel };
-
-                _termbaseControl = new TermbaseViewerControl(termbaseViewer);
-                ActionManager.CurrentlyUsedTermbaseViewerControl = _termbaseControl;
+                SetupTermbaseControl();
                 return _termbaseControl;
             }
         }
 
         public bool Initialized => true;
+
         public IEntry SelectedTerm { get; set; }
+
         private InterpretBankProvider InterpretBankProvider { get; set; }
+
         private Language SourceLanguage { get; set; }
+
         private Language TargetLanguage { get; set; }
+
+        private ILifetimeScope TermbaseControlScope { get; } = ApplicationInitializer.Container.BeginLifetimeScope();
         private TermbaseViewerControl TermbaseViewerControl => (TermbaseViewerControl)Control;
 
         public void AddAndEditTerm(IEntry term, string source, string target)
@@ -51,7 +46,11 @@ namespace InterpretBank.Studio
 
         public void AddTerm(string source, string target) => TermbaseViewerControl.AddTerm(source, target);
 
-        public void EditTerm(IEntry term) => TermbaseViewerControl.EditTerm(term);
+        public void EditTerm(IEntry term)
+        {
+            TermbaseViewerControl.EditTerm(term);
+            //TermChanged?.Invoke(this, EventArgs.Empty);
+        }
 
         public void Initialize(ITerminologyProvider terminologyProvider, CultureInfo source, CultureInfo target)
         {
@@ -59,6 +58,7 @@ namespace InterpretBank.Studio
                 return;
 
             InterpretBankProvider = interpretBankProvider;
+            InterpretBankProvider.ProviderSettingsChanged += InterpretBankProvider_ProviderSettingsChanged;
 
             var currentProject = StudioContext.ProjectsController.CurrentProject;
             var targetLanguages = currentProject.GetTargetLanguageFiles().Select(p => p.Language);
@@ -71,9 +71,28 @@ namespace InterpretBank.Studio
 
         public void Release()
         {
+            TermbaseControlScope.Dispose();
         }
 
         public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
             => terminologyProviderUri.ToString().Contains(Constants.InterpretBankUri);
+
+        private void InterpretBankProvider_ProviderSettingsChanged() => LoadTerms();
+
+        private void LoadTerms() =>
+            _termbaseControl
+                .LoadTerms(SourceLanguage, TargetLanguage,
+                    InterpretBankProvider.Settings.Glossaries,
+                    InterpretBankProvider.TermSearchService);
+
+        private void SetupTermbaseControl()
+        {
+            if (_termbaseControl is null)
+            {
+                _termbaseControl = TermbaseControlScope.Resolve<TermbaseViewerControl>();
+                LoadTerms();
+            }
+            else _termbaseControl.ReloadTerms(SourceLanguage, TargetLanguage);
+        }
     }
 }

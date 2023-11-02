@@ -1,7 +1,11 @@
-﻿using InterpretBank.Model;
+﻿using InterpretBank.GlossaryService.Interface;
+using InterpretBank.Model;
 using InterpretBank.TermbaseViewer.ViewModel;
+using InterpretBank.TerminologyService.Interface;
+using Sdl.Core.Globalization;
 using Sdl.Terminology.TerminologyProvider.Core;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 
@@ -9,7 +13,7 @@ namespace InterpretBank.TermbaseViewer.UI
 {
     public partial class TermbaseViewerControl : UserControl
     {
-        public TermbaseViewerControl(TermbaseViewer termbaseViewer)
+        public TermbaseViewerControl(TermbaseViewer termbaseViewer, IInterpretBankDataContext interpretBankDataContext)
         {
             InitializeComponent();
             var elementHost = new ElementHost
@@ -49,5 +53,15 @@ namespace InterpretBank.TermbaseViewer.UI
         public void EditTerm(IEntry term) => DataContext.EditTerm(term);
 
         public void JumpToTerm(IEntry entry) => DataContext.JumpToTerm(entry);
+
+        public void LoadTerms(Language sourceLanguage = null, Language targetLanguage = null, List<string> glossaries = null, ITerminologyService terminologyService = null)
+        {
+            TermbaseViewer.LoadTerms(sourceLanguage, targetLanguage, glossaries, terminologyService);
+        }
+
+        public void ReloadTerms(Language sourceLanguage, Language targetLanguage)
+        {
+            TermbaseViewer.ReloadTerms(sourceLanguage, targetLanguage);
+        }
     }
 }

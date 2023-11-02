@@ -20,11 +20,14 @@ namespace InterpretBank.TermbaseViewer.ViewModel
         private int _selectedIndex;
         private TermModel _selectedItem;
 
+        private string _sourceLanguage;
+        private Image _sourceLanguageFlag;
+        private string _targetLanguage;
+        private Image _targetLanguageFlag;
         private ObservableCollection<TermModel> _terms;
 
-        public TermbaseViewerViewModel(ITerminologyService termSearchService, IUserInteractionService dialogService)
+        public TermbaseViewerViewModel(IUserInteractionService dialogService)
         {
-            TerminologyService = termSearchService;
             DialogService = dialogService;
             //TerminologyService.ShouldReload += () => LoadTerms();
         }
@@ -32,7 +35,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
         public event Action<bool> AnyEditedTermsChanged;
 
         public ICommand AddNewTermCommand => new RelayCommand(AddNewTerm);
-        public bool AnyEditedTerms => Terms.Any(t => t.Edited);
+        public bool AnyEditedTerms => Terms?.Any(t => t.Edited) ?? false;
         public ICommand CommitAllToDatabaseCommand => new RelayCommand(CommitAllToDatabase);
         public ICommand RevertCommand => new RelayCommand(RevertChanges);
 
@@ -57,11 +60,31 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             set => SetField(ref _selectedItem, value);
         }
 
-        public string SourceLanguage { get; set; }
-        public Image SourceLanguageFlag { get; set; }
-        public string TargetLanguage { get; set; }
-        public Image TargetLanguageFlag { get; set; }
-        public ITerminologyService TerminologyService { get; }
+        public string SourceLanguage
+        {
+            get => _sourceLanguage;
+            set => SetField(ref _sourceLanguage, value);
+        }
+
+        public Image SourceLanguageFlag
+        {
+            get => _sourceLanguageFlag;
+            set => SetField(ref _sourceLanguageFlag, value);
+        }
+
+        public string TargetLanguage
+        {
+            get => _targetLanguage;
+            set => SetField(ref _targetLanguage, value);
+        }
+
+        public Image TargetLanguageFlag
+        {
+            get => _targetLanguageFlag;
+            set => SetField(ref _targetLanguageFlag, value);
+        }
+
+        public ITerminologyService TerminologyService { get; set; }
 
         public ObservableCollection<TermModel> Terms
         {
@@ -90,21 +113,23 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
         //public void LoadTerms()
 
-        public void LoadTerms(Language source, Language target, List<string> glossaries)
+        public void LoadTerms(Language source, Language target, List<string> glossaries, ITerminologyService terminologyService)
         {
+            TerminologyService = terminologyService;
             Glossaries = glossaries;
 
-            SourceLanguage = source.GetInterpretBankLanguageName();
-            TargetLanguage = target.GetInterpretBankLanguageName();
-
-            SourceLanguageFlag = source.GetFlagImage();
-            TargetLanguageFlag = target.GetFlagImage();
+            SetLanguagePair(source, target);
 
             LoadTermsFromDb(SourceLanguage, TargetLanguage, glossaries);
             Terms.ForEach(t => t.PropertyChanged += OnTermModelOnPropertyChanged);
 
-            SelectedIndex = 1;
-            SelectedIndex = 0;
+            ResetIndex();
+        }
+
+        public void ReloadTerms(Language sourceLanguage, Language targetLanguage)
+        {
+            SetLanguagePair(sourceLanguage, targetLanguage);
+            ReloadTerms();
         }
 
         private void AddNewTerm(object obj)
@@ -140,8 +165,6 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             changedTerms.ForEach(t => t.SetOriginalTerm(true));
 
             ReloadTerms();
-
-            SelectedIndex = Terms.Count - 1;
         }
 
         private void LoadTermsFromDb(string source, string target, List<string> glossaries) =>
@@ -161,6 +184,13 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             Terms.ForEach(t => t.PropertyChanged -= OnTermModelOnPropertyChanged);
             LoadTermsFromDb(SourceLanguage, TargetLanguage, Glossaries);
             Terms.ForEach(t => t.PropertyChanged += OnTermModelOnPropertyChanged);
+            ResetIndex();
+        }
+
+        private void ResetIndex()
+        {
+            SelectedIndex = 1;
+            SelectedIndex = 0;
         }
 
         private void RevertChanges(object obj)
@@ -177,6 +207,15 @@ namespace InterpretBank.TermbaseViewer.ViewModel
                 SelectedItem.Revert();
 
             RaiseAnyEditedPropertyChanged();
+        }
+
+        private void SetLanguagePair(Language sourceLanguage, Language targetLanguage)
+        {
+            SourceLanguage = sourceLanguage.GetInterpretBankLanguageName();
+            TargetLanguage = targetLanguage.GetInterpretBankLanguageName();
+
+            SourceLanguageFlag = sourceLanguage.GetFlagImage();
+            TargetLanguageFlag = targetLanguage.GetFlagImage();
         }
     }
 }

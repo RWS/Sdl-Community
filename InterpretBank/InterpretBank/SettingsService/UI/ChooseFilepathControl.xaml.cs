@@ -1,4 +1,5 @@
-﻿using InterpretBank.CommonServices;
+﻿using Autofac;
+using InterpretBank.CommonServices;
 using InterpretBank.Interface;
 using Newtonsoft.Json;
 using System;
@@ -56,13 +57,12 @@ namespace InterpretBank.SettingsService.UI
                     return;
 
                 AddToDatabaseList(value);
-
                 SetValue(FilepathProperty, value);
             }
         }
 
         public int SelectedIndex { get; set; }
-        private UserInteractionService UserInteractionService => UserInteractionService.Instance;
+        private IUserInteractionService UserInteractionService => ApplicationInitializer.Container.Resolve<IUserInteractionService>();
 
         private void AddToDatabaseList(string filepath)
         {

@@ -1,11 +1,12 @@
-﻿using InterpretBank.CommonServices;
+﻿using Autofac;
+using InterpretBank.CommonServices;
 using InterpretBank.GlossaryService;
 using InterpretBank.GlossaryService.Interface;
+using InterpretBank.Interface;
 using InterpretBank.SettingsService.UI;
 using InterpretBank.SettingsService.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System;
 using ExchangeService = InterpretBank.GlossaryExchangeService.GlossaryExchangeService;
 
@@ -25,7 +26,7 @@ namespace InterpretBank.Studio.Actions
         private static GlossarySetup GlossarySetup => new(GlossarySetupViewModel);
 
         private static GlossarySetupViewModel GlossarySetupViewModel { get; } = _glossarySetupViewModel ??=
-            new GlossarySetupViewModel(UserInteractionService.Instance, GlossaryExchangeService, InterpretBankDataContext);
+            new GlossarySetupViewModel(new UserInteractionService(), GlossaryExchangeService, InterpretBankDataContext);
 
         private static IInterpretBankDataContext InterpretBankDataContext => new InterpretBankDataContext();
 

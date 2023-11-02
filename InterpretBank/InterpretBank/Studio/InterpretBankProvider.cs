@@ -1,28 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text.RegularExpressions;
-using InterpretBank.SettingsService;
+﻿using InterpretBank.SettingsService;
 using InterpretBank.Studio.Model;
 using InterpretBank.TerminologyService.Interface;
 using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.Terminology.TerminologyProvider.Core;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace InterpretBank.Studio;
 
 public class InterpretBankProvider : AbstractTerminologyProvider
 {
+    private Settings _settings;
+
     public InterpretBankProvider(ITerminologyService termSearchService, Settings settings)
     {
         TermSearchService = termSearchService;
         Settings = settings;
-
-        if (Settings.Tags?.Count > 0)
-            Settings.Glossaries.AddRange(TermSearchService.GetTaggedGlossaries(Settings.Tags));
     }
 
-    public override bool IsReadOnly => false;
+    public event Action ProviderSettingsChanged;
 
     public override IDefinition Definition =>
         //TODO: take name of these fields from Settings
@@ -34,10 +32,19 @@ public class InterpretBankProvider : AbstractTerminologyProvider
             }, GetLanguages().Cast<IDefinitionLanguage>());
 
     public override string Description => PluginResources.Plugin_Description;
-
+    public override bool IsReadOnly => false;
     public override string Name => "Interpret Bank";
 
-    public Settings Settings { get; set; }
+    public Settings Settings
+    {
+        get => _settings;
+        set
+        {
+            _settings = value;
+            if (_settings.Tags?.Count > 0)
+                _settings.Glossaries.AddRange(TermSearchService.GetTaggedGlossaries(_settings.Tags));
+        }
+    }
 
     public ITerminologyService TermSearchService { get; }
     public override Uri Uri => new($"{Constants.InterpretBankUri}/{Settings.SettingsId}.json://");
@@ -64,7 +71,7 @@ public class InterpretBankProvider : AbstractTerminologyProvider
 
     public override IList<ILanguage> GetLanguages()
     {
-        if (Settings.Glossaries == null || !Settings.Glossaries.Any()) return null;
+        if (Settings.Glossaries == null || !Settings.Glossaries.Any()) return new List<ILanguage>();
 
         var languages = new List<ILanguage>();
 
@@ -92,8 +99,10 @@ public class InterpretBankProvider : AbstractTerminologyProvider
             .ToList();
     }
 
+    public void RaiseProviderSettingsChanged() => ProviderSettingsChanged?.Invoke();
+
     public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage destination,
-        int maxResultsCount, SearchMode mode, bool targetRequired)
+            int maxResultsCount, SearchMode mode, bool targetRequired)
     {
         var words = Regex.Split(text, "\\s+");
 

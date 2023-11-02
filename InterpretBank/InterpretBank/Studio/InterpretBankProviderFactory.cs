@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Autofac;
+using System;
 using InterpretBank.GlossaryService;
 using Sdl.Terminology.TerminologyProvider.Core;
 
@@ -8,7 +9,15 @@ namespace InterpretBank.Studio
 								Name = "My_Terminology_Provider_Name",
 								Description = "My_Terminology_Provider_Description")]
 	public class InterpretBankProviderFactory : ITerminologyProviderFactory
-	{
+    {
+        public InterpretBankProviderFactory()
+        {
+            
+        }
+
+        private ILifetimeScope TerminologyProviderScope { get; } =
+            ApplicationInitializer.Container.BeginLifetimeScope();
+
 		public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri, ITerminologyProviderCredentialStore credentials)
 		{
 			var settingsId = terminologyProviderUri.AbsolutePath.Split('.')[0].TrimStart('/');
