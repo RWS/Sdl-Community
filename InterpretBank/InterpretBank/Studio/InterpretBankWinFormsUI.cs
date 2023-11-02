@@ -35,7 +35,8 @@ internal class InterpretBankWinFormsUI : ITerminologyProviderWinFormsUI
         PersistenceService.PersistenceService.SaveSettings(settings, settingsId);
 
         var termSearchService = new TerminologyService.TerminologyService(interpretBankDataContext);
-        var provider = new InterpretBankProvider(termSearchService, settings);
+        var provider = new InterpretBankProvider(termSearchService);
+        provider.Setup(settings);
 
         return new ITerminologyProvider[] { provider };
     }

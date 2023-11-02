@@ -22,5 +22,6 @@ namespace InterpretBank.TerminologyService.Interface
 		void SaveAllTerms(List<TermModel> changedTerms);
 		List<string> GetTaggedGlossaries(List<string> tagList);
         int GetLanguageIndex(string interpretBankLanguage);
+        void Setup(string settingsDatabaseFilepath);
     }
 }

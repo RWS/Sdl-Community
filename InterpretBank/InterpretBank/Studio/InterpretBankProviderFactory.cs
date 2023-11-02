@@ -22,13 +22,9 @@ namespace InterpretBank.Studio
 		{
 			var settingsId = terminologyProviderUri.AbsolutePath.Split('.')[0].TrimStart('/');
 			var settings = PersistenceService.PersistenceService.GetSettings(settingsId);
-
-			var interpretBankDataContext = new InterpretBankDataContext();
-			interpretBankDataContext.Setup(settings.DatabaseFilepath);
-
-			var termSearchService = new TerminologyService.TerminologyService(interpretBankDataContext);
-
-			var interpretBankProvider = new InterpretBankProvider(termSearchService, settings);
+			
+            var interpretBankProvider = TerminologyProviderScope.Resolve<InterpretBankProvider>();
+            interpretBankProvider.Setup(settings);
 
 			return interpretBankProvider;
 		}

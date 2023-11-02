@@ -14,10 +14,10 @@ public class InterpretBankProvider : AbstractTerminologyProvider
 {
     private Settings _settings;
 
-    public InterpretBankProvider(ITerminologyService termSearchService, Settings settings)
+    public InterpretBankProvider(ITerminologyService termSearchService/*, Settings settings*/)
     {
         TermSearchService = termSearchService;
-        Settings = settings;
+        //Settings = settings;
     }
 
     public event Action ProviderSettingsChanged;
@@ -32,7 +32,9 @@ public class InterpretBankProvider : AbstractTerminologyProvider
             }, GetLanguages().Cast<IDefinitionLanguage>());
 
     public override string Description => PluginResources.Plugin_Description;
+
     public override bool IsReadOnly => false;
+
     public override string Name => "Interpret Bank";
 
     public Settings Settings
@@ -47,6 +49,7 @@ public class InterpretBankProvider : AbstractTerminologyProvider
     }
 
     public ITerminologyService TermSearchService { get; }
+
     public override Uri Uri => new($"{Constants.InterpretBankUri}/{Settings.SettingsId}.json://");
 
     private HashSet<IEntry> Entries { get; } = new();
@@ -118,6 +121,12 @@ public class InterpretBankProvider : AbstractTerminologyProvider
         }
 
         return results;
+    }
+
+    public void Setup(Settings settings)
+    {
+        TermSearchService.Setup(settings.DatabaseFilepath);
+        Settings = settings;
     }
 
     //TODO: simplify this; creates confusion

@@ -153,6 +153,11 @@ public class TerminologyService : ITerminologyService
         InterpretBankDataContext.CommitAllChanges(changedTerms);
     }
 
+    public void Setup(string settingsDatabaseFilepath)
+    {
+        InterpretBankDataContext.Setup(settingsDatabaseFilepath);
+    }
+
     private static List<string> GetTermColumns(int targetLanguageIndex, int sourceLanguageIndex = -1)
     {
         var columns = new List<string>
