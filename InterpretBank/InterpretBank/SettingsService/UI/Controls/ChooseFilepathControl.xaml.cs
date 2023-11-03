@@ -61,7 +61,7 @@ namespace InterpretBank.SettingsService.UI.Controls
         }
 
         public int SelectedIndex { get; set; }
-        private IUserInteractionService UserInteractionService => ApplicationInitializer.Container.Resolve<IUserInteractionService>();
+        private IUserInteractionService UserInteractionService => ApplicationInitializer.ApplicationLifetimeScope.Resolve<IUserInteractionService>();
 
         private void AddToDatabaseList(string filepath)
         {

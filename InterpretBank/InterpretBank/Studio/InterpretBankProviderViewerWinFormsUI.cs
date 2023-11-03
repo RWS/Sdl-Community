@@ -37,7 +37,7 @@ namespace InterpretBank.Studio
 
         private Language TargetLanguage { get; set; }
 
-        private ILifetimeScope TermbaseControlScope { get; } = ApplicationInitializer.Container.BeginLifetimeScope();
+        private ILifetimeScope TermbaseControlScope { get; } = ApplicationInitializer.ApplicationLifetimeScope.BeginLifetimeScope();
         private TermbaseViewerControl TermbaseViewerControl => (TermbaseViewerControl)Control;
 
         public void AddAndEditTerm(IEntry term, string source, string target)

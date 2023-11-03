@@ -19,9 +19,9 @@ internal class InterpretBankWinFormsUI : ITerminologyProviderWinFormsUI
 
     public string TypeName => PluginResources.Plugin_Name;
 
-    private ILifetimeScope InterpretBankSettingsScope { get; } = ApplicationInitializer.Container.BeginLifetimeScope();
+    private ILifetimeScope InterpretBankSettingsScope { get; } = ApplicationInitializer.ApplicationLifetimeScope.BeginLifetimeScope();
 
-    private PersistenceService.PersistenceService PersistenceService { get; } = ApplicationInitializer.Container.Resolve<PersistenceService.PersistenceService>();
+    private PersistenceService.PersistenceService PersistenceService { get; } = ApplicationInitializer.ApplicationLifetimeScope.Resolve<PersistenceService.PersistenceService>();
 
     public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
     {

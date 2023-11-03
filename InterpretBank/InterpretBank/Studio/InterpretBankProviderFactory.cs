@@ -4,13 +4,13 @@ using System;
 
 namespace InterpretBank.Studio
 {
-    [TerminologyProviderFactory(Id = "My_Terminology_Provider_Id",
+    [TerminologyProviderFactory(Id = nameof(InterpretBankProviderFactory),
                                 Name = "My_Terminology_Provider_Name",
                                 Description = "My_Terminology_Provider_Description")]
     public class InterpretBankProviderFactory : ITerminologyProviderFactory
     {
         private ILifetimeScope TerminologyProviderScope { get; } =
-            ApplicationInitializer.Container.BeginLifetimeScope();
+            ApplicationInitializer.ApplicationLifetimeScope.BeginLifetimeScope();
 
         public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri, ITerminologyProviderCredentialStore credentials)
         {
