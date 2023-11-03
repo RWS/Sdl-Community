@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="InterpretBank.SettingsService.UI.ChooseFilepathControl"
+﻿<UserControl x:Class="InterpretBank.SettingsService.UI.Controls.ChooseFilepathControl"
 			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -10,7 +10,7 @@
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="../Styles/SettingsMainResources.xaml" />
+				<ResourceDictionary Source="../../Styles/SettingsMainResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
 		</ResourceDictionary>

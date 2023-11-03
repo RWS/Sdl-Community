@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using InterpretBank.CommonServices;
 using InterpretBank.Interface;
 using Newtonsoft.Json;
 using System;
@@ -10,7 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace InterpretBank.SettingsService.UI
+namespace InterpretBank.SettingsService.UI.Controls
 {
     /// <summary>
     /// Interaction logic for ChooseFilepathControl.xaml

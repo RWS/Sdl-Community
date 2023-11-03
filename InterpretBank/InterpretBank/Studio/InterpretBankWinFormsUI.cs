@@ -49,12 +49,6 @@ internal class InterpretBankWinFormsUI : ITerminologyProviderWinFormsUI
         if (provider == null)
             return false;
 
-        //var settingsService =
-        //    new SettingsService.ViewModel.SettingsService(provider.TermSearchService.InterpretBankDataContext);
-        //settingsService.Settings = provider.Settings;
-
-        //var settingsUi = new SettingsMain(settingsService);
-
         var settingsUi = InterpretBankSettingsScope.Resolve<SettingsMain>();
         settingsUi.Setup(provider.Settings);
         var result = settingsUi.ShowDialog() ?? false;

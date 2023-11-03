@@ -12,6 +12,7 @@
         MouseDown="GlossarySetup_OnMouseDown"
         xmlns:converters="clr-namespace:InterpretBank.SettingsService.Converters"
         xmlns:model="clr-namespace:InterpretBank.SettingsService.Model"
+        xmlns:controls="clr-namespace:InterpretBank.SettingsService.UI.Controls"
         d:DataContext="{d:DesignInstance viewModel:GlossarySetupViewModel}"
         SizeToContent="Height"
         mc:Ignorable="d"
@@ -49,7 +50,7 @@
             <TextBlock Text="{x:Static interpretBank:PluginResources.SettingsWindow_TextBlock_DBFilepath}"
                        DockPanel.Dock="Top" />
 
-            <ui:ChooseFilepathControl x:Name="ChooseFilepathControl" Filepath="{Binding Filepath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            <controls:ChooseFilepathControl x:Name="ChooseFilepathControl" Filepath="{Binding Filepath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
         </DockPanel>
         <TabControl Margin="10"

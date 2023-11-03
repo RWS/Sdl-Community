@@ -3,7 +3,7 @@
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:ui="clr-namespace:InterpretBank.SettingsService.UI"
+		xmlns:ui="clr-namespace:InterpretBank.SettingsService.UI.Controls"
 		xmlns:viewModel="clr-namespace:InterpretBank.SettingsService.ViewModel"
 		xmlns:styles="clr-namespace:InterpretBank.Styles"
 		xmlns:interpretBank="clr-namespace:InterpretBank"
@@ -19,10 +19,10 @@
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="../../Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="/InterpretBank;component/Styles/WindowsBorder.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
-				<ResourceDictionary Source="../Styles/SettingsResources.xaml" />
-				<ResourceDictionary Source="../Styles/SettingsMainResources.xaml" />
+				<ResourceDictionary Source="/InterpretBank;component/SettingsService/Styles/SettingsResources.xaml" />
+				<ResourceDictionary Source="/InterpretBank;component/SettingsService/Styles/SettingsMainResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Controls;component/Controls/WatermarkTextBox/WatermarkTextBoxResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 

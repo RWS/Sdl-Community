@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace InterpretBank.SettingsService.UI
+namespace InterpretBank.SettingsService.UI.Controls
 {
 	/// <summary>
 	/// Interaction logic for Settings.xaml
