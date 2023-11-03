@@ -17,7 +17,7 @@ namespace Sdl.Community.MTCloud.Provider.Helpers
 
 			var config = LogManager.Configuration;
 
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Constants.RWSAppStore, Constants.SDLMachineTranslationCloud);
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Constants.TradosAppStore, Constants.SDLMachineTranslationCloud);
 
 			Directory.CreateDirectory(logDirectoryPath);
 
