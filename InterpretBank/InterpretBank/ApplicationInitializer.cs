@@ -42,26 +42,26 @@ namespace InterpretBank
 
             Builder.RegisterType<TerminologyService.TerminologyService>().As<ITerminologyService>().InstancePerLifetimeScope();
 
-            Builder.RegisterType<UserInteractionService>().As<IUserInteractionService>().SingleInstance();
+            Builder.RegisterType<UserInteractionService>().As<IUserInteractionService>().InstancePerDependency();
             Builder.RegisterType<PersistenceService.PersistenceService>().SingleInstance();
             Builder.RegisterType<GlossaryExchangeService.GlossaryExchangeService>().SingleInstance();
         }
 
         private static void RegisterGlossarySetup()
         {
-            Builder.RegisterType<GlossarySetupViewModel>();
-            Builder.RegisterType<GlossarySetup>();
+            Builder.RegisterType<GlossarySetupViewModel>().InstancePerDependency();
+            Builder.RegisterType<GlossarySetup>().InstancePerDependency();
         }
 
         private static void RegisterInterpretBankProvider()
         {
-            Builder.RegisterType<InterpretBankProvider>().InstancePerLifetimeScope();
+            Builder.RegisterType<InterpretBankProvider>().InstancePerDependency();
         }
 
         private static void RegisterSettingsUi()
         {
-            Builder.RegisterType<SettingsService.ViewModel.SettingsService>().InstancePerLifetimeScope();
-            Builder.RegisterType<SettingsMain>().InstancePerLifetimeScope();
+            Builder.RegisterType<SettingsService.ViewModel.SettingsService>().InstancePerDependency();
+            Builder.RegisterType<SettingsMain>().InstancePerDependency();
         }
 
         private static void RegisterTermbaseViewerControl()
