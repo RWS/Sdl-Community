@@ -13,7 +13,7 @@ namespace InterpretBank.TermbaseViewer.UI
 {
     public partial class TermbaseViewerControl : UserControl
     {
-        public TermbaseViewerControl(TermbaseViewer termbaseViewer, IInterpretBankDataContext interpretBankDataContext)
+        public TermbaseViewerControl(TermbaseViewer termbaseViewer)
         {
             InitializeComponent();
             var elementHost = new ElementHost

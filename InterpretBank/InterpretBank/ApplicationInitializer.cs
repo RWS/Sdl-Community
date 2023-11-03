@@ -3,6 +3,7 @@ using InterpretBank.CommonServices;
 using InterpretBank.GlossaryService;
 using InterpretBank.GlossaryService.Interface;
 using InterpretBank.Interface;
+using InterpretBank.SettingsService.UI;
 using InterpretBank.Studio;
 using InterpretBank.TermbaseViewer.UI;
 using InterpretBank.TermbaseViewer.ViewModel;
@@ -23,7 +24,15 @@ namespace InterpretBank
             RegisterGlobalDependencies();
             RegisterTermbaseViewerControl();
             RegisterInterpretBankProvider();
+            RegisterSettingsUi();
+
             Container = Builder.Build().BeginLifetimeScope();
+        }
+
+        private void RegisterSettingsUi()
+        {
+            Builder.RegisterType<SettingsService.ViewModel.SettingsService>().InstancePerLifetimeScope();
+            Builder.RegisterType<SettingsMain>().InstancePerLifetimeScope();
         }
 
         private static void RegisterTermbaseViewerControl()

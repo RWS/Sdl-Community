@@ -58,6 +58,7 @@ namespace InterpretBank.Studio
                 return;
 
             InterpretBankProvider = interpretBankProvider;
+            InterpretBankProvider.ProviderSettingsChanged -= InterpretBankProvider_ProviderSettingsChanged;
             InterpretBankProvider.ProviderSettingsChanged += InterpretBankProvider_ProviderSettingsChanged;
 
             var currentProject = StudioContext.ProjectsController.CurrentProject;
@@ -71,7 +72,7 @@ namespace InterpretBank.Studio
 
         public void Release()
         {
-            TermbaseControlScope.Dispose();
+            //TermbaseControlScope.Dispose(); this breaks the TermbaseViewer when switching projects
         }
 
         public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
@@ -92,7 +93,10 @@ namespace InterpretBank.Studio
                 _termbaseControl = TermbaseControlScope.Resolve<TermbaseViewerControl>();
                 LoadTerms();
             }
-            else _termbaseControl.ReloadTerms(SourceLanguage, TargetLanguage);
+            else
+            {
+                _termbaseControl.ReloadTerms(SourceLanguage, TargetLanguage);
+            }
         }
     }
 }

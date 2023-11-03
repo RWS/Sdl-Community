@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -100,7 +101,7 @@ public class SettingsService : ViewModelBase.ViewModel, ISettingsService, IDataE
 		set => SetField(ref _tags, value);
 	}
 
-	private IInterpretBankDataContext InterpretBankDataContext { get; }
+	private IInterpretBankDataContext InterpretBankDataContext { get; set; }
 
 	public void Dispose()
 	{
@@ -159,4 +160,9 @@ public class SettingsService : ViewModelBase.ViewModel, ISettingsService, IDataE
 		Error = !SelectedTags.Any() && !SelectedGlossaries.Any() ? "Please select some tags or glossaries" : "";
 		OnPropertyChanged(Error);
 	}
+
+    public void Setup(string dbFilepath)
+    {
+        _filepath = dbFilepath;
+    }
 }

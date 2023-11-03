@@ -1,44 +1,43 @@
 ﻿using Autofac;
-using InterpretBank.GlossaryService;
 using InterpretBank.SettingsService.UI;
 using Sdl.Terminology.TerminologyProvider.Core;
 using System;
 using IWin32Window = System.Windows.Forms.IWin32Window;
-using Settings = InterpretBank.SettingsService.Settings;
 
 namespace InterpretBank.Studio;
 
 [TerminologyProviderWinFormsUI]
 internal class InterpretBankWinFormsUI : ITerminologyProviderWinFormsUI
 {
+    public InterpretBankWinFormsUI()
+    {
+        
+    }
     public bool SupportsEditing => true;
 
     public string TypeDescription => PluginResources.Plugin_Description;
 
     public string TypeName => PluginResources.Plugin_Name;
 
+    private ILifetimeScope InterpretBankSettingsScope { get; } = ApplicationInitializer.Container.BeginLifetimeScope();
+
     private PersistenceService.PersistenceService PersistenceService { get; } = ApplicationInitializer.Container.Resolve<PersistenceService.PersistenceService>();
 
     public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
     {
-        var interpretBankDataContext = new InterpretBankDataContext();
-        var settingsService =
-            new SettingsService.ViewModel.SettingsService(interpretBankDataContext);
-        var settingsUi = new SettingsMain { DataContext = settingsService };
+        var settingsUi = InterpretBankSettingsScope.Resolve<SettingsMain>();
 
-        Settings settings;
-        if (settingsUi.ShowDialog() ?? false)
-            settings = settingsService.Settings;
-        else
+        if (!(settingsUi.ShowDialog() ?? false))
             return null;
+
+        var settings = settingsUi.Settings;
 
         var settingsId = GetSettingsId();
         settings.SettingsId = settingsId;
 
         PersistenceService.SaveSettings(settings, settingsId);
 
-        var termSearchService = new TerminologyService.TerminologyService(interpretBankDataContext);
-        var provider = new InterpretBankProvider(termSearchService);
+        var provider = InterpretBankSettingsScope.Resolve<InterpretBankProvider>();
         provider.Setup(settings);
 
         return new ITerminologyProvider[] { provider };
@@ -50,18 +49,21 @@ internal class InterpretBankWinFormsUI : ITerminologyProviderWinFormsUI
         if (provider == null)
             return false;
 
-        var settingsService =
-            new SettingsService.ViewModel.SettingsService(provider.TermSearchService.InterpretBankDataContext);
-        settingsService.Settings = provider.Settings;
+        //var settingsService =
+        //    new SettingsService.ViewModel.SettingsService(provider.TermSearchService.InterpretBankDataContext);
+        //settingsService.Settings = provider.Settings;
 
-        var settingsUi = new SettingsMain { DataContext = settingsService };
+        //var settingsUi = new SettingsMain(settingsService);
+
+        var settingsUi = InterpretBankSettingsScope.Resolve<SettingsMain>();
+        settingsUi.Setup(provider.Settings);
         var result = settingsUi.ShowDialog() ?? false;
 
         if (!result)
             return false;
 
-        provider.Settings = settingsService.Settings;
-        PersistenceService.SaveSettings(settingsService.Settings, provider.Settings.SettingsId);
+        provider.Settings = settingsUi.Settings;
+        PersistenceService.SaveSettings(provider.Settings, provider.Settings.SettingsId);
 
         provider.RaiseProviderSettingsChanged();
         return true;
