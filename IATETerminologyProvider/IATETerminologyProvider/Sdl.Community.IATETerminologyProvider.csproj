@@ -44,7 +44,15 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.IdentityModel.Tokens">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Microsoft.IdentityModel.Tokens.dll</HintPath>
-    </Reference>    
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.Core, Version=1.0.1774.30, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(MSBuildProgramFiles32)Trados\Trados Studio\Studio17\Microsoft.Web.WebView2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.Wpf, Version=1.0.1774.30, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Microsoft.Web.WebView2.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -146,6 +154,8 @@
     <Compile Include="Model\ResponseModels\IateInstitution.cs" />
     <Compile Include="Service\EUProvider.cs" />
     <Compile Include="Service\SettingsService.cs" />
+    <Compile Include="ViewModel\BaseViewModel.cs" />
+    <Compile Include="ViewModel\BrowserViewModel.cs" />
     <Compile Include="ViewModel\FineGrainedFilterViewModel.cs" />
     <Compile Include="Helpers\ApiUrls.cs" />
     <Compile Include="Helpers\Constants.cs" />
@@ -206,6 +216,9 @@
     <Compile Include="View\FineGrainedFilter.xaml.cs">
       <DependentUpon>FineGrainedFilter.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\SearchResultsControl.xaml.cs">
+      <DependentUpon>SearchResultsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>
@@ -213,12 +226,6 @@
       <DependentUpon>DomainsAndTermTypes.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
-    <Compile Include="View\SearchResultsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="View\SearchResultsControl.Designer.cs">
-      <DependentUpon>SearchResultsControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="View\SearchResultsViewerController.cs" />
     <Compile Include="View\IATETermsControl.cs">
       <SubType>UserControl</SubType>
@@ -247,6 +254,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\FineGrainedFilter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SearchResultsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -282,9 +293,6 @@
     <Resource Include="Resources\StarGrey.png" />
     <Resource Include="Resources\StarYellow.png" />
     <Resource Include="Resources\Question.ico" />
-    <EmbeddedResource Include="View\SearchResultsControl.resx">
-      <DependentUpon>SearchResultsControl.cs</DependentUpon>
-    </EmbeddedResource>
     <Resource Include="Resources\IATE_logo.png" />
     <Resource Include="Resources\IATE_settings.ico" />
     <Resource Include="Resources\IATE_settings.png" />
@@ -309,10 +317,7 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="CefSharp.WinForms">
-      <Version>117.2.40</Version>
-    </PackageReference>
+  <ItemGroup>   
     <PackageReference Include="Sdl.Core.PluginFramework">
       <Version>2.1.0</Version>
     </PackageReference>

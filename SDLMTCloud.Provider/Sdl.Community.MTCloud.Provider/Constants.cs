@@ -25,7 +25,7 @@
 
 		// TODO confirm if some or all of these should be managed in a resource file		
 		public static string SDLMachineTranslationCloud = "Language Weaver";
-		public static string RWSAppStore = "RWS AppStore";
+		public static string TradosAppStore = "Trados AppStore";
 		public static string TraceId = "Trace-ID";
 		public static string FAILED = "FAILED";
 		public static string INIT = "INIT";
