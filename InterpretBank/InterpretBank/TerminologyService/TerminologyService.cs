@@ -2,11 +2,14 @@
 using InterpretBank.GlossaryService.Interface;
 using InterpretBank.Model;
 using InterpretBank.SettingsService.Model;
+using InterpretBank.Studio;
 using InterpretBank.Studio.Model;
 using InterpretBank.TerminologyService.Extensions;
 using InterpretBank.TerminologyService.Interface;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -29,41 +32,51 @@ public class TerminologyService : ITerminologyService
         InterpretBankDataContext?.Dispose();
     }
 
-    public List<TermModel> GetAllTerms(string source, string target, List<string> glossaries)
+    //+ support for subglossaries
+    public ObservableCollection<EntryModel> GetEntriesFromDb(List<string> glossaries)
     {
-        List<DbTerm> dbTerms = null;
-        try
+        var dbTerms = InterpretBankDataContext
+            .GetRows<DbTerm>()
+            .Where(dbTerm => glossaries.Contains(dbTerm.Tag1));
+
+        var entryModels = new ObservableCollection<EntryModel>();
+
+        var dbLanguages = GetLanguages();
+        var studioLanguages = StudioContext.Languages;
+        foreach (var t in dbTerms)
         {
-            dbTerms = InterpretBankDataContext
-                .GetRows<DbTerm>()
-                .Where(t => glossaries.Contains(t.Tag1))
-                .ToList();
+            var entryModel = new EntryModel
+            {
+                Id = t.Id,
+                EntryComment = t.CommentAll,
+                GlossaryName = t.Tag1,
+                SubGlossaryName = t.Tag2,
+                Terms = new ObservableCollection<TermModel>()
+            };
+
+            for (int i = 1; i <= 10; i++)
+            {
+                var languageName = "";
+                if (i - 1 < dbLanguages.Count) languageName = dbLanguages[i - 1].Name;
+
+                Image languageFlag = null;
+                if (!string.IsNullOrWhiteSpace(languageName)) languageFlag = studioLanguages.FirstOrDefault(s => s.EnglishName.Contains(languageName) && !s.IsNeutral)?.GetFlagImage();
+
+                if (!string.IsNullOrWhiteSpace(languageName))
+                    entryModel.Terms.Add(new TermModel
+                    {
+                        FirstComment = t[$"Comment{i}a"],
+                        SecondComment = t[$"Comment{i}b"],
+                        Term = t[$"Term{i}"],
+                        LanguageName = languageName,
+                        LanguageFlag = languageFlag
+                    });
+            }
+
+            entryModels.Add(entryModel);
         }
-        catch { }
 
-        //TODO: optimize this to use IQueryable and not .ToList()
-
-        var sourceLanguageIndex = GetLanguageIndex(source);
-        var targetLanguageIndex = GetLanguageIndex(target);
-        var columns = GetTermColumns(targetLanguageIndex, sourceLanguageIndex);
-
-        var termbaseViewerTerms = new List<TermModel>();
-        dbTerms.ForEach(dbT => termbaseViewerTerms.Add(new TermModel
-        (
-            dbT.Id,
-            dbT[columns[0]],
-            dbT[columns[1]],
-            dbT[columns[2]],
-            dbT[columns[3]],
-            dbT[columns[4]],
-            dbT[columns[5]],
-            dbT.CommentAll,
-            sourceLanguageIndex,
-            targetLanguageIndex,
-            dbT.Tag1
-        )));
-
-        return termbaseViewerTerms;
+        return entryModels;
     }
 
     public List<StudioTermEntry> GetExactTerms(string word, string sourceLanguage, string targetLanguage, List<string> glossaries)
@@ -150,7 +163,7 @@ public class TerminologyService : ITerminologyService
 
     public void SaveAllTerms(List<TermModel> changedTerms)
     {
-        InterpretBankDataContext.CommitAllChanges(changedTerms);
+        //InterpretBankDataContext.CommitAllChanges(changedTerms);
     }
 
     public void Setup(string settingsDatabaseFilepath)

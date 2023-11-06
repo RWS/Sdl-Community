@@ -63,6 +63,7 @@ public class SettingsService : ViewModelBase.ViewModel, ISettingsService, IDataE
 		set
 		{
 			SetField(ref _selectedTags, value);
+            //Add tagged glossaries to the SelectedGlossaries
 			_selectedTags.CollectionChanged += (s, e) =>
 			{
 				OnPropertyChanged();

@@ -1,190 +1,70 @@
-﻿using InterpretBank.Commands;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows.Input;
+﻿using System.Drawing;
 
 namespace InterpretBank.Model
 {
-    public class TermModel : INotifyPropertyChanged
+    public class TermModel : ViewModelBase.ViewModel
     {
-        private string _commentAll;
-        private bool _isEditing;
-        private bool _isRemoved;
-        private int _sourceLanguageIndex;
-        private string _sourceTerm;
-        private string _sourceTermComment1;
-        private string _sourceTermComment2;
-        private int _targetLanguageIndex;
-        private string _targetTerm;
-        private string _targetTermComment1;
-        private string _targetTermComment2;
+        private string _firstComment;
+        private int _id;
+        private Image _languageFlag;
+        private string _secondComment;
+        private string _term;
 
-        public TermModel() => Id = -1;
-
-        public TermModel(int id, string targetTerm, string targetTermComment1, string targetTermComment2, string sourceTerm, string sourceTermComment1, string sourceTermComment2, string commentAll, int sourceLanguageIndex, int targetLanguageIndex, string glossaryName)
+        public string FirstComment
         {
-            Id = id;
-
-            _targetTerm = targetTerm;
-            _targetTermComment1 = targetTermComment1;
-            _targetTermComment2 = targetTermComment2;
-
-            _sourceTerm = sourceTerm;
-            _sourceTermComment1 = sourceTermComment1;
-            _sourceTermComment2 = sourceTermComment2;
-
-            _commentAll = commentAll;
-
-            _sourceLanguageIndex = sourceLanguageIndex;
-            _targetLanguageIndex = targetLanguageIndex;
-
-            GlossaryName = glossaryName;
-
-            SetOriginalTerm();
+            get => _firstComment;
+            set => SetField(ref _firstComment, value);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public string CommentAll
+        public int Id
         {
-            get => _commentAll;
-            set => SetField(ref _commentAll, value);
+            get => _id;
+            set => SetField(ref _id, value);
         }
 
-        public bool Edited => !ContentEquals(OriginalTerm) || IsRemoved || Id == -1;
-
-        public string GlossaryName { get; set; }
-
-        public int Id { get; set; }
-
-        public bool IsEditing
+        public Image LanguageFlag
         {
-            get => _isEditing;
-            set => SetField(ref _isEditing, value);
+            get => _languageFlag;
+            set => SetField(ref _languageFlag, value);
         }
 
-        public bool IsRemoved
+        public string LanguageName { get; set; }
+
+        public string SecondComment
         {
-            get => _isRemoved;
-            set
+            get => _secondComment;
+            set => SetField(ref _secondComment, value);
+        }
+
+        public string Term
+        {
+            get => _term;
+            set => SetField(ref _term, value);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((TermModel)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
             {
-                if (value == _isRemoved)
-                    return;
-                _isRemoved = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(Edited));
+                var hashCode = (_firstComment != null ? _firstComment.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (_secondComment != null ? _secondComment.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (_term != null ? _term.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (LanguageName != null ? LanguageName.GetHashCode() : 0);
+                return hashCode;
             }
         }
 
-        public ICommand RemoveTermCommand => new RelayCommand(RemoveTerm);
-
-        public int SourceLanguageIndex
+        protected bool Equals(TermModel other)
         {
-            get => _sourceLanguageIndex;
-            set => _sourceLanguageIndex = value;
-        }
-
-        public string SourceTerm
-        {
-            get => _sourceTerm;
-            set => SetField(ref _sourceTerm, value);
-        }
-
-        public string SourceTermComment1
-        {
-            get => _sourceTermComment1;
-            set => SetField(ref _sourceTermComment1, value);
-        }
-
-        public string SourceTermComment2
-        {
-            get => _sourceTermComment2;
-            set => SetField(ref _sourceTermComment2, value);
-        }
-
-        public int TargetLanguageIndex
-        {
-            get => _targetLanguageIndex;
-            set => _targetLanguageIndex = value;
-        }
-
-        public string TargetTerm
-        {
-            get => _targetTerm;
-            set => SetField(ref _targetTerm, value);
-        }
-
-        public string TargetTermComment1
-        {
-            get => _targetTermComment1;
-            set => SetField(ref _targetTermComment1, value);
-        }
-
-        public string TargetTermComment2
-        {
-            get => _targetTermComment2;
-            set => SetField(ref _targetTermComment2, value);
-        }
-
-        private TermModel OriginalTerm { get; set; }
-
-        public bool ContentEquals(TermModel other) =>
-            _commentAll == other._commentAll && _sourceTerm == other._sourceTerm &&
-            _sourceTermComment1 == other._sourceTermComment1 &&
-            _sourceTermComment2 == other._sourceTermComment2 && _targetTerm == other._targetTerm &&
-            _targetTermComment1 == other._targetTermComment1 && _targetTermComment2 == other._targetTermComment2;
-
-        public void Revert()
-        {
-            if (OriginalTerm == null)
-                return;
-            SourceTerm = OriginalTerm.SourceTerm;
-            SourceTermComment1 = OriginalTerm.SourceTermComment1;
-            SourceTermComment2 = OriginalTerm.SourceTermComment2;
-            TargetTerm = OriginalTerm.TargetTerm;
-            TargetTermComment1 = OriginalTerm.TargetTermComment1;
-            TargetTermComment2 = OriginalTerm.TargetTermComment2;
-            CommentAll = OriginalTerm.CommentAll;
-            OnPropertyChanged(nameof(Edited));
-        }
-
-        public void SetOriginalTerm(bool triggerOnPropertyChanged = false)
-        {
-            OriginalTerm = new TermModel
-            {
-                TargetTerm = TargetTerm,
-                TargetTermComment1 = TargetTermComment1,
-                TargetTermComment2 = TargetTermComment2,
-                SourceTerm = SourceTerm,
-                SourceTermComment1 = SourceTermComment1,
-                SourceTermComment2 = SourceTermComment2,
-                CommentAll = CommentAll
-            };
-
-            if (triggerOnPropertyChanged)
-                OnPropertyChanged(nameof(Edited));
-        }
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(field, value))
-                return false;
-            field = value;
-
-            OnPropertyChanged(propertyName);
-            OnPropertyChanged(nameof(Edited));
-            return true;
-        }
-
-        private void RemoveTerm(object obj)
-        {
-            IsRemoved = !IsRemoved;
+            return _firstComment == other._firstComment && _secondComment == other._secondComment && _term == other._term && LanguageName == other.LanguageName;
         }
     }
 }

@@ -1,69 +1,55 @@
-﻿using InterpretBank.Commands;
-using InterpretBank.Extensions;
-using InterpretBank.Interface;
+﻿using InterpretBank.Extensions;
 using InterpretBank.Model;
 using InterpretBank.TerminologyService.Interface;
 using Sdl.Core.Globalization;
-using Sdl.Terminology.TerminologyProvider.Core;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Input;
 
 namespace InterpretBank.TermbaseViewer.ViewModel
 {
     public class TermbaseViewerViewModel : ViewModelBase.ViewModel
     {
-        private int _selectedIndex;
-        private TermModel _selectedItem;
-
-        private string _sourceLanguage;
+        private ObservableCollection<EntryModel> _entries;
+        private EntryModel _selectedEntry;
+        private int _selectedEntryIndex;
         private Image _sourceLanguageFlag;
-        private string _targetLanguage;
+        private string _sourceLanguageName;
         private Image _targetLanguageFlag;
-        private ObservableCollection<TermModel> _terms;
+        private string _targetLanguageName;
 
-        public TermbaseViewerViewModel(IUserInteractionService dialogService)
+        public TermbaseViewerViewModel(ITerminologyService terminologyService)
         {
-            DialogService = dialogService;
-            //TerminologyService.ShouldReload += () => LoadTerms();
+            TerminologyService = terminologyService;
         }
 
-        public event Action<bool> AnyEditedTermsChanged;
-
-        public ICommand AddNewTermCommand => new RelayCommand(AddNewTerm);
-        public bool AnyEditedTerms => Terms?.Any(t => t.Edited) ?? false;
-        public ICommand CommitAllToDatabaseCommand => new RelayCommand(CommitAllToDatabase);
-        public ICommand RevertCommand => new RelayCommand(RevertChanges);
-
-        public int SelectedIndex
+        public ObservableCollection<EntryModel> Entries
         {
-            get => _selectedIndex;
+            get => _entries;
             set
             {
-                if (value == _selectedIndex)
-                    return;
-                _selectedIndex = value;
+                var previousTerm = SelectedEntry;
+                if (!SetField(ref _entries, value)) return;
 
-                if (Terms.Any()) SelectedItem = value == -1 ? null : Terms[value];
-
-                OnPropertyChanged();
+                SetEntryNames(_entries);
+                MoveSourceAndTargetTermsFirst();
+                SetSelectedEntry(previousTerm);
             }
         }
 
-        public TermModel SelectedItem
+        public List<string> Glossaries { get; set; }
+
+        public EntryModel SelectedEntry
         {
-            get => _selectedItem;
-            set => SetField(ref _selectedItem, value);
+            get => _selectedEntry;
+            set => SetField(ref _selectedEntry, value);
         }
 
-        public string SourceLanguage
+        public int SelectedEntryIndex
         {
-            get => _sourceLanguage;
-            set => SetField(ref _sourceLanguage, value);
+            get => _selectedEntryIndex;
+            set => SetField(ref _selectedEntryIndex, value);
         }
 
         public Image SourceLanguageFlag
@@ -72,10 +58,10 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             set => SetField(ref _sourceLanguageFlag, value);
         }
 
-        public string TargetLanguage
+        public string SourceLanguageName
         {
-            get => _targetLanguage;
-            set => SetField(ref _targetLanguage, value);
+            get => _sourceLanguageName;
+            set => SetField(ref _sourceLanguageName, value);
         }
 
         public Image TargetLanguageFlag
@@ -84,138 +70,85 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             set => SetField(ref _targetLanguageFlag, value);
         }
 
-        public ITerminologyService TerminologyService { get; set; }
-
-        public ObservableCollection<TermModel> Terms
+        public string TargetLanguageName
         {
-            get => _terms;
-            set
-            {
-                if (SetField(ref _terms, value))
-                    RaiseAnyEditedPropertyChanged();
-            }
+            get => _targetLanguageName;
+            set => SetField(ref _targetLanguageName, value);
         }
 
-        private IUserInteractionService DialogService { get; }
-        private List<string> Glossaries { get; set; }
+        private Language SourceLanguage { get; set; }
 
-        public void EditTerm(IEntry term)
+        private Language TargetLanguage { get; set; }
+
+        private ITerminologyService TerminologyService { get; set; }
+
+        public void LoadTerms()
         {
-            JumpToTerm(term);
-            SelectedItem.IsEditing = true;
+            Entries = TerminologyService.GetEntriesFromDb(Glossaries);
         }
 
-        public void JumpToTerm(IEntry entry)
+        public void ReloadDb(string filepath)
         {
-            var term = Terms.FirstOrDefault(t => t.Id == entry.Id);
-            SelectedIndex = Terms.IndexOf(term);
-        }
-
-        //public void LoadTerms()
-
-        public void LoadTerms(Language source, Language target, List<string> glossaries, ITerminologyService terminologyService)
-        {
-            TerminologyService = terminologyService;
-            Glossaries = glossaries;
-
-            SetLanguagePair(source, target);
-
-            LoadTermsFromDb(SourceLanguage, TargetLanguage, glossaries);
-            Terms.ForEach(t => t.PropertyChanged += OnTermModelOnPropertyChanged);
-
-            ResetIndex();
+            TerminologyService.Setup(filepath);
+            LoadTerms();
         }
 
         public void ReloadTerms(Language sourceLanguage, Language targetLanguage)
         {
             SetLanguagePair(sourceLanguage, targetLanguage);
-            ReloadTerms();
+            LoadTerms();
         }
 
-        private void AddNewTerm(object obj)
+        public void Setup(Language sourceLanguage, Language targetLanguage, List<string> glossaries, string databaseFilePath)
         {
-            //if (Terms.Any(t => t.Id == -1 && !t.Edited)) return;
+            Glossaries = glossaries;
+            SetLanguagePair(sourceLanguage, targetLanguage);
 
-            var termModel = obj as TermModel ?? new TermModel();
-            termModel.IsEditing = true;
+            TerminologyService.Setup(databaseFilePath);
 
-            termModel.PropertyChanged += OnTermModelOnPropertyChanged;
-            termModel.SetOriginalTerm();
-
-            var sourceLanguageIndex = TerminologyService.GetLanguageIndex(SourceLanguage);
-            var targetLanguageIndex = TerminologyService.GetLanguageIndex(TargetLanguage);
-
-            termModel.SourceLanguageIndex = sourceLanguageIndex;
-            termModel.TargetLanguageIndex = targetLanguageIndex;
-
-            var glossaryNameFromUser = DialogService.GetGlossaryNameFromUser(Glossaries);
-            if (glossaryNameFromUser is null) return;
-
-            termModel.GlossaryName = glossaryNameFromUser;
-            Terms.Add(termModel);
-            SelectedIndex = Terms.IndexOf(termModel);
-            RaiseAnyEditedPropertyChanged();
+            LoadTerms();
         }
 
-        private void CommitAllToDatabase(object obj)
+        private void MoveSourceAndTargetTermsFirst()
         {
-            var changedTerms = Terms.Where(t => t.Edited).ToList();
-
-            TerminologyService.SaveAllTerms(changedTerms);
-            changedTerms.ForEach(t => t.SetOriginalTerm(true));
-
-            ReloadTerms();
-        }
-
-        private void LoadTermsFromDb(string source, string target, List<string> glossaries) =>
-            Terms = new ObservableCollection<TermModel>(TerminologyService.GetAllTerms(source, target,
-                glossaries));
-
-        private void OnTermModelOnPropertyChanged(object o, PropertyChangedEventArgs propertyChangedEventArgs) => RaiseAnyEditedPropertyChanged();
-
-        private void RaiseAnyEditedPropertyChanged()
-        {
-            OnPropertyChanged(nameof(AnyEditedTerms));
-            AnyEditedTermsChanged?.Invoke(AnyEditedTerms);
-        }
-
-        private void ReloadTerms()
-        {
-            Terms.ForEach(t => t.PropertyChanged -= OnTermModelOnPropertyChanged);
-            LoadTermsFromDb(SourceLanguage, TargetLanguage, Glossaries);
-            Terms.ForEach(t => t.PropertyChanged += OnTermModelOnPropertyChanged);
-            ResetIndex();
-        }
-
-        private void ResetIndex()
-        {
-            SelectedIndex = 1;
-            SelectedIndex = 0;
-        }
-
-        private void RevertChanges(object obj)
-        {
-            SelectedItem.IsRemoved = false;
-            if (SelectedItem.Id == -1)
+            foreach (var entryModel in Entries)
             {
-                var selectedItem = SelectedItem;
-                Terms.Remove(selectedItem);
+                var sourceTerm = entryModel.Terms.FirstOrDefault(t => t.LanguageName == SourceLanguageName);
+                var targetTerm = entryModel.Terms.FirstOrDefault(t => t.LanguageName == TargetLanguageName);
 
-                SelectedIndex = Terms.Any() ? Terms.Count - 1 : -1;
+                entryModel.Terms.Remove(sourceTerm);
+                entryModel.Terms.Insert(0, sourceTerm);
+
+                entryModel.Terms.Remove(targetTerm);
+                entryModel.Terms.Insert(1, targetTerm);
             }
-            else
-                SelectedItem.Revert();
+        }
 
-            RaiseAnyEditedPropertyChanged();
+        private void SetEntryNames(ObservableCollection<EntryModel> entries)
+        {
+            entries.ForEach(entryModel =>
+            {
+                entryModel.Name = entryModel.Terms.FirstOrDefault(t => t.LanguageName == SourceLanguageName)?.Term;
+            });
         }
 
         private void SetLanguagePair(Language sourceLanguage, Language targetLanguage)
         {
-            SourceLanguage = sourceLanguage.GetInterpretBankLanguageName();
-            TargetLanguage = targetLanguage.GetInterpretBankLanguageName();
+            SourceLanguage = sourceLanguage;
+            TargetLanguage = targetLanguage;
+
+            SourceLanguageName = sourceLanguage.GetInterpretBankLanguageName();
+            TargetLanguageName = targetLanguage.GetInterpretBankLanguageName();
 
             SourceLanguageFlag = sourceLanguage.GetFlagImage();
             TargetLanguageFlag = targetLanguage.GetFlagImage();
+        }
+
+        private void SetSelectedEntry(EntryModel previousTerm)
+        {
+            if (Entries.Contains(previousTerm))
+                SelectedEntry = Entries.FirstOrDefault(e => e.Equals(previousTerm));
+            else if (Entries.Any()) SelectedEntry = Entries.FirstOrDefault();
         }
     }
 }

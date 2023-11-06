@@ -25,43 +25,48 @@ namespace InterpretBank.TermbaseViewer.UI
 
             TermbaseViewer = termbaseViewer;
 
-            DataContext.AnyEditedTermsChanged += b => AnyEditedTermsChanged?.Invoke(b);
+//            DataContext.AnyEditedTermsChanged += b => AnyEditedTermsChanged?.Invoke(b);
         }
 
-        public event Action<bool> AnyEditedTermsChanged;
+        //public event Action<bool> AnyEditedTermsChanged;
 
-        public bool AnyEditedTerms => DataContext.AnyEditedTerms;
+        //public bool AnyEditedTerms => DataContext.AnyEditedTerms;
         private TermbaseViewerViewModel DataContext => (TermbaseViewerViewModel)TermbaseViewer.DataContext;
         private TermbaseViewer TermbaseViewer { get; set; }
 
-        public void AddNewTerm()
+        //public void AddNewTerm()
+        //{
+        //    TermbaseViewer.AddNewTermButton_Click(null, null);
+        //}
+
+        //public void AddTerm(string source, string target)
+        //{
+        //    TermbaseViewer.AddNewTermButton_Click(
+        //        new TermModel { SourceTerm = source, TargetTerm = target }, null);
+        //}
+
+        //public void CommitToDatabase()
+        //{
+        //    DataContext.CommitAllToDatabaseCommand.Execute(null);
+        //}
+
+        //public void EditTerm(IEntry term) => DataContext.EditTerm(term);
+
+        //public void JumpToTerm(IEntry entry) => DataContext.JumpToTerm(entry);
+
+        public void LoadTerms(Language sourceLanguage, Language targetLanguage, List<string> glossaries, string databaseFilepath)
         {
-            TermbaseViewer.AddNewTermButton_Click(null, null);
-        }
-
-        public void AddTerm(string source, string target)
-        {
-            TermbaseViewer.AddNewTermButton_Click(
-                new TermModel { SourceTerm = source, TargetTerm = target }, null);
-        }
-
-        public void CommitToDatabase()
-        {
-            DataContext.CommitAllToDatabaseCommand.Execute(null);
-        }
-
-        public void EditTerm(IEntry term) => DataContext.EditTerm(term);
-
-        public void JumpToTerm(IEntry entry) => DataContext.JumpToTerm(entry);
-
-        public void LoadTerms(Language sourceLanguage = null, Language targetLanguage = null, List<string> glossaries = null, ITerminologyService terminologyService = null)
-        {
-            TermbaseViewer.LoadTerms(sourceLanguage, targetLanguage, glossaries, terminologyService);
+            TermbaseViewer.LoadTerms(sourceLanguage, targetLanguage, glossaries, databaseFilepath);
         }
 
         public void ReloadTerms(Language sourceLanguage, Language targetLanguage)
         {
             TermbaseViewer.ReloadTerms(sourceLanguage, targetLanguage);
+        }
+
+        public void ReloadDb(string filepath)
+        {
+            TermbaseViewer.ReloadDb(filepath);
         }
     }
 }

@@ -38,37 +38,37 @@ namespace InterpretBank
 
         private static void RegisterGlobalDependencies()
         {
-            Builder.RegisterType<InterpretBankDataContext>().As<IInterpretBankDataContext>().InstancePerDependency();
+            Builder.RegisterType<InterpretBankDataContext>().As<IInterpretBankDataContext>();
 
-            Builder.RegisterType<TerminologyService.TerminologyService>().As<ITerminologyService>().InstancePerLifetimeScope();
+            Builder.RegisterType<TerminologyService.TerminologyService>().As<ITerminologyService>();
 
-            Builder.RegisterType<UserInteractionService>().As<IUserInteractionService>().InstancePerDependency();
+            Builder.RegisterType<UserInteractionService>().As<IUserInteractionService>();
             Builder.RegisterType<PersistenceService.PersistenceService>().SingleInstance();
             Builder.RegisterType<GlossaryExchangeService.GlossaryExchangeService>().SingleInstance();
         }
 
         private static void RegisterGlossarySetup()
         {
-            Builder.RegisterType<GlossarySetupViewModel>().InstancePerDependency();
-            Builder.RegisterType<GlossarySetup>().InstancePerDependency();
+            Builder.RegisterType<GlossarySetupViewModel>();
+            Builder.RegisterType<GlossarySetup>();
         }
 
         private static void RegisterInterpretBankProvider()
         {
-            Builder.RegisterType<InterpretBankProvider>().InstancePerDependency();
+            Builder.RegisterType<InterpretBankProvider>();
         }
 
         private static void RegisterSettingsUi()
         {
-            Builder.RegisterType<SettingsService.ViewModel.SettingsService>().InstancePerDependency();
-            Builder.RegisterType<SettingsMain>().InstancePerDependency();
+            Builder.RegisterType<SettingsService.ViewModel.SettingsService>();
+            Builder.RegisterType<SettingsMain>();
         }
 
         private static void RegisterTermbaseViewerControl()
         {
-            Builder.RegisterType<TermbaseViewerViewModel>().As<TermbaseViewerViewModel>().InstancePerLifetimeScope();
-            Builder.RegisterType<TermbaseViewer.UI.TermbaseViewer>().As<TermbaseViewer.UI.TermbaseViewer>().InstancePerLifetimeScope();
-            Builder.RegisterType<TermbaseViewerControl>().As<TermbaseViewerControl>().InstancePerLifetimeScope();
+            Builder.RegisterType<TermbaseViewerViewModel>().As<TermbaseViewerViewModel>();
+            Builder.RegisterType<TermbaseViewer.UI.TermbaseViewer>().As<TermbaseViewer.UI.TermbaseViewer>();
+            Builder.RegisterType<TermbaseViewerControl>().As<TermbaseViewerControl>();
         }
     }
 }

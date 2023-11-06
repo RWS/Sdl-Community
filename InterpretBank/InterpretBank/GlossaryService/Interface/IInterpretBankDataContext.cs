@@ -16,7 +16,7 @@ public interface IInterpretBankDataContext : IDisposable
 
     void AddLanguageToGlossary(LanguageModel newLanguage, string selectedGlossaryGlossaryName);
 
-    void CommitAllChanges(List<TermModel> changedTerms);
+    //void CommitAllChanges(List<TermModel> changedTerms);
 
     List<LanguageModel> GetDbLanguages();
 

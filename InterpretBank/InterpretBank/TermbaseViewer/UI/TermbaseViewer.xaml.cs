@@ -1,90 +1,37 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using InterpretBank.Commands;
-using InterpretBank.Model;
-using InterpretBank.TermbaseViewer.ViewModel;
-using InterpretBank.TerminologyService.Interface;
+﻿using InterpretBank.TermbaseViewer.ViewModel;
 using Sdl.Core.Globalization;
 using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace InterpretBank.TermbaseViewer.UI
 {
-	public partial class TermbaseViewer
-	{
-		public TermbaseViewer(TermbaseViewerViewModel viewModel)
+    /// <summary>
+    /// Interaction logic for TermbaseViewer.xaml
+    /// </summary>
+    public partial class TermbaseViewer
+    {
+        public TermbaseViewer(TermbaseViewerViewModel termbaseViewerViewModel)
         {
-            DataContext = viewModel;
-			InitializeComponent();
-		}
-
-		public ICommand SetEditingFromKeyboardCommand => new RelayCommand(SetEditingFromKeyboard);
-
-		public void SetEditing(bool editing)
-		{
-            var selectedItem = ((TermModel)Term_ListBox.SelectedItem);
-            if (selectedItem == null) return;
-            selectedItem.IsEditing = editing;
-
-			//Focusing cannot be done very easily through XAML without it looking like an ugly workaround
-			if (editing)
-				SourceTerm_EditableTextBlock.EditBox.Focus();
-		}
-
-		/// <summary>
-		/// In this section, we are invoking the command directly from code-behind instead of using
-		/// command binding for a specific reason. Due to the timing requirements between the command
-		/// execution and subsequent UI actions, using command binding would not guarantee the correct
-		/// order of operations in this particular scenario.
-		///
-		/// The invoked command (TermbaseViewerViewModel.AddNewTermCommand) adds a new item to a ListBox,
-		/// and the UI event handler needs to focus an EditableTextBlock bound to properties of the newly added item.
-		/// This requires the command
-		/// to be executed before focusing the EditableTextBlock.
-		/// </summary>
-		public void AddNewTermButton_Click(object sender, RoutedEventArgs e)
-		{
-			ViewModel.AddNewTermCommand.Execute(sender is TermModel ? sender : null);
-			SourceTerm_EditableTextBlock.EditBox.Focus();
-		}
+            InitializeComponent();
+            DataContext = termbaseViewerViewModel;
+        }
 
         private TermbaseViewerViewModel ViewModel => (TermbaseViewerViewModel)DataContext;
 
-		private void EditButton_Click(object sender, RoutedEventArgs e)
-		{
-			SetEditing(true);
-		}
-
-		private void SaveEdit_Button_OnClick(object sender, RoutedEventArgs e)
-		{
-			SetEditing(false);
-		}
-
-		/// <summary>
-		/// Here, we are invoking a command from code-behind for two reasons: firstly, the same reason mentioned above
-		/// but in regards to another command and secondly, because multiple keyboard modifiers
-		/// cannot be specified in code-behind, so PreviewKeyDown cannot be used in all cases.
-		/// In order to not use PreviewKeyDown event for some of the keys and KeyBindings for others, we'll just use KeyBindings.
-		/// </summary>
-		private void SetEditingFromKeyboard(object parameter)
-		{
-			if (!bool.TryParse(parameter.ToString(), out var editing))
-			{
-				editing = false;
-				ViewModel.RevertCommand.Execute(null);
-			}
-
-			SetEditing(editing);
-		}
-
-        public void LoadTerms(Language sourceLanguage, Language targetLanguage, List<string> glossaries, ITerminologyService terminologyService)
+        public void LoadTerms(Language sourceLanguage, Language targetLanguage, List<string> glossaries, string databaseFilepath)
         {
-            ViewModel.LoadTerms(sourceLanguage, targetLanguage, glossaries, terminologyService);
+            ViewModel.Setup(sourceLanguage, targetLanguage, glossaries, databaseFilepath);
         }
 
         public void ReloadTerms(Language sourceLanguage, Language targetLanguage)
         {
             ViewModel.ReloadTerms(sourceLanguage, targetLanguage);
+        }
+
+        public void ReloadDb(string filepath)
+        {
+            ViewModel.ReloadDb(filepath);
         }
     }
 }

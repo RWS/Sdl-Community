@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using InterpretBank.Events;
 using InterpretBank.TermbaseViewer.UI;
 using Sdl.Core.Globalization;
 using Sdl.Terminology.TerminologyProvider.Core;
@@ -44,11 +45,14 @@ namespace InterpretBank.Studio
         {
         }
 
-        public void AddTerm(string source, string target) => TermbaseViewerControl.AddTerm(source, target);
+        public void AddTerm(string source, string target)
+        {
+            //TermbaseViewerControl.AddTerm(source, target);
+        }
 
         public void EditTerm(IEntry term)
         {
-            TermbaseViewerControl.EditTerm(term);
+            //TermbaseViewerControl.EditTerm(term);
             //TermChanged?.Invoke(this, EventArgs.Empty);
         }
 
@@ -66,13 +70,22 @@ namespace InterpretBank.Studio
 
             TargetLanguage = targetLanguages.FirstOrDefault(l => l.CultureInfo.Equals(target));
             SourceLanguage = currentProject.GetProjectInfo().SourceLanguage;
+
+            StudioContext.EventAggregator.GetEvent<DbChangedEvent>().Subscribe(OnDbChanged);
         }
 
-        public void JumpToTerm(IEntry entry) => TermbaseViewerControl.JumpToTerm(entry);
+        private void OnDbChanged(DbChangedEvent dbChangedEvent)
+        {
+            _termbaseControl.ReloadDb(dbChangedEvent.Filepath);
+        }
+
+        public void JumpToTerm(IEntry entry)
+        {
+            // TermbaseViewerControl.JumpToTerm(entry);
+        }
 
         public void Release()
         {
-            //TermbaseControlScope.Dispose(); this breaks the TermbaseViewer when switching projects
         }
 
         public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
@@ -82,9 +95,11 @@ namespace InterpretBank.Studio
 
         private void LoadTerms() =>
             _termbaseControl
-                .LoadTerms(SourceLanguage, TargetLanguage,
+                .LoadTerms(
+                    SourceLanguage,
+                    TargetLanguage,
                     InterpretBankProvider.Settings.Glossaries,
-                    InterpretBankProvider.TermSearchService);
+                    InterpretBankProvider.Settings.DatabaseFilepath);
 
         private void SetupTermbaseControl()
         {
