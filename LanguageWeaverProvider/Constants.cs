@@ -19,7 +19,7 @@
 		public const string Provider_TranslationProviderFactory = "LanguageWeaverProvider_Factory";
 		public const string Provider_TranslationProviderWinFormsUi = "LanguageWeaverProvider_WinFormsUI";
 
-		// X
+		// Services
 		public const string CloudService = "Cloud";
 		public const string EdgeService = "Edge";
 

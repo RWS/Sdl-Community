@@ -9,7 +9,6 @@
 		WindowStartupLocation="CenterScreen"
 		mc:Ignorable="d"
 		d:DataContext="{d:DesignInstance {x:Type viewModel:CloudAuth0ViewModel}}"
-		Title="CloudAuth0View"
 		Width="600"
 		Height="800">
 	<Grid Margin="10">

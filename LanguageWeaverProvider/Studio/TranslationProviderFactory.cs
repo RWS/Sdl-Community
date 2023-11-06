@@ -25,10 +25,26 @@ namespace LanguageWeaverProvider
 
 		public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
 		{
+			if (string.IsNullOrEmpty(translationProviderState))
+			{
+				return new TranslationProviderInfo
+				{
+					TranslationMethod = TranslationMethod.MachineTranslation,
+					Name = Constants.PluginName
+				};
+			}
+
+			var translationOptions = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
+			var pluginName = translationOptions.Version == PluginVersion.LanguageWeaverCloud ? Constants.PluginNameCloud : Constants.PluginNameEdge;
+			if (!string.IsNullOrEmpty(translationOptions.ProviderSettings.CustomName) && translationOptions.ProviderSettings.UseCustomName)
+			{
+				pluginName += $" - {translationOptions.ProviderSettings.CustomName}";
+			}
+
 			return new TranslationProviderInfo
 			{
 				TranslationMethod = TranslationMethod.MachineTranslation,
-				Name = Constants.PluginName
+				Name = pluginName
 			};
 		}
 

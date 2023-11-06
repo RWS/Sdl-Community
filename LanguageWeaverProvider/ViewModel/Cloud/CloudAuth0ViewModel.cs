@@ -18,8 +18,6 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		public Auth0Config Auth0Config { get; set; }
 
-		public bool LoginSuccesful { get; private set; }
-
 		public delegate void CloseAuth0Raiser();
 
 		public event CloseAuth0Raiser CloseAuth0Raised;
@@ -27,7 +25,6 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 		public async void Navigated(string uri)
 		{
 			var (success, error) = await CloudService.AuthenticateSSOUser(_translationOptions, Auth0Config, new Uri(uri));
-			LoginSuccesful = success;
 			if (!success)
 			{
 				ErrorHandling.ShowDialog(error, "SSO Error", "Something went wrong, couldn't authenticate", true);

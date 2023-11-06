@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Security.Policy;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,7 +13,6 @@ using LanguageWeaverProvider.Studio.FeedbackController.Model;
 using LanguageWeaverProvider.XliffConverter.Converter;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Sdl.LanguagePlatform.Core.Tokenization;
 
 namespace LanguageWeaverProvider.Services
 {
@@ -157,7 +152,7 @@ namespace LanguageWeaverProvider.Services
 		{
 			try
 			{
-				var uri = new Uri($"https://api.languageweaver.com/v4/accounts/{accessToken.AccountId}/dictionaries?source=eng&target=ger");
+				var uri = new Uri($"https://api.languageweaver.com/v4/accounts/{accessToken.AccountId}/dictionaries");
 
 				var request = new HttpRequestMessage(HttpMethod.Get, uri);
 				request.Headers.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
@@ -238,9 +233,14 @@ namespace LanguageWeaverProvider.Services
 				LinguisticOptions = linguisticOptionsDictionary
 			};
 
-			if (!string.IsNullOrEmpty(mappedPair.SelectedDictionary.DictionaryId))
+			var dictionaries = mappedPair.Dictionaries.Where(x => x.IsSelected);
+			if (dictionaries.Any())
 			{
-				translationRequestModel.Dictionaries = new object[] { mappedPair.SelectedDictionary.DictionaryId };
+				translationRequestModel.Dictionaries = new object[dictionaries.Count()];
+				for (var i = 0; i < translationRequestModel.Dictionaries.Length; i++)
+				{
+					translationRequestModel.Dictionaries[i] = dictionaries.ElementAt(i).DictionaryId;
+				}
 			}
 
 			var httpClient = new HttpClient();

@@ -138,7 +138,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 		private async void SignIn(object parameter)
 		{
 			if (AuthenticationType == AuthenticationType.None
-			 ||!CredentialsAreSet())
+			 || !CredentialsAreSet())
 			{
 				StopLoginProcess?.Invoke(this, EventArgs.Empty);
 				ErrorHandling.ShowDialog(null, PluginResources.Connection_Credentials, PluginResources.Connection_Error_NoCredentials);

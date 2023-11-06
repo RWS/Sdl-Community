@@ -112,8 +112,15 @@ namespace LanguageWeaverProvider.ViewModel
 
 		private void Back(object parameter)
 		{
-			IsCloudSelected = false;
-			IsEdgeSelected = false;
+			if (ProviderView.AuthenticationType == AuthenticationType.None)
+			{
+				IsCloudSelected = false;
+				IsEdgeSelected = false;
+			}
+			else
+			{
+				ProviderView.AuthenticationType = AuthenticationType.None;
+			}
 		}
 
 		private void CloseApplication(object parameter)

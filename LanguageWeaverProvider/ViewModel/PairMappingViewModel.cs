@@ -165,10 +165,6 @@ namespace LanguageWeaverProvider.ViewModel
 			{
 				var selectedModelName = pairMapping.SelectedModel.Name;
 				var selectedModel = pairMapping.Models.FirstOrDefault(x => x.Name == selectedModelName);
-
-				var selectedDictionaryId = pairMapping.SelectedDictionary.DictionaryId;
-				var selectedDictionary = pairMapping.Dictionaries.FirstOrDefault(x => x?.DictionaryId == selectedDictionaryId);
-
 				var newPairMapping = new PairMapping()
 				{
 					DisplayName = pairMapping.DisplayName,
@@ -177,8 +173,7 @@ namespace LanguageWeaverProvider.ViewModel
 					LanguagePair = pairMapping.LanguagePair,
 					Models = pairMapping.Models,
 					SelectedModel = selectedModel,
-					Dictionaries = pairMapping.Dictionaries,
-					SelectedDictionary = selectedDictionary,
+					Dictionaries = pairMapping.Dictionaries
 				};
 
 				pairMappings.Add(newPairMapping);
@@ -202,7 +197,6 @@ namespace LanguageWeaverProvider.ViewModel
 			foreach (var languagePair in _languagePairs)
 			{
 				var mappedLanguagePairs = mappedLanguages.Where(mappedLang => mappedLang.TradosCode.Equals(languagePair.SourceCultureName) || mappedLang.TradosCode.Equals(languagePair.TargetCultureName));
-
 				var mappedSource = mappedLanguagePairs.FirstOrDefault(mappedLang => mappedLang.TradosCode.Equals(languagePair.SourceCultureName));
 				var mappedTarget = mappedLanguagePairs.FirstOrDefault(mappedLang => mappedLang.TradosCode.Equals(languagePair.TargetCultureName));
 				var displayName = $"{mappedSource.Name} ({mappedSource.Region}) - {mappedTarget.Name} ({mappedTarget.Region})";
@@ -228,16 +222,10 @@ namespace LanguageWeaverProvider.ViewModel
 					});
 				}
 
-				var dictionaries = accountDictionaries.Where(dictionary => dictionary.Source.Equals(mappedSource.LanguageCode) && dictionary.Target.Equals(mappedTarget.LanguageCode)).ToList();
-				dictionaries.Insert(0, new PairDictionary()
-				{
-					Name = dictionaries.Any() ? PluginResources.PairModel_Dictionary_NotSelected : PluginResources.PairModel_Dictionary_Unavailable,
-					DictionaryId = string.Empty,
-					Source = mappedSource.LanguageCode,
-					Target = mappedTarget.LanguageCode,
-				});
-
-				var newPairMapping = new PairMapping
+				var dictionaries = accountDictionaries.Where(dictionary => dictionary.Source.Equals(mappedSource.LanguageCode) && dictionary.Target.Equals(mappedTarget.LanguageCode))
+													  .OrderBy(dictionary => dictionary.Name)
+													  .ToList();
+				PairMappings.Add(new PairMapping
 				{
 					DisplayName = displayName,
 					SourceCode = mappedSource.LanguageCode,
@@ -245,11 +233,8 @@ namespace LanguageWeaverProvider.ViewModel
 					LanguagePair = languagePair,
 					Models = models,
 					SelectedModel = models.FirstOrDefault(),
-					Dictionaries = dictionaries,
-					SelectedDictionary = dictionaries.FirstOrDefault()
-				};
-
-				PairMappings.Add(newPairMapping);
+					Dictionaries = dictionaries
+				});
 			}
 		}
 	}

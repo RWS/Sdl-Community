@@ -6,6 +6,7 @@
 		xmlns:root="clr-namespace:LanguageWeaverProvider"
 		xmlns:view="clr-namespace:LanguageWeaverProvider.View"
 		xmlns:local="clr-namespace:LanguageWeaverProvider.ViewModel"
+		xmlns:controls="clr-namespace:LanguageWeaverProvider.Controls"
 		xmlns:viewModel="clr-namespace:LanguageWeaverProvider.ViewModel"
 		xmlns:converters="clr-namespace:LanguageWeaverProvider.Converters"
 		mc:Ignorable="d"
@@ -29,6 +30,9 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBoxResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/CheckBoxResources.xaml" />
+				<ResourceDictionary Source="../Controls/WatermarkTextBoxResources.xaml" />
+				<ResourceDictionary Source="../Controls/WatermarkPasswordBoxResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 
 			<Style TargetType="Image">
@@ -39,10 +43,11 @@
 			<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 			<converters:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter" />
 			<converters:EmptyCollectionToVisibilityConverter x:Key="EmptyCollectionToVisibilityConverter" />
-			
+
 			<DataTemplate DataType="{x:Type viewModel:SettingsViewModel}">
 				<view:SettingsView />
 			</DataTemplate>
+
 		</ResourceDictionary>
 	</Window.Resources>
 
@@ -147,29 +152,87 @@
 								<ComboBox ItemsSource="{Binding Models}"
 										  SelectedItem="{Binding SelectedModel, UpdateSourceTrigger=PropertyChanged}"
 										  Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
-										  DisplayMemberPath="DisplayName"
 										  VerticalAlignment="Stretch"
 										  Margin="-2"
+										  Padding="4"
 										  SelectedIndex="0"
 										  BorderThickness="0">
+									<ComboBox.ItemTemplate>
+										<DataTemplate>
+											<TextBlock Text="{Binding DisplayName}"
+													   Padding="4" />
+										</DataTemplate>
+									</ComboBox.ItemTemplate>
 								</ComboBox>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
 
 					<DataGridTemplateColumn Header="{x:Static root:PluginResources.CloudMappingView_Headers_Dictionaries}"
-											MinWidth="172">
+											MinWidth="232">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
-								<ComboBox ItemsSource="{Binding Dictionaries}"
-										  SelectedItem="{Binding SelectedDictionary, UpdateSourceTrigger=PropertyChanged}"
-										  Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
-										  DisplayMemberPath="Name"
-										  SelectedIndex="0"
-										  VerticalAlignment="Stretch"
-										  Margin="-2"
-										  BorderThickness="0">
-								</ComboBox>
+								<Grid Margin="-2">
+									<ComboBox ItemsSource="{Binding Dictionaries}"
+											  Style="{StaticResource Sdl.ComboBox.ListViewRow.Style}"
+											  Visibility="{Binding Dictionaries, Converter={StaticResource EmptyCollectionToVisibilityConverter}}"
+											  VerticalContentAlignment="Center"
+											  SelectionChanged="ComboBox_SelectionChanged"
+											  DropDownClosed="ComboBox_DropDownClosed"
+											  VerticalAlignment="Stretch"
+											  BorderThickness="0">
+										<ComboBox.ItemTemplate>
+											<DataTemplate>
+												<Grid Margin="4">
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition Width="Auto" />
+														<ColumnDefinition Width="*" />
+													</Grid.ColumnDefinitions>
+													<Grid.RowDefinitions>
+														<RowDefinition Height="Auto" />
+														<RowDefinition Height="Auto"/>
+													</Grid.RowDefinitions>
+													
+													<CheckBox IsChecked="{Binding IsSelected}"
+															   Visibility="{Binding DictionaryId, Converter={StaticResource EmptyStringToVisibilityConverter}, ConverterParameter=Inverted}"
+															  Margin="0 0 4 0" 
+															  Grid.Row="0"
+															  Grid.Column="0"/>
+													
+													<TextBlock Text="{Binding Name}"
+															   Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"
+															   Grid.Row="0"
+															   Grid.Column="1"
+															   HorizontalAlignment="Left"/>
+													
+													<TextBlock Text="{Binding DictionaryId}"
+															   Visibility="{Binding DictionaryId, Converter={StaticResource EmptyStringToVisibilityConverter}, ConverterParameter=Inverted}"
+															   FontSize="10"
+															   FontStyle="Italic"
+															   Foreground="#808080"
+															   Margin="0"
+															   Grid.Row="1"
+															   Grid.Column="0"
+															   Grid.ColumnSpan="2"/>
+												</Grid>
+											</DataTemplate>
+										</ComboBox.ItemTemplate>
+									</ComboBox>
+									
+									<TextBlock Text="Select dictionaries"
+											   Visibility="{Binding Dictionaries, Converter={StaticResource EmptyCollectionToVisibilityConverter}}"
+											   IsHitTestVisible="False"
+											   VerticalAlignment="Center"
+											   HorizontalAlignment="Left"
+											   Margin="8 0" />
+
+									<TextBlock Text="No dictionaries available"
+											   Visibility="{Binding Dictionaries, Converter={StaticResource EmptyCollectionToVisibilityConverter}, ConverterParameter=Inverted}"
+											   IsHitTestVisible="False"
+											   VerticalAlignment="Center"
+											   HorizontalAlignment="Left"
+											   Margin="8 0" />
+								</Grid>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>

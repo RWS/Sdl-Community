@@ -91,16 +91,10 @@ namespace LanguageWeaverProvider
 		{
 			var currentPair = TranslationOptions.PairMappings.FirstOrDefault(pair => pair.LanguagePair.SourceCulture.Name == languageDirection.SourceCulture.Name
 																				  && pair.LanguagePair.TargetCulture.Name == languageDirection.TargetCulture.Name);
-			try
-			{
-				return !string.IsNullOrEmpty(currentPair.SourceCode)
-					&& !string.IsNullOrEmpty(currentPair.TargetCode)
-					&& !currentPair.SelectedModel.DisplayName.Equals(PluginResources.PairModel_Model_Unavailable);
-			}
-			catch
-			{
-				return false;
-			}
+			return currentPair is not null
+				&& !string.IsNullOrEmpty(currentPair.SourceCode)
+				&& !string.IsNullOrEmpty(currentPair.TargetCode)
+				&& !currentPair.SelectedModel.DisplayName.Equals(PluginResources.PairModel_Model_Unavailable);
 		}
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)

@@ -70,7 +70,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cliend ID.
+        ///   Looks up a localized string similar to Cliend Email.
         /// </summary>
         public static string Auth_Cloud_ClientID {
             get {
@@ -543,11 +543,29 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to LW Edge (coming soon).
+        ///   Looks up a localized string similar to Language Weaver is a secure, adaptable, cloud-based enterprise machine translation API and portal for businesses that need to process high volumes of multilingual content quickly and effectively..
+        /// </summary>
+        public static string MainView_Buttons_LWCloud_ToolTip {
+            get {
+                return ResourceManager.GetString("MainView_Buttons_LWCloud_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language Weaver Edge.
         /// </summary>
         public static string MainView_Buttons_LWEdge {
             get {
                 return ResourceManager.GetString("MainView_Buttons_LWEdge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language Weaver Edge is a secure, scalable and adaptable on-premises solution leveraging state-of-the-art neural technologies. All the features and functionality of Language Weaver is available behind your firewall..
+        /// </summary>
+        public static string MainView_Buttons_LWEdge_ToolTip {
+            get {
+                return ResourceManager.GetString("MainView_Buttons_LWEdge_ToolTip", resourceCulture);
             }
         }
         
@@ -570,9 +588,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select your required Language Weaver Service Provider.
-        ///Language Weaver is a secure, adaptable, cloud-based enterprise machine translation API and portal for businesses that need to process high volumes of multilingual content quickly and effectively.
-        ///Language Weaver Edge is a secure, scalable and adaptable on-premises solution leveraging state-of-the-art neural technologies. All the features and functionality of Language Weaver is available behind your firewall..
+        ///   Looks up a localized string similar to Select your required Language Weaver Service Provider..
         /// </summary>
         public static string MainView_HelpMessage {
             get {
@@ -637,7 +653,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No dictionary selected.
+        ///   Looks up a localized string similar to Select dictionaries.
         /// </summary>
         public static string PairModel_Dictionary_NotSelected {
             get {

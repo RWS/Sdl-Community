@@ -53,16 +53,6 @@ namespace LanguageWeaverProvider.Model
 			}
 		}
 
-		public PairDictionary SelectedDictionary
-		{
-			get => _selectedDictionary;
-			set
-			{
-				_selectedDictionary = value;
-				OnPropertyChanged();
-			}
-		}
-
 		[JsonIgnore]
 		public List<LinguisticOption> LinguisticOptions => SelectedModel?.LinguisticOptions;
 	}

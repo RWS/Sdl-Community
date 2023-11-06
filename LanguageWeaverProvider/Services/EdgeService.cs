@@ -278,31 +278,43 @@ namespace LanguageWeaverProvider.Services
 
 		private static Dictionary<string, string> BuildQuery(PairMapping pairMapping, Xliff sourceXliff)
 		{
-			const string InputFormat = "application/x-xliff";
+			const string XliffMimeType = "application/x-xliff";
+			const string LanguagePairIdKey = "languagePairId";
+			const string InputKey = "input";
+			const string InputFormatKey = "inputFormat";
+			const string DictionaryIdsKey = "dictionaryIds";
+			const string LinguisticOptionsKey = "linguisticOptions";
 
 			var input = Base64Encode(sourceXliff.ToString());
 			var queryString = new Dictionary<string, string>
 			{
-				["languagePairId"] = pairMapping.SelectedModel.Model,
-				["input"] = input,
-				["inputFormat"] = InputFormat
+				[LanguagePairIdKey] = pairMapping.SelectedModel.Model,
+				[InputKey] = input,
+				[InputFormatKey] = XliffMimeType
 			};
 
-			if (pairMapping.SelectedDictionary is not null && !string.IsNullOrEmpty(pairMapping.SelectedDictionary.DictionaryId))
+			var dictionaries = pairMapping.Dictionaries.Where(x => x.IsSelected);
+			if (dictionaries.Any())
 			{
-				queryString["dictionaryIds"] = pairMapping.SelectedDictionary.DictionaryId;
+				queryString[DictionaryIdsKey] = string.Empty;
+				foreach (var dictionary in dictionaries)
+				{
+					queryString[DictionaryIdsKey] += $"{dictionary.DictionaryId},";
+				}
+
+				queryString[DictionaryIdsKey] = queryString[DictionaryIdsKey].Substring(0, queryString[DictionaryIdsKey].Length - 1);
 			}
 
 			if (pairMapping.LinguisticOptions is not null)
 			{
-				queryString["linguisticOptions"] = string.Empty;
+				queryString[LinguisticOptionsKey] = string.Empty;
 				var linguisticOptionsDictionary = pairMapping.LinguisticOptions.ToDictionary(lo => lo.Id, lo => lo.SelectedValue);
 				foreach (var linguisticOption in linguisticOptionsDictionary)
 				{
-					queryString["linguisticOptions"] += $"{linguisticOption.Key}:{linguisticOption.Value},";
+					queryString[LinguisticOptionsKey] += $"{linguisticOption.Key}:{linguisticOption.Value},";
 				}
 
-				queryString["linguisticOptions"] = queryString["linguisticOptions"].Substring(0, queryString["linguisticOptions"].Length - 1);
+				queryString[LinguisticOptionsKey] = queryString[LinguisticOptionsKey].Substring(0, queryString[LinguisticOptionsKey].Length - 1);
 			}
 
 			return queryString;

@@ -121,7 +121,7 @@
     <value>Change authentication type</value>
   </data>
   <data name="Auth_Cloud_ClientID" xml:space="preserve">
-    <value>Cliend ID</value>
+    <value>Cliend Email</value>
   </data>
   <data name="Auth_Cloud_ClientSecret" xml:space="preserve">
     <value>Client Secret</value>
@@ -280,8 +280,14 @@ This action cannot be undone.</value>
   <data name="MainView_Buttons_LWCloud" xml:space="preserve">
     <value>Language Weaver</value>
   </data>
+  <data name="MainView_Buttons_LWCloud_ToolTip" xml:space="preserve">
+    <value>Language Weaver is a secure, adaptable, cloud-based enterprise machine translation API and portal for businesses that need to process high volumes of multilingual content quickly and effectively.</value>
+  </data>
   <data name="MainView_Buttons_LWEdge" xml:space="preserve">
-    <value>LW Edge (coming soon)</value>
+    <value>Language Weaver Edge</value>
+  </data>
+  <data name="MainView_Buttons_LWEdge_ToolTip" xml:space="preserve">
+    <value>Language Weaver Edge is a secure, scalable and adaptable on-premises solution leveraging state-of-the-art neural technologies. All the features and functionality of Language Weaver is available behind your firewall.</value>
   </data>
   <data name="MainView_CloseButton" xml:space="preserve">
     <value>Close app</value>
@@ -290,9 +296,7 @@ This action cannot be undone.</value>
     <value>Confirm</value>
   </data>
   <data name="MainView_HelpMessage" xml:space="preserve">
-    <value>Select your required Language Weaver Service Provider.
-Language Weaver is a secure, adaptable, cloud-based enterprise machine translation API and portal for businesses that need to process high volumes of multilingual content quickly and effectively.
-Language Weaver Edge is a secure, scalable and adaptable on-premises solution leveraging state-of-the-art neural technologies. All the features and functionality of Language Weaver is available behind your firewall.</value>
+    <value>Select your required Language Weaver Service Provider.</value>
   </data>
   <data name="NameOf_CommandParameterI_MissingComponent" xml:space="preserve">
     <value>Could not find the property '{0}' in '{1}', please check the spelling for both the property and the class or if any of the two had its name changed in both C# class and XAML.</value>
@@ -315,7 +319,7 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
     <value>Settings</value>
   </data>
   <data name="PairModel_Dictionary_NotSelected" xml:space="preserve">
-    <value>No dictionary selected</value>
+    <value>Select dictionaries</value>
   </data>
   <data name="PairModel_Dictionary_Unavailable" xml:space="preserve">
     <value>No dictionary available</value>

@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using LanguageWeaverProvider.Model;
 
 namespace LanguageWeaverProvider.View
 {
@@ -19,27 +19,36 @@ namespace LanguageWeaverProvider.View
 
 		private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			if (Window.GetWindow(this) is not Window window)
+			if (GetWindow(this) is Window window)
 			{
-				return;
-			}
-
-			window.DragMove();
-		}
-
-		private void ComboBox_DropDownClosed(object sender, System.EventArgs e)
-		{
-			if (_selectionChanged)
-			{
-				var comboBox = (ComboBox)sender;
-				comboBox.IsDropDownOpen = true;
-				_selectionChanged = false;
+				window.DragMove();
 			}
 		}
 
 		private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			_selectionChanged = true;
+			var comboBox = sender as ComboBox;
+			if (comboBox.SelectedItem is PairDictionary selectedDictionary
+			 && !string.IsNullOrEmpty(selectedDictionary.DictionaryId))
+			{
+				selectedDictionary.IsSelected = !selectedDictionary.IsSelected;
+				_selectionChanged = true;
+			}
+
+			comboBox.SelectedItem = null;
+		}
+
+		private void ComboBox_DropDownClosed(object sender, System.EventArgs e)
+		{
+			if (!_selectionChanged)
+			{
+				return;
+			}
+
+			var comboBox = sender as ComboBox;
+			comboBox.IsDropDownOpen = true;
+			comboBox.SelectedItem = null;
+			_selectionChanged = false;
 		}
 	}
 }

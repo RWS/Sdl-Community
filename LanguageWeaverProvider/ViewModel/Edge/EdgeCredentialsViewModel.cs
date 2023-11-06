@@ -130,9 +130,12 @@ namespace LanguageWeaverProvider.ViewModel.Edge
 			 || !CredentialsAreSet()
 			 || !IsAuthenticationTypeSelected)
 			{
+				StopLoginProcess?.Invoke(this, EventArgs.Empty);
+				ErrorHandling.ShowDialog(null, PluginResources.Connection_Credentials, PluginResources.Connection_Error_NoCredentials);
 				return;
 			}
 
+			StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Connection_Loading_Connecting));
 			var edgeCredentials = new EdgeCredentials()
 			{
 				UserName = Username,
@@ -155,6 +158,7 @@ namespace LanguageWeaverProvider.ViewModel.Edge
 				response = await EdgeService.SignInAuthAsync(edgeCredentials, TranslationOptions);
 			}
 
+			StopLoginProcess?.Invoke(this, EventArgs.Empty);
 			if (!response.Success)
 			{
 				ErrorHandling.ShowDialog(response.Error, "Authentication failed", "The authentication failed", true);
