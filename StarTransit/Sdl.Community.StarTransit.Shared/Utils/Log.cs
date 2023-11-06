@@ -16,7 +16,7 @@ namespace Sdl.Community.StarTransit.Shared.Utils
 			}
 			var config = LogManager.Configuration;
 
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RWS AppStore", "StarTransit");
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Trados AppStore", "StarTransit");
 
 			Directory.CreateDirectory(logDirectoryPath);
 
