@@ -25,6 +25,7 @@
   <ItemGroup>
     <None Remove="Resources\AddTerm.ico" />
     <None Remove="Resources\AddTerm2.ico" />
+    <None Remove="Resources\EditIcon.ico" />
     <None Remove="Resources\Flag.png" />
     <None Remove="Resources\Glossary.png" />
     <None Remove="Resources\logo.ico" />
@@ -138,11 +139,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\AddTerm.ico" />
+    <Resource Include="Resources\EditIcon.ico" />
     <Resource Include="Resources\Flag.png" />
     <Resource Include="Resources\Glossary.png" />
     <Resource Include="Resources\logo.ico" />
     <Resource Include="Resources\logo.png" />
     <Resource Include="Resources\Tag.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TermbaseViewer\UI\Controls\Resources\" />
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>

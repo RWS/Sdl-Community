@@ -1,37 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace InterpretBank.TermbaseViewer.UI.Controls
 {
-	/// <summary>
-	/// Interaction logic for EditBox.xaml
-	/// </summary>
-	public partial class EditBox : Window
-	{
-		public static readonly DependencyProperty TextProperty =
-			DependencyProperty.Register(nameof(Text), typeof(string), typeof(EditBox), new PropertyMetadata(""));
+    /// <summary>
+    /// Interaction logic for EditBox.xaml
+    /// </summary>
+    public partial class EditBox : UserControl
+    {
+        public static readonly DependencyProperty EditBoxTextProperty = DependencyProperty.Register(nameof(EditBoxText), typeof(string), typeof(EditBox), new PropertyMetadata(default(string)));
+        public static readonly DependencyProperty LabelProperty = DependencyProperty.Register(nameof(Label), typeof(string), typeof(EditBox), new PropertyMetadata(default(string)));
 
-		public EditBox()
-		{
-			InitializeComponent();
-		}
+        public EditBox()
+        {
+            InitializeComponent();
+        }
 
-		public string Text
-		{
-			get { return (string)GetValue(TextProperty); }
-			set { SetValue(TextProperty, value); }
-		}
+        public string EditBoxText
+        {
+            get => (string)GetValue(EditBoxTextProperty);
+            set => SetValue(EditBoxTextProperty, value);
+        }
 
-	}
+        public string Label
+        {
+            get => (string)GetValue(LabelProperty);
+            set => SetValue(LabelProperty, value);
+        }
+    }
 }

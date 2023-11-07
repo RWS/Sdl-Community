@@ -1,14 +1,73 @@
-﻿<Window x:Class="InterpretBank.TermbaseViewer.UI.Controls.EditBox"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:InterpretBank.TermbaseViewer.UI.Controls"
-        mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance local:EditBox}"
-        Title="EditBox" Height="450" Width="800">
-    <Border>
-		<TextBox Text="{Binding Text, RelativeSource={RelativeSource AncestorType=Window}}"
-		         TextWrapping="Wrap"/>
+﻿<UserControl x:Class="InterpretBank.TermbaseViewer.UI.Controls.EditBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Name="EditBoxControl"
+             HorizontalAlignment="Left"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Border BorderThickness="1">
+
+        <Border.Style>
+            <Style TargetType="{x:Type Border}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsMouseOver, ElementName=EditBoxControl}"
+                                 Value="True">
+                        <Setter Property="BorderBrush"
+                                Value="LightGray" />
+                        <Setter Property="Background"
+                                Value="LightGray" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Border.Style>
+
+        <Grid x:Name="EditBoxGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="{Binding Label, ElementName=EditBoxControl}"
+                       Foreground="Gray" />
+
+            <TextBox x:Name="TextBox"
+                     Grid.Column="1"
+                     BorderThickness="0"
+                     MinWidth="40"
+                     TextWrapping="Wrap"
+                     AcceptsReturn="True"
+                     VerticalScrollBarVisibility="Auto"
+                     Text="{Binding EditBoxText, ElementName=EditBoxControl}"
+                     BorderBrush="Transparent" />
+
+            <Image Grid.Column="2"
+                   Source="../../../Resources/EditIcon.ico"
+                   Height="15">
+                <Image.Style>
+                    <Style TargetType="{x:Type Image}">
+                        <Setter Property="Visibility"
+                                Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsMouseOver, ElementName=EditBoxControl}"
+                                         Value="True">
+                                <Setter Property="Visibility"
+                                        Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+        </Grid>
     </Border>
-</Window>
+</UserControl>
