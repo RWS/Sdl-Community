@@ -18,6 +18,7 @@
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/textblockresources.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:ImageToBitmapImageConverter x:Key="ImageConverter" />
+            <converters:LanguageToColorConverter x:Key="LanguageToColorConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -28,23 +29,42 @@
         <ListBox Grid.Column="0"
                  ItemsSource="{Binding Entries}"
                  DisplayMemberPath="Name"
+                 FontSize="14"
+                 FontWeight="Light"
                  SelectedItem="{Binding SelectedEntry}"
                  SelectedIndex="{Binding SelectedEntryIndex}" />
 
 
-        <StackPanel Grid.Column="1">
 
-            <StackPanel Margin="5"
-                        Orientation="Horizontal">
-                <TextBlock Text="Entry note: "
-                           FontSize="15"
-                           Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}" />
-                <TextBlock Text="{Binding SelectedEntry.EntryComment}"
-                           FontSize="15" />
-            </StackPanel>
+        <DockPanel Grid.Column="1"
+                   LastChildFill="False">
+
+            <!--<StackPanel>
+                <Button Content="Add"/>
+                <Button Content="Edit"/>
+            </StackPanel>-->
+
+            <Border DockPanel.Dock="Top"
+                    BorderBrush="Gray"
+                    BorderThickness="0.3"
+                    Margin="5 5 0 5"
+                    x:Name="EntryNote_Border">
+                <StackPanel Margin="5"
+                            Orientation="Horizontal"
+                            DockPanel.Dock="Top">
+                    <TextBlock Text="Entry note: "
+                               FontSize="15"
+                               Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}" />
+                    <TextBlock Text="{Binding SelectedEntry.EntryComment}"
+                               VerticalAlignment="Bottom"
+                               FontSize="15" />
+                </StackPanel>
+            </Border>
 
             <ListView ItemsSource="{Binding SelectedEntry.Terms}"
+                      Width="{Binding ActualWidth, ElementName=EntryNote_StackPanel}"
                       Height="{Binding ActualHeight, ElementName=TermbaseViewerControl}"
+                      x:Name="Terms_ListView"
                       BorderThickness="0">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
@@ -54,55 +74,73 @@
                 </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
                     <DataTemplate DataType="{x:Type model:TermModel}">
-                        <DockPanel LastChildFill="False">
-                            <StackPanel Orientation="Horizontal"
-                                        DockPanel.Dock="Top">
-                                <Image Source="{Binding LanguageFlag, Converter={StaticResource ImageConverter}}"
-                                       Height="30" />
-                                <TextBlock Text="{Binding LanguageName}"
-                                           FontWeight="Black"
-                                           Margin="5"
-                                           VerticalAlignment="Center"
-                                           FontSize="15" />
-                            </StackPanel>
-                            <Grid DockPanel.Dock="Bottom"
-                                  Margin="37 0 0 0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
-                                <TextBlock Grid.Column="0"
-                                           Grid.Row="0"
-                                           Grid.ColumnSpan="2"
-                                           Text="{Binding Term}"
-                                           FontSize="15" />
+                        <Border CornerRadius="1"
+                                Margin="0 3 0 0"
+                                BorderThickness="6 0.7 3 3"
+                                Width="{Binding ActualWidth, ElementName=EntryNote_Border}">
+                            <Border.BorderBrush>
+                                <MultiBinding Converter="{StaticResource LanguageToColorConverter}">
+                                    <Binding Path="LanguageName"/>
+                                    <Binding ElementName="TermbaseViewerControl" Path="DataContext.SourceLanguageName" />
+                                    <Binding ElementName="TermbaseViewerControl" Path="DataContext.TargetLanguageName" />
+                                </MultiBinding>
+                            </Border.BorderBrush>
+                            <DockPanel LastChildFill="False">
+                                <StackPanel Orientation="Horizontal"
+                                            DockPanel.Dock="Top">
+                                    <Image Source="{Binding LanguageFlag, Converter={StaticResource ImageConverter}}"
+                                           Height="30" />
+                                    <TextBlock Text="{Binding LanguageName}"
+                                               Margin="5"
+                                               Foreground="#3b3535"
+                                               FontWeight="Black"
+                                               VerticalAlignment="Center"
+                                               FontSize="15" />
+                                </StackPanel>
+                                <Grid DockPanel.Dock="Bottom"
+                                      Margin="37 0 0 0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Grid.Column="0"
+                                               Grid.Row="0"
+                                               Grid.ColumnSpan="2"
+                                               FontFamily="ComicSans"
+                                               Text="{Binding Term}"
+                                               FontSize="15" />
 
-                                <TextBlock Grid.Column="0"
-                                           Grid.Row="1"
-                                           Text="First comment: "
-                                           Foreground="Gray" />
-                                <TextBlock Grid.Column="1"
-                                           Grid.Row="1"
-                                           Text="{Binding FirstComment}"/>
+                                    <TextBlock Grid.Column="0"
+                                               Grid.Row="1"
+                                               FontFamily="ComicSans"
+                                               Text="First comment: "
+                                               Foreground="Gray" />
+                                    <TextBlock Grid.Column="1"
+                                               Grid.Row="1"
+                                               FontFamily="ComicSans"
+                                               Text="{Binding FirstComment}" />
 
-                                <TextBlock Grid.Column="0"
-                                           Grid.Row="2"
-                                           Text="Second comment: "
-                                           Foreground="Gray" />
-                                <TextBlock Grid.Column="1"
-                                           Grid.Row="2"
-                                           Text="{Binding SecondComment}"/>
-                            </Grid>
-                        </DockPanel>
+                                    <TextBlock Grid.Column="0"
+                                               Grid.Row="2"
+                                               FontFamily="ComicSans"
+                                               Text="Second comment: "
+                                               Foreground="Gray" />
+                                    <TextBlock Grid.Column="1"
+                                               Grid.Row="2"
+                                               FontFamily="ComicSans"
+                                               Text="{Binding SecondComment}" />
+                                </Grid>
+                            </DockPanel>
+                        </Border>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-        </StackPanel>
+        </DockPanel>
 
     </Grid>
 </UserControl>

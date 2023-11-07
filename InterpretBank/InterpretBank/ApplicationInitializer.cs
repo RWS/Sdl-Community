@@ -39,9 +39,7 @@ namespace InterpretBank
         private static void RegisterGlobalDependencies()
         {
             Builder.RegisterType<InterpretBankDataContext>().As<IInterpretBankDataContext>();
-
             Builder.RegisterType<TerminologyService.TerminologyService>().As<ITerminologyService>();
-
             Builder.RegisterType<UserInteractionService>().As<IUserInteractionService>();
             Builder.RegisterType<PersistenceService.PersistenceService>().SingleInstance();
             Builder.RegisterType<GlossaryExchangeService.GlossaryExchangeService>().SingleInstance();
