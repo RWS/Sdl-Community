@@ -13,7 +13,7 @@ namespace Sdl.Community.IATETerminologyProvider
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private MainWindow _mainWindow;
-        public bool SupportsEditing => true;
+        //public bool SupportsEditing => true;
         public string TypeDescription => PluginResources.IATETerminologyProviderDescription;
         public string TypeName => PluginResources.IATETerminologyProviderName;
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using NLog;
@@ -19,136 +18,206 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.IATETerminologyProvider
 {
-	public class IATETerminologyProvider : AbstractTerminologyProvider
+	public class IATETerminologyProvider : ITerminologyProvider
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private IList<EntryModel> _entryModels;
 		private TermSearchService _searchService;
 		private EditorController _editorController;
-		private IEUProvider _euProvider;
+		private IStudioDocument _activeDocument;
+		private readonly IEUProvider _euProvider;
+		private readonly object _searchLock = new object();
+		private readonly object _entryModelsLock = new object();
+
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
 		public SettingsModel ProviderSettings { get; set; }
 
 		public IATETerminologyProvider(SettingsModel providerSettings, ConnectionProvider connectionProvider,
-			InventoriesProvider inventoriesProvider, ICacheProvider cacheProvider,IEUProvider eUProvider)
+			InventoriesProvider inventoriesProvider, ICacheProvider cacheProvider, IEUProvider eUProvider)
 		{
 			ProviderSettings = providerSettings;
 			ConnectionProvider = connectionProvider;
 			InventoriesProvider = inventoriesProvider;
 			CacheProvider = cacheProvider;
-			_euProvider=eUProvider;
-			Task.Run(async () => await Setup());			
+			_euProvider = eUProvider;
+			Id = Guid.NewGuid().ToString();
 		}
 
-		private async Task Setup()
+		public bool Initialize()
 		{
+			if (IsInitialized)
+			{
+				return true;
+			}
+
 			if (!InventoriesProvider.IsInitialized)
 			{
-				await InventoriesProvider.Initialize();
+				_ = LegacyAsyncHelpers.WrapAsyncCode(InventoriesProvider.Initialize);
 			}
 
 			_entryModels = new List<EntryModel>();
 			_searchService = new TermSearchService(ConnectionProvider, InventoriesProvider);
-			
+
 			InitializeEditorController();
+			ActivateDocument(_editorController.ActiveDocument);
+			IsInitialized = true;
+			return true;
 		}
 
-		public ConnectionProvider ConnectionProvider { get; private set; }
+		public ConnectionProvider ConnectionProvider { get; }
 
-		public InventoriesProvider InventoriesProvider { get; private set; }
+		public InventoriesProvider InventoriesProvider { get; }
 
-		public ICacheProvider CacheProvider { get; private set; }
+		public ICacheProvider CacheProvider { get; }
 
-		public const string IateUriTemplate = Constants.IATEUriTemplate;
+		public Definition Definition => new Definition(GetDescriptiveFields(), GetDefinitionLanguages());
 
-		public override IDefinition Definition => new Definition(GetDescriptiveFields(), GetDefinitionLanguages());
+		public string Description => PluginResources.IATETerminologyProviderDescription;
 
-		public override string Description => PluginResources.IATETerminologyProviderDescription;
+		public string Name => PluginResources.IATETerminologyProviderName;
 
-		public override string Name => PluginResources.IATETerminologyProviderName;
+		public Uri Uri => new Uri(Constants.IATEUriTemplate);
 
-		public override Uri Uri => new Uri(Constants.IATEUriTemplate);
+		public string Id { get; }
 
-		public override IEntry GetEntry(int id)
+		public TerminologyProviderType Type => TerminologyProviderType.Custom;
+
+		public bool IsReadOnly => false;
+
+		public bool SearchEnabled => true;
+
+		public FilterDefinition ActiveFilter { get; set; }
+
+		public bool IsInitialized { get; private set; }
+
+		public void SetDefault(bool value)
+		{
+			//Nothing to do here
+		}
+
+		public bool Initialize(TerminologyProviderCredential _)
+		{
+			return Initialize();
+		}
+
+		public bool IsProviderUpToDate()
+		{
+			return true;
+		}
+
+		public IList<FilterDefinition> GetFilters() => new List<FilterDefinition>();
+
+		public bool Uninitialize()
+		{
+			IsInitialized = false;
+			return true;
+		}
+
+		public Entry GetEntry(int id)
+		{
+			var entry = _entryModels.ToList().FirstOrDefault(e => e.Id == id);
+			return entry;
+		}
+
+		public Entry GetEntry(int id, IEnumerable<ILanguage> languages)
 		{
 			return _entryModels.ToList().FirstOrDefault(e => e.Id == id);
 		}
 
-		public override IEntry GetEntry(int id, IEnumerable<ILanguage> languages)
-		{
-			return _entryModels.ToList().FirstOrDefault(e => e.Id == id);
-		}
-
-		public override IList<ILanguage> GetLanguages()
+		public IList<ILanguage> GetLanguages()
 		{
 			return GetDefinitionLanguages().Cast<ILanguage>().ToList();
 		}
 
-		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage target, int maxResultsCount, SearchMode mode, bool targetRequired)
+		public IList<SearchResult> Search(string text, ILanguage source, ILanguage target, int maxResultsCount, SearchMode mode, bool targetRequired)
 		{
-			// Prevent the empty query
-			if (string.IsNullOrEmpty(text) || string.IsNullOrWhiteSpace(text)) return null;
-			if (text == "\" \"" || text == "") return null;
-			// Limit to EU languages
-			if (!_euProvider.IsEULanguages(source, target)) { return null; }
-
-			ClearEntries();
-			_logger.Info("--> Try searching for segment");
-
-			var jsonBody = GetApiRequestBodyValues(source, target, text);
-			var queryString = JsonConvert.SerializeObject(jsonBody);
-			var canConnect = CacheProvider?.Connect(IATEApplication.ProjectsController?.CurrentProject);
-
-			if (canConnect != null && (bool)canConnect)
+			lock (_searchLock)
 			{
-				_logger.Info("--> Try to get cache results");
-
-				var cachedResults = CacheProvider.GetCachedResults(text, target.Locale.Name, queryString);
-				if (cachedResults != null && cachedResults.Count > 0)
+				// Prevent the empty query
+				if (string.IsNullOrEmpty(text) || string.IsNullOrWhiteSpace(text)) return null;
+				if (text == "\" \"" || text == "") return null;
+				// Limit to EU languages
+				if (!_euProvider.IsEULanguages(source, target))
 				{
-					CreateEntryTerms(cachedResults.ToList(), source, GetLanguages());
-
-					_logger.Info("--> Cache results found");
-					OnTermEntriesChanged(text, source, target);
-
-					return cachedResults;
+					return null;
 				}
-			}
 
-			var config = IATEApplication.ProjectsController?.CurrentProject?.GetTermbaseConfiguration();
-			var results = _searchService.GetTerms(queryString, config?.TermRecognitionOptions?.SearchDepth ?? 500);
-			if (results != null)
-			{
-				var termGroups = SortSearchResultsByPriority(text, GetTermResultGroups(results), source);
+				//_logger.Info("--> Try searching for segment");
 
-				results = RemoveDuplicateTerms(termGroups, source, target);
-				results = MaxSearchResults(results, maxResultsCount);
-				CreateEntryTerms(results, source, GetLanguages());
+				var jsonBody = GetApiRequestBodyValues(source, target, text);
+				var queryString = JsonConvert.SerializeObject(jsonBody);
+				var canConnect = CacheProvider?.Connect(IATEApplication.ProjectsController?.CurrentProject);
 
-				// add search to cache db
-				var searchCache = new SearchCache
+				if (canConnect != null && (bool)canConnect)
 				{
-					SourceText = text,
-					TargetLanguage = target.Locale.Name,
-					QueryString = queryString
-				};
+					//_logger.Info("--> Try to get cache results");
 
-				if (CacheProvider != null)
-				{
-					_logger.Info("--> Try to add results in db");
-					CacheProvider.AddSearchResults(searchCache, results);
+					var cachedResults = CacheProvider.GetCachedResults(text, target.Locale.Name, queryString);
+					if (cachedResults != null && cachedResults.Count > 0)
+					{
+						var entryModels = CreateEntryTerms(cachedResults.ToList(), source, GetLanguages());
+
+						//_logger.Info("--> Cache results found");
+						OnTermEntriesChanged(entryModels, text, source, target);
+
+						foreach (var entryModel in entryModels)
+						{
+							var existingEntryModel = _entryModels.FirstOrDefault(a => a.Id == entryModel.Id && a.SearchText == text);
+							if (existingEntryModel == null)
+							{
+								_entryModels.Add(entryModel);
+							}
+						}
+
+						return cachedResults?.Cast<SearchResult>().ToList();
+					}
 				}
+
+				var config = IATEApplication.ProjectsController?.CurrentProject?.GetTermbaseConfiguration();
+				var results = _searchService.GetTerms(queryString, config?.TermRecognitionOptions?.SearchDepth ?? 20);
+				if (results != null)
+				{
+					var termGroups = SortSearchResultsByPriority(text, GetTermResultGroups(results), source);
+
+					results = RemoveDuplicateTerms(termGroups, source, target);
+					results = MaxSearchResults(results, maxResultsCount);
+
+
+					// add search to cache db
+					var searchCache = new SearchCache
+					{
+						SourceText = text,
+						TargetLanguage = target.Locale.Name,
+						QueryString = queryString
+					};
+
+					if (CacheProvider != null)
+					{
+						//_logger.Info("--> Try to add results in db");
+						CacheProvider.AddSearchResults(searchCache, results);
+					}
+
+					var entryModels = CreateEntryTerms(results, source, GetLanguages());
+					OnTermEntriesChanged(entryModels, text, source, target);
+
+					foreach (var entryModel in entryModels)
+					{
+						var existingEntryModel = _entryModels.FirstOrDefault(a => a.Id == entryModel.Id && a.SearchText == text);
+						if (existingEntryModel == null)
+						{
+							_entryModels.Add(entryModel);
+						}
+					}
+				}
+
+				return results?.Cast<SearchResult>().ToList();
 			}
-
-			OnTermEntriesChanged(text, source, target);
-
-			return results;
 		}
 
-		public IList<IDescriptiveField> GetDescriptiveFields()
+		public IList<DescriptiveField> GetDescriptiveFields()
 		{
-			var result = new List<IDescriptiveField>();
+			var result = new List<DescriptiveField>();
 
 			var definitionField = new DescriptiveField
 			{
@@ -183,9 +252,9 @@ namespace Sdl.Community.IATETerminologyProvider
 			return result;
 		}
 
-		public IList<IDefinitionLanguage> GetDefinitionLanguages()
+		public IList<DefinitionLanguage> GetDefinitionLanguages()
 		{
-			var result = new List<IDefinitionLanguage>();
+			var result = new List<DefinitionLanguage>();
 
 			var currentProject = IATEApplication.ProjectsController?.CurrentProject;
 			if (currentProject == null)
@@ -232,17 +301,6 @@ namespace Sdl.Community.IATETerminologyProvider
 			}
 		}
 
-		public override void Dispose()
-		{
-			if (_editorController != null)
-			{
-				_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
-				_editorController.Opened -= EditorControllerOnOpened;
-			}
-
-			base.Dispose();
-		}
-
 		private object GetApiRequestBodyValues(ILanguage source, ILanguage destination, string text)
 		{
 			var targetLanguages = new List<string>();
@@ -251,7 +309,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			var filteredCollections = new List<string>();
 			var filteredInstitutions = new List<string>();
 
-			targetLanguages.Add(destination.Locale.TwoLetterISOLanguageName);
+			targetLanguages.Add(destination.Locale.RegionNeutralName);
 			var primarities = new List<int>();
 			var sourceReliabilities = new List<int>();
 			var targetReliabilities = new List<int>();
@@ -266,7 +324,7 @@ namespace Sdl.Community.IATETerminologyProvider
 
 				var collections = ProviderSettings.Collections.Select(c => c.Code).ToList();
 				filteredCollections.AddRange(collections);
-				
+
 				var institutions = ProviderSettings.Institutions.Select(i => i.Code).ToList();
 				filteredInstitutions.AddRange(institutions);
 
@@ -281,7 +339,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			dynamic bodyModel = new ExpandoObject();
 
 			bodyModel.query = text;
-			bodyModel.source = source.Locale.TwoLetterISOLanguageName;
+			bodyModel.source = source.Locale.RegionNeutralName;
 			bodyModel.targets = targetLanguages;
 			bodyModel.cascade_domains = searchInSubdomains;
 			bodyModel.query_operator = 18;
@@ -313,21 +371,20 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		private void ClearEntries()
 		{
-			if (_entryModels == null)
+			lock (_entryModelsLock)
 			{
-				_entryModels = new List<EntryModel>();
+				_entryModels ??= new List<EntryModel>();
+				_entryModels.Clear();
 			}
-
-			_entryModels.Clear();
 		}
 
-		private void OnTermEntriesChanged(string text, ILanguage source, ILanguage target)
+		private void OnTermEntriesChanged(IList<EntryModel> entryModels, string text, ILanguage source, ILanguage target)
 		{
 			if (IsActiveSegmentText(text, source))
 			{
 				OnTermEntriesChanged(new TermEntriesChangedEventArgs
 				{
-					EntryModels = _entryModels,
+					EntryModels = entryModels,
 					SourceLanguage = new Language(source.Locale.Name),
 					TargetLanguage = new Language(target.Locale.Name)
 				});
@@ -345,7 +402,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			{
 				return false;
 			}
-			
+
 			var selectedSegmentPair = _editorController?.ActiveDocument?.GetActiveSegmentPair();
 			if (selectedSegmentPair?.Source == null)
 			{
@@ -382,63 +439,75 @@ namespace Sdl.Community.IATETerminologyProvider
 		private void EditorControllerOnOpened(object sender, DocumentEventArgs e)
 		{
 			Application.DoEvents();
-			if (_editorController?.ActiveDocument != null)
-			{
-				OnTermEntriesChanged(new TermEntriesChangedEventArgs
-				{
-					EntryModels = _entryModels,
-					SourceLanguage = _editorController.ActiveDocument.Project.GetProjectInfo().SourceLanguage,
-					TargetLanguage = _editorController.ActiveDocument.ActiveFile.Language
-				});
-			}
+			//ClearEntries();
+			//OnTermEntriesChanged(null);
 		}
 
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
 		{
-			if (e.Document == null)
-			{
-				OnTermEntriesChanged(null);
-			}
+			ActivateDocument(e.Document);
 		}
 
-		private void CreateEntryTerms(IReadOnlyCollection<ISearchResult> termsResult, ILanguage sourceLanguage, IList<ILanguage> languages)
+		private void ActivateDocument(IStudioDocument document)
+		{
+			if (_activeDocument != null)
+			{
+				_activeDocument.ActiveSegmentChanged -= ActiveDocument_ActiveSegmentChanged;
+			}
+
+			_activeDocument = document;
+
+			if (_activeDocument != null)
+			{
+				_activeDocument.ActiveSegmentChanged += ActiveDocument_ActiveSegmentChanged;
+			}
+
+			ClearEntries();
+		}
+
+		private void ActiveDocument_ActiveSegmentChanged(object sender, System.EventArgs e)
 		{
 			ClearEntries();
-
-			var termsForSourceLanguage = termsResult.Where(s =>
-				s.Language.Locale.TwoLetterISOLanguageName.Equals(sourceLanguage.Locale.TwoLetterISOLanguageName));
-
-			foreach (var searchResult in termsForSourceLanguage)
-			{
-				var termResult = (SearchResultModel)searchResult;
-
-				var entryModel = new EntryModel
-				{
-					SearchText = termResult.Text,
-					Id = termResult.Id,
-					ItemId = termResult.ItemId,
-					Fields = SetEntryFields(termResult, 0),
-					Transactions = new List<IEntryTransaction>(),
-					Languages = SetEntryLanguages(termsResult, sourceLanguage, languages, termResult)
-				};
-
-				_entryModels.Add(entryModel);
-			}
 		}
 
-		private IList<IEntryLanguage> SetEntryLanguages(IReadOnlyCollection<ISearchResult> termsResult, ILanguage sourceLanguage, IEnumerable<ILanguage> languages, SearchResultModel termResult)
+		private IList<EntryModel> CreateEntryTerms(IReadOnlyCollection<SearchResultModel> searchResults, ILanguage sourceLanguage, IList<ILanguage> languages)
 		{
-			var entryLanguages = new List<IEntryLanguage>();
+			var entryModels = new List<EntryModel>();
+			var searchResultsByLanguage = searchResults.Where(s =>
+				s.Language.Locale.RegionNeutralName.Equals(sourceLanguage.Locale.RegionNeutralName));
+
+			foreach (var searchResultByLanguage in searchResultsByLanguage)
+			{
+				var searchResult = searchResultByLanguage;
+				var entryModel = new EntryModel
+				{
+					SearchText = searchResult.Text,
+					Id = searchResult.Id,
+					ItemId = searchResult.ItemId,
+					Fields = SetEntryFields(searchResult, 0),
+					Transactions = new List<EntryTransaction>(),
+					Languages = SetEntryLanguages(searchResults, sourceLanguage, languages, searchResult)
+				};
+
+				entryModels.Add(entryModel);
+			}
+
+			return entryModels;
+		}
+
+		private IList<EntryLanguage> SetEntryLanguages(IReadOnlyCollection<SearchResultModel> searchResults, ILanguage sourceLanguage, IEnumerable<ILanguage> languages, SearchResultModel termResult)
+		{
+			var entryLanguages = new List<EntryLanguage>();
 			foreach (var language in languages)
 			{
 				var entryLanguage = new EntryLanguageModel
 				{
-					Fields = !language.Locale.TwoLetterISOLanguageName.Equals(sourceLanguage.Locale.TwoLetterISOLanguageName) ? SetEntryFields(termResult, 1) : new List<IEntryField>(),
+					Fields = !language.Locale.RegionNeutralName.Equals(sourceLanguage.Locale.RegionNeutralName) ? SetEntryFields(termResult, 1) : new List<EntryField>(),
 					Locale = language.Locale,
 					Name = language.Name,
 					ParentEntry = null,
-					Terms = CreateEntryTerms(termsResult, language, termResult.Id),
-					IsSource = language.Locale.TwoLetterISOLanguageName.Equals(sourceLanguage.Locale.TwoLetterISOLanguageName)
+					Terms = CreateEntryTerms(searchResults, language, termResult.Id),
+					IsSource = language.Locale.RegionNeutralName.Equals(sourceLanguage.Locale.RegionNeutralName)
 				};
 				entryLanguages.Add(entryLanguage);
 			}
@@ -446,19 +515,20 @@ namespace Sdl.Community.IATETerminologyProvider
 			return entryLanguages;
 		}
 
-		private IList<IEntryTerm> CreateEntryTerms(IEnumerable<ISearchResult> termsResult, ILanguage language, int id)
+		private IList<EntryTerm> CreateEntryTerms(IEnumerable<SearchResultModel> searchResults, ILanguage language, int id)
 		{
-			IList<IEntryTerm> entryTerms = new List<IEntryTerm>();
-			var terms = termsResult.Where(t => t.Id == id && t.Language.Locale.TwoLetterISOLanguageName == language.Locale.TwoLetterISOLanguageName).ToList();
+			IList<EntryTerm> entryTerms = new List<EntryTerm>();
+			var searchResultsByLanguage = searchResults.Where(t =>
+				t.Id == id &&
+				t.Language.Locale.RegionNeutralName == language.Locale.RegionNeutralName).ToList();
 
-			foreach (var searchResult in terms)
+			foreach (var searchResultByLanguage in searchResultsByLanguage)
 			{
-				var term = (SearchResultModel)searchResult;
-
+				var searchResult = searchResultByLanguage;
 				var entryTerm = new EntryTerm
 				{
-					Value = term.Text,
-					Fields = SetEntryFields(term, 2)
+					Value = searchResult.Text,
+					Fields = SetEntryFields(searchResult, 2)
 				};
 
 				entryTerms.Add(entryTerm);
@@ -467,9 +537,9 @@ namespace Sdl.Community.IATETerminologyProvider
 			return entryTerms;
 		}
 
-		private IList<IEntryField> SetEntryFields(SearchResultModel searchResultModel, int level)
+		private IList<EntryField> SetEntryFields(SearchResultModel searchResultModel, int level)
 		{
-			var entryFields = new List<IEntryField>();
+			var entryFields = new List<EntryField>();
 
 			if (!string.IsNullOrEmpty(searchResultModel.Definition))
 			{
@@ -527,9 +597,9 @@ namespace Sdl.Community.IATETerminologyProvider
 			return entryFields;
 		}
 
-		private static List<ISearchResult> MaxSearchResults(List<ISearchResult> searchResults, int maxResultsCount)
+		private static List<SearchResultModel> MaxSearchResults(List<SearchResultModel> searchResults, int maxResultsCount)
 		{
-			var results = new List<ISearchResult>();
+			var results = new List<SearchResultModel>();
 			if (searchResults.Count > maxResultsCount)
 			{
 				for (var i = 0; i < maxResultsCount; i++)
@@ -545,15 +615,15 @@ namespace Sdl.Community.IATETerminologyProvider
 			return results;
 		}
 
-		private static List<TermResultGroup> SortSearchResultsByPriority(string text, List<TermResultGroup> termsResult, ILanguage source)
+		private static List<TermResultGroup> SortSearchResultsByPriority(string text, List<TermResultGroup> termResultGroups, ILanguage source)
 		{
 			var index = new List<int>();
 			var secondaryIndex = new List<int>();
 
-			foreach (var termResult in termsResult)
+			foreach (var termResultGroup in termResultGroups)
 			{
-				var sourceTerms = termResult.Results
-					.Where(a => a.Language.Locale.TwoLetterISOLanguageName == source.Locale.TwoLetterISOLanguageName).ToList();
+				var sourceTerms = termResultGroup.Results
+					.Where(a => a.Language.Locale.RegionNeutralName == source.Locale.RegionNeutralName).ToList();
 
 				foreach (var sourceTerm in sourceTerms)
 				{
@@ -580,19 +650,19 @@ namespace Sdl.Community.IATETerminologyProvider
 
 			index.AddRange(secondaryIndex);
 
-			termsResult = termsResult.OrderBy(a => index.IndexOf(a.Id)).ToList();
-			return termsResult;
+			termResultGroups = termResultGroups.OrderBy(a => index.IndexOf(a.Id)).ToList();
+			return termResultGroups;
 		}
 
-		private static List<ISearchResult> RemoveDuplicateTerms(IReadOnlyCollection<TermResultGroup> termGroups, ILanguage source, ILanguage target)
+		private static List<SearchResultModel> RemoveDuplicateTerms(IReadOnlyCollection<TermResultGroup> termResultGroups, ILanguage source, ILanguage target)
 		{
-			var results = new List<ISearchResult>();
+			var results = new List<SearchResultModel>();
 
 			var indexes = new List<string>();
-			foreach (var termGroup in termGroups)
+			foreach (var termGroup in termResultGroups)
 			{
-				var sourceTerms = termGroup.Results.Where(a => a.Language.Locale.TwoLetterISOLanguageName == source.Locale.TwoLetterISOLanguageName).ToList();
-				var targetTerms = termGroup.Results.Where(a => a.Language.Locale.TwoLetterISOLanguageName == target.Locale.TwoLetterISOLanguageName).ToList();
+				var sourceTerms = termGroup.Results.Where(a => a.Language.Locale.RegionNeutralName == source.Locale.RegionNeutralName).ToList();
+				var targetTerms = termGroup.Results.Where(a => a.Language.Locale.RegionNeutralName == target.Locale.RegionNeutralName).ToList();
 
 				foreach (var sourceTerm in sourceTerms)
 				{
@@ -616,7 +686,7 @@ namespace Sdl.Community.IATETerminologyProvider
 				}
 			}
 
-			foreach (var resultGroup in termGroups)
+			foreach (var resultGroup in termResultGroups)
 			{
 				if (resultGroup.Results.Count > 0)
 				{
@@ -627,23 +697,42 @@ namespace Sdl.Community.IATETerminologyProvider
 			return results;
 		}
 
-		private static List<TermResultGroup> GetTermResultGroups(IEnumerable<ISearchResult> termsResult)
+		private static List<TermResultGroup> GetTermResultGroups(IEnumerable<SearchResultModel> searchResults)
 		{
-			var resultGroups = new List<TermResultGroup>();
-			foreach (var searchResult in termsResult)
+			var termResultGroups = new List<TermResultGroup>();
+			foreach (var searchResult in searchResults)
 			{
-				var resultGroup = resultGroups.FirstOrDefault(a => a.Id == searchResult.Id);
+				var resultGroup = termResultGroups.FirstOrDefault(a => a.Id == searchResult.Id);
 				if (resultGroup != null)
 				{
 					resultGroup.Results.Add(searchResult);
 				}
 				else
 				{
-					resultGroups.Add(new TermResultGroup { Id = searchResult.Id, Results = new List<ISearchResult> { searchResult } });
+					termResultGroups.Add(new TermResultGroup
+					{
+						Id = searchResult.Id,
+						Results = new List<SearchResultModel> { searchResult }
+					});
 				}
 			}
 
-			return resultGroups;
+			return termResultGroups;
 		}
+
+		public void Dispose()
+		{
+			if (_editorController != null)
+			{
+				_editorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
+				_editorController.Opened -= EditorControllerOnOpened;
+			}
+
+			if (_activeDocument != null)
+			{
+				_activeDocument.ActiveSegmentChanged -= ActiveDocument_ActiveSegmentChanged;
+			}
+		}
+
 	}
 }

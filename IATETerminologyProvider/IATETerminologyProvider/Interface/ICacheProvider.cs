@@ -10,11 +10,11 @@ namespace Sdl.Community.IATETerminologyProvider.Interface
 	{
 		bool Connect(IProject project);
 		
-		List<ISearchResult> GetCachedResults(string sourceText, string targetLanguage, string queryString);
+		List<SearchResultModel> GetCachedResults(string sourceText, string targetLanguage, string queryString);
 		
 		IEnumerable<SearchCache> GetAllCachedResults();
 
-		void AddSearchResults(SearchCache searchCache, List<ISearchResult> searchResult);
+		void AddSearchResults(SearchCache searchCache, List<SearchResultModel> searchResult);
 
 		void ClearCachedResults();
 

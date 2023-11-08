@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.Community.IATETerminologyProvider.View;
+using Sdl.Core.Globalization;
 using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace Sdl.Community.IATETerminologyProvider
@@ -18,7 +19,7 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		public event EventHandler TermChanged;
 		public event EventHandler<EntryEventArgs> SelectedTermChanged;
-		public event Action<IEntry> JumpToTermAction;
+		public event Action<Entry> JumpToTermAction;
 		public event Action<string, string> AddTermAction;
 
 		public Control Control
@@ -46,9 +47,13 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		public bool Initialized => true;
 
-		public IEntry SelectedTerm { get; set; }
+		public Entry SelectedTerm { get; set; }
 
-		public void AddAndEditTerm(IEntry term, string source, string target)
+		bool ITerminologyProviderViewerWinFormsUI.CanAddTerm => false;
+
+		public bool IsEditing => false;
+
+		public void AddAndEditTerm(Entry term, string source, string target)
 		{
 		}
 
@@ -57,16 +62,16 @@ namespace Sdl.Community.IATETerminologyProvider
 			AddTermAction?.Invoke(source, target);
 		}
 
-		public void EditTerm(IEntry term)
+		public void EditTerm(Entry term)
 		{
 		}
 
-		public void Initialize(ITerminologyProvider terminologyProvider, CultureInfo source, CultureInfo target)
+		public void Initialize(ITerminologyProvider terminologyProvider, CultureCode source, CultureCode target)
 		{
 			_iateTerminologyProvider = (IATETerminologyProvider)terminologyProvider;
 		}
 
-		public void JumpToTerm(IEntry entry)
+		public void JumpToTerm(Entry entry)
 		{
 			JumpToTermAction?.Invoke(entry);
 		}
@@ -86,6 +91,18 @@ namespace Sdl.Community.IATETerminologyProvider
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
 		{
 			return terminologyProviderUri.Scheme == Constants.IATEGlossary;
-		}	
+		}
+
+		public bool CanAddTerm() => true;
+
+		public void CancelTerm()
+		{
+			
+		}
+
+		public void SaveTerm()
+		{
+			
+		}
 	}
 }
