@@ -11,7 +11,7 @@ namespace Sdl.Community.AhkPlugin.Helpers
 	public class DbContext
 	{
 		private readonly string  _defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-			"SDL Community", "AhkMasterScript", "Ahk.db");
+			"Trados AppStore", "AhkMasterScript", "Ahk.db");
 		public Task<MasterScript> GetMasterScript()
 		{
 

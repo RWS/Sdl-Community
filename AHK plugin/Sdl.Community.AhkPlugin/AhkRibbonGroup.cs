@@ -20,7 +20,7 @@ namespace Sdl.Community.AhkPlugin
 		{
 			// Open database (or create if not exits)
 			var defaultFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				"SDL Community", "AhkMasterScript");
+				"Trados AppStore", "AhkMasterScript");
 			if (!Directory.Exists(defaultFolderPath))
 			{
 				Directory.CreateDirectory(defaultFolderPath);

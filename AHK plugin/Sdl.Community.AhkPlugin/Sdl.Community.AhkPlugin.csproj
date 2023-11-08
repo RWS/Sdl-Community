@@ -2,31 +2,36 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net48</TargetFramework>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
-		<CreatePluginPackage>true</CreatePluginPackage>
-		<SignAssembly>True</SignAssembly>
-		<AssemblyOriginatorKeyFile>C:\Code\SDLCOM - Studio 2021\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17</TradosFolder>
 	</PropertyGroup>
+
+	<PropertyGroup>
+		<SignAssembly>true</SignAssembly>
+		<CreatePluginPackage>true</CreatePluginPackage>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+	</PropertyGroup>
+	
   <ItemGroup>
     <Reference Include="NLog">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\NLog.dll</HintPath>
+      <HintPath>$(TradosFolder)\NLog.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="Sdl.Desktop.IntegrationApi">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Styles">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.Styles.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Styles.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -111,9 +116,6 @@
     <Resource Include="Resources\trash-alt.png" />
     <None Include="Resources\reload.txt" />
     <Resource Include="Resources\icon.png" />
-    <None Include="..\..\SdlCommunity.snk">
-      <Link>SdlCommunity.snk</Link>
-    </None>
     <Content Include="pluginpackage.manifest.xml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
