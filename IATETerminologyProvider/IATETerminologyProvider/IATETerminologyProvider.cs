@@ -160,15 +160,7 @@ namespace Sdl.Community.IATETerminologyProvider
 
 						//_logger.Info("--> Cache results found");
 						OnTermEntriesChanged(entryModels, text, source, target);
-
-						foreach (var entryModel in entryModels)
-						{
-							var existingEntryModel = _entryModels.FirstOrDefault(a => a.Id == entryModel.Id && a.SearchText == text);
-							if (existingEntryModel == null)
-							{
-								_entryModels.Add(entryModel);
-							}
-						}
+						UpdateEntryModelsList(text, entryModels);
 
 						return cachedResults?.Cast<SearchResult>().ToList();
 					}
@@ -200,15 +192,7 @@ namespace Sdl.Community.IATETerminologyProvider
 
 					var entryModels = CreateEntryTerms(results, source, GetLanguages());
 					OnTermEntriesChanged(entryModels, text, source, target);
-
-					foreach (var entryModel in entryModels)
-					{
-						var existingEntryModel = _entryModels.FirstOrDefault(a => a.Id == entryModel.Id && a.SearchText == text);
-						if (existingEntryModel == null)
-						{
-							_entryModels.Add(entryModel);
-						}
-					}
+					UpdateEntryModelsList(text, entryModels);
 				}
 
 				return results?.Cast<SearchResult>().ToList();
@@ -298,6 +282,18 @@ namespace Sdl.Community.IATETerminologyProvider
 				case 2: return ""; // TODO: confirm value
 				case 3: return "Preferred";
 				default: return ""; // TODO: confirm default value
+			}
+		}
+
+		private void UpdateEntryModelsList(string text, IEnumerable<EntryModel> entryModels)
+		{
+			foreach (var entryModel in entryModels)
+			{
+				var existingEntryModel = _entryModels.FirstOrDefault(a => a.Id == entryModel.Id && a.SearchText == text);
+				if (existingEntryModel == null)
+				{
+					_entryModels.Add(entryModel);
+				}
 			}
 		}
 
