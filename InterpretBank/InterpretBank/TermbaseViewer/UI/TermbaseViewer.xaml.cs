@@ -34,5 +34,10 @@ namespace InterpretBank.TermbaseViewer.UI
         {
             ViewModel.ReloadDb(filepath);
         }
+
+        public void AddTerm(string source, string target)
+        {
+            ViewModel.AddTerm(source, target);
+        }
     }
 }

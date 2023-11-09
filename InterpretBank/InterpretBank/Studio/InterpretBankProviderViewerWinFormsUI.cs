@@ -47,7 +47,7 @@ namespace InterpretBank.Studio
 
         public void AddTerm(string source, string target)
         {
-            //TermbaseViewerControl.AddTerm(source, target);
+            TermbaseViewerControl.AddTerm(source, target);
         }
 
         public void EditTerm(IEntry term)

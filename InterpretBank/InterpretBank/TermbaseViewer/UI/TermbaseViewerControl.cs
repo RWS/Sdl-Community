@@ -68,5 +68,10 @@ namespace InterpretBank.TermbaseViewer.UI
         {
             TermbaseViewer.ReloadDb(filepath);
         }
+
+        public void AddTerm(string source, string target)
+        {
+            TermbaseViewer.AddTerm(source, target);
+        }
     }
 }

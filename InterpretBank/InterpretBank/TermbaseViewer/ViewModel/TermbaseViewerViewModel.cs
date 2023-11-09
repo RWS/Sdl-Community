@@ -1,5 +1,6 @@
 ﻿using InterpretBank.Commands;
 using InterpretBank.Extensions;
+using InterpretBank.Interface;
 using InterpretBank.Model;
 using InterpretBank.TerminologyService.Interface;
 using Sdl.Core.Globalization;
@@ -14,7 +15,6 @@ namespace InterpretBank.TermbaseViewer.ViewModel
     public class TermbaseViewerViewModel : ViewModelBase.ViewModel
     {
         private ObservableCollection<EntryModel> _entries;
-        private ICommand _rejectEditCommand;
         private ICommand _saveEditCommand;
         private EntryModel _selectedEntry;
         private int _selectedEntryIndex;
@@ -24,9 +24,10 @@ namespace InterpretBank.TermbaseViewer.ViewModel
         private Image _targetLanguageFlag;
         private string _targetLanguageName;
 
-        public TermbaseViewerViewModel(ITerminologyService terminologyService)
+        public TermbaseViewerViewModel(ITerminologyService terminologyService, IUserInteractionService userInteractionService)
         {
             TerminologyService = terminologyService;
+            UserInteractionService = userInteractionService;
         }
 
         public ObservableCollection<EntryModel> Entries
@@ -44,7 +45,6 @@ namespace InterpretBank.TermbaseViewer.ViewModel
         }
 
         public List<string> Glossaries { get; set; }
-
         public ICommand SaveEditCommand => _saveEditCommand ??= new RelayCommand(UpdateTerm);
 
         public EntryModel SelectedEntry
@@ -89,11 +89,17 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             set => SetField(ref _targetLanguageName, value);
         }
 
+        public IUserInteractionService UserInteractionService { get; set; }
         private Language SourceLanguage { get; set; }
 
         private Language TargetLanguage { get; set; }
 
         private ITerminologyService TerminologyService { get; set; }
+
+        public void AddTerm(string source, string target)
+        {
+            var glossaryNameFromUser = UserInteractionService.GetGlossaryNameFromUser(Glossaries);
+        }
 
         public void LoadTerms()
         {
