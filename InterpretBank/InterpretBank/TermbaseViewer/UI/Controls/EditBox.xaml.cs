@@ -21,7 +21,7 @@ namespace InterpretBank.TermbaseViewer.UI.Controls
 
         public EditBox()
         {
-            EditBoxHelper.GotFocus += EditBoxHelper_SomeControlGotFocus;
+            //EditBoxHelper.GotFocus += EditBoxHelper_SomeControlGotFocus;
             InitializeComponent();
         }
 
@@ -69,12 +69,12 @@ namespace InterpretBank.TermbaseViewer.UI.Controls
             SaveEditCommand?.Execute(SaveEditCommandParameter);
         }
 
-        private void EditBoxHelper_SomeControlGotFocus(DependencyObject obj)
-        {
-            if (TextBox.IsFocused) return;
-            SaveEditCommand?.Execute(SaveEditCommandParameter);
-            IsEditing = false;
-        }
+        //private void EditBoxHelper_SomeControlGotFocus(DependencyObject obj)
+        //{
+        //    if (TextBox.IsFocused) return;
+        //    SaveEditCommand?.Execute(SaveEditCommandParameter);
+        //    IsEditing = false;
+        //}
 
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
@@ -88,12 +88,33 @@ namespace InterpretBank.TermbaseViewer.UI.Controls
             if (parameter == "ConfirmEdit")
             {
                 SaveEditCommand?.Execute(null);
-                var focusedElement = (Keyboard.FocusedElement as UIElement);
-                focusedElement?.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                var control =
+                    (((Parent as FrameworkElement).TemplatedParent as FrameworkElement).TemplatedParent as
+                        FrameworkElement);
+
+                //control?.Focus();
+                Keyboard.Focus(control);
+                IsEditing = false;
+            }
+
+            if (EditBoxGrid.IsFocused && parameter == "EnterEdit")
+            {
+                IsEditing = true;
+                TextBox.Focus();
+            }
+
+            if (parameter == "RejectEdit")
+            {
+                RejectEditing();
             }
         }
 
         private void RejectEditButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            RejectEditing();
+        }
+
+        private void RejectEditing()
         {
             EditBoxText = PreviousText;
             IsEditing = false;
@@ -103,6 +124,12 @@ namespace InterpretBank.TermbaseViewer.UI.Controls
         {
             EditBoxHelper.RaiseGotFocus(null);
             IsEditing = true;
+        }
+
+        private void TextBox_OnLostFocus(object sender, RoutedEventArgs e)
+        {
+            IsEditing = false;
+            SaveEditCommand?.Execute(SaveEditCommandParameter);
         }
     }
 }

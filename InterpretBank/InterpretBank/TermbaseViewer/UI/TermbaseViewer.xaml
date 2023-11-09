@@ -21,6 +21,7 @@
             <converters:ImageToBitmapImageConverter x:Key="ImageConverter" />
             <converters:LanguageToColorConverter x:Key="LanguageToColorConverter" />
             <converters:SubtractConverter x:Key="SubtractConverter" />
+
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -68,6 +69,7 @@
                       ItemContainerStyle="{DynamicResource TermListViewStyle}"
                       HorizontalContentAlignment="Stretch"
                       KeyboardNavigation.TabNavigation="Local"
+                      SelectionMode="Single"
                       ItemsSource="{Binding SelectedEntry.Terms}"
                       SelectedItem="{Binding SelectedTerm}"
                       ScrollViewer.VerticalScrollBarVisibility="Visible"
