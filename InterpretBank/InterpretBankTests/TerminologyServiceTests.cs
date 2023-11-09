@@ -9,7 +9,7 @@ using InterpretBank.GlossaryService.Model;
 using InterpretBank.TerminologyService;
 using NSubstitute;
 using Xunit;
-using DbTerm = InterpretBank.GlossaryService.DAL.DbTerm;
+using DbTerm = InterpretBank.GlossaryService.DAL.DbGlossaryEntry;
 
 namespace InterpretBankTests
 {

@@ -36,7 +36,7 @@ public class TerminologyService : ITerminologyService
     public ObservableCollection<EntryModel> GetEntriesFromDb(List<string> glossaries)
     {
         var dbTerms = InterpretBankDataContext
-            .GetRows<DbTerm>()
+            .GetRows<DbGlossaryEntry>()
             .Where(dbTerm => glossaries.Contains(dbTerm.Tag1));
 
         var entryModels = new ObservableCollection<EntryModel>();
@@ -79,21 +79,26 @@ public class TerminologyService : ITerminologyService
         return entryModels;
     }
 
+    public void UpdateTerm(TermChange termChange)
+    {
+        InterpretBankDataContext.UpdateTerm(termChange);
+    }
+
     public List<StudioTermEntry> GetExactTerms(string word, string sourceLanguage, string targetLanguage, List<string> glossaries)
     {
         var sourceLanguageIndex = GetLanguageIndex(sourceLanguage);
         var targetLanguageIndex = GetLanguageIndex(targetLanguage);
         var columns = GetTermColumns(targetLanguageIndex);
 
-        var parameter = Expression.Parameter(typeof(DbTerm), "term");
+        var parameter = Expression.Parameter(typeof(DbGlossaryEntry), "term");
         var property = Expression.Property(parameter, $"Term{sourceLanguageIndex}");
 
         var constant = Expression.Constant(word);
         var comparison = Expression.Equal(property, constant);
 
-        var filterExpression = Expression.Lambda<Func<DbTerm, bool>>(comparison, parameter);
+        var filterExpression = Expression.Lambda<Func<DbGlossaryEntry, bool>>(comparison, parameter);
         var filteredTerms = InterpretBankDataContext
-            .GetRows<DbTerm>()
+            .GetRows<DbGlossaryEntry>()
             .Where(t => glossaries.Contains(t.Tag1))
             .Where(filterExpression);
 
@@ -120,7 +125,7 @@ public class TerminologyService : ITerminologyService
         var sourceLanguageIndex = GetLanguageIndex(sourceLanguage);
 
         var filteredTerms = InterpretBankDataContext
-            .GetRows<DbTerm>()
+            .GetRows<DbGlossaryEntry>()
             .Where(t => glossaries.Contains(t.Tag1))
             .WhereFuzzy($"Term{sourceLanguageIndex}", word);
 

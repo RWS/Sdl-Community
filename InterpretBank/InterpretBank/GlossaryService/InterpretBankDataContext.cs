@@ -22,14 +22,14 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 
     public void AddCompatibleLanguageEquivalentsFromImport(GlossaryImport glossaryImport, string glossaryName)
     {
-        var dbTerms = DataContext.GetTable<DbTerm>();
+        var dbTerms = DataContext.GetTable<DbGlossaryEntry>();
 
-        var id = GetMaxId<DbTerm>() + 1;
+        var id = GetMaxId<DbGlossaryEntry>() + 1;
 
         var (compatibleLanguages, notCompatible) = CheckLanguages(glossaryImport.Languages);
         for (var entryNumber = 0; entryNumber < glossaryImport.Count - 1; entryNumber++)
         {
-            var newTerm = new DbTerm();
+            var newTerm = new DbGlossaryEntry();
             foreach (var language in compatibleLanguages)
             {
                 var languageIndex = GetLanguageIndex(language);
@@ -166,7 +166,7 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         if (glossary is null) return;
         dbGlossaries.DeleteOnSubmit(glossary);
 
-        var dbTerms = GetTable<DbTerm>();
+        var dbTerms = GetTable<DbGlossaryEntry>();
         var dbTermsWithPendingInserts = GetTableWithPendingInserts(dbTerms);
 
         var glossaryTerms = dbTermsWithPendingInserts.Where(t => t.Tag1 == selectedGlossaryGlossaryName);
@@ -224,7 +224,7 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         DataContext = new DataContext(SqLiteConnection);
     }
 
-    public void SubmitData(bool notify = false)
+    public void SubmitData()
     {
         DataContext.SubmitChanges();
         ShouldReloadEvent?.Invoke();
@@ -250,6 +250,19 @@ public class InterpretBankDataContext : IInterpretBankDataContext
             TagName = newTag.TagName,
             Id = maxId
         });
+    }
+
+    public void UpdateTerm(TermChange termChange)
+    {
+        var languageIndex = GetLanguageIndex(termChange.LanguageName);
+        var dbTermToBeUpdated = GetTable<DbGlossaryEntry>().FirstOrDefault(t => t.Id == termChange.EntryId);
+        if (dbTermToBeUpdated is null) return;
+
+        dbTermToBeUpdated[$"Term{languageIndex}"] = termChange.Term;
+        dbTermToBeUpdated[$"Comment{languageIndex}a"] = termChange.FirstComment;
+        dbTermToBeUpdated[$"Comment{languageIndex}b"] = termChange.SecondComment;
+
+        SubmitData();
     }
 
     //public void UpdateTerms(List<TermModel> terms)

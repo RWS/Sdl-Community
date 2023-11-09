@@ -18,18 +18,27 @@
             </ResourceDictionary.MergedDictionaries>
             <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
             <platformConverters:InverseBooleanToVisibilityConverter x:Key="InvertBoolToVisConverter" />
-            <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+            <!--<BooleanToVisibilityConverter x:Key="BoolToVisConverter" />-->
             <Style TargetType="Button">
                 <Setter Property="Template"
                         Value="{StaticResource EditButtonTemplate}" />
             </Style>
-            
+
+            <converters:OrBoolToVisibilityConverter  x:Key="MultipleBoolToVisConverter" />
             <Style x:Key="DialogButtonsStyle" TargetType="Button">
                 <Setter Property="Template"
                         Value="{StaticResource EditButtonTemplate}" />
                 <Setter Property="Background" Value="{Binding ElementName=EditBoxControl, Path=IsEditing, Converter={StaticResource BoolToColorConverter}, ConverterParameter=LightGray}"/>
                 <Setter Property="BorderBrush" Value="{Binding ElementName=EditBoxControl, Path=IsEditing, Converter={StaticResource BoolToColorConverter}, ConverterParameter=LightGray}"/>
-                <Setter Property="Visibility" Value="{Binding ElementName=EditBoxControl, Path=IsEditing, Converter={StaticResource BoolToVisConverter}}"/>
+                <!--<Setter Property="Visibility" Value="{Binding ElementName=EditBoxControl, Path=IsEditing, Converter={StaticResource BoolToVisConverter}}"/>-->
+                <Setter Property="Visibility">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource MultipleBoolToVisConverter}">
+                            <Binding Path="IsEditing" ElementName="EditBoxControl" />
+                            <Binding Path="IsFocused" RelativeSource="{RelativeSource Self}"/>
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>

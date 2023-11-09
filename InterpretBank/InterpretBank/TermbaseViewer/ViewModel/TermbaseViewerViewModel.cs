@@ -45,7 +45,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
         public List<string> Glossaries { get; set; }
 
-        public ICommand SaveEditCommand => _saveEditCommand ??= new RelayCommand(SaveEdit);
+        public ICommand SaveEditCommand => _saveEditCommand ??= new RelayCommand(UpdateTerm);
 
         public EntryModel SelectedEntry
         {
@@ -137,30 +137,6 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             }
         }
 
-        private void SaveEdit(object obj)
-        {
-            var termModel = obj as TermModel;
-            //var changed = obj.ToString();
-            //switch (changed)
-            //{
-            //    case "Term":
-
-            //        break;
-
-            //    case "FirstComment":
-            //        break;
-
-            //    case "SecondComment":
-            //        break;
-            //}
-            //TerminologyService.SaveTerm(new TermChange
-            //{
-            //    EntryId = SelectedEntry.Id,
-            //    GlossaryName = SelectedEntry.GlossaryName,
-            //    Language =
-            //});
-        }
-
         private void SetEntryNames(ObservableCollection<EntryModel> entries)
         {
             entries.ForEach(entryModel =>
@@ -186,6 +162,22 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             if (Entries.Contains(previousTerm))
                 SelectedEntry = Entries.FirstOrDefault(e => e.Equals(previousTerm));
             else if (Entries.Any()) SelectedEntry = Entries.FirstOrDefault();
+        }
+
+        private void UpdateTerm(object obj)
+        {
+            if (obj is not TermModel { Modified: true } termModel) return;
+
+            termModel.Modified = false;
+            TerminologyService.UpdateTerm(new TermChange
+            {
+                EntryId = SelectedEntry.Id,
+                GlossaryName = SelectedEntry.GlossaryName,
+                LanguageName = termModel.LanguageName,
+                Term = termModel.Term,
+                FirstComment = termModel.FirstComment,
+                SecondComment = termModel.SecondComment,
+            });
         }
     }
 }

@@ -6,7 +6,7 @@ using InterpretBank.GlossaryService.Model;
 namespace InterpretBank.GlossaryService.DAL;
 
 [Table(Name = "GlossaryData")]
-public class DbTerm : IInterpretBankTable
+public class DbGlossaryEntry : IInterpretBankTable
 {
 	private static PropertyInfo[] _properties;
 

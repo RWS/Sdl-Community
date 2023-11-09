@@ -76,7 +76,6 @@
                 <ListView.ItemTemplate>
                     <DataTemplate DataType="{x:Type model:TermModel}">
                         <Border CornerRadius="1"
-                                
                                 Margin="0 3 0 0"
                                 BorderThickness="4 0.7 0.7 2">
                             <Border.BorderBrush>
@@ -115,7 +114,7 @@
                                                   SaveEditCommand="{Binding DataContext.SaveEditCommand, ElementName=TermbaseViewerControl}"
                                                   SaveEditCommandParameter="{Binding }"
                                                   Margin="3 0 0 0"
-                                                  EditBoxText="{Binding Term}"
+                                                  EditBoxText="{Binding Term, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                   FontSize="15" />
 
                                 <controls:EditBox Grid.Row="2"
@@ -125,7 +124,7 @@
                                                   Margin="5 0 0 0"
                                                   FontSize="12"
                                                   Label="Extra 1: "
-                                                  EditBoxText="{Binding FirstComment}" />
+                                                  EditBoxText="{Binding FirstComment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                                 <controls:EditBox Grid.Row="3"
                                                   FontFamily="ComicSans"
@@ -134,7 +133,7 @@
                                                   SaveEditCommandParameter="{Binding }"
                                                   Label="Extra 2: "
                                                   FontSize="12"
-                                                  EditBoxText="{Binding SecondComment}" />
+                                                  EditBoxText="{Binding SecondComment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </Grid>
                         </Border>
                     </DataTemplate>

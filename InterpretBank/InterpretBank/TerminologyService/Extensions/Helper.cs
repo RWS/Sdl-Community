@@ -45,12 +45,12 @@ public static class Helper
 		return score;
 	}
 
-	public static IEnumerable<(DbTerm, string, int)> WhereFuzzy(this IQueryable<DbTerm> source, string propertyName, string word)
+	public static IEnumerable<(DbGlossaryEntry, string, int)> WhereFuzzy(this IQueryable<DbGlossaryEntry> source, string propertyName, string word)
 	{
-		var parameter = Expression.Parameter(typeof(DbTerm), "term");
+		var parameter = Expression.Parameter(typeof(DbGlossaryEntry), "term");
 		var termProperty = Expression.Property(parameter, propertyName);
 		var convertExpression = Expression.Convert(termProperty, typeof(string));
-		var accessProperty = Expression.Lambda<Func<DbTerm, string>>(convertExpression, parameter);
+		var accessProperty = Expression.Lambda<Func<DbGlossaryEntry, string>>(convertExpression, parameter);
 
 		var getTermValue = accessProperty.Compile();
 		foreach (var dbTerm in source)

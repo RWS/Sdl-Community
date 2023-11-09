@@ -16,8 +16,8 @@ namespace InterpretBank.TermbaseViewer.UI.Controls
 
         public static readonly DependencyProperty LabelProperty = DependencyProperty.Register(nameof(Label), typeof(string), typeof(EditBox), new PropertyMetadata(default(string)));
 
-        public static readonly DependencyProperty SaveEditCommandProperty = DependencyProperty.Register(nameof(SaveEditCommand), typeof(ICommand), typeof(EditBox), new PropertyMetadata(default(ICommand)));
         public static readonly DependencyProperty SaveEditCommandParameterProperty = DependencyProperty.Register(nameof(SaveEditCommandParameter), typeof(object), typeof(EditBox), new PropertyMetadata(default(object)));
+        public static readonly DependencyProperty SaveEditCommandProperty = DependencyProperty.Register(nameof(SaveEditCommand), typeof(ICommand), typeof(EditBox), new PropertyMetadata(default(ICommand)));
 
         public EditBox()
         {
@@ -55,13 +55,13 @@ namespace InterpretBank.TermbaseViewer.UI.Controls
             set => SetValue(SaveEditCommandProperty, value);
         }
 
-        private string PreviousText { get; set; }
-
         public object SaveEditCommandParameter
         {
             get => (object)GetValue(SaveEditCommandParameterProperty);
             set => SetValue(SaveEditCommandParameterProperty, value);
         }
+
+        private string PreviousText { get; set; }
 
         private void ConfirmEditButton_Click(object sender, RoutedEventArgs e)
         {
@@ -71,7 +71,9 @@ namespace InterpretBank.TermbaseViewer.UI.Controls
 
         private void EditBoxHelper_SomeControlGotFocus(DependencyObject obj)
         {
-            if (!TextBox.IsFocused) IsEditing = false;
+            if (TextBox.IsFocused) return;
+            SaveEditCommand?.Execute(SaveEditCommandParameter);
+            IsEditing = false;
         }
 
         private void EditButton_Click(object sender, RoutedEventArgs e)

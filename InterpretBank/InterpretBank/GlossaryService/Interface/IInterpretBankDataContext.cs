@@ -46,7 +46,8 @@ public interface IInterpretBankDataContext : IDisposable
 
     void Setup(string filepath);
 
-    void SubmitData(bool notify = false);
+    void SubmitData();
 
     void TagGlossary(TagModel newTag, string glossaryName);
+    void UpdateTerm(TermChange termChange);
 }

@@ -24,5 +24,6 @@ namespace InterpretBank.TerminologyService.Interface
         int GetLanguageIndex(string interpretBankLanguage);
         void Setup(string settingsDatabaseFilepath);
         ObservableCollection<EntryModel> GetEntriesFromDb(List<string> glossaries);
+        void UpdateTerm(TermChange termChange);
     }
 }
