@@ -1,13 +1,12 @@
 ﻿<UserControl x:Class="InterpretBank.TermbaseViewer.UI.TermbaseViewer"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="clr-namespace:InterpretBank.TermbaseViewer.UI"
-             xmlns:viewModel="clr-namespace:InterpretBank.TermbaseViewer.ViewModel"
              xmlns:model="clr-namespace:InterpretBank.Model"
-             xmlns:converters="clr-namespace:InterpretBank.TermbaseViewer.UI.Converters"
              xmlns:controls="clr-namespace:InterpretBank.TermbaseViewer.UI.Controls"
+             xmlns:converters="clr-namespace:InterpretBank.TermbaseViewer.UI.Converters"
+             xmlns:viewModel="clr-namespace:InterpretBank.TermbaseViewer.ViewModel"
              x:Name="TermbaseViewerControl"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance viewModel:TermbaseViewerViewModel}"
@@ -21,7 +20,7 @@
             </ResourceDictionary.MergedDictionaries>
             <converters:ImageToBitmapImageConverter x:Key="ImageConverter" />
             <converters:LanguageToColorConverter x:Key="LanguageToColorConverter" />
-            
+            <converters:SubtractConverter x:Key="SubtractConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -29,6 +28,7 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
+
         <ListBox Grid.Column="0"
                  ItemsSource="{Binding Entries}"
                  DisplayMemberPath="Name"
@@ -37,50 +37,48 @@
                  SelectedItem="{Binding SelectedEntry}"
                  SelectedIndex="{Binding SelectedEntryIndex}" />
 
+        <Grid Grid.Column="1"
+              x:Name="TermsGrid">
 
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-        <DockPanel Grid.Column="1"
-                   LastChildFill="False">
-
-            <!--<StackPanel>
-                <Button Content="Add"/>
-                <Button Content="Edit"/>
-            </StackPanel>-->
-
-            <Border DockPanel.Dock="Top"
-                    BorderBrush="Gray"
-                    BorderThickness="0.3"
+            <Border Grid.Row="0"
+                    DockPanel.Dock="Top"
+                    BorderBrush="LightGray"
+                    BorderThickness="2 1 1 2"
                     Margin="5 5 0 5"
                     x:Name="EntryNote_Border">
-                <StackPanel Margin="5"
-                            Orientation="Horizontal"
-                            DockPanel.Dock="Top">
-                    <TextBlock Text="Entry note: "
-                               FontSize="15"
-                               Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}" />
-                    <TextBlock Text="{Binding SelectedEntry.EntryComment}"
-                               VerticalAlignment="Bottom"
-                               FontSize="15" />
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                                Margin="5"
+                                DockPanel.Dock="Top">
+
+                        <controls:EditBox Label="Entry note: "
+                                          FontSize="13"
+                                          EditBoxText="{Binding SelectedEntry.EntryComment}" />
+                    </StackPanel>
                 </StackPanel>
             </Border>
-
-            <ListView ItemContainerStyle="{DynamicResource TermListViewStyle}" ItemsSource="{Binding SelectedEntry.Terms}"
-                      Width="{Binding ActualWidth, ElementName=EntryNote_StackPanel}"
-                      Height="{Binding ActualHeight, ElementName=TermbaseViewerControl}"
+            <ListView Grid.Row="1"
+                      DockPanel.Dock="Top"
+                      ItemContainerStyle="{DynamicResource TermListViewStyle}"
+                      HorizontalContentAlignment="Stretch"
+                      KeyboardNavigation.TabNavigation="Local"
+                      ItemsSource="{Binding SelectedEntry.Terms}"
+                      SelectedItem="{Binding SelectedTerm}"
+                      ScrollViewer.VerticalScrollBarVisibility="Visible"
                       x:Name="Terms_ListView"
                       BorderThickness="0">
-                <!--<ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="IsHitTestVisible"
-                                Value="False" />
-                    </Style>
-                </ListView.ItemContainerStyle>-->
                 <ListView.ItemTemplate>
                     <DataTemplate DataType="{x:Type model:TermModel}">
                         <Border CornerRadius="1"
+                                
                                 Margin="0 3 0 0"
-                                BorderThickness="6 0.7 3 3"
-                                Width="{Binding ActualWidth, ElementName=EntryNote_Border}">
+                                BorderThickness="4 0.7 0.7 2">
                             <Border.BorderBrush>
                                 <MultiBinding Converter="{StaticResource LanguageToColorConverter}">
                                     <Binding Path="LanguageName" />
@@ -92,51 +90,76 @@
                             </Border.BorderBrush>
 
                             <Grid Margin="5 0 0 0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
 
-                                <Image Grid.Row="0"
-                                       Grid.Column="0"
-                                       Source="{Binding LanguageFlag, Converter={StaticResource ImageConverter}}"
-                                       VerticalAlignment="Center"
-                                       Height="30" />
-
-                                <StackPanel Grid.Row="0"
-                                            Margin="5"
-                                            Grid.Column="1">
-
+                                <StackPanel Orientation="Horizontal"
+                                            Grid.Row="0">
+                                    <Image Source="{Binding LanguageFlag, Converter={StaticResource ImageConverter}}"
+                                           VerticalAlignment="Center"
+                                           Height="30" />
                                     <TextBlock Text="{Binding LanguageName}"
                                                Foreground="#3b3535"
                                                FontWeight="Black"
+                                               Margin="5 0 0 0"
                                                VerticalAlignment="Center"
                                                FontSize="15" />
-
-                                    <controls:EditBox FontFamily="ComicSans"
-                                                      Margin="3 0 0 0"
-                                                      EditBoxText="{Binding Term}"
-                                                      FontSize="15" />
-
-                                    <controls:EditBox FontFamily="ComicSans"
-                                                      Margin="5 0 0 0"
-                                                      FontSize="12"
-                                                      Label="Extra 1: "
-                                                      EditBoxText="{Binding FirstComment}" />
-
-                                    <controls:EditBox FontFamily="ComicSans"
-                                                      Margin="5 0 0 0"
-                                                      Label="Extra 2: "
-                                                      FontSize="12"
-                                                      EditBoxText="{Binding SecondComment}" />
-                                    
                                 </StackPanel>
+
+                                <controls:EditBox Grid.Row="1"
+                                                  FontFamily="ComicSans"
+                                                  SaveEditCommand="{Binding DataContext.SaveEditCommand, ElementName=TermbaseViewerControl}"
+                                                  SaveEditCommandParameter="{Binding }"
+                                                  Margin="3 0 0 0"
+                                                  EditBoxText="{Binding Term}"
+                                                  FontSize="15" />
+
+                                <controls:EditBox Grid.Row="2"
+                                                  FontFamily="ComicSans"
+                                                  SaveEditCommand="{Binding DataContext.SaveEditCommand, ElementName=TermbaseViewerControl}"
+                                                  SaveEditCommandParameter="{Binding }"
+                                                  Margin="5 0 0 0"
+                                                  FontSize="12"
+                                                  Label="Extra 1: "
+                                                  EditBoxText="{Binding FirstComment}" />
+
+                                <controls:EditBox Grid.Row="3"
+                                                  FontFamily="ComicSans"
+                                                  Margin="5 0 0 0"
+                                                  SaveEditCommand="{Binding DataContext.SaveEditCommand, ElementName=TermbaseViewerControl}"
+                                                  SaveEditCommandParameter="{Binding }"
+                                                  Label="Extra 2: "
+                                                  FontSize="12"
+                                                  EditBoxText="{Binding SecondComment}" />
                             </Grid>
                         </Border>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-        </DockPanel>
 
+            <Border Grid.Row="2"
+                    Background="LightSteelBlue"
+                    BorderThickness="0"
+                    HorizontalAlignment="Left"
+                    Margin="5"
+                    VerticalAlignment="Bottom"
+                    BorderBrush="Gray">
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Left"
+                            Margin="5 5 0 0">
+                    <Image Source="/InterpretBank;component/Resources/Glossary.png"
+                           Height="20" />
+                    <TextBlock VerticalAlignment="Center"
+                               Margin="0 0 5 0"
+                               FontFamily="ComicSans"
+                               FontSize="15"
+                               Text="{Binding DataContext.SelectedEntry.GlossaryName, ElementName=TermbaseViewerControl}" />
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>

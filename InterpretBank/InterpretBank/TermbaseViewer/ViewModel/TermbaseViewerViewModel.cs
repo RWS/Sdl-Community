@@ -1,4 +1,5 @@
-﻿using InterpretBank.Extensions;
+﻿using InterpretBank.Commands;
+using InterpretBank.Extensions;
 using InterpretBank.Model;
 using InterpretBank.TerminologyService.Interface;
 using Sdl.Core.Globalization;
@@ -6,14 +7,18 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Input;
 
 namespace InterpretBank.TermbaseViewer.ViewModel
 {
     public class TermbaseViewerViewModel : ViewModelBase.ViewModel
     {
         private ObservableCollection<EntryModel> _entries;
+        private ICommand _rejectEditCommand;
+        private ICommand _saveEditCommand;
         private EntryModel _selectedEntry;
         private int _selectedEntryIndex;
+        private TermModel _selectedTerm;
         private Image _sourceLanguageFlag;
         private string _sourceLanguageName;
         private Image _targetLanguageFlag;
@@ -40,6 +45,8 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
         public List<string> Glossaries { get; set; }
 
+        public ICommand SaveEditCommand => _saveEditCommand ??= new RelayCommand(SaveEdit);
+
         public EntryModel SelectedEntry
         {
             get => _selectedEntry;
@@ -50,6 +57,12 @@ namespace InterpretBank.TermbaseViewer.ViewModel
         {
             get => _selectedEntryIndex;
             set => SetField(ref _selectedEntryIndex, value);
+        }
+
+        public TermModel SelectedTerm
+        {
+            get => _selectedTerm;
+            set => SetField(ref _selectedTerm, value);
         }
 
         public Image SourceLanguageFlag
@@ -122,6 +135,30 @@ namespace InterpretBank.TermbaseViewer.ViewModel
                 entryModel.Terms.Remove(targetTerm);
                 entryModel.Terms.Insert(1, targetTerm);
             }
+        }
+
+        private void SaveEdit(object obj)
+        {
+            var termModel = obj as TermModel;
+            //var changed = obj.ToString();
+            //switch (changed)
+            //{
+            //    case "Term":
+
+            //        break;
+
+            //    case "FirstComment":
+            //        break;
+
+            //    case "SecondComment":
+            //        break;
+            //}
+            //TerminologyService.SaveTerm(new TermChange
+            //{
+            //    EntryId = SelectedEntry.Id,
+            //    GlossaryName = SelectedEntry.GlossaryName,
+            //    Language =
+            //});
         }
 
         private void SetEntryNames(ObservableCollection<EntryModel> entries)

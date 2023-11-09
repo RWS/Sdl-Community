@@ -1,4 +1,5 @@
-﻿using InterpretBank.TermbaseViewer.ViewModel;
+﻿using InterpretBank.TermbaseViewer.UI.Controls;
+using InterpretBank.TermbaseViewer.ViewModel;
 using Sdl.Core.Globalization;
 using System.Collections.Generic;
 using System.Windows;
