@@ -321,7 +321,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 						var regexPattern = row.DataBoundItem as RegexPattern;
 						selectedExpressions.Add(regexPattern);
 					}
-					Expressions.ExportExporessions(fileDialog.FileName, selectedExpressions);
+					Expressions.ExportExpressions(fileDialog.FileName, selectedExpressions);
 					MessageBox.Show(StringResources.File_was_exported_successfully_to_selected_location, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
 			}
