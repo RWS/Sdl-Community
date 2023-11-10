@@ -201,48 +201,41 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		public IList<DescriptiveField> GetDescriptiveFields()
 		{
-			var result = new List<DescriptiveField>();
+			var result = new List<DescriptiveField>
+			{ 
+				new DescriptiveField
+				{
+					Label = "Definition",
+					Level = FieldLevel.EntryLevel,
+					Mandatory = true,
+					Multiple = true,
+					Type = FieldType.String
+				},
+				new DescriptiveField
+				{
+					Label = "Domain",
+					Level = FieldLevel.EntryLevel,
+					Mandatory = true,
+					Multiple = true,
+					Type = FieldType.String
+				},new DescriptiveField
+				{
+					Label = "Subdomain",
+					Level = FieldLevel.LanguageLevel,
+					Mandatory = true,
+					Multiple = true,
+					Type = FieldType.String
+				},new DescriptiveField
+				{
+					Label = "Status",
+					Level = FieldLevel.TermLevel,
+					Mandatory = false,
+					Multiple = true,
+					Type = FieldType.PickList,
+					PickListValues = new[] { "Deprecated", "Obsolete", "Admitted", "Preferred", "Proposed" }
+				}
 
-			var definitionField = new DescriptiveField
-			{
-				Label = "Definition",
-				Level = FieldLevel.EntryLevel,
-				Mandatory = true,
-				Multiple = true,
-				Type = FieldType.String
 			};
-			result.Add(definitionField);
-
-			var domainField = new DescriptiveField
-			{
-				Label = "Domain",
-				Level = FieldLevel.EntryLevel,
-				Mandatory = true,
-				Multiple = true,
-				Type = FieldType.String
-			};
-			result.Add(domainField);
-
-			var subdomainField = new DescriptiveField
-			{
-				Label = "Subdomain",
-				Level = FieldLevel.LanguageLevel,
-				Mandatory = true,
-				Multiple = true,
-				Type = FieldType.String
-			};
-			result.Add(subdomainField);
-
-			var statusField = new DescriptiveField
-			{
-				Label = "Status",
-				Level = FieldLevel.TermLevel,
-				Mandatory = false,
-				Multiple = true,
-				Type = FieldType.PickList,
-				PickListValues = new[] { "Deprecated", "Obsolete", "Admitted", "Preferred", "Proposed" }
-			};
-			result.Add(statusField);
 
 			return result;
 		}
@@ -268,18 +261,13 @@ namespace Sdl.Community.IATETerminologyProvider
 			};
 			result.Add(sourceLanguage);
 
-			foreach (var language in projectInfo.TargetLanguages)
+			result.AddRange(projectInfo.TargetLanguages.Select(language => new DefinitionLanguage
 			{
-				var targetLanguage = new DefinitionLanguage
-				{
-					IsBidirectional = true,
-					Locale = language.CultureInfo,
-					Name = language.DisplayName,
-					TargetOnly = false
-				};
-
-				result.Add(targetLanguage);
-			}
+				IsBidirectional = true,
+				Locale = language.CultureInfo,
+				Name = language.DisplayName,
+				TargetOnly = false
+			}));
 
 			return result;
 		}
@@ -290,7 +278,7 @@ namespace Sdl.Community.IATETerminologyProvider
 			{
 				case 0: return "Deprecated";
 				case 1: return "Obsolete";
-				case 2: return "Admitted"; 
+				case 2: return "Admitted";
 				case 3: return "Preferred";
 				case 4: return "Proposed";
 				default: return ""; //
