@@ -26,8 +26,6 @@ namespace Sdl.Community.IATETerminologyProvider
 		private EditorController _editorController;
 		private IStudioDocument _activeDocument;
 		private readonly IEUProvider _euProvider;
-		private readonly object _searchLock = new object();
-		private readonly object _entryModelsLock = new object();
 
 		public event EventHandler<TermEntriesChangedEventArgs> TermEntriesChanged;
 
@@ -106,7 +104,12 @@ namespace Sdl.Community.IATETerminologyProvider
 			return true;
 		}
 
-		public IList<FilterDefinition> GetFilters() => new List<FilterDefinition>();
+		public IList<FilterDefinition> GetFilters()
+		{
+			var filterDefinitions = new List<FilterDefinition>();
+
+			return filterDefinitions;
+		}
 
 		public bool Uninitialize()
 		{
@@ -132,71 +135,68 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		public IList<SearchResult> Search(string text, ILanguage source, ILanguage target, int maxResultsCount, SearchMode mode, bool targetRequired)
 		{
-			lock (_searchLock)
+			// Prevent the empty query
+			if (string.IsNullOrEmpty(text) || string.IsNullOrWhiteSpace(text)) return null;
+			if (text == "\" \"" || text == "") return null;
+			// Limit to EU languages
+			if (!_euProvider.IsEULanguages(source, target))
 			{
-				// Prevent the empty query
-				if (string.IsNullOrEmpty(text) || string.IsNullOrWhiteSpace(text)) return null;
-				if (text == "\" \"" || text == "") return null;
-				// Limit to EU languages
-				if (!_euProvider.IsEULanguages(source, target))
+				return null;
+			}
+
+			//_logger.Info("--> Try searching for segment");
+
+			var jsonBody = GetApiRequestBodyValues(source, target, text);
+			var queryString = JsonConvert.SerializeObject(jsonBody);
+			var canConnect = CacheProvider?.Connect(IATEApplication.ProjectsController?.CurrentProject);
+
+			if (canConnect != null && (bool)canConnect)
+			{
+				//_logger.Info("--> Try to get cache results");
+
+				var cachedResults = CacheProvider.GetCachedResults(text, target.Locale.Name, queryString);
+				if (cachedResults != null && cachedResults.Count > 0)
 				{
-					return null;
-				}
+					var entryModels = CreateEntryTerms(cachedResults.ToList(), source, GetLanguages());
 
-				//_logger.Info("--> Try searching for segment");
-
-				var jsonBody = GetApiRequestBodyValues(source, target, text);
-				var queryString = JsonConvert.SerializeObject(jsonBody);
-				var canConnect = CacheProvider?.Connect(IATEApplication.ProjectsController?.CurrentProject);
-
-				if (canConnect != null && (bool)canConnect)
-				{
-					//_logger.Info("--> Try to get cache results");
-
-					var cachedResults = CacheProvider.GetCachedResults(text, target.Locale.Name, queryString);
-					if (cachedResults != null && cachedResults.Count > 0)
-					{
-						var entryModels = CreateEntryTerms(cachedResults.ToList(), source, GetLanguages());
-
-						//_logger.Info("--> Cache results found");
-						OnTermEntriesChanged(entryModels, text, source, target);
-						UpdateEntryModelsList(text, entryModels);
-
-						return cachedResults?.Cast<SearchResult>().ToList();
-					}
-				}
-
-				var config = IATEApplication.ProjectsController?.CurrentProject?.GetTermbaseConfiguration();
-				var results = _searchService.GetTerms(queryString, config?.TermRecognitionOptions?.SearchDepth ?? 20);
-				if (results != null)
-				{
-					var termGroups = SortSearchResultsByPriority(text, GetTermResultGroups(results), source);
-
-					results = RemoveDuplicateTerms(termGroups, source, target);
-					results = MaxSearchResults(results, maxResultsCount);
-
-
-					// add search to cache db
-					var searchCache = new SearchCache
-					{
-						SourceText = text,
-						TargetLanguage = target.Locale.Name,
-						QueryString = queryString
-					};
-
-					if (CacheProvider != null)
-					{
-						//_logger.Info("--> Try to add results in db");
-						CacheProvider.AddSearchResults(searchCache, results);
-					}
-
-					var entryModels = CreateEntryTerms(results, source, GetLanguages());
+					//_logger.Info("--> Cache results found");
 					OnTermEntriesChanged(entryModels, text, source, target);
 					UpdateEntryModelsList(text, entryModels);
+
+					return cachedResults?.Cast<SearchResult>().ToList();
+				}
+			}
+
+			var config = IATEApplication.ProjectsController?.CurrentProject?.GetTermbaseConfiguration();
+			var results = _searchService.GetTerms(queryString, config?.TermRecognitionOptions?.SearchDepth ?? 20);
+			if (results != null)
+			{
+				var termGroups = SortSearchResultsByPriority(text, GetTermResultGroups(results), source);
+
+				results = RemoveDuplicateTerms(termGroups, source, target);
+				results = MaxSearchResults(results, maxResultsCount);
+
+
+				// add search to cache db
+				var searchCache = new SearchCache
+				{
+					SourceText = text,
+					TargetLanguage = target.Locale.Name,
+					QueryString = queryString
+				};
+
+				if (CacheProvider != null)
+				{
+					//_logger.Info("--> Try to add results in db");
+					CacheProvider.AddSearchResults(searchCache, results);
 				}
 
-				return results?.Cast<SearchResult>().ToList();
+				var entryModels = CreateEntryTerms(results, source, GetLanguages());
+				OnTermEntriesChanged(entryModels, text, source, target);
+				UpdateEntryModelsList(text, entryModels);
 			}
+
+			return results?.Cast<SearchResult>().ToList();
 		}
 
 		public IList<DescriptiveField> GetDescriptiveFields()
@@ -232,6 +232,17 @@ namespace Sdl.Community.IATETerminologyProvider
 				Type = FieldType.String
 			};
 			result.Add(subdomainField);
+
+			var statusField = new DescriptiveField
+			{
+				Label = "Status",
+				Level = FieldLevel.TermLevel,
+				Mandatory = false,
+				Multiple = true,
+				Type = FieldType.PickList,
+				PickListValues = new[] { "Deprecated", "Obsolete", "Admitted", "Preferred", "Proposed" }
+			};
+			result.Add(statusField);
 
 			return result;
 		}
@@ -279,9 +290,10 @@ namespace Sdl.Community.IATETerminologyProvider
 			{
 				case 0: return "Deprecated";
 				case 1: return "Obsolete";
-				case 2: return ""; // TODO: confirm value
+				case 2: return "Admitted"; 
 				case 3: return "Preferred";
-				default: return ""; // TODO: confirm default value
+				case 4: return "Proposed";
+				default: return ""; //
 			}
 		}
 
@@ -367,11 +379,8 @@ namespace Sdl.Community.IATETerminologyProvider
 
 		private void ClearEntries()
 		{
-			lock (_entryModelsLock)
-			{
-				_entryModels ??= new List<EntryModel>();
-				_entryModels.Clear();
-			}
+			_entryModels ??= new List<EntryModel>();
+			_entryModels.Clear();
 		}
 
 		private void OnTermEntriesChanged(IList<EntryModel> entryModels, string text, ILanguage source, ILanguage target)
