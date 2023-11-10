@@ -432,8 +432,6 @@ namespace Sdl.Community.IATETerminologyProvider
 		private void EditorControllerOnOpened(object sender, DocumentEventArgs e)
 		{
 			Application.DoEvents();
-			//ClearEntries();
-			//OnTermEntriesChanged(null);
 		}
 
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
