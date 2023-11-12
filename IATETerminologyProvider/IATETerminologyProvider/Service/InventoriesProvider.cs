@@ -37,19 +37,19 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 
 			try
 			{
-				_logger.Info("--> Try to recover inventories");
+				//_logger.Info("--> Try to recover inventories");
 
 				Institutions = await GetInstitutions();
-				_logger.Info($"--> Recovered {Domains?.Count} Institutions");
+				//_logger.Info($"--> Recovered {Domains?.Count} Institutions");
 
 				Collections = await GetCollections();
-				_logger.Info($"--> Recovered {Domains?.Count} Collections");
+				//_logger.Info($"--> Recovered {Domains?.Count} Collections");
 
 				Domains = await GetDomains();
-				_logger.Info($"--> Recovered {Domains?.Count} Domains");
+				//_logger.Info($"--> Recovered {Domains?.Count} Domains");
 
 				TermTypes = await GetTermTypes();
-				_logger.Info($"--> Recovered {TermTypes?.Count} Term Types");
+				//_logger.Info($"--> Recovered {TermTypes?.Count} Term Types");
 
 				IsInitialized = true;
 			}

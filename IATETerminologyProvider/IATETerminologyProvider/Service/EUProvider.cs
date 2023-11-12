@@ -13,7 +13,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		public bool IsEULanguages(ILanguage source, ILanguage target)
 		{
 			string[] EULanguageArray = { "bg", "cs", "da", "de", "el", "en", "es", "et", "fi", "fr", "ga", "hr", "hu", "it", "lt", "lv", "mt", "nl", "pl", "pt", "ro", "sk", "sl", "sv" };
-			var checkEULanguages = EULanguageArray.ToList().Where(a => a == source.Locale.TwoLetterISOLanguageName.ToLower() || a == target.Locale.TwoLetterISOLanguageName.ToLower()).ToList();
+			var checkEULanguages = EULanguageArray.ToList().Where(a => a == source.Locale.RegionNeutralName.ToLower() || a == target.Locale.RegionNeutralName.ToLower()).ToList();
 			if (checkEULanguages.Any() )
 			{
 				return true;

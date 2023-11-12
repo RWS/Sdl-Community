@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+﻿using Sdl.Core.Globalization;
 using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace Sdl.Community.IATETerminologyProvider.Model
@@ -6,6 +6,6 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 	public class LanguageModel : ILanguage
 	{
 		public string Name { get; set; }
-		public CultureInfo Locale { get; set; }
+		public CultureCode Locale { get; set; }
 	}
 }

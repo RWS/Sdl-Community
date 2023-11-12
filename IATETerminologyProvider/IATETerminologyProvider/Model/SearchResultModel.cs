@@ -2,13 +2,9 @@
 
 namespace Sdl.Community.IATETerminologyProvider.Model
 {
-	public class SearchResultModel : ISearchResult
+	public class SearchResultModel : SearchResult
 	{
-		public int Id { get; set; }
 		public string ItemId { get; set; }
-		public string Text { get; set; }
-		public int Score { get; set; }
-		public ILanguage Language { get; set; }
 		public string Definition { get; set; }
 		public string Domain { get; set; }
 		public string Subdomain { get; set; }
