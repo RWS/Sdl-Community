@@ -7,11 +7,11 @@ namespace Sdl.Community.TermExcelerator.Services.Interfaces
 {
 	public interface IEntryTransformerService
 	{
-		IList<IEntryLanguage> CreateEntryLanguages(ExcelTerm excelTerm);
+		IList<EntryLanguage> CreateEntryLanguages(ExcelTerm excelTerm);
 
-		IList<IEntryField> CreateEntryTermFields(int index, IList<string> approvals);
+		IList<EntryField> CreateEntryTermFields(int index, IList<string> approvals);
 
-		IList<IEntryTerm> CreateEntryTerms(string term, string approved = null);
+		IList<EntryTerm> CreateEntryTerms(string term, string approved = null);
 
 		ExcelEntry CreateExcelEntry(string source, string target, CultureInfo sourceLanguage, CultureInfo targetLanguage, int id = 0);
 

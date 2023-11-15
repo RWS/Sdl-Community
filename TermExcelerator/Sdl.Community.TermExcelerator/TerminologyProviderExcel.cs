@@ -10,7 +10,7 @@ using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace Sdl.Community.TermExcelerator
 {
-	public class TerminologyProviderExcel : AbstractTerminologyProvider
+	public class TerminologyProviderExcel : ITerminologyProvider
 	{
 		private readonly ITermSearchService _termSearchService;
 
@@ -20,15 +20,32 @@ namespace Sdl.Community.TermExcelerator
         public List<ExcelEntry> Terms { get; private set; }
 		public static readonly Log Log = Log.Instance;
 
-		public override bool IsReadOnly => false;
-		public override string Name => Path.GetFileName(ProviderSettings.TermFilePath);
-		public override string Description => PluginResources.ExcelTerminologyProviderDescription;
-		public override Uri Uri => new Uri((ExcelUriTemplate + Path.GetFileName(ProviderSettings.TermFilePath)).RemoveUriForbiddenCharacters());
-		public override IDefinition Definition => new Definition(GetDescriptiveFields(), GetDefinitionLanguages());
+		public TerminologyProviderType Type => TerminologyProviderType.Custom;
+		public bool IsReadOnly => false;
+		public bool SearchEnabled => true;
+
+		public IList<FilterDefinition> GetFilters()
+		{
+			return new List<FilterDefinition>();
+		}
+
+		public bool Uninitialize()
+		{
+			IsInitialized = false;
+			return true;
+		}
+
+		public string Name => Path.GetFileName(ProviderSettings.TermFilePath);
+		public string Description => PluginResources.ExcelTerminologyProviderDescription;
+		public string Id { get; }
+		public Uri Uri => new Uri((ExcelUriTemplate + Path.GetFileName(ProviderSettings.TermFilePath)).RemoveUriForbiddenCharacters());
+		public Definition Definition => new Definition(GetDescriptiveFields(), GetDefinitionLanguages());
+		public FilterDefinition ActiveFilter { get; set; }
+		public bool IsInitialized { get; set; }
 
 		public event Action<List<ExcelEntry>> TermsLoaded;
 
-		public override void Dispose()
+		public void Dispose()
 		{
 			Terms.Clear();
 		}
@@ -65,14 +82,18 @@ namespace Sdl.Community.TermExcelerator
 			}
 		}
 
-		public override IList<ILanguage> GetLanguages()
+		public void SetDefault(bool value)
+		{
+		}
+
+		public IList<ILanguage> GetLanguages()
 		{
 			return GetDefinitionLanguages().Cast<ILanguage>().ToList();
 		}
 
-		public IList<IDescriptiveField> GetDescriptiveFields()
+		public IList<DescriptiveField> GetDescriptiveFields()
 		{
-			var result = new List<IDescriptiveField>();
+			var result = new List<DescriptiveField>();
 
 			var approvedField = new DescriptiveField
 			{
@@ -87,9 +108,9 @@ namespace Sdl.Community.TermExcelerator
 			result.Add(approvedField);
 			return result;
 		}
-		public IList<IDefinitionLanguage> GetDefinitionLanguages()
+		public IList<DefinitionLanguage> GetDefinitionLanguages()
 		{
-			var result = new List<IDefinitionLanguage>();
+			var result = new List<DefinitionLanguage>();
 			var sourceLanguage = new DefinitionLanguage
 			{
 				IsBidirectional = true,
@@ -113,21 +134,21 @@ namespace Sdl.Community.TermExcelerator
 			return result;
 		}
 
-		public override IEntry GetEntry(int id)
+		public Entry GetEntry(int id)
 		{
 			return Terms?.FirstOrDefault(termEntry => termEntry.Id == id);
 		}
 
-		public override IEntry GetEntry(int id, IEnumerable<ILanguage> languages)
+		public Entry GetEntry(int id, IEnumerable<ILanguage> languages)
 		{
 			return Terms?.FirstOrDefault(termEntry => termEntry.Id == id);
 		}
 
-		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage destination,
+		public IList<SearchResult> Search(string text, ILanguage source, ILanguage destination,
 			int maxResultsCount, SearchMode mode,
 			bool targetRequired)
 		{
-			var results = new List<ISearchResult>();
+			var results = new List<SearchResult>();
 			try
 			{
 				results.AddRange(_termSearchService.Search(text, Terms, maxResultsCount));
@@ -138,6 +159,22 @@ namespace Sdl.Community.TermExcelerator
 				throw ex;
 			}
 			return results;
+		}
+
+		public bool Initialize()
+		{
+			IsInitialized = true;
+			return true;
+		}
+
+		public bool Initialize(TerminologyProviderCredential credential)
+		{
+			return Initialize();
+		}
+
+		public bool IsProviderUpToDate()
+		{
+			return true;
 		}
 	}
 }
