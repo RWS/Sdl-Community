@@ -10,7 +10,6 @@
 		<File>SegmentComparer.dll</File>
 		<File>RwsAppStore.UsefulTipsService.dll</File>
 		<File>RwsAppStore.UsefulTipsService.Update.exe</File>
-		<File>Microsoft.IO.RecyclableMemoryStream.dll</File>
 	</Include>
-	<RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
+	<RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9" />
 </PluginPackage>
