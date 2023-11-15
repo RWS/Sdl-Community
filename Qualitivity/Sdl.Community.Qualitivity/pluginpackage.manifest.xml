@@ -1,20 +1,21 @@
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-		<PlugInName>Qualitivity</PlugInName>
-		<Version>5.2.7.1</Version>
-		<Description>Qualitivity</Description>
-		<Author>Trados AppStore Team</Author>
-		<Include>
-				<File>Qualitivity.dll.config</File>
-				<File>Qualitivity.Comparison.dll</File>
-				<File>Qualitivity.Hooks.dll</File>
-				<File>Qualitivity.Models.dll</File>
-				<File>Qualitivity.Parser.dll</File>
-				<File>Qualitivity.Report.dll</File>
-				<File>Qualitivity.TM.dll</File>
-				<File>Qualitivity.WPFListView.dll</File>
-				<File>Qualitivity.ObjectListView.dll</File>
-				<File>Trados.Community.Toolkit.LanguagePlatform.dll</File>
-				<File>System.Data.SQLite.dll</File>
-		</Include>
-		<RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9" />
+	<PlugInName>Qualitivity</PlugInName>
+	<Version>5.2.8.1</Version>
+	<Description>Qualitivity</Description>
+	<Author>Trados AppStore Team</Author>
+	<Include>
+		<File>Qualitivity.dll.config</File>
+		<File>Qualitivity.Comparison.dll</File>
+		<File>Qualitivity.Hooks.dll</File>
+		<File>Qualitivity.Models.dll</File>
+		<File>Qualitivity.Parser.dll</File>
+		<File>Qualitivity.Report.dll</File>
+		<File>Qualitivity.TM.dll</File>
+		<File>Qualitivity.WPFListView.dll</File>
+		<File>Qualitivity.ObjectListView.dll</File>
+		<File>Trados.Community.Toolkit.LanguagePlatform.dll</File>
+		<File>Trados.Community.Toolkit.Core.dll</File>
+		<File>System.Data.SQLite.dll</File>
+	</Include>
+	<RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9" />
 </PluginPackage>

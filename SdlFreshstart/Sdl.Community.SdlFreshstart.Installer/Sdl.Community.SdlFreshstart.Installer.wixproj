@@ -9,11 +9,12 @@
     <OutputName>Sdl.Community.SdlFreshstart.Installer</OutputName>
     <OutputType>Package</OutputType>
     <Name>Sdl.Community.SdlFreshstart.Installer</Name>
+	<DefineConstants>BuildOutputPath=..\Sdl.Community.SdlFreshstart\bin\$(Configuration)\</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>Debug;BuildOutputPath=..\Sdl.Community.SdlFreshstart\bin\debug</DefineConstants>
+    <DefineConstants>BuildOutputPath=..\Sdl.Community.SdlFreshstart\bin\$(Configuration)\</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>

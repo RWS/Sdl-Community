@@ -22,7 +22,7 @@ namespace Sdl.Community.AhkPlugin.Helpers
 		public static string GetDbDefaultPath()
 		{
 			var defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				"SDL Community", "AhkMasterScript", "Ahk.db");
+				"Trados AppStore", "AhkMasterScript", "Ahk.db");
 			if (!Directory.Exists(defaultPath))
 			{
 				Directory.CreateDirectory(defaultPath);

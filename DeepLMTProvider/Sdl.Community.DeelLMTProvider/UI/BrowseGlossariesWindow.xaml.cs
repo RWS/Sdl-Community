@@ -2,7 +2,6 @@
 using Sdl.Community.DeepLMTProvider.Extensions;
 using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Model;
-using Sdl.Community.DeepLMTProvider.Service;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -16,25 +15,29 @@ namespace Sdl.Community.DeepLMTProvider.UI
 {
     public partial class BrowseGlossariesWindow : INotifyPropertyChanged
     {
-        private ObservableCollection<GlossaryItem> _glossaries;
+        private ObservableCollection<GlossaryItem> _glossaries = new();
         private bool _isEditing;
 
-        public BrowseGlossariesWindow(List<string> supportedLanguages, IBrowseDialog openFileDialog, IGlossarySniffer glossarySniffer, bool isAddNewGlossaryWindow = false)
+        public BrowseGlossariesWindow(List<string> supportedLanguages, IBrowseDialog openFileDialog, IGlossarySniffer glossarySniffer)
         {
-
-            Glossaries = new ObservableCollection<GlossaryItem>();
             Glossaries.CollectionChanged += Glossaries_CollectionChanged;
 
             SupportedLanguages = supportedLanguages;
             OpenFileDialog = openFileDialog;
             GlossarySniffer = glossarySniffer;
+
+            InitializeComponent();
+        }
+
+        public BrowseGlossariesWindow(List<string> supportedLanguages, IGlossarySniffer glossarySniffer)
+        {
+            SupportedLanguages = supportedLanguages;
+            GlossarySniffer = glossarySniffer;
+
             InitializeComponent();
 
-            if (isAddNewGlossaryWindow)
-            {
-                Browse_Button.Visibility = Visibility.Collapsed;
-                ImportGlossaries_Button.Content = "Add new glossary";
-            }
+            Browse_Button.Visibility = Visibility.Collapsed;
+            ImportGlossaries_Button.Content = "Add new glossary";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -59,8 +62,8 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         public ICommand KeyboardShortcutCommand => new CommandWithParameter(ExecuteKeyboardShortcut);
         public List<string> SupportedLanguages { get; }
-        private IBrowseDialog OpenFileDialog { get; }
         private IGlossarySniffer GlossarySniffer { get; }
+        private IBrowseDialog OpenFileDialog { get; }
 
         public void AddGlossaries(string[] importDialogFileNames)
         {
@@ -69,7 +72,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         public void Browse()
         {
-            if (OpenFileDialog.ShowDialog()) return;
+            if (!OpenFileDialog.ShowDialog()) return;
             AddGlossaries(OpenFileDialog.FileNames);
         }
 
@@ -91,11 +94,14 @@ namespace Sdl.Community.DeepLMTProvider.UI
             if (Glossaries.Any(g => g.Path == fn)) return;
 
             var newGlossaryItem = new GlossaryItem(fn);
-            (string source, string target, char delimiter) metadata;
-            if (fn.ToLower().Contains(".csv"))
+            var fnLower = fn.ToLower();
+            if (fnLower.Contains(".csv"))
             {
-                metadata = GlossarySniffer.GetGlossaryFileMetadata(fn, SupportedLanguages);
-                newGlossaryItem.Delimiter = metadata.delimiter.ToString();
+                var metadata = GlossarySniffer.GetGlossaryFileMetadata(fn, SupportedLanguages);
+
+                newGlossaryItem.Delimiter = metadata.Delimiter.ToString();
+                newGlossaryItem.SourceLanguage = metadata.Source;
+                newGlossaryItem.TargetLanguage = metadata.Target;
             }
 
             Glossaries.Add(newGlossaryItem /*{ SourceLanguage = "EN", TargetLanguage = "DE" }*/);
@@ -110,6 +116,11 @@ namespace Sdl.Community.DeepLMTProvider.UI
         {
             DialogResult = false;
             Close();
+        }
+
+        private void DataGrid_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            IsEditing = true;
         }
 
         private void EditButton_OnClick(object sender, RoutedEventArgs e)
@@ -158,11 +169,6 @@ namespace Sdl.Community.DeepLMTProvider.UI
         {
             DialogResult = true;
             Close();
-        }
-
-        private void DataGrid_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            IsEditing = true;
         }
     }
 }

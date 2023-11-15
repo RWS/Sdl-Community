@@ -1,8 +1,8 @@
+using System;
 using System.Globalization;
 using System.Windows.Data;
-using System;
 
-namespace Sdl.Community.DeepLMTProvider
+namespace Sdl.Community.DeepLMTProvider.UI.Converters
 {
     public class NameToBoolConverter : IValueConverter
     {

@@ -6,7 +6,8 @@
         {
             Path = path;
             Name = System.IO.Path.GetFileName(Path);
-            Delimiter = ",";
+            Delimiter = "\\t";
+
         }
 
         private string _sourceLanguage;
@@ -16,7 +17,7 @@
 
         public string Delimiter { get; set; }
 
-        public char GetDelimiter() => Delimiter.Length > 0 ? Delimiter[0] : ',';
+        public string GetDelimiter() => Delimiter.Length > 0 ? Delimiter : null;
 
         public string Name
         {

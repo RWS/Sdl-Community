@@ -54,11 +54,11 @@ namespace Sdl.Community.DeepLMTProvider.Service
 
         private void EditGlossaryWindow_ImportEntriesRequested()
         {
-            GlossaryBrowserService.OpenImportEntriesDialog(out var filePaths);
+            GlossaryBrowserService.OpenImportEntriesDialog(out var glossariesAndDelimiters);
 
-            foreach (var filePath in filePaths)
+            foreach (var glossaryAndDelimiter in glossariesAndDelimiters)
             {
-                var (success, glossary, message) = GlossaryReaderWriterService.ReadGlossary(filePath);
+                var (success, glossary, message) = GlossaryReaderWriterService.ReadGlossary(glossaryAndDelimiter.Filepath, glossaryAndDelimiter.Delimiter);
                 if (HandleErrorIfFound(success, message)) continue;
                 AddRangeOfEntries(glossary.Entries);
             }

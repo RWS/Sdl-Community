@@ -15,7 +15,7 @@ namespace Sdl.Community.AhkPlugin.Helpers
 		{
 			var config = new LoggingConfiguration();
 			var assembly = Assembly.GetExecutingAssembly();
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL", "AHKLogs");
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Trados AppStore", "AHKLogs");
 			if (!Directory.Exists(logDirectoryPath))
 			{
 				Directory.CreateDirectory(logDirectoryPath);

@@ -1,4 +1,4 @@
-﻿using CefSharp.WinForms;
+﻿using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
@@ -25,6 +25,6 @@ namespace Sdl.Community.IATETerminologyProvider.View
 			return _control;
 		}
 
-		public ChromiumWebBrowser Browser => _control.Browser;
+		public WebBrowser Browser => _control.Browser;
 	}
 }

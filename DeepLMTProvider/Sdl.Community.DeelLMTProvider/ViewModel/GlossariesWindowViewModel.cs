@@ -327,10 +327,10 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 return;
             }
 
-            UserInteractionService.OpenImportEntriesDialog(out var filePaths);
-            foreach (var filePath in filePaths)
+            if (UserInteractionService.OpenImportEntriesDialog(out var glossariesAndDelimiters)) return;
+            foreach (var glossaryDelimiter in glossariesAndDelimiters)
             {
-                var (success, glossary, message) = GlossaryReaderWriterService.ReadGlossary(filePath);
+                var (success, glossary, message) = GlossaryReaderWriterService.ReadGlossary(glossaryDelimiter.Filepath, glossaryDelimiter.Delimiter);
                 if (HandleErrorIfFound(success, message)) continue;
                 await AddRangeOfEntriesToSelectedGlossaries(glossary.Entries);
             }
@@ -341,10 +341,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             var glossarySupportedLanguages = SupportedLanguagePairs.Select(glp => glp.SourceLanguage).Distinct().ToList();
             if (UserInteractionService.OpenImportDialog(glossarySupportedLanguages, out var glossaries))
             {
-                //var delimiter = glossaries.Any(g => g.Name.ToLower().EndsWith(".csv"))
-                //    ? GlossaryBrowserService.GetDelimiterFromUser()
-                //    : default;
-
                 foreach (var glossaryItem in glossaries)
                 {
                     if (IsCancellationRequested()) break;
@@ -405,6 +401,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             originalEntries.RemoveAll(oe => duplicates.Select(d => d.SourceTerm).Contains(oe.SourceTerm));
             originalEntries.AddRange(duplicates);
+            originalEntries.RemoveAll(oe => oe.IsDummyTerm());
         }
 
         private void ValidateEntriesList(List<GlossaryEntry> glossaryEntries)

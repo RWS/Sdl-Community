@@ -1,5 +1,4 @@
 ﻿using System.Windows.Forms;
-using CefSharp.WinForms;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.IATETerminologyProvider.View
@@ -11,7 +10,6 @@ namespace Sdl.Community.IATETerminologyProvider.View
 			InitializeComponent();
 		}
 
-		public ChromiumWebBrowser Browser => searchResultsWebBrowser;
-
+		public WebBrowser Browser => searchResultsWebBrowser;
 	}
 }

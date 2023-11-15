@@ -3,14 +3,15 @@ using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Model;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Sdl.Community.DeepLMTProvider.Helpers.GlossaryReadersWriters
 {
     public class CsvGlossaryReaderWriter : IGlossaryReaderWriter
     {
-        public CsvGlossaryReaderWriter(char delimiter = ',') => Delimiter = delimiter;
+        public CsvGlossaryReaderWriter(string delimiter = ",") => Delimiter = delimiter;
 
-        private char Delimiter { get; }
+        private string Delimiter { get; }
 
         public ActionResult<Glossary> ReadGlossary(string filePath) =>
                     ErrorHandler.WrapTryCatch(() =>
@@ -20,7 +21,7 @@ namespace Sdl.Community.DeepLMTProvider.Helpers.GlossaryReadersWriters
 
                 while (reader.ReadLine() is { } line)
                 {
-                    var fields = line.Split(Delimiter);
+                    var fields = Regex.Split(line, Delimiter);
                     glossary.Entries.Add(new GlossaryEntry { SourceTerm = fields[0], TargetTerm = fields[1] });
                 }
 

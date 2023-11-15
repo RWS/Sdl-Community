@@ -8,7 +8,7 @@ namespace Sdl.Community.DeepLMTProvider.Helpers.GlossaryReadersWriters
 {
     public class GlossaryReaderWriterFactory : IGlossaryReaderWriterFactory
     {
-        public ActionResult<IGlossaryReaderWriter> CreateFileReader(string filePath, char delimiter = default)
+        public ActionResult<IGlossaryReaderWriter> CreateFileReader(string filePath, string delimiter = default)
         {
             var fileExtension = Path.GetExtension(filePath).ToLower();
 

@@ -62,8 +62,10 @@ namespace Sdl.Community.IATETerminologyProvider
 		private static void ShowBrowserResults(string url)
 		{
 			var searchResultsController = GetSearchResultsController();
+
 			var browser = searchResultsController.Browser;
-			browser.LoadUrl(url);			
+			browser.ScriptErrorsSuppressed = true;
+			browser.Navigate(url, false);
 			searchResultsController.Show();
 		}
 

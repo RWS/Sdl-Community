@@ -42,7 +42,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		/// <param name="jsonBody">Values in the jsonBody of the requests</param>
 		/// <param name="searchDepth"></param>
 		/// <returns>terms</returns>
-		public List<ISearchResult> GetTerms(string jsonBody, int searchDepth)
+		public List<SearchResultModel> GetTerms(string jsonBody, int searchDepth)
 		{
 			if (!_connectionProvider.EnsureConnection())
 			{
@@ -94,9 +94,9 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		/// <param name="response">IATE API response</param>
 		/// <param name="domainResponseModel">domains response model</param>
 		/// <returns>list of terms</returns>
-		private List<ISearchResult> MapResponseValues(string response, JsonDomainResponseModel domainResponseModel)
+		private List<SearchResultModel> MapResponseValues(string response, JsonDomainResponseModel domainResponseModel)
 		{
-			var termsList = new List<ISearchResult>();
+			var termsList = new List<SearchResultModel>();
 			if (!string.IsNullOrEmpty(response))
 			{
 				var jObject = JObject.Parse(response);

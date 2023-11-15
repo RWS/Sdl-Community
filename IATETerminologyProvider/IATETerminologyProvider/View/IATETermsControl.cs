@@ -46,7 +46,7 @@ namespace Sdl.Community.IATETerminologyProvider.View
 			}
 		}
 
-		public void JumpToTerm(IEntry entry)
+		public void JumpToTerm(Entry entry)
 		{
 			SelectEntryItem(entry);
 		}
@@ -64,9 +64,9 @@ namespace Sdl.Community.IATETerminologyProvider.View
 			}
 		}
 
-		public IEnumerable<IEntry> GetEntries()
+		public IEnumerable<Entry> GetEntries()
 		{
-			var entries = new List<IEntry>();
+			var entries = new List<Entry>();
 			foreach (TreeNode node in treeView1.Nodes)
 			{
 				entries.Add(node.Tag as EntryModel);
@@ -83,17 +83,17 @@ namespace Sdl.Community.IATETerminologyProvider.View
 			return entries;
 		}
 
-		public IEntry GetSelectedEntry()
+		public Entry GetSelectedEntry()
 		{
 			return (EntryModel)treeView1.SelectedNode?.Tag;
 		}
 
-		public void UpdateEntriesInView(IEnumerable<IEntry> entries, Language sourceLanguage, Language targetLanguage, IEntry selectedEntry)
+		public void UpdateEntriesInView(IEnumerable<Entry> entries, Language sourceLanguage, Language targetLanguage, Entry selectedEntry)
 		{
 			UpdateEntriesInViewInternal(entries.Cast<EntryModel>(), sourceLanguage, targetLanguage, selectedEntry);
 		}
 
-		private void SelectEntryItem(IEntry entry)
+		private void SelectEntryItem(Entry entry)
 		{
 			if (!(entry is EntryModel entryModel))
 			{
@@ -143,7 +143,7 @@ namespace Sdl.Community.IATETerminologyProvider.View
 			return false;
 		}
 
-		private void SelectEntry(IEntry entry)
+		private void SelectEntry(Entry entry)
 		{
 			var reportXmlFulPath = Path.Combine(_pathInfo.TemporaryStorageFullPath, "report.xml");
 
@@ -180,11 +180,11 @@ namespace Sdl.Community.IATETerminologyProvider.View
 			}
 		}
 
-		private void UpdateEntriesInViewInternal(IEnumerable<EntryModel> entryModels, Language sourceLanguage, Language targetLanguage, IEntry selectedEntry)
+		private void UpdateEntriesInViewInternal(IEnumerable<EntryModel> entryModels, Language sourceLanguage, Language targetLanguage, Entry selectedEntry)
 		{
 			if (InvokeRequired)
 			{
-				BeginInvoke(new Action<IEnumerable<EntryModel>, Language, Language, IEntry>(UpdateEntriesInViewInternal), entryModels, sourceLanguage, targetLanguage, selectedEntry);
+				BeginInvoke(new Action<IEnumerable<EntryModel>, Language, Language, Entry>(UpdateEntriesInViewInternal), entryModels, sourceLanguage, targetLanguage, selectedEntry);
 				return;
 			}
 
@@ -237,7 +237,7 @@ namespace Sdl.Community.IATETerminologyProvider.View
 			foreach (var entryModel in entryModels)
 			{
 				var sourceTerms = entryModel.Languages
-					.Where(a => a.Locale.TwoLetterISOLanguageName == sourceLanguage.CultureInfo.TwoLetterISOLanguageName).ToList();
+					.Where(a => a.Locale.RegionNeutralName == sourceLanguage.CultureInfo.TwoLetterISOLanguageName).ToList();
 
 				foreach (var sourceTerm in sourceTerms)
 				{
@@ -308,7 +308,7 @@ namespace Sdl.Community.IATETerminologyProvider.View
 			}
 		}
 
-		private void WriteReport(IEntry entry, XmlWriter xmlTxtWriter)
+		private void WriteReport(Entry entry, XmlWriter xmlTxtWriter)
 		{
 			xmlTxtWriter.WriteStartElement("Report");
 			xmlTxtWriter.WriteAttributeString("xml:space", "preserve");
@@ -324,7 +324,7 @@ namespace Sdl.Community.IATETerminologyProvider.View
 			xmlTxtWriter.WriteEndElement(); //report
 		}
 
-		private void WriteLanguages(IEntry entry, XmlWriter xmlTxtWriter)
+		private void WriteLanguages(Entry entry, XmlWriter xmlTxtWriter)
 		{
 			xmlTxtWriter.WriteStartElement("Languages");
 
@@ -340,7 +340,7 @@ namespace Sdl.Community.IATETerminologyProvider.View
 			xmlTxtWriter.WriteEndElement(); //Languages
 		}
 
-		private void WriteLanguage(IEntryLanguage language, bool isSource, XmlWriter xmlTxtWriter)
+		private void WriteLanguage(EntryLanguage language, bool isSource, XmlWriter xmlTxtWriter)
 		{
 			var languageFlags = new LanguageFlags();
 			var fullPath = languageFlags.GetImageStudioCodeByLanguageCode(language.Locale.Name);
@@ -348,7 +348,7 @@ namespace Sdl.Community.IATETerminologyProvider.View
 			xmlTxtWriter.WriteStartElement("Language");
 			xmlTxtWriter.WriteAttributeString("Name", language.Name);
 			xmlTxtWriter.WriteAttributeString("CultureInfo", language.Locale.Name);
-			xmlTxtWriter.WriteAttributeString("TwoLetterISOLanguageName", language.Locale.TwoLetterISOLanguageName);
+			xmlTxtWriter.WriteAttributeString("TwoLetterISOLanguageName", language.Locale.RegionNeutralName);
 			xmlTxtWriter.WriteAttributeString("IsSource", isSource.ToString());
 			xmlTxtWriter.WriteAttributeString("FlagFullPath", File.Exists(fullPath) ? fullPath : string.Empty);
 
@@ -359,7 +359,7 @@ namespace Sdl.Community.IATETerminologyProvider.View
 			xmlTxtWriter.WriteEndElement(); //Language
 		}
 
-		private static void WriteTerms(IEntryLanguage language, XmlWriter xmlTxtWriter)
+		private static void WriteTerms(EntryLanguage language, XmlWriter xmlTxtWriter)
 		{
 			xmlTxtWriter.WriteStartElement("Terms");
 
@@ -379,7 +379,7 @@ namespace Sdl.Community.IATETerminologyProvider.View
 			xmlTxtWriter.WriteEndElement(); //Terms
 		}
 
-		private static void WriteTerm(IEntryTerm term, XmlWriter xmlTxtWriter)
+		private static void WriteTerm(EntryTerm term, XmlWriter xmlTxtWriter)
 		{
 			xmlTxtWriter.WriteStartElement("Term");
 
@@ -393,7 +393,7 @@ namespace Sdl.Community.IATETerminologyProvider.View
 			xmlTxtWriter.WriteEndElement(); //Term
 		}
 
-		private static void WriteFields(IEnumerable<IEntryField> fields, XmlWriter xmlTxtWriter)
+		private static void WriteFields(IEnumerable<EntryField> fields, XmlWriter xmlTxtWriter)
 		{
 			xmlTxtWriter.WriteStartElement("Fields");
 			foreach (var field in fields)
