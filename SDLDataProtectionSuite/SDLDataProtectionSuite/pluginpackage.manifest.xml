@@ -1,16 +1,16 @@
 
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Trados Data Protection Suite</PlugInName>
-  <Version>3.1.2.0</Version>
+  <Version>3.1.3.0</Version>
   <Description>The Trados Data Protection Suite combines two existing applications - project Anonymizer and TradosTM Anonymizer, giving you control over how sensitive data is managed. Using plain text, or regular expressions, you can pseudonomize, or anonymize the data in your translation projects and translation memories.</Description>
   <Author>Trados AppStore Team</Author>
 	<Include>
-		<File>EPPlus.dll</File>
 		<File>Xceed.Wpf.Toolkit.dll</File>
 		<File>System.Data.SQLite.dll</File>
 		<File>SegmentComparer.dll</File>
 		<File>RwsAppStore.UsefulTipsService.dll</File>
 		<File>RwsAppStore.UsefulTipsService.Update.exe</File>
+		<File>Microsoft.IO.RecyclableMemoryStream.dll</File>
 	</Include>
-	<RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9" />
+	<RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
 </PluginPackage>

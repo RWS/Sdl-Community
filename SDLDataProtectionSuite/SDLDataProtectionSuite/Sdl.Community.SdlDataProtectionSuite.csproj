@@ -30,6 +30,9 @@
     <Reference Include="NLog">
       <HintPath>$(TradosFolder)\NLog.dll</HintPath>
     </Reference>
+		<Reference Include="DocumentFormat.OpenXml">
+			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\DocumentFormat.OpenXml.dll</HintPath>
+		</Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
@@ -254,7 +257,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="EPPlus" Version="6.2.2" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
     <PackageReference Include="RwsAppStore.UsefulTips.Service" Version="4.0.1" />
     <PackageReference Include="Sdl.Core.PluginFramework">
