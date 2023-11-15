@@ -30,7 +30,7 @@ namespace LanguageWeaverProvider.ViewModel
 		{
 			_languagePairs = languagePairs;
 			_translationOptions = translationOptions;
-			_languageMappingDatabase = DatabaseControl.InitializeDatabase(translationOptions.Version);
+			_languageMappingDatabase = DatabaseControl.InitializeDatabase(translationOptions.PluginVersion);
 			InitializeSettingsView();
 			InitializeCommands();
 			LoadPairMapping();
@@ -187,12 +187,12 @@ namespace LanguageWeaverProvider.ViewModel
 			var originalPairMappings = PairMappings;
 			PairMappings = new();
 			var mappedLanguages = _languageMappingDatabase.GetMappedLanguages();
-			var accountModels = _translationOptions.Version == PluginVersion.LanguageWeaverCloud
+			var accountModels = _translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
 							  ? await CloudService.GetSupportedLanguages(_translationOptions.AccessToken)
-							  : await EdgeService.GetLanguagePairs(_translationOptions);
-			var accountDictionaries = _translationOptions.Version == PluginVersion.LanguageWeaverCloud
+							  : await EdgeService.GetLanguagePairs(_translationOptions.AccessToken);
+			var accountDictionaries = _translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
 									? await CloudService.GetDictionaries(_translationOptions.AccessToken)
-									: await EdgeService.GetDictionaries(_translationOptions);
+									: await EdgeService.GetDictionaries(_translationOptions.AccessToken);
 
 			foreach (var languagePair in _languagePairs)
 			{
@@ -225,6 +225,8 @@ namespace LanguageWeaverProvider.ViewModel
 				var dictionaries = accountDictionaries.Where(dictionary => dictionary.Source.Equals(mappedSource.LanguageCode) && dictionary.Target.Equals(mappedTarget.LanguageCode))
 													  .OrderBy(dictionary => dictionary.Name)
 													  .ToList();
+				dictionaries.ForEach(x => x.LanguagePair = languagePair);
+
 				PairMappings.Add(new PairMapping
 				{
 					DisplayName = displayName,

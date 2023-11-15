@@ -11,7 +11,7 @@ namespace LanguageWeaverProvider.View
 		public ErrorDialogView()
 		{
 			InitializeComponent();
-			this.Height = 200;
+			Height = 200;
 		}
 
 		private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

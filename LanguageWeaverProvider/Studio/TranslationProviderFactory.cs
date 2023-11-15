@@ -1,4 +1,5 @@
 ﻿using System;
+using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model.Options;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -12,34 +13,15 @@ namespace LanguageWeaverProvider
 	{
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
 		{
-			try
-			{
-				var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
-				return new TranslationProvider(options, credentialStore);
-			}
-			catch (Exception ex)
-			{
-				throw ex;
-			}
+			var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
+			return new TranslationProvider(options, credentialStore);
 		}
 
 		public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
 		{
-			if (string.IsNullOrEmpty(translationProviderState))
-			{
-				return new TranslationProviderInfo
-				{
-					TranslationMethod = TranslationMethod.MachineTranslation,
-					Name = Constants.PluginName
-				};
-			}
-
-			var translationOptions = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
-			var pluginName = translationOptions.Version == PluginVersion.LanguageWeaverCloud ? Constants.PluginNameCloud : Constants.PluginNameEdge;
-			if (!string.IsNullOrEmpty(translationOptions.ProviderSettings.CustomName) && translationOptions.ProviderSettings.UseCustomName)
-			{
-				pluginName += $" - {translationOptions.ProviderSettings.CustomName}";
-			}
+			var pluginName = string.IsNullOrEmpty(translationProviderState)
+						   ? Constants.PluginName
+						   : StringExtensions.GetPluginName(translationProviderState);
 
 			return new TranslationProviderInfo
 			{

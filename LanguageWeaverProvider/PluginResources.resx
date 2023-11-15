@@ -117,32 +117,47 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Auth_ChangeAuthType" xml:space="preserve">
-    <value>Change authentication type</value>
+  <data name="Auth_Cloud_APICredentials" xml:space="preserve">
+    <value>API Credentials</value>
   </data>
-  <data name="Auth_Cloud_ClientID" xml:space="preserve">
-    <value>Cliend Email</value>
+  <data name="Auth_Cloud_APICredentials_ClientID" xml:space="preserve">
+    <value>Client ID</value>
   </data>
-  <data name="Auth_Cloud_ClientSecret" xml:space="preserve">
+  <data name="Auth_Cloud_APICredentials_ClientSecret" xml:space="preserve">
     <value>Client Secret</value>
   </data>
   <data name="Auth_Cloud_Credentials" xml:space="preserve">
     <value>User credentials</value>
   </data>
-  <data name="Auth_Cloud_Secrets" xml:space="preserve">
-    <value>User secrets</value>
+  <data name="Auth_Cloud_Credentials_Username" xml:space="preserve">
+    <value>Username</value>
   </data>
-  <data name="Auth_Cloud_SSO" xml:space="preserve">
-    <value>Single sign-on</value>
-  </data>
-  <data name="Auth_Cloud_UserID" xml:space="preserve">
-    <value>User ID</value>
-  </data>
-  <data name="Auth_Cloud_UserPw" xml:space="preserve">
+  <data name="Auth_Cloud_Credentials_Userpw" xml:space="preserve">
     <value>Password</value>
+  </data>
+  <data name="Auth_Cloud_SSO_ConnectionCode" xml:space="preserve">
+    <value>Connection code</value>
+  </data>
+  <data name="Auth_Edge_APIKey" xml:space="preserve">
+    <value>API Key</value>
+  </data>
+  <data name="Auth_Edge_Host" xml:space="preserve">
+    <value>Host: https://my-domain.com:8001/</value>
+  </data>
+  <data name="Auth_Edge_UserCredentials" xml:space="preserve">
+    <value>User credentials</value>
+  </data>
+  <data name="Auth_Edge_UserCredentials_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Auth_Edge_UserCredentials_Username" xml:space="preserve">
+    <value>Username</value>
   </data>
   <data name="Auth_SignIn" xml:space="preserve">
     <value>Sign in</value>
+  </data>
+  <data name="Auth_SSO" xml:space="preserve">
+    <value>Single sign-on</value>
   </data>
   <data name="CloudMappingView_Headers_Dictionaries" xml:space="preserve">
     <value>Dictionary</value>
@@ -188,6 +203,27 @@
   </data>
   <data name="Connection_Loading_Initiating" xml:space="preserve">
     <value>Initiating...</value>
+  </data>
+  <data name="Dictionary_CreateTerm_Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="Dictionary_CreateTerm_Source" xml:space="preserve">
+    <value>Source term</value>
+  </data>
+  <data name="Dictionary_CreateTerm_Target" xml:space="preserve">
+    <value>Target term</value>
+  </data>
+  <data name="Dictionary_NewTerm_Succesfully" xml:space="preserve">
+    <value>Term added succesfully</value>
+  </data>
+  <data name="Dictionary_NewTerm_Unsuccessfully" xml:space="preserve">
+    <value>Couldn't add the new term</value>
+  </data>
+  <data name="Dictionary_Window_AddTerm" xml:space="preserve">
+    <value>Add term</value>
+  </data>
+  <data name="Dictionary_Window_CloseWindow" xml:space="preserve">
+    <value>Close</value>
   </data>
   <data name="ErrorView_Buttons_Close" xml:space="preserve">
     <value>Close</value>

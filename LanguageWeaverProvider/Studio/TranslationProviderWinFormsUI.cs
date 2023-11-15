@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Runtime.Remoting.Messaging;
-using System.Security.Policy;
 using System.Windows.Forms;
-using System.Windows.Media;
 using LanguageWeaverProvider.Extensions;
-using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.View;
@@ -61,11 +57,11 @@ namespace LanguageWeaverProvider
 				return false;
 			}
 
-			var pairMappingViewModel = ShowPairMappingView(languagePairs, editProvider.TranslationOptions, true);
+			var pairMappingViewModel = ShowPairMappingView(languagePairs, editProvider.TranslationOptions);
 			return pairMappingViewModel.SaveChanges;
 		}
 
-		private PairMappingViewModel ShowPairMappingView(LanguagePair[] languagePairs, ITranslationOptions translationOptions, bool editProvider = false)
+		private PairMappingViewModel ShowPairMappingView(LanguagePair[] languagePairs, ITranslationOptions translationOptions)
 		{
 			var pairMappingViewModel = new PairMappingViewModel(translationOptions, languagePairs);
 			var pairMappingView = new PairMappingView() { DataContext = pairMappingViewModel };
@@ -76,24 +72,9 @@ namespace LanguageWeaverProvider
 
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
 		{
-			if (string.IsNullOrEmpty(translationProviderState))
-			{
-				return new TranslationProviderDisplayInfo()
-				{
-					Name = PluginResources.Plugin_Name,
-					TooltipText = PluginResources.Plugin_Name,
-					TranslationProviderIcon = PluginResources.lwLogoIco,
-					SearchResultImage = PluginResources.lwLogoPng
-				};
-
-			}
-
-			var translationOptions = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
-			var pluginName = translationOptions.Version == PluginVersion.LanguageWeaverCloud ? Constants.PluginNameCloud : Constants.PluginNameEdge;
-			if (!string.IsNullOrEmpty(translationOptions.ProviderSettings.CustomName) && translationOptions.ProviderSettings.UseCustomName)
-			{
-				pluginName += $" - {translationOptions.ProviderSettings.CustomName}";
-			}
+			var pluginName = string.IsNullOrEmpty(translationProviderState)
+						   ? Constants.PluginName
+						   : StringExtensions.GetPluginName(translationProviderState);
 
 			return new TranslationProviderDisplayInfo()
 			{

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Input;
 using LanguageWeaverProvider.Command;
 
@@ -116,7 +118,36 @@ namespace LanguageWeaverProvider.ViewModel
 
 		private void SaveReport(object parameter)
 		{
+			const string TradosAppStoreFolder = "Trados AppStore";
 
+			var directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), TradosAppStoreFolder, Constants.PluginName);
+			if (!Directory.Exists(directoryPath))
+			{
+				Directory.CreateDirectory(directoryPath);
+			}
+
+			var fileName = $"{DateTime.Now:ddMMyyHHmmss}_{ErrorTitle}.txt";
+			var filePath = Path.Combine(directoryPath, fileName);
+			var content = $"{ErrorMessage}\n\n\n{DetailedReport}";
+			File.WriteAllText(filePath, content);
+			OpenFolderAndSelectFile(filePath);
 		}
+
+		private void OpenFolderAndSelectFile(string filePath)
+		{
+
+			var pidl = ILCreateFromPathW(filePath);
+			SHOpenFolderAndSelectItems(pidl, 0, IntPtr.Zero, 0);
+			ILFree(pidl);
+		}
+
+		[DllImport("shell32.dll", CharSet = CharSet.Unicode)]
+		private static extern IntPtr ILCreateFromPathW(string pszPath);
+
+		[DllImport("shell32.dll")]
+		private static extern int SHOpenFolderAndSelectItems(IntPtr pidlFolder, int cild, IntPtr apidl, int dwFlags);
+
+		[DllImport("shell32.dll")]
+		private static extern void ILFree(IntPtr pidl);
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using LanguageWeaverProvider.ViewModel;
+using Sdl.LanguagePlatform.Core;
 
 namespace LanguageWeaverProvider.Model
 {
@@ -36,5 +37,7 @@ namespace LanguageWeaverProvider.Model
 		public string LastModifiedBy { get; set; }
 		
 		public DateTime LastModifyDate { get; set; }
+
+		public LanguagePair LanguagePair { get; set; }
 	}
 }

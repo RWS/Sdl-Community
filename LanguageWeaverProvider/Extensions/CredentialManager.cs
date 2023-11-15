@@ -44,12 +44,12 @@ namespace LanguageWeaverProvider.Extensions
 
 		public static void UpdateCredentials(ITranslationProviderCredentialStore credentialStore, ITranslationOptions translationOptions)
 		{
-			if (translationOptions.Version == PluginVersion.None)
+			if (translationOptions.PluginVersion == PluginVersion.None)
 			{
 				return;
 			}
 
-			var credentials = translationOptions.Version == PluginVersion.LanguageWeaverCloud
+			var credentials = translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
 							? JsonConvert.SerializeObject(translationOptions.CloudCredentials)
 							: JsonConvert.SerializeObject(translationOptions.EdgeCredentials);
 			var translationProviderCredential = new TranslationProviderCredential(credentials, true);
@@ -64,17 +64,6 @@ namespace LanguageWeaverProvider.Extensions
 			 && IsTimestampExpired(translationOptions.AccessToken.ExpiresAt))
 			{
 				await CloudService.RefreshToken(translationOptions.AccessToken);
-				return;
-			}
-
-			// delete this
-			await CloudService.RefreshToken(translationOptions.AccessToken);
-			// delete this
-
-			if (translationOptions.Version == PluginVersion.LanguageWeaverCloud
-			 && IsTimestampExpired(translationOptions.AccessToken.ExpiresAt))
-			{
-				await CloudService.AuthenticateUser(translationOptions.CloudCredentials, translationOptions, translationOptions.AuthenticationType);
 				return;
 			}
 		}

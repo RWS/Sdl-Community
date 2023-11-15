@@ -3,29 +3,17 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:local="clr-namespace:LanguageWeaverProvider.View.Cloud"
 		xmlns:viewModel="clr-namespace:LanguageWeaverProvider.ViewModel.Cloud"
 		xmlns:wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
 		WindowStartupLocation="CenterScreen"
 		mc:Ignorable="d"
 		d:DataContext="{d:DesignInstance {x:Type viewModel:CloudAuth0ViewModel}}"
-		Width="600"
+		Title="Language Weaver Browser"
+		Width="800"
 		Height="800">
-	<Grid Margin="10">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="*" />
-			<RowDefinition Height="Auto" />
-		</Grid.RowDefinitions>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*" />
-		</Grid.ColumnDefinitions>
-
-		<Grid Grid.Row="1"
-			  Margin="5">
-			<wpf:WebView2 Name="WebView2Browser"
-						  Loaded="WebView2Browser_OnLoaded"
-						  NavigationStarting="WebView2Browser_OnNavigationStarting" />
-		</Grid>
+	<Grid>
+		<wpf:WebView2 Name="WebView2Browser"
+					  Loaded="WebView2Browser_OnLoaded"
+					  NavigationStarting="WebView2Browser_OnNavigationStarting" />
 	</Grid>
 </Window>

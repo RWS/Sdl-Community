@@ -167,7 +167,7 @@ namespace LanguageWeaverProvider.ViewModel.Edge
 
 			TranslationOptions.EdgeCredentials = edgeCredentials;
 			TranslationOptions.AuthenticationType = AuthenticationType;
-			TranslationOptions.Version = PluginVersion.LanguageWeaverEdge;
+			TranslationOptions.PluginVersion = PluginVersion.LanguageWeaverEdge;
 			TranslationOptions.UpdateUri();
 			CloseWindow();
 		}

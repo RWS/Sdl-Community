@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Security.AccessControl;
+using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.LanguageMappingProvider;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
@@ -13,26 +13,15 @@ namespace LanguageWeaverProvider
 	internal class TranslationProvider : ITranslationProvider
 	{
 		private readonly ITranslationProviderCredentialStore _credentialStore;
+
 		public TranslationProvider(ITranslationOptions translationOptions, ITranslationProviderCredentialStore credentialStore = null)
 		{
 			_credentialStore = credentialStore;
 			TranslationOptions = translationOptions;
-			_ = DatabaseControl.InitializeDatabase(translationOptions.Version);
+			_ = DatabaseControl.InitializeDatabase(translationOptions.PluginVersion);
 		}
 
-		public string Name
-		{
-			get
-			{
-				var pluginName = TranslationOptions.Version == PluginVersion.LanguageWeaverCloud ? Constants.PluginNameCloud : Constants.PluginNameEdge;
-				if (!string.IsNullOrEmpty(TranslationOptions.ProviderSettings.CustomName) && TranslationOptions.ProviderSettings.UseCustomName)
-				{
-					pluginName += $" - {TranslationOptions.ProviderSettings.CustomName}";
-				}
-
-				return pluginName;
-			}
-		}
+		public string Name => StringExtensions.GetPluginName(TranslationOptions);
 
 		public ITranslationOptions TranslationOptions { get; set; }
 

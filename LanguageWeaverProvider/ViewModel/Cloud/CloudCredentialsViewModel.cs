@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Extensions;
+using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Services;
 using LanguageWeaverProvider.View.Cloud;
@@ -11,12 +12,13 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 {
 	public class CloudCredentialsViewModel : BaseViewModel, ICredentialsViewModel
 	{
-		private AuthenticationType _authenticationType;
+		AuthenticationType _authenticationType;
 
-		private string _userId;
-		private string _userPassword;
-		private string _clientId;
-		private string _clientSecret;
+		string _connectionCode;
+		string _userName;
+		string _userPassword;
+		string _clientId;
+		string _clientSecret;
 
 		public CloudCredentialsViewModel(ITranslationOptions translationOptions)
 		{
@@ -37,21 +39,34 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				OnPropertyChanged(nameof(IsAuthenticationTypeSelected));
 				OnPropertyChanged(nameof(IsCredentialsSelected));
 				OnPropertyChanged(nameof(IsApiKeySelected));
+				OnPropertyChanged(nameof(IsSSOSelected));
 			}
 		}
 
+		public bool IsAuthenticationTypeSelected => IsApiKeySelected || IsCredentialsSelected || IsSSOSelected;
+
 		public bool IsCredentialsSelected => AuthenticationType == AuthenticationType.CloudCredentials;
 
-		public bool IsApiKeySelected => AuthenticationType == AuthenticationType.CloudSecret;
+		public bool IsApiKeySelected => AuthenticationType == AuthenticationType.CloudAPI;
 
-		public bool IsAuthenticationTypeSelected => IsApiKeySelected || IsCredentialsSelected;
+		public bool IsSSOSelected => AuthenticationType == AuthenticationType.CloudSSO;
 
-		public string UserId
+		public string ConnectionCode
 		{
-			get => _userId;
+			get => _connectionCode;
 			set
 			{
-				_userId = value;
+				_connectionCode = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string UserName
+		{
+			get => _userName;
+			set
+			{
+				_userName = value;
 				OnPropertyChanged();
 			}
 		}
@@ -115,7 +130,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				return;
 			}
 
-			UserId = TranslationOptions.CloudCredentials.UserID;
+			UserName = TranslationOptions.CloudCredentials.UserName;
 			UserPassword = TranslationOptions.CloudCredentials.UserPassword;
 			ClientId = TranslationOptions.CloudCredentials.ClientID;
 			ClientSecret = TranslationOptions.CloudCredentials.ClientSecret;
@@ -129,10 +144,6 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			}
 
 			AuthenticationType = authenticationType;
-			if (AuthenticationType == AuthenticationType.CloudSSO)
-			{
-				Auth0SignIn();
-			}
 		}
 
 		private async void SignIn(object parameter)
@@ -149,13 +160,19 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			TranslationOptions.CloudCredentials ??= new();
 			if (AuthenticationType == AuthenticationType.CloudCredentials)
 			{
-				TranslationOptions.CloudCredentials.UserID = UserId;
+				TranslationOptions.CloudCredentials.UserName = UserName;
 				TranslationOptions.CloudCredentials.UserPassword = UserPassword;
 			}
-			else if (AuthenticationType == AuthenticationType.CloudSecret)
+			else if (AuthenticationType == AuthenticationType.CloudAPI)
 			{
 				TranslationOptions.CloudCredentials.ClientID = ClientId;
 				TranslationOptions.CloudCredentials.ClientSecret = ClientSecret;
+			}
+			else if (AuthenticationType == AuthenticationType.CloudSSO)
+			{
+				Auth0SignIn();
+				StopLoginProcess?.Invoke(this, EventArgs.Empty);
+				return;
 			}
 
 			var response = await CloudService.AuthenticateUser(TranslationOptions.CloudCredentials, TranslationOptions, AuthenticationType);
@@ -176,16 +193,25 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		private void Auth0SignIn()
 		{
-			var cloudAuth0ViewModel = new CloudAuth0ViewModel(TranslationOptions);
+			var auth0Config = new Auth0Config(ConnectionCode);
+			var cloudAuth0ViewModel = new CloudAuth0ViewModel(TranslationOptions, auth0Config);
 			var cloudAuth0View = new CloudAuth0View() { DataContext = cloudAuth0ViewModel };
-			cloudAuth0ViewModel.CloseAuth0Raised += () => { cloudAuth0View.Close(); CloseWindow(); };
+			cloudAuth0ViewModel.CloseAuth0Raised += () =>
+			{
+				cloudAuth0View.Close();
+				if (cloudAuth0ViewModel.IsConnected)
+				{
+					CloseWindow();
+				}
+			};
+
 			cloudAuth0View.ShowDialog();
 		}
 
 		private bool CredentialsAreSet()
 		{
 			if (IsCredentialsSelected
-			&& (string.IsNullOrEmpty(UserId) || string.IsNullOrEmpty(UserPassword)))
+			&& (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(UserPassword)))
 			{
 				return false;
 			}
@@ -207,12 +233,16 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 			switch (parameterString)
 			{
-				case nameof(UserId):
-					UserId = string.Empty;
+				case nameof(UserName):
+					UserName = string.Empty;
 					break;
 
 				case nameof(ClientId):
 					ClientId = string.Empty;
+					break;
+
+				case nameof(ConnectionCode):
+					ConnectionCode = string.Empty;
 					break;
 
 				default:
@@ -228,7 +258,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 		public void CloseWindow()
 		{
 			TranslationOptions.AuthenticationType = AuthenticationType;
-			TranslationOptions.Version = PluginVersion.LanguageWeaverCloud;
+			TranslationOptions.PluginVersion = PluginVersion.LanguageWeaverCloud;
 			TranslationOptions.UpdateUri();
 			CloseRequested?.Invoke(this, EventArgs.Empty);
 		}

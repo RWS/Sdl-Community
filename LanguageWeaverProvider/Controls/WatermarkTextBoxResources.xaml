@@ -63,10 +63,10 @@
 				<ControlTemplate x:Uid="ControlTemplate_2"
 								 TargetType="TextBox">
 					<Border x:Uid="Border_2"
-							BorderThickness="1.5"
+							BorderThickness="1"
 							BorderBrush="{TemplateBinding BorderBrush}"
 							Background="{TemplateBinding Background}"
-							CornerRadius="4"
+							CornerRadius="3"
 							Padding="3"
 							SnapsToDevicePixels="True">
 						<DockPanel x:Uid="DockPanel_1">
@@ -94,7 +94,7 @@
 										   Focusable="False"
 										   FontStyle="Italic"
 										   FontFamily="{TemplateBinding FontFamily}"
-										   VerticalAlignment="Center"
+										   VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
 										   Cursor="IBeam"
 										   ForceCursor="True"
 										   Foreground="#AF000000" />

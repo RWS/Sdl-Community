@@ -63,19 +63,18 @@ namespace LanguageWeaverProvider.Services
 			}
 		}
 
-
 		public static async Task<(bool Success, Exception Error)> AuthenticateUser(CloudCredentials cloudCredentials, ITranslationOptions translationOptions, AuthenticationType authenticationType)
 		{
 			try
 			{
-			var endpoint = authenticationType switch
-			{
-				AuthenticationType.CloudCredentials => "https://api.languageweaver.com/v4/token/user",
-				AuthenticationType.CloudSecret => "https://api.languageweaver.com/v4/token"
-			};
+				var endpoint = authenticationType switch
+				{
+					AuthenticationType.CloudCredentials => "https://api.languageweaver.com/v4/token/user",
+					AuthenticationType.CloudAPI => "https://api.languageweaver.com/v4/token"
+				};
 
-			var content = GetAuthenticationContent(cloudCredentials, authenticationType);
-			var stringContent = new StringContent(content, null, "application/json");
+				var content = GetAuthenticationContent(cloudCredentials, authenticationType);
+				var stringContent = new StringContent(content, null, "application/json");
 
 				var response = await new HttpClient().PostAsync(endpoint, stringContent);
 				response.EnsureSuccessStatusCode();
@@ -88,6 +87,17 @@ namespace LanguageWeaverProvider.Services
 								 : "https://api.languageweaver.com/v4/accounts/api-credentials/self";
 				cloudCredentials.AccountId = await GetUserInfo(translationOptions.AccessToken, selfEndpoint, "accountId");
 				translationOptions.AccessToken.AccountId = cloudCredentials.AccountId;
+
+				var uri = new Uri($"https://api.languageweaver.com/v4/mt/languages");
+
+				var request = new HttpRequestMessage(HttpMethod.Get, uri);
+				request.Headers.Add("Authorization", $"{translationOptions.AccessToken.TokenType} {translationOptions.AccessToken.Token}");
+
+				var response2 = await new HttpClient().SendAsync(request);
+				var x = await response2.Content.ReadAsStringAsync();
+
+				var z = JsonConvert.DeserializeObject<CloudLanguagesResponse>(x);
+
 				return (true, null);
 			}
 			catch (Exception ex)
@@ -100,7 +110,7 @@ namespace LanguageWeaverProvider.Services
 		{
 			var isCredentialsSelected = authenticationType == AuthenticationType.CloudCredentials;
 			var idKey = isCredentialsSelected ? "username" : "clientId";
-			var idValue = isCredentialsSelected ? cloudCredentials.UserID : cloudCredentials.ClientID;
+			var idValue = isCredentialsSelected ? cloudCredentials.UserName : cloudCredentials.ClientID;
 			var secretKey = isCredentialsSelected ? "password" : "clientSecret";
 			var secretValue = isCredentialsSelected ? cloudCredentials.UserPassword : cloudCredentials.ClientSecret;
 
@@ -256,10 +266,7 @@ namespace LanguageWeaverProvider.Services
 		{
 			var endpoint = $"https://api.languageweaver.com/v4/mt/translations/async/{requestId}/content";
 
-			var httpClient = new HttpClient();
-			httpClient.DefaultRequestHeaders.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
-			using var request = new HttpRequestMessage(HttpMethod.Get, endpoint);
-			var response = await httpClient.SendAsync(request);
+			var response = await Service.SendRequest(accessToken, HttpMethod.Get, endpoint);
 			response.EnsureSuccessStatusCode();
 
 			return await response.Content.ReadAsStringAsync();
@@ -267,34 +274,39 @@ namespace LanguageWeaverProvider.Services
 
 		public static async Task CreateFeedback(AccessToken accessToken, FeedbackRequest feedbackRequest)
 		{
-			var uri = $"https://api.languageweaver.com/v4/accounts/{accessToken.AccountId}/feedback/translations";
+			var requestUri = $"https://api.languageweaver.com/v4/accounts/{accessToken.AccountId}/feedback/translations";
 			var feedbackRequestJson = JsonConvert.SerializeObject(feedbackRequest);
 			var content = new StringContent(feedbackRequestJson, new UTF8Encoding(), "application/json");
 
-			var request = new HttpRequestMessage(HttpMethod.Post, uri);
-			request.Headers.Add("Authorization", $"Bearer {accessToken.Token}");
-			request.Content = content;
+			_ = await Service.SendRequest(accessToken, HttpMethod.Post, requestUri, content);
+		}
 
-			var httpClient = new HttpClient();
-			await httpClient.SendAsync(request);
+		public static async Task<bool> CreateDictionaryTerm(AccessToken accessToken, PairDictionary pairDictionary, List<KeyValuePair<string, string>> newDictionaryTerm)
+		{
+			var requestUri = $"https://api.languageweaver.com/v4/accounts/{accessToken.AccountId}/dictionaries/{pairDictionary.DictionaryId}/terms";
+			var content = new StringContent(JsonConvert.SerializeObject(newDictionaryTerm), new UTF8Encoding(), "application/json");
+
+			var response = await Service.SendRequest(accessToken, HttpMethod.Post, requestUri, content);
+			return response.IsSuccessStatusCode;
 		}
 
 		public static async Task RefreshToken(AccessToken accessToken)
 		{
 			try
 			{
-
 				var parameters = new Dictionary<string, string>
 				{
 					{ "grant_type", "refresh_token" },
 					{ "refresh_token", accessToken.RefreshToken }
 				};
+
 				using var httpRequest = new HttpRequestMessage
 				{
 					Method = HttpMethod.Post,
 					RequestUri = new Uri("https://sdl-prod.eu.auth0.com/"),
 					Content = new FormUrlEncodedContent(parameters)
 				};
+
 				var result = await new HttpClient().SendAsync(httpRequest);
 			}
 			catch { }

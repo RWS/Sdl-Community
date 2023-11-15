@@ -31,5 +31,17 @@
 		public const string SegmentMetadata_ShortModelName = "model";
 		public const string SegmentMetadata_LongModelName = "nmt_model";
 		public const string SegmentMetadata_Translation = "nmt_translation";
+
+		// Feedback - translation errors
+		public const string WordsOmission = "Words omission";
+		public const string WordsAddition = "Words addition";
+		public const string WordChoice = "Word choice";
+		public const string Unintelligible = "Unintelligible";
+		public const string Grammar = "Grammar";
+		public const string Spelling = "Spelling";
+		public const string Punctuation = "Punctuation";
+		public const string Capitalization = "Capitalization";
+		public const string CapitalizationPunctuation = "Capitalization, punctuation";
+
 	}
 }

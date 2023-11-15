@@ -10,7 +10,6 @@ namespace LanguageWeaverProvider.Model
 		string _sourceCode;
 		string _targetCode;
 		PairModel _selectedModel;
-		PairDictionary _selectedDictionary;
 
 		public string DisplayName { get; set; }
 

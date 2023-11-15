@@ -11,7 +11,7 @@ namespace LanguageWeaverProvider.Model.Interface
 
 		AuthenticationType AuthenticationType { get; set; }
 
-		PluginVersion Version { get; set; }
+		PluginVersion PluginVersion { get; set; }
 
 		CloudCredentials CloudCredentials { get; set; }
 

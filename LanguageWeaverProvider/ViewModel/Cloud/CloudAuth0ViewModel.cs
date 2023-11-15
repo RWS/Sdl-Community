@@ -8,15 +8,17 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 {
 	public class CloudAuth0ViewModel : BaseViewModel
 	{
-		private ITranslationOptions _translationOptions;
+		readonly ITranslationOptions _translationOptions;
 
-		public CloudAuth0ViewModel(ITranslationOptions translationOptions)
+		public CloudAuth0ViewModel(ITranslationOptions translationOptions, Auth0Config auth0Config)
 		{
-			Auth0Config = new Auth0Config();
+			Auth0Config = auth0Config;
 			_translationOptions = translationOptions;
 		}
 
 		public Auth0Config Auth0Config { get; set; }
+
+		public bool IsConnected { get; set; }
 
 		public delegate void CloseAuth0Raiser();
 
@@ -25,9 +27,10 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 		public async void Navigated(string uri)
 		{
 			var (success, error) = await CloudService.AuthenticateSSOUser(_translationOptions, Auth0Config, new Uri(uri));
+			IsConnected = success;
 			if (!success)
 			{
-				ErrorHandling.ShowDialog(error, "SSO Error", "Something went wrong, couldn't authenticate", true);
+				ErrorHandling.ShowDialog(error, "SSO Error", error.Message, true);
 				CloseAuth0Raised?.Invoke();
 				return;
 			}

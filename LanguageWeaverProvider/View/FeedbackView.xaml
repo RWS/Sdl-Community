@@ -4,11 +4,9 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:root="clr-namespace:LanguageWeaverProvider"
-			 xmlns:converters="clr-namespace:LanguageWeaverProvider.Converters"
 			 xmlns:viewModel="clr-namespace:LanguageWeaverProvider.ViewModel"
+			 xmlns:converters="clr-namespace:LanguageWeaverProvider.Converters"
 			 d:DataContext="{d:DesignInstance viewModel:FeedbackViewModel}"
-			 Loaded="UserControl_Loaded"
-			 MouseLeftButtonDown="Window_MouseLeftButtonDown"
 			 mc:Ignorable="d"
 			 d:DesignHeight="450"
 			 d:DesignWidth="800">
@@ -20,6 +18,7 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBoxResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/CheckBoxResources.xaml" />
 				<ResourceDictionary Source="../Style/Buttons.xaml" />
 				<ResourceDictionary Source="../Controls/WatermarkTextBoxResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
@@ -28,27 +27,11 @@
 
 		</ResourceDictionary>
 	</UserControl.Resources>
-
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="*" />
-		</Grid.RowDefinitions>
-
-		<StackPanel Grid.Row="0">
-			<ComboBox Style="{StaticResource Sdl.ComboBox.Generic.Style}"
-					  ItemsSource="{Binding Providers}"
-					  SelectedItem="{Binding SelectedProvider}"
-					  Visibility="{Binding MultipleProvidersActive, Converter={StaticResource BooleanVisibility}}"
-					  FontWeight="Medium"
-					  Margin="16 16 16 0"
-					  VerticalContentAlignment="Center"
-					  DisplayMemberPath="Version" />
-		</StackPanel>
-
-		<Grid Grid.Row="1"
-			  Visibility="{Binding IsCloudServiceSelected, Converter={StaticResource BooleanVisibility}}">
+	<ScrollViewer VerticalScrollBarVisibility="Auto"
+				  HorizontalScrollBarVisibility="Disabled">
+		<Grid Margin="24">
 			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
@@ -58,130 +41,17 @@
 				<RowDefinition Height="Auto" />
 			</Grid.RowDefinitions>
 
-			<TextBlock Grid.Row="0"
-					   Text="{x:Static root:PluginResources.FeedbackView_Title}"
-					   Style="{StaticResource Sdl.TextBlock.GenericTitleTextStyle}"
-					   HorizontalAlignment="Center"
-					   FontSize="20"
-					   Margin="0 8" />
-
-			<TextBlock Grid.Row="1"
-					   Text="{x:Static root:PluginResources.FeedbackView_Message}"
-					   Style="{StaticResource Sdl.TextBlock.GenericTextStyle}"
-					   HorizontalAlignment="Center"
-					   Focusable="True"
-					   Margin="0" />
-
-			<StackPanel Grid.Row="2"
-						Orientation="Horizontal"
-						HorizontalAlignment="Center"
-						Margin="0 4"
-						IsEnabled="{Binding CanSendFeedback}">
-				<Button x:Name="star_1"
-						Style="{StaticResource TransparentButtonStyle}"
-						MouseEnter="Star_MouseEnter"
-						MouseLeave="Star_MouseLeave"
-						Click="Star_Clicked"
-						Height="22"
-						Margin="0"
-						Padding="0">
-					<Button.Content>
-						<TextBlock Text="★"
-								   FontSize="30"
-								   Foreground="#d4d4d4"
-								   HorizontalAlignment="Center"
-								   VerticalAlignment="Center" />
-					</Button.Content>
-				</Button>
-				<Button x:Name="star_2"
-						Style="{StaticResource TransparentButtonStyle}"
-						MouseEnter="Star_MouseEnter"
-						MouseLeave="Star_MouseLeave"
-						Click="Star_Clicked"
-						Height="22"
-						Margin="0"
-						Padding="0">
-					<Button.Content>
-						<TextBlock Text="★"
-								   FontSize="30"
-								   Foreground="#d4d4d4"
-								   HorizontalAlignment="Center"
-								   VerticalAlignment="Center" />
-					</Button.Content>
-				</Button>
-				<Button x:Name="star_3"
-						Style="{StaticResource TransparentButtonStyle}"
-						MouseEnter="Star_MouseEnter"
-						MouseLeave="Star_MouseLeave"
-						Click="Star_Clicked"
-						Height="22"
-						Margin="0"
-						Padding="0">
-					<Button.Content>
-						<TextBlock Text="★"
-								   FontSize="30"
-								   Foreground="#d4d4d4"
-								   HorizontalAlignment="Center"
-								   VerticalAlignment="Center" />
-					</Button.Content>
-				</Button>
-				<Button x:Name="star_4"
-						Style="{StaticResource TransparentButtonStyle}"
-						MouseEnter="Star_MouseEnter"
-						MouseLeave="Star_MouseLeave"
-						Click="Star_Clicked"
-						Height="22"
-						Margin="0"
-						Padding="0">
-					<Button.Content>
-						<TextBlock Text="★"
-								   FontSize="30"
-								   Foreground="#d4d4d4"
-								   HorizontalAlignment="Center"
-								   VerticalAlignment="Center" />
-					</Button.Content>
-				</Button>
-				<Button x:Name="star_5"
-						Style="{StaticResource TransparentButtonStyle}"
-						MouseEnter="Star_MouseEnter"
-						MouseLeave="Star_MouseLeave"
-						Click="Star_Clicked"
-						Height="22"
-						Margin="0"
-						Padding="0">
-					<Button.Content>
-						<TextBlock Text="★"
-								   FontSize="30"
-								   Foreground="#d4d4d4"
-								   HorizontalAlignment="Center"
-								   VerticalAlignment="Center" />
-					</Button.Content>
-				</Button>
-			</StackPanel>
-
-			<ComboBox Grid.Row="3"
-					  ItemsSource="{Binding QualityEstimations}"
-					  SelectedItem="{Binding SelectedQE, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-					  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
-					  IsEnabled="{Binding CanSendFeedback}"
-					  VerticalContentAlignment="Center"
-					  Width="160"
-					  Height="24"
-					  Margin="0 8 0 0" />
-
-			<GroupBox Grid.Row="4"
-					  Margin="24 8"
-					  Padding="8 16">
+			<GroupBox Grid.Row="0"
+					  Padding="8">
 				<GroupBox.Header>
-					<TextBlock Text="{x:Static root:PluginResources.FeedbackView_GroupBox_Header}"
-							   Margin="4 0" />
+					<TextBlock Text="Translation details" />
 				</GroupBox.Header>
-
 				<Grid>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto" />
 						<RowDefinition Height="Auto" />
 					</Grid.RowDefinitions>
+
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="Auto" />
 						<ColumnDefinition Width="*" />
@@ -189,120 +59,148 @@
 
 					<TextBlock Grid.Row="0"
 							   Grid.Column="0"
-							   Text="{x:Static root:PluginResources.FeedbackView_GroupBox_Translation}"
+							   Text="Original Translation "
+							   TextWrapping="Wrap"
+							   HorizontalAlignment="Right"
 							   Margin="0 2 2 2" />
 
 					<TextBlock Grid.Row="1"
 							   Grid.Column="0"
-							   Text="{x:Static root:PluginResources.FeedbackView_GroupBox_QE}"
+							   Text="Quality Estimation "
+							   Visibility="{Binding IsQeEnabled, Converter={StaticResource BooleanVisibility}}"
+							   TextWrapping="Wrap"
+							   HorizontalAlignment="Right"
 							   Margin="0 2 2 2" />
 
 					<TextBlock Grid.Row="0"
 							   Grid.Column="1"
 							   Text="{Binding MTTranslation}"
 							   TextWrapping="Wrap"
+							   Foreground="Black"
 							   Margin="4 2" />
 
 					<TextBlock Grid.Row="1"
 							   Grid.Column="1"
 							   Text="{Binding OriginalQE}"
+							   Visibility="{Binding IsQeEnabled, Converter={StaticResource BooleanVisibility}}"
+							   TextWrapping="Wrap"
+							   Foreground="Black"
 							   Margin="4 2" />
 				</Grid>
 			</GroupBox>
 
-			<Border Grid.Row="5"
-					Grid.ColumnSpan="2"
-					BorderBrush="#c0c0c0"
-					BorderThickness="1"
-					Margin="16">
-				<ScrollViewer Grid.Row="0"
-							  VerticalScrollBarVisibility="Auto">
-					<Grid>
-						<Grid.RowDefinitions>
-							<RowDefinition Height="Auto" />
-							<RowDefinition Height="*" />
-						</Grid.RowDefinitions>
+			<TextBlock Grid.Row="1"
+					   Text="Please select the quality of our translation"
+					   Style="{StaticResource Sdl.TextBlock.SubsectionTitleStyle}"
+					   Visibility="{Binding IsQeEnabled, Converter={StaticResource BooleanVisibility}}"
+					   Foreground="Black"
+					   FontSize="14"
+					   Margin="0 16 0 4" />
 
-						<Border Grid.Row="0"
-								BorderThickness="0 0 0 1"
-								HorizontalAlignment="Center"
-								BorderBrush="#d4d4d4"
-								Margin="16 0">
-							<TextBlock Text="{x:Static root:PluginResources.FeedbackView_OptionalMessage}"
-									   Focusable="True"
-									   TextWrapping="Wrap"
-									   Foreground="#c0c0c0"
-									   FontSize="18"
-									   FontWeight="DemiBold"
-									   Margin="16 0" />
-						</Border>
+			<ComboBox Grid.Row="2"
+					  ItemsSource="{Binding QualityEstimations}"
+					  SelectedItem="{Binding SelectedQE}"
+					  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+					  Visibility="{Binding IsQeEnabled, Converter={StaticResource BooleanVisibility}}"
+					  HorizontalAlignment="Left"
+					  VerticalContentAlignment="Center"
+					  Width="200"
+					  Height="24"
+					  Margin="10 0 0 0">
+				<ComboBox.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding}"
+								   Padding="2 4" />
+					</DataTemplate>
+				</ComboBox.ItemTemplate>
+			</ComboBox>
 
-						<TextBox Grid.Row="1"
-								 Text="{Binding FeedbackMessage, UpdateSourceTrigger=PropertyChanged}"
-								 Style="{StaticResource Sdl.TextBox.BorderlessReadOnlyStyle}"
-								 IsEnabled="{Binding CanSendFeedback}"
-								 IsReadOnly="False"
-								 Padding="4 8" />
-					</Grid>
-				</ScrollViewer>
-			</Border>
+			<TextBlock Grid.Row="3"
+					   Text="Please report any translation error"
+					   Style="{StaticResource Sdl.TextBlock.SubsectionTitleStyle}"
+					   Visibility="{Binding IsCloudServiceSelected, Converter={StaticResource BooleanVisibility}}"
+					   Foreground="Black"
+					   FontSize="14"
+					   Margin="0 16 0 4" />
 
-			<Button Grid.Row="6"
+			<Grid Grid.Row="4"
+				  Visibility="{Binding IsCloudServiceSelected, Converter={StaticResource BooleanVisibility}}">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="136" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+
+				<StackPanel Grid.Column="0">
+					<CheckBox Content="{x:Static root:Constants.WordChoice}"
+							  IsChecked="{Binding TranslationErrors.WordChoice}"
+							  Style="{StaticResource Sdl.Checkbox.GenericStyle}" 
+							  Cursor="Hand"
+							  Margin="10 2 0 2"/>
+					<CheckBox Content="{x:Static root:Constants.WordsAddition}"
+							  IsChecked="{Binding TranslationErrors.WordsAddition}"
+							  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+							  Cursor="Hand"
+							  Margin="10 2 0 2" />
+					<CheckBox Content="{x:Static root:Constants.WordsOmission}"
+							  IsChecked="{Binding TranslationErrors.WordsOmission}"
+							  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+							  Cursor="Hand"
+							  Margin="10 2 0 2" />
+					<CheckBox Content="{x:Static root:Constants.Unintelligible}"
+							  IsChecked="{Binding TranslationErrors.Unintelligible}"
+							  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+							  Cursor="Hand"
+							  Margin="10 2 0 2" />
+				</StackPanel>
+
+				<StackPanel Grid.Column="1">
+					<CheckBox Content="{x:Static root:Constants.Spelling}"
+							  IsChecked="{Binding TranslationErrors.Spelling}"
+							  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+							  Cursor="Hand"
+							  Margin="10 2 0 2" />
+					<CheckBox Content="{x:Static root:Constants.Grammar}"
+							  IsChecked="{Binding TranslationErrors.Grammar}"
+							  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+							  Cursor="Hand"
+							  Margin="10 2 0 2" />
+					<CheckBox Content="{x:Static root:Constants.Punctuation}"
+							  IsChecked="{Binding TranslationErrors.Punctuation}"
+							  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+							  Cursor="Hand"
+							  Margin="10 2 0 2" />
+					<CheckBox Content="{x:Static root:Constants.Capitalization}"
+							  IsChecked="{Binding TranslationErrors.Capitalization}"
+							  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+							  Cursor="Hand"
+							  Margin="10 2 0 2" />
+				</StackPanel>
+			</Grid>
+
+			<TextBlock Grid.Row="5"
+					   Text="Leave a message?"
+					   Style="{StaticResource Sdl.TextBlock.SubsectionTitleStyle}"
+					   Foreground="Black"
+					   FontSize="14"
+					   Margin="0 16 0 4" />
+
+			<TextBox Grid.Row="6"
+					 Grid.ColumnSpan="2"
+					 Text="{Binding FeedbackMessage}"
+					 TextWrapping="Wrap"
+					 VerticalScrollBarVisibility="Auto"
+					 Padding="4 6"
+					 MinHeight="64" />
+
+			<Button Grid.Row="7"
 					Grid.ColumnSpan="2"
 					Content="{x:Static root:PluginResources.FeedbackView_Button_SendFeedback}"
 					Command="{Binding SendFeedbackCommand}"
 					CommandParameter="{x:Static root:Constants.CloudService}"
 					Style="{StaticResource Sdl.Button.PrimaryStyle}"
 					IsEnabled="{Binding CanSendFeedback}"
-					Margin="8" />
+					Cursor="Hand"
+					Margin="0 16 0 0" />
 		</Grid>
-
-		<Grid Grid.Row="1"
-			  Visibility="{Binding IsCloudServiceSelected, Converter={StaticResource BooleanVisibility}, ConverterParameter=Inverted}">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="*" />
-				<RowDefinition Height="Auto" />
-			</Grid.RowDefinitions>
-			<Border BorderBrush="#c0c0c0"
-					BorderThickness="1"
-					Margin="16">
-				<ScrollViewer Grid.Row="0"
-							  VerticalScrollBarVisibility="Auto">
-					<Grid>
-						<Grid.RowDefinitions>
-							<RowDefinition Height="Auto" />
-							<RowDefinition Height="*" />
-						</Grid.RowDefinitions>
-
-						<Border Grid.Row="0"
-								BorderThickness="0 0 0 1"
-								HorizontalAlignment="Center"
-								BorderBrush="#d4d4d4"
-								Margin="16 0">
-							<TextBlock Text="{x:Static root:PluginResources.FeedbackView_OptionalMessage}"
-									   Focusable="True"
-									   TextWrapping="Wrap"
-									   Foreground="#c0c0c0"
-									   FontSize="18"
-									   FontWeight="DemiBold"
-									   Margin="16 0" />
-						</Border>
-
-						<TextBox Grid.Row="1"
-								 Text="{Binding FeedbackMessage, UpdateSourceTrigger=PropertyChanged}"
-								 Style="{StaticResource Sdl.TextBox.BorderlessReadOnlyStyle}"
-								 IsReadOnly="False"
-								 Padding="4 8" />
-					</Grid>
-				</ScrollViewer>
-			</Border>
-			<Button Grid.Row="1"
-					Content="{x:Static root:PluginResources.FeedbackView_Button_SendFeedback}"
-					Command="{Binding SendFeedbackCommand}"
-					CommandParameter="{x:Static root:Constants.EdgeService}"
-					Style="{StaticResource Sdl.Button.PrimaryStyle}"
-					Margin="8" />
-		</Grid>
-	</Grid>
-
+	</ScrollViewer>
 </UserControl>

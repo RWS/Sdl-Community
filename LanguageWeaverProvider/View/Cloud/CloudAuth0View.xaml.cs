@@ -27,14 +27,18 @@ namespace LanguageWeaverProvider.View.Cloud
 
 		private async Task InitializeWebView(string uri)
 		{
-			if (WebView2Browser.CoreWebView2 == null)
+			if (WebView2Browser.CoreWebView2 is null)
 			{
+				var userDataFolder = Path.Combine(Path.GetTempPath(), Assembly.GetExecutingAssembly().GetName().Name);
+				var options = new CoreWebView2EnvironmentOptions { AllowSingleSignOnUsingOSPrimaryAccount = true };
+				var environment = await CoreWebView2Environment.CreateAsync(null, userDataFolder, options);
+
 				WebView2Browser.CreationProperties = new CoreWebView2CreationProperties
 				{
-					UserDataFolder = Path.Combine(Path.GetTempPath(), Assembly.GetExecutingAssembly().GetName().Name)
+					UserDataFolder = userDataFolder
 				};
 
-				await WebView2Browser.EnsureCoreWebView2Async();
+				await WebView2Browser.EnsureCoreWebView2Async(environment);
 				await WebView2Browser.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(BrowserScript);
 			}
 

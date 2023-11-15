@@ -61,29 +61,29 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change authentication type.
+        ///   Looks up a localized string similar to API Credentials.
         /// </summary>
-        public static string Auth_ChangeAuthType {
+        public static string Auth_Cloud_APICredentials {
             get {
-                return ResourceManager.GetString("Auth_ChangeAuthType", resourceCulture);
+                return ResourceManager.GetString("Auth_Cloud_APICredentials", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cliend Email.
+        ///   Looks up a localized string similar to Client ID.
         /// </summary>
-        public static string Auth_Cloud_ClientID {
+        public static string Auth_Cloud_APICredentials_ClientID {
             get {
-                return ResourceManager.GetString("Auth_Cloud_ClientID", resourceCulture);
+                return ResourceManager.GetString("Auth_Cloud_APICredentials_ClientID", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Client Secret.
         /// </summary>
-        public static string Auth_Cloud_ClientSecret {
+        public static string Auth_Cloud_APICredentials_ClientSecret {
             get {
-                return ResourceManager.GetString("Auth_Cloud_ClientSecret", resourceCulture);
+                return ResourceManager.GetString("Auth_Cloud_APICredentials_ClientSecret", resourceCulture);
             }
         }
         
@@ -97,38 +97,74 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User secrets.
+        ///   Looks up a localized string similar to Username.
         /// </summary>
-        public static string Auth_Cloud_Secrets {
+        public static string Auth_Cloud_Credentials_Username {
             get {
-                return ResourceManager.GetString("Auth_Cloud_Secrets", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Single sign-on.
-        /// </summary>
-        public static string Auth_Cloud_SSO {
-            get {
-                return ResourceManager.GetString("Auth_Cloud_SSO", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to User ID.
-        /// </summary>
-        public static string Auth_Cloud_UserID {
-            get {
-                return ResourceManager.GetString("Auth_Cloud_UserID", resourceCulture);
+                return ResourceManager.GetString("Auth_Cloud_Credentials_Username", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
-        public static string Auth_Cloud_UserPw {
+        public static string Auth_Cloud_Credentials_Userpw {
             get {
-                return ResourceManager.GetString("Auth_Cloud_UserPw", resourceCulture);
+                return ResourceManager.GetString("Auth_Cloud_Credentials_Userpw", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection code.
+        /// </summary>
+        public static string Auth_Cloud_SSO_ConnectionCode {
+            get {
+                return ResourceManager.GetString("Auth_Cloud_SSO_ConnectionCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to API Key.
+        /// </summary>
+        public static string Auth_Edge_APIKey {
+            get {
+                return ResourceManager.GetString("Auth_Edge_APIKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Host: https://my-domain.com:8001/.
+        /// </summary>
+        public static string Auth_Edge_Host {
+            get {
+                return ResourceManager.GetString("Auth_Edge_Host", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User credentials.
+        /// </summary>
+        public static string Auth_Edge_UserCredentials {
+            get {
+                return ResourceManager.GetString("Auth_Edge_UserCredentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string Auth_Edge_UserCredentials_Password {
+            get {
+                return ResourceManager.GetString("Auth_Edge_UserCredentials_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username.
+        /// </summary>
+        public static string Auth_Edge_UserCredentials_Username {
+            get {
+                return ResourceManager.GetString("Auth_Edge_UserCredentials_Username", resourceCulture);
             }
         }
         
@@ -138,6 +174,15 @@ namespace LanguageWeaverProvider {
         public static string Auth_SignIn {
             get {
                 return ResourceManager.GetString("Auth_SignIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Single sign-on.
+        /// </summary>
+        public static string Auth_SSO {
+            get {
+                return ResourceManager.GetString("Auth_SSO", resourceCulture);
             }
         }
         
@@ -273,6 +318,69 @@ namespace LanguageWeaverProvider {
         public static string Connection_Loading_Initiating {
             get {
                 return ResourceManager.GetString("Connection_Loading_Initiating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comment.
+        /// </summary>
+        public static string Dictionary_CreateTerm_Comment {
+            get {
+                return ResourceManager.GetString("Dictionary_CreateTerm_Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source term.
+        /// </summary>
+        public static string Dictionary_CreateTerm_Source {
+            get {
+                return ResourceManager.GetString("Dictionary_CreateTerm_Source", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Target term.
+        /// </summary>
+        public static string Dictionary_CreateTerm_Target {
+            get {
+                return ResourceManager.GetString("Dictionary_CreateTerm_Target", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Term added succesfully.
+        /// </summary>
+        public static string Dictionary_NewTerm_Succesfully {
+            get {
+                return ResourceManager.GetString("Dictionary_NewTerm_Succesfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Couldn&apos;t add the new term.
+        /// </summary>
+        public static string Dictionary_NewTerm_Unsuccessfully {
+            get {
+                return ResourceManager.GetString("Dictionary_NewTerm_Unsuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add term.
+        /// </summary>
+        public static string Dictionary_Window_AddTerm {
+            get {
+                return ResourceManager.GetString("Dictionary_Window_AddTerm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string Dictionary_Window_CloseWindow {
+            get {
+                return ResourceManager.GetString("Dictionary_Window_CloseWindow", resourceCulture);
             }
         }
         

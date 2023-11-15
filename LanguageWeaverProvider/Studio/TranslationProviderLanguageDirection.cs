@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Windows;
 using LanguageWeaverProvider.Extensions;
@@ -41,29 +42,10 @@ namespace LanguageWeaverProvider
 
 		public bool CanReverseLanguageDirection => false;
 
-		public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
+		public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
 		{
-			throw new NotImplementedException();
-		}
-
-		public ImportResult[] AddOrUpdateTranslationUnitsMasked(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings, bool[] mask)
-		{
-			throw new NotImplementedException();
-		}
-
-		public ImportResult AddTranslationUnit(TranslationUnit translationUnit, ImportSettings settings)
-		{
-			throw new NotImplementedException();
-		}
-
-		public ImportResult[] AddTranslationUnits(TranslationUnit[] translationUnits, ImportSettings settings)
-		{
-			throw new NotImplementedException();
-		}
-
-		public ImportResult[] AddTranslationUnitsMasked(TranslationUnit[] translationUnits, ImportSettings settings, bool[] mask)
-		{
-			throw new NotImplementedException();
+			_currentTranslationUnit = translationUnit;
+			return SearchSegment(settings, translationUnit.SourceSegment);
 		}
 
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
@@ -96,22 +78,6 @@ namespace LanguageWeaverProvider
 			var searchResult = TranslateSegment(segment, sourceSegment);
 			searchResults.Add(searchResult);
 			return searchResults;
-		}
-
-		private SearchResult TranslateSegment(Segment segment, Segment sourceSegment)
-		{
-			CredentialManager.ValidateToken(_translationOptions);
-			var xliff = CreateXliffFile(new Segment[] { sourceSegment });
-			var mappedPair = GetMappedPair();
-			var translation = CloudService.Translate(_translationOptions.AccessToken, mappedPair, xliff).Result;
-			var translatedSegment = translation.GetTargetSegments().First();
-			var searchResult = CreateSearchResult(segment, translatedSegment.Segment);
-			if (translatedSegment.Estimation != QualityEstimations.None)
-			{
-				SetMetadata(translatedSegment, mappedPair);
-			}
-
-			return searchResult;
 		}
 
 		public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
@@ -153,7 +119,10 @@ namespace LanguageWeaverProvider
 					continue;
 				}
 
-				translatableSegments.Add(translationUnit.SourceSegment);
+				var sourceSegment = _translationOptions.ProviderSettings.IncludeTags
+								  ? translationUnit.SourceSegment.Duplicate()
+								  : RemoveTagsOnSegment(translationUnit.SourceSegment);
+				translatableSegments.Add(sourceSegment);
 			}
 
 			if (!translatableSegments.Any())
@@ -161,12 +130,12 @@ namespace LanguageWeaverProvider
 				return searchResults;
 			}
 
-			//CredentialManager.ValidateToken(_translationOptions);
+			CredentialManager.ValidateToken(_translationOptions);
 			var mappedPair = GetMappedPair();
 			var xliffFile = CreateXliffFile(translatableSegments);
-			var translation = _translationOptions.Version == PluginVersion.LanguageWeaverCloud
+			var translation = _translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
 							? CloudService.Translate(_translationOptions.AccessToken, mappedPair, xliffFile).Result
-							: EdgeService.Translate(_translationOptions, mappedPair, xliffFile).Result;
+							: EdgeService.Translate(_translationOptions.AccessToken, mappedPair, xliffFile).Result;
 
 			var translatedSegments = translation.GetTargetSegments();
 			var translatedSegmentsIndex = 0;
@@ -194,22 +163,58 @@ namespace LanguageWeaverProvider
 				};
 				
 				searchResults[i].Add(CreateSearchResult(currentSegment, translatedSegment.Segment));
-				if (translatedSegment.Estimation != QualityEstimations.None
-				 || _translationOptions.Version == PluginVersion.LanguageWeaverEdge)
-				{
-					SetMetadata(translatedSegment, mappedPair);
-				}
+				SetMetadataOnSegment(translatedSegment, mappedPair);
 			}
 
 			_batchTaskWindow = null;
 			return searchResults;
 		}
 
-		private void SetMetadata(EvaluatedSegment evaluatedSegment, PairMapping pairMapping)
+		private Xliff CreateXliffFile(IEnumerable<Segment> segments)
+		{
+			var file = new File
+			{
+				SourceCulture = _languagePair.SourceCulture,
+				TargetCulture = _languagePair.TargetCulture
+			};
+
+			var xliffDocument = new Xliff
+			{
+				File = file
+			};
+
+			foreach (var segment in segments)
+			{
+				if (segment is not null)
+				{
+					xliffDocument.AddSourceSegment(segment);
+				}
+			}
+
+			return xliffDocument;
+		}
+
+		private SearchResult TranslateSegment(Segment segment, Segment sourceSegment)
+		{
+			CredentialManager.ValidateToken(_translationOptions);
+			var xliff = CreateXliffFile(new Segment[] { sourceSegment });
+			var mappedPair = GetMappedPair();
+			var translation = CloudService.Translate(_translationOptions.AccessToken, mappedPair, xliff).Result;
+			var translatedSegment = translation.GetTargetSegments().First();
+			var searchResult = CreateSearchResult(segment, translatedSegment.Segment);
+			if (translatedSegment.Estimation != QualityEstimations.None)
+			{
+				SetMetadataOnSegment(translatedSegment, mappedPair);
+			}
+
+			return searchResult;
+		}
+
+		private void SetMetadataOnSegment(EvaluatedSegment evaluatedSegment, PairMapping pairMapping)
 		{
 			if (_batchTaskWindow is not null)
 			{
-				StoreMetadata(evaluatedSegment, pairMapping);
+				StoreSegmentMetadata(evaluatedSegment, pairMapping);
 				return;
 			}
 
@@ -225,18 +230,14 @@ namespace LanguageWeaverProvider
 				return;
 			}
 
-			if (_translationOptions.Version == PluginVersion.LanguageWeaverCloud)
-			{
-				activeSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_QE, evaluatedSegment.QualityEstimation);
-				activeSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_LongModelName, pairMapping.SelectedModel.Name);
-			}
-
+			activeSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_QE, evaluatedSegment.QualityEstimation);
+			activeSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_LongModelName, pairMapping.SelectedModel.Name);
 			activeSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_ShortModelName, pairMapping.SelectedModel.Model);
 			activeSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_Translation, evaluatedSegment.Segment.ToString());
 			editorController.ActiveDocument.UpdateSegmentPairProperties(activeSegmentPair, activeSegmentPair.Properties);
 		}
 
-		private void StoreMetadata(EvaluatedSegment evaluatedSegment, PairMapping pairMapping)
+		private void StoreSegmentMetadata(EvaluatedSegment evaluatedSegment, PairMapping pairMapping)
 		{
 			ApplicationInitializer.RatedSegments ??= new List<RatedSegment>();
 			var ratedSegment = new RatedSegment()
@@ -275,62 +276,6 @@ namespace LanguageWeaverProvider
 									 && x.LanguagePair.TargetCultureName.Equals(TargetLanguage.Name));
 		}
 
-		public Xliff CreateXliffFile(IEnumerable<Segment> segments)
-		{
-			var file = new File
-			{
-				SourceCulture = _languagePair.SourceCulture,
-				TargetCulture = _languagePair.TargetCulture
-			};
-
-			var xliffDocument = new Xliff
-			{
-				File = file
-			};
-
-			foreach (var segment in segments)
-			{
-				if (segment is not null)
-				{
-					xliffDocument.AddSourceSegment(segment);
-				}
-			}
-
-			return xliffDocument;
-		}
-
-		public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
-		{
-			throw new NotImplementedException();
-		}
-
-		public SearchResults SearchText(SearchSettings settings, string segment)
-		{
-			throw new NotImplementedException();
-		}
-
-		public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
-		{
-			_currentTranslationUnit = translationUnit;
-			return SearchSegment(settings, translationUnit.SourceSegment);
-		}
-
-		public SearchResults[] SearchTranslationUnits(SearchSettings settings, TranslationUnit[] translationUnits)
-		{
-			throw new NotImplementedException();
-		}
-
-
-		public ImportResult UpdateTranslationUnit(TranslationUnit translationUnit)
-		{
-			throw new NotImplementedException();
-		}
-
-		public ImportResult[] UpdateTranslationUnits(TranslationUnit[] translationUnits)
-		{
-			throw new NotImplementedException();
-		}
-
 		private SearchResult CreateSearchResult(Segment searchSegment, Segment translation)
 		{
 			var translationUnit = new TranslationUnit
@@ -348,5 +293,119 @@ namespace LanguageWeaverProvider
 				TranslationProposal = new TranslationUnit(translationUnit)
 			};
 		}
+
+		#region Unused
+		public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ImportResult[] AddOrUpdateTranslationUnitsMasked(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings, bool[] mask)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ImportResult AddTranslationUnit(TranslationUnit translationUnit, ImportSettings settings)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ImportResult[] AddTranslationUnits(TranslationUnit[] translationUnits, ImportSettings settings)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ImportResult[] AddTranslationUnitsMasked(TranslationUnit[] translationUnits, ImportSettings settings, bool[] mask)
+		{
+			throw new NotImplementedException();
+		}
+
+		public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
+		{
+			throw new NotImplementedException();
+		}
+
+		public SearchResults SearchText(SearchSettings settings, string segment)
+		{
+			throw new NotImplementedException();
+		}
+
+		public SearchResults[] SearchTranslationUnits(SearchSettings settings, TranslationUnit[] translationUnits)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ImportResult UpdateTranslationUnit(TranslationUnit translationUnit)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ImportResult[] UpdateTranslationUnits(TranslationUnit[] translationUnits)
+		{
+			throw new NotImplementedException();
+		}
+		#endregion
+
+		#region To finish
+		private (List<Segment> Segments, List<string> Emojis) FilterSegmentEmojis(List<Segment> translatableSegments)
+		{
+			var newSegments = new List<Segment>();
+			var emojis = new List<string>();
+			foreach (var segment in translatableSegments)
+			{
+				var newSegment = new Segment();
+				foreach (var element in segment.Elements)
+				{
+					if (element is not Tag currentTag)
+					{
+						newSegment.Elements.Add(element);
+						continue;
+					}
+
+					var input = element.ToString();
+					var hasEmoji = DetectEmojis(input, emojis);
+					if (!hasEmoji)
+					{
+						newSegment.Add(element);
+						continue;
+					}
+
+					var placeholder = CreateEmojiPlaceholder(currentTag);
+					newSegment.Add(placeholder);
+				}
+
+				newSegments.Add(newSegment);
+			}
+
+			return (newSegments, emojis);
+		}
+
+		bool DetectEmojis(string input, List<string> emojis)
+		{
+			var hasEmoji = false;
+			for (var i = 0; i < input.Length; i++)
+			{
+				var category = CharUnicodeInfo.GetUnicodeCategory(input, i);
+				if (category == UnicodeCategory.OtherSymbol || category == UnicodeCategory.OtherNotAssigned)
+				{
+					hasEmoji = true;
+					var emoji = char.ConvertFromUtf32(char.ConvertToUtf32(input, i));
+					emojis.Add(emoji);
+				}
+			}
+
+			return hasEmoji;
+		}
+
+		Tag CreateEmojiPlaceholder(Tag currentTag)
+		{
+			return new Tag(
+				TagType.TextPlaceholder,
+				$"emoji_{currentTag.TagID}",
+				currentTag.Anchor,
+				currentTag.AlignmentAnchor,
+				string.Empty);
+		}
+		#endregion
 	}
 }

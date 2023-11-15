@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace LanguageWeaverProvider.Model
+﻿namespace LanguageWeaverProvider.Model
 {
 	public class CloudCredentials
     {
@@ -8,7 +6,7 @@ namespace LanguageWeaverProvider.Model
 
 		public string AccountRegion { get; set; }
 
-		public string UserID { get; set; }
+		public string UserName { get; set; }
 
 		public string UserPassword { get; set; }
 

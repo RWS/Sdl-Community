@@ -11,8 +11,10 @@ using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Services;
 using LanguageWeaverProvider.Studio.FeedbackController.Model;
 using Newtonsoft.Json;
+using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
+using Sdl.LanguagePlatform.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -25,6 +27,7 @@ namespace LanguageWeaverProvider.ViewModel
 
 		ObservableCollection<ITranslationOptions> _providers;
 		ITranslationOptions _selectedProvider;
+		TranslationErrors _translationErrors;
 
 		ISegmentPair _activeSegment;
 		QualityEstimations _originalQE;
@@ -32,7 +35,7 @@ namespace LanguageWeaverProvider.ViewModel
 		string _feedbackMessage;
 		string _mtTranslation;
 		bool _canSendFeedback;
-		int _rating;
+		bool _isQeEnabled;
 
 		public FeedbackViewModel()
 		{
@@ -44,7 +47,7 @@ namespace LanguageWeaverProvider.ViewModel
 			InitializeCommands();
 		}
 
-		public bool IsCloudServiceSelected => SelectedProvider?.Version == PluginVersion.LanguageWeaverCloud;
+		public bool IsCloudServiceSelected => SelectedProvider?.PluginVersion == PluginVersion.LanguageWeaverCloud;
 
 		public bool MultipleProvidersActive => Providers?.Count > 1;
 
@@ -67,6 +70,16 @@ namespace LanguageWeaverProvider.ViewModel
 				_selectedProvider = value;
 				OnPropertyChanged();
 				OnPropertyChanged(nameof(IsCloudServiceSelected));
+			}
+		}
+
+		public TranslationErrors TranslationErrors
+		{
+			get => _translationErrors ??= new();
+			set
+			{
+				_translationErrors = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -119,16 +132,15 @@ namespace LanguageWeaverProvider.ViewModel
 			{
 				_mtTranslation = value;
 				OnPropertyChanged();
-				CanSendFeedback = value is not null;
 			}
 		}
 
-		public int Rating
+		public bool IsQeEnabled
 		{
-			get => _rating;
+			get => _isQeEnabled;
 			set
 			{
-				_rating = value;
+				_isQeEnabled = value;
 				OnPropertyChanged();
 			}
 		}
@@ -147,7 +159,6 @@ namespace LanguageWeaverProvider.ViewModel
 
 		private void InitializeControl()
 		{
-			SetTranslationOptions();
 			if (_editController.ActiveDocument is null)
 			{
 				return;
@@ -155,17 +166,9 @@ namespace LanguageWeaverProvider.ViewModel
 
 			_editController.ActiveDocument.ActiveSegmentChanged += ActiveSegmentChanged;
 			_editController.ActiveDocument.SegmentsTranslationOriginChanged += ActiveSegmentMetadataUpdated;
+			_editController.ActiveDocument.SegmentsConfirmationLevelChanged += SegmentConfirmationLevelChanged;
 			_activeSegment = _editController.ActiveDocument.GetActiveSegmentPair();
 			GetSegmentMetadata(_activeSegment);
-		}
-
-		private void SetTranslationOptions()
-		{
-			Providers = new(_projectController.GetTranslationProviderConfiguration()
-											  .Entries
-											  .Where(entry => entry.MainTranslationProvider.Uri.AbsoluteUri.StartsWith(Constants.BaseTranslationScheme))
-											  .Select(entry => JsonConvert.DeserializeObject<TranslationOptions>(entry.MainTranslationProvider.State)));
-			SelectedProvider = Providers.First();
 		}
 
 		private void ActiveSegmentChanged(object sender, EventArgs e)
@@ -175,9 +178,31 @@ namespace LanguageWeaverProvider.ViewModel
 				return;
 			}
 
-			SetTranslationOptions();
 			_activeSegment = segmentPair;
 			GetSegmentMetadata(_activeSegment);
+		}
+
+		private async void SegmentConfirmationLevelChanged(object sender, EventArgs e)
+		{
+			var segmentObj = GetPropertyValue(sender, "Segment");
+			var segmentPropertiesObj = GetPropertyValue(segmentObj, "Properties");
+			var segmentProperties = segmentPropertiesObj as ISegmentPairProperties;
+			if (segmentProperties.ConfirmationLevel != ConfirmationLevel.Translated
+			 || !IsLanguageWeaverSource(segmentProperties))
+			{
+				return;
+			}
+
+			var currentSegment = _editController.ActiveDocument.SegmentPairs.FirstOrDefault(x => x.Properties.Id.Id.Equals(segmentProperties.Id.Id));
+			GetSegmentMetadata(currentSegment.Properties);
+			if (SelectedProvider?.PluginVersion == PluginVersion.LanguageWeaverCloud)
+			{
+				await SendCloudFeedback(currentSegment);
+			}
+			else if (SelectedProvider?.PluginVersion == PluginVersion.LanguageWeaverEdge)
+			{
+				await SendEdgeFeedback(currentSegment);
+			}
 		}
 
 		private void ActiveSegmentMetadataUpdated(object sender, EventArgs e)
@@ -217,52 +242,74 @@ namespace LanguageWeaverProvider.ViewModel
 
 		private void GetSegmentMetadata(ISegmentPairProperties segmentProperties)
 		{
-			if (segmentProperties is null || !IsLanguageWeaverSource(segmentProperties) || !IsQEEnabled(segmentProperties))
+			SetProviderState(segmentProperties);
+			if (segmentProperties is null || !IsLanguageWeaverSource(segmentProperties) || SelectedProvider is null)
 			{
 				MTTranslation = null;
 				OriginalQE = LanguageWeaverProvider.QualityEstimations.None;
+				CanSendFeedback = false;
 				return;
 			}
 
+			CanSendFeedback = true;
 			MTTranslation = segmentProperties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_Translation);
 			var qualityEstimation = segmentProperties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_QE);
-			if (!Enum.TryParse(qualityEstimation, true, out QualityEstimations currentQE))
+
+			IsQeEnabled = Enum.TryParse(qualityEstimation, true, out QualityEstimations currentQE);
+			OriginalQE = currentQE;
+			SelectedQE = QualityEstimations.FirstOrDefault(qe => qe.Equals(currentQE));
+		}
+
+		private void SetProviderState(ISegmentPairProperties segmentProperties)
+		{
+			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
+			var segmentModel = segmentProperties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_LongModelName);
+			var origin = segmentProperties.TranslationOrigin.OriginBeforeAdaptation is null
+				       ? segmentProperties.TranslationOrigin.OriginSystem
+				       : segmentProperties.TranslationOrigin.OriginBeforeAdaptation.OriginSystem;
+
+			if (segmentModel is null || origin is null)
 			{
 				return;
 			}
 
-			OriginalQE = currentQE;
-			SelectedQE = QualityEstimations.FirstOrDefault(qe => qe.Equals(currentQE));
-			Rating = SelectedQE switch
-			{
-				LanguageWeaverProvider.QualityEstimations.Poor => 1,
-				LanguageWeaverProvider.QualityEstimations.Good => 5,
-				_ => 3
-			};
+
+			Providers = new(_projectController.GetTranslationProviderConfiguration()
+								  .Entries
+								  .Where(entry => entry.MainTranslationProvider.Uri.AbsoluteUri.StartsWith(Constants.BaseTranslationScheme))
+								  .Select(entry => JsonConvert.DeserializeObject<TranslationOptions>(entry.MainTranslationProvider.State)));
+			var versionToSearch = origin.StartsWith(Constants.PluginNameCloud)
+								? PluginVersion.LanguageWeaverCloud
+								: origin.StartsWith(Constants.PluginNameEdge)
+								? PluginVersion.LanguageWeaverEdge
+								: PluginVersion.None;
+
+			var matchingProviders = Providers.Where(provider => provider.PluginVersion == versionToSearch);
+			SelectedProvider = matchingProviders.FirstOrDefault(provider => provider.PairMappings.Any(pairMapping => pairMapping.SelectedModel.Name.Equals(segmentModel)));
 		}
 
 		private async void SendFeedback(object parameter)
 		{
-			if (parameter is not string parameterString)
+			if (parameter is not string)
 			{
 				return;
 			}
 
 			_activeSegment = _editController?.ActiveDocument?.ActiveSegmentPair;
-			if (parameterString.Equals(Constants.CloudService))
+			SetProviderState(_activeSegment.Properties);
+			if (SelectedProvider.PluginVersion == PluginVersion.LanguageWeaverCloud)
 			{
-				await SendCloudFeedback();
+				await SendCloudFeedback(_activeSegment);
 			}
-			else if (parameterString.Equals(Constants.EdgeService))
+			else if (SelectedProvider.PluginVersion == PluginVersion.LanguageWeaverEdge)
 			{
-				await SendEdgeFeedback();
+				await SendEdgeFeedback(_activeSegment);
 			}
 		}
 
-		private async Task SendCloudFeedback()
+		private async Task SendCloudFeedback(ISegmentPair segmentPair)
 		{
-			if (!IsLanguageWeaverSource(_activeSegment?.Properties)
-			 || !IsQEEnabled(_activeSegment?.Properties))
+			if (!IsLanguageWeaverSource(segmentPair?.Properties))
 			{
 				return;
 			}
@@ -273,57 +320,58 @@ namespace LanguageWeaverProvider.ViewModel
 			{
 				SourceLanguageId = mappedPair.SourceCode,
 				TargetLanguageId = mappedPair.TargetCode,
-				Model = _activeSegment.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_ShortModelName),
-				SourceText = _activeSegment.Source.ToString(),
-				TargetMTText = _activeSegment.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_Translation)
-							?? _activeSegment.Target.ToString(),
-				QualityEstimationMT = OriginalQE.ToString()
+				Model = segmentPair.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_ShortModelName),
+				SourceText = segmentPair.Source.ToString(),
+				TargetMTText = segmentPair.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_Translation)
+							?? segmentPair.Target.ToString(),
+				QualityEstimationMT = IsQeEnabled ? OriginalQE.ToString() : null
 			};
 
 			var improvement = new Improvement()
 			{
-				Text = _activeSegment.Target.ToString()
+				Text = segmentPair.Target.ToString()
 			};
 
 			var rating = new Rating()
 			{
-				Score = _rating.ToString(),
 				Comments = new List<string>() { string.IsNullOrEmpty(FeedbackMessage) ? string.Empty : FeedbackMessage }
 			};
+
+			rating.Comments.AddRange(TranslationErrors.GetProblemsReported());
 
 			var feedbackRequest = new FeedbackRequest()
 			{
 				Translation = translation,
-				Improvement = IsAdapted(_activeSegment.Properties) ? improvement : null,
+				Improvement = IsAdapted(segmentPair.Properties) ? improvement : null,
 				Rating = rating,
-				QualityEstimation = SelectedQE.ToString()
+				QualityEstimation = IsQeEnabled ? SelectedQE.ToString() : null
 			};
 
 			CredentialManager.ValidateToken(SelectedProvider);
 			await CloudService.CreateFeedback(SelectedProvider.AccessToken, feedbackRequest);
 		}
 
-		private async Task SendEdgeFeedback()
+		private async Task SendEdgeFeedback(ISegmentPair segmentPair)
 		{
-			if (!IsLanguageWeaverSource(_activeSegment?.Properties))
+			if (!IsLanguageWeaverSource(segmentPair?.Properties))
 			{
 				return;
 			}
 
 			var mappedPair = SelectedProvider.PairMappings.FirstOrDefault(x => x.LanguagePair.TargetCultureName.Equals(_editController.ActiveDocument.ActiveFile.Language.CultureInfo.Name));
-			var collection = new List<KeyValuePair<string, string>>
+			var feedbackDictionary = new Dictionary<string, string>
 			{
-				new("sourceText", _activeSegment.Source.ToString()),
-				new("languagePairId", _activeSegment.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_ShortModelName)),
-				new("machineTranslation", _activeSegment.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_Translation))
+				["sourceText"] = segmentPair.Source.ToString(),
+				["languagePairId"] = segmentPair.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_ShortModelName),
+				["machineTranslation"] = segmentPair.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_Translation)
 			};
 
-			if (IsAdapted(_activeSegment.Properties))
+			if (IsAdapted(segmentPair.Properties))
 			{
-				collection.Add(new("suggestedTranslation", _activeSegment.Target.ToString()));
+				feedbackDictionary["suggestedTranslation"] = segmentPair.Target.ToString();
 			}
 
-			await EdgeService.SendFeedback(SelectedProvider.AccessToken, collection);
+			await EdgeService.SendFeedback(SelectedProvider.AccessToken, feedbackDictionary);
 		}
 
 		private bool IsLanguageWeaverSource(ISegmentPairProperties segmentProperties)

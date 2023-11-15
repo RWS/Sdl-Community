@@ -4,7 +4,6 @@
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:root="clr-namespace:LanguageWeaverProvider"
-		xmlns:local="clr-namespace:LanguageWeaverProvider.View"
 		xmlns:viewmodel="clr-namespace:LanguageWeaverProvider.ViewModel"
 		xmlns:converters="clr-namespace:LanguageWeaverProvider.Converters"
 		mc:Ignorable="d"

@@ -9,6 +9,8 @@
 	<Include>
 		<File>LanguageMappingProvider.dll</File>
 		<File>Dapper.StrongName.dll</File>
+		<File>Microsoft.Web.WebView2.Core.dll</File>
+		<File>Microsoft.Web.WebView2.Wpf.dll</File>
 	</Include>
 	
 </PluginPackage>

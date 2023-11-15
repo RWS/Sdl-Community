@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Services.Model;
+using LanguageWeaverProvider.ViewModel;
 using LanguageWeaverProvider.XliffConverter.Converter;
 using Newtonsoft.Json;
 
@@ -22,26 +19,24 @@ namespace LanguageWeaverProvider.Services
 	{
 		public static async Task<(bool Success, Exception Error)> AuthenticateUser(EdgeCredentials edgeCredentials, ITranslationOptions translationOptions)
 		{
-			ServicePointManager.Expect100Continue = true;
-			ServicePointManager.DefaultConnectionLimit = 9999;
 			try
 			{
-				using var httpClient = new HttpClient();
-
-				var queryString = HttpUtility.ParseQueryString(string.Empty);
-				queryString["username"] = edgeCredentials.UserName;
-				queryString["password"] = edgeCredentials.Password;
-
-				var builder = new UriBuilder(edgeCredentials.Uri)
+				var userName = Uri.EscapeDataString(edgeCredentials.UserName);
+				var password = Uri.EscapeDataString(edgeCredentials.Password);
+				var uri = new UriBuilder(edgeCredentials.Uri)
 				{
 					Path = "/api/v2/auth",
-					Query = queryString.ToString()
+					Query = $"username={userName}&password={password}"
 				};
 
-				var httpResponse = httpClient.PostAsync(builder.Uri, null).Result;
-				httpResponse.EnsureSuccessStatusCode();
-				var responseContent = httpResponse.Content.ReadAsStringAsync().Result;
-				translationOptions.AccessToken = new() { Token = responseContent, TokenType = "Bearer", EdgeUri = edgeCredentials.Uri };
+				var x = $"{edgeCredentials.Uri}api/v2/auth$username={userName}&password={password}";
+
+				var response = await new HttpClient().PostAsync(uri.Uri, null);
+				response.EnsureSuccessStatusCode();
+
+				var token = await response.Content.ReadAsStringAsync();
+				SetAccessToken(translationOptions, token, "Bearer", edgeCredentials.Uri);
+
 				return (true, null);
 			}
 			catch (Exception ex)
@@ -52,26 +47,22 @@ namespace LanguageWeaverProvider.Services
 
 		public static async Task<(bool Success, Exception Error)> VerifyAPI(EdgeCredentials edgeCredentials, ITranslationOptions translationOptions)
 		{
-			ServicePointManager.Expect100Continue = true;
-			ServicePointManager.DefaultConnectionLimit = 9999;
 			try
 			{
-				using var httpClient = new HttpClient();
 				var encodedApiKey = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{edgeCredentials.ApiKey}:"));
-				httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", encodedApiKey);
+				SetAccessToken(translationOptions, encodedApiKey, "Basic", edgeCredentials.Uri);
 
-				var uriBuilder = new UriBuilder(edgeCredentials.Uri)
-				{
-					Path = "/api/v2/language-pairs"
-				};
+				var temporaryAccessToken = translationOptions.AccessToken;
+				var requestUri = $"{temporaryAccessToken.EdgeUri}api/v2/language-pairs";
 
-				var response = await httpClient.GetAsync(uriBuilder.Uri);
+				var response = await Service.SendRequest(temporaryAccessToken, HttpMethod.Get, requestUri);
 				response.EnsureSuccessStatusCode();
-				translationOptions.AccessToken = new() { Token = encodedApiKey, TokenType = "Basic", EdgeUri = edgeCredentials.Uri };
+
 				return (true, null);
 			}
 			catch (Exception ex)
 			{
+				translationOptions.AccessToken = null;
 				return (false, ex);
 			}
 		}
@@ -88,7 +79,7 @@ namespace LanguageWeaverProvider.Services
 				using var httpClient = new HttpClient();
 				var response = await httpClient.SendAsync(httpRequest);
 
-				var secret = "";
+				var secret = string.Empty;
 				if (response.IsSuccessStatusCode)
 				{
 					secret = await response.Content.ReadAsStringAsync();
@@ -112,7 +103,8 @@ namespace LanguageWeaverProvider.Services
 					token = await response.Content.ReadAsStringAsync();
 				}
 
-				translationOptions.AccessToken = new() { Token = token, TokenType = "Bearer", EdgeUri = edgeCredentials.Uri };
+				SetAccessToken(translationOptions, token, "Bearer", edgeCredentials.Uri);
+
 				return (true, null);
 			}
 			catch (Exception ex)
@@ -121,24 +113,17 @@ namespace LanguageWeaverProvider.Services
 			}
 		}
 
-		public static async Task<List<PairModel>> GetLanguagePairs(ITranslationOptions translationOptions)
+		private static void SetAccessToken(ITranslationOptions translationOptions, string token, string tokenType, Uri edgeUri)
+			=> translationOptions.AccessToken = new() { Token = token, TokenType = tokenType, EdgeUri = edgeUri };
+
+		public static async Task<List<PairModel>> GetLanguagePairs(AccessToken accessToken)
 		{
 			try
 			{
-				ServicePointManager.Expect100Continue = true;
-				ServicePointManager.DefaultConnectionLimit = 9999;
-				var edgeCredentials = translationOptions.EdgeCredentials;
-				var accessToken = translationOptions.AccessToken;
+				var requestUri = $"{accessToken.EdgeUri}api/v2/language-pairs";
 
-				var client = new HttpClient();
-				var request = new HttpRequestMessage(HttpMethod.Get, $"{edgeCredentials.Uri}api/v2/language-pairs");
-				request.Headers.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
-
-				var response = client.SendAsync(request).Result;
-				response.EnsureSuccessStatusCode();
-
-				var content = response.Content.ReadAsStringAsync().Result;
-				var languagePairs = JsonConvert.DeserializeObject<EdgeLanguagePairResult>(content);
+				var response = await Service.SendRequest(accessToken, HttpMethod.Get, requestUri);
+				var languagePairs = await DeserializeResponse<EdgeLanguagePairResult>(response);
 
 				var pairModels = languagePairs.LanguagePairs.Select(lp => new PairModel()
 				{
@@ -163,24 +148,15 @@ namespace LanguageWeaverProvider.Services
 			}
 		}
 
-		public static async Task<List<PairDictionary>> GetDictionaries(ITranslationOptions translationOptions)
+		public static async Task<List<PairDictionary>> GetDictionaries(AccessToken accessToken)
 		{
 			try
 			{
-				ServicePointManager.Expect100Continue = true;
-				ServicePointManager.DefaultConnectionLimit = 9999;
-				var edgeCredentials = translationOptions.EdgeCredentials;
-				var accessToken = translationOptions.AccessToken;
-
-				var request = new HttpRequestMessage(HttpMethod.Get, $"{edgeCredentials.Uri}api/v2/dictionaries");
-				request.Headers.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
-
-				var client = new HttpClient();
-				var response = await client.SendAsync(request);
-				response.EnsureSuccessStatusCode();
-
-				var content = response.Content.ReadAsStringAsync().Result;
+				var requestUri = $"{accessToken.EdgeUri}api/v2/dictionaries";
+				var response = await Service.SendRequest(accessToken, HttpMethod.Get, requestUri);
+				var content = await response.Content.ReadAsStringAsync();
 				var dictionaries = JsonConvert.DeserializeObject<EdgeDictionariesResponse>(content);
+
 				var pairDictionaries = dictionaries.Dictionaries.Select(dictionary => new PairDictionary()
 				{
 					Name = dictionary.DictionaryId,
@@ -197,33 +173,30 @@ namespace LanguageWeaverProvider.Services
 			}
 		}
 
-		public static async Task<Xliff> Translate(ITranslationOptions translationOptions, PairMapping pairMapping, Xliff sourceXliff)
+		public static async Task<bool> CreateDictionaryTerm(AccessToken accessToken, PairDictionary pairDictionary, List<KeyValuePair<string, string>> newDictionaryTerm)
+		{
+			var requestUri = $"{accessToken.EdgeUri}api/v2/dictionaries/{pairDictionary.DictionaryId}/term";
+			var content = new FormUrlEncodedContent(newDictionaryTerm);
+
+			var response = await Service.SendRequest(accessToken, HttpMethod.Post, requestUri, content);
+			return response.IsSuccessStatusCode;
+		}
+
+		public static async Task<Xliff> Translate(AccessToken accessToken, PairMapping pairMapping, Xliff sourceXliff)
 		{
 			try
 			{
-				var translationRequestResponse = await SendTranslationRequest(translationOptions, pairMapping, sourceXliff);
-				var translationRequest = JsonConvert.DeserializeObject<EdgeTranslationRequestResponse>(translationRequestResponse);
-
-				var translationStatusReponse = await GetTranslationStatus(translationOptions, translationRequest.TranslationId);
-				var translationStatus = JsonConvert.DeserializeObject<EdgeTranslationStatus>(translationStatusReponse);
-
+				var translationRequest = await SendTranslationRequest(accessToken, pairMapping, sourceXliff);
+				var translationStatus = await GetTranslationStatus(accessToken, translationRequest.TranslationId);
 				if (translationStatus.Error is not null)
 				{
 					ErrorHandling.ShowDialog(null, translationStatus.Error.Code, translationStatus.Error.Message);
 					return null;
 				}
 
-				while (translationStatus.State != "done")
-				{
-					Thread.Sleep(500);
-					translationStatusReponse = await GetTranslationStatus(translationOptions, translationRequest.TranslationId);
-					translationStatus = JsonConvert.DeserializeObject<EdgeTranslationStatus>(translationStatusReponse);
-				}
-
-				var translationResponse = await GetTranslation(translationOptions, translationRequest.TranslationId);
-
-				var translationDecoded = Base64Decode(translationResponse);
-				var translatedXliff = Converter.ParseXliffString(translationDecoded);
+				await WaitForTranslationCompletion(accessToken, translationRequest.TranslationId);
+				var translationResponse = await GetTranslation(accessToken, translationRequest.TranslationId);
+				var translatedXliff = Converter.ParseXliffString(Base64Decode(translationResponse));
 
 				return translatedXliff;
 			}
@@ -233,55 +206,73 @@ namespace LanguageWeaverProvider.Services
 			}
 		}
 
-		private static async Task<string> GetTranslation(ITranslationOptions translationOptions, string translationId)
+		private static async Task<EdgeTranslationRequestResponse> SendTranslationRequest(AccessToken accessToken, PairMapping pairMapping, Xliff sourceXliff)
 		{
-			var edgeCredentials = translationOptions.EdgeCredentials;
-			var accessToken = translationOptions.AccessToken;
-
-			var client = new HttpClient();
-			var request = new HttpRequestMessage(HttpMethod.Get, $"{edgeCredentials.Uri}api/v2/translations/{translationId}/download");
-			request.Headers.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
-
-			var response = await client.SendAsync(request);
-			response.EnsureSuccessStatusCode();
-			return await response.Content.ReadAsStringAsync();
-		}
-
-		private static async Task<string> GetTranslationStatus(ITranslationOptions translationOptions, string requestId)
-		{
-			var edgeCredentials = translationOptions.EdgeCredentials;
-			var accessToken = translationOptions.AccessToken;
-
-			var client = new HttpClient();
-			var request = new HttpRequestMessage(HttpMethod.Get, $"{edgeCredentials.Uri}api/v2/translations/{requestId}");
-			request.Headers.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
-			var response = await client.SendAsync(request);
-			response.EnsureSuccessStatusCode();
-			return await response.Content.ReadAsStringAsync();
-		}
-
-		private static async Task<string> SendTranslationRequest(ITranslationOptions translationOptions, PairMapping pairMapping, Xliff sourceXliff)
-		{
-			var accessToken = translationOptions.AccessToken;
-
+			var requestUri = $"{accessToken.EdgeUri}api/v2/translations";
 			var query = BuildQuery(pairMapping, sourceXliff);
+			var content = new FormUrlEncodedContent(query);
 
-			var client = new HttpClient();
-			var request = new HttpRequestMessage(HttpMethod.Post, $"{accessToken.EdgeUri}api/v2/translations");
-			request.Headers.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
-			request.Content = new FormUrlEncodedContent(query);
-			var response = await client.SendAsync(request);
+			var response = await Service.SendRequest(accessToken, HttpMethod.Post, requestUri, content);
+			var translationRequestResponse = await DeserializeResponse<EdgeTranslationRequestResponse>(response);
+
+			return translationRequestResponse;
+		}
+
+		private static async Task<string> GetTranslation(AccessToken accessToken, string translationId)
+		{
+			var requestUri = $"{accessToken.EdgeUri}api/v2/translations/{translationId}/download";
+
+			var response = await Service.SendRequest(accessToken, HttpMethod.Get, requestUri);
+			response.EnsureSuccessStatusCode();
+			return await response.Content.ReadAsStringAsync();
+		}
+
+		private static async Task<EdgeTranslationStatus> GetTranslationStatus(AccessToken accessToken, string requestId)
+		{
+			var requestUri = $"{accessToken.EdgeUri}api/v2/translations/{requestId}";
+
+			var response = await Service.SendRequest(accessToken, HttpMethod.Get, requestUri);
 			response.EnsureSuccessStatusCode();
 
-			return await response.Content.ReadAsStringAsync();
+			var translationStatus = await DeserializeResponse<EdgeTranslationStatus>(response);
+			return translationStatus;
+		}
+
+		private static async Task WaitForTranslationCompletion(AccessToken accessToken, string translationId)
+		{
+			EdgeTranslationStatus translationStatus;
+			bool isWaiting;
+			do
+			{
+				translationStatus = await GetTranslationStatus(accessToken, translationId);
+				isWaiting = translationStatus.State != "done";
+				if (isWaiting)
+				{
+					await Task.Delay(1000);
+				}
+			} while (isWaiting);
+		}
+
+		public static async Task SendFeedback(AccessToken accessToken, Dictionary<string, string> feedback)
+		{
+			var requestUri = $"{accessToken.EdgeUri}api/v2/feedback";
+			var content = new FormUrlEncodedContent(feedback);
+
+			await Service.SendRequest(accessToken, HttpMethod.Post, requestUri, content);
+		}
+
+		private static async Task<T> DeserializeResponse<T>(HttpResponseMessage response)
+		{
+			var content = await response.Content.ReadAsStringAsync();
+			return JsonConvert.DeserializeObject<T>(content);
 		}
 
 		private static Dictionary<string, string> BuildQuery(PairMapping pairMapping, Xliff sourceXliff)
 		{
-			const string XliffMimeType = "application/x-xliff";
 			const string LanguagePairIdKey = "languagePairId";
 			const string InputKey = "input";
 			const string InputFormatKey = "inputFormat";
+			const string XliffMimeType = "application/x-xliff";
 			const string DictionaryIdsKey = "dictionaryIds";
 			const string LinguisticOptionsKey = "linguisticOptions";
 
@@ -318,17 +309,6 @@ namespace LanguageWeaverProvider.Services
 			}
 
 			return queryString;
-		}
-
-		public static async Task SendFeedback(AccessToken accessToken, List<KeyValuePair<string, string>> collection)
-		{
-			var client = new HttpClient();
-			var request = new HttpRequestMessage(HttpMethod.Post, $"{accessToken.EdgeUri}api/v2/feedback");
-			request.Headers.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
-			var content = new FormUrlEncodedContent(collection);
-			request.Content = content;
-			var response = await client.SendAsync(request);
-			response.EnsureSuccessStatusCode();
 		}
 
 		private static string Base64Encode(this string text)

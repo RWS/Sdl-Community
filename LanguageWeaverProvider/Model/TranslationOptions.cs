@@ -13,7 +13,7 @@ namespace LanguageWeaverProvider.Model.Options
 
 		public AuthenticationType AuthenticationType { get; set; }
 
-		public PluginVersion Version { get; set; }
+		public PluginVersion PluginVersion { get; set; }
 
 		[JsonIgnore]
 		public CloudCredentials CloudCredentials { get; set; }
@@ -37,7 +37,7 @@ namespace LanguageWeaverProvider.Model.Options
 
 		public void UpdateUri()
 		{
-			UpdateUri(Version);
+			UpdateUri(PluginVersion);
 		}
 
 		public void UpdateUri(PluginVersion pluginVersion)

@@ -11,7 +11,7 @@
 	{
 		None,
 		CloudCredentials,
-		CloudSecret,
+		CloudAPI,
 		CloudSSO,
 		EdgeCredentials,
 		EdgeApiKey,
