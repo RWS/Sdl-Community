@@ -37,7 +37,7 @@ namespace Sdl.Community.TermExcelerator
 
 		public string Name => Path.GetFileName(ProviderSettings.TermFilePath);
 		public string Description => PluginResources.ExcelTerminologyProviderDescription;
-		public string Id { get; }
+		public string Id { get; } = Guid.NewGuid().ToString();
 		public Uri Uri => new Uri((ExcelUriTemplate + Path.GetFileName(ProviderSettings.TermFilePath)).RemoveUriForbiddenCharacters());
 		public Definition Definition => new Definition(GetDescriptiveFields(), GetDefinitionLanguages());
 		public FilterDefinition ActiveFilter { get; set; }
@@ -158,7 +158,7 @@ namespace Sdl.Community.TermExcelerator
 				Log.Logger.Error($"LoadEntries Search: {ex.Message}\n {ex.StackTrace}");
 				throw ex;
 			}
-			return results;
+			return results.ToList();
 		}
 
 		public bool Initialize()
