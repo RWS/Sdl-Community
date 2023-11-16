@@ -9,19 +9,19 @@ namespace Sdl.Community.TermExcelerator.Tests.Helper
 {
     public class TestExcelLoader : IExcelTermLoaderService
     {
-        public async Task<Dictionary<int, ExcelTerm>> LoadTerms()
+        public Task<Dictionary<int, ExcelTerm>> LoadTerms()
         {
-            return new Dictionary<int, ExcelTerm>
+            return Task.FromResult(new Dictionary<int, ExcelTerm>
             {
-                {10,  SampleExcelTerm},
-                {22, new ExcelTerm{
-                    Source= "unaccountable",
-                    SourceCulture = CultureInfo.CreateSpecificCulture("en-US"),
-                    Target ="unerklärbar|unerfindlich",
-                    TargetCulture = CultureInfo.CreateSpecificCulture("de-De"),
-                    Approved = "Approved|Not approved"
-                } }
-            };
+	            {10,  SampleExcelTerm},
+	            {22, new ExcelTerm{
+		            Source= "unaccountable",
+		            SourceCulture = CultureInfo.CreateSpecificCulture("en-US"),
+		            Target ="unerklärbar|unerfindlich",
+		            TargetCulture = CultureInfo.CreateSpecificCulture("de-De"),
+		            Approved = "Approved|Not approved"
+	            } }
+            });
 
         }
 

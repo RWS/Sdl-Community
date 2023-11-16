@@ -29,7 +29,7 @@ namespace Sdl.Community.TermExcelerator.Tests
 
 			var worksheet = await excelTerminologyService.GetTerminologyWorksheet(excelPackage);
 
-			Assert.Equal(worksheet.Name, "Glossary");
+			Assert.Equal("Glossary", worksheet.Name);
 		}
 
 		[Fact]
@@ -41,7 +41,7 @@ namespace Sdl.Community.TermExcelerator.Tests
 			providerSettings.WorksheetName = "Worksheet";
 			var excelTerminologyService = new ExcelTermLoaderService(providerSettings);
 			var worksheet = await excelTerminologyService.GetTerminologyWorksheet(excelPackage);
-			Assert.Equal(worksheet, null);
+			Assert.Equal(null, worksheet);
 		}
 
 		[Theory]

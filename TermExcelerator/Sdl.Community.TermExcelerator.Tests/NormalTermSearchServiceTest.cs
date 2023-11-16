@@ -29,7 +29,7 @@ namespace Sdl.Community.TermExcelerator.Tests
             var results = termSearchService.Search(text, termEntries, 1);
 
             //assert
-            Assert.Equal(results.Count, 1);
+            Assert.Equal(1, results.Count);
             var actualResult = results.First();
             Assert.Equal(expectedId, actualResult.Id );
             Assert.Equal(providerSettings.SourceLanguage, 

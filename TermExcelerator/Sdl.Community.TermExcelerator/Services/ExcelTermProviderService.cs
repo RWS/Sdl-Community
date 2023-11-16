@@ -9,9 +9,9 @@ namespace Sdl.Community.TermExcelerator.Services
 	public class ExcelTermProviderService
 	{
 		private readonly IExcelTermLoaderService _excelTermLoaderService;
-		private readonly IEntryTransformerService _transformerService;
+		private readonly EntryTransformerService _transformerService;
 
-		public ExcelTermProviderService(IExcelTermLoaderService excelTermLoaderService, IEntryTransformerService transformerService)
+		public ExcelTermProviderService(IExcelTermLoaderService excelTermLoaderService, EntryTransformerService transformerService)
 		{
 			_excelTermLoaderService = excelTermLoaderService;
 			_transformerService = transformerService;

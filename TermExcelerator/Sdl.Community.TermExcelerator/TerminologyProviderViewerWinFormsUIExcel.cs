@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Sdl.Community.TermExcelerator.Model;
 using Sdl.Community.TermExcelerator.Ui;
+using Sdl.Core.Globalization;
 using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace Sdl.Community.TermExcelerator
@@ -18,6 +19,8 @@ namespace Sdl.Community.TermExcelerator
 		public event EventHandler<EntryEventArgs> SelectedTermChanged;
 
 		public event EventHandler TermChanged;
+
+		public bool IsEditing { get; }
 
 		public Control Control
 		{
@@ -35,9 +38,9 @@ namespace Sdl.Community.TermExcelerator
 
 		public bool Initialized => true;
 
-		public IEntry SelectedTerm { get; set; }
+		public Entry SelectedTerm { get; set; }
 
-		public void AddAndEditTerm(IEntry term, string source, string target)
+		public void AddAndEditTerm(Entry term, string source, string target)
 		{
 			var dataGrid = new ExcelData
 			{
@@ -48,22 +51,32 @@ namespace Sdl.Community.TermExcelerator
 			_control?.AddAndEdit(term, dataGrid);
 		}
 
+		public void CancelTerm()
+		{
+			
+		}
+
+		public void SaveTerm()
+		{
+			
+		}
+
 		public void AddTerm(string source, string target)
 		{
 			_control?.AddTerm(source, target);
 		}
 
-		public void EditTerm(IEntry term)
+		public void EditTerm(Entry term)
 		{
 		}
 
-		public void Initialize(ITerminologyProvider terminologyProvider, CultureInfo source, CultureInfo target)
+		public void Initialize(ITerminologyProvider terminologyProvider, CultureCode source, CultureCode target)
 		{
 			_terminologyProvider = (TerminologyProviderExcel)terminologyProvider;
 			Task.Run(_terminologyProvider.LoadEntries);
 		}
 
-		public void JumpToTerm(IEntry entry)
+		public void JumpToTerm(Entry entry)
 		{
 			_control?.JumpToTerm(entry);
 		}
@@ -73,6 +86,8 @@ namespace Sdl.Community.TermExcelerator
 			_control?.Dispose();
 			_terminologyProvider?.Dispose();
 		}
+
+		public bool CanAddTerm => true;
 
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
 		{

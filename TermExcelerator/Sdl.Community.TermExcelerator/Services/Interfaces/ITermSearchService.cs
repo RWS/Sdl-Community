@@ -6,6 +6,6 @@ namespace Sdl.Community.TermExcelerator.Services.Interfaces
 {
 	public interface ITermSearchService
     {
-        IList<ISearchResult> Search(string text, List<ExcelEntry> entries, int maxResultsCount);
+        IList<SearchResult> Search(string text, List<ExcelEntry> entries, int maxResultsCount);
     }
 }

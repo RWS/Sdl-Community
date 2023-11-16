@@ -17,16 +17,16 @@ namespace Sdl.Community.TermExcelerator.Services
 			_parser = parser;
 		}
 
-		public IList<IEntryLanguage> CreateEntryLanguages(ExcelTerm excelTerm)
+		public IList<EntryLanguage> CreateEntryLanguages(ExcelTerm excelTerm)
 		{
-			var result = new List<IEntryLanguage>();
+			var result = new List<EntryLanguage>();
 
 			var sourceEntryLanguage = new ExcelEntryLanguage
 			{
 				Locale = excelTerm.SourceCulture,
 				Name = excelTerm.SourceCulture.EnglishName,
 				Terms = CreateEntryTerms(excelTerm.Source),
-				Fields = new List<IEntryField>(),
+				Fields = new List<EntryField>(),
 				IsSource = true
 			};
 			result.Add(sourceEntryLanguage);
@@ -38,7 +38,7 @@ namespace Sdl.Community.TermExcelerator.Services
 					Locale = excelTerm.TargetCulture,
 					Name = excelTerm.TargetCulture.EnglishName,
 					Terms = CreateEntryTerms(excelTerm.Target, excelTerm.Approved),
-					Fields = new List<IEntryField>(),
+					Fields = new List<EntryField>(),
 					IsSource = false
 				};
 				result.Add(targetEntryLanguage);
@@ -46,9 +46,9 @@ namespace Sdl.Community.TermExcelerator.Services
 			return result;
 		}
 
-		public IList<IEntryField> CreateEntryTermFields(int index, IList<string> approvals)
+		public IList<EntryField> CreateEntryTermFields(int index, IList<string> approvals)
 		{
-			var result = new List<IEntryField>();
+			var result = new List<EntryField>();
 			if (approvals.Count == 0) return result;
 			if (index >= approvals.Count) return result;
 
@@ -62,7 +62,7 @@ namespace Sdl.Community.TermExcelerator.Services
 			return result;
 		}
 
-		public IList<IEntryTerm> CreateEntryTerms(string term, string approved = null)
+		public IList<EntryTerm> CreateEntryTerms(string term, string approved = null)
 		{
 			var terms = _parser.Parse(term);
 			var approvals = _parser.Parse(approved);
@@ -71,7 +71,7 @@ namespace Sdl.Community.TermExcelerator.Services
 			{
 				Fields = CreateEntryTermFields(i, approvals),
 				Value = t
-			}).Cast<IEntryTerm>().ToList();
+			}).Cast<EntryTerm>().ToList();
 		}
 
 		public ExcelEntry CreateExcelEntry(string source, string target, CultureInfo sourceLanguage, CultureInfo targetLanguage, int id = 0)
@@ -83,7 +83,7 @@ namespace Sdl.Community.TermExcelerator.Services
 			var excelEntry = new ExcelEntry
 			{
 				Id = id,
-				Fields = new List<IEntryField>(),
+				Fields = new List<EntryField>(),
 				Languages = entryLanguages,
 				SearchText = excelTerm.Source,
 				IsDirty = true
@@ -99,7 +99,7 @@ namespace Sdl.Community.TermExcelerator.Services
 			var excelEntry = new ExcelEntry
 			{
 				Id = id,
-				Fields = new List<IEntryField>(),
+				Fields = new List<EntryField>(),
 				Languages = entryLanguages,
 				SearchText = excelTerm.Source
 			};
