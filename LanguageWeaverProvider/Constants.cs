@@ -43,5 +43,9 @@
 		public const string Capitalization = "Capitalization";
 		public const string CapitalizationPunctuation = "Capitalization, punctuation";
 
+
+		// LW Cloud API Region
+		public static string CloudEUUrl = "https://api.languageweaver.com/";
+		public static string CloudUSUrl = "https://us.api.languageweaver.com/";
 	}
 }

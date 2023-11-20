@@ -136,13 +136,12 @@ namespace LanguageWeaverProvider.ViewModel.Edge
 			}
 
 			StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Connection_Loading_Connecting));
-			var edgeCredentials = new EdgeCredentials()
+			var edgeCredentials = new EdgeCredentials(Host)
 			{
 				UserName = Username,
 				Password = Password,
 				ApiKey = ApiKey
 			};
-			edgeCredentials.SetUri(Host);
 
 			(bool Success, Exception Error) response;
 			if (IsApiKeySelected)

@@ -20,6 +20,6 @@ namespace LanguageWeaverProvider.Model
 
 		public string AccountNickname { get; set; }
 
-		public Uri EdgeUri { get; set; }
+		public Uri BaseUri { get; set; }
 	}
 }

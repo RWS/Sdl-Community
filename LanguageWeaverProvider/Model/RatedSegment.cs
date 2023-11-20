@@ -15,5 +15,7 @@ namespace LanguageWeaverProvider.Model
 		public SegmentId SegmentId { get; set; }
 
 		public string TargetLanguageCode { get; set; }
+
+		public string FileName { get; set; }
 	}
 }

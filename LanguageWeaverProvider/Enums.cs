@@ -2,20 +2,20 @@
 {
 	public enum PluginVersion
 	{
-		None,
-		LanguageWeaverCloud,
-		LanguageWeaverEdge
+		None = 0,
+		LanguageWeaverCloud = 1,
+		LanguageWeaverEdge = 2
 	}
 
 	public enum AuthenticationType
 	{
-		None,
-		CloudCredentials,
-		CloudAPI,
-		CloudSSO,
-		EdgeCredentials,
-		EdgeApiKey,
-		EdgeSSO
+		None = 0,
+		CloudCredentials = 1,
+		CloudAPI = 2,
+		CloudSSO = 3,
+		EdgeCredentials = 4,
+		EdgeApiKey = 5,
+		EdgeSSO = 6
 	}
 
 	public enum Direction

@@ -4,6 +4,14 @@ namespace LanguageWeaverProvider.Model
 {
 	public class EdgeCredentials
     {
+		public EdgeCredentials(string uri)
+		{
+			Host = uri;
+			Uri = new Uri(uri);
+			Scheme = Uri.Scheme;
+			Port = Uri.Port.ToString();
+		}
+
 		public Uri Uri { get; set; }
 
 		public string Scheme { get; set; }
@@ -17,23 +25,5 @@ namespace LanguageWeaverProvider.Model
 		public string Password { get; set; }
 
 		public string ApiKey { get; set; }
-
-		public void SetUri(string uriString)
-		{
-			if (uriString is null)
-			{
-				return;
-			}
-
-			Host = uriString;
-			Uri = new Uri(uriString);
-			Scheme = Uri.Scheme;
-			Port = Uri.Port.ToString();
-		}
-
-		public void SetUri(Uri uri)
-		{
-			SetUri(uri.ToString());
-		}
     }
 }

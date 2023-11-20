@@ -9,11 +9,11 @@
 		mc:Ignorable="d"
 		d:DataContext="{d:DesignInstance {x:Type viewModel:CloudAuth0ViewModel}}"
 		Title="Language Weaver Browser"
-		Width="800"
-		Height="800">
+		Height="600"
+		Width="500">
 	<Grid>
 		<wpf:WebView2 Name="WebView2Browser"
 					  Loaded="WebView2Browser_OnLoaded"
-					  NavigationStarting="WebView2Browser_OnNavigationStarting" />
+					  NavigationStarting="WebView2Browser_OnNavigationStarting"/>
 	</Grid>
 </Window>

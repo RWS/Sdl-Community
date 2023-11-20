@@ -24,9 +24,10 @@ namespace LanguageWeaverProvider.BatchTask
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
 			var filePath = projectFile.LocalFilePath;
+			var fileName = System.IO.Path.GetFileName(filePath);
 
 			var languageCode = GetCurrentProjectLanguageCode(projectFile.Language.CultureInfo);
-			var ratedSegments = ApplicationInitializer.RatedSegments.Where(x => x.TargetLanguageCode == languageCode);
+			var ratedSegments = ApplicationInitializer.RatedSegments.Where(seg => seg.TargetLanguageCode == languageCode && seg.FileName.Equals(fileName));
 
 			var translationOriginData = new TranslationOriginData()
 			{
@@ -56,7 +57,8 @@ namespace LanguageWeaverProvider.BatchTask
 			var contentProcessor = new MetaDataProcessor(mtoList);
 			converter?.AddBilingualProcessor(new BilingualContentHandlerAdapter(contentProcessor));
 			converter?.Parse();
-			ApplicationInitializer.RatedSegments = new List<RatedSegment>();
+
+			ApplicationInitializer.RatedSegments = ApplicationInitializer.RatedSegments.Except(ratedSegments).ToList();
 		}
 
 		private string GetCurrentProjectLanguageCode(CultureInfo cultureInfo)

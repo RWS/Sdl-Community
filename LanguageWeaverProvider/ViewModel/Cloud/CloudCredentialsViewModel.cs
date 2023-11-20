@@ -148,8 +148,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		private async void SignIn(object parameter)
 		{
-			if (AuthenticationType == AuthenticationType.None
-			 || !CredentialsAreSet())
+			if (!CredentialsAreSet())
 			{
 				StopLoginProcess?.Invoke(this, EventArgs.Empty);
 				ErrorHandling.ShowDialog(null, PluginResources.Connection_Credentials, PluginResources.Connection_Error_NoCredentials);
@@ -175,11 +174,11 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				return;
 			}
 
-			var response = await CloudService.AuthenticateUser(TranslationOptions.CloudCredentials, TranslationOptions, AuthenticationType);
+			var response = await CloudService.AuthenticateUser(TranslationOptions.CloudCredentials, TranslationOptions, AuthenticationType, SelectedRegion);
 			if (!response.Success)
 			{
 				StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Connection_Error_FirstFail));
-				response = await CloudService.AuthenticateUser(TranslationOptions.CloudCredentials, TranslationOptions, AuthenticationType);
+				response = await CloudService.AuthenticateUser(TranslationOptions.CloudCredentials, TranslationOptions, AuthenticationType, SelectedRegion);
 				StopLoginProcess?.Invoke(this, EventArgs.Empty);
 				if (!response.Success)
 				{
@@ -193,7 +192,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		private void Auth0SignIn()
 		{
-			var auth0Config = new Auth0Config(ConnectionCode);
+			var auth0Config = new Auth0Config(ConnectionCode, SelectedRegion);
 			var cloudAuth0ViewModel = new CloudAuth0ViewModel(TranslationOptions, auth0Config);
 			var cloudAuth0View = new CloudAuth0View() { DataContext = cloudAuth0ViewModel };
 			cloudAuth0ViewModel.CloseAuth0Raised += () =>
@@ -261,6 +260,21 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			TranslationOptions.PluginVersion = PluginVersion.LanguageWeaverCloud;
 			TranslationOptions.UpdateUri();
 			CloseRequested?.Invoke(this, EventArgs.Empty);
+		}
+
+		private string _selectedRegion;
+
+		public string SelectedRegion
+		{
+			get { return _selectedRegion; }
+			set
+			{
+				if (_selectedRegion != value)
+				{
+					_selectedRegion = value;
+					OnPropertyChanged(nameof(SelectedRegion));
+				}
+			}
 		}
 	}
 }

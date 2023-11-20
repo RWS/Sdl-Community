@@ -53,7 +53,7 @@ namespace LanguageWeaverProvider.Services
 				SetAccessToken(translationOptions, encodedApiKey, "Basic", edgeCredentials.Uri);
 
 				var temporaryAccessToken = translationOptions.AccessToken;
-				var requestUri = $"{temporaryAccessToken.EdgeUri}api/v2/language-pairs";
+				var requestUri = $"{temporaryAccessToken.BaseUri}api/v2/language-pairs";
 
 				var response = await Service.SendRequest(temporaryAccessToken, HttpMethod.Get, requestUri);
 				response.EnsureSuccessStatusCode();
@@ -114,13 +114,13 @@ namespace LanguageWeaverProvider.Services
 		}
 
 		private static void SetAccessToken(ITranslationOptions translationOptions, string token, string tokenType, Uri edgeUri)
-			=> translationOptions.AccessToken = new() { Token = token, TokenType = tokenType, EdgeUri = edgeUri };
+			=> translationOptions.AccessToken = new() { Token = token, TokenType = tokenType, BaseUri = edgeUri };
 
 		public static async Task<List<PairModel>> GetLanguagePairs(AccessToken accessToken)
 		{
 			try
 			{
-				var requestUri = $"{accessToken.EdgeUri}api/v2/language-pairs";
+				var requestUri = $"{accessToken.BaseUri}api/v2/language-pairs";
 
 				var response = await Service.SendRequest(accessToken, HttpMethod.Get, requestUri);
 				var languagePairs = await DeserializeResponse<EdgeLanguagePairResult>(response);
@@ -144,6 +144,7 @@ namespace LanguageWeaverProvider.Services
 			}
 			catch (Exception ex)
 			{
+				ErrorHandling.ShowDialog(ex, "Language pairs", ex.Message, true);
 				return null;
 			}
 		}
@@ -152,7 +153,7 @@ namespace LanguageWeaverProvider.Services
 		{
 			try
 			{
-				var requestUri = $"{accessToken.EdgeUri}api/v2/dictionaries";
+				var requestUri = $"{accessToken.BaseUri}api/v2/dictionaries";
 				var response = await Service.SendRequest(accessToken, HttpMethod.Get, requestUri);
 				var content = await response.Content.ReadAsStringAsync();
 				var dictionaries = JsonConvert.DeserializeObject<EdgeDictionariesResponse>(content);
@@ -169,13 +170,14 @@ namespace LanguageWeaverProvider.Services
 			}
 			catch (Exception ex)
 			{
+				ErrorHandling.ShowDialog(ex, "Dictionaries", ex.Message, true);
 				return null;
 			}
 		}
 
 		public static async Task<bool> CreateDictionaryTerm(AccessToken accessToken, PairDictionary pairDictionary, List<KeyValuePair<string, string>> newDictionaryTerm)
 		{
-			var requestUri = $"{accessToken.EdgeUri}api/v2/dictionaries/{pairDictionary.DictionaryId}/term";
+			var requestUri = $"{accessToken.BaseUri}api/v2/dictionaries/{pairDictionary.DictionaryId}/term";
 			var content = new FormUrlEncodedContent(newDictionaryTerm);
 
 			var response = await Service.SendRequest(accessToken, HttpMethod.Post, requestUri, content);
@@ -208,7 +210,7 @@ namespace LanguageWeaverProvider.Services
 
 		private static async Task<EdgeTranslationRequestResponse> SendTranslationRequest(AccessToken accessToken, PairMapping pairMapping, Xliff sourceXliff)
 		{
-			var requestUri = $"{accessToken.EdgeUri}api/v2/translations";
+			var requestUri = $"{accessToken.BaseUri}api/v2/translations";
 			var query = BuildQuery(pairMapping, sourceXliff);
 			var content = new FormUrlEncodedContent(query);
 
@@ -220,7 +222,7 @@ namespace LanguageWeaverProvider.Services
 
 		private static async Task<string> GetTranslation(AccessToken accessToken, string translationId)
 		{
-			var requestUri = $"{accessToken.EdgeUri}api/v2/translations/{translationId}/download";
+			var requestUri = $"{accessToken.BaseUri}api/v2/translations/{translationId}/download";
 
 			var response = await Service.SendRequest(accessToken, HttpMethod.Get, requestUri);
 			response.EnsureSuccessStatusCode();
@@ -229,7 +231,7 @@ namespace LanguageWeaverProvider.Services
 
 		private static async Task<EdgeTranslationStatus> GetTranslationStatus(AccessToken accessToken, string requestId)
 		{
-			var requestUri = $"{accessToken.EdgeUri}api/v2/translations/{requestId}";
+			var requestUri = $"{accessToken.BaseUri}api/v2/translations/{requestId}";
 
 			var response = await Service.SendRequest(accessToken, HttpMethod.Get, requestUri);
 			response.EnsureSuccessStatusCode();
@@ -255,7 +257,7 @@ namespace LanguageWeaverProvider.Services
 
 		public static async Task SendFeedback(AccessToken accessToken, Dictionary<string, string> feedback)
 		{
-			var requestUri = $"{accessToken.EdgeUri}api/v2/feedback";
+			var requestUri = $"{accessToken.BaseUri}api/v2/feedback";
 			var content = new FormUrlEncodedContent(feedback);
 
 			await Service.SendRequest(accessToken, HttpMethod.Post, requestUri, content);

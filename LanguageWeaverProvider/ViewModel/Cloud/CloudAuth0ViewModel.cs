@@ -26,7 +26,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		public async void Navigated(string uri)
 		{
-			var (success, error) = await CloudService.AuthenticateSSOUser(_translationOptions, Auth0Config, new Uri(uri));
+			var (success, error) = await CloudService.AuthenticateSSOUser(_translationOptions, Auth0Config, new Uri(uri), Auth0Config.PortalRegion);
 			IsConnected = success;
 			if (!success)
 			{
