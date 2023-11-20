@@ -59,9 +59,9 @@
       <HintPath Condition="Exists('$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Newtonsoft.Json.dll')">$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
-	    <HintPath Condition="Exists('$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\NLog.dll')">$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\NLog.dll</HintPath>
-	    <HintPath Condition="Exists('$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17Beta\NLog.dll')">$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17Beta\NLog.dll</HintPath>
-	    <HintPath Condition="Exists('$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\NLog.dll')">$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\NLog.dll</HintPath>
+      <HintPath Condition="Exists('$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\NLog.dll')">$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\NLog.dll</HintPath>
+      <HintPath Condition="Exists('$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17Beta\NLog.dll')">$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17Beta\NLog.dll</HintPath>
+      <HintPath Condition="Exists('$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\NLog.dll')">$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\NLog.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Versioning">
       <HintPath Condition="Exists('$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Versioning.dll')">$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Versioning.dll</HintPath>

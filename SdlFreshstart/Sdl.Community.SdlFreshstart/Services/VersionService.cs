@@ -109,7 +109,7 @@ namespace Sdl.Community.SdlFreshstart.Services
 				{
 					var folderName = string.Format(possibleVersion, versionName, executableVersion.Minor,
 						executableVersion.Build);
-					folderPath = Path.Combine(_packageCacheSdl, folderName);
+					folderPath = Path.Combine(_packageCacheTrados, folderName);
 					if (Directory.Exists(folderPath)) return folderPath;
 				}
 			}
