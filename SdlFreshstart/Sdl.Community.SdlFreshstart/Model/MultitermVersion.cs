@@ -20,7 +20,7 @@ namespace Sdl.Community.SdlFreshstart.Model
 			get
 			{
 				var yearOfVersion = Regex.Match(PublicVersion, @"\d+").Value;
-				return $"SDLMultiTermDesktop{yearOfVersion}";
+				return $"MultiTermDesktop{yearOfVersion}";
 			}
 		}
 
