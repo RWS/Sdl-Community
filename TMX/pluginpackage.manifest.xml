@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>File type definition for TMX</PlugInName>
-  <Version>3.0.2.0</Version>
+  <Version>3.1.0.0</Version>
   <Description>Open TMX files as translatable files in Trados Studio.</Description>
   <Author>Trados AppStore Team</Author>
-  <RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
+  <RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9" />
 </PluginPackage>
