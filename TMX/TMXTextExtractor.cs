@@ -101,9 +101,9 @@ namespace Sdl.Community.FileType.TMX
 
         public void VisitTagPair(ITagPair tagPair)
         {
-            PlainText.Append("<" + tagPair.StartTagProperties.TagContent + ">");
+            PlainText.Append(tagPair.StartTagProperties.TagContent);
             VisitChildren(tagPair);
-            PlainText.Append("</" + tagPair.EndTagProperties.TagContent + ">");
+            PlainText.Append(tagPair.EndTagProperties.TagContent);
         }  
 
         #region "left empty"

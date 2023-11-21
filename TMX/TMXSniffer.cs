@@ -1,11 +1,12 @@
-﻿using System.Xml;
+﻿using System.Globalization;
+using System.Xml;
 using Sdl.Core.Globalization;
 using Sdl.Core.Settings;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace Sdl.Community.FileType.TMX
 {
-    class TMXSniffer : INativeFileSniffer
+	class TMXSniffer : INativeFileSniffer
     {
 
         static string _BilingualDocument = "tmx";
@@ -68,18 +69,28 @@ namespace Sdl.Community.FileType.TMX
         {
             XmlDocument doc = new XmlDocument();
 
-            
-            doc.Load(nativeFilePath);
+			doc.Load(nativeFilePath);
             string tmxSource = doc.SelectSingleNode("tmx/header/@srclang").InnerText;
+			CultureInfo sourceLanguage;
+			try // currently LegacySdlxLanguage initialization fails first time
+			{
+				sourceLanguage = LegacySdlxLanguage.GetCultureInfoFromIsoCode(tmxSource);
+			}
+			catch
+			{
+				sourceLanguage = LegacySdlxLanguage.GetCultureInfoFromIsoCode(tmxSource);
+			}
 
-            info.DetectedSourceLanguage =
-                new Sdl.FileTypeSupport.Framework.Pair<Language, DetectionLevel>(new Language(tmxSource), DetectionLevel.Certain); 
+			info.DetectedSourceLanguage =
+                new Sdl.FileTypeSupport.Framework.Pair<Language, DetectionLevel>(new Language(sourceLanguage), DetectionLevel.Certain); 
 
             if (doc.SelectSingleNode("tmx/body/tu[1]/tuv[2]").Attributes[0] != null && 
                 doc.SelectSingleNode("tmx/body/tu[1]/tuv[2]").Attributes[0].InnerText.Length==5)
             {
                 string tmxTarget = doc.SelectSingleNode("tmx/body/tu[1]/tuv[2]").Attributes[0].InnerText;
-                info.DetectedTargetLanguage = new Sdl.FileTypeSupport.Framework.Pair<Language, DetectionLevel>(new Language(tmxTarget), 
+				var targetLanguage = LegacySdlxLanguage.GetCultureInfoFromIsoCode(tmxTarget);
+
+				info.DetectedTargetLanguage = new Sdl.FileTypeSupport.Framework.Pair<Language, DetectionLevel>(new Language(targetLanguage), 
                     DetectionLevel.Certain);
             }
         }
