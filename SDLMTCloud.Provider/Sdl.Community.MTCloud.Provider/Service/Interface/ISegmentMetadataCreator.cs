@@ -1,5 +1,4 @@
-﻿using Sdl.Community.MTCloud.Provider.Model;
-using Sdl.Community.MTCloud.Provider.Model.RateIt;
+﻿using Sdl.Community.MTCloud.Provider.Model.RateIt;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.MTCloud.Provider.Service.Interface

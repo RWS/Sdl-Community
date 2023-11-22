@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Sdl.Community.StudioViews.Model;
-using Trados.Community.Toolkit.LanguagePlatform;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.Versioning;
 
@@ -15,11 +14,13 @@ namespace Sdl.Community.StudioViews.Services
 		private readonly SegmentBuilder _segmentBuilder;
 		private readonly List<string> _projectFilesFiltered;
 		private readonly List<string> _subSegmentParagraphUnitIds;
+		private readonly Action<string, int, int> _progressLogger;
+		private readonly WordCountProvider _wordCountProvider;
 		private IFileProperties _fileProperties;
-		private string _productName;
-		private SegmentPairProcessor _segmentPairProcessor;
-		
-		public ContentExporter(List<SegmentPairInfo> selectedSegments, SegmentBuilder segmentBuilder)
+	
+
+		public ContentExporter(List<SegmentPairInfo> selectedSegments, SegmentBuilder segmentBuilder, WordCountProvider wordCountProvider,
+			 Action<string, int, int> progressLogger)
 		{
 			_selectedSegments = selectedSegments;
 			_segmentBuilder = segmentBuilder;
@@ -27,6 +28,9 @@ namespace Sdl.Community.StudioViews.Services
 			_projectFilesFiltered = new List<string>();
 			_subSegmentParagraphUnitIds = new List<string>();
 			SegmentPairInfos = new List<SegmentPairInfo>();
+
+			_progressLogger = progressLogger;
+			_wordCountProvider = wordCountProvider;
 		}
 
 		public List<SegmentPairInfo> SegmentPairInfos { get; }
@@ -52,25 +56,27 @@ namespace Sdl.Community.StudioViews.Services
 		{
 			if (paragraphUnit.IsStructure)
 			{
-
-				UpdateParagraphUnit(paragraphUnit);
 				return;
 			}
 
 			if (!paragraphUnit.SegmentPairs.Any())
 			{
+				UpdateParagraphUnit(paragraphUnit);
 				return;
 			}
 
 			var segmentPairs = new List<ISegmentPair>();
 			foreach (var segmentPair in paragraphUnit.SegmentPairs)
 			{
-				if (_subSegmentParagraphUnitIds.Contains(paragraphUnit.Properties.ParagraphUnitId.Id) ||
-					_selectedSegments.Exists(a =>
+				var selectedSegment = _selectedSegments.FirstOrDefault(a =>
 					a.ParagraphUnitId == paragraphUnit.Properties.ParagraphUnitId.Id &&
-					a.SegmentId == segmentPair.Properties.Id.Id))
+					a.SegmentId == segmentPair.Properties.Id.Id);
+				if (_subSegmentParagraphUnitIds.Contains(paragraphUnit.Properties.ParagraphUnitId.Id) ||
+					selectedSegment != null)
 				{
 					segmentPairs.Add(segmentPair);
+
+					_progressLogger.Invoke("Exporting segments", SegmentPairInfos.Count, _selectedSegments.Count);
 
 					var subSegmentParagraphUnitIds = GetSubSegmentParagraphUnitIds(segmentPair);
 					foreach (var paragraphUnitId in subSegmentParagraphUnitIds.Where(paragraphUnitId =>
@@ -90,7 +96,9 @@ namespace Sdl.Community.StudioViews.Services
 
 					try
 					{
-						segmentPairInfo.SourceWordCounts = SegmentPairProcessor.GetSegmentPairInfo(segmentPair)?.SourceWordCounts;
+						segmentPairInfo.SourceWordCounts = selectedSegment != null 
+							? selectedSegment.SourceWordCounts 
+							: _wordCountProvider.GetWordCounts(segmentPair.Source, SourceLanguage);
 					}
 					catch
 					{
@@ -205,49 +213,6 @@ namespace Sdl.Community.StudioViews.Services
 			}
 
 			base.ProcessParagraphUnit(paragraphUnit);
-		}
-
-		private SegmentPairProcessor SegmentPairProcessor
-		{
-			get
-			{
-				if (_segmentPairProcessor != null)
-				{
-					return _segmentPairProcessor;
-				}
-
-				if (SourceLanguage == null || TargetLanguage == null)
-				{
-					throw new Exception(
-						string.Format(PluginResources.Error_Message_Unable_To_Parse_File_Language_Null, SourceLanguage == null
-							? "Source" : "Target"));
-				}
-
-				var productName = GetProductName();
-				var pathInfo = new Trados.Community.Toolkit.LanguagePlatform.Models.PathInfo(productName);
-
-				_segmentPairProcessor = new SegmentPairProcessor(
-					new Trados.Community.Toolkit.LanguagePlatform.Models.Settings(SourceLanguage, TargetLanguage), pathInfo);
-
-				return _segmentPairProcessor;
-			}
-		}
-
-		private string GetProductName()
-		{
-			if (!string.IsNullOrEmpty(_productName))
-			{
-				return _productName;
-			}
-
-			var studioVersionService = new StudioVersionService();
-			var studioVersion = studioVersionService.GetStudioVersion();
-			if (studioVersion != null)
-			{
-				_productName = studioVersion.StudioDocumentsFolderName;
-			}
-
-			return _productName;
 		}
 	}
 }

@@ -7,6 +7,7 @@ using System.Xml;
 using Sdl.Core.Globalization;
 using Sdl.MultiTerm.TMO.Interop;
 using Sdl.ProjectAutomation.Core;
+using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Application = Sdl.MultiTerm.TMO.Interop.Application;
 using Termbase = Sdl.MultiTerm.TMO.Interop.Termbase;
@@ -15,11 +16,21 @@ namespace Sdl.Community.RapidAddTerm
 {
 	public class TermbaseService
 	{
+		private ProjectsController _projectsController = null;
+		private EditorController _editorController = null;
+
+		private ProjectsController ProjectsController => _projectsController ?? (_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>());
+		private EditorController EditorController => _editorController ?? (_editorController = SdlTradosStudio.Application.GetController<EditorController>());
+
+		private FileBasedProject GetProject() => ProjectsController.CurrentProject;
+		private TermbaseConfiguration GetTermbaseConfiguration() => GetProject()?.GetTermbaseConfiguration();
+
+		private IStudioDocument GetActiveDocument() => EditorController.ActiveDocument;
 		public void AddNewTerm()
 		{
-			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-			var activeDocument = editorController?.ActiveDocument;
-			if (activeDocument == null) return;
+			var activeDocument = GetActiveDocument();
+			if (activeDocument == null) 
+				return;
 
 			var sourceSelection = activeDocument.Selection?.Source?.ToString().TrimStart().TrimEnd();
 			var targetSelection = activeDocument.Selection?.Target?.ToString().TrimStart().TrimEnd();
@@ -29,23 +40,24 @@ namespace Sdl.Community.RapidAddTerm
 				var targetLanguage = activeDocument.ActiveFile?.Language;
 
 				// Add concept to default termbase for source and target language of active file
-				var defaultTermbasePath = GetTermbasePath();
-				var languageIndexes = GetDefaultTermbaseConfiguration().LanguageIndexes;
-				if (!string.IsNullOrEmpty(defaultTermbasePath))
+				var termbasePath = GetTermbasePath();
+				var languageIndexes = GetTermbaseConfiguration().LanguageIndexes;
+				if (!string.IsNullOrEmpty(termbasePath))
 				{
-					var sourceIndexName = GetTermbaseIndex(languageIndexes, sourceLanguage);
+					var termbase = GetTermbase(termbasePath);
+					var sourceIndexName = GetTermbaseIndex(termbase, languageIndexes, sourceLanguage);
 					var sourceLanguageCode = GetLanguageCode(sourceIndexName, sourceLanguage);
 
-					var targetIndexName = GetTermbaseIndex(languageIndexes, targetLanguage);
+					var targetIndexName = GetTermbaseIndex(termbase, languageIndexes, targetLanguage);
 					var targetLanguageCode = GetLanguageCode(targetIndexName,targetLanguage);
 						
-					var sourceEntry = SearchEntries(defaultTermbasePath, sourceSelection, sourceIndexName);
-					var targetEntries = SearchTargetEntries(defaultTermbasePath, targetSelection, targetIndexName);
+					var sourceEntry = SearchEntries(termbasePath, sourceSelection, sourceIndexName);
+					var targetEntries = SearchTargetEntries(termbasePath, targetSelection, targetIndexName);
 					targetSelection = SecurityElement.Escape(targetSelection);
 					sourceSelection = SecurityElement.Escape(sourceSelection);
 					if (sourceEntry != null)
 					{
-						var targetAlreadyExists = TargetAlreadyAdded(targetEntries, sourceEntry.ID);
+						var targetAlreadyExists = IsTargetAlreadyAdded(targetEntries, sourceEntry.ID);
 						if (targetAlreadyExists)
 						{
 							MessageBox.Show(@"The term you are trying to add already exists", @"Duplicate", MessageBoxButtons.OK,
@@ -56,7 +68,7 @@ namespace Sdl.Community.RapidAddTerm
 					}
 					else
 					{
-						var entries = GetTermbaseEntries(defaultTermbasePath);
+						var entries = GetTermbaseEntries(termbasePath);
 						var entryText =
 							$"<conceptGrp><languageGrp><language type=\"{sourceIndexName}\" lang=\"{sourceLanguageCode}\"></language><termGrp><term>{sourceSelection}</term></termGrp></languageGrp><languageGrp><language type=\"{targetIndexName}\" lang=\"{targetLanguageCode}\"></language><termGrp><term>{targetSelection}</term></termGrp></languageGrp></conceptGrp>";
 						entries.New(entryText, false);
@@ -69,18 +81,23 @@ namespace Sdl.Community.RapidAddTerm
 					MessageBoxIcon.Exclamation);
 			}
 		}
-		private  string GetTermbaseIndex(List<TermbaseLanguageIndex> termbaseIndexes, Language currentLanguage)
+
+		private static bool IsLanguage(Index index, Language language)
 		{
-			if (!termbaseIndexes.Any()) return string.Empty;
+			return index.Locale.ToLower() == language.CultureInfo.TwoLetterISOLanguageName.ToLower();
+		}
+		private  string GetTermbaseIndex(Termbase termbase, List<TermbaseLanguageIndex> projectTermbaseIndexes, Language currentLanguage)
+		{
+			// https://jira.sdl.com/browse/SDLCOM-3794 - always prefer language code from the termbase file, if possible
+			var termbaseIndex = termbase.Definition.Indexes.OfType<Index>().FirstOrDefault(i => IsLanguage(i, currentLanguage));
+			if (termbaseIndex != null)
+				return termbaseIndex.Label;
+
+			if (!projectTermbaseIndexes.Any()) return string.Empty;
 			if (currentLanguage == null) return string.Empty;
 
-			var termbaseIndex =
-				termbaseIndexes.FirstOrDefault(t => t.ProjectLanguage.CultureInfo.Name.Equals(currentLanguage.CultureInfo.Name));
-			if (termbaseIndex != null)
-			{
-				return termbaseIndex.TermbaseIndex;
-			}
-			return string.Empty;
+			var projectTermbaseIndex = projectTermbaseIndexes.FirstOrDefault(t => t.ProjectLanguage.CultureInfo.Name.Equals(currentLanguage.CultureInfo.Name));
+			return projectTermbaseIndex?.TermbaseIndex ?? string.Empty;
 		}
 
 		private bool IsSubLanguage(string languageName)
@@ -97,17 +114,10 @@ namespace Sdl.Community.RapidAddTerm
 			return language.CultureInfo.TwoLetterISOLanguageName.ToUpper();
 		}
 
-		private TermbaseConfiguration GetDefaultTermbaseConfiguration()
-		{
-			var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-			var activeProject = projectsController?.CurrentProject;
-
-			return activeProject?.GetTermbaseConfiguration();
-		}
 
 		private string GetTermbasePath()
 		{
-			var termbConfig = GetDefaultTermbaseConfiguration();
+			var termbConfig = GetTermbaseConfiguration();
 			var termbaseSettingsXml = termbConfig?.Termbases.FirstOrDefault()?.SettingsXML;
 			if (!string.IsNullOrEmpty(termbaseSettingsXml))
 			{
@@ -239,7 +249,7 @@ namespace Sdl.Community.RapidAddTerm
 			entry.Save();
 		}
 
-		private bool TargetAlreadyAdded(List<Entry> targetEntries, int parentId)
+		private bool IsTargetAlreadyAdded(List<Entry> targetEntries, int parentId)
 		{
 			var exists = targetEntries.Exists(e => e.ID.Equals(parentId));
 			return exists;

@@ -11,15 +11,15 @@ namespace Sdl.Community.TMBackup.TMBackupTellMe
 		{
 			new SDLTMBackupSupportAction
 			{
-				Keywords = new []{ "trados tm backup", "trados tm backup community", "trados tm backup support" }
+				Keywords = new []{ "trados", "tm", "backup", "community", "support", "forum" }
 			},
 			new SDLTMBackupHelpAction
 			{
-				Keywords = new []{ "trados tm backup", "trados tm backup help", "trados tm backup guide" }
+				Keywords = new []{ "trados", "tm", "backup", "help", "community", "support", "wiki" }
 			},
 			new SDLTMBackupStoreAction
 			{
-				Keywords = new []{ "trados tm backup", "trados tm backup store", "trados tm backup download" }
+				Keywords = new []{ "trados", "tm", "backup", "store", "download", "appstore" }
 			}
 		};
 	}

@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
+using NLog;
 using Sdl.Core.Globalization;
 using Sdl.Core.PluginFramework;
 using Sdl.Core.Settings;
@@ -29,11 +32,13 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 	[Shortcut(Keys.Control | Keys.Alt | Keys.T)]
 	public class ApplyStudioProjectTemplateAction : AbstractViewControllerAction<ProjectsController>
 	{
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		/// <summary>
 		/// Executes this instance.
 		/// </summary>
 		protected override void Execute()
 		{
+			string methodName = "Execute";
 			var grammarCheckerSettingsId = "GrammarCheckerSettings";
 			var numberVerifierSettingsId = "NumberVerifierSettings";
 			var globalVerifiersExtensionPoint = PluginManager.DefaultPluginRegistry.GetExtensionPoint<GlobalVerifierAttribute>();
@@ -78,6 +83,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 				// Work through all projects
 				var projectsList = new StringBuilder();
 				projectsList.AppendLine(PluginResources.Settings_Applied);
+				
 				foreach (var targetProject in selectedProjects)
 				{
 					// Temporary folder path
@@ -492,21 +498,95 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					// Use reflection to synch the project to the server
 					try
 					{
-						targetProject.Save();
+						_logger.Info("Method: {methodName}, Target Project: {@TargetProject}",
+								methodName, targetProject);
+						// re-analyze files, otherwise, everything would be "n/a" (SDLCOM-4268)
+						/*
+						 * var targetIds = targetProject.GetTargetLanguageFiles().Select(f => f.Id).ToArray();
+						 * targetProject.RunAutomaticTask(targetIds, AutomaticTaskTemplateIds.AnalyzeFiles);
+						 * targetProject.Save();
+						*/
+						// run analyze and pre-translating batch tasks (SDLCOM-4714)
+						if (applyTemplateForm.RunAnalysisBatchTaskFlag || applyTemplateForm.RunPreTranslateBatchTaskFlag)
+						{
+							_logger.Info("Method: {methodName}, RunAnalysisBatchTaskFlag: {RunAnalysisBatchTaskFlag}, RunPreTranslateBatchTaskFlag: {RunPreTranslateBatchTaskFlag}",
+								methodName, applyTemplateForm.RunAnalysisBatchTaskFlag, applyTemplateForm.RunPreTranslateBatchTaskFlag);
+							var targetIds = targetProject.GetTargetLanguageFiles().Select(f => f.Id).ToArray();
+							// run automatic task for analyze files
+							if (applyTemplateForm.RunAnalysisBatchTaskFlag)
+							{								
+								var objAnalysisAutomaticTask = targetProject.RunAutomaticTask(targetIds, AutomaticTaskTemplateIds.AnalyzeFiles);
+								if (objAnalysisAutomaticTask != null)
+								{
+									if (objAnalysisAutomaticTask.Status == TaskStatus.Completed)
+									{
+										targetProject.Save();
+									}
+									_logger.Info("Method: {methodName}, Analysis Automatic Task Status: {Status}",
+										methodName, objAnalysisAutomaticTask.Status);
+								}
+								_logger.Info("Method: {methodName}, Analysis Automatic Task: {@objAnalysisAutomaticTask}",
+											methodName, objAnalysisAutomaticTask);
+								// Copy automation analysis batch task
+								if (selectedTemplate.AnalysisBatchTask != ApplyTemplateOptions.Keep)
+								{
+									try
+									{
+										CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "AnalysisTaskSettings", targetProject);
+									}
+									catch (Exception e)
+									{
+										MessageBox.Show(e.Message, PluginResources.AABT_Failed, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+									}
+								}
+							}
+							// run automatic task for pre translate files
+							if (applyTemplateForm.RunPreTranslateBatchTaskFlag)
+							{
+								var objPreTranslateAutomaticTask = targetProject.RunAutomaticTask(targetIds, AutomaticTaskTemplateIds.PreTranslateFiles);
+								if (objPreTranslateAutomaticTask != null)
+								{
+									if (objPreTranslateAutomaticTask.Status == TaskStatus.Completed)
+									{
+										targetProject.Save();
+									}
+									_logger.Info("Method: {methodName}, Pre-Translate Automatic Task Status: {Status}",
+									methodName, objPreTranslateAutomaticTask.Status);
+								}
+								_logger.Info("Method: {methodName}, Pre-Translate Automatic Task: {@objPreTranslateAutomaticTask}",
+										methodName, objPreTranslateAutomaticTask);
+								// Copy automation pre translate batch task
+								if (selectedTemplate.PreTranslateBatchTask != ApplyTemplateOptions.Keep)
+								{
+									try
+									{
+										CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "TranslateTaskSettings", targetProject);
+									}
+									catch (Exception e)
+									{
+										MessageBox.Show(e.Message, PluginResources.APTBT_Failed, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+									}
+								}
+							}
 
-						var project = typeof(FileBasedProject).GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(targetProject);
-						var updateServerMethod = project.GetType().GetMethod("ExecuteOperation");
+						}
+
+						var updateServerMethod = targetProject.GetType().GetMethod("ExecuteOperation");
 						//For GS projects
-						updateServerMethod?.Invoke(project, new object[] { "UpdateServerProjectSettingsOperation", new object[] { true } });
+						updateServerMethod?.Invoke(targetProject, new object[] { "UpdateServerProjectSettingsOperation", new object[] { true } });
 						//For LC projects
-						updateServerMethod?.Invoke(project, new object[] { "SynchronizeServerProjectDataOperation", new object[] { null } });
+						updateServerMethod?.Invoke(targetProject, new object[] { "SynchronizeServerProjectDataOperation", new object[] { null } });
 					}
 					catch (Exception e)
 					{
 						Console.Write(e);
+						_logger.Error("Method: {methodName}, Exception: {@ex}", methodName, e);
+						throw;
 					}
 				}
+
 				Controller.RefreshProjects();
+
 				// Tell the user we're done
 				MessageBox.Show(projectsList.ToString(), PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
@@ -525,15 +605,15 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 				CopySettingsFuzzyBands(sourceProject, targetProject);
 		}
 
-	
+
 		private void CopySettingsFuzzyBands(FileBasedProject sourceProject, FileBasedProject targetProject)
 		{
-			
+
 			var sourceAnalysisBandsAsIntsx = GetAnalysisBandsAsIntArray(GetProjectUsingReflection(sourceProject));
 			var internalTargetProject = GetProjectUsingReflection(targetProject);
 			var setAnalysisBandsMethod = internalTargetProject.GetType().GetMethod("SetAnalysisBands");
 			//update the FuzzyBands
-			setAnalysisBandsMethod?.Invoke(internalTargetProject, new object[]{sourceAnalysisBandsAsIntsx});
+			setAnalysisBandsMethod?.Invoke(internalTargetProject, new object[] { sourceAnalysisBandsAsIntsx });
 		}
 
 
@@ -572,22 +652,22 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 		private AnalysisBand[] GetAnalysisBandsValues(dynamic internalDynamicProject)
 		{
 			var analysisList = internalDynamicProject?.AnalysisBands;
-			
+
 			if (analysisList != null)
 			{
 				var result = new AnalysisBand[analysisList.Length];
-				
-				for (var i=0;i< analysisList.Length-1;i++)
+
+				for (var i = 0; i < analysisList.Length - 1; i++)
 				{
-					result[i]=analysisList[i] as AnalysisBand;
-					
+					result[i] = analysisList[i] as AnalysisBand;
+
 				}
 			}
 
-			
+
 			return null;
 		}
-	
+
 
 		#endregion FuzzyBands 
 

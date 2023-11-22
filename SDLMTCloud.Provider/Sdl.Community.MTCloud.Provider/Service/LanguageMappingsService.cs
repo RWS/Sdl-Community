@@ -134,7 +134,8 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					MTCloudLanguagePair = model,
 					DisplayName = $"{model.SourceLanguageId}-{model.TargetLanguageId} {model.DisplayName}",
 					Source = source,
-					Target = target
+					Target = target,
+					LinguisticOptions = SetLinguisticOptions(model.Name)
 				});
 			}
 
@@ -147,10 +148,37 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					DisplayName = PluginResources.Message_No_model_available,
 					Source = source,
 					Target = target
+
 				});
 			}
 
 			return translationModels;
+		}
+
+		private List<LinguisticOption> SetLinguisticOptions(string modelName)
+		{
+			var result = Task.Run(async () => await _translationService.GetLinguisticOptions(modelName)).Result;
+			var availableLinguisticOptions = result?.AvailableLinguisticOptions;
+			if (availableLinguisticOptions is null || !availableLinguisticOptions.Any())
+			{
+				return null;
+			}
+
+			if (!availableLinguisticOptions.Any())
+			{
+				return null;
+			}
+
+			foreach (var linguisticOption in availableLinguisticOptions)
+			{
+				if (linguisticOption.Name == "QualityEstimation")
+				{
+					linguisticOption.SystemDefault = linguisticOption.Values.FirstOrDefault(x => x == "Enabled");
+					linguisticOption.SelectedValue = linguisticOption.Values.FirstOrDefault(x => x == "Enabled");
+				}
+			}
+
+			return availableLinguisticOptions;
 		}
 
 		private static Image SetLanguageFlag(CultureInfo cultureInfo)

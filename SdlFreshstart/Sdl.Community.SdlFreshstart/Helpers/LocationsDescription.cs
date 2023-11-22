@@ -14,12 +14,12 @@
 				"\n ";
 
 		public static string RoamingPluginsFolder =>
-			"This location contains the sdlplugins you have installed from the RWS AppStore that are intended to be used by one user and should be available to that user on any machine they log into under that same userprofile.  The plugins folder contains two folders:" +
+			"This location contains the sdlplugins you have installed from the Trados AppStore that are intended to be used by one user and should be available to that user on any machine they log into under that same userprofile.  The plugins folder contains two folders:" +
 			"\n - Packages: this is where the sdlplugin files are saved when they are installed" +
 			"\n - Unpacked: sdlplugin files are essentially zip files and the unzipped versions and unpacked in this folder when Trados Studio starts" +
 			"\n If you want to replace all your plugins quickly then back up the content of your 'Packages' folder first so you only have to copy them back afterwards.  You don't need to, and in fact should not, back up the 'Unpacked' folder.";
 
-		public static string ProjectApiPath => "This folder contains one file, Sdl.ProjectApi.xml, which contains information relating to the location of local project folders. This is only the default since today Studio can be configured by the user to store projects wherever you like through the use of the project templates.  So unless you manually edited this file it seems unlikely that deleting it will cause any cause for concern.";
+		public static string ProjectApiPath => "The file Sdl.ProjectApi.xml contains information relating to the location of local project folders. This is only the default since today Studio can be configured by the user to store projects wherever you like through the use of the project templates.  So unless you manually edited this file it seems unlikely that deleting it will cause any cause for concern.";
 
 		public static string GeneralSettingsFolder =>
 			"This folder is the most likely reason for a fresh start when working with Trados Studio. It contains several things." +
@@ -30,7 +30,7 @@
 			"\n - Settings.xml: if you have added any server connections, Translation Memories or Termbases for example, then the URL is held in here.  Credentials for logging in are not held here as they are encrypted elsewhere in the software. Deleting this file means you are going to lose all the connections you had and they need to be added again. " +
 			"\n - plugincache.xml: can be used to deactivate plug-ins by default. If certain plug-ins you expect to be working are not, then one reason might be that the plugin cache has been configured to disable them by default.";
 
-		public static string LocalPluginsFolder => "This location contains the sdlplugins you have installed from the RWS AppStore that are intended to be used by one user on one machine. They will not be available to that user on another machine even if logged in with the same userprofile.  The plugins folder contains two folders:" +
+		public static string LocalPluginsFolder => "This location contains the sdlplugins you have installed from the Trados AppStore that are intended to be used by one user on one machine. They will not be available to that user on another machine even if logged in with the same userprofile.  The plugins folder contains two folders:" +
 				"\n - Packages: this is where the sdlplugin files are saved when they are installed" +
 				"\n - Unpacked: sdlplugin files are essentially zip files and the unzipped versions and unpacked in this folder when Studio starts" +
 				"\n If you want to replace all your plugins quickly then back up the content of your 'Packages' folder first so you only have to copy them back afterwards.  You don't need to, and in fact should not, back up the 'Unpacked' folder.";
@@ -38,7 +38,7 @@
 		public static string LocalTradosLogsFolder => "This folder mostly contains logfiles that have been generated while using the application.  They can be very useful for a developer in troubleshooting errors, but are unlikely to be useful to most users and can be deleted without cause for concern.  Might be worth backing up if you are trying to solve an error in the software however since you may be asked for them if you have a Support contract." +
 				"\n The folder also contains the TranslationMemoryRepository.xml file which contains the list of Translation Memories you have open in your Translation Memories View. Deleting this file just means you will have to open them again if you want them listed in this view.  The Translation Memories themselves are not deleted.";
 
-		public static string ProgramDataPluginsFolder => "This location contains the sdlplugins you have installed from the RWS AppStore that are going to be shared across multiple users, usually in an Enterprise environment to avoid having to maintain multiple copies of the same files on every machine." +
+		public static string ProgramDataPluginsFolder => "This location contains the sdlplugins you have installed from the Trados AppStore that are going to be shared across multiple users, usually in an Enterprise environment to avoid having to maintain multiple copies of the same files on every machine." +
 				"\n The plugins folder contains two folders:" +
 				"\n - Packages: this is where the sdlplugin files are saved when they are installed" +
 				"\n - Unpacked: sdlplugin files are essentially zip files and the unzipped versions and unpacked in this folder when Studio starts" +

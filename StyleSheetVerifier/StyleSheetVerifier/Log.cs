@@ -17,7 +17,7 @@ namespace Sdl.Community.StyleSheetVerifier
 
 			var config = LogManager.Configuration;
 
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community", "StyleSheetVerifier");
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Trados AppStore", "StyleSheetVerifier");
 			Directory.CreateDirectory(logDirectoryPath);
 
 			var target = new FileTarget

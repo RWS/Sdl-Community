@@ -5,8 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Sdl.Community.Utilities.TMTool.Task;
+using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.Versioning;
 
 namespace Sdl.Community.Utilities.TMTool.Tasks.RemapTMX
 {
@@ -184,25 +186,13 @@ namespace Sdl.Community.Utilities.TMTool.Tasks.RemapTMX
 				exporter.Export(targetTMXFile, true);
 
 				// convert TMX into required format
-
 				var flavour = TranslationUnitFormat.TradosTranslatorsWorkbench;
-				string targetTMXFlavouredFile = string.Empty;
-				if (settings.SaveIntoTargetFolder)
-				{
-					targetTMXFlavouredFile = string.Format(
-					"{0}{1}{2}_Trados2019.tmx",
-					Path.GetDirectoryName(fileName),
+				var targetTMXFlavouredFile = string.Format(
+					"{0}{1}{2}_Trados{3}.tmx",
+					settings.SaveIntoTargetFolder ? Path.GetDirectoryName(fileName) : settings.TargetFolder,
 					Path.DirectorySeparatorChar,
-					Path.GetFileNameWithoutExtension(fileName));
-				}
-				else
-				{
-					targetTMXFlavouredFile = string.Format(
-					"{0}{1}{2}_Trados2019.tmx",
-					settings.TargetFolder,
-					Path.DirectorySeparatorChar,
-					Path.GetFileNameWithoutExtension(fileName));
-				}
+					Path.GetFileNameWithoutExtension(fileName),
+					Versions.ProductYear);
 
 				this.Convert(targetTMXFile, targetTMXFlavouredFile, flavour);
 				this.OnProgressChanged(0, string.Empty);

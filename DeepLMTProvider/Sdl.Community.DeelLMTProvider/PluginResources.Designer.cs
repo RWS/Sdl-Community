@@ -19,7 +19,7 @@ namespace Sdl.Community.DeepLMTProvider {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -57,6 +57,15 @@ namespace Sdl.Community.DeepLMTProvider {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All language pairs.
+        /// </summary>
+        public static string AllLanguagePairs_Label {
+            get {
+                return ResourceManager.GetString("AllLanguagePairs_Label", resourceCulture);
             }
         }
         
@@ -153,6 +162,15 @@ namespace Sdl.Community.DeepLMTProvider {
             get {
                 object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No glossary.
+        /// </summary>
+        public static string NoGlossary {
+            get {
+                return ResourceManager.GetString("NoGlossary", resourceCulture);
             }
         }
         

@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Sdl.MultiTerm.TMO.Interop">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio16\Sdl.MultiTerm.TMO.Interop.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.MultiTerm.TMO.Interop.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />

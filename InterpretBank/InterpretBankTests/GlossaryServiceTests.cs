@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Data.SQLite;
-using InterpretBank.Model;
-using InterpretBank.Service;
-using InterpretBank.Service.Interface;
+using InterpretBank.GlossaryService;
+using InterpretBank.GlossaryService.Interface;
+using InterpretBank.GlossaryService.Model;
 using NSubstitute;
 using Xunit;
 
@@ -25,7 +25,7 @@ namespace InterpretBankTests
 				.WithDatabaseConnection(connectionMock)
 				.Build();
 
-			glossaryService.CreateDb(@"C:\Users\ealbu\Desktop\Test7.db");
+			glossaryService.CreateDb(@"C:\Things\Work\Test");
 
 			var createGlossaryDataCommand =
 					"CREATE TABLE GlossaryData (ID Int64, Tag1 String, Tag2 String, Term1 String, Comment1a String, Comment1b String, Term2 String, Comment2a String, Comment2b String, Term3 String, Comment3a String, Comment3b String, Term4 String, Comment4a String, Comment4b String, Term5 String, Comment5a String, Comment5b String, Term6 String, Comment6a String, Comment6b String, Term7 String, Comment7a String, Comment7b String, Term8 String, Comment8a String, Comment8b String, Term9 String, Comment9a String, Comment9b String, Term10 String, Comment10a String, Comment10b String, CommentAll String, RecordCreation String, RecordEdit String, RecordValidation String, RecordCreator String, RecordEditor String, Memorization String, Term1index String, Term2index String, Term3index String, Term4index String, Term5index String, Term6index String, Term7index String, Term8index String, Term9index String, Term10index String, TermFullindex String, Tags String, PRIMARY KEY(\"ID\"))";

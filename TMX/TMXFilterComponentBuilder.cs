@@ -1,6 +1,12 @@
-﻿	using Sdl.Core.Globalization;
-using Sdl.FileTypeSupport.Framework;
-using Sdl.FileTypeSupport.Framework.IntegrationApi;
+﻿	using Sdl.Community.FileType.TMX.Settings;
+	using Sdl.Core.Globalization;
+	using Sdl.Core.Settings;
+	using Sdl.FileTypeSupport.Framework;
+using Sdl.FileTypeSupport.Framework.Core.IntegrationApi;
+using Sdl.FileTypeSupport.Framework.Core.Settings;
+	using Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts;
+	using Sdl.FileTypeSupport.Framework.Core.Settings.Serialization;
+	using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace Sdl.Community.FileType.TMX
@@ -8,14 +14,12 @@ namespace Sdl.Community.FileType.TMX
     /// <summary>
     /// Define Bil filter component builder.
     /// </summary> 
-    [FileTypeComponentBuilder(Id = "Bil_FilterComponentBuilderExtension_Id",
-                                       Name = "Bil_FilterComponentBuilderExtension_Name",
-                                       Description = "Bil_FilterComponentBuilderExtension_Description")]
-    public class TMXFilterComponentBuilder : IFileTypeComponentBuilder
-    {
-
-
-        /// <summary>
+    [FileTypeComponentBuilder(Id = "TMX_FilterComponentBuilderExtension_Id",
+                                       Name = "TMX_FilterComponentBuilderExtension_Name",
+                                       Description = "TMX_FilterComponentBuilderExtension_Description")]
+    public class TMXFilterComponentBuilder : IFileTypeComponentBuilder, IDefaultFileTypeSettingsProvider, IFileTypeSettingsConverterComponentBuilder
+	{
+	    /// <summary>
         /// Gets or sets file type manager
         /// </summary>
         public IFileTypeManager FileTypeManager { get; set; }
@@ -44,6 +48,11 @@ namespace Sdl.Community.FileType.TMX
             info.DefaultFileExtension = "*.tmx";
             info.Icon = new IconDescriptor(PluginResources.bil);
             info.Enabled = true;
+
+            info.WinFormSettingsPageIds = new[]
+            {
+				Constants.WriterId,
+            };
 
             return info;
         }
@@ -176,5 +185,23 @@ namespace Sdl.Community.FileType.TMX
         {
             return null;
         }
-    }
+
+        public void PopulateDefaultSettingsBundle(ISettingsBundle settingsBundle, string fileTypeConfigurationId)
+        {
+	        var settPages = new FileTypeSettingsBase[]
+	        {
+				new WriterSettings(),
+	        };
+			foreach (var settings in settPages)
+				settings.SaveDefaultsToSettingsBundle(settingsBundle, fileTypeConfigurationId);
+        }
+
+        public IFileTypeSettingsConverter BuildFileTypeSettingsConverter(string name)
+        {
+	        return new GenericFileTypeSettingsConverter(
+		        SettingsFormatConverter.ConvertSettings<WriterSettings>
+		        );
+
+		}
+	}
 }

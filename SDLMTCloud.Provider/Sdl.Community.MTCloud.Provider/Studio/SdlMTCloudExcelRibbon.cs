@@ -2,7 +2,6 @@
 using System.Windows.Interop;
 using NLog;
 using Sdl.Community.MTCloud.Languages.Provider;
-using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.View;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 using Sdl.Desktop.IntegrationApi;
@@ -27,7 +26,7 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			protected override void Execute()
 			{
 				try
-				{										
+				{
 					var window = new MTCodesWindow();
 					var activeForm = StudioInstance.GetActiveForm();
 					if (activeForm != null)

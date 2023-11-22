@@ -5,7 +5,7 @@ namespace Sdl.Community.RapidAddTerm.TellMe
 	[TellMeProvider]
 	public class RapidAddTermTellMeProvider : ITellMeProvider
 	{
-		public string Name => "Rapid Add Term tell me provider";
+		public string Name => "Rapid Add Term Tell Me provider";
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{

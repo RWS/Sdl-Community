@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -44,10 +43,6 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.Converter
 			{
 				var xliff = (Xliff)Serializer.Deserialize(stream);
 
-				// represents the Line Feed (new line: \n)
-				var softReturn = Convert.ToChar(10).ToString();
-				var regExPattern = new Regex("\r\n");
-
 				for (var i = 0; i < sourceText.Count; i++)
 				{
 					if (sourceText[i].Groups.Count < 2)
@@ -55,16 +50,7 @@ namespace Sdl.Community.MTCloud.Provider.XliffConverter.Converter
 						continue;
 					}
 
-					// if the target result contains Carriage Return and Line Feed characters(\r\n), replace it with a soft return
-					// (otherwise a hard return is added and might crash Studio, the hard return is used for a new paragraph and not to display a new line inside of a segment)
-					if (targetText[i].Groups[1].Value.Contains("\r\n"))
-					{
-						xliff.File.Body.TranslationUnits[i].TranslationList.First().Translation.Text = regExPattern.Replace(targetText[i].Groups[1].Value, softReturn);
-					}
-					else
-					{
-						xliff.File.Body.TranslationUnits[i].TranslationList.First().Translation.Text = targetText[i].Groups[1].Value;
-					}
+					xliff.File.Body.TranslationUnits[i].TranslationList.First().Translation.Text = targetText[i].Groups[1].Value;
 					xliff.File.Body.TranslationUnits[i].SourceText = sourceText[i].Groups[1].Value;
 					xliff.File.Body.TranslationUnits[i].TranslationList.First().Translation.TargetLanguage = xliff.File.TargetLanguage;
 				}

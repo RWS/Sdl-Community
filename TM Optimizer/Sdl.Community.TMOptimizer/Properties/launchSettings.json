@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "Profile 1": {
-      "commandName": "Executable",
-      "executablePath": "C:\\Program Files (x86)\\Trados\\TMOptimizer\\Sdl.Community.TMOptimizer.exe"
-    }
-  }
-}

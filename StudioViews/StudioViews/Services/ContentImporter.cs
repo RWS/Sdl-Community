@@ -6,9 +6,9 @@ using Sdl.Community.StudioViews.Common;
 using Sdl.Community.StudioViews.Interfaces;
 using Sdl.Community.StudioViews.Model;
 using Sdl.Community.StudioViews.Providers;
-using Trados.Community.Toolkit.LanguagePlatform.Models;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
+using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Extensions;
 using SegmentPairInfo = Sdl.Community.StudioViews.Model.SegmentPairInfo;
 

@@ -404,6 +404,10 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.XLIFF.Writers
 			{
 				writer.WriteStartElement("ph");
 				writer.WriteAttributeString("id", placeholder.TagId);
+				if (!string.IsNullOrEmpty(placeholder.DisplayText))
+				{
+					writer.WriteAttributeString("equiv-text", placeholder.DisplayText);
+				}
 				writer.WriteString(placeholder.TagContent);
 				writer.WriteEndElement();
 			}

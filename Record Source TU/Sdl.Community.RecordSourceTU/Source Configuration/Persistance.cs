@@ -10,7 +10,7 @@ namespace Sdl.Community.RecordSourceTU
 
         public Persistance()
         {
-            _persistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL Community\RecordSourceTU\recordSourceTU.json");
+            _persistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"Trados AppStore\RecordSourceTU\recordSourceTU.json");
         }
 
         public void Save(AddSourceTmConfigurations toSave)

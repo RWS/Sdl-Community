@@ -5,7 +5,7 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 	[TellMeProvider]
     public class DeepLTellMeProvider : ITellMeProvider
     {
-        public string Name => "DeepL tell me provider";
+        public string Name => "DeepL Tell Me provider";
 
         public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
         {

@@ -33,7 +33,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		private bool _isRestoreEnabled;
 		private ObservableCollection<MultiTermLocationListItem> _multiTermLocationCollection = new ObservableCollection<MultiTermLocationListItem>();
 		private List<MultitermVersion> _multiTermVersionsCollection;
-		private string _packageCache = @"C:\ProgramData\Package Cache\SDL";
+		private string _packageCache = @"C:\ProgramData\Package Cache\Trados";
 		private string _removeBtnColor;
 		private ICommand _removeCommand;
 		private string _removeForeground;
@@ -97,7 +97,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		public bool IsRepairEnabled
 		{
 			get => _isRepairEnabled;
-
+			
 			set
 			{
 				if (Equals(value, _isRepairEnabled))

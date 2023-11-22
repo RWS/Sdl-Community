@@ -1,0 +1,134 @@
+﻿<UserControl x:Class="Multilingual.Excel.FileType.BatchTasks.Views.ImportSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:rws="http://schemas.rws.com/xaml"
+             xmlns:viewModels="clr-namespace:Multilingual.Excel.FileType.BatchTasks.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="700" d:DataContext="{d:DesignInstance viewModels:ImportSettingsViewModel}">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/General.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/TreeView.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/ComboboStyle.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/DataGridStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/MultiSelectComboBox.Custom.ControlTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/MultiSelectComboBox.Custom.Image.Resources.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/MultiSelectComboBox.Custom.DropdownItemTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/MultiSelectComboBox.Custom.SelectedItemTemplate.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+
+			<Style TargetType="{x:Type Window}">
+				<Setter Property="FontFamily" Value="Segoe UI" />
+				<Setter Property="FontSize" Value="11"/>
+				<Setter Property="Foreground" Value="{StaticResource WindowsControl.Control.Text}"/>
+			</Style>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid Margin="0">
+		<GroupBox Header="Settings">
+			<Grid Margin="10">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+
+				<CheckBox Grid.Row="0" Grid.Column="0"  Margin="5,10,5,0"  Content="Overwrite existing translations" 
+				          IsChecked="{Binding OverwriteTranslations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+				<Grid Grid.Row="1" HorizontalAlignment="Left"  Margin="5,10,5,10" >
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
+					<TextBlock Grid.Row="0" Grid.Column="0" Text="Origin system:" Margin="0,0,10,0" MinWidth="90" VerticalAlignment="Center"/>
+					<TextBox Grid.Row="0" Grid.Column="1" Margin="0,0,0,0" Width="200" Height="22"
+					         VerticalAlignment="Center"
+					         VerticalContentAlignment="Center"
+					         Text="{Binding OriginSystem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"/>
+				</Grid>
+
+				<Grid Grid.Row="2">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+					<TextBlock Grid.Row="0" Grid.Column="0" Text="Segment status:" Margin="5,0,10,0" MinWidth="90" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+					<ComboBox Grid.Row="0" Grid.Column="1"  Margin="0,0,10,0" Width="200" DisplayMemberPath="Name" HorizontalAlignment="Left" Height="22"
+					          VerticalAlignment="Center"
+					          VerticalContentAlignment="Center"
+					          ItemsSource="{Binding ConfirmationStatuses, Mode=OneWay, UpdateSourceTrigger=PropertyChanged }"					          
+					          SelectedItem="{Binding StatusTranslationUpdated, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					/>
+				</Grid>
+
+				<Grid Grid.Row="3" Grid.Column="0" Margin="0,10,0,0">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
+
+					<Grid Grid.Row="0" Margin="5,10,5,5">
+						<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+							<TextBlock VerticalAlignment="Center" 
+							           Text="Exclude Segments" Style="{StaticResource TextBlockColor}" 
+							           />
+							<Image  Margin="5,2,0,0" VerticalAlignment="Center" Stretch="UniformToFill"
+							        Width="16"  RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased"
+							        Source="../../Resources/information.png"
+							        ToolTip="{Binding ExcludeSegmentsToolTip, Mode=OneWay}"/>
+						</StackPanel>
+					</Grid>
+
+					<rws:MultiSelectComboBox Grid.Row="1" Grid.Column="0" 
+					                         Margin="5,0,5,0" 
+					                         Height="55" 
+					                         MaxDropDownHeight="250"
+					                         Style="{StaticResource MultiSelectComboBox.Custom.Style}"
+					                         SelectedItemTemplate="{StaticResource MultiSelectComboBox.SelectedItems.ItemTemplate}"
+					                         DropdownItemTemplate="{StaticResource MultiSelectComboBox.Dropdown.ListBox.ItemTemplate}" 
+					                         ItemsSource="{Binding FilterItems}"            
+					                         SelectedItems="{Binding SelectedExcludeFilterItems}"
+					                         EnableGrouping="True"
+					                         EnableFiltering="True"
+					                         IsEditable="True"
+					                         EnableAutoComplete="True"
+					                         ClearFilterOnDropdownClosing="True"
+					                         ClearSelectionOnFilterChanged="True"
+					/>
+					<Button Grid.Row="2" Grid.Column="0" Margin="0,0,6,0"
+					        Command="{Binding ClearFiltersCommand}" Style="{StaticResource LinkButton}" HorizontalAlignment="Right" Height="20">
+						<Underline>Clear selected items</Underline>
+					</Button>
+				</Grid>
+
+
+				<!--<TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="Wrap" Foreground="#575656"
+				           Text="Note: The properties will be assigned if the translation is updated or the option to 'Overwrite existing translations' is checked." 
+				           Margin="5,10,10,0" VerticalAlignment="Center"/>-->
+
+
+			</Grid>
+		</GroupBox>
+	</Grid>
+</UserControl>

@@ -41,11 +41,48 @@
 		</ResourceDictionary>
 	</Window.Resources>
 	<Grid>
-		<generic:CustomProgressRing x:Name="ProgressRing"
+		<!--<generic:CustomProgressRing x:Name="ProgressRing"
 		                            Canvas.ZIndex="110" 
 		                            Visibility="{Binding ProgressIsVisible, Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisConv}}"
-		                            Style="{StaticResource Sdl.CustomProgressRing.Normal}"/>
+		                            Style="{StaticResource Sdl.CustomProgressRing.Normal}"/>-->
+		<Grid Canvas.ZIndex="110" HorizontalAlignment="Center" VerticalAlignment="Center"
+		      Visibility="{Binding ProgressIsVisible, Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisConv}}"
+		      Height="130"
+		      Width="460" Margin="10"
+		      Background="White">
+			<Border BorderBrush="#727070" BorderThickness="1">
+				<Grid Margin="10">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
 
+					<TextBlock Grid.Row="0" Margin="2 5, 2 5" FontWeight="Bold" Text="{Binding ProcessingMessage, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                               TextWrapping="WrapWithOverflow"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+					<controls:TextBoxWithEllipsis Grid.Row="1" Margin="2, 5, 2, 5"
+                                TextWrapping="NoWrap"
+								IsReadOnly="True"
+                                BorderThickness="0"
+                                Text="{Binding ProcessingFile, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                                VerticalAlignment="Center" HorizontalAlignment="Center"/>
+					<controls:TextBoxWithEllipsis Grid.Row="2" Margin="2"
+                                Text="{Binding ProcessingProgressMessage, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                                TextWrapping="NoWrap"
+                                IsReadOnly="True"
+                                BorderThickness="0"
+                                VerticalAlignment="Center" HorizontalAlignment="Center"/>
+					<ProgressBar Grid.Row="3" Margin="2" Minimum="0" Maximum="100" Height="20" 
+                                 IsIndeterminate="{Binding ProcessingIsIndeterminate, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                                 Value="{Binding ProcessingCurrentProgress, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Name="PbStatus" />
+					<TextBlock Grid.Row="3"
+					           Visibility="{Binding ProcessingShowPercentage, Mode=OneWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVisConv}}"
+                               Margin="2" Text="{Binding ElementName=PbStatus, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+				</Grid>
+			</Border>
+		</Grid>
 		<Grid AllowDrop="True" Margin="5" IsEnabled="{Binding IsEnabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto"/>
@@ -255,7 +292,5 @@
 				</Grid>
 			</StackPanel>
 		</Grid>
-
-
 	</Grid>
 </Window>

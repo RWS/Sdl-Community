@@ -6,12 +6,10 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("SDLXLIFF Compare")]
 [assembly: AssemblyDescription("SDLXLIFF Compare")]
-[assembly: AssemblyConfiguration("")]
 [assembly: AssemblyProduct("SDLXLIFF Compare")]
 [assembly: AssemblyCompany("SDL Limited as part of the RWS Holdings Plc group of companies")]
 [assembly: AssemblyCopyright("Copyright © 2011 - 2022 SDL Limited as part of the RWS Holdings Plc group of companies (\"RWS Group\").")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
+
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -31,5 +29,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.0.0.0")]
-[assembly: AssemblyFileVersion("2.3.3.0")]
+[assembly: AssemblyVersion("3.0.0.0")]
+[assembly: AssemblyFileVersion("3.0.1.0")]

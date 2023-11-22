@@ -5,7 +5,7 @@ namespace Reports.Viewer.Api.Model
 {
 	public class PathInfo
 	{
-		private const string RwlAppStorePathName = "RWS AppStore";
+		private const string RwlAppStorePathName = "Trados AppStore";
 		private const string ApplicationPathName = "Reports.Viewer";
 		private const string SettingsPathName = "Settings";
 		private const string LogsPathName = "Logs";

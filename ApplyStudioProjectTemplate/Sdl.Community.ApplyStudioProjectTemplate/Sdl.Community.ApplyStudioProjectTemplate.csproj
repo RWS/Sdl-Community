@@ -16,14 +16,17 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -46,46 +49,59 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17</TradosFolder>
+    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="NLog">
+      <HintPath>$(TradosFolder)\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.Globalization">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.Globalization.Async">
+      <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Settings">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.Core.Settings.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Settings">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Core.Settings.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Core.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Settings">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Settings.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Verification.Api">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.Verification.Api.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.Verification.Api.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -99,6 +115,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationInstance.cs" />
     <Compile Include="ApplyStudioProjectTemplateAction.cs" />
     <Compile Include="ApplyStudioProjectTemplateRibbonGroup.cs" />
     <Compile Include="ApplyTemplate.cs" />
@@ -110,6 +127,7 @@
       <DependentUpon>EditApplyTemplates.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PluginResources.Designer.cs">
@@ -123,7 +141,17 @@
     <Compile Include="ApplyTemplateForm.Designer.cs">
       <DependentUpon>ApplyTemplateForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TellMe\CommunityAppStoreAction.cs" />
+    <Compile Include="TellMe\CommunityAppStoreForumAction.cs" />
+    <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="TemplateLanguageDetails.cs" />
+    <Compile Include="WarningForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WarningForm.Designer.cs">
+      <DependentUpon>WarningForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="TermbaseWarningForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -135,8 +163,11 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Resources\question.ico" />
-    <None Include="Resources\ASPT.ico" />
+    <Resource Include="Resources\QuestionIcon.ico" />
+    <Resource Include="Resources\Download.ico" />
+    <Resource Include="Resources\ForumIcon.ico" />
+    <Resource Include="Resources\question.ico" />
+    <Resource Include="Resources\ASPT.ico" />
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +181,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ApplyTemplateForm.resx">
       <DependentUpon>ApplyTemplateForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WarningForm.resx">
+      <DependentUpon>WarningForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TermbaseWarningForm.resx">
       <DependentUpon>TermbaseWarningForm.cs</DependentUpon>

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -11,9 +10,9 @@ using Sdl.Community.Extended.MessageUI;
 using Sdl.Community.NumberVerifier.Composers;
 using Sdl.Community.NumberVerifier.Helpers;
 using Sdl.Community.NumberVerifier.Interfaces;
-using Sdl.Community.NumberVerifier.MessageUI;
 using Sdl.Community.NumberVerifier.Model;
 using Sdl.Community.NumberVerifier.Processors;
+using Sdl.Community.NumberVerifier.Reporter;
 using Sdl.Community.NumberVerifier.Validator;
 using Sdl.Core.Globalization;
 using Sdl.Core.Settings;
@@ -111,7 +110,7 @@ namespace Sdl.Community.NumberVerifier
 
 		/// <summary>
 		/// The following members set some general properties of the verification plug-in,
-		/// e.g. the plug-in name and the icon that are displayed in the user interface of SDL Trados Studio.
+		/// e.g. the plug-in name and the icon that are displayed in the user interface of Trados Studio.
 		/// </summary>
 
 		public string Description
@@ -156,7 +155,7 @@ namespace Sdl.Community.NumberVerifier
 		}
 
 		/// <summary>
-		/// This member is used to output any verification messages in the user interface of SDL Trados Studio.
+		/// This member is used to output any verification messages in the user interface of Trados Studio.
 		/// </summary>
 
 		public IBilingualContentMessageReporter MessageReporter
@@ -209,7 +208,7 @@ namespace Sdl.Community.NumberVerifier
 		/// and checks whether a particular segment has any numbers. It then determines whether
 		/// the target and the source contains the same numbers.
 		/// If not, a warning message will be generated, which is then displayed between the source and target segments,
-		/// and in the Messages window of SDL Trados Studio.
+		/// and in the Messages window of Trados Studio.
 		/// </summary>
 		/// <param name="paragraphUnit"></param>
 		public void CheckParagraphUnit(IParagraphUnit paragraphUnit)
@@ -375,7 +374,17 @@ namespace Sdl.Community.NumberVerifier
 		{
 			_numberValidator.Verify(sourceText, targetText, VerificationSettings, out var sourceNumbers, out var targetNumbers, sourceExcludedRanges, targetExcludedRanges);
 
-			if (segmentPair is not null) ReportErrors(sourceNumbers, targetNumbers, segmentPair);
+			if (segmentPair is null) return;
+
+			var reportAllowanceTable = new Dictionary<string, bool>
+			{
+				[PluginResources.Error_NumberAdded] = VerificationSettings.ReportAddedNumbers,
+				[PluginResources.Error_NumbersRemoved] = VerificationSettings.ReportRemovedNumbers,
+				[PluginResources.Error_DifferentValues] = VerificationSettings.ReportModifiedNumbers,
+				[PluginResources.Error_AlphanumericsModified] = VerificationSettings.ReportModifiedAlphanumerics
+			};
+			var errorReporter = new ErrorReporter(MessageReporter, VerificationSettings, new MessageFilter(reportAllowanceTable));
+			errorReporter.ReportErrors(sourceNumbers, targetNumbers, segmentPair);
 		}
 
 		/// <summary>
@@ -732,140 +741,6 @@ namespace Sdl.Community.NumberVerifier
 					 segmentPair.Properties.TranslationOrigin.MatchPercent != 100))
 					 && !(VerificationSettings.ExcludeUntranslatedSegments == true && segmentPair.Properties.ConfirmationLevel == ConfirmationLevel.Unspecified)
 					 && !(VerificationSettings.ExcludeDraftSegments == true && segmentPair.Properties.ConfirmationLevel == ConfirmationLevel.Draft);
-		}
-
-		private void ReportErrors(NumberTexts sourceNumberTexts, NumberTexts targetNumberTexts, ISegmentPair segmentPair)
-		{
-			var sourceNumbersTotal = sourceNumberTexts.Texts.Count;
-			var targetNumbersTotal = targetNumberTexts.Texts.Count;
-			var errorPairsTotal = sourceNumbersTotal > targetNumbersTotal ? sourceNumbersTotal : targetNumbersTotal;
-
-			for (var i = 0; i < errorPairsTotal; i++)
-			{
-				var extendedReportInfo = GetExtendedReport(i, sourceNumberTexts, targetNumberTexts);
-
-				if (extendedReportInfo.Message is null) continue;
-				if (VerificationSettings.ReportExtendedMessages &&
-				    MessageReporter is IBilingualContentMessageReporterWithExtendedData extendedMessageReporter)
-				{
-
-					extendedMessageReporter.ReportMessage(this, PluginResources.Plugin_Name,
-						extendedReportInfo.ErrorLevel,
-						extendedReportInfo.Message,
-						new TextLocation(new Location(segmentPair.Target, true), extendedReportInfo.Report.TargetRange.StartIndex),
-						new TextLocation(new Location(segmentPair.Target, false), extendedReportInfo.Report.TargetRange.Length),
-						extendedReportInfo.Report);
-				}
-				else
-				{
-					MessageReporter.ReportMessage(this, PluginResources.Plugin_Name,
-						extendedReportInfo.ErrorLevel,
-						extendedReportInfo.Message,
-						new TextLocation(new Location(segmentPair.Target, true), extendedReportInfo.Report.TargetRange.StartIndex),
-						new TextLocation(new Location(segmentPair.Target, false), extendedReportInfo.Report.TargetRange.Length));
-				}
-			}
-		}
-
-		[Flags]
-		public enum Range
-		{
-			Default = 0,
-			Source = 1,
-			Target = 2,
-			Both = 3
-		}
-
-		private ExtendedErrorReportInfo GetExtendedReport(int i, NumberTexts sourceNumberTexts, NumberTexts targetNumberTexts)
-		{
-			var isInSourceRange = sourceNumberTexts.Texts.Count > i;
-			var isInTargetRange = targetNumberTexts.Texts.Count > i;
-
-			var range = Range.Default;
-			if (isInSourceRange) range = Range.Source;
-			if (isInTargetRange) range |= Range.Target;
-
-			var errorReportInfo = new ExtendedErrorReportInfo();
-			switch (range)
-			{
-				case Range.Source:
-					errorReportInfo.Message = sourceNumberTexts[i].Errors[NumberText.ErrorLevel.SegmentPairLevel].FirstOrDefault()?.Message;
-
-					errorReportInfo.Report = new AlignmentErrorExtendedData
-					{
-						SourceIssues = GetFormattedError(sourceNumberTexts[i]),
-						TargetIssues = "-",
-						MessageType = "Segment-pair level errors"
-					};
-					errorReportInfo.ErrorLevel = GetNumbersErrorLevel(VerificationSettings.AddedNumbersErrorType);
-
-					errorReportInfo.Report.SourceRange.StartIndex = sourceNumberTexts[i].StartIndex;
-					errorReportInfo.Report.SourceRange.Length = sourceNumberTexts[i].Length;
-					break;
-
-				case Range.Both:
-					errorReportInfo.Message = targetNumberTexts[i].Errors[NumberText.ErrorLevel.SegmentPairLevel].FirstOrDefault()?.Message;
-
-					errorReportInfo.Report = new AlignmentErrorExtendedData
-					{
-						SourceIssues = GetFormattedError(sourceNumberTexts[i]),
-						TargetIssues = GetFormattedError(targetNumberTexts[i]),
-						MessageType = "Segment-pair level errors"
-					};
-
-					errorReportInfo.ErrorLevel = GetNumbersErrorLevel(VerificationSettings.ModifiedNumbersErrorType);
-
-					errorReportInfo.Report.SourceRange.StartIndex = sourceNumberTexts[i].StartIndex;
-					errorReportInfo.Report.SourceRange.Length = sourceNumberTexts[i].Length;
-					errorReportInfo.Report.TargetRange.StartIndex = targetNumberTexts[i].StartIndex;
-					errorReportInfo.Report.TargetRange.Length = targetNumberTexts[i].Length;
-
-					break;
-
-				case Range.Target:
-					errorReportInfo.Message = targetNumberTexts[i].Errors[NumberText.ErrorLevel.SegmentPairLevel].FirstOrDefault()?.Message;
-
-					errorReportInfo.Report = new AlignmentErrorExtendedData
-					{
-						SourceIssues = GetFormattedError(sourceNumberTexts[i]),
-						TargetIssues = GetFormattedError(targetNumberTexts[i]),
-						MessageType = "Segment-pair level errors",
-
-					};
-					errorReportInfo.ErrorLevel = GetNumbersErrorLevel(VerificationSettings.AddedNumbersErrorType);
-
-					errorReportInfo.Report.TargetRange.StartIndex = targetNumberTexts[i].StartIndex;
-					errorReportInfo.Report.TargetRange.Length = targetNumberTexts[i].Length;
-					break;
-			}
-
-			errorReportInfo.Report.MessageType = "Alignment";
-			return errorReportInfo;
-		}
-
-		private static string GetFormattedError(NumberText numberText)
-		{
-			if (numberText is null) return null;
-			var explanation = numberText.IsValidNumber
-				? numberText.Normalized
-				: numberText.Errors[NumberText.ErrorLevel.TextAreaLevel].FirstOrDefault()?.Message;
-
-			return $"{numberText.Text}	[{explanation}]";
-		}
-
-		private ErrorLevel GetNumbersErrorLevel(string setting)
-		{
-			switch (setting)
-			{
-				case "Error":
-					return ErrorLevel.Error;
-
-				case "Warning":
-					return ErrorLevel.Warning;
-
-				default:
-					return ErrorLevel.Note;
-			}
 		}
 
 		private string GetSegmentText(ISegment segment)

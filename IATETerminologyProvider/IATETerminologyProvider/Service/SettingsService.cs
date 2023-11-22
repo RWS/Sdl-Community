@@ -48,7 +48,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			try
 			{
 				var serializedSettings = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-					$@"RWS AppStore\IATETerminologyProvider\Settings\{GetProjectInProcessing().GetProjectInfo().Id}",
+					$@"Trados AppStore\IATETerminologyProvider\Settings\{GetProjectInProcessing().GetProjectInfo().Id}",
 					"IATESettings.json"));
 
 				return string.IsNullOrEmpty(serializedSettings)
@@ -103,7 +103,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			var serializedSettings = JsonConvert.SerializeObject(settings);
 
 			var settingsFolderPath = path ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				$@"RWS AppStore\IATETerminologyProvider\Settings\{GetProjectInProcessing().GetProjectInfo().Id}");
+				$@"Trados AppStore\IATETerminologyProvider\Settings\{GetProjectInProcessing().GetProjectInfo().Id}");
 
 
 			await Task.Run(() =>

@@ -13,7 +13,7 @@ namespace SDLCopyTags.CopyTagsTellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://appstore.sdl.com/language/app/trados-copy-tags/1070/");
+			Process.Start("https://appstore.rws.com/Plugin/26");
 		}
 
 		public override bool IsAvailable => true;

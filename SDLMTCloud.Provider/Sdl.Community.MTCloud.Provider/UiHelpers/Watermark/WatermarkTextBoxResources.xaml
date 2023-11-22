@@ -1,21 +1,46 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:watermark="clr-namespace:Sdl.Community.MTCloud.Provider.UiHelpers.Watermark">
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:watermark="clr-namespace:Sdl.Community.MTCloud.Provider.UiHelpers.Watermark">
 
-	<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+	<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 	<!--Watermark TextBox-->
-	<Style x:Uid="Style_1" x:Key="ClearButtonStyle" TargetType="Button">
-		<Setter x:Uid="Setter_1" Property="Height" Value="12" />
-		<Setter x:Uid="Setter_2" Property="Width" Value="12" />
-		<Setter Property="Cursor" Value="Hand" />
-		<Setter x:Uid="Setter_3" Property="BorderThickness" Value="0" />
-		<Setter x:Uid="Setter_4" Property="Template">
+	<Style x:Uid="Style_1"
+		   x:Key="ClearButtonStyle"
+		   TargetType="Button">
+		<Setter x:Uid="Setter_1"
+				Property="Height"
+				Value="12" />
+		<Setter x:Uid="Setter_2"
+				Property="Width"
+				Value="12" />
+		<Setter Property="Cursor"
+				Value="Hand" />
+		<Setter x:Uid="Setter_3"
+				Property="BorderThickness"
+				Value="0" />
+		<Setter x:Uid="Setter_4"
+				Property="Template">
 			<Setter.Value>
-				<ControlTemplate x:Uid="ControlTemplate_1" TargetType="Button">
-					<Border x:Uid="Border_1" BorderThickness="0" Background="Transparent">
+				<ControlTemplate x:Uid="ControlTemplate_1"
+								 TargetType="Button">
+					<Border x:Uid="Border_1"
+							BorderThickness="0"
+							Background="Transparent">
 						<Grid x:Uid="Grid_1">
-							<Line x:Uid="Line_1" X1="0" Y1="0" Y2="1" X2="1" Stroke="Black" Stretch="Fill" />
-							<Line x:Uid="Line_2" X1="0" Y1="1" X2="1" Y2="0" Stroke="Black" Stretch="Fill" />
+							<Line x:Uid="Line_1"
+								  X1="0"
+								  Y1="0"
+								  Y2="1"
+								  X2="1"
+								  Stroke="Black"
+								  Stretch="Fill" />
+							<Line x:Uid="Line_2"
+								  X1="0"
+								  Y1="1"
+								  X2="1"
+								  Y2="0"
+								  Stroke="Black"
+								  Stretch="Fill" />
 						</Grid>
 					</Border>
 				</ControlTemplate>
@@ -23,33 +48,46 @@
 		</Setter>
 	</Style>
 
-	<Style x:Uid="Style_2" x:Key="WatermarkTextBox" TargetType="TextBox">
-		<Setter x:Uid="Setter_5" Property="BorderBrush"
-					Value="#999999" />
-		<Setter x:Uid="Setter_6" Property="BorderThickness"
-                    Value="0" />
-		<Setter x:Uid="Setter_7" Property="Template">
+	<Style x:Uid="Style_2"
+		   x:Key="WatermarkTextBox"
+		   TargetType="TextBox">
+		<Setter x:Uid="Setter_5"
+				Property="BorderBrush"
+				Value="#999999" />
+		<Setter x:Uid="Setter_6"
+				Property="BorderThickness"
+				Value="0" />
+		<Setter x:Uid="Setter_7"
+				Property="Template">
 			<Setter.Value>
-				<ControlTemplate x:Uid="ControlTemplate_2" TargetType="TextBox">
-					<Border x:Uid="Border_2" BorderThickness="1"
-								BorderBrush="{TemplateBinding BorderBrush}"
-								Background="{TemplateBinding Background}"
-								Padding="3"
-								SnapsToDevicePixels="True">
+				<ControlTemplate x:Uid="ControlTemplate_2"
+								 TargetType="TextBox">
+					<Border x:Uid="Border_2"
+							BorderThickness="1"
+							BorderBrush="{TemplateBinding BorderBrush}"
+							Background="{TemplateBinding Background}"
+							Padding="3"
+							SnapsToDevicePixels="True">
 						<DockPanel x:Uid="DockPanel_1">
-							<Button x:Uid="CloseBtn" x:Name="CloseBtn" DockPanel.Dock="Right"
-                                        Background="{Binding Background, ElementName=TextBox}"
-                                        Style="{StaticResource ClearButtonStyle}"
-                                        HorizontalAlignment="Right"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        watermark:TextBoxWatermarkHelper.ButtonCommand="{TemplateBinding watermark:TextBoxWatermarkHelper.ButtonCommand}"
-                                        watermark:TextBoxWatermarkHelper.ButtonCommandParameter="{TemplateBinding watermark:TextBoxWatermarkHelper.ButtonCommandParameter}"
-                                        watermark:TextBoxWatermarkHelper.IsClearTextButtonBehaviorEnabled="true" />
-							<Grid x:Uid="Grid_2" DockPanel.Dock="Left">
-								<ScrollViewer x:Uid="PART_ContentHost" x:Name="PART_ContentHost"
-											  Margin="4,0,0,0" VerticalAlignment="Center" />
-								<TextBlock x:Uid="Watermark" x:Name="Watermark"
+							<Button x:Uid="CloseBtn"
+									x:Name="CloseBtn"
+									DockPanel.Dock="Right"
+									Background="{Binding Background, ElementName=TextBox}"
+									Style="{StaticResource ClearButtonStyle}"
+									HorizontalAlignment="Right"
+									HorizontalContentAlignment="Center"
+									VerticalContentAlignment="Center"
+									watermark:TextBoxWatermarkHelper.ButtonCommand="{TemplateBinding watermark:TextBoxWatermarkHelper.ButtonCommand}"
+									watermark:TextBoxWatermarkHelper.ButtonCommandParameter="{TemplateBinding watermark:TextBoxWatermarkHelper.ButtonCommandParameter}"
+									watermark:TextBoxWatermarkHelper.IsClearTextButtonBehaviorEnabled="true" />
+							<Grid x:Uid="Grid_2"
+								  DockPanel.Dock="Left">
+								<ScrollViewer x:Uid="PART_ContentHost"
+											  x:Name="PART_ContentHost"
+											  Margin="4,0,0,0"
+											  VerticalAlignment="Center" />
+								<TextBlock x:Uid="Watermark"
+										   x:Name="Watermark"
 										   Margin="8,0,0,0"
 										   Text="{TemplateBinding watermark:TextBoxWatermarkHelper.WatermarkText}"
 										   Focusable="False"
@@ -64,29 +102,37 @@
 					</Border>
 
 					<ControlTemplate.Triggers>
-						<Trigger x:Uid="Trigger_1" Property="watermark:TextBoxWatermarkHelper.IsWatermarkVisible"
-									 Value="True">
-							<Setter x:Uid="Setter_8" Property="Visibility"
-										Value="Visible"
-										TargetName="Watermark" />
-							<Setter x:Uid="Setter_9" Property="Visibility"
-										Value="Hidden"
-										TargetName="PART_ContentHost" />
-							<Setter x:Uid="Setter_10" Property="Visibility"
-										Value="Hidden"
-										TargetName="CloseBtn" />
+						<Trigger x:Uid="Trigger_1"
+								 Property="watermark:TextBoxWatermarkHelper.IsWatermarkVisible"
+								 Value="True">
+							<Setter x:Uid="Setter_8"
+									Property="Visibility"
+									Value="Visible"
+									TargetName="Watermark" />
+							<Setter x:Uid="Setter_9"
+									Property="Visibility"
+									Value="Hidden"
+									TargetName="PART_ContentHost" />
+							<Setter x:Uid="Setter_10"
+									Property="Visibility"
+									Value="Hidden"
+									TargetName="CloseBtn" />
 						</Trigger>
-						<Trigger x:Uid="Trigger_2" Property="watermark:TextBoxWatermarkHelper.IsWatermarkVisible"
-									 Value="False">
-							<Setter x:Uid="Setter_11" Property="Visibility"
-										Value="Hidden"
-										TargetName="Watermark" />
-							<Setter x:Uid="Setter_12" Property="FontStyle"
-										Value="Normal"
-										TargetName="Watermark" />
-							<Setter x:Uid="Setter_13" Property="Visibility"
-										Value="Visible"
-										TargetName="PART_ContentHost" />
+						<Trigger x:Uid="Trigger_2"
+								 Property="watermark:TextBoxWatermarkHelper.IsWatermarkVisible"
+								 Value="False">
+							<Setter x:Uid="Setter_11"
+									Property="Visibility"
+									Value="Hidden"
+									TargetName="Watermark" />
+							<Setter x:Uid="Setter_12"
+									Property="FontStyle"
+									Value="Normal"
+									TargetName="Watermark" />
+							<Setter x:Uid="Setter_13"
+									Property="Visibility"
+									Value="Visible"
+									TargetName="PART_ContentHost" />
 						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>

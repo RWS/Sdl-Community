@@ -1,0 +1,112 @@
+﻿<Window x:Class="GoogleCloudTranslationProvider.Views.MainWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:root="clr-namespace:GoogleCloudTranslationProvider"
+        xmlns:views="clr-namespace:GoogleCloudTranslationProvider.Views"
+		xmlns:styles="clr-namespace:GoogleCloudTranslationProvider.Styles"
+		xmlns:viewModels="clr-namespace:GoogleCloudTranslationProvider.ViewModels"
+        xmlns:behaviours="clr-namespace:GoogleCloudTranslationProvider.Behaviours"
+		xmlns:converters="clr-namespace:GoogleCloudTranslationProvider.Converters"
+		mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
+		WindowStartupLocation="CenterScreen"
+		Icon="../Resources/appicon.ico"
+		Title="Google TP"
+		WindowStyle="None"
+		Height="550"
+		Width="1000"
+		MinHeight="500"
+		MinWidth="900"
+		d:DesignHeight="550"
+		d:DesignWidth="1000">
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="../Styles/GroupBox.xaml" />
+				<ResourceDictionary Source="../Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+
+			<converters:EmptyToVisibility x:Key="EmptyToVisibilityConverter"/>
+			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter"/>
+			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter"/>
+
+			<DataTemplate DataType="{x:Type viewModels:ProviderViewModel}">
+				<views:ProviderView/>
+			</DataTemplate>
+
+			<DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
+				<views:SettingsView/>
+			</DataTemplate>
+
+			<Style TargetType="Image">
+				<Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality" />
+			</Style>
+		</ResourceDictionary>
+	</Window.Resources>
+
+	<Border Style="{StaticResource WindowControlBorderStyle}">
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="auto"/>
+			</Grid.RowDefinitions>
+
+			<!--<Top bar>-->
+			<styles:WindowsControl Grid.Row="0"/>
+			<!--</Top bar>-->
+
+			<!--<API Version Selector>-->
+			<ContentControl Grid.Row="2"
+							Content="{Binding SelectedView.ViewModel}"
+							Margin="0"/>
+			<!--</API Version Selector>-->
+
+			<!--<Footer>-->
+			<DockPanel Grid.Row="3"
+					   Margin="24 20">
+				<StackPanel Orientation="Horizontal">
+					<Button Content="{x:Static root:PluginResources.MainView_HelpButton}"
+							Style="{StaticResource Sdl.Button.SecondaryStyle}"
+							Command="{Binding NavigateToCommand}"
+							Cursor="Hand"
+							Width="136" />
+
+					<Button Content="Language Mapping"
+							Style="{StaticResource Sdl.Button.SecondaryStyle}"
+							Command="{Binding OpenLanguageMappingCommand}"
+							IsEnabled="{Binding IsLanguageMappingProviderEnabled}"
+							IsDefault="True"
+							Cursor="Hand"
+							Width="136"
+							Margin="8 0 0 0" />
+				</StackPanel>
+				
+				<StackPanel HorizontalAlignment="Right"
+							Orientation="Horizontal">
+					<Button Content="{Binding MultiButtonContent}"
+							Style="{StaticResource Sdl.Button.SecondaryStyle}"
+							Visibility="{Binding ShowMultiButton, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+							Command="{Binding SwitchViewCommand}"
+							Cursor="Hand"
+							Width="136"/>
+
+					<Button Content="{x:Static root:PluginResources.MainView_ConfirmButton}"
+							Style="{StaticResource Sdl.Button.PrimaryStyle}"
+							Command="{Binding SaveCommand}"
+							IsDefault="True"
+							Cursor="Hand"
+							Width="136"
+							Margin="8 0 0 0"/>
+				</StackPanel>
+			</DockPanel>
+			<!--</Footer>-->
+		</Grid>
+	</Border>
+</Window>

@@ -1,0 +1,53 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        xmlns:viewModel="clr-namespace:ChromiumBrowserSupport.ViewModel"
+        x:Class="ChromiumBrowserSupport.View.BrowserView"
+        x:Name="BrowserWindow"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Normal"
+        WindowStyle="SingleBorderWindow"
+        ResizeMode="CanResizeWithGrip"
+        Title="{Binding Name, Mode=OneWay}"
+        mc:Ignorable="d" 
+        d:DataContext="{d:DesignInstance {x:Type viewModel:BrowserViewModel}}"
+        MinHeight="480" MinWidth="550">
+	<Grid Margin="10">
+
+
+		<Grid Margin="10">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+
+			<Grid Grid.Row="1" Margin="5">
+				<wpf:WebView2 Name="WebView2Browser" Loaded="WebView2Browser_OnLoaded" NavigationStarting="WebView2Browser_OnNavigationStarting" />
+			</Grid>
+
+			<Grid Grid.Row="2">
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Height="24">
+					<Button Margin="0,0,10,0" Width="90" Command="{Binding SaveCommand}" 
+					        CommandParameter="{Binding ElementName=BrowserWindow}" IsDefault="True">
+						<StackPanel Orientation="Horizontal">
+							<TextBlock><Run Text="OK"/></TextBlock>
+						</StackPanel>
+					</Button>
+					<Button Margin="0" Width="90" IsCancel="True">
+						<StackPanel Orientation="Horizontal">
+							<TextBlock><Run Text="Cancel"/></TextBlock>
+						</StackPanel>
+					</Button>
+				</StackPanel>
+			</Grid>
+
+		</Grid>
+	</Grid>
+</Window>

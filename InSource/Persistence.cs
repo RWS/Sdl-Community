@@ -14,7 +14,7 @@ namespace Sdl.Community.InSource
         public Persistence()
         {
             _persistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                @"SDL Community\StudioAutomation\studioAutomation.json");
+                @"Trados AppStore\StudioAutomation\studioAutomation.json");
         }
 
 	    public void SaveProjectRequestList(List<ProjectRequest> persistenceListFolders)

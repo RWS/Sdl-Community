@@ -34,19 +34,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Sdl.Desktop.IntegrationApi">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Versioning">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.Versioning.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Versioning.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -58,6 +61,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
+    <Compile Include="TellMe\CommunityAppStoreAction.cs" />
+    <Compile Include="TellMe\CommunityAppStoreForumAction.cs" />
+    <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="TranslationMemoryProviderRibbon.cs" />
     <Compile Include="OptionsPanel.cs">
       <SubType>UserControl</SubType>
@@ -87,13 +97,16 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Download.ico" />
+    <Resource Include="Resources\ForumIcon.ico" />
+    <Resource Include="Resources\Question.ico" />
     <None Include="Resources\TM_icon.ico" />
     <EmbeddedResource Include="OptionsPanel.resx">
       <DependentUpon>OptionsPanel.cs</DependentUpon>
     </EmbeddedResource>
     <Content Include="pluginpackage.manifest.xml" />
     <EmbeddedResource Include="PluginResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="TMResultsForm.resx">

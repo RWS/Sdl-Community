@@ -55,6 +55,8 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 			ofd.CheckFileExists = false;
 			ofd.DereferenceLinks = true;
 			ofd.Multiselect = false;
+			ofd.CheckPathExists = true;
+
 		}
 
 		public bool ShowDialog()
@@ -81,7 +83,8 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 			object[] objArray3 = new object[] { obj1, num };
 			object[] objArray4 = objArray3;
 			reflector.CallAs2(type, obj, "Advise", objArray4);
-			num = (uint)objArray4[1];
+			if (objArray4.Length > 1)
+				num = (uint)objArray4[1];
 			try
 			{
 				object[] objArray5 = new object[] { hWndOwner };
@@ -97,9 +100,6 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 
 			return flag;
 		}
-		public void Dispose()
-		{
 
-		}
 	}
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Sdl.Community.AmazonTranslateProvider;
 using Sdl.Community.AmazonTranslateTradosPlugin.AmzConnect;
@@ -37,11 +38,15 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
 
         }
 
-        public System.Globalization.CultureInfo SourceLanguage => _languageDirection.SourceCulture;
+		//CultureCode ITranslationProviderLanguageDirection.SourceLanguage => _languageDirection.SourceCulture;
 
-        public System.Globalization.CultureInfo TargetLanguage => _languageDirection.TargetCulture;
+		//CultureCode ITranslationProviderLanguageDirection.TargetLanguage => _languageDirection.TargetCulture;
 
-        public ITranslationProvider TranslationProvider => _provider;
+		public System.Globalization.CultureInfo SourceLanguage => _languageDirection.SourceCulture;
+
+		public System.Globalization.CultureInfo TargetLanguage => _languageDirection.TargetCulture;
+
+		public ITranslationProvider TranslationProvider => _provider;
 
         private string LookupAmz(string sourcetext, MtTranslationOptions options)
         {
@@ -193,7 +198,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
         }
         /// <summary>
         /// Creates the translation unit as it is later shown in the Translation Results
-        /// window of SDL Trados Studio. This member also determines the match score
+        /// window of Trados Studio. This member also determines the match score
         /// (in our implementation always 100%, as only exact matches are supported)
         /// as well as the confirmation level, i.e. Translated.
         /// </summary>
@@ -224,7 +229,9 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
 
         public bool CanReverseLanguageDirection { get; } = false;
 
-        public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
+	
+
+		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
         {
             var results = new SearchResults[segments.Length];
             for (var p = 0; p < segments.Length; ++p)

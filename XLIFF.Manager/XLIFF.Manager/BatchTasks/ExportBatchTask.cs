@@ -15,6 +15,7 @@ using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Community.XLIFF.Manager.Model.ProjectSettings;
 using Sdl.Community.XLIFF.Manager.Service;
 using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
@@ -221,7 +222,7 @@ namespace Sdl.Community.XLIFF.Manager.BatchTasks
 		private static LanguageDirection GetLanguageDirection(string targetLanguageCode, FileBasedProject project)
 		{
 			var cultureInfo = new CultureInfo(targetLanguageCode);
-			var language = new Language(cultureInfo);
+			var language = LanguageRegistryApi.Instance.GetLanguage(cultureInfo.Name);
 			var projectFiles = project?.GetTargetLanguageFiles(language);
 			var ld = projectFiles?[0].GetLanguageDirection();
 			return ld;

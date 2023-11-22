@@ -9,7 +9,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 {
 	public class PathInfo
 	{
-		private const string SdlCommunityPathName = "RWS AppStore";
+		private const string SdlCommunityPathName = "Trados AppStore";
 		private const string ApplicationPathName = "ExportAnalysisReports";
 		private const string SettingsPathName = "Settings";
 		private const string SettingsFileName = "settings.xml";

@@ -291,7 +291,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 				}
 			}
 
-			AddProjectApiFolderLocation();
+			AddProjectApiFileLocation();
 
 			foreach (var location in _locations)
 			{
@@ -302,16 +302,16 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		/// <summary>
 		/// This is needed because this folder is not used by all versions of Studio and so the adding of its path must be done differently
 		/// </summary>
-		private void AddProjectApiFolderLocation()
+		private void AddProjectApiFileLocation()
 		{
 			var projectApiFolderPaths =
 				StudioVersionsCollection.Where(v => v.IsSelected && !string.IsNullOrWhiteSpace(v.ProjectApiPath))?.Select(
-					v => Path.GetDirectoryName(v.ProjectApiPath));
+					v => v.ProjectApiPath);
 			var apiPathDescription = LocationsDescription.ProjectApiPath;
 
 			foreach (var path in projectApiFolderPaths)
 			{
-				AddLocation(path, apiPathDescription, nameof(StudioVersion.ProjectApiPath), "Project API folder");
+				AddLocation(path, apiPathDescription, nameof(StudioVersion.ProjectApiPath), "Project API file");
 			}
 		}
 
@@ -470,12 +470,9 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		{
 			var (unchangeableVersions, changeableVersions) = GetUnchangeableAndChangeableVersions();
 
-			if (Directory.Exists(_packageCache))
+			foreach (var version in changeableVersions)
 			{
-				foreach (var version in changeableVersions)
-				{
-					RunRepair(version);
-				}
+				RunRepair(version);
 			}
 
 			if (unchangeableVersions.Any())
@@ -547,12 +544,8 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			_logger.Info(
 				$"Selected Trados executable version: Minor - {version.ExecutableVersion.Minor}, Build - {version.ExecutableVersion.Build}");
 
-			var currentVersionFolder = _versionService.GetPackageCacheCurrentFolder(version.ExecutableVersion,
-				version.CacheFolderName, version.Edition.ToLower().Equals("beta"));
 			var msiName = GetMsiName(version);
-			var moduleDirectoryPath = Path.Combine(currentVersionFolder, "modules");
-
-			_versionService.RunRepairMsi(moduleDirectoryPath, msiName);
+			_versionService.RunRepairMsi(version.ProgramDataPackagePath, msiName);
 		}
 
 		private void SetButtonColors()

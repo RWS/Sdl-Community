@@ -1,0 +1,143 @@
+﻿<Window x:Class="Multilingual.Excel.FileType.FileType.Views.AppendPlaceablePatternWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"       
+        xmlns:rws="http://schemas.rws.com/xaml"
+        xmlns:converters="clr-namespace:Multilingual.Excel.FileType.Converters"
+        xmlns:viewModels="clr-namespace:Multilingual.Excel.FileType.FileType.ViewModels"
+        WindowStyle="ThreeDBorderWindow"
+		WindowStartupLocation="CenterScreen"
+        AllowsTransparency="False" 
+        ResizeMode="NoResize"
+		mc:Ignorable="d" 
+        Title ="{Binding WindowTitle, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+        MinHeight="300" MinWidth="450" Height="300" Width="450"
+		d:DataContext="{d:DesignInstance viewModels:AppendPlaceablePatternViewModel}">
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/General.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/WindowsBorder.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/TreeView.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/ComboboStyle.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/MultiSelectComboBox.Custom.ControlTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/MultiSelectComboBox.Custom.Image.Resources.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/MultiSelectComboBox.Custom.DropdownItemTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/MultiSelectComboBox.Custom.SelectedItemTemplate.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+
+			<converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" FalseValue="Collapsed" TrueValue="Visible"/>
+
+			<Style TargetType="{x:Type Window}">
+				<Setter Property="FontFamily" Value="Segoe UI" />
+				<Setter Property="FontSize" Value="11"/>
+				<Setter Property="Foreground" Value="{StaticResource WindowsControl.Control.Text}"/>
+			</Style>
+		</ResourceDictionary>
+	</Window.Resources>
+	<Grid Margin="10" FocusManager.FocusedElement="{Binding ElementName=Pattern_TextBox}">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<Grid Grid.Row="0" Margin="5">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
+
+			<Grid Grid.Row="0" Margin="0,5,0,0">
+
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+
+				<TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="5,0,0,2" Text="Pattern:"/>
+				<TextBox Grid.Row="1" Grid.Column="0" Margin="5,0,0,0" MinHeight="24" x:Name="Pattern_TextBox"
+				         VerticalContentAlignment="Center"
+				         Text="{Binding  Pattern, 
+								Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+			</Grid>
+
+			<Grid Grid.Row="1" Margin="0,5,0,0">
+
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+
+
+				<TextBlock Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Margin="5,0,0,2" 
+				           Text="Segmentation Hint:"  VerticalAlignment="Center"/>
+
+				<ComboBox Grid.Row="1" Grid.Column="0" Margin="5,0,0,0"
+				          HorizontalAlignment="Stretch"
+				          HorizontalContentAlignment="Left"
+				          VerticalContentAlignment="Center"
+						  MinHeight="24"
+						  DisplayMemberPath="Name"
+				          ItemsSource="{Binding SegmentationHintItems}"
+				          SelectedItem="{Binding SegmentationHintItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				/>
+			</Grid>
+
+			<Grid Grid.Row="2" Margin="0,5,0,0">
+
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+
+
+				<TextBlock Grid.Row="0" Grid.Column="0" Margin="5,0,0,2" Text="Description:" 
+				         VerticalAlignment="Top"/>
+				<TextBox Grid.Row="1" Grid.Column="0" Margin="5,0,0,0"
+				         VerticalContentAlignment="Top" TextWrapping="Wrap"
+				         Text="{Binding  Description, 
+								Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+			</Grid>
+
+			
+		</Grid>
+		<StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Bottom" Orientation="Vertical" Margin="0,10,5,0" Height="36">
+			<Grid Height="28">
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+					<Button Margin="0,0,10,0" Width="90" Click="ButtonBase_OnClick"
+					      IsEnabled="{Binding IsValid}" IsDefault="True">
+						<StackPanel Orientation="Horizontal">
+							<TextBlock>OK</TextBlock>
+						</StackPanel>
+					</Button>
+					<Button Margin="0" Width="90" IsCancel="True">
+						<StackPanel Orientation="Horizontal">
+							<TextBlock>Cancel</TextBlock>
+						</StackPanel>
+					</Button>
+				</StackPanel>
+			</Grid>
+		</StackPanel>
+	</Grid>
+</Window>

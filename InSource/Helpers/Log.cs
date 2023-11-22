@@ -16,7 +16,7 @@ namespace Sdl.Community.InSource.Helpers
 			}
 			var config = LogManager.Configuration;
 
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RWS AppStore",
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Trados AppStore",
 				"InSourceLogs");
 			Directory.CreateDirectory(logDirectoryPath);
 

@@ -1,0 +1,263 @@
+﻿<UserControl x:Class="Multilingual.Excel.FileType.FileType.Views.PlaceholderPatternsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:rws="http://schemas.rws.com/xaml"
+             xmlns:converters="clr-namespace:Multilingual.Excel.FileType.Converters"
+             xmlns:controls="clr-namespace:Multilingual.Excel.FileType.Controls"
+             xmlns:behaviours="clr-namespace:Multilingual.Excel.FileType.Behaviours"
+             xmlns:viewModels="clr-namespace:Multilingual.Excel.FileType.FileType.ViewModels"
+             xmlns:resources="clr-namespace:Multilingual.Excel.FileType"
+             xmlns:models="clr-namespace:Multilingual.Excel.FileType.Models"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="700" d:DataContext="{d:DesignInstance viewModels:PlaceholderPatternsViewModel}">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/General.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/TreeView.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/ComboboStyle.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/DataGridStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/MultiSelectComboBox.Custom.ControlTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/MultiSelectComboBox.Custom.Image.Resources.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/MultiSelectComboBox.Custom.DropdownItemTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/MultiSelectComboBox.Custom.SelectedItemTemplate.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+
+
+			<converters:CultureInfoNameToImageConverter x:Key="CultureInfoNameToImageConverter"/>
+			<converters:CultureInfoNameToDisplayNameConverter x:Key="CultureInfoNameToDisplayNameConverter"/>
+
+			<Style TargetType="{x:Type Window}">
+				<Setter Property="FontFamily" Value="Segoe UI" />
+				<Setter Property="FontSize" Value="11"/>
+				<Setter Property="Foreground" Value="{StaticResource WindowsControl.Control.Text}"/>
+			</Style>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid Margin="0">
+		<GroupBox Header="Placeholders">
+			<Grid Margin="10">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+
+				<Grid Grid.Row="0" Margin="0,0,15,10">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<CheckBox Grid.Row="0" Grid.Column="0" Content="Process placeholder patterns"
+                         VerticalContentAlignment="Center"
+				         IsChecked="{Binding PlaceholderPatternsProcess, 
+					Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+					<TextBlock Grid.Row="1" Padding="0,5,5,5" Foreground="Gray" 
+					           TextWrapping="Wrap"  Text="{x:Static resources:PluginResources.ToolTip_PlaceholderPatterns}" />
+				</Grid>
+
+				<GroupBox Header="Placeholder patterns" Grid.Row="2">
+					<Grid Margin="10"
+					      IsEnabled="{Binding PlaceholderPatternsProcess, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="*"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+
+						<StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,2">
+							<Button Style="{StaticResource BaseButtonStyle}" Command="{Binding AddPlaceholderPatternCommand}" 
+							        CommandParameter="{Binding ElementName=DataGrid}">
+								<StackPanel Orientation="Horizontal">
+									<Image Source="../../Resources/Add.ico" Width="15"/>
+									<TextBlock Text="Add" Margin="5,0,0,0" ToolTip="Add a new placeholder pattern (Ctrl+N)"/>
+								</StackPanel>
+							</Button>
+							<Button Style="{StaticResource BaseButtonStyle}" Margin="5,0,0,0" Command="{Binding EditPlaceholderPatternCommand}" 
+							        CommandParameter="{Binding ElementName=DataGrid}"
+						        IsEnabled="{Binding IsPlaceholderPatternSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+								<StackPanel Orientation="Horizontal">
+									<Image Source="../../Resources/Edit.ico" Width="15"/>
+									<TextBlock Text="Edit" Margin="5,0,0,0" ToolTip="Edit the selected placeholder pattern (Ctrl+E)"/>
+								</StackPanel>
+							</Button>
+							<Button Style="{StaticResource BaseButtonStyle}" Margin="5,0,0,0" 
+							        Command="{Binding RemovePlaceholderPatternCommand}"
+							        CommandParameter="{Binding ElementName=DataGrid}"
+						        IsEnabled="{Binding IsPlaceholderPatternsSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+								<StackPanel Orientation="Horizontal">
+									<Image Source="../../Resources/Delete.ico" Width="15"/>
+									<TextBlock Text="Delete" Margin="5,0,0,0" ToolTip="Remove the selected placeholder patterns (Delete)"/>
+								</StackPanel>
+							</Button>
+							<Separator/>
+							<Button Style="{StaticResource BaseButtonStyle}" Margin="5,0,0,0" Command="{Binding ExportPlaceholderPatternsCommand}"
+							        IsEnabled="{Binding PlaceholderPatternsProcess, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+								<StackPanel Orientation="Horizontal">
+									<Image Source="../../Resources/ExportTo.ico" Width="15"/>
+									<TextBlock Text="Export" Margin="5,0,0,0" ToolTip="Export the selected placeholder patterns"/>
+								</StackPanel>
+							</Button>
+
+							<Button Style="{StaticResource BaseButtonStyle}" Margin="5,0,0,0" Command="{Binding ImportPlaceholderPatternsCommand}"
+							        IsEnabled="{Binding PlaceholderPatternsProcess, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+								<StackPanel Orientation="Horizontal">
+									<Image Source="../../Resources/ImportFrom.ico" Width="15"/>
+									<TextBlock Text="Import" Margin="5,0,0,0" ToolTip="Import placeholder patterns"/>
+								</StackPanel>
+							</Button>
+						</StackPanel>
+						<Grid Grid.Row="1">
+							<controls:SortAwareDataGrid Grid.Row="0"
+														x:Name="DataGrid"
+							  DefaultColumnName="[none]"
+							  DefaultSortDirection="Descending"									
+							  Style="{StaticResource CustomGridStyle}"
+							  Margin="0" 		
+							  AllowDrop="True"
+							  ItemsSource="{Binding PlaceholderPatterns, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"                
+							  SelectedItem="{Binding SelectedPlaceholderPattern, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							  SelectedItems="{Binding SelectedPlaceholderPatterns, Mode=OneWayToSource}"
+							  behaviours:DragDropBehaviour.DragDrop="{Binding DragDropCommand}"
+							  behaviours:MouseDoubleClickBehaviour.MouseDoubleClick="{Binding MouseDoubleClickCommand}"			
+							  FontSize="12"
+							  BorderBrush="#C1C0C0"
+							  FontFamily="Segoe UI"
+							  SelectionMode="Extended"
+							  SelectionUnit="FullRow"	
+							  GridLinesVisibility="Horizontal"
+							  VerticalScrollBarVisibility="Auto"
+							  HorizontalScrollBarVisibility="Disabled"
+							  CanUserSortColumns="False"
+							  CanUserDeleteRows="False">
+								<DataGrid.InputBindings>
+									<KeyBinding Key="Delete" Command="{Binding RemovePlaceholderPatternCommand}" CommandParameter="{Binding ElementName=DataGrid}"/>
+									<KeyBinding Modifiers="Control" Key="N" Command="{Binding AddPlaceholderPatternCommand}" CommandParameter="{Binding ElementName=DataGrid}"/>
+									<KeyBinding Modifiers="Control" Key="E" Command="{Binding EditPlaceholderPatternCommand}" CommandParameter="{Binding ElementName=DataGrid}"/>
+									<KeyBinding Modifiers="Control" Key="Up" Command="{Binding MovePlaceholderPatternUpCommand}" CommandParameter="{Binding ElementName=DataGrid}"/>
+									<KeyBinding Modifiers="Control" Key="Down" Command="{Binding MovePlaceholderPatternDownCommand}" CommandParameter="{Binding ElementName=DataGrid}"/>
+								</DataGrid.InputBindings>
+								<DataGrid.Columns>
+									<DataGridTemplateColumn  Width="Auto" IsReadOnly="True" MinWidth="50" CanUserSort="False">
+										<DataGridTemplateColumn.Header>
+											<CheckBox Content="Process" FontFamily="Segoe UI" Margin="0" 
+										          IsChecked="{Binding Path=  DataContext.SelectAll, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" 
+										          Command="{Binding Path=DataContext.SelectAllCommand,  RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" 
+										          VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+										</DataGridTemplateColumn.Header>
+										<DataGridTemplateColumn.CellTemplate>
+											<DataTemplate DataType="models:PlaceholderPattern">
+												<CheckBox IsChecked="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+												          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+											</DataTemplate>
+										</DataGridTemplateColumn.CellTemplate>
+									</DataGridTemplateColumn>
+									<DataGridTemplateColumn Header="Pattern" CanUserSort="True" IsReadOnly="True"
+								                        SortMemberPath="Group" Width="1*">
+										<DataGridTemplateColumn.CellTemplate>
+											<DataTemplate DataType="models:PlaceholderPattern">
+												<TextBlock ToolTip="{Binding Pattern}" VerticalAlignment="Center" Padding="2,0,2,0"
+											           Text="{Binding Pattern, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="NoWrap"/>
+											</DataTemplate>
+										</DataGridTemplateColumn.CellTemplate>
+									</DataGridTemplateColumn>
+									<DataGridTemplateColumn Header="Segmentation Hint" CanUserSort="True" IsReadOnly="True"
+									                        SortMemberPath="Group" Width="1*">
+										<DataGridTemplateColumn.CellTemplate>
+											<DataTemplate DataType="models:PlaceholderPattern">
+												<TextBlock
+													ToolTip="{Binding  SegmentationHintName}" VerticalAlignment="Center" Padding="2,0,2,0"
+												           Text="{Binding SegmentationHintName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="NoWrap"/>
+											</DataTemplate>
+										</DataGridTemplateColumn.CellTemplate>
+									</DataGridTemplateColumn>
+									<DataGridTemplateColumn Header="Description" CanUserSort="True" IsReadOnly="True"
+								                        SortMemberPath="Group" Width="2*">
+										<DataGridTemplateColumn.CellTemplate>
+											<DataTemplate DataType="models:PlaceholderPattern">
+												<TextBlock ToolTip="{Binding Description}" VerticalAlignment="Center" Padding="2,0,2,0"
+											           Text="{Binding Description, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"/>
+											</DataTemplate>
+										</DataGridTemplateColumn.CellTemplate>
+									</DataGridTemplateColumn>
+									<DataGridTemplateColumn Header="" Width="18" IsReadOnly="True" CanUserSort="False" >
+										<DataGridTemplateColumn.CellTemplate>
+											<DataTemplate>
+												<Button Background="Transparent" BorderThickness="0" 
+												        ToolTip="Move Up" VerticalAlignment="Center"
+												        Command="{Binding Path=DataContext.MovePlaceholderPatternUpCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+												        CommandParameter="{Binding ElementName=DataGrid}">
+													<Image Source="../../Resources/Up.ico" Width="16" Height="16"/>
+												</Button>
+											</DataTemplate>
+										</DataGridTemplateColumn.CellTemplate>
+									</DataGridTemplateColumn>
+									<DataGridTemplateColumn Header="" Width="18" IsReadOnly="True" MinWidth="18" CanUserSort="False">
+										<DataGridTemplateColumn.CellTemplate>
+											<DataTemplate>
+												<Button Background="Transparent" BorderThickness="0"
+												        VerticalAlignment="Center"
+												        ToolTip="Move Down" 
+												        Command="{Binding Path=DataContext.MovePlaceholderPatternDownCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+												        CommandParameter="{Binding ElementName=DataGrid}">
+													<Image Source="../../Resources/Down.ico" Width="16" Height="16"/>
+												</Button>
+											</DataTemplate>
+										</DataGridTemplateColumn.CellTemplate>
+									</DataGridTemplateColumn>
+									<DataGridTemplateColumn Header="" IsReadOnly="True" MinWidth="24" CanUserSort="False" >
+										<DataGridTemplateColumn.CellTemplate>
+											<DataTemplate>
+												<Button Background="Transparent" BorderThickness="0" ToolTip="Delete"
+												        VerticalAlignment="Center"
+												        Command="{Binding Path=DataContext.RemovePlaceholderPatternCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+												        CommandParameter="{Binding ElementName=DataGrid}">
+													<Image Opacity=".8" Source="../../Resources/Delete.ico" Width="16" Height="16"/>
+												</Button>
+											</DataTemplate>
+										</DataGridTemplateColumn.CellTemplate>
+									</DataGridTemplateColumn>
+								</DataGrid.Columns>
+								<DataGrid.ContextMenu>
+									<ContextMenu>
+										<MenuItem Header="Edit the selected placeholder pattern (Ctrl+E)" 
+										  IsEnabled="{Binding IsPlaceholderPatternSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+										  Command="{Binding EditPlaceholderPatternCommand}"
+										  CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+											<MenuItem.Icon>
+												<Image Source="../../Resources/Edit.ico"/>
+											</MenuItem.Icon>
+										</MenuItem>
+										<MenuItem Header="Remove the selected placeholder patterns (Delete)" 
+										  IsEnabled="{Binding IsPlaceholderPatternsSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+										  Command="{Binding RemovePlaceholderPatternCommand}"
+										  CommandParameter="{Binding ElementName=DataGrid}">
+											<MenuItem.Icon>
+												<Image Source="../../Resources/Delete.ico"/>
+											</MenuItem.Icon>
+										</MenuItem>
+									</ContextMenu>
+								</DataGrid.ContextMenu>
+							</controls:SortAwareDataGrid>
+						</Grid>
+
+						<Grid Grid.Row="2">
+							<Label HorizontalAlignment="Right" Foreground="#4E4D4D" Content="{Binding PlaceholderPatternsStatusLabel, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+						</Grid>
+					</Grid>
+				</GroupBox>
+			</Grid>
+		</GroupBox>
+
+	</Grid>
+</UserControl>

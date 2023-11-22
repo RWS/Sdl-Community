@@ -1,7 +1,9 @@
 ﻿using Sdl.Community.Utilities.TMTool.Task;
+using Sdl.Community.Utilities.TMTool.Tasks.RemapTMX;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -51,14 +53,20 @@ namespace Sdl.Community.TranslationMemoryManagementUtility
 		private void SetTargetFolder()
 		{
 			btnOpenFolder.Visible = false;
+			var settings = _task.Control.Options;
+			if (settings is null)
+			{
+				return;
+			}
 
-			ISettings settings = _task.Control.Options;
-			if (settings != null)
-				if (settings.TargetFolder != null && settings.TargetFolder.Length > 0)
-				{
-					_targetFolder = settings.TargetFolder;
-					btnOpenFolder.Visible = true;
-				}
+			var targetPath = (settings as RemapTMXSettings)?.SaveIntoTargetFolder ?? false ? Path.GetDirectoryName(_files.FirstOrDefault()) : settings.TargetFolder;
+
+			settings.TargetFolder = targetPath;
+			if (!string.IsNullOrEmpty(settings.TargetFolder))
+			{
+				_targetFolder = settings.TargetFolder;
+				btnOpenFolder.Visible = true;
+			}
 		}
 
 		/// <summary>

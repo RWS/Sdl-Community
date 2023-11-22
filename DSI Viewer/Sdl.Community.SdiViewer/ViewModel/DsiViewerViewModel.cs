@@ -292,18 +292,22 @@ namespace Sdl.Community.DsiViewer.ViewModel
 				return;
 			}
 
-			if (translationOrigin.OriginSystem.ToLower().Contains(PluginResources.ProviderId))
+			switch (translationOrigin.OriginSystem)
 			{
-				var qualityEstimation = translationOrigin.GetMetaData("quality_estimation");
-				TranslationOriginData = new TranslationOriginData
-				{
-					QualityEstimation = qualityEstimation,
-					Model = translationOrigin.GetMetaData("model"),
-				};
-			}
-			else
-			{
-				TranslationOriginData = null;
+				case not null when translationOrigin.OriginSystem.ToLower().Contains(PluginResources.ProviderId):
+					{
+						var qualityEstimation = translationOrigin.GetMetaData("quality_estimation");
+						TranslationOriginData = new TranslationOriginData
+						{
+							QualityEstimation = qualityEstimation,
+							Model = translationOrigin.GetMetaData("model"),
+						};
+						break;
+					}
+
+				default:
+					TranslationOriginData = null;
+					break;
 			}
 		}
 	}

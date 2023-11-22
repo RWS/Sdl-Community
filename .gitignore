@@ -236,4 +236,9 @@ IATETerminologyProvider/IATETerminologyProvider/pluginpackage.manifest_LOCAL_178
 /SDLDataProtectionSuite/SDLDataProtectionSuite/Properties/launchSettings.json
 /SDLTMRepair/SDLTMRepair/Properties/launchSettings.json
 /SDLMTEdge.Provider/SDLMTEdgeTranslationProvider/Properties/launchSettings.json
+/TM Optimizer/Sdl.Community.TMOptimizer/Properties/launchSettings.json
 
+*.json
+TMX_TranslationProvider/TMX_TranslationProviderWithUITest.sln
+/InterpretBank/InterpretBankTests/Resources/SavedGlossary.xlsx
+/InterpretBank/InterpretBankTests/Resources/exp2.tbx

@@ -22,7 +22,9 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 		/// <summary>
 		/// Determines whether to show the warning about terminology
 		/// </summary>
-		private bool _showWarning = true;
+		private bool _showTermbaseWarning = true;
+
+		private bool _showDiffTemplateWarning = true;
 		private bool _languageMatches = true;
 
 		private readonly ProjectsController _projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
@@ -52,12 +54,19 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 		/// </value>
 		public bool ApplyToSelected => ApplyTo.SelectedIndex == 1;
 
+		private string GetTemplatesPath()
+		{
+			var projectTemplatesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"Trados\ASPT.xml");
+			Directory.CreateDirectory( Path.GetDirectoryName(projectTemplatesPath) );
+			return projectTemplatesPath;
+		}
+
 		/// <summary>
 		/// Saves the project templates.
 		/// </summary>
 		public void SaveProjectTemplates()
 		{
-			var projectTemplatesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL\ASPT.xml");
+			var projectTemplatesPath = GetTemplatesPath();
 			var settings = new XmlWriterSettings
 			{
 				Indent = true
@@ -72,7 +81,10 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 						applyTemplate.Id.ToString("D"));
 				writer.WriteAttributeString("apply", (string)ApplyTo.SelectedItem);
 				writer.WriteAttributeString("tooltips", ShowToolTips.Checked ? "1" : "0");
-				writer.WriteAttributeString("warning", _showWarning ? "1" : "0");
+				writer.WriteAttributeString("runAnalysisBatchTask", RunAnalysisBatchTask.Checked ? "1" : "0");
+				writer.WriteAttributeString("runPreTranslateBatchTask", RunPreTranslateBatchTask.Checked ? "1" : "0");
+				writer.WriteAttributeString("warning", _showTermbaseWarning ? "1" : "0");
+				writer.WriteAttributeString("diff_template_warning", _showDiffTemplateWarning? "1" : "0");
 
 				if (SelectedTemplate?.Items != null)
 				{
@@ -92,6 +104,14 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 				writer.Close();
 			}
 		}
+		/// <summary>
+		/// set true/false if run analysis batch task checked/unchecked.
+		/// </summary>
+		public bool RunAnalysisBatchTaskFlag=> RunAnalysisBatchTask.Checked;
+		/// <summary>
+		/// set true/false if run pre-translate batch task checked/unchecked.
+		/// </summary>
+		public bool RunPreTranslateBatchTaskFlag => RunPreTranslateBatchTask.Checked;
 
 		/// <summary>
 		/// Loads the project templates.
@@ -112,7 +132,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			// Add in any extra templates manually defined
 			var selectedId = Guid.Empty;
 			ApplyTo.SelectedIndex = 0;
-			var projectTemplatesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL\ASPT.xml");
+			var projectTemplatesPath = GetTemplatesPath();
 			if (File.Exists(projectTemplatesPath))
 			{
 				try
@@ -137,9 +157,20 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 
 					if (templatesXml.DocumentElement != null && templatesXml.DocumentElement.HasAttribute("warning"))
 					{
-						_showWarning = templatesXml.DocumentElement.Attributes["warning"].Value == "1";
+						_showTermbaseWarning = templatesXml.DocumentElement.Attributes["warning"].Value == "1";
 					}
-
+					if (templatesXml.DocumentElement != null && templatesXml.DocumentElement.HasAttribute("diff_template_warning"))
+					{
+						_showDiffTemplateWarning = templatesXml.DocumentElement.Attributes["diff_template_warning"].Value == "1";
+					}
+					if(templatesXml.DocumentElement != null && templatesXml.DocumentElement.HasAttribute("runAnalysisBatchTask"))
+					{
+						RunAnalysisBatchTask.Checked = templatesXml.DocumentElement.Attributes["runAnalysisBatchTask"].Value == "1";						
+					}
+					if (templatesXml.DocumentElement != null && templatesXml.DocumentElement.HasAttribute("runPreTranslateBatchTask"))
+					{
+						RunPreTranslateBatchTask.Checked = templatesXml.DocumentElement.Attributes["runPreTranslateBatchTask"].Value == "1";
+					}
 					var xmlNodeList = templatesXml.SelectNodes("//template");
 					if (xmlNodeList != null)
 					{
@@ -171,7 +202,9 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 									thisTemplate.BatchTasksSpecificLanguages = newTemplate.BatchTasksSpecificLanguages;
 									thisTemplate.FileTypes = newTemplate.FileTypes;
 									thisTemplate.MatchRepairSettings = newTemplate.MatchRepairSettings;
-									thisTemplate.VerificationSpecificLanguages = newTemplate.VerificationSpecificLanguages;
+									thisTemplate.VerificationSpecificLanguages = newTemplate.VerificationSpecificLanguages;	
+									thisTemplate.AnalysisBatchTask=newTemplate.AnalysisBatchTask;
+									thisTemplate.PreTranslateBatchTask=newTemplate.PreTranslateBatchTask;
 								}
 							}
 							else
@@ -223,7 +256,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 		private void SelectedTemplate_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			var selectedTemplate = SelectedTemplate.SelectedItem as ApplyTemplate;
-			
+		
 			if (selectedTemplate != null)
 			{
 				TranslationProvidersAllLanguages.SelectedItem = selectedTemplate.TranslationProvidersAllLanguages.ToString();
@@ -243,6 +276,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 				FileTypes.SelectedItem = selectedTemplate.FileTypes.ToString();
 				matchRepairBox.SelectedItem = selectedTemplate.MatchRepairSettings.ToString();
 				VerificationSpecificLanguages.SelectedItem = selectedTemplate.VerificationSpecificLanguages.ToString();
+				AutomationAnalysisBatchTask.SelectedItem=selectedTemplate.AnalysisBatchTask.ToString();
+				AutomationPreTranslateBatchTask.SelectedItem=selectedTemplate.PreTranslateBatchTask.ToString();
 			}
 			CheckChanged();
 		}
@@ -274,8 +309,13 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 									VerificationNumberVerifier.SelectedIndex +
 									matchRepairBox.SelectedIndex +
 									FileTypes.SelectedIndex +
-									VerificationSpecificLanguages.SelectedIndex;
+									VerificationSpecificLanguages.SelectedIndex									
+									;
 				OkButton.Enabled = sumOfSelected > 0;
+				if(OkButton.Enabled==false && (RunAnalysisBatchTask.Checked==true || RunPreTranslateBatchTask.Checked==true))
+				{
+					OkButton.Enabled = true;
+				}
 			}
 		}
 
@@ -605,7 +645,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 		/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
 		private void OkButton_Click(object sender, EventArgs e)
 		{
-			if (_showWarning)
+			if (_showTermbaseWarning)
 			{
 				if (TerminologyTermbases.SelectedIndex > 0 || TerminologySearchSettings.SelectedIndex > 0)
 				{
@@ -615,17 +655,23 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 						TerminologyTermbases.SelectedIndex = 0;
 						TerminologySearchSettings.SelectedIndex = 0;
 					}
-					_showWarning = warningForm.ShowAgain;
+					_showTermbaseWarning = warningForm.ShowAgain;
 				}
 			}
 
 			_languageMatches = Helpers.Matches(_projectController.SelectedProjects.ToList(), ActiveTemplate);
-
 			if (!_languageMatches)
 			{
-				var result = MessageBox.Show(@"Selected template has different language directions, or language pairs, from the selected project.  Do you still wish to apply the settings from this template?", @"Warning",
-					MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-				DialogResult = result == DialogResult.Yes ? DialogResult.OK : DialogResult.None;
+				if (_showDiffTemplateWarning)
+				{
+					var warningForm = new WarningForm(
+						@"Selected template has different language directions, or language pairs, from the selected project.  Do you still wish to apply the settings from this template?");
+					var okPressed = warningForm.ShowDialog() == DialogResult.OK;
+					_showDiffTemplateWarning = warningForm.ShowAgain;
+					DialogResult = okPressed ? DialogResult.OK : DialogResult.None;
+				}
+				else
+					DialogResult = DialogResult.OK;
 			}
 			else
 			{
@@ -671,6 +717,52 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 				applyTemplate.VerificationSpecificLanguages =
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), VerificationSpecificLanguages.SelectedItem.ToString());
 				CheckChanged();
+			}
+		}
+
+		private void RunAnalysisBatchTask_CheckedChanged(object sender, EventArgs e)
+		{
+			CheckChanged();
+			if (RunAnalysisBatchTask.Checked)
+			{
+				AutomationAnalysisBatchTask.Visible = true;				
+			}
+			else
+			{
+				AutomationAnalysisBatchTask.Visible = false;
+			}
+		}
+
+		private void RunPreTranslateBatchTask_CheckedChanged(object sender, EventArgs e)
+		{
+			CheckChanged();
+			if(RunPreTranslateBatchTask.Checked)
+			{
+				AutomationPreTranslateBatchTask.Visible=true;				
+			}
+			else
+			{
+				AutomationPreTranslateBatchTask.Visible = false;
+			}
+		}
+
+		private void AutomationAnalysisBatchTask_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (SelectedTemplate.SelectedItem is ApplyTemplate applyTemplate)
+			{
+				applyTemplate.AnalysisBatchTask =
+					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
+						AutomationAnalysisBatchTask.SelectedItem.ToString());
+			}
+		}
+
+		private void AutomationPreTranslateBatchTask_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (SelectedTemplate.SelectedItem is ApplyTemplate applyTemplate)
+			{
+				applyTemplate.PreTranslateBatchTask =
+					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
+						AutomationPreTranslateBatchTask.SelectedItem.ToString());
 			}
 		}
 	}

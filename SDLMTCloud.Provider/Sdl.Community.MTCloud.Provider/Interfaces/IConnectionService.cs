@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Sdl.Community.MTCloud.Provider.Model;
-using Sdl.LanguageCloud.IdentityApi;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.MTCloud.Provider.Interfaces
@@ -11,8 +11,6 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 	public interface IConnectionService
 	{
 		IWin32Window Owner { get; set; }
-
-		LanguageCloudIdentityApi LanguageCloudIdentityApi { get; }
 
 		bool IsSignedIn { get; }
 
@@ -26,25 +24,26 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 
 		ICredential GetCredential(string credentialString);
 
-		(bool, string) Connect(ICredential credential);
+		(bool, string) Connect(ICredential credential = null, bool showDialog = false);
 
-		(bool, string) EnsureSignedIn(ICredential credential, bool alwaysShowWindow = false);
-
-		bool IsValidStudioCredential(out string message);
+		(bool, string) EnsureSignedIn(ITranslationProviderCredentialStore credentialStore, bool alwaysShowWindow = false);
 
 		bool IsValidCredential(out string message);
 
-		(LanguageCloudIdentityApiModel, string) StudioSignIn();
+		(LanguageCloudCredentials, string) StudioSignIn(bool showDialog);
 
 		Task<(AuthorizationResponse, string)> SignIn(string resource, string content);
 
 		Task<(UserDetails, string)> GetUserDetails(string resource);
 
-		void AddTraceHeader(HttpRequestMessage request);
+		void AddTraceHeaders(HttpRequestMessage request);
 
-		void SaveCredential(ITranslationProviderCredentialStore credentialStore, bool persist = true);
+		void SaveCredential(bool persist = true);
 
-		ICredential GetCredential(ITranslationProviderCredentialStore credentialStore);
+		//ICredential GetCredential(ITranslationProviderCredentialStore credentialStore);
 		string CurrentWorkingPortalAddress { get; set; }
+		void SignOut();
+		void CheckConnection([CallerMemberName] string caller = null);
+		HttpRequestMessage GetRequestMessage(HttpMethod httpMethod, Uri uri);
 	}
 }

@@ -17,8 +17,8 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 		{
 			try
 			{
-				_studioPersistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RWS AppStore", "TradosFreshstart", "Settings", "studioSettings.json");
-				_multiTermPersistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RWS AppStore", "TradosFreshstart", "Settings", "multiTermSettings.json");
+				_studioPersistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Trados AppStore", "TradosFreshstart", "Settings", "studioSettings.json");
+				_multiTermPersistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Trados AppStore", "TradosFreshstart", "Settings", "multiTermSettings.json");
 				if (!File.Exists(_studioPersistancePath))
 				{
 					var studioDirectory = Path.GetDirectoryName(_studioPersistancePath);

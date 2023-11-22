@@ -13,7 +13,7 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://appstore.sdl.com/language/app");
+			Process.Start("https://appstore.rws.com/Plugin/21");
 		}
 
 		public override bool IsAvailable => true;

@@ -33,7 +33,9 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
 
 				_segmentPairProcessor = new SegmentPairProcessor(
 					new Trados.Community.Toolkit.LanguagePlatform.Models.Settings(sourceLanguage, targetLanguage),
-					new Trados.Community.Toolkit.LanguagePlatform.Models.PathInfo());
+					// Note: this is a workaround, calling the default constructor of PathInfo()
+					// doesn't recognize Trados Studio 17.0.0.1, and would throw an exception
+					new Trados.Community.Toolkit.LanguagePlatform.Models.PathInfo("Trados Studio 2022"));
 
 				return _segmentPairProcessor;
 			}

@@ -12,7 +12,7 @@ namespace Sdl.Community.InSource.Tellme
 		}
 		public override void Execute()
 		{
-			Process.Start("https://appstore.sdl.com/language/app/trados-insource/548/");
+			Process.Start("https://appstore.rws.com/Plugin/31");
 		}
 
 		public override bool IsAvailable => true;

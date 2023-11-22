@@ -8,7 +8,7 @@ namespace Sdl.Community.SdlFreshstart.Helpers
 {
 	public static class Paths
 	{
-		private static readonly string BackupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RWS AppStore", "TradosFreshstart");
+		private static readonly string BackupFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Trados AppStore", "TradosFreshstart");
 
 		public static List<LocationDetails> GetLocationsFromVersions(List<string> locationNames, List<IStudioVersion> studioVersions)
 		{

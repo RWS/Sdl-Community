@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="Multilingual.Excel.FileType.BatchTasks.Views.ExportSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:rws="http://schemas.rws.com/xaml"
+             xmlns:viewModels="clr-namespace:Multilingual.Excel.FileType.BatchTasks.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="700" d:DataContext="{d:DesignInstance viewModels:ExportSettingsViewModel}">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/General.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/TreeView.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/Buttons.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/ComboboStyle.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/DataGridStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/MultiSelectComboBox.Custom.ControlTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/MultiSelectComboBox.Custom.Image.Resources.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/MultiSelectComboBox.Custom.DropdownItemTemplate.xaml"/>
+				<ResourceDictionary Source="pack://application:,,,/Multilingual.Excel.FileType;component/Styles/MultiSelectComboBox.Custom.SelectedItemTemplate.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+
+			<Style TargetType="{x:Type Window}">
+				<Setter Property="FontFamily" Value="Segoe UI" />
+				<Setter Property="FontSize" Value="11"/>
+				<Setter Property="Foreground" Value="{StaticResource WindowsControl.Control.Text}"/>
+			</Style>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid Margin="0">
+		<GroupBox Header="Settings">
+			<Grid Margin="10">
+			</Grid>
+		</GroupBox>
+	</Grid>
+</UserControl>

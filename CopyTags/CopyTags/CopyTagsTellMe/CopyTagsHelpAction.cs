@@ -8,12 +8,12 @@ namespace SDLCopyTags.CopyTagsTellMe
 	{
 		public CopyTagsHelpAction()
 		{
-			Name = "Trados Copy Tags wiki in the RWS Community";
+			Name = "Trados Copy Tags wiki";
 		}
 
 		public override void Execute()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/5247/trados-copy-tags");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/5247/trados-copy-tags");
 		}
 
 		public override bool IsAvailable => true;

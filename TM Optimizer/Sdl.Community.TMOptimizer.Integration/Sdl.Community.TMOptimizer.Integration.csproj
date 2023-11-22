@@ -4,9 +4,14 @@
 		<TargetFramework>net48</TargetFramework>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17Beta\Plugins</PluginDeploymentPath>
 		<CreatePluginPackage>true</CreatePluginPackage>
 	</PropertyGroup>
+	<ItemGroup>
+	  <None Remove="Resources\Download.ico" />
+	  <None Remove="Resources\ForumIcon.ico" />
+	  <None Remove="Resources\Question.ico" />
+	</ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -37,6 +42,9 @@
     <Reference Include="Sdl.ProjectAutomation.Settings">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
+		<Reference Include="Sdl.TellMe.ProviderApi">
+			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
+		</Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -49,6 +57,8 @@
   <ItemGroup>
     <Content Include="PluginResources.resx">
       <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </Content>
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
@@ -72,6 +82,18 @@
     <PackageReference Include="Sdl.Core.PluginFramework.Build">
       <Version>17.0.0</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Download.ico" />
+    <Resource Include="Resources\ForumIcon.ico" />
+    <Resource Include="Resources\Question.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="PluginResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PluginResources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>

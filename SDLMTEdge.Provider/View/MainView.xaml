@@ -1,0 +1,104 @@
+﻿<Window x:Class="Sdl.Community.MTEdge.Provider.View.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="clr-namespace:Sdl.Community.MTEdge.Provider.Converters"
+        xmlns:styles="clr-namespace:Sdl.Community.MTEdge.Provider.Style"
+        xmlns:views="clr-namespace:Sdl.Community.MTEdge.Provider.View"
+        xmlns:viewModels="clr-namespace:Sdl.Community.MTEdge.Provider.ViewModel"
+        mc:Ignorable="d"
+		d:DataContext="{d:DesignInstance viewModels:MainViewModel}"
+		WindowStartupLocation="CenterScreen"
+		Title="Language Weaver Edge"
+		WindowStyle="None"
+		SizeToContent="Height"
+		ResizeMode="NoResize"
+		MinHeight="450"
+		MaxHeight="450"
+		MinWidth="500"
+		MaxWidth="500"
+		d:DesignHeight="450"
+		d:DesignWidth="500">
+
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../Style/WindowsBorder.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBoxResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+
+			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
+
+			<DataTemplate DataType="{x:Type viewModels:CredentialsViewModel}">
+				<views:CredentialsView />
+			</DataTemplate>
+
+			<DataTemplate DataType="{x:Type viewModels:LanguageMappingViewModel}">
+				<views:LanguageMappingView />
+			</DataTemplate>
+
+			<Style TargetType="Image">
+				<Setter Property="RenderOptions.BitmapScalingMode"
+						Value="HighQuality" />
+			</Style>
+		</ResourceDictionary>
+	</Window.Resources>
+
+	<Border Style="{StaticResource WindowControlBorderStyle}">
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="auto" />
+				<RowDefinition Height="auto" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="auto" />
+				<RowDefinition Height="auto" />
+			</Grid.RowDefinitions>
+
+			<styles:WindowsControl Grid.Row="0" />
+
+			<GroupBox Grid.Row="2"
+					  Margin="10 20 10 10">
+				<GroupBox.Header>
+					<TextBlock Text="{Binding HeaderTitle, UpdateSourceTrigger=PropertyChanged}" />
+				</GroupBox.Header>
+				<StackPanel>
+					<ContentControl Grid.Row="1"
+									Content="{Binding SelectedView.ViewModel}"
+									Margin="0"/>
+				</StackPanel>
+			</GroupBox>
+
+			<StackPanel Grid.Row="3"
+						Orientation="Horizontal"
+						HorizontalAlignment="Right"
+						Margin="16">
+				<Button Content="Sign In"
+						Command="{Binding SignInCommand}"
+						Visibility="{Binding ShowSettingsView, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+						Style="{StaticResource Sdl.Button.PrimaryStyle}"
+						Width="160"
+						Height="32"
+						Margin="8 0" />
+				<Button Content="Confirm"
+						Command="{Binding SaveCommand}"
+						Visibility="{Binding ShowSettingsView, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+						Style="{StaticResource Sdl.Button.PrimaryStyle}"
+						Width="160"
+						Height="32"
+						Margin="8 0"/>
+				<Button Content="Cancel"
+						Command="{Binding CancelCommand}"
+						Visibility="{Binding ShowSettingsView, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+						Style="{StaticResource Sdl.Button.SecondaryStyle}"
+						Margin="8 0"
+						Width="160"
+						Height="32" />
+			</StackPanel>
+		</Grid>
+	</Border>
+</Window>

@@ -21,8 +21,7 @@ namespace Sdl.Community.MTCloud.Provider.UiHelpers.Watermark
 									"IsWatermarkVisible", typeof(bool), typeof(TextBoxWatermarkHelper));
 
 		public static readonly DependencyProperty WatermarkTextProperty = DependencyProperty.RegisterAttached(
-			"WatermarkText", typeof(string), typeof(TextBoxWatermarkHelper),
-			new PropertyMetadata("Watermark", OnWatermarkTextChanged));
+			"WatermarkText", typeof(string), typeof(TextBoxWatermarkHelper),new PropertyMetadata("Watermark"));
 
 		public static void ButtonClicked(object sender, RoutedEventArgs e)
 		{
@@ -102,29 +101,7 @@ namespace Sdl.Community.MTCloud.Provider.UiHelpers.Watermark
 			}
 		}
 
-		private static void OnControlGotFocus(object sender, RoutedEventArgs e)
-		{
-			(sender as TextBox)?.SetValue(IsWatermarkVisibleProperty, false);
-		}
 
-		private static void OnControlLostFocus(object sender, RoutedEventArgs e)
-		{
-			if (!(sender is TextBox control)) return;
-			if (string.IsNullOrEmpty(control.Text))
-			{
-				control.SetValue(IsWatermarkVisibleProperty, true);
-			}
-		}
-
-		private static void OnWatermarkTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-		{
-			var textBox = d as TextBox;
-			d?.SetValue(IsWatermarkVisibleProperty, true);
-
-			if (textBox == null) return;
-			textBox.LostFocus += OnControlLostFocus;
-			textBox.GotFocus += OnControlGotFocus;
-		}
 
 		private static void SetTextLength<TDependencyObject>(TDependencyObject sender, Func<TDependencyObject, int> funcTextLength) where TDependencyObject : DependencyObject
 		{

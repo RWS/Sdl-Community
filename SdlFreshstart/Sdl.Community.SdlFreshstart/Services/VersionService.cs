@@ -14,7 +14,8 @@ namespace Sdl.Community.SdlFreshstart.Services
 	public class VersionService
 	{
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-		private readonly string _packageCache = @"C:\ProgramData\Package Cache\SDL";
+		private readonly string _packageCacheSdl = @"C:\ProgramData\Package Cache\SDL";
+		private readonly string _packageCacheTrados = @"C:\ProgramData\Package Cache\Trados";
 		private readonly List<string> _possiblePackageCacheFolderName;
 		private List<StudioVersion> _installedVersions;
 
@@ -108,7 +109,7 @@ namespace Sdl.Community.SdlFreshstart.Services
 				{
 					var folderName = string.Format(possibleVersion, versionName, executableVersion.Minor,
 						executableVersion.Build);
-					folderPath = Path.Combine(_packageCache, folderName);
+					folderPath = Path.Combine(_packageCacheTrados, folderName);
 					if (Directory.Exists(folderPath)) return folderPath;
 				}
 			}
@@ -119,7 +120,14 @@ namespace Sdl.Community.SdlFreshstart.Services
 				{
 					versionName = $"{versionName}_Beta";
 				}
-				folderPath = Path.Combine(_packageCache, versionName);
+
+				folderPath = Path.Combine(_packageCacheSdl, versionName);
+				if (Directory.Exists(folderPath))
+				{
+					return folderPath;
+				}
+
+				folderPath = Path.Combine(_packageCacheTrados, versionName.Replace("SDL", string.Empty));
 				if (Directory.Exists(folderPath))
 				{
 					return folderPath;

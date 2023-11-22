@@ -17,7 +17,7 @@ namespace Sdl.Community.StyleSheetVerifier.TellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://appstore.sdl.com/language/app/stylesheet-verifier/870/");
+			Process.Start("https://appstore.rws.com/Plugin/47");
 		}
 	}
 }

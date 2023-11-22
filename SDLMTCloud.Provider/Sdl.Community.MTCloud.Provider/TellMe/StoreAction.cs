@@ -13,7 +13,7 @@ namespace Sdl.Community.MTCloud.Provider.TellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://appstore.sdl.com/language/app/language-weaver-cloud/941/");
+			Process.Start("https://appstore.rws.com/Plugin/9");
 		}
 
 		public override bool IsAvailable => true;

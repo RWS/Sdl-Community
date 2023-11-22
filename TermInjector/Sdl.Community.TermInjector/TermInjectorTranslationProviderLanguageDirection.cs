@@ -38,19 +38,19 @@ namespace Sdl.Community.TermInjector
 
         }
 
-        #endregion
+		#endregion
 
-        public System.Globalization.CultureInfo SourceLanguage
-        {
-            get { return _languageDirection.SourceCulture; }
-        }
+		public System.Globalization.CultureInfo SourceLanguage
+		{
+			get { return _languageDirection.SourceCulture; }
+		}
 
-        public System.Globalization.CultureInfo TargetLanguage
-        {
-            get { return _languageDirection.TargetCulture; }
-        }
+		public System.Globalization.CultureInfo TargetLanguage
+		{
+			get { return _languageDirection.TargetCulture; }
+		}
 
-        public bool CanReverseLanguageDirection
+		public bool CanReverseLanguageDirection
         {
             get { return false; }
         }
@@ -59,8 +59,13 @@ namespace Sdl.Community.TermInjector
         {
             get { return _provider; }
         }
+			
 
-        private Boolean InjectTermsNoMatch(Segment segment, Segment blankSegment)
+		CultureCode ITranslationProviderLanguageDirection.SourceLanguage => _languageDirection.SourceCulture;
+
+		CultureCode ITranslationProviderLanguageDirection.TargetLanguage => _languageDirection.TargetCulture;
+
+		private Boolean InjectTermsNoMatch(Segment segment, Segment blankSegment)
         {
             //Reset the nomatch visitor and have it visit the segment elements
             _provider.NoMatchVisitor.Reset();
@@ -265,7 +270,7 @@ namespace Sdl.Community.TermInjector
 
 
         /// Creates the translation unit as it is later shown in the Translation Results
-        /// window of SDL Trados Studio.
+        /// window of Trados Studio.
 
         #region "CreateSearchResult"
         private SearchResult CreateSearchResult(Segment searchSegment, Segment translation)

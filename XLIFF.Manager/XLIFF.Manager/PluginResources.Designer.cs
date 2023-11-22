@@ -19,7 +19,7 @@ namespace Sdl.Community.XLIFF.Manager {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class PluginResources {
@@ -87,6 +87,16 @@ namespace Sdl.Community.XLIFF.Manager {
             get {
                 object obj = ResourceManager.GetObject("document_add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Download {
+            get {
+                object obj = ResourceManager.GetObject("Download", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -855,6 +865,24 @@ namespace Sdl.Community.XLIFF.Manager {
             get {
                 object obj = ResourceManager.GetObject("TellMe", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} TellMe provider.
+        /// </summary>
+        internal static string TellMe_Provider {
+            get {
+                return ResourceManager.GetString("TellMe_Provider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} results.
+        /// </summary>
+        internal static string TellMe_Provider_Results {
+            get {
+                return ResourceManager.GetString("TellMe_Provider_Results", resourceCulture);
             }
         }
         

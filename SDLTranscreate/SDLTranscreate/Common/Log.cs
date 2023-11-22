@@ -26,7 +26,7 @@ namespace Trados.Transcreate.Common
 			LoggingConfiguration config = LogManager.Configuration;
 
 			string logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				"RWS AppStore", "Transcreate");
+				"Trados AppStore", "Transcreate");
 
 			Directory.CreateDirectory(logDirectoryPath);
 

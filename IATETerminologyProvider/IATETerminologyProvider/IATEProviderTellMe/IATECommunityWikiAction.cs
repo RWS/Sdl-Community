@@ -12,12 +12,12 @@ namespace Sdl.Community.IATETerminologyProvider.IATEProviderTellMe
 
 		public IATECommunityWikiAction()
 		{
-			Name = "SDL Community IATE plugin wiki";
+			Name = "RWS Community IATE plugin wiki";
 		}
 
 		public override void Execute()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3390.iate-terminology-provider");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3390/iate-real-time-terminology");
 		}
 	}
 }

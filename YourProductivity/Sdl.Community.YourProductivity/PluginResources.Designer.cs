@@ -19,7 +19,7 @@ namespace Sdl.Community.YourProductivity {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -63,6 +63,26 @@ namespace Sdl.Community.YourProductivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        public static System.Drawing.Icon Download {
+            get {
+                object obj = ResourceManager.GetObject("Download", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon ForumIcon {
+            get {
+                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         public static System.Drawing.Icon icon {
             get {
                 object obj = ResourceManager.GetObject("icon", resourceCulture);
@@ -90,13 +110,23 @@ namespace Sdl.Community.YourProductivity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This plugin is compatible with SDL Studio 2014 CU10 or later. In order to enjoy this plugin please upgrade to a newer version..
+        ///   Looks up a localized string similar to This plugin is compatible with Trados Studio 2014 CU10 or later. In order to enjoy this plugin please upgrade to a newer version..
         /// </summary>
-        public static string ProductivityViewPartAction_Execute_This_plugin_is_compatible_with_SDL_Studio_2014_CU10_or_later__In_order_to_enjoy_this_plugin_please_upgrade_to_a_newer_version_ {
+        public static string ProductivityViewPartAction_Execute_This_plugin_is_compatible_with_Trados_Studio_2014_CU10_or_later__In_order_to_enjoy_this_plugin_please_upgrade_to_a_newer_version_ {
             get {
-                return ResourceManager.GetString("ProductivityViewPartAction_Execute_This_plugin_is_compatible_with_SDL_Studio_2014" +
-                        "_CU10_or_later__In_order_to_enjoy_this_plugin_please_upgrade_to_a_newer_version_" +
-                        "", resourceCulture);
+                return ResourceManager.GetString("ProductivityViewPartAction_Execute_This_plugin_is_compatible_with_Trados_Studio_2" +
+                        "014_CU10_or_later__In_order_to_enjoy_this_plugin_please_upgrade_to_a_newer_versi" +
+                        "on_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Question {
+            get {
+                object obj = ResourceManager.GetObject("Question", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -107,6 +137,33 @@ namespace Sdl.Community.YourProductivity {
             get {
                 object obj = ResourceManager.GetObject("score", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download {0} from the AppStore.
+        /// </summary>
+        public static string TellMe_Download_Plugin_From_AppStore {
+            get {
+                return ResourceManager.GetString("TellMe_Download_Plugin_From_AppStore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} results.
+        /// </summary>
+        public static string TellMe_String_Results {
+            get {
+                return ResourceManager.GetString("TellMe_String_Results", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} TellMe provider.
+        /// </summary>
+        public static string TellMe_String_TellMe_Provider {
+            get {
+                return ResourceManager.GetString("TellMe_String_TellMe_Provider", resourceCulture);
             }
         }
     }

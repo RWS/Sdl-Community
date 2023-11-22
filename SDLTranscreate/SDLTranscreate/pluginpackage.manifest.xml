@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Trados Transcreate</PlugInName>
-	<Version>3.0.0.2</Version>
+	<Version>3.1.2.0</Version>
 	<Description>Trados Transcreate is a plugin for Trados Studio designed to help manage the Transcreation process.</Description>
 	<Author>Trados AppStore Team</Author>
-	<RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
+	<RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9" />
 	<Include>
 		<File>Reports.Viewer.Api.dll</File>
 		<File>Rws.MultiSelectComboBox.dll</File>

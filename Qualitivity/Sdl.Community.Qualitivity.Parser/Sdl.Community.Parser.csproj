@@ -8,11 +8,10 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.Parser</RootNamespace>
-    <AssemblyName>Sdl.Community.Qualitivity.Parser</AssemblyName>
+    <AssemblyName>Qualitivity.Parser</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
-    <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\16\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,13 +41,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Sdl.Core.Globalization">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.LanguagePlatform.Core.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

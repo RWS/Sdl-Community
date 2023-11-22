@@ -76,20 +76,24 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 							
 						if (renderMethod != null)
 						{
-							var reportRawData = renderMethod.Invoke(_excelRenderer,
-								new[]
-								{
-									content, _reportDefinition, reportFormat
-								});
+							
+								var reportRawData = renderMethod.Invoke(_excelRenderer,
+									new[]
+									{
+									content, _reportDefinition, reportFormat,_automaticTasksAnalysisAssembly
+									});
 
-							if (reportRawData != null)
-							{
-								var reportName = string.Concat("generatedReport_", report.AnalyzeFileName, ".xlsx");
-								using (Stream s = File.Create(Path.Combine(folderPath, reportName)))
+								if (reportRawData != null)
 								{
-									s.Write(reportRawData, 0, reportRawData.Length);
+									var reportName = string.Concat("generatedReport_", report.AnalyzeFileName, ".xlsx");
+									if (!Directory.Exists(folderPath))
+										Directory.CreateDirectory(folderPath);
+									using (Stream s = File.Create(Path.Combine(folderPath, reportName)))
+									{
+										s.Write(reportRawData, 0, reportRawData.Length);
+									}
 								}
-							}
+							
 						}
 					}
 				}

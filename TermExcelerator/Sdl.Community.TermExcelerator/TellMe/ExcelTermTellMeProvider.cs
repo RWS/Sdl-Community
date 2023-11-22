@@ -5,7 +5,7 @@ namespace Sdl.Community.TermExcelerator.TellMe
 	[TellMeProvider]
 	public class ExcelTermTellMeProvider : ITellMeProvider
 	{
-		public string Name => "Term Excelerator tell me provider";
+		public string Name => "Term Excelerator Tell Me provider";
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{

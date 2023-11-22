@@ -22,7 +22,7 @@ namespace Sdl.Community.TermInjector
 
         /// <summary>
         /// Show the plug-in settings form when the user is adding the translation provider plug-in
-        /// through the GUI of SDL Trados Studio
+        /// through the GUI of Trados Studio
         /// </summary>
         /// <param name="owner"></param>
         /// <param name="languagePairs"></param>
@@ -84,7 +84,7 @@ namespace Sdl.Community.TermInjector
 
         /// <summary>
         /// Determines whether the plug-in settings can be changed
-        /// by displaying the Settings button in SDL Trados Studio.
+        /// by displaying the Settings button in Trados Studio.
         /// </summary>
         #region "SupportsEditing"
         public bool SupportsEditing
@@ -95,7 +95,7 @@ namespace Sdl.Community.TermInjector
 
         /// <summary>
         /// If the plug-in settings can be changed by the user,
-        /// SDL Trados Studio will display a Settings button.
+        /// Trados Studio will display a Settings button.
         /// By clicking this button, users raise the plug-in user interface,
         /// in which they can modify any applicable settings, in our implementation
         /// the delimiter character and the list file name.

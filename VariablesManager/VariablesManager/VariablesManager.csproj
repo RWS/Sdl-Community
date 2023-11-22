@@ -18,7 +18,7 @@
     <SccProvider>SAK</SccProvider>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\16\Plugins</PluginDeploymentPath>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -35,7 +35,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-	<OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -58,14 +58,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Sdl.Desktop.IntegrationApi">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data.SQLite">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\System.Data.SQLite.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -91,6 +94,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="TellMe\CommunityAppStoreAction.cs" />
+    <Compile Include="TellMe\CommunityAppStoreForumAction.cs" />
+    <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="VariablesManagerRibbon.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
@@ -104,12 +116,18 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="Properties\Settings.settings" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
     <None Include="Resources\variables manager - 128.ico" />
+    <Resource Include="Resources\Download.ico" />
+    <Resource Include="Resources\ForumIcon.ico" />
+    <Resource Include="Resources\Question.ico" />
     <Content Include="variables manager - 128.ico" />
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -23,7 +23,7 @@ namespace Sdl.Community.TMLifting.TranslationMemory
         {
             var studioService = new StudioVersionService();
             var publicVersion = studioService.GetStudioVersion().ExecutableVersion.Major;
-             _tmsConfigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"SDL\SDL Trados Studio\"+publicVersion+ @".0.0.0\TranslationMemoryRepository.xml");
+             _tmsConfigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Trados\Trados Studio\Studio17\TranslationMemoryRepository.xml");
             _reindexStatus = new StringBuilder();
         }
 

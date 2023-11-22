@@ -8,13 +8,13 @@ namespace Sdl.Community.ExportToExcel.TellMe
 	{
 		public CommunityForumAction()
 		{
-			Name = "SDL Community AppStore forum";
+			Name = "RWS Community AppStore forum";
 		}
 
 		public override void Execute()
 		{
 			Process.Start(
-				"https://community.sdl.com/product-groups/translationproductivity/f/160");
+				"https://community.rws.com/product-groups/trados-portfolio/rws-appstore/f");
 		}
 
 		public override bool IsAvailable => true;

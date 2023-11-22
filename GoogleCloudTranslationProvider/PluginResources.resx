@@ -1,0 +1,541 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="my_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\my_icon.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="LangPairAuthErrorMsg1" xml:space="preserve">
+    <value>There was a problem checking language pair support.</value>
+    <comment>Line1</comment>
+  </data>
+  <data name="Plugin_NiceName" xml:space="preserve">
+    <value>Google Translator Provider - Plugin_NiceName</value>
+  </data>
+  <data name="Plugin_Tooltip" xml:space="preserve">
+    <value>Google Translator Provider Plugin - Choose between V2 or V3 - ToolTip</value>
+  </data>
+  <data name="LangPairAuthErrorMsg2" xml:space="preserve">
+    <value>Please verify that you have entered the correct API key.</value>
+    <comment>Line2</comment>
+  </data>
+  <data name="LangPairAuthErrorMsg3" xml:space="preserve">
+    <value>If the problem persists, close/reopen the current dialog and try again</value>
+    <comment>Line3</comment>
+  </data>
+  <data name="Plugin_Name" xml:space="preserve">
+    <value>Google Translator Provider - Plugin_Name</value>
+  </data>
+  <data name="Plugin_Description" xml:space="preserve">
+    <value>Google Translator Provider Plugin - Choose between V2 or V3 - Description</value>
+  </data>
+  <data name="my_image" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\my_image.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ApiConnectionGoogleNoKeyErrorMessage" xml:space="preserve">
+    <value>No API key has been set.  Please open the plugin settings form and enter a valid API key</value>
+  </data>
+  <data name="EditSettingsErrorCaption" xml:space="preserve">
+    <value>Edit settings error</value>
+  </data>
+  <data name="EditSettingsGenericErrorMessage" xml:space="preserve">
+    <value>Error with edit settings:</value>
+  </data>
+  <data name="PromptForCredentialsCaption_Google" xml:space="preserve">
+    <value>Credentials for Google Translate...</value>
+  </data>
+  <data name="TranslationLookupDraftNotResentMessage" xml:space="preserve">
+    <value>[segment already translated...source not re-sent]</value>
+  </data>
+  <data name="UriNotSupportedMessage" xml:space="preserve">
+    <value>Translation provider URI not supported.</value>
+  </data>
+  <data name="EditSettingsXmlErrorMessage" xml:space="preserve">
+    <value>There was a problem with the file: '{0}'. Make sure the contents are properly-formatted XML according to the required specifications, which are described in the plugin's documentation.</value>
+  </data>
+  <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ForumIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Download.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="backImg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\backImg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MultiButton_Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="MainView_CloseButton" xml:space="preserve">
+    <value>Close app</value>
+  </data>
+  <data name="Validation_ApiKey" xml:space="preserve">
+    <value>Can not connect to the service without an API Key.</value>
+  </data>
+  <data name="SettingsView_BrowseButton" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="Validation_EmptyJsonFilePath" xml:space="preserve">
+    <value>The local path to the JSON file cannot be empty.</value>
+  </data>
+  <data name="GoogleApiDescription" xml:space="preserve">
+    <value>Select the version of the Google TP and sign in using your credentials</value>
+  </data>
+  <data name="GoogleResponseDescription" xml:space="preserve">
+    <value>Google Response</value>
+  </data>
+  <data name="Validation_ProjectID_Empty" xml:space="preserve">
+    <value>The ProjectID can not be empty. The JSON file might be corrupted.</value>
+  </data>
+  <data name="ProviderView_V2_RememberKey" xml:space="preserve">
+    <value>Remember key</value>
+  </data>
+  <data name="SettingsView_PostLookup_Description" xml:space="preserve">
+    <value>Do post-lookup find/replace</value>
+  </data>
+  <data name="PostLookupEmptyMessage" xml:space="preserve">
+    <value>Post-lookup filepath cannot be empty. Please add a valid path otherwise uncheck "Do post-lookup checkbox".</value>
+  </data>
+  <data name="PostLookupFileName" xml:space="preserve">
+    <value>Do post-lookup find/replace filename:</value>
+  </data>
+  <data name="SettingsView_PostLookup_WaterMark" xml:space="preserve">
+    <value>Type the location of the post-lookup file or browse</value>
+  </data>
+  <data name="PostLookupWrongPathMessage" xml:space="preserve">
+    <value>Post-lookup file could not be found at the specified path.</value>
+  </data>
+  <data name="SettingsView_PreLookup_Description" xml:space="preserve">
+    <value>Do pre-lookup find/replace</value>
+  </data>
+  <data name="PreLookupEmptyMessage" xml:space="preserve">
+    <value>Pre-lookup filepath cannot be empty. Please add a valid path otherwise uncheck "Do pre-lookup checkbox".</value>
+  </data>
+  <data name="SettingsView_PreLookup_WaterMark" xml:space="preserve">
+    <value>Type the location of the pre-lookup file or browse</value>
+  </data>
+  <data name="PreLookupWrongPathMessage" xml:space="preserve">
+    <value>Pre-lookup file could not be found at the specified path.</value>
+  </data>
+  <data name="SettingsView_ResendDraft_Description" xml:space="preserve">
+    <value>Re-send draft and translated segments</value>
+  </data>
+  <data name="SettingsView_TextOnly_Description" xml:space="preserve">
+    <value>Do not include tags in the translated segments</value>
+  </data>
+  <data name="Validation_MissingJsonFile" xml:space="preserve">
+    <value>The JSON file could not be found, the file could be either renamed, moved or deleted, please browse again for you file.</value>
+  </data>
+  <data name="GoogleApiVersionV2Description" xml:space="preserve">
+    <value>V2 - Basic Translation</value>
+  </data>
+  <data name="GoogleApiVersionV3Description" xml:space="preserve">
+    <value>V3 - Advanced Translation</value>
+  </data>
+  <data name="GoogleAdvanced" xml:space="preserve">
+    <value>Google Translate - V3 Advanced Translation</value>
+  </data>
+  <data name="GoogleBasic" xml:space="preserve">
+    <value>Google Translate - V2 Basic Translation</value>
+  </data>
+  <data name="GoogleEngineModelDescription" xml:space="preserve">
+    <value>Enter AutoML Translation model:</value>
+  </data>
+  <data name="Validation_ModelName_Invalid" xml:space="preserve">
+    <value>The model name is invalid, it might be misspelled or it doesn't exists.</value>
+  </data>
+  <data name="GoogleProjectLocation" xml:space="preserve">
+    <value>Please add project location:</value>
+  </data>
+  <data name="Validation_Location_Empty" xml:space="preserve">
+    <value>The project location can not be empty. Please select an option from the drop down menu.</value>
+  </data>
+  <data name="ProviderView_V2_ApiKey_Description" xml:space="preserve">
+    <value>Google Cloud API Key</value>
+  </data>
+  <data name="MultiButton_Provider" xml:space="preserve">
+    <value>Provider</value>
+  </data>
+  <data name="Validation_ProjectID_Failed" xml:space="preserve">
+    <value>The ProjectID was not valid. The JSON file might be corrupted.</value>
+  </data>
+  <data name="appicon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\appicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="NameOf_CommandParameter_Syntax" xml:space="preserve">
+    <value>Syntax for the NameOf is:
+"{[location_of_NameOf]:NameOf Member=[PropertyName], Type={x:Type[classLocation:ClassName]}}"
+Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
+  </data>
+  <data name="NameOf_CommandParameterI_MissingComponent" xml:space="preserve">
+    <value>Could not find the property ['{0}'] in ['{1}'], please check the spelling for both the property and the class or if any of the two had its name changed in both C# class and XAML.</value>
+  </data>
+  <data name="ProviderView_V3_CustomModel_Watermark" xml:space="preserve">
+    <value>Engine name here</value>
+  </data>
+  <data name="ProviderView_V3_Glossary_Watermark" xml:space="preserve">
+    <value>Glossary name here</value>
+  </data>
+  <data name="ProviderView_V3_Location_Watermark" xml:space="preserve">
+    <value>Project location here</value>
+  </data>
+  <data name="MainView_ConfirmButton" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="MainView_HelpButton" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="ProviderView_V3_File_Browse" xml:space="preserve">
+    <value>or click here to browse for it on your machine</value>
+  </data>
+  <data name="ProviderView_V3_File_DragAndDrop" xml:space="preserve">
+    <value>Drop your JSON file</value>
+  </data>
+  <data name="ProviderView_V2_ApiKey_Tooltip" xml:space="preserve">
+    <value>API Key associated with Google Cloud project</value>
+  </data>
+  <data name="ProviderView_V3_LocalPath_Description" xml:space="preserve">
+    <value>Local path: </value>
+  </data>
+  <data name="ProviderView_V3_LocalPath_Tooltip" xml:space="preserve">
+    <value>Stored JSON file location</value>
+  </data>
+  <data name="ProviderView_V3_Location_Description" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="ProviderView_V3_Location_Tooltip" xml:space="preserve">
+    <value>You permanently set a location for storing your data when you create a bucket.</value>
+  </data>
+  <data name="ProviderView_V3_ProjectID_Description" xml:space="preserve">
+    <value>Project ID: </value>
+  </data>
+  <data name="ProviderView_V3_ProjectID_Tooltip" xml:space="preserve">
+    <value>A globally unique identifier for your project.</value>
+  </data>
+  <data name="ProviderView_V3_ProjectID_Warning" xml:space="preserve">
+    <value>JSON file is corrupted, the ProjectID is either missing or incorrect.</value>
+  </data>
+  <data name="ProviderView_V3_CustomModel_Description" xml:space="preserve">
+    <value>Custom model (AutoML)</value>
+  </data>
+  <data name="ProviderView_V3_CustomModel_Tooltip" xml:space="preserve">
+    <value>AutoML, a custom machine learning model</value>
+  </data>
+  <data name="ProviderView_V3_Glossary_Description" xml:space="preserve">
+    <value>Glossary</value>
+  </data>
+  <data name="ProviderView_V3_Glossary_Tooltip" xml:space="preserve">
+    <value>A glossary is a custom dictionary</value>
+  </data>
+  <data name="ProviderView_V3_Glossary_UseUnidirectional" xml:space="preserve">
+    <value>Unidirectional glossaries</value>
+  </data>
+  <data name="Validation_PermissionDenied" xml:space="preserve">
+    <value>Permission denied, could not connect to the server using the provided credentials</value>
+  </data>
+  <data name="Validation_Location_Failed" xml:space="preserve">
+    <value>The project location is invalid. This project is available only on the next location(s): {0}.</value>
+  </data>
+  <data name="ProviderViewModel_PathNotSpecified" xml:space="preserve">
+    <value>Not specified</value>
+  </data>
+  <data name="ProviderView_V3_File_DownloadButton" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="ProviderView_V3_Url_Watermark" xml:space="preserve">
+    <value>Type/paste your url here</value>
+  </data>
+  <data name="ProviderView_V3_UseUrl" xml:space="preserve">
+    <value>Use URL</value>
+  </data>
+  <data name="GroupboxHeaders_GoogleApi" xml:space="preserve">
+    <value>Google API Version</value>
+  </data>
+  <data name="GroupboxHeaders_ProjectInfo" xml:space="preserve">
+    <value>Project info</value>
+  </data>
+  <data name="FileValidation_DownloadFailed" xml:space="preserve">
+    <value>An unexpected error occured while downloading the file.</value>
+  </data>
+  <data name="FileValidation_EmptyUri" xml:space="preserve">
+    <value>The url can not be empty.</value>
+  </data>
+  <data name="FileValidation_MissingJsonFile" xml:space="preserve">
+    <value>Could not find a valid JSON file that could be downloaded.</value>
+  </data>
+  <data name="FileValidation_FileDoesNotExists" xml:space="preserve">
+    <value>The file {0} could not be found at the selected location. The file could have been renamed, deleted or moved from when it was loaded.</value>
+  </data>
+  <data name="FileValidation_JsonFileFields" xml:space="preserve">
+    <value>The selected json file has {0} fields than it is supposed to have. Please download the file again and use an unedited file.</value>
+  </data>
+  <data name="FileValidation_NotJsonType" xml:space="preserve">
+    <value>The selected file must be of .json type.</value>
+  </data>
+  <data name="FileValidation_PathDoesNotExists" xml:space="preserve">
+    <value>The selected path does not exists.
+Path: {0}</value>
+  </data>
+  <data name="FileValidation_ReadingJsonFailed" xml:space="preserve">
+    <value>An unexpected error occured while trying to read the file. The file might be corrupted.</value>
+  </data>
+  <data name="FileValidation_UnsetFilePath" xml:space="preserve">
+    <value>The file path must be set.</value>
+  </data>
+  <data name="RetrievedResources_CustomModels_Unselected" xml:space="preserve">
+    <value>No model selected</value>
+  </data>
+  <data name="RetrievedResources_Glossaries_Unselected" xml:space="preserve">
+    <value>No glossary selected</value>
+  </data>
+  <data name="V2Api_CharacterLimit" xml:space="preserve">
+    <value>The Google Cloud API it is limited to 5000 characters per segment. Characters count: {0}</value>
+  </data>
+  <data name="ProjectInfo_CustomModelNotUsed" xml:space="preserve">
+    <value>This project does not use a custom model.</value>
+  </data>
+  <data name="ProjectInfo_GlossaryNotUsed" xml:space="preserve">
+    <value>This project does not use a glossary.</value>
+  </data>
+  <data name="ProjectInfo_LocationMissing" xml:space="preserve">
+    <value>Couldn't determine the location of the project.</value>
+  </data>
+  <data name="ProjectInfo_PathCorrupted" xml:space="preserve">
+    <value>Couldn't determine the json file path. The file was moved, renamed or deleted.</value>
+  </data>
+  <data name="ProjectInfo_ProjectIdMissing" xml:space="preserve">
+    <value>Couldn't determine the project id. The field is probably missing on the json file or the json file is corrupted.</value>
+  </data>
+  <data name="ProviderView_V3_CustomModel_Navigate" xml:space="preserve">
+    <value>Navigate to your custom models</value>
+  </data>
+  <data name="ProviderView_V3_Glossary_Navigate" xml:space="preserve">
+    <value>Navigate to your glossaries</value>
+  </data>
+  <data name="SettingsView_CustomName_Description" xml:space="preserve">
+    <value>Use custom name for this provider</value>
+  </data>
+  <data name="SettingsView_CustomName_Watermark" xml:space="preserve">
+    <value>Type your custom name here</value>
+  </data>
+  <data name="Validation_AuthenticationFailed" xml:space="preserve">
+    <value>Could not authenticate the user with the ProjectID provided in the JSON file.</value>
+  </data>
+  <data name="Validation_Glossary_Invalid" xml:space="preserve">
+    <value>The location path to the JSON file cannot be empty</value>
+  </data>
+  <data name="Validation_MultipleFiles" xml:space="preserve">
+    <value>Only one file can be dropped to be used on the authentication process.</value>
+  </data>
+  <data name="ProjectInfo_CustomModel" xml:space="preserve">
+    <value>Custom Model</value>
+  </data>
+  <data name="ProviderView_V3_Project_Navigate" xml:space="preserve">
+    <value>Navigate to your project</value>
+  </data>
+  <data name="SettingsView_DownloadPath_Description" xml:space="preserve">
+    <value>JSON Location</value>
+  </data>
+  <data name="SettingsView_DownloadPath_ToolTip" xml:space="preserve">
+    <value>Location for downloaded JSON files for V3 projects</value>
+  </data>
+  <data name="SettingsView_SessionSettingsTitle" xml:space="preserve">
+    <value>Session settings</value>
+  </data>
+  <data name="SettingsView_Title" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="ProviderView_V3_File_ValidateUrl" xml:space="preserve">
+    <value>Validate URL</value>
+  </data>
+  <data name="ProviderView_V2_ApiKey_Navigate" xml:space="preserve">
+    <value>Navigate to your account</value>
+  </data>
+  <data name="JsonFile_Browse" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="JsonFile_Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="JsonFile_DragAndDrop" xml:space="preserve">
+    <value>DragAndDrop</value>
+  </data>
+  <data name="Validation_ApiKey_Invalid" xml:space="preserve">
+    <value>The API Key is not valid</value>
+  </data>
+  <data name="SettingsView_LanguageMapping_Description" xml:space="preserve">
+    <value>Use Language Mapping Provider</value>
+  </data>
+  <data name="ProviderView_V3_MappingTable_Glossaries" xml:space="preserve">
+    <value>Glossaries</value>
+  </data>
+  <data name="ProviderView_V3_MappingTable_Models" xml:space="preserve">
+    <value>Models</value>
+  </data>
+  <data name="ProviderView_V3_MappingTable_Pairs" xml:space="preserve">
+    <value>Language Pair</value>
+  </data>
+  <data name="RetrievedResources_NotAvailable" xml:space="preserve">
+    <value>Not available</value>
+  </data>
+  <data name="Database_PluginName_V2" xml:space="preserve">
+    <value>googlecloudbasic</value>
+  </data>
+  <data name="Database_PluginName_V3" xml:space="preserve">
+    <value>googlecloudadvanced</value>
+  </data>
+  <data name="LMP_Button_CloseApp" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="LMP_Button_ApplyChanges" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="LMP_Button_Reset" xml:space="preserve">
+    <value>Reset to default</value>
+  </data>
+  <data name="LMP_Filter_Watermark" xml:space="preserve">
+    <value>Search languages...</value>
+  </data>
+  <data name="LMP_Table_Header_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="LMP_Table_Header_LanguageCode" xml:space="preserve">
+    <value>Language Code</value>
+  </data>
+  <data name="LMP_Table_Header_Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="LMP_Table_Header_TradosCode" xml:space="preserve">
+    <value>Trados Code</value>
+  </data>
+  <data name="LMP_NavigateToLanguageCodes_Message" xml:space="preserve">
+    <value>Missing a language code? Click here to find it</value>
+  </data>
+  <data name="LMP_ResetToDefaults_Warning" xml:space="preserve">
+    <value>Warning: Resetting to default values!
+All changes will be lost and the database will be restored to its original state.
+
+This action cannot be undone.</value>
+  </data>
+</root>

@@ -163,7 +163,7 @@
     <value>Failed.\r\nERROR: {0}</value>
   </data>
   <data name="LicenseErrorMessage" xml:space="preserve">
-    <value>SDL Trados Studio  is not licensed on this computer. Activate it first before using this add-on.</value>
+    <value>Trados Studio  is not licensed on this computer. Activate it first before using this add-on.</value>
   </data>
   <data name="MergeTitle" xml:space="preserve">
     <value>Merge Task.</value>
@@ -256,7 +256,7 @@
     <value>Select original SDLXLIFF file.</value>
   </data>
   <data name="ProjectFileDialogTitle" xml:space="preserve">
-    <value>Select SDL Trados Studio project file</value>
+    <value>Select Trados Studio project file</value>
   </data>
   <data name="SplitFilesDialogDesc" xml:space="preserve">
     <value>Select a path for split files.</value>

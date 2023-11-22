@@ -9,11 +9,11 @@ using Sdl.Terminology.TerminologyProvider.Core;
 namespace Sdl.Community.IATETerminologyProvider
 {
 	[TerminologyProviderWinFormsUI]
-    public class IATETerminologyProviderWinFormsUI : ITerminologyProviderWinFormsUI
+    public class IATETerminologyProviderWinFormsUI : ITerminologyProviderWinFormsUIWithEdit
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private MainWindow _mainWindow;
-        public bool SupportsEditing => true;
+
         public string TypeDescription => PluginResources.IATETerminologyProviderDescription;
         public string TypeName => PluginResources.IATETerminologyProviderName;
 
@@ -29,7 +29,7 @@ namespace Sdl.Community.IATETerminologyProvider
                 }
 
                 var provider = new IATETerminologyProvider(_mainWindow.ProviderSettings, IATEApplication.ConnectionProvider,
-                    IATEApplication.InventoriesProvider, IATEApplication.CacheProvider);
+                    IATEApplication.InventoriesProvider, IATEApplication.CacheProvider,IATEApplication.EUProvider);
 
                 return new ITerminologyProvider[] { provider };
             }
@@ -56,9 +56,6 @@ namespace Sdl.Community.IATETerminologyProvider
                 return false;
             }
 
-            var messageBoxService = new MessageBoxService();
-
-            //_settingsViewModel = new SettingsViewModel(provider.ProviderSettings, provider.InventoriesProvider, provider.CacheProvider, messageBoxService);
             _mainWindow = IATEApplication.GetMainWindow();
 
             if (!_mainWindow.ShowDialog() ?? false)

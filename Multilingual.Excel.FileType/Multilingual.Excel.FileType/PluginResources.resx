@@ -1,0 +1,436 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Plugin_Description" xml:space="preserve">
+    <value>Multilingual Excel File Type</value>
+  </data>
+  <data name="Plugin_Name" xml:space="preserve">
+    <value>Multilingual Excel File Type</value>
+  </data>
+  <data name="MultilingualExcelFileType_ComponentBuilder_Description" xml:space="preserve">
+    <value>Multilingual Excel FileType Component Builder</value>
+  </data>
+  <data name="MultilingualExcelFileType_ComponentBuilder_Name" xml:space="preserve">
+    <value>Multilingual Excel FileType Component Builder</value>
+  </data>
+  <data name="MultilingualExcelFileType_LanguageMappingPage_Description" xml:space="preserve">
+    <value>Worksheet Mapping</value>
+  </data>
+  <data name="MultilingualExcelFileType_LanguageMappingPage_Name" xml:space="preserve">
+    <value>Worksheet Mapping</value>
+  </data>
+  <data name="ToolTip_AbsoluteXPathQueryLanguagesRoot" xml:space="preserve">
+    <value>Absolute Column query that locates the languages root element (e.g. /root/trans-unit)</value>
+  </data>
+  <data name="ToolTip_CommentElementName" xml:space="preserve">
+    <value>The name of the comment element, typically called 'Comment', 'Note' etc...</value>
+  </data>
+  <data name="ToolTip_RelativeXPathQueryLanguagesRoot" xml:space="preserve">
+    <value>Relative Column query that locates the language element containing the segment content.</value>
+  </data>
+  <data name="ToolTip_RelativeXPathQueryCommentsRoot" xml:space="preserve">
+    <value>Relative Column query that locates the comments root element.</value>
+  </data>
+  <data name="MultilingualExcelFileType_ImportBatchTask_Description" xml:space="preserve">
+    <value>Import Multilingual Translations (Excel)</value>
+  </data>
+  <data name="MultilingualExcelFileType_ImportBatchTask_Name" xml:space="preserve">
+    <value>Import Multilingual Translations (Excel)</value>
+  </data>
+  <data name="WindowTitle_Edit_Language" xml:space="preserve">
+    <value>Edit Language</value>
+  </data>
+  <data name="WindowTitle_Add_Language" xml:space="preserve">
+    <value>Add Language</value>
+  </data>
+  <data name="WindowTitle_Edit_CommentProperty" xml:space="preserve">
+    <value>Edit Attribute</value>
+  </data>
+  <data name="WindowTitle_Add_CommentProperty" xml:space="preserve">
+    <value>Add Attribute</value>
+  </data>
+  <data name="MultilingualExcelFileType_ExportBatchTask_Description" xml:space="preserve">
+    <value>Generate Multilingual Translations (Excel)</value>
+  </data>
+  <data name="MultilingualExcelFileType_ExportBatchTask_Name" xml:space="preserve">
+    <value>Generate Multilingual Translations (Excel)</value>
+  </data>
+  <data name="MultilingualExcelFileType_EmbeddedContentPage_Description" xml:space="preserve">
+    <value>Embedded Content</value>
+  </data>
+  <data name="MultilingualExcelFileType_EmbeddedContentPage_Name" xml:space="preserve">
+    <value>Embedded Content</value>
+  </data>
+  <data name="ToolTip_PlaceholderPatternExpression" xml:space="preserve">
+    <value>Regular expression that recognizes text which should be converted to a placeable tag.</value>
+  </data>
+  <data name="WindowTitle_Add_PlaceholderPattern" xml:space="preserve">
+    <value>Add Placeholder Pattern</value>
+  </data>
+  <data name="WindowTitle_Edit_PlaceholderPattern" xml:space="preserve">
+    <value>Edit Placeholder Pattern</value>
+  </data>
+  <data name="MultilingualExcelFileType_PlaceholdersPage_Description" xml:space="preserve">
+    <value>Placeholders</value>
+  </data>
+  <data name="MultilingualExcelFileType_PlaceholdersPage_Name" xml:space="preserve">
+    <value>Placeholders</value>
+  </data>
+  <data name="ToolTip_PlaceholderPatterns" xml:space="preserve">
+    <value>Placeholder patterns are regular expressions that recognize text which should be converted to placeholder tags.</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="DefaultPlaceHolders" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\defaultplaceholders.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="InformationMessage_FileWasExportedSuccessfully" xml:space="preserve">
+    <value>File was exported successfully to selected location.</value>
+  </data>
+  <data name="InformationMessage_PleaseSelectAtLeastOnePlaceholder" xml:space="preserve">
+    <value>Please select at least one placeholder pattern to export.</value>
+  </data>
+  <data name="InformationMessage_SelectTheImportFiles" xml:space="preserve">
+    <value>Select the files you want to import</value>
+  </data>
+  <data name="InformationMessage_ExortSelectedPlaceholders" xml:space="preserve">
+    <value>Export selected placeholder patterns</value>
+  </data>
+  <data name="AddEntityMappingFormTitle" xml:space="preserve">
+    <value>Add Entity</value>
+  </data>
+  <data name="DuplicateEntitiyNameInListTitle" xml:space="preserve">
+    <value>Duplicate Entity Name</value>
+  </data>
+  <data name="DuplicateEntityNameInList" xml:space="preserve">
+    <value>An entity with the same name already exists. Please choose a unique name.</value>
+  </data>
+  <data name="EditEntityMappingFormTitle" xml:space="preserve">
+    <value>Edit Entity</value>
+  </data>
+  <data name="EntitySetTypeCustom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="EntitySetTypeDefault" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="GenericXml_2_NamespaceMapping" xml:space="preserve">
+    <value>Namespaces</value>
+  </data>
+  <data name="GenericXml_2_NamespaceMapping_Description" xml:space="preserve">
+    <value>Namespace Settings for Excel Parser</value>
+  </data>
+  <data name="GenericXml_2_NamespaceMapping_Name" xml:space="preserve">
+    <value>Namespaces</value>
+  </data>
+  <data name="HTMLSPECIAL" xml:space="preserve">
+    <value>HTML Special</value>
+  </data>
+  <data name="HTMLSYMBOL" xml:space="preserve">
+    <value>HTML Symbols</value>
+  </data>
+  <data name="ISOAMSA" xml:space="preserve">
+    <value>Added Math Symbols: Arrow relations</value>
+  </data>
+  <data name="ISOAMSB" xml:space="preserve">
+    <value>Added Math Symbols: Binary operators</value>
+  </data>
+  <data name="ISOAMSC" xml:space="preserve">
+    <value>Added Math Symbols: Delimiters</value>
+  </data>
+  <data name="ISOAMSN" xml:space="preserve">
+    <value>Added Math Symbols: Operations</value>
+  </data>
+  <data name="ISOAMSO" xml:space="preserve">
+    <value>Added Math Symbols: Ordinary</value>
+  </data>
+  <data name="ISOAMSR" xml:space="preserve">
+    <value>Added Math Symbols: Relations</value>
+  </data>
+  <data name="ISOBOX" xml:space="preserve">
+    <value>Box and Line Drawing</value>
+  </data>
+  <data name="ISOCYR1" xml:space="preserve">
+    <value>Russian Cyrilic</value>
+  </data>
+  <data name="ISOCYR2" xml:space="preserve">
+    <value>Non-Russian Cyrilic</value>
+  </data>
+  <data name="ISODIA" xml:space="preserve">
+    <value>Diacritical Marks</value>
+  </data>
+  <data name="ISOGRK1" xml:space="preserve">
+    <value>Greek Letters</value>
+  </data>
+  <data name="ISOGRK2" xml:space="preserve">
+    <value>Monotoniko Greek</value>
+  </data>
+  <data name="ISOGRK3" xml:space="preserve">
+    <value>Greek Symbols</value>
+  </data>
+  <data name="ISOGRK4" xml:space="preserve">
+    <value>Alternative Greek Symbols</value>
+  </data>
+  <data name="ISOLAT1" xml:space="preserve">
+    <value>Added Latin 1</value>
+  </data>
+  <data name="ISOLAT2" xml:space="preserve">
+    <value>Added Latin 2</value>
+  </data>
+  <data name="ISOMFRK" xml:space="preserve">
+    <value>Math Fraktur Font</value>
+  </data>
+  <data name="ISOMOPF" xml:space="preserve">
+    <value>Math Open Face Font</value>
+  </data>
+  <data name="ISOMSCR" xml:space="preserve">
+    <value>Math Script Font</value>
+  </data>
+  <data name="ISONUM" xml:space="preserve">
+    <value>Numeric and Special Graphic</value>
+  </data>
+  <data name="ISOPUB" xml:space="preserve">
+    <value>Publishing</value>
+  </data>
+  <data name="ISOTECH" xml:space="preserve">
+    <value>General Technical</value>
+  </data>
+  <data name="Plugin_Name1" xml:space="preserve">
+    <value>Excel Filter Settings</value>
+  </data>
+  <data name="ResetEntitySet" xml:space="preserve">
+    <value>Are you sure you wish to reset all entities in this set to default values?</value>
+  </data>
+  <data name="ResetEntitySetTitle" xml:space="preserve">
+    <value>Reset Entity Set to Defaults</value>
+  </data>
+  <data name="UnknownEntitySet" xml:space="preserve">
+    <value>Unknown Entity Set</value>
+  </data>
+  <data name="UserDefinedEntitySetName" xml:space="preserve">
+    <value>User Defined</value>
+  </data>
+  <data name="MultilingualExcelFileType_EntitiesPage_Description" xml:space="preserve">
+    <value>Entities</value>
+  </data>
+  <data name="MultilingualExcelFileType_EntitiesPage_Name" xml:space="preserve">
+    <value>Entities</value>
+  </data>
+  <data name="Header_AddNewLanguage" xml:space="preserve">
+    <value>Add a new language (Ctrl+L)</value>
+  </data>
+  <data name="Header_EditSelectedLanguage" xml:space="preserve">
+    <value>Edit the selected language (Ctrl+E)</value>
+  </data>
+  <data name="Header_RemoveSelectedLanguages" xml:space="preserve">
+    <value>Remove the selected languages (Delete)</value>
+  </data>
+  <data name="Header_AddNewCommentProperty" xml:space="preserve">
+    <value>Add a new attribute (Ctrl+N)</value>
+  </data>
+  <data name="Header_EditSelectedCommentProperty" xml:space="preserve">
+    <value>Edit the selected attribute (Ctrl+E)</value>
+  </data>
+  <data name="Header_RemoveSelectedCommentProperties" xml:space="preserve">
+    <value>Remove the selected attributes (Delete)</value>
+  </data>
+  <data name="MultilingualExcelFileType_CommentMappingPage_Description" xml:space="preserve">
+    <value>Comments</value>
+  </data>
+  <data name="MultilingualExcelFileType_CommentMappingPage_Name" xml:space="preserve">
+    <value>Comments</value>
+  </data>
+  <data name="MLExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\mlexcel.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MLExcel_image" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\mlexcel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ValidationMessage_Column_Is_Defined_For_Language" xml:space="preserve">
+    <value>Column {0} is defined for language {1}</value>
+  </data>
+  <data name="ValidationMessage_Column_Is_Defined_For_Current_Language" xml:space="preserve">
+    <value>Column {0} is defined for the current language</value>
+  </data>
+  <data name="ValidationMessage_Found_Invalid_Characters" xml:space="preserve">
+    <value>Found invalid characters: {0}</value>
+  </data>
+  <data name="ValidationMessage_Language_Already_Defined" xml:space="preserve">
+    <value>The language is already defined for another record</value>
+  </data>
+  <data name="VerificationSettings_Description" xml:space="preserve">
+    <value>Verification Settings</value>
+  </data>
+  <data name="VerificationSettings_Name" xml:space="preserve">
+    <value>Verification Settings</value>
+  </data>
+  <data name="Verifier_Description" xml:space="preserve">
+    <value>Multilingual Excel Verifier</value>
+  </data>
+  <data name="Verifier_Name" xml:space="preserve">
+    <value>Multilingual Excel Verifier</value>
+  </data>
+  <data name="VerficationMessage_PixelLengthExceedsMaximum" xml:space="preserve">
+    <value>{0}: Pixel length {1} exceeds the maximum {2}, using {3}font {4}, {5}size {6}</value>
+  </data>
+  <data name="VerficationMessage_CharacterLengthExceedsMaximum" xml:space="preserve">
+    <value>{0}: Character length {1} exceeds the maximum {2}</value>
+  </data>
+  <data name="ValidationMessage_Column_Already_Defined" xml:space="preserve">
+    <value>Column {0} is already defined!</value>
+  </data>
+  <data name="VerificationMessage_ParagraphLinesExceedsMaximum" xml:space="preserve">
+    <value>{0}: Number of lines {1} exceed the maximum {2}</value>
+  </data>
+  <data name="ToolTip_ValueInhertiedFromExcelWorksheet" xml:space="preserve">
+    <value>Value is inherited from the excel worksheet</value>
+  </data>
+  <data name="ExceptionMessage_UnableToLocateTheSourceFile_" xml:space="preserve">
+    <value>Unable to locate the source file {0}</value>
+  </data>
+  <data name="ExceptionMessage_UnableToLocateTheMappedLanguage_" xml:space="preserve">
+    <value>Unable to locate the language {0}. Please check that the language is mapped correctly in the File Type settings of the project.</value>
+  </data>
+  <data name="VerificationMessage_DefaultInParenthesis" xml:space="preserve">
+    <value>(Default)</value>
+  </data>
+  <data name="Header_SetAsDefaultLanguage" xml:space="preserve">
+    <value>Set the selected language as default (Ctrl+D)</value>
+  </data>
+  <data name="ExceptionMessage_Incorrect_File_Type" xml:space="preserve">
+    <value>Incorrect File Type '{0}', expected: '{1}'</value>
+  </data>
+  <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\download.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\forumicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe_Download_Plugin_From_AppStore" xml:space="preserve">
+    <value>Download {0} from the AppStore</value>
+  </data>
+  <data name="TellMe_String_Results" xml:space="preserve">
+    <value>{0} results</value>
+  </data>
+  <data name="TellMe_String_TellMe_Provider" xml:space="preserve">
+    <value>{0} TellMe provider</value>
+  </data>
+</root>

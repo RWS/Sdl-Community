@@ -1,6 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 using NLog;
+using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -10,9 +11,9 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 	public class DeepLMtTranslationProvider : ITranslationProvider
     {
         public static readonly string ListTranslationProviderScheme = "deepltranslationprovider";
-        private readonly Logger _logger = Log.GetLogger(nameof(Studio.DeepLTranslationProviderConnecter));
+        private readonly Logger _logger = Log.GetLogger(nameof(Client.DeepLTranslationProviderClient));
 
-        public DeepLMtTranslationProvider(DeepLTranslationOptions options, DeepLTranslationProviderConnecter deepLTranslationProviderConnecter, LanguagePair[] languagePairs = null)
+        public DeepLMtTranslationProvider(DeepLTranslationOptions options, DeepLTranslationProviderClient deepLTranslationProviderConnecter, LanguagePair[] languagePairs = null)
         {
             DeepLTranslationProviderConnecter = deepLTranslationProviderConnecter;
             Options = options;
@@ -51,7 +52,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         public bool SupportsWordCounts => false;
         public TranslationMethod TranslationMethod => TranslationMethod.MachineTranslation;
         public Uri Uri => Options.Uri;
-        private DeepLTranslationProviderConnecter DeepLTranslationProviderConnecter { get; }
+        public DeepLTranslationProviderClient DeepLTranslationProviderConnecter { get; }
 
         public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
         {
@@ -91,7 +92,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         {
             foreach (var languagePair in languagePairs)
             {
-                var targetLanguage = languagePair.TargetCulture.TwoLetterISOLanguageName.ToUpper();
+                var targetLanguage = languagePair.TargetCulture.RegionNeutralName.ToUpper();
                 if (DeepLTranslationProviderConnecter.IsLanguagePairSupported(languagePair.SourceCulture, languagePair.TargetCulture) && !Options.LanguagesSupported.ContainsKey(targetLanguage))
                 {
                     if (!Options.LanguagesSupported.ContainsKey(languagePair.TargetCultureName))

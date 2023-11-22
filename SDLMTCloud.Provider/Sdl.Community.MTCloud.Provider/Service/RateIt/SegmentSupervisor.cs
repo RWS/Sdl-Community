@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Sdl.Community.MTCloud.Provider.Events;
+using Sdl.Community.MTCloud.Provider.Extensions;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model.RateIt;
 using Sdl.Core.Globalization;
@@ -16,13 +17,11 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 	{
 		private readonly EditorController _editorController;
 		private ITranslationService _translationService;
-		private static List<string> _providerNames;
 		
 
 		public SegmentSupervisor(EditorController editorController)
 		{
 			_editorController = editorController;
-			_providerNames = new List<string> { PluginResources.SDLMTCloud_Provider_Name, PluginResources.SDLMTCloud_Provider_OldName, PluginResources.SDLMTCloud_Provider_OldName2 };
 		}
 
 		public event ShouldSendFeedbackEventHandler ShouldSendFeedback;
@@ -93,10 +92,14 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 				ActiveDocument.SegmentsConfirmationLevelChanged += ActiveDocument_SegmentsConfirmationLevelChanged;
 			}
 
-			_translationService = translationService;
 			if (_translationService != null)
 			{
 				_translationService.TranslationReceived -= TranslationService_TranslationReceived;
+			}
+
+			if (translationService != null)
+			{
+				_translationService = translationService;
 				_translationService.TranslationReceived += TranslationService_TranslationReceived;
 			}
 
@@ -105,31 +108,33 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 
 		private static bool WasPreviousOriginMTCloud(ITranslationOrigin translationOrigin)
 		{
-			return _providerNames.Contains(translationOrigin?.OriginBeforeAdaptation?.OriginSystem);
+			return translationOrigin?.OriginBeforeAdaptation?.OriginSystem?.IsLanguageWeaverOrigin() ?? false;
 		}
 
 		private static bool IsOriginMTCloud(ITranslationOrigin translationOrigin)
 		{
-			return _providerNames.Contains(translationOrigin?.OriginSystem);
+			return translationOrigin?.OriginSystem?.IsLanguageWeaverOrigin() ?? false;
 		}
 
 		private void ActiveDocument_SegmentsConfirmationLevelChanged(object sender, EventArgs e)
 		{
-			var targetSegment = (ISegment)((ISegmentContainerNode)sender).Item;
-			if (targetSegment == null) return;
+			if ((sender as ISegmentContainerNode).Item is not ISegment targetSegment)
+			{
+				return;
+			}
 
 			var segmentId = targetSegment.Properties.Id;
 			var translationOrigin = targetSegment.Properties.TranslationOrigin;
-
 			if (IsImprovementToTpTranslation(translationOrigin, segmentId, targetSegment))
 			{
 				UpdateImprovement(segmentId, targetSegment.ToString());
 			}
 
-			if (!IsOriginMTCloud(translationOrigin) && !WasPreviousOriginMTCloud(translationOrigin) ||
-			    targetSegment.Properties.ConfirmationLevel != ConfirmationLevel.Translated) return;
-
-			ShouldSendFeedback?.Invoke(segmentId);
+			if ((IsOriginMTCloud(translationOrigin) || WasPreviousOriginMTCloud(translationOrigin))
+			 && targetSegment.Properties.ConfirmationLevel == ConfirmationLevel.Translated)
+			{
+				ShouldSendFeedback?.Invoke(segmentId);
+			}
 		}
 
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
@@ -142,11 +147,10 @@ namespace Sdl.Community.MTCloud.Provider.Service.RateIt
 		private bool IsImprovementToTpTranslation(ITranslationOrigin translationOrigin, SegmentId segmentId, ISegment segment)
 		{
 			if (ActiveDocumentData is null) return false;
-
-			return (WasPreviousOriginMTCloud(translationOrigin) || IsOriginMTCloud(translationOrigin)) &&
-			       ActiveDocumentData.ContainsKey(segmentId) &&
-			       ActiveDocumentData[segmentId].OriginalMtCloudTranslation != segment.ToString() &&
-			       segment.Properties?.ConfirmationLevel == ConfirmationLevel.Translated;
+			return (WasPreviousOriginMTCloud(translationOrigin) || IsOriginMTCloud(translationOrigin))
+				&& ActiveDocumentData.ContainsKey(segmentId)
+				&& ActiveDocumentData[segmentId].OriginalMtCloudTranslation != segment.ToString()
+				&& segment.Properties?.ConfirmationLevel == ConfirmationLevel.Translated;
 		}
 
 		private void TranslationService_TranslationReceived(TranslationData translationData)

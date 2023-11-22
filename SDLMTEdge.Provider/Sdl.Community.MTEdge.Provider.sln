@@ -1,16 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28803.156
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.MTEdge.Provider", "SDLMTEdgeTranslationProvider\Sdl.Community.MTEdge.Provider.csproj", "{5DF3208A-65A1-4988-B997-C361FC9C5A0A}"
-	ProjectSection(ProjectDependencies) = postProject
-		{CEBE84EB-A630-4957-B93A-3B60456B5FB7} = {CEBE84EB-A630-4957-B93A-3B60456B5FB7}
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.MTEdge.UnitTests", "TradosPluginTests\Sdl.Community.MTEdge.UnitTests.csproj", "{56A97DE3-02E3-4A34-97C1-6B9F62A567D4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.MTEdge.LPConverter", "SDLMTEdgeLPConverter\Sdl.Community.MTEdge.LPConverter.csproj", "{CEBE84EB-A630-4957-B93A-3B60456B5FB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdl.Community.MTEdge.Provider", "Sdl.Community.MTEdge.Provider.csproj", "{2739687A-D9BA-45B4-B1C8-516886028468}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,23 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5DF3208A-65A1-4988-B997-C361FC9C5A0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5DF3208A-65A1-4988-B997-C361FC9C5A0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5DF3208A-65A1-4988-B997-C361FC9C5A0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5DF3208A-65A1-4988-B997-C361FC9C5A0A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{56A97DE3-02E3-4A34-97C1-6B9F62A567D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{56A97DE3-02E3-4A34-97C1-6B9F62A567D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{56A97DE3-02E3-4A34-97C1-6B9F62A567D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{56A97DE3-02E3-4A34-97C1-6B9F62A567D4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CEBE84EB-A630-4957-B93A-3B60456B5FB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CEBE84EB-A630-4957-B93A-3B60456B5FB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CEBE84EB-A630-4957-B93A-3B60456B5FB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CEBE84EB-A630-4957-B93A-3B60456B5FB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2739687A-D9BA-45B4-B1C8-516886028468}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2739687A-D9BA-45B4-B1C8-516886028468}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2739687A-D9BA-45B4-B1C8-516886028468}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2739687A-D9BA-45B4-B1C8-516886028468}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {3F87FD92-A0CE-4B61-92BA-DDA1FB5060FD}
+		SolutionGuid = {5ED46B23-FFE1-42CB-A176-F6096FB95E00}
 	EndGlobalSection
 EndGlobal

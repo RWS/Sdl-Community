@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Sdl.Community.XmlReader.WPF.Annotations;
+using System.IO;
 
 namespace Sdl.Community.XmlReader.WPF.ViewModels
 {
@@ -126,6 +127,8 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
 			{
 				var selectedItems = XmlFiles.Where(f => f.IsSelected).ToList();
 				MessageVisibility = "Visible";
+				if (!Directory.Exists(folderPath.FileName))
+					Directory.CreateDirectory(folderPath.FileName);
 				await Task.Run(()=> Report.GenerateExcelReport(folderPath.FileName, selectedItems));
 				MessageVisibility = "Hidden";
 

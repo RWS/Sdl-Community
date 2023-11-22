@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
+	<PlugInName>Multilingual Excel FileType</PlugInName>
+	<Version>1.1.1.0</Version>
+	<Description>Multilingual Excel File Type</Description>
+	<Author>Trados AppStore Team</Author>
+	<RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9"/>
+  <Include>
+	  <File>Rws.MultiSelectComboBox.dll</File>
+  </Include>
+</PluginPackage>

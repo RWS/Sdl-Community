@@ -17,7 +17,7 @@ namespace SDLCopyTags.Helpers
 
 			var config = LogManager.Configuration;
 
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RWS AppStore",
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Trados AppStore",
 				"TradosCopyTags");
 
 			Directory.CreateDirectory(logDirectoryPath);

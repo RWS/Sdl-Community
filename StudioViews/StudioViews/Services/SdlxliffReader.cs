@@ -13,7 +13,7 @@ namespace Sdl.Community.StudioViews.Services
 			
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 			var converter = fileTypeManager.GetConverterToDefaultBilingual(filePathInput, dummyFile, null);
-			
+
 			var contentReader = new ContentReader();
 
 			converter.AddBilingualProcessor(contentReader);

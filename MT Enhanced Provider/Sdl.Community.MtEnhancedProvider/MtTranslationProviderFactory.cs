@@ -62,31 +62,32 @@ namespace Sdl.Community.MtEnhancedProvider
 			}
 			else //if we are using Google as the provider need to get API key
 			{
-				// The credential is saved with a different URI scheme than that of the plugin!
-				// We will need to make this known and/or provide a workaround in identifying the credentials
-				// added from the project automation API.
-				// The following is a work-around which attempts to recover the credential, given various scenarios
-				var credential = credentialStore.GetCredential(new Uri(PluginResources.UriGt))
-								 ?? credentialStore.GetCredential(translationProviderUri)
-								 ?? credentialStore.GetCredential(new Uri(translationProviderUri.Scheme + ":///"));
-				if (credential != null)
+				if (loadOptions.SelectedGoogleVersion == Helpers.Enums.GoogleApiVersion.V2)
 				{
-					var cred = new TranslationProviderCredential(credential.Credential, credential.Persist);
-					loadOptions.ApiKey = cred.Credential;
-					loadOptions.PersistGoogleKey = cred.Persist;
-				}
-				else
-				{
-					throw new TranslationProviderAuthenticationException();
-					//throwing this exception ends up causing Studio to call MtTranslationProviderWinFormsUI.GetCredentialsFromUser();
-					//which we use to prompt the user to enter credentials
+					// The credential is saved with a different URI scheme than that of the plugin!
+					// We will need to make this known and/or provide a workaround in identifying the credentials
+					// added from the project automation API.
+					// The following is a work-around which attempts to recover the credential, given various scenarios
+					var credential = credentialStore.GetCredential(new Uri(PluginResources.UriGt))
+					                 ?? credentialStore.GetCredential(translationProviderUri)
+					                 ?? credentialStore.GetCredential(new Uri(translationProviderUri.Scheme + ":///"));
+					if (credential != null)
+					{
+						var cred = new TranslationProviderCredential(credential.Credential, credential.Persist);
+						loadOptions.ApiKey = cred.Credential;
+						loadOptions.PersistGoogleKey = cred.Persist;
+					}
+					else
+					{
+						throw new TranslationProviderAuthenticationException();
+						//throwing this exception ends up causing Studio to call MtTranslationProviderWinFormsUI.GetCredentialsFromUser();
+						//which we use to prompt the user to enter credentials
+					}
 				}
 			}
 
 			//construct new provider with options..these options are going to include the cred.credential and the cred.persists
-			var tp = new MtTranslationProvider(loadOptions, regionsProvider, htmlUtil);
-
-			return tp;
+			return new MtTranslationProvider(loadOptions, regionsProvider, htmlUtil);
 		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)

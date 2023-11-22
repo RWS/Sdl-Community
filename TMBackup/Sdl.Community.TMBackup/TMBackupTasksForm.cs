@@ -302,9 +302,9 @@ namespace Sdl.Community.TMBackup
 		/// </summary>
 		private void OpenReadMe()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3134.trados-tm-backup");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3134/trados-tmbackup");
 		}
-
+		
 		/// <summary>
 		/// Create new task
 		/// </summary>

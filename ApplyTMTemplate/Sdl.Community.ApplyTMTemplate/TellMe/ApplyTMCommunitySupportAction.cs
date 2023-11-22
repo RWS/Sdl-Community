@@ -8,12 +8,12 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 	{
 		public ApplyTMCommunitySupportAction()
 		{
-			Name = "SDL Community AppStore forum";
+			Name = "RWS Community AppStore forum";
 		}
 
 		public override void Execute()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/f/160");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/f");
 		}
 
 		public override bool IsAvailable => true;

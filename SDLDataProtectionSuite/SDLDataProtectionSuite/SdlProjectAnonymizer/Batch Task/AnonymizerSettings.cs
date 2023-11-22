@@ -13,8 +13,6 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 {
 	public class AnonymizerSettings : SettingsGroup, IAnonymizerSettings
 	{
-		private readonly BindingList<RegexPattern> _regexPatterns = new BindingList<RegexPattern>();
-
 		public bool? IsOldVersion
 		{
 			get => GetSetting<bool?>(nameof(IsOldVersion));
@@ -43,53 +41,15 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 		{
 			get
 			{
-				BindingList<RegexPattern> regexPatterns;
-				try
+				if (!ContainsSetting(nameof(RegexPatterns)))
 				{
-					regexPatterns = GetSetting<BindingList<RegexPattern>>(nameof(RegexPatterns));
+					// here, we don't yet have it, create it as a default
+					var regexPatterns = Constants.GetDefaultRegexPatterns();
+					GetSetting<BindingList<RegexPattern>>(nameof(RegexPatterns)).Value = regexPatterns;
 				}
-				catch
-				{
-					var projectFile = GetProjectFile();
-
-					if (string.IsNullOrEmpty(projectFile) || !File.Exists(projectFile))
-					{
-						return new BindingList<RegexPattern>();
-					}
-
-					var settingsService = new AnonymizerSettingsService(projectFile);
-					regexPatterns = new BindingList<RegexPattern>(settingsService.GetRegexPatternSettings());
-				}
-
-				return regexPatterns;
+				return GetSetting<BindingList<RegexPattern>>(nameof(RegexPatterns));
 			}
 			set => GetSetting<BindingList<RegexPattern>>(nameof(RegexPatterns)).Value = value;
-		}
-
-		private static string GetProjectFile()
-		{
-			var projectFile = string.Empty;
-
-			var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-
-			if (ActiveViewService.Instance.ProjectsViewIsActive)
-			{
-				var selectedProjects = projectsController?.SelectedProjects?.ToList();
-				if (selectedProjects?.Count > 0)
-				{
-					projectFile = selectedProjects[0].FilePath;
-				}
-				else if (projectsController?.CurrentProject != null)
-				{
-					projectFile = projectsController.CurrentProject.FilePath;
-				}
-			}
-			else if (projectsController?.CurrentProject != null)
-			{
-				projectFile = projectsController.CurrentProject.FilePath;
-			}
-
-			return projectFile;
 		}
 
 		public string EncryptionKey
@@ -131,13 +91,10 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 		//Initialize settings with default regex list
 		public void AddPattern(RegexPattern pattern)
 		{
-			_regexPatterns.Add(pattern);
+			RegexPatterns.Add(pattern);
 		}
 
-		public BindingList<RegexPattern> GetRegexPatterns()
-		{
-			return RegexPatterns;
-		}
+		public BindingList<RegexPattern> GetRegexPatterns() => RegexPatterns;
 
 		public string GetEncryptionKey()
 		{
@@ -148,7 +105,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Batch_Task
 			switch (settingId)
 			{
 				case nameof(RegexPatterns):
-					return _regexPatterns;
+					return new BindingList<RegexPattern>();
 
 				case nameof(EncryptionKey):
 					return "<dummy-encryption-key>";

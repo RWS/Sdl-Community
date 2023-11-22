@@ -19,7 +19,7 @@ namespace Trados.TargetRenamer.TellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/5956/target-renamer");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/5956/target-renamer");
 		}
 	}
 }

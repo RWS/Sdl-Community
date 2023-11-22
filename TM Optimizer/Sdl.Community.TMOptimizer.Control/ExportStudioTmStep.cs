@@ -1,6 +1,7 @@
 ﻿using System;
 using Sdl.Community.TMOptimizerLib;
 using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.TMOptimizer.Control

@@ -118,11 +118,29 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\download.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\forumicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="help_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\help_icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
     <value>Trados Studio Word Cloud</value>
+  </data>
+  <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe_Download_Plugin_From_AppStore" xml:space="preserve">
+    <value>Download {0} from the AppStore</value>
+  </data>
+  <data name="TellMe_String_Results" xml:space="preserve">
+    <value>{0} results</value>
+  </data>
+  <data name="TellMe_String_TellMe_Provider" xml:space="preserve">
+    <value>{0} TellMe provider</value>
   </data>
   <data name="wordcloud" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\wordcloud.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

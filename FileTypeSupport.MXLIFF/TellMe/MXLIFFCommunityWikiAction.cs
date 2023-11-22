@@ -12,12 +12,12 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF.TellMe
 
 		public MXLIFFCommunityWikiAction()
 		{
-			Name = "SDL Community MXLIFF file type support plugin wiki";
+			Name = "MXLIFF file type support plugin wiki";
 		}
 
 		public override void Execute()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/4036.mxliff-file-type-support");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/4036/mxliff-file-type-support");
 		}
 	}
 }

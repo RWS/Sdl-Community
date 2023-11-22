@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.StarTransit.UnitTests
@@ -60,7 +61,7 @@ namespace Sdl.Community.StarTransit.UnitTests
 			{
 				Name = packageModel.Name,
 				LocalProjectFolder = Path.Combine(tempTestFolder, packageModel.Name),
-				SourceLanguage = new Language(packageModel.LanguagePairs[0].SourceLanguage),
+				SourceLanguage = LanguageRegistryApi.Instance.GetLanguage(packageModel.LanguagePairs[0].SourceLanguage.Name),
 				TargetLanguages = GetTargetLanguages(packageModel.LanguagePairs),
 				DueDate = packageModel.DueDate
 			};
@@ -86,7 +87,7 @@ namespace Sdl.Community.StarTransit.UnitTests
 			var targetLanguageList = new List<Language>();
 			foreach (var target in targetCultureInfoList)
 			{
-				var language = new Language(target);
+				var language = LanguageRegistryApi.Instance.GetLanguage(target.Name);
 				targetLanguageList.Add(language);
 			}
 			var targetArray = targetLanguageList.ToArray();

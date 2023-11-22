@@ -64,6 +64,9 @@
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.Core.Globalization.Async">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.Async.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.Core.dll</HintPath>
     </Reference>
@@ -72,6 +75,9 @@
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -90,6 +96,10 @@
     <Compile Include="Determiniser.cs" />
     <Compile Include="RegexTrie.cs" />
     <Compile Include="RegexTrieProcessing.cs" />
+    <Compile Include="TellMe\AppStoreDownloadAction.cs" />
+    <Compile Include="TellMe\AppStoreForumAction.cs" />
+    <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="TrieLoader.cs" />
     <Compile Include="ValidationErrorForm.cs">
       <SubType>Form</SubType>
@@ -122,7 +132,10 @@
   <ItemGroup>
     <Content Include="band_aid.ico" />
     <Content Include="band_aid.png" />
+    <Content Include="Resources\Download.ico" />
+    <Content Include="Resources\ForumIcon.ico" />
     <Content Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\FilterFramework2Configuration.xml" />
+    <Content Include="Resources\Question.ico" />
     <EmbeddedResource Include="TermInjector Help\help.css" />
     <EmbeddedResource Include="TermInjector Help\images\HelpPic1.png" />
     <EmbeddedResource Include="TermInjector Help\images\HelpPic10.png" />

@@ -35,13 +35,13 @@ namespace Sdl.Community.TMLifting
 			
 		}
 	}
-	[Action("HelpAction", typeof(TMLiftingRibbon), Name = "Help", Description = "An wiki page will be opened in browser with user guide", Icon = "question")]
-	[ActionLayout(typeof(TMLiftingRibbonGroup), 0, DisplayType.Large)]
-	public class HelpAction : AbstractViewControllerAction<TMLiftingRibbon>
-	{
-		protected override void Execute()
-		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3268.tm-lifting");
-		}
-	}
+	//[Action("HelpAction", typeof(TMLiftingRibbon), Name = "Help", Description = "An wiki page will be opened in browser with user guide", Icon = "question")]
+	//[ActionLayout(typeof(TMLiftingRibbonGroup), 0, DisplayType.Large)]
+	//public class HelpAction : AbstractViewControllerAction<TMLiftingRibbon>
+	//{
+	//	protected override void Execute()
+	//	{
+	//		Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3268.tm-lifting-reindex-translation-memories");
+	//	}
+	//}
 }

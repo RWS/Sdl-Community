@@ -12,11 +12,11 @@ namespace Sdl.Community.StarTransit.TellMe
 		}
 		public override void Execute()
 		{
-			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/f/rws-appstore");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/f");
 		}
 
 		public override bool IsAvailable => true;
-		public override string Category => "StarTransit results";
+		public override string Category => string.Format(PluginResources.TellMe_Provider_Results, PluginResources.Plugin_Name);
 
 		public override Icon Icon => PluginResources.ForumIcon;
 	}

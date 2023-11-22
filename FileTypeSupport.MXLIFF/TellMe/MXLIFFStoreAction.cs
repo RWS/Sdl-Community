@@ -17,7 +17,7 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF.TellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://appstore.sdl.com/language/app/mxliff-file-type/962/");
+			Process.Start("https://appstore.rws.com/Plugin/29");
 		}
 	}
 }

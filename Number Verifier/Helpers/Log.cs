@@ -18,7 +18,7 @@ namespace Sdl.Community.NumberVerifier.Helpers
 			var config = LogManager.Configuration;
 
 			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				"RWS AppStore",
+				"Trados AppStore",
 				"Number Verifier");
 			Directory.CreateDirectory(logDirectoryPath);
 

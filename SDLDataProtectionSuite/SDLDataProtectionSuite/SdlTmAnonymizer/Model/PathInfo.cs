@@ -5,7 +5,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Model
 {
 	public class PathInfo
 	{
-		private const string SdlCommunityPathName = "RWS AppStore";
+		private const string SdlCommunityPathName = "Trados AppStore";
 		private const string ApplicationPathName = "TradosTMAnonymizer";
 		private const string BackupPathName = "Backup";
 		private const string LogsPathName = "Logs";

@@ -51,7 +51,7 @@ namespace Sdl.Community.TermExcelerator.Ui
 
 		private IEnumerable<ExcelEntry> SourceListViewEntries => sourceListView.Objects.Cast<ExcelEntry>();
 
-		public async void AddAndEdit(IEntry entry, ExcelData excelDataGrid)
+		public async void AddAndEdit(Entry entry, ExcelData excelDataGrid)
 		{
 			if (!string.IsNullOrEmpty(excelDataGrid?.Term))
 			{
@@ -72,7 +72,7 @@ namespace Sdl.Community.TermExcelerator.Ui
 			await Save();
 		}
 
-		public void JumpToTerm(IEntry entry)
+		public void JumpToTerm(Entry entry)
 		{
 			try
 			{
@@ -259,7 +259,7 @@ namespace Sdl.Community.TermExcelerator.Ui
 			}
 		}
 
-		private void EditTerm(IEntry entry, ExcelData excelDataGrid)
+		private void EditTerm(Entry entry, ExcelData excelDataGrid)
 		{
 			((ExcelEntry)entry).IsDirty = true;
 
@@ -378,7 +378,7 @@ namespace Sdl.Community.TermExcelerator.Ui
 					Locale = _providerSettings.SourceLanguage,
 					Name = _providerSettings.SourceLanguage.EnglishName,
 					Terms = sourceEntryTerms,
-					Fields = new List<IEntryField>(),
+					Fields = new List<EntryField>(),
 					IsSource = true
 				};
 				entryTerm.Languages.Add(newSourceEntryLanguage);

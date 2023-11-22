@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<tmx version="1.4">
+<header creationtool="SDL Language Platform" creationtoolversion="8.0" o-tmf="SDL TM8 Format" datatype="xml" segtype="sentence" adminlang="en-GB" srclang="en-GB" creationdate="20150326T162954Z" creationid="GLOBAL\pfilkin"><prop type="x-Domain:SinglePicklist">Construction,Legal,Manuals,Misc</prop><prop type="x-Document:SingleString"></prop><prop type="x-Client:SinglePicklist">Balfour Beatty,Canon,Galliford,HP,James L Outhouse QC,Jarvis Construction,Lies and Bullis,Microsoft,Rush Rush and Delay,Screwem Goode and Harte,Sony,Taylor Woodrow</prop><prop type="x-Recognizers">RecognizeAll</prop><prop type="x-TMName">en(GB) - es(MX)</prop></header>
+    <body>
+        <tu creationdate="20150326T170409Z" creationid="GLOBAL\pfilkin" changedate="20150326T170412Z" changeid="GLOBAL\pfilkin" lastusagedate="20150326T170412Z">
+            <prop type="x-Context">0, 0</prop>
+            <prop type="x-Origin">TM</prop>
+            <prop type="x-ConfirmationLevel">Translated</prop>
+            <prop type="x-Document:SingleString">#4</prop>
+            <prop type="x-Domain:SinglePicklist">Construction</prop>
+            <prop type="x-Client:SinglePicklist">Balfour Beatty</prop>
+            <tuv xml:lang="en-GB">
+                <seg>INTRODUCTION</seg>
+            </tuv>
+            <tuv xml:lang="es-MX">
+                <seg>INTRODUCCIÓN</seg>
+            </tuv>
+        </tu>
+        <tu creationdate="20150326T170421Z" creationid="GLOBAL\pfilkin" changedate="20150326T170423Z" changeid="GLOBAL\pfilkin" lastusagedate="20150326T170423Z">
+            <prop type="x-Context">2032267, 2032267</prop>
+            <prop type="x-Origin">TM</prop>
+            <prop type="x-ConfirmationLevel">Translated</prop>
+            <prop type="x-Document:SingleString">#4</prop>
+            <prop type="x-Domain:SinglePicklist">Construction</prop>
+            <prop type="x-Client:SinglePicklist">Balfour Beatty</prop>
+            <tuv xml:lang="en-GB">
+                <seg>This document contains both the Interserve Construction Health and Safety Code for Subcontractors and the Sustainability Code for Subcontractors.</seg>
+            </tuv>
+            <tuv xml:lang="es-MX">
+                <seg>Este documento contiene el Interserve Construcción Código de Salud y Seguridad de los subcontratistas y la sostenibilidad Código de los subcontratistas.</seg>
+            </tuv>
+        </tu>
+        <tu creationdate="20150326T170455Z" creationid="GLOBAL\pfilkin" changedate="20150326T170457Z" changeid="GLOBAL\pfilkin" lastusagedate="20150326T170457Z">
+            <prop type="x-Context">-5955111135218339266, 164767338788415934</prop>
+            <prop type="x-Origin">TM</prop>
+            <prop type="x-ConfirmationLevel">Translated</prop>
+            <prop type="x-Document:SingleString">#4</prop>
+            <prop type="x-Domain:SinglePicklist">Construction</prop>
+            <prop type="x-Client:SinglePicklist">Balfour Beatty</prop>
+            <tuv xml:lang="en-GB">
+                <seg>These codes have been prepared to ensure that Interserve Construction and all subcontractors on Interserve Construction contracts operate to clear and consistent standards and in doing so assist us in meeting our goals of being accident free and reducing our environmental impact.</seg>
+            </tuv>
+            <tuv xml:lang="es-MX">
+                <seg>Estos códigos han sido preparados para asegurar que Interserve Construcción y todos los subcontratistas de Interserve contratos de construcción de las normas claras y coherentes y, al hacerlo, nos ayudará en la consecución de nuestros objetivos de accidente libre y reducir nuestro impacto en el medioambiente.</seg>
+            </tuv>
+        </tu>
+        <tu creationdate="20150326T170506Z" creationid="GLOBAL\pfilkin" changedate="20150326T170507Z" changeid="GLOBAL\pfilkin" lastusagedate="20150326T170507Z">
+            <prop type="x-Context">-3784049579862487578, -1593910706652273900</prop>
+            <prop type="x-Origin">TM</prop>
+            <prop type="x-ConfirmationLevel">Translated</prop>
+            <prop type="x-Document:SingleString">#4</prop>
+            <prop type="x-Domain:SinglePicklist">Construction</prop>
+            <prop type="x-Client:SinglePicklist">Balfour Beatty</prop>
+            <tuv xml:lang="en-GB">
+                <seg>In meeting these goals we will achieve our vision of being the trusted Partner to all those with whom we have a relationship be they shareholders, customers, employees, suppliers, members of the community in which we are working, or any other group or individual.</seg>
+            </tuv>
+            <tuv xml:lang="es-MX">
+                <seg>En el cumplimiento de estas metas, lograr nuestra visión de ser el socio de confianza para todos aquellos con quienes tenemos una relación, accionistas, clientes, empleados, proveedores, miembros de la comunidad en la que estamos trabajando, o de cualquier otro grupo o persona.</seg>
+            </tuv>
+        </tu>
+        <tu creationdate="20150326T170518Z" creationid="GLOBAL\pfilkin" changedate="20150326T170519Z" changeid="GLOBAL\pfilkin" lastusagedate="20150326T170519Z">
+            <prop type="x-Context">7282442498426123152, -6918177430141953044</prop>
+            <prop type="x-Origin">TM</prop>
+            <prop type="x-ConfirmationLevel">Translated</prop>
+            <prop type="x-Document:SingleString">#4</prop>
+            <prop type="x-Domain:SinglePicklist">Construction</prop>
+            <prop type="x-Client:SinglePicklist">Balfour Beatty</prop>
+            <tuv xml:lang="en-GB">
+                <seg>Subcontractors are required to assist and co-operate with Interserve Construction with health, safety and environmental related issues, including initiatives that may be operated from time to time.</seg>
+            </tuv>
+            <tuv xml:lang="es-MX">
+                <seg>Los subcontratistas la obligación de asistir y cooperar con Interserve Construcción a la seguridad, la salud y el medio ambiente, en particular las cuestiones relacionadas con las iniciativas que se pueden utilizar de vez en cuando.</seg>
+            </tuv>
+        </tu>
+
+    </body>
+</tmx>

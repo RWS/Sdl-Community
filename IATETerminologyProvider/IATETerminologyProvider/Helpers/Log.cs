@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
@@ -17,8 +18,8 @@ namespace Sdl.Community.IATETerminologyProvider.Helpers
 			
 			var config = LogManager.Configuration;
 
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RWS AppStore",
-				"IATEProviderLogs");
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Trados AppStore",
+				"IATETerminologyProvider", "Logs");
 
 			Directory.CreateDirectory(logDirectoryPath);
 
@@ -26,7 +27,8 @@ namespace Sdl.Community.IATETerminologyProvider.Helpers
 			{
 				Name = "IATETerminologyProvider",
 				FileName = Path.Combine(logDirectoryPath, "IATEProviderLogs.txt"),
-				Layout = "${logger}: ${longdate} ${level} ${message}  ${exception}"
+				Layout = "${logger}: ${longdate} ${level} ${message}  ${exception}",
+				Encoding = Encoding.UTF8
 			};
 
 			config.AddTarget(target);

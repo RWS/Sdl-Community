@@ -13,7 +13,7 @@ namespace Sdl.Community.ExportToExcel.TellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://appstore.sdl.com/language/app/export-to-excel/532/");
+			Process.Start("https://appstore.rws.com/Plugin/27");
 		}
 
 		public override bool IsAvailable => true;

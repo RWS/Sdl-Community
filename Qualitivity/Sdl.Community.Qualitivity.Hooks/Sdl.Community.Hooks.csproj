@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.Hooks</RootNamespace>
-    <AssemblyName>Sdl.Community.Qualitivity.Hooks</AssemblyName>
+    <AssemblyName>Qualitivity.Hooks</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

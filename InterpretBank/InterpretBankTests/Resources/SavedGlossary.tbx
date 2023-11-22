@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE martif PUBLIC "SYSTEM" "TBXcoreStructV02.dtd">
+<martif xml:lang="en" type="TBX-Default">
+  <text>
+    <body>
+      <glossary />
+      <subglossary />
+      <termEntry>
+        <CommentAll />
+        <langSet xml:lang="en">
+          <tig>
+            <term>helmet</term>
+            <extra1 />
+            <extra2 />
+          </tig>
+        </langSet>
+        <langSet xml:lang="fr">
+          <tig>
+            <term />
+            <extra1 />
+            <extra2 />
+          </tig>
+        </langSet>
+        <langSet xml:lang="de">
+          <tig>
+            <term />
+            <extra1 />
+            <extra2 />
+          </tig>
+        </langSet>
+        <langSet xml:lang="it">
+          <tig>
+            <term />
+            <extra1 />
+            <extra2 />
+          </tig>
+        </langSet>
+      </termEntry>
+      <termEntry>
+        <CommentAll />
+        <langSet xml:lang="en">
+          <tig>
+            <term>EnTerm3</term>
+            <extra1 />
+            <extra2 />
+          </tig>
+        </langSet>
+        <langSet xml:lang="fr">
+          <tig>
+            <term>FrTerm3</term>
+            <extra1 />
+            <extra2 />
+          </tig>
+        </langSet>
+        <langSet xml:lang="de">
+          <tig>
+            <term>DeTerm3</term>
+            <extra1 />
+            <extra2 />
+          </tig>
+        </langSet>
+        <langSet xml:lang="it">
+          <tig>
+            <term>ItTerm3</term>
+            <extra1 />
+            <extra2 />
+          </tig>
+        </langSet>
+      </termEntry>
+      <termEntry>
+        <CommentAll />
+        <langSet xml:lang="en">
+          <tig>
+            <term>EnTerm2</term>
+            <extra1 />
+            <extra2 />
+          </tig>
+        </langSet>
+        <langSet xml:lang="fr">
+          <tig>
+            <term>FrTerm2</term>
+            <extra1 />
+            <extra2 />
+          </tig>
+        </langSet>
+        <langSet xml:lang="de">
+          <tig>
+            <term>DeTerm2</term>
+            <extra1 />
+            <extra2 />
+          </tig>
+        </langSet>
+        <langSet xml:lang="it">
+          <tig>
+            <term>ItTerm2</term>
+            <extra1 />
+            <extra2 />
+          </tig>
+        </langSet>
+      </termEntry>
+      <termEntry>
+        <CommentAll>Term4Note1 Term4Note2 Term4Note3 Term4Note4</CommentAll>
+        <langSet xml:lang="en">
+          <tig>
+            <term>EnTerm1</term>
+            <extra1 />
+            <extra2 />
+          </tig>
+        </langSet>
+        <langSet xml:lang="fr">
+          <tig>
+            <term>FrTerm1</term>
+            <extra1 />
+            <extra2 />
+          </tig>
+        </langSet>
+        <langSet xml:lang="de">
+          <tig>
+            <term>DeTerm1</term>
+            <extra1 />
+            <extra2 />
+          </tig>
+        </langSet>
+        <langSet xml:lang="it">
+          <tig>
+            <term>ItTerm1</term>
+            <extra1 />
+            <extra2 />
+          </tig>
+        </langSet>
+      </termEntry>
+    </body>
+  </text>
+</martif>

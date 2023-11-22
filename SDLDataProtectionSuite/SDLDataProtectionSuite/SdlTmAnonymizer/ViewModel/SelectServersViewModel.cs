@@ -74,7 +74,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 
 		private void GetServerTms(ProgressDialogContext context)
 		{
-			var translationMemories = _translationProviderServer.GetTranslationMemories(TranslationMemoryProperties.None);
+			var translationMemories = _translationProviderServer.GetTranslationMemories();
 
 			foreach (var tm in translationMemories)
 			{

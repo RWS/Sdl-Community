@@ -1,11 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using Newtonsoft.Json;
 using Sdl.Community.MTCloud.Provider.Events;
+using Sdl.Community.MTCloud.Provider.Extensions;
 using Sdl.Community.MTCloud.Provider.Interfaces;
+using Sdl.Community.MTCloud.Provider.Model;
+using Sdl.Community.MTCloud.Provider.Service.FeedbackService;
+using Sdl.Community.MTCloud.Provider.Service.FeedbackService.Model;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
+using Sdl.ProjectAutomation.Core;
+using Sdl.ProjectAutomation.FileBased;
 using Sdl.ProjectAutomation.Settings.Events;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -48,13 +56,9 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			Setup();
 		}
 
-		private static bool GetTpStatus()
+		private static bool GetTpStatus(TranslationProviderReference tpReference)
 		{
-			var tpStatus =
-				MtCloudApplicationInitializer.GetProjectInProcessing()?.GetTranslationProviderConfiguration().Entries
-					.FirstOrDefault(
-						e => e.MainTranslationProvider.Uri.ToString().Contains(PluginResources.SDLMTCloudUri))?.MainTranslationProvider
-					.Enabled;
+			var tpStatus = tpReference?.Enabled;
 			return tpStatus ?? false;
 		}
 
@@ -74,20 +78,32 @@ namespace Sdl.Community.MTCloud.Provider.Studio
 			if (MtCloudApplicationInitializer.CurrentViewDetector.View != Helpers.CurrentViewDetector.CurrentView.EditorView)
 				return;
 
-			var projectInProcessing = MtCloudApplicationInitializer.GetProjectInProcessing();
+			var currentProject = MtCloudApplicationInitializer.GetProjectInProcessing();
 			if (MtCloudApplicationInitializer.EditorController.ActiveDocument?.Project !=
-			    projectInProcessing) return;
+			    currentProject) return;
 
-			var currentProvider = MtCloudApplicationInitializer.GetCurrentProjectProvider();
+			var tpReference = currentProject.GetLwTpReference();
+			if (tpReference == null) return;
 
-			var visibility = currentProvider != null && currentProvider.Options.SendFeedback && (GetTpStatus() || providerAdded);
+			var currentProviderOptions = JsonConvert.DeserializeObject<Options>(tpReference.State);
+
+			var visibility = currentProviderOptions != null && currentProviderOptions.SendFeedback && (GetTpStatus(tpReference) || providerAdded);
 			SwitchVisibility(visibility);
 
-			if (currentProvider is null) return;
+			if (currentProviderOptions is null) return;
 			try
 			{
 				Application.Current?.Dispatcher?.Invoke(
-					() => RateIt.SetTranslationService(currentProvider.TranslationService));
+					() =>
+					{
+						var feedbackService = new FeedbackService(new FeedbackSettings
+							{
+								AutoSendFeedback = currentProviderOptions.AutoSendFeedback,
+								SendFeedback = currentProviderOptions.SendFeedback
+							},
+							currentProviderOptions.LanguageMappings, MtCloudApplicationInitializer.ConnectionService);
+						RateIt.SetTranslationService(feedbackService);
+					});
 			}
 			catch
 			{

@@ -1,5 +1,4 @@
-﻿using System;
-using Sdl.Community.MTCloud.Provider.Interfaces;
+﻿using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;

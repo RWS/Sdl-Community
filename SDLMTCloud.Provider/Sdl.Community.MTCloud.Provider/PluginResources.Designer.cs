@@ -19,7 +19,7 @@ namespace Sdl.Community.MTCloud.Provider {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -212,6 +212,42 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid path.
+        /// </summary>
+        public static string InvalidPath {
+            get {
+                return ResourceManager.GetString("InvalidPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The path to file {0} is invalid or doesn&apos;t exist!.
+        /// </summary>
+        public static string InvalidPathInFileName {
+            get {
+                return ResourceManager.GetString("InvalidPathInFileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The path {0} is invalid or doesn&apos;t exist! .
+        /// </summary>
+        public static string InvalidPathOrDirectoryDoesntExist {
+            get {
+                return ResourceManager.GetString("InvalidPathOrDirectoryDoesntExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid path or file name.
+        /// </summary>
+        public static string InvalidPathOrFileDoesntExist {
+            get {
+                return ResourceManager.GetString("InvalidPathOrFileDoesntExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Account region:.
         /// </summary>
         public static string Label_AccountRegion {
@@ -221,7 +257,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to OK.
+        ///   Looks up a localized string similar to Sign out.
         /// </summary>
         public static string Label_OK {
             get {
@@ -307,6 +343,15 @@ namespace Sdl.Community.MTCloud.Provider {
         public static string Message_No_dictionary_available {
             get {
                 return ResourceManager.GetString("Message_No_dictionary_available", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No linguistic options available.
+        /// </summary>
+        public static string Message_No_LO_available {
+            get {
+                return ResourceManager.GetString("Message_No_LO_available", resourceCulture);
             }
         }
         
@@ -482,6 +527,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Language Weaver Provider.
+        /// </summary>
+        public static string OriginSystem_LWC {
+            get {
+                return ResourceManager.GetString("OriginSystem_LWC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Poor.
         /// </summary>
         public static string PoorQuality {
@@ -610,6 +664,15 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No shortcut was set in Studio for this option.
+        /// </summary>
+        public static string RateItViewModel_SetOptionTooltip_No_shortcut_was_set {
+            get {
+                return ResourceManager.GetString("RateItViewModel_SetOptionTooltip_No_shortcut_was_set", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language Weaver Rate Translations.
         /// </summary>
         public static string RateTranslations_Name {
@@ -659,7 +722,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Language Weaver provider.
+        ///   Looks up a localized string similar to Language Weaver Provider.
         /// </summary>
         public static string SDLMTCloud_Provider_Description {
             get {
@@ -668,7 +731,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Language Weaver provider.
+        ///   Looks up a localized string similar to Language Weaver.
         /// </summary>
         public static string SDLMTCloud_Provider_Name {
             get {
@@ -686,16 +749,7 @@ namespace Sdl.Community.MTCloud.Provider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Language Weaver Cloud provider.
-        /// </summary>
-        public static string SDLMTCloud_Provider_OldName2 {
-            get {
-                return ResourceManager.GetString("SDLMTCloud_Provider_OldName2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Language Weaver provider.
+        ///   Looks up a localized string similar to Language Weaver Provider.
         /// </summary>
         public static string SDLMTCloud_RibbonGroup_Name {
             get {

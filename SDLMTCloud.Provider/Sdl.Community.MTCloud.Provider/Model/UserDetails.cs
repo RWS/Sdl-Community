@@ -12,5 +12,8 @@ namespace Sdl.Community.MTCloud.Provider.Model
 
 		[JsonProperty("userId")]
 		public string UserId { get; set; }
+
+		[JsonProperty("email")]
+		public string Email { get; set; }
 	}
 }

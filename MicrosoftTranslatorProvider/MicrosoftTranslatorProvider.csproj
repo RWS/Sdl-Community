@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net48</TargetFramework>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
+		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17</TradosFolder>
+		<CreatePluginPackage>true</CreatePluginPackage>
+		<UseWPF>true</UseWPF>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+	<ItemGroup>
+	  <None Remove="Resources\backImg.png" />
+	  <None Remove="Resources\Download.ico" />
+	  <None Remove="Resources\ForumIcon.ico" />
+	  <None Remove="Resources\Information.png" />
+	  <None Remove="Resources\mtp_logo.png" />
+	  <None Remove="Resources\Question.ico" />
+	  <None Remove="Resources\Setting.png" />
+	  <None Remove="Resources\Settings.ico" />
+	  <None Remove="Styles\Buttons.xaml" />
+	  <None Remove="Styles\General.xaml" />
+	  <None Remove="Styles\WindowsBorder.xaml" />
+	  <None Remove="Styles\WindowsControl.xaml" />
+	  <None Remove="UiHelpers\WatermarkTextBoxResources.xaml" />
+	  <None Remove="View\MainWindow.xaml" />
+	  <None Remove="View\ProviderControl.xaml" />
+	  <None Remove="View\SettingsControl.xaml" />
+	</ItemGroup>
+	<ItemGroup>
+		<Reference Include="Microsoft.IdentityModel.Tokens">
+			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Microsoft.IdentityModel.Tokens.dll</HintPath>
+		</Reference>
+		<Reference Include="Newtonsoft.Json">
+		  <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Newtonsoft.Json.dll</HintPath>
+		</Reference>
+		<Reference Include="NLog">
+			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\NLog.dll</HintPath>
+		</Reference>
+		<Reference Include="PresentationCore" />
+		<Reference Include="PresentationFramework" />
+		<Reference Include="PresentationFramework.Aero" />
+		<Reference Include="Sdl.Core.Globalization">
+			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Core.Globalization.Async">
+		  <HintPath>..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.Async.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Core.Globalization.Async">
+		  <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Desktop.IntegrationApi">
+		  <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
+		  <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Desktop.Platform.Controls">
+		  <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.Controls.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Desktop.Platform.Styles">
+		  <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.Styles.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.LanguagePlatform.Core">
+			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.LanguagePlatform.TranslationMemory">
+			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
+			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.ProjectAutomation.Core">
+		  <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.ProjectAutomation.FileBased">
+		  <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.TellMe.ProviderApi">
+			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
+			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
+			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
+		</Reference>
+		<Reference Include="System" />
+		<Reference Include="System.Core" />
+		<Reference Include="System.Drawing" />
+		<Reference Include="System.IdentityModel" />
+		<Reference Include="System.IdentityModel.Tokens.Jwt">
+		  <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+		</Reference>
+		<Reference Include="System.Net.Http" />
+		<Reference Include="System.Text.Json">
+		  <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\System.Text.Json.dll</HintPath>
+		</Reference>
+		<Reference Include="System.Web" />
+		<Reference Include="System.Windows" />
+		<Reference Include="System.Windows.Forms" />
+		<Reference Include="System.Data" />
+		<Reference Include="System.Xaml" />
+		<Reference Include="System.Xml" />
+		<Reference Include="System.Xml.Linq" />
+		<Reference Include="System.Core" />
+		<Reference Include="WindowsBase" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="Studio\TranslationProvider\ProviderWinFormsUI.cs" />
+		<None Include="Studio\TranslationProvider\ProviderLanguageDirection.cs" />
+		<None Include="Studio\TranslationProvider\Provider.cs" />
+		<None Include="Studio\TranslationProvider\ProviderFactory.cs" />
+		<None Include="Properties\AssemblyInfo.cs" />
+		<None Include="Properties\PluginProperties.cs" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="pluginpackage.manifest.xml" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="LanguageMappingProvider" Version="1.0.92" />
+		<PackageReference Include="RestSharp" Version="107.3.0" />
+		<PackageReference Include="Sdl.Core.PluginFramework">
+			<Version>2.1.0</Version>
+		</PackageReference>
+		<PackageReference Include="Sdl.Core.PluginFramework.Build">
+			<Version>17.0.0</Version>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Update="PluginResources.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>PluginResources.resx</DependentUpon>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Update="PluginResources.resx">
+			<Generator>PublicResXFileCodeGenerator</Generator>
+			<LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
+	<ItemGroup>
+	  <Resource Include="Resources\backImg.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Download.ico">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\ForumIcon.ico">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Information.png" />
+	  <Resource Include="Resources\mtp_logo.png" />
+	  <Resource Include="Resources\Question.ico">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Setting.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Resources\Settings.ico">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Resource>
+	</ItemGroup>
+	<PropertyGroup>
+		<CreatePluginPackage>True</CreatePluginPackage>
+		<SignAssembly>True</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+	</PropertyGroup>
+</Project>

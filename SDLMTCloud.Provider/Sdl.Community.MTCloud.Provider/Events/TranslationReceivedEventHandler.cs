@@ -1,5 +1,4 @@
-﻿using Sdl.Community.MTCloud.Provider.Model;
-using Sdl.Community.MTCloud.Provider.Model.RateIt;
+﻿using Sdl.Community.MTCloud.Provider.Model.RateIt;
 
 namespace Sdl.Community.MTCloud.Provider.Events
 {

@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Sdl.Community.MTCloud.Provider.ViewModel;
 
 namespace Sdl.Community.MTCloud.Provider.Model
@@ -20,5 +21,8 @@ namespace Sdl.Community.MTCloud.Provider.Model
 
 		[DataMember]
 		public string Target { get; set; }
+
+		[DataMember]
+		public List<LinguisticOption> LinguisticOptions { get; set; }
 	}
 }

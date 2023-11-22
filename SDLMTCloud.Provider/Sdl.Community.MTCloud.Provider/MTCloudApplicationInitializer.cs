@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Security.Policy;
 using System.Windows;
 using Sdl.Community.MTCloud.Provider.Events;
 using Sdl.Community.MTCloud.Provider.Helpers;
@@ -26,8 +27,9 @@ namespace Sdl.Community.MTCloud.Provider
 	{
 		private const string BatchProcessing = "batch processing";
 		private const string CreateNewProject = "create a new project";
-		private const string ProjectInProcessing = "ProjectInProcessing";
+
 		private static IStudioEventAggregator _eventAggregator;
+
 		private static bool? _isStudioRunning;
 		public static IHttpClient Client { get; } = new HttpClient();
 
@@ -40,57 +42,54 @@ namespace Sdl.Community.MTCloud.Provider
 		public static ISegmentSupervisor SegmentSupervisor { get; set; }
 		public static ITranslationService TranslationService { get; private set; }
 
-		private static string CurrentProjectId
-		{
-			get
-			{
-				var currentProject = GetProjectInProcessing();
-				return currentProject is null ? ProjectInProcessing : currentProject.GetProjectInfo().Id.ToString();
-			}
-		}
-
 		private static IStudioEventAggregator EventAggregator { get; } = _eventAggregator ??
 																		 (IsStudioRunning()
 																			 ? _eventAggregator = SdlTradosStudio.Application
 																				 .GetService<IStudioEventAggregator>()
 																			 : null);
 
-		private static Dictionary<string, SdlMTCloudTranslationProvider> Providers { get; set; } = new();
 
-		public static void AddCurrentProjectProvider(SdlMTCloudTranslationProvider provider)
+		public static string EnsureValidPath(string filePath, string targetLanguage)
 		{
-			if (!IsStudioRunning()) return;
-			if (IsProjectCreationTime())
-			{
-				AttachToProjectCreatedEvent();
-			}
+			if (File.Exists(filePath))
+				return filePath;
 
-			if (string.IsNullOrEmpty(CurrentProjectId)) return;
+			const string filenameExtension = ".sdlxliff";
+			var separatorTokens = new string[] { $@"{targetLanguage.ToLower()}\" };
+			var fileName = filePath.ToLower()
+								   .Split(separatorTokens, StringSplitOptions.RemoveEmptyEntries)
+								   .LastOrDefault();
+			fileName += !fileName.EndsWith(filenameExtension) ? filenameExtension : string.Empty;
+			var projectPath = Path.GetDirectoryName(ProjectInCreationFilePath) ??
+							  Path.GetDirectoryName(GetProjectInProcessing()?.FilePath);
+			var processedPath = $@"{projectPath}\{targetLanguage}\{fileName}";
 
-			Providers[CurrentProjectId] = provider;
+			if (File.Exists(processedPath))
+				return processedPath;
+
+			if (string.IsNullOrEmpty(projectPath))
+				return null;
+
+			var targetLanguageFiles = Directory.GetFiles(projectPath);
+			processedPath = targetLanguageFiles.FirstOrDefault(
+					file =>
+						Path.GetFileName(file).Contains(Path.GetFileNameWithoutExtension(filePath)) &&
+						Path.GetExtension(file) == filenameExtension);
+
+			return File.Exists(processedPath) ? processedPath : null;
 		}
 
-		public static SdlMTCloudTranslationProvider GetCurrentProjectProvider()
-		{
-			return Providers.ContainsKey(ProjectInProcessing)
-				? Providers[ProjectInProcessing]
-				: string.IsNullOrEmpty(CurrentProjectId) ? null : Providers.ContainsKey(CurrentProjectId) ? Providers[CurrentProjectId] : null;
-		}
-
-		public static Window GetCurrentWindow()
-		{
-			return
-				Application.Current.Windows.Cast<Window>().FirstOrDefault(
+		public static Window GetCurrentWindow() => Application.Current.Windows.Cast<Window>().FirstOrDefault(
 					window => window.Title.ToLower() == BatchProcessing || window.Title.ToLower().Contains(CreateNewProject));
-		}
 
 		public static FileBasedProject GetProjectInProcessing()
 		{
-			if (!IsStudioRunning()) return null;
-			if (Application.Current.Dispatcher.Invoke(() => GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false))
-			{
+			if (!IsStudioRunning())
 				return null;
-			}
+
+			if (Application.Current.Dispatcher.Invoke(() =>
+					GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false))
+				return null;
 
 			var projectInProcessing = CurrentViewDetector.View
 				switch
@@ -100,20 +99,14 @@ namespace Sdl.Community.MTCloud.Provider
 				CurrentViewDetector.CurrentView.EditorView => ProjectsController.CurrentProject,
 				_ => null
 			};
-			return projectInProcessing;
-		}
 
-		public static bool IsProjectCreationTime()
-		{
-			return
-				Application.Current.Dispatcher.Invoke(
-					() =>
-						GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false);
+			return projectInProcessing;
 		}
 
 		public static bool IsStudioRunning()
 		{
-			if (_isStudioRunning is not null) return _isStudioRunning.Value;
+			if (_isStudioRunning is not null)
+				return _isStudioRunning.Value;
 
 			try
 			{
@@ -143,13 +136,11 @@ namespace Sdl.Community.MTCloud.Provider
 			SegmentSupervisor?.StartSupervising(TranslationService);
 		}
 
-		public static IDisposable Subscribe<T>(Action<T> action)
-		{
-			return EventAggregator?.GetEvent<T>().Subscribe(action);
-		}
+		public static IDisposable Subscribe<T>(Action<T> action) => EventAggregator?.GetEvent<T>().Subscribe(action);
 
 		public void Execute()
 		{
+			ConnectionService = new ConnectionService(StudioInstance.GetActiveForm(), new VersionService(), Client);
 			Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
 			if (IsStudioRunning())
@@ -163,47 +154,6 @@ namespace Sdl.Community.MTCloud.Provider
 			}
 		}
 
-		public static string EnsureValidPath(string filepath, string targetLanguage)
-		{
-			if (File.Exists(filepath)) return filepath;
-
-			var projectPath = Path.GetDirectoryName(ProjectInCreationFilePath) ??
-							  Path.GetDirectoryName(GetProjectInProcessing()?.FilePath);
-
-			var pathWithExtension = filepath.Contains(".sdlxliff") ? filepath : $"{filepath}.sdlxliff";
-			var processedPath = $@"{projectPath}\{targetLanguage}\{pathWithExtension}";
-
-			if (File.Exists(processedPath)) return processedPath;
-
-			if (string.IsNullOrWhiteSpace(projectPath)) return null;
-			var targetLanguageFiles = Directory.GetFiles(projectPath);
-			processedPath =
-				targetLanguageFiles.FirstOrDefault(
-					f =>
-						Path.GetFileName(f).Contains(Path.GetFileNameWithoutExtension(pathWithExtension)) &&
-						Path.GetExtension(f) == ".sdlxliff");
-
-			return File.Exists(processedPath) ? processedPath : null;
-		}
-
-		private static void AttachToProjectCreatedEvent()
-		{
-			ProjectsController.CurrentProjectChanged += ProjectsController_CurrentProjectChanged;
-		}
-
-		private static void ProjectsController_CurrentProjectChanged(object sender, EventArgs e)
-		{
-			ProjectsController.CurrentProjectChanged -= ProjectsController_CurrentProjectChanged;
-
-			if (!Providers.ContainsKey(ProjectInProcessing)) return;
-
-			var currentProvider = Providers[ProjectInProcessing];
-			Providers.Remove(ProjectInProcessing);
-
-			var projectInCreation = ProjectsController.CurrentProject;
-
-			ProjectInCreationFilePath = projectInCreation.FilePath;
-			Providers[projectInCreation.GetProjectInfo().Id.ToString()] = currentProvider;
-		}
+		public static ConnectionService ConnectionService { get; set; }
 	}
 }

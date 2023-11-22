@@ -8,7 +8,6 @@
 		public static string MTCloudTranslateAPIUrlEULogin = "https://portal.languageweaver.com/login";
 		public static string MTCloudTranslateAPIUrlUSLogin = "https://us.portal.languageweaver.com/login";
 
-		public static string MTCloudTranslateUri = "https://translate.sdlbeglobal.com";
 		public static string MTCloudUriScheme = "sdlmtcloud";		
 		public static string MTCloudUriResourceUserToken = "/token/user";
 		public static string MTCloudUriResourceUserDetails = "/accounts/users/self";
@@ -20,14 +19,13 @@
 		public static string ClientLoginAuthentication = "ClientLogin";
 		public static string UserLoginAuthentication= "UserLogin";
 
-		public static string StudioAuthentication = "Studio credentials - SDL Language Cloud";
+		public static string StudioAuthentication = "Single Sign-On";
 		public static string UserAuthentication = $"User credentials - {PluginResources.SDLMTCloud_Provider_Name}";
 		public static string ClientAuthentication = $"Client credentials - {PluginResources.SDLMTCloud_Provider_Name}";
 
-
 		// TODO confirm if some or all of these should be managed in a resource file		
 		public static string SDLMachineTranslationCloud = "Language Weaver";
-		public static string RWSAppStore = "RWS AppStore";
+		public static string TradosAppStore = "Trados AppStore";
 		public static string TraceId = "Trace-ID";
 		public static string FAILED = "FAILED";
 		public static string INIT = "INIT";
@@ -70,6 +68,6 @@
 		public static string SuccessfullyUpdatedMessage = "The MT Code was successfully updated within the MTLanguageCodes.xlsx file.";
 		public static string NoEnginesLoaded = "No LW engines were received from Language Weaver for the current project's Language Pairs";
 		public static string EnginesSelectionMessage = "Settings not saved! Please select the corresponding engine from the Language Mappings tab.";
-		public static string NoTranslationMessage = "Translation cannot be received because LW engine is not set for the current Language Pair";				
+		public static string NoTranslationMessage = "Translation cannot be received because LW engine is not set for the current Language Pair";
 	}
 }

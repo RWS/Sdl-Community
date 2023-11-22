@@ -209,7 +209,7 @@ namespace Sdl.Community.NumberVerifier {
         /// <summary>
         ///   Looks up a localized string similar to {\rtf1\ansi\ansicpg1252\deff0\deflang1053{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
         ///{\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\sa200\sl276\slmult1\qc\lang29\b\f0\fs28 Number Verifier Help\par
-        ///\pard\sa200\sl276\slmult1\b0\fs22 While the standard number verification in SDL Trados Studio may often be sufficient there are some occasions when a bit more control would be preferable, for example when translating documents that contain lots of numbers. This Number Verifier plug-in allows you to fine-tu [rest of string was truncated]&quot;;.
+        ///\pard\sa200\sl276\slmult1\b0\fs22 While the standard number verification in Trados Studio may often be sufficient there are some occasions when a bit more control would be preferable, for example when translating documents that contain lots of numbers. This Number Verifier plug-in allows you to fine-tu [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Help_Text {
             get {

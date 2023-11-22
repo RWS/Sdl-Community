@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Sdl.Community.MTCloud.Provider.Model
 {
@@ -24,5 +25,8 @@ namespace Sdl.Community.MTCloud.Provider.Model
 
 		[JsonProperty("targetLanguageId")]
 		public string TargetLanguageId { get; set; }
+
+		[JsonProperty("linguisticOptions")]
+		public Dictionary<string, string> LinguisticOptions { get; set; }
 	}
 }

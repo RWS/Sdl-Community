@@ -5,7 +5,7 @@ namespace Sdl.Community.IATETerminologyProvider.IATEProviderTellMe
 	[TellMeProvider]
 	public class IATETellMeProvider : ITellMeProvider
 	{
-		public string Name => "IATE tell me provider";
+		public string Name => "IATE Tell Me provider";
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{

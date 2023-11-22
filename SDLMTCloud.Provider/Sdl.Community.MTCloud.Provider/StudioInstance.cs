@@ -3,7 +3,6 @@ using System.Windows.Forms;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.LanguageCloud.IdentityApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Application = System.Windows.Application;
 
@@ -16,7 +15,7 @@ namespace Sdl.Community.MTCloud.Provider
 		{
 			Log.Setup();
 			SetApplicationShutdownMode();
-		}		
+		}
 
 		public static Form GetActiveForm()
 		{
@@ -45,22 +44,22 @@ namespace Sdl.Community.MTCloud.Provider
 			return null;
 		}
 
-		public static LanguageCloudIdentityApi GetLanguageCloudIdentityApi()
-		{
-			try
-			{
-				return (LanguageCloudIdentityApi)LanguageCloudIdentityApi.Instance;
-			}
-			catch
-			{
-				// ignore; catch all
-			}
+		//public static LanguageCloudIdentityApi GetLanguageCloudIdentityApi()
+		//{
+		//	try
+		//	{
+		//		return (LanguageCloudIdentityApi)LanguageCloudIdentityApi.Instance;
+		//	}
+		//	catch
+		//	{
+		//		// ignore; catch all
+		//	}
 
-			return null;
-		}
+		//	return null;
+		//}
 
 		public static EditorController GetEditorController()
-		{			
+		{
 			try
 			{
 				return SdlTradosStudio.Application?.GetController<EditorController>();

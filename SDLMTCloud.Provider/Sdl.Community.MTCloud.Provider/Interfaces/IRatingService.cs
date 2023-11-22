@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using Sdl.Community.MTCloud.Provider.Service.Interface;
 
 namespace Sdl.Community.MTCloud.Provider.Interfaces
 {
@@ -7,7 +8,7 @@ namespace Sdl.Community.MTCloud.Provider.Interfaces
 		void IncreaseRating();
 		void DecreaseRating();
 		void SetRateOptionFromShortcuts(string optionName);
-		void SetTranslationService(ITranslationService translationService);
+		void SetTranslationService(IFeedbackService translationService);
 		bool IsSendFeedbackEnabled { get; set; }
 		bool? AutoSendFeedback { get; set; }
 		ICommand SendFeedbackCommand { get; }

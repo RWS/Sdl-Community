@@ -19,7 +19,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -98,7 +98,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _project.
+        ///   Looks up a localized string similar to InternalProject.
         /// </summary>
         public static string Constant_ProjectType {
             get {
@@ -112,6 +112,16 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         public static string Constant_ProjectTypeContent {
             get {
                 return ResourceManager.GetString("Constant_ProjectTypeContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Download {
+            get {
+                object obj = ResourceManager.GetObject("Download", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -287,6 +297,16 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon ForumIcon {
+            get {
+                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No matches found!.
         /// </summary>
         public static string Info_NotMatch {
@@ -442,6 +462,44 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Question {
+            get {
+                object obj = ResourceManager.GetObject("Question", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} TellMe provider.
+        /// </summary>
+        public static string TellMe_Provider {
+            get {
+                return ResourceManager.GetString("TellMe_Provider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} results.
+        /// </summary>
+        public static string TellMe_Provider_Results {
+            get {
+                return ResourceManager.GetString("TellMe_Provider_Results", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] termbaseDefaultDefinitionFile {
+            get {
+                object obj = ResourceManager.GetObject("termbaseDefaultDefinitionFile", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         

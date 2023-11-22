@@ -27,5 +27,7 @@ namespace Sdl.Community.MTCloud.Provider.Model
 			get; 
 			set;
 		}
+
+		public string RefreshToken { get; set; }
 	}
 }

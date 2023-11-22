@@ -15,7 +15,7 @@ namespace Sdl.Community.TermExcelerator.Services
         public PersistenceService()
         {
             _persistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                @"SDL Community\ExcelTerminology\excelTerminology.json");
+				@"Trados AppStore\ExcelTerminology\excelTerminology.json");
         }
 
         internal void WriteToFile()

@@ -19,7 +19,7 @@ namespace Sdl.Community.TermInjector {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -81,6 +81,26 @@ namespace Sdl.Community.TermInjector {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Download {
+            get {
+                object obj = ResourceManager.GetObject("Download", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon ForumIcon {
+            get {
+                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to #main {
         ///        
         ///        width:1000px;
@@ -101,8 +121,7 @@ namespace Sdl.Community.TermInjector {
         ///}
         ///
         ///td.conventions {
-        ///		font-size:100%;
-        ///		pad [rest of string was truncated]&quot;;.
+        ///		f [rest of string was truncated]&quot;;.
         /// </summary>
         public static string help {
             get {
@@ -360,7 +379,7 @@ namespace Sdl.Community.TermInjector {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A translation provider plug-in for inserting terms into new segments or fuzzy matches.
+        ///   Looks up a localized string similar to A plug-in for inserting terms into new segments or fuzzy matches.
         /// </summary>
         public static string Plugin_Description {
             get {
@@ -369,7 +388,7 @@ namespace Sdl.Community.TermInjector {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TermInjector translation provider.
+        ///   Looks up a localized string similar to TermInjector.
         /// </summary>
         public static string Plugin_Name {
             get {
@@ -378,7 +397,7 @@ namespace Sdl.Community.TermInjector {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TermInjector translation provider.
+        ///   Looks up a localized string similar to TermInjector.
         /// </summary>
         public static string Plugin_NiceName {
             get {
@@ -387,11 +406,39 @@ namespace Sdl.Community.TermInjector {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This provider insert terms into new segments or fuzzy matches.
+        ///   Looks up a localized string similar to This insert terms into new segments or fuzzy matches.
         /// </summary>
         public static string Plugin_Tooltip {
             get {
                 return ResourceManager.GetString("Plugin_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Question {
+            get {
+                object obj = ResourceManager.GetObject("Question", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} TellMe provider.
+        /// </summary>
+        public static string TellMe_Provider {
+            get {
+                return ResourceManager.GetString("TellMe_Provider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} results.
+        /// </summary>
+        public static string TellMe_Provider_Results {
+            get {
+                return ResourceManager.GetString("TellMe_Provider_Results", resourceCulture);
             }
         }
         
@@ -412,8 +459,7 @@ namespace Sdl.Community.TermInjector {
         ///			&lt;a href=&quot;#regex&quot;&gt;Regular expression conventions&lt;/a&gt;
         ///			&lt;br /&gt;
         ///			&lt;a href=&quot;#regexexample&quot;&gt;Regular expression examples&lt;/a&gt;
-        ///			&lt;br /&gt;
-        ///			&lt;a hr [rest of string was truncated]&quot;;.
+        ///		 [rest of string was truncated]&quot;;.
         /// </summary>
         public static string TermInjectorHelp {
             get {

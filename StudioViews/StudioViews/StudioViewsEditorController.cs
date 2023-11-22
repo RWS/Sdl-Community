@@ -42,9 +42,10 @@ namespace Sdl.Community.StudioViews
 			var sdlxliffExporter = new SdlxliffExporter(segmentBuilder);
 			var sdlXliffReader = new SdlxliffReader();
 			var displayFilter = new DisplayFilter();
+			var wordCountProvider = new WordCountProvider();
 
 			var model = new StudioViewsEditorViewModel(_editorController, filterItemService,
-				commonService, sdlxliffMerger, sdlxliffExporter, sdlXliffReader, paragraphUnitProvider, displayFilter);
+				commonService, sdlxliffMerger, sdlxliffExporter, sdlXliffReader, paragraphUnitProvider, displayFilter, wordCountProvider);
 
 			_control = new StudioViewsEditorView { DataContext = model };
 		}

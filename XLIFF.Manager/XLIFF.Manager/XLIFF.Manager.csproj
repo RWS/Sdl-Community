@@ -11,7 +11,7 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\16\Plugins</PluginDeploymentPath>
+    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
@@ -24,7 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\16\Plugins</PluginDeploymentPath>
+    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,17 +33,17 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\16\Plugins</PluginDeploymentPath>
+    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DocumentFormat.OpenXml">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\DocumentFormat.OpenXml.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Newtonsoft.Json.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\NLog.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\NLog.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -52,52 +52,58 @@
       <HintPath>ThirdParty\Rws.MultiSelectComboBox.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Globalization.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.Globalization.Async">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.Async.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Settings">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Core.Settings.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Controls">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Desktop.Platform.Controls.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.Controls.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Settings">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.Settings.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Utilities.SdlXliffConvertor">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.FileTypeSupport.Utilities.SdlXliffConvertor.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Utilities.SdlXliffConvertor.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.Core.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.FileBased.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Settings">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.ProjectAutomation.Settings.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Versioning">
-      <HintPath>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio16\Sdl.Versioning.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Versioning.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -301,6 +307,10 @@
     <Compile Include="Service\ProjectSettingsService.cs" />
     <Compile Include="Service\ReportService.cs" />
     <Compile Include="Service\WizardService.cs" />
+    <Compile Include="TellMe\AppStoreDownloadAction.cs" />
+    <Compile Include="TellMe\AppStoreForumAction.cs" />
+    <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
     <Compile Include="ViewModel\ReportViewModel.cs" />
     <Compile Include="View\SettingsWindow.xaml.cs">
@@ -550,6 +560,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Download.ico" />
     <Content Include="Resources\Refresh.ico" />
     <Resource Include="ThirdParty\Rws.MultiSelectComboBox.dll" />
     <Resource Include="Resources\LanguageMapping.ico" />
@@ -592,17 +603,17 @@
     <Resource Include="Resources\Warning.png" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Sdl.Community.Toolkit.Core">
-      <Version>3.0.0</Version>
-    </PackageReference>
-    <PackageReference Include="Sdl.Community.Toolkit.LanguagePlatform">
-      <Version>3.0.0</Version>
-    </PackageReference>
     <PackageReference Include="Sdl.Core.PluginFramework">
       <Version>2.1.0</Version>
     </PackageReference>
     <PackageReference Include="Sdl.Core.PluginFramework.Build">
-      <Version>16.1.0</Version>
+      <Version>17.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Trados.Community.Toolkit.Core">
+      <Version>4.1.0</Version>
+    </PackageReference>
+    <PackageReference Include="Trados.Community.Toolkit.LanguagePlatform">
+      <Version>4.1.0</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup>

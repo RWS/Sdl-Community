@@ -51,7 +51,7 @@
   <PropertyGroup>
     <ApplicationIcon>
     </ApplicationIcon>
-    <AssemblyOriginatorKeyFile>C:\Code\SDLCOM - Studio 2021\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\Sdl-Community\SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <None Include="Resources\Question.ico" />

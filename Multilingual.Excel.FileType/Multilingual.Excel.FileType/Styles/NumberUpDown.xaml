@@ -1,0 +1,422 @@
+﻿<ResourceDictionary x:Uid="ResourceDictionary_1" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Multilingual.Excel.FileType.Controls">
+
+	<Style x:Uid="Style_1" x:Key="FocusVisual">
+		<Setter x:Uid="Setter_1" Property="Control.Template">
+			<Setter.Value>
+				<ControlTemplate x:Uid="ControlTemplate_1">
+					<Rectangle x:Uid="Rectangle_1" Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	<SolidColorBrush x:Uid="SolidColorBrush_1" x:Key="NumericUpDown.Static.Background" Color="White"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_2" x:Key="NumericUpDown.Static.Border" Color="#FFACACAC"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_3" x:Key="NumericUpDown.Static.Editable.Background" Color="#FFFFFFFF"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_4" x:Key="NumericUpDown.Static.Editable.Border" Color="#FFABADB3"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_5" x:Key="NumericUpDown.Static.Editable.Button.Background" Color="Transparent"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_6" x:Key="NumericUpDown.Static.Editable.Button.Border" Color="Transparent"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_7" x:Key="NumericUpDown.MouseOver.Glyph" Color="#FF000000"/>
+	<LinearGradientBrush x:Uid="LinearGradientBrush_1" x:Key="NumericUpDown.MouseOver.Background" EndPoint="0,1" StartPoint="0,0">
+		<GradientStop x:Uid="GradientStop_1" Color="#FFECF4FC" Offset="0.0"/>
+		<GradientStop x:Uid="GradientStop_2" Color="#FFDCECFC" Offset="1.0"/>
+	</LinearGradientBrush>
+	<SolidColorBrush x:Uid="SolidColorBrush_8" x:Key="NumericUpDown.MouseOver.Border" Color="#FF7EB4EA"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_9" x:Key="NumericUpDown.MouseOver.Editable.Background" Color="#FFFFFFFF"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_10" x:Key="NumericUpDown.MouseOver.Editable.Border" Color="#FF7EB4EA"/>
+	<LinearGradientBrush x:Uid="LinearGradientBrush_2" x:Key="NumericUpDown.MouseOver.Editable.Button.Background" EndPoint="0,1" StartPoint="0,0">
+		<GradientStop x:Uid="GradientStop_3" Color="#FFEBF4FC" Offset="0.0"/>
+		<GradientStop x:Uid="GradientStop_4" Color="#FFDCECFC" Offset="1.0"/>
+	</LinearGradientBrush>
+	<SolidColorBrush x:Uid="SolidColorBrush_11" x:Key="NumericUpDown.MouseOver.Editable.Button.Border" Color="#FF7EB4EA"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_12" x:Key="NumericUpDown.Pressed.Glyph" Color="#FF000000"/>
+	<LinearGradientBrush x:Uid="LinearGradientBrush_3" x:Key="NumericUpDown.Pressed.Background" EndPoint="0,1" StartPoint="0,0">
+		<GradientStop x:Uid="GradientStop_5" Color="#FFDAECFC" Offset="0.0"/>
+		<GradientStop x:Uid="GradientStop_6" Color="#FFC4E0FC" Offset="1.0"/>
+	</LinearGradientBrush>
+	<SolidColorBrush x:Uid="SolidColorBrush_13" x:Key="NumericUpDown.Pressed.Border" Color="#FF569DE5"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_14" x:Key="NumericUpDown.Pressed.Editable.Background" Color="#FFFFFFFF"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_15" x:Key="NumericUpDown.Pressed.Editable.Border" Color="#FF569DE5"/>
+	<LinearGradientBrush x:Uid="LinearGradientBrush_4" x:Key="NumericUpDown.Pressed.Editable.Button.Background" EndPoint="0,1" StartPoint="0,0">
+		<GradientStop x:Uid="GradientStop_7" Color="#FFDAEBFC" Offset="0.0"/>
+		<GradientStop x:Uid="GradientStop_8" Color="#FFC4E0FC" Offset="1.0"/>
+	</LinearGradientBrush>
+	<SolidColorBrush x:Uid="SolidColorBrush_16" x:Key="NumericUpDown.Pressed.Editable.Button.Border" Color="#FF569DE5"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_17" x:Key="NumericUpDown.Disabled.Glyph" Color="#FFBFBFBF"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_18" x:Key="NumericUpDown.Disabled.Background" Color="#FFF0F0F0"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_19" x:Key="NumericUpDown.Disabled.Border" Color="#FFD9D9D9"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_20" x:Key="NumericUpDown.Disabled.Editable.Background" Color="#FFFFFFFF"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_21" x:Key="NumericUpDown.Disabled.Editable.Border" Color="#FFBFBFBF"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_22" x:Key="NumericUpDown.Disabled.Editable.Button.Background" Color="Transparent"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_23" x:Key="NumericUpDown.Disabled.Editable.Button.Border" Color="Transparent"/>
+	<SolidColorBrush x:Uid="SolidColorBrush_24" x:Key="NumericUpDown.Static.Glyph" Color="#FF606060"/>
+
+	<SolidColorBrush x:Uid="SolidColorBrush_37" x:Key="TextBox.Static.Background" Color="#FFFFFFFF"/>
+
+	<Style x:Uid="Style_2" x:Key="Sdl.NumericUpDown.Generic.RepeatButtonDn" TargetType="{x:Type RepeatButton}">
+		<Setter x:Uid="Setter_2" Property="OverridesDefaultStyle" Value="true"/>
+		<Setter x:Uid="Setter_3" Property="IsTabStop" Value="false"/>
+		<Setter x:Uid="Setter_4" Property="Focusable" Value="false"/>
+		<Setter x:Uid="Setter_5" Property="ClickMode" Value="Press"/>
+		<Setter x:Uid="Setter_6" Property="Template">
+			<Setter.Value>
+				<ControlTemplate x:Uid="ControlTemplate_2" TargetType="{x:Type RepeatButton}">
+					<Border x:Uid="templateRoot" x:Name="templateRoot" 
+                            BorderBrush="Transparent" 
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            Background="{StaticResource NumericUpDown.Static.Background}" 
+                            SnapsToDevicePixels="true">
+						<Border x:Uid="splitBorder" x:Name="splitBorder" 
+                                BorderBrush="Transparent" 
+                                BorderThickness="1" 
+                                HorizontalAlignment="Right" 
+                                Margin="0" 
+                                Padding="0"
+                                SnapsToDevicePixels="true" 
+                                Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}">
+							<Path x:Uid="arrow" x:Name="arrow" 
+                                  Data="M 0 0 L 4 4 L 8 0 Z" 
+                                  Fill="{StaticResource NumericUpDown.Static.Glyph}" 
+                                  HorizontalAlignment="Center" 
+                                  Margin="0" 
+                                  VerticalAlignment="Top"/>
+						</Border>
+					</Border>
+					<ControlTemplate.Triggers>
+						<MultiDataTrigger x:Uid="MultiDataTrigger_1">
+							<MultiDataTrigger.Conditions>
+								<Condition x:Uid="Condition_1" Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type controls:NumericUpDown}}}" Value="true"/>
+								<Condition x:Uid="Condition_2" Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false"/>
+								<Condition x:Uid="Condition_3" Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="false"/>
+								<Condition x:Uid="Condition_4" Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="true"/>
+							</MultiDataTrigger.Conditions>
+							<Setter x:Uid="Setter_7" Property="Background" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Static.Background}"/>
+							<Setter x:Uid="Setter_8" Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Static.Editable.Border}"/>
+							<Setter x:Uid="Setter_9" Property="Background" TargetName="splitBorder" Value="{StaticResource NumericUpDown.Static.Editable.Button.Background}"/>
+							<Setter x:Uid="Setter_10" Property="BorderBrush" TargetName="splitBorder" Value="{StaticResource NumericUpDown.Static.Editable.Button.Border}"/>
+						</MultiDataTrigger>
+						<Trigger x:Uid="Trigger_1" Property="IsMouseOver" Value="true">
+							<Setter x:Uid="Setter_11" Property="Fill" TargetName="arrow" Value="{StaticResource NumericUpDown.MouseOver.Glyph}"/>
+						</Trigger>
+						<MultiDataTrigger x:Uid="MultiDataTrigger_2">
+							<MultiDataTrigger.Conditions>
+								<Condition x:Uid="Condition_5" Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true"/>
+								<Condition x:Uid="Condition_6" Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type controls:NumericUpDown}}}" Value="false"/>
+							</MultiDataTrigger.Conditions>
+							<Setter x:Uid="Setter_12" Property="Background" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Static.Background}"/>
+							<Setter x:Uid="Setter_13" Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource NumericUpDown.MouseOver.Border}"/>
+						</MultiDataTrigger>
+						<MultiDataTrigger x:Uid="MultiDataTrigger_3">
+							<MultiDataTrigger.Conditions>
+								<Condition x:Uid="Condition_7" Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true"/>
+								<Condition x:Uid="Condition_8" Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type controls:NumericUpDown}}}" Value="true"/>
+							</MultiDataTrigger.Conditions>
+							<Setter x:Uid="Setter_14" Property="Background" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Static.Background}"/>
+							<Setter x:Uid="Setter_15" Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource NumericUpDown.MouseOver.Editable.Border}"/>
+							<Setter x:Uid="Setter_16" Property="Background" TargetName="splitBorder" Value="{StaticResource NumericUpDown.MouseOver.Editable.Button.Background}"/>
+							<Setter x:Uid="Setter_17" Property="BorderBrush" TargetName="splitBorder" Value="{StaticResource NumericUpDown.MouseOver.Editable.Button.Border}"/>
+						</MultiDataTrigger>
+						<Trigger x:Uid="Trigger_2" Property="IsPressed" Value="true">
+							<Setter x:Uid="Setter_18" Property="Fill" TargetName="arrow" Value="{StaticResource NumericUpDown.Pressed.Glyph}"/>
+						</Trigger>
+						<MultiDataTrigger x:Uid="MultiDataTrigger_4">
+							<MultiDataTrigger.Conditions>
+								<Condition x:Uid="Condition_9" Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="true"/>
+								<Condition x:Uid="Condition_10" Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type controls:NumericUpDown}}}" Value="false"/>
+							</MultiDataTrigger.Conditions>
+							<Setter x:Uid="Setter_19" Property="Background" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Static.Background}"/>
+							<Setter x:Uid="Setter_20" Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Pressed.Border}"/>
+						</MultiDataTrigger>
+						<MultiDataTrigger x:Uid="MultiDataTrigger_5">
+							<MultiDataTrigger.Conditions>
+								<Condition x:Uid="Condition_11" Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="true"/>
+								<Condition x:Uid="Condition_12" Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type controls:NumericUpDown}}}" Value="true"/>
+							</MultiDataTrigger.Conditions>
+							<Setter x:Uid="Setter_21" Property="Background" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Static.Background}"/>
+							<Setter x:Uid="Setter_22" Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Pressed.Editable.Border}"/>
+							<Setter x:Uid="Setter_23" Property="Background" TargetName="splitBorder" Value="{StaticResource NumericUpDown.Pressed.Editable.Button.Background}"/>
+							<Setter x:Uid="Setter_24" Property="BorderBrush" TargetName="splitBorder" Value="{StaticResource NumericUpDown.Pressed.Editable.Button.Border}"/>
+						</MultiDataTrigger>
+						<Trigger x:Uid="Trigger_3" Property="IsEnabled" Value="false">
+							<Setter x:Uid="Setter_25" Property="Fill" TargetName="arrow" Value="{StaticResource NumericUpDown.Disabled.Glyph}"/>
+						</Trigger>
+						<MultiDataTrigger x:Uid="MultiDataTrigger_6">
+							<MultiDataTrigger.Conditions>
+								<Condition x:Uid="Condition_13" Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
+								<Condition x:Uid="Condition_14" Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type controls:NumericUpDown}}}" Value="false"/>
+							</MultiDataTrigger.Conditions>
+							<Setter x:Uid="Setter_26" Property="Background" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Disabled.Background}"/>
+							<Setter x:Uid="Setter_27" Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Disabled.Border}"/>
+						</MultiDataTrigger>
+						<MultiDataTrigger x:Uid="MultiDataTrigger_7">
+							<MultiDataTrigger.Conditions>
+								<Condition x:Uid="Condition_15" Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
+								<Condition x:Uid="Condition_16" Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type controls:NumericUpDown}}}" Value="true"/>
+							</MultiDataTrigger.Conditions>
+							<Setter x:Uid="Setter_28" Property="Background" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Disabled.Editable.Background}"/>
+							<Setter x:Uid="Setter_29" Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Disabled.Editable.Border}"/>
+							<Setter x:Uid="Setter_30" Property="Background" TargetName="splitBorder" Value="{StaticResource NumericUpDown.Disabled.Editable.Button.Background}"/>
+							<Setter x:Uid="Setter_31" Property="BorderBrush" TargetName="splitBorder" Value="{StaticResource NumericUpDown.Disabled.Editable.Button.Border}"/>
+						</MultiDataTrigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Uid="Style_3" x:Key="Sdl.NumericUpDown.Generic.RepeatButtonUp" TargetType="{x:Type RepeatButton}">
+		<Setter x:Uid="Setter_32" Property="OverridesDefaultStyle" Value="true"/>
+		<Setter x:Uid="Setter_33" Property="IsTabStop" Value="false"/>
+		<Setter x:Uid="Setter_34" Property="Focusable" Value="false"/>
+		<Setter x:Uid="Setter_35" Property="ClickMode" Value="Press"/>
+		<Setter x:Uid="Setter_36" Property="Template">
+			<Setter.Value>
+				<ControlTemplate x:Uid="ControlTemplate_3" TargetType="{x:Type RepeatButton}">
+					<Border x:Uid="Border_1" x:Name="templateRoot" 
+                            BorderBrush="Transparent" 
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            Background="{StaticResource NumericUpDown.Static.Background}" 
+                            SnapsToDevicePixels="true">
+						<Border x:Uid="Border_2" x:Name="splitBorder" 
+                                BorderBrush="Transparent" 
+                                BorderThickness="1" 
+                                HorizontalAlignment="Right" 
+                                Margin="0" 
+                                Padding="0"
+                                SnapsToDevicePixels="true" 
+                                Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}">
+							<Path x:Uid="Path_1" x:Name="arrow" 
+                                  Data="M 0 0 L 4 -4 L 8 0 Z" 
+                                  Fill="{StaticResource NumericUpDown.Static.Glyph}" 
+                                  HorizontalAlignment="Center" 
+                                  Margin="0" 
+                                  VerticalAlignment="Bottom"/>
+						</Border>
+					</Border>
+					<ControlTemplate.Triggers>
+						<MultiDataTrigger x:Uid="MultiDataTrigger_8">
+							<MultiDataTrigger.Conditions>
+								<Condition x:Uid="Condition_17" Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type controls:NumericUpDown}}}" Value="true"/>
+								<Condition x:Uid="Condition_18" Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="false"/>
+								<Condition x:Uid="Condition_19" Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="false"/>
+								<Condition x:Uid="Condition_20" Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="true"/>
+							</MultiDataTrigger.Conditions>
+							<Setter x:Uid="Setter_37" Property="Background" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Static.Background}"/>
+							<Setter x:Uid="Setter_38" Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Static.Editable.Border}"/>
+							<Setter x:Uid="Setter_39" Property="Background" TargetName="splitBorder" Value="{StaticResource NumericUpDown.Static.Editable.Button.Background}"/>
+							<Setter x:Uid="Setter_40" Property="BorderBrush" TargetName="splitBorder" Value="{StaticResource NumericUpDown.Static.Editable.Button.Border}"/>
+						</MultiDataTrigger>
+						<Trigger x:Uid="Trigger_4" Property="IsMouseOver" Value="true">
+							<Setter x:Uid="Setter_41" Property="Fill" TargetName="arrow" Value="{StaticResource NumericUpDown.MouseOver.Glyph}"/>
+						</Trigger>
+						<MultiDataTrigger x:Uid="MultiDataTrigger_9">
+							<MultiDataTrigger.Conditions>
+								<Condition x:Uid="Condition_21" Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true"/>
+								<Condition x:Uid="Condition_22" Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type controls:NumericUpDown}}}" Value="false"/>
+							</MultiDataTrigger.Conditions>
+							<Setter x:Uid="Setter_42" Property="Background" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Static.Background}"/>
+							<Setter x:Uid="Setter_43" Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource NumericUpDown.MouseOver.Border}"/>
+						</MultiDataTrigger>
+						<MultiDataTrigger x:Uid="MultiDataTrigger_10">
+							<MultiDataTrigger.Conditions>
+								<Condition x:Uid="Condition_23" Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true"/>
+								<Condition x:Uid="Condition_24" Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type controls:NumericUpDown}}}" Value="true"/>
+							</MultiDataTrigger.Conditions>
+							<Setter x:Uid="Setter_44" Property="Background" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Static.Background}"/>
+							<Setter x:Uid="Setter_45" Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource NumericUpDown.MouseOver.Editable.Border}"/>
+							<Setter x:Uid="Setter_46" Property="Background" TargetName="splitBorder" Value="{StaticResource NumericUpDown.MouseOver.Editable.Button.Background}"/>
+							<Setter x:Uid="Setter_47" Property="BorderBrush" TargetName="splitBorder" Value="{StaticResource NumericUpDown.MouseOver.Editable.Button.Border}"/>
+						</MultiDataTrigger>
+						<Trigger x:Uid="Trigger_5" Property="IsPressed" Value="true">
+							<Setter x:Uid="Setter_48" Property="Fill" TargetName="arrow" Value="{StaticResource NumericUpDown.Pressed.Glyph}"/>
+						</Trigger>
+						<MultiDataTrigger x:Uid="MultiDataTrigger_11">
+							<MultiDataTrigger.Conditions>
+								<Condition x:Uid="Condition_25" Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="true"/>
+								<Condition x:Uid="Condition_26" Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type controls:NumericUpDown}}}" Value="false"/>
+							</MultiDataTrigger.Conditions>
+							<Setter x:Uid="Setter_49" Property="Background" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Static.Background}"/>
+							<Setter x:Uid="Setter_50" Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Pressed.Border}"/>
+						</MultiDataTrigger>
+						<MultiDataTrigger x:Uid="MultiDataTrigger_12">
+							<MultiDataTrigger.Conditions>
+								<Condition x:Uid="Condition_27" Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="true"/>
+								<Condition x:Uid="Condition_28" Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type controls:NumericUpDown}}}" Value="true"/>
+							</MultiDataTrigger.Conditions>
+							<Setter x:Uid="Setter_51" Property="Background" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Static.Background}"/>
+							<Setter x:Uid="Setter_52" Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Pressed.Editable.Border}"/>
+							<Setter x:Uid="Setter_53" Property="Background" TargetName="splitBorder" Value="{StaticResource NumericUpDown.Pressed.Editable.Button.Background}"/>
+							<Setter x:Uid="Setter_54" Property="BorderBrush" TargetName="splitBorder" Value="{StaticResource NumericUpDown.Pressed.Editable.Button.Border}"/>
+						</MultiDataTrigger>
+						<Trigger x:Uid="Trigger_6" Property="IsEnabled" Value="false">
+							<Setter x:Uid="Setter_55" Property="Fill" TargetName="arrow" Value="{StaticResource NumericUpDown.Disabled.Glyph}"/>
+						</Trigger>
+						<MultiDataTrigger x:Uid="MultiDataTrigger_13">
+							<MultiDataTrigger.Conditions>
+								<Condition x:Uid="Condition_29" Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
+								<Condition x:Uid="Condition_30" Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type controls:NumericUpDown}}}" Value="false"/>
+							</MultiDataTrigger.Conditions>
+							<Setter x:Uid="Setter_56" Property="Background" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Disabled.Background}"/>
+							<Setter x:Uid="Setter_57" Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Disabled.Border}"/>
+						</MultiDataTrigger>
+						<MultiDataTrigger x:Uid="MultiDataTrigger_14">
+							<MultiDataTrigger.Conditions>
+								<Condition x:Uid="Condition_31" Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
+								<Condition x:Uid="Condition_32" Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type controls:NumericUpDown}}}" Value="true"/>
+							</MultiDataTrigger.Conditions>
+							<Setter x:Uid="Setter_58" Property="Background" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Disabled.Editable.Background}"/>
+							<Setter x:Uid="Setter_59" Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource NumericUpDown.Disabled.Editable.Border}"/>
+							<Setter x:Uid="Setter_60" Property="Background" TargetName="splitBorder" Value="{StaticResource NumericUpDown.Disabled.Editable.Button.Background}"/>
+							<Setter x:Uid="Setter_61" Property="BorderBrush" TargetName="splitBorder" Value="{StaticResource NumericUpDown.Disabled.Editable.Button.Border}"/>
+						</MultiDataTrigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Uid="Style_4" TargetType="{x:Type controls:NumericUpDown}" x:Key="Sdl.NumericUpDown.Generic">
+		<Setter x:Uid="Setter_62" Property="Background" Value="{StaticResource NumericUpDown.Static.Background}" />
+		<Setter x:Uid="Setter_63" Property="BorderBrush" Value="{StaticResource NumericUpDown.Static.Border}" />
+		<Setter x:Uid="Setter_64" Property="BorderThickness" Value="1" />
+		<Setter x:Uid="Setter_65" Property="FocusVisualStyle" Value="{x:Null}" />
+		<Setter x:Uid="Setter_66" Property="FontFamily" Value="{DynamicResource ContentFontFamily}" />
+		<Setter x:Uid="Setter_67" Property="FontSize" Value="{DynamicResource ContentFontSize}" />
+		<Setter x:Uid="Setter_68" Property="Foreground" Value="{DynamicResource TextBrush}" />
+		<Setter x:Uid="Setter_69" Property="HorizontalContentAlignment" Value="Right" />
+		<Setter x:Uid="Setter_70" Property="MinHeight" Value="25" />
+		<Setter x:Uid="Setter_71" Property="MinWidth" Value="62" />
+		<Setter x:Uid="Setter_72" Property="Padding" Value="1" />
+		<Setter x:Uid="Setter_73" Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden" />
+		<Setter x:Uid="Setter_74" Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden" />
+		<Setter x:Uid="Setter_75" Property="SnapsToDevicePixels" Value="true" />
+		<Setter x:Uid="Setter_76" Property="Template">
+			<Setter.Value>
+				<ControlTemplate x:Uid="ControlTemplate_4" TargetType="{x:Type controls:NumericUpDown}">
+					<Grid x:Uid="Grid_1" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+						<Border x:Uid="Base" x:Name="Base"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+						<Grid x:Uid="Grid_2" Margin="{TemplateBinding BorderThickness}">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition x:Uid="PART_TextBoxColumn" x:Name="PART_TextBoxColumn" Width="*" />
+								<ColumnDefinition x:Uid="PART_ButtonsColumn" x:Name="PART_ButtonsColumn" Width="Auto" />
+							</Grid.ColumnDefinitions>
+							<TextBox x:Uid="PART_TextBox" x:Name="PART_TextBox"
+                                     Grid.Column="0"
+                                     MinWidth="20"
+                                     MinHeight="0"
+                                     Margin="0"
+                                     Padding="0"
+                                     HorizontalAlignment="Stretch"
+                                     HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                     VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                     Background="{StaticResource TextBox.Static.Background}"  
+                                     BorderThickness="0"
+                                     FocusVisualStyle="{x:Null}"
+                                     Focusable="{TemplateBinding Focusable}"
+                                     FontFamily="{TemplateBinding FontFamily}"
+                                     FontSize="{TemplateBinding FontSize}"
+                                     TextAlignment="Center"
+                                     Foreground="{TemplateBinding Foreground}"
+                                     HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                                     IsReadOnly="{TemplateBinding IsReadOnly}"
+                                     IsTabStop="{TemplateBinding IsTabStop}"
+                                     SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                     TabIndex="{TemplateBinding TabIndex}"
+                                     VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}" />
+							<Grid x:Uid="PART_Buttons" x:Name="PART_Buttons"
+                                        Grid.Column="1">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition x:Uid="ColumnDefinition_1" Width="*" />
+								</Grid.ColumnDefinitions>
+								<Grid.RowDefinitions>
+									<RowDefinition x:Uid="RowDefinition_1" Height="*" />
+									<RowDefinition x:Uid="RowDefinition_2" Height="*" />
+								</Grid.RowDefinitions>
+								<RepeatButton x:Uid="PART_NumericUp" x:Name="PART_NumericUp"
+                                              Width="{TemplateBinding UpDownButtonsWidth}"
+                                              HorizontalContentAlignment="Center"
+                                              Foreground="{TemplateBinding Foreground}"
+                                              BorderThickness="{TemplateBinding BorderThickness}"
+                                              BorderBrush="{TemplateBinding BorderBrush}"
+                                              IsTabStop="False"
+                                              Grid.Column="0"
+                                              Grid.Row="0"
+                                              Style="{StaticResource Sdl.NumericUpDown.Generic.RepeatButtonUp}"/>
+								<RepeatButton x:Uid="PART_NumericDown" x:Name="PART_NumericDown"
+                                              Width="{TemplateBinding UpDownButtonsWidth}"
+                                              HorizontalContentAlignment="Center"
+                                              Foreground="{TemplateBinding Foreground}"
+                                              BorderThickness="{TemplateBinding BorderThickness}"
+                                              BorderBrush="{TemplateBinding BorderBrush}"
+                                              IsTabStop="False"
+                                              Grid.Column="0"
+                                              Grid.Row="1"
+                                              Style="{StaticResource Sdl.NumericUpDown.Generic.RepeatButtonDn}"/>
+							</Grid>
+						</Grid>
+					</Grid>
+					<ControlTemplate.Triggers>
+						<Trigger x:Uid="Trigger_7" Property="ButtonsAlignment" Value="Left">
+							<Setter x:Uid="Setter_77" TargetName="PART_Buttons" Property="Grid.Column" Value="0" />
+							<Setter x:Uid="Setter_78" TargetName="PART_ButtonsColumn" Property="Width" Value="*" />
+							<Setter x:Uid="Setter_79" TargetName="PART_TextBox" Property="Grid.Column" Value="1" />
+							<Setter x:Uid="Setter_80" TargetName="PART_TextBox" Property="Margin" Value="-2 0 0 0" />
+							<Setter x:Uid="Setter_81" TargetName="PART_TextBox" Property="Margin" Value="-2 0 0 0" />
+							<Setter x:Uid="Setter_82" TargetName="PART_TextBoxColumn" Property="Width" Value="Auto" />
+						</Trigger>
+						<Trigger x:Uid="Trigger_8" Property="IsEnabled" Value="False">
+							<Setter x:Uid="Setter_83" TargetName="PART_TextBox" Property="IsEnabled" Value="True" />
+							<Setter x:Uid="Setter_84" TargetName="PART_NumericDown" Property="IsEnabled" Value="False" />
+							<Setter x:Uid="Setter_85" TargetName="PART_NumericUp" Property="IsEnabled" Value="False" />
+						</Trigger>
+						<Trigger x:Uid="Trigger_9" Property="IsReadOnly" Value="True">
+							<Setter x:Uid="Setter_86" Property="InterceptArrowKeys" Value="False" />
+							<Setter x:Uid="Setter_87" Property="InterceptManualEnter" Value="False" />
+							<Setter x:Uid="Setter_88" Property="InterceptMouseWheel" Value="False" />
+							<Setter x:Uid="Setter_89" TargetName="PART_NumericDown" Property="IsEnabled" Value="False" />
+							<Setter x:Uid="Setter_90" TargetName="PART_NumericUp" Property="IsEnabled" Value="False" />
+						</Trigger>
+						<MultiTrigger x:Uid="MultiTrigger_1">
+							<MultiTrigger.Conditions>
+								<Condition x:Uid="Condition_33" Property="IsReadOnly" Value="False" />
+								<Condition x:Uid="Condition_34" Property="InterceptManualEnter" Value="False" />
+							</MultiTrigger.Conditions>
+							<Setter x:Uid="Setter_91" TargetName="PART_TextBox" Property="IsReadOnly" Value="True" />
+						</MultiTrigger>
+						<Trigger x:Uid="Trigger_10" Property="IsMouseOver" Value="true">
+							<Setter x:Uid="Setter_92" TargetName="Base" Property="BorderBrush" Value="{StaticResource NumericUpDown.MouseOver.Border}" />
+						</Trigger>
+						<Trigger x:Uid="Trigger_11" SourceName="PART_TextBox" Property="IsFocused" Value="true">
+							<Setter x:Uid="Setter_93" TargetName="Base" Property="BorderBrush" Value="{StaticResource NumericUpDown.Pressed.Editable.Border}" />
+						</Trigger>
+						<Trigger x:Uid="Trigger_12" Property="HideUpDownButtons" Value="True">
+							<Setter x:Uid="Setter_94" TargetName="PART_Buttons" Property="Visibility" Value="Collapsed" />
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Setter x:Uid="Setter_95" Property="UpDownButtonsWidth" Value="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" />
+		<Setter x:Uid="Setter_96" Property="Validation.ErrorTemplate" Value="{DynamicResource ValidationErrorTemplate}" />
+	</Style>
+
+
+
+
+	<Style x:Uid="Style_1" x:Key="NumericSpinnerStyle" TargetType="controls:NumericUpDown" BasedOn="{StaticResource Sdl.NumericUpDown.Generic}">
+		<Setter x:Uid="Setter_1" Property="HorizontalAlignment" Value="Left" />
+		<Setter x:Uid="Setter_2" Property="Width" Value="60" />
+		<Setter x:Uid="Setter_3" Property="Margin" Value="0 6" />
+		<Setter x:Uid="Setter_4" Property="Height" Value="20" />
+		<Setter x:Uid="Setter_5" Property="Minimum" Value="0" />
+		<Setter x:Uid="Setter_6" Property="Maximum" Value="20" />
+		<Setter x:Uid="Setter_7" Property="Interval" Value="1" />
+		<Setter x:Uid="Setter_8" Property="InterceptManualEnter" Value="True" />
+		<Setter x:Uid="Setter_9" Property="AllowPositiveNegativeSign" Value="False" />
+	</Style>
+</ResourceDictionary>

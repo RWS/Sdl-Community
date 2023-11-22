@@ -9,6 +9,7 @@ using Sdl.Community.XLIFF.Manager.LanguageMapping.Interfaces;
 using Sdl.Community.XLIFF.Manager.LanguageMapping.Model;
 using Sdl.Community.XLIFF.Manager.Model;
 using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
 using Application = System.Windows.Forms.Application;
 
 namespace Sdl.Community.XLIFF.Manager.LanguageMapping.ViewModel
@@ -30,7 +31,7 @@ namespace Sdl.Community.XLIFF.Manager.LanguageMapping.ViewModel
 		{
 			Owner = owner;
 			_languageProvider = languageProvider;
-			_languages = Language.GetAllLanguages().ToList();
+			_languages = LanguageRegistryApi.Instance.GetAllLanguages().ToList();
 			MappedLanguages = new List<MappedLanguage>(GetAllMappedLanguages(false));
 			Query = string.Empty;
 		}

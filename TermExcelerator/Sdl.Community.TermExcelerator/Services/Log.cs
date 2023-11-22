@@ -17,7 +17,7 @@ namespace Sdl.Community.TermExcelerator.Services
 		{
 			var config = new LoggingConfiguration();
 			var assembly = Assembly.GetExecutingAssembly();
-			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL Community",
+			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Trados AppStore",
 				"TermExcelerator");
 
 			if (!Directory.Exists(logDirectoryPath))

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>SDLXLIFF to Legacy Converter</PlugInName>
-  <Version>4.0.1.1</Version>
+  <Version>4.1.1.0</Version>
   <Description>SdlXliff to Legacy Converter</Description>
   <Author>Trados AppStore Team</Author>
-  <RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
+  <RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9" />
   <Include>
     <File>Sdl.Community.XliffReadWrite.dll</File>
     <File>Sdl.Community.XliffToLegacyConverter.Core.dll</File>

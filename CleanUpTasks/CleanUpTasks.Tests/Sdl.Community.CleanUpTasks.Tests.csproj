@@ -15,7 +15,6 @@
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17Beta\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,13 +36,13 @@
   <ItemGroup>
 	  <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Sdl.Core.Settings">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17Beta\Sdl.Core.Settings.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17Beta\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17Beta\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

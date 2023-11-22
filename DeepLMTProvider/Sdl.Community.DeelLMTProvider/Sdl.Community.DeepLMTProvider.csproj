@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>9</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,65 +32,65 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>9</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Newtonsoft.Json.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\NLog.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\NLog.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Sdl.Core.Globalization">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.Globalization.Async">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.Async.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Settings">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.Core.Settings.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Desktop.Platform">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Controls">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.Controls.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.Controls.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Styles">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.Styles.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.Platform.Styles.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.Core.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Core.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.FileBased.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Settings">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Settings.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TellMe.ProviderApi">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-      <HintPath>$(ProgramFiles)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -112,6 +112,49 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\DeepLGlossaryClient.cs" />
+    <Compile Include="Command\AsyncCommandWithParameter.cs" />
+    <Compile Include="Command\AsyncParameterlessCommand.cs" />
+    <Compile Include="Command\ParameterlessCommand.cs" />
+    <Compile Include="Command\CommandWithParameter.cs" />
+    <Compile Include="Extensions\ActionResult.cs" />
+    <Compile Include="Extensions\CultureNameExtensions.cs" />
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Extensions\ErrorHandler.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Helpers\GlossaryEntriesExtensions.cs" />
+    <Compile Include="Helpers\GlossaryReadersWriters\CsvGlossaryReaderWriter.cs" />
+    <Compile Include="Helpers\GlossaryReadersWriters\GlossaryReaderWriterFactory.cs" />
+    <Compile Include="Helpers\GlossaryReadersWriters\TsvGlossaryReaderWriter.cs" />
+    <Compile Include="Helpers\DialogWrapper.cs" />
+    <Compile Include="Helpers\ProcessStarter.cs" />
+    <Compile Include="Helpers\TsvReaderWriter.cs" />
+    <Compile Include="Interface\IGlossarySniffer.cs" />
+    <Compile Include="Interface\IDeepLGlossaryClient.cs" />
+    <Compile Include="Interface\IEditGlossaryService.cs" />
+    <Compile Include="Interface\IUserInteractionService.cs" />
+    <Compile Include="Interface\IGlossaryReaderWriter.cs" />
+    <Compile Include="Interface\IGlossaryReaderWriterFactory.cs" />
+    <Compile Include="Interface\IGlossaryReaderWriterService.cs" />
+    <Compile Include="Interface\IMessageService.cs" />
+    <Compile Include="Interface\IBrowseDialog.cs" />
+    <Compile Include="Interface\IProcessStarter.cs" />
+    <Compile Include="Interface\ITsvReaderWriter.cs" />
+    <Compile Include="Model\DeepLRequestParameters.cs" />
+    <Compile Include="Model\Glossary.cs" />
+    <Compile Include="Model\GlossaryDelimiterItem.cs" />
+    <Compile Include="Model\GlossaryEntry.cs" />
+    <Compile Include="Model\GlossaryInfo.cs" />
+    <Compile Include="Model\GlossaryItem.cs" />
+    <Compile Include="Model\GlossaryLanguagePair.cs" />
+    <Compile Include="Model\LanguagePairOptions.cs" />
+    <Compile Include="UI\Converters\NameToBoolConverter.cs" />
+    <Compile Include="Service\EditGlossaryService.cs" />
+    <Compile Include="Service\GlossaryBackupService.cs" />
+    <Compile Include="Service\GlossarySniffer.cs" />
+    <Compile Include="Service\UserInteractionService.cs" />
+    <Compile Include="Service\GlossaryReaderWriterService.cs" />
+    <Compile Include="Service\MessageService.cs" />
     <Compile Include="Studio\DeepLMtTranslationProvider.cs" />
     <Compile Include="Studio\DeepLMtTranslationProviderFactory.cs" />
     <Compile Include="Studio\DeepLMtTranslationProviderLanguageDirection.cs" />
@@ -122,7 +165,6 @@
     <Compile Include="DeepLTellMe\DeepLSettingsAction.cs" />
     <Compile Include="DeepLTellMe\DeepLStoreAction.cs" />
     <Compile Include="DeepLTellMe\DeepLTellMeProvider.cs" />
-    <Compile Include="Studio\DeepLTranslationProviderConnecter.cs" />
     <Compile Include="Helpers\DeepLTranslationProviderTagPlacer.cs" />
     <Compile Include="Model\DeepLTag.cs" />
     <Compile Include="Model\PreTranslateSegment.cs" />
@@ -144,25 +186,56 @@
     </Compile>
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="AppInitializer.cs" />
+    <Compile Include="Client\DeepLTranslationProviderClient.cs" />
+    <Compile Include="UI\BrowseGlossariesWindow.xaml.cs">
+      <DependentUpon>BrowseGlossariesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ImportEntriesWindow.cs">
+      <DependentUpon>ImportEntriesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\BrowsePathControl.xaml.cs">
+      <DependentUpon>BrowsePathControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\ClearButtonTextBox.xaml.cs">
+      <DependentUpon>ClearButtonTextBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\EditableTextBlock.xaml.cs">
+      <DependentUpon>EditableTextBlock.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Converters\AddAllItemConverter.cs" />
     <Compile Include="UI\DeepLWindow.xaml.cs">
       <DependentUpon>DeepLWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Log.cs" />
     <Compile Include="Model\DeepLTranslationOptions.cs" />
     <Compile Include="Model\Formality.cs" />
+    <Compile Include="UI\EditGlossaryWindow.xaml.cs">
+      <DependentUpon>EditGlossaryWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\GlossariesWindow.xaml.cs">
+      <DependentUpon>GlossariesWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\UiHelpers\WindowsControl.xaml.cs">
       <DependentUpon>WindowsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\DeepLWindowViewModel.cs" />
+    <Compile Include="ViewModel\GlossariesWindowViewModel.cs" />
+    <Compile Include="ViewModel\ViewModel.cs" />
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\deepl_ExportGlossaries.ico" />
+    <Resource Include="Resources\deepl_Glossarytransfer.ico" />
+    <Resource Include="Resources\deepl_Importentries.ico" />
+    <Resource Include="Resources\deepl_ImportGlossaries.ico" />
+    <Resource Include="Resources\Export_64b.png" />
     <None Include="Resources\Settings.ico" />
     <EmbeddedResource Include="Resources\ForumIcon.ico" />
     <EmbeddedResource Include="Resources\TellMe1.ico" />
     <EmbeddedResource Include="Resources\Question.ico" />
     <Resource Include="Resources\deepLIcon.ico" />
     <Resource Include="Resources\deepLResized.png" />
-    <EmbeddedResource Include="Resources\deepL_logo_new.png" />
+    <Resource Include="Resources\deepL_logo_new.png" />
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
@@ -190,7 +263,43 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Page Include="UI\BrowseGlossariesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ImportEntriesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Controls\BrowsePathControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Controls\ClearButtonTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Controls\EditableTextBlock.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\DeepLWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\EditGlossaryWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\GlossariesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\UiHelpers\ToggleButtonsStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\UiHelpers\ProgressRingStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

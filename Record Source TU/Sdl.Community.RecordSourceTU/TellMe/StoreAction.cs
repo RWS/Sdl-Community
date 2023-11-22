@@ -19,7 +19,7 @@ namespace Sdl.Community.RecordSourceTU.TellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://appstore.sdl.com/language/app/record-source-tu/504/");
+			Process.Start("https://appstore.rws.com/Plugin/36");
 		}
 	}
 }

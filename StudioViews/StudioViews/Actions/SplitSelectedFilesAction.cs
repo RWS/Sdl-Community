@@ -58,7 +58,7 @@ namespace Sdl.Community.StudioViews.Actions
 			var segmentBuilder = new SegmentBuilder();
 			var sdlxliffExporter = new SdlxliffExporter(segmentBuilder);
 			var sdlXliffReader = new SdlxliffReader();
-
+			var wordCountProvider = new WordCountProvider();
 
 			var projectHelper = new ProjectService(_projectsController, _studioVersionService);
 			var analysisBands = projectHelper.GetAnalysisBands(_projectsController.CurrentProject ?? _projectsController.SelectedProjects.FirstOrDefault());
@@ -66,7 +66,7 @@ namespace Sdl.Community.StudioViews.Actions
 
 			_window = new StudioViewsFilesSplitView();
 			var model = new StudioViewsFilesSplitViewModel(_window, project, selectedFiles, projectFileService, filterItemService,
-				sdlxliffMerger, sdlxliffExporter, sdlXliffReader);
+				sdlxliffMerger, sdlxliffExporter, sdlXliffReader, wordCountProvider);
 
 			_window.DataContext = model;
 			_window.ShowDialog();
@@ -75,7 +75,6 @@ namespace Sdl.Community.StudioViews.Actions
 			{
 				return;
 			}
-
 
 			OpenMessageWindow(model);
 		}

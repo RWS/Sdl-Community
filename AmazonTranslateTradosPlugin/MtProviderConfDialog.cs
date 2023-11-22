@@ -362,7 +362,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
 		private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			Process.Start(
-				"https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3315.amazon-translate-mt-provider");
+				"https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3315.amazon-translate-mt-provider");
 		}
 	}
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Model.QELabelExtractorModel;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
@@ -37,11 +36,12 @@ namespace Sdl.Community.MTCloud.Provider.Studio.QEReportBatchTask
 			{
 				string qualityEstimation = null;
 				var translationOrigin = segmentPair.Properties.TranslationOrigin;
-				if (translationOrigin.OriginSystem == Resources.OriginSystem_LWC)
+				if (translationOrigin.OriginSystem == PluginResources.OriginSystem_LWC)
 				{
 					qualityEstimation = translationOrigin.GetMetaData("quality_estimation");
 				}
-				if (string.IsNullOrEmpty(qualityEstimation)) continue;
+				if (string.IsNullOrEmpty(qualityEstimation))
+					continue;
 
 				var projectFileLocalFilePath = _projectFile.LocalFilePath;
 

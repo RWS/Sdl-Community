@@ -138,6 +138,8 @@ namespace Sdl.Community.XLIFF.Manager.FileTypeSupport.SDLXLIFF
 
 				VisitChildren(tagPair);
 			}
+
+			VisitChildren(tagPair);
 		}
 
 		public void VisitText(IText text) { }

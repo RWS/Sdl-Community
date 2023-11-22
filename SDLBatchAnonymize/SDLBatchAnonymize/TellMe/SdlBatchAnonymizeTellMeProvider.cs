@@ -5,7 +5,7 @@ namespace Sdl.Community.SDLBatchAnonymize.TellMe
 	[TellMeProvider]
 	public class SdlBatchAnonymizeTellMeProvider: ITellMeProvider
 	{
-		public string Name => "Trados BatchAnonymize tell me provider";
+		public string Name => "Trados BatchAnonymize Tell Me provider";
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
 			new SdlBatchAnonymizeCommunitySupportAction

@@ -19,6 +19,11 @@ namespace Sdl.Community.TermExcelerator.Ui
 
 		protected override void OnLoad(EventArgs e)
 		{
+			if (!(_providerSettings is null))
+			{
+				return;
+			}
+
 			sourceBox.Text = @"A";
 			targetBox.Text = @"B";
 			approvedBox.Text = @"C";
@@ -103,5 +108,36 @@ namespace Sdl.Community.TermExcelerator.Ui
 			return _providerSettings;
 		}
 
+		public void SetSettings(ProviderSettings settings)
+		{
+			_providerSettings = settings;
+
+			descriptionLbl.Text = @"From this screen you can fill your settings from your excel document.";
+
+			hasHeader.Checked = _providerSettings.HasHeader;
+			chkIsReadOnly.Checked = _providerSettings.IsReadOnly;
+
+			sourceBox.Text = settings.SourceColumn;
+			targetBox.Text = settings.TargetColumn;
+			approvedBox.Text = settings.ApprovedColumn;
+			separatorTextBox.Text = settings.Separator.ToString();
+
+			var cultureNames = GetCultureNames();
+			var hashSet = new HashSet<CultureInfo>(cultureNames);
+			hashSet.TryGetValue(new CultureInfo(settings.SourceLanguage.Name), out var sourceCulture);
+			hashSet.TryGetValue(new CultureInfo(settings.TargetLanguage.Name), out var targetCulture);
+
+			sourceLanguageComboBox.DataSource = cultureNames;
+			sourceLanguageComboBox.DisplayMember = "DisplayName";
+			sourceLanguageComboBox.ValueMember = "Name";
+			sourceLanguageComboBox.SelectedItem = sourceCulture;
+
+			targetLanguageComboBox.DataSource = cultureNames;
+			targetLanguageComboBox.DisplayMember = "DisplayName";
+			targetLanguageComboBox.ValueMember = "Name";
+			targetLanguageComboBox.SelectedItem = targetCulture;
+
+			pathTextBox.Text = settings.TermFilePath;
+		}
 	}
 }

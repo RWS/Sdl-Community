@@ -42,9 +42,6 @@ variables:
 name: $(Build.DefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
 
 steps:
-  - template: tasks/version-assemblies/version-assemblies.yml
-    parameters:
-      PathToVersion: '$(Build.SourcesDirectory)\ChangeScalingBehavior\ChangeScalingBehavior\Properties'
   - template: jobs/build-sdlplugin.yml
   - template: tasks/sign-artifacts/prepare-signing.yml
 

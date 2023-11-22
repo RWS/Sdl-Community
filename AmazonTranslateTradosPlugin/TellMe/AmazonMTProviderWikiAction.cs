@@ -13,12 +13,12 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin.TellMe
 
 		public AmazonMTProviderWikiAction()
 		{
-			Name = "SDL Community Amazon Translate MT Provider Wiki";
+			Name = "Amazon Translate MT Provider Wiki";
 		}
 
 		public override void Execute()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3315/amazon-translate-mt-provider");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3315/amazon-translate-mt-provider");
 		}
 	}
 }

@@ -24,8 +24,8 @@ namespace Sdl.Community.NumberVerifier.Validator
 		public void Verify(string sourceText, string targetText, INumberVerifierSettings settings, out NumberTexts sourceNumberTexts, out NumberTexts targetNumberTexts, List<ExcludedRange> sourceExcludedRanges = null, List<ExcludedRange> targetExcludedRanges = null)
 		{
 			_settings = settings;
-			_sourceText = sourceText?.Normalize(System.Text.NormalizationForm.FormKC);
-			_targetText = targetText?.Normalize(System.Text.NormalizationForm.FormKC);
+			_sourceText = sourceText;
+			_targetText = targetText;
 
 			if (_sourceText is null && _targetText is null)
 			{

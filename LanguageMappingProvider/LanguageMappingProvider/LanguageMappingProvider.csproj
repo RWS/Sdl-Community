@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17</TradosFolder>
+		<Company>RWS</Company>
+		<Authors>Trados AppStore Team</Authors>
+		<Product>Language Mapping Provider</Product>
+		<Description>Language Mapping Provider is a library that provides functionality for managing language mappings in a database. It allows you to insert, update, and retrieve language mappings for various purposes, such as language code conversions or language-specific operations.</Description>
+
+		<OutputType>Library</OutputType>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Reference Include="System.Data.SQLite">
+			<HintPath>$(TradosFolder)\System.Data.SQLite.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Core.Globalization">
+			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Core.Globalization.Async">
+			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Dapper.StrongName" Version="2.0.123" />
+	</ItemGroup>
+
+	<PropertyGroup>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+	</PropertyGroup>
+
+</Project>

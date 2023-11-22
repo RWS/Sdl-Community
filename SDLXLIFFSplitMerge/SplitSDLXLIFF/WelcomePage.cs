@@ -50,7 +50,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF
 
 		private void linkLbl_Help_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			Process.Start(new ProcessStartInfo("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3166.sdlxliff-split-merge"));
+			Process.Start(new ProcessStartInfo("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3166/sdlxliff-split-merge"));
 		}
 	}
 }

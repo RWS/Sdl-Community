@@ -35,6 +35,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private readonly SdlxliffReader _sdlxliffReader;
 		private readonly ParagraphUnitProvider _paragraphUnitProvider;
 		private readonly DisplayFilter _displayFilter;
+		private readonly WordCountProvider _wordCountProvider;
 
 		private IStudioDocument _activeDocument;
 
@@ -62,7 +63,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 		public StudioViewsEditorViewModel(EditorController editorController,
 			FilterItemService filterItemService, ProjectFileService projectFileService,
 			SdlxliffMerger sdlxliffMerger, SdlxliffExporter sdlxliffExporter, SdlxliffReader sdlxliffReader,
-			ParagraphUnitProvider paragraphUnitProvider, DisplayFilter displayFilter)
+			ParagraphUnitProvider paragraphUnitProvider, DisplayFilter displayFilter, WordCountProvider wordCountProvider)
 		{
 			_filterItemService = filterItemService;
 			_projectFileService = projectFileService;
@@ -83,6 +84,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 			SelectedExcludeFilterItems = new ObservableCollection<FilterItem>(
 				_filterItemService.GetFilterItems(FilterItems, new List<string> { "Locked" }));
 			SelectedTabItem = 0;
+			_wordCountProvider = wordCountProvider;
 		}
 
 		public ICommand OpenFolderInExplorerCommand => _openFolderInExplorerCommand ?? (_openFolderInExplorerCommand = new CommandHandler(OpenFolderInExplorer));
@@ -410,7 +412,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 				if (exportResult.OutputFiles.Count > 1)
 				{
 					filePathOutput = _projectFileService.GetUniqueFileName(Path.Combine(ExportPath, "StudioViewsFile.sdlxliff"), "Filtered");
-					_sdlxliffMerger.MergeFiles(exportResult.OutputFiles.Select(a => a.FilePath).ToList(), filePathOutput, true);
+					_sdlxliffMerger.MergeFiles(exportResult.OutputFiles.Select(a => a.FilePath).ToList(), filePathOutput, true, ProgressLogger);
 
 					var outputFile = new OutputFile
 					{
@@ -439,6 +441,10 @@ namespace Sdl.Community.StudioViews.ViewModel
 			}
 		}
 
+		private void ProgressLogger(string message, int min, int max)
+		{
+			
+		}
 		private void Import(object param)
 		{
 			if (_activeDocument == null)
@@ -829,13 +835,16 @@ namespace Sdl.Community.StudioViews.ViewModel
 				InputFiles = new List<string>(projectFiles.Select(a => a.LocalFilePath))
 			};
 
+			var sourceLanguage = projectFiles.FirstOrDefault()?.SourceFile.Language.CultureInfo;
+			var targetLanguage = projectFiles.FirstOrDefault()?.Language.CultureInfo;
+
 			foreach (var documentFile in projectFiles)
 			{
 				var filePathInput = documentFile.LocalFilePath;
 				var filePathInputName = Path.GetFileName(filePathInput);
 				var filePathOutput = _projectFileService.GetUniqueFileName(Path.Combine(ExportPath, filePathInputName), "Filtered");
 
-				var outputFile = _sdlxliffExporter.ExportFile(segmentPairInfos, filePathInput, filePathOutput);
+				var outputFile = _sdlxliffExporter.ExportFile(segmentPairInfos, filePathInput, filePathOutput, _wordCountProvider, ProgressLogger);
 				if (outputFile != null)
 				{
 					exportResult.OutputFiles.Add(outputFile);

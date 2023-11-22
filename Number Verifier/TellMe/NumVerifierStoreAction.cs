@@ -17,7 +17,7 @@ namespace Sdl.Community.NumberVerifier.TellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://appstore.sdl.com/language/app/trados-number-verifier/440/");
+			Process.Start("https://appstore.rws.com/Plugin/33");
 		}
 	}
 }

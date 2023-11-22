@@ -12,7 +12,7 @@ namespace Sdl.Community.MTCloud.Provider.TellMe
 		}
 		public override void Execute()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/f/160");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/");
 		}
 
 		public override bool IsAvailable => true;

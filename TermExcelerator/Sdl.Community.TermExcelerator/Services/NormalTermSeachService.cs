@@ -14,7 +14,7 @@ namespace Sdl.Community.TermExcelerator.Services
 			_providerSettings = providerSettings;
 		}
 
-		public IList<ISearchResult> Search(string text, List<ExcelEntry> entries, int maxResultsCount)
+		public IList<SearchResult> Search(string text, List<ExcelEntry> entries, int maxResultsCount)
 		{
 			var lowerSearchText = text.ToLower();
 
@@ -31,7 +31,7 @@ namespace Sdl.Community.TermExcelerator.Services
 
 			return results
 				.Take(maxResultsCount)
-				.Cast<ISearchResult>()
+				.Cast<SearchResult>()
 				.ToList();
 		}
 

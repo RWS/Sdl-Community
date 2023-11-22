@@ -8,6 +8,7 @@ using System.Linq;
 using System.Windows;
 using Sdl.Community.TMOptimizerLib;
 using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -191,7 +192,7 @@ namespace Sdl.Community.TMOptimizer.Control
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             dlg.Title = "Select TM to optimize";
             dlg.DefaultExt = ".sdltm";
-            dlg.Filter = "SDL Trados Studio TMs (.sdltm)|*.sdltm";
+            dlg.Filter = "Trados Studio TMs (.sdltm)|*.sdltm";
 
             if (!String.IsNullOrEmpty(InputTranslationMemory.FilePath))
             {
@@ -264,7 +265,7 @@ namespace Sdl.Community.TMOptimizer.Control
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
             dlg.Title = "Specify output TM file name";
             dlg.DefaultExt = ".sdltm";
-            dlg.Filter = "SDL Trados Studio TMs (.sdltm)|*.sdltm";
+            dlg.Filter = "Trados Studio TMs (.sdltm)|*.sdltm";
 
             if (!String.IsNullOrEmpty(NewOutputTranslationMemoryFilePath))
             {
@@ -282,7 +283,7 @@ namespace Sdl.Community.TMOptimizer.Control
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             dlg.Title = "Select output TM";
             dlg.DefaultExt = ".sdltm";
-            dlg.Filter = "SDL Trados Studio TMs (.sdltm)|*.sdltm";
+            dlg.Filter = "Trados Studio TMs (.sdltm)|*.sdltm";
 
             if (!String.IsNullOrEmpty(OutputTranslationMemory.FilePath))
             {
@@ -349,8 +350,8 @@ namespace Sdl.Community.TMOptimizer.Control
                 return false;
             }
 
-            CultureInfo sourceCulture = tm != null ? tm.LanguageDirection.SourceLanguage : InputTmxFiles.First().TmxFile.DetectInfo.SourceLanguage.CultureInfo;
-            CultureInfo targetCulture = tm != null ? tm.LanguageDirection.TargetLanguage : InputTmxFiles.First().TmxFile.DetectInfo.TargetLanguage.CultureInfo;
+            CultureInfo sourceCulture = tm != null ? new Language(tm.LanguageDirection.SourceLanguage).CultureInfo : InputTmxFiles.First().TmxFile.DetectInfo.SourceLanguage.CultureInfo;
+            CultureInfo targetCulture = tm != null ? new Language(tm.LanguageDirection.TargetLanguage).CultureInfo : InputTmxFiles.First().TmxFile.DetectInfo.TargetLanguage.CultureInfo;
 
             foreach (InputTmxFile f in InputTmxFiles)
             {
@@ -364,8 +365,8 @@ namespace Sdl.Community.TMOptimizer.Control
                 totalTuCount += f.TmxFile.GetDetectInfo().TuCount;
             }
 
-            SourceLanguage = new Language(sourceCulture);
-            TargetLanguage = new Language(targetCulture);
+            SourceLanguage = LanguageRegistryApi.Instance.GetLanguage(sourceCulture.Name);
+            TargetLanguage =LanguageRegistryApi.Instance.GetLanguage (targetCulture.Name);
 
             return true;
         }
@@ -438,9 +439,15 @@ namespace Sdl.Community.TMOptimizer.Control
                 // new TM
                 if (String.IsNullOrEmpty(NewOutputTranslationMemoryFilePath))
                 {
-                    ShowError("Select the location where the new translation memory should be created.");
+                    ShowError("Select from Browse the location where the new translation memory should be created, or provide full path to folder and add the name and .sdltm extension.");
                     return false;
                 }
+
+				if(!System.IO.Path.IsPathRooted(NewOutputTranslationMemoryFilePath))
+				{
+					ShowError("Select from Browse the location where the new translation memory should be created, or provide full path to folder and add the name and .sdltm extension.");
+					return false;
+				}
             }
 
             return true;

@@ -56,15 +56,30 @@ namespace Sdl.Community.TermExcelerator
 
 		public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
 		{
+			if (!(terminologyProvider is TerminologyProviderExcel provider))
+			{
+				return false;
+			}
+
+			var settingsDialog = new Settings();
+			settingsDialog.SetSettings(provider.ProviderSettings);
+			var dialogResult = settingsDialog.ShowDialog();
+			if (dialogResult == DialogResult.OK ||
+				dialogResult == DialogResult.Yes)
+			{
+				provider.ProviderSettings = settingsDialog.GetSettings();
+			}
+
 			return true;
 		}
 
 		public TerminologyProviderDisplayInfo GetDisplayInfo(Uri terminologyProviderUri)
 		{
+			var name = terminologyProviderUri.AbsolutePath.Replace(TerminologyProviderExcel.ExcelUriTemplate, "").Replace("/", "");
 			return new TerminologyProviderDisplayInfo
 			{
-				Name = "Excel",
-				TooltipText = "excel"
+				Name = name,
+				TooltipText = name
 			};
 		}
 	}

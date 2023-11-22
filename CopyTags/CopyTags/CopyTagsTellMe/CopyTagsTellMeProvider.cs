@@ -5,7 +5,7 @@ namespace SDLCopyTags.CopyTagsTellMe
 	[TellMeProvider]
 	public class CopyTagsTellMeProvider : ITellMeProvider
 	{
-		public string Name => "Trados Copy Tags tell me provider";
+		public string Name => "Trados Copy Tags Tell Me provider";
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{

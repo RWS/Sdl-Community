@@ -10,7 +10,7 @@ namespace Sdl.Community.TMRepair
 {
     public partial class SDLTMRepair : Form
     {
-	    public readonly string DeployPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL Community\TMRepair");
+	    public readonly string DeployPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"Trados AppStore\TMRepair");
 
 		public SDLTMRepair()
         {

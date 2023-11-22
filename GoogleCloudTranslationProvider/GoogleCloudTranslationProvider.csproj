@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+		<SignAssembly>True</SignAssembly>
+		<TargetFramework>net48</TargetFramework>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
+		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17</TradosFolder>
+		<LangVersion>latest</LangVersion>
+		<UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Resources\%24this.Icon.ico" />
+    <None Remove="Resources\appicon.ico" />
+    <None Remove="Resources\appicon.png" />
+    <None Remove="Resources\backImg.png" />
+    <None Remove="Resources\defaultSettings.png" />
+    <None Remove="Resources\Download.ico" />
+    <None Remove="Resources\Folder.png" />
+    <None Remove="Resources\ForumIcon.ico" />
+    <None Remove="Resources\gctpLogo.png" />
+    <None Remove="Resources\Information.png" />
+    <None Remove="Resources\my_icon.ico" />
+    <None Remove="Resources\my_image.png" />
+    <None Remove="Resources\Question.ico" />
+    <None Remove="Resources\rwslmplogo.png" />
+    <None Remove="Resources\Search.png" />
+    <None Remove="Resources\Settings.ico" />
+    <None Remove="Resources\warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>$(TradosFolder)\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.Globalization">
+      <HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.Globalization.Async">
+      <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.IntegrationApi">
+      <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
+      <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.Platform">
+      <HintPath>$(TradosFolder)\Sdl.Desktop.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.Platform.Controls">
+      <HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.Platform.Styles">
+      <HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Styles.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.Core">
+      <HintPath>$(TradosFolder)\Sdl.LanguagePlatform.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
+      <HintPath>$(TradosFolder)\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
+      <HintPath>$(TradosFolder)\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Platform.UI">
+      <HintPath>$(TradosFolder)\Sdl.Platform.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.Core">
+      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.FileBased">
+      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
+      <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
+      <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Core" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+	<ItemGroup>
+	  <None Include="Studio\TranslationProviderWinFormsUI.cs" />
+	  <None Include="Studio\TranslationProviderLanguageDirection.cs" />
+	  <None Include="Studio\TranslationProvider.cs" />
+	  <None Include="Studio\TranslationProviderFactory.cs" />
+	  <None Include="Properties\AssemblyInfo.cs" />
+	  <None Include="Properties\PluginProperties.cs" />
+	</ItemGroup>
+  <ItemGroup>
+    <None Include="PluginResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="pluginpackage.manifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+  	<PackageReference Include="Google.Cloud.AutoML.V1" Version="2.4.0" />
+  	<PackageReference Include="Google.Cloud.Translate.V3" Version="2.4.0" />
+  	<PackageReference Include="LanguageMappingProvider" Version="1.0.92" />
+		<PackageReference Include="Sdl.Core.PluginFramework" Version="2.1.0" />
+		<PackageReference Include="Sdl.Core.PluginFramework.Build" Version="17.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\$this.Icon.ico" />
+    <Resource Include="Resources\appicon.ico" />
+    <Resource Include="Resources\appicon.png" />
+    <Resource Include="Resources\backImg.png" />
+    <Resource Include="Resources\defaultSettings.png" />
+    <Resource Include="Resources\Download.ico" />
+    <Resource Include="Resources\Folder.png" />
+    <Resource Include="Resources\ForumIcon.ico" />
+    <Resource Include="Resources\gctpLogo.png" />
+    <Resource Include="Resources\Information.png" />
+    <Resource Include="Resources\my_icon.ico" />
+    <Resource Include="Resources\my_image.png" />
+    <Resource Include="Resources\Question.ico" />
+    <Resource Include="Resources\rwslmplogo.png" />
+    <Resource Include="Resources\Search.png" />
+    <Resource Include="Resources\Settings.ico" />
+    <Resource Include="Resources\warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="PluginResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PluginResources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <PropertyGroup>
+		<AssemblyOriginatorKeyFile>..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+		<CreatePluginPackage>true</CreatePluginPackage>
+  </PropertyGroup>
+  </Project>

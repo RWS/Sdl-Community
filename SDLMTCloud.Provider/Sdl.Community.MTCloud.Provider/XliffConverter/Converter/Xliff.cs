@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
-using Sdl.Community.MTCloud.Provider.Model;
 using Sdl.Community.MTCloud.Provider.XliffConverter.Models;
-using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.MTCloud.Provider.XliffConverter.Converter

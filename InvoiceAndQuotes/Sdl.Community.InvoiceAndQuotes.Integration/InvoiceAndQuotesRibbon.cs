@@ -28,7 +28,7 @@ namespace Sdl.Community.InvoiceAndQuotes.Integration
 
         private string CreateTemplateFolder()
         {
-            var templateFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"RWS AppStore\Invoice\Office Templates");
+            var templateFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"Trados AppStore\Invoice\Office Templates");
             if (!Directory.Exists(templateFolderPath))
             {
                 Directory.CreateDirectory(templateFolderPath);

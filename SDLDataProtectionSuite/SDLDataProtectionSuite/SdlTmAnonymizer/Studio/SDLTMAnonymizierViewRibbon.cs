@@ -336,31 +336,4 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 		}
 	}
 
-
-	[RibbonGroup("SDLTMAnonymizerHelpRibbonGroup", "    Help    ")]
-	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
-	public class SDLTMAnonymizerHelpRibbonGroup : AbstractRibbonGroup
-	{
-	}
-
-	[Action("SDLTMAnonymizerHelpRibbonGroupHelpAction", typeof(SDLTMAnonymizerView), Name = "Online Help", Icon = "help", Description = "An wiki page will be opened in browser with user documentation")]
-	[ActionLayout(typeof(SDLTMAnonymizerHelpRibbonGroup), 1, DisplayType.Large)]
-	public class SDLTMAnonymizerHelpRibbonGroupHelpAction : AbstractAction
-	{
-		protected override void Execute()
-		{
-			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3272/tradostmanonymizer");
-		}
-	}
-
-	//[Action("SDLTMAnonymizerHelpRibbonGroupAboutAction", typeof(SDLTMAnonymizerView), Name = "About", Icon = "information", Description = "About")]
-	//[ActionLayout(typeof(SDLTMAnonymizerHelpRibbonGroup), 0, DisplayType.Large)]
-	//public class SDLTMAnonymizerHelpRibbonGroupAboutAction : AbstractAction
-	//{
-	//	protected override void Execute()
-	//	{
-	//		var about = new AboutBox();
-	//		about.ShowDialog();
-	//	}
-	//}
 }

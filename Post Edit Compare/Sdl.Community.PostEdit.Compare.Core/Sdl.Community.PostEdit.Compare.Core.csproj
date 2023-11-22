@@ -62,6 +62,10 @@
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.Core.Globalization.Async">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.Async.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.Settings">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Settings.dll</HintPath>
     </Reference>
@@ -172,10 +176,10 @@
       <Version>4.5.3.3</Version>
     </PackageReference>
     <PackageReference Include="Trados.Community.Toolkit.Core">
-      <Version>4.0.6</Version>
+      <Version>4.1.1</Version>
     </PackageReference>
     <PackageReference Include="Trados.Community.Toolkit.LanguagePlatform">
-      <Version>4.0.6</Version>
+      <Version>4.1.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

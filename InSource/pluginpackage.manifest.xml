@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Trados InSource!</PlugInName>
-  <Version>4.0.0.0</Version>
+  <Version>4.0.1.0</Version>
   <Description>Supports watch folders for the automatic creation of Projects.</Description>
   <Author>Trados AppStore Team</Author>
   <RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9"/>

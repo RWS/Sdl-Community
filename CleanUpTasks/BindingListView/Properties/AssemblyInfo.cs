@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("BindingListView")]
 [assembly: AssemblyDescription("Advanced, data bindable, object list view.")]
-[assembly: AssemblyCompany("Equin")]
 [assembly: AssemblyProduct("BindingListView")]
-[assembly: AssemblyCopyright("Copyright © Andrew Davey 2005")]
+[assembly: AssemblyCompany("SDL Limited as part of the RWS Holdings Plc group of companies")]
+[assembly: AssemblyCopyright("Copyright © 2011 - 2022 SDL Limited as part of the RWS Holdings Plc group of companies (\"RWS Group\").")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM componenets.  If you need to access a type in this assembly from
@@ -26,6 +26,6 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.3.*")]
-[assembly: AssemblyFileVersion("1.3.0.0")]
+[assembly: AssemblyVersion("3.0.0.0")]
+[assembly: AssemblyFileVersion("3.1.1.0")]
 [assembly: CLSCompliant(true)]

@@ -17,7 +17,7 @@ namespace Sdl.Community.NumberVerifier.TellMe
 
 		public override void Execute()
 		{
-			Process.Start("http://community.sdl.com/appsupport");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/f");
 		}
 	}
 }

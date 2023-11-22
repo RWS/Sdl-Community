@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Xceed.Wpf.Toolkit;
 
 namespace Sdl.Community.TMOptimizer.Control
 {
@@ -28,7 +29,9 @@ namespace Sdl.Community.TMOptimizer.Control
 
         private void Wizard_Next(object sender, Xceed.Wpf.Toolkit.Core.CancelRoutedEventArgs e)
         {
-            IWizardPageControl c = _wizard.CurrentPage.Content as IWizardPageControl;
+           // IWizardPageControl c = _wizard.CurrentPage.Content as IWizardPageControl;
+
+			var c = ((Wizard)sender).CurrentPage.Content as IWizardPageControl;
 
             if (c != null)
             {

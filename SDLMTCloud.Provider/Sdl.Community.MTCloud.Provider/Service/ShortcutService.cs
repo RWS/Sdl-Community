@@ -9,6 +9,8 @@ using System.Xml;
 using Microsoft.Win32.SafeHandles;
 using Sdl.Community.MTCloud.Provider.Interfaces;
 using Sdl.Community.MTCloud.Provider.Model;
+using NLog;
+using LogManager = NLog.LogManager;
 
 namespace Sdl.Community.MTCloud.Provider.Service
 {
@@ -20,15 +22,19 @@ namespace Sdl.Community.MTCloud.Provider.Service
 		private readonly string _settingsFileName;
 		private readonly KeysConverter _keysConverter;
 		private FileSystemWatcher _fileWatcher;
+		private readonly IMessageBoxService _messageService;
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
 		public event ShortcutChangedEventRaiser StudioShortcutChanged;
 		// Instantiate a SafeHandle instance.
 		private readonly SafeHandle _safeHandle;
 		// Public implementation of Dispose pattern callable by consumers.
 		public void Dispose() => Dispose(true);
 
-		public ShortcutService(VersionService versionService)
+		public ShortcutService(VersionService versionService, IMessageBoxService messageBoxService)
 		{
 			_settingsFileName = "UserSettings.xml";
+			_messageService = messageBoxService;
 			_settingsFolderPath = versionService.GetAppDataStudioFolder();
 			_settingsXmlPath =  Path.Combine(_settingsFolderPath,_settingsFileName);
 			_safeHandle = new SafeFileHandle(IntPtr.Zero, true);
@@ -36,6 +42,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			_keysConverter = new KeysConverter();
 
 			ReadCustomShortcutsFromUserSettingsXml();
+			InitializeSettingsFileWatcher();
 		}
 
 		/// <summary>
@@ -61,6 +68,13 @@ namespace Sdl.Community.MTCloud.Provider.Service
 
 		private void InitializeSettingsFileWatcher()
 		{
+			if (!Directory.Exists(_settingsFolderPath))
+			{
+				var msg = String.Format(PluginResources.InvalidPathOrDirectoryDoesntExist, _settingsFolderPath);
+				_messageService.ShowErrorMessage(msg, PluginResources.InvalidPath);
+				_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name}, Error:" + msg);
+				return;
+			}
 			_fileWatcher = new FileSystemWatcher(_settingsFolderPath)
 			{
 				Filter = _settingsFileName
@@ -76,6 +90,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			Dispose();
 
 			ReadCustomShortcutsFromUserSettingsXml();
+			InitializeSettingsFileWatcher();
 			StudioShortcutChanged?.Invoke();
 		}
 
@@ -90,6 +105,9 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			{
 				if (!File.Exists(_settingsXmlPath))
 				{
+					var msg = string.Format(PluginResources.InvalidPathInFileName, _settingsXmlPath);
+					_messageService.ShowErrorMessage(msg, PluginResources.InvalidPathOrFileDoesntExist);
+					_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name}, Error:" + msg);
 					return;
 				}
 
@@ -119,7 +137,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 					};
 					if (!string.IsNullOrEmpty(studioShortcut.ShortcutCombination))
 					{
-						var keyCombination = (Keys) Enum.Parse(typeof(Keys), studioShortcut.ShortcutCombination, true);
+						var keyCombination = (Keys)Enum.Parse(typeof(Keys), studioShortcut.ShortcutCombination, true);
 
 						studioShortcut.ShortcutText = _keysConverter.ConvertToString(keyCombination);
 					}
@@ -128,11 +146,7 @@ namespace Sdl.Community.MTCloud.Provider.Service
 			}
 			catch (Exception e)
 			{
-				//TODO:" Log error
-			}
-			finally
-			{
-				InitializeSettingsFileWatcher();
+				_logger.Error($"{System.Reflection.MethodBase.GetCurrentMethod().Name} " + e.Message);
 			}
 		}
 

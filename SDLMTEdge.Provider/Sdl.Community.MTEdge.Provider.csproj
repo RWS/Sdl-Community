@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+		<SignAssembly>True</SignAssembly>
+  	<TargetFramework>net48</TargetFramework>
+  	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17</TradosFolder>
+  	<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
+	  <LangVersion>latest</LangVersion>
+		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+	  <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Resources\256x256.png" />
+    <None Remove="Resources\48x48.png" />
+    <None Remove="Resources\Download.ico" />
+    <None Remove="Resources\ForumIcon.ico" />
+    <None Remove="Resources\icon.ico" />
+    <None Remove="Resources\icon.png" />
+    <None Remove="Resources\LanguagePairsIcon.ico" />
+    <None Remove="Resources\lwEdgeLogo.png" />
+    <None Remove="Resources\Question.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\lwEdgeLogo.png" />
+    <Resource Include="Resources\Question.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Web.WebView2.Wpf">
+      <HintPath>$(TradosFolder)\Microsoft.Web.WebView2.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>$(TradosFolder)\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.Globalization">
+      <HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
+    </Reference>
+		<Reference Include="Sdl.Core.Globalization.Async">
+			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
+		</Reference>
+    <Reference Include="Sdl.Desktop.Platform.Controls">
+      <HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.Platform.Styles">
+      <HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Styles.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.Core">
+      <HintPath>$(TradosFolder)\Sdl.LanguagePlatform.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
+      <HintPath>$(TradosFolder)\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
+      <HintPath>$(TradosFolder)\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Core" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+	<ItemGroup>
+	  <None Include="Properties\AssemblyInfo.cs" />
+	  <None Include="Properties\PluginProperties.cs" />
+	</ItemGroup>
+  <ItemGroup>
+    <None Include="pluginpackage.manifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+  	<PackageReference Include="Sdl.Core.PluginFramework">
+  		<Version>2.1.0</Version>
+  	</PackageReference>
+  	<PackageReference Include="Sdl.Core.PluginFramework.Build">
+  		<Version>17.0.0</Version>
+  	</PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\256x256.png" />
+    <Resource Include="Resources\48x48.png" />
+    <Resource Include="Resources\Download.ico" />
+    <Resource Include="Resources\ForumIcon.ico" />
+    <Resource Include="Resources\icon.ico" />
+    <Resource Include="Resources\icon.png" />
+    <Resource Include="Resources\LanguagePairsIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="MTEdgeLanguages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MTEdgeLanguages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="PluginResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PluginResources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="WeaverEdgeResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WeaverEdgeResource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="MTEdgeLanguages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MTEdgeLanguages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="PluginResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="WeaverEdgeResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WeaverEdgeResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Style\General.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <PropertyGroup>
+	  <AssemblyOriginatorKeyFile>..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+	  <CreatePluginPackage>true</CreatePluginPackage>
+  </PropertyGroup>
+  </Project>

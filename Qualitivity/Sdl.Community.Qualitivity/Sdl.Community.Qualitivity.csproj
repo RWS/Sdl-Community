@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.Qualitivity</RootNamespace>
-    <AssemblyName>Sdl.Community.Qualitivity</AssemblyName>
+    <AssemblyName>Qualitivity</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -77,6 +77,9 @@
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.Core.Globalization.Async">
+	    <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.Async.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.Settings">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Settings.dll</HintPath>
     </Reference>
@@ -110,7 +113,11 @@
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite">
@@ -145,6 +152,10 @@
     <Compile Include="Custom\Accordion.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="TellMe\AppStoreDownloadAction.cs" />
+    <Compile Include="TellMe\AppStoreForumAction.cs" />
+    <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="Tracking\TrackedActions.cs" />
     <Compile Include="Tracking\Tracked.cs" />
     <Compile Include="Tracking\TrackedDocumentEvents.cs" />
@@ -191,12 +202,6 @@
       <DependentUpon>QualityMetricWeightsAppend.cs</DependentUpon>
     </Compile>
     <Compile Include="EditDistance.cs" />
-    <Compile Include="Dialogs\About.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\About.Designer.cs">
-      <DependentUpon>About.cs</DependentUpon>
-    </Compile>
     <Compile Include="Dialogs\AddressDetails.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -339,12 +344,15 @@
     <Content Include="Resources\Coins.ico" />
     <Content Include="Resources\Document-Export.ico" />
     <Content Include="Resources\Document-Import.ico" />
+    <Content Include="Resources\Download.ico" />
     <Content Include="Resources\Edit-Yes.ico" />
     <Content Include="Resources\Export.ico" />
+    <Content Include="Resources\ForumIcon.ico" />
     <Content Include="Resources\Gnome-Bookmark-New.ico" />
     <Content Include="Resources\Ldap-Browser-Pgp.ico" />
     <Content Include="Resources\License.ico" />
     <Content Include="Resources\Question-type-drag-drop.ico" />
+    <Content Include="Resources\Question.ico" />
     <Content Include="Resources\Save-download.ico" />
     <Content Include="Resources\Tasks.ico" />
     <Content Include="Resources\tausdata_1tE_icon.ico" />
@@ -389,10 +397,6 @@
     <Content Include="Resources\Timer.ico" />
     <Content Include="Resources\Timetable.ico" />
     <Content Include="Resources\Users-simple.ico" />
-    <EmbeddedResource Include="Dialogs\About.resx">
-      <DependentUpon>About.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\ActivityReportWizard.resx">
       <DependentUpon>ActivityReportWizard.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -544,22 +548,23 @@
     <None Include="..\..\SdlCommunity.snk">
       <Link>SdlCommunity.snk</Link>
     </None>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Trados.Community.Toolkit.Core">
-      <Version>4.0.6</Version>
-    </PackageReference>
-    <PackageReference Include="Trados.Community.Toolkit.LanguagePlatform">
-      <Version>4.0.6</Version>
-    </PackageReference>
     <PackageReference Include="Sdl.Core.PluginFramework">
       <Version>2.1.0</Version>
     </PackageReference>
     <PackageReference Include="Sdl.Core.PluginFramework.Build">
       <Version>17.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Trados.Community.Toolkit.Core">
+      <Version>4.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Trados.Community.Toolkit.LanguagePlatform">
+      <Version>4.1.1</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup>

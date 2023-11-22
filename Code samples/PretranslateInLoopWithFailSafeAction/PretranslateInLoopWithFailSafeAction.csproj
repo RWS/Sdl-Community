@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17</TradosFolder>
+		<TargetFramework>net48</TargetFramework>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<CreatePluginPackage>true</CreatePluginPackage>
+		<PlatformTarget>x86</PlatformTarget>
+		<OutputType>Exe</OutputType>
+		<OutputPath>$(TradosFolder)</OutputPath>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+	<ItemGroup>
+		<Reference Include="Sdl.Core.Globalization">
+			<HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.Core.Settings">
+			<HintPath>$(TradosFolder)\Sdl.Core.Settings.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.ProjectAutomation.Core">
+			<HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.ProjectAutomation.FileBased">
+			<HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+		</Reference>
+		<Reference Include="Sdl.ProjectAutomation.Settings">
+			<HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Settings.dll</HintPath>
+		</Reference>
+		<Reference Include="System" />
+		<Reference Include="System.Core" />
+		<Reference Include="System.Xml.Linq" />
+		<Reference Include="System.Data.DataSetExtensions" />
+		<Reference Include="Microsoft.CSharp" />
+		<Reference Include="System.Data" />
+		<Reference Include="System.Xml" />
+	</ItemGroup>
+</Project>

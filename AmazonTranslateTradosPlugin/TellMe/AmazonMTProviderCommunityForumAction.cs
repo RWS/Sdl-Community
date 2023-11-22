@@ -13,12 +13,12 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin.TellMe
 
 		public AmazonMTProviderCommunityForumAction()
 		{
-			Name = "SDL Community AppStore Forum";
+			Name = "RWS Community AppStore Forum";
 		}
 
 		public override void Execute()
 		{
-			Process.Start("http://community.sdl.com/appsupport");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/f");
 		}
 	}
 }

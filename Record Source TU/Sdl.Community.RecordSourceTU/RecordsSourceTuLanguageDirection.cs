@@ -1,4 +1,5 @@
-﻿using Sdl.LanguagePlatform.Core;
+﻿using Sdl.Core.Globalization;
+using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -119,19 +120,12 @@ namespace Sdl.Community.RecordSourceTU
 				settings,
                 translationUnits,
 				mask);
-        }
+        }		
+		
+		public CultureCode SourceLanguage => _fileBasedTranslationProviderLanguageDirection.SourceLanguage;
+		public CultureCode TargetLanguage => _fileBasedTranslationProviderLanguageDirection.TargetLanguage;
 
-        public System.Globalization.CultureInfo SourceLanguage
-        {
-            get { return _fileBasedTranslationProviderLanguageDirection.SourceLanguage; }
-        }
-
-        public System.Globalization.CultureInfo TargetLanguage
-        {
-            get { return _fileBasedTranslationProviderLanguageDirection.TargetLanguage; }
-        }
-
-        public ITranslationProvider TranslationProvider
+		public ITranslationProvider TranslationProvider
         {
             get { return _fileBasedTranslationProviderLanguageDirection.TranslationProvider; }
         }
@@ -232,8 +226,8 @@ namespace Sdl.Community.RecordSourceTU
         {
             get { return _tmLanguageDirection.TranslationProvider; }
         }
-
-        public ImportResult[] UpdateTranslationUnitsMasked(TranslationUnit[] translationUnits, bool[] mask)
+			
+		public ImportResult[] UpdateTranslationUnitsMasked(TranslationUnit[] translationUnits, bool[] mask)
         {
             return _tmLanguageDirection.UpdateTranslationUnitsMasked(translationUnits, mask);
         }

@@ -43,6 +43,12 @@ namespace Sdl.Community.SdlFreshstart.Model
 			var pluginPath = Path.Combine(SdlFolder, $"{MajorVersion}{Edition}");
 			var programDataStudioFolderPath = Path.Combine(SdlFolder, ProgramDataStudioFolder);
 
+			var srPathPart = ExecutableVersion.Minor > 0 ? $"SR{ExecutableVersion.Minor}" : "";
+			var betaPath = version.Edition.ToLower().Equals("beta") ? "_Beta" : "";
+
+			ProgramDataPackagePath = Path.Combine(
+				Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Package Cache", ExecutableVersion.Major < 17 ? "SDL" : "Trados", $"{CacheFolderName}{srPathPart}{betaPath}", @"Modules");
+
 			ProgramDataLicenseFolder = Path.Combine(
 				Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
 				programDataStudioFolderPath);
@@ -83,12 +89,12 @@ namespace Sdl.Community.SdlFreshstart.Model
 			_logger.Info("Trying to get the Project API file path...");
 			var localProjectApiPath = Path.Combine(
 				Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				"SDL", "ProjectApi");
+				SdlFolder);
 
 			_logger.Info($"Local Project APi path: {localProjectApiPath}");
 			_logger.Info($"Major version: {MajorVersion}");
-			ProjectApiPath = Directory.GetDirectories(localProjectApiPath)
-				.FirstOrDefault(d => d.Contains(MajorVersion.ToString()));
+			ProjectApiPath = Directory.GetFiles(Path.Combine(localProjectApiPath, AppDataStudioFolder))
+				.FirstOrDefault(d => d.Contains("Sdl.ProjectApi.xml"));
 
 			_logger.Info($"Found ProjectAPI Path: {ProjectApiPath}");
 		}
@@ -149,6 +155,7 @@ namespace Sdl.Community.SdlFreshstart.Model
 
 		public string ProgramDataPluginsFolder { get; set; }
 		public string ProgramDataUpdatesFolder { get; set; }
+		public string ProgramDataPackagePath { get; }
 		public string ProgramDataLicenseFolder { get; set; }
 		public string ProjectApiPath { get; set; }
 		public string ProjectsXmlPath { get; set; }

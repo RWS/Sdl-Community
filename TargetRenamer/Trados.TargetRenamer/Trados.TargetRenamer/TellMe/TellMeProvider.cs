@@ -5,7 +5,7 @@ namespace Trados.TargetRenamer.TellMe
 	[TellMeProvider]
 	public class TellMeProvider : ITellMeProvider
 	{
-		public string Name => $"{PluginResources.TargetRenamer_Name} tell me provider";
+		public string Name => $"{PluginResources.TargetRenamer_Name} Tell Me provider";
 
         public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
         {
@@ -13,6 +13,14 @@ namespace Trados.TargetRenamer.TellMe
                 {
                     Keywords = new []{ $"{PluginResources.TargetRenamer_Name.ToLower()}", "help", "guide" }
                 },
-        };
+				new AppStoreForumAction
+			    {
+				    Keywords = new[] { "target", "renamer", "targetrenamer", "support", "forum" }
+			    },
+			    new AppStoreDownloadAction
+			    {
+				    Keywords = new[] { "target", "renamer", "targetrenamer", "store", "download", "appstore" }
+				}
+		};
     }
 }

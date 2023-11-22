@@ -6,8 +6,8 @@ namespace Sdl.Community.TMOptimizer.Control
 	/// <summary>
 	/// Interaction logic for OutputWizardPageControl.xaml
 	/// </summary>
-	public partial class OutputWizardPageControl : UserControl
-    {
+	public partial class OutputWizardPageControl : UserControl, IWizardPageControl
+	{
         public OutputWizardPageControl()
         {
             InitializeComponent();

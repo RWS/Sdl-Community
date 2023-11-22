@@ -65,16 +65,18 @@ namespace Sdl.Community.StudioViews.Services
 			return contextInfo;
 		}
 
-		public IAbstractMarkupData CreatePlaceholder(string tagId, string tagContent, ref List<string> existingTagIds)
+		public IAbstractMarkupData CreatePlaceholder(string tagId, string displayText, string tagContent, ref List<string> existingTagIds)
 		{
-			// Dev Notes: the tagContent is switched with the Display text to align with how the tags are 
-			// recreated by the XLIFF 1.2 parser from the framework
+			var textProperties = PropertiesFactory.CreatePlaceholderTagProperties(tagContent);
+			if (!string.IsNullOrEmpty(displayText))
+			{
+				textProperties.DisplayText = displayText;
+			}
 
-			var textProperties = PropertiesFactory.CreatePlaceholderTagProperties("<ph id=\"" + tagId + "\"/>");
-			textProperties.DisplayText = tagContent;
 			textProperties.SetMetaData("localName", "ph");
-			textProperties.SetMetaData("displayText", tagContent);
+			//textProperties.SetMetaData("displayText", displayText);
 			textProperties.SetMetaData("attribute:id", tagId);
+
 
 			if (existingTagIds.Contains(textProperties.TagId.Id))
 			{

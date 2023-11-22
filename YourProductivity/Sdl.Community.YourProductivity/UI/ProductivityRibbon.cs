@@ -24,7 +24,7 @@ namespace Sdl.Community.YourProductivity.UI
             if (!ProductivityUiHelper.IsGreaterThanCu10())
             {
                 MessageBox.Show(
-                    PluginResources.ProductivityViewPartAction_Execute_This_plugin_is_compatible_with_SDL_Studio_2014_CU10_or_later__In_order_to_enjoy_this_plugin_please_upgrade_to_a_newer_version_);
+                    PluginResources.ProductivityViewPartAction_Execute_This_plugin_is_compatible_with_Trados_Studio_2014_CU10_or_later__In_order_to_enjoy_this_plugin_please_upgrade_to_a_newer_version_);
                 return;
             }
             Application.EnableVisualStyles();

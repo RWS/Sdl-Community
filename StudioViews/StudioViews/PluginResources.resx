@@ -346,4 +346,7 @@
   <data name="Message_SelectYesToProceedWithImport" xml:space="preserve">
     <value>Select 'Yes' to close the document and proceed with the import.</value>
   </data>
+  <data name="Progress_Processing_0_of_1_files" xml:space="preserve">
+    <value>Processing {0} of {1} files</value>
+  </data>
 </root>

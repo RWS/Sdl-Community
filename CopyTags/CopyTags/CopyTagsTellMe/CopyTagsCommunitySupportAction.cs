@@ -12,7 +12,7 @@ namespace SDLCopyTags.CopyTagsTellMe
 		}
 		public override void Execute()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/f/160");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/f");
 		}
 
 		public override bool IsAvailable => true;

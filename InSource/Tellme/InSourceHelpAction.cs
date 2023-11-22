@@ -12,7 +12,7 @@ namespace Sdl.Community.InSource.Tellme
 		}
 		public override void Execute()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3267/trados-insource");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3267/trados-insource");
 		}
 
 		public override bool IsAvailable => true;

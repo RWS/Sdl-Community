@@ -5,7 +5,7 @@ namespace Sdl.Community.IATETerminologyProvider.Model
 {
 	public class PathInfo
 	{
-		private const string RWSAppStorePathName = "RWS AppStore";
+		private const string RWSAppStorePathName = "Trados AppStore";
 		private const string ApplicationPathName = "IATETerminologyProvider";
 		private const string TemporaryStoragePathName = "TemporaryStorage";
 		private const string DbaseCachePathName = "Cache";

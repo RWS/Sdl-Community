@@ -179,7 +179,7 @@
     <value>Sign In</value>
   </data>
   <data name="Label_OK" xml:space="preserve">
-    <value>OK</value>
+    <value>Sign out</value>
   </data>
   <data name="Message_Invalid_credentials" xml:space="preserve">
     <value>Invalid credentials!</value>
@@ -233,13 +233,13 @@
     <value>The LanguageCloudIdentityApi is not implemented!</value>
   </data>
   <data name="SDLMTCloud_Provider_Description" xml:space="preserve">
-    <value>Language Weaver provider</value>
+    <value>Language Weaver Provider</value>
   </data>
   <data name="SDLMTCloud_Provider_Name" xml:space="preserve">
-    <value>Language Weaver provider</value>
+    <value>Language Weaver</value>
   </data>
   <data name="SDLMTCloud_RibbonGroup_Name" xml:space="preserve">
-    <value>Language Weaver provider</value>
+    <value>Language Weaver Provider</value>
   </data>
   <data name="SDLMTCloud_Action_LanguageMapping_Description" xml:space="preserve">
     <value>Language Weaver Language Mapping</value>
@@ -415,10 +415,28 @@ Response from Language Weaver:
   <data name="Label_AccountRegion" xml:space="preserve">
     <value>Account region:</value>
   </data>
-  <data name="SDLMTCloud_Provider_OldName2" xml:space="preserve">
-    <value>Language Weaver Cloud provider</value>
-  </data>
   <data name="ClickingHere" xml:space="preserve">
     <value>here</value>
+  </data>
+  <data name="InvalidPath" xml:space="preserve">
+    <value>Invalid path</value>
+  </data>
+  <data name="InvalidPathInFileName" xml:space="preserve">
+    <value>The path to file {0} is invalid or doesn't exist!</value>
+  </data>
+  <data name="InvalidPathOrDirectoryDoesntExist" xml:space="preserve">
+    <value>The path {0} is invalid or doesn't exist! </value>
+  </data>
+  <data name="InvalidPathOrFileDoesntExist" xml:space="preserve">
+    <value>Invalid path or file name</value>
+  </data>
+  <data name="Message_No_LO_available" xml:space="preserve">
+    <value>No linguistic options available</value>
+  </data>
+  <data name="OriginSystem_LWC" xml:space="preserve">
+    <value>Language Weaver Provider</value>
+  </data>
+  <data name="RateItViewModel_SetOptionTooltip_No_shortcut_was_set" xml:space="preserve">
+    <value>No shortcut was set in Studio for this option</value>
   </data>
 </root>

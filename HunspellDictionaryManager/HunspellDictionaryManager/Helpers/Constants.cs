@@ -4,7 +4,7 @@ namespace Sdl.Community.HunspellDictionaryManager.Helpers
 {
 	public static class Constants
 	{
-		public static readonly string BackupFolderPath = string.Format(@"C:\Users\{0}\AppData\Roaming\RWS AppStore", Environment.UserName);
+		public static readonly string BackupFolderPath = string.Format(@"C:\Users\{0}\AppData\Roaming\Trados AppStore", Environment.UserName);
 		public static readonly string Backup2022HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2022\HunspellDictionaries";
 		public static readonly string Restore2022HunspellDicFolderPath = @"HunspellDictionaryManager\Studio2022\RestoreHunspellDictionaries";
 
@@ -16,7 +16,7 @@ namespace Sdl.Community.HunspellDictionaryManager.Helpers
 		public static readonly string GreenColor = "#30c23f";
 		public static readonly string ConfigFileName = "spellcheckmanager_config.xml";
 
-		public static readonly string HelpLink = "https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3316.hunspell-dictionary-manager";
+		public static readonly string HelpLink = "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3316/hunspell-dictionary-manager";
 		public static readonly string Studio2022ErrorMessage = "Application error occured: Studio 2022 needs to be installed!";
 
 		public static readonly string InformativeMessage = "Informative message";

@@ -24,5 +24,6 @@ namespace Sdl.Community.SdlFreshstart.Model
 		string ShortVersion { get; set; }
 		string Edition { get; set; }
 		string CacheFolderName { get; }
+		string ProgramDataPackagePath { get; }
 	}
 }

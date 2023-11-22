@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -65,36 +65,28 @@
   <ItemGroup>
     <Reference Include="DocumentFormat.OpenXml">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\DocumentFormat.OpenXml.dll</HintPath>
-      
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.dll</HintPath>
-      
-      
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-      
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
-      
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
-      
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Core.dll</HintPath>
-      
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.FileBased.dll</HintPath>
-      
-      
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-      
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
-      
     </Reference>
     <Reference Include="Studio.Time.Tracker.ObjectListView, Version=2.7.0.33772, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>ThirdParty\objectListView\Studio.Time.Tracker.ObjectListView.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -109,6 +101,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TellMe\AppStoreDownloadAction.cs" />
+    <Compile Include="TellMe\AppStoreForumAction.cs" />
+    <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="Tracking\Tracked.cs" />
     <Compile Include="Custom\ComboboxItem.cs" />
     <Compile Include="Dialogs\ExportActivitesToExcel.cs">
@@ -240,8 +236,11 @@
     <Content Include="Resources\Button-Pause-yellow.ico" />
     <Content Include="Resources\Button-Stop-blue.ico" />
     <Content Include="Resources\Chart-Bar-Document.ico" />
+    <Content Include="Resources\Download.ico" />
     <Content Include="Resources\Excel.ico" />
+    <Content Include="Resources\ForumIcon.ico" />
     <Content Include="Resources\Ms-Excel.ico" />
+    <Content Include="Resources\Question.ico" />
     <Content Include="Resources\StartTimer.ico" />
     <Content Include="Resources\StopTimer.ico" />
     <Content Include="Resources\Book-Add.ico" />

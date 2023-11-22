@@ -11,14 +11,13 @@ using Sdl.Community.MTCloud.Languages.Provider;
 using Sdl.Community.MTCloud.Provider.Commands;
 using Sdl.Community.MTCloud.Provider.Helpers;
 using Sdl.Community.MTCloud.Provider.Model;
-using Sdl.Community.MTCloud.Provider.Studio;
 using Sdl.Community.MTCloud.Provider.Studio.TranslationProvider;
 using Sdl.Community.MTCloud.Provider.View;
 using Sdl.LanguagePlatform.Core;
 using Application = System.Windows.Forms.Application;
 using Cursors = System.Windows.Input.Cursors;
-using MessageBox = System.Windows.Forms.MessageBox;
 using LogManager = NLog.LogManager;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace Sdl.Community.MTCloud.Provider.ViewModel
 {
@@ -31,7 +30,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		private ICommand _saveCommand;
 		private ICommand _resetToDefaultsCommand;
 		private ICommand _viewLanguageMappingsCommand;
-		private ICommand _navigateToWikiCommand;
+		private ICommand _navigateToCommand;
 
 		private bool _reSendChecked;
 		private LanguageMappingModel _selectedLanguageMappingModel;
@@ -52,20 +51,13 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			LoadLanguageMappings();
 		}
 
-		public ICommand SaveCommand => _saveCommand ?? (_saveCommand = new RelayCommand(Save));
-		public ICommand NavigateToWikiCommand => _navigateToWikiCommand ?? (_navigateToWikiCommand = new RelayCommand(NavigateToWiki));
+		public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save);
 
-		private void NavigateToWiki(object obj)
-		{
-			Process.Start(
-				"https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/5561/rating-translations");
-		}
+		public ICommand NavigateToCommand => _navigateToCommand ??= new RelayCommand(NavigateTo);
 
-		public ICommand ResetToDefaultsCommand => _resetToDefaultsCommand
-														?? (_resetToDefaultsCommand = new RelayCommand(ResetToDefaults));
+		public ICommand ResetToDefaultsCommand => _resetToDefaultsCommand ??= new RelayCommand(ResetToDefaults);
 
-		public ICommand ViewLanguageMappingsCommand => _viewLanguageMappingsCommand
-														?? (_viewLanguageMappingsCommand = new RelayCommand(ViewLanguageMappings));
+		public ICommand ViewLanguageMappingsCommand => _viewLanguageMappingsCommand ??= new RelayCommand(ViewLanguageMappings);
 
 		public Window Owner { get; }
 
@@ -83,7 +75,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				}
 
 				_languageMappingModels = value;
-
 				if (_languageMappingModels != null)
 				{
 					foreach (var languageMappingModel in _languageMappingModels)
@@ -126,7 +117,7 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			get => _sendFeedback;
 			set
 			{
-				_sendFeedback = value; 
+				_sendFeedback = value;
 				OnPropertyChanged(nameof(SendFeedback));
 			}
 		}
@@ -147,9 +138,9 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 			{
 				return;
 			}
+
 			var languages = _provider.LanguageProvider.GetMappedLanguages();
 			var languageMappingModels = new List<LanguageMappingModel>();
-
 			foreach (var languagePair in _languagePairs)
 			{
 				var languageMappingModel = _provider.GetLanguageMappingModel(languagePair, languages);
@@ -166,9 +157,6 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 		{
 			try
 			{
-				ReSendChecked = true;
-				SendFeedback = true;
-
 				_provider.Options = new Options();
 
 				IsWaiting = true;
@@ -177,16 +165,38 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 					Mouse.OverrideCursor = Cursors.Wait;
 				}
 
-				if (LanguageMappingModels != null)
+				if (LanguageMappingModels is null)
 				{
+					return;
+				}
+
+				var selectedIndex = LanguageMappingModels.IndexOf(SelectedLanguageMappingModel);
+				if ((parameter as string) == "ResetSelected" && SelectedLanguageMappingModel is not null)
+				{
+					var selectedLanguageMappingModelName = SelectedLanguageMappingModel.Name;
+					var originalLanguageMappingModels = LanguageMappingModels.Where(x => x.Name != SelectedLanguageMappingModel.Name).ToList();
 					LanguageMappingModels.Clear();
 					LoadLanguageMappings();
 
-					if (Owner != null)
-					{
-						System.Windows.MessageBox.Show(PluginResources.Message_Successfully_reset_to_defaults,
-							Application.ProductName, MessageBoxButton.OK, MessageBoxImage.Information);
-					}
+					originalLanguageMappingModels.Insert(selectedIndex, LanguageMappingModels.FirstOrDefault(x => x.Name.Equals(selectedLanguageMappingModelName)));
+					LanguageMappingModels = new(originalLanguageMappingModels);
+					SelectedLanguageMappingModel = LanguageMappingModels.ElementAt(selectedIndex) ?? LanguageMappingModels.FirstOrDefault();
+
+					System.Windows.MessageBox.Show($"{PluginResources.Message_Successfully_reset_to_defaults} the selected model",
+						Application.ProductName, MessageBoxButton.OK, MessageBoxImage.Information);
+				}
+				else if ((parameter as string) == "ResetSelected" && SelectedLanguageMappingModel is null)
+				{
+					System.Windows.MessageBox.Show("Please select a model to reset",
+						Application.ProductName, MessageBoxButton.OK, MessageBoxImage.Warning);
+				}
+				else
+				{
+					LanguageMappingModels.Clear();
+					LoadLanguageMappings();
+					SelectedLanguageMappingModel = LanguageMappingModels.ElementAt(selectedIndex) ?? LanguageMappingModels.FirstOrDefault();
+					System.Windows.MessageBox.Show(PluginResources.Message_Successfully_reset_to_defaults,
+						Application.ProductName, MessageBoxButton.OK, MessageBoxImage.Information);
 				}
 			}
 			catch (Exception ex)
@@ -298,6 +308,28 @@ namespace Sdl.Community.MTCloud.Provider.ViewModel
 				{
 					Mouse.OverrideCursor = Cursors.Arrow;
 				}
+			}
+		}
+
+		private void NavigateTo(object parameter)
+		{
+			const string WikiUrl = "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/5561/rating-translations";
+			const string AccountUrl_UE = "https://portal.languageweaver.com/settings/account";
+			const string AccountUrl_US = "https://us.portal.languageweaver.com/settings/account";
+
+			var region = _provider.TranslationService.ConnectionService.Credential.AccountRegion.ToString().ToLower();
+			switch (parameter as string)
+			{
+				case "wiki":
+					Process.Start(WikiUrl);
+					break;
+
+				case "account":
+					Process.Start(region.Contains("us") ? AccountUrl_US : AccountUrl_UE);
+					break;
+
+				default:
+					break;
 			}
 		}
 

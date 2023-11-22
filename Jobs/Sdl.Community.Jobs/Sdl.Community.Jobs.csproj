@@ -47,6 +47,9 @@
     <Reference Include="Sdl.ProjectAutomation.Settings">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
+		<Reference Include="Sdl.TellMe.ProviderApi">
+			<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
+		</Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -85,6 +88,12 @@
     <PackageReference Include="Sdl.Core.PluginFramework.Build">
       <Version>17.0.0</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="PluginResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>

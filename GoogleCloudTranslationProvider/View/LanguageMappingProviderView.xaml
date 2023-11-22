@@ -1,0 +1,148 @@
+﻿<Window x:Class="GoogleCloudTranslationProvider.View.LanguageMappingProviderView"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:root="clr-namespace:GoogleCloudTranslationProvider"
+		xmlns:views="clr-namespace:GoogleCloudTranslationProvider.Views"
+		xmlns:styles="clr-namespace:GoogleCloudTranslationProvider.Styles"
+		xmlns:helpers="clr-namespace:GoogleCloudTranslationProvider.Helpers"
+		xmlns:uiHelpers="clr-namespace:GoogleCloudTranslationProvider.UiHelpers"
+		xmlns:behaviours="clr-namespace:GoogleCloudTranslationProvider.Behaviours"
+		xmlns:converters="clr-namespace:GoogleCloudTranslationProvider.Converters"
+		xmlns:viewmodel="clr-namespace:GoogleCloudTranslationProvider.ViewModel"
+		mc:Ignorable="d"
+		d:DataContext="{d:DesignInstance viewmodel:LanguageMappingProviderViewModel}"
+		Title="LanguageMappingProviderView"
+		WindowStartupLocation="CenterScreen"
+		WindowStyle="None"
+		MinWidth="750"
+		Width="800"
+		MinHeight="420"
+		Height="600">
+
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="../UiHelpers/WatermarkTextBoxResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+
+			<Style TargetType="Image">
+				<Setter Property="RenderOptions.BitmapScalingMode"
+						Value="HighQuality" />
+			</Style>
+
+		</ResourceDictionary>
+	</Window.Resources>
+
+	<Border Style="{StaticResource WindowControlBorderStyle}">
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+
+			<styles:WindowsControl Grid.Row="0" />
+
+			<TextBox Grid.Row="1"
+					 Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}"
+					 Style="{StaticResource WatermarkTextBox}"
+					 BorderBrush="#FFBFCDD4"
+					 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.LMP_Filter_Watermark}"
+					 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+					 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=Filter, Type={x:Type viewmodel:LanguageMappingProviderViewModel}}"
+					 HorizontalAlignment="Right"
+					 Width="232" 
+					 Margin="16 12 16 0"/>
+
+			<DataGrid ItemsSource="{Binding FilteredMappedLanguages}"
+					  SelectedItem="{Binding SelectedMappedLanguage}"
+					  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+					  BorderThickness="1"
+					  BorderBrush="#FFBFCDD4"
+					  AutoGenerateColumns="False"
+					  Grid.Row="2"
+					  HorizontalAlignment="Stretch"
+					  ScrollViewer.VerticalScrollBarVisibility="Auto"
+					  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+					  CanUserSortColumns="True"
+					  CanUserAddRows="False"
+					  CanUserDeleteRows="False"
+					  Margin="16 16 16 0">
+				<DataGrid.Columns>
+					<DataGridTextColumn Header="{x:Static root:PluginResources.LMP_Table_Header_Language}"
+										Binding="{Binding Path=Name}"
+										IsReadOnly="True"
+										Width="2*" />
+					<DataGridTextColumn Header="{x:Static root:PluginResources.LMP_Table_Header_Region}"
+										Binding="{Binding Path=Region}"
+										IsReadOnly="True"
+										Width="2*" />
+					<DataGridTextColumn Header="{x:Static root:PluginResources.LMP_Table_Header_TradosCode}"
+										Binding="{Binding Path=TradosCode}"
+										IsReadOnly="True"
+										Width="1*" />
+					<DataGridTextColumn Header="{x:Static root:PluginResources.LMP_Table_Header_LanguageCode}"
+										Binding="{Binding Path=LanguageCode, UpdateSourceTrigger=PropertyChanged}"
+										IsReadOnly="False"
+										Width="1*" />
+				</DataGrid.Columns>
+			</DataGrid>
+
+			<TextBlock Text="{Binding LanguagesCountMessage}"
+					   Grid.Row="3"
+					   VerticalAlignment="Top"
+					   Margin="16 6" />
+
+			<Button Content="{x:Static root:PluginResources.LMP_NavigateToLanguageCodes_Message}"
+					Command="{Binding OpenHyperlinkCommand}"
+					CommandParameter="{x:Static root:Constants.LanguageCodesUri}"
+					ToolTip="{x:Static root:Constants.LanguageCodesUri}"
+					Style="{StaticResource Sdl.Button.HyperLinkStyle}"
+					Grid.Row="3"
+					VerticalAlignment="Top"
+					HorizontalAlignment="Right"
+					Margin="16 6" />
+
+			<Separator Grid.Row="4"
+					   VerticalAlignment="Top"
+					   Background="#FFBFCDD4" />
+
+			<Button Content="{x:Static root:PluginResources.LMP_Button_Reset}"
+					Command="{Binding ResetToDefaultCommand}"
+					Style="{StaticResource Sdl.Button.SecondaryStyle}"
+					IsEnabled="{Binding CanResetToDefaults}"
+					Grid.Row="4"
+					HorizontalAlignment="Left"
+					Cursor="Hand"
+					Width="120"
+					Margin="16" />
+
+			<StackPanel Grid.Row="4"
+						Orientation="Horizontal"
+						HorizontalAlignment="Right"
+						Margin="16">
+				
+				<Button Content="{x:Static root:PluginResources.LMP_Button_ApplyChanges}"
+						Command="{Binding ApplyChangesCommand}"
+						Style="{StaticResource Sdl.Button.SecondaryStyle}"
+						Cursor="Hand"
+						Width="120"
+						Margin="0 0 16 0" />
+
+				<Button Content="{x:Static root:PluginResources.LMP_Button_CloseApp}"
+						Command="{Binding CloseApplicationCommand}"
+						Style="{StaticResource Sdl.Button.SecondaryStyle}"
+						Cursor="Hand"
+						Width="120" />
+			</StackPanel>
+		</Grid>
+	</Border>
+
+</Window>

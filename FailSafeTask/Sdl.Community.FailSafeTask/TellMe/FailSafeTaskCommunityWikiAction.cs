@@ -12,12 +12,12 @@ namespace Sdl.Community.FailSafeTask.TellMe
 
 		public FailSafeTaskCommunityWikiAction()
 		{
-			Name = "SDL Community File safe task plugin wiki";
+			Name = "RWS Community File safe task plugin wiki";
 		}
 
 		public override void Execute()
 		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/4038.fail-safe-task");
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/4038/fail-safe-task");
 		}
 	}
 }

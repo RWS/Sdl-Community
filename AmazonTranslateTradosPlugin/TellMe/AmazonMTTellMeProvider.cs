@@ -5,7 +5,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin.TellMe
 	[TellMeProvider]
 	public class AmazonMTTellMeProvider : ITellMeProvider
 	{
-		public string Name => "Amazon Translate MT Provider tell me provider";
+		public string Name => "Amazon Translate MT Provider Tell Me provider";
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{

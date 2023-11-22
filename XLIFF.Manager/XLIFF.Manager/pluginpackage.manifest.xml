@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>XLIFF Manager for Trados Studio</PlugInName>
-	<Version>2.1.3.0</Version>
+	<Version>3.1.2.1</Version>
 	<Description>XLIFF Manager for Trados Studio</Description>
-	<Author>RWS AppStore Team</Author>
-	<RequiredProduct name="SDLTradosStudio" minversion="16.1" maxversion="16.9"/>
+	<Author>Trados AppStore Team</Author>
+	<RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9"/>
 	<Include>
 		<File>Rws.MultiSelectComboBox.dll</File>
-		<File>Sdl.Community.Toolkit.LanguagePlatform.dll</File>
-		<File>Sdl.Community.Toolkit.Core.dll</File>
+		<File>Trados.Community.Toolkit.LanguagePlatform.dll</File>
+		<File>Trados.Community.Toolkit.Core.dll</File>
 	</Include>
 </PluginPackage>

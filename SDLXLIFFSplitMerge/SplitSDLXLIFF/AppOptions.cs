@@ -76,7 +76,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF
 
         private static string GetSettingsPath()
         {
-            string generatorFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SDL\\OpenExchange\\SplitSDLXLIFF";
+            string generatorFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Trados\\OpenExchange\\SplitSDLXLIFF";
             if (!Directory.Exists(generatorFolder))
             {
                 Directory.CreateDirectory(generatorFolder);

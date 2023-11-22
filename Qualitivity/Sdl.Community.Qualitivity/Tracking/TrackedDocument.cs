@@ -40,6 +40,8 @@ namespace Sdl.Community.Qualitivity.Tracking
 		public string Name { get; set; }
 		public string Path { get; set; }
 
+		public string ProductName { get; set; }
+
 		public string SourceLanguage { get; set; }
 		public string TargetLanguage { get; set; }
 
@@ -71,12 +73,14 @@ namespace Sdl.Community.Qualitivity.Tracking
 
 				if (SourceLanguage == null || TargetLanguage == null)
 				{
-					throw new Exception(string.Format("Unable to parse the file; {0} langauge cannot be null!", SourceLanguage == null ? "Source" : "Target"));
+					throw new Exception(string.Format("Unable to parse the file; {0} language cannot be null!", SourceLanguage == null ? "Source" : "Target"));
 				}
+
+				var pathInfo = new Trados.Community.Toolkit.LanguagePlatform.Models.PathInfo(ProductName);
 
 				_segmentPairProcessor = new SegmentPairProcessor(
 					new Trados.Community.Toolkit.LanguagePlatform.Models.Settings(new CultureInfo(SourceLanguage), new CultureInfo(TargetLanguage)),
-					new Trados.Community.Toolkit.LanguagePlatform.Models.PathInfo());
+					pathInfo);
 
 				return _segmentPairProcessor;
 			}

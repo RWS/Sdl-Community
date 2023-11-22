@@ -17,5 +17,11 @@ namespace CustomViewExample.Ribbon
 		public class ActionsGroup : AbstractRibbonGroup
 		{
 		}
+
+		[RibbonGroup("CustomViewExample_EditorActionsGroup", "CustomViewExample_EditorActionsGroup_Name")]
+		[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.EditorReviewRibbonTabLocation))]
+		public class EditorActionsGroup : AbstractRibbonGroup
+		{
+		}
 	}
 }
