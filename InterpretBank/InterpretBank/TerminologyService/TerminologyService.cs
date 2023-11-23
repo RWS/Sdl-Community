@@ -84,6 +84,11 @@ public class TerminologyService : ITerminologyService
         InterpretBankDataContext.UpdateTerm(termChange);
     }
 
+    public int? AddTerm(string source, string target, string glossaryName, string sourceLanguage, string targetLanguage)
+    {
+        return InterpretBankDataContext.InsertTerm(source, target, glossaryName, sourceLanguage, targetLanguage);
+    }
+
     public List<StudioTermEntry> GetExactTerms(string word, string sourceLanguage, string targetLanguage, List<string> glossaries)
     {
         var sourceLanguageIndex = GetLanguageIndex(sourceLanguage);

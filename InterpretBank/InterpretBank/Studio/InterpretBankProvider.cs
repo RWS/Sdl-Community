@@ -110,6 +110,7 @@ public class InterpretBankProvider : AbstractTerminologyProvider
         var words = Regex.Split(text, "\\s+");
 
         List<ISearchResult> results = null;
+        Entries.Clear();
         foreach (var word in words)
         {
             results = mode switch
@@ -141,6 +142,7 @@ public class InterpretBankProvider : AbstractTerminologyProvider
     /// <param name="score"></param>
     private void AddResultToList(ILanguage destination, List<ISearchResult> results, List<StudioTermEntry> terms, int score)
     {
+        if (!terms.Any()) return;
         var id = GetIndex();
         results.Add(new SearchResult { Id = (int)terms[0].Id, Score = score, Text = terms[0].SearchText });
         Entries.Add(CreateEntry((int)terms[0].Id, terms, destination.Name));
@@ -180,6 +182,7 @@ public class InterpretBankProvider : AbstractTerminologyProvider
 
     private List<ISearchResult> GetFuzzyTerms(ILanguage source, ILanguage destination, string word)
     {
+
         var terms = TermSearchService.GetFuzzyTerms(word, source.Name, destination.Name, Settings.Glossaries);
 
         var results = new List<ISearchResult>();

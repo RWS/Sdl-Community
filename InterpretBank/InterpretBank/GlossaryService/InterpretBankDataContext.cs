@@ -265,6 +265,35 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         SubmitData();
     }
 
+    public int InsertTerm(string source, string target, string glossaryName, string sourceLanguage, string targetLanguage)
+    {
+        var newEntry = new DbGlossaryEntry
+        {
+            Id = GetMaxId<DbGlossaryEntry>() + 1,
+            Tag1 = glossaryName,
+            [$"Term{GetLanguageIndex(sourceLanguage)}"] = source,
+            [$"Term{GetLanguageIndex(targetLanguage)}"] = target,
+        };
+
+        InsertEntity(newEntry);
+        return newEntry.Id;
+    }
+
+    public void InsertEntity<T>(T entity) where T : class, IInterpretBankTable
+    {
+        switch (entity)
+        {
+            case DbGlossaryEntry entry:
+                GetTable<T>().InsertOnSubmit(entity);
+                break;
+
+            case DbGlossary glossary:
+                break;
+        }
+
+        SubmitData();
+    }
+
     //public void UpdateTerms(List<TermModel> terms)
     //{
     //    var termsIds = terms.Select(t => t.Id).ToList();

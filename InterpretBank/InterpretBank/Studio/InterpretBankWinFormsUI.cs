@@ -45,8 +45,7 @@ internal class InterpretBankWinFormsUI : ITerminologyProviderWinFormsUI
 
     public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
     {
-        var provider = terminologyProvider as InterpretBankProvider;
-        if (provider == null)
+        if (terminologyProvider is not InterpretBankProvider provider)
             return false;
 
         var settingsUi = InterpretBankSettingsScope.Resolve<SettingsMain>();

@@ -50,4 +50,5 @@ public interface IInterpretBankDataContext : IDisposable
 
     void TagGlossary(TagModel newTag, string glossaryName);
     void UpdateTerm(TermChange termChange);
+    int InsertTerm(string source, string target, string glossaryName, string sourceLanguage, string targetLanguage);
 }

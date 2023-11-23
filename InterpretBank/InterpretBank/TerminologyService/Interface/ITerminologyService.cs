@@ -25,5 +25,6 @@ namespace InterpretBank.TerminologyService.Interface
         void Setup(string settingsDatabaseFilepath);
         ObservableCollection<EntryModel> GetEntriesFromDb(List<string> glossaries);
         void UpdateTerm(TermChange termChange);
+        int? AddTerm(string source, string target, string glossaryName, string sourceLanguage, string targetLanguage);
     }
 }

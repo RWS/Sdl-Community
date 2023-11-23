@@ -99,6 +99,11 @@ namespace InterpretBank.TermbaseViewer.ViewModel
         public void AddTerm(string source, string target)
         {
             var glossaryNameFromUser = UserInteractionService.GetGlossaryNameFromUser(Glossaries);
+            if (string.IsNullOrWhiteSpace(glossaryNameFromUser)) return;
+
+            var newTermId = TerminologyService.AddTerm(source, target, glossaryNameFromUser, SourceLanguageName, TargetLanguageName);
+
+            if (newTermId is not null)
         }
 
         public void LoadTerms()
