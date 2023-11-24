@@ -32,7 +32,7 @@ namespace Sdl.Community.TermExcelerator.Tests
             Assert.Equal(1, results.Count);
             var actualResult = results.First();
             Assert.Equal(expectedId, actualResult.Id );
-            Assert.Equal(providerSettings.SourceLanguage, 
+            Assert.Equal(providerSettings.SourceLanguage.ToString(), 
                 actualResult.Language.Locale);
 
         }
