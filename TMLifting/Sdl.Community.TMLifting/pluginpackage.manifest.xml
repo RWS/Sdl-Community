@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>TM Lifting</PlugInName>
-  <Version>4.0.3.0</Version>
+  <Version>4.2.0.0</Version>
   <Description>This plugin supports the reindexing of multiple TMs at once, building a translation model and aligning the fragments for upLIFT.</Description>
   <Author>Trados AppStore Team</Author>
-  <RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
+  <RequiredProduct name="TradosStudio" minversion="17.2" maxversion="17.9" />
  </PluginPackage>
