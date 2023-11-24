@@ -102,7 +102,7 @@ namespace Sdl.Community.TMLifting
 				var translationProvider = new TranslationProviderServer(uriServer, false,
 											Properties.Settings.Default.UserName,
 											Properties.Settings.Default.Password);
-				var translationMemories = translationProvider.GetTranslationMemories(TranslationMemoryProperties.None);
+				var translationMemories = translationProvider.GetTranslationMemories();
 				var tmDetails = new List<TranslationMemoryDetails>();
 
 				foreach (var tm in translationMemories)
@@ -116,7 +116,6 @@ namespace Sdl.Community.TMLifting
 						Location = tm.ParentResourceGroupPath,
 						Size = tm.GetTranslationUnitCount()
 					});
-					var result = tm.CurrentReindexOperation;
 				}
 				var sortedBindingList = new SortableBindingList<TranslationMemoryDetails>(tmDetails);
 				gridServerBasedTMs.DataSource = sortedBindingList;
