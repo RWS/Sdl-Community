@@ -38,9 +38,9 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
 
         }
 
-		//CultureCode ITranslationProviderLanguageDirection.SourceLanguage => _languageDirection.SourceCulture;
+		CultureCode ITranslationProviderLanguageDirection.SourceLanguage => _languageDirection.SourceCulture;
 
-		//CultureCode ITranslationProviderLanguageDirection.TargetLanguage => _languageDirection.TargetCulture;
+		CultureCode ITranslationProviderLanguageDirection.TargetLanguage => _languageDirection.TargetCulture;
 
 		public System.Globalization.CultureInfo SourceLanguage => _languageDirection.SourceCulture;
 
