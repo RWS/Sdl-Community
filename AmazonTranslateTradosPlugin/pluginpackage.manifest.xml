@@ -1,12 +1,12 @@
 
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Amazon Translate MT provider</PlugInName>
-  <Version>4.1.1.0</Version>
+  <Version>4.1.2.0</Version>
   <Description>This plugin provides machine translation from the Amazon Translate Service AWS.</Description>
   <Author>Trados AppStore Team</Author>
 	<Include>
 		<File>AWSSDK.Core.dll</File>
 		<File>AWSSDK.Translate.dll</File>
 	</Include>
-  <RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9" />
+  <RequiredProduct name="TradosStudio" minversion="17.2" maxversion="17.1.9" />
 </PluginPackage>
