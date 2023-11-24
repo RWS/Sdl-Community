@@ -32,6 +32,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+	<PropertyGroup>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
+		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17</TradosFolder>
+	</PropertyGroup>
   <ItemGroup>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
@@ -157,8 +161,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
-    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17Beta\Plugins</PluginDeploymentPath>
-    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17Beta</TradosFolder>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
