@@ -20,8 +20,8 @@ namespace Sdl.Community.TermExcelerator.Tests
 
 			//assert
 			Assert.Equal(2, entryLanguages.Count);
-			Assert.Equal(entryLanguages[0].Locale, sampleExcelTerm.SourceCulture);
-			Assert.Equal(entryLanguages[1].Locale, sampleExcelTerm.TargetCulture);
+			Assert.Equal(entryLanguages[0].Locale, sampleExcelTerm.SourceCulture.ToString());
+			Assert.Equal(entryLanguages[1].Locale, sampleExcelTerm.TargetCulture.ToString());
 
 		}
 
