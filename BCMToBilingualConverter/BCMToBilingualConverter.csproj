@@ -12,7 +12,7 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-	  <TradosTarget>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17Beta\</TradosTarget>
+	  <TradosTarget>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\</TradosTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
