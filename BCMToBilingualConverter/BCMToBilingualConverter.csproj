@@ -19,7 +19,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\..\Program Files %28x86%29\Trados\Trados Studio\Studio17\</OutputPath>
+    <OutputPath>$(TradosTarget)</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -28,7 +28,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\..\Program Files %28x86%29\Trados\Trados Studio\Studio17\</OutputPath>
+    <OutputPath>$(TradosTarget)</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -36,34 +36,34 @@
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>${TradosTarget}\Newtonsoft.Json.dll</HintPath>
+      <HintPath>$(TradosTarget)\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Bcm.BcmConverters">
-      <HintPath>${TradosTarget}\Sdl.Core.Bcm.BcmConverters.dll</HintPath>
+      <HintPath>$(TradosTarget)\Sdl.Core.Bcm.BcmConverters.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Bcm.BcmModel">
-      <HintPath>${TradosTarget}\Sdl.Core.Bcm.BcmModel.dll</HintPath>
+      <HintPath>$(TradosTarget)\Sdl.Core.Bcm.BcmModel.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization">
-      <HintPath>${TradosTarget}\Sdl.Core.Globalization.dll</HintPath>
+      <HintPath>$(TradosTarget)\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization.Async">
-      <HintPath>${TradosTarget}\Sdl.Core.Globalization.Async.dll</HintPath>
+      <HintPath>$(TradosTarget)\Sdl.Core.Globalization.Async.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Settings">
-      <HintPath>${TradosTarget}\Sdl.Core.Settings.dll</HintPath>
+      <HintPath>$(TradosTarget)\Sdl.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Bilingual.SdlXliff">
-      <HintPath>${TradosTarget}\Sdl.FileTypeSupport.Bilingual.SdlXliff.dll</HintPath>
+      <HintPath>$(TradosTarget)\Sdl.FileTypeSupport.Bilingual.SdlXliff.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <HintPath>${TradosTarget}\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+      <HintPath>$(TradosTarget)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
-      <HintPath>${TradosTarget}\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
+      <HintPath>$(TradosTarget)\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
-      <HintPath>${TradosTarget}\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
+      <HintPath>$(TradosTarget)\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
