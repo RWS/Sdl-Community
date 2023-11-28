@@ -115,25 +115,11 @@ namespace InterpretBank.TermbaseViewer.ViewModel
                 TerminologyService.AddTerm(source, target, glossaryName, SourceLanguageName, TargetLanguageName);
             if (!IsActionSuccessful(addTermActionResult)) return;
 
-            //var entryModel = new EntryModel
-            //{
-            //    Id = addTermActionResult.Result,
-            //    GlossaryName = glossaryName,
-            //    Terms = new()
-            //    {
-            //        new()
-            //        {
-            //            LanguageFlag = SourceLanguageFlag, LanguageName = SourceLanguageName, Term = source
-            //        },
-            //        new()
-            //        {
-            //            LanguageFlag = TargetLanguageFlag, LanguageName = TargetLanguageName, Term = target
-            //        }
-            //    }
-            //};
+            var newEntryModel = addTermActionResult.Result;
+            newEntryModel.GlossaryName = glossaryName;
 
-            SetEntryName(addTermActionResult.Result);
-            Entries.Add(addTermActionResult.Result);
+            SetEntryName(newEntryModel);
+            Entries.Add(newEntryModel);
         }
 
         public void LoadTerms()
