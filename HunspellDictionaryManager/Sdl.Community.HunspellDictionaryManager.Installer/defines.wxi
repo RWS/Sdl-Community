@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Include>
-  <?define productVersion = "4.0.0.0"?>
+  <?define productVersion = "4.2.0.0"?>
   <?define versionedName = "Studio17"?>
   <!--Upgrade code only change per new baseline (rtm or SP release).-->
   <?define upgradeCode = "F6741828-198D-43B2-A0F8-2D96C5443390"?>
