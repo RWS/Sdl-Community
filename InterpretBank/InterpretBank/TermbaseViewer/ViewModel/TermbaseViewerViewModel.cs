@@ -97,6 +97,11 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
         private ITerminologyService TerminologyService { get; set; }
 
+        public void LoadTerms()
+        {
+            Entries = TerminologyService.GetEntriesFromDb(Glossaries);
+        }
+
         public void OpenAddTermPopup(string source, string target)
         {
             UserInteractionService.GetNewTermDetailsFromUser(Glossaries, SourceLanguageName, TargetLanguageName, source,
@@ -104,27 +109,6 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
             UserInteractionService.GotTermDetailsEvent -= AddTerm;
             UserInteractionService.GotTermDetailsEvent += AddTerm;
-        }
-       
-        private void AddTerm(string source, string target, string glossaryName)
-        {
-            UserInteractionService.GotTermDetailsEvent -= AddTerm;
-            if (string.IsNullOrWhiteSpace(glossaryName)) return;
-
-            var addTermActionResult =
-                TerminologyService.AddTerm(source, target, glossaryName, SourceLanguageName, TargetLanguageName);
-            if (!IsActionSuccessful(addTermActionResult)) return;
-
-            var newEntryModel = addTermActionResult.Result;
-            newEntryModel.GlossaryName = glossaryName;
-
-            SetEntryName(newEntryModel);
-            Entries.Add(newEntryModel);
-        }
-
-        public void LoadTerms()
-        {
-            Entries = TerminologyService.GetEntriesFromDb(Glossaries);
         }
 
         public void ReloadDb(string filepath)
@@ -139,6 +123,9 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             LoadTerms();
         }
 
+        public void SetEntryName(EntryModel entryModel) => entryModel.Name =
+            entryModel.Terms.FirstOrDefault(t => t.LanguageName == SourceLanguageName)?.Term;
+
         public void Setup(Language sourceLanguage, Language targetLanguage, List<string> glossaries, string databaseFilePath)
         {
             Glossaries = glossaries;
@@ -147,6 +134,22 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             TerminologyService.Setup(databaseFilePath);
 
             LoadTerms();
+        }
+
+        private void AddTerm(string source, string target, string glossaryName)
+        {
+            UserInteractionService.GotTermDetailsEvent -= AddTerm;
+            if (string.IsNullOrWhiteSpace(glossaryName)) return;
+
+            var addTermActionResult =
+                TerminologyService.AddTerm(source, target, glossaryName, SourceLanguageName, TargetLanguageName);
+            if (!IsActionSuccessful(addTermActionResult)) return;
+
+            var newEntryModel = addTermActionResult.Result;
+            newEntryModel.GlossaryName = glossaryName;
+
+            SetEntryName(newEntryModel);
+            Entries.Add(newEntryModel);
         }
 
         private bool IsActionSuccessful<T>(ActionResult<T> actionResult)
@@ -173,9 +176,6 @@ namespace InterpretBank.TermbaseViewer.ViewModel
         }
 
         private void SetEntryNames(ObservableCollection<EntryModel> entries) => entries.ForEach(SetEntryName);
-
-        public void SetEntryName(EntryModel entryModel) => entryModel.Name =
-            entryModel.Terms.FirstOrDefault(t => t.LanguageName == SourceLanguageName)?.Term;
 
         private void SetLanguagePair(Language sourceLanguage, Language targetLanguage)
         {
