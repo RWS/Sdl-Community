@@ -11,6 +11,7 @@ using Sdl.Community.HunspellDictionaryManager.Helpers;
 using Sdl.Community.HunspellDictionaryManager.Model;
 using Sdl.Community.HunspellDictionaryManager.Ui;
 using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
 
 namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 {
@@ -24,7 +25,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		private HunspellLangDictionaryModel _selectedDictionaryLanguage;
 		private HunspellLangDictionaryModel _selectedUndoDictionary;
 		private HunspellLangDictionaryModel _deletedDictionaryLanguage;
-		private Language[] _studioLanguages = Language.GetAllLanguages().OrderBy(s => s.DisplayName).ToArray();
+		private Language[] _studioLanguages = LanguageRegistryApi.Instance.GetAllLanguages().OrderBy(s => s.DisplayName).ToArray();
 		private List<string> _backupFiles;
 		private LanguageModel _newDictionaryLanguage;
 		private string _resultMessageColor;
