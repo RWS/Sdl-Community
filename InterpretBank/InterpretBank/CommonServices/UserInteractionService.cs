@@ -1,12 +1,19 @@
 ﻿using InterpretBank.Interface;
 using InterpretBank.TermbaseViewer.UI;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 
 namespace InterpretBank.CommonServices
 {
     public class UserInteractionService : IUserInteractionService
     {
+        public event Action<string, string, string> GotTermDetailsEvent;
+
+        public AddTermPopup ChooseGlossaryWindow { get; private set; }
+
         //private static UserInteractionService _dialogService;
         //public static UserInteractionService Instance { get; set; } = _dialogService ??= new UserInteractionService();
         public bool Confirm(string message)
@@ -24,10 +31,36 @@ namespace InterpretBank.CommonServices
             return showDialog.HasValue && showDialog.Value;
         }
 
-        public string GetGlossaryNameFromUser(List<string> glossaries)
+        public void GetNewTermDetailsFromUser(List<string> glossaries, string sourceLanguage, string targetLanguage,
+            string sourceTerm, string targetTerm, Image sourceLanguageFlag, Image targetLanguageFlag)
         {
-            var chooseGlossaryWindow = new ChooseGlossaryWindow(glossaries);
-            return chooseGlossaryWindow.ShowDialog() ?? false ? chooseGlossaryWindow.SelectedGlossary : null;
+            ChooseGlossaryWindow = new AddTermPopup
+            {
+                SourceLanguage = sourceLanguage,
+                TargetLanguage = targetLanguage,
+                SourceLanguageFlag = sourceLanguageFlag,
+                TargetLanguageFlag = targetLanguageFlag,
+                SourceTerm = sourceTerm,
+                TargetTerm = targetTerm,
+                Glossaries = glossaries,
+                SelectedGlossary = glossaries[0]
+            };
+
+            ChooseGlossaryWindow.Closed += ChooseGlossaryWindow_Closed;
+
+            ElementHost.EnableModelessKeyboardInterop(ChooseGlossaryWindow);
+            ChooseGlossaryWindow.Show();
+        }
+
+        private void ChooseGlossaryWindow_Closed(object sender, EventArgs e)
+        {
+            ChooseGlossaryWindow.Closed -= ChooseGlossaryWindow_Closed;
+            if (!ChooseGlossaryWindow.TermAdded) return;
+
+            GotTermDetailsEvent?.Invoke(ChooseGlossaryWindow.SourceTerm,
+                ChooseGlossaryWindow.TargetTerm, ChooseGlossaryWindow.SelectedGlossary);
+
+            ChooseGlossaryWindow = null;
         }
 
         public void WarnUser(string message) => MessageBox.Show(message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);

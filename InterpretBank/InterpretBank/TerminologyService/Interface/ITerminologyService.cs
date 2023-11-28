@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using InterpretBank.GlossaryService.Interface;
+using InterpretBank.Helpers;
 using InterpretBank.Model;
 using InterpretBank.SettingsService.Model;
 using InterpretBank.Studio.Model;
@@ -25,6 +26,7 @@ namespace InterpretBank.TerminologyService.Interface
         void Setup(string settingsDatabaseFilepath);
         ObservableCollection<EntryModel> GetEntriesFromDb(List<string> glossaries);
         void UpdateTerm(TermChange termChange);
-        int? AddTerm(string source, string target, string glossaryName, string sourceLanguage, string targetLanguage);
+        ActionResult<EntryModel> AddTerm(string source, string target, string glossaryName, string sourceLanguage,
+            string targetLanguage);
     }
 }

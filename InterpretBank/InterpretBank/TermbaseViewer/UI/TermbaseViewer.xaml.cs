@@ -37,7 +37,7 @@ namespace InterpretBank.TermbaseViewer.UI
 
         public void AddTerm(string source, string target)
         {
-            ViewModel.AddTerm(source, target);
+            ViewModel.OpenAddTermPopup(source, target);
         }
     }
 }

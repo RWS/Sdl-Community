@@ -1,5 +1,6 @@
 ﻿using InterpretBank.Commands;
 using InterpretBank.Extensions;
+using InterpretBank.Helpers;
 using InterpretBank.Interface;
 using InterpretBank.Model;
 using InterpretBank.TerminologyService.Interface;
@@ -96,14 +97,43 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
         private ITerminologyService TerminologyService { get; set; }
 
-        public void AddTerm(string source, string target)
+        public void OpenAddTermPopup(string source, string target)
         {
-            var glossaryNameFromUser = UserInteractionService.GetGlossaryNameFromUser(Glossaries);
-            if (string.IsNullOrWhiteSpace(glossaryNameFromUser)) return;
+            UserInteractionService.GetNewTermDetailsFromUser(Glossaries, SourceLanguageName, TargetLanguageName, source,
+                target, SourceLanguageFlag, TargetLanguageFlag);
 
-            var newTermId = TerminologyService.AddTerm(source, target, glossaryNameFromUser, SourceLanguageName, TargetLanguageName);
+            UserInteractionService.GotTermDetailsEvent -= AddTerm;
+            UserInteractionService.GotTermDetailsEvent += AddTerm;
+        }
+       
+        private void AddTerm(string source, string target, string glossaryName)
+        {
+            UserInteractionService.GotTermDetailsEvent -= AddTerm;
+            if (string.IsNullOrWhiteSpace(glossaryName)) return;
 
-            if (newTermId is not null)
+            var addTermActionResult =
+                TerminologyService.AddTerm(source, target, glossaryName, SourceLanguageName, TargetLanguageName);
+            if (!IsActionSuccessful(addTermActionResult)) return;
+
+            //var entryModel = new EntryModel
+            //{
+            //    Id = addTermActionResult.Result,
+            //    GlossaryName = glossaryName,
+            //    Terms = new()
+            //    {
+            //        new()
+            //        {
+            //            LanguageFlag = SourceLanguageFlag, LanguageName = SourceLanguageName, Term = source
+            //        },
+            //        new()
+            //        {
+            //            LanguageFlag = TargetLanguageFlag, LanguageName = TargetLanguageName, Term = target
+            //        }
+            //    }
+            //};
+
+            SetEntryName(addTermActionResult.Result);
+            Entries.Add(addTermActionResult.Result);
         }
 
         public void LoadTerms()
@@ -133,6 +163,14 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             LoadTerms();
         }
 
+        private bool IsActionSuccessful<T>(ActionResult<T> actionResult)
+        {
+            if (actionResult.Success) return true;
+
+            UserInteractionService.WarnUser(actionResult.Message);
+            return false;
+        }
+
         private void MoveSourceAndTargetTermsFirst()
         {
             foreach (var entryModel in Entries)
@@ -148,13 +186,10 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             }
         }
 
-        private void SetEntryNames(ObservableCollection<EntryModel> entries)
-        {
-            entries.ForEach(entryModel =>
-            {
-                entryModel.Name = entryModel.Terms.FirstOrDefault(t => t.LanguageName == SourceLanguageName)?.Term;
-            });
-        }
+        private void SetEntryNames(ObservableCollection<EntryModel> entries) => entries.ForEach(SetEntryName);
+
+        public void SetEntryName(EntryModel entryModel) => entryModel.Name =
+            entryModel.Terms.FirstOrDefault(t => t.LanguageName == SourceLanguageName)?.Term;
 
         private void SetLanguagePair(Language sourceLanguage, Language targetLanguage)
         {

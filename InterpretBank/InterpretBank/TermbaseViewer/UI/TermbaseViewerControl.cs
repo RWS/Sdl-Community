@@ -1,10 +1,5 @@
-﻿using InterpretBank.GlossaryService.Interface;
-using InterpretBank.Model;
-using InterpretBank.TermbaseViewer.ViewModel;
-using InterpretBank.TerminologyService.Interface;
+﻿using InterpretBank.TermbaseViewer.ViewModel;
 using Sdl.Core.Globalization;
-using Sdl.Terminology.TerminologyProvider.Core;
-using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
@@ -25,13 +20,14 @@ namespace InterpretBank.TermbaseViewer.UI
 
             TermbaseViewer = termbaseViewer;
 
-//            DataContext.AnyEditedTermsChanged += b => AnyEditedTermsChanged?.Invoke(b);
+            //            DataContext.AnyEditedTermsChanged += b => AnyEditedTermsChanged?.Invoke(b);
         }
 
         //public event Action<bool> AnyEditedTermsChanged;
 
         //public bool AnyEditedTerms => DataContext.AnyEditedTerms;
         private TermbaseViewerViewModel DataContext => (TermbaseViewerViewModel)TermbaseViewer.DataContext;
+
         private TermbaseViewer TermbaseViewer { get; set; }
 
         //public void AddNewTerm()
@@ -54,14 +50,14 @@ namespace InterpretBank.TermbaseViewer.UI
 
         //public void JumpToTerm(IEntry entry) => DataContext.JumpToTerm(entry);
 
+        public void AddTerm(string source, string target)
+        {
+            TermbaseViewer.AddTerm(source, target);
+        }
+
         public void LoadTerms(Language sourceLanguage, Language targetLanguage, List<string> glossaries, string databaseFilepath)
         {
             TermbaseViewer.LoadTerms(sourceLanguage, targetLanguage, glossaries, databaseFilepath);
-        }
-
-        public void ReloadTerms(Language sourceLanguage, Language targetLanguage)
-        {
-            TermbaseViewer.ReloadTerms(sourceLanguage, targetLanguage);
         }
 
         public void ReloadDb(string filepath)
@@ -69,9 +65,9 @@ namespace InterpretBank.TermbaseViewer.UI
             TermbaseViewer.ReloadDb(filepath);
         }
 
-        public void AddTerm(string source, string target)
+        public void ReloadTerms(Language sourceLanguage, Language targetLanguage)
         {
-            TermbaseViewer.AddTerm(source, target);
+            TermbaseViewer.ReloadTerms(sourceLanguage, targetLanguage);
         }
     }
 }

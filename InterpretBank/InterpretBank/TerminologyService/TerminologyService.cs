@@ -1,11 +1,13 @@
 ﻿using InterpretBank.GlossaryService.DAL;
 using InterpretBank.GlossaryService.Interface;
+using InterpretBank.Helpers;
 using InterpretBank.Model;
 using InterpretBank.SettingsService.Model;
 using InterpretBank.Studio;
 using InterpretBank.Studio.Model;
 using InterpretBank.TerminologyService.Extensions;
 using InterpretBank.TerminologyService.Interface;
+using Sdl.Core.Globalization;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -42,41 +44,49 @@ public class TerminologyService : ITerminologyService
         var entryModels = new ObservableCollection<EntryModel>();
 
         var dbLanguages = GetLanguages();
-        var studioLanguages = StudioContext.Languages;
-        foreach (var t in dbTerms)
+        var studioLanguages = StudioContext.Languages.ToList();
+
+        foreach (var dbEntry in dbTerms)
         {
             var entryModel = new EntryModel
             {
-                Id = t.Id,
-                EntryComment = t.CommentAll,
-                GlossaryName = t.Tag1,
-                SubGlossaryName = t.Tag2,
+                Id = dbEntry.Id,
+                EntryComment = dbEntry.CommentAll,
+                GlossaryName = dbEntry.Tag1,
+                SubGlossaryName = dbEntry.Tag2,
                 Terms = new ObservableCollection<TermModel>()
             };
 
-            for (int i = 1; i <= 10; i++)
-            {
-                var languageName = "";
-                if (i - 1 < dbLanguages.Count) languageName = dbLanguages[i - 1].Name;
-
-                Image languageFlag = null;
-                if (!string.IsNullOrWhiteSpace(languageName)) languageFlag = studioLanguages.FirstOrDefault(s => s.EnglishName.Contains(languageName) && !s.IsNeutral)?.GetFlagImage();
-
-                if (!string.IsNullOrWhiteSpace(languageName))
-                    entryModel.Terms.Add(new TermModel
-                    {
-                        FirstComment = t[$"Comment{i}a"],
-                        SecondComment = t[$"Comment{i}b"],
-                        Term = t[$"Term{i}"],
-                        LanguageName = languageName,
-                        LanguageFlag = languageFlag
-                    });
-            }
-
+            InitializeEntryModelTerms(dbLanguages, studioLanguages, entryModel, dbEntry);
             entryModels.Add(entryModel);
         }
 
         return entryModels;
+    }
+
+    private void InitializeEntryModelTerms(List<LanguageModel> dbLanguages, List<Language> studioLanguages, EntryModel entryModel, DbGlossaryEntry t)
+    {
+        entryModel.Terms ??= new ObservableCollection<TermModel>();
+        for (int i = 1; i <= 10; i++)
+        {
+            var languageName = "";
+            if (i - 1 < dbLanguages.Count) languageName = dbLanguages[i - 1].Name;
+
+            Image languageFlag = null;
+            if (!string.IsNullOrWhiteSpace(languageName))
+                languageFlag = studioLanguages.FirstOrDefault(s => s.EnglishName.Contains(languageName) && !s.IsNeutral)
+                    ?.GetFlagImage();
+
+            if (!string.IsNullOrWhiteSpace(languageName))
+                entryModel.Terms.Add(new TermModel
+                {
+                    FirstComment = t[$"Comment{i}a"],
+                    SecondComment = t[$"Comment{i}b"],
+                    Term = t[$"Term{i}"],
+                    LanguageName = languageName,
+                    LanguageFlag = languageFlag
+                });
+        }
     }
 
     public void UpdateTerm(TermChange termChange)
@@ -84,9 +94,19 @@ public class TerminologyService : ITerminologyService
         InterpretBankDataContext.UpdateTerm(termChange);
     }
 
-    public int? AddTerm(string source, string target, string glossaryName, string sourceLanguage, string targetLanguage)
+    public ActionResult<EntryModel> AddTerm(string source, string target, string glossaryName, string sourceLanguage,
+        string targetLanguage)
     {
-        return InterpretBankDataContext.InsertTerm(source, target, glossaryName, sourceLanguage, targetLanguage);
+        var entryModel = new EntryModel();
+        var addTermAction = InterpretBankDataContext.InsertTerm(source, target, glossaryName, sourceLanguage, targetLanguage);
+
+        if (!addTermAction.Success) return new ActionResult<EntryModel>(false, null, addTermAction.Message);
+
+        var dbLanguages = GetLanguages();
+        var studioLanguages = StudioContext.Languages.ToList();
+
+        InitializeEntryModelTerms(dbLanguages, studioLanguages, entryModel, addTermAction.Result);
+        return new ActionResult<EntryModel>(true, entryModel, null);
     }
 
     public List<StudioTermEntry> GetExactTerms(string word, string sourceLanguage, string targetLanguage, List<string> glossaries)

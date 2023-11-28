@@ -2,6 +2,7 @@
 using InterpretBank.GlossaryService.DAL;
 using InterpretBank.GlossaryService.DAL.Interface;
 using InterpretBank.GlossaryService.Interface;
+using InterpretBank.Helpers;
 using InterpretBank.Model;
 using InterpretBank.SettingsService.Model;
 using System;
@@ -132,6 +133,25 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 
     public List<TagModel> GetTags() => GetRows<DbTag>().Select(t => new TagModel { TagName = t.TagName }).ToList();
 
+    public ActionResult<int> InsertEntity<T>(T entity) where T : class, IInterpretBankTable
+    {
+        return ErrorHandler.WrapTryCatch(() =>
+        {
+            switch (entity)
+            {
+                case DbGlossaryEntry entry:
+                    GetTable<T>().InsertOnSubmit(entity);
+                    break;
+
+                case DbGlossary glossary:
+                    break;
+            }
+
+            SubmitData();
+            return entity.Id;
+        });
+    }
+
     public void InsertGlossary(GlossaryModel newGlossary)
     {
         var languages = "0#0#0#0#0#0#0#0#0#0#0#0";
@@ -155,6 +175,24 @@ public class InterpretBankDataContext : IInterpretBankDataContext
     {
         var maxId = GetMaxId<DbTag>() + 1;
         GetTable<DbTag>().InsertOnSubmit(new DbTag { TagName = newTag.TagName, Id = maxId });
+    }
+
+    public ActionResult<DbGlossaryEntry> InsertTerm(string source, string target, string glossaryName,
+        string sourceLanguage, string targetLanguage)
+    {
+        var newEntry = new DbGlossaryEntry
+        {
+            Id = GetMaxId<DbGlossaryEntry>() + 1,
+            Tag1 = glossaryName,
+            [$"Term{GetLanguageIndex(sourceLanguage)}"] = source,
+            [$"Term{GetLanguageIndex(targetLanguage)}"] = target,
+        };
+
+        var actionResult = InsertEntity(newEntry);
+
+        return actionResult.Success
+            ? new ActionResult<DbGlossaryEntry>(true, newEntry, null)
+            : new ActionResult<DbGlossaryEntry>(false, null, actionResult.Message);
     }
 
     public void RemoveGlossary(string selectedGlossaryGlossaryName)
@@ -261,35 +299,6 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         dbTermToBeUpdated[$"Term{languageIndex}"] = termChange.Term;
         dbTermToBeUpdated[$"Comment{languageIndex}a"] = termChange.FirstComment;
         dbTermToBeUpdated[$"Comment{languageIndex}b"] = termChange.SecondComment;
-
-        SubmitData();
-    }
-
-    public int InsertTerm(string source, string target, string glossaryName, string sourceLanguage, string targetLanguage)
-    {
-        var newEntry = new DbGlossaryEntry
-        {
-            Id = GetMaxId<DbGlossaryEntry>() + 1,
-            Tag1 = glossaryName,
-            [$"Term{GetLanguageIndex(sourceLanguage)}"] = source,
-            [$"Term{GetLanguageIndex(targetLanguage)}"] = target,
-        };
-
-        InsertEntity(newEntry);
-        return newEntry.Id;
-    }
-
-    public void InsertEntity<T>(T entity) where T : class, IInterpretBankTable
-    {
-        switch (entity)
-        {
-            case DbGlossaryEntry entry:
-                GetTable<T>().InsertOnSubmit(entity);
-                break;
-
-            case DbGlossary glossary:
-                break;
-        }
 
         SubmitData();
     }

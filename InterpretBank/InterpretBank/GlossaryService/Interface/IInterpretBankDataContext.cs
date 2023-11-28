@@ -1,4 +1,6 @@
-﻿using InterpretBank.GlossaryService.DAL.Interface;
+﻿using InterpretBank.GlossaryService.DAL;
+using InterpretBank.GlossaryService.DAL.Interface;
+using InterpretBank.Helpers;
 using InterpretBank.Model;
 using InterpretBank.SettingsService.Model;
 using System;
@@ -50,5 +52,6 @@ public interface IInterpretBankDataContext : IDisposable
 
     void TagGlossary(TagModel newTag, string glossaryName);
     void UpdateTerm(TermChange termChange);
-    int InsertTerm(string source, string target, string glossaryName, string sourceLanguage, string targetLanguage);
+    ActionResult<DbGlossaryEntry> InsertTerm(string source, string target, string glossaryName, string sourceLanguage,
+        string targetLanguage);
 }
