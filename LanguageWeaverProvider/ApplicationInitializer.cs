@@ -4,6 +4,7 @@ using System.Windows;
 using LanguageWeaverProvider.Model;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace LanguageWeaverProvider
 {
@@ -14,6 +15,8 @@ namespace LanguageWeaverProvider
 		private const string CreateNewProject = "create a new project";
 
 		public static IList<RatedSegment> RatedSegments { get; set; }
+
+		public static ITranslationProviderCredentialStore CredentialStore { get; set; }
 
 		public void Execute()
 		{

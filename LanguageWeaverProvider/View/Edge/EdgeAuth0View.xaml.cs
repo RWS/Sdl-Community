@@ -1,31 +1,37 @@
-﻿using System.IO;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Net.Http;
 using System.Reflection;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using System.Windows;
+using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.ViewModel.Cloud;
+using LanguageWeaverProvider.ViewModel.Edge;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
 
-namespace LanguageWeaverProvider.View.Cloud
+namespace LanguageWeaverProvider.View.Edge
 {
 	/// <summary>
-	/// Interaction logic for CloudAuth0View.xaml
+	/// Interaction logic for EdgeAuth0View.xaml
 	/// </summary>
-	public partial class CloudAuth0View : Window
+	public partial class EdgeAuth0View : Window
 	{
-		public CloudAuth0View()
+		public EdgeAuth0View()
 		{
 			InitializeComponent();
 		}
 
 		private async void WebView2Browser_OnLoaded(object sender, RoutedEventArgs e)
 		{
-			await InitializeWebView(ViewModel.Auth0Config.LoginUri.ToString());
+			await InitializeWebView();
 		}
 
-		private CloudAuth0ViewModel ViewModel => DataContext as CloudAuth0ViewModel;
+		private EdgeAuth0ViewModel ViewModel => DataContext as EdgeAuth0ViewModel;
 
-		private async Task InitializeWebView(string uri)
+		private async Task InitializeWebView()
 		{
 			if (WebView2Browser.CoreWebView2 is null)
 			{
@@ -40,18 +46,18 @@ namespace LanguageWeaverProvider.View.Cloud
 
 				await WebView2Browser.EnsureCoreWebView2Async(environment);
 				await WebView2Browser.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(BrowserScript);
+
 			}
 
-			WebView2Browser.CoreWebView2.Navigate(uri);
+			await ViewModel.Connect(WebView2Browser);
+			Close();
 		}
 
 		private async void WebView2Browser_OnNavigationStarting(object sender, CoreWebView2NavigationStartingEventArgs e)
 		{
-			if (e.Uri?.StartsWith(ViewModel.Auth0Config.RedirectUri) == true)
+			if (e.Uri.ToString().Contains("/api/v2/auth/saml/success"))
 			{
-				WebView2Browser.Visibility = Visibility.Collapsed;
-				await ViewModel.Navigated(e.Uri);
-				WebView2Browser.Visibility = Visibility.Visible;
+
 			}
 		}
 

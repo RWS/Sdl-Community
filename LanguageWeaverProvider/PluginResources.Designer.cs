@@ -88,11 +88,29 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Recommended for systematic automated workflows.
+        /// </summary>
+        public static string Auth_Cloud_APICredentials_ToolTip {
+            get {
+                return ResourceManager.GetString("Auth_Cloud_APICredentials_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User credentials.
         /// </summary>
         public static string Auth_Cloud_Credentials {
             get {
                 return ResourceManager.GetString("Auth_Cloud_Credentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provision for external user access.
+        /// </summary>
+        public static string Auth_Cloud_Credentials_ToolTip {
+            get {
+                return ResourceManager.GetString("Auth_Cloud_Credentials_ToolTip", resourceCulture);
             }
         }
         
@@ -117,9 +135,36 @@ namespace LanguageWeaverProvider {
         /// <summary>
         ///   Looks up a localized string similar to Connection code.
         /// </summary>
-        public static string Auth_Cloud_SSO_ConnectionCode {
+        public static string Auth_Cloud_FederatedSSO_ConnectionCode {
             get {
-                return ResourceManager.GetString("Auth_Cloud_SSO_ConnectionCode", resourceCulture);
+                return ResourceManager.GetString("Auth_Cloud_FederatedSSO_ConnectionCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Federated SSO.
+        /// </summary>
+        public static string Auth_Cloud_FSSO {
+            get {
+                return ResourceManager.GetString("Auth_Cloud_FSSO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supports Single Sign On across external domains and organisations.
+        /// </summary>
+        public static string Auth_Cloud_FSSO_ToolTip {
+            get {
+                return ResourceManager.GetString("Auth_Cloud_FSSO_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Access Language Weaver using your unique RWS ID authentication or email.
+        /// </summary>
+        public static string Auth_Cloud_SSO_Tooltip {
+            get {
+                return ResourceManager.GetString("Auth_Cloud_SSO_Tooltip", resourceCulture);
             }
         }
         
@@ -259,7 +304,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Welcome to the Language Weaver translation provider for Studio..
+        ///   Looks up a localized string similar to Welcome to the Language Weaver translation provider for Trados Studio..
         /// </summary>
         public static string CloudMappingView_WelcomeMessage {
             get {
@@ -300,24 +345,6 @@ namespace LanguageWeaverProvider {
         public static string Connection_Error_NoCredentials {
             get {
                 return ResourceManager.GetString("Connection_Error_NoCredentials", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Connecting user....
-        /// </summary>
-        public static string Connection_Loading_Connecting {
-            get {
-                return ResourceManager.GetString("Connection_Loading_Connecting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Initiating....
-        /// </summary>
-        public static string Connection_Loading_Initiating {
-            get {
-                return ResourceManager.GetString("Connection_Loading_Initiating", resourceCulture);
             }
         }
         
@@ -595,6 +622,42 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connecting user....
+        /// </summary>
+        public static string Loading_Connecting {
+            get {
+                return ResourceManager.GetString("Loading_Connecting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Initiating....
+        /// </summary>
+        public static string Loading_Initiating {
+            get {
+                return ResourceManager.GetString("Loading_Initiating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Applying changes....
+        /// </summary>
+        public static string Loading_LMP_Apply {
+            get {
+                return ResourceManager.GetString("Loading_LMP_Apply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restoring database....
+        /// </summary>
+        public static string Loading_LMP_RestoreDefaults {
+            get {
+                return ResourceManager.GetString("Loading_LMP_RestoreDefaults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon lwLogoIco {
@@ -642,7 +705,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Language Weaver.
+        ///   Looks up a localized string similar to Language Weaver Cloud.
         /// </summary>
         public static string MainView_Buttons_LWCloud {
             get {
@@ -651,7 +714,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Language Weaver is a secure, adaptable, cloud-based enterprise machine translation API and portal for businesses that need to process high volumes of multilingual content quickly and effectively..
+        ///   Looks up a localized string similar to Language Weaver Cloud is a secure, adaptable, cloud-based enterprise machine translation API and portal for businesses that need to process high volumes of multilingual content quickly and effectively..
         /// </summary>
         public static string MainView_Buttons_LWCloud_ToolTip {
             get {
@@ -696,7 +759,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select your required Language Weaver Service Provider..
+        ///   Looks up a localized string similar to Select your required Language Weaver Service Provider.
         /// </summary>
         public static string MainView_HelpMessage {
             get {

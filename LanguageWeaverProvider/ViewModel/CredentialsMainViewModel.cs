@@ -162,8 +162,6 @@ namespace LanguageWeaverProvider.ViewModel
 		private async void StartLoginProcess(object sender, EventArgs e)
 		{
 			IsUserAttemptingLogin = true;
-			CurrentActionMessage = PluginResources.Connection_Loading_Initiating;
-			await Task.Delay(2000);
 			var loginEventArgs = e as LoginEventArgs;
 			CurrentActionMessage = loginEventArgs.Message;
 		}
@@ -172,12 +170,14 @@ namespace LanguageWeaverProvider.ViewModel
 		{
 			if (e is not LoginEventArgs loginEventArgs)
 			{
+				CurrentActionMessage = null;
 				IsUserAttemptingLogin = false;
 				return;
 			}
 
 			CurrentActionMessage = loginEventArgs.Message;
-			await Task.Delay(3000);
+			await Task.Delay(1000);
+			CurrentActionMessage = null;
 			IsUserAttemptingLogin = false;
 		}
 	}

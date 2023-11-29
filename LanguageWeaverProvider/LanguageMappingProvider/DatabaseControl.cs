@@ -12,7 +12,7 @@ namespace LanguageWeaverProvider.LanguageMappingProvider
 		{
 			var isCloudSelected = pluginVersion == PluginVersion.LanguageWeaverCloud;
 			var targetDatabase = isCloudSelected ? Constants.CloudService : Constants.EdgeService;
-			var supportedLanguages = isCloudSelected ? DatabaseControl.GetCloudLanguageCodes() : DatabaseControl.GetEdgeLanguageCodes();
+			var supportedLanguages = isCloudSelected ? GetCloudLanguageCodes() : GetEdgeLanguageCodes();
 			return new LanguageMappingDatabase(targetDatabase, supportedLanguages);
 		}
 
@@ -35,8 +35,13 @@ Burmese 	bur 	my
 Catalan 	cat 	ca
 Cebuano 	ceb 	ceb
 Cherokee 	chr 	chr
-Chinese (Simplified) 	chi 	zh-Hans
-Chinese (Traditional) 	cht 	zh-Hant
+Chinese (Simplified Han, Hong Kong SAR) 	chi 	zh-Hans-HK
+Chinese (Simplified Han, Macao SAR) 	chi 	zh-Hans-MO
+Chinese (Simplified, China) 	chi 	zh-CN
+Chinese (Simplified, Singapore) 	chi 	zh-SG
+Chinese (Traditional, Hong Kong SAR) 	cht 	zh-HK
+Chinese (Traditional, Macao SAR) 	cht 	zh-MO
+Chinese (Traditional, Taiwan) 	cht 	zh-TW
 Croatian 	hrv 	hr
 Czech 	cze 	cs
 Danish 	dan 	da
@@ -132,8 +137,13 @@ Burmese 	bur 	my
 Catalan 	cat 	ca
 Cebuano 	ceb 	ceb
 Cherokee 	chr 	chr
-Chinese (Simplified) 	chi 	zh-Hans
-Chinese (Traditional) 	cht 	zh-Hant
+Chinese (Simplified Han, Hong Kong SAR) 	chi 	zh-Hans-HK
+Chinese (Simplified Han, Macao SAR) 	chi 	zh-Hans-MO
+Chinese (Simplified, China) 	chi 	zh-CN
+Chinese (Simplified, Singapore) 	chi 	zh-SG
+Chinese (Traditional, Hong Kong SAR) 	cht 	zh-HK
+Chinese (Traditional, Macao SAR) 	cht 	zh-MO
+Chinese (Traditional, Taiwan) 	cht 	zh-TW
 Croatian 	hrv 	hr
 Czech 	cze 	cs
 Danish 	dan 	da

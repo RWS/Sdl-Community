@@ -35,6 +35,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <None Remove="Resources\lwHeader.png" />
 	  <None Remove="Resources\lwMainLogo.png" />
 	</ItemGroup>
 	
@@ -44,10 +45,10 @@
 	
 	<ItemGroup>
 		<Reference Include="Microsoft.Web.WebView2.Core">
-		  <HintPath>..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Microsoft.Web.WebView2.Core.dll</HintPath>
+		  <HintPath>$(TradosFolder)\Microsoft.Web.WebView2.Core.dll</HintPath>
 		</Reference>
 		<Reference Include="Microsoft.Web.WebView2.Wpf">
-		  <HintPath>..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Microsoft.Web.WebView2.WPF.dll</HintPath>
+		  <HintPath>$(TradosFolder)\Microsoft.Web.WebView2.WPF.dll</HintPath>
 		</Reference>
 		<Reference Include="Newtonsoft.Json">
 		  <HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
@@ -74,7 +75,7 @@
 		  <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
-		  <HintPath>..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
+		  <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.LanguagePlatform.Core">
 			<HintPath>$(TradosFolder)\Sdl.LanguagePlatform.Core.dll</HintPath>
@@ -86,13 +87,13 @@
 			<HintPath>$(TradosFolder)\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
-		  <HintPath>..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
+		  <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.ProjectAutomation.Core">
-		  <HintPath>..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Core.dll</HintPath>
+		  <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Core.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.ProjectAutomation.FileBased">
-		  <HintPath>..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+		  <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.TellMe.ProviderApi">
 		  <HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
@@ -142,6 +143,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Resource Include="Resources\lwHeader.png" />
 	  <Resource Include="Resources\lwMainLogo.png" />
 	  <Resource Include="Style\Buttons.xaml" />
 	</ItemGroup>
@@ -152,5 +154,9 @@
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>PluginResources.resx</DependentUpon>
 	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Studio\Actions\Models\" />
 	</ItemGroup>
 </Project>

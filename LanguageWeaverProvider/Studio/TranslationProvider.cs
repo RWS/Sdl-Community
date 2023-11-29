@@ -12,11 +12,8 @@ namespace LanguageWeaverProvider
 {
 	internal class TranslationProvider : ITranslationProvider
 	{
-		private readonly ITranslationProviderCredentialStore _credentialStore;
-
-		public TranslationProvider(ITranslationOptions translationOptions, ITranslationProviderCredentialStore credentialStore = null)
+		public TranslationProvider(ITranslationOptions translationOptions)
 		{
-			_credentialStore = credentialStore;
 			TranslationOptions = translationOptions;
 			_ = DatabaseControl.InitializeDatabase(translationOptions.PluginVersion);
 		}
@@ -80,15 +77,21 @@ namespace LanguageWeaverProvider
 		{
 			var currentPair = TranslationOptions.PairMappings.FirstOrDefault(pair => pair.LanguagePair.SourceCulture.Name == languageDirection.SourceCulture.Name
 																				  && pair.LanguagePair.TargetCulture.Name == languageDirection.TargetCulture.Name);
-			return currentPair is not null
-				&& !string.IsNullOrEmpty(currentPair.SourceCode)
-				&& !string.IsNullOrEmpty(currentPair.TargetCode)
-				&& !currentPair.SelectedModel.DisplayName.Equals(PluginResources.PairModel_Model_Unavailable);
+			if (currentPair is null)
+			{
+				return false;
+			}
+
+			var sourceCode = DatabaseControl.GetLanguageCode(currentPair.LanguagePair.SourceCulture);
+			var targetCode = DatabaseControl.GetLanguageCode(currentPair.LanguagePair.TargetCulture);
+			return !string.IsNullOrEmpty(sourceCode)
+				&& !string.IsNullOrEmpty(targetCode)
+				&& !string.IsNullOrEmpty(currentPair.SelectedModel.Model);
 		}
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
 		{
-			return new TranslationProviderLanguageDirection(this, TranslationOptions, languageDirection, _credentialStore);
+			return new TranslationProviderLanguageDirection(this, TranslationOptions, languageDirection);
 		}
 
 		public void RefreshStatusInfo() { }

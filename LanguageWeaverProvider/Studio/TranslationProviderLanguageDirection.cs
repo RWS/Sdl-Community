@@ -27,12 +27,12 @@ namespace LanguageWeaverProvider
 		private TranslationUnit _currentTranslationUnit;
 		private Window _batchTaskWindow;
 
-		public TranslationProviderLanguageDirection(ITranslationProvider translationProvider, ITranslationOptions translationOptions, LanguagePair languagePair, ITranslationProviderCredentialStore credentialStore)
+		public TranslationProviderLanguageDirection(ITranslationProvider translationProvider, ITranslationOptions translationOptions, LanguagePair languagePair)
 		{
 			TranslationProvider = translationProvider;
 			_translationOptions = translationOptions;
 			_languagePair = languagePair;
-			CredentialManager.GetCredentials(credentialStore, translationOptions);
+			CredentialManager.GetCredentials(translationOptions, true);
 		}
 
 		public ITranslationProvider TranslationProvider { get; private set; }
@@ -70,8 +70,6 @@ namespace LanguageWeaverProvider
 		public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
 		{
 			ManageBatchTaskWindow(true);
-			CredentialManager.ValidateToken(_translationOptions);
-
 			var searchResults = new SearchResults[mask.Length];
 			var segmentsInput = translationUnits.Select(x => x.SourceSegment).ToList();
 			var translatableSegments = ExtractTranslatableSegments(translationUnits, mask, searchResults, segmentsInput);
@@ -83,7 +81,7 @@ namespace LanguageWeaverProvider
 			}
 
 			var (Segments, Emojis) = FilterSegmentEmojis(translatableSegments);
-			CredentialManager.ValidateToken(_translationOptions);
+			Service.ValidateToken(_translationOptions);
 			var mappedPair = GetMappedPair();
 			var xliffFile = CreateXliffFile(Segments);
 			var translation = GetTranslation(mappedPair, xliffFile);
@@ -96,6 +94,7 @@ namespace LanguageWeaverProvider
 
 			var fileName = _batchTaskWindow is null ? string.Empty : System.IO.Path.GetFileName(translationUnits.First().DocumentProperties.LastOpenedAsPath);
 			var translatedSegmentsIndex = 0;
+
 			for (var i = 0; i < mask.Length; i++)
 			{
 				if (ShouldSkipSearchResult(searchResults[i], mask[i], segmentsInput[i]))
@@ -163,7 +162,7 @@ namespace LanguageWeaverProvider
 
 		private SearchResult TranslateSegment(Segment segment, Segment sourceSegment)
 		{
-			CredentialManager.ValidateToken(_translationOptions);
+			Service.ValidateToken(_translationOptions);
 			var xliff = CreateXliffFile(new Segment[] { sourceSegment });
 			var mappedPair = GetMappedPair();
 			var translation = CloudService.Translate(_translationOptions.AccessToken, mappedPair, xliff).Result;
@@ -203,7 +202,8 @@ namespace LanguageWeaverProvider
 
 		private void SetMetadataOnSegment(EvaluatedSegment evaluatedSegment, PairMapping pairMapping, string fileName)
 		{
-			if (_batchTaskWindow is not null)
+			if (_batchTaskWindow is not null
+			 || _currentTranslationUnit.ConfirmationLevel == ConfirmationLevel.Draft)
 			{
 				StoreSegmentMetadata(evaluatedSegment, pairMapping, fileName);
 				return;
@@ -215,22 +215,19 @@ namespace LanguageWeaverProvider
 				return;
 			}
 
-			var activeSegmentPair = editorController.ActiveDocument.ActiveSegmentPair;
-			if (activeSegmentPair is null)
-			{
-				return;
-			}
+			var currentSegmentId = _currentTranslationUnit.DocumentSegmentPair.Properties.Id;
+			var currentSegmentPair = editorController.ActiveDocument.SegmentPairs.First(p => p.Properties.Id == currentSegmentId);
 
-			activeSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_QE, evaluatedSegment.QualityEstimation);
-			activeSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_LongModelName, pairMapping.SelectedModel.Name);
-			activeSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_ShortModelName, pairMapping.SelectedModel.Model);
-			activeSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_Translation, evaluatedSegment.Segment.ToString());
-			editorController.ActiveDocument.UpdateSegmentPairProperties(activeSegmentPair, activeSegmentPair.Properties);
+			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_QE, evaluatedSegment.QualityEstimation);
+			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_LongModelName, pairMapping.SelectedModel.Name);
+			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_ShortModelName, pairMapping.SelectedModel.Model);
+			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_Translation, evaluatedSegment.Segment.ToString());
+			currentSegmentPair.Properties.TranslationOrigin.SetMetaData("autosend_feedback", _translationOptions.ProviderSettings.AutosendFeedback.ToString());
+			editorController.ActiveDocument.UpdateSegmentPairProperties(currentSegmentPair, currentSegmentPair.Properties);
 		}
 
 		private void StoreSegmentMetadata(EvaluatedSegment evaluatedSegment, PairMapping pairMapping, string fileName)
 		{
-			ApplicationInitializer.RatedSegments ??= new List<RatedSegment>();
 			var ratedSegment = new RatedSegment()
 			{
 				Model = pairMapping.SelectedModel.Model,
@@ -239,10 +236,20 @@ namespace LanguageWeaverProvider
 				QualityEstimation = evaluatedSegment.QualityEstimation,
 				SegmentId = _currentTranslationUnit.DocumentSegmentPair.Properties.Id,
 				TargetLanguageCode = pairMapping.TargetCode,
-				FileName = fileName
+				FileName = fileName,
+				AutosendFeedback = _translationOptions.ProviderSettings.AutosendFeedback
 			};
 
-			ApplicationInitializer.RatedSegments.Add(ratedSegment);
+			var existingSegment = ApplicationInitializer.RatedSegments.FirstOrDefault(x => x.SegmentId.Equals(ratedSegment.SegmentId));
+			if (existingSegment is null)
+			{
+				ApplicationInitializer.RatedSegments.Add(ratedSegment);
+			}
+			else
+			{
+				var existingSegmentIndex = ApplicationInitializer.RatedSegments.IndexOf(existingSegment);
+				ApplicationInitializer.RatedSegments[existingSegmentIndex] = ratedSegment;
+			}
 		}
 
 		private Segment RemoveTagsOnSegment(Segment segment)
@@ -292,7 +299,6 @@ namespace LanguageWeaverProvider
 			var translatableSegments = new List<Segment>();
 			for (var i = 0; i < translationUnits.Length; i++)
 			{
-				_currentTranslationUnit = translationUnits[i];
 				var translationUnit = translationUnits[i];
 				var currentSegment = segments[i];
 
@@ -380,7 +386,7 @@ namespace LanguageWeaverProvider
 							var isEmoji = regex.Match(result).Success;
 							if (isEmoji)
 							{
-								var newTag = CreateEmojiPlaceholder(result, textTagIndex++);
+								var newTag = CreateEmojiPlaceholder(textTagIndex++);
 								newSegment.Elements.Add(newTag);
 								emojis.Add(result);
 								continue;
@@ -425,7 +431,7 @@ namespace LanguageWeaverProvider
 				currentTag.TagID);
 		}
 
-		Tag CreateEmojiPlaceholder(string text, int index)
+		Tag CreateEmojiPlaceholder(int index)
 		{
 			return new Tag(
 				TagType.TextPlaceholder,

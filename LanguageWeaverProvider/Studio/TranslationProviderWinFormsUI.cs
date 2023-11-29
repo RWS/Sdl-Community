@@ -5,7 +5,6 @@ using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.View;
 using LanguageWeaverProvider.ViewModel;
-using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -25,17 +24,19 @@ namespace LanguageWeaverProvider
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
 			var translationOptions = new TranslationOptions();
-			CredentialManager.GetCredentials(credentialStore, translationOptions);
-			var CredentialsMainViewModel = new CredentialsMainViewModel(translationOptions);
-			var CredentialsMainView = new CredentialsMainView { DataContext = CredentialsMainViewModel };
-			CredentialsMainViewModel.CloseEventRaised += () =>
+			ApplicationInitializer.CredentialStore = credentialStore;
+			CredentialManager.GetCredentials(translationOptions);
+
+			var credentialsMainViewModel = new CredentialsMainViewModel(translationOptions);
+			var credentialsMainView = new CredentialsMainView { DataContext = credentialsMainViewModel };
+			credentialsMainViewModel.CloseEventRaised += () =>
 			{
 				CredentialManager.UpdateCredentials(credentialStore, translationOptions);
-				CredentialsMainView.Close();
+				credentialsMainView.Close();
 			};
 
-			CredentialsMainView.ShowDialog();
-			if (!CredentialsMainViewModel.SaveChanges)
+			credentialsMainView.ShowDialog();
+			if (!credentialsMainViewModel.SaveChanges)
 			{
 				return null;
 			}
@@ -46,12 +47,13 @@ namespace LanguageWeaverProvider
 				return null;
 			}
 
-			var translationProvider = new TranslationProvider(translationOptions, credentialStore);
+			var translationProvider = new TranslationProvider(translationOptions);
 			return new ITranslationProvider[] { translationProvider };
 		}
 
 		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
+			ApplicationInitializer.CredentialStore = credentialStore;
 			if (translationProvider is not TranslationProvider editProvider)
 			{
 				return false;

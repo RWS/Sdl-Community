@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using System.Windows;
+using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Services.Model;
@@ -64,14 +67,15 @@ namespace LanguageWeaverProvider.Services
 			}
 		}
 
-		public static async Task<(bool Success, Exception Error)> AuthenticateUser(CloudCredentials cloudCredentials, ITranslationOptions translationOptions, AuthenticationType authenticationType, string selectedRegion)
+		public static async Task<(bool Success, Exception Error)> AuthenticateUser(ITranslationOptions translationOptions, AuthenticationType authenticationType)
 		{
 			try
 			{
+				var cloudCredentials = translationOptions.CloudCredentials;
 				var endpoint = authenticationType switch
 				{
-					AuthenticationType.CloudCredentials => $"{selectedRegion}v4/token/user",
-					AuthenticationType.CloudAPI => $"{selectedRegion}v4/token"
+					AuthenticationType.CloudCredentials => $"{cloudCredentials.AccountRegion}v4/token/user",
+					AuthenticationType.CloudAPI => $"{cloudCredentials.AccountRegion}v4/token"
 				};
 
 				var content = GetAuthenticationContent(cloudCredentials, authenticationType);
@@ -82,23 +86,13 @@ namespace LanguageWeaverProvider.Services
 
 				var accessTokenString = await response.Content.ReadAsStringAsync();
 				translationOptions.AccessToken = JsonConvert.DeserializeObject<AccessToken>(accessTokenString);
-				translationOptions.AccessToken.BaseUri = new Uri(selectedRegion);
+				translationOptions.AccessToken.BaseUri = new Uri(cloudCredentials.AccountRegion);
 
 				var selfEndpoint = authenticationType == AuthenticationType.CloudCredentials
-								 ? $"{selectedRegion}v4/accounts/users/self"
-								 : $"{selectedRegion}v4/accounts/api-credentials/self";
+								 ? $"{cloudCredentials.AccountRegion}v4/accounts/users/self"
+								 : $"{cloudCredentials.AccountRegion}v4/accounts/api-credentials/self";
 				cloudCredentials.AccountId = await GetUserInfo(translationOptions.AccessToken, selfEndpoint, "accountId");
 				translationOptions.AccessToken.AccountId = cloudCredentials.AccountId;
-
-				var uri = new Uri($"{selectedRegion}v4/mt/languages");
-
-				var request = new HttpRequestMessage(HttpMethod.Get, uri);
-				request.Headers.Add("Authorization", $"{translationOptions.AccessToken.TokenType} {translationOptions.AccessToken.Token}");
-
-				var response2 = await new HttpClient().SendAsync(request);
-				var x = await response2.Content.ReadAsStringAsync();
-
-				var z = JsonConvert.DeserializeObject<CloudLanguagesResponse>(x);
 
 				return (true, null);
 			}
@@ -259,6 +253,7 @@ namespace LanguageWeaverProvider.Services
 			httpClient.DefaultRequestHeaders.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
 			var translationRequestModelJson = JsonConvert.SerializeObject(translationRequestModel);
 			var response = await httpClient.PostAsync($"{accessToken.BaseUri}v4/mt/translations/async", new StringContent(translationRequestModelJson, Encoding.UTF8, "application/json"));
+			var x = await response.Content.ReadAsStringAsync();
 			response.EnsureSuccessStatusCode();
 
 			return await response.Content.ReadAsStringAsync();
@@ -276,42 +271,40 @@ namespace LanguageWeaverProvider.Services
 
 		public static async Task CreateFeedback(AccessToken accessToken, FeedbackRequest feedbackRequest)
 		{
-			var requestUri = $"{accessToken.BaseUri}v4/accounts/{accessToken.AccountId}/feedback/translations";
-			var feedbackRequestJson = JsonConvert.SerializeObject(feedbackRequest);
-			var content = new StringContent(feedbackRequestJson, new UTF8Encoding(), "application/json");
-
-			_ = await Service.SendRequest(accessToken, HttpMethod.Post, requestUri, content);
-		}
-
-		public static async Task<bool> CreateDictionaryTerm(AccessToken accessToken, PairDictionary pairDictionary, List<KeyValuePair<string, string>> newDictionaryTerm)
-		{
-			var requestUri = $"{accessToken.BaseUri}v4/accounts/{accessToken.AccountId}/dictionaries/{pairDictionary.DictionaryId}/terms";
-			var content = new StringContent(JsonConvert.SerializeObject(newDictionaryTerm), new UTF8Encoding(), "application/json");
-
-			var response = await Service.SendRequest(accessToken, HttpMethod.Post, requestUri, content);
-			return response.IsSuccessStatusCode;
-		}
-
-		public static async Task RefreshToken(AccessToken accessToken)
-		{
 			try
 			{
-				var parameters = new Dictionary<string, string>
-				{
-					{ "grant_type", "refresh_token" },
-					{ "refresh_token", accessToken.RefreshToken }
-				};
+				var requestUri = $"{accessToken.BaseUri}v4/accounts/{accessToken.AccountId}/feedback/translations";
+				var feedbackRequestJson = JsonConvert.SerializeObject(feedbackRequest);
+				var content = new StringContent(feedbackRequestJson, new UTF8Encoding(), "application/json");
 
-				using var httpRequest = new HttpRequestMessage
-				{
-					Method = HttpMethod.Post,
-					RequestUri = new Uri("https://sdl-prod.eu.auth0.com/"),
-					Content = new FormUrlEncodedContent(parameters)
-				};
+				var response = await Service.SendRequest(accessToken, HttpMethod.Post, requestUri, content);
+				response.EnsureSuccessStatusCode();
 
-				var result = await new HttpClient().SendAsync(httpRequest);
+				MessageBox.Show("Success");
 			}
-			catch { }
+			catch (Exception ex)
+			{
+				ErrorHandling.ShowDialog(ex, "Feedback", ex.Message, true);
+			}
+		}
+
+		public static async Task<bool> CreateDictionaryTerm(AccessToken accessToken, PairDictionary pairDictionary, DictionaryTerm newDictionaryTerm)
+		{
+
+			var requestUri = $"https://api.languageweaver.com/v4/accounts/{accessToken.AccountId}/dictionaries/{pairDictionary.DictionaryId}/terms";
+			var content = JsonConvert.SerializeObject(newDictionaryTerm);
+			var stringContent = new StringContent(content, new UTF8Encoding(), "application/json");
+
+			var response = await Service.SendRequest(accessToken, HttpMethod.Post, requestUri, stringContent);
+			var isSuccessStatusCode = response.IsSuccessStatusCode;
+			if (isSuccessStatusCode)
+			{
+				return isSuccessStatusCode;
+			}
+
+			var result = await response.Content.ReadAsStringAsync();
+			ErrorHandling.ShowDialog(null, PluginResources.Dictionary_NewTerm_Unsuccessfully, result);
+			return isSuccessStatusCode;
 		}
 	}
 }

@@ -5,12 +5,13 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Services.Model;
-using LanguageWeaverProvider.ViewModel;
 using LanguageWeaverProvider.XliffConverter.Converter;
+using Microsoft.Web.WebView2.Wpf;
 using Newtonsoft.Json;
 
 namespace LanguageWeaverProvider.Services
@@ -67,7 +68,7 @@ namespace LanguageWeaverProvider.Services
 			}
 		}
 
-		public static async Task<(bool Success, Exception Error)> SignInAuthAsync(EdgeCredentials edgeCredentials, ITranslationOptions translationOptions)
+		public static async Task<(bool Success, Exception Error)> SignInAuthAsync(EdgeCredentials edgeCredentials, ITranslationOptions translationOptions, WebView2 browser)
 		{
 			try
 			{
@@ -86,25 +87,19 @@ namespace LanguageWeaverProvider.Services
 				}
 
 				var url = $"{uri2}?secret={secret}";
-				var ps = new ProcessStartInfo(url)
-				{
-					UseShellExecute = true,
-					Verb = "open"
-				};
-
-				Process.Start(ps);
+				browser.CoreWebView2.Navigate(url);
 
 				httpRequest = new HttpRequestMessage(HttpMethod.Get, $"{uri3}?secret={secret}");
 				response = await httpClient.SendAsync(httpRequest);
 
-				var token = string.Empty;
+				string token;
 				if (response.IsSuccessStatusCode)
 				{
 					token = await response.Content.ReadAsStringAsync();
+					SetAccessToken(translationOptions, token, "Bearer", edgeCredentials.Uri);
 				}
 
-				SetAccessToken(translationOptions, token, "Bearer", edgeCredentials.Uri);
-
+				response.EnsureSuccessStatusCode();
 				return (true, null);
 			}
 			catch (Exception ex)
@@ -175,13 +170,22 @@ namespace LanguageWeaverProvider.Services
 			}
 		}
 
-		public static async Task<bool> CreateDictionaryTerm(AccessToken accessToken, PairDictionary pairDictionary, List<KeyValuePair<string, string>> newDictionaryTerm)
+		public static async Task<bool> CreateDictionaryTerm(AccessToken accessToken, PairDictionary pairDictionary, DictionaryTerm newDictionaryTerm)
 		{
 			var requestUri = $"{accessToken.BaseUri}api/v2/dictionaries/{pairDictionary.DictionaryId}/term";
-			var content = new FormUrlEncodedContent(newDictionaryTerm);
+			var content = newDictionaryTerm.ToKeyValuePairDictionary();
+			var encodedContent = new FormUrlEncodedContent(content);
 
-			var response = await Service.SendRequest(accessToken, HttpMethod.Post, requestUri, content);
-			return response.IsSuccessStatusCode;
+			var response = await Service.SendRequest(accessToken, HttpMethod.Post, requestUri, encodedContent);
+			var isSuccessStatusCode = response.IsSuccessStatusCode;
+			if (isSuccessStatusCode)
+			{
+				return isSuccessStatusCode;
+			}
+
+			var result = await response.Content.ReadAsStringAsync();
+			ErrorHandling.ShowDialog(null, PluginResources.Dictionary_NewTerm_Unsuccessfully, result);
+			return isSuccessStatusCode;
 		}
 
 		public static async Task<Xliff> Translate(AccessToken accessToken, PairMapping pairMapping, Xliff sourceXliff)
@@ -255,12 +259,22 @@ namespace LanguageWeaverProvider.Services
 			} while (isWaiting);
 		}
 
-		public static async Task SendFeedback(AccessToken accessToken, Dictionary<string, string> feedback)
+		public static async Task SendFeedback(AccessToken accessToken, List<KeyValuePair<string, string>> feedback)
 		{
-			var requestUri = $"{accessToken.BaseUri}api/v2/feedback";
-			var content = new FormUrlEncodedContent(feedback);
+			try
+			{
+				var requestUri = $"{accessToken.BaseUri}api/v2/feedback";
+				var content = new FormUrlEncodedContent(feedback);
 
-			await Service.SendRequest(accessToken, HttpMethod.Post, requestUri, content);
+				var result = await Service.SendRequest(accessToken, HttpMethod.Post, requestUri, content);
+				result.EnsureSuccessStatusCode();
+
+				MessageBox.Show("Success");
+			}
+			catch (Exception ex)
+			{
+				ErrorHandling.ShowDialog(ex, "Feedback", ex.Message, true);
+			}
 		}
 
 		private static async Task<T> DeserializeResponse<T>(HttpResponseMessage response)

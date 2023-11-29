@@ -16,6 +16,7 @@ using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Services;
 using Newtonsoft.Json;
 using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -193,6 +194,11 @@ namespace LanguageWeaverProvider.ViewModel
 			Dictionaries = new(_providers
 				.SelectMany(provider => provider.PairMappings.SelectMany(pair => pair.Dictionaries))
 				.OrderBy(x=> x.IsSelected == false));
+			if (!Dictionaries.Any())
+			{
+				return;
+			}
+
 			SelectedDictionary = Dictionaries.FirstOrDefault();
 
 			var currentSelection = _editController.ActiveDocument.Selection;
@@ -208,8 +214,8 @@ namespace LanguageWeaverProvider.ViewModel
 			SourceLanguage = sourceCultureInfo.DisplayName.Split('(')[0].Trim();
 			TargetLanguage = targetCultureInfo.DisplayName.Split('(')[0].Trim();
 
-			SourceImage = new Language(sourceCultureInfo).GetFlagImage();
-			TargetImage = new Language(targetCultureInfo).GetFlagImage();
+			SourceImage = LanguageRegistryApi.Instance.GetLanguage(SelectedDictionary.LanguagePair.SourceCulture).GetFlagImage();
+			TargetImage = LanguageRegistryApi.Instance.GetLanguage(SelectedDictionary.LanguagePair.TargetCulture).GetFlagImage();
 		}
 
 		private void SetCurrentProvider()
@@ -218,16 +224,12 @@ namespace LanguageWeaverProvider.ViewModel
 				.SelectMany(p => p.PairMappings, (p, pair) => new { Provider = p, Pair = pair })
 				.FirstOrDefault(x => x.Pair.Dictionaries.Contains(SelectedDictionary))?
 				.Provider;
+			CredentialManager.GetCredentials(_currentProvider, true);
 		}
 
 		private void Clear(object parameter)
 		{
-			if (parameter is not string parameterString)
-			{
-				return;
-			}
-
-			switch (parameter)
+			switch (parameter as string)
 			{
 				case nameof(SourceTerm):
 					SourceTerm = string.Empty;
@@ -243,10 +245,10 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 		}
 
-		private async void ToggleNotification(bool termWasAdded)
+		private async void ToggleSuccesfullNotification()
 		{
 			IsNotificationVisible = true;
-			NotificationMessage = termWasAdded ? PluginResources.Dictionary_NewTerm_Succesfully : PluginResources.Dictionary_NewTerm_Unsuccessfully;
+			NotificationMessage = PluginResources.Dictionary_NewTerm_Succesfully;
 			await Task.Delay(3000);
 			IsNotificationVisible = false;
 			await Task.Delay(1000);
@@ -260,23 +262,19 @@ namespace LanguageWeaverProvider.ViewModel
 				Source = SourceTerm,
 				Target = TargetTerm,
 				Comment = Comment
-			}.ToKeyValuePairList();
+			};
 
-			bool termWasAdded;
-			if (_currentProvider.PluginVersion == PluginVersion.LanguageWeaverCloud)
+			var termWasAdded = _currentProvider.PluginVersion switch
 			{
-				termWasAdded = await CloudService.CreateDictionaryTerm(_currentProvider.AccessToken, SelectedDictionary, newDictionaryTerm);
-			}
-			else if (_currentProvider.PluginVersion == PluginVersion.LanguageWeaverEdge)
-			{
-				termWasAdded = await EdgeService.CreateDictionaryTerm(_currentProvider.AccessToken, SelectedDictionary, newDictionaryTerm);
-			}
-			else
-			{
-				return;
-			}
+				PluginVersion.LanguageWeaverCloud => await CloudService.CreateDictionaryTerm(_currentProvider.AccessToken, SelectedDictionary, newDictionaryTerm),
+				PluginVersion.LanguageWeaverEdge => await EdgeService.CreateDictionaryTerm(_currentProvider.AccessToken, SelectedDictionary, newDictionaryTerm),
+				_ => false
+			};
 
-			ToggleNotification(termWasAdded);
+			if (termWasAdded)
+			{
+				ToggleSuccesfullNotification();
+			}
 		}
 	}
 }

@@ -26,6 +26,7 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/LanguageWeaverProvider;component/Style/WindowsBorder.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/LanguageWeaverProvider;component/Controls/WatermarkTextBoxResources.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/LanguageWeaverProvider;component/Controls/ProgressIndicator.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 
 			<Style TargetType="Image">
@@ -48,8 +49,8 @@
 				<RowDefinition Height="Auto" />
 			</Grid.RowDefinitions>
 
-			<styles:WindowsControl Grid.Row="0" 
-								   Margin="0 20 0 0"/>
+			<styles:WindowsControl Grid.Row="0"
+								   Margin="0 20 0 0" />
 
 			<TextBox Grid.Row="1"
 					 Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}"
@@ -61,11 +62,12 @@
 					 controls:TextBoxWatermarkHelper.IsWatermarkVisible="True"
 					 HorizontalAlignment="Right"
 					 Width="232"
-					 Margin="16 12 16 0" />
+					 Margin="16 0 16 0" />
 
 			<DataGrid ItemsSource="{Binding FilteredMappedLanguages}"
 					  SelectedItem="{Binding SelectedMappedLanguage}"
 					  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+					  Visibility="{Binding LoadingAction, Converter={StaticResource EmptyStringToVisibility}, ConverterParameter=Inverted}"
 					  BorderThickness="1"
 					  BorderBrush="#FFBFCDD4"
 					  AutoGenerateColumns="False"
@@ -97,20 +99,25 @@
 				</DataGrid.Columns>
 			</DataGrid>
 
+			<controls:ProgressIndicator Grid.Row="2"
+										Text="{Binding LoadingAction}"
+										Visibility="{Binding LoadingAction, Converter={StaticResource EmptyStringToVisibility}}"
+										VerticalAlignment="Center" />
+
 			<StackPanel Grid.Row="3"
 						Orientation="Horizontal"
 						Margin="16 4">
 				<TextBlock Text="{x:Static root:PluginResources.LMPView_Languages_TotalCount}" />
-				
-				<TextBlock Text="{Binding MappedLanguages.Count}" 
-						   Margin="2 0 0 0"/>
+
+				<TextBlock Text="{Binding MappedLanguages.Count}"
+						   Margin="2 0 0 0" />
 
 				<TextBlock Text="{x:Static root:PluginResources.LMPView_Languages_Filtered}"
 						   Visibility="{Binding Filter, Converter={StaticResource EmptyStringToVisibility}, ConverterParameter=Inverted}" />
-				
+
 				<TextBlock Text="{Binding FilteredMappedLanguages.Count}"
-						   Visibility="{Binding Filter, Converter={StaticResource EmptyStringToVisibility}, ConverterParameter=Inverted}" 
-						   Margin="2 0 0 0"/>
+						   Visibility="{Binding Filter, Converter={StaticResource EmptyStringToVisibility}, ConverterParameter=Inverted}"
+						   Margin="2 0 0 0" />
 			</StackPanel>
 
 			<Separator Grid.Row="4"
@@ -152,7 +159,7 @@
 						Height="26"
 						Width="120" />
 			</StackPanel>
-			
+
 		</Grid>
 	</Border>
 </Window>

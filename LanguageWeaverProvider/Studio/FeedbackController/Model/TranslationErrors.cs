@@ -135,5 +135,17 @@ namespace LanguageWeaverProvider.Studio.FeedbackController.Model
 
 			return problemsReported;
 		}
+
+		public void ResetValues()
+		{
+			WordsOmission = default;
+			WordsAddition = default;
+			WordChoice = default;
+			Unintelligible = default;
+			Grammar = default;
+			Spelling = default;
+			Punctuation = default;
+			Capitalization = default;
+		}
 	}
 }

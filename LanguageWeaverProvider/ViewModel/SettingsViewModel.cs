@@ -7,6 +7,7 @@ namespace LanguageWeaverProvider.ViewModel
 {
 	public class SettingsViewModel : BaseViewModel
 	{
+		bool _autosendFeedback;
 		bool _resendDrafts;
 		bool _includeTags;
 		bool _useCustomName;
@@ -22,12 +23,21 @@ namespace LanguageWeaverProvider.ViewModel
 
 		public ITranslationOptions TranslationOptions { get; private set; }
 
+		public bool AutosendFeedback
+		{
+			get => _autosendFeedback;
+			set
+			{
+				_autosendFeedback = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public bool ResendDrafts
 		{
 			get => _resendDrafts;
 			set
 			{
-				if (_resendDrafts == value) return;
 				_resendDrafts = value;
 				OnPropertyChanged();
 			}
@@ -38,7 +48,6 @@ namespace LanguageWeaverProvider.ViewModel
 			get => _includeTags;
 			set
 			{
-				if (_includeTags == value) return;
 				_includeTags = value;
 				OnPropertyChanged();
 			}
@@ -79,6 +88,7 @@ namespace LanguageWeaverProvider.ViewModel
 		private void SetSettings()
 		{
 			TranslationOptions.ProviderSettings ??= new();
+			AutosendFeedback = TranslationOptions.ProviderSettings.AutosendFeedback;
 			ResendDrafts = TranslationOptions.ProviderSettings.ResendDrafts;
 			IncludeTags = TranslationOptions.ProviderSettings.IncludeTags;
 			UseCustomName = TranslationOptions.ProviderSettings.UseCustomName;

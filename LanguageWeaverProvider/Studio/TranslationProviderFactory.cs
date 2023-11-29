@@ -13,8 +13,10 @@ namespace LanguageWeaverProvider
 	{
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
 		{
+			ApplicationInitializer.CredentialStore = credentialStore;
 			var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
-			return new TranslationProvider(options, credentialStore);
+			CredentialManager.GetCredentials(options, true);
+			return new TranslationProvider(options);
 		}
 
 		public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)

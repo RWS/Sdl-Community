@@ -55,6 +55,7 @@ namespace LanguageWeaverProvider.BatchTask
 					translationOrigin.SetMetaData(Constants.SegmentMetadata_ShortModelName, ratedSegment.Model);
 					translationOrigin.SetMetaData(Constants.SegmentMetadata_LongModelName, ratedSegment.ModelName);
 					translationOrigin.SetMetaData(Constants.SegmentMetadata_Translation, ratedSegment.Translation);
+					translationOrigin.SetMetaData("autosend_feedback", ratedSegment.AutosendFeedback.ToString());
 				}
 
 				_usedIds.AddRange(segmentPairs.Select(sp => sp.Properties.Id));

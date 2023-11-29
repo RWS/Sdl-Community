@@ -5,6 +5,7 @@ using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Services;
+using LanguageWeaverProvider.View.Edge;
 using LanguageWeaverProvider.ViewModel.Interface;
 
 namespace LanguageWeaverProvider.ViewModel.Edge
@@ -135,7 +136,7 @@ namespace LanguageWeaverProvider.ViewModel.Edge
 				return;
 			}
 
-			StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Connection_Loading_Connecting));
+			StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Loading_Connecting));
 			var edgeCredentials = new EdgeCredentials(Host)
 			{
 				UserName = Username,
@@ -154,7 +155,10 @@ namespace LanguageWeaverProvider.ViewModel.Edge
 			}
 			else
 			{
-				response = await EdgeService.SignInAuthAsync(edgeCredentials, TranslationOptions);
+				var vm = new EdgeAuth0ViewModel(edgeCredentials, TranslationOptions);
+				var view = new EdgeAuth0View() { DataContext = vm };
+				view.ShowDialog();
+				response = (vm.Success, vm.Exception);
 			}
 
 			StopLoginProcess?.Invoke(this, EventArgs.Empty);

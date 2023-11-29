@@ -107,6 +107,8 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		public ICommand SignInCommand { get; private set; }
 
+		public ICommand Auth0SignInCommand { get; private set; }
+
 		public ICommand SelectAuthenticationTypeCommand { get; private set; }
 
 		public event EventHandler CloseRequested;
@@ -120,6 +122,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			BackCommand = new RelayCommand(Back);
 			ClearCommand = new RelayCommand(Clear);
 			SignInCommand = new RelayCommand(SignIn);
+			Auth0SignInCommand = new RelayCommand(Auth0SignIn);
 			SelectAuthenticationTypeCommand = new RelayCommand(SelectAuthenticationType);
 		}
 
@@ -127,9 +130,11 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 		{
 			if (TranslationOptions.CloudCredentials is null)
 			{
+				SelectedRegion = Constants.CloudEUUrl;
 				return;
 			}
 
+			SelectedRegion = TranslationOptions.CloudCredentials.AccountRegion;
 			UserName = TranslationOptions.CloudCredentials.UserName;
 			UserPassword = TranslationOptions.CloudCredentials.UserPassword;
 			ClientId = TranslationOptions.CloudCredentials.ClientID;
@@ -155,8 +160,9 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				return;
 			}
 
-			StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Connection_Loading_Connecting));
+			StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Loading_Connecting));
 			TranslationOptions.CloudCredentials ??= new();
+			TranslationOptions.CloudCredentials.AccountRegion = SelectedRegion;
 			if (AuthenticationType == AuthenticationType.CloudCredentials)
 			{
 				TranslationOptions.CloudCredentials.UserName = UserName;
@@ -169,35 +175,32 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			}
 			else if (AuthenticationType == AuthenticationType.CloudSSO)
 			{
-				Auth0SignIn();
+				Auth0SignInCommand?.Execute(ConnectionCode);
 				StopLoginProcess?.Invoke(this, EventArgs.Empty);
 				return;
 			}
 
-			var response = await CloudService.AuthenticateUser(TranslationOptions.CloudCredentials, TranslationOptions, AuthenticationType, SelectedRegion);
+			var response = await CloudService.AuthenticateUser(TranslationOptions, AuthenticationType);
 			if (!response.Success)
 			{
-				StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Connection_Error_FirstFail));
-				response = await CloudService.AuthenticateUser(TranslationOptions.CloudCredentials, TranslationOptions, AuthenticationType, SelectedRegion);
 				StopLoginProcess?.Invoke(this, EventArgs.Empty);
-				if (!response.Success)
-				{
-					response.Error.ShowDialog(PluginResources.Connection_Error_Failed, response.Error.Message, true);
-					return;
-				}
+				response.Error.ShowDialog(PluginResources.Connection_Error_Failed, response.Error.Message, true);
+				return;
 			}
 
 			CloseWindow();
 		}
 
-		private void Auth0SignIn()
+		private void Auth0SignIn(object parameter)
 		{
-			var auth0Config = new Auth0Config(ConnectionCode, SelectedRegion);
+			StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Loading_Connecting));
+			var auth0Config = new Auth0Config(parameter as string, SelectedRegion);
 			var cloudAuth0ViewModel = new CloudAuth0ViewModel(TranslationOptions, auth0Config);
 			var cloudAuth0View = new CloudAuth0View() { DataContext = cloudAuth0ViewModel };
 			cloudAuth0ViewModel.CloseAuth0Raised += () =>
 			{
 				cloudAuth0View.Close();
+				StopLoginProcess?.Invoke(this, EventArgs.Empty);
 				if (cloudAuth0ViewModel.IsConnected)
 				{
 					CloseWindow();
@@ -205,6 +208,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			};
 
 			cloudAuth0View.ShowDialog();
+			StopLoginProcess?.Invoke(this, EventArgs.Empty);
 		}
 
 		private bool CredentialsAreSet()

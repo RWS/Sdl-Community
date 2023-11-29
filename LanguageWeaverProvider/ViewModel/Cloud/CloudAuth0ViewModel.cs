@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
@@ -24,7 +25,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		public event CloseAuth0Raiser CloseAuth0Raised;
 
-		public async void Navigated(string uri)
+		public async Task Navigated(string uri)
 		{
 			var (success, error) = await CloudService.AuthenticateSSOUser(_translationOptions, Auth0Config, new Uri(uri), Auth0Config.PortalRegion);
 			IsConnected = success;

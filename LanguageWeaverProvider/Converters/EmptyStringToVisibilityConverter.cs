@@ -10,8 +10,12 @@ namespace LanguageWeaverProvider.Converters
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			var isEmpty = value is not null && string.IsNullOrEmpty(value as string);
-			return parameter.ToVisibility(isEmpty);
+			if (parameter is null)
+			{
+				return string.IsNullOrWhiteSpace((string)value) ? Visibility.Collapsed : Visibility.Visible;
+			}
+
+			return string.IsNullOrWhiteSpace((string)value) ? Visibility.Visible : Visibility.Collapsed;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

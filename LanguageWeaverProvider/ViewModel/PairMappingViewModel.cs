@@ -2,8 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
-using LanguageMappingProvider.Database;
 using LanguageMappingProvider.Database.Interface;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.LanguageMappingProvider;
@@ -17,14 +17,16 @@ namespace LanguageWeaverProvider.ViewModel
 {
 	public class PairMappingViewModel : BaseViewModel
 	{
-		private readonly ITranslationOptions _translationOptions;
-		private readonly ILanguageMappingDatabase _languageMappingDatabase;
-		private readonly LanguagePair[] _languagePairs;
+		readonly ITranslationOptions _translationOptions;
+		readonly ILanguageMappingDatabase _languageMappingDatabase;
+		readonly LanguagePair[] _languagePairs;
 
-		private SettingsViewModel _settingsView;
-		private bool _showSettingsView;
+		SettingsViewModel _settingsView;
+		bool _showSettingsView;
 
-		private ObservableCollection<PairMapping> _pairMappings;
+		string _loadingAction = "Loading...";
+
+		ObservableCollection<PairMapping> _pairMappings;
 
 		public PairMappingViewModel(ITranslationOptions translationOptions, LanguagePair[] languagePairs)
 		{
@@ -52,6 +54,16 @@ namespace LanguageWeaverProvider.ViewModel
 			set
 			{
 				_showSettingsView = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string LoadingAction
+		{
+			get => _loadingAction;
+			set
+			{
+				_loadingAction = value;
 				OnPropertyChanged();
 			}
 		}
@@ -103,6 +115,7 @@ namespace LanguageWeaverProvider.ViewModel
 		{
 			SaveChanges = true;
 			_translationOptions.PairMappings = PairMappings.ToList();
+			_translationOptions.ProviderSettings.AutosendFeedback = SettingsView.AutosendFeedback;
 			_translationOptions.ProviderSettings.ResendDrafts = SettingsView.ResendDrafts;
 			_translationOptions.ProviderSettings.IncludeTags = SettingsView.IncludeTags;
 			_translationOptions.ProviderSettings.UseCustomName = SettingsView.UseCustomName;
@@ -152,7 +165,7 @@ namespace LanguageWeaverProvider.ViewModel
 			CreatePairMappings();
 		}
 
-		private void LoadPairMapping()
+		private async void LoadPairMapping()
 		{
 			if (_translationOptions.PairMappings is null || !_translationOptions.PairMappings.Any())
 			{
@@ -160,6 +173,8 @@ namespace LanguageWeaverProvider.ViewModel
 				return;
 			}
 
+			LoadingAction = "Loading resources...";
+			await Task.Delay(50);
 			var pairMappings = new ObservableCollection<PairMapping>();
 			foreach (var pairMapping in _translationOptions.PairMappings)
 			{
@@ -180,6 +195,7 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 
 			PairMappings = pairMappings;
+			LoadingAction = null;
 		}
 
 		private async void CreatePairMappings()
@@ -187,19 +203,24 @@ namespace LanguageWeaverProvider.ViewModel
 			var originalPairMappings = PairMappings;
 			PairMappings = new();
 			var mappedLanguages = _languageMappingDatabase.GetMappedLanguages();
+			LoadingAction = "Getting models...";
+			await Task.Delay(50);
 			var accountModels = _translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
 							  ? await CloudService.GetSupportedLanguages(_translationOptions.AccessToken)
 							  : await EdgeService.GetLanguagePairs(_translationOptions.AccessToken);
+			LoadingAction = "Getting dictionaries...";
+			await Task.Delay(50);
 			var accountDictionaries = _translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
 									? await CloudService.GetDictionaries(_translationOptions.AccessToken)
 									: await EdgeService.GetDictionaries(_translationOptions.AccessToken);
-
+			LoadingAction = "Loading resources...";
+			await Task.Delay(50);
 			foreach (var languagePair in _languagePairs)
 			{
 				var mappedLanguagePairs = mappedLanguages.Where(mappedLang => mappedLang.TradosCode.Equals(languagePair.SourceCultureName) || mappedLang.TradosCode.Equals(languagePair.TargetCultureName));
 				var mappedSource = mappedLanguagePairs.FirstOrDefault(mappedLang => mappedLang.TradosCode.Equals(languagePair.SourceCultureName));
 				var mappedTarget = mappedLanguagePairs.FirstOrDefault(mappedLang => mappedLang.TradosCode.Equals(languagePair.TargetCultureName));
-				var displayName = $"{mappedSource.Name} ({mappedSource.Region}) - {mappedTarget.Name} ({mappedTarget.Region})";
+				var displayName = $"{mappedSource.Name} ({mappedSource.Region}) - {mappedTarget?.Name} ({mappedTarget?.Region})";
 
 				var currentModel = originalPairMappings?.FirstOrDefault(pair => pair.DisplayName.Equals(displayName));
 				if (currentModel is not null
@@ -238,6 +259,8 @@ namespace LanguageWeaverProvider.ViewModel
 					Dictionaries = dictionaries
 				});
 			}
+
+			LoadingAction = null;
 		}
 	}
 }

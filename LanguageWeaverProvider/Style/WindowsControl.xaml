@@ -37,9 +37,10 @@
 		</Grid>
 
 		<DockPanel Grid.Row="1">
-			<Image Source="../Resources/lwMainLogo.png"
-				   DockPanel.Dock="Top"
-				   Width="400"/>
+			<Image Grid.Row="0"
+				   Grid.ColumnSpan="2"
+				   Source="../Resources/lwHeader.png"
+				   Height="60"/>
 		</DockPanel>
 	</Grid>
 </UserControl>

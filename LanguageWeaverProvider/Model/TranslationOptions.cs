@@ -7,13 +7,8 @@ namespace LanguageWeaverProvider.Model.Options
 {
 	public class TranslationOptions : ITranslationOptions
 	{
-		public Uri Uri { get; set; }
-
-		public ProviderSettings ProviderSettings { get; set; }
-
-		public AuthenticationType AuthenticationType { get; set; }
-
-		public PluginVersion PluginVersion { get; set; }
+		[JsonIgnore]
+		public AccessToken AccessToken { get; set; }
 
 		[JsonIgnore]
 		public CloudCredentials CloudCredentials { get; set; }
@@ -21,9 +16,15 @@ namespace LanguageWeaverProvider.Model.Options
 		[JsonIgnore]
 		public EdgeCredentials EdgeCredentials { get; set; }
 
+		public AuthenticationType AuthenticationType { get; set; }
+
+		public PluginVersion PluginVersion { get; set; }
+
 		public List<PairMapping> PairMappings { get; set; }
 
-		public AccessToken AccessToken { get; set; }
+		public ProviderSettings ProviderSettings { get; set; }
+
+		public Uri Uri { get; set; }
 
 		public void UpdateUri(string uriString)
 		{

@@ -126,8 +126,14 @@
   <data name="Auth_Cloud_APICredentials_ClientSecret" xml:space="preserve">
     <value>Client Secret</value>
   </data>
+  <data name="Auth_Cloud_APICredentials_ToolTip" xml:space="preserve">
+    <value>Recommended for systematic automated workflows</value>
+  </data>
   <data name="Auth_Cloud_Credentials" xml:space="preserve">
     <value>User credentials</value>
+  </data>
+  <data name="Auth_Cloud_Credentials_ToolTip" xml:space="preserve">
+    <value>Provision for external user access</value>
   </data>
   <data name="Auth_Cloud_Credentials_Username" xml:space="preserve">
     <value>Username</value>
@@ -135,8 +141,17 @@
   <data name="Auth_Cloud_Credentials_Userpw" xml:space="preserve">
     <value>Password</value>
   </data>
-  <data name="Auth_Cloud_SSO_ConnectionCode" xml:space="preserve">
+  <data name="Auth_Cloud_FederatedSSO_ConnectionCode" xml:space="preserve">
     <value>Connection code</value>
+  </data>
+  <data name="Auth_Cloud_FSSO" xml:space="preserve">
+    <value>Federated SSO</value>
+  </data>
+  <data name="Auth_Cloud_FSSO_ToolTip" xml:space="preserve">
+    <value>Supports Single Sign On across external domains and organisations</value>
+  </data>
+  <data name="Auth_Cloud_SSO_Tooltip" xml:space="preserve">
+    <value>Access Language Weaver using your unique RWS ID authentication or email</value>
   </data>
   <data name="Auth_Edge_APIKey" xml:space="preserve">
     <value>API Key</value>
@@ -184,7 +199,7 @@
     <value>Not available</value>
   </data>
   <data name="CloudMappingView_WelcomeMessage" xml:space="preserve">
-    <value>Welcome to the Language Weaver translation provider for Studio.</value>
+    <value>Welcome to the Language Weaver translation provider for Trados Studio.</value>
   </data>
   <data name="Connection_Credentials" xml:space="preserve">
     <value>Credentials</value>
@@ -197,12 +212,6 @@
   </data>
   <data name="Connection_Error_NoCredentials" xml:space="preserve">
     <value>Please provide your credentials</value>
-  </data>
-  <data name="Connection_Loading_Connecting" xml:space="preserve">
-    <value>Connecting user...</value>
-  </data>
-  <data name="Connection_Loading_Initiating" xml:space="preserve">
-    <value>Initiating...</value>
   </data>
   <data name="Dictionary_CreateTerm_Comment" xml:space="preserve">
     <value>Comment</value>
@@ -297,6 +306,18 @@ This action cannot be undone.</value>
   <data name="LMPView_SearchBox" xml:space="preserve">
     <value>Search language...</value>
   </data>
+  <data name="Loading_Connecting" xml:space="preserve">
+    <value>Connecting user...</value>
+  </data>
+  <data name="Loading_Initiating" xml:space="preserve">
+    <value>Initiating...</value>
+  </data>
+  <data name="Loading_LMP_Apply" xml:space="preserve">
+    <value>Applying changes...</value>
+  </data>
+  <data name="Loading_LMP_RestoreDefaults" xml:space="preserve">
+    <value>Restoring database...</value>
+  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="lwLogoIco" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\lwLogoIco.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -314,10 +335,10 @@ This action cannot be undone.</value>
     <value>Exit</value>
   </data>
   <data name="MainView_Buttons_LWCloud" xml:space="preserve">
-    <value>Language Weaver</value>
+    <value>Language Weaver Cloud</value>
   </data>
   <data name="MainView_Buttons_LWCloud_ToolTip" xml:space="preserve">
-    <value>Language Weaver is a secure, adaptable, cloud-based enterprise machine translation API and portal for businesses that need to process high volumes of multilingual content quickly and effectively.</value>
+    <value>Language Weaver Cloud is a secure, adaptable, cloud-based enterprise machine translation API and portal for businesses that need to process high volumes of multilingual content quickly and effectively.</value>
   </data>
   <data name="MainView_Buttons_LWEdge" xml:space="preserve">
     <value>Language Weaver Edge</value>
@@ -332,7 +353,7 @@ This action cannot be undone.</value>
     <value>Confirm</value>
   </data>
   <data name="MainView_HelpMessage" xml:space="preserve">
-    <value>Select your required Language Weaver Service Provider.</value>
+    <value>Select your required Language Weaver Service Provider</value>
   </data>
   <data name="NameOf_CommandParameterI_MissingComponent" xml:space="preserve">
     <value>Could not find the property '{0}' in '{1}', please check the spelling for both the property and the class or if any of the two had its name changed in both C# class and XAML.</value>

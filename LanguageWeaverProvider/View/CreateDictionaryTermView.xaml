@@ -18,7 +18,7 @@
 		Background="Transparent"
 		MinHeight="360"
 		MinWidth="400"
-		Height="360"
+		Height="400"
 		Width="400">
 
 	<Window.Resources>
@@ -44,6 +44,7 @@
 			<converters:EnumToVisibilityConverter x:Key="EnumToVisibility" />
 			<converters:ImageToBitmapImageConverter x:Key="ImageConverter" />
 			<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+			<converters:EmptyCollectionToVisibilityConverter x:Key="EmptyCollection" />
 		</ResourceDictionary>
 	</Window.Resources>
 
@@ -54,78 +55,29 @@
 			BorderBrush="Black">
 		<Grid>
 			<Grid.RowDefinitions>
-				<RowDefinition Height="42" />
+				<RowDefinition Height="56" />
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="*" />
-				<RowDefinition Height="42" />
+				<RowDefinition Height="56" />
 			</Grid.RowDefinitions>
 
-			<Border Grid.Row="0"
-					Background="#ffffff">
-				<Grid>
-					<Image HorizontalAlignment="Left"
-						   VerticalAlignment="Center"
-						   Source="../Resources/lwMainLogo.png"
-						   Width="210"
-						   Margin="8 0"/>
-					<ContentControl Content="{Binding NotificationMessage}"
-									HorizontalAlignment="Right"
-									VerticalAlignment="Center"
-									Margin="0 0 8 0">
-						<ContentControl.Style>
-							<Style TargetType="ContentControl">
-								<Setter Property="Opacity"
-										Value="0" />
-								<Setter Property="Template">
-									<Setter.Value>
-										<ControlTemplate TargetType="ContentControl">
-											<Border BorderBrush="#d0d0d0"
-													Background="#edeff1"
-													Padding="10 4"
-													BorderThickness="1"
-													CornerRadius="8">
-												<ContentPresenter />
-											</Border>
-										</ControlTemplate>
-									</Setter.Value>
-								</Setter>
-								<Style.Triggers>
-									<DataTrigger Binding="{Binding IsNotificationVisible}"
-												 Value="True">
-										<DataTrigger.EnterActions>
-											<BeginStoryboard>
-												<Storyboard>
-													<DoubleAnimation Storyboard.TargetProperty="Opacity"
-																	 From="0.0"
-																	 To="1.0"
-																	 Duration="0:0:1" />
-												</Storyboard>
-											</BeginStoryboard>
-										</DataTrigger.EnterActions>
-										<DataTrigger.ExitActions>
-											<BeginStoryboard>
-												<Storyboard>
-													<DoubleAnimation Storyboard.TargetProperty="Opacity"
-																	 From="1.0"
-																	 To="0.0"
-																	 Duration="0:0:1" />
-												</Storyboard>
-											</BeginStoryboard>
-										</DataTrigger.ExitActions>
-									</DataTrigger>
-								</Style.Triggers>
-							</Style>
-						</ContentControl.Style>
-					</ContentControl>
-				</Grid>
-			</Border>
+			<Grid Grid.Row="0"
+				  Background="#ffffff">
+				<Image HorizontalAlignment="Left"
+					   VerticalAlignment="Center"
+					   Source="../Resources/lwHeader.png"
+					   Width="210"
+					   Height="40"
+					   Margin="8 0" />
+			</Grid>
 
 			<StackPanel Grid.Row="1"
 						Grid.ColumnSpan="3"
-						Margin="16 8">
+						Margin="16 8"
+						Visibility="{Binding Dictionaries, Converter={StaticResource EmptyCollection}}">
 				<TextBlock Text="Dictionary"
 						   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
 						   HorizontalAlignment="Left"
@@ -173,7 +125,8 @@
 
 			<StackPanel Grid.Row="2"
 						Grid.Column="0"
-						Margin="16 4">
+						Margin="16 4"
+						Visibility="{Binding Dictionaries, Converter={StaticResource EmptyCollection}}">
 				<StackPanel Orientation="Horizontal"
 							Margin="4 2">
 					<Image Source="{Binding SourceImage, Converter={StaticResource ImageConverter}}"
@@ -198,7 +151,8 @@
 			</StackPanel>
 
 			<StackPanel Grid.Row="3"
-						Margin="16 4">
+						Margin="16 4"
+						Visibility="{Binding Dictionaries, Converter={StaticResource EmptyCollection}}">
 				<StackPanel Orientation="Horizontal"
 							Margin="4 2">
 					<Image Source="{Binding TargetImage, Converter={StaticResource ImageConverter}}"
@@ -222,7 +176,8 @@
 			</StackPanel>
 
 			<StackPanel Grid.Row="4"
-						Margin="16 4 16 8">
+						Margin="16 4 16 8"
+						Visibility="{Binding Dictionaries, Converter={StaticResource EmptyCollection}}">
 				<TextBlock Text="Comment (optional)"
 						   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
 						   HorizontalAlignment="Left"
@@ -241,12 +196,74 @@
 						 VerticalContentAlignment="Center" />
 			</StackPanel>
 
+			<TextBlock Grid.Row="5"
+					   Text="No dictionaries available for the active language pairs in the current project"
+					   Style="{StaticResource Sdl.TextBlock.GenericTitleTextStyle}"
+					   Visibility="{Binding Dictionaries, Converter={StaticResource EmptyCollection}, ConverterParameter=Inverted}"
+					   Margin="36 0"
+					   HorizontalAlignment="Center"
+					   VerticalAlignment="Center"
+					   TextWrapping="Wrap" />
+
+			<Border Grid.Row="5"
+					Margin="0"
+					HorizontalAlignment="Stretch">
+				<ContentControl Content="{Binding NotificationMessage}"
+								HorizontalAlignment="Center"
+								VerticalAlignment="Center">
+					<ContentControl.Style>
+						<Style TargetType="ContentControl">
+							<Setter Property="Opacity"
+									Value="0" />
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate TargetType="ContentControl">
+										<Border BorderBrush="#d0d0d0"
+												Background="#edeff1"
+												Padding="10 4"
+												BorderThickness="1"
+												CornerRadius="8">
+											<ContentPresenter />
+										</Border>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+							<Style.Triggers>
+								<DataTrigger Binding="{Binding IsNotificationVisible}"
+											 Value="True">
+									<DataTrigger.EnterActions>
+										<BeginStoryboard>
+											<Storyboard>
+												<DoubleAnimation Storyboard.TargetProperty="Opacity"
+																 From="0.0"
+																 To="1.0"
+																 Duration="0:0:1" />
+											</Storyboard>
+										</BeginStoryboard>
+									</DataTrigger.EnterActions>
+									<DataTrigger.ExitActions>
+										<BeginStoryboard>
+											<Storyboard>
+												<DoubleAnimation Storyboard.TargetProperty="Opacity"
+																 From="1.0"
+																 To="0.0"
+																 Duration="0:0:1" />
+											</Storyboard>
+										</BeginStoryboard>
+									</DataTrigger.ExitActions>
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</ContentControl.Style>
+				</ContentControl>
+			</Border>
+
 			<Grid Grid.Row="6"
 				  Grid.ColumnSpan="2"
 				  HorizontalAlignment="Stretch"
 				  Background="#ffffff">
 				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*" />
 				</Grid.ColumnDefinitions>
 
@@ -254,23 +271,24 @@
 						Content="{x:Static root:PluginResources.Dictionary_Window_AddTerm}"
 						Command="{Binding CreateNewTermCommand}"
 						Style="{StaticResource Sdl.Button.PrimaryStyle}"
+						Visibility="{Binding Dictionaries, Converter={StaticResource EmptyCollection}}"
 						HorizontalAlignment="Right"
-						Cursor="Hand"
+						FontWeight="DemiBold"
 						Padding="0"
-						Height="24"
-						Margin="16 0"
-						Width="120" />
+						Height="30"
+						Width="120" 
+						Margin="32 0"/>
 
 				<Button Grid.Column="1"
 						Content="{x:Static root:PluginResources.Dictionary_Window_CloseWindow}"
 						Command="{Binding CloseDialogCommand}"
 						Style="{StaticResource Sdl.Button.SecondaryStyle}"
-						HorizontalAlignment="Left"
-						Cursor="Hand"
+						HorizontalAlignment="Right"
+						FontWeight="DemiBold"
 						Padding="0"
-						Height="24"
-						Margin="16 0"
-						Width="120" />
+						Height="30"
+						Width="120" 
+						Margin="32 0"/>
 			</Grid>
 		</Grid>
 	</Border>

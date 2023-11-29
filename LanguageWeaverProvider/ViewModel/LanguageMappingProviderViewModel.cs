@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using LanguageMappingProvider.Database.Interface;
@@ -13,18 +14,19 @@ namespace LanguageWeaverProvider.ViewModel
 {
 	public class LanguageMappingProviderViewModel : BaseViewModel
 	{
-		private readonly ILanguageMappingDatabase _languageMappingDatabase;
+		readonly ILanguageMappingDatabase _languageMappingDatabase;
 
-		private ObservableCollection<LanguageMapping> _filteredMappedLanguages;
-		private ObservableCollection<LanguageMapping> _mappedLanguages;
-		private LanguageMapping _selectedMappedLanguage;
+		ObservableCollection<LanguageMapping> _filteredMappedLanguages;
+		ObservableCollection<LanguageMapping> _mappedLanguages;
+		LanguageMapping _selectedMappedLanguage;
 
-		private string _filter;
+		string _loadingAction;
+		string _filter;
 
-		private ICommand _applyChangesCommand;
-		private ICommand _closeLanguageMappingProviderCommand;
-		private ICommand _resetToDefaultCommand;
-		private ICommand _clearCommand;
+		ICommand _applyChangesCommand;
+		ICommand _closeLanguageMappingProviderCommand;
+		ICommand _resetToDefaultCommand;
+		ICommand _clearCommand;
 
 		public LanguageMappingProviderViewModel(ILanguageMappingDatabase languageMappingDatabase)
 		{
@@ -75,6 +77,16 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 		}
 
+		public string LoadingAction
+		{
+			get => _loadingAction;
+			set
+			{
+				_loadingAction = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
 		public ICommand ResetToDefaultCommand => _resetToDefaultCommand ??= new RelayCommand(ResetToDefault);
 		public ICommand ApplyChangesCommand => _applyChangesCommand ??= new RelayCommand(ApplyChanges, CanApplyChanges);
@@ -120,9 +132,11 @@ namespace LanguageWeaverProvider.ViewModel
 
 		private void ApplyChanges(object parameter)
 		{
+			LoadingAction = PluginResources.Loading_LMP_Apply;
 			_languageMappingDatabase.UpdateAll(MappedLanguages);
 			RetrieveMappedLanguagesFromDatabase();
 			LanguageMappingUpdated?.Invoke(this, EventArgs.Empty);
+			LoadingAction = null;
 		}
 
 		private bool CanApplyChanges(object parameter)
@@ -130,14 +144,18 @@ namespace LanguageWeaverProvider.ViewModel
 			return _languageMappingDatabase.HasMappedLanguagesChanged(MappedLanguages);
 		}
 
-		private void ResetToDefault(object parameter)
+		private async void ResetToDefault(object parameter)
 		{
+			LoadingAction = PluginResources.Loading_LMP_RestoreDefaults;
 			if (ExecuteAction(PluginResources.LMPViewModel_ResetWarning, PluginResources.LMPViewModel_ResetTitle))
 			{
+				await Task.Delay(50);
 				_languageMappingDatabase.ResetToDefault();
 				RetrieveMappedLanguagesFromDatabase();
 				LanguageMappingUpdated?.Invoke(this, EventArgs.Empty);
+				await Task.Delay(50);
 			}
+			LoadingAction = null;
 		}
 
 		private bool ExecuteAction(string message, string title)

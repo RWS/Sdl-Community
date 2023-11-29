@@ -4,11 +4,11 @@ namespace LanguageWeaverProvider.Extensions
 {
 	public static class ObjectExtensions
 	{
-		public static List<KeyValuePair<string, string>> ToKeyValuePairList(this object obj)
+		public static Dictionary<string, string> ToKeyValuePairDictionary(this object obj)
 		{
 			var type = obj.GetType();
 			var properties = type.GetProperties();
-			var keyValuePairs = new List<KeyValuePair<string, string>>();
+			var keyValuePairs = new Dictionary<string, string>();
 			foreach (var property in properties)
 			{
 				var key = property.Name;
@@ -18,7 +18,8 @@ namespace LanguageWeaverProvider.Extensions
 					continue;
 				}
 
-				keyValuePairs.Add(new(key, stringValue));
+				key = char.ToLower(key[0]) + key.Substring(1);
+				keyValuePairs.Add(key, stringValue);
 			}
 
 			return keyValuePairs;
