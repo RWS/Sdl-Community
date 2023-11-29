@@ -73,9 +73,8 @@ namespace Sdl.Community.AhkPlugin
 	{
 		protected override void Execute()
 		{
-			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3171.ahk-plugin");
+			System.Diagnostics.Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3171/autohotkey-manager-ahk");
 
 		}
 	}
-
 }
