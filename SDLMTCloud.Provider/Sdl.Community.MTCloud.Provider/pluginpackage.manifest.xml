@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Language Weaver</PlugInName>
-	<Version>5.1.4.0</Version>
+	<Version>5.2.0.0</Version>
 	<Description>Language Weaver Provider</Description>
 	<Author>Trados AppStore Team</Author>
 	<Include>
@@ -11,5 +11,5 @@
 		<File>Sdl.Community.MTCloud.Languages.Provider.dll</File>
 		<File>Sdl.Community.RateItControl.dll</File>
 	</Include>
-	<RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9"/>
+	<RequiredProduct name="TradosStudio" minversion="17.2" maxversion="17.9"/>
 </PluginPackage>
