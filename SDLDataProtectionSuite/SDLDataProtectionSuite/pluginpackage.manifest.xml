@@ -11,5 +11,5 @@
 		<File>RwsAppStore.UsefulTipsService.dll</File>
 		<File>RwsAppStore.UsefulTipsService.Update.exe</File>
 	</Include>
-	<RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.1.9" />
+	<RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9" />
 </PluginPackage>
