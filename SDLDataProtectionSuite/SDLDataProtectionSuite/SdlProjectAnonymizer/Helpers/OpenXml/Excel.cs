@@ -1,76 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 
-namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
+namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers.OpenXml
 {
 	public class Excel
 	{
-		/// <summary>
-		/// Creates the workbook
-		/// </summary>
-		/// <returns>Spreadsheet created</returns>
-		public SpreadsheetDocument CreateWorkbook(string fileName)
-		{
-			// Create the Excel workbook
-			var spreadSheet = SpreadsheetDocument.Create(fileName, SpreadsheetDocumentType.Workbook, false);
-
-			// Create the parts and the corresponding objects
-
-			// Workbook
-			spreadSheet.AddWorkbookPart();
-			spreadSheet.WorkbookPart.Workbook = new Workbook();
-			spreadSheet.WorkbookPart.Workbook.Save();
-
-			// Shared string table
-			var sharedStringTablePart = spreadSheet.WorkbookPart.AddNewPart<SharedStringTablePart>();
-			sharedStringTablePart.SharedStringTable = new SharedStringTable();
-			sharedStringTablePart.SharedStringTable.Save();
-
-			// Sheets collection
-			spreadSheet.WorkbookPart.Workbook.Sheets = new Sheets();
-			spreadSheet.WorkbookPart.Workbook.Save();
-
-			// Stylesheet
-			var workbookStylesPart = spreadSheet.WorkbookPart.AddNewPart<WorkbookStylesPart>();
-			workbookStylesPart.Stylesheet = new Stylesheet();
-			workbookStylesPart.Stylesheet.Save();
-
-			return spreadSheet;
-		}
-
-		/// <summary>
-		/// Adds a new worksheet to the workbook
-		/// </summary>
-		/// <param name="spreadsheet">Spreadsheet to use</param>
-		/// <param name="name">Name of the worksheet</param>
-		/// <returns>True if successful</returns>
-		public Worksheet AddWorksheet(SpreadsheetDocument spreadsheet, string name)
-		{
-			var sheets = spreadsheet.WorkbookPart.Workbook.GetFirstChild<Sheets>();
-
-			// Add the worksheetpart
-			var worksheetPart = spreadsheet.WorkbookPart.AddNewPart<WorksheetPart>();
-			worksheetPart.Worksheet = new Worksheet(new SheetData());
-			worksheetPart.Worksheet.Save();
-
-			// Add the sheet and make relation to workbook
-			var sheet = new Sheet
-			{
-				Id = spreadsheet.WorkbookPart.GetIdOfPart(worksheetPart),
-				SheetId = (uint)(spreadsheet.WorkbookPart.Workbook.Sheets.Count() + 1),
-				Name = name
-			};
-			sheets.Append(sheet);
-			spreadsheet.WorkbookPart.Workbook.Save();
-
-			return worksheetPart.Worksheet;
-		}
-
 		/// <summary>
 		/// Adds the basic styles to the workbook
 		/// </summary>
@@ -195,23 +133,6 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 		}
 
 		/// <summary>
-		/// Adds a list of strings to the shared strings table.
-		/// </summary>
-		/// <param name="spreadsheet">The spreadsheet</param>
-		/// <param name="stringList">Strings to add</param>
-		/// <returns></returns>
-		public bool AddSharedStrings(SpreadsheetDocument spreadsheet, List<string> stringList)
-		{
-			foreach (var item in stringList)
-			{
-				AddSharedString(spreadsheet, item, false);
-			}
-			spreadsheet.WorkbookPart.SharedStringTablePart.SharedStringTable.Save();
-
-			return true;
-		}
-
-		/// <summary>
 		/// Add a single string to shared strings table.
 		/// Shared string table is created if it doesn't exist.
 		/// </summary>
@@ -223,7 +144,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 		{
 			var sharedStringTable = spreadsheet.WorkbookPart.SharedStringTablePart.SharedStringTable;
 
-			if (0 != sharedStringTable.Count(item => item.InnerText == stringItem)) return true;
+			if (0 != sharedStringTable.Count(item => item.InnerText == stringItem))
+				return true;
 			sharedStringTable.AppendChild(
 				new SharedStringItem(
 					new Text(stringItem)));
@@ -238,28 +160,30 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 		}
 
 		/// <summary>
-		/// Returns the index of a shared string.
+		/// Adds a new worksheet to the workbook
 		/// </summary>
 		/// <param name="spreadsheet">Spreadsheet to use</param>
-		/// <param name="stringItem">String to search for</param>
-		/// <returns>Index of a shared string. -1 if not found</returns>
-		public int IndexOfSharedString(SpreadsheetDocument spreadsheet, string stringItem)
+		/// <param name="name">Name of the worksheet</param>
+		/// <returns>True if successful</returns>
+		public Worksheet AddWorksheet(SpreadsheetDocument spreadsheet, string name)
 		{
-			var sharedStringTable = spreadsheet.WorkbookPart.SharedStringTablePart.SharedStringTable;
-			var found = false;
-			var index = 0;
+			// Add the worksheetpart
+			var worksheetPart = spreadsheet.WorkbookPart.AddNewPart<WorksheetPart>();
+			worksheetPart.Worksheet = new Worksheet(new SheetData());
+			worksheetPart.Worksheet.Save();
 
-			foreach (var sharedString in sharedStringTable.Elements<SharedStringItem>())
+			var sheets = spreadsheet.WorkbookPart.Workbook.AppendChild(new Sheets());
+			// Add the sheet and make relation to workbook
+			var sheet = new Sheet
 			{
-				if (sharedString.InnerText == stringItem)
-				{
-					found = true;
-					break; 
-				}
-				index++;
-			}
+				Id = spreadsheet.WorkbookPart.GetIdOfPart(worksheetPart),
+				SheetId = (uint)(spreadsheet.WorkbookPart.Workbook.Sheets.Count() + 1),
+				Name = name
+			};
+			sheets.Append(sheet);
+			spreadsheet.WorkbookPart.Workbook.Save();
 
-			return found ? index : -1;
+			return worksheetPart.Worksheet;
 		}
 
 		/// <summary>
@@ -279,6 +203,31 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 			}
 
 			return columnName;
+		}
+
+		/// <summary>
+		/// Returns the index of a shared string.
+		/// </summary>
+		/// <param name="spreadsheet">Spreadsheet to use</param>
+		/// <param name="stringItem">String to search for</param>
+		/// <returns>Index of a shared string. -1 if not found</returns>
+		public int IndexOfSharedString(SpreadsheetDocument spreadsheet, string stringItem)
+		{
+			var sharedStringTable = spreadsheet.WorkbookPart.SharedStringTablePart.SharedStringTable;
+			var found = false;
+			var index = 0;
+
+			foreach (var sharedString in sharedStringTable.Elements<SharedStringItem>())
+			{
+				if (sharedString.InnerText == stringItem)
+				{
+					found = true;
+					break;
+				}
+				index++;
+			}
+
+			return found ? index : -1;
 		}
 
 		/// <summary>
@@ -313,111 +262,6 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 			}
 
 			return SetCellValue(worksheet, columnIndex, rowIndex, cellValueType, columnValue, null, save);
-		}
-
-		/// <summary>
-		/// Sets a cell value with a date
-		/// </summary>
-		/// <param name="spreadsheet">Spreadsheet to use</param>
-		/// <param name="worksheet">Worksheet to use</param>
-		/// <param name="columnIndex">Index of the column</param>
-		/// <param name="rowIndex">Index of the row</param>
-		/// <param name="datetimeValue">DateTime value</param>
-		/// <param name="styleIndex">Style to use</param>
-		/// <param name="save">Save the worksheet</param>
-		/// <returns>True if successful</returns>
-		public bool SetCellValue(SpreadsheetDocument spreadsheet, Worksheet worksheet, uint columnIndex, uint rowIndex, DateTime datetimeValue, uint? styleIndex, bool save = false)
-		{
-#if EN_US_CULTURE
-         string columnValue = datetimeValue.ToOADate().ToString();
-#else
-			var columnValue = datetimeValue.ToOADate().ToString(CultureInfo.InvariantCulture).Replace(",", ".");
-#endif
-
-			return SetCellValue(worksheet, columnIndex, rowIndex, CellValues.Date, columnValue, styleIndex, save);
-		}
-
-		/// <summary>
-		/// Sets a cell value with double number
-		/// </summary>
-		/// <param name="spreadsheet">Spreadsheet to use</param>
-		/// <param name="worksheet">Worksheet to use</param>
-		/// <param name="columnIndex">Index of the column</param>
-		/// <param name="rowIndex">Index of the row</param>
-		/// <param name="doubleValue">Double value</param>
-		/// <param name="styleIndex">Style to use</param>
-		/// <param name="save">Save the worksheet</param>
-		/// <returns>True if successful</returns>
-		public bool SetCellValue(SpreadsheetDocument spreadsheet, Worksheet worksheet, uint columnIndex, uint rowIndex, double doubleValue, uint? styleIndex, bool save = false)
-		{
-#if EN_US_CULTURE
-         string columnValue = doubleValue.ToString();
-#else
-			var columnValue = doubleValue.ToString(CultureInfo.InvariantCulture).Replace(",", ".");
-#endif
-
-			return SetCellValue(worksheet, columnIndex, rowIndex, CellValues.Number, columnValue, styleIndex, save);
-		}
-
-		/// <summary>
-		/// Sets a cell value with double number
-		/// </summary>
-		/// <param name="spreadsheet">Spreadsheet to use</param>
-		/// <param name="worksheet">Worksheet to use</param>
-		/// <param name="columnIndex">Index of the column</param>
-		/// <param name="rowIndex">Index of the row</param>
-		/// <param name="intValue"></param>
-		/// <param name="styleIndex">Style to use</param>
-		/// <param name="save">Save the worksheet</param>
-		/// <returns>True if successful</returns>
-		public bool SetCellValue(SpreadsheetDocument spreadsheet, Worksheet worksheet, uint columnIndex, uint rowIndex, int intValue, uint? styleIndex, bool save = false)
-		{
-#if EN_US_CULTURE
-         string columnValue = doubleValue.ToString();
-#else
-			var columnValue = intValue.ToString().Replace(",", ".");
-#endif
-
-			return SetCellValue(worksheet, columnIndex, rowIndex, CellValues.Number, columnValue, styleIndex, save);
-		}
-
-		/// <summary>
-		/// Sets a cell value with double number
-		/// </summary>
-		/// <param name="spreadsheet">Spreadsheet to use</param>
-		/// <param name="worksheet">Worksheet to use</param>
-		/// <param name="columnIndex">Index of the column</param>
-		/// <param name="rowIndex">Index of the row</param>
-		/// <param name="decimalValue"></param>
-		/// <param name="styleIndex">Style to use</param>
-		/// <param name="save">Save the worksheet</param>
-		/// <returns>True if successful</returns>
-		public bool SetCellValue(SpreadsheetDocument spreadsheet, Worksheet worksheet, uint columnIndex, uint rowIndex, decimal decimalValue, uint? styleIndex, bool save = false)
-		{
-#if EN_US_CULTURE
-         string columnValue = doubleValue.ToString();
-#else
-			var columnValue = decimalValue.ToString(CultureInfo.InvariantCulture).Replace(",", ".");
-#endif
-
-			return SetCellValue(worksheet, columnIndex, rowIndex, CellValues.Number, columnValue, styleIndex, save);
-		}
-
-		/// <summary>
-		/// Sets a cell value with boolean value
-		/// </summary>
-		/// <param name="worksheet">Worksheet to use</param>
-		/// <param name="columnIndex">Index of the column</param>
-		/// <param name="rowIndex">Index of the row</param>
-		/// <param name="boolValue">Boolean value</param>
-		/// <param name="styleIndex">Style to use</param>
-		/// <param name="save">Save the worksheet</param>
-		/// <returns>True if successful</returns>
-		public bool SetCellValue(Worksheet worksheet, uint columnIndex, uint rowIndex, bool boolValue, uint? styleIndex, bool save = false)
-		{
-			var columnValue = boolValue ? "1" : "0";
-
-			return SetCellValue(worksheet, columnIndex, rowIndex, CellValues.Boolean, columnValue, styleIndex, save);
 		}
 
 		/// <summary>
@@ -468,7 +312,6 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 			Cell previousCell = null;
 			var cellAddress = ColumnNameFromIndex(columnIndex) + rowIndex;
 
-
 			// Check if the row exists, create if necessary
 			if (sheetData.Elements<Row>().Count(item => item.RowIndex == rowIndex) != 0)
 			{
@@ -509,7 +352,6 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 				row.InsertAfter(cell, previousCell);
 			}
 
-		
 			// Add the value
 			cell.CellValue = new CellValue(value);
 
@@ -526,20 +368,6 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 			{
 				worksheet.Save();
 			}
-
-			return true;
-		}
-
-		/// <summary>
-		/// Adds a predefined style from the given xml
-		/// </summary>
-		/// <param name="spreadsheet">Spreadsheet to use</param>
-		/// <param name="xml">Style definition as xml</param>
-		/// <returns>True if succesful</returns>
-		public bool AddPredefinedStyles(SpreadsheetDocument spreadsheet, string xml)
-		{
-			spreadsheet.WorkbookPart.WorkbookStylesPart.Stylesheet.InnerXml = xml;
-			spreadsheet.WorkbookPart.WorkbookStylesPart.Stylesheet.Save();
 
 			return true;
 		}

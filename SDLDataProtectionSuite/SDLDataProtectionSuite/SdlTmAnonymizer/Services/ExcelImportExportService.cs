@@ -15,6 +15,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Vml.Office;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers;
+using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers.OpenXml;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Models;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Model.Log;
