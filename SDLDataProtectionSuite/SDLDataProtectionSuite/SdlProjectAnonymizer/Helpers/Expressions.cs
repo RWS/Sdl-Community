@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers.OpenXml;
@@ -15,7 +13,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 	{
 		public static void ExportExpressions(string filePath, List<RegexPattern> patterns)
 		{
-			var package = GetSheetInfo(filePath, true);
+			var package = Excel.GetSheetInfo(filePath, true);
 			var excelDocument = new Excel();
 			var worksheet = excelDocument.AddWorksheet(package, "Exported expressions");
 			var order = 0;
@@ -112,40 +110,6 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 				}
 			}
 			return patterns;
-		}
-
-		public static SpreadsheetDocument GetSheetInfo(string filePath, bool isExport = false)
-		{
-			if (isExport)
-			{
-				CreateExcelWithPatterns(ref filePath);
-			}
-			var mySpreadsheet = SpreadsheetDocument.Open(filePath, true);
-			return mySpreadsheet;
-		}
-
-		private static void CreateExcelWithPatterns(ref string filePath)
-		{
-			try
-			{
-				if (File.Exists(filePath))
-				{
-					File.Delete(filePath);
-				}
-
-				using var spreadsheet = SpreadsheetDocument.Create(filePath, SpreadsheetDocumentType.Workbook);
-
-				spreadsheet.AddWorkbookPart();
-				spreadsheet.WorkbookPart.Workbook = new Workbook();
-
-				spreadsheet.WorkbookPart.Workbook.Save();
-			}
-			catch (Exception e)
-			{
-				Console.Write(e);
-				filePath = filePath.Insert(filePath.IndexOf(".xlsx", StringComparison.Ordinal), "(new)");
-				CreateExcelWithPatterns(ref filePath);
-			}
 		}
 
 		private static bool IsValidColumnHeader(string colmun, string expected)

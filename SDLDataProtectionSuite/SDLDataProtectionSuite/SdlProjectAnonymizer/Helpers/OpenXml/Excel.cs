@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
@@ -9,127 +10,14 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers.Open
 {
 	public class Excel
 	{
-		/// <summary>
-		/// Adds the basic styles to the workbook
-		/// </summary>
-		/// <param name="spreadsheet">Spreadsheet to use</param>
-		/// <returns>True if successful</returns>
-		public bool AddBasicStyles(SpreadsheetDocument spreadsheet)
+		public static SpreadsheetDocument GetSheetInfo(string filePath, bool isExport = false)
 		{
-			var stylesheet = spreadsheet.WorkbookPart.WorkbookStylesPart.Stylesheet;
-
-			// Numbering formats (x:numFmts)
-			stylesheet.InsertAt(new NumberingFormats(), 0);
-			// Currency
-			stylesheet.GetFirstChild<NumberingFormats>().InsertAt(
-			   new NumberingFormat
-			   {
-				   NumberFormatId = 164,
-				   FormatCode = "#,##0.00"
-				   + "\\ \"" + CultureInfo.CurrentUICulture.NumberFormat.CurrencySymbol + "\""
-			   }, 0);
-
-			// Fonts (x:fonts)
-			stylesheet.InsertAt(new Fonts(), 1);
-			stylesheet.GetFirstChild<Fonts>().InsertAt(
-			   new Font
-			   {
-				   FontSize = new FontSize
-				   {
-					   Val = 11
-				   },
-				   FontName = new FontName
-				   {
-					   Val = "Calibri"
-				   }
-			   }, 0);
-
-			// Fills (x:fills)
-			stylesheet.InsertAt(new Fills(), 2);
-			stylesheet.GetFirstChild<Fills>().InsertAt(
-			   new Fill
-			   {
-				   PatternFill = new PatternFill
-				   {
-					   PatternType = new EnumValue<PatternValues>
-					   {
-						   Value = PatternValues.None
-					   }
-				   }
-			   }, 0);
-
-			// Borders (x:borders)
-			stylesheet.InsertAt(new Borders(), 3);
-			stylesheet.GetFirstChild<Borders>().InsertAt(
-			   new Border
-			   {
-				   LeftBorder = new LeftBorder(),
-				   RightBorder = new RightBorder(),
-				   TopBorder = new TopBorder(),
-				   BottomBorder = new BottomBorder(),
-				   DiagonalBorder = new DiagonalBorder()
-			   }, 0);
-
-			// Cell style formats (x:CellStyleXfs)
-			stylesheet.InsertAt(new CellStyleFormats(), 4);
-			stylesheet.GetFirstChild<CellStyleFormats>().InsertAt(
-			   new CellFormat
-			   {
-				   NumberFormatId = 0,
-				   FontId = 0,
-				   FillId = 0,
-				   BorderId = 0
-			   }, 0);
-
-			// Cell formats (x:CellXfs)
-			stylesheet.InsertAt(new CellFormats(), 5);
-			// General text
-			stylesheet.GetFirstChild<CellFormats>().InsertAt(
-			   new CellFormat
-			   {
-				   FormatId = 0,
-				   NumberFormatId = 0
-			   }, 0);
-			// Date
-			stylesheet.GetFirstChild<CellFormats>().InsertAt(
-			   new CellFormat
-			   {
-				   ApplyNumberFormat = true,
-				   FormatId = 0,
-				   NumberFormatId = 22,
-				   FontId = 0,
-				   FillId = 0,
-				   BorderId = 0
-			   },
-				  1);
-			// Currency
-			stylesheet.GetFirstChild<CellFormats>().InsertAt(
-			   new CellFormat
-			   {
-				   ApplyNumberFormat = true,
-				   FormatId = 0,
-				   NumberFormatId = 164,
-				   FontId = 0,
-				   FillId = 0,
-				   BorderId = 0
-			   },
-				  2);
-			// Percentage
-			stylesheet.GetFirstChild<CellFormats>().InsertAt(
-			   new CellFormat
-			   {
-				   ApplyNumberFormat = true,
-				   FormatId = 0,
-				   NumberFormatId = 10,
-				   FontId = 0,
-				   FillId = 0,
-				   BorderId = 0
-			   },
-				  3);
-
-			stylesheet.Save();
-
-			return true;
+			if (isExport)
+			{
+				CreateExcelWithPatterns(ref filePath);
+			}
+			var mySpreadsheet = SpreadsheetDocument.Open(filePath, true);
+			return mySpreadsheet;
 		}
 
 		/// <summary>
@@ -290,6 +178,30 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers.Open
 			worksheet.Save();
 
 			return true;
+		}
+
+		private static void CreateExcelWithPatterns(ref string filePath)
+		{
+			try
+			{
+				if (File.Exists(filePath))
+				{
+					File.Delete(filePath);
+				}
+
+				using var spreadsheet = SpreadsheetDocument.Create(filePath, SpreadsheetDocumentType.Workbook);
+
+				spreadsheet.AddWorkbookPart();
+				spreadsheet.WorkbookPart.Workbook = new Workbook();
+
+				spreadsheet.WorkbookPart.Workbook.Save();
+			}
+			catch (Exception e)
+			{
+				Console.Write(e);
+				filePath = filePath.Insert(filePath.IndexOf(".xlsx", StringComparison.Ordinal), "(new)");
+				CreateExcelWithPatterns(ref filePath);
+			}
 		}
 
 		/// <summary>
