@@ -92,28 +92,31 @@
             this.mainPanel.Controls.Add(this.addNewPatternButton, 2, 2);
             this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanel.Location = new System.Drawing.Point(0, 0);
+            this.mainPanel.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.RowCount = 4;
             this.mainPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.mainPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.mainPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.mainPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mainPanel.Size = new System.Drawing.Size(689, 400);
+            this.mainPanel.Size = new System.Drawing.Size(1468, 769);
             this.mainPanel.TabIndex = 0;
             // 
             // expressionsGrid
             // 
             this.expressionsGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.expressionsGrid.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.expressionsGrid.ColumnHeadersHeight = 46;
             this.expressionsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.mainPanel.SetColumnSpan(this.expressionsGrid, 3);
             this.expressionsGrid.Cursor = System.Windows.Forms.Cursors.Hand;
             this.expressionsGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.expressionsGrid.Location = new System.Drawing.Point(3, 45);
+            this.expressionsGrid.Location = new System.Drawing.Point(6, 84);
+            this.expressionsGrid.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.expressionsGrid.Name = "expressionsGrid";
             this.expressionsGrid.RowHeadersWidth = 30;
             this.expressionsGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.expressionsGrid.Size = new System.Drawing.Size(683, 297);
+            this.expressionsGrid.Size = new System.Drawing.Size(1456, 557);
             this.expressionsGrid.TabIndex = 1;
             this.expressionsGrid.KeyDown += new System.Windows.Forms.KeyEventHandler(this.expressionsGrid_KeyDown);
             // 
@@ -122,9 +125,10 @@
             this.importBtn.AutoSize = true;
             this.importBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.importBtn.Dock = System.Windows.Forms.DockStyle.Left;
-            this.importBtn.Location = new System.Drawing.Point(3, 348);
+            this.importBtn.Location = new System.Drawing.Point(6, 653);
+            this.importBtn.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.importBtn.Name = "importBtn";
-            this.importBtn.Size = new System.Drawing.Size(82, 23);
+            this.importBtn.Size = new System.Drawing.Size(159, 67);
             this.importBtn.TabIndex = 2;
             this.importBtn.Text = "Import rules(s)";
             this.importBtn.UseVisualStyleBackColor = true;
@@ -133,9 +137,10 @@
             // exportBtn
             // 
             this.exportBtn.Dock = System.Windows.Forms.DockStyle.Left;
-            this.exportBtn.Location = new System.Drawing.Point(124, 348);
+            this.exportBtn.Location = new System.Drawing.Point(267, 653);
+            this.exportBtn.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.exportBtn.Name = "exportBtn";
-            this.exportBtn.Size = new System.Drawing.Size(108, 23);
+            this.exportBtn.Size = new System.Drawing.Size(216, 67);
             this.exportBtn.TabIndex = 3;
             this.exportBtn.Text = "Export rules(s)";
             this.exportBtn.UseVisualStyleBackColor = true;
@@ -145,18 +150,20 @@
             // 
             this.encryptionLbl.AutoSize = true;
             this.encryptionLbl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.encryptionLbl.Location = new System.Drawing.Point(3, 374);
+            this.encryptionLbl.Location = new System.Drawing.Point(6, 726);
+            this.encryptionLbl.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.encryptionLbl.Name = "encryptionLbl";
-            this.encryptionLbl.Size = new System.Drawing.Size(115, 26);
+            this.encryptionLbl.Size = new System.Drawing.Size(249, 43);
             this.encryptionLbl.TabIndex = 4;
             // 
             // encryptionBox
             // 
             this.encryptionBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.encryptionBox.Location = new System.Drawing.Point(124, 377);
+            this.encryptionBox.Location = new System.Drawing.Point(267, 732);
+            this.encryptionBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.encryptionBox.Name = "encryptionBox";
             this.encryptionBox.PasswordChar = '*';
-            this.encryptionBox.Size = new System.Drawing.Size(480, 20);
+            this.encryptionBox.Size = new System.Drawing.Size(1032, 31);
             this.encryptionBox.TabIndex = 5;
             // 
             // descriptionPanel
@@ -169,20 +176,22 @@
             this.descriptionPanel.Controls.Add(this.descriptionLbl, 0, 0);
             this.descriptionPanel.Controls.Add(this.selectAll, 0, 1);
             this.descriptionPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.descriptionPanel.Location = new System.Drawing.Point(3, 3);
+            this.descriptionPanel.Location = new System.Drawing.Point(6, 6);
+            this.descriptionPanel.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.descriptionPanel.Name = "descriptionPanel";
             this.descriptionPanel.RowCount = 2;
             this.descriptionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.descriptionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.descriptionPanel.Size = new System.Drawing.Size(683, 36);
+            this.descriptionPanel.Size = new System.Drawing.Size(1456, 66);
             this.descriptionPanel.TabIndex = 6;
             // 
             // descriptionLbl
             // 
             this.descriptionLbl.AutoSize = true;
-            this.descriptionLbl.Location = new System.Drawing.Point(3, 0);
+            this.descriptionLbl.Location = new System.Drawing.Point(6, 0);
+            this.descriptionLbl.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.descriptionLbl.Name = "descriptionLbl";
-            this.descriptionLbl.Size = new System.Drawing.Size(35, 13);
+            this.descriptionLbl.Size = new System.Drawing.Size(70, 25);
             this.descriptionLbl.TabIndex = 0;
             this.descriptionLbl.Text = "label1";
             // 
@@ -190,9 +199,10 @@
             // 
             this.selectAll.AutoSize = true;
             this.selectAll.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.selectAll.Location = new System.Drawing.Point(3, 16);
+            this.selectAll.Location = new System.Drawing.Point(6, 31);
+            this.selectAll.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.selectAll.Name = "selectAll";
-            this.selectAll.Size = new System.Drawing.Size(677, 17);
+            this.selectAll.Size = new System.Drawing.Size(1444, 29);
             this.selectAll.TabIndex = 1;
             this.selectAll.Text = "Select all";
             this.selectAll.UseVisualStyleBackColor = true;
@@ -202,9 +212,10 @@
             // 
             this.addNewPatternButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.addNewPatternButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.addNewPatternButton.Location = new System.Drawing.Point(611, 348);
+            this.addNewPatternButton.Location = new System.Drawing.Point(1312, 664);
+            this.addNewPatternButton.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.addNewPatternButton.Name = "addNewPatternButton";
-            this.addNewPatternButton.Size = new System.Drawing.Size(75, 23);
+            this.addNewPatternButton.Size = new System.Drawing.Size(150, 44);
             this.addNewPatternButton.TabIndex = 7;
             this.addNewPatternButton.Text = "Add new";
             this.addNewPatternButton.UseVisualStyleBackColor = true;
@@ -215,42 +226,45 @@
             this.encryptedPanel.AutoSize = true;
             this.encryptedPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.encryptedPanel.ColumnCount = 3;
-            this.encryptedPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.encryptedPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.encryptedPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.encryptedPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.encryptedPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.encryptedPanel.Controls.Add(this.lockPictureBox, 1, 1);
             this.encryptedPanel.Controls.Add(this.decryptionPanel, 1, 5);
             this.encryptedPanel.Controls.Add(this.encryptedMessage, 1, 3);
             this.encryptedPanel.Location = new System.Drawing.Point(0, 0);
+            this.encryptedPanel.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.encryptedPanel.Name = "encryptedPanel";
             this.encryptedPanel.RowCount = 8;
-            this.encryptedPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
+            this.encryptedPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.encryptedPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.encryptedPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
+            this.encryptedPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.encryptedPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.encryptedPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
+            this.encryptedPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.encryptedPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.encryptedPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
+            this.encryptedPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.encryptedPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.encryptedPanel.Size = new System.Drawing.Size(488, 271);
+            this.encryptedPanel.Size = new System.Drawing.Size(972, 525);
             this.encryptedPanel.TabIndex = 10;
             this.encryptedPanel.Visible = false;
             // 
             // lockPictureBox
             // 
             this.lockPictureBox.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.lockPictureBox.Location = new System.Drawing.Point(179, 18);
+            this.lockPictureBox.Location = new System.Drawing.Point(357, 35);
+            this.lockPictureBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.lockPictureBox.Name = "lockPictureBox";
-            this.lockPictureBox.Size = new System.Drawing.Size(129, 135);
+            this.lockPictureBox.Size = new System.Drawing.Size(258, 260);
             this.lockPictureBox.TabIndex = 8;
             this.lockPictureBox.TabStop = false;
             // 
             // decryptionPanel
             // 
             this.decryptionPanel.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.decryptionPanel.Location = new System.Drawing.Point(73, 214);
+            this.decryptionPanel.Location = new System.Drawing.Point(144, 416);
+            this.decryptionPanel.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.decryptionPanel.Name = "decryptionPanel";
-            this.decryptionPanel.Size = new System.Drawing.Size(342, 33);
+            this.decryptionPanel.Size = new System.Drawing.Size(684, 63);
             this.decryptionPanel.TabIndex = 9;
             // 
             // encryptedMessage
@@ -260,25 +274,27 @@
             this.encryptedMessage.AutoSize = true;
             this.encryptedMessage.CausesValidation = false;
             this.encryptedMessage.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.encryptedMessage.Location = new System.Drawing.Point(23, 171);
+            this.encryptedMessage.Location = new System.Drawing.Point(46, 330);
+            this.encryptedMessage.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.encryptedMessage.Name = "encryptedMessage";
-            this.encryptedMessage.Size = new System.Drawing.Size(442, 25);
+            this.encryptedMessage.Size = new System.Drawing.Size(880, 51);
             this.encryptedMessage.TabIndex = 7;
             this.encryptedMessage.Text = "Data encrypted. Unprotect Data before proceeding.";
             this.encryptedMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // AnonymizerSettingsControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.mainPanel);
             this.Controls.Add(this.encryptedPanel);
-            this.MinimumSize = new System.Drawing.Size(400, 400);
+            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.MinimumSize = new System.Drawing.Size(800, 769);
             this.Name = "AnonymizerSettingsControl";
-            this.Size = new System.Drawing.Size(689, 400);
+            this.Size = new System.Drawing.Size(1468, 769);
             this.mainPanel.ResumeLayout(false);
             this.mainPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.expressionsGrid)).EndInit();
