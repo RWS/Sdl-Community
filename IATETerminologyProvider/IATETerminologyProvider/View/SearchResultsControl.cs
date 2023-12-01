@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 
 namespace Sdl.Community.IATETerminologyProvider.View
@@ -7,9 +8,17 @@ namespace Sdl.Community.IATETerminologyProvider.View
 	{
 		public SearchResultsControl()
 		{
+			var elementHost = new ElementHost
+			{
+				Dock = DockStyle.Fill,
+			};
+
+			Controls.Add(elementHost);
+			elementHost.Child = Browser;
+
 			InitializeComponent();
 		}
 
-		public WebBrowser Browser => searchResultsWebBrowser;
+		public BrowserWindow Browser { get; set; } = new();
 	}
 }
