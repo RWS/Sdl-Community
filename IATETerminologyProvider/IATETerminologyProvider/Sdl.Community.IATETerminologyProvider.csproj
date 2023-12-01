@@ -37,8 +37,8 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
-    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17beta</TradosFolder>
-    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17beta\Plugins</PluginDeploymentPath>
+    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17</TradosFolder>
+    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MahApps.Metro">
@@ -206,6 +206,9 @@
     <Compile Include="Service\TermSearchService.cs" />
     <Compile Include="Model\ResponseModels\IateCollection.cs" />
     <Compile Include="Events\ResetEvent.cs" />
+    <Compile Include="View\BrowserWindow.xaml.cs">
+      <DependentUpon>BrowserWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\FineGrainedFilter.xaml.cs">
       <DependentUpon>FineGrainedFilter.xaml</DependentUpon>
     </Compile>
@@ -248,6 +251,10 @@
     <Page Include="Styles\WindowsBorder.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\BrowserWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\FineGrainedFilter.xaml">
       <SubType>Designer</SubType>
@@ -313,6 +320,9 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2">
+      <Version>1.0.2151.40</Version>
+    </PackageReference>
     <PackageReference Include="Sdl.Core.PluginFramework">
       <Version>2.1.0</Version>
     </PackageReference>
