@@ -23,13 +23,14 @@ namespace LanguageWeaverProvider.ViewModel
 
 		SettingsViewModel _settingsView;
 		bool _showSettingsView;
-
-		string _loadingAction = "Loading...";
+		string _loadingAction;
+		string _windowTitle;
 
 		ObservableCollection<PairMapping> _pairMappings;
 
 		public PairMappingViewModel(ITranslationOptions translationOptions, LanguagePair[] languagePairs)
 		{
+			WindowTitle = Constants.PairMapping_MainWindow;
 			_languagePairs = languagePairs;
 			_translationOptions = translationOptions;
 			_languageMappingDatabase = DatabaseControl.InitializeDatabase(translationOptions.PluginVersion);
@@ -64,6 +65,16 @@ namespace LanguageWeaverProvider.ViewModel
 			set
 			{
 				_loadingAction = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string WindowTitle
+		{
+			get => _windowTitle;
+			set
+			{
+				_windowTitle = value;
 				OnPropertyChanged();
 			}
 		}
@@ -147,6 +158,7 @@ namespace LanguageWeaverProvider.ViewModel
 		private void ChangeSettingsViewState(object sender, EventArgs e)
 		{
 			ShowSettingsView = !ShowSettingsView;
+			WindowTitle = ShowSettingsView ? Constants.PairMapping_SettingsWindow : Constants.PairMapping_MainWindow;
 		}
 
 		private void OpenLanguageMappingProviderView(object parameter)

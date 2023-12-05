@@ -194,7 +194,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 		private void Auth0SignIn(object parameter)
 		{
 			StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Loading_Connecting));
-			var auth0Config = new Auth0Config(parameter as string, SelectedRegion);
+			var auth0Config = new CloudAuth0Config(parameter as string, SelectedRegion);
 			var cloudAuth0ViewModel = new CloudAuth0ViewModel(TranslationOptions, auth0Config);
 			var cloudAuth0View = new CloudAuth0View() { DataContext = cloudAuth0ViewModel };
 			cloudAuth0ViewModel.CloseAuth0Raised += () =>

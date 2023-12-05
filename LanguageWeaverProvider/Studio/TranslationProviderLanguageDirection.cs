@@ -168,10 +168,7 @@ namespace LanguageWeaverProvider
 			var translation = CloudService.Translate(_translationOptions.AccessToken, mappedPair, xliff).Result;
 			var translatedSegment = translation.GetTargetSegments().First();
 			var searchResult = CreateSearchResult(segment, translatedSegment.Segment);
-			if (translatedSegment.Estimation != QualityEstimations.None)
-			{
-				SetMetadataOnSegment(translatedSegment, mappedPair, null);
-			}
+			SetMetadataOnSegment(translatedSegment, mappedPair, null);
 
 			return searchResult;
 		}
@@ -222,7 +219,7 @@ namespace LanguageWeaverProvider
 			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_LongModelName, pairMapping.SelectedModel.Name);
 			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_ShortModelName, pairMapping.SelectedModel.Model);
 			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_Translation, evaluatedSegment.Segment.ToString());
-			currentSegmentPair.Properties.TranslationOrigin.SetMetaData("autosend_feedback", _translationOptions.ProviderSettings.AutosendFeedback.ToString());
+			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_Feedback, _translationOptions.ProviderSettings.AutosendFeedback.ToString());
 			editorController.ActiveDocument.UpdateSegmentPairProperties(currentSegmentPair, currentSegmentPair.Properties);
 		}
 

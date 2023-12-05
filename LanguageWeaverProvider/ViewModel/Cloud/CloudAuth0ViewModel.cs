@@ -11,13 +11,13 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 	{
 		readonly ITranslationOptions _translationOptions;
 
-		public CloudAuth0ViewModel(ITranslationOptions translationOptions, Auth0Config auth0Config)
+		public CloudAuth0ViewModel(ITranslationOptions translationOptions, CloudAuth0Config auth0Config)
 		{
 			Auth0Config = auth0Config;
 			_translationOptions = translationOptions;
 		}
 
-		public Auth0Config Auth0Config { get; set; }
+		public CloudAuth0Config Auth0Config { get; set; }
 
 		public bool IsConnected { get; set; }
 
@@ -31,7 +31,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			IsConnected = success;
 			if (!success)
 			{
-				ErrorHandling.ShowDialog(error, "SSO Error", error.Message, true);
+				error.ShowDialog("SSO Error", error.Message, true);
 				CloseAuth0Raised?.Invoke();
 				return;
 			}

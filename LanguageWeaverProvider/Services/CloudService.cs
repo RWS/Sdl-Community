@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -21,7 +20,7 @@ namespace LanguageWeaverProvider.Services
 {
 	public static class CloudService
 	{
-		public static async Task<(bool Success, Exception Error)> AuthenticateSSOUser(ITranslationOptions translationOptions, Auth0Config auth0Config, Uri uri, string selectedRegion)
+		public static async Task<(bool Success, Exception Error)> AuthenticateSSOUser(ITranslationOptions translationOptions, CloudAuth0Config auth0Config, Uri uri, string selectedRegion)
 		{
 			try
 			{
@@ -150,6 +149,7 @@ namespace LanguageWeaverProvider.Services
 			}
 			catch (Exception ex)
 			{
+				ex.ShowDialog("Language Models", ex.Message, true);
 				throw ex;
 			}
 		}

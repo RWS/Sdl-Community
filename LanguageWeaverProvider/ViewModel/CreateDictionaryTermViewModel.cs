@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Xml.Serialization;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model;
@@ -15,7 +12,6 @@ using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Services;
 using Newtonsoft.Json;
-using Sdl.Core.Globalization;
 using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -225,6 +221,7 @@ namespace LanguageWeaverProvider.ViewModel
 				.FirstOrDefault(x => x.Pair.Dictionaries.Contains(SelectedDictionary))?
 				.Provider;
 			CredentialManager.GetCredentials(_currentProvider, true);
+			Service.ValidateToken(_currentProvider);
 		}
 
 		private void Clear(object parameter)

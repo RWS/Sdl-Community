@@ -31,6 +31,7 @@
 		public const string SegmentMetadata_ShortModelName = "model";
 		public const string SegmentMetadata_LongModelName = "nmt_model";
 		public const string SegmentMetadata_Translation = "nmt_translation";
+		public const string SegmentMetadata_Feedback = "autosend_feedback";
 
 		// Feedback - translation errors
 		public const string WordsOmission = "Words omission";
@@ -42,6 +43,10 @@
 		public const string Punctuation = "Punctuation";
 		public const string Capitalization = "Capitalization";
 		public const string CapitalizationPunctuation = "Capitalization, punctuation";
+
+		// Window titles
+		public const string PairMapping_MainWindow = "Language Weaver Provider";
+		public const string PairMapping_SettingsWindow = "Language Weaver Provider - Settings";
 
 
 		// LW Cloud API Region

@@ -2,9 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using LanguageWeaverProvider.BatchTask.Model;
-using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.LanguageMappingProvider;
-using LanguageWeaverProvider.Model;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
@@ -14,10 +12,11 @@ using Sdl.ProjectAutomation.Core;
 
 namespace LanguageWeaverProvider.BatchTask
 {
-	[AutomaticTask(Id = "Language Weaver - Apply QE",
-	Name = "Language Weaver - Apply QE",
-	Description = "Apply the QE status on segments if a QE model was selected.",
-	GeneratedFileType = AutomaticTaskFileType.BilingualTarget, AllowMultiple = true)]
+	[AutomaticTask(Id = "Apply Language Weaver Metadata",
+		Name = "Apply Language Weaver Metadata",
+		Description = "Apply metadata for files pre-translated with the Language Weaver plugin.",
+		GeneratedFileType = AutomaticTaskFileType.BilingualTarget,
+		AllowMultiple = true)]
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
 	public class QEBatchTask : AbstractFileContentProcessingAutomaticTask
 	{

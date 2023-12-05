@@ -13,7 +13,7 @@
 		d:DataContext="{d:DesignInstance local:PairMappingViewModel}"
 		MouseLeftButtonDown="Window_MouseLeftButtonDown"
 		WindowStartupLocation="CenterScreen"
-		Title="Language Weaver Provider"
+		Title="{Binding WindowTitle}"
 		ResizeMode="CanResize"
 		WindowStyle="None"
 		MinHeight="600"

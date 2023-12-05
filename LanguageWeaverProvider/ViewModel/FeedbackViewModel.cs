@@ -189,7 +189,7 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 
 			var currentSegment = _editController.ActiveDocument.SegmentPairs.FirstOrDefault(x => x.Properties.Id.Id.Equals(segmentProperties.Id.Id));
-			if (!bool.TryParse(currentSegment.Properties.TranslationOrigin.GetMetaData("autosend_feedback"), out var autosendFeedback)
+			if (!bool.TryParse(currentSegment.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_Feedback), out var autosendFeedback)
 			 || !autosendFeedback)
 			{
 				return;
@@ -263,6 +263,7 @@ namespace LanguageWeaverProvider.ViewModel
 			documentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_LongModelName, ratedSegment.ModelName);
 			documentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_ShortModelName, ratedSegment.Model);
 			documentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_Translation, ratedSegment.Translation);
+			documentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_Feedback, ratedSegment.AutosendFeedback.ToString());
 			_editController.ActiveDocument.UpdateSegmentPairProperties(documentSegmentPair, documentSegmentPair.Properties);
 
 			ApplicationInitializer.RatedSegments.Remove(ratedSegment);
