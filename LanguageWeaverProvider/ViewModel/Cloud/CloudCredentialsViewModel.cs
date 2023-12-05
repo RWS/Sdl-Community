@@ -180,11 +180,11 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				return;
 			}
 
-			var response = await CloudService.AuthenticateUser(TranslationOptions, AuthenticationType);
-			if (!response.Success)
+			var (Success, Error) = await CloudService.AuthenticateUser(TranslationOptions, AuthenticationType);
+			if (!Success)
 			{
 				StopLoginProcess?.Invoke(this, EventArgs.Empty);
-				response.Error.ShowDialog(PluginResources.Connection_Error_Failed, response.Error.Message, true);
+				Error.ShowDialog(PluginResources.Connection_Error_Failed, Error.Message, true);
 				return;
 			}
 

@@ -46,19 +46,10 @@ namespace LanguageWeaverProvider.View.Edge
 
 				await WebView2Browser.EnsureCoreWebView2Async(environment);
 				await WebView2Browser.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(BrowserScript);
-
 			}
 
 			await ViewModel.Connect(WebView2Browser);
 			Close();
-		}
-
-		private async void WebView2Browser_OnNavigationStarting(object sender, CoreWebView2NavigationStartingEventArgs e)
-		{
-			if (e.Uri.ToString().Contains("/api/v2/auth/saml/success"))
-			{
-
-			}
 		}
 
 		internal const string BrowserScript = @"

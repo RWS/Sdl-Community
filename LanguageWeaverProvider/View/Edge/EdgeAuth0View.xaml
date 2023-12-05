@@ -13,7 +13,6 @@
 		Width="500">
 	<Grid>
 		<wpf:WebView2 Name="WebView2Browser"
-					  Loaded="WebView2Browser_OnLoaded"
-					  NavigationStarting="WebView2Browser_OnNavigationStarting" />
+					  Loaded="WebView2Browser_OnLoaded"/>
 	</Grid>
 </Window>

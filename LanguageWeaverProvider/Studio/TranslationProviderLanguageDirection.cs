@@ -118,7 +118,7 @@ namespace LanguageWeaverProvider
 		private bool ShouldResendDrafts()
 		{
 			return !_translationOptions.ProviderSettings.ResendDrafts &&
-				   _currentTranslationUnit.ConfirmationLevel != ConfirmationLevel.Unspecified;
+				   _currentTranslationUnit?.ConfirmationLevel != ConfirmationLevel.Unspecified;
 		}
 
 		private SearchResults CreateDraftNotResentSearchResults(Segment segment)
@@ -296,6 +296,7 @@ namespace LanguageWeaverProvider
 			var translatableSegments = new List<Segment>();
 			for (var i = 0; i < translationUnits.Length; i++)
 			{
+				_currentTranslationUnit = translationUnits[i];
 				var translationUnit = translationUnits[i];
 				var currentSegment = segments[i];
 
