@@ -148,4 +148,13 @@
   <data name="TellMe_Provider_Results" xml:space="preserve">
     <value>{0} results</value>
   </data>
+  <data name="AntidoteRegistryKeyNotFound_Error" xml:space="preserve">
+	  <value>Registry key not found. Make sure you install the 'Antidote' app before trying to use the plug-in</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+	  <value>Error</value>
+  </data>
+  <data name="AntidoteCannotBeStarted_Error" xml:space="preserve">
+	  <value>Antidote cannot be started.</value>
+  </data>
 </root>

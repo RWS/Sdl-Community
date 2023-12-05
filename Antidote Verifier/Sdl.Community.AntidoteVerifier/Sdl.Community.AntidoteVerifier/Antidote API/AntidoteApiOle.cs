@@ -4,6 +4,7 @@ using Serilog;
 using System;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace Sdl.Community.AntidoteVerifier.Antidote_API
 {
@@ -38,7 +39,8 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
             }catch(Exception ex)
             {
                 Log.Error(ex, "An error appeared while starting antidote!");
-            }
+                MessageBox.Show(ex.Message, PluginResources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
         }
 
         private ApiOle GetAntidoteInstance()
@@ -69,10 +71,9 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
 			    var pRegKey = Registry.LocalMachine;
 			    pRegKey = pRegKey.OpenSubKey(Constants.RegistryInstallLocation);
 			    var obj = pRegKey?.GetValue(Constants.RegistryInstallLocationValue, "Invalide");
-			    if (obj?.ToString() == "Invalide")
+			    if (obj is null || obj.ToString() == "Invalide")
 			    {
-				    //TODO message if the registry values could not be find - this should be displayed
-				    //to the user
+				    MessageBox.Show(PluginResources.AntidoteRegistryKeyNotFound_Error, PluginResources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
 				    return false;
 			    }
 			    var antidotePath = obj?.ToString();
@@ -82,25 +83,24 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
 
 			    // get a hold of the newly launched Antidote instance
 			    long i = 0;
-			    IntPtr hwndAntidote;
 
-			    while (!IsAntidoteRuning(out hwndAntidote))
+			    while (!IsAntidoteRuning(out _))
 			    {
-				    System.Threading.Thread.Sleep(250);
+				    Thread.Sleep(250);
 				    i++;
 				    // limit the number of attempts
 				    if (i > 48)
 				    {
-					    //TODO display a message to the user if this didn't work and we could find the window
-					    //probably didn't launched
-					    return false;
+						MessageBox.Show(PluginResources.AntidoteCannotBeStarted_Error, PluginResources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return false;
 				    }
 			    }
 		    }
 		    catch (Exception ex)
 		    {
 			    Log.Error(ex, "An error appeared while starting antidote!");
-			    return false;
+			    MessageBox.Show(ex.Message, PluginResources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return false;
 		    }
 
 		    return true;

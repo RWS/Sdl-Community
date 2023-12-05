@@ -61,6 +61,24 @@ namespace Sdl.Community.AntidoteVerifier {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Antidote cannot be started..
+        /// </summary>
+        public static string AntidoteCannotBeStarted_Error {
+            get {
+                return ResourceManager.GetString("AntidoteCannotBeStarted_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Registry key not found. Make sure you install the &apos;Antidote&apos; app before trying to use the plug-in.
+        /// </summary>
+        public static string AntidoteRegistryKeyNotFound_Error {
+            get {
+                return ResourceManager.GetString("AntidoteRegistryKeyNotFound_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon boutonCorrecteur {
@@ -97,6 +115,15 @@ namespace Sdl.Community.AntidoteVerifier {
             get {
                 object obj = ResourceManager.GetObject("Druide", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
             }
         }
         
