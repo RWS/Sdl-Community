@@ -51,9 +51,10 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 			var patterns = new List<RegexPattern>();
 			foreach (var file in files)
 			{
-				//Open the Excel file in Read Mode using OpenXml.
 				using var doc = SpreadsheetDocument.Open(file, false);
-				//Read the first Sheet from Excel file.
+
+				var excelReader = new ExcelReader(doc.WorkbookPart.SharedStringTablePart?.SharedStringTable);
+
 				var sheet = doc.WorkbookPart.Workbook.Sheets.GetFirstChild<Sheet>();
 
 				//Get the Worksheet instance.
@@ -75,10 +76,10 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 					var colValue = row.ToList();
 					if (row.RowIndex.Value == 1)
 					{
-						if (!IsValidColumnHeader(colValue[0].InnerText, "ID") |
-							!IsValidColumnHeader(colValue[1].InnerText, "Order") |
-							!IsValidColumnHeader(colValue[2].InnerText, "Rule") |
-							!IsValidColumnHeader(colValue[3].InnerText, "Description")
+						if (!IsValidColumnHeader(excelReader.GetCellText(colValue[0].InnerText), "ID") |
+							!IsValidColumnHeader(excelReader.GetCellText(colValue[1].InnerText), "Order") |
+							!IsValidColumnHeader(excelReader.GetCellText(colValue[2].InnerText), "Rule") |
+							!IsValidColumnHeader(excelReader.GetCellText(colValue[3].InnerText), "Description")
 						   )
 						{
 							return null;
@@ -88,10 +89,10 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 					//Use the first row to add columns to DataTable.
 					if (row.RowIndex.Value > 1)
 					{
-						for (var i = 0; i < colValue.Count; i++)
+						foreach (var cell in colValue)
 						{
-							var address = ((DocumentFormat.OpenXml.Spreadsheet.CellType)colValue[i]).CellReference.Value;
-							var cellValue = colValue[i].InnerText;
+							var address = ((CellType)cell).CellReference?.Value;
+							var cellValue = excelReader.GetCellText(cell.InnerText);
 							if (address.Contains("A"))
 							{
 								pattern.Id = cellValue ?? string.Empty;
@@ -105,6 +106,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers
 								pattern.Description = cellValue ?? string.Empty;
 							}
 						}
+
 						patterns.Add(pattern);
 					}
 				}
