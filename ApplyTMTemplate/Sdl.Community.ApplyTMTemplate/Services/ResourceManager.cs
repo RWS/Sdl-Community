@@ -233,6 +233,7 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 		{
 			foreach (var languageResourceBundle in languageResourceBundles)
 			{
+				if (languageResourceBundle is null) continue;
 				foreach (var propertyInfo in typeof(Settings).GetProperties())
 				{
 					if (propertyInfo.CanWrite)
