@@ -279,44 +279,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 				AutomationAnalysisBatchTask.SelectedItem=selectedTemplate.AnalysisBatchTask.ToString();
 				AutomationPreTranslateBatchTask.SelectedItem=selectedTemplate.PreTranslateBatchTask.ToString();
 			}
-			CheckChanged();
-		}
-
-		/// <summary>
-		/// Checks whether to enable the OK button.
-		/// </summary>
-		private void CheckChanged()
-		{
-			var applyTemplate = SelectedTemplate.SelectedItem as ApplyTemplate;
-			if (applyTemplate != null && applyTemplate.Id == Guid.Empty)
-			{
-				OkButton.Enabled = false;
-			}
-			else
-			{
-				var sumOfSelected = TranslationProvidersAllLanguages.SelectedIndex +
-									TranslationProvidersSpecificLanguages.SelectedIndex +
-									TranslationMemoriesAllLanguages.SelectedIndex +
-									TranslationMemoriesSpecificLanguages.SelectedIndex +
-									TerminologyTermbases.SelectedIndex +
-									TerminologySearchSettings.SelectedIndex +
-									TranslationQualityAssessment.SelectedIndex +
-									BatchTasksAllLanguages.SelectedIndex +
-									BatchTasksSpecificLanguages.SelectedIndex +
-									VerificationQaChecker30.SelectedIndex +
-									VerificationTagVerifier.SelectedIndex +
-									VerificationTerminologyVerifier.SelectedIndex +
-									VerificationNumberVerifier.SelectedIndex +
-									matchRepairBox.SelectedIndex +
-									FileTypes.SelectedIndex +
-									VerificationSpecificLanguages.SelectedIndex									
-									;
-				OkButton.Enabled = sumOfSelected > 0;
-				if(OkButton.Enabled==false && (RunAnalysisBatchTask.Checked==true || RunPreTranslateBatchTask.Checked==true))
-				{
-					OkButton.Enabled = true;
-				}
-			}
 		}
 
 		/// <summary>
@@ -332,7 +294,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						TranslationProvidersAllLanguages.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -348,8 +309,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						TranslationProvidersSpecificLanguages.SelectedItem.ToString());
 			}
-
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -365,7 +324,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						TranslationMemoriesAllLanguages.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -381,7 +339,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						TranslationMemoriesSpecificLanguages.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -397,7 +354,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						TerminologyTermbases.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -413,7 +369,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						TerminologySearchSettings.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -429,7 +384,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						BatchTasksAllLanguages.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -445,7 +399,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						BatchTasksSpecificLanguages.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -461,7 +414,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						VerificationQaChecker30.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -477,7 +429,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						VerificationTagVerifier.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -493,7 +444,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						VerificationTerminologyVerifier.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -509,7 +459,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						VerificationNumberVerifier.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -525,7 +474,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						VerificationGrammarChecker.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -540,7 +488,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 				applyTemplate.FileTypes =
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), FileTypes.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -556,7 +503,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						TranslationQualityAssessment.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -705,7 +651,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			{
 				applyTemplate.MatchRepairSettings =
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), matchRepairBox.SelectedItem.ToString());
-				CheckChanged();
+				 ;
 			}
 		}
 
@@ -716,13 +662,13 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			{
 				applyTemplate.VerificationSpecificLanguages =
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), VerificationSpecificLanguages.SelectedItem.ToString());
-				CheckChanged();
+				 ;
 			}
 		}
 
 		private void RunAnalysisBatchTask_CheckedChanged(object sender, EventArgs e)
 		{
-			CheckChanged();
+			 ;
 			if (RunAnalysisBatchTask.Checked)
 			{
 				AutomationAnalysisBatchTask.Visible = true;				
@@ -735,7 +681,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 
 		private void RunPreTranslateBatchTask_CheckedChanged(object sender, EventArgs e)
 		{
-			CheckChanged();
+			 ;
 			if(RunPreTranslateBatchTask.Checked)
 			{
 				AutomationPreTranslateBatchTask.Visible=true;				

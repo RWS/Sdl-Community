@@ -571,7 +571,20 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 
 						}
 
-						var updateServerMethod = targetProject.GetType().GetMethod("ExecuteOperation");
+
+						var type = typeof(FileBasedProject);
+						var fieldInfo = type.GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance);
+						if (fieldInfo is null)
+						{
+							Controller.RefreshProjects();
+							applyTemplateForm.SaveProjectTemplates();
+							Controller.RefreshProjects();
+							MessageBox.Show(projectsList.ToString(), PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
+							return;
+						}
+
+						var project = fieldInfo.GetValue(targetProject);
+						var updateServerMethod = project.GetType().GetMethod("ExecuteOperation");
 						//For GS projects
 						updateServerMethod?.Invoke(targetProject, new object[] { "UpdateServerProjectSettingsOperation", new object[] { true } });
 						//For LC projects
@@ -602,7 +615,9 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			//Valentin -> code already prepared for the "long term" Studio API solution change, if the "Studio team" will add this AnalysisBands settings in the BundleSettings where it should be.
 			//I hope that they will respect the naming convention and the section will be named "FuzzyBandsSettings"
 			if (!CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, settingsGroupId, targetProject))
+			{
 				CopySettingsFuzzyBands(sourceProject, targetProject);
+			}
 		}
 
 
@@ -611,6 +626,11 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 
 			var sourceAnalysisBandsAsIntsx = GetAnalysisBandsAsIntArray(GetProjectUsingReflection(sourceProject));
 			var internalTargetProject = GetProjectUsingReflection(targetProject);
+			if (internalTargetProject is null)
+			{
+				return;
+			}
+
 			var setAnalysisBandsMethod = internalTargetProject.GetType().GetMethod("SetAnalysisBands");
 			//update the FuzzyBands
 			setAnalysisBandsMethod?.Invoke(internalTargetProject, new object[] { sourceAnalysisBandsAsIntsx });
@@ -620,9 +640,15 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 		private int[] GetAnalysisBandsAsIntArray(dynamic internalDynamicProject)
 		{
 			var regex = new Regex(@"(?<min>[\d]*)([^\d]*)(?<max>[\d]*)", RegexOptions.IgnoreCase);
-			var analysisBandsMinsValues = new int[internalDynamicProject.AnalysisBands.Length];
-			int i = 0;
-			foreach (var analysisBand in internalDynamicProject.AnalysisBands)
+			var arrayLength = internalDynamicProject?.AnalysisBands?.Length ?? 0;
+			var analysisBandsMinsValues = new int[arrayLength];
+			var analysisBands = internalDynamicProject?.AnalysisBands;
+			if (analysisBands is null)
+			{
+				return analysisBandsMinsValues;
+			}
+			var i = 0;
+			foreach (var analysisBand in analysisBands)
 			{
 				Match match = regex.Match(analysisBand.ToString());
 				if (match.Success)
