@@ -18,7 +18,7 @@ namespace LanguageWeaverProvider.BatchTask
 		GeneratedFileType = AutomaticTaskFileType.BilingualTarget,
 		AllowMultiple = true)]
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
-	public class QEBatchTask : AbstractFileContentProcessingAutomaticTask
+	public class ApplyMetadataBatchTask : AbstractFileContentProcessingAutomaticTask
 	{
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
@@ -26,7 +26,16 @@ namespace LanguageWeaverProvider.BatchTask
 			var fileName = System.IO.Path.GetFileName(filePath);
 
 			var languageCode = GetCurrentProjectLanguageCode(projectFile.Language.CultureInfo);
+			if (languageCode is null)
+			{
+				return;
+			}
+
 			var ratedSegments = ApplicationInitializer.RatedSegments.Where(seg => seg.TargetLanguageCode == languageCode && seg.FileName.Equals(fileName));
+			if (!ratedSegments.Any())
+			{
+				return;
+			}
 
 			var translationOriginData = new TranslationOriginData()
 			{
