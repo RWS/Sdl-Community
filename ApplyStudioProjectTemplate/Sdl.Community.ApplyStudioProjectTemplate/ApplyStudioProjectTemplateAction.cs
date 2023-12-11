@@ -623,7 +623,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 
 		private void CopySettingsFuzzyBands(FileBasedProject sourceProject, FileBasedProject targetProject)
 		{
-
 			var sourceAnalysisBandsAsIntsx = GetAnalysisBandsAsIntArray(GetProjectUsingReflection(sourceProject));
 			var internalTargetProject = GetProjectUsingReflection(targetProject);
 			if (internalTargetProject is null)
@@ -666,9 +665,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 		private dynamic GetProjectUsingReflection(FileBasedProject project)
 		{
 			var type = project.GetType();
-			var internalProjectField = type.GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance);
-			dynamic internalDynamicProject = internalProjectField?.GetValue(project);
-			return internalDynamicProject;
+			var internalProject = type.GetProperty("InternalProject", BindingFlags.NonPublic | BindingFlags.Instance);
+			return internalProject.GetValue(project);
 		}
 
 
