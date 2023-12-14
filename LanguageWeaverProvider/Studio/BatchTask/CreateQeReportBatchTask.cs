@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
+using LanguageWeaverProvider.BatchTask;
 using LanguageWeaverProvider.Studio.BatchTask.Model;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
@@ -14,26 +17,26 @@ namespace LanguageWeaverProvider.Studio.BatchTask
 	GeneratedFileType = AutomaticTaskFileType.BilingualTarget,
 	AllowMultiple = true)]
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
-	public class QEReportBatchTask : AbstractFileContentProcessingAutomaticTask
+	public class CreateQEReportBatchTask : AbstractFileContentProcessingAutomaticTask
 	{
-		private readonly List<SegmentExtractor> _segments = new();
+		private readonly List<CreateQeReportProcessor> _segments = new();
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
 			var fileName = System.IO.Path.GetFileName(projectFile.LocalFilePath);
 
-			var segmentExtractor = new SegmentExtractor(fileName);
-			multiFileConverter.AddBilingualProcessor(segmentExtractor);
-			multiFileConverter.Parse();
+			var processor = new CreateQeReportProcessor(fileName);
+			var processorHandler = new BilingualContentHandlerAdapter(processor);
+			multiFileConverter?.AddBilingualProcessor(processorHandler);
+			multiFileConverter?.Parse();
 
-			_segments.Add(segmentExtractor);
+			_segments.Add(processor);
+			CreateReport();
 		}
 
-		public override void TaskComplete()
+		private void CreateReport()
 		{
 			var projectInfo = Project.GetProjectInfo();
-			var x = projectInfo.TargetLanguages[0];
-			Project.GetProjectStatistics();
 			var report = new Report
 			{
 				Summary = new ReportSummary
@@ -50,7 +53,7 @@ namespace LanguageWeaverProvider.Studio.BatchTask
 			var data = new Data();
 			foreach (var segment in _segments)
 			{
-				var file = new File(segment.FileName);
+				var file = new File() { Name = segment.FileName };
 				foreach (var qs in segment.Segments)
 				{
 					file.QeValues.Add(new QeValue()

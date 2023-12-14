@@ -1,9 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-	<PlugInName>LanguageWeaverProvider</PlugInName>
-	<Version>1.0.0.1</Version>
-	<Description>Plugin description</Description>
-	<Author></Author>
+	
+	<Author>Trados AppStore Team</Author>
+	<PlugInName>Language Weaver Provider</PlugInName>
+	<Description>Language Weaver Provider</Description>
+	
+	<Version>1.0.0.2</Version>
 	<RequiredProduct name="TradosStudio" minversion="17.2" maxversion="17.9" />
 
 	<Include>

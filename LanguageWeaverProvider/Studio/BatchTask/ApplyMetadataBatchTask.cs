@@ -3,9 +3,9 @@ using System.Globalization;
 using System.Linq;
 using LanguageWeaverProvider.BatchTask.Model;
 using LanguageWeaverProvider.LanguageMappingProvider;
+using LanguageWeaverProvider.Model;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
-using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
@@ -20,53 +20,49 @@ namespace LanguageWeaverProvider.BatchTask
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
 	public class ApplyMetadataBatchTask : AbstractFileContentProcessingAutomaticTask
 	{
+		IEnumerable<RatedSegment> _ratedSegments;
+
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
 			var filePath = projectFile.LocalFilePath;
 			var fileName = System.IO.Path.GetFileName(filePath);
 
-			var languageCode = GetCurrentProjectLanguageCode(projectFile.Language.CultureInfo);
-			if (languageCode is null)
+			if (GetCurrentProjectLanguageCode(projectFile.Language.CultureInfo) is not string languageCode)
 			{
 				return;
 			}
 
-			var ratedSegments = ApplicationInitializer.RatedSegments.Where(seg => seg.TargetLanguageCode == languageCode && seg.FileName.Equals(fileName));
-			if (!ratedSegments.Any())
+			_ratedSegments = ApplicationInitializer.RatedSegments.Where(seg => seg.TargetLanguageCode == languageCode && seg.FileName.Equals(fileName));
+			if (!_ratedSegments.Any())
 			{
 				return;
 			}
 
 			var translationOriginData = new TranslationOriginData()
 			{
-				Model = ratedSegments.First().Model,
-				RatedSegments = new()
+				Model = _ratedSegments.First().Model,
+				RatedSegments = _ratedSegments.ToDictionary(ratedSegment => ratedSegment.SegmentId)
 			};
-
-			foreach (var ratedSegment in ratedSegments)
-			{
-				translationOriginData.RatedSegments[ratedSegment.SegmentId] = ratedSegment;
-			}
 
 			var metadataTransferObject = new MetadataTransferObject()
 			{
 				TargetLanguage = languageCode,
 				FilePath = filePath,
-				SegmentIds = ratedSegments.Select(x => x.SegmentId).ToList(),
+				SegmentIds = _ratedSegments.Select(x => x.SegmentId).ToList(),
 				TranslationOriginData = translationOriginData
 			};
 
-			var mtoList = new List<MetadataTransferObject>()
-			{
-				metadataTransferObject
-			};
+			var metadataTransferObjectList = new List<MetadataTransferObject>() { metadataTransferObject };
+			var processor = new ApplyMetadataProcessor(metadataTransferObjectList);
+			var processorHandler = new BilingualContentHandlerAdapter(processor);
 
-			var converter = DefaultFileTypeManager.CreateInstance(true).GetConverterToDefaultBilingual(filePath, filePath, null);
-			var contentProcessor = new MetaDataProcessor(mtoList);
-			converter?.AddBilingualProcessor(new BilingualContentHandlerAdapter(contentProcessor));
-			converter?.Parse();
+			multiFileConverter?.AddBilingualProcessor(processorHandler);
+		}
 
-			ApplicationInitializer.RatedSegments = ApplicationInitializer.RatedSegments.Except(ratedSegments).ToList();
+		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
+		{
+			ApplicationInitializer.RatedSegments = ApplicationInitializer.RatedSegments.Except(_ratedSegments).ToList();
+			return true;
 		}
 
 		private string GetCurrentProjectLanguageCode(CultureInfo cultureInfo)

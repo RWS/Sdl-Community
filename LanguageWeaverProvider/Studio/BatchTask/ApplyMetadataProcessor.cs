@@ -6,11 +6,11 @@ using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace LanguageWeaverProvider.BatchTask
 {
-	internal class MetaDataProcessor : AbstractBilingualContentProcessor
+	internal class ApplyMetadataProcessor : AbstractBilingualContentProcessor
 	{
 		private readonly List<SegmentId> _usedIds = new();
 
-		public MetaDataProcessor(List<MetadataTransferObject> translationData)
+		public ApplyMetadataProcessor(List<MetadataTransferObject> translationData)
 		{
 			TranslationData = translationData;
 		}
@@ -39,10 +39,13 @@ namespace LanguageWeaverProvider.BatchTask
 
 			foreach (var datum in TranslationData)
 			{
-				if (segmentPairsRemaining == 0) break;
+				if (segmentPairsRemaining == 0)
+				{
+					break;
+				}
+
 				var metaData = datum.TranslationOriginData;
 				var segmentPairs = GetValidSegmentPairs(paragraphUnit, datum.SegmentIds);
-
 				foreach (var segmentPair in segmentPairs)
 				{
 					segmentPairsRemaining--;

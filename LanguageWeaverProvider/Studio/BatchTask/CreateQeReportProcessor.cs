@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Drawing.Text;
-using System.Windows.Input;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace LanguageWeaverProvider.Studio.BatchTask
 {
-	public class SegmentExtractor : AbstractBilingualContentProcessor
+	public class CreateQeReportProcessor : AbstractBilingualContentProcessor
 	{
 		private const string NoQE = "No QE set";
 
-		public SegmentExtractor(string fileName)
+		public CreateQeReportProcessor(string fileName)
 		{
 			FileName = fileName;
 			Segments = new()
@@ -28,6 +26,8 @@ namespace LanguageWeaverProvider.Studio.BatchTask
 
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
+			base.ProcessParagraphUnit(paragraphUnit);
+
 			if (paragraphUnit.IsStructure)
 			{
 				return;

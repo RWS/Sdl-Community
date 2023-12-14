@@ -5,11 +5,6 @@ namespace LanguageWeaverProvider.Studio.BatchTask.Model
 {
 	public class File
 	{
-		public File(string fileName)
-		{
-			Name = fileName.Trim();
-		}
-
 		[XmlAttribute]
 		public string Name { get; set; }
 
