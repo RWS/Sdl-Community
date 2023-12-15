@@ -37,6 +37,7 @@
 	<ItemGroup>
 	  <None Remove="Resources\lwHeader.png" />
 	  <None Remove="Resources\lwMainLogo.png" />
+	  <None Remove="Resources\Report.xsl" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -145,6 +146,7 @@
 	<ItemGroup>
 	  <Resource Include="Resources\lwHeader.png" />
 	  <Resource Include="Resources\lwMainLogo.png" />
+	  <EmbeddedResource Include="Resources\Report.xsl" />
 	  <Resource Include="Style\Buttons.xaml" />
 	</ItemGroup>
 

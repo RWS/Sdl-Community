@@ -34,5 +34,5 @@ namespace LanguageWeaverProvider.View.Cloud
 			userPwBox.Password = dataContext.UserPassword;
 			clientSecretBox.Password = dataContext.ClientSecret;
 		}
-    }
+	}
 }

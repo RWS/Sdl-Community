@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 using LanguageWeaverProvider.Command;
+using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model.Interface;
 
 namespace LanguageWeaverProvider.ViewModel
@@ -79,6 +80,34 @@ namespace LanguageWeaverProvider.ViewModel
 
 		public event EventHandler BackCommandExecuted;
 
+		public bool SettingsAreValid()
+		{
+			return CustomNameIsValid();
+		}
+
+		private bool CustomNameIsValid()
+		{
+			if (!UseCustomName)
+			{
+				return true;
+			}
+
+			if (string.IsNullOrEmpty(CustomName))
+			{
+				ErrorHandling.ShowDialog(null, "Custom name", "The frienly provider name can not be empty if the option \"Friendly provider name\" is active.");
+				return false;
+			}
+
+			CustomName = CustomName.Trim();
+			var customNameIsSet = !string.IsNullOrEmpty(CustomName);
+			if (!customNameIsSet)
+			{
+				ErrorHandling.ShowDialog(null, "Friendly name option", "The frienly provider name can not be empty if the option \"Friendly provider name\" is active.");
+			}
+
+			return customNameIsSet;
+		}
+
 		private void InitializeCommands()
 		{
 			BackCommand = new RelayCommand(Back);
@@ -94,6 +123,7 @@ namespace LanguageWeaverProvider.ViewModel
 			UseCustomName = TranslationOptions.ProviderSettings.UseCustomName;
 			CustomName = TranslationOptions.ProviderSettings.CustomName;
 		}
+
 
 		private void Back(object parameter)
 		{

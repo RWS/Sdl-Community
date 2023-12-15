@@ -61,8 +61,13 @@ namespace LanguageWeaverProvider.BatchTask
 
 		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
-			ApplicationInitializer.RatedSegments = ApplicationInitializer.RatedSegments.Except(_ratedSegments).ToList();
 			return true;
+		}
+
+		public override void TaskComplete()
+		{
+			base.TaskComplete();
+			ApplicationInitializer.RatedSegments = ApplicationInitializer.RatedSegments.Except(_ratedSegments).ToList();
 		}
 
 		private string GetCurrentProjectLanguageCode(CultureInfo cultureInfo)

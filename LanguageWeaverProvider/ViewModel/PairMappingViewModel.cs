@@ -124,6 +124,11 @@ namespace LanguageWeaverProvider.ViewModel
 
 		private void Save(object parameter)
 		{
+			if (!SettingsView.SettingsAreValid())
+			{
+				return;
+			}
+
 			SaveChanges = true;
 			_translationOptions.PairMappings = PairMappings.ToList();
 			_translationOptions.ProviderSettings.AutosendFeedback = SettingsView.AutosendFeedback;

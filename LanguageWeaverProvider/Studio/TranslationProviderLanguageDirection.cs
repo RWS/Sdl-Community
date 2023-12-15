@@ -237,7 +237,7 @@ namespace LanguageWeaverProvider
 				AutosendFeedback = _translationOptions.ProviderSettings.AutosendFeedback
 			};
 
-			var existingSegment = ApplicationInitializer.RatedSegments.FirstOrDefault(x => x.SegmentId.Equals(ratedSegment.SegmentId));
+			var existingSegment = ApplicationInitializer.RatedSegments.FirstOrDefault(x => x.SegmentId.Equals(ratedSegment.SegmentId) && x.FileName.Equals(fileName));
 			if (existingSegment is null)
 			{
 				ApplicationInitializer.RatedSegments.Add(ratedSegment);

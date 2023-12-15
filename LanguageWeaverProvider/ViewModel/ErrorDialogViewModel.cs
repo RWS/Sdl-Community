@@ -17,7 +17,7 @@ namespace LanguageWeaverProvider.ViewModel
 
 		public ErrorDialogViewModel(string title, string message, Exception exception = null)
 		{
-			WindowHeight = 200;
+			WindowHeight = 250;
 			ErrorTitle = title;
 			ErrorMessage = message;
 			DetailedReport = exception?.StackTrace;
@@ -108,11 +108,11 @@ namespace LanguageWeaverProvider.ViewModel
 			if (DisplayDetailedReport)
 			{
 				DisplayDetailedReport = false;
-				WindowHeight = 200;
+				WindowHeight = 250;
 				return;
 			}
 
-			WindowHeight = 500;
+			WindowHeight = 550;
 			DisplayDetailedReport = true;
 		}
 

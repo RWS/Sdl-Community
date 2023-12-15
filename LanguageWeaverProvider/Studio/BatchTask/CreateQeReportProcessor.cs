@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.ProjectAutomation.AutomaticTasks;
 
 namespace LanguageWeaverProvider.Studio.BatchTask
 {
 	public class CreateQeReportProcessor : AbstractBilingualContentProcessor
 	{
 		private const string NoQE = "No QE set";
+		private readonly WordCounter _wordCounter;
 
-		public CreateQeReportProcessor(string fileName)
+		public CreateQeReportProcessor(string fileName, WordCounter wordCounter)
 		{
+			_wordCounter = wordCounter;
 			FileName = fileName;
 			Segments = new()
 			{
@@ -43,6 +46,8 @@ namespace LanguageWeaverProvider.Studio.BatchTask
 			{
 				var qualityEstimation = GetCurrentQEValue(pair);
 				Segments[qualityEstimation]++;
+
+				var x = _wordCounter.Count(pair.Target);
 			}
 		}
 
