@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using LanguageWeaverProvider.ViewModel.Edge;
 
 namespace LanguageWeaverProvider.View.Edge
@@ -9,37 +10,52 @@ namespace LanguageWeaverProvider.View.Edge
 	/// </summary>
 	public partial class EdgeCredentialsView : UserControl
 	{
+		private EdgeCredentialsViewModel _edgeCredentialsViewModel;
+
 		public EdgeCredentialsView()
 		{
 			InitializeComponent();
 		}
 
-		private void UserPassword_Changed(object sender, RoutedEventArgs e)
-		{
-			if (DataContext is not null && DataContext is EdgeCredentialsViewModel viewModel)
-			{
-				viewModel.Password = (sender as PasswordBox).Password;
-			}
-
-		}
-
-		private void ApiKey_Changed(object sender, RoutedEventArgs e)
-		{
-			if (DataContext is not null && DataContext is EdgeCredentialsViewModel viewModel)
-			{
-				viewModel.ApiKey = (sender as PasswordBox).Password;
-			}
-		}
-
 		private void ViewLoaded(object sender, RoutedEventArgs e)
 		{
-			if (DataContext is not EdgeCredentialsViewModel dataContext || dataContext.TranslationOptions is null)
+			if (DataContext is not EdgeCredentialsViewModel viewModel)
 			{
 				return;
 			}
 
-			userPwBox.Password = dataContext.Password;
-			apiKeyBox.Password = dataContext.ApiKey;
+			_edgeCredentialsViewModel = viewModel;
+			if (_edgeCredentialsViewModel.TranslationOptions is null)
+			{
+				return;
+			}
+
+			userPwBox.Password = _edgeCredentialsViewModel.Password;
+			apiKeyBox.Password = _edgeCredentialsViewModel.ApiKey;
 		}
-	}
+
+		private void KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Enter)
+			{
+				_edgeCredentialsViewModel.SignInCommand.Execute(null);
+			}
+		}
+
+		private void UserPassword_Changed(object sender, RoutedEventArgs e)
+		{
+			if (_edgeCredentialsViewModel is not null)
+			{
+				_edgeCredentialsViewModel.Password = (sender as PasswordBox).Password;
+			}
+		}
+
+		private void ApiKey_Changed(object sender, RoutedEventArgs e)
+		{
+			if (_edgeCredentialsViewModel is not null)
+			{
+				_edgeCredentialsViewModel.ApiKey = (sender as PasswordBox).Password;
+			}
+		}
+    }
 }
