@@ -15,7 +15,7 @@ namespace GoogleCloudTranslationProvider.Extensions
 {
 	public static class DatabaseExtensions
 	{
-		public static async Task<List<LanguageMapping>> GetGoogleDefaultMapping(ITranslationOptions translationOptions)
+		public static List<LanguageMapping> GetGoogleDefaultMapping(ITranslationOptions translationOptions)
 		{
 			var databaseFilePath = GetDatabaseFilePath(translationOptions.SelectedGoogleVersion);
 			if (!File.Exists(databaseFilePath))
@@ -25,8 +25,8 @@ namespace GoogleCloudTranslationProvider.Extensions
 
 			return translationOptions.SelectedGoogleVersion switch
 			{
-				ApiVersion.V2 => await CreateDatabase(translationOptions, CreateV2Database),
-				ApiVersion.V3 => await CreateDatabase(translationOptions, CreateV3Database),
+				ApiVersion.V2 => CreateDatabase(translationOptions, CreateV2Database),
+				ApiVersion.V3 => CreateDatabase(translationOptions, CreateV3Database),
 				_ => null
 			};
 		}
@@ -42,16 +42,15 @@ namespace GoogleCloudTranslationProvider.Extensions
 			_ = new LanguageMappingDatabase(database, languageMappings);
 		}
 
-		private static async Task<List<LanguageMapping>> CreateDatabase(ITranslationOptions translationOptions, Func<ITranslationOptions, Task<List<LanguageMapping>>> createDatabaseFunc)
+		private static List<LanguageMapping> CreateDatabase(ITranslationOptions translationOptions, Func<ITranslationOptions, List<LanguageMapping>> createDatabaseFunc)
 		{
-			var languageMappings = await createDatabaseFunc(translationOptions);
+			var languageMappings = createDatabaseFunc(translationOptions);
 			return languageMappings;
 		}
 
-		private static async Task<List<LanguageMapping>> CreateV2Database(ITranslationOptions translationOptions)
+		private static List<LanguageMapping> CreateV2Database(ITranslationOptions translationOptions)
 		{
-			var v2Connector = new V2Connector(translationOptions.ApiKey, null);
-			var v2Languages = await v2Connector.GetLanguages();
+			var v2Languages = translationOptions.V2SupportedLanguages;
 
 			return v2Languages
 				.Where(language => IsValidLanguage(translationOptions.SelectedGoogleVersion, language))
@@ -60,12 +59,16 @@ namespace GoogleCloudTranslationProvider.Extensions
 				.ToList();
 		}
 
-		private static Task<List<LanguageMapping>> CreateV3Database(ITranslationOptions translationOptions)
+		private static List<LanguageMapping> CreateV3Database(ITranslationOptions translationOptions)
 		{
-			var v3Connector = new V3Connector(translationOptions);
-			var v3Languages = v3Connector.GetLanguages();
+			if (translationOptions.V3SupportedLanguages is null || !translationOptions.V3SupportedLanguages.Any())
+			{
+				var v3Connector = new V3Connector(translationOptions);
+				translationOptions.V3SupportedLanguages = v3Connector.GetLanguages();
+			}
 
-			return Task.FromResult(v3Languages
+			var v3Languages = translationOptions.V3SupportedLanguages;
+			return v3Languages
 				.Where(language => IsValidLanguage(translationOptions.SelectedGoogleVersion, language))
 				.Select(language => new LanguageMapping
 				{
@@ -73,7 +76,7 @@ namespace GoogleCloudTranslationProvider.Extensions
 					LanguageCode = language.GoogleLanguageCode
 				})
 				.Union(CreateChineseMapping())
-				.ToList());
+				.ToList();
 		}
 
 		private static List<LanguageMapping> CreateChineseMapping()
@@ -108,10 +111,11 @@ namespace GoogleCloudTranslationProvider.Extensions
 
 		private static List<LanguageMapping> CreateLanguageMappings(ITranslationOptions translationOptions)
 		{
+
 			return translationOptions.SelectedGoogleVersion switch
 			{
-				ApiVersion.V2 => CreateV2Database(translationOptions).Result,
-				ApiVersion.V3 => CreateV3Database(translationOptions).Result,
+				ApiVersion.V2 => CreateV2Database(translationOptions),
+				ApiVersion.V3 => CreateV3Database(translationOptions),
 				_ => new List<LanguageMapping>()
 			};
 		}

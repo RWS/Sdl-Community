@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Models;
@@ -42,7 +43,7 @@ namespace GoogleCloudTranslationProvider.Interfaces
 
 		event EventHandler LanguageMappingLoaded;
 
-		bool CanConnectToGoogleV2(HtmlUtil htmlUtil);
+		Task<bool> CanConnectToGoogleV2(HtmlUtil htmlUtil);
 
 		bool CanConnectToGoogleV3(LanguagePair[] languagePairs);
 

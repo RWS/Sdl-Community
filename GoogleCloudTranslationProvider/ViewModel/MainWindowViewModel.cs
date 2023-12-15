@@ -4,9 +4,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using Google.Protobuf.WellKnownTypes;
 using GoogleCloudTranslationProvider.Commands;
 using GoogleCloudTranslationProvider.Extensions;
+using GoogleCloudTranslationProvider.GoogleAPI;
 using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
@@ -236,12 +239,12 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		public bool IsWindowValid()
 		{
-			return ValidGoogleOptions() && _settingsViewModel.SettingsAreValid();
+			return ValidGoogleOptions().Result && _settingsViewModel.SettingsAreValid();
 		}
 
-		private bool ValidGoogleOptions()
+		private async Task<bool> ValidGoogleOptions()
 		{
-			return _providerViewModel.IsV2Checked ? _providerViewModel.CanConnectToGoogleV2(_htmlUtil)
+			return _providerViewModel.IsV2Checked ? await _providerViewModel.CanConnectToGoogleV2(_htmlUtil)
 												  : _providerViewModel.CanConnectToGoogleV3(_languagePairs);
 		}
 
@@ -304,6 +307,13 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				}
 
 				TranslationOptions.LanguagesSupported.Add(languagePair.TargetCultureName);
+			}
+
+			if (TranslationOptions.SelectedGoogleVersion.Equals(ApiVersion.V3)
+			 && (TranslationOptions.V3SupportedLanguages is null || !TranslationOptions.V3SupportedLanguages.Any()))
+			{
+				var v3Connector = new V3Connector(TranslationOptions);
+				TranslationOptions.V3SupportedLanguages = v3Connector.GetLanguages();
 			}
 		}
 
