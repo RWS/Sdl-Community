@@ -344,7 +344,7 @@ This action cannot be undone.</value>
     <value>Language Weaver Edge</value>
   </data>
   <data name="MainView_Buttons_LWEdge_ToolTip" xml:space="preserve">
-    <value>Language Weaver Edge is a secure, scalable and adaptable on-premises solution leveraging state-of-the-art neural technologies. All the features and functionality of Language Weaver is available behind your firewall.</value>
+    <value>Language Weaver Edge is an on-premise solution leveraging state-of-the-art neural technologies. All the features and functionality of Language Weaver is available behind your firewall.</value>
   </data>
   <data name="MainView_CloseButton" xml:space="preserve">
     <value>Close app</value>
@@ -353,7 +353,7 @@ This action cannot be undone.</value>
     <value>Confirm</value>
   </data>
   <data name="MainView_HelpMessage" xml:space="preserve">
-    <value>Select your required Language Weaver Service Provider</value>
+    <value>Select your required Language Weaver Service solution</value>
   </data>
   <data name="NameOf_CommandParameterI_MissingComponent" xml:space="preserve">
     <value>Could not find the property '{0}' in '{1}', please check the spelling for both the property and the class or if any of the two had its name changed in both C# class and XAML.</value>

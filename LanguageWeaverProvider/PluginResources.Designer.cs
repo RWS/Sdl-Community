@@ -732,7 +732,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Language Weaver Edge is a secure, scalable and adaptable on-premises solution leveraging state-of-the-art neural technologies. All the features and functionality of Language Weaver is available behind your firewall..
+        ///   Looks up a localized string similar to Language Weaver Edge is an on-premise solution leveraging state-of-the-art neural technologies. All the features and functionality of Language Weaver is available behind your firewall..
         /// </summary>
         public static string MainView_Buttons_LWEdge_ToolTip {
             get {
@@ -759,7 +759,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select your required Language Weaver Service Provider.
+        ///   Looks up a localized string similar to Select your required Language Weaver Service solution.
         /// </summary>
         public static string MainView_HelpMessage {
             get {
