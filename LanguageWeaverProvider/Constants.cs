@@ -25,6 +25,11 @@
 
 		// LW Portal
 		public const string LanguageWeaverEUPortal = "https://portal.languageweaver.com/login";
+		public const string LanguageWeaverUSPortal = "https://us.portal.languageweaver.com/login";
+
+		// LW Cloud API Region
+		public static string CloudEUUrl = "https://api.languageweaver.com/";
+		public static string CloudUSUrl = "https://us.api.languageweaver.com/";
 
 		// Segment metadata
 		public const string SegmentMetadata_QE = "quality_estimation";
@@ -54,9 +59,5 @@
 		public static readonly string TellMe_Help_Name = $"{PluginName} - Wiki";
 		public static readonly string TellMe_Forum_Url = "https://appstore.rws.com/Plugin/9?tab=documentation";
 		public static readonly string TellMe_Help_Url = "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/f";
-
-		// LW Cloud API Region
-		public static string CloudEUUrl = "https://api.languageweaver.com/";
-		public static string CloudUSUrl = "https://us.api.languageweaver.com/";
 	}
 }

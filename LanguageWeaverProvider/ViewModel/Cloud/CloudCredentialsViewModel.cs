@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Security.Policy;
 using System.Windows.Input;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Extensions;
@@ -20,6 +22,8 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 		string _clientId;
 		string _clientSecret;
 
+		bool _showVerifyCredentialsWarning;
+
 		public CloudCredentialsViewModel(ITranslationOptions translationOptions)
 		{
 			TranslationOptions = translationOptions;
@@ -40,6 +44,16 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				OnPropertyChanged(nameof(IsCredentialsSelected));
 				OnPropertyChanged(nameof(IsApiKeySelected));
 				OnPropertyChanged(nameof(IsSSOSelected));
+			}
+		}
+
+		public bool ShowVerifyCredentialsWarning
+		{
+			get => _showVerifyCredentialsWarning;
+			set
+			{
+				_showVerifyCredentialsWarning = value;
+				OnPropertyChanged();
 			}
 		}
 
@@ -109,6 +123,8 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		public ICommand Auth0SignInCommand { get; private set; }
 
+		public ICommand OpenExternalUrlCommand { get; private set; }
+
 		public ICommand SelectAuthenticationTypeCommand { get; private set; }
 
 		public event EventHandler CloseRequested;
@@ -123,6 +139,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			ClearCommand = new RelayCommand(Clear);
 			SignInCommand = new RelayCommand(SignIn);
 			Auth0SignInCommand = new RelayCommand(Auth0SignIn);
+			OpenExternalUrlCommand = new RelayCommand(OpenExternalUrl);
 			SelectAuthenticationTypeCommand = new RelayCommand(SelectAuthenticationType);
 		}
 
@@ -185,6 +202,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			{
 				StopLoginProcess?.Invoke(this, EventArgs.Empty);
 				Error.ShowDialog(PluginResources.Connection_Error_Failed, Error.Message, true);
+				ShowVerifyCredentialsWarning = true;
 				return;
 			}
 
@@ -256,6 +274,15 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 		private void Back(object parameter)
 		{
 			AuthenticationType = AuthenticationType.None;
+		}
+
+		private void OpenExternalUrl(object parameter)
+		{
+			var targetUri = SelectedRegion.Equals(Constants.CloudEUUrl) ? Constants.LanguageWeaverEUPortal
+						  : SelectedRegion.Equals(Constants.CloudUSUrl) ? Constants.LanguageWeaverUSPortal
+						  : string.Empty;
+
+			Process.Start(targetUri);
 		}
 
 		public void CloseWindow()
