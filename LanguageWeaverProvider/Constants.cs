@@ -48,6 +48,12 @@
 		public const string PairMapping_MainWindow = "Language Weaver Provider";
 		public const string PairMapping_SettingsWindow = "Language Weaver Provider - Settings";
 
+		// Tell Me
+		public static readonly string TellMe_Provider_Name = $"{PluginName} - Tell Me";
+		public static readonly string TellMe_Forum_Name = $"{PluginName} - Forum";
+		public static readonly string TellMe_Help_Name = $"{PluginName} - Wiki";
+		public static readonly string TellMe_Forum_Url = "https://appstore.rws.com/Plugin/9?tab=documentation";
+		public static readonly string TellMe_Help_Url = "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/f";
 
 		// LW Cloud API Region
 		public static string CloudEUUrl = "https://api.languageweaver.com/";
