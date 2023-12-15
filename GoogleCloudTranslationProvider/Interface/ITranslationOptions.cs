@@ -36,6 +36,10 @@ namespace GoogleCloudTranslationProvider.Interfaces
 
 		List<string> LanguagesSupported { get; set; }
 
+		List<V2LanguageModel> V2SupportedLanguages { get; set; }
+
+		List<V3LanguageModel> V3SupportedLanguages { get; set; }
+
 		Uri Uri { get; }
 
 		ApiVersion SelectedGoogleVersion { get; set; }

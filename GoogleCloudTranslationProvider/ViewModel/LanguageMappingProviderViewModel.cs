@@ -32,7 +32,7 @@ namespace GoogleCloudTranslationProvider.ViewModel
 		{
 			_translationOptions = translationOptions;
 			CanResetToDefaults = canResetToDefaults;
-			var defaultMapping = canResetToDefaults ? DatabaseExtensions.GetGoogleDefaultMapping(translationOptions).Result : null;
+			var defaultMapping = canResetToDefaults ? DatabaseExtensions.GetGoogleDefaultMapping(translationOptions) : null;
 			_database = new LanguageMappingDatabase(GetDatabaseName(), defaultMapping);
 			RetrieveMappedLanguagesFromDatabase();
 			FilteredMappedLanguages = MappedLanguages;

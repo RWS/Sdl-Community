@@ -26,6 +26,8 @@ namespace GoogleCloudTranslationProvider.Models
 		}
 
 		public bool PersistGoogleKey { get; set; }
+
+		public List<V2LanguageModel> V2SupportedLanguages { get; set; }
 		#endregion
 
 		#region V3
@@ -36,6 +38,8 @@ namespace GoogleCloudTranslationProvider.Models
 		public string ProjectLocation { get; set; }
 
 		public List<LanguagePairResources> LanguageMappingPairs { get; set; }
+
+		public List<V3LanguageModel> V3SupportedLanguages { get; set; }
 		#endregion
 
 		#region Common

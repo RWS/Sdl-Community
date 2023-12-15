@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using GoogleCloudTranslationProvider.Commands;
@@ -258,7 +259,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		public event EventHandler LanguageMappingLoaded;
 
-		public bool CanConnectToGoogleV2(HtmlUtil htmlUtil)
+		public async Task<bool> CanConnectToGoogleV2(HtmlUtil htmlUtil)
 		{
 			if (string.IsNullOrEmpty(ApiKey))
 			{
@@ -276,6 +277,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 					return canConnect;
 				}
 
+				_options.V2SupportedLanguages = await v2Connector.GetLanguages();
 				_options.ApiKey ??= ApiKey;
 				DatabaseExtensions.CreateDatabase(_options);
 				foreach (var languagePair in _languagePairs)
