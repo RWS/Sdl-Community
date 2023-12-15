@@ -116,10 +116,13 @@ namespace LanguageWeaverProvider.ViewModel
 			{
 				IsCloudSelected = false;
 				IsEdgeSelected = false;
+				return;
 			}
-			else
+
+			ProviderView.AuthenticationType = AuthenticationType.None;
+			if (ProviderView is CloudCredentialsViewModel cloudViewModel)
 			{
-				ProviderView.AuthenticationType = AuthenticationType.None;
+				cloudViewModel.ShowVerifyCredentialsWarning = false;
 			}
 		}
 
