@@ -74,7 +74,6 @@ namespace Multilingual.Excel.FileType.Verifier.SettingsUI
 
 			_control.MaxLinesPerParagraphEnabled = _controlSettings.MaxLinesPerParagraphEnabled.Value;
 			_control.MaxLinesPerParagraphSeverity = _controlSettings.MaxLinesPerParagraphSeverity.Value;
-			_control.MaxLinesPerParagraph = _controlSettings.MaxLinesPerParagraph.Value;
 
 			_control.VerifySourceParagraphsEnabled = _controlSettings.VerifySourceParagraphsEnabled.Value;
 			_control.VerifyTargetParagraphsEnabled = _controlSettings.VerifyTargetParagraphsEnabled.Value;
@@ -95,7 +94,6 @@ namespace Multilingual.Excel.FileType.Verifier.SettingsUI
 
 			_controlSettings.MaxLinesPerParagraphEnabled.Value = _control.MaxLinesPerParagraphEnabled;
 			_controlSettings.MaxLinesPerParagraphSeverity.Value = _control.MaxLinesPerParagraphSeverity;
-			_controlSettings.MaxLinesPerParagraph.Value = _control.MaxLinesPerParagraph;
 
 			_controlSettings.VerifySourceParagraphsEnabled.Value  = _control.VerifySourceParagraphsEnabled;
 			_controlSettings.VerifyTargetParagraphsEnabled.Value = _control.VerifyTargetParagraphsEnabled;

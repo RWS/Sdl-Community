@@ -17,6 +17,8 @@ namespace Multilingual.Excel.FileType.Models
 
 		public string CharacterLimitationColumn { get; set; }
 
+		public string LineLimitationColumn { get; set; }
+
 		public string PixelLimitationColumn { get; set; }
 
 		public string PixelFontFamilyColumn { get; set; }
@@ -37,7 +39,6 @@ namespace Multilingual.Excel.FileType.Models
 
 		public string FilterScope { get; set; }
 
-
 		[JsonIgnore]
 		public string DisplayName { get; set; }
 
@@ -53,6 +54,7 @@ namespace Multilingual.Excel.FileType.Models
 				ContextColumn = ContextColumn,
 				CommentColumn = CommentColumn,
 				CharacterLimitationColumn = CharacterLimitationColumn,
+				LineLimitationColumn = LineLimitationColumn,
 				PixelLimitationColumn = PixelLimitationColumn,
 				PixelFontFamilyColumn = PixelFontFamilyColumn,
 				PixelFontSizeColumn = PixelFontSizeColumn,

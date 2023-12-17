@@ -17,6 +17,8 @@ namespace Multilingual.Excel.FileType.Verifier.SettingsUI
 			pixelValueToolTip.SetToolTip(pictureBox_maxPixelLengthInfo, PluginResources.ToolTip_ValueInhertiedFromExcelWorksheet);
 			var characterValueToolTip = new ToolTip();
 			characterValueToolTip.SetToolTip(pictureBox_maxCharacterLengthInfo, PluginResources.ToolTip_ValueInhertiedFromExcelWorksheet);
+			var lineValueToolTip = new ToolTip();
+			lineValueToolTip.SetToolTip(pictureBox_maxLineLengthInfo, PluginResources.ToolTip_ValueInhertiedFromExcelWorksheet);
 		}
 
 		public bool MaxCharacterLengthEnabled
@@ -47,12 +49,6 @@ namespace Multilingual.Excel.FileType.Verifier.SettingsUI
 		{
 			get => checkBox_MaxLinesPerParagraphEnabled.Checked;
 			set => checkBox_MaxLinesPerParagraphEnabled.Checked = value;
-		}
-
-		public int MaxLinesPerParagraph
-		{
-			get => Convert.ToInt32(numericUpDown_MaxLinesPerParagraph.Value);
-			set => numericUpDown_MaxLinesPerParagraph.Value = value;
 		}
 
 		public int MaxLinesPerParagraphSeverity
@@ -90,12 +86,10 @@ namespace Multilingual.Excel.FileType.Verifier.SettingsUI
 		{
 			if (checkBox_MaxLinesPerParagraphEnabled.Checked)
 			{
-				numericUpDown_MaxLinesPerParagraph.Enabled = true;
 				comboBox_MaxLinesPerParagraphSeverity.Enabled = true;
 			}
 			else
 			{
-				numericUpDown_MaxLinesPerParagraph.Enabled = false;
 				comboBox_MaxLinesPerParagraphSeverity.Enabled = false;
 			}
 		}

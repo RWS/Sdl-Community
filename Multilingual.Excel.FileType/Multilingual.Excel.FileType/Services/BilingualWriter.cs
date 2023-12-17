@@ -56,7 +56,6 @@ namespace Multilingual.Excel.FileType.Services
 		private uint _excelRowIndex;
 		private bool _isCDATA;
 
-
 		public BilingualWriter(SegmentBuilder segmentBuilder, EntityContext entityContext, EntityService entityService, ExcelReader excelReader, ExcelWriter excelWriter,
 			bool isPreview = false, bool isSource = false)
 		{
@@ -352,14 +351,32 @@ namespace Multilingual.Excel.FileType.Services
 				segmentPair.Target.Add(_segmentBuilder.Text(_segmentVisitor.Text));
 			}
 
+
 			var excelSheet = _excelSheets.FirstOrDefault(a => a.Index == _excelSheetIndex);
 			var excelRow = excelSheet?.Rows.FirstOrDefault(a => a.Index == _excelRowIndex);
 			if (excelRow != null)
 			{
-				//var sourceContent = excelRow.Cells.FirstOrDefault(a => a.Column.Name == _sourceLanguageMapping.ContentColumn);
+				var multilingualParagraphUnitContext = paragraphUnit.Properties.Contexts?.Contexts;
+				var multilingualParagraphUnitStructureInfo = paragraphUnit.Properties.Contexts?.StructureInfo?.ContextInfo;
+
+				var hyperlink = multilingualParagraphUnitContext?.FirstOrDefault(a => a.ContextType == "sdl:hyperlink");
+
+				var sourceContent = excelRow.Cells.FirstOrDefault(a => a.Column.Name == _sourceLanguageMapping.ContentColumn);
 				var targetContent = excelRow.Cells.FirstOrDefault(a => a.Column.Name == _targetLanguageMapping.ContentColumn);
 
-				targetContent.Value = paragraphUnit.Target.ToString();
+				if (targetContent == null)
+				{
+					return;
+				}
+
+				if (!string.IsNullOrEmpty(hyperlink?.DisplayName))
+				{
+					targetContent.Hyperlink = paragraphUnit.Target.ToString();
+				}
+				else
+				{
+					targetContent.Value = paragraphUnit.Target.ToString();
+				}
 			}
 		}
 

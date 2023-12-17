@@ -6,6 +6,8 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml.Model
 	{
 		public string Value { get; set; }
 
+		public string Hyperlink { get; set; }
+
 		public ExcelColumn Column { get; set; }
 
 		public string Background { get; set; }
@@ -16,6 +18,7 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml.Model
 			{
 				Background = Background,
 				Value = Value,
+				Hyperlink = Hyperlink,
 				Column = Column.Clone() as ExcelColumn
 			};
 

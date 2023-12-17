@@ -244,15 +244,39 @@ namespace Multilingual.Excel.FileType.Verifier
 					if (multilingualParagraphUnitContext != null)
 					{
 						var excelCharacterLimitationSource = Convert.ToInt32(multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelCharacterLimitationSource) ?? "0");
+						var excelLineLimitationSource = Convert.ToInt32(multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelLineLimitationSource) ?? "0");
 						var excelPixelLimitationSource = Convert.ToInt32(multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelPixelLimitationSource) ?? "0");
 						var excelPixelFontNameSource = multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelPixelFontNameSource) ?? string.Empty;
 						var excelPixelFontSizeSource = Convert.ToSingle(multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelPixelFontSizeSource) ?? "0");
 
 						var excelCharacterLimitationTarget = Convert.ToInt32(multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelCharacterLimitationTarget) ?? "0");
+						var excelLineLimitationTarget = Convert.ToInt32(multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelLineLimitationTarget) ?? "0");
 						var excelPixelLimitationTarget = Convert.ToInt32(multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelPixelLimitationTarget) ?? "0");
 						var excelPixelFontNameTarget = multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelPixelFontNameTarget) ?? string.Empty;
 						var excelPixelFontSizeTarget = Convert.ToSingle(multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelPixelFontSizeTarget) ?? "0");
 						var isCDATA = Convert.ToBoolean(multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.IsCDATA));
+
+
+						if (excelCharacterLimitationTarget == 0)
+						{
+							excelCharacterLimitationTarget = excelCharacterLimitationSource;
+						}
+						if (excelLineLimitationTarget == 0)
+						{
+							excelLineLimitationTarget = excelLineLimitationSource;
+						}
+						if (excelPixelLimitationTarget == 0)
+						{
+							excelPixelLimitationTarget = excelPixelLimitationSource;
+						}
+						if (string.IsNullOrEmpty(excelPixelFontNameTarget))
+						{
+							excelPixelFontNameTarget = excelPixelFontNameSource;
+						}
+						if (excelPixelFontSizeTarget == 0)
+						{
+							excelPixelFontSizeTarget = excelPixelFontSizeSource;
+						}
 
 						var sourceContent = string.Empty;
 						var targetContent = string.Empty;
@@ -288,6 +312,38 @@ namespace Multilingual.Excel.FileType.Verifier
 										new TextLocation(new Location(segmentPair.Source, true), 0),
 										new TextLocation(new Location(segmentPair.Source, false), (segmentPair.Source.ToString().Length) - 1),
 										extendedMessageData);
+								}
+							}
+
+							if (VerificationSettings.MaxLinesPerParagraphEnabled && excelLineLimitationSource > 0 && sourceContent.Length > excelLineLimitationSource)
+							{
+								var regexLine = new Regex(@"\r\n|\r|\n", RegexOptions.Singleline);
+								var lpp = regexLine.Split(sourceContent).Length;
+
+								if (lpp > excelLineLimitationSource)
+								{
+									foreach (var segmentPair in paragraphUnit.SegmentPairs)
+									{
+										var segmentPairId = segmentPair?.Properties?.Id.Id;
+										if (segmentPairId == null)
+										{
+											continue;
+										}
+
+										var message = string.Format(PluginResources.VerificationMessage_ParagraphLinesExceedsMaximum,
+											"Source",
+											lpp,
+											excelLineLimitationSource);
+
+										var extendedMessageData = MultilingualExcelMessageData(segmentPair, message, "MaxLinesPerParagraph");
+
+										MessageReporterProxy.ReportMessage(this, PluginResources.Plugin_Name,
+											GetErrorLevel(VerificationSettings.MaxLinesPerParagraphSeverity), message,
+											new TextLocation(new Location(segmentPair.Source, true), 0),
+											new TextLocation(new Location(segmentPair.Source, false),
+												(segmentPair.Source.ToString().Length) - 1),
+											extendedMessageData);
+									}
 								}
 							}
 
@@ -328,36 +384,7 @@ namespace Multilingual.Excel.FileType.Verifier
 								}
 							}
 
-							if (VerificationSettings.MaxLinesPerParagraphEnabled && VerificationSettings.MaxLinesPerParagraph?.Value > 0)
-							{ 
-								var regexLine = new Regex(@"\r\n|\r|\n", RegexOptions.Singleline);
-								var lpp = regexLine.Split(sourceContent).Length;
 
-								if (lpp > VerificationSettings.MaxLinesPerParagraph.Value)
-								{
-									foreach (var segmentPair in paragraphUnit.SegmentPairs)
-									{
-										var segmentPairId = segmentPair?.Properties?.Id.Id;
-										if (segmentPairId == null)
-										{
-											continue;
-										}
-
-										var message = string.Format(PluginResources.VerificationMessage_ParagraphLinesExceedsMaximum,
-											lpp,
-											VerificationSettings.MaxLinesPerParagraph.Value);
-
-										var extendedMessageData = MultilingualExcelMessageData(segmentPair, message, "MaxLinesPerParagraph");
-
-										MessageReporterProxy.ReportMessage(this, PluginResources.Plugin_Name,
-											GetErrorLevel(VerificationSettings.MaxLinesPerParagraphSeverity), message,
-											new TextLocation(new Location(segmentPair.Source, true), 0),
-											new TextLocation(new Location(segmentPair.Source, false),
-												(segmentPair.Source.ToString().Length) - 1),
-											extendedMessageData);
-									}
-								}
-							}
 						}
 
 						if (VerificationSettings.VerifyTargetParagraphsEnabled && !string.IsNullOrEmpty(targetContent))
@@ -382,6 +409,38 @@ namespace Multilingual.Excel.FileType.Verifier
 										new TextLocation(new Location(segmentPair.Target, true), 0),
 										new TextLocation(new Location(segmentPair.Target, false), segmentPair.Target.ToString().Length - 1),
 										extendedMessageData);
+								}
+							}
+
+							if (VerificationSettings.MaxLinesPerParagraphEnabled && excelLineLimitationTarget > 0 && sourceContent.Length > excelLineLimitationTarget)
+							{
+								var regexLine = new Regex(@"\r\n|\r|\n", RegexOptions.Singleline);
+								var lpp = regexLine.Split(targetContent).Length;
+
+								if (lpp > excelLineLimitationTarget)
+								{
+									foreach (var segmentPair in paragraphUnit.SegmentPairs)
+									{
+										var segmentPairId = segmentPair?.Properties?.Id.Id;
+										if (segmentPairId == null)
+										{
+											continue;
+										}
+
+										var message = string.Format(PluginResources.VerificationMessage_ParagraphLinesExceedsMaximum,
+											"Target",
+											lpp,
+											excelLineLimitationTarget);
+
+										var extendedMessageData = MultilingualExcelMessageData(segmentPair, message, "MaxLinesPerParagraph");
+
+										MessageReporterProxy.ReportMessage(this, PluginResources.Plugin_Name,
+											GetErrorLevel(VerificationSettings.MaxLinesPerParagraphSeverity), message,
+											new TextLocation(new Location(segmentPair.Target, true), 0),
+											new TextLocation(new Location(segmentPair.Target, false),
+												(segmentPair.Target.ToString().Length) - 1),
+											extendedMessageData);
+									}
 								}
 							}
 
@@ -418,37 +477,6 @@ namespace Multilingual.Excel.FileType.Verifier
 											GetErrorLevel(VerificationSettings.MaxPixelLengthSeverity), message,
 											new TextLocation(new Location(segmentPair.Target, true), 0),
 											new TextLocation(new Location(segmentPair.Target, false), segmentPair.Target.ToString().Length - 1),
-											extendedMessageData);
-									}
-								}
-							}
-
-							if (VerificationSettings.MaxLinesPerParagraphEnabled && VerificationSettings.MaxLinesPerParagraph?.Value > 0)
-							{
-								var regexLine = new Regex(@"\r\n|\r|\n", RegexOptions.Singleline);
-								var lpp = regexLine.Split(targetContent).Length;
-
-								if (lpp > VerificationSettings.MaxLinesPerParagraph.Value)
-								{
-									foreach (var segmentPair in paragraphUnit.SegmentPairs)
-									{
-										var segmentPairId = segmentPair?.Properties?.Id.Id;
-										if (segmentPairId == null)
-										{
-											continue;
-										}
-
-										var message = string.Format(PluginResources.VerificationMessage_ParagraphLinesExceedsMaximum,
-											lpp,
-											VerificationSettings.MaxLinesPerParagraph.Value);
-
-										var extendedMessageData = MultilingualExcelMessageData(segmentPair, message, "MaxLinesPerParagraph");
-
-										MessageReporterProxy.ReportMessage(this, PluginResources.Plugin_Name,
-											GetErrorLevel(VerificationSettings.MaxLinesPerParagraphSeverity), message,
-											new TextLocation(new Location(segmentPair.Target, true), 0),
-											new TextLocation(new Location(segmentPair.Target, false),
-												(segmentPair.Target.ToString().Length) - 1),
 											extendedMessageData);
 									}
 								}

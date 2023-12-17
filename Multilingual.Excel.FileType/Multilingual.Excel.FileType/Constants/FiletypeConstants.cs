@@ -42,11 +42,13 @@ namespace Multilingual.Excel.FileType.Constants
 		public const string MultilingualExcelFilterLockSegmentsTarget = "MultilingualExcelFilterLockSegmentsTarget";
 
 		public const string MultilingualExcelCharacterLimitationSource = "MultilingualExcelCharacterLimitationSource";
+		public const string MultilingualExcelLineLimitationSource = "MultilingualExcelLineLimitationSource";
 		public const string MultilingualExcelPixelLimitationSource = "MultilingualExcelPixelLimitationSource";
 		public const string MultilingualExcelPixelFontNameSource = "MultilingualExcelPixelFontNameSource";
 		public const string MultilingualExcelPixelFontSizeSource = "MultilingualExcelPixelFontSizeSource";
 
 		public const string MultilingualExcelCharacterLimitationTarget = "MultilingualExcelCharacterLimitationTarget";
+		public const string MultilingualExcelLineLimitationTarget = "MultilingualExcelLineLimitationTarget";
 		public const string MultilingualExcelPixelLimitationTarget = "MultilingualExcelPixelLimitationTarget";
 		public const string MultilingualExcelPixelFontNameTarget = "MultilingualExcelPixelFontNameTarget";
 		public const string MultilingualExcelPixelFontSizeTarget = "MultilingualExcelPixelFontSizeTarget";

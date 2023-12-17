@@ -433,4 +433,7 @@
   <data name="TellMe_String_TellMe_Provider" xml:space="preserve">
     <value>{0} TellMe provider</value>
   </data>
+  <data name="ValidationMessage_Found_Invalid_Lines" xml:space="preserve">
+    <value>Found invalid characters: {0}</value>
+  </data>
 </root>

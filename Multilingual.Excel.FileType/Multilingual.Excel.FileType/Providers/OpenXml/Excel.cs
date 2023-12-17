@@ -5,6 +5,7 @@ using System.Linq;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using Multilingual.Excel.FileType.Providers.OpenXml.Model;
 
 namespace Multilingual.Excel.FileType.Providers.OpenXml
 {
@@ -315,6 +316,28 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 			return SetCellValue(worksheet, columnIndex, rowIndex, cellValueType, columnValue, null, save);
 		}
 
+
+		public void SetHyperlink(Hyperlinks hyperlinks, WorksheetPart worksheetDoc, string colName, uint rowIndex, Uri link)
+		{
+
+			// TODO get link if it already exists on the cell
+			var idIdx = 1;
+			var list1 = hyperlinks.Descendants<Hyperlink>().ToList().Select(x => x.Id?.Value).ToList();
+			if (list1.Count > 0 && list1.Any(y => y.Contains("IdLink")))
+			{
+				idIdx = 1 + list1.Where(y => y.Contains("IdLink")).Select(x => int.Parse(x.Replace("IdLink", ""))).Max();
+			}
+			var id = "IdLink" + idIdx;
+
+			var l1 = new Hyperlink { Reference = (colName + rowIndex), Id = id };
+			
+
+
+			hyperlinks.Append(l1);
+			worksheetDoc.Worksheet.Save();
+			worksheetDoc.AddHyperlinkRelationship(link, true, id);
+		}
+
 		/// <summary>
 		/// Sets a cell value with a date
 		/// </summary>
@@ -448,6 +471,71 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 			return true;
 		}
 
+		public Cell GetCell(uint columnIndex, uint rowIndex, Row row)
+		{
+			Cell cell;
+			Cell previousCell = null;
+			var cellAddress = ColumnNameFromIndex(columnIndex) + rowIndex;
+			// Check if the cell exists, create if necessary
+			if (row.Elements<Cell>().Any(item => item.CellReference?.Value == cellAddress))
+			{
+				cell = row.Elements<Cell>().First(item => item.CellReference?.Value == cellAddress);
+			}
+			else
+			{
+				// Find the previous existing cell in the row
+				for (var counter = columnIndex - 1; counter > 0; counter--)
+				{
+					previousCell = row.Elements<Cell>()
+						.FirstOrDefault(item => item.CellReference?.Value == ColumnNameFromIndex(counter) + rowIndex);
+					if (previousCell != null)
+					{
+						break;
+					}
+				}
+
+				cell = new Cell { CellReference = cellAddress };
+				row.InsertAfter(cell, previousCell);
+			}
+
+			return cell;
+		}
+
+
+		public Row GetRow(ExcelRow excelRow, WorksheetPart workSheetPart)
+		{
+			var rowIndex = excelRow.Index;
+
+			var sheetData = workSheetPart.Worksheet.Elements<SheetData>().First();
+
+			Row row;
+			Row previousRow = null;
+
+			// Check if the row exists, create if necessary
+			if (sheetData.Elements<Row>().Count(item => item.RowIndex == rowIndex) != 0)
+			{
+				row = sheetData.Elements<Row>().First(item => item.RowIndex == rowIndex);
+			}
+			else
+			{
+				row = new Row { RowIndex = rowIndex };
+				//sheetData.Append(row);
+				for (var counter = rowIndex - 1; counter > 0; counter--)
+				{
+					previousRow = sheetData.Elements<Row>().FirstOrDefault(item => item.RowIndex == counter);
+					if (previousRow != null)
+					{
+						break;
+					}
+				}
+
+				sheetData.InsertAfter(row, previousRow);
+			}
+
+			return row;
+		}
+
+
 		/// <summary>
 		/// Sets a cell value. The row and the cell are created if they do not exist. If the cell exists, the contents of the cell is overwritten
 		/// </summary>
@@ -521,6 +609,7 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 			{
 				cell.DataType = new EnumValue<CellValues>(valueType);
 			}
+			
 
 			if (save)
 			{

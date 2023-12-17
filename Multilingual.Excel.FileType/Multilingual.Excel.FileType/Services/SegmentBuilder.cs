@@ -26,6 +26,7 @@ namespace Multilingual.Excel.FileType.Services
 		{
 			ItemFactory = entityService.FrameworkService.DocumentItemFactory;
 			PropertiesFactory = entityService.FrameworkService.PropertiesFactory;
+			FormattingFactory = PropertiesFactory.FormattingItemFactory;
 
 			_entityService = entityService;
 		}
@@ -33,6 +34,8 @@ namespace Multilingual.Excel.FileType.Services
 		public IDocumentItemFactory ItemFactory { get; }
 
 		public IPropertiesFactory PropertiesFactory { get; }
+
+		public IFormattingItemFactory FormattingFactory { get; }
 
 		public ITranslationOrigin CreateTranslationOrigin()
 		{
@@ -51,10 +54,10 @@ namespace Multilingual.Excel.FileType.Services
 			return paragraphUnit;
 		}
 
-		public IContextInfo CreateContextInfo(string contextType)
-		{
-			return ItemFactory.PropertiesFactory.CreateContextInfo(contextType);
-		}
+		//public IContextInfo CreateContextInfo(string contextType)
+		//{
+		//	return ItemFactory.PropertiesFactory.CreateContextInfo(contextType);
+		//}
 
 		public IContextInfo CreateMultilingualParagraphContextInfo()
 		{
@@ -135,6 +138,21 @@ namespace Multilingual.Excel.FileType.Services
 			return segment;
 		}
 
+		public IContextInfo CreateContextInfo(string contextType)
+		{
+			return ItemFactory.PropertiesFactory.CreateContextInfo(contextType);
+		}
+
+		public IContextInfo CreateCustomContextInfo(string code, string name, string description, Color color = default)
+		{
+			var contextInfo = ItemFactory.PropertiesFactory.CreateContextInfo(code);
+			contextInfo.DisplayCode = code;
+			contextInfo.DisplayName = name;
+			contextInfo.Description = description;
+			contextInfo.DisplayColor = color;
+
+			return contextInfo;
+		}
 
 		public ISegment CreateSegment(XmlNode xmlNode, ISegmentPairProperties pair, SegmentationHint segmentationHint)
 		{

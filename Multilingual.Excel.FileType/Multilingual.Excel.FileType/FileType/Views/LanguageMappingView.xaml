@@ -76,8 +76,15 @@
 						          Content="Read data from all worksheets in the excel document"
 						          IsChecked="{Binding ReadAllWorkSheets}"/>
 						<Image Grid.Row="2" Grid.Column="3" Source="../../Resources/Information.png" Height="16" HorizontalAlignment="Left" 
-						       RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" Margin="5,5,0,5"
-						       ToolTip="Select this option if the row/column structure is the same for all worksheets"/>
+						       RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" Margin="5,5,0,5">
+							<Image.ToolTip>
+								<StackPanel>
+									<TextBlock MaxWidth="400" TextWrapping='Wrap'
+									           Text="Select this option if the row/column structure is the same for all worksheets"/>
+								</StackPanel>
+							</Image.ToolTip>
+						</Image>
+						      
 						
 					</Grid>
 				</GroupBox>
@@ -245,6 +252,14 @@
 											<DataTemplate DataType="models:LanguageMapping">
 												<TextBlock ToolTip="{Binding CharacterLimitationColumn}" VerticalAlignment="Center" Padding="2,0,2,0"
 												           Text="{Binding CharacterLimitationColumn, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"/>
+											</DataTemplate>
+										</DataGridTemplateColumn.CellTemplate>
+									</DataGridTemplateColumn>
+									<DataGridTemplateColumn Header="Max Lines" CanUserSort="True" IsReadOnly="True" SortMemberPath="LineLimitationColumn" Width="2*">
+										<DataGridTemplateColumn.CellTemplate>
+											<DataTemplate DataType="models:LanguageMapping">
+												<TextBlock ToolTip="{Binding LineLimitationColumn}" VerticalAlignment="Center" Padding="2,0,2,0"
+												           Text="{Binding LineLimitationColumn, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"/>
 											</DataTemplate>
 										</DataGridTemplateColumn.CellTemplate>
 									</DataGridTemplateColumn>

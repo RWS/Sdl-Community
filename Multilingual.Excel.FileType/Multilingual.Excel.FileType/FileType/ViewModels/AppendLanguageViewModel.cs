@@ -6,14 +6,11 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
-using System.Windows.Media;
 using Multilingual.Excel.FileType.Commands;
-using Multilingual.Excel.FileType.Common;
 using Multilingual.Excel.FileType.Models;
 using Multilingual.Excel.FileType.Services;
 using Rws.MultiSelectComboBox.API;
 using Rws.MultiSelectComboBox.EventArgs;
-using Sdl.Core.Globalization;
 using Sdl.Core.Globalization.LanguageRegistry;
 using static Multilingual.Excel.FileType.Common.Enumerators;
 
@@ -29,6 +26,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 		public string _contextColumn;
 		private string _commentColumn;
 		private string _characterLimitationColumn;
+		private string _lineLimitationColumn;
 		private string _pixelLimitationColumn;
 		private string _pixelFontFamilyColumn;
 		private string _pixelFontSizeColumn;
@@ -69,6 +67,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 			ContextColumn = languageMapping?.ContextColumn;
 			CommentColumn = languageMapping?.CommentColumn;
 			CharacterLimitationColumn = languageMapping?.CharacterLimitationColumn;
+			LineLimitationColumn = languageMapping?.LineLimitationColumn;
 			PixelLimitationColumn = languageMapping?.PixelLimitationColumn;
 			PixelFontFamilyColumn = languageMapping?.PixelFontFamilyColumn;
 			PixelFontSizeColumn = languageMapping?.PixelFontSizeColumn;
@@ -285,6 +284,26 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 
 		public string CharacterLimitationColumnErrorToolTip { get; set; }
 
+		public string LineLimitationColumn
+		{
+			get => _lineLimitationColumn;
+			set
+			{
+				if (_lineLimitationColumn == value)
+				{
+					return;
+				}
+
+				_lineLimitationColumn = NormalizeColumn(value);
+				_languageMapping.LineLimitationColumn = _lineLimitationColumn;
+
+				OnPropertyChanged(nameof(LineLimitationColumn));
+				OnPropertyChanged(nameof(IsValid));
+			}
+		}
+
+		public string LineLimitationColumnErrorToolTip { get; set; }
+
 		public string PixelLimitationColumn
 		{
 			get => _pixelLimitationColumn;
@@ -478,6 +497,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 					|| !Validate(nameof(ContextColumn))
 					|| !Validate(nameof(CommentColumn))
 					|| !Validate(nameof(CharacterLimitationColumn))
+					|| !Validate(nameof(LineLimitationColumn))
 					|| !Validate(nameof(PixelLimitationColumn))
 					|| !Validate(nameof(PixelFontFamilyColumn))
 					|| !Validate(nameof(PixelFontSizeColumn))
@@ -552,6 +572,9 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 					case nameof(CharacterLimitationColumn):
 						CharacterLimitationColumnErrorToolTip = validationMessage == string.Empty ? null : validationMessage;
 						break;
+					case nameof(LineLimitationColumn):
+						LineLimitationColumnErrorToolTip = validationMessage == string.Empty ? null : validationMessage;
+						break;
 					case nameof(PixelLimitationColumn):
 						PixelLimitationColumnErrorToolTip = validationMessage == string.Empty ? null : validationMessage;
 						break;
@@ -574,6 +597,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 				OnPropertyChanged(nameof(ContextColumnErrorToolTip));
 				OnPropertyChanged(nameof(CommentColumnErrorToolTip));
 				OnPropertyChanged(nameof(CharacterLimitationColumnErrorToolTip));
+				OnPropertyChanged(nameof(LineLimitationColumnErrorToolTip));
 				OnPropertyChanged(nameof(PixelLimitationColumnErrorToolTip));
 				OnPropertyChanged(nameof(PixelFontFamilyColumnErrorToolTip));
 				OnPropertyChanged(nameof(PixelFontSizeColumnErrorToolTip));
@@ -628,6 +652,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 								GetColumnNames(a.ContextColumn).Contains(ContentColumn) ||
 								GetColumnNames(a.CommentColumn).Contains(ContentColumn) ||
 								a.CharacterLimitationColumn == ContentColumn ||
+								a.LineLimitationColumn == ContentColumn ||
 								a.PixelLimitationColumn == ContentColumn ||
 								a.PixelFontFamilyColumn == ContentColumn ||
 								a.PixelFontSizeColumn == ContentColumn)
@@ -641,6 +666,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 						if (GetColumnNames(ContextColumn).Contains(ContentColumn) ||
 							GetColumnNames(CommentColumn).Contains(ContentColumn) ||
 							ContentColumn == CharacterLimitationColumn ||
+							ContentColumn == LineLimitationColumn ||
 							ContentColumn == PixelLimitationColumn ||
 							ContentColumn == PixelFontFamilyColumn ||
 							ContentColumn == PixelFontSizeColumn)
@@ -664,6 +690,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 								a.ContentColumn == contextColumn ||
 								GetColumnNames(a.CommentColumn).Contains(contextColumn) ||
 								a.CharacterLimitationColumn == contextColumn ||
+								a.LineLimitationColumn == contextColumn ||
 								a.PixelLimitationColumn == contextColumn ||
 								a.PixelFontFamilyColumn == contextColumn ||
 								a.PixelFontSizeColumn == contextColumn);
@@ -677,6 +704,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 							if (contextColumn == ContentColumn ||
 								GetColumnNames(CommentColumn).Contains(contextColumn) ||
 								contextColumn == CharacterLimitationColumn ||
+								contextColumn == LineLimitationColumn ||
 								contextColumn == PixelLimitationColumn ||
 								contextColumn == PixelFontFamilyColumn ||
 								contextColumn == PixelFontSizeColumn)
@@ -706,6 +734,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 								a.ContentColumn == commentColumn ||
 								GetColumnNames(a.ContextColumn).Contains(commentColumn) ||
 								a.CharacterLimitationColumn == commentColumn ||
+								a.LineLimitationColumn == commentColumn ||
 								a.PixelLimitationColumn == commentColumn ||
 								a.PixelFontFamilyColumn == commentColumn ||
 								a.PixelFontSizeColumn == commentColumn);
@@ -717,6 +746,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 							if (commentColumn == ContentColumn ||
 								GetColumnNames(ContextColumn).Contains(commentColumn) ||
 								commentColumn == CharacterLimitationColumn ||
+								commentColumn == LineLimitationColumn ||
 								commentColumn == PixelLimitationColumn ||
 								commentColumn == PixelFontFamilyColumn ||
 								commentColumn == PixelFontSizeColumn)
@@ -744,6 +774,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 							a.ContentColumn == CharacterLimitationColumn ||
 							GetColumnNames(a.ContextColumn).Contains(CharacterLimitationColumn) ||
 							GetColumnNames(a.CommentColumn).Contains(CharacterLimitationColumn) ||
+							a.LineLimitationColumn == CharacterLimitationColumn ||
 							a.PixelLimitationColumn == CharacterLimitationColumn ||
 							a.PixelFontFamilyColumn == CharacterLimitationColumn ||
 							a.PixelFontSizeColumn == CharacterLimitationColumn);
@@ -755,6 +786,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 						if (CharacterLimitationColumn == ContentColumn ||
 							GetColumnNames(ContextColumn).Contains(CharacterLimitationColumn) ||
 							GetColumnNames(CommentColumn).Contains(CharacterLimitationColumn) ||
+							CharacterLimitationColumn == LineLimitationColumn ||
 							CharacterLimitationColumn == PixelLimitationColumn ||
 							CharacterLimitationColumn == PixelFontFamilyColumn ||
 							CharacterLimitationColumn == PixelFontSizeColumn)
@@ -769,6 +801,40 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 						}
 					}
 					break;
+				case nameof(LineLimitationColumn):
+					if (!string.IsNullOrEmpty(LineLimitationColumn))
+					{
+						var mapping = _languageMappings.FirstOrDefault(a =>
+							a.ContentColumn == LineLimitationColumn ||
+							GetColumnNames(a.ContextColumn).Contains(LineLimitationColumn) ||
+							GetColumnNames(a.CommentColumn).Contains(LineLimitationColumn) ||
+							a.CharacterLimitationColumn == LineLimitationColumn ||
+							a.PixelLimitationColumn == LineLimitationColumn ||
+							a.PixelFontFamilyColumn == LineLimitationColumn ||
+							a.PixelFontSizeColumn == LineLimitationColumn);
+						if (mapping != null)
+						{
+							validationMessage = string.Format(PluginResources.ValidationMessage_Column_Is_Defined_For_Language, LineLimitationColumn, mapping.LanguageId);
+						}
+
+						if (LineLimitationColumn == ContentColumn ||
+						    GetColumnNames(ContextColumn).Contains(LineLimitationColumn) ||
+						    GetColumnNames(CommentColumn).Contains(LineLimitationColumn) ||
+						    LineLimitationColumn == CharacterLimitationColumn ||
+						    LineLimitationColumn == PixelLimitationColumn ||
+						    LineLimitationColumn == PixelFontFamilyColumn ||
+						    LineLimitationColumn == PixelFontSizeColumn)
+						{
+							validationMessage = string.Format(PluginResources.ValidationMessage_Column_Is_Defined_For_Current_Language, LineLimitationColumn);
+						}
+
+						var invalidChars = GetInvalidChars(LineLimitationColumn);
+						if (!string.IsNullOrEmpty(invalidChars))
+						{
+							validationMessage = string.Format(PluginResources.ValidationMessage_Found_Invalid_Lines, invalidChars);
+						}
+					}
+					break;
 				case nameof(PixelLimitationColumn):
 					if (!string.IsNullOrEmpty(PixelLimitationColumn))
 					{
@@ -777,6 +843,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 							GetColumnNames(a.ContextColumn).Contains(PixelLimitationColumn) ||
 							GetColumnNames(a.CommentColumn).Contains(PixelLimitationColumn) ||
 							a.CharacterLimitationColumn == PixelLimitationColumn ||
+							a.LineLimitationColumn == PixelLimitationColumn ||
 							a.PixelFontFamilyColumn == PixelLimitationColumn ||
 							a.PixelFontSizeColumn == PixelLimitationColumn);
 
@@ -789,6 +856,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 							GetColumnNames(ContextColumn).Contains(PixelLimitationColumn) ||
 							GetColumnNames(CommentColumn).Contains(PixelLimitationColumn) ||
 							PixelLimitationColumn == CharacterLimitationColumn ||
+							PixelLimitationColumn == LineLimitationColumn ||
 							PixelLimitationColumn == PixelFontFamilyColumn ||
 							PixelLimitationColumn == PixelFontSizeColumn)
 						{
@@ -812,6 +880,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 							GetColumnNames(a.CommentColumn).Contains(PixelFontFamilyColumn) ||
 							a.PixelLimitationColumn == PixelFontFamilyColumn ||
 							a.CharacterLimitationColumn == PixelFontFamilyColumn ||
+							a.LineLimitationColumn == PixelFontFamilyColumn ||
 							a.PixelFontSizeColumn == PixelFontFamilyColumn);
 
 						if (mapping != null)
@@ -824,6 +893,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 							GetColumnNames(CommentColumn).Contains(PixelFontFamilyColumn) ||
 							PixelFontFamilyColumn == PixelLimitationColumn ||
 							PixelFontFamilyColumn == CharacterLimitationColumn ||
+							PixelFontFamilyColumn == LineLimitationColumn ||
 							PixelFontFamilyColumn == PixelFontSizeColumn)
 						{
 							validationMessage = string.Format(PluginResources.ValidationMessage_Column_Is_Defined_For_Current_Language, PixelFontFamilyColumn);
@@ -846,6 +916,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 							GetColumnNames(a.CommentColumn).Contains(PixelFontSizeColumn) ||
 							a.PixelLimitationColumn == PixelFontSizeColumn ||
 							a.CharacterLimitationColumn == PixelFontSizeColumn ||
+							a.LineLimitationColumn == PixelFontSizeColumn ||
 							a.PixelFontFamilyColumn == PixelFontSizeColumn);
 
 						if (mapping != null)
@@ -858,6 +929,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 							GetColumnNames(CommentColumn).Contains(PixelFontSizeColumn) ||
 							PixelFontSizeColumn == PixelLimitationColumn ||
 							PixelFontSizeColumn == CharacterLimitationColumn ||
+							PixelFontSizeColumn == LineLimitationColumn ||
 							PixelFontSizeColumn == PixelFontFamilyColumn)
 						{
 							validationMessage = string.Format(PluginResources.ValidationMessage_Column_Is_Defined_For_Current_Language, PixelFontSizeColumn);

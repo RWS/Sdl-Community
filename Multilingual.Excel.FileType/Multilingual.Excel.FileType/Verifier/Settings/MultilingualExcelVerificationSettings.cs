@@ -12,7 +12,6 @@ namespace Multilingual.Excel.FileType.Verifier.Settings
 
 		private const string MaxLinesPerParagraphEnabled_Setting = "MaxLinesPerParagraphEnabled";
 		private const string MaxLinesPerParagraphSeverity_Setting = "MaxLinesPerParagraphSeverity";
-		private const string MaxLinesPerParagraph_Setting = "MaxLinesPerParagraph";
 
 		private const string VerifySourceParagraphs_Setting = "VerifySourceParagraphs";
 		private const string VerifyTargetParagraphs_Setting = "VerifyTargetParagraphs";
@@ -53,12 +52,6 @@ namespace Multilingual.Excel.FileType.Verifier.Settings
 			set => GetSetting<int>(MaxLinesPerParagraphSeverity_Setting).Value = value;
 		}
 
-		public Setting<int> MaxLinesPerParagraph
-		{
-			get => GetSetting<int>(MaxLinesPerParagraph_Setting);
-			set => GetSetting<int>(MaxLinesPerParagraph_Setting).Value = value;
-		}
-
 		public Setting<bool> VerifySourceParagraphsEnabled
 		{
 			get => GetSetting<bool>(VerifySourceParagraphs_Setting);
@@ -85,8 +78,6 @@ namespace Multilingual.Excel.FileType.Verifier.Settings
 					return 1;
 				case MaxLinesPerParagraphEnabled_Setting:
 					return false;
-				case MaxLinesPerParagraph_Setting:
-					return 1;
 				case MaxLinesPerParagraphSeverity_Setting:
 					return 1;
 				case VerifySourceParagraphs_Setting:

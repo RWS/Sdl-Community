@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Multilingual.Excel.FileType.Providers.OpenXml.Model;
+using Hyperlink = DocumentFormat.OpenXml.Spreadsheet.Hyperlink;
 
 namespace Multilingual.Excel.FileType.Providers.OpenXml
 {
@@ -26,7 +29,7 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 			WriteExcelSheets(path, excelSheets);
 		}
 
-		private void WriteExcelSheets(string path, IReadOnlyCollection<ExcelSheet> excelSheets)
+		private void WriteExcelSheets(string path, IEnumerable<ExcelSheet> excelSheets)
 		{
 			lock (_lockObject)
 			{
@@ -36,20 +39,73 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 				{
 					foreach (var excelSheet in excelSheets)
 					{
-						var worksheetPart = GetWorksheetPartByName(spreadsheetDocument, excelSheet.Name);
+						var workSheetPart = GetWorksheetPartByName(spreadsheetDocument, excelSheet.Name);
+
+						var hyperlinks = workSheetPart.Worksheet.Descendants<Hyperlinks>().FirstOrDefault();
+						if (hyperlinks == null)
+						{
+							hyperlinks = new Hyperlinks();
+							var pm = workSheetPart.Worksheet.Descendants<PageMargins>().First();
+							workSheetPart.Worksheet.InsertBefore(hyperlinks, pm);
+						}
 
 						foreach (var excelRow in excelSheet.Rows)
 						{
-							foreach (var cell in excelRow.Cells)
+							var styleIndex = 0;
+							foreach (var excelCell in excelRow.Cells)
 							{
-								excelDocument.SetCellValue(spreadsheetDocument, worksheetPart.Worksheet, cell.Column.Index, excelRow.Index, cell.Value, false, false);
+								excelDocument.SetCellValue(spreadsheetDocument, workSheetPart.Worksheet,
+									excelCell.Column.Index, excelRow.Index, excelCell.Value, false, false);
+
+								if (!string.IsNullOrEmpty(excelCell.Hyperlink))
+								{
+									var row = excelDocument.GetRow(excelRow, workSheetPart);
+									var cell = excelDocument.GetCell(excelCell.Column.Index, excelRow.Index, row);
+									var cellStyleIndex = GetCellStyleIndex(cell);
+									if (styleIndex <= 0 && cell.StyleIndex != null && cell.StyleIndex > 0)
+									{
+										styleIndex = cellStyleIndex;
+									}
+
+									excelDocument.SetHyperlink(hyperlinks, workSheetPart, ColumnNameFromIndex(excelCell.Column.Index), excelRow.Index, new Uri(excelCell.Hyperlink));
+									cell.StyleIndex = Convert.ToUInt32(styleIndex);
+								}
 							}
 						}
 
-						worksheetPart.Worksheet.Save();
+						workSheetPart.Worksheet.Save();
 					}
 				}
 			}
+		}
+
+		private static int GetCellStyleIndex(CellType cell)
+		{
+			int cellStyleIndex;
+			if (cell?.StyleIndex == null)
+			{
+				cellStyleIndex = 0;
+			}
+			else
+			{
+				cellStyleIndex = (int)cell.StyleIndex.Value;
+			}
+
+			return cellStyleIndex;
+		}
+
+		public string ColumnNameFromIndex(uint columnIndex)
+		{
+			var columnName = "";
+
+			while (columnIndex > 0)
+			{
+				var remainder = (columnIndex - 1) % 26;
+				columnName = Convert.ToChar(65 + remainder) + columnName;
+				columnIndex = (columnIndex - remainder) / 26;
+			}
+
+			return columnName;
 		}
 
 		private static WorksheetPart GetWorksheetPartByName(SpreadsheetDocument document, string sheetName)

@@ -64,6 +64,7 @@ namespace Multilingual.Excel.FileType.FileType.Settings
 				parserTargetLanguage.Image = _imageService.GetImage(parserTargetLanguage.LanguageId);
 				parserTargetLanguage.ContentColumn = parserTargetLanguage.ContentColumn.ToUpper();
 				parserTargetLanguage.CharacterLimitationColumn = parserTargetLanguage.CharacterLimitationColumn?.ToUpper();
+				parserTargetLanguage.LineLimitationColumn = parserTargetLanguage.LineLimitationColumn?.ToUpper();
 				parserTargetLanguage.PixelLimitationColumn = parserTargetLanguage.PixelLimitationColumn?.ToUpper();
 				parserTargetLanguage.PixelFontFamilyColumn = parserTargetLanguage.PixelFontFamilyColumn?.ToUpper();
 				parserTargetLanguage.PixelFontSizeColumn = parserTargetLanguage.PixelFontSizeColumn?.ToUpper();

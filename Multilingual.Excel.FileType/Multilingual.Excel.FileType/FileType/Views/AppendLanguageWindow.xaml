@@ -294,14 +294,17 @@
 							<ColumnDefinition Width="Auto"/>
 							<ColumnDefinition Width="Auto"/>
 							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="Auto"/>
 							<ColumnDefinition Width="*"/>
 						</Grid.ColumnDefinitions>
 
 						<TextBlock Grid.Row="0" Grid.Column="0" Foreground="#FF636161" FontSize="13"
-						           Margin="0,5,0,5" Grid.ColumnSpan="4" Text="Characters"/>
+						           Margin="0,5,0,5" Grid.ColumnSpan="4" Text="Characters/Lines"/>
 
-						<Label Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"  Margin="15,0,5,0" MinWidth="85" 
-						       Content="Max Length:" />
+						<Label Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"  Margin="15,0,5,0" MinWidth="70" 
+						       Content="Max Chars:" />
 
 						<TextBox Grid.Row="1"  Grid.Column="2" Width="75" Height="30" VerticalContentAlignment="Center" 
 						         ToolTip="{Binding CharacterLimitationColumnErrorToolTip, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
@@ -310,6 +313,18 @@
 						<Image Grid.Row="1" Grid.Column="3" Source="../../Resources/Information.png" Height="16" HorizontalAlignment="Left" 
 					       RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" Margin="5,0,0,0"
 					       ToolTip="The column name associated with the maximum character length in the excel worksheet"/>
+
+
+						<Label Grid.Row="1" Grid.Column="4" Margin="25,0,5,0" MinWidth="65" VerticalAlignment="Center"  Content="Max Lines:"/>
+
+						<TextBox Grid.Row="1"  Grid.Column="5" Width="75" Height="30" VerticalContentAlignment="Center" 
+						                             ToolTip="{Binding LineLimitationColumnErrorToolTip, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+						                             Text="{Binding LineLimitationColumn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+
+						<Image Grid.Row="1" Grid.Column="6" Source="../../Resources/Information.png" Height="16" HorizontalAlignment="Left" 
+						       RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" Margin="5,0,0,0"
+						       ToolTip="The column name associated with the maximum lines length in the excel worksheet"/>
+
 						<!--<TextBlock Grid.Row="1" Grid.Column="3" Margin="10,0,0,0"
 						           HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="Gray"
 						           Text="(column names separated by a semicolon)"/>-->
@@ -328,6 +343,7 @@
 							<ColumnDefinition Width="Auto"/>
 							<ColumnDefinition Width="Auto"/>
 							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="Auto"/>
 							<ColumnDefinition Width="*"/>
 							<ColumnDefinition Width="Auto"/>
 						</Grid.ColumnDefinitions>
@@ -335,7 +351,7 @@
 						<TextBlock Grid.Row="0" Grid.Column="0" Foreground="#FF636161" FontSize="13"
 						           Grid.ColumnSpan="5" Margin="0,5,0,5" Text="Pixels"/>
 
-						<Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"  Margin="15,0,5,0" MinWidth="85" 
+						<Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"  Margin="15,0,5,0" MinWidth="70" 
 						       Content="Max Length:"/>
 
 						<TextBox Grid.Row="1" Grid.Column="1" Width="75" Height="30" Margin="0,0,0,4" HorizontalAlignment="Left"
@@ -348,7 +364,7 @@
 					       ToolTip="The column name associated with the maximum pixel length in the excel worksheet"/>
 
 
-						<Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"  Margin="15,0,5,0" MinWidth="85" 
+						<Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"  Margin="15,0,5,0" MinWidth="70" 
 						       Content="Font Family:" IsEnabled="{Binding PixelControlIsEnabled}"/>
 
 						<TextBox Grid.Row="2" Grid.Column="1" Width="75" Height="30" Margin="0" HorizontalAlignment="Left"
@@ -360,9 +376,9 @@
 						       RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" Margin="5,0,0,0"
 						       ToolTip="The column name associated with the pixel font family in the excel worksheet"/>
 
-						<Label Grid.Row="2" Grid.Column="2" Margin="25,0,5,0" VerticalAlignment="Center"  Content="Default:"
+						<Label Grid.Row="2" Grid.Column="3" Margin="25,0,5,0" MinWidth="65" VerticalAlignment="Center"  Content="Default:"
 						       IsEnabled="{Binding PixelControlIsEnabled}"/>
-						<rws:MultiSelectComboBox Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="2"
+						<rws:MultiSelectComboBox Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2"
 												 IsEnabled="{Binding PixelControlIsEnabled}"
 												 ToolTip="{Binding PixelFontFamilyErrorToolTip, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
 						                         x:Name="MultiSelectComboBoxFonts"
@@ -386,7 +402,7 @@
 												 ClearSelectionOnFilterChanged="True"/>
 
 
-						<Label Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="15,0,5,0" MinWidth="85" 
+						<Label Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="15,0,5,0" MinWidth="70" 
 						       Content="Font Size:" IsEnabled="{Binding PixelControlIsEnabled}"/>
 
 						<TextBox Grid.Row="3" Grid.Column="1" Width="75" Height="30" Margin="0" HorizontalAlignment="Left"
@@ -398,9 +414,9 @@
 						       RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" Margin="5,0,0,0"
 						       ToolTip="The column name associated with the pixel font size in the excel worksheet"/>
 
-						<Label Grid.Row="3" Grid.Column="2" Margin="25,0,5,0" VerticalAlignment="Center"  Content="Default:"
+						<Label Grid.Row="3" Grid.Column="3" Margin="25,0,5,0" MinWidth="65" VerticalAlignment="Center"  Content="Default:"
 						       IsEnabled="{Binding PixelControlIsEnabled}"/>
-						<controls:NumericUpDown  Grid.Row="3" Grid.Column="3" Maximum="100"
+						<controls:NumericUpDown  Grid.Row="3" Grid.Column="4" Maximum="100"
 						                         IsEnabled="{Binding PixelControlIsEnabled}"
 												 Style="{StaticResource NumericSpinnerStyle}" 
 												 ToolTip="{Binding PixelSizeErrorToolTip, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"

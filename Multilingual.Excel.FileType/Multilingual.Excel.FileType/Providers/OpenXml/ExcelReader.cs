@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -84,11 +85,15 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 			var excelWorkSheet = new ExcelSheet
 			{
 				Name = workSheet.Name,
-				Index = Convert.ToInt32(workSheet.SheetId.Value)
+				Index = Convert.ToInt32(workSheet.SheetId?.Value)
 			};
 
 			var excelRows = new List<ExcelRow>();
 			var sheetData = workSheetPart.Worksheet.Elements<SheetData>().First();
+
+			// get all hyperlinks - you might want to store them ...
+			var hyperlinks = workSheetPart.RootElement?.Descendants<Hyperlinks>().First().Cast<Hyperlink>().ToList();
+
 
 			foreach (var row in sheetData.Elements<Row>())
 			{
@@ -97,7 +102,7 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 					continue;
 				}
 
-				var excelRow = ReadExcelRow(row, spreadsheetDocument);
+				var excelRow = ReadExcelRow(row, spreadsheetDocument, workSheetPart, hyperlinks);
 				if (excelRow != null)
 				{
 					excelRows.Add(excelRow);
@@ -108,7 +113,7 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 			return excelWorkSheet;
 		}
 
-		private ExcelRow ReadExcelRow(OpenXmlElement row, SpreadsheetDocument spreadsheetDocument)
+		private ExcelRow ReadExcelRow(OpenXmlElement row, SpreadsheetDocument spreadsheetDocument, WorksheetPart workSheetPart, IReadOnlyCollection<Hyperlink> hyperlinks)
 		{
 			var xmlRow = row as Row;
 			if (xmlRow == null)
@@ -138,6 +143,9 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 				excelColumn.Index = columnIndex;
 
 				var cell = row.Descendants<Cell>().FirstOrDefault(a => a.CellReference?.Value == excelColumn.Name + excelRow.Index);
+				
+				var hyperlink = GetHyperLinkValue(workSheetPart, hyperlinks, cell);
+
 				var cellValue = GetCellValue(cell, spreadsheetDocument);
 				var cellBackgroundColor = GetCellBackgroundColor(cell, spreadsheetDocument);
 
@@ -145,6 +153,7 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 				{
 					Column = excelColumn,
 					Value = cellValue,
+					Hyperlink = hyperlink,
 					Background = cellBackgroundColor
 				};
 
@@ -152,6 +161,41 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 			}
 
 			return excelRow;
+		}
+
+		private static string GetHyperLinkValue(WorksheetPart workSheetPart, IEnumerable<Hyperlink> hyperlinks, Cell cell)
+		{
+			if (cell == null)
+			{
+				return null;
+			}
+
+			// get the Hyperlink object "behind" the cell
+			var hyperlink = hyperlinks.SingleOrDefault(i => i.Reference?.Value == cell.CellReference?.Value);
+			if (hyperlink == null)
+			{
+				return null;
+			}
+			
+			var tooltip = hyperlink.Tooltip;
+		
+			// if the hyperlink has an anchor, the anchor will be stored without the # in hyperlink.Location
+			string location = hyperlink.Location;
+
+			// the URI is stored in the HyperlinkRelationship
+			var hyperlinkRelationship = workSheetPart.HyperlinkRelationships.SingleOrDefault(i => i.Id == hyperlink.Id);
+			var url = hyperlinkRelationship?.Uri.ToString();
+
+			var isExternal = hyperlinkRelationship?.IsExternal;
+			var type = hyperlinkRelationship?.RelationshipType;
+			var hyperlinkValue = string.IsNullOrWhiteSpace(location) ? url : $"{url}#{location}";
+			return hyperlinkValue;
+
+			//email
+			//url = "mailto:my@me.com?subject=This%20is%20the%20email%20subject"
+
+			// if url == null && location !=null, then internal document reference
+			//		location	"Sheet1!A11"	string
 		}
 
 		private void AddColumnHeaders(OpenXmlElement row, SpreadsheetDocument spreadsheetDocument)
@@ -269,15 +313,15 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 			}
 
 			//remove digits
-			string columnReference = Regex.Replace(cellReference.ToUpper(), @"[\d]", string.Empty);
+			var columnReference = Regex.Replace(cellReference.ToUpper(), @"[\d]", string.Empty);
 
-			int columnNumber = -1;
-			int mulitplier = 1;
+			var columnNumber = -1;
+			var mulitplier = 1;
 
 			//working from the end of the letters take the ASCII code less 64 (so A = 1, B =2...etc)
 			//then multiply that number by our multiplier (which starts at 1)
 			//multiply our multiplier by 26 as there are 26 letters
-			foreach (char c in columnReference.ToCharArray().Reverse())
+			foreach (var c in columnReference.ToCharArray().Reverse())
 			{
 				columnNumber += mulitplier * ((int)c - 64);
 

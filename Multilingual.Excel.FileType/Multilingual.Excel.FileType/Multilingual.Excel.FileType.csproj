@@ -189,6 +189,7 @@
     <Compile Include="Models\DocumentInfo.cs" />
     <Compile Include="Models\ElementTags.cs" />
     <Compile Include="Models\FontFamilyItem.cs" />
+    <Compile Include="Models\Hyperlink.cs" />
     <Compile Include="Models\MultilingualComment.cs" />
     <Compile Include="Models\MultilingualParagraphUnit.cs" />
     <Compile Include="Models\SegmentationHintItem.cs" />
