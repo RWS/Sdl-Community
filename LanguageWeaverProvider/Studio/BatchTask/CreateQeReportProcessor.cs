@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using LanguageWeaverProvider.Studio.BatchTask.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 
@@ -15,17 +16,17 @@ namespace LanguageWeaverProvider.Studio.BatchTask
 			FileName = fileName;
 			Segments = new()
 			{
-				[NoQE] = 0,
-				[QualityEstimations.None.ToString()] = 0,
-				[QualityEstimations.Poor.ToString()] = 0,
-				[QualityEstimations.Adequate.ToString()] = 0,
-				[QualityEstimations.Good.ToString()] = 0,
+				[NoQE] = new(),
+				[QualityEstimations.None.ToString()] = new(),
+				[QualityEstimations.Poor.ToString()] = new(),
+				[QualityEstimations.Adequate.ToString()] = new(),
+				[QualityEstimations.Good.ToString()] = new(),
 			};
 		}
 
 		public string FileName { get; private set; }
 
-		public Dictionary<string, int> Segments { get; private set; }
+		public Dictionary<string, ReportSegmentDetails> Segments { get; private set; }
 
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
@@ -45,9 +46,8 @@ namespace LanguageWeaverProvider.Studio.BatchTask
 			foreach (var pair in segmentPairs)
 			{
 				var qualityEstimation = GetCurrentQEValue(pair);
-				Segments[qualityEstimation]++;
-
-				var x = _wordCounter.Count(pair.Target);
+				Segments[qualityEstimation].QeCouunt++;
+				Segments[qualityEstimation].WordsCount += _wordCounter.Count(pair.Target).Words;
 			}
 		}
 

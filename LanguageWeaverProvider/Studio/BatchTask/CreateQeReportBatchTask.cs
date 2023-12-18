@@ -64,8 +64,9 @@ namespace LanguageWeaverProvider.Studio.BatchTask
 				{
 					file.QeValues.Add(new QeValue()
 					{
-						SegmentsTotal = qs.Value,
-						QualityEstimation = qs.Key
+						QualityEstimation = qs.Key,
+						SegmentsTotal = qs.Value.QeCouunt,
+						WordsTotal = qs.Value.WordsCount,
 					});
 				}
 
