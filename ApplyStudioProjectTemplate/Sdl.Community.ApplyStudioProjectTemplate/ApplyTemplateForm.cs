@@ -255,68 +255,30 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 		/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
 		private void SelectedTemplate_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			var selectedTemplate = SelectedTemplate.SelectedItem as ApplyTemplate;
-		
-			if (selectedTemplate != null)
+			if (!(SelectedTemplate.SelectedItem is ApplyTemplate selectedTemplate))
 			{
-				TranslationProvidersAllLanguages.SelectedItem = selectedTemplate.TranslationProvidersAllLanguages.ToString();
-				TranslationProvidersSpecificLanguages.SelectedItem = selectedTemplate.TranslationProvidersSpecificLanguages.ToString();
-				TranslationMemoriesAllLanguages.SelectedItem = selectedTemplate.TranslationMemoriesAllLanguages.ToString();
-				TranslationMemoriesSpecificLanguages.SelectedItem = selectedTemplate.TranslationMemoriesSpecificLanguages.ToString();
-				TerminologyTermbases.SelectedItem = selectedTemplate.TerminologyTermbases.ToString();
-				TerminologySearchSettings.SelectedItem = selectedTemplate.TerminologySearchSettings.ToString();
-				TranslationQualityAssessment.SelectedItem = selectedTemplate.TranslationQualityAssessment.ToString();
-				BatchTasksAllLanguages.SelectedItem = selectedTemplate.BatchTasksAllLanguages.ToString();
-				BatchTasksSpecificLanguages.SelectedItem = selectedTemplate.BatchTasksSpecificLanguages.ToString();
-				VerificationQaChecker30.SelectedItem = selectedTemplate.VerificationQaChecker30.ToString();
-				VerificationTagVerifier.SelectedItem = selectedTemplate.VerificationTagVerifier.ToString();
-				VerificationTerminologyVerifier.SelectedItem = selectedTemplate.VerificationTerminologyVerifier.ToString();
-				VerificationNumberVerifier.SelectedItem = selectedTemplate.VerificationNumberVerifier.ToString();
-				VerificationGrammarChecker.SelectedItem = selectedTemplate.VerificationGrammarChecker.ToString();
-				FileTypes.SelectedItem = selectedTemplate.FileTypes.ToString();
-				matchRepairBox.SelectedItem = selectedTemplate.MatchRepairSettings.ToString();
-				VerificationSpecificLanguages.SelectedItem = selectedTemplate.VerificationSpecificLanguages.ToString();
-				AutomationAnalysisBatchTask.SelectedItem=selectedTemplate.AnalysisBatchTask.ToString();
-				AutomationPreTranslateBatchTask.SelectedItem=selectedTemplate.PreTranslateBatchTask.ToString();
+				return;
 			}
-			CheckChanged();
-		}
 
-		/// <summary>
-		/// Checks whether to enable the OK button.
-		/// </summary>
-		private void CheckChanged()
-		{
-			var applyTemplate = SelectedTemplate.SelectedItem as ApplyTemplate;
-			if (applyTemplate != null && applyTemplate.Id == Guid.Empty)
-			{
-				OkButton.Enabled = false;
-			}
-			else
-			{
-				var sumOfSelected = TranslationProvidersAllLanguages.SelectedIndex +
-									TranslationProvidersSpecificLanguages.SelectedIndex +
-									TranslationMemoriesAllLanguages.SelectedIndex +
-									TranslationMemoriesSpecificLanguages.SelectedIndex +
-									TerminologyTermbases.SelectedIndex +
-									TerminologySearchSettings.SelectedIndex +
-									TranslationQualityAssessment.SelectedIndex +
-									BatchTasksAllLanguages.SelectedIndex +
-									BatchTasksSpecificLanguages.SelectedIndex +
-									VerificationQaChecker30.SelectedIndex +
-									VerificationTagVerifier.SelectedIndex +
-									VerificationTerminologyVerifier.SelectedIndex +
-									VerificationNumberVerifier.SelectedIndex +
-									matchRepairBox.SelectedIndex +
-									FileTypes.SelectedIndex +
-									VerificationSpecificLanguages.SelectedIndex									
-									;
-				OkButton.Enabled = sumOfSelected > 0;
-				if(OkButton.Enabled==false && (RunAnalysisBatchTask.Checked==true || RunPreTranslateBatchTask.Checked==true))
-				{
-					OkButton.Enabled = true;
-				}
-			}
+			TranslationProvidersAllLanguages.SelectedItem = selectedTemplate.TranslationProvidersAllLanguages.ToString();
+			TranslationProvidersSpecificLanguages.SelectedItem = selectedTemplate.TranslationProvidersSpecificLanguages.ToString();
+			TranslationMemoriesAllLanguages.SelectedItem = selectedTemplate.TranslationMemoriesAllLanguages.ToString();
+			TranslationMemoriesSpecificLanguages.SelectedItem = selectedTemplate.TranslationMemoriesSpecificLanguages.ToString();
+			TerminologyTermbases.SelectedItem = selectedTemplate.TerminologyTermbases.ToString();
+			TerminologySearchSettings.SelectedItem = selectedTemplate.TerminologySearchSettings.ToString();
+			TranslationQualityAssessment.SelectedItem = selectedTemplate.TranslationQualityAssessment.ToString();
+			BatchTasksAllLanguages.SelectedItem = selectedTemplate.BatchTasksAllLanguages.ToString();
+			BatchTasksSpecificLanguages.SelectedItem = selectedTemplate.BatchTasksSpecificLanguages.ToString();
+			VerificationQaChecker30.SelectedItem = selectedTemplate.VerificationQaChecker30.ToString();
+			VerificationTagVerifier.SelectedItem = selectedTemplate.VerificationTagVerifier.ToString();
+			VerificationTerminologyVerifier.SelectedItem = selectedTemplate.VerificationTerminologyVerifier.ToString();
+			VerificationNumberVerifier.SelectedItem = selectedTemplate.VerificationNumberVerifier.ToString();
+			VerificationGrammarChecker.SelectedItem = selectedTemplate.VerificationGrammarChecker.ToString();
+			FileTypes.SelectedItem = selectedTemplate.FileTypes.ToString();
+			matchRepairBox.SelectedItem = selectedTemplate.MatchRepairSettings.ToString();
+			VerificationSpecificLanguages.SelectedItem = selectedTemplate.VerificationSpecificLanguages.ToString();
+			AutomationAnalysisBatchTask.SelectedItem = selectedTemplate.AnalysisBatchTask.ToString();
+			AutomationPreTranslateBatchTask.SelectedItem = selectedTemplate.PreTranslateBatchTask.ToString();
 		}
 
 		/// <summary>
@@ -326,13 +288,14 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 		/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
 		private void TranslationProvidersAllLanguages_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (SelectedTemplate.SelectedItem is ApplyTemplate applyTemplate)
+			if (!(SelectedTemplate.SelectedItem is ApplyTemplate applyTemplate))
 			{
-				applyTemplate.TranslationProvidersAllLanguages =
-					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
-						TranslationProvidersAllLanguages.SelectedItem.ToString());
+				return;
 			}
-			CheckChanged();
+
+			applyTemplate.TranslationProvidersAllLanguages =
+				(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
+					TranslationProvidersAllLanguages.SelectedItem.ToString());
 		}
 
 		/// <summary>
@@ -342,14 +305,14 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 		/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
 		private void TranslationProvidersSpecificLanguages_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (SelectedTemplate.SelectedItem is ApplyTemplate applyTemplate)
+			if (!(SelectedTemplate.SelectedItem is ApplyTemplate applyTemplate))
 			{
-				applyTemplate.TranslationProvidersSpecificLanguages =
-					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
-						TranslationProvidersSpecificLanguages.SelectedItem.ToString());
+				return;
 			}
 
-			CheckChanged();
+			applyTemplate.TranslationProvidersSpecificLanguages =
+				(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
+					TranslationProvidersSpecificLanguages.SelectedItem.ToString());
 		}
 
 		/// <summary>
@@ -359,13 +322,14 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 		/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
 		private void TranslationMemoriesAllLanguages_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (SelectedTemplate.SelectedItem is ApplyTemplate applyTemplate)
+			if (!(SelectedTemplate.SelectedItem is ApplyTemplate applyTemplate))
 			{
-				applyTemplate.TranslationMemoriesAllLanguages =
-					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
-						TranslationMemoriesAllLanguages.SelectedItem.ToString());
+				return;
 			}
-			CheckChanged();
+
+			applyTemplate.TranslationMemoriesAllLanguages =
+				(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
+					TranslationMemoriesAllLanguages.SelectedItem.ToString());
 		}
 
 		/// <summary>
@@ -375,13 +339,13 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 		/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
 		private void TranslationMemoriesSpecificLanguages_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (SelectedTemplate.SelectedItem is ApplyTemplate applyTemplate)
+			if (!(SelectedTemplate.SelectedItem is ApplyTemplate applyTemplate))
 			{
-				applyTemplate.TranslationMemoriesSpecificLanguages =
-					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
-						TranslationMemoriesSpecificLanguages.SelectedItem.ToString());
+				return;
 			}
-			CheckChanged();
+			applyTemplate.TranslationMemoriesSpecificLanguages =
+				(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
+					TranslationMemoriesSpecificLanguages.SelectedItem.ToString());
 		}
 
 		/// <summary>
@@ -397,7 +361,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						TerminologyTermbases.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -413,7 +376,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						TerminologySearchSettings.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -429,7 +391,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						BatchTasksAllLanguages.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -445,7 +406,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						BatchTasksSpecificLanguages.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -461,7 +421,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						VerificationQaChecker30.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -477,7 +436,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						VerificationTagVerifier.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -493,7 +451,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						VerificationTerminologyVerifier.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -509,7 +466,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						VerificationNumberVerifier.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -525,7 +481,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						VerificationGrammarChecker.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -540,7 +495,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 				applyTemplate.FileTypes =
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), FileTypes.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -556,7 +510,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
 						TranslationQualityAssessment.SelectedItem.ToString());
 			}
-			CheckChanged();
 		}
 
 		/// <summary>
@@ -700,70 +653,58 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 
 		private void matchRepairBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			var applyTemplate = SelectedTemplate.SelectedItem as ApplyTemplate;
-			if (applyTemplate != null)
+			if (!(SelectedTemplate.SelectedItem is ApplyTemplate applyTemplate))
 			{
-				applyTemplate.MatchRepairSettings =
-					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), matchRepairBox.SelectedItem.ToString());
-				CheckChanged();
+				return;
 			}
+
+			applyTemplate.MatchRepairSettings =
+				(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), matchRepairBox.SelectedItem.ToString());
 		}
 
 		private void VerificationSpecificLanguages_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			var applyTemplate = SelectedTemplate.SelectedItem as ApplyTemplate;
-			if (applyTemplate != null)
+			if (!(SelectedTemplate.SelectedItem is ApplyTemplate applyTemplate))
 			{
-				applyTemplate.VerificationSpecificLanguages =
-					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), VerificationSpecificLanguages.SelectedItem.ToString());
-				CheckChanged();
+				return;
 			}
+
+			applyTemplate.VerificationSpecificLanguages =
+				(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), VerificationSpecificLanguages.SelectedItem.ToString());
 		}
 
 		private void RunAnalysisBatchTask_CheckedChanged(object sender, EventArgs e)
 		{
-			CheckChanged();
-			if (RunAnalysisBatchTask.Checked)
-			{
-				AutomationAnalysisBatchTask.Visible = true;				
-			}
-			else
-			{
-				AutomationAnalysisBatchTask.Visible = false;
-			}
+			AutomationAnalysisBatchTask.Visible = RunAnalysisBatchTask.Checked;
 		}
 
 		private void RunPreTranslateBatchTask_CheckedChanged(object sender, EventArgs e)
 		{
-			CheckChanged();
-			if(RunPreTranslateBatchTask.Checked)
-			{
-				AutomationPreTranslateBatchTask.Visible=true;				
-			}
-			else
-			{
-				AutomationPreTranslateBatchTask.Visible = false;
-			}
+			AutomationPreTranslateBatchTask.Visible = RunPreTranslateBatchTask.Checked;
 		}
 
 		private void AutomationAnalysisBatchTask_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (SelectedTemplate.SelectedItem is ApplyTemplate applyTemplate)
+			if (!(SelectedTemplate.SelectedItem is ApplyTemplate applyTemplate))
 			{
-				applyTemplate.AnalysisBatchTask =
-					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
-						AutomationAnalysisBatchTask.SelectedItem.ToString());
+				return;
 			}
+
+			applyTemplate.AnalysisBatchTask =
+				(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
+					AutomationAnalysisBatchTask.SelectedItem.ToString());
 		}
 
 		private void AutomationPreTranslateBatchTask_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (SelectedTemplate.SelectedItem is ApplyTemplate applyTemplate)
+			if (!(SelectedTemplate.SelectedItem is ApplyTemplate applyTemplate))
 			{
-				applyTemplate.PreTranslateBatchTask =
-					(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
-						AutomationPreTranslateBatchTask.SelectedItem.ToString());
+				return;
 			}
+
+			applyTemplate.PreTranslateBatchTask =
+				(ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions),
+					AutomationPreTranslateBatchTask.SelectedItem.ToString());
 		}
 	}
 }

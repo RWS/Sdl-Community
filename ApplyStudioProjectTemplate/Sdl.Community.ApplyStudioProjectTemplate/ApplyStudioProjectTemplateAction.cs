@@ -602,7 +602,9 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			//Valentin -> code already prepared for the "long term" Studio API solution change, if the "Studio team" will add this AnalysisBands settings in the BundleSettings where it should be.
 			//I hope that they will respect the naming convention and the section will be named "FuzzyBandsSettings"
 			if (!CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, settingsGroupId, targetProject))
+			{
 				CopySettingsFuzzyBands(sourceProject, targetProject);
+			}
 		}
 
 
@@ -640,7 +642,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 		private dynamic GetProjectUsingReflection(FileBasedProject project)
 		{
 			var type = project.GetType();
-			var internalProjectField = type.GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance);
+			var internalProjectField = type.GetProperty("InternalProject", BindingFlags.NonPublic | BindingFlags.Instance);
 			dynamic internalDynamicProject = internalProjectField?.GetValue(project);
 			return internalDynamicProject;
 		}
