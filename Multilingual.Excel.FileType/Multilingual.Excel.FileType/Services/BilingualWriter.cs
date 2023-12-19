@@ -170,7 +170,8 @@ namespace Multilingual.Excel.FileType.Services
 			{
 				ReadAllWorkSheets = LanguageMappingSettings.LanguageMappingReadAllWorkSheets,
 				FirstRowIndex = LanguageMappingSettings.LanguageMappingFirstRowIndex,
-				FirstRowIndexIsHeading = LanguageMappingSettings.LanguageMappingFirstRowIsHeading
+				FirstRowIndexIsHeading = LanguageMappingSettings.LanguageMappingFirstRowIsHeading,
+				ReadHyperlinks = LanguageMappingSettings.LanguageMappingReadHyperlinks,
 			};
 			_excelSheets = new List<ExcelSheet>();
 
@@ -375,9 +376,9 @@ namespace Multilingual.Excel.FileType.Services
 					return;
 				}
 
-				if (hyperlink != null)
+				if (hyperlink != null && !string.IsNullOrEmpty(hyperlinkDataType))
 				{
-					if (targetContent.Hyperlink == null)
+					if (targetContent.Hyperlink == null )
 					{
 						targetContent.Hyperlink = sourceContent?.Hyperlink.Clone() as Hyperlink ?? new Hyperlink();
 					}
@@ -454,7 +455,8 @@ namespace Multilingual.Excel.FileType.Services
 			{
 				ReadAllWorkSheets = LanguageMappingSettings.LanguageMappingReadAllWorkSheets,
 				FirstRowIndex = LanguageMappingSettings.LanguageMappingFirstRowIndex,
-				FirstRowIndexIsHeading = LanguageMappingSettings.LanguageMappingFirstRowIsHeading
+				FirstRowIndexIsHeading = LanguageMappingSettings.LanguageMappingFirstRowIsHeading,
+				ReadHyperlinks = LanguageMappingSettings.LanguageMappingReadHyperlinks,
 			};
 
 			var excelColumns = GetExcelColumns();

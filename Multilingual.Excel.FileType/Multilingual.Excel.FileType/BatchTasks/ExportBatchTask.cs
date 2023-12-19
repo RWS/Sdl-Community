@@ -179,7 +179,8 @@ namespace Multilingual.Excel.FileType.BatchTasks
 				{
 					ReadAllWorkSheets = languageMappingSettings.LanguageMappingReadAllWorkSheets,
 					FirstRowIndex = languageMappingSettings.LanguageMappingFirstRowIndex,
-					FirstRowIndexIsHeading = languageMappingSettings.LanguageMappingFirstRowIsHeading
+					FirstRowIndexIsHeading = languageMappingSettings.LanguageMappingFirstRowIsHeading,
+					ReadHyperlinks = languageMappingSettings.LanguageMappingReadHyperlinks,
 				};
 
 				var excelColumns = GetExcelColumns(multilingualFileInfo);

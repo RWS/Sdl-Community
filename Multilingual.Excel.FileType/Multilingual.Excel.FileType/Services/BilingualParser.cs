@@ -136,7 +136,8 @@ namespace Multilingual.Excel.FileType.Services
 			{
 				ReadAllWorkSheets = LanguageMappingSettings.LanguageMappingReadAllWorkSheets,
 				FirstRowIndex = LanguageMappingSettings.LanguageMappingFirstRowIndex,
-				FirstRowIndexIsHeading = LanguageMappingSettings.LanguageMappingFirstRowIsHeading
+				FirstRowIndexIsHeading = LanguageMappingSettings.LanguageMappingFirstRowIsHeading,
+				ReadHyperlinks = LanguageMappingSettings.LanguageMappingReadHyperlinks,
 			};
 
 			var excelColumns = GetExcelColumns();

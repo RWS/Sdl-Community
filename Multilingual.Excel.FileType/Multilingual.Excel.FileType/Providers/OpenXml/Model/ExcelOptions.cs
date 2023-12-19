@@ -7,5 +7,7 @@
 		public bool FirstRowIndexIsHeading { get; set; }
 
 		public bool ReadAllWorkSheets { get; set; }
+
+		public bool ReadHyperlinks { get; set; }
 	}
 }

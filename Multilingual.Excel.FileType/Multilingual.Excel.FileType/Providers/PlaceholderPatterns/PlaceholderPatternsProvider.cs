@@ -26,7 +26,8 @@ namespace Multilingual.Excel.FileType.Providers.PlaceholderPatterns
 			{
 				FirstRowIndex = 1,
 				FirstRowIndexIsHeading = true,
-				ReadAllWorkSheets = false
+				ReadAllWorkSheets = false,
+				ReadHyperlinks = false,
 			};
 
 			var excelColumns = common.GetDefaultExcelColumns();

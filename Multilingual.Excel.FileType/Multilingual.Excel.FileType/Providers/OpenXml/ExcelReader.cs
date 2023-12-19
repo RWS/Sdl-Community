@@ -162,9 +162,14 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 			return excelRow;
 		}
 
-		private static Models.Hyperlink GetHyperLink(WorksheetPart workSheetPart, IEnumerable<Hyperlink> hyperlinks, Cell cell)
+		private Models.Hyperlink GetHyperLink(WorksheetPart workSheetPart, IEnumerable<Hyperlink> hyperlinks, Cell cell)
 		{
 			if (cell == null)
+			{
+				return null;
+			}
+
+			if (!_excelOptions.ReadHyperlinks)
 			{
 				return null;
 			}

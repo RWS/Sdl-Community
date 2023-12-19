@@ -27,6 +27,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 		private int _firstRowIndex;
 		private bool _firstRowIsHeading;
 		private bool _readAllWorkSheets;
+		private bool _readHyperlinks;
 
 		private LanguageMapping _selectedLanguageMapping;
 
@@ -51,6 +52,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 			FirstRowIndex = Settings.LanguageMappingFirstRowIndex;
 			FirstRowIsHeading = Settings.LanguageMappingFirstRowIsHeading;
 			ReadAllWorkSheets = Settings.LanguageMappingReadAllWorkSheets;
+			ReadHyperlinks = Settings.LanguageMappingReadHyperlinks;
 
 			LanguageMappings = new ObservableCollection<LanguageMapping>(Settings.LanguageMappingLanguages);
 		}
@@ -122,6 +124,23 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 			}
 		}
 
+		public bool ReadHyperlinks
+		{
+			get => _readHyperlinks;
+			set
+			{
+				if (_readHyperlinks == value)
+				{
+					return;
+				}
+
+				_readHyperlinks = value;
+				OnPropertyChanged(nameof(ReadHyperlinks));
+
+				Settings.LanguageMappingReadHyperlinks = _readHyperlinks;
+			}
+		}
+
 		public ObservableCollection<LanguageMapping> LanguageMappings
 		{
 			get => _languageMappings;
@@ -186,6 +205,7 @@ namespace Multilingual.Excel.FileType.FileType.ViewModels
 			FirstRowIndex = Settings.LanguageMappingFirstRowIndex;
 			FirstRowIsHeading = Settings.LanguageMappingFirstRowIsHeading;
 			ReadAllWorkSheets = Settings.LanguageMappingReadAllWorkSheets;
+			ReadHyperlinks = Settings.LanguageMappingReadHyperlinks;
 			LanguageMappings = new ObservableCollection<LanguageMapping>(Settings.LanguageMappingLanguages);
 
 			return Settings;
