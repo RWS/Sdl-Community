@@ -20,12 +20,20 @@ namespace Multilingual.Excel.FileType.Services
 		private string _excelSheetName;
 		private uint _excelRowIndex;
 		private int _excelCharacterLimitationSource;
+		private int _excelLineLimitationSource;
 		private int _excelPixelLimitationSource;
 		private string _excelPixelFontNameSource;
 		private float _excelPixelFontSizeSource;
 		private bool _isCATA;
 		private string _excelFilterBackgroundColorSource;
 		private bool _excelFilterLockSegments;
+
+		private string _hyperlinkDataType;
+		private string _hyperlinkId;
+		private string _hyperlinkLocation;
+		private string _hyperlinkReference;
+		private bool _hyperlinkIsExternal;
+		private string _hyperlinkDisplay;
 
 		public ContentReader()
 		{
@@ -67,12 +75,24 @@ namespace Multilingual.Excel.FileType.Services
 				_excelSheetName = multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelSheetName);
 				_excelRowIndex = Convert.ToUInt32(multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelRowIndex));
 				_excelCharacterLimitationSource = Convert.ToInt32(multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelCharacterLimitationSource) ?? "0");
+				_excelLineLimitationSource = Convert.ToInt32(multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelLineLimitationSource) ?? "0");
 				_excelPixelLimitationSource = Convert.ToInt32(multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelPixelLimitationSource) ?? "0");
-				_excelPixelFontNameSource = multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelPixelFontNameSource ?? string.Empty);
+				_excelPixelFontNameSource = multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelPixelFontNameSource);
 				_excelPixelFontSizeSource = Convert.ToSingle(multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelPixelFontSizeSource) ?? "0");
 				_isCATA = Convert.ToBoolean(multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.IsCDATA));
-				_excelFilterBackgroundColorSource = multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelFilterBackgroundColorSource ?? string.Empty);
+				_excelFilterBackgroundColorSource = multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelFilterBackgroundColorSource);
 				_excelFilterLockSegments = Convert.ToBoolean(multilingualParagraphUnitContext.GetMetaData(FiletypeConstants.MultilingualExcelFilterLockSegmentsSource));
+			}
+
+			var hyperlinkContextInfo = paragraphUnit.Properties.Contexts?.Contexts?.FirstOrDefault(a => a.ContextType == "sdl:hyperlink");
+			if (hyperlinkContextInfo != null)
+			{
+				_hyperlinkDataType = hyperlinkContextInfo.GetMetaData("HyperlinkDataType");
+				_hyperlinkId = hyperlinkContextInfo.GetMetaData("HyperlinkId");
+				_hyperlinkLocation = hyperlinkContextInfo.GetMetaData("HyperlinkLocation");
+				_hyperlinkReference = hyperlinkContextInfo.GetMetaData("HyperlinkReference");
+				_hyperlinkIsExternal = Convert.ToBoolean(hyperlinkContextInfo.GetMetaData("HyperlinkIsExternal"));
+				_hyperlinkDisplay = hyperlinkContextInfo.GetMetaData("HyperlinkDisplay");
 			}
 
 			if (paragraphUnit.IsStructure)
@@ -87,11 +107,21 @@ namespace Multilingual.Excel.FileType.Services
 				ExcelSheetName = _excelSheetName,
 				ExcelRowIndex = _excelRowIndex,
 				ExcelCharacterLimitation = _excelCharacterLimitationSource,
+				ExcelLineLimitation = _excelLineLimitationSource,
 				ExcelPixelLimitation = _excelPixelLimitationSource,
 				ExcelPixelFontName = _excelPixelFontNameSource,
 				ExcelPixelFontSize = _excelPixelFontSizeSource,
 				ExcelFilterBackgroundColor = _excelFilterBackgroundColorSource,
 				ExcelFilterLockSegments = _excelFilterLockSegments,
+
+				HyperlinkDataType = _hyperlinkDataType,
+				HyperlinkId = _hyperlinkId,
+				HyperlinkLocation = _hyperlinkLocation,
+				HyperlinkReference = _hyperlinkReference,
+				HyperlinkIsExternal = _hyperlinkIsExternal,
+				HyperlinkDisplay = _hyperlinkDisplay,
+
+
 				IsCDATA = _isCATA,
 				ParagraphUnit = paragraphUnit,
 				ParagraphUnitId = paragraphUnit.Properties.ParagraphUnitId.Id,
@@ -134,11 +164,20 @@ namespace Multilingual.Excel.FileType.Services
 					ExcelSheetName = _excelSheetName,
 					ExcelRowIndex = _excelRowIndex,
 					ExcelCharacterLimitation = _excelCharacterLimitationSource,
+					ExcelLineLimitation = _excelLineLimitationSource,
 					ExcelPixelLimitation = _excelPixelLimitationSource,
 					ExcelPixelFontName = _excelPixelFontNameSource,
 					ExcelPixelFontSize = _excelPixelFontSizeSource,
 					ExcelFilterBackgroundColor = _excelFilterBackgroundColorSource,
 					ExcelFilterLockSegments = _excelFilterLockSegments,
+
+					HyperlinkDataType = _hyperlinkDataType,
+					HyperlinkId = _hyperlinkId,
+					HyperlinkLocation = _hyperlinkLocation,
+					HyperlinkReference = _hyperlinkReference,
+					HyperlinkIsExternal = _hyperlinkIsExternal,
+					HyperlinkDisplay = _hyperlinkDisplay,
+
 					IsCDATA = _isCATA,
 					ParagraphUnit = _paragraphUnit,
 					ParagraphUnitId = _paragraphUnit.Properties.ParagraphUnitId.Id,

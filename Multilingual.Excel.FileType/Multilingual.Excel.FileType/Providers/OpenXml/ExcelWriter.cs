@@ -49,6 +49,8 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 							workSheetPart.Worksheet.InsertBefore(hyperlinks, pm);
 						}
 
+						var hyperlinkList = hyperlinks.Cast<Hyperlink>().ToList();
+
 						foreach (var excelRow in excelSheet.Rows)
 						{
 							var styleIndex = 0;
@@ -57,7 +59,8 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 								excelDocument.SetCellValue(spreadsheetDocument, workSheetPart.Worksheet,
 									excelCell.Column.Index, excelRow.Index, excelCell.Value, false, false);
 
-								if (!string.IsNullOrEmpty(excelCell.Hyperlink))
+								var isHyperlink = !string.IsNullOrEmpty(excelCell.Hyperlink?.Reference);
+								if (isHyperlink)
 								{
 									var row = excelDocument.GetRow(excelRow, workSheetPart);
 									var cell = excelDocument.GetCell(excelCell.Column.Index, excelRow.Index, row);
@@ -67,7 +70,9 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 										styleIndex = cellStyleIndex;
 									}
 
-									excelDocument.SetHyperlink(hyperlinks, workSheetPart, ColumnNameFromIndex(excelCell.Column.Index), excelRow.Index, new Uri(excelCell.Hyperlink));
+									var hyperlink = hyperlinkList.SingleOrDefault(i => i.Reference?.Value == cell.CellReference?.Value);
+									excelDocument.SetHyperlink(hyperlinks, hyperlink, workSheetPart, excelCell.Hyperlink);
+									
 									cell.StyleIndex = Convert.ToUInt32(styleIndex);
 								}
 							}

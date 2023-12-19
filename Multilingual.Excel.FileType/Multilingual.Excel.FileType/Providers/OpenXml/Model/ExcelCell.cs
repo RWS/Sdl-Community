@@ -1,4 +1,5 @@
 ﻿using System;
+using Multilingual.Excel.FileType.Models;
 
 namespace Multilingual.Excel.FileType.Providers.OpenXml.Model
 {
@@ -6,7 +7,7 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml.Model
 	{
 		public string Value { get; set; }
 
-		public string Hyperlink { get; set; }
+		public Hyperlink Hyperlink { get; set; }
 
 		public ExcelColumn Column { get; set; }
 
@@ -21,7 +22,6 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml.Model
 				Hyperlink = Hyperlink,
 				Column = Column.Clone() as ExcelColumn
 			};
-
 		}
 	}
 }

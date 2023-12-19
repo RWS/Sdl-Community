@@ -55,7 +55,7 @@ namespace Multilingual.Excel.FileType.BatchTasks
 			var filterItemService = new FilterItemService(analysisBands);
 
 			var documentItemFactory = DefaultDocumentItemFactory.CreateInstance();
-			var propertiesFactory = DefaultPropertiesFactory.CreateInstance();
+			propertiesFactory = DefaultPropertiesFactory.CreateInstance();
 
 			var entityContext = new EntityContext();
 			var sdlFrameworkService = new SdlFrameworkService(documentItemFactory, propertiesFactory);
@@ -79,6 +79,8 @@ namespace Multilingual.Excel.FileType.BatchTasks
 			base.OnInitializeTask();
 		}
 
+		private IPropertiesFactory propertiesFactory;
+
 		public override bool ShouldProcessFile(ProjectFile projectFile)
 		{
 			var valid = projectFile.FileTypeId == FiletypeConstants.FileTypeDefinitionId;
@@ -91,6 +93,9 @@ namespace Multilingual.Excel.FileType.BatchTasks
 
 			return true;
 		}
+
+
+		private LanguageMapping _targetLanguageMapping = null;
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
@@ -111,7 +116,7 @@ namespace Multilingual.Excel.FileType.BatchTasks
 
 			var sourceLanguage = _languageMappingSettings.LanguageMappingLanguages.FirstOrDefault(a =>
 				string.Compare(a.LanguageId, sourceLanguageId, StringComparison.InvariantCultureIgnoreCase) == 0);
-			var targetLanguage = _languageMappingSettings.LanguageMappingLanguages.FirstOrDefault(a =>
+			_targetLanguageMapping = _languageMappingSettings.LanguageMappingLanguages.FirstOrDefault(a =>
 				string.Compare(a.LanguageId, targetLanguageId, StringComparison.InvariantCultureIgnoreCase) == 0);
 
 			if (sourceLanguage == null)
@@ -119,11 +124,10 @@ namespace Multilingual.Excel.FileType.BatchTasks
 				throw new Exception(string.Format(PluginResources.ExceptionMessage_UnableToLocateTheMappedLanguage_, sourceLanguageId));
 			}
 
-			if (targetLanguage == null)
+			if (_targetLanguageMapping == null)
 			{
 				throw new Exception(string.Format(PluginResources.ExceptionMessage_UnableToLocateTheMappedLanguage_, targetLanguageId));
 			}
-
 
 			EnsureDocumentSegmented(projectFile);
 
@@ -264,6 +268,14 @@ namespace Multilingual.Excel.FileType.BatchTasks
 					var lockSegments = false;
 
 					var multilingualContextInfo = newParagraphUnit.Properties.Contexts?.Contexts?.FirstOrDefault(a => a.ContextType == FiletypeConstants.MultilingualParagraphUnit);
+					//var hyperlinkContextInfo = newParagraphUnit.Properties.Contexts?.Contexts?.FirstOrDefault(a => a.ContextType == "sdl:hyperlink");
+
+					var sourceCellContextInfo = newParagraphUnit.Properties.Contexts?.Contexts?.FirstOrDefault(a =>
+						a.ContextType == "sdl:cell" && !a.DisplayName.StartsWith(_targetLanguageMapping.ContentColumn, StringComparison.CurrentCultureIgnoreCase));
+
+					//var targetCellContextInfo = newParagraphUnit.Properties.Contexts?.Contexts?.FirstOrDefault(a => 
+					//	a.ContextType == "sdl:cell" && a.DisplayName.StartsWith(_targetLanguageMapping.ContentColumn, StringComparison.CurrentCultureIgnoreCase));
+					
 					var targetMultilingualContextInfo = updatedParagraphUnitInfo ?? targetMultilingualParagraphUnit?.ParagraphUnitInfos?.FirstOrDefault();
 					if (targetMultilingualContextInfo != null)
 					{
@@ -278,13 +290,35 @@ namespace Multilingual.Excel.FileType.BatchTasks
 							lockSegments = targetMultilingualContextInfo.ExcelFilterLockSegments;
 						}
 
-
 						multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelCharacterLimitationTarget, targetMultilingualContextInfo.ExcelCharacterLimitation.ToString());
+						multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelLineLimitationTarget, targetMultilingualContextInfo.ExcelLineLimitation.ToString());
 						multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelPixelLimitationTarget, targetMultilingualContextInfo.ExcelPixelLimitation.ToString());
 						multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelPixelFontNameTarget, targetMultilingualContextInfo.ExcelPixelFontName);
 						multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelPixelFontSizeTarget, targetMultilingualContextInfo.ExcelPixelFontSize.ToString(CultureInfo.InvariantCulture));
 						multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelFilterBackgroundColorTarget, targetMultilingualContextInfo.ExcelFilterBackgroundColor);
 						multilingualContextInfo.SetMetaData(FiletypeConstants.MultilingualExcelFilterLockSegmentsTarget, targetMultilingualContextInfo.ExcelFilterLockSegments.ToString());
+
+						//if (hyperlinkContextInfo != null)
+						//{
+						//	hyperlinkContextInfo.SetMetaData("HyperlinkDataType", targetMultilingualContextInfo.HyperlinkDataType);
+						//	hyperlinkContextInfo.SetMetaData("HyperlinkId", targetMultilingualContextInfo.HyperlinkId);
+						//	hyperlinkContextInfo.SetMetaData("HyperlinkLocation", targetMultilingualContextInfo.HyperlinkLocation);
+						//	hyperlinkContextInfo.SetMetaData("HyperlinkReference", _targetLanguageMapping.ContentColumn + targetMultilingualContextInfo.ExcelRowIndex);
+						//	hyperlinkContextInfo.SetMetaData("HyperlinkIsExternal", targetMultilingualContextInfo.HyperlinkIsExternal.ToString());
+						//	hyperlinkContextInfo.SetMetaData("HyperlinkDisplay", targetMultilingualContextInfo.HyperlinkDisplay);
+						//}
+
+						if (sourceCellContextInfo != null)
+						{
+							sourceCellContextInfo.DisplayName = _targetLanguageMapping.ContentColumn +
+							                                    targetMultilingualContextInfo.ExcelRowIndex;
+							sourceCellContextInfo.SetMetaData("CellReference", _targetLanguageMapping.ContentColumn +
+							                                                   targetMultilingualContextInfo.ExcelRowIndex);
+							//var cellContextInfo = propertiesFactory.CreateContextInfo(StandardContextTypes.Cell);
+							//cellContextInfo.DisplayName = _targetLanguageMapping.ContentColumn + targetMultilingualContextInfo.ExcelRowIndex;
+							//cellContextInfo.SetMetaData("CellReference", _targetLanguageMapping.ContentColumn + targetMultilingualContextInfo.ExcelRowIndex);
+							//newParagraphUnit.Properties?.Contexts?.Contexts?.Insert(1, cellContextInfo);
+						}
 					}
 
 					if (lockSegments)

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,6 +9,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using Multilingual.Excel.FileType.Providers.OpenXml.Model;
 using Multilingual.Excel.FileType.Services;
 using Fill = DocumentFormat.OpenXml.Spreadsheet.Fill;
+using Hyperlink = DocumentFormat.OpenXml.Spreadsheet.Hyperlink;
 
 namespace Multilingual.Excel.FileType.Providers.OpenXml
 {
@@ -94,7 +94,6 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 			// get all hyperlinks - you might want to store them ...
 			var hyperlinks = workSheetPart.RootElement?.Descendants<Hyperlinks>().First().Cast<Hyperlink>().ToList();
 
-
 			foreach (var row in sheetData.Elements<Row>())
 			{
 				if (row.Hidden != null && row.Hidden.HasValue && row.Hidden)
@@ -143,8 +142,8 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 				excelColumn.Index = columnIndex;
 
 				var cell = row.Descendants<Cell>().FirstOrDefault(a => a.CellReference?.Value == excelColumn.Name + excelRow.Index);
-				
-				var hyperlink = GetHyperLinkValue(workSheetPart, hyperlinks, cell);
+
+				var hyperlink = GetHyperLink(workSheetPart, hyperlinks, cell);
 
 				var cellValue = GetCellValue(cell, spreadsheetDocument);
 				var cellBackgroundColor = GetCellBackgroundColor(cell, spreadsheetDocument);
@@ -163,7 +162,7 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 			return excelRow;
 		}
 
-		private static string GetHyperLinkValue(WorksheetPart workSheetPart, IEnumerable<Hyperlink> hyperlinks, Cell cell)
+		private static Models.Hyperlink GetHyperLink(WorksheetPart workSheetPart, IEnumerable<Hyperlink> hyperlinks, Cell cell)
 		{
 			if (cell == null)
 			{
@@ -171,31 +170,51 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 			}
 
 			// get the Hyperlink object "behind" the cell
-			var hyperlink = hyperlinks.SingleOrDefault(i => i.Reference?.Value == cell.CellReference?.Value);
-			if (hyperlink == null)
+			var hyperlinkInstance = hyperlinks.SingleOrDefault(i => i.Reference?.Value == cell.CellReference?.Value);
+			if (hyperlinkInstance == null)
 			{
 				return null;
 			}
-			
-			var tooltip = hyperlink.Tooltip;
-		
-			// if the hyperlink has an anchor, the anchor will be stored without the # in hyperlink.Location
-			string location = hyperlink.Location;
 
 			// the URI is stored in the HyperlinkRelationship
-			var hyperlinkRelationship = workSheetPart.HyperlinkRelationships.SingleOrDefault(i => i.Id == hyperlink.Id);
-			var url = hyperlinkRelationship?.Uri.ToString();
+			var hyperlinkRelationship = workSheetPart.HyperlinkRelationships.SingleOrDefault(i => i.Id == hyperlinkInstance.Id);
+	
 
-			var isExternal = hyperlinkRelationship?.IsExternal;
-			var type = hyperlinkRelationship?.RelationshipType;
-			var hyperlinkValue = string.IsNullOrWhiteSpace(location) ? url : $"{url}#{location}";
-			return hyperlinkValue;
+			var hyperlink = new Models.Hyperlink
+			{
+				Id = hyperlinkInstance.Id,
+				Location = hyperlinkInstance.Location,
+				Reference = hyperlinkInstance.Reference,
+				IsExternal = hyperlinkRelationship?.IsExternal ?? false,
+				Display = hyperlinkInstance.Display,
+				Tooltip = hyperlinkInstance.Tooltip,
+				Url = Uri.UnescapeDataString(hyperlinkRelationship?.Uri.ToString() ?? string.Empty)
+			};
 
-			//email
-			//url = "mailto:my@me.com?subject=This%20is%20the%20email%20subject"
+			try
+			{
+				if (hyperlinkRelationship?.Uri != null)
+				{
+					if (hyperlinkRelationship.Uri.Scheme.StartsWith("mailto",
+							StringComparison.CurrentCultureIgnoreCase))
+					{
+						hyperlink.IsEmail = true;
+						hyperlink.Email = Uri.UnescapeDataString(hyperlinkRelationship.Uri.UserInfo + "@" + hyperlinkRelationship.Uri.Host);
+						var query = hyperlinkRelationship.Uri.Query.TrimStart('?');
+						if (query.StartsWith("subject", StringComparison.CurrentCultureIgnoreCase))
+						{
+							var indexOfSubject = query.IndexOf("subject=") + "subject=".Length;
+							hyperlink.Subject = Uri.UnescapeDataString(query.Substring(indexOfSubject));
+						}
+					}
+				}
+			}
+			catch
+			{
+				// ignore; catch all
+			}
 
-			// if url == null && location !=null, then internal document reference
-			//		location	"Sheet1!A11"	string
+			return hyperlink;
 		}
 
 		private void AddColumnHeaders(OpenXmlElement row, SpreadsheetDocument spreadsheetDocument)
@@ -250,7 +269,7 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 				Console.Out.WriteLine("RGB value -> {0}", ct.Rgb.Value);
 				return ct.Rgb.Value;
 			}
-		
+
 			var themeValue = ct.Theme;
 			if (themeValue != null)
 			{
