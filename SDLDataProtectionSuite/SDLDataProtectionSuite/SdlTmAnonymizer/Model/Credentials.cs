@@ -1,14 +1,12 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
+using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel;
 
 namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Model
 {
 	public class Credentials : ModelBase
 	{
-		public Credentials()
-		{
-			CanAuthenticate = true;
-		}
+		public CredentialKind CredentialType { get; set; }
 
 		public string Url { get; set; }
 
@@ -20,7 +18,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Model
 
 		[JsonIgnore]
 		[XmlIgnore]
-		public bool CanAuthenticate { get; set; }
+		public bool CanAuthenticate { get; set; } = true;
 
 		[JsonIgnore]
 		[XmlIgnore]

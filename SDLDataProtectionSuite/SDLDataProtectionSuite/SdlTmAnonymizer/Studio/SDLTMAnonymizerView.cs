@@ -40,7 +40,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 		{
 			SettingsService = new SettingsService(new PathInfo());
 
-			Model = new MainViewModel(SettingsService, this);
+			Model = new MainViewModel(SettingsService, this, new GroupShareCredentialManager());
 			Model.PropertyChanged += Model_PropertyChanged;
 			Model.SelectedTabIndex = 0;
 
