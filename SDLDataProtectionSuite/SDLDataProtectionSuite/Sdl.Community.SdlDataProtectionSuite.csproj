@@ -27,6 +27,7 @@
 	  <None Remove="SdlTmAnonymizer\UsefulTips\zh\zh.zip" />
 	</ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="NLog">
       <HintPath>$(TradosFolder)\NLog.dll</HintPath>
     </Reference>
@@ -211,10 +212,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="SdlTmAnonymizer\View\CustomFieldsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SdlTmAnonymizer\View\LoginView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

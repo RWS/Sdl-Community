@@ -36,9 +36,10 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 		private readonly SerializerService _serializerService;
 
 		public CustomFieldsViewModel(TranslationMemoryViewModel model, CustomFieldsService customFieldsService, 
-			ExcelImportExportService excelImportExportService, SerializerService serializerService)
+			ExcelImportExportService excelImportExportService, SerializerService serializerService, GroupshareCredentialManager groupshareCredentialManager)
 		{
-			_customFieldsService = customFieldsService;
+            GroupshareCredentialManager = groupshareCredentialManager;
+            _customFieldsService = customFieldsService;
 			_excelImportExportService = excelImportExportService;
 
 			_serializerService = serializerService;
@@ -222,10 +223,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 				if (tm.IsServerTm)
 				{
 					var uri = new Uri(tm.Credentials.Url);
-					var translationProvider = new TranslationProviderServer(uri, false,
-						tm.Credentials.UserName,
-						tm.Credentials.Password);
-
+                    var translationProvider =
+                        GroupshareCredentialManager.TryGetProviderWithoutUserInput(tm.Credentials);
+                        
 					customFields.AddRange(_customFieldsService.GetServerBasedCustomFields(ProgressDialog.Current, tm,
 						translationProvider));
 				}
@@ -259,7 +259,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-		private void UnselectTm(TmFile tm)
+        public GroupshareCredentialManager GroupshareCredentialManager { get; set; }
+
+        private void UnselectTm(TmFile tm)
 		{
 			var customFieldsToBeRemoved = CustomFields.Where(c => c.TmPath.Equals(tm.Path)).ToList();
 
@@ -298,9 +300,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 					else
 					{
 						var uri = new Uri(tm.Credentials.Url);
-						var translationProvider = new TranslationProviderServer(uri, false,
-							tm.Credentials.UserName,
-							tm.Credentials.Password);
+                        var translationProvider =
+                            GroupshareCredentialManager.TryGetProviderWithoutUserInput(tm.Credentials);
 
 						report = _customFieldsService.AnonymizeServerBasedCustomFields(ProgressDialog.Current, tm, CustomFields.ToList(), translationProvider);
 					}
@@ -439,9 +440,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 					foreach (var tm in serverTms)
 					{						
 						var uri = new Uri(tm.Credentials.Url);
-						var translationProvider = new TranslationProviderServer(uri, false,
-							tm.Credentials.UserName,
-							tm.Credentials.Password);
+                        var translationProvider =
+                            GroupshareCredentialManager.TryGetProviderWithoutUserInput(tm.Credentials);
 
 						customFields.AddRange(_customFieldsService.GetServerBasedCustomFields(ProgressDialog.Current, tm, translationProvider));
 					}

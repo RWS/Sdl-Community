@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -48,10 +49,11 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 		}
 
 		private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
-		{
+        {
+            ProgressDialogSettings settings = null;
 			Application.Current.Dispatcher.Invoke(() =>
 			{
-				var settings = new ProgressDialogSettings(_controlWindow, true, true, true);
+				settings = new ProgressDialogSettings(_controlWindow, true, true, true);
 				var result = ProgressDialog.Execute(StringResources.Loading_data, () =>
 				{
 					GetServerTms(ProgressDialog.Current);
@@ -74,7 +76,17 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 
 		private void GetServerTms(ProgressDialogContext context)
 		{
-			var translationMemories = _translationProviderServer.GetTranslationMemories();
+			ReadOnlyCollection<ServerBasedTranslationMemory> translationMemories;
+
+			try
+			{
+				translationMemories = _translationProviderServer.GetTranslationMemories();
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.InnerException.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				return;
+			}
 
 			foreach (var tm in translationMemories)
 			{

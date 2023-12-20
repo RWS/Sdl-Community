@@ -8,19 +8,19 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 		private TranslationMemoryViewModel _translationMemoryViewModel;
 		private int _selectedTabIndex;
 
-		public MainViewModel(SettingsService settingsService, SDLTMAnonymizerView controller)
+		public MainViewModel(SettingsService settingsService, SDLTMAnonymizerView controller, GroupshareCredentialManager groupShareCredentialManager)
 		{
 			var contentParsingService = new ContentParsingService();
 			var serializerService = new SerializerService();
-			_translationMemoryViewModel = new TranslationMemoryViewModel(settingsService, contentParsingService, serializerService, controller);
+			_translationMemoryViewModel = new TranslationMemoryViewModel(settingsService, contentParsingService, serializerService, controller, groupShareCredentialManager);
 
 			var excelImportExportService = new ExcelImportExportService();
 			var systemFieldsService = new SystemFieldsService(_translationMemoryViewModel.TmService, settingsService);
 			var customFieldsService = new CustomFieldsService(_translationMemoryViewModel.TmService, settingsService);
 
-			ContentFilteringRulesViewModel = new ContentFilteringRulesViewModel(_translationMemoryViewModel, excelImportExportService);
-			SystemFieldsViewModel = new SystemFieldsViewModel(_translationMemoryViewModel, systemFieldsService, excelImportExportService, serializerService);
-			CustomFieldsViewModel = new CustomFieldsViewModel(_translationMemoryViewModel, customFieldsService, excelImportExportService, serializerService);
+			ContentFilteringRulesViewModel = new ContentFilteringRulesViewModel(_translationMemoryViewModel, excelImportExportService, groupShareCredentialManager);
+			SystemFieldsViewModel = new SystemFieldsViewModel(_translationMemoryViewModel, systemFieldsService, excelImportExportService, serializerService, groupShareCredentialManager);
+			CustomFieldsViewModel = new CustomFieldsViewModel(_translationMemoryViewModel, customFieldsService, excelImportExportService, serializerService, groupShareCredentialManager);
 
 			LogViewModel = new LogViewModel(_translationMemoryViewModel, serializerService, excelImportExportService);		
 		}

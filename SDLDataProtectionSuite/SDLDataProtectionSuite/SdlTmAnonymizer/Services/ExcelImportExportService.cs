@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Helpers.OpenXml;
@@ -160,6 +159,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 					//Read the first Sheet from Excel file.
 					var sheet = doc.WorkbookPart.Workbook.Sheets.GetFirstChild<Sheet>();
 
+					var excelReader = new ExcelReader(doc.WorkbookPart.SharedStringTablePart?.SharedStringTable);
+
 					//Get the Worksheet instance.
 					var worksheet = (doc.WorkbookPart.GetPartById(sheet.Id.Value) as WorksheetPart).Worksheet;
 
@@ -172,57 +173,57 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 						var colValue = row.ToList();
 						if (row.RowIndex.Value == 1)
 						{
-							if (!IsValidColumnHeader(colValue[0].InnerText, "Name") |
-								!IsValidColumnHeader(colValue[1].InnerText, "Type") |
-								!IsValidColumnHeader(colValue[2].InnerText, "Value") |
-								!IsValidColumnHeader(colValue[3].InnerText, "New Value")
+							if (!IsValidColumnHeader(excelReader.GetCellText(colValue[0].InnerText), "Name") |
+								!IsValidColumnHeader(excelReader.GetCellText(colValue[1].InnerText), "Type") |
+								!IsValidColumnHeader(excelReader.GetCellText(colValue[2].InnerText), "Value") |
+								!IsValidColumnHeader(excelReader.GetCellText(colValue[3].InnerText), "New Value")
 								)
 							{
 								return null;
 							}
 						}
-						if (row.RowIndex.Value > 1)
-						{
-							for (var i = 0; i < colValue.Count; i++)
-							{
-								var address = ((CellType)colValue[i]).CellReference.Value;
-								var cellValue = colValue[i].InnerText;
-								var customFieldName = cellValue;
-								var existingField = customFields.FirstOrDefault(c => c.Name.Equals(customFieldName));
-								if (existingField == null)
-								{
-									var fieldType = cellValue;// workSheet.Cells[i, 2].Value.ToString();
-									var studioCustomFieldType = (FieldValueType)Enum.Parse(typeof(FieldValueType), fieldType);
-									var field = new CustomField
-									{
-										IsSelected = true,
-										Name = customFieldName,
-										ValueType = studioCustomFieldType,
-										FieldValues = new List<CustomFieldValue>()
-									};
-									customFields.Add(field);
-								}
-								else
-								{
-									var details = new CustomFieldValue
-									{
-										Value = string.Empty,
-										NewValue = string.Empty
-									};
 
-									//C column contains the original value
-									if (address.Contains("C") && cellValue != null)
+						if (row.RowIndex.Value <= 1)
+							continue;
+						foreach (var cell in colValue)
+						{
+							var address = ((CellType)cell).CellReference?.Value;
+							var cellValue = excelReader.GetCellText(cell.InnerText);
+							var customFieldName = cellValue;
+							var existingField = customFields.FirstOrDefault(c => c.Name.Equals(customFieldName));
+							if (existingField == null)
+							{
+								var fieldType = cellValue;// workSheet.Cells[i, 2].Value.ToString();
+								var studioCustomFieldType = (FieldValueType)Enum.Parse(typeof(FieldValueType), fieldType);
+								var field = new CustomField
+								{
+									IsSelected = true,
+									Name = customFieldName,
+									ValueType = studioCustomFieldType,
+									FieldValues = new List<CustomFieldValue>()
+								};
+								customFields.Add(field);
+							}
+							else
+							{
+								var details = new CustomFieldValue
+								{
+									Value = string.Empty,
+									NewValue = string.Empty
+								};
+
+								//C column contains the original value
+								if (address.Contains("C") && cellValue != null)
+								{
+									details.Value = cellValue;
+									//D column contains alias value
+									var newValue = cellValue;
+									if (newValue != null)
 									{
-										details.Value = cellValue;
-										//D column contains alias value
-										var newValue = cellValue;
-										if (newValue != null)
-										{
-											details.NewValue = newValue;
-										}
-										existingField.FieldValues.Add(details);
-										break;
+										details.NewValue = newValue;
 									}
+									existingField.FieldValues.Add(details);
+									break;
 								}
 							}
 						}
@@ -242,6 +243,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 					//Read the first Sheet from Excel file.
 					var sheet = doc.WorkbookPart.Workbook.Sheets.GetFirstChild<Sheet>();
 
+					var excelReader = new ExcelReader(doc.WorkbookPart.SharedStringTablePart?.SharedStringTable);
+
 					//Get the Worksheet instance.
 					var worksheet = (doc.WorkbookPart.GetPartById(sheet.Id.Value) as WorksheetPart).Worksheet;
 
@@ -258,10 +261,10 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 						var colValue = row.ToList();
 						if (row.RowIndex.Value == 1)
 						{
-							if (!IsValidColumnHeader(colValue[0].InnerText, "ID") |
-								!IsValidColumnHeader(colValue[1].InnerText, "Order") |
-								!IsValidColumnHeader(colValue[2].InnerText, "Rule") |
-								!IsValidColumnHeader(colValue[3].InnerText, "Description")
+							if (!IsValidColumnHeader(excelReader.GetCellText(colValue[0].InnerText), "ID") |
+								!IsValidColumnHeader(excelReader.GetCellText(colValue[1].InnerText), "Order") |
+								!IsValidColumnHeader(excelReader.GetCellText(colValue[2].InnerText), "Rule") |
+								!IsValidColumnHeader(excelReader.GetCellText(colValue[3].InnerText), "Description")
 								)
 							{
 								return null;
@@ -274,7 +277,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 							for (var i = 0; i < colValue.Count; i++)
 							{
 								var address = ((CellType)colValue[i]).CellReference.Value;
-								var cellValue = colValue[i].InnerText;
+								var cellValue = excelReader.GetCellText(colValue[i].InnerText);
 								if (address.Contains("A"))
 								{
 									rule.Id = cellValue ?? string.Empty;
@@ -310,7 +313,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 					//Read the first Sheet from Excel file.
 					var sheet = doc.WorkbookPart.Workbook.Sheets.GetFirstChild<Sheet>();
 
-					//Get the Worksheet instance.
+					var excelReader = new ExcelReader(doc.WorkbookPart.SharedStringTablePart?.SharedStringTable);
+
 					var worksheet = (doc.WorkbookPart.GetPartById(sheet.Id.Value) as WorksheetPart).Worksheet;
 
 					//Fetch all the rows present in the Worksheet.
@@ -329,8 +333,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 						var colValue = row.ToList();
 						if (row.RowIndex.Value == 1)
 						{
-							if (!IsValidColumnHeader(colValue[0].InnerText, "User Name") |
-								!IsValidColumnHeader(colValue[1].InnerText, "New Value")
+							if (!IsValidColumnHeader(excelReader.GetCellText(colValue[0].InnerText), "User Name") |
+								!IsValidColumnHeader(excelReader.GetCellText(colValue[1].InnerText), "New Value")
 								)
 							{
 								return null;
@@ -344,7 +348,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 						foreach (var cell in colValue)
 						{
 							var address = ((CellType)cell).CellReference.Value;
-							var cellValue = cell.InnerText;
+							var cellValue = excelReader.GetCellText(cell.InnerText);
 							if (address.Contains("A") && cellValue != null)
 							{
 								user.UserName = cellValue;
@@ -399,28 +403,6 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 			excelDocument.SetCellValue(package, worksheet, 1, lineNumber, labelText);
 			excelDocument.SetCellValue(package, worksheet, 2, lineNumber, Convert.ToString(value));
 			lineNumber++;
-		}
-
-		private static void CreateExcelWithPatterns(ref string filePath)
-		{
-			try
-			{
-				if (File.Exists(filePath))
-					File.Delete(filePath);
-
-				using var spreadsheet = SpreadsheetDocument.Create(filePath, SpreadsheetDocumentType.Workbook);
-
-				spreadsheet.AddWorkbookPart();
-				spreadsheet.WorkbookPart.Workbook = new Workbook();
-				spreadsheet.WorkbookPart.AddNewPart<WorksheetPart>();
-				spreadsheet.WorkbookPart.Workbook.Save();
-			}
-			catch (Exception e)
-			{
-				Console.Write(e);
-				filePath = filePath.Insert(filePath.IndexOf(".xlsx", StringComparison.Ordinal), "(new)");
-				CreateExcelWithPatterns(ref filePath);
-			}
 		}
 
 		private static bool IsValidColumnHeader(string colmun, string expected)

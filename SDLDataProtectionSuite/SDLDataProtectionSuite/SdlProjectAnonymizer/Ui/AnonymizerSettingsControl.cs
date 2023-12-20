@@ -369,6 +369,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlProjectAnonymizer.Ui
 
 		private void ImportExpressionsInSettings(IEnumerable<RegexPattern> expressions)
 		{
+			if (expressions is null) return;
 			foreach (var expression in expressions)
 			{
 				var existScript = RegexPatterns.FirstOrDefault(s => s.Pattern.Equals(expression.Pattern));

@@ -12,6 +12,7 @@ using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Extensions;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Model.Log;
 using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Model.TM;
+using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -20,14 +21,16 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 {
 	public class TmService
 	{
-		private readonly SettingsService _settingsService;
+        public GroupshareCredentialManager GroupshareCredentialManager { get; }
+        private readonly SettingsService _settingsService;
 		private readonly ContentParsingService _contentParsingService;
 		private readonly SerializerService _serializerService;
 		private readonly object _lockObject = new object();
 
-		public TmService(SettingsService settingsService, ContentParsingService contentParsingService, SerializerService serializerService)
+		public TmService(SettingsService settingsService, ContentParsingService contentParsingService, SerializerService serializerService, GroupshareCredentialManager groupshareCredentialManager)
 		{
-			_settingsService = settingsService;
+            GroupshareCredentialManager = groupshareCredentialManager;
+            _settingsService = settingsService;
 			_contentParsingService = contentParsingService;
 			_serializerService = serializerService;
 		}
@@ -401,7 +404,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 				stopWatch.Start();
 
 				var uri = new Uri(memory.TmFile.Credentials.Url);
-				var translationProvider = new TranslationProviderServer(uri, false, memory.TmFile.Credentials.UserName, memory.TmFile.Credentials.Password);
+				var translationProvider = GroupshareCredentialManager.TryGetProviderWithoutUserInput(memory.TmFile.Credentials);
 				var tm = translationProvider.GetTranslationMemory(memory.TmFile.Path, TranslationMemoryProperties.All);
 
 				var groupsOf = 100;
@@ -473,7 +476,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 			return updatedCount;
 		}
 
-		private static IEnumerable<Model.Log.Action> GetResultActions(IReadOnlyList<ImportResult> results, IReadOnlyList<TranslationUnitDetails> unitsClone,
+
+        private static IEnumerable<Model.Log.Action> GetResultActions(IReadOnlyList<ImportResult> results, IReadOnlyList<TranslationUnitDetails> unitsClone,
 			IReadOnlyList<LanguagePlatform.TranslationMemory.TranslationUnit> unitsUpdated, IReadOnlyCollection<TmTranslationUnit> unitsReference)
 		{
 			var details = new List<Model.Log.Action>();
@@ -624,7 +628,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 
 					var uri = new Uri(tm.Credentials.Url);
 					var translationProvider =
-						new TranslationProviderServer(uri, false, tm.Credentials.UserName, tm.Credentials.Password);
+						GroupshareCredentialManager.TryGetProviderWithoutUserInput(tm.Credentials);
 
 					context.Report(0, "Backup " + tm.Path);
 

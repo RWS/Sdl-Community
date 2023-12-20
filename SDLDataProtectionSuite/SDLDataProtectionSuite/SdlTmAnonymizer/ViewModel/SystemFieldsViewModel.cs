@@ -34,9 +34,10 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 		private readonly SerializerService _serializerService;
 
 		public SystemFieldsViewModel(TranslationMemoryViewModel model, SystemFieldsService systemFieldsService,
-			ExcelImportExportService excelImportExportService, SerializerService serializerService)
+			ExcelImportExportService excelImportExportService, SerializerService serializerService, GroupshareCredentialManager groupshareCredentialManager)
 		{
-			_systemFieldsService = systemFieldsService;
+            GroupshareCredentialManager = groupshareCredentialManager;
+            _systemFieldsService = systemFieldsService;
 			_excelImportExportService = excelImportExportService;
 			_serializerService = serializerService;
 
@@ -151,11 +152,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 				if (tm.IsServerTm)
 				{
 					var uri = new Uri(tm.Credentials.Url);
-					var translationProvider = new TranslationProviderServer(uri, false,
-						tm.Credentials.UserName,
-						tm.Credentials.Password);
+					var translationProvider = GroupshareCredentialManager.TryGetProviderWithoutUserInput(tm.Credentials);
 
-					userNames.AddRange(_systemFieldsService.GetUniqueServerBasedSystemFields(ProgressDialog.Current, tm,
+                    userNames.AddRange(_systemFieldsService.GetUniqueServerBasedSystemFields(ProgressDialog.Current, tm,
 						translationProvider));
 				}
 				else
@@ -186,7 +185,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-		private void AddUniqueUserNames(IEnumerable<User> userNames)
+        public GroupshareCredentialManager GroupshareCredentialManager { get; set; }
+
+        private void AddUniqueUserNames(IEnumerable<User> userNames)
 		{
 			foreach (var name in userNames)
 			{
@@ -249,9 +250,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 					else
 					{
 						var uri = new Uri(tm.Credentials.Url);
-						var translationProvider = new TranslationProviderServer(uri, false,
-							tm.Credentials.UserName,
-							tm.Credentials.Password);
+                        var translationProvider =
+                            GroupshareCredentialManager.TryGetProviderWithoutUserInput(tm.Credentials);
 
 						report = _systemFieldsService.AnonymizeServerBasedSystemFields(ProgressDialog.Current, tm, UniqueUserNames.ToList(), translationProvider);
 					}
@@ -300,9 +300,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel
 					foreach (var tm in serverTms)
 					{
 						var uri = new Uri(tm.Credentials.Url);
-						var translationProvider = new TranslationProviderServer(uri, false,
-							tm.Credentials.UserName,
-							tm.Credentials.Password);
+                        var translationProvider =
+                            GroupshareCredentialManager.TryGetProviderWithoutUserInput(tm.Credentials);
 
 						users.AddRange(_systemFieldsService.GetUniqueServerBasedSystemFields(ProgressDialog.Current, tm, translationProvider));
 					}
