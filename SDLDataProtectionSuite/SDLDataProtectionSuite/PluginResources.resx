@@ -253,4 +253,7 @@ were ignored by the parser because they were not in the correct format (.sdlxlif
   <data name="TellMe_Provider_Results" xml:space="preserve">
     <value>{0} results</value>
   </data>
+  <data name="GroupShareCredentialManager_TryGetCredentialsWithoutUserInput_Credentials_invalid_" xml:space="preserve">
+	  <value>Credentials invalid!</value>
+  </data>
 </root>

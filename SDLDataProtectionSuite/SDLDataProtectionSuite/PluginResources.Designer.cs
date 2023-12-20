@@ -143,6 +143,16 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Credentials invalid!.
+        /// </summary>
+        public static string GroupShareCredentialManager_TryGetCredentialsWithoutUserInput_Credentials_invalid_ {
+            get {
+                return ResourceManager.GetString("GroupShareCredentialManager_TryGetCredentialsWithoutUserInput_Credentials_invalid" +
+                        "_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon help {

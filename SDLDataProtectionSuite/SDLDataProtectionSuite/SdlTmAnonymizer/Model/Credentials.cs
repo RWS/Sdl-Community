@@ -15,13 +15,9 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Model
 		[JsonIgnore]
 		[XmlIgnore]
 		public string Password { get; set; }
-
-		[JsonIgnore]
+        
+        [JsonIgnore]
 		[XmlIgnore]
-		public bool CanAuthenticate { get; set; } = true;
-
-		[JsonIgnore]
-		[XmlIgnore]
-		public bool IsAuthenticated { get; set; }
+		public string Token { get; set; }
 	}
 }
