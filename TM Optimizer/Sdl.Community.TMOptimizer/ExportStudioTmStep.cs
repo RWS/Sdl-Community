@@ -1,15 +1,14 @@
 ﻿using System;
 using Sdl.Community.TMOptimizerLib;
 using Sdl.Core.Globalization;
-using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace Sdl.Community.TMOptimizer.Control
+namespace Sdl.Community.TMOptimizer
 {
-    /// <summary>
-    /// Export a Studio TM to TMX
-    /// </summary>
-    class ExportStudioTmStep : ProcessingStep
+	/// <summary>
+	/// Export a Studio TM to TMX
+	/// </summary>
+	class ExportStudioTmStep : ProcessingStep
     {
         private FileBasedTranslationMemory _translationMemory;
         private TmxFile _exportTmxFile;
