@@ -92,7 +92,7 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 			var sheetData = workSheetPart.Worksheet.Elements<SheetData>().First();
 
 			// get all hyperlinks - you might want to store them ...
-			var hyperlinks = workSheetPart.RootElement?.Descendants<Hyperlinks>().First().Cast<Hyperlink>().ToList();
+			var hyperlinks = workSheetPart.RootElement?.Descendants<Hyperlinks>().FirstOrDefault()?.Cast<Hyperlink>().ToList();
 
 			foreach (var row in sheetData.Elements<Row>())
 			{
@@ -175,7 +175,7 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 			}
 
 			// get the Hyperlink object "behind" the cell
-			var hyperlinkInstance = hyperlinks.SingleOrDefault(i => i.Reference?.Value == cell.CellReference?.Value);
+			var hyperlinkInstance = hyperlinks?.SingleOrDefault(i => i.Reference?.Value == cell.CellReference?.Value);
 			if (hyperlinkInstance == null)
 			{
 				return null;
@@ -290,8 +290,16 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 			{
 				Console.Out.WriteLine("Indexed color -> {0}", ct.Indexed.Value);
 
-				var ic = (IndexedColors)styles.Stylesheet.Colors.IndexedColors.ChildElements[(int)ct.Indexed.Value];
-				return ic.ToString();
+				var ic = styles.Stylesheet.Colors?.IndexedColors?.ChildElements[(int)ct.Indexed.Value];
+				switch (ic)
+				{
+					case RgbColor rgbColor:
+						return rgbColor.Rgb?.Value;
+					case IndexedColors indexedColors:
+						return indexedColors.ToString();
+					default:
+						return null;
+				}
 			}
 
 			return null;
