@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="Sdl.Community.TMOptimizer.IntroWizardPageControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Sdl.Community.TMOptimizer"
+             xmlns:conv="clr-namespace:Xceed.Wpf.Toolkit.Core.Converters;assembly=Xceed.Wpf.Toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="800">
+    <UserControl.Resources>
+        <conv:InverseBoolConverter x:Key="InverseBoolConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
+
+    <Grid Margin="24,32,24,16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <local:EnumRadioButton Grid.Row="0" Margin="0,0,0,8" FontWeight="Bold" EnumBinding="{Binding Mode}" EnumValue="ConvertTranslationMemory">_Convert Workbench translation memory</local:EnumRadioButton>
+        <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="20,0,0,32">Use this option when you have not yet converted your Workbench TM for use in Studio. You will need 
+        a TMX export of the Workbench TM you want to convert.</TextBlock>
+        <local:EnumRadioButton Grid.Row="2" Margin="0,0,0,8" FontWeight="Bold" EnumBinding="{Binding Mode}" EnumValue="CleanExistingTranslationMemory">_Optimize already converted Workbench translation memory</local:EnumRadioButton>
+        <TextBlock Grid.Row="3" TextWrapping="Wrap" Margin="20,0,0,0">Use this option when you have already converted your Workbench TM to a Studio TM but are having problems caused
+        by excessive formatting tags. You will need your Studio TM and a TMX export of your original Workbench TM.</TextBlock>
+
+    </Grid>
+</UserControl>

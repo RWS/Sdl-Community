@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.5.33516.290
+VisualStudioVersion = 17.9.34407.89
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AA2AF093-976A-431F-A54B-C86F63C00F5F}"
 EndProject
@@ -17,6 +17,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdl.Community.TMOptimizer.Control", "Sdl.Community.TMOptimizer.Control\Sdl.Community.TMOptimizer.Control.csproj", "{A82ED8EE-C8FF-4AD2-B09F-EC379AA17B0E}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Sdl.Community.TMOptimizer.Installer", "Sdl.Community.TMOptimizer.Installer\Sdl.Community.TMOptimizer.Installer.wixproj", "{BD6FDD83-75C6-4DDE-B92A-4C9CAD18CBD7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdl.Community.TMOptimizer", "Sdl.Community.TMOptimizer\Sdl.Community.TMOptimizer.csproj", "{4C6FE095-A4D0-4250-895E-AC895592E22B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,6 +76,18 @@ Global
 		{BD6FDD83-75C6-4DDE-B92A-4C9CAD18CBD7}.Release|Mixed Platforms.Build.0 = Release|x86
 		{BD6FDD83-75C6-4DDE-B92A-4C9CAD18CBD7}.Release|x86.ActiveCfg = Release|x86
 		{BD6FDD83-75C6-4DDE-B92A-4C9CAD18CBD7}.Release|x86.Build.0 = Release|x86
+		{4C6FE095-A4D0-4250-895E-AC895592E22B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C6FE095-A4D0-4250-895E-AC895592E22B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C6FE095-A4D0-4250-895E-AC895592E22B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4C6FE095-A4D0-4250-895E-AC895592E22B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4C6FE095-A4D0-4250-895E-AC895592E22B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4C6FE095-A4D0-4250-895E-AC895592E22B}.Debug|x86.Build.0 = Debug|Any CPU
+		{4C6FE095-A4D0-4250-895E-AC895592E22B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C6FE095-A4D0-4250-895E-AC895592E22B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C6FE095-A4D0-4250-895E-AC895592E22B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4C6FE095-A4D0-4250-895E-AC895592E22B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4C6FE095-A4D0-4250-895E-AC895592E22B}.Release|x86.ActiveCfg = Release|Any CPU
+		{4C6FE095-A4D0-4250-895E-AC895592E22B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
