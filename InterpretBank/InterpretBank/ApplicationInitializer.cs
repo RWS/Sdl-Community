@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using InterpretBank.Booth;
+using InterpretBank.Booth.ViewModel;
 using InterpretBank.CommonServices;
 using InterpretBank.GlossaryService;
 using InterpretBank.GlossaryService.Interface;
@@ -27,8 +29,15 @@ namespace InterpretBank
             RegisterInterpretBankProvider();
             RegisterSettingsUi();
             RegisterGlossarySetup();
+            RegisterBooth();
 
             ApplicationLifetimeScope = Builder.Build().BeginLifetimeScope();
+        }
+
+        private static void RegisterBooth()
+        {
+            Builder.RegisterType<BoothWindowViewModel>();
+            Builder.RegisterType<BoothWindow>();
         }
 
         public void Execute()

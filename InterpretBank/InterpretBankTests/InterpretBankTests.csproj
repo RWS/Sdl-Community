@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net48</TargetFramework>
-		<TradosFolder>C:\Code\Studio2\Bin\Mixed Platforms\Debug</TradosFolder>
+		<TradosFolder>C:\Code\SDL\Trados\Release 17.1.6\Trados - release 17.1.6\Bin\Mixed Platforms\Debug</TradosFolder>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<LangVersion>latest</LangVersion>

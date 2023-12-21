@@ -73,6 +73,16 @@ namespace InterpretBank {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        public static System.Drawing.Icon Booth {
+            get {
+                object obj = ResourceManager.GetObject("Booth", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         public static System.Drawing.Icon CommitToDb {
             get {
                 object obj = ResourceManager.GetObject("CommitToDb", resourceCulture);

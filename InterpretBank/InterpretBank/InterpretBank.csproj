@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TradosFolder>C:\Code\Studio2\Bin\Mixed Platforms\Debug</TradosFolder>
+		<TradosFolder>C:\Code\SDL\Trados\Release 17.1.6\Trados - release 17.1.6\Bin\Mixed Platforms\Debug</TradosFolder>
 		<TargetFramework>net48</TargetFramework>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -23,8 +23,10 @@
     <Page Remove="TermbaseViewer\Converters\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Resources\299033_microphone_icon.png" />
     <None Remove="Resources\AddTerm.ico" />
     <None Remove="Resources\AddTerm2.ico" />
+    <None Remove="Resources\Booth.ico" />
     <None Remove="Resources\ConfirmEdit.png" />
     <None Remove="Resources\Edit.png" />
     <None Remove="Resources\EditIcon.ico" />
@@ -142,6 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\AddTerm.ico" />
+    <Resource Include="Resources\Booth.ico" />
     <Resource Include="Resources\ConfirmEdit.png" />
     <Resource Include="Resources\Edit.png" />
     <Resource Include="Resources\Flag.png" />
