@@ -379,8 +379,24 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 					workSheetPart.DeleteReferenceRelationship(hyperlink.Id);
 				}
 
-				workSheetPart.AddHyperlinkRelationship(new Uri(updatedHyperlink.Url),
-					updatedHyperlink.IsExternal, hyperlink.Id);
+				try
+				{
+					workSheetPart.AddHyperlinkRelationship(new Uri(updatedHyperlink.Url),
+						updatedHyperlink.IsExternal, hyperlink.Id);
+				}
+				catch
+				{
+					try
+					{
+						workSheetPart.DeleteReferenceRelationship(hyperlink.Id);
+					}
+					catch
+					{
+						// catch all; ignore
+					}
+
+					hyperlink.Id = null;
+				}
 			}
 		}
 
@@ -398,7 +414,17 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 
 			const string pattern = @"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$";
 			var rgx = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
-			return rgx.IsMatch(url);
+			var rgxSuccess = rgx.IsMatch(url);
+
+			var uriSuccess = Uri.TryCreate(url, UriKind.Absolute, out var uriResult)
+			       && (uriResult.Scheme == Uri.UriSchemeHttp || 
+			           uriResult.Scheme == Uri.UriSchemeHttps ||
+			           uriResult.Scheme == Uri.UriSchemeFile ||
+			           uriResult.Scheme == Uri.UriSchemeMailto);
+
+			var wellFormattedUrl = Uri.IsWellFormedUriString(url, UriKind.Absolute);
+
+			return rgxSuccess && uriSuccess && wellFormattedUrl;
 
 			//it will accept URL like that:
 
