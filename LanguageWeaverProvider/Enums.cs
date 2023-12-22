@@ -1,4 +1,6 @@
-﻿namespace LanguageWeaverProvider
+﻿using System.Xml.Serialization;
+
+namespace LanguageWeaverProvider
 {
 	public enum PluginVersion
 	{
@@ -30,4 +32,12 @@
 		Adequate,
 		Good
 	}
+
+	public enum EditItemType
+	{
+		[XmlEnum(Name = "plain_text")]
+		PlainText,
+		[XmlEnum(Name = "regular_expression")]
+		RegularExpression
+	};
 }

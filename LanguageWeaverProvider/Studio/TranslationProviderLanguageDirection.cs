@@ -22,6 +22,8 @@ namespace LanguageWeaverProvider
 	public class TranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
 	{
 		private readonly ITranslationOptions _translationOptions;
+		private readonly LWSegmentEditor _postLookupEditor;
+		private readonly LWSegmentEditor _preLookupEditor;
 		private readonly LanguagePair _languagePair;
 
 		private TranslationUnit _currentTranslationUnit;
@@ -33,6 +35,16 @@ namespace LanguageWeaverProvider
 			_translationOptions = translationOptions;
 			_languagePair = languagePair;
 			CredentialManager.GetCredentials(translationOptions, true);
+
+			if (_translationOptions.ProviderSettings.UsePrelookup)
+			{
+				_preLookupEditor = new(_translationOptions.ProviderSettings.PreLookupFilePath);
+			}
+
+			if (_translationOptions.ProviderSettings.UsePostLookup)
+			{
+				_postLookupEditor = new(_translationOptions.ProviderSettings.PostLookupFilePath);
+			}
 		}
 
 		public ITranslationProvider TranslationProvider { get; private set; }
@@ -42,6 +54,10 @@ namespace LanguageWeaverProvider
 		public CultureCode TargetLanguage => _languagePair.TargetCulture;
 
 		public bool CanReverseLanguageDirection => false;
+
+		public bool UsePreLookup => _preLookupEditor is not null;
+
+		public bool UsePostLookup => _postLookupEditor is not null;
 
 		public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
 		{
@@ -82,14 +98,24 @@ namespace LanguageWeaverProvider
 
 			var (Segments, Emojis) = FilterSegmentEmojis(translatableSegments);
 			Service.ValidateToken(_translationOptions);
+
+			if (UsePreLookup)
+			{
+				Segments = ModifySegmentsOnPreLookup(_preLookupEditor, Segments);
+			}
+
 			var mappedPair = GetMappedPair();
 			var xliffFile = CreateXliffFile(Segments);
 			var translation = GetTranslation(mappedPair, xliffFile);
-
 			var translatedSegments = translation.GetTargetSegments();
 			if (Emojis.Any())
 			{
 				ReconstructBaseSegments(translatedSegments, Emojis);
+			}
+
+			if (UsePostLookup)
+			{
+				Segments = ModifySegmentsOnPreLookup(_postLookupEditor, Segments);
 			}
 
 			var fileName = _batchTaskWindow is null ? string.Empty : System.IO.Path.GetFileName(translationUnits.First().DocumentProperties.LastOpenedAsPath);
@@ -113,6 +139,29 @@ namespace LanguageWeaverProvider
 
 			ManageBatchTaskWindow();
 			return searchResults;
+		}
+
+		private List<Segment> ModifySegmentsOnPreLookup(LWSegmentEditor segmentEditor, List<Segment> segments)
+		{
+			var output = new List<Segment>();
+			foreach (var segment in segments)
+			{
+				var newSegment = new Segment(segment.Culture);
+				foreach (var element in segment.Elements)
+				{
+					if (element.GetType() == typeof(Tag))
+					{
+						segment.Add(element);
+						continue;
+					}
+
+					segment.Add(_preLookupEditor.EditText(element.ToString()));
+				}
+
+				output.Add(newSegment);
+			}
+
+			return output;
 		}
 
 		private bool ShouldResendDrafts()

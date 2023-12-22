@@ -321,6 +321,12 @@
 									Text="{Binding LoadingAction}"
 									Visibility="{Binding LoadingAction, Converter={StaticResource EmptyStringToVisibilityConverter}}"/>
 
+		<Separator Grid.Row="2"
+				   Grid.ColumnSpan="2"
+				   Background="#d4d4d4"
+				   VerticalAlignment="Top"
+				   Margin="0 10 0 0"/>
+
 		<StackPanel Grid.Row="2"
 					Grid.Column="0"
 					Orientation="Horizontal"
@@ -332,7 +338,7 @@
 					FontWeight="DemiBold"
 					Width="176"
 					Height="32"
-					Margin="0 0 8 0"/>
+					Margin="0 8 8 0"/>
 			<Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Settings}"
 					Style="{StaticResource Sdl.Button.SecondaryStyle}"
 					Command="{Binding OpenSettingsViewCommand}"
@@ -341,7 +347,7 @@
 					FontWeight="DemiBold"
 					Width="120"
 					Height="32"
-					Margin="8 0" />
+					Margin="8 8 8 0" />
 		</StackPanel>
 
 		<StackPanel Grid.Row="2"
@@ -355,7 +361,7 @@
 					FontWeight="DemiBold"
 					Width="120"
 					Height="32"
-					Margin="8 0" />
+					Margin="8 8 8 0" />
 
 			<Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Cancel}"
 					Style="{StaticResource Sdl.Button.SecondaryStyle}"
@@ -364,7 +370,7 @@
 					FontWeight="DemiBold"
 					Width="120"
 					Height="32" 
-					Margin="8 0 0 0"/>
+					Margin="8 8 0 0"/>
 		</StackPanel>
 
 	</Grid>

@@ -18,8 +18,9 @@ namespace LanguageWeaverProvider.Studio.TellMe
 		{
 			var forumAction = new CommunityForumAction();
 			var helpAction = new HelpAction();
+			var sourceCodeAction = new SourceCodeAction();
 
-			var providerActions = new AbstractTellMeAction[] { forumAction, helpAction };
+			var providerActions = new AbstractTellMeAction[] { forumAction, helpAction, sourceCodeAction };
 			return providerActions;
 		}
 	}

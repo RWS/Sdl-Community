@@ -34,7 +34,7 @@ namespace LanguageWeaverProvider.View.Edge
 			apiKeyBox.Password = _edgeCredentialsViewModel.ApiKey;
 		}
 
-		private void KeyDown(object sender, KeyEventArgs e)
+		private new void KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Key == Key.Enter)
 			{

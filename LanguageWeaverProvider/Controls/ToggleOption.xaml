@@ -5,8 +5,10 @@
 
 	<ResourceDictionary.MergedDictionaries>
 		<ResourceDictionary Source="../Controls/WatermarkTextBoxResources.xaml" />
+		<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
 	</ResourceDictionary.MergedDictionaries>
-	
+
+	<converters:EmptyStringToVisibilityConverter x:Key="StringConverter" />
 	<converters:BooleanToVisibilityConverter x:Key="BooleanConverter" />
 	<converters:MultiBooleanToVisibilityConverter x:Key="MultiBooleanConverter" />
 	<converters:BoolToBrushConverter x:Key="BrushConverter"
@@ -219,6 +221,7 @@
 									<ColumnDefinition Width="Auto" />
 									<ColumnDefinition Width="Auto" />
 									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="Auto" />
 								</Grid.ColumnDefinitions>
 
 								<CheckBox Grid.Column="0"
@@ -244,8 +247,8 @@
 										 Style="{StaticResource WatermarkTextBox}"
 										 local:TextBoxWatermarkHelper.WatermarkText="{TemplateBinding CheckBoxContent}"
 										 local:TextBoxWatermarkHelper.IsWatermarkVisible="True"
-										 local:TextBoxWatermarkHelper.ButtonCommand="{TemplateBinding ButtonCommand}"
-										 local:TextBoxWatermarkHelper.ButtonCommandParameter="{TemplateBinding ButtonParameter}"
+										 local:TextBoxWatermarkHelper.ButtonCommand="{TemplateBinding ClearButtonCommand}"
+										 local:TextBoxWatermarkHelper.ButtonCommandParameter="{TemplateBinding ClearButtonParameter}"
 										 Height="24"
 										 VerticalContentAlignment="Center"
 										 TextWrapping="Wrap">
@@ -258,6 +261,28 @@
 										</MultiBinding>
 									</TextBox.Visibility>
 								</TextBox>
+
+								<Button x:Name="ActionButton" Grid.Column="3"
+										Content="{TemplateBinding ButtonContent}"
+										Style="{StaticResource Sdl.Button.PrimaryStyle}"
+										Width="80"
+										Height="24"
+										Cursor="Hand"
+										Margin="16 0 0 0"
+										Padding="0">
+									<Button.Visibility>
+										<MultiBinding Converter="{StaticResource MultiBooleanConverter}">
+											<Binding Path="IsChecked"
+													 ElementName="ToggleCheckBox" />
+											<Binding Path="ButtonContent"
+													 RelativeSource="{RelativeSource TemplatedParent}">
+												<Binding.Converter>
+													<converters:EmptyStringToBooleanConverter />
+												</Binding.Converter>
+											</Binding>
+										</MultiBinding>
+									</Button.Visibility>
+								</Button>
 							</Grid>
 
 							<TextBlock Grid.Row="1"

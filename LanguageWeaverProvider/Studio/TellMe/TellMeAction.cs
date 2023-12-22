@@ -24,6 +24,11 @@ namespace LanguageWeaverProvider.Studio.TellMe
 
 		public override void Execute()
 		{
+			if (string.IsNullOrEmpty(_url))
+			{
+				return;
+			}
+
 			Process.Start(_url);
 		}
 	}
@@ -39,5 +44,11 @@ namespace LanguageWeaverProvider.Studio.TellMe
 	{
 		private static readonly string[] _helpKeywords = { "community", "support" };
 		public CommunityForumAction() : base(Constants.TellMe_Forum_Name, PluginResources.ForumIcon, Constants.TellMe_Forum_Url, _helpKeywords) { }
+	}
+
+	class SourceCodeAction : TellMeAction
+	{
+		private static readonly string[] _helpKeywords = { "source code", "github" };
+		public SourceCodeAction() : base(Constants.TellMe_SourceCode_Name, PluginResources.ForumIcon, Constants.TellMe_SourceCode_Url, _helpKeywords) { }
 	}
 }

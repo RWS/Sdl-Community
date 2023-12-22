@@ -29,10 +29,16 @@ namespace LanguageWeaverProvider.Controls
 			typeof(ToggleOption),
 			new PropertyMetadata("Watermark", OnWatermarkTextChanged));
 
-		private static void OnWatermarkTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-		{
+		public static readonly DependencyProperty ButtonVisibleProperty = DependencyProperty.Register(
+			"ButtonVisible",
+			typeof(bool),
+			typeof(ToggleOption),
+			new PropertyMetadata(true));
 
-		}
+		public static readonly DependencyProperty ButtonContentProperty = DependencyProperty.Register(
+			"ButtonContent",
+			typeof(string),
+			typeof(ToggleOption));
 
 		public static readonly DependencyProperty CheckedProperty = DependencyProperty.Register(
 			"Checked",
@@ -40,13 +46,13 @@ namespace LanguageWeaverProvider.Controls
 			typeof(ToggleOption),
 			new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-		public static readonly DependencyProperty ButtonCommandProperty = DependencyProperty.Register(
-			"ButtonCommand",
+		public static readonly DependencyProperty ClearButtonCommandProperty = DependencyProperty.Register(
+			"ClearButtonCommand",
 			typeof(ICommand),
 			typeof(ToggleOption));
 
-		public static readonly DependencyProperty ButtonParameterProperty = DependencyProperty.Register(
-			"ButtonParameter",
+		public static readonly DependencyProperty ClearButtonParameterProperty = DependencyProperty.Register(
+			"ClearButtonParameter",
 			typeof(string),
 			typeof(ToggleOption));
 
@@ -81,16 +87,27 @@ namespace LanguageWeaverProvider.Controls
 			set => SetValue(CheckedProperty, value);
 		}
 
-		public ICommand ButtonCommand
+		public ICommand ClearButtonCommand
 		{
-			get => (ICommand)GetValue(ButtonCommandProperty);
-			set => SetValue(ButtonCommandProperty, value);
+			get => (ICommand)GetValue(ClearButtonCommandProperty);
+			set => SetValue(ClearButtonCommandProperty, value);
 		}
 
-		public string ButtonParameter
+		public string ClearButtonParameter
 		{
-			get => (string)GetValue(ButtonParameterProperty);
+			get => (string)GetValue(ClearButtonParameterProperty);
 			set => SetValue(DescriptionTextProperty, value);
+		}
+
+		public string ButtonContent
+		{
+			get => (string)GetValue(ButtonContentProperty);
+			set => SetValue(ButtonContentProperty, value);
+		}
+
+		private static void OnWatermarkTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		{
+
 		}
 	}
 }

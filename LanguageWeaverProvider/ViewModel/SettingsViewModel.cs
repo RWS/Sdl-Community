@@ -1,19 +1,27 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Input;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model.Interface;
+using Microsoft.Win32;
+using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace LanguageWeaverProvider.ViewModel
 {
 	public class SettingsViewModel : BaseViewModel
 	{
+		bool _useCustomName;
+		string _customName;
+
 		bool _autosendFeedback;
 		bool _resendDrafts;
 		bool _includeTags;
-		bool _useCustomName;
 
-		string _customName;
+		bool _usePreLookup;
+		bool _usePostLookup;
+		string _preLookupFilePath;
+		string _postLookupFilePath;
 
 		public SettingsViewModel(ITranslationOptions translationOptions)
 		{
@@ -24,12 +32,12 @@ namespace LanguageWeaverProvider.ViewModel
 
 		public ITranslationOptions TranslationOptions { get; private set; }
 
-		public bool AutosendFeedback
+		public bool IncludeTags
 		{
-			get => _autosendFeedback;
+			get => _includeTags;
 			set
 			{
-				_autosendFeedback = value;
+				_includeTags = value;
 				OnPropertyChanged();
 			}
 		}
@@ -44,12 +52,12 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 		}
 
-		public bool IncludeTags
+		public bool AutosendFeedback
 		{
-			get => _includeTags;
+			get => _autosendFeedback;
 			set
 			{
-				_includeTags = value;
+				_autosendFeedback = value;
 				OnPropertyChanged();
 			}
 		}
@@ -74,9 +82,51 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 		}
 
+		public bool UsePreLookup
+		{
+			get => _usePreLookup;
+			set
+			{
+				_usePreLookup = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public bool UsePostLookup
+		{
+			get => _usePostLookup;
+			set
+			{
+				_usePostLookup = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string PreLookupFilePath
+		{
+			get => _preLookupFilePath;
+			set
+			{
+				_preLookupFilePath = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string PostLookupFilePath
+		{
+			get => _postLookupFilePath;
+			set
+			{
+				_postLookupFilePath = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public ICommand BackCommand { get; private set; }
 
 		public ICommand ClearCommand { get; private set; }
+
+		public ICommand BrowseFileCommand { get; private set; }
 
 		public event EventHandler BackCommandExecuted;
 
@@ -112,6 +162,7 @@ namespace LanguageWeaverProvider.ViewModel
 		{
 			BackCommand = new RelayCommand(Back);
 			ClearCommand = new RelayCommand(Clear);
+			BrowseFileCommand = new RelayCommand(BrowseFile);
 		}
 
 		private void SetSettings()
@@ -141,6 +192,31 @@ namespace LanguageWeaverProvider.ViewModel
 			{
 				case nameof(CustomName):
 					CustomName = string.Empty;
+					break;
+			}
+		}
+
+		private void BrowseFile(object parameter)
+		{
+			var openFileDialog = new OpenFileDialog
+			{
+				Multiselect = false
+			};
+
+			var filePath = (bool)openFileDialog.ShowDialog() ? openFileDialog.FileName
+															 : string.Empty;
+
+			switch (parameter as string)
+			{
+				case "Pre":
+					PreLookupFilePath = filePath;
+					break;
+
+				case "Post":
+					PostLookupFilePath = filePath;
+					break;
+
+				default:
 					break;
 			}
 		}

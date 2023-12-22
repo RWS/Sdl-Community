@@ -50,27 +50,47 @@
 									   DescriptionText="When this option is active, the name of the provider will appear as 'Language Weaver - Custom name'."
 									   TextBoxVisible="True"
 									   TextBoxText="{Binding CustomName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-									   ButtonCommand="{Binding ClearCommand}"
-									   ButtonParameter="{controls:NameOf Member=CustomName, Type={x:Type viewModel:SettingsViewModel}}"
+									   ClearButtonCommand="{Binding ClearCommand}"
+									   ClearButtonParameter="{controls:NameOf Member=CustomName, Type={x:Type viewModel:SettingsViewModel}}"
 									   Margin="0 4" />
 
-				<controls:ToggleOption CheckBoxContent="Include tags in translation"
+				<controls:ToggleOption Checked="{Binding IncludeTags, Mode=TwoWay}"
+									   CheckBoxContent="Include tags in translation"
 									   DescriptionText="When this option is disabled, the segments will be sent for translation without tags and the Target Segments won't include any tag."
 									   TextBoxVisible="False"
-									   Checked="{Binding IncludeTags, Mode=TwoWay}"
 									   Margin="0 4" />
 
-				<controls:ToggleOption CheckBoxContent="Resend drafts for translation"
+				<controls:ToggleOption Checked="{Binding ResendDrafts, Mode=TwoWay}"
+									   CheckBoxContent="Resend drafts for translation"
 									   DescriptionText="When this option is disabled, the segments that are marked as Draft won't be sent to the Language Weaver service for translation."
 									   TextBoxVisible="False"
-									   Checked="{Binding ResendDrafts, Mode=TwoWay}"
 									   Margin="0 4" />
 
-				<controls:ToggleOption CheckBoxContent="Send feed-back on confirmed segments"
+				<controls:ToggleOption Checked="{Binding AutosendFeedback, Mode=TwoWay}"
+									   CheckBoxContent="Send feed-back on confirmed segments"
 									   DescriptionText="When this option is active, the segments that were translated using the Language Weaver service will automatically be sent for feed-back."
 									   TextBoxVisible="False"
-									   Checked="{Binding AutosendFeedback, Mode=TwoWay}"
 									   Margin="0 4" />
+
+				<controls:ToggleOption Checked="{Binding UsePreLookup}"
+									   CheckBoxContent="Pre-Lookup Find/Replace"
+									   DescriptionText="-"
+									   TextBoxVisible="True"
+									   TextBoxText="{Binding PreLookupFilePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+									   ClearButtonCommand="{Binding ClearCommand}"
+									   ClearButtonParameter="{controls:NameOf Member=PreLookupFilePath, Type={x:Type viewModel:SettingsViewModel}}"
+									   ButtonContent="Browse" 
+									   Margin="0 4"/>
+
+				<controls:ToggleOption Checked="{Binding UsePostLookup}"
+									   CheckBoxContent="Post-Lookup Find/Replace"
+									   DescriptionText="-"
+									   TextBoxVisible="True"
+									   TextBoxText="{Binding PostLookupFilePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+									   ClearButtonCommand="{Binding ClearCommand}"
+									   ClearButtonParameter="{controls:NameOf Member=UsePostLookup, Type={x:Type viewModel:SettingsViewModel}}"
+									   ButtonContent="Browse" 
+									   Margin="0 4"/>
 			</StackPanel>
 		</ScrollViewer>
 	</Grid>
