@@ -23,9 +23,9 @@ namespace Sdl.Community.DsiViewer.Studio.DisplayFilters
 			if (Settings.ByQualityEstimation)
 			{
 				var anyQualityEstimation = false;
-				if (Settings.QeUnknown)
+				if (Settings.QeNone)
 				{
-					anyQualityEstimation = GetQualityEstimation(translationOrigin) == Constants.UnknownQuality;
+					anyQualityEstimation = GetQualityEstimation(translationOrigin) == Constants.NoneQuality;
 				}
 				if (Settings.QePoor)
 				{
