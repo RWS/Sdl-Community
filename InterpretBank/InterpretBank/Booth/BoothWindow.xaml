@@ -5,9 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModel="clr-namespace:InterpretBank.Booth.ViewModel"
         xmlns:controls="clr-namespace:InterpretBank.SettingsService.UI.Controls"
+        xmlns:model="clr-namespace:InterpretBank.Model"
+        xmlns:converters="clr-namespace:InterpretBank.Converters"
+        xmlns:controls1="clr-namespace:InterpretBank.Controls"
         d:DataContext="{d:DesignInstance viewModel:BoothWindowViewModel}"
         mc:Ignorable="d"
-        Title="BoothWindow"
+        Title="Live Search"
+        Name="Booth_Window"
         WindowStartupLocation="CenterScreen"
         Height="450"
         Width="800">
@@ -15,37 +19,158 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/datagridresources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <converters:TermSelector x:Key="TermSelector" />
+            <converters:StringEmptyToBoolConverter x:Key="StringEmptyToBoolConverter" />
+
+            <Style TargetType="{x:Type Grid}"
+                   x:Key="GridStyle">
+                <Setter Property="Height"
+                        Value="20" />
+            </Style>
+            <Style TargetType="{x:Type ComboBox}"
+                   BasedOn="{StaticResource Sdl.ComboBox.Generic.Style}">
+                <Setter Property="FontSize"
+                        Value="11" />
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
-    
-        <Grid>
+
+    <DockPanel>
+        <controls:ChooseFilepathControl Margin="10"
+                                        DockPanel.Dock="Top"
+                                        Height="28"
+                                        Filepath="{Binding Filepath, Mode=TwoWay}"
+                                        VerticalContentAlignment="Top" />
+
+        <Grid DockPanel.Dock="Top"
+              Width="200"
+              Style="{StaticResource GridStyle}"
+              HorizontalAlignment="Left"
+              Margin="10 0 0 0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-
-            <controls:ChooseFilepathControl Grid.Column="0"
-                                            Margin="10"
-                                            Grid.ColumnSpan="2"
-                                            VerticalContentAlignment="Top"
-                                            Grid.Row="0"
-                                            />
-
-            <!--<DataGrid Grid.Column="1"
-                      Grid.Row="1"
-                      ItemsSource="{Binding Entries}"
-                      Style="{StaticResource Sdl.DataGrid.GenericStyle}">
-                <DataGrid.ItemTemplate>
-                    <DataTemplate DataType="{x:Type model:EntryModel}" />
-                </DataGrid.ItemTemplate>
-            </DataGrid>-->
-
+            <TextBlock Text="Source Language"
+                       VerticalAlignment="Center"
+                       Grid.Column="0"
+                       DockPanel.Dock="Left" />
+            <ComboBox ItemsSource="{Binding Languages}"
+                      Width="100"
+                      Grid.Column="1"
+                      IsEnabled="{Binding Filepath, Converter={StaticResource StringEmptyToBoolConverter}}"
+                      SelectedItem="{Binding SourceLanguage}"
+                      DockPanel.Dock="Right"
+                      HorizontalAlignment="Left" />
         </Grid>
+
+
+        <Grid DockPanel.Dock="Top"
+              Width="200"
+              Style="{StaticResource GridStyle}"
+              HorizontalAlignment="Left"
+              Margin="10 5 0 0">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Target Language"
+                       Grid.Column="0"
+                       VerticalAlignment="Center"
+                       DockPanel.Dock="Left" />
+            <ComboBox ItemsSource="{Binding Languages}"
+                      Grid.Column="1"
+                      Width="100"
+                      IsEnabled="{Binding Filepath, Converter={StaticResource StringEmptyToBoolConverter}}"
+                      SelectedItem="{Binding TargetLanguage}"
+                      DockPanel.Dock="Right"
+                      HorizontalAlignment="Left" />
+        </Grid>
+
+
+        <!--<TextBlock HorizontalAlignment="Center"
+                       TextWrapping="Wrap"
+                       DockPanel.Dock="Top"
+                       VerticalAlignment="Top"
+                       Height="19"
+                       Text="Search"
+                       Width="45" />-->
+
+        <controls1:WatermarkTextBox DockPanel.Dock="Top"
+                                     HorizontalAlignment="Left"
+                                     Width="200"
+                                     Text="{Binding DataContext.SearchText, ElementName=Booth_Window, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <!--<Grid Name="SearchBox" Focusable="True">
+                <TextBlock Text="Search..."
+                           FontStyle="Italic"
+                           HorizontalAlignment="Center"
+                           Foreground="Gray"
+                           VerticalAlignment="Center"
+                           Canvas.ZIndex="1">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsFocused, ElementName=SearchBox}" Value="True">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBox HorizontalAlignment="Center"
+                         TextWrapping="Wrap"
+                         DockPanel.Dock="Bottom"
+                         VerticalContentAlignment="Center"
+                         Height="25"
+                         Width="200"
+                         Margin="10 0 10 0"
+                         Text=""
+                         Canvas.ZIndex="0"
+                         VerticalAlignment="Bottom" />
+            </Grid>-->
+
+
+        <DataGrid d:ItemsSource="{d:SampleData ItemCount=5}"
+                  ItemsSource="{Binding Entries}"
+                  IsReadOnly="True"
+                  CanUserReorderColumns="True"
+                  Margin="10"
+                  AutoGenerateColumns="False"
+                  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+                  DockPanel.Dock="Top">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Source"
+                                    Width="*">
+                    <DataGridTextColumn.Binding>
+                        <MultiBinding Converter="{StaticResource TermSelector}">
+                            <Binding Path="Terms" />
+                            <Binding Path="DataContext.SourceLanguage"
+                                     ElementName="Booth_Window" />
+                        </MultiBinding>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Target"
+                                    Width="*">
+                    <DataGridTextColumn.Binding>
+                        <MultiBinding Converter="{StaticResource TermSelector}">
+                            <Binding Path="Terms" />
+                            <Binding Path="DataContext.TargetLanguage"
+                                     ElementName="Booth_Window" />
+                        </MultiBinding>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+
+            </DataGrid.Columns>
+
+        </DataGrid>
+
+    </DockPanel>
 </Window>

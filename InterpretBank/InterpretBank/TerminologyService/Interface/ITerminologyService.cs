@@ -28,5 +28,7 @@ namespace InterpretBank.TerminologyService.Interface
         void UpdateTerm(TermChange termChange);
         ActionResult<EntryModel> AddTerm(string source, string target, string glossaryName, string sourceLanguage,
             string targetLanguage);
+
+        public List<LanguageModel> GetLanguages();
     }
 }

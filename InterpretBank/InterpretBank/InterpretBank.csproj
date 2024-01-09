@@ -27,12 +27,13 @@
     <None Remove="Resources\AddTerm.ico" />
     <None Remove="Resources\AddTerm2.ico" />
     <None Remove="Resources\Booth.ico" />
+    <None Remove="Resources\Booth.png" />
     <None Remove="Resources\ConfirmEdit.png" />
     <None Remove="Resources\Edit.png" />
     <None Remove="Resources\EditIcon.ico" />
     <None Remove="Resources\Flag.png" />
     <None Remove="Resources\Glossary.png" />
-    <None Remove="Resources\logo.ico" />
+    <None Remove="Resources\IB.ico" />
     <None Remove="Resources\logo.png" />
     <None Remove="Resources\RejectEdit.png" />
     <None Remove="Resources\Tag.png" />
@@ -149,7 +150,7 @@
     <Resource Include="Resources\Edit.png" />
     <Resource Include="Resources\Flag.png" />
     <Resource Include="Resources\Glossary.png" />
-    <Resource Include="Resources\logo.ico" />
+    <Resource Include="Resources\IB.ico" />
     <Resource Include="Resources\logo.png" />
     <Resource Include="Resources\RejectEdit.png" />
     <Resource Include="Resources\Tag.png" />

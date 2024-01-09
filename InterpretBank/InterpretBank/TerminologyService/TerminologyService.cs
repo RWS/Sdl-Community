@@ -29,6 +29,21 @@ public class TerminologyService : ITerminologyService
 
     public IInterpretBankDataContext InterpretBankDataContext { get; }
 
+    public ActionResult<EntryModel> AddTerm(string source, string target, string glossaryName, string sourceLanguage,
+        string targetLanguage)
+    {
+        var entryModel = new EntryModel();
+        var addTermAction = InterpretBankDataContext.InsertTerm(source, target, glossaryName, sourceLanguage, targetLanguage);
+
+        if (!addTermAction.Success) return new ActionResult<EntryModel>(false, null, addTermAction.Message);
+
+        var dbLanguages = GetLanguages();
+        var studioLanguages = StudioContext.Languages.ToList();
+
+        InitializeEntryModelTerms(dbLanguages, studioLanguages, entryModel, addTermAction.Result);
+        return new ActionResult<EntryModel>(true, entryModel, null);
+    }
+
     public void Dispose()
     {
         InterpretBankDataContext?.Dispose();
@@ -37,9 +52,12 @@ public class TerminologyService : ITerminologyService
     //+ support for subglossaries
     public ObservableCollection<EntryModel> GetEntriesFromDb(List<string> glossaries)
     {
-        var dbTerms = InterpretBankDataContext
-            .GetRows<DbGlossaryEntry>()
-            .Where(dbTerm => glossaries.Contains(dbTerm.Tag1));
+        var dbTerms =
+            glossaries != null
+                ? InterpretBankDataContext
+                    .GetRows<DbGlossaryEntry>()
+                    .Where(dbTerm => glossaries.Contains(dbTerm.Tag1))
+                : InterpretBankDataContext.GetRows<DbGlossaryEntry>();
 
         var entryModels = new ObservableCollection<EntryModel>();
 
@@ -62,51 +80,6 @@ public class TerminologyService : ITerminologyService
         }
 
         return entryModels;
-    }
-
-    private void InitializeEntryModelTerms(List<LanguageModel> dbLanguages, List<Language> studioLanguages, EntryModel entryModel, DbGlossaryEntry t)
-    {
-        entryModel.Terms ??= new ObservableCollection<TermModel>();
-        for (int i = 1; i <= 10; i++)
-        {
-            var languageName = "";
-            if (i - 1 < dbLanguages.Count) languageName = dbLanguages[i - 1].Name;
-
-            Image languageFlag = null;
-            if (!string.IsNullOrWhiteSpace(languageName))
-                languageFlag = studioLanguages.FirstOrDefault(s => s.EnglishName.Contains(languageName) && !s.IsNeutral)
-                    ?.GetFlagImage();
-
-            if (!string.IsNullOrWhiteSpace(languageName))
-                entryModel.Terms.Add(new TermModel
-                {
-                    FirstComment = t[$"Comment{i}a"],
-                    SecondComment = t[$"Comment{i}b"],
-                    Term = t[$"Term{i}"],
-                    LanguageName = languageName,
-                    LanguageFlag = languageFlag
-                });
-        }
-    }
-
-    public void UpdateTerm(TermChange termChange)
-    {
-        InterpretBankDataContext.UpdateTerm(termChange);
-    }
-
-    public ActionResult<EntryModel> AddTerm(string source, string target, string glossaryName, string sourceLanguage,
-        string targetLanguage)
-    {
-        var entryModel = new EntryModel();
-        var addTermAction = InterpretBankDataContext.InsertTerm(source, target, glossaryName, sourceLanguage, targetLanguage);
-
-        if (!addTermAction.Success) return new ActionResult<EntryModel>(false, null, addTermAction.Message);
-
-        var dbLanguages = GetLanguages();
-        var studioLanguages = StudioContext.Languages.ToList();
-
-        InitializeEntryModelTerms(dbLanguages, studioLanguages, entryModel, addTermAction.Result);
-        return new ActionResult<EntryModel>(true, entryModel, null);
     }
 
     public List<StudioTermEntry> GetExactTerms(string word, string sourceLanguage, string targetLanguage, List<string> glossaries)
@@ -184,6 +157,12 @@ public class TerminologyService : ITerminologyService
             .First(lang =>
                 string.Equals(lang.Name, interpretBankLanguage, StringComparison.CurrentCultureIgnoreCase)).Index;
 
+    public List<LanguageModel> GetLanguages()
+    {
+        var languages = InterpretBankDataContext.GetDbLanguages();
+        return languages;
+    }
+
     public List<string> GetTaggedGlossaries(List<string> tagList)
     {
         var glossaryIds = InterpretBankDataContext.GetLinks().Where(tl => tagList.Contains(tl.TagName)).Select(tl => tl.GlossaryId).ToList();
@@ -199,6 +178,11 @@ public class TerminologyService : ITerminologyService
     public void Setup(string settingsDatabaseFilepath)
     {
         InterpretBankDataContext.Setup(settingsDatabaseFilepath);
+    }
+
+    public void UpdateTerm(TermChange termChange)
+    {
+        InterpretBankDataContext.UpdateTerm(termChange);
     }
 
     private static List<string> GetTermColumns(int targetLanguageIndex, int sourceLanguageIndex = -1)
@@ -219,9 +203,28 @@ public class TerminologyService : ITerminologyService
         return columns;
     }
 
-    private List<LanguageModel> GetLanguages()
+    private void InitializeEntryModelTerms(List<LanguageModel> dbLanguages, List<Language> studioLanguages, EntryModel entryModel, DbGlossaryEntry t)
     {
-        var languages = InterpretBankDataContext.GetDbLanguages();
-        return languages;
+        entryModel.Terms ??= new ObservableCollection<TermModel>();
+        for (int i = 1; i <= 10; i++)
+        {
+            var languageName = "";
+            if (i - 1 < dbLanguages.Count) languageName = dbLanguages[i - 1].Name;
+
+            Image languageFlag = null;
+            if (!string.IsNullOrWhiteSpace(languageName))
+                languageFlag = studioLanguages.FirstOrDefault(s => s.EnglishName.Contains(languageName) && !s.IsNeutral)
+                    ?.GetFlagImage();
+
+            if (!string.IsNullOrWhiteSpace(languageName))
+                entryModel.Terms.Add(new TermModel
+                {
+                    FirstComment = t[$"Comment{i}a"],
+                    SecondComment = t[$"Comment{i}b"],
+                    Term = t[$"Term{i}"],
+                    LanguageName = languageName,
+                    LanguageFlag = languageFlag
+                });
+        }
     }
 }

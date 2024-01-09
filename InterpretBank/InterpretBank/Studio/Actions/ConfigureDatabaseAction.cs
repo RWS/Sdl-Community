@@ -7,7 +7,7 @@ using System;
 
 namespace InterpretBank.Studio.Actions
 {
-    [Action(nameof(ConfigureDatabaseAction), Icon = "logo", Name = "Configure database",
+    [Action(nameof(ConfigureDatabaseAction), Icon = "IB", Name = "Configure database",
         Description = "InterpretBank database configuration")]
     [ActionLayout(typeof(InterpretBankRibbonGroup), 10, DisplayType.Large)]
     public class ConfigureDatabaseAction : AbstractAction

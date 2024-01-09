@@ -103,9 +103,9 @@ namespace InterpretBank {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon logo {
+        public static System.Drawing.Icon IB {
             get {
-                object obj = ResourceManager.GetObject("logo", resourceCulture);
+                object obj = ResourceManager.GetObject("IB", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

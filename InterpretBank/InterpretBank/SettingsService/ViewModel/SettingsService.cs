@@ -11,7 +11,8 @@ using InterpretBank.TerminologyService;
 
 namespace InterpretBank.SettingsService.ViewModel;
 
-public class SettingsService : ViewModelBase.ViewModel, ISettingsService, IDataErrorInfo
+public class SettingsService(IInterpretBankDataContext interpretBankDataContext)
+    : ViewModelBase.ViewModel, IDataErrorInfo
 {
 	private string _filepath;
 	private List<GlossaryModel> _glossaries;
@@ -20,12 +21,7 @@ public class SettingsService : ViewModelBase.ViewModel, ISettingsService, IDataE
 	private ObservableCollection<TagModel> _selectedTags = new();
 	private List<TagModel> _tags;
 
-	public SettingsService(IInterpretBankDataContext interpretBankDataContext)
-	{
-		InterpretBankDataContext = interpretBankDataContext;
-	}
-
-	public string Filepath
+    public string Filepath
 	{
 		get => _filepath;
 		set
@@ -102,9 +98,9 @@ public class SettingsService : ViewModelBase.ViewModel, ISettingsService, IDataE
 		set => SetField(ref _tags, value);
 	}
 
-	private IInterpretBankDataContext InterpretBankDataContext { get; set; }
+	private IInterpretBankDataContext InterpretBankDataContext { get; set; } = interpretBankDataContext;
 
-	public void Dispose()
+    public void Dispose()
 	{
 		InterpretBankDataContext?.Dispose();
 	}
