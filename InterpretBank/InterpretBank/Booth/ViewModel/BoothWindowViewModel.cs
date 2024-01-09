@@ -19,7 +19,11 @@ namespace InterpretBank.Booth.ViewModel
         public ObservableCollection<EntryModel> Entries
         {
             get => _entries;
-            set => SetField(ref _entries, value);
+            set
+            {
+                SetField(ref _entries, value);
+                Filter();
+            }
         }
 
         public string Filepath
@@ -51,13 +55,21 @@ namespace InterpretBank.Booth.ViewModel
         public string SourceLanguage
         {
             get => _sourceLanguage;
-            set => SetField(ref _sourceLanguage, value);
+            set
+            {
+                SetField(ref _sourceLanguage, value);
+                Filter();
+            }
         }
 
         public string TargetLanguage
         {
             get => _targetLanguage;
-            set => SetField(ref _targetLanguage, value);
+            set
+            {
+                SetField(ref _targetLanguage, value);
+                Filter();
+            }
         }
 
         private void Filter()
@@ -65,29 +77,25 @@ namespace InterpretBank.Booth.ViewModel
             if (Entries == null) return;
             var collectionView = CollectionViewSource.GetDefaultView(Entries);
 
-            if (string.IsNullOrWhiteSpace(SearchText) || SearchText == "Search...")
-            {
-                collectionView.Filter = null;
-                return;
-            }
-
             collectionView.Filter = null;
-
-            collectionView.Filter = entry => ((EntryModel)entry).Terms.Count > 8;
             collectionView.Filter = entry =>
             {
                 var entryModel = (EntryModel)entry;
                 var terms = entryModel.Terms;
 
-                var sourceTerms = terms.Where(t => t.LanguageName == SourceLanguage);
-                var targetTerms = terms.Where(t => t.LanguageName == TargetLanguage);
+                var sourceTerms = IsSet(SourceLanguage) ? terms.Where(t => t.LanguageName == SourceLanguage) : null;
+                var targetTerms = IsSet(TargetLanguage)
+                    ? terms.Where(t => t.LanguageName == TargetLanguage)
+                    : null;
 
-                var relevantSourceTerms = sourceTerms.Where(t => t.Term?.Contains(SearchText) ?? false);
-                var relevantTargetTerms = targetTerms.Where(t => t.Term?.Contains(SearchText) ?? false);
+                var relevantSourceTerms = IsSet(SearchText) ? sourceTerms?.Where(t => t.Term?.Contains(SearchText) ?? false) : sourceTerms;
+                var relevantTargetTerms = IsSet(SearchText) ? targetTerms?.Where(t => t.Term?.Contains(SearchText) ?? false) : targetTerms;
 
-                return relevantSourceTerms.Any() || relevantTargetTerms.Any();
+                return (relevantSourceTerms?.Any() ?? false) || (relevantTargetTerms?.Any() ?? false);
             };
         }
+
+        private static bool IsSet(string @string) => !string.IsNullOrWhiteSpace(@string);
 
         private void ResetData()
         {

@@ -10,7 +10,14 @@ namespace InterpretBank.Controls
     public partial class WatermarkTextBox : UserControl
     {
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(nameof(Text),
-            typeof(string), typeof(WatermarkTextBox), new PropertyMetadata(default(string)));
+            typeof(string), typeof(WatermarkTextBox), new PropertyMetadata(default(string), TextChanged));
+
+        private static void TextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is not WatermarkTextBox watermarkTextBox) return;
+            if (string.IsNullOrWhiteSpace(e.NewValue.ToString()) && !watermarkTextBox.TextBox.IsFocused)
+                watermarkTextBox.Watermark.Visibility = Visibility.Visible;
+        }
 
         public WatermarkTextBox()
         {

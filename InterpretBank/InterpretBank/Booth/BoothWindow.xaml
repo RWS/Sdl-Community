@@ -93,48 +93,11 @@
         </Grid>
 
 
-        <!--<TextBlock HorizontalAlignment="Center"
-                       TextWrapping="Wrap"
-                       DockPanel.Dock="Top"
-                       VerticalAlignment="Top"
-                       Height="19"
-                       Text="Search"
-                       Width="45" />-->
-
         <controls1:WatermarkTextBox DockPanel.Dock="Top"
-                                     HorizontalAlignment="Left"
-                                     Width="200"
-                                     Text="{Binding DataContext.SearchText, ElementName=Booth_Window, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-        <!--<Grid Name="SearchBox" Focusable="True">
-                <TextBlock Text="Search..."
-                           FontStyle="Italic"
-                           HorizontalAlignment="Center"
-                           Foreground="Gray"
-                           VerticalAlignment="Center"
-                           Canvas.ZIndex="1">
-                    <TextBlock.Style>
-                        <Style TargetType="TextBlock">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsFocused, ElementName=SearchBox}" Value="True">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
-                <TextBox HorizontalAlignment="Center"
-                         TextWrapping="Wrap"
-                         DockPanel.Dock="Bottom"
-                         VerticalContentAlignment="Center"
-                         Height="25"
-                         Width="200"
-                         Margin="10 0 10 0"
-                         Text=""
-                         Canvas.ZIndex="0"
-                         VerticalAlignment="Bottom" />
-            </Grid>-->
-
+                                    HorizontalAlignment="Left"
+                                    Width="200"
+                                    IsEnabled="{Binding Filepath, Converter={StaticResource StringEmptyToBoolConverter}}"
+                                    Text="{Binding DataContext.SearchText, ElementName=Booth_Window, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
         <DataGrid d:ItemsSource="{d:SampleData ItemCount=5}"
                   ItemsSource="{Binding Entries}"
