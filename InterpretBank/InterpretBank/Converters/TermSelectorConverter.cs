@@ -10,7 +10,7 @@ using System.Windows.Data;
 
 namespace InterpretBank.Converters
 {
-    public class TermSelector : IMultiValueConverter
+    public class TermSelectorConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
