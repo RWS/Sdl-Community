@@ -28,7 +28,7 @@
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/datagridresources.xaml" />
                 <ResourceDictionary Source="../Styles/SetupGlossariesResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+            <converters:NullStringToVisibilityConverter x:Key="NullToVisibilityConverter" />
             <converters:NullToBoolConverter x:Key="NullToBullConverter" />
         </ResourceDictionary>
     </Window.Resources>

@@ -26,7 +26,7 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Controls;component/Controls/WatermarkTextBox/WatermarkTextBoxResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 
-			<converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+			<converters:NullStringToVisibilityConverter x:Key="NullToVisibilityConverter" />
 		</ResourceDictionary>
 	</Window.Resources>
 

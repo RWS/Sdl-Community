@@ -1,5 +1,6 @@
 ﻿using InterpretBank.Booth.ViewModel;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace InterpretBank.Booth
@@ -15,6 +16,23 @@ namespace InterpretBank.Booth
             InitializeComponent();
         }
 
-        
+
+        private void SettingsToggleButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (sender is not ToggleButton toggleButton) return;
+            if (toggleButton.IsChecked ?? false)
+            {
+                LastColumnWidth = ColumnOne.Width;
+                ColumnOne.MinWidth = 0;
+                ColumnOne.Width = GridLength.Auto;
+            }
+            else
+            {
+                ColumnOne.Width = LastColumnWidth;
+                ColumnOne.MinWidth = 200;
+            }
+        }
+
+        private GridLength LastColumnWidth { get; set; }
     }
 }

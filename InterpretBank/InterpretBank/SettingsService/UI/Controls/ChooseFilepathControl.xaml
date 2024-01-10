@@ -4,7 +4,9 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:converters="clr-namespace:InterpretBank.SettingsService.Converters"
+			 xmlns:converters1="clr-namespace:InterpretBank.Converters"
 			 mc:Ignorable="d"
+			 x:Name="Root"
 			 d:DesignHeight="450"
 			 d:DesignWidth="800">
 	<UserControl.Resources>
@@ -12,14 +14,16 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../../Styles/SettingsMainResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
-			<converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+			<converters:NullStringToVisibilityConverter x:Key="NullToVisibilityConverter" />
+			<converters1:RatioConverter x:Key="RatioConverter"/>
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<Grid>
 		<Grid>
 			<TextBox Name="FilepathTextBox"
 					 DockPanel.Dock="Bottom"
-					 IsReadOnly="True"
+                     FontSize="{Binding ActualHeight, ElementName=Root, Converter={StaticResource RatioConverter}, ConverterParameter=0.44}"
+                     IsReadOnly="True"
 					 VerticalContentAlignment="Center"
 					 Text="{Binding Filepath, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}"
 					 PreviewMouseLeftButtonUp="FilepathTextBox_OnPreviewMouseLeftButtonDown"
@@ -42,20 +46,22 @@
 						x:Name="BrowseButton"
 						Click="BrowseButton_OnClick"
 						BorderBrush="Transparent"
+						FontSize="{Binding ActualHeight, ElementName=Root, Converter={StaticResource RatioConverter}, ConverterParameter=0.44}"
 						Background="Transparent"
 						DockPanel.Dock="Right"
 						Content="📂"
 						HorizontalAlignment="Right"
-						Margin="5" />
+						Margin="0 0 5 0" />
 				<Button Style="{StaticResource ClearTextButtonStyle}"
 						Click="ClearFilepathButton"
 						BorderBrush="Transparent"
-						Background="Transparent"
+                        FontSize="{Binding ActualHeight, ElementName=Root, Converter={StaticResource RatioConverter}, ConverterParameter=0.40}"
+                        Background="Transparent"
 						Content="X"
 						DockPanel.Dock="Right"
 						Visibility="{Binding ElementName=FilepathTextBox, Path=Text, Converter={StaticResource NullToVisibilityConverter}}"
 						HorizontalAlignment="Right"
-						Margin="5" />
+						Margin="5 5 2 5" />
 			</DockPanel>
 		</Grid>
 	</Grid>

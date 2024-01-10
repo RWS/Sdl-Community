@@ -8,6 +8,7 @@
         xmlns:model="clr-namespace:InterpretBank.Model"
         xmlns:converters="clr-namespace:InterpretBank.Converters"
         xmlns:controls1="clr-namespace:InterpretBank.Controls"
+        xmlns:converters1="clr-namespace:InterpretBank.SettingsService.Converters"
         d:DataContext="{d:DesignInstance viewModel:BoothWindowViewModel}"
         mc:Ignorable="d"
         Title="Live Search"
@@ -20,79 +21,152 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/datagridresources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
+                <ResourceDictionary Source="/InterpretBank;component/Styles/Buttons.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <converters:TermSelectorConverter x:Key="TermSelector" />
             <converters:StringEmptyToBoolConverter x:Key="StringEmptyToBoolConverter" />
-            <converters:RatioConverter x:Key="RatioConverter" />
 
-            <Style TargetType="{x:Type Grid}"
-                   x:Key="GridStyle">
-                <Setter Property="Height"
-                        Value="20" />
-            </Style>
             <Style TargetType="{x:Type ComboBox}"
                    BasedOn="{StaticResource Sdl.ComboBox.Generic.Style}">
                 <Setter Property="FontSize"
                         Value="11" />
+            </Style>
+
+            <Style TargetType="GroupBox">
+                <Setter Property="HeaderTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}"
+                                       Foreground="DarkCyan"
+                                       FontSize="16" />
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
         </ResourceDictionary>
     </Window.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto"
+                              MinWidth="200"
+                              x:Name="ColumnOne" />
             <ColumnDefinition Width="5*" />
         </Grid.ColumnDefinitions>
-        <DockPanel x:Name="FilterGrid"
-                   Grid.Column="0"
-                   DockPanel.Dock="Top"
-                   Height="Auto"
-                   HorizontalAlignment="Left"
-                   Margin="10 0 10 0">
 
-            <TextBlock Text="Source Language"
+
+        <GroupBox Header="Settings"
+                  Grid.Column="0"
+                  BorderThickness="0 1 0 0"
+                  Margin="0 0 10 0">
+
+            <DockPanel x:Name="FilterGrid"
                        DockPanel.Dock="Top"
-                       Grid.Column="0"
-                       Grid.Row="0" />
-            <ComboBox ItemsSource="{Binding Languages}"
-                      Grid.Column="1"
-                      DockPanel.Dock="Top"
-                      Grid.Row="0"
-                      IsEnabled="{Binding Filepath, Converter={StaticResource StringEmptyToBoolConverter}}"
-                      SelectedItem="{Binding SourceLanguage}"
-                      HorizontalAlignment="Stretch" />
+                       Height="Auto"
+                       Margin="0 10 0 0"
+                       HorizontalAlignment="Stretch">
+                <DockPanel.Style>
+                    <Style TargetType="DockPanel">
+                        <Setter Property="Visibility"
+                                Value="Visible" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=SettingsToggleButton}"
+                                         Value="True">
+                                <Setter Property="Visibility"
+                                        Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DockPanel.Style>
 
-            <TextBlock Text="Target Language"
-                       Grid.Column="0"
-                       Margin="0 5 0 0"
-                       Grid.Row="1"
-                       DockPanel.Dock="Top" />
-            <ComboBox ItemsSource="{Binding Languages}"
-                      Grid.Column="1"
-                      Grid.Row="1"
-                      DockPanel.Dock="Top"
-                      Margin="0 5 0 0"
-                      IsEnabled="{Binding Filepath, Converter={StaticResource StringEmptyToBoolConverter}}"
-                      SelectedItem="{Binding TargetLanguage}"
-                      HorizontalAlignment="Stretch" />
+                <!--<TextBlock Text="Settings" DockPanel.Dock="Top" FontSize="15" Margin="0 0 0 20" Foreground="DarkCyan" />-->
+
+                <TextBlock Text="Source Language"
+                           DockPanel.Dock="Top" />
+                <ComboBox ItemsSource="{Binding Languages}"
+                          DockPanel.Dock="Top"
+                          Margin="0 5 0 0"
+                          IsEnabled="{Binding Filepath, Converter={StaticResource StringEmptyToBoolConverter}}"
+                          SelectedItem="{Binding SourceLanguage}"
+                          HorizontalAlignment="Stretch" />
+
+                <TextBlock Text="Target Language"
+                           Margin="0 10 0 0"
+                           DockPanel.Dock="Top" />
+                <ComboBox ItemsSource="{Binding Languages}"
+                          DockPanel.Dock="Top"
+                          Margin="0 5 0 0"
+                          IsEnabled="{Binding Filepath, Converter={StaticResource StringEmptyToBoolConverter}}"
+                          SelectedItem="{Binding TargetLanguage}"
+                          HorizontalAlignment="Stretch" />
 
 
-            <controls1:GlossariesOrTagsControl Grid.Row="0"
-                                               Grid.Column="2"
-                                               Grid.RowSpan="3" />
+                <controls1:GlossariesOrTagsControl Margin="0 30 0 10"
+                                                   HorizontalContentAlignment="Stretch"
+                                                   HorizontalAlignment="Stretch" />
 
-        </DockPanel>
-        <DockPanel Grid.Column="1" x:Name="TermSearchPanel">
+            </DockPanel>
+        </GroupBox>
+        <GridSplitter Grid.Column="0"
+                      Width="1"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Stretch">
+            <GridSplitter.Style>
+                <Style TargetType="GridSplitter">
+                    <Setter Property="Visibility"
+                            Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsChecked, ElementName=SettingsToggleButton}"
+                                     Value="True">
+                            <Setter Property="Visibility"
+                                    Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </GridSplitter.Style>
+        </GridSplitter>
+
+        <DockPanel Grid.Column="1"
+                   LastChildFill="False"
+                   x:Name="TermSearchPanel">
+
+            <ToggleButton DockPanel.Dock="Top"
+                          ToolTip="Show/hide settings"
+                          x:Name="SettingsToggleButton"
+                          Foreground="Gray"
+                          BorderBrush="Transparent"
+                          FontSize="20"
+                          Click="SettingsToggleButton_OnClick"
+                          Background="Transparent"
+                          HorizontalAlignment="Left">
+                <ToggleButton.Style>
+                    <Style TargetType="ToggleButton"
+                           BasedOn="{StaticResource GlyphToggleButtonStyle}">
+                        <Setter Property="Content"
+                                Value="←" />
+                        <Style.Triggers>
+                            <Trigger Property="IsChecked"
+                                     Value="True">
+                                <Setter Property="Content"
+                                        Value="→" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ToggleButton.Style>
+            </ToggleButton>
+
             <controls:ChooseFilepathControl Margin="10"
                                             DockPanel.Dock="Top"
-                                            Height="28"
+                                            Height="23"
                                             Filepath="{Binding Filepath, Mode=TwoWay}"
                                             VerticalContentAlignment="Top" />
 
-            <controls1:WatermarkTextBox Margin="10"
+            <controls1:WatermarkTextBox Margin="10 20 12 0"
                                         DockPanel.Dock="Top"
-                                        Width="{Binding ActualWidth, ElementName=TermSearchPanel, Converter={StaticResource RatioConverter}, ConverterParameter=0.982}"
+                                        HorizontalAlignment="Left"
+                                        Height="25"
+                                        MinWidth="200"
                                         IsEnabled="{Binding Filepath, Converter={StaticResource StringEmptyToBoolConverter}}"
                                         Text="{Binding DataContext.SearchText, ElementName=Booth_Window, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
@@ -102,6 +176,7 @@
                       ItemsSource="{Binding Entries}"
                       IsReadOnly="True"
                       CanUserReorderColumns="True"
+                      BorderThickness="0.5"
                       Margin="10"
                       AutoGenerateColumns="False"
                       Style="{StaticResource Sdl.DataGrid.GenericStyle}"
@@ -145,6 +220,8 @@
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
+
+
         </DockPanel>
     </Grid>
 </Window>
