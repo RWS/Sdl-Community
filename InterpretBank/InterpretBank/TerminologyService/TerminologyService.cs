@@ -149,8 +149,10 @@ public class TerminologyService : ITerminologyService
         return studioTerms;
     }
 
+    public List<GlossaryModel> GetGlossaries() => InterpretBankDataContext.GetGlossaries();
+
     public List<LanguageModel> GetGlossaryLanguages(string glossaryName) =>
-        InterpretBankDataContext.GetGlossaryLanguages(glossaryName);
+            InterpretBankDataContext.GetGlossaryLanguages(glossaryName);
 
     public int GetLanguageIndex(string interpretBankLanguage) =>
         GetLanguages()
@@ -169,6 +171,10 @@ public class TerminologyService : ITerminologyService
         return InterpretBankDataContext.GetRows<DbGlossary>()
             .Where(g => glossaryIds.Contains(g.Id)).Select(g => g.Tag1).ToList();
     }
+
+    public List<TagModel> GetTags() => InterpretBankDataContext.GetTags();
+
+   
 
     public void SaveAllTerms(List<TermModel> changedTerms)
     {

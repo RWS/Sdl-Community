@@ -1,20 +1,37 @@
-﻿using InterpretBank.Model;
+﻿using DocumentFormat.OpenXml;
+using InterpretBank.Model;
+using InterpretBank.SettingsService.Model;
 using InterpretBank.TerminologyService.Interface;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Data;
 
 namespace InterpretBank.Booth.ViewModel
 {
-    public class BoothWindowViewModel(ITerminologyService terminologyService) : ViewModelBase.ViewModel
+    public class BoothWindowViewModel : ViewModelBase.ViewModel
     {
+        private readonly ITerminologyService _terminologyService;
         private ObservableCollection<EntryModel> _entries;
         private string _filepath;
+        private List<GlossaryModel> _glossaries = new();
         private List<string> _languages;
         private string _searchText;
+        private ObservableCollection<GlossaryModel> _selectedGlossaries = new();
+        private ObservableCollection<TagModel> _selectedTags = new();
         private string _sourceLanguage;
+        private List<TagModel> _tags = new();
         private string _targetLanguage;
+        private bool _useTags;
+
+        public BoothWindowViewModel(ITerminologyService terminologyService)
+        {
+            _terminologyService = terminologyService;
+
+            UseTags = true;
+            AttachSelectedTagsChangedEventHandler();
+        }
 
         public ObservableCollection<EntryModel> Entries
         {
@@ -33,6 +50,30 @@ namespace InterpretBank.Booth.ViewModel
             {
                 SetField(ref _filepath, value);
                 Setup();
+                OnPropertyChanged(nameof(IsDbValid));
+            }
+        }
+
+        public List<GlossaryModel> Glossaries
+        {
+            get => _glossaries;
+            set => SetField(ref _glossaries, value);
+        }
+
+        public bool IsDbValid
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(Filepath)) return false;
+                try
+                {
+                    _terminologyService.GetGlossaries();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
         }
 
@@ -52,6 +93,34 @@ namespace InterpretBank.Booth.ViewModel
             }
         }
 
+        public ObservableCollection<GlossaryModel> SelectedGlossaries
+        {
+            get => _selectedGlossaries;
+            set
+            {
+                SetField(ref _selectedGlossaries, value);
+                _selectedGlossaries.CollectionChanged += (s, e) =>
+                {
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(SelectedTags));
+                };
+            }
+        }
+
+        public ObservableCollection<TagModel> SelectedTags
+        {
+            get => _selectedTags;
+            set
+            {
+                SetField(ref _selectedTags, value);
+                //Add tagged glossaries to the SelectedGlossaries
+                _selectedTags.CollectionChanged += (s, e) =>
+                {
+                    OnPropertyChanged();
+                };
+            }
+        }
+
         public string SourceLanguage
         {
             get => _sourceLanguage;
@@ -60,6 +129,12 @@ namespace InterpretBank.Booth.ViewModel
                 SetField(ref _sourceLanguage, value);
                 Filter();
             }
+        }
+
+        public List<TagModel> Tags
+        {
+            get => _tags;
+            set => SetField(ref _tags, value);
         }
 
         public string TargetLanguage
@@ -72,6 +147,39 @@ namespace InterpretBank.Booth.ViewModel
             }
         }
 
+        public bool UseTags
+        {
+            get => _useTags;
+            set
+            {
+                SetField(ref _useTags, value);
+
+                if (!IsDbValid) return;
+
+                if (value)
+                {
+                    AttachSelectedTagsChangedEventHandler();
+                }
+                else
+                {
+                    SelectedTags.CollectionChanged -= OnSelectionChanged();
+                    SelectedGlossaries.CollectionChanged -= OnSelectionChanged();
+                    SelectedGlossaries.CollectionChanged += OnSelectionChanged();
+                }
+
+                SetupEntries();
+            }
+        }
+
+        private void AttachSelectedTagsChangedEventHandler()
+        {
+            SelectedGlossaries.CollectionChanged -= OnSelectionChanged();
+            SelectedTags.CollectionChanged -= OnSelectionChanged();
+            SelectedTags.CollectionChanged += OnSelectionChanged();
+        }
+
+        private static bool IsSet(string @string) => !string.IsNullOrWhiteSpace(@string);
+
         private void Filter()
         {
             if (Entries == null) return;
@@ -81,6 +189,7 @@ namespace InterpretBank.Booth.ViewModel
             collectionView.Filter = entry =>
             {
                 var entryModel = (EntryModel)entry;
+
                 var terms = entryModel.Terms;
 
                 var sourceTerms = IsSet(SourceLanguage) ? terms.Where(t => t.LanguageName == SourceLanguage) : null;
@@ -88,14 +197,18 @@ namespace InterpretBank.Booth.ViewModel
                     ? terms.Where(t => t.LanguageName == TargetLanguage)
                     : null;
 
-                var relevantSourceTerms = IsSet(SearchText) ? sourceTerms?.Where(t => t.Term?.Contains(SearchText) ?? false) : sourceTerms;
-                var relevantTargetTerms = IsSet(SearchText) ? targetTerms?.Where(t => t.Term?.Contains(SearchText) ?? false) : targetTerms;
+                sourceTerms = IsSet(SearchText) ? sourceTerms?.Where(t => t.Term?.Contains(SearchText) ?? false) : sourceTerms;
+                targetTerms = IsSet(SearchText) ? targetTerms?.Where(t => t.Term?.Contains(SearchText) ?? false) : targetTerms;
 
-                return (relevantSourceTerms?.Any() ?? false) || (relevantTargetTerms?.Any() ?? false);
+                return (sourceTerms?.Any() ?? false) || (targetTerms?.Any() ?? false);
             };
         }
 
-        private static bool IsSet(string @string) => !string.IsNullOrWhiteSpace(@string);
+        private NotifyCollectionChangedEventHandler OnSelectionChanged() => (_, _) =>
+        {
+            if (IsDbValid)
+                SetupEntries();
+        };
 
         private void ResetData()
         {
@@ -104,6 +217,11 @@ namespace InterpretBank.Booth.ViewModel
             TargetLanguage = null;
             Languages = null;
             SearchText = "";
+
+            SelectedTags.Clear();
+            SelectedGlossaries.Clear();
+            Glossaries.Clear();
+            Tags.Clear();
         }
 
         private void Setup()
@@ -111,11 +229,28 @@ namespace InterpretBank.Booth.ViewModel
             ResetData();
 
             if (string.IsNullOrWhiteSpace(Filepath)) return;
-            terminologyService.Setup(Filepath);
+            _terminologyService.Setup(Filepath);
 
-            Entries = terminologyService.GetEntriesFromDb(null);
+            if (!IsDbValid) return;
 
-            Languages = terminologyService.GetLanguages().Select(l => l.Name).ToList();
+            SetupEntries();
+            Languages = _terminologyService.GetLanguages().Select(l => l.Name).ToList();
+            Glossaries = _terminologyService.GetGlossaries();
+            Tags = _terminologyService.GetTags();
+        }
+
+        private void SetupEntries()
+        {
+            if (!SelectedGlossaries.Any() && !SelectedTags.Any())
+                Entries = _terminologyService.GetEntriesFromDb(null);
+
+            Entries =
+                UseTags
+                    ? _terminologyService.GetEntriesFromDb(
+                        _terminologyService.GetTaggedGlossaries(
+                            SelectedTags.Select(t => t.TagName).ToList()))
+                    : _terminologyService.GetEntriesFromDb(SelectedGlossaries.Select(g => g.GlossaryName)
+                        .ToList());
         }
     }
 }

@@ -40,6 +40,10 @@ public interface IInterpretBankDataContext : IDisposable
 
     void InsertTag(TagModel newTag);
 
+    ActionResult<DbGlossaryEntry> InsertTerm(string source, string target, string glossaryName, string sourceLanguage,
+        string targetLanguage);
+
+
     void RemoveGlossary(string selectedGlossaryGlossaryName);
 
     void RemoveTag(string tagName);
@@ -51,7 +55,6 @@ public interface IInterpretBankDataContext : IDisposable
     void SubmitData();
 
     void TagGlossary(TagModel newTag, string glossaryName);
+
     void UpdateTerm(TermChange termChange);
-    ActionResult<DbGlossaryEntry> InsertTerm(string source, string target, string glossaryName, string sourceLanguage,
-        string targetLanguage);
 }

@@ -22,6 +22,7 @@
 		<Grid>
 			<TextBox Name="FilepathTextBox"
 					 DockPanel.Dock="Bottom"
+					 Padding="0 0 50 0"
                      FontSize="{Binding ActualHeight, ElementName=Root, Converter={StaticResource RatioConverter}, ConverterParameter=0.44}"
                      IsReadOnly="True"
 					 VerticalContentAlignment="Center"

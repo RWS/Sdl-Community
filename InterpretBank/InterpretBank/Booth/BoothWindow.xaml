@@ -58,6 +58,7 @@
 
         <GroupBox Header="Settings"
                   Grid.Column="0"
+                  x:Name="SettingsGroupBox"
                   BorderThickness="0 1 0 0"
                   Margin="0 0 10 0">
 
@@ -80,6 +81,12 @@
                     </Style>
                 </DockPanel.Style>
 
+                <controls:ChooseFilepathControl Margin="10"
+                                                DockPanel.Dock="Top"
+                                                Height="23"
+                                                Filepath="{Binding Filepath, Mode=TwoWay}"
+                                                VerticalContentAlignment="Top" />
+
                 <!--<TextBlock Text="Settings" DockPanel.Dock="Top" FontSize="15" Margin="0 0 0 20" Foreground="DarkCyan" />-->
 
                 <TextBlock Text="Source Language"
@@ -87,7 +94,7 @@
                 <ComboBox ItemsSource="{Binding Languages}"
                           DockPanel.Dock="Top"
                           Margin="0 5 0 0"
-                          IsEnabled="{Binding Filepath, Converter={StaticResource StringEmptyToBoolConverter}}"
+                          IsEnabled="{Binding IsDbValid}"
                           SelectedItem="{Binding SourceLanguage}"
                           HorizontalAlignment="Stretch" />
 
@@ -97,7 +104,7 @@
                 <ComboBox ItemsSource="{Binding Languages}"
                           DockPanel.Dock="Top"
                           Margin="0 5 0 0"
-                          IsEnabled="{Binding Filepath, Converter={StaticResource StringEmptyToBoolConverter}}"
+                          IsEnabled="{Binding IsDbValid}"
                           SelectedItem="{Binding TargetLanguage}"
                           HorizontalAlignment="Stretch" />
 
@@ -134,7 +141,6 @@
             <ToggleButton DockPanel.Dock="Top"
                           ToolTip="Show/hide settings"
                           x:Name="SettingsToggleButton"
-                          Foreground="Gray"
                           BorderBrush="Transparent"
                           FontSize="20"
                           Click="SettingsToggleButton_OnClick"
@@ -156,18 +162,14 @@
                 </ToggleButton.Style>
             </ToggleButton>
 
-            <controls:ChooseFilepathControl Margin="10"
-                                            DockPanel.Dock="Top"
-                                            Height="23"
-                                            Filepath="{Binding Filepath, Mode=TwoWay}"
-                                            VerticalContentAlignment="Top" />
+         
 
             <controls1:WatermarkTextBox Margin="10 20 12 0"
                                         DockPanel.Dock="Top"
                                         HorizontalAlignment="Left"
                                         Height="25"
                                         MinWidth="200"
-                                        IsEnabled="{Binding Filepath, Converter={StaticResource StringEmptyToBoolConverter}}"
+                                        IsEnabled="{Binding IsDbValid}"
                                         Text="{Binding DataContext.SearchText, ElementName=Booth_Window, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
 
@@ -176,7 +178,7 @@
                       ItemsSource="{Binding Entries}"
                       IsReadOnly="True"
                       CanUserReorderColumns="True"
-                      BorderThickness="0.5"
+                      BorderThickness="0.7 0.55 0 0"
                       Margin="10"
                       AutoGenerateColumns="False"
                       Style="{StaticResource Sdl.DataGrid.GenericStyle}"

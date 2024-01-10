@@ -14,6 +14,7 @@ namespace InterpretBank.Booth
         {
             DataContext = boothWindowViewModel;
             InitializeComponent();
+
         }
 
 
@@ -25,11 +26,13 @@ namespace InterpretBank.Booth
                 LastColumnWidth = ColumnOne.Width;
                 ColumnOne.MinWidth = 0;
                 ColumnOne.Width = GridLength.Auto;
+                SettingsGroupBox.Visibility = Visibility.Collapsed;
             }
             else
             {
                 ColumnOne.Width = LastColumnWidth;
                 ColumnOne.MinWidth = 200;
+                SettingsGroupBox.Visibility = Visibility.Visible;
             }
         }
 

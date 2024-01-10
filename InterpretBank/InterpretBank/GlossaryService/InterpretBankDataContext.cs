@@ -260,6 +260,8 @@ public class InterpretBankDataContext : IInterpretBankDataContext
     {
         if (!string.IsNullOrWhiteSpace(filepath)) SqLiteConnection = new SQLiteConnection($"Data Source={filepath}");
         DataContext = new DataContext(SqLiteConnection);
+
+        DataContext.Connection.Open();
     }
 
     public void SubmitData()

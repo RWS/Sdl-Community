@@ -45,7 +45,7 @@
         <Setter Property="BorderBrush"
                 Value="{StaticResource Button.Static.Border}" />
         <Setter Property="Foreground"
-                Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                Value="Gray" />
         <Setter Property="BorderThickness"
                 Value="1" />
         <Setter Property="HorizontalContentAlignment"
@@ -57,6 +57,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
+               
                     <Border x:Name="border"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
@@ -71,6 +72,7 @@
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                     </Border>
                     <ControlTemplate.Triggers>
+
                         <Trigger Property="Button.IsDefaulted"
                                  Value="true">
                             <Setter Property="BorderBrush"
@@ -136,7 +138,7 @@
                                 <Storyboard>
                                     <ColorAnimation Storyboard.TargetName="Border"
                                                     Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                    To="#FF4CD661"
+                                                    To="CornflowerBlue"
                                                     Duration="0:0:0.1" />
                                     <ThicknessAnimation Storyboard.TargetName="Ellipse"
                                                         Storyboard.TargetProperty="Margin"
@@ -150,7 +152,7 @@
                                 <Storyboard>
                                     <ColorAnimation Storyboard.TargetName="Border"
                                                     Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                    To="White"
+                                                    To="DarkGreen"
                                                     Duration="0:0:0.1" />
                                     <ThicknessAnimation Storyboard.TargetName="Ellipse"
                                                         Storyboard.TargetProperty="Margin"
