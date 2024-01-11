@@ -76,7 +76,7 @@
                     <DataTemplate DataType="{x:Type model:TermModel}">
                         <Border CornerRadius="1"
                                 HorizontalAlignment="Left"
-                                Width="{Binding ActualWidth, ElementName=TermsGrid, Converter={StaticResource SubtractConverter}, ConverterParameter=26}"
+                                Width="{Binding ActualWidth, ElementName=TermsGrid, Converter={StaticResource SubtractConverter}, ConverterParameter=32}"
                                 Margin="0 3 0 0"
 
                                 BorderThickness="4 0.7 0.7 2">
