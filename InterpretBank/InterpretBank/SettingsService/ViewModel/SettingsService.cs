@@ -21,6 +21,8 @@ public class SettingsService(IInterpretBankDataContext interpretBankDataContext)
 	private ObservableCollection<TagModel> _selectedTags = new();
 	private List<TagModel> _tags;
 
+    public bool UseTags { get; set; } = true;
+
     public string Filepath
 	{
 		get => _filepath;

@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:converters="clr-namespace:InterpretBank.TermbaseViewer.UI.Converters"
              xmlns:platformConverters="clr-namespace:Sdl.Desktop.Platform.Controls.Converters;assembly=Sdl.Desktop.Platform.Controls"
+             xmlns:converters1="clr-namespace:InterpretBank.Converters"
              mc:Ignorable="d"
              Focusable="True"
              x:Name="EditBoxControl"
@@ -18,6 +19,7 @@
                 <ResourceDictionary Source="/InterpretBank;component/TermbaseViewer/UI/Resources/EditButtonTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
+            <converters1:RatioConverter x:Key="RatioConverter" />
             <platformConverters:InverseBooleanToVisibilityConverter x:Key="InvertBoolToVisConverter" />
             <!--<BooleanToVisibilityConverter x:Key="BoolToVisConverter" />-->
             <Style TargetType="Button">
@@ -81,7 +83,7 @@
                             Command="{Binding ElementName=EditBoxControl, Path=KeyboardKeypressCommand}" />
             </Grid.InputBindings>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
