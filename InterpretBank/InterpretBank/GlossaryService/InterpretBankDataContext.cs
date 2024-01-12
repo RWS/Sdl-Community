@@ -305,6 +305,17 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         SubmitData();
     }
 
+    public void RemoveTerm(EntryModel selectedEntry)
+    {
+        var dbTerms = DataContext.GetTable<DbGlossaryEntry>();
+
+        var toRemove = dbTerms.FirstOrDefault(dbt => dbt.Id == selectedEntry.Id);
+        if (toRemove is null) return;
+
+        dbTerms.DeleteOnSubmit(toRemove);
+        SubmitData();
+    }
+
     //public void UpdateTerms(List<TermModel> terms)
     //{
     //    var termsIds = terms.Select(t => t.Id).ToList();

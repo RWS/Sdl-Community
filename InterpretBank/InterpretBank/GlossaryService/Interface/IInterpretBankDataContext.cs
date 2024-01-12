@@ -57,4 +57,5 @@ public interface IInterpretBankDataContext : IDisposable
     void TagGlossary(TagModel newTag, string glossaryName);
 
     void UpdateTerm(TermChange termChange);
+    void RemoveTerm(EntryModel selectedEntry);
 }

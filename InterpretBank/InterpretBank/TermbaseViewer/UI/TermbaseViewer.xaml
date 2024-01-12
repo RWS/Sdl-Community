@@ -16,11 +16,11 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/textblockresources.xaml" />
                 <ResourceDictionary Source="/InterpretBank;component/TermbaseViewer/UI/Resources/TermbaseViewerResources.xaml" />
+                <ResourceDictionary Source="/InterpretBank;component/Styles/ButtonStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:ImageToBitmapImageConverter x:Key="ImageConverter" />
             <converters:LanguageToColorConverter x:Key="LanguageToColorConverter" />
             <converters:SubtractConverter x:Key="SubtractConverter" />
-            <converters1:RatioConverter x:Key="RatioConverter"/>
 
         </ResourceDictionary>
     </UserControl.Resources>
@@ -38,10 +38,16 @@
                  SelectedItem="{Binding SelectedEntry}"
                  SelectedIndex="{Binding SelectedEntryIndex}" />
 
+        <GridSplitter Grid.Column="0"
+                      Width="1"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Stretch" />
+
         <Grid Grid.Column="1"
               x:Name="TermsGrid">
 
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
@@ -49,11 +55,28 @@
 
             <Border Grid.Row="0"
                     DockPanel.Dock="Top"
-                    BorderBrush="LightGray"
-                    
+                    Background="LightGray"
                     BorderThickness="2 1 1 2"
-                    Margin="5 5 0 5"
                     x:Name="EntryNote_Border">
+
+                <StackPanel Orientation="Horizontal">
+                    <Button Height="20"
+                            ToolTip="Remove entry"
+                            Command="{Binding RemoveSelectedEntryCommand}"
+                            Style="{StaticResource GlyphButtonStyle2}"
+                            Content="🗑️"/>
+                    <Button Height="20"
+                            ToolTip="Add entry"
+                            Command="{Binding AddEntryCommand}"
+                            Style="{StaticResource GlyphButtonStyle2}"
+                            Content="➕"/>
+                </StackPanel>
+            </Border>
+            <Border Grid.Row="1"
+                    DockPanel.Dock="Top"
+                    BorderBrush="LightGray"
+                    BorderThickness="2 1 1 2"
+                    Margin="5 5 0 5">
 
                 <controls:EditBox Label="Entry note: "
                                   Margin="5"
@@ -61,7 +84,7 @@
                                   FontSize="13"
                                   EditBoxText="{Binding SelectedEntry.EntryComment}" />
             </Border>
-            <ListView Grid.Row="1"
+            <ListView Grid.Row="2"
                       DockPanel.Dock="Top"
                       ItemContainerStyle="{DynamicResource TermListViewStyle}"
                       HorizontalContentAlignment="Stretch"
@@ -78,7 +101,6 @@
                                 HorizontalAlignment="Left"
                                 Width="{Binding ActualWidth, ElementName=TermsGrid, Converter={StaticResource SubtractConverter}, ConverterParameter=32}"
                                 Margin="0 3 0 0"
-
                                 BorderThickness="4 0.7 0.7 2">
                             <Border.BorderBrush>
                                 <MultiBinding Converter="{StaticResource LanguageToColorConverter}">
@@ -142,7 +164,7 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-            <Border Grid.Row="2"
+            <Border Grid.Row="3"
                     Background="LightSteelBlue"
                     BorderThickness="0"
                     HorizontalAlignment="Left"

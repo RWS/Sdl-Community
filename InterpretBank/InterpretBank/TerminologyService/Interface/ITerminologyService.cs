@@ -42,5 +42,6 @@ namespace InterpretBank.TerminologyService.Interface
         void Setup(string settingsDatabaseFilepath);
 
         void UpdateTerm(TermChange termChange);
+        void RemoveTerm(EntryModel selectedEntry);
     }
 }

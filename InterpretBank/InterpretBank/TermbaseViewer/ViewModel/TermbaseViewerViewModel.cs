@@ -15,6 +15,8 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 {
     public class TermbaseViewerViewModel : ViewModelBase.ViewModel
     {
+        private readonly ICommand _addEntryCommand;
+        private readonly ICommand _removeSelectedEntryCommand;
         private ObservableCollection<EntryModel> _entries;
         private ICommand _saveEditCommand;
         private EntryModel _selectedEntry;
@@ -31,6 +33,8 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             UserInteractionService = userInteractionService;
         }
 
+        public ICommand AddEntryCommand => _addEntryCommand ?? new RelayCommand(s => OpenAddTermPopup(null, null));
+
         public ObservableCollection<EntryModel> Entries
         {
             get => _entries;
@@ -46,6 +50,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
         }
 
         public List<string> Glossaries { get; set; }
+        public ICommand RemoveSelectedEntryCommand => _removeSelectedEntryCommand ?? new RelayCommand(RemoveSelectedEntry);
         public ICommand SaveEditCommand => _saveEditCommand ??= new RelayCommand(UpdateTerm);
 
         public EntryModel SelectedEntry
@@ -172,6 +177,17 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
                 entryModel.Terms.Remove(targetTerm);
                 entryModel.Terms.Insert(1, targetTerm);
+            }
+        }
+
+        private void RemoveSelectedEntry(object obj)
+        {
+            var confirmation = UserInteractionService.Confirm("Are you sure you want to delete this entry?");
+
+            if (confirmation)
+            {
+                TerminologyService.RemoveTerm(SelectedEntry);
+                Entries.Remove(SelectedEntry);
             }
         }
 

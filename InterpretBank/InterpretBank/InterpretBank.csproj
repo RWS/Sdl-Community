@@ -36,6 +36,9 @@
     <None Remove="Resources\IB.ico" />
     <None Remove="Resources\logo.png" />
     <None Remove="Resources\RejectEdit.png" />
+    <None Remove="Resources\Remove.ico" />
+    <None Remove="Resources\Remove2.ico" />
+    <None Remove="Resources\RemoveClick.ico" />
     <None Remove="Resources\Tag.png" />
   </ItemGroup>
   <ItemGroup>
@@ -153,6 +156,9 @@
     <Resource Include="Resources\IB.ico" />
     <Resource Include="Resources\logo.png" />
     <Resource Include="Resources\RejectEdit.png" />
+    <Resource Include="Resources\Remove.ico" />
+    <Resource Include="Resources\Remove2.ico" />
+    <Resource Include="Resources\RemoveClick.ico" />
     <Resource Include="Resources\Tag.png" />
   </ItemGroup>
   <ItemGroup>

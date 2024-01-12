@@ -191,6 +191,11 @@ public class TerminologyService : ITerminologyService
         InterpretBankDataContext.UpdateTerm(termChange);
     }
 
+    public void RemoveTerm(EntryModel selectedEntry)
+    {
+        InterpretBankDataContext.RemoveTerm(selectedEntry);
+    }
+
     private static List<string> GetTermColumns(int targetLanguageIndex, int sourceLanguageIndex = -1)
     {
         var columns = new List<string>
