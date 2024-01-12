@@ -159,6 +159,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="Studio\AccountSubscription\Model\" />
 	  <Folder Include="Studio\Actions\Models\" />
 	</ItemGroup>
 </Project>

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -125,6 +127,85 @@ namespace LanguageWeaverProvider.Services
 			var accountId = JObject.Parse(userDetailsJson)[property].ToString();
 
 			return accountId;
+		}
+
+		public static async Task<CloudAccount> GetAccountDetails(AccessToken accessToken)
+		{
+			var uri = new Uri($"{accessToken.BaseUri}v4/accounts/{accessToken.AccountId}/subscriptions");
+			var request = new HttpRequestMessage(HttpMethod.Get, uri);
+			request.Headers.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
+			var response = await new HttpClient().SendAsync(request);
+			var responseContent = await response.Content.ReadAsStringAsync();
+
+			var output = JsonConvert.DeserializeObject<CloudAccount>(responseContent);
+			return output;
+		}
+
+		public static async Task<CloudUsageReport> GetUsageReport(AccessToken accessToken, IEnumerable<CloudAccountSubscription> subscriptions)
+		{
+			var usageReport = new CloudUsageReport();
+			foreach (var subscription in subscriptions.Where(sub => sub.IsActive))
+			{
+				var startDate = DateTime.ParseExact(subscription.StartDate, "yyyy/MM/dd", null);
+				var endDate = DateTime.ParseExact(subscription.EndDate, "yyyy/MM/dd", null);
+
+				for (var currentMonthStart = startDate; currentMonthStart < endDate; currentMonthStart = currentMonthStart.AddMonths(3))
+				{
+					var currentMonthEnd = currentMonthStart.AddMonths(2);
+					if (currentMonthEnd > endDate)
+					{
+						currentMonthEnd = endDate;
+					}
+
+					var uri = $"{accessToken.BaseUri}v4/accounts/{accessToken.AccountId}/reports/usage/translations";
+					var request = new HttpRequestMessage(HttpMethod.Get, uri);
+					request.Headers.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
+
+					var period = new CloudSubscriptionPeriod
+					{
+						StartDate = currentMonthStart.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture),
+						EndDate = currentMonthEnd.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture)
+					};
+
+					var feedbackRequestJson = JsonConvert.SerializeObject(period);
+					var content = new StringContent(feedbackRequestJson, new UTF8Encoding(), "application/json");
+
+					var response = await Service.SendRequest(accessToken, HttpMethod.Post, uri, content);
+					var responseContent = await response.Content.ReadAsStringAsync();
+
+					var currentPeriodUsageReports = JsonConvert.DeserializeObject<CloudUsageReports>(responseContent);
+
+					foreach (var currentPeriodUsageReport in currentPeriodUsageReports.Reports)
+					{
+						UpdateUsageReport(usageReport, currentPeriodUsageReport);
+					}
+				}
+			}
+
+			return usageReport;
+		}
+
+		public static async Task<List<AccountCategoryFeature>> GetSubscriptionDetails(AccessToken accessToken)
+		{
+			var uri = new Uri($"{accessToken.BaseUri}v4/accounts/{accessToken.AccountId}");
+			var request = new HttpRequestMessage(HttpMethod.Get, uri);
+			request.Headers.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
+			var response = await new HttpClient().SendAsync(request);
+			var responseContent = await response.Content.ReadAsStringAsync();
+
+			var json = JObject.Parse(responseContent);
+			var accountCategoryFeatures = json["accountSetting"]["accountCategoryFeatures"].ToObject<List<AccountCategoryFeature>>();
+			return accountCategoryFeatures;
+		}
+
+		private static void UpdateUsageReport(CloudUsageReport totalUsageReport, CloudUsageReport currentPeriodReport)
+		{
+			totalUsageReport.OutputWordCount += currentPeriodReport.OutputWordCount;
+			totalUsageReport.OutputCharCount += currentPeriodReport.OutputCharCount;
+			totalUsageReport.Count += currentPeriodReport.Count;
+			totalUsageReport.InputWordCount += currentPeriodReport.InputWordCount;
+			totalUsageReport.InputCharCount += currentPeriodReport.InputCharCount;
+			// Add more properties if needed
 		}
 
 		public static async Task<List<PairModel>> GetSupportedLanguages(AccessToken accessToken)

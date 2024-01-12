@@ -1,7 +1,6 @@
 ﻿using System;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
-using LanguageWeaverProvider.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -26,6 +25,11 @@ namespace LanguageWeaverProvider.Extensions
 
 		public static void GetAndAssignCredentials<T>(ITranslationProviderCredentialStore credentialStore, ITranslationOptions translationOptions, string scheme, bool assignAccessToken = false)
 		{
+			if (credentialStore is null)
+			{
+				return;
+			}
+
 			var uri = new Uri(scheme);
 			var translationProviderCredential = credentialStore.GetCredential(uri);
 			if (translationProviderCredential is null
@@ -57,15 +61,13 @@ namespace LanguageWeaverProvider.Extensions
 		private static void AssignCredentials<T>(ITranslationOptions translationOptions, string credentials)
 		{
 			var tType = typeof(T);
-			var deserializedCredentials = DeserializeAndCast<T>(credentials);
-
 			if (tType == typeof(CloudCredentials))
 			{
-				translationOptions.CloudCredentials = deserializedCredentials as CloudCredentials;
+				translationOptions.CloudCredentials = DeserializeAndCast<T>(credentials) as CloudCredentials;
 			}
 			else if (tType == typeof(EdgeCredentials))
 			{
-				translationOptions.EdgeCredentials = deserializedCredentials as EdgeCredentials;
+				translationOptions.EdgeCredentials = DeserializeAndCast<T>(credentials) as EdgeCredentials;
 			}
 		}
 

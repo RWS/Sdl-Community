@@ -1,6 +1,7 @@
 ﻿using System;
 using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model.Options;
+using LanguageWeaverProvider.Services;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -16,6 +17,7 @@ namespace LanguageWeaverProvider
 			ApplicationInitializer.CredentialStore = credentialStore;
 			var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
 			CredentialManager.GetCredentials(options, true);
+			Service.ValidateToken(options);
 			return new TranslationProvider(options);
 		}
 

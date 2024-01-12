@@ -7,13 +7,10 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace LanguageWeaverProvider.Studio.FeedbackController
 {
-	[ViewPart(
-		Id = "Language Weaver - Feedback",
-		Name = "Language Weaver - Feedback",
-		Description = "Send feedback for the translated content using Language Weaver.",
-		Icon = "lwLogoIco"
-	)]
-
+	[ViewPart(Id = "Language Weaver - Feedback",
+			  Name = "Language Weaver - Feedback",
+			  Description = "Send feedback for the translated content using Language Weaver.",
+			  Icon = "lwLogoIco")]
 	[ViewPartLayout(typeof(EditorController), Dock = DockType.Left)]
 	public class LanguageWeaverEditorController : AbstractViewPartController
 	{

@@ -13,7 +13,7 @@ namespace LanguageWeaverProvider.Extensions
 		/// <returns></returns>
 		public static string Base64urlencodeNoPadding(byte[] buffer)
 		{
-			string base64 = Convert.ToBase64String(buffer);
+			var base64 = Convert.ToBase64String(buffer);
 
 			// Converts base64 to base64url.
 			base64 = base64.Replace("+", "-");
@@ -32,7 +32,7 @@ namespace LanguageWeaverProvider.Extensions
 		public static string RandomDataBase64url(uint length)
 		{
 			var rng = new RNGCryptoServiceProvider();
-			byte[] bytes = new byte[length];
+			var bytes = new byte[length];
 			rng.GetBytes(bytes);
 			return Base64urlencodeNoPadding(bytes);
 		}
@@ -44,7 +44,7 @@ namespace LanguageWeaverProvider.Extensions
 		/// <returns></returns>
 		public static byte[] Sha256(string inputStirng)
 		{
-			byte[] bytes = Encoding.ASCII.GetBytes(inputStirng);
+			var bytes = Encoding.ASCII.GetBytes(inputStirng);
 			var sha256 = new SHA256Managed();
 			return sha256.ComputeHash(bytes);
 		}
