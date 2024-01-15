@@ -8,7 +8,7 @@ namespace GoogleCloudTranslationProvider.TellMe
 	{
 		public HelpAction()
 		{
-			Name = $"{Constants.GoogleNaming_FullName} - Wiki";
+			Name = $"{Constants.GoogleNaming_FullName} - Documentation";
 		}
 
 		public override bool IsAvailable => true;

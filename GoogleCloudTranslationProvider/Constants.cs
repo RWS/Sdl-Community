@@ -50,6 +50,6 @@ namespace GoogleCloudTranslationProvider
 		// Tell Me
 		public const string TellMe_StoreUrl = "https://appstore.rws.com/plugin/174/";
 		public const string TellMe_CommunityForumUrl = "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/";
-		public const string TellMe_HelpUrl = "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/6547/google-translator-provider";
+		public const string TellMe_HelpUrl = "https://appstore.rws.com/Plugin/174?tab=documentation";
 	}
 }
