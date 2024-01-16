@@ -8,9 +8,11 @@ namespace InterpretBank.TermbaseViewer.UI.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return string.IsNullOrWhiteSpace(value.ToString()) || string.IsNullOrWhiteSpace(parameter.ToString())
-                ? Binding.DoNothing
-                : double.Parse(value.ToString()) - double.Parse(parameter.ToString());
+            if (string.IsNullOrWhiteSpace(value.ToString()) || string.IsNullOrWhiteSpace(parameter.ToString()))
+                return Binding.DoNothing;
+
+            var result = double.Parse(value.ToString()) - double.Parse(parameter.ToString());
+            return result > 0 ? result : 0;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

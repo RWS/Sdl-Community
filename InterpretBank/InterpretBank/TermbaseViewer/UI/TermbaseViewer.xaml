@@ -55,21 +55,25 @@
 
             <Border Grid.Row="0"
                     DockPanel.Dock="Top"
-                    Background="LightGray"
+                    Margin="5 5 0 5"
+                    Background="#f0f0f0"
+                    CornerRadius="3"
+                    Height="30"
                     BorderThickness="2 1 1 2"
                     x:Name="EntryNote_Border">
 
-                <StackPanel Orientation="Horizontal">
-                    <Button Height="20"
-                            ToolTip="Remove entry"
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Left">
+                    <Button ToolTip="Remove entry"
                             Command="{Binding RemoveSelectedEntryCommand}"
+                            FontSize="15"
                             Style="{StaticResource GlyphButtonStyle2}"
-                            Content="🗑️"/>
-                    <Button Height="20"
-                            ToolTip="Add entry"
+                            Content="🗑️" />
+                    <Button ToolTip="Add entry"
+                            FontSize="15"
                             Command="{Binding AddEntryCommand}"
                             Style="{StaticResource GlyphButtonStyle2}"
-                            Content="➕"/>
+                            Content="➕" />
                 </StackPanel>
             </Border>
             <Border Grid.Row="1"

@@ -25,7 +25,6 @@
             </ResourceDictionary.MergedDictionaries>
 
             <converters:TermSelectorConverter x:Key="TermSelector" />
-            <converters:StringEmptyToBoolConverter x:Key="StringEmptyToBoolConverter" />
 
             <Style TargetType="{x:Type ComboBox}"
                    BasedOn="{StaticResource Sdl.ComboBox.Generic.Style}">
