@@ -20,7 +20,7 @@ namespace InterpretBankTests
 
 		public IGlossaryService Build()
 		{
-			var glossaryService = new GlossaryService(DatabaseConnection, SqlBuilder);
+			var glossaryService = new SqlGlossaryService(DatabaseConnection, SqlBuilder);
 
 			ResetFields();
 

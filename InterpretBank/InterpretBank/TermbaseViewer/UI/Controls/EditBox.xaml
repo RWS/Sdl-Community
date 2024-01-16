@@ -1,0 +1,140 @@
+﻿<UserControl x:Class="InterpretBank.TermbaseViewer.UI.Controls.EditBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:converters="clr-namespace:InterpretBank.TermbaseViewer.UI.Converters"
+             xmlns:platformConverters="clr-namespace:Sdl.Desktop.Platform.Controls.Converters;assembly=Sdl.Desktop.Platform.Controls"
+             xmlns:converters1="clr-namespace:InterpretBank.Converters"
+             mc:Ignorable="d"
+             Focusable="True"
+             x:Name="EditBoxControl"
+             HorizontalAlignment="Left"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/InterpretBank;component/TermbaseViewer/UI/Resources/EditButtonTemplate.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
+            <converters1:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+            <platformConverters:InverseBooleanToVisibilityConverter x:Key="InvertBoolToVisConverter" />
+            <Style TargetType="Button">
+                <Setter Property="Template"
+                        Value="{StaticResource EditButtonTemplate}" />
+            </Style>
+
+            <converters:OrBoolToVisibilityConverter  x:Key="MultipleBoolToVisConverter" />
+            <Style x:Key="DialogButtonsStyle"
+                   TargetType="Button">
+                <Setter Property="Template"
+                        Value="{StaticResource EditButtonTemplate}" />
+                <Setter Property="Focusable"
+                        Value="False" />
+                <Setter Property="Background"
+                        Value="{Binding ElementName=EditBoxControl, Path=IsEditing, Converter={StaticResource BoolToColorConverter}, ConverterParameter=LightGray}" />
+                <Setter Property="BorderBrush"
+                        Value="{Binding ElementName=EditBoxControl, Path=IsEditing, Converter={StaticResource BoolToColorConverter}, ConverterParameter=LightGray}" />
+                <Setter Property="Visibility">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource MultipleBoolToVisConverter}">
+                            <Binding Path="IsEditing"
+                                     ElementName="EditBoxControl" />
+                            <Binding Path="IsFocused"
+                                     RelativeSource="{RelativeSource Self}" />
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Border BorderThickness="1">
+
+        <Border.Style>
+            <Style TargetType="{x:Type Border}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsMouseOver, ElementName=EditBoxControl}"
+                                 Value="True">
+                        <Setter Property="BorderBrush"
+                                Value="LightGray" />
+                        <Setter Property="Background"
+                                Value="LightGray" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Border.Style>
+
+            <Grid x:Name="EditBoxGrid"
+                  Focusable="True">
+                <Grid.InputBindings>
+                    <KeyBinding Key="Enter"
+                                Modifiers="Alt"
+                                CommandParameter="ConfirmEdit"
+                                Command="{Binding KeyboardKeypressCommand, ElementName=EditBoxControl}" />
+                    <KeyBinding Key="Enter"
+                                CommandParameter="EnterEdit"
+                                Command="{Binding KeyboardKeypressCommand, ElementName=EditBoxControl}" />
+                    <KeyBinding Key="Escape"
+                                CommandParameter="RejectEdit"
+                                Command="{Binding ElementName=EditBoxControl, Path=KeyboardKeypressCommand}" />
+                </Grid.InputBindings>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="{Binding Label, ElementName=EditBoxControl}"
+                           Foreground="Gray" />
+
+                <TextBox x:Name="TextBox"
+                         Grid.Column="1"
+                         BorderThickness="1"
+                         IsEnabled="{Binding IsEditing, ElementName=EditBoxControl}"
+                         GotFocus="TextBox_OnGotFocus"
+                         LostFocus="TextBox_OnLostFocus"
+                         BorderBrush="{Binding IsEditing, ElementName=EditBoxControl, Converter={StaticResource BoolToColorConverter}}"
+                         MinWidth="40"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         VerticalScrollBarVisibility="Auto"
+                         Text="{Binding EditBoxText, ElementName=EditBoxControl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                <StackPanel Grid.Column="2"
+                            Orientation="Horizontal">
+
+                    <Button Width="50"
+                            Focusable="False"
+                            Style="{StaticResource DialogButtonsStyle}"
+                            CommandParameter="{Binding ElementName=EditBoxControl, Path=SaveEditCommandParameter}"
+                            Click="ConfirmEditButton_Click">
+
+                        <Image Source="/InterpretBank;component/Resources/ConfirmEdit.png"
+                               Focusable="False"
+                               Height="10" />
+                    </Button>
+                    <Button Style="{StaticResource DialogButtonsStyle}"
+                            Width="50"
+                            Focusable="False"
+                            Click="RejectEditButton_OnClick">
+
+                        <Image Source=" /InterpretBank;component/Resources/RejectEdit.png"
+                               Focusable="False"
+                               Height="10" />
+                    </Button>
+                </StackPanel>
+
+                <Button Background="Transparent"
+                        BorderBrush="Transparent"
+                        Focusable="False"
+                        Click="EditButton_Click"
+                        Visibility="{Binding IsEditing,ElementName=EditBoxControl, Converter={StaticResource InvertBoolToVisConverter}}"
+                        Grid.Column="2">
+                    <Image Source="/InterpretBank;component/Resources/Edit.png"
+                           Height="10" />
+                </Button>
+            </Grid>
+    </Border>
+</UserControl>

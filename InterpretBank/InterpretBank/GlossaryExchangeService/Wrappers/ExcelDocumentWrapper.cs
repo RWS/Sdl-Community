@@ -53,7 +53,7 @@ namespace InterpretBank.GlossaryExchangeService.Wrappers
 		public IEnumerable<OpenXmlElement> GetRowsSax(string path)
 		{
 			using var spreadsheet = SpreadsheetDocument.Open(path, false);
-
+			
 			var workbookPart = spreadsheet.WorkbookPart;
 			if (workbookPart == null) yield break;
 
