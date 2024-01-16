@@ -1,0 +1,56 @@
+﻿<Window x:Class="InterpretBank.TermbaseViewer.UI.AddTermPopup"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        WindowStyle="None"
+        x:Name="AddTermPopupWindow"
+        Background="Transparent"
+        ResizeMode="NoResize"
+        Width="160"
+        SizeToContent="Height"
+        AllowsTransparency="True"
+        mc:Ignorable="d"
+        Title="AddTermPopup">
+    <Window.Resources>
+        <ResourceDictionary Source="Resources/AddTermPopupResources.xaml" />
+    </Window.Resources>
+    <Border BorderThickness="1"
+            CornerRadius="10"
+            Margin="5"
+            BorderBrush="DodgerBlue"
+            Background="White">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="5"
+                              Opacity="0.4" />
+        </Border.Effect>
+        <DockPanel LastChildFill="False">
+
+            <TextBlock Text="Glossary"
+                       DockPanel.Dock="Top" />
+            <ComboBox SelectedItem="{Binding SelectedGlossary, ElementName=AddTermPopupWindow}"
+                      DockPanel.Dock="Top"
+                      ItemsSource="{Binding Glossaries, ElementName=AddTermPopupWindow}" />
+
+            <StackPanel Orientation="Horizontal"
+                        DockPanel.Dock="Top">
+                <Image Source="{Binding SourceLanguageFlag, ElementName=AddTermPopupWindow, Converter={StaticResource ImageConverter}}" />
+                <TextBlock Text="{Binding SourceLanguage, ElementName=AddTermPopupWindow}" />
+            </StackPanel>
+            <TextBox Text="{Binding SourceTerm, ElementName=AddTermPopupWindow}"
+                     DockPanel.Dock="Top" />
+
+            <StackPanel Orientation="Horizontal"
+                        DockPanel.Dock="Top">
+                <Image Source="{Binding TargetLanguageFlag, ElementName=AddTermPopupWindow, Converter={StaticResource ImageConverter}}" />
+                <TextBlock Text="{Binding TargetLanguage, ElementName=AddTermPopupWindow}" />
+            </StackPanel>
+            <TextBox Text="{Binding TargetTerm, ElementName=AddTermPopupWindow}"
+                     DockPanel.Dock="Top" />
+
+            <Button Content="Add term"
+                    Click="AddTermButton_OnClick"
+                    DockPanel.Dock="Bottom" />
+        </DockPanel>
+    </Border>
+</Window>

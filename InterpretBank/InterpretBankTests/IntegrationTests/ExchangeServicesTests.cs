@@ -15,6 +15,9 @@ namespace InterpretBankTests.IntegrationTests
 			GlossaryExchangeService = new GlossaryExchangeService();
 		}
 
+		//TODO: Test with an actual import into the db
+		//TODO: Try to handle/catch all exceptions in GES
+
 		private GlossaryExchangeService GlossaryExchangeService { get; }
 
 		[Fact]
