@@ -82,7 +82,7 @@ public class InterpretBankDataContext : IInterpretBankDataContext
             .Select(prop =>
                 new LanguageModel
                 {
-                    Name = prop.GetValue(dbInfo).ToString(),
+                    Name = prop.GetValue(dbInfo)?.ToString(),
                     Index = int.Parse(prop.Name.Substring(12))
                 })
             .ToList();

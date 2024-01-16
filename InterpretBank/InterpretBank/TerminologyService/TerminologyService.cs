@@ -8,10 +8,12 @@ using InterpretBank.Studio.Model;
 using InterpretBank.TerminologyService.Extensions;
 using InterpretBank.TerminologyService.Interface;
 using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -174,7 +176,7 @@ public class TerminologyService : ITerminologyService
 
     public List<TagModel> GetTags() => InterpretBankDataContext.GetTags();
 
-   
+
 
     public void SaveAllTerms(List<TermModel> changedTerms)
     {
@@ -224,8 +226,16 @@ public class TerminologyService : ITerminologyService
 
             Image languageFlag = null;
             if (!string.IsNullOrWhiteSpace(languageName))
-                languageFlag = studioLanguages.FirstOrDefault(s => s.EnglishName.Contains(languageName) && !s.IsNeutral)
-                    ?.GetFlagImage();
+            {
+                var neutralLangCode = studioLanguages.FirstOrDefault(sl => sl.EnglishName == languageName && sl.IsNeutral)?.DefaultSpecificLanguageCode;
+
+                if (neutralLangCode != null) 
+                {
+                    var lang = LanguageRegistryApi.Instance.GetLanguage(neutralLangCode);
+                    languageFlag = lang.GetFlagImage();
+                }
+            }
+
 
             if (!string.IsNullOrWhiteSpace(languageName))
                 entryModel.Terms.Add(new TermModel

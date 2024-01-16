@@ -19,6 +19,8 @@ namespace InterpretBank.Studio
 
         public event EventHandler TermChanged;
 
+        public bool IsEditing => false;
+
         public Control Control
         {
             get
@@ -30,7 +32,7 @@ namespace InterpretBank.Studio
 
         public bool Initialized => true;
 
-        public IEntry SelectedTerm { get; set; }
+        public Entry SelectedTerm { get; set; }
 
         private InterpretBankProvider InterpretBankProvider { get; set; }
 
@@ -41,22 +43,21 @@ namespace InterpretBank.Studio
         private ILifetimeScope TermbaseControlScope { get; } = ApplicationInitializer.ApplicationLifetimeScope.BeginLifetimeScope();
         private TermbaseViewerControl TermbaseViewerControl => (TermbaseViewerControl)Control;
 
-        public void AddAndEditTerm(IEntry term, string source, string target)
+        public void AddAndEditTerm(Entry term, string source, string target)
         {
         }
 
-        public void AddTerm(string source, string target)
+        public void CancelTerm()
         {
-            TermbaseViewerControl.AddTerm(source, target);
+            
         }
 
-        public void EditTerm(IEntry term)
+        public void SaveTerm()
         {
-            //TermbaseViewerControl.EditTerm(term);
-            //TermChanged?.Invoke(this, EventArgs.Empty);
+            
         }
 
-        public void Initialize(ITerminologyProvider terminologyProvider, CultureInfo source, CultureInfo target)
+        public void Initialize(ITerminologyProvider terminologyProvider, CultureCode source, CultureCode target)
         {
             if (terminologyProvider is not InterpretBankProvider interpretBankProvider)
                 return;
@@ -68,18 +69,32 @@ namespace InterpretBank.Studio
             var currentProject = StudioContext.ProjectsController.CurrentProject;
             var targetLanguages = currentProject.GetTargetLanguageFiles().Select(p => p.Language);
 
-            TargetLanguage = targetLanguages.FirstOrDefault(l => l.CultureInfo.Equals(target));
+
+            TargetLanguage = targetLanguages.FirstOrDefault(l => l.CultureInfo.IetfLanguageTag.Equals(target.Name));
             SourceLanguage = currentProject.GetProjectInfo().SourceLanguage;
 
             StudioContext.EventAggregator.GetEvent<DbChangedEvent>().Subscribe(OnDbChanged);
         }
+
+        public void AddTerm(string source, string target)
+        {
+            TermbaseViewerControl.AddTerm(source, target);
+        }
+
+        public void EditTerm(Entry term)
+        {
+            //TermbaseViewerControl.EditTerm(term);
+            //TermChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+       
 
         private void OnDbChanged(DbChangedEvent dbChangedEvent)
         {
             _termbaseControl.ReloadDb(dbChangedEvent.Filepath);
         }
 
-        public void JumpToTerm(IEntry entry)
+        public void JumpToTerm(Entry entry)
         {
             // TermbaseViewerControl.JumpToTerm(entry);
         }
@@ -87,6 +102,8 @@ namespace InterpretBank.Studio
         public void Release()
         {
         }
+
+        public bool CanAddTerm => true;
 
         public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
             => terminologyProviderUri.ToString().Contains(Constants.InterpretBankUri);
