@@ -139,11 +139,8 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         {
             switch (entity)
             {
-                case DbGlossaryEntry entry:
+                case DbGlossaryEntry _:
                     GetTable<T>().InsertOnSubmit(entity);
-                    break;
-
-                case DbGlossary glossary:
                     break;
             }
 
@@ -189,6 +186,7 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         };
 
         var actionResult = InsertEntity(newEntry);
+
 
         return actionResult.Success
             ? new ActionResult<DbGlossaryEntry>(true, newEntry, null)
@@ -258,11 +256,14 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 
     public void Setup(string filepath = null)
     {
+        //Filepath = filepath;
         if (!string.IsNullOrWhiteSpace(filepath)) SqLiteConnection = new SQLiteConnection($"Data Source={filepath}");
         DataContext = new DataContext(SqLiteConnection);
 
         DataContext.Connection.Open();
     }
+
+    //private string Filepath { get; set; }
 
     public void SubmitData()
     {
@@ -309,12 +310,21 @@ public class InterpretBankDataContext : IInterpretBankDataContext
     {
         var dbTerms = DataContext.GetTable<DbGlossaryEntry>();
 
-        var toRemove = dbTerms.FirstOrDefault(dbt => dbt.Id == selectedEntry.Id);
+        var terms = dbTerms.ToList();
+
+        var toRemove = terms.FirstOrDefault(dbt => dbt.Id == selectedEntry.Id);
         if (toRemove is null) return;
 
         dbTerms.DeleteOnSubmit(toRemove);
         SubmitData();
     }
+
+    //public void Reset()
+    //{
+    //    Setup();
+    //}
+
+    //public void Refresh() => DataContext.Refresh(RefreshMode.OverwriteCurrentValues);
 
     //public void UpdateTerms(List<TermModel> terms)
     //{

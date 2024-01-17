@@ -19,6 +19,8 @@ namespace InterpretBank.TerminologyService;
 
 public class TerminologyService : ITerminologyService
 {
+    private List<LanguageModel> _languages;
+
     public TerminologyService(IInterpretBankDataContext interpretBankDataContext)
     {
         InterpretBankDataContext = interpretBankDataContext;
@@ -79,6 +81,8 @@ public class TerminologyService : ITerminologyService
 
     public List<StudioTermEntry> GetExactTerms(string word, string sourceLanguage, string targetLanguage, List<string> glossaries)
     {
+        
+
         var sourceLanguageIndex = GetLanguageIndex(sourceLanguage);
         var targetLanguageIndex = GetLanguageIndex(targetLanguage);
         var columns = GetTermColumns(targetLanguageIndex);
@@ -117,6 +121,7 @@ public class TerminologyService : ITerminologyService
     {
         var sourceLanguageIndex = GetLanguageIndex(sourceLanguage);
 
+
         var filteredTerms = InterpretBankDataContext
             .GetRows<DbGlossaryEntry>()
             .Where(t => glossaries.Contains(t.Tag1))
@@ -149,16 +154,23 @@ public class TerminologyService : ITerminologyService
     public List<LanguageModel> GetGlossaryLanguages(string glossaryName) =>
             InterpretBankDataContext.GetGlossaryLanguages(glossaryName);
 
-    public int GetLanguageIndex(string interpretBankLanguage) =>
-        GetLanguages()
-            .First(lang =>
-                string.Equals(lang.Name, interpretBankLanguage, StringComparison.CurrentCultureIgnoreCase)).Index;
+    public int GetLanguageIndex(string interpretBankLanguage)
+    {
+        if (LanguageDictionary is not null) return LanguageDictionary[interpretBankLanguage].Index;
+
+        LanguageDictionary = GetLanguages().ToDictionary(l => l.Name, l=>l);
+
+        return LanguageDictionary[interpretBankLanguage].Index;
+    }
 
     public List<LanguageModel> GetLanguages()
     {
-        var languages = InterpretBankDataContext.GetDbLanguages();
-        return languages;
+        if (_languages is not null) return _languages;
+        _languages = InterpretBankDataContext.GetDbLanguages();
+        return _languages;
     }
+
+    private Dictionary<string, LanguageModel> LanguageDictionary { get; set; }
 
     public List<string> GetTaggedGlossaries(List<string> tagList)
     {
@@ -174,6 +186,7 @@ public class TerminologyService : ITerminologyService
         InterpretBankDataContext.RemoveTerm(selectedEntry);
     }
 
+  
     public void SaveAllTerms(List<TermModel> changedTerms)
     {
         //InterpretBankDataContext.CommitAllChanges(changedTerms);

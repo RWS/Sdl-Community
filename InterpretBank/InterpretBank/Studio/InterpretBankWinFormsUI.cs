@@ -60,7 +60,7 @@ namespace InterpretBank.Studio
             new() { Name = PluginResources.Plugin_Description };
 
         public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri) =>
-                                                                    terminologyProviderUri.ToString().Contains(Constants.InterpretBankUri);
+            terminologyProviderUri.ToString().Contains(Constants.InterpretBankUri);
 
         private static string GetSettingsId() => (Guid.NewGuid().ToString());
     }

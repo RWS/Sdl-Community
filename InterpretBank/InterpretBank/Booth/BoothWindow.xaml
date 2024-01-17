@@ -171,8 +171,6 @@
                 </ToggleButton.Style>
             </ToggleButton>
 
-
-
             <controls1:WatermarkTextBox Margin="10 20 12 0"
                                         DockPanel.Dock="Top"
                                         HorizontalAlignment="Left"
@@ -180,7 +178,6 @@
                                         MinWidth="200"
                                         IsEnabled="{Binding IsDbValid}"
                                         Text="{Binding DataContext.SearchText, ElementName=Booth_Window, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
 
             <DataGrid x:Name="TermsGrid"
                       d:ItemsSource="{d:SampleData ItemCount=5}"

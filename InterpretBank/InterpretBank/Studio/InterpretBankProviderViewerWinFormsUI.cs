@@ -79,12 +79,13 @@ namespace InterpretBank.Studio
         public void AddTerm(string source, string target)
         {
             TermbaseViewerControl.AddTerm(source, target);
+            TermChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public void EditTerm(Entry term)
         {
             //TermbaseViewerControl.EditTerm(term);
-            //TermChanged?.Invoke(this, EventArgs.Empty);
+            TermChanged?.Invoke(this, EventArgs.Empty);
         }
 
        
