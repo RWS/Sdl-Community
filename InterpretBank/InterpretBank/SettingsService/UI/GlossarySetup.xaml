@@ -16,6 +16,8 @@
         d:DataContext="{d:DesignInstance viewModel:GlossarySetupViewModel}"
         SizeToContent="Height"
         mc:Ignorable="d"
+        Title="Configure database"
+        Icon="/InterpretBank;component/Resources/IB.ico"
         MaxHeight="650"
         Width="600">
     <Window.Resources>

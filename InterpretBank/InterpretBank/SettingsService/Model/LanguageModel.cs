@@ -1,4 +1,6 @@
-﻿using Sdl.MultiSelectComboBox.API;
+﻿using InterpretBank.Studio;
+using Sdl.MultiSelectComboBox.API;
+using System.Drawing;
 
 namespace InterpretBank.SettingsService.Model
 {
@@ -14,7 +16,9 @@ namespace InterpretBank.SettingsService.Model
 			return model.Name == Name;
 		}
 
-		public override int GetHashCode()
+        public Image Flag => StudioContext.GetLanguageFlag(Name);
+
+        public override int GetHashCode()
 		{
 			return (Name != null ? Name.GetHashCode() : 0);
 		}

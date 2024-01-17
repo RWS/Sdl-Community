@@ -16,7 +16,7 @@ namespace InterpretBank.Booth.ViewModel
         private ObservableCollection<EntryModel> _entries;
         private string _filepath;
         private List<GlossaryModel> _glossaries = new();
-        private List<string> _languages;
+        private List<LanguageModel> _languages;
         private string _searchText;
         private ObservableCollection<GlossaryModel> _selectedGlossaries = new();
         private ObservableCollection<TagModel> _selectedTags = new();
@@ -77,7 +77,7 @@ namespace InterpretBank.Booth.ViewModel
             }
         }
 
-        public List<string> Languages
+        public List<LanguageModel> Languages
         {
             get => _languages;
             set => SetField(ref _languages, value);
@@ -234,7 +234,7 @@ namespace InterpretBank.Booth.ViewModel
             if (!IsDbValid) return;
 
             SetupEntries();
-            Languages = _terminologyService.GetLanguages().Select(l => l.Name).ToList();
+            Languages = _terminologyService.GetLanguages();
             Glossaries = _terminologyService.GetGlossaries();
             Tags = _terminologyService.GetTags();
         }

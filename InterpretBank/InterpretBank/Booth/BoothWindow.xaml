@@ -13,6 +13,7 @@
         mc:Ignorable="d"
         Title="Live Search"
         Name="Booth_Window"
+        Icon="/InterpretBank;component/Resources/Booth.ico"
         WindowStartupLocation="CenterScreen"
         Height="450"
         Width="800">
@@ -22,6 +23,7 @@
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/datagridresources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
                 <ResourceDictionary Source="/InterpretBank;component/Styles/Buttons.xaml" />
+                <ResourceDictionary Source="/InterpretBank;component/Styles/LanguageModelTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <converters:TermSelectorConverter x:Key="TermSelector" />
@@ -99,6 +101,7 @@
                 <ComboBox ItemsSource="{Binding Languages}"
                           DockPanel.Dock="Top"
                           Margin="0 5 0 0"
+                          ItemTemplate="{StaticResource LanguageTemplate}"
                           IsEnabled="{Binding IsDbValid}"
                           SelectedItem="{Binding SourceLanguage}"
                           HorizontalAlignment="Stretch" />
@@ -107,6 +110,7 @@
                            Margin="0 10 0 0"
                            DockPanel.Dock="Top" />
                 <ComboBox ItemsSource="{Binding Languages}"
+                          ItemTemplate="{StaticResource LanguageTemplate}"
                           DockPanel.Dock="Top"
                           Margin="0 5 0 0"
                           IsEnabled="{Binding IsDbValid}"

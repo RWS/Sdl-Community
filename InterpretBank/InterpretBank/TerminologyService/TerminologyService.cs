@@ -7,13 +7,11 @@ using InterpretBank.Studio;
 using InterpretBank.Studio.Model;
 using InterpretBank.TerminologyService.Extensions;
 using InterpretBank.TerminologyService.Interface;
-using Sdl.Core.Globalization;
 using Sdl.Core.Globalization.LanguageRegistry;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -40,16 +38,12 @@ public class TerminologyService : ITerminologyService
         if (!addTermAction.Success) return new ActionResult<EntryModel>(false, null, addTermAction.Message);
 
         var dbLanguages = GetLanguages();
-        var studioLanguages = StudioContext.Languages.ToList();
 
-        InitializeEntryModelTerms(dbLanguages, studioLanguages, entryModel, addTermAction.Result);
+        InitializeEntryModelTerms(dbLanguages, entryModel, addTermAction.Result);
         return new ActionResult<EntryModel>(true, entryModel, null);
     }
 
-    public void Dispose()
-    {
-        InterpretBankDataContext?.Dispose();
-    }
+    public void Dispose() => InterpretBankDataContext?.Dispose();
 
     //+ support for subglossaries
     public ObservableCollection<EntryModel> GetEntriesFromDb(List<string> glossaries)
@@ -64,7 +58,6 @@ public class TerminologyService : ITerminologyService
         var entryModels = new ObservableCollection<EntryModel>();
 
         var dbLanguages = GetLanguages();
-        var studioLanguages = StudioContext.Languages.ToList();
 
         foreach (var dbEntry in dbTerms)
         {
@@ -77,7 +70,7 @@ public class TerminologyService : ITerminologyService
                 Terms = new ObservableCollection<TermModel>()
             };
 
-            InitializeEntryModelTerms(dbLanguages, studioLanguages, entryModel, dbEntry);
+            InitializeEntryModelTerms(dbLanguages, entryModel, dbEntry);
             entryModels.Add(entryModel);
         }
 
@@ -176,7 +169,10 @@ public class TerminologyService : ITerminologyService
 
     public List<TagModel> GetTags() => InterpretBankDataContext.GetTags();
 
-
+    public void RemoveTerm(EntryModel selectedEntry)
+    {
+        InterpretBankDataContext.RemoveTerm(selectedEntry);
+    }
 
     public void SaveAllTerms(List<TermModel> changedTerms)
     {
@@ -193,10 +189,7 @@ public class TerminologyService : ITerminologyService
         InterpretBankDataContext.UpdateTerm(termChange);
     }
 
-    public void RemoveTerm(EntryModel selectedEntry)
-    {
-        InterpretBankDataContext.RemoveTerm(selectedEntry);
-    }
+    
 
     private static List<string> GetTermColumns(int targetLanguageIndex, int sourceLanguageIndex = -1)
     {
@@ -216,7 +209,7 @@ public class TerminologyService : ITerminologyService
         return columns;
     }
 
-    private void InitializeEntryModelTerms(List<LanguageModel> dbLanguages, List<Language> studioLanguages, EntryModel entryModel, DbGlossaryEntry t)
+    private void InitializeEntryModelTerms(List<LanguageModel> dbLanguages, EntryModel entryModel, DbGlossaryEntry t)
     {
         entryModel.Terms ??= new ObservableCollection<TermModel>();
         for (int i = 1; i <= 10; i++)
@@ -227,15 +220,8 @@ public class TerminologyService : ITerminologyService
             Image languageFlag = null;
             if (!string.IsNullOrWhiteSpace(languageName))
             {
-                var neutralLangCode = studioLanguages.FirstOrDefault(sl => sl.EnglishName == languageName && sl.IsNeutral)?.DefaultSpecificLanguageCode;
-
-                if (neutralLangCode != null) 
-                {
-                    var lang = LanguageRegistryApi.Instance.GetLanguage(neutralLangCode);
-                    languageFlag = lang.GetFlagImage();
-                }
+                languageFlag = StudioContext.GetLanguageFlag(languageName);
             }
-
 
             if (!string.IsNullOrWhiteSpace(languageName))
                 entryModel.Terms.Add(new TermModel
