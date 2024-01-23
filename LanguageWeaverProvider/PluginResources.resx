@@ -148,7 +148,7 @@
     <value>Federated SSO</value>
   </data>
   <data name="Auth_Cloud_FSSO_ToolTip" xml:space="preserve">
-    <value>Supports Single Sign On across external domains and organisations</value>
+    <value>You've chosen Federated SSO Authentication. Please provide the Connection Code for access.  Please note that only administrators can retrieve the Connection Code</value>
   </data>
   <data name="Auth_Cloud_SSO_Tooltip" xml:space="preserve">
     <value>Access Language Weaver using your unique RWS ID authentication or email</value>
@@ -172,7 +172,7 @@
     <value>Sign in</value>
   </data>
   <data name="Auth_SSO" xml:space="preserve">
-    <value>Single sign-on</value>
+    <value>RWS ID SSO</value>
   </data>
   <data name="CloudMappingView_Headers_Dictionaries" xml:space="preserve">
     <value>Dictionary</value>
@@ -344,13 +344,13 @@ This action cannot be undone.</value>
     <value>Language Weaver Cloud</value>
   </data>
   <data name="MainView_Buttons_LWCloud_ToolTip" xml:space="preserve">
-    <value>Language Weaver Cloud is a secure, adaptable, cloud-based enterprise machine translation API and portal for businesses that need to process high volumes of multilingual content quickly and effectively.</value>
+    <value>Language Weaver Cloud is a secure and adaptive, cloud-based enterprise machine translation solution for transforming your multilingual content.</value>
   </data>
   <data name="MainView_Buttons_LWEdge" xml:space="preserve">
     <value>Language Weaver Edge</value>
   </data>
   <data name="MainView_Buttons_LWEdge_ToolTip" xml:space="preserve">
-    <value>Language Weaver Edge is an on-premise solution leveraging state-of-the-art neural technologies. All the features and functionality of Language Weaver is available behind your firewall.</value>
+    <value>Language Weaver Edge is deployed within your private environment, providing the full power of Language Weaver behind your firewall.</value>
   </data>
   <data name="MainView_CloseButton" xml:space="preserve">
     <value>Close app</value>

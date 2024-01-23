@@ -19,6 +19,7 @@ namespace LanguageWeaverProvider.Model
 			{
 				_isSelected = value;
 				OnPropertyChanged();
+				OnIsSelectedChanged();
 			}
 		}
 
@@ -39,5 +40,12 @@ namespace LanguageWeaverProvider.Model
 		public DateTime LastModifyDate { get; set; }
 
 		public LanguagePair LanguagePair { get; set; }
+
+		public event EventHandler IsSelectedChanged;
+
+		private void OnIsSelectedChanged()
+		{
+			IsSelectedChanged?.Invoke(this, EventArgs.Empty);
+		}
 	}
 }

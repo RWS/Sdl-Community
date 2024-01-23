@@ -22,6 +22,9 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 		string _clientId;
 		string _clientSecret;
 
+		string _selectedRegion;
+		string _selectedRegionUIMessage;
+
 		bool _showVerifyCredentialsWarning;
 
 		public CloudCredentialsViewModel(ITranslationOptions translationOptions)
@@ -115,6 +118,29 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			}
 		}
 
+		public string SelectedRegion
+		{
+			get => _selectedRegion;
+			set
+			{
+				_selectedRegion = value;
+				OnPropertyChanged();
+				SelectedRegionUIMessage = value == Constants.CloudEUUrl ? "Selected region: EU"
+										: value == Constants.CloudUSUrl ? "Selected region: US"
+										: "No region selected";
+			}
+		}
+
+		public string SelectedRegionUIMessage
+		{
+			get => _selectedRegionUIMessage;
+			set
+			{
+				_selectedRegionUIMessage = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public ICommand BackCommand { get; private set; }
 
 		public ICommand ClearCommand { get; private set; }
@@ -156,6 +182,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			UserPassword = TranslationOptions.CloudCredentials.UserPassword;
 			ClientId = TranslationOptions.CloudCredentials.ClientID;
 			ClientSecret = TranslationOptions.CloudCredentials.ClientSecret;
+			ConnectionCode = TranslationOptions.CloudCredentials.ConnectionCode;
 		}
 
 		private void SelectAuthenticationType(object parameter)
@@ -201,7 +228,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			if (!Success)
 			{
 				StopLoginProcess?.Invoke(this, EventArgs.Empty);
-				Error.ShowDialog(PluginResources.Connection_Error_Failed, Error.Message, true);
+				Error?.ShowDialog(PluginResources.Connection_Error_Failed, Error.Message, true);
 				ShowVerifyCredentialsWarning = true;
 				return;
 			}
@@ -221,6 +248,11 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				StopLoginProcess?.Invoke(this, EventArgs.Empty);
 				if (cloudAuth0ViewModel.IsConnected)
 				{
+					if (!string.IsNullOrEmpty(ConnectionCode))
+					{
+						TranslationOptions.CloudCredentials.ConnectionCode = ConnectionCode;
+					}
+
 					CloseWindow();
 				}
 			};
@@ -291,21 +323,6 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			TranslationOptions.PluginVersion = PluginVersion.LanguageWeaverCloud;
 			TranslationOptions.UpdateUri();
 			CloseRequested?.Invoke(this, EventArgs.Empty);
-		}
-
-		private string _selectedRegion;
-
-		public string SelectedRegion
-		{
-			get { return _selectedRegion; }
-			set
-			{
-				if (_selectedRegion != value)
-				{
-					_selectedRegion = value;
-					OnPropertyChanged(nameof(SelectedRegion));
-				}
-			}
 		}
 	}
 }

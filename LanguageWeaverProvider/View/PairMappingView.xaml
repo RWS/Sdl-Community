@@ -221,7 +221,7 @@
 											</ComboBox.ItemTemplate>
 										</ComboBox>
 
-										<TextBlock Text="Select dictionaries"
+										<TextBlock Text="{Binding DictionaryUILabel, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
 												   Visibility="{Binding Dictionaries, Converter={StaticResource EmptyCollectionToVisibilityConverter}}"
 												   IsHitTestVisible="False"
 												   VerticalAlignment="Center"

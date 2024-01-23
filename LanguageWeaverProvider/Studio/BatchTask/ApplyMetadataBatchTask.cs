@@ -14,7 +14,7 @@ namespace LanguageWeaverProvider.BatchTask
 {
 	[AutomaticTask(Id = "Apply Language Weaver Metadata",
 		Name = "Apply Language Weaver Metadata",
-		Description = "Apply metadata for files pre-translated with the Language Weaver plugin.",
+		Description = "Use this batch task when automating your workflows to extract information from Language Weaver, when relying on Quality Estimation or offering Feedback.",
 		GeneratedFileType = AutomaticTaskFileType.BilingualTarget,
 		AllowMultiple = true)]
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
@@ -53,6 +53,7 @@ namespace LanguageWeaverProvider.BatchTask
 			};
 
 			var metadataTransferObjectList = new List<MetadataTransferObject>() { metadataTransferObject };
+
 			var processor = new ApplyMetadataProcessor(metadataTransferObjectList);
 			var processorHandler = new BilingualContentHandlerAdapter(processor);
 

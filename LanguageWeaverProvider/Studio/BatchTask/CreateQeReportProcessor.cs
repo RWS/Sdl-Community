@@ -7,13 +7,16 @@ namespace LanguageWeaverProvider.Studio.BatchTask
 {
 	public class CreateQeReportProcessor : AbstractBilingualContentProcessor
 	{
-		private const string NoQE = "No QE set";
-		private readonly WordCounter _wordCounter;
+		const string NoQE = "No QE set";
+		readonly WordCounter _wordCounter;
+		readonly CreateQeReportSettings _settings;
 
-		public CreateQeReportProcessor(string fileName, WordCounter wordCounter)
+		public CreateQeReportProcessor(LanguageDirection languageDirection, string fileName, WordCounter wordCounter, CreateQeReportSettings settings)
 		{
+			_settings = settings;
 			_wordCounter = wordCounter;
 			FileName = fileName;
+			LanguageDirection = languageDirection;
 			Segments = new()
 			{
 				[NoQE] = new(),
@@ -25,6 +28,8 @@ namespace LanguageWeaverProvider.Studio.BatchTask
 		}
 
 		public string FileName { get; private set; }
+
+		public LanguageDirection LanguageDirection { get; private set; }
 
 		public Dictionary<string, ReportSegmentDetails> Segments { get; private set; }
 
@@ -45,9 +50,17 @@ namespace LanguageWeaverProvider.Studio.BatchTask
 
 			foreach (var pair in segmentPairs)
 			{
+				var skipSegment = _settings.ExcludeLockedSegments && pair.Properties.IsLocked;
+				if (skipSegment)
+				{
+					continue;
+				}
+
+				var counter = _wordCounter.Count(pair.Target);
 				var qualityEstimation = GetCurrentQEValue(pair);
-				Segments[qualityEstimation].QeCouunt++;
-				Segments[qualityEstimation].WordsCount += _wordCounter.Count(pair.Target).Words;
+				Segments[qualityEstimation].QeCount++;
+				Segments[qualityEstimation].WordsCount += counter.Words;
+				Segments[qualityEstimation].CharacterCount += counter.Characters;
 			}
 		}
 

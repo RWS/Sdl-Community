@@ -259,7 +259,7 @@ namespace LanguageWeaverProvider.Services
 			} while (isWaiting);
 		}
 
-		public static async Task SendFeedback(AccessToken accessToken, List<KeyValuePair<string, string>> feedback)
+		public static async Task<bool> SendFeedback(AccessToken accessToken, List<KeyValuePair<string, string>> feedback)
 		{
 			try
 			{
@@ -269,11 +269,12 @@ namespace LanguageWeaverProvider.Services
 				var result = await Service.SendRequest(accessToken, HttpMethod.Post, requestUri, content);
 				result.EnsureSuccessStatusCode();
 
-				MessageBox.Show("Success");
+				return true;
 			}
 			catch (Exception ex)
 			{
 				ErrorHandling.ShowDialog(ex, "Feedback", ex.Message, true);
+				return false;
 			}
 		}
 

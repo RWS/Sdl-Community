@@ -60,6 +60,9 @@
 		<Reference Include="Sdl.Core.Globalization.Async">
 		  <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
 		</Reference>
+		<Reference Include="Sdl.Core.Settings">
+		  <HintPath>..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Core.Settings.dll</HintPath>
+		</Reference>
 		<Reference Include="Sdl.Desktop.IntegrationApi">
 		  <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
 		</Reference>

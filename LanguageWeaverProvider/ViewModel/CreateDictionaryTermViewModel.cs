@@ -221,7 +221,6 @@ namespace LanguageWeaverProvider.ViewModel
 				.FirstOrDefault(x => x.Pair.Dictionaries.Contains(SelectedDictionary))?
 				.Provider;
 			CredentialManager.GetCredentials(_currentProvider, true);
-			Service.ValidateToken(_currentProvider);
 		}
 
 		private void Clear(object parameter)

@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-using System.Windows;
+using System.Web.UI.WebControls;
 using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
@@ -46,6 +45,13 @@ namespace LanguageWeaverProvider.Services
 
 				var result = await httpClient.SendAsync(httpRequest);
 				var content = result.Content.ReadAsStringAsync().Result;
+				if (!result.IsSuccessStatusCode)
+				{
+					var errorResponse = JsonConvert.DeserializeObject<CloudAuth0Error>(content);
+					ErrorHandling.ShowDialog(null, $"{result.StatusCode} {(int)result.StatusCode}", errorResponse.ToString());
+					return (false, null);
+				}
+
 				var ssoToken = JsonConvert.DeserializeObject<CloudAuth0Response>(content);
 				var currentDate = DateTime.UtcNow;
 
@@ -60,7 +66,9 @@ namespace LanguageWeaverProvider.Services
 
 				translationOptions.AccessToken.AccountId = await GetUserInfo(translationOptions.AccessToken, $"{selectedRegion}v4/accounts/users/self", "accountId");
 				translationOptions.AccessToken.AccountNickname = await GetUserInfo(translationOptions.AccessToken, "https://sdl-prod.eu.auth0.com/userinfo", "nickname");
-				return (true, null);
+
+				var success = translationOptions.AccessToken.AccountId is not null && translationOptions.AccessToken.AccountNickname is not null;
+				return (success, null);
 			}
 			catch (Exception ex)
 			{
@@ -83,9 +91,17 @@ namespace LanguageWeaverProvider.Services
 				var stringContent = new StringContent(content, null, "application/json");
 
 				var response = await new HttpClient().PostAsync(endpoint, stringContent);
+				var accessTokenString = await response.Content.ReadAsStringAsync();
+				if (!response.IsSuccessStatusCode)
+				{
+					var codeJson = JObject.Parse(accessTokenString)["status"].ToString();
+					var error = JsonConvert.DeserializeObject<CloudAccountError>(codeJson);
+					ErrorHandling.ShowDialog(null, $"{response.StatusCode} {(int)response.StatusCode}", $"Code: {error.Code}\nMessage: {error.Description}");
+					return (false, null);
+				}
+
 				response.EnsureSuccessStatusCode();
 
-				var accessTokenString = await response.Content.ReadAsStringAsync();
 				translationOptions.AccessToken = JsonConvert.DeserializeObject<AccessToken>(accessTokenString);
 				translationOptions.AccessToken.BaseUri = new Uri(cloudCredentials.AccountRegion);
 
@@ -121,9 +137,15 @@ namespace LanguageWeaverProvider.Services
 			request.Headers.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
 
 			var response = await new HttpClient().SendAsync(request);
+			var userDetailsJson = await response.Content.ReadAsStringAsync();
+			if (!response.IsSuccessStatusCode)
+			{
+				var errorResponse = JsonConvert.DeserializeObject<CloudAccountErrors>(userDetailsJson).Errors.FirstOrDefault();
+				ErrorHandling.ShowDialog(null, $"{response.StatusCode} {(int)response.StatusCode}", errorResponse?.Description);
+				return null;
+			}
 			response.EnsureSuccessStatusCode();
 
-			var userDetailsJson = await response.Content.ReadAsStringAsync();
 			var accountId = JObject.Parse(userDetailsJson)[property].ToString();
 
 			return accountId;
@@ -349,7 +371,7 @@ namespace LanguageWeaverProvider.Services
 			return await response.Content.ReadAsStringAsync();
 		}
 
-		public static async Task CreateFeedback(AccessToken accessToken, FeedbackRequest feedbackRequest)
+		public static async Task<bool> CreateFeedback(AccessToken accessToken, FeedbackRequest feedbackRequest)
 		{
 			try
 			{
@@ -360,11 +382,12 @@ namespace LanguageWeaverProvider.Services
 				var response = await Service.SendRequest(accessToken, HttpMethod.Post, requestUri, content);
 				response.EnsureSuccessStatusCode();
 
-				MessageBox.Show("Success");
+				return true;
 			}
 			catch (Exception ex)
 			{
 				ErrorHandling.ShowDialog(ex, "Feedback", ex.Message, true);
+				return false;
 			}
 		}
 

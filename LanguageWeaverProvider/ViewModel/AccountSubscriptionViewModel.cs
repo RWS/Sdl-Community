@@ -129,17 +129,18 @@ namespace LanguageWeaverProvider.ViewModel
 				.Select(entry => JsonConvert.DeserializeObject<TranslationOptions>(entry.MainTranslationProvider.State) as ITranslationOptions)
 				.ToList();
 
+			if (Providers is null || !Providers.Any())
+			{
+				return;
+			}
+
 			foreach (var provider in Providers)
 			{
 				CredentialManager.GetCredentials(provider, true);
-				if (provider.AccessToken is not null)
-				{
-					Service.ValidateToken(provider);
-				}
 			}
 
 			CurrentProvider = _providers?.FirstOrDefault();
-			if (CurrentProvider.AccessToken is not null)
+			if (CurrentProvider?.AccessToken is not null)
 			{
 				GetSubscriptionInfoCommand.Execute(null);
 			}

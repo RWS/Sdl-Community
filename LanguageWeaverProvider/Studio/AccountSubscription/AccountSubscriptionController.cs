@@ -7,7 +7,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace LanguageWeaverProvider.Studio.AccountSubscription
 {
-	[ViewPart(Id = "Language Weaver - Subscription",
+	/*[ViewPart(Id = "Language Weaver - Subscription",
 			  Name = "Language Weaver - Subscription",
 			  Description = "See informations about your active subscription.",
 			  Icon = "lwLogoIco")]
@@ -27,5 +27,5 @@ namespace LanguageWeaverProvider.Studio.AccountSubscription
 		{
 			 return _feedbackView;
 		}
-	}
+	}*/
 }

@@ -31,7 +31,7 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 			IsConnected = success;
 			if (!success)
 			{
-				error.ShowDialog("SSO Error", error.Message, true);
+				error?.ShowDialog("SSO Error", error.Message, true);
 				CloseAuth0Raised?.Invoke();
 				return;
 			}

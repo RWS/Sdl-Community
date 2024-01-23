@@ -173,8 +173,11 @@ namespace LanguageWeaverProvider.ViewModel
 			IncludeTags = TranslationOptions.ProviderSettings.IncludeTags;
 			UseCustomName = TranslationOptions.ProviderSettings.UseCustomName;
 			CustomName = TranslationOptions.ProviderSettings.CustomName;
+			UsePreLookup = TranslationOptions.ProviderSettings.UsePrelookup;
+			UsePostLookup = TranslationOptions.ProviderSettings.UsePostLookup;
+			PreLookupFilePath = TranslationOptions.ProviderSettings.PostLookupFilePath;
+			PostLookupFilePath = TranslationOptions.ProviderSettings.PostLookupFilePath;
 		}
-
 
 		private void Back(object parameter)
 		{
@@ -193,27 +196,42 @@ namespace LanguageWeaverProvider.ViewModel
 				case nameof(CustomName):
 					CustomName = string.Empty;
 					break;
+
+				case nameof(PostLookupFilePath):
+					PostLookupFilePath = string.Empty;
+					break;
+
+				case nameof(PreLookupFilePath):
+					PreLookupFilePath = string.Empty;
+					break;
+
+				default:
+					break;
 			}
 		}
 
 		private void BrowseFile(object parameter)
 		{
-			var openFileDialog = new OpenFileDialog
+			if (parameter is not string target)
 			{
-				Multiselect = false
-			};
+				return;
+			}
 
-			var filePath = (bool)openFileDialog.ShowDialog() ? openFileDialog.FileName
-															 : string.Empty;
-
-			switch (parameter as string)
+			var openFileDialog = new OpenFileDialog { Multiselect = false };
+			var filePath = (bool)openFileDialog.ShowDialog() ? openFileDialog.FileName : string.Empty;
+			if (string.IsNullOrEmpty(filePath))
 			{
-				case "Pre":
-					PreLookupFilePath = filePath;
+				return;
+			}
+
+			switch (target)
+			{
+				case nameof(PostLookupFilePath):
+					PostLookupFilePath = filePath;
 					break;
 
-				case "Post":
-					PostLookupFilePath = filePath;
+				case nameof(PreLookupFilePath):
+					PreLookupFilePath = filePath;
 					break;
 
 				default:

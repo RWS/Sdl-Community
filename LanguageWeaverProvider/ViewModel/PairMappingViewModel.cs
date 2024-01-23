@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
 using LanguageMappingProvider.Database.Interface;
 using LanguageWeaverProvider.Command;
@@ -129,6 +130,11 @@ namespace LanguageWeaverProvider.ViewModel
 				return;
 			}
 
+			if (!LinguisticOptionsAreActive() && !ContinueWithDisabledLinguisticOptions())
+			{
+				return;
+			}
+
 			SaveChanges = true;
 			_translationOptions.PairMappings = PairMappings.ToList();
 			_translationOptions.ProviderSettings.AutosendFeedback = SettingsView.AutosendFeedback;
@@ -137,6 +143,36 @@ namespace LanguageWeaverProvider.ViewModel
 			_translationOptions.ProviderSettings.UseCustomName = SettingsView.UseCustomName;
 			_translationOptions.ProviderSettings.CustomName = SettingsView.CustomName;
 			CloseEventRaised.Invoke();
+		}
+
+		private bool LinguisticOptionsAreActive()
+		{
+			foreach (var pairMapping in PairMappings)
+			{
+				var linguisticOptions = pairMapping.LinguisticOptions?.Where(x => x.Name.Equals("qualityestimation", StringComparison.InvariantCultureIgnoreCase));
+				if (linguisticOptions is null)
+				{
+					continue;
+				}
+
+				foreach (var linguisticOption in linguisticOptions)
+				{
+					var isQeActive = linguisticOption.SelectedValue.Equals("enabled", StringComparison.InvariantCultureIgnoreCase)
+								  || linguisticOption.SelectedValue.Equals("active", StringComparison.InvariantCultureIgnoreCase);
+					if (!isQeActive)
+					{
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
+
+		private bool ContinueWithDisabledLinguisticOptions()
+		{
+			var result = MessageBox.Show("In order to use Quality Estimation, it needs to be enabled. Do you want to proceed? ", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+			return result == DialogResult.Yes;
 		}
 
 		private void Close(object parameter)

@@ -29,7 +29,19 @@
 	</UserControl.Resources>
 	<ScrollViewer VerticalScrollBarVisibility="Auto"
 				  HorizontalScrollBarVisibility="Disabled">
-		<Grid Margin="24">
+		<Grid>
+			<TextBlock Text="To provide feedback the segment requires metadata, that originates from Language Weaver. To obtain this Run the Apply Language Weaver Metadata Batch task, which will apply against existing segments that has translations which originate from Language Weaver." 
+					   Style="{StaticResource Sdl.TextBlock.GenericTitleTextStyle}"
+					   Visibility="{Binding IsMetadataSet, Converter={StaticResource BooleanVisibility}, ConverterParameter=Inverted}"
+					   TextWrapping="Wrap"
+					   HorizontalAlignment="Center"
+					   VerticalAlignment="Center"
+					   Margin="32"
+					   />
+			
+			<Grid Margin="24"
+				  Visibility="{Binding IsMetadataSet, Converter={StaticResource BooleanVisibility}}"
+				  IsEnabled="{Binding CanSendFeedback}">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
@@ -133,9 +145,9 @@
 				<StackPanel Grid.Column="0">
 					<CheckBox Content="{x:Static root:Constants.WordChoice}"
 							  IsChecked="{Binding TranslationErrors.WordChoice}"
-							  Style="{StaticResource Sdl.Checkbox.GenericStyle}" 
+							  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
 							  Cursor="Hand"
-							  Margin="10 2 0 2"/>
+							  Margin="10 2 0 2" />
 					<CheckBox Content="{x:Static root:Constants.WordsAddition}"
 							  IsChecked="{Binding TranslationErrors.WordsAddition}"
 							  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
@@ -186,7 +198,7 @@
 
 			<TextBox Grid.Row="6"
 					 Grid.ColumnSpan="2"
-					 Text="{Binding FeedbackMessage}"
+					 Text="{Binding FeedbackMessage, UpdateSourceTrigger=PropertyChanged}"
 					 TextWrapping="Wrap"
 					 VerticalScrollBarVisibility="Auto"
 					 Padding="4 6"
@@ -201,6 +213,7 @@
 					IsEnabled="{Binding CanSendFeedback}"
 					Cursor="Hand"
 					Margin="0 16 0 0" />
+		</Grid>
 		</Grid>
 	</ScrollViewer>
 </UserControl>

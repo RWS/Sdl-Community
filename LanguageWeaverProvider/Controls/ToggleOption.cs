@@ -27,7 +27,7 @@ namespace LanguageWeaverProvider.Controls
 			"TextBoxText",
 			typeof(string),
 			typeof(ToggleOption),
-			new PropertyMetadata("Watermark", OnWatermarkTextChanged));
+			new PropertyMetadata("Watermark"));
 
 		public static readonly DependencyProperty ButtonVisibleProperty = DependencyProperty.Register(
 			"ButtonVisible",
@@ -55,6 +55,27 @@ namespace LanguageWeaverProvider.Controls
 			"ClearButtonParameter",
 			typeof(string),
 			typeof(ToggleOption));
+
+		public static readonly DependencyProperty ButtonCommandProperty = DependencyProperty.Register(
+			"ButtonCommand",
+			typeof(ICommand),
+			typeof(ToggleOption));
+
+		public static readonly DependencyProperty ButtonParameterProperty = DependencyProperty.Register(
+			"ButtonParameter",
+			typeof(string),
+			typeof(ToggleOption));
+
+		public static readonly DependencyProperty TextBlockTextProperty = DependencyProperty.Register(
+			"TextBlockText",
+			typeof(string),
+			typeof(ToggleOption));
+
+		public static readonly DependencyProperty TextBlockVisibilityProperty = DependencyProperty.Register(
+			"TextBlockVisibility",
+			typeof(bool),
+			typeof(ToggleOption),
+			new PropertyMetadata(false));
 
 
 		public object CheckBoxContent
@@ -105,9 +126,28 @@ namespace LanguageWeaverProvider.Controls
 			set => SetValue(ButtonContentProperty, value);
 		}
 
-		private static void OnWatermarkTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		public string TextBlockText
 		{
+			get => (string)GetValue(TextBlockTextProperty);
+			set => SetValue(TextBlockTextProperty, value);
+		}
 
+		public bool TextBlockVisibility
+		{
+			get => (bool)GetValue(TextBlockVisibilityProperty);
+			set => SetValue(TextBlockVisibilityProperty, value);
+		}
+
+		public ICommand ButtonCommand
+		{
+			get => (ICommand)(GetValue(ButtonCommandProperty));
+			set => SetValue(ButtonCommandProperty, value);
+		}
+
+		public string ButtonParameter
+		{
+			get => (string)GetValue(ButtonParameterProperty);
+			set => SetValue(DescriptionTextProperty, value);
 		}
 	}
 }

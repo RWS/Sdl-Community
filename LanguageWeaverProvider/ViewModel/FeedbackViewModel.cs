@@ -28,6 +28,7 @@ namespace LanguageWeaverProvider.ViewModel
 		string _feedbackMessage;
 		string _mtTranslation;
 		bool _canSendFeedback;
+		bool _isMetadataSet;
 		bool _isQeEnabled;
 
 		public FeedbackViewModel()
@@ -101,6 +102,7 @@ namespace LanguageWeaverProvider.ViewModel
 			{
 				_canSendFeedback = value;
 				OnPropertyChanged();
+				IsMetadataSet = value;
 			}
 		}
 
@@ -124,6 +126,36 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 		}
 
+		public bool IsMetadataSet
+		{
+			get => _isMetadataSet;
+			set => SetIsMetadataSetValueAsync(value);
+		}
+
+		private async void SetIsMetadataSetValueAsync(bool value)
+		{
+			if (value)
+			{
+				_isMetadataSet = value;
+				OnPropertyChanged(nameof(IsMetadataSet));
+				return;
+			}
+
+			if (value || !_isMetadataSet)
+			{
+				return;
+			}
+
+			await Task.Delay(4000);
+			if (CanSendFeedback)
+			{
+				return;
+			}
+
+			_isMetadataSet = value;
+			OnPropertyChanged(nameof(IsMetadataSet));
+		}
+
 		public ICommand SendFeedbackCommand { get; private set; }
 
 		private void InitializeControl()
@@ -143,6 +175,7 @@ namespace LanguageWeaverProvider.ViewModel
 		private void ActiveDocumentChanged(object sender, DocumentEventArgs e)
 		{
 			InitializeControl();
+			ResetView();
 		}
 
 		private void ActiveSegmentChanged(object sender, EventArgs e)
@@ -153,7 +186,7 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 
 			_activeSegment = segmentPair;
-			TranslationErrors.ResetValues();
+			ResetView();
 			GetSegmentMetadata(_activeSegment);
 		}
 
@@ -196,13 +229,23 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 
 			GetSegmentMetadata(currentSegment.Properties);
-			if (SelectedProvider?.PluginVersion == PluginVersion.LanguageWeaverCloud)
+			bool feedbackSent;
+			if (SelectedProvider.PluginVersion == PluginVersion.LanguageWeaverCloud)
 			{
-				await SendCloudFeedback(currentSegment);
+				feedbackSent = await SendCloudFeedback(_activeSegment);
 			}
-			else if (SelectedProvider?.PluginVersion == PluginVersion.LanguageWeaverEdge)
+			else if (SelectedProvider.PluginVersion == PluginVersion.LanguageWeaverEdge)
 			{
-				await SendEdgeFeedback(currentSegment);
+				feedbackSent = await SendEdgeFeedback(_activeSegment);
+			}
+			else
+			{
+				return;
+			}
+
+			if (feedbackSent)
+			{
+				ResetView();
 			}
 		}
 
@@ -289,21 +332,31 @@ namespace LanguageWeaverProvider.ViewModel
 			_activeSegment = _editController?.ActiveDocument?.ActiveSegmentPair;
 			SetProviderState(_activeSegment.Properties);
 
+			bool feedbackSent;
 			if (SelectedProvider.PluginVersion == PluginVersion.LanguageWeaverCloud)
 			{
-				await SendCloudFeedback(_activeSegment);
+				feedbackSent = await SendCloudFeedback(_activeSegment);
 			}
 			else if (SelectedProvider.PluginVersion == PluginVersion.LanguageWeaverEdge)
 			{
-				await SendEdgeFeedback(_activeSegment);
+				feedbackSent = await SendEdgeFeedback(_activeSegment);
+			}
+			else
+			{
+				return;
+			}
+
+			if (feedbackSent)
+			{
+				ResetView();
 			}
 		}
 
-		private async Task SendCloudFeedback(ISegmentPair segmentPair)
+		private async Task<bool> SendCloudFeedback(ISegmentPair segmentPair)
 		{
 			if (!IsLanguageWeaverSource(segmentPair?.Properties))
 			{
-				return;
+				return false;
 			}
 
 			var modelName = segmentPair.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_LongModelName);
@@ -331,15 +384,14 @@ namespace LanguageWeaverProvider.ViewModel
 				QualityEstimation = IsQeEnabled ? SelectedQE.ToString() : null
 			};
 
-			Service.ValidateToken(SelectedProvider);
-			await CloudService.CreateFeedback(SelectedProvider.AccessToken, feedbackRequest);
+			return await CloudService.CreateFeedback(SelectedProvider.AccessToken, feedbackRequest);
 		}
 
-		private async Task SendEdgeFeedback(ISegmentPair segmentPair)
+		private async Task<bool> SendEdgeFeedback(ISegmentPair segmentPair)
 		{
 			if (!IsLanguageWeaverSource(segmentPair?.Properties))
 			{
-				return;
+				return false;
 			}
 
 			var feedback = new List<KeyValuePair<string, string>>
@@ -354,7 +406,7 @@ namespace LanguageWeaverProvider.ViewModel
 				feedback.Add(new("suggestedTranslation", segmentPair.Target.ToString()));
 			}
 
-			await EdgeService.SendFeedback(SelectedProvider.AccessToken, feedback);
+			return await EdgeService.SendFeedback(SelectedProvider.AccessToken, feedback);
 		}
 
 		private bool IsLanguageWeaverSource(ISegmentPairProperties segmentProperties)
@@ -388,6 +440,12 @@ namespace LanguageWeaverProvider.ViewModel
 				Constants.PluginNameEdge => PluginVersion.LanguageWeaverEdge,
 				_ => PluginVersion.None,
 			};
+		}
+
+		private void ResetView()
+		{
+			FeedbackMessage = string.Empty;
+			TranslationErrors.ResetValues();
 		}
 	}
 }

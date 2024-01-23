@@ -34,7 +34,7 @@ namespace LanguageWeaverProvider.Services
 
 			if (translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
 			 && translationOptions.AuthenticationType != AuthenticationType.CloudSSO
-			 && IsTimestampExpired(translationOptions.AccessToken.ExpiresAt))
+			 && IsTimestampExpired(translationOptions.AccessToken?.ExpiresAt))
 			{
 				await CloudService.AuthenticateUser(translationOptions, translationOptions.AuthenticationType);
 				return;
@@ -59,9 +59,14 @@ namespace LanguageWeaverProvider.Services
 			await new HttpClient().SendAsync(httpRequest);
 		}
 
-		private static bool IsTimestampExpired(double unixTimeStamp)
+		private static bool IsTimestampExpired(double? unixTimeStamp)
 		{
-			var expirationTime = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero).AddMilliseconds(unixTimeStamp);
+			if (!unixTimeStamp.HasValue)
+			{
+				return false;
+			}
+
+			var expirationTime = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero).AddMilliseconds((double)unixTimeStamp);
 			var currentTime = DateTimeOffset.UtcNow;
 
 			return expirationTime <= currentTime;

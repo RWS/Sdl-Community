@@ -1,6 +1,7 @@
 ﻿using System;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
+using LanguageWeaverProvider.Model.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -11,6 +12,37 @@ namespace LanguageWeaverProvider.Extensions
 	{
 		private const string CredentialsKey = "credentials";
 		private const string TokenKey = "accessToken";
+
+		public static bool CredentialsArePersisted(Uri translationProviderUri)
+		{
+			var credentialStore = ApplicationInitializer.CredentialStore;
+			if (credentialStore is null)
+			{
+				return false;
+			}
+
+			var credentials = credentialStore.GetCredential(translationProviderUri);
+			if (credentials is null)
+			{
+				return false;
+			}
+
+			var translationOptions = new TranslationOptions();
+			var pluginVersion = translationProviderUri.AbsoluteUri.Equals(Constants.CloudFullScheme) ? PluginVersion.LanguageWeaverCloud
+							  : translationProviderUri.AbsoluteUri.Equals(Constants.EdgeFullScheme) ? PluginVersion.LanguageWeaverEdge
+							  : PluginVersion.None;
+			if (pluginVersion == PluginVersion.None)
+			{
+				return false;
+			}
+
+			translationOptions.PluginVersion = pluginVersion;
+			GetCredentials(translationOptions, true);
+			return translationOptions.AccessToken is not null
+				|| ((pluginVersion != PluginVersion.LanguageWeaverCloud || translationOptions.CloudCredentials is not null)
+				&& (pluginVersion != PluginVersion.LanguageWeaverEdge || translationOptions.EdgeCredentials is not null));
+
+		}
 
 		public static void GetCredentials(ITranslationOptions translationOptions, bool assignAccessToken = false)
 		{

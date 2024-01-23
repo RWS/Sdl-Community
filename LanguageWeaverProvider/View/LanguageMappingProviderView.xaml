@@ -49,10 +49,26 @@
 				<RowDefinition Height="Auto" />
 			</Grid.RowDefinitions>
 
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+
 			<styles:WindowsControl Grid.Row="0"
+								   Grid.ColumnSpan="2"
 								   Margin="0 20 0 0" />
 
+			<TextBlock Grid.Row="1"
+					   Text="The Language Mapping feature allows users to align unrecognised or new language codes coming from the machine translation engine with a recognised language in Trados Studio, enabling translation where it otherwise wouldn't be possible."
+					   Foreground="#444444"
+					   FontSize="12"
+					   FontWeight="DemiBold"
+					   Focusable="True"
+					   TextWrapping="Wrap"
+					   Margin="16 4 16 0"/>
+
 			<TextBox Grid.Row="1"
+					 Grid.Column="1"
 					 Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}"
 					 Style="{StaticResource WatermarkTextBox}"
 					 BorderBrush="#FFBFCDD4"
@@ -61,17 +77,21 @@
 					 controls:TextBoxWatermarkHelper.ButtonCommandParameter="{controls:NameOf Member=Filter, Type={x:Type viewmodel:LanguageMappingProviderViewModel}}"
 					 controls:TextBoxWatermarkHelper.IsWatermarkVisible="True"
 					 HorizontalAlignment="Right"
+					 VerticalAlignment="Bottom"
 					 Width="232"
-					 Margin="16 0 16 0" />
+					 Height="24"
+					 Margin="16 4" />
 
-			<DataGrid ItemsSource="{Binding FilteredMappedLanguages}"
+			<DataGrid 
+					  Grid.Row="2"
+					  Grid.ColumnSpan="2"
+				ItemsSource="{Binding FilteredMappedLanguages}"
 					  SelectedItem="{Binding SelectedMappedLanguage}"
 					  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
 					  Visibility="{Binding LoadingAction, Converter={StaticResource EmptyStringToVisibility}, ConverterParameter=Inverted}"
 					  BorderThickness="1"
 					  BorderBrush="#FFBFCDD4"
 					  AutoGenerateColumns="False"
-					  Grid.Row="2"
 					  HorizontalAlignment="Stretch"
 					  ScrollViewer.VerticalScrollBarVisibility="Auto"
 					  ScrollViewer.HorizontalScrollBarVisibility="Auto"
@@ -105,6 +125,7 @@
 										VerticalAlignment="Center" />
 
 			<StackPanel Grid.Row="3"
+						Grid.ColumnSpan="2"
 						Orientation="Horizontal"
 						Margin="16 4">
 				<TextBlock Text="{x:Static root:PluginResources.LMPView_Languages_TotalCount}" />
@@ -121,6 +142,7 @@
 			</StackPanel>
 
 			<Separator Grid.Row="4"
+					   Grid.ColumnSpan="2"
 					   VerticalAlignment="Top"
 					   Background="#FFBFCDD4" />
 
@@ -128,6 +150,7 @@
 					Command="{Binding ResetToDefaultCommand}"
 					Style="{StaticResource Sdl.Button.SecondaryStyle}"
 					Grid.Row="4"
+					Grid.ColumnSpan="2"
 					HorizontalAlignment="Left"
 					Cursor="Hand"
 					FontSize="11"
@@ -137,6 +160,7 @@
 					Margin="16" />
 
 			<StackPanel Grid.Row="4"
+						Grid.ColumnSpan="2"
 						Orientation="Horizontal"
 						HorizontalAlignment="Right"
 						Margin="16">

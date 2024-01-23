@@ -97,7 +97,6 @@ namespace LanguageWeaverProvider
 			}
 
 			var (Segments, Emojis) = FilterSegmentEmojis(translatableSegments);
-			Service.ValidateToken(_translationOptions);
 
 			if (UsePreLookup)
 			{
@@ -208,10 +207,8 @@ namespace LanguageWeaverProvider
 				 : EdgeService.Translate(_translationOptions.AccessToken, mappedPair, xliffFile).Result;
 		}
 
-
 		private SearchResult TranslateSegment(Segment segment, Segment sourceSegment)
 		{
-			Service.ValidateToken(_translationOptions);
 			var xliff = CreateXliffFile(new Segment[] { sourceSegment });
 			var mappedPair = GetMappedPair();
 			var translation = CloudService.Translate(_translationOptions.AccessToken, mappedPair, xliff).Result;
@@ -286,7 +283,7 @@ namespace LanguageWeaverProvider
 				AutosendFeedback = _translationOptions.ProviderSettings.AutosendFeedback
 			};
 
-			var existingSegment = ApplicationInitializer.RatedSegments.FirstOrDefault(x => x.SegmentId.Equals(ratedSegment.SegmentId) && x.FileName.Equals(fileName));
+			var existingSegment = ApplicationInitializer.RatedSegments.FirstOrDefault(x => x.SegmentId.Id.Equals(ratedSegment.SegmentId.Id) && x.FileName.Equals(fileName) && x.ModelName.Equals(ratedSegment.ModelName));
 			if (existingSegment is null)
 			{
 				ApplicationInitializer.RatedSegments.Add(ratedSegment);

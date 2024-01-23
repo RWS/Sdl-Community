@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
+using LanguageWeaverProvider.Services;
 using LanguageWeaverProvider.View;
 using LanguageWeaverProvider.ViewModel;
 using Sdl.LanguagePlatform.Core;
@@ -23,8 +24,9 @@ namespace LanguageWeaverProvider
 
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
-			var translationOptions = new TranslationOptions();
 			ApplicationInitializer.CredentialStore = credentialStore;
+
+			var translationOptions = new TranslationOptions();
 			CredentialManager.GetCredentials(translationOptions);
 
 			var credentialsMainViewModel = new CredentialsMainViewModel(translationOptions);
@@ -54,6 +56,7 @@ namespace LanguageWeaverProvider
 		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
 			ApplicationInitializer.CredentialStore = credentialStore;
+
 			if (translationProvider is not TranslationProvider editProvider)
 			{
 				return false;
@@ -65,6 +68,7 @@ namespace LanguageWeaverProvider
 
 		private PairMappingViewModel ShowPairMappingView(LanguagePair[] languagePairs, ITranslationOptions translationOptions)
 		{
+			Service.ValidateToken(translationOptions);
 			var pairMappingViewModel = new PairMappingViewModel(translationOptions, languagePairs);
 			var pairMappingView = new PairMappingView() { DataContext = pairMappingViewModel };
 			pairMappingViewModel.CloseEventRaised += pairMappingView.Close;

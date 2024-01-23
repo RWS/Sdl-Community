@@ -151,7 +151,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supports Single Sign On across external domains and organisations.
+        ///   Looks up a localized string similar to You&apos;ve chosen Federated SSO Authentication. Please provide the Connection Code for access.  Please note that only administrators can retrieve the Connection Code.
         /// </summary>
         public static string Auth_Cloud_FSSO_ToolTip {
             get {
@@ -223,7 +223,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Single sign-on.
+        ///   Looks up a localized string similar to RWS ID SSO.
         /// </summary>
         public static string Auth_SSO {
             get {
@@ -734,7 +734,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Language Weaver Cloud is a secure, adaptable, cloud-based enterprise machine translation API and portal for businesses that need to process high volumes of multilingual content quickly and effectively..
+        ///   Looks up a localized string similar to Language Weaver Cloud is a secure and adaptive, cloud-based enterprise machine translation solution for transforming your multilingual content..
         /// </summary>
         public static string MainView_Buttons_LWCloud_ToolTip {
             get {
@@ -752,7 +752,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Language Weaver Edge is an on-premise solution leveraging state-of-the-art neural technologies. All the features and functionality of Language Weaver is available behind your firewall..
+        ///   Looks up a localized string similar to Language Weaver Edge is deployed within your private environment, providing the full power of Language Weaver behind your firewall..
         /// </summary>
         public static string MainView_Buttons_LWEdge_ToolTip {
             get {

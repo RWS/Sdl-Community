@@ -15,6 +15,7 @@ namespace LanguageWeaverProvider
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
 		{
 			ApplicationInitializer.CredentialStore = credentialStore;
+
 			var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
 			CredentialManager.GetCredentials(options, true);
 			Service.ValidateToken(options);
@@ -36,13 +37,16 @@ namespace LanguageWeaverProvider
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
 		{
-			var supportsTranslationProviderUri = translationProviderUri switch
+			if (ApplicationInitializer.CredentialStore is not null && !CredentialManager.CredentialsArePersisted(translationProviderUri))
+			{
+				return false;
+			}
+
+			return translationProviderUri switch
 			{
 				null => throw new ArgumentNullException("Unsuported"),
 				_ => translationProviderUri.Scheme.StartsWith(Constants.BaseTranslationScheme)
 			};
-
-			return supportsTranslationProviderUri;
 		}
 	}
 }

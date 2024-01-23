@@ -47,7 +47,7 @@
 			<StackPanel Margin="32 0">
 				<controls:ToggleOption Checked="{Binding UseCustomName, Mode=TwoWay}"
 									   CheckBoxContent="Friendly provider name"
-									   DescriptionText="When this option is active, the name of the provider will appear as 'Language Weaver - Custom name'."
+									   DescriptionText="When this option is enabled, the provider's name will display as 'Language Weaver - Custom Name'."
 									   TextBoxVisible="True"
 									   TextBoxText="{Binding CustomName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 									   ClearButtonCommand="{Binding ClearCommand}"
@@ -55,28 +55,31 @@
 									   Margin="0 4" />
 
 				<controls:ToggleOption Checked="{Binding IncludeTags, Mode=TwoWay}"
-									   CheckBoxContent="Include tags in translation"
-									   DescriptionText="When this option is disabled, the segments will be sent for translation without tags and the Target Segments won't include any tag."
+									   CheckBoxContent="Include tags in translations"
+									   DescriptionText="When this option is enabled, segments will be sent for translation with their corresponding tags. Conversely, if the option is disabled, the Target Segments will lack any formatting or tags."
 									   TextBoxVisible="False"
 									   Margin="0 4" />
 
 				<controls:ToggleOption Checked="{Binding ResendDrafts, Mode=TwoWay}"
-									   CheckBoxContent="Resend drafts for translation"
-									   DescriptionText="When this option is disabled, the segments that are marked as Draft won't be sent to the Language Weaver service for translation."
+									   CheckBoxContent="Re-translation of unconfirmed segments"
+									   DescriptionText="When this option is enabled, previously translated but unconfirmed segments will be sent to the service for translation each time you revisit them."
 									   TextBoxVisible="False"
 									   Margin="0 4" />
 
 				<controls:ToggleOption Checked="{Binding AutosendFeedback, Mode=TwoWay}"
-									   CheckBoxContent="Send feed-back on confirmed segments"
-									   DescriptionText="When this option is active, the segments that were translated using the Language Weaver service will automatically be sent for feed-back."
+									   CheckBoxContent="Feedback for Language Weaver translations"
+									   DescriptionText="When this option is enabled, segments that have been translated using the Language Weaver service will be automatically submitted for feedback."
 									   TextBoxVisible="False"
 									   Margin="0 4" />
 
 				<controls:ToggleOption Checked="{Binding UsePreLookup}"
 									   CheckBoxContent="Pre-Lookup Find/Replace"
-									   DescriptionText="-"
-									   TextBoxVisible="True"
-									   TextBoxText="{Binding PreLookupFilePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+									   DescriptionText="Pre-Lookup Find/Replace description"
+									   TextBoxVisible="False"
+									   TextBlockText="{Binding PreLookupFilePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+									   TextBlockVisibility="True"
+									   ButtonCommand="{Binding BrowseFileCommand}"
+									   ButtonParameter="{controls:NameOf Member=PreLookupFilePath, Type={x:Type viewModel:SettingsViewModel}}"
 									   ClearButtonCommand="{Binding ClearCommand}"
 									   ClearButtonParameter="{controls:NameOf Member=PreLookupFilePath, Type={x:Type viewModel:SettingsViewModel}}"
 									   ButtonContent="Browse" 
@@ -84,11 +87,14 @@
 
 				<controls:ToggleOption Checked="{Binding UsePostLookup}"
 									   CheckBoxContent="Post-Lookup Find/Replace"
-									   DescriptionText="-"
-									   TextBoxVisible="True"
-									   TextBoxText="{Binding PostLookupFilePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+									   DescriptionText="Post-Lookup Find/Replace description"
+									   TextBoxVisible="False"
+									   TextBlockText="{Binding PostLookupFilePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+									   TextBlockVisibility="True"
+									   ButtonCommand="{Binding BrowseFileCommand}"
+									   ButtonParameter="{controls:NameOf Member=PostLookupFilePath, Type={x:Type viewModel:SettingsViewModel}}"
 									   ClearButtonCommand="{Binding ClearCommand}"
-									   ClearButtonParameter="{controls:NameOf Member=UsePostLookup, Type={x:Type viewModel:SettingsViewModel}}"
+									   ClearButtonParameter="{controls:NameOf Member=PostLookupFilePath, Type={x:Type viewModel:SettingsViewModel}}"
 									   ButtonContent="Browse" 
 									   Margin="0 4"/>
 			</StackPanel>

@@ -10,6 +10,9 @@ namespace LanguageWeaverProvider.Studio.BatchTask.Model
 		[XmlAttribute]
 		public int WordsTotal { get; set; }
 
+		[XmlAttribute]
+		public int CharactersTotal { get; set; }
+
 		[XmlText]
 		public string QualityEstimation { get; set; }
 	}

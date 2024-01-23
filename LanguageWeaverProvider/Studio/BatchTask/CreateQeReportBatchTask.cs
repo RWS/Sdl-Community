@@ -7,6 +7,7 @@ using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
+using static Dapper.SqlMapper;
 
 namespace LanguageWeaverProvider.Studio.BatchTask
 {
@@ -16,16 +17,23 @@ namespace LanguageWeaverProvider.Studio.BatchTask
 	GeneratedFileType = AutomaticTaskFileType.BilingualTarget,
 	AllowMultiple = true)]
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
+	[RequiresSettings(typeof(CreateQeReportSettings), typeof(CreateQeReportSettingsPage))]
 	public class CreateQEReportBatchTask : AbstractFileContentProcessingAutomaticTask
 	{
 		private readonly List<CreateQeReportProcessor> _segments = new();
+		private CreateQeReportSettings _settings;
+
+		protected override void OnInitializeTask()
+		{
+			_settings = GetSetting<CreateQeReportSettings>();
+		}
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
 			var fileName = System.IO.Path.GetFileName(projectFile.LocalFilePath);
 			var wordCounter = GetWordCounter(projectFile);
 
-			var processor = new CreateQeReportProcessor(fileName, wordCounter);
+			var processor = new CreateQeReportProcessor(projectFile.GetLanguageDirection(), fileName, wordCounter, _settings);
 			var processorHandler = new BilingualContentHandlerAdapter(processor);
 			multiFileConverter?.AddBilingualProcessor(processorHandler);
 			multiFileConverter?.Parse();
@@ -59,14 +67,15 @@ namespace LanguageWeaverProvider.Studio.BatchTask
 			var data = new Data();
 			foreach (var segment in _segments)
 			{
-				var file = new File() { Name = segment.FileName };
+				var file = new File() { Name = $"{segment.FileName}: {segment.LanguageDirection.SourceLanguage.DisplayName} - {segment.LanguageDirection.TargetLanguage.DisplayName}" };
 				foreach (var qs in segment.Segments)
 				{
 					file.QeValues.Add(new QeValue()
 					{
 						QualityEstimation = qs.Key,
-						SegmentsTotal = qs.Value.QeCouunt,
+						SegmentsTotal = qs.Value.QeCount,
 						WordsTotal = qs.Value.WordsCount,
+						CharactersTotal = qs.Value.CharacterCount
 					});
 				}
 
