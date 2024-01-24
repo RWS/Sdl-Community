@@ -76,13 +76,19 @@
 
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Left">
+
                     <Button ToolTip="Remove entry"
+                            AutomationProperties.Name="Remove entry"
                             Command="{Binding RemoveSelectedEntryCommand}"
                             FontSize="15"
                             Style="{StaticResource GlyphButtonStyle2}"
-                            Content="🗑️" />
+                            Content="🗑️">
+                        
+                    </Button>
+
                     <Button ToolTip="Add entry"
                             FontSize="15"
+                            AutomationProperties.Name="Add entry"
                             Command="{Binding AddEntryCommand}"
                             Style="{StaticResource GlyphButtonStyle2}"
                             Content="➕" />
@@ -138,7 +144,7 @@
 
                                 <StackPanel Orientation="Horizontal"
                                             Grid.Row="0">
-                                    <Image Source="{Binding LanguageFlag, Converter={StaticResource ImageConverter}}"
+                                    <Image Source="{Binding LanguageName, Converter={StaticResource ImageConverter}}"
                                            VerticalAlignment="Center"
                                            Height="30" />
                                     <TextBlock Text="{Binding LanguageName}"

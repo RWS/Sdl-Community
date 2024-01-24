@@ -1,4 +1,6 @@
-﻿using System;
+﻿using InterpretBank.Studio;
+using System;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
@@ -17,7 +19,14 @@ namespace InterpretBank.TermbaseViewer.UI.Converters
                 return null;
             }
 
-            var image = (System.Drawing.Image)value;
+            Image languageFlag = null;
+            var languageName = value.ToString();
+            if (!string.IsNullOrWhiteSpace(languageName))
+            {
+                languageFlag = StudioContext.GetLanguageFlag(languageName);
+            }
+
+            var image = languageFlag;
             var memoryStream = new MemoryStream();
             var bitmap = new BitmapImage();
             bitmap.BeginInit();

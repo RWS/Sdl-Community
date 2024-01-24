@@ -13,7 +13,7 @@ namespace InterpretBank.Interface
         bool GetFilePath(out string filepath, string filter = "All Supported Formats (*.db;*.tbx;*.xlsx)|*.db;*.tbx;*.xlsx|Interpret Bank Database (*.db)|*.db|TermBase eXchange (*.tbx)|*.tbx|Microsoft Excel spreadsheet (*.xlsx)|*.xlsx");
 
         public void GetNewTermDetailsFromUser(List<string> glossaries, string sourceLanguage, string targetLanguage,
-            string sourceTerm, string targetTerm, Image sourceLanguageFlag, Image targetLanguageFlag);
+            string sourceTerm, string targetTerm);
 
         void WarnUser(string message);
     }

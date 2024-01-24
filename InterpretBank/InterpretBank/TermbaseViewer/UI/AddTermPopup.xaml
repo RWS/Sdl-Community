@@ -34,7 +34,7 @@
 
             <StackPanel Orientation="Horizontal"
                         DockPanel.Dock="Top">
-                <Image Source="{Binding SourceLanguageFlag, ElementName=AddTermPopupWindow, Converter={StaticResource ImageConverter}}" />
+                <Image Source="{Binding SourceLanguage, ElementName=AddTermPopupWindow, Converter={StaticResource ImageConverter}}" />
                 <TextBlock Text="{Binding SourceLanguage, ElementName=AddTermPopupWindow}" />
             </StackPanel>
             <TextBox Text="{Binding SourceTerm, ElementName=AddTermPopupWindow}"
@@ -42,7 +42,7 @@
 
             <StackPanel Orientation="Horizontal"
                         DockPanel.Dock="Top">
-                <Image Source="{Binding TargetLanguageFlag, ElementName=AddTermPopupWindow, Converter={StaticResource ImageConverter}}" />
+                <Image Source="{Binding TargetLanguage, ElementName=AddTermPopupWindow, Converter={StaticResource ImageConverter}}" />
                 <TextBlock Text="{Binding TargetLanguage, ElementName=AddTermPopupWindow}" />
             </StackPanel>
             <TextBox Text="{Binding TargetTerm, ElementName=AddTermPopupWindow}"

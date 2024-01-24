@@ -32,14 +32,12 @@ namespace InterpretBank.CommonServices
         }
 
         public void GetNewTermDetailsFromUser(List<string> glossaries, string sourceLanguage, string targetLanguage,
-            string sourceTerm, string targetTerm, Image sourceLanguageFlag, Image targetLanguageFlag)
+            string sourceTerm, string targetTerm)
         {
             ChooseGlossaryWindow = new AddTermPopup
             {
                 SourceLanguage = sourceLanguage,
                 TargetLanguage = targetLanguage,
-                SourceLanguageFlag = sourceLanguageFlag,
-                TargetLanguageFlag = targetLanguageFlag,
                 SourceTerm = sourceTerm,
                 TargetTerm = targetTerm,
                 Glossaries = glossaries,

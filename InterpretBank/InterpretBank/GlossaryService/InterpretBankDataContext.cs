@@ -124,8 +124,6 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         return GetLanguageNames(settings);
     }
 
-    //    dbTerms.DeleteAllOnSubmit(toRemove);
-    //}
     public List<DbGlossaryEntry> GetItems(List<string> glossaries, int skipCount, int takeCount) =>
     [
         .. glossaries != null

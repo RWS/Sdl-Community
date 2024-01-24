@@ -3,8 +3,10 @@ using InterpretBank.Extensions;
 using InterpretBank.Helpers;
 using InterpretBank.Interface;
 using InterpretBank.Model;
+using InterpretBank.Studio;
 using InterpretBank.TerminologyService.Interface;
 using Sdl.Core.Globalization;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
@@ -113,7 +115,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
         public void OpenAddTermPopup(string source, string target)
         {
             UserInteractionService.GetNewTermDetailsFromUser(Glossaries, SourceLanguageName, TargetLanguageName, source,
-                target, SourceLanguageFlag, TargetLanguageFlag);
+                target /*SourceLanguageFlag, TargetLanguageFlag*/);
 
             UserInteractionService.GotTermDetailsEvent -= AddTerm;
             UserInteractionService.GotTermDetailsEvent += AddTerm;
@@ -131,8 +133,11 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             LoadTerms();
         }
 
-        public void SetEntryName(EntryModel entryModel) => entryModel.Name =
-            entryModel.Terms.FirstOrDefault(t => t.LanguageName == SourceLanguageName)?.Term;
+        public void InitializeEntry(EntryModel entryModel)
+        {
+            entryModel.Name =
+                entryModel.Terms.FirstOrDefault(t => t.LanguageName == SourceLanguageName)?.Term;
+        }
 
         public void Setup(Language sourceLanguage, Language targetLanguage, List<string> glossaries, string databaseFilePath)
         {
@@ -156,19 +161,18 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             var newEntryModel = addTermActionResult.Result;
             newEntryModel.GlossaryName = glossaryName;
 
-            SetEntryName(newEntryModel);
+            InitializeEntry(newEntryModel);
             Entries.Result.Add(newEntryModel);
         }
 
         private void Entries_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Status")
-            {
-                var previousTerm = SelectedEntry;
-                SetEntryNames(Entries.Result);
-                MoveSourceAndTargetTermsFirst();
-                SetSelectedEntry(previousTerm);
-            }
+            if (e.PropertyName != "Status") return;
+
+            var previousTerm = SelectedEntry;
+            InitializeEntries(Entries.Result);
+            MoveSourceAndTargetTermsFirst();
+            SetSelectedEntry(previousTerm);
         }
 
             private bool IsActionSuccessful<T>(ActionResult<T> actionResult)
@@ -181,7 +185,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
         private void MoveSourceAndTargetTermsFirst()
         {
-            foreach (EntryModel entryModel in Entries.Result)
+            foreach (var entryModel in Entries.Result)
             {
                 var sourceTerm = entryModel.Terms.FirstOrDefault(t => t.LanguageName == SourceLanguageName);
                 var targetTerm = entryModel.Terms.FirstOrDefault(t => t.LanguageName == TargetLanguageName);
@@ -198,21 +202,16 @@ namespace InterpretBank.TermbaseViewer.ViewModel
         {
             var confirmation = UserInteractionService.Confirm("Are you sure you want to delete this entry?");
 
-            if (confirmation)
-            {
-                TerminologyService.RemoveTerm(SelectedEntry);
-                Entries.Result.Remove(SelectedEntry);
-            }
+            if (!confirmation) return;
+
+            TerminologyService.RemoveTerm(SelectedEntry);
+            Entries.Result.Remove(SelectedEntry);
         }
 
-        private void SetEntryNames(ObservableCollection<EntryModel> entries)
+        private void InitializeEntries(ObservableCollection<EntryModel> entries)
         {
-            //var collectionView = CollectionViewSource.GetDefaultView(Entries);
-
-            foreach (EntryModel entry in entries)
-            {
-                SetEntryName(entry);
-            }
+            foreach (var entry in entries)
+                InitializeEntry(entry);
         }
 
         private void SetLanguagePair(Language sourceLanguage, Language targetLanguage)

@@ -23,9 +23,8 @@ namespace InterpretBank.TerminologyService.Interface
         public ObservableCollection<EntryModel> GetEntriesFromDb(List<string> glossaries);
 
 
-        List<StudioTermEntry> GetExactTerms(string word, string name1, string name2, List<string> glossaries);
 
-        public List<StudioTermEntry> GetExactTerms2(string[] word, string sourceLanguage, string targetLanguage,
+        public List<StudioTermEntry> GetExactTerms(string word, string sourceLanguage, string targetLanguage,
             List<string> glossaries);
 
         //List<StudioTermEntry> GetFuzzyTerms(string word, string sourceLanguage, string targetLanguage,
@@ -52,7 +51,7 @@ namespace InterpretBank.TerminologyService.Interface
         void UpdateTerm(TermChange termChange);
 
         //IItemsProvider<EntryModel> GetEntriesProvider(List<string> glossaries, string sourceLanguageName);
-        public ConcurrentDictionary<string, List<StudioTermEntry>> GetFuzzyTerms2(string[] words, string sourceLanguage,
+        public ConcurrentDictionary<string, List<StudioTermEntry>> GetFuzzyTerms(string[] words, string sourceLanguage,
             string targetLanguage, List<string> glossaries, int minScore);
     }
 }

@@ -54,7 +54,6 @@ namespace InterpretBank.Studio
         public TerminologyProviderType Type => TerminologyProviderType.Custom;
         public Uri Uri => new($"{Constants.InterpretBankUri}/{Settings.SettingsId}.json://");
         private HashSet<Entry> Entries { get; } = new();
-        private int TermIndex { get; set; }
 
         public void Dispose() => TermSearchService.Dispose();
 
@@ -122,38 +121,21 @@ namespace InterpretBank.Studio
         public IList<SearchResult> Search(string text, ILanguage source, ILanguage destination,
             int maxResultsCount, SearchMode mode, bool targetRequired)
         {
-            var words = Regex.Split(text, "\\s+");
-
             Entries.Clear();
 
             var config = StudioContext.ProjectsController.CurrentProject.GetTermbaseConfiguration();
             var minScore = config.TermRecognitionOptions.MinimumMatchValue;
 
-            //foreach (var word in words)
-            //{
-            //    var localResults = mode switch
-            //    {
-            //        SearchMode.Fuzzy => GetFuzzyTerms(source, destination, word, minScore),
-            //        SearchMode.Normal => GetExactTerms(source, destination, word),
-            //        SearchMode.FullText => throw new NotImplementedException()
-            //    };
-            //    results.AddRange(localResults);
-            //}
-
-            //SearchMode.Normal => GetExactTerms(source, destination, word),
-            //SearchMode.FullText => throw new NotImplementedException()
-            List<SearchResult> results = [];
+            List<SearchResult> results;
             switch (mode)
             {
                 case SearchMode.Fuzzy:
-                    //var exactTerms = GetExactTerms2(source, destination, words);
-                    results = GetFuzzyTerms2(words, source, destination, minScore);
-                    //results.AddRange(exactTerms);
+                    var words = Regex.Split(text, "\\s+");
+                    results = GetFuzzyTerms(words, source, destination, minScore);
                     break;
 
                 case SearchMode.Normal:
-                    foreach (var word in words)
-                        results.AddRange(GetExactTerms(source, destination, word));
+                    results = GetExactTerms2(source, destination, text);
                     break;
 
                 default:
@@ -221,9 +203,9 @@ namespace InterpretBank.Studio
             return entry;
         }
 
-        private List<SearchResult> GetExactTerms(ILanguage source, ILanguage destination, string word)
+        private List<SearchResult> GetExactTerms2(ILanguage source, ILanguage destination, string words)
         {
-            var terms = TermSearchService.GetExactTerms(word, source.Name, destination.Name, Settings.Glossaries);
+            var terms = TermSearchService.GetExactTerms(words, source.Name, destination.Name, Settings.Glossaries);
 
             var results = new List<SearchResult>();
             AddResultToList(destination, results, terms, 100);
@@ -231,31 +213,10 @@ namespace InterpretBank.Studio
             return results;
         }
 
-        private List<SearchResult> GetExactTerms2(ILanguage source, ILanguage destination, string[] words)
-        {
-            var terms = TermSearchService.GetExactTerms2(words, source.Name, destination.Name, Settings.Glossaries);
-
-            var results = new List<SearchResult>();
-            AddResultToList(destination, results, terms, 100);
-
-            return results;
-        }
-
-        //private List<SearchResult> GetFuzzyTerms(ILanguage source, ILanguage destination, string word, int minScore)
-        //{
-        //    var terms = TermSearchService.GetFuzzyTerms(word, source.Name, destination.Name, Settings.Glossaries, minScore);
-
-        //    var results = new List<SearchResult>();
-        //    foreach (var term in terms)
-        //        AddResultToList(destination, results, [term], term.Score);
-
-        //    return results;
-        //}
-
-        private List<SearchResult> GetFuzzyTerms2(string[] words, ILanguage source, ILanguage destination, int minScore)
+        private List<SearchResult> GetFuzzyTerms(string[] words, ILanguage source, ILanguage destination, int minScore)
         {
             var termsDictionary =
-                TermSearchService.GetFuzzyTerms2(words, source.Name, destination.Name, Settings.Glossaries, minScore);
+                TermSearchService.GetFuzzyTerms(words, source.Name, destination.Name, Settings.Glossaries, minScore);
 
             var results = new List<SearchResult>();
             var studioTermEntries = termsDictionary.SelectMany(termsEntry => termsEntry.Value);
@@ -264,7 +225,5 @@ namespace InterpretBank.Studio
 
             return results;
         }
-
-        private int GetIndex() => TermIndex++;
     }
 }
