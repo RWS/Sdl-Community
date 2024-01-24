@@ -124,8 +124,18 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         return GetLanguageNames(settings);
     }
 
+    //    dbTerms.DeleteAllOnSubmit(toRemove);
+    //}
+    public List<DbGlossaryEntry> GetItems(List<string> glossaries, int skipCount, int takeCount) =>
+    [
+        .. glossaries != null
+            ? GetRows<DbGlossaryEntry>()
+                .Where(dbTerm => glossaries.Contains(dbTerm.Tag1))
+            : GetRows<DbGlossaryEntry>().Skip(skipCount).Take(takeCount)
+    ];
+
     public List<TagLinkModel> GetLinks() => GetRows<DbTagLink>()
-        .Select(t => new TagLinkModel { GlossaryId = t.GlossaryId, TagName = t.TagName, TagId = t.Id }).ToList();
+            .Select(t => new TagLinkModel { GlossaryId = t.GlossaryId, TagName = t.TagName, TagId = t.Id }).ToList();
 
     public IQueryable<T> GetRows<T>() where T : class, IInterpretBankTable => DataContext.GetTable<T>();
 
@@ -135,16 +145,17 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 
     public ActionResult<int> InsertEntity<T>(T entity) where T : class, IInterpretBankTable
     {
+        using var ibContext = new DataContext(SqLiteConnection);
         return ErrorHandler.WrapTryCatch(() =>
         {
             switch (entity)
             {
                 case DbGlossaryEntry _:
-                    GetTable<T>().InsertOnSubmit(entity);
+                    ibContext.GetTable<T>().InsertOnSubmit(entity);
                     break;
             }
 
-            SubmitData();
+            ibContext.SubmitChanges();
             return entity.Id;
         });
     }
@@ -186,7 +197,6 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         };
 
         var actionResult = InsertEntity(newEntry);
-
 
         return actionResult.Success
             ? new ActionResult<DbGlossaryEntry>(true, newEntry, null)
@@ -254,6 +264,20 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         if (tagForRemoval is not null) tagLinks.DeleteOnSubmit(tagForRemoval);
     }
 
+    public void RemoveTerm(EntryModel selectedEntry)
+    {
+        using var ibContext = new DataContext(SqLiteConnection);
+        var dbTerms = ibContext.GetTable<DbGlossaryEntry>();
+
+        var terms = dbTerms.ToList();
+
+        var toRemove = terms.FirstOrDefault(dbt => dbt.Id == selectedEntry.Id);
+        if (toRemove is null) return;
+
+        dbTerms.DeleteOnSubmit(toRemove);
+        ibContext.SubmitChanges();
+    }
+
     public void Setup(string filepath = null)
     {
         //Filepath = filepath;
@@ -303,19 +327,6 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         dbTermToBeUpdated[$"Comment{languageIndex}a"] = termChange.FirstComment;
         dbTermToBeUpdated[$"Comment{languageIndex}b"] = termChange.SecondComment;
 
-        SubmitData();
-    }
-
-    public void RemoveTerm(EntryModel selectedEntry)
-    {
-        var dbTerms = DataContext.GetTable<DbGlossaryEntry>();
-
-        var terms = dbTerms.ToList();
-
-        var toRemove = terms.FirstOrDefault(dbt => dbt.Id == selectedEntry.Id);
-        if (toRemove is null) return;
-
-        dbTerms.DeleteOnSubmit(toRemove);
         SubmitData();
     }
 
@@ -425,7 +436,4 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 
     //    var idsRemove = removedTerms.Select(rt => rt.Id);
     //    var toRemove = dbTerms.Where(t => idsRemove.Contains(t.Id));
-
-    //    dbTerms.DeleteAllOnSubmit(toRemove);
-    //}
 }

@@ -30,13 +30,25 @@
             <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
 
-        <ListBox Grid.Column="0"
-                 ItemsSource="{Binding Entries}"
-                 DisplayMemberPath="Name"
-                 FontSize="14"
-                 FontWeight="Light"
-                 SelectedItem="{Binding SelectedEntry}"
-                 SelectedIndex="{Binding SelectedEntryIndex}" />
+        <DockPanel>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        DockPanel.Dock="Bottom"
+                        Background="#f0f0f0">
+                <TextBlock Text="Count" />
+                <TextBlock Margin="5 0 0 0"
+                           Text="{Binding Entries.Result.Count}" />
+            </StackPanel>
+            <ListBox ItemsSource="{Binding Entries.Result}"
+                     DisplayMemberPath="Name"
+                     FontSize="14"
+                     DockPanel.Dock="Top"
+                     VirtualizingStackPanel.VirtualizationMode="Recycling"
+                     VirtualizingStackPanel.IsVirtualizing="True"
+                     FontWeight="Light"
+                     SelectedItem="{Binding SelectedEntry}"
+                     SelectedIndex="{Binding SelectedEntryIndex}" />
+        </DockPanel>
 
         <GridSplitter Grid.Column="0"
                       Width="1"

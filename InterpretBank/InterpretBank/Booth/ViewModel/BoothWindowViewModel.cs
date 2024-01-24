@@ -246,9 +246,8 @@ namespace InterpretBank.Booth.ViewModel
 
             Entries =
                 UseTags
-                    ? _terminologyService.GetEntriesFromDb(
-                        _terminologyService.GetTaggedGlossaries(
-                            SelectedTags.Select(t => t.TagName).ToList()))
+                    ? _terminologyService.GetEntriesFromDb(_terminologyService.GetTaggedGlossaries(
+                        SelectedTags.Select(t => t.TagName).ToList()))
                     : _terminologyService.GetEntriesFromDb(SelectedGlossaries.Select(g => g.GlossaryName)
                         .ToList());
         }

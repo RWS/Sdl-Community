@@ -9,16 +9,22 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace InterpretBank.TermbaseViewer.ViewModel
 {
-    public class TermbaseViewerViewModel : ViewModelBase.ViewModel
+    public class TermbaseViewerViewModel(
+        ITerminologyService terminologyService,
+        IUserInteractionService userInteractionService)
+        : ViewModelBase.ViewModel
     {
-        private readonly ICommand _addEntryCommand;
-        private readonly ICommand _removeSelectedEntryCommand;
-        private ObservableCollection<EntryModel> _entries;
+        private ICommand _addEntryCommand;
+        private NotifyTaskCompletion<ObservableCollection<EntryModel>> _entries;
+        private ICommand _removeSelectedEntryCommand;
+
         private ICommand _saveEditCommand;
+
         private EntryModel _selectedEntry;
         private int _selectedEntryIndex;
         private TermModel _selectedTerm;
@@ -26,31 +32,23 @@ namespace InterpretBank.TermbaseViewer.ViewModel
         private string _sourceLanguageName;
         private Image _targetLanguageFlag;
         private string _targetLanguageName;
+        public ICommand AddEntryCommand => _addEntryCommand ??= new RelayCommand(s => OpenAddTermPopup(null, null));
 
-        public TermbaseViewerViewModel(ITerminologyService terminologyService, IUserInteractionService userInteractionService)
-        {
-            TerminologyService = terminologyService;
-            UserInteractionService = userInteractionService;
-        }
-
-        public ICommand AddEntryCommand => _addEntryCommand ?? new RelayCommand(s => OpenAddTermPopup(null, null));
-
-        public ObservableCollection<EntryModel> Entries
+        public NotifyTaskCompletion<ObservableCollection<EntryModel>> Entries
         {
             get => _entries;
             set
             {
-                var previousTerm = SelectedEntry;
                 if (!SetField(ref _entries, value)) return;
 
-                SetEntryNames(_entries);
-                MoveSourceAndTargetTermsFirst();
-                SetSelectedEntry(previousTerm);
+                if (_entries == null) return;
+                _entries.PropertyChanged -= Entries_PropertyChanged;
+                _entries.PropertyChanged += Entries_PropertyChanged;
             }
         }
 
-        public List<string> Glossaries { get; set; }
-        public ICommand RemoveSelectedEntryCommand => _removeSelectedEntryCommand ?? new RelayCommand(RemoveSelectedEntry);
+        public ICommand RemoveSelectedEntryCommand => _removeSelectedEntryCommand ??= new RelayCommand(RemoveSelectedEntry);
+
         public ICommand SaveEditCommand => _saveEditCommand ??= new RelayCommand(UpdateTerm);
 
         public EntryModel SelectedEntry
@@ -95,16 +93,21 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             set => SetField(ref _targetLanguageName, value);
         }
 
-        public IUserInteractionService UserInteractionService { get; set; }
+        public IUserInteractionService UserInteractionService { get; set; } = userInteractionService;
+
+        private List<string> Glossaries { get; set; }
+
         private Language SourceLanguage { get; set; }
 
         private Language TargetLanguage { get; set; }
 
-        private ITerminologyService TerminologyService { get; set; }
+        private ITerminologyService TerminologyService { get; set; } = terminologyService;
 
         public void LoadTerms()
         {
-            Entries = TerminologyService.GetEntriesFromDb(Glossaries);
+            Entries = null;
+            Entries = new NotifyTaskCompletion<ObservableCollection<EntryModel>>(Task.Run(() =>
+                TerminologyService.GetEntriesFromDb(Glossaries)));
         }
 
         public void OpenAddTermPopup(string source, string target)
@@ -154,10 +157,21 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             newEntryModel.GlossaryName = glossaryName;
 
             SetEntryName(newEntryModel);
-            Entries.Add(newEntryModel);
+            Entries.Result.Add(newEntryModel);
         }
 
-        private bool IsActionSuccessful<T>(ActionResult<T> actionResult)
+        private void Entries_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Status")
+            {
+                var previousTerm = SelectedEntry;
+                SetEntryNames(Entries.Result);
+                MoveSourceAndTargetTermsFirst();
+                SetSelectedEntry(previousTerm);
+            }
+        }
+
+            private bool IsActionSuccessful<T>(ActionResult<T> actionResult)
         {
             if (actionResult.Success) return true;
 
@@ -167,7 +181,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
         private void MoveSourceAndTargetTermsFirst()
         {
-            foreach (var entryModel in Entries)
+            foreach (EntryModel entryModel in Entries.Result)
             {
                 var sourceTerm = entryModel.Terms.FirstOrDefault(t => t.LanguageName == SourceLanguageName);
                 var targetTerm = entryModel.Terms.FirstOrDefault(t => t.LanguageName == TargetLanguageName);
@@ -187,11 +201,19 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             if (confirmation)
             {
                 TerminologyService.RemoveTerm(SelectedEntry);
-                Entries.Remove(SelectedEntry);
+                Entries.Result.Remove(SelectedEntry);
             }
         }
 
-        private void SetEntryNames(ObservableCollection<EntryModel> entries) => entries.ForEach(SetEntryName);
+        private void SetEntryNames(ObservableCollection<EntryModel> entries)
+        {
+            //var collectionView = CollectionViewSource.GetDefaultView(Entries);
+
+            foreach (EntryModel entry in entries)
+            {
+                SetEntryName(entry);
+            }
+        }
 
         private void SetLanguagePair(Language sourceLanguage, Language targetLanguage)
         {
@@ -207,9 +229,9 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
         private void SetSelectedEntry(EntryModel previousTerm)
         {
-            if (Entries.Contains(previousTerm))
-                SelectedEntry = Entries.FirstOrDefault(e => e.Equals(previousTerm));
-            else if (Entries.Any()) SelectedEntry = Entries.FirstOrDefault();
+            if (Entries.Result.Contains(previousTerm))
+                SelectedEntry = Entries.Result.FirstOrDefault(e => e.Equals(previousTerm));
+            else if (Entries.Result.Any()) SelectedEntry = Entries.Result.FirstOrDefault();
         }
 
         private void UpdateTerm(object obj)

@@ -6,6 +6,7 @@ using InterpretBank.SettingsService.Model;
 using System;
 using System.Collections.Generic;
 using System.Data.Linq;
+using System.Data.SQLite;
 using System.Linq;
 
 namespace InterpretBank.GlossaryService.Interface;
@@ -13,6 +14,7 @@ namespace InterpretBank.GlossaryService.Interface;
 public interface IInterpretBankDataContext : IDisposable
 {
     event Action ShouldReloadEvent;
+    SQLiteConnection SqLiteConnection { get; set; }
 
     void AddCompatibleLanguageEquivalentsFromImport(GlossaryImport glossaryImport, string glossaryName);
 
@@ -58,4 +60,5 @@ public interface IInterpretBankDataContext : IDisposable
 
     void UpdateTerm(TermChange termChange);
     void RemoveTerm(EntryModel selectedEntry);
+    List<DbGlossaryEntry> GetItems(List<string> glossaries, int skipCount, int takeCount);
 }

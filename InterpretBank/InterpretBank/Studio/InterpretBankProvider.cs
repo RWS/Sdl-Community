@@ -29,7 +29,7 @@ namespace InterpretBank.Studio
 
         public string Description => PluginResources.Plugin_Description;
 
-        public string Id  => "Interpret Bank";
+        public string Id => "Interpret Bank";
 
         public bool IsInitialized => true;
 
@@ -124,24 +124,50 @@ namespace InterpretBank.Studio
         {
             var words = Regex.Split(text, "\\s+");
 
-            List<SearchResult> results = null;
             Entries.Clear();
-            foreach (var word in words)
+
+            var config = StudioContext.ProjectsController.CurrentProject.GetTermbaseConfiguration();
+            var minScore = config.TermRecognitionOptions.MinimumMatchValue;
+
+            //foreach (var word in words)
+            //{
+            //    var localResults = mode switch
+            //    {
+            //        SearchMode.Fuzzy => GetFuzzyTerms(source, destination, word, minScore),
+            //        SearchMode.Normal => GetExactTerms(source, destination, word),
+            //        SearchMode.FullText => throw new NotImplementedException()
+            //    };
+            //    results.AddRange(localResults);
+            //}
+
+            //SearchMode.Normal => GetExactTerms(source, destination, word),
+            //SearchMode.FullText => throw new NotImplementedException()
+            List<SearchResult> results = [];
+            switch (mode)
             {
-                results = mode switch
-                {
-                    SearchMode.Fuzzy => GetFuzzyTerms(source, destination, word),
-                    SearchMode.Normal => GetExactTerms(source, destination, word),
-                    SearchMode.FullText => throw new NotImplementedException()
-                };
+                case SearchMode.Fuzzy:
+                    //var exactTerms = GetExactTerms2(source, destination, words);
+                    results = GetFuzzyTerms2(words, source, destination, minScore);
+                    //results.AddRange(exactTerms);
+                    break;
+
+                case SearchMode.Normal:
+                    foreach (var word in words)
+                        results.AddRange(GetExactTerms(source, destination, word));
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(mode));
             }
 
-            return results;
+            var searchResults = results.OrderByDescending(r => r.Score).ThenBy(r => r.Text.Length);
+            var scored = searchResults.Take(maxResultsCount).ToList();
+
+            return scored;
         }
 
         public void SetDefault(bool value)
         {
-            
         }
 
         public void Setup(Settings settings)
@@ -168,7 +194,7 @@ namespace InterpretBank.Studio
         private void AddResultToList(ILanguage destination, List<SearchResult> results, List<StudioTermEntry> terms, int score)
         {
             if (!terms.Any()) return;
-            var id = GetIndex();
+            //var id = GetIndex();
             results.Add(new SearchResult { Id = (int)terms[0].Id, Score = score, Text = terms[0].SearchText });
             Entries.Add(CreateEntry((int)terms[0].Id, terms, destination.Name));
         }
@@ -205,15 +231,36 @@ namespace InterpretBank.Studio
             return results;
         }
 
-        private List<SearchResult> GetFuzzyTerms(ILanguage source, ILanguage destination, string word)
+        private List<SearchResult> GetExactTerms2(ILanguage source, ILanguage destination, string[] words)
         {
-            var terms = TermSearchService.GetFuzzyTerms(word, source.Name, destination.Name, Settings.Glossaries);
+            var terms = TermSearchService.GetExactTerms2(words, source.Name, destination.Name, Settings.Glossaries);
 
             var results = new List<SearchResult>();
-            foreach (var term in terms)
-            {
-                AddResultToList(destination, results, new List<StudioTermEntry> { term }, term.Score);
-            }
+            AddResultToList(destination, results, terms, 100);
+
+            return results;
+        }
+
+        //private List<SearchResult> GetFuzzyTerms(ILanguage source, ILanguage destination, string word, int minScore)
+        //{
+        //    var terms = TermSearchService.GetFuzzyTerms(word, source.Name, destination.Name, Settings.Glossaries, minScore);
+
+        //    var results = new List<SearchResult>();
+        //    foreach (var term in terms)
+        //        AddResultToList(destination, results, [term], term.Score);
+
+        //    return results;
+        //}
+
+        private List<SearchResult> GetFuzzyTerms2(string[] words, ILanguage source, ILanguage destination, int minScore)
+        {
+            var termsDictionary =
+                TermSearchService.GetFuzzyTerms2(words, source.Name, destination.Name, Settings.Glossaries, minScore);
+
+            var results = new List<SearchResult>();
+            var studioTermEntries = termsDictionary.SelectMany(termsEntry => termsEntry.Value);
+            foreach (var term in studioTermEntries)
+                AddResultToList(destination, results, [term], term.Score);
 
             return results;
         }
