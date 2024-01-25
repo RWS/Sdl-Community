@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
@@ -42,32 +43,12 @@ namespace InterpretBank.Model
             set => SetField(ref _term, value);
         }
 
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((TermModel)obj);
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hashCode = (_firstComment != null ? _firstComment.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (_secondComment != null ? _secondComment.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (_term != null ? _term.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (LanguageName != null ? LanguageName.GetHashCode() : 0);
-                return hashCode;
-            }
-        }
-
         protected bool Equals(TermModel other)
         {
             return _firstComment == other._firstComment && _secondComment == other._secondComment && _term == other._term && LanguageName == other.LanguageName;
         }
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

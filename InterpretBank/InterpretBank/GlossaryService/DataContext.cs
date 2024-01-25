@@ -12,6 +12,11 @@ namespace InterpretBank.GlossaryService
         {
         }
 
+        public MyDataContext(string dbFilepath) : base(new SQLiteConnection($"Data Source={dbFilepath}"))
+        {
+            
+        }
+
         public Table<DbGlossaryEntry> GlossaryEntries => GetTable<DbGlossaryEntry>();
     }
 }

@@ -187,20 +187,14 @@ public class TerminologyService : ITerminologyService
         InterpretBankDataContext.RemoveTerm(selectedEntry);
     }
 
-    public void SaveAllTerms(List<TermModel> changedTerms)
-    {
-        //InterpretBankDataContext.CommitAllChanges(changedTerms);
-    }
-
     public void Setup(string settingsDatabaseFilepath)
     {
         InterpretBankDataContext.Setup(settingsDatabaseFilepath);
     }
 
-    public void UpdateTerm(TermChange termChange)
-    {
-        InterpretBankDataContext.UpdateTerm(termChange);
-    }
+    public void UpdateTerm(TermChange termChange) => InterpretBankDataContext.UpdateEntry(termChange);
+
+    public void UpdateEntry(EntryChange entryChange) => InterpretBankDataContext.UpdateEntry(entryChange);
 
     private static List<string> GetTermColumns(int targetLanguageIndex, int sourceLanguageIndex = -1)
     {

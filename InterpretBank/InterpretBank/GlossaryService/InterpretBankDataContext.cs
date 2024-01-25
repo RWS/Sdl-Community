@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Data.Linq;
 using System.Data.SQLite;
 using System.Linq;
+using System.Windows.Controls;
 
 namespace InterpretBank.GlossaryService;
 
@@ -315,18 +316,53 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         });
     }
 
-    public void UpdateTerm(TermChange termChange)
+    public void UpdateEntry(EntryChange entryChange)
     {
-        var languageIndex = GetLanguageIndex(termChange.LanguageName);
-        var dbTermToBeUpdated = GetTable<DbGlossaryEntry>().FirstOrDefault(t => t.Id == termChange.EntryId);
-        if (dbTermToBeUpdated is null) return;
+        using var dataContext = GetDataContext();
 
-        dbTermToBeUpdated[$"Term{languageIndex}"] = termChange.Term;
-        dbTermToBeUpdated[$"Comment{languageIndex}a"] = termChange.FirstComment;
-        dbTermToBeUpdated[$"Comment{languageIndex}b"] = termChange.SecondComment;
+        var dbTerms = dataContext.GetTable<DbGlossaryEntry>();
 
-        SubmitData();
+        DbGlossaryEntry updateTerm = null;
+        foreach (var term in dbTerms)
+        {
+            if (term.Id == entryChange.EntryId) updateTerm = term;
+        }
+
+        if (updateTerm is null) return;
+        updateTerm["CommentAll"] = entryChange.EntryComment;
+
+        dataContext.SubmitChanges();
     }
+
+    private MyDataContext GetDataContext()
+    {
+        var dataContext = new MyDataContext(SqLiteConnection.FileName);
+        return dataContext;
+    }
+
+    public void UpdateEntry(TermChange termChange)
+    {
+        using var dataContext = GetDataContext();
+
+        var languageIndex = GetLanguageIndex(termChange.LanguageName);
+        var dbTerms = dataContext.GetTable<DbGlossaryEntry>();
+
+        DbGlossaryEntry updateTerm = null;
+        foreach (var term in dbTerms)
+        {
+            if (term.Id == termChange.EntryId) updateTerm = term;
+        }
+
+        if (updateTerm is null) return;
+
+        updateTerm[$"Term{languageIndex}"] = termChange.Term;
+        updateTerm[$"Comment{languageIndex}a"] = termChange.FirstComment;
+        updateTerm[$"Comment{languageIndex}b"] = termChange.SecondComment;
+
+        dataContext.SubmitChanges();
+    }
+
+   
 
     //public void Reset()
     //{

@@ -44,7 +44,6 @@ namespace InterpretBank.TerminologyService.Interface
 
         void RemoveTerm(EntryModel selectedEntry);
 
-        void SaveAllTerms(List<TermModel> changedTerms);
 
         void Setup(string settingsDatabaseFilepath);
 
@@ -53,5 +52,7 @@ namespace InterpretBank.TerminologyService.Interface
         //IItemsProvider<EntryModel> GetEntriesProvider(List<string> glossaries, string sourceLanguageName);
         public ConcurrentDictionary<string, List<StudioTermEntry>> GetFuzzyTerms(string[] words, string sourceLanguage,
             string targetLanguage, List<string> glossaries, int minScore);
+
+        void UpdateEntry(EntryChange entryChange);
     }
 }

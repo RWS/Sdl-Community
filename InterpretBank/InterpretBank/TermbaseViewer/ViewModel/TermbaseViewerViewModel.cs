@@ -3,12 +3,11 @@ using InterpretBank.Extensions;
 using InterpretBank.Helpers;
 using InterpretBank.Interface;
 using InterpretBank.Model;
-using InterpretBank.Studio;
 using InterpretBank.TerminologyService.Interface;
 using Sdl.Core.Globalization;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,8 +27,6 @@ namespace InterpretBank.TermbaseViewer.ViewModel
         private ICommand _saveEditCommand;
 
         private EntryModel _selectedEntry;
-        private int _selectedEntryIndex;
-        private TermModel _selectedTerm;
         private Image _sourceLanguageFlag;
         private string _sourceLanguageName;
         private Image _targetLanguageFlag;
@@ -57,18 +54,6 @@ namespace InterpretBank.TermbaseViewer.ViewModel
         {
             get => _selectedEntry;
             set => SetField(ref _selectedEntry, value);
-        }
-
-        public int SelectedEntryIndex
-        {
-            get => _selectedEntryIndex;
-            set => SetField(ref _selectedEntryIndex, value);
-        }
-
-        public TermModel SelectedTerm
-        {
-            get => _selectedTerm;
-            set => SetField(ref _selectedTerm, value);
         }
 
         public Image SourceLanguageFlag
@@ -105,17 +90,28 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
         private ITerminologyService TerminologyService { get; set; } = terminologyService;
 
+        public void InitializeEntry(EntryModel entryModel)
+        {
+            entryModel.Name =
+                entryModel.Terms.FirstOrDefault(t => t.LanguageName == SourceLanguageName)?.Term;
+        }
+
         public void LoadTerms()
         {
             Entries = null;
-            Entries = new NotifyTaskCompletion<ObservableCollection<EntryModel>>(Task.Run(() =>
-                TerminologyService.GetEntriesFromDb(Glossaries)));
+
+            var loadEntriesFromDb = new Task<ObservableCollection<EntryModel>>(() =>
+                TerminologyService.GetEntriesFromDb(Glossaries));
+
+            Entries = new NotifyTaskCompletion<ObservableCollection<EntryModel>>(loadEntriesFromDb);
+
+            loadEntriesFromDb.RunSynchronously();
         }
 
         public void OpenAddTermPopup(string source, string target)
         {
             UserInteractionService.GetNewTermDetailsFromUser(Glossaries, SourceLanguageName, TargetLanguageName, source,
-                target /*SourceLanguageFlag, TargetLanguageFlag*/);
+                target);
 
             UserInteractionService.GotTermDetailsEvent -= AddTerm;
             UserInteractionService.GotTermDetailsEvent += AddTerm;
@@ -131,12 +127,6 @@ namespace InterpretBank.TermbaseViewer.ViewModel
         {
             SetLanguagePair(sourceLanguage, targetLanguage);
             LoadTerms();
-        }
-
-        public void InitializeEntry(EntryModel entryModel)
-        {
-            entryModel.Name =
-                entryModel.Terms.FirstOrDefault(t => t.LanguageName == SourceLanguageName)?.Term;
         }
 
         public void Setup(Language sourceLanguage, Language targetLanguage, List<string> glossaries, string databaseFilePath)
@@ -169,13 +159,25 @@ namespace InterpretBank.TermbaseViewer.ViewModel
         {
             if (e.PropertyName != "Status") return;
 
+            Entries.Result.ForEach(entry => entry.Terms.ForEach(t =>
+            {
+                t.PropertyChanged -= TermChanged;
+                t.PropertyChanged += TermChanged;
+            }));
+
             var previousTerm = SelectedEntry;
             InitializeEntries(Entries.Result);
             MoveSourceAndTargetTermsFirst();
             SetSelectedEntry(previousTerm);
         }
 
-            private bool IsActionSuccessful<T>(ActionResult<T> actionResult)
+        private void InitializeEntries(ObservableCollection<EntryModel> entries)
+        {
+            foreach (var entry in entries)
+                InitializeEntry(entry);
+        }
+
+        private bool IsActionSuccessful<T>(ActionResult<T> actionResult)
         {
             if (actionResult.Success) return true;
 
@@ -208,12 +210,6 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             Entries.Result.Remove(SelectedEntry);
         }
 
-        private void InitializeEntries(ObservableCollection<EntryModel> entries)
-        {
-            foreach (var entry in entries)
-                InitializeEntry(entry);
-        }
-
         private void SetLanguagePair(Language sourceLanguage, Language targetLanguage)
         {
             SourceLanguage = sourceLanguage;
@@ -233,20 +229,38 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             else if (Entries.Result.Any()) SelectedEntry = Entries.Result.FirstOrDefault();
         }
 
+        private void TermChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var termModel = sender as TermModel;
+            if (termModel?.LanguageName == SourceLanguageName && e.PropertyName == nameof(TermModel.Term))
+                SelectedEntry.Name = termModel?.Term;
+        }
+
         private void UpdateTerm(object obj)
         {
-            if (obj is not TermModel { Modified: true } termModel) return;
-
-            termModel.Modified = false;
-            TerminologyService.UpdateTerm(new TermChange
+            switch (obj)
             {
-                EntryId = SelectedEntry.Id,
-                GlossaryName = SelectedEntry.GlossaryName,
-                LanguageName = termModel.LanguageName,
-                Term = termModel.Term,
-                FirstComment = termModel.FirstComment,
-                SecondComment = termModel.SecondComment,
-            });
+                case TermModel termModel:
+                    termModel.Modified = false;
+                    TerminologyService.UpdateTerm(new TermChange
+                    {
+                        EntryId = SelectedEntry.Id,
+                        GlossaryName = SelectedEntry.GlossaryName,
+                        LanguageName = termModel.LanguageName,
+                        Term = termModel.Term,
+                        FirstComment = termModel.FirstComment,
+                        SecondComment = termModel.SecondComment,
+                    });
+                    break;
+
+                case EntryModel entryModel:
+                    TerminologyService.UpdateEntry(new EntryChange
+                    {
+                        EntryId = entryModel.Id,
+                        EntryComment = entryModel.EntryComment
+                    });
+                    break;
+            }
         }
     }
 }

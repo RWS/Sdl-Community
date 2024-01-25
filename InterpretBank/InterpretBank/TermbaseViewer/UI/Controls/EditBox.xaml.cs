@@ -69,13 +69,6 @@ namespace InterpretBank.TermbaseViewer.UI.Controls
             SaveEditCommand?.Execute(SaveEditCommandParameter);
         }
 
-        //private void EditBoxHelper_SomeControlGotFocus(DependencyObject obj)
-        //{
-        //    if (TextBox.IsFocused) return;
-        //    SaveEditCommand?.Execute(SaveEditCommandParameter);
-        //    IsEditing = false;
-        //}
-
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
             IsEditing = true;
@@ -84,15 +77,15 @@ namespace InterpretBank.TermbaseViewer.UI.Controls
 
         private void KeyboardKeypress(object obj)
         {
+            if (obj == null) return;
             var parameter = obj.ToString();
             if (parameter == "ConfirmEdit")
             {
                 SaveEditCommand?.Execute(null);
                 var control =
-                    (((Parent as FrameworkElement).TemplatedParent as FrameworkElement).TemplatedParent as
+                    (((Parent as FrameworkElement)?.TemplatedParent as FrameworkElement)?.TemplatedParent as
                         FrameworkElement);
 
-                //control?.Focus();
                 Keyboard.Focus(control);
                 IsEditing = false;
             }

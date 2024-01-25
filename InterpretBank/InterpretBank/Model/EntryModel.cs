@@ -6,11 +6,25 @@ namespace InterpretBank.Model
 {
     public class EntryModel : ViewModelBase.ViewModel, IEquatable<EntryModel>
     {
+        private string _entryComment;
         private ObservableCollection<TermModel> _terms;
-        public string EntryComment { get; set; }
+        private string _name;
+
+        public string EntryComment
+        {
+            get => _entryComment;
+            set => SetField(ref _entryComment, value);
+        }
+
         public string GlossaryName { get; set; }
         public int Id { get; set; }
-        public string Name { get; set; }
+
+        public string Name
+        {
+            get => _name;
+            set => SetField(ref _name, value);
+        }
+
         public string SubGlossaryName { get; set; }
 
         public ObservableCollection<TermModel> Terms
@@ -22,19 +36,6 @@ namespace InterpretBank.Model
         public bool Equals(EntryModel other)
         {
             return AreCollectionsEqual(other) && EntryComment == other.EntryComment && GlossaryName == other.GlossaryName && Name == other.Name && SubGlossaryName == other.SubGlossaryName;
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hashCode = 0;
-                hashCode = (hashCode * 397) ^ (EntryComment != null ? EntryComment.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (GlossaryName != null ? GlossaryName.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (Name != null ? Name.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (SubGlossaryName != null ? SubGlossaryName.GetHashCode() : 0);
-                return hashCode;
-            }
         }
 
         private bool AreCollectionsEqual(EntryModel other)
