@@ -109,7 +109,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
 		public FilterApplier FilterApplier { get; set; } = new();
 
 		public bool HasSdlMtCloudRelatedInfo =>
-				_editorController?.ActiveDocument?.ActiveSegmentPair?.Properties?.TranslationOrigin?.MetaDataContainsKey("quality_estimation") ?? false;
+				_activeDocument?.SegmentPairs?.Any(x => x.Properties?.TranslationOrigin?.MetaDataContainsKey("quality_estimation") ?? false) ?? false;
 
 		public bool HasTranslationOriginMetadata => TranslationOriginData != null;
 
@@ -515,7 +515,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
 				return;
 			}
 
-			var pattern = @"<(\w+)([^>]*)>(.*?)<\/\1>";
+			var pattern = @"<(\w+[-]?\w*)([^>]*)>(.*?)<\/\1>";
 			var example = tag.ToString();
 			var match = Regex.Match(example, pattern, RegexOptions.Singleline);
 
@@ -537,6 +537,27 @@ namespace Sdl.Community.DsiViewer.ViewModel
 			{
 				return;
 			}
+
+			var tagId = tag.TagProperties.TagId.Id;
+			if (tags.Any(x => x.Id == tagId))
+			{
+				return;
+			}
+
+
+			var tagString = tag.ToString();
+			var pattern = @"<(?<TagName>\w+)(?<Attributes>.*?)>";
+
+			var match = Regex.Match(tagString, pattern, RegexOptions.Singleline);
+
+			var newTagModel = new DSITagModel()
+			{
+				Id = tagId,
+				StartTag = $"<{match.Groups["TagName"].Value}\\>",
+				Attributes = match.Groups["Attributes"].Value
+			};
+
+			tags.Add(newTagModel);
 		}
 
 		private void ExtractStructureTagProperties(IStructureTag tag, List<DSITagModel> tags)

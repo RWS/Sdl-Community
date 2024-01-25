@@ -16,6 +16,14 @@ namespace Sdl.Community.DsiViewer.TellMe
 			new HelpAction
 			{
 				Keywords = new []{ "dsi", "viewer", "metadata", "community", "support", "help" }
+			},
+			new SourceCodeAction()
+			{
+				Keywords = new []{ "dsi", "viewer", "metadata", "community", "source code", "github" }
+			},
+			new SettingsAction()
+			{
+				Keywords = new []{ "dsi", "viewer", "metadata", "community", "settings" }
 			}
 		};
 	}

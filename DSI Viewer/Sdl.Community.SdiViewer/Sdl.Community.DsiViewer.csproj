@@ -109,6 +109,8 @@
     <Compile Include="Studio\DisplayFilters\SdlMtCloudDisplayFilter.cs" />
     <Compile Include="TellMe\CommunitySupportAction.cs" />
     <Compile Include="TellMe\DsiViewerTellMeAction.cs" />
+    <Compile Include="TellMe\SettingsAction.cs" />
+    <Compile Include="TellMe\SourceCodeAction.cs" />
     <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="TellMe\HelpAction.cs" />
     <Compile Include="ViewModel\DsiViewerViewModel.cs" />
