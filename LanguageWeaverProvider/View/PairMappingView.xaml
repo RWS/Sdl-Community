@@ -94,6 +94,7 @@
 				<DataGrid Grid.Row="1"
 						  x:Name="myDataGrid"
 						  ItemsSource="{Binding PairMappings}"
+						  SelectedItem="{Binding SelectedPairMapping}"
 						  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
 						  MinRowHeight="30"
 						  BorderBrush="#d4d4d4"

@@ -25,6 +25,7 @@ namespace LanguageWeaverProvider.ViewModel
 		ISegmentPair _activeSegment;
 		QualityEstimations _originalQE;
 		QualityEstimations _selectedQE;
+		string _previousFeedbackmessage;
 		string _feedbackMessage;
 		string _mtTranslation;
 		bool _canSendFeedback;
@@ -165,9 +166,9 @@ namespace LanguageWeaverProvider.ViewModel
 				return;
 			}
 
+			_editController.ActiveDocument.SegmentsConfirmationLevelChanged += SegmentConfirmationLevelChanged;
 			_editController.ActiveDocument.ActiveSegmentChanged += ActiveSegmentChanged;
 			_editController.ActiveDocument.SegmentsTranslationOriginChanged += ActiveSegmentMetadataUpdated;
-			_editController.ActiveDocument.SegmentsConfirmationLevelChanged += SegmentConfirmationLevelChanged;
 			_activeSegment = _editController.ActiveDocument.GetActiveSegmentPair();
 			GetSegmentMetadata(_activeSegment);
 		}
@@ -232,11 +233,11 @@ namespace LanguageWeaverProvider.ViewModel
 			bool feedbackSent;
 			if (SelectedProvider.PluginVersion == PluginVersion.LanguageWeaverCloud)
 			{
-				feedbackSent = await SendCloudFeedback(_activeSegment);
+				feedbackSent = await SendCloudFeedback(currentSegment);
 			}
 			else if (SelectedProvider.PluginVersion == PluginVersion.LanguageWeaverEdge)
 			{
-				feedbackSent = await SendEdgeFeedback(_activeSegment);
+				feedbackSent = await SendEdgeFeedback(currentSegment);
 			}
 			else
 			{
@@ -373,9 +374,10 @@ namespace LanguageWeaverProvider.ViewModel
 				QualityEstimationMT = IsQeEnabled ? OriginalQE.ToString() : null
 			};
 
+			var feedbackMessage = string.IsNullOrEmpty(FeedbackMessage) ? _previousFeedbackmessage : FeedbackMessage;
 			var isAdapted = IsAdapted(segmentPair.Properties);
 			var improvement = new Improvement(segmentPair.Target.ToString());
-			var rating = new Rating(FeedbackMessage, TranslationErrors);
+			var rating = new Rating(feedbackMessage, TranslationErrors);
 			var feedbackRequest = new FeedbackRequest()
 			{
 				Translation = translation,
@@ -394,16 +396,28 @@ namespace LanguageWeaverProvider.ViewModel
 				return false;
 			}
 
+			var originalTranslation = segmentPair.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_Translation);
 			var feedback = new List<KeyValuePair<string, string>>
 			{
 				new("sourceText", segmentPair.Source.ToString()),
 				new("languagePairId", segmentPair.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_ShortModelName)),
-				new("machineTranslation", segmentPair.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_Translation))
+				new("machineTranslation", originalTranslation)
 			};
 
-			if (IsAdapted(segmentPair.Properties))
+			if (!string.IsNullOrEmpty(_previousFeedbackmessage))
 			{
-				feedback.Add(new("suggestedTranslation", segmentPair.Target.ToString()));
+				feedback.Add(new("comment", _previousFeedbackmessage));
+			}
+			else if (!string.IsNullOrEmpty(FeedbackMessage))
+			{
+				feedback.Add(new("comment", FeedbackMessage));
+			}
+
+			var targetSegmentString = segmentPair.Target.ToString();
+			if (IsAdapted(segmentPair.Properties)
+			 && !originalTranslation.Equals(targetSegmentString))
+			{
+				feedback.Add(new("suggestedTranslation", targetSegmentString));
 			}
 
 			return await EdgeService.SendFeedback(SelectedProvider.AccessToken, feedback);
@@ -444,6 +458,7 @@ namespace LanguageWeaverProvider.ViewModel
 
 		private void ResetView()
 		{
+			_previousFeedbackmessage = FeedbackMessage;
 			FeedbackMessage = string.Empty;
 			TranslationErrors.ResetValues();
 		}

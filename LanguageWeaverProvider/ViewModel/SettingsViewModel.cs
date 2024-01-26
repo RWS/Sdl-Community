@@ -1,11 +1,10 @@
 ﻿using System;
-using System.IO;
 using System.Windows.Input;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Extensions;
+using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using Microsoft.Win32;
-using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace LanguageWeaverProvider.ViewModel
 {
@@ -175,7 +174,7 @@ namespace LanguageWeaverProvider.ViewModel
 			CustomName = TranslationOptions.ProviderSettings.CustomName;
 			UsePreLookup = TranslationOptions.ProviderSettings.UsePrelookup;
 			UsePostLookup = TranslationOptions.ProviderSettings.UsePostLookup;
-			PreLookupFilePath = TranslationOptions.ProviderSettings.PostLookupFilePath;
+			PreLookupFilePath = TranslationOptions.ProviderSettings.PreLookupFilePath;
 			PostLookupFilePath = TranslationOptions.ProviderSettings.PostLookupFilePath;
 		}
 
@@ -197,12 +196,12 @@ namespace LanguageWeaverProvider.ViewModel
 					CustomName = string.Empty;
 					break;
 
-				case nameof(PostLookupFilePath):
-					PostLookupFilePath = string.Empty;
-					break;
-
 				case nameof(PreLookupFilePath):
 					PreLookupFilePath = string.Empty;
+					break;
+
+				case nameof(PostLookupFilePath):
+					PostLookupFilePath = string.Empty;
 					break;
 
 				default:
@@ -226,17 +225,48 @@ namespace LanguageWeaverProvider.ViewModel
 
 			switch (target)
 			{
-				case nameof(PostLookupFilePath):
-					PostLookupFilePath = filePath;
-					break;
-
 				case nameof(PreLookupFilePath):
 					PreLookupFilePath = filePath;
+					ValidateLookupFile(PreLookupFilePath, target);
+					break;
+
+				case nameof(PostLookupFilePath):
+					PostLookupFilePath = filePath;
+					ValidateLookupFile(PostLookupFilePath, target);
 					break;
 
 				default:
 					break;
 			}
+		}
+
+		private void ValidateLookupFile(string filePath, string propertyName)
+		{
+			var lookup = new LWSegmentEditor(filePath);
+			if (lookup.IsValid)
+			{
+				return;
+			}
+
+			string target;
+			switch (propertyName)
+			{
+				case nameof(PreLookupFilePath):
+					UsePreLookup = false;
+					target = "Pre-Lookup Find/Replace";
+					break;
+
+				case nameof(PostLookupFilePath):
+					UsePostLookup = false;
+					target = "Post-Lookup Find/Replace";
+					break;
+
+				default:
+					return;
+			}
+
+			Clear(propertyName);
+			ErrorHandling.ShowDialog(null, "Oops! An error occurred", $"The chosen file is not in a valid format, and the {target} option has been disabled for now. Please see documentation for assistance.");
 		}
 	}
 }

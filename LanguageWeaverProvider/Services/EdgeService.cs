@@ -266,10 +266,15 @@ namespace LanguageWeaverProvider.Services
 				var requestUri = $"{accessToken.BaseUri}api/v2/feedback";
 				var content = new FormUrlEncodedContent(feedback);
 
-				var result = await Service.SendRequest(accessToken, HttpMethod.Post, requestUri, content);
-				result.EnsureSuccessStatusCode();
+				var response = await Service.SendRequest(accessToken, HttpMethod.Post, requestUri, content);
+				if (!response.IsSuccessStatusCode)
+				{
+					var responseContent = await response.Content.ReadAsStringAsync();
+					var error = JsonConvert.DeserializeObject<EdgeFeedbackError>(responseContent);
+					ErrorHandling.ShowDialog(null, $"Code {error.Error.Code}: {error.Error.Message}", error.Error.Details);
+				}
 
-				return true;
+				return response.IsSuccessStatusCode;
 			}
 			catch (Exception ex)
 			{

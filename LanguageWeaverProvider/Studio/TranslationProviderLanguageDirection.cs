@@ -100,13 +100,14 @@ namespace LanguageWeaverProvider
 
 			if (UsePreLookup)
 			{
-				Segments = ModifySegmentsOnPreLookup(_preLookupEditor, Segments);
+				Segments = ModifySegmentsOnLookup(_preLookupEditor, Segments);
 			}
 
 			var mappedPair = GetMappedPair();
 			var xliffFile = CreateXliffFile(Segments);
 			var translation = GetTranslation(mappedPair, xliffFile);
-			var translatedSegments = translation.GetTargetSegments();
+			var evaluatedSegments = translation.GetTargetSegments();
+			var translatedSegments = evaluatedSegments.Select(seg => seg.Segment).ToList();
 			if (Emojis.Any())
 			{
 				ReconstructBaseSegments(translatedSegments, Emojis);
@@ -114,12 +115,11 @@ namespace LanguageWeaverProvider
 
 			if (UsePostLookup)
 			{
-				Segments = ModifySegmentsOnPreLookup(_postLookupEditor, Segments);
+				translatedSegments = ModifySegmentsOnLookup(_postLookupEditor, translatedSegments);
 			}
 
 			var fileName = _batchTaskWindow is null ? string.Empty : System.IO.Path.GetFileName(translationUnits.First().DocumentProperties.LastOpenedAsPath);
 			var translatedSegmentsIndex = 0;
-
 			for (var i = 0; i < mask.Length; i++)
 			{
 				if (ShouldSkipSearchResult(searchResults[i], mask[i], segmentsInput[i]))
@@ -128,25 +128,26 @@ namespace LanguageWeaverProvider
 				}
 
 				_currentTranslationUnit = translationUnits[i];
-				var currentSegment = segmentsInput[i];
+				var currentSegment = Segments[translatedSegmentsIndex];
+				var evaluatedSegment = evaluatedSegments[translatedSegmentsIndex];
 				var translatedSegment = translatedSegments[translatedSegmentsIndex++];
 
 				searchResults[i] = new SearchResults { SourceSegment = currentSegment.Duplicate() };
-				searchResults[i].Add(CreateSearchResult(currentSegment, translatedSegment.Segment));
-				SetMetadataOnSegment(translatedSegment, mappedPair, fileName);
+				searchResults[i].Add(CreateSearchResult(currentSegment, translatedSegment));
+				SetMetadataOnSegment(evaluatedSegment, mappedPair, fileName);
 			}
 
 			ManageBatchTaskWindow();
 			return searchResults;
 		}
 
-		private List<Segment> ModifySegmentsOnPreLookup(LWSegmentEditor segmentEditor, List<Segment> segments)
+		private List<Segment> ModifySegmentsOnLookup(LWSegmentEditor segmentEditor, List<Segment> segments)
 		{
-			var output = new List<Segment>();
-			foreach (var segment in segments)
+			var editedSegments = new List<Segment>();
+			foreach (var inSegment in segments)
 			{
-				var newSegment = new Segment(segment.Culture);
-				foreach (var element in segment.Elements)
+				var segment = new Segment(inSegment.Culture);
+				foreach (var element in inSegment.Elements)
 				{
 					if (element.GetType() == typeof(Tag))
 					{
@@ -154,13 +155,13 @@ namespace LanguageWeaverProvider
 						continue;
 					}
 
-					segment.Add(_preLookupEditor.EditText(element.ToString()));
+					segment.Add(segmentEditor.EditText(element.ToString()));
 				}
 
-				output.Add(newSegment);
+				editedSegments.Add(segment);
 			}
 
-			return output;
+			return editedSegments;
 		}
 
 		private bool ShouldResendDrafts()
@@ -365,15 +366,15 @@ namespace LanguageWeaverProvider
 			return translatableSegments;
 		}
 
-		private void ReconstructBaseSegments(List<EvaluatedSegment> translations, List<string> emojis)
+		private void ReconstructBaseSegments(List<Segment> translations, List<string> emojis)
 		{
 			var anchorCount = 1;
 			var currentEmojiIndex = 0;
 			foreach (var translation in translations)
 			{
-				for (var i = 0; i < translation.Segment.Elements.Count; i++)
+				for (var i = 0; i < translation.Elements.Count; i++)
 				{
-					var element = translation.Segment.Elements[i];
+					var element = translation.Elements[i];
 					if (element is not Tag tag || !tag.TagID.Contains("Emoji"))
 					{
 						continue;
@@ -381,7 +382,7 @@ namespace LanguageWeaverProvider
 
 					if (tag.TagID.Contains("textEmoji"))
 					{
-						translation.Segment.Elements[i] = new Text(emojis[currentEmojiIndex++]);
+						translation.Elements[i] = new Text(emojis[currentEmojiIndex++]);
 						continue;
 					}
 

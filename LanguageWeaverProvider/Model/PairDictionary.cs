@@ -1,5 +1,6 @@
 ﻿using System;
 using LanguageWeaverProvider.ViewModel;
+using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 
 namespace LanguageWeaverProvider.Model
@@ -42,6 +43,11 @@ namespace LanguageWeaverProvider.Model
 		public LanguagePair LanguagePair { get; set; }
 
 		public event EventHandler IsSelectedChanged;
+
+		public PairDictionary Clone()
+		{
+			return MemberwiseClone() as PairDictionary;
+		}
 
 		private void OnIsSelectedChanged()
 		{

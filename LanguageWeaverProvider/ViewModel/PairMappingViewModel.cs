@@ -28,6 +28,7 @@ namespace LanguageWeaverProvider.ViewModel
 		string _windowTitle;
 
 		ObservableCollection<PairMapping> _pairMappings;
+		PairMapping _selectedPairMapping;
 
 		public PairMappingViewModel(ITranslationOptions translationOptions, LanguagePair[] languagePairs)
 		{
@@ -91,6 +92,16 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 		}
 
+		public PairMapping SelectedPairMapping
+		{
+			get => _selectedPairMapping;
+			set
+			{
+				_selectedPairMapping = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public bool SaveChanges { get; private set; }
 
 		public ICommand SaveCommand { get; private set; }
@@ -142,6 +153,10 @@ namespace LanguageWeaverProvider.ViewModel
 			_translationOptions.ProviderSettings.IncludeTags = SettingsView.IncludeTags;
 			_translationOptions.ProviderSettings.UseCustomName = SettingsView.UseCustomName;
 			_translationOptions.ProviderSettings.CustomName = SettingsView.CustomName;
+			_translationOptions.ProviderSettings.UsePrelookup = SettingsView.UsePreLookup;
+			_translationOptions.ProviderSettings.PreLookupFilePath = SettingsView.PreLookupFilePath;
+			_translationOptions.ProviderSettings.UsePostLookup = SettingsView.UsePostLookup;
+			_translationOptions.ProviderSettings.PostLookupFilePath = SettingsView.PostLookupFilePath;
 			CloseEventRaised.Invoke();
 		}
 
@@ -284,7 +299,9 @@ namespace LanguageWeaverProvider.ViewModel
 					continue;
 				}
 
-				var models = accountModels.Where(model => model.SourceLanguageId.Equals(mappedSource.LanguageCode) && model.TargetLanguageId.Equals(mappedTarget.LanguageCode)).ToList();
+				var models = accountModels.Where(model => model.SourceLanguageId.Equals(mappedSource.LanguageCode) && model.TargetLanguageId.Equals(mappedTarget.LanguageCode))
+										  .Select(x => x.Clone())
+										  .ToList();
 				if (!models.Any())
 				{
 					models.Add(new PairModel()
@@ -298,6 +315,7 @@ namespace LanguageWeaverProvider.ViewModel
 
 				var dictionaries = accountDictionaries.Where(dictionary => dictionary.Source.Equals(mappedSource.LanguageCode) && dictionary.Target.Equals(mappedTarget.LanguageCode))
 													  .OrderBy(dictionary => dictionary.Name)
+													  .Select(dictionary => dictionary.Clone())
 													  .ToList();
 				dictionaries.ForEach(x => x.LanguagePair = languagePair);
 

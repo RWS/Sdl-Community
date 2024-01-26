@@ -33,5 +33,11 @@ namespace LanguageWeaverProvider.Model
 			>= 15 => $"{Name.Substring(0, 12)}..",
 			_ => Name
 		};
+
+
+		public LinguisticOption Clone()
+		{
+			return MemberwiseClone() as LinguisticOption;
+		}
 	}
 }

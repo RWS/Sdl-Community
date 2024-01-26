@@ -356,6 +356,7 @@ namespace LanguageWeaverProvider.Services
 			httpClient.DefaultRequestHeaders.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
 			var translationRequestModelJson = JsonConvert.SerializeObject(translationRequestModel);
 			var response = await httpClient.PostAsync($"{accessToken.BaseUri}v4/mt/translations/async", new StringContent(translationRequestModelJson, Encoding.UTF8, "application/json"));
+			var responseContent = await response.Content.ReadAsStringAsync();
 			response.EnsureSuccessStatusCode();
 
 			return await response.Content.ReadAsStringAsync();

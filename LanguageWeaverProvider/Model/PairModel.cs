@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace LanguageWeaverProvider.Model
 {
@@ -25,5 +26,13 @@ namespace LanguageWeaverProvider.Model
 		public bool AdaptationSupport { get; set; }
 		
 		public List<LinguisticOption> LinguisticOptions { get; set; }
+
+		public PairModel Clone()
+		{
+			var clonedPair = MemberwiseClone() as PairModel;
+			clonedPair.LinguisticOptions = LinguisticOptions?.Select(lo => lo.Clone())?.ToList();
+
+			return clonedPair;
+		}
 	}
 }

@@ -89,6 +89,11 @@ namespace LanguageWeaverProvider.Model
 		[JsonIgnore]
 		public List<LinguisticOption> LinguisticOptions => SelectedModel?.LinguisticOptions;
 
+		public PairMapping Clone()
+		{
+			return MemberwiseClone() as PairMapping;
+		}
+
 		private void PairDictionary_IsSelectedChanged(object sender, EventArgs e)
 		{
 			var limit = 24;

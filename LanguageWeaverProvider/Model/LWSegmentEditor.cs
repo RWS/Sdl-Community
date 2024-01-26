@@ -20,6 +20,8 @@ namespace LanguageWeaverProvider.Model
 			LoadCollection();
 		}
 
+		public bool IsValid { get; private set; }
+
 		public string EditText(string text)
 		{
 			var result = text;
@@ -64,14 +66,17 @@ namespace LanguageWeaverProvider.Model
 				var reader = new StreamReader(_fileName);
 				var serializer = new XmlSerializer(typeof(EditCollection));
 				_editCollection = (EditCollection)serializer.Deserialize(reader);
+				IsValid = true;
 			}
 			catch (InvalidOperationException e)
 			{ //invalid operation is what happens when the xml can't be parsed into the objects correctly
 				e.ShowDialog(string.Empty, e.Message, true);
+				IsValid = false;
 			}
 			catch (Exception e)
 			{
 				e.ShowDialog(string.Empty, e.Message, true);
+				IsValid = false;
 			}
 		}
 	}

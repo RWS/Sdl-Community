@@ -74,7 +74,7 @@
 
 				<controls:ToggleOption Checked="{Binding UsePreLookup}"
 									   CheckBoxContent="Pre-Lookup Find/Replace"
-									   DescriptionText="Pre-Lookup Find/Replace description"
+									   DescriptionText="Uses terms from a text file to tailor source text before translation, enhancing context and accuracy."
 									   TextBoxVisible="False"
 									   TextBlockText="{Binding PreLookupFilePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 									   TextBlockVisibility="True"
@@ -87,7 +87,7 @@
 
 				<controls:ToggleOption Checked="{Binding UsePostLookup}"
 									   CheckBoxContent="Post-Lookup Find/Replace"
-									   DescriptionText="Post-Lookup Find/Replace description"
+									   DescriptionText="Applies terms from a text file to the machine-translated target text, ensuring terminological precision and consistency."
 									   TextBoxVisible="False"
 									   TextBlockText="{Binding PostLookupFilePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 									   TextBlockVisibility="True"

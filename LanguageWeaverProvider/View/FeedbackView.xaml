@@ -30,7 +30,7 @@
 	<ScrollViewer VerticalScrollBarVisibility="Auto"
 				  HorizontalScrollBarVisibility="Disabled">
 		<Grid>
-			<TextBlock Text="To provide feedback the segment requires metadata, that originates from Language Weaver. To obtain this Run the Apply Language Weaver Metadata Batch task, which will apply against existing segments that has translations which originate from Language Weaver." 
+			<TextBlock Text="To provide feedback the segment requires metadata, that originates from Language Weaver. To obtain this run the Apply Language Weaver Metadata Batch task, which will apply against existing segments that has translations which originate from Language Weaver." 
 					   Style="{StaticResource Sdl.TextBlock.GenericTitleTextStyle}"
 					   Visibility="{Binding IsMetadataSet, Converter={StaticResource BooleanVisibility}, ConverterParameter=Inverted}"
 					   TextWrapping="Wrap"
