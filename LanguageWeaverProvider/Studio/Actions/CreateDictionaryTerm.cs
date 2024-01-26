@@ -9,7 +9,7 @@ namespace LanguageWeaverProvider.Studio.Actions
 {
 	[Action("Create new dictionary term",
 	Name = "Create new dictionary term",
-	Icon = "lwLogoIco",
+	Icon = "lwLogo_Main_Icon",
 	Description = "Create new dictionary term")]
 	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.EditorDocumentContextMenuLocation), 2, DisplayType.Default, "", true)]
 	public class CreateDictionaryTerm : AbstractAction

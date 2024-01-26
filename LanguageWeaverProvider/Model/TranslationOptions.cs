@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using LanguageWeaverProvider.Model.Interface;
+using LanguageWeaverProvider.ViewModel;
 using Newtonsoft.Json;
 
 namespace LanguageWeaverProvider.Model.Options
 {
-	public class TranslationOptions : ITranslationOptions
+	public class TranslationOptions : BaseViewModel, ITranslationOptions
 	{
+		PluginVersion _pluginVersion;
+
 		[JsonIgnore]
 		public AccessToken AccessToken { get; set; }
 
@@ -18,7 +21,15 @@ namespace LanguageWeaverProvider.Model.Options
 
 		public AuthenticationType AuthenticationType { get; set; }
 
-		public PluginVersion PluginVersion { get; set; }
+		public PluginVersion PluginVersion
+		{
+			get => _pluginVersion;
+			set
+			{
+				_pluginVersion = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public List<PairMapping> PairMappings { get; set; }
 

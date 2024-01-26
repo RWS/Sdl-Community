@@ -39,7 +39,7 @@
 		<DockPanel Grid.Row="1">
 			<Image Grid.Row="0"
 				   Grid.ColumnSpan="2"
-				   Source="../Resources/lwHeader.png"
+				   Source="../Resources/lwHeader_Main.png"
 				   Height="60"/>
 		</DockPanel>
 	</Grid>

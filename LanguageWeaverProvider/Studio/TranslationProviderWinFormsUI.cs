@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using LanguageWeaverProvider.Extensions;
+using LanguageWeaverProvider.Helpers;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Services;
@@ -82,12 +83,13 @@ namespace LanguageWeaverProvider
 						   ? Constants.PluginName
 						   : StringExtensions.GetPluginName(translationProviderState);
 
+			var images = ImagePathUtility.GetImagePaths(translationProviderUri.AbsoluteUri);
 			return new TranslationProviderDisplayInfo()
 			{
 				Name = pluginName,
 				TooltipText = pluginName,
-				TranslationProviderIcon = PluginResources.lwLogoIco,
-				SearchResultImage = PluginResources.lwLogoPng
+				TranslationProviderIcon = images.IcoFile,
+				SearchResultImage = images.PngFile
 			};
 		}
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)

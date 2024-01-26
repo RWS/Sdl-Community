@@ -10,6 +10,7 @@ using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.LanguageMappingProvider;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
+using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Services;
 using LanguageWeaverProvider.View;
 using Sdl.LanguagePlatform.Core;
@@ -21,6 +22,8 @@ namespace LanguageWeaverProvider.ViewModel
 		readonly ITranslationOptions _translationOptions;
 		readonly ILanguageMappingDatabase _languageMappingDatabase;
 		readonly LanguagePair[] _languagePairs;
+
+		string _headerImagePath;
 
 		SettingsViewModel _settingsView;
 		bool _showSettingsView;
@@ -39,6 +42,17 @@ namespace LanguageWeaverProvider.ViewModel
 			InitializeSettingsView();
 			InitializeCommands();
 			LoadPairMapping();
+			SetHeader();
+		}
+
+		public string HeaderImagePath
+		{
+			get => _headerImagePath;
+			set
+			{
+				_headerImagePath = value;
+				OnPropertyChanged();
+			}
 		}
 
 		public SettingsViewModel SettingsView
@@ -332,6 +346,16 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 
 			LoadingAction = null;
+		}
+
+		private void SetHeader()
+		{
+			HeaderImagePath = _translationOptions.PluginVersion switch
+			{
+				PluginVersion.LanguageWeaverCloud => "../Resources/lwHeader_Cloud.png",
+				PluginVersion.LanguageWeaverEdge => "../Resources/lwHeader_Edge.png",
+				_ => "../Resources/lwHeader_Main.png"
+			};
 		}
 	}
 }

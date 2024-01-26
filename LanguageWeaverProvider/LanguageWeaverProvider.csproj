@@ -20,23 +20,33 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
-	  <Compile Remove="Helpers\**" />
 	  <Compile Remove="Interface\**" />
 	  <Compile Remove="ServiceClients\**" />
-	  <EmbeddedResource Remove="Helpers\**" />
+	  <Compile Remove="Studio\Actions\Models\**" />
 	  <EmbeddedResource Remove="Interface\**" />
 	  <EmbeddedResource Remove="ServiceClients\**" />
-	  <None Remove="Helpers\**" />
+	  <EmbeddedResource Remove="Studio\Actions\Models\**" />
 	  <None Remove="Interface\**" />
 	  <None Remove="ServiceClients\**" />
-	  <Page Remove="Helpers\**" />
+	  <None Remove="Studio\Actions\Models\**" />
 	  <Page Remove="Interface\**" />
 	  <Page Remove="ServiceClients\**" />
+	  <Page Remove="Studio\Actions\Models\**" />
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <None Remove="Resources\lwHeader.png" />
-	  <None Remove="Resources\lwMainLogo.png" />
+	  <None Remove="Resources\lwHeader_Cloud.png" />
+	  <None Remove="Resources\lwHeader_Edge.png" />
+	  <None Remove="Resources\lwHeader_Main.png" />
+	  <None Remove="Resources\lwLogo_Cloud.png" />
+	  <None Remove="Resources\lwLogo_Cloud16.png" />
+	  <None Remove="Resources\lwLogo_Cloud32.png" />
+	  <None Remove="Resources\lwLogo_Edge.png" />
+	  <None Remove="Resources\lwLogo_Edge16.png" />
+	  <None Remove="Resources\lwLogo_Edge32.png" />
+	  <None Remove="Resources\lwLogo_Main.png" />
+	  <None Remove="Resources\lwLogo_Main16.png" />
+	  <None Remove="Resources\lwLogo_Main32.png" />
 	  <None Remove="Resources\Report.xsl" />
 	</ItemGroup>
 	
@@ -147,9 +157,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Resource Include="Resources\lwHeader.png" />
-	  <Resource Include="Resources\lwMainLogo.png" />
 	  <EmbeddedResource Include="Resources\Report.xsl" />
+	  <Resource Include="Resources\lwHeader_Cloud.png" />
+	  <Resource Include="Resources\lwHeader_Edge.png" />
+	  <Resource Include="Resources\lwHeader_Main.png" />
+	  <Resource Include="Resources\lwLogo_Cloud.png" />
+	  <Resource Include="Resources\lwLogo_Cloud16.png" />
+	  <Resource Include="Resources\lwLogo_Cloud32.png" />
+	  <Resource Include="Resources\lwLogo_Edge.png" />
+	  <Resource Include="Resources\lwLogo_Edge16.png" />
+	  <Resource Include="Resources\lwLogo_Edge32.png" />
+	  <Resource Include="Resources\lwLogo_Main.png" />
+	  <Resource Include="Resources\lwLogo_Main16.png" />
+	  <Resource Include="Resources\lwLogo_Main32.png" />
 	  <Resource Include="Style\Buttons.xaml" />
 	</ItemGroup>
 
@@ -163,6 +183,5 @@
 
 	<ItemGroup>
 	  <Folder Include="Studio\AccountSubscription\Model\" />
-	  <Folder Include="Studio\Actions\Models\" />
 	</ItemGroup>
 </Project>

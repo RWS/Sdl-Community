@@ -66,7 +66,7 @@
 
 		<Image Grid.Row="0"
 			   Grid.ColumnSpan="2"
-			   Source="../Resources/lwHeader.png"
+			   Source="{Binding HeaderImagePath}"
 			   Height="60"
 			   Margin="48 24 48 0" />
 

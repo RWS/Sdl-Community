@@ -325,11 +325,50 @@ This action cannot be undone.</value>
   <data name="Loading_LMP_RestoreDefaults" xml:space="preserve">
     <value>Restoring database...</value>
   </data>
-  <data name="lwLogoIco" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\lwLogoIco.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="lwHeader_Cloud" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwHeader_Cloud.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="lwLogoPng" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\lwLogoPng.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="lwHeader_Edge" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwHeader_Edge.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwHeader_Main" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwHeader_Main.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Cloud" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Cloud.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Cloud16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Cloud16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Cloud32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Cloud32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Cloud_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Cloud_Icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Edge" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Edge.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Edge16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Edge16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Edge32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Edge32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Edge_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Edge_Icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Main" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Main.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Main16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Main16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Main32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Main32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Main_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Main_Icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="MainView_AuthMethods_BackBttn" xml:space="preserve">
     <value>Back</value>

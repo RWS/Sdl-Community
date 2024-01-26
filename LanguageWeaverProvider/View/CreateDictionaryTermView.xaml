@@ -68,10 +68,10 @@
 				  Background="#ffffff">
 				<Image HorizontalAlignment="Left"
 					   VerticalAlignment="Center"
-					   Source="../Resources/lwHeader.png"
+					   Source="../Resources/lwHeader_Main.png"
 					   Width="210"
 					   Height="40"
-					   Margin="8 0" />
+					   Margin="4 0" />
 			</Grid>
 
 			<StackPanel Grid.Row="1"
