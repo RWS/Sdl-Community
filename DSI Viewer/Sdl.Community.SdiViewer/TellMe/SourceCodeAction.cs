@@ -15,7 +15,7 @@ namespace Sdl.Community.DsiViewer.TellMe
 			Name = "DSI Viewer Source Code";
 		}
 
-		public override Icon Icon => default;
+		public override Icon Icon => PluginResources.ForumIcon;
 
 		public override void Execute()
 		{

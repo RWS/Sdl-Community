@@ -10,7 +10,7 @@ namespace Sdl.Community.DsiViewer.TellMe
 			Name = "RWS Community AppStore Forum";
 		}
 
-		public override Icon Icon => default;
+		public override Icon Icon => PluginResources.Question;
 
 		public override void Execute()
 		{
