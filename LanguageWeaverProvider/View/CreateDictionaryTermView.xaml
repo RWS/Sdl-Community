@@ -69,8 +69,7 @@
 				<Image HorizontalAlignment="Left"
 					   VerticalAlignment="Center"
 					   Source="../Resources/lwHeader_Main.png"
-					   Width="210"
-					   Height="40"
+					   Width="240"
 					   Margin="4 0" />
 			</Grid>
 

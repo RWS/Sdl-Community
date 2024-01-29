@@ -40,7 +40,7 @@
 			<Image Grid.Row="0"
 				   Grid.ColumnSpan="2"
 				   Source="../Resources/lwHeader_Main.png"
-				   Height="60"/>
+				   Height="48"/>
 		</DockPanel>
 	</Grid>
 </UserControl>
