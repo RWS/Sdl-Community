@@ -148,8 +148,8 @@
   <data name="CheckBox_ByModel_Content" xml:space="preserve">
     <value>by Model</value>
   </data>
-  <data name="CheckBox_Unknown" xml:space="preserve">
-    <value>Unknown</value>
+  <data name="CheckBox_None" xml:space="preserve">
+    <value>None</value>
   </data>
   <data name="CheckBox_Poor" xml:space="preserve">
     <value>Poor</value>

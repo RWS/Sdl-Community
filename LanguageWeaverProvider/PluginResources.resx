@@ -1,0 +1,453 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Auth_Cloud_APICredentials" xml:space="preserve">
+    <value>API Credentials</value>
+  </data>
+  <data name="Auth_Cloud_APICredentials_ClientID" xml:space="preserve">
+    <value>Client ID</value>
+  </data>
+  <data name="Auth_Cloud_APICredentials_ClientSecret" xml:space="preserve">
+    <value>Client Secret</value>
+  </data>
+  <data name="Auth_Cloud_APICredentials_ToolTip" xml:space="preserve">
+    <value>Recommended for systematic automated workflows</value>
+  </data>
+  <data name="Auth_Cloud_Credentials" xml:space="preserve">
+    <value>User credentials</value>
+  </data>
+  <data name="Auth_Cloud_Credentials_ToolTip" xml:space="preserve">
+    <value>Provision for external user access</value>
+  </data>
+  <data name="Auth_Cloud_Credentials_Username" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="Auth_Cloud_Credentials_Userpw" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Auth_Cloud_FederatedSSO_ConnectionCode" xml:space="preserve">
+    <value>Connection code</value>
+  </data>
+  <data name="Auth_Cloud_FSSO" xml:space="preserve">
+    <value>Federated SSO</value>
+  </data>
+  <data name="Auth_Cloud_FSSO_ToolTip" xml:space="preserve">
+    <value>You've chosen Federated SSO Authentication. Please provide the Connection Code for access.  Please note that only administrators can retrieve the Connection Code</value>
+  </data>
+  <data name="Auth_Cloud_SSO_Tooltip" xml:space="preserve">
+    <value>Access Language Weaver using your unique RWS ID authentication or email</value>
+  </data>
+  <data name="Auth_Edge_APIKey" xml:space="preserve">
+    <value>API Key</value>
+  </data>
+  <data name="Auth_Edge_Host" xml:space="preserve">
+    <value>Host: https://my-domain.com:8001/</value>
+  </data>
+  <data name="Auth_Edge_UserCredentials" xml:space="preserve">
+    <value>User credentials</value>
+  </data>
+  <data name="Auth_Edge_UserCredentials_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Auth_Edge_UserCredentials_Username" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="Auth_SignIn" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="Auth_SSO" xml:space="preserve">
+    <value>RWS ID SSO</value>
+  </data>
+  <data name="CloudMappingView_Headers_Dictionaries" xml:space="preserve">
+    <value>Dictionary</value>
+  </data>
+  <data name="CloudMappingView_Headers_LOs" xml:space="preserve">
+    <value>Linguistic options</value>
+  </data>
+  <data name="CloudMappingView_Headers_Models" xml:space="preserve">
+    <value>Model</value>
+  </data>
+  <data name="CloudMappingView_Headers_Pairs" xml:space="preserve">
+    <value>Language pair</value>
+  </data>
+  <data name="CloudMappingView_Headers_Source" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="CloudMappingView_Headers_Target" xml:space="preserve">
+    <value>Target</value>
+  </data>
+  <data name="CloudMappingView_Values_NotSet" xml:space="preserve">
+    <value>Not set</value>
+  </data>
+  <data name="CloudMappingView_Values_Unavailable" xml:space="preserve">
+    <value>Not available</value>
+  </data>
+  <data name="CloudMappingView_WelcomeMessage" xml:space="preserve">
+    <value>Welcome to the Language Weaver translation provider for Trados Studio.</value>
+  </data>
+  <data name="Connection_Credentials" xml:space="preserve">
+    <value>Credentials</value>
+  </data>
+  <data name="Connection_Error_Failed" xml:space="preserve">
+    <value>Authentication process failed</value>
+  </data>
+  <data name="Connection_Error_FirstFail" xml:space="preserve">
+    <value>Connection unsuccessful. Attempting retry...</value>
+  </data>
+  <data name="Connection_Error_NoCredentials" xml:space="preserve">
+    <value>Please provide your credentials</value>
+  </data>
+  <data name="Dictionary_CreateTerm_Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="Dictionary_CreateTerm_Source" xml:space="preserve">
+    <value>Source term</value>
+  </data>
+  <data name="Dictionary_CreateTerm_Target" xml:space="preserve">
+    <value>Target term</value>
+  </data>
+  <data name="Dictionary_NewTerm_Succesfully" xml:space="preserve">
+    <value>Term added succesfully</value>
+  </data>
+  <data name="Dictionary_NewTerm_Unsuccessfully" xml:space="preserve">
+    <value>Couldn't add the new term</value>
+  </data>
+  <data name="Dictionary_Window_AddTerm" xml:space="preserve">
+    <value>Add term</value>
+  </data>
+  <data name="Dictionary_Window_CloseWindow" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Download.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ErrorView_Buttons_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="ErrorView_Buttons_HideDetails" xml:space="preserve">
+    <value>Hide details</value>
+  </data>
+  <data name="ErrorView_Buttons_SaveReport" xml:space="preserve">
+    <value>Save report</value>
+  </data>
+  <data name="ErrorView_Buttons_ShowDetails" xml:space="preserve">
+    <value>Show details</value>
+  </data>
+  <data name="FeedbackView_Button_SendFeedback" xml:space="preserve">
+    <value>Send feedback</value>
+  </data>
+  <data name="FeedbackView_GroupBox_Header" xml:space="preserve">
+    <value>Segment Details</value>
+  </data>
+  <data name="FeedbackView_GroupBox_QE" xml:space="preserve">
+    <value>Original QE:</value>
+  </data>
+  <data name="FeedbackView_GroupBox_Translation" xml:space="preserve">
+    <value>Original translation:</value>
+  </data>
+  <data name="FeedbackView_Message" xml:space="preserve">
+    <value>Let us know how we did!</value>
+  </data>
+  <data name="FeedbackView_OptionalMessage" xml:space="preserve">
+    <value>Leave a message (optional)</value>
+  </data>
+  <data name="FeedbackView_Title" xml:space="preserve">
+    <value>Give feedback!</value>
+  </data>
+  <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ForumIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="LMPViewModel_ResetTitle" xml:space="preserve">
+    <value>Reset to defaults</value>
+  </data>
+  <data name="LMPViewModel_ResetWarning" xml:space="preserve">
+    <value>Warning: Resetting to default values!
+All changes will be lost and the database will be restored to its original state.
+
+This action cannot be undone.</value>
+  </data>
+  <data name="LMPView_Buttons_ApplyChanges" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="LMPView_Buttons_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="LMPView_Buttons_Reset" xml:space="preserve">
+    <value>Reset to defaults</value>
+  </data>
+  <data name="LMPView_Headers_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="LMPView_Headers_LanguageCode" xml:space="preserve">
+    <value>Language code</value>
+  </data>
+  <data name="LMPView_Headers_Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="LMPView_Headers_TradosCode" xml:space="preserve">
+    <value>Trados code</value>
+  </data>
+  <data name="LMPView_Languages_Filtered" xml:space="preserve">
+    <value>; Filtered:</value>
+  </data>
+  <data name="LMPView_Languages_TotalCount" xml:space="preserve">
+    <value>Total languages:</value>
+  </data>
+  <data name="LMPView_SearchBox" xml:space="preserve">
+    <value>Search language...</value>
+  </data>
+  <data name="Loading_Connecting" xml:space="preserve">
+    <value>Connecting user...</value>
+  </data>
+  <data name="Loading_Initiating" xml:space="preserve">
+    <value>Initiating...</value>
+  </data>
+  <data name="Loading_LMP_Apply" xml:space="preserve">
+    <value>Applying changes...</value>
+  </data>
+  <data name="Loading_LMP_RestoreDefaults" xml:space="preserve">
+    <value>Restoring database...</value>
+  </data>
+  <data name="lwHeader_Cloud" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwHeader_Cloud.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwHeader_Edge" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwHeader_Edge.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwHeader_Main" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwHeader_Main.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Cloud" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Cloud.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Cloud16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Cloud16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Cloud32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Cloud32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Cloud_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Cloud_Icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Edge" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Edge.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Edge16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Edge16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Edge32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Edge32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Edge_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Edge_Icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Main" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Main.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Main16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Main16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Main32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Main32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lwLogo_Main_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lwLogo_Main_Icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MainView_AuthMethods_BackBttn" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="MainView_AuthMethods_HelpMessage" xml:space="preserve">
+    <value>Please choose your preferred login method.</value>
+  </data>
+  <data name="MainView_Buttons_Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="MainView_Buttons_LWCloud" xml:space="preserve">
+    <value>Language Weaver Cloud</value>
+  </data>
+  <data name="MainView_Buttons_LWCloud_ToolTip" xml:space="preserve">
+    <value>Language Weaver Cloud is a secure and adaptive, cloud-based enterprise machine translation solution for transforming your multilingual content.</value>
+  </data>
+  <data name="MainView_Buttons_LWEdge" xml:space="preserve">
+    <value>Language Weaver Edge</value>
+  </data>
+  <data name="MainView_Buttons_LWEdge_ToolTip" xml:space="preserve">
+    <value>Language Weaver Edge is deployed within your private environment, providing the full power of Language Weaver behind your firewall.</value>
+  </data>
+  <data name="MainView_CloseButton" xml:space="preserve">
+    <value>Close app</value>
+  </data>
+  <data name="MainView_ConfirmButton" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="MainView_HelpMessage" xml:space="preserve">
+    <value>Select your required Language Weaver Service solution</value>
+  </data>
+  <data name="NameOf_CommandParameterI_MissingComponent" xml:space="preserve">
+    <value>Could not find the property '{0}' in '{1}', please check the spelling for both the property and the class or if any of the two had its name changed in both C# class and XAML.</value>
+  </data>
+  <data name="NameOf_CommandParameter_Syntax" xml:space="preserve">
+    <value>Syntax for the NameOf is:
+"{[location_of_NameOf]:NameOf Member=[PropertyName], Type={x:Type[classLocation:ClassName]}}"
+Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
+  </data>
+  <data name="PairMappingView_Buttons_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="PairMappingView_Buttons_Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="PairMappingView_Buttons_OpenLMP" xml:space="preserve">
+    <value>Open Language Mapping</value>
+  </data>
+  <data name="PairMappingView_Buttons_Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="PairModel_Dictionary_NotSelected" xml:space="preserve">
+    <value>Select dictionaries</value>
+  </data>
+  <data name="PairModel_Dictionary_Unavailable" xml:space="preserve">
+    <value>No dictionary available</value>
+  </data>
+  <data name="PairModel_Model_Unavailable" xml:space="preserve">
+    <value>No model available</value>
+  </data>
+  <data name="Plugin_Name" xml:space="preserve">
+    <value>Language Weaver Provider</value>
+  </data>
+  <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SettingsView_BackButton_LeftContent" xml:space="preserve">
+    <value>←</value>
+  </data>
+  <data name="SettingsView_BackButton_RightContent" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="SettingsView_Drafts" xml:space="preserve">
+    <value>Resend drafts for translation</value>
+  </data>
+  <data name="SettingsView_Tags" xml:space="preserve">
+    <value>Include tags in translation</value>
+  </data>
+  <data name="TranslationDraftNotResent" xml:space="preserve">
+    <value>[segment already translated...source not re-sent]</value>
+  </data>
+</root>

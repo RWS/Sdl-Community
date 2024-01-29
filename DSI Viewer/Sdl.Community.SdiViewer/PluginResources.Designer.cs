@@ -106,20 +106,20 @@ namespace Sdl.Community.DsiViewer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string CheckBox_None {
+            get {
+                return ResourceManager.GetString("CheckBox_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Poor.
         /// </summary>
         public static string CheckBox_Poor {
             get {
                 return ResourceManager.GetString("CheckBox_Poor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unknown.
-        /// </summary>
-        public static string CheckBox_Unknown {
-            get {
-                return ResourceManager.GetString("CheckBox_Unknown", resourceCulture);
             }
         }
         

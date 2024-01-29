@@ -57,8 +57,9 @@
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
+    <Reference Include="Sdl.LanguagePlatform.Core, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Core.dll</HintPath>
@@ -95,6 +96,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
     <Compile Include="DsiViewerInitializer.cs" />
+    <Compile Include="Model\DSITagModel.cs" />
     <Compile Include="Model\SdlMtCloudFilterSettings.cs" />
     <Compile Include="Model\TranslationOriginData.cs" />
     <Compile Include="PluginResources.Designer.cs">
@@ -107,6 +109,8 @@
     <Compile Include="Studio\DisplayFilters\SdlMtCloudDisplayFilter.cs" />
     <Compile Include="TellMe\CommunitySupportAction.cs" />
     <Compile Include="TellMe\DsiViewerTellMeAction.cs" />
+    <Compile Include="TellMe\SettingsAction.cs" />
+    <Compile Include="TellMe\SourceCodeAction.cs" />
     <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="TellMe\HelpAction.cs" />
     <Compile Include="ViewModel\DsiViewerViewModel.cs" />
