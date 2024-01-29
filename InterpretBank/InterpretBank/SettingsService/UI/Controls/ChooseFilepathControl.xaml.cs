@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -16,12 +15,12 @@ namespace InterpretBank.SettingsService.UI.Controls
     /// </summary>
     public partial class ChooseFilepathControl : UserControl
     {
-        public static readonly DependencyProperty AutoCompleteOptionsProperty =
-            DependencyProperty.Register(nameof(AutoCompleteOptions), typeof(List<string>),
-                typeof(ChooseFilepathControl), new PropertyMetadata(default(List<string>)));
+        public static readonly DependencyProperty DatabaseListProperty =
+                    DependencyProperty.Register(nameof(DatabaseList), typeof(List<string>), typeof(ChooseFilepathControl),
+                new PropertyMetadata(default(List<string>)));
 
         public static readonly DependencyProperty FilepathProperty =
-                    DependencyProperty.Register(nameof(Filepath), typeof(string), typeof(ChooseFilepathControl),
+                            DependencyProperty.Register(nameof(Filepath), typeof(string), typeof(ChooseFilepathControl),
                 new PropertyMetadata(string.Empty));
 
         private static readonly string DbListPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -39,13 +38,11 @@ namespace InterpretBank.SettingsService.UI.Controls
             DatabaseList = JsonConvert.DeserializeObject<List<string>>(File.ReadAllText(DbListPath)) ?? new List<string>();
         }
 
-        public List<string> AutoCompleteOptions
+        public List<string> DatabaseList
         {
-            get => (List<string>)GetValue(AutoCompleteOptionsProperty);
-            set => SetValue(AutoCompleteOptionsProperty, value);
+            get => (List<string>)GetValue(DatabaseListProperty);
+            set => SetValue(DatabaseListProperty, value);
         }
-
-        public List<string> DatabaseList { get; set; }
 
         public string Filepath
         {
@@ -60,7 +57,6 @@ namespace InterpretBank.SettingsService.UI.Controls
             }
         }
 
-        public int SelectedIndex { get; set; }
         private IUserInteractionService UserInteractionService => ApplicationInitializer.ApplicationLifetimeScope.Resolve<IUserInteractionService>();
 
         private void AddToDatabaseList(string filepath)
@@ -72,7 +68,7 @@ namespace InterpretBank.SettingsService.UI.Controls
 
         private void AutoCompleteList_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            var autoCompleteOption = AutoCompleteOptions[SelectedIndex];
+            var autoCompleteOption = (string)AutoCompleteList.SelectedItem;
 
             if (!File.Exists(autoCompleteOption))
             {
@@ -81,14 +77,14 @@ namespace InterpretBank.SettingsService.UI.Controls
                 if (confirmation)
                 {
                     DatabaseList.Remove(autoCompleteOption);
-                    AutoCompleteOptions.Remove(autoCompleteOption);
+                    DatabaseList.Remove(autoCompleteOption);
                 }
             }
             else
             {
                 Filepath = autoCompleteOption;
             }
-            AutoCompletePopup.IsOpen = false;
+            AutoCompleteList.Visibility = Visibility.Collapsed;
         }
 
         private void BrowseButton_OnClick(object sender, RoutedEventArgs e)
@@ -100,12 +96,12 @@ namespace InterpretBank.SettingsService.UI.Controls
         private void ClearFilepathButton(object sender, RoutedEventArgs e)
         {
             FilepathTextBox.Clear();
+            Filepath = null;
         }
 
         private void FilepathTextBox_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            AutoCompleteOptions = DatabaseList?.ToList();
-            AutoCompletePopup.IsOpen = !AutoCompletePopup.IsOpen;
+            OpenMenu();
         }
 
         private void FilepathTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -114,8 +110,8 @@ namespace InterpretBank.SettingsService.UI.Controls
             {
                 e.Handled = true;
 
-                if (AutoCompletePopup.IsOpen)
-                    AutoCompletePopup.IsOpen = false;
+                if (AutoCompleteList.Visibility == Visibility.Visible)
+                    AutoCompleteList.Visibility = Visibility.Collapsed;
                 else if (!string.IsNullOrWhiteSpace(Filepath))
                     FilepathTextBox.Clear();
                 else
@@ -126,18 +122,19 @@ namespace InterpretBank.SettingsService.UI.Controls
 
             if (e.Key == Key.Enter)
             {
-                if (AutoCompletePopup.IsOpen)
+                if (AutoCompleteList.Visibility == Visibility.Visible)
                 {
-                    Filepath = AutoCompleteOptions[AutoCompleteList.SelectedIndex];
-                    AutoCompletePopup.IsOpen = false;
+                    Filepath = DatabaseList[AutoCompleteList.SelectedIndex];
+                    AutoCompleteList.Visibility = Visibility.Collapsed;
                 }
+                else OpenMenu();
 
                 e.Handled = true;
             }
 
             if (e.Key == Key.Down)
             {
-                AutoCompletePopup.IsOpen = true;
+                AutoCompleteList.Visibility = Visibility.Visible;
                 if (AutoCompleteList.SelectedIndex < AutoCompleteList.Items.Count - 1)
                 {
                     AutoCompleteList.SelectedIndex++;
@@ -154,6 +151,13 @@ namespace InterpretBank.SettingsService.UI.Controls
                 }
                 e.Handled = true;
             }
+        }
+
+        private void OpenMenu()
+        {
+            AutoCompleteList.Visibility = AutoCompleteList.Visibility == Visibility.Visible
+                ? Visibility.Collapsed
+                : Visibility.Visible;
         }
     }
 }

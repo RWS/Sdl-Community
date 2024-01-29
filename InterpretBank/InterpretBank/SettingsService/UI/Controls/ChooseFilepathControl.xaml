@@ -16,54 +16,54 @@
             </ResourceDictionary.MergedDictionaries>
             <converters:NullStringToVisibilityConverter x:Key="NullToVisibilityConverter" />
             <converters1:RatioConverter x:Key="RatioConverter" />
+            <converters1:InvertVisibilityConverter x:Key="InvertVisibilityConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <Grid>
-            <TextBox Name="FilepathTextBox"
-                     DockPanel.Dock="Bottom"
-                     Padding="0 0 50 0"
-                     FontSize="{Binding ActualHeight, ElementName=Root, Converter={StaticResource RatioConverter}, ConverterParameter=0.44}"
-                     IsReadOnly="True"
-                     VerticalContentAlignment="Center"
-                     Text="{Binding Filepath, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}"
-                     PreviewMouseLeftButtonUp="FilepathTextBox_OnPreviewMouseLeftButtonDown"
-                     PreviewKeyDown="FilepathTextBox_PreviewKeyDown" />
-            <Popup Name="AutoCompletePopup"
-                   PlacementTarget="{Binding ElementName=FilepathTextBox}"
-                   Placement="Bottom"
-                   IsOpen="False"
-                   Focusable="True"
-                   StaysOpen="False"
-                   Width="{Binding ElementName=FilepathTextBox, Path=ActualWidth}">
-                <ListBox Name="AutoCompleteList"
-                         PreviewMouseLeftButtonUp="AutoCompleteList_OnPreviewMouseLeftButtonDown"
-                         SelectedIndex="{Binding SelectedIndex, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                         ItemsSource="{Binding AutoCompleteOptions, RelativeSource={RelativeSource AncestorType=UserControl}}" />
-            </Popup>
-            <DockPanel>
+        <TextBox Name="FilepathTextBox"
+                 DockPanel.Dock="Bottom"
+                 AutomationProperties.Name="FilePath"
+                 Padding="0 0 50 0"
+                 FontSize="{Binding ActualHeight, ElementName=Root, Converter={StaticResource RatioConverter}, ConverterParameter=0.44}"
+                 IsReadOnly="True"
+                 VerticalContentAlignment="Center"
+                 Text="{Binding Filepath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ElementName=Root}"
+                 PreviewMouseLeftButtonUp="FilepathTextBox_OnPreviewMouseLeftButtonDown"
+                 PreviewKeyDown="FilepathTextBox_PreviewKeyDown" />
+        <ListBox Name="AutoCompleteList"
+                 Visibility="Collapsed"
+                 PreviewMouseLeftButtonUp="AutoCompleteList_OnPreviewMouseLeftButtonDown"
+                 ItemsSource="{Binding DatabaseList, ElementName=Root}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding .}"
+                               AutomationProperties.Name="{Binding .}"
+                               PreviewKeyDown="FilepathTextBox_PreviewKeyDown" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <DockPanel Visibility="{Binding Visibility, ElementName=AutoCompleteList, Converter={StaticResource InvertVisibilityConverter}}">
 
-                <Button Style="{StaticResource ClearTextButtonStyle}"
-                        x:Name="BrowseButton"
-                        Click="BrowseButton_OnClick"
-                        BorderBrush="Transparent"
-                        FontSize="{Binding ActualHeight, ElementName=Root, Converter={StaticResource RatioConverter}, ConverterParameter=0.44}"
-                        Background="Transparent"
-                        DockPanel.Dock="Right"
-                        Content="📂"
-                        HorizontalAlignment="Right"
-                        Margin="0 0 5 0" />
-                <Button Style="{StaticResource ClearTextButtonStyle}"
-                        Click="ClearFilepathButton"
-                        BorderBrush="Transparent"
-                        FontSize="{Binding ActualHeight, ElementName=Root, Converter={StaticResource RatioConverter}, ConverterParameter=0.40}"
-                        Background="Transparent"
-                        Content="X"
-                        DockPanel.Dock="Right"
-                        Visibility="{Binding ElementName=FilepathTextBox, Path=Text, Converter={StaticResource NullToVisibilityConverter}}"
-                        HorizontalAlignment="Right"
-                        Margin="5 5 2 5" />
-            </DockPanel>
-        </Grid>
+            <Button Style="{StaticResource ClearTextButtonStyle}"
+                    x:Name="BrowseButton"
+                    Click="BrowseButton_OnClick"
+                    BorderBrush="Transparent"
+                    FontSize="{Binding ActualHeight, ElementName=Root, Converter={StaticResource RatioConverter}, ConverterParameter=0.44}"
+                    Background="Transparent"
+                    DockPanel.Dock="Right"
+                    Content="📂"
+                    HorizontalAlignment="Right"
+                    Margin="0 0 5 0" />
+            <Button Style="{StaticResource ClearTextButtonStyle}"
+                    Click="ClearFilepathButton"
+                    BorderBrush="Transparent"
+                    FontSize="{Binding ActualHeight, ElementName=Root, Converter={StaticResource RatioConverter}, ConverterParameter=0.40}"
+                    Background="Transparent"
+                    Content="X"
+                    DockPanel.Dock="Right"
+                    Visibility="{Binding ElementName=FilepathTextBox, Path=Text, Converter={StaticResource NullToVisibilityConverter}}"
+                    HorizontalAlignment="Right"
+                    Margin="5 5 2 5" />
+        </DockPanel>
     </Grid>
 </UserControl>

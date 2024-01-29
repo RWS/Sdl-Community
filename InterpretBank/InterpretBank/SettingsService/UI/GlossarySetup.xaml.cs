@@ -25,8 +25,8 @@ namespace InterpretBank.SettingsService.UI
 
         private void GlossarySetup_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (ChooseFilepathControl.AutoCompletePopup.IsOpen && !IsMouseOverPopup(e))
-                ChooseFilepathControl.AutoCompletePopup.IsOpen = false;
+            if (ChooseFilepathControl.AutoCompleteList.Visibility ==  Visibility.Visible && !IsMouseOverPopup(e))
+                ChooseFilepathControl.AutoCompleteList.Visibility = Visibility.Collapsed;
         }
 
         private void ImportButton_Click(object sender, RoutedEventArgs e)

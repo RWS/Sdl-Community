@@ -1,5 +1,6 @@
 ﻿using InterpretBank.TermbaseViewer.ViewModel;
 using Sdl.Core.Globalization;
+using Sdl.Terminology.TerminologyProvider.Core;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
@@ -48,7 +49,7 @@ namespace InterpretBank.TermbaseViewer.UI
 
         //public void EditTerm(IEntry term) => DataContext.EditTerm(term);
 
-        //public void JumpToTerm(IEntry entry) => DataContext.JumpToTerm(entry);
+        public void JumpToTerm(Entry entry) => DataContext.JumpToTerm(entry);
 
         public void AddTerm(string source, string target)
         {

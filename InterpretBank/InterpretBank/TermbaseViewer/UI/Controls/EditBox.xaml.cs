@@ -90,7 +90,7 @@ namespace InterpretBank.TermbaseViewer.UI.Controls
                 IsEditing = false;
             }
 
-            if (EditBoxGrid.IsFocused && parameter == "EnterEdit")
+            if (IsFocused && parameter == "EnterEdit")
             {
                 IsEditing = true;
                 TextBox.Focus();

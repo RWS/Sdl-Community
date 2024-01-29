@@ -97,7 +97,7 @@ namespace InterpretBank.Studio
 
         public void JumpToTerm(Entry entry)
         {
-            // TermbaseViewerControl.JumpToTerm(entry);
+            TermbaseViewerControl.JumpToTerm(entry);
         }
 
         public void Release()

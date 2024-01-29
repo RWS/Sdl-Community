@@ -5,6 +5,7 @@ using InterpretBank.Interface;
 using InterpretBank.Model;
 using InterpretBank.TerminologyService.Interface;
 using Sdl.Core.Globalization;
+using Sdl.Terminology.TerminologyProvider.Core;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -222,10 +223,10 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             TargetLanguageFlag = targetLanguage.GetFlagImage();
         }
 
-        private void SetSelectedEntry(EntryModel previousTerm)
+        private void SetSelectedEntry(EntryModel term)
         {
-            if (Entries.Result.Contains(previousTerm))
-                SelectedEntry = Entries.Result.FirstOrDefault(e => e.Equals(previousTerm));
+            if (Entries.Result.Contains(term))
+                SelectedEntry = Entries.Result.FirstOrDefault(e => e.Equals(term));
             else if (Entries.Result.Any()) SelectedEntry = Entries.Result.FirstOrDefault();
         }
 
@@ -261,6 +262,12 @@ namespace InterpretBank.TermbaseViewer.ViewModel
                     });
                     break;
             }
+        }
+
+        public void JumpToTerm(Entry entry)
+        {
+          var jumpEntry =  Entries.Result.FirstOrDefault(e => e.Id == entry.Id);
+          SetSelectedEntry(jumpEntry);
         }
     }
 }

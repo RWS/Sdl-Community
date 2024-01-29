@@ -50,9 +50,11 @@
                    VerticalAlignment="Top">
 
             <TextBlock Text="{x:Static interpretBank:PluginResources.SettingsWindow_TextBlock_DBFilepath}"
+                       x:Name="FilepathLabel"
                        DockPanel.Dock="Top" />
 
-            <controls:ChooseFilepathControl x:Name="ChooseFilepathControl" Filepath="{Binding Filepath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            <controls:ChooseFilepathControl x:Name="ChooseFilepathControl"
+                                            AutomationProperties.LabeledBy="{Binding ElementName=FilepathLabel}" Filepath="{Binding Filepath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
         </DockPanel>
         <TabControl Margin="10"

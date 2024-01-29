@@ -7,7 +7,6 @@
              xmlns:controls="clr-namespace:InterpretBank.TermbaseViewer.UI.Controls"
              xmlns:converters="clr-namespace:InterpretBank.TermbaseViewer.UI.Converters"
              xmlns:viewModel="clr-namespace:InterpretBank.TermbaseViewer.ViewModel"
-             xmlns:converters1="clr-namespace:InterpretBank.Converters"
              x:Name="TermbaseViewerControl"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance viewModel:TermbaseViewerViewModel}">
@@ -31,14 +30,54 @@
         </Grid.ColumnDefinitions>
 
         <DockPanel>
+
+            <Border DockPanel.Dock="Top"
+                    Background="#f0f0f0"
+                    CornerRadius="3"
+                    Height="Auto">
+                <WrapPanel Orientation="Horizontal"
+                           DockPanel.Dock="Top">
+
+                    <Button ToolTip="Remove entry"
+                            DockPanel.Dock="Left"
+                            AutomationProperties.Name="Remove entry"
+                            Command="{Binding RemoveSelectedEntryCommand}"
+                            Style="{StaticResource GlyphButtonStyle2}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🗑"
+                                       VerticalAlignment="Center"
+                                       FontSize="15" />
+                            <AccessText Text="_Remove entry"
+                                        Foreground="Black"
+                                        VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button ToolTip="Add entry"
+                            DockPanel.Dock="Right"
+                            AutomationProperties.Name="Add entry"
+                            Focusable="True"
+                            Command="{Binding AddEntryCommand}"
+                            Style="{StaticResource GlyphButtonStyle2}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="➕"
+                                       VerticalAlignment="Center"
+                                       FontSize="15" />
+                            <AccessText Text="_Add entry"
+                                        Foreground="Black"
+                                        Margin="1 0 0 0"
+                                        VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                </WrapPanel>
+            </Border>
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center"
                         DockPanel.Dock="Bottom"
                         Background="#f0f0f0">
-                <Label>
-                    <TextBlock Margin="5 0 0 0"
-                               Text="{Binding Entries.Result.Count}" />
-                </Label>
+                <TextBlock Text="Count: " />
+                <TextBlock Margin="5 0 0 0"
+                           Text="{Binding Entries.Result.Count}" />
             </StackPanel>
             <ListBox ItemsSource="{Binding Entries.Result}"
                      AutomationProperties.Name="Entries"
@@ -54,6 +93,7 @@
 
         <GridSplitter Grid.Column="0"
                       Width="1"
+                      Focusable="False"
                       HorizontalAlignment="Right"
                       VerticalAlignment="Stretch" />
 
@@ -67,7 +107,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Border Grid.Row="0"
+            <!--<Border Grid.Row="0"
                     DockPanel.Dock="Top"
                     Margin="5 5 0 5"
                     Background="#f0f0f0"
@@ -82,10 +122,9 @@
                     <Button ToolTip="Remove entry"
                             AutomationProperties.Name="Remove entry"
                             Command="{Binding RemoveSelectedEntryCommand}"
-                            Style="{StaticResource Sdl.Button.WindowControlStyle}">
+                            Style="{StaticResource GlyphButtonStyle2}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="🗑"
-                                       Foreground="Black"
                                        VerticalAlignment="Center"
                                        FontSize="15" />
                             <AccessText Text="_Remove entry"
@@ -96,11 +135,11 @@
 
                     <Button ToolTip="Add entry"
                             AutomationProperties.Name="Add entry"
+                            Focusable="True"
                             Command="{Binding AddEntryCommand}"
-                            Style="{StaticResource Sdl.Button.WindowControlStyle}">
+                            Style="{StaticResource GlyphButtonStyle2}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="➕"
-                                       Foreground="Black"
                                        VerticalAlignment="Center"
                                        FontSize="15" />
                             <AccessText Text="_Add entry"
@@ -110,12 +149,13 @@
                         </StackPanel>
                     </Button>
                 </StackPanel>
-            </Border>
+            </Border>-->
 
             <Border Grid.Row="1"
                     DockPanel.Dock="Top"
                     BorderBrush="LightGray"
                     BorderThickness="2 1 1 2"
+                    AutomationProperties.Name="EntryNoteBorder"
                     Margin="5 5 0 5">
 
                 <controls:EditBox Label="Entry note: "
@@ -134,7 +174,6 @@
                       KeyboardNavigation.TabNavigation="Local"
                       SelectionMode="Single"
                       ItemsSource="{Binding SelectedEntry.Terms}"
-                      SelectedIndex="{Binding SelectedEntry}"
                       ScrollViewer.VerticalScrollBarVisibility="Visible"
                       x:Name="Terms_ListView"
                       BorderThickness="0">

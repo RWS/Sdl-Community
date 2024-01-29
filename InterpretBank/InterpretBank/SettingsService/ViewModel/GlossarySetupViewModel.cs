@@ -74,7 +74,7 @@ public class GlossarySetupViewModel : ViewModelBase.ViewModel
     {
         get
         {
-            var idsOfTaggedGlossaries = TagLinks?.Where(tl => tl.TagName == SelectedTag.TagName).Select(tl => tl.GlossaryId);
+            var idsOfTaggedGlossaries = TagLinks?.Where(tl => tl.TagName == SelectedTag?.TagName).Select(tl => tl.GlossaryId);
 
             if (idsOfTaggedGlossaries is null) return null;
 
@@ -139,7 +139,12 @@ public class GlossarySetupViewModel : ViewModelBase.ViewModel
 
     public void Setup()
     {
-        if (string.IsNullOrWhiteSpace(Filepath)) return;
+        //Languages.Clear();
+        //Tags.Clear();
+
+        if (string.IsNullOrWhiteSpace(Filepath)) ClearControl();
+
+        SelectedGlossary = null;
 
         Tags = new ObservableCollection<TagModel>(InterpretBankDataContext.GetTags().Distinct().ToList());
         Languages = InterpretBankDataContext.GetDbLanguages();
@@ -153,6 +158,14 @@ public class GlossarySetupViewModel : ViewModelBase.ViewModel
         Tags.ForEach(t => t.Group = tagGroup);
 
         SetupSelectedLanguages();
+    }
+
+    private void ClearControl()
+    {
+        SelectedGlossary = null;
+        Tags = null;
+        Glossaries = null;
+        Languages = null;
     }
 
     private void AttachToEventsOfGlossaryModel(GlossaryModel glossaryModel)

@@ -7,10 +7,23 @@
              xmlns:platformConverters="clr-namespace:Sdl.Desktop.Platform.Controls.Converters;assembly=Sdl.Desktop.Platform.Controls"
              mc:Ignorable="d"
              Focusable="True"
+             IsTabStop="True"
              x:Name="EditBoxControl"
              HorizontalAlignment="Left"
              d:DesignHeight="450"
              d:DesignWidth="800">
+    <UserControl.InputBindings>
+        <KeyBinding Key="Enter"
+                    Modifiers="Alt"
+                    CommandParameter="ConfirmEdit"
+                    Command="{Binding KeyboardKeypressCommand, ElementName=EditBoxControl}" />
+        <KeyBinding Key="Enter"
+                    CommandParameter="EnterEdit"
+                    Command="{Binding KeyboardKeypressCommand, ElementName=EditBoxControl}" />
+        <KeyBinding Key="Escape"
+                    CommandParameter="RejectEdit"
+                    Command="{Binding ElementName=EditBoxControl, Path=KeyboardKeypressCommand}" />
+    </UserControl.InputBindings>
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -64,20 +77,8 @@
             </Style>
         </Border.Style>
 
-        <Grid x:Name="EditBoxGrid"
-              Focusable="True">
-            <Grid.InputBindings>
-                <KeyBinding Key="Enter"
-                            Modifiers="Alt"
-                            CommandParameter="ConfirmEdit"
-                            Command="{Binding KeyboardKeypressCommand, ElementName=EditBoxControl}" />
-                <KeyBinding Key="Enter"
-                            CommandParameter="EnterEdit"
-                            Command="{Binding KeyboardKeypressCommand, ElementName=EditBoxControl}" />
-                <KeyBinding Key="Escape"
-                            CommandParameter="RejectEdit"
-                            Command="{Binding ElementName=EditBoxControl, Path=KeyboardKeypressCommand}" />
-            </Grid.InputBindings>
+        <Grid x:Name="EditBoxGrid">
+           
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="2*" />
@@ -85,6 +86,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Text="{Binding Label, ElementName=EditBoxControl}"
+                       x:Name="LabelText"
                        Foreground="Gray" />
 
             <TextBox x:Name="TextBox"
