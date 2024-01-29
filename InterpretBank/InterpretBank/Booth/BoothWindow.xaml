@@ -84,11 +84,12 @@
                     </Style>
                 </DockPanel.Style>
 
-                <TextBlock Text="Database filepath"
+                <TextBlock Text="Database file path"
+                           x:Name="FilepathLabel"
                            DockPanel.Dock="Top" />
                 <controls:ChooseFilepathControl DockPanel.Dock="Top"
-                                                Height="25"
                                                 Margin="0 5 0 0"
+                                                AutomationProperties.LabeledBy="{Binding ElementName=FilepathLabel}"
                                                 Filepath="{Binding Filepath, Mode=TwoWay}"
                                                 VerticalContentAlignment="Top" />
 
@@ -125,6 +126,7 @@
             </DockPanel>
         </GroupBox>
         <GridSplitter Grid.Column="0"
+                      AutomationProperties.Name="Window splitter"
                       Width="1"
                       HorizontalAlignment="Right"
                       VerticalAlignment="Stretch">
@@ -147,11 +149,26 @@
                    LastChildFill="False"
                    x:Name="TermSearchPanel">
 
+            <TextBlock Name="ShowHideSettingsLabel" Width="0"> 
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock" >
+                        <Setter Property="Text"
+                                Value="Hide settings" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=SettingsToggleButton, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                <Setter Property="Text" Value="Show settings"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
             <ToggleButton DockPanel.Dock="Top"
                           ToolTip="Show/hide settings"
                           x:Name="SettingsToggleButton"
                           BorderBrush="Transparent"
                           FontSize="20"
+                          AutomationProperties.Name="{Binding Text, ElementName=ShowHideSettingsLabel}"
                           Click="SettingsToggleButton_OnClick"
                           Background="Transparent"
                           HorizontalAlignment="Left">
@@ -160,6 +177,7 @@
                            BasedOn="{StaticResource GlyphToggleButtonStyle}">
                         <Setter Property="Content"
                                 Value="←" />
+                        
                         <Style.Triggers>
                             <Trigger Property="IsChecked"
                                      Value="True">

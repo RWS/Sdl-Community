@@ -23,11 +23,11 @@ namespace InterpretBank.SettingsService.UI
             DialogResult = true;
         }
 
-        private void GlossarySetup_OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (ChooseFilepathControl.AutoCompleteList.Visibility ==  Visibility.Visible && !IsMouseOverPopup(e))
-                ChooseFilepathControl.AutoCompleteList.Visibility = Visibility.Collapsed;
-        }
+        //private void GlossarySetup_OnMouseDown(object sender, MouseButtonEventArgs e)
+        //{
+        //    if (ChooseFilepathControl.AutoCompleteList.Visibility ==  Visibility.Visible && !IsMouseOverPopup(e))
+        //        ChooseFilepathControl.AutoCompleteList.Visibility = Visibility.Collapsed;
+        //}
 
         private void ImportButton_Click(object sender, RoutedEventArgs e)
         {

@@ -3,67 +3,44 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:converters="clr-namespace:InterpretBank.SettingsService.Converters"
-             xmlns:converters1="clr-namespace:InterpretBank.Converters"
              mc:Ignorable="d"
              x:Name="Root"
+             HorizontalContentAlignment="Stretch"
              d:DesignHeight="450"
              d:DesignWidth="800">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Styles/SettingsMainResources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <converters:NullStringToVisibilityConverter x:Key="NullToVisibilityConverter" />
-            <converters1:RatioConverter x:Key="RatioConverter" />
-            <converters1:InvertVisibilityConverter x:Key="InvertVisibilityConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
-        <TextBox Name="FilepathTextBox"
-                 DockPanel.Dock="Bottom"
-                 AutomationProperties.Name="FilePath"
-                 Padding="0 0 50 0"
-                 FontSize="{Binding ActualHeight, ElementName=Root, Converter={StaticResource RatioConverter}, ConverterParameter=0.44}"
-                 IsReadOnly="True"
-                 VerticalContentAlignment="Center"
-                 Text="{Binding Filepath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ElementName=Root}"
-                 PreviewMouseLeftButtonUp="FilepathTextBox_OnPreviewMouseLeftButtonDown"
-                 PreviewKeyDown="FilepathTextBox_PreviewKeyDown" />
-        <ListBox Name="AutoCompleteList"
-                 Visibility="Collapsed"
-                 PreviewMouseLeftButtonUp="AutoCompleteList_OnPreviewMouseLeftButtonDown"
-                 ItemsSource="{Binding DatabaseList, ElementName=Root}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding .}"
-                               AutomationProperties.Name="{Binding .}"
-                               PreviewKeyDown="FilepathTextBox_PreviewKeyDown" />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <DockPanel Visibility="{Binding Visibility, ElementName=AutoCompleteList, Converter={StaticResource InvertVisibilityConverter}}">
+    <WrapPanel>
 
-            <Button Style="{StaticResource ClearTextButtonStyle}"
-                    x:Name="BrowseButton"
-                    Click="BrowseButton_OnClick"
-                    BorderBrush="Transparent"
-                    FontSize="{Binding ActualHeight, ElementName=Root, Converter={StaticResource RatioConverter}, ConverterParameter=0.44}"
-                    Background="Transparent"
-                    DockPanel.Dock="Right"
-                    Content="📂"
-                    HorizontalAlignment="Right"
-                    Margin="0 0 5 0" />
-            <Button Style="{StaticResource ClearTextButtonStyle}"
-                    Click="ClearFilepathButton"
-                    BorderBrush="Transparent"
-                    FontSize="{Binding ActualHeight, ElementName=Root, Converter={StaticResource RatioConverter}, ConverterParameter=0.40}"
-                    Background="Transparent"
-                    Content="X"
-                    DockPanel.Dock="Right"
-                    Visibility="{Binding ElementName=FilepathTextBox, Path=Text, Converter={StaticResource NullToVisibilityConverter}}"
-                    HorizontalAlignment="Right"
-                    Margin="5 5 2 5" />
-        </DockPanel>
-    </Grid>
+        <ComboBox Height="25"
+                  IsEditable="True"
+                  Text="Select file path..."
+                  IsReadOnly="False"
+                  MinWidth="50"
+                  SelectedItem="{Binding Filepath, ElementName=Root}"
+                  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+                  ItemsSource="{Binding DatabaseList, ElementName=Root}">
+
+        </ComboBox>
+
+        <Button Style="{StaticResource Sdl.Button.EmbeddedStyle}"
+                x:Name="BrowseButton"
+                Click="BrowseButton_OnClick"
+                Height="30"
+                Background="Transparent"
+                BorderBrush="Transparent"
+                FontSize="15"
+                Content="📂"
+                DockPanel.Dock="Right"
+                HorizontalAlignment="Right"
+                Margin="5 5 2 5"/>
+
+    </WrapPanel>
 </UserControl>

@@ -8,16 +8,32 @@ using InterpretBank.SettingsService.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Data.Linq;
 using System.Data.SQLite;
 using System.Linq;
-using System.Windows.Controls;
 
 namespace InterpretBank.GlossaryService;
 
 public class InterpretBankDataContext : IInterpretBankDataContext
 {
     public event Action ShouldReloadEvent;
+
+    public bool IsValid
+    {
+        get
+        {
+            try
+            {
+                var x = DataContext.GetTable<DatabaseInfo>().ToList();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+    }
 
     public SQLiteConnection SqLiteConnection { get; set; }
     private DataContext DataContext { get; set; }
@@ -283,7 +299,11 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         if (!string.IsNullOrWhiteSpace(filepath)) SqLiteConnection = new SQLiteConnection($"Data Source={filepath}");
         DataContext = new DataContext(SqLiteConnection);
 
-        DataContext.Connection.Open();
+        try
+        {
+            DataContext.Connection.Open();
+        }
+        catch{}
     }
 
     //private string Filepath { get; set; }
@@ -334,12 +354,6 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         dataContext.SubmitChanges();
     }
 
-    private MyDataContext GetDataContext()
-    {
-        var dataContext = new MyDataContext(SqLiteConnection.FileName);
-        return dataContext;
-    }
-
     public void UpdateEntry(TermChange termChange)
     {
         using var dataContext = GetDataContext();
@@ -362,7 +376,26 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         dataContext.SubmitChanges();
     }
 
-   
+    private (List<string> contained, List<string> notContained) CheckLanguages(List<string> newTerms)
+    {
+        var languages = GetDbLanguages().Select(l => l.Name);
+        var notContained = new List<string>();
+        var contained = new List<string>();
+
+        newTerms.ForEach(l =>
+        {
+            if (!languages.Contains(l)) notContained.Add(l);
+            else contained.Add(l);
+        });
+
+        return (contained, notContained);
+    }
+
+    private MyDataContext GetDataContext()
+    {
+        var dataContext = new MyDataContext(SqLiteConnection.FileName);
+        return dataContext;
+    }
 
     //public void Reset()
     //{
@@ -418,22 +451,6 @@ public class InterpretBankDataContext : IInterpretBankDataContext
     //        });
     //    });
     //}
-
-    private (List<string> contained, List<string> notContained) CheckLanguages(List<string> newTerms)
-    {
-        var languages = GetDbLanguages().Select(l => l.Name);
-        var notContained = new List<string>();
-        var contained = new List<string>();
-
-        newTerms.ForEach(l =>
-        {
-            if (!languages.Contains(l)) notContained.Add(l);
-            else contained.Add(l);
-        });
-
-        return (contained, notContained);
-    }
-
     private int GetLanguageIndex(string language)
     {
         var dbLanguages = GetDbLanguages();

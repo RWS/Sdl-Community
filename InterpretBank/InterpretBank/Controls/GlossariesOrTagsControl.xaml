@@ -18,7 +18,7 @@
                 <ResourceDictionary Source="/InterpretBank;component/Styles/Buttons.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:BoolToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <converters:RatioConverter x:Key="RatioConverter"/>
+            <converters:RatioConverter x:Key="RatioConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -28,18 +28,21 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <DockPanel LastChildFill="False"
-                   
                    HorizontalAlignment="Stretch">
+
             <ToggleButton x:Name="TagsOrGlossariesToggleButton"
                           DockPanel.Dock="Left"
                           HorizontalAlignment="Left"
+                          AutomationProperties.Name="ToggleUseOfTagsOrGlossaries"
                           IsChecked="{Binding UseTags}"
                           IsEnabled="{Binding IsDbValid}"
-                          VerticalContentAlignment="Bottom"
                           Style="{StaticResource IOSToggleButtonStyle}"
+                          VerticalContentAlignment="Bottom"
                           Margin="0 10 0 0"
-                          Height="12" />
+                          Height="12">
+            </ToggleButton>
             <TextBlock VerticalAlignment="Bottom"
+                       Name="ToggleButtonLabel"
                        Margin="5 8 0 0">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">

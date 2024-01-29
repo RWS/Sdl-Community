@@ -9,10 +9,10 @@
         xmlns:ui="clr-namespace:InterpretBank.SettingsService.UI"
         x:Name="GlossaryManager_Window"
         xmlns:interpretBank="clr-namespace:InterpretBank"
-        MouseDown="GlossarySetup_OnMouseDown"
         xmlns:converters="clr-namespace:InterpretBank.SettingsService.Converters"
         xmlns:model="clr-namespace:InterpretBank.SettingsService.Model"
         xmlns:controls="clr-namespace:InterpretBank.SettingsService.UI.Controls"
+        xmlns:converters1="clr-namespace:InterpretBank.Converters"
         d:DataContext="{d:DesignInstance viewModel:GlossarySetupViewModel}"
         SizeToContent="Height"
         mc:Ignorable="d"
@@ -32,6 +32,7 @@
             </ResourceDictionary.MergedDictionaries>
             <converters:NullStringToVisibilityConverter x:Key="NullToVisibilityConverter" />
             <converters:NullToBoolConverter x:Key="NullToBullConverter" />
+            <converters1:BoolToVisibilityConverter x:Key="BoolToVisConverter" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -54,11 +55,13 @@
                        DockPanel.Dock="Top" />
 
             <controls:ChooseFilepathControl x:Name="ChooseFilepathControl"
-                                            AutomationProperties.LabeledBy="{Binding ElementName=FilepathLabel}" Filepath="{Binding Filepath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                            Height="50"
+                                            AutomationProperties.LabeledBy="{Binding ElementName=FilepathLabel}"
+                                            Filepath="{Binding Filepath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
         </DockPanel>
         <TabControl Margin="10"
-                    Visibility="{Binding Filepath, Converter={StaticResource NullToVisibilityConverter}}"
+                    Visibility="{Binding IsDbValid, Converter={StaticResource BoolToVisConverter}, ConverterParameter=True}"
                     Grid.Row="2"
                     Background="#F6F6F6"
                     BorderThickness="1">
@@ -99,10 +102,9 @@
                              Grid.Column="0"
                              Grid.Row="1"
                              x:Name="GlossaryList"
-                             Validation.ErrorTemplate="{x:Null}"
                              ItemsSource="{Binding Glossaries}"
                              SelectedIndex="0"
-                             SelectedItem="{Binding SelectedGlossary}"
+                             SelectedItem="{Binding SelectedGlossary, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              d:ItemsSource="{d:SampleData ItemCount=5}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
@@ -149,7 +151,7 @@
                                                      Margin="5 0 0 5"
                                                      IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}"
                                                      ItemsSource="{Binding Languages}"
-                                                     SelectedItems="{Binding SelectedItem.Languages, ElementName=GlossaryList}"
+                                                     SelectedItems="{Binding SelectedGlossary.Languages}"
                                                      DropdownItemTemplate="{StaticResource LanguageTemplate}"
                                                      SelectedItemTemplate="{StaticResource LanguageTemplate}" />
                         </DockPanel>
@@ -163,7 +165,7 @@
                                                      Margin="5 0 0 0"
                                                      IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}"
                                                      ItemsSource="{Binding Tags}"
-                                                     SelectedItems="{Binding SelectedItem.Tags, ElementName=GlossaryList}"
+                                                     SelectedItems="{Binding SelectedGlossary.Tags}"
                                                      DropdownItemTemplate="{StaticResource TagTemplate}"
                                                      SelectedItemTemplate="{StaticResource TagTemplate}" />
                         </DockPanel>
@@ -220,7 +222,7 @@
                                             FontSize="8"
                                             Style="{StaticResource Sdl.Button.EmbeddedStyle}"
                                             Content="✖">
-                                        
+
                                     </Button>
                                     <Image Source="../../Resources/Tag.png"
                                            DockPanel.Dock="Left"

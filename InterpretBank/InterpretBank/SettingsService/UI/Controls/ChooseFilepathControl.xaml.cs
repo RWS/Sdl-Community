@@ -50,7 +50,15 @@ namespace InterpretBank.SettingsService.UI.Controls
             set
             {
                 if (!File.Exists(value))
-                    return;
+                {
+                    var confirmation =
+                        UserInteractionService.Confirm("This DB no longer exists. Do you wish to remove it from this list?");
+                    if (confirmation)
+                    {
+                        DatabaseList.Remove(value);
+                        DatabaseList.Remove(value);
+                    }
+                }
 
                 AddToDatabaseList(value);
                 SetValue(FilepathProperty, value);
@@ -66,26 +74,26 @@ namespace InterpretBank.SettingsService.UI.Controls
             File.WriteAllText(DbListPath, JsonConvert.SerializeObject(DatabaseList));
         }
 
-        private void AutoCompleteList_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            var autoCompleteOption = (string)AutoCompleteList.SelectedItem;
+        //private void AutoCompleteList_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        //{
+        //    var autoCompleteOption = (string)AutoCompleteList.SelectedItem;
 
-            if (!File.Exists(autoCompleteOption))
-            {
-                var confirmation =
-                    UserInteractionService.Confirm("This DB no longer exists. Do you wish to remove it from this list?");
-                if (confirmation)
-                {
-                    DatabaseList.Remove(autoCompleteOption);
-                    DatabaseList.Remove(autoCompleteOption);
-                }
-            }
-            else
-            {
-                Filepath = autoCompleteOption;
-            }
-            AutoCompleteList.Visibility = Visibility.Collapsed;
-        }
+        //    if (!File.Exists(autoCompleteOption))
+        //    {
+        //        var confirmation =
+        //            UserInteractionService.Confirm("This DB no longer exists. Do you wish to remove it from this list?");
+        //        if (confirmation)
+        //        {
+        //            DatabaseList.Remove(autoCompleteOption);
+        //            DatabaseList.Remove(autoCompleteOption);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Filepath = autoCompleteOption;
+        //    }
+        //    AutoCompleteList.IsDropDownOpen = false;
+        //}
 
         private void BrowseButton_OnClick(object sender, RoutedEventArgs e)
         {
@@ -93,71 +101,74 @@ namespace InterpretBank.SettingsService.UI.Controls
             Filepath = filepath;
         }
 
-        private void ClearFilepathButton(object sender, RoutedEventArgs e)
-        {
-            FilepathTextBox.Clear();
-            Filepath = null;
-        }
+        //private void ClearFilepathButton(object sender, RoutedEventArgs e)
+        //{
+        //    FilepathTextBox.Clear();
+        //    Filepath = null;
+        //}
 
-        private void FilepathTextBox_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            OpenMenu();
-        }
+        //private void FilepathTextBox_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        //{
+        //    OpenMenu();
+        //}
 
-        private void FilepathTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Escape)
-            {
-                e.Handled = true;
+        //private void FilepathTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        //{
+        //    if (e.Key == Key.Escape)
+        //    {
+        //        e.Handled = true;
 
-                if (AutoCompleteList.Visibility == Visibility.Visible)
-                    AutoCompleteList.Visibility = Visibility.Collapsed;
-                else if (!string.IsNullOrWhiteSpace(Filepath))
-                    FilepathTextBox.Clear();
-                else
-                {
-                    e.Handled = false;
-                }
-            }
+        //        if (AutoCompleteList.IsDropDownOpen)
+        //            AutoCompleteList.IsDropDownOpen = false;
+        //        else if (!string.IsNullOrWhiteSpace(Filepath))
+        //            FilepathTextBox.Clear();
+        //        else
+        //        {
+        //            e.Handled = false;
+        //        }
+        //    }
 
-            if (e.Key == Key.Enter)
-            {
-                if (AutoCompleteList.Visibility == Visibility.Visible)
-                {
-                    Filepath = DatabaseList[AutoCompleteList.SelectedIndex];
-                    AutoCompleteList.Visibility = Visibility.Collapsed;
-                }
-                else OpenMenu();
+        //    if (e.Key == Key.Enter)
+        //    {
+        //        if (AutoCompleteList.IsDropDownOpen)
+        //        {
+        //            Filepath = DatabaseList[AutoCompleteList.SelectedIndex];
+        //            AutoCompleteList.IsDropDownOpen = false;
+        //        }
+        //        else OpenMenu();
 
-                e.Handled = true;
-            }
+        //        e.Handled = true;
+        //    }
 
-            if (e.Key == Key.Down)
-            {
-                AutoCompleteList.Visibility = Visibility.Visible;
-                if (AutoCompleteList.SelectedIndex < AutoCompleteList.Items.Count - 1)
-                {
-                    AutoCompleteList.SelectedIndex++;
-                    AutoCompleteList.ScrollIntoView(AutoCompleteList.SelectedItem);
-                }
-                e.Handled = true;
-            }
-            else if (e.Key == Key.Up)
-            {
-                if (AutoCompleteList.SelectedIndex > 0)
-                {
-                    AutoCompleteList.SelectedIndex--;
-                    AutoCompleteList.ScrollIntoView(AutoCompleteList.SelectedItem);
-                }
-                e.Handled = true;
-            }
-        }
+        //    if (e.Key == Key.Down)
+        //    {
+        //        AutoCompleteList.IsDropDownOpen = true;
+        //        if (AutoCompleteList.SelectedIndex < AutoCompleteList.Items.Count - 1)
+        //        {
+        //            AutoCompleteList.SelectedIndex++;
+        //            //AutoCompleteList.ScrollIntoView(AutoCompleteList.SelectedItem);
+        //        }
+        //        e.Handled = true;
+        //    }
+        //    else if (e.Key == Key.Up)
+        //    {
+        //        if (AutoCompleteList.SelectedIndex > 0)
+        //        {
+        //            AutoCompleteList.SelectedIndex--;
+        //            //AutoCompleteList.ScrollIntoView(AutoCompleteList.SelectedItem);
+        //        }
+        //        e.Handled = true;
+        //    }
+        //}
 
-        private void OpenMenu()
-        {
-            AutoCompleteList.Visibility = AutoCompleteList.Visibility == Visibility.Visible
-                ? Visibility.Collapsed
-                : Visibility.Visible;
-        }
+        //private void OpenMenu()
+        //{
+        //    var isDropDownOpen = AutoCompleteList.IsDropDownOpen;
+        //    AutoCompleteList.IsDropDownOpen = !isDropDownOpen;
+
+        //    //AutoCompleteList.Visibility = AutoCompleteList.Visibility == Visibility.Visible
+        //    //    ? Visibility.Collapsed
+        //    //    : Visibility.Visible;
+        //}
     }
 }

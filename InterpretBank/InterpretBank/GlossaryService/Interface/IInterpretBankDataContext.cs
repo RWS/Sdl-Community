@@ -15,6 +15,7 @@ public interface IInterpretBankDataContext : IDisposable
 {
     event Action ShouldReloadEvent;
     SQLiteConnection SqLiteConnection { get; set; }
+    bool IsValid { get; }
 
     void AddCompatibleLanguageEquivalentsFromImport(GlossaryImport glossaryImport, string glossaryName);
 
