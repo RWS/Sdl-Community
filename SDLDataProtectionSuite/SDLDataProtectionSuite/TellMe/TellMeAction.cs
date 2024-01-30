@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows;
+using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.View;
 using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.SdlDataProtectionSuite.TellMe
@@ -10,11 +11,14 @@ namespace Sdl.Community.SdlDataProtectionSuite.TellMe
 	public abstract class TellMeAction : AbstractTellMeAction
 	{
 		readonly string[] _helpKeywords = { "data", "protection", "suite", "dps", "plugin" };
+
 		readonly string _url;
+		readonly Action _customAction;
 
 		protected TellMeAction(string name, Icon icon, string[] helpKeywords, bool isAvailable, string url = null, Action customAction = null)
 		{
 			_url = url;
+			_customAction = customAction;
 
 			Name = name;
 			Icon = icon;
@@ -26,7 +30,21 @@ namespace Sdl.Community.SdlDataProtectionSuite.TellMe
 
 		public override string Category => PluginResources.Plugin_Name;
 
-		public override void Execute() => Process.Start(_url);
+		public override void Execute()
+		{
+			if (_customAction is not null)
+			{
+				_customAction.Invoke();
+				return;
+			}
+
+			if (string.IsNullOrEmpty(_url))
+			{
+				return;
+			}
+
+			Process.Start(_url);
+		}
 	}
 
 	class DocumentationAction : TellMeAction
@@ -49,5 +67,16 @@ namespace Sdl.Community.SdlDataProtectionSuite.TellMe
 		private static readonly string[] _helpKeywords = { "source code", "github" };
 		private static readonly bool _isAvailable = true;
 		public SourceCodeAction() : base($"{PluginResources.Plugin_Name} Source Code", PluginResources.ForumIcon, _helpKeywords, _isAvailable, url: "https://github.com/RWS/Sdl-Community/tree/master/SDLDataProtectionSuite") { }
+	}
+
+	class SettingsAction : TellMeAction
+	{
+		private static readonly string[] _helpKeywords = { "settings" };
+		private static readonly bool _isAvailable = true;
+		public SettingsAction() : base($"{PluginResources.Plugin_Name} Settings", PluginResources.ForumIcon, _helpKeywords, _isAvailable, customAction: DisplayMessage) { }
+		private static void DisplayMessage()
+		{
+			new SettingsActionView("https://appstore.rws.com/Plugin/39?tab=documentation").ShowDialog();
+		}
 	}
 }

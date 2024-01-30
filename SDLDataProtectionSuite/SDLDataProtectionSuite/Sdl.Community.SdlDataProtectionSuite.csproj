@@ -25,6 +25,7 @@
 	  <None Remove="SdlTmAnonymizer\UsefulTips\ko\ko.zip" />
 	  <None Remove="SdlTmAnonymizer\UsefulTips\ru\ru.zip" />
 	  <None Remove="SdlTmAnonymizer\UsefulTips\zh\zh.zip" />
+	  <None Remove="SdlTmAnonymizer\View\SettingsActionView.xaml" />
 	</ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -234,6 +235,10 @@
     <Page Include="SdlTmAnonymizer\View\SelectServersView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SdlTmAnonymizer\View\SettingsActionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SdlTmAnonymizer\View\SettingsView.xaml">
       <Generator>MSBuild:Compile</Generator>
