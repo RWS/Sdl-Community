@@ -19,7 +19,7 @@ public class GlossarySetupViewModel(
     IUserInteractionService userInteractionService,
     ExchangeService exchangeService,
     IInterpretBankDataContext interpretBankDataContext)
-    : ViewModelBase.ViewModel
+    : InterpretBank.ViewModel.ViewModel
 {
     private ICommand _deleteTagCommand;
     private ICommand _enterGlossaryCommand;

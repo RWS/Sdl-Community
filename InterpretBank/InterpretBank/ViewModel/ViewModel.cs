@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using InterpretBank.SettingsService.ViewModel.Interface;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using InterpretBank.SettingsService.ViewModel.Interface;
 
-namespace InterpretBank.ViewModelBase
+namespace InterpretBank.ViewModel
 {
 	public class ViewModel : IViewModel
 	{

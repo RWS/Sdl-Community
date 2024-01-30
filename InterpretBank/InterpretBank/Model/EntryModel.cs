@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace InterpretBank.Model
 {
-    public class EntryModel : ViewModelBase.ViewModel, IEquatable<EntryModel>
+    public class EntryModel : ViewModel.ViewModel, IEquatable<EntryModel>
     {
         private string _entryComment;
         private ObservableCollection<TermModel> _terms;

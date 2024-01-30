@@ -12,7 +12,7 @@ using InterpretBank.TerminologyService;
 namespace InterpretBank.SettingsService.ViewModel;
 
 public class SettingsService(IInterpretBankDataContext interpretBankDataContext)
-    : ViewModelBase.ViewModel, IDataErrorInfo
+    : InterpretBank.ViewModel.ViewModel, IDataErrorInfo
 {
 	private string _filepath;
 	private List<GlossaryModel> _glossaries;
