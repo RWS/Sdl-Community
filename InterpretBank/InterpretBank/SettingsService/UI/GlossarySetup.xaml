@@ -11,7 +11,6 @@
         xmlns:interpretBank="clr-namespace:InterpretBank"
         xmlns:converters="clr-namespace:InterpretBank.SettingsService.Converters"
         xmlns:model="clr-namespace:InterpretBank.SettingsService.Model"
-        xmlns:controls="clr-namespace:InterpretBank.SettingsService.UI.Controls"
         xmlns:converters1="clr-namespace:InterpretBank.Converters"
         xmlns:controls1="clr-namespace:InterpretBank.Controls"
         d:DataContext="{d:DesignInstance viewModel:GlossarySetupViewModel}"

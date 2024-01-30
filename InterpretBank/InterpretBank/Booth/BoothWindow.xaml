@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModel="clr-namespace:InterpretBank.Booth.ViewModel"
-        xmlns:controls="clr-namespace:InterpretBank.SettingsService.UI.Controls"
         xmlns:model="clr-namespace:InterpretBank.Model"
         xmlns:converters="clr-namespace:InterpretBank.Converters"
         xmlns:controls1="clr-namespace:InterpretBank.Controls"
