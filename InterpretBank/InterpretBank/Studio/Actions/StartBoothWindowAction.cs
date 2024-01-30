@@ -7,8 +7,8 @@ using System.Windows.Forms.Integration;
 
 namespace InterpretBank.Studio.Actions
 {
-    [Action(nameof(StartBoothWindowAction), Icon = "Booth", Name = "In the booth",
-        Description = "Start Booth Window")]
+    [Action(nameof(StartBoothWindowAction), Icon = "Booth", Name = "Live Search",
+        Description = "Start live search")]
     [ActionLayout(typeof(InterpretBankRibbonGroup), 10, DisplayType.Large)]
     public class StartBoothWindowAction : AbstractAction
     {

@@ -11,7 +11,7 @@
         xmlns:converters1="clr-namespace:InterpretBank.SettingsService.Converters"
         d:DataContext="{d:DesignInstance viewModel:BoothWindowViewModel}"
         mc:Ignorable="d"
-        Title="Live Search"
+        Title="InterpretBank Live Search"
         Name="Booth_Window"
         Icon="/InterpretBank;component/Resources/Booth.ico"
         WindowStartupLocation="CenterScreen"

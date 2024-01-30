@@ -14,7 +14,7 @@
         mc:Ignorable="d"
         x:Name="Root"
         d:DataContext="{d:DesignInstance viewModel:SettingsService}"
-        Title="MainWindow"
+        Title="InterpretBank settings"
         SizeToContent="Height"
         WindowStartupLocation="CenterScreen"
         Height="Auto"
