@@ -3,23 +3,25 @@
 namespace Sdl.Community.SdlDataProtectionSuite.TellMe
 {
 	[TellMeProvider]
-	public class TellMeProvider: ITellMeProvider
+	public class TellMeProvider : ITellMeProvider
 	{
-		public string Name => string.Format(PluginResources.TellMe_Provider, PluginResources.Plugin_Name);
-
-		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
+		public TellMeProvider()
 		{
-			new CommunityWikiAction
-			{
-				Keywords = new[] { "data", "protection", "suite", "community", "support", "wiki" }
-			},
-			new AppStoreForumAction
-			{
-				Keywords = new[] { "data", "protection", "suite", "support", "forum" }
-			},
-			new AppStoreDownloadAction
-			{
-				Keywords = new[] { "data", "protection", "suite", "store", "download", "appstore" }}
-		};
+			ProviderActions = GetProviderActions();
+		}
+
+		public string Name => PluginResources.Plugin_Name;
+
+		public AbstractTellMeAction[] ProviderActions { get; }
+
+		private AbstractTellMeAction[] GetProviderActions()
+		{
+			var forumAction = new CommunityForumAction();
+			var helpAction = new DocumentationAction();
+			var sourceCodeAction = new SourceCodeAction();
+
+			var providerActions = new AbstractTellMeAction[] { forumAction, helpAction, sourceCodeAction };
+			return providerActions;
+		}
 	}
 }

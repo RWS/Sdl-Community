@@ -3,6 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net48</TargetFramework>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<LangVersion>preview</LangVersion>
 	</PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
