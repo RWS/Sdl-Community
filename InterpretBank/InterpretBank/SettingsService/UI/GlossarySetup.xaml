@@ -13,6 +13,7 @@
         xmlns:model="clr-namespace:InterpretBank.SettingsService.Model"
         xmlns:controls="clr-namespace:InterpretBank.SettingsService.UI.Controls"
         xmlns:converters1="clr-namespace:InterpretBank.Converters"
+        xmlns:controls1="clr-namespace:InterpretBank.Controls"
         d:DataContext="{d:DesignInstance viewModel:GlossarySetupViewModel}"
         SizeToContent="Height"
         mc:Ignorable="d"
@@ -54,7 +55,7 @@
                        x:Name="FilepathLabel"
                        DockPanel.Dock="Top" />
 
-            <controls:ChooseFilepathControl x:Name="ChooseFilepathControl"
+            <controls1:ChooseFilepathControl x:Name="ChooseFilepathControl"
                                             Height="50"
                                             AutomationProperties.LabeledBy="{Binding ElementName=FilepathLabel}"
                                             Filepath="{Binding Filepath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
