@@ -1,0 +1,329 @@
+﻿<Window x:Class="InterpretBank.SettingsService.UI.GlossarySetup"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:sdl="http://schemas.sdl.com/xaml"
+        WindowStartupLocation="CenterScreen"
+        xmlns:viewModel="clr-namespace:InterpretBank.SettingsService.ViewModel"
+        xmlns:ui="clr-namespace:InterpretBank.SettingsService.UI"
+        x:Name="GlossaryManager_Window"
+        xmlns:interpretBank="clr-namespace:InterpretBank"
+        xmlns:converters="clr-namespace:InterpretBank.SettingsService.Converters"
+        xmlns:model="clr-namespace:InterpretBank.SettingsService.Model"
+        xmlns:converters1="clr-namespace:InterpretBank.Converters"
+        xmlns:controls1="clr-namespace:InterpretBank.Controls"
+        d:DataContext="{d:DesignInstance viewModel:GlossarySetupViewModel}"
+        SizeToContent="Height"
+        mc:Ignorable="d"
+        Title="InterpretBank database configurator"
+        Icon="/InterpretBank;component/Resources/IB.ico"
+        MaxHeight="650"
+        Width="600">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/InterpretBank;component/Styles/SettingsResources.xaml" />
+                <ResourceDictionary Source="../Styles/SettingsMainResources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/datagridresources.xaml" />
+                <ResourceDictionary Source="../Styles/SetupGlossariesResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <converters:NullStringToVisibilityConverter x:Key="NullToVisibilityConverter" />
+            <converters:NullToBoolConverter x:Key="NullToBullConverter" />
+            <converters1:BoolToVisibilityConverter x:Key="BoolToVisConverter" />
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Image Grid.Row="0"
+               Height="50"
+               Source="../../Resources/logo.png" />
+        <DockPanel Grid.Row="1"
+                   HorizontalAlignment="Stretch"
+                   Margin="10 10 10 5"
+                   VerticalAlignment="Top">
+
+            <TextBlock Text="{x:Static interpretBank:PluginResources.SettingsWindow_TextBlock_DBFilepath}"
+                       x:Name="FilepathLabel"
+                       DockPanel.Dock="Top" />
+
+            <controls1:ChooseFilepathControl x:Name="ChooseFilepathControl"
+                                            Height="50"
+                                            AutomationProperties.LabeledBy="{Binding ElementName=FilepathLabel}"
+                                            Filepath="{Binding Filepath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+        </DockPanel>
+        <TabControl Margin="10"
+                    Visibility="{Binding IsDbValid, Converter={StaticResource BoolToVisConverter}, ConverterParameter=True}"
+                    Grid.Row="2"
+                    Background="#F6F6F6"
+                    BorderThickness="1">
+            <TabItem Header="Glossaries"
+                     Template="{StaticResource GlossarySetupTabItem}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <DockPanel LastChildFill="False"
+                               Grid.Column="0"
+                               Grid.ColumnSpan="2"
+                               Grid.Row="0"
+                               DockPanel.Dock="Left">
+                        <TextBox x:Name="ValueHolder"
+                                 Visibility="Collapsed" />
+                        <TextBlock Text="Type in a new glossary name then press enter:"
+                                   Margin="0 5 0 1"
+                                   DockPanel.Dock="Top" />
+                        <TextBox DockPanel.Dock="Top"
+                                 Margin="0 0 0 5"
+                                 PreviewKeyDown="UIElement_OnKeyDown">
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter"
+                                            Command="{Binding EnterGlossaryCommand}"
+                                            CommandParameter="{Binding Text, ElementName=ValueHolder}" />
+                            </TextBox.InputBindings>
+                        </TextBox>
+                    </DockPanel>
+
+                    <ListBox DockPanel.Dock="Top"
+                             Grid.Column="0"
+                             Grid.Row="1"
+                             x:Name="GlossaryList"
+                             ItemsSource="{Binding Glossaries}"
+                             SelectedIndex="0"
+                             SelectedItem="{Binding SelectedGlossary, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             d:ItemsSource="{d:SampleData ItemCount=5}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel>
+                                    <Button VerticalAlignment="Bottom"
+                                            Command="{Binding DataContext.DeleteGlossaryCommand, ElementName=GlossaryManager_Window}"
+                                            DockPanel.Dock="Left"
+                                            FontSize="8"
+                                            Style="{StaticResource Sdl.Button.EmbeddedStyle}"
+                                            Content="✖">
+
+                                    </Button>
+                                    <Image Source="../../Resources/Glossary.png"
+                                           DockPanel.Dock="Left"
+                                           Height="17" />
+                                    <TextBlock FontSize="10"
+                                               VerticalAlignment="Center"
+                                               DockPanel.Dock="Left">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding Path="GlossaryName" />
+                                                <Binding Path="SubGlossaryName" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </DockPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Grid Grid.Column="1"
+                          Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <DockPanel>
+                            <Label Content="Languages"
+                                   Padding="5 0 0 5"
+                                   DockPanel.Dock="Top"
+                                   FontWeight="Light"
+                                   FontSize="10" />
+                            <sdl:MultiSelectComboBox DockPanel.Dock="Bottom"
+                                                     Margin="5 0 0 5"
+                                                     IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}"
+                                                     ItemsSource="{Binding Languages}"
+                                                     SelectedItems="{Binding SelectedGlossary.Languages}"
+                                                     DropdownItemTemplate="{StaticResource LanguageTemplate}"
+                                                     SelectedItemTemplate="{StaticResource LanguageTemplate}" />
+                        </DockPanel>
+                        <DockPanel Grid.Row="1">
+                            <Label DockPanel.Dock="Top"
+                                   Content="Tags"
+                                   Padding="5 0 0 5"
+                                   FontWeight="Light"
+                                   FontSize="10" />
+                            <sdl:MultiSelectComboBox DockPanel.Dock="Bottom"
+                                                     Margin="5 0 0 0"
+                                                     IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}"
+                                                     ItemsSource="{Binding Tags}"
+                                                     SelectedItems="{Binding SelectedGlossary.Tags}"
+                                                     DropdownItemTemplate="{StaticResource TagTemplate}"
+                                                     SelectedItemTemplate="{StaticResource TagTemplate}" />
+                        </DockPanel>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <!--Tags tab-->
+            <TabItem Header="Tags"
+                     Template="{StaticResource GlossarySetupTabItem}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <DockPanel LastChildFill="False"
+                               Grid.Row="0"
+                               Grid.Column="0"
+                               Grid.ColumnSpan="2">
+                        <TextBlock Text="Type in a new tag then press enter:"
+                                   Margin="0 5 0 1"
+                                   DockPanel.Dock="Top" />
+                        <TextBox DockPanel.Dock="Top"
+                                 Margin="0 0 0 5"
+                                 PreviewKeyDown="UIElement_OnKeyDown">
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter"
+                                            Command="{Binding EnterTagCommand}"
+                                            CommandParameter="{Binding Text, ElementName=ValueHolder}" />
+                            </TextBox.InputBindings>
+                        </TextBox>
+                    </DockPanel>
+
+                    <ListBox DockPanel.Dock="Top"
+                             Grid.Row="1"
+                             x:Name="TagsList"
+                             Grid.Column="0"
+                             ItemsSource="{Binding Tags}"
+                             SelectedIndex="0"
+                             SelectedItem="{Binding SelectedTag}"
+                             d:ItemsSource="{d:SampleData ItemCount=5}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel>
+                                    <Button Command="{Binding DataContext.DeleteTagCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                            CommandParameter="{Binding TagName}"
+                                            VerticalAlignment="Bottom"
+                                            DockPanel.Dock="Left"
+                                            FontSize="8"
+                                            Style="{StaticResource Sdl.Button.EmbeddedStyle}"
+                                            Content="✖">
+
+                                    </Button>
+                                    <Image Source="../../Resources/Tag.png"
+                                           DockPanel.Dock="Left"
+                                           Height="17" />
+                                    <TextBlock Text="{Binding TagName}"
+                                               FontSize="10"
+                                               VerticalAlignment="Center"
+                                               DockPanel.Dock="Right" />
+                                </DockPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+
+                    <sdl:MultiSelectComboBox Grid.Column="1"
+                                             Grid.Row="1"
+                                             Margin="5 0 0 0"
+                                             ItemsSource="{Binding Glossaries}"
+                                             IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}"
+                                             DropdownItemTemplate="{StaticResource GlossaryTemplate}"
+                                             SelectedItems="{Binding GlossariesTaggedWithSelected}"
+                                             SelectedItemTemplate="{StaticResource GlossaryTemplate}" />
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="DB Languages"
+                     Template="{StaticResource GlossarySetupTabItem}">
+
+                <DataGrid ItemsSource="{Binding SelectedLanguages}"
+                          Grid.Row="0"
+                          AutoGenerateColumns="False"
+                          Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+                          SelectionMode="Single"
+                          IsReadOnly="True">
+
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <Button Content="⟲"
+                                                FontSize="15"
+                                                Command="{Binding RestoreCommand}"
+                                                Background="Transparent"
+                                                HorizontalAlignment="Left"
+                                                BorderBrush="Transparent"
+                                                Style="{StaticResource ClearTextButtonStyle}" />
+                                        <ComboBox ItemsSource="{Binding LanguageModels}"
+                                                  Grid.Column="1"
+                                                  SelectedIndex="{Binding SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                                  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+                                                  ItemTemplate="{StaticResource LanguageTemplate}"
+                                                  IsEnabled="{Binding IsEditable}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+        </TabControl>
+        <DockPanel Grid.Row="3"
+                   Margin="0 10 0 0"
+                   VerticalAlignment="Bottom"
+                   LastChildFill="False">
+
+            <Button Content="⇪"
+                    FontSize="20"
+                    FontWeight="Bold"
+                    ToolTip="Import entries into selected glossary"
+                    x:Name="Import_Button"
+                    DockPanel.Dock="Left"
+                    Visibility="{Binding Filepath, Converter={StaticResource NullToVisibilityConverter}}"
+                    Style="{StaticResource Sdl.Button.EmbeddedStyle}"
+                    Click="ImportButton_Click"
+                    Command="{Binding ImportIntoSelectedGlossaryCommand}"
+                    Margin="10 0 10 10">
+            </Button>
+
+            <Button Content="Cancel"
+                    Cursor="Hand"
+                    IsCancel="True"
+                    Click="CancelButton_OnClick"
+                    Height="30"
+                    Style="{StaticResource Sdl.Button.SecondaryStyle}"
+                    DockPanel.Dock="Right"
+                    Margin="0 0 10 10" />
+
+            <Button Content="Apply"
+                    Cursor="Hand"
+                    Click="ApplyButton_Click"
+                    Command="{Binding SaveCommand}"
+                    Height="30"
+                    Style="{StaticResource Sdl.Button.PrimaryStyle}"
+                    DockPanel.Dock="Right"
+                    Margin="0 0 10 10" />
+        </DockPanel>
+    </Grid>
+</Window>

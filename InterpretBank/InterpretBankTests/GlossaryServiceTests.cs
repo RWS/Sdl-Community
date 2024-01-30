@@ -10,12 +10,7 @@ namespace InterpretBankTests
 {
 	public class GlossaryServiceTests
 	{
-		private readonly GlossaryServiceBuilder _glossaryServiceBuilder;
-
-		public GlossaryServiceTests()
-		{
-			_glossaryServiceBuilder = new GlossaryServiceBuilder();
-		}
+		private readonly GlossaryServiceBuilder _glossaryServiceBuilder = new();
 
 		[Fact]
 		public void CreateDatabase_Test()
@@ -168,10 +163,10 @@ namespace InterpretBankTests
 				.WithDatabaseConnection(new DatabaseConnection(filepath))
 				.Build();
 
-			var termList = glossaryService.GetGlossaries();
+			var glossaryList = glossaryService.GetGlossaries();
 
-			Assert.Equal(6, termList.Count);
-			Assert.Equal(typeof(GlossaryMetadataEntry), termList[0].GetType());
+			Assert.Equal(12, glossaryList.Count);
+			Assert.Equal(typeof(GlossaryMetadataEntry), glossaryList[0].GetType());
 		}
 
 		[Fact]

@@ -18,12 +18,12 @@ namespace InterpretBank.GlossaryService
 		TagList
 	}
 
-	public class GlossaryService : IGlossaryService
+	public class SqlGlossaryService : IGlossaryService
 	{
 		private readonly IDatabaseConnection _connection;
 		private readonly ISqlBuilder _sqlBuilder;
 
-		public GlossaryService(IDatabaseConnection connection, ISqlBuilder sqlBuilder)
+		public SqlGlossaryService(IDatabaseConnection connection, ISqlBuilder sqlBuilder)
 		{
 			_connection = connection;
 			_sqlBuilder = sqlBuilder;

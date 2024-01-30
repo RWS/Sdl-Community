@@ -1,48 +1,67 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using Autofac;
+using InterpretBank.SettingsService.UI;
 using Sdl.Terminology.TerminologyProvider.Core;
+using System;
+using System.Windows.Forms;
 
 namespace InterpretBank.Studio
 {
-	[TerminologyProviderWinFormsUI]
-	internal class InterpretBankWinFormsUI : ITerminologyProviderWinFormsUI
-	{
-		public bool SupportsEditing
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
+    [TerminologyProviderWinFormsUI]
+    internal class InterpretBankWinFormsUI : ITerminologyProviderWinFormsUIWithEdit
+    {
+        public string TypeDescription => PluginResources.Plugin_Description;
 
-		public string TypeDescription
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
+        public string TypeName => PluginResources.Plugin_Name;
 
-		public string TypeName => PluginResources.Plugin_Name;
+        private ILifetimeScope InterpretBankSettingsScope { get; } = ApplicationInitializer.ApplicationLifetimeScope.BeginLifetimeScope();
 
-		public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
-		{
-			throw new NotImplementedException();
-		}
+        private PersistenceService.PersistenceService PersistenceService { get; } = ApplicationInitializer.ApplicationLifetimeScope.Resolve<PersistenceService.PersistenceService>();
 
-		public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
-		{
-			throw new NotImplementedException();
-		}
+        public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
+        {
+            var settingsUi = InterpretBankSettingsScope.Resolve<SettingsMain>();
 
-		public TerminologyProviderDisplayInfo GetDisplayInfo(Uri terminologyProviderUri)
-		{
-			throw new NotImplementedException();
-		}
+            if (!(settingsUi.ShowDialog() ?? false))
+                return null;
 
-		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
-		{
-			throw new NotImplementedException();
-		}
-	}
+            var settings = settingsUi.Settings;
+
+            var settingsId = GetSettingsId();
+            settings.SettingsId = settingsId;
+
+            PersistenceService.SaveSettings(settings, settingsId);
+
+            var provider = InterpretBankSettingsScope.Resolve<InterpretBankProvider>();
+            provider.Setup(settings);
+
+            return [provider];
+        }
+
+        public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
+        {
+            if (terminologyProvider is not InterpretBankProvider provider)
+                return false;
+
+            var settingsUi = InterpretBankSettingsScope.Resolve<SettingsMain>();
+            settingsUi.Setup(provider.Settings);
+            var result = settingsUi.ShowDialog() ?? false;
+
+            if (!result)
+                return false;
+
+            provider.Settings = settingsUi.Settings;
+            PersistenceService.SaveSettings(provider.Settings, provider.Settings.SettingsId);
+
+            provider.RaiseProviderSettingsChanged();
+            return true;
+        }
+
+        public TerminologyProviderDisplayInfo GetDisplayInfo(Uri terminologyProviderUri) =>
+            new() { Name = PluginResources.Plugin_Description };
+
+        public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri) =>
+            terminologyProviderUri.ToString().Contains(Constants.InterpretBankUri);
+
+        private static string GetSettingsId() => (Guid.NewGuid().ToString());
+    }
 }

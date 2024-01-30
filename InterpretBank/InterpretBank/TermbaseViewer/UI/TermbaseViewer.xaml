@@ -1,0 +1,271 @@
+﻿<UserControl x:Class="InterpretBank.TermbaseViewer.UI.TermbaseViewer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:model="clr-namespace:InterpretBank.Model"
+             xmlns:controls="clr-namespace:InterpretBank.TermbaseViewer.UI.Controls"
+             xmlns:converters="clr-namespace:InterpretBank.TermbaseViewer.UI.Converters"
+             xmlns:viewModel="clr-namespace:InterpretBank.TermbaseViewer.ViewModel"
+             x:Name="TermbaseViewerControl"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance viewModel:TermbaseViewerViewModel}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/textblockresources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
+                <ResourceDictionary Source="/InterpretBank;component/TermbaseViewer/UI/Resources/TermbaseViewerResources.xaml" />
+                <ResourceDictionary Source="/InterpretBank;component/Styles/ButtonStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <converters:ImageToBitmapImageConverter x:Key="ImageConverter" />
+            <converters:LanguageToColorConverter x:Key="LanguageToColorConverter" />
+            <converters:SubtractConverter x:Key="SubtractConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+
+        <DockPanel>
+
+            <Border DockPanel.Dock="Top"
+                    Background="#f0f0f0"
+                    CornerRadius="3"
+                    Height="Auto">
+                <WrapPanel Orientation="Horizontal"
+                           DockPanel.Dock="Top">
+
+                    <Button ToolTip="Remove entry"
+                            DockPanel.Dock="Left"
+                            AutomationProperties.Name="Remove entry"
+                            Command="{Binding RemoveSelectedEntryCommand}"
+                            Style="{StaticResource GlyphButtonStyle2}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🗑"
+                                       VerticalAlignment="Center"
+                                       FontSize="15" />
+                            <AccessText Text="_Remove entry"
+                                        Foreground="Black"
+                                        VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button ToolTip="Add entry"
+                            DockPanel.Dock="Right"
+                            AutomationProperties.Name="Add entry"
+                            Focusable="True"
+                            Command="{Binding AddEntryCommand}"
+                            Style="{StaticResource GlyphButtonStyle2}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="➕"
+                                       VerticalAlignment="Center"
+                                       FontSize="15" />
+                            <AccessText Text="_Add entry"
+                                        Foreground="Black"
+                                        Margin="1 0 0 0"
+                                        VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                </WrapPanel>
+            </Border>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        DockPanel.Dock="Bottom"
+                        Background="#f0f0f0">
+                <TextBlock Text="Count: " />
+                <TextBlock Margin="5 0 0 0"
+                           Text="{Binding Entries.Result.Count}" />
+            </StackPanel>
+            <ListBox ItemsSource="{Binding Entries.Result}"
+                     AutomationProperties.Name="Entries"
+                     FontSize="14"
+                     x:Name="EntriesList"
+                     DisplayMemberPath="Name"
+                     DockPanel.Dock="Top"
+                     VirtualizingStackPanel.VirtualizationMode="Recycling"
+                     VirtualizingStackPanel.IsVirtualizing="True"
+                     FontWeight="Light"
+                     SelectedItem="{Binding SelectedEntry}" />
+        </DockPanel>
+
+        <GridSplitter Grid.Column="0"
+                      Width="1"
+                      Focusable="False"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Stretch" />
+
+        <Grid Grid.Column="1"
+              x:Name="TermsGrid">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!--<Border Grid.Row="0"
+                    DockPanel.Dock="Top"
+                    Margin="5 5 0 5"
+                    Background="#f0f0f0"
+                    CornerRadius="3"
+                    Height="30"
+                    BorderThickness="2 1 1 2"
+                    x:Name="EntryNote_Border">
+
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Left">
+
+                    <Button ToolTip="Remove entry"
+                            AutomationProperties.Name="Remove entry"
+                            Command="{Binding RemoveSelectedEntryCommand}"
+                            Style="{StaticResource GlyphButtonStyle2}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🗑"
+                                       VerticalAlignment="Center"
+                                       FontSize="15" />
+                            <AccessText Text="_Remove entry"
+                                        Foreground="Black"
+                                        VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button ToolTip="Add entry"
+                            AutomationProperties.Name="Add entry"
+                            Focusable="True"
+                            Command="{Binding AddEntryCommand}"
+                            Style="{StaticResource GlyphButtonStyle2}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="➕"
+                                       VerticalAlignment="Center"
+                                       FontSize="15" />
+                            <AccessText Text="_Add entry"
+                                        Foreground="Black"
+                                        Margin="1 0 0 0"
+                                        VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Border>-->
+
+            <Border Grid.Row="1"
+                    DockPanel.Dock="Top"
+                    BorderBrush="LightGray"
+                    BorderThickness="2 1 1 2"
+                    AutomationProperties.Name="EntryNoteBorder"
+                    Margin="5 5 0 5">
+
+                <controls:EditBox Label="Entry note: "
+                                  Margin="5"
+                                  x:Name="EntryNote"
+                                  HorizontalAlignment="Stretch"
+                                  FontSize="13"
+                                  SaveEditCommand="{Binding DataContext.SaveEditCommand, ElementName=TermbaseViewerControl}"
+                                  SaveEditCommandParameter="{Binding SelectedEntry}"
+                                  EditBoxText="{Binding SelectedEntry.EntryComment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </Border>
+            <ListView Grid.Row="2"
+                      DockPanel.Dock="Top"
+                      ItemContainerStyle="{DynamicResource TermListViewStyle}"
+                      HorizontalContentAlignment="Stretch"
+                      KeyboardNavigation.TabNavigation="Local"
+                      SelectionMode="Single"
+                      ItemsSource="{Binding SelectedEntry.Terms}"
+                      ScrollViewer.VerticalScrollBarVisibility="Visible"
+                      x:Name="Terms_ListView"
+                      BorderThickness="0">
+                <ListView.ItemTemplate>
+                    <DataTemplate DataType="{x:Type model:TermModel}">
+                        <Border CornerRadius="1"
+                                HorizontalAlignment="Left"
+                                Width="{Binding ActualWidth, ElementName=TermsGrid, Converter={StaticResource SubtractConverter}, ConverterParameter=32}"
+                                Margin="0 3 0 0"
+                                BorderThickness="4 0.7 0.7 2">
+                            <Border.BorderBrush>
+                                <MultiBinding Converter="{StaticResource LanguageToColorConverter}">
+                                    <Binding Path="LanguageName" />
+                                    <Binding ElementName="TermbaseViewerControl"
+                                             Path="DataContext.SourceLanguageName" />
+                                    <Binding ElementName="TermbaseViewerControl"
+                                             Path="DataContext.TargetLanguageName" />
+                                </MultiBinding>
+                            </Border.BorderBrush>
+
+                            <Grid Margin="5 0 0 0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+
+                                <StackPanel Orientation="Horizontal"
+                                            Grid.Row="0">
+                                    <Image Source="{Binding LanguageName, Converter={StaticResource ImageConverter}}"
+                                           VerticalAlignment="Center"
+                                           Height="30" />
+                                    <TextBlock Text="{Binding LanguageName}"
+                                               Foreground="#3b3535"
+                                               FontWeight="Black"
+                                               Margin="5 0 0 0"
+                                               VerticalAlignment="Center"
+                                               FontSize="15" />
+                                </StackPanel>
+
+                                <controls:EditBox Grid.Row="1"
+                                                  FontFamily="ComicSans"
+                                                  Label="Term: "
+                                                  SaveEditCommand="{Binding DataContext.SaveEditCommand, ElementName=TermbaseViewerControl}"
+                                                  SaveEditCommandParameter="{Binding }"
+                                                  Margin="3 0 0 0"
+                                                  EditBoxText="{Binding Term, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                  FontSize="15" />
+
+                                <controls:EditBox Grid.Row="2"
+                                                  FontFamily="ComicSans"
+                                                  SaveEditCommand="{Binding DataContext.SaveEditCommand, ElementName=TermbaseViewerControl}"
+                                                  SaveEditCommandParameter="{Binding }"
+                                                  Margin="5 0 0 0"
+                                                  FontSize="12"
+                                                  Label="Extra 1: "
+                                                  EditBoxText="{Binding FirstComment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <controls:EditBox Grid.Row="3"
+                                                  FontFamily="ComicSans"
+                                                  Margin="5 0 0 0"
+                                                  SaveEditCommand="{Binding DataContext.SaveEditCommand, ElementName=TermbaseViewerControl}"
+                                                  SaveEditCommandParameter="{Binding }"
+                                                  Label="Extra 2: "
+                                                  FontSize="12"
+                                                  EditBoxText="{Binding SecondComment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <Border Grid.Row="3"
+                    Background="LightSteelBlue"
+                    BorderThickness="0"
+                    HorizontalAlignment="Left"
+                    Margin="5"
+                    VerticalAlignment="Bottom"
+                    BorderBrush="Gray">
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Left"
+                            Margin="5 5 0 0">
+                    <Image Source="/InterpretBank;component/Resources/Glossary.png"
+                           Height="20" />
+                    <TextBlock VerticalAlignment="Center"
+                               Margin="0 0 5 0"
+                               FontFamily="ComicSans"
+                               FontSize="15"
+                               Text="{Binding DataContext.SelectedEntry.GlossaryName, ElementName=TermbaseViewerControl}" />
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

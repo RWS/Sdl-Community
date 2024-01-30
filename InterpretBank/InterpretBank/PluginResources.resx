@@ -121,6 +121,43 @@
     <value>InterpretBank</value>
   </data>
   <data name="GlossaryExchangeServiceManager_CreateFileReader_The_file_type__0__is_not_supported" xml:space="preserve">
-	  <value>The file type {0} is not supported</value>
+    <value>The file type {0} is not supported</value>
+  </data>
+  <data name="Plugin_Description" xml:space="preserve">
+    <value>InterpretBank description</value>
+  </data>
+  <data name="SettingsWindow_GroupBox_Header" xml:space="preserve">
+    <value>Interpret Bank Settings</value>
+  </data>
+  <data name="SettingsWindow_TextBlock_DBFilepath" xml:space="preserve">
+    <value>Database file path:</value>
+  </data>
+  <data name="SettingsWindow_TextBlock_Tags" xml:space="preserve">
+    <value>Use the glossaries tagged with the following:</value>
+  </data>
+  <data name="SettingsWindow_TextBlock_Glossaries" xml:space="preserve">
+    <value>Use the following glossaries:</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="AddTerm" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\AddTerm.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CommitToDb" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\CommitToDb.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Booth" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Booth.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IB" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\IB.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Remove" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Remove.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Remove2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Remove2.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RemoveClick" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\RemoveClick.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
