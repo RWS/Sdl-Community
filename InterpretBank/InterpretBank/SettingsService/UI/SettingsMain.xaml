@@ -23,7 +23,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/InterpretBank;component/Styles/WindowsBorder.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
-                <ResourceDictionary Source="/InterpretBank;component/SettingsService/Styles/SettingsResources.xaml" />
+                <ResourceDictionary Source="/InterpretBank;component/Styles/SettingsResources.xaml" />
                 <ResourceDictionary Source="/InterpretBank;component/SettingsService/Styles/SettingsMainResources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Controls;component/Controls/WatermarkTextBox/WatermarkTextBoxResources.xaml" />
             </ResourceDictionary.MergedDictionaries>

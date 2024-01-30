@@ -14,7 +14,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/InterpretBank;component/SettingsService/Styles/SettingsResources.xaml" />
+                <ResourceDictionary Source="/InterpretBank;component/Styles/SettingsResources.xaml" />
                 <ResourceDictionary Source="/InterpretBank;component/Styles/Buttons.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:BoolToVisibilityConverter x:Key="BooleanToVisibilityConverter" />

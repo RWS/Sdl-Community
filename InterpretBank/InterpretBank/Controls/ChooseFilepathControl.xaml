@@ -11,7 +11,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/InterpretBank;component/SettingsService/Styles/SettingsResources.xaml" />
+                <ResourceDictionary Source="/InterpretBank;component/Styles/SettingsResources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
             </ResourceDictionary.MergedDictionaries>
