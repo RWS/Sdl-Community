@@ -10,7 +10,7 @@ using System.Windows.Data;
 
 namespace InterpretBank.Booth.ViewModel
 {
-    public class BoothWindowViewModel : InterpretBank.ViewModel.ViewModel
+    public class BoothWindowViewModel : Model.NotifyChangeModel
     {
         private readonly ITerminologyService _terminologyService;
         private ObservableCollection<EntryModel> _entries;

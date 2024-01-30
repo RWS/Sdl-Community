@@ -1,6 +1,5 @@
 ﻿using InterpretBank.Commands;
 using InterpretBank.Extensions;
-using InterpretBank.GlossaryService.Interface;
 using InterpretBank.Interface;
 using InterpretBank.Model;
 using InterpretBank.SettingsService.Model;
@@ -19,7 +18,7 @@ public class GlossarySetupViewModel(
     IUserInteractionService userInteractionService,
     ExchangeService exchangeService,
     IInterpretBankDataContext interpretBankDataContext)
-    : InterpretBank.ViewModel.ViewModel
+    : NotifyChangeModel
 {
     private ICommand _deleteTagCommand;
     private ICommand _enterGlossaryCommand;
@@ -93,6 +92,8 @@ public class GlossarySetupViewModel(
 
     public IInterpretBankDataContext InterpretBankDataContext { get; set; } = interpretBankDataContext;
 
+    public bool IsDbValid => InterpretBankDataContext.IsValid;
+
     public ObservableCollection<LanguageModel> Languages
     {
         get => _languages;
@@ -140,11 +141,9 @@ public class GlossarySetupViewModel(
     private ExchangeService ExchangeService { get; } = exchangeService;
 
     private IUserInteractionService UserInteractionService { get; } = userInteractionService;
-    public bool IsDbValid => InterpretBankDataContext.IsValid;
 
     public void Setup()
     {
-
         SelectedGlossary = null;
 
         Tags = new ObservableCollection<TagModel>(InterpretBankDataContext.GetTags().Distinct().ToList());
@@ -161,24 +160,10 @@ public class GlossarySetupViewModel(
         SetupSelectedLanguages();
     }
 
-    private void ClearControl()
-    {
-        SelectedGlossary = new GlossaryModel();
-        Tags = [];
-        Glossaries = [];
-        Languages = [];
-    }
-
     private void AttachToEventsOfGlossaryModel(GlossaryModel glossaryModel)
     {
         glossaryModel.Tags.CollectionChanged += Glossary_TagCollectionChanged;
         glossaryModel.Languages.CollectionChanged += Glossary_LanguageCollectionChanged;
-    }
-
-    private void DetachFromEventsOfGlossaryModel(GlossaryModel glossaryModel)
-    {
-        glossaryModel.Tags.CollectionChanged -= Glossary_TagCollectionChanged;
-        glossaryModel.Languages.CollectionChanged -= Glossary_LanguageCollectionChanged;
     }
 
     private List<LanguageModelsListBoxItem> CheckForDuplicates(string selectedIndexName)
@@ -207,6 +192,14 @@ public class GlossarySetupViewModel(
         return nonDuplicates;
     }
 
+    private void ClearControl()
+    {
+        SelectedGlossary = new GlossaryModel();
+        Tags = [];
+        Glossaries = [];
+        Languages = [];
+    }
+
     private void DeleteGlossary(object obj)
     {
         if (!UserInteractionService.Confirm($@"Are you sure you want to delete the glossary ""{SelectedGlossary.GlossaryName}""?")) return;
@@ -223,6 +216,12 @@ public class GlossarySetupViewModel(
 
         Tags.Remove(Tags.Single(t => t.TagName == tagName));
         InterpretBankDataContext.RemoveTag(tagName);
+    }
+
+    private void DetachFromEventsOfGlossaryModel(GlossaryModel glossaryModel)
+    {
+        glossaryModel.Tags.CollectionChanged -= Glossary_TagCollectionChanged;
+        glossaryModel.Languages.CollectionChanged -= Glossary_LanguageCollectionChanged;
     }
 
     private void EnterGlossary(object parameter)

@@ -3,7 +3,6 @@ using InterpretBank.Booth;
 using InterpretBank.Booth.ViewModel;
 using InterpretBank.CommonServices;
 using InterpretBank.GlossaryService;
-using InterpretBank.GlossaryService.Interface;
 using InterpretBank.Interface;
 using InterpretBank.SettingsService.UI;
 using InterpretBank.SettingsService.ViewModel;

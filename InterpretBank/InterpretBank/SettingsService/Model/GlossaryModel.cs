@@ -2,7 +2,7 @@
 
 namespace InterpretBank.SettingsService.Model
 {
-	public class GlossaryModel : InterpretBank.ViewModel.ViewModel
+    public class GlossaryModel : InterpretBank.Model.NotifyChangeModel
     {
         private ObservableCollection<LanguageModel> _languages = new();
 		private ObservableCollection<TagModel> _tags = new();

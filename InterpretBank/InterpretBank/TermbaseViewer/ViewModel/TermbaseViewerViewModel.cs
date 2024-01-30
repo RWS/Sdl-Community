@@ -19,7 +19,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
     public class TermbaseViewerViewModel(
         ITerminologyService terminologyService,
         IUserInteractionService userInteractionService)
-        : InterpretBank.ViewModel.ViewModel
+        : Model.NotifyChangeModel
     {
         private ICommand _addEntryCommand;
         private NotifyTaskCompletion<ObservableCollection<EntryModel>> _entries;

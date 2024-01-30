@@ -1,8 +1,8 @@
 ﻿using InterpretBank.Extensions;
 using InterpretBank.GlossaryService.DAL;
 using InterpretBank.GlossaryService.DAL.Interface;
-using InterpretBank.GlossaryService.Interface;
 using InterpretBank.Helpers;
+using InterpretBank.Interface;
 using InterpretBank.Model;
 using InterpretBank.SettingsService.Model;
 using System;

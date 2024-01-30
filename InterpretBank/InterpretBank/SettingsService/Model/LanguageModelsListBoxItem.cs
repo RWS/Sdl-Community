@@ -5,7 +5,7 @@ using InterpretBank.Commands;
 
 namespace InterpretBank.SettingsService.Model
 {
-	public class LanguageModelsListBoxItem : InterpretBank.ViewModel.ViewModel, IDataErrorInfo
+    public class LanguageModelsListBoxItem : InterpretBank.Model.NotifyChangeModel, IDataErrorInfo
 	{
 		private List<LanguageModel> _languageModels;
 		private ICommand _restoreCommand;

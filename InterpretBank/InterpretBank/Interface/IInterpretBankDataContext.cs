@@ -9,7 +9,7 @@ using System.Data.Linq;
 using System.Data.SQLite;
 using System.Linq;
 
-namespace InterpretBank.GlossaryService.Interface;
+namespace InterpretBank.Interface;
 
 public interface IInterpretBankDataContext : IDisposable
 {

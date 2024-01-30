@@ -1,5 +1,5 @@
-﻿using InterpretBank.GlossaryService.Interface;
-using InterpretBank.Helpers;
+﻿using InterpretBank.Helpers;
+using InterpretBank.Interface;
 using InterpretBank.Model;
 using InterpretBank.SettingsService.Model;
 using InterpretBank.Studio.Model;
