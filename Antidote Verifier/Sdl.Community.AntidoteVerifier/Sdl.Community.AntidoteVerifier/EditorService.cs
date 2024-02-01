@@ -1,6 +1,7 @@
 ﻿using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System.Collections.Generic;
 using System.Linq;
+using Sdl.Community.AntidoteVerifier.Extensions;
 using Sdl.Community.AntidoteVerifier.Utils;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
@@ -90,8 +91,6 @@ namespace Sdl.Community.AntidoteVerifier
         public string GetSegmentText(int index)
         {
             var segmentPair = GetSegmentPair(index);
-
-
             return segmentPair.Target.GetString();
         }
 
