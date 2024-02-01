@@ -89,7 +89,7 @@ namespace LanguageWeaverProvider
 			var searchResults = new SearchResults[mask.Length];
 			var segmentsInput = translationUnits.Select(x => x.SourceSegment).ToList();
 			var translatableSegments = ExtractTranslatableSegments(translationUnits, mask, searchResults, segmentsInput);
-
+   
 			if (!translatableSegments.Any())
 			{
 				ManageBatchTaskWindow();

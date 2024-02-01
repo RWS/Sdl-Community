@@ -275,7 +275,7 @@ namespace LanguageWeaverProvider.ViewModel
 		private void GetSegmentMetadata(ISegmentPairProperties segmentProperties)
 		{
 			SetProviderState(segmentProperties);
-			CanSendFeedback = segmentProperties is not null && SelectedProvider is not null && IsLanguageWeaverSource(segmentProperties);
+			CanSendFeedback = segmentProperties is not null && SelectedProvider is not null && IsLanguageWeaverSource(segmentProperties) && segmentProperties.TranslationOrigin?.GetMetaData(Constants.SegmentMetadata_Translation) is not null;
 
 			if (!CanSendFeedback)
 			{
