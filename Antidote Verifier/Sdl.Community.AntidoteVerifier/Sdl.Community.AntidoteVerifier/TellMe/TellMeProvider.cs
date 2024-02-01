@@ -3,7 +3,7 @@
 namespace Sdl.Community.AntidoteVerifier.TellMe
 {
 	[TellMeProvider]
-	public class TellMeProvider: ITellMeProvider
+	public class TellMeProvider : ITellMeProvider
 	{
 		public string Name => string.Format(PluginResources.TellMe_Provider, PluginResources.Plugin_Name);
 
@@ -19,7 +19,16 @@ namespace Sdl.Community.AntidoteVerifier.TellMe
 			},
 			new AppStoreDownloadAction
 			{
-				Keywords = new[] { "antidote", "verifier", "store", "download", "appstore" }}
+				Keywords = new[] { "antidote", "verifier", "store", "download", "appstore" }
+
+			},new SourceCodeAction
+			{
+				Keywords = new[] { "antidote", "verifier", "community", "source code", "github" }
+
+			},new DocumentationAction
+			{
+				Keywords = new[] { "antidote", "verifier", "help", "documentation"}
+			}
 		};
 	}
 }

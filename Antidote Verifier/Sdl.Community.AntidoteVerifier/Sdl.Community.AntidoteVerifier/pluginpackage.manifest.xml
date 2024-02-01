@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Antidote Verifier</PlugInName>
-  <Version>3.1.0.0</Version>
+  <Version>3.1.0.2</Version>
   <Description>Studio verifier that will verify the text in Antidote</Description>
   <Author>Trados AppStore Team</Author>
   <RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9" />
