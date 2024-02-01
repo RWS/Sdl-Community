@@ -77,16 +77,7 @@ namespace LanguageWeaverProvider
 		{
 			var currentPair = TranslationOptions.PairMappings.FirstOrDefault(pair => pair.LanguagePair.SourceCulture.Name == languageDirection.SourceCulture.Name
 																				  && pair.LanguagePair.TargetCulture.Name == languageDirection.TargetCulture.Name);
-			if (currentPair is null)
-			{
-				return false;
-			}
-
-			var sourceCode = DatabaseControl.GetLanguageCode(currentPair.LanguagePair.SourceCulture);
-			var targetCode = DatabaseControl.GetLanguageCode(currentPair.LanguagePair.TargetCulture);
-			return !string.IsNullOrEmpty(sourceCode)
-				&& !string.IsNullOrEmpty(targetCode)
-				&& !string.IsNullOrEmpty(currentPair.SelectedModel.Model);
+			return currentPair is not null && !string.IsNullOrEmpty(currentPair.SelectedModel.Model);
 		}
 
 		public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
