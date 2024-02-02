@@ -1,9 +1,9 @@
-﻿using Sdl.TranslationStudioAutomation.IntegrationApi;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Sdl.Community.AntidoteVerifier.Extensions;
 using Sdl.Community.AntidoteVerifier.Utils;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.AntidoteVerifier
 {
@@ -61,7 +61,7 @@ namespace Sdl.Community.AntidoteVerifier
 		public int GetCurrentSegmentId(int segmentNumber)
 		{
 			return segmentNumber;
-		} 
+		}
 
 		public int GetDocumentId()
 		{
@@ -124,11 +124,9 @@ namespace Sdl.Community.AntidoteVerifier
 		private void Initialize()
 		{
 			_segmentMetadata.Clear();
-			var activeSegmentId = _document.ActiveSegmentPair.Properties.Id.Id;
-			var currentSegmentIndex = _document.SegmentPairs.ToList().FindIndex(i => i.Properties.Id.Id.Equals(activeSegmentId));
 
 			var index = 1;
-			for (var i = currentSegmentIndex; i < _document.FilteredSegmentPairsCount; i++)
+			for (var i = 0; i < _document.FilteredSegmentPairsCount; i++)
 			{
 				var segmentPair = _document.FilteredSegmentPairs.ToList()[i];
 				var paragraphUnitId = segmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id;
