@@ -1,26 +1,11 @@
 ﻿using Sdl.FileTypeSupport.Framework.BilingualApi;
 
-namespace Sdl.Community.AntidoteVerifier.Utils
+namespace Sdl.Community.AntidoteVerifier.Extensions
 {
-    public static class SegmentExtenstions
+    public static class SegmentExtensions
     {
-        public static string GetString(this ISegment segment, bool includeSegments=false)
-        {
-            var textVisitor = new CustomTextCollectionVisitor(segment);
-
-            foreach (var item in segment)
-            {
-                item.AcceptVisitor(textVisitor);
-            }
-
-            return textVisitor.CollectedText;
-        }
-
-        public static string Substring(this ISegment segment, int startIndex, int endPosition)
-        {
-            var segmentText = GetString(segment);
-            return segmentText.Length >= endPosition ? segmentText.Substring(startIndex, endPosition - startIndex) : string.Empty;
-        }
+	    public static string GetString(this ISegment segment, bool includeSegments = false) =>
+		    segment.ToString().RemoveTags();
 
         //displayLanguage = language of the message or the explication 
         public static bool CanReplace(this ISegment segment, int startIndex, int endPosition, string origString, string displayLanguage, ref string message, ref string explication)

@@ -111,6 +111,7 @@
     <Compile Include="Antidote API\IAntidoteClient.cs" />
     <Compile Include="AntidoteRibbon.cs" />
     <Compile Include="EditorService.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -119,12 +120,14 @@
     <Compile Include="TellMe\AppStoreDownloadAction.cs" />
     <Compile Include="TellMe\AppStoreForumAction.cs" />
     <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\DocumentationAction.cs" />
+    <Compile Include="TellMe\SourceCodeAction.cs" />
     <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="Utils\CustomTextCollectionVisitor.cs" />
     <Compile Include="Utils\DocumentIdGenerator.cs" />
     <Compile Include="Utils\EndOfItemCharacterCounterNoTagsVisitor.cs" />
     <Compile Include="Utils\Logger.cs" />
-    <Compile Include="Utils\SegmentExtenstions.cs" />
+    <Compile Include="Extensions\SegmentExtensions.cs" />
     <Compile Include="IEditorService.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -164,6 +167,7 @@
       <Version>3.3.0</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
