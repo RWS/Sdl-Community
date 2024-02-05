@@ -9,10 +9,6 @@ namespace Sdl.Community.AntidoteVerifier.TellMe
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new CommunityWikiAction
-			{
-				Keywords = new[] {"antidote", "verifier", "community", "support", "wiki" }
-			},
 			new AppStoreForumAction
 			{
 				Keywords = new[] { "antidote", "verifier", "support", "forum" }

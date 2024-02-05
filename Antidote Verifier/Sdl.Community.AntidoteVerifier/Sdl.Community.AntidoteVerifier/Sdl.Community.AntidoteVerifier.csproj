@@ -119,7 +119,6 @@
     </Compile>
     <Compile Include="TellMe\AppStoreDownloadAction.cs" />
     <Compile Include="TellMe\AppStoreForumAction.cs" />
-    <Compile Include="TellMe\CommunityWikiAction.cs" />
     <Compile Include="TellMe\DocumentationAction.cs" />
     <Compile Include="TellMe\SourceCodeAction.cs" />
     <Compile Include="TellMe\TellMeProvider.cs" />
