@@ -24,6 +24,9 @@ namespace InterpretBank.Controls
 
         private static readonly string DbListPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             @"Trados AppStore\InterpretBank\DatabaseList.json");
+        
+        private static readonly string DbListFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            @"Trados AppStore\InterpretBank");
 
         public ChooseFilepathControl()
         {
@@ -31,6 +34,7 @@ namespace InterpretBank.Controls
 
             if (!File.Exists(DbListPath))
             {
+                if (!Directory.Exists(DbListFolderPath)) Directory.CreateDirectory(DbListFolderPath);
                 using var file = File.Create(DbListPath);
             }
 
