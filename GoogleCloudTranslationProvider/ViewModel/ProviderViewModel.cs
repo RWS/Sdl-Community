@@ -309,7 +309,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			}
 		}
 
-		public bool CanConnectToGoogleV3(LanguagePair[] languagePairs)
+		public bool CanConnectToGoogleV3(IEnumerable<LanguagePair> languagePairs)
 		{
 			var optionsAreSet = GoogleV3OptionsAreSet();
 			if (!optionsAreSet)

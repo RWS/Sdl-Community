@@ -26,7 +26,7 @@ namespace GoogleCloudTranslationProvider.Studio
 
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
-			var options = new TranslationOptions();
+			var options = new TranslationOptions(true);
 			var mainWindowViewModel = ShowRequestedView(languagePairs, credentialStore, options);
 			return mainWindowViewModel.DialogResult ? new ITranslationProvider[] { new TranslationProvider(options) }
 													: null;
@@ -57,13 +57,12 @@ namespace GoogleCloudTranslationProvider.Studio
 			}
 
 			var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
-			var providerName = options.CustomProviderName.SetProviderName(options.UseCustomProviderName, options.SelectedGoogleVersion);
 			return new TranslationProviderDisplayInfo()
 			{
 				SearchResultImage = PluginResources.my_image,
 				TranslationProviderIcon = PluginResources.appicon,
-				TooltipText = providerName,
-				Name = providerName
+				TooltipText = options.ProviderName,
+				Name = options.ProviderName
 			};
 		}
 
@@ -72,11 +71,11 @@ namespace GoogleCloudTranslationProvider.Studio
 			return translationProviderUri switch
 			{
 				null => throw new ArgumentNullException(PluginResources.UriNotSupportedMessage),
-				_ => string.Equals(translationProviderUri.Scheme, Constants.GoogleTranslationScheme, StringComparison.CurrentCultureIgnoreCase)
+				_ => translationProviderUri.Scheme.Contains(Constants.GoogleTranslationScheme)
 			};
 		}
 
-		private MainWindowViewModel ShowRequestedView(LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, bool editProvider = false)
+		private MainWindowViewModel ShowRequestedView(IEnumerable<LanguagePair> languagePairs, ITranslationProviderCredentialStore credentialStore, ITranslationOptions loadOptions, bool editProvider = false)
 		{
 			SetSavedCredentialsOnUi(credentialStore, loadOptions);
 			if (editProvider)

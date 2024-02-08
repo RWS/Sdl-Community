@@ -1,4 +1,5 @@
 ﻿using System;
+using Google.Protobuf.WellKnownTypes;
 using GoogleCloudTranslationProvider.Extensions;
 using GoogleCloudTranslationProvider.GoogleAPI;
 using GoogleCloudTranslationProvider.Helpers;
@@ -25,17 +26,7 @@ namespace GoogleCloudTranslationProvider.Studio
 
 		public ITranslationOptions Options { get; set; }
 
-		public string Name
-		{
-			get
-			{
-				var customName = Options.CustomProviderName;
-				var useCustomName = Options.UseCustomProviderName;
-				var selectedVersion = Options.SelectedGoogleVersion;
-				var providerName = customName.SetProviderName(useCustomName, selectedVersion);
-				return providerName;
-			}
-		}
+		public string Name => Options.ProviderName;
 
 		public ProviderStatusInfo StatusInfo => new(true, Constants.GoogleNaming_FullName);
 		

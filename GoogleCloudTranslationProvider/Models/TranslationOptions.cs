@@ -8,14 +8,19 @@ namespace GoogleCloudTranslationProvider.Models
 {
 	public class TranslationOptions : ITranslationOptions
 	{
-		private readonly TranslationProviderUriBuilder _uriBuilder;
 		private string _apiKey;
 
-		public TranslationOptions(Uri uri = null)
+		public TranslationOptions(bool isNewInstance = false)
 		{
-			_uriBuilder = uri is null ? new TranslationProviderUriBuilder(Constants.GoogleTranslationScheme)
-									  : new TranslationProviderUriBuilder(uri);
+			if (isNewInstance)
+			{
+				Id = Guid.NewGuid().ToString();
+			}
+
+			Uri = new TranslationProviderUriBuilder(Constants.GoogleTranslationScheme).Uri;
 		}
+
+		public string Id { get; set; }
 
 		#region V2
 		[JsonIgnore]
@@ -47,7 +52,9 @@ namespace GoogleCloudTranslationProvider.Models
 
 		public ApiVersion SelectedGoogleVersion { get; set; }
 
-		public Uri Uri => _uriBuilder.Uri;
+		public Uri Uri { get; set; }
+
+		public string ProviderName => GetProviderName();
 		#endregion
 
 		#region Settings
@@ -69,5 +76,26 @@ namespace GoogleCloudTranslationProvider.Models
 
 		public string DownloadPath { get; set; }
 		#endregion
+
+		private string GetProviderName()
+		{
+			var providerNamePrefix = Constants.GoogleNaming_ShortName;
+			string providerNameSufix;
+			if (string.IsNullOrEmpty(CustomProviderName) || !UseCustomProviderName)
+			{
+				providerNameSufix = SelectedGoogleVersion == ApiVersion.V2
+								  ? Constants.GoogleVersion_V2_FullName
+								  : Constants.GoogleVersion_V3_FullName;
+			}
+			else
+			{
+				var providerVersion = SelectedGoogleVersion == ApiVersion.V2
+									? Constants.GoogleVersion_V2_ShortName
+									: Constants.GoogleVersion_V3_ShortName;
+				providerNameSufix = $"{providerVersion} {CustomProviderName}";
+			}
+
+			return $"{providerNamePrefix} - {providerNameSufix}";
+		}
 	}
 }

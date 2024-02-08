@@ -60,8 +60,11 @@
 					  Visibility="{Binding CanChangeProviderResources, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverted}"
 					  DisplayMemberPath="Name"
 					  HorizontalContentAlignment="Center"
+					  AutomationProperties.Name="Select Google Cloud Version"
+					  AutomationProperties.HelpText="Use arrow keys to navigate."
 					  Cursor="Hand"
-					  Margin="16 12 16 0" />
+					  Margin="16 12 16 0">
+			</ComboBox>
 
 			<Grid Visibility="{Binding IsV2Checked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
 				  Margin="16 12 16 0"
@@ -91,6 +94,7 @@
 
 				<controls:BindablePasswordBox Password="{Binding ApiKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
 											  Style="{DynamicResource Sdl.BindablePasswordBox.GenericStyle}"
+											  AutomationProperties.Name="Google Cloud API Key"
 											  HorizontalAlignment="Left"
 											  Width="320"
 											  Margin="0 2"

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Globalization;
+using System.Collections.Generic;
 using GoogleCloudTranslationProvider.Extensions;
 using GoogleCloudTranslationProvider.GoogleAPI;
 using GoogleCloudTranslationProvider.Helpers;
@@ -14,13 +14,13 @@ namespace GoogleCloudTranslationProvider.Studio
 {
 	public class TranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
 	{
-		private readonly ITranslationOptions _translationOptions;
 		private readonly LanguagePair _languageDirection;
 		private readonly TranslationProvider _provider;
 		private readonly HtmlUtil _htmlUtil;
 
 		private V2Connector _googleV2Api;
 		private V3Connector _googleV3Api;
+		private ITranslationOptions _translationOptions;
 
 		private GoogleSegmentEditor _postLookupSegmentEditor;
 		private GoogleSegmentEditor _preLookupSegmentEditor;
@@ -32,6 +32,8 @@ namespace GoogleCloudTranslationProvider.Studio
 			_languageDirection = languages;
 			_translationOptions = _provider.Options;
 			_htmlUtil = htmlUtil;
+
+			AppInitializer.TranslationOptions ??= new Dictionary<string, ITranslationOptions>();
 		}
 
 		public ITranslationProvider TranslationProvider => _provider;
@@ -55,7 +57,14 @@ namespace GoogleCloudTranslationProvider.Studio
 
 		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
 		{
+			AppInitializer.TranslationOptions ??= new Dictionary<string, ITranslationOptions>();
+			if (AppInitializer.TranslationOptions.TryGetValue(_translationOptions.Id, out var currentOptions))
+			{
+				_translationOptions = currentOptions;
+			}
+
 			DatabaseExtensions.CreateDatabase(_translationOptions);
+
 			var translation = new Segment(_languageDirection.TargetCulture);
 			var searchResults = new SearchResults { SourceSegment = segment.Duplicate() };
 			if (!_translationOptions.ResendDrafts && _currentTranslationUnit.ConfirmationLevel != ConfirmationLevel.Unspecified)

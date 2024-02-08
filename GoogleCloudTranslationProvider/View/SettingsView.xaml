@@ -132,6 +132,7 @@
 						Style="{StaticResource Sdl.Button.DialogStyle}"
 						Command="{Binding BrowseFolderCommand}"
 						CommandParameter="{uiHelpers:NameOf Member=DownloadPath, Type={x:Type viewModels:SettingsViewModel}}"
+						AutomationProperties.HelpText="Select where your file will be downloaded"
 						DockPanel.Dock="Left"
 						Cursor="Hand"
 						Width="80" />
@@ -141,6 +142,7 @@
 						 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
 						 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=DownloadPath, Type={x:Type viewModels:SettingsViewModel}}"
 						 VerticalContentAlignment="Center"
+						 Focusable="True"
 						 IsReadOnly="True"
 						 Width="400"
 						 Margin="8 0 0 0" />
