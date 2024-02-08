@@ -140,7 +140,7 @@
     <comment>Line3</comment>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>Google Translator Provider - Plugin_Name</value>
+    <value>Google Translator Provider</value>
   </data>
   <data name="Plugin_Description" xml:space="preserve">
     <value>Google Translator Provider Plugin - Choose between V2 or V3 - Description</value>
@@ -537,5 +537,15 @@ Path: {0}</value>
 All changes will be lost and the database will be restored to its original state.
 
 This action cannot be undone.</value>
+  </data>
+  <data name="HowToAddProviderInfo" xml:space="preserve">
+    <value>We couldn't find any instance of Google Cloud Translation Provider for the current project. To add it to your project, please follow these steps:
+     1. Open Project Settings.
+     2. Go to Translation Memory and Automated Translation.
+     3. Choose Translation Provider from the list.
+     4. Add it via the Use dropdown menu.</value>
+  </data>
+  <data name="sourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\sourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

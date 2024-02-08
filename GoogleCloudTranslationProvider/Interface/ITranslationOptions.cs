@@ -6,6 +6,9 @@ namespace GoogleCloudTranslationProvider.Interfaces
 {
 	public interface ITranslationOptions
 	{
+		 string ProviderName { get; }
+		string Id { get; set; }
+
 		bool SendPlainTextOnly { get; set; }
 
 		bool PersistGoogleKey { get; set; }

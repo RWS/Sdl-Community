@@ -45,7 +45,7 @@ namespace GoogleCloudTranslationProvider.Interfaces
 
 		Task<bool> CanConnectToGoogleV2(HtmlUtil htmlUtil);
 
-		bool CanConnectToGoogleV3(LanguagePair[] languagePairs);
+		bool CanConnectToGoogleV3(IEnumerable<LanguagePair> languagePairs);
 
 		void UpdateLanguageMapping();
 	}

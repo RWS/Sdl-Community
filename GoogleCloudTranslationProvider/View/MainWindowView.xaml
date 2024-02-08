@@ -49,8 +49,9 @@
 		</ResourceDictionary>
 	</Window.Resources>
 
-	<Border Style="{StaticResource WindowControlBorderStyle}">
-		<Grid>
+	<Border Style="{StaticResource WindowControlBorderStyle}"
+			Focusable="False">
+		<Grid Focusable="False">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="auto"/>
 				<RowDefinition Height="auto"/>
@@ -65,7 +66,8 @@
 			<!--<API Version Selector>-->
 			<ContentControl Grid.Row="2"
 							Content="{Binding SelectedView.ViewModel}"
-							Margin="0"/>
+							Margin="0"
+							Focusable="False"/>
 			<!--</API Version Selector>-->
 
 			<!--<Footer>-->
@@ -75,6 +77,7 @@
 					<Button Content="{x:Static root:PluginResources.MainView_HelpButton}"
 							Style="{StaticResource Sdl.Button.SecondaryStyle}"
 							Command="{Binding NavigateToCommand}"
+							AutomationProperties.HelpText="Opens a hyperlink to documentation."
 							Cursor="Hand"
 							Width="136" />
 

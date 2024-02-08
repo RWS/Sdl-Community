@@ -26,7 +26,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private const string ViewDetails_Settings = nameof(SettingsViewModel);
 
 		private readonly ITranslationProviderCredentialStore _credentialStore;
-		private readonly LanguagePair[] _languagePairs;
+		private readonly IEnumerable<LanguagePair> _languagePairs;
 		private readonly HtmlUtil _htmlUtil;
 
 		private ViewDetails _selectedView;
@@ -54,7 +54,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		public MainWindowViewModel(ITranslationOptions options,
 								   ITranslationProviderCredentialStore credentialStore,
-								   LanguagePair[] languagePairs,
+								   IEnumerable<LanguagePair> languagePairs,
 								   bool editProvider = false)
 		{
 			TranslationOptions = options;
@@ -215,7 +215,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 		private void InitializeViews()
 		{
-			_providerViewModel = new ProviderViewModel(TranslationOptions, _languagePairs.ToList(), _editProvider)
+			_providerViewModel = new ProviderViewModel(TranslationOptions, _languagePairs?.ToList(), _editProvider)
 			{
 				SwitchViewExternal = new RelayCommand(SwitchView)
 			};

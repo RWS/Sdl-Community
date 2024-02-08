@@ -5,26 +5,25 @@ namespace GoogleCloudTranslationProvider.TellMe
 	[TellMeProvider]
 	public class TellMeProvider : ITellMeProvider
 	{
-		public string Name => $"{Constants.GoogleNaming_FullName} - TellMe";
-
-		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
+		public TellMeProvider()
 		{
-			new StoreAction
-			{
-				Keywords = AppStoreKeywords
-			},
-			new CommunityForumAction()
-			{
-				Keywords = CommunityKeywords
-			},
-			new HelpAction
-			{
-				Keywords = HelpKeywords
-			},
-		};
+			ProviderActions = GetProviderActions();
+		}
 
-		private readonly string[] HelpKeywords = { "gctp", "google cloud provider", "machine translation", "help", "guide" };
-		private readonly string[] CommunityKeywords = { "gctp", "google cloud provider", "machine translation", "community", "support" };
-		private readonly string[] AppStoreKeywords = { "gctp", "google cloud provider", "machine translation", "store", "download", "appstore", "update" };
+		public string Name => PluginResources.Plugin_Name;
+
+		public AbstractTellMeAction[] ProviderActions { get; }
+
+		private AbstractTellMeAction[] GetProviderActions()
+		{
+			var forumAction = new CommunityForumAction();
+			var helpAction = new DocumentationAction();
+			var sourceCodeAction = new SourceCodeAction();
+			var settingsAction = new SettingsAction();
+
+			var providerActions = new AbstractTellMeAction[] { forumAction, helpAction, sourceCodeAction, settingsAction };
+
+			return providerActions;
+		}
 	}
 }

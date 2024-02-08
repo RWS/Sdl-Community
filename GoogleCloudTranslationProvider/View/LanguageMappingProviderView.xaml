@@ -54,12 +54,13 @@
 					 Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}"
 					 Style="{StaticResource WatermarkTextBox}"
 					 BorderBrush="#FFBFCDD4"
+					 AutomationProperties.Name="Language filter text box"
 					 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.LMP_Filter_Watermark}"
 					 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
 					 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{uiHelpers:NameOf Member=Filter, Type={x:Type viewmodel:LanguageMappingProviderViewModel}}"
 					 HorizontalAlignment="Right"
-					 Width="232" 
-					 Margin="16 12 16 0"/>
+					 Width="232"
+					 Margin="16 12 16 0" />
 
 			<DataGrid ItemsSource="{Binding FilteredMappedLanguages}"
 					  SelectedItem="{Binding SelectedMappedLanguage}"
@@ -69,6 +70,7 @@
 					  AutoGenerateColumns="False"
 					  Grid.Row="2"
 					  HorizontalAlignment="Stretch"
+					  AutomationProperties.Name="Language Mapping Table, 4 columns"
 					  ScrollViewer.VerticalScrollBarVisibility="Auto"
 					  ScrollViewer.HorizontalScrollBarVisibility="Auto"
 					  CanUserSortColumns="True"

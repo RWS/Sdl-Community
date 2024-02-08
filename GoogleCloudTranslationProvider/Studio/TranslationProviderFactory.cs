@@ -17,10 +17,10 @@ namespace GoogleCloudTranslationProvider.Studio
 				throw new Exception(PluginResources.UriNotSupportedMessage);
 			}
 
-			var translationOptions = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
+ 			var translationOptions = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
 			if (translationOptions.SelectedGoogleVersion is not ApiVersion.V2)
 			{
-				return new TranslationProvider(translationOptions);
+ 				return new TranslationProvider(translationOptions);
 			}
 
 			if ((credentialStore.GetCredential(translationProviderUri) ??
@@ -33,25 +33,23 @@ namespace GoogleCloudTranslationProvider.Studio
 			credentials = new TranslationProviderCredential(credentials.Credential, credentials.Persist);
 			translationOptions.ApiKey = credentials.Credential;
 			translationOptions.PersistGoogleKey = credentials.Persist;
+
+			AppInitializer.TranslationOptions[translationOptions.Id] = translationOptions;
 			return new TranslationProvider(translationOptions);
 		}
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
-		{
-			return translationProviderUri switch
+			=> translationProviderUri switch
 			{
 				null => throw new ArgumentNullException(PluginResources.UriNotSupportedMessage),
-				_ => string.Equals(translationProviderUri.Scheme, Constants.GoogleTranslationScheme, StringComparison.OrdinalIgnoreCase)
+				_ => translationProviderUri.Scheme.Contains(Constants.GoogleTranslationScheme)
 			};
-		}
 
 		public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
-		{
-			return new TranslationProviderInfo
+			=> new()
 			{
 				TranslationMethod = TranslationMethod.MachineTranslation,
 				Name = Constants.GoogleNaming_FullName
 			};
-		}
 	}
 }
