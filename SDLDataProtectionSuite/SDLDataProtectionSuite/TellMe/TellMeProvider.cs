@@ -19,9 +19,8 @@ namespace Sdl.Community.SdlDataProtectionSuite.TellMe
 			var forumAction = new CommunityForumAction();
 			var helpAction = new DocumentationAction();
 			var sourceCodeAction = new SourceCodeAction();
-			var settingsAction = new SettingsAction();
 
-			var providerActions = new AbstractTellMeAction[] { forumAction, helpAction, sourceCodeAction, settingsAction };
+			var providerActions = new AbstractTellMeAction[] { forumAction, helpAction, sourceCodeAction };
 			return providerActions;
 		}
 	}

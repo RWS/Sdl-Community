@@ -52,31 +52,20 @@ namespace Sdl.Community.SdlDataProtectionSuite.TellMe
 		private static readonly string[] _helpKeywords = { "help", "guide" };
 		private static readonly bool _isAvailable = true;
 
-		public DocumentationAction() : base($"{PluginResources.Plugin_Name} Documentation", PluginResources.ForumIcon, _helpKeywords, _isAvailable, url: "https://appstore.rws.com/Plugin/39?tab=documentation") { }
+		public DocumentationAction() : base($"{PluginResources.Plugin_Name} Documentation", PluginResources.TellMeDocumentation, _helpKeywords, _isAvailable, url: "https://appstore.rws.com/Plugin/39?tab=documentation") { }
 	}
 
 	class CommunityForumAction : TellMeAction
 	{
 		private static readonly string[] _helpKeywords = { "community", "support", "documentation" };
 		private static readonly bool _isAvailable = true;
-		public CommunityForumAction() : base("RWS Community AppStore Forum", PluginResources.question, _helpKeywords, _isAvailable, url: "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/f") { }
+		public CommunityForumAction() : base("RWS Community AppStore Forum", PluginResources.TellmeForum, _helpKeywords, _isAvailable, url: "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/f") { }
 	}
 
 	class SourceCodeAction : TellMeAction
 	{
 		private static readonly string[] _helpKeywords = { "source code", "github" };
 		private static readonly bool _isAvailable = true;
-		public SourceCodeAction() : base($"{PluginResources.Plugin_Name} Source Code", PluginResources.ForumIcon, _helpKeywords, _isAvailable, url: "https://github.com/RWS/Sdl-Community/tree/master/SDLDataProtectionSuite") { }
-	}
-
-	class SettingsAction : TellMeAction
-	{
-		private static readonly string[] _helpKeywords = { "settings" };
-		private static readonly bool _isAvailable = true;
-		public SettingsAction() : base($"{PluginResources.Plugin_Name} Settings", PluginResources.ForumIcon, _helpKeywords, _isAvailable, customAction: DisplayMessage) { }
-		private static void DisplayMessage()
-		{
-			new SettingsActionView("https://appstore.rws.com/Plugin/39?tab=documentation").ShowDialog();
-		}
+		public SourceCodeAction() : base($"{PluginResources.Plugin_Name} Source Code", PluginResources.TellMeSourceCode, _helpKeywords, _isAvailable, url: "https://github.com/RWS/Sdl-Community/tree/master/SDLDataProtectionSuite") { }
 	}
 }

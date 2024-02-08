@@ -350,6 +350,46 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        public static System.Drawing.Icon TellMeDocumentation {
+            get {
+                object obj = ResourceManager.GetObject("TellMeDocumentation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellmeForum {
+            get {
+                object obj = ResourceManager.GetObject("TellmeForum", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMeSettings {
+            get {
+                object obj = ResourceManager.GetObject("TellMeSettings", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMeSourceCode {
+            get {
+                object obj = ResourceManager.GetObject("TellMeSourceCode", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         public static System.Drawing.Icon TranslationMemoriesFolder_Open {
             get {
                 object obj = ResourceManager.GetObject("TranslationMemoriesFolder_Open", resourceCulture);
