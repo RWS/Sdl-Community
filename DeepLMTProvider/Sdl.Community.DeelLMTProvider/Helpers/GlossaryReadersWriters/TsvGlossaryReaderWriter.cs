@@ -17,7 +17,9 @@ namespace Sdl.Community.DeepLMTProvider.Helpers.GlossaryReadersWriters
                 while (reader.ReadLine() is { } line)
                 {
                     var fields = line.Split('\t');
-                    glossary.Entries.Add(new GlossaryEntry { SourceTerm = fields[0], TargetTerm = fields[1] });
+
+                    if (fields.Length == 2)
+                        glossary.Entries.Add(new GlossaryEntry { SourceTerm = fields[0], TargetTerm = fields[1] });
                 }
 
                 return glossary;
