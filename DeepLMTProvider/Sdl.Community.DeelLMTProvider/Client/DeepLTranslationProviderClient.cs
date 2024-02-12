@@ -112,6 +112,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
                         TargetLanguage = targetLanguage,
                         Formality = formality.ToString().ToLower(),
                         GlossaryId = glossaryId,
+                        TagHandling = "xml",
+                        PreserveFormatting = true
                     },
                     new JsonSerializerSettings
                     {

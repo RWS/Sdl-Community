@@ -17,5 +17,11 @@ namespace Sdl.Community.DeepLMTProvider.Model
         public string TargetLanguage { get; set; }
 
         public List<string> Text { get; set; }
+
+        [JsonProperty("tag_handling")]
+        public string TagHandling { get; set; }
+
+        [JsonProperty("preserve_formatting")]
+        public bool PreserveFormatting { get; set; }
     }
 }
