@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
@@ -11,14 +12,16 @@ using Sdl.LanguagePlatform.Core;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace GoogleCloudTranslationProvider.TellMe
+namespace GoogleCloudTranslationProvider.Studio.TellMe
 {
-	class SettingsAction : TellMeAction
+	class SettingsAction : BaseTellMeAction
 	{
 		private static readonly string[] _helpKeywords = { "project", "settings" };
+		private static readonly string _actionName = $"{PluginResources.Plugin_Name} Settings";
 		private static readonly bool _isAvailable = true;
+		private static readonly Icon _icon = PluginResources.Settings;
 
-		public SettingsAction() : base($"{PluginResources.Plugin_Name} Settings", PluginResources.Settings, _helpKeywords, _isAvailable, customAction: ShowDialog) { }
+		public SettingsAction() : base(_actionName, _icon, _helpKeywords, _isAvailable, customAction: ShowDialog) { }
 
 		private static void ShowDialog()
 		{
