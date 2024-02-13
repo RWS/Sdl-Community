@@ -110,6 +110,16 @@ namespace GoogleCloudTranslationProvider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        public static System.Drawing.Icon documentation {
+            get {
+                object obj = ResourceManager.GetObject("documentation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         public static System.Drawing.Icon Download {
             get {
                 object obj = ResourceManager.GetObject("Download", resourceCulture);
@@ -581,7 +591,7 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Google Translator Provider.
+        ///   Looks up a localized string similar to Google Cloud Translation Provider.
         /// </summary>
         public static string Plugin_Name {
             get {
@@ -1183,6 +1193,16 @@ namespace GoogleCloudTranslationProvider {
             get {
                 object obj = ResourceManager.GetObject("sourceCode", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap TellmeDocumentation {
+            get {
+                object obj = ResourceManager.GetObject("TellmeDocumentation", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
