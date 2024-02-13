@@ -1,6 +1,6 @@
 ﻿using Sdl.TellMe.ProviderApi;
 
-namespace GoogleCloudTranslationProvider.TellMe
+namespace GoogleCloudTranslationProvider.Studio.TellMe
 {
 	[TellMeProvider]
 	public class TellMeProvider : ITellMeProvider
