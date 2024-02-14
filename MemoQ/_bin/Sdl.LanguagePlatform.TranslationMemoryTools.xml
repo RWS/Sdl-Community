@@ -1,0 +1,1735 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sdl.LanguagePlatform.TranslationMemoryTools</name>
+    </assembly>
+    <members>
+        <member name="T:Sdl.LanguagePlatform.TranslationMemoryTools.EditDistanceChangeSequence">
+            <summary>
+            Used by the <see cref="T:Sdl.LanguagePlatform.TranslationMemoryTools.EditDistanceClassifier"/> to represent
+            sequences of changes.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.EditDistanceChangeSequence.Items">
+            <summary>
+            items in the sequence
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.EditDistanceChangeSequence.Add(Sdl.LanguagePlatform.Core.EditDistance.EditDistanceItem)">
+            <summary>
+            Add an item to the sequence. 
+            </summary>
+            <remarks>
+            No explicit check is made that the item is compatible. The caller is assumed
+            to have ensured that beforehand.
+            </remarks>
+            <param name="item"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.EditDistanceChangeSequence.AreItemsCompatible(Sdl.LanguagePlatform.Core.EditDistance.EditDistanceItem,Sdl.LanguagePlatform.Core.EditDistance.EditDistanceItem)">
+            <summary>
+            Helper to determine if two edit-distance items can be combined into a sequence and
+            treated like a single operation.
+            </summary>
+            <param name="first"></param>
+            <param name="second"></param>
+            <returns><c>true</c> if the <see cref="P:Sdl.LanguagePlatform.Core.EditDistance.EditDistanceItem.Operation"/> and 
+            <see cref="P:Sdl.LanguagePlatform.Core.EditDistance.EditDistanceItem.Resolution"/> are equal for both items, <c>false</c> otherwise.</returns>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.TranslationMemoryTools.EditDistanceClassifier">
+            <summary>
+            Classifies edit-distance information into categories that are used
+            when applying it to markup data in order to show differences in the TM window.
+            </summary>
+            <remarks>
+            <para>
+            To properly mark up differences for tag pairs it is important to know whether
+            a tag pair has been added, deleted or moved. That information must (currently) be
+            extracted by processing multiple EditDistance items. This class analyses tag
+            operations and classifies them into add/delete and move operations, which can be
+            accessed from the corresponding properties.
+            </para>
+            <para>
+            When highlighting changed content it is also typically of interest to show a sequence
+            of change operations as one edit. This is especially important for DBCS languages as source,
+            where each character is typically a token, but a sequence of characters may represent
+            a word. To show the edit operation as single character edits make the text unreadable.
+            This class also looks for such sequences of change operations. These can be accessed
+            from a separate property after execution.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.EditDistanceClassifier.#ctor(System.Collections.Generic.List{Sdl.LanguagePlatform.Core.EditDistance.EditDistanceItem})">
+            <summary>
+            Construct from the EditDistance information to be processed.
+            </summary>
+            <param name="editDistanceItems"></param>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.EditDistanceClassifier.AddedTagPairs">
+            <summary>
+            the pairs here contains the edit-distance items for the start and end tags
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.EditDistanceClassifier.ChangeSequences">
+            <summary>
+            identified sequences of change operations
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.EditDistanceClassifier.ExtractTagPairInfo(System.Nullable{Sdl.LanguagePlatform.Core.EditDistance.EditDistanceItem},System.Nullable{Sdl.LanguagePlatform.Core.EditDistance.EditDistanceItem})">
+            <summary>
+            Create tag pair info object for tag pair described by start and end edit distance items.
+            </summary>
+            <param name="start">Start tag edit distance item.</param>
+            <param name="end">End tag edit distance item.</param>
+            <returns>Classified Tag Pair Info object</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.EditDistanceClassifier.CreateMoveOperation(System.Nullable{Sdl.LanguagePlatform.Core.EditDistance.EditDistanceItem},System.Nullable{Sdl.LanguagePlatform.Core.EditDistance.EditDistanceItem})">
+            <summary>
+            Construct a move operation that corresponds to a delete and an insert operation.
+            </summary>
+            <param name="insertOperation"></param>
+            <param name="deleteOperation"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.TranslationMemoryTools.ClassifiedTagPairInfo">
+            <summary>
+            Encapsulates informations about classified tag pair
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.ClassifiedTagPairInfo.Subitems">
+            <summary>
+            List of operations for subitems in tag pair
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.ClassifiedTagPairInfo.Start">
+            <summary>
+            Edit distance element for start tag.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.ClassifiedTagPairInfo.StartTokenPosition">
+            <summary>
+            Index of corresponding start token
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.ClassifiedTagPairInfo.End">
+            <summary>
+            Edit distance element for end tag.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.ClassifiedTagPairInfo.EndTokenPosition">
+            <summary>
+            Index of corresponding end token position
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.ClassifiedTagPairInfo.SubitemsCount">
+            <summary>
+            Returns number of subitem operations.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.EdUtilities.MarkWhiteSpaceBetweenTextChangesAsChange(Sdl.LanguagePlatform.Core.Segment,Sdl.LanguagePlatform.Core.Segment,System.Collections.Generic.List{Sdl.LanguagePlatform.Core.EditDistance.EditDistanceItem})">
+            <summary>
+            if we have multiple consecutive word changes, ED(EditDistance) will see them as multiple changes separated by whitespace
+            in this case we force these whitespaces to show up as changes in ED
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.TranslationMemoryTools.InvalidSegmentContentException">
+            <inheritdoc />
+            <summary>
+            Thrown when the content of a TM segment is invalid for some reason.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.InvalidSegmentContentException.#ctor">
+            <inheritdoc />
+            <summary>
+            Default contructor.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.InvalidSegmentContentException.#ctor(System.String)">
+            <inheritdoc />
+            <summary>
+            Construction from a message string.
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.InvalidSegmentContentException.#ctor(System.String,System.Exception)">
+            <inheritdoc />
+            <summary>
+            Construction from a message string and an inner exception
+            </summary>
+            <param name="message"></param>
+            <param name="inner"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.InvalidSegmentContentException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <inheritdoc />
+            <summary>
+            Used during serialization.
+            </summary>
+            <param name="info"></param>
+            <param name="context"></param>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.TranslationMemoryTools.LinguaSegmentBuilder">
+            <summary>
+            Append filter framework markup data content to a Lingua segment.
+            </summary>
+            <remarks>
+            <para>ToContent use, call <see cref="M:Sdl.LanguagePlatform.TranslationMemoryTools.LinguaSegmentBuilder.VisitChildNodes(Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupDataContainer)"/> with a collection of filter framework markup data items,
+            or pass as parameter to <c>IAbstractMarkupData.AcceptVisitor()</c> for a single markup data item.</para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.LinguaSegmentBuilder.#ctor(Sdl.LanguagePlatform.Core.Segment,Sdl.LanguagePlatform.TranslationMemoryTools.LinguaTuBuilderSettings)">
+            <summary>
+            Construct with a segment instance that will receive the results.
+            </summary>
+            <param name="result"></param>
+            <param name="flags"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.LinguaSegmentBuilder.#ctor(Sdl.LanguagePlatform.Core.Segment,System.Boolean,System.Boolean)">
+            <inheritdoc />
+            <summary>
+            Construct with a segment instance that will receive the results.
+            </summary>
+            <param name="result"></param>
+            <param name="ignoreTags"></param>
+            <param name="excludeTagsInLockedContentText">when true any locked content will be represented as
+            lingua locked content tags with a text equivalent that does not include tag content (typically used
+            when updating the TM). When false locked content rag will have a text equivalent containing all tag and text content that has
+            been locked (this is useful to determine which locked content parts match between source and target, or
+            between the document and the TM match)</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.LinguaSegmentBuilder.#ctor(Sdl.LanguagePlatform.Core.Segment,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <inheritdoc />
+            <summary>
+            Construct with a segment instance that will receive the results.
+            </summary>
+            <param name="result"></param>
+            <param name="ignoreTags"></param>
+            <param name="excludeTagsInLockedContentText"></param>
+            <param name="acceptTrackChanges">accept or reject track changes</param>
+            <param name="includeTrackChanges"> </param>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.LinguaSegmentBuilder.Result">
+            <summary>
+            The lingua segment all content will be appended to.
+            </summary>
+            <remarks>Must be set before using the builder.</remarks>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.LinguaSegmentBuilder.TagAssociations">
+            <summary>
+            Contains tag relationships between Core.Tag's and BCM Tags after segment conversion. Not all 
+            Core.Tag's necessarily have associated BCM tags, in which case the value part is null.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.LinguaSegmentBuilder.TextAssociations">
+            <summary>
+            Contains text relationships between Core.Text's and BCM Texts after segment conversion. Not all 
+            Core.Text's necessarily have associated BCM text, in which case the value part is null.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.LinguaSegmentBuilder.IgnoreTags">
+            <summary>
+            When <c>true</c> tags are not included in the result.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.LinguaSegmentBuilder.VisitChildNodes(Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupDataContainer)">
+            <summary>
+            Visit each child node in the container.
+            </summary>
+            <param name="container"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.LinguaSegmentBuilder.VisitCommentMarker(Sdl.FileTypeSupport.Framework.BilingualApi.ICommentMarker)">
+            <summary>
+            visits all comment content
+            </summary>
+            <param name="commentMarker"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.LinguaSegmentBuilder.VisitLocationMarker(Sdl.FileTypeSupport.Framework.BilingualApi.ILocationMarker)">
+            <summary>
+            ignored
+            </summary>
+            <param name="location"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.LinguaSegmentBuilder.VisitLockedContent(Sdl.FileTypeSupport.Framework.BilingualApi.ILockedContent)">
+            <summary>
+            Visits all content inside the locked content.
+            </summary>
+            <param name="lockedContent"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.LinguaSegmentBuilder.VisitOtherMarker(Sdl.FileTypeSupport.Framework.BilingualApi.IOtherMarker)">
+            <summary>
+            Visits all content inside the marker.
+            </summary>
+            <param name="marker"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.LinguaSegmentBuilder.VisitPlaceholderTag(Sdl.FileTypeSupport.Framework.BilingualApi.IPlaceholderTag)">
+            <summary>
+            Append a standalone tag to the result.
+            </summary>
+            <param name="placeholderTag"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.LinguaSegmentBuilder.VisitSegment(Sdl.FileTypeSupport.Framework.BilingualApi.ISegment)">
+            <summary>
+            Should never be called. Throws an exception.
+            </summary>
+            <param name="segment"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.LinguaSegmentBuilder.VisitTagPair(Sdl.FileTypeSupport.Framework.BilingualApi.ITagPair)">
+            <summary>
+            Appends a start tag to the result, visits all tag pair content and appends an end tag to the result.
+            </summary>
+            <param name="tagPair"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.LinguaSegmentBuilder.VisitText(Sdl.FileTypeSupport.Framework.BilingualApi.IText)">
+            <summary>
+            Appends text to the result.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.LinguaSegmentBuilder.VisitRevisionMarker(Sdl.FileTypeSupport.Framework.BilingualApi.IRevisionMarker)">
+            <summary>
+            Visits all child nodes in the revision marker.
+            </summary>
+            <param name="revisionMarker"></param>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier">
+            <summary>
+            Applies edit distance information to markup data content by
+            inserting corresponding revision markers.
+            
+            The EditDistance information tells us which transformations are needed
+            to convert the <see cref="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.LinguaFromSegment"/> content to the <see cref="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.LinguaToSegment"/> content.
+            
+            The markup data content to be annotated must correspond to the <see cref="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.LinguaFromSegment"/> or
+            the <see cref="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.LinguaToSegment"/>, a flag passed to the <see cref="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.Execute(Sdl.FileTypeSupport.Framework.BilingualApi.ISegment,System.Collections.Generic.IList{Sdl.FileTypeSupport.Framework.Pair{Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupData,Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupData}},Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.MarkupDataAs)"/> method indicates which.
+            
+            The markup data content must already have been "tokenized", i.e. that
+            the <see cref="T:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenApplier"/> has been used to wrap all tokens
+            in individual <c>IOtherMarker</c> containers with the token number as IDs.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.MarkupDataAs">
+            <summary>
+            Indicates whether the markup data to be annotated represents the initial or final
+            result of the edit distance operations.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.MarkupDataAs.FromContent">
+            <summary>
+            The markup data content being annotated represents the content before
+            the edit operations are applied.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.MarkupDataAs.ToContent">
+            <summary>
+            The markup data content being annotated represens the content after
+            the edit operations have been applied.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.#ctor(Sdl.FileTypeSupport.Framework.BilingualApi.IDocumentItemFactory)">
+            <summary>
+            Uses defaults for formatting settings.
+            </summary>
+            <param name="factory"></param>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.ShowDeleteOperations">
+            <summary>
+            When <c>false</c> EditDistance operations for deletes are not
+            applied. This is useful e.g. when showing the document source
+            in the TM window, to make it easier to read.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.ShowResolvedMoveOperations">
+            <summary>
+            When <c>false</c> EditDistance operations that have been
+            resolved by the TM as a moved token will not be
+            applied as added/deleted content.
+            When this is <c>true</c> resolved EditDistance operations
+            will show up as replace operations, where the original content
+            is shown as deleted followed by the replaced content. 
+            The default setting is <c>true</c>.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.ShowResolvedDeleteOperations">
+            <summary>
+            When <c>false</c> EditDistance operations that have been
+            resolved by the TM as a deleted token will not be
+            applied as deleted content.
+            When this is <c>true</c> resolved EditDistance operations
+            will show up as delete operations, where the original content
+            is shown as deleted. 
+            The default setting is <c>true</c>.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.ShowResolvedSubstitutionOperations">
+            <summary>
+            When <c>false</c> EditDistance operations that have been
+            resolved by the TM as token substitutions will not be
+            applied.
+            When this is <c>true</c> resolved token substitution operations
+            will show up as replace operations, where the original content
+            is shown as deleted followed by the replaced content. 
+            The default setting is <c>false</c>.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.ShowResolvedUnknownOperations">
+            <summary>
+            When <c>false</c> EditDistance operations that have been
+            resolved by the TM in a different way than substitution,
+            deletion or move will not be applied.
+            When this is <c>true</c> such operations
+            will show up as replace operations, where the original content
+            is shown as deleted followed by the replaced content. 
+            The default setting is <c>true</c>.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.EditDistance">
+            <summary>
+            The EditDistance information (typically from the TM match).
+            </summary>
+            <remarks>
+            Note that the TM currently returns "inverted" EditDistance information,
+            i.e. it tells you how to transform the document content into the TU content,
+            not the other way around. For this reason you may need to "invert" the EditDistance
+            information before using it, by changing all delete operations to inserts and vice
+            versa, and reversing all move operations.
+            </remarks>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.LinguaFromSegment">
+            <summary>
+            The TM segment content the EditDistance transformation would be applied to
+            in order to achive the content of the <see cref="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.LinguaToSegment"/>.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.LinguaToSegment">
+            <summary>
+            The content that should be the result of applying the EditDistance information
+            to the <see cref="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.LinguaFromSegment"/>.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.ItemFactory">
+            <summary>
+            Factory used to create all markup data content.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.MarkupDataSegment">
+            <summary>
+            The markup data segment that was passed to the <see cref="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.Execute(Sdl.FileTypeSupport.Framework.BilingualApi.ISegment,System.Collections.Generic.IList{Sdl.FileTypeSupport.Framework.Pair{Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupData,Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupData}},Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.MarkupDataAs)"/> method,
+            paired with the token ranges that were also passed in the same call.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.MarkupDataIs">
+            <summary>
+            Indicates whether the content passed to the
+            execute method corresponds to the <see cref="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.LinguaFromSegment"/> or the
+            <see cref="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.LinguaToSegment"/>.
+            </summary>
+            <remarks>This is a read-only property, the value is set when passed to the
+            <see cref="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.Execute(Sdl.FileTypeSupport.Framework.BilingualApi.ISegment,System.Collections.Generic.IList{Sdl.FileTypeSupport.Framework.Pair{Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupData,Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupData}},Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.MarkupDataAs)"/> method.</remarks>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.Execute(Sdl.FileTypeSupport.Framework.BilingualApi.ISegment,System.Collections.Generic.IList{Sdl.FileTypeSupport.Framework.Pair{Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupData,Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupData}},Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.MarkupDataAs)">
+            <summary>
+            Performs the operation. Make sure that you have set all relevant properties
+            before calling this.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.HandleAddedTagPair(Sdl.LanguagePlatform.TranslationMemoryTools.ClassifiedTagPairInfo)">
+            <summary>
+            Handles adding tag pair operation
+            </summary>
+            <param name="info">Added tag pair info.</param>
+            <returns>list of edit items to skip (if tag pair was added with content) or null</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.InsertOperationsOnly(System.Collections.Generic.IEnumerable{Sdl.LanguagePlatform.Core.EditDistance.EditDistanceItem})">
+            <summary>
+            Check if sequence of operations contains inserts only
+            </summary>
+            <param name="list">sequence of operations</param>
+            <returns>true if list contains insert operations only</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataEditDistanceApplier.InsertTagPair(Sdl.FileTypeSupport.Framework.BilingualApi.ITagPair,Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupData,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="tagPair"></param>
+            <param name="fromLocation">can be <c>null</c>, in which case the tag pair is appended and
+            no items wrapped.</param>
+            <param name="itemsToWrap"></param>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataPosition">
+            <summary>
+            MarkupDataPosition class represents a position in the markup data.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataPosition.#ctor(Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupData,System.Int32)">
+            <summary>
+            Constructor that takes the markup data and character offset.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataPosition.MarkupData">
+            <summary>
+            MarkupData property represents the markup data at the position.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataPosition.CharacterOffset">
+            <summary>
+            CharacterOffset property represents the character offset into text markup at the position.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataQuickTagApplier">
+            <summary>
+            Provides functionality to map tags with known quick tag IDs to one or more occurrences
+            of such tags in a segment returned by the language platform.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataQuickTagApplier.#ctor(Sdl.FileTypeSupport.Framework.IntegrationApi.IQuickTags)">
+            <summary>
+            Initializes a new instance with the specified values.
+            </summary>
+            <param name="quickTags">The quick tag definitions which should be applied to the segment (not null)</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataQuickTagApplier.ApplyQuickTags(System.Collections.Generic.List{Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupData})">
+            <summary>
+            Apply tags from the document to the passed-in match.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataQuickTagApplier.VisitCommentMarker(Sdl.FileTypeSupport.Framework.BilingualApi.ICommentMarker)">
+            <summary>
+            Implementation of <see cref="M:Sdl.FileTypeSupport.Framework.BilingualApi.IMarkupDataVisitor.VisitCommentMarker(Sdl.FileTypeSupport.Framework.BilingualApi.ICommentMarker)"/>. Do
+            not call directly.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataQuickTagApplier.VisitLocationMarker(Sdl.FileTypeSupport.Framework.BilingualApi.ILocationMarker)">
+            <summary>
+            Implementation of <see cref="M:Sdl.FileTypeSupport.Framework.BilingualApi.IMarkupDataVisitor.VisitLocationMarker(Sdl.FileTypeSupport.Framework.BilingualApi.ILocationMarker)"/>. Do
+            not call directly.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataQuickTagApplier.VisitLockedContent(Sdl.FileTypeSupport.Framework.BilingualApi.ILockedContent)">
+            <summary>
+            Implementation of <see cref="M:Sdl.FileTypeSupport.Framework.BilingualApi.IMarkupDataVisitor.VisitLockedContent(Sdl.FileTypeSupport.Framework.BilingualApi.ILockedContent)"/>. Do
+            not call directly.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataQuickTagApplier.VisitOtherMarker(Sdl.FileTypeSupport.Framework.BilingualApi.IOtherMarker)">
+            <summary>
+            Implementation of <see cref="M:Sdl.FileTypeSupport.Framework.BilingualApi.IMarkupDataVisitor.VisitOtherMarker(Sdl.FileTypeSupport.Framework.BilingualApi.IOtherMarker)"/>. Do
+            not call directly.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataQuickTagApplier.VisitPlaceholderTag(Sdl.FileTypeSupport.Framework.BilingualApi.IPlaceholderTag)">
+            <summary>
+            Implementation of <see cref="M:Sdl.FileTypeSupport.Framework.BilingualApi.IMarkupDataVisitor.VisitPlaceholderTag(Sdl.FileTypeSupport.Framework.BilingualApi.IPlaceholderTag)"/>. Do
+            not call directly.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataQuickTagApplier.VisitSegment(Sdl.FileTypeSupport.Framework.BilingualApi.ISegment)">
+            <summary>
+            Implementation of <see cref="M:Sdl.FileTypeSupport.Framework.BilingualApi.IMarkupDataVisitor.VisitSegment(Sdl.FileTypeSupport.Framework.BilingualApi.ISegment)"/>. Do
+            not call directly.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataQuickTagApplier.VisitTagPair(Sdl.FileTypeSupport.Framework.BilingualApi.ITagPair)">
+            <summary>
+            Implementation of <see cref="M:Sdl.FileTypeSupport.Framework.BilingualApi.IMarkupDataVisitor.VisitTagPair(Sdl.FileTypeSupport.Framework.BilingualApi.ITagPair)"/>. Do
+            not call directly.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataQuickTagApplier.VisitText(Sdl.FileTypeSupport.Framework.BilingualApi.IText)">
+            <summary>
+            Implementation of <see cref="M:Sdl.FileTypeSupport.Framework.BilingualApi.IMarkupDataVisitor.VisitText(Sdl.FileTypeSupport.Framework.BilingualApi.IText)"/>. Do
+            not call directly.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataQuickTagApplier.VisitRevisionMarker(Sdl.FileTypeSupport.Framework.BilingualApi.IRevisionMarker)">
+            <summary>
+            Implementation of <see cref="M:Sdl.FileTypeSupport.Framework.BilingualApi.IMarkupDataVisitor.VisitRevisionMarker(Sdl.FileTypeSupport.Framework.BilingualApi.IRevisionMarker)"/>. Do
+            not call directly.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataQuickTagApplier.TagSetter">
+            <summary>
+            Helper class to set the tag IDs on a markup data node and any subnodes.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataRange">
+            <summary>
+            MarkupDataRange class represents a range within the markup data.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataRange.#ctor(Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataPosition,Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataPosition)">
+            <summary>
+            Constructor that takes the from position and into position.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataRange.From">
+            <summary>
+            From property represents the position from which the range begins (inclusive).
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataRange.Into">
+            <summary>
+            Into property represents the position into which the range ends (inclusive).
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentBuilder">
+            <inheritdoc />
+            <summary>
+            Use this class to construct a basic filter framework segment
+            from a Lingua segment.
+            </summary>
+            <remarks>
+            <para>
+            Assumptions:
+            </para>
+            <list type="bullet">
+            <item>All paired tags are fully matched in an XML compliant fashion.</item>
+            <item>There are no tokens objects in the segment content.</item>
+            </list>
+            <para>
+            An <see cref="T:Sdl.LanguagePlatform.TranslationMemoryTools.InvalidSegmentContentException" /> with an explanatory error message 
+            will be thrown if this is not the case.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentBuilder.TreatAllTagsAsStandalone">
+            <summary>
+            When <c>true</c> the builder will not attempt to match up tag pairs,
+            all tags will be treated as standalone tags. This is useful if you 
+            want to build markup data from content that may not be wellformed.
+            </summary>
+            <remarks>This is <c>false</c> by default.</remarks>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentBuilder.ItemFactory">
+            <summary>
+            The factory that is used to create all filter framework content.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentBuilder.Result">
+            <summary>
+            The filter framework segment built from the lingua content.
+            </summary>
+            <remarks>
+            <para>Assign to this property before using the builder if you wish to 
+            append content to an existing segment.</para>
+            <para>If this property is not set a new segment is created by the builder.</para>
+            <para>When reading this property an exception is thrown if all start tags have not been closed
+            with corresponding end tags.</para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentBuilder.#ctor(Sdl.FileTypeSupport.Framework.BilingualApi.IDocumentItemFactory)">
+            <summary>
+            Initializes a new instance with the specified values.
+            </summary>
+            <param name="itemFactory">The document item factory that will be used to create the segment and its content (not null)</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentBuilder.VisitLinguaSegment(Sdl.LanguagePlatform.Core.Segment)">
+            <summary>
+            Visits each item in the segment to generate corresponding filter
+            framework content.
+            </summary>
+            <param name="segment">must not be <c>null</c>.</param>
+            <exception cref="T:Sdl.LanguagePlatform.TranslationMemoryTools.InvalidSegmentContentException">thrown if the 
+            content is not well formed or if it contains tokens.</exception>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentBuilder.VisitText(Sdl.LanguagePlatform.Core.Text)">
+            <inheritdoc />
+            <summary>
+            Append a text node to the filter framework segment.
+            </summary>
+            <param name="text"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentBuilder.VisitTag(Sdl.LanguagePlatform.Core.Tag)">
+            <inheritdoc />
+            <summary>
+            Append a placeholder tag or a tag pair to the filter framework segment.
+            </summary>
+            <param name="tag"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentBuilder.VisitDateTimeToken(Sdl.LanguagePlatform.Core.Tokenization.DateTimeToken)">
+            <inheritdoc />
+            <summary>
+            should not be called if segment content is valid
+            </summary>
+            <param name="token"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentBuilder.VisitNumberToken(Sdl.LanguagePlatform.Core.Tokenization.NumberToken)">
+            <inheritdoc />
+            <summary>
+            should not be called if segment content is valid
+            </summary>
+            <param name="token"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentBuilder.VisitMeasureToken(Sdl.LanguagePlatform.Core.Tokenization.MeasureToken)">
+            <inheritdoc />
+            <summary>
+            should not be called if segment content is valid
+            </summary>
+            <param name="token"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentBuilder.VisitSimpleToken(Sdl.LanguagePlatform.Core.Tokenization.SimpleToken)">
+            <inheritdoc />
+            <summary>
+            should not be called if segment content is valid
+            </summary>
+            <param name="token"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentBuilder.VisitTagToken(Sdl.LanguagePlatform.Core.Tokenization.TagToken)">
+            <inheritdoc />
+            <summary>
+            should not be called if segment content is valid
+            </summary>
+            <param name="token"></param>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentPositionLocator">
+            <inheritdoc />
+            <summary>
+            Helper class to locate a specific lingua segment position inside a 
+            filter framework segment. The filter framework data must be the same
+            as the data in the lingua segment. If not an exception will be thrown.
+            </summary>
+            <remarks>
+            MarkupDataSegmentPositionLocator should only be used internally by MarkupDataTokenApplier 
+            because attempts are being made to replace MarkupDataSegmentPositionLocator with 
+            MarkupDataTokenMapping which is easier to use and easier to understand.
+            </remarks>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentPositionLocator.#ctor(Sdl.FileTypeSupport.Framework.BilingualApi.ISegment)">
+            <summary>
+            Initializes a new instance with the specified values.
+            </summary>
+            <param name="markupDataSegment">The filter framework representation of the segment</param>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentPositionLocator.Location">
+            <summary>
+            Gets or sets the current location.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentPositionLocator.OffsetIntoTextField">
+            <summary>
+            Gets or sets the current offset in text fields.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentPositionLocator.ItemAtLocation">
+            <summary>
+            Gets or sets the filter framework item at the current location.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentPositionLocator.StepOver(Sdl.LanguagePlatform.Core.SegmentElement)">
+            <summary>
+            Advances the location and steps over the specified element.
+            </summary>
+            <param name="element">The element to step over.</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentPositionLocator.StepInto(Sdl.LanguagePlatform.Core.SegmentElement,System.Int32)">
+            <summary>
+            Advances the current position and steps into the specified segment element. 
+            </summary>
+            <param name="element">The element to step into</param>
+            <param name="uptoOffset">The offset to set</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentPositionLocator.AdjustToDataItemPosition">
+            <summary>
+            Ensures that the markup data location is on an actual 
+            data item by advancing it if necessary.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentPositionLocator.VisitText(Sdl.LanguagePlatform.Core.Text)">
+            <inheritdoc />
+            <summary>
+            Implements <see cref="M:Sdl.LanguagePlatform.Core.ISegmentElementVisitor.VisitText(Sdl.LanguagePlatform.Core.Text)" />. Do not call directly.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentPositionLocator.VisitTag(Sdl.LanguagePlatform.Core.Tag)">
+            <inheritdoc />
+            <summary>
+            Implements <see cref="M:Sdl.LanguagePlatform.Core.ISegmentElementVisitor.VisitTag(Sdl.LanguagePlatform.Core.Tag)" />. Do not call directly.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentPositionLocator.VisitDateTimeToken(Sdl.LanguagePlatform.Core.Tokenization.DateTimeToken)">
+            <inheritdoc />
+            <summary>
+            Implements <see cref="M:Sdl.LanguagePlatform.Core.ISegmentElementVisitor.VisitDateTimeToken(Sdl.LanguagePlatform.Core.Tokenization.DateTimeToken)" />. Do not call directly.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentPositionLocator.VisitNumberToken(Sdl.LanguagePlatform.Core.Tokenization.NumberToken)">
+            <inheritdoc />
+            <summary>
+            Implements <see cref="M:Sdl.LanguagePlatform.Core.ISegmentElementVisitor.VisitNumberToken(Sdl.LanguagePlatform.Core.Tokenization.NumberToken)" />. Do not call directly.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentPositionLocator.VisitMeasureToken(Sdl.LanguagePlatform.Core.Tokenization.MeasureToken)">
+            <inheritdoc />
+            <summary>
+            Implements <see cref="M:Sdl.LanguagePlatform.Core.ISegmentElementVisitor.VisitMeasureToken(Sdl.LanguagePlatform.Core.Tokenization.MeasureToken)" />. Do not call directly.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentPositionLocator.VisitSimpleToken(Sdl.LanguagePlatform.Core.Tokenization.SimpleToken)">
+            <inheritdoc />
+            <summary>
+            Implements <see cref="M:Sdl.LanguagePlatform.Core.ISegmentElementVisitor.VisitSimpleToken(Sdl.LanguagePlatform.Core.Tokenization.SimpleToken)" />. Do not call directly.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentPositionLocator.VisitTagToken(Sdl.LanguagePlatform.Core.Tokenization.TagToken)">
+            <inheritdoc />
+            <summary>
+            Implements <see cref="M:Sdl.LanguagePlatform.Core.ISegmentElementVisitor.VisitTagToken(Sdl.LanguagePlatform.Core.Tokenization.TagToken)" />. Do not call directly.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier">
+            <summary>
+            Matches tags and other significant items between two markup data containers, with the
+            purpose of adapting the content of a TM match so that it can be used in 
+            an actual document.
+            </summary>
+            <remarks>
+            <para>
+            Matching is based on item type and IDs. Tags of the same type that
+            have the same ID will be considered matching, and the corresponding
+            tag properties in the TM match will be replaced with the ones from 
+            the document.
+            </para>
+            <para>The intended use case for this class is to apply tagging from the 
+            source or target language in the document to the source or target of a 
+            match from a TM.</para>
+            <para>
+            The term "Document" in this class refers to the content that contains
+            the tags we want to apply, and the term "Match" refers to the content
+            with temporary tags that we want to replace with tags from the document.
+            </para>
+            <para>
+            To use: Create an instance, set the <see cref="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier.DocumentContent"/> and
+            call <see cref="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier.ApplyDocumentTags(Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupDataContainer)"/>. If it returns <c>false</c> you must
+            decide what to do with the <see cref="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier.UnmatchedItems"/>, e.g. remove them
+            from the match.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier.#ctor">
+            <inheritdoc />
+            <summary>
+            Initializes a new instance with default values.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier.#ctor(System.Boolean)">
+            <summary>
+            Initializes a new instance with default values.
+            </summary>
+            <param name="excludeTagsInLockedContentText">Flag stating whether tags in locked content should be ignored (i.e. only use text content)</param>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier.DocumentContent">
+            <summary>
+            The container with document tags (and other content) that we
+            want to apply to the match. This is typically a segment from 
+            the actual document.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier.SegmentToSearchIn">
+            <summary>
+            The container with document tags (and other content) that we
+            want to apply to the match. This is typically a segment from 
+            the actual document.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier.UnmatchedItems">
+            <summary>
+            When the tag applier has finished executing this collection contains
+            any tags or other relevant items that could not be matched up with corresponding
+            items in the document.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier.ApplyDocumentTags(Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupDataContainer)">
+            <summary>
+            Apply tags from the document to the passed-in match.
+            </summary>
+            <param name="matchContent">
+            The container with temporary tagged content that we want to
+            replace with corresponding items from an actual document. This is typically
+            a segment from a TM match.</param>
+            <returns><c>true</c> if all relevant items in the match was successfully matched.
+            If not any unmatched content can be accessed from the <see cref="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier.UnmatchedItems"/> property.</returns>
+            <remarks>
+            <para>
+            If this method returns <c>false</c> you can call <see cref="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier.RemoveUnmatchedContent"/> to remove any unmatched tags etc.
+            from the match content.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier.RemoveUnmatchedContent">
+            <summary>
+            Helper method that removes any items in the <see cref="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier.UnmatchedItems"/> collection
+            from their parent collection. If the unmatched items are collections the sub-items inside
+            the collection will remain in place after this operation, i.e. they will replace the 
+            removed item in the parent collection (effectively removing the collection, but not its content).
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier.VisitCommentMarker(Sdl.FileTypeSupport.Framework.BilingualApi.ICommentMarker)">
+            <summary>
+            no effect
+            </summary>
+            <param name="commentMarker"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier.VisitLocationMarker(Sdl.FileTypeSupport.Framework.BilingualApi.ILocationMarker)">
+            <summary>
+            no effect
+            </summary>
+            <param name="location"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier.VisitLockedContent(Sdl.FileTypeSupport.Framework.BilingualApi.ILockedContent)">
+            <summary>
+            Locate a corresponding piece of locked content in the document.
+            If found the document locked content is cloned and replaces the content
+            of the passed-in locked content. If not found the locked content is added
+            to the un-matched items collection.
+            </summary>
+            <param name="lockedContent"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier.CheckLockCount(System.String,System.Int32)">
+            <summary>
+            Locked indexes need to be syncd according to the text content so
+            that we don't accidentally end up with the same source tags in the target
+            when they should be matched to different tags. This is a side-affect of
+            not keeping the tags in the TM and it's the best we can do...
+            </summary>
+            <param name="lockedText"></param>
+            <param name="currentLockedIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier.VisitOtherMarker(Sdl.FileTypeSupport.Framework.BilingualApi.IOtherMarker)">
+            <summary>
+            no effect
+            </summary>
+            <param name="marker"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier.VisitPlaceholderTag(Sdl.FileTypeSupport.Framework.BilingualApi.IPlaceholderTag)">
+            <summary>
+            Locate a corresponding placeholder tag in the document content.
+            If found its properties replace the properties of the passed-in tag.
+            If not found the tag is added to the unmached items collection.
+            </summary>
+            <param name="tag"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier.VisitSegment(Sdl.FileTypeSupport.Framework.BilingualApi.ISegment)">
+            <summary>
+            Find a corresponding segment in the document content. 
+            If found the properties of the corresponding item in the document
+            replaces the segment properties of the passed-in segment.
+            </summary>
+            <param name="segment"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier.VisitTagPair(Sdl.FileTypeSupport.Framework.BilingualApi.ITagPair)">
+            <summary>
+            Locate a corresponding tag pair in the document content. If found
+            the tag properties of the passed-in tag get replaced with the match from the
+            document. If not found the tag pair is added to the unmatched content.
+            </summary>
+            <param name="tagPair"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier.VisitText(Sdl.FileTypeSupport.Framework.BilingualApi.IText)">
+            <summary>
+            no effect
+            </summary>
+            <param name="text"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier.VisitRevisionMarker(Sdl.FileTypeSupport.Framework.BilingualApi.IRevisionMarker)">
+            <summary>
+            no effect
+            </summary>
+            <param name="revisionMarker"></param>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenApplier">
+            <summary>
+            Annotates a filter framework segment with token information
+            by wrapping all tokens in OtherMarker containers that have
+            the token number as ID.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenApplier.TOKEN_MARKER_TYPE">
+            <summary>
+            The marker identifier which is used to mark up tokens in a markup data structure.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenApplier.#ctor(Sdl.FileTypeSupport.Framework.BilingualApi.IDocumentItemFactory)">
+            <summary>
+            Initializes a new instance with the specified values.
+            </summary>
+            <param name="factory">The document item factory to use (not null)</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenApplier.GetRange(System.Int32)">
+            <summary>
+            The from and upto markup data items the token spans after
+            tokens have been applied. 
+            </summary>
+            <param name="tokenIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenApplier.TokenRanges">
+            <summary>
+            Gets the list of token ranges. This property is only valid after <c>Execute</c>
+            has finished.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenApplier.ItemFactory">
+            <summary>
+            Gets or sets the document item factory used to create the token markers in the 
+            segment.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenApplier.MarkupDataSegment">
+            <summary>
+            Gets the markup data segment. This property is only valid after <c>Execute</c>
+            has finished.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenApplier.LinguaSegment">
+            <summary>
+            Gets or sets the language platform segment.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenApplier.Execute(Sdl.FileTypeSupport.Framework.BilingualApi.ISegment,Sdl.LanguagePlatform.Core.Segment)">
+            <summary>
+            Marks up the tokens included in <paramref name="languagePlatformSegment"/> in the 
+            <paramref name="filterFrameworkSegment"/>, which must be the corresponding segment
+            in the filter framework data model. 
+            </summary>
+            <param name="filterFrameworkSegment">The filter framework segment in which to mark
+            up the token ranges</param>
+            <param name="languagePlatformSegment">The language platform segment, which must
+            be tokenized.</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenApplier.Execute(Sdl.FileTypeSupport.Framework.BilingualApi.ISegment)">
+            <summary>
+            Injects token ranges from the currently set language platform segment
+            (see <see cref="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenApplier.LinguaSegment"/>) into the markup data segment, which must
+            correspond to the language platform segment.
+            </summary>
+            <param name="markupDataSegment">The markup data segment in which to mark up 
+            the token boundaries</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenApplier.RemoveAllTokenMarkup(Sdl.FileTypeSupport.Framework.BilingualApi.ISegment)">
+            <summary>
+            Removes all markers for tokens introduced by the <c>Execute</c> method. 
+            The content inside the markers replace the markers, thus the data content remains unchanged.
+            </summary>
+            <param name="markupDataSegment">The markup data segment to remove any token markup from.</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenApplier.SplitBefore(Sdl.LanguagePlatform.Core.SegmentPosition)">
+            <summary>
+            Find the corresponding location in the markup data, and if it
+            is in the middle of a text node, split that text node.
+            Return the location of the node at the "split" position (i.e. the right part if a node was split).
+            </summary>
+            <param name="segmentPosition">The "upto" position</param>
+            <returns>The location corresponding to the segment position</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenApplier.ConvertToUptoPosition(Sdl.LanguagePlatform.Core.SegmentPosition)">
+            <summary>
+            Get a position that can be used as an "upto" from a position that is 
+            to be used as an "into".
+            </summary>
+            <param name="intoPosition"></param>
+            <returns></returns>
+            <remarks>
+            <para>
+            If the into position is for the last valid character/element the returned
+            position will have an index equal to the number of segment elements in the collection.
+            </para>
+            </remarks>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping">
+            <summary>
+            MarkupDataTokenMapping determines where tokens are within a markup segment.
+            </summary>
+            <remarks>
+            This implementation works by converting the markup segment into a string where each character is tagged with the markup data
+            and then similiarly converting the lingua segment into a string where each character is tagged with the token. After creating
+            these tagged strings (CharacterItem lists) then the markup items are filtered to remove revision markers and whitespace
+            and the lingua items are filtered to remove tag tokens and whitespace. This filtering is done to remove arbitrary differences
+            between the markup segment and lingua segment model leaving two tagged strings where each markup item character corresponds 
+            directly to each lingua item character. It is relatively trivial using these tagged strings to find the markup that correspond 
+            to a given token.
+            
+            To summarize:
+            1. Markup segment is converted to markup items (effectively a string where each character is tagged with the markup data).
+            2. Lingua segment is converted to lingua items (effectively a string where each character is tagged with the token).
+            3. Markup items is filtered to remove deleted revision markers and whitespace.
+            4. Lingua items is filtered to remove tag tokens and whitespace.
+            5. After filtering, each character in the markup items corresponds directly to the lingua items.
+            6. To find the markup data for a given token, search the lingua items for the token and use the corresponding markup item.
+            </remarks>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.#ctor(Sdl.LanguagePlatform.Core.Segment,Sdl.FileTypeSupport.Framework.BilingualApi.ISegment,System.Nullable{System.Boolean})">
+            <inheritdoc />
+            <summary>
+            Constructor that takes the given lingua segment, markup segment, and whether to accept track changes.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.#ctor(Sdl.LanguagePlatform.Core.Segment,Sdl.FileTypeSupport.Framework.BilingualApi.ISegment,System.Nullable{System.Boolean},System.Boolean)">
+            <summary>
+            Constructor that takes the given lingua segment, markup segment, whether to accept track changes and whether to ignore tags in locked content.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.CalculateMarkupItems(Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupData,System.Nullable{System.Boolean})">
+            <summary>
+            Calculates the markup items from the given markup segment.
+            </summary>
+            <param name="markupSegment">markup segment</param>
+            <param name="acceptTrackChanges">accept track changes</param>
+            <returns>markup items</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.GetMarkupItems(Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupData)">
+            <summary>
+            Get the markup items from the given markup segment.
+            </summary>
+            <param name="markupSegment">markup segment</param>
+            <returns>markup items</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.GetRevisionTypeToRemove(System.Nullable{System.Boolean})">
+            <summary>
+            Determines the revision type to remove.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.RemoveRevisionItems(System.Collections.Generic.IEnumerable{Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.CharacterItem{Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupData}},Sdl.FileTypeSupport.Framework.BilingualApi.RevisionType)">
+            <summary>
+            Remove revision items of a given revision type from the given markup items.
+            </summary>
+            <param name="markupItems0">markup items</param>
+            <param name="revisionType">revision type</param>
+            <returns>markup without revision items of given revision type</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.RemoveWhitespaceItems``1(System.Collections.Generic.IEnumerable{Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.CharacterItem{``0}})">
+            <summary>
+            Removes the white space items from the given items.
+            </summary>
+            <typeparam name="T">item type</typeparam>
+            <param name="items0">items</param>
+            <returns>items without whitespace</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.InRevisionMarker(Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupData,Sdl.FileTypeSupport.Framework.BilingualApi.RevisionType)">
+            <summary>
+            Determines whether the given markup data is in a revision marker of the given revision type.
+            </summary>
+            <param name="markupData">markup data</param>
+            <param name="revisionType">revision type</param>
+            <returns>whether markup data in revision marker of given revision type</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.CalculateLinguaItems(Sdl.LanguagePlatform.Core.Segment)">
+            <summary>
+            Calulate lingua items from the given lingua segment.
+            </summary>
+            <param name="linguaSegment">lingua segment</param>
+            <returns>lingua items</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.GetLinguaItems(Sdl.LanguagePlatform.Core.Segment)">
+            <summary>
+            Gets the lingua items from the given lingua segment.
+            </summary>
+            <param name="linguaSegment">lingua segment</param>
+            <returns>lingua items</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.GetTokenText(Sdl.LanguagePlatform.Core.Tokenization.Token)">
+            <summary>
+            Gets the token text from the given token.
+            </summary>
+            <param name="token">token</param>
+            <returns>token text</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.RemoveTagTokens(System.Collections.Generic.IEnumerable{Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.CharacterItem{Sdl.LanguagePlatform.Core.Tokenization.Token}})">
+            <summary>
+            Removes the tag tokens (apart from locked content) from the given token items.
+            </summary>
+            <param name="tokenItems0">token items</param>
+            <returns>token items without tag tokens</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.IsLockedContentTagToken(Sdl.LanguagePlatform.Core.Tokenization.TagToken)">
+            <summary>
+            Determines whether the given tag token is a locked content tag token.
+            </summary>
+            <param name="tagToken">tag token</param>
+            <returns>whether locked content tag token</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.GetTokenRanges">
+            <summary>
+            Gets the token ranges (start and finish positions) of the tokens within the bilingual content model.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.CalculateTokenRanges(System.Collections.Generic.IEnumerable{Sdl.LanguagePlatform.Core.Tokenization.Token},System.Collections.Generic.IList{Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.CharacterItem{Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupData}},System.Collections.Generic.IList{Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.CharacterItem{Sdl.LanguagePlatform.Core.Tokenization.Token}})">
+            <summary>
+            Calculates the ranges of the tokens within the markup segment.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.GetTokenStartIndex(Sdl.LanguagePlatform.Core.Tokenization.Token,System.Collections.Generic.IList{Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.CharacterItem{Sdl.LanguagePlatform.Core.Tokenization.Token}},System.Int32)">
+            <summary>
+            Gets the token start index for the given token from the given lingua items.
+            </summary>
+            <param name="token">token</param>
+            <param name="linguaItems">lingua items</param>
+            <param name="searchFromIndex">where to start search from</param>
+            <returns>token start index</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.GetTokenFinishIndex(Sdl.LanguagePlatform.Core.Tokenization.Token,System.Collections.Generic.IList{Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.CharacterItem{Sdl.LanguagePlatform.Core.Tokenization.Token}},System.Int32)">
+            <summary>
+            Get the token finish index for the given start token from the given lingua items.
+            </summary>
+            <param name="startToken">start token</param>
+            <param name="linguaItems">lingua items</param>
+            <param name="startTokenIndex">start token index</param>
+            <returns>token finish index</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.GetMarkupDataPosition(Sdl.LanguagePlatform.Core.SegmentPosition)">
+            <summary>
+            Gets the markup data position from the given segment position.
+            </summary>
+            <param name="segmentPosition">segment position</param>
+            <returns>markup data position</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.GetToken(Sdl.LanguagePlatform.Core.SegmentPosition)">
+            <summary>
+            Gets the token at the given segment position.
+            </summary>
+            <param name="segmentPosition">segment position</param>
+            <returns>token at segment position</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.IsInside(Sdl.LanguagePlatform.Core.SegmentPosition,Sdl.LanguagePlatform.Core.SegmentRange)">
+            <summary>
+            Determines whether the given position is inside the given range.
+            </summary>
+            <param name="position">position</param>
+            <param name="range">range</param>
+            <returns>whether position is inside range</returns>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.CharacterItem`1">
+            <summary>
+            CharacterItem class represents each character along with the corresponding item.
+            </summary>
+            <remarks>
+            The bilingual content model and lingua segments are both effectively converted into strings where each
+            character has the corresponding markup or token - this is represented using CharacterItem.
+            </remarks>
+            <typeparam name="T">item type</typeparam>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.CharacterItem`1.#ctor(System.Int32,System.Char,`0)">
+            <summary>
+            Constructor that takes the given character offset, character, and item.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.CharacterItem`1.CharacterOffset">
+            <summary>
+            CharacterOffset property represents the character offset of the character in the item.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.CharacterItem`1.Character">
+            <summary>
+            Character property represents the character.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.CharacterItem`1.Item">
+            <summary>
+            Item property represents the corresponding item that the character belongs to.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.CharacterItem`1.ToString">
+            <summary>
+            Converts the character item to a string.
+            </summary>
+            <returns>character item as a string</returns>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.MarkupItemsVisitor">
+            <summary>
+            MarkupItemsVisitor class is a markup data visitor that can visit markup and extract effectively a string 
+            where each character has the corresponding markup node.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.MarkupItemsVisitor.GetMarkupItems">
+            <summary>
+            Gets the markup items.
+            </summary>
+            <returns>markup items</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.MarkupItemsVisitor.VisitCommentMarker(Sdl.FileTypeSupport.Framework.BilingualApi.ICommentMarker)">
+            <summary>
+            Visits the comment marker.
+            </summary>
+            <param name="commentMarker">comment marker</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.MarkupItemsVisitor.VisitLocationMarker(Sdl.FileTypeSupport.Framework.BilingualApi.ILocationMarker)">
+            <summary>
+            Visits the location marker.
+            </summary>
+            <param name="locationMarker">location marker</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.MarkupItemsVisitor.VisitLockedContent(Sdl.FileTypeSupport.Framework.BilingualApi.ILockedContent)">
+            <summary>
+            Visits the locked content.
+            </summary>
+            <param name="lockedContent">locked content</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.MarkupItemsVisitor.VisitOtherMarker(Sdl.FileTypeSupport.Framework.BilingualApi.IOtherMarker)">
+            <summary>
+            Visits the other marker.
+            </summary>
+            <param name="otherMarker">other marker</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.MarkupItemsVisitor.VisitPlaceholderTag(Sdl.FileTypeSupport.Framework.BilingualApi.IPlaceholderTag)">
+            <summary>
+            Visits the placeholder tag.
+            </summary>
+            <param name="placeholderTag">placeholder tag</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.MarkupItemsVisitor.VisitRevisionMarker(Sdl.FileTypeSupport.Framework.BilingualApi.IRevisionMarker)">
+            <summary>
+            Visits the revision marker.
+            </summary>
+            <param name="revisionMarker">revision marker</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.MarkupItemsVisitor.VisitSegment(Sdl.FileTypeSupport.Framework.BilingualApi.ISegment)">
+            <summary>
+            Visits the segment.
+            </summary>
+            <param name="segment">segment</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.MarkupItemsVisitor.VisitTagPair(Sdl.FileTypeSupport.Framework.BilingualApi.ITagPair)">
+            <summary>
+            Visits the tag pair.
+            </summary>
+            <param name="tagPair">tag pair</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.MarkupItemsVisitor.VisitText(Sdl.FileTypeSupport.Framework.BilingualApi.IText)">
+            <summary>
+            Visits the text.
+            </summary>
+            <param name="text">text</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTokenMapping.MarkupItemsVisitor.VisitChildren(Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupDataContainer)">
+            <summary>
+            Visits all the children in the given container.
+            </summary>
+            <param name="container">container</param>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.TranslationMemoryTools.PhraseExtraction.TMXDataEncoder">
+            <summary>
+            Supports methods to encode data coming from a TMX file into a vocabulary file for 
+            source and target, and the corresponding sentence files.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.TranslationMemoryTools.PhraseExtraction.TMXDataEncoder.Settings.ComputePlainFile">
+            <summary>
+            If true, all segments will be written as "plain text" into an output file.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.TranslationMemoryTools.PhraseExtraction.TMXDataEncoder.Settings.ComputeTokenFrequencies">
+            <summary>
+            If true, token frequencies will be computed and stored in the data folder.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.TranslationMemoryTools.PhraseExtraction.TMXDataEncoder.Settings.MaxTUs">
+            <summary>
+            The maximum number of TUs to encode. If the value is less or equal to zero, 
+            the whole file will be encoded.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.TranslationMemoryTools.PhraseExtraction.TMXDataEncoder.Settings.MaxSegmentTokenCount">
+            <summary>
+            The maximum number of tokens in a segment to be processed further. Longer
+            segments will be skipped. A value of 0 indicates no limit.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.TranslationMemoryTools.PhraseExtraction.TMXDataEncoder.Settings.IgnoreRegionCodeMismatch">
+            <summary>
+            If true, mismatching region codes will be mapped to the user-specified region code, if available, 
+            or to the detected region-qualified language. If false, TUs with non-matching region codes will
+            be skipped. The default is false.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.PhraseExtraction.TMXDataEncoder.Encode(System.String,System.String,System.IO.TextWriter,Sdl.LanguagePlatform.TranslationMemoryTools.PhraseExtraction.TMXDataEncoder.Settings)">
+            <summary>
+            Encodes the data in the TMX file.
+            </summary>
+            <param name="tmxFile">tmx file</param>
+            <param name="outputLocationOverride">If set, overrides the output location. The data will
+            be stored in a subdirectory of the output location, where the name of the subdirectory
+            will be the input TMX file's name, without extensions.</param>
+            <param name="logStream">log stream</param>
+            <param name="settings">settings</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.PhraseExtraction.TMXDataEncoder.Encode(System.Collections.Generic.IList{System.String},System.String,System.IO.TextWriter,Sdl.LanguagePlatform.TranslationMemoryTools.PhraseExtraction.TMXDataEncoder.Settings)">
+            <summary>
+            Encodes the data in the TMX files.
+            </summary>
+            <param name="tmxFiles">tmx files</param>
+            <param name="outputLocationOverride">If set, overrides the output location. The data will
+            be stored in a subdirectory of the output location, where the name of the subdirectory
+            will be the input TMX file's name, without extensions.</param>
+            <param name="logStream">log stream</param>
+            <param name="settings">settings</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.PhraseExtraction.TMXDataEncoder.Encode(System.String,System.Globalization.CultureInfo,System.Globalization.CultureInfo,System.String,System.IO.TextWriter)">
+            <summary>
+            Encode the data in the TMX file. A set of data files will be created for
+            the data, which will be stored in the specified folder. Note that existing
+            files will be overwritten so that a separate, empty folder should be specified
+            for each TMX file. Data creation is not incremental. Only the default components
+            will be computed (i.e. no trigrams and no "plain file").
+            </summary>
+            <param name="tmxFile">tmx file</param>
+            <param name="sourceCulture">source culture</param>
+            <param name="targetCulture">target culture</param>
+            <param name="outputLocationOverride">If set, overrides the output location. The data will
+            be stored in a subdirectory of the output location, where the name of the subdirectory
+            will be the input TMX file's name, without extensions.</param>
+            <param name="logStream">log stream</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.PhraseExtraction.TMXDataEncoder.Encode(System.Collections.Generic.IList{System.String},System.Globalization.CultureInfo,System.Globalization.CultureInfo,System.String,System.IO.TextWriter)">
+            <summary>
+            Encode the data in the TMX files. A set of data files will be created for
+            the data, which will be stored in the specified folder. Note that existing
+            files will be overwritten so that a separate, empty folder should be specified
+            for each TMX file. Data creation is not incremental. Only the default components
+            will be computed (i.e. no trigrams and no "plain file").
+            </summary>
+            <param name="tmxFiles">tmx files</param>
+            <param name="sourceCulture">source culture</param>
+            <param name="targetCulture">target culture</param>
+            <param name="outputLocationOverride">If set, overrides the output location. The data will
+            be stored in a subdirectory of the output location, where the name of the subdirectory
+            will be the input TMX file's name, without extensions.</param>
+            <param name="logStream">log stream</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.PhraseExtraction.TMXDataEncoder.Encode(System.String,System.Globalization.CultureInfo,System.Globalization.CultureInfo,System.String,System.IO.TextWriter,Sdl.LanguagePlatform.TranslationMemoryTools.PhraseExtraction.TMXDataEncoder.Settings)">
+            <summary>
+            Encode the data in the TMX file. A set of data files will be created for
+            the data, which will be stored in the specified folder. Note that existing
+            files will be overwritten so that a separate, empty folder should be specified
+            for each TMX file. Data creation is not incremental.
+            </summary>
+            <param name="tmxFile">tmx file</param>
+            <param name="sourceCulture">source culture</param>
+            <param name="targetCulture">target culture</param>
+            <param name="outputLocationOverride">If set, overrides the output location. The data will
+            be stored in a subdirectory of the output location, where the name of the subdirectory
+            will be the input TMX file's name, without extensions.</param>
+            <param name="logStream">log stream</param>
+            <param name="settings">settings</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.PhraseExtraction.TMXDataEncoder.Encode(System.Collections.Generic.IList{System.String},System.Globalization.CultureInfo,System.Globalization.CultureInfo,System.String,System.IO.TextWriter,Sdl.LanguagePlatform.TranslationMemoryTools.PhraseExtraction.TMXDataEncoder.Settings)">
+            <summary>
+            Encode the data in the TMX files. A set of data files will be created for
+            the data, which will be stored in the specified folder. Note that existing
+            files will be overwritten so that a separate, empty folder should be specified
+            for each run. Data creation is not incremental.
+            </summary>
+            <param name="tmxFiles">tmx files</param>
+            <param name="sourceCulture">source culture</param>
+            <param name="targetCulture">target culture</param>
+            <param name="outputLocationOverride">If set, overrides the output location. The data will
+            be stored in a subdirectory of the output location, where the name of the subdirectory
+            will be the input TMX file's name, without extensions.</param>
+            <param name="logStream">log stream</param>
+            <param name="settings">settings</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.PhraseExtraction.TMXDataEncoder.GetLanguageDirection(System.String)">
+            <summary>
+            Gets the language direction from the given tmx file.
+            </summary>
+            <param name="tmxFile">tmx file</param>
+            <returns>language direction</returns>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.TranslationMemoryTools.PhraseExtraction.TMXDataEncoder.TokenRestorer">
+            <summary>
+            The statistical phrase extraction process analyses distributions of tokens produced by the tokenizer,
+            regardless of whatever whitespace may separate them, if any. When multiple-token associations are
+            made, the text for the suggestion is constructed of each of the tokens concerned, assembled with
+            a space character between them. As a result, if the (target) tokenizer output for "can't" consists of three
+            tokens, and is passed as-is to phrase extraction, then associated with (source) tokens "ne peut pas",
+            the suggestion that will be made for the latter will appear as "can ' t". This problem is avoided for hyphenated
+            words such as "two-wheeled" by passing flags to the tokenizer to ensure such a string produces only 
+            a single token. In the absence of similar flags covering other cases, this class examines
+            the tokenizer output so as to ensure examples such as "can't" are passed to phrase extraction
+            as a single token. 
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.TranslationMemoryTools.SegmentBuilderWithTagApplier">
+            <summary>
+            Extends the <see cref="T:Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataSegmentBuilder"/> with a method to map tags with 
+            known quick tag IDs to their closest representation in the filter framework tag model.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.SegmentBuilderWithTagApplier.#ctor(Sdl.FileTypeSupport.Framework.BilingualApi.IDocumentItemFactory,Sdl.FileTypeSupport.Framework.IntegrationApi.IQuickTags)">
+            <inheritdoc />
+            <summary>
+            Initializes a new instance with the specified values.
+            </summary>
+            <param name="itemFactory">The document item factory that will be used to create the segment and its content (not null)</param>
+            <param name="quickTags">The quick tag definitions which should be applied to the segment (not null)</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.SegmentBuilderWithTagApplier.#ctor(Sdl.FileTypeSupport.Framework.BilingualApi.IDocumentItemFactory,Sdl.FileTypeSupport.Framework.IntegrationApi.IQuickTags,System.Boolean)">
+            <summary>
+            Initializes a new instance with the specified values.
+            </summary>
+            <param name="itemFactory">The document item factory that will be used to create the segment and its content (not null)</param>
+            <param name="quickTags">The quick tag definitions which should be applied to the segment (not null)</param>
+            <param name="excludeTagsInLockedContentText">Flag stating whether tags in locked content should be ignored (i.e. only use text content)</param>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.SegmentBuilderWithTagApplier.TagsRemoved">
+            <summary>
+            Gets a flag which indicates whether tags got removed during the conversion. This 
+            property is part of the conversion result and is only valid once the segment 
+            has been converted.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.SegmentBuilderWithTagApplier.PenaltyApplied">
+            <summary>
+            Gets or sets a flag which indicates whether a MemoryTagDeleted penalty was applied to the search result as a result of unmatched memory tags.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.TranslationMemoryTools.SegmentBuilderWithTagApplier.Result">
+            <summary>
+            Gets the result of the conversion. This property is only valid after the 
+            segment has been converted.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.SegmentBuilderWithTagApplier.ApplyTags(Sdl.LanguagePlatform.TranslationMemory.SearchResult,Sdl.FileTypeSupport.Framework.BilingualApi.ISegment,Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupDataContainer,Sdl.LanguagePlatform.TranslationMemory.Penalty)">
+            <summary>
+            Apply the tags from the document to memory translation. Attempt to apply QuickTags to any unmatched memory tags. Finally, remove
+            any unmatchedult. If any unmatched tags are removed then apply the MemoryTagDeleted
+            penalty (if no other tag related penalties have already been applied. The result of the conversion can be retrieved
+            through the <see cref="P:Sdl.LanguagePlatform.TranslationMemoryTools.SegmentBuilderWithTagApplier.Result"/> property.
+            </summary>
+            <param name="searchResult">The search resultsgment to convert.</param>
+            <param name="segmentToSearchIn"> </param>
+            <param name="documentContent">The document the resulting segment will be in.</param>
+            <param name="memoryTagDeletedPenalty">The penalty to be applied if unmatched memory tags are removed.</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.SegmentBuilderWithTagApplier.ApplyTags(Sdl.LanguagePlatform.Core.Segment,Sdl.FileTypeSupport.Framework.BilingualApi.ISegment,Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupDataContainer)">
+            <summary>
+            Convert the specified segment, apply the quick tags, and remove any unmatched tags. The result 
+            of the conversion can be retrieved through the <see cref="P:Sdl.LanguagePlatform.TranslationMemoryTools.SegmentBuilderWithTagApplier.Result"/> property.
+            </summary>
+            <param name="segment">The segment to convert.</param>
+            <param name="segmentToSearchIn">the container where to search the builder result </param>
+            <param name="documentContent">The document the resulting segment will be in.</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.SegmentBuilderWithTagApplier.ApplyQuickTags(Sdl.LanguagePlatform.TranslationMemoryTools.MarkupDataTagApplier)">
+            <summary>
+            Apply the quick tags, using the provided tag matcher.
+            </summary>
+            <param name="tagMatcher">The tag matcher to apply.</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.SegmentBuilderWithTagApplier.RemoveUnmatchedTags">
+            <summary>
+            Removes any unmatched tags from the result. This method should only be called after
+            the conversion has finished.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.TranslationMemoryTools.TUConverter">
+            <summary>
+            Provides methods to convert a bilingual filter framework segment (see
+            <see cref="T:Sdl.FileTypeSupport.Framework.BilingualApi.ISegment"/>) to 
+            an equivalent representation used by the language platform
+            (see <see cref="T:Sdl.LanguagePlatform.Core.Segment"/>), or to convert 
+            a bilingual filter framework segment pair to an equivalent 
+            <see cref="T:Sdl.LanguagePlatform.TranslationMemory.TranslationUnit"/>.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.TUConverter.BuildLinguaSegment(System.Globalization.CultureInfo,Sdl.FileTypeSupport.Framework.BilingualApi.ISegment,System.Boolean)">
+            <summary>
+            Builds a language platform segment from a filter framework segment. 
+            </summary>
+            <param name="culture">The culture of the segment</param>
+            <param name="segment">The filter framework segment</param>
+            <param name="includeTrackChanges"> </param>
+            <returns>A new language platform segment which corresponds to <paramref name="segment"/></returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.TUConverter.BuildLinguaSegment(System.Globalization.CultureInfo,Sdl.FileTypeSupport.Framework.BilingualApi.ISegment,System.Boolean,System.Boolean,System.Boolean,System.Boolean@,System.Boolean)">
+            <summary>
+            Builds a language platform segment from a filter framework segment. 
+            </summary>
+            <param name="culture"></param>
+            <param name="segment"></param>
+            <param name="stripTags"></param>
+            <param name="excludeTagsInLockedContentText"></param>
+            <param name="acceptTrackChanges"></param>
+            <param name="hasTrackChanges">an out parameter to show if this segment has track changes</param>
+            <param name="includeTrackChanges"> </param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.TUConverter.BuildLinguaSegment(System.Globalization.CultureInfo,Sdl.FileTypeSupport.Framework.BilingualApi.ISegment,Sdl.LanguagePlatform.TranslationMemoryTools.LinguaTuBuilderSettings)">
+            <summary>
+            Builds a language platform segment from a filter framework segment. 
+            </summary>
+            <param name="culture"></param>
+            <param name="segment"></param>
+            <param name="settings"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.TUConverter.BuildLinguaSegment(System.Globalization.CultureInfo,Sdl.FileTypeSupport.Framework.BilingualApi.ISegment,Sdl.LanguagePlatform.TranslationMemoryTools.LinguaTuBuilderSettings,System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{Sdl.LanguagePlatform.Core.Text,Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupData}}@,System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{Sdl.LanguagePlatform.Core.Tag,Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupData}}@)">
+            <summary>
+            Converts bilingual segment to lingua and returns text elements mapping between the 2 models
+            </summary>
+            <param name="culture"></param>
+            <param name="segment"></param>
+            <param name="settings"></param>
+            <param name="textAssociations"></param>
+            <param name="tagAssociations"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.TUConverter.BuildLinguaSegment(System.Globalization.CultureInfo,Sdl.FileTypeSupport.Framework.BilingualApi.ISegment,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Builds a language platform segment from a filter framework segment. 
+            </summary>
+            <param name="culture">The culture of the segment</param>
+            <param name="segment">The filter framework segment</param>
+            <param name="stripTags">If <c>true</c>, tags will be stripped from the segment. The result
+            will be a plain-text segment.</param>
+            <param name="excludeTagsInLockedContentText">If <c>true</c>, tags which appear in locked content text
+            will be excluded.</param>
+            <param name="includeTrackChanges"> </param>
+            <returns>A new language platform segment which corresponds to <paramref name="segment"/></returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.TUConverter.GetMostSignificantStructureContext(Sdl.FileTypeSupport.Framework.NativeApi.IParagraphUnitProperties)">
+            <summary>
+            Searches for the most sigifnicant structure context information in an <see cref="T:Sdl.FileTypeSupport.Framework.NativeApi.IParagraphUnitProperties"/> object.
+            </summary>
+            <param name="paragraphProperties">The paragraph unit's properties</param>
+            <returns>The most significant structure context name, or <c>null</c> if none is present</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.TUConverter.GeSIDContext(Sdl.FileTypeSupport.Framework.NativeApi.IParagraphUnitProperties)">
+            <summary>
+            Searches for SID value in an <see cref="T:Sdl.FileTypeSupport.Framework.NativeApi.IParagraphUnitProperties"/> object.
+            </summary>
+            <param name="paragraphProperties">The paragraph unit's properties</param>
+            <returns>The most significant structure context name, or <c>null</c> if none is present</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.TUConverter.BuildLinguaTranslationUnit(Sdl.LanguagePlatform.Core.LanguagePair,Sdl.FileTypeSupport.Framework.BilingualApi.IDocumentProperties,Sdl.FileTypeSupport.Framework.BilingualApi.IFileProperties,Sdl.FileTypeSupport.Framework.BilingualApi.ISegmentPair,Sdl.FileTypeSupport.Framework.NativeApi.IParagraphUnitProperties,System.Boolean,System.Boolean,System.Boolean,System.Boolean@,System.Boolean)">
+            <summary>
+            Converts a bilingual segment pair to a translation unit.
+            </summary>
+            <param name="lp">The segment pair's language direction (not null)</param>
+            <param name="documentProperties">Document properties for the document which the segment pair belongs to </param>
+            <param name="fileProperties">File properties for file which the segment pair belongs to </param>
+            <param name="sp">The segment pair (not null)</param>
+            <param name="paragraphProperties">The properties of the paragraph the segment appears in</param>
+            <param name="stripTags">If <c>true</c>, tags will be stripped from the segment. The result
+            will be a plain-text segment.</param>
+            <param name="excludeTagsInLockedContentText">If <c>true</c>, tags which appear in locked content text
+            will be excluded.</param>
+            <param name="acceptTrackChanges"></param>
+            <param name="hasSourceTrackChanges"></param>
+            <param name="includeTrackChanges">If true, result will contain revision tags </param>
+            <returns>A new translation unit which corresponds to <paramref name="sp"/>, or 
+            <c>null</c> if the source segment is empty.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.TUConverter.BuildLinguaTranslationUnit(Sdl.LanguagePlatform.Core.LanguagePair,Sdl.FileTypeSupport.Framework.BilingualApi.ISegmentPair,Sdl.FileTypeSupport.Framework.NativeApi.IParagraphUnitProperties,System.Boolean,System.Boolean,System.Boolean,System.Boolean@,System.Boolean)">
+            <summary>
+            Converts a bilingual segment pair to a translation unit.
+            </summary>
+            <param name="lp">The segment pair's language direction (not null)</param>
+            <param name="sp">The segment pair (not null)</param>
+            <param name="paragraphProperties">The properties of the paragraph the segment appears in</param>
+            <param name="stripTags">If <c>true</c>, tags will be stripped from the segment. The result
+            will be a plain-text segment.</param>
+            <param name="excludeTagsInLockedContentText">If <c>true</c>, tags which appear in locked content text
+            will be excluded.</param>
+            <param name="acceptTrackChanges"></param>
+            <param name="hasSourceTrackChanges"></param>
+            <param name="includeTrackChanges">If true, result will contain revision tags </param>
+            <returns>A new translation unit which corresponds to <paramref name="sp"/>, or 
+            <c>null</c> if the source segment is empty.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.TUConverter.BuildLinguaTranslationUnit(Sdl.LanguagePlatform.Core.LanguagePair,Sdl.FileTypeSupport.Framework.BilingualApi.IDocumentProperties,Sdl.FileTypeSupport.Framework.BilingualApi.IFileProperties,Sdl.FileTypeSupport.Framework.BilingualApi.ISegmentPair,Sdl.FileTypeSupport.Framework.NativeApi.IParagraphUnitProperties,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean@,System.Boolean)">
+            <summary>
+            Converts a bilingual segment pair to a translation unit.
+            </summary>
+            <param name="lp">The segment pair's language direction (not null)</param>
+            <param name="documentProperties">document properties for the document which the segment belongs to </param>	    
+            <param name="fileProperties">file properties for the file which the segment belongs to </param>
+            <param name="sp">The segment pair (not null)</param>
+            <param name="paragraphProperties">The properties of the paragraph the segment appears in</param>
+            <param name="stripTags">If <c>true</c>, tags will be stripped from the segment. The result
+            will be a plain-text segment.</param>
+            <param name="excludeTagsInLockedContentText">If <c>true</c>, tags which appear in locked content text
+            will be excluded.</param>
+            <param name="acceptTrackChanges"></param>
+            <param name="hasSourceTrackChanges"></param>
+            <param name="alignTags">If true, an attempt is made to align cross-segment tags</param>
+            <param name="includeTrackChanges">If true, result will contain revision tags </param>
+            <returns>A new translation unit which corresponds to <paramref name="sp"/>, or 
+            <c>null</c> if the source segment is empty.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.TUConverter.BuildLinguaTranslationUnit(Sdl.LanguagePlatform.Core.LanguagePair,Sdl.FileTypeSupport.Framework.BilingualApi.ISegmentPair,Sdl.FileTypeSupport.Framework.NativeApi.IParagraphUnitProperties,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean@,System.Boolean)">
+            <summary>
+            Converts a bilingual segment pair to a translation unit.
+            </summary>
+            <param name="lp">The segment pair's language direction (not null)</param>
+            <param name="sp">The segment pair (not null)</param>
+            <param name="paragraphProperties">The properties of the paragraph the segment appears in</param>
+            <param name="stripTags">If <c>true</c>, tags will be stripped from the segment. The result
+            will be a plain-text segment.</param>
+            <param name="excludeTagsInLockedContentText">If <c>true</c>, tags which appear in locked content text
+            will be excluded.</param>
+            <param name="acceptTrackChanges"></param>
+            <param name="hasSourceTrackChanges"></param>
+            <param name="alignTags">If true, an attempt is made to align cross-segment tags</param>
+            <param name="includeTrackChanges">If true, result will contain revision tags </param>
+            <returns>A new translation unit which corresponds to <paramref name="sp"/>, or 
+            <c>null</c> if the source segment is empty.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.TUConverter.TryParseDateTimeWithFallback(System.String)">
+            <summary>
+            Tryes to parse the given string using invariant culture and if fails tries with current culture.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.TUConverter.AreAlignable(System.Collections.Generic.KeyValuePair{Sdl.LanguagePlatform.Core.Tag,Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupData},System.Collections.Generic.KeyValuePair{Sdl.LanguagePlatform.Core.Tag,Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupData})">
+            <summary>
+            For a paired tag, determines whether the tags can be aligned.
+            </summary>
+            <param name="leftTag"></param>
+            <param name="rightTag"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.TUConverter.BuildLinguaTranslationUnit(Sdl.LanguagePlatform.Core.LanguagePair,Sdl.FileTypeSupport.Framework.BilingualApi.IDocumentProperties,Sdl.FileTypeSupport.Framework.BilingualApi.IFileProperties,Sdl.FileTypeSupport.Framework.BilingualApi.ISegmentPair,Sdl.FileTypeSupport.Framework.NativeApi.IParagraphUnitProperties,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Converts a bilingual segment pair to a translation unit.
+            </summary>
+            <param name="lp"></param>
+            <param name="fileProperties"></param>
+            <param name="sp"></param>
+            <param name="paragraphProperties"></param>
+            <param name="stripTags"></param>
+            <param name="excludeTagsInLockedContentText"></param>
+            <param name="documentProperties"> </param>
+            <param name="includeTrackChanges"> </param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.TUConverter.BuildLinguaTranslationUnit(Sdl.LanguagePlatform.Core.LanguagePair,Sdl.FileTypeSupport.Framework.BilingualApi.ISegmentPair,Sdl.FileTypeSupport.Framework.NativeApi.IParagraphUnitProperties,Sdl.LanguagePlatform.TranslationMemoryTools.LinguaTuBuilderSettings)">
+            <summary>
+            Converts a bilingual segment pair to a translation unit.
+            </summary>
+            <param name="lp">The segment pair's language direction (not null)</param>
+            <param name="sp">The segment pair (not null)</param>
+            <param name="paragraphProperties">The properties of the paragraph the segment appears in</param>        
+            <param name="flags"></param>
+            <returns>A new translation unit which corresponds to <paramref name="sp"/>, or 
+            <c>null</c> if the source segment is empty.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.TUConverter.BuildLinguaTranslationUnit(Sdl.LanguagePlatform.Core.LanguagePair,Sdl.FileTypeSupport.Framework.BilingualApi.ISegmentPair,Sdl.FileTypeSupport.Framework.NativeApi.IParagraphUnitProperties,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Converts a bilingual segment pair to a translation unit.
+            </summary>
+            <param name="lp">The segment pair's language direction (not null)</param>
+            <param name="sp">The segment pair (not null)</param>
+            <param name="paragraphProperties">The properties of the paragraph the segment appears in</param>
+            <param name="stripTags">If <c>true</c>, tags will be stripped from the segment. The result will be a plain-text segment.</param>
+            <param name="excludeTagsInLockedContentText">If <c>true</c>, tags which appear in locked content text will be excluded.</param>
+            <param name="includeTrackChanges">If true, result will contain revision tags </param>
+            <returns>A new translation unit which corresponds to <paramref name="sp"/>, or <c>null</c> if the source segment is empty.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.TranslationMemoryTools.TUConverter.AppendToLinguaSegment(Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupDataContainer,Sdl.LanguagePlatform.Core.Segment,Sdl.LanguagePlatform.TranslationMemoryTools.LinguaTuBuilderSettings,System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{Sdl.LanguagePlatform.Core.Tag,Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupData}}@,System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{Sdl.LanguagePlatform.Core.Text,Sdl.FileTypeSupport.Framework.BilingualApi.IAbstractMarkupData}}@)">
+            <summary>
+            return if the segment contains track changes
+            </summary>
+            <param name="data"></param>
+            <param name="result"></param>
+            <param name="flags"></param>
+            <param name="tagAssociations"></param>
+            <param name="textAssociations"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

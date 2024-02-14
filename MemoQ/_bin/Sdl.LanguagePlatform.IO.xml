@@ -1,0 +1,1101 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sdl.LanguagePlatform.IO</name>
+    </assembly>
+    <members>
+        <member name="T:Sdl.LanguagePlatform.IO.IllegalCharacterFilter">
+            <summary>
+            Used as a filter for illegal characters after a text reader.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "F:Sdl.LanguagePlatform.IO.IllegalCharacterFilter._BUFFER_SIZE" -->
+        <member name="F:Sdl.LanguagePlatform.IO.IllegalCharacterFilter._Buffer">
+            <summary>
+            Buffer to hold the wrapped stream's data (converted)
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.IO.IllegalCharacterFilter._BufferUsed">
+            <summary>
+            Number of chars which are used in _Buffer
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.IO.IllegalCharacterFilter._BufferStart">
+            <summary>
+            The position of the reader in the buffer
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.IO.IllegalCharacterFilter._EOF">
+            <summary>
+            signals EOF of the wrapped stream
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.IO.IllegalCharacterFilter._Block">
+            <summary>
+            A block of raw data read from the input
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.IllegalCharacterFilter.#ctor(System.IO.TextReader)">
+            <summary>
+            Initializes a new 
+            </summary>
+            <param name="wrappedReader"></param>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.MultiFileTextReader">
+            <summary>
+            A text reader which virtually concatenates a number of text files and allows sequential reading from this file set.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.MultiFileTextReader.#ctor(System.IO.FileInfo[])">
+            <summary>
+            Instantiates a MultiFileTextReader which works on the specified set of files. The files are opened with BOM sniffing
+            defaulting to UTF8 encoding.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.MultiFileTextReader.#ctor(System.IO.DirectoryInfo,System.String,System.Boolean)">
+            <summary>
+            Instantiates a MultiFileTextReader which works on the files contained in the specified directory and its subdirectories.
+            </summary>
+            <param name="rootDirectory">The directory in which to search for applicable files.</param>
+            <param name="fileFilter">If non-null, only files which match the filter are added to the file set (see System.IO.DirectoryInfo.GetFiles()). </param>
+            <param name="recurse">If true, subdirectories are scanned for matching false. Otherwise, only files in the specified root directory are considered.</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.MultiFileTextReader.#ctor(System.String[])">
+            <summary>
+            Instantiates a MultiFileTextReader which works on the files or directories passed as the parameter. Directories
+            are recursed into, files are opened UTF8 with BOM sniffing.
+            </summary>
+            <param name="filesOrDirectories">The set of file names or directory names to work on</param>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.MultiFileTextReader.CurrentFile">
+            <summary>
+            Allows access to the FileInfo of the currently worked-on file. If null, EOF has been reached.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.MultiFileTextReader.Peek">
+            <summary>
+            Not implemented.
+            </summary>
+            <returns>Always throws exception.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.MultiFileTextReader.Read">
+            <summary>
+            Reads the next character from the set of input files, advances the current file as necessary.
+            </summary>
+            <returns>The next input character or -1 if EOF (of the concatenation) is reached.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.MultiFileTextReader.Read(System.Char[],System.Int32,System.Int32)">
+            <summary>
+            Reads a block of characters from the virtual concatenation of text files.
+            </summary>
+            <param name="buffer">The buffer to store the data in (see TextReader.Read())</param>
+            <param name="index">The index to start storing characters in the buffer.</param>
+            <param name="count">The maximum number of characters to read</param>
+            <returns>0 on EOF, or the number of characters read which may be 0 &lt; n &lt;= count</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.MultiFileTextReader.ReadBlock(System.Char[],System.Int32,System.Int32)">
+            <summary>
+            Reads a block of characters from the virtual concatenation of text files.
+            </summary>
+            <param name="buffer">The buffer to store the data in (see TextReader.Read())</param>
+            <param name="index">The index to start storing characters in the buffer</param>
+            <param name="count">The number of characters to read</param>
+            <returns>The number of characters read. Unlike Read(buffer, index, count), this method
+            will always attempt to read count characters and will automatically advance to the next file 
+            if the current file does not contain enough data.
+            </returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.MultiFileTextReader.ReadLine">
+            <summary>
+            Reads the next line of input from the concatenation of text files.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.MultiFileTextReader.ReadToEnd">
+            <summary>
+            Not implemented.
+            </summary>
+            <returns>Always throws exception.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.MultiFileTextReader.Close">
+            <summary>
+            Closes the overall file set. An attempt to read more data will lead to an exception.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.Streams.Event">
+            <summary>
+            An abstract base class, purely for inheritance purposes, representing a particular step/item in a stream of translation units.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.Streams.IEventReader">
+            <summary>
+            Simple interface for reading events from a stream.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.Streams.IEventReader.Read">
+            <summary>
+            Reads the next item in the stream and returns the corresponding Event object, from that particular item.
+            </summary>
+            <returns>An Event object.</returns>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.Streams.IEventReceiver">
+            <summary>
+            Simple event receiver interface.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.Streams.IEventReceiver.Emit(Sdl.LanguagePlatform.IO.Streams.Event)">
+            <summary>
+            Processes an event.
+            </summary>
+            <param name="e">The event.</param>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.Streams.ITUStreamContext">
+            <summary>
+            Represents "global" settings related to a TU stream, e.g. during import. 
+            
+            This interface wraps access to user and field information. 
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.Streams.ITUStreamContext.SourceCulture">
+            <summary>
+            Gets the source language.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.Streams.ITUStreamContext.TargetCulture">
+            <summary>
+            Gets the target language.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.Streams.ITUStreamContext.CheckMatchingSublanguages">
+            <summary>
+            Gets a value indicating whether the process should check if the sublanguages match.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.Streams.ITUStreamContext.FieldDefinitions">
+            <summary>
+            Gets the field definitions.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.Streams.ITUStreamContext.MayAddNewFields">
+            <summary>
+            Whether or not the importer may add new fields to the TM.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.Streams.StartOfInputEvent">
+            <summary>
+            Corresponds to the filter framework's StartOfInput event. It represents the beginning of the input stream.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.Streams.StartOfInputEvent.SourceCulture">
+            <summary>
+            Gets or sets the source language.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.Streams.StartOfInputEvent.SourceCultureName">
+            <summary>
+            Gets or sets the source language as a string value.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.Streams.StartOfInputEvent.Properties">
+            <summary>
+            Accesses user-defined properties, which are key-value pairs of strings. Note that the field value
+            is null unless it's allocated by the user.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.Streams.StartOfInputEvent.TargetCulture">
+            <summary>
+            Gets or sets the target language.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.Streams.StartOfInputEvent.TargetCultureName">
+            <summary>
+            Gets or sets the target language as a string value.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.Streams.StartOfInputEvent.CreationDate">
+            <summary>
+            Gets or sets the creation date.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.Streams.StartOfInputEvent.CreationUser">
+            <summary>
+            Gets or sets the creation user.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.Streams.EndOfInputEvent">
+            <summary>
+            Represents an end-of-input event.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.Streams.EndOfInputEvent.#ctor">
+            <summary>
+            Initializes a new instance with default values.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.Streams.TUEvent">
+            <summary>
+            Represents a translation unit event in the stream.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.Streams.TUEvent.#ctor(Sdl.LanguagePlatform.TranslationMemory.TranslationUnit)">
+            <summary>
+            Initializes a new instance of the TUEvent class with the specified translation unit.
+            </summary>
+            <param name="tu">The translation unit.</param>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.Streams.TUEvent.TranslationUnit">
+            <summary>
+            Gets the underlying translation unit.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.Streams.TUStreamContext">
+            <summary>
+            Represents "global" settings related to a TU stream, e.g. during import. 
+            Wraps access to language and field information.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.Streams.TUStreamContext.#ctor">
+            <summary>
+            Initializes a new instance with invariant cultures and empty field declarations.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.Streams.TUStreamContext.#ctor(Sdl.LanguagePlatform.Core.LanguagePair)">
+            <summary>
+            Initializes a new instance with the specified language direction and empty field declarations.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.Streams.TUStreamContext.#ctor(Sdl.LanguagePlatform.Core.LanguagePair,Sdl.LanguagePlatform.TranslationMemory.FieldDefinitions)">
+            <summary>
+            Initializes a new instance with the specified language direction and field declarations.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.Streams.TUStreamContext.#ctor(System.Globalization.CultureInfo,System.Globalization.CultureInfo)">
+            <summary>
+            Initializes a new instance with the specified source cultures and empty field declarations.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.Streams.TUStreamContext.#ctor(System.Globalization.CultureInfo,System.Globalization.CultureInfo,Sdl.LanguagePlatform.TranslationMemory.FieldDefinitions)">
+            <summary>
+            Initializes a new instance with the specified source cultures and field declarations.
+            </summary>
+            <param name="sourceCulture">The source culture to filter the TMX stream for. If null, the invariant culture 
+            will be used. The invariant culture means that no filtering takes place.</param>
+            <param name="targetCulture">The target culture to filter the TMX stream for. If null, the invariant culture 
+            will be used. The invariant culture means that no filtering takes place.</param>
+            <param name="fields">Pre-defined field declarations, or null.</param>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.Streams.TUStreamContext.FieldDefinitions">
+            <summary>
+            The predefined or collected field definitions.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.Streams.TUStreamContext.SourceCulture">
+            <summary>
+            The source culture to filter for in the TMX stream.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.Streams.TUStreamContext.TargetCulture">
+            <summary>
+            The target culture to filter for in the TMX stream.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.Streams.TUStreamContext.CheckMatchingSublanguages">
+            <summary>
+            Indicates whether the process should check if the sublanguages match.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.Streams.TUStreamContext.MayAddNewFields">
+            <summary>
+            Whether or not the importer may add new fields to the TM.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.ContentBearingTag.Duplicate">
+            <summary>
+            See <see cref="!:SegmentElement.Duplicate"/>
+            </summary>
+            <returns>A new instance that is a deep copy of this instance.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.GenericCleaner.ApplyCleanupHeuristics(Sdl.LanguagePlatform.TranslationMemory.TranslationUnit)">
+            <summary>
+            Applies various heuristics to cleanup legacy SDLX TUs
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.SDLXCleaner">
+            <summary>
+            Cleans SDLX TUs
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.SDLXCleaner.ApplyExtendedCleanupHeuristics(Sdl.LanguagePlatform.TranslationMemory.TranslationUnit)">
+            <summary>
+            Applies various heuristics to cleanup legacy SDLX TUs
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.SDLXCleaner.ApplyStandardCleanupHeuristics(Sdl.LanguagePlatform.Core.Segment)">
+            <summary>
+            Applies the standard cleanup rules which are always applied, independent of the 
+            "compatibility" settings.
+            </summary>
+            <returns>true iff the segment has been changed</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.SDLXCleaner.HandleDanglingTags(Sdl.LanguagePlatform.Core.Segment)">
+            <summary>
+            Fill dangling unmatched start or end tags, if possible, and delete those tags
+            for which this is not possible.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.tmx">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tmx.header">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tmx.body">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tmx.version">
+            <remarks/>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.header">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.header.Items">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.header.creationtool">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.header.creationtoolversion">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.header.segtype">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.header.otmf">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.header.adminlang">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.header.srclang">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.header.datatype">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.header.oencoding">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.header.creationdate">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.header.creationid">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.header.changedate">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.header.changeid">
+            <remarks/>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.headerSegtype">
+            <remarks/>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.IO.TMX.headerSegtype.block">
+            <remarks/>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.IO.TMX.headerSegtype.paragraph">
+            <remarks/>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.IO.TMX.headerSegtype.sentence">
+            <remarks/>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.IO.TMX.headerSegtype.phrase">
+            <remarks/>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.body">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.body.tu">
+            <remarks/>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.note">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.note.oencoding">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.note.lang">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.note.lang1">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.note.Value">
+            <remarks/>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.ude">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.ude.map">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.ude.name">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.ude.base">
+            <remarks/>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.map">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.map.unicode">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.map.code">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.map.ent">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.map.subst">
+            <remarks/>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.prop">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.prop.type">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.prop.lang">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.prop.oencoding">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.prop.lang1">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.prop.Value">
+            <remarks/>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.tu">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tu.Items">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tu.tuv">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tu.tuid">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tu.oencoding">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tu.datatype">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tu.usagecount">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tu.lastusagedate">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tu.creationtool">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tu.creationtoolversion">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tu.creationdate">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tu.creationid">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tu.changedate">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tu.segtype">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tu.segtypeSpecified">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tu.changeid">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tu.otmf">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tu.srclang">
+            <remarks/>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.tuSegtype">
+            <remarks/>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.IO.TMX.tuSegtype.block">
+            <remarks/>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.IO.TMX.tuSegtype.paragraph">
+            <remarks/>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.IO.TMX.tuSegtype.sentence">
+            <remarks/>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.IO.TMX.tuSegtype.phrase">
+            <remarks/>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.tuv">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tuv.Items">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tuv.seg">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tuv.lang">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tuv.oencoding">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tuv.datatype">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tuv.usagecount">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tuv.lastusagedate">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tuv.creationtool">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tuv.creationtoolversion">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tuv.creationdate">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tuv.creationid">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tuv.changedate">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tuv.otmf">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tuv.changeid">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.tuv.lang1">
+            <remarks/>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.seg">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.seg.Items">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.seg.Text">
+            <remarks/>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.bpt">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.bpt.Items">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.bpt.Text">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.bpt.i">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.bpt.x">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.bpt.type">
+            <remarks/>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.ept">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.ept.Items">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.ept.Text">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.ept.i">
+            <remarks/>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.sub">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.sub.Items">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.sub.Text">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.sub.datatype">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.sub.type">
+            <remarks/>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.it">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.it.Items">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.it.Text">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.it.pos">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.it.x">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.it.type">
+            <remarks/>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.itPos">
+            <remarks/>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.IO.TMX.itPos.begin">
+            <remarks/>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.IO.TMX.itPos.end">
+            <remarks/>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.ph">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.ph.Items">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.ph.Text">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.ph.x">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.ph.assoc">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.ph.type">
+            <remarks/>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.hi">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.hi.Items">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.hi.Text">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.hi.x">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.hi.type">
+            <remarks/>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.ut">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.ut.Items">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.ut.Text">
+            <remarks/>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.ut.x">
+            <remarks/>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.TMXConstants">
+            <summary>
+            Represents a set of constants used to generate TMX export files.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.IO.TMX.TMXConstants.CreationTool">
+            <summary>
+            The string associated with the CreationTool attribute in the TMX export file.
+            <value>The generated value is "SDL Language Platform".</value>
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.IO.TMX.TMXConstants.CreationToolVersion">
+            <summary>
+            The string associated with the CreationToolVersion attribute in the TMX export file.
+            <value>The generated value is "8.1".</value>
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.IO.TMX.TMXConstants.TranslationMemoryFormat">
+            <summary>
+            The string associated with the TranslationMemoryFormat attribute in the TMX export file.
+            <value>The generated value is "SDL TM8 Format"</value>
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TMXConversions.TryTMXToDateTime(System.String,System.DateTime@)">
+            <summary>
+            Converts a TMX (string) representation of a date/time to a DateTime object
+            Note: this conversion should take place at the presentation layer.
+            </summary>
+            <param name="tmxDateTime">The string (in TMX compliant format)</param>
+            <returns>A DateTime object representing the date</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TMXConversions.DateTimeToTMX(System.DateTime)">
+            <summary>
+            Converts a date/time object to the corresponding TMX (string) representation. 
+            Note: this conversion should take place at the presentation layer.
+            </summary>
+            <param name="date">The input date/time object</param>
+            <returns>The string which represents the input date, in TMX-compliant format</returns>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.TMXReader">
+            <summary>
+            Represents an event reader for  TMX files.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TMXReader.#ctor(System.IO.TextReader)">
+            <summary>
+            Initializes a new instance of the TMXReader class with the specified text reader and default settings.
+            </summary>
+            <param name="reader">The text reader.</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TMXReader.#ctor(System.IO.TextReader,Sdl.LanguagePlatform.IO.TMX.TMXReaderSettings)">
+            <summary>
+            Initializes a new instance of the TMXReader class with the specified text reader and import context.
+            </summary>
+            <param name="reader">The text reader.</param>
+            <param name="readerSettings">The settings to use for the reader.</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TMXReader.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the TMXReader class with the specified file name and default settings.
+            </summary>
+            <param name="fileName">The file name.</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TMXReader.#ctor(System.String,Sdl.LanguagePlatform.IO.TMX.TMXReaderSettings)">
+            <summary>
+            Initializes a new instance of the TMXReader class with the specified file name and import context.
+            </summary>
+            <param name="fileName">The file name.</param>
+            <param name="readerSettings">The settings to use for the reader.</param>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.TMXReader.Flavor">
+            <summary>
+            Gets the TMX flavor of the underlying TMX file.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.TMXReader.EncounteredLanguages">
+            <summary>
+            Returns a dictionary which counts the number of times a segment was encountered in
+            a specific culture, independent of whether this was as a source or target segment.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.TMXReader.Settings">
+            <summary>
+            Gets the current reader settings.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TMXReader.Read">
+            <summary>
+            Reads the next item in the import file and returns the corresponding Event object, from that particular item.
+            </summary>
+            <returns>An Event object.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TMXReader.GetTagType(System.String)">
+            <summary>
+            Returns the tag type for the specified tag relation.
+            <remarks>The following strings are currently valid values for the relation parameter:
+            <list type="table">
+            <listheader><term>Relation</term><description>Tag Type</description></listheader>
+            <item><term>bpt</term><description>TagType.Start</description></item>
+            <item><term>ept</term><description>TagType.End</description></item>
+            <item><term>ph</term><description>TagType.Standalone</description></item>
+            <item><term>it</term><description>TagType.Undefined</description></item>
+            <item><term>ut</term><description>TagType.Undefined</description></item>
+            </list>
+            An error is thrown for an invalid value.
+            </remarks>
+            </summary>
+            <param name="relation"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.TMXReaderSettings.ValidateAgainstSchema">
+            <summary>
+            Controls whether the input will be verified against the TMX 1.4b schema. If false, 
+            the TMX input version number is ignored and no schema verification takes place.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.TMXReaderSettings.Context">
+            <summary>
+            The input stream context which is a container for new fields and values.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.TMXReaderSettings.ResolveNeutralCultures">
+            <summary>
+            Controls whether or not region-neutral cultures ("en") are resolved to their default region-specific
+            culture ("en-US")
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.TMXReaderSettings.SkipUnknownCultures">
+            <summary>
+            Controls whether unknown cultures are skipped during TMX processing, or whether unknown 
+            cultures will raise an exception (default).
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.TMXReaderSettings.PlainText">
+            <summary>
+            Gets or sets a value indicating whether only plain text should be imported.
+            <remarks>If true, all the tags are ignored, if false, the content is imported without changes.</remarks>
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.TMXReaderSettings.FieldIdentifierMappings">
+            <summary>
+            Gets or sets the field identifier mappings; old field identifier, new field identifier.
+            Field identifier mapping immediately maps the field identifier read to another field identifier.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.TMXStartOfInputEvent">
+            <summary>
+            Represents the StartOfInputEvent in a TMX file.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TMXStartOfInputEvent.#ctor(System.String,Sdl.LanguagePlatform.IO.TMX.header,Sdl.LanguagePlatform.TranslationMemory.TranslationUnitFormat)">
+            <summary>
+            Initializes a new instance of the TMXStartOfInputEvent with the specified file name, header and flavor.
+            </summary>
+            <param name="fileName">The file name.</param>
+            <param name="hdr">The TMX header as generated from the TMX 1.4 XSD.</param>
+            <param name="flavor">The TMX flavor.</param>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.TMXStartOfInputEvent.Header">
+            <summary>
+            Gets the TMX header.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.TMXStartOfInputEvent.Fields">
+            <summary>
+            Gets or sets the field definitions of the TM in the TMX file, if present.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.TMXStartOfInputEvent.BuiltinRecognizers">
+            <summary>
+            Gets or sets special tokenization recognizers which are set up for the TM (template), if present.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.TMXStartOfInputEvent.TMName">
+            <summary>
+            Gets or sets the TM Name, if present in the header.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.TMXStartOfInputEvent.TokenizerFlags">
+            <summary>
+            Gets or sets tokenization settings which are set up for the TM (template), if present.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.TMXStartOfInputEvent.WordCountFlags">
+            <summary>
+            Gets or sets word count settings which are set up for the TM (template), if present.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.TMXStartOfInputEvent.UsesIdContextMatch">
+            <summary>
+            Gets or sets a flag indicating whether the TM (template) uses IdContextMatch
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.TMXStartOfInputEvent.IncludesContextContent">
+            <summary>
+            Gets or sets a flag indicating whether the TM (template) can include context content
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.TMXStartOfInputEvent.TextContextMatchType">
+            <summary>
+            Gets or sets the TextContextMatchType the TM (template) uses
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TMXTools.GetLanguageDirection(System.String,System.Globalization.CultureInfo@)">
+            <summary>
+            Attempts to obtain the language direction from a TMX file which must be bilingual. The method reads
+            the first couple of TUs from the input file and determines the language direction. If not null, the 
+            result's languages will be set to the source and target language. If a language in the result is null, 
+            it was not present in any TUs in the sample. If a language is the InvariantCulture, it was inconsistent 
+            within the sample (as is the case with multi-target-language TUs).
+            </summary>
+            <param name="fileName">The input file name</param>
+            <param name="headerSourceLanguage">The source language as it is specified in the TMX header, or null if not set</param>
+            <returns>The language direction or null on errors or if the language direction cannot be determined or invalid input is encountered. No exceptions are returned.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TMXTools.GetLanguages(System.String,System.Int32,System.Int32@)">
+            <summary>
+            Gets the languages from the given TMX filename.
+            </summary>
+            <param name="fileName">file name</param>
+            <param name="limit">limit on scanned TUs; if 0 then no limit</param>
+            <param name="scannedTUs">scanned TUs; if limit 0 then this corresponds to TU count</param>
+            <returns>languages</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TmxtuBuilder.NormalizeSpaceAfterTagRemove(System.String)">
+            <summary>
+            This function normalizes space for all cultures, chinese/japanese/french have some exceptions for space handling, based on test track defect 45926
+            </summary>
+            <param name="text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TmxtuBuilder.CloseTag">
+            <summary>
+            Inspects the content of placeholder tags and applies special mapping/deletion rules for Workbench
+            imports.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TmxtuBuilder.CleanCurrentSegment">
+            <summary>
+            Applies format-dependent cleanup heuristics which are applied in any case, i.e. independently 
+            of the import compatibility setting.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TmxtuBuilder.MapContentBearingTags(Sdl.LanguagePlatform.Core.Segment)">
+            <summary>
+            Maps content-bearing placeholders back to standard Core.Tag's
+            </summary>
+            <param name="segment"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TmxtuBuilder.MapContentBearingTags(Sdl.LanguagePlatform.TranslationMemory.TranslationUnit)">
+            <summary>
+            Maps content-bearing placeholders back to standard Core.Tag's
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TmxtuBuilder.AddAttribute(System.String,System.String)">
+            <summary>
+            Add one of "tu" or "seg" attributes to the TU or segment, as described in TMX1.4b
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TmxtuBuilder.TransformTextPlaceholderTags(Sdl.LanguagePlatform.Core.Segment)">
+            <summary>
+            On the TMX level, text placeholder tags are represented as a paired tag (bpt/ept) with a 
+            special tag ID. This needs to be transformed into a single tag with the appropriate
+            embedded text element as the text placeholder's text equivalent.
+            </summary>
+            <param name="segment"></param>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.TMXWriter">
+            <summary>
+            Represents a writer for exporting translation units into the TMX format.
+            <remarks>The content is generated in TMX version 1.4.</remarks>
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TMXWriter.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the TMXWriter class with the specified file name and UTF8 encoding.
+            </summary>
+            <param name="filename">The file name.</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TMXWriter.#ctor(System.IO.Stream)">
+            <summary>
+            Initializes a new instance of the TMXWriter class with the specified output stream and UTF8 encoding.
+            </summary>
+            <param name="stream">The output stream.</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TMXWriter.#ctor(System.String,Sdl.LanguagePlatform.IO.TMX.TMXWriterSettings)">
+            <summary>
+            Initializes a new instance of the TMXWriter class with the specified file name and encoding.
+            </summary>
+            <param name="filename">The file name.</param>
+            <param name="writerSettings">The <see cref="T:Sdl.LanguagePlatform.IO.TMX.TMXWriterSettings"/>TMX writer settings to apply.</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TMXWriter.#ctor(System.IO.Stream,Sdl.LanguagePlatform.IO.TMX.TMXWriterSettings)">
+            <summary>
+            Initializes a new instance of the TMXWriter class with the specified output stream and encoding.
+            </summary>
+            <param name="outStream">The output stream.</param>
+            <param name="writerSettings">The <see cref="T:Sdl.LanguagePlatform.IO.TMX.TMXWriterSettings"/>TMX writer settings to apply.</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TMXWriter.Emit(Sdl.LanguagePlatform.IO.Streams.Event)">
+            <summary>
+            Writes the specified event to the associated export writer.
+            </summary>
+            <param name="e">The event.</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.TMXWriter.Close">
+            <summary>
+            Closes the underlying writer.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.TMXWriterSettings.ReplaceInvalidCharacters">
+            <summary>
+            Gets or sets a flag whether to replace characters &lt; \u0020 with '*'. Usually these are emitted as
+            numeric character reference entities. However, some XML parsers (such as Java's) throw errors on such
+            characters.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.IO.TMX.TMXWriterSettings.ReplacementCharacter">
+            <summary>
+            Gets or sets the character to replace invalid characters with - if \0, invalid characters will be deleted. Only 
+            relevant if _ReplaceInvalidCharacters is true. Defaults to \0. Obviously should not be set to an invalid XML character :)
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.WorkbenchCleaner">
+            <summary>
+            Cleans Workbench TUs
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.WorkbenchCleaner.DeletePeripheralBookmarks(Sdl.LanguagePlatform.Core.Segment)">
+            <summary>
+            Deletes Workbench bookmarkstart and bookmarkend placeholders if they appear paired, 
+            without anything in-between, at the start or end of the segment (in peripheral position)
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.WorkbenchCleaner.IsCommentMarker(System.String)">
+            <summary>
+            true iff s starts with HTML/XML comment marker (after optional whitespace)
+            or ends in the end comment marker
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.WorkbenchCleaner.ApplyCleanupHeuristics(Sdl.LanguagePlatform.TranslationMemory.TranslationUnit)">
+            <summary>
+            Applies additional heuristics to cleanup legacy Workbench TUs
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.WorkbenchCleaner.RebracketMIFPlaceholders(Sdl.LanguagePlatform.Core.Segment)">
+            <summary>
+            Handle paired tags which Workbench errorneously exports as placeholders, such as MIF tags.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.WorkbenchCleaner.FixMistaggingsFromWorkbench_ph_it(Sdl.LanguagePlatform.Core.Segment)">
+            <summary>
+            Fixes erroneously exported TMX tag pairs from Workbench by converting the start and end tags.
+            </summary>
+            <param name="segment">segment</param>
+            <returns>whether the segment was changed</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.WorkbenchCleaner.ApplyCleanupHeuristics(Sdl.LanguagePlatform.Core.Segment)">
+            <summary>
+            Applies additional heuristics to cleanup legacy Workbench TUs
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.IO.TMX.WorkbenchCleaner.ConvertEmptyTagPairsToLockedContentPlaceholders(Sdl.LanguagePlatform.Core.Segment)">
+            <summary>
+            Converts empty tag pairs (a start tag directly followed by the end tag with the same
+            tag anchor) to a locked content placeholder.
+            </summary>
+            <returns>true if any modifications were done, and false otherwise.</returns>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.IO.TMX.WSCleaner">
+            <summary>
+            Cleans WS TUs
+            </summary>
+        </member>
+    </members>
+</doc>

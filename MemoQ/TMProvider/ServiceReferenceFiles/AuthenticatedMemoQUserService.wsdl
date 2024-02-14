@@ -1,0 +1,191 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://v2.client.services.memoq.ws.ev.kilgray.weblib.hu/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="AuthenticatedMemoqUserService" targetNamespace="http://v2.client.services.memoq.ws.ev.kilgray.weblib.hu/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://v2.client.services.memoq.ws.ev.kilgray.weblib.hu/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://v2.client.services.memoq.ws.ev.kilgray.weblib.hu/">
+  <xs:element name="getAuthenticatedLink" type="tns:getAuthenticatedLink"/>
+  <xs:element name="getAuthenticatedLinkResponse" type="tns:getAuthenticatedLinkResponse"/>
+  <xs:element name="getQuota" type="tns:getQuota"/>
+  <xs:element name="getQuotaResponse" type="tns:getQuotaResponse"/>
+  <xs:element name="hello" type="tns:hello"/>
+  <xs:element name="helloResponse" type="tns:helloResponse"/>
+  <xs:element name="setTGT" type="tns:setTGT"/>
+  <xs:element name="setTGTResponse" type="tns:setTGTResponse"/>
+  <xs:complexType name="getAuthenticatedLink">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:authenticatedLink"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getAuthenticatedLinkResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="hello">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="helloResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="setTGT">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="tgt" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="setTGTResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getQuota">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getQuotaResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="authenticatedLink">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="index"/>
+      <xs:enumeration value="profile"/>
+      <xs:enumeration value="storage"/>
+      <xs:enumeration value="project"/>
+      <xs:enumeration value="vendor"/>
+      <xs:enumeration value="login"/>
+      <xs:enumeration value="pricingStrategy"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="DeprecatedOperationException" type="tns:DeprecatedOperationException"/>
+  <xs:complexType name="DeprecatedOperationException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getAuthenticatedLink">
+    <wsdl:part element="tns:getAuthenticatedLink" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setTGTResponse">
+    <wsdl:part element="tns:setTGTResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getQuotaResponse">
+    <wsdl:part element="tns:getQuotaResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeprecatedOperationException">
+    <wsdl:part element="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="helloResponse">
+    <wsdl:part element="tns:helloResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="hello">
+    <wsdl:part element="tns:hello" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAuthenticatedLinkResponse">
+    <wsdl:part element="tns:getAuthenticatedLinkResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setTGT">
+    <wsdl:part element="tns:setTGT" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getQuota">
+    <wsdl:part element="tns:getQuota" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="AuthenticatedMemoqUserService">
+    <wsdl:operation name="getAuthenticatedLink">
+      <wsdl:input message="tns:getAuthenticatedLink" name="getAuthenticatedLink">
+    </wsdl:input>
+      <wsdl:output message="tns:getAuthenticatedLinkResponse" name="getAuthenticatedLinkResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="hello">
+      <wsdl:input message="tns:hello" name="hello">
+    </wsdl:input>
+      <wsdl:output message="tns:helloResponse" name="helloResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setTGT">
+      <wsdl:input message="tns:setTGT" name="setTGT">
+    </wsdl:input>
+      <wsdl:output message="tns:setTGTResponse" name="setTGTResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getQuota">
+      <wsdl:input message="tns:getQuota" name="getQuota">
+    </wsdl:input>
+      <wsdl:output message="tns:getQuotaResponse" name="getQuotaResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AuthenticatedMemoqUserServiceSoapBinding" type="tns:AuthenticatedMemoqUserService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getAuthenticatedLink">
+      <soap:operation soapAction="getAuthenticatedLink" style="document"/>
+      <wsdl:input name="getAuthenticatedLink">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAuthenticatedLinkResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="hello">
+      <soap:operation soapAction="hello" style="document"/>
+      <wsdl:input name="hello">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="helloResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setTGT">
+      <soap:operation soapAction="setTgt" style="document"/>
+      <wsdl:input name="setTGT">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="setTGTResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getQuota">
+      <soap:operation soapAction="getQuota" style="document"/>
+      <wsdl:input name="getQuota">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getQuotaResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AuthenticatedMemoqUserService">
+    <wsdl:port binding="tns:AuthenticatedMemoqUserServiceSoapBinding" name="AuthenticatedMemoqUserServicePort">
+      <soap:address location="http://bcf956e5d4ea:80/LanguageTerminal/ws/memoQ/v2/AuthenticatedMemoqUserService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

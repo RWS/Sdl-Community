@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <system.serviceModel>
+        <bindings>
+            <wsHttpBinding>
+                <binding name="WSHttpBinding_ITMLTService">
+                    <security mode="Transport">
+                        <transport clientCredentialType="None" />
+                    </security>
+                </binding>
+            </wsHttpBinding>
+        </bindings>
+        <client>
+            <endpoint address="https://localhost:8081/TMLTService" binding="wsHttpBinding"
+                bindingConfiguration="WSHttpBinding_ITMLTService" contract="TMLTServiceReference.ITMLTService"
+                name="WSHttpBinding_ITMLTService">
+                <identity>
+                    <dns value="tmtbapi.kilgray.com" />
+                </identity>
+            </endpoint>
+        </client>
+    </system.serviceModel>
+</configuration>

@@ -1,0 +1,741 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="afr" xml:space="preserve">
+    <value>Afrikaans</value>
+  </data>
+  <data name="alb" xml:space="preserve">
+    <value>Albanais</value>
+  </data>
+  <data name="aze" xml:space="preserve">
+    <value>Azéri (latin)</value>
+  </data>
+  <data name="azf" xml:space="preserve">
+    <value>Azéri (cyrillique)</value>
+  </data>
+  <data name="baq" xml:space="preserve">
+    <value>Basque</value>
+  </data>
+  <data name="bel" xml:space="preserve">
+    <value>Biélorusse</value>
+  </data>
+  <data name="ben" xml:space="preserve">
+    <value>Bengali</value>
+  </data>
+  <data name="ben-BD" xml:space="preserve">
+    <value>Bengali (Bangladesh)</value>
+  </data>
+  <data name="ben-IN" xml:space="preserve">
+    <value>Bengali (Inde)</value>
+  </data>
+  <data name="bul" xml:space="preserve">
+    <value>Bulgare</value>
+  </data>
+  <data name="cat" xml:space="preserve">
+    <value>Catalan</value>
+  </data>
+  <data name="hrv" xml:space="preserve">
+    <value>Croate</value>
+  </data>
+  <data name="cze" xml:space="preserve">
+    <value>Tchèque</value>
+  </data>
+  <data name="dan" xml:space="preserve">
+    <value>Danois</value>
+  </data>
+  <data name="dut" xml:space="preserve">
+    <value>Néerlandais</value>
+  </data>
+  <data name="dut-BE" xml:space="preserve">
+    <value>Néerlandais (Belgique)</value>
+  </data>
+  <data name="dut-NL" xml:space="preserve">
+    <value>Néerlandais (Pays-Bas)</value>
+  </data>
+  <data name="eng" xml:space="preserve">
+    <value>Anglais</value>
+  </data>
+  <data name="eng-AU" xml:space="preserve">
+    <value>Anglais (Australie)</value>
+  </data>
+  <data name="eng-BZ" xml:space="preserve">
+    <value>Anglais (Belize)</value>
+  </data>
+  <data name="eng-CA" xml:space="preserve">
+    <value>Anglais (Canada)</value>
+  </data>
+  <data name="eng-CB" xml:space="preserve">
+    <value>Anglais (Caraïbes)</value>
+  </data>
+  <data name="eng-IE" xml:space="preserve">
+    <value>Anglais (Irlande)</value>
+  </data>
+  <data name="eng-JM" xml:space="preserve">
+    <value>Anglais (Jamaïque)</value>
+  </data>
+  <data name="eng-NZ" xml:space="preserve">
+    <value>Anglais (Nouvelle-Zélande)</value>
+  </data>
+  <data name="eng-PH" xml:space="preserve">
+    <value>Anglais (Philippines)</value>
+  </data>
+  <data name="eng-ZA" xml:space="preserve">
+    <value>Anglais (Afrique du Sud)</value>
+  </data>
+  <data name="eng-TT" xml:space="preserve">
+    <value>Anglais (Trinité-et-Tobago)</value>
+  </data>
+  <data name="eng-GB" xml:space="preserve">
+    <value>Anglais (Royaume-Uni)</value>
+  </data>
+  <data name="eng-US" xml:space="preserve">
+    <value>Anglais (États-Unis)</value>
+  </data>
+  <data name="eng-ZW" xml:space="preserve">
+    <value>Anglais (Zimbabwe)</value>
+  </data>
+  <data name="epo" xml:space="preserve">
+    <value>Espéranto</value>
+  </data>
+  <data name="est" xml:space="preserve">
+    <value>Estonien</value>
+  </data>
+  <data name="fas" xml:space="preserve">
+    <value>Farsi</value>
+  </data>
+  <data name="fin" xml:space="preserve">
+    <value>Finnois</value>
+  </data>
+  <data name="fre" xml:space="preserve">
+    <value>Français</value>
+  </data>
+  <data name="fre-BE" xml:space="preserve">
+    <value>Français (Belgique)</value>
+  </data>
+  <data name="fre-CA" xml:space="preserve">
+    <value>Français (Canada)</value>
+  </data>
+  <data name="fre-FR" xml:space="preserve">
+    <value>Français (France)</value>
+  </data>
+  <data name="fre-LU" xml:space="preserve">
+    <value>Français (Luxembourg)</value>
+  </data>
+  <data name="fre-MC" xml:space="preserve">
+    <value>Français (Monaco)</value>
+  </data>
+  <data name="fre-CH" xml:space="preserve">
+    <value>Français (Suisse)</value>
+  </data>
+  <data name="gle" xml:space="preserve">
+    <value>Gaëlique</value>
+  </data>
+  <data name="gla" xml:space="preserve">
+    <value>Gaélique (Écosse)</value>
+  </data>
+  <data name="glg" xml:space="preserve">
+    <value>Galicien</value>
+  </data>
+  <data name="ger" xml:space="preserve">
+    <value>Allemand</value>
+  </data>
+  <data name="ger-AT" xml:space="preserve">
+    <value>Allemand (Autriche)</value>
+  </data>
+  <data name="ger-DE" xml:space="preserve">
+    <value>Allemand (Allemagne)</value>
+  </data>
+  <data name="ger-LI" xml:space="preserve">
+    <value>Allemand (Liechtenstein)</value>
+  </data>
+  <data name="ger-LU" xml:space="preserve">
+    <value>Allemand (Luxembourg)</value>
+  </data>
+  <data name="ger-CH" xml:space="preserve">
+    <value>Allemand (Suisse)</value>
+  </data>
+  <data name="gre" xml:space="preserve">
+    <value>Grec</value>
+  </data>
+  <data name="hat" xml:space="preserve">
+    <value>Créole haïtien</value>
+  </data>
+  <data name="hin" xml:space="preserve">
+    <value>Hindi</value>
+  </data>
+  <data name="hun" xml:space="preserve">
+    <value>Hongrois</value>
+  </data>
+  <data name="ice" xml:space="preserve">
+    <value>Islandais</value>
+  </data>
+  <data name="ind" xml:space="preserve">
+    <value>Indonésien</value>
+  </data>
+  <data name="ita" xml:space="preserve">
+    <value>Italien</value>
+  </data>
+  <data name="ita-CH" xml:space="preserve">
+    <value>Italien (Suisse)</value>
+  </data>
+  <data name="ita-IT" xml:space="preserve">
+    <value>Italien (Italie)</value>
+  </data>
+  <data name="kan" xml:space="preserve">
+    <value>Kannada</value>
+  </data>
+  <data name="kaz" xml:space="preserve">
+    <value>Kazakh</value>
+  </data>
+  <data name="lat" xml:space="preserve">
+    <value>Latin</value>
+  </data>
+  <data name="lav" xml:space="preserve">
+    <value>Letton</value>
+  </data>
+  <data name="lit" xml:space="preserve">
+    <value>Lituanien</value>
+  </data>
+  <data name="ltz" xml:space="preserve">
+    <value>Luxembourgeois</value>
+  </data>
+  <data name="mac" xml:space="preserve">
+    <value>Macédonien</value>
+  </data>
+  <data name="mar" xml:space="preserve">
+    <value>Marathi</value>
+  </data>
+  <data name="mlt" xml:space="preserve">
+    <value>Maltais</value>
+  </data>
+  <data name="mol" xml:space="preserve">
+    <value>Moldave</value>
+  </data>
+  <data name="msa" xml:space="preserve">
+    <value>Malais</value>
+  </data>
+  <data name="nep" xml:space="preserve">
+    <value>Népalais</value>
+  </data>
+  <data name="nor" xml:space="preserve">
+    <value>Norvégien</value>
+  </data>
+  <data name="nno" xml:space="preserve">
+    <value>Norvégien (Nynorsk)</value>
+  </data>
+  <data name="nnb" xml:space="preserve">
+    <value>Norvégien (Bokmål)</value>
+  </data>
+  <data name="pol" xml:space="preserve">
+    <value>Polonais</value>
+  </data>
+  <data name="por" xml:space="preserve">
+    <value>Portugais</value>
+  </data>
+  <data name="por-PT" xml:space="preserve">
+    <value>Portugais (Portugal)</value>
+  </data>
+  <data name="por-BR" xml:space="preserve">
+    <value>Portugais (Brésil)</value>
+  </data>
+  <data name="rum" xml:space="preserve">
+    <value>Roumain</value>
+  </data>
+  <data name="rus" xml:space="preserve">
+    <value>Russe</value>
+  </data>
+  <data name="scc" xml:space="preserve">
+    <value>Serbe (Cyrillique)</value>
+  </data>
+  <data name="san" xml:space="preserve">
+    <value>Sanscrit</value>
+  </data>
+  <data name="scr" xml:space="preserve">
+    <value>Serbe (Latin)</value>
+  </data>
+  <data name="slo" xml:space="preserve">
+    <value>Slovaque</value>
+  </data>
+  <data name="slv" xml:space="preserve">
+    <value>Slovène</value>
+  </data>
+  <data name="som" xml:space="preserve">
+    <value>Somali</value>
+  </data>
+  <data name="som-DJ" xml:space="preserve">
+    <value>Somali (Djibouti)</value>
+  </data>
+  <data name="som-ET" xml:space="preserve">
+    <value>Somali (Éthiopie)</value>
+  </data>
+  <data name="som-KE" xml:space="preserve">
+    <value>Somali (Kenya)</value>
+  </data>
+  <data name="som-SO" xml:space="preserve">
+    <value>Somali (Somalie)</value>
+  </data>
+  <data name="sot" xml:space="preserve">
+    <value>Sesotho</value>
+  </data>
+  <data name="spa" xml:space="preserve">
+    <value>Espagnol</value>
+  </data>
+  <data name="spa-AR" xml:space="preserve">
+    <value>Espagnol (Argentine)</value>
+  </data>
+  <data name="spa-BO" xml:space="preserve">
+    <value>Espagnol (Bolivie)</value>
+  </data>
+  <data name="spa-CL" xml:space="preserve">
+    <value>Espagnol (Chili)</value>
+  </data>
+  <data name="spa-CO" xml:space="preserve">
+    <value>Espagnol (Colombie)</value>
+  </data>
+  <data name="spa-CR" xml:space="preserve">
+    <value>Espagnol (Costa Rica)</value>
+  </data>
+  <data name="spa-DO" xml:space="preserve">
+    <value>Espagnol (République dominicaine)</value>
+  </data>
+  <data name="spa-EC" xml:space="preserve">
+    <value>Espagnol (Équateur)</value>
+  </data>
+  <data name="spa-SV" xml:space="preserve">
+    <value>Espagnol (Salvador)</value>
+  </data>
+  <data name="spa-GT" xml:space="preserve">
+    <value>Espagnol (Guatemala)</value>
+  </data>
+  <data name="spa-HN" xml:space="preserve">
+    <value>Espagnol (Honduras)</value>
+  </data>
+  <data name="spa-MX" xml:space="preserve">
+    <value>Espagnol (Mexique)</value>
+  </data>
+  <data name="spa-NI" xml:space="preserve">
+    <value>Espagnol (Nicaragua)</value>
+  </data>
+  <data name="spa-PA" xml:space="preserve">
+    <value>Espagnol (Panama)</value>
+  </data>
+  <data name="spa-PY" xml:space="preserve">
+    <value>Espagnol (Paraguay)</value>
+  </data>
+  <data name="spa-PE" xml:space="preserve">
+    <value>Espagnol (Pérou)</value>
+  </data>
+  <data name="spa-PR" xml:space="preserve">
+    <value>Espagnol (Porto Rico)</value>
+  </data>
+  <data name="spa-ES" xml:space="preserve">
+    <value>Espagnol (Espagne)</value>
+  </data>
+  <data name="spa-UY" xml:space="preserve">
+    <value>Espagnol (Uruguay)</value>
+  </data>
+  <data name="spa-VE" xml:space="preserve">
+    <value>Espagnol (Venezuela)</value>
+  </data>
+  <data name="swe" xml:space="preserve">
+    <value>Suédois</value>
+  </data>
+  <data name="swe-SE" xml:space="preserve">
+    <value>Suédois (Suède)</value>
+  </data>
+  <data name="swe-FI" xml:space="preserve">
+    <value>Suédois (Finlande)</value>
+  </data>
+  <data name="tam" xml:space="preserve">
+    <value>Tamoul</value>
+  </data>
+  <data name="tel" xml:space="preserve">
+    <value>Télougou</value>
+  </data>
+  <data name="tgl" xml:space="preserve">
+    <value>Tagalog</value>
+  </data>
+  <data name="tur" xml:space="preserve">
+    <value>Turc</value>
+  </data>
+  <data name="ukr" xml:space="preserve">
+    <value>Ukrainien</value>
+  </data>
+  <data name="urd" xml:space="preserve">
+    <value>Ourdou</value>
+  </data>
+  <data name="vie" xml:space="preserve">
+    <value>Vietnamien</value>
+  </data>
+  <data name="wel" xml:space="preserve">
+    <value>Gallois</value>
+  </data>
+  <data name="ara" xml:space="preserve">
+    <value>Arabe</value>
+  </data>
+  <data name="ara-DZ" xml:space="preserve">
+    <value>Arabe (Algérie)</value>
+  </data>
+  <data name="ara-BH" xml:space="preserve">
+    <value>Arabe (Bahreïn)</value>
+  </data>
+  <data name="ara-EG" xml:space="preserve">
+    <value>Arabe (Égypte)</value>
+  </data>
+  <data name="ara-IQ" xml:space="preserve">
+    <value>Arabe (Irak)</value>
+  </data>
+  <data name="ara-JO" xml:space="preserve">
+    <value>Arabe (Jordanie)</value>
+  </data>
+  <data name="ara-KW" xml:space="preserve">
+    <value>Arabe (Koweït)</value>
+  </data>
+  <data name="ara-LB" xml:space="preserve">
+    <value>Arabe (Liban)</value>
+  </data>
+  <data name="ara-LY" xml:space="preserve">
+    <value>Arabe (Lybie)</value>
+  </data>
+  <data name="ara-MA" xml:space="preserve">
+    <value>Arabe (Maroc)</value>
+  </data>
+  <data name="ara-OM" xml:space="preserve">
+    <value>Arabe (Oman)</value>
+  </data>
+  <data name="ara-QA" xml:space="preserve">
+    <value>Arabe (Qatar)</value>
+  </data>
+  <data name="ara-SA" xml:space="preserve">
+    <value>Arabe (Arabie saoudite)</value>
+  </data>
+  <data name="ara-SY" xml:space="preserve">
+    <value>Arabe (Syrie)</value>
+  </data>
+  <data name="ara-TN" xml:space="preserve">
+    <value>Arabe (Tunisie)</value>
+  </data>
+  <data name="ara-AE" xml:space="preserve">
+    <value>Arabe (Émirats arabes unis)</value>
+  </data>
+  <data name="ara-YE" xml:space="preserve">
+    <value>Arabe (Yémen)</value>
+  </data>
+  <data name="heb" xml:space="preserve">
+    <value>Hébreu</value>
+  </data>
+  <data name="zho" xml:space="preserve">
+    <value>Chinois</value>
+  </data>
+  <data name="zho-HK" xml:space="preserve">
+    <value>Chinois (Hong Kong RAS)</value>
+  </data>
+  <data name="zho-MO" xml:space="preserve">
+    <value>Chinois (Macao RAS)</value>
+  </data>
+  <data name="zho-CN" xml:space="preserve">
+    <value>Chinois (PRC)</value>
+  </data>
+  <data name="zho-SG" xml:space="preserve">
+    <value>Chinois (Singapour)</value>
+  </data>
+  <data name="zho-TW" xml:space="preserve">
+    <value>Chinois (Taïwan)</value>
+  </data>
+  <data name="jpn" xml:space="preserve">
+    <value>Japonais</value>
+  </data>
+  <data name="kor" xml:space="preserve">
+    <value>Coréen</value>
+  </data>
+  <data name="tha" xml:space="preserve">
+    <value>Thaï</value>
+  </data>
+  <data name="spa-US" xml:space="preserve">
+    <value>Espagnol (États-Unis)</value>
+  </data>
+  <data name="kas" xml:space="preserve">
+    <value>Kashmiri</value>
+  </data>
+  <data name="pan" xml:space="preserve">
+    <value>Pendjabi (Gurmukhi)</value>
+  </data>
+  <data name="pbu" xml:space="preserve">
+    <value>Pachtou</value>
+  </data>
+  <data name="pnb" xml:space="preserve">
+    <value>Pendjabi (Shahmukhi)</value>
+  </data>
+  <data name="boc" xml:space="preserve">
+    <value>Bosniaque (cyrillique)</value>
+  </data>
+  <data name="bos" xml:space="preserve">
+    <value>Bosniaque (latin)</value>
+  </data>
+  <data name="hau" xml:space="preserve">
+    <value>Haoussa</value>
+  </data>
+  <data name="ibo" xml:space="preserve">
+    <value>Igbo</value>
+  </data>
+  <data name="jav" xml:space="preserve">
+    <value>Javanais</value>
+  </data>
+  <data name="sun" xml:space="preserve">
+    <value>Sundanais</value>
+  </data>
+  <data name="tzm" xml:space="preserve">
+    <value>Tamazight</value>
+  </data>
+  <data name="yor" xml:space="preserve">
+    <value>Yorouba</value>
+  </data>
+  <data name="zul" xml:space="preserve">
+    <value>Zoulou</value>
+  </data>
+  <data name="guj" xml:space="preserve">
+    <value>Gujarati</value>
+  </data>
+  <data name="mal" xml:space="preserve">
+    <value>Malayalam</value>
+  </data>
+  <data name="asm" xml:space="preserve">
+    <value>Assamais</value>
+  </data>
+  <data name="hye" xml:space="preserve">
+    <value>Arménien</value>
+  </data>
+  <data name="kat" xml:space="preserve">
+    <value>Géorgien</value>
+  </data>
+  <data name="khm" xml:space="preserve">
+    <value>Khmer</value>
+  </data>
+  <data name="lao" xml:space="preserve">
+    <value>Laotien</value>
+  </data>
+  <data name="ori" xml:space="preserve">
+    <value>Oriya</value>
+  </data>
+  <data name="sin" xml:space="preserve">
+    <value>Cinghalais</value>
+  </data>
+  <data name="cgy" xml:space="preserve">
+    <value>Monténégrin (cyrillique)</value>
+  </data>
+  <data name="khk" xml:space="preserve">
+    <value>Mongol (cyrillique)</value>
+  </data>
+  <data name="kir" xml:space="preserve">
+    <value>Kirghiz (cyrillique)</value>
+  </data>
+  <data name="tgk" xml:space="preserve">
+    <value>Tadjik (cyrillique)</value>
+  </data>
+  <data name="uzn" xml:space="preserve">
+    <value>Ouzbek (cyrillique)</value>
+  </data>
+  <data name="fil" xml:space="preserve">
+    <value>Filipino</value>
+  </data>
+  <data name="fry" xml:space="preserve">
+    <value>Frison occidental</value>
+  </data>
+  <data name="lin" xml:space="preserve">
+    <value>Lingala</value>
+  </data>
+  <data name="mlg" xml:space="preserve">
+    <value>Malgache</value>
+  </data>
+  <data name="mri" xml:space="preserve">
+    <value>Maori</value>
+  </data>
+  <data name="swa" xml:space="preserve">
+    <value>Swahili</value>
+  </data>
+  <data name="tuk" xml:space="preserve">
+    <value>Turkmène (latin)</value>
+  </data>
+  <data name="xho" xml:space="preserve">
+    <value>Xhosa</value>
+  </data>
+  <data name="cgl" xml:space="preserve">
+    <value>Monténégrin (latin)</value>
+  </data>
+  <data name="amh" xml:space="preserve">
+    <value>Amharique</value>
+  </data>
+  <data name="mya" xml:space="preserve">
+    <value>Birman</value>
+  </data>
+    
+<data name="bis" xml:space="preserve">
+<value>Bichelamar</value>
+</data>
+<data name="ctd" xml:space="preserve">
+<value>Tchin</value>
+</data>
+<data name="prs" xml:space="preserve">
+<value>Dari</value>
+</data>
+<data name="din" xml:space="preserve">
+<value>Dinka</value>
+</data>
+<data name="fij" xml:space="preserve">
+<value>Fidjien</value>
+</data>
+<data name="vls" xml:space="preserve">
+<value>Flamand</value>
+</data>
+<data name="haz" xml:space="preserve">
+<value>Hazara</value>
+</data>
+<data name="hmn" xml:space="preserve">
+<value>Hmong</value>
+</data>
+<data name="ksw" xml:space="preserve">
+<value>Karen</value>
+</data>
+<data name="kyu" xml:space="preserve">
+<value>Kayah (latin)</value>
+</data>
+<data name="eky" xml:space="preserve">
+<value>Kayah (Myanmar)</value>
+</data>
+<data name="gil" xml:space="preserve">
+<value>Kiribati</value>
+</data>
+<data name="qqq" xml:space="preserve">
+<value>Klingon</value>
+</data>
+<data name="ckb" xml:space="preserve">
+<value>Kurde (arabe)</value>
+</data>
+<data name="kmr" xml:space="preserve">
+<value>Kurde (cyrillique)</value>
+</data>
+<data name="kur" xml:space="preserve">
+<value>Kurde (latin)</value>
+</data>
+<data name="mno" xml:space="preserve">
+<value>Mandinka (arabe)</value>
+</data>
+<data name="mnk" xml:space="preserve">
+<value>Mandinka (latin)</value>
+</data>
+<data name="mah" xml:space="preserve">
+<value>Marshallais</value>
+</data>
+<data name="mnw" xml:space="preserve">
+<value>Môn</value>
+</data>
+<data name="nau" xml:space="preserve">
+<value>Nauruan</value>
+</data>
+<data name="pis" xml:space="preserve">
+<value>Pidjin</value>
+</data>
+<data name="rhg" xml:space="preserve">
+<value>Rohingya</value>
+</data>
+<data name="run" xml:space="preserve">
+<value>Rundi</value>
+</data>
+<data name="kin" xml:space="preserve">
+<value>Rwanda</value>
+</data>
+<data name="smo" xml:space="preserve">
+<value>Samoan</value>
+</data>
+<data name="shn" xml:space="preserve">
+<value>Shan</value>
+</data>
+<data name="pga" xml:space="preserve">
+<value>Créole soudanais</value>
+</data>
+<data name="tdt" xml:space="preserve">
+<value>Tetun Dili</value>
+</data>
+<data name="tir" xml:space="preserve">
+<value>Tigrigna</value>
+</data>
+<data name="tpi" xml:space="preserve">
+<value>Tok pisin</value>
+</data>
+<data name="ton" xml:space="preserve">
+<value>Tonguien </value>
+</data>
+<data name="tcs" xml:space="preserve">
+<value>Créole du détroit de Torrès</value>
+</data>
+<data name="tsn" xml:space="preserve">
+<value>Tswana</value>
+</data>
+<data name="tvl" xml:space="preserve">
+<value>Tuvaluan </value>
+</data>
+<data name="uzb" xml:space="preserve">
+<value>Ouzbek (latin)</value>
+</data>
+<data name="yid" xml:space="preserve">
+<value>Yiddish</value>
+</data>
+
+</root>
