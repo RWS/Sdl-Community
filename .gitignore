@@ -242,3 +242,15 @@ IATETerminologyProvider/IATETerminologyProvider/pluginpackage.manifest_LOCAL_178
 TMX_TranslationProvider/TMX_TranslationProviderWithUITest.sln
 /InterpretBank/InterpretBankTests/Resources/SavedGlossary.xlsx
 /InterpretBank/InterpretBankTests/Resources/exp2.tbx
+/MemoQ/_bin/de/memoQPlugin.resources.dll
+/MemoQ/_bin/es/memoQPlugin.resources.dll
+/MemoQ/_bin/fr/memoQPlugin.resources.dll
+/MemoQ/_bin/hu/memoQPlugin.resources.dll
+/MemoQ/_bin/ja/memoQPlugin.resources.dll
+/MemoQ/_bin/memoQPlugin.dll
+/MemoQ/_bin/memoQPlugin.sdlplugin
+/MemoQ/_bin/pl/memoQPlugin.resources.dll
+/MemoQ/_bin/pt/memoQPlugin.resources.dll
+/MemoQ/_bin/ru/memoQPlugin.resources.dll
+/MemoQ/_bin/TMProvider.dll
+/MemoQ/_bin/zh-Hans/memoQPlugin.resources.dll
