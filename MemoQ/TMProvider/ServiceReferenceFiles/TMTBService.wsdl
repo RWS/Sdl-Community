@@ -1,0 +1,1371 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="TMTBServiceService" targetNamespace="http://tmtb.client.services.memoq.ws.ev.kilgray.weblib.hu/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://tmtb.client.services.memoq.ws.ev.kilgray.weblib.hu/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://tmtb.client.services.memoq.ws.ev.kilgray.weblib.hu/" version="1.0" xmlns:tns="http://tmtb.client.services.memoq.ws.ev.kilgray.weblib.hu/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="AddTBEntry">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="tbGuid" type="xs:string"/>
+        <xs:element minOccurs="0" name="entrydata" nillable="true" type="tns:TermBaseEntry"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="AddTBEntryResponse">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="AddTMEntries">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="tmLTGuid" type="xs:string"/>
+        <xs:element minOccurs="0" name="transUnits" nillable="true" type="tns:ArrayOfTranslationUnit"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="AddTMEntriesResponse">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="ArrayOfConcTransItem" type="tns:ArrayOfConcTransItem"/>
+<xs:element name="ArrayOfConcordanceError" type="tns:ArrayOfConcordanceError"/>
+<xs:element name="ArrayOfConcordanceItem" type="tns:ArrayOfConcordanceItem"/>
+<xs:element name="ArrayOfLanguageEntry" type="tns:ArrayOfLanguageEntry"/>
+<xs:element name="ArrayOfQuerySegment" type="tns:ArrayOfQuerySegment"/>
+<xs:element name="ArrayOfRangeInfo" type="tns:ArrayOfRangeInfo"/>
+<xs:element name="ArrayOfTBHit" type="tns:ArrayOfTBHit"/>
+<xs:element name="ArrayOfTBHitsPerSegment" type="tns:ArrayOfTBHitsPerSegment"/>
+<xs:element name="ArrayOfTBInfo" type="tns:ArrayOfTBInfo"/>
+<xs:element name="ArrayOfTMHit" type="tns:ArrayOfTMHit"/>
+<xs:element name="ArrayOfTMHitsPerSegment" type="tns:ArrayOfTMHitsPerSegment"/>
+<xs:element name="ArrayOfTMInfo" type="tns:ArrayOfTMInfo"/>
+<xs:element name="ArrayOfTermEntry" type="tns:ArrayOfTermEntry"/>
+<xs:element name="ArrayOfTermItem" type="tns:ArrayOfTermItem"/>
+<xs:element name="ArrayOfTranslationRangeInfo" type="tns:ArrayOfTranslationRangeInfo"/>
+<xs:element name="ArrayOfTranslationUnit" type="tns:ArrayOfTranslationUnit"/>
+<xs:element name="ArrayOfstring" type="tns:ArrayOfstring"/>
+<xs:element name="ColumnField" type="tns:ColumnField"/>
+<xs:element name="ConcTransItem" type="tns:ConcTransItem"/>
+<xs:element name="Concordance">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="tmLTGuid" type="xs:string"/>
+        <xs:element minOccurs="0" name="searchExpression" nillable="true" type="tns:ArrayOfstring"/>
+        <xs:element minOccurs="0" name="options" nillable="true" type="tns:ConcordanceRequest"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="ConcordanceError" type="tns:ConcordanceError"/>
+<xs:element name="ConcordanceItem" type="tns:ConcordanceItem"/>
+<xs:element name="ConcordanceRequest" type="tns:ConcordanceRequest"/>
+<xs:element name="ConcordanceResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ConcordanceResult" nillable="true" type="tns:ConcordanceResult"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="ConcordanceResult" type="tns:ConcordanceResult"/>
+<xs:element name="DeleteTBEntry">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="tbGuid" type="xs:string"/>
+        <xs:element minOccurs="0" name="entryId" type="xs:int"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="DeleteTBEntryResponse">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="DeleteTMEntry">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="tmLTGuid" type="xs:string"/>
+        <xs:element minOccurs="0" name="tuId" type="xs:int"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="DeleteTMEntryResponse">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="ErrorCode" type="tns:ErrorCode"/>
+<xs:element name="ErrorTypes" type="tns:ErrorTypes"/>
+<xs:element name="FirstLastField" type="tns:FirstLastField"/>
+<xs:element name="GenericFault" type="tns:GenericFault"/>
+<xs:element name="GetTBEntry">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="tbGuid" type="xs:string"/>
+        <xs:element minOccurs="0" name="entryId" type="xs:int"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="GetTBEntryResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetTBEntryResult" nillable="true" type="tns:TermBaseEntry"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="GetTBInfo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="guid" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="GetTBInfoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetTBInfoResult" nillable="true" type="tns:TBInfo"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="GetTMEntry">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="tmLTGuid" type="xs:string"/>
+        <xs:element minOccurs="0" name="tuId" type="xs:int"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="GetTMEntryResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetTMEntryResult" nillable="true" type="tns:TranslationUnit"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="GetTMInfo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="guid" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="GetTMInfoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetTMInfoResult" nillable="true" type="tns:TMInfo"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="InlineTagStrictness" type="tns:InlineTagStrictness"/>
+<xs:element name="LanguageEntry" type="tns:LanguageEntry"/>
+<xs:element name="ListTBs">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="ListTBsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ListTBsResult" nillable="true" type="tns:ArrayOfTBInfo"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="ListTMs">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="ListTMsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ListTMsResult" nillable="true" type="tns:ArrayOfTMInfo"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="LookupSegmentRequest" type="tns:LookupSegmentRequest"/>
+<xs:element name="LookupSegments">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="tmLTGuid" type="xs:string"/>
+        <xs:element minOccurs="0" name="segments" nillable="true" type="tns:ArrayOfQuerySegment"/>
+        <xs:element minOccurs="0" name="options" nillable="true" type="tns:LookupSegmentRequest"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="LookupSegmentsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LookupSegmentsResult" nillable="true" type="tns:ArrayOfTMHitsPerSegment"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="LookupTerms">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="tbGuiD" type="xs:string"/>
+        <xs:element minOccurs="0" name="sourceLanguage" nillable="true" type="xs:string"/>
+        <xs:element minOccurs="0" name="targetLanguage" nillable="true" type="xs:string"/>
+        <xs:element minOccurs="0" name="segments" nillable="true" type="tns:ArrayOfstring"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="LookupTermsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LookupTermsResult" nillable="true" type="tns:ArrayOfTBHitsPerSegment"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="MaintenanceFault" type="tns:MaintenanceFault"/>
+<xs:element name="MetaField" type="tns:MetaField"/>
+<xs:element name="PermissionFault" type="tns:PermissionFault"/>
+<xs:element name="QName" type="xs:QName"/>
+<xs:element name="QuerySegment" type="tns:QuerySegment"/>
+<xs:element name="RangeInfo" type="tns:RangeInfo"/>
+<xs:element name="ResourceAccessLevel" type="tns:ResourceAccessLevel"/>
+<xs:element name="ResourceNotFoundFault" type="tns:ResourceNotFoundFault"/>
+<xs:element name="ServiceNotAvailableFault" type="tns:ServiceNotAvailableFault"/>
+<xs:element name="TBHit" type="tns:TBHit"/>
+<xs:element name="TBHitsPerSegment" type="tns:TBHitsPerSegment"/>
+<xs:element name="TBInfo" type="tns:TBInfo"/>
+<xs:element name="TMHit" type="tns:TMHit"/>
+<xs:element name="TMHitsPerSegment" type="tns:TMHitsPerSegment"/>
+<xs:element name="TMInfo" type="tns:TMInfo"/>
+<xs:element name="TermBaseEntry" type="tns:TermBaseEntry"/>
+<xs:element name="TermEntry" type="tns:TermEntry"/>
+<xs:element name="TermItem" type="tns:TermItem"/>
+<xs:element name="TranslationRangeInfo" type="tns:TranslationRangeInfo"/>
+<xs:element name="TranslationUnit" type="tns:TranslationUnit"/>
+<xs:element name="UpdateTBEntry">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="tbGuid" type="xs:string"/>
+        <xs:element minOccurs="0" name="entryId" type="xs:int"/>
+        <xs:element minOccurs="0" name="entrydata" nillable="true" type="tns:TermBaseEntry"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="UpdateTBEntryResponse">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="UpdateTMEntry">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="tmLTGuid" type="xs:string"/>
+        <xs:element minOccurs="0" name="tuId" type="xs:int"/>
+        <xs:element minOccurs="0" name="transUnit" nillable="true" type="tns:TranslationUnit"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="UpdateTMEntryResponse">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+<xs:element name="anyType" type="xs:anyType"/>
+<xs:element name="anyURI" type="xs:string"/>
+<xs:element name="base64Binary" type="xs:base64Binary"/>
+<xs:element name="boolean" type="xs:boolean"/>
+<xs:element name="byte" type="xs:byte"/>
+<xs:element name="char" type="xs:int"/>
+<xs:element name="dateTime" type="xs:anySimpleType"/>
+<xs:element name="decimal" type="xs:decimal"/>
+<xs:element name="double" type="xs:double"/>
+<xs:element name="duration" type="xs:duration"/>
+<xs:element name="float" type="xs:float"/>
+<xs:element name="guid" type="xs:string"/>
+<xs:element name="int" type="xs:int"/>
+<xs:element name="long" type="xs:long"/>
+<xs:element name="short" type="xs:short"/>
+<xs:element name="string" type="xs:string"/>
+<xs:element name="unsignedByte" type="xs:short"/>
+<xs:element name="unsignedInt" type="xs:long"/>
+<xs:element name="unsignedLong" type="xs:integer"/>
+<xs:element name="unsignedShort" type="xs:int"/>
+<xs:complexType name="TranslationUnit">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Client" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="ContextID" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="Created" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="Creator" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="Document" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="Domain" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="FollowingSegment" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="Key" type="xs:int"/>
+      <xs:element minOccurs="0" name="Modified" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="Modifier" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="PrecedingSegment" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="Project" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="SourceSegment" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="Subject" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="TargetSegment" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ResourceNotFoundFault">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="GenericFault">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Error" type="tns:ErrorCode"/>
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="MoreData" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ServiceNotAvailableFault">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="MaintenanceFault">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="PermissionFault">
+    <xs:sequence/>
+  </xs:complexType>
+<xs:complexType name="TMInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccessLevel" type="tns:ResourceAccessLevel"/>
+      <xs:element minOccurs="0" name="Client" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="Domain" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="FriendlyName" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="NumEntries" type="xs:int"/>
+      <xs:element minOccurs="0" name="Project" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="SourceLanguageCode" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="Subject" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="TMGuid" type="xs:string"/>
+      <xs:element minOccurs="0" name="TMOwner" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="TargetLanguageCode" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ArrayOfstring">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="string" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ArrayOfTBHitsPerSegment">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="TBHitsPerSegment" nillable="true" type="tns:TBHitsPerSegment"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="TBHitsPerSegment">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Hits" nillable="true" type="tns:ArrayOfTBHit"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ArrayOfTBHit">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="TBHit" nillable="true" type="tns:TBHit"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="TBHit">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="LengthInSegment" type="xs:int"/>
+      <xs:element minOccurs="0" name="MatchRate" type="xs:int"/>
+      <xs:element minOccurs="0" name="SourceLang" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="SourceTerm" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="SourceTermIndex" type="xs:int"/>
+      <xs:element minOccurs="0" name="StartPosInSegment" type="xs:int"/>
+      <xs:element minOccurs="0" name="TargetLang" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="TargetTerm" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="TargetTermIndex" type="xs:int"/>
+      <xs:element minOccurs="0" name="Entry" nillable="true" type="tns:TermBaseEntry"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="TermBaseEntry">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Client" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="Created" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="Creator" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="Domain" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="LanguageEntries" nillable="true" type="tns:ArrayOfLanguageEntry"/>
+      <xs:element minOccurs="0" name="Modified" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="Modifier" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="Project" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="Subject" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="Id" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ArrayOfLanguageEntry">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="LanguageEntry" nillable="true" type="tns:LanguageEntry"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="LanguageEntry">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Language" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="TermItems" nillable="true" type="tns:ArrayOfTermItem"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ArrayOfTermItem">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="TermItem" nillable="true" type="tns:TermItem"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="TermItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Definition" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="Id" type="xs:int"/>
+      <xs:element minOccurs="0" name="TermEntries" nillable="true" type="tns:ArrayOfTermEntry"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ArrayOfTermEntry">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="TermEntry" nillable="true" type="tns:TermEntry"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="TermEntry">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Example" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="Id" type="xs:int"/>
+      <xs:element minOccurs="0" name="IsForbidden" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="Term" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ConcordanceRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AbsScoreLimit" type="xs:int"/>
+      <xs:element minOccurs="0" name="Ascending" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="CaseSensitive" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="Column" type="tns:ColumnField"/>
+      <xs:element minOccurs="0" name="FirstLast" type="tns:FirstLastField"/>
+      <xs:element minOccurs="0" name="IgnorePunctuation" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="Meta" type="tns:MetaField"/>
+      <xs:element minOccurs="0" name="NumericEquivalence" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="RelScroreLimit" type="xs:int"/>
+      <xs:element minOccurs="0" name="ReverseLookup" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="TargetFilterStrings" nillable="true" type="tns:ArrayOfstring"/>
+      <xs:element minOccurs="0" name="TopScoreCount" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ConcordanceResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ConcResult" nillable="true" type="tns:ArrayOfConcordanceItem"/>
+      <xs:element minOccurs="0" name="ConcTransResult" nillable="true" type="tns:ArrayOfConcTransItem"/>
+      <xs:element minOccurs="0" name="Errors" nillable="true" type="tns:ArrayOfConcordanceError"/>
+      <xs:element minOccurs="0" name="TotalConcResult" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ArrayOfConcordanceItem">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="ConcordanceItem" nillable="true" type="tns:ConcordanceItem"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ConcordanceItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ConcordanceTextRanges" nillable="true" type="tns:ArrayOfRangeInfo"/>
+      <xs:element minOccurs="0" name="ConcordanceTranslationRanges" nillable="true" type="tns:ArrayOfTranslationRangeInfo"/>
+      <xs:element minOccurs="0" name="Length" type="xs:int"/>
+      <xs:element minOccurs="0" name="StartPos" type="xs:int"/>
+      <xs:element minOccurs="0" name="TMEntry" nillable="true" type="tns:TranslationUnit"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ArrayOfRangeInfo">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="RangeInfo" nillable="true" type="tns:RangeInfo"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="RangeInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Length" type="xs:int"/>
+      <xs:element minOccurs="0" name="Start" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ArrayOfTranslationRangeInfo">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="TranslationRangeInfo" nillable="true" type="tns:TranslationRangeInfo"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="TranslationRangeInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Length" type="xs:int"/>
+      <xs:element minOccurs="0" name="Score" type="xs:double"/>
+      <xs:element minOccurs="0" name="Start" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ArrayOfConcTransItem">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="ConcTransItem" nillable="true" type="tns:ConcTransItem"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ConcTransItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Expression" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="Score" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ArrayOfConcordanceError">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="ConcordanceError" nillable="true" type="tns:ConcordanceError"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ConcordanceError">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ErrorType" type="tns:ErrorTypes"/>
+      <xs:element minOccurs="0" name="QueryPart" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ArrayOfTMInfo">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="TMInfo" nillable="true" type="tns:TMInfo"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ArrayOfQuerySegment">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="QuerySegment" nillable="true" type="tns:QuerySegment"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="QuerySegment">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ContextID" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="FollowingSegment" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="PrecedingSegment" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="Segment" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="LookupSegmentRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AdjustFuzzyMatches" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="InlineTagStrictness" type="tns:InlineTagStrictness"/>
+      <xs:element minOccurs="0" name="MatchThreshold" type="xs:int"/>
+      <xs:element minOccurs="0" name="OnlyBest" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="OnlyUnambiguous" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="ReverseLookup" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ArrayOfTMHitsPerSegment">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="TMHitsPerSegment" nillable="true" type="tns:TMHitsPerSegment"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="TMHitsPerSegment">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="TMHits" nillable="true" type="tns:ArrayOfTMHit"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ArrayOfTMHit">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="TMHit" nillable="true" type="tns:TMHit"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="TMHit">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="MatchRate" type="xs:int"/>
+      <xs:element minOccurs="0" name="TransUnit" nillable="true" type="tns:TranslationUnit"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ArrayOfTranslationUnit">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="TranslationUnit" nillable="true" type="tns:TranslationUnit"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="ArrayOfTBInfo">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="TBInfo" nillable="true" type="tns:TBInfo"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="TBInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccessLevel" type="tns:ResourceAccessLevel"/>
+      <xs:element minOccurs="0" name="Client" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="Domain" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="FriendlyName" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="Languages" nillable="true" type="tns:ArrayOfstring"/>
+      <xs:element minOccurs="0" name="NumEntries" type="xs:int"/>
+      <xs:element minOccurs="0" name="Project" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="Subject" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="TBGuid" type="xs:string"/>
+      <xs:element minOccurs="0" name="TBOwner" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:simpleType name="ErrorCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ResourceNotFound"/>
+      <xs:enumeration value="DataNotFound"/>
+      <xs:enumeration value="GeneralError"/>
+    </xs:restriction>
+  </xs:simpleType>
+<xs:simpleType name="ResourceAccessLevel">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ReadOnly"/>
+      <xs:enumeration value="ReadWrite"/>
+      <xs:enumeration value="Admin"/>
+    </xs:restriction>
+  </xs:simpleType>
+<xs:simpleType name="ColumnField">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Prefix"/>
+      <xs:enumeration value="Middle"/>
+      <xs:enumeration value="Suffix"/>
+      <xs:enumeration value="Source"/>
+      <xs:enumeration value="Target"/>
+      <xs:enumeration value="Meta"/>
+      <xs:enumeration value="None"/>
+    </xs:restriction>
+  </xs:simpleType>
+<xs:simpleType name="FirstLastField">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="First"/>
+      <xs:enumeration value="Last"/>
+    </xs:restriction>
+  </xs:simpleType>
+<xs:simpleType name="MetaField">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="User"/>
+      <xs:enumeration value="ModifTime"/>
+    </xs:restriction>
+  </xs:simpleType>
+<xs:simpleType name="ErrorTypes">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="TooManySimilarWords"/>
+      <xs:enumeration value="TooManySegments"/>
+      <xs:enumeration value="Unknown"/>
+    </xs:restriction>
+  </xs:simpleType>
+<xs:simpleType name="InlineTagStrictness">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Strict"/>
+      <xs:enumeration value="Medium"/>
+      <xs:enumeration value="Permissive"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="AddTMEntries">
+    <wsdl:part element="tns:AddTMEntries" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="Concordance">
+    <wsdl:part element="tns:Concordance" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ListTMsResponse">
+    <wsdl:part element="tns:ListTMsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ListTBs">
+    <wsdl:part element="tns:ListTBs" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetTBEntry">
+    <wsdl:part element="tns:GetTBEntry" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ListTBsResponse">
+    <wsdl:part element="tns:ListTBsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ListTMs">
+    <wsdl:part element="tns:ListTMs" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="AddTBEntryResponse">
+    <wsdl:part element="tns:AddTBEntryResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="PermissionFaultException">
+    <wsdl:part element="tns:PermissionFault" name="PermissionFaultException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeleteTMEntry">
+    <wsdl:part element="tns:DeleteTMEntry" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="LookupTerms">
+    <wsdl:part element="tns:LookupTerms" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeleteTBEntryResponse">
+    <wsdl:part element="tns:DeleteTBEntryResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeleteTMEntryResponse">
+    <wsdl:part element="tns:DeleteTMEntryResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetTMInfoResponse">
+    <wsdl:part element="tns:GetTMInfoResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GenericFaultException">
+    <wsdl:part element="tns:GenericFault" name="GenericFaultException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeleteTBEntry">
+    <wsdl:part element="tns:DeleteTBEntry" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetTBEntryResponse">
+    <wsdl:part element="tns:GetTBEntryResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ServiceNotAvailableFaultException">
+    <wsdl:part element="tns:ServiceNotAvailableFault" name="ServiceNotAvailableFaultException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetTMInfo">
+    <wsdl:part element="tns:GetTMInfo" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetTBInfoResponse">
+    <wsdl:part element="tns:GetTBInfoResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="LookupTermsResponse">
+    <wsdl:part element="tns:LookupTermsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="LookupSegments">
+    <wsdl:part element="tns:LookupSegments" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetTMEntry">
+    <wsdl:part element="tns:GetTMEntry" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetTBInfo">
+    <wsdl:part element="tns:GetTBInfo" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="AddTBEntry">
+    <wsdl:part element="tns:AddTBEntry" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UpdateTMEntry">
+    <wsdl:part element="tns:UpdateTMEntry" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UpdateTBEntry">
+    <wsdl:part element="tns:UpdateTBEntry" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UpdateTBEntryResponse">
+    <wsdl:part element="tns:UpdateTBEntryResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ConcordanceResponse">
+    <wsdl:part element="tns:ConcordanceResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="AddTMEntriesResponse">
+    <wsdl:part element="tns:AddTMEntriesResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="MaintenanceFaultException">
+    <wsdl:part element="tns:MaintenanceFault" name="MaintenanceFaultException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ResourceNotFoundFaultException">
+    <wsdl:part element="tns:ResourceNotFoundFault" name="ResourceNotFoundFaultException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetTMEntryResponse">
+    <wsdl:part element="tns:GetTMEntryResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="LookupSegmentsResponse">
+    <wsdl:part element="tns:LookupSegmentsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UpdateTMEntryResponse">
+    <wsdl:part element="tns:UpdateTMEntryResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="TMTBService">
+    <wsdl:operation name="UpdateTMEntry">
+      <wsdl:input message="tns:UpdateTMEntry" name="UpdateTMEntry">
+    </wsdl:input>
+      <wsdl:output message="tns:UpdateTMEntryResponse" name="UpdateTMEntryResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ResourceNotFoundFaultException" name="ResourceNotFoundFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:GenericFaultException" name="GenericFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:PermissionFaultException" name="PermissionFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceNotAvailableFaultException" name="ServiceNotAvailableFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:MaintenanceFaultException" name="MaintenanceFaultException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetTMInfo">
+      <wsdl:input message="tns:GetTMInfo" name="GetTMInfo">
+    </wsdl:input>
+      <wsdl:output message="tns:GetTMInfoResponse" name="GetTMInfoResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ResourceNotFoundFaultException" name="ResourceNotFoundFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:GenericFaultException" name="GenericFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:PermissionFaultException" name="PermissionFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceNotAvailableFaultException" name="ServiceNotAvailableFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:MaintenanceFaultException" name="MaintenanceFaultException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="LookupTerms">
+      <wsdl:input message="tns:LookupTerms" name="LookupTerms">
+    </wsdl:input>
+      <wsdl:output message="tns:LookupTermsResponse" name="LookupTermsResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ResourceNotFoundFaultException" name="ResourceNotFoundFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:GenericFaultException" name="GenericFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:PermissionFaultException" name="PermissionFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceNotAvailableFaultException" name="ServiceNotAvailableFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:MaintenanceFaultException" name="MaintenanceFaultException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Concordance">
+      <wsdl:input message="tns:Concordance" name="Concordance">
+    </wsdl:input>
+      <wsdl:output message="tns:ConcordanceResponse" name="ConcordanceResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ResourceNotFoundFaultException" name="ResourceNotFoundFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:GenericFaultException" name="GenericFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:PermissionFaultException" name="PermissionFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceNotAvailableFaultException" name="ServiceNotAvailableFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:MaintenanceFaultException" name="MaintenanceFaultException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ListTMs">
+      <wsdl:input message="tns:ListTMs" name="ListTMs">
+    </wsdl:input>
+      <wsdl:output message="tns:ListTMsResponse" name="ListTMsResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ResourceNotFoundFaultException" name="ResourceNotFoundFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:GenericFaultException" name="GenericFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceNotAvailableFaultException" name="ServiceNotAvailableFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:MaintenanceFaultException" name="MaintenanceFaultException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="AddTBEntry">
+      <wsdl:input message="tns:AddTBEntry" name="AddTBEntry">
+    </wsdl:input>
+      <wsdl:output message="tns:AddTBEntryResponse" name="AddTBEntryResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ResourceNotFoundFaultException" name="ResourceNotFoundFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:GenericFaultException" name="GenericFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:PermissionFaultException" name="PermissionFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceNotAvailableFaultException" name="ServiceNotAvailableFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:MaintenanceFaultException" name="MaintenanceFaultException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="LookupSegments">
+      <wsdl:input message="tns:LookupSegments" name="LookupSegments">
+    </wsdl:input>
+      <wsdl:output message="tns:LookupSegmentsResponse" name="LookupSegmentsResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ResourceNotFoundFaultException" name="ResourceNotFoundFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:GenericFaultException" name="GenericFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:PermissionFaultException" name="PermissionFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceNotAvailableFaultException" name="ServiceNotAvailableFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:MaintenanceFaultException" name="MaintenanceFaultException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateTBEntry">
+      <wsdl:input message="tns:UpdateTBEntry" name="UpdateTBEntry">
+    </wsdl:input>
+      <wsdl:output message="tns:UpdateTBEntryResponse" name="UpdateTBEntryResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ResourceNotFoundFaultException" name="ResourceNotFoundFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:GenericFaultException" name="GenericFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:PermissionFaultException" name="PermissionFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceNotAvailableFaultException" name="ServiceNotAvailableFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:MaintenanceFaultException" name="MaintenanceFaultException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="AddTMEntries">
+      <wsdl:input message="tns:AddTMEntries" name="AddTMEntries">
+    </wsdl:input>
+      <wsdl:output message="tns:AddTMEntriesResponse" name="AddTMEntriesResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ResourceNotFoundFaultException" name="ResourceNotFoundFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:GenericFaultException" name="GenericFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:PermissionFaultException" name="PermissionFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceNotAvailableFaultException" name="ServiceNotAvailableFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:MaintenanceFaultException" name="MaintenanceFaultException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteTMEntry">
+      <wsdl:input message="tns:DeleteTMEntry" name="DeleteTMEntry">
+    </wsdl:input>
+      <wsdl:output message="tns:DeleteTMEntryResponse" name="DeleteTMEntryResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ResourceNotFoundFaultException" name="ResourceNotFoundFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:GenericFaultException" name="GenericFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:PermissionFaultException" name="PermissionFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceNotAvailableFaultException" name="ServiceNotAvailableFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:MaintenanceFaultException" name="MaintenanceFaultException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetTBEntry">
+      <wsdl:input message="tns:GetTBEntry" name="GetTBEntry">
+    </wsdl:input>
+      <wsdl:output message="tns:GetTBEntryResponse" name="GetTBEntryResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ResourceNotFoundFaultException" name="ResourceNotFoundFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:GenericFaultException" name="GenericFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:PermissionFaultException" name="PermissionFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceNotAvailableFaultException" name="ServiceNotAvailableFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:MaintenanceFaultException" name="MaintenanceFaultException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteTBEntry">
+      <wsdl:input message="tns:DeleteTBEntry" name="DeleteTBEntry">
+    </wsdl:input>
+      <wsdl:output message="tns:DeleteTBEntryResponse" name="DeleteTBEntryResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ResourceNotFoundFaultException" name="ResourceNotFoundFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:GenericFaultException" name="GenericFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:PermissionFaultException" name="PermissionFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceNotAvailableFaultException" name="ServiceNotAvailableFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:MaintenanceFaultException" name="MaintenanceFaultException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetTMEntry">
+      <wsdl:input message="tns:GetTMEntry" name="GetTMEntry">
+    </wsdl:input>
+      <wsdl:output message="tns:GetTMEntryResponse" name="GetTMEntryResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ResourceNotFoundFaultException" name="ResourceNotFoundFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:GenericFaultException" name="GenericFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:PermissionFaultException" name="PermissionFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceNotAvailableFaultException" name="ServiceNotAvailableFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:MaintenanceFaultException" name="MaintenanceFaultException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ListTBs">
+      <wsdl:input message="tns:ListTBs" name="ListTBs">
+    </wsdl:input>
+      <wsdl:output message="tns:ListTBsResponse" name="ListTBsResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ResourceNotFoundFaultException" name="ResourceNotFoundFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:GenericFaultException" name="GenericFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceNotAvailableFaultException" name="ServiceNotAvailableFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:MaintenanceFaultException" name="MaintenanceFaultException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetTBInfo">
+      <wsdl:input message="tns:GetTBInfo" name="GetTBInfo">
+    </wsdl:input>
+      <wsdl:output message="tns:GetTBInfoResponse" name="GetTBInfoResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ResourceNotFoundFaultException" name="ResourceNotFoundFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:GenericFaultException" name="GenericFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:PermissionFaultException" name="PermissionFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ServiceNotAvailableFaultException" name="ServiceNotAvailableFaultException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:MaintenanceFaultException" name="MaintenanceFaultException">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="TMTBServiceServiceSoapBinding" type="tns:TMTBService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="UpdateTMEntry">
+      <soap:operation soapAction="UpdateTMEntry" style="document"/>
+      <wsdl:input name="UpdateTMEntry">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="UpdateTMEntryResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ResourceNotFoundFaultException">
+        <soap:fault name="ResourceNotFoundFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GenericFaultException">
+        <soap:fault name="GenericFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionFaultException">
+        <soap:fault name="PermissionFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceNotAvailableFaultException">
+        <soap:fault name="ServiceNotAvailableFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="MaintenanceFaultException">
+        <soap:fault name="MaintenanceFaultException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetTMInfo">
+      <soap:operation soapAction="GetTMInfo" style="document"/>
+      <wsdl:input name="GetTMInfo">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetTMInfoResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ResourceNotFoundFaultException">
+        <soap:fault name="ResourceNotFoundFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GenericFaultException">
+        <soap:fault name="GenericFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionFaultException">
+        <soap:fault name="PermissionFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceNotAvailableFaultException">
+        <soap:fault name="ServiceNotAvailableFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="MaintenanceFaultException">
+        <soap:fault name="MaintenanceFaultException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="LookupTerms">
+      <soap:operation soapAction="LookupTerms" style="document"/>
+      <wsdl:input name="LookupTerms">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="LookupTermsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ResourceNotFoundFaultException">
+        <soap:fault name="ResourceNotFoundFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GenericFaultException">
+        <soap:fault name="GenericFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionFaultException">
+        <soap:fault name="PermissionFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceNotAvailableFaultException">
+        <soap:fault name="ServiceNotAvailableFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="MaintenanceFaultException">
+        <soap:fault name="MaintenanceFaultException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Concordance">
+      <soap:operation soapAction="Concordance" style="document"/>
+      <wsdl:input name="Concordance">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="ConcordanceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ResourceNotFoundFaultException">
+        <soap:fault name="ResourceNotFoundFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GenericFaultException">
+        <soap:fault name="GenericFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionFaultException">
+        <soap:fault name="PermissionFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceNotAvailableFaultException">
+        <soap:fault name="ServiceNotAvailableFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="MaintenanceFaultException">
+        <soap:fault name="MaintenanceFaultException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ListTMs">
+      <soap:operation soapAction="ListTMs" style="document"/>
+      <wsdl:input name="ListTMs">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="ListTMsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ResourceNotFoundFaultException">
+        <soap:fault name="ResourceNotFoundFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GenericFaultException">
+        <soap:fault name="GenericFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceNotAvailableFaultException">
+        <soap:fault name="ServiceNotAvailableFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="MaintenanceFaultException">
+        <soap:fault name="MaintenanceFaultException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="AddTBEntry">
+      <soap:operation soapAction="AddTBEntry" style="document"/>
+      <wsdl:input name="AddTBEntry">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="AddTBEntryResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ResourceNotFoundFaultException">
+        <soap:fault name="ResourceNotFoundFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GenericFaultException">
+        <soap:fault name="GenericFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionFaultException">
+        <soap:fault name="PermissionFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceNotAvailableFaultException">
+        <soap:fault name="ServiceNotAvailableFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="MaintenanceFaultException">
+        <soap:fault name="MaintenanceFaultException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="LookupSegments">
+      <soap:operation soapAction="LookupSegments" style="document"/>
+      <wsdl:input name="LookupSegments">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="LookupSegmentsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ResourceNotFoundFaultException">
+        <soap:fault name="ResourceNotFoundFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GenericFaultException">
+        <soap:fault name="GenericFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionFaultException">
+        <soap:fault name="PermissionFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceNotAvailableFaultException">
+        <soap:fault name="ServiceNotAvailableFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="MaintenanceFaultException">
+        <soap:fault name="MaintenanceFaultException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateTBEntry">
+      <soap:operation soapAction="UpdateTBEntry" style="document"/>
+      <wsdl:input name="UpdateTBEntry">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="UpdateTBEntryResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ResourceNotFoundFaultException">
+        <soap:fault name="ResourceNotFoundFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GenericFaultException">
+        <soap:fault name="GenericFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionFaultException">
+        <soap:fault name="PermissionFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceNotAvailableFaultException">
+        <soap:fault name="ServiceNotAvailableFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="MaintenanceFaultException">
+        <soap:fault name="MaintenanceFaultException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="AddTMEntries">
+      <soap:operation soapAction="AddTMEntries" style="document"/>
+      <wsdl:input name="AddTMEntries">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="AddTMEntriesResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ResourceNotFoundFaultException">
+        <soap:fault name="ResourceNotFoundFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GenericFaultException">
+        <soap:fault name="GenericFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionFaultException">
+        <soap:fault name="PermissionFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceNotAvailableFaultException">
+        <soap:fault name="ServiceNotAvailableFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="MaintenanceFaultException">
+        <soap:fault name="MaintenanceFaultException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteTMEntry">
+      <soap:operation soapAction="DeleteTMEntry" style="document"/>
+      <wsdl:input name="DeleteTMEntry">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="DeleteTMEntryResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ResourceNotFoundFaultException">
+        <soap:fault name="ResourceNotFoundFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GenericFaultException">
+        <soap:fault name="GenericFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionFaultException">
+        <soap:fault name="PermissionFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceNotAvailableFaultException">
+        <soap:fault name="ServiceNotAvailableFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="MaintenanceFaultException">
+        <soap:fault name="MaintenanceFaultException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetTBEntry">
+      <soap:operation soapAction="GetTBEntry" style="document"/>
+      <wsdl:input name="GetTBEntry">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetTBEntryResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ResourceNotFoundFaultException">
+        <soap:fault name="ResourceNotFoundFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GenericFaultException">
+        <soap:fault name="GenericFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionFaultException">
+        <soap:fault name="PermissionFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceNotAvailableFaultException">
+        <soap:fault name="ServiceNotAvailableFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="MaintenanceFaultException">
+        <soap:fault name="MaintenanceFaultException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteTBEntry">
+      <soap:operation soapAction="DeleteTBEntry" style="document"/>
+      <wsdl:input name="DeleteTBEntry">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="DeleteTBEntryResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ResourceNotFoundFaultException">
+        <soap:fault name="ResourceNotFoundFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GenericFaultException">
+        <soap:fault name="GenericFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionFaultException">
+        <soap:fault name="PermissionFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceNotAvailableFaultException">
+        <soap:fault name="ServiceNotAvailableFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="MaintenanceFaultException">
+        <soap:fault name="MaintenanceFaultException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetTMEntry">
+      <soap:operation soapAction="GetTMEntry" style="document"/>
+      <wsdl:input name="GetTMEntry">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetTMEntryResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ResourceNotFoundFaultException">
+        <soap:fault name="ResourceNotFoundFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GenericFaultException">
+        <soap:fault name="GenericFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionFaultException">
+        <soap:fault name="PermissionFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceNotAvailableFaultException">
+        <soap:fault name="ServiceNotAvailableFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="MaintenanceFaultException">
+        <soap:fault name="MaintenanceFaultException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ListTBs">
+      <soap:operation soapAction="ListTBs" style="document"/>
+      <wsdl:input name="ListTBs">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="ListTBsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ResourceNotFoundFaultException">
+        <soap:fault name="ResourceNotFoundFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GenericFaultException">
+        <soap:fault name="GenericFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceNotAvailableFaultException">
+        <soap:fault name="ServiceNotAvailableFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="MaintenanceFaultException">
+        <soap:fault name="MaintenanceFaultException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetTBInfo">
+      <soap:operation soapAction="GetTBInfo" style="document"/>
+      <wsdl:input name="GetTBInfo">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetTBInfoResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ResourceNotFoundFaultException">
+        <soap:fault name="ResourceNotFoundFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GenericFaultException">
+        <soap:fault name="GenericFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionFaultException">
+        <soap:fault name="PermissionFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ServiceNotAvailableFaultException">
+        <soap:fault name="ServiceNotAvailableFaultException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="MaintenanceFaultException">
+        <soap:fault name="MaintenanceFaultException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TMTBServiceService">
+    <wsdl:port binding="tns:TMTBServiceServiceSoapBinding" name="TMTBServicePort">
+      <soap:address location="http://memoq-devel.languageterminal.com:8080/LanguageTerminal/ws/memoQ/tmtb/TMTBService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

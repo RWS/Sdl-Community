@@ -1,0 +1,450 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sdl.Core.TM.ImportExport</name>
+    </assembly>
+    <members>
+        <member name="T:Sdl.Core.TM.ImportExport.BatchImportedEventArgs">
+            <inheritdoc />
+            <summary>
+            Encapsulates the data published by <see cref="E:Sdl.Core.TM.ImportExport.Importer.BatchImported" /> 
+            progress events.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.BatchImportedEventArgs.#ctor(Sdl.LanguagePlatform.TranslationMemory.ImportStatistics)">
+            <inheritdoc />
+            <summary>
+            Instantiates a new object using the provided import statistics.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.TM.ImportExport.BatchImportedEventArgs.Statistics">
+            <summary>
+            Gets the import statistics collected so far by the import process.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.TM.ImportExport.BatchImportedEventArgs.BatchResults">
+            <summary>
+            The <see cref="T:Sdl.LanguagePlatform.TranslationMemory.ImportResults"/> for the currently batches processed so far.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.BatchExportedEventArgs.#ctor(System.Int32,System.Int32)">
+            <inheritdoc />
+            <summary>
+            Instantiates a new event data object.
+            </summary>
+            <param name="totalProcessed">The total number of processed translation units</param>
+            <param name="totalExported">The total number of exported translation units</param>
+        </member>
+        <member name="P:Sdl.Core.TM.ImportExport.BatchExportedEventArgs.TotalExported">
+            <summary>
+            The total number of exported translation units. This is usually 
+            equivalent to <see cref="P:Sdl.Core.TM.ImportExport.BatchExportedEventArgs.TotalProcessed"/>, but may be lower in case
+            the export process uses filters.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.TM.ImportExport.BatchExportedEventArgs.TotalProcessed">
+            <summary>
+            The total number of processed translation units. This is usually 
+            equivalent to <see cref="P:Sdl.Core.TM.ImportExport.BatchExportedEventArgs.TotalExported"/>, but if the export process
+            uses filters, the number of processed translation units may be lower.
+            </summary>
+        </member>
+        <member name="E:Sdl.Core.TM.ImportExport.Exporter.BatchExported">
+            <summary>
+            Occurs when ever a batch is imported, set Cancel = True to stop the export.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.TM.ImportExport.Exporter.TmxExportFormat">
+            <summary>
+            Gets or sets the flavour of the exported TMX.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.TM.ImportExport.Exporter.FilterExpression">
+            <summary>
+            Gets or sets the filter expression.
+            </summary>
+            <value>The filter expression.</value>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.Exporter.Export(Sdl.Core.TM.ImportExport.IExportOriginAsync,Sdl.LanguagePlatform.IO.Streams.IEventReceiver)">
+            <summary>
+            Starts the export process with the configured settings into the specified TMX writer.
+            </summary>
+            <param name="exportOrigin"></param>
+            <param name="writer">The TMX writer.</param>
+            <returns>The total number of exported translation units.</returns>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.Exporter.Export(Sdl.Core.TM.ImportExport.IExportOrigin,System.String,System.Boolean)">
+            <summary>
+            Starts the export process with the configured settings into a file with the specified name.
+            <remarks>This method supports GZip compressed files, such as: export.tmx.gz</remarks>
+            </summary>
+            <param name="exportOrigin"></param>
+            <param name="fileName">Name of the file.</param>
+            <param name="overwriteExisting">if set to <c>true</c> [overwrite existing].</param>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.Exporter.ExportAsync(Sdl.Core.TM.ImportExport.IExportOriginAsync,System.String,System.Boolean)">
+            <summary>
+            See <see cref="M:Sdl.Core.TM.ImportExport.Exporter.Export(Sdl.Core.TM.ImportExport.IExportOrigin,System.String,System.Boolean)"/>
+            </summary>
+            <param name="exportOrigin"></param>
+            <param name="fileName"></param>
+            <param name="overwriteExisting"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="T:Sdl.Core.TM.ImportExport.IExportOriginAsync">
+            <summary>
+            Async version of <see cref="T:Sdl.Core.TM.ImportExport.IExportOrigin"/>
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.IExportOriginAsync.GetTranslationUnitsAsync(Sdl.LanguagePlatform.TranslationMemory.RegularIterator)">
+            <summary>
+            Async version of <see cref="M:Sdl.Core.TM.ImportExport.IExportOrigin.GetTranslationUnits(Sdl.LanguagePlatform.TranslationMemory.RegularIterator@)"/>
+            </summary>
+            <param name="iter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.IExportOriginAsync.GetLanguageResourcesAsync">
+            <summary>
+            Async version of <see cref="P:Sdl.Core.TM.ImportExport.IExportOrigin.LanguageResources"/>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.IExportOriginAsync.GetFieldDefinitionsAsync">
+            <summary>
+            Async version of <see cref="P:Sdl.Core.TM.ImportExport.IExportOrigin.FieldDefinitions"/>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.IImportDestination.AddTranslationUnits(Sdl.LanguagePlatform.TranslationMemory.TranslationUnit[],Sdl.LanguagePlatform.TranslationMemory.ImportSettings)">
+            <summary>
+            Replaced by AddTranslationUnitsMask
+            </summary>
+            <param name="tus"></param>
+            <param name="settings"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.IImportDestination.UpdateFieldDefinitions(Sdl.LanguagePlatform.TranslationMemory.FieldDefinitions)">
+            <summary>
+            
+            </summary>
+            <param name="mergedFieldDefinitions">Fields that either 1. were only defined in the incoming data or 2. were defined in incoming data and destination data, but with additional picklist values in the incoming data (field contains a merge of both)</param>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.IImportDestination.UpdateLanguageResources(System.Collections.Generic.List{Sdl.LanguagePlatform.TranslationMemoryImpl.LanguageResource})">
+            <summary>
+            
+            </summary>
+            <param name="mergedLanguageResources">Language resources that either 1. were only defined in the incoming data or 2. were defined in incoming and destination data, but with additional values in the incoming data (resource contains a merge of both)</param>
+        </member>
+        <member name="T:Sdl.Core.TM.ImportExport.IImportDestinationAsync">
+            <summary>
+            Async version of <see cref="T:Sdl.Core.TM.ImportExport.IImportDestination"/>
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.IImportDestinationAsync.GetFieldDefinitionsAsync">
+            <summary>
+            Async version of <see cref="P:Sdl.Core.TM.ImportExport.IImportDestination.FieldDefinitions"/>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.IImportDestinationAsync.GetLanguageResourcesAsync">
+            <summary>
+            Async version of <see cref="P:Sdl.Core.TM.ImportExport.IImportDestination.LanguageResources"/>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.IImportDestinationAsync.AddTranslationUnitsMaskedAsync(Sdl.LanguagePlatform.TranslationMemory.TranslationUnit[],Sdl.LanguagePlatform.TranslationMemory.ImportSettings,System.Boolean[])">
+            <summary>
+            Async version of <see cref="M:Sdl.Core.TM.ImportExport.IImportDestination.AddTranslationUnitsMask(Sdl.LanguagePlatform.TranslationMemory.TranslationUnit[],Sdl.LanguagePlatform.TranslationMemory.ImportSettings,System.Boolean[])"/>
+            </summary>
+            <param name="tus"></param>
+            <param name="settings"></param>
+            <param name="mask"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.IImportDestinationAsync.UpdateFieldDefinitionsAsync(Sdl.LanguagePlatform.TranslationMemory.FieldDefinitions)">
+            <summary>
+            Async version of <see cref="M:Sdl.Core.TM.ImportExport.IImportDestination.UpdateFieldDefinitions(Sdl.LanguagePlatform.TranslationMemory.FieldDefinitions)"/>
+            </summary>
+            <param name="mergedFieldDefinitions"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.IImportDestinationAsync.UpdateLanguageResourcesAsync(System.Collections.Generic.List{Sdl.LanguagePlatform.TranslationMemoryImpl.LanguageResource})">
+            <summary>
+            Async version of <see cref="M:Sdl.Core.TM.ImportExport.IImportDestination.UpdateLanguageResources(System.Collections.Generic.List{Sdl.LanguagePlatform.TranslationMemoryImpl.LanguageResource})"/>
+            </summary>
+            <param name="mergedLanguageResources"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Sdl.Core.TM.ImportExport.Importer.ImportResultsMap">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.TM.ImportExport.Importer.ImportResultsMap.MergedTuIds">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.TM.ImportExport.Importer.ImportResultsMap.AddedTuIds">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.TM.ImportExport.Importer.ImportResultsMap.OverwrittenTuIds">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.TM.ImportExport.Importer.DefaultTranslationUnitChunkSize">
+            <summary>
+            Defines the default size for a chunk of translation units to be processed in one round-trip through the import/export process.
+            <value>The default chunk size is 25.</value>
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.TM.ImportExport.Importer.MaxTranslationUnitChunkSize">
+            <summary>
+            Defines the maximum allowed chunk size.
+            <value>The maximum allowed chunk size is 200.</value>
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.TM.ImportExport.Importer.MinTranslationUnitChunkSize">
+            <summary>
+            Defines the minimum allowed chunk size.
+            <value>The minimum allowed chunk size is 2.</value>
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.TM.ImportExport.Importer._defaultFileTypeManager">
+            <summary>
+            Default file type manager that is used if the FileTypeManager is not set
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.TM.ImportExport.Importer.Statistics">
+            <summary>
+            Gets the statistics.
+            </summary>
+            <value>The statistics.</value>
+        </member>
+        <member name="P:Sdl.Core.TM.ImportExport.Importer.FileTypeManager">
+            <summary>
+            Gets or sets the file type manager. This is only needed when imported bilingual documents; it is not required when
+            imported TMX files.
+            </summary>
+            <value>The file type manager.</value>
+        </member>
+        <member name="P:Sdl.Core.TM.ImportExport.Importer.CanChangeImportFile">
+            <summary>
+            Flag set to true if the imported file can/should be changed
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.TM.ImportExport.Importer.TranslationMemoryUserIdSetting">
+            <summary>
+            Gets or sets the user id used to import TUs.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.TM.ImportExport.Importer.ChunkSize">
+            <summary>
+            Gets or sets the size of the translation unit chunk size
+            </summary>
+            <value>The size of the chunk.</value>
+        </member>
+        <member name="P:Sdl.Core.TM.ImportExport.Importer.Exclusive">
+            <summary>
+            If true, indicates this <see cref="T:Sdl.Core.TM.ImportExport.Importer"/> is the only flow making 
+            changes to the destination TM, in which case optimisations are used. Do not
+            set true if other flows/users may be updating the TM during the import.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.TM.ImportExport.Importer.ImportSettings">
+            <summary>
+            Gets or sets the import settings.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.TM.ImportExport.Importer.InvalidTranslationUnitsExportPath">
+            <summary>
+            Gets or sets the invalid translation units export path.
+            </summary>
+            <value>The invalid translation units export path.</value>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.Importer.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sdl.Core.TM.ImportExport.Importer"/> class.
+            </summary>
+        </member>
+        <member name="E:Sdl.Core.TM.ImportExport.Importer.BatchImported">
+            <summary>
+            Occurs after a TU batch is imported
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.Importer.Import(System.String,Sdl.Core.TM.ImportExport.IImportDestination)">
+            <summary>
+            Starts the import from the specified file.
+            </summary>
+            <param name="fileName">The file name.</param>
+            <param name="importDestination"></param>
+            <returns>The import results.</returns>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.Importer.GetDefaultFileTypeManager">
+            <summary>
+            Returns the default file type manager.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.Importer.ImportTranslationUnit(System.Collections.Generic.IList{Sdl.LanguagePlatform.TranslationMemory.TranslationUnit},Sdl.LanguagePlatform.TranslationMemory.ImportStatistics,Sdl.Core.TM.ImportExport.Importer.ImportResultsMap,Sdl.Core.TM.ImportExport.IImportDestinationAsync)">
+            <summary>
+            uSed by ImportSdltmFile
+            </summary>
+            <param name="translationUnits"></param>
+            <param name="stats"></param>
+            <param name="map"></param>
+            <param name="importDestination"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.Importer.ImportTranslationUnit(Sdl.LanguagePlatform.TranslationMemory.TranslationUnit,Sdl.LanguagePlatform.TranslationMemory.ImportStatistics,Sdl.Core.TM.ImportExport.IImportDestinationAsync)">
+            <summary>
+            Imports the specified translation unit into the configured translation memory.
+            <remarks> Depending on the page size, the translation unit might not be added to the translation memory immediately,
+            but cached into an internal buffer and processed when the page size is reached, there are no more translation units 
+            in the input stream or when Flush is called explicitly.
+            Used by ProcessParagraphUnit
+            <para>Stats is an input/output parameter and it will be updated after the execution of this method accordingly.</para>
+            </remarks>
+            </summary>
+            <param name="translationUnit">The translation unit to be imported.</param>
+            <param name="stats">The import statistics, which will be updated during processing. Note that 
+            if a filter is set, the sum of the individual import results does not necessarily match the 
+            overall statistics since some TUs will never be processed by the TM.
+            </param>
+            <param name="importDestination"></param>
+            <returns>Response.Cancel if there is an event listener that has signaled it wants to stop the import, 
+            otherwise Response.Continue.</returns>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.Importer.CheckLanguageDirections(System.Globalization.CultureInfo,System.Globalization.CultureInfo,Sdl.Core.TM.ImportExport.IImportDestinationAsync,System.Boolean@,System.Boolean)">
+            <summary>
+            Checks to see if the source and target match the language direction in the TM.
+            </summary>
+            <param name="sourceLang"></param>
+            <param name="targetLang"></param>
+            <param name="languageDirectionCompatible">True if the language pairs are compatible; false otherwise.</param>
+            <param name="allowReverse"></param>
+            <param name="importDestination"></param>
+            <returns>false if a match is found, true if a match is found in the reverse direction</returns>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.Importer.Flush(Sdl.LanguagePlatform.TranslationMemory.ImportStatistics,Sdl.Core.TM.ImportExport.IImportDestinationAsync)">
+            <summary>
+            Flushes the content of the internal translation unit buffer into the translation memory immediately.
+            </summary>
+            <remarks>Stats is an input/output parameter and it will be updated after the execution of this method accordingly.</remarks>
+            <param name="stats">The import results.</param>
+            <param name="importDestination"></param>
+            <returns>Response.Cancel if there is an event listener that has signaled it wants to stop the import, 
+            otherwise Response.Continue.</returns>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.Importer.UpdateFieldDefinitions(Sdl.LanguagePlatform.TranslationMemory.FieldDefinitions,System.Boolean,Sdl.Core.TM.ImportExport.IImportDestinationAsync)">
+            <summary>
+            Update (merge) the TM Template's field definitions from the provided definitions.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.TM.ImportExport.ImportExportResponse">
+            <summary>
+            ImportExportResponse
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.TM.ImportExport.ImportExportResponse.Continue">
+            <summary>
+            Continues the process if there are any translation units left.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.TM.ImportExport.ImportExportResponse.Cancel">
+            <summary>
+            Stops the process.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.TM.ImportExport.TmApiImportExport">
+            <summary>
+            Provides implementations of <see cref="T:Sdl.Core.TM.ImportExport.IImportDestination"/> and <see cref="T:Sdl.Core.TM.ImportExport.IExportOrigin"/> 
+            based on the Core.TM container API
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.TmApiImportExport.#ctor(Sdl.LanguagePlatform.TranslationMemoryImpl.ITranslationMemoryServiceAsync,Sdl.LanguagePlatform.TranslationMemoryImpl.Container,Sdl.LanguagePlatform.TranslationMemory.PersistentObjectToken)">
+            <summary>
+            
+            </summary>
+            <param name="service"></param>
+            <param name="container"></param>
+            <param name="tmId"></param>
+        </member>
+        <member name="T:Sdl.Core.TM.ImportExport.Tools">
+            <summary>
+            Helper functions relating to TM import/export, largely concerning direct data import for speed.
+            Currently not public as this functionality is still under consideration.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.Tools.CopyTm(Sdl.LanguagePlatform.TranslationMemoryImpl.FileContainer,Sdl.LanguagePlatform.TranslationMemory.PersistentObjectToken,Sdl.LanguagePlatform.TranslationMemoryImpl.DatabaseContainer,Sdl.LanguagePlatform.TranslationMemory.PersistentObjectToken,System.Int32,System.Int32)">
+            <summary>
+            Copies the contents of a file-based TM created with <see cref="M:Sdl.Core.TM.ImportExport.Tools.FileBasedTmFromServerBasedTm(Sdl.LanguagePlatform.TranslationMemoryImpl.DatabaseContainer,Sdl.LanguagePlatform.TranslationMemory.PersistentObjectToken,System.String)"/>
+            to a server-based TM, replacing any existing content
+            </summary>
+            <param name="sourceContainer"></param>
+            <param name="sourceTmId"></param>
+            <param name="destContainer"></param>
+            <param name="destTmId"></param>
+            <param name="timeoutSeconds">The timeout to use for database server operations, in seconds</param>
+            <param name="batchSize">The batch size to use when copying rows to the destination. If 0, all rows are streamed in a single operation. If non-zero, rows are sent in batches, each in their own transaction.</param>
+            <remarks>The default <paramref name="batchSize"/> value of 0 provides the fastest copy, but a non-zero value may be needed if the size or duration of server operations must be kept below a minimum.</remarks>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.Tools.FileBasedTmFromServerBasedTm(Sdl.LanguagePlatform.TranslationMemoryImpl.DatabaseContainer,Sdl.LanguagePlatform.TranslationMemory.PersistentObjectToken,System.String)">
+            <summary>
+            Creates a special-purpose file-based TM with the same language way, resources and fields as the 
+            specified server-based TM, using a schema specific for import/export. The file-based TM does
+            not maintain backwards compatibility (can't be read by older Studio versions) and should not
+            be used in other ways.
+            </summary>
+            <param name="container">The container holding the server-based TM</param>
+            <param name="tmId">The server-based TM id</param>
+            <param name="tmFile">The file to create for the file-based TM</param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.Tools.ExclusiveImport(System.String,System.String,Sdl.LanguagePlatform.TranslationMemory.ImportSettings,System.Action{System.Object,Sdl.Core.TM.ImportExport.BatchImportedEventArgs})">
+            <summary>
+            Imports data into a file-based TM with exclusive access, for faster throughput
+            </summary>
+            <param name="tmFile">The path to the file-based TM</param>
+            <param name="inputFile">The file to import (TMX, sdltm)</param>
+            <param name="settings">The settings to use</param>
+            <param name="batchEvent">A function to invoke to handle the <see cref="E:Sdl.Core.TM.ImportExport.Importer.BatchImported"/> event, or null</param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.Tools.CheckTmsEqual(Sdl.LanguagePlatform.TranslationMemoryImpl.Container,Sdl.LanguagePlatform.TranslationMemory.PersistentObjectToken,Sdl.LanguagePlatform.TranslationMemoryImpl.Container,Sdl.LanguagePlatform.TranslationMemory.PersistentObjectToken)">
+            <summary>
+            Verifies that TM contents are equal. For diagnostic use on reasonably-small TMs only. Throws exception if TM contents do not match.
+            </summary>
+            <param name="container1"></param>
+            <param name="tmId1"></param>
+            <param name="container2"></param>
+            <param name="tmId2"></param>
+        </member>
+        <member name="T:Sdl.Core.TM.ImportExport.Tools.TMMatchFailException">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.TM.ImportExport.Tools.WrongTmFormatException">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.TM.ImportExport.Tools.EnumerateFuzzyIndexEntries(System.Data.SQLite.SQLiteDataReader)">
+            <summary>
+            Stream-reads fuzzy index entries from a file-based TM, provding them in a format suitable for server-based TM
+            </summary>
+            <param name="dr"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Sdl.Core.TM.ImportExport.Tools.SqliteDataReaderWrapper">
+            <summary>
+            Wraps a <see cref="T:System.Data.SQLite.SQLiteDataReader"/> so it can be used with <see cref="T:System.Data.SqlClient.SqlBulkCopy"/>, specifically by converting guid values
+            </summary>
+        </member>
+    </members>
+</doc>

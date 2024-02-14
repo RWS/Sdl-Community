@@ -1,0 +1,223 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sdl.Core.FineGrainedAlignment</name>
+    </assembly>
+    <members>
+        <member name="T:Sdl.Core.FineGrainedAlignment.AlignableContentPairWrapper">
+            <summary>
+            Wrapper around an IAlignableContentPair, ensuring any stems found in the tokens
+            are ignored, so that we re-stem to have stems that are consistent with those
+            we used when building the model. Uses a copy of the token object so's not
+            to mess up any in-process use e.g. in Studio. See LCC-7288.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.FineGrainedAlignment.AlignResult">
+            <summary>
+            Represents the result of attempting alignment for a single <see cref="T:Sdl.Core.FineGrainedAlignment.IAlignableContentPair"/>
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.FineGrainedAlignment.AlignResult.Aligned">
+            <summary>
+            Alignment was performed on the pair
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.FineGrainedAlignment.AlignResult.PairUntokenized">
+            <summary>
+            The pair was not tokenized so alignment could not be performed
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.FineGrainedAlignment.AlignResult.PairEmptyOrTooLarge">
+            <summary>
+            The pair either had no significant content or was too large for the aligner
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.FineGrainedAlignment.AlignResult.AlignError">
+            <summary>
+            An exception occurred while trying to align the pair
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.FineGrainedAlignment.AlignResult.InvalidAlignmentData">
+            <summary>
+            'Native' alignments were provided with the pair in <see cref="P:Sdl.Core.FineGrainedAlignment.IAlignableContentPair.AlignmentData"/>, but the data was invalid
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.FineGrainedAlignment.AlignResult.NoModel">
+            <summary>
+            The aligner is model-based, but no model was available for use to perform alignment
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.FineGrainedAlignment.AlignResult.CorruptModel">
+            <summary>
+            The aligner is model-based, but the model data is corrupt
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.FineGrainedAlignment.BilingualChiSquareComputer3.Compute">
+            <summary>
+            Computes chi-square scores for all token pairs in the corpus, using default parameters.
+            </summary>
+            <returns>A matrix with the scores. Empty cells are below the min score</returns>
+        </member>
+        <member name="M:Sdl.Core.FineGrainedAlignment.BilingualChiSquareComputer3.Compute(System.Double,System.Int32,System.Int32)">
+            <summary>
+            Computes chi-square scores for all token pairs of the corpus. Can take very long (several hours) to
+            compute on larger TMs (200.000 TUs and up).
+            </summary>
+            <param name="minScore">The minimum chi-square score a token pair must have to be included in the result. 5% ~= minscore = 3.841 (should be the minimum)</param>
+            <param name="minFreq">minimum occurrence (frequency) of a token to be considered</param>
+            <param name="minCooc">minimum co-occurrence of a token pair to be considered</param>
+            <returns>A matrix with the scores. Empty cells are below the min score</returns>
+        </member>
+        <member name="F:Sdl.Core.FineGrainedAlignment.BilingualPhraseComputer3.MIN_TOKEN_FREQUENCY">
+            <summary>
+            Min #occ of a token to participate in a phrase
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.FineGrainedAlignment.ChiSquaredTranslationModel.Unload">
+            <summary>
+            Reverts this object to its unloaded state.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.FineGrainedAlignment.DiskBasedMergeCounter2`1.FinishCounting">
+            <summary>
+            Merges all data and returns the file name of the final file which contains the counted items.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.FineGrainedAlignment.IFineGrainedAligner.Align(System.Collections.Generic.IEnumerable{Sdl.Core.FineGrainedAlignment.IAlignableContentPair})">
+            <summary>
+            Performs alignment on the pairs provided - any 'native' alignments should be provided by the corpus
+            </summary>
+            <param name="pairs"></param>
+            <returns>True if the pairs were aligned, false if alignment was not possible (e.g. model not yet built)</returns>
+            <remarks>The AlignmentData provided for each pair can either be null, or a LiftAlignedSpanPairSet containing any 'native' alignments that the corpus can provide.
+            If alignment can't be peformed (e.g. model not built) implementations should set AlignmentData and TranslationModelDate to null for each pair. If alignment can be 
+            performed but no alignment data can be computed for a given pair (e.g. no significant tokens, or too many), AlignmentData for the pair
+            should be set to an empty LiftAlignedSpanPairSet.
+            </remarks>
+        </member>
+        <member name="M:Sdl.Core.FineGrainedAlignment.IFineGrainedAligner.AlignEx(System.Collections.Generic.IEnumerable{Sdl.Core.FineGrainedAlignment.IAlignableContentPair})">
+            <summary>
+            Same functionality as Align but with detailed result codes for each pair processed.
+            </summary>
+            <param name="pairs"></param>
+            <returns>An array of <see cref="T:Sdl.Core.FineGrainedAlignment.AlignResult"/>, one per item in <paramref name="pairs"/></returns>
+        </member>
+        <member name="M:Sdl.Core.FineGrainedAlignment.IFineGrainedAligner.CanAlign(System.Collections.Generic.IEnumerable{Sdl.Core.FineGrainedAlignment.IAlignableContentPair})">
+            <summary>
+            
+            </summary>
+            <param name="pairs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Core.FineGrainedAlignment.IFineGrainedAligner.SetErrorLogger(System.Action{System.Exception,System.String})">
+            <summary>
+            Provides an implementation of an error logger for the aligner. In exception cases, the aligner may invoke
+            the implementation, providing either an Exception object, a string, or both.
+            </summary>
+            <param name="logger">The logger implementation</param>
+            <remarks>If the aligner wishes only to invoke using the Exception object, the string argument will be null, and vice versa.</remarks>
+        </member>
+        <member name="M:Sdl.Core.FineGrainedAlignment.WordAlignmentWithAlternatives.IsAmbiguous">
+            <summary>
+            Ensure alternatives are sorted in descending order of confidence before calling this
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Core.FineGrainedAlignment.WordAlignmentWithAlternatives.UseBest">
+            <summary>
+            Ensure alternatives are sorted in descending order of confidence before calling this
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.FineGrainedAlignment.SymmetrizedAlignmentResults.SymmetrizedAlignments">
+            <summary>
+            List with one member per source word, containing either null for each word
+            or a symmetrized alignment.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.FineGrainedAlignment.TrainedModelAligner.SymmetrizeAlignments(System.Collections.Generic.List{Sdl.Core.FineGrainedAlignment.WordAlignmentWithAlternatives},System.Collections.Generic.List{Sdl.Core.FineGrainedAlignment.WordAlignmentWithAlternatives})">
+            <summary>
+            
+            </summary>
+            <param name="sourceToTargetAlignments">List of s2t alignments, one per coded source token</param>
+            <param name="targetToSourceAlignments">List ot t2s alignments, one per coded target token</param>
+            <param name="srcCodedIxConverter"></param>
+            <param name="trgCodedIxConverter"></param>
+            <param name="sourceTokens"></param>
+            <param name="targetTokens"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Core.FineGrainedAlignment.TrainedTranslationModel.Unload">
+            <summary>
+            Reverts this object to its unloaded state.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.FineGrainedAlignment.VocabularyFile3.Dirty">
+            <summary>
+            True iff words were added since loading
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.FineGrainedAlignment.VocabularyFile3.Lookup(System.String)">
+            <summary>
+            Lookup string s in the vocabulary. Returns -1 if not found. 
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Core.FineGrainedAlignment.VocabularyFile3.GetIDs(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            NOTE IDs are not in the order of the words but in order of the IDs
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.FineGrainedAlignment.VocabularyFile3.GetIntSegment(System.Collections.Generic.List{Sdl.LanguagePlatform.Core.Tokenization.Token})">
+            <summary>
+            Keeps ID for unknown words (won't add)
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.FineGrainedAlignment.VocabularyFile3.Lookup(System.Int32)">
+            <summary>
+            Looks up the word with id key in the vocabulary. Returns null if not found. 
+            </summary>
+            <param name="key">The key of the word to look up</param>
+            <returns>The word, or null if not found</returns>
+        </member>
+        <member name="T:Sdl.Core.FineGrainedAlignment.CompactTrie`1">
+            <summary>
+            Yet another trie. It uses arrays instead of lists as well as multi-label arcs
+            to reduce memory consumption.
+            <para>Keys are limited to structs/value types, and the value must be a non-negative
+            integer.</para>
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.FineGrainedAlignment.CompactTrie`1.Node.CompareTo(Sdl.Core.FineGrainedAlignment.CompactTrie{`0}.Node)">
+            <summary>
+            Only compares "head" of paths (first item)
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.FineGrainedAlignment.CompactTrie`1.Find(System.Collections.Generic.IList{`0},System.Boolean@,System.Int32@)">
+            <summary>
+            </summary>
+            <param name="path"></param>
+            <param name="isPrefix">will be true if the search phrase is a prefix of an indexed phrase</param>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Sdl.Core.FineGrainedAlignment.WordAlignmentComputer3">
+            <summary>
+            Adaptation of AutoSuggest Creator aligner.
+            </summary>
+            <remarks>The original aligner seems mostly to have been inspired by "Competitive grouping in integrated 
+            phrase segmentation and alignment model" (Zhang and Vogel, 2005). The ExtendPhrases function is described
+            as implementing an alternative to the CGA algortihm.</remarks>
+        </member>
+        <member name="M:Sdl.Core.FineGrainedAlignment.WordAlignmentComputer3.FindSeedPoints(Sdl.LanguagePlatform.Stat.AlignmentTable,System.Double[0:,0:])">
+            <summary>
+            Seed points are coordinates (s, t) in the association matrix which are row/column
+            maxima, i.e. there are no other cells in the S row nor in the T column which
+            have a higher association value. These points are undisputed alignments. 
+            </summary>
+            <param name="alignments"></param>
+            <param name="associations">The association value matrix</param>
+            <returns>The list of fixpoints</returns>
+        </member>
+    </members>
+</doc>

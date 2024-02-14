@@ -1,0 +1,1125 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sdl.Desktop.IntegrationApi.Extensions</name>
+    </assembly>
+    <members>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.AbstractCommandBarItemAttribute">
+            <summary>
+            Abstract base class for command bar item extension attributes.
+            </summary>
+            <remarks>
+            The concrete classes extending this abstract base class:
+            </remarks>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.AbstractCommandBarItemAttribute.#ctor">
+            <summary>
+            Default constructor for XML serialization.
+            </summary>        
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.AbstractCommandBarItemAttribute.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Constructor with basic properties.
+            </summary>
+            <param name="id">A unique id for this command bar item.</param>
+            <param name="name">A name for this command bar item. Should typically be a key of a resource string in PluginResources.resx.</param>
+            <param name="description">A description for this command bar item. Should typically be a key of a resource string in PluginResources.resx.</param>        
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.AbstractCommandBarItemAttribute.ContextByType">
+            <summary>
+            Gets or sets the action context in which the action is valid. This can be a view controller type, or null if the action available globally.
+            </summary>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.AbstractLayoutAttribute">
+            <summary>
+            Abstract base class for auxiliary extension attributes that specify the location of plug-in items on a command bar.
+            </summary>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.AbstractLayoutAttribute.#ctor">
+            <summary>
+            Default constructor for XML serialization.
+            </summary>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.AbstractLayoutAttribute.#ctor(System.Type)">
+            <summary>
+            Constructor using the target command bar path.
+            </summary>
+            <param name="locationType">The location by type at which to insert the plug-in item.</param>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.AbstractLayoutAttribute.LocationByType">
+            <summary>
+            The type of the location where the UI element is positioned.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.AbstractLayoutAttribute.ZIndex">
+            <summary>
+            Defines a 0 based index order for the UI elements where the highest value is the most important.
+            </summary>
+            <remarks>
+            <para>
+            The z-Index ordering is performed only for the intergrated elements and have a lower priority than SDL ordering. It acts as importance from left to right or top to bottom.
+            </para>
+            <para> The highest ZIndex value is in the left or top and the lowest value is in the right or bottom. </para>        
+            </remarks>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.AbstractLayoutAttribute.IsSeparator">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.AbstractLayoutAttribute.Name">
+            <summary>
+            An instance specific name, overriding the default <see cref="P:Sdl.Core.PluginFramework.ExtensionAttribute.Name"/>, which should be 
+            used for this instance. This only has an effect for instances of actions. Can be null.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.AbstractLayoutAttribute.DisplayType">
+            <summary>
+            The visual representation type.
+            </summary>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.AbstractLayoutConfiguration">
+            <summary>
+            Base class for layout configurations
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.AbstractLayoutConfiguration.Id">
+            <summary>
+            Layout configuration identifier
+            </summary>    
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.ActionAttribute">
+            <summary>
+            Decorate an action of a Studio application provinding metadata informations
+            </summary>
+            <remarks>
+            <para>
+            The framework also provides support for getting property values from the PluginResources.resx resource file, which is deployed together with the plug-in manifest.
+                        To specify that the value of a certain string property needs to be retrieved from the resource file, annotate the property definition with the <see cref="T:Sdl.Core.PluginFramework.PluginResourceAttribute"/> attribute.
+                        Users should now specify the name of the resource key, instead of the actual value, as the property value. When no resource string with the specified key can be found,
+                        the framework keeps the specified string as the property value. To define non-string properties whose value is stored in the PluginResources.resx resource file, create a string property, which value
+                        should be set to a resource key. When consuming the extension, use <see cref="M:Sdl.Core.PluginFramework.IPlugin.GetPluginResource``1(System.String)"/> tio retriece the resource from
+                        the plug-in resource file.
+            
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.ActionAttribute.#ctor">
+            <summary>
+            Default constructor for XML serialization.
+            </summary>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.ActionAttribute.#ctor(System.String,System.Type)">
+            <summary>
+            Initialize the instance of the action attribute 
+            </summary>
+            <param name="id">The unique identifier of the action</param>
+            <param name="contextByType">The context in which the action should work.</param>  
+            <remarks>
+            <para>
+            This constructor should be used only if pluginresources are used to resolve the name and description of the extension.
+            </para>
+            <para>
+            The resource keys for name and description are built from id and postfixed with _Name and _Description.
+            </para>
+            </remarks>      
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.ActionAttribute.#ctor(System.String)">
+            <summary>
+            Initialize the instance of the action attribute 
+            </summary>
+            <param name="id">The unique identifier of the action</param>
+            <remarks>
+            <para>
+            This constructor should be used only if pluginresources are used to resolve the name and description of the extension.
+            </para>
+            <para>
+            The resource keys for name and description are built from id and postfixed with _Name and _Description.
+            </para>
+            </remarks>      
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.ActionAttribute.#ctor(System.String,System.String,System.String,System.Type)">
+            <summary>
+            Initialize the instance of the action attribute.
+            </summary>
+            <param name="id">The unique identifier of the action.</param>
+            <param name="name">The name that will be displayed. </param>
+            <param name="description">The description of the action.</param>
+            <param name="contextByType">The context in which the action should work.</param>       
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.ActionAttribute.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Initialize the instance of the action attribute.
+            </summary>
+            <param name="id">The unique identifier of the action.</param>
+            <param name="name">The name that will be displayed. </param>
+            <param name="description">The description of the action.</param>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.ActionLayoutAttribute">
+            <summary>
+            Define UI informations for an action.
+            </summary>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.ActionLayoutAttribute.#ctor(System.Type,System.UInt32,Sdl.Desktop.IntegrationApi.Extensions.DisplayType,System.String,System.Boolean)">
+            <summary>
+            Initialize the instance of the action layout attribute.
+            </summary>
+            <param name="locationByType">The location where the visual representation of the action should be added.</param>
+            <param name="zIndex">Defines a 0 based index order for the UI elements where the highest value is the most important.</param> 
+            <param name="displayType">The UI display type of the action.</param>
+            <param name="name">Used to override the default name of the action and replace it with a new provided name.</param>
+            <param name="isSeparator">Is separator determines if a separator should be added before the action</param>
+            <remarks>
+            You may use as a locationByType
+            <list> 
+            <listItem>A predefined location (eq AddinsRibbonTabLocation).</listItem>
+            <listItem>An integrated ribbon group class type.</listItem>
+            </list>
+            </remarks>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.ApplicationInitializerAttribute">
+            <summary>
+            Used to decorate the classes which are executed at the application startup.
+            This classes must also implement the Sdl.Desktop.IntegrationApi.IApplicationInitializer interface
+            </summary>
+            <example><a href="6bbfdddf-235e-411b-b097-adefe629ff71.htm">Application Initializer Sample</a></example>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.ExternalCommandLineArgument">
+            <summary>
+            Represents a command line argument and its values.
+            </summary>       
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.ExternalCommandLineArgument.#ctor(Sdl.Desktop.IntegrationApi.Extensions.CommandLine.ExternalCommandLineArgumentDefinition)">
+            <summary>
+            Creates a new argument with the specific definition.
+            </summary>
+            <param name="definition">The definition of the argument.</param>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.ExternalCommandLineArgument.Definition">
+            <summary>
+            Gets the command line argument definition.
+            </summary>           
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.ExternalCommandLineArgument.Values">
+            <summary>
+            Gets the list of values supplied for this argument.
+            </summary>            
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.ExternalCommandLineArgumentDefinition">
+            <summary>
+            Defines a command line argument.
+            </summary>        
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.ExternalCommandLineArgumentDefinition.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new command line argument definition with the given argument name and description.
+            </summary>
+            <param name="name"></param>
+            <param name="description"></param>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.ExternalCommandLineArgumentDefinition.Name">
+            <summary>
+            Gets or sets the argument name. The user must use this name, preceded by a slash ('/') in order to specify this argument on the command line,
+            followed by a  number of values separated by a space.</summary>        
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.ExternalCommandLineArgumentDefinition.Required">
+            <summary>
+            Gets or sets if this argument is required = true or optional = false.
+            <remarks>
+            This is currently only used to display square brackets around optional arguments in the command line help.
+            </remarks>
+            </summary>        
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.ExternalCommandLineArgumentDefinition.SampleValues">
+            <summary>
+            Gets or sets an array of sample argument value strings to be used in the command line help.
+            </summary>
+            <remarks>
+            The default value is a string[] containing the main argument name appended with '1'.  Also when displaying the command line help if more
+            sample names are needed to display required or optional sample names then an incrementing number is appended to the last
+            sample name in the the array.
+            </remarks>        
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.ExternalCommandLineArgumentDefinition.Aliases">
+            <summary>
+            Gets or sets a list of alias arguments that can be used instead of the main argument name in the <see cref="P:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.ExternalCommandLineArgumentDefinition.Name"/> property.
+            </summary>        
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.ExternalCommandLineArgumentDefinition.Description">
+            <summary>
+            Gets or sets the description of the argument (shown in the usage text).
+            </summary>        
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.ExternalCommandLineArgumentDefinition.MinValues">
+            <summary>
+            Gets or sets the minimum number of values expected for this argument, if it is specified. Defaults to 0.
+            </summary>       
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.ExternalCommandLineArgumentDefinition.MaxValues">
+            <summary>
+            Gets or sets the maximum number of values expected for this argument, if it is specified.
+            Set to -1 in order to allow un unlimited number of values. Defaults to -1.
+            </summary>        
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.ExternalCommandLineArguments">
+            <summary>
+            A collection of command line arguments supplied by the user.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.ExternalCommandLineArguments.Item(System.String)">
+            <summary>
+            Gets the command line argument with the specified name or alias (case insensitive).
+            </summary>
+            <param name="name">The name of requested argument.</param>
+            <returns>The argument; or null if this argument was not supplied.</returns>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.ExternalCommandLineProcessorAttribute">
+            <summary>
+            Extension attribute for regsitering command line processors.
+            This can be used on classes implementing <see cref="T:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.IExternalCommandLineProcessor"/>.
+            </summary>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.ExternalCommandLineProcessorAttribute.#ctor">
+            <summary>
+            Default constructor for XML serialization.
+            </summary>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.ExternalCommandLineProcessorAttribute.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Constructor with required parameters.
+            </summary>
+            <param name="id">An id for the processor.</param>
+            <param name="name">A name for the processor.</param>
+            <param name="description">A description for the processor.</param>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.ExternalCommandLineProcessorAttribute.Validate(Sdl.Core.PluginFramework.Validation.IExtensionAttributeInfo,Sdl.Core.PluginFramework.Validation.IExtensionValidationContext)">
+            <summary>
+            Validates an extension targeting this extension point. This method is called by the framework while generating the plug-in manifest.
+            </summary>
+            <param name="info">Information about the extension.</param>
+            <param name="context">Provides functionality to validate extensions targeting the extension point
+            and report warning or error messages</param>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.IExternalCommandLineProcessor">
+            <summary>
+            Represents a command line processor extension, which is responsible for processing a number of command line arguments, which 
+            allow the user the execute a specific task or a set of tasks from the command line.
+            This will be executed before the main window is created.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.IExternalCommandLineProcessor.TaskName">
+            <summary>
+            Gets the name of the task or tasks which the processor allows the user to execute from the command line.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.IExternalCommandLineProcessor.TaskDescription">
+            <summary>
+            Gets the description of the task or tasks which the processor allows the user to execute from the command line.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.IExternalCommandLineProcessor.SupportedArguments">
+            <summary>
+            Gets the definitions for the supported command line arguments for this processor.
+            </summary>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.IExternalCommandLineProcessor.ProcessCommandLine(Sdl.Desktop.IntegrationApi.Extensions.CommandLine.ExternalCommandLineArguments)">
+            <summary>
+            This methods is called when the processor is executed.
+            </summary>
+            <remarks>A command line processor will always be executed, even if none of its expected parameters have been specified.</remarks>
+            <param name="args">The full set of command line arguments and values supplied by the user, not restricted to the arguments expected by this processor.</param>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.IExternalWindowAwareCommandLineProcessor">
+            <summary>
+            Represents a command line processor which is executed after the application window has been shown.
+            For more information <see cref="T:Sdl.Desktop.IntegrationApi.Extensions.CommandLine.IExternalCommandLineProcessor"/>.
+            </summary>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.DisplayType">
+            <summary>
+            The way that UI elements are displayed in the ribbon
+            </summary>    
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.DisplayType.Default">
+            <summary>
+            The size of the UI element will be based on its preseted default or by its parent container.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.DisplayType.ImageOnly">
+            <summary>
+            The caption of the UI element is hidden and its image is displayed.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.DisplayType.Normal">
+            <summary>
+            The image and text of the UI element are both displayed.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.DisplayType.Large">
+            <summary>
+            The UI element displays an enlarged image with the text below.
+            </summary>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.ILocationAware">
+            <summary>
+            Implements the positioning the UI elements inside the layout.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.ILocationAware.LocationByType">
+            <summary>
+            The type of the location where the UI element is positioned.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.ILocationAware.ZIndex">
+            <summary>
+            Defines a 0 based index order for the UI elements where the highest value is the most important.
+            </summary>
+            <remarks>
+            <para>
+            The z-Index ordering is performed only for the intergrated elements and have a lower priority than SDL ordering. It acts as importance from left to right or top to bottom.
+            </para>
+            <para> The highest ZIndex value is in the left or top and the lowest value is in the right or bottom. </para>        
+            </remarks>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.ILocationAware.IsSeparator">
+            <summary>
+            Is separator determines if a separator should be added before the action
+            </summary>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.Internal.AbstractController">
+            <summary>
+            Base class for all controllers.
+            </summary>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.Internal.AbstractLocation">
+            <summary>
+            Base class for defining a location
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.Internal.AbstractLocation.Path">
+            <summary>
+            Gets or sets the command bar path at which to insert the plug-in item.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.Internal.AbstractLocation.InsertBefore">
+            <summary>
+            The id of the command bar item before which this plug-in item should be inserted.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.Internal.AbstractLocation.InsertAfter">
+            <summary>
+            The id of the command bar item after which this plug-in item should be inserted.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.Internal.AbstractLocation.TargetAttributeType">
+            <summary>
+            The target extension attribute type
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.Internal.AbstractLocation.ZIndex">
+            <summary>
+            Used internaly for defining and sorting the position of the UI integrated elements
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.Internal.AbstractLocation.IsSeparator">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.Internal.BindActionAttribute">
+            <summary>
+            Allows binding for internal actions
+            </summary>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.Internal.BindActionAttribute.#ctor(System.String)">
+            <summary>
+            Initializes the bind action attribute
+            </summary>
+            <param name="actionId"></param>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.Internal.BindControllerAttribute">
+            <summary>
+            Allows binding for internal views
+            </summary>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.Internal.BindControllerAttribute.#ctor(System.String)">
+            <summary>
+            TODO: Add Comment
+            </summary>
+            <param name="viewId"></param>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.Internal.BindControllerAttribute.ViewId">
+            <summary>
+            Gets or sets the id of the internal view this adapter is targeted at.
+            </summary>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionStyle">
+            <summary>
+            Enumeration of different action styles.
+            </summary>
+            <seealso cref="P:Sdl.Desktop.IntegrationApi.Extensions.Internal.IAction.Style"/>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionStyle.PushButton">
+            <summary>
+            Push button action.
+            </summary>
+            <remarks>This type of action is represented by a normal menu item or toolbar button.</remarks>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionStyle.ToggleButton">
+            <summary>
+            Toggle button action.
+            </summary>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties">
+            <summary>
+            Flags enumeration defining action properties for use in action property change events.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.None">
+            <summary>
+            No action properties are affected.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.Text">
+            <summary>
+            Text property.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.ToolTipText">
+            <summary>
+            ToolTipText property.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.Icon">
+            <summary>
+            Icon property.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.Shortcuts">
+            <summary>
+            Shortcut property.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.Enabled">
+            <summary>
+            Enabled property.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.Available">
+            <summary>
+            Available property.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.Style">
+            <summary>
+            Style property.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.Checked">
+            <summary>
+            Checked property.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.ActionGroup">
+            <summary>
+            ActionGroup property.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.ShowText">
+            <summary>
+            ShowText property.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.PopupControl">
+            <summary>
+            PopupControl property.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.Size">
+            <summary>
+            Ribbon size
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.All">
+            <summary>
+            All properties combined.
+            </summary>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionPropertyChangedEventArgs">
+            <summary>
+            Event args for the <see cref="E:Sdl.Desktop.IntegrationApi.Extensions.Internal.IAction.PropertyChanged"/> event.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionPropertyChangedEventArgs.Text">
+            <summary>
+            Static instance for <see cref="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionPropertyChangedEventArgs.Text"/> property change events.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionPropertyChangedEventArgs.ActionGroup">
+            <summary>
+            Static instance for <see cref="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionPropertyChangedEventArgs.Text"/> property change events.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionPropertyChangedEventArgs.All">
+            <summary>
+            Static instance for property change events covering all action properties.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionPropertyChangedEventArgs.Available">
+            <summary>
+            Static instance for <see cref="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.Available"/> property change events.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionPropertyChangedEventArgs.Checked">
+            <summary>
+            Static instance for <see cref="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.Checked"/> property change events.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionPropertyChangedEventArgs.Enabled">
+            <summary>
+            Static instance for <see cref="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.Enabled"/> property change events.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionPropertyChangedEventArgs.Icon">
+            <summary>
+            Static instance for <see cref="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.Icon"/> property change events.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionPropertyChangedEventArgs.Shortcuts">
+            <summary>
+            Static instance for <see cref="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.Shortcuts"/> property change events.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionPropertyChangedEventArgs.Style">
+            <summary>
+            Static instance for <see cref="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.Style"/> property change events.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionPropertyChangedEventArgs.ToolTipText">
+            <summary>
+            Static instance for <see cref="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.ToolTipText"/> property change events.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionPropertyChangedEventArgs.ShowText">
+            <summary>
+            Static instance for <see cref="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.ShowText"/> property change events.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionPropertyChangedEventArgs.PopupControl">
+            <summary>
+            Static instance for <see cref="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.PopupControl"/> property change events.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionPropertyChangedEventArgs.Size">
+            <summary>
+            Static instance for <see cref="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties.Size"/> property change events.
+            </summary>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionPropertyChangedEventArgs.#ctor(Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties)">
+            <summary>
+            Creates a new instance for the specified action properties.
+            </summary>
+            <param name="properties">The action properties that have changed.</param>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionPropertyChangedEventArgs.Properties">
+            <summary>
+            Gets the action properties that have changed.
+            </summary>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionPropertyChangedEventArgs.ContainsProperty(Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties)">
+            <summary>
+            Returns true when the specified property has been changed.
+            </summary>
+            <param name="property"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.Internal.IAction">
+            <summary>
+            Represents a user action, which can be added to a command bar.
+            </summary>
+        </member>
+        <member name="E:Sdl.Desktop.IntegrationApi.Extensions.Internal.IAction.PropertyChanged">
+            <summary>
+            Raised when the value of one of the action's properties changed.
+            </summary>
+            <remarks>For possible property values, see the constants defined in <see cref="T:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionProperties"/>.</remarks>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.Internal.IAction.Id">
+            <summary>
+            Returns the unique id for this action.
+            </summary>
+            <remarks>This id is unique across the Studio.</remarks>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.Internal.IAction.Text">
+            <summary>
+            Returns the text for this action.
+            </summary>
+            <remarks>Can contain an ampersand to indicate the mnemonic character.</remarks>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.Internal.IAction.ToolTipText">
+            <summary>
+            Returns the tooltip test for this action.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.Internal.IAction.Icon">
+            <summary>
+            Returns the icon for this action. Can be null.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.Internal.IAction.Enabled">
+            <summary>
+            Returns whether this action is currently enabled.
+            </summary>
+            <remarks>If an action is not enabled, it is shown is greyed out on the command bar.</remarks>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.Internal.IAction.Available">
+            <summary>
+            Returns whether this action is currently available.
+            </summary>
+            <remarks>If an action is not enabled, it is not shown on the command bar.</remarks>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.Internal.IAction.Style">
+            <summary>
+            Returns the action style.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.Internal.IAction.DisplayType">
+            <summary>
+            Ribbon action size
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.Internal.IAction.Checked">
+            <summary>
+            Gets or sets whether this action is checked. This property is only valid when the action style (<see cref="P:Sdl.Desktop.IntegrationApi.Extensions.Internal.IAction.Style"/>
+            property is set to <see cref="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionStyle.ToggleButton"/>.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.Internal.IAction.ActionGroup">
+            <summary>
+            Returns the action group this action is part of. This property is only valid when the action style (<see cref="P:Sdl.Desktop.IntegrationApi.Extensions.Internal.IAction.Style"/>
+            property is set to <see cref="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionStyle.ToggleButton"/>.
+            </summary>
+            <remarks>
+            <para>This property is ignored unless the <see cref="P:Sdl.Desktop.IntegrationApi.Extensions.Internal.IAction.Style"/> property is set to <see cref="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.ActionStyle.ToggleButton"/>.</para>
+            <para>The action group should be a string that is unique across the studio. All ToggleButton style actions
+            that share the same action group act as a group and are rendered as a rdaio button.</para>
+            <para>When null, the action is shown on the command bar as a checkbox, otherwise it is shown as a radio button.</para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.Internal.IAction.Execute">
+            <summary>
+            Called when the user activates this action.
+            </summary>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.Internal.IAction.Initialize">
+            <summary>
+            Called when the action is initialized.
+            </summary>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.Internal.IBindedController">
+            <summary>
+            Contract used to distinguish between normal controller and binded controller.
+            </summary>
+            <remarks> Used to make distinction between binded and normal view as non assignable types (required in ExtensionsRepository).</remarks>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.Internal.PluginTargetCommandBarSiteType">
+            <summary>
+            Possibles sites for adding items to command bars.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.PluginTargetCommandBarSiteType.Window">
+            <summary>
+            Adds the item to the window; it is available while the window is showing.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.PluginTargetCommandBarSiteType.View">
+            <summary>
+            TODO : review bellow comments
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.PluginTargetCommandBarSiteType.ViewPart">
+            <summary>
+            TODO : review bellow comments
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.Internal.PluginTargetCommandBarSiteType.ViewPartCommandBarProvider">
+            <summary>
+            TODO : review bellow comments
+            </summary>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.RibbonGroupAttribute">
+            <summary>
+            Decorate a ribbon group of a Studio application provinding metadata informations
+            </summary>
+            <remarks>
+            <para>
+            The framework also provides support for getting property values from the PluginResources.resx resource file, which is deployed together with the plug-in manifest.
+                        To specify that the value of a certain string property needs to be retrieved from the resource file, annotate the property definition with the <see cref="T:Sdl.Core.PluginFramework.PluginResourceAttribute"/> attribute.
+                        Users should now specify the name of the resource key, instead of the actual value, as the property value. When no resource string with the specified key can be found,
+                        the framework keeps the specified string as the property value. To define non-string properties whose value is stored in the PluginResources.resx resource file, create a string property, which value
+                        should be set to a resource key. When consuming the extension, use <see cref="M:Sdl.Core.PluginFramework.IPlugin.GetPluginResource``1(System.String)"/> tio retriece the resource from
+                        the plug-in resource file.
+            
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.RibbonGroupAttribute.#ctor(System.String,System.String,System.Type)">
+            <summary>
+            Initialize the instance of the ribbon group attribute
+            </summary>
+            <param name="id">The unique identifier of the ribbon group</param>
+            <param name="name">The name that will be displayed by the ribbon group. </param>
+            <param name="contextByType">The context in which the ribbon is working</param>       
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.RibbonGroupAttribute.#ctor(System.String,System.String)">
+            <summary>
+            Initialize the instance of the ribbon group attribute
+            </summary>
+            <param name="id">The unique identifier of the ribbon group</param>
+            <param name="name">The name that will be displayed by the ribbon group. </param>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.RibbonGroupAttribute.#ctor(System.String,System.Type)">
+            <summary>
+            Initialize the instance of the ribbon group attribute 
+            </summary>        
+            <param name="id">The unique identifier of the ribbon group</param>
+            <param name="contextByType">The context in which the ribbon group is available and enabled.</param>
+            <remarks>
+            <para>
+            This constructor should be used only if pluginresources are used to resolve the name and description of the extension.
+            </para>
+            <para>
+            The resource keys for name and description are built from id and postfixed with _Name and _Description.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.RibbonGroupAttribute.#ctor(System.String)">
+            <summary>
+            Initialize the instance of the ribbon group attribute 
+            </summary>        
+            <param name="id">The unique identifier of the ribbon group</param>
+            <remarks>
+            <para>
+            This constructor should be used only if pluginresources are used to resolve the name and description of the extension.
+            </para>
+            <para>
+            The resource keys for name and description are built from id and postfixed with _Name and _Description.
+            </para>
+            </remarks>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.RibbonGroupLayoutAttribute">
+            <summary>
+            Auxiliary extension attribute used to setup the layout of a ribbon group.
+            </summary>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.RibbonGroupLayoutAttribute.#ctor">
+            <summary>
+            Default constructor for XML serialization.
+            </summary>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.RibbonGroupLayoutAttribute.#ctor(System.Type)">
+            <summary>
+            Initialize the instance of the attribute using a specific location.
+            </summary>
+            <param name="locationType">The location of the ribbon group.</param>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.ShortcutAttribute">
+            <summary>
+            Used to define shortcuts for the actions.
+            </summary>
+            <remarks>
+            This attribute can be used in conjunction with the <see cref="T:Sdl.Desktop.IntegrationApi.Extensions.ActionAttribute"/> attributes.
+            </remarks>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.ShortcutAttribute.#ctor(System.Windows.Forms.Keys)">
+            <summary>
+            Initialize the instance of this attribute using a specified shortcut.
+            </summary>
+            <param name="shortcut">The shortcut to use.</param>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.ShortcutAttribute.Shortcut">
+            <summary>
+            Gets or sets the shortcut.
+            </summary>
+            <value>The shortcut.</value>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.ViewAttribute">
+            <summary>
+            Extension attribute for integrating new views into Studio applications.
+            </summary>
+            <remarks>
+            <para>A view is represented as an item in the explorer bar and is responsible for the showing the UI.</para>
+            <para>A view needs to implement the <a href="Sdl.Desktop.IntegrationApi.AbstractViewController">AbstractViewController</a> class.</para>
+            </remarks>    
+            <remarks>
+            <para>
+            The framework also provides support for getting property values from the PluginResources.resx resource file, which is deployed together with the plug-in manifest.
+                        To specify that the value of a certain string property needs to be retrieved from the resource file, annotate the property definition with the <see cref="T:Sdl.Core.PluginFramework.PluginResourceAttribute"/> attribute.
+                        Users should now specify the name of the resource key, instead of the actual value, as the property value. When no resource string with the specified key can be found,
+                        the framework keeps the specified string as the property value. To define non-string properties whose value is stored in the PluginResources.resx resource file, create a string property, which value
+                        should be set to a resource key. When consuming the extension, use <see cref="M:Sdl.Core.PluginFramework.IPlugin.GetPluginResource``1(System.String)"/> tio retriece the resource from
+                        the plug-in resource file.
+            
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.ViewAttribute.#ctor">
+            <summary>
+            Default constructor for XML serialization.
+            </summary>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.ViewAttribute.#ctor(System.String,System.String,System.String,System.Type,System.String,System.Windows.Forms.Keys,System.Boolean)">
+            <summary>
+            Initialize the view attribute
+            </summary>
+            <param name="id">The unique id for this view.</param>
+            <param name="name">The name for this view. Should typically be a key of a resource string in PluginResources.resx.</param>
+            <param name="description">The description for this view. Should typically be a key of a resource string in PluginResources.resx.</param>
+            <param name="locationByType">The location where the view is loaded.</param>
+            <param name="helpTopic">The help topic identifier of the view.</param>
+            <param name="shorcut">The shortcut key for accessing the view.</param>
+            <param name="allowViewParts">Enables or disables the view parts integration inside the view.</param>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.ViewAttribute.HelpTopic">
+            <summary>
+            Gets or sets the help topic ID for this view. Can be null.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.ViewAttribute.Shortcut">
+            <summary>
+            Gets or sets the shortcut for accessing this view.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.ViewAttribute.LocationByType">
+            <summary>
+            Gets or sets the location of the view
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.ViewAttribute.ZIndex">
+            <summary>
+            Defines a 0 based index order for the UI elements where the highest value is the most important.
+            </summary>
+            <remarks>
+            <para>
+            The z-Index ordering is performed only for the intergrated elements and have a lower priority than SDL ordering. It acts as importance from left to right or top to bottom.
+            </para>
+            <para> The highest ZIndex value is in the left or top and the lowest value is in the right or bottom. </para>        
+            </remarks>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.ViewAttribute.IsSeparator">
+            <summary>
+            Is separator determines if a separator should be added before the action
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.ViewAttribute.AllowViewParts">
+            <summary>
+            Gets or sets if the view can contain viewparts
+            </summary>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.ViewPartAttribute">
+            <summary>
+            Extension attribute for integrating new view parts into Studio applications.
+            </summary>
+            <remarks>
+            <para>A view part needs to implement the <a href="Sdl.Desktop.IntegrationApi.AbstractViewPartController">AbstractViewPartController</a> class.</para>
+            </remarks>    
+            <remarks>
+            <para>
+            The framework also provides support for getting property values from the PluginResources.resx resource file, which is deployed together with the plug-in manifest.
+                        To specify that the value of a certain string property needs to be retrieved from the resource file, annotate the property definition with the <see cref="T:Sdl.Core.PluginFramework.PluginResourceAttribute"/> attribute.
+                        Users should now specify the name of the resource key, instead of the actual value, as the property value. When no resource string with the specified key can be found,
+                        the framework keeps the specified string as the property value. To define non-string properties whose value is stored in the PluginResources.resx resource file, create a string property, which value
+                        should be set to a resource key. When consuming the extension, use <see cref="M:Sdl.Core.PluginFramework.IPlugin.GetPluginResource``1(System.String)"/> tio retriece the resource from
+                        the plug-in resource file.
+            
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.ViewPartAttribute.#ctor">
+            <summary>
+            Default constructor for XML serialization.
+            </summary>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.ViewPartAttribute.#ctor(System.String,System.String,System.String,System.String,System.Windows.Forms.Keys)">
+            <summary>
+            Initialize the viewpart attribute.
+            </summary>
+            <param name="id">The unique id for the viewpart.</param>
+            <param name="name">The name for this view. Should typically be a key of a resource string in PluginResources.resx.</param>
+            <param name="description">The description for this view. Should typically be a key of a resource string in PluginResources.resx.</param>
+            <param name="helpTopic">The help topic identifier of the viewpart.</param>
+            <param name="shortcut">The shortcut key for accessing the viewpart.</param>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.ViewPartAttribute.#ctor(System.String,System.String,System.Windows.Forms.Keys)">
+            <summary>
+            Initialize the viewpart attribute.
+            </summary>
+            <param name="id">The unique id for the viewpart.</param>
+            <param name="helpTopic">The help topic identifier of the viewpart.</param>
+            <param name="shortcut">The shortcut key for accessing the viewpart.</param>
+            <remarks>
+            <para>
+            This constructor should be used only if pluginresources are used to resolve the name and description of the extension.
+            </para>
+            <para>
+            The resource keys for name and description are built from id and postfixed with _Name and _Description.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.ViewPartAttribute.HelpTopic">
+            <summary>
+            Gets or sets the help topic ID for this view. Can be null.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.ViewPartAttribute.Shortcut">
+            <summary>
+            Gets or sets the shortcut for accessing this view.
+            </summary>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.ViewPartLayoutAttribute">
+            <summary>
+            An auxiliary extension attribute for use with the <see cref="T:Sdl.Desktop.IntegrationApi.Extensions.ViewPartAttribute"/> to define a view part. 
+            This extension can be used to specify a default layout for the view part, but also to specify a layout specific
+            to a certain view configuration. Multiple instances of this attribute can be applied.
+            </summary>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.ViewPartLayoutAttribute.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:Sdl.Desktop.IntegrationApi.Extensions.ViewPartLayoutAttribute.#ctor(System.Type)">
+            <summary>
+            Initialize the viewpart layout instance
+            </summary>
+            <param name="locationByType">The location where the viewpart will be added. </param>
+            <remarks>
+            You may use as a locationByType
+            <list> 
+            <listItem>A predefined controller (eq: ProjectsController, FilesController, EditorController).</listItem>
+            <listItem>An integrated view controller class type.</listItem>
+            </list>
+            </remarks>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.ViewPartLayoutAttribute.ConfigurationType">
+            <summary>
+            Gets or sets the id of the configuration within the target view to which this layout applies.
+            If ommitted, this layout is the default layout.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.ViewPartLayoutAttribute.Dock">
+            <summary>
+            Gets or sets the preferred location within the view in which the view part should appear, in case no
+            view parts are specified in ZIndex or in case these view parts
+            are not open in the view.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.ViewPartLayoutAttribute.GroupStyle">
+            <summary>
+            Gets or sets the preferred way this view part should be grouped with other view parts in the same area (see <see cref="P:Sdl.Desktop.IntegrationApi.Extensions.ViewPartLayoutAttribute.Dock"/>),
+            in case no view parts are specified in ZIndex or in case these view parts
+            are not open in the view.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.ViewPartLayoutAttribute.Width">
+            <summary>
+            Gets or sets the preferred width of the view part in case this is not already implied by the way view parts are grouped
+            in the group to which the view parts, specified in ZIndex, belong to.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.ViewPartLayoutAttribute.Height">
+            <summary>
+            Gets or sets the preferred height of the view part in case this is not already implied by the way view parts are grouped
+            in the group to which the view parts, specified in ZIndex, belong to.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.ViewPartLayoutAttribute.Visible">
+            <summary>
+            Gets or sets whether this view part is visible by default. True by default.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.ViewPartLayoutAttribute.Pinned">
+            <summary>
+            Gets or sets whether the view part should be pinned. True by default.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.ViewPartLayoutAttribute.MinWidth">
+            <summary>
+            Gets or sets whether the minimum width of the view part.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.ViewPartLayoutAttribute.MinHeight">
+            <summary>
+            Gets or sets whether the minimum height of the view part.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.ViewPartLayoutAttribute.CreateNewGroup">
+            <summary>
+            Gets or sets whether to create a new docking group. When set to true, the new docking group is created 
+            positioned relatively to the view parts specified by ZIndex.
+            The new group is positioned relatively to the existing panes according to the <see cref="P:Sdl.Desktop.IntegrationApi.Extensions.ViewPartLayoutAttribute.ParentGroupStyle"/> property.
+            </summary>
+        </member>
+        <member name="P:Sdl.Desktop.IntegrationApi.Extensions.ViewPartLayoutAttribute.ParentGroupStyle">
+            <summary>
+            Gets or sets the group style used when creating a new <see cref="P:Sdl.Desktop.IntegrationApi.Extensions.ViewPartLayoutAttribute.CreateNewGroup"/> is set to true.
+            Refer to <see cref="P:Sdl.Desktop.IntegrationApi.Extensions.ViewPartLayoutAttribute.CreateNewGroup"/> for more information.
+            </summary>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.GroupStyle">
+            <summary>
+            Enum specifying possible ways a number of view parts sharing the same area can be grouped.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.GroupStyle.Tab">
+            <summary>
+            Defines a tabbed group
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.GroupStyle.VerticalSplit">
+            <summary>
+            Defines the group to be vertically split
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.GroupStyle.HorizontalSplit">
+            <summary>
+            Defines the group to be horizontaly split
+            </summary>
+        </member>
+        <member name="T:Sdl.Desktop.IntegrationApi.Extensions.DockType">
+            <summary>
+            Enum specifying possible locations where a view part can be located in.
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.DockType.Top">
+            <summary>
+            The top location
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.DockType.Left">
+            <summary>
+            The left location
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.DockType.Bottom">
+            <summary>
+            The bottom location
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.DockType.Right">
+            <summary>
+            The right location
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.DockType.Fill">
+            <summary>
+            The center location which is filling all the content
+            </summary>
+        </member>
+        <member name="F:Sdl.Desktop.IntegrationApi.Extensions.DockType.Floating">
+            <summary>
+            The floating location
+            </summary>
+        </member>
+    </members>
+</doc>

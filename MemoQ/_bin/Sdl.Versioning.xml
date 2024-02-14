@@ -1,0 +1,278 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sdl.Versioning</name>
+    </assembly>
+    <members>
+        <member name="T:Sdl.Versioning.Company">
+            <summary>
+            As part of rebranding the company name and folders change, the details of each companies locations are here.
+            </summary>
+            
+        </member>
+        <member name="P:Sdl.Versioning.Company.Name">
+            <summary>
+            The name of the company which is also used in paths.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Sdl.Versioning.Company.InstallFolder">
+            <summary>
+            The template that is used to populate the installation path for the company.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Sdl.Versioning.Company.RegistryPath">
+            <summary>
+            The template that is used to populate the registry path for the company.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Sdl.Versioning.Company.ExeName">
+            <summary>
+            The company specific name of the main executable of the product.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Sdl.Versioning.Company.BaseProductName">
+            <summary>
+            The company specific name of the main product of the product.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Sdl.Versioning.IStudioVersionService">
+            <summary>
+            Abstraction used to obtain installation information for the current running Trados Studio instance
+            </summary>
+        </member>
+        <member name="M:Sdl.Versioning.IStudioVersionService.GetInstalledStudioVersions">
+            <summary>
+            Returns a list of all installed Trados Studio versions
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Versioning.IStudioVersionService.GetStudioVersion">
+            <summary>
+            Returns information for the current Trados Studio installation
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Versioning.IStudioVersionService.StudioVersionSuported(System.Version,System.Version,System.Version)">
+            <summary>
+            Returns true if the given version is supported or not
+            </summary>
+            <param name="minVersion"></param>
+            <param name="maxVersion"></param>
+            <param name="studioVersion"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Sdl.Versioning.StudioVersion">
+            <summary>
+            This class hold details specific to a Studio version
+            </summary>
+        </member>
+        <member name="P:Sdl.Versioning.StudioVersion.Version">
+            <summary>
+            The product version string e.g. studio16Beta
+            </summary>
+        </member>
+        <member name="P:Sdl.Versioning.StudioVersion.PublicVersion">
+            <summary>
+            The public version e.g."Trados Studio 2022"
+            </summary>
+        </member>
+        <member name="P:Sdl.Versioning.StudioVersion.InstallPath">
+            <summary>
+            The installation location
+            </summary>
+        </member>
+        <member name="P:Sdl.Versioning.StudioVersion.ExecutableVersion">
+            <summary>
+            The version of the Executable as a version type e.g. 16.0.0.1234
+            </summary>
+        </member>
+        <member name="P:Sdl.Versioning.StudioVersion.BaseProductName">
+            <summary>
+            The Name of the product with no qualifiers e.g. Trados Studio this is usually used as a neutral folder name
+            </summary>
+        </member>
+        <member name="P:Sdl.Versioning.StudioVersion.PluginPackagePath">
+            <summary>
+            The version dependent part of the plugin package location e.g 15 or 16 or 16Beta
+            </summary>
+        </member>
+        <member name="P:Sdl.Versioning.StudioVersion.PluginUnpackPath">
+            <summary>
+            The version dependent part of the plugin contents when unpacked location e.g 15 or 16 or 16Beta
+            </summary>
+        </member>
+        <member name="P:Sdl.Versioning.StudioVersion.Edition">
+            <summary>
+            The current Studio edition e.g. blank or beta, nightly etc.
+            </summary>
+        </member>
+        <member name="P:Sdl.Versioning.StudioVersion.StudioDocumentsFolderName">
+            <summary>
+            The Studio Documents folder name
+            </summary>
+        </member>
+        <member name="P:Sdl.Versioning.StudioVersion.ShortVersion">
+            <summary>
+            The Studio short version e.g. 2021
+            </summary>
+        </member>
+        <member name="P:Sdl.Versioning.StudioVersion.Company">
+            <summary>
+            The publishing company of the Studio edition e.g. Sdl or Trados
+            </summary>
+        </member>
+        <member name="T:Sdl.Versioning.StudioVersionService">
+            <summary>
+            Service used to obtain installation information for the current running Trados Studio instance
+            </summary>
+        </member>
+        <member name="M:Sdl.Versioning.StudioVersionService.GetInstalledStudioVersions">
+            <summary>
+            Returns a list of all installed Trados Studio versions
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Versioning.StudioVersionService.StudioVersionSuported(System.Version,System.Version,System.Version)">
+            <summary>
+            Determines if given version is supported or not
+            </summary>
+            <param name="minVersion"></param>
+            <param name="maxVersion"></param>
+            <param name="studioVersion"></param>
+            <returns>True when the Studio version is within the given bounds</returns>
+        </member>
+        <member name="M:Sdl.Versioning.StudioVersionService.GetStudioVersion">
+            <summary>
+            Returns information for the current Trados Studio installation
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Sdl.Versioning.Versions">
+            <summary>
+            This class defines Version specific constants for default items in studio.
+            </summary>
+            <summary>
+            Helper class with product infomation (released versions, copyright, etc.)
+            </summary>
+        </member>
+        <member name="P:Sdl.Versioning.Versions.Copyright">
+            <summary>
+            Returns CopyRight text
+            </summary>
+        </member>
+        <member name="M:Sdl.Versioning.Versions.GetBuildVersion">
+            <summary>
+            Returns the current build version
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Sdl.Versioning.Versions.ProductDescription">
+            <summary>
+            Returns the Product Description
+            </summary>
+        </member>
+        <member name="P:Sdl.Versioning.Versions.BaseProductDescription">
+            <summary>
+            Returns the Product Description without edition
+            </summary>
+        </member>
+        <member name="F:Sdl.Versioning.Versions.KnownStudioVersions">
+            <summary>
+            Returns a list mapping Studio Version Names with official Names
+            </summary>
+        </member>
+        <member name="T:Sdl.Versioning.VersionedPaths">
+            <summary>
+            Helper class with common settings locations.
+            </summary>
+        </member>
+        <member name="P:Sdl.Versioning.VersionedPaths.UserAppDataPath">
+            <summary>
+            Returns the path to store settings in a roaming user folder.
+            e.g.
+             C:\Users\*username*\AppData\Roaming\SDL\SDL Trados Studio\Studio16Beta
+            </summary>
+        </member>
+        <member name="P:Sdl.Versioning.VersionedPaths.LocalUserAppDataPath">
+            <summary>
+            Returns the path to store settings in a non roaming user folder.
+            e.g.
+             C:\Users\*username*\AppData\Local\SDL\SDL Trados Studio\Studio16Beta
+            </summary>
+        </member>
+        <member name="P:Sdl.Versioning.VersionedPaths.UnversionedUserAppDataPath">
+            <summary>
+            Returns the unversioned path to store settings in a roaming user folder. Settings shared between versions can be stored here.
+            e.g.
+              C:\Users\*username*\AppData\Roaming\SDL\SDL Trados Studio
+            </summary>
+        </member>
+        <member name="P:Sdl.Versioning.VersionedPaths.CompanyAppDataPath">
+            <summary>
+            Returns the company path to store settings in a roaming user folder. Settings shared between all company applications.
+            e.g.
+              C:\Users\*username*\AppData\Roaming\SDL
+            </summary>
+        </member>
+        <member name="P:Sdl.Versioning.VersionedPaths.RetailProgramDataPath">
+            <summary>
+            Returns the path to store settings in a per machine folder that is fixed per edition
+            e.g.
+            C:\ProgramData\SDL\SDL Trados Studio\Studio16 (never beta etc)
+            </summary>
+            
+        </member>
+        <member name="P:Sdl.Versioning.VersionedPaths.ProgramDataPath">
+            <summary>
+            Returns the path to store settings in a per machine folder.
+            e.g.
+            C:\ProgramData\SDL\SDL Trados Studio\Studio16Beta
+            </summary>
+            
+        </member>
+        <member name="P:Sdl.Versioning.VersionedPaths.UserAppDataRegistry">
+            <summary>
+            Returns a Microsoft.Win32.RegistryKey in which to store per user settings
+            e.g.
+            HKEY_CURRENT_USER\SOFTWARE\SDL\SDL Trados Studio\Studio16Beta
+            </summary>
+            
+        </member>
+        <member name="T:Sdl.Versioning.VersionResources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Sdl.Versioning.VersionResources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Sdl.Versioning.VersionResources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Sdl.Versioning.VersionResources.Copyright">
+            <summary>
+              Looks up a localized string similar to Copyright © {0} SDL. All rights reserved..
+            </summary>
+        </member>
+        <member name="P:Sdl.Versioning.VersionResources.ProductDescription">
+            <summary>
+              Looks up a localized string similar to Trados Studio {0}.
+            </summary>
+        </member>
+        <member name="P:Sdl.Versioning.VersionResources.ProductDescriptionWithEdition">
+            <summary>
+              Looks up a localized string similar to Trados Studio {0} {1}.
+            </summary>
+        </member>
+    </members>
+</doc>

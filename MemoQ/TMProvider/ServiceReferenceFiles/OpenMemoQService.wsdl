@@ -1,0 +1,314 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://v2.client.services.memoq.ws.ev.kilgray.weblib.hu/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="OpenMemoqService" targetNamespace="http://v2.client.services.memoq.ws.ev.kilgray.weblib.hu/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://v2.client.services.memoq.ws.ev.kilgray.weblib.hu/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://v2.client.services.memoq.ws.ev.kilgray.weblib.hu/">
+  <xs:element name="activate" type="tns:activate"/>
+  <xs:element name="activateResponse" type="tns:activateResponse"/>
+  <xs:element name="getServiceEndpoint" type="tns:getServiceEndpoint"/>
+  <xs:element name="getServiceEndpointResponse" type="tns:getServiceEndpointResponse"/>
+  <xs:element name="getStaticLink" type="tns:getStaticLink"/>
+  <xs:element name="getStaticLinkResponse" type="tns:getStaticLinkResponse"/>
+  <xs:element name="getVersion" type="tns:getVersion"/>
+  <xs:element name="getVersionResponse" type="tns:getVersionResponse"/>
+  <xs:element name="hello" type="tns:hello"/>
+  <xs:element name="helloResponse" type="tns:helloResponse"/>
+  <xs:element name="register" type="tns:register"/>
+  <xs:element name="registerResponse" type="tns:registerResponse"/>
+  <xs:complexType name="getVersion">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getVersionResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getStaticLink">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:staticLink"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getStaticLinkResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getServiceEndpoint">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="endPointName" type="tns:serviceEndpoint"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getServiceEndpointResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="activate">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+      <xs:element minOccurs="0" name="arg1" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="activateResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="hello">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="helloResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="register">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+      <xs:element minOccurs="0" name="arg1" type="xs:string"/>
+      <xs:element minOccurs="0" name="arg2" type="xs:string"/>
+      <xs:element minOccurs="0" name="arg3" type="xs:string"/>
+      <xs:element minOccurs="0" name="arg4" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="registerResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:simpleType name="staticLink">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="index"/>
+      <xs:enumeration value="protectedBase"/>
+      <xs:enumeration value="termsOfUse"/>
+      <xs:enumeration value="whatIs"/>
+      <xs:enumeration value="storageService"/>
+      <xs:enumeration value="casTicketStore"/>
+      <xs:enumeration value="ltAuthServiceUrl"/>
+      <xs:enumeration value="csAuthServiceUrl"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="serviceEndpoint">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="USER"/>
+      <xs:enumeration value="BACKUP"/>
+      <xs:enumeration value="INDESIGN"/>
+      <xs:enumeration value="PROJECT"/>
+      <xs:enumeration value="CAS_TICKETSTORE"/>
+      <xs:enumeration value="CAS_SERVICEVALIDATE"/>
+      <xs:enumeration value="CAS_LOGOUT"/>
+      <xs:enumeration value="LT_AUTH"/>
+      <xs:enumeration value="CONTENT_AUTH"/>
+      <xs:enumeration value="CONTENT"/>
+      <xs:enumeration value="TMTB"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="registrationErrorCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="unknown"/>
+      <xs:enumeration value="usernameExists"/>
+      <xs:enumeration value="emailExists"/>
+      <xs:enumeration value="usernameInvalidFormat"/>
+      <xs:enumeration value="emailInvalidFormat"/>
+      <xs:enumeration value="passwordInvalidFormat"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="DeprecatedOperationException" type="tns:DeprecatedOperationException"/>
+  <xs:complexType name="DeprecatedOperationException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="RegistrationException" type="tns:RegistrationException"/>
+  <xs:complexType name="RegistrationException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="localizedMessage" type="xs:string"/>
+      <xs:element minOccurs="0" name="errCode" type="tns:registrationErrorCode"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="RegistrationException">
+    <wsdl:part element="tns:RegistrationException" name="RegistrationException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getVersion">
+    <wsdl:part element="tns:getVersion" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getServiceEndpointResponse">
+    <wsdl:part element="tns:getServiceEndpointResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeprecatedOperationException">
+    <wsdl:part element="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getVersionResponse">
+    <wsdl:part element="tns:getVersionResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getStaticLinkResponse">
+    <wsdl:part element="tns:getStaticLinkResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="activateResponse">
+    <wsdl:part element="tns:activateResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getStaticLink">
+    <wsdl:part element="tns:getStaticLink" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getServiceEndpoint">
+    <wsdl:part element="tns:getServiceEndpoint" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="helloResponse">
+    <wsdl:part element="tns:helloResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="registerResponse">
+    <wsdl:part element="tns:registerResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="activate">
+    <wsdl:part element="tns:activate" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="hello">
+    <wsdl:part element="tns:hello" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="register">
+    <wsdl:part element="tns:register" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="OpenMemoqService">
+    <wsdl:operation name="getVersion">
+      <wsdl:input message="tns:getVersion" name="getVersion">
+    </wsdl:input>
+      <wsdl:output message="tns:getVersionResponse" name="getVersionResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getStaticLink">
+      <wsdl:input message="tns:getStaticLink" name="getStaticLink">
+    </wsdl:input>
+      <wsdl:output message="tns:getStaticLinkResponse" name="getStaticLinkResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getServiceEndpoint">
+      <wsdl:input message="tns:getServiceEndpoint" name="getServiceEndpoint">
+    </wsdl:input>
+      <wsdl:output message="tns:getServiceEndpointResponse" name="getServiceEndpointResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="activate">
+      <wsdl:input message="tns:activate" name="activate">
+    </wsdl:input>
+      <wsdl:output message="tns:activateResponse" name="activateResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="hello">
+      <wsdl:input message="tns:hello" name="hello">
+    </wsdl:input>
+      <wsdl:output message="tns:helloResponse" name="helloResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="register">
+      <wsdl:input message="tns:register" name="register">
+    </wsdl:input>
+      <wsdl:output message="tns:registerResponse" name="registerResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:RegistrationException" name="RegistrationException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="OpenMemoqServiceSoapBinding" type="tns:OpenMemoqService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getVersion">
+      <soap:operation soapAction="getVersion" style="document"/>
+      <wsdl:input name="getVersion">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getVersionResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getServiceEndpoint">
+      <soap:operation soapAction="getServiceEndpoint" style="document"/>
+      <wsdl:input name="getServiceEndpoint">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getServiceEndpointResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getStaticLink">
+      <soap:operation soapAction="getStaticLink" style="document"/>
+      <wsdl:input name="getStaticLink">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getStaticLinkResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="activate">
+      <soap:operation soapAction="activate" style="document"/>
+      <wsdl:input name="activate">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="activateResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="hello">
+      <soap:operation soapAction="hello" style="document"/>
+      <wsdl:input name="hello">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="helloResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="register">
+      <soap:operation soapAction="register" style="document"/>
+      <wsdl:input name="register">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="registerResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="RegistrationException">
+        <soap:fault name="RegistrationException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="OpenMemoqService">
+    <wsdl:port binding="tns:OpenMemoqServiceSoapBinding" name="OpenMemoqServicePort">
+      <soap:address location="http://bcf956e5d4ea:80/LanguageTerminal/ws/memoQ/v2/OpenMemoqService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

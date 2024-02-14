@@ -1,0 +1,798 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://v3.user.ws.frontend.lt.kilgray.precognox.com/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="UserServiceV3" targetNamespace="http://v3.user.ws.frontend.lt.kilgray.precognox.com/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://v3.user.ws.frontend.lt.kilgray.precognox.com/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://v3.user.ws.frontend.lt.kilgray.precognox.com/">
+  <xs:element name="addClient" type="tns:addClient"/>
+  <xs:element name="addClientResponse" type="tns:addClientResponse"/>
+  <xs:element name="addLanguagePair" type="tns:addLanguagePair"/>
+  <xs:element name="addLanguagePairResponse" type="tns:addLanguagePairResponse"/>
+  <xs:element name="addSubject" type="tns:addSubject"/>
+  <xs:element name="addSubjectResponse" type="tns:addSubjectResponse"/>
+  <xs:element name="getAuthenticatedLink" type="tns:getAuthenticatedLink"/>
+  <xs:element name="getAuthenticatedLinkResponse" type="tns:getAuthenticatedLinkResponse"/>
+  <xs:element name="getClients" type="tns:getClients"/>
+  <xs:element name="getClientsResponse" type="tns:getClientsResponse"/>
+  <xs:element name="getCurrencyCodes" type="tns:getCurrencyCodes"/>
+  <xs:element name="getCurrencyCodesResponse" type="tns:getCurrencyCodesResponse"/>
+  <xs:element name="getLanguagePairs" type="tns:getLanguagePairs"/>
+  <xs:element name="getLanguagePairsResponse" type="tns:getLanguagePairsResponse"/>
+  <xs:element name="getLanguages" type="tns:getLanguages"/>
+  <xs:element name="getLanguagesResponse" type="tns:getLanguagesResponse"/>
+  <xs:element name="getPricingStrategies" type="tns:getPricingStrategies"/>
+  <xs:element name="getPricingStrategiesResponse" type="tns:getPricingStrategiesResponse"/>
+  <xs:element name="getPricingStrategy" type="tns:getPricingStrategy"/>
+  <xs:element name="getPricingStrategyResponse" type="tns:getPricingStrategyResponse"/>
+  <xs:element name="getQuota" type="tns:getQuota"/>
+  <xs:element name="getQuotaResponse" type="tns:getQuotaResponse"/>
+  <xs:element name="getRole" type="tns:getRole"/>
+  <xs:element name="getRoleResponse" type="tns:getRoleResponse"/>
+  <xs:element name="getSubjects" type="tns:getSubjects"/>
+  <xs:element name="getSubjectsResponse" type="tns:getSubjectsResponse"/>
+  <xs:element name="getUsername" type="tns:getUsername"/>
+  <xs:element name="getUsernameResponse" type="tns:getUsernameResponse"/>
+  <xs:element name="hello" type="tns:hello"/>
+  <xs:element name="helloResponse" type="tns:helloResponse"/>
+  <xs:element name="setTGT" type="tns:setTGT"/>
+  <xs:element name="setTGTResponse" type="tns:setTGTResponse"/>
+  <xs:complexType name="getSubjects">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getSubjectsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:subject"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="subject">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="uuid" type="xs:string"/>
+      <xs:element name="value" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="addClient">
+    <xs:sequence>
+      <xs:element name="client" type="tns:client"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="client">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="uuid" type="xs:string"/>
+      <xs:element name="name" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="addClientResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getPricingStrategy">
+    <xs:sequence>
+      <xs:element name="uuid" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getPricingStrategyResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:pricingStrategy"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="pricingStrategy">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="activity" type="tns:pricingStrategyActivity"/>
+      <xs:element minOccurs="0" name="analysisOptions" type="tns:analysisOptions"/>
+      <xs:element minOccurs="0" name="client" type="tns:client"/>
+      <xs:element minOccurs="0" name="fuzzyband" type="tns:fuzzyBand"/>
+      <xs:element minOccurs="0" name="languagePair" type="tns:languagePair"/>
+      <xs:element minOccurs="0" name="price" type="tns:price"/>
+      <xs:element minOccurs="0" name="priceUnit" type="tns:pricingUnit"/>
+      <xs:element minOccurs="0" name="shortDescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="uuid" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="analysisOptions">
+    <xs:sequence>
+      <xs:element name="homogenity" nillable="true" type="xs:boolean"/>
+      <xs:element name="includeLockedRows" nillable="true" type="xs:boolean"/>
+      <xs:element name="includeSpacesInCharacterCount" nillable="true" type="xs:boolean"/>
+      <xs:element name="tagWeightWords" nillable="true" type="xs:decimal"/>
+      <xs:element name="tagWeightCharacters" nillable="true" type="xs:decimal"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="fuzzyBand">
+    <xs:sequence>
+      <xs:element name="b50_74" type="xs:int"/>
+      <xs:element name="b75_84" type="xs:int"/>
+      <xs:element name="b85_94" type="xs:int"/>
+      <xs:element name="b95_99" type="xs:int"/>
+      <xs:element name="contextMatch" type="xs:int"/>
+      <xs:element name="exactMatch" type="xs:int"/>
+      <xs:element name="noMatch" type="xs:int"/>
+      <xs:element name="repetition" type="xs:int"/>
+      <xs:element name="XTranslated" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="languagePair">
+    <xs:sequence>
+      <xs:element name="experience" type="xs:byte"/>
+      <xs:element name="nativeTarget" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="sourceLanguage" type="xs:string"/>
+      <xs:element minOccurs="0" name="targetLanguage" type="xs:string"/>
+      <xs:element minOccurs="0" name="uuid" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="price">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="amount" type="xs:decimal"/>
+      <xs:element minOccurs="0" name="currency" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="addSubject">
+    <xs:sequence>
+      <xs:element name="subject" type="tns:subject"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="addSubjectResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getCurrencyCodes">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getCurrencyCodesResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getUsername">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getUsernameResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getQuota">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getQuotaResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getLanguages">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getLanguagesResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getRole">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getRoleResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:role"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getClients">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getClientsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:client"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getAuthenticatedLink">
+    <xs:sequence>
+      <xs:element name="link" type="tns:authenticatedLink"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="param" type="tns:linkParam"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="linkParam">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="value" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getAuthenticatedLinkResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="addLanguagePair">
+    <xs:sequence>
+      <xs:element name="languagePair" type="tns:languagePair"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="addLanguagePairResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="setTGT">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="tgt" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="setTGTResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getLanguagePairs">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getLanguagePairsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:languagePair"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getPricingStrategies">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getPricingStrategiesResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:pricingStrategy"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="hello">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="helloResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="pricingStrategyActivity">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="TRANSLATION"/>
+      <xs:enumeration value="REVIEW"/>
+      <xs:enumeration value="REVIEW_1"/>
+      <xs:enumeration value="REVIEW_2"/>
+      <xs:enumeration value="TRANSLATION_AND_REVIEW"/>
+      <xs:enumeration value="ANY"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="pricingUnit">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="WORD"/>
+      <xs:enumeration value="CHARACTER"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="role">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PRIMARY_ADMIN"/>
+      <xs:enumeration value="ADMIN"/>
+      <xs:enumeration value="PROJECT_MANAGER"/>
+      <xs:enumeration value="VIEWER"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="authenticatedLink">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="index"/>
+      <xs:enumeration value="profile"/>
+      <xs:enumeration value="storage"/>
+      <xs:enumeration value="project"/>
+      <xs:enumeration value="vendor"/>
+      <xs:enumeration value="login"/>
+      <xs:enumeration value="pricingStrategy"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="DeprecatedOperationException" type="tns:DeprecatedOperationException"/>
+  <xs:complexType name="DeprecatedOperationException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConflictingDataException" type="tns:ConflictingDataException"/>
+  <xs:complexType name="ConflictingDataException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="UUIDConflictException" type="tns:UUIDConflictException"/>
+  <xs:complexType name="UUIDConflictException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="addSubjectResponse">
+    <wsdl:part element="tns:addSubjectResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getLanguagesResponse">
+    <wsdl:part element="tns:getLanguagesResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getUsernameResponse">
+    <wsdl:part element="tns:getUsernameResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAuthenticatedLinkResponse">
+    <wsdl:part element="tns:getAuthenticatedLinkResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addSubject">
+    <wsdl:part element="tns:addSubject" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getCurrencyCodes">
+    <wsdl:part element="tns:getCurrencyCodes" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getRole">
+    <wsdl:part element="tns:getRole" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getQuotaResponse">
+    <wsdl:part element="tns:getQuotaResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addClientResponse">
+    <wsdl:part element="tns:addClientResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="helloResponse">
+    <wsdl:part element="tns:helloResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="UUIDConflictException">
+    <wsdl:part element="tns:UUIDConflictException" name="UUIDConflictException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getCurrencyCodesResponse">
+    <wsdl:part element="tns:getCurrencyCodesResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAuthenticatedLink">
+    <wsdl:part element="tns:getAuthenticatedLink" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getSubjectsResponse">
+    <wsdl:part element="tns:getSubjectsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ConflictingDataException">
+    <wsdl:part element="tns:ConflictingDataException" name="ConflictingDataException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getLanguagePairsResponse">
+    <wsdl:part element="tns:getLanguagePairsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPricingStrategiesResponse">
+    <wsdl:part element="tns:getPricingStrategiesResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="hello">
+    <wsdl:part element="tns:hello" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getSubjects">
+    <wsdl:part element="tns:getSubjects" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeprecatedOperationException">
+    <wsdl:part element="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addClient">
+    <wsdl:part element="tns:addClient" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPricingStrategy">
+    <wsdl:part element="tns:getPricingStrategy" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setTGTResponse">
+    <wsdl:part element="tns:setTGTResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getUsername">
+    <wsdl:part element="tns:getUsername" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getClientsResponse">
+    <wsdl:part element="tns:getClientsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addLanguagePairResponse">
+    <wsdl:part element="tns:addLanguagePairResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getQuota">
+    <wsdl:part element="tns:getQuota" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getRoleResponse">
+    <wsdl:part element="tns:getRoleResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPricingStrategyResponse">
+    <wsdl:part element="tns:getPricingStrategyResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getLanguages">
+    <wsdl:part element="tns:getLanguages" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getClients">
+    <wsdl:part element="tns:getClients" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addLanguagePair">
+    <wsdl:part element="tns:addLanguagePair" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setTGT">
+    <wsdl:part element="tns:setTGT" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getLanguagePairs">
+    <wsdl:part element="tns:getLanguagePairs" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPricingStrategies">
+    <wsdl:part element="tns:getPricingStrategies" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="UserServiceV3">
+    <wsdl:operation name="getSubjects">
+      <wsdl:input message="tns:getSubjects" name="getSubjects">
+    </wsdl:input>
+      <wsdl:output message="tns:getSubjectsResponse" name="getSubjectsResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addClient">
+      <wsdl:input message="tns:addClient" name="addClient">
+    </wsdl:input>
+      <wsdl:output message="tns:addClientResponse" name="addClientResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:UUIDConflictException" name="UUIDConflictException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ConflictingDataException" name="ConflictingDataException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getPricingStrategy">
+      <wsdl:input message="tns:getPricingStrategy" name="getPricingStrategy">
+    </wsdl:input>
+      <wsdl:output message="tns:getPricingStrategyResponse" name="getPricingStrategyResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addSubject">
+      <wsdl:input message="tns:addSubject" name="addSubject">
+    </wsdl:input>
+      <wsdl:output message="tns:addSubjectResponse" name="addSubjectResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:UUIDConflictException" name="UUIDConflictException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ConflictingDataException" name="ConflictingDataException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getCurrencyCodes">
+      <wsdl:input message="tns:getCurrencyCodes" name="getCurrencyCodes">
+    </wsdl:input>
+      <wsdl:output message="tns:getCurrencyCodesResponse" name="getCurrencyCodesResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getUsername">
+      <wsdl:input message="tns:getUsername" name="getUsername">
+    </wsdl:input>
+      <wsdl:output message="tns:getUsernameResponse" name="getUsernameResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getQuota">
+      <wsdl:input message="tns:getQuota" name="getQuota">
+    </wsdl:input>
+      <wsdl:output message="tns:getQuotaResponse" name="getQuotaResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getLanguages">
+      <wsdl:input message="tns:getLanguages" name="getLanguages">
+    </wsdl:input>
+      <wsdl:output message="tns:getLanguagesResponse" name="getLanguagesResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getRole">
+      <wsdl:input message="tns:getRole" name="getRole">
+    </wsdl:input>
+      <wsdl:output message="tns:getRoleResponse" name="getRoleResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getClients">
+      <wsdl:input message="tns:getClients" name="getClients">
+    </wsdl:input>
+      <wsdl:output message="tns:getClientsResponse" name="getClientsResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAuthenticatedLink">
+      <wsdl:input message="tns:getAuthenticatedLink" name="getAuthenticatedLink">
+    </wsdl:input>
+      <wsdl:output message="tns:getAuthenticatedLinkResponse" name="getAuthenticatedLinkResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addLanguagePair">
+      <wsdl:input message="tns:addLanguagePair" name="addLanguagePair">
+    </wsdl:input>
+      <wsdl:output message="tns:addLanguagePairResponse" name="addLanguagePairResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:UUIDConflictException" name="UUIDConflictException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ConflictingDataException" name="ConflictingDataException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setTGT">
+      <wsdl:input message="tns:setTGT" name="setTGT">
+    </wsdl:input>
+      <wsdl:output message="tns:setTGTResponse" name="setTGTResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getLanguagePairs">
+      <wsdl:input message="tns:getLanguagePairs" name="getLanguagePairs">
+    </wsdl:input>
+      <wsdl:output message="tns:getLanguagePairsResponse" name="getLanguagePairsResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getPricingStrategies">
+      <wsdl:input message="tns:getPricingStrategies" name="getPricingStrategies">
+    </wsdl:input>
+      <wsdl:output message="tns:getPricingStrategiesResponse" name="getPricingStrategiesResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="hello">
+      <wsdl:input message="tns:hello" name="hello">
+    </wsdl:input>
+      <wsdl:output message="tns:helloResponse" name="helloResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DeprecatedOperationException" name="DeprecatedOperationException">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="UserServiceV3SoapBinding" type="tns:UserServiceV3">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getSubjects">
+      <soap12:operation soapAction="getSubjects" style="document"/>
+      <wsdl:input name="getSubjects">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getSubjectsResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap12:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addClient">
+      <soap12:operation soapAction="addClient" style="document"/>
+      <wsdl:input name="addClient">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="addClientResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="UUIDConflictException">
+        <soap12:fault name="UUIDConflictException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap12:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ConflictingDataException">
+        <soap12:fault name="ConflictingDataException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getPricingStrategy">
+      <soap12:operation soapAction="getPricingStrategy" style="document"/>
+      <wsdl:input name="getPricingStrategy">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getPricingStrategyResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap12:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addSubject">
+      <soap12:operation soapAction="addSubject" style="document"/>
+      <wsdl:input name="addSubject">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="addSubjectResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="UUIDConflictException">
+        <soap12:fault name="UUIDConflictException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap12:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ConflictingDataException">
+        <soap12:fault name="ConflictingDataException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getCurrencyCodes">
+      <soap12:operation soapAction="getCurrencyCodes" style="document"/>
+      <wsdl:input name="getCurrencyCodes">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getCurrencyCodesResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap12:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getUsername">
+      <soap12:operation soapAction="getUsername" style="document"/>
+      <wsdl:input name="getUsername">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getUsernameResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap12:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getQuota">
+      <soap12:operation soapAction="getQuota" style="document"/>
+      <wsdl:input name="getQuota">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getQuotaResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap12:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getLanguages">
+      <soap12:operation soapAction="getLanguages" style="document"/>
+      <wsdl:input name="getLanguages">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getLanguagesResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap12:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getRole">
+      <soap12:operation soapAction="getRole" style="document"/>
+      <wsdl:input name="getRole">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getRoleResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap12:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getClients">
+      <soap12:operation soapAction="getClients" style="document"/>
+      <wsdl:input name="getClients">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getClientsResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap12:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAuthenticatedLink">
+      <soap12:operation soapAction="getAuthenticatedLink" style="document"/>
+      <wsdl:input name="getAuthenticatedLink">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAuthenticatedLinkResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap12:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addLanguagePair">
+      <soap12:operation soapAction="addLanguagePair" style="document"/>
+      <wsdl:input name="addLanguagePair">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="addLanguagePairResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="UUIDConflictException">
+        <soap12:fault name="UUIDConflictException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap12:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ConflictingDataException">
+        <soap12:fault name="ConflictingDataException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setTGT">
+      <soap12:operation soapAction="setTgt" style="document"/>
+      <wsdl:input name="setTGT">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="setTGTResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap12:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getLanguagePairs">
+      <soap12:operation soapAction="getLanguagePairs" style="document"/>
+      <wsdl:input name="getLanguagePairs">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getLanguagePairsResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap12:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getPricingStrategies">
+      <soap12:operation soapAction="getPricingStrategies" style="document"/>
+      <wsdl:input name="getPricingStrategies">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getPricingStrategiesResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap12:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="hello">
+      <soap12:operation soapAction="hello" style="document"/>
+      <wsdl:input name="hello">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="helloResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DeprecatedOperationException">
+        <soap12:fault name="DeprecatedOperationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="UserServiceV3">
+    <wsdl:port binding="tns:UserServiceV3SoapBinding" name="UserServiceV3Port">
+      <soap12:address location="http://bcf956e5d4ea:80/LanguageTerminal/ws/user/v3"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

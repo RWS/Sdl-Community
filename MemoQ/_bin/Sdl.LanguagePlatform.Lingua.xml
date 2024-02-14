@@ -1,0 +1,2144 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sdl.LanguagePlatform.Lingua</name>
+    </assembly>
+    <members>
+        <member name="T:Sdl.LanguagePlatform.Lingua.AlignedRange">
+            <summary>
+            Represents an aligned pair of segment ranges between two segments.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.AlignedRange.#ctor(Sdl.LanguagePlatform.Core.SegmentRange,Sdl.LanguagePlatform.Core.SegmentRange)">
+            <summary>
+            Instantiates a new object and initializes it with the specified values.
+            </summary>
+            <param name="source">The aligned range in the source segment</param>
+            <param name="target">The aligned range in the target segment</param>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.AlignedRange.Source">
+            <summary>
+            The range in the source segment (may be null). Note that <see cref="T:Sdl.LanguagePlatform.Core.SegmentRange" />
+            has "into" semantics (which means that the end position is inclusive).
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.AlignedRange.Target">
+            <summary>
+            The range in the target segment (may be null). Note that <see cref="T:Sdl.LanguagePlatform.Core.SegmentRange" />
+            has "into" semantics (which means that the end position is inclusive).
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.AlignedSubstring">
+            <summary>
+            Represents a pair of aligned substrings in some underlying sequence.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.AlignedSubstring.#ctor(Sdl.LanguagePlatform.Lingua.Substring,Sdl.LanguagePlatform.Lingua.Substring)">
+            <inheritdoc />
+            <summary>
+            Instantiates a new object and initializes it with the specified values.
+            </summary>
+            <param name="src">The substring in the source segment</param>
+            <param name="trg">The substring in the target segment</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.AlignedSubstring.#ctor(Sdl.LanguagePlatform.Lingua.Substring,Sdl.LanguagePlatform.Lingua.Substring,System.Int32)">
+            <inheritdoc />
+            <summary>
+            Instantiates a new object and initializes it with the specified values.
+            </summary>
+            <param name="src">The substring in the source segment</param>
+            <param name="trg">The substring in the target segment</param>
+            <param name="score">The score to assign to the aligned pair</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.AlignedSubstring.#ctor(Sdl.LanguagePlatform.Lingua.Substring,Sdl.LanguagePlatform.Lingua.Substring,System.Int32,System.Int32)">
+            <summary>
+            Instantiates a new object and initializes it with the specified values.
+            </summary>
+            <param name="src">The substring in the source segment</param>
+            <param name="trg">The substring in the target segment</param>
+            <param name="score">The score to assign to the aligned pair</param>
+            <param name="length">A length to assign to the aligned pair (which may differ from the substring lengths)</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.AlignedSubstring.#ctor(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <inheritdoc />
+            <summary>
+            Instantiates a new object and initializes it with the specified values.
+            </summary>
+            <param name="sourcePos">The start position of the source substring</param>
+            <param name="sourceLen">The length of the source substring</param>
+            <param name="targetPos">The start position of the target substring</param>
+            <param name="targetLen">The length of the target substring</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.AlignedSubstring.#ctor(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <inheritdoc />
+            <summary>
+            Instantiates a new object and initializes it with the specified values.
+            </summary>
+            <param name="sourcePos">The start position of the source substring</param>
+            <param name="sourceLen">The length of the source substring</param>
+            <param name="targetPos">The start position of the target substring</param>
+            <param name="targetLen">The length of the target substring</param>
+            <param name="score">A score to assign to the alignment</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.AlignedSubstring.#ctor(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <inheritdoc />
+            <summary>
+            Instantiates a new object and initializes it with the specified values.
+            </summary>
+            <param name="sourcePos">The start position of the source substring</param>
+            <param name="sourceLen">The length of the source substring</param>
+            <param name="targetPos">The start position of the target substring</param>
+            <param name="targetLen">The length of the target substring</param>
+            <param name="score">A score to assign to the alignment</param>
+            <param name="length">A length to assign to the alignment, which may differ from the lengths
+            of the substrings.</param>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.AlignedSubstring.Source">
+            <summary>
+            Gets or sets the source substring.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.AlignedSubstring.Target">
+            <summary>
+            Gets or sets the target substring.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.AlignedSubstring.Score">
+            <summary>
+            The score of the alignment (defaults to 0).
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.AlignedSubstring.Length">
+            <summary>
+            The length of the aligned sequence (defaults to 0), which may differ from the substring lengths.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.AlignedSubstring.ToString">
+            <summary>
+            <see cref="M:System.Object.ToString"/>
+            </summary>
+            <returns>A string representation of the object, for display purposes.</returns>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Alignment.AlignmentOperation">
+            <summary>
+            Represents the basic types of supported alignments. Note that general n:m alignments 
+            are currently not supported.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Alignment.AlignmentOperation.None">
+            <summary>
+            Unknown (for initialization)
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Alignment.AlignmentOperation.Substitute">
+            <summary>
+            Represents a 1:1 alignment
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Alignment.AlignmentOperation.Insert">
+            <summary>
+            Represents a 0:1 alignment
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Alignment.AlignmentOperation.Delete">
+            <summary>
+            Represents a 1:0 alignment
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Alignment.AlignmentOperation.Contract">
+            <summary>
+            Represents a 2:1 alignment
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Alignment.AlignmentOperation.Expand">
+            <summary>
+            Represents a 1:2 alignment
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Alignment.AlignmentOperation.Merge">
+            <summary>
+            Represents a 2:2 alignment
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Alignment.AlignmentOperation.Invalid">
+            <summary>
+            Represents an invalid alignment (used for fixpoints/fixed ranges)
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Alignment.AlignmentItem">
+            <summary>
+            Represents an alignment between ranges in a source and target sequence.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Alignment.AlignmentItem.Op">
+            <summary>
+            The type of alignment between the ranges.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Alignment.AlignmentItem.SourceFrom">
+            <summary>
+            The start index of the alignment in the source sequence. Depending on the 
+            alignment type, this value may be invalid or undefined.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Alignment.AlignmentItem.SourceUpto">
+            <summary>
+            The end index of the alignment in the source sequence (exclusive). Depending on the 
+            alignment type, this value may be invalid or undefined.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Alignment.AlignmentItem.TargetFrom">
+            <summary>
+            The start index of the alignment in the target sequence. Depending on the 
+            alignment type, this value may be invalid or undefined.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Alignment.AlignmentItem.TargetUpto">
+            <summary>
+            The end index of the alignment in the target sequence (exclusive). Depending on the 
+            alignment type, this value may be invalid or undefined.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Alignment.CostBasedAlignmentComputer`1">
+            <summary>
+            Implements a simple, generic cost-based alignment computer with externally specified alignment costs
+            for the basic alignment operations.
+            </summary>
+            <typeparam name="T">The type of elements to be aligned.</typeparam>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.CostBasedAlignmentComputer`1.#ctor(Sdl.LanguagePlatform.Lingua.Alignment.IAlignmentCostComputer{`0})">
+            <summary>
+            Constructs a new instance with the specified cost computer.
+            </summary>
+            <param name="alignmentCostComputer">The cost computer</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.CostBasedAlignmentComputer`1.Align(System.Collections.Generic.IList{`0},System.Collections.Generic.IList{`0})">
+            <summary>
+            Computes the alignment between the two sequences, using the cost computer
+            used in the constructor.
+            </summary>
+            <param name="srcItems">The non-empty sequence of source items.</param>
+            <param name="trgItems">The non-empty sequence of target items.</param>
+            <returns>An alignment between the input sequences.</returns>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Alignment.IAlignmentCostComputer`1">
+            <summary>
+            Defines a set of methods for computing the costs of the six basic alignment operations.
+            </summary>
+            The type of the sequence elements to be aligned.
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.IAlignmentCostComputer`1.GetSubstitutionCosts(`0,`0)">
+            <summary>
+            Returns the costs of the 1:1 alignment between the source and target item
+            </summary>
+            <param name="s">The source item</param>
+            <param name="t">The target item</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.IAlignmentCostComputer`1.GetDeletionCosts(`0)">
+            <summary>
+            Returns the costs of the 1:0 alignment of the source item (deletion)
+            </summary>
+            <param name="s">The source item</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.IAlignmentCostComputer`1.GetInsertionCosts(`0)">
+            <summary>
+            Returns the costs of the 0:1 alignment of the target item (insertion)
+            </summary>
+            <param name="t">The target item</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.IAlignmentCostComputer`1.GetContractionCosts(`0,`0,`0)">
+            <summary>
+            Returns the costs of the 2:1 alignment between two source items and the target item
+            </summary>
+            <param name="s1">The first source item</param>
+            <param name="s2">The second source item</param>
+            <param name="t">The target item</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.IAlignmentCostComputer`1.GetExpansionCosts(`0,`0,`0)">
+            <summary>
+            Returns the costs of the 1:2 alignment between the the source item and two target items
+            </summary>
+            <param name="s">The source item</param>
+            <param name="t1">The first target item</param>
+            <param name="t2">The second target item</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.IAlignmentCostComputer`1.GetMeldingCosts(`0,`0,`0,`0)">
+            <summary>
+            Returns the costs of the 2:2 alignment between the two source and the two target items
+            </summary>
+            <param name="s1">The first source item</param>
+            <param name="s2">The second source item</param>
+            <param name="t1">The first target item</param>
+            <param name="t2">The second target item</param>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Alignment.LengthAlignmentCostComputer">
+            <inheritdoc />
+            <summary>
+            Provides an <see cref="T:Sdl.LanguagePlatform.Lingua.Alignment.IAlignmentCostComputer`1" /> which can be used to sequences
+            of integer numbers (which may be indices into underlying sequences).
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.LengthAlignmentCostComputer.#ctor(System.Double)">
+            <summary>
+            Initializes a new instance with the provided expansion factor.
+            </summary>
+            <param name="expansionFactor">An empirically estimated expansion factor
+            which estimates the average target sequence length.</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.LengthAlignmentCostComputer.GetSubstitutionCosts(System.Int32,System.Int32)">
+            <inheritdoc />
+            <summary>
+            <see cref="M:Sdl.LanguagePlatform.Lingua.Alignment.IAlignmentCostComputer`1.GetSubstitutionCosts(`0,`0)" />
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.LengthAlignmentCostComputer.GetDeletionCosts(System.Int32)">
+            <inheritdoc />
+            <summary>
+            <see cref="M:Sdl.LanguagePlatform.Lingua.Alignment.IAlignmentCostComputer`1.GetDeletionCosts(`0)" />
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.LengthAlignmentCostComputer.GetInsertionCosts(System.Int32)">
+            <inheritdoc />
+            <summary>
+            <see cref="M:Sdl.LanguagePlatform.Lingua.Alignment.IAlignmentCostComputer`1.GetInsertionCosts(`0)" />
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.LengthAlignmentCostComputer.GetContractionCosts(System.Int32,System.Int32,System.Int32)">
+            <inheritdoc />
+            <summary>
+            <see cref="M:Sdl.LanguagePlatform.Lingua.Alignment.IAlignmentCostComputer`1.GetContractionCosts(`0,`0,`0)" />
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.LengthAlignmentCostComputer.GetExpansionCosts(System.Int32,System.Int32,System.Int32)">
+            <inheritdoc />
+            <summary>
+            <see cref="M:Sdl.LanguagePlatform.Lingua.Alignment.IAlignmentCostComputer`1.GetExpansionCosts(`0,`0,`0)" />
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.LengthAlignmentCostComputer.GetMeldingCosts(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <inheritdoc />
+            <summary>
+            <see cref="M:Sdl.LanguagePlatform.Lingua.Alignment.IAlignmentCostComputer`1.GetMeldingCosts(`0,`0,`0,`0)" />
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.LengthAlignmentCostComputer.pnorm(System.Double)">
+            <summary>
+            Returns an approximation of the area under the standardized normal distribution 
+            between -inf and z standard deviations. A Standardized Normal Distribution is
+            a normal distribution with mean 0 and variance 1.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Alignment.LongestCommonSubsequenceComputer`1">
+            <summary>
+            Provides methods to compute the longest common subsequence between two 
+            item sequences.
+            </summary>
+            <typeparam name="T">The type of the elements of the sequences.</typeparam>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.LongestCommonSubsequenceComputer`1.ComputeLongestCommonSubsequence(System.Collections.Generic.IList{`0},System.Collections.Generic.IList{`0})">
+            <summary>
+            Computes the longest common subsequence of two input sequences of type T. To compare
+            the items, .Equal() is called on the objects. Note that the longest common subsequence 
+            does not have to be contiguous (it's not the longest common substring).
+            </summary>
+            <param name="sequenceA">The first (source) sequence</param>
+            <param name="sequenceB">The second (target) sequence</param>
+            <returns>A list of index pairs {(a, b)} where a is  a position in <paramref name="sequenceA"/>
+            and b is a position in <paramref name="sequenceB"/>. It's guaranteed that A[a].Equals(B[b]). 
+            The list represents the longest common subsequence.
+            </returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.LongestCommonSubsequenceComputer`1.ComputeLongestCommonSubstring(System.Collections.Generic.IList{`0},System.Collections.Generic.IList{`0})">
+            <summary>
+            Computes the longest common substring of two input sequences of a common element type <typeparamref name="T"/>. To compare
+            the items, .Equal() is called on the objects. A longest common substring is always 
+            contiguous (unlike the longest common subsequence). Note
+            that if more than one longest common substring exists, all are returned.
+            </summary>
+            <param name="sequenceA">The first (source) sequence</param>
+            <param name="sequenceB">The second (target) sequence</param>
+            <returns>A list of substring objects, which can be null (null/empty argument), empty (no common
+            substring), or contain the longest common substrings of the two input sequences (which may not be 
+            unique and may overlap).
+            </returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.LongestCommonSubsequenceComputer`1.ComputeLongestCommonSubstringCoverage(System.Collections.Generic.IList{`0},System.Collections.Generic.IList{`0})">
+            <summary>
+            Computes the longest common substrings of two input sequences of a common element type <typeparamref name="T"/>. To compare
+            the items, .Equal() is called on the objects. A longest common substring is always 
+            contiguous (unlike the longest common subsequence, which is not necessarily continguous). This method 
+            will compute the broadest coverage for the input sequences. This means that first the longest substring
+            is found. Unlike <see cref="M:Sdl.LanguagePlatform.Lingua.Alignment.LongestCommonSubsequenceComputer`1.ComputeLongestCommonSubstring(System.Collections.Generic.IList{`0},System.Collections.Generic.IList{`0})"/>, the search is then continued and more (possibly shorter)
+            longest substrings are identified in the remainder (uncovered portion) of the string. Note that the
+            coverage is not necessarily optimal - if more than one longest common substring exists during any 
+            iteration, the first one found is picked which may lead to a suboptimal overall coverage. 
+            </summary>
+            <param name="sequenceA">The first (source) sequence</param>
+            <param name="sequenceB">The second (target) sequence</param>
+            <returns>A list of substring objects, which can be null (null/empty argument), empty (no common
+            substring), or contain a good coverage of the input sequences. 
+            </returns>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Alignment.ISequenceAlignmentItemScoreProvider`1">
+            <summary>
+            Represents methods used to determine scores for sequence alignment.
+            </summary>
+            <typeparam name="T">The type of the elements to align.</typeparam>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.ISequenceAlignmentItemScoreProvider`1.GetAlignScore(`0,`0)">
+            <summary>
+            Computes the score of the alignment between the two objects. The higher
+            the score, the stronger is the association.
+            </summary>
+            <param name="a">The first object</param>
+            <param name="b">The second object</param>
+            <returns>The score of the alignment of the two objects.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.ISequenceAlignmentItemScoreProvider`1.GetSourceSkipScore(`0)">
+            <summary>
+            Computes the score of skipping the object in the source sequence. This is typically
+            a negative  value. If the value is very small, it will in most cases prevent skipping
+            objects, which means that the substring (not the subsequence) will be computed.
+            </summary>
+            <param name="a">The object</param>
+            <returns>The skip score (usually a negative value)</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.ISequenceAlignmentItemScoreProvider`1.GetTargetSkipScore(`0)">
+            <summary>
+            Computes the score of skipping the object in the target sequence. This is typically
+            a negative  value. If the value is very small, it will in most cases prevent skipping
+            objects, which means that the substring (not the subsequence) will be computed.
+            </summary>
+            <param name="b">The object</param>
+            <returns>The skip score (usually a negative value)</returns>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.Alignment.ISequenceAlignmentItemScoreProvider`1.MaySkip">
+            <summary>
+            Called once by the sequence aligner to test whether skips are desired
+            at all (if not, it's a longest common substring aligner; if true, it's 
+            a longest common subsequence aligner). This is primarily for optimization
+            purposes as calls to <see cref="M:Sdl.LanguagePlatform.Lingua.Alignment.ISequenceAlignmentItemScoreProvider`1.GetSourceSkipScore(`0)"/> and 
+            <see cref="M:Sdl.LanguagePlatform.Lingua.Alignment.ISequenceAlignmentItemScoreProvider`1.GetTargetSkipScore(`0)"/> can be avoided.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Alignment.IExtensionDisambiguator">
+            <summary>
+            Represents methods used for sequence alignment, to disambiguate among multiple
+            alignment paths with the same scores.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.IExtensionDisambiguator.PickExtension(System.Collections.Generic.List{Sdl.LanguagePlatform.Lingua.AlignedSubstring},System.Collections.Generic.List{Sdl.LanguagePlatform.Lingua.AlignedSubstring})">
+            <summary>
+            Used to pick one of multiple possible extension candidates (<paramref name="candidates"/>)
+            which can extend the already computed sequence alignment (<paramref name="path"/>).
+            </summary>
+            <param name="path">The sequence alignment computed so far</param>
+            <param name="candidates">The list of extension candidates</param>
+            <returns>A single extension, which must be an element of <paramref name="candidates"/>,
+            which is then used to extend the alignment in <paramref name="path"/>.
+            </returns>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Alignment.SimpleCharLSAScoreProvider">
+            <inheritdoc />
+            <summary>
+            A simple longest common subsequence alignment score provider for character
+            sequences.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.SimpleCharLSAScoreProvider.GetAlignScore(System.Char,System.Char)">
+            <inheritdoc />
+            <summary>
+            Computes the alignment score between the two characters.
+            </summary>
+            <param name="a">The first character</param>
+            <param name="b">The second character</param>
+            <returns>The alignment score between the two characters.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.SimpleCharLSAScoreProvider.GetSourceSkipScore(System.Char)">
+            <inheritdoc />
+            <summary>
+            The skip score for skipping the character in the source sequence.
+            </summary>
+            <param name="a">The character</param>
+            <returns>The skip score</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.SimpleCharLSAScoreProvider.GetTargetSkipScore(System.Char)">
+            <inheritdoc />
+            <summary>
+            The skip score for skipping the character in the target sequence.
+            </summary>
+            <param name="a">The character</param>
+            <returns>The skip score</returns>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.Alignment.SimpleCharLSAScoreProvider.MaySkip">
+            <inheritdoc />
+            <summary>
+            Always returns <c>true</c> (since this class is a longest common subsequence score provider).
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Alignment.SimpleCharLCSScoreProvider">
+            <inheritdoc />
+            <summary>
+            A simple longest common substring alignment score provider for character
+            sequences.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.SimpleCharLCSScoreProvider.GetAlignScore(System.Char,System.Char)">
+            <inheritdoc />
+            <summary>
+            Computes the alignment score between the two characters.
+            </summary>
+            <param name="a">The first character</param>
+            <param name="b">The second character</param>
+            <returns>The alignment score between the two characters.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.SimpleCharLCSScoreProvider.GetSourceSkipScore(System.Char)">
+            <inheritdoc />
+            <summary>
+            The skip score for skipping the character in the source sequence. This is a large
+            negative value.
+            </summary>
+            <param name="a">The character</param>
+            <returns>The skip score</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.SimpleCharLCSScoreProvider.GetTargetSkipScore(System.Char)">
+            <inheritdoc />
+            <summary>
+            The skip score for skipping the character in the target sequence. This is a large
+            negative value.
+            </summary>
+            <param name="a">The character</param>
+            <returns>The skip score</returns>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.Alignment.SimpleCharLCSScoreProvider.MaySkip">
+            <inheritdoc />
+            <summary>
+            Always returns <c>false</c> (since this class is a longest common substring score provider).
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Alignment.SimpleLCSScoreProvider`1">
+            <inheritdoc />
+            <summary>
+            A standardized longest common substring score provider.
+            </summary>
+            <typeparam name="T">The type of the elements of the sequences to align.</typeparam>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.SimpleLCSScoreProvider`1.GetAlignScore(`0,`0)">
+            <inheritdoc />
+            <summary>
+            Computes the alignment score between the two objects.
+            </summary>
+            <param name="a">The first object</param>
+            <param name="b">The second object</param>
+            <returns><c>1</c> if the objects are equal, and <c>-100000</c> otherwise.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.SimpleLCSScoreProvider`1.GetSourceSkipScore(`0)">
+            <inheritdoc />
+            <summary>
+            Computes the score of skipping the specified object in the source sequence.
+            </summary>
+            <param name="a">The object (ignored)</param>
+            <returns>-100000</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.SimpleLCSScoreProvider`1.GetTargetSkipScore(`0)">
+            <inheritdoc />
+            <summary>
+            Computes the score of skipping the specified object in the target sequence.
+            </summary>
+            <param name="a">The object (ignored)</param>
+            <returns>-100000</returns>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.Alignment.SimpleLCSScoreProvider`1.MaySkip">
+            <inheritdoc />
+            <summary>
+            Always returns <c>false</c>.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Alignment.CharSubstringScoreProvider">
+            <inheritdoc />
+            <summary>
+            A simple longest common subsequence alignment score provider for character
+            sequences.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.CharSubstringScoreProvider.GetAlignScore(System.Char,System.Char)">
+            <inheritdoc />
+            <summary>
+            Returns the alignment score for the two characters.
+            </summary>
+            <param name="a">The first character</param>
+            <param name="b">The second character</param>
+            <returns><c>3</c> if the characters are equal, and <c>-100</c> otherwise</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.CharSubstringScoreProvider.GetSourceSkipScore(System.Char)">
+            <inheritdoc />
+            <summary>
+            Computes the skip score of the character in the source sequence.
+            </summary>
+            <param name="a">The character (ignored)</param>
+            <returns><c>-100</c></returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.CharSubstringScoreProvider.GetTargetSkipScore(System.Char)">
+            <inheritdoc />
+            <summary>
+            Computes the skip score of the character in the target sequence.
+            </summary>
+            <param name="a">The character (ignored)</param>
+            <returns><c>-100</c></returns>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.Alignment.CharSubstringScoreProvider.MaySkip">
+            <inheritdoc />
+            <summary>
+            Always returns <c>true</c>.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Alignment.SequenceAlignmentComputer`1">
+            <summary>
+            A generic sequence alignment computer for sequences of elements of a common type.
+            </summary>
+            <typeparam name="T">The type of the elements in the sequences to align.</typeparam>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Alignment.SequenceAlignmentComputer`1.Cell.UlMaxScore">
+            <summary>
+            The maximum score seen so far in the upper left corner, including this cell. 
+            Used for LSC only (not for coverage).
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.SequenceAlignmentComputer`1.Cell.ToString">
+            <summary>
+            <see cref="M:System.Object.ToString"/>
+            </summary>
+            <returns>A string representation of the object, for display purposes.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.SequenceAlignmentComputer`1.ComputeCoverage(System.Collections.Generic.IList{`0},System.Collections.Generic.IList{`0},Sdl.LanguagePlatform.Lingua.Alignment.ISequenceAlignmentItemScoreProvider{`0},Sdl.LanguagePlatform.Lingua.Alignment.IExtensionDisambiguator)">
+            <summary>
+            Computes the longest local alignment coverage of the two sequences.
+            </summary>
+            <param name="source">The source sequence</param>
+            <param name="target">The target sequence</param>
+            <param name="scorer">The score provider to use</param>
+            <param name="picker">An extension disambiguator (may be null)</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.SequenceAlignmentComputer`1.ComputeLongestCommonSubsequence(System.Collections.Generic.IList{`0},System.Collections.Generic.IList{`0},System.Int32,Sdl.LanguagePlatform.Lingua.Alignment.ISequenceAlignmentItemScoreProvider{`0},Sdl.LanguagePlatform.Lingua.Alignment.IExtensionDisambiguator)">
+            <summary>
+            Computes the longest common subsequence of the two sequences.
+            </summary>
+            <param name="source">The source sequence</param>
+            <param name="target">The target sequence</param>
+            <param name="minLength">The minimum length of an aligned substring</param>
+            <param name="scorer">The score provider to use</param>
+            <param name="picker">An extension disambiguator (may be null)</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.SequenceAlignmentComputer`1.ComputeCoverage(System.Collections.Generic.IList{`0},System.Collections.Generic.IList{`0},System.Int32,Sdl.LanguagePlatform.Lingua.Alignment.ISequenceAlignmentItemScoreProvider{`0},Sdl.LanguagePlatform.Lingua.Alignment.IExtensionDisambiguator,System.Int32)">
+            <summary>
+            Computes the longest local alignment coverage of the two sequences.
+            </summary>
+            <param name="source">The source sequence</param>
+            <param name="target">The target sequence</param>
+            <param name="minLength">The minimum length of an aligned substring</param>
+            <param name="scorer">The score provider to use</param>
+            <param name="picker">An extension disambiguator (may be null)</param>
+            <param name="maxItems">The maximum number of items in the result coverage. If 1, 
+            no coverage, but only the longest subsequence will be computed. If 0, the full
+            coverage will be computed.</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.SequenceAlignmentComputer`1.#ctor(System.Collections.Generic.IList{`0},System.Collections.Generic.IList{`0},Sdl.LanguagePlatform.Lingua.Alignment.ISequenceAlignmentItemScoreProvider{`0},Sdl.LanguagePlatform.Lingua.Alignment.IExtensionDisambiguator,System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance with the provided values. Once initialized, 
+            call <see cref="M:Sdl.LanguagePlatform.Lingua.Alignment.SequenceAlignmentComputer`1.Compute"/> to compute and return the actual alignment.
+            </summary>
+            <param name="source">The source sequence</param>
+            <param name="target">The target sequence</param>
+            <param name="scorer">The score provider to use</param>
+            <param name="picker">An extension disambiguator (may be null)</param>
+            <param name="minLength">The minimum length of an aligned substring</param>
+            <param name="maxItems">The maximum number of items in the result coverage. If 1, 
+            no coverage, but only the longest subsequence will be computed. If 0, the full
+            coverage will be computed.</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.SequenceAlignmentComputer`1.Compute">
+            <summary>
+            Computes the longest common subsequence of the two sequences used to initialize
+            this instance.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.SequenceAlignmentComputer`1.Compute(System.Int32,System.Int32)">
+            <summary>
+            Computes the longest local alignment coverage of the two sequences used to 
+            initialize this instance. Unlike <see cref="M:Compute()"/>, you can specify
+            positions in the sequences up to which to compute the alignment. 
+            </summary>
+            <param name="uptoSource">The maximum index to cover in the source sequence (exclusive)</param>
+            <param name="uptoTarget">The maximum index to cover in the target sequence (exclusive)</param>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Alignment.StringLengthAlignmentCostComputer">
+            <inheritdoc />
+            <summary>
+            A simple string alignment cost computer which uses string lengths and an 
+            empirically determined expansion factor for the score computation.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.StringLengthAlignmentCostComputer.#ctor(System.Double)">
+            <summary>
+            Initializes a new instance with the provided expansion factor, which 
+            is the average length of a target string given a source string of length 1.0.
+            </summary>
+            <param name="expansionFactor">The expansion factor</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.StringLengthAlignmentCostComputer.GetSubstitutionCosts(System.String,System.String)">
+            <inheritdoc />
+            <summary>
+            Computes the substitution (alignment) costs for the two strings.
+            </summary>
+            <param name="s">The source string</param>
+            <param name="t">The target string</param>
+            <returns>The substitution costs</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.StringLengthAlignmentCostComputer.GetDeletionCosts(System.String)">
+            <inheritdoc />
+            <summary>
+            Computes the deletion costs for the provided source string.
+            </summary>
+            <param name="s">The string</param>
+            <returns>The deletion costs</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.StringLengthAlignmentCostComputer.GetInsertionCosts(System.String)">
+            <inheritdoc />
+            <summary>
+            Computes the insertion costs for the provided target string.
+            </summary>
+            <param name="t">The string</param>
+            <returns>The insertion costs</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.StringLengthAlignmentCostComputer.GetContractionCosts(System.String,System.String,System.String)">
+            <inheritdoc />
+            <summary>
+            Computes the contraction costs for mapping two source strings to a single target string.
+            </summary>
+            <param name="s1">The first source string</param>
+            <param name="s2">The second source string</param>
+            <param name="t">The target string</param>
+            <returns>The contraction costs</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.StringLengthAlignmentCostComputer.GetExpansionCosts(System.String,System.String,System.String)">
+            <inheritdoc />
+            <summary>
+            Computes the expansion costs for mapping a single source string to two target strings.
+            </summary>
+            <param name="s">The source string</param>
+            <param name="t1">The first target string</param>
+            <param name="t2">The second target string</param>
+            <returns>The expansion costs</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Alignment.StringLengthAlignmentCostComputer.GetMeldingCosts(System.String,System.String,System.String,System.String)">
+            <inheritdoc />
+            <summary>
+            Computes the melding costs for mapping two source strings to two target strings.
+            </summary>
+            <param name="s1">The first source string</param>
+            <param name="s2">The second source string</param>
+            <param name="t1">The first target string</param>
+            <param name="t2">The second target string</param>
+            <returns>The melding costs</returns>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.CharTrigramVector">
+            <summary>
+            Represents a vector of character-based trigrams
+            <remarks>This class is for internal use only and not intended to be directly used in your code.</remarks>
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.CharTrigramVector.#ctor">
+            <summary>
+            Instantiates a new object.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.CharTrigramVector.#ctor(Sdl.LanguagePlatform.Lingua.CharTrigramVector)">
+            <summary>
+            Instantiates a new object and initializes it with the <paramref name="other"/> vector, 
+            creating a deep copy.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.CharTrigramVector.Inc(System.Char,System.Char,System.Char)">
+            <summary>
+            Increments the trigram count for the specified character combination.
+            </summary>
+            <param name="c1">The first character in the trigram</param>
+            <param name="c2">The second character in the trigram</param>
+            <param name="c3">The third character in the trigram</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.CharTrigramVector.Cutoff(System.Double)">
+            <summary>
+            Deletes all trigram count cells with a value lower than the given <paramref name="threshold"/>. This
+            is useful to cut rare trigrams which do not contribute significantly to the vector. Note that
+            the threshold should depend on whether the vector is normalized or not.
+            </summary>
+            <param name="threshold">The threshold</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.CharTrigramVector.Topmost(System.Int32)">
+            <summary>
+            Deletes all trigram count cells which are not among those with 
+            the <paramref name="n"/> largest values. 
+            </summary>
+            <param name="n">The maximum number of cells to keep</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.CharTrigramVector.Normalize">
+            <summary>
+            Normalizes the vector so that the vector's length will be (close to) 1.0.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.CharTrigramVector.IsNormalized">
+            <summary>
+            Gets a flag indicating whether the vector is normalized.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.CharTrigramVector.DotProduct(Sdl.LanguagePlatform.Lingua.CharTrigramVector)">
+            <summary>
+            Computes the dot product of this vector and another vector.
+            </summary>
+            <param name="other">The other vector</param>
+            <returns>The dot product of the two vectors</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.CharTrigramVector.Length">
+            <summary>
+            Returns the length of the vector (which is 1.0 if the vector is normalized). The
+            length is SQRT(SUM(c[i]^2)).
+            </summary>
+            <returns>The length of the vector</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.CharTrigramVector.Angle(Sdl.LanguagePlatform.Lingua.CharTrigramVector)">
+            <summary>
+            Computes the cosine of the angle between both vectors. 
+            Use <see cref="M:System.Math.Acos(System.Double)"/> to get the actual angle.
+            </summary>
+            <returns>The cosine of the angle between both vectors</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.CharTrigramVector.Save(System.String)">
+            <summary>
+            Writes a binary respresentation of the vector's data to a file
+            </summary>
+            <param name="fileName">The file name to write the data to</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.CharTrigramVector.Save(System.IO.Stream)">
+            <summary>
+            Writes a binary respresentation of the vector's data to a stream
+            </summary>
+            <param name="str">The output stream, which must be open and ready for
+            appending data</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.CharTrigramVector.Load(System.String)">
+            <summary>
+            Instantiates a new instance and loads the instance's data from the specified file.
+            </summary>
+            <param name="fileName">The file containing the binary representation of the vector</param>
+            <returns>A new instance, initialized with the data obtained from the file, or an
+            exception if the data in the file is invalid.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.CharTrigramVector.Load(System.IO.Stream)">
+            <summary>
+            Instantiates a new instance and loads the instance's data from the specified stream.
+            </summary>
+            <param name="stream">The stream containing the binary representation of the vector. The
+            stream must be open and ready to read.</param>
+            <returns>A new instance, initialized with the data obtained from the stream, or an
+            exception if the data in the stream is invalid.</returns>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.EditDistance.EditDistanceComputer`1">
+            <summary>
+            <para>
+            This class provides methods to compute the edit distance between two item sequences of type <typeparamref name="T"/>. 
+            The user
+            needs to pass a similarity computation method for two items as well as specify 
+            the costs of insert/delete and move operations. Insertion costs and deletion costs
+            are always identical (which makes the computation symmetric, i.e. ed(a, b) = ed(b, a)).
+            </para>
+            <list type="bullet">
+            <item>All costs and similarities are expressed as floating-point values between 0 and 1.</item>
+            <item>Change costs are computed as 1 minus the similary value between the items (as returned
+            by the user-supplied similarity computation method).</item>
+            <item>Move operations are not computed by default and need to be explicitly activated. </item>
+            </list>
+            There are several differences to "standard" edit distance:
+            <list type="bullet">
+            <item>Costs of edit operations can be freely defined (in classic ED they default to 1)</item>
+            <item>Tthe set of operations depends on the similarity between two items (in ED two items are either equal or not)</item>
+            <item>This implementation optionally computes (limited) move operations</item>
+            <item>The algorithm can be used for item sequences of arbitrary types (classic ED is only for character strings).</item>
+            </list>
+            </summary>
+            <typeparam name="T">The item type of the sequence elements</typeparam>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.EditDistance.EditDistanceComputer`1.#ctor(Sdl.LanguagePlatform.Lingua.SimilarityComputer{`0},System.Double,System.Double)">
+            <summary>
+            Instantiates an edit distance computer with the specified similarity 
+            computation function and the specified insert/delete and move costs. Note
+            that no move operations are computed unless ComputeMoveOperations is set to
+            true (the default is false).
+            </summary>
+            <param name="similarityComputer">The item similarity computation method</param>
+            <param name="insertDeleteCosts">The costs of inserting/deleting an item</param>
+            <param name="moveCosts">The costs of moving an item. If &gt;0, move operations will 
+            be computed. Otherwise, no move operations will be computed. Move costs should be 
+            between the insertion/deletion costs and two times the insertion/deletion costs.</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.EditDistance.EditDistanceComputer`1.#ctor(Sdl.LanguagePlatform.Lingua.SimilarityComputer{`0})">
+            <inheritdoc />
+            <summary>
+            Instantiates an edit distance computer with the specified similarity 
+            computation function and the default insert/delete (1.0) costs, change
+            costs of 0.9, and zero move (0.0) costs (the latter meaning that no 
+            move operations are computed).
+            </summary>
+            <param name="similarityComputer">The item similarity computation method</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.EditDistance.EditDistanceComputer`1.#ctor(Sdl.LanguagePlatform.Lingua.SimilarityComputer{`0},System.Boolean)">
+            <inheritdoc />
+            <summary>
+            Instantiates an edit distance computer with the specified similarity 
+            computation function and the default insert/delete (1.0) costs, change
+            costs of 0.9, and zero move (0.0) costs (the latter meaning that no 
+            move operations are computed).
+            </summary>
+            <param name="similarityComputer">The item similarity computation method</param>
+            <param name="applySmallChangeAdjustment">Flag dictating whether the cost adjustment for small changes will be applied</param>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.EditDistance.EditDistanceComputer`1.SimilarityThreshold">
+            <summary>
+            Gets or sets the similarity threshold which is used to detect move operations. If the similarity
+            between items participating in two "compensating operations" is >= the threshold, a "move" may be
+            recorded since the items are considered "sufficiently similar". The default threshold
+            is 0.7. Note that no move operations will be computed if ComputeMoveOperations is false 
+            (which is the default).
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.EditDistance.EditDistanceComputer`1.InsertDeleteCosts">
+            <summary>
+            Gets or sets the costs for inserting or deleting an item. Insert/delete costs must be between 0 and 1. The
+            default is 1.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.EditDistance.EditDistanceComputer`1.MoveCosts">
+            <summary>
+            Gets or sets the costs of moving an item. Move costs should be between the insert/deletion
+            costs and two times the insertion/deletion costs. The default is 1.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.EditDistance.EditDistanceComputer`1.ComputeMoveOperations">
+            <summary>
+            Gets or sets a flag which controls whether or not move operations are computed. 
+            The default is false.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.EditDistance.EditDistanceComputer`1.ComputeEditDistance(System.Collections.Generic.IList{`0},System.Collections.Generic.IList{`0})">
+            <summary>
+            Computes and returns the edit distance between two sequences of type <typeparamref name="T"/>, using 
+            the similarity computer and cost values specified in the constructor. If <see cref="P:Sdl.LanguagePlatform.Lingua.EditDistance.EditDistanceComputer`1.ComputeMoveOperations"/>
+            is <c>true</c>, simple moves will be detected. Otherwise, moves will (typically) result in two independent
+            insert/delete operations.
+            </summary>
+            <param name="sourceObjects">The first input sequence ("source")</param>
+            <param name="targetObjects">The second input sequence ("target")</param>
+            <returns>The edit distance between the two sequences</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.EditDistance.EditDistanceComputer`1.ComputeEditDistance(System.Collections.Generic.IList{`0},System.Collections.Generic.IList{`0},System.Collections.Generic.List{Sdl.LanguagePlatform.Core.Pair{System.Int32}})">
+            <summary>
+            Computes and returns the edit distance between two sequences of type <typeparamref name="T"/>, using 
+            the similarity computer and cost values specified in the constructor. If <see cref="P:Sdl.LanguagePlatform.Lingua.EditDistance.EditDistanceComputer`1.ComputeMoveOperations"/>
+            is <c>true</c>, simple moves will be detected. Otherwise, moves will (typically) result in two independent
+            insert/delete operations.
+            </summary>
+            <param name="sourceObjects">The first input sequence ("source")</param>
+            <param name="targetObjects">The second input sequence ("target")</param>
+            <param name="precomputedAssociations">A list of precomputed item index associations. If valid, item pairs
+            in this list will be associated with each other, which will result in either an identity
+            or a change operation.</param>
+            <returns>The edit distance between the two sequences</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.EditDistance.EditDistanceComputer`1.GetSourcePreassignment(System.Int32,System.Collections.Generic.IReadOnlyCollection{Sdl.LanguagePlatform.Core.Pair{System.Int32}})">
+            <summary>
+            Returns the target item position if the source tag st is preassigned, and -1 otherwise.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Hash">
+            <summary>
+            Provides computing hash codes for strings. The standard String.GetHashCode() has two 
+            drawbacks: first, the values may change in updated implementations of the CLR and therefore
+            should not be persisted. Second, the standard hash code is an int which produces too many
+            collisions for TM applications.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Hash.GetHashCodeInt(System.String)">
+            <summary>
+            Computes a int hash code for the given string, to be used by the TM Kernel.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Hash.GetHashCodeLong(System.String)">
+            <summary>
+            Computes a long hash code for the given string, to be used by the TM Kernel.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Hash.ComputeStrictIdentityString(Sdl.LanguagePlatform.Core.Segment,Sdl.LanguagePlatform.Lingua.LanguageTools)">
+            <summary>
+            Gets a strict identity string - use with GetStrictHash()
+            </summary>
+            <param name="s"></param>
+            <param name="languageTools"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Hash.GetStrictHash(System.String)">
+            <summary>
+            Generates a strict hash code with a very small chance of a collision
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Index.AbstractPostingsIterator.CompareTo(Sdl.LanguagePlatform.Lingua.Index.AbstractPostingsIterator)">
+            <inheritdoc />
+            <summary>
+            Sort by decreasing length (i.e. number of postings) of the associated column
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Index.ScoringMethod">
+            <summary>
+            How to compute the score of a fuzzy match
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Index.ScoringMethod.Query">
+            <summary>
+            Score = overlap / |query vector|, used for e.g. concordance searches
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Index.ScoringMethod.Result">
+            <summary>
+            Score = overlap / |item vector|
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Index.ScoringMethod.Dice">
+            <summary>
+            Score = dice coefficient, i.e. 2*overlap / (|query vector| + |item vector|), used for standard searches
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Index.FuzzySearcher.Search(Sdl.LanguagePlatform.Lingua.Index.IntFeatureVector,System.Int32,System.Int32,System.Int32,Sdl.LanguagePlatform.Lingua.Index.ScoringMethod,System.Predicate{System.Int32},System.Boolean)">
+            <summary>
+            Run a fuzzy search for a feature vector fv, returning at most maxResults hits. 
+            </summary>
+            <param name="fv">The search feature vector</param>
+            <param name="maxResults">The maximum number of hits to return</param>
+            <param name="minScore">The minimum score of a hit</param>
+            <param name="lastKey">Only consider keys larger than lastKey</param>
+            <param name="scoringMethod">The scoring method to apply</param>
+            <param name="validateItemCallback">A callback to determine whether the item with the int key is valid to be included in the result</param>
+            <param name="descendingOrder">true if descending Order, false if ascending order (order by db keys)</param>
+            <returns>A list of hits</returns>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Index.IFeatureVector">
+            <summary>
+            A generalized feature vector which can be weighted or not.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Index.IFuzzyDataReader">
+            <summary>
+            Provides read-only access to feature vector and blocked postings storage.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Index.IFuzzyDataReader.GetIterator(System.Int32,System.Boolean)">
+            <summary>
+            Returns a postings iterator for the given feature.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Index.IFuzzyDataReader.ContainsFeature(System.Int32)">
+            <summary>
+            Returns true iff the storage contains data (i.e. postings) for the provided feature.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Index.IFuzzyDataReader.GetPostingsCount(System.Int32)">
+            <summary>
+            Returns the number of postings for the provided feature.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Index.IFuzzyDataReader.GetFeatureVector(System.Int32)">
+            <summary>
+            Returns the feature vector for the item with the given key, or null if none exists.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Index.ClusterSearchMode.BestOnly">
+            <summary>
+            Search only the single closest cluster.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Index.ClusterSearchMode.FirstOnly">
+            <summary>
+            Search only the first cluster which satisfies the maximum distance/minimum overlap condition.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Index.ClusterSearchMode.FirstWithHits">
+            <summary>
+            Search only the first cluster which satisfies the maximum distance/minimum overlap condition
+            and which returns one or more hits.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Index.ClusterSearchMode.AllApplicable">
+            <summary>
+            Search all clusters which satisfy the maximum distance/minimum overlap condition and join the results.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Index.InMemoryClusteredFuzzyIndex.GetClusterAmbiguity(Sdl.LanguagePlatform.Lingua.Index.IntFeatureVector)">
+            <summary>
+            Returns the number of matching clusters, given the configured minimum overlap with the centroid
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Index.InMemoryClusteredFuzzyIndex.GetClusterAmbiguity(Sdl.LanguagePlatform.Lingua.Index.IntFeatureVector,System.Double)">
+            <summary>
+            Returns the number of matching clusters, given the minimum overlap with the centroid
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Index.InMemoryClusteredFuzzyIndex.Rebalance">
+            <summary>
+            Recomputes all centroids, then removes distant FVs from all clusters, recomputes centroids, and re-adds orphan FVs.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Index.InMemoryClusteredFuzzyIndex.GetAverageVariance">
+            <summary>
+            Average variance of the clusters. Expensive to compute.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Index.InMemoryFeatureVectorCluster.Delete(System.Int32,System.Boolean)">
+            <summary>
+            Deletes the FV with the specified key from the FI. 
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Index.InMemoryFeatureVectorCluster.Remove(System.Int32,System.Boolean)">
+            <summary>
+            Deletes the FV with the specified key from the FI and returns it. 
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.Index.InMemoryFeatureVectorCluster.IsOutOfBalance">
+            <summary>
+            Returns true iff the centroid is up-to-date. Use <see cref="M:Sdl.LanguagePlatform.Lingua.Index.InMemoryFeatureVectorCluster.RecomputeCentroid"/> to recompute it 
+            if required.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Index.InMemoryFeatureVectorCluster.RemoveDistantVectors">
+            <summary>
+            Removes and returns all FVs which don't satisfy the minimum
+            overlap condition. If any vectors are removed, the centroid is updated again.
+            <para>Note that the centroid is not updated prior to this operation.</para>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Index.InMemoryFeatureVectorCluster.GetVariance">
+            <summary>
+            Returns a measure of distribution/variance by summing up the squares of distances
+            of the vectors from the centroid, and dividing the sum by the number of items in the 
+            cluster.
+            <para>This is a somewhat expensive operation to compute. It should not
+            be used to determine whether the clusters need rebalancing.</para>
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Index.InMemoryFuzzyIndex">
+            <summary>
+            Simple, non-persistent, in-memory-only fuzzy index
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Index.InMemoryFuzzyIndex.Clear">
+            <summary>
+            Empties the index.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Index.InMemoryFuzzyIndex.Search(Sdl.LanguagePlatform.Lingua.Index.IntFeatureVector,System.Int32,System.Int32,System.Int32,Sdl.LanguagePlatform.Lingua.Index.ScoringMethod,System.Predicate{System.Int32},System.Boolean)">
+            <summary>
+            Run a fuzzy search for a feature vector fv, returning at most maxResults hits. 
+            </summary>
+            <param name="fv">The search feature vector</param>
+            <param name="maxResults">The maximum number of hits to return</param>
+            <param name="minScore">The minimum score of a hit</param>
+            <param name="lastKey">Only consider keys larger than lastKey</param>
+            <param name="scoringMethod">The scoring method to apply</param>
+            <param name="validateItemCallback">A callback to determine whether the item with the int key is valid to be included in the result</param>
+            <param name="descendingOrder">true if descending Order, false if ascending order (order by db keys)</param>
+            <returns>A list of hits</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Index.InMemoryFuzzyIndex.Search(System.Collections.Generic.IList{System.Int32},System.Int32,System.Int32,System.Int32,Sdl.LanguagePlatform.Lingua.Index.ScoringMethod,System.Predicate{System.Int32},System.Boolean)">
+            <summary>
+            Run a fuzzy search for a feature vector fv, returning at most maxResults hits. 
+            </summary>
+            <param name="fv">The search feature vector</param>
+            <param name="maxResults">The maximum number of hits to return</param>
+            <param name="minScore">The minimum score of a hit</param>
+            <param name="lastKey">Only consider keys larger than lastKey</param>
+            <param name="scoringMethod">The scoring method to apply</param>
+            <param name="validateItemCallback">A callback to determine whether the item with the int key is valid to be included in the result</param>
+            <param name="descendingOrder">true if descending Order, false if ascending order (order by db keys)</param>
+            <returns>A list of hits</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Index.IPostingsBlockReader.ReadBlockAfter(System.Int32,System.Int32)">
+            <summary>
+            Retrieve the postings block for the feature where the first
+            posting is larger than last, or null if no such block exists (which means that
+            there are no postings for the feature beyond 'last').
+            </summary>
+            <returns>The block or null if no such block exists</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Index.IPostingsBlockReader.ReadBlockBefore(System.Int32,System.Int32)">
+            <summary>
+            Retrieve the postings block for the feature where the last
+            posting is smaller than next, or null if no such block exists (which means that
+            there are no postings for the feature before 'first').
+            </summary>
+            <returns>The block or null if no such block exists</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Index.IPostingsBlockReader.ReadBlockContaining(System.Int32,System.Int32)">
+            <summary>
+            Retrieve the postings block for the provided feature which contains
+            the posting to the given key, or null if no such block exists
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Index.SimpleFeatureVectorCentroidComputer.Add(Sdl.LanguagePlatform.Lingua.Index.WeightedFeatureVector,Sdl.LanguagePlatform.Lingua.Index.WeightedFeatureVector,System.Double)">
+            <summary>
+            Adds a feature vector to a given centroid
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Index.SimpleFeatureVectorCentroidComputer.Remove(Sdl.LanguagePlatform.Lingua.Index.WeightedFeatureVector,Sdl.LanguagePlatform.Lingua.Index.WeightedFeatureVector)">
+            <summary>
+            Removes a feature vector from a given centroid
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Index.WeightedFeatureVector.Clean(System.Double)">
+            <summary>
+            Deletes all features with a weight smaller than the threshold
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.LanguageTools.IsNonblankLanguage">
+            <summary>
+            True iff the culture is a language which does not use blanks (Chinese, Thai, Japanese) as word separators. Note
+            that Korean does use blanks, as does Viet.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.LanguageTools.TokenToFeatureMappingMode.Stem">
+            <summary>
+            Triggers stemming and uses the stem associated with the token for the identity string
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.LanguageTools.TokenToFeatureMappingMode.Token">
+            <summary>
+            Uses the token's literal text, converted to lower-case, for the identity string
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo">
+            <summary>
+            Encapsulates information related to a locale.
+            <remarks>This class is not used to represent culture-specific information.</remarks>
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo.#ctor(System.Int32,System.String,System.String)">
+            <summary>
+            Initializes a new instance with the specified values.
+            </summary>
+            <param name="lcid">The numeric LCID</param>
+            <param name="name">The name (e.g. "English (United States)")</param>
+            <param name="code">The code (e.g. "en-US")</param>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo.LCID">
+            <summary>
+            Gets or sets the numeric LCID
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo.Name">
+            <summary>
+            Gets or sets the locale name (e.g. "English (United States)")
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo.Code">
+            <summary>
+            Gets or sets the locale code (e.g. "en-US")
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo.RegionQualifiedCode">
+            <summary>
+            Gets or sets the region-qualified code for locales which are region-neutral
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo.CanonicalCode">
+            <summary>
+            Gets or sets the canonical code which is used to map locales across different
+            numeric LCIDs, or to map locales to their corresponding .Net culture. This value
+            should be the .Net culture code (e.g. "en-US")
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo.Equals(System.Object)">
+            <summary>
+            <see cref="M:System.Object.Equals(object)"/>
+            </summary>
+            <param name="obj">The object to compare with the current object.</param>
+            <returns>true if the specified object is equal to the current object;
+            otherwise, false.
+            </returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo.Equals(Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo,System.Boolean)">
+            <summary>
+            Tests whether this instance is equal to another instance.
+            </summary>
+            <param name="other">The other instance</param>
+            <param name="relaxedCodeEquality">If true, the two instances are also considered
+            equal if their codes are different, but are compatible, as determined by 
+            <see cref="M:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo.AreCodesCompatible(Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo,Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo)"/>.</param>
+            <returns>true if the LCID, the name, and the code are equal, and false otherwise.
+            If <paramref name="relaxedCodeEquality"/> is true, the codes may differ but then
+            need to be compatible.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo.AreCodesCompatible(Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo,Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo)">
+            <summary>
+            Tests whether the codes of the two instances are compatible. This is the case if 
+            the codes or the region-qualified codes are equal.
+            </summary>
+            <param name="left">The first instance</param>
+            <param name="right">The second instance</param>
+            <returns>true if the codes are compatible, and false otherwise.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo.AreCodesMapped(Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo,Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo)">
+            <summary>
+            Tests whether the language code or the canonical code of the two instances are equal.
+            </summary>
+            <param name="left">The first instance</param>
+            <param name="right">The second instance</param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo.GetHashCode">
+            <summary>
+            <see cref="M:System.Object.GetHashCode"/>
+            </summary>
+            <returns>A hash code for this object</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo.CompareByLCIDThenByCode(Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo,Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo)">
+            <summary>
+            Compares the two instances and returns a value indicating their relative sort order, 
+            based on the LCIDs.
+            </summary>
+            <param name="a">The first instance</param>
+            <param name="b">The second instance</param>
+            <returns>The relative (sort) order between the two instances, based on the LCIDs.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo.CompareByRelaxedCode(Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo,Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo)">
+            <summary>
+            Compares the two instances and returns a value indicating their relative sort order, 
+            based on the language codes. Relaxed code equality is used if the codes differ, which means
+            that 0 (indicating equality) is returned if the codes are compatible or mapped.
+            </summary>
+            <param name="a">The first instance</param>
+            <param name="b">The second instance</param>
+            <returns>The relative (sort) order between the two instances, based on the codes.</returns>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Locales.FieldCode">
+            <summary>
+            Enumerates the fields present in a <see cref="T:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo"/> object, for UI or
+            sorting purposes.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Locales.FieldCode.LCID">
+            <summary>
+            The LCID
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Locales.FieldCode.Name">
+            <summary>
+            The locale name (e.g. "English (United States)")
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Locales.FieldCode.Code">
+            <summary>
+            The locale code (e.g. "en-US")
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Locales.LocaleSource">
+            <summary>
+            Enumerates the different well-known sources for locale information.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Locales.LocaleSource.XP">
+            <summary>
+            Windows XP
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Locales.LocaleSource.Vista">
+            <summary>
+            Windows Vista
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Locales.LocaleSource.Win7">
+            <summary>
+            Windows 7
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Locales.LocaleSource.Workbench">
+            <summary>
+            Trados Translator's Workbench
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Locales.LocaleSource.SDLX">
+            <summary>
+            SDL SDLX
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Locales.LocaleSource.TMS">
+            <summary>
+            SDL TMS
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfoSet">
+            <inheritdoc />
+            <summary>
+            Represents information of a set of <see cref="T:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo" /> objects, derived from 
+            a specific <see cref="T:Sdl.LanguagePlatform.Lingua.Locales.LocaleSource" />. The locale info sets can be sorted and 
+            mapped, using the numeric LCIDs or the language codes.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfoSet.#ctor(Sdl.LanguagePlatform.Lingua.Locales.LocaleSource,System.String)">
+            <summary>
+            Initializes a new instance with the specified values.
+            </summary>
+            <param name="source">The source of the locale info set</param>
+            <param name="description">A description, for UI purposes</param>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfoSet.Description">
+            <summary>
+            Gets or sets the description to use when displaying the data to the user.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfoSet.Source">
+            <summary>
+            Gets or sets the source of the locale info set.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfoSet.Data">
+            <summary>
+            Gets the collection of <see cref="T:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo"/> objects in this locale info set.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfoSet.LookupCode(System.String)">
+            <summary>
+            Looks up the <see cref="T:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo"/> data for the specified code in the current locale system.
+            If the current locale system is a legacy system, this looks up by the legacy code. To look up
+            the corresonding legacy code for a .Net code, use <see cref="M:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfoSet.LookupCanonicalCode(System.String)"/>.
+            </summary>
+            <returns>The <see cref="T:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo"/> for the specified code, or <c>null</c> if it wasn't found.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfoSet.LookupCanonicalCode(System.String)">
+            <summary>
+            Looks up the <see cref="T:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo"/> data for the specified canonical code, which usually is 
+            the .Net code. 
+            </summary>
+            <param name="canonicalCode"></param>
+            <returns>The <see cref="T:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo"/> for the specified canonical code, or <c>null</c> if it wasn't found.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfoSet.IsSupported(System.Globalization.CultureInfo)">
+            <summary>
+            Looks up the canonical code of the specified culture and returns true iff
+            the culture is supported by the locale system (possibly through a different/mapped 
+            language code).
+            </summary>
+            <returns><c>true</c> if the culture's code is the canonical code of one of the known locales in this set, and <c>null</c> otherwise.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfoSet.Add(Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo)">
+            <summary>
+            Adds the specified item to this set.
+            </summary>
+            <param name="item">The item to add</param>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfoSet.Count">
+            <summary>
+            Gets the number of items in this set.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfoSet.Item(System.Int32)">
+            <summary>
+            Gets the <see cref="T:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo"/> object at the specified index.
+            </summary>
+            <param name="idx">The index</param>
+            <returns>The <see cref="T:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo"/> object at the specified index. If the index
+            is invalid, an exception is thrown.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfoSet.Sort(Sdl.LanguagePlatform.Lingua.Locales.FieldCode,System.Boolean)">
+            <summary>
+            Sorts this locale info set on the specified field.
+            </summary>
+            <param name="field">The field to sort on</param>
+            <param name="relaxedCodeEquality">If <c>true</c>, and if sorting by <see cref="F:Sdl.LanguagePlatform.Lingua.Locales.FieldCode.Code"/>, 
+            relaxed code equality is applied (see <see cref="M:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo.CompareByRelaxedCode(Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo,Sdl.LanguagePlatform.Lingua.Locales.LocaleInfo)"/>) 
+            instead of strict equality.</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfoSet.GetLocaleInfoSet(Sdl.LanguagePlatform.Lingua.Locales.LocaleSource)">
+            <summary>
+            Obtains the locale info set for the specified source. The data is 
+            computed from data stored in the resources at compile-time, and is not
+            retrieved from the operating system or other sources at run-time.
+            </summary>
+            <param name="source">The source to get the locale info set for.</param>
+            <returns>The locale info set for the specified source. </returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfoSet.GetEnumerator">
+            <inheritdoc />
+            <summary>
+            Gets an enumerator for this collection.
+            </summary>
+            <returns>An enumerator</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Locales.LocaleInfoSet.System#Collections#IEnumerable#GetEnumerator">
+            <inheritdoc />
+            <summary>
+            Gets an enumerator for this collection.
+            </summary>
+            <returns>An enumerator</returns>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Range`1">
+            <summary>
+            Represents a range of objects of base type T, which must be <see cref="T:System.IComparable"/>. No
+            checks are performed whether the start is before the end. Whether the start and/or end
+            positions are inclusive or exlusive is application-defined.
+            </summary>
+            <typeparam name="T">The base type, must implement IComparable&lt;T&gt;</typeparam>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Range`1.#ctor(`0,`0)">
+            <summary>
+            Initializes a new instance with the start end positions according to the parameters. 
+            No checks are performed whether start &lt;= end.
+            </summary>
+            <param name="start">The object indicating the start of the range</param>
+            <param name="end">The object indicating the end of the range</param>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.Range`1.Start">
+            <summary>
+            Gets or sets the start object of the range.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.Range`1.End">
+            <summary>
+            Gets or sets the end object of the range.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Segmentation.SRX.SRXReader">
+            <summary>
+            Reads a set of SRX rules from an XML file or stream.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Segmentation.SRX.SRXReader.ValidateSRX(System.String)">
+            <summary>
+            Validates the SRX in the specified filename against the published SRX schema.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Segmentation.SRX.SRXReader.Read(System.String)">
+            <summary>
+            Reads and returns a set of SRX rules from the specified input file.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Segmentation.SRX.SRXReader.MapICURXToDotNetRX(System.String)">
+            <summary>
+            Attempts to map ICU regular expressions to .Net regular expressions. 
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Segmentation.SRX.SRXSegmentationEngine.CompiledRule.IsBreakRule">
+            <summary>
+            If true, the _Rule is a break _Rule. Otherwise, it's a break exception (no-break _Rule).
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Segmentation.SRX.SRXSegmentationEngine.GetAllMatches(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Gets all matches for this text run
+            </summary>
+            <param name="text">text to analyse</param>
+            <param name="assumeEof">true if EOF assumed</param>
+            <param name="followedByWordBreakTag">true if followed by WordBreakTag</param>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Segmentation.SRX.SRXToT8Converter">
+            <summary>
+            Attempts to convert SRX segmentation rules to the rule format used by the TM8 segmentation engine.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Segmentation.T8.TWBRuleConverter.TwbRule.Description">
+            <summary>
+            rule name/description
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Segmentation.T8.TWBRuleConverter.TwbRule.StopCharacters">
+            <summary>
+            "trigger chars", i.e. stop chars
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Segmentation.T8.TWBRuleConverter.TwbRule.MinSegmentCharacters">
+            <summary>
+            min length of segment in #chars - ignored for t9 rule
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Segmentation.T8.TWBRuleConverter.TwbRule.MinSegmentWords">
+            <summary>
+            min length of segment in #words - ignored for t9 rule
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Segmentation.T8.TWBRuleConverter.TwbRule.MinTrailingWhitespace">
+            <summary>
+            number of required following whitespace (blanks, tabs) following the stop char
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Segmentation.T8.TWBRuleConverter.TwbRule.MinFullStops">
+            <summary>
+            for full stop '.' rules only: number of required full stops
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Segmentation.T8.TWBRuleConverter.TwbRule.LetterDot">
+            <summary>
+            for full stop rules only: token ending at break position is a single letter followed by the stop char
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Segmentation.T8.TWBRuleConverter.TwbRule.NumberStop">
+            <summary>
+            alphanumeric string followed by stop char
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Segmentation.T8.TWBRuleConverter.TwbRule.OrdinalDot">
+            <summary>
+            for full stop rules only: token is an ordinal number followed by the stop char
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Segmentation.T8.TWBRuleConverter.TwbRule.FoundAbbreviation">
+            <summary>
+            for full stop rules only:
+            if 0, forbids a preceding known abbr
+            if 1, requires a preceding known abbr
+            -- preceding context of exception rule
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Segmentation.T8.TWBRuleConverter.TwbRule.GuessedAbbreviation">
+            <summary>
+            for full stop rules only:
+            if 0, forbids a preceding guessed abbr
+            if 1, requires a preceding guessed abbr
+            other values: don't care
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Segmentation.T8.TWBRuleConverter.TwbRule.TabFollower">
+            <summary>
+            if 1, rule requires one following tab
+            if 0, rule forbids a following tab
+            other values: ignore tabs/rule fires
+            - afterbreak context
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Segmentation.T8.TWBRuleConverter.TwbRule.LowerFollower">
+            <summary>
+            if 1, rule requires one lower-case following char (after some whitespace). 
+            if 0, rule forbids a lower-case following char (if there is one, the rule does not
+             fire).
+            all other values: rule fires
+            - afterbreak context
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Segmentation.T8.TWBRuleConverter.TwbRule.OrdinalFollower">
+            <summary>
+            for full stop rules only:
+            if 0, forbids an ordinal follower
+            if 1, requires an ordinal follower
+            other values: don't care
+            - afterbreak context
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.SegmentEditDistanceComputer.InsertDeleteCosts">
+            <summary>
+            Costs of inserting or deleting a word
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.SegmentEditDistanceComputer.MoveCosts">
+            <summary>
+            Costs of moving a word somewhere else in the string
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.SegmentEditDistanceComputer.MoveSimThreshold">
+            <summary>
+            Similarity threshold at which a move operation may be triggered, instead of an 
+            insert/delete pair of operations
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.SegmentEditDistanceComputer.UseStringEditDistance">
+            <summary>
+            Controls whether to apply string edit distance during computation of the similarity matrix
+            (has performance impact).
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SegmentEditDistanceComputer.CanComputeEditDistance(System.Int32,System.Int32)">
+            <summary>
+            Determines whether the edit distance can be computed given the token counts.
+            </summary>
+            <param name="sourceTokenCount">source token count</param>
+            <param name="targetTokenCount">target token count</param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SegmentEditDistanceComputer.ComputeEditDistance(System.Collections.Generic.IList{Sdl.LanguagePlatform.Core.Tokenization.Token},System.Collections.Generic.IList{Sdl.LanguagePlatform.Core.Tokenization.Token},System.Boolean,Sdl.LanguagePlatform.Core.Tokenization.BuiltinRecognizers,Sdl.LanguagePlatform.Lingua.TagAssociations@,System.Boolean,System.Boolean)">
+            <summary>
+            Computes the ED
+            </summary>
+            <param name="sourceTokens"></param>
+            <param name="targetTokens"></param>
+            <param name="computeDiagonalOnly">If number of tokens is equivalent, only the diagonal's similarities are computed.</param>
+            <param name="disabledAutoSubstitutions"></param>
+            <param name="alignedTags"></param>
+            <param name="charactersNormalizeSafely">Set to false if the language is not considered 'char-based' like Chinese and Japanese are 
+            (i.e. uses space as separator), but does consist of complex characters producing strings of more than 1 significant char 
+            when Unicode-normalised (NormalizationForm.FormD) </param>
+            <param name="applySmallChangeAdjustment"></param>
+            <returns></returns>
+            <remarks>See LCC-2663 for more information about <param name="charactersNormalizeSafely">charactersNormalizeSafely</param> </remarks>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SegmentEditDistanceComputer.ComputeEditDistance(System.Collections.Generic.IList{Sdl.LanguagePlatform.Core.Tokenization.Token},System.Collections.Generic.IList{Sdl.LanguagePlatform.Core.Tokenization.Token},System.Boolean,Sdl.LanguagePlatform.Core.Tokenization.BuiltinRecognizers,Sdl.LanguagePlatform.Lingua.TagAssociations@,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Computes the ED
+            </summary>
+            <param name="sourceTokens"></param>
+            <param name="targetTokens"></param>
+            <param name="computeDiagonalOnly">If number of tokens is equivalent, only the diagonal's similarities are computed.</param>
+            <param name="disabledAutoSubstitutions"></param>
+            <param name="alignedTags"></param>
+            <param name="charactersNormalizeSafely">Set to false if the language is not considered 'char-based' like Chinese and Japanese are 
+            (i.e. uses space as separator), but does consist of complex characters producing strings of more than 1 significant char 
+            when Unicode-normalised (NormalizationForm.FormD) </param>
+            <param name="applySmallChangeAdjustment"></param>
+            <param name="diagonalOnly">Unlike <paramref name="computeDiagonalOnly"/>, should only be set true if number of tokens is equivalent, and if 
+            the only edit operations of interest are 'identity' and 'change'. This provides a fast way to score segments with matching
+            identity strings and feature-token placement.</param>
+            <returns></returns>
+            <remarks>See LCC-2663 for more information about <param name="charactersNormalizeSafely">charactersNormalizeSafely</param> </remarks>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SegmentEditDistanceComputer.VerifyEditDistance(System.Collections.Generic.IEnumerable{Sdl.LanguagePlatform.Core.EditDistance.EditDistanceItem},System.Int32,System.Int32)">
+            <summary>
+            Verifies that no ED position is used twice, and all positions in the input vector are covered
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SegmentEditDistanceComputer.CreateEditDistanceMatrix(System.Collections.Generic.ICollection{Sdl.LanguagePlatform.Core.Tokenization.Token},System.Collections.Generic.ICollection{Sdl.LanguagePlatform.Core.Tokenization.Token})">
+            <summary>
+            Creates a new edit distance matrix, and initializes the border elements.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SegmentEditDistanceComputer.PatchSimilarityMatrix(Sdl.LanguagePlatform.Lingua.SimilarityMatrix,System.Collections.Generic.IList{Sdl.LanguagePlatform.Core.Tokenization.Token},System.Collections.Generic.IList{Sdl.LanguagePlatform.Core.Tokenization.Token},Sdl.LanguagePlatform.Lingua.TagAssociations)">
+            <summary>
+            Patch the similarity matrix so that tags which are not aligned can't be associated
+            by the ED
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SegmentEditDistanceComputer.FixTagActions(System.Collections.Generic.IList{Sdl.LanguagePlatform.Core.Tokenization.Token},System.Collections.Generic.IList{Sdl.LanguagePlatform.Core.Tokenization.Token},Sdl.LanguagePlatform.Core.EditDistance.EditDistance,Sdl.LanguagePlatform.Lingua.TagAssociations)">
+            <summary>
+            If the tag alignment suggests action "Change", but the ED can't find this, 
+            we need to patch the corresponding ED item for the corresponding start or end tag as well.
+            </summary>
+            <param name="targetTokens"></param>
+            <param name="result"></param>
+            <param name="tagAlignment"></param>
+            <param name="sourceTokens"></param>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.SimilarityComputer`1">
+            <summary>
+            Return the simliarity between two objects, as a float value between
+            0 and 1. A larger value indicates higher simliarity. 1 indicates
+            equality, 0 indicates inequality. 
+            <para>
+            An implementation may return a proper value for null parameters or may 
+            throw an exception. An implementation may also choose either
+            if the object types are not comparable. 
+            </para>
+            <para>
+            The following conditions must be met by any impementation:
+            <list type="bullet">
+            <item><c>GetSimilarity(x, x) == 1.0</c> (reflexive)</item> 
+            <item><c>GetSimilarity(x, y) == GetSimilarity(y, x)</c> (symmetrical)</item>
+            </list>
+            </para>
+            </summary>
+            <param name="a">The first object to compare</param>
+            <param name="b">The second object to compare</param>
+            <returns>A similarity measure between the two objects, which is
+            a floating point number between 0.0 and 1.0</returns>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.InsertDeleteCostComputer`1">
+            <summary>
+            Return the costs of inserting or deleting the object in some underlying sequence.
+            </summary>
+            <returns>The costs, which are between 0 and 1, where 0 means lowest costs and 1 means
+            highest costs.</returns>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.StringIntTrie">
+            <inheritdoc />
+            <summary>
+            A data structure which maps strings to integer keys. The strings must be unique in the
+            underlying collection.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.StringIntTrie.Add(System.String,System.Int32)">
+            <summary>
+            Adds the string to the index and assigns the specified key. The string must not yet
+            be indexed, or an exception is thrown.
+            </summary>
+            <param name="s">The string to add.</param>
+            <param name="key">The key to assign to the string.</param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.StringIntTrie.Contains(System.String,System.Int32@)">
+            <summary>
+            Tests whether the specified string is in the index, and returns the assigned key 
+            in the <paramref name="key"/> parameter.
+            </summary>
+            <param name="s">The string to test</param>
+            <param name="key">An out parameter which will contain the key assigned to <paramref name="s"/>, 
+            if it is contained in the index.</param>
+            <returns><c>true</c> if <paramref name="s"/> is in the index, and <c>false</c> otherwise.</returns>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.Substring">
+            <summary>
+            Represents a substring in an ordered sequence, using the zero-based start position and the 
+            substring length.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.Substring.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance with the specified values. No checks are performed whether 
+            the values are consistent.
+            </summary>
+            <param name="start">The start position of the substring.</param>
+            <param name="length">The length of the substring.</param>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Substring.Start">
+            <summary>
+            The start position of the substring.
+            </summary>
+        </member>
+        <member name="F:Sdl.LanguagePlatform.Lingua.Substring.Length">
+            <summary>
+            The end position of the substring.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.SuffixTree`1">
+            <summary>
+            A suffix tree for sequences of type T. This class is currently unused.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SuffixTree`1.#ctor">
+            <summary>
+            Constructs a new, empty suffix tree.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SuffixTree`1.CreateNode">
+            <summary>
+            Creates and returns a new node in the tree.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.SuffixTree`1.Root">
+            <summary>
+            Accesses the root node of the tree.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SuffixTree`1.Traverse(System.Collections.Generic.IList{`0})">
+            <summary>
+            Returns the node after fully traversing s.
+            </summary>
+            <returns>The node reached after traversing through s, not necessarily a leaf</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SuffixTree`1.Verify">
+            <summary>
+            Returns true iff the tree is consistent.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SuffixTree`1.Dump(System.String)">
+            <summary>
+            Dumps the tree in textual format to a new file with the given name.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SuffixTree`1.Dump(System.IO.TextWriter)">
+            <summary>
+            Dumps the tree in textual format to the provided output stream.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.SuffixTreeEdge`1">
+            <summary>
+            Represents an edge of type T in a suffix tree of the same type.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SuffixTreeEdge`1.#ctor">
+            <summary>
+            Creates a new, empty edge
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SuffixTreeEdge`1.#ctor(System.Collections.Generic.IList{`0},Sdl.LanguagePlatform.Lingua.SuffixTreeNode{`0})">
+            <summary>
+            Creates a new edge with the specified label and end node.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.SuffixTreeEdge`1.Label">
+            <summary>
+            Gets or sets the label of the edge.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SuffixTreeEdge`1.LabelStartsWith(`0)">
+            <summary>
+            Returns true iff the edge starts with symbol <paramref name="t"/>
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.SuffixTreeEdge`1.EndNode">
+            <summary>
+            Gets or sets the end node of the edge.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SuffixTreeEdge`1.Append(`0)">
+            <summary>
+            Appends <paramref name="t"/> to the edge label.
+            </summary>
+            <param name="t"></param>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SuffixTreeEdge`1.SplitBefore(Sdl.LanguagePlatform.Lingua.SuffixTree{`0},System.Int32)">
+            <summary>
+            Split the edge into two parts, before the splitPoint position. The position
+            must be "inside" the edge label, i.e. in [1..label.Count -1[
+            </summary>
+            <returns>The new node created at the split point. The second, split-off part
+            of the edge will point to the new leaf.</returns>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.SuffixTreeNode`1">
+            <summary>
+            Represents a node of type T in a suffix tree of the same type.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SuffixTreeNode`1.#ctor(System.Int32)">
+            <summary>
+            Creates a new node with the given ID.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.SuffixTreeNode`1.Parent">
+            <summary>
+            Gets or sets the parent node.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.SuffixTreeNode`1.SuffixLink">
+            <summary>
+            Gets or sets the suffix link for the node.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.SuffixTreeNode`1.Length">
+            <summary>
+            Gets or sets the length of the node.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SuffixTreeNode`1.CollectPositions">
+            <summary>
+            Collects positions at all leaf nodes at or below this node.
+            </summary>
+            <returns>A list of positions, or null, or an empty list, if none exist.</returns>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.SuffixTreeNode`1.ID">
+            <summary>
+            Gets the node ID.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.SuffixTreeNode`1.HasEdges">
+            <summary>
+            true iff the node has any edges.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SuffixTreeNode`1.HasEdgeStartingWith(`0)">
+            <summary>
+            true iff the node has an edge starting with label <paramref name="t"/>
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SuffixTreeNode`1.FindEdgeStartingWith(`0)">
+            <summary>
+            Returns the first edge starting with label <paramref name="t"/> or null if none exists.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.SuffixTreeNode`1.Edges">
+            <summary>
+            Gets or sets the edges of the node.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SuffixTreeNode`1.AddEdge(Sdl.LanguagePlatform.Lingua.SuffixTreeEdge{`0})">
+            <summary>
+            Adds an edge to the node. 
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.SuffixTreeComputer`1">
+            <summary>
+            Computes a suffix tree for a sequence of type T This class is currently unused.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.SuffixTreeComputer`1.Create(System.Collections.Generic.IList{`0})">
+            <summary>
+            Create a suffix tree for the sequence s. Throws if s is null or empty.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.TagAligner.FindPairedTags(System.Collections.Generic.IList{Sdl.LanguagePlatform.Core.Tokenization.Token})">
+            <summary>
+            Returns a dictionary of paired tag indices, or null if none exist.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.TagAligner.GetTagSpan(Sdl.LanguagePlatform.Lingua.PairedTag)">
+            <summary>
+            Returns the span (number of spanned tokens) of the tag.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.TagAssociation.ToString">
+            <summary>
+            <see cref="M:System.Object.ToString"/>
+            </summary>
+            <returns>A string representation of the object, for display purposes.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.TagAssociation.Equals(System.Object)">
+            <summary>
+            <see cref="M:System.Object.Equals(object)"/>
+            </summary>
+            <param name="obj">The object to compare with the current object.</param>
+            <returns>true if the specified object is equal to the current object;
+            otherwise, false.
+            </returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.TagAssociation.GetHashCode">
+            <summary>
+            <see cref="M:System.Object.GetHashCode(object)"/>
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.TagAssociations.AreAssociated(System.Int32,System.Int32)">
+            <summary>
+            true iff the two positions are start or end position of an associated paired tag, 
+            i.e. the source position is the source tag's start or end position, and the target
+            position is the target tag's start or end position
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.TagAssociations.GetBySourcePosition(System.Int32)">
+            <summary>
+            Returns the tag association which is related to the specified source position, 
+            which may either be the start or end position of a tag.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.TagAssociations.GetOperationBySourcePosition(System.Int32)">
+            <summary>
+            Returns the tag association operation which is related to the specified source position, 
+            which may either be the start or end position of a tag.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.TagAssociations.GetByTargetPosition(System.Int32)">
+            <summary>
+            Returns the tag association which is related to the specified target position, 
+            which may either be the start or end position of a tag.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.TagAssociations.GetOperationByTargetPosition(System.Int32)">
+            <summary>
+            Returns the tag association operation which is related to the specified target position, 
+            which may either be the start or end position of a tag.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.PairedTag.ToString">
+            <summary>
+            <see cref="M:System.Object.ToString"/>
+            </summary>
+            <returns>A string representation of the object, for display purposes.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.PairedTag.Equals(System.Object)">
+            <summary>
+            <see cref="M:System.Object.Equals(object)"/>
+            </summary>
+            <param name="obj">The object to compare with the current object.</param>
+            <returns>true if the specified object is equal to the current object;
+            otherwise, false.
+            </returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.PairedTag.GetHashCode">
+            <summary>
+            <see cref="M:System.Object.GetHashCode(object)"/>
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.TermRecognition.TermFinder.FindTerms(System.String,System.String,System.Globalization.CultureInfo,System.Boolean)">
+            <summary>
+            Attempts to identify the locations of (substrings of) the search segment in the result segment.
+            Typically, the search segment is a single search string (such as a concordance search string), 
+            and the result segment is a transation unit segment. 
+            </summary>
+            <param name="search">The search text.</param>
+            <param name="text">The text segment, usually a sentence or larger block of text.</param>
+            <param name="culture">The culture the search and text belong to.</param>
+            <param name="expectContinuousMatch"></param>
+            <returns>The locations and other information about the coverage of the search segment
+            in the result segment.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.TermRecognition.TermFinder.FindTerms(Sdl.LanguagePlatform.Core.Segment,Sdl.LanguagePlatform.Core.Segment,System.Boolean)">
+            <summary>
+            Attempts to identify the locations of (substrings of) the search segment in the result segment.
+            Typically, the search segment is a single search string (such as a concordance search string), 
+            and the result segment is a transation unit segment. 
+            </summary>
+            <param name="searchSegment">The search segment or search word. The segment must be tokenized.</param>
+            <param name="textSegment">The text segment, usually a sentence or larger block of text. 
+            The segment must be tokenized.</param>
+            <param name="expectContinuousMatch"></param>
+            <returns>The locations and other information about the coverage of the search segment
+            in the result segment.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.TermRecognition.TermFinder.FindTerms(Sdl.LanguagePlatform.Core.Segment,Sdl.LanguagePlatform.Core.Segment,System.Boolean,System.Boolean)">
+            <summary>
+            Attempts to identify the locations of (substrings of) the search segment in the result segment.
+            Typically, the search segment is a single search string (such as a concordance search string), 
+            and the result segment is a transation unit segment. 
+            </summary>
+            <param name="searchSegment">The search segment or search word. The segment must be tokenized.</param>
+            <param name="textSegment">The text segment, usually a sentence or larger block of text. 
+            The segment must be tokenized.</param>
+            <param name="expectContinuousMatch"></param>
+            <param name="useWidthNormalization"></param>
+            <returns>The locations and other information about the coverage of the search segment
+            in the result segment.</returns>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.TermRecognition.TermFinder.VerifyRanges(System.Collections.Generic.IEnumerable{Sdl.LanguagePlatform.Core.SegmentRange},Sdl.LanguagePlatform.Core.Segment)">
+            <summary>
+            Verifies that all ranges are "inside" the segment's (text) elements.
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.TermRecognition.TermFinder.SortAndMelt(System.Collections.Generic.List{Sdl.LanguagePlatform.Core.SegmentPosition})">
+            <summary>
+            Sorts the ranges and joins adjacent ranges, if possible. Assumes (but does not
+            check) that ranges are non-overlapping, and that ranges never cover more than one
+            element. Resulting ranges will not cross token boundaries.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.TermRecognition.TermFinderResult">
+            <summary>
+            Represents information returned by a term recognition process.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.TermRecognition.TermFinderResult.MatchingRanges">
+            <summary>
+            Gets or sets the list of matching segment ranges.
+            </summary>
+        </member>
+        <member name="P:Sdl.LanguagePlatform.Lingua.TermRecognition.TermFinderResult.Score">
+            <summary>
+            Gets or sets the score associated to this result.
+            </summary>
+        </member>
+        <member name="T:Sdl.LanguagePlatform.Lingua.TokenIndexLcsScoreProvider">
+            <inheritdoc />
+            <summary>
+            A score provider for computing the longest common substring or longest common subsequence
+            of two token vectors. Use with <see cref="!:Sdl.LanguagePlatform.Core.Alignment.SequenceAlignmentComputer&lt;T&gt;" />
+            <para>The similarity scores are retrieved from a similarity matrix which must also be provided.</para>
+            <para>To align two token sequences, you first need to construct position lists which map to the
+            token position in the input vectors.</para>
+            </summary>
+        </member>
+        <member name="M:Sdl.LanguagePlatform.Lingua.TokenIndexLcsScoreProvider.#ctor(Sdl.LanguagePlatform.Lingua.SimilarityMatrix,System.Double,System.Boolean)">
+            <summary>
+            blablabla
+            </summary>
+            <param name="simMatrix"></param>
+            <param name="threshold"></param>
+            <param name="maySkip">If true, computes the longest common subsequence. Otherwise,
+            computes the longest common substring.
+            </param>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,1861 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sdl.FileTypeSupport.Framework.Core.Settings</name>
+    </assembly>
+    <members>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2">
+            <summary>
+            Convenient implementation class for settings pages that handles the initialization of settings
+            and controls, and provides a default implementation of the file type specific settings page interface.
+            </summary>
+            <remarks>
+            <para>
+            Settings pages do not need to be derived from this class. However, if they follow standard patterns, deriving from this class
+            can result in a simpler implementation.
+            </para>
+            </remarks>
+            <example>
+            <para>
+            To use this class in order to implement a file type settings page, take the following steps:
+            </para>
+            <list type="bullet">
+            <item>Create a settings class that implements <see cref="T:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsBase"/>. Make sure that your property setters
+            are raising the <see cref="E:System.ComponentModel.INotifyPropertyChanged.PropertyChanged"/> event when values change. Implement the
+            <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsBase.ResetToDefaults"/> method by calling the property setters (rather than updating
+            the fields directly). Implement settings reading and writing functionality using the settings bundle.</item>
+            <item>
+            Create a settings control for the settings page, and implement <c>IFileTypeSettingsAware</c> for your settings class. 
+            In the property setter for Settings, assign the value to <c>LayoutRoot.DataContext</c>. 
+            Implement the user interface by using two-way data binding to access and update the settings.
+            </item>
+            <item>
+            Create a settings page class derived from this class and mark it with the <see cref="T:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsPageAttribute"/>.
+            </item>
+            </list>
+            <para>
+            The default implementation of the settings page and the data binding will take care of everything else. Unless you
+            require special processing for anything, there should be no need to override any of the methods and properties
+            in this base class.
+            </para>
+            </example>
+            <typeparam name="SettingsControlType">Control class that will be used to edit the settings; should be derived from <c>Control</c>, and 
+            have a default constructor. The control should implement <c>IFileTypeSettingsAware</c>, and use data binding
+            to interact with the settings.</typeparam>
+            <typeparam name="SettingsType">Settings data container class; should implement <see cref="T:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsBase"/> and
+            raise property change events when data is changed. Must have a default constructor. The settings class should
+            correspond to the settings displayed by the control for the ResetToDefaults function to work as expected without
+            manual tweaking. If the settings class contains settings used by other pages, you must override the
+            <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.ResetToDefaults"/> method to ensure that only the settings for this page are reset.</typeparam>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.#ctor">
+            <summary>
+            Default constructor, does not do anything
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.Finalize">
+            <summary>
+            Finalizer calls <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.Dispose(System.Boolean)"/> with <c>false</c>
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.Dispose(System.Boolean)">
+            <summary>
+            Override this method to perform additional clean-up tasks when the object is destroyed.
+            </summary>
+            <param name="disposing">Indicates whether the call originates from the <see cref="M:System.IDisposable.Dispose"/> method
+            or from the finalizer.</param>
+            <remarks>
+            The default implementation disposes of the settings if they implement IDisposable.
+            </remarks>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.SettingsBundle">
+            <summary>
+            The SettingsBundle which contains setting information for the page
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.Settings">
+            <summary>
+            The settings are created and initialized the first time
+            this property is accessed.
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.Control">
+            <summary>
+            This property provides derived classes direct access to the
+            control, which may or may not yet have been created.
+            </summary>
+            <remarks>
+            <para>
+            Normally the control should be accessed by calling <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.GetControl"/> instead
+            of accessing this property, as the control does not get created until the first time
+            <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.GetControl"/> is called.
+            </para>
+            <para>
+            This property may be <c>null</c> before the first call to <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.GetControl"/>.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.CreateAndInitializeControl">
+            <summary>
+            Called from <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.GetControl"/> when the control implementation is needed for the first time.
+            The implementation should create and initialize the control.
+            </summary>
+            <remarks>
+            <para>
+            The default implementation creates a new instance of the control class using the default constructor,
+            and if the control implements <see cref="T:Sdl.FileTypeSupport.Framework.Core.Settings.IFileTypeSettingsAware`1"/>, the settings are
+            communicated to the control.
+            </para>
+            <para>
+            Override this if you need to do additional initialization.
+            </para>
+            </remarks>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.CreateAndInitializeSettings">
+            <summary>
+            Called to create the settings the first time they are needed, typically 
+            during the first call to <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.GetControl"/>.
+            </summary>
+            <remarks>
+            <para>
+            The default implementation creates a new instance of the settings class
+            using the default constructor, and calls <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsBase.PopulateFromSettingsBundle(Sdl.Core.Settings.ISettingsBundle,System.String)"/>.
+            </para>
+            <para>
+            Override this if you need to do additional initialization of the settings.
+            </para>
+            </remarks>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.GetControl">
+            <summary>
+            Called by the framework to obtain the user interface control.
+            </summary>
+            <remarks>
+            The default implementation calls <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.CreateAndInitializeControl"/> the first time that this method is called.
+            If custom initialization is required for the control, it is recommended that you override that particular custom method rather than this one.
+            </remarks>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.Save">
+            <summary>
+            Called when settings should be saved. The implementation is responsible for persisting the settings.
+            </summary>
+            <remarks>
+            <para>This method is called once after <see cref="M:Sdl.Core.Settings.AbstractSettingsPage.ValidateInput"/> has been called.
+            </para>
+            <para>
+            The default implementation calls <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsBase.SaveToSettingsBundle(Sdl.Core.Settings.ISettingsBundle,System.String)"/> on the settings.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.ResetToDefaults">
+            <summary>
+            Called to reset settings to their default values. Should update the user interface accordingly.
+            </summary>
+            <remarks>
+            <para>
+            This method should not save the settings yet. This should be done in <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.Save"/>.
+            </para>
+            <para>This method will not be called if <see cref="P:Sdl.Core.Settings.AbstractSettingsPage.HasDefaultSettings"/> returns <c>false</c>.</para>
+            <para>
+            The default implementation calls <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsBase.ResetToDefaults"/>. If you are using
+            data binding with the settings as data context and have implemented property change notification events for the settings,
+            the user interface should update automatically to reflect the changes (assuming ResetToDefaults() on 
+            the settings invokes the property setters). If not, you will need to override this
+            method and ensure that the user interface is updated.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.Refresh">
+            <summary>
+            Called to re-populate the settings when the underlying data source has been changed externally. This
+            can happen when settings are imported, for example.
+            </summary>
+            <remarks>
+            <para>
+            If you are using
+            data binding with the settings as data context and have implemented property change notification events for the settings,
+            the user interface should update automatically to reflect the changes (assuming PopulateFromSettingsBundle() on 
+            the settings invokes the property setters). If not, you will need to override this
+            method and ensure that the user interface is updated.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.Dispose">
+            <summary>
+            Standard implementation of the Dispose method; calls <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.Dispose(System.Boolean)"/> with <c>true</c>
+            and suppresses finalization.
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.FileTypeConfigurationId">
+            <summary>
+            Id of the file type that is being configured. This id can be used (as a key) to retrieve 
+            the settings group representing the file type settings from a settings
+            bundle.
+            </summary>
+            <remarks>
+            <para>
+            The framework sets this property before the settings page is initialized.
+            </para>
+            <para>
+            The configuration id is typically the same as the file type definition id.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.AbstractFileTypeSettingsPage`2.SubContentFileTypeConfigurationIds">
+            <summary>
+            List of FileTypeConfigurationIds of all subcontent processing file types
+            </summary>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.ComplexObservableList`1">
+            <summary>
+            An implementation of ObservableList&lt;T&gt; which has the ability to save complex data types
+            to a settings file as long as they inherit from <see cref="T:Sdl.FileTypeSupport.Framework.Core.Settings.ISerializableListItem"/>.
+            </summary>
+            <typeparam name="T">The type of the object contained in the list - must derive from
+            <see cref="T:Sdl.FileTypeSupport.Framework.Core.Settings.ISerializableListItem"/> and have a default constructor.</typeparam>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ComplexObservableList`1.SaveToSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Saves this list to the settings group using the setting ID as a base. Any list items that implement
+            <see cref="T:Sdl.FileTypeSupport.Framework.Core.Settings.ISerializableListItem"/> will be serialized according to their serialization
+            implementations, otherwise default object serialization will be used.
+            </summary>
+            <param name="settingsGroup">The settings group to save to.</param>
+            <param name="listSettingId">The setting ID to use as a base when saving the list.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ComplexObservableList`1.PopulateFromSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Restores the list from the settings group and populates itself using the setting ID as its base.
+            Any list items that implement <see cref="T:Sdl.FileTypeSupport.Framework.Core.Settings.ISerializableListItem"/> will be deserialized according to
+            their implementations, otherwise default object deserialization will be used.
+            </summary>
+            <param name="settingsGroup">The settings group to load from.</param>
+            <param name="listSettingId">The setting ID to use as a base when populating the list.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ComplexObservableList`1.ClearListItemSettings(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Removes all saved items belonging to this list from the stored settings group. This is
+            called from <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.ComplexObservableList`1.SaveToSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)"/> to make sure that the settings being updated
+            are all saved cleanly. This implementation calls <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.ISerializableListItem.ClearListItemSettings(Sdl.Core.Settings.ISettingsGroup,System.String)"/>
+            to allow complex list item implementations to clear themselves. This may be used, for example, when a
+            list item is a nested list.
+            </summary>
+            <param name="settingsGroup">The settings group to remove the settings from.</param>
+            <param name="listSettingId">The ID of the setting to remove.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ComplexObservableList`1.GetListItemFromSettings(Sdl.Core.Settings.ISettingsGroup,System.String,System.Boolean@)">
+            <summary>
+            Gets the setting for the list item from the settings group and populates it by calling
+            <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.ISerializableListItem.PopulateFromSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)"/>.
+            </summary>
+            <param name="settingsGroup">The settings group containing the list item settings.</param>
+            <param name="listItemSetting">The setting ID to use to retrieve the setting.</param>
+            <param name="foundSetting">A flag which reports if the setting was found or not.</param>
+            <returns>The populated list item.</returns>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.Constants.SettingsConstants">
+            <summary>
+            Constants for settings
+            </summary>
+        </member>
+        <member name="F:Sdl.FileTypeSupport.Framework.Core.Settings.Constants.SettingsConstants.FileTypeSettingsKey">
+            <summary>
+            Key used for specific FileTypeSettings section
+            </summary>
+        </member>
+        <member name="F:Sdl.FileTypeSupport.Framework.Core.Settings.Constants.SettingsConstants.VerificationSettingsKey">
+            <summary>
+            Key used for specific Verification section in settings
+            </summary>
+        </member>
+        <member name="F:Sdl.FileTypeSupport.Framework.Core.Settings.Constants.SettingsConstants.PreviewSettingsKey">
+            <summary>
+            Key used for specific Preview section in settings
+            </summary>
+        </member>
+        <member name="F:Sdl.FileTypeSupport.Framework.Core.Settings.Constants.SettingsConstants.EmbeddedContentProcessorIdsSettingsKey">
+            <summary>
+            Key used for specific embedded content processor ids section.
+            </summary>
+            <remarks>This section has to be populated with all the embedded content processor ids that the filter needs when the current settings are applied.</remarks>
+        </member>
+        <member name="F:Sdl.FileTypeSupport.Framework.Core.Settings.Constants.SettingsConstants.PreviewTypesSettingsKey">
+            <summary>
+            Key used for PreviewTypes section
+            </summary>
+        </member>
+        <member name="F:Sdl.FileTypeSupport.Framework.Core.Settings.Constants.SettingsConstants.ComponentBuilderIdKey">
+            <summary>
+            Specific key used for ComponentBuilderId setting
+            </summary>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.FileSerializer">
+            <summary>
+            Class that is used to convert dependency files from and to their native format into a serialized form that can be
+            embedded in an XML file, XLIFF file, or file type definition.
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileSerializer.SerializeFile(System.String)">
+            <summary>
+            Serializes the file into a base-64 encoded string
+            </summary>
+            <param name="filePath">The path of the file to encode</param>
+            <returns>The serialized file string</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileSerializer.SerializeFile(System.IO.FileInfo)">
+            <summary>
+            Serializes the file into a base-64 encoded string
+            </summary>
+            <param name="file">The file to encode</param>
+            <returns>The serialized file string</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileSerializer.DeserializeFile(System.String)">
+            <summary>
+            Deserializes the file from a base-64 string
+            </summary>
+            <param name="encodedFile">The serialized file string</param>
+            <returns>Information on the file and whether it was created successfully</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileSerializer.ZipFile(System.IO.FileInfo)">
+            <summary>
+            Compresses the file according to the zip standard to reduce the size of the encoded file.
+            </summary>
+            <param name="file">The file that needs to be zipped.</param>
+            <returns>The byte buffer of the compressed zip file.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileSerializer.UnzipExternalFile(System.String)">
+            <summary>
+            Unzips a file
+            </summary>
+            <param name="filePath">The path to the zip file.</param>
+            <returns>Information on the file and whether it was created successfully</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileSerializer.UnzipFile(System.IO.Stream)">
+            <summary>
+            Unzips a file
+            </summary>
+            <param name="zipStream">The file stream of the zipped file</param>
+            <returns>Information on the file and whether it was created successfully</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileSerializer.ZipExternalFile(System.String)">
+            <summary>
+            Compresses the file according to the zip standard to reduce the size of the encoded file.
+            </summary>
+            <param name="filepath">The path to the file that needs to be zipped</param>
+            <returns>The path to the zip file</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileSerializer.EncodeFile(System.Byte[])">
+            <summary>
+            Encode the file to a base-64 string with a line break after every 76 characters.
+            </summary>
+            <param name="zipBuffer"></param>
+            <returns>The encoded file</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileSerializer.DecodeFile(System.String)">
+            <summary>
+            Create a .zip file from a base-64 string
+            </summary>
+            <param name="encodedFile"></param>
+            <returns>The path to the file that was created</returns>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.DeserializeFileInfo">
+            <summary>
+            Provides information on the file that was deserialized
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.DeserializeFileInfo.#ctor(System.Boolean,System.Boolean,System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="isFileCreated"></param>
+            <param name="isDirectoryCreated"></param>
+            <param name="fullPath"></param>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.DeserializeFileInfo.IsFileCreated">
+            <summary>
+            Indicates whether the file was created successfully
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.DeserializeFileInfo.IsDirectoryCreated">
+            <summary>
+            Indicates whether the current directory had to be created especially for this file
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.DeserializeFileInfo.FullPath">
+            <summary>
+            The full path to the file that was created
+            </summary>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsBase">
+            <summary>
+            This base class defines the common operations for settings objects used for processing a given file type.
+            </summary>
+            <remarks>
+            <para>
+            Settings implementations are not required to implement this class, but it is recommended.
+            </para>
+            <para>
+            The <see cref="T:System.ComponentModel.INotifyPropertyChanged"/> interface facilitates dynamic
+            UI updates for operations such as <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsBase.ResetToDefaults"/> if data binding is used. Note that
+            for this to work properly, all relevant property setters must raise the <see cref="E:System.ComponentModel.INotifyPropertyChanged.PropertyChanged"/> event
+            or call <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsBase.OnPropertyChanged(System.String)"/>.
+            </para>
+            </remarks>
+        </member>
+        <member name="E:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsBase.PropertyChanged">
+            <summary>
+            All property setters must fire this event if data binding is to be used. The recommended approach is to use
+            <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsBase.OnPropertyChanged(System.String)"/>.
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsBase.PopulateFromSettingsBundle(Sdl.Core.Settings.ISettingsBundle,System.String)">
+            <summary>
+            Populates the settings for a specific file type configuration.
+            </summary>
+            <param name="settingsBundle">The settings bundle to read settings from.</param>
+            <param name="fileTypeConfigurationId">Id that can be used (as key) to retrieve the 
+            settings group with file type specific settings from the settings bundle (this is normally
+            equal to the file type definition id). Default settings should be used if no settings
+            group exists with the specified configuration id.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsBase.SaveToSettingsBundle(Sdl.Core.Settings.ISettingsBundle,System.String)">
+            <summary>
+            Stores settings for a specified file type configuration.
+            </summary>
+            <param name="settingsBundle">The settings bundle in which the settings should be stored.</param>
+            <param name="fileTypeConfigurationId">Id for the settings group that
+            file type specific settings should be stored in.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsBase.ResetToDefaults">
+            <summary>
+            Restore all settings to default values.
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsBase.SaveDefaultsToSettingsBundle(Sdl.Core.Settings.ISettingsBundle,System.String)">
+            <summary>
+            Stores default settings for a specified file type configuration. Each setting must have its
+            default value explicitly stored.
+            </summary>
+            <param name="settingsBundle">The default settings bundle in which the settings should be stored.</param>
+            <param name="fileTypeConfigurationId">Id for the settings group that
+            file type specific settings should be stored in.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsBase.OnPropertyChanged(System.String)">
+            <summary>
+            Fires the <see cref="E:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsBase.PropertyChanged"/> event with the propertyName used as the event argument. This
+            needs to be called from the setter of every property when using binding (for example, in WPF UIs).
+            </summary>
+            <param name="propertyName">The name of the property that has been changed.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsBase.GetSettingFromSettingsGroup``1(Sdl.Core.Settings.ISettingsGroup,System.String,``0)">
+            <summary>
+            Checks whether the setting exists in the settings group, and retrieves its value (if it exists). If it does
+            not exist, the default value is returned instead.
+            </summary>
+            <typeparam name="T">The type of the setting to retrieve. The type must be the same as at the point 
+            of save, or it will not be found. See <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsBase.UpdateSettingInSettingsGroup``1(Sdl.Core.Settings.ISettingsGroup,System.String,``0,``0)"/>.</typeparam>
+            <param name="settingsGroup">The settings group in which the setting should be located.</param>
+            <param name="settingName">The name of the setting to retrieve.</param>
+            <param name="defaultValue">The default value to return if the setting has not been found.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsBase.UpdateSettingInSettingsGroup``1(Sdl.Core.Settings.ISettingsGroup,System.String,``0,``0)">
+            <summary>
+            Checks whether the setting exists in the settings group. If the setting does exist, then it 
+            is updated with the new value; if it does not exist, a new setting is created, but only 
+            if the value is not the same as the default value (in which case the call is effectively ignored).
+            </summary>
+            <typeparam name="T">The type of the setting to save. The type must be the same as at the point of
+            retrieval, or it will not be returned again correctly. See <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsBase.GetSettingFromSettingsGroup``1(Sdl.Core.Settings.ISettingsGroup,System.String,``0)"/>.</typeparam>
+            <param name="settingsGroup">The settings group in which the setting should be saved.</param>
+            <param name="settingName">The name of the setting to save.</param>
+            <param name="settingValue">The value of the setting to save.</param>
+            <param name="defaultValue">The default value of the setting. This is used to prevent creating unnecessary
+            settings when the setting to be created is equal to the default value. This does not affect updating a setting,
+            it only applies when creating a new one.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsBase.SaveInGroup``1(Sdl.Core.Settings.ISettingsGroup,System.String,``0)">
+            <summary>
+            Checks whether the setting exists in the settings group. If the setting does exist, then it 
+            is updated with the new value; if it does not exist, a new setting is created.
+            </summary>
+            <typeparam name="T">The type of the setting to save. The type must be the same as at the point of
+            retrieval, or it will not be returned again correctly. See <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsBase.GetSettingFromSettingsGroup``1(Sdl.Core.Settings.ISettingsGroup,System.String,``0)"/>.</typeparam>
+            <param name="settingsGroup">The settings group in which the setting should be saved.</param>
+            <param name="settingName">The name of the setting to save.</param>
+            <param name="settingValue">The value of the setting to save.</param>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsPageAttribute">
+            <summary>
+            Apply this attribute to a class implementing Sdl.Core.Settings.ISettingsPage.
+            </summary>
+            <remarks>
+            <para>
+            File type settings pages typically also implement <see cref="T:Sdl.FileTypeSupport.Framework.Core.Settings.IFileTypeConfigurationAware"/>.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsPageAttribute.#ctor">
+            <summary>
+            Default constructor; see base class for documentation.
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsPageAttribute.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Construct with id, name and description. See base class for parameter documentation.
+            </summary>
+            <param name="id"></param>
+            <param name="name"></param>
+            <param name="description"></param>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.FileTypeSettingsPageAttribute.HelpTopic">
+            <summary>
+            Help topic ID associated with the settings page.
+            </summary>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingRule">
+            <summary>
+            FontMappingRule represents the list of source fonts to map to a target font
+            for a particular language represented by its Lcid
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingRule.LanguageCultureName">
+            <summary>
+            Gets or sets the culture identifier name of the language
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingRule.Lcid">
+            <summary>
+            Gets or sets the culture identifier of the language
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingRule.Font">
+            <summary>
+            Gets or sets the list of source fonts to map to the target font
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingRule.ApplyFont">
+            <summary>
+            Gets or sets the target font
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingRule.Equals(System.Object)">
+            <summary>
+            Determines whether the given object is equal to this object.
+            </summary>
+            <param name="obj">object</param>
+            <returns>whether equal to this object</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingRule.GetHashCode">
+            <summary>
+            Gets the hash code.
+            </summary>
+            <returns>hash code</returns>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingSettings">
+            <summary>
+            FontMapping Settings implementation
+            </summary>
+        </member>
+        <member name="F:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingSettings.SettingEnableFontMapping">
+            <summary>
+            Enable font mapping flag setting name.
+            </summary>
+        </member>
+        <member name="F:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingSettings.SettingFontMappingRules">
+            <summary>
+            Font mapping rules setting name.
+            </summary>
+        </member>
+        <member name="F:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingSettings.SettingCustomFonts">
+            <summary>
+            Custom fonts setting name
+            </summary>
+        </member>
+        <member name="F:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingSettings.DefaultEnableFontMapping">
+            <summary>
+            Enable font mapping flag's default value.
+            </summary>
+        </member>
+        <member name="F:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingSettings._allLanguages">
+            <summary>
+            Collection of Culture IDs mapped to Culture short names (like en-US).
+            </summary>
+        </member>
+        <member name="F:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingSettings._enableFontMapping">
+            <summary>
+            Value indicating whether usage of font mapping rules is enabled
+            </summary>
+        </member>
+        <member name="F:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingSettings._fontMappingRules">
+            <summary>
+            List that contains the FontMappingRule items that apply to the setting.
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingSettings.#ctor">
+            <summary>
+            Initializes a new instance of the FontMappingSettings class.
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingSettings.AllLanguages">
+            <summary>
+            Gets a collection of Culture IDs mapped to Culture short names (like en-US).
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingSettings.EnableFontMapping">
+            <summary>
+            Gets or sets a value indicating whether usage of font mapping rules is enabled.
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingSettings.FontMappingRules">
+            <summary>
+            Gets list that contains the FontMappingRule items that apply to the setting.
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingSettings.DefaultFontMappingRules">
+            <summary>
+            Gets default collection of mapping rules.
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingSettings.CustomFontList">
+            <summary>
+            Gets the Custom font list
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingSettings.GetFontMappingRule(System.String,System.String)">
+            <summary>
+            Returns the list of FontMappingRule items that corresponds to the lcid parameter
+            </summary>
+            <param name="languageCultureCode">the culture identifier code of the language</param>
+            <param name="lcid">the culture identifier id of the language</param>
+            <returns>a hash table containing the the FontMappingRule items that correspond to the given lcid</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingSettings.ResetToDefaults">
+            <summary>
+            Reset font mapping settings to their default values
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingSettings.PopulateFromSettingsBundle(Sdl.Core.Settings.ISettingsBundle,System.String)">
+            <summary>
+            Populates a FontMappiongSettings from a SettingsBundle
+            </summary>
+            <param name="settingsBundle">the SettingsBundle to use</param>
+            <param name="fileTypeConfigurationId">the filter definition id to use</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingSettings.SaveToSettingsBundle(Sdl.Core.Settings.ISettingsBundle,System.String)">
+            <summary>
+            Saves the FontMappingSettings into a SettingsBundle
+            </summary>
+            <param name="settingsBundle">the SettingsBundle to use</param>
+            <param name="fileTypeConfigurationId">the filter definition id to use</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingSettings.SaveDefaultsToSettingsBundle(Sdl.Core.Settings.ISettingsBundle,System.String)">
+            <summary>
+            Saves the default FontMappingSettings into a SettingsBundle
+            </summary>
+            <param name="settingsBundle">the default SettingsBundle to use</param>
+            <param name="fileTypeConfigurationId">the filter definition id to use</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingSettings.GetSettingsInXml">
+            <summary>
+            Builds an xml (filters version 1) representation of the font settings
+            This is useful to be able to write the old represenation an be used by version 1 filters
+            </summary>
+            <returns>an xml representation of the font mapping settings</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingSettings.GetFontMappingRule(System.String,System.String,System.String,System.String)">
+            <summary>
+            Creates a new instance of the FontMappingRule class.
+            </summary>
+            <param name="languageCultureCode">Language Culture Code</param>
+            <param name="lcid">Language Culture ID.</param>
+            <param name="sourceFonts">Source fonts.</param>
+            <param name="targetFont">Target font.</param>
+            <returns>Newly created instance of the FontMappingRule class.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingSettings.InitAllLanguages">
+            <summary>
+            Creates the collection of Culture IDs mapped to Culture short names (like en-US).
+            </summary>
+            <returns>Collection of Culture IDs mapped to Culture short names (like en-US).</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FontMappingSettings.GetLanguageNameFromLcid(System.String)">
+            <summary>
+            Gets language short name by a culture ID.
+            </summary>
+            <param name="lcid">Culture ID.</param>
+            <returns>Language short name.</returns>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.FormattingGroupSettings">
+            <summary>
+            Formatting representation (Quick Inserts)
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FormattingGroupSettings.#ctor">
+            <summary>
+             Default constructor
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FormattingGroupSettings.#ctor(Sdl.FileTypeSupport.Framework.Core.Settings.FormattingGroupSettings)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="sourceData">Reference to the source object</param>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.FormattingGroupSettings.FormattingDescription">
+            <summary>
+             String representation of settings stored in the instance.
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.FormattingGroupSettings.FormattingItems">
+            <summary>
+            Represents a Formatting Items collection
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FormattingGroupSettings.Clone">
+            <summary>
+             Peforms deep copy of current instance.
+            </summary>
+            <returns>Reference to the clone instance.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FormattingGroupSettings.SaveToSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Saves formatting items to Settings Group
+            </summary>
+            <param name="settingsGroup"></param>
+            <param name="listItemSetting"></param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FormattingGroupSettings.PopulateFromSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Retrieves formatting items from Settings Group
+            </summary>
+            <param name="settingsGroup"></param>
+            <param name="listItemSetting"></param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FormattingGroupSettings.ClearListItemSettings(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Clears all formatting items in Settings Group
+            </summary>
+            <param name="settingsGroup"></param>
+            <param name="listItemSetting"></param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FormattingGroupSettings.GetSettingFromSettingsGroup``1(Sdl.Core.Settings.ISettingsGroup,System.String,``0)">
+            <summary>
+            Gets setting from Settings Group
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="settingsGroup"></param>
+            <param name="settingName"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FormattingGroupSettings.UpdateSettingInSettingsGroup``1(Sdl.Core.Settings.ISettingsGroup,System.String,``0,``0)">
+            <summary>
+            Updates setting in Settings Group
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="settingsGroup"></param>
+            <param name="settingName"></param>
+            <param name="settingValue"></param>
+            <param name="defaultValue"></param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FormattingGroupSettings.Equals(Sdl.FileTypeSupport.Framework.Core.Settings.Serialization.ISettingsClass)">
+            <summary>
+            Override of the equals implementation which compares formatting elements.
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.FormattingGroupSettings.GetHashCode">
+            <summary>
+            Generates a hash code for formatting settings
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.IAbstractSettingsPage">
+            <summary>
+            This interface defines the basic communication between a settings
+            page and its host.
+            </summary>
+            <remarks>
+            <para>
+            This interface intentionally excludes initialization and user interface
+            components, since this tends to be implementation specific. 
+            </para>
+            </remarks>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.IAbstractSettingsPage.HasDefaultSettings">
+            <summary>
+            Called to determine whether the settings page supports the <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.IAbstractSettingsPage.ResetToDefaults"/> method.
+            </summary>
+            <remarks>
+            <para>
+            Determines whether a 'Reset To Default' button should be displayed/enabled in the host application.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.IAbstractSettingsPage.OnActivate">
+            <summary>
+            Called when this settings page is activated.
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.IAbstractSettingsPage.OnDeactivate">
+            <summary>
+            Called when this settings page is deactivated.
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.IAbstractSettingsPage.ValidateInput">
+            <summary>
+            Returns true if the input on this settings page is valid.
+            </summary>
+            <remarks>This method is called when navigating away from a page and before <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.IAbstractSettingsPage.Save"/> is called.</remarks>
+            <returns>True if the input on this settings page is valid.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.IAbstractSettingsPage.Save">
+            <summary>
+            Called when settings should be saved. The implementation is responsible for persisting the settings.
+            </summary>
+            <remarks>This method is called once, after <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.IAbstractSettingsPage.ValidateInput"/> has been called.</remarks>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.IAbstractSettingsPage.AfterSave">
+            <summary>
+            Called after all settings pages shown on the settings dialog have been saved.
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.IAbstractSettingsPage.Cancel">
+            <summary>
+            Called when the settings dialog is canceled.
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.IAbstractSettingsPage.AfterCancel">
+            <summary>
+            Called after all settings pages shown on the settings dialog have been canceled.
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.IAbstractSettingsPage.ResetToDefaults">
+            <summary>
+            Called to reset settings to default values. The implementation is responsible for
+            resetting the settings and updating the user interface accordingly.
+            </summary>
+            <remarks>
+            <para>
+            This method should not save the settings yet. This should be done in <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.IAbstractSettingsPage.Save"/>.
+            </para>
+            <para>This method will not be called if <see cref="P:Sdl.FileTypeSupport.Framework.Core.Settings.IAbstractSettingsPage.HasDefaultSettings"/> returns <c>false</c>.</para>
+            </remarks>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.IFileTypeConfigurationAware">
+            <summary>
+            Interface implemented by settings pages that need to know which file
+            type configuration is being used. This is also used to configure a list of FileTypeConfigurationIds
+            for sub-content settings pages
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.IFileTypeConfigurationAware.FileTypeConfigurationId">
+            <summary>
+            Id of the file type being configured. This id can be used (as a key) to retrieve 
+            the settings group representing the file type settings from a settings
+            bundle.
+            </summary>
+            <remarks>
+            <para>
+            The framework sets this property before the settings page is initialized.
+            </para>
+            <para>
+            The configuration id is typically the same as the file type definition id.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.IFileTypeConfigurationAware.SubContentFileTypeConfigurationIds">
+            <summary>
+            List of sub-content file type configuration IDs which indicates all the FileTypes which
+            support sub-content processing
+            </summary>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.IFileTypeSettingsAware`1">
+            <summary>
+            This interface may be implemented by file type settings controls to provide
+            access to the settings.
+            </summary>
+            <remarks>
+            <para>
+            Implementing this interface is optional, but recommended, as it provides a standardized way to 
+            communicate settings to the control, which can be used by standard implementations such as 
+            <c>AbstractFileTypeSettingsPage</c>.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.IFileTypeSettingsAware`1.Settings">
+            <summary>
+            The settings
+            </summary>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.IFileTypeSettingsConverter">
+            <summary>
+            Interface which should be implemented by File Types supporting conversion from XML to Json settings and vice versa
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.IFileTypeSettingsConverter.ConvertXmlToJson(Sdl.Core.Settings.ISettingsBundle,System.String)">
+            <summary>
+            Converts from an Xml settings object to a Json settings object
+            </summary>
+            <param name="xmlSettingsBundle">xml settings bundle</param>
+            <param name="fileTypeConfigurationId">fileTypeConfigurationId</param>
+            <returns>IJsonSettingsBundle with settings from passed in xmlSettingsBundle</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.IFileTypeSettingsConverter.ConvertXmlToJson(Sdl.Core.Settings.ISettingsBundle,Sdl.Core.Settings.ISettingsBundle,System.String)">
+            <summary>
+            Converts from XML to JSON passing in both settings bundles and fileTypeConfigurationId
+            </summary>
+            <param name="xmlSettingsBundle">XML settings bundle</param>
+            <param name="jsonSettingsBundle">JSON settings bundle</param>
+            <param name="fileTypeConfigurationId">fileTypeConfigurationId</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.IFileTypeSettingsConverter.ConvertJsonToXml(Sdl.Core.Settings.ISettingsBundle,System.String)">
+            <summary>
+            Converts from a Json settings object to an Xml settings object
+            </summary>
+            <param name="jsonSettingsBundle">json settings bundle</param>
+            <param name="fileTypeConfigurationId">fileTypeConfigurationId</param>
+            <returns>A populated ISettingsBundle with settings from passed in jsonSettingsBundle</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.IFileTypeSettingsConverter.ConvertJsonToXml(Sdl.Core.Settings.ISettingsBundle,Sdl.Core.Settings.ISettingsBundle,System.String)">
+            <summary>
+            Converts from Json to XML passing in both settings bundles and fileTypeConfigurationId
+            </summary>
+            <param name="jsonSettingsBundle">JSON settings bundle</param>
+            <param name="xmlSettingsBundle">XML settings bundle</param>
+            <param name="fileTypeConfigurationId">fileTypeConfigurationId</param>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.IFileTypeSettingsPage">
+            <summary>
+            This interface defines the interaction between a settings page that is implemented
+            in Silverlight or WPF and the host application.
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.IFileTypeSettingsPage.SettingsBundle">
+            <summary>
+            The implementation should return the settings bundle passed in the <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.IFileTypeSettingsPage.Init(Sdl.Core.Settings.ISettingsBundle)"/> method.
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.IFileTypeSettingsPage.Init(Sdl.Core.Settings.ISettingsBundle)">
+            <summary>
+            The framework calls this method after the settings page has been created, before it is used for the first time. 
+            </summary>
+            <param name="settingsBundle">The settings bundle in which settings are persisted. The implementation should 
+            store this value and make it accessible from the <see cref="P:Sdl.FileTypeSupport.Framework.Core.Settings.IFileTypeSettingsPage.SettingsBundle"/> property.
+            <para>The implementation should use settings from the bundle to initialize the user interface before
+            returning the control from <see cref="!:GetControl"/>, and to persist changed settings in the 
+            <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.IAbstractSettingsPage.Save"/> method.</para>
+            </param>
+            <remarks>
+            <para>
+            This method will only be called once. The implementation may throw an exception if it is called multiple times.
+            </para>
+            <para>
+            File type specific settings need the configuration id to determine which settings group to access in the
+            settings bundle. This can be retrieved by implementing <see cref="T:Sdl.FileTypeSupport.Framework.Core.Settings.IFileTypeConfigurationAware"/>. The framework
+            will set the configuration id before calling the <c>Init()</c> method.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.IFileTypeSettingsPage.IsInitialized">
+            <summary>
+            The implementation should return true after <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.IFileTypeSettingsPage.Init(Sdl.Core.Settings.ISettingsBundle)"/> has been called.
+            </summary>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.ISerializableListItem">
+            <summary>
+            Interface that provides complicated list items in an <see cref="T:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1"/> with the opportunity
+            to serialize and restore themselves when <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.SaveToSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)"/> and
+            <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.PopulateFromSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)"/> are called on the parent list.
+            </summary>
+            <remarks>
+            It is not required to always inherit from this interface when adding an item to <c>ObservableList</c> but
+            it is the recommended approach when the item added is of a complex nature (for example, it is another list itself).
+            </remarks>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ISerializableListItem.SaveToSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Serializes and saves the list item to the settings group.
+            </summary>
+            <param name="settingsGroup">The settings group of the <see cref="T:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1"/> that this item belongs to.</param>
+            <param name="listItemSetting">The setting ID used by the <see cref="T:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1"/> to save the list settings.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ISerializableListItem.PopulateFromSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Deserializes and re-populates the list item from the settings group.
+            </summary>
+            <param name="settingsGroup">The settings group of the <see cref="T:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1"/> that this item belongs to.</param>
+            <param name="listItemSetting">The setting ID used by the <see cref="T:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1"/> to load the list settings.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ISerializableListItem.ClearListItemSettings(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Removes all current settings belonging to this list item from the settings bundle. This is called from
+            <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.SaveToSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)"/> to ensure that all list items in the settings are removed from
+            the stored list before saving a new set of list items. Implementations may be required if the settings object 
+            is of a complex type such as another list, otherwise this can be left empty.
+            </summary>
+            <param name="settingsGroup">The settings group of the <see cref="T:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1"/> that this item belongs to.</param>
+            <param name="listItemSetting">The setting ID used by the <see cref="T:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1"/> to access the list settings.</param>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.JsonSettings.FileTypeSettingsJson">
+            <summary/>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.JsonSettings.FileTypeSettingsJson.FileTypeId">
+            <summary/>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.JsonSettings.FileTypeSettingsJson.ComponentBuilderId">
+            <summary/>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.JsonSettings.FileTypeSettingsJson.FilterSettings">
+            <summary/>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.JsonSettings.FileTypeSettingsJson.VerificationSettings">
+            <summary/>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.JsonSettings.FileTypeSettingsJson.PreviewSettings">
+            <summary/>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.JsonSettings.FileTypeSettingsJson.EmbeddedContentProcessors">
+            <summary/>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.JsonSettings.FileTypeSettingsJson.PreviewTypes">
+            <summary/>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.JsonSettings.FileTypeSettingsUtil">
+            <summary>
+            Helper class for ISettingsBundles
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.JsonSettings.FileTypeSettingsUtil.CreateJsonSettingsBundle(Sdl.FileTypeSupport.Framework.Core.Settings.JsonSettings.FileTypeSettingsJson)">
+            <summary>
+            Create a new ISettingsBundle from FileTypeSettings in JSON format, from scratch
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.JsonSettings.FileTypeSettingsUtil.CreateJsonSettingsBundleFromData(Sdl.FileTypeSupport.Framework.Core.Settings.JsonSettings.FileTypeSettingsJson,System.String)">
+            <summary>
+            Create a new ISettingsBundle from FileTypeSettings in JSON format, based on existing data
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.JsonSettings.FileTypeSettingsUtil.UpdateFileTypeSettingsDataInJObject(Sdl.FileTypeSupport.Framework.Core.Settings.JsonSettings.FileTypeSettingsJson,Newtonsoft.Json.Linq.JObject)">
+            <summary>
+            Updates the data JObject base on the settings from fileTypeSettingsJson
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.JsonSettings.FileTypeSettingsUtil.GetWellKnownSectionFromJsonBundle(Newtonsoft.Json.Linq.JObject,System.String,System.String)">
+            <summary>
+            Extract all settings from FileTypeSettings section of a JsonBundle
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.JsonSettings.FileTypeSettingsUtil.GetComponentBuilderIdFromJsonBundle(Newtonsoft.Json.Linq.JObject)">
+            <summary>
+            Extract component builder id from JsonBundle
+            </summary>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2">
+            <summary>
+            An implementation of <c>IDictionary&lt;TKey&gt;&lt;TValue&gt;</c> which fires <see cref="T:System.Collections.Specialized.INotifyCollectionChanged"/>
+            and <see cref="T:System.ComponentModel.INotifyPropertyChanged"/> when required. This allows the dictionary to be used as
+            a data source for WPF user controls implementing data-binding.
+            </summary>
+            <typeparam name="TKey">The type of the key used in the dictionary.</typeparam>
+            <typeparam name="TValue">The type of the value used in the dictionary.</typeparam>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.#ctor">
+            <summary>
+            Default constructor creating a new dictionary with the default capacity.
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.#ctor(System.Int32)">
+            <summary>
+            Constructor creating a new dictionary with the specified capacity.
+            </summary>
+            <param name="size">The initial capacity of the dictionary.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.Add(`0,`1)">
+            <summary>
+            Adds an element with the key and value to the dictionary or updates the value
+            if the key already exists.
+            </summary>
+            <param name="key">The object to use as the key for the element.</param>
+            <param name="value">The object to use as the value for the element.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.ContainsKey(`0)">
+            <summary>
+            Determines whether the dictionary contains an element with the specified key.
+            </summary>
+            <param name="key">The key to search the dictionary for.</param>
+            <returns><c>true</c> if the key exists in the dictionary.</returns>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.Keys">
+            <summary>
+            A collection of all element keys contained in the dictionary.
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.Remove(`0)">
+            <summary>
+            Removes the element with the specified key from the dictionary.
+            </summary>
+            <param name="key">The key of the element to remove.</param>
+            <returns><c>true</c> if the element was successfully removed.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.TryGetValue(`0,`1@)">
+            <summary>
+            Gets the value of the element with the specified key if it
+            exists.
+            </summary>
+            <param name="key">The key of the element to get.</param>
+            <param name="value">The value of the element at the specified key.</param>
+            <returns><c>true</c> if an element with the specified key exists.</returns>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.Values">
+            <summary>
+            A collection of all element values contained in the dictionary.
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.Item(`0)">
+            <summary>
+            Retrieves the dictionary element value at the specified key.
+            </summary>
+            <param name="key">The key of the element to get.</param>
+            <returns>The value of the element at the specified key.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.Add(System.Collections.Generic.KeyValuePair{`0,`1})">
+            <summary>
+            Adds a new element to the dictionary.
+            </summary>
+            <param name="item">The element to add to the dictionary.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.Clear">
+            <summary>
+            Removes all elements from the dictionary.
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.Contains(System.Collections.Generic.KeyValuePair{`0,`1})">
+            <summary>
+            Determines whether the dictionary contains the specified item.
+            </summary>
+            <param name="item">The item to look for.</param>
+            <returns><c>true</c> if the item exists in the dictionary.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.CopyTo(System.Collections.Generic.KeyValuePair{`0,`1}[],System.Int32)">
+            <summary>
+            Copies the dictionary elements into the provided array, starting
+            from the specified index in the array.
+            </summary>
+            <param name="array">The index to copy the dictionary elements in to.</param>
+            <param name="arrayIndex">The index in the array to start copying from.</param>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.Count">
+            <summary>
+            The number of elements contained in the dictionary.
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.IsReadOnly">
+            <summary>
+            Determines whether the dictionary is read-only.
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.Remove(System.Collections.Generic.KeyValuePair{`0,`1})">
+            <summary>
+            Removes the specified item from the dictionary.
+            </summary>
+            <param name="item">The item to remove from the dictionary.</param>
+            <returns><c>true</c> if the item was successfully removed from the dictionary.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="E:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.CollectionChanged">
+            <summary>
+            Event that is fired whenever the contents of the collection are changed.
+            </summary>
+        </member>
+        <member name="E:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.PropertyChanged">
+            <summary>
+            Event that is fired whenever the value of a property of the collection is changed.
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Creates a new dictionary based on the serialization information provided.
+            </summary>
+            <param name="info"></param>
+            <param name="context"></param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Populates serialization information with the elements in the dictionary.
+            </summary>
+            <param name="info"></param>
+            <param name="context"></param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.SaveToSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Saves this dictionary to the settings group using the setting ID as a base.
+            </summary>
+            <param name="settingsGroup">The settings group to save to.</param>
+            <param name="listSettingId">The setting ID to use as a base when saving the dictionary.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.PopulateFromSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Restores the dictionary from the settings group and populates itself using the setting ID as its base.
+            </summary>
+            <param name="settingsGroup">The settings group to load from.</param>
+            <param name="listSettingId">The setting ID to use as a base when populating the dictionary.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.ClearDictionaryItemSettings(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Removes all saved items belonging to this dictionary from the stored settings group. This is
+            called from <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.SaveToSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)"/> to make sure that the settings being updated
+            are all saved cleanly.
+            </summary>
+            <param name="settingsGroup">The settings group to remove the settings from.</param>
+            <param name="listSettingId">The ID of the setting to remove.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableDictionary`2.GetDictionaryItemFromSettings``1(Sdl.Core.Settings.ISettingsGroup,System.String,System.Boolean@)">
+            <summary>
+            Gets the setting for the dictionary item from the settings group and populates it.
+            </summary>
+            <param name="settingsGroup">The settings group containing the dictionary item settings.</param>
+            <param name="listItemSetting">The setting ID to use to retrieve the setting.</param>
+            <param name="found">A flag which reports if the setting was found or not.</param>
+            <returns>The populated dictionary item.</returns>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1">
+            <summary>
+            An implementation of <c>IList&lt;T&gt;</c> which fires <see cref="T:System.Collections.Specialized.INotifyCollectionChanged"/>
+            and <see cref="T:System.ComponentModel.INotifyPropertyChanged"/> when required. This allows the list to be used as
+            a data source for WPF user controls implementing data-binding.
+            </summary>
+            <typeparam name="T">The type of object contained in the list.</typeparam>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.CreateObservableStringList(System.String[])">
+            <summary>
+            Factory method used by the Spring framework to create observable string lists
+            to assign to the properties that require them.
+            </summary>
+            <param name="strings"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.#ctor">
+            <summary>
+            Default constructor creating a new empty list with a default capacity.
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Constructor which takes a collection of T and adds it to this list
+            </summary>
+            <param name="collection">The collection to be added</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.InsertRange(System.Int32,System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Inserts the elements of a collection into list at the specified index.
+            </summary>
+            <param name="index">The index to insert elements at.</param>
+            <param name="collection">The elements to insert into the list.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.AddRange(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Adds the elements of the specified collection to the list.
+            </summary>
+            <param name="collection">The collection of elements to add to the list.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.ToArray">
+            <summary>
+            Copies the elements of the list to a new array.
+            </summary>
+            <returns>A new array containing the elements of the list.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.Sort">
+            <summary>
+            Sorts the list using the default comparer.
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.Sort(System.Collections.Generic.IComparer{`0})">
+            <summary>
+            Sorts the list using the provided comparer.
+            </summary>
+            <param name="comparer">The comparer to sort the list with.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.Sort(System.Comparison{`0})">
+            <summary>
+            Sorts the list using the provided comparison delegate
+            </summary>
+            <param name="comparison">The delegate to use when comparing</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.IndexOf(`0)">
+            <summary>
+            Determines the index of the specified item in the list.
+            </summary>
+            <param name="item">The item to locate in the list.</param>
+            <returns>The zero-based index of the item in the list.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.Insert(System.Int32,`0)">
+            <summary>
+            Inserts an item into the list at the specified index.
+            </summary>
+            <param name="index">The zero-based index to insert the item at.</param>
+            <param name="item">The item to insert into the list.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.Find(System.Predicate{`0})">
+            <summary>
+            Searches for an element that matches the conditions defined by the specified predicate, 
+            and returns the first occurrence within the entire ObservableList.
+            </summary>
+            <param name="match">The <see cref="T:System.Predicate`1"/> delegate that defines the conditions of the element to search for.</param>
+            <returns>The first element that matches the conditions defined by the specified predicate, if found; otherwise, the default value for type T.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.RemoveAt(System.Int32)">
+            <summary>
+            Removes the list item at the specified index.
+            </summary>
+            <param name="index">The zero-based index of the item to remove.</param>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.Item(System.Int32)">
+            <summary>
+            Retrieves the list item at the specified index.
+            </summary>
+            <param name="index">The zero-based index of the item to retrieve.</param>
+            <returns>The item located at the index.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.Add(`0)">
+            <summary>
+            Adds an item to the list.
+            </summary>
+            <param name="item">The item to add to the list.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.Clear">
+            <summary>
+            Removes all items from the list.
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.Contains(`0)">
+            <summary>
+            Determines whether the list contains a specific item.
+            </summary>
+            <param name="item">The item to search the list for.</param>
+            <returns><c>true</c> if the list contains the item.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.CopyTo(`0[],System.Int32)">
+            <summary>
+            Copies the elements of the list to an array, starting at a particular index.
+            </summary>
+            <param name="array">The array to copy the list items in to.</param>
+            <param name="arrayIndex">The zero-based index of the array from which to start copying.</param>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.Count">
+            <summary>
+            The number of elements contained in the list.
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.IsReadOnly">
+            <summary>
+            Determines whether the list is read-only.
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.Remove(`0)">
+            <summary>
+            Removes the first occurrence of a specific item from the list.
+            </summary>
+            <param name="item">The item to remove.</param>
+            <returns><c>true</c> if the item was successfully removed.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the list.
+            </summary>
+            <returns>An enumerator that iterates through the list.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the list.
+            </summary>
+            <returns>An enumerator that iterates through the list.</returns>
+        </member>
+        <member name="E:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.CollectionChanged">
+            <summary>
+            Event that is fired whenever the list collection has changed.
+            </summary>
+        </member>
+        <member name="E:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.PropertyChanged">
+            <summary>
+            Event that is fired whenever the value of a property on the list has changed.
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.SaveToSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Saves this list to the settings group using the setting ID as a base.
+            </summary>
+            <param name="settingsGroup">The settings group to save to.</param>
+            <param name="listSettingId">The setting ID to use as a base when saving the list.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.PopulateFromSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Restores the list from the settings group and populates itself using the setting ID as its base.
+            </summary>
+            <param name="settingsGroup">The settings group to load from.</param>
+            <param name="listSettingId">The setting ID to use as a base when populating the list.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.ClearListItemSettings(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Removes all saved items belonging to this list from the stored settings group. This is
+            called from <see cref="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.SaveToSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)"/> to make sure that the settings being updated
+            are all saved cleanly.
+            </summary>
+            <param name="settingsGroup">The settings group to remove the settings from.</param>
+            <param name="listSettingId">The ID of the setting to remove.</param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.GetListItemFromSettings(Sdl.Core.Settings.ISettingsGroup,System.String,System.Boolean@)">
+            <summary>
+            Gets the setting for the list item from the settings group and populates it.
+            </summary>
+            <param name="settingsGroup">The settings group containing the list item settings.</param>
+            <param name="listItemSetting">The setting ID to use to retrieve the setting.</param>
+            <param name="foundSetting">A flag which reports if the setting was found or not.</param>
+            <returns>The populated list item.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.Equals(System.Object)">
+            <summary>
+            Determines whether the given object is equal to this object.
+            </summary>
+            <param name="obj">given object</param>
+            <returns>whether equal to this object</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.ObservableList`1.GetHashCode">
+            <summary>
+            Gets the hash code.
+            </summary>
+            <returns>hash code</returns>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.BaseMarkupDataType">
+            <summary>
+            This class represents a markup data object such as
+            Text, TextPair, PlaceholderTag and TagPair
+            The classes TextMarkup, TextPairMarkup, PlaceholderTagMarkup and TagPairMarkup derive from this.
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.BaseMarkupDataType.SaveToSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Saves settings to settings group
+            </summary>
+            <param name="settingsGroup"></param>
+            <param name="listItemSetting"></param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.BaseMarkupDataType.PopulateFromSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Loads settings from settings group
+            </summary>
+            <param name="settingsGroup"></param>
+            <param name="listItemSetting"></param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.BaseMarkupDataType.ClearListItemSettings(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Clears settings in settings group
+            </summary>
+            <param name="settingsGroup"></param>
+            <param name="listItemSetting"></param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.BaseMarkupDataType.ToString">
+            <summary>
+            Returns a System.String that represents the current object.
+            </summary>
+            <returns>A System.String that represents the current object.</returns>
+        </member>
+        <member name="E:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.BaseMarkupDataType.PropertyChanged">
+            <summary>
+            Event for notification of property changes
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.BaseMarkupDataType.OnPropertyChanged(System.String)">
+            <summary>
+            Fires the PropertyChanged event
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.BaseMarkupDataType.GetSettingFromSettingsGroup``1(Sdl.Core.Settings.ISettingsGroup,System.String,``0)">
+            <summary>
+            Gets a settings from settings group
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="settingsGroup"></param>
+            <param name="settingName"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.BaseMarkupDataType.UpdateSettingInSettingsGroup``1(Sdl.Core.Settings.ISettingsGroup,System.String,``0,``0)">
+            <summary>
+            Updates a setting in settings group
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="settingsGroup"></param>
+            <param name="settingName"></param>
+            <param name="settingValue"></param>
+            <param name="defaultValue"></param>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.MarkupDataFactory">
+            <summary>
+            Factory which creates Markup representation object (Quick Inserts)
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.MarkupDataFactory.CreateMarkupDataType(System.String)">
+            <summary>
+            Creates a markup representation object (Quick Inserts)
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.PlaceholderTagMarkup">
+            <summary>
+            Markup representation for Placeholder Tags (Quick Inserts)
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.PlaceholderTagMarkup.Text">
+            <summary>
+            Represents the text for this markup
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.PlaceholderTagMarkup.TextEquivalent">
+            <summary>
+            Represents the Text Equivalent for this markup
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.PlaceholderTagMarkup.ToString">
+            <summary>
+            Returns a System.String that represents the current object.
+            </summary>
+            <returns>A System.String that represents the current object.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.PlaceholderTagMarkup.Clone">
+            <summary>
+            Performs deep copy of the object.
+            </summary>
+            <returns>Reference to the newly created object.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.PlaceholderTagMarkup.SaveToSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Saves the settings to settings group
+            </summary>
+            <param name="settingsGroup"></param>
+            <param name="listItemSetting"></param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.PlaceholderTagMarkup.PopulateFromSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Loads the settings from settings group
+            </summary>
+            <param name="settingsGroup"></param>
+            <param name="listItemSetting"></param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.PlaceholderTagMarkup.ClearListItemSettings(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Clears the settings from settings group
+            </summary>
+            <param name="settingsGroup"></param>
+            <param name="listItemSetting"></param>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.QuickInsertSettings">
+            <summary>
+            Quick Insert representation
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.QuickInsertSettings.CommandId">
+            <summary>
+            Represents the Quick Insert Command Id
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.QuickInsertSettings.CommandName">
+            <summary>
+            Represents the Quick Insert's Command Name
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.QuickInsertSettings.Description">
+            <summary>
+            Represents the Quick Insert's Description
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.QuickInsertSettings.DisplayOnToolbar">
+            <summary>
+            QuickInsert DisplayOnToolbar property
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.QuickInsertSettings.Markup">
+            <summary>
+            Markup for this Quick Insert
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.QuickInsertSettings.#ctor">
+            <summary>
+            Constructor for this Quick Insert Settings object
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.QuickInsertSettings.ResetToDefaults">
+            <summary>
+            Resets all Quick Inserts settings to defaults
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.QuickInsertSettings.SaveToSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Saves settings to settings group
+            </summary>
+            <param name="settingsGroup"></param>
+            <param name="listItemSetting"></param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.QuickInsertSettings.PopulateFromSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Loads settings from settings group
+            </summary>
+            <param name="settingsGroup"></param>
+            <param name="listItemSetting"></param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.QuickInsertSettings.ClearListItemSettings(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Clears settings from settings group
+            </summary>
+            <param name="settingsGroup"></param>
+            <param name="listItemSetting"></param>
+        </member>
+        <member name="E:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.QuickInsertSettings.PropertyChanged">
+            <summary>
+            Event for notification of property changes
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.QuickInsertSettings.OnPropertyChanged(System.String)">
+            <summary>
+            Fires the PropertyChanged event
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.QuickInsertSettings.GetSettingFromSettingsGroup``1(Sdl.Core.Settings.ISettingsGroup,System.String,``0)">
+            <summary>
+            Gets a setting from the settings group
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="settingsGroup"></param>
+            <param name="settingName"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.QuickInsertSettings.UpdateSettingInSettingsGroup``1(Sdl.Core.Settings.ISettingsGroup,System.String,``0,``0)">
+            <summary>
+            Updates a setting in the settings group
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="settingsGroup"></param>
+            <param name="settingName"></param>
+            <param name="settingValue"></param>
+            <param name="defaultValue"></param>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.QuickInsertsSettings">
+            <summary>
+            Top level Quick Inserts representation
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.QuickInsertsSettings.QuickInserts">
+            <summary>
+            Property used to access Quick Inserts collection
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.QuickInsertsSettings.ResetToDefaults">
+            <summary>
+            Resets all settings to defaults
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.QuickInsertsSettings.GetDefaultQuickInsertsSettings">
+            <summary>
+            Returns the default quick inserts settings. Each subclass should override this method to return an appropriate instance.
+            </summary>
+            <returns>The default quick inserts settings</returns>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TagPairMarkup">
+            <summary>
+            Markup representation for TagPairs (Quick Inserts)
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TagPairMarkup.StartTagText">
+            <summary>
+            Represents the start tag text for this markup
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TagPairMarkup.EndTagText">
+            <summary>
+            Represents the end tag text for this markup
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TagPairMarkup.CanHide">
+            <summary>
+            Represents the hide property for this markup
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TagPairMarkup.Formatting">
+            <summary>
+            Represents the formatting for this markup
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TagPairMarkup.ToString">
+            <summary>
+            Returns a System.String that represents the current object.
+            </summary>
+            <returns>A System.String that represents the current object.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TagPairMarkup.Clone">
+            <summary>
+            Performs deep copy of the object.
+            </summary>
+            <returns>Reference to the newly created object.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TagPairMarkup.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TagPairMarkup.ResetToDefaults">
+            <summary>
+            Reset markup to default values
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TagPairMarkup.SaveToSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Saves markup to Settings Group
+            </summary>
+            <param name="settingsGroup"></param>
+            <param name="listItemSetting"></param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TagPairMarkup.PopulateFromSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Loads markup from Settings Group
+            </summary>
+            <param name="settingsGroup"></param>
+            <param name="listItemSetting"></param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TagPairMarkup.ClearListItemSettings(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Clears settings from Settings Group
+            </summary>
+            <param name="settingsGroup"></param>
+            <param name="listItemSetting"></param>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TextMarkup">
+            <summary>
+            Markup representation for Text (Quick Inserts)
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TextMarkup.Text">
+            <summary>
+            This property represents the text for this markup object
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TextMarkup.ToString">
+            <summary>
+            Returns a System.String that represents the current object.
+            </summary>
+            <returns>A System.String that represents the current object.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TextMarkup.Clone">
+            <summary>
+            Performs deep copy of the object.
+            </summary>
+            <returns>Reference to the newly created object.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TextMarkup.SaveToSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Saves settings to settings group
+            </summary>
+            <param name="settingsGroup"></param>
+            <param name="listItemSetting"></param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TextMarkup.PopulateFromSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Loads settings from settings group
+            </summary>
+            <param name="settingsGroup"></param>
+            <param name="listItemSetting"></param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TextMarkup.ClearListItemSettings(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Clears settings from settings group
+            </summary>
+            <param name="settingsGroup"></param>
+            <param name="listItemSetting"></param>
+        </member>
+        <member name="T:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TextPairMarkup">
+            <summary>
+            Markup representation for TextPairs (Quick Inserts)
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TextPairMarkup.StartText">
+            <summary>
+            Represents the start text for this markup
+            </summary>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TextPairMarkup.EndText">
+            <summary>
+            Represents the end text for this markup
+            </summary>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TextPairMarkup.ToString">
+            <summary>
+            Returns a System.String that represents the current object.
+            </summary>
+            <returns>A System.String that represents the current object.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TextPairMarkup.Clone">
+            <summary>
+            Performs deep copy of the object.
+            </summary>
+            <returns>Reference to the newly created object.</returns>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TextPairMarkup.SaveToSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Saves this markup to settings group
+            </summary>
+            <param name="settingsGroup"></param>
+            <param name="listItemSetting"></param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TextPairMarkup.PopulateFromSettingsGroup(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Gets the settings for this markup from settings group
+            </summary>
+            <param name="settingsGroup"></param>
+            <param name="listItemSetting"></param>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.QuickInserts.TextPairMarkup.ClearListItemSettings(Sdl.Core.Settings.ISettingsGroup,System.String)">
+            <summary>
+            Clears the settings related to this object in settings group
+            </summary>
+            <param name="settingsGroup"></param>
+            <param name="listItemSetting"></param>
+        </member>
+        <member name="P:Sdl.FileTypeSupport.Framework.Core.Settings.Serialization.AbstractSettingsClass.HasEmbeddedContentProcessorIds">
+            <summary>
+            Should be overriden with true in at most one settings class of the filter.
+            </summary>
+            <remarks>
+            Returns whether the filter depends on other embedded content processors whose
+            settings will have to be fetched too.
+            </remarks>
+        </member>
+        <member name="M:Sdl.FileTypeSupport.Framework.Core.Settings.Serialization.AbstractSettingsClass.GetEmbeddedContentProcessorIds">
+            <summary>
+            Should be overriden in at most one settings class of the filter. Returns the ids
+            of embedded content processors that the filter depends on using the current settings.
+            </summary>
+            <remarks>
+            This is needed because the settings of those processors will have to be fetched
+            together with the current one.
+            </remarks>
+        </member>
+    </members>
+</doc>
