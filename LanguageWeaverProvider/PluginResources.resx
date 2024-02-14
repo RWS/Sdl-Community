@@ -234,10 +234,6 @@
   <data name="Dictionary_Window_CloseWindow" xml:space="preserve">
     <value>Close</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Download.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ErrorView_Buttons_Close" xml:space="preserve">
     <value>Close</value>
   </data>
@@ -270,9 +266,6 @@
   </data>
   <data name="FeedbackView_Title" xml:space="preserve">
     <value>Give feedback!</value>
-  </data>
-  <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\ForumIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="LMPViewModel_ResetTitle" xml:space="preserve">
     <value>Reset to defaults</value>
@@ -325,6 +318,7 @@ This action cannot be undone.</value>
   <data name="Loading_LMP_RestoreDefaults" xml:space="preserve">
     <value>Restoring database...</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="lwHeader_Cloud" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\lwHeader_Cloud.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -432,9 +426,6 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
   <data name="Plugin_Name" xml:space="preserve">
     <value>Language Weaver Provider</value>
   </data>
-  <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="SettingsView_BackButton_LeftContent" xml:space="preserve">
     <value>←</value>
   </data>
@@ -446,6 +437,18 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
   </data>
   <data name="SettingsView_Tags" xml:space="preserve">
     <value>Include tags in translation</value>
+  </data>
+  <data name="TellMeDoc" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMeDoc.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMeForum" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMeForum.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMeSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMeSettings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMeSourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMeSourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="TranslationDraftNotResent" xml:space="preserve">
     <value>[segment already translated...source not re-sent]</value>
