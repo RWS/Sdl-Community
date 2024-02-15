@@ -60,5 +60,10 @@ namespace InterpretBank.GlossaryService
 		{
 			_connection.ConnectionString = $"Data Source='{filePath}';Cache=Shared";
 		}
-	}
+
+        public void Dispose()
+        {
+            _connection?.Dispose();
+        }
+    }
 }

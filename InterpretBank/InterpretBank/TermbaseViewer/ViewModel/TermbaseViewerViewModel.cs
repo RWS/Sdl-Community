@@ -156,9 +156,11 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             Entries.Result.Add(newEntryModel);
         }
 
-        private void Entries_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void Entries_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName != "Status") return;
+
+            if (Entries.Status == TaskStatus.Faulted) return;
 
             Entries.Result.ForEach(entry => entry.Terms.ForEach(t =>
             {

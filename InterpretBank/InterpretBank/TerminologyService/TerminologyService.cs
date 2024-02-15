@@ -1,5 +1,8 @@
-﻿using InterpretBank.GlossaryService;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using InterpretBank.GlossaryService;
 using InterpretBank.GlossaryService.DAL;
+using InterpretBank.GlossaryService.Interface;
+using InterpretBank.GlossaryService.Model;
 using InterpretBank.Helpers;
 using InterpretBank.Interface;
 using InterpretBank.Model;
@@ -11,7 +14,9 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Data.Linq;
+using System.Data.SqlClient;
 using System.Data.SQLite;
 using System.Linq;
 using System.Threading.Tasks;
@@ -51,40 +56,28 @@ public class TerminologyService : ITerminologyService
     //+ support for subglossaries
     public ObservableCollection<EntryModel> GetEntriesFromDb(List<string> glossaries)
     {
-        using var ibContext = new DataContext(InterpretBankDataContext.SqLiteConnection);
-        var dbEntries =
-            (glossaries != null
-                ? ibContext
-                    .GetTable<DbGlossaryEntry>()
-                    .Where(dbTerm => glossaries.Contains(dbTerm.Tag1))
-                : ibContext.GetTable<DbGlossaryEntry>()).ToList();
+        //using var ibContext = new DataContext(InterpretBankDataContext.SqLiteConnection);
+        //var dbEntries =
+        //    (glossaries != null
+        //        ? ibContext
+        //            .GetTable<DbGlossaryEntry>()
+        //            .Where(dbTerm => glossaries.Contains(dbTerm.Tag1))
+        //        : ibContext.GetTable<DbGlossaryEntry>()).ToList();
+
+        using var glossaryService = GetGlossaryService();
+        var terms = glossaryService.GetTerms(null, null, glossaries, null).Cast<TermEntry>();
 
         var entryModels = new ObservableCollection<EntryModel>();
 
-        InitializeEntries(dbEntries, entryModels);
+        InitializeEntries(terms, entryModels);
         return entryModels;
     }
 
     public List<StudioTermEntry> GetExactTerms(string searchText, string sourceLanguage, string targetLanguage,
         List<string> glossaries)
     {
-        var sourceLanguageIndex = GetLanguageIndex(sourceLanguage);
-        var targetLanguageIndex = GetLanguageIndex(targetLanguage);
-        var columns = GetTermColumns(targetLanguageIndex);
-
-        var allTerms = InterpretBankDataContext
-            .GetRows<DbGlossaryEntry>()
-            .Where(t => glossaries.Contains(t.Tag1))
-            .Select(t => new SimpleEntry
-            {
-                Id = t.Id,
-                Source = t[$"Term{sourceLanguageIndex}"],
-                Target = t[columns[0]],
-                Extra1 = t[columns[1]],
-                Extra2 = t[columns[2]]
-            }).ToList();
-
-        var filteredTerms = allTerms.Where(t => t.Source.ToLower().Equals(searchText.ToLower()));
+        var allEntries = GetSourceAndTargetTerms(sourceLanguage, targetLanguage, glossaries);
+        var filteredTerms = allEntries.Where(t => t.Source.ToLower().Equals(searchText.ToLower()));
 
         var localStudioTerms = filteredTerms
             .Select(term => new StudioTermEntry
@@ -104,31 +97,9 @@ public class TerminologyService : ITerminologyService
     public ConcurrentDictionary<string, List<StudioTermEntry>> GetFuzzyTerms(string[] words, string sourceLanguage,
         string targetLanguage, List<string> glossaries, int minScore)
     {
-        var sourceLanguageIndex = GetLanguageIndex(sourceLanguage);
+        var allEntries = GetSourceAndTargetTerms(sourceLanguage, targetLanguage, glossaries);
+
         var termsDictionary = new ConcurrentDictionary<string, List<StudioTermEntry>>();
-
-        var filepath = InterpretBankDataContext.SqLiteConnection.FileName;
-        using var connection = new SQLiteConnection($"Data Source={filepath};Pooling=True;Max Pool Size=10000;");
-        using var dataContext = new MyDataContext(connection);
-
-        dataContext.Connection.Open();
-
-        var targetLanguageIndex = GetLanguageIndex(targetLanguage);
-        var columns = GetTermColumns(targetLanguageIndex);
-
-        var allEntries =
-            dataContext
-                .GetTable<DbGlossaryEntry>()
-                .Where(t => glossaries.Contains(t.Tag1))
-                .Select(t => new SimpleEntry
-                {
-                    Id = t.Id,
-                    Source = t[$"Term{sourceLanguageIndex}"],
-                    Target = t[columns[0]],
-                    Extra1 = t[columns[1]],
-                    Extra2 = t[columns[2]]
-                }).ToList();
-
         Parallel.ForEach(words, word =>
         {
             var filteredTerms = allEntries.WhereFuzzy(word, minScore, string.Join(" ", words));
@@ -192,9 +163,9 @@ public class TerminologyService : ITerminologyService
         InterpretBankDataContext.Setup(settingsDatabaseFilepath);
     }
 
-    public void UpdateTerm(TermChange termChange) => InterpretBankDataContext.UpdateEntry(termChange);
-
     public void UpdateEntry(EntryChange entryChange) => InterpretBankDataContext.UpdateEntry(entryChange);
+
+    public void UpdateTerm(TermChange termChange) => InterpretBankDataContext.UpdateEntry(termChange);
 
     private static List<string> GetTermColumns(int targetLanguageIndex, int sourceLanguageIndex = -1)
     {
@@ -215,7 +186,42 @@ public class TerminologyService : ITerminologyService
         return columns;
     }
 
-    private void InitializeEntries(List<DbGlossaryEntry> dbEntries, ObservableCollection<EntryModel> entryModels)
+    private SqlGlossaryService GetGlossaryService()
+    {
+        var filepath = InterpretBankDataContext.SqLiteConnection.FileName;
+        var dbConnection = new DatabaseConnection(filepath);
+        var glossaryService = new SqlGlossaryService(dbConnection, new SqlBuilder.SqlBuilder());
+        return glossaryService;
+    }
+
+    private List<SimpleEntry> GetSourceAndTargetTerms(string sourceLanguage, string targetLanguage, List<string> glossaries)
+    {
+        using var glossaryService = GetGlossaryService();
+
+        var targetLanguageIndex = GetLanguageIndex(targetLanguage);
+        var sourceLanguageIndex = GetLanguageIndex(sourceLanguage);
+        var entries = glossaryService.GetTerms(null, [sourceLanguageIndex, targetLanguageIndex], glossaries, null).Cast<TermEntry>();
+
+        var allEntries = entries.Select(t =>
+        {
+            var sourceLe =
+                t.LanguageEquivalents.FirstOrDefault(le => le.LanguageIndex == sourceLanguageIndex);
+            var targetLe =
+                t.LanguageEquivalents.FirstOrDefault(le => le.LanguageIndex == targetLanguageIndex);
+
+            return new SimpleEntry
+            {
+                Id = t.ID,
+                Source = sourceLe?.Term,
+                Target = targetLe?.Term,
+                Extra1 = targetLe?.Commenta,
+                Extra2 = targetLe?.Commentb
+            };
+        }).ToList();
+        return allEntries;
+    }
+
+    private void InitializeEntries(IEnumerable<TermEntry> dbEntries, ObservableCollection<EntryModel> entryModels)
     {
         try
         {
@@ -223,14 +229,24 @@ public class TerminologyService : ITerminologyService
             {
                 var entryModel = new EntryModel
                 {
-                    Id = dbEntry.Id,
+                    Id = dbEntry.ID,
                     EntryComment = dbEntry.CommentAll,
                     GlossaryName = dbEntry.Tag1,
                     SubGlossaryName = dbEntry.Tag2,
                     Terms = []
                 };
 
-                InitializeEntryModelTerms(entryModel, dbEntry);
+                foreach (var le in dbEntry.LanguageEquivalents)
+                {
+                    entryModel.Terms.Add(new TermModel
+                    {
+                        FirstComment = le.Commenta,
+                        SecondComment = le.Commentb,
+                        Term = le.Term,
+                        LanguageName = GetLanguages()[le.LanguageIndex - 1].Name
+                    });
+                }
+
                 entryModels.Add(entryModel);
             }
         }
@@ -246,8 +262,6 @@ public class TerminologyService : ITerminologyService
         {
             var languageName = "";
             if (i - 1 < GetLanguages().Count) languageName = GetLanguages()[i - 1].Name;
-
-            
 
             if (string.IsNullOrWhiteSpace(languageName)) continue;
 
