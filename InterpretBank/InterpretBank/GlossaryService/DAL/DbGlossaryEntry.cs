@@ -54,7 +54,7 @@ public class DbGlossaryEntry : IInterpretBankTable
 
 	[Column(Name = "ID", IsPrimaryKey = true)] public int Id { get; set; }
 
-	[Column(Name = "Memorization")] public string Memorization { get; set; }
+	[Column(Name = "Memorization")] public int Memorization { get; set; }
 
 	[Column(Name = "RecordCreation")] public string RecordCreation { get; set; }
 

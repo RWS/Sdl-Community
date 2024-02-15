@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SQLite;
 
 namespace InterpretBank.GlossaryService.Interface
 {
-	public interface IDatabaseConnection
+	public interface IDatabaseConnection : IDisposable
 	{
 		bool IsSet { get; }
 

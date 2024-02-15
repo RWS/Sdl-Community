@@ -1,25 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace InterpretBank.GlossaryService.Interface
 {
-	public interface IGlossaryService
-	{
-		void Create(IGlossaryEntry termEntry);
+    public interface IGlossaryService : IDisposable
+    {
+        void Create(IGlossaryEntry termEntry);
 
-		void CreateDb(string filePath);
+        void CreateDb(string filePath);
 
-		void DeleteGlossary(string glossaryId);
+        void DeleteGlossary(string glossaryId);
 
-		void DeleteTerm(string termId);
+        void DeleteTerm(string termId);
 
-		List<IGlossaryEntry> GetGlossaries();
+        List<IGlossaryEntry> GetGlossaries();
 
-		List<IGlossaryEntry> GetTerms(string searchString = null, List<int> languages = null, List<string> glossaryNames = null, List<string> tags = null);
+        List<IGlossaryEntry> GetTerms(string searchString = null, List<int> languages = null, List<string> glossaryNames = null, List<string> tags = null);
 
-		void LoadDb(string filePath);
+        void LoadDb(string filePath);
 
-		void MergeGlossaries(string firstGlossary, string secondGlossary, string subGlossary = null);
+        void MergeGlossaries(string firstGlossary, string secondGlossary, string subGlossary = null);
 
-		void UpdateContent(IGlossaryEntry entry);
-	}
+        void UpdateContent(IGlossaryEntry entry);
+    }
 }

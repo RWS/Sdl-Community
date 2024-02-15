@@ -170,7 +170,9 @@ namespace InterpretBank.SqlBuilder
 		}
 
 		public IConditionBuilder In(string columnName, SQLiteCommand sqlSelect, string @operator = "AND")
-		{
+        {
+            if (string.IsNullOrWhiteSpace(sqlSelect.CommandText)) return this;
+
 			foreach (SQLiteParameter sqlSelectParameter in sqlSelect.Parameters)
 			{
 				var newName = StoreAndGetReference(sqlSelectParameter.Value);
