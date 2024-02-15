@@ -1,7 +1,5 @@
-﻿using DocumentFormat.OpenXml.Bibliography;
-using InterpretBank.GlossaryService;
+﻿using InterpretBank.GlossaryService;
 using InterpretBank.GlossaryService.DAL;
-using InterpretBank.GlossaryService.Interface;
 using InterpretBank.GlossaryService.Model;
 using InterpretBank.Helpers;
 using InterpretBank.Interface;
@@ -15,9 +13,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Data.Linq;
-using System.Data.SqlClient;
-using System.Data.SQLite;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -56,14 +51,6 @@ public class TerminologyService : ITerminologyService
     //+ support for subglossaries
     public ObservableCollection<EntryModel> GetEntriesFromDb(List<string> glossaries)
     {
-        //using var ibContext = new DataContext(InterpretBankDataContext.SqLiteConnection);
-        //var dbEntries =
-        //    (glossaries != null
-        //        ? ibContext
-        //            .GetTable<DbGlossaryEntry>()
-        //            .Where(dbTerm => glossaries.Contains(dbTerm.Tag1))
-        //        : ibContext.GetTable<DbGlossaryEntry>()).ToList();
-
         using var glossaryService = GetGlossaryService();
         var terms = glossaryService.GetTerms(null, null, glossaries, null).Cast<TermEntry>();
 
