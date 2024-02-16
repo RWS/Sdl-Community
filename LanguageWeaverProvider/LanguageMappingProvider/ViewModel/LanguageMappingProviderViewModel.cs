@@ -110,11 +110,13 @@ namespace LanguageWeaverProvider.LanguageMappingProvider.ViewModel
 			}
 
 			var filterLower = Filter.ToLower();
+			var filterParts = filterLower.Split(' ');
+
 			var filteredContent = MappedLanguages.Where(language =>
-				!string.IsNullOrEmpty(language.Name) && language.Name.IndexOf(filterLower, StringComparison.OrdinalIgnoreCase) >= 0
-			 || !string.IsNullOrEmpty(language.Region) && language.Region.IndexOf(filterLower, StringComparison.OrdinalIgnoreCase) >= 0
-			 || !string.IsNullOrEmpty(language.TradosCode) && language.TradosCode.IndexOf(filterLower, StringComparison.OrdinalIgnoreCase) >= 0
-			 || !string.IsNullOrEmpty(language.LanguageCode) && language.LanguageCode.IndexOf(filterLower, StringComparison.OrdinalIgnoreCase) >= 0);
+				filterParts.All(filterPart => (!string.IsNullOrEmpty(language.Name) && language.Name.IndexOf(filterPart, StringComparison.OrdinalIgnoreCase) >= 0)
+										   || (!string.IsNullOrEmpty(language.Region) && language.Region.IndexOf(filterPart, StringComparison.OrdinalIgnoreCase) >= 0)
+										   || (!string.IsNullOrEmpty(language.TradosCode) && language.TradosCode.IndexOf(filterPart, StringComparison.OrdinalIgnoreCase) >= 0)
+										   || (!string.IsNullOrEmpty(language.LanguageCode) && language.LanguageCode.IndexOf(filterPart, StringComparison.OrdinalIgnoreCase) >= 0)));
 
 			FilteredMappedLanguages = new List<LanguageMapping>(filteredContent);
 		}
