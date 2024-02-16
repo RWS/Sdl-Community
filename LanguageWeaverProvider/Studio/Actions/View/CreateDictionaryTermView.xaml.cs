@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace LanguageWeaverProvider.View
+namespace LanguageWeaverProvider.Studio.Actions.View
 {
 	public partial class CreateDictionaryTermView : Window
 	{

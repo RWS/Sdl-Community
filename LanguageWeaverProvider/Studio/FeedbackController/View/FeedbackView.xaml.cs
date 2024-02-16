@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 
-namespace LanguageWeaverProvider.View
+namespace LanguageWeaverProvider.Studio.FeedbackController.View
 {
 	/// <summary>
 	/// Interaction logic for FeedbackView.xaml

@@ -8,6 +8,18 @@ namespace LanguageWeaverProvider.Model.Options
 {
 	public class TranslationOptions : BaseViewModel, ITranslationOptions
 	{
+		public TranslationOptions(bool isNewInstance = false)
+		{
+			if (isNewInstance)
+			{
+				Id = Guid.NewGuid().ToString();
+			}
+		}
+
+		public string Id { get; set; }
+
+		public string ProviderName => GetProviderName();
+
 		PluginVersion _pluginVersion;
 
 		[JsonIgnore]
@@ -65,6 +77,20 @@ namespace LanguageWeaverProvider.Model.Options
 				default:
 					break;
 			}
+		}
+
+		private string GetProviderName()
+		{
+			var providerNamePrefix = PluginVersion switch
+			{
+				PluginVersion.LanguageWeaverCloud => Constants.PluginNameCloud,
+				PluginVersion.LanguageWeaverEdge => Constants.PluginNameEdge,
+				_ => Constants.PluginName
+			};
+
+			return ProviderSettings?.UseCustomName == true
+				 ? $"{providerNamePrefix} - {ProviderSettings.CustomName}"
+				 : providerNamePrefix;
 		}
 	}
 }

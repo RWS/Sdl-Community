@@ -21,11 +21,11 @@ namespace LanguageWeaverProvider
 {
 	public class TranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
 	{
-		private readonly ITranslationOptions _translationOptions;
 		private readonly LWSegmentEditor _postLookupEditor;
 		private readonly LWSegmentEditor _preLookupEditor;
 		private readonly LanguagePair _languagePair;
 
+		private ITranslationOptions _translationOptions;
 		private TranslationUnit _currentTranslationUnit;
 		private Window _batchTaskWindow;
 
@@ -85,6 +85,11 @@ namespace LanguageWeaverProvider
 
 		public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
 		{
+			ApplicationInitializer.TranslationOptions ??= new Dictionary<string, ITranslationOptions>();
+			if (ApplicationInitializer.TranslationOptions.TryGetValue(_translationOptions.Id, out var currentOptions))
+			{
+				_translationOptions = currentOptions;
+			}
 			ManageBatchTaskWindow(true);
 			var searchResults = new SearchResults[mask.Length];
 			var segmentsInput = translationUnits.Select(x => x.SourceSegment).ToList();

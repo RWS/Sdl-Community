@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,25 +8,21 @@ using System.Windows.Input;
 using LanguageMappingProvider.Database.Interface;
 using LanguageMappingProvider.Model;
 using LanguageWeaverProvider.Command;
+using LanguageWeaverProvider.ViewModel;
 using static LanguageWeaverProvider.ViewModel.PairMappingViewModel;
 
-namespace LanguageWeaverProvider.ViewModel
+namespace LanguageWeaverProvider.LanguageMappingProvider.ViewModel
 {
 	public class LanguageMappingProviderViewModel : BaseViewModel
 	{
 		readonly ILanguageMappingDatabase _languageMappingDatabase;
 
-		ObservableCollection<LanguageMapping> _filteredMappedLanguages;
-		ObservableCollection<LanguageMapping> _mappedLanguages;
+		IList<LanguageMapping> _filteredMappedLanguages;
+		IList<LanguageMapping> _mappedLanguages;
 		LanguageMapping _selectedMappedLanguage;
 
 		string _loadingAction;
 		string _filter;
-
-		ICommand _applyChangesCommand;
-		ICommand _closeLanguageMappingProviderCommand;
-		ICommand _resetToDefaultCommand;
-		ICommand _clearCommand;
 
 		public LanguageMappingProviderViewModel(ILanguageMappingDatabase languageMappingDatabase)
 		{
@@ -34,9 +30,10 @@ namespace LanguageWeaverProvider.ViewModel
 			RetrieveMappedLanguagesFromDatabase();
 			FilteredMappedLanguages = MappedLanguages;
 			PropertyChanged += FilterPropertyChangedHandler;
+			InitializeCommands();
 		}
 
-		public ObservableCollection<LanguageMapping> MappedLanguages
+		public IList<LanguageMapping> MappedLanguages
 		{
 			get => _mappedLanguages;
 			set
@@ -46,7 +43,7 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 		}
 
-		public ObservableCollection<LanguageMapping> FilteredMappedLanguages
+		public IList<LanguageMapping> FilteredMappedLanguages
 		{
 			get => _filteredMappedLanguages;
 			set
@@ -87,31 +84,39 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 		}
 
-		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
-		public ICommand ResetToDefaultCommand => _resetToDefaultCommand ??= new RelayCommand(ResetToDefault);
-		public ICommand ApplyChangesCommand => _applyChangesCommand ??= new RelayCommand(ApplyChanges, CanApplyChanges);
-		public ICommand CloseLanguageMappingProviderCommand => _closeLanguageMappingProviderCommand ??= new RelayCommand(CloseLanguageMappingProvider);
+		public ICommand ClearCommand { get; private set; }
+		public ICommand ResetToDefaultCommand { get; private set; }
+		public ICommand ApplyChangesCommand { get; private set; }
+		public ICommand CloseLanguageMappingProviderCommand { get; private set; }
 
 		public event EventHandler LanguageMappingUpdated;
 
 		public event CloseWindowEventRaiser CloseEventRaised;
 
+		private void InitializeCommands()
+		{
+			ClearCommand = new RelayCommand(Clear);
+			ResetToDefaultCommand = new AsyncRelayCommand(ResetToDefault);
+			ApplyChangesCommand = new RelayCommand(ApplyChanges, CanApplyChanges);
+			CloseLanguageMappingProviderCommand = new RelayCommand(CloseLanguageMappingProvider);
+		}
+
 		private void ApplyFilter()
 		{
 			if (string.IsNullOrWhiteSpace(Filter))
 			{
-				FilteredMappedLanguages = new ObservableCollection<LanguageMapping>(MappedLanguages);
+				FilteredMappedLanguages = new List<LanguageMapping>(MappedLanguages);
 				return;
 			}
 
 			var filterLower = Filter.ToLower();
 			var filteredContent = MappedLanguages.Where(language =>
-				(!string.IsNullOrEmpty(language.Name) && language.Name.IndexOf(filterLower, StringComparison.OrdinalIgnoreCase) >= 0)
-			 || (!string.IsNullOrEmpty(language.Region) && language.Region.IndexOf(filterLower, StringComparison.OrdinalIgnoreCase) >= 0)
-			 || (!string.IsNullOrEmpty(language.TradosCode) && language.TradosCode.IndexOf(filterLower, StringComparison.OrdinalIgnoreCase) >= 0)
-			 || (!string.IsNullOrEmpty(language.LanguageCode) && language.LanguageCode.IndexOf(filterLower, StringComparison.OrdinalIgnoreCase) >= 0));
+				!string.IsNullOrEmpty(language.Name) && language.Name.IndexOf(filterLower, StringComparison.OrdinalIgnoreCase) >= 0
+			 || !string.IsNullOrEmpty(language.Region) && language.Region.IndexOf(filterLower, StringComparison.OrdinalIgnoreCase) >= 0
+			 || !string.IsNullOrEmpty(language.TradosCode) && language.TradosCode.IndexOf(filterLower, StringComparison.OrdinalIgnoreCase) >= 0
+			 || !string.IsNullOrEmpty(language.LanguageCode) && language.LanguageCode.IndexOf(filterLower, StringComparison.OrdinalIgnoreCase) >= 0);
 
-			FilteredMappedLanguages = new ObservableCollection<LanguageMapping>(filteredContent);
+			FilteredMappedLanguages = new List<LanguageMapping>(filteredContent);
 		}
 
 		private void RetrieveMappedLanguagesFromDatabase()
@@ -126,7 +131,7 @@ namespace LanguageWeaverProvider.ViewModel
 				LanguageCode = pair.LanguageCode
 			});
 
-			MappedLanguages = new ObservableCollection<LanguageMapping>(newMappedLanguages);
+			MappedLanguages = new List<LanguageMapping>(newMappedLanguages);
 			ApplyFilter();
 		}
 
@@ -144,29 +149,32 @@ namespace LanguageWeaverProvider.ViewModel
 			return _languageMappingDatabase.HasMappedLanguagesChanged(MappedLanguages);
 		}
 
-		private async void ResetToDefault(object parameter)
+		private async Task ResetToDefault()
 		{
-			LoadingAction = PluginResources.Loading_LMP_RestoreDefaults;
-			if (ExecuteAction(PluginResources.LMPViewModel_ResetWarning, PluginResources.LMPViewModel_ResetTitle))
+			try
 			{
-				await Task.Delay(50);
+				if (!ExecuteAction(PluginResources.LMPViewModel_ResetWarning, PluginResources.LMPViewModel_ResetTitle))
+				{
+					return;
+				}
+
+				LoadingAction = PluginResources.Loading_LMP_RestoreDefaults;
+				await Task.Delay(1000);
 				_languageMappingDatabase.ResetToDefault();
 				RetrieveMappedLanguagesFromDatabase();
-				LanguageMappingUpdated?.Invoke(this, EventArgs.Empty);
-				await Task.Delay(50);
+				await Task.Delay(1000);
 			}
-			LoadingAction = null;
+			finally
+			{
+				LanguageMappingUpdated?.Invoke(this, EventArgs.Empty);
+				LoadingAction = null;
+			}
 		}
 
 		private bool ExecuteAction(string message, string title)
 		{
 			var dialogResult = MessageBox.Show(message, title, MessageBoxButton.OKCancel, MessageBoxImage.Warning);
 			return dialogResult == MessageBoxResult.OK;
-		}
-
-		private void CloseLanguageMappingProvider(object parameter)
-		{
-			CloseEventRaised?.Invoke();
 		}
 
 		private void Clear(object parameter)
@@ -188,6 +196,11 @@ namespace LanguageWeaverProvider.ViewModel
 			{
 				ApplyFilter();
 			}
+		}
+
+		private void CloseLanguageMappingProvider(object parameter)
+		{
+			CloseEventRaised?.Invoke();
 		}
 	}
 }

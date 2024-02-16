@@ -11,12 +11,13 @@ using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Services;
+using LanguageWeaverProvider.ViewModel;
 using Newtonsoft.Json;
 using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace LanguageWeaverProvider.ViewModel
+namespace LanguageWeaverProvider.Studio.Actions.ViewModel
 {
 	public class CreateDictionaryTermViewModel : BaseViewModel
 	{
@@ -189,7 +190,7 @@ namespace LanguageWeaverProvider.ViewModel
 
 			Dictionaries = new(_providers
 				.SelectMany(provider => provider.PairMappings.SelectMany(pair => pair.Dictionaries))
-				.OrderBy(x=> x.IsSelected == false));
+				.OrderBy(x => x.IsSelected == false));
 			if (!Dictionaries.Any())
 			{
 				return;
@@ -245,9 +246,9 @@ namespace LanguageWeaverProvider.ViewModel
 		{
 			IsNotificationVisible = true;
 			NotificationMessage = PluginResources.Dictionary_NewTerm_Succesfully;
-			await Task.Delay(3000);
+			await Task.Delay(3500);
 			IsNotificationVisible = false;
-			await Task.Delay(1000);
+			await Task.Delay(1500);
 			NotificationMessage = null;
 		}
 

@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 
-namespace LanguageWeaverProvider.View
+namespace LanguageWeaverProvider.Studio.AccountSubscription.View
 {
 	/// <summary>
 	/// Interaction logic for AccountSubscriptionView.xaml

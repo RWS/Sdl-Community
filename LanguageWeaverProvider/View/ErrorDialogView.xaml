@@ -23,9 +23,9 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBoxResources.xaml" />
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ExpanderResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/CheckBoxResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ExpanderResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/LanguageWeaverProvider;component/Style/Buttons.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 

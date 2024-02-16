@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Windows.Controls;
 using LanguageWeaverProvider.Studio.BatchTask.Model;
-using LanguageWeaverProvider.ViewModel;
+using LanguageWeaverProvider.Studio.BatchTask.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 
-namespace LanguageWeaverProvider.View
+namespace LanguageWeaverProvider.Studio.BatchTask.View
 {
 	/// <summary>
 	/// Interaction logic for CreateQeReportView.xaml

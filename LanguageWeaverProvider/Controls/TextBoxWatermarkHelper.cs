@@ -12,19 +12,33 @@ namespace LanguageWeaverProvider.Controls
 	public class TextBoxWatermarkHelper : DependencyObject
 	{
 		public static readonly DependencyProperty ButtonCommandParameterProperty = DependencyProperty.RegisterAttached(
-			"ButtonCommandParameter", typeof(object), typeof(TextBoxWatermarkHelper), new FrameworkPropertyMetadata(null));
+			"ButtonCommandParameter",
+			typeof(object),
+			typeof(TextBoxWatermarkHelper),
+			new FrameworkPropertyMetadata(null));
 
 		public static readonly DependencyProperty ButtonCommandProperty = DependencyProperty.RegisterAttached(
-			"ButtonCommand", typeof(ICommand), typeof(TextBoxWatermarkHelper), new FrameworkPropertyMetadata(null, ButtonCommandOrClearTextChanged));
+			"ButtonCommand",
+			typeof(ICommand),
+			typeof(TextBoxWatermarkHelper),
+			new FrameworkPropertyMetadata(null, ButtonCommandOrClearTextChanged));
 
 		public static readonly DependencyProperty IsClearTextButtonBehaviorEnabledProperty = DependencyProperty.RegisterAttached(
-			"IsClearTextButtonBehaviorEnabled", typeof(bool), typeof(TextBoxWatermarkHelper), new FrameworkPropertyMetadata(false, IsClearTextButtonBehaviorEnabledChanged));
+			"IsClearTextButtonBehaviorEnabled",
+			typeof(bool),
+			typeof(TextBoxWatermarkHelper),
+			new FrameworkPropertyMetadata(false, IsClearTextButtonBehaviorEnabledChanged));
 
 		public static readonly DependencyProperty IsWatermarkVisibleProperty = DependencyProperty.RegisterAttached(
-			"IsWatermarkVisible", typeof(bool), typeof(TextBoxWatermarkHelper));
+			"IsWatermarkVisible",
+			typeof(bool),
+			typeof(TextBoxWatermarkHelper));
 
 		public static readonly DependencyProperty WatermarkTextProperty = DependencyProperty.RegisterAttached(
-			"WatermarkText", typeof(string), typeof(TextBoxWatermarkHelper), new PropertyMetadata("Watermark", OnWatermarkTextChanged));
+			"WatermarkText",
+			typeof(string),
+			typeof(TextBoxWatermarkHelper),
+			new PropertyMetadata("Watermark", OnWatermarkTextChanged));
 
 		private static void OnWatermarkTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
@@ -112,8 +126,11 @@ namespace LanguageWeaverProvider.Controls
 
 		private static void ButtonCommandOrClearTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			if (d is not TextBox textbox) return;
-			// only one loaded event
+			if (d is not TextBox textbox)
+			{
+				return;
+			}
+
 			textbox.Loaded -= TextChanged;
 			textbox.Loaded += TextChanged;
 			if (textbox.IsLoaded)
@@ -124,7 +141,11 @@ namespace LanguageWeaverProvider.Controls
 
 		private static void IsClearTextButtonBehaviorEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			if (e.OldValue == e.NewValue || d is not Button button) return;
+			if (e.OldValue == e.NewValue || d is not Button button)
+			{
+				return;
+			}
+
 			button.Click -= ButtonClicked;
 			if ((bool)e.NewValue)
 			{
@@ -134,8 +155,11 @@ namespace LanguageWeaverProvider.Controls
 
 		private static void SetTextLength<TDependencyObject>(TDependencyObject sender, Func<TDependencyObject, int> funcTextLength) where TDependencyObject : DependencyObject
 		{
-			if (sender == null) return;
-			//var value = funcTextLength(sender);
+			if (sender == null)
+			{
+				return;
+			}
+
 			var textBox = sender as TextBox;
 			var textBoxText = textBox?.Text;
 			if (!string.IsNullOrEmpty(textBoxText))

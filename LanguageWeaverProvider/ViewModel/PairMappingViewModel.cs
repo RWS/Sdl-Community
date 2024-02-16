@@ -8,11 +8,11 @@ using System.Windows.Input;
 using LanguageMappingProvider.Database.Interface;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.LanguageMappingProvider;
+using LanguageWeaverProvider.LanguageMappingProvider.View;
+using LanguageWeaverProvider.LanguageMappingProvider.ViewModel;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
-using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Services;
-using LanguageWeaverProvider.View;
 using Sdl.LanguagePlatform.Core;
 
 namespace LanguageWeaverProvider.ViewModel
@@ -38,7 +38,7 @@ namespace LanguageWeaverProvider.ViewModel
 			WindowTitle = Constants.PairMapping_MainWindow;
 			_languagePairs = languagePairs;
 			_translationOptions = translationOptions;
-			_languageMappingDatabase = DatabaseControl.InitializeDatabase(translationOptions.PluginVersion);
+			_languageMappingDatabase = DatabaseControl.InitializeDatabase();
 			InitializeSettingsView();
 			InitializeCommands();
 			LoadPairMapping();
@@ -314,7 +314,7 @@ namespace LanguageWeaverProvider.ViewModel
 				}
 
 				var models = accountModels.Where(model => model.SourceLanguageId.Equals(mappedSource.LanguageCode) && model.TargetLanguageId.Equals(mappedTarget.LanguageCode))
-										  .Select(x => x.Clone())
+										  .Select(model => model.Clone())
 										  .ToList();
 				if (!models.Any())
 				{
@@ -352,9 +352,9 @@ namespace LanguageWeaverProvider.ViewModel
 		{
 			HeaderImagePath = _translationOptions.PluginVersion switch
 			{
-				PluginVersion.LanguageWeaverCloud => "../Resources/lwHeader_Cloud.png",
-				PluginVersion.LanguageWeaverEdge => "../Resources/lwHeader_Edge.png",
-				_ => "../Resources/lwHeader_Main.png"
+				PluginVersion.LanguageWeaverCloud => "pack://application:,,,/LanguageWeaverProvider;component/Resources/lwHeader_Cloud.png",
+				PluginVersion.LanguageWeaverEdge => "pack://application:,,,/LanguageWeaverProvider;component/Resources/lwHeader_Edge.png",
+				_ => "pack://application:,,,/LanguageWeaverProvider;component/Resources/lwHeader_Main.png"
 			};
 		}
 	}

@@ -22,15 +22,19 @@
 	<ItemGroup>
 	  <Compile Remove="Interface\**" />
 	  <Compile Remove="ServiceClients\**" />
+	  <Compile Remove="Studio\AccountSubscription\Model\**" />
 	  <Compile Remove="Studio\Actions\Models\**" />
 	  <EmbeddedResource Remove="Interface\**" />
 	  <EmbeddedResource Remove="ServiceClients\**" />
+	  <EmbeddedResource Remove="Studio\AccountSubscription\Model\**" />
 	  <EmbeddedResource Remove="Studio\Actions\Models\**" />
 	  <None Remove="Interface\**" />
 	  <None Remove="ServiceClients\**" />
+	  <None Remove="Studio\AccountSubscription\Model\**" />
 	  <None Remove="Studio\Actions\Models\**" />
 	  <Page Remove="Interface\**" />
 	  <Page Remove="ServiceClients\**" />
+	  <Page Remove="Studio\AccountSubscription\Model\**" />
 	  <Page Remove="Studio\Actions\Models\**" />
 	</ItemGroup>
 	
@@ -48,6 +52,7 @@
 	  <None Remove="Resources\lwLogo_Main16.png" />
 	  <None Remove="Resources\lwLogo_Main32.png" />
 	  <None Remove="Resources\Report.xsl" />
+	  <None Remove="Resources\Warning.png" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -129,10 +134,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="Studio\TranslationProviderWinFormsUI.cs" />
-		<None Include="Studio\TranslationProviderLanguageDirection.cs" />
-		<None Include="Studio\TranslationProvider.cs" />
-		<None Include="Studio\TranslationProviderFactory.cs" />
+		<None Include="Studio\TranslationProvider\TranslationProviderWinFormsUI.cs" />
+		<None Include="Studio\TranslationProvider\TranslationProviderLanguageDirection.cs" />
+		<None Include="Studio\TranslationProvider\TranslationProvider.cs" />
+		<None Include="Studio\TranslationProvider\TranslationProviderFactory.cs" />
 		<None Include="Properties\AssemblyInfo.cs" />
 		<None Include="Properties\PluginProperties.cs" />
 	</ItemGroup>
@@ -170,6 +175,7 @@
 	  <Resource Include="Resources\lwLogo_Main.png" />
 	  <Resource Include="Resources\lwLogo_Main16.png" />
 	  <Resource Include="Resources\lwLogo_Main32.png" />
+	  <Resource Include="Resources\Warning.png" />
 	  <Resource Include="Style\Buttons.xaml" />
 	</ItemGroup>
 
@@ -179,9 +185,5 @@
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>PluginResources.resx</DependentUpon>
 	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Studio\AccountSubscription\Model\" />
 	</ItemGroup>
 </Project>

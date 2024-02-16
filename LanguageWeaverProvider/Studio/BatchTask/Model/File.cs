@@ -9,6 +9,6 @@ namespace LanguageWeaverProvider.Studio.BatchTask.Model
 		public string Name { get; set; }
 
 		[XmlElement]
-		public List<QeValue> QeValues { get; set; } = new();
+		public IEnumerable<QeValue> QeValues { get; set; }
 	}
 }

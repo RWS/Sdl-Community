@@ -8,7 +8,7 @@ namespace LanguageWeaverProvider.BatchTask
 {
 	internal class ApplyMetadataProcessor : AbstractBilingualContentProcessor
 	{
-		private readonly List<SegmentId> _usedIds = new();
+		readonly List<SegmentId> _usedIds = new();
 
 		public ApplyMetadataProcessor(List<MetadataTransferObject> translationData)
 		{

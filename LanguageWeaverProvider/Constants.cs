@@ -23,6 +23,9 @@
 		public const string CloudService = "Cloud";
 		public const string EdgeService = "Edge";
 
+		// Database
+		public const string DatabaseName = "languageweaver";
+
 		// LW Portal
 		public const string LanguageWeaverEUPortal = "https://portal.languageweaver.com/login";
 		public const string LanguageWeaverUSPortal = "https://us.portal.languageweaver.com/login";

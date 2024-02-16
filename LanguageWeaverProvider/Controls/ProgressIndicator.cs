@@ -5,8 +5,10 @@ namespace LanguageWeaverProvider.Controls
 {
 	public class ProgressIndicator : Control
 	{
-		public static readonly DependencyProperty TextProperty =
-			DependencyProperty.Register("Text", typeof(string), typeof(ProgressIndicator));
+		public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
+			"Text",
+			typeof(string),
+			typeof(ProgressIndicator));
 
 		public string Text
 		{

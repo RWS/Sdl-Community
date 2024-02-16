@@ -9,12 +9,13 @@ using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Services;
 using LanguageWeaverProvider.Studio.FeedbackController.Model;
+using LanguageWeaverProvider.ViewModel;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace LanguageWeaverProvider.ViewModel
+namespace LanguageWeaverProvider.Studio.FeedbackController.ViewModel
 {
 	public class FeedbackViewModel : BaseViewModel
 	{

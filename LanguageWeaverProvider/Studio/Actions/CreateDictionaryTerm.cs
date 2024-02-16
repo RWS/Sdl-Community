@@ -1,6 +1,6 @@
 ﻿using System;
-using LanguageWeaverProvider.View;
-using LanguageWeaverProvider.ViewModel;
+using LanguageWeaverProvider.Studio.Actions.View;
+using LanguageWeaverProvider.Studio.Actions.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;

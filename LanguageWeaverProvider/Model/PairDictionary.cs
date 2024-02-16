@@ -1,6 +1,5 @@
 ﻿using System;
 using LanguageWeaverProvider.ViewModel;
-using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 
 namespace LanguageWeaverProvider.Model

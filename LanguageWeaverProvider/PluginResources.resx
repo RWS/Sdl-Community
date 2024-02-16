@@ -426,6 +426,26 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
   <data name="Plugin_Name" xml:space="preserve">
     <value>Language Weaver Provider</value>
   </data>
+  <data name="SettingsAction_ExternalHelp_1" xml:space="preserve">
+    <value>For more information,</value>
+    <comment>First part of the text (TextBlock)</comment>
+  </data>
+  <data name="SettingsAction_ExternalHelp_2" xml:space="preserve">
+    <value>click here</value>
+    <comment>Second part of the text (Button)</comment>
+  </data>
+  <data name="SettingsAction_ExternalHelp_3" xml:space="preserve">
+    <value>for documentation.</value>
+    <comment>Third part of the text (TextBlock)</comment>
+  </data>
+  <data name="SettingsAction_NoProviderAvailable" xml:space="preserve">
+    <value>We couldn't find an instance of Language Weaver Provider for the current project selected. To add it to your project, follow these steps:
+
+1. Open Project Settings;
+2. Go to Translation Memory and Automated Translation;
+3. Select Use;
+4. Via the dropdown menu locate Language Weaver Provider.</value>
+  </data>
   <data name="SettingsView_BackButton_LeftContent" xml:space="preserve">
     <value>←</value>
   </data>

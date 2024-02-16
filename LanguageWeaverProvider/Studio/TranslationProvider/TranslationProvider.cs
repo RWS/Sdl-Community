@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.LanguageMappingProvider;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
@@ -15,10 +14,10 @@ namespace LanguageWeaverProvider
 		public TranslationProvider(ITranslationOptions translationOptions)
 		{
 			TranslationOptions = translationOptions;
-			_ = DatabaseControl.InitializeDatabase(translationOptions.PluginVersion);
+			_ = DatabaseControl.InitializeDatabase();
 		}
 
-		public string Name => StringExtensions.GetPluginName(TranslationOptions);
+		public string Name => TranslationOptions.ProviderName;
 
 		public ITranslationOptions TranslationOptions { get; set; }
 

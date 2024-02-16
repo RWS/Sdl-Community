@@ -5,6 +5,10 @@ namespace LanguageWeaverProvider.Model.Interface
 {
 	public interface ITranslationOptions
 	{
+		string Id { get; set; }
+
+		string ProviderName { get; }
+
 		Uri Uri { get; }
 
 		ProviderSettings ProviderSettings { get; set; }

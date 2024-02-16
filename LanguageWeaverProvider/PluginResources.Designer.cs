@@ -990,6 +990,47 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For more information,.
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_1 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to click here.
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_2 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to for documentation..
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_3 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We couldn&apos;t find an instance of Language Weaver Provider for the current project selected. To add it to your project, follow these steps:
+        ///
+        ///1. Open Project Settings;
+        ///2. Go to Translation Memory and Automated Translation;
+        ///3. Select Use;
+        ///4. Via the dropdown menu locate Language Weaver Provider..
+        /// </summary>
+        public static string SettingsAction_NoProviderAvailable {
+            get {
+                return ResourceManager.GetString("SettingsAction_NoProviderAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ←.
         /// </summary>
         public static string SettingsView_BackButton_LeftContent {

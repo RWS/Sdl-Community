@@ -1,5 +1,5 @@
-﻿using LanguageWeaverProvider.View;
-using LanguageWeaverProvider.ViewModel;
+﻿using LanguageWeaverProvider.Studio.FeedbackController.View;
+using LanguageWeaverProvider.Studio.FeedbackController.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
@@ -12,7 +12,7 @@ namespace LanguageWeaverProvider.Studio.FeedbackController
 			  Description = "Send feedback for the translated content using Language Weaver.",
 			  Icon = "lwLogo_Main_Icon")]
 	[ViewPartLayout(typeof(EditorController), Dock = DockType.Left)]
-	public class LanguageWeaverEditorController : AbstractViewPartController
+	public class FeedbackController : AbstractViewPartController
 	{
 		private FeedbackView _feedbackView;
 

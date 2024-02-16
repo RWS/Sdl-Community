@@ -8,11 +8,12 @@ using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Services;
 using LanguageWeaverProvider.Services.Model;
+using LanguageWeaverProvider.ViewModel;
 using Newtonsoft.Json;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace LanguageWeaverProvider.ViewModel
+namespace LanguageWeaverProvider.Studio.AccountSubscription.ViewModel
 {
 	public class AccountSubscriptionViewModel : BaseViewModel
 	{
@@ -20,9 +21,9 @@ namespace LanguageWeaverProvider.ViewModel
 
 		CloudUsageReport _usageReport;
 		AccountCategoryFeature _subscriptionCharactersLimit;
-		string _loadingAction;
 		List<ITranslationOptions> _providers;
 		ITranslationOptions _currentProvider;
+		string _loadingAction;
 
 		public AccountSubscriptionViewModel()
 		{

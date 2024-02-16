@@ -19,6 +19,8 @@ namespace LanguageWeaverProvider
 			var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
 			CredentialManager.GetCredentials(options, true);
 			Service.ValidateToken(options);
+
+			ApplicationInitializer.TranslationOptions[options.Id] = options;
 			return new TranslationProvider(options);
 		}
 
@@ -26,7 +28,7 @@ namespace LanguageWeaverProvider
 		{
 			var pluginName = string.IsNullOrEmpty(translationProviderState)
 						   ? Constants.PluginName
-						   : StringExtensions.GetPluginName(translationProviderState);
+						   : JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState).ProviderName;
 
 			return new TranslationProviderInfo
 			{

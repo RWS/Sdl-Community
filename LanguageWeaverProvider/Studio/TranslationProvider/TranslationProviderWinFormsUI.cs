@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
 using LanguageWeaverProvider.Extensions;
-using LanguageWeaverProvider.Helpers;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Services;
 using LanguageWeaverProvider.View;
 using LanguageWeaverProvider.ViewModel;
+using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -27,7 +27,7 @@ namespace LanguageWeaverProvider
 		{
 			ApplicationInitializer.CredentialStore = credentialStore;
 
-			var translationOptions = new TranslationOptions();
+			var translationOptions = new TranslationOptions(true);
 			CredentialManager.GetCredentials(translationOptions);
 
 			var credentialsMainViewModel = new CredentialsMainViewModel(translationOptions);
@@ -79,17 +79,25 @@ namespace LanguageWeaverProvider
 
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
 		{
-			var pluginName = string.IsNullOrEmpty(translationProviderState)
-						   ? Constants.PluginName
-						   : StringExtensions.GetPluginName(translationProviderState);
+			var pluginName = string.IsNullOrEmpty(translationProviderState) switch
+			{
+				true => Constants.PluginName,
+				false => JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState).ProviderName
+			};
 
-			var images = ImagePathUtility.GetImagePaths(translationProviderUri.AbsoluteUri);
+			var images = translationProviderUri.AbsoluteUri switch
+			{
+				Constants.CloudFullScheme => (PluginResources.lwLogo_Cloud_Icon, PluginResources.lwLogo_Cloud16),
+				Constants.EdgeFullScheme => (PluginResources.lwLogo_Edge_Icon, PluginResources.lwLogo_Edge16),
+				_ => throw new ArgumentException("Unsupported PluginVersion value"),
+			};
+
 			return new TranslationProviderDisplayInfo()
 			{
 				Name = pluginName,
 				TooltipText = pluginName,
-				TranslationProviderIcon = images.IcoFile,
-				SearchResultImage = images.PngFile
+				TranslationProviderIcon = images.Item1,
+				SearchResultImage = images.Item2
 			};
 		}
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)

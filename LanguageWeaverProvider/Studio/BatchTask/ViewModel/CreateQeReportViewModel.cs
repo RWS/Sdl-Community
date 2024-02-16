@@ -1,4 +1,6 @@
-﻿namespace LanguageWeaverProvider.ViewModel
+﻿using LanguageWeaverProvider.ViewModel;
+
+namespace LanguageWeaverProvider.Studio.BatchTask.ViewModel
 {
 	public class CreateQeReportViewModel : BaseViewModel
 	{
