@@ -8,7 +8,7 @@ To connect to a memoQ server you will need to be provided with the following det
 - your username
 - your password
 
-**Important:** to receive matches from a memoQ server TM you must be a member of the Resorce lookup via API/plugins group on the memoQ server.  If you cannot connect to the memoQ server with the username and password you received you will need to contact the server administrator and ask them to resolve this for you.
+**Important:** to receive matches from a memoQ server TM you must be a member of the Resource lookup via API/plugins group on the memoQ server.  If you cannot connect to the memoQ server with the username and password you received you will need to contact the server administrator and ask them to resolve this for you.
 In addition the memoQ TM Provider plugin takes a memoQ web licence from the memoQ server if there is one available.  If there are none available you will not be able to use translation memories on that server and again will need to contact the server administrator.
 ## Additional Information ##
 In this repository you will find the [original PDF document](https://github.com/RWS/Sdl-Community/blob/master/MemoQ/memoQ_SDLTradosTMPlugin_GettingStarted_1_0.pdf "memoQ plugin for SDL Trados Studio") provided by the memoQ team.  This document shold be used for now for any additional information required to understad how the plugin works.  But please keep in mind the points above.
