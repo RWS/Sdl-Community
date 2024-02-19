@@ -8,18 +8,20 @@
 		xmlns:converters="clr-namespace:LanguageWeaverProvider.Converters"
 		xmlns:viewModels="clr-namespace:LanguageWeaverProvider.Studio.Actions.ViewModel"
 		d:DataContext="{d:DesignInstance viewModels:CreateDictionaryTermViewModel}"
-		MouseLeftButtonDown="Window_MouseLeftButtonDown"
 		WindowStartupLocation="CenterScreen"
 		mc:Ignorable="d"
 		Title="Create Dictionary Term"
 		ResizeMode="NoResize"
 		WindowStyle="None"
-		AllowsTransparency="True"
 		Background="Transparent"
 		MinHeight="360"
 		MinWidth="400"
 		Height="400"
-		Width="400">
+		Width="400"
+		MouseLeftButtonDown="Window_MouseLeftButtonDown"
+		Loaded="Window_Loaded"
+		Closing="Window_Closing"
+		AllowsTransparency="True">
 
 	<Window.Resources>
 		<ResourceDictionary>

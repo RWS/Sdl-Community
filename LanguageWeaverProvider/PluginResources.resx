@@ -159,6 +159,9 @@
   <data name="Auth_Edge_Host" xml:space="preserve">
     <value>Host: https://my-domain.com:8001/</value>
   </data>
+  <data name="Auth_Edge_SSO_ToolTip" xml:space="preserve">
+    <value>You've chosen SSO Authentication. Please provide the Host URL for access.</value>
+  </data>
   <data name="Auth_Edge_UserCredentials" xml:space="preserve">
     <value>User credentials</value>
   </data>
@@ -309,6 +312,15 @@ This action cannot be undone.</value>
   <data name="Loading_Connecting" xml:space="preserve">
     <value>Connecting user...</value>
   </data>
+  <data name="Loading_Edge_ConnectingApi" xml:space="preserve">
+    <value>Connecting using API Key...</value>
+  </data>
+  <data name="Loading_Edge_ConnectingAuth0" xml:space="preserve">
+    <value>Connecting using Single sign-on...</value>
+  </data>
+  <data name="Loading_Edge_ConnectingUser" xml:space="preserve">
+    <value>Connecting using User credentials...</value>
+  </data>
   <data name="Loading_Initiating" xml:space="preserve">
     <value>Initiating...</value>
   </data>
@@ -428,15 +440,15 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
   </data>
   <data name="SettingsAction_ExternalHelp_1" xml:space="preserve">
     <value>For more information,</value>
-    <comment>First part of the text (TextBlock)</comment>
+    <comment>First part of the text, acting as plain text</comment>
   </data>
   <data name="SettingsAction_ExternalHelp_2" xml:space="preserve">
     <value>click here</value>
-    <comment>Second part of the text (Button)</comment>
+    <comment>Second part of the text, acting as button</comment>
   </data>
   <data name="SettingsAction_ExternalHelp_3" xml:space="preserve">
     <value>for documentation.</value>
-    <comment>Third part of the text (TextBlock)</comment>
+    <comment>Third part of the text, acting as plain text</comment>
   </data>
   <data name="SettingsAction_NoProviderAvailable" xml:space="preserve">
     <value>We couldn't find an instance of Language Weaver Provider for the current project selected. To add it to your project, follow these steps:

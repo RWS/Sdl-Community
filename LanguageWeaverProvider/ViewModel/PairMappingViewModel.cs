@@ -256,7 +256,7 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 
 			LoadingAction = "Loading resources...";
-			await Task.Delay(50);
+			await Task.Delay(0);
 			var pairMappings = new ObservableCollection<PairMapping>();
 			foreach (var pairMapping in _translationOptions.PairMappings)
 			{
@@ -286,17 +286,14 @@ namespace LanguageWeaverProvider.ViewModel
 			PairMappings = new();
 			var mappedLanguages = _languageMappingDatabase.GetMappedLanguages();
 			LoadingAction = "Getting models...";
-			await Task.Delay(50);
 			var accountModels = _translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
 							  ? await CloudService.GetSupportedLanguages(_translationOptions.AccessToken)
 							  : await EdgeService.GetLanguagePairs(_translationOptions.AccessToken);
 			LoadingAction = "Getting dictionaries...";
-			await Task.Delay(50);
 			var accountDictionaries = _translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
 									? await CloudService.GetDictionaries(_translationOptions.AccessToken)
 									: await EdgeService.GetDictionaries(_translationOptions.AccessToken);
 			LoadingAction = "Loading resources...";
-			await Task.Delay(50);
 			foreach (var languagePair in _languagePairs)
 			{
 				var mappedLanguagePairs = mappedLanguages.Where(mappedLang => mappedLang.TradosCode.Equals(languagePair.SourceCultureName) || mappedLang.TradosCode.Equals(languagePair.TargetCultureName));

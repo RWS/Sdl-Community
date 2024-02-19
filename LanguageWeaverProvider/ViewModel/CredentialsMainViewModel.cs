@@ -162,7 +162,7 @@ namespace LanguageWeaverProvider.ViewModel
 			CloseEventRaised?.Invoke();
 		}
 
-		private async void StartLoginProcess(object sender, EventArgs e)
+		private void StartLoginProcess(object sender, EventArgs e)
 		{
 			IsUserAttemptingLogin = true;
 			var loginEventArgs = e as LoginEventArgs;

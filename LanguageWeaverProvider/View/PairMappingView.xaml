@@ -14,6 +14,8 @@
 		MouseLeftButtonDown="Window_MouseLeftButtonDown"
 		WindowStartupLocation="CenterScreen"
 		Title="{Binding WindowTitle}"
+		BorderThickness="1"
+		BorderBrush="#c0c0c0"
 		ResizeMode="CanResize"
 		WindowStyle="None"
 		MinHeight="600"
@@ -21,7 +23,10 @@
 		Height="600"
 		Width="1000"
 		d:DesignHeight="800"
-		d:DesignWidth="1000">
+		d:DesignWidth="1000"
+		Loaded="Window_Loaded"
+		Closing="Window_Closing"
+		AllowsTransparency="True">
 
 	<Window.Resources>
 		<ResourceDictionary>

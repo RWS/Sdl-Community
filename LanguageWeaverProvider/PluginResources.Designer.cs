@@ -187,6 +187,15 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You&apos;ve chosen SSO Authentication. Please provide the Host URL for access..
+        /// </summary>
+        public static string Auth_Edge_SSO_ToolTip {
+            get {
+                return ResourceManager.GetString("Auth_Edge_SSO_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User credentials.
         /// </summary>
         public static string Auth_Edge_UserCredentials {
@@ -627,6 +636,33 @@ namespace LanguageWeaverProvider {
         public static string Loading_Connecting {
             get {
                 return ResourceManager.GetString("Loading_Connecting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connecting using API Key....
+        /// </summary>
+        public static string Loading_Edge_ConnectingApi {
+            get {
+                return ResourceManager.GetString("Loading_Edge_ConnectingApi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connecting using Single sign-on....
+        /// </summary>
+        public static string Loading_Edge_ConnectingAuth0 {
+            get {
+                return ResourceManager.GetString("Loading_Edge_ConnectingAuth0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connecting using User credentials....
+        /// </summary>
+        public static string Loading_Edge_ConnectingUser {
+            get {
+                return ResourceManager.GetString("Loading_Edge_ConnectingUser", resourceCulture);
             }
         }
         

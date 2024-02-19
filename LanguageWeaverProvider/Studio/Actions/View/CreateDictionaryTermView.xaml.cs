@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
+using LanguageWeaverProvider.Helpers;
+using System.Windows.Input;
 
 namespace LanguageWeaverProvider.Studio.Actions.View
 {
@@ -9,12 +12,21 @@ namespace LanguageWeaverProvider.Studio.Actions.View
 			InitializeComponent();
 		}
 
-		private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+		private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			if (GetWindow(this) is Window window)
-			{
-				window.DragMove();
-			}
+			DragMove();
+		}
+
+		private void Window_Loaded(object sender, RoutedEventArgs e)
+		{
+			AnimationsHelper.StartOpeningWindowAnimation(this);
+		}
+
+		private void Window_Closing(object sender, CancelEventArgs e)
+		{
+			Closing -= Window_Closing;
+			e.Cancel = true;
+			AnimationsHelper.StartClosingWindowAnimation(this);
 		}
 	}
 }

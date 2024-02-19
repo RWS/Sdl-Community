@@ -16,7 +16,7 @@ namespace LanguageWeaverProvider.Services
 {
 	public static class EdgeService
 	{
-		public static async Task<(bool Success, Exception Error)> AuthenticateUser(EdgeCredentials edgeCredentials, ITranslationOptions translationOptions)
+		public static async Task<bool> AuthenticateUser(EdgeCredentials edgeCredentials, ITranslationOptions translationOptions)
 		{
 			try
 			{
@@ -28,23 +28,29 @@ namespace LanguageWeaverProvider.Services
 					Query = $"username={userName}&password={password}"
 				};
 
-				var x = $"{edgeCredentials.Uri}api/v2/auth$username={userName}&password={password}";
-
 				var response = await new HttpClient().PostAsync(uri.Uri, null);
-				response.EnsureSuccessStatusCode();
+
+				var isSuccessStatusCode = response.IsSuccessStatusCode;
+				if (!isSuccessStatusCode)
+				{
+					var responseContent = await response.Content.ReadAsStringAsync();
+					var errorResponse = JsonConvert.DeserializeObject<EdgeFeedbackError>(responseContent).Error;
+					ErrorHandling.ShowDialog(null, $"Authentication failed: {errorResponse.Code}", errorResponse.Message, false);
+					return isSuccessStatusCode;
+				}
 
 				var token = await response.Content.ReadAsStringAsync();
 				SetAccessToken(translationOptions, token, "Bearer", edgeCredentials.Uri);
-
-				return (true, null);
+				return isSuccessStatusCode;
 			}
 			catch (Exception ex)
 			{
-				return (false, ex);
+				ex.ShowDialog("Authentication failed", ex.Message, true);
+				return false;
 			}
 		}
 
-		public static async Task<(bool Success, Exception Error)> VerifyAPI(EdgeCredentials edgeCredentials, ITranslationOptions translationOptions)
+		public static async Task<bool> VerifyAPI(EdgeCredentials edgeCredentials, ITranslationOptions translationOptions)
 		{
 			try
 			{
@@ -55,18 +61,25 @@ namespace LanguageWeaverProvider.Services
 				var requestUri = $"{temporaryAccessToken.BaseUri}api/v2/language-pairs";
 
 				var response = await Service.SendRequest(temporaryAccessToken, HttpMethod.Get, requestUri);
-				response.EnsureSuccessStatusCode();
+				var isSuccessStatusCode = response.IsSuccessStatusCode;
+				if (isSuccessStatusCode)
+				{
+					return isSuccessStatusCode;
+				}
 
-				return (true, null);
+				var responseContent = await response.Content.ReadAsStringAsync();
+				ErrorHandling.ShowDialog(null, "Authentication failed", responseContent, true);
+				return isSuccessStatusCode;
 			}
 			catch (Exception ex)
 			{
 				translationOptions.AccessToken = null;
-				return (false, ex);
+				ex.ShowDialog("Authentication failed", ex.Message, true);
+				return false;
 			}
 		}
 
-		public static async Task<(bool Success, Exception Error)> SignInAuthAsync(EdgeCredentials edgeCredentials, ITranslationOptions translationOptions, WebView2 browser)
+		public static async Task<bool> SignInAuthAsync(EdgeCredentials edgeCredentials, ITranslationOptions translationOptions, WebView2 browser)
 		{
 			try
 			{
@@ -98,18 +111,19 @@ namespace LanguageWeaverProvider.Services
 				}
 
 				response.EnsureSuccessStatusCode();
-				return (true, null);
+				return true;
 			}
 			catch (Exception ex)
 			{
-				return (false, ex);
+				ex.ShowDialog("Authentication failed", ex.Message, true);
+				return false;
 			}
 		}
 
 		private static void SetAccessToken(ITranslationOptions translationOptions, string token, string tokenType, Uri edgeUri)
 			=> translationOptions.AccessToken = new() { Token = token, TokenType = tokenType, BaseUri = edgeUri };
 
-		public static async Task<List<PairModel>> GetLanguagePairs(AccessToken accessToken)
+		public static async Task<IEnumerable<PairModel>> GetLanguagePairs(AccessToken accessToken)
 		{
 			try
 			{
@@ -126,7 +140,7 @@ namespace LanguageWeaverProvider.Services
 					LinguisticOptions = lp.LinguisticOptions,
 					Name = lp.LanguagePairId,
 					Model = lp.LanguagePairId
-				}).ToList();
+				});
 
 				foreach (var linguisticOption in pairModels.Where(pair => pair.LinguisticOptions is not null).SelectMany(pair => pair.LinguisticOptions))
 				{
@@ -137,19 +151,19 @@ namespace LanguageWeaverProvider.Services
 			}
 			catch (Exception ex)
 			{
-				ErrorHandling.ShowDialog(ex, "Language pairs", ex.Message, true);
+				ex.ShowDialog("Language pairs", ex.Message, true);
 				return null;
 			}
 		}
 
-		public static async Task<List<PairDictionary>> GetDictionaries(AccessToken accessToken)
+		public static async Task<IEnumerable<PairDictionary>> GetDictionaries(AccessToken accessToken)
 		{
 			try
 			{
 				var requestUri = $"{accessToken.BaseUri}api/v2/dictionaries";
 				var response = await Service.SendRequest(accessToken, HttpMethod.Get, requestUri);
-				var content = await response.Content.ReadAsStringAsync();
-				var dictionaries = JsonConvert.DeserializeObject<EdgeDictionariesResponse>(content);
+
+				var dictionaries = await DeserializeResponse<EdgeDictionariesResponse>(response);
 
 				var pairDictionaries = dictionaries.Dictionaries.Select(dictionary => new PairDictionary()
 				{
@@ -157,13 +171,13 @@ namespace LanguageWeaverProvider.Services
 					DictionaryId = dictionary.DictionaryId,
 					Source = dictionary.SourceLanguageId,
 					Target = dictionary.TargetLanguageId
-				}).ToList();
+				});
 
 				return pairDictionaries;
 			}
 			catch (Exception ex)
 			{
-				ErrorHandling.ShowDialog(ex, "Dictionaries", ex.Message, true);
+				ex.ShowDialog("Dictionaries", ex.Message, true);
 				return null;
 			}
 		}
@@ -213,8 +227,10 @@ namespace LanguageWeaverProvider.Services
 		private static async Task<EdgeTranslationRequestResponse> SendTranslationRequest(AccessToken accessToken, PairMapping pairMapping, Xliff sourceXliff)
 		{
 			var requestUri = $"{accessToken.BaseUri}api/v2/translations";
-			var query = BuildQuery(pairMapping, sourceXliff);
-			var content = new FormUrlEncodedContent(query);
+
+			var input = Base64Encode(sourceXliff.ToString());
+			var edgeTranslationRequestContent = new EdgeTranslationRequestContent(pairMapping, input);
+			var content = new FormUrlEncodedContent(edgeTranslationRequestContent.ToKeyValuePairDictionary());
 
 			var response = await Service.SendRequest(accessToken, HttpMethod.Post, requestUri, content);
 			var translationRequestResponse = await DeserializeResponse<EdgeTranslationRequestResponse>(response);
@@ -257,18 +273,19 @@ namespace LanguageWeaverProvider.Services
 			} while (isWaiting);
 		}
 
-		public static async Task<bool> SendFeedback(AccessToken accessToken, List<KeyValuePair<string, string>> feedback)
+		public static async Task<bool> SendFeedback(AccessToken accessToken, EdgeFeedbackItem feedbackItem)
 		{
 			try
 			{
 				var requestUri = $"{accessToken.BaseUri}api/v2/feedback";
+
+				var feedback = feedbackItem.ToKeyValuePairDictionary();
 				var content = new FormUrlEncodedContent(feedback);
 
 				var response = await Service.SendRequest(accessToken, HttpMethod.Post, requestUri, content);
 				if (!response.IsSuccessStatusCode)
 				{
-					var responseContent = await response.Content.ReadAsStringAsync();
-					var error = JsonConvert.DeserializeObject<EdgeFeedbackError>(responseContent);
+					var error = await DeserializeResponse<EdgeFeedbackError>(response);
 					ErrorHandling.ShowDialog(null, $"Code {error.Error.Code}: {error.Error.Message}", error.Error.Details);
 				}
 
@@ -276,7 +293,7 @@ namespace LanguageWeaverProvider.Services
 			}
 			catch (Exception ex)
 			{
-				ErrorHandling.ShowDialog(ex, "Feedback", ex.Message, true);
+				ex.ShowDialog("Feedback", ex.Message, true);
 				return false;
 			}
 		}
@@ -285,50 +302,6 @@ namespace LanguageWeaverProvider.Services
 		{
 			var content = await response.Content.ReadAsStringAsync();
 			return JsonConvert.DeserializeObject<T>(content);
-		}
-
-		private static Dictionary<string, string> BuildQuery(PairMapping pairMapping, Xliff sourceXliff)
-		{
-			const string LanguagePairIdKey = "languagePairId";
-			const string InputKey = "input";
-			const string InputFormatKey = "inputFormat";
-			const string XliffMimeType = "application/x-xliff";
-			const string DictionaryIdsKey = "dictionaryIds";
-			const string LinguisticOptionsKey = "linguisticOptions";
-
-			var input = Base64Encode(sourceXliff.ToString());
-			var queryString = new Dictionary<string, string>
-			{
-				[LanguagePairIdKey] = pairMapping.SelectedModel.Model,
-				[InputKey] = input,
-				[InputFormatKey] = XliffMimeType
-			};
-
-			var dictionaries = pairMapping.Dictionaries.Where(x => x.IsSelected);
-			if (dictionaries.Any())
-			{
-				queryString[DictionaryIdsKey] = string.Empty;
-				foreach (var dictionary in dictionaries)
-				{
-					queryString[DictionaryIdsKey] += $"{dictionary.DictionaryId},";
-				}
-
-				queryString[DictionaryIdsKey] = queryString[DictionaryIdsKey].Substring(0, queryString[DictionaryIdsKey].Length - 1);
-			}
-
-			if (pairMapping.LinguisticOptions is not null)
-			{
-				queryString[LinguisticOptionsKey] = string.Empty;
-				var linguisticOptionsDictionary = pairMapping.LinguisticOptions.ToDictionary(lo => lo.Id, lo => lo.SelectedValue);
-				foreach (var linguisticOption in linguisticOptionsDictionary)
-				{
-					queryString[LinguisticOptionsKey] += $"{linguisticOption.Key}:{linguisticOption.Value},";
-				}
-
-				queryString[LinguisticOptionsKey] = queryString[LinguisticOptionsKey].Substring(0, queryString[LinguisticOptionsKey].Length - 1);
-			}
-
-			return queryString;
 		}
 
 		private static string Base64Encode(this string text)

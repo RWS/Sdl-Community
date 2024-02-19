@@ -1,6 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using LanguageWeaverProvider.Helpers;
 using LanguageWeaverProvider.Model;
 
 namespace LanguageWeaverProvider.View
@@ -19,10 +22,19 @@ namespace LanguageWeaverProvider.View
 
 		private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			if (GetWindow(this) is Window window)
-			{
-				window.DragMove();
-			}
+			DragMove();
+		}
+
+		private void Window_Loaded(object sender, RoutedEventArgs e)
+		{
+			AnimationsHelper.StartOpeningWindowAnimation(this);
+		}
+
+		private void Window_Closing(object sender, CancelEventArgs e)
+		{
+			Closing -= Window_Closing;
+			e.Cancel = true;
+			AnimationsHelper.StartClosingWindowAnimation(this);
 		}
 
 		private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -38,7 +50,7 @@ namespace LanguageWeaverProvider.View
 			comboBox.SelectedItem = null;
 		}
 
-		private void ComboBox_DropDownClosed(object sender, System.EventArgs e)
+		private void ComboBox_DropDownClosed(object sender, EventArgs e)
 		{
 			if (!_selectionChanged)
 			{

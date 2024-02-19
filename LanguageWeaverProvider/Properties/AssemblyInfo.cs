@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("LanguageWeaverProvider")]
 [assembly: AssemblyProduct("LanguageWeaverProvider")]
 [assembly: AssemblyCompany("SDL Limited as part of the RWS Holdings Plc group of companies")]
-[assembly: AssemblyCopyright("Copyright © 2011 - 2023 SDL Limited as part of the RWS Holdings Plc group of companies (\"RWS Group\").")]
+[assembly: AssemblyCopyright("Copyright © 2011 - 2024 SDL Limited as part of the RWS Holdings Plc group of companies (\"RWS Group\").")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

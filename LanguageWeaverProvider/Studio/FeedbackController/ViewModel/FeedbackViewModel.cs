@@ -8,6 +8,7 @@ using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Services;
+using LanguageWeaverProvider.Services.Model;
 using LanguageWeaverProvider.Studio.FeedbackController.Model;
 using LanguageWeaverProvider.ViewModel;
 using Sdl.Core.Globalization;
@@ -397,31 +398,23 @@ namespace LanguageWeaverProvider.Studio.FeedbackController.ViewModel
 				return false;
 			}
 
+			var sourceText = segmentPair.Source.ToString();
+			var languagePairId = segmentPair.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_ShortModelName);
 			var originalTranslation = segmentPair.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_Translation);
-			var feedback = new List<KeyValuePair<string, string>>
+			var comment = !string.IsNullOrEmpty(_previousFeedbackmessage) ? _previousFeedbackmessage : !string.IsNullOrEmpty(FeedbackMessage) ? FeedbackMessage : default;
+			var targetText = segmentPair.Target.ToString();
+			var suggestedTranslation = IsAdapted(segmentPair.Properties) && !originalTranslation.Equals(targetText) ? targetText : default;
+
+			var feedbackItem = new EdgeFeedbackItem()
 			{
-				new("sourceText", segmentPair.Source.ToString()),
-				new("languagePairId", segmentPair.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_ShortModelName)),
-				new("machineTranslation", originalTranslation)
+				SourceText = sourceText,
+				LanguagePairId = languagePairId,
+				MachineTranslation = originalTranslation,
+				Comment = comment,
+				SuggestedTranslation = suggestedTranslation
 			};
 
-			if (!string.IsNullOrEmpty(_previousFeedbackmessage))
-			{
-				feedback.Add(new("comment", _previousFeedbackmessage));
-			}
-			else if (!string.IsNullOrEmpty(FeedbackMessage))
-			{
-				feedback.Add(new("comment", FeedbackMessage));
-			}
-
-			var targetSegmentString = segmentPair.Target.ToString();
-			if (IsAdapted(segmentPair.Properties)
-			 && !originalTranslation.Equals(targetSegmentString))
-			{
-				feedback.Add(new("suggestedTranslation", targetSegmentString));
-			}
-
-			return await EdgeService.SendFeedback(SelectedProvider.AccessToken, feedback);
+			return await EdgeService.SendFeedback(SelectedProvider.AccessToken, feedbackItem);
 		}
 
 		private bool IsLanguageWeaverSource(ISegmentPairProperties segmentProperties)

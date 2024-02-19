@@ -10,6 +10,8 @@
 		xmlns:viewmodel="clr-namespace:LanguageWeaverProvider.LanguageMappingProvider.ViewModel"
 		mc:Ignorable="d"
 		d:DataContext="{d:DesignInstance viewmodel:LanguageMappingProviderViewModel}"
+		BorderThickness="1"
+		BorderBrush="#c0c0c0"
 		Title="Language Mapping"
 		WindowStartupLocation="CenterScreen"
 		WindowStyle="None"
@@ -17,7 +19,11 @@
 		MinWidth="600"
 		Width="800"
 		MinHeight="400"
-		Height="600">
+		Height="600"
+		MouseLeftButtonDown="Window_MouseLeftButtonDown"
+		Loaded="Window_Loaded"
+		Closing="Window_Closing"
+		AllowsTransparency="True">
 
 	<Window.Resources>
 		<ResourceDictionary>
@@ -54,9 +60,11 @@
 				<ColumnDefinition Width="Auto" />
 			</Grid.ColumnDefinitions>
 
-			<styles:WindowsControl Grid.Row="0"
-								   Grid.ColumnSpan="2"
-								   Margin="0 16 0 8" />
+			<Image Grid.Row="0"
+				   Grid.ColumnSpan="2"
+				   Source="pack://application:,,,/LanguageWeaverProvider;component/Resources/lwHeader_Main.png"
+				   Width="600"
+				   Margin="0 16 0 8" />
 
 			<TextBlock Grid.Row="1"
 					   Text="The Language Mapping feature allows users to align unrecognised or new language codes coming from the machine translation engine with a recognised language in Trados Studio, enabling translation where it otherwise wouldn't be possible."
@@ -161,7 +169,7 @@
 						Margin="16">
 				<Button Content="{x:Static root:PluginResources.LMPView_Buttons_ApplyChanges}"
 						Command="{Binding ApplyChangesCommand}"
-						Style="{StaticResource Sdl.Button.SecondaryStyle}"
+						Style="{StaticResource Sdl.Button.PrimaryStyle}"
 						Cursor="Hand"
 						FontSize="11"
 						FontWeight="DemiBold"

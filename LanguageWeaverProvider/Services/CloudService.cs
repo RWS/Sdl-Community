@@ -83,7 +83,8 @@ namespace LanguageWeaverProvider.Services
 				var endpoint = authenticationType switch
 				{
 					AuthenticationType.CloudCredentials => $"{cloudCredentials.AccountRegion}v4/token/user",
-					AuthenticationType.CloudAPI => $"{cloudCredentials.AccountRegion}v4/token"
+					AuthenticationType.CloudAPI => $"{cloudCredentials.AccountRegion}v4/token",
+					_ => throw new InvalidOperationException("Unsupported authentication type")
 				};
 
 				var content = GetAuthenticationContent(cloudCredentials, authenticationType);
