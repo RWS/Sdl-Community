@@ -110,7 +110,7 @@ namespace LanguageWeaverProvider.LanguageMappingProvider.ViewModel
 			}
 
 			var filterLower = Filter.ToLower();
-			var filterParts = filterLower.Split(' ');
+			var filterParts = filterLower.Split(' ').Where(x => !string.IsNullOrEmpty(x));
 
 			var filteredContent = MappedLanguages.Where(language =>
 				filterParts.All(filterPart => (!string.IsNullOrEmpty(language.Name) && language.Name.IndexOf(filterPart, StringComparison.OrdinalIgnoreCase) >= 0)

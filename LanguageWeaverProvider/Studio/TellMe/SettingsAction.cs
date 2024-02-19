@@ -124,7 +124,7 @@ namespace LanguageWeaverProvider.Studio.TellMe
 		private static void DisplayNoProviderAvailableWarning()
 		{
 			SystemSounds.Beep.Play();
-			new SettingsActionWarning(Constants.TellMe_Help_Url).ShowDialog();
+			new SettingsActionWarning(Constants.TellMe_Documentation_Url).ShowDialog();
 		}
 
 		private static bool IsGoogleCloudProvider(TranslationProviderReference translationProviderReference)
