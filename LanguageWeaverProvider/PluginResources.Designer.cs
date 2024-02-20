@@ -538,7 +538,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reset to defaults.
+        ///   Looks up a localized string similar to Reset to default.
         /// </summary>
         public static string LMPView_Buttons_Reset {
             get {
@@ -610,7 +610,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reset to defaults.
+        ///   Looks up a localized string similar to Reset to default.
         /// </summary>
         public static string LMPViewModel_ResetTitle {
             get {
@@ -977,6 +977,42 @@ namespace LanguageWeaverProvider {
         public static string PairMappingView_Buttons_OpenLMP {
             get {
                 return ResourceManager.GetString("PairMappingView_Buttons_OpenLMP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh.
+        /// </summary>
+        public static string PairMappingView_Buttons_Refresh {
+            get {
+                return ResourceManager.GetString("PairMappingView_Buttons_Refresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Identify any newly added languages within the project..
+        /// </summary>
+        public static string PairMappingView_Buttons_Refresh_ToolTip {
+            get {
+                return ResourceManager.GetString("PairMappingView_Buttons_Refresh_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset to default.
+        /// </summary>
+        public static string PairMappingView_Buttons_Reset {
+            get {
+                return ResourceManager.GetString("PairMappingView_Buttons_Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restores all language pair options to their default settings..
+        /// </summary>
+        public static string PairMappingView_Buttons_Reset_ToolTip {
+            get {
+                return ResourceManager.GetString("PairMappingView_Buttons_Reset_ToolTip", resourceCulture);
             }
         }
         

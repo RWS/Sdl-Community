@@ -126,7 +126,10 @@ namespace LanguageWeaverProvider.ViewModel
 
 		public ICommand OpenSettingsViewCommand { get; private set; }
 
+		public ICommand ResetAndIdentifyPairsCommand { get; private set; }
+
 		public ICommand OpenLanguageMappingProviderViewCommand { get; private set; }
+
 
 		public delegate void CloseWindowEventRaiser();
 
@@ -138,6 +141,7 @@ namespace LanguageWeaverProvider.ViewModel
 			CloseCommand = new RelayCommand(Close);
 			NavigateToCommand = new RelayCommand(NavigateTo);
 			OpenSettingsViewCommand = new RelayCommand(OpenSettingsView);
+			ResetAndIdentifyPairsCommand = new RelayCommand(ResetAndIdentifyPairs);
 			OpenLanguageMappingProviderViewCommand = new RelayCommand(OpenLanguageMappingProviderView);
 		}
 
@@ -343,6 +347,18 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 
 			LoadingAction = null;
+		}
+
+		private void ResetAndIdentifyPairs(object parameter)
+		{
+			if (parameter is string parameterString
+			 && parameterString.Equals(PluginResources.PairMappingView_Buttons_Reset))
+			{
+				PairMappings.Clear();
+				SelectedPairMapping = default;
+			}
+
+			CreatePairMappings();
 		}
 
 		private void SetHeader()

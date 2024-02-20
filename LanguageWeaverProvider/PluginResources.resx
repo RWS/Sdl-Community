@@ -271,7 +271,7 @@
     <value>Give feedback!</value>
   </data>
   <data name="LMPViewModel_ResetTitle" xml:space="preserve">
-    <value>Reset to defaults</value>
+    <value>Reset to default</value>
   </data>
   <data name="LMPViewModel_ResetWarning" xml:space="preserve">
     <value>Warning: Resetting to default values!
@@ -286,7 +286,7 @@ This action cannot be undone.</value>
     <value>Close</value>
   </data>
   <data name="LMPView_Buttons_Reset" xml:space="preserve">
-    <value>Reset to defaults</value>
+    <value>Reset to default</value>
   </data>
   <data name="LMPView_Headers_Language" xml:space="preserve">
     <value>Language</value>
@@ -422,6 +422,18 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
   </data>
   <data name="PairMappingView_Buttons_OpenLMP" xml:space="preserve">
     <value>Open Language Mapping</value>
+  </data>
+  <data name="PairMappingView_Buttons_Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="PairMappingView_Buttons_Refresh_ToolTip" xml:space="preserve">
+    <value>Identify any newly added languages within the project.</value>
+  </data>
+  <data name="PairMappingView_Buttons_Reset" xml:space="preserve">
+    <value>Reset to default</value>
+  </data>
+  <data name="PairMappingView_Buttons_Reset_ToolTip" xml:space="preserve">
+    <value>Restores all language pair options to their default settings.</value>
   </data>
   <data name="PairMappingView_Buttons_Settings" xml:space="preserve">
     <value>Settings</value>
