@@ -35,6 +35,7 @@ namespace LanguageWeaverProvider.ViewModel
 
 		public PairMappingViewModel(ITranslationOptions translationOptions, LanguagePair[] languagePairs)
 		{
+			LoadingAction = "Loading views...";
 			WindowTitle = Constants.PairMapping_MainWindow;
 			_languagePairs = languagePairs;
 			_translationOptions = translationOptions;
@@ -165,7 +166,7 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 
 			SaveChanges = true;
-			_translationOptions.PairMappings = PairMappings.ToList();
+			_translationOptions.PairMappings = [.. PairMappings];
 			_translationOptions.ProviderSettings.AutosendFeedback = SettingsView.AutosendFeedback;
 			_translationOptions.ProviderSettings.ResendDrafts = SettingsView.ResendDrafts;
 			_translationOptions.ProviderSettings.IncludeTags = SettingsView.IncludeTags;
@@ -287,11 +288,11 @@ namespace LanguageWeaverProvider.ViewModel
 		private async void CreatePairMappings()
 		{
 			var originalPairMappings = PairMappings;
-			PairMappings = new();
+			PairMappings = [];
 			var mappedLanguages = _languageMappingDatabase.GetMappedLanguages();
 			LoadingAction = "Getting models...";
 			var accountModels = _translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
-							  ? await CloudService.GetSupportedLanguages(_translationOptions.AccessToken)
+							  ? await CloudService.GetSupportedLanguages(_translationOptions.AccessToken, _languagePairs)
 							  : await EdgeService.GetLanguagePairs(_translationOptions.AccessToken);
 			LoadingAction = "Getting dictionaries...";
 			var accountDictionaries = _translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud

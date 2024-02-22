@@ -34,6 +34,9 @@ namespace LanguageWeaverProvider.Studio.FeedbackController.ViewModel
 		bool _isMetadataSet;
 		bool _isQeEnabled;
 
+		bool _isNotificationVisible;
+		string _notificationMessage;
+
 		public FeedbackViewModel()
 		{
 			_editController = SdlTradosStudio.Application.GetController<EditorController>();
@@ -133,6 +136,26 @@ namespace LanguageWeaverProvider.Studio.FeedbackController.ViewModel
 		{
 			get => _isMetadataSet;
 			set => SetIsMetadataSetValueAsync(value);
+		}
+
+		public bool IsNotificationVisible
+		{
+			get => _isNotificationVisible;
+			set
+			{
+				_isNotificationVisible = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string NotificationMessage
+		{
+			get => _notificationMessage;
+			set
+			{
+				_notificationMessage = value;
+				OnPropertyChanged();
+			}
 		}
 
 		private async void SetIsMetadataSetValueAsync(bool value)
@@ -352,7 +375,18 @@ namespace LanguageWeaverProvider.Studio.FeedbackController.ViewModel
 			if (feedbackSent)
 			{
 				ResetView();
+				ToggleSuccesfullNotification();
 			}
+		}
+
+		private async void ToggleSuccesfullNotification()
+		{
+			IsNotificationVisible = true;
+			NotificationMessage = "Feedback sent";
+			await Task.Delay(3500);
+			IsNotificationVisible = false;
+			await Task.Delay(1500);
+			NotificationMessage = null;
 		}
 
 		private async Task<bool> SendCloudFeedback(ISegmentPair segmentPair)

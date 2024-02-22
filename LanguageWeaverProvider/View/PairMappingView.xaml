@@ -18,12 +18,12 @@
         BorderBrush="#c0c0c0"
         ResizeMode="CanResize"
         WindowStyle="None"
-        MinHeight="600"
-        MinWidth="1000"
-        Height="600"
-        Width="1000"
-        d:DesignHeight="800"
-        d:DesignWidth="1000"
+		MinHeight="600"
+		Height="600"
+		MaxHeight="600"
+		MinWidth="1024"
+		Width="1100"
+		MaxWidth="1100"
         Loaded="Window_Loaded"
         Closing="Window_Closing"
         AllowsTransparency="True">
@@ -62,8 +62,9 @@
                         Value="320" />
             </Style>
 
-            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <converters:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter" />
+			<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+			<converters:EmptyStringToBooleanConverter x:Key="EmptyStringToBooleanConverter" />
+			<converters:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter" />
             <converters:EmptyCollectionToVisibilityConverter x:Key="EmptyCollectionToVisibilityConverter" />
 
             <DataTemplate DataType="{x:Type viewModel:SettingsViewModel}">
@@ -316,75 +317,83 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="{x:Static root:PluginResources.CloudMappingView_Headers_LOs}"
-                                                Width="1*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate DataType="model:PairMapping">
-                                    <StackPanel VerticalAlignment="Center">
-                                        <ListBox  x:Name="linguisticOptionsList"
-                                                  ItemsSource="{Binding LinguisticOptions, UpdateSourceTrigger=PropertyChanged}"
-                                                  Visibility="{Binding LinguisticOptions, Converter={StaticResource EmptyCollectionToVisibilityConverter}}"
-                                                  BorderThickness="0"
-                                                  Background="Transparent"
-                                                  Padding="0">
-                                            <ListBox.Resources>
-                                                <Style TargetType="{x:Type ListBoxItem}">
-                                                    <Setter Property="Background"
-                                                            Value="Transparent" />
-                                                </Style>
-                                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
-                                                                 Color="Transparent" />
-                                            </ListBox.Resources>
+						
+						<DataGridTemplateColumn Header="{x:Static root:PluginResources.CloudMappingView_Headers_LOs}"
+												Width="1*">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate DataType="model:PairMapping">
+									<StackPanel VerticalAlignment="Center">
+										<ListBox  x:Name="linguisticOptionsList"
+												  ItemsSource="{Binding LinguisticOptions, UpdateSourceTrigger=PropertyChanged}"
+												  Visibility="{Binding LinguisticOptions, Converter={StaticResource EmptyCollectionToVisibilityConverter}}"
+												  BorderThickness="0"
+												  Background="Transparent"
+												  Padding="0">
+											<ListBox.Resources>
+												<Style TargetType="{x:Type ListBoxItem}">
+													<Setter Property="Background"
+															Value="Transparent" />
+												</Style>
+												<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+																 Color="Transparent" />
+											</ListBox.Resources>
 
-                                            <ListBox.ItemContainerStyle>
-                                                <Style TargetType="ListBoxItem">
-                                                    <Setter Property="IsTabStop"
-                                                            Value="False" />
-                                                    <Setter Property="Focusable"
-                                                            Value="False" />
-                                                    <Setter Property="Template">
-                                                        <Setter.Value>
-                                                            <ControlTemplate TargetType="ListBoxItem">
-                                                                <Border Background="Transparent">
-                                                                    <ContentPresenter HorizontalAlignment="Stretch"
-                                                                                      VerticalAlignment="Center" />
-                                                                </Border>
-                                                            </ControlTemplate>
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Style>
-                                            </ListBox.ItemContainerStyle>
+											<ListBox.ItemContainerStyle>
+												<Style TargetType="ListBoxItem">
+													<Setter Property="IsTabStop"
+															Value="False" />
+													<Setter Property="Focusable"
+															Value="False" />
+													<Setter Property="Template">
+														<Setter.Value>
+															<ControlTemplate TargetType="ListBoxItem">
+																<Border Background="Transparent">
+																	<ContentPresenter HorizontalAlignment="Stretch"
+																					  VerticalAlignment="Center" />
+																</Border>
+															</ControlTemplate>
+														</Setter.Value>
+													</Setter>
+												</Style>
+											</ListBox.ItemContainerStyle>
 
-                                            <ListBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <DockPanel Margin="4 0">
-                                                        <TextBlock Text="{Binding DispayName}"
-                                                                   ToolTip="{Binding Name}"
-                                                                   VerticalAlignment="Center"
-                                                                   DockPanel.Dock="Left"
-                                                                   MinWidth="85"
-                                                                   Margin="0" />
+											<ListBox.ItemTemplate>
+												<DataTemplate>
+													<Grid Margin="4 0">
+														<Grid.ColumnDefinitions>
+															<ColumnDefinition Width="*" />
+															<ColumnDefinition Width="*" />
+														</Grid.ColumnDefinitions>
 
-                                                        <ComboBox ItemsSource="{Binding Values}"
-                                                                  SelectedValue="{Binding SelectedValue}"
-                                                                  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
-                                                                  DockPanel.Dock="Right"
-                                                                  HorizontalAlignment="Stretch"
-                                                                  Cursor="Hand" />
-                                                    </DockPanel>
-                                                </DataTemplate>
-                                            </ListBox.ItemTemplate>
-                                        </ListBox>
+														<TextBlock Grid.Column="0"
+																   Text="{Binding DispayName}"
+																   ToolTip="{Binding Name}"
+																   HorizontalAlignment="Left"
+																   VerticalAlignment="Center"
+																   Margin="0 0 2 0" />
 
-                                        <TextBlock Text="{x:Static root:PluginResources.CloudMappingView_Values_Unavailable}"
-                                                   Visibility="{Binding LinguisticOptions, Converter={StaticResource EmptyCollectionToVisibilityConverter}, ConverterParameter=Inverted}"
-                                                   Margin="4 0" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
+														<ComboBox Grid.Column="1"
+																  ItemsSource="{Binding Values}"
+																  SelectedValue="{Binding SelectedValue}"
+																  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+																  HorizontalAlignment="Right"
+																  VerticalAlignment="Center"
+																  MinWidth="80"
+																  Cursor="Hand" />
+													</Grid>
+												</DataTemplate>
+											</ListBox.ItemTemplate>
+										</ListBox>
+
+										<TextBlock Text="{x:Static root:PluginResources.CloudMappingView_Values_Unavailable}"
+												   Visibility="{Binding LinguisticOptions, Converter={StaticResource EmptyCollectionToVisibilityConverter}, ConverterParameter=Inverted}"
+												   Margin="4 0" />
+									</StackPanel>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+					</DataGrid.Columns>
+				</DataGrid>
             </Grid>
 			
             <ContentControl Content="{Binding SettingsView}"
@@ -413,8 +422,9 @@
             <Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_OpenLMP}"
                     Style="{StaticResource Sdl.Button.SecondaryStyle}"
                     Command="{Binding OpenLanguageMappingProviderViewCommand}"
-                    FontSize="11"
-                    FontWeight="DemiBold"
+					IsEnabled="{Binding LoadingAction, Converter={StaticResource EmptyStringToBooleanConverter}, ConverterParameter=Inverted}"
+					FontSize="11"
+					FontWeight="DemiBold"
                     Width="176"
                     Height="32"
                     Margin="0 8 8 0" />
@@ -422,8 +432,9 @@
                     Style="{StaticResource Sdl.Button.SecondaryStyle}"
                     Command="{Binding OpenSettingsViewCommand}"
                     Visibility="{Binding ShowSettingsView, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverted}"
-                    FontSize="11"
-                    FontWeight="DemiBold"
+					IsEnabled="{Binding LoadingAction, Converter={StaticResource EmptyStringToBooleanConverter}, ConverterParameter=Inverted}"
+					FontSize="11"
+					FontWeight="DemiBold"
                     Width="120"
                     Height="32"
                     Margin="8 8 8 0" />
@@ -436,8 +447,9 @@
             <Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Confirm}"
                     Style="{StaticResource Sdl.Button.PrimaryStyle}"
                     Command="{Binding SaveCommand}"
-                    FontSize="11"
-                    FontWeight="DemiBold"
+					IsEnabled="{Binding LoadingAction, Converter={StaticResource EmptyStringToBooleanConverter}, ConverterParameter=Inverted}"
+					FontSize="11"
+					FontWeight="DemiBold"
                     Width="120"
                     Height="32"
                     Margin="8 8 8 0" />
@@ -445,6 +457,7 @@
             <Button Content="{x:Static root:PluginResources.PairMappingView_Buttons_Cancel}"
                     Style="{StaticResource Sdl.Button.SecondaryStyle}"
                     Command="{Binding CloseCommand}"
+					IsEnabled="{Binding LoadingAction, Converter={StaticResource EmptyStringToBooleanConverter}, ConverterParameter=Inverted}"
                     FontSize="11"
                     FontWeight="DemiBold"
                     Width="120"

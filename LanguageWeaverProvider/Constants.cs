@@ -2,13 +2,18 @@
 {
 	public class Constants
 	{
+		public const string TraceAppKey = "Trace-App";
+		public const string TraceAppValue = "Trados Studio";
+		public const string TraceAppVersionKey = "Trace-App-Version";
+		public const string TraceAppVersionValue = "1.0.1.0";
+
 		// Plugin Name
 		public const string PluginShortName = "Language Weaver";
 		public const string PluginName = "Language Weaver Provider";
 		public const string PluginNameCloud = "Language Weaver Cloud";
 		public const string PluginNameEdge = "Language Weaver Edge";
 
-
+		// Scheme
 		public const string BaseTranslationScheme = "languageweaver";
 		public const string CloudScheme = "languageweavercloud";
 		public const string CloudFullScheme = "languageweavercloud:///";

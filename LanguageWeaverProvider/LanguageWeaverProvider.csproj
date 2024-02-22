@@ -39,6 +39,8 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <None Remove="Resources\Feedback_Default.png" />
+	  <None Remove="Resources\Feedback_Notification.png" />
 	  <None Remove="Resources\lwHeader_Cloud.png" />
 	  <None Remove="Resources\lwHeader_Edge.png" />
 	  <None Remove="Resources\lwHeader_Main.png" />
@@ -163,6 +165,8 @@
 
 	<ItemGroup>
 	  <EmbeddedResource Include="Resources\Report.xsl" />
+	  <Resource Include="Resources\Feedback_Default.png" />
+	  <Resource Include="Resources\Feedback_Notification.png" />
 	  <Resource Include="Resources\lwHeader_Cloud.png" />
 	  <Resource Include="Resources\lwHeader_Edge.png" />
 	  <Resource Include="Resources\lwHeader_Main.png" />

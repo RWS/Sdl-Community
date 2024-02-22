@@ -50,22 +50,6 @@ namespace LanguageWeaverProvider.Studio.BatchTask
 
 		private Report BuildXMLReport()
 		{
-			var projectInfo = Project.GetProjectInfo();
-			var reportSummary = new ReportSummary
-			{
-				Task = "MT QE Report",
-				Project = projectInfo.Name,
-				DueDate = $"{projectInfo.DueDate?.ToString("g")}",
-				CreatedAt = $"{projectInfo.CreatedAt:g}",
-				Files = _segments.Count,
-				Location = projectInfo.LocalProjectFolder,
-			};
-
-			var report = new Report
-			{
-				Summary = reportSummary
-			};
-
 			var data = new Data();
 			foreach (var segment in _segments)
 			{
@@ -76,7 +60,7 @@ namespace LanguageWeaverProvider.Studio.BatchTask
 					SegmentsTotal = qs.Value.QeCount,
 					WordsTotal = qs.Value.WordsCount,
 					CharactersTotal = qs.Value.CharacterCount
-				});
+				}).ToList();
 
 				var file = new File()
 				{
@@ -87,7 +71,24 @@ namespace LanguageWeaverProvider.Studio.BatchTask
 				data.File.Add(file);
 			}
 
-			report.Data = data;
+			var projectInfo = Project.GetProjectInfo();
+			var reportSummary = new ReportSummary
+			{
+				Task = "MT QE Report",
+				Project = projectInfo.Name,
+				DueDate = $"{projectInfo.DueDate?.ToString("g")}",
+				CreatedAt = $"{projectInfo.CreatedAt:g}",
+				Files = _segments.Count,
+				Location = projectInfo.LocalProjectFolder,
+				LockedSegmentsAreExcluded = _settings.ExcludeLockedSegments ? "Yes" : "No"
+			};
+
+			var report = new Report
+			{
+				Summary = reportSummary,
+				Data = data
+			};
+
 			return report;
 		}
 

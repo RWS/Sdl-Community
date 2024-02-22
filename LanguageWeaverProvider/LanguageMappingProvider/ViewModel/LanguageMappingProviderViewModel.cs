@@ -139,11 +139,9 @@ namespace LanguageWeaverProvider.LanguageMappingProvider.ViewModel
 
 		private void ApplyChanges(object parameter)
 		{
-			LoadingAction = PluginResources.Loading_LMP_Apply;
 			_languageMappingDatabase.UpdateAll(MappedLanguages);
 			RetrieveMappedLanguagesFromDatabase();
 			LanguageMappingUpdated?.Invoke(this, EventArgs.Empty);
-			LoadingAction = null;
 		}
 
 		private bool CanApplyChanges(object parameter)

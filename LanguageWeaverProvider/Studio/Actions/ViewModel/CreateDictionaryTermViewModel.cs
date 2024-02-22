@@ -74,14 +74,11 @@ namespace LanguageWeaverProvider.Studio.Actions.ViewModel
 
 		public bool IsNotificationVisible
 		{
-			get { return _isNotificationVisible; }
+			get => _isNotificationVisible;
 			set
 			{
-				if (_isNotificationVisible != value)
-				{
-					_isNotificationVisible = value;
-					OnPropertyChanged();
-				}
+				_isNotificationVisible = value;
+				OnPropertyChanged();
 			}
 		}
 

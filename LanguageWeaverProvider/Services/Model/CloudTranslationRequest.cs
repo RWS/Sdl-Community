@@ -25,5 +25,8 @@ namespace LanguageWeaverProvider.Services.Model
 
 		[JsonProperty("linguisticOptions")]
 		public Dictionary<string, string> LinguisticOptions { get; set; }
+
+		[JsonProperty("qualityEstimation")]
+		public int QualityEstimation { get; set; }
 	}
 }

@@ -15,6 +15,7 @@ using LanguageWeaverProvider.Studio.FeedbackController.Model;
 using LanguageWeaverProvider.XliffConverter.Converter;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Sdl.LanguagePlatform.Core;
 
 namespace LanguageWeaverProvider.Services
 {
@@ -33,8 +34,6 @@ namespace LanguageWeaverProvider.Services
 				param.Add("grant_type", "authorization_code");
 
 				var endpoint = new Uri("https://sdl-prod.eu.auth0.com/oauth/token");
-
-				var httpClient = new HttpClient();
 				using var httpRequest = new HttpRequestMessage()
 				{
 					Method = HttpMethod.Post,
@@ -42,7 +41,7 @@ namespace LanguageWeaverProvider.Services
 					Content = new FormUrlEncodedContent(param)
 				};
 
-				var result = await httpClient.SendAsync(httpRequest);
+				var result = await GetHttpClient().SendAsync(httpRequest);
 				var content = result.Content.ReadAsStringAsync().Result;
 				if (!result.IsSuccessStatusCode)
 				{
@@ -90,7 +89,7 @@ namespace LanguageWeaverProvider.Services
 				var content = GetAuthenticationContent(cloudCredentials, authenticationType);
 				var stringContent = new StringContent(content, null, "application/json");
 
-				var response = await new HttpClient().PostAsync(endpoint, stringContent);
+				var response = await GetHttpClient().PostAsync(endpoint, stringContent);
 				var accessTokenString = await response.Content.ReadAsStringAsync();
 				if (!response.IsSuccessStatusCode)
 				{
@@ -136,7 +135,7 @@ namespace LanguageWeaverProvider.Services
 			var request = new HttpRequestMessage(HttpMethod.Get, uri);
 			request.Headers.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
 
-			var response = await new HttpClient().SendAsync(request);
+			var response = await GetHttpClient().SendAsync(request);
 			var userDetailsJson = await response.Content.ReadAsStringAsync();
 			if (!response.IsSuccessStatusCode)
 			{
@@ -156,7 +155,7 @@ namespace LanguageWeaverProvider.Services
 			var uri = new Uri($"{accessToken.BaseUri}v4/accounts/{accessToken.AccountId}/subscriptions");
 			var request = new HttpRequestMessage(HttpMethod.Get, uri);
 			request.Headers.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
-			var response = await new HttpClient().SendAsync(request);
+			var response = await GetHttpClient().SendAsync(request);
 			var responseContent = await response.Content.ReadAsStringAsync();
 
 			var output = JsonConvert.DeserializeObject<CloudAccount>(responseContent);
@@ -212,7 +211,7 @@ namespace LanguageWeaverProvider.Services
 			var uri = new Uri($"{accessToken.BaseUri}v4/accounts/{accessToken.AccountId}");
 			var request = new HttpRequestMessage(HttpMethod.Get, uri);
 			request.Headers.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
-			var response = await new HttpClient().SendAsync(request);
+			var response = await GetHttpClient().SendAsync(request);
 			var responseContent = await response.Content.ReadAsStringAsync();
 
 			var json = JObject.Parse(responseContent);
@@ -230,7 +229,7 @@ namespace LanguageWeaverProvider.Services
 			// Add more properties if needed
 		}
 
-		public static async Task<List<PairModel>> GetSupportedLanguages(AccessToken accessToken)
+		public static async Task<List<PairModel>> GetSupportedLanguages(AccessToken accessToken, LanguagePair[] _languagePairs)
 		{
 			try
 			{
@@ -241,14 +240,14 @@ namespace LanguageWeaverProvider.Services
 				var request = new HttpRequestMessage(HttpMethod.Get, uri);
 				request.Headers.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
 
-				var response = await new HttpClient().SendAsync(request);
+				var response = await GetHttpClient().SendAsync(request);
 				response.EnsureSuccessStatusCode();
 
 				var responseContent = await response.Content.ReadAsStringAsync();
-				var languagePairs = JObject.Parse(responseContent)["languagePairs"].ToString();
-				var languagePairsOutput = JsonConvert.DeserializeObject<List<PairModel>>(languagePairs);
+				var languagePairsJson = JObject.Parse(responseContent)["languagePairs"].ToString();
+				var languagePairs = JsonConvert.DeserializeObject<List<PairModel>>(languagePairsJson);
 
-				return languagePairsOutput;
+				return languagePairs;
 			}
 			catch (Exception ex)
 			{
@@ -266,7 +265,7 @@ namespace LanguageWeaverProvider.Services
 				var request = new HttpRequestMessage(HttpMethod.Get, uri);
 				request.Headers.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
 
-				var response = await new HttpClient().SendAsync(request);
+				var response = await GetHttpClient().SendAsync(request);
 				response.EnsureSuccessStatusCode();
 
 				var responseContent = await response.Content.ReadAsStringAsync();
@@ -317,7 +316,7 @@ namespace LanguageWeaverProvider.Services
 
 		private static async Task<string> GetTranslationStatus(AccessToken accessToken, string requestId)
 		{
-			var httpClient = new HttpClient();
+			var httpClient = GetHttpClient();
 			httpClient.DefaultRequestHeaders.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
 
 			var endpoint = $"{accessToken.BaseUri}v4/mt/translations/async/{requestId}?includeProgressInfo=true";
@@ -335,11 +334,12 @@ namespace LanguageWeaverProvider.Services
 			{
 				SourceLanguageId = mappedPair.SourceCode,
 				TargetLanguageId = mappedPair.TargetCode,
-				Input = new[] { sourceXliff.ToString() },
+				Input = [sourceXliff.ToString()],
 				Model = mappedPair.SelectedModel.Model,
 				InputFormat = InputFormat,
-				Dictionaries = new object[] { },
-				LinguisticOptions = linguisticOptionsDictionary
+				Dictionaries = [],
+				LinguisticOptions = linguisticOptionsDictionary,
+				QualityEstimation = 1
 			};
 
 			var dictionaries = mappedPair.Dictionaries.Where(x => x.IsSelected);
@@ -352,7 +352,7 @@ namespace LanguageWeaverProvider.Services
 				}
 			}
 
-			var httpClient = new HttpClient();
+			var httpClient = GetHttpClient();
 			httpClient.DefaultRequestHeaders.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
 			var translationRequestModelJson = JsonConvert.SerializeObject(translationRequestModel);
 			var response = await httpClient.PostAsync($"{accessToken.BaseUri}v4/mt/translations/async", new StringContent(translationRequestModelJson, Encoding.UTF8, "application/json"));
@@ -409,6 +409,14 @@ namespace LanguageWeaverProvider.Services
 			var result = await response.Content.ReadAsStringAsync();
 			ErrorHandling.ShowDialog(null, PluginResources.Dictionary_NewTerm_Unsuccessfully, result);
 			return isSuccessStatusCode;
+		}
+
+		public static HttpClient GetHttpClient()
+		{
+			var httpClient = new HttpClient();
+			httpClient.DefaultRequestHeaders.Add(Constants.TraceAppKey, Constants.TraceAppValue);
+			httpClient.DefaultRequestHeaders.Add(Constants.TraceAppVersionKey, Constants.TraceAppVersionValue);
+			return httpClient;
 		}
 	}
 }

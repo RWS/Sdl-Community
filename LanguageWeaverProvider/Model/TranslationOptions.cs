@@ -8,6 +8,8 @@ namespace LanguageWeaverProvider.Model.Options
 {
 	public class TranslationOptions : BaseViewModel, ITranslationOptions
 	{
+		PluginVersion _pluginVersion;
+
 		public TranslationOptions(bool isNewInstance = false)
 		{
 			if (isNewInstance)
@@ -15,12 +17,6 @@ namespace LanguageWeaverProvider.Model.Options
 				Id = Guid.NewGuid().ToString();
 			}
 		}
-
-		public string Id { get; set; }
-
-		public string ProviderName => GetProviderName();
-
-		PluginVersion _pluginVersion;
 
 		[JsonIgnore]
 		public AccessToken AccessToken { get; set; }
@@ -31,8 +27,6 @@ namespace LanguageWeaverProvider.Model.Options
 		[JsonIgnore]
 		public EdgeCredentials EdgeCredentials { get; set; }
 
-		public AuthenticationType AuthenticationType { get; set; }
-
 		public PluginVersion PluginVersion
 		{
 			get => _pluginVersion;
@@ -42,6 +36,12 @@ namespace LanguageWeaverProvider.Model.Options
 				OnPropertyChanged();
 			}
 		}
+
+		public AuthenticationType AuthenticationType { get; set; }
+
+		public string Id { get; set; }
+
+		public string ProviderName => GetProviderName();
 
 		public List<PairMapping> PairMappings { get; set; }
 
