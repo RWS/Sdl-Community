@@ -14,7 +14,6 @@ namespace LanguageWeaverProvider.ViewModel.Edge
 		private ITranslationOptions _translationOptions;
 		private EdgeCredentials _edgeCredentials;
 		private bool _success;
-		private Exception _exception;
 
 		public EdgeAuth0ViewModel(EdgeCredentials edgeCredentials, ITranslationOptions translationOptions)
 		{
@@ -65,19 +64,9 @@ namespace LanguageWeaverProvider.ViewModel.Edge
 			}
 		}
 
-		public Exception Exception
-		{
-			get => _exception;
-			set
-			{
-				_exception = value;
-				OnPropertyChanged();
-			}
-		}
-
 		public async Task Connect(WebView2 webView)
 		{
-			(Success, _exception) = await EdgeService.SignInAuthAsync(EdgeCredentials, TranslationOptions, webView);
+			Success = await EdgeService.SignInAuthAsync(EdgeCredentials, TranslationOptions, webView);
 		}
 	}
 }

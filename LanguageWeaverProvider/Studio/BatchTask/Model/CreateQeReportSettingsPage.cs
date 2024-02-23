@@ -1,5 +1,5 @@
-﻿using LanguageWeaverProvider.View;
-using LanguageWeaverProvider.ViewModel;
+﻿using LanguageWeaverProvider.Studio.BatchTask.View;
+using LanguageWeaverProvider.Studio.BatchTask.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 
 namespace LanguageWeaverProvider.Studio.BatchTask.Model

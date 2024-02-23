@@ -19,7 +19,7 @@ namespace LanguageWeaverProvider.Services
 				request.Content = content;
 			}
 
-			var response = await new HttpClient().SendAsync(request);
+			var response = await GetHttpClient().SendAsync(request);
 			return response;
 		}
 
@@ -71,5 +71,14 @@ namespace LanguageWeaverProvider.Services
 
 			return expirationTime <= currentTime;
 		}
+
+		public static HttpClient GetHttpClient()
+		{
+			var httpClient = new HttpClient();
+			httpClient.DefaultRequestHeaders.Add(Constants.TraceAppKey, Constants.TraceAppValue);
+			httpClient.DefaultRequestHeaders.Add(Constants.TraceAppVersionKey, Constants.TraceAppVersionValue);
+			return httpClient;
+		}
+
 	}
 }

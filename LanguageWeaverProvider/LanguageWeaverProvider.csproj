@@ -22,19 +22,25 @@
 	<ItemGroup>
 	  <Compile Remove="Interface\**" />
 	  <Compile Remove="ServiceClients\**" />
+	  <Compile Remove="Studio\AccountSubscription\Model\**" />
 	  <Compile Remove="Studio\Actions\Models\**" />
 	  <EmbeddedResource Remove="Interface\**" />
 	  <EmbeddedResource Remove="ServiceClients\**" />
+	  <EmbeddedResource Remove="Studio\AccountSubscription\Model\**" />
 	  <EmbeddedResource Remove="Studio\Actions\Models\**" />
 	  <None Remove="Interface\**" />
 	  <None Remove="ServiceClients\**" />
+	  <None Remove="Studio\AccountSubscription\Model\**" />
 	  <None Remove="Studio\Actions\Models\**" />
 	  <Page Remove="Interface\**" />
 	  <Page Remove="ServiceClients\**" />
+	  <Page Remove="Studio\AccountSubscription\Model\**" />
 	  <Page Remove="Studio\Actions\Models\**" />
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <None Remove="Resources\Feedback_Default.png" />
+	  <None Remove="Resources\Feedback_Notification.png" />
 	  <None Remove="Resources\lwHeader_Cloud.png" />
 	  <None Remove="Resources\lwHeader_Edge.png" />
 	  <None Remove="Resources\lwHeader_Main.png" />
@@ -48,6 +54,7 @@
 	  <None Remove="Resources\lwLogo_Main16.png" />
 	  <None Remove="Resources\lwLogo_Main32.png" />
 	  <None Remove="Resources\Report.xsl" />
+	  <None Remove="Resources\Warning.png" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -71,7 +78,7 @@
 		  <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.Core.Settings">
-		  <HintPath>..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Core.Settings.dll</HintPath>
+		  <HintPath>$(TradosFolder)\Sdl.Core.Settings.dll</HintPath>
 		</Reference>
 		<Reference Include="Sdl.Desktop.IntegrationApi">
 		  <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
@@ -129,10 +136,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="Studio\TranslationProviderWinFormsUI.cs" />
-		<None Include="Studio\TranslationProviderLanguageDirection.cs" />
-		<None Include="Studio\TranslationProvider.cs" />
-		<None Include="Studio\TranslationProviderFactory.cs" />
+		<None Include="Studio\TranslationProvider\TranslationProviderWinFormsUI.cs" />
+		<None Include="Studio\TranslationProvider\TranslationProviderLanguageDirection.cs" />
+		<None Include="Studio\TranslationProvider\TranslationProvider.cs" />
+		<None Include="Studio\TranslationProvider\TranslationProviderFactory.cs" />
 		<None Include="Properties\AssemblyInfo.cs" />
 		<None Include="Properties\PluginProperties.cs" />
 	</ItemGroup>
@@ -158,6 +165,8 @@
 
 	<ItemGroup>
 	  <EmbeddedResource Include="Resources\Report.xsl" />
+	  <Resource Include="Resources\Feedback_Default.png" />
+	  <Resource Include="Resources\Feedback_Notification.png" />
 	  <Resource Include="Resources\lwHeader_Cloud.png" />
 	  <Resource Include="Resources\lwHeader_Edge.png" />
 	  <Resource Include="Resources\lwHeader_Main.png" />
@@ -170,6 +179,7 @@
 	  <Resource Include="Resources\lwLogo_Main.png" />
 	  <Resource Include="Resources\lwLogo_Main16.png" />
 	  <Resource Include="Resources\lwLogo_Main32.png" />
+	  <Resource Include="Resources\Warning.png" />
 	  <Resource Include="Style\Buttons.xaml" />
 	</ItemGroup>
 
@@ -179,9 +189,5 @@
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>PluginResources.resx</DependentUpon>
 	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Studio\AccountSubscription\Model\" />
 	</ItemGroup>
 </Project>

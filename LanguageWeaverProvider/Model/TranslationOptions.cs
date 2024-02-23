@@ -10,6 +10,14 @@ namespace LanguageWeaverProvider.Model.Options
 	{
 		PluginVersion _pluginVersion;
 
+		public TranslationOptions(bool isNewInstance = false)
+		{
+			if (isNewInstance)
+			{
+				Id = Guid.NewGuid().ToString();
+			}
+		}
+
 		[JsonIgnore]
 		public AccessToken AccessToken { get; set; }
 
@@ -18,8 +26,6 @@ namespace LanguageWeaverProvider.Model.Options
 
 		[JsonIgnore]
 		public EdgeCredentials EdgeCredentials { get; set; }
-
-		public AuthenticationType AuthenticationType { get; set; }
 
 		public PluginVersion PluginVersion
 		{
@@ -30,6 +36,12 @@ namespace LanguageWeaverProvider.Model.Options
 				OnPropertyChanged();
 			}
 		}
+
+		public AuthenticationType AuthenticationType { get; set; }
+
+		public string Id { get; set; }
+
+		public string ProviderName => GetProviderName();
 
 		public List<PairMapping> PairMappings { get; set; }
 
@@ -65,6 +77,20 @@ namespace LanguageWeaverProvider.Model.Options
 				default:
 					break;
 			}
+		}
+
+		private string GetProviderName()
+		{
+			var providerNamePrefix = PluginVersion switch
+			{
+				PluginVersion.LanguageWeaverCloud => Constants.PluginNameCloud,
+				PluginVersion.LanguageWeaverEdge => Constants.PluginNameEdge,
+				_ => Constants.PluginName
+			};
+
+			return ProviderSettings?.UseCustomName == true
+				 ? $"{providerNamePrefix} - {ProviderSettings.CustomName}"
+				 : providerNamePrefix;
 		}
 	}
 }

@@ -8,11 +8,11 @@ using System.Windows.Input;
 using LanguageMappingProvider.Database.Interface;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.LanguageMappingProvider;
+using LanguageWeaverProvider.LanguageMappingProvider.View;
+using LanguageWeaverProvider.LanguageMappingProvider.ViewModel;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
-using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Services;
-using LanguageWeaverProvider.View;
 using Sdl.LanguagePlatform.Core;
 
 namespace LanguageWeaverProvider.ViewModel
@@ -35,10 +35,11 @@ namespace LanguageWeaverProvider.ViewModel
 
 		public PairMappingViewModel(ITranslationOptions translationOptions, LanguagePair[] languagePairs)
 		{
+			LoadingAction = "Loading views...";
 			WindowTitle = Constants.PairMapping_MainWindow;
 			_languagePairs = languagePairs;
 			_translationOptions = translationOptions;
-			_languageMappingDatabase = DatabaseControl.InitializeDatabase(translationOptions.PluginVersion);
+			_languageMappingDatabase = DatabaseControl.InitializeDatabase();
 			InitializeSettingsView();
 			InitializeCommands();
 			LoadPairMapping();
@@ -126,7 +127,10 @@ namespace LanguageWeaverProvider.ViewModel
 
 		public ICommand OpenSettingsViewCommand { get; private set; }
 
+		public ICommand ResetAndIdentifyPairsCommand { get; private set; }
+
 		public ICommand OpenLanguageMappingProviderViewCommand { get; private set; }
+
 
 		public delegate void CloseWindowEventRaiser();
 
@@ -138,6 +142,7 @@ namespace LanguageWeaverProvider.ViewModel
 			CloseCommand = new RelayCommand(Close);
 			NavigateToCommand = new RelayCommand(NavigateTo);
 			OpenSettingsViewCommand = new RelayCommand(OpenSettingsView);
+			ResetAndIdentifyPairsCommand = new RelayCommand(ResetAndIdentifyPairs);
 			OpenLanguageMappingProviderViewCommand = new RelayCommand(OpenLanguageMappingProviderView);
 		}
 
@@ -161,7 +166,7 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 
 			SaveChanges = true;
-			_translationOptions.PairMappings = PairMappings.ToList();
+			_translationOptions.PairMappings = [.. PairMappings];
 			_translationOptions.ProviderSettings.AutosendFeedback = SettingsView.AutosendFeedback;
 			_translationOptions.ProviderSettings.ResendDrafts = SettingsView.ResendDrafts;
 			_translationOptions.ProviderSettings.IncludeTags = SettingsView.IncludeTags;
@@ -256,7 +261,7 @@ namespace LanguageWeaverProvider.ViewModel
 			}
 
 			LoadingAction = "Loading resources...";
-			await Task.Delay(50);
+			await Task.Delay(0);
 			var pairMappings = new ObservableCollection<PairMapping>();
 			foreach (var pairMapping in _translationOptions.PairMappings)
 			{
@@ -283,20 +288,17 @@ namespace LanguageWeaverProvider.ViewModel
 		private async void CreatePairMappings()
 		{
 			var originalPairMappings = PairMappings;
-			PairMappings = new();
+			PairMappings = [];
 			var mappedLanguages = _languageMappingDatabase.GetMappedLanguages();
 			LoadingAction = "Getting models...";
-			await Task.Delay(50);
 			var accountModels = _translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
-							  ? await CloudService.GetSupportedLanguages(_translationOptions.AccessToken)
+							  ? await CloudService.GetSupportedLanguages(_translationOptions.AccessToken, _languagePairs)
 							  : await EdgeService.GetLanguagePairs(_translationOptions.AccessToken);
 			LoadingAction = "Getting dictionaries...";
-			await Task.Delay(50);
 			var accountDictionaries = _translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
 									? await CloudService.GetDictionaries(_translationOptions.AccessToken)
 									: await EdgeService.GetDictionaries(_translationOptions.AccessToken);
 			LoadingAction = "Loading resources...";
-			await Task.Delay(50);
 			foreach (var languagePair in _languagePairs)
 			{
 				var mappedLanguagePairs = mappedLanguages.Where(mappedLang => mappedLang.TradosCode.Equals(languagePair.SourceCultureName) || mappedLang.TradosCode.Equals(languagePair.TargetCultureName));
@@ -314,7 +316,7 @@ namespace LanguageWeaverProvider.ViewModel
 				}
 
 				var models = accountModels.Where(model => model.SourceLanguageId.Equals(mappedSource.LanguageCode) && model.TargetLanguageId.Equals(mappedTarget.LanguageCode))
-										  .Select(x => x.Clone())
+										  .Select(model => model.Clone())
 										  .ToList();
 				if (!models.Any())
 				{
@@ -348,13 +350,25 @@ namespace LanguageWeaverProvider.ViewModel
 			LoadingAction = null;
 		}
 
+		private void ResetAndIdentifyPairs(object parameter)
+		{
+			if (parameter is string parameterString
+			 && parameterString.Equals(PluginResources.PairMappingView_Buttons_Reset))
+			{
+				PairMappings.Clear();
+				SelectedPairMapping = default;
+			}
+
+			CreatePairMappings();
+		}
+
 		private void SetHeader()
 		{
 			HeaderImagePath = _translationOptions.PluginVersion switch
 			{
-				PluginVersion.LanguageWeaverCloud => "../Resources/lwHeader_Cloud.png",
-				PluginVersion.LanguageWeaverEdge => "../Resources/lwHeader_Edge.png",
-				_ => "../Resources/lwHeader_Main.png"
+				PluginVersion.LanguageWeaverCloud => "pack://application:,,,/LanguageWeaverProvider;component/Resources/lwHeader_Cloud.png",
+				PluginVersion.LanguageWeaverEdge => "pack://application:,,,/LanguageWeaverProvider;component/Resources/lwHeader_Edge.png",
+				_ => "pack://application:,,,/LanguageWeaverProvider;component/Resources/lwHeader_Main.png"
 			};
 		}
 	}

@@ -17,7 +17,7 @@ namespace LanguageWeaverProvider.Studio.TellMe
 		private AbstractTellMeAction[] GetProviderActions()
 		{
 			var forumAction = new CommunityForumAction();
-			var helpAction = new HelpAction();
+			var helpAction = new DocumentationAction();
 			var sourceCodeAction = new SourceCodeAction();
 			var settingsAction = new SettingsAction();
 

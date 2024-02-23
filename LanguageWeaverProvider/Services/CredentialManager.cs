@@ -27,16 +27,19 @@ namespace LanguageWeaverProvider.Extensions
 				return false;
 			}
 
-			var translationOptions = new TranslationOptions();
-			var pluginVersion = translationProviderUri.AbsoluteUri.Equals(Constants.CloudFullScheme) ? PluginVersion.LanguageWeaverCloud
-							  : translationProviderUri.AbsoluteUri.Equals(Constants.EdgeFullScheme) ? PluginVersion.LanguageWeaverEdge
-							  : PluginVersion.None;
+			var pluginVersion = translationProviderUri.AbsoluteUri switch
+			{
+				Constants.CloudFullScheme => PluginVersion.LanguageWeaverCloud,
+				Constants.EdgeFullScheme => PluginVersion.LanguageWeaverEdge,
+				_ => PluginVersion.None
+			};
+
 			if (pluginVersion == PluginVersion.None)
 			{
 				return false;
 			}
 
-			translationOptions.PluginVersion = pluginVersion;
+			var translationOptions = new TranslationOptions { PluginVersion = pluginVersion };
 			GetCredentials(translationOptions, true);
 			return translationOptions.AccessToken is not null
 				|| ((pluginVersion != PluginVersion.LanguageWeaverCloud || translationOptions.CloudCredentials is not null)

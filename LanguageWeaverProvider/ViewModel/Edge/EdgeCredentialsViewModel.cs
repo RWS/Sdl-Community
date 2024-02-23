@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Extensions;
@@ -12,12 +13,12 @@ namespace LanguageWeaverProvider.ViewModel.Edge
 {
 	public class EdgeCredentialsViewModel : BaseViewModel, ICredentialsViewModel
 	{
-		private AuthenticationType _authenticationType;
+		AuthenticationType _authenticationType;
 
-		private string _host;
-		private string _apiKey;
-		private string _username;
-		private string _password;
+		string _host;
+		string _apiKey;
+		string _username;
+		string _password;
 
 		public EdgeCredentialsViewModel(ITranslationOptions translationOptions)
 		{
@@ -120,23 +121,19 @@ namespace LanguageWeaverProvider.ViewModel.Edge
 			}
 
 			ApiKey = TranslationOptions.EdgeCredentials.ApiKey;
-			Host = TranslationOptions.EdgeCredentials.Uri.ToString();
 			Password = TranslationOptions.EdgeCredentials.Password;
 			Username = TranslationOptions.EdgeCredentials.UserName;
+			Host = TranslationOptions.EdgeCredentials.Uri.ToString();
 		}
 
 		private async void SignIn(object parameter)
 		{
-			if (!HostIsValid()
-			 || !CredentialsAreSet()
-			 || !IsAuthenticationTypeSelected)
+			if (!AreCredentialsValid())
 			{
-				StopLoginProcess?.Invoke(this, EventArgs.Empty);
 				ErrorHandling.ShowDialog(null, PluginResources.Connection_Credentials, PluginResources.Connection_Error_NoCredentials);
 				return;
 			}
 
-			StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Loading_Connecting));
 			var edgeCredentials = new EdgeCredentials(Host)
 			{
 				UserName = Username,
@@ -144,72 +141,55 @@ namespace LanguageWeaverProvider.ViewModel.Edge
 				ApiKey = ApiKey
 			};
 
-			(bool Success, Exception Error) response;
-			if (IsApiKeySelected)
-			{
-				response = await EdgeService.VerifyAPI(edgeCredentials, TranslationOptions);
-			}
-			else if (IsCredentialsSelected)
-			{
-				response = await EdgeService.AuthenticateUser(edgeCredentials, TranslationOptions);
-			}
-			else
-			{
-				var vm = new EdgeAuth0ViewModel(edgeCredentials, TranslationOptions);
-				var view = new EdgeAuth0View() { DataContext = vm };
-				view.ShowDialog();
-				response = (vm.Success, vm.Exception);
-			}
-
+			var result = await Authenticate(edgeCredentials);
 			StopLoginProcess?.Invoke(this, EventArgs.Empty);
-			if (!response.Success)
+			if (!result)
 			{
-				ErrorHandling.ShowDialog(response.Error, "Authentication failed", "The authentication failed", true);
 				return;
 			}
 
+			UpdateTranslationOptions(edgeCredentials);
+			CloseWindow();
+		}
+
+		private bool AreCredentialsValid()
+		{
+			return HostIsValid() && CredentialsAreSet() && IsAuthenticationTypeSelected;
+		}
+
+		private async Task<bool> Authenticate(EdgeCredentials edgeCredentials)
+		{
+			if (IsApiKeySelected)
+			{
+				StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Loading_Edge_ConnectingApi));
+				return await EdgeService.VerifyAPI(edgeCredentials, TranslationOptions);
+			}
+			else if (IsCredentialsSelected)
+			{
+				StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Loading_Edge_ConnectingUser));
+				return await EdgeService.AuthenticateUser(edgeCredentials, TranslationOptions);
+			}
+			else
+			{
+				StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Loading_Edge_ConnectingAuth0));
+				return AuthenticateWithAuth0(edgeCredentials);
+			}
+		}
+
+		private bool AuthenticateWithAuth0(EdgeCredentials edgeCredentials)
+		{
+			var viewModel = new EdgeAuth0ViewModel(edgeCredentials, TranslationOptions);
+			var view = new EdgeAuth0View() { DataContext = viewModel };
+			view.ShowDialog();
+			return viewModel.Success;
+		}
+
+		private void UpdateTranslationOptions(EdgeCredentials edgeCredentials)
+		{
 			TranslationOptions.EdgeCredentials = edgeCredentials;
 			TranslationOptions.AuthenticationType = AuthenticationType;
 			TranslationOptions.PluginVersion = PluginVersion.LanguageWeaverEdge;
 			TranslationOptions.UpdateUri();
-			CloseWindow();
-		}
-
-		private void Back(object parameter)
-		{
-			AuthenticationType = AuthenticationType.None;
-		}
-
-		private void Clear(object parameter)
-		{
-			if (parameter is not string parameterString)
-			{
-				return;
-			}
-
-			switch (parameterString)
-			{
-				case nameof(Username):
-					Username = string.Empty;
-					break;
-
-				case nameof(Host):
-					Host = string.Empty;
-					break;
-
-				default:
-					break;
-			}
-		}
-
-		private void SelectAuthenticationType(object parameter)
-		{
-			if (parameter is not AuthenticationType authenticationType)
-			{
-				return;
-			}
-
-			AuthenticationType = authenticationType;
 		}
 
 		private bool HostIsValid()
@@ -251,6 +231,43 @@ namespace LanguageWeaverProvider.ViewModel.Edge
 			return IsCredentialsSelected
 				? !string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password)
 				: !string.IsNullOrEmpty(ApiKey);
+		}
+
+		private void Back(object parameter)
+		{
+			AuthenticationType = AuthenticationType.None;
+		}
+
+		private void Clear(object parameter)
+		{
+			if (parameter is not string parameterString)
+			{
+				return;
+			}
+
+			switch (parameterString)
+			{
+				case nameof(Username):
+					Username = string.Empty;
+					break;
+
+				case nameof(Host):
+					Host = string.Empty;
+					break;
+
+				default:
+					break;
+			}
+		}
+
+		private void SelectAuthenticationType(object parameter)
+		{
+			if (parameter is not AuthenticationType authenticationType)
+			{
+				return;
+			}
+
+			AuthenticationType = authenticationType;
 		}
 	}
 }

@@ -187,6 +187,15 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You&apos;ve chosen SSO Authentication. Please provide the Host URL for access..
+        /// </summary>
+        public static string Auth_Edge_SSO_ToolTip {
+            get {
+                return ResourceManager.GetString("Auth_Edge_SSO_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User credentials.
         /// </summary>
         public static string Auth_Edge_UserCredentials {
@@ -412,16 +421,6 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon Download {
-            get {
-                object obj = ResourceManager.GetObject("Download", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string ErrorView_Buttons_Close {
@@ -521,16 +520,6 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon ForumIcon {
-            get {
-                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Apply.
         /// </summary>
         public static string LMPView_Buttons_ApplyChanges {
@@ -549,7 +538,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reset to defaults.
+        ///   Looks up a localized string similar to Reset to default.
         /// </summary>
         public static string LMPView_Buttons_Reset {
             get {
@@ -621,7 +610,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reset to defaults.
+        ///   Looks up a localized string similar to Reset to default.
         /// </summary>
         public static string LMPViewModel_ResetTitle {
             get {
@@ -647,6 +636,33 @@ namespace LanguageWeaverProvider {
         public static string Loading_Connecting {
             get {
                 return ResourceManager.GetString("Loading_Connecting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connecting using API Key....
+        /// </summary>
+        public static string Loading_Edge_ConnectingApi {
+            get {
+                return ResourceManager.GetString("Loading_Edge_ConnectingApi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connecting using Single sign-on....
+        /// </summary>
+        public static string Loading_Edge_ConnectingAuth0 {
+            get {
+                return ResourceManager.GetString("Loading_Edge_ConnectingAuth0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connecting using User credentials....
+        /// </summary>
+        public static string Loading_Edge_ConnectingUser {
+            get {
+                return ResourceManager.GetString("Loading_Edge_ConnectingUser", resourceCulture);
             }
         }
         
@@ -965,6 +981,42 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Refresh.
+        /// </summary>
+        public static string PairMappingView_Buttons_Refresh {
+            get {
+                return ResourceManager.GetString("PairMappingView_Buttons_Refresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Identify any newly added languages within the project..
+        /// </summary>
+        public static string PairMappingView_Buttons_Refresh_ToolTip {
+            get {
+                return ResourceManager.GetString("PairMappingView_Buttons_Refresh_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset to default.
+        /// </summary>
+        public static string PairMappingView_Buttons_Reset {
+            get {
+                return ResourceManager.GetString("PairMappingView_Buttons_Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restores all language pair options to their default settings..
+        /// </summary>
+        public static string PairMappingView_Buttons_Reset_ToolTip {
+            get {
+                return ResourceManager.GetString("PairMappingView_Buttons_Reset_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string PairMappingView_Buttons_Settings {
@@ -1010,12 +1062,43 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        ///   Looks up a localized string similar to For more information,.
         /// </summary>
-        public static System.Drawing.Icon Question {
+        public static string SettingsAction_ExternalHelp_1 {
             get {
-                object obj = ResourceManager.GetObject("Question", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to click here.
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_2 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to for documentation..
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_3 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We couldn&apos;t find an instance of Language Weaver Provider for the current project selected. To add it to your project, follow these steps:
+        ///
+        ///1. Open Project Settings;
+        ///2. Go to Translation Memory and Automated Translation;
+        ///3. Select Use;
+        ///4. Via the dropdown menu locate Language Weaver Provider..
+        /// </summary>
+        public static string SettingsAction_NoProviderAvailable {
+            get {
+                return ResourceManager.GetString("SettingsAction_NoProviderAvailable", resourceCulture);
             }
         }
         
@@ -1052,6 +1135,46 @@ namespace LanguageWeaverProvider {
         public static string SettingsView_Tags {
             get {
                 return ResourceManager.GetString("SettingsView_Tags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMeDoc {
+            get {
+                object obj = ResourceManager.GetObject("TellMeDoc", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMeForum {
+            get {
+                object obj = ResourceManager.GetObject("TellMeForum", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMeSettings {
+            get {
+                object obj = ResourceManager.GetObject("TellMeSettings", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMeSourceCode {
+            get {
+                object obj = ResourceManager.GetObject("TellMeSourceCode", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         

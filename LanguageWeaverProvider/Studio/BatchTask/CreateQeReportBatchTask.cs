@@ -7,7 +7,7 @@ using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
-using static Dapper.SqlMapper;
+using System.Linq;
 
 namespace LanguageWeaverProvider.Studio.BatchTask
 {
@@ -20,8 +20,8 @@ namespace LanguageWeaverProvider.Studio.BatchTask
 	[RequiresSettings(typeof(CreateQeReportSettings), typeof(CreateQeReportSettingsPage))]
 	public class CreateQEReportBatchTask : AbstractFileContentProcessingAutomaticTask
 	{
-		private readonly List<CreateQeReportProcessor> _segments = new();
-		private CreateQeReportSettings _settings;
+		readonly List<CreateQeReportProcessor> _segments = new();
+		CreateQeReportSettings _settings;
 
 		protected override void OnInitializeTask()
 		{
@@ -50,39 +50,44 @@ namespace LanguageWeaverProvider.Studio.BatchTask
 
 		private Report BuildXMLReport()
 		{
-			var projectInfo = Project.GetProjectInfo();
-			var report = new Report
-			{
-				Summary = new ReportSummary
-				{
-					Task = "MT QE Report",
-					Project = projectInfo.Name,
-					DueDate = $"{projectInfo.DueDate?.ToString("g")}",
-					CreatedAt = $"{projectInfo.CreatedAt:g}",
-					Files = _segments.Count,
-					Location = projectInfo.LocalProjectFolder,
-				}
-			};
-
 			var data = new Data();
 			foreach (var segment in _segments)
 			{
-				var file = new File() { Name = $"{segment.FileName}: {segment.LanguageDirection.SourceLanguage.DisplayName} - {segment.LanguageDirection.TargetLanguage.DisplayName}" };
-				foreach (var qs in segment.Segments)
+				var fileName = $"{segment.FileName}: {segment.LanguageDirection.SourceLanguage.DisplayName} - {segment.LanguageDirection.TargetLanguage.DisplayName}";
+				var qeValues = segment.Segments.Select(qs => new QeValue()
 				{
-					file.QeValues.Add(new QeValue()
-					{
-						QualityEstimation = qs.Key,
-						SegmentsTotal = qs.Value.QeCount,
-						WordsTotal = qs.Value.WordsCount,
-						CharactersTotal = qs.Value.CharacterCount
-					});
-				}
+					QualityEstimation = qs.Key,
+					SegmentsTotal = qs.Value.QeCount,
+					WordsTotal = qs.Value.WordsCount,
+					CharactersTotal = qs.Value.CharacterCount
+				}).ToList();
+
+				var file = new File()
+				{
+					Name = fileName,
+					QeValues = qeValues
+				};
 
 				data.File.Add(file);
 			}
 
-			report.Data = data;
+			var projectInfo = Project.GetProjectInfo();
+			var reportSummary = new ReportSummary
+			{
+				Task = "MT QE Report",
+				Project = projectInfo.Name,
+				DueDate = $"{projectInfo.DueDate?.ToString("g")}",
+				CreatedAt = $"{projectInfo.CreatedAt:g}",
+				Files = _segments.Count,
+				Location = projectInfo.LocalProjectFolder,
+				LockedSegmentsAreExcluded = _settings.ExcludeLockedSegments ? "Yes" : "No"
+			};
+
+			var report = new Report
+			{
+				Summary = reportSummary,
+				Data = data
+			};
 
 			return report;
 		}

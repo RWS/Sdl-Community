@@ -19,6 +19,7 @@ namespace LanguageWeaverProvider.Studio.BatchTask
 			LanguageDirection = languageDirection;
 			Segments = new()
 			{
+				["Locked Segment"] = new(),
 				[NoQE] = new(),
 				[QualityEstimations.None.ToString()] = new(),
 				[QualityEstimations.Poor.ToString()] = new(),
@@ -53,6 +54,7 @@ namespace LanguageWeaverProvider.Studio.BatchTask
 				var skipSegment = _settings.ExcludeLockedSegments && pair.Properties.IsLocked;
 				if (skipSegment)
 				{
+					Segments["Locked Segment"].QeCount++;
 					continue;
 				}
 

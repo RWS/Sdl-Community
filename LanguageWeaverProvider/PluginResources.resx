@@ -159,6 +159,9 @@
   <data name="Auth_Edge_Host" xml:space="preserve">
     <value>Host: https://my-domain.com:8001/</value>
   </data>
+  <data name="Auth_Edge_SSO_ToolTip" xml:space="preserve">
+    <value>You've chosen SSO Authentication. Please provide the Host URL for access.</value>
+  </data>
   <data name="Auth_Edge_UserCredentials" xml:space="preserve">
     <value>User credentials</value>
   </data>
@@ -234,10 +237,6 @@
   <data name="Dictionary_Window_CloseWindow" xml:space="preserve">
     <value>Close</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Download.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ErrorView_Buttons_Close" xml:space="preserve">
     <value>Close</value>
   </data>
@@ -271,11 +270,8 @@
   <data name="FeedbackView_Title" xml:space="preserve">
     <value>Give feedback!</value>
   </data>
-  <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\ForumIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="LMPViewModel_ResetTitle" xml:space="preserve">
-    <value>Reset to defaults</value>
+    <value>Reset to default</value>
   </data>
   <data name="LMPViewModel_ResetWarning" xml:space="preserve">
     <value>Warning: Resetting to default values!
@@ -290,7 +286,7 @@ This action cannot be undone.</value>
     <value>Close</value>
   </data>
   <data name="LMPView_Buttons_Reset" xml:space="preserve">
-    <value>Reset to defaults</value>
+    <value>Reset to default</value>
   </data>
   <data name="LMPView_Headers_Language" xml:space="preserve">
     <value>Language</value>
@@ -316,6 +312,15 @@ This action cannot be undone.</value>
   <data name="Loading_Connecting" xml:space="preserve">
     <value>Connecting user...</value>
   </data>
+  <data name="Loading_Edge_ConnectingApi" xml:space="preserve">
+    <value>Connecting using API Key...</value>
+  </data>
+  <data name="Loading_Edge_ConnectingAuth0" xml:space="preserve">
+    <value>Connecting using Single sign-on...</value>
+  </data>
+  <data name="Loading_Edge_ConnectingUser" xml:space="preserve">
+    <value>Connecting using User credentials...</value>
+  </data>
   <data name="Loading_Initiating" xml:space="preserve">
     <value>Initiating...</value>
   </data>
@@ -325,6 +330,7 @@ This action cannot be undone.</value>
   <data name="Loading_LMP_RestoreDefaults" xml:space="preserve">
     <value>Restoring database...</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="lwHeader_Cloud" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\lwHeader_Cloud.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -417,6 +423,18 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
   <data name="PairMappingView_Buttons_OpenLMP" xml:space="preserve">
     <value>Open Language Mapping</value>
   </data>
+  <data name="PairMappingView_Buttons_Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="PairMappingView_Buttons_Refresh_ToolTip" xml:space="preserve">
+    <value>Identify any newly added languages within the project.</value>
+  </data>
+  <data name="PairMappingView_Buttons_Reset" xml:space="preserve">
+    <value>Reset to default</value>
+  </data>
+  <data name="PairMappingView_Buttons_Reset_ToolTip" xml:space="preserve">
+    <value>Restores all language pair options to their default settings.</value>
+  </data>
   <data name="PairMappingView_Buttons_Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
@@ -432,8 +450,25 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
   <data name="Plugin_Name" xml:space="preserve">
     <value>Language Weaver Provider</value>
   </data>
-  <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="SettingsAction_ExternalHelp_1" xml:space="preserve">
+    <value>For more information,</value>
+    <comment>First part of the text, acting as plain text</comment>
+  </data>
+  <data name="SettingsAction_ExternalHelp_2" xml:space="preserve">
+    <value>click here</value>
+    <comment>Second part of the text, acting as button</comment>
+  </data>
+  <data name="SettingsAction_ExternalHelp_3" xml:space="preserve">
+    <value>for documentation.</value>
+    <comment>Third part of the text, acting as plain text</comment>
+  </data>
+  <data name="SettingsAction_NoProviderAvailable" xml:space="preserve">
+    <value>We couldn't find an instance of Language Weaver Provider for the current project selected. To add it to your project, follow these steps:
+
+1. Open Project Settings;
+2. Go to Translation Memory and Automated Translation;
+3. Select Use;
+4. Via the dropdown menu locate Language Weaver Provider.</value>
   </data>
   <data name="SettingsView_BackButton_LeftContent" xml:space="preserve">
     <value>←</value>
@@ -446,6 +481,18 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
   </data>
   <data name="SettingsView_Tags" xml:space="preserve">
     <value>Include tags in translation</value>
+  </data>
+  <data name="TellMeDoc" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMeDoc.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMeForum" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMeForum.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMeSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMeSettings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMeSourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMeSourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="TranslationDraftNotResent" xml:space="preserve">
     <value>[segment already translated...source not re-sent]</value>
