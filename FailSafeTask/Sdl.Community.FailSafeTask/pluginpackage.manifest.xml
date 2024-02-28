@@ -4,5 +4,5 @@
   <Version>4.2.3.0</Version>
   <Description>A plug-in for Trados Studio that allows you to verify that all translations can be generated.</Description>
   <Author>Trados AppStore Team</Author>
-  <RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
+  <RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />
 </PluginPackage>

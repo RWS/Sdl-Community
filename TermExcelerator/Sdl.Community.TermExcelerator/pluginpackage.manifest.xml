@@ -4,7 +4,7 @@
   <Version>5.2.0.0</Version>
   <Description>Excel based terminology provider. It allows to specify the columns from worksheet as source and target terms including synonyms separated by a delimitation.</Description>
   <Author>Trados AppStore Team</Author>
-  <RequiredProduct name="TradosStudio" minversion="17.2" maxversion="17.9" />
+  <RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />
   <Include>
     <File>EPPlus.dll</File>
     <File>ObjectListView.dll</File>

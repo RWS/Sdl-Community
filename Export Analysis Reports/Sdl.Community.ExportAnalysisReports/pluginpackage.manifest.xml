@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Trados Studio – Export Analysis Reports</PlugInName>
   <Version>5.1.1.0</Version>
@@ -7,5 +7,5 @@
 	<Include>
 		<File>Trados.Community.Toolkit.Core.dll</File>
 	</Include>
-	<RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9" />
+	<RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />
 </PluginPackage>

@@ -4,7 +4,7 @@
   <Version>4.0.1.0</Version>
   <Description>Studio Time Tracker</Description>
   <Author>Trados AppStore Team</Author>
-  <RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
+  <RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />
   <Include>
     <File>Studio.Time.Tracker.ObjectListView.dll</File>
   </Include>
