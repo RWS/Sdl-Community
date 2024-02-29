@@ -5,7 +5,7 @@
 		public const string TraceAppKey = "Trace-App";
 		public const string TraceAppValue = "Trados Studio";
 		public const string TraceAppVersionKey = "Trace-App-Version";
-		public const string TraceAppVersionValue = "1.0.1.0";
+		public const string TraceAppVersionValue = "1.0.1.1";
 
 		// Plugin Name
 		public const string PluginShortName = "Language Weaver";

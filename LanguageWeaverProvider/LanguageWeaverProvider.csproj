@@ -19,6 +19,14 @@
 		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17</TradosFolder>
 	</PropertyGroup>
 	
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <NoWarn>1701;1702;CS8509</NoWarn>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <NoWarn>1701;1702;CS8509</NoWarn>
+	</PropertyGroup>
+	
 	<ItemGroup>
 	  <Compile Remove="Interface\**" />
 	  <Compile Remove="ServiceClients\**" />

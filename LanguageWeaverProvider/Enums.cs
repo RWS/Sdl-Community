@@ -40,4 +40,10 @@ namespace LanguageWeaverProvider
 		[XmlEnum(Name = "regular_expression")]
 		RegularExpression
 	};
+
+	public enum CloudResources
+	{
+		LanguagePairs,
+		Dictionaries
+	}
 }

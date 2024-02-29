@@ -73,6 +73,7 @@
 							<Button x:Uid="CloseBtn"
 									x:Name="CloseBtn"
 									DockPanel.Dock="Right"
+									AutomationProperties.Name="Clear text"
 									Background="{Binding Background, ElementName=TextBox}"
 									Style="{StaticResource ClearButtonStyle}"
 									HorizontalAlignment="Right"

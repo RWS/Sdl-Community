@@ -301,10 +301,10 @@ This action cannot be undone.</value>
     <value>Trados code</value>
   </data>
   <data name="LMPView_Languages_Filtered" xml:space="preserve">
-    <value>; Filtered:</value>
+    <value>. Filtered</value>
   </data>
   <data name="LMPView_Languages_TotalCount" xml:space="preserve">
-    <value>Total languages:</value>
+    <value>Total languages</value>
   </data>
   <data name="LMPView_SearchBox" xml:space="preserve">
     <value>Search language...</value>
@@ -424,7 +424,7 @@ Your values should go inside each [], eg: [PropertyName] =&gt; ProjectId</value>
     <value>Open Language Mapping</value>
   </data>
   <data name="PairMappingView_Buttons_Refresh" xml:space="preserve">
-    <value>Refresh</value>
+    <value>Update</value>
   </data>
   <data name="PairMappingView_Buttons_Refresh_ToolTip" xml:space="preserve">
     <value>Identify any newly added languages within the project.</value>
