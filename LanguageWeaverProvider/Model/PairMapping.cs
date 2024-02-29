@@ -13,7 +13,7 @@ namespace LanguageWeaverProvider.Model
 		string _targetCode;
 		string _dictionaryLabel;
 		PairModel _selectedModel;
-		private List<PairDictionary> _dictionaries;
+		List<PairDictionary> _dictionaries;
 
 		public string DisplayName { get; set; }
 
@@ -41,7 +41,6 @@ namespace LanguageWeaverProvider.Model
 				PairDictionary_IsSelectedChanged(null, null);
 			}
 		}
-
 
 		public string DictionaryUILabel
 		{

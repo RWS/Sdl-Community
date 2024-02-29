@@ -4,23 +4,36 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace LanguageWeaverProvider.Services
 {
-	internal class Service
+	internal static class Service
 	{
-		public static async Task<HttpResponseMessage> SendRequest(AccessToken accessToken, HttpMethod httpMethod, string requestUri, HttpContent content = null)
+		public static async Task<HttpResponseMessage> SendRequest(HttpMethod httpMethod, string requestUri, AccessToken accessToken = null, HttpContent content = null)
 		{
-			var request = new HttpRequestMessage(httpMethod, requestUri);
-			request.Headers.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
-
-			if (content is not null)
+			var request = new HttpRequestMessage(httpMethod, requestUri) { Content = content };
+			if (accessToken is not null)
 			{
-				request.Content = content;
+				request.Headers.Add("Authorization", $"{accessToken.TokenType} {accessToken.Token}");
 			}
 
-			var response = await GetHttpClient().SendAsync(request);
+			var httpClient = GetHttpClient();
+			var response = await httpClient.SendAsync(request);
 			return response;
+		}
+
+		public static async Task<T> DeserializeResponse<T>(this HttpResponseMessage httpResponseMessage, string property = null)
+		{
+			var content = await httpResponseMessage.Content.ReadAsStringAsync();
+			if (!string.IsNullOrEmpty(property))
+			{
+				content = JObject.Parse(content)[property].ToString();
+			}
+
+			var deserializedObject = JsonConvert.DeserializeObject<T>(content);
+			return deserializedObject;
 		}
 
 		public static async void ValidateToken(ITranslationOptions translationOptions)
@@ -79,6 +92,5 @@ namespace LanguageWeaverProvider.Services
 			httpClient.DefaultRequestHeaders.Add(Constants.TraceAppVersionKey, Constants.TraceAppVersionValue);
 			return httpClient;
 		}
-
 	}
 }

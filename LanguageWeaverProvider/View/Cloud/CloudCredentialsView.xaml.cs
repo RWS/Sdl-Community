@@ -57,5 +57,19 @@ namespace LanguageWeaverProvider.View.Cloud
 				_cloudCredentialsViewModel.ClientSecret = passwordBox.Password;
 			}
 		}
+
+		private void RadioButton_PreviewKeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Tab)
+			{
+				FederatedSSOButon.Focus();
+				e.Handled = true;
+			}
+		}
+
+		private void RegionRadioButton_GotFocus(object sender, RoutedEventArgs e)
+		{
+			(sender as RadioButton).IsChecked = true;
+		}
 	}
 }

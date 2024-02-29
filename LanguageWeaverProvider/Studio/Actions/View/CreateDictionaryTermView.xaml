@@ -142,6 +142,7 @@
 
 				<TextBox Text="{Binding SourceTerm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
 						 Style="{StaticResource WatermarkTextBox}"
+						 AutomationProperties.Name="{x:Static root:PluginResources.Dictionary_CreateTerm_Source}"
 						 controls:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.Dictionary_CreateTerm_Source}"
 						 controls:TextBoxWatermarkHelper.IsWatermarkVisible="True"
 						 controls:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
@@ -167,6 +168,7 @@
 				</StackPanel>
 				<TextBox Text="{Binding TargetTerm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
 						 Style="{StaticResource WatermarkTextBox}"
+						 AutomationProperties.Name="{x:Static root:PluginResources.Dictionary_CreateTerm_Target}"
 						 controls:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.Dictionary_CreateTerm_Target}"
 						 controls:TextBoxWatermarkHelper.IsWatermarkVisible="True"
 						 controls:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
@@ -188,6 +190,7 @@
 						   Margin="4 2" />
 				<TextBox Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
 						 Style="{StaticResource WatermarkTextBox}"
+						 AutomationProperties.Name="Comment (optional)"
 						 controls:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.Dictionary_CreateTerm_Comment}"
 						 controls:TextBoxWatermarkHelper.IsWatermarkVisible="True"
 						 controls:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
@@ -201,6 +204,7 @@
 					   Text="No dictionaries available for the active language pairs in the current project"
 					   Style="{StaticResource Sdl.TextBlock.GenericTitleTextStyle}"
 					   Visibility="{Binding Dictionaries, Converter={StaticResource EmptyCollection}, ConverterParameter=Inverted}"
+					   Focusable="True"
 					   Margin="36 0"
 					   HorizontalAlignment="Center"
 					   VerticalAlignment="Center"
@@ -211,7 +215,8 @@
 					HorizontalAlignment="Stretch">
 				<ContentControl Content="{Binding NotificationMessage}"
 								HorizontalAlignment="Center"
-								VerticalAlignment="Center">
+								VerticalAlignment="Center"
+								Focusable="False">
 					<ContentControl.Style>
 						<Style TargetType="ContentControl">
 							<Setter Property="Opacity"

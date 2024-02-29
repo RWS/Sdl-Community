@@ -276,6 +276,7 @@
 
                                                         <CheckBox IsChecked="{Binding IsSelected}"
                                                                   Visibility="{Binding DictionaryId, Converter={StaticResource EmptyStringToVisibilityConverter}}"
+																  AutomationProperties.Name="{Binding Name}"
                                                                   Margin="0 0 4 0"
                                                                   Grid.Row="0"
                                                                   Grid.Column="0" />
