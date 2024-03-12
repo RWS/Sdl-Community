@@ -95,6 +95,7 @@
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
+    <Compile Include="Converters\MultiBooleanToVisibilityConverter.cs" />
     <Compile Include="DsiViewerInitializer.cs" />
     <Compile Include="Model\DSITagModel.cs" />
     <Compile Include="Model\SdlMtCloudFilterSettings.cs" />

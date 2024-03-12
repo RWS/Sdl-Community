@@ -32,16 +32,19 @@ namespace Sdl.Community.DsiViewer.ViewModel
 		private string _collapseCommentsButtonName;
 		private string _collapseTagsButtonName;
 		private string _collapseLwButtonName;
+		private string _collapseFilteringButtonName;
 
 		private bool _isDsiVisible;
 		private bool _isCommentsVisible;
 		private bool _isTagsVisible;
 		private bool _isLwVisible;
-
+		private bool _isfilteringVisible;
+		
 		private ICommand _collapseCommentsCommand;
 		private ICommand _collapseTagsCommand;
 		private ICommand _collapseDsiCommand;
 		private ICommand _collapseLwCommand;
+		private ICommand _collapseFilteringCommand;
 
 		public DsiViewerViewModel()
 		{
@@ -56,11 +59,13 @@ namespace Sdl.Community.DsiViewer.ViewModel
 			CollapseCommentsButtonName = "Collapse";
 			CollapseTagsButtonName = "Collapse";
 			CollapseLwButtonName = "Collapse";
+			CollapseFilteringButtonName = "Collapse";
 
 			IsDsiVisible = true;
 			IsCommentsVisible = true;
 			IsTagsVisible = true;
 			IsLwVisible = true;
+			IsFilteringVisible = true;
 
 			SetActiveDocument(_editorController.ActiveDocument);
 		}
@@ -71,6 +76,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
 		public ICommand CollapseCommentsCommand => _collapseCommentsCommand ??= new CommandHandler(CollapseComments, true);
 		public ICommand CollapseTagsCommand => _collapseTagsCommand ??= new CommandHandler(CollapseTags, true);
 		public ICommand CollapseLwCommand => _collapseLwCommand ??= new CommandHandler(CollapseLw, true);
+		public ICommand CollapseFilteringCommand => _collapseFilteringCommand ??= new CommandHandler(CollapseFiltering, true);
 
 		public IOrderedEnumerable<IComment> Comments
 		{
@@ -108,8 +114,9 @@ namespace Sdl.Community.DsiViewer.ViewModel
 
 		public FilterApplier FilterApplier { get; set; } = new();
 
-		public bool HasSdlMtCloudRelatedInfo =>
-				_activeDocument?.SegmentPairs?.Any(x => x.Properties?.TranslationOrigin?.MetaDataContainsKey("quality_estimation") ?? false) ?? false;
+		public bool SegmentHasLanguageWeaverSource => _activeDocument?.ActiveSegmentPair?.Properties?.TranslationOrigin?.MetaDataContainsKey("quality_estimation") ?? false;
+
+		public bool ProjectHasLanguageWeaverSource => _activeDocument?.SegmentPairs?.Any(x => x.Properties?.TranslationOrigin?.MetaDataContainsKey("quality_estimation") ?? false) ?? false;
 
 		public bool HasTranslationOriginMetadata => TranslationOriginData != null;
 
@@ -148,9 +155,12 @@ namespace Sdl.Community.DsiViewer.ViewModel
 				{
 					_collapseDsiButtonName = value;
 					OnPropertyChanged();
+					OnPropertyChanged(nameof(CollapseDsiButtonAccessibilityName));
 				}
 			}
 		}
+
+		public string CollapseDsiButtonAccessibilityName => $"{CollapseDsiButtonName} DSI Table";
 
 		public string CollapseCommentsButtonName
 		{
@@ -161,9 +171,12 @@ namespace Sdl.Community.DsiViewer.ViewModel
 				{
 					_collapseCommentsButtonName = value;
 					OnPropertyChanged();
+					OnPropertyChanged(nameof(CollapseCommentsButtonAccessibilityName));
 				}
 			}
 		}
+
+		public string CollapseCommentsButtonAccessibilityName => $"{CollapseCommentsButtonName} Comments Table";
 
 		public string CollapseTagsButtonName
 		{
@@ -174,9 +187,13 @@ namespace Sdl.Community.DsiViewer.ViewModel
 				{
 					_collapseTagsButtonName = value;
 					OnPropertyChanged();
+					OnPropertyChanged(nameof(CollapseTagsButtonAccessibilityName));
 				}
 			}
 		}
+
+		public string CollapseTagsButtonAccessibilityName => $"{CollapseTagsButtonName} Tags Table";
+
 
 		public string CollapseLwButtonName
 		{
@@ -187,9 +204,28 @@ namespace Sdl.Community.DsiViewer.ViewModel
 				{
 					_collapseLwButtonName = value;
 					OnPropertyChanged();
+					OnPropertyChanged(nameof(CollapseLwButtonAccessibilityName));
 				}
 			}
 		}
+
+		public string CollapseLwButtonAccessibilityName => $"{CollapseLwButtonName} Language Weaver Section";
+
+		public string CollapseFilteringButtonName
+		{
+			get { return _collapseFilteringButtonName; }
+			set
+			{
+				if (_collapseFilteringButtonName != value)
+				{
+					_collapseFilteringButtonName = value;
+					OnPropertyChanged();
+					OnPropertyChanged(nameof(CollapseFilteringButtonAccessibilityName));
+				}
+			}
+		}
+
+		public string CollapseFilteringButtonAccessibilityName => $"{CollapseFilteringButtonName} Segment Filtering Section";
 
 		public bool IsDsiVisible
 		{
@@ -243,6 +279,19 @@ namespace Sdl.Community.DsiViewer.ViewModel
 			}
 		}
 
+		public bool IsFilteringVisible
+		{
+			get { return _isfilteringVisible; }
+			set
+			{
+				if (_isfilteringVisible != value)
+				{
+					_isfilteringVisible = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
 		public void Dispose()
 		{
 			if (_editorController != null)
@@ -271,7 +320,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
 			UpdateComments();
 			UpdateTranslationOriginInformation();
 			UpdateTags();
-			OnPropertyChanged(nameof(HasSdlMtCloudRelatedInfo));
+			OnPropertyChanged(nameof(SegmentHasLanguageWeaverSource));
 		}
 
 		private void ActiveDocument_ContentChanged(object sender, DocumentContentEventArgs e)
@@ -283,7 +332,8 @@ namespace Sdl.Community.DsiViewer.ViewModel
 		{
 			UpdateTranslationOriginInformation();
 			UpdateTags();
-			OnPropertyChanged(nameof(HasSdlMtCloudRelatedInfo));
+			OnPropertyChanged(nameof(SegmentHasLanguageWeaverSource));
+			OnPropertyChanged(nameof(ProjectHasLanguageWeaverSource));
 		}
 
 		private void AddComments(ISegment segment)
@@ -322,7 +372,8 @@ namespace Sdl.Community.DsiViewer.ViewModel
 		private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
 		{
 			SetActiveDocument(e.Document);
-			OnPropertyChanged(nameof(HasSdlMtCloudRelatedInfo));
+			OnPropertyChanged(nameof(SegmentHasLanguageWeaverSource));
+			OnPropertyChanged(nameof(ProjectHasLanguageWeaverSource));
 		}
 
 		private string GetAdditionalInformation(IContextInfo context)
@@ -432,24 +483,22 @@ namespace Sdl.Community.DsiViewer.ViewModel
 		{
 			TranslationOriginData = null;
 			var translationOrigin = _activeDocument.ActiveSegmentPair?.Properties.TranslationOrigin;
-			if (translationOrigin is null || string.IsNullOrWhiteSpace(translationOrigin.GetMetaData("quality_estimation")))
+			var qualityEstimation = translationOrigin?.GetMetaData("quality_estimation");
+			qualityEstimation = string.IsNullOrEmpty(qualityEstimation) ? "N/A" : qualityEstimation;
+			var model = translationOrigin?.GetMetaData("model");
+			if (!SegmentHasLanguageWeaverSource)
 			{
 				OnPropertyChanged(nameof(TranslationOriginData));
 				OnPropertyChanged(nameof(HasTranslationOriginMetadata));
-				return;
-			}
-
-			if (translationOrigin.OriginSystem is null)
-			{
+				OnPropertyChanged(nameof(ProjectHasLanguageWeaverSource));
 				TranslationOriginData = null;
 				return;
 			}
 
-			var qualityEstimation = translationOrigin.GetMetaData("quality_estimation");
 			TranslationOriginData = new TranslationOriginData
 			{
 				QualityEstimation = qualityEstimation,
-				Model = translationOrigin.GetMetaData("model"),
+				Model = model,
 			};
 		}
 
@@ -590,6 +639,12 @@ namespace Sdl.Community.DsiViewer.ViewModel
 		{
 			IsLwVisible = !IsLwVisible;
 			CollapseLwButtonName = IsLwVisible ? "Collapse" : "Expand";
+		}
+
+		private void CollapseFiltering()
+		{
+			IsFilteringVisible = !IsFilteringVisible;
+			CollapseFilteringButtonName = IsFilteringVisible ? "Collapse" : "Expand";
 		}
 	}
 }
