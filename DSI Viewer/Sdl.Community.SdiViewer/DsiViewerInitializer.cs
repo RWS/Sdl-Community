@@ -11,7 +11,7 @@ namespace Sdl.Community.DsiViewer
 
 		public void Execute()
 		{
-			EditorController = SdlTradosStudio.Application.GetController<EditorController>();
+			EditorController = new EditorController();
 		}
 	}
 }
