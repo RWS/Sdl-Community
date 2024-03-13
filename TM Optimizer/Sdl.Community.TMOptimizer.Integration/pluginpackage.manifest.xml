@@ -4,7 +4,7 @@
   <Version>4.1.2.0</Version>
   <Description>TM Optimizer</Description>
   <Author>Trados AppStore Team</Author>
-  <RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9" />
+  <RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />
   <Include>
     <File>Sdl.Community.TMOptimizer.Control.dll</File>
     <File>Sdl.Community.TMOptimizerLib.dll</File>

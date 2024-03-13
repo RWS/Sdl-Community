@@ -4,5 +4,5 @@
 	<Version>4.0.1.0</Version>
 	<Description>This application attempts to repair a corrected translation memory,TM, by exporting the contents via SQL, creating a new container and reimporting the content.</Description>
 	<Author>Trados AppStore Team</Author>
-	<RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
+	<RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />
 </PluginPackage>

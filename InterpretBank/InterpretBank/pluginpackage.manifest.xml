@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>InterpretBank</PlugInName>
   <Version>1.0.0.4</Version>
@@ -10,5 +10,5 @@
 	  <File>Castle.Core.dll</File>
 	  <File>DocumentFormat.OpenXml.dll</File>
   </Include>
-  <RequiredProduct name="TradosStudio" minversion="17.2" maxversion="17.9"/>
+  <RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9"/>
 </PluginPackage>

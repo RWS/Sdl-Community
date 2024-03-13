@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>IATE Real-time Terminology</PlugInName>
   <Version>4.2.0.2</Version>
@@ -9,5 +9,5 @@
 		<File>Microsoft.Web.WebView2.Wpf.dll</File>
 		<File>Microsoft.Web.WebView2.Core.dll</File>
 	</Include>
-  <RequiredProduct name="TradosStudio" minversion="17.2" maxversion="17.9"/>
+  <RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9"/>
 </PluginPackage> 

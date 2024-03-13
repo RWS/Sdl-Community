@@ -4,7 +4,7 @@
   <Version>4.1.2.0</Version>
   <Description>This app supports opening a Star Transit package (PPF file) and the creation of a Star Transit return package (TPF file).</Description>
   <Author>Trados AppStore Team</Author>
-  <RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9"/>
+  <RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9"/>
 	<Include>
 		<File>Sdl.Community.StarTransit.Shared.dll</File>
 		<File>System.Windows.Interactivity.dll</File>

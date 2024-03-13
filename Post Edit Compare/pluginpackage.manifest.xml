@@ -4,7 +4,7 @@
 	<Version>7.6.2.0</Version>
 	<Description>Post-Edit Compare</Description>
 	<Author>Trados AppStore Team</Author>
-	<RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9" />
+	<RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />
 	<Include>
 		<File>Sdl.Community.PostEdit.Compare.dll</File>
 		<File>Sdl.Community.PostEdit.Compare.DAL.dll</File>

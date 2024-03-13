@@ -4,7 +4,7 @@
   <Version>4.0.1.0</Version>
   <Description>This plugin can generate a word cloud based on the contents of a Trados Studio project.</Description>
   <Author>Trados AppStore Team</Author>
-  <RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
+  <RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />
   <Include>
     <File>Sdl.Community.WordCloud.Controls.dll</File>
   </Include>

@@ -4,7 +4,7 @@
   <Version>3.1.0.6</Version>
   <Description>Studio verifier that will verify the text in Antidote</Description>
   <Author>Trados AppStore Team</Author>
-  <RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9" />
+  <RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />
   <Include>
     <File>Interop.antido32Lib.dll</File>
     <File>Serilog.dll</File>

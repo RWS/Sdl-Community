@@ -4,7 +4,7 @@
   <Version>4.1.1.0</Version>
   <Description>SdlXliff to Legacy Converter</Description>
   <Author>Trados AppStore Team</Author>
-  <RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9" />
+  <RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />
   <Include>
     <File>Sdl.Community.XliffReadWrite.dll</File>
     <File>Sdl.Community.XliffToLegacyConverter.Core.dll</File>
