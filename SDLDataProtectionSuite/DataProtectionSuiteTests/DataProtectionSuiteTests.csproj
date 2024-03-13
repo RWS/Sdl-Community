@@ -3,6 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net48</TargetFramework>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<LangVersion>preview</LangVersion>
 	</PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -15,9 +16,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.Linq.Dynamic.Core">
-      <Version>1.2.18</Version>
-    </PackageReference>
     <PackageReference Include="xunit">
       <Version>2.4.1</Version>
     </PackageReference>
