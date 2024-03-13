@@ -2,8 +2,6 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Windows;
-using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.View;
 using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.SdlDataProtectionSuite.TellMe
@@ -45,27 +43,5 @@ namespace Sdl.Community.SdlDataProtectionSuite.TellMe
 
 			Process.Start(_url);
 		}
-	}
-
-	class DocumentationAction : TellMeAction
-	{
-		private static readonly string[] _helpKeywords = { "help", "guide" };
-		private static readonly bool _isAvailable = true;
-
-		public DocumentationAction() : base($"{PluginResources.Plugin_Name} Documentation", PluginResources.TellMeDocumentation, _helpKeywords, _isAvailable, url: "https://appstore.rws.com/Plugin/39?tab=documentation") { }
-	}
-
-	class CommunityForumAction : TellMeAction
-	{
-		private static readonly string[] _helpKeywords = { "community", "support", "documentation" };
-		private static readonly bool _isAvailable = true;
-		public CommunityForumAction() : base("RWS Community AppStore Forum", PluginResources.TellmeForum, _helpKeywords, _isAvailable, url: "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/f") { }
-	}
-
-	class SourceCodeAction : TellMeAction
-	{
-		private static readonly string[] _helpKeywords = { "source code", "github" };
-		private static readonly bool _isAvailable = true;
-		public SourceCodeAction() : base($"{PluginResources.Plugin_Name} Source Code", PluginResources.TellMeSourceCode, _helpKeywords, _isAvailable, url: "https://github.com/RWS/Sdl-Community/tree/master/SDLDataProtectionSuite") { }
 	}
 }

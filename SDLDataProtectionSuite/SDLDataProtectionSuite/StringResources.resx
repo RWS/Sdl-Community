@@ -279,49 +279,49 @@
   <data name="SDLProjectAnonymizer_AcceptDescription_Line02" xml:space="preserve">
     <value>SDL accepts no liability associated with creating such tags or any errors or omissions associated with the use of the tool or any deliverables.</value>
   </data>
-	<data name="Export_selected_expressions_to_disk" xml:space="preserve">
+  <data name="Export_selected_expressions_to_disk" xml:space="preserve">
     <value>Export selected expressions to disk</value>
   </data>
-	<data name="Import_regular_expressions_in_to_current_project" xml:space="preserve">
+  <data name="Import_regular_expressions_in_to_current_project" xml:space="preserve">
     <value>Import regular expressions in to current project</value>
   </data>
-	<data name="Are_you_sure_you_want_to_delete_the_expressions" xml:space="preserve">
+  <data name="Are_you_sure_you_want_to_delete_the_expressions" xml:space="preserve">
     <value>Are you sure you want to delete the expressions?</value>
   </data>
-	<data name="Please_confirm" xml:space="preserve">
+  <data name="Please_confirm" xml:space="preserve">
     <value>Please confirm</value>
   </data>
-	<data name="Please_select_the_files_you_want_to_import" xml:space="preserve">
+  <data name="Please_select_the_files_you_want_to_import" xml:space="preserve">
     <value>Please select the files you want to import</value>
   </data>
-	<data name="Please_select_at_least_one_row_to_export" xml:space="preserve">
+  <data name="Please_select_at_least_one_row_to_export" xml:space="preserve">
     <value>Please select at least one row to export</value>
   </data>
-	<data name="File_was_exported_successfully_to_selected_location" xml:space="preserve">
+  <data name="File_was_exported_successfully_to_selected_location" xml:space="preserve">
     <value>File was exported successfully to selected location</value>
   </data>
-	<data name="Export_selected_expressions" xml:space="preserve">
+  <data name="Export_selected_expressions" xml:space="preserve">
     <value>Export selected expressions</value>
   </data>
-	<data name="Click_finish_to_untag_the_text" xml:space="preserve">
+  <data name="Click_finish_to_untag_the_text" xml:space="preserve">
     <value>Click finish to untag the text</value>
   </data>
-	<data name="Decryption_key_doesn_t_match_the_encryption_key" xml:space="preserve">
+  <data name="Decryption_key_doesn_t_match_the_encryption_key" xml:space="preserve">
     <value>Decryption key doesn't match the encryption key.</value>
   </data>
-	<data name="Invalid_import_format_found_0_expected_column_header_name_1" xml:space="preserve">
+  <data name="Invalid_import_format_found_0_expected_column_header_name_1" xml:space="preserve">
     <value>Invalid import format, found '{0}', expected column header name '{1}'</value>
   </data>
-	<data name="Only_the_first_0_comparison_differences_are_identified_in_view" xml:space="preserve">
+  <data name="Only_the_first_0_comparison_differences_are_identified_in_view" xml:space="preserve">
     <value>Only the first {0} comparison differences are identified in view</value>
   </data>
-	<data name="Invalid_Backup_TMs_path" xml:space="preserve">
+  <data name="Invalid_Backup_TMs_path" xml:space="preserve">
     <value>Invalid Backup TMs path!</value>
   </data>
-	<data name="Invalid_Log_report_path" xml:space="preserve">
+  <data name="Invalid_Log_report_path" xml:space="preserve">
     <value>Invalid Log report path!</value>
   </data>
-	<data name="Browse_Select_folder" xml:space="preserve">
+  <data name="Browse_Select_folder" xml:space="preserve">
     <value>Select folder</value>
   </data>
 </root>

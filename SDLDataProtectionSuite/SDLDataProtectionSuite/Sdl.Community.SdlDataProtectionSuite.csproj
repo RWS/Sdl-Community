@@ -25,6 +25,7 @@
 	  <None Remove="SdlTmAnonymizer\UsefulTips\ko\ko.zip" />
 	  <None Remove="SdlTmAnonymizer\UsefulTips\ru\ru.zip" />
 	  <None Remove="SdlTmAnonymizer\UsefulTips\zh\zh.zip" />
+	  <None Remove="SdlTmAnonymizer\View\TellMe.xaml" />
 	</ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -203,6 +204,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="SdlTmAnonymizer\View\TellMe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SdlTmAnonymizer\View\AcceptView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -272,11 +277,20 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>PluginResources.resx</DependentUpon>
     </Compile>
+    <Compile Update="StringResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>StringResources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="PluginResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="StringResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>StringResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 </Project>
