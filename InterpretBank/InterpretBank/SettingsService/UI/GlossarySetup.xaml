@@ -147,6 +147,7 @@
                                    FontWeight="Light"
                                    FontSize="10" />
                             <sdl:MultiSelectComboBox DockPanel.Dock="Bottom"
+                                                     OpenDropDownListAlsoWhenNotInEditMode="True"
                                                      Margin="5 0 0 5"
                                                      IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}"
                                                      ItemsSource="{Binding Languages}"
@@ -161,6 +162,7 @@
                                    FontWeight="Light"
                                    FontSize="10" />
                             <sdl:MultiSelectComboBox DockPanel.Dock="Bottom"
+                                                     OpenDropDownListAlsoWhenNotInEditMode="True"
                                                      Margin="5 0 0 0"
                                                      IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}"
                                                      ItemsSource="{Binding Tags}"
@@ -238,6 +240,7 @@
 
                     <sdl:MultiSelectComboBox Grid.Column="1"
                                              Grid.Row="1"
+                                             OpenDropDownListAlsoWhenNotInEditMode="True"
                                              Margin="5 0 0 0"
                                              ItemsSource="{Binding Glossaries}"
                                              IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}"

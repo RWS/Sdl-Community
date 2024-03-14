@@ -33,6 +33,7 @@
                       IsEditable="True"
                       x:Name="FilepathCombobox"
                       Text="Select file path..."
+                      SelectionChanged="FilepathCombobox_OnSelectionChanged"
                       IsReadOnly="False"
                       MinWidth="50"
                       SelectedItem="{Binding Filepath, ElementName=Root, UpdateSourceTrigger=PropertyChanged}"
