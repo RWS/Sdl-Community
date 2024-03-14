@@ -28,6 +28,8 @@
     <None Remove="Resources\AddTerm2.ico" />
     <None Remove="Resources\Booth.ico" />
     <None Remove="Resources\Booth.png" />
+    <None Remove="Resources\Browse.png" />
+    <None Remove="Resources\Browse2.png" />
     <None Remove="Resources\ConfirmEdit.png" />
     <None Remove="Resources\Edit.png" />
     <None Remove="Resources\EditIcon.ico" />
@@ -155,6 +157,8 @@
   <ItemGroup>
     <Resource Include="Resources\AddTerm.ico" />
     <Resource Include="Resources\Booth.ico" />
+    <Resource Include="Resources\Browse.png" />
+    <Resource Include="Resources\Browse2.png" />
     <Resource Include="Resources\ConfirmEdit.png" />
     <Resource Include="Resources\Edit.png" />
     <Resource Include="Resources\Flag.png" />

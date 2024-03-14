@@ -47,12 +47,13 @@
                     Click="BrowseButton_OnClick"
                     Height="30"
                     Background="Transparent"
+                    Content="📂"
                     BorderBrush="Transparent"
                     FontSize="15"
-                    Content="📂"
                     DockPanel.Dock="Right"
                     HorizontalAlignment="Right"
-                    Margin="5 5 2 5" />
+                    Margin="5 5 2 5" >
+            </Button>
 
         </WrapPanel>
         <StackPanel Orientation="Horizontal"

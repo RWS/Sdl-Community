@@ -81,6 +81,16 @@ namespace InterpretBank {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Browse {
+            get {
+                object obj = ResourceManager.GetObject("Browse", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon CommitToDb {
@@ -107,6 +117,24 @@ namespace InterpretBank {
             get {
                 object obj = ResourceManager.GetObject("IB", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import entries.
+        /// </summary>
+        public static string ImportEntries {
+            get {
+                return ResourceManager.GetString("ImportEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import entries into selected glossary.
+        /// </summary>
+        public static string ImportEntriesIntoSelectedGlossary {
+            get {
+                return ResourceManager.GetString("ImportEntriesIntoSelectedGlossary", resourceCulture);
             }
         }
         

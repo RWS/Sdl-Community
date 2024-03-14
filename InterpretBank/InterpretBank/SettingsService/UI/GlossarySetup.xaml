@@ -296,10 +296,9 @@
                    VerticalAlignment="Bottom"
                    LastChildFill="False">
 
-            <Button Content="⇪"
-                    FontSize="20"
+            <Button FontSize="20"
                     FontWeight="Bold"
-                    ToolTip="Import entries into selected glossary"
+                    ToolTip="{x:Static interpretBank:PluginResources.ImportEntriesIntoSelectedGlossary}"
                     x:Name="Import_Button"
                     DockPanel.Dock="Left"
                     Visibility="{Binding Filepath, Converter={StaticResource NullToVisibilityConverter}}"
@@ -307,6 +306,17 @@
                     Click="ImportButton_Click"
                     Command="{Binding ImportIntoSelectedGlossaryCommand}"
                     Margin="10 0 10 10">
+                <DockPanel>
+                    <Image DockPanel.Dock="Left"
+                           VerticalAlignment="Bottom"
+                           Source="/InterpretBank;component/Resources/Browse2.png"
+                           Height="15" />
+                    <TextBlock Text="{x:Static interpretBank:PluginResources.ImportEntries}"
+                               FontSize="10"
+                               Margin="5 0 0 0"
+                               DockPanel.Dock="Right"
+                               VerticalAlignment="Center"/>
+                </DockPanel>
             </Button>
 
             <Button Content="Cancel"
