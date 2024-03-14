@@ -131,6 +131,16 @@ namespace InterpretBank {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        public static System.Drawing.Icon Question {
+            get {
+                object obj = ResourceManager.GetObject("Question", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         public static System.Drawing.Icon Remove {
             get {
                 object obj = ResourceManager.GetObject("Remove", resourceCulture);
@@ -154,6 +164,16 @@ namespace InterpretBank {
         public static System.Drawing.Icon RemoveClick {
             get {
                 object obj = ResourceManager.GetObject("RemoveClick", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Settings {
+            get {
+                object obj = ResourceManager.GetObject("Settings", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -191,6 +211,44 @@ namespace InterpretBank {
         public static string SettingsWindow_TextBlock_Tags {
             get {
                 return ResourceManager.GetString("SettingsWindow_TextBlock_Tags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon SourceCode {
+            get {
+                object obj = ResourceManager.GetObject("SourceCode", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellmeDocumentation {
+            get {
+                object obj = ResourceManager.GetObject("TellmeDocumentation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locate your private Interpret Bank database.
+        /// </summary>
+        public static string ToolTip_LocateInterpretBankDatabase {
+            get {
+                return ResourceManager.GetString("ToolTip_LocateInterpretBankDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no tags on this db. To be able to use tags, please go to the database configurator and create some..
+        /// </summary>
+        public static string ToolTip_PleaseCreateTags {
+            get {
+                return ResourceManager.GetString("ToolTip_PleaseCreateTags", resourceCulture);
             }
         }
     }

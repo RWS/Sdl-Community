@@ -10,6 +10,8 @@
              x:Name="Root"
              mc:Ignorable="d"
              d:DesignHeight="450"
+             MinWidth="460"
+             MinHeight="120"
              d:DesignWidth="800">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -33,36 +35,62 @@
             <ToggleButton x:Name="TagsOrGlossariesToggleButton"
                           DockPanel.Dock="Left"
                           HorizontalAlignment="Left"
-                          AutomationProperties.Name="ToggleUseOfTagsOrGlossaries"
+                          AutomationProperties.Name="{Binding Content, ElementName=ToggleButtonLabel}"
                           IsChecked="{Binding UseTags}"
                           IsEnabled="{Binding IsDbValid}"
                           Style="{StaticResource IOSToggleButtonStyle}"
                           VerticalContentAlignment="Bottom"
                           Margin="0 10 0 0"
                           Height="12">
+
             </ToggleButton>
-            <TextBlock VerticalAlignment="Bottom"
-                       Name="ToggleButtonLabel"
-                       Margin="5 8 0 0">
-                <TextBlock.Style>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="Text"
+
+
+            <Label VerticalAlignment="Bottom"
+                   Name="ToggleButtonLabel"
+                   Target="{Binding ElementName=TagsOrGlossariesToggleButton}"
+                   Margin="5 8 0 0">
+                <Label.Style>
+                    <Style TargetType="Label">
+                        <Setter Property="Content"
                                 Value="Use glossaries" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsChecked, ElementName=TagsOrGlossariesToggleButton}"
                                          Value="True">
-                                <Setter Property="Text"
+                                <Setter Property="Content"
                                         Value="Use tags" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </TextBlock.Style>
-            </TextBlock>
+                </Label.Style>
+            </Label>
         </DockPanel>
+
+        <TextBlock Text="{Binding TagsComboboxHelpText}"
+                   Foreground="Red"
+                   Margin="0"
+                   x:Name="HelpText"
+                   Grid.Row="1">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock"
+                       BasedOn="{StaticResource {x:Type TextBlock}}">
+                    <Setter Property="Visibility"
+                            Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding TagsComboboxHelpText}"
+                                     Value="{x:Null}">
+                            <Setter Property="Visibility"
+                                    Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
 
 
         <sdl:MultiSelectComboBox Margin="0 5 0 0"
-                                 Grid.Row="1"
+                                 Grid.Row="2"
+                                 AutomationProperties.Name="TagsMultiselectCombobox"
                                  IsEnabled="{Binding IsDbValid}"
                                  Height="{Binding ActualHeight, ElementName=Root, Converter={StaticResource RatioConverter}, ConverterParameter=0.75}"
                                  SelectedItems="{Binding SelectedTags, Mode=TwoWay, ValidatesOnDataErrors=True}"
@@ -75,6 +103,7 @@
 
         <sdl:MultiSelectComboBox Margin="0 5 0 0"
                                  Grid.Row="2"
+                                 AutomationProperties.Name="GlossariesMultiselectCombobox"
                                  IsEnabled="{Binding IsDbValid}"
                                  Height="{Binding ActualHeight, ElementName=Root, Converter={StaticResource RatioConverter}, ConverterParameter=0.75}"
                                  Visibility="{Binding IsChecked, ElementName=TagsOrGlossariesToggleButton, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=False}"

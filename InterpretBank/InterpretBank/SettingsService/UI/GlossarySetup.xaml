@@ -55,9 +55,8 @@
                        DockPanel.Dock="Top" />
 
             <controls1:ChooseFilepathControl x:Name="ChooseFilepathControl"
-                                            Height="50"
-                                            AutomationProperties.LabeledBy="{Binding ElementName=FilepathLabel}"
-                                            Filepath="{Binding Filepath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                             AutomationProperties.LabeledBy="{Binding ElementName=FilepathLabel}"
+                                             Filepath="{Binding Filepath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
         </DockPanel>
         <TabControl Margin="10"

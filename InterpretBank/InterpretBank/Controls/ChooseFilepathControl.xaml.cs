@@ -1,9 +1,12 @@
 ﻿using Autofac;
 using InterpretBank.Interface;
+using InterpretBank.Model;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -15,8 +18,8 @@ namespace InterpretBank.Controls
     public partial class ChooseFilepathControl : UserControl
     {
         public static readonly DependencyProperty DatabaseListProperty =
-                    DependencyProperty.Register(nameof(DatabaseList), typeof(List<string>), typeof(ChooseFilepathControl),
-                new PropertyMetadata(default(List<string>)));
+                    DependencyProperty.Register(nameof(DatabaseList), typeof(DatabaseList), typeof(ChooseFilepathControl),
+                new PropertyMetadata(default(DatabaseList)));
 
         public static readonly DependencyProperty FilepathProperty =
                             DependencyProperty.Register(nameof(Filepath), typeof(string), typeof(ChooseFilepathControl),
@@ -28,22 +31,18 @@ namespace InterpretBank.Controls
         private static readonly string DbListFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             @"Trados AppStore\InterpretBank");
 
+
+
         public ChooseFilepathControl()
         {
             InitializeComponent();
 
-            if (!File.Exists(DbListPath))
-            {
-                if (!Directory.Exists(DbListFolderPath)) Directory.CreateDirectory(DbListFolderPath);
-                using var file = File.Create(DbListPath);
-            }
-
-            DatabaseList = JsonConvert.DeserializeObject<List<string>>(File.ReadAllText(DbListPath)) ?? new List<string>();
+            
         }
 
-        public List<string> DatabaseList
+        public DatabaseList DatabaseList
         {
-            get => (List<string>)GetValue(DatabaseListProperty);
+            get => (DatabaseList)GetValue(DatabaseListProperty);
             set => SetValue(DatabaseListProperty, value);
         }
 
@@ -58,12 +57,13 @@ namespace InterpretBank.Controls
                         UserInteractionService.Confirm("This DB no longer exists. Do you wish to remove it from this list?");
                     if (confirmation)
                     {
-                        DatabaseList.Remove(value);
-                        DatabaseList.Remove(value);
+                        DatabaseList.List.Remove(value);
+                        DatabaseList.List.Remove(value);
                     }
                 }
 
                 AddToDatabaseList(value);
+
                 SetValue(FilepathProperty, value);
             }
         }
@@ -72,8 +72,10 @@ namespace InterpretBank.Controls
 
         private void AddToDatabaseList(string filepath)
         {
-            if (!DatabaseList.Contains(filepath))
-                DatabaseList.Add(filepath);
+            if (!DatabaseList.List.Contains(filepath))
+                DatabaseList.List.Add(filepath);
+
+            DatabaseList.LastUsed = filepath;
             File.WriteAllText(DbListPath, JsonConvert.SerializeObject(DatabaseList));
         }
 
@@ -173,5 +175,25 @@ namespace InterpretBank.Controls
         //    //    ? Visibility.Collapsed
         //    //    : Visibility.Visible;
         //}
+        private void DocumentationButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://appstore.rws.com/Plugin/243?tab=documentation");
+        }
+
+        private void ChooseFilepathControl_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (!File.Exists(DbListPath))
+            {
+                if (!Directory.Exists(DbListFolderPath)) Directory.CreateDirectory(DbListFolderPath);
+                using var file = File.Create(DbListPath);
+            }
+
+            DatabaseList = JsonConvert.DeserializeObject<DatabaseList>(File.ReadAllText(DbListPath)) ?? new DatabaseList();
+
+            if (!string.IsNullOrWhiteSpace(DatabaseList.LastUsed))
+            {
+                FilepathCombobox.SelectedIndex = DatabaseList.List.IndexOf(DatabaseList.LastUsed);
+            }
+        }
     }
 }

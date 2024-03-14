@@ -14,7 +14,9 @@
         Name="Booth_Window"
         Icon="/InterpretBank;component/Resources/Booth.ico"
         WindowStartupLocation="CenterScreen"
-        Height="450"
+        MinHeight="510"
+        Height="510"
+        MinWidth="723"
         Width="800">
     <Window.Resources>
         <ResourceDictionary>
