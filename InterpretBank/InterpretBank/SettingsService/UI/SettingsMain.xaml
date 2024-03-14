@@ -67,7 +67,6 @@
                                           Height="Auto"
                                           x:Name="SettingsUi"
                                           Margin="10 10 10 5"
-                                          AutomationProperties.HelpText="{Binding TagsComboboxHelpText, UpdateSourceTrigger=PropertyChanged}"
                                           DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}"
                                           Visibility="{Binding Filepath, Converter={StaticResource NullToVisibilityConverter}}" />
 

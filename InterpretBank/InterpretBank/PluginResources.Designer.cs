@@ -111,6 +111,15 @@ namespace InterpretBank {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no tags on this db. To be able to use tags, please go to the database configurator and create some..
+        /// </summary>
+        public static string Message_PleaseCreateTags {
+            get {
+                return ResourceManager.GetString("Message_PleaseCreateTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to InterpretBank description.
         /// </summary>
         public static string Plugin_Description {
@@ -240,15 +249,6 @@ namespace InterpretBank {
         public static string ToolTip_LocateInterpretBankDatabase {
             get {
                 return ResourceManager.GetString("ToolTip_LocateInterpretBankDatabase", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to There are no tags on this db. To be able to use tags, please go to the database configurator and create some..
-        /// </summary>
-        public static string ToolTip_PleaseCreateTags {
-            get {
-                return ResourceManager.GetString("ToolTip_PleaseCreateTags", resourceCulture);
             }
         }
     }

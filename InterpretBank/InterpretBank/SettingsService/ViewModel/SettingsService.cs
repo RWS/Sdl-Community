@@ -75,8 +75,6 @@ public class SettingsService(IInterpretBankDataContext interpretBankDataContext)
             {
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(SelectedGlossaries));
-                OnPropertyChanged(nameof(NoTagsTooltipVisibility));
-                OnPropertyChanged(nameof(TagsComboboxHelpText));
             };
         }
     }
@@ -124,30 +122,14 @@ public class SettingsService(IInterpretBankDataContext interpretBankDataContext)
 
             OnPropertyChanged(nameof(SaveCommand));
             OnPropertyChanged(nameof(Settings));
-            OnPropertyChanged(nameof(NoTagsTooltipVisibility));
-            OnPropertyChanged(nameof(TagsComboboxHelpText));
         }
     }
 
     private IInterpretBankDataContext InterpretBankDataContext { get; set; } = interpretBankDataContext;
 
-    public Visibility NoTagsTooltipVisibility
-    {
-        get
-        {
-            var visible = UseTags && !SelectedTags.Any();
-            return visible ? Visibility.Visible : Visibility.Collapsed;
-        }
-    }
+   
 
-    public string TagsComboboxHelpText
-    {
-        get
-        {
-            var visible = UseTags && !Tags.Any();
-            return visible ? PluginResources.ToolTip_PleaseCreateTags : null;
-        }
-    }
+    
 
     public string this[string columnName] =>
         columnName switch

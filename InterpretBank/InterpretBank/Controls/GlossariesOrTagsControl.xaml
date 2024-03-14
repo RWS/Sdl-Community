@@ -66,8 +66,7 @@
             </Label>
         </DockPanel>
 
-        <TextBlock Text="{Binding TagsComboboxHelpText}"
-                   Foreground="Red"
+        <TextBlock Foreground="Red"
                    Margin="0"
                    x:Name="HelpText"
                    Grid.Row="1">
@@ -75,13 +74,20 @@
                 <Style TargetType="TextBlock"
                        BasedOn="{StaticResource {x:Type TextBlock}}">
                     <Setter Property="Visibility"
-                            Value="Visible" />
+                            Value="Collapsed" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding TagsComboboxHelpText}"
-                                     Value="{x:Null}">
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsChecked, ElementName=TagsOrGlossariesToggleButton}"
+                                           Value="True" />
+                                <Condition Binding="{Binding ItemsSource.Count, ElementName=TagsMultiselectCombobox}"
+                                           Value="0" />
+                            </MultiDataTrigger.Conditions>
                             <Setter Property="Visibility"
-                                    Value="Collapsed" />
-                        </DataTrigger>
+                                    Value="Visible" />
+                            <Setter Property="Text"
+                                    Value="{x:Static interpretBank:PluginResources.Message_PleaseCreateTags}" />
+                        </MultiDataTrigger>
                     </Style.Triggers>
                 </Style>
             </TextBlock.Style>
@@ -90,6 +96,7 @@
 
         <sdl:MultiSelectComboBox Margin="0 5 0 0"
                                  Grid.Row="2"
+                                 x:Name="TagsMultiselectCombobox"
                                  AutomationProperties.Name="TagsMultiselectCombobox"
                                  IsEnabled="{Binding IsDbValid}"
                                  Height="{Binding ActualHeight, ElementName=Root, Converter={StaticResource RatioConverter}, ConverterParameter=0.75}"

@@ -175,7 +175,7 @@
   <data name="Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ToolTip_PleaseCreateTags" xml:space="preserve">
+  <data name="Message_PleaseCreateTags" xml:space="preserve">
     <value>There are no tags on this db. To be able to use tags, please go to the database configurator and create some.</value>
   </data>
 </root>
