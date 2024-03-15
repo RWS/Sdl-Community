@@ -303,10 +303,8 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         {
             DataContext.Connection.Open();
         }
-        catch{}
+        catch { }
     }
-
-    //private string Filepath { get; set; }
 
     public void SubmitData()
     {
@@ -397,60 +395,6 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         return dataContext;
     }
 
-    //public void Reset()
-    //{
-    //    Setup();
-    //}
-
-    //public void Refresh() => DataContext.Refresh(RefreshMode.OverwriteCurrentValues);
-
-    //public void UpdateTerms(List<TermModel> terms)
-    //{
-    //    var termsIds = terms.Select(t => t.Id).ToList();
-    //    var dbTerms = DataContext.GetTable<DbTerm>()
-    //        .Where(t => termsIds.Contains(t.Id))
-    //        .ToList();
-
-    //    terms.ForEach(term =>
-    //    {
-    //        var dbTerm = dbTerms.FirstOrDefault(t => t.Id == term.Id);
-
-    //        if (dbTerm == null) return;
-
-    //        dbTerm[$"Term{term.SourceLanguageIndex}"] = term.SourceTerm;
-    //        dbTerm[$"Comment{term.SourceLanguageIndex}a"] = term.SourceTermComment1;
-    //        dbTerm[$"Comment{term.SourceLanguageIndex}b"] = term.SourceTermComment2;
-
-    //        dbTerm[$"Term{term.TargetLanguageIndex}"] = term.TargetTerm;
-    //        dbTerm[$"Comment{term.TargetLanguageIndex}a"] = term.TargetTermComment1;
-    //        dbTerm[$"Comment{term.TargetLanguageIndex}b"] = term.TargetTermComment2;
-
-    //        dbTerm["CommentAll"] = term.CommentAll;
-    //    });
-    //}
-
-    //private void AddTerms(List<TermModel> newTerms)
-    //{
-    //    var dbTerms = DataContext.GetTable<DbTerm>();
-    //    var id = GetMaxId<DbTerm>() + 1;
-
-    //    //TODO Add full index, maybe other missing fields
-    //    newTerms.ForEach(t =>
-    //    {
-    //        dbTerms.InsertOnSubmit(new DbTerm
-    //        {
-    //            Id = id++,
-    //            Tag1 = t.GlossaryName,
-    //            [$"Term{t.SourceLanguageIndex}"] = t.SourceTerm,
-    //            [$"Comment{t.SourceLanguageIndex}a"] = t.SourceTermComment1,
-    //            [$"Comment{t.SourceLanguageIndex}b"] = t.SourceTermComment2,
-    //            [$"Term{t.TargetLanguageIndex}"] = t.TargetTerm,
-    //            [$"Comment{t.TargetLanguageIndex}a"] = t.TargetTermComment1,
-    //            [$"Comment{t.TargetLanguageIndex}b"] = t.TargetTermComment2,
-    //            ["CommentAll"] = t.CommentAll,
-    //        });
-    //    });
-    //}
     private int GetLanguageIndex(string language)
     {
         var dbLanguages = GetDbLanguages();
@@ -476,15 +420,8 @@ public class InterpretBankDataContext : IInterpretBankDataContext
     }
 
     private int GetMaxId<T>() where T : class, IInterpretBankTable =>
-                                                (DataContext.GetChangeSet().Inserts.OfType<T>().Union(GetTable<T>())).Select(r => r.Id).Max();
+        (GetTable<T>()).Select(r => r.Id).Max();
 
     private IEnumerable<T> GetTableWithPendingInserts<T>(Table<T> table) where T : class, IInterpretBankTable =>
                                                         DataContext.GetTablePendingInserts<T>().Union(table);
-
-    //private void RemoveTerms(List<TermModel> removedTerms)
-    //{
-    //    var dbTerms = DataContext.GetTable<DbTerm>();
-
-    //    var idsRemove = removedTerms.Select(rt => rt.Id);
-    //    var toRemove = dbTerms.Where(t => idsRemove.Contains(t.Id));
 }
