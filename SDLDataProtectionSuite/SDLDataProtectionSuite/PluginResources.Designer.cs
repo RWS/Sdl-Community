@@ -388,14 +388,14 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Trados Data Projection Suite can either be applied against project files or Translation Memory data.
+        ///   Looks up a localized string similar to Trados Data Protection Suite can either be applied against project files or Translation Memory data.
         ///
-        ///To apply Trados Data Projection settings against project files, please follow these steps:
+        ///To apply Trados Data Protection settings against project files, please follow these steps:
         ///    1. Select Project
         ///    2. Access Batch Task
         ///    3. Run Protect Data followed by Unprotect Data if needed  
         ///
-        ///To apply Trados Data Projection settings against a Translation Memory, please go to to the TradosTMAnonymizer view located at the bottom left of Trados Studio.
+        ///To apply Trados Data Protection settings against a Translation Memory, please go to the TradosTMAnonymizer view located at the bottom left of Trados Studio.
         /// </summary>
         public static string TellMeView {
             get {

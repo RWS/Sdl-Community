@@ -40,7 +40,7 @@
 
 			<TextBlock Grid.Row="0"
 					   Grid.Column="1"
-					   Text="Configuring Trados Data Projection Suite in Batch Task"
+					   Text="Configuring Trados Data Protection Suite in Batch Task"
 					   Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"
 					   FontSize="16"
 					   HorizontalAlignment="Center"
