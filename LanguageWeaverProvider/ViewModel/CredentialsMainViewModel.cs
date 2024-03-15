@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Speech.Synthesis;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using LanguageWeaverProvider.Command;

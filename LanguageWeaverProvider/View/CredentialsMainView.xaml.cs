@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Automation.Peers;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using LanguageWeaverProvider.Helpers;
 
@@ -34,5 +35,5 @@ namespace LanguageWeaverProvider.View
 			e.Cancel = true;
 			AnimationsHelper.StartClosingWindowAnimation(this);
 		}
-	}
+    }
 }

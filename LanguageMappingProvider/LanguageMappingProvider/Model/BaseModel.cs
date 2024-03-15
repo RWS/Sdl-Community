@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace LanguageMappingProvider.Model
+namespace LanguageMappingProvider
 {
 	public class BaseModel : INotifyPropertyChanged
     {

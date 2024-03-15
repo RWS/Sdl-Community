@@ -204,24 +204,24 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 				return;
 			}
 
-			StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Loading_Connecting));
 			TranslationOptions.CloudCredentials ??= new();
 			TranslationOptions.CloudCredentials.AccountRegion = SelectedRegion;
 			TranslationOptions.AuthenticationType = AuthenticationType;
 			if (AuthenticationType == AuthenticationType.CloudCredentials)
 			{
+				StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Loading_Cloud_ConnectingUser));
 				TranslationOptions.CloudCredentials.UserName = UserName;
 				TranslationOptions.CloudCredentials.UserPassword = UserPassword;
 			}
 			else if (AuthenticationType == AuthenticationType.CloudAPI)
 			{
+				StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Loading_Cloud_ConnectingApi));
 				TranslationOptions.CloudCredentials.ClientID = ClientId;
 				TranslationOptions.CloudCredentials.ClientSecret = ClientSecret;
 			}
 			else if (AuthenticationType == AuthenticationType.CloudSSO)
 			{
 				Auth0SignInCommand?.Execute(ConnectionCode);
-				StopLoginProcess?.Invoke(this, EventArgs.Empty);
 				return;
 			}
 
@@ -238,7 +238,8 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		private void Auth0SignIn(object parameter)
 		{
-			StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Loading_Connecting));
+			StartLoginProcess?.Invoke(this, new LoginEventArgs(PluginResources.Loading_Cloud_ConnectingAuth0));
+
 			TranslationOptions.AuthenticationType = AuthenticationType.CloudSSO;
 			var auth0Config = new CloudAuth0Config(parameter as string, SelectedRegion);
 			var cloudAuth0ViewModel = new CloudAuth0ViewModel(TranslationOptions, auth0Config);

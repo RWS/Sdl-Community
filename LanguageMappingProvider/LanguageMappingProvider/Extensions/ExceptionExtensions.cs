@@ -10,7 +10,7 @@ namespace LanguageMappingProvider.Extensions
 
     public class MappedLanguageNullException : ArgumentNullException
     {
-        public MappedLanguageNullException(string paramName)
+		public MappedLanguageNullException(string paramName)
             : base(paramName, "Mapped language cannot be null.") { }
     }
 

@@ -134,6 +134,7 @@
 		<Reference Include="System.Core" />
 		<Reference Include="System.Drawing" />
 		<Reference Include="System.Net.Http" />
+		<Reference Include="System.Speech" />
 		<Reference Include="System.Web" />
 		<Reference Include="System.Windows.Forms" />
 		<Reference Include="System.Data" />
@@ -161,7 +162,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="LanguageMappingProvider" Version="1.0.92" />
 		<PackageReference Include="Sdl.Core.PluginFramework">
 			<Version>2.1.0</Version>
 		</PackageReference>
@@ -173,6 +173,7 @@
 
 	<ItemGroup>
 	  <EmbeddedResource Include="Resources\Report.xsl" />
+	  <ProjectReference Include="..\LanguageMappingProvider\LanguageMappingProvider\LanguageMappingProvider.csproj" />
 	  <Resource Include="Resources\Feedback_Default.png" />
 	  <Resource Include="Resources\Feedback_Notification.png" />
 	  <Resource Include="Resources\lwHeader_Cloud.png" />

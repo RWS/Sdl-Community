@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17</TradosFolder>
+
 		<Company>RWS</Company>
 		<Authors>Trados AppStore Team</Authors>
 		<Product>Language Mapping Provider</Product>

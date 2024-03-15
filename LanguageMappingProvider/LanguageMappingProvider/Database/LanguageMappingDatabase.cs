@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Dapper;
-using LanguageMappingProvider.Database.Interface;
 using LanguageMappingProvider.Extensions;
-using LanguageMappingProvider.Model;
 using Sdl.Core.Globalization;
 using Sdl.Core.Globalization.LanguageRegistry;
 
-namespace LanguageMappingProvider.Database
+namespace LanguageMappingProvider
 {
 	public class LanguageMappingDatabase : ILanguageMappingDatabase, IDisposable
 	{
@@ -126,6 +125,20 @@ namespace LanguageMappingProvider.Database
 			return HasMappedLanguagesChanged(mappedLanguagesDictionary);
 		}
 
+		private void EnsureCollectionIsValid(IEnumerable<LanguageMapping> collection)
+		{
+			var indexSet = new HashSet<int>();
+			foreach (var mappedLanguage in collection)
+			{
+				if (indexSet.Contains(mappedLanguage.Index))
+				{
+					throw new DuplicateIndexException();
+				}
+
+				indexSet.Add(mappedLanguage.Index);
+			}
+		}
+
 		public IEnumerable<LanguageMapping> GetMappedLanguages()
 		{
 			return _mappedLanguagesDictionary.Values.Select(mappedLanguage => new LanguageMapping
@@ -165,6 +178,23 @@ namespace LanguageMappingProvider.Database
 			{
 				_mappedLanguagesDictionary[pair.Index] = pair;
 			}
+
+			HandleMissingLanguageCodes();
+		}
+
+		private void HandleMissingLanguageCodes()
+		{
+			var mappedLanguages = new List<LanguageMapping>();
+			foreach (var mappedLanguage in _mappedLanguagesDictionary.Values)
+			{
+				if (string.IsNullOrEmpty(mappedLanguage.LanguageCode))
+				{
+					mappedLanguage.LanguageCode = Constants.UndefinedLanguageCode;
+					mappedLanguages.Add(mappedLanguage);
+				}
+			}
+
+			UpdateAll(mappedLanguages);
 		}
 
 		private void ExecuteCommand(string syntax)
@@ -229,7 +259,7 @@ namespace LanguageMappingProvider.Database
 			InsertCollection(codes);
 		}
 
-		private static IList<LanguageMapping> GetTradosLanguages()
+		private IList<LanguageMapping> GetTradosLanguages()
 		{
 			var languages = LanguageRegistryApi.Instance.GetAllLanguages();
 			var mappedLanguages = new List<LanguageMapping>();
@@ -245,11 +275,15 @@ namespace LanguageMappingProvider.Database
 				var regex = new Regex(@"^(.*?)\s*(?:\((.*?)\))?$");
 				var match = regex.Match(language.DisplayName);
 
+				var languageName = match.Groups[1].Value;
+				var languageRegion = match.Groups[2].Success ? match.Groups[2].Value : new RegionInfo(language.CultureInfo.Name).DisplayName;
+				var tradosCode = language.CultureInfo.Name;
+
 				mappedLanguages.Add(new LanguageMapping
 				{
-					Name = match.Groups[1].Value,
-					Region = match.Groups[2].Success ? match.Groups[2].Value : null,
-					TradosCode = language.CultureInfo.Name
+					Name = languageName,
+					Region = languageRegion,
+					TradosCode = tradosCode
 				});
 			}
 
@@ -281,7 +315,7 @@ namespace LanguageMappingProvider.Database
 			ExecuteCommand(syntax);
 		}
 
-		private static string GenerateInsertSyntax(IEnumerable<LanguageMapping> collection)
+		private string GenerateInsertSyntax(IEnumerable<LanguageMapping> collection)
 		{
 			var syntaxBuilder = new StringBuilder();
 			syntaxBuilder.AppendLine(Constants.SQL_InsertData_StringBuilder);
@@ -307,7 +341,8 @@ namespace LanguageMappingProvider.Database
 				if (!_mappedLanguagesDictionary.TryGetValue(index, out var originalPair)
 				 || !string.Equals(currentPair.LanguageCode, originalPair.LanguageCode))
 				{
-					UpdateAt(index, nameof(currentPair.LanguageCode), currentPair.LanguageCode);
+					var languageCode = string.IsNullOrEmpty(currentPair.LanguageCode) ? Constants.UndefinedLanguageCode : currentPair.LanguageCode;
+					UpdateAt(index, nameof(currentPair.LanguageCode), languageCode);
 				}
 			}
 		}
@@ -329,7 +364,7 @@ namespace LanguageMappingProvider.Database
 			return mappedLanguagesDictionary.Count != _mappedLanguagesDictionary.Count;
 		}
 
-		private static void EnsurePluginSupportedLanguagesAreValid(IEnumerable<LanguageMapping> pluginSupportedLanguages)
+		private void EnsurePluginSupportedLanguagesAreValid(IEnumerable<LanguageMapping> pluginSupportedLanguages)
 		{
 			if (pluginSupportedLanguages is null
 			 || !pluginSupportedLanguages.Any())
@@ -338,7 +373,7 @@ namespace LanguageMappingProvider.Database
 			}
 		}
 
-		private static void EnsureMappedLanguageIsValid(LanguageMapping mappedLanguage)
+		private void EnsureMappedLanguageIsValid(LanguageMapping mappedLanguage)
 		{
 			if (mappedLanguage is null)
 			{
@@ -371,20 +406,6 @@ namespace LanguageMappingProvider.Database
 			if (string.IsNullOrEmpty(value))
 			{
 				throw new MappedLanguageValidationException("The value must be set.", nameof(value));
-			}
-		}
-
-		private static void EnsureCollectionIsValid(IEnumerable<LanguageMapping> collection)
-		{
-			var indexSet = new HashSet<int>();
-			foreach (var mappedLanguage in collection)
-			{
-				if (indexSet.Contains(mappedLanguage.Index))
-				{
-					throw new DuplicateIndexException();
-				}
-
-				indexSet.Add(mappedLanguage.Index);
 			}
 		}
 	}

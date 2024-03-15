@@ -8,6 +8,7 @@ namespace LanguageWeaverProvider.Converters
 	public class BoolToBrushConverter : IValueConverter
 	{
 		public Brush TrueBrush { get; set; }
+
 		public Brush FalseBrush { get; set; }
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

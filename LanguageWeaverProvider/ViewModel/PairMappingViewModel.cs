@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
-using LanguageMappingProvider.Database.Interface;
+using LanguageMappingProvider;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.LanguageMappingProvider;
 using LanguageWeaverProvider.LanguageMappingProvider.View;

@@ -1,10 +1,8 @@
 using System.Collections.Generic;
-using System.Globalization;
 using LanguageMappingProvider.Extensions;
-using LanguageMappingProvider.Model;
 using Sdl.Core.Globalization;
 
-namespace LanguageMappingProvider.Database.Interface
+namespace LanguageMappingProvider
 {
 	public interface ILanguageMappingDatabase
     {

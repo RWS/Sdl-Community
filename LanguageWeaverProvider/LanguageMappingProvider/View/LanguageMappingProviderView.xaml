@@ -8,6 +8,7 @@
 		xmlns:controls="clr-namespace:LanguageWeaverProvider.Controls"
 		xmlns:converters="clr-namespace:LanguageWeaverProvider.Converters"
 		xmlns:viewmodel="clr-namespace:LanguageWeaverProvider.LanguageMappingProvider.ViewModel"
+		xmlns:lmpConverters="clr-namespace:LanguageMappingProvider;assembly=LanguageMappingProvider"
 		mc:Ignorable="d"
 		d:DataContext="{d:DesignInstance viewmodel:LanguageMappingProviderViewModel}"
 		BorderThickness="1"
@@ -36,18 +37,20 @@
 				<ResourceDictionary Source="pack://application:,,,/LanguageWeaverProvider;component/Controls/WatermarkTextBoxResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 
+			<converters:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibility" />
+			<converters:EmptyStringToBooleanConverter x:Key="EmptyStringToBooleanConverter" />
+			<lmpConverters:LanguageCodeToColorConverter x:Key="LanguageCodeToColorConverter" />
+
 			<Style TargetType="Image">
 				<Setter Property="RenderOptions.BitmapScalingMode"
 						Value="HighQuality" />
 			</Style>
 
-			<converters:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibility" />
-			
 		</ResourceDictionary>
 	</Window.Resources>
 
 	<Border>
-		<Grid>
+		<Grid IsEnabled="{Binding LoadingAction, Converter={StaticResource EmptyStringToBooleanConverter}, ConverterParameter=Inverted}">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
@@ -94,7 +97,7 @@
 					 Width="232"
 					 Height="24"
 					 Margin="16 16 16 0" />
-			
+
 			<TextBlock Grid.Row="2"
 					   Grid.Column="1"
 					   Margin="0 0 20 0"
@@ -111,7 +114,7 @@
 			</TextBlock>
 
 			<DataGrid Grid.Row="3"
-					  Grid.ColumnSpan="2"
+					  Grid.ColumnSpan="3"
 					  ItemsSource="{Binding FilteredMappedLanguages}"
 					  SelectedItem="{Binding SelectedMappedLanguage}"
 					  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
@@ -123,7 +126,7 @@
 					  ScrollViewer.VerticalScrollBarVisibility="Auto"
 					  ScrollViewer.HorizontalScrollBarVisibility="Auto"
 					  HorizontalContentAlignment="Right"
-					  CanUserSortColumns="False"
+					  CanUserSortColumns="True"
 					  CanUserAddRows="False"
 					  CanUserDeleteRows="False"
 					  Margin="16 16 16 4"
@@ -131,19 +134,29 @@
 				<DataGrid.Columns>
 					<DataGridTextColumn Header="{x:Static root:PluginResources.LMPView_Headers_Language}"
 										Binding="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}"
+										IsReadOnly="True"
 										Width="2*" />
 
 					<DataGridTextColumn Header="{x:Static root:PluginResources.LMPView_Headers_Region}"
 										Binding="{Binding Path=Region, UpdateSourceTrigger=PropertyChanged}"
+										IsReadOnly="True"
 										Width="2*" />
 
 					<DataGridTextColumn Header="{x:Static root:PluginResources.LMPView_Headers_TradosCode}"
 										Binding="{Binding Path=TradosCode, UpdateSourceTrigger=PropertyChanged}"
+										IsReadOnly="True"
 										Width="1*" />
 
 					<DataGridTextColumn Header="{x:Static root:PluginResources.LMPView_Headers_LanguageCode}"
 										Binding="{Binding Path=LanguageCode, UpdateSourceTrigger=PropertyChanged}"
-										Width="1*" />
+										Width="1*">
+						<DataGridTextColumn.ElementStyle>
+							<Style TargetType="TextBlock">
+								<Setter Property="Foreground"
+										Value="{Binding Path=LanguageCode, Converter={StaticResource LanguageCodeToColorConverter}, ConverterParameter=#FF808080}" />
+							</Style>
+						</DataGridTextColumn.ElementStyle>
+					</DataGridTextColumn>
 
 				</DataGrid.Columns>
 			</DataGrid>
@@ -154,57 +167,64 @@
 										Visibility="{Binding LoadingAction, Converter={StaticResource EmptyStringToVisibility}}"
 										VerticalAlignment="Center" />
 
-			<Button Grid.Row="4" 
-					Grid.ColumnSpan="2"
+			<Button Grid.Row="4"
+					Grid.ColumnSpan="3"
 					Content="Missing a language code? Click here to find it!"
 					Style="{StaticResource Sdl.Button.HyperLinkStyle}"
 					Command="{Binding OpenExternalLinkCommand}"
 					HorizontalAlignment="Right"
-					Margin="0 0 16 2"/>
+					Margin="0 0 16 2" />
 
 			<Separator Grid.Row="5"
-					   Grid.ColumnSpan="2"
+					   Grid.ColumnSpan="3"
 					   VerticalAlignment="Top"
 					   Background="#FFBFCDD4" />
 
-			<Button Content="{x:Static root:PluginResources.LMPView_Buttons_Reset}"
-					Command="{Binding ResetToDefaultCommand}"
-					Style="{StaticResource Sdl.Button.SecondaryStyle}"
-					Grid.Row="5"
-					Grid.ColumnSpan="2"
-					HorizontalAlignment="Left"
-					Cursor="Hand"
-					FontSize="11"
-					FontWeight="DemiBold"
-					Height="26"
-					Width="160"
-					Margin="16" />
+			<Grid Grid.Row="5"
+				  Grid.ColumnSpan="2"
+				  Margin="8 16"
+				  KeyboardNavigation.DirectionalNavigation="Continue">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
 
-			<StackPanel Grid.Row="5"
-						Grid.ColumnSpan="2"
-						Orientation="Horizontal"
-						HorizontalAlignment="Right"
-						Margin="16">
-				<Button Content="{x:Static root:PluginResources.LMPView_Buttons_ApplyChanges}"
+				<Button Grid.Column="0"
+						Content="{x:Static root:PluginResources.LMPView_Buttons_Reset}"
+						Command="{Binding ResetToDefaultCommand}"
+						Style="{StaticResource Sdl.Button.SecondaryStyle}"
+						Cursor="Hand"
+						FontSize="11"
+						FontWeight="DemiBold"
+						Height="26"
+						Width="160"
+						Margin="8 0" />
+
+				<Button Grid.Column="1"
+						Content="{x:Static root:PluginResources.LMPView_Buttons_ApplyChanges}"
 						Command="{Binding ApplyChangesCommand}"
 						Style="{StaticResource Sdl.Button.PrimaryStyle}"
+						HorizontalAlignment="Right"
 						Cursor="Hand"
 						FontSize="11"
 						FontWeight="DemiBold"
 						Height="26"
 						Width="120"
-						Margin="16 0" />
+						Margin="8 0" />
 
-				<Button Content="{x:Static root:PluginResources.LMPView_Buttons_Close}"
+				<Button Grid.Column="2"
+						Content="{x:Static root:PluginResources.LMPView_Buttons_Close}"
 						Command="{Binding CloseLanguageMappingProviderCommand}"
 						Style="{StaticResource Sdl.Button.SecondaryStyle}"
 						Cursor="Hand"
 						FontSize="11"
 						FontWeight="DemiBold"
 						Height="26"
-						Width="120" />
-			</StackPanel>
-
+						Width="120"
+						Margin="8 0" />
+			</Grid>
 		</Grid>
 	</Border>
 </Window>

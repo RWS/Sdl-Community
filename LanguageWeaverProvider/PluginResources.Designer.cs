@@ -631,6 +631,33 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connecting using API Credentials....
+        /// </summary>
+        public static string Loading_Cloud_ConnectingApi {
+            get {
+                return ResourceManager.GetString("Loading_Cloud_ConnectingApi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connecting using Single sign-on....
+        /// </summary>
+        public static string Loading_Cloud_ConnectingAuth0 {
+            get {
+                return ResourceManager.GetString("Loading_Cloud_ConnectingAuth0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connecting using User Credentials....
+        /// </summary>
+        public static string Loading_Cloud_ConnectingUser {
+            get {
+                return ResourceManager.GetString("Loading_Cloud_ConnectingUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connecting user....
         /// </summary>
         public static string Loading_Connecting {

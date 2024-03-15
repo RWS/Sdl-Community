@@ -309,6 +309,15 @@ This action cannot be undone.</value>
   <data name="LMPView_SearchBox" xml:space="preserve">
     <value>Search language...</value>
   </data>
+  <data name="Loading_Cloud_ConnectingApi" xml:space="preserve">
+    <value>Connecting using API Credentials...</value>
+  </data>
+  <data name="Loading_Cloud_ConnectingAuth0" xml:space="preserve">
+    <value>Connecting using Single sign-on...</value>
+  </data>
+  <data name="Loading_Cloud_ConnectingUser" xml:space="preserve">
+    <value>Connecting using User Credentials...</value>
+  </data>
   <data name="Loading_Connecting" xml:space="preserve">
     <value>Connecting user...</value>
   </data>
