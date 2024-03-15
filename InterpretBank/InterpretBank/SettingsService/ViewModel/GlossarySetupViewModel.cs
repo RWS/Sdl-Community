@@ -226,10 +226,12 @@ public class GlossarySetupViewModel(
 
     private void EnterGlossary(object parameter)
     {
-        if (string.IsNullOrEmpty((string)parameter))
+        var glossaryName = UserInteractionService.GetGlossaryNameFromUser();
+
+        if (string.IsNullOrEmpty(glossaryName))
             return;
 
-        var newGlossary = new GlossaryModel { GlossaryName = (string)parameter };
+        var newGlossary = new GlossaryModel { GlossaryName = glossaryName };
         Glossaries.Add(newGlossary);
         AttachToEventsOfGlossaryModel(newGlossary);
 

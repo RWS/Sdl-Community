@@ -61,6 +61,16 @@ namespace InterpretBank {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Add {
+            get {
+                object obj = ResourceManager.GetObject("Add", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon AddTerm {
@@ -268,6 +278,15 @@ namespace InterpretBank {
             get {
                 object obj = ResourceManager.GetObject("TellmeDocumentation", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add new glossary.
+        /// </summary>
+        public static string Tooltip_AddNewGlossary {
+            get {
+                return ResourceManager.GetString("Tooltip_AddNewGlossary", resourceCulture);
             }
         }
         

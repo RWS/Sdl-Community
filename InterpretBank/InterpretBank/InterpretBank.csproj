@@ -24,6 +24,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Resources\299033_microphone_icon.png" />
+    <None Remove="Resources\Add.png" />
     <None Remove="Resources\AddTerm.ico" />
     <None Remove="Resources\AddTerm2.ico" />
     <None Remove="Resources\Booth.ico" />
@@ -155,6 +156,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Add.png" />
     <Resource Include="Resources\AddTerm.ico" />
     <Resource Include="Resources\Booth.ico" />
     <Resource Include="Resources\Browse.png" />

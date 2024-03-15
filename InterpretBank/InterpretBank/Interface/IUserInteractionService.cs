@@ -16,5 +16,6 @@ namespace InterpretBank.Interface
             string sourceTerm, string targetTerm);
 
         void WarnUser(string message);
+        string GetGlossaryNameFromUser();
     }
 }

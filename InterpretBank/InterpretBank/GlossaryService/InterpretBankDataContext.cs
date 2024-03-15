@@ -183,6 +183,8 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 
         table.InsertOnSubmit(
             new DbGlossary { Tag1 = newGlossary.GlossaryName, Id = maxId, GlossarySetting = languages });
+
+        SubmitData();
     }
 
     public void InsertLanguage(LanguageModel language)
@@ -198,6 +200,8 @@ public class InterpretBankDataContext : IInterpretBankDataContext
     {
         var maxId = GetMaxId<DbTag>() + 1;
         GetTable<DbTag>().InsertOnSubmit(new DbTag { TagName = newTag.TagName, Id = maxId });
+
+        SubmitData();
     }
 
     public ActionResult<DbGlossaryEntry> InsertTerm(string source, string target, string glossaryName,
@@ -221,23 +225,25 @@ public class InterpretBankDataContext : IInterpretBankDataContext
     public void RemoveGlossary(string selectedGlossaryGlossaryName)
     {
         var dbGlossaries = GetTable<DbGlossary>();
-        var dbGlossariesWithPendingInserts = GetTableWithPendingInserts(dbGlossaries);
+        //var dbGlossariesWithPendingInserts = GetTableWithPendingInserts(dbGlossaries);
 
-        var glossary = dbGlossariesWithPendingInserts.FirstOrDefault(g => g.Tag1 == selectedGlossaryGlossaryName);
+        var glossary = dbGlossaries.Where(g => g.Tag1 == selectedGlossaryGlossaryName).ToList()[0];
         if (glossary is null) return;
         dbGlossaries.DeleteOnSubmit(glossary);
 
         var dbTerms = GetTable<DbGlossaryEntry>();
-        var dbTermsWithPendingInserts = GetTableWithPendingInserts(dbTerms);
+        //var dbTermsWithPendingInserts = GetTableWithPendingInserts(dbTerms);
 
-        var glossaryTerms = dbTermsWithPendingInserts.Where(t => t.Tag1 == selectedGlossaryGlossaryName);
+        var glossaryTerms = dbTerms.Where(t => t.Tag1 == selectedGlossaryGlossaryName);
         if (glossaryTerms.Any()) dbTerms.DeleteAllOnSubmit(glossaryTerms);
 
         var dbTagLinks = GetTable<DbTagLink>();
-        var dbTagLinksWithPendingInserts = GetTableWithPendingInserts(dbTagLinks);
+        //var dbTagLinksWithPendingInserts = GetTableWithPendingInserts(dbTagLinks);
 
-        var glossaryTags = dbTagLinksWithPendingInserts.Where(tl => tl.GlossaryId == glossary.Id);
+        var glossaryTags = dbTagLinks.Where(tl => tl.GlossaryId == glossary.Id);
         dbTagLinks.DeleteAllOnSubmit(glossaryTags);
+
+        SubmitData();
     }
 
     public void RemoveTag(string tagName)
