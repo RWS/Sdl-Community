@@ -3,7 +3,7 @@
 
 	<PropertyGroup>
 		<UseWPF>true</UseWPF>
-		<LangVersion>latest</LangVersion>
+		<LangVersion>preview</LangVersion>
 		<TargetFramework>net48</TargetFramework>
 	</PropertyGroup>
 
