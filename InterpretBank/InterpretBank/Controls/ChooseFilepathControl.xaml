@@ -27,6 +27,7 @@
     </UserControl.Resources>
     <DockPanel>
         <WrapPanel DockPanel.Dock="Top"
+                   Orientation="Vertical"
                    ToolTip="{x:Static interpretBank:PluginResources.ToolTip_LocateInterpretBankDatabase}">
             <Border BorderBrush="DarkGray"
                     BorderThickness="0.5"

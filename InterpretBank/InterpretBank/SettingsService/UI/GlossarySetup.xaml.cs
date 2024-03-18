@@ -22,8 +22,6 @@ namespace InterpretBank.SettingsService.UI
             DialogResult = true;
         }
 
-       
-
         private void CancelButton_OnClick(object sender, RoutedEventArgs e)
         {
             Close();
@@ -44,7 +42,5 @@ namespace InterpretBank.SettingsService.UI
             var hitTestResult = VisualTreeHelper.HitTest(this, point);
             return hitTestResult.VisualHit is Popup;
         }
-
-       
     }
 }
