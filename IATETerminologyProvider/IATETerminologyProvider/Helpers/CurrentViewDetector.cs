@@ -10,9 +10,9 @@ namespace Sdl.Community.IATETerminologyProvider.Helpers
 			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
 			var filesController = SdlTradosStudio.Application.GetController<FilesController>();
 
-			//projectsController.ActivationChanged += ProjectsController_ActivationChanged;
-			//editorController.ActivationChanged += EditorController_ActivationChanged;
-			//filesController.ActivationChanged += FilesController_ActivationChanged;
+			projectsController.ActivationChanged += ProjectsController_ActivationChanged;
+			editorController.ActivationChanged += EditorController_ActivationChanged;
+			filesController.ActivationChanged += FilesController_ActivationChanged;
 		}
 
 		public enum CurrentView
