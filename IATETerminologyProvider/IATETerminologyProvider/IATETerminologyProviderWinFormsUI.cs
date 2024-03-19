@@ -5,6 +5,7 @@ using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.Community.IATETerminologyProvider.View;
 using Sdl.Terminology.TerminologyProvider.Core;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.IATETerminologyProvider
 {
@@ -19,7 +20,7 @@ namespace Sdl.Community.IATETerminologyProvider
 
         public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
         {
-            _mainWindow = IATEApplication.GetMainWindow();
+			_mainWindow = IATEApplication.GetMainWindow();
             if (_mainWindow != null)
             {
 				_mainWindow.ShowDialog();
