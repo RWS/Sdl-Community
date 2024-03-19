@@ -68,6 +68,7 @@
             <TabItem Header="Glossaries"
                      Template="{StaticResource GlossarySetupTabItem}">
                 <Grid>
+
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
@@ -78,29 +79,6 @@
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-
-                    <!--<DockPanel LastChildFill="False"
-                               Grid.Column="0"
-                               Grid.ColumnSpan="2"
-                               Grid.Row="0"
-                               DockPanel.Dock="Left">
-                        -->
-                    <!--<TextBox x:Name="ValueHolder"
-                                 Visibility="Collapsed" />-->
-                    <!--<TextBlock Text="Type in a new glossary name then press enter:"
-                                   Margin="0 5 0 1"
-                                   DockPanel.Dock="Top" />-->
-                    <!--<TextBox DockPanel.Dock="Top"
-                                     Margin="0 0 0 5"
-                                     PreviewKeyDown="UIElement_OnKeyDown">
-                                <TextBox.InputBindings>
-                                    <KeyBinding Key="Enter"
-                                                Command="{Binding EnterGlossaryCommand}"
-                                                CommandParameter="{Binding Text, ElementName=ValueHolder}" />
-                                </TextBox.InputBindings>
-                            </TextBox>-->
-                    <!--
-                    </DockPanel>-->
 
                     <Border Grid.Row="0"
                             Margin="0"
@@ -126,11 +104,6 @@
                                            VerticalAlignment="Bottom"
                                            Source="/InterpretBank;component/Resources/Browse2.png"
                                            Height="16" />
-                                    <!--<TextBlock Text="{x:Static interpretBank:PluginResources.ImportEntries}"
-                                           FontSize="10"
-                                           Margin="5 0 0 0"
-                                           DockPanel.Dock="Right"
-                                           VerticalAlignment="Center" />-->
                                 </DockPanel>
                             </Button>
                             <Button BorderThickness="0"
@@ -143,8 +116,6 @@
                             </Button>
                         </StackPanel>
                     </Border>
-
-
 
                     <ListBox DockPanel.Dock="Top"
                              Grid.Column="0"
@@ -299,6 +270,7 @@
                                              OpenDropDownListAlsoWhenNotInEditMode="True"
                                              Margin="5 0 0 0"
                                              ItemsSource="{Binding Glossaries}"
+
                                              IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}"
                                              DropdownItemTemplate="{StaticResource GlossaryTemplate}"
                                              SelectedItems="{Binding GlossariesTaggedWithSelected}"
@@ -354,19 +326,10 @@
                    LastChildFill="False">
 
 
-            <Button Content="Cancel"
-                    Cursor="Hand"
+            <Button Content="Close"
                     IsCancel="True"
-                    Click="CancelButton_OnClick"
-                    Height="30"
-                    Style="{StaticResource Sdl.Button.SecondaryStyle}"
-                    DockPanel.Dock="Right"
-                    Margin="0 0 10 10" />
-
-            <Button Content="OK"
                     Cursor="Hand"
                     Click="ApplyButton_Click"
-                    Command="{Binding SaveCommand}"
                     Height="30"
                     Style="{StaticResource Sdl.Button.PrimaryStyle}"
                     DockPanel.Dock="Right"

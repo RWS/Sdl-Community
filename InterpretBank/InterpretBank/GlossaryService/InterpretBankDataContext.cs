@@ -321,11 +321,11 @@ public class InterpretBankDataContext : IInterpretBankDataContext
     public void TagGlossary(TagModel newTag, string glossaryName)
     {
         var dbGlossaries = GetTable<DbGlossary>();
-        var glossaryId = GetTableWithPendingInserts(dbGlossaries)
-            .FirstOrDefault(g => g.Tag1 == glossaryName)?.Id;
+        //var x = dbGlossaries.Where(g => g.Tag1 == glossaryName);
+        var glossaryId = dbGlossaries.Where(g => g.Tag1 == glossaryName).FirstOrDefault()?.Id;
 
         var dbTags = GetTable<DbTag>();
-        var tagId = GetTableWithPendingInserts(dbTags).FirstOrDefault(t => t.TagName == newTag.TagName)?.Id;
+        var tagId = dbTags.Where(t => t.TagName == newTag.TagName).FirstOrDefault()?.Id;
 
         if (tagId is null || glossaryId is null)
             return;
@@ -338,6 +338,8 @@ public class InterpretBankDataContext : IInterpretBankDataContext
             TagName = newTag.TagName,
             Id = maxId
         });
+
+        SubmitData();
     }
 
     public void UpdateEntry(EntryChange entryChange)

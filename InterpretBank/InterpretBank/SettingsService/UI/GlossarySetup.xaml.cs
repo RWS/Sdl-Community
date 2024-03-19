@@ -19,7 +19,7 @@ namespace InterpretBank.SettingsService.UI
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = true;
+            Close();
         }
 
         private void CancelButton_OnClick(object sender, RoutedEventArgs e)

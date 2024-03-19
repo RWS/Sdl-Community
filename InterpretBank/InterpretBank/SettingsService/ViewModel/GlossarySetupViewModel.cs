@@ -102,8 +102,6 @@ public class GlossarySetupViewModel(
 
     public string Name => "Tag/set up glossaries";
 
-    public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save, o => !string.IsNullOrWhiteSpace(Filepath));
-
     public GlossaryModel SelectedGlossary
     {
         get => _selectedGlossary;
@@ -347,8 +345,6 @@ public class GlossarySetupViewModel(
             InterpretBankDataContext.InsertLanguage(newLanguage);
         }
     }
-
-    private void Save(object parameter) => InterpretBankDataContext.SubmitData();
 
     private void SetupSelectedLanguages()
     {
