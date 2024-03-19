@@ -32,8 +32,6 @@ namespace MicrosoftTranslatorProvider
 
 		public List<UrlMetadata> PrivateHeaders { get; set; }
 
-		public RegionsProvider RegionsProvider { get; }
-
 		public ITranslationOptions Options { get; set; }
 
 		public Uri Uri => Options.Uri;

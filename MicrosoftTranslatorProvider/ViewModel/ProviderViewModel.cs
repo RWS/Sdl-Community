@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MicrosoftTranslatorProvider.Commands;
+using MicrosoftTranslatorProvider.Helpers;
 using MicrosoftTranslatorProvider.Interfaces;
 using MicrosoftTranslatorProvider.Model;
 using Sdl.LanguagePlatform.Core;
@@ -18,8 +19,8 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 		private PairMapping _selectedLanguageMapping;
 		private List<PairMapping> _languageMappings;
-		private List<RegionSubscription> _regions;
-		private RegionSubscription _selectedRegion;
+		private List<AccountRegion> _regions;
+		private AccountRegion _selectedRegion;
 
 		private bool _editProvider;
 		private bool _persistMicrosoftKey;
@@ -60,7 +61,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			}
 		}
 
-		public RegionSubscription SelectedRegion
+		public AccountRegion SelectedRegion
 		{
 			get => _selectedRegion;
 			set
@@ -71,11 +72,11 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			}
 		}
 
-		public List<RegionSubscription> Regions
+		public List<AccountRegion> Regions
 		{
 			get
 			{
-				return _regions ??= new List<RegionSubscription>(new RegionsProvider().GetSubscriptionRegions());
+				return _regions ??= RegionsProvider.GetSubscriptionRegions();
 			}
 			set
 			{
@@ -124,7 +125,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		{
 			ApiKey = _options.ApiKey;
 			PersistMicrosoftKey = _options.PersistMicrosoftCredentials;
-			SelectedRegion = Regions.FirstOrDefault(a => a.Key == _options.Region) ?? Regions.ElementAt(0);
+			SelectedRegion = Regions.FirstOrDefault(a => a.Name == _options.Region) ?? Regions.ElementAt(0);
 		}
 
 		private void CreateMapping()

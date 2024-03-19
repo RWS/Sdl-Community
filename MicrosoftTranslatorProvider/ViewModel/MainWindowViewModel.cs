@@ -271,7 +271,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 					return true;
 				}
 
-				var apiConnecter = new MicrosoftApi(_providerControlViewModel.ApiKey, _providerControlViewModel.SelectedRegion?.Key);
+				var apiConnecter = new MicrosoftApi(_providerControlViewModel.ApiKey, _providerControlViewModel.SelectedRegion?.Name);
 				apiConnecter.RefreshAuthToken();
 				return true;
 			}
@@ -338,7 +338,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		private void SetMicrosoftProviderOptions()
 		{
 			TranslationOptions.ApiKey = _providerControlViewModel.ApiKey;
-			TranslationOptions.Region = _providerControlViewModel.SelectedRegion.Key;
+			TranslationOptions.Region = _providerControlViewModel.SelectedRegion.Name;
 			TranslationOptions.PersistMicrosoftCredentials = _providerControlViewModel.PersistMicrosoftKey;
 			TranslationOptions.LanguageMappings = _providerControlViewModel.LanguageMappings;
 			TranslationOptions.UsePrivateEndpoint = UsePrivateEndpoint;

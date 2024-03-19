@@ -33,5 +33,7 @@ namespace MicrosoftTranslatorProvider.Model
 		public List<string> LanguagesSupported { get; set; }
 
 		public List<PairMapping> LanguageMappings { get; set; }
+
+		public MicrosoftCredentials MicrosoftCredentials { get; set; }
 	}
 }

@@ -25,9 +25,23 @@ namespace MicrosoftTranslatorProvider.Studio
 
 		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
-			var options = new TranslationOptions();
-			var mainWindowDialogResult = ShowProviderWindow(languagePairs, credentialStore, options).DialogResult;
-			return mainWindowDialogResult ? new ITranslationProvider[] { new Provider(options) }
+			var translationOptions = new TranslationOptions();
+			var authenticationViewModel = new AuthenticationViewModel(translationOptions);
+			var authenticationView = new AuthenticationView()
+			{
+				DataContext = authenticationViewModel,
+			};
+			authenticationViewModel.CloseEventRaised += authenticationView.Close;
+
+			authenticationView.ShowDialog();
+			if (!authenticationViewModel.SaveChanges)
+			{
+				return null;
+			}
+
+			new PairMappingViewModel(translationOptions, languagePairs);
+			var mainWindowDialogResult = ShowProviderWindow(languagePairs, credentialStore, translationOptions).DialogResult;
+			return mainWindowDialogResult ? new ITranslationProvider[] { new Provider(translationOptions) }
 										  : null;
 		}
 

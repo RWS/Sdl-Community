@@ -43,5 +43,7 @@ namespace MicrosoftTranslatorProvider.Interfaces
 		List<string> LanguagesSupported { get; set; }
 
 		List<PairMapping> LanguageMappings { get; set; }
+
+		MicrosoftCredentials MicrosoftCredentials { get; set; }
 	}
 }

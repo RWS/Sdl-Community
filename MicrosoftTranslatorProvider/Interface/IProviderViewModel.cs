@@ -16,9 +16,9 @@ namespace MicrosoftTranslatorProvider.Interfaces
 
 		BaseModel ViewModel { get; }
 		
-		RegionSubscription SelectedRegion { get; set; }
+		AccountRegion SelectedRegion { get; set; }
 
-		List<RegionSubscription> Regions { get; set; }
+		List<AccountRegion> Regions { get; set; }
 
 		List<PairMapping> LanguageMappings { get; set; }
 	}

@@ -31,6 +31,7 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ComboBoxResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
+			
 			<converters:EmptyToVisibility x:Key="EmptyToVisibilityConverter" />
 			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
 			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter" />
