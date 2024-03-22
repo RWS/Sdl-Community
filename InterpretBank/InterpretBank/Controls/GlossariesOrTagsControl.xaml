@@ -32,48 +32,27 @@
         <DockPanel LastChildFill="False"
                    HorizontalAlignment="Stretch">
 
-            <!--<ToggleButton x:Name="TagsOrGlossariesToggleButton"
-                          DockPanel.Dock="Left"
-                          HorizontalAlignment="Left"
-                          AutomationProperties.Name="{Binding Content, ElementName=ToggleButtonLabel}"
-                          IsChecked="{Binding UseTags}"
-                          IsEnabled="{Binding IsDbValid}"
-                          Style="{StaticResource IOSToggleButtonStyle}"
-                          VerticalContentAlignment="Bottom"
-                          Margin="0 10 0 0"
-                          Height="12">
-
-            </ToggleButton>-->
-
             <StackPanel>
                 <RadioButton Content="Use glossaries"
                              x:Name="UseGlossariesButton"
-                             GroupName="Use glossaries or tags" />
+                             GroupName="Use glossaries or tags" >
+                    <RadioButton.Style>
+                        <Style TargetType="RadioButton">
+                            <Setter Property="IsChecked" Value="True"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=UseTagsButton, Path=IsChecked}" Value="True">
+                                    <Setter Property="IsChecked" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </RadioButton.Style>
+                </RadioButton>
                 <RadioButton Content="Use tags"
                              x:Name="UseTagsButton"
                              IsChecked="{Binding UseTags}"
                              GroupName="Use glossaries or tags" />
             </StackPanel>
-
-
-            <!--<Label VerticalAlignment="Bottom"
-                   Name="ToggleButtonLabel"
-                   Target="{Binding ElementName=TagsOrGlossariesToggleButton}"
-                   Margin="5 8 0 0">
-                <Label.Style>
-                    <Style TargetType="Label">
-                        <Setter Property="Content"
-                                Value="Use glossaries" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsChecked, ElementName=TagsOrGlossariesToggleButton}"
-                                         Value="True">
-                                <Setter Property="Content"
-                                        Value="Use tags" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Label.Style>
-            </Label>-->
+           
         </DockPanel>
 
         <TextBlock Foreground="Red"

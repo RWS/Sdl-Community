@@ -127,9 +127,6 @@ public class SettingsService(IInterpretBankDataContext interpretBankDataContext)
 
     private IInterpretBankDataContext InterpretBankDataContext { get; set; } = interpretBankDataContext;
 
-   
-
-    
 
     public string this[string columnName] =>
         columnName switch
