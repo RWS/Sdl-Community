@@ -290,9 +290,9 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         using var ibContext = new DataContext(SqLiteConnection);
         var dbTerms = ibContext.GetTable<DbGlossaryEntry>();
 
-        var terms = dbTerms.ToList();
+        //var terms = dbTerms.ToList();
 
-        var toRemove = terms.FirstOrDefault(dbt => dbt.Id == selectedEntry.Id);
+        var toRemove = dbTerms.Where(dbt => dbt.Id == selectedEntry.Id).ToList()[0];
         if (toRemove is null) return;
 
         dbTerms.DeleteOnSubmit(toRemove);
