@@ -32,7 +32,7 @@
         <DockPanel LastChildFill="False"
                    HorizontalAlignment="Stretch">
 
-            <ToggleButton x:Name="TagsOrGlossariesToggleButton"
+            <!--<ToggleButton x:Name="TagsOrGlossariesToggleButton"
                           DockPanel.Dock="Left"
                           HorizontalAlignment="Left"
                           AutomationProperties.Name="{Binding Content, ElementName=ToggleButtonLabel}"
@@ -43,10 +43,20 @@
                           Margin="0 10 0 0"
                           Height="12">
 
-            </ToggleButton>
+            </ToggleButton>-->
+
+            <StackPanel>
+                <RadioButton Content="Use glossaries"
+                             x:Name="UseGlossariesButton"
+                             GroupName="Use glossaries or tags" />
+                <RadioButton Content="Use tags"
+                             x:Name="UseTagsButton"
+                             IsChecked="{Binding UseTags}"
+                             GroupName="Use glossaries or tags" />
+            </StackPanel>
 
 
-            <Label VerticalAlignment="Bottom"
+            <!--<Label VerticalAlignment="Bottom"
                    Name="ToggleButtonLabel"
                    Target="{Binding ElementName=TagsOrGlossariesToggleButton}"
                    Margin="5 8 0 0">
@@ -63,7 +73,7 @@
                         </Style.Triggers>
                     </Style>
                 </Label.Style>
-            </Label>
+            </Label>-->
         </DockPanel>
 
         <TextBlock Foreground="Red"
@@ -102,7 +112,7 @@
                                  IsEnabled="{Binding IsDbValid}"
                                  Height="{Binding ActualHeight, ElementName=Root, Converter={StaticResource RatioConverter}, ConverterParameter=0.75}"
                                  SelectedItems="{Binding SelectedTags, Mode=TwoWay, ValidatesOnDataErrors=True}"
-                                 Visibility="{Binding IsChecked, ElementName=TagsOrGlossariesToggleButton, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=True}"
+                                 Visibility="{Binding IsChecked, ElementName=UseTagsButton, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=True}"
                                  ItemsSource="{Binding Tags, UpdateSourceTrigger=PropertyChanged}"
                                  DropdownItemTemplate="{StaticResource TagTemplate}"
                                  SelectedItemTemplate="{StaticResource TagTemplate}" />
@@ -115,8 +125,8 @@
                                  IsEnabled="{Binding IsDbValid}"
                                  OpenDropDownListAlsoWhenNotInEditMode="True"
                                  Height="{Binding ActualHeight, ElementName=Root, Converter={StaticResource RatioConverter}, ConverterParameter=0.75}"
-                                 Visibility="{Binding IsChecked, ElementName=TagsOrGlossariesToggleButton, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=False}"
-                                 SelectedItems="{Binding SelectedGlossaries, Mode=TwoWay, ValidatesOnDataErrors=True}"
+                                 Visibility="{Binding IsChecked, ElementName=UseGlossariesButton, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=True}"
+                                 SelectedItems="{Binding SelectedGlossaries, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
                                  ItemsSource="{Binding Glossaries, UpdateSourceTrigger=PropertyChanged}"
                                  DropdownItemTemplate="{StaticResource GlossaryTemplate}"
                                  SelectedItemTemplate="{StaticResource GlossaryTemplate}" />
