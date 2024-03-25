@@ -47,7 +47,7 @@ public interface IInterpretBankDataContext : IDisposable
         string targetLanguage);
 
 
-    void RemoveGlossary(string selectedGlossaryGlossaryName);
+    public void RemoveGlossary(int glossaryId);
 
     void RemoveTag(string tagName);
 

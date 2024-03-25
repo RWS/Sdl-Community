@@ -193,4 +193,19 @@
   <data name="Tooltip_AddNewGlossary" xml:space="preserve">
     <value>Add new glossary</value>
   </data>
+  <data name="Tooltip_AddNewTag" xml:space="preserve">
+    <value>Add new tag</value>
+  </data>
+  <data name="Message_TypeNameOfNewGlossary" xml:space="preserve">
+    <value>Type the name of the new glossary</value>
+  </data>
+  <data name="Message_TypeNameOfNewTag" xml:space="preserve">
+    <value>Type the name of the new tag</value>
+  </data>
+  <data name="Message_GlossaryAlreadyExists" xml:space="preserve">
+    <value>This glossary already exists</value>
+  </data>
+  <data name="Message_TagAlreadyExists" xml:space="preserve">
+    <value>This tag already exists</value>
+  </data>
 </root>

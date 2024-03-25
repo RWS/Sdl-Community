@@ -76,11 +76,12 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         var glossarySetting = glossary.GlossarySetting;
         var indexToReplace = glossarySetting.IndexOf("0");
 
-        if (indexToReplace == -1)
-            return;
+        if (indexToReplace == -1) return;
 
         glossary.GlossarySetting = glossarySetting.Substring(0, indexToReplace) + newLanguage.Index +
                                    glossarySetting.Substring(indexToReplace + 0.ToString().Length);
+
+        SubmitData();
     }
 
     public void Dispose()
@@ -194,6 +195,8 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         dbInfoProperties
             .FirstOrDefault(p => int.Parse(p.Name.Substring(12)) == language.Index)?
             .SetValue(dbInfo, language.Name);
+
+        SubmitData();
     }
 
     public void InsertTag(TagModel newTag)
@@ -222,29 +225,36 @@ public class InterpretBankDataContext : IInterpretBankDataContext
             : new ActionResult<DbGlossaryEntry>(false, null, actionResult.Message);
     }
 
-    public void RemoveGlossary(string selectedGlossaryGlossaryName)
+    public void RemoveGlossary(int glossaryId)
     {
-        var dbGlossaries = GetTable<DbGlossary>();
-        //var dbGlossariesWithPendingInserts = GetTableWithPendingInserts(dbGlossaries);
-
-        var glossary = dbGlossaries.Where(g => g.Tag1 == selectedGlossaryGlossaryName).ToList()[0];
-        if (glossary is null) return;
-        dbGlossaries.DeleteOnSubmit(glossary);
-
-        var dbTerms = GetTable<DbGlossaryEntry>();
-        //var dbTermsWithPendingInserts = GetTableWithPendingInserts(dbTerms);
-
-        var glossaryTerms = dbTerms.Where(t => t.Tag1 == selectedGlossaryGlossaryName);
-        if (glossaryTerms.Any()) dbTerms.DeleteAllOnSubmit(glossaryTerms);
-
-        var dbTagLinks = GetTable<DbTagLink>();
-        //var dbTagLinksWithPendingInserts = GetTableWithPendingInserts(dbTagLinks);
-
-        var glossaryTags = dbTagLinks.Where(tl => tl.GlossaryId == glossary.Id);
-        dbTagLinks.DeleteAllOnSubmit(glossaryTags);
-
-        SubmitData();
+        var dbConnection = new DatabaseConnection(SqLiteConnection.FileName);
+        using var glossaryService = new SqlGlossaryService(dbConnection, new SqlBuilder.SqlBuilder());
+        glossaryService.DeleteGlossary(glossaryId);
     }
+
+    //public void RemoveGlossary(string selectedGlossaryGlossaryName)
+    //{
+    //    var dbGlossaries = GetTable<DbGlossary>();
+    //    //var dbGlossariesWithPendingInserts = GetTableWithPendingInserts(dbGlossaries);
+
+    //    var glossary = dbGlossaries.Where(g => g.Tag1 == selectedGlossaryGlossaryName).ToList()[0];
+    //    if (glossary is null) return;
+    //    dbGlossaries.DeleteOnSubmit(glossary);
+
+    //    var dbTerms = GetTable<DbGlossaryEntry>();
+    //    //var dbTermsWithPendingInserts = GetTableWithPendingInserts(dbTerms);
+
+    //    var glossaryTerms = dbTerms.Where(t => t.Tag1 == selectedGlossaryGlossaryName);
+    //    if (glossaryTerms.Any()) dbTerms.DeleteAllOnSubmit(glossaryTerms);
+
+    //    var dbTagLinks = GetTable<DbTagLink>();
+    //    //var dbTagLinksWithPendingInserts = GetTableWithPendingInserts(dbTagLinks);
+
+    //    var glossaryTags = dbTagLinks.Where(tl => tl.GlossaryId == glossary.Id);
+    //    dbTagLinks.DeleteAllOnSubmit(glossaryTags);
+
+    //    SubmitData();
+    //}
 
     public void RemoveTag(string tagName)
     {

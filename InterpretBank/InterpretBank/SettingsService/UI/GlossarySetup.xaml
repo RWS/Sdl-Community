@@ -131,13 +131,12 @@
                                 <DockPanel>
                                     <Button VerticalAlignment="Bottom"
                                             Command="{Binding DataContext.DeleteGlossaryCommand, ElementName=GlossaryManager_Window}"
+                                            CommandParameter="{Binding .}"
                                             DockPanel.Dock="Left"
                                             FontSize="8"
                                             AutomationProperties.Name="DeleteGlossary"
                                             Style="{StaticResource Sdl.Button.EmbeddedStyle}"
-                                            Content="✖">
-
-                                    </Button>
+                                            Content="✖"/>
                                     <Image Source="../../Resources/Glossary.png"
                                            DockPanel.Dock="Left"
                                            Height="17" />
@@ -206,29 +205,28 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-
-                    <DockPanel LastChildFill="False"
-                               Grid.Row="0"
-                               Grid.Column="0"
-                               Grid.ColumnSpan="2">
-                        <!--<TextBlock Text="Type in a new tag then press enter:"
-                                   Margin="0 5 0 1"
-                                   DockPanel.Dock="Top" />-->
-                        <!--<TextBox DockPanel.Dock="Top"
-                                 Margin="0 0 0 5"
-                                 PreviewKeyDown="UIElement_OnKeyDown">
-                            <TextBox.InputBindings>
-                                <KeyBinding Key="Enter"
-                                            Command="{Binding EnterTagCommand}"
-                                            CommandParameter="{Binding Text, ElementName=ValueHolder}" />
-                            </TextBox.InputBindings>
-                        </TextBox>-->
-                    </DockPanel>
+                    <Border Grid.Row="0"
+                            Margin="0"
+                            Grid.ColumnSpan="2"
+                            Background="LightGray"
+                            Grid.Column="0">
+                        <StackPanel Orientation="Horizontal">
+                            <Button BorderThickness="0"
+                                    ToolTip="{x:Static interpretBank:PluginResources.Tooltip_AddNewTag}"
+                                    Command="{Binding EnterTagCommand}"
+                                    Cursor="Hand"
+                                    Style="{StaticResource Sdl.Button.EmmbeddedAddButtonStyle}">
+                                <Image Source="/InterpretBank;component/Resources/Add.png"
+                                       Height="16" />
+                            </Button>
+                        </StackPanel>
+                    </Border>
 
                     <ListBox DockPanel.Dock="Top"
                              Grid.Row="1"
@@ -249,9 +247,7 @@
                                             DockPanel.Dock="Left"
                                             FontSize="8"
                                             Style="{StaticResource Sdl.Button.EmbeddedStyle}"
-                                            Content="✖">
-
-                                    </Button>
+                                            Content="✖"/>
                                     <Image Source="../../Resources/Tag.png"
                                            DockPanel.Dock="Left"
                                            Height="17" />
@@ -270,7 +266,6 @@
                                              OpenDropDownListAlsoWhenNotInEditMode="True"
                                              Margin="5 0 0 0"
                                              ItemsSource="{Binding Glossaries}"
-
                                              IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}"
                                              DropdownItemTemplate="{StaticResource GlossaryTemplate}"
                                              SelectedItems="{Binding GlossariesTaggedWithSelected}"
@@ -299,7 +294,7 @@
                                         </Grid.ColumnDefinitions>
                                         <Button Content="⟲"
                                                 FontSize="15"
-                                                Command="{Binding RestoreCommand}"
+                                                Command="{Binding ResetCommand}"
                                                 Background="Transparent"
                                                 AutomationProperties.Name="Restore"
                                                 HorizontalAlignment="Left"

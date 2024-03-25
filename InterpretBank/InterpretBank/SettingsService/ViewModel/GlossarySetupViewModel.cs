@@ -34,7 +34,7 @@ public class GlossarySetupViewModel(
     private ObservableCollection<TagLinkModel> _tagLinks;
     private ObservableCollection<TagModel> _tags;
 
-    public ICommand DeleteGlossaryCommand => new RelayCommand(DeleteGlossary, o => SelectedGlossary != null);
+    public ICommand DeleteGlossaryCommand => new RelayCommand(DeleteGlossary);
     public ICommand DeleteTagCommand => _deleteTagCommand ??= new RelayCommand(DeleteTag);
     public ICommand EnterGlossaryCommand => _enterGlossaryCommand ??= new RelayCommand(EnterGlossary);
     public ICommand EnterTagCommand => _enterTagCommand ??= new RelayCommand(EnterTag);
@@ -200,8 +200,10 @@ public class GlossarySetupViewModel(
 
     private void DeleteGlossary(object obj)
     {
-        if (!UserInteractionService.Confirm($@"Are you sure you want to delete the glossary ""{SelectedGlossary.GlossaryName}""?")) return;
-        InterpretBankDataContext.RemoveGlossary(SelectedGlossary.GlossaryName);
+        if (obj is not GlossaryModel glossary) return;
+
+        if (!UserInteractionService.Confirm($@"Are you sure you want to delete the glossary ""{glossary.GlossaryName}""?")) return;
+        InterpretBankDataContext.RemoveGlossary(glossary.Id);
         Glossaries.Remove(SelectedGlossary);
     }
 
@@ -224,12 +226,18 @@ public class GlossarySetupViewModel(
 
     private void EnterGlossary(object parameter)
     {
-        var glossaryName = UserInteractionService.GetGlossaryNameFromUser();
+        var glossaryName = UserInteractionService.GetInfoFromUser(PluginResources.Message_TypeNameOfNewGlossary);
 
-        if (string.IsNullOrEmpty(glossaryName))
-            return;
+        if (string.IsNullOrEmpty(glossaryName)) return;
 
         var newGlossary = new GlossaryModel { GlossaryName = glossaryName };
+
+        if (Glossaries.Any(g => g.GlossaryName == glossaryName))
+        {
+            UserInteractionService.WarnUser(PluginResources.Message_GlossaryAlreadyExists);
+            return;
+        }
+
         Glossaries.Add(newGlossary);
         AttachToEventsOfGlossaryModel(newGlossary);
 
@@ -238,14 +246,15 @@ public class GlossarySetupViewModel(
 
     private void EnterTag(object parameter)
     {
-        if (string.IsNullOrEmpty((string)parameter))
-            return;
+        var tagName = UserInteractionService.GetInfoFromUser(PluginResources.Message_TypeNameOfNewTag);
 
-        var newTag = new TagModel { TagName = (string)parameter };
+        if (string.IsNullOrEmpty(tagName)) return;
+
+        var newTag = new TagModel { TagName = tagName };
 
         if (Tags.Any(t => t.TagName == newTag.TagName))
         {
-            UserInteractionService.WarnUser("This tag already exists");
+            UserInteractionService.WarnUser(PluginResources.Message_TagAlreadyExists);
             return;
         }
         Tags.Add(newTag);
@@ -288,9 +297,6 @@ public class GlossarySetupViewModel(
                             if (tl.TagName == removedTag.TagName && tl.GlossaryId == SelectedGlossary.Id)
                                 TagLinks.Remove(tl);
                         });
-
-                        //TagLinks.RemoveAll(tl =>
-                        //    tl.TagName == removedTag.TagName && tl.GlossaryId == SelectedGlossary.Id);
                     }
                     break;
                 }

@@ -51,9 +51,9 @@ namespace InterpretBank.CommonServices
             ChooseGlossaryWindow.Show();
         }
 
-        public string GetGlossaryNameFromUser()
+        public string GetInfoFromUser(string text)
         {
-            var createGlossaryWindow = new CreateGlossaryWindow();
+            var createGlossaryWindow = new CreateGlossaryWindow{Text = text};
             createGlossaryWindow.ShowDialog();
 
             return createGlossaryWindow.InputTextBox.Text;

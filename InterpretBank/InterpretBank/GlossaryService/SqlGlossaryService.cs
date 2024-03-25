@@ -188,7 +188,7 @@ namespace InterpretBank.GlossaryService
             }
         }
 
-        public void DeleteGlossary(string glossaryId)
+        public void DeleteGlossary(int glossaryId)
         {
             var glossaryDeleteCondition = $"ID = {glossaryId}";
 
@@ -206,18 +206,19 @@ namespace InterpretBank.GlossaryService
                 .Where(glossaryDeleteCondition)
                 .Build();
 
-            var tag2Condition = !string.IsNullOrWhiteSpace(tags[0]["Tag2"]) ? $" AND Tag2 = {tags[0]["Tag2"]}" : null;
-
-            var termsDeleteCondition = $"Tag1 = {tags[0]["Tag1"]}{tag2Condition}";
-
-            var deleteGlossaryTerms = _sqlBuilder
-                .Table(Tables.GlossaryData)
-                .Where(termsDeleteCondition)
-                .Delete()
-                .Build();
+            if (tags.Any())
+            {
+                var tag2Condition = !string.IsNullOrWhiteSpace(tags[0]["Tag2"]) ? $" AND Tag2 = {tags[0]["Tag2"]}" : null;
+                var termsDeleteCondition = $"Tag1 = {tags[0]["Tag1"]}{tag2Condition}";
+                var deleteGlossaryTerms = _sqlBuilder
+                    .Table(Tables.GlossaryData)
+                    .Where(termsDeleteCondition)
+                    .Delete()
+                    .Build();
+                _connection.ExecuteCommand(deleteGlossaryTerms);
+            }
 
             _connection.ExecuteCommand(deleteGlossaryStatement);
-            _connection.ExecuteCommand(deleteGlossaryTerms);
         }
 
         public void DeleteTerm(string termId)

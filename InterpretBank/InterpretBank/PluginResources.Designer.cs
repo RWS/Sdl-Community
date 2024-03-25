@@ -149,11 +149,47 @@ namespace InterpretBank {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This glossary already exists.
+        /// </summary>
+        public static string Message_GlossaryAlreadyExists {
+            get {
+                return ResourceManager.GetString("Message_GlossaryAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are no tags on this db. To be able to use tags, please go to the database configurator and create some..
         /// </summary>
         public static string Message_PleaseCreateTags {
             get {
                 return ResourceManager.GetString("Message_PleaseCreateTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This tag already exists.
+        /// </summary>
+        public static string Message_TagAlreadyExists {
+            get {
+                return ResourceManager.GetString("Message_TagAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type the name of the new glossary.
+        /// </summary>
+        public static string Message_TypeNameOfNewGlossary {
+            get {
+                return ResourceManager.GetString("Message_TypeNameOfNewGlossary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type the name of the new tag.
+        /// </summary>
+        public static string Message_TypeNameOfNewTag {
+            get {
+                return ResourceManager.GetString("Message_TypeNameOfNewTag", resourceCulture);
             }
         }
         
@@ -287,6 +323,15 @@ namespace InterpretBank {
         public static string Tooltip_AddNewGlossary {
             get {
                 return ResourceManager.GetString("Tooltip_AddNewGlossary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add new tag.
+        /// </summary>
+        public static string Tooltip_AddNewTag {
+            get {
+                return ResourceManager.GetString("Tooltip_AddNewTag", resourceCulture);
             }
         }
         

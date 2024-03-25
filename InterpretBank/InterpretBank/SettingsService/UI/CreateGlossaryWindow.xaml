@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
+        x:Name="Root"
         Height="Auto"
         WindowStartupLocation="CenterScreen"
         FocusManager.FocusedElement="{Binding ElementName=InputTextBox}"
@@ -24,7 +25,7 @@
             <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBlock Text="Type the name of the new glossary: "
+        <TextBlock Text="{Binding Text, ElementName=Root}"
                    Margin="5 10"
                    HorizontalAlignment="Center"
                    Grid.Row="0" />
