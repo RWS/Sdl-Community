@@ -18,7 +18,7 @@ using MessageBox = System.Windows.MessageBox;
 
 namespace Trados.Transcreate.Actions
 {
-	[Action("TranscreateManager_ConvertProject_Action", 
+	[Action("TranscreateManager_ConvertProject_Action",
 		Name = "TranscreateManager_ConvertProject_Name",
 		Description = "TranscreateManager_ConvertProject_Description",
 		ContextByType = typeof(ProjectsController),
@@ -37,15 +37,36 @@ namespace Trados.Transcreate.Actions
 		private ProjectSettingsService _projectSettingsService;
 		private StudioVersionService _studioVersionService;
 
+		public Controllers Controllers
+		{
+			get
+			{
+
+				if (_controllers == null)
+				{ 
+					var fileController = SdlTradosStudio.Application.GetController<FilesController>();
+					var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+					var editorController = SdlTradosStudio.Application.GetController<EditorController>();
+					var transcreateViewController = SdlTradosStudio.Application.GetController<TranscreateViewController>();
+					_controllers = new Controllers(projectsController, fileController, editorController, transcreateViewController);
+
+					SetProjectsController();
+				}
+
+
+				return _controllers;
+			}
+		}
+
 		protected override void Execute()
 		{
-			var selectedProject = _controllers.ProjectsController.SelectedProjects.FirstOrDefault();
+			var selectedProject = Controllers.ProjectsController.SelectedProjects.FirstOrDefault();
 			if (selectedProject == null)
 			{
 				return;
 			}
-			
-			var documents = _controllers.EditorController.GetDocuments()?.ToList();
+
+			var documents = Controllers.EditorController.GetDocuments()?.ToList();
 			if (documents != null && documents.Count > 0)
 			{
 				var documentProjectIds = documents.Select(a => a.Project.GetProjectInfo().Id.ToString()).Distinct();
@@ -71,11 +92,11 @@ namespace Trados.Transcreate.Actions
 			var action = Enumerators.Action.Convert;
 			var workFlow = Enumerators.WorkFlow.Internal;
 
-			
+
 			var newProjectLocalFolder = selectedProject.GetProjectInfo().LocalProjectFolder + "-T";
 			if (Directory.Exists(newProjectLocalFolder))
 			{
-				MessageBox.Show(PluginResources.Warning_Message_ProjectFolderAlreadyExists + Environment.NewLine + Environment.NewLine + newProjectLocalFolder, 
+				MessageBox.Show(PluginResources.Warning_Message_ProjectFolderAlreadyExists + Environment.NewLine + Environment.NewLine + newProjectLocalFolder,
 					PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Information);
 				return;
 			}
@@ -88,26 +109,26 @@ namespace Trados.Transcreate.Actions
 			}
 
 			var wizardService = new WizardService(action, workFlow, _pathInfo, _customerProvider,
-				_imageService, _controllers, _segmentBuilder, settings, _dialogService, 
+				_imageService, Controllers, _segmentBuilder, settings, _dialogService,
 				_projectAutomationService, _projectSettingsService);
 
-			var taskContext = wizardService.ShowWizard(_controllers.ProjectsController, out var message);
+			var taskContext = wizardService.ShowWizard(Controllers.ProjectsController, out var message);
 			if (taskContext == null && !string.IsNullOrEmpty(message))
 			{
 				MessageBox.Show(message, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Information);
 				return;
 			}
-		
-			_controllers.TranscreateController.UpdateProjectData(taskContext);
+
+			Controllers.TranscreateController.UpdateProjectData(taskContext);
 		}
-	
+
 
 		public override void Initialize()
 		{
 			Enabled = false;
 
-			_controllers = SdlTradosStudio.Application.GetController<TranscreateViewController>().Controllers;
-			SetProjectsController();
+			//_controllers = SdlTradosStudio.Application.GetController<TranscreateViewController>().Controllers;
+			//SetProjectsController();
 			_customerProvider = new CustomerProvider();
 			_pathInfo = new PathInfo();
 			_imageService = new ImageService();
@@ -115,9 +136,9 @@ namespace Trados.Transcreate.Actions
 			_segmentBuilder = new SegmentBuilder();
 			_studioVersionService = new StudioVersionService();
 			_projectAutomationService = new ProjectAutomationService(
-				_imageService, _controllers.TranscreateController, _controllers.ProjectsController, _customerProvider, _studioVersionService);
+				_imageService, Controllers.TranscreateController, Controllers.ProjectsController, _customerProvider, _studioVersionService);
 			_projectSettingsService = new ProjectSettingsService();
-			
+
 			SetEnabled();
 		}
 
@@ -134,9 +155,9 @@ namespace Trados.Transcreate.Actions
 
 		private void SetProjectsController()
 		{
-			if (_controllers.ProjectsController != null)
+			if (Controllers.ProjectsController != null)
 			{
-				_controllers.ProjectsController.SelectedProjectsChanged += ProjectsController_SelectedProjectsChanged;
+				Controllers.ProjectsController.SelectedProjectsChanged += ProjectsController_SelectedProjectsChanged;
 			}
 		}
 
@@ -147,13 +168,13 @@ namespace Trados.Transcreate.Actions
 
 		private void SetEnabled()
 		{
-			if (_controllers.ProjectsController.SelectedProjects.Count() != 1)
+			if (Controllers.ProjectsController.SelectedProjects.Count() != 1)
 			{
 				Enabled = false;
 				return;
 			}
-			
-			var selectedProject = _controllers.ProjectsController.SelectedProjects.FirstOrDefault();
+
+			var selectedProject = Controllers.ProjectsController.SelectedProjects.FirstOrDefault();
 
 			Enabled = selectedProject?.GetProjectInfo().ProjectOrigin != Constants.ProjectOrigin_TranscreateProject;
 		}
