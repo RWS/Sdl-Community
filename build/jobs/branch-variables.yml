@@ -3,7 +3,7 @@ variables:
   value: 'windows-latest'
 
 - name: StudioProductIdentifier  
-  value: Studio17
+  value: Studio18
 
 - name: StudioBranch
   value: refs/heads/master
