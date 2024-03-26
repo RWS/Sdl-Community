@@ -115,9 +115,9 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         var glossaries = new List<GlossaryModel>();
         foreach (var dbGlossary in dbGlossaries)
         {
-            var tagLinks = GetRows<DbTagLink>();
-            var currentGlossaryLinks = tagLinks.Where(tl => tl.GlossaryId == dbGlossary.Id)
-                .Select(tm => new TagModel { TagName = tm.TagName }).ToList();
+            //var tagLinks = GetRows<DbTagLink>();
+            //var currentGlossaryLinks = tagLinks.Where(tl => tl.GlossaryId == dbGlossary.Id)
+            //    .Select(tm => new TagModel { TagName = tm.TagName }).ToList();
 
             var languages = GetLanguageNames(dbGlossary.GlossarySetting);
             glossaries.Add(new GlossaryModel
@@ -125,7 +125,7 @@ public class InterpretBankDataContext : IInterpretBankDataContext
                 GlossaryName = dbGlossary.Tag1,
                 SubGlossaryName = dbGlossary.Tag2,
                 Languages = new ObservableCollection<LanguageModel>(languages),
-                Tags = new ObservableCollection<TagModel>(currentGlossaryLinks),
+                //Tags = new ObservableCollection<TagModel>(currentGlossaryLinks),
                 Id = dbGlossary.Id
             });
         }
@@ -187,7 +187,7 @@ public class InterpretBankDataContext : IInterpretBankDataContext
             ID = maxId,
             GlossarySetting = languages
         });
-       
+
         return maxId;
     }
 

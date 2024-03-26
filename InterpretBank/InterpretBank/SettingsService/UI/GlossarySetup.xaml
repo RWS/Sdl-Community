@@ -187,7 +187,7 @@
                                                      Margin="5 0 0 0"
                                                      IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}"
                                                      ItemsSource="{Binding Tags}"
-                                                     SelectedItems="{Binding SelectedGlossary.Tags}"
+                                                     SelectedItems="{Binding SelectedGlossaryTags}"
                                                      DropdownItemTemplate="{StaticResource TagTemplate}"
                                                      SelectedItemTemplate="{StaticResource TagTemplate}" />
                         </DockPanel>
@@ -241,7 +241,7 @@
                             <DataTemplate>
                                 <DockPanel>
                                     <Button Command="{Binding DataContext.DeleteTagCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
-                                            CommandParameter="{Binding TagName}"
+                                            CommandParameter="{Binding .}"
                                             VerticalAlignment="Bottom"
                                             AutomationProperties.Name="DeleteTag"
                                             DockPanel.Dock="Left"
@@ -268,7 +268,7 @@
                                              ItemsSource="{Binding Glossaries}"
                                              IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}"
                                              DropdownItemTemplate="{StaticResource GlossaryTemplate}"
-                                             SelectedItems="{Binding GlossariesTaggedWithSelected}"
+                                             SelectedItems="{Binding SelectedTagGlossaries}"
                                              SelectedItemTemplate="{StaticResource GlossaryTemplate}" />
                 </Grid>
             </TabItem>

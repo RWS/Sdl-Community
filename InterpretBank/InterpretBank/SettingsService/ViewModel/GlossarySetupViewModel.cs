@@ -25,15 +25,14 @@ public class GlossarySetupViewModel(
     private ICommand _enterTagCommand;
     private string _filepath;
     private ObservableCollection<GlossaryModel> _glossaries;
-    private List<GlossaryModel> _glossariesTaggedWithSelected;
     private ObservableCollection<LanguageModel> _languages;
-    private ICommand _saveCommand;
     private GlossaryModel _selectedGlossary;
+    private ObservableCollection<TagModel> _selectedGlossaryTags;
     private List<LanguageModelsListBoxItem> _selectedLanguages;
     private TagModel _selectedTag;
+    private ObservableCollection<GlossaryModel> _selectedTagGlossaries;
     private ObservableCollection<TagLinkModel> _tagLinks;
     private ObservableCollection<TagModel> _tags;
-
     public ICommand DeleteGlossaryCommand => new RelayCommand(DeleteGlossary);
     public ICommand DeleteTagCommand => _deleteTagCommand ??= new RelayCommand(DeleteTag);
     public ICommand EnterGlossaryCommand => _enterGlossaryCommand ??= new RelayCommand(EnterGlossary);
@@ -73,22 +72,6 @@ public class GlossarySetupViewModel(
         }
     }
 
-    public List<GlossaryModel> GlossariesTaggedWithSelected
-    {
-        get
-        {
-            var idsOfTaggedGlossaries = TagLinks?.Where(tl => tl.TagName == SelectedTag?.TagName).Select(tl => tl.GlossaryId);
-
-            if (idsOfTaggedGlossaries is null) return null;
-
-            _glossariesTaggedWithSelected = Glossaries?.Where(gl => idsOfTaggedGlossaries.Contains(gl.Id)).ToList();
-
-
-            return _glossariesTaggedWithSelected;
-        }
-        set => SetField(ref _glossariesTaggedWithSelected, value);
-    }
-
     public ICommand ImportIntoSelectedGlossaryCommand =>
         new RelayCommand(ImportIntoSelectedGlossary, o => SelectedGlossary != null);
 
@@ -107,7 +90,35 @@ public class GlossarySetupViewModel(
     public GlossaryModel SelectedGlossary
     {
         get => _selectedGlossary;
-        set => SetField(ref _selectedGlossary, value);
+        set
+        {
+            SetField(ref _selectedGlossary, value);
+            OnPropertyChanged(nameof(SelectedGlossaryTags));
+        }
+    }
+
+    public ObservableCollection<TagModel> SelectedGlossaryTags
+    {
+        get
+        {
+            if (SelectedGlossary is null) return _selectedGlossaryTags;
+
+            if (_selectedGlossaryTags is not null)
+                _selectedGlossaryTags.CollectionChanged -= TagLinks_CollectionChanged;
+
+            var tagNamesSelectedGlossary =
+                TagLinks?.Where(tl => tl.GlossaryId == SelectedGlossary.Id).Select(tl => tl.TagName);
+
+            _selectedGlossaryTags =
+                new ObservableCollection<TagModel>(
+                    (tagNamesSelectedGlossary is not null && tagNamesSelectedGlossary.Any())
+                        ? Tags.Where(t => tagNamesSelectedGlossary.Contains(t.TagName)).ToList()
+                        : []);
+
+            _selectedGlossaryTags.CollectionChanged += TagLinks_CollectionChanged;
+            return _selectedGlossaryTags;
+        }
+        set => SetField(ref _selectedGlossaryTags, value);
     }
 
     public List<LanguageModelsListBoxItem> SelectedLanguages
@@ -122,8 +133,25 @@ public class GlossarySetupViewModel(
         set
         {
             SetField(ref _selectedTag, value);
-            OnPropertyChanged(nameof(GlossariesTaggedWithSelected));
+            OnPropertyChanged(nameof(SelectedTagGlossaries));
         }
+    }
+
+    public ObservableCollection<GlossaryModel> SelectedTagGlossaries
+    {
+        get
+        {
+            if (_selectedTagGlossaries is not null) _selectedTagGlossaries.CollectionChanged -= TagLinks_CollectionChanged;
+
+            var idsOfTaggedGlossaries = TagLinks?.Where(tl => tl.TagName == SelectedTag?.TagName).Select(tl => tl.GlossaryId);
+            if (idsOfTaggedGlossaries is null) return null;
+
+            _selectedTagGlossaries = new ObservableCollection<GlossaryModel>(Glossaries?.Where(gl => idsOfTaggedGlossaries.Contains(gl.Id)).ToList());
+            _selectedTagGlossaries.CollectionChanged += TagLinks_CollectionChanged;
+
+            return _selectedTagGlossaries;
+        }
+        set => SetField(ref _selectedTagGlossaries, value);
     }
 
     public ObservableCollection<TagLinkModel> TagLinks
@@ -162,7 +190,6 @@ public class GlossarySetupViewModel(
 
     private void AttachToEventsOfGlossaryModel(GlossaryModel glossaryModel)
     {
-        glossaryModel.Tags.CollectionChanged += Glossary_TagCollectionChanged;
         glossaryModel.Languages.CollectionChanged += Glossary_LanguageCollectionChanged;
     }
 
@@ -209,37 +236,24 @@ public class GlossarySetupViewModel(
         Glossaries.Remove(glossary);
 
         SelectedGlossary = Glossaries[0];
+
+        OnPropertyChanged(nameof(SelectedTagGlossaries));
     }
 
     private void DeleteTag(object parameter)
     {
-        if (!UserInteractionService.Confirm($@"Are you sure you want to delete the tag ""{SelectedTag.TagName}""?")) return;
-
-        if (parameter is not string tagName)
+        if (parameter is not TagModel tag)
             return;
 
-        Tags.Remove(Tags.Single(t => t.TagName == tagName));
-        var glossariesWithTagRemoved = InterpretBankDataContext.RemoveTag(tagName);
+        if (!UserInteractionService.Confirm($@"Are you sure you want to delete the tag ""{tag.TagName}""?")) return;
 
-        foreach (var glossaryId in glossariesWithTagRemoved)
-        {
-            var glossary = Glossaries.FirstOrDefault(g => g.Id == glossaryId);
-            var tagRemoved = glossary?.Tags.FirstOrDefault(t => t.TagName == tagName);
-            if (tagRemoved != null) glossary.Tags.Remove(tagRemoved);
-
-            ReloadGlossary(glossary);
-        }
-    }
-
-    private void ReloadGlossary(GlossaryModel glossary)
-    {
-        Glossaries.Remove(glossary);
-        Glossaries.Add(glossary);
+        Tags.Remove(Tags.Single(t => t.TagName == tag.TagName));
+        InterpretBankDataContext.RemoveTag(tag.TagName);
+        OnPropertyChanged(nameof(SelectedGlossaryTags));
     }
 
     private void DetachFromEventsOfGlossaryModel(GlossaryModel glossaryModel)
     {
-        glossaryModel.Tags.CollectionChanged -= Glossary_TagCollectionChanged;
         glossaryModel.Languages.CollectionChanged -= Glossary_LanguageCollectionChanged;
     }
 
@@ -302,49 +316,6 @@ public class GlossarySetupViewModel(
         }
     }
 
-    private void Glossary_TagCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        switch (e.Action)
-        {
-            case NotifyCollectionChangedAction.Remove:
-                {
-                    if (e.OldItems[0] is TagModel removedTag)
-                    {
-                        InterpretBankDataContext.RemoveTagFromGlossary(removedTag.TagName,
-                            SelectedGlossary.GlossaryName);
-
-                        TagLinkModel tagLinkRemoved = null;
-                        TagLinks.ForEach(tl =>
-                        {
-                            if (tl.TagName == removedTag.TagName && tl.GlossaryId == SelectedGlossary.Id)
-                                tagLinkRemoved = tl;
-                        });
-
-                        TagLinks.Remove(tagLinkRemoved);
-                    }
-                    break;
-                }
-            case NotifyCollectionChangedAction.Add:
-                {
-                    var newItem = e.NewItems[0];
-                    if (newItem is TagModel newTag)
-                    {
-                        InterpretBankDataContext.TagGlossary(newTag, SelectedGlossary.GlossaryName);
-                        TagLinks.Add(new TagLinkModel
-                        {
-                            GlossaryId = SelectedGlossary.Id,
-                            TagName = newTag.TagName
-                        });
-
-                        ReloadGlossary(SelectedGlossary);
-                    }
-                    break;
-                }
-        }
-
-        OnPropertyChanged(nameof(GlossariesTaggedWithSelected));
-    }
-
     private void ImportIntoSelectedGlossary(object obj)
     {
         if (!UserInteractionService.GetFilePath(out var filepath, "All Supported Formats (*.tbx;*.xlsx)|*.tbx;*.xlsx|TermBase eXchange (*.tbx)|*.tbx|Microsoft Excel spreadsheet (*.xlsx)|*.xlsx")) return;
@@ -401,5 +372,46 @@ public class GlossarySetupViewModel(
         }
 
         SelectedLanguages.ForEach(sl => sl.PropertyChanged += LanguageListBoxItem_SelectedLanguagesChanged);
+    }
+
+    private void TagLinks_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Add when e.NewItems[0] is TagModel tagModel:
+                TagLinks.Add(new TagLinkModel
+                {
+                    GlossaryId = SelectedGlossary.Id,
+                    TagName = tagModel.TagName
+                });
+                InterpretBankDataContext.TagGlossary(tagModel, SelectedGlossary.GlossaryName);
+                if (tagModel.TagName == SelectedTag.TagName) OnPropertyChanged(nameof(SelectedTagGlossaries));
+
+                break;
+
+            case NotifyCollectionChangedAction.Add when e.NewItems[0] is GlossaryModel glossaryModel:
+                TagLinks.Add(new TagLinkModel
+                {
+                    GlossaryId = glossaryModel.Id,
+                    TagName = SelectedTag.TagName
+                });
+                InterpretBankDataContext.TagGlossary(SelectedTag, glossaryModel.GlossaryName);
+                if (glossaryModel.GlossaryName == SelectedGlossary.GlossaryName) OnPropertyChanged(nameof(SelectedGlossaryTags));
+                break;
+
+            case NotifyCollectionChangedAction.Remove when e.OldItems[0] is TagModel tagModel:
+                var tagLinkRemoved = TagLinks.FirstOrDefault(tl => tl.TagName == tagModel.TagName && tl.GlossaryId == SelectedGlossary.Id);
+                TagLinks.Remove(tagLinkRemoved);
+                InterpretBankDataContext.RemoveTagFromGlossary(tagModel.TagName, SelectedGlossary.GlossaryName);
+                if (tagModel.TagName == SelectedTag.TagName) OnPropertyChanged(nameof(SelectedTagGlossaries));
+                break;
+
+            case NotifyCollectionChangedAction.Remove when e.OldItems[0] is GlossaryModel glossaryModel:
+                tagLinkRemoved = TagLinks.FirstOrDefault(tl => tl.TagName == SelectedTag.TagName && tl.GlossaryId == glossaryModel.Id);
+                TagLinks.Remove(tagLinkRemoved);
+                InterpretBankDataContext.RemoveTagFromGlossary(SelectedTag.TagName, glossaryModel.GlossaryName);
+                if (glossaryModel.GlossaryName == SelectedGlossary.GlossaryName) OnPropertyChanged(nameof(SelectedGlossaryTags));
+                break;
+        }
     }
 }

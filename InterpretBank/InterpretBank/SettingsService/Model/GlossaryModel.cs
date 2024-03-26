@@ -16,11 +16,11 @@ namespace InterpretBank.SettingsService.Model
 			set => SetField(ref _languages, value);
 		}
 
-		public ObservableCollection<TagModel> Tags
-		{
-			get => _tags;
-			set => SetField(ref _tags, value);
-		}
+		//public ObservableCollection<TagModel> Tags
+		//{
+		//	get => _tags;
+		//	set => SetField(ref _tags, value);
+		//}
 
         public override string ToString() => $"{GlossaryName}{SubGlossaryName}";
     }
