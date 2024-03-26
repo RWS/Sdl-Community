@@ -10,8 +10,9 @@ namespace InterpretBank.GlossaryService.Interface
 
 		void CreateDatabaseFile(string filePath);
 
-		List<Dictionary<string, string>> ExecuteCommand(SQLiteCommand sql);
+		List<Dictionary<string, string>> ExecuteSelectCommand(SQLiteCommand sql);
 
 		void LoadDatabase(string filePath);
-	}
+        void ExecuteNonSelectCommand(SQLiteCommand cmdQuery);
+    }
 }

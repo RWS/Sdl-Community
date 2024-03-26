@@ -37,7 +37,7 @@ public interface IInterpretBankDataContext : IDisposable
 
     List<TagModel> GetTags();
 
-    void InsertGlossary(GlossaryModel newGlossary);
+    int InsertGlossary(GlossaryModel newGlossary);
 
     void InsertLanguage(LanguageModel language);
 
@@ -49,7 +49,7 @@ public interface IInterpretBankDataContext : IDisposable
 
     public void RemoveGlossary(int glossaryId);
 
-    void RemoveTag(string tagName);
+    List<int> RemoveTag(string tagName);
 
     void RemoveTagFromGlossary(string tagName, string glossaryName);
 

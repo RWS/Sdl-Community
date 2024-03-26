@@ -1,6 +1,7 @@
 ﻿using InterpretBank.Extensions;
 using InterpretBank.GlossaryService.DAL;
 using InterpretBank.GlossaryService.DAL.Interface;
+using InterpretBank.GlossaryService.Model;
 using InterpretBank.Helpers;
 using InterpretBank.Interface;
 using InterpretBank.Model;
@@ -69,9 +70,7 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 
     public void AddLanguageToGlossary(LanguageModel newLanguage, string glossaryName)
     {
-        var glossary = GetTable<DbGlossary>().ToList().FirstOrDefault(g => g.Tag1 == glossaryName)
-                       ?? DataContext.GetChangeSet().Inserts.OfType<DbGlossary>()
-                           .FirstOrDefault(g => g.Tag1 == glossaryName);
+        var glossary = GetTable<DbGlossary>().ToList().Where(g => g.Tag1 == glossaryName).ToList()[0];
 
         var glossarySetting = glossary.GlossarySetting;
         var indexToReplace = glossarySetting.IndexOf("0");
@@ -176,16 +175,20 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         });
     }
 
-    public void InsertGlossary(GlossaryModel newGlossary)
+    public int InsertGlossary(GlossaryModel newGlossary)
     {
         var languages = "0#0#0#0#0#0#0#0#0#0#0#0";
-        var table = GetTable<DbGlossary>();
         var maxId = GetMaxId<DbGlossary>() + 1;
 
-        table.InsertOnSubmit(
-            new DbGlossary { Tag1 = newGlossary.GlossaryName, Id = maxId, GlossarySetting = languages });
-
-        SubmitData();
+        using var sqlService = GetSqlGlossaryService();
+        sqlService.Create(new GlossaryMetadataEntry
+        {
+            Tag1 = newGlossary.GlossaryName,
+            ID = maxId,
+            GlossarySetting = languages
+        });
+       
+        return maxId;
     }
 
     public void InsertLanguage(LanguageModel language)
@@ -203,7 +206,6 @@ public class InterpretBankDataContext : IInterpretBankDataContext
     {
         var maxId = GetMaxId<DbTag>() + 1;
         GetTable<DbTag>().InsertOnSubmit(new DbTag { TagName = newTag.TagName, Id = maxId });
-
         SubmitData();
     }
 
@@ -215,7 +217,7 @@ public class InterpretBankDataContext : IInterpretBankDataContext
             Id = GetMaxId<DbGlossaryEntry>() + 1,
             Tag1 = glossaryName,
             [$"Term{GetLanguageIndex(sourceLanguage)}"] = source,
-            [$"Term{GetLanguageIndex(targetLanguage)}"] = target,
+            [$"Term{GetLanguageIndex(targetLanguage)}"] = target
         };
 
         var actionResult = InsertEntity(newEntry);
@@ -227,57 +229,26 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 
     public void RemoveGlossary(int glossaryId)
     {
-        var dbConnection = new DatabaseConnection(SqLiteConnection.FileName);
-        using var glossaryService = new SqlGlossaryService(dbConnection, new SqlBuilder.SqlBuilder());
+        using var glossaryService = GetSqlGlossaryService();
         glossaryService.DeleteGlossary(glossaryId);
     }
 
-    //public void RemoveGlossary(string selectedGlossaryGlossaryName)
-    //{
-    //    var dbGlossaries = GetTable<DbGlossary>();
-    //    //var dbGlossariesWithPendingInserts = GetTableWithPendingInserts(dbGlossaries);
-
-    //    var glossary = dbGlossaries.Where(g => g.Tag1 == selectedGlossaryGlossaryName).ToList()[0];
-    //    if (glossary is null) return;
-    //    dbGlossaries.DeleteOnSubmit(glossary);
-
-    //    var dbTerms = GetTable<DbGlossaryEntry>();
-    //    //var dbTermsWithPendingInserts = GetTableWithPendingInserts(dbTerms);
-
-    //    var glossaryTerms = dbTerms.Where(t => t.Tag1 == selectedGlossaryGlossaryName);
-    //    if (glossaryTerms.Any()) dbTerms.DeleteAllOnSubmit(glossaryTerms);
-
-    //    var dbTagLinks = GetTable<DbTagLink>();
-    //    //var dbTagLinksWithPendingInserts = GetTableWithPendingInserts(dbTagLinks);
-
-    //    var glossaryTags = dbTagLinks.Where(tl => tl.GlossaryId == glossary.Id);
-    //    dbTagLinks.DeleteAllOnSubmit(glossaryTags);
-
-    //    SubmitData();
-    //}
-
-    public void RemoveTag(string tagName)
+    public List<int> RemoveTag(string tagName)
     {
         var tags = GetTable<DbTag>();
-        var tagsWithPendingInserts = GetTableWithPendingInserts(tags);
-
         var tagLinks = GetTable<DbTagLink>();
-        var tagLinksWithPendingInserts = GetTableWithPendingInserts(tagLinks);
 
-        var tagMarkedForRemoval = tagsWithPendingInserts.FirstOrDefault(t => t.TagName == tagName);
-        if (tagMarkedForRemoval is null)
-        {
-            var pendingInserts = DataContext.GetChangeSet().Inserts;
-            tagMarkedForRemoval = pendingInserts.OfType<DbTag>()
-                .FirstOrDefault(t => t.TagName == tagName);
-        }
-
-        var tagLinkMarkedForRemoval = tagLinksWithPendingInserts.Where(t => t.TagName == tagName);
+        var tagMarkedForRemoval = tags.Where(t => t.TagName == tagName).ToList()[0];
+        var tagLinkMarkedForRemoval = tagLinks.Where(t => t.TagName == tagName).ToList();
 
         if (tagMarkedForRemoval is not null)
             tags.DeleteOnSubmit(tagMarkedForRemoval);
         if (tagLinkMarkedForRemoval.Any())
             tagLinks.DeleteAllOnSubmit(tagLinkMarkedForRemoval);
+
+        SubmitData();
+        var removeTag = tagLinkMarkedForRemoval.Select(tl => tl.GlossaryId).ToList();
+        return removeTag;
     }
 
     public void RemoveTagFromGlossary(string tagName, string glossaryName)
@@ -287,20 +258,17 @@ public class InterpretBankDataContext : IInterpretBankDataContext
             .FirstOrDefault(g => g.Tag1 == glossaryName)?.Id;
 
         var tagLinks = GetTable<DbTagLink>();
-        var tagLinksWithPendingInserts = GetTableWithPendingInserts(tagLinks);
 
-        var tagForRemoval =
-            tagLinksWithPendingInserts.FirstOrDefault(tl => tl.TagName == tagName && tl.GlossaryId == glossaryId);
+        var tagForRemoval = tagLinks.Where(tl => tl.TagName == tagName && tl.GlossaryId == glossaryId).ToList();
+        if (tagForRemoval.Any()) tagLinks.DeleteOnSubmit(tagForRemoval[0]);
 
-        if (tagForRemoval is not null) tagLinks.DeleteOnSubmit(tagForRemoval);
+        SubmitData();
     }
 
     public void RemoveTerm(EntryModel selectedEntry)
     {
         using var ibContext = new DataContext(SqLiteConnection);
         var dbTerms = ibContext.GetTable<DbGlossaryEntry>();
-
-        //var terms = dbTerms.ToList();
 
         var toRemove = dbTerms.Where(dbt => dbt.Id == selectedEntry.Id).ToList()[0];
         if (toRemove is null) return;
@@ -311,7 +279,6 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 
     public void Setup(string filepath = null)
     {
-        //Filepath = filepath;
         if (!string.IsNullOrWhiteSpace(filepath)) SqLiteConnection = new SQLiteConnection($"Data Source={filepath}");
         DataContext = new DataContext(SqLiteConnection);
 
@@ -331,11 +298,10 @@ public class InterpretBankDataContext : IInterpretBankDataContext
     public void TagGlossary(TagModel newTag, string glossaryName)
     {
         var dbGlossaries = GetTable<DbGlossary>();
-        //var x = dbGlossaries.Where(g => g.Tag1 == glossaryName);
-        var glossaryId = dbGlossaries.Where(g => g.Tag1 == glossaryName).FirstOrDefault()?.Id;
+        var glossaryId = dbGlossaries.Where(g => g.Tag1 == glossaryName).ToList()[0]?.Id;
 
         var dbTags = GetTable<DbTag>();
-        var tagId = dbTags.Where(t => t.TagName == newTag.TagName).FirstOrDefault()?.Id;
+        var tagId = dbTags.Where(t => t.TagName == newTag.TagName).ToList()[0]?.Id;
 
         if (tagId is null || glossaryId is null)
             return;
@@ -439,6 +405,12 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 
     private int GetMaxId<T>() where T : class, IInterpretBankTable =>
         (GetTable<T>()).Select(r => r.Id).Max();
+
+    private SqlGlossaryService GetSqlGlossaryService()
+    {
+        var dbConnection = new DatabaseConnection(SqLiteConnection.FileName);
+        return new SqlGlossaryService(dbConnection, new SqlBuilder.SqlBuilder());
+    }
 
     private IEnumerable<T> GetTableWithPendingInserts<T>(Table<T> table) where T : class, IInterpretBankTable =>
                                                         DataContext.GetTablePendingInserts<T>().Union(table);

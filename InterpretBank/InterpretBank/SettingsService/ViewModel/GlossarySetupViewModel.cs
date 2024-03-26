@@ -82,6 +82,8 @@ public class GlossarySetupViewModel(
             if (idsOfTaggedGlossaries is null) return null;
 
             _glossariesTaggedWithSelected = Glossaries?.Where(gl => idsOfTaggedGlossaries.Contains(gl.Id)).ToList();
+
+
             return _glossariesTaggedWithSelected;
         }
         set => SetField(ref _glossariesTaggedWithSelected, value);
@@ -204,7 +206,9 @@ public class GlossarySetupViewModel(
 
         if (!UserInteractionService.Confirm($@"Are you sure you want to delete the glossary ""{glossary.GlossaryName}""?")) return;
         InterpretBankDataContext.RemoveGlossary(glossary.Id);
-        Glossaries.Remove(SelectedGlossary);
+        Glossaries.Remove(glossary);
+
+        SelectedGlossary = Glossaries[0];
     }
 
     private void DeleteTag(object parameter)
@@ -215,7 +219,22 @@ public class GlossarySetupViewModel(
             return;
 
         Tags.Remove(Tags.Single(t => t.TagName == tagName));
-        InterpretBankDataContext.RemoveTag(tagName);
+        var glossariesWithTagRemoved = InterpretBankDataContext.RemoveTag(tagName);
+
+        foreach (var glossaryId in glossariesWithTagRemoved)
+        {
+            var glossary = Glossaries.FirstOrDefault(g => g.Id == glossaryId);
+            var tagRemoved = glossary?.Tags.FirstOrDefault(t => t.TagName == tagName);
+            if (tagRemoved != null) glossary.Tags.Remove(tagRemoved);
+
+            ReloadGlossary(glossary);
+        }
+    }
+
+    private void ReloadGlossary(GlossaryModel glossary)
+    {
+        Glossaries.Remove(glossary);
+        Glossaries.Add(glossary);
     }
 
     private void DetachFromEventsOfGlossaryModel(GlossaryModel glossaryModel)
@@ -241,7 +260,8 @@ public class GlossarySetupViewModel(
         Glossaries.Add(newGlossary);
         AttachToEventsOfGlossaryModel(newGlossary);
 
-        InterpretBankDataContext.InsertGlossary(newGlossary);
+        var id = InterpretBankDataContext.InsertGlossary(newGlossary);
+        newGlossary.Id = id;
     }
 
     private void EnterTag(object parameter)
@@ -258,6 +278,7 @@ public class GlossarySetupViewModel(
             return;
         }
         Tags.Add(newTag);
+        SelectedTag = newTag;
 
         InterpretBankDataContext.InsertTag(newTag);
     }
@@ -292,11 +313,14 @@ public class GlossarySetupViewModel(
                         InterpretBankDataContext.RemoveTagFromGlossary(removedTag.TagName,
                             SelectedGlossary.GlossaryName);
 
+                        TagLinkModel tagLinkRemoved = null;
                         TagLinks.ForEach(tl =>
                         {
                             if (tl.TagName == removedTag.TagName && tl.GlossaryId == SelectedGlossary.Id)
-                                TagLinks.Remove(tl);
+                                tagLinkRemoved = tl;
                         });
+
+                        TagLinks.Remove(tagLinkRemoved);
                     }
                     break;
                 }
@@ -311,6 +335,8 @@ public class GlossarySetupViewModel(
                             GlossaryId = SelectedGlossary.Id,
                             TagName = newTag.TagName
                         });
+
+                        ReloadGlossary(SelectedGlossary);
                     }
                     break;
                 }
