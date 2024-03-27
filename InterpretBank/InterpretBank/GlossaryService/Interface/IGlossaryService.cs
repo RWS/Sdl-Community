@@ -9,7 +9,7 @@ namespace InterpretBank.GlossaryService.Interface
 
         void CreateDb(string filePath);
 
-        void DeleteGlossary(string glossaryId);
+        public void DeleteGlossary(int glossaryName);
 
         void DeleteTerm(string termId);
 

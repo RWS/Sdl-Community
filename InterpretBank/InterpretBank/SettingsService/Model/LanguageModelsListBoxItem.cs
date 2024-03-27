@@ -8,7 +8,7 @@ namespace InterpretBank.SettingsService.Model
     public class LanguageModelsListBoxItem : InterpretBank.Model.NotifyChangeModel, IDataErrorInfo
 	{
 		private List<LanguageModel> _languageModels;
-		private ICommand _restoreCommand;
+		private ICommand _resetCommand;
 		private int _selectedIndex = -1;
 		public string Error { get; set; }
 		private string _errorMessage;
@@ -21,7 +21,7 @@ namespace InterpretBank.SettingsService.Model
 			set => SetField(ref _languageModels, value);
 		}
 
-		public ICommand RestoreCommand => _restoreCommand ??= new RelayCommand(Restore);
+		public ICommand ResetCommand => _resetCommand ??= new RelayCommand(Reset, _ => IsEditable);
 
 		public int SelectedIndex
 		{
@@ -35,7 +35,7 @@ namespace InterpretBank.SettingsService.Model
 			set => _errorMessage = value;
 		}
 
-		private void Restore(object obj)
+		private void Reset(object obj)
 		{
 			SelectedIndex = 0;
 		}

@@ -14,7 +14,9 @@
         Name="Booth_Window"
         Icon="/InterpretBank;component/Resources/Booth.ico"
         WindowStartupLocation="CenterScreen"
-        Height="450"
+        MinHeight="510"
+        Height="510"
+        MinWidth="723"
         Width="800">
     <Window.Resources>
         <ResourceDictionary>
@@ -87,10 +89,10 @@
                            x:Name="FilepathLabel"
                            DockPanel.Dock="Top" />
                 <controls1:ChooseFilepathControl DockPanel.Dock="Top"
-                                                Margin="0 5 0 0"
-                                                AutomationProperties.LabeledBy="{Binding ElementName=FilepathLabel}"
-                                                Filepath="{Binding Filepath, Mode=TwoWay}"
-                                                VerticalContentAlignment="Top" />
+                                                 Margin="0 5 0 0"
+                                                 AutomationProperties.LabeledBy="{Binding ElementName=FilepathLabel}"
+                                                 Filepath="{Binding Filepath, Mode=TwoWay}"
+                                                 VerticalContentAlignment="Top" />
 
                 <!--<TextBlock Text="Settings" DockPanel.Dock="Top" FontSize="15" Margin="0 0 0 20" Foreground="DarkCyan" />-->
 
@@ -148,14 +150,17 @@
                    LastChildFill="False"
                    x:Name="TermSearchPanel">
 
-            <TextBlock Name="ShowHideSettingsLabel" Width="0"> 
+            <TextBlock Name="ShowHideSettingsLabel"
+                       Width="0">
                 <TextBlock.Style>
-                    <Style TargetType="TextBlock" >
+                    <Style TargetType="TextBlock">
                         <Setter Property="Text"
                                 Value="Hide settings" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsChecked, ElementName=SettingsToggleButton, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                <Setter Property="Text" Value="Show settings"/>
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=SettingsToggleButton, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         Value="True">
+                                <Setter Property="Text"
+                                        Value="Show settings" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -176,7 +181,7 @@
                            BasedOn="{StaticResource GlyphToggleButtonStyle}">
                         <Setter Property="Content"
                                 Value="←" />
-                        
+
                         <Style.Triggers>
                             <Trigger Property="IsChecked"
                                      Value="True">
@@ -198,7 +203,7 @@
 
             <DataGrid x:Name="TermsGrid"
                       d:ItemsSource="{d:SampleData ItemCount=5}"
-                      ItemsSource="{Binding Entries}"
+                      ItemsSource="{Binding Entries.Result}"
                       IsReadOnly="True"
                       CanUserReorderColumns="True"
                       BorderThickness="0.7 0.55 0 0"

@@ -17,6 +17,8 @@
         SizeToContent="Height"
         WindowStartupLocation="CenterScreen"
         Height="Auto"
+        MinWidth="300"
+        MinHeight="490"
         Width="600">
     <Window.Resources>
         <ResourceDictionary>
@@ -29,7 +31,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <converters:NullStringToVisibilityConverter x:Key="NullToVisibilityConverter" />
-            <converters1:RatioConverter x:Key="RatioConverter"/>
+            <converters1:RatioConverter x:Key="RatioConverter" />
         </ResourceDictionary>
     </Window.Resources>
 
@@ -54,12 +56,16 @@
 
             <TextBlock Text="{x:Static interpretBank:PluginResources.SettingsWindow_TextBlock_DBFilepath}"
                        DockPanel.Dock="Top" />
+
+
+
             <controls:ChooseFilepathControl Filepath="{Binding Filepath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
         </DockPanel>
 
         <controls:GlossariesOrTagsControl Grid.Row="2"
+                                          Height="Auto"
                                           x:Name="SettingsUi"
-                                          Height="{Binding ActualHeight, ElementName=Root, Converter={StaticResource RatioConverter}, ConverterParameter=0.3}"
                                           Margin="10 10 10 5"
                                           DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}"
                                           Visibility="{Binding Filepath, Converter={StaticResource NullToVisibilityConverter}}" />
@@ -78,7 +84,7 @@
                     DockPanel.Dock="Right"
                     Margin="0 0 10 10" />
 
-            <Button Content="Ok"
+            <Button Content="OK"
                     Cursor="Hand"
                     Width="120"
                     Command="{Binding SaveCommand}"
