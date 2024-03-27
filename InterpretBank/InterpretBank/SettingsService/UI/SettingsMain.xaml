@@ -18,7 +18,7 @@
         SizeToContent="Height"
         WindowStartupLocation="CenterScreen"
         Height="Auto"
-        MinWidth="300"
+        MinWidth="533"
         MinHeight="450"
         Width="600">
     <Window.Resources>
