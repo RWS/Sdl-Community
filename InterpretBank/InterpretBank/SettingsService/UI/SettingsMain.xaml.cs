@@ -1,5 +1,4 @@
-﻿using InterpretBank.GlossaryService.Interface;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 
 namespace InterpretBank.SettingsService.UI
@@ -15,9 +14,13 @@ namespace InterpretBank.SettingsService.UI
             InitializeComponent();
         }
 
+        public Settings Settings => SettingsService.Settings;
         private ViewModel.SettingsService SettingsService => (ViewModel.SettingsService)DataContext;
 
-        public SettingsService.Settings Settings => SettingsService.Settings;
+        public void Setup(Settings settings)
+        {
+            SettingsService.Settings = settings;
+        }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
@@ -28,11 +31,6 @@ namespace InterpretBank.SettingsService.UI
         {
             if (e.ChangedButton == MouseButton.Left)
                 DragMove();
-        }
-
-        public void Setup(SettingsService.Settings settings)
-        {
-            SettingsService.Settings = settings;
         }
     }
 }

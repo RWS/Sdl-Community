@@ -3,10 +3,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:interpretBank="clr-namespace:InterpretBank"
              mc:Ignorable="d"
              x:Name="Root"
              HorizontalContentAlignment="Stretch"
              d:DesignHeight="450"
+             Loaded="ChooseFilepathControl_OnLoaded"
              d:DesignWidth="800">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -14,33 +16,65 @@
                 <ResourceDictionary Source="/InterpretBank;component/Styles/SettingsResources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/textblockresources.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="TextBlock"
+                   BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="Margin"
+                        Value="0" />
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-    <WrapPanel>
+        <WrapPanel DockPanel.Dock="Top"
+                   Orientation="Vertical"
+                   ToolTip="{x:Static interpretBank:PluginResources.ToolTip_LocateInterpretBankDatabase}">
+            <Border BorderBrush="DarkGray"
+                    BorderThickness="0.5"
+                    Height="26">
 
-        <ComboBox Height="25"
-                  IsEditable="True"
-                  Text="Select file path..."
-                  IsReadOnly="False"
-                  MinWidth="50"
-                  SelectedItem="{Binding Filepath, ElementName=Root}"
-                  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
-                  ItemsSource="{Binding DatabaseList, ElementName=Root}">
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox Height="25"
+                              IsEditable="True"
+                              x:Name="FilepathCombobox"
+                              BorderThickness="0"
+                              VerticalContentAlignment="Center"
+                              AutomationProperties.AutomationId="{Binding Filepath, ElementName=Root}"
+                              Text="Select file path..."
+                              SelectionChanged="FilepathCombobox_OnSelectionChanged"
+                              IsReadOnly="False"
+                              MinWidth="50"
+                              SelectedItem="{Binding Filepath, ElementName=Root, UpdateSourceTrigger=PropertyChanged}"
+                              Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+                              ItemsSource="{Binding DatabaseList.List, ElementName=Root}">
 
-        </ComboBox>
+                    </ComboBox>
 
-        <Button Style="{StaticResource Sdl.Button.EmbeddedStyle}"
-                x:Name="BrowseButton"
-                Click="BrowseButton_OnClick"
-                Height="30"
-                Background="Transparent"
-                BorderBrush="Transparent"
-                FontSize="15"
-                Content="📂"
-                DockPanel.Dock="Right"
-                HorizontalAlignment="Right"
-                Margin="5 5 2 5"/>
+                    <Button Style="{StaticResource Sdl.Button.EmbeddedStyle}"
+                            x:Name="BrowseButton"
+                            Click="BrowseButton_OnClick"
+                            Cursor="Hand"
+                            Height="30"
+                            Background="Transparent"
+                            Content="📂"
+                            VerticalAlignment="Center"
+                            BorderBrush="Transparent"
+                            FontSize="15"
+                            DockPanel.Dock="Right"
+                            HorizontalAlignment="Right"
+                            Margin="5 5 2 5">
+                    </Button>
+                </StackPanel>
 
-    </WrapPanel>
+            </Border>
+            <StackPanel Orientation="Horizontal"
+                        Margin="5 0 0 0">
+                <TextBlock Text="See "
+                           DockPanel.Dock="Bottom" />
+                <Button Content="documentation"
+                        Style="{StaticResource Sdl.Button.HyperLinkStyle}"
+                        Click="DocumentationButton_OnClick"
+                        Margin="0 1.2 0 0" />
+                <TextBlock Text=" for further guidance" />
+            </StackPanel>
+        </WrapPanel>
 </UserControl>

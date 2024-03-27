@@ -1,4 +1,5 @@
 ﻿using InterpretBank.Interface;
+using InterpretBank.SettingsService.UI;
 using InterpretBank.TermbaseViewer.UI;
 using System;
 using System.Collections.Generic;
@@ -48,6 +49,14 @@ namespace InterpretBank.CommonServices
 
             ElementHost.EnableModelessKeyboardInterop(ChooseGlossaryWindow);
             ChooseGlossaryWindow.Show();
+        }
+
+        public string GetInfoFromUser(string text)
+        {
+            var createGlossaryWindow = new CreateGlossaryWindow{Text = text};
+            createGlossaryWindow.ShowDialog();
+
+            return createGlossaryWindow.InputTextBox.Text;
         }
 
         private void ChooseGlossaryWindow_Closed(object sender, EventArgs e)

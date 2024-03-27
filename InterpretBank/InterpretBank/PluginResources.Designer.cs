@@ -61,6 +61,16 @@ namespace InterpretBank {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Add {
+            get {
+                object obj = ResourceManager.GetObject("Add", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon AddTerm {
@@ -77,6 +87,16 @@ namespace InterpretBank {
             get {
                 object obj = ResourceManager.GetObject("Booth", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Browse {
+            get {
+                object obj = ResourceManager.GetObject("Browse", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -111,6 +131,69 @@ namespace InterpretBank {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import entries.
+        /// </summary>
+        public static string ImportEntries {
+            get {
+                return ResourceManager.GetString("ImportEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import entries into selected glossary.
+        /// </summary>
+        public static string ImportEntriesIntoSelectedGlossary {
+            get {
+                return ResourceManager.GetString("ImportEntriesIntoSelectedGlossary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This glossary already exists.
+        /// </summary>
+        public static string Message_GlossaryAlreadyExists {
+            get {
+                return ResourceManager.GetString("Message_GlossaryAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no tags on this db. To be able to use tags, please go to the database configurator and create some..
+        /// </summary>
+        public static string Message_PleaseCreateTags {
+            get {
+                return ResourceManager.GetString("Message_PleaseCreateTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This tag already exists.
+        /// </summary>
+        public static string Message_TagAlreadyExists {
+            get {
+                return ResourceManager.GetString("Message_TagAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type the name of the new glossary.
+        /// </summary>
+        public static string Message_TypeNameOfNewGlossary {
+            get {
+                return ResourceManager.GetString("Message_TypeNameOfNewGlossary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type the name of the new tag.
+        /// </summary>
+        public static string Message_TypeNameOfNewTag {
+            get {
+                return ResourceManager.GetString("Message_TypeNameOfNewTag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to InterpretBank description.
         /// </summary>
         public static string Plugin_Description {
@@ -125,6 +208,16 @@ namespace InterpretBank {
         public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Question {
+            get {
+                object obj = ResourceManager.GetObject("Question", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -154,6 +247,16 @@ namespace InterpretBank {
         public static System.Drawing.Icon RemoveClick {
             get {
                 object obj = ResourceManager.GetObject("RemoveClick", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Settings {
+            get {
+                object obj = ResourceManager.GetObject("Settings", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -191,6 +294,53 @@ namespace InterpretBank {
         public static string SettingsWindow_TextBlock_Tags {
             get {
                 return ResourceManager.GetString("SettingsWindow_TextBlock_Tags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon SourceCode {
+            get {
+                object obj = ResourceManager.GetObject("SourceCode", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellmeDocumentation {
+            get {
+                object obj = ResourceManager.GetObject("TellmeDocumentation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add new glossary.
+        /// </summary>
+        public static string Tooltip_AddNewGlossary {
+            get {
+                return ResourceManager.GetString("Tooltip_AddNewGlossary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add new tag.
+        /// </summary>
+        public static string Tooltip_AddNewTag {
+            get {
+                return ResourceManager.GetString("Tooltip_AddNewTag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locate your private Interpret Bank database.
+        /// </summary>
+        public static string ToolTip_LocateInterpretBankDatabase {
+            get {
+                return ResourceManager.GetString("ToolTip_LocateInterpretBankDatabase", resourceCulture);
             }
         }
     }
