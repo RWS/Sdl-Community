@@ -165,7 +165,7 @@ namespace InterpretBank.GlossaryService
                 .Insert(columnValues)
                 .Build();
 
-            _connection.ExecuteCommand(insertSqlStatement);
+            _connection.ExecuteSelectCommand(insertSqlStatement);
         }
 
         public void CreateDb(string filePath)
@@ -184,40 +184,49 @@ namespace InterpretBank.GlossaryService
                     .CreateTable(types, columnNames.Item2)
                     .Build();
 
-                _connection.ExecuteCommand(createTablesCommand);
+                _connection.ExecuteSelectCommand(createTablesCommand);
             }
         }
 
-        public void DeleteGlossary(string glossaryId)
+        public void DeleteGlossary(int glossaryId)
         {
             var glossaryDeleteCondition = $"ID = {glossaryId}";
+            var deleteGlossary = _sqlBuilder
+                .Table(Tables.GlossaryMetadata)
+                .Delete()
+                .Where(glossaryDeleteCondition)
+                .Build();
+            _connection.ExecuteNonSelectCommand(deleteGlossary);
 
             var tagsStatement = _sqlBuilder
                 .Table(Tables.GlossaryMetadata)
-                .Columns(new() { "Tag1", "Tag2" })
+                .Columns(["Tag1", "Tag2"])
                 .Where(glossaryDeleteCondition)
                 .Build();
 
-            var tags = _connection.ExecuteCommand(tagsStatement);
+            var glossaryNameTags = _connection.ExecuteSelectCommand(tagsStatement);
+            if (glossaryNameTags.Any())
+            {
+                var tag2Condition = !string.IsNullOrWhiteSpace(glossaryNameTags[0]["Tag2"])
+                    ? $" AND Tag2 = {glossaryNameTags[0]["Tag2"]}"
+                    : null;
+                var termsDeleteCondition = $"Tag1 = '{glossaryNameTags[0]["Tag1"]}{tag2Condition}'";
+                var deleteGlossaryTerms = _sqlBuilder
+                    .Table(Tables.GlossaryData)
+                    .Where(termsDeleteCondition)
+                    .Delete()
+                    .Build();
 
-            var deleteGlossaryStatement = _sqlBuilder
-                .Table(Tables.GlossaryMetadata)
+                _connection.ExecuteNonSelectCommand(deleteGlossaryTerms);
+            }
+
+            var tagLinkRemoveCondition = $"GlossaryID = {glossaryId}";
+            var removeTags = _sqlBuilder
+                .Table(Tables.TagLink)
+                .Where(tagLinkRemoveCondition)
                 .Delete()
-                .Where(glossaryDeleteCondition)
                 .Build();
-
-            var tag2Condition = !string.IsNullOrWhiteSpace(tags[0]["Tag2"]) ? $" AND Tag2 = {tags[0]["Tag2"]}" : null;
-
-            var termsDeleteCondition = $"Tag1 = {tags[0]["Tag1"]}{tag2Condition}";
-
-            var deleteGlossaryTerms = _sqlBuilder
-                .Table(Tables.GlossaryData)
-                .Where(termsDeleteCondition)
-                .Delete()
-                .Build();
-
-            _connection.ExecuteCommand(deleteGlossaryStatement);
-            _connection.ExecuteCommand(deleteGlossaryTerms);
+            _connection.ExecuteNonSelectCommand(removeTags);
         }
 
         public void DeleteTerm(string termId)
@@ -230,7 +239,7 @@ namespace InterpretBank.GlossaryService
                 .Delete()
                 .Build();
 
-            _connection.ExecuteCommand(deleteSqlStatement);
+            _connection.ExecuteSelectCommand(deleteSqlStatement);
         }
 
         public void Dispose() => _connection?.Dispose();
@@ -241,7 +250,7 @@ namespace InterpretBank.GlossaryService
                 .Table(Tables.GlossaryMetadata)
                 .Build();
 
-            var rows = _connection.ExecuteCommand(sqlStatement);
+            var rows = _connection.ExecuteSelectCommand(sqlStatement);
             var glossaries = ReadEntries<GlossaryMetadataEntry>(rows);
 
             return glossaries;
@@ -276,7 +285,7 @@ namespace InterpretBank.GlossaryService
                     .EndCondition()
                 .Build();
 
-            var rows = _connection.ExecuteCommand(sql);
+            var rows = _connection.ExecuteSelectCommand(sql);
             var termList = ReadEntries<TermEntry>(rows);
 
             return termList;
@@ -297,7 +306,7 @@ namespace InterpretBank.GlossaryService
                 .Where($@"Tag1 = ""{secondGlossary}""")
                 .Build();
 
-            _connection.ExecuteCommand(mergeStatement);
+            _connection.ExecuteSelectCommand(mergeStatement);
         }
 
         public void UpdateContent(IGlossaryEntry entry)
@@ -315,7 +324,7 @@ namespace InterpretBank.GlossaryService
                     .EndCondition()
                 .Build();
 
-            _connection.ExecuteCommand(sqlUpdateStatement);
+            _connection.ExecuteSelectCommand(sqlUpdateStatement);
         }
 
         private List<IGlossaryEntry> ReadEntries<T>(List<Dictionary<string, string>> rows)
@@ -345,7 +354,7 @@ namespace InterpretBank.GlossaryService
                 .Table(Tables.DatabaseInfo)
                 .Build();
 
-            var rows = _connection.ExecuteCommand(sql);
+            var rows = _connection.ExecuteSelectCommand(sql);
 
             if (rows is null || rows.Count == 0) return;
 

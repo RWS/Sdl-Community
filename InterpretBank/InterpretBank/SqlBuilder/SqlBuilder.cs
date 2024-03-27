@@ -45,10 +45,10 @@ namespace InterpretBank.SqlBuilder
 			{
 				case StatementType.Insert:
 					{
-						var insertValuesString = $@"""{InsertValues[0]}""";
+						var insertValuesString = $@"{InsertValues[0]}";
 						foreach (var value in InsertValues.Skip(1))
 						{
-							insertValuesString += $@", ""{value}""";
+							insertValuesString += $@", {value}";
 						}
 
 						var insert = $"INSERT INTO {TableName} ({columnNamesString})";

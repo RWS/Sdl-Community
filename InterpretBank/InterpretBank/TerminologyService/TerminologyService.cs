@@ -52,7 +52,7 @@ public class TerminologyService : ITerminologyService
     public ObservableCollection<EntryModel> GetEntriesFromDb(List<string> glossaries)
     {
         using var glossaryService = GetGlossaryService();
-        var terms = glossaryService.GetTerms(null, null, glossaries, null).Cast<TermEntry>();
+        var terms = glossaryService.GetTerms(null, null, glossaries, null)?.Cast<TermEntry>();
 
         var entryModels = new ObservableCollection<EntryModel>();
 
@@ -147,6 +147,7 @@ public class TerminologyService : ITerminologyService
 
     public void Setup(string settingsDatabaseFilepath)
     {
+        _languages = null;
         InterpretBankDataContext.Setup(settingsDatabaseFilepath);
     }
 

@@ -160,4 +160,52 @@
   <data name="RemoveClick" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\RemoveClick.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ToolTip_LocateInterpretBankDatabase" xml:space="preserve">
+    <value>Locate your private Interpret Bank database</value>
+  </data>
+  <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellmeDocumentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellmeDocumentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Message_PleaseCreateTags" xml:space="preserve">
+    <value>There are no tags on this db. To be able to use tags, please go to the database configurator and create some.</value>
+  </data>
+  <data name="Browse" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Browse.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ImportEntriesIntoSelectedGlossary" xml:space="preserve">
+    <value>Import entries into selected glossary</value>
+  </data>
+  <data name="ImportEntries" xml:space="preserve">
+    <value>Import entries</value>
+  </data>
+  <data name="Add" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Tooltip_AddNewGlossary" xml:space="preserve">
+    <value>Add new glossary</value>
+  </data>
+  <data name="Tooltip_AddNewTag" xml:space="preserve">
+    <value>Add new tag</value>
+  </data>
+  <data name="Message_TypeNameOfNewGlossary" xml:space="preserve">
+    <value>Type the name of the new glossary</value>
+  </data>
+  <data name="Message_TypeNameOfNewTag" xml:space="preserve">
+    <value>Type the name of the new tag</value>
+  </data>
+  <data name="Message_GlossaryAlreadyExists" xml:space="preserve">
+    <value>This glossary already exists</value>
+  </data>
+  <data name="Message_TagAlreadyExists" xml:space="preserve">
+    <value>This tag already exists</value>
+  </data>
 </root>

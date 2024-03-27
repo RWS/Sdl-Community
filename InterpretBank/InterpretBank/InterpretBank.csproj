@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio17</TradosFolder>
+		<TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio18beta</TradosFolder>
 		<TargetFramework>net48</TargetFramework>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18beta\Plugins</PluginDeploymentPath>
 		<CreatePluginPackage>true</CreatePluginPackage>
 		<UseWPF>true</UseWPF>
 		<LangVersion>latest</LangVersion>
@@ -24,10 +24,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Resources\299033_microphone_icon.png" />
+    <None Remove="Resources\Add.png" />
     <None Remove="Resources\AddTerm.ico" />
     <None Remove="Resources\AddTerm2.ico" />
     <None Remove="Resources\Booth.ico" />
     <None Remove="Resources\Booth.png" />
+    <None Remove="Resources\Browse.png" />
+    <None Remove="Resources\Browse2.png" />
     <None Remove="Resources\ConfirmEdit.png" />
     <None Remove="Resources\Edit.png" />
     <None Remove="Resources\EditIcon.ico" />
@@ -90,6 +93,9 @@
     <Reference Include="Sdl.ProjectAutomation.Settings">
       <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.TellMe.ProviderApi">
+      <HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Terminology.TerminologyProvider.Core">
       <HintPath>$(TradosFolder)\Sdl.Terminology.TerminologyProvider.Core.dll</HintPath>
     </Reference>
@@ -130,7 +136,7 @@
     <PackageReference Include="Sdl.Core.PluginFramework.Build">
       <Version>17.0.0</Version>
     </PackageReference>
-    <PackageReference Include="Sdl.MultiSelectComboBox" Version="1.0.61" />
+    <PackageReference Include="Sdl.MultiSelectComboBox" Version="1.0.77" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.115" />
   </ItemGroup>
   <ItemGroup>
@@ -150,8 +156,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Add.png" />
     <Resource Include="Resources\AddTerm.ico" />
     <Resource Include="Resources\Booth.ico" />
+    <Resource Include="Resources\Browse.png" />
+    <Resource Include="Resources\Browse2.png" />
     <Resource Include="Resources\ConfirmEdit.png" />
     <Resource Include="Resources\Edit.png" />
     <Resource Include="Resources\Flag.png" />

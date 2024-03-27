@@ -19,7 +19,8 @@ namespace InterpretBank.Studio.Actions
         private void ShowGlossarySetupDialog()
         {
             var glossarySetup = ApplicationInitializer.ApplicationLifetimeScope.Resolve<GlossarySetup>();
-            if (glossarySetup.ShowDialog() ?? false) RaiseDbChanged(glossarySetup.ChooseFilepathControl.Filepath);
+            glossarySetup.ShowDialog();
+            RaiseDbChanged(glossarySetup.ChooseFilepathControl.Filepath);
         }
     }
 }
