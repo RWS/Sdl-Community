@@ -32,27 +32,35 @@
         <DockPanel LastChildFill="False"
                    HorizontalAlignment="Stretch">
 
-            <StackPanel>
-                <RadioButton Content="Use glossaries"
+            <StackPanel KeyboardNavigation.DirectionalNavigation="Cycle"
+                        KeyboardNavigation.TabNavigation="Once">
+                <RadioButton Content="By glossary names"
                              x:Name="UseGlossariesButton"
-                             GroupName="Use glossaries or tags" >
+                             AutomationProperties.PositionInSet="1"
+                             AutomationProperties.SizeOfSet="2"
+                             GroupName="Use glossaries or tags">
                     <RadioButton.Style>
                         <Style TargetType="RadioButton">
-                            <Setter Property="IsChecked" Value="True"/>
+                            <Setter Property="IsChecked"
+                                    Value="True" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ElementName=UseTagsButton, Path=IsChecked}" Value="True">
-                                    <Setter Property="IsChecked" Value="False"/>
+                                <DataTrigger Binding="{Binding ElementName=UseTagsButton, Path=IsChecked}"
+                                             Value="True">
+                                    <Setter Property="IsChecked"
+                                            Value="False" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </RadioButton.Style>
                 </RadioButton>
-                <RadioButton Content="Use tags"
+                <RadioButton Content="By tags"
                              x:Name="UseTagsButton"
+                             AutomationProperties.PositionInSet="2"
+                             AutomationProperties.SizeOfSet="2"
                              IsChecked="{Binding UseTags}"
                              GroupName="Use glossaries or tags" />
             </StackPanel>
-           
+
         </DockPanel>
 
         <TextBlock Foreground="Red"

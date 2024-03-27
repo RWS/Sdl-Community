@@ -12,7 +12,7 @@
         xmlns:converters="clr-namespace:InterpretBank.SettingsService.Converters"
         xmlns:model="clr-namespace:InterpretBank.SettingsService.Model"
         xmlns:converters1="clr-namespace:InterpretBank.Converters"
-        xmlns:controls1="clr-namespace:InterpretBank.Controls"
+        xmlns:controls="clr-namespace:InterpretBank.Controls"
         d:DataContext="{d:DesignInstance viewModel:GlossarySetupViewModel}"
         SizeToContent="Height"
         mc:Ignorable="d"
@@ -55,9 +55,9 @@
                        x:Name="FilepathLabel"
                        DockPanel.Dock="Top" />
 
-            <controls1:ChooseFilepathControl x:Name="ChooseFilepathControl"
-                                             AutomationProperties.LabeledBy="{Binding ElementName=FilepathLabel}"
-                                             Filepath="{Binding Filepath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            <controls:ChooseFilepathControl x:Name="ChooseFilepathControl"
+                                            AutomationProperties.LabeledBy="{Binding ElementName=FilepathLabel}"
+                                            Filepath="{Binding Filepath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
         </DockPanel>
         <TabControl Margin="10"
@@ -136,7 +136,7 @@
                                             FontSize="8"
                                             AutomationProperties.Name="DeleteGlossary"
                                             Style="{StaticResource Sdl.Button.EmbeddedStyle}"
-                                            Content="✖"/>
+                                            Content="✖" />
                                     <Image Source="../../Resources/Glossary.png"
                                            DockPanel.Dock="Left"
                                            Height="17" />
@@ -247,7 +247,7 @@
                                             DockPanel.Dock="Left"
                                             FontSize="8"
                                             Style="{StaticResource Sdl.Button.EmbeddedStyle}"
-                                            Content="✖"/>
+                                            Content="✖" />
                                     <Image Source="../../Resources/Tag.png"
                                            DockPanel.Dock="Left"
                                            Height="17" />

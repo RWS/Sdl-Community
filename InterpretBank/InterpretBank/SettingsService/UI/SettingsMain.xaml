@@ -7,6 +7,7 @@
         xmlns:styles="clr-namespace:InterpretBank.Styles"
         xmlns:interpretBank="clr-namespace:InterpretBank"
         xmlns:converters="clr-namespace:InterpretBank.SettingsService.Converters"
+        WindowStyle="None"
         xmlns:controls="clr-namespace:InterpretBank.Controls"
         xmlns:converters1="clr-namespace:InterpretBank.Converters"
         MouseDown="Window_MouseDown"
@@ -18,7 +19,7 @@
         WindowStartupLocation="CenterScreen"
         Height="Auto"
         MinWidth="300"
-        MinHeight="490"
+        MinHeight="450"
         Width="600">
     <Window.Resources>
         <ResourceDictionary>
@@ -29,6 +30,13 @@
                 <ResourceDictionary Source="/InterpretBank;component/SettingsService/Styles/SettingsMainResources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Controls;component/Controls/WatermarkTextBox/WatermarkTextBoxResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="GroupBox"
+                   BasedOn="{StaticResource {x:Type GroupBox}}">
+                <Setter Property="Margin"
+                        Value="10" />
+                <Setter Property="Padding"
+                        Value="10" />
+            </Style>
 
             <converters:NullStringToVisibilityConverter x:Key="NullToVisibilityConverter" />
             <converters1:RatioConverter x:Key="RatioConverter" />
@@ -46,33 +54,35 @@
 
         <Image Grid.Row="0"
                Height="50"
+               Margin="0 25 0 20"
                Source="../../Resources/logo.png" />
 
         <!--Filepath field-->
-        <DockPanel Grid.Row="1"
-                   HorizontalAlignment="Stretch"
-                   Margin="10 10 10 5"
-                   VerticalAlignment="Top">
+        <GroupBox Grid.Row="1"
+                  Padding="0"
+                  HorizontalAlignment="Left"
+                  Header="Locate database">
+            <DockPanel HorizontalAlignment="Stretch"
+                       VerticalAlignment="Top">
 
-            <TextBlock Text="{x:Static interpretBank:PluginResources.SettingsWindow_TextBlock_DBFilepath}"
-                       DockPanel.Dock="Top" />
+                <controls:ChooseFilepathControl AutomationProperties.Name="Recently used"
+                                                Filepath="{Binding Filepath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
+            </DockPanel>
+        </GroupBox>
 
-
-            <controls:ChooseFilepathControl Filepath="{Binding Filepath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-
-        </DockPanel>
-
-        <controls:GlossariesOrTagsControl Grid.Row="2"
-                                          Height="Auto"
-                                          x:Name="SettingsUi"
-                                          Margin="10 10 10 5"
-                                          DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}"
-                                          Visibility="{Binding Filepath, Converter={StaticResource NullToVisibilityConverter}}" />
+        <GroupBox Grid.Row="2"
+                  Header="Select glossaries">
+            <controls:GlossariesOrTagsControl Grid.Row="2"
+                                              BorderThickness="0"
+                                              Height="Auto"
+                                              x:Name="SettingsUi"
+                                              DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}"
+                                              Visibility="{Binding Filepath, Converter={StaticResource NullToVisibilityConverter}}" />
+        </GroupBox>
 
         <StackPanel Grid.Row="3"
                     Orientation="Horizontal"
-                    Margin="0 50 0 0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom">
             <Button Content="Cancel"
