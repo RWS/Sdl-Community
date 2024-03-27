@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MicrosoftTranslatorProvider.Interface
+﻿namespace MicrosoftTranslatorProvider.Interface
 {
-    public interface IAuthenticationView
-    {
-    }
+	public interface IAuthenticationView { }
 }

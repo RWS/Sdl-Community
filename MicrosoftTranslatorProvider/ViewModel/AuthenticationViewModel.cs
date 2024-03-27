@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Input;
-using LanguageMappingProvider.Model;
 using MicrosoftTranslatorProvider.Commands;
 using MicrosoftTranslatorProvider.Interface;
 using MicrosoftTranslatorProvider.Interfaces;
 
 namespace MicrosoftTranslatorProvider.ViewModel
 {
-	public class AuthenticationViewModel : BaseModel
+	public class AuthenticationViewModel : BaseViewModel
 	{
 		ITranslationOptions _translationOptions;
 		
@@ -60,11 +59,14 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			var microsoftAuthenticationViewModel = new MicrosoftAuthenticationViewModel(_translationOptions);
 			microsoftAuthenticationViewModel.CloseRequested += CloseCredentialsViewRequest;
 
+			var privateEndpointAuthenticationViewModel = new PrivateEndpointAuthenticationViewModel(_translationOptions);
+			privateEndpointAuthenticationViewModel.CloseRequested += CloseCredentialsViewRequest;
+
 			_authenticationViews = new()
 			{
 				{ AuthenticationType.None, null },
 				{ AuthenticationType.Microsoft, microsoftAuthenticationViewModel },
-				{ AuthenticationType.PrivateEndpoint, null }
+				{ AuthenticationType.PrivateEndpoint, privateEndpointAuthenticationViewModel }
 			};
 		}
 
@@ -87,6 +89,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		private void CloseCredentialsViewRequest(object sender, EventArgs e)
 		{
 			SaveChanges = true;
+			_translationOptions.AuthenticationType = AuthenticationType;
 			CloseEventRaised?.Invoke();
 		}
 	}

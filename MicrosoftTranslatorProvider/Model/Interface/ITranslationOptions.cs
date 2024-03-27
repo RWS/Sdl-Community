@@ -6,44 +6,24 @@ namespace MicrosoftTranslatorProvider.Interfaces
 {
 	public interface ITranslationOptions
 	{
-		bool PersistMicrosoftCredentials { get; set; }
+		string Id { get; set; }
 
-		bool SendPlainTextOnly { get; set; }
+        string ProviderName { get; }
 
-		bool ResendDrafts { get; set; }
-
-		bool UsePreEdit { get; set; }
-
-		bool UsePostEdit { get; set; }
-
-		string CategoryID { get; set; }
-
-		string PreLookupFilename { get; set; }
-
-		string PostLookupFilename { get; set; }
-
-		string ProjectName { get; set; }
-
-		string ApiKey { get; set; }
-
-		string Region { get; set; }
-
-		string CustomProviderName { get; set; }
-
-		bool UseCustomProviderName { get; set; }
-
-		bool UsePrivateEndpoint { get; set; }
-
-		string PrivateEndpoint { get; set; }
-
-		List<UrlMetadata> Parameters { get; set; }
+        List<UrlMetadata> Parameters { get; set; }
 
 		Uri Uri { get; }
 
-		List<string> LanguagesSupported { get; set; }
+		List<PairModel> PairModels { get; set; }
 
-		List<PairMapping> LanguageMappings { get; set; }
+		List<PairMapping> PairMappings { get; set; }
 
 		MicrosoftCredentials MicrosoftCredentials { get; set; }
+
+		AuthenticationType AuthenticationType { get; set; }
+
+		ProviderSettings ProviderSettings { get; set; }
+
+		PrivateEndpoint PrivateEndpoint { get; set; }
 	}
 }

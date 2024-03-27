@@ -5,7 +5,7 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:converters="clr-namespace:MicrosoftTranslatorProvider.Converters"
 			 xmlns:behaviours="clr-namespace:MicrosoftTranslatorProvider.Behaviours"
-			 xmlns:uiHelpers="clr-namespace:MicrosoftTranslatorProvider.UiHelpers"
+			 xmlns:Controls="clr-namespace:MicrosoftTranslatorProvider.Controls"
 			 xmlns:viewModels="clr-namespace:MicrosoftTranslatorProvider.ViewModel"
 			 d:DataContext="{d:DesignInstance viewModels:PrivateEndpointViewModel}"
 			 mc:Ignorable="d">
@@ -15,7 +15,7 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../Styles/Buttons.xaml" />
 				<ResourceDictionary Source="../Styles/GroupBox.xaml" />
-				<ResourceDictionary Source="../UiHelpers/WatermarkTextBoxResources.xaml" />
+				<ResourceDictionary Source="../Controls/WatermarkTextBox.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
@@ -46,9 +46,9 @@
 					   Margin="0" />
 			<TextBox Text="{Binding Endpoint, UpdateSourceTrigger=PropertyChanged}"
 					 Style="{StaticResource WatermarkTextBox}"
-					 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-					 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="url"
-					 uiHelpers:TextBoxWatermarkHelper.WatermarkText="Private endpoint"
+					 Controls:WatermarkTextBox.ButtonCommand="{Binding ClearCommand}"
+					 Controls:WatermarkTextBox.ButtonCommandParameter="url"
+					 Controls:WatermarkTextBox.WatermarkText="Private endpoint"
 					 HorizontalAlignment="Stretch" />
 		</StackPanel>
 
@@ -66,23 +66,23 @@
 									 Style="{StaticResource WatermarkTextBox}"
 									 behaviours:TextBoxCommandBehavior.Command="{Binding DataContext.SelectedItemChangedCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
 									 behaviours:TextBoxCommandBehavior.CommandParameter="{Binding}"
-									 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-									 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="key"
-									 uiHelpers:TextBoxWatermarkHelper.WatermarkText="Header key"
+									 Controls:WatermarkTextBox.ButtonCommand="{Binding ClearCommand}"
+									 Controls:WatermarkTextBox.ButtonCommandParameter="key"
+									 Controls:WatermarkTextBox.WatermarkText="Header key"
 									 Width="350"
 									 Margin="0 0 5 0" />
 
-								<TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-										 Style="{StaticResource WatermarkTextBox}"
-										 behaviours:TextBoxCommandBehavior.Command="{Binding DataContext.SelectedItemChangedCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-										 behaviours:TextBoxCommandBehavior.CommandParameter="{Binding}"
-										 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-										 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="value"
-										 uiHelpers:TextBoxWatermarkHelper.WatermarkText="Header value"
-										 Width="350"
-										 Margin="0 0 5 0" />
+							<TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
+									 Style="{StaticResource WatermarkTextBox}"
+									 behaviours:TextBoxCommandBehavior.Command="{Binding DataContext.SelectedItemChangedCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+									 behaviours:TextBoxCommandBehavior.CommandParameter="{Binding}"
+									 Controls:WatermarkTextBox.ButtonCommand="{Binding ClearCommand}"
+									 Controls:WatermarkTextBox.ButtonCommandParameter="value"
+									 Controls:WatermarkTextBox.WatermarkText="Header value"
+									 Width="350"
+									 Margin="0 0 5 0" />
 
-								<Button Content="Delete"
+							<Button Content="Delete"
 									Style="{StaticResource Sdl.Button.DialogStyle}"
 									Command="{Binding DataContext.DeletePairCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
 									CommandParameter="{Binding}"
@@ -114,25 +114,25 @@
 						<StackPanel Orientation="Horizontal"
 									Margin="0 4">
 							<TextBox Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}"
-										 Style="{StaticResource WatermarkTextBox}"
-										 behaviours:TextBoxCommandBehavior.Command="{Binding DataContext.SelectedItemChangedCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-										 behaviours:TextBoxCommandBehavior.CommandParameter="{Binding}"
-										 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-										 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="key"
-										 uiHelpers:TextBoxWatermarkHelper.WatermarkText="Parameter key"
-										 IsReadOnly="{Binding IsReadOnly}"
-										 Width="350"
-										 Margin="0 0 5 0" />
-								<TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-										 Style="{StaticResource WatermarkTextBox}"
-										 behaviours:TextBoxCommandBehavior.Command="{Binding DataContext.SelectedItemChangedCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-										 behaviours:TextBoxCommandBehavior.CommandParameter="{Binding}"
-										 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-										 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="value"
-										 uiHelpers:TextBoxWatermarkHelper.WatermarkText="Parameter value"
-										 IsReadOnly="{Binding IsReadOnly}"
-										 Width="350"
-										 Margin="0 0 5 0" />
+									 Style="{StaticResource WatermarkTextBox}"
+									 behaviours:TextBoxCommandBehavior.Command="{Binding DataContext.SelectedItemChangedCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+									 behaviours:TextBoxCommandBehavior.CommandParameter="{Binding}"
+									 Controls:WatermarkTextBox.ButtonCommand="{Binding ClearCommand}"
+									 Controls:WatermarkTextBox.ButtonCommandParameter="key"
+									 Controls:WatermarkTextBox.WatermarkText="Parameter key"
+									 IsReadOnly="{Binding IsReadOnly}"
+									 Width="350"
+									 Margin="0 0 5 0" />
+							<TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
+									 Style="{StaticResource WatermarkTextBox}"
+									 behaviours:TextBoxCommandBehavior.Command="{Binding DataContext.SelectedItemChangedCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+									 behaviours:TextBoxCommandBehavior.CommandParameter="{Binding}"
+									 Controls:WatermarkTextBox.ButtonCommand="{Binding ClearCommand}"
+									 Controls:WatermarkTextBox.ButtonCommandParameter="value"
+									 Controls:WatermarkTextBox.WatermarkText="Parameter value"
+									 IsReadOnly="{Binding IsReadOnly}"
+									 Width="350"
+									 Margin="0 0 5 0" />
 
 							<Button Content="Delete"
 									Style="{StaticResource Sdl.Button.DialogStyle}"

@@ -7,10 +7,11 @@ namespace MicrosoftTranslatorProvider
 	{
 		public const string MicrosoftProviderUriBase = "api.cognitive.microsofttranslator.com";
 		public const string MicrosoftProviderServiceUriBase = "api.cognitive.microsoft.com";
+
 		public const string MicrosoftProviderScheme = "microsofttranslatorprovider";
 		public const string MicrosoftProviderFullScheme = "microsofttranslatorprovider:///";
-
-		public const string MicrosoftProviderPrivateEndpointScheme = "microsofttranslatorproviderprivateendpoint:///";
+		public const string MicrosoftProviderPrivateEndpointScheme = "microsofttranslatorproviderprivateendpoint";
+		public const string MicrosoftProviderPrivateEndpointFullScheme = "microsofttranslatorproviderprivateendpoint:///";
 
 		public const string MicrosoftNaming_FullName = "Microsoft Translator Provider";
 		public const string MicrosoftTranslatorString = "Microsoft Translator";

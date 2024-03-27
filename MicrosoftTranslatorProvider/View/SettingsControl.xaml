@@ -6,7 +6,7 @@
 			 xmlns:root="clr-namespace:MicrosoftTranslatorProvider"
 			 xmlns:viewModels="clr-namespace:MicrosoftTranslatorProvider.ViewModel"
 			 xmlns:converters="clr-namespace:MicrosoftTranslatorProvider.Converters"
-			 xmlns:uiHelpers="clr-namespace:MicrosoftTranslatorProvider.UiHelpers"
+			 xmlns:Controls="clr-namespace:MicrosoftTranslatorProvider.Controls"
 			 d:DataContext="{d:DesignInstance viewModels:SettingsViewModel}"
 			 mc:Ignorable="d">
 	
@@ -14,7 +14,7 @@
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../Styles/Buttons.xaml" />
-				<ResourceDictionary Source="../UiHelpers/WatermarkTextBoxResources.xaml" />
+				<ResourceDictionary Source="../Controls/WatermarkTextBox.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Checkboxresources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
@@ -38,9 +38,9 @@
 			<TextBox Text="{Binding CustomProviderName, UpdateSourceTrigger=PropertyChanged}"
 					 Style="{StaticResource WatermarkTextBox}"
 					 Visibility="{Binding UseCustomProviderName, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-					 uiHelpers:TextBoxWatermarkHelper.WatermarkText="Type your custom name clear"
-					 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-					 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="CustomProviderName"
+					 Controls:WatermarkTextBox.WatermarkText="Type your custom name clear"
+					 Controls:WatermarkTextBox.ButtonCommand="{Binding ClearCommand}"
+					 Controls:WatermarkTextBox.ButtonCommandParameter="CustomProviderName"
 					 IsEnabled="{Binding UseCustomProviderName,Converter={StaticResource InvertableBoolEnabledConverter}}"
 					 HorizontalAlignment="Stretch"
 					 Margin="0 2 0 0" />
@@ -61,9 +61,9 @@
 					  Margin="0 12 0 0" />
 			<TextBox Style="{StaticResource WatermarkTextBox}"
 					 Visibility="{Binding DoPreLookup,Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-					 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.PreLookupWaterMark}"
-					 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="PreLookupFileName"
-					 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+					 Controls:WatermarkTextBox.WatermarkText="{x:Static root:PluginResources.PreLookupWaterMark}"
+					 Controls:WatermarkTextBox.ButtonCommandParameter="PreLookupFileName"
+					 Controls:WatermarkTextBox.ButtonCommand="{Binding ClearCommand}"
 					 HorizontalAlignment="Stretch"
 					 Text="{Binding PreLookupFileName}"
 					 VerticalContentAlignment="Center" />
@@ -83,9 +83,9 @@
 					  Margin="0 12 0 0" />
 			<TextBox Style="{StaticResource WatermarkTextBox}"
 					 Visibility="{Binding DoPostLookup,Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
-					 uiHelpers:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.PostLookupWaterMark}"
-					 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="PostLookupFileName"
-					 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
+					 Controls:WatermarkTextBox.WatermarkText="{x:Static root:PluginResources.PostLookupWaterMark}"
+					 Controls:WatermarkTextBox.ButtonCommandParameter="PostLookupFileName"
+					 Controls:WatermarkTextBox.ButtonCommand="{Binding ClearCommand}"
 					 Text="{Binding PostLookupFileName}"
 					 HorizontalAlignment="Stretch"
 					 VerticalContentAlignment="Center" />

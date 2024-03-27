@@ -4,7 +4,7 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:root="clr-namespace:MicrosoftTranslatorProvider"
-			 xmlns:uiHelpers="clr-namespace:MicrosoftTranslatorProvider.UiHelpers"
+			 xmlns:Controls="clr-namespace:MicrosoftTranslatorProvider.Controls"
 			 xmlns:viewModels="clr-namespace:MicrosoftTranslatorProvider.ViewModel"
 			 xmlns:converters="clr-namespace:MicrosoftTranslatorProvider.Converters"
 			 xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
@@ -17,7 +17,7 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../Styles/Buttons.xaml" />
 				<ResourceDictionary Source="../Styles/GroupBox.xaml" />
-				<ResourceDictionary Source="../UiHelpers/WatermarkTextBoxResources.xaml" />
+				<ResourceDictionary Source="../Controls/WatermarkTextBox.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
@@ -133,9 +133,9 @@
 							<DataTemplate>
 								<TextBox Text="{Binding CategoryID, UpdateSourceTrigger=PropertyChanged}"
 										 Style="{StaticResource BorderlessWatermarkTextBox}"
-										 uiHelpers:TextBoxWatermarkHelper.WatermarkText="E.g.: f7a8b963-2c4e-47d1-9b22-68e2fd15ae4e-CAT"
-										 uiHelpers:TextBoxWatermarkHelper.ButtonCommand="{Binding ClearCommand}"
-										 uiHelpers:TextBoxWatermarkHelper.ButtonCommandParameter="{Binding}"
+										 Controls:WatermarkTextBox.WatermarkText="E.g.: f7a8b963-2c4e-47d1-9b22-68e2fd15ae4e-CAT"
+										 Controls:WatermarkTextBox.ButtonCommand="{Binding ClearCommand}"
+										 Controls:WatermarkTextBox.ButtonCommandParameter="{Binding}"
 										 VerticalContentAlignment="Center" />
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>

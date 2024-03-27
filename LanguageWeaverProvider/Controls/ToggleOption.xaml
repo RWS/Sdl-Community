@@ -285,7 +285,8 @@
 										<Binding Path="IsChecked"
 												 ElementName="ToggleCheckBox" />
 										<Binding Path="ButtonContent"
-												 RelativeSource="{RelativeSource TemplatedParent}">
+												 RelativeSource="{RelativeSource TemplatedParent}"
+												 ConverterParameter="Inverted">
 											<Binding.Converter>
 												<converters:EmptyStringToBooleanConverter />
 											</Binding.Converter>

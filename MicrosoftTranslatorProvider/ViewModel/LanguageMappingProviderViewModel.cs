@@ -1,71 +1,56 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using LanguageMappingProvider.Database;
 using LanguageMappingProvider.Database.Interface;
 using LanguageMappingProvider.Model;
 using MicrosoftTranslatorProvider.Commands;
-using MicrosoftTranslatorProvider.Extensions;
-using MicrosoftTranslatorProvider.Interfaces;
-using static MicrosoftTranslatorProvider.ViewModel.MainWindowViewModel;
+using static MicrosoftTranslatorProvider.ViewModel.ProviderConfigurationViewModel;
 using MessageBox = System.Windows.MessageBox;
 
 namespace MicrosoftTranslatorProvider.ViewModel
 {
-	public class LanguageMappingProviderViewModel : Model.BaseModel
-    {
-		private readonly ILanguageMappingDatabase _database;
-		private readonly ITranslationOptions _translationOptions;
+	public class LanguageMappingProviderViewModel : BaseViewModel
+	{
+		readonly ILanguageMappingDatabase _languageMappingDatabase;
 
-		private ObservableCollection<LanguageMapping> _filteredMappedLanguages;
-		private ObservableCollection<LanguageMapping> _mappedLanguages;
-		private LanguageMapping _selectedMappedLanguage;
+		IList<LanguageMapping> _filteredMappedLanguages;
+		IList<LanguageMapping> _mappedLanguages;
+		LanguageMapping _selectedMappedLanguage;
 
-		private bool _dialogResult;
-		private bool _canResetToDefaults;
+		string _loadingAction;
+		string _filter;
 
-		private string _filter;
-		private string _languagesCountMessage;
-
-		private ICommand _applyChangesCommand;
-		private ICommand _cancelChangesCommand;
-		private ICommand _resetToDefaultCommand;
-		private ICommand _clearCommand;
-
-		public LanguageMappingProviderViewModel(ITranslationOptions translationOptions, bool editProvider)
+		public LanguageMappingProviderViewModel(ILanguageMappingDatabase languageMappingDatabase)
 		{
-			_translationOptions = translationOptions;
-			CanResetToDefaults = editProvider;
-			var defaultMapping = CanResetToDefaults ? DatabaseExtensions.GetDefaultMapping(_translationOptions) : null;
-			_database = new LanguageMappingDatabase(Constants.DatabaseName, defaultMapping);
+			_languageMappingDatabase = languageMappingDatabase;
 			RetrieveMappedLanguagesFromDatabase();
 			FilteredMappedLanguages = MappedLanguages;
 			PropertyChanged += FilterPropertyChangedHandler;
+			InitializeCommands();
 		}
 
-		public ObservableCollection<LanguageMapping> MappedLanguages
+		public IList<LanguageMapping> MappedLanguages
 		{
 			get => _mappedLanguages;
 			set
 			{
-				if (_mappedLanguages == value) return;
 				_mappedLanguages = value;
 				OnPropertyChanged();
 			}
 		}
 
-		public ObservableCollection<LanguageMapping> FilteredMappedLanguages
+		public IList<LanguageMapping> FilteredMappedLanguages
 		{
 			get => _filteredMappedLanguages;
 			set
 			{
-				if (_filteredMappedLanguages == value) return;
 				_filteredMappedLanguages = value;
 				OnPropertyChanged();
-				RefreshLanguagesCountMessage();
 			}
 		}
 
@@ -74,7 +59,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			get => _selectedMappedLanguage;
 			set
 			{
-				if (_selectedMappedLanguage == value) return;
 				_selectedMappedLanguage = value;
 				OnPropertyChanged();
 			}
@@ -82,60 +66,67 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 		public string Filter
 		{
-			get => _filter;
+			get => _filter ??= string.Empty;
 			set
 			{
-				if (_filter == value) return;
 				_filter = value?.ToLower();
 				OnPropertyChanged();
 				ApplyFilter();
-				RefreshLanguagesCountMessage();
 			}
 		}
 
-		public string LanguagesCountMessage
+		public string LoadingAction
 		{
-			get => _languagesCountMessage;
+			get => _loadingAction;
 			set
 			{
-				if (_languagesCountMessage == value) return;
-				_languagesCountMessage = value;
+				_loadingAction = value;
 				OnPropertyChanged();
 			}
 		}
 
-		public bool DialogResult
-		{
-			get => _dialogResult;
-			set
-			{
-				if (_dialogResult == value) return;
-				_dialogResult = value;
-				OnPropertyChanged(nameof(DialogResult));
-			}
-		}
+		public ICommand ClearCommand { get; private set; }
+		public ICommand ApplyChangesCommand { get; private set; }
+		public ICommand ResetToDefaultCommand { get; private set; }
+		public ICommand OpenExternalLinkCommand { get; private set; }
+		public ICommand CloseLanguageMappingProviderCommand { get; private set; }
 
-		public bool CanResetToDefaults
-		{
-			get => _canResetToDefaults;
-			set
-			{
-				if (_canResetToDefaults == value) return;
-				_canResetToDefaults = value;
-				OnPropertyChanged();
-			}
-		}
+		public event EventHandler LanguageMappingUpdated;
 
 		public event CloseWindowEventRaiser CloseEventRaised;
 
-		public ICommand ApplyChangesCommand => _applyChangesCommand ??= new RelayCommand(ApplyChanges, CanApplyChanges);
-		public ICommand CancelChangesCommand => _cancelChangesCommand ??= new RelayCommand(CancelChanges);
-		public ICommand ResetToDefaultCommand => _resetToDefaultCommand ??= new RelayCommand(ResetToDefault);
-		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
+		private void InitializeCommands()
+		{
+			ClearCommand = new RelayCommand(Clear);
+			ResetToDefaultCommand = new AsyncRelayCommand(ResetToDefault);
+			ApplyChangesCommand = new RelayCommand(ApplyChanges, CanApplyChanges);
+			CloseLanguageMappingProviderCommand = new RelayCommand(CloseLanguageMappingProvider);
+			OpenExternalLinkCommand = new RelayCommand(OpenExternalLink);
+		}
+
+		private void ApplyFilter()
+		{
+			if (string.IsNullOrWhiteSpace(Filter))
+			{
+				FilteredMappedLanguages = new List<LanguageMapping>(MappedLanguages);
+				return;
+			}
+
+			var filterLower = Filter.ToLower();
+			var filterParts = filterLower.Split(' ').Where(x => !string.IsNullOrEmpty(x));
+
+			var filteredContent = MappedLanguages.Where(language =>
+				filterParts.All(filterPart => (!string.IsNullOrEmpty(language.Name) && language.Name.IndexOf(filterPart, StringComparison.OrdinalIgnoreCase) >= 0)
+										   || (!string.IsNullOrEmpty(language.Region) && language.Region.IndexOf(filterPart, StringComparison.OrdinalIgnoreCase) >= 0)
+										   || (!string.IsNullOrEmpty(language.TradosCode) && language.TradosCode.IndexOf(filterPart, StringComparison.OrdinalIgnoreCase) >= 0)
+										   || (!string.IsNullOrEmpty(language.LanguageCode) && language.LanguageCode.IndexOf(filterPart, StringComparison.OrdinalIgnoreCase) >= 0)));
+
+			FilteredMappedLanguages = new List<LanguageMapping>(filteredContent);
+		}
 
 		private void RetrieveMappedLanguagesFromDatabase()
 		{
-			var mappedLanguages = _database.GetMappedLanguages();
+			var mappedLanguages = _languageMappingDatabase.GetMappedLanguages();
 			var newMappedLanguages = mappedLanguages.Select(pair => new LanguageMapping
 			{
 				Index = pair.Index,
@@ -145,44 +136,41 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				LanguageCode = pair.LanguageCode
 			});
 
-			MappedLanguages = new ObservableCollection<LanguageMapping>(newMappedLanguages);
-			FilteredMappedLanguages = MappedLanguages;
-			Filter = string.Empty;
+			MappedLanguages = new List<LanguageMapping>(newMappedLanguages);
+			ApplyFilter();
 		}
 
-		private void RefreshLanguagesCountMessage()
+		private void ApplyChanges(object parameter)
 		{
-			var totalLanguagesCount = MappedLanguages.Count;
-			var filteredLanguagesCount = FilteredMappedLanguages.Count;
-			LanguagesCountMessage = string.IsNullOrWhiteSpace(Filter)
-								  ? $"Total languages: {totalLanguagesCount}"
-								  : $"Total languages: {totalLanguagesCount}; Filtered: {filteredLanguagesCount}";
+			_languageMappingDatabase.UpdateAll(MappedLanguages);
+			RetrieveMappedLanguagesFromDatabase();
+			LanguageMappingUpdated?.Invoke(this, EventArgs.Empty);
 		}
 
-		private void ApplyFilter()
+		private bool CanApplyChanges(object parameter)
 		{
-			if (string.IsNullOrWhiteSpace(Filter))
+			return _languageMappingDatabase.HasMappedLanguagesChanged(MappedLanguages);
+		}
+
+		private async Task ResetToDefault()
+		{
+			try
 			{
-				FilteredMappedLanguages = new ObservableCollection<LanguageMapping>(MappedLanguages);
-				return;
-			}
+				if (!ExecuteAction("Reset", "Reset"))
+				{
+					return;
+				}
 
-			var filterLower = Filter.ToLower();
-			var filteredContent = MappedLanguages.Where(language =>
-				(!string.IsNullOrEmpty(language.Name) && language.Name.IndexOf(filterLower, StringComparison.OrdinalIgnoreCase) >= 0) ||
-				(!string.IsNullOrEmpty(language.Region) && language.Region.IndexOf(filterLower, StringComparison.OrdinalIgnoreCase) >= 0) ||
-				(!string.IsNullOrEmpty(language.TradosCode) && language.TradosCode.IndexOf(filterLower, StringComparison.OrdinalIgnoreCase) >= 0) ||
-				(!string.IsNullOrEmpty(language.LanguageCode) && language.LanguageCode.IndexOf(filterLower, StringComparison.OrdinalIgnoreCase) >= 0));
-
-			FilteredMappedLanguages = new ObservableCollection<LanguageMapping>(filteredContent);
-		}
-
-		private void ResetToDefault(object parameter)
-		{
-			if (ExecuteAction("Warning: Resetting to default values!\nAll changes will be lost and the database will be restored to its original state.\n\nThis action cannot be undone.", "Reset to default"))
-			{
-				_database.ResetToDefault();
+				LoadingAction = "Restoring database...";
+				await Task.Delay(1000);
+				_languageMappingDatabase.ResetToDefault();
 				RetrieveMappedLanguagesFromDatabase();
+				await Task.Delay(1000);
+				LanguageMappingUpdated?.Invoke(this, EventArgs.Empty);
+			}
+			finally
+			{
+				LoadingAction = null;
 			}
 		}
 
@@ -194,12 +182,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 		private void Clear(object parameter)
 		{
-			if (parameter is not string parameterString)
-			{
-				return;
-			}
-
-			switch (parameterString)
+			switch (parameter as string)
 			{
 				case nameof(Filter):
 					Filter = string.Empty;
@@ -210,28 +193,10 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			}
 		}
 
-		private void ApplyChanges(object parameter)
+		private void OpenExternalLink(object parameter)
 		{
-			var originalFilter = Filter;
-			_database.UpdateAll(MappedLanguages);
-			RetrieveMappedLanguagesFromDatabase();
-			Filter = originalFilter;
-		}
-
-		private bool CanApplyChanges(object parameter)
-		{
-			return _database.HasMappedLanguagesChanged(MappedLanguages);
-		}
-
-		private void CancelChanges(object parameter)
-		{
-			ShutDownApp();
-		}
-
-		private void ShutDownApp()
-		{
-			DialogResult = true;
-			CloseEventRaised?.Invoke();
+			var target = "https://learn.microsoft.com/en-us/azure/ai-services/translator/language-support";
+			Process.Start(target);
 		}
 
 		private void FilterPropertyChangedHandler(object sender, PropertyChangedEventArgs e)
@@ -240,6 +205,11 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			{
 				ApplyFilter();
 			}
+		}
+
+		private void CloseLanguageMappingProvider(object parameter)
+		{
+			CloseEventRaised.Invoke();
 		}
 	}
 }

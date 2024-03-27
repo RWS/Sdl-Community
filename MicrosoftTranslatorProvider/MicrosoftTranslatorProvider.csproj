@@ -22,8 +22,6 @@
 	  <None Remove="Styles\General.xaml" />
 	  <None Remove="Styles\WindowsBorder.xaml" />
 	  <None Remove="Styles\WindowsControl.xaml" />
-	  <None Remove="UiHelpers\WatermarkTextBoxResources.xaml" />
-	  <None Remove="View\MainWindow.xaml" />
 	  <None Remove="View\ProviderControl.xaml" />
 	  <None Remove="View\SettingsControl.xaml" />
 	</ItemGroup>
@@ -107,10 +105,11 @@
 		<Reference Include="WindowsBase" />
 	</ItemGroup>
 	<ItemGroup>
-		<None Include="Studio\TranslationProvider\ProviderWinFormsUI.cs" />
-		<None Include="Studio\TranslationProvider\ProviderLanguageDirection.cs" />
-		<None Include="Studio\TranslationProvider\Provider.cs" />
-		<None Include="Studio\TranslationProvider\ProviderFactory.cs" />
+		<None Include="..\.editorconfig" Link=".editorconfig" />
+		<None Include="Studio\TranslationProvider\TranslationProviderWinFormsUI.cs" />
+		<None Include="Studio\TranslationProvider\TranslationProviderLanguageDirection.cs" />
+		<None Include="Studio\TranslationProvider\TranslationProvider.cs" />
+		<None Include="Studio\TranslationProvider\TranslationProviderFactory.cs" />
 		<None Include="Properties\AssemblyInfo.cs" />
 		<None Include="Properties\PluginProperties.cs" />
 	</ItemGroup>

@@ -1,0 +1,276 @@
+﻿<UserControl x:Class="MicrosoftTranslatorProvider.View.MicrosoftConfigurationView"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:local="clr-namespace:MicrosoftTranslatorProvider.View"
+			 xmlns:models="clr-namespace:MicrosoftTranslatorProvider.Model"
+			 xmlns:controls="clr-namespace:MicrosoftTranslatorProvider.Controls"
+			 xmlns:converters="clr-namespace:MicrosoftTranslatorProvider.Converters"
+			 xmlns:viewModel="clr-namespace:MicrosoftTranslatorProvider.ViewModel"
+			 d:DataContext="{d:DesignInstance viewModel:MicrosoftConfigurationViewModel}"
+			 mc:Ignorable="d"
+			 d:DesignHeight="450"
+			 d:DesignWidth="800">
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBoxResources.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MicrosoftTranslatorProvider;component/Styles/Buttons.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MicrosoftTranslatorProvider;component/Controls/ProgressIndicator.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MicrosoftTranslatorProvider;component/Controls/WatermarkTextBox.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+
+			<converters:EvenIndexToBooleanConverter x:Key="EvenIndexToBooleanConverter" />
+            <converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter" />
+            <converters:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter" />
+            
+        </ResourceDictionary>
+	</UserControl.Resources>
+
+	<Grid>
+		<GroupBox Visibility="{Binding LoadingAction, Converter={StaticResource EmptyStringToVisibilityConverter}, ConverterParameter=Inverted}"
+				  BorderThickness="0"
+                  Margin="24">
+			<GroupBox.Header>
+				<TextBlock Text="Language Pair Table"
+						   Visibility="Collapsed" />
+			</GroupBox.Header>
+			<Border BorderBrush="#d4d4d4"
+					BorderThickness="0"
+					CornerRadius="0"
+					Padding="0">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+
+					<Border Grid.Row="0"
+							Margin="6 0 6 -2"
+							BorderBrush="#d4d4d4"
+                            BorderThickness="1">
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*" />
+								<ColumnDefinition Width="*" />
+							</Grid.ColumnDefinitions>
+
+							<CheckBox Content="Configure languages"
+                                      IsChecked="{Binding ConfigureLanguages}"
+									  HorizontalAlignment="Left"
+									  VerticalAlignment="Center" />
+
+							<StackPanel Grid.Column="1"
+										Orientation="Horizontal"
+                                        HorizontalAlignment="Right"
+                                        Margin="0 2">
+								<Button Content="Update"
+										Style="{StaticResource TransparentButtonStyle}"
+										Command="{Binding ResetAndIdentifyPairsCommand}"
+                                        IsEnabled="{Binding ConfigureLanguages}"
+                                        CommandParameter="Update"
+                                        Foreground="#FF008080"
+										FontWeight="DemiBold"
+										FontSize="12"
+										Cursor="Hand"
+										Margin="8 0" />
+
+								<TextBlock Text="|"
+										   Foreground="#E4D4D4"
+										   FontWeight="Light" />
+
+								<Button Content="Reset to default"
+										Style="{StaticResource TransparentButtonStyle}"
+										Command="{Binding ResetAndIdentifyPairsCommand}"
+                                        IsEnabled="{Binding ConfigureLanguages}"
+                                        CommandParameter="Reset to default"
+                                        Foreground="#FF008080"
+										FontWeight="DemiBold"
+										FontSize="12"
+										Cursor="Hand"
+										Margin="8 0" />
+							</StackPanel>
+						</Grid>
+					</Border>
+
+					<ItemsControl Grid.Row="2"
+								  ItemsSource="{Binding PairModels}"
+								  Background="#ffffff"
+								  AlternationCount="2"
+                                  IsEnabled="{Binding ConfigureLanguages}"
+                                  Focusable="False">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<GroupBox BorderThickness="0"
+										  Padding="0 0 0 -8">
+									<GroupBox.Header>
+										<TextBlock Visibility="Collapsed">
+											<Run Text="From" />
+											<Run Text="{Binding SourceLanguageName}" />
+											<Run Text="To" />
+											<Run Text="{Binding TargetLanguageName}" />
+											<Run Text="Configuration" />
+										</TextBlock>
+									</GroupBox.Header>
+
+									<Border x:Name="FooBar"
+											BorderBrush="#d4d4d4"
+											BorderThickness="1 1 1 1">
+										<Grid>
+											<Grid.RowDefinitions>
+												<RowDefinition Height="32" />
+												<RowDefinition Height="Auto" />
+											</Grid.RowDefinitions>
+
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="2*" />
+												<ColumnDefinition Width="72" />
+												<ColumnDefinition Width="72" />
+												<ColumnDefinition Width="1.5*" />
+											</Grid.ColumnDefinitions>
+
+											<Border Grid.Row="0"
+													Grid.Column="0"
+													BorderBrush="#d4d4d4"
+													BorderThickness="0 0 1 0">
+												<TextBlock Text="{Binding DisplayName}"
+														   VerticalAlignment="Center"
+														   Margin="8 0" />
+											</Border>
+
+											<Border Grid.Row="0"
+													Grid.Column="1"
+													BorderBrush="#d4d4d4"
+													BorderThickness="0 0 1 0">
+												<TextBlock Text="{Binding SourceLanguageCode}"
+														   VerticalAlignment="Center"
+														   Margin="8 0" />
+											</Border>
+
+											<Border Grid.Row="0"
+													Grid.Column="2"
+													BorderBrush="#d4d4d4"
+													BorderThickness="0 0 1 0">
+												<TextBlock Text="{Binding TargetLanguageCode}"
+														   VerticalAlignment="Center"
+														   Margin="8 0" />
+											</Border>
+
+											<TextBox Grid.Row="0"
+													 Grid.Column="3"
+													 AutomationProperties.Name="Category ID"
+													 Text="{Binding Model, UpdateSourceTrigger=PropertyChanged}"
+													 Style="{StaticResource WatermarkTextBox}"
+                                                     IsEnabled="{Binding ConfigureLanguages}"
+                                                     controls:WatermarkTextBox.WatermarkText="Category ID..."
+													 controls:WatermarkTextBox.ButtonCommand="{Binding ClearCommand}"
+													 controls:WatermarkTextBox.ButtonCommandParameter="{controls:NameOf Member=Model, Type={x:Type models:PairModel}}"
+													 controls:WatermarkTextBox.IsWatermarkVisible="True"
+													 BorderThickness="0"
+													 Background="Transparent"
+													 VerticalContentAlignment="Center"
+													 Padding="0"
+													 IsReadOnly="False"
+													 Margin="0 -1 0 0" />
+										</Grid>
+									</Border>
+								</GroupBox>
+
+								<DataTemplate.Triggers>
+									<Trigger Property="ItemsControl.AlternationIndex"
+											 Value="0">
+										<Setter Property="Background"
+												Value="#f5f5f5"
+												TargetName="FooBar" />
+									</Trigger>
+									<Trigger Property="ItemsControl.AlternationIndex"
+											 Value="1">
+										<Setter Property="Background"
+												Value="#ffffff"
+												TargetName="FooBar" />
+									</Trigger>
+								</DataTemplate.Triggers>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+					<Border Grid.Row="1"
+							x:Name="FooBar"
+							Margin="0">
+						<GroupBox BorderThickness="0"
+								  Padding="0 0 0 -7">
+							<Grid>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto" />
+									<RowDefinition Height="Auto" />
+								</Grid.RowDefinitions>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="2*" />
+									<ColumnDefinition Width="72" />
+									<ColumnDefinition Width="72" />
+									<ColumnDefinition Width="1.5*" />
+								</Grid.ColumnDefinitions>
+
+								<Border Grid.Row="0"
+										Grid.Column="0"
+										BorderBrush="#d4d4d4"
+										BorderThickness="1 1 1 0"
+										Height="24"
+										Padding="4 0">
+									<TextBlock Text="Language Pair"
+											   VerticalAlignment="Center"
+											   FontWeight="DemiBold"
+											   FontSize="11" />
+								</Border>
+
+								<Border Grid.Row="0"
+										Grid.Column="1"
+										BorderBrush="#d4d4d4"
+										BorderThickness="0 1 1 0"
+										Height="24"
+										Padding="4 0">
+									<TextBlock Text="Target"
+											   VerticalAlignment="Center"
+											   FontWeight="DemiBold"
+											   FontSize="11" />
+								</Border>
+
+								<Border Grid.Row="0"
+										Grid.Column="2"
+										BorderBrush="#d4d4d4"
+										BorderThickness="0 1 1 0"
+										Height="24"
+										Padding="4 0">
+									<TextBlock Text="Source"
+											   VerticalAlignment="Center"
+											   FontWeight="DemiBold"
+											   FontSize="11" />
+								</Border>
+
+								<Border Grid.Row="0"
+										Grid.Column="3"
+										BorderBrush="#d4d4d4"
+										BorderThickness="0 1 1 0"
+										Height="24"
+										Padding="4 0"
+										Margin="0 0 0 0">
+									<TextBlock Text="Category ID"
+											   VerticalAlignment="Center"
+											   FontWeight="DemiBold"
+											   FontSize="11" />
+								</Border>
+							</Grid>
+						</GroupBox>
+					</Border>
+				</Grid>
+			</Border>
+		</GroupBox>
+		<controls:ProgressIndicator VerticalAlignment="Center"
+									Text="{Binding LoadingAction}"
+									Visibility="{Binding LoadingAction, Converter={StaticResource EmptyStringToVisibilityConverter}}" />
+	</Grid>
+</UserControl>

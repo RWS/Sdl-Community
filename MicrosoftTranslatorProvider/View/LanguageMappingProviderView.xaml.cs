@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using MicrosoftTranslatorProvider.Helpers;
 
 namespace MicrosoftTranslatorProvider.View
 {
@@ -22,6 +13,32 @@ namespace MicrosoftTranslatorProvider.View
 		public LanguageMappingProviderView()
 		{
 			InitializeComponent();
+		}
+
+		private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			DragMove();
+		}
+
+		private void Window_Loaded(object sender, RoutedEventArgs e)
+		{
+			AnimationsHelper.StartOpeningWindowAnimation(this);
+		}
+
+		private void Window_Closing(object sender, CancelEventArgs e)
+		{
+			Closing -= Window_Closing;
+			e.Cancel = true;
+			AnimationsHelper.StartClosingWindowAnimation(this);
+		}
+
+		private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+		{
+			if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.F)
+			{
+				FilterSearchBox.Focus();
+				e.Handled = true;
+			}
 		}
 	}
 }

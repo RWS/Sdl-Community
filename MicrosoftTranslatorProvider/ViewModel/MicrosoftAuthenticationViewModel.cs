@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
-using MicrosoftTranslatorProvider.ApiService;
+using MicrosoftTranslatorProvider.Service;
 using MicrosoftTranslatorProvider.Commands;
 using MicrosoftTranslatorProvider.Helpers;
 using MicrosoftTranslatorProvider.Interface;
@@ -11,9 +11,9 @@ using MicrosoftTranslatorProvider.Model;
 
 namespace MicrosoftTranslatorProvider.ViewModel
 {
-	public class MicrosoftAuthenticationViewModel : BaseModel, IAuthenticationView
+	public class MicrosoftAuthenticationViewModel : BaseViewModel, IAuthenticationView
 	{
-		ITranslationOptions _translationOptions;
+		readonly ITranslationOptions _translationOptions;
 
 		string _apiKey;
 		AccountRegion _selectedRegion;
@@ -22,8 +22,8 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		{
 			_translationOptions = translationOptions;
 			Regions = RegionsProvider.GetSubscriptionRegions();
-			SelectedRegion = Regions.FirstOrDefault(x => x.Name.Equals(translationOptions.MicrosoftCredentials?.Region ?? string.Empty));
 			InitializeCommands();
+			LoadCredentials();
 		}
 
 		public List<AccountRegion> Regions { get; private set; }
@@ -59,6 +59,18 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			SignInCommand = new RelayCommand(SignIn);
 		}
 
+		private void LoadCredentials()
+		{
+			if (_translationOptions.MicrosoftCredentials is null)
+			{
+				SelectedRegion = Regions.First();
+				return;
+			}
+
+			SelectedRegion = Regions.FirstOrDefault(x => x.Name.Equals(_translationOptions.MicrosoftCredentials?.Region ?? string.Empty));
+			ApiKey = _translationOptions.MicrosoftCredentials.APIKey;
+		}
+
 		private async void SignIn(object parameter)
 		{
 			var credentials = new MicrosoftCredentials()
@@ -70,6 +82,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			var successful = await MicrosoftService.AuthenticateUser(credentials);
 			if (successful)
 			{
+				_translationOptions.MicrosoftCredentials = credentials;
 				CloseRequested.Invoke(null, EventArgs.Empty);
 			}
 		}

@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using LanguageMappingProvider.Database;
 using LanguageMappingProvider.Model;
+using MicrosoftTranslatorProvider.Service;
 using MicrosoftTranslatorProvider.Interfaces;
-using MicrosoftTranslatorProvider.Studio.TranslationProvider;
 using Sdl.Core.Globalization;
 using Sdl.Core.Globalization.LanguageRegistry;
 
@@ -32,8 +32,8 @@ namespace MicrosoftTranslatorProvider.Extensions
 
 		public static List<LanguageMapping> GetDefaultMapping(ITranslationOptions translationOptions)
 		{
-			var apiConnector = new MicrosoftApi(translationOptions);
-			var supportedLanguages = apiConnector.GetSupportedLanguages().Where(x => !x.Name.Contains("Chinese"));
+			return null;
+			/*var supportedLanguages = MicrosoftService.GetSupportedLanguageCodes().Where(x => !x.Name.Contains("Chinese"));
 			var regex = new Regex(@"^(.*?)\s*(?:\((.*?)\))?$");
 			foreach (var supportedLanguage in supportedLanguages.Where(x => x.Name.Contains("(")))
 			{
@@ -50,7 +50,7 @@ namespace MicrosoftTranslatorProvider.Extensions
 
 			return supportedLanguages.Union(CreateChineseMapping())
 									 .OrderBy(x => x.Name).ThenBy(x => x.Region)
-									 .ToList();
+									 .ToList();*/
 		}
 
 		public static void CreateDatabase(ITranslationOptions translationOptions)

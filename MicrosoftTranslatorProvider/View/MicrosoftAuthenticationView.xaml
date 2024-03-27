@@ -18,7 +18,7 @@
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ComboBoxResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MicrosoftTranslatorProvider;component/Controls/WatermarkPasswordBoxResources.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MicrosoftTranslatorProvider;component/Controls/WatermarkPasswordBox.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
@@ -43,6 +43,7 @@
 				   Grid.Column="0"
 				   Grid.ColumnSpan="2"
 				   Text="Microsoft Translator Provider"
+                   AutomationProperties.HelpText="You've chosen Microsoft Authentication. Please provide your API Key and choose your account region."
 				   Style="{StaticResource Sdl.TextBlock.TitleStyle}"
 				   HorizontalAlignment="Center"
 				   TextWrapping="Wrap"
@@ -58,7 +59,6 @@
 				   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
 				   HorizontalAlignment="Center"
 				   TextWrapping="Wrap"
-				   Focusable="True"
 				   MaxWidth="999"
 				   FontSize="12"
 				   Margin="0 4" />
@@ -71,21 +71,25 @@
 					 PasswordChanged="UserPassword_Changed"
 					 KeyDown="KeyDown"
 					 Style="{StaticResource WatermarkPasswordBox}"
-					 controls:PasswordBoxWatermarkHelper.WatermarkText="API Key"
+					 controls:WatermarkPasswordBox.WatermarkText="API Key"
 					 Margin="0 8" />
 
-		<TextBlock Grid.Row="4"
-				   Grid.Column="0"
-				   Text="Region"
-				   VerticalAlignment="Center"
-				   FontSize="13"
-				   Margin="0 0 4 0"/>
+        <Label Grid.Row="4"
+               Grid.Column="0"
+               Target="{Binding ElementName=RegionSelector}"
+               VerticalAlignment="Center"
+               FontSize="13"
+               Margin="0 0 4 0">
+            <AccessText>_Region</AccessText>
+        </Label>
 
 		<ComboBox Grid.Row="4"
 				  Grid.Column="1"
+                  x:Name="RegionSelector"
 				  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
 				  ItemsSource="{Binding Regions}"
 				  SelectedItem="{Binding SelectedRegion}"
+                  VerticalContentAlignment="Center"
 				  DisplayMemberPath="DisplayName"/>
 
 		<Button Grid.Row="5"

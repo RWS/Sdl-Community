@@ -24,6 +24,7 @@ namespace MicrosoftTranslatorProvider.View
 				return;
 			}
 
+			ApiKeyPasswordBox.Password = viewModel.ApiKey;
 			_microsoftAuthenticationViewModel = viewModel;
 		}
 
