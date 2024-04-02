@@ -7,6 +7,7 @@
              xmlns:sdl="http://schemas.sdl.com/xaml"
              xmlns:interpretBank="clr-namespace:InterpretBank"
              xmlns:converters="clr-namespace:InterpretBank.Converters"
+             xmlns:multiItemSelect="clr-namespace:InterpretBank.Controls.MultiItemSelect"
              x:Name="Root"
              mc:Ignorable="d"
              d:DesignHeight="450"
@@ -63,7 +64,7 @@
 
         </DockPanel>
 
-        <TextBlock Foreground="Red"
+        <!--<TextBlock Foreground="Red"
                    Margin="0"
                    x:Name="HelpText"
                    Grid.Row="1">
@@ -88,21 +89,28 @@
                     </Style.Triggers>
                 </Style>
             </TextBlock.Style>
-        </TextBlock>
+        </TextBlock>-->
 
 
-        <sdl:MultiSelectComboBox Margin="0 5 0 0"
-                                 Grid.Row="2"
-                                 x:Name="TagsMultiselectCombobox"
-                                 AutomationProperties.Name="TagsMultiselectCombobox"
-                                 OpenDropDownListAlsoWhenNotInEditMode="True"
-                                 IsEnabled="{Binding IsDbValid}"
-                                 Height="{Binding ActualHeight, ElementName=Root, Converter={StaticResource RatioConverter}, ConverterParameter=0.75}"
-                                 SelectedItems="{Binding SelectedTags, Mode=TwoWay, ValidatesOnDataErrors=True}"
-                                 Visibility="{Binding IsChecked, ElementName=UseTagsButton, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=True}"
-                                 ItemsSource="{Binding Tags, UpdateSourceTrigger=PropertyChanged}"
-                                 DropdownItemTemplate="{StaticResource TagTemplate}"
-                                 SelectedItemTemplate="{StaticResource TagTemplate}" />
+        
+
+        <multiItemSelect:MultiItemSelectControl Grid.Row="2"
+                                                x:Name="TagsMultiselectCombobox"
+                                                Height="{Binding ActualHeight, ElementName=Root, Converter={StaticResource RatioConverter}, ConverterParameter=0.75}"
+                                                Margin="0 5 0 0"
+                                                IsTabStop="True"
+                                                Focusable="True"
+                                                IsEnabled="{Binding IsDbValid}"
+                                                ItemsSource="{Binding DataContext.Tags, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}"
+                                                Visibility="{Binding IsChecked, ElementName=UseTagsButton, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=True}"
+                                                CornerRadius="0"
+                                                SelectedItems="{Binding SelectedTags, Mode=TwoWay, ValidatesOnDataErrors=True}"
+                                                SelectedItemTemplate="{StaticResource TagTemplate}"
+                                                ItemTemplate="{StaticResource TagTemplate}"
+                                                HorizontalAlignment="Stretch"
+                                                BorderBrush="#c0c0c0"
+                                                BorderBackground="White"
+                                                VerticalAlignment="Top" />
 
 
 

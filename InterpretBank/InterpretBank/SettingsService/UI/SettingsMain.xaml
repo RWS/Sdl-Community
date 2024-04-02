@@ -10,6 +10,8 @@
         WindowStyle="None"
         xmlns:controls="clr-namespace:InterpretBank.Controls"
         xmlns:converters1="clr-namespace:InterpretBank.Converters"
+        xmlns:multiItemSelect="clr-namespace:InterpretBank.Controls.MultiItemSelect"
+        xmlns:model="clr-namespace:InterpretBank.SettingsService.Model"
         MouseDown="Window_MouseDown"
         mc:Ignorable="d"
         x:Name="Root"
@@ -73,12 +75,82 @@
 
         <GroupBox Grid.Row="2"
                   Header="Select glossaries">
-            <controls:GlossariesOrTagsControl Grid.Row="2"
-                                              BorderThickness="0"
-                                              Height="Auto"
-                                              x:Name="SettingsUi"
-                                              DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}"
-                                              Visibility="{Binding Filepath, Converter={StaticResource NullToVisibilityConverter}}" />
+
+
+            <DockPanel LastChildFill="False">
+                <StackPanel KeyboardNavigation.DirectionalNavigation="Cycle"
+                            DockPanel.Dock="Top"
+                            KeyboardNavigation.TabNavigation="Once">
+                    <RadioButton Content="By glossary names"
+                                 x:Name="UseGlossariesButton"
+                                 AutomationProperties.PositionInSet="1"
+                                 AutomationProperties.SizeOfSet="2"
+                                 GroupName="Use glossaries or tags">
+                        <RadioButton.Style>
+                            <Style TargetType="RadioButton">
+                                <Setter Property="IsChecked"
+                                        Value="True" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=UseTagsButton, Path=IsChecked}"
+                                                 Value="True">
+                                        <Setter Property="IsChecked"
+                                                Value="False" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </RadioButton.Style>
+                    </RadioButton>
+                    <RadioButton Content="By tags"
+                                 x:Name="UseTagsButton"
+                                 AutomationProperties.PositionInSet="2"
+                                 AutomationProperties.SizeOfSet="2"
+                                 IsChecked="{Binding UseTags}"
+                                 GroupName="Use glossaries or tags" />
+                </StackPanel>
+
+
+                <multiItemSelect:MultiItemSelectControl x:Name="TagsMultiselectCombobox"
+                                                        DockPanel.Dock="Bottom"
+                                                        Margin="0 5 0 0"
+                                                        IsTabStop="True"
+                                                        AutomationProperties.Name="{Binding  SelectedItems.Count, StringFormat='Selected: {0}', RelativeSource={RelativeSource Self}}"
+                                                        ItemsSource="{Binding Tags, UpdateSourceTrigger=PropertyChanged}"
+                                                        Visibility="{Binding IsChecked, ElementName=UseTagsButton, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=True}"
+                                                        CornerRadius="0"
+                                                        HorizontalAlignment="Stretch"
+                                                        BorderBrush="#c0c0c0"
+                                                        SelectedItems="{Binding SelectedTags, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                        BorderBackground="White"
+                                                        VerticalAlignment="Top">
+                    <multiItemSelect:MultiItemSelectControl.InputBindings>
+                        <KeyBinding Command="Delete" Key="Delete"/>
+                    </multiItemSelect:MultiItemSelectControl.InputBindings>
+                    <multiItemSelect:MultiItemSelectControl.SelectedItemTemplate>
+                        <DataTemplate DataType="{x:Type model:TagModel}">
+
+                            <TextBlock Text="{Binding TagName}"
+                                       FontSize="10"
+                                       AutomationProperties.Name="{Binding TagName, StringFormat={}{0} Press DELETE to unselect}"
+                                       VerticalAlignment="Center" />
+                        </DataTemplate>
+                    </multiItemSelect:MultiItemSelectControl.SelectedItemTemplate>
+                    <multiItemSelect:MultiItemSelectControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type model:TagModel}">
+
+                            <TextBlock Text="{Binding TagName}"
+                                       FontSize="10"
+                                       VerticalAlignment="Center"
+                                       DockPanel.Dock="Right" />
+                        </DataTemplate>
+                    </multiItemSelect:MultiItemSelectControl.ItemTemplate>
+                </multiItemSelect:MultiItemSelectControl>
+
+                <!--<controls:GlossariesOrTagsControl BorderThickness="0"
+                                                  Height="Auto"
+                                                  x:Name="SettingsUi"
+                                                  DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                  Visibility="{Binding Filepath, Converter={StaticResource NullToVisibilityConverter}}" />-->
+            </DockPanel>
         </GroupBox>
 
         <StackPanel Grid.Row="3"
