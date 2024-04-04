@@ -117,6 +117,9 @@ namespace InterpretBank.Controls.MultiItemSelect
         {
             AllItemsListBox.SelectedItems.Remove(obj);
             await NotifyUser("Item unselected");
+
+            var item = (ListBoxItem)SelectedItemsControl.ItemContainerGenerator.ContainerFromItem(SelectedItemsControl.SelectedItem);
+            Focus(item);
         }
 
         private void DropdownButton_Click(object sender, RoutedEventArgs e)

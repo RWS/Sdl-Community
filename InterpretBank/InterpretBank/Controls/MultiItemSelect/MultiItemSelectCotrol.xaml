@@ -14,7 +14,7 @@
     <UserControl.InputBindings>
         <KeyBinding Key="Escape"
                     Command="{Binding HideDropdownCommand, ElementName=Root}" />
-        <KeyBinding Key="D"
+        <KeyBinding Key="Down"
                     Modifiers="Alt"
                     Command="{Binding ShowDropdownCommand, ElementName=Root}">
         </KeyBinding>
@@ -25,7 +25,7 @@
     <Border CornerRadius="{Binding CornerRadius, ElementName=Root}"
             BorderBrush="{Binding BorderBrush, ElementName=Root}"
             Background="{Binding BorderBackground, ElementName=Root}"
-            BorderThickness="1">
+            BorderThickness="{Binding BorderThickness, ElementName=Root}">
 
         <Grid MaxWidth="{Binding ActualWidth, ElementName=Root}">
             <Grid.RowDefinitions>
@@ -41,10 +41,12 @@
                        Margin="0"
                        Padding="0"
                        Grid.Row="0"
+                       FontSize="11"
                        DockPanel.Dock="Top"
+                       Height="15"
                        Grid.Column="0"
                        Grid.ColumnSpan="2"
-                       Background="LightGray" />
+                       Background="AliceBlue" />
 
             <Popup x:Name="NotificationsPopup"
                    AllowsTransparency="True"
@@ -64,7 +66,7 @@
             </Popup>
 
             <ListBox Grid.Column="0"
-                     AutomationProperties.HelpText="Press Alt-D to select items"
+                     AutomationProperties.HelpText="Press Alt-ArrowDown to select items"
                      Grid.Row="1"
                      Focusable="True"
                      IsTabStop="True"
@@ -117,8 +119,7 @@
 
             <Button Click="DropdownButton_Click"
                     Grid.Column="1"
-                    Grid.RowSpan="2"
-                    Grid.Row="0"
+                    Grid.Row="1"
                     Width="25"
                     FontSize="20"
                     AutomationProperties.Name="Open items list"
@@ -160,10 +161,16 @@
                                Focusable="True" />
                     <ListBox x:Name="AllItemsListBox"
                              SelectionMode="Multiple"
+                             TabIndex="1"
                              SelectionChanged="ItemList_OnSelectionChanged"
                              Visibility="{Binding ShowDropdown, ElementName=Root, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"
-                             ItemsSource="{Binding ItemsSource, ElementName=Root}"
-                             ItemTemplate="{Binding ItemTemplate, ElementName=Root}" />
+                             ItemsSource="{Binding ItemsSource, ElementName=Root}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <ContentPresenter ContentTemplate="{Binding ItemTemplate, ElementName=Root}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </StackPanel>
             </Popup>
         </Grid>

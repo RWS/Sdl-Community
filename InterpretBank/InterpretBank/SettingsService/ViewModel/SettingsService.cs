@@ -18,7 +18,7 @@ public class SettingsService(IInterpretBankDataContext interpretBankDataContext)
     private string _filepath;
     private List<GlossaryModel> _glossaries;
     private ICommand _saveCommand;
-    private ObservableCollection<GlossaryModel> _selectedGlossaries = new();
+    private ObservableCollection<object> _selectedGlossaries = new();
     private ObservableCollection<object> _selectedTags = new();
     private List<TagModel> _tags;
     private bool _useTags;
@@ -51,7 +51,7 @@ public class SettingsService(IInterpretBankDataContext interpretBankDataContext)
         return enabled;
     });
 
-    public ObservableCollection<GlossaryModel> SelectedGlossaries
+    public ObservableCollection<object> SelectedGlossaries
     {
         get => _selectedGlossaries;
         set
@@ -92,7 +92,7 @@ public class SettingsService(IInterpretBankDataContext interpretBankDataContext)
             UseTags = value.UseTags;
 
             if (value.Glossaries is not null)
-                SelectedGlossaries = new ObservableCollection<GlossaryModel>(Glossaries?.Where(g => value.Glossaries.Contains(g.GlossaryName)));
+                SelectedGlossaries = new ObservableCollection<object>(Glossaries?.Where(g => value.Glossaries.Contains(g.GlossaryName)));
 
             if (value.Tags is not null)
                 SelectedTags = new ObservableCollection<object>(Tags?.Where(t => value.Tags.Contains(t.TagName)));
@@ -102,7 +102,7 @@ public class SettingsService(IInterpretBankDataContext interpretBankDataContext)
             {
                 SettingsId = SettingsId,
                 DatabaseFilepath = Filepath,
-                Glossaries = SelectedGlossaries?.Select(g => g.GlossaryName).ToList(),
+                Glossaries = SelectedGlossaries?.Cast<GlossaryModel>().Select(g => g.GlossaryName).ToList(),
                 Tags = SelectedTags?.Cast<TagModel>().Select(t => t.TagName).ToList(),
                 UseTags = UseTags
             };
@@ -181,7 +181,7 @@ public class SettingsService(IInterpretBankDataContext interpretBankDataContext)
         {
             InterpretBankDataContext.Setup(Filepath);
             Tags = [.. InterpretBankDataContext.GetTags().Distinct().OrderBy(t => t.TagName)];
-            Glossaries = InterpretBankDataContext.GetGlossaries();
+            Glossaries = [.. InterpretBankDataContext.GetGlossaries().OrderBy(g => g.GlossaryName).ThenBy(g=>g.SubGlossaryName)];
         }
         else
         {

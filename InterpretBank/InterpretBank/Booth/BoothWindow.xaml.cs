@@ -14,9 +14,14 @@ namespace InterpretBank.Booth
         {
             DataContext = boothWindowViewModel;
             InitializeComponent();
-
         }
 
+        private GridLength LastColumnWidth { get; set; }
+
+        private void CommandBinding_OnExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            Close();
+        }
 
         private void SettingsToggleButton_OnClick(object sender, RoutedEventArgs e)
         {
@@ -35,7 +40,5 @@ namespace InterpretBank.Booth
                 SettingsGroupBox.Visibility = Visibility.Visible;
             }
         }
-
-        private GridLength LastColumnWidth { get; set; }
     }
 }
