@@ -192,14 +192,10 @@
                                                                     SelectedItems="{Binding SelectedGlossary.Languages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                                     ItemsSource="{Binding Languages}"
                                                                     Margin="5 0 0 5"
+                                                                    DeleteEnabled="False"
                                                                     SelectedItemTemplate="{StaticResource LanguageTemplate}"
                                                                     ItemTemplate="{StaticResource LanguageTemplate}"
                                                                     IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}" />
-
-
-
-
-
 
                         </DockPanel>
                         <DockPanel Grid.Row="1">

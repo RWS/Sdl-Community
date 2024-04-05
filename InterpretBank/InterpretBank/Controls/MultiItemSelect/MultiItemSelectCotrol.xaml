@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:InterpretBank.Converters"
              x:Name="Root"
              mc:Ignorable="d"
              d:DesignHeight="450"
@@ -20,7 +21,12 @@
         </KeyBinding>
     </UserControl.InputBindings>
     <UserControl.Resources>
-        <ResourceDictionary Source="/InterpretBank;component/Styles/MultiItemSelectControlResources.xaml" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/InterpretBank;component/Styles/MultiItemSelectControlResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <converters:ConcatenationConverter x:Key="ConcatenationConverter" />
+        </ResourceDictionary>
     </UserControl.Resources>
     <Border CornerRadius="{Binding CornerRadius, ElementName=Root}"
             BorderBrush="{Binding BorderBrush, ElementName=Root}"
@@ -77,8 +83,16 @@
 
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
-                        <Setter Property="AutomationProperties.Name"
-                                Value="{Binding ., StringFormat={}{0} Press DELETE to unselect}" />
+                        <Setter Property="AutomationProperties.Name">
+                            <!--Value="{Binding ., StringFormat={}{0} Press DELETE to unselect}" />-->
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource ConcatenationConverter}">
+                                    <Binding Path="." />
+                                    <Binding Path="DeleteButtonAssistiveText"
+                                             ElementName="Root" />
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
                     </Style>
                 </ListBox.ItemContainerStyle>
 
@@ -89,6 +103,7 @@
                                     Focusable="False">
                             <Button Content="❌"
                                     AutomationProperties.Name="Unselect item"
+                                    Visibility="{Binding DeleteEnabled, ElementName=Root, Converter={StaticResource BooleanToVisibilityConverter}}"
                                     Command="{Binding DeleteItemCommand, ElementName=Root}"
                                     CommandParameter="{Binding .}"
                                     Margin="2 0 5 0"

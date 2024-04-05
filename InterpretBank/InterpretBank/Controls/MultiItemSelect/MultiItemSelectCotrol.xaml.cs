@@ -28,10 +28,13 @@ namespace InterpretBank.Controls.MultiItemSelect
         public static readonly DependencyProperty SelectedItemTemplateProperty = DependencyProperty.Register(nameof(SelectedItemTemplate), typeof(DataTemplate), typeof(MultiItemSelectControl), new PropertyMetadata(default(DataTemplate)));
 
         public static readonly DependencyProperty ShowDropdownProperty = DependencyProperty.Register(nameof(ShowDropdown), typeof(bool), typeof(MultiItemSelectControl), new PropertyMetadata(default(bool)));
+        public static readonly DependencyProperty DeleteEnabledProperty = DependencyProperty.Register(nameof(DeleteEnabled), typeof(bool), typeof(MultiItemSelectControl), new PropertyMetadata(true));
+        public static readonly DependencyProperty DeleteButtonAssistiveTextProperty = DependencyProperty.Register(nameof(DeleteButtonAssistiveText), typeof(string), typeof(MultiItemSelectControl), new PropertyMetadata("Press DELETE to unselect"));
 
         public MultiItemSelectControl()
         {
             InitializeComponent();
+            if (!DeleteEnabled) DeleteButtonAssistiveText = "";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -98,6 +101,20 @@ namespace InterpretBank.Controls.MultiItemSelect
 
         public ICommand ShowDropdownCommand => new RelayCommand(ShowDropdownHandler);
 
+        public bool DeleteEnabled
+        {
+            get => (bool)GetValue(DeleteEnabledProperty);
+            set => SetValue(DeleteEnabledProperty, value);
+        }
+
+        public string DeleteButtonAssistiveText
+        {
+            get => (string)GetValue(DeleteButtonAssistiveTextProperty);
+            set => SetValue(DeleteButtonAssistiveTextProperty, value);
+        } 
+
+        //public string DeleteButtonAssistiveText => !DeleteEnabled ? null : "Press DELETE to unselect";
+
         private static void SelectedItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is not MultiItemSelectControl multiItemSelectControl) return;
@@ -123,10 +140,9 @@ namespace InterpretBank.Controls.MultiItemSelect
 
         private void CommandBinding_OnExecuted(object sender, ExecutedRoutedEventArgs e)
         {
+            if (!DeleteEnabled) return;
             DeleteItem(AllItemsListBox.SelectedItem);
         }
-
-
 
         private async void DeleteItem(object obj)
         {
