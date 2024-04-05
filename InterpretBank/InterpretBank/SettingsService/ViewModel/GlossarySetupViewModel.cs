@@ -172,16 +172,13 @@ public class GlossarySetupViewModel(
     {
         SelectedGlossary = null;
 
-        Tags = new ObservableCollection<object>(InterpretBankDataContext.GetTags().Distinct().ToList());
-        Languages = new ObservableCollection<object>(InterpretBankDataContext.GetDbLanguages());
         TagLinks = new ObservableCollection<TagLinkModel>(InterpretBankDataContext.GetLinks());
         Glossaries = new ObservableCollection<object>(InterpretBankDataContext.GetGlossaries());
+        Tags = new ObservableCollection<object>(InterpretBankDataContext.GetTags().Distinct().ToList());
+        Languages = new ObservableCollection<object>(InterpretBankDataContext.GetDbLanguages());
 
-        //var languageGroup = new LanguageGroup(1, "All languages");
-        //Languages.ForEach(l => l.Group = languageGroup);
-
-        //var tagGroup = new TagsGroup(1, "All tags");
-        //Tags.ForEach(t => t.Group = tagGroup);
+        OnPropertyChanged(nameof(SelectedGlossaryTags));
+        OnPropertyChanged(nameof(SelectedTagGlossaries));
 
         SetupSelectedLanguages();
     }

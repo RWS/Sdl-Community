@@ -79,6 +79,7 @@
                     Background="#F6F6F6"
                     BorderThickness="1">
             <TabItem Header="Glossaries"
+                     TabIndex="1"
                      Template="{StaticResource GlossarySetupTabItem}">
                 <Grid>
 
@@ -224,7 +225,8 @@
             </TabItem>
 
             <!--Tags tab-->
-            <TabItem Header="Tags">
+            <TabItem Header="Tags"
+                     TabIndex="2">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -314,6 +316,7 @@
             </TabItem>
 
             <TabItem Header="DB Languages"
+                     TabIndex="3"
                      Template="{StaticResource GlossarySetupTabItem}">
 
                 <DataGrid ItemsSource="{Binding SelectedLanguages}"

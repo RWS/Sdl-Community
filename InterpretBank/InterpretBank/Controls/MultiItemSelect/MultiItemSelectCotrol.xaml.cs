@@ -20,6 +20,8 @@ namespace InterpretBank.Controls.MultiItemSelect
     {
         public static readonly DependencyProperty BorderBackgroundProperty = DependencyProperty.Register(nameof(BorderBackground), typeof(Brush), typeof(MultiItemSelectControl), new PropertyMetadata(default(Brush)));
         public static readonly DependencyProperty CornerRadiusProperty = DependencyProperty.Register(nameof(CornerRadius), typeof(CornerRadius), typeof(MultiItemSelectControl), new PropertyMetadata(default(CornerRadius)));
+        public static readonly DependencyProperty DeleteButtonAssistiveTextProperty = DependencyProperty.Register(nameof(DeleteButtonAssistiveText), typeof(string), typeof(MultiItemSelectControl), new PropertyMetadata("Press DELETE to unselect"));
+        public static readonly DependencyProperty DeleteEnabledProperty = DependencyProperty.Register(nameof(DeleteEnabled), typeof(bool), typeof(MultiItemSelectControl), new PropertyMetadata(true, PropertyChangedCallback));
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register(nameof(ItemsSource), typeof(IEnumerable), typeof(MultiItemSelectControl), new PropertyMetadata(default(IEnumerable)));
         public static readonly DependencyProperty ItemTemplateProperty = DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(MultiItemSelectControl), new PropertyMetadata(default(DataTemplate)));
         public static readonly DependencyProperty NotificationsProperty = DependencyProperty.Register(nameof(Notifications), typeof(string), typeof(MultiItemSelectControl), new PropertyMetadata(default(string)));
@@ -28,13 +30,10 @@ namespace InterpretBank.Controls.MultiItemSelect
         public static readonly DependencyProperty SelectedItemTemplateProperty = DependencyProperty.Register(nameof(SelectedItemTemplate), typeof(DataTemplate), typeof(MultiItemSelectControl), new PropertyMetadata(default(DataTemplate)));
 
         public static readonly DependencyProperty ShowDropdownProperty = DependencyProperty.Register(nameof(ShowDropdown), typeof(bool), typeof(MultiItemSelectControl), new PropertyMetadata(default(bool)));
-        public static readonly DependencyProperty DeleteEnabledProperty = DependencyProperty.Register(nameof(DeleteEnabled), typeof(bool), typeof(MultiItemSelectControl), new PropertyMetadata(true));
-        public static readonly DependencyProperty DeleteButtonAssistiveTextProperty = DependencyProperty.Register(nameof(DeleteButtonAssistiveText), typeof(string), typeof(MultiItemSelectControl), new PropertyMetadata("Press DELETE to unselect"));
 
         public MultiItemSelectControl()
         {
             InitializeComponent();
-            if (!DeleteEnabled) DeleteButtonAssistiveText = "";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -49,6 +48,18 @@ namespace InterpretBank.Controls.MultiItemSelect
         {
             get => (CornerRadius)GetValue(CornerRadiusProperty);
             set => SetValue(CornerRadiusProperty, value);
+        }
+
+        public string DeleteButtonAssistiveText
+        {
+            get => (string)GetValue(DeleteButtonAssistiveTextProperty);
+            set => SetValue(DeleteButtonAssistiveTextProperty, value);
+        }
+
+        public bool DeleteEnabled
+        {
+            get => (bool)GetValue(DeleteEnabledProperty);
+            set => SetValue(DeleteEnabledProperty, value);
         }
 
         public ICommand DeleteItemCommand => new RelayCommand(DeleteItem);
@@ -101,17 +112,12 @@ namespace InterpretBank.Controls.MultiItemSelect
 
         public ICommand ShowDropdownCommand => new RelayCommand(ShowDropdownHandler);
 
-        public bool DeleteEnabled
+        private static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            get => (bool)GetValue(DeleteEnabledProperty);
-            set => SetValue(DeleteEnabledProperty, value);
+            if (d is not MultiItemSelectControl multiItemSelectControl) return;
+            multiItemSelectControl.DeleteButtonAssistiveText =
+                !multiItemSelectControl.DeleteEnabled ? null : "Press DELETE to unselect";
         }
-
-        public string DeleteButtonAssistiveText
-        {
-            get => (string)GetValue(DeleteButtonAssistiveTextProperty);
-            set => SetValue(DeleteButtonAssistiveTextProperty, value);
-        } 
 
         //public string DeleteButtonAssistiveText => !DeleteEnabled ? null : "Press DELETE to unselect";
 
@@ -129,7 +135,7 @@ namespace InterpretBank.Controls.MultiItemSelect
 
         private void AllItemsListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (SelectedItems.Count >= AllItemsListBox.SelectedItems.Count) return;
+            if (SelectedItems is null || SelectedItems.Count >= AllItemsListBox.SelectedItems.Count) return;
 
             foreach (var selectedItem in AllItemsListBox.SelectedItems)
             {
@@ -195,7 +201,5 @@ namespace InterpretBank.Controls.MultiItemSelect
         {
             ShowDropdown = true;
         }
-
-        
     }
 }
