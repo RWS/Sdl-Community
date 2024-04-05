@@ -22,13 +22,13 @@ public class GlossarySetupViewModel(
     private ICommand _enterGlossaryCommand;
     private ICommand _enterTagCommand;
     private string _filepath;
-    private ObservableCollection<GlossaryModel> _glossaries;
+    private ObservableCollection<object> _glossaries;
     private ObservableCollection<object> _languages;
     private object _selectedGlossary;
     private ObservableCollection<object> _selectedGlossaryTags;
     private List<LanguageModelsListBoxItem> _selectedLanguages;
     private TagModel _selectedTag;
-    private ObservableCollection<GlossaryModel> _selectedTagGlossaries;
+    private ObservableCollection<object> _selectedTagGlossaries;
     private ObservableCollection<TagLinkModel> _tagLinks;
     private ObservableCollection<object> _tags;
     public ICommand DeleteGlossaryCommand => new RelayCommand(DeleteGlossary);
@@ -52,7 +52,7 @@ public class GlossarySetupViewModel(
         }
     }
 
-    public ObservableCollection<GlossaryModel> Glossaries
+    public ObservableCollection<object> Glossaries
     {
         get => _glossaries;
         set
@@ -60,11 +60,11 @@ public class GlossarySetupViewModel(
             if (value == null)
             {
                 foreach (var glossaryModel in _glossaries)
-                    DetachFromEventsOfGlossaryModel(glossaryModel);
+                    DetachFromEventsOfGlossaryModel((GlossaryModel)glossaryModel);
                 return;
             }
 
-            foreach (var glossaryModel in value) AttachToEventsOfGlossaryModel(glossaryModel);
+            foreach (var glossaryModel in value) AttachToEventsOfGlossaryModel((GlossaryModel)glossaryModel);
 
             SetField(ref _glossaries, value);
         }
@@ -135,7 +135,7 @@ public class GlossarySetupViewModel(
         }
     }
 
-    public ObservableCollection<GlossaryModel> SelectedTagGlossaries
+    public ObservableCollection<object> SelectedTagGlossaries
     {
         get
         {
@@ -144,7 +144,7 @@ public class GlossarySetupViewModel(
             var idsOfTaggedGlossaries = TagLinks?.Where(tl => tl.TagName == SelectedTag?.TagName).Select(tl => tl.GlossaryId);
             if (idsOfTaggedGlossaries is null) return null;
 
-            _selectedTagGlossaries = new ObservableCollection<GlossaryModel>(Glossaries?.Where(gl => idsOfTaggedGlossaries.Contains(gl.Id)).ToList());
+            _selectedTagGlossaries = new ObservableCollection<object>(Glossaries?.Cast<GlossaryModel>().Where(gl => idsOfTaggedGlossaries.Contains(gl.Id)).ToList());
             _selectedTagGlossaries.CollectionChanged += TagLinks_CollectionChanged;
 
             return _selectedTagGlossaries;
@@ -174,8 +174,8 @@ public class GlossarySetupViewModel(
 
         Tags = new ObservableCollection<object>(InterpretBankDataContext.GetTags().Distinct().ToList());
         Languages = new ObservableCollection<object>(InterpretBankDataContext.GetDbLanguages());
-        Glossaries = new ObservableCollection<GlossaryModel>(InterpretBankDataContext.GetGlossaries());
         TagLinks = new ObservableCollection<TagLinkModel>(InterpretBankDataContext.GetLinks());
+        Glossaries = new ObservableCollection<object>(InterpretBankDataContext.GetGlossaries());
 
         //var languageGroup = new LanguageGroup(1, "All languages");
         //Languages.ForEach(l => l.Group = languageGroup);
@@ -233,7 +233,7 @@ public class GlossarySetupViewModel(
         InterpretBankDataContext.RemoveGlossary(glossary.Id);
         Glossaries.Remove(glossary);
 
-        SelectedGlossary = Glossaries[0];
+        SelectedGlossary = Glossaries.Cast<GlossaryModel>().ToList()[0];
 
         OnPropertyChanged(nameof(SelectedTagGlossaries));
     }
@@ -263,7 +263,7 @@ public class GlossarySetupViewModel(
 
         var newGlossary = new GlossaryModel { GlossaryName = glossaryName };
 
-        if (Glossaries.Any(g => g.GlossaryName == glossaryName))
+        if (Glossaries.Cast<GlossaryModel>().Any(g => g.GlossaryName == glossaryName))
         {
             UserInteractionService.WarnUser(PluginResources.Message_GlossaryAlreadyExists);
             return;
