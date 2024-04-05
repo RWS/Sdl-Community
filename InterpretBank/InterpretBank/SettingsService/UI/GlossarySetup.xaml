@@ -18,6 +18,7 @@
         d:DataContext="{d:DesignInstance viewModel:GlossarySetupViewModel}"
         WindowStyle="None"
         SizeToContent="WidthAndHeight"
+        MaxWidth="600"
         mc:Ignorable="d"
         Title="InterpretBank database configurator"
         Icon="/InterpretBank;component/Resources/IB.ico"
@@ -71,8 +72,10 @@
 
         </DockPanel>
         <TabControl Margin="10"
+                    x:Name="TabControl"
                     Visibility="{Binding IsDbValid, Converter={StaticResource BoolToVisConverter}, ConverterParameter=True}"
                     Grid.Row="2"
+                    HorizontalAlignment="Stretch"
                     Background="#F6F6F6"
                     BorderThickness="1">
             <TabItem Header="Glossaries"
@@ -306,9 +309,9 @@
                      Template="{StaticResource GlossarySetupTabItem}">
 
                 <DataGrid ItemsSource="{Binding SelectedLanguages}"
-                          Grid.Row="0"
                           AutoGenerateColumns="False"
                           Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+                          HorizontalAlignment="Stretch"
                           SelectionMode="Single"
                           IsReadOnly="True">
 
@@ -319,7 +322,7 @@
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
                                         <Button Content="⟲"
                                                 FontSize="15"
