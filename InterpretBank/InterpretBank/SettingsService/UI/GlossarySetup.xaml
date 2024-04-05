@@ -10,11 +10,14 @@
         x:Name="GlossaryManager_Window"
         xmlns:interpretBank="clr-namespace:InterpretBank"
         xmlns:converters="clr-namespace:InterpretBank.SettingsService.Converters"
+        MouseDown="Window_MouseDown"
         xmlns:model="clr-namespace:InterpretBank.SettingsService.Model"
         xmlns:converters1="clr-namespace:InterpretBank.Converters"
         xmlns:controls="clr-namespace:InterpretBank.Controls"
+        xmlns:multiItemSelect="clr-namespace:InterpretBank.Controls.MultiItemSelect"
         d:DataContext="{d:DesignInstance viewModel:GlossarySetupViewModel}"
-        SizeToContent="Height"
+        WindowStyle="None"
+        SizeToContent="WidthAndHeight"
         mc:Ignorable="d"
         Title="InterpretBank database configurator"
         Icon="/InterpretBank;component/Resources/IB.ico"
@@ -34,6 +37,12 @@
             <converters:NullStringToVisibilityConverter x:Key="NullToVisibilityConverter" />
             <converters:NullToBoolConverter x:Key="NullToBullConverter" />
             <converters1:BoolToVisibilityConverter x:Key="BoolToVisConverter" />
+            <Style TargetType="GroupBox">
+                <Setter Property="Margin"
+                        Value="0" />
+            </Style>
+
+
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -43,21 +52,22 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+
+
         <Image Grid.Row="0"
                Height="50"
                Source="/InterpretBank;component/Resources/logo.png" />
+
         <DockPanel Grid.Row="1"
                    HorizontalAlignment="Stretch"
                    Margin="10 10 10 5"
                    VerticalAlignment="Top">
 
-            <TextBlock Text="{x:Static interpretBank:PluginResources.SettingsWindow_TextBlock_DBFilepath}"
-                       x:Name="FilepathLabel"
-                       DockPanel.Dock="Top" />
-
-            <controls:ChooseFilepathControl x:Name="ChooseFilepathControl"
-                                            AutomationProperties.LabeledBy="{Binding ElementName=FilepathLabel}"
-                                            Filepath="{Binding Filepath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            <GroupBox Header="Locate your database">
+                <controls:ChooseFilepathControl x:Name="ChooseFilepathControl"
+                                                AutomationProperties.LabeledBy="{Binding ElementName=FilepathLabel}"
+                                                Filepath="{Binding Filepath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            </GroupBox>
 
         </DockPanel>
         <TabControl Margin="10"
@@ -167,14 +177,30 @@
                                    DockPanel.Dock="Top"
                                    FontWeight="Light"
                                    FontSize="10" />
-                            <sdl:MultiSelectComboBox DockPanel.Dock="Bottom"
+
+
+                            <!--<sdl:MultiSelectComboBox DockPanel.Dock="Bottom"
                                                      OpenDropDownListAlsoWhenNotInEditMode="True"
                                                      Margin="5 0 0 5"
                                                      IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}"
                                                      ItemsSource="{Binding Languages}"
                                                      SelectedItems="{Binding SelectedGlossary.Languages}"
                                                      DropdownItemTemplate="{StaticResource LanguageTemplate}"
-                                                     SelectedItemTemplate="{StaticResource LanguageTemplate}" />
+                                                     SelectedItemTemplate="{StaticResource LanguageTemplate}" />-->
+
+                            <multiItemSelect:MultiItemSelectControl DockPanel.Dock="Bottom"
+                                                                    SelectedItems="{Binding SelectedGlossary.Languages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                    ItemsSource="{Binding Languages}"
+                                                                    Margin="5 0 0 5"
+                                                                    SelectedItemTemplate="{StaticResource LanguageTemplate}"
+                                                                    ItemTemplate="{StaticResource LanguageTemplate}"
+                                                                    IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}" />
+
+
+
+
+
+
                         </DockPanel>
                         <DockPanel Grid.Row="1">
                             <Label DockPanel.Dock="Top"
@@ -182,14 +208,22 @@
                                    Padding="5 0 0 5"
                                    FontWeight="Light"
                                    FontSize="10" />
-                            <sdl:MultiSelectComboBox DockPanel.Dock="Bottom"
+                            <!--<sdl:MultiSelectComboBox DockPanel.Dock="Bottom"
                                                      OpenDropDownListAlsoWhenNotInEditMode="True"
                                                      Margin="5 0 0 0"
                                                      IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}"
                                                      ItemsSource="{Binding Tags}"
                                                      SelectedItems="{Binding SelectedGlossaryTags}"
                                                      DropdownItemTemplate="{StaticResource TagTemplate}"
-                                                     SelectedItemTemplate="{StaticResource TagTemplate}" />
+                                                     SelectedItemTemplate="{StaticResource TagTemplate}" />-->
+
+                            <multiItemSelect:MultiItemSelectControl DockPanel.Dock="Bottom"
+                                                                    SelectedItems="{Binding SelectedGlossaryTags}"
+                                                                    ItemsSource="{Binding Tags}"
+                                                                    Margin="5 0 0 5"
+                                                                    SelectedItemTemplate="{StaticResource TagTemplate}"
+                                                                    ItemTemplate="{StaticResource TagTemplate}"
+                                                                    IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}" />
                         </DockPanel>
                     </Grid>
 
@@ -199,8 +233,7 @@
             </TabItem>
 
             <!--Tags tab-->
-            <TabItem Header="Tags"
-                     Template="{StaticResource GlossarySetupTabItem}">
+            <TabItem Header="Tags">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -320,15 +353,15 @@
                    VerticalAlignment="Bottom"
                    LastChildFill="False">
 
-
             <Button Content="Close"
                     IsCancel="True"
                     Cursor="Hand"
                     Click="ApplyButton_Click"
                     Height="30"
-                    Style="{StaticResource Sdl.Button.PrimaryStyle}"
+                    Style="{StaticResource Sdl.Button.DialogStyle}"
                     DockPanel.Dock="Right"
                     Margin="0 0 10 10" />
+
         </DockPanel>
     </Grid>
 </Window>

@@ -1,9 +1,7 @@
 ﻿using InterpretBank.Commands;
-using InterpretBank.Extensions;
 using InterpretBank.Interface;
 using InterpretBank.Model;
 using InterpretBank.SettingsService.Model;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -25,14 +23,14 @@ public class GlossarySetupViewModel(
     private ICommand _enterTagCommand;
     private string _filepath;
     private ObservableCollection<GlossaryModel> _glossaries;
-    private ObservableCollection<LanguageModel> _languages;
-    private GlossaryModel _selectedGlossary;
-    private ObservableCollection<TagModel> _selectedGlossaryTags;
+    private ObservableCollection<object> _languages;
+    private object _selectedGlossary;
+    private ObservableCollection<object> _selectedGlossaryTags;
     private List<LanguageModelsListBoxItem> _selectedLanguages;
     private TagModel _selectedTag;
     private ObservableCollection<GlossaryModel> _selectedTagGlossaries;
     private ObservableCollection<TagLinkModel> _tagLinks;
-    private ObservableCollection<TagModel> _tags;
+    private ObservableCollection<object> _tags;
     public ICommand DeleteGlossaryCommand => new RelayCommand(DeleteGlossary);
     public ICommand DeleteTagCommand => _deleteTagCommand ??= new RelayCommand(DeleteTag);
     public ICommand EnterGlossaryCommand => _enterGlossaryCommand ??= new RelayCommand(EnterGlossary);
@@ -79,7 +77,7 @@ public class GlossarySetupViewModel(
 
     public bool IsDbValid => InterpretBankDataContext.IsValid;
 
-    public ObservableCollection<LanguageModel> Languages
+    public ObservableCollection<object> Languages
     {
         get => _languages;
         set => SetField(ref _languages, value);
@@ -89,7 +87,7 @@ public class GlossarySetupViewModel(
 
     public GlossaryModel SelectedGlossary
     {
-        get => _selectedGlossary;
+        get => (GlossaryModel)_selectedGlossary;
         set
         {
             SetField(ref _selectedGlossary, value);
@@ -97,7 +95,7 @@ public class GlossarySetupViewModel(
         }
     }
 
-    public ObservableCollection<TagModel> SelectedGlossaryTags
+    public ObservableCollection<object> SelectedGlossaryTags
     {
         get
         {
@@ -110,9 +108,9 @@ public class GlossarySetupViewModel(
                 TagLinks?.Where(tl => tl.GlossaryId == SelectedGlossary.Id).Select(tl => tl.TagName);
 
             _selectedGlossaryTags =
-                new ObservableCollection<TagModel>(
+                new ObservableCollection<object>(
                     (tagNamesSelectedGlossary is not null && tagNamesSelectedGlossary.Any())
-                        ? Tags.Where(t => tagNamesSelectedGlossary.Contains(t.TagName)).ToList()
+                        ? Tags.Cast<TagModel>().Where(t => tagNamesSelectedGlossary.Contains(t.TagName)).ToList()
                         : []);
 
             _selectedGlossaryTags.CollectionChanged += TagLinks_CollectionChanged;
@@ -160,7 +158,7 @@ public class GlossarySetupViewModel(
         set => SetField(ref _tagLinks, value);
     }
 
-    public ObservableCollection<TagModel> Tags
+    public ObservableCollection<object> Tags
     {
         get => _tags;
         set => SetField(ref _tags, value);
@@ -174,16 +172,16 @@ public class GlossarySetupViewModel(
     {
         SelectedGlossary = null;
 
-        Tags = new ObservableCollection<TagModel>(InterpretBankDataContext.GetTags().Distinct().ToList());
-        Languages = new ObservableCollection<LanguageModel>(InterpretBankDataContext.GetDbLanguages());
+        Tags = new ObservableCollection<object>(InterpretBankDataContext.GetTags().Distinct().ToList());
+        Languages = new ObservableCollection<object>(InterpretBankDataContext.GetDbLanguages());
         Glossaries = new ObservableCollection<GlossaryModel>(InterpretBankDataContext.GetGlossaries());
         TagLinks = new ObservableCollection<TagLinkModel>(InterpretBankDataContext.GetLinks());
 
-        var languageGroup = new LanguageGroup(1, "All languages");
-        Languages.ForEach(l => l.Group = languageGroup);
+        //var languageGroup = new LanguageGroup(1, "All languages");
+        //Languages.ForEach(l => l.Group = languageGroup);
 
-        var tagGroup = new TagsGroup(1, "All tags");
-        Tags.ForEach(t => t.Group = tagGroup);
+        //var tagGroup = new TagsGroup(1, "All tags");
+        //Tags.ForEach(t => t.Group = tagGroup);
 
         SetupSelectedLanguages();
     }
@@ -247,7 +245,7 @@ public class GlossarySetupViewModel(
 
         if (!UserInteractionService.Confirm($@"Are you sure you want to delete the tag ""{tag.TagName}""?")) return;
 
-        Tags.Remove(Tags.Single(t => t.TagName == tag.TagName));
+        Tags.Remove(Tags.Cast<TagModel>().Single(t => t.TagName == tag.TagName));
         InterpretBankDataContext.RemoveTag(tag.TagName);
         OnPropertyChanged(nameof(SelectedGlossaryTags));
     }
@@ -286,7 +284,7 @@ public class GlossarySetupViewModel(
 
         var newTag = new TagModel { TagName = tagName };
 
-        if (Tags.Any(t => t.TagName == newTag.TagName))
+        if (Tags.Cast<TagModel>().Any(t => t.TagName == newTag.TagName))
         {
             UserInteractionService.WarnUser(PluginResources.Message_TagAlreadyExists);
             return;
@@ -304,15 +302,9 @@ public class GlossarySetupViewModel(
             case NotifyCollectionChangedAction.Add:
                 if (e.NewItems[0] is LanguageModel newLanguage)
                 {
-                    InterpretBankDataContext.AddLanguageToGlossary(newLanguage, SelectedGlossary.GlossaryName);
+                    InterpretBankDataContext.AddLanguageToGlossary(newLanguage, SelectedGlossary?.GlossaryName);
                 }
                 break;
-
-            case NotifyCollectionChangedAction.Remove:
-                break;
-
-            default:
-                throw new ArgumentOutOfRangeException();
         }
     }
 
@@ -323,7 +315,7 @@ public class GlossarySetupViewModel(
 
         var glossaryImport = new GlossaryImport(importTerms);
 
-        InterpretBankDataContext.AddCompatibleLanguageEquivalentsFromImport(glossaryImport, SelectedGlossary.GlossaryName);
+        InterpretBankDataContext.AddCompatibleLanguageEquivalentsFromImport(glossaryImport, SelectedGlossary?.GlossaryName);
     }
 
     private void LanguageListBoxItem_SelectedLanguagesChanged(object sender, PropertyChangedEventArgs e)
@@ -364,7 +356,7 @@ public class GlossarySetupViewModel(
 
         SelectedLanguages.ForEach(si => si.SelectedIndex = 0);
 
-        foreach (var language in Languages)
+        foreach (var language in Languages.Cast<LanguageModel>())
         {
             var selectedIndex = allLanguages.IndexOf(language.Name);
             SelectedLanguages[language.Index - 1].SelectedIndex = selectedIndex;
@@ -376,15 +368,16 @@ public class GlossarySetupViewModel(
 
     private void TagLinks_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
+        var selectedGlossary = SelectedGlossary;
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add when e.NewItems[0] is TagModel tagModel:
                 TagLinks.Add(new TagLinkModel
                 {
-                    GlossaryId = SelectedGlossary.Id,
+                    GlossaryId = selectedGlossary.Id,
                     TagName = tagModel.TagName
                 });
-                InterpretBankDataContext.TagGlossary(tagModel, SelectedGlossary.GlossaryName);
+                InterpretBankDataContext.TagGlossary(tagModel, selectedGlossary.GlossaryName);
                 if (tagModel.TagName == SelectedTag.TagName) OnPropertyChanged(nameof(SelectedTagGlossaries));
 
                 break;
@@ -396,13 +389,13 @@ public class GlossarySetupViewModel(
                     TagName = SelectedTag.TagName
                 });
                 InterpretBankDataContext.TagGlossary(SelectedTag, glossaryModel.GlossaryName);
-                if (glossaryModel.GlossaryName == SelectedGlossary.GlossaryName) OnPropertyChanged(nameof(SelectedGlossaryTags));
+                if (glossaryModel.GlossaryName == selectedGlossary.GlossaryName) OnPropertyChanged(nameof(SelectedGlossaryTags));
                 break;
 
             case NotifyCollectionChangedAction.Remove when e.OldItems[0] is TagModel tagModel:
-                var tagLinkRemoved = TagLinks.FirstOrDefault(tl => tl.TagName == tagModel.TagName && tl.GlossaryId == SelectedGlossary.Id);
+                var tagLinkRemoved = TagLinks.FirstOrDefault(tl => tl.TagName == tagModel.TagName && tl.GlossaryId == selectedGlossary.Id);
                 TagLinks.Remove(tagLinkRemoved);
-                InterpretBankDataContext.RemoveTagFromGlossary(tagModel.TagName, SelectedGlossary.GlossaryName);
+                InterpretBankDataContext.RemoveTagFromGlossary(tagModel.TagName, selectedGlossary.GlossaryName);
                 if (tagModel.TagName == SelectedTag.TagName) OnPropertyChanged(nameof(SelectedTagGlossaries));
                 break;
 
@@ -410,7 +403,7 @@ public class GlossarySetupViewModel(
                 tagLinkRemoved = TagLinks.FirstOrDefault(tl => tl.TagName == SelectedTag.TagName && tl.GlossaryId == glossaryModel.Id);
                 TagLinks.Remove(tagLinkRemoved);
                 InterpretBankDataContext.RemoveTagFromGlossary(SelectedTag.TagName, glossaryModel.GlossaryName);
-                if (glossaryModel.GlossaryName == SelectedGlossary.GlossaryName) OnPropertyChanged(nameof(SelectedGlossaryTags));
+                if (glossaryModel.GlossaryName == selectedGlossary.GlossaryName) OnPropertyChanged(nameof(SelectedGlossaryTags));
                 break;
         }
     }

@@ -1,8 +1,6 @@
 ﻿using InterpretBank.SettingsService.ViewModel;
 using System.Windows;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace InterpretBank.SettingsService.UI
 {
@@ -22,11 +20,6 @@ namespace InterpretBank.SettingsService.UI
             Close();
         }
 
-        private void CancelButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
         private void ImportButton_Click(object sender, RoutedEventArgs e)
         {
             var contextMenu = Import_Button.ContextMenu;
@@ -36,11 +29,10 @@ namespace InterpretBank.SettingsService.UI
             contextMenu.IsOpen = true;
         }
 
-        private bool IsMouseOverPopup(MouseButtonEventArgs e)
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            var point = e.GetPosition(this);
-            var hitTestResult = VisualTreeHelper.HitTest(this, point);
-            return hitTestResult.VisualHit is Popup;
+            if (e.ChangedButton == MouseButton.Left)
+                DragMove();
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using Autofac;
+using InterpretBank.Helpers;
 using InterpretBank.Interface;
 using InterpretBank.Model;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -64,6 +66,12 @@ namespace InterpretBank.Controls
 
         private IUserInteractionService UserInteractionService => ApplicationInitializer.ApplicationLifetimeScope.Resolve<IUserInteractionService>();
 
+        private static void CreateDatabaseListFile()
+        {
+            if (!Directory.Exists(DbListFolderPath)) Directory.CreateDirectory(DbListFolderPath);
+            using var file = File.Create(DbListPath);
+        }
+
         private void AddToDatabaseList(string filepath)
         {
             if (!DatabaseList.List.Contains(filepath))
@@ -80,18 +88,42 @@ namespace InterpretBank.Controls
 
         private void ChooseFilepathControl_OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (!File.Exists(DbListPath))
-            {
-                if (!Directory.Exists(DbListFolderPath)) Directory.CreateDirectory(DbListFolderPath);
-                using var file = File.Create(DbListPath);
-            }
+            if (!File.Exists(DbListPath)) CreateDatabaseListFile();
 
-            DatabaseList = JsonConvert.DeserializeObject<DatabaseList>(File.ReadAllText(DbListPath)) ?? new DatabaseList();
+            var deserializationActionResult = ErrorHandler.WrapTryCatch(DeserializeListFromFile);
+
+            if (!deserializationActionResult.Success)
+            {
+                //File.Delete(DbListPath);
+
+                var dbListDeserializationActionResult = ErrorHandler.WrapTryCatch(() =>
+                    JsonConvert.DeserializeObject<List<string>>(File.ReadAllText(DbListPath)));
+
+                if (!dbListDeserializationActionResult.Success)
+                {
+                    File.Delete(DbListPath);
+                    CreateDatabaseListFile();
+                }
+
+                DatabaseList = new DatabaseList
+                {
+                    LastUsed = "",
+                    List = dbListDeserializationActionResult.Result
+                };
+
+                File.WriteAllText(DbListPath, JsonConvert.SerializeObject(DatabaseList));
+            }
 
             if (!string.IsNullOrWhiteSpace(DatabaseList.LastUsed))
             {
                 FilepathCombobox.SelectedIndex = DatabaseList.List.IndexOf(DatabaseList.LastUsed);
             }
+        }
+
+        private void DeserializeListFromFile()
+        {
+            DatabaseList = JsonConvert.DeserializeObject<DatabaseList>(File.ReadAllText(DbListPath)) ??
+                new DatabaseList();
         }
 
         private void DocumentationButton_OnClick(object sender, RoutedEventArgs e)

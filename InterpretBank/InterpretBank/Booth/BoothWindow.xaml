@@ -9,8 +9,10 @@
         d:DataContext="{d:DesignInstance viewModel:BoothWindowViewModel}"
         mc:Ignorable="d"
         Title="InterpretBank Live Search"
+        MouseDown="Window_MouseDown"
         Name="Booth_Window"
         Icon="/InterpretBank;component/Resources/Booth.ico"
+        WindowStyle="None"
         WindowStartupLocation="CenterScreen"
         MinHeight="510"
         Height="510"
@@ -28,6 +30,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/datagridresources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
                 <ResourceDictionary Source="/InterpretBank;component/Styles/Buttons.xaml" />
                 <ResourceDictionary Source="/InterpretBank;component/Styles/LanguageModelTemplate.xaml" />
@@ -64,6 +67,11 @@
     </Window.Resources>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"
                               MinWidth="200"
@@ -71,9 +79,14 @@
             <ColumnDefinition Width="5*" />
         </Grid.ColumnDefinitions>
 
+        <Image Grid.Row="0"
+               Height="50"
+               Grid.ColumnSpan="2"
+               Source="/InterpretBank;component/Resources/logo.png" />
 
         <GroupBox Header="Settings"
                   Grid.Column="0"
+                  Grid.Row="1"
                   Style="{StaticResource HeaderStyle}"
                   x:Name="SettingsGroupBox"
                   BorderThickness="0"
@@ -148,6 +161,7 @@
         </GroupBox>
 
         <GridSplitter Grid.Column="0"
+                      Grid.Row="1"
                       AutomationProperties.Name="Window splitter"
                       Width="1"
                       HorizontalAlignment="Right"
@@ -168,6 +182,7 @@
         </GridSplitter>
 
         <DockPanel Grid.Column="1"
+                   Grid.Row="1"
                    LastChildFill="False"
                    x:Name="TermSearchPanel">
 
@@ -274,5 +289,14 @@
 
 
         </DockPanel>
+
+        <Button Grid.Row="2"
+                Grid.Column="1"
+                Margin="10"
+                Command="Close"
+                HorizontalAlignment="Right"
+                Style="{StaticResource Sdl.Button.DialogStyle}"
+                Content="Close" />
+
     </Grid>
 </Window>

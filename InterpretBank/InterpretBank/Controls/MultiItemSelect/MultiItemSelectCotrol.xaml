@@ -161,8 +161,8 @@
                                Focusable="True" />
                     <ListBox x:Name="AllItemsListBox"
                              SelectionMode="Multiple"
+                             SelectionChanged="AllItemsListBox_OnSelectionChanged"
                              TabIndex="1"
-                             SelectionChanged="ItemList_OnSelectionChanged"
                              Visibility="{Binding ShowDropdown, ElementName=Root, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"
                              ItemsSource="{Binding ItemsSource, ElementName=Root}">
                         <ListBox.ItemTemplate>

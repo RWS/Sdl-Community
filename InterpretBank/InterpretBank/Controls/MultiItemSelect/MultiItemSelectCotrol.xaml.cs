@@ -23,7 +23,7 @@ namespace InterpretBank.Controls.MultiItemSelect
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register(nameof(ItemsSource), typeof(IEnumerable), typeof(MultiItemSelectControl), new PropertyMetadata(default(IEnumerable)));
         public static readonly DependencyProperty ItemTemplateProperty = DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(MultiItemSelectControl), new PropertyMetadata(default(DataTemplate)));
         public static readonly DependencyProperty NotificationsProperty = DependencyProperty.Register(nameof(Notifications), typeof(string), typeof(MultiItemSelectControl), new PropertyMetadata(default(string)));
-        public static readonly DependencyProperty SelectedItemsProperty = DependencyProperty.Register(nameof(SelectedItems), typeof(ObservableCollection<object>), typeof(MultiItemSelectControl), new PropertyMetadata(new ObservableCollection<object>(), PropertyChangedCallback));
+        public static readonly DependencyProperty SelectedItemsProperty = DependencyProperty.Register(nameof(SelectedItems), typeof(ObservableCollection<object>), typeof(MultiItemSelectControl), new PropertyMetadata(new ObservableCollection<object>(), SelectedItemsChanged));
 
         public static readonly DependencyProperty SelectedItemTemplateProperty = DependencyProperty.Register(nameof(SelectedItemTemplate), typeof(DataTemplate), typeof(MultiItemSelectControl), new PropertyMetadata(default(DataTemplate)));
 
@@ -98,13 +98,26 @@ namespace InterpretBank.Controls.MultiItemSelect
 
         public ICommand ShowDropdownCommand => new RelayCommand(ShowDropdownHandler);
 
-        private static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void SelectedItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is not MultiItemSelectControl multiItemSelectControl) return;
-            multiItemSelectControl.AllItemsListBox.SelectedItems.Clear();
-            foreach (var selectedItem in multiItemSelectControl.SelectedItems.ToList())
+            var selectedItems = multiItemSelectControl.SelectedItems;
+
+            var uiSelectedItems = multiItemSelectControl.AllItemsListBox.SelectedItems;
+            uiSelectedItems.Clear();
+
+            if (selectedItems is null) return;
+            foreach (var selectedItem in selectedItems.ToList()) uiSelectedItems.Add(selectedItem);
+        }
+
+        private void AllItemsListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (SelectedItems.Count >= AllItemsListBox.SelectedItems.Count) return;
+
+            foreach (var selectedItem in AllItemsListBox.SelectedItems)
             {
-                multiItemSelectControl.AllItemsListBox.SelectedItems.Add(selectedItem);
+                if (SelectedItems.Contains(selectedItem)) continue;
+                SelectedItems.Add(selectedItem);
             }
         }
 
@@ -113,9 +126,13 @@ namespace InterpretBank.Controls.MultiItemSelect
             DeleteItem(AllItemsListBox.SelectedItem);
         }
 
+
+
         private async void DeleteItem(object obj)
         {
             AllItemsListBox.SelectedItems.Remove(obj);
+            SelectedItems.Remove(obj);
+
             await NotifyUser("Item unselected");
 
             var item = (ListBoxItem)SelectedItemsControl.ItemContainerGenerator.ContainerFromItem(SelectedItemsControl.SelectedItem);
@@ -141,18 +158,8 @@ namespace InterpretBank.Controls.MultiItemSelect
         private void HideDropdown(object obj)
         {
             ShowDropdown = false;
-
             //var firstItem = (ListBoxItem)SelectedItemsControl.ItemContainerGenerator.ContainerFromItem(SelectedItemsControl.SelectedItem);
             Focus(SelectedItemsControl);
-        }
-
-        private void ItemList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            SelectedItems.Clear();
-            foreach (var selectedItem in ((ListBox)sender).SelectedItems)
-            {
-                SelectedItems.Add(selectedItem);
-            }
         }
 
         private async Task NotifyUser(string message)
@@ -172,5 +179,7 @@ namespace InterpretBank.Controls.MultiItemSelect
         {
             ShowDropdown = true;
         }
+
+        
     }
 }

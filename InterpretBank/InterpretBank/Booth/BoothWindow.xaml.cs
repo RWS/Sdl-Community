@@ -18,9 +18,12 @@ namespace InterpretBank.Booth
 
         private GridLength LastColumnWidth { get; set; }
 
-        private void CommandBinding_OnExecuted(object sender, ExecutedRoutedEventArgs e)
+        private void CommandBinding_OnExecuted(object sender, ExecutedRoutedEventArgs e) => Close();
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            Close();
+            if (e.ChangedButton == MouseButton.Left)
+                DragMove();
         }
 
         private void SettingsToggleButton_OnClick(object sender, RoutedEventArgs e)
