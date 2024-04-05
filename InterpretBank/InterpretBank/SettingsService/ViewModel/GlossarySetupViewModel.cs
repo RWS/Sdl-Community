@@ -109,9 +109,9 @@ public class GlossarySetupViewModel(
 
             _selectedGlossaryTags =
                 new ObservableCollection<object>(
-                    (tagNamesSelectedGlossary is not null && tagNamesSelectedGlossary.Any())
+                    ((tagNamesSelectedGlossary is not null && tagNamesSelectedGlossary.Any())
                         ? Tags.Cast<TagModel>().Where(t => tagNamesSelectedGlossary.Contains(t.TagName)).ToList()
-                        : []);
+                        : []).OrderBy(t=>t.TagName));
 
             _selectedGlossaryTags.CollectionChanged += TagLinks_CollectionChanged;
             return _selectedGlossaryTags;
@@ -144,7 +144,9 @@ public class GlossarySetupViewModel(
             var idsOfTaggedGlossaries = TagLinks?.Where(tl => tl.TagName == SelectedTag?.TagName).Select(tl => tl.GlossaryId);
             if (idsOfTaggedGlossaries is null) return null;
 
-            _selectedTagGlossaries = new ObservableCollection<object>(Glossaries?.Cast<GlossaryModel>().Where(gl => idsOfTaggedGlossaries.Contains(gl.Id)).ToList());
+            _selectedTagGlossaries = new ObservableCollection<object>(Glossaries?.Cast<GlossaryModel>()
+                .Where(gl => idsOfTaggedGlossaries.Contains(gl.Id)).OrderBy(g => g.GlossaryName)
+                .ThenBy(g => g.SubGlossaryName).ToList());
             _selectedTagGlossaries.CollectionChanged += TagLinks_CollectionChanged;
 
             return _selectedTagGlossaries;
@@ -173,9 +175,9 @@ public class GlossarySetupViewModel(
         SelectedGlossary = null;
 
         TagLinks = new ObservableCollection<TagLinkModel>(InterpretBankDataContext.GetLinks());
-        Glossaries = new ObservableCollection<object>(InterpretBankDataContext.GetGlossaries());
-        Tags = new ObservableCollection<object>(InterpretBankDataContext.GetTags().Distinct().ToList());
-        Languages = new ObservableCollection<object>(InterpretBankDataContext.GetDbLanguages());
+        Glossaries = new ObservableCollection<object>(InterpretBankDataContext.GetGlossaries().OrderBy(g=>g.GlossaryName).ThenBy(g=>g.SubGlossaryName));
+        Tags = new ObservableCollection<object>(InterpretBankDataContext.GetTags().Distinct().OrderBy(t=>t.TagName).ToList());
+        Languages = new ObservableCollection<object>(InterpretBankDataContext.GetDbLanguages().OrderBy(l=>l.Name));
 
         OnPropertyChanged(nameof(SelectedGlossaryTags));
         OnPropertyChanged(nameof(SelectedTagGlossaries));
