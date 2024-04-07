@@ -218,8 +218,6 @@
                                                                     IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}" />
                         </DockPanel>
                     </Grid>
-
-
                 </Grid>
 
             </TabItem>

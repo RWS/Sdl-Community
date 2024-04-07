@@ -19,6 +19,9 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="Close" Executed="CloseWindowCommandHandler"/>
+    </Window.CommandBindings>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -39,6 +42,7 @@
             <Button Content="OK"
                     Style="{StaticResource Sdl.Button.GeneralStyle}"
                     Height="10"
+                    Command="Close"
                     Click="ButtonBase_OnClick"
                     IsDefault="True"
                     HorizontalAlignment="Left"
@@ -46,6 +50,7 @@
             <Button Content="Cancel"
                     Style="{StaticResource Sdl.Button.GeneralStyle}"
                     HorizontalAlignment="Right"
+                    Command="Close"
                     Height="10"
                     IsCancel="True"
                     Margin="0 0 5 5"/>

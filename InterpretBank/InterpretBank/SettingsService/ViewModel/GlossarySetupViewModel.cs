@@ -256,11 +256,7 @@ public class GlossarySetupViewModel(
 
     private void EnterGlossary(object parameter)
     {
-        var glossaryName = UserInteractionService.GetInfoFromUser(PluginResources.Message_TypeNameOfNewGlossary);
-
-        if (string.IsNullOrEmpty(glossaryName)) return;
-
-        var newGlossary = new GlossaryModel { GlossaryName = glossaryName };
+        if (!UserInteractionService.GetInfoFromUser(out var glossaryName, PluginResources.Message_TypeNameOfNewGlossary)) return;
 
         if (Glossaries.Cast<GlossaryModel>().Any(g => g.GlossaryName == glossaryName))
         {
@@ -268,6 +264,7 @@ public class GlossarySetupViewModel(
             return;
         }
 
+        var newGlossary = new GlossaryModel { GlossaryName = glossaryName };
         Glossaries.Add(newGlossary);
         AttachToEventsOfGlossaryModel(newGlossary);
 
@@ -277,17 +274,15 @@ public class GlossarySetupViewModel(
 
     private void EnterTag(object parameter)
     {
-        var tagName = UserInteractionService.GetInfoFromUser(PluginResources.Message_TypeNameOfNewTag);
+        if (!UserInteractionService.GetInfoFromUser(out var tagName, PluginResources.Message_TypeNameOfNewTag)) return;
 
-        if (string.IsNullOrEmpty(tagName)) return;
-
-        var newTag = new TagModel { TagName = tagName };
-
-        if (Tags.Cast<TagModel>().Any(t => t.TagName == newTag.TagName))
+        if (Tags.Cast<TagModel>().Any(t => t.TagName == tagName))
         {
             UserInteractionService.WarnUser(PluginResources.Message_TagAlreadyExists);
             return;
         }
+
+        var newTag = new TagModel { TagName = tagName };
         Tags.Add(newTag);
         SelectedTag = newTag;
 
