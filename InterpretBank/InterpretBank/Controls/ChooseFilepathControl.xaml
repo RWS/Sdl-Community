@@ -68,7 +68,6 @@
                         HorizontalAlignment="Right"
                         Margin="5 5 2 5" />
             </StackPanel>
-
         </Border>
     </WrapPanel>
 </UserControl>

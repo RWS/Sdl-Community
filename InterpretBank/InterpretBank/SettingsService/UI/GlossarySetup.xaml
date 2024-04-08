@@ -361,6 +361,15 @@
                    VerticalAlignment="Bottom"
                    LastChildFill="False">
 
+            <Button Content="Help"
+                    Cursor="Hand"
+                    Height="30"
+                    Click="HelpButton_OnClick"
+                    HorizontalAlignment="Left"
+                    Style="{StaticResource Sdl.Button.GeneralStyle}"
+                    DockPanel.Dock="Left"
+                    Margin="10 0 10 10" />
+
             <Button Content="Close"
                     IsCancel="True"
                     Cursor="Hand"

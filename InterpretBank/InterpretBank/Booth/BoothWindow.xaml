@@ -290,6 +290,17 @@
 
         </DockPanel>
 
+        <Button Content="Help"
+                Cursor="Hand"
+                Grid.Row="2"
+                Grid.Column="0"
+                Height="30"
+                Click="HelpButton_OnClick"
+                HorizontalAlignment="Left"
+                Style="{StaticResource Sdl.Button.GeneralStyle}"
+                DockPanel.Dock="Left"
+                Margin="10 0 10 10" />
+
         <Button Grid.Row="2"
                 Grid.Column="1"
                 Margin="10"

@@ -126,11 +126,6 @@ namespace InterpretBank.Controls
                 new DatabaseList();
         }
 
-        private void DocumentationButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            Process.Start("https://appstore.rws.com/Plugin/243?tab=documentation");
-        }
-
         private void FilepathCombobox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             DatabaseList.LastUsed = Filepath;

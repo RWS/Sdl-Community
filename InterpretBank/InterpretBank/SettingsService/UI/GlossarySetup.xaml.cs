@@ -1,4 +1,5 @@
 ﻿using InterpretBank.SettingsService.ViewModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 
@@ -33,6 +34,11 @@ namespace InterpretBank.SettingsService.UI
         {
             if (e.ChangedButton == MouseButton.Left)
                 DragMove();
+        }
+
+        private void HelpButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://appstore.rws.com/Plugin/243?tab=documentation");
         }
     }
 }

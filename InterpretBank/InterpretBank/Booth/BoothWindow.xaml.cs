@@ -1,4 +1,5 @@
 ﻿using InterpretBank.Booth.ViewModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
@@ -42,6 +43,11 @@ namespace InterpretBank.Booth
                 ColumnOne.MinWidth = 200;
                 SettingsGroupBox.Visibility = Visibility.Visible;
             }
+        }
+
+        private void HelpButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://appstore.rws.com/Plugin/243?tab=documentation");
         }
     }
 }
