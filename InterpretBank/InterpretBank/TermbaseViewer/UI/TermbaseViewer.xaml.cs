@@ -1,6 +1,7 @@
 ﻿using InterpretBank.TermbaseViewer.ViewModel;
 using Sdl.Core.Globalization;
 using System.Collections.Generic;
+using System.Windows.Input;
 
 namespace InterpretBank.TermbaseViewer.UI
 {
@@ -22,9 +23,9 @@ namespace InterpretBank.TermbaseViewer.UI
             ViewModel.OpenAddTermPopup(source, target);
         }
 
-        public void LoadTerms(Language sourceLanguage, Language targetLanguage, List<string> glossaries, string databaseFilepath)
+        public void LoadTerms(Language sourceLanguage, Language targetLanguage, List<string> glossaries, List<string> tags, bool useTags, string databaseFilepath)
         {
-            ViewModel.Setup(sourceLanguage, targetLanguage, glossaries, databaseFilepath);
+            ViewModel.Setup(sourceLanguage, targetLanguage, glossaries, tags, useTags, databaseFilepath);
         }
 
         public void ReloadDb(string filepath)
@@ -35,6 +36,12 @@ namespace InterpretBank.TermbaseViewer.UI
         public void ReloadTerms(Language sourceLanguage, Language targetLanguage)
         {
             ViewModel.ReloadTerms(sourceLanguage, targetLanguage);
+        }
+
+        private void DeleteCommandHandler(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (DataContext is not TermbaseViewerViewModel viewModel) return;
+            viewModel.RemoveSelectedEntryCommand.Execute(viewModel.SelectedEntry);
         }
     }
 }

@@ -305,7 +305,7 @@
                                                             Grid.Row="1"
                                                             Margin="5 0 0 0"
                                                             ItemsSource="{Binding Glossaries}"
-                                                            IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}"
+                                                            IsEnabled="{Binding SelectedTag, Converter={StaticResource NullToBullConverter}}"
                                                             ItemTemplate="{StaticResource GlossaryTemplate}"
                                                             SelectedItems="{Binding SelectedTagGlossaries}"
                                                             SelectedItemTemplate="{StaticResource GlossaryTemplate}" />

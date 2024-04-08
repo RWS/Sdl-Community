@@ -201,5 +201,10 @@ namespace InterpretBank.Controls.MultiItemSelect
         {
             ShowDropdown = true;
         }
+
+        //private void SelectAllItemsButton_OnClick(object sender, RoutedEventArgs e)
+        //{
+        //    AllItemsListBox.SelectAll();
+        //}
     }
 }

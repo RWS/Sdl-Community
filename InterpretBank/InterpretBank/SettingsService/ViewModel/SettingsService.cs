@@ -41,15 +41,7 @@ public class SettingsService(IInterpretBankDataContext interpretBankDataContext)
         set => SetField(ref _glossaries, value);
     }
 
-    public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save, o =>
-    {
-        var enabled =
-            !string.IsNullOrWhiteSpace(Filepath); /*&& this["SelectedTags"] == "" && this["SelectedGlossaries"] == "";*/
-
-        enabled &= UseTags ? this["SelectedTags"] == "" : this["SelectedGlossaries"] == "";
-
-        return enabled;
-    });
+    public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save);
 
     public ObservableCollection<object> SelectedGlossaries
     {
