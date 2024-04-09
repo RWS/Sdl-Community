@@ -15,15 +15,27 @@ namespace Sdl.Community.IATETerminologyProvider.View
 	{
 		private readonly SearchResultsControl _control = new();
 
+		public static bool IsInitialized { get; set; }
+
 		public BrowserWindow Browser => _control.Browser;
 
-		protected override IUIControl GetContentControl()
+		public string Url { get; set; }
+
+		public void NavigateTo(string url)
 		{
-			return _control;
+			Url = url;
+			if (!IsVisible) Show();
+			Navigate();
 		}
 
-		protected override void Initialize()
+		protected override IUIControl GetContentControl() => _control;
+
+		protected override async void Initialize()
 		{
+			IsInitialized = true;
+			await Browser.InitializeWebView();
 		}
+
+		private void Navigate() => Browser.Navigate(Url);
 	}
 }
