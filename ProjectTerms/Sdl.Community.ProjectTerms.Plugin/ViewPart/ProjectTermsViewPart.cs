@@ -11,6 +11,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.ViewPart
 
         protected override IUIControl GetContentControl()
         {
+	        StudioContext.RaiseControllersAvailableEvent();
             return control.Value;
         }
 

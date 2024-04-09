@@ -26,7 +26,8 @@ namespace Sdl.Community.ProjectTerms.Plugin.ProjectTermsAction
 				
 		protected override void Execute()
         {
-            if (Utils.Utils.VerifySingleFileProjectType())
+	        StudioContext.RaiseControllersAvailableEvent();
+			if (Utils.Utils.VerifySingleFileProjectType())
             {
                 MessageBox.Show(PluginResources.Error_SingleFileProject, PluginResources.MessageType_Info);
                 return;
