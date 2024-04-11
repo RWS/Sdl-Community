@@ -4,15 +4,15 @@ using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.IATETerminologyProvider.IATEProviderTellMe
 {
-	public class IATECommunityWikiAction : AbstractTellMeAction
+	public class IATECommunityDocumentationAction : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
 		public override string Category => "IATE results";
 		public override Icon Icon => PluginResources.Question;
 
-		public IATECommunityWikiAction()
+		public IATECommunityDocumentationAction()
 		{
-			Name = "RWS Community IATE plugin wiki";
+			Name = "IATE Documentation";
 		}
 
 		public override void Execute()

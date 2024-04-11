@@ -139,6 +139,7 @@
     <Compile Include="Controls\CustomProgressRing.cs" />
     <Compile Include="EventArgs\TermEntryModelChanged.cs" />
     <Compile Include="Helpers\CurrentViewDetector.cs" />
+    <Compile Include="IATEProviderTellMe\IATESourceCode.cs" />
     <Compile Include="Interface\IEUProvider.cs" />
     <Compile Include="Model\CollectionModel.cs" />
     <Compile Include="Model\InstitutionModel.cs" />
@@ -156,7 +157,7 @@
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="IATEApplication.cs" />
-    <Compile Include="IATEProviderTellMe\IATECommunityWikiAction.cs" />
+    <Compile Include="IATEProviderTellMe\IATECommunityDocumentationAction.cs" />
     <Compile Include="IATEProviderTellMe\IATECommunityForumAction.cs" />
     <Compile Include="IATEProviderTellMe\IATEContactAction.cs" />
     <Compile Include="IATEProviderTellMe\IATEStoreAction.cs" />
@@ -289,6 +290,9 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Resource Include="Resources\Forum.ico" />
+    <Resource Include="Resources\Settings.ico" />
+    <Resource Include="Resources\SourceCode.ico" />
     <Resource Include="Resources\StarGrey.png" />
     <Resource Include="Resources\StarYellow.png" />
     <Resource Include="Resources\Question.ico" />
