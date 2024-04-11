@@ -139,6 +139,7 @@
     <Compile Include="Controls\CustomProgressRing.cs" />
     <Compile Include="EventArgs\TermEntryModelChanged.cs" />
     <Compile Include="Helpers\CurrentViewDetector.cs" />
+    <Compile Include="IATEProviderTellMe\IATESettingsAction.cs" />
     <Compile Include="IATEProviderTellMe\IATESourceCode.cs" />
     <Compile Include="Interface\IEUProvider.cs" />
     <Compile Include="Model\CollectionModel.cs" />

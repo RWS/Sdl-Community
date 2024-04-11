@@ -23,6 +23,9 @@ namespace Sdl.Community.IATETerminologyProvider.IATEProviderTellMe
 			},new IATESourceCode
 			{
 				Keywords = ["iate", "source", "code"]
+			}, new IATESettingsAction
+			{
+				Keywords = ["iate", "settings"]
 			}
 		];
 	}
