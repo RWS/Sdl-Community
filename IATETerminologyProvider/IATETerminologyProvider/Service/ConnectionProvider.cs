@@ -16,7 +16,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 		private readonly System.Timers.Timer _timer;
 		
-		private DateTime _expireDate;
+		private DateTime? _expireDate;
 
 		private bool _accessTokenExpired;
 		private bool _refreshTokenExpired;
@@ -122,7 +122,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			}
 		}
 
-		public DateTime ExpireDate
+		public DateTime? ExpireDate
 		{
 			get => _expireDate;
 			private set
@@ -159,7 +159,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 				_accessTokenExpired = false;
 				_refreshTokenExpired = false;
 
-				_expireDate = ReadToken(_accessToken).ValidTo;
+				_expireDate = ReadTokenExpiryDate(_accessToken);
 
 				_httpClient = GetDefaultHttpClient();
 				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
@@ -198,7 +198,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 				_accessTokenExpired = true;
 				_refreshTokenExpired = false;
 
-				_expireDate = ReadToken(_accessToken).ValidTo;
+				_expireDate = ReadTokenExpiryDate(_accessToken);
 				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
 
 				OnPropertyChanged(nameof(AccessToken));
@@ -288,29 +288,15 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 			return GetResponse(httpClient);
 		}
 
-		private JwtSecurityToken ReadToken(string token)
+		private DateTime? ReadTokenExpiryDate(string token)
 		{
-			if (string.IsNullOrEmpty(token))
-			{
-				return null;
-			}
-
 			try
 			{
-				var jwtHandler = new JwtSecurityTokenHandler();
-
-				//Check if readable token (string is in a JWT format)
-				var readableToken = jwtHandler.CanReadToken(token);
-				if (!readableToken)
-				{
-					return null;
-				}
-
-				return jwtHandler.ReadJwtToken(token);
+				return JwtHelper.GetTokenExpiryDate(token);
 			}
-			catch
+			catch (Exception e)
 			{
-				// catch all; ignore
+				
 			}
 
 			return null;

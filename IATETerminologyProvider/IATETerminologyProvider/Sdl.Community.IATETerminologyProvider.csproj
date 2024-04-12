@@ -45,9 +45,6 @@
       <HintPath>$(TradosFolder)\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.IdentityModel.Tokens">
-      <HintPath>$(TradosFolder)\Microsoft.IdentityModel.Tokens.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -139,6 +136,7 @@
     <Compile Include="Controls\CustomProgressRing.cs" />
     <Compile Include="EventArgs\TermEntryModelChanged.cs" />
     <Compile Include="Helpers\CurrentViewDetector.cs" />
+    <Compile Include="Helpers\JwtHelper.cs" />
     <Compile Include="IATEProviderTellMe\IATESettingsAction.cs" />
     <Compile Include="IATEProviderTellMe\IATESourceCode.cs" />
     <Compile Include="Interface\IEUProvider.cs" />
