@@ -140,6 +140,8 @@
     <Compile Include="IATEProviderTellMe\IATESettingsAction.cs" />
     <Compile Include="IATEProviderTellMe\IATESourceCode.cs" />
     <Compile Include="Interface\IEUProvider.cs" />
+    <Compile Include="Interface\IModel.cs" />
+    <Compile Include="Model\CheckStateEnum.cs" />
     <Compile Include="Model\CollectionModel.cs" />
     <Compile Include="Model\InstitutionModel.cs" />
     <Compile Include="Model\Primarities.cs" />
