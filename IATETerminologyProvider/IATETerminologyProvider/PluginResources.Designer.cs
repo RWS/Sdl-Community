@@ -99,19 +99,9 @@ namespace Sdl.Community.IATETerminologyProvider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon Download {
+        public static System.Drawing.Icon Forum {
             get {
-                object obj = ResourceManager.GetObject("Download", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon ForumIcon {
-            get {
-                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
+                object obj = ResourceManager.GetObject("Forum", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -209,11 +199,31 @@ namespace Sdl.Community.IATETerminologyProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Settings {
+            get {
+                object obj = ResourceManager.GetObject("Settings", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Terminology provider settings.
         /// </summary>
         public static string Settings_Descr {
             get {
                 return ResourceManager.GetString("Settings_Descr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon SourceCode {
+            get {
+                object obj = ResourceManager.GetObject("SourceCode", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         

@@ -4,20 +4,20 @@ using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.IATETerminologyProvider.IATEProviderTellMe
 {
-	public class IATEContactAction : AbstractTellMeAction
+	public class IATESourceCode : AbstractTellMeAction
 	{
-		public IATEContactAction()
+		public IATESourceCode()
 		{
-			Name = "IATE Official Web Site Terminology";
+			Name = "IATE Source Code";
 		}
 
 		public override string Category => "IATE results";
-		public override Icon Icon => PluginResources.Iate_logo;
+		public override Icon Icon => PluginResources.SourceCode;
 		public override bool IsAvailable => true;
 
 		public override void Execute()
 		{
-			Process.Start("https://iate.europa.eu/home");
+			Process.Start("https://github.com/RWS/Sdl-Community/tree/master/IATETerminologyProvider");
 		}
 	}
 }
