@@ -16,10 +16,10 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
     {
         public DeepLSettingsAction()
         {
-            Name = "DeepL MT Provider options";
+            Name = $"{PluginResources.Plugin_Name} Settings";
         }
 
-        public override string Category => "DeepL results";
+        public override string Category => $"{PluginResources.Plugin_Name} results";
 
         public override Icon Icon => PluginResources.Settings;
 
