@@ -310,7 +310,9 @@
     <Compile Include="Service\WizardService.cs" />
     <Compile Include="TellMe\AppStoreDownloadAction.cs" />
     <Compile Include="TellMe\AppStoreForumAction.cs" />
-    <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\DocumentationAction.cs" />
+    <Compile Include="TellMe\SettingsAction.cs" />
+    <Compile Include="TellMe\SourceCodeAction.cs" />
     <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
     <Compile Include="ViewModel\ReportViewModel.cs" />
@@ -563,6 +565,8 @@
   <ItemGroup>
     <Content Include="Resources\Download.ico" />
     <Content Include="Resources\Refresh.ico" />
+    <Content Include="Resources\SourceCode.ico" />
+    <Content Include="Resources\TellmeDocumentation.ico" />
     <Resource Include="ThirdParty\Rws.MultiSelectComboBox.dll" />
     <Resource Include="Resources\LanguageMapping.ico" />
     <Resource Include="Resources\Search.png" />
