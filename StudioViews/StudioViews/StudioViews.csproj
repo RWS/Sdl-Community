@@ -185,6 +185,7 @@
     <Compile Include="TellMe\CommunityAppStoreAction.cs" />
     <Compile Include="TellMe\CommunityAppStoreForumAction.cs" />
     <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\SourceCodeAction.cs" />
     <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="Themes\Generic\CustomProgressRing.cs" />
     <Compile Include="ViewModel\BaseModel.cs" />
@@ -239,6 +240,9 @@
     <AdditionalFiles Include="ThirdParty\Rws.MultiSelectComboBox.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AdditionalFiles>
+    <Resource Include="Resources\Settings.ico" />
+    <Resource Include="Resources\SourceCode.ico" />
+    <Resource Include="Resources\TellmeDocumentation.ico" />
     <Resource Include="Resources\Download.ico" />
     <Resource Include="Resources\ForumIcon.ico" />
     <Content Include="Resources\information.ico" />

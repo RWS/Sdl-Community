@@ -3,7 +3,7 @@
 namespace Sdl.Community.StudioViews.TellMe
 {
 	[TellMeProvider]
-	public class TellMeProvider: ITellMeProvider
+	public class TellMeProvider : ITellMeProvider
 	{
 		public string Name => string.Format(PluginResources.TellMe_String_TellMe_Provider, PluginResources.Plugin_Name);
 
@@ -17,9 +17,11 @@ namespace Sdl.Community.StudioViews.TellMe
 			{
 				Keywords = new[] { "studio", "views", "studioviews", "support", "forum" }
 			},
-			new CommunityAppStoreAction
+			new SourceCodeAction
 			{
-				Keywords = new[] { "studio", "views", "studioviews", "store", "download", "appstore" }}
+				Keywords = new[] { "studio", "views", "studioviews", "source", "code" }
+
+			}
 		};
 	}
 }
