@@ -757,7 +757,7 @@ namespace Sdl.Community.XLIFF.Manager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XLIFF Manager Plugin.
+        ///   Looks up a localized string similar to XLIFF Manager.
         /// </summary>
         internal static string Plugin_Name {
             get {
@@ -809,6 +809,16 @@ namespace Sdl.Community.XLIFF.Manager {
         internal static System.Drawing.Icon Settings {
             get {
                 object obj = ResourceManager.GetObject("Settings", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon SourceCode {
+            get {
+                object obj = ResourceManager.GetObject("SourceCode", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -883,6 +893,16 @@ namespace Sdl.Community.XLIFF.Manager {
         internal static string TellMe_Provider_Results {
             get {
                 return ResourceManager.GetString("TellMe_Provider_Results", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon TellmeDocumentation {
+            get {
+                object obj = ResourceManager.GetObject("TellmeDocumentation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
