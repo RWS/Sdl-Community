@@ -10,11 +10,11 @@ namespace Sdl.Community.SdlDataProtectionSuite.TellMe
 
 		public override string Category => string.Format(PluginResources.TellMe_Provider_Results, PluginResources.Plugin_Name);
 
-		public override Icon Icon => PluginResources.question;
+		public override Icon Icon => PluginResources.TellmeDocumentation;
 
 		public CommunityWikiAction()
 		{
-			Name = string.Format("{0} plugin wiki", PluginResources.Plugin_Name);
+			Name = string.Format("{0} Documentation", PluginResources.Plugin_Name);
 		}
 
 		public override void Execute()

@@ -7,19 +7,24 @@ namespace Sdl.Community.SdlDataProtectionSuite.TellMe
 	{
 		public string Name => string.Format(PluginResources.TellMe_Provider, PluginResources.Plugin_Name);
 
-		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
-		{
+		public AbstractTellMeAction[] ProviderActions =>
+		[
 			new CommunityWikiAction
 			{
-				Keywords = new[] { "data", "protection", "suite", "community", "support", "wiki" }
+				Keywords = ["data", "protection", "suite", "community", "support", "wiki"]
 			},
 			new AppStoreForumAction
 			{
-				Keywords = new[] { "data", "protection", "suite", "support", "forum" }
+				Keywords = ["data", "protection", "suite", "support", "forum"]
 			},
-			new AppStoreDownloadAction
+			new SourceCodeAction
 			{
-				Keywords = new[] { "data", "protection", "suite", "store", "download", "appstore" }}
-		};
+				Keywords = ["data", "protection", "suite", "source", "code"]
+			},
+			new SettingsAction
+			{
+				Keywords = ["data", "protection", "suite", "settings", "tm", "anonymizer"]
+			}
+		];
 	}
 }
