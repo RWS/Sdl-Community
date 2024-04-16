@@ -17,9 +17,14 @@ namespace Sdl.Community.SdlDataProtectionSuite.TellMe
 			{
 				Keywords = new[] { "data", "protection", "suite", "support", "forum" }
 			},
-			new AppStoreDownloadAction
+			new SourceCodeAction()
 			{
-				Keywords = new[] { "data", "protection", "suite", "store", "download", "appstore" }}
+				Keywords = new[] { "data", "protection", "suite", "source", "code" }
+			},
+			new SettingsAction()
+			{
+				Keywords = new[] { "data", "protection", "suite", "settings", "tm", "anonymizer" }
+			}
 		};
 	}
 }
