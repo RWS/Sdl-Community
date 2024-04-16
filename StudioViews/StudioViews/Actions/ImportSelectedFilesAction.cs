@@ -45,7 +45,8 @@ namespace Sdl.Community.StudioViews.Actions
 
 		protected override void Execute()
 		{
-			Run(null, _filesController.CurrentSelectedLanguage);
+			var currentSelectedLanguage = _filesController.SelectedFiles.First().Language;
+			Run(null, currentSelectedLanguage);
 		}
 
 		private void Run(IReadOnlyCollection<SystemFileInfo> importFiles, Language language)
