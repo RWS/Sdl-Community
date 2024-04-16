@@ -226,6 +226,7 @@
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\TellmeDocumentation.ico" />
     <Resource Include="Resources\deepl_ExportGlossaries.ico" />
     <Resource Include="Resources\deepl_Glossarytransfer.ico" />
     <Resource Include="Resources\deepl_Importentries.ico" />

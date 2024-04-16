@@ -6,6 +6,7 @@ using Sdl.Community.DeepLMTProvider.UI;
 using Sdl.Community.DeepLMTProvider.ViewModel;
 using Sdl.TellMe.ProviderApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -43,8 +44,9 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
                 if (!settings.Entries.Any(entry =>
                     entry.MainTranslationProvider.Uri.OriginalString.Contains("deepltranslationprovider")))
                 {
-                    MessageBox.Show(
-                        @"DeepL is not set on this project\nPlease set it in project settings before using TellMe to access it");
+                    MessageBox.Show(@"DeepL is not set on this project" + Environment.NewLine +
+                                    "Please set it in project settings before using TellMe to access it", "DeepL",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 else
                 {
