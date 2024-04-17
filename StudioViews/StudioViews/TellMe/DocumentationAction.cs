@@ -4,7 +4,7 @@ using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.StudioViews.TellMe
 {
-	public class CommunityWikiAction : AbstractTellMeAction
+	public class DocumentationAction : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
 
@@ -12,14 +12,14 @@ namespace Sdl.Community.StudioViews.TellMe
 
 		public override Icon Icon => PluginResources.TellmeDocumentation;
 
-		public CommunityWikiAction()
+		public DocumentationAction()
 		{
 			Name = string.Format("{0} Documentation", PluginResources.Plugin_Name);
 		}
 
 		public override void Execute()
 		{
-			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/5620/studioviews");
+			Process.Start("https://appstore.rws.com/Plugin/12?tab=documentation");
 		}
 	}
 }
