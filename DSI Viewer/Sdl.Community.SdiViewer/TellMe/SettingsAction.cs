@@ -10,7 +10,7 @@ namespace Sdl.Community.DsiViewer.TellMe
 			Name = "DSI Viewer Settings";
 		}
 
-		public override Icon Icon => PluginResources.ForumIcon;
+		public override Icon Icon => PluginResources.Settings;
 
 		public override void Execute()
 		{

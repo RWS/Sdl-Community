@@ -15,9 +15,9 @@ namespace Sdl.Community.DsiViewer
     [ViewPartLayout(typeof(EditorController), Dock = DockType.Bottom)]
     public class DsiViewerController : AbstractViewPartController
     {
-        private DsiViewerView _control = new DsiViewerView();
+        private readonly DsiViewerView _control = new();
 
-		protected override IUIControl GetContentControl()
+        protected override IUIControl GetContentControl()
         {
             return _control;
         }
