@@ -9,7 +9,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.TellMe
 
 		public AbstractTellMeAction[] ProviderActions =>
 		[
-			new CommunityWikiAction
+			new DocumentationAction
 			{
 				Keywords = ["data", "protection", "suite", "community", "support", "wiki"]
 			},

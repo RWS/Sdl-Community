@@ -308,7 +308,6 @@
     <Compile Include="Service\ProjectSettingsService.cs" />
     <Compile Include="Service\ReportService.cs" />
     <Compile Include="Service\WizardService.cs" />
-    <Compile Include="TellMe\AppStoreDownloadAction.cs" />
     <Compile Include="TellMe\AppStoreForumAction.cs" />
     <Compile Include="TellMe\DocumentationAction.cs" />
     <Compile Include="TellMe\SettingsAction.cs" />
