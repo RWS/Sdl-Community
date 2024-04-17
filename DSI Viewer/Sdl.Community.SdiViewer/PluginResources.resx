@@ -178,19 +178,24 @@
   <data name="Label_SDLMTCloudInfo" xml:space="preserve">
     <value> - Translation Origin Info:</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\forumicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Global" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\global.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="TellMe" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\tellme.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ProviderId" xml:space="preserve">
     <value>weaver</value>
+  </data>
+  <data name="Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  
+  <data name="TellmeDocumentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellmeDocumentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

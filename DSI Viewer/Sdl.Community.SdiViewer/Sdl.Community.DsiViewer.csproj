@@ -14,7 +14,7 @@
     <LangVersion>latest</LangVersion>
     <FileAlignment>512</FileAlignment>
     <XamlDebuggingInformation>True</XamlDebuggingInformation>
-    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
+    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -127,7 +127,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\TellMe.ico" />
+    <Content Include="Resources\Forum.ico" />
+    <Content Include="Resources\Settings.ico" />
+    <Content Include="Resources\SourceCode.ico" />
+    <Content Include="Resources\TellmeDocumentation.ico" />
     <Resource Include="Resources\Global.ico" />
     <Resource Include="Resources\Question.ico" />
     <Resource Include="Resources\ForumIcon.ico" />
