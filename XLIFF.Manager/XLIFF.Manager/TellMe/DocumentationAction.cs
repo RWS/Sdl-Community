@@ -19,7 +19,7 @@ namespace Sdl.Community.XLIFF.Manager.TellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/5583/xliff-manager-for-sdl-trados-studio");
+			Process.Start("https://appstore.rws.com/Plugin/67?tab=documentation");
 		}
 	}
 }
