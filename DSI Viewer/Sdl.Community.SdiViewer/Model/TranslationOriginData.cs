@@ -12,6 +12,7 @@
 			{
 				_model = value;
 				OnPropertyChanged(nameof(Model));
+				OnPropertyChanged(nameof(AccessibilityModelLabel));
 			}
 		}
 
@@ -22,7 +23,12 @@
 			{
 				_qualityEstimation = value;
 				OnPropertyChanged(nameof(QualityEstimation));
+				OnPropertyChanged(nameof(AccessibilityQELabel));
 			}
 		}
+
+		public string AccessibilityQELabel => $"Quality Estimation: {QualityEstimation}";
+
+		public string AccessibilityModelLabel => $"Model: {Model}";
 	}
 }

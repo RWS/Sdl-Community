@@ -10,25 +10,9 @@
 		private bool _qeNone;
 		private bool _qePoor;
 
-		public bool ByModel
-		{
-			get => _byModel;
-			set
-			{
-				_byModel = value;
-				OnPropertyChanged(nameof(ByModel));
-			}
-		}
+		public bool ByModel => !string.IsNullOrEmpty(Model);
 
-		public bool ByQualityEstimation
-		{
-			get => _byQualityEstimation;
-			set
-			{
-				_byQualityEstimation = value;
-				OnPropertyChanged(nameof(ByQualityEstimation));
-			}
-		}
+		public bool ByQualityEstimation => QeAdequate || QeGood || QePoor;
 
 		public string Model
 		{
@@ -82,13 +66,11 @@
 
 		public void ClearFilter()
 		{
-			ByQualityEstimation = false;
 			Model = null;
 			QeNone = false;
 			QePoor = false;
 			QeGood = false;
 			QeAdequate = false;
-			ByModel = false;
 		}
 	}
 }
