@@ -9,7 +9,7 @@ namespace Sdl.Community.IATETerminologyProvider.IATEProviderTellMe
 
 		public AbstractTellMeAction[] ProviderActions =>
 		[
-			new IATECommunityDocumentationAction
+			new IATEDocumentationAction
 			{
 				Keywords = ["iate", "iate community", "iate support", "iate wiki"]
 			},

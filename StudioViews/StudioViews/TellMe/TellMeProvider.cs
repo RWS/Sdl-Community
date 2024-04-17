@@ -9,7 +9,7 @@ namespace Sdl.Community.StudioViews.TellMe
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new CommunityWikiAction
+			new DocumentationAction
 			{
 				Keywords = new[] {"studio", "views", "studioviews", "community", "support", "wiki" }
 			},

@@ -158,7 +158,7 @@
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="IATEApplication.cs" />
-    <Compile Include="IATEProviderTellMe\IATECommunityDocumentationAction.cs" />
+    <Compile Include="IATEProviderTellMe\IATEDocumentationAction.cs" />
     <Compile Include="IATEProviderTellMe\IATECommunityForumAction.cs" />
     <Compile Include="IATEProviderTellMe\IATEContactAction.cs" />
     <Compile Include="IATEProviderTellMe\IATEStoreAction.cs" />

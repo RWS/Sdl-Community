@@ -19,7 +19,7 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 
         public override void Execute()
         {
-            Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3266/deepl-translation-provider");
+            Process.Start("https://appstore.rws.com/Plugin/24?tab=documentation");
         }
     }
 }
