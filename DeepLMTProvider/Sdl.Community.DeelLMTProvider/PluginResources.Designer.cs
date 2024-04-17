@@ -175,7 +175,7 @@ namespace Sdl.Community.DeepLMTProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sdl.Community.DeepLMTProvider.
+        ///   Looks up a localized string similar to DeepL Translation Provider.
         /// </summary>
         public static string Plugin_Name {
             get {
@@ -236,6 +236,16 @@ namespace Sdl.Community.DeepLMTProvider {
         public static string SettingsUpdated_ReopenFilesForEditing {
             get {
                 return ResourceManager.GetString("SettingsUpdated_ReopenFilesForEditing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellmeDocumentation {
+            get {
+                object obj = ResourceManager.GetObject("TellmeDocumentation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         

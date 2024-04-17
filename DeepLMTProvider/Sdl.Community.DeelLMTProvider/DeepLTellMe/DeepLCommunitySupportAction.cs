@@ -11,7 +11,7 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 			Name = "RWS Community AppStore forum";
 		}
 
-		public override string Category => "DeepL results";
+		public override string Category => $"{PluginResources.Plugin_Name} results";
 
 		public override Icon Icon => PluginResources.ForumIcon;
 
