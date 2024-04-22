@@ -24,6 +24,10 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
             new DeepLSettingsAction
             {
                 Keywords = new[] {"deepL", "deepl settings", "settings"}
+            },
+            new DeepLSourceCodeAction
+            {
+                Keywords = new[] {"deepl", "source", "code"}
             }
         };
     }

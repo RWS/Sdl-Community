@@ -242,6 +242,16 @@ namespace Sdl.Community.DeepLMTProvider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        public static System.Drawing.Icon SourceCode {
+            get {
+                object obj = ResourceManager.GetObject("SourceCode", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         public static System.Drawing.Icon TellmeDocumentation {
             get {
                 object obj = ResourceManager.GetObject("TellmeDocumentation", resourceCulture);

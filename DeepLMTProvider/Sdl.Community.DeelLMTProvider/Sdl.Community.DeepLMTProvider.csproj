@@ -120,6 +120,7 @@
     <Compile Include="Command\AsyncParameterlessCommand.cs" />
     <Compile Include="Command\ParameterlessCommand.cs" />
     <Compile Include="Command\CommandWithParameter.cs" />
+    <Compile Include="DeepLTellMe\DeepLSourceCodeAction.cs" />
     <Compile Include="Extensions\ActionResult.cs" />
     <Compile Include="Extensions\CultureNameExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
@@ -226,6 +227,7 @@
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\SourceCode.ico" />
     <Content Include="Resources\TellmeDocumentation.ico" />
     <Resource Include="Resources\deepl_ExportGlossaries.ico" />
     <Resource Include="Resources\deepl_Glossarytransfer.ico" />
