@@ -9,17 +9,17 @@ namespace Sdl.Community.NumberVerifier.TellMe
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new NumVerifierCommunityWikiAction
+			new NumVerifierCommunityDocumentation
 			{
-				Keywords = new[] {"number verifier", "number verifier community", "number verifier support", "number verifier wiki" }
+				Keywords = new[] {"number verifier", "number verifier community", "number verifier documentation" }
 			},
 			new NumVerifierCommunityForumAction
 			{
 				Keywords = new[] { "number verifier", "number verifier community", "number verifier support", "number verifier forum" }
 			},
-			new NumVerifierStoreAction
+			new NumVerifierSourceCodeAction
 			{
-				Keywords = new[] { "number verifier", "number verifier store", "number verifier download", "number verifier appstore" }
+				Keywords = new[] { "number verifier","number verifier source", "number verifier source code" }
 			}
 		};
 	}
