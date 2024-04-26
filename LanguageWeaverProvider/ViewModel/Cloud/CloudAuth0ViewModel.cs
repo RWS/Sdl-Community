@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Services;
@@ -27,11 +26,10 @@ namespace LanguageWeaverProvider.ViewModel.Cloud
 
 		public async Task Navigated(string uri)
 		{
-			var (success, error) = await CloudService.AuthenticateSSOUser(_translationOptions, Auth0Config, new Uri(uri), Auth0Config.PortalRegion);
+			var success = await CloudService.AuthenticateSSOUser(_translationOptions, Auth0Config, new Uri(uri), Auth0Config.PortalRegion);
 			IsConnected = success;
 			if (!success)
 			{
-				error?.ShowDialog("SSO Error", error.Message, true);
 				CloseAuth0Raised?.Invoke();
 				return;
 			}

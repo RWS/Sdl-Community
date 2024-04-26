@@ -51,7 +51,7 @@ namespace LanguageWeaverProvider
 			}
 
 			var translationProvider = new TranslationProvider(translationOptions);
-			return new ITranslationProvider[] { translationProvider };
+			return [translationProvider];
 		}
 
 		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)

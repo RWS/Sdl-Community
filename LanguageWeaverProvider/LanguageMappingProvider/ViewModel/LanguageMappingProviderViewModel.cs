@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,6 +17,7 @@ namespace LanguageWeaverProvider.LanguageMappingProvider.ViewModel
 	public class LanguageMappingProviderViewModel : BaseViewModel
 	{
 		readonly ILanguageMappingDatabase _languageMappingDatabase;
+		readonly PluginVersion _pluginVersion;
 
 		IList<LanguageMapping> _filteredMappedLanguages;
 		IList<LanguageMapping> _mappedLanguages;
@@ -24,8 +26,9 @@ namespace LanguageWeaverProvider.LanguageMappingProvider.ViewModel
 		string _loadingAction;
 		string _filter;
 
-		public LanguageMappingProviderViewModel(ILanguageMappingDatabase languageMappingDatabase)
+		public LanguageMappingProviderViewModel(ILanguageMappingDatabase languageMappingDatabase, PluginVersion pluginVersion)
 		{
+			_pluginVersion = pluginVersion;
 			_languageMappingDatabase = languageMappingDatabase;
 			RetrieveMappedLanguagesFromDatabase();
 			FilteredMappedLanguages = MappedLanguages;
@@ -85,8 +88,9 @@ namespace LanguageWeaverProvider.LanguageMappingProvider.ViewModel
 		}
 
 		public ICommand ClearCommand { get; private set; }
-		public ICommand ResetToDefaultCommand { get; private set; }
 		public ICommand ApplyChangesCommand { get; private set; }
+		public ICommand ResetToDefaultCommand { get; private set; }
+		public ICommand OpenExternalLinkCommand { get; private set; }
 		public ICommand CloseLanguageMappingProviderCommand { get; private set; }
 
 		public event EventHandler LanguageMappingUpdated;
@@ -99,6 +103,7 @@ namespace LanguageWeaverProvider.LanguageMappingProvider.ViewModel
 			ResetToDefaultCommand = new AsyncRelayCommand(ResetToDefault);
 			ApplyChangesCommand = new RelayCommand(ApplyChanges, CanApplyChanges);
 			CloseLanguageMappingProviderCommand = new RelayCommand(CloseLanguageMappingProvider);
+			OpenExternalLinkCommand = new RelayCommand(OpenExternalLink);
 		}
 
 		private void ApplyFilter()
@@ -188,6 +193,18 @@ namespace LanguageWeaverProvider.LanguageMappingProvider.ViewModel
 				default:
 					break;
 			}
+		}
+
+		private void OpenExternalLink(object parameter)
+		{
+			var target = _pluginVersion switch
+			{
+				PluginVersion.LanguageWeaverCloud => "https://developers.languageweaver.com/api/lw/common/language-codes.html",
+				PluginVersion.LanguageWeaverEdge => "https://developers.languageweaver.com/api/lw-edge/codes.html",
+				_ => throw new ArgumentException("Unsupported plugin version")
+			};
+
+			Process.Start(target);
 		}
 
 		private void FilterPropertyChangedHandler(object sender, PropertyChangedEventArgs e)
