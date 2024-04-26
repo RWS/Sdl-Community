@@ -24,60 +24,24 @@ namespace Sdl.Community.StudioViews.Actions
 	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.FilesContextMenuLocation), 0, DisplayType.Default, "", true)]
 	public class ImportSelectedFilesAction : AbstractAction
 	{
-		private StudioViewsFilesImportView _window;
-		private FilesController _filesController;
-		private ProjectsController _projectsController;
 		private StudioVersionService _studioVersionService;
+		private StudioViewsFilesImportView _window;
+
+		public void Execute(List<SystemFileInfo> importFiles, Language language)
+		{
+			ApplicationInstance.FilesController.Activate();
+			Run(importFiles, language);
+		}
 
 		public override void Initialize()
 		{
-			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
-			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			_studioVersionService = new StudioVersionService();
-		}
-
-		public void Execute(List<SystemFileInfo> importFiles, Language langauge)
-		{
-			_filesController.Activate();
-
-			Run(importFiles, langauge);
 		}
 
 		protected override void Execute()
 		{
-			var currentSelectedLanguage = _filesController.SelectedFiles.First().Language;
+			var currentSelectedLanguage = ApplicationInstance.FilesController.SelectedFiles.First().Language;
 			Run(null, currentSelectedLanguage);
-		}
-
-		private void Run(IReadOnlyCollection<SystemFileInfo> importFiles, Language language)
-		{
-			var projectHelper = new ProjectService(_projectsController, _studioVersionService);
-			var analysisBands = projectHelper.GetAnalysisBands(_projectsController.CurrentProject ?? _projectsController.SelectedProjects.FirstOrDefault());
-			var filterItemService = new FilterItemService(analysisBands);
-			var commonService = new ProjectFileService();
-			var segmentVisitor = new SegmentVisitor();
-			var segmentBuilder = new SegmentBuilder();
-			var paragraphUnitProvider = new ParagraphUnitProvider(segmentVisitor, filterItemService, segmentBuilder);
-			var sdlxliffImporter = new SdlxliffImporter(commonService, filterItemService, paragraphUnitProvider, segmentBuilder);
-			var sdlXliffReader = new SdlxliffReader();
-
-			_window = new StudioViewsFilesImportView();
-			var model = new StudioViewsFilesImportViewModel(_window, _filesController, language, commonService, filterItemService, sdlxliffImporter, sdlXliffReader);
-
-			_window.DataContext = model;
-			if (importFiles != null)
-			{
-				model.AddFiles(importFiles);
-			}
-
-			_window.ShowDialog();
-
-			if (model.DialogResult != DialogResult.OK)
-			{
-				return;
-			}
-
-			OpenMessageWindow(model);
 		}
 
 		private static void OpenMessageWindow(StudioViewsFilesImportViewModel model)
@@ -99,6 +63,37 @@ namespace Sdl.Community.StudioViews.Actions
 			messageView.DataContext = messageViewModel;
 
 			messageView.ShowDialog();
+		}
+
+		public void Run(IReadOnlyCollection<SystemFileInfo> importFiles, Language language)
+		{
+			var projectHelper = new ProjectService(ApplicationInstance.ProjectsController, _studioVersionService);
+			var analysisBands = projectHelper.GetAnalysisBands(ApplicationInstance.ProjectsController.CurrentProject ?? ApplicationInstance.ProjectsController.SelectedProjects.FirstOrDefault());
+			var filterItemService = new FilterItemService(analysisBands);
+			var commonService = new ProjectFileService();
+			var segmentVisitor = new SegmentVisitor();
+			var segmentBuilder = new SegmentBuilder();
+			var paragraphUnitProvider = new ParagraphUnitProvider(segmentVisitor, filterItemService, segmentBuilder);
+			var sdlxliffImporter = new SdlxliffImporter(commonService, filterItemService, paragraphUnitProvider, segmentBuilder);
+			var sdlXliffReader = new SdlxliffReader();
+
+			_window = new StudioViewsFilesImportView();
+			var model = new StudioViewsFilesImportViewModel(_window, ApplicationInstance.FilesController, language, commonService, filterItemService, sdlxliffImporter, sdlXliffReader);
+
+			_window.DataContext = model;
+			if (importFiles != null)
+			{
+				model.AddFiles(importFiles);
+			}
+
+			_window.ShowDialog();
+
+			if (model.DialogResult != DialogResult.OK)
+			{
+				return;
+			}
+
+			OpenMessageWindow(model);
 		}
 	}
 }

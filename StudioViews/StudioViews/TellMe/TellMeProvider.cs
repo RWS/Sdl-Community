@@ -21,6 +21,16 @@ namespace Sdl.Community.StudioViews.TellMe
 			{
 				Keywords = new[] { "studio", "views", "studioviews", "source", "code" }
 
+			},
+			new ImportAction
+            {
+				Keywords = new[] { "studio", "views", "import", "studioviews"}
+
+			},
+			new SplitAction
+            {
+				Keywords = new[] { "studio", "views", "split", "studioviews"}
+
 			}
 		};
 	}
