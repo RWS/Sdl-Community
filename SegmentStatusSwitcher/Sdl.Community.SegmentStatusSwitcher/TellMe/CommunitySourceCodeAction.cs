@@ -4,22 +4,22 @@ using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.SegmentStatusSwitcher.TellMe
 {
-	public class CommunityWikiAction : AbstractTellMeAction
+	public class CommunitySourceCodeAction : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
 
 		public override string Category => string.Format(PluginResources.TellMe_Provider_Results, PluginResources.Plugin_Name);
 
-		public override Icon Icon => PluginResources.Question;
+		public override Icon Icon => PluginResources.SourceCode;
 
-		public CommunityWikiAction()
+		public CommunitySourceCodeAction()
 		{
-			Name = string.Format("{0} plugin wiki", PluginResources.Plugin_Name);
+			Name = string.Format("{0} source code", PluginResources.Plugin_Name);
 		}
 
 		public override void Execute()
 		{
-			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/6269/segment-status-switcher");
+			Process.Start("https://github.com/RWS/Sdl-Community/tree/master/SegmentStatusSwitcher");
 		}
 	}
 }

@@ -9,17 +9,22 @@ namespace Sdl.Community.SegmentStatusSwitcher.TellMe
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new CommunityWikiAction
+			new AppStoreDocumentationAction
 			{
-				Keywords = new[] { "segment", "status", "switcher", "community", "support", "wiki" }
+				Keywords = new[] { "segment", "status", "switcher", "documentation" }
 			},
 			new AppStoreForumAction
 			{
 				Keywords = new[] { "segment", "status", "switcher", "support", "forum" }
 			},
-			new AppStoreDownloadAction
+			new CommunitySourceCodeAction
 			{
-				Keywords = new[] { "segment", "status", "switcher", "store", "download", "appstore" }}
+				Keywords = new[] { "segment", "status", "switcher", "source", "code", "source code" }
+			},
+			new SettingsAction()
+			{
+				Keywords = new[] {"settings"}
+			}
 		};
 	}
 }

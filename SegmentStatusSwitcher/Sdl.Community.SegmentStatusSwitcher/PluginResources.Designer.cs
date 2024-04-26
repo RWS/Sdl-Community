@@ -170,6 +170,16 @@ namespace Sdl.Community.SegmentStatusSwitcher {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon SourceCode {
+            get {
+                object obj = ResourceManager.GetObject("SourceCode", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} TellMe provider.
         /// </summary>
         public static string TellMe_Provider {
@@ -184,6 +194,27 @@ namespace Sdl.Community.SegmentStatusSwitcher {
         public static string TellMe_Provider_Results {
             get {
                 return ResourceManager.GetString("TellMe_Provider_Results", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To engage with the app, follow these steps:
+        ///    1.In Editor view, go to Add-Ins.
+        ///    2.With the cursor on an active segment, click on the status options in the app..
+        /// </summary>
+        public static string TellMe_WarningMessage {
+            get {
+                return ResourceManager.GetString("TellMe_WarningMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellmeDocumentation {
+            get {
+                object obj = ResourceManager.GetObject("TellmeDocumentation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
     }
