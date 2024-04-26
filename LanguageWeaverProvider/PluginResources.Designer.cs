@@ -583,7 +583,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ; Filtered:.
+        ///   Looks up a localized string similar to . Filtered.
         /// </summary>
         public static string LMPView_Languages_Filtered {
             get {
@@ -592,7 +592,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total languages:.
+        ///   Looks up a localized string similar to Total languages.
         /// </summary>
         public static string LMPView_Languages_TotalCount {
             get {
@@ -981,7 +981,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Refresh.
+        ///   Looks up a localized string similar to Update.
         /// </summary>
         public static string PairMappingView_Buttons_Refresh {
             get {

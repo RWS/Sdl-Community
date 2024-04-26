@@ -31,5 +31,14 @@ namespace LanguageWeaverProvider.LanguageMappingProvider.View
 			e.Cancel = true;
 			AnimationsHelper.StartClosingWindowAnimation(this);
 		}
-	}
+
+		private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+		{
+			if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.F)
+			{
+				FilterSearchBox.Focus();
+				e.Handled = true;
+			}
+		}
+    }
 }

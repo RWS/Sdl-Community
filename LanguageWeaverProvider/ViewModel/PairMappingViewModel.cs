@@ -238,7 +238,7 @@ namespace LanguageWeaverProvider.ViewModel
 
 		private void OpenLanguageMappingProviderView(object parameter)
 		{
-			var lmpViewModel = new LanguageMappingProviderViewModel(_languageMappingDatabase);
+			var lmpViewModel = new LanguageMappingProviderViewModel(_languageMappingDatabase, _translationOptions.PluginVersion);
 			lmpViewModel.LanguageMappingUpdated += LanguageMappingUpdated;
 
 			var lmpView = new LanguageMappingProviderView() { DataContext = lmpViewModel };
@@ -291,13 +291,20 @@ namespace LanguageWeaverProvider.ViewModel
 			PairMappings = [];
 			var mappedLanguages = _languageMappingDatabase.GetMappedLanguages();
 			LoadingAction = "Getting models...";
-			var accountModels = _translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
-							  ? await CloudService.GetSupportedLanguages(_translationOptions.AccessToken, _languagePairs)
-							  : await EdgeService.GetLanguagePairs(_translationOptions.AccessToken);
+			var accountModels = _translationOptions.PluginVersion switch
+			{
+				PluginVersion.LanguageWeaverCloud => await CloudService.GetResources<PairModel>(_translationOptions.AccessToken, CloudResources.LanguagePairs),
+				PluginVersion.LanguageWeaverEdge => await EdgeService.GetLanguagePairs(_translationOptions.AccessToken),
+				_ => throw new ArgumentException("Unsupport PluginVersion value")
+			};
+
 			LoadingAction = "Getting dictionaries...";
-			var accountDictionaries = _translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
-									? await CloudService.GetDictionaries(_translationOptions.AccessToken)
-									: await EdgeService.GetDictionaries(_translationOptions.AccessToken);
+			var accountDictionaries = _translationOptions.PluginVersion switch
+			{
+				PluginVersion.LanguageWeaverCloud => await CloudService.GetResources<PairDictionary>(_translationOptions.AccessToken, CloudResources.Dictionaries),
+				PluginVersion.LanguageWeaverEdge => await EdgeService.GetDictionaries(_translationOptions.AccessToken),
+				_ => throw new ArgumentException("Unsupport PluginVersion value")
+			};
 			LoadingAction = "Loading resources...";
 			foreach (var languagePair in _languagePairs)
 			{

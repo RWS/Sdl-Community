@@ -22,6 +22,7 @@
 		Height="720"
 		MaxHeight="720"
 		MouseLeftButtonDown="Window_MouseLeftButtonDown"
+		PreviewKeyDown="Window_PreviewKeyDown"
 		Loaded="Window_Loaded"
 		Closing="Window_Closing"
 		AllowsTransparency="True">
@@ -41,13 +42,14 @@
 			</Style>
 
 			<converters:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibility" />
-
+			
 		</ResourceDictionary>
 	</Window.Resources>
 
 	<Border>
 		<Grid>
 			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="*" />
@@ -64,21 +66,23 @@
 				   Grid.ColumnSpan="2"
 				   Source="pack://application:,,,/LanguageWeaverProvider;component/Resources/lwHeader_Main.png"
 				   Width="600"
-				   Margin="0 16 0 8" />
+				   Margin="0 16 0 0" />
 
 			<TextBlock Grid.Row="1"
+					   Grid.RowSpan="2"
 					   Text="The Language Mapping feature allows users to align unrecognised or new language codes coming from the machine translation engine with a recognised language in Trados Studio, enabling translation where it otherwise wouldn't be possible."
 					   Foreground="#444444"
 					   FontSize="12"
 					   FontWeight="DemiBold"
 					   Focusable="True"
 					   TextWrapping="Wrap"
-					   Margin="16 8 16 0" />
+					   Margin="16 16 16 0" />
 
 			<TextBox Grid.Row="1"
 					 Grid.Column="1"
+					 x:Name="FilterSearchBox"
 					 Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}"
-					 AutomationProperties.Name="{x:Static root:PluginResources.LMPView_SearchBox}"
+					 AutomationProperties.Name="Search language"
 					 Style="{StaticResource WatermarkTextBox}"
 					 BorderBrush="#FFBFCDD4"
 					 controls:TextBoxWatermarkHelper.WatermarkText="{x:Static root:PluginResources.LMPView_SearchBox}"
@@ -89,10 +93,24 @@
 					 VerticalAlignment="Bottom"
 					 Width="232"
 					 Height="24"
-					 Margin="16 4">
-			</TextBox>
+					 Margin="16 16 16 0" />
+			
+			<TextBlock Grid.Row="2"
+					   Grid.Column="1"
+					   Margin="0 0 20 0"
+					   Foreground="#444444"
+					   FontSize="11"
+					   FontWeight="DemiBold"
+					   HorizontalAlignment="Right"
+					   VerticalAlignment="Bottom"
+					   Focusable="True">
+				<Run Text="{x:Static root:PluginResources.LMPView_Languages_TotalCount}" />
+				<Run Text="{Binding MappedLanguages.Count, Mode=OneWay}" />
+				<Run Text="{x:Static root:PluginResources.LMPView_Languages_Filtered}" />
+				<Run Text="{Binding FilteredMappedLanguages.Count, Mode=OneWay}" />
+			</TextBlock>
 
-			<DataGrid Grid.Row="2"
+			<DataGrid Grid.Row="3"
 					  Grid.ColumnSpan="2"
 					  ItemsSource="{Binding FilteredMappedLanguages}"
 					  SelectedItem="{Binding SelectedMappedLanguage}"
@@ -104,47 +122,47 @@
 					  HorizontalAlignment="Stretch"
 					  ScrollViewer.VerticalScrollBarVisibility="Auto"
 					  ScrollViewer.HorizontalScrollBarVisibility="Auto"
-					  CanUserSortColumns="True"
+					  HorizontalContentAlignment="Right"
+					  CanUserSortColumns="False"
 					  CanUserAddRows="False"
 					  CanUserDeleteRows="False"
-					  Margin="16 16 16 0"
-					  AutomationProperties.Name="Language Mapping Table">
+					  Margin="16 16 16 4"
+					  AutomationProperties.Name="Language Mapping">
 				<DataGrid.Columns>
 					<DataGridTextColumn Header="{x:Static root:PluginResources.LMPView_Headers_Language}"
-										Binding="{Binding Path=Name}"
-										IsReadOnly="True"
+										Binding="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}"
 										Width="2*" />
+
 					<DataGridTextColumn Header="{x:Static root:PluginResources.LMPView_Headers_Region}"
-										Binding="{Binding Path=Region}"
-										IsReadOnly="True"
+										Binding="{Binding Path=Region, UpdateSourceTrigger=PropertyChanged}"
 										Width="2*" />
+
 					<DataGridTextColumn Header="{x:Static root:PluginResources.LMPView_Headers_TradosCode}"
-										Binding="{Binding Path=TradosCode}"
-										IsReadOnly="True"
+										Binding="{Binding Path=TradosCode, UpdateSourceTrigger=PropertyChanged}"
 										Width="1*" />
+
 					<DataGridTextColumn Header="{x:Static root:PluginResources.LMPView_Headers_LanguageCode}"
 										Binding="{Binding Path=LanguageCode, UpdateSourceTrigger=PropertyChanged}"
-										IsReadOnly="False"
 										Width="1*" />
+
 				</DataGrid.Columns>
 			</DataGrid>
 
-			<controls:ProgressIndicator Grid.Row="2"
-										Grid.ColumnSpan="2"
+			<controls:ProgressIndicator Grid.Row="3"
+										Grid.ColumnSpan="3"
 										Text="{Binding LoadingAction}"
 										Visibility="{Binding LoadingAction, Converter={StaticResource EmptyStringToVisibility}}"
 										VerticalAlignment="Center" />
 
-			<TextBlock Grid.Row="3"
-					   Grid.ColumnSpan="2"
-					   Margin="16 4">
-				<Run Text="{x:Static root:PluginResources.LMPView_Languages_TotalCount}" />
-				<Run Text="{Binding MappedLanguages.Count, Mode=OneWay}" />
-				<Run Text="{x:Static root:PluginResources.LMPView_Languages_Filtered}"/>
-				<Run Text="{Binding FilteredMappedLanguages.Count, Mode=OneWay}" />
-			</TextBlock>
+			<Button Grid.Row="4" 
+					Grid.ColumnSpan="2"
+					Content="Missing a language code? Click here to find it!"
+					Style="{StaticResource Sdl.Button.HyperLinkStyle}"
+					Command="{Binding OpenExternalLinkCommand}"
+					HorizontalAlignment="Right"
+					Margin="0 0 16 2"/>
 
-			<Separator Grid.Row="4"
+			<Separator Grid.Row="5"
 					   Grid.ColumnSpan="2"
 					   VerticalAlignment="Top"
 					   Background="#FFBFCDD4" />
@@ -152,7 +170,7 @@
 			<Button Content="{x:Static root:PluginResources.LMPView_Buttons_Reset}"
 					Command="{Binding ResetToDefaultCommand}"
 					Style="{StaticResource Sdl.Button.SecondaryStyle}"
-					Grid.Row="4"
+					Grid.Row="5"
 					Grid.ColumnSpan="2"
 					HorizontalAlignment="Left"
 					Cursor="Hand"
@@ -162,7 +180,7 @@
 					Width="160"
 					Margin="16" />
 
-			<StackPanel Grid.Row="4"
+			<StackPanel Grid.Row="5"
 						Grid.ColumnSpan="2"
 						Orientation="Horizontal"
 						HorizontalAlignment="Right"
