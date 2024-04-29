@@ -151,10 +151,24 @@
   <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellmeDocumentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellmeDocumentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="TellMe_Provider" xml:space="preserve">
     <value>{0} TellMe provider</value>
   </data>
   <data name="TellMe_Provider_Results" xml:space="preserve">
     <value>{0} results</value>
+  </data>
+  <data name="TellMe_WarningMessage" xml:space="preserve">
+    <value>To engage with the app, follow these steps:
+    1.In Editor view, go to Add-Ins.
+    2.With the cursor on an active segment, click on the status options in the app.</value>
   </data>
 </root>
