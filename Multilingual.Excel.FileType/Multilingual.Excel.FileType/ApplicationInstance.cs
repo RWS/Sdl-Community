@@ -13,26 +13,14 @@ namespace Multilingual.Excel.FileType
 	[ApplicationInitializer]
 	internal class ApplicationInstance : IApplicationInitializer
 	{
-		private DocumentProcessor _documentProcessor;
+		private EditorController _controller;
 
 		public void Execute()
 		{
-			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-
-			var documentItemFactory = DefaultDocumentItemFactory.CreateInstance();
-			var propertiesFactory = DefaultPropertiesFactory.CreateInstance();
-
-			var entityContext = new EntityContext();
-			var sdlFrameworkService = new SdlFrameworkService(documentItemFactory, propertiesFactory);
-			var entityMarkerConversionService = new EntityMarkerConversionService();
-			var entityService = new EntityService(entityContext, sdlFrameworkService, entityMarkerConversionService);
-
-			var segmentBuilder = new SegmentBuilder(entityService);
-
-			_documentProcessor = new DocumentProcessor(editorController, segmentBuilder);
-
-			// Setup Logger
 		}
+
+		//public EditorController EditorController =>
+		//	_controller ??= SdlTradosStudio.Application.GetController<EditorController>();
 
 		public static Form GetActiveForm()
 		{

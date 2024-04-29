@@ -420,4 +420,14 @@ Note: File types need to be configured prior to project creation</value>
   <data name="SettingsAction_Title" xml:space="preserve">
     <value>Configure FileType in Options</value>
   </data>
+
+	<data name="SettingsAction_ExternalHelp_1" xml:space="preserve">
+    <value>For more information,</value>
+  </data>
+  <data name="SettingsAction_ExternalHelp_2" xml:space="preserve">
+    <value>click here</value>
+  </data>
+  <data name="SettingsAction_ExternalHelp_3" xml:space="preserve">
+    <value>for documentation.</value>
+  </data>
 </root>

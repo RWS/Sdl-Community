@@ -10,16 +10,16 @@ namespace Multilingual.Excel.FileType.TellMe
 
 		public override string Category => string.Format(PluginResources.TellMe_String_Results, PluginResources.Plugin_Name);
 
-		public override Icon Icon => PluginResources.Question;
+		public override Icon Icon => PluginResources.TellmeDocumentation;
 
 		public CommunityWikiAction()
 		{
-			Name = string.Format("{0} plugin wiki", PluginResources.Plugin_Name);
+			Name = string.Format("{0} Documentation", PluginResources.Plugin_Name);
 		}
 
 		public override void Execute()
 		{
-			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/6290/multilingual-excel-filetype");
+			Process.Start("https://appstore.rws.com/Plugin/17?tab=documentation");
 		}
 	}
 }
