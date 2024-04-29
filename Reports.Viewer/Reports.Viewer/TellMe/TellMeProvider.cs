@@ -9,17 +9,22 @@ namespace Reports.Viewer.Plus.TellMe
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new CommunityWikiAction
+			new DocumentationAction
 			{
-				Keywords = new[] { "reports", "viewer", "plus", "community", "support", "wiki" }
+				Keywords = new[] { "reports", "viewer", "plus", "documentation" }
 			},
 			new AppStoreForumAction
 			{
 				Keywords = new[] { "reports", "viewer", "plus", "support", "forum" }
 			},
-			new AppStoreDownloadAction
+			new SourceCodeAction
 			{
-				Keywords = new[] { "reports", "viewer", "plus", "store", "download", "appstore" }}
+				Keywords = new[] { "reports", "viewer", "plus", "source", "code" }
+			},
+			new SettingsAction
+			{
+				Keywords = new[] { "reports", "viewer", "plus", "settings" }
+			}
 		};
 	}
 }

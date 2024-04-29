@@ -44,6 +44,11 @@ namespace Reports.Viewer.Plus.Actions
 			}
 		}
 
+		public void Run()
+		{
+			Execute();
+		}
+
 		public override void UpdateEnabled(bool loading)
 		{
 			_isLoading = loading;
