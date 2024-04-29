@@ -28,4 +28,4 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("2.0.0.0")]
-[assembly: AssemblyFileVersion("2.0.0.0")] // Please also update the TraceAppVersionValue from the Constants file!
+[assembly: AssemblyFileVersion("2.0.0.1")] // Please also update the TraceAppVersionValue from the Constants file!
