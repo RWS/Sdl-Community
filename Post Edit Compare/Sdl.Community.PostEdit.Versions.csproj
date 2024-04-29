@@ -189,7 +189,6 @@
     <Compile Include="Structures\ProjectVersion.cs" />
     <Compile Include="Structures\Settings.cs" />
     <Compile Include="Structures\VersionDetails.cs" />
-    <Compile Include="TellMe\AppStoreDownloadAction.cs" />
     <Compile Include="TellMe\AppStoreForumAction.cs" />
     <Compile Include="TellMe\CommunityWikiAction.cs" />
     <Compile Include="TellMe\SettingsAction.cs" />
