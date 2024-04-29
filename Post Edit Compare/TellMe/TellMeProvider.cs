@@ -17,9 +17,14 @@ namespace Sdl.Community.PostEdit.Versions.TellMe
 			{
 				Keywords = new[] { "post edit", "post-edit", "post edit compare", "support", "forum" }
 			},
-			new AppStoreDownloadAction
+			new SourceCodeAction
 			{
-				Keywords = new[] { "post edit", "post-edit", "post edit compare", "store", "download", "appstore" }}
+				Keywords = new[] { "post edit", "post-edit", "post edit compare", "source code" }
+			},
+			new SettingsAction
+			{
+				Keywords = new[] { "post edit", "post-edit", "post edit compare", "support", "forum" }
+			}
 		};
 	}
 }
