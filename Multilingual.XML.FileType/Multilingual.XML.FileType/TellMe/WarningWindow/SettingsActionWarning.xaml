@@ -64,6 +64,37 @@
 					   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
 					   TextWrapping="Wrap"
 					   Margin="24 8 24 0" />
+			<TextBlock Grid.Row="2"
+			           Grid.Column="0"
+			           Grid.ColumnSpan="2"
+			           Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
+			           HorizontalAlignment="Left"
+			           Focusable="True"
+			           Margin="24 12 24 0"
+			           KeyDown="OpenUrl_KeyPressed">
+				<Run Text="{x:Static root:PluginResources.SettingsAction_ExternalHelp_1}" />
+				<Run Text="{x:Static root:PluginResources.SettingsAction_ExternalHelp_2}"
+				     Cursor="Hand"
+				     MouseLeftButtonDown="OpenUrl_ButtonClicked">
+					<Run.Style>
+						<Style TargetType="Run">
+							<Setter Property="Foreground"
+							        Value="#0096D6" />
+							<Style.Triggers>
+								<Trigger Property="IsMouseOver"
+								         Value="True">
+									<Setter Property="Foreground"
+									        Value="#028ac4" />
+									<Setter Property="TextDecorations"
+									        Value="Underline" />
+								</Trigger>
+							</Style.Triggers>
+						</Style>
+					</Run.Style>
+				</Run>
+				<Run Text="{x:Static root:PluginResources.SettingsAction_ExternalHelp_3}" />
+			</TextBlock>
+
 
 			<Button Grid.Row="4"
 					Grid.Column="0"
