@@ -31,7 +31,7 @@ namespace LanguageWeaverProvider.Studio.TellMe.View
 
 		private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			if (GetWindow(this) is Window window)
+			if (IsFocused && GetWindow(this) is Window window)
 			{
 				window.DragMove();
 			}
