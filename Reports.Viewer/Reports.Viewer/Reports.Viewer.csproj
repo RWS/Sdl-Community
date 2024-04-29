@@ -12,8 +12,8 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18Beta</TradosFolder>
-    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18Beta\Plugins</PluginDeploymentPath>
+    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
+    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
     <CefSharpAnyCpuSupport>true</CefSharpAnyCpuSupport>
     <CefSharpBuildAction>Content</CefSharpBuildAction>
     <TargetFrameworkProfile />
