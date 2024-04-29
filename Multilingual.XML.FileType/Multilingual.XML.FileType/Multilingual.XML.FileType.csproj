@@ -69,7 +69,7 @@
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Styles, Version=18.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Trados\Bin\Mixed Platforms\Debug\Sdl.Desktop.Platform.Styles.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Styles.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
