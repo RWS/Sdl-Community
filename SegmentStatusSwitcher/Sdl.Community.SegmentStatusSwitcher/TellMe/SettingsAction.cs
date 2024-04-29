@@ -11,7 +11,12 @@ namespace Sdl.Community.SegmentStatusSwitcher.TellMe
 
 		public override string Category => string.Format(PluginResources.TellMe_Provider_Results, PluginResources.Plugin_Name);
 
-		public override Icon Icon => PluginResources.SourceCode;
+		public override Icon Icon => PluginResources.Settings;
+
+		public SettingsAction()
+		{
+			Name = string.Format("{0} settings", PluginResources.Plugin_Name);
+		}
 
 		private static void ShowDialog()
 		{

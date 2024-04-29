@@ -20,7 +20,7 @@ namespace Sdl.Community.SegmentStatusSwitcher.TellMe.View
 
 		private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			if (GetWindow(this) is Window window)
+			if (IsFocused && GetWindow(this) is Window window)
 			{
 				window.DragMove();
 			}
@@ -41,10 +41,6 @@ namespace Sdl.Community.SegmentStatusSwitcher.TellMe.View
 			{
 				Process.Start(_url);
 			}
-		}
-
-		private void OpenUrl_ButtonClicked(object sender, RoutedEventArgs e)
-		{
 		}
 
 		private void CloseWindow_Click(object sender, RoutedEventArgs e)

@@ -123,6 +123,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Settings.ico" />
     <None Include="Resources\TellmeDocumentation.ico" />
     <None Include="Resources\SourceCode.ico" />
     <EmbeddedResource Include="PluginResources.resx">
