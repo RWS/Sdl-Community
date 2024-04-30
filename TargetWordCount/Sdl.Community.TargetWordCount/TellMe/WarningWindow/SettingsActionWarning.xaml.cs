@@ -9,7 +9,7 @@ namespace Sdl.Community.TargetWordCount.TellMe.WarningWindow
 	/// </summary>
 	public partial class SettingsActionWarning : Window
 	{
-		private readonly string _url;
+		readonly string _url;
 
 		public SettingsActionWarning(string url)
 		{
@@ -17,22 +17,12 @@ namespace Sdl.Community.TargetWordCount.TellMe.WarningWindow
 			_url = url;
 		}
 
-		private void CloseWindow_Click(object sender, RoutedEventArgs e)
-		{
-			Close();
-		}
 
-		private void OpenUrl_ButtonClicked(object sender, MouseButtonEventArgs e)
+		private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			Process.Start(_url);
-		}
-
-		private void OpenUrl_KeyPressed(object sender, KeyEventArgs e)
-		{
-			if (e.Key == Key.Enter
-			 || e.Key == Key.Space)
+			if (IsFocused && GetWindow(this) is Window window)
 			{
-				Process.Start(_url);
+				window.DragMove();
 			}
 		}
 
@@ -44,12 +34,23 @@ namespace Sdl.Community.TargetWordCount.TellMe.WarningWindow
 			}
 		}
 
-		private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		private void OpenUrl_KeyPressed(object sender, KeyEventArgs e)
 		{
-			if (IsFocused && GetWindow(this) is Window window)
+			if (e.Key == Key.Enter
+			 || e.Key == Key.Space)
 			{
-				window.DragMove();
+				Process.Start(_url);
 			}
+		}
+
+		private void CloseWindow_Click(object sender, RoutedEventArgs e)
+		{
+			Close();
+		}
+
+		private void OpenUrl_ButtonClicked(object sender, MouseButtonEventArgs e)
+		{
+			Process.Start(_url);
 		}
 	}
 }

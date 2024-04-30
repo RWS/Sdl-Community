@@ -125,7 +125,6 @@
     <Compile Include="TellMe\SettingsAction.cs" />
     <Compile Include="TellMe\SourceCodeAction.cs" />
     <Compile Include="TellMe\TargetWordCountCommunityForumAction.cs" />
-    <Compile Include="TellMe\TargetWordCountStoreAction.cs" />
     <Compile Include="TellMe\TargetWordCountTellMeProvider.cs" />
     <Compile Include="TellMe\TargetWordCountDocumentationAction.cs" />
     <Compile Include="TellMe\WarningWindow\SettingsActionWarning.xaml.cs">
