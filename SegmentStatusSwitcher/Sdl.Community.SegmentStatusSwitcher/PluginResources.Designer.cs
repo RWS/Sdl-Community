@@ -209,8 +209,9 @@ namespace Sdl.Community.SegmentStatusSwitcher {
         
         /// <summary>
         ///   Looks up a localized string similar to To engage with the app, follow these steps:
-        ///    1.In Editor view, go to Add-Ins.
-        ///    2.With the cursor on an active segment, click on the status options in the app..
+        ///
+        ///    1.In Editor view, go to Add-Ins
+        ///    2.With the cursor on an active segment, click on the status options in the app.
         /// </summary>
         public static string TellMe_WarningMessage {
             get {

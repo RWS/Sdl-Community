@@ -115,6 +115,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="TellMe\View\Warning.png" />
+    <None Include="Resources\Warning.png" />
     <None Include="Resources\Settings.ico" />
     <None Include="Resources\TellmeDocumentation.ico" />
     <None Include="Resources\SourceCode.ico" />
