@@ -9,17 +9,21 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new CommunityWikiAction
+			new DocumentationAction
 			{
-				Keywords = new[] { "apply", "studio","project", "community", "support", "wiki" }
+				Keywords = new[] { "apply", "studio", "project", "documentation" }
 			},
 			new CommunityAppStoreForumAction
 			{
 				Keywords = new[] { "apply", "studio", "project", "support", "forum" }
 			},
-			new CommunityAppStoreAction
+			new SourceCodeAction
 			{
-				Keywords = new[] { "apply", "studio", "project", "store", "download", "appstore" }
+				Keywords = new[] { "apply", "studio","project", "source", "code" }
+			},
+			new SettingsAction
+			{
+				Keywords = new[] { "apply", "studio","project", "settings" }
 			}
 		};
 	}

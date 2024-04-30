@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -141,9 +141,10 @@
     <Compile Include="ApplyTemplateForm.Designer.cs">
       <DependentUpon>ApplyTemplateForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TellMe\CommunityAppStoreAction.cs" />
+    <Compile Include="TellMe\DocumentationAction.cs" />
     <Compile Include="TellMe\CommunityAppStoreForumAction.cs" />
-    <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\SettingsAction.cs" />
+    <Compile Include="TellMe\SourceCodeAction.cs" />
     <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="TemplateLanguageDetails.cs" />
     <Compile Include="WarningForm.cs">
@@ -163,6 +164,9 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+    <None Include="Resources\TellmeDocumentation.ico" />
+    <None Include="Resources\SourceCode.ico" />
+    <None Include="Resources\Settings.ico" />
     <Resource Include="Resources\QuestionIcon.ico" />
     <Resource Include="Resources\Download.ico" />
     <Resource Include="Resources\ForumIcon.ico" />
