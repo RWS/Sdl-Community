@@ -18,6 +18,16 @@ namespace Sdl.Community.TermExcelerator.TellMe
 			{
 				Keywords = new[] { "excel terminology", "excel terminology community", "excel terminology support", "excel terminology forum",
 								   "term excelerator", "term excelerator community", "term excelerator support", "term excelerator forum"}
+			},
+			new SettingsAction
+			{
+				Keywords = new[] { "excel terminology", "excel terminology community", "excel terminology support", "excel terminology forum",
+								   "term excelerator", "term excelerator community", "settings"}
+			},
+			new SourceCodeAction
+			{
+				Keywords = new[] { "excel terminology", "excel terminology community", "excel terminology support", "excel terminology forum",
+								   "term excelerator", "term excelerator community", "source code"}
 			}
 		};
 	}
