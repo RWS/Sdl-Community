@@ -116,6 +116,9 @@
     <Compile Include="TellMe\SourceCodeAction.cs" />
     <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="TellMe\HelpAction.cs" />
+    <Compile Include="TellMe\WarningWindow\SettingsActionWarning.xaml.cs">
+      <DependentUpon>SettingsActionWarning.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\DsiViewerViewModel.cs" />
     <Compile Include="Model\ModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -131,6 +134,7 @@
     <Content Include="Resources\Settings.ico" />
     <Content Include="Resources\SourceCode.ico" />
     <Content Include="Resources\TellmeDocumentation.ico" />
+    <Resource Include="Resources\Warning2.png" />
     <Resource Include="Resources\Global.ico" />
     <Resource Include="Resources\Question.ico" />
     <Resource Include="Resources\ForumIcon.ico" />
@@ -140,8 +144,8 @@
     <EmbeddedResource Include="Resources\ds.ico" />
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Content Include="pluginpackage.manifest.xml" />
   </ItemGroup>
@@ -152,6 +156,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Styles\DataGridStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TellMe\WarningWindow\SettingsActionWarning.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
