@@ -609,6 +609,11 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			Controller.RefreshProjects();
 		}
 
+		public void RunOptions()
+		{
+			Execute();
+		}
+
 		#region FuzzyBands 
 		private void CopySettingsFuzzyBands(ISettingsBundle sourceSettingsBundle, ISettingsBundle targetSettingsBundle, string settingsGroupId, FileBasedProject sourceProject, FileBasedProject targetProject)
 		{

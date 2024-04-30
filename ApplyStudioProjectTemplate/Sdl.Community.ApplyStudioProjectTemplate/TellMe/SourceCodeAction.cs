@@ -4,22 +4,22 @@ using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.ApplyStudioProjectTemplate
 {
-	public class CommunityWikiAction : AbstractTellMeAction
+	public class SourceCodeAction : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
 
 		public override string Category => string.Format(PluginResources.TellMe_String_Results, PluginResources.Plugin_Name);
 
-		public override Icon Icon => PluginResources.QuestionIcon;
+		public override Icon Icon => PluginResources.SourceCode;
 
-		public CommunityWikiAction()
+		public SourceCodeAction()
 		{
-			Name = string.Format("{0} plugin wiki", PluginResources.Plugin_Name);
+			Name = string.Format("{0} source code", PluginResources.Plugin_Name);
 		}
 
 		public override void Execute()
 		{
-			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3157/apply-studio-project-template");
+			Process.Start("https://github.com/RWS/Sdl-Community/tree/master/ApplyStudioProjectTemplate");
 		}
 	}
 }
