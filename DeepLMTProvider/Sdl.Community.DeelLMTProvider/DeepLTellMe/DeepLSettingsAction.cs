@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Sdl.Community.DeepLMTProvider.Client;
+using Sdl.Community.DeepLMTProvider.DeepLTellMe.WarningWindow;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Community.DeepLMTProvider.Service;
 using Sdl.Community.DeepLMTProvider.UI;
@@ -44,9 +45,9 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
                 if (!settings.Entries.Any(entry =>
                     entry.MainTranslationProvider.Uri.OriginalString.Contains("deepltranslationprovider")))
                 {
-                    MessageBox.Show(@"DeepL is not set on this project" + Environment.NewLine +
-                                    "Please set it in project settings before using TellMe to access it", "DeepL",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    var settingsWarningWindow =
+                        new SettingsActionWarning("https://appstore.rws.com/Plugin/24?tab=documentation");
+                    settingsWarningWindow.ShowDialog();
                 }
                 else
                 {
