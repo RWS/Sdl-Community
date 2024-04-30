@@ -121,6 +121,9 @@
     <Compile Include="Command\ParameterlessCommand.cs" />
     <Compile Include="Command\CommandWithParameter.cs" />
     <Compile Include="DeepLTellMe\DeepLSourceCodeAction.cs" />
+    <Compile Include="DeepLTellMe\WarningWindow\SettingsActionWarning.xaml.cs">
+      <DependentUpon>SettingsActionWarning.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Extensions\ActionResult.cs" />
     <Compile Include="Extensions\CultureNameExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
@@ -229,6 +232,7 @@
   <ItemGroup>
     <Content Include="Resources\SourceCode.ico" />
     <Content Include="Resources\TellmeDocumentation.ico" />
+    <Resource Include="Resources\Warning.png" />
     <Resource Include="Resources\deepl_ExportGlossaries.ico" />
     <Resource Include="Resources\deepl_Glossarytransfer.ico" />
     <Resource Include="Resources\deepl_Importentries.ico" />
@@ -268,6 +272,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Page Include="DeepLTellMe\WarningWindow\SettingsActionWarning.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="UI\BrowseGlossariesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
