@@ -7,39 +7,54 @@
 		mc:Ignorable="d"
 		Title="TellMe Warning"
 		Width="600"
-		Height="280"
+		Height="233"
 		ResizeMode="NoResize"
 		WindowStyle="None"
 		WindowStartupLocation="CenterScreen"
 		MouseLeftButtonDown="Window_MouseLeftButtonDown"
 		KeyDown="Window_KeyDown">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
 
-	<Border BorderBrush="#d4d4d4"
-			BorderThickness="1">
-		<Grid>
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="*" />
-				<RowDefinition Height="Auto" />
-			</Grid.RowDefinitions>
+    <Border BorderBrush="#000000"
+			BorderThickness="1" Margin="0,0,131,0">
+        <Grid Margin="0,0,9,-1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto" />
-				<ColumnDefinition Width="*" />
-			</Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-			<TextBlock Grid.Row="0"
+            <Image Grid.Row="0"
+	               Grid.Column="0"
+	               Source="/Sdl.Community.SegmentStatusSwitcher;component/TellMe/View/Warning.png"
+	               Height="40"
+	               Width="40"
+	               RenderOptions.BitmapScalingMode="HighQuality"
+	               Margin="24,8,24,8" />
+
+            <TextBlock
 			   Grid.Column="1"
-			   Text="SegmentStatusSwitcher"
+			   Text="Access Segment Status Switcher"
+	           Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"
 			   FontSize="16"
-			   HorizontalAlignment="Center"
-			   VerticalAlignment="Top"
-			   Margin="8 16"
-			   Grid.ColumnSpan="2" />
+			   HorizontalAlignment="Left"
+			   Margin="37,0,0,0" RenderTransformOrigin="0.485,0.534" />
 
-			<TextBlock Grid.Row="1"
+            <TextBlock Grid.Row="1"
 			   Grid.ColumnSpan="3"
 			   Text="{x:Static root:PluginResources.TellMe_WarningMessage}"
 			   Focusable="True"
@@ -47,14 +62,13 @@
 			   Grid.RowSpan="2" 
 			   Margin="16 0"/>
 
-			<TextBlock Grid.Row="3"
+            <TextBlock Grid.Row="3"
 			   Grid.ColumnSpan="2"
 			   HorizontalAlignment="Left"
 			   TextWrapping="Wrap"
 			   Focusable="True"
 			   KeyDown="OpenUrl_KeyPressed"
-			   Grid.RowSpan="2"
-			   Margin="16 8">
+			   Margin="16,19,0,20">
 		<Run Text="For more information," />
 		<Run Text="click here"
 			 Cursor="Hand"
@@ -76,16 +90,17 @@
 			</Run.Style>
 		</Run>
 		<Run Text="to review documentation" />
-			</TextBlock>
+            </TextBlock>
 
-			<Button Grid.Row="4"
+            <Button Grid.Row="4"
 			Grid.ColumnSpan="3"
 			Content="Close"
+		    Style="{StaticResource Sdl.Button.SecondaryStyle}"
 			Click="CloseWindow_Click"
 			HorizontalAlignment="Right"
 			Width="120" 
 			Margin="0 16 16 16"/>
-		</Grid>
-	</Border>
+        </Grid>
+    </Border>
 
 </Window>

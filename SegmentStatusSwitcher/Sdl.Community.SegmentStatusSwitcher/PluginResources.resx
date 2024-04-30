@@ -168,7 +168,8 @@
   </data>
   <data name="TellMe_WarningMessage" xml:space="preserve">
     <value>To engage with the app, follow these steps:
-    1.In Editor view, go to Add-Ins.
-    2.With the cursor on an active segment, click on the status options in the app.</value>
+
+    1.In Editor view, go to Add-Ins
+    2.With the cursor on an active segment, click on the status options in the app</value>
   </data>
 </root>
