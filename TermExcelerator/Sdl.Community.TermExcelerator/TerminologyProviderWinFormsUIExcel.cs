@@ -8,11 +8,10 @@ using Sdl.Terminology.TerminologyProvider.Core;
 namespace Sdl.Community.TermExcelerator
 {
 	[TerminologyProviderWinFormsUI]
-	public class TerminologyProviderWinFormsUIExcel : ITerminologyProviderWinFormsUI
+	public class TerminologyProviderWinFormsUIExcel : ITerminologyProviderWinFormsUIWithEdit
 	{
 		public string TypeName => PluginResources.ExcelTerminologyProviderName;
 		public string TypeDescription => PluginResources.ExcelTerminologyProviderDescription;
-		public bool SupportsEditing => true;
 		public static readonly Log Log = Log.Instance;
 
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
@@ -75,10 +74,11 @@ namespace Sdl.Community.TermExcelerator
 
 		public TerminologyProviderDisplayInfo GetDisplayInfo(Uri terminologyProviderUri)
 		{
-			var name = terminologyProviderUri.AbsolutePath.Replace(TerminologyProviderExcel.ExcelUriTemplate, "").Replace("/", "");
+			var name = terminologyProviderUri.Host;
+			//var name = terminologyProviderUri.AbsolutePath.Replace(TerminologyProviderExcel.ExcelUriTemplate, "").Replace("/", "");
 			return new TerminologyProviderDisplayInfo
 			{
-				Name = name,
+				Name = $"TermExcelerator: {name}",
 				TooltipText = name
 			};
 		}

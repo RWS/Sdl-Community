@@ -6,7 +6,11 @@
 		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
+		<UseWPF>true</UseWPF>
 	</PropertyGroup>
+  <ItemGroup>
+	  <None Remove="Resources\Warning.png" />
+	</ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
@@ -15,6 +19,7 @@
     <Reference Include="NLog">
       <HintPath>$(TradosFolder)\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="Sdl.Core.Globalization.Async">
       <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
     </Reference>
@@ -23,6 +28,9 @@
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
       <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.Platform.Styles">
+      <HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Styles.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TellMe.ProviderApi">
       <HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
@@ -63,7 +71,9 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Question.ico" />
@@ -88,6 +98,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Warning.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Update="PluginResources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -100,6 +113,11 @@
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <None Update="TellMe\WarningWindow\SettingsActionWarning.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+  </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
@@ -108,5 +126,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 </Project>
