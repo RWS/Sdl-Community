@@ -51,5 +51,10 @@ namespace Sdl.Community.ExportAnalysisReports
 			var dialog = new ReportExporterControl(studioProjectsPaths, settingsService, projectService, messageBoxService, reportService);
 			dialog.ShowDialog();
 		}
+
+		public void RunSettingsView()
+		{
+			Execute();
+		}
 	}
 }
