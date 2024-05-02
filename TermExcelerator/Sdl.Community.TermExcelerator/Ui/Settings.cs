@@ -12,9 +12,13 @@ namespace Sdl.Community.TermExcelerator.Ui
 	{
 		private ProviderSettings _providerSettings;
 
-		public Settings()
+		public Settings(bool isForTellMeAction = false)
 		{
 			InitializeComponent();
+			if (!isForTellMeAction) return;
+
+			pathTextBox.Enabled = false;
+			browseBtn.Enabled = false;
 		}
 
 		protected override void OnLoad(EventArgs e)
