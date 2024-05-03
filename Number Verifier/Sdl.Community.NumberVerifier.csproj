@@ -69,6 +69,9 @@
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.ProjectAutomation.FileBased">
+      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.TellMe.ProviderApi">
       <HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
@@ -98,6 +101,13 @@
     <Compile Include="Composers\NumberErrorComposer.cs" />
     <Compile Include="Composers\SourceErrorMessageComposer.cs" />
     <Compile Include="Composers\TargetErrorMessageComposer.cs" />
+    <Compile Include="GUI\TellMeSettingsActionWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\TellMeSettingsActionWindow.Designer.cs">
+      <DependentUpon>TellMeSettingsActionWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Reporter\ErrorReporter.cs" />
     <Compile Include="Model\ExcludedRange.cs" />
     <Compile Include="GUI\NumberVerifierHelp.cs">
@@ -148,6 +158,7 @@
     <Compile Include="Model\ComparisonItem.cs" />
     <Compile Include="Reporter\IMessageFilter.cs" />
     <Compile Include="Reporter\MessageFilter.cs" />
+    <Compile Include="TellMe\SettingsAction.cs" />
     <Compile Include="Validator\NumberComparisonExtension.cs" />
     <Compile Include="Validator\ComparisonConstants.cs" />
     <Compile Include="Validator\Comparer.cs" />
@@ -233,6 +244,9 @@
     <Compile Include="Processors\NumberFormatVerifier.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GUI\TellMeSettingsActionWindow.resx">
+      <DependentUpon>TellMeSettingsActionWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\NumberVerifierHelp.resx">
       <DependentUpon>NumberVerifierHelp.cs</DependentUpon>
       <SubType>Designer</SubType>
