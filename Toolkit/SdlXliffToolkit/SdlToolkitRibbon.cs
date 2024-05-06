@@ -12,7 +12,7 @@ namespace SdlXliffToolkit
 	[ViewPartLayout(typeof(EditorController), Dock = DockType.Bottom)]
 	internal class SdlToolkitEditorViewPart : AbstractViewPartController
 	{
-		private static readonly Lazy<global::SDLXLIFFSliceOrChange.SDLXLIFFSliceOrChange> _control = new Lazy<global::SDLXLIFFSliceOrChange.SDLXLIFFSliceOrChange>(() => new global::SDLXLIFFSliceOrChange.SDLXLIFFSliceOrChange());
+		private static readonly Lazy<global::SDLXLIFFSliceOrChange.SdlxliffSliceOrChange> _control = new Lazy<global::SDLXLIFFSliceOrChange.SdlxliffSliceOrChange>(() => new global::SDLXLIFFSliceOrChange.SdlxliffSliceOrChange());
 
 		protected override IUIControl GetContentControl()
 		{
@@ -38,7 +38,7 @@ namespace SdlXliffToolkit
 	[ViewPartLayout(typeof(FilesController), Dock = DockType.Bottom)]
 	internal class SdlToolkitFilesViewPart : AbstractViewPartController
 	{
-		private static readonly Lazy<global::SDLXLIFFSliceOrChange.SDLXLIFFSliceOrChange> _control = new Lazy<global::SDLXLIFFSliceOrChange.SDLXLIFFSliceOrChange>(() => new global::SDLXLIFFSliceOrChange.SDLXLIFFSliceOrChange());
+		private static readonly Lazy<global::SDLXLIFFSliceOrChange.SdlxliffSliceOrChange> _control = new Lazy<global::SDLXLIFFSliceOrChange.SdlxliffSliceOrChange>(() => new global::SDLXLIFFSliceOrChange.SdlxliffSliceOrChange());
 
 		protected override IUIControl GetContentControl()
 		{
@@ -66,7 +66,7 @@ namespace SdlXliffToolkit
 	[ViewPartLayout(typeof(ProjectsController), Dock = DockType.Bottom)]
 	internal class SdlToolkitProjectsViewPart : AbstractViewPartController
 	{
-		private static readonly Lazy<global::SDLXLIFFSliceOrChange.SDLXLIFFSliceOrChange> _control = new Lazy<global::SDLXLIFFSliceOrChange.SDLXLIFFSliceOrChange>(() => new global::SDLXLIFFSliceOrChange.SDLXLIFFSliceOrChange());
+		private static readonly Lazy<global::SDLXLIFFSliceOrChange.SdlxliffSliceOrChange> _control = new Lazy<global::SDLXLIFFSliceOrChange.SdlxliffSliceOrChange>(() => new global::SDLXLIFFSliceOrChange.SdlxliffSliceOrChange());
 
 		protected override IUIControl GetContentControl()
 		{

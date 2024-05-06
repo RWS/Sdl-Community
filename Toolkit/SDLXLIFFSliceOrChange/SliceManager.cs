@@ -12,7 +12,7 @@ namespace SDLXLIFFSliceOrChange
 {
     public class SliceManager
     {
-        private SDLXLIFFSliceOrChange _sdlxliffSliceOrChange;
+        private SdlxliffSliceOrChange _sdlxliffSliceOrChange;
         private List<string> _fontsToBeAdded;
         private List<string> _cxtsToBeAdded;
         private List<string> _tagsToBeAdded;
@@ -20,7 +20,7 @@ namespace SDLXLIFFSliceOrChange
         private List<string> _groupsToBeAdded;
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		public SliceManager(SDLXLIFFSliceOrChange sdlxliffSliceOrChange)
+		public SliceManager(SdlxliffSliceOrChange sdlxliffSliceOrChange)
         {
             _sdlxliffSliceOrChange = sdlxliffSliceOrChange;
         }

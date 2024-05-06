@@ -2,7 +2,7 @@
 
 namespace SDLXLIFFSliceOrChange
 {
-    partial class SDLXLIFFSliceOrChange
+    partial class SdlxliffSliceOrChange
     {
 
         /// <summary>
@@ -27,9 +27,9 @@ namespace SDLXLIFFSliceOrChange
         public void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SDLXLIFFSliceOrChange));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.xLIFFFiles = new XLIFFFiles();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SdlxliffSliceOrChange));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.xLIFFFiles = new SDLXLIFFSliceOrChange.Data.XLIFFFiles();
             this.selectFolder = new System.Windows.Forms.FolderBrowserDialog();
             this.selectProjectFile = new System.Windows.Forms.OpenFileDialog();
             this.filesBindingSource = new System.Windows.Forms.BindingSource(this.components);
@@ -201,7 +201,7 @@ namespace SDLXLIFFSliceOrChange
             this.tabControl1.Controls.Add(this.pageSearch);
             this.tabControl1.Controls.Add(this.pageReplace);
             this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabControl1.Location = new System.Drawing.Point(7, 256);
+            this.tabControl1.Location = new System.Drawing.Point(8, 256);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(803, 279);
@@ -1008,7 +1008,7 @@ namespace SDLXLIFFSliceOrChange
             this.panelCommands.Controls.Add(this.groupClear);
             this.panelCommands.Controls.Add(this.groupChange);
             this.panelCommands.Controls.Add(this.groupSlice);
-            this.panelCommands.Location = new System.Drawing.Point(5, 541);
+            this.panelCommands.Location = new System.Drawing.Point(6, 541);
             this.panelCommands.Name = "panelCommands";
             this.panelCommands.Size = new System.Drawing.Size(807, 239);
             this.panelCommands.TabIndex = 9;
@@ -1356,7 +1356,7 @@ namespace SDLXLIFFSliceOrChange
             this.browseTableLayoutPanel.Controls.Add(this.panel1, 0, 1);
             this.browseTableLayoutPanel.Controls.Add(this.browseLabel, 0, 0);
             this.browseTableLayoutPanel.Controls.Add(this.gridXLIFFFiles, 0, 2);
-            this.browseTableLayoutPanel.Location = new System.Drawing.Point(6, 3);
+            this.browseTableLayoutPanel.Location = new System.Drawing.Point(8, 3);
             this.browseTableLayoutPanel.MaximumSize = new System.Drawing.Size(804, 274);
             this.browseTableLayoutPanel.Name = "browseTableLayoutPanel";
             this.browseTableLayoutPanel.RowCount = 3;
@@ -1420,7 +1420,7 @@ namespace SDLXLIFFSliceOrChange
             this.btnSelectSDLXLIFFFiles.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectSDLXLIFFFiles.Image")));
             this.btnSelectSDLXLIFFFiles.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnSelectSDLXLIFFFiles.Name = "btnSelectSDLXLIFFFiles";
-            this.btnSelectSDLXLIFFFiles.Size = new System.Drawing.Size(131, 28);
+            this.btnSelectSDLXLIFFFiles.Size = new System.Drawing.Size(132, 28);
             this.btnSelectSDLXLIFFFiles.Text = "Select sdlxliff files ...";
             this.btnSelectSDLXLIFFFiles.Click += new System.EventHandler(this.btnSelectSDLXLIFFFiles_Click);
             // 
@@ -1495,8 +1495,8 @@ namespace SDLXLIFFSliceOrChange
             // colSize
             // 
             this.colSize.DataPropertyName = "Size";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.colSize.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.colSize.DefaultCellStyle = dataGridViewCellStyle1;
             this.colSize.HeaderText = "Size";
             this.colSize.Name = "colSize";
             this.colSize.ReadOnly = true;
@@ -1510,14 +1510,15 @@ namespace SDLXLIFFSliceOrChange
             // 
             // mainTableLayoutPanel
             // 
-            this.mainTableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.mainTableLayoutPanel.AutoSize = true;
+            this.mainTableLayoutPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.mainTableLayoutPanel.ColumnCount = 1;
             this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.mainTableLayoutPanel.Controls.Add(this.panelCommands, 0, 2);
             this.mainTableLayoutPanel.Controls.Add(this.panelStatus, 0, 3);
             this.mainTableLayoutPanel.Controls.Add(this.tabControl1, 0, 1);
             this.mainTableLayoutPanel.Controls.Add(this.browseTableLayoutPanel, 0, 0);
+            this.mainTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.mainTableLayoutPanel.Name = "mainTableLayoutPanel";
             this.mainTableLayoutPanel.RowCount = 4;
@@ -1525,7 +1526,7 @@ namespace SDLXLIFFSliceOrChange
             this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mainTableLayoutPanel.Size = new System.Drawing.Size(817, 1056);
+            this.mainTableLayoutPanel.Size = new System.Drawing.Size(820, 1059);
             this.mainTableLayoutPanel.TabIndex = 11;
             // 
             // panelStatus
@@ -1549,14 +1550,14 @@ namespace SDLXLIFFSliceOrChange
             // 
             this.errorProvider1.ContainerControl = this;
             // 
-            // SDLXLIFFSliceOrChange
+            // SdlxliffSliceOrChange
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
             this.AutoSize = true;
             this.Controls.Add(this.mainTableLayoutPanel);
-            this.Name = "SDLXLIFFSliceOrChange";
+            this.Name = "SdlxliffSliceOrChange";
             this.Size = new System.Drawing.Size(820, 1059);
             this.Load += new System.EventHandler(this.SDLXLIFFSliceOrChange_Load);
             this.SizeChanged += new System.EventHandler(this.SDLXLIFFSliceOrChange_SizeChanged);
@@ -1612,6 +1613,7 @@ namespace SDLXLIFFSliceOrChange
             this.panelStatus.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
