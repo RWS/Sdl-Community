@@ -136,7 +136,7 @@ namespace Sdl.Community.TermExcelerator.Ui
 			sourceLanguageComboBox.ValueMember = "Name";
 			sourceLanguageComboBox.SelectedItem = sourceCulture;
 
-			targetLanguageComboBox.DataSource = cultureNames;
+			targetLanguageComboBox.DataSource = cultureNames.ToList();
 			targetLanguageComboBox.DisplayMember = "DisplayName";
 			targetLanguageComboBox.ValueMember = "Name";
 			targetLanguageComboBox.SelectedItem = targetCulture;
