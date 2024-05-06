@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AnalyzeFilesTestApp</RootNamespace>
     <AssemblyName>AnalyzeFilesTestApp</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\18\Plugins</PluginDeploymentPath>
     <NuGetPackageImportStamp>
@@ -34,11 +34,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio18</TradosFolder>
+    <TradosFolder>C:\Code\SDL\Trados\Bin\Mixed Platforms\Debug</TradosFolder>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Core.PluginFramework.2.1.0\lib\netstandard2.0\Sdl.Core.PluginFramework.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Settings">
       <HintPath>$(TradosFolder)\Sdl.Core.Settings.dll</HintPath>
@@ -87,15 +90,8 @@
     <Content Include="pluginpackage.manifest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="SdlCommunity.snk" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Sdl.Core.PluginFramework">
-      <Version>2.1.0</Version>
-    </PackageReference>
-    <PackageReference Include="Sdl.Core.PluginFramework.Build">
-      <Version>18.0.1</Version>
-    </PackageReference>
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
@@ -107,6 +103,13 @@
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Sdl.Core.PluginFramework.Build.18.0.1\build\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\packages\Sdl.Core.PluginFramework.Build.18.0.1\build\Sdl.Core.PluginFramework.Build.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Sdl.Core.PluginFramework.Build.18.0.1\build\Sdl.Core.PluginFramework.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Sdl.Core.PluginFramework.Build.18.0.1\build\Sdl.Core.PluginFramework.Build.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
