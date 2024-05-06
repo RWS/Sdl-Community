@@ -81,7 +81,7 @@ namespace SdlXliffToolkit {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SdlXliffToolkit.
+        ///   Looks up a localized string similar to SDLXLIFF Toolkit.
         /// </summary>
         public static string Plugin_Name {
             get {
@@ -95,6 +95,16 @@ namespace SdlXliffToolkit {
         public static System.Drawing.Icon Question {
             get {
                 object obj = ResourceManager.GetObject("Question", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon SourceCode {
+            get {
+                object obj = ResourceManager.GetObject("SourceCode", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -114,6 +124,16 @@ namespace SdlXliffToolkit {
         public static string TellMe_Provider_Results {
             get {
                 return ResourceManager.GetString("TellMe_Provider_Results", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellmeDocumentation {
+            get {
+                object obj = ResourceManager.GetObject("TellmeDocumentation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
