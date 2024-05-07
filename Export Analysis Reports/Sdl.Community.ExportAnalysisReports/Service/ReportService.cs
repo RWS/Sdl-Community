@@ -305,11 +305,11 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 
 			if (optionalInformation.IncludeAdaptiveBaseline)
 			{
-				sb.Append(file.NewBaseline.FullRecallWords).Append(csvSeparator);
+				sb.Append(file.NewBaseline?.FullRecallWords).Append(csvSeparator);
 			}
 			if (optionalInformation.IncludeAdaptiveLearnings)
 			{
-				sb.Append(file.NewLearnings.FullRecallWords).Append(csvSeparator);
+				sb.Append(file.NewLearnings?.FullRecallWords).Append(csvSeparator);
 			}
 
 			sb.Append(file.Untranslated.Words).Append(csvSeparator).Append(file.Total.Words).Append(csvSeparator).Append(Environment.NewLine);
