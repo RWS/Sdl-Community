@@ -8,6 +8,7 @@ using Sdl.Community.XLIFF.Manager.View;
 using Sdl.Community.XLIFF.Manager.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Application = System.Windows.Application;
 
 namespace Sdl.Community.XLIFF.Manager
@@ -30,6 +31,11 @@ namespace Sdl.Community.XLIFF.Manager
 				}
 			}
 			return activeForm;
+		}
+
+		public static void Initialize()
+		{
+			SdlTradosStudio.Application.GetController<XLIFFManagerViewController>().Initialize();
 		}
 
 		public static void ShowSettingsWindow()
