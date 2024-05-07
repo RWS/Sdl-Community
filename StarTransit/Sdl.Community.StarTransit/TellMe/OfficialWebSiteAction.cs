@@ -4,20 +4,20 @@ using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.StarTransit.TellMe
 {
-	public class HelpAction : AbstractTellMeAction
+	public class OfficialWebSiteAction : AbstractTellMeAction
 	{
-		public HelpAction()
+		public OfficialWebSiteAction()
 		{
-			Name = "StarTransit wiki in the RWS Community";
+			Name = "Official Star Translation Website";
 		}
-
 		public override void Execute()
 		{
-			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3270/star-transit-transitpackage-handler");
+			Process.Start("https://www.star-ts.com/software/");
 		}
 
 		public override bool IsAvailable => true;
 		public override string Category => string.Format(PluginResources.TellMe_Provider_Results, PluginResources.Plugin_Name);
-		public override Icon Icon => PluginResources.Question;
+
+		public override Icon Icon => PluginResources.starTs_oficialWebSite;
 	}
 }

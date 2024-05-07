@@ -4,22 +4,22 @@ using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.StarTransit.TellMe
 {
-    public class AppStoreDownloadAction : AbstractTellMeAction
+    public class DocumentationAction : AbstractTellMeAction
     {
         public override bool IsAvailable => true;
 
         public override string Category => string.Format(PluginResources.TellMe_Provider_Results, PluginResources.Plugin_Name);
 
-        public override Icon Icon => PluginResources.Download;
+        public override Icon Icon => PluginResources.TellmeDocumentation;
 
-        public AppStoreDownloadAction()
+        public DocumentationAction()
         {
-            Name = string.Format("Download {0} from the AppStore", PluginResources.Plugin_Name);
+            Name = string.Format("{0} documentation", PluginResources.Plugin_Name);
         }
 
         public override void Execute()
         {
-            Process.Start("https://appstore.rws.com/Plugin/45");
+            Process.Start("https://appstore.rws.com/Plugin/45?tab=documentation");
         }
     }
 }
