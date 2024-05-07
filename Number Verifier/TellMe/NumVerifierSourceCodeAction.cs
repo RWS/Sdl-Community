@@ -8,7 +8,7 @@ namespace Sdl.Community.NumberVerifier.TellMe
 	public class NumVerifierSourceCodeAction : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
-		public override string Category => "Number Verifier results";
+		public override string Category => $"{PluginResources.Plugin_Name} results";
 		public override Icon Icon => PluginResources.SourceCode;
 
 		public NumVerifierSourceCodeAction()

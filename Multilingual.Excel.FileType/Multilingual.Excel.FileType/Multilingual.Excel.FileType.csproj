@@ -319,7 +319,6 @@
     <Compile Include="FileType\ViewModels\LanguageMappingViewModel.cs" />
     <Compile Include="Services\XmlReaderFactory.cs" />
     <Compile Include="Constants\XmlConstants.cs" />
-    <Compile Include="TellMe\CommunityAppStoreAction.cs" />
     <Compile Include="TellMe\CommunityAppStoreForumAction.cs" />
     <Compile Include="TellMe\CommunityWikiAction.cs" />
     <Compile Include="TellMe\SettingsAction.cs" />
@@ -371,6 +370,7 @@
     <Content Include="Resources\Settings.ico" />
     <Content Include="Resources\SourceCode.ico" />
     <Content Include="Resources\TellmeDocumentation.ico" />
+    <Resource Include="Resources\Warning2.png" />
     <Resource Include="Resources\Download.ico" />
     <Resource Include="Resources\ForumIcon.ico" />
     <Resource Include="Resources\Question.ico" />

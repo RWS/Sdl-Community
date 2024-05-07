@@ -6,7 +6,7 @@
 		xmlns:root="clr-namespace:Multilingual.XML.FileType"
 		mc:Ignorable="d"
 		Title="TellMe Warning"
-		Width="500"
+		Width="400"
 		Height="300"
 		ResizeMode="NoResize"
 		WindowStyle="None"
@@ -40,8 +40,8 @@
 
 			<Image Grid.Row="0"
 				   Grid.Column="0"
-                   Source="/Multilingual.XML.FileType;component/Resources/Warning.png"
-                   Height="40"
+				   Source="/Multilingual.XML.FileType;component/Resources/Warning.png"
+				   Height="40"
 				   Width="40"
 				   RenderOptions.BitmapScalingMode="HighQuality"
 				   Margin="32 16 16 0" />
@@ -56,37 +56,36 @@
 					   Margin="8 16 0 0" />
 
 			<TextBlock Grid.Row="1"
-					   Grid.Column="0"
 					   Grid.ColumnSpan="2"
 					   Text="{x:Static root:PluginResources.SettingsAction_OpenOptionsText}"
 					   Focusable="True"
-					   FontWeight="DemiBold"
 					   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
+					   MaxWidth="9999"
 					   TextWrapping="Wrap"
 					   Margin="24 8 24 0" />
+
 			<TextBlock Grid.Row="2"
-			           Grid.Column="0"
-			           Grid.ColumnSpan="2"
-			           Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
-			           HorizontalAlignment="Left"
-			           Focusable="True"
-			           Margin="24 12 24 0"
-			           KeyDown="OpenUrl_KeyPressed">
+					   Grid.ColumnSpan="2"
+					   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
+					   HorizontalAlignment="Left"
+					   Focusable="True"
+					   Margin="24 12 24 0"
+					   KeyDown="OpenUrl_KeyPressed">
 				<Run Text="{x:Static root:PluginResources.SettingsAction_ExternalHelp_1}" />
 				<Run Text="{x:Static root:PluginResources.SettingsAction_ExternalHelp_2}"
-				     Cursor="Hand"
-				     MouseLeftButtonDown="OpenUrl_ButtonClicked">
+					 Cursor="Hand"
+					 MouseLeftButtonDown="OpenUrl_ButtonClicked">
 					<Run.Style>
 						<Style TargetType="Run">
 							<Setter Property="Foreground"
-							        Value="#0096D6" />
+									Value="#0096D6" />
 							<Style.Triggers>
 								<Trigger Property="IsMouseOver"
-								         Value="True">
+										 Value="True">
 									<Setter Property="Foreground"
-									        Value="#028ac4" />
+											Value="#028ac4" />
 									<Setter Property="TextDecorations"
-									        Value="Underline" />
+											Value="Underline" />
 								</Trigger>
 							</Style.Triggers>
 						</Style>
@@ -95,14 +94,13 @@
 				<Run Text="{x:Static root:PluginResources.SettingsAction_ExternalHelp_3}" />
 			</TextBlock>
 
-
 			<Button Grid.Row="4"
-					Grid.Column="0"
 					Grid.ColumnSpan="2"
 					Content="Close"
 					Style="{StaticResource Sdl.Button.SecondaryStyle}"
 					Click="CloseWindow_Click"
 					HorizontalAlignment="Right"
+					Width="120"
 					Margin="0 16 16 16"/>
 		</Grid>
 	</Border>

@@ -14,7 +14,7 @@ namespace SDLXLIFFSliceOrChange
 	{
 		private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		public static void DoReplaceInFile(string file, ReplaceSettings settings, SDLXLIFFSliceOrChange sdlxliffSliceOrChange)
+		public static void DoReplaceInFile(string file, ReplaceSettings settings, SdlxliffSliceOrChange sdlxliffSliceOrChange)
 		{
 			try
 			{

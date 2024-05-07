@@ -16,7 +16,7 @@ namespace Sdl.Community.DsiViewer.TellMe
 		public override void Execute()
 		{
 			var settingsWarningWindow = new SettingsActionWarning("https://appstore.rws.com/Plugin/25?tab=documentation");
-			settingsWarningWindow.Show();
+			settingsWarningWindow.ShowDialog();
 		}
 	}
 }

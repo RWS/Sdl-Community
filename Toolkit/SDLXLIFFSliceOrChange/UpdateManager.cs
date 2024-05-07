@@ -8,10 +8,10 @@ namespace SDLXLIFFSliceOrChange
 {
 	public class UpdateManager
     {
-        private SDLXLIFFSliceOrChange _sdlxliffSliceOrChange;
+        private SdlxliffSliceOrChange _sdlxliffSliceOrChange;
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		public UpdateManager(SDLXLIFFSliceOrChange sdlxliffSliceOrChange)
+		public UpdateManager(SdlxliffSliceOrChange sdlxliffSliceOrChange)
         {
             _sdlxliffSliceOrChange = sdlxliffSliceOrChange;
         }
