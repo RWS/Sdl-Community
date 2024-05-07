@@ -30,7 +30,7 @@ namespace Reports.Viewer.Plus.Actions
 		{
 			var reports = _reportsViewerController.GetReports();
 			
-			var groupNames = reports.OrderByDescending(b => b.Group).Select(a => a.Group).Distinct().ToList();
+			var groupNames = reports?.OrderByDescending(b => b.Group).Select(a => a.Group).Distinct().ToList();
 
 			var settings = GetSettings();
 			var view = new SettingsWindow();
