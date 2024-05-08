@@ -7,11 +7,11 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 namespace AddTUToTM
 {
 	[ApplicationInitializer]
-	public class AddTu:IApplicationInitializer
+	public class AddTu : IApplicationInitializer
 	{
 		public void Execute()
 		{
-			var tm = new FileBasedTranslationMemory(@"tm path");
+			var tm = new FileBasedTranslationMemory(@"");
 
 			var tu = new TranslationUnit
 			{
