@@ -567,8 +567,8 @@ namespace Sdl.Community.StarTransit {
         /// <summary>
         ///   Looks up a localized string similar to To engage with this plugin, follow these steps:
         ///
-        ///    1.In Projects view, go to Home tab
-        ///    2.Locate the StarTransit Group.
+        ///    1. In Projects view, go to Home tab
+        ///    2. Locate the StarTransit Group.
         /// </summary>
         public static string TellMe_WarningMessage {
             get {
