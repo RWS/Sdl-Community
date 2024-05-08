@@ -2,7 +2,7 @@
 using System.Drawing;
 using Sdl.TellMe.ProviderApi;
 
-namespace Sdl.Community.XliffCompare.TellMe
+namespace Sdl.Community.XliffCompare.TellMe.Actions
 {
 	public class AppStoreForumAction : AbstractTellMeAction
 	{
