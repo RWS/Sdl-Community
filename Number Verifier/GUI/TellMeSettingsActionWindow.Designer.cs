@@ -32,12 +32,14 @@
             this.OKButton = new System.Windows.Forms.Button();
             this.CancelButton = new System.Windows.Forms.Button();
             this.Ui = new Sdl.Community.NumberVerifier.NumberVerifierUI();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // OKButton
             // 
             this.OKButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.OKButton.Location = new System.Drawing.Point(532, 796);
+            this.OKButton.Location = new System.Drawing.Point(470, 18);
             this.OKButton.Name = "OKButton";
             this.OKButton.Size = new System.Drawing.Size(75, 23);
             this.OKButton.TabIndex = 1;
@@ -48,7 +50,7 @@
             // CancelButton
             // 
             this.CancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.CancelButton.Location = new System.Drawing.Point(613, 796);
+            this.CancelButton.Location = new System.Drawing.Point(551, 18);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(75, 23);
             this.CancelButton.TabIndex = 2;
@@ -91,7 +93,7 @@
             this.Ui.ReportNumberFormatErrors = true;
             this.Ui.ReportRemovedNumbers = true;
             this.Ui.RequireLocalizations = false;
-            this.Ui.Size = new System.Drawing.Size(700, 829);
+            this.Ui.Size = new System.Drawing.Size(629, 829);
             this.Ui.SourceDecimalComma = true;
             this.Ui.SourceDecimalCustomSeparator = false;
             this.Ui.SourceDecimalPeriod = true;
@@ -118,23 +120,33 @@
             this.Ui.TargetThousandsSpace = true;
             this.Ui.TargetThousandsThinSpace = true;
             // 
+            // panel1
+            // 
+            this.panel1.AutoSize = true;
+            this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel1.Controls.Add(this.OKButton);
+            this.panel1.Controls.Add(this.CancelButton);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 785);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(629, 44);
+            this.panel1.TabIndex = 3;
+            // 
             // TellMeSettingsActionWindow
             // 
             this.AcceptButton = this.OKButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.CancelButton = this.CancelButton;
-            this.ClientSize = new System.Drawing.Size(700, 829);
-            this.Controls.Add(this.CancelButton);
-            this.Controls.Add(this.OKButton);
+            this.ClientSize = new System.Drawing.Size(629, 829);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.Ui);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.Name = "TellMeSettingsActionWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Trados Number Verifier Settings";
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -145,5 +157,6 @@
 		private NumberVerifierUI Ui;
 		private System.Windows.Forms.Button OKButton;
 		private System.Windows.Forms.Button CancelButton;
+		private System.Windows.Forms.Panel panel1;
 	}
 }

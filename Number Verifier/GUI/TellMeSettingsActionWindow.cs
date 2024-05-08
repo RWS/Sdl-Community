@@ -1,4 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using System.Drawing;
+using System;
+using System.Windows.Forms;
 using Sdl.Core.Settings;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -19,6 +21,26 @@ namespace Sdl.Community.NumberVerifier.GUI
 
 			NumberVerifierSettings = CurrentProjectSettings.GetSettingsGroup<NumberVerifierSettings>();
 			Setup();
+
+			AdjustWindowSize();
+		}
+
+		private void AdjustWindowSize()
+		{
+			var screen = Screen.FromControl(this);
+			var workingArea = screen.WorkingArea;
+			var maxWidth = workingArea.Width;
+			var maxHeight = workingArea.Height;
+
+			// Adjust window size
+			var newWidth = Math.Min(this.Width, maxWidth);
+			var newHeight = Math.Min(this.Height, maxHeight);
+			this.Size = new Size(newWidth, newHeight);
+
+			// Adjust window position
+			var newX = Math.Max(workingArea.Left, Math.Min(this.Left, workingArea.Right - newWidth));
+			var newY = Math.Max(workingArea.Top, Math.Min(this.Top, workingArea.Bottom - newHeight));
+			this.Location = new Point(newX, newY);
 		}
 
 		private FileBasedProject CurrentProject { get; set; }

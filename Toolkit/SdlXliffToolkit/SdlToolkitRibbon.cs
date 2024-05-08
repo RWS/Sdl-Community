@@ -54,8 +54,6 @@ namespace SdlXliffToolkit
 	[ActionLayout(typeof(SdlToolkitRibbon), 20, DisplayType.Large)]
 	internal class SdlToolkitFilesViewPartAction : AbstractAction
 	{
-		public void ExecuteAction() => Execute();
-
 		protected override void Execute()
 		{
 			ApplicationHost<SdlTradosStudioApplication>.Application.GetController<SdlToolkitFilesViewPart>().Show();
