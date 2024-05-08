@@ -48,11 +48,11 @@
 
             <TextBlock
 			   Grid.Column="1"
-			   Text="Access Star Transit"
+			   Text="Access StarTransit"
 	           Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"
 			   FontSize="16"
 			   HorizontalAlignment="Left"
-			   Margin="55,0,0,0" RenderTransformOrigin="0.485,0.534" />
+			   Margin="67,0,0,0" RenderTransformOrigin="0.485,0.534" />
 
             <TextBlock Grid.Row="1"
 			   Grid.ColumnSpan="3"
