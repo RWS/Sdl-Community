@@ -108,6 +108,10 @@
 		  <Component Id="Sdl.Core.Globalization.dll" Guid="*">
 			  <File Id="Sdl.Core.Globalization.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Sdl.Core.Globalization.dll"></File>
 		  </Component>
+				
+			<Component Id="Sdl.Core.Globalization.Async.dll" Guid="*">
+			  <File Id="Sdl.Core.Globalization.Async.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Sdl.Core.Globalization.Async.dll"></File>
+		  </Component>
 	  </ComponentGroup>
   </Fragment>
 
