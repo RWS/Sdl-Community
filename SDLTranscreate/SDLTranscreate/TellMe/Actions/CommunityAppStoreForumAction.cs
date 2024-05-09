@@ -1,21 +1,19 @@
-﻿using System.Diagnostics;
+﻿using Sdl.TellMe.ProviderApi;
+using System.Diagnostics;
 using System.Drawing;
-using Sdl.TellMe.ProviderApi;
 
-namespace Trados.Transcreate.TellMe
+namespace Trados.Transcreate.TellMe.Actions
 {
 	public class CommunityAppStoreForumAction : AbstractTellMeAction
 	{
-		public override bool IsAvailable => true;
-
-		public override string Category => string.Format("{0} results", PluginResources.Plugin_Name);
-
-		public override Icon Icon => PluginResources.ForumIcon;
-
 		public CommunityAppStoreForumAction()
 		{
 			Name = "RWS Community AppStore Forum";
 		}
+
+		public override string Category => $"{PluginResources.Plugin_Name} results";
+		public override Icon Icon => PluginResources.ForumIcon;
+		public override bool IsAvailable => true;
 
 		public override void Execute()
 		{
