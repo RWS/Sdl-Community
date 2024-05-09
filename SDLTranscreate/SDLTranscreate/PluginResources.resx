@@ -785,6 +785,45 @@
     <value>Switch with Recommended Translation</value>
   </data>
   <data name="WizardTitle_CreateBackTranslationProject" xml:space="preserve">
-	  <value>Create Back-Translation project</value>
+    <value>Create Back-Translation project</value>
+  </data>
+  <data name="SettingsAction_ExternalHelp_1" xml:space="preserve">
+    <value>For more information,</value>
+  </data>
+  <data name="SettingsAction_ExternalHelp_2" xml:space="preserve">
+    <value>click here</value>
+  </data>
+  <data name="SettingsAction_ExternalHelp_3" xml:space="preserve">
+    <value>for documentation.</value>
+  </data>
+  <data name="SettingsAction_Title" xml:space="preserve">
+    <value>Convert to Transcreate Project</value>
+  </data>
+  <data name="TellmeDocumentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellmeDocumentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SettingsAction_ConvertToTranscreate_MoreThanOneFileSelected" xml:space="preserve">
+    <value>Multi project selection is not supported.
+
+Via the Projects view:
+
+1. Select a single project
+2. Right click to access the Context Menu
+3. Select "Convert to Transcreate project"</value>
+  </data>
+  <data name="SettingsAction_ConvertToTranscreate_NoFileSelected" xml:space="preserve">
+    <value>No project has been selected.
+
+Via the Projects view:
+
+1. Select a single project
+2. Right click to access the Context Menu
+3. Select "Convert to Transcreate project"</value>
+  </data>
+  <data name="SettingsAction_ConvertToTranscreate_SelectedProjectIsAlreadyTranscreate" xml:space="preserve">
+    <value>The selected project is already a transcreate project.</value>
+  </data>
+  <data name="Settings2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Settings2.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
