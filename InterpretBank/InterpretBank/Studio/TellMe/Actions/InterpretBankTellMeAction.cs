@@ -1,6 +1,6 @@
 ﻿using Sdl.TellMe.ProviderApi;
 
-namespace InterpretBank.Studio.TellMe
+namespace InterpretBank.Studio.TellMe.Actions
 {
     public abstract class InterpretBankTellMeAction : AbstractTellMeAction
     {

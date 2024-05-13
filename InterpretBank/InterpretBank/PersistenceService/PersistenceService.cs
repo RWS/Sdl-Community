@@ -7,6 +7,8 @@ using InterpretBank.SettingsService;
 using InterpretBank.Studio;
 using Newtonsoft.Json;
 using Sdl.ProjectAutomation.Core;
+using Sdl.ProjectAutomation.FileBased;
+using System.Linq;
 
 namespace InterpretBank.PersistenceService
 {
@@ -31,10 +33,20 @@ namespace InterpretBank.PersistenceService
 
 			return settings;
 		}
-        
-        public Settings GetSettingsForCurrentProject()
+        public string GetSettingsId() => (Guid.NewGuid().ToString());
+        public Settings GetSettingsForSelectedProject()
 		{
-            var settingsXml = StudioContext.ProjectsController.CurrentProject.GetTermbaseConfiguration().Termbases[0].SettingsXML;
+            var selectedProjects = StudioContext.ProjectsController.SelectedProjects;
+
+            var selectedProject = selectedProjects != null
+                ? selectedProjects.LastOrDefault()
+                : StudioContext.ProjectsController.CurrentProject;
+
+            var termbaseConfiguration = selectedProject?.GetTermbaseConfiguration();
+
+            if (!termbaseConfiguration?.Termbases?.Any() ?? true) return null;
+
+            var settingsXml = termbaseConfiguration.Termbases[0].SettingsXML;
             var serializer = new XmlSerializer(typeof(TermbaseSettings));
 
             using TextReader reader = new StringReader(settingsXml);
