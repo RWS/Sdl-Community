@@ -31,7 +31,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             _connecter = connecter;
 
             _languagePairOptions =
-                _options.LanguagePairOptions.FirstOrDefault(lpo => lpo.LanguagePair.Equals(languageDirection));
+                _options?.LanguagePairOptions?.FirstOrDefault(lpo => lpo.LanguagePair.Equals(languageDirection));
         }
 
         public bool CanReverseLanguageDirection => throw new NotImplementedException();
