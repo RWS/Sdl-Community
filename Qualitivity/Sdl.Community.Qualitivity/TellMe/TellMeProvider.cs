@@ -11,7 +11,7 @@ namespace Sdl.Community.Qualitivity.TellMe
 		{
 			new DocumentationAction
 			{
-				Keywords = new[] { "qualitivity", "community", "support", "wiki" }
+				Keywords = new[] { "qualitivity", "documentation" }
 			},
 			new AppStoreForumAction
 			{
