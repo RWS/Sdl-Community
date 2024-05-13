@@ -42,6 +42,6 @@ namespace InterpretBank.Studio.TellMe.Actions
             persistenceService.SaveSettings(settingsUi.Settings, settings.SettingsId);
         }
 
-        private void ShowWarningWindow() => new SettingsActionWarning("https://appstore.rws.com/").ShowDialog();
+        private void ShowWarningWindow() => new SettingsActionWarning("https://appstore.rws.com/Plugin/243?tab=documentation").ShowDialog();
     }
 }
