@@ -9,7 +9,7 @@ namespace Sdl.Community.Qualitivity.TellMe
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new CommunityWikiAction
+			new DocumentationAction
 			{
 				Keywords = new[] { "qualitivity", "community", "support", "wiki" }
 			},
@@ -17,9 +17,9 @@ namespace Sdl.Community.Qualitivity.TellMe
 			{
 				Keywords = new[] { "qualitivity", "support", "forum" }
 			},
-			new AppStoreDownloadAction
+			new SettingsAction
 			{
-				Keywords = new[] { "qualitivity", "store", "download", "appstore" }}
+				Keywords = new[] { "qualitivity", "settings" }}
 		};
 	}
 }
