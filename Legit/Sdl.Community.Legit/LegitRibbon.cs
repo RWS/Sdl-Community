@@ -27,7 +27,7 @@ namespace Sdl.Community.Legit
 	{
 		protected override void Execute()
 		{
-			System.Diagnostics.Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3281/trados-legit");
+			System.Diagnostics.Process.Start("https://appstore.rws.com/Plugin/57?tab=documentation");
 		}
 	}
 }
