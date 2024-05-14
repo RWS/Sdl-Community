@@ -209,7 +209,7 @@ namespace LanguageWeaverProvider.Services
 				InputFormat = InputFormat,
 				Dictionaries = dictionaries,
 				LinguisticOptions = linguisticOptionsDictionary,
-				QualityEstimation = 1
+				QualityEstimation = mappedPair.SelectedModel.QeSupport ? 1 : 0
 			};
 
 			return translationRequestModel;
@@ -235,6 +235,7 @@ namespace LanguageWeaverProvider.Services
 		{
 			var requestUri = $"{accessToken.BaseUri}v4/mt/translations/async/{requestId}/{endpoint}";
 			var translationStatusReponse = await Service.SendRequest(HttpMethod.Get, requestUri, accessToken);
+			var x = await translationStatusReponse.Content.ReadAsStringAsync();
 			var translationStatus = await Service.DeserializeResponse<T>(translationStatusReponse);
 			return translationStatus;
 		}

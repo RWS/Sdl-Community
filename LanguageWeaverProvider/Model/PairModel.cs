@@ -24,6 +24,8 @@ namespace LanguageWeaverProvider.Model
 		public bool AutoAdaptiveStatus { get; set; }
 		
 		public bool AdaptationSupport { get; set; }
+
+		public bool QeSupport { get; set; }
 		
 		public List<LinguisticOption> LinguisticOptions { get; set; }
 
