@@ -1,13 +1,15 @@
-﻿using System;
+﻿using MicrosoftTranslatorProvider.View;
+using MicrosoftTranslatorProvider.ViewModel;
+using NLog;
+using System;
 using System.IO;
 using System.Media;
 using System.Reflection;
 using System.Windows.Forms;
-using NLog;
 
 namespace MicrosoftTranslatorProvider.Helpers
 {
-	public static class ErrorHandler
+    public static class ErrorHandler
 	{
 		private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
@@ -28,13 +30,13 @@ namespace MicrosoftTranslatorProvider.Helpers
 
 		public static void ShowDialog(this Exception exception, string title, string message, bool displayDetailedReport = false)
 		{
-			/*var passedException = displayDetailedReport ? exception : null;
+			var passedException = displayDetailedReport ? exception : null;
 			var edViewModel = new ErrorDialogViewModel(title, message, passedException);
 
 			var edView = new ErrorDialogView() { DataContext = edViewModel };
 			edViewModel.CloseEventRaised += edView.Close;
 			SystemSounds.Beep.Play();
-			edView.ShowDialog();*/
+			edView.ShowDialog();
 		}
 	}
 }

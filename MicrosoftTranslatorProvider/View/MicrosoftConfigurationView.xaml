@@ -34,7 +34,7 @@
 	<Grid>
 		<GroupBox Visibility="{Binding LoadingAction, Converter={StaticResource EmptyStringToVisibilityConverter}, ConverterParameter=Inverted}"
 				  BorderThickness="0"
-                  Margin="24">
+                  Margin="24 12">
 			<GroupBox.Header>
 				<TextBlock Text="Language Pair Table"
 						   Visibility="Collapsed" />
@@ -60,10 +60,11 @@
 								<ColumnDefinition Width="*" />
 							</Grid.ColumnDefinitions>
 
-							<CheckBox Content="Configure languages"
-                                      IsChecked="{Binding ConfigureLanguages}"
+                            <CheckBox Content="Enable language pair configuration"
+                                      IsChecked="{Binding TranslationOptions.ProviderSettings.ConfigureLanguages}"
 									  HorizontalAlignment="Left"
-									  VerticalAlignment="Center" />
+									  VerticalAlignment="Center" 
+                                      Margin="4 0"/>
 
 							<StackPanel Grid.Column="1"
 										Orientation="Horizontal"

@@ -1,0 +1,88 @@
+﻿<Window x:Class="MicrosoftTranslatorProvider.Studio.TellMe.View.ProviderSelectorView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MicrosoftTranslatorProvider.Studio.TellMe.View"
+        xmlns:viewModels="clr-namespace:MicrosoftTranslatorProvider.Studio.TellMe.ViewModel"
+        d:DataContext="{d:DesignInstance viewModels:ProviderSelectorViewModel}"
+        mc:Ignorable="d"
+        Title="ProviderSelectorView"
+        Width="500"
+        Height="420"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Border BorderThickness="1"
+            BorderBrush="#d4d4d4">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Image Grid.Row="0"
+                   Source="pack://application:,,,/MicrosoftTranslatorProvider;component/Resources/mtp_logo.png"
+                   Margin="48 16"
+                   RenderOptions.BitmapScalingMode="HighQuality" />
+
+            <Separator Grid.Row="1"
+                       VerticalAlignment="Top"
+                       Background="#d4d4d4"
+                       Margin="0 0 0 0" />
+
+            <TextBlock Grid.Row="1"
+                       Text="Multiple instances of the Microsoft Translator Provider for your active project has been detected. Please select the one you wish to open:"
+                       TextWrapping="Wrap"
+                       Focusable="True"
+                       HorizontalAlignment="Center"
+                       Margin="32 16 32 0" />
+
+            <ScrollViewer Grid.Row="2"
+                          Margin="0 16">
+                <ItemsControl HorizontalAlignment="Center"
+                              ItemsSource="{Binding TranslationOptions}"
+                              Focusable="False">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Content="{Binding ProviderName}"
+                                    ToolTip="{Binding Id}"
+                                    Style="{StaticResource Sdl.Button.SecondaryStyle}"
+                                    Command="{Binding DataContext.SelectProviderCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                    CommandParameter="{Binding}"
+                                    Cursor="Hand"
+                                    Margin="0 4" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <Separator Grid.Row="3"
+                       VerticalAlignment="Top"
+                       Background="#d4d4d4"
+                       Margin="0 0 0 0" />
+
+            <Button Grid.Row="3"
+                    Content="Close"
+                    Command="{Binding CloseWindowCommand}"
+                    Style="{StaticResource Sdl.Button.PrimaryStyle}"
+                    HorizontalAlignment="Right"
+                    Width="120"
+                    Margin="0 16 24 16" />
+        </Grid>
+    </Border>
+</Window>

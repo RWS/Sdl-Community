@@ -359,4 +359,27 @@ It must be the same region you selected when you signed up for your multi-servic
   <data name="mstp_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\mstp-icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="TellMe_CommunityForum" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_CommunityForum.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe_Documentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_Documentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe_Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_Settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe_SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SettingsAction_NoProviderAvailable" xml:space="preserve">
+    <value>We couldn't find an instance of Microsoft Translator Provider for the current project selected. To add it to your project, follow these steps:
+
+    1. Open Project Settings
+    2. Go to Translation Memory and Automated Translation
+    3. Select Use
+    4. Via the dropdown menu locate Microsoft Translator Provider</value>
+  </data>
+  <data name="TellMe_ThirdParty" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_ThirdParty.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

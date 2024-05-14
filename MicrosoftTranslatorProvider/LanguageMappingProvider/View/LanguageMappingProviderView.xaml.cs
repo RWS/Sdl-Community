@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using MicrosoftTranslatorProvider.Helpers;
 
-namespace MicrosoftTranslatorProvider.View
+namespace MicrosoftTranslatorProvider.LanguageMappingProvider.View
 {
 	/// <summary>
 	/// Interaction logic for LanguageMappingProviderView.xaml

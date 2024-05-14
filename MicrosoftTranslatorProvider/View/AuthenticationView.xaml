@@ -5,10 +5,8 @@
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:root="clr-namespace:MicrosoftTranslatorProvider"
 		xmlns:views="clr-namespace:MicrosoftTranslatorProvider.View"
-		xmlns:styles="clr-namespace:MicrosoftTranslatorProvider.Styles"
 		xmlns:viewModels="clr-namespace:MicrosoftTranslatorProvider.ViewModel"
 		xmlns:converters="clr-namespace:MicrosoftTranslatorProvider.Converters"
-		xmlns:behaviours="clr-namespace:MicrosoftTranslatorProvider.Behaviours"
 		mc:Ignorable="d"
 		d:DataContext="{d:DesignInstance viewModels:AuthenticationViewModel}"
 		Title="Microsoft Translator Provider Authentication"
@@ -24,11 +22,8 @@
 
 	<Window.Resources>
 		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="../Styles/Buttons.xaml" />
-				<ResourceDictionary Source="../Styles/GroupBox.xaml" />
-				<ResourceDictionary Source="../Styles/WindowsBorder.xaml" />
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ComboBoxResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
@@ -86,21 +81,21 @@
                                    Focusable="True"
                                    Margin="0 16" />
 
-                        <TextBlock Text="Authentication with Microsoft using API Key."
-                                   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
-                                   HorizontalAlignment="Center"
-                                   TextWrapping="Wrap"
-                                   MaxWidth="550"
-                                   Focusable="True"
-                                   Margin="0 4" />
+                        <StackPanel Margin="16 0">
+                            <TextBlock Text="API keys are used to authenticate Azure Microsoft Translator, providing a simple method to access the service through a secure key-based system."
+                                       Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
+                                       TextWrapping="Wrap"
+                                       MaxWidth="550"
+                                       Focusable="False"
+                                       Margin="0 4" />
 
-                        <TextBlock Text="Authentication with Private Endpoint using private URL's between Azure and company network."
-                                   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
-                                   HorizontalAlignment="Center"
-                                   TextWrapping="Wrap"
-                                   MaxWidth="550"
-                                   Focusable="True"
-                                   Margin="0 4" />
+                            <TextBlock Text="Private endpoints require a private URL to establish a direct connection between Azure and your company network bypassing the public internet."
+                                       Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
+                                       TextWrapping="Wrap"
+                                       MaxWidth="550"
+                                       Focusable="False"
+                                       Margin="0 4" />
+                        </StackPanel>
                     </StackPanel>
 
 					<ContentControl Grid.Row="0"
@@ -112,8 +107,8 @@
 
 					<StackPanel Grid.Row="2"
 								Margin="0 0 0 16">
-						<Button Content="Microsoft"
-                                AutomationProperties.HelpText="Authentication with Microsoft using API Key."
+						<Button Content="Microsoft API Key"
+                                AutomationProperties.HelpText="API keys are used to authenticate Azure Microsoft Translator, providing a simple method to access the service through a secure key-based system."
 								Style="{StaticResource Sdl.Button.PrimaryStyle}"
 								Command="{Binding SelectMicrosoftServiceCommand}"
 								CommandParameter="{x:Static root:AuthenticationType.Microsoft}"
@@ -124,7 +119,7 @@
 								Margin="0 4" />
 
 						<Button Content="Private Endpoint"
-                                AutomationProperties.HelpText="Authentication with Private Endpoint using private URL's between Azure and company network."
+                                AutomationProperties.HelpText="Private endpoints require a private URL to establish a direct connection between Azure and your company network bypassing the public internet."
 								Style="{StaticResource Sdl.Button.PrimaryStyle}"
 								Command="{Binding SelectMicrosoftServiceCommand}"
 								CommandParameter="{x:Static root:AuthenticationType.PrivateEndpoint}"

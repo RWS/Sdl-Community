@@ -22,6 +22,7 @@ namespace MicrosoftTranslatorProvider
 				_ = Task.Run(async () => await MicrosoftService.AuthenticateUser(translationOptions.MicrosoftCredentials)).Result;
 			}
 
+			ApplicationInitializer.TranslationOptions[translationOptions.Id] = translationOptions;
 			return new TranslationProvider(translationOptions);
 		}
 

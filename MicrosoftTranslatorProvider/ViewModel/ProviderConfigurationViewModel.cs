@@ -1,22 +1,21 @@
-﻿using System;
-using System.Windows.Input;
-using LanguageMappingProvider.Database.Interface;
+﻿using LanguageMappingProvider.Database.Interface;
 using MicrosoftTranslatorProvider.Commands;
 using MicrosoftTranslatorProvider.Interfaces;
 using MicrosoftTranslatorProvider.LanguageMappingProvider;
+using MicrosoftTranslatorProvider.LanguageMappingProvider.View;
+using MicrosoftTranslatorProvider.LanguageMappingProvider.ViewModel;
 using MicrosoftTranslatorProvider.View;
 using Sdl.LanguagePlatform.Core;
+using System;
+using System.Windows.Input;
 
 namespace MicrosoftTranslatorProvider.ViewModel
 {
-	public class ProviderConfigurationViewModel : BaseViewModel
+    public class ProviderConfigurationViewModel : BaseViewModel
     {
 		readonly ILanguageMappingDatabase _languageMappingDatabase;
 		readonly ITranslationOptions _translationOptions;
 		readonly LanguagePair[] _languagePairs;
-
-		public MicrosoftConfigurationViewModel MicrosoftConfigurationViewModel { get; set; }
-		public PrivateEndpointConfigurationViewModel PrivateEndpointConfigurationViewModel { get; set; }
 
 		public ProviderConfigurationViewModel(ITranslationOptions translationOptions, LanguagePair[] languagePairs)
 		{
@@ -32,7 +31,11 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 		public AuthenticationType AuthenticationType { get; private set; }
 
-		public ICommand ManageChangesCommand { get; private set; }
+        public MicrosoftConfigurationViewModel MicrosoftConfigurationViewModel { get; set; }
+
+        public PrivateEndpointConfigurationViewModel PrivateEndpointConfigurationViewModel { get; set; }
+
+        public ICommand ManageChangesCommand { get; private set; }
 		public ICommand OpenLanguageMappingCommand { get; private set; }
 		public ICommand OpenProviderSettingsCommand { get; private set; }
 		public ICommand ResetAndIdentifyPairsCommand { get; private set; }

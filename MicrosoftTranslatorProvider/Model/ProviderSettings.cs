@@ -4,14 +4,15 @@ namespace MicrosoftTranslatorProvider.Model
 {
 	public class ProviderSettings : BaseViewModel
 	{
-		private bool _useCustomName = false;
-		private string _customName = null;
-		private bool _includeTags = true;
-		private bool _resendDrafts = false;
-		private bool _usePrelookup = false;
-		private string _preLookupFilePath = null;
-		private bool _usePostLookup = false;
-		private string _postLookupFilePath = null;
+		bool _useCustomName = false;
+		string _customName = null;
+		bool _includeTags = true;
+		bool _resendDrafts = false;
+		bool _usePrelookup = false;
+		string _preLookupFilePath = null;
+		bool _usePostLookup = false;
+		string _postLookupFilePath = null;
+		bool _configureLanguages = false;
 
 		public bool UseCustomName
 		{
@@ -89,6 +90,16 @@ namespace MicrosoftTranslatorProvider.Model
 			set
 			{
 				_postLookupFilePath = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public bool ConfigureLanguages
+		{
+			get => _configureLanguages;
+			set
+			{
+				_configureLanguages = value;
 				OnPropertyChanged();
 			}
 		}

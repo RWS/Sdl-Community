@@ -14,24 +14,24 @@ namespace MicrosoftTranslatorProvider.ViewModel
 	public class MicrosoftConfigurationViewModel : BaseViewModel
     {
 		readonly ILanguageMappingDatabase _languageMappingDatabase;
-		readonly ITranslationOptions _translationOptions;
 		readonly LanguagePair[] _languagePairs;
 
 		string _loadingAction;
-		bool _configureLanguages;
 
 		public MicrosoftConfigurationViewModel(ITranslationOptions translationOptions, LanguagePair[] languagePairs, ILanguageMappingDatabase languageMappingDatabase)
 		{
 			LoadingAction = "Initializing...";
 			_languagePairs = languagePairs;
-			_translationOptions = translationOptions;
+            TranslationOptions = translationOptions;
 			_languageMappingDatabase = languageMappingDatabase;
 			InitializeCommands();
 			LoadingAction = string.Empty;
 			LoadPairMapping();
-		}
+        }
 
-		public ObservableCollection<PairModel> PairModels { get; set; }
+		public ITranslationOptions TranslationOptions { get; private set; }
+
+        public ObservableCollection<PairModel> PairModels { get; private set; }
 
 		public string LoadingAction
 		{
@@ -39,16 +39,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			set
 			{
 				_loadingAction = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public bool ConfigureLanguages
-		{
-			get => _configureLanguages;
-			set
-			{
-				_configureLanguages = value;
 				OnPropertyChanged();
 			}
 		}
@@ -73,7 +63,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 		private async void LoadPairMapping()
 		{
-			if (_translationOptions.PairModels is null || !_translationOptions.PairModels.Any())
+			if (TranslationOptions.PairModels is null || !TranslationOptions.PairModels.Any())
 			{
 				CreatePairMappings();
 				return;
@@ -81,8 +71,8 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 			LoadingAction = "Loading resources...";
 			await Task.Delay(0);
-			PairModels = new(_translationOptions.PairModels.Select(pm => pm.Clone()));
-			LoadingAction = string.Empty;
+			PairModels = new(TranslationOptions.PairModels.Select(pm => pm.Clone()));
+            LoadingAction = string.Empty;
 		}
 
 		public async void CreatePairMappings()
@@ -130,7 +120,12 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			}
 
 			OnPropertyChanged(nameof(PairModels));
+			if (!TranslationOptions.ProviderSettings.ConfigureLanguages)
+			{
+				TranslationOptions.ProviderSettings.ConfigureLanguages = PairModels.Any(pm => string.IsNullOrEmpty(pm.SourceLanguageCode) || string.IsNullOrEmpty(pm.TargetLanguageCode));
+			}
+
 			LoadingAction = string.Empty;
-		}
-	}
+        }
+    }
 }

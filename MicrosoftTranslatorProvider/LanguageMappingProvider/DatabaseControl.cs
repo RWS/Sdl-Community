@@ -13,7 +13,7 @@ namespace MicrosoftTranslatorProvider.LanguageMappingProvider
 	{
 		public static LanguageMappingDatabase InitializeDatabase()
 		{
-			var mappedLanguages = Task.Run(async () => await GetMappeddLanguages()).Result;
+			var mappedLanguages = Task.Run(GetMappeddLanguages).Result;
 			return new LanguageMappingDatabase("microsoft", mappedLanguages);
 		}
 

@@ -77,12 +77,12 @@
         <TextBlock Grid.Row="1"
                    Grid.Column="0"
                    Grid.ColumnSpan="2"
-                   Text="Manage the output of machine translation by configuring the table"
+                   Text="Enable customisation table to support custom output of machine translation"
                    Foreground="#444444"
                    FontSize="12"
                    FontWeight="DemiBold"
                    Focusable="True"
-                   Margin="16 0"
+                   Margin="40 0"
                    TextWrapping="Wrap" />
 
         <ContentControl Grid.Row="2"
@@ -91,7 +91,6 @@
 						Content="{Binding MicrosoftConfigurationViewModel}"
 						Visibility="{Binding MicrosoftConfigurationViewModel, Converter={StaticResource NullToVisibilityConverter}}"
 						Focusable="False"
-						Margin="0 8"
 						HorizontalAlignment="Stretch" />
 
 		<ContentControl Grid.Row="2"
@@ -100,7 +99,6 @@
 						Content="{Binding PrivateEndpointConfigurationViewModel}"
 						Visibility="{Binding PrivateEndpointConfigurationViewModel, Converter={StaticResource NullToVisibilityConverter}}"
 						Focusable="False"
-						Margin="0 8"
 						HorizontalAlignment="Stretch" />
 
 		<StackPanel Grid.Row="3"

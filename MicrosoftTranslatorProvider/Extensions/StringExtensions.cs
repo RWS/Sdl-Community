@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace MicrosoftTranslatorProvider.Extensions
 {
-	public static class StringExtensions
+    public static class StringExtensions
 	{
 		public static string[] SplitAt(this string source, params int[] index)
 		{
@@ -60,18 +60,6 @@ namespace MicrosoftTranslatorProvider.Extensions
 			}
 
 			return splitText.Aggregate(string.Empty, (current, text) => current + text);
-		}
-
-		public static string SetProviderName(this string customName, bool useCustomName)
-		{
-			var providerNamePrefix = PluginResources.Microsoft_NiceName;
-			var providerNameSufix = string.Empty;
-			if (!string.IsNullOrEmpty(customName) && useCustomName)
-			{
-				providerNameSufix = $" - {customName}";
-			}
-
-			return $"{providerNamePrefix}{providerNameSufix}";
 		}
 	}
 }
