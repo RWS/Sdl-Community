@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -16,6 +16,9 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
+	<PropertyGroup>
+		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
+	</PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -38,52 +41,52 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="Sdl.Core.Globalization">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.Core.Globalization.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization.Async">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.Core.Globalization.Async.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.Desktop.IntegrationApi.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.LanguagePlatform.Core.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.LanguagePlatform.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.ProjectAutomation.Core.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Settings">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.ProjectAutomation.Settings.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Versioning">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.Versioning.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.Versioning.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TellMe.ProviderApi">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.TellMe.ProviderApi.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -106,9 +109,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PluginResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="TellMe\AppStoreDownloadAction.cs" />
     <Compile Include="TellMe\AppStoreForumAction.cs" />
-    <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\DocumentationAction.cs" />
+    <Compile Include="TellMe\SettingsAction.cs" />
+    <Compile Include="TellMe\SourceCodeAction.cs" />
     <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="TuToTmAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -125,6 +129,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\SourceCode.ico" />
+    <None Include="Resources\Settings.ico" />
+    <None Include="Resources\QuestionT.ico" />
+    <None Include="Resources\Documentation.ico" />
     <Content Include="Resources\Download.ico" />
     <Content Include="Resources\ForumIcon.ico" />
     <Content Include="Resources\Question.ico" />
@@ -148,7 +156,7 @@
       <Version>2.1.0</Version>
     </PackageReference>
     <PackageReference Include="Sdl.Core.PluginFramework.Build">
-      <Version>17.0.0</Version>
+      <Version>18.0.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
