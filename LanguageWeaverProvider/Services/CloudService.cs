@@ -209,7 +209,7 @@ namespace LanguageWeaverProvider.Services
 				InputFormat = InputFormat,
 				Dictionaries = dictionaries,
 				LinguisticOptions = linguisticOptionsDictionary,
-				QualityEstimation = 1
+				QualityEstimation = mappedPair.SelectedModel.QeSupport ? 1 : 0
 			};
 
 			return translationRequestModel;
