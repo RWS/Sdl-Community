@@ -6,7 +6,7 @@
 		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
 		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
 		<CreatePluginPackage>true</CreatePluginPackage>
-		<LangVersion>latest</LangVersion>
+		<LangVersion>preview</LangVersion>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
@@ -25,6 +25,7 @@
 	  <None Remove="SdlTmAnonymizer\UsefulTips\ko\ko.zip" />
 	  <None Remove="SdlTmAnonymizer\UsefulTips\ru\ru.zip" />
 	  <None Remove="SdlTmAnonymizer\UsefulTips\zh\zh.zip" />
+	  <None Remove="SdlTmAnonymizer\View\TellMe.xaml" />
 	</ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -203,6 +204,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="SdlTmAnonymizer\View\TellMe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SdlTmAnonymizer\View\AcceptView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -254,7 +259,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
+		<PackageReference Include="Extended.Wpf.Toolkit">
+			<Version>4.5.0</Version>
+		</PackageReference>
     <PackageReference Include="RwsAppStore.UsefulTips.Service" Version="4.0.1" />
     <PackageReference Include="Sdl.Core.PluginFramework">
       <Version>2.1.0</Version>
@@ -270,11 +277,20 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>PluginResources.resx</DependentUpon>
     </Compile>
+    <Compile Update="StringResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>StringResources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="PluginResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="StringResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>StringResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

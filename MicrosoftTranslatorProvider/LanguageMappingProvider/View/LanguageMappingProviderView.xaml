@@ -1,0 +1,213 @@
+﻿<Window x:Class="MicrosoftTranslatorProvider.LanguageMappingProvider.View.LanguageMappingProviderView"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:controls="clr-namespace:MicrosoftTranslatorProvider.Controls"
+		xmlns:converters="clr-namespace:MicrosoftTranslatorProvider.Converters"
+        xmlns:viewmodel="clr-namespace:MicrosoftTranslatorProvider.LanguageMappingProvider.ViewModel"
+		mc:Ignorable="d"
+		d:DataContext="{d:DesignInstance viewmodel:LanguageMappingProviderViewModel}"
+		BorderThickness="1"
+		BorderBrush="#c0c0c0"
+		Title="Language Mapping"
+		WindowStartupLocation="CenterScreen"
+		WindowStyle="None"
+		ResizeMode="CanResize"
+		MinWidth="768"
+		Width="768"
+		MaxWidth="768"
+		MinHeight="720"
+		Height="720"
+		MaxHeight="720"
+		MouseLeftButtonDown="Window_MouseLeftButtonDown"
+		PreviewKeyDown="Window_PreviewKeyDown"
+		Loaded="Window_Loaded"
+		Closing="Window_Closing"
+		AllowsTransparency="True">
+
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MicrosoftTranslatorProvider;component/Controls/ProgressIndicator.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MicrosoftTranslatorProvider;component/Controls/WatermarkTextBox.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+
+			<Style TargetType="Image">
+				<Setter Property="RenderOptions.BitmapScalingMode"
+						Value="HighQuality" />
+			</Style>
+
+			<converters:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibility" />
+
+		</ResourceDictionary>
+	</Window.Resources>
+
+	<Border>
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+
+			<Image Grid.Row="0"
+				   Grid.ColumnSpan="2"
+				   Source="pack://application:,,,/MicrosoftTranslatorProvider;component/Resources/mtp_logo.png"
+				   Width="600"
+				   Margin="0 16 0 0" />
+
+			<TextBlock Grid.Row="1"
+					   Grid.RowSpan="2"
+					   Text="The Language Mapping feature allows users to align unrecognised or new language codes coming from the machine translation engine with a recognised language in Trados Studio, enabling translation where it otherwise wouldn't be possible."
+					   Foreground="#444444"
+					   FontSize="12"
+					   FontWeight="DemiBold"
+					   Focusable="True"
+					   TextWrapping="Wrap"
+					   Margin="16 16 16 0" />
+
+			<TextBox Grid.Row="1"
+					 Grid.Column="1"
+					 x:Name="FilterSearchBox"
+					 Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}"
+					 AutomationProperties.Name="Search language"
+					 Style="{StaticResource WatermarkTextBox}"
+					 BorderThickness="1"
+					 BorderBrush="#FFBFCDD4"
+					 controls:WatermarkTextBox.WatermarkText="Search languages..."
+					 controls:WatermarkTextBox.ButtonCommand="{Binding ClearCommand}"
+					 controls:WatermarkTextBox.ButtonCommandParameter="{controls:NameOf Member=Filter, Type={x:Type viewmodel:LanguageMappingProviderViewModel}}"
+					 controls:WatermarkTextBox.IsWatermarkVisible="True"
+					 HorizontalAlignment="Right"
+					 VerticalAlignment="Bottom"
+					 Width="232"
+					 Height="24"
+					 Margin="16 16 16 0" />
+
+			<TextBlock Grid.Row="2"
+					   Grid.Column="1"
+					   Margin="0 0 20 0"
+					   Foreground="#444444"
+					   FontSize="11"
+					   FontWeight="DemiBold"
+					   HorizontalAlignment="Right"
+					   VerticalAlignment="Bottom"
+					   Focusable="True">
+				<Run Text="Total" />
+				<Run Text="{Binding MappedLanguages.Count, Mode=OneWay}" />
+				<Run Text="Displayed" />
+				<Run Text="{Binding FilteredMappedLanguages.Count, Mode=OneWay}" />
+			</TextBlock>
+
+			<DataGrid Grid.Row="3"
+					  Grid.ColumnSpan="2"
+					  ItemsSource="{Binding FilteredMappedLanguages}"
+					  SelectedItem="{Binding SelectedMappedLanguage}"
+					  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+					  Visibility="{Binding LoadingAction, Converter={StaticResource EmptyStringToVisibility}, ConverterParameter=Inverted}"
+					  BorderThickness="1"
+					  BorderBrush="#FFBFCDD4"
+					  AutoGenerateColumns="False"
+					  HorizontalAlignment="Stretch"
+					  ScrollViewer.VerticalScrollBarVisibility="Auto"
+					  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+					  HorizontalContentAlignment="Right"
+					  CanUserSortColumns="False"
+					  CanUserAddRows="False"
+					  CanUserDeleteRows="False"
+					  Margin="16 16 16 4"
+					  AutomationProperties.Name="Language Mapping">
+				<DataGrid.Columns>
+					<DataGridTextColumn Header="Language"
+										Binding="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}"
+										IsReadOnly="True"
+										Width="2*" />
+
+					<DataGridTextColumn Header="Region"
+										Binding="{Binding Path=Region, UpdateSourceTrigger=PropertyChanged}"
+										IsReadOnly="True"
+										Width="2*" />
+
+					<DataGridTextColumn Header="Trados Code"
+										Binding="{Binding Path=TradosCode, UpdateSourceTrigger=PropertyChanged}"
+										IsReadOnly="True"
+										Width="1*" />
+
+					<DataGridTextColumn Header="Language Code"
+										Binding="{Binding Path=LanguageCode, UpdateSourceTrigger=PropertyChanged}"
+										Width="1*" />
+
+				</DataGrid.Columns>
+			</DataGrid>
+
+			<controls:ProgressIndicator Grid.Row="3"
+										Grid.ColumnSpan="3"
+										Text="{Binding LoadingAction}"
+										Visibility="{Binding LoadingAction, Converter={StaticResource EmptyStringToVisibility}}"
+										VerticalAlignment="Center" />
+
+			<Button Grid.Row="4"
+					Grid.ColumnSpan="2"
+					Content="Missing a language code? Click here to find it!"
+					Style="{StaticResource Sdl.Button.HyperLinkStyle}"
+					Command="{Binding OpenExternalLinkCommand}"
+					HorizontalAlignment="Right"
+					Margin="0 0 16 2" />
+
+			<Separator Grid.Row="5"
+					   Grid.ColumnSpan="2"
+					   VerticalAlignment="Top"
+					   Background="#FFBFCDD4" />
+
+			<Button Content="Reset to default"
+					Command="{Binding ResetToDefaultCommand}"
+					Style="{StaticResource Sdl.Button.SecondaryStyle}"
+					Grid.Row="5"
+					Grid.ColumnSpan="2"
+					HorizontalAlignment="Left"
+					Cursor="Hand"
+					FontSize="11"
+					FontWeight="DemiBold"
+					Height="26"
+					Width="160"
+					Margin="16" />
+
+			<StackPanel Grid.Row="5"
+						Grid.ColumnSpan="2"
+						Orientation="Horizontal"
+						HorizontalAlignment="Right"
+						Margin="16">
+				<Button Content="Apply changes"
+						Command="{Binding ApplyChangesCommand}"
+						Style="{StaticResource Sdl.Button.PrimaryStyle}"
+						Cursor="Hand"
+						FontSize="11"
+						FontWeight="DemiBold"
+						Height="26"
+						Width="120"
+						Margin="16 0" />
+
+				<Button Content="Close"
+						Command="{Binding CloseLanguageMappingProviderCommand}"
+						Style="{StaticResource Sdl.Button.SecondaryStyle}"
+						Cursor="Hand"
+						FontSize="11"
+						FontWeight="DemiBold"
+						Height="26"
+						Width="120" />
+			</StackPanel>
+
+		</Grid>
+	</Border>
+</Window>

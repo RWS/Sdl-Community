@@ -2,6 +2,13 @@
 
 namespace MicrosoftTranslatorProvider
 {
+	public enum AuthenticationType
+	{
+		None,
+		Microsoft,
+		PrivateEndpoint
+	}
+
 	public enum Parameters
 	{
 		Inverted

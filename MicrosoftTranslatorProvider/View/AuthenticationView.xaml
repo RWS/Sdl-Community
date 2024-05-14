@@ -1,0 +1,155 @@
+﻿<Window x:Class="MicrosoftTranslatorProvider.View.AuthenticationView"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:root="clr-namespace:MicrosoftTranslatorProvider"
+		xmlns:views="clr-namespace:MicrosoftTranslatorProvider.View"
+		xmlns:viewModels="clr-namespace:MicrosoftTranslatorProvider.ViewModel"
+		xmlns:converters="clr-namespace:MicrosoftTranslatorProvider.Converters"
+		mc:Ignorable="d"
+		d:DataContext="{d:DesignInstance viewModels:AuthenticationViewModel}"
+		Title="Microsoft Translator Provider Authentication"
+		AllowsTransparency="True"
+		WindowStartupLocation="CenterScreen"
+		ResizeMode="NoResize"
+		WindowStyle="None"
+		Height="500"
+		Width="600"
+		MouseLeftButtonDown="Window_MouseLeftButtonDown"
+		Loaded="Window_Loaded"
+		Closing="Window_Closing">
+
+	<Window.Resources>
+		<ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ComboBoxResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+
+			<converters:EmptyToVisibility x:Key="EmptyToVisibilityConverter" />
+			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter" />
+			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
+
+			<DataTemplate DataType="{x:Type viewModels:MicrosoftAuthenticationViewModel}">
+				<views:MicrosoftAuthenticationView />
+			</DataTemplate>
+
+			<DataTemplate DataType="{x:Type viewModels:PrivateEndpointAuthenticationViewModel}">
+				<views:PrivateEndpointAuthenticationView />
+			</DataTemplate>
+
+		</ResourceDictionary>
+	</Window.Resources>
+
+	<Border Background="#f0f0f0"
+			BorderThickness="1"
+			BorderBrush="#c0c0c0">
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+
+			<Image Grid.Row="0"
+				   Source="../Resources/mtp_logo.png"
+				   Margin="32 24" />
+
+			<Border Grid.Row="1"
+					Background="#ffffff"
+					BorderBrush="#c0c0c0"
+					BorderThickness="1"
+					CornerRadius="8"
+					Margin="24 0 24 24">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="*" />
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0"
+                                HorizontalAlignment="Center"
+                                Visibility="{Binding IsAuthenticationMethodSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}">
+                        <TextBlock Text="Select your Microsoft Translator Provider service"
+                                   Style="{StaticResource Sdl.TextBlock.TitleStyle}"
+                                   HorizontalAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   FontSize="18"
+                                   FontWeight="DemiBold"
+                                   Focusable="True"
+                                   Margin="0 16" />
+
+                        <StackPanel Margin="16 0">
+                            <TextBlock Text="API keys are used to authenticate Azure Microsoft Translator, providing a simple method to access the service through a secure key-based system."
+                                       Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
+                                       TextWrapping="Wrap"
+                                       MaxWidth="550"
+                                       Focusable="False"
+                                       Margin="0 4" />
+
+                            <TextBlock Text="Private endpoints require a private URL to establish a direct connection between Azure and your company network bypassing the public internet."
+                                       Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
+                                       TextWrapping="Wrap"
+                                       MaxWidth="550"
+                                       Focusable="False"
+                                       Margin="0 4" />
+                        </StackPanel>
+                    </StackPanel>
+
+					<ContentControl Grid.Row="0"
+									Grid.RowSpan="2"
+									Content="{Binding SelectedAuthenticationView}"
+									Focusable="False"
+									Margin="0 8"
+									VerticalAlignment="Stretch" />
+
+					<StackPanel Grid.Row="2"
+								Margin="0 0 0 16">
+						<Button Content="Microsoft API Key"
+                                AutomationProperties.HelpText="API keys are used to authenticate Azure Microsoft Translator, providing a simple method to access the service through a secure key-based system."
+								Style="{StaticResource Sdl.Button.PrimaryStyle}"
+								Command="{Binding SelectMicrosoftServiceCommand}"
+								CommandParameter="{x:Static root:AuthenticationType.Microsoft}"
+								Visibility="{Binding IsAuthenticationMethodSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+								Cursor="Hand"
+								Width="176"
+								Height="32"
+								Margin="0 4" />
+
+						<Button Content="Private Endpoint"
+                                AutomationProperties.HelpText="Private endpoints require a private URL to establish a direct connection between Azure and your company network bypassing the public internet."
+								Style="{StaticResource Sdl.Button.PrimaryStyle}"
+								Command="{Binding SelectMicrosoftServiceCommand}"
+								CommandParameter="{x:Static root:AuthenticationType.PrivateEndpoint}"
+								Visibility="{Binding IsAuthenticationMethodSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+								Cursor="Hand"
+								Width="176"
+								Height="32"
+								Margin="0 4" />
+
+						<Button Content="Exit"
+								Style="{StaticResource Sdl.Button.SecondaryStyle}"
+								Visibility="{Binding IsAuthenticationMethodSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+								Command="{Binding ExitApplicationCommand}"
+								Cursor="Hand"
+								Width="176"
+								Height="32"
+								Margin="0 8" />
+
+						<Button Content="Back"
+								Style="{StaticResource Sdl.Button.SecondaryStyle}"
+								Command="{Binding SelectMicrosoftServiceCommand}"
+								CommandParameter="{x:Static root:AuthenticationType.None}"
+								Visibility="{Binding IsAuthenticationMethodSelected, Converter={StaticResource InvertableBooleanToVisibilityConverter}}"
+								Cursor="Hand"
+								Width="176"
+								Height="32"
+								Margin="0 0 0 8" />
+					</StackPanel>
+				</Grid>
+			</Border>
+		</Grid>
+	</Border>
+</Window>

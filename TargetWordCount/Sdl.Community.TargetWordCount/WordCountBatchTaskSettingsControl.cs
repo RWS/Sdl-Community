@@ -55,7 +55,7 @@ namespace Sdl.Community.TargetWordCount
 			foreach (DataGridViewRow row in dataGridView.Rows)
 			{
 				var rateType = displayString.First(p => p.Value == row.Cells[0].Value.ToString()).Key;
-				var rate = row.Cells[1].Value.ToString();
+				var rate = row.Cells[1].Value as string;
 
 				invoiceRates.Add(new InvoiceItem(rateType, rate));
 			}
@@ -138,7 +138,7 @@ namespace Sdl.Community.TargetWordCount
 			foreach (DataGridViewRow row in dataGridView.Rows)
 			{
 				var cell = row.Cells[1];
-				var rate = cell.Value.ToString();
+				var rate = cell.Value as string;
 
 				if (!string.IsNullOrWhiteSpace(rate))
 				{
@@ -267,7 +267,7 @@ namespace Sdl.Community.TargetWordCount
 			foreach (DataGridViewRow row in dataGridView.Rows)
 			{
 				var rateType = displayString.First(p => p.Value == row.Cells[0].Value.ToString()).Key;
-				var rate = row.Cells[1].Value.ToString();
+				var rate = row.Cells[1].Value as string;
 
 				invoiceRates.Add(new InvoiceItem(rateType, rate));
 			}

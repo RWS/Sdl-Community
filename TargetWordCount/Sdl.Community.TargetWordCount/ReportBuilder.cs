@@ -99,7 +99,7 @@ namespace Sdl.Community.TargetWordCount
 			}
 
 			var amount = count * rate;
-			int output = 0;
+			float output = 0;
 			int totalChar = 0;
 			if (settings.UseLineCount)
 			{
@@ -156,11 +156,11 @@ namespace Sdl.Community.TargetWordCount
 			}
 		}
 
-		private static int CalculateLineCount(RateType type, IWordCountBatchTaskSettings settings, CountData countData, CountTotal total, ref int output, ref int totalChar)
+		private static int CalculateLineCount(RateType type, IWordCountBatchTaskSettings settings, CountData countData, CountTotal total, ref float output, ref int totalChar)
 		{
 			if (!string.IsNullOrWhiteSpace(settings.CharactersPerLine))
 			{
-				if (int.TryParse(settings.CharactersPerLine, out output))
+				if (float.TryParse(settings.CharactersPerLine, out output))
 				{
 					if (type == RateType.Locked && settings.ReportLockedSeperately)
 					{

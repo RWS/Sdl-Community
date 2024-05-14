@@ -1,240 +1,175 @@
 ﻿using System;
-using System.Reflection;
+using System.Linq;
 using System.Windows.Input;
-using System.Xml.Serialization;
+using Microsoft.Win32;
 using MicrosoftTranslatorProvider.Commands;
 using MicrosoftTranslatorProvider.Helpers;
 using MicrosoftTranslatorProvider.Interfaces;
 using MicrosoftTranslatorProvider.Model;
-using NLog;
+using static MicrosoftTranslatorProvider.ViewModel.ProviderConfigurationViewModel;
 
 namespace MicrosoftTranslatorProvider.ViewModel
 {
-	public class SettingsViewModel: BaseModel, ISettingsViewModel
+	public class SettingsViewModel : BaseViewModel
 	{
-		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-		private readonly ITranslationOptions _options;
+		readonly ITranslationOptions _translationOptions;
 
-		private bool _reSendDraft;
-		private bool _sendPlainText;
-		private bool _doPreLookup;
-		private bool _doPostLookup;
-		private string _preLookupFileName;
-		private string _postLookupFileName;
-		private string _errorMessage;
-
-		private bool _useCustomProviderName;
-		private string _customProviderName;
-
-		private ICommand _clearCommand;
-
-		public SettingsViewModel(ITranslationOptions options)
+		public SettingsViewModel(ITranslationOptions translationOptions)
 		{
-			_options = options;
-			BrowseCommand = new RelayCommand(Browse);
-			SetSavedSettings();
+			_translationOptions = translationOptions;
+			ProviderSettings = _translationOptions.ProviderSettings.Clone();
+			InitializeCommands();
 		}
 
-		public BaseModel ViewModel => this;
-		public ICommand ShowMainWindowCommand { get; set; }
-		public ICommand BrowseCommand { get; set; }
-		public ICommand ShowSettingsCommand { get; set; }
+		public ProviderSettings ProviderSettings { get; private set; }
 
-		public bool ReSendDraft
+		public ICommand CloseCommand { get; private set; }
+		public ICommand ClearCommand { get; private set; }
+		public ICommand BrowseFileCommand { get; private set; }
+		public ICommand ApplyChangesCommand { get; private set; }
+
+		public event CloseWindowEventRaiser CloseEventRaised;
+
+		public bool SettingsAreValid()
 		{
-			get => _reSendDraft;
-			set
+			return CustomNameIsValid();
+		}
+
+		private bool CustomNameIsValid()
+		{
+			if (!ProviderSettings.UseCustomName)
 			{
-				if (_reSendDraft == value) return;
-				_reSendDraft = value;
-				ErrorMessage = string.Empty;
-				OnPropertyChanged(nameof(ReSendDraft));
+				return true;
+			}
+
+			if (string.IsNullOrEmpty(ProviderSettings.CustomName))
+			{
+				ErrorHandler.ShowDialog(null, "Custom name", "The frienly provider name can not be empty if the option \"Friendly provider name\" is active.");
+				return false;
+			}
+
+			ProviderSettings.CustomName = ProviderSettings.CustomName.Trim();
+			var customNameIsSet = !string.IsNullOrEmpty(ProviderSettings.CustomName);
+			if (!customNameIsSet)
+			{
+				ErrorHandler.ShowDialog(null, "Friendly name option", "The frienly provider name can not be empty if the option \"Friendly provider name\" is active.");
+			}
+
+			return customNameIsSet;
+		}
+
+		private void InitializeCommands()
+		{
+			CloseCommand = new RelayCommand(Close);
+			ClearCommand = new RelayCommand(Clear);
+			BrowseFileCommand = new RelayCommand(BrowseFile);
+			ApplyChangesCommand = new RelayCommand(ApplyChanges, ChangesHasBeenAplied);
+		}
+
+		private bool ChangesHasBeenAplied(object parameter)
+		{
+			var currentSettings = _translationOptions.ProviderSettings;
+			var properties = currentSettings.GetType().GetProperties();
+			return properties.Any(property => !Equals(property.GetValue(currentSettings), property.GetValue(ProviderSettings)));
+		}
+
+		private void ApplyChanges(object parameter)
+		{
+			if (SettingsAreValid())
+			{
+				_translationOptions.ProviderSettings = ProviderSettings.Clone();
 			}
 		}
 
-		public bool SendPlainText
+		private void Close(object parameter)
 		{
-			get => _sendPlainText;
-			set
-			{
-				if (_sendPlainText == value) return;
-				_sendPlainText = value;
-				ErrorMessage = string.Empty;
-				OnPropertyChanged(nameof(SendPlainText));
-			}
-		}
-
-		public bool DoPreLookup
-		{
-			get => _doPreLookup;
-			set
-			{
-				if (_doPreLookup == value) return;
-				_doPreLookup = value;
-				if (!_doPreLookup)
-				{
-					PreLookupFileName = string.Empty;
-				}
-				ErrorMessage = string.Empty;
-				OnPropertyChanged(nameof(DoPreLookup));
-			}
-		}
-
-		public bool DoPostLookup
-		{
-			get => _doPostLookup;
-			set
-			{
-				if (_doPostLookup == value) return;
-				_doPostLookup = value;
-				if (!_doPostLookup)
-				{
-					PostLookupFileName = string.Empty;
-				}
-				OnPropertyChanged(nameof(DoPostLookup));
-			}
-		}
-
-		public string PreLookupFileName
-		{
-			get => _preLookupFileName;
-			set
-			{
-				if (_preLookupFileName == value) return;
-				_preLookupFileName = value;
-				ErrorMessage = string.Empty;
-
-				OnPropertyChanged(nameof(PreLookupFileName));
-			}
-		}
-
-		public string PostLookupFileName
-		{
-			get => _postLookupFileName;
-			set
-			{
-				if (_postLookupFileName == value) return;
-				_postLookupFileName = value;
-				ErrorMessage = string.Empty;
-
-				OnPropertyChanged(nameof(PostLookupFileName));
-			}
-		}
-
-		public string ErrorMessage
-		{
-			get => _errorMessage;
-			set
-			{
-				if (_errorMessage == value) return;
-				_errorMessage = value;
-				OnPropertyChanged(nameof(ErrorMessage));
-			}
-		}
-
-		public bool UseCustomProviderName
-		{
-			get => _useCustomProviderName;
-			set
-			{
-				if (_useCustomProviderName == value) return;
-				_useCustomProviderName = value;
-				OnPropertyChanged(nameof(UseCustomProviderName));
-			}
-		}
-
-
-		public string CustomProviderName
-		{
-			get => _customProviderName;
-			set
-			{
-				if (_customProviderName == value) return;
-				_customProviderName = value;
-				OnPropertyChanged(nameof(CustomProviderName));
-			}
-		}
-
-		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
-		
-		private void SetSavedSettings()
-		{
-			ReSendDraft = _options.ResendDrafts;
-			SendPlainText = _options.SendPlainTextOnly;
-			DoPreLookup = _options.UsePreEdit;
-			PreLookupFileName = _options.PreLookupFilename;
-			DoPostLookup = _options.UsePostEdit;
-			PostLookupFileName = _options.PostLookupFilename;
-			CustomProviderName = _options.CustomProviderName;
-			UseCustomProviderName = _options.UseCustomProviderName;
+			CloseEventRaised.Invoke();
 		}
 
 		private void Clear(object parameter)
 		{
-			if (parameter is not string fieldName)
+			if (parameter is not string parameterString)
 			{
 				return;
 			}
 
-			switch (fieldName)
+			switch (parameterString)
 			{
-				case "PreLookupFileName":
-					PreLookupFileName = string.Empty;
+				case nameof(ProviderSettings.CustomName):
+					ProviderSettings.CustomName = string.Empty;
 					break;
-				case "PostLookupFileName":
-					PostLookupFileName = string.Empty;
+
+				case nameof(ProviderSettings.PreLookupFilePath):
+					ProviderSettings.PreLookupFilePath = string.Empty;
 					break;
-				case "CustomProviderName":
-					CustomProviderName = string.Empty;
+
+				case nameof(ProviderSettings.PostLookupFilePath):
+                    ProviderSettings.PostLookupFilePath = string.Empty;
+					break;
+
+				default:
 					break;
 			}
 		}
 
-		private void Browse(object commandParameter)
+		private void BrowseFile(object parameter)
 		{
-			ErrorMessage = string.Empty;
-			if (string.IsNullOrEmpty(commandParameter.ToString()))
+			if (parameter is not string target)
 			{
 				return;
 			}
 
-			var selectedFile = new OpenFileDialogService().ShowDialog("XML Files(*.xml) | *.xml");
-			if (string.IsNullOrEmpty(selectedFile))
+			var openFileDialog = new OpenFileDialog { Multiselect = false };
+			var filePath = (bool)openFileDialog.ShowDialog() ? openFileDialog.FileName : string.Empty;
+			if (string.IsNullOrEmpty(filePath))
 			{
 				return;
 			}
 
-			if (commandParameter.Equals(PluginResources.PreLookBrowse))
+			switch (target)
 			{
-				PreLookupFileName = selectedFile;
-				CheckIfIsValidLookupFile(PreLookupFileName);
-			}
-			else if (commandParameter.Equals(PluginResources.PostLookupBrowse))
-			{
-				PostLookupFileName = selectedFile;
-				CheckIfIsValidLookupFile(PostLookupFileName);
+				case nameof(ProviderSettings.PreLookupFilePath):
+					ProviderSettings.PreLookupFilePath = filePath;
+					ValidateLookupFile(ProviderSettings.PreLookupFilePath, target);
+					break;
+
+				case nameof(ProviderSettings.PostLookupFilePath):
+					ProviderSettings.PostLookupFilePath = filePath;
+					ValidateLookupFile(ProviderSettings.PostLookupFilePath, target);
+					break;
+
+				default:
+					break;
 			}
 		}
 
-		private void CheckIfIsValidLookupFile(string filePath)
+		private void ValidateLookupFile(string filePath, string propertyName)
 		{
-			try
+			var lookup = new MicrosoftSegmentEditor(filePath);
+			if (lookup.IsValid)
 			{
-				using var reader = new System.IO.StreamReader(filePath);
-				var serializer = new XmlSerializer(typeof(EditCollection));
-				var edcoll = (EditCollection)serializer.Deserialize(reader);
+				return;
 			}
-			catch (InvalidOperationException) //invalid operation is what happens when the xml can't be parsed into the objects correctly
-			{
-				var fileName = System.IO.Path.GetFileName(filePath);
-				ErrorMessage = $"{PluginResources.lookupFileStructureCheckErrorCaption} {fileName}";
-			}
-			catch (Exception exp) //catch-all for any other kind of error...passes up a general message with the error description
-			{
-				_logger.Error($"{MethodBase.GetCurrentMethod().Name}: {exp}");
 
-				ErrorMessage = $"{PluginResources.lookupFileStructureCheckGenericErrorMessage} {exp.Message}";
+			string target;
+			switch (propertyName)
+			{
+				case nameof(ProviderSettings.PreLookupFilePath):
+					ProviderSettings.UsePreLookup = false;
+					target = "Pre-Lookup Find/Replace";
+					break;
+
+				case nameof(ProviderSettings.PostLookupFilePath):
+					ProviderSettings.UsePostLookup = false;
+					target = "Post-Lookup Find/Replace";
+					break;
+
+				default:
+					return;
 			}
+
+			Clear(propertyName);
+			ErrorHandler.ShowDialog(null, "Oops! An error occurred", $"The chosen file is not in a valid format, and the {target} option has been disabled for now. Please see documentation for assistance.");
 		}
 	}
 }

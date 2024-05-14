@@ -3,9 +3,14 @@
 namespace Sdl.Community.SdlDataProtectionSuite.TellMe
 {
 	[TellMeProvider]
-	public class TellMeProvider: ITellMeProvider
+	public class TellMeProvider : ITellMeProvider
 	{
-		public string Name => string.Format(PluginResources.TellMe_Provider, PluginResources.Plugin_Name);
+		public TellMeProvider()
+		{
+			ProviderActions = GetProviderActions();
+		}
+
+		public string Name => PluginResources.Plugin_Name;
 
 		public AbstractTellMeAction[] ProviderActions =>
 		[
