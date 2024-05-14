@@ -63,19 +63,9 @@ namespace Sdl.Community.TMRepair {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon Download {
+        public static System.Drawing.Icon Documentation {
             get {
-                object obj = ResourceManager.GetObject("Download", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon ForumIcon {
-            get {
-                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
+                object obj = ResourceManager.GetObject("Documentation", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -105,6 +95,26 @@ namespace Sdl.Community.TMRepair {
         public static System.Drawing.Icon Repair {
             get {
                 object obj = ResourceManager.GetObject("Repair", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Settings {
+            get {
+                object obj = ResourceManager.GetObject("Settings", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon SourceCode {
+            get {
+                object obj = ResourceManager.GetObject("SourceCode", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

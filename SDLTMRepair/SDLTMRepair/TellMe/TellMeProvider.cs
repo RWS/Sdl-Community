@@ -9,17 +9,22 @@ namespace Sdl.Community.TMRepair.TellMe
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new CommunityWikiAction
+			new DocumentationAction
 			{
-				Keywords = new[] { "sdltm", "repair", "support", "wiki" }
+				Keywords = new[] { "sdltm repaire", "repaire", "tm repaire", "tmrepaire", "documentation" }
 			},
 			new AppStoreForumAction
 			{
-				Keywords = new[] { "sdltm", "repair", "support", "forum" }
+				Keywords = new[] { "sdltm repaire", "repaire", "tm repaire", "tmrepaire", "support", "forum" }
 			},
-			new AppStoreDownloadAction
+			new SourceCodeAction
 			{
-				Keywords = new[] { "sdltm", "repair", "store", "download", "appstore" }}
+				Keywords = new[] { "sdltm repaire", "repaire", "tm repaire", "tmrepaire", "source", "code" }
+			},
+			new SettingsAction
+			{
+				Keywords = new[] { "sdltm repaire", "repaire", "tm repaire", "tmrepaire", "settings" }
+			}
 		};
 	}
 }
