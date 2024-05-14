@@ -1,0 +1,60 @@
+﻿<Window x:Class="InterpretBank.SettingsService.UI.CreateGlossaryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        x:Name="Root"
+        Height="Auto"
+        WindowStartupLocation="CenterScreen"
+        FocusManager.FocusedElement="{Binding ElementName=InputTextBox}"
+        WindowStyle="None"
+        SizeToContent="WidthAndHeight"
+        Width="Auto"
+        Title="CreateGlossaryWindow">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="Close" Executed="CloseWindowCommandHandler"/>
+    </Window.CommandBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock Text="{Binding Text, ElementName=Root}"
+                   Margin="5 10"
+                   HorizontalAlignment="Center"
+                   Grid.Row="0" />
+        <TextBox Grid.Row="1"
+                 Margin="5 0 5 15"
+                 x:Name="InputTextBox" />
+
+        <StackPanel Grid.Row="2"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+            <Button Content="OK"
+                    Style="{StaticResource Sdl.Button.GeneralStyle}"
+                    Height="10"
+                    Command="Close"
+                    Click="ButtonBase_OnClick"
+                    IsDefault="True"
+                    HorizontalAlignment="Left"
+                    Margin="0 0 5 5" />
+            <Button Content="Cancel"
+                    Style="{StaticResource Sdl.Button.GeneralStyle}"
+                    HorizontalAlignment="Right"
+                    Command="Close"
+                    Height="10"
+                    IsCancel="True"
+                    Margin="0 0 5 5"/>
+
+        </StackPanel>
+    </Grid>
+</Window>

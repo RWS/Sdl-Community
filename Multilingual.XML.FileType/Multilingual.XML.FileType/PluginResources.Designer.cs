@@ -751,6 +751,79 @@ namespace Multilingual.XML.FileType {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Settings {
+            get {
+                object obj = ResourceManager.GetObject("Settings", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For more information,.
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_1 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to click here.
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_2 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to for documentation..
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_3 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To configure this file type you need have it installed and listed. Follow these steps:
+        ///
+        ///1. File - Options
+        ///2. File Types - click on:  &quot;Additional installed File Types exist&quot;
+        ///3. Select File Type
+        ///4. OK to confirm
+        ///
+        ///Once listed select the file type from the list to configure as needed.
+        ///Note: File types need to be configured prior to project creation.
+        /// </summary>
+        public static string SettingsAction_OpenOptionsText {
+            get {
+                return ResourceManager.GetString("SettingsAction_OpenOptionsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configure FileType in Options.
+        /// </summary>
+        public static string SettingsAction_Title {
+            get {
+                return ResourceManager.GetString("SettingsAction_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon SourceCode {
+            get {
+                object obj = ResourceManager.GetObject("SourceCode", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download {0} from the AppStore.
         /// </summary>
         public static string TellMe_Download_Plugin_From_AppStore {
@@ -774,6 +847,16 @@ namespace Multilingual.XML.FileType {
         public static string TellMe_String_TellMe_Provider {
             get {
                 return ResourceManager.GetString("TellMe_String_TellMe_Provider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellmeDocumentation {
+            get {
+                object obj = ResourceManager.GetObject("TellmeDocumentation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         

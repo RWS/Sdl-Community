@@ -31,82 +31,30 @@ namespace Reports.Viewer.Plus
 		LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation))]
 	public class ReportsViewerController : AbstractViewController
 	{
-		private ProjectsController _projectsController;
-		private ReportViewModel _reportViewModel;
-		private ReportsNavigationViewModel _reportsNavigationViewModel;
-
-		private ReportView _reportView;
-		private ReportsNavigationView _reportsNavigationView;
-		private DataView _dataView;
-		private BrowserView _browserView;
-		private DataViewModel _dataViewModel;
-		private PathInfo _pathInfo;
-		private ReportsController _reportsController;
-		private TaskTemplateIdProvider _taskTemplateIdProvider;
-
-		private BaseReportAction _removeReportAction;
 		private BaseReportAction _addReportAction;
+		private BrowserView _browserView;
+		private DataView _dataView;
+		private DataViewModel _dataViewModel;
 		private BaseReportAction _editReportAction;
 		private BaseReportAction _openSettingsAction;
+		private PathInfo _pathInfo;
 		private BaseReportAction _printReportAction;
+		private ProjectsController _projectsController;
 		private BaseReportAction _refreshAction;
+		private BaseReportAction _removeReportAction;
+		private ReportsController _reportsController;
+		private ReportsNavigationView _reportsNavigationView;
+		private ReportsNavigationViewModel _reportsNavigationViewModel;
+		private ReportView _reportView;
+		private ReportViewModel _reportViewModel;
 		private BaseReportAction _saveAsReportAction;
-
-		protected override void Initialize(IViewContext context)
-		{
-			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-
-			_pathInfo = new PathInfo();
-			_taskTemplateIdProvider = new TaskTemplateIdProvider();
-			_reportsController = new ReportsController(
-				_projectsController.CurrentProject ?? _projectsController.SelectedProjects.FirstOrDefault(),
-				_pathInfo, _taskTemplateIdProvider);
-
-			_projectsController.CurrentProjectChanged += ProjectsControllerOnCurrentProjectChanged;
-
-			_removeReportAction = SdlTradosStudio.Application.GetAction<RemoveReportAction>();
-			_addReportAction = SdlTradosStudio.Application.GetAction<AddReportAction>();
-			_editReportAction = SdlTradosStudio.Application.GetAction<EditReportAction>();
-			_openSettingsAction = SdlTradosStudio.Application.GetAction<OpenSettingsAction>();
-			_printReportAction = SdlTradosStudio.Application.GetAction<PrintReportAction>();
-			_refreshAction = SdlTradosStudio.Application.GetAction<RefreshAction>();
-			_saveAsReportAction = SdlTradosStudio.Application.GetAction<SaveAsReportAction>();
-
-			ActivationChanged += ReportsViewerController_ActivationChanged;
-		}
-
-		protected override IUIControl GetExplorerBarControl()
-		{
-			return _reportsNavigationView ?? (_reportsNavigationView = new ReportsNavigationView());
-		}
-
-		protected override IUIControl GetContentControl()
-		{
-			if (_reportView == null)
-			{
-				InitializeViews();
-			}
-
-			return _reportView;
-		}
+		private TaskTemplateIdProvider _taskTemplateIdProvider;
 
 		public event EventHandler<ReportSelectionChangedEventArgs> ReportSelectionChanged;
 
-		internal List<Report> GetSelectedReports()
-		{
-			var selectedReport = _reportsNavigationViewModel?.SelectedReport;
-			if (selectedReport != null)
-			{
-				return new List<Report> { selectedReport };
-			}
+		public bool IsInitialized { get; set; }
 
-			return _dataViewModel?.SelectedReports?.Cast<Report>().ToList();
-		}
-
-		internal List<Report> GetReports()
-		{
-			return _reportsNavigationViewModel?.Reports;
-		}
+		public void Initialize() => Initialize(null);
 
 		internal void AddReports(List<Report> reports)
 		{
@@ -125,43 +73,61 @@ namespace Reports.Viewer.Plus
 			_reportsNavigationViewModel.AddReports(result.Reports);
 		}
 
-		internal void UpdateReports(List<Report> reports)
+		internal List<ReportTemplate> GetCustomReportTemplates()
 		{
-			if (_reportsNavigationViewModel == null)
+			if (File.Exists(_pathInfo.CustomReportTemplatesFilePath))
 			{
-				return;
+				var json = File.ReadAllText(_pathInfo.CustomReportTemplatesFilePath);
+				return JsonConvert.DeserializeObject<List<ReportTemplate>>(json);
 			}
 
-			var result = _reportsController.UpdateReports(reports);
-			if (!result.Success)
-			{
-				MessageBox.Show(result.Message, PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
-				return;
-			}
-
-			_reportsNavigationViewModel.UpdateReports(result.Reports);
+			return new List<ReportTemplate>();
 		}
 
-		internal void RemoveReports(List<Guid> reportIds)
+		internal List<Report> GetReports()
 		{
-			if (_reportsNavigationViewModel == null)
+			return _reportsNavigationViewModel?.Reports;
+		}
+
+		internal string GetSelectedGroup()
+		{
+			if (_reportsNavigationViewModel != null)
 			{
-				return;
+				return _reportsNavigationViewModel.GetSelectedGroup();
 			}
 
-			if (_reportsNavigationViewModel == null)
+			return string.Empty;
+		}
+
+		internal string GetSelectedLanguage()
+		{
+			if (_reportsNavigationViewModel != null)
 			{
-				return;
+				return _reportsNavigationViewModel.GetSelectedLanguage();
 			}
 
-			var result = _reportsController.RemoveReports(reportIds);
-			if (!result.Success)
+			return string.Empty;
+		}
+
+		internal FileBasedProject GetSelectedProject()
+		{
+			return _reportsController?.Project;
+		}
+
+		internal List<Report> GetSelectedReports()
+		{
+			var selectedReport = _reportsNavigationViewModel?.SelectedReport;
+			if (selectedReport != null)
 			{
-				MessageBox.Show(result.Message, PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
-				return;
+				return new List<Report> { selectedReport };
 			}
 
-			_reportsNavigationViewModel.DeleteReports(GetReports(result.Reports.Select(a => a.Id).ToList()));
+			return _dataViewModel?.SelectedReports?.Cast<Report>().ToList();
+		}
+
+		internal void Print()
+		{
+			_reportViewModel?.Print();
 		}
 
 		internal void RefreshView(bool force = true)
@@ -188,15 +154,31 @@ namespace Reports.Viewer.Plus
 			}
 		}
 
-		internal List<ReportTemplate> GetCustomReportTemplates()
+		internal void RemoveReports(List<Guid> reportIds)
 		{
-			if (File.Exists(_pathInfo.CustomReportTemplatesFilePath))
+			if (_reportsNavigationViewModel == null)
 			{
-				var json = File.ReadAllText(_pathInfo.CustomReportTemplatesFilePath);
-				return JsonConvert.DeserializeObject<List<ReportTemplate>>(json);
+				return;
 			}
 
-			return new List<ReportTemplate>();
+			if (_reportsNavigationViewModel == null)
+			{
+				return;
+			}
+
+			var result = _reportsController.RemoveReports(reportIds);
+			if (!result.Success)
+			{
+				MessageBox.Show(result.Message, PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
+				return;
+			}
+
+			_reportsNavigationViewModel.DeleteReports(GetReports(result.Reports.Select(a => a.Id).ToList()));
+		}
+
+		internal void SaveReport()
+		{
+			_reportViewModel?.SaveReport();
 		}
 
 		internal bool UpdateCustomReportTemplates(List<ReportTemplate> reportTemplates)
@@ -213,6 +195,23 @@ namespace Reports.Viewer.Plus
 			}
 		}
 
+		internal void UpdateReports(List<Report> reports)
+		{
+			if (_reportsNavigationViewModel == null)
+			{
+				return;
+			}
+
+			var result = _reportsController.UpdateReports(reports);
+			if (!result.Success)
+			{
+				MessageBox.Show(result.Message, PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
+				return;
+			}
+
+			_reportsNavigationViewModel.UpdateReports(result.Reports);
+		}
+
 		internal void UpdateSettings(bool updatedTemplates)
 		{
 			if (_reportsNavigationViewModel == null)
@@ -223,97 +222,47 @@ namespace Reports.Viewer.Plus
 			RefreshView();
 		}
 
-		internal FileBasedProject GetSelectedProject()
+		protected override IUIControl GetContentControl()
 		{
-			return _reportsController?.Project;
-		}
-
-		internal void Print()
-		{
-			_reportViewModel?.Print();
-		}
-
-		internal string GetSelectedLanguage()
-		{
-			if (_reportsNavigationViewModel != null)
+			if (_reportView == null)
 			{
-				return _reportsNavigationViewModel.GetSelectedLanguage();
+				InitializeViews();
 			}
 
-			return string.Empty;
+			return _reportView;
 		}
 
-		internal string GetSelectedGroup()
+		protected override IUIControl GetExplorerBarControl()
 		{
-			if (_reportsNavigationViewModel != null)
-			{
-				return _reportsNavigationViewModel.GetSelectedGroup();
-			}
-
-			return string.Empty;
+			return _reportsNavigationView ?? (_reportsNavigationView = new ReportsNavigationView());
 		}
 
-		internal void SaveReport()
+		protected override void Initialize(IViewContext context)
 		{
-			_reportViewModel?.SaveReport();
-		}
+			if (IsInitialized)
+				return;
 
-		private void InitializeViews()
-		{
-			_browserView = new BrowserView();
-			_dataViewModel = new DataViewModel();
-			_dataViewModel.ReportSelectionChanged += OnReportSelectionChanged;
-			_dataView = new DataView
-			{
-				DataContext = _dataViewModel
-			};
+			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 
-			_reportViewModel = new ReportViewModel(_browserView, _dataViewModel, _dataView, GetSelectedProject());
-			_reportView = new ReportView
-			{
-				DataContext = _reportViewModel
-			};
+			_pathInfo = new PathInfo();
+			_taskTemplateIdProvider = new TaskTemplateIdProvider();
+			_reportsController = new ReportsController(
+				_projectsController.CurrentProject ?? _projectsController.SelectedProjects.FirstOrDefault(),
+				_pathInfo, _taskTemplateIdProvider);
 
-			var reports = _reportsController.GetReports(true).Result;
+			_projectsController.CurrentProjectChanged += ProjectsControllerOnCurrentProjectChanged;
 
-			_reportsNavigationViewModel = new ReportsNavigationViewModel(reports, GetSettings(), _pathInfo, GetSelectedProject());
-			_reportsNavigationViewModel.ReportSelectionChanged += OnReportSelectionChanged;
-			_reportsNavigationViewModel.ReportViewModel = _reportViewModel;
-			_reportsNavigationViewModel.SelectedProject = _reportsController?.Project;
-			_reportsNavigationViewModel.ProjectLocalFolder = _reportsController?.ProjectLocalFolder;
-			_reportsNavigationView.DataContext = _reportsNavigationViewModel;
-		}
+			_removeReportAction = SdlTradosStudio.Application.GetAction<RemoveReportAction>();
+			_addReportAction = SdlTradosStudio.Application.GetAction<AddReportAction>();
+			_editReportAction = SdlTradosStudio.Application.GetAction<EditReportAction>();
+			_openSettingsAction = SdlTradosStudio.Application.GetAction<OpenSettingsAction>();
+			_printReportAction = SdlTradosStudio.Application.GetAction<PrintReportAction>();
+			_refreshAction = SdlTradosStudio.Application.GetAction<RefreshAction>();
+			_saveAsReportAction = SdlTradosStudio.Application.GetAction<SaveAsReportAction>();
 
-		private Settings GetSettings()
-		{
-			if (File.Exists(_pathInfo.SettingsFilePath))
-			{
-				var json = File.ReadAllText(_pathInfo.SettingsFilePath);
-				return JsonConvert.DeserializeObject<Settings>(json);
-			}
+			ActivationChanged += ReportsViewerController_ActivationChanged;
 
-			return new Settings();
-		}
-
-		private List<Report> GetReports(List<Guid> reportIds)
-		{
-			if (_reportsNavigationViewModel == null)
-			{
-				return null;
-			}
-
-			var reports = new List<Report>();
-			foreach (var reportId in reportIds)
-			{
-				var report = _reportsNavigationViewModel.Reports.FirstOrDefault(a => a.Id == reportId);
-				if (report == null)
-				{
-					continue;
-				}
-				reports.Add(report);
-			}
-
-			return reports;
+			IsInitialized = true;
 		}
 
 		private void EnableControls(bool isLoading)
@@ -356,6 +305,69 @@ namespace Reports.Viewer.Plus
 			}
 		}
 
+		private List<Report> GetReports(List<Guid> reportIds)
+		{
+			if (_reportsNavigationViewModel == null)
+			{
+				return null;
+			}
+
+			var reports = new List<Report>();
+			foreach (var reportId in reportIds)
+			{
+				var report = _reportsNavigationViewModel.Reports.FirstOrDefault(a => a.Id == reportId);
+				if (report == null)
+				{
+					continue;
+				}
+				reports.Add(report);
+			}
+
+			return reports;
+		}
+
+		private Settings GetSettings()
+		{
+			if (File.Exists(_pathInfo.SettingsFilePath))
+			{
+				var json = File.ReadAllText(_pathInfo.SettingsFilePath);
+				return JsonConvert.DeserializeObject<Settings>(json);
+			}
+
+			return new Settings();
+		}
+
+		private void InitializeViews()
+		{
+			_browserView = new BrowserView();
+			_dataViewModel = new DataViewModel();
+			_dataViewModel.ReportSelectionChanged += OnReportSelectionChanged;
+			_dataView = new DataView
+			{
+				DataContext = _dataViewModel
+			};
+
+			_reportViewModel = new ReportViewModel(_browserView, _dataViewModel, _dataView, GetSelectedProject());
+			_reportView = new ReportView
+			{
+				DataContext = _reportViewModel
+			};
+
+			var reports = _reportsController.GetReports(true).Result;
+
+			_reportsNavigationViewModel = new ReportsNavigationViewModel(reports, GetSettings(), _pathInfo, GetSelectedProject());
+			_reportsNavigationViewModel.ReportSelectionChanged += OnReportSelectionChanged;
+			_reportsNavigationViewModel.ReportViewModel = _reportViewModel;
+			_reportsNavigationViewModel.SelectedProject = _reportsController?.Project;
+			_reportsNavigationViewModel.ProjectLocalFolder = _reportsController?.ProjectLocalFolder;
+			_reportsNavigationView.DataContext = _reportsNavigationViewModel;
+		}
+
+		private void OnReportSelectionChanged(object sender, ReportSelectionChangedEventArgs e)
+		{
+			ReportSelectionChanged?.Invoke(this, e);
+		}
+
 		private void ProjectsControllerOnCurrentProjectChanged(object sender, EventArgs e)
 		{
 			_reportsController = new ReportsController(_projectsController.CurrentProject, _pathInfo, _taskTemplateIdProvider);
@@ -365,11 +377,6 @@ namespace Reports.Viewer.Plus
 				_reportsNavigationViewModel.ProjectLocalFolder = _reportsController.ProjectLocalFolder;
 				RefreshView();
 			}
-		}
-
-		private void OnReportSelectionChanged(object sender, ReportSelectionChangedEventArgs e)
-		{
-			ReportSelectionChanged?.Invoke(this, e);
 		}
 
 		private void ReportsViewerController_ActivationChanged(object sender, ActivationChangedEventArgs e)

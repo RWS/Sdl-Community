@@ -4,7 +4,7 @@
 	<Version>4.0.0.0</Version>
 	<Description>Studio Migration Utility</Description>
 	<Author>Trados AppStore Team</Author>
-	<RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
+	<RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />
 	<Include>
 		<File>Sdl.Community.Controls.dll</File>
 		<File>ObjectListView.dll</File>

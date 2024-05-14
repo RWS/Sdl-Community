@@ -1,10 +1,10 @@
 
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>SDLXLIFF Compare</PlugInName>
-  <Version>3.0.1.0</Version>
+  <Version>4.0.0.0</Version>
   <Description>SDLXLIFF Compare is a compact and fast tool used for comparing SDLXLIFF files, or complete Projects, and then displaying the comparison results in an XML/HTML report.</Description>
   <Author>Trados AppStore Team</Author>
-  <RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
+  <RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />
   <Include>
     <File>Sdl.Community.XliffCompare.Core.dll</File>
   </Include>

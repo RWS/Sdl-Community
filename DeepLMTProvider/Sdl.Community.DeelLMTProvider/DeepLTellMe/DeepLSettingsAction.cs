@@ -1,11 +1,13 @@
 ﻿using Newtonsoft.Json;
 using Sdl.Community.DeepLMTProvider.Client;
+using Sdl.Community.DeepLMTProvider.DeepLTellMe.WarningWindow;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Community.DeepLMTProvider.Service;
 using Sdl.Community.DeepLMTProvider.UI;
 using Sdl.Community.DeepLMTProvider.ViewModel;
 using Sdl.TellMe.ProviderApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -16,10 +18,10 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
     {
         public DeepLSettingsAction()
         {
-            Name = "DeepL MT Provider options";
+            Name = $"{PluginResources.Plugin_Name} Settings";
         }
 
-        public override string Category => "DeepL results";
+        public override string Category => $"{PluginResources.Plugin_Name} results";
 
         public override Icon Icon => PluginResources.Settings;
 
@@ -43,8 +45,9 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
                 if (!settings.Entries.Any(entry =>
                     entry.MainTranslationProvider.Uri.OriginalString.Contains("deepltranslationprovider")))
                 {
-                    MessageBox.Show(
-                        @"DeepL is not set on this project\nPlease set it in project settings before using TellMe to access it");
+                    var settingsWarningWindow =
+                        new SettingsActionWarning("https://appstore.rws.com/Plugin/24?tab=documentation");
+                    settingsWarningWindow.ShowDialog();
                 }
                 else
                 {

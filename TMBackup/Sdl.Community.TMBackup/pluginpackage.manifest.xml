@@ -9,5 +9,5 @@
     <File>Microsoft.Win32.TaskScheduler.dll</File>
 	<File>Sdl.Community.BackupFiles.exe</File>
   </Include>
-  <RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
+  <RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />
 </PluginPackage>

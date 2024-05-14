@@ -10,6 +10,10 @@
              x:Name="TermbaseViewerControl"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance viewModel:TermbaseViewerViewModel}">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="Delete"
+                        Executed="DeleteCommandHandler" />
+    </UserControl.CommandBindings>
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -37,21 +41,6 @@
                     Height="Auto">
                 <WrapPanel Orientation="Horizontal"
                            DockPanel.Dock="Top">
-
-                    <Button ToolTip="Remove entry"
-                            DockPanel.Dock="Left"
-                            AutomationProperties.Name="Remove entry"
-                            Command="{Binding RemoveSelectedEntryCommand}"
-                            Style="{StaticResource GlyphButtonStyle2}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="🗑"
-                                       VerticalAlignment="Center"
-                                       FontSize="15" />
-                            <AccessText Text="_Remove entry"
-                                        Foreground="Black"
-                                        VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
 
                     <Button ToolTip="Add entry"
                             DockPanel.Dock="Right"
@@ -83,12 +72,42 @@
                      AutomationProperties.Name="Entries"
                      FontSize="14"
                      x:Name="EntriesList"
-                     DisplayMemberPath="Name"
                      DockPanel.Dock="Top"
                      VirtualizingStackPanel.VirtualizationMode="Recycling"
                      VirtualizingStackPanel.IsVirtualizing="True"
                      FontWeight="Light"
-                     SelectedItem="{Binding SelectedEntry}" />
+                     SelectedItem="{Binding SelectedEntry}">
+
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="AutomationProperties.Name"
+                                Value="{Binding Name, StringFormat={}{0} Press DELETE to delete entry}" />
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type model:EntryModel}">
+                        <StackPanel Orientation="Horizontal"
+                                    Focusable="False">
+                            <Button Content="❌"
+                                    FontSize="10"
+                                    AutomationProperties.Name="Hello"
+                                    Focusable="False"
+                                    VerticalContentAlignment="Center"
+                                    Style="{StaticResource Sdl.Button.EmbeddedStyle}"
+                                    Command="{Binding DataContext.RemoveSelectedEntryCommand, ElementName=TermbaseViewerControl}"
+                                    CommandParameter="{Binding .}">
+
+                                <Button.InputBindings>
+                                    <KeyBinding Key="Delete"
+                                                Command="{Binding DataContext.RemoveSelectedEntryCommand, ElementName=TermbaseViewerControl}"
+                                                CommandParameter="{Binding .}" />
+                                </Button.InputBindings>
+                            </Button>
+                            <TextBlock Text="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </DockPanel>
 
         <GridSplitter Grid.Column="0"
@@ -107,49 +126,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <!--<Border Grid.Row="0"
-                    DockPanel.Dock="Top"
-                    Margin="5 5 0 5"
-                    Background="#f0f0f0"
-                    CornerRadius="3"
-                    Height="30"
-                    BorderThickness="2 1 1 2"
-                    x:Name="EntryNote_Border">
 
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Left">
-
-                    <Button ToolTip="Remove entry"
-                            AutomationProperties.Name="Remove entry"
-                            Command="{Binding RemoveSelectedEntryCommand}"
-                            Style="{StaticResource GlyphButtonStyle2}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="🗑"
-                                       VerticalAlignment="Center"
-                                       FontSize="15" />
-                            <AccessText Text="_Remove entry"
-                                        Foreground="Black"
-                                        VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
-
-                    <Button ToolTip="Add entry"
-                            AutomationProperties.Name="Add entry"
-                            Focusable="True"
-                            Command="{Binding AddEntryCommand}"
-                            Style="{StaticResource GlyphButtonStyle2}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="➕"
-                                       VerticalAlignment="Center"
-                                       FontSize="15" />
-                            <AccessText Text="_Add entry"
-                                        Foreground="Black"
-                                        Margin="1 0 0 0"
-                                        VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
-            </Border>-->
 
             <Border Grid.Row="1"
                     DockPanel.Dock="Top"

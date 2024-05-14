@@ -10,11 +10,15 @@
         x:Name="GlossaryManager_Window"
         xmlns:interpretBank="clr-namespace:InterpretBank"
         xmlns:converters="clr-namespace:InterpretBank.SettingsService.Converters"
+        MouseDown="Window_MouseDown"
         xmlns:model="clr-namespace:InterpretBank.SettingsService.Model"
         xmlns:converters1="clr-namespace:InterpretBank.Converters"
-        xmlns:controls1="clr-namespace:InterpretBank.Controls"
+        xmlns:controls="clr-namespace:InterpretBank.Controls"
+        xmlns:multiItemSelect="clr-namespace:InterpretBank.Controls.MultiItemSelect"
         d:DataContext="{d:DesignInstance viewModel:GlossarySetupViewModel}"
-        SizeToContent="Height"
+        WindowStyle="None"
+        SizeToContent="WidthAndHeight"
+        MaxWidth="600"
         mc:Ignorable="d"
         Title="InterpretBank database configurator"
         Icon="/InterpretBank;component/Resources/IB.ico"
@@ -24,6 +28,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/InterpretBank;component/Styles/SettingsResources.xaml" />
+                <ResourceDictionary Source="/InterpretBank;component/Styles/General.xaml" />
                 <ResourceDictionary Source="../Styles/SettingsMainResources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
@@ -33,6 +38,12 @@
             <converters:NullStringToVisibilityConverter x:Key="NullToVisibilityConverter" />
             <converters:NullToBoolConverter x:Key="NullToBullConverter" />
             <converters1:BoolToVisibilityConverter x:Key="BoolToVisConverter" />
+            <Style TargetType="GroupBox">
+                <Setter Property="Margin"
+                        Value="0" />
+            </Style>
+
+
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -42,64 +53,87 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+
+
         <Image Grid.Row="0"
                Height="50"
-               Source="../../Resources/logo.png" />
+               Source="/InterpretBank;component/Resources/logo.png" />
+
         <DockPanel Grid.Row="1"
                    HorizontalAlignment="Stretch"
                    Margin="10 10 10 5"
                    VerticalAlignment="Top">
 
-            <TextBlock Text="{x:Static interpretBank:PluginResources.SettingsWindow_TextBlock_DBFilepath}"
-                       x:Name="FilepathLabel"
-                       DockPanel.Dock="Top" />
-
-            <controls1:ChooseFilepathControl x:Name="ChooseFilepathControl"
-                                            Height="50"
-                                            AutomationProperties.LabeledBy="{Binding ElementName=FilepathLabel}"
-                                            Filepath="{Binding Filepath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            <GroupBox Header="Locate your database">
+                <controls:ChooseFilepathControl x:Name="ChooseFilepathControl"
+                                                AutomationProperties.LabeledBy="{Binding ElementName=FilepathLabel}"
+                                                Filepath="{Binding Filepath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            </GroupBox>
 
         </DockPanel>
         <TabControl Margin="10"
+                    x:Name="TabControl"
                     Visibility="{Binding IsDbValid, Converter={StaticResource BoolToVisConverter}, ConverterParameter=True}"
                     Grid.Row="2"
+                    HorizontalAlignment="Stretch"
                     Background="#F6F6F6"
                     BorderThickness="1">
             <TabItem Header="Glossaries"
+                     TabIndex="1"
                      Template="{StaticResource GlossarySetupTabItem}">
                 <Grid>
+
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
-                    <DockPanel LastChildFill="False"
-                               Grid.Column="0"
-                               Grid.ColumnSpan="2"
-                               Grid.Row="0"
-                               DockPanel.Dock="Left">
-                        <TextBox x:Name="ValueHolder"
-                                 Visibility="Collapsed" />
-                        <TextBlock Text="Type in a new glossary name then press enter:"
-                                   Margin="0 5 0 1"
-                                   DockPanel.Dock="Top" />
-                        <TextBox DockPanel.Dock="Top"
-                                 Margin="0 0 0 5"
-                                 PreviewKeyDown="UIElement_OnKeyDown">
-                            <TextBox.InputBindings>
-                                <KeyBinding Key="Enter"
-                                            Command="{Binding EnterGlossaryCommand}"
-                                            CommandParameter="{Binding Text, ElementName=ValueHolder}" />
-                            </TextBox.InputBindings>
-                        </TextBox>
-                    </DockPanel>
+                    <Border Grid.Row="0"
+                            Margin="0"
+                            Grid.ColumnSpan="2"
+                            Background="LightGray"
+                            Grid.Column="0">
+                        <StackPanel Orientation="Horizontal">
+                            <Button FontSize="20"
+                                    Cursor="Hand"
+                                    HorizontalContentAlignment="Left"
+                                    FontWeight="Bold"
+                                    BorderThickness="0"
+                                    HorizontalAlignment="Left"
+                                    ToolTip="{x:Static interpretBank:PluginResources.ImportEntriesIntoSelectedGlossary}"
+                                    x:Name="Import_Button"
+                                    DockPanel.Dock="Left"
+                                    Visibility="{Binding Filepath, Converter={StaticResource NullToVisibilityConverter}}"
+                                    Style="{StaticResource Sdl.Button.EmmbeddedAddButtonStyle}"
+                                    Click="ImportButton_Click"
+                                    Command="{Binding ImportIntoSelectedGlossaryCommand}">
+                                <DockPanel HorizontalAlignment="Left">
+                                    <Image DockPanel.Dock="Left"
+                                           VerticalAlignment="Bottom"
+                                           Source="/InterpretBank;component/Resources/Browse2.png"
+                                           Height="16" />
+                                </DockPanel>
+                            </Button>
+                            <Button BorderThickness="0"
+                                    ToolTip="{x:Static interpretBank:PluginResources.Tooltip_AddNewGlossary}"
+                                    Command="{Binding EnterGlossaryCommand}"
+                                    Cursor="Hand"
+                                    Style="{StaticResource Sdl.Button.EmmbeddedAddButtonStyle}">
+                                <Image Source="/InterpretBank;component/Resources/Add.png"
+                                       Height="16" />
+                            </Button>
+                        </StackPanel>
+                    </Border>
 
                     <ListBox DockPanel.Dock="Top"
                              Grid.Column="0"
+                             AutomationProperties.Name="Glossaries"
                              Grid.Row="1"
                              x:Name="GlossaryList"
                              ItemsSource="{Binding Glossaries}"
@@ -111,12 +145,12 @@
                                 <DockPanel>
                                     <Button VerticalAlignment="Bottom"
                                             Command="{Binding DataContext.DeleteGlossaryCommand, ElementName=GlossaryManager_Window}"
+                                            CommandParameter="{Binding .}"
                                             DockPanel.Dock="Left"
                                             FontSize="8"
+                                            AutomationProperties.Name="DeleteGlossary"
                                             Style="{StaticResource Sdl.Button.EmbeddedStyle}"
-                                            Content="✖">
-
-                                    </Button>
+                                            Content="✖" />
                                     <Image Source="../../Resources/Glossary.png"
                                            DockPanel.Dock="Left"
                                            Height="17" />
@@ -147,13 +181,26 @@
                                    DockPanel.Dock="Top"
                                    FontWeight="Light"
                                    FontSize="10" />
-                            <sdl:MultiSelectComboBox DockPanel.Dock="Bottom"
+
+
+                            <!--<sdl:MultiSelectComboBox DockPanel.Dock="Bottom"
+                                                     OpenDropDownListAlsoWhenNotInEditMode="True"
                                                      Margin="5 0 0 5"
                                                      IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}"
                                                      ItemsSource="{Binding Languages}"
                                                      SelectedItems="{Binding SelectedGlossary.Languages}"
                                                      DropdownItemTemplate="{StaticResource LanguageTemplate}"
-                                                     SelectedItemTemplate="{StaticResource LanguageTemplate}" />
+                                                     SelectedItemTemplate="{StaticResource LanguageTemplate}" />-->
+
+                            <multiItemSelect:MultiItemSelectControl DockPanel.Dock="Bottom"
+                                                                    SelectedItems="{Binding SelectedGlossary.Languages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                    ItemsSource="{Binding Languages}"
+                                                                    Margin="5 0 0 5"
+                                                                    DeleteEnabled="False"
+                                                                    SelectedItemTemplate="{StaticResource LanguageTemplate}"
+                                                                    ItemTemplate="{StaticResource LanguageTemplate}"
+                                                                    IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}" />
+
                         </DockPanel>
                         <DockPanel Grid.Row="1">
                             <Label DockPanel.Dock="Top"
@@ -161,51 +208,53 @@
                                    Padding="5 0 0 5"
                                    FontWeight="Light"
                                    FontSize="10" />
-                            <sdl:MultiSelectComboBox DockPanel.Dock="Bottom"
-                                                     Margin="5 0 0 0"
-                                                     IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}"
-                                                     ItemsSource="{Binding Tags}"
-                                                     SelectedItems="{Binding SelectedGlossary.Tags}"
-                                                     DropdownItemTemplate="{StaticResource TagTemplate}"
-                                                     SelectedItemTemplate="{StaticResource TagTemplate}" />
+
+                            <multiItemSelect:MultiItemSelectControl DockPanel.Dock="Bottom"
+                                                                    SelectedItems="{Binding SelectedGlossaryTags}"
+                                                                    ItemsSource="{Binding Tags}"
+                                                                    Margin="5 0 0 5"
+                                                                    SelectedItemTemplate="{StaticResource TagTemplate}"
+                                                                    ItemTemplate="{StaticResource TagTemplate}"
+                                                                    IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}" />
                         </DockPanel>
                     </Grid>
                 </Grid>
+
             </TabItem>
 
             <!--Tags tab-->
             <TabItem Header="Tags"
-                     Template="{StaticResource GlossarySetupTabItem}">
+                     TabIndex="2">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-
-                    <DockPanel LastChildFill="False"
-                               Grid.Row="0"
-                               Grid.Column="0"
-                               Grid.ColumnSpan="2">
-                        <TextBlock Text="Type in a new tag then press enter:"
-                                   Margin="0 5 0 1"
-                                   DockPanel.Dock="Top" />
-                        <TextBox DockPanel.Dock="Top"
-                                 Margin="0 0 0 5"
-                                 PreviewKeyDown="UIElement_OnKeyDown">
-                            <TextBox.InputBindings>
-                                <KeyBinding Key="Enter"
-                                            Command="{Binding EnterTagCommand}"
-                                            CommandParameter="{Binding Text, ElementName=ValueHolder}" />
-                            </TextBox.InputBindings>
-                        </TextBox>
-                    </DockPanel>
+                    <Border Grid.Row="0"
+                            Margin="0"
+                            Grid.ColumnSpan="2"
+                            Background="LightGray"
+                            Grid.Column="0">
+                        <StackPanel Orientation="Horizontal">
+                            <Button BorderThickness="0"
+                                    ToolTip="{x:Static interpretBank:PluginResources.Tooltip_AddNewTag}"
+                                    Command="{Binding EnterTagCommand}"
+                                    Cursor="Hand"
+                                    Style="{StaticResource Sdl.Button.EmmbeddedAddButtonStyle}">
+                                <Image Source="/InterpretBank;component/Resources/Add.png"
+                                       Height="16" />
+                            </Button>
+                        </StackPanel>
+                    </Border>
 
                     <ListBox DockPanel.Dock="Top"
                              Grid.Row="1"
+                             AutomationProperties.Name="Tags"
                              x:Name="TagsList"
                              Grid.Column="0"
                              ItemsSource="{Binding Tags}"
@@ -216,14 +265,13 @@
                             <DataTemplate>
                                 <DockPanel>
                                     <Button Command="{Binding DataContext.DeleteTagCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
-                                            CommandParameter="{Binding TagName}"
+                                            CommandParameter="{Binding .}"
                                             VerticalAlignment="Bottom"
+                                            AutomationProperties.Name="DeleteTag"
                                             DockPanel.Dock="Left"
                                             FontSize="8"
                                             Style="{StaticResource Sdl.Button.EmbeddedStyle}"
-                                            Content="✖">
-
-                                    </Button>
+                                            Content="✖" />
                                     <Image Source="../../Resources/Tag.png"
                                            DockPanel.Dock="Left"
                                            Height="17" />
@@ -237,24 +285,42 @@
                     </ListBox>
 
 
-                    <sdl:MultiSelectComboBox Grid.Column="1"
+                    <!--<sdl:MultiSelectComboBox Grid.Column="1"
                                              Grid.Row="1"
+                                             OpenDropDownListAlsoWhenNotInEditMode="True"
                                              Margin="5 0 0 0"
                                              ItemsSource="{Binding Glossaries}"
                                              IsEnabled="{Binding SelectedGlossary, Converter={StaticResource NullToBullConverter}}"
                                              DropdownItemTemplate="{StaticResource GlossaryTemplate}"
-                                             SelectedItems="{Binding GlossariesTaggedWithSelected}"
-                                             SelectedItemTemplate="{StaticResource GlossaryTemplate}" />
+                                             SelectedItems="{Binding SelectedTagGlossaries}"
+                                             SelectedItemTemplate="{StaticResource GlossaryTemplate}" />-->
+                    <Label DockPanel.Dock="Top"
+                           Content="Glossaries"
+                           Grid.Column="1"
+                           Grid.Row="1"
+                           Padding="5 0 0 5"
+                           FontWeight="Light"
+                           FontSize="10" />
+                    <multiItemSelect:MultiItemSelectControl Grid.Column="1"
+                                                            Grid.Row="1"
+                                                            Margin="5 0 0 0"
+                                                            ItemsSource="{Binding Glossaries}"
+                                                            IsEnabled="{Binding SelectedTag, Converter={StaticResource NullToBullConverter}}"
+                                                            ItemTemplate="{StaticResource GlossaryTemplate}"
+                                                            SelectedItems="{Binding SelectedTagGlossaries}"
+                                                            SelectedItemTemplate="{StaticResource GlossaryTemplate}" />
+
                 </Grid>
             </TabItem>
 
             <TabItem Header="DB Languages"
+                     TabIndex="3"
                      Template="{StaticResource GlossarySetupTabItem}">
 
                 <DataGrid ItemsSource="{Binding SelectedLanguages}"
-                          Grid.Row="0"
                           AutoGenerateColumns="False"
                           Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+                          HorizontalAlignment="Stretch"
                           SelectionMode="Single"
                           IsReadOnly="True">
 
@@ -265,12 +331,13 @@
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
                                         <Button Content="⟲"
                                                 FontSize="15"
-                                                Command="{Binding RestoreCommand}"
+                                                Command="{Binding ResetCommand}"
                                                 Background="Transparent"
+                                                AutomationProperties.Name="Restore"
                                                 HorizontalAlignment="Left"
                                                 BorderBrush="Transparent"
                                                 Style="{StaticResource ClearTextButtonStyle}" />
@@ -294,36 +361,24 @@
                    VerticalAlignment="Bottom"
                    LastChildFill="False">
 
-            <Button Content="⇪"
-                    FontSize="20"
-                    FontWeight="Bold"
-                    ToolTip="Import entries into selected glossary"
-                    x:Name="Import_Button"
-                    DockPanel.Dock="Left"
-                    Visibility="{Binding Filepath, Converter={StaticResource NullToVisibilityConverter}}"
-                    Style="{StaticResource Sdl.Button.EmbeddedStyle}"
-                    Click="ImportButton_Click"
-                    Command="{Binding ImportIntoSelectedGlossaryCommand}"
-                    Margin="10 0 10 10">
-            </Button>
-
-            <Button Content="Cancel"
+            <Button Content="Help"
                     Cursor="Hand"
-                    IsCancel="True"
-                    Click="CancelButton_OnClick"
                     Height="30"
-                    Style="{StaticResource Sdl.Button.SecondaryStyle}"
-                    DockPanel.Dock="Right"
-                    Margin="0 0 10 10" />
+                    Click="HelpButton_OnClick"
+                    HorizontalAlignment="Left"
+                    Style="{StaticResource Sdl.Button.GeneralStyle}"
+                    DockPanel.Dock="Left"
+                    Margin="10 0 10 10" />
 
-            <Button Content="Apply"
+            <Button Content="Close"
+                    IsCancel="True"
                     Cursor="Hand"
                     Click="ApplyButton_Click"
-                    Command="{Binding SaveCommand}"
                     Height="30"
-                    Style="{StaticResource Sdl.Button.PrimaryStyle}"
+                    Style="{StaticResource Sdl.Button.DialogStyle}"
                     DockPanel.Dock="Right"
                     Margin="0 0 10 10" />
+
         </DockPanel>
     </Grid>
 </Window>

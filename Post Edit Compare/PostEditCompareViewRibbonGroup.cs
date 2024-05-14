@@ -366,6 +366,10 @@ namespace Sdl.Community.PostEdit.Versions
     [ActionLayout(typeof(PostEditCompareViewConfigurationRibbonGroup), 1, DisplayType.Large)]
     public class PostEditCompareActionsConfiguration : AbstractViewControllerAction<PostEditCompareViewController>
     {
+	    public void Run()
+	    {
+			Execute();
+	    }
         protected override void Execute()
         {
             Controller.LoadConfigurationSettings();

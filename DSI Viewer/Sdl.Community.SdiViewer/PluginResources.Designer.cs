@@ -228,9 +228,67 @@ namespace Sdl.Community.DsiViewer {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon Question {
+        public static System.Drawing.Icon Settings {
             get {
-                object obj = ResourceManager.GetObject("Question", resourceCulture);
+                object obj = ResourceManager.GetObject("Settings", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For more information,.
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_1 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to click here.
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_2 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to for documentation..
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_3 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To engage with the app, follow these steps:
+        ///
+        ///1. In Edition view, go to View tab
+        ///2. Under the Information group, find DSI Viewer.
+        /// </summary>
+        public static string SettingsAction_OpenOptionsText {
+            get {
+                return ResourceManager.GetString("SettingsAction_OpenOptionsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Access DSI Viewer.
+        /// </summary>
+        public static string SettingsAction_Title {
+            get {
+                return ResourceManager.GetString("SettingsAction_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon SourceCode {
+            get {
+                object obj = ResourceManager.GetObject("SourceCode", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -283,10 +341,20 @@ namespace Sdl.Community.DsiViewer {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon TellMe {
+        public static System.Drawing.Icon TellmeDocumentation {
             get {
-                object obj = ResourceManager.GetObject("TellMe", resourceCulture);
+                object obj = ResourceManager.GetObject("TellmeDocumentation", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Warning2 {
+            get {
+                object obj = ResourceManager.GetObject("Warning2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

@@ -1,6 +1,8 @@
-﻿namespace Sdl.Community.IATETerminologyProvider.Model
+﻿using Sdl.Community.IATETerminologyProvider.Interface;
+
+namespace Sdl.Community.IATETerminologyProvider.Model
 {
-	public class TermTypeModel : ViewModelBase
+	public class TermTypeModel : ViewModelBase, IModel
     {
 		private bool _isSelected;
 		public int Code { get; set; }

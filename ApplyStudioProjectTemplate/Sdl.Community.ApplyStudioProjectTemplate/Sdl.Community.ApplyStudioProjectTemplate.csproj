@@ -50,8 +50,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17</TradosFolder>
-    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
+    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
+    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -141,9 +141,10 @@
     <Compile Include="ApplyTemplateForm.Designer.cs">
       <DependentUpon>ApplyTemplateForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TellMe\CommunityAppStoreAction.cs" />
+    <Compile Include="TellMe\DocumentationAction.cs" />
     <Compile Include="TellMe\CommunityAppStoreForumAction.cs" />
-    <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\SettingsAction.cs" />
+    <Compile Include="TellMe\SourceCodeAction.cs" />
     <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="TemplateLanguageDetails.cs" />
     <Compile Include="WarningForm.cs">
@@ -163,6 +164,9 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+    <None Include="Resources\TellmeDocumentation.ico" />
+    <None Include="Resources\SourceCode.ico" />
+    <None Include="Resources\Settings.ico" />
     <Resource Include="Resources\QuestionIcon.ico" />
     <Resource Include="Resources\Download.ico" />
     <Resource Include="Resources\ForumIcon.ico" />

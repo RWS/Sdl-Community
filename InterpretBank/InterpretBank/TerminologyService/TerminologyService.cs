@@ -1,4 +1,5 @@
-﻿using InterpretBank.GlossaryService;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using InterpretBank.GlossaryService;
 using InterpretBank.GlossaryService.DAL;
 using InterpretBank.GlossaryService.Model;
 using InterpretBank.Helpers;
@@ -52,12 +53,9 @@ public class TerminologyService : ITerminologyService
     public ObservableCollection<EntryModel> GetEntriesFromDb(List<string> glossaries)
     {
         using var glossaryService = GetGlossaryService();
-        var terms = glossaryService.GetTerms(null, null, glossaries, null).Cast<TermEntry>();
+        var entries = glossaryService.GetTerms(null, null, glossaries, null)?.Cast<TermEntry>();
 
-        var entryModels = new ObservableCollection<EntryModel>();
-
-        InitializeEntries(terms, entryModels);
-        return entryModels;
+        return GetInitializedEntries(entries);
     }
 
     public List<StudioTermEntry> GetExactTerms(string searchText, string sourceLanguage, string targetLanguage,
@@ -147,6 +145,7 @@ public class TerminologyService : ITerminologyService
 
     public void Setup(string settingsDatabaseFilepath)
     {
+        _languages = null;
         InterpretBankDataContext.Setup(settingsDatabaseFilepath);
     }
 
@@ -208,8 +207,9 @@ public class TerminologyService : ITerminologyService
         return allEntries;
     }
 
-    private void InitializeEntries(IEnumerable<TermEntry> dbEntries, ObservableCollection<EntryModel> entryModels)
+    private ObservableCollection<EntryModel> GetInitializedEntries(IEnumerable<TermEntry> dbEntries)
     {
+        var entries = new ObservableCollection<EntryModel>();
         try
         {
             foreach (var dbEntry in dbEntries)
@@ -234,12 +234,16 @@ public class TerminologyService : ITerminologyService
                     });
                 }
 
-                entryModels.Add(entryModel);
+                entries.Add(entryModel);
             }
+
+            return entries;
         }
         catch
         {
         }
+
+        return [];
     }
 
     private void InitializeEntryModelTerms(EntryModel entryModel, DbGlossaryEntry t)

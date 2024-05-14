@@ -37,17 +37,14 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
-    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17</TradosFolder>
-    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
+    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
+    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MahApps.Metro">
       <HintPath>$(TradosFolder)\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.IdentityModel.Tokens">
-      <HintPath>$(TradosFolder)\Microsoft.IdentityModel.Tokens.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -139,7 +136,12 @@
     <Compile Include="Controls\CustomProgressRing.cs" />
     <Compile Include="EventArgs\TermEntryModelChanged.cs" />
     <Compile Include="Helpers\CurrentViewDetector.cs" />
+    <Compile Include="Helpers\JwtHelper.cs" />
+    <Compile Include="IATEProviderTellMe\IATESettingsAction.cs" />
+    <Compile Include="IATEProviderTellMe\IATESourceCode.cs" />
     <Compile Include="Interface\IEUProvider.cs" />
+    <Compile Include="Interface\IModel.cs" />
+    <Compile Include="Model\CheckStateEnum.cs" />
     <Compile Include="Model\CollectionModel.cs" />
     <Compile Include="Model\InstitutionModel.cs" />
     <Compile Include="Model\Primarities.cs" />
@@ -156,7 +158,7 @@
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="IATEApplication.cs" />
-    <Compile Include="IATEProviderTellMe\IATECommunityWikiAction.cs" />
+    <Compile Include="IATEProviderTellMe\IATEDocumentationAction.cs" />
     <Compile Include="IATEProviderTellMe\IATECommunityForumAction.cs" />
     <Compile Include="IATEProviderTellMe\IATEContactAction.cs" />
     <Compile Include="IATEProviderTellMe\IATEStoreAction.cs" />
@@ -289,6 +291,9 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Resource Include="Resources\Forum.ico" />
+    <Resource Include="Resources\Settings.ico" />
+    <Resource Include="Resources\SourceCode.ico" />
     <Resource Include="Resources\StarGrey.png" />
     <Resource Include="Resources\StarYellow.png" />
     <Resource Include="Resources\Question.ico" />

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Drawing;
 using Sdl.TellMe.ProviderApi;
 
@@ -9,12 +8,12 @@ namespace Sdl.Community.IATETerminologyProvider.IATEProviderTellMe
 	{
 		public IATEContactAction()
 		{
-			Name = "IATE official web site terminology";
+			Name = "IATE Official Web Site Terminology";
 		}
 
-		public override bool IsAvailable => throw new NotImplementedException();
 		public override string Category => "IATE results";
 		public override Icon Icon => PluginResources.Iate_logo;
+		public override bool IsAvailable => true;
 
 		public override void Execute()
 		{

@@ -20,49 +20,30 @@ namespace InterpretBank.TermbaseViewer.UI
             elementHost.Child = termbaseViewer;
 
             TermbaseViewer = termbaseViewer;
-
-            //            DataContext.AnyEditedTermsChanged += b => AnyEditedTermsChanged?.Invoke(b);
         }
 
-        //public event Action<bool> AnyEditedTermsChanged;
+        public string LoadedDatabaseFilepath { get; set; }
 
-        //public bool AnyEditedTerms => DataContext.AnyEditedTerms;
         private TermbaseViewerViewModel DataContext => (TermbaseViewerViewModel)TermbaseViewer.DataContext;
 
         private TermbaseViewer TermbaseViewer { get; set; }
-
-        //public void AddNewTerm()
-        //{
-        //    TermbaseViewer.AddNewTermButton_Click(null, null);
-        //}
-
-        //public void AddTerm(string source, string target)
-        //{
-        //    TermbaseViewer.AddNewTermButton_Click(
-        //        new TermModel { SourceTerm = source, TargetTerm = target }, null);
-        //}
-
-        //public void CommitToDatabase()
-        //{
-        //    DataContext.CommitAllToDatabaseCommand.Execute(null);
-        //}
-
-        //public void EditTerm(IEntry term) => DataContext.EditTerm(term);
-
-        public void JumpToTerm(Entry entry) => DataContext.JumpToTerm(entry);
 
         public void AddTerm(string source, string target)
         {
             TermbaseViewer.AddTerm(source, target);
         }
 
-        public void LoadTerms(Language sourceLanguage, Language targetLanguage, List<string> glossaries, string databaseFilepath)
+        public void JumpToTerm(Entry entry) => DataContext.JumpToTerm(entry);
+
+        public void LoadTerms(Language sourceLanguage, Language targetLanguage, List<string> glossaries, List<string> tags, bool useTags, string databaseFilepath)
         {
-            TermbaseViewer.LoadTerms(sourceLanguage, targetLanguage, glossaries, databaseFilepath);
+            LoadedDatabaseFilepath = databaseFilepath;
+            TermbaseViewer.LoadTerms(sourceLanguage, targetLanguage, glossaries, tags, useTags, databaseFilepath);
         }
 
         public void ReloadDb(string filepath)
         {
+            if (!filepath.Equals(LoadedDatabaseFilepath)) return;
             TermbaseViewer.ReloadDb(filepath);
         }
 

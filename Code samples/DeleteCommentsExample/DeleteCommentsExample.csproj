@@ -5,7 +5,7 @@
 		<TradosFolder>C:\Code\bin\Mixed Platforms\Debug</TradosFolder>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<LangVersion>latest</LangVersion>
-		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
 	</PropertyGroup>
   <ItemGroup>
     <Reference Include="Sdl.Core.Globalization">

@@ -1,17 +1,19 @@
-﻿using System.Media;
+using System.Drawing;
+using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.SdlDataProtectionSuite.TellMe
 {
-	public class SettingsAction : TellMeAction
+	internal class SettingsAction : AbstractTellMeAction
 	{
-		private static readonly string[] _helpKeywords = { "settings", "batch task" };
-		private static readonly bool _isAvailable = true;
-		public SettingsAction() : base($"{PluginResources.Plugin_Name} Settings", PluginResources.TellMeSettings, _helpKeywords, _isAvailable, customAction: ShowDialog) { }
-
-		private static void ShowDialog()
+		public SettingsAction()
 		{
-			SystemSounds.Beep.Play();
-			new SdlTmAnonymizer.View.TellMe("https://appstore.rws.com/Plugin/39?tab=documentation").ShowDialog();
+			Name = string.Format("{0} - TM Anonymizer Settings", PluginResources.Plugin_Name);
 		}
+
+		public override string Category => string.Format(PluginResources.TellMe_Provider_Results, PluginResources.Plugin_Name);
+		public override Icon Icon => PluginResources.TellmeDocumentation;
+		public override bool IsAvailable => true;
+
+		public override void Execute() => ApplicationContext.ShowSettingsWindow();
 	}
 }

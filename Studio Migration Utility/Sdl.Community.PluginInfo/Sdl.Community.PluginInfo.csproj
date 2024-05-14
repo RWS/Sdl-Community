@@ -11,7 +11,7 @@
     <AssemblyName>Sdl.Community.PluginInfo</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
+    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,7 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
 	<Reference Include="Sdl.Core.PluginFramework.PackageSupport">
-		<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
+		<HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
 	</Reference>   
     <Reference Include="System" />
     <Reference Include="System.Core" />

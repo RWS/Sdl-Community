@@ -4,28 +4,46 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModel="clr-namespace:InterpretBank.Booth.ViewModel"
-        xmlns:model="clr-namespace:InterpretBank.Model"
         xmlns:converters="clr-namespace:InterpretBank.Converters"
         xmlns:controls1="clr-namespace:InterpretBank.Controls"
-        xmlns:converters1="clr-namespace:InterpretBank.SettingsService.Converters"
         d:DataContext="{d:DesignInstance viewModel:BoothWindowViewModel}"
         mc:Ignorable="d"
         Title="InterpretBank Live Search"
+        MouseDown="Window_MouseDown"
         Name="Booth_Window"
         Icon="/InterpretBank;component/Resources/Booth.ico"
+        WindowStyle="None"
         WindowStartupLocation="CenterScreen"
-        Height="450"
+        MinHeight="510"
+        Height="510"
+        MinWidth="723"
         Width="800">
+    <Window.CommandBindings>
+        <CommandBinding Command="Close"
+                        Executed="CommandBinding_OnExecuted" />
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Key="Escape"
+                    Command="Close" />
+    </Window.InputBindings>
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/datagridresources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
                 <ResourceDictionary Source="/InterpretBank;component/Styles/Buttons.xaml" />
                 <ResourceDictionary Source="/InterpretBank;component/Styles/LanguageModelTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <converters:TermSelectorConverter x:Key="TermSelector" />
+
+            <Style TargetType="GroupBox">
+                <Setter Property="Margin"
+                        Value="5" />
+                <Setter Property="Padding"
+                        Value="5" />
+            </Style>
 
             <Style TargetType="{x:Type ComboBox}"
                    BasedOn="{StaticResource Sdl.ComboBox.Generic.Style}">
@@ -49,6 +67,11 @@
     </Window.Resources>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"
                               MinWidth="200"
@@ -56,12 +79,17 @@
             <ColumnDefinition Width="5*" />
         </Grid.ColumnDefinitions>
 
+        <Image Grid.Row="0"
+               Height="50"
+               Grid.ColumnSpan="2"
+               Source="/InterpretBank;component/Resources/logo.png" />
 
         <GroupBox Header="Settings"
                   Grid.Column="0"
+                  Grid.Row="1"
                   Style="{StaticResource HeaderStyle}"
                   x:Name="SettingsGroupBox"
-                  BorderThickness="0 1 0 0"
+                  BorderThickness="0"
                   Margin="0 0 10 0">
 
             <DockPanel x:Name="FilterGrid"
@@ -83,48 +111,57 @@
                     </Style>
                 </DockPanel.Style>
 
-                <TextBlock Text="Database file path"
-                           x:Name="FilepathLabel"
-                           DockPanel.Dock="Top" />
-                <controls1:ChooseFilepathControl DockPanel.Dock="Top"
-                                                Margin="0 5 0 0"
-                                                AutomationProperties.LabeledBy="{Binding ElementName=FilepathLabel}"
-                                                Filepath="{Binding Filepath, Mode=TwoWay}"
-                                                VerticalContentAlignment="Top" />
 
-                <!--<TextBlock Text="Settings" DockPanel.Dock="Top" FontSize="15" Margin="0 0 0 20" Foreground="DarkCyan" />-->
-
-
-                <TextBlock Text="Source Language"
-                           Margin="0 20 0 0"
-                           DockPanel.Dock="Top" />
-                <ComboBox ItemsSource="{Binding Languages}"
+                <GroupBox Grid.Row="1"
                           DockPanel.Dock="Top"
-                          Margin="0 5 0 0"
-                          ItemTemplate="{StaticResource LanguageTemplate}"
-                          IsEnabled="{Binding IsDbValid}"
-                          SelectedItem="{Binding SourceLanguage}"
-                          HorizontalAlignment="Stretch" />
+                          Padding="5 0 0 0"
+                          Header="Locate database">
+                    <controls1:ChooseFilepathControl AutomationProperties.LabeledBy="{Binding ElementName=FilepathLabel}"
+                                                     Filepath="{Binding Filepath, Mode=TwoWay}"
+                                                     VerticalContentAlignment="Top" />
+                </GroupBox>
 
-                <TextBlock Text="Target Language"
-                           Margin="0 10 0 0"
-                           DockPanel.Dock="Top" />
-                <ComboBox ItemsSource="{Binding Languages}"
-                          ItemTemplate="{StaticResource LanguageTemplate}"
+                <GroupBox Grid.Row="1"
                           DockPanel.Dock="Top"
-                          Margin="0 5 0 0"
-                          IsEnabled="{Binding IsDbValid}"
-                          SelectedItem="{Binding TargetLanguage}"
-                          HorizontalAlignment="Stretch" />
+                          Header="Choose language pair">
+                    <StackPanel>
+                        <TextBlock Text="Source Language"
+                                   Margin="0 10 0 0"
+                                   DockPanel.Dock="Top" />
+                        <ComboBox ItemsSource="{Binding Languages}"
+                                  DockPanel.Dock="Top"
+                                  Margin="0 5 0 0"
+                                  ItemTemplate="{StaticResource LanguageTemplate}"
+                                  IsEnabled="{Binding IsDbValid}"
+                                  SelectedItem="{Binding SourceLanguage}"
+                                  HorizontalAlignment="Stretch" />
+
+                        <TextBlock Text="Target Language"
+                                   Margin="0 7 0 0"
+                                   DockPanel.Dock="Top" />
+                        <ComboBox ItemsSource="{Binding Languages}"
+                                  ItemTemplate="{StaticResource LanguageTemplate}"
+                                  DockPanel.Dock="Top"
+                                  Margin="0 5 0 0"
+                                  IsEnabled="{Binding IsDbValid}"
+                                  SelectedItem="{Binding TargetLanguage}"
+                                  HorizontalAlignment="Stretch" />
+                    </StackPanel>
+                </GroupBox>
 
 
-                <controls1:GlossariesOrTagsControl Margin="0 30 0 10"
-                                                   HorizontalContentAlignment="Stretch"
-                                                   HorizontalAlignment="Stretch" />
+                <GroupBox Grid.Row="1"
+                          DockPanel.Dock="Top"
+                          Header="Select glossaries">
+                    <controls1:GlossariesOrTagsControl2 Margin="0 10 0 0"
+                                                        BorderThickness="0" />
+                </GroupBox>
 
             </DockPanel>
         </GroupBox>
+
         <GridSplitter Grid.Column="0"
+                      Grid.Row="1"
                       AutomationProperties.Name="Window splitter"
                       Width="1"
                       HorizontalAlignment="Right"
@@ -145,17 +182,21 @@
         </GridSplitter>
 
         <DockPanel Grid.Column="1"
+                   Grid.Row="1"
                    LastChildFill="False"
                    x:Name="TermSearchPanel">
 
-            <TextBlock Name="ShowHideSettingsLabel" Width="0"> 
+            <TextBlock Name="ShowHideSettingsLabel"
+                       Width="0">
                 <TextBlock.Style>
-                    <Style TargetType="TextBlock" >
+                    <Style TargetType="TextBlock">
                         <Setter Property="Text"
                                 Value="Hide settings" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsChecked, ElementName=SettingsToggleButton, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                <Setter Property="Text" Value="Show settings"/>
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=SettingsToggleButton, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         Value="True">
+                                <Setter Property="Text"
+                                        Value="Show settings" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -176,7 +217,7 @@
                            BasedOn="{StaticResource GlyphToggleButtonStyle}">
                         <Setter Property="Content"
                                 Value="←" />
-                        
+
                         <Style.Triggers>
                             <Trigger Property="IsChecked"
                                      Value="True">
@@ -198,7 +239,7 @@
 
             <DataGrid x:Name="TermsGrid"
                       d:ItemsSource="{d:SampleData ItemCount=5}"
-                      ItemsSource="{Binding Entries}"
+                      ItemsSource="{Binding Entries.Result}"
                       IsReadOnly="True"
                       CanUserReorderColumns="True"
                       BorderThickness="0.7 0.55 0 0"
@@ -248,5 +289,25 @@
 
 
         </DockPanel>
+
+        <Button Content="Help"
+                Cursor="Hand"
+                Grid.Row="2"
+                Grid.Column="0"
+                Height="30"
+                Click="HelpButton_OnClick"
+                HorizontalAlignment="Left"
+                Style="{StaticResource Sdl.Button.GeneralStyle}"
+                DockPanel.Dock="Left"
+                Margin="10 0 10 10" />
+
+        <Button Grid.Row="2"
+                Grid.Column="1"
+                Margin="10"
+                Command="Close"
+                HorizontalAlignment="Right"
+                Style="{StaticResource Sdl.Button.DialogStyle}"
+                Content="Close" />
+
     </Grid>
 </Window>

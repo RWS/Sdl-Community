@@ -125,7 +125,7 @@
     <value>Resources\deepL_logo_new.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>Sdl.Community.DeepLMTProvider</value>
+    <value>DeepL Translation Provider</value>
   </data>
   <data name="Plugin_NiceName" xml:space="preserve">
     <value>DeepL MT Provider</value>
@@ -174,12 +174,38 @@ This feature currently works for all target languages except "ES" (Spanish), "JA
     <value>Minimize</value>
   </data>
   <data name="DeeplTranslationProviderScheme" xml:space="preserve">
-	  <value>deepltranslationprovider:///</value>
+    <value>deepltranslationprovider:///</value>
   </data>
   <data name="NoGlossary" xml:space="preserve">
-	  <value>No glossary</value>
+    <value>No glossary</value>
   </data>
   <data name="AllLanguagePairs_Label" xml:space="preserve">
     <value>All language pairs</value>
+  </data>
+  <data name="TellmeDocumentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellmeDocumentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SettingsAction_ExternalHelp_1" xml:space="preserve">
+    <value>For more information,</value>
+  </data>
+  <data name="SettingsAction_ExternalHelp_2" xml:space="preserve">
+    <value>click here</value>
+  </data>
+  <data name="SettingsAction_ExternalHelp_3" xml:space="preserve">
+    <value>for documentation.</value>
+  </data>
+  <data name="SettingsAction_OpenOptionsText" xml:space="preserve">
+    <value>We couldn't find an instance of DeepL Translation Provider for the current project selected. To add it to your project, follow these steps:
+
+1. Open Project Settings
+2. Go to Translation Memory and Automated Translation
+3. Select Use
+4. Via the dropdown menu locate DeepL Translation Provider</value>
+  </data>
+  <data name="SettingsAction_Title" xml:space="preserve">
+    <value>Configuring Translation Provider in Project Settings</value>
   </data>
 </root>

@@ -1,8 +1,11 @@
 ﻿using Autofac;
+using InterpretBank.Helpers;
 using InterpretBank.Interface;
+using InterpretBank.Model;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,35 +18,27 @@ namespace InterpretBank.Controls
     public partial class ChooseFilepathControl : UserControl
     {
         public static readonly DependencyProperty DatabaseListProperty =
-                    DependencyProperty.Register(nameof(DatabaseList), typeof(List<string>), typeof(ChooseFilepathControl),
-                new PropertyMetadata(default(List<string>)));
+                    DependencyProperty.Register(nameof(DatabaseList), typeof(DatabaseList), typeof(ChooseFilepathControl),
+                new PropertyMetadata(default(DatabaseList)));
 
         public static readonly DependencyProperty FilepathProperty =
                             DependencyProperty.Register(nameof(Filepath), typeof(string), typeof(ChooseFilepathControl),
                 new PropertyMetadata(string.Empty));
 
-        private static readonly string DbListPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            @"Trados AppStore\InterpretBank\DatabaseList.json");
-        
         private static readonly string DbListFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             @"Trados AppStore\InterpretBank");
+
+        private static readonly string DbListPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    @"Trados AppStore\InterpretBank\DatabaseList.json");
 
         public ChooseFilepathControl()
         {
             InitializeComponent();
-
-            if (!File.Exists(DbListPath))
-            {
-                if (!Directory.Exists(DbListFolderPath)) Directory.CreateDirectory(DbListFolderPath);
-                using var file = File.Create(DbListPath);
-            }
-
-            DatabaseList = JsonConvert.DeserializeObject<List<string>>(File.ReadAllText(DbListPath)) ?? new List<string>();
         }
 
-        public List<string> DatabaseList
+        public DatabaseList DatabaseList
         {
-            get => (List<string>)GetValue(DatabaseListProperty);
+            get => (DatabaseList)GetValue(DatabaseListProperty);
             set => SetValue(DatabaseListProperty, value);
         }
 
@@ -58,45 +53,32 @@ namespace InterpretBank.Controls
                         UserInteractionService.Confirm("This DB no longer exists. Do you wish to remove it from this list?");
                     if (confirmation)
                     {
-                        DatabaseList.Remove(value);
-                        DatabaseList.Remove(value);
+                        DatabaseList.List.Remove(value);
+                        DatabaseList.List.Remove(value);
                     }
                 }
 
                 AddToDatabaseList(value);
+
                 SetValue(FilepathProperty, value);
             }
         }
 
         private IUserInteractionService UserInteractionService => ApplicationInitializer.ApplicationLifetimeScope.Resolve<IUserInteractionService>();
 
-        private void AddToDatabaseList(string filepath)
+        private static void CreateDatabaseListFile()
         {
-            if (!DatabaseList.Contains(filepath))
-                DatabaseList.Add(filepath);
-            File.WriteAllText(DbListPath, JsonConvert.SerializeObject(DatabaseList));
+            if (!Directory.Exists(DbListFolderPath)) Directory.CreateDirectory(DbListFolderPath);
+            using var file = File.Create(DbListPath);
         }
 
-        //private void AutoCompleteList_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    var autoCompleteOption = (string)AutoCompleteList.SelectedItem;
+        private void AddToDatabaseList(string filepath)
+        {
+            if (!DatabaseList.List.Contains(filepath))
+                DatabaseList.List.Add(filepath);
 
-        //    if (!File.Exists(autoCompleteOption))
-        //    {
-        //        var confirmation =
-        //            UserInteractionService.Confirm("This DB no longer exists. Do you wish to remove it from this list?");
-        //        if (confirmation)
-        //        {
-        //            DatabaseList.Remove(autoCompleteOption);
-        //            DatabaseList.Remove(autoCompleteOption);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        Filepath = autoCompleteOption;
-        //    }
-        //    AutoCompleteList.IsDropDownOpen = false;
-        //}
+            File.WriteAllText(DbListPath, JsonConvert.SerializeObject(DatabaseList));
+        }
 
         private void BrowseButton_OnClick(object sender, RoutedEventArgs e)
         {
@@ -104,74 +86,50 @@ namespace InterpretBank.Controls
             Filepath = filepath;
         }
 
-        //private void ClearFilepathButton(object sender, RoutedEventArgs e)
-        //{
-        //    FilepathTextBox.Clear();
-        //    Filepath = null;
-        //}
+        private void ChooseFilepathControl_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (!File.Exists(DbListPath)) CreateDatabaseListFile();
 
-        //private void FilepathTextBox_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    OpenMenu();
-        //}
+            var deserializationActionResult = ErrorHandler.WrapTryCatch(DeserializeListFromFile);
 
-        //private void FilepathTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
-        //{
-        //    if (e.Key == Key.Escape)
-        //    {
-        //        e.Handled = true;
+            if (!deserializationActionResult.Success)
+            {
+                //File.Delete(DbListPath);
 
-        //        if (AutoCompleteList.IsDropDownOpen)
-        //            AutoCompleteList.IsDropDownOpen = false;
-        //        else if (!string.IsNullOrWhiteSpace(Filepath))
-        //            FilepathTextBox.Clear();
-        //        else
-        //        {
-        //            e.Handled = false;
-        //        }
-        //    }
+                var dbListDeserializationActionResult = ErrorHandler.WrapTryCatch(() =>
+                    JsonConvert.DeserializeObject<List<string>>(File.ReadAllText(DbListPath)));
 
-        //    if (e.Key == Key.Enter)
-        //    {
-        //        if (AutoCompleteList.IsDropDownOpen)
-        //        {
-        //            Filepath = DatabaseList[AutoCompleteList.SelectedIndex];
-        //            AutoCompleteList.IsDropDownOpen = false;
-        //        }
-        //        else OpenMenu();
+                if (!dbListDeserializationActionResult.Success)
+                {
+                    File.Delete(DbListPath);
+                    CreateDatabaseListFile();
+                }
 
-        //        e.Handled = true;
-        //    }
+                DatabaseList = new DatabaseList
+                {
+                    LastUsed = "",
+                    List = dbListDeserializationActionResult.Result
+                };
 
-        //    if (e.Key == Key.Down)
-        //    {
-        //        AutoCompleteList.IsDropDownOpen = true;
-        //        if (AutoCompleteList.SelectedIndex < AutoCompleteList.Items.Count - 1)
-        //        {
-        //            AutoCompleteList.SelectedIndex++;
-        //            //AutoCompleteList.ScrollIntoView(AutoCompleteList.SelectedItem);
-        //        }
-        //        e.Handled = true;
-        //    }
-        //    else if (e.Key == Key.Up)
-        //    {
-        //        if (AutoCompleteList.SelectedIndex > 0)
-        //        {
-        //            AutoCompleteList.SelectedIndex--;
-        //            //AutoCompleteList.ScrollIntoView(AutoCompleteList.SelectedItem);
-        //        }
-        //        e.Handled = true;
-        //    }
-        //}
+                File.WriteAllText(DbListPath, JsonConvert.SerializeObject(DatabaseList));
+            }
 
-        //private void OpenMenu()
-        //{
-        //    var isDropDownOpen = AutoCompleteList.IsDropDownOpen;
-        //    AutoCompleteList.IsDropDownOpen = !isDropDownOpen;
+            if (!string.IsNullOrWhiteSpace(DatabaseList.LastUsed))
+            {
+                FilepathCombobox.SelectedIndex = DatabaseList.List.IndexOf(DatabaseList.LastUsed);
+            }
+        }
 
-        //    //AutoCompleteList.Visibility = AutoCompleteList.Visibility == Visibility.Visible
-        //    //    ? Visibility.Collapsed
-        //    //    : Visibility.Visible;
-        //}
+        private void DeserializeListFromFile()
+        {
+            DatabaseList = JsonConvert.DeserializeObject<DatabaseList>(File.ReadAllText(DbListPath)) ??
+                new DatabaseList();
+        }
+
+        private void FilepathCombobox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DatabaseList.LastUsed = Filepath;
+            File.WriteAllText(DbListPath, JsonConvert.SerializeObject(DatabaseList));
+        }
     }
 }

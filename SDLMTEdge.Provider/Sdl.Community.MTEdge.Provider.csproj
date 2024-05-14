@@ -4,8 +4,8 @@
 		<SignAssembly>True</SignAssembly>
   	<TargetFramework>net48</TargetFramework>
   	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17</TradosFolder>
-  	<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
+		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
+  	<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
 	  <LangVersion>latest</LangVersion>
 		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
 	  <UseWPF>true</UseWPF>

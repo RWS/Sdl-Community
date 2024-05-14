@@ -1,4 +1,5 @@
 ﻿using InterpretBank.Booth.ViewModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
@@ -14,9 +15,17 @@ namespace InterpretBank.Booth
         {
             DataContext = boothWindowViewModel;
             InitializeComponent();
-
         }
 
+        private GridLength LastColumnWidth { get; set; }
+
+        private void CommandBinding_OnExecuted(object sender, ExecutedRoutedEventArgs e) => Close();
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                DragMove();
+        }
 
         private void SettingsToggleButton_OnClick(object sender, RoutedEventArgs e)
         {
@@ -36,6 +45,9 @@ namespace InterpretBank.Booth
             }
         }
 
-        private GridLength LastColumnWidth { get; set; }
+        private void HelpButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://appstore.rws.com/Plugin/243?tab=documentation");
+        }
     }
 }

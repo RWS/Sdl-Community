@@ -7,24 +7,26 @@ namespace Sdl.Community.IATETerminologyProvider.IATEProviderTellMe
 	{
 		public string Name => "IATE Tell Me provider";
 
-		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
-		{
-			new IATECommunityWikiAction
+		public AbstractTellMeAction[] ProviderActions =>
+		[
+			new IATEDocumentationAction
 			{
-				Keywords = new[] {"iate", "iate community", "iate support", "iate wiki" }
+				Keywords = ["iate", "iate community", "iate support", "iate wiki"]
 			},
 			new IATECommunityForumAction
 			{
-				Keywords = new[] {"iate", "iate community", "iate support", "iate forum" }
-			},
-			new IATEStoreAction
-			{
-				Keywords = new[] {"iate", "iate store", "iate download", "iate appstore" }
+				Keywords = ["iate", "iate community", "iate support", "iate forum"]
 			},
 			new IATEContactAction
 			{
-				Keywords = new[] {"iate", "iate contact", "iate official", "iate website", "iate web search"}
+				Keywords = ["iate", "iate contact", "iate official", "iate website", "iate web search"]
+			},new IATESourceCode
+			{
+				Keywords = ["iate", "source", "code"]
+			}, new IATESettingsAction
+			{
+				Keywords = ["iate", "settings"]
 			}
-		};
+		];
 	}
 }

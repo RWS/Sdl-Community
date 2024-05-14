@@ -1,4 +1,6 @@
 ﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Drawing;
+using InterpretBank.Helpers;
 using InterpretBank.Model;
 using InterpretBank.SettingsService.Model;
 using InterpretBank.TerminologyService.Interface;
@@ -6,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace InterpretBank.Booth.ViewModel
@@ -13,13 +16,13 @@ namespace InterpretBank.Booth.ViewModel
     public class BoothWindowViewModel : Model.NotifyChangeModel
     {
         private readonly ITerminologyService _terminologyService;
-        private ObservableCollection<EntryModel> _entries;
+        private NotifyTaskCompletion<ObservableCollection<EntryModel>> _entries;
         private string _filepath;
         private List<GlossaryModel> _glossaries = new();
         private List<LanguageModel> _languages;
         private string _searchText;
-        private ObservableCollection<GlossaryModel> _selectedGlossaries = new();
-        private ObservableCollection<TagModel> _selectedTags = new();
+        private ObservableCollection<object> _selectedGlossaries = new();
+        private ObservableCollection<object> _selectedTags = new();
         private string _sourceLanguage;
         private List<TagModel> _tags = new();
         private string _targetLanguage;
@@ -33,7 +36,7 @@ namespace InterpretBank.Booth.ViewModel
             AttachSelectedTagsChangedEventHandler();
         }
 
-        public ObservableCollection<EntryModel> Entries
+        public NotifyTaskCompletion<ObservableCollection<EntryModel>> Entries
         {
             get => _entries;
             set
@@ -93,7 +96,7 @@ namespace InterpretBank.Booth.ViewModel
             }
         }
 
-        public ObservableCollection<GlossaryModel> SelectedGlossaries
+        public ObservableCollection<object> SelectedGlossaries
         {
             get => _selectedGlossaries;
             set
@@ -107,7 +110,7 @@ namespace InterpretBank.Booth.ViewModel
             }
         }
 
-        public ObservableCollection<TagModel> SelectedTags
+        public ObservableCollection<object> SelectedTags
         {
             get => _selectedTags;
             set
@@ -171,6 +174,8 @@ namespace InterpretBank.Booth.ViewModel
             }
         }
 
+        private static bool IsSet(string @string) => !string.IsNullOrWhiteSpace(@string);
+
         private void AttachSelectedTagsChangedEventHandler()
         {
             SelectedGlossaries.CollectionChanged -= OnSelectionChanged();
@@ -178,12 +183,11 @@ namespace InterpretBank.Booth.ViewModel
             SelectedTags.CollectionChanged += OnSelectionChanged();
         }
 
-        private static bool IsSet(string @string) => !string.IsNullOrWhiteSpace(@string);
-
         private void Filter()
         {
             if (Entries == null) return;
-            var collectionView = CollectionViewSource.GetDefaultView(Entries);
+            var collectionView = CollectionViewSource.GetDefaultView(Entries.Result);
+            if (collectionView == null) return;
 
             collectionView.Filter = null;
             collectionView.Filter = entry =>
@@ -241,15 +245,22 @@ namespace InterpretBank.Booth.ViewModel
 
         private void SetupEntries()
         {
-            if (!SelectedGlossaries.Any() && !SelectedTags.Any())
-                Entries = _terminologyService.GetEntriesFromDb(null);
+            Task.Run(() =>
+            {
+                var loadEntriesFromDb = new Task<ObservableCollection<EntryModel>>
+                (() =>
+                    (!SelectedGlossaries.Any() && !SelectedTags.Any()) ? _terminologyService.GetEntriesFromDb(null) :
+                    UseTags ? _terminologyService.GetEntriesFromDb(_terminologyService.GetTaggedGlossaries(
+                        SelectedTags.Cast<TagModel>().Select(t => t.TagName).ToList())) :
+                    _terminologyService.GetEntriesFromDb(SelectedGlossaries.Cast<GlossaryModel>().Select(g => g.GlossaryName).ToList())
+                );
+                Entries = new NotifyTaskCompletion<ObservableCollection<EntryModel>>
+                (
+                    loadEntriesFromDb
+                );
 
-            Entries =
-                UseTags
-                    ? _terminologyService.GetEntriesFromDb(_terminologyService.GetTaggedGlossaries(
-                        SelectedTags.Select(t => t.TagName).ToList()))
-                    : _terminologyService.GetEntriesFromDb(SelectedGlossaries.Select(g => g.GlossaryName)
-                        .ToList());
+                loadEntriesFromDb.RunSynchronously();
+            });
         }
     }
 }

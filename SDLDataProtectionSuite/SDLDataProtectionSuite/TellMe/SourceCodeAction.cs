@@ -1,9 +1,23 @@
-﻿namespace Sdl.Community.SdlDataProtectionSuite.TellMe
+using System.Diagnostics;
+using System.Drawing;
+using Sdl.TellMe.ProviderApi;
+
+namespace Sdl.Community.SdlDataProtectionSuite.TellMe
 {
-	class SourceCodeAction : TellMeAction
+	internal class SourceCodeAction : AbstractTellMeAction
 	{
-		private static readonly string[] _helpKeywords = { "source code", "github" };
-		private static readonly bool _isAvailable = true;
-		public SourceCodeAction() : base($"{PluginResources.Plugin_Name} Source Code", PluginResources.TellMeSourceCode, _helpKeywords, _isAvailable, url: "https://github.com/RWS/Sdl-Community/tree/master/SDLDataProtectionSuite") { }
+		public SourceCodeAction()
+		{
+			Name = string.Format("{0} Source Code", PluginResources.Plugin_Name);
+		}
+
+		public override string Category => string.Format(PluginResources.TellMe_Provider_Results, PluginResources.Plugin_Name);
+		public override Icon Icon => PluginResources.SourceCode;
+		public override bool IsAvailable => true;
+
+		public override void Execute()
+		{
+			Process.Start("https://github.com/RWS/Sdl-Community/tree/master/SDLDataProtectionSuite");
+		}
 	}
 }

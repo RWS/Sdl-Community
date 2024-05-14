@@ -32,9 +32,11 @@ namespace Sdl.Community.NumberVerifier
         {
             _ControlSettings = ((ISettingsBundle)DataSource).GetSettingsGroup<NumberVerifierSettings>();
             _ControlSettings.BeginEdit();
+
             if (_Control == null)
             {
                 _Control = new NumberVerifierUI();
+                //ApplicationInitializer.Control = _Control;
             }
 
             return _Control;

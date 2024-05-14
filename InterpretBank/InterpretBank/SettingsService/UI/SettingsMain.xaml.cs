@@ -1,4 +1,4 @@
-﻿using InterpretBank.GlossaryService.Interface;
+﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 
@@ -15,9 +15,13 @@ namespace InterpretBank.SettingsService.UI
             InitializeComponent();
         }
 
+        public Settings Settings => SettingsService.Settings;
         private ViewModel.SettingsService SettingsService => (ViewModel.SettingsService)DataContext;
 
-        public SettingsService.Settings Settings => SettingsService.Settings;
+        public void Setup(Settings settings)
+        {
+            SettingsService.Settings = settings;
+        }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
@@ -30,9 +34,9 @@ namespace InterpretBank.SettingsService.UI
                 DragMove();
         }
 
-        public void Setup(SettingsService.Settings settings)
+        private void HelpButton_OnClick(object sender, RoutedEventArgs e)
         {
-            SettingsService.Settings = settings;
+            Process.Start("https://appstore.rws.com/Plugin/243?tab=documentation");
         }
     }
 }

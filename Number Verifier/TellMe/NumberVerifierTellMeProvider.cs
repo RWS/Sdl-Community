@@ -7,20 +7,25 @@ namespace Sdl.Community.NumberVerifier.TellMe
 	{
 		public string Name => "Number Verifier Tell Me provider";
 
-		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
-		{
-			new NumVerifierCommunityWikiAction
+		public AbstractTellMeAction[] ProviderActions =>
+		[
+			new NumVerifierCommunityDocumentation
 			{
-				Keywords = new[] {"number verifier", "number verifier community", "number verifier support", "number verifier wiki" }
+				Keywords = ["number verifier", "number verifier community", "number verifier documentation"]
 			},
 			new NumVerifierCommunityForumAction
 			{
-				Keywords = new[] { "number verifier", "number verifier community", "number verifier support", "number verifier forum" }
+				Keywords = ["number verifier", "number verifier community", "number verifier support", "number verifier forum"
+				]
 			},
-			new NumVerifierStoreAction
+			new NumVerifierSourceCodeAction
 			{
-				Keywords = new[] { "number verifier", "number verifier store", "number verifier download", "number verifier appstore" }
+				Keywords = ["number verifier","number verifier source", "number verifier source code"]
+			},
+			new SettingsAction
+			{
+				Keywords = ["number verifier settings"]
 			}
-		};
+		];
 	}
 }

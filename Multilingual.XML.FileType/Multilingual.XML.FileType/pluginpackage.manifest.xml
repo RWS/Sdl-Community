@@ -1,10 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Multilingual XML FileType</PlugInName>
-	<Version>2.1.1.0</Version>
+	<Version>3.0.0.1</Version>
 	<Description>Multilingual XML File Type</Description>
 	<Author>Trados AppStore Team</Author>
-	<RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9"/>
+	<RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9"/>
   <Include>
 	  <File>Rws.MultiSelectComboBox.dll</File>
   </Include>

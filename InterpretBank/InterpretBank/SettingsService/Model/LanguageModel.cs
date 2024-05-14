@@ -1,11 +1,13 @@
-﻿using InterpretBank.Studio;
+﻿using InterpretBank.Model;
+using InterpretBank.Studio;
 using Sdl.MultiSelectComboBox.API;
+using System.ComponentModel;
 using System.Drawing;
 
 namespace InterpretBank.SettingsService.Model
 {
 	public class LanguageModel : IItemGroupAware
-	{
+    {
 		public IItemGroup Group { get; set; }
 		public int Index { get; set; }
 		public string Name { get; set; }
@@ -15,6 +17,8 @@ namespace InterpretBank.SettingsService.Model
             if (obj is not LanguageModel model) return false;
 			return model.Name == Name;
 		}
+
+
 
         public Image Flag => StudioContext.GetLanguageFlag(Name);
 
