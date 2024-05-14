@@ -9,17 +9,21 @@ namespace Sdl.Community.TuToTm.TellMe
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new CommunityWikiAction
+			new DocumentationAction
 			{
-				Keywords = new[] { "tutotm", "community", "support", "wiki" }
+				Keywords = new[] { "tutotm", "documentation" }
 			},
 			new AppStoreForumAction
 			{
 				Keywords = new[] { "tutotm", "support", "forum" }
 			},
-			new AppStoreDownloadAction
+			new SourceCodeAction
 			{
-				Keywords = new[] { "tutotm", "store", "download", "appstore" }
+				Keywords = new[] { "tutotm", "source", "code" }
+			},
+			new SettingsAction
+			{
+				Keywords = new[] { "tutotm", "settings" }
 			}
 		};
 	}
