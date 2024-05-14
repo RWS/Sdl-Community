@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 	<PropertyGroup>
 		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
@@ -41,6 +43,9 @@
     </Reference>
     <Reference Include="Sdl.Core.Globalization.Async">
       <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.Platform.Styles">
+      <HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Styles.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
       <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
@@ -313,10 +318,18 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StringResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="TellMe\CommunityAppStoreAction.cs" />
-    <Compile Include="TellMe\CommunityAppStoreForumAction.cs" />
-    <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\Actions\CommunityAppStoreForumAction.cs" />
+    <Compile Include="TellMe\Actions\ConvertToTranscreateProjectAction.cs" />
+    <Compile Include="TellMe\Actions\CreateBackTranslationAction.cs" />
+    <Compile Include="TellMe\Actions\DocumentationAction.cs" />
+    <Compile Include="TellMe\Actions\ExportAction.cs" />
+    <Compile Include="TellMe\Actions\ImportAction.cs" />
+    <Compile Include="TellMe\Actions\SettingsAction.cs" />
+    <Compile Include="TellMe\Actions\ShowTranscreateViewAction.cs" />
     <Compile Include="TellMe\TellMeProvider.cs" />
+    <Compile Include="TellMe\WarningWindow\SettingsActionWarning.xaml.cs">
+      <DependentUpon>SettingsActionWarning.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TestData\TestDataUtil.cs" />
     <Compile Include="TranscreateViewController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -461,7 +474,6 @@
     <Resource Include="Resources\File.png" />
     <Resource Include="Resources\Folder.png" />
     <Resource Include="Resources\folder_add.png" />
-    <Resource Include="Resources\ForumIcon.ico" />
     <Resource Include="Resources\Import.ico" />
     <Resource Include="Resources\Imported.png" />
     <Resource Include="Resources\ImportFrom.ico" />
@@ -487,6 +499,7 @@
     <Resource Include="Resources\information.png" />
     <Resource Include="Resources\check.ico" />
     <Content Include="Resources\Download.ico" />
+    <Content Include="Resources\Forum.ico" />
     <Content Include="Resources\Refresh.ico" />
     <Resource Include="Resources\Search.png" />
     <Resource Include="Resources\Settings.ico" />
