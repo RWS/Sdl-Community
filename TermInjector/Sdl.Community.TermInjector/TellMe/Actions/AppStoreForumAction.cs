@@ -2,20 +2,18 @@
 using System.Drawing;
 using Sdl.TellMe.ProviderApi;
 
-namespace Sdl.Community.TermInjector.TellMe
+namespace Sdl.Community.TermInjector.TellMe.Actions
 {
 	public class AppStoreForumAction : AbstractTellMeAction
 	{
-		public override bool IsAvailable => true;
-
-		public override string Category => string.Format(PluginResources.TellMe_Provider_Results, PluginResources.Plugin_Name);
-
-		public override Icon Icon => PluginResources.ForumIcon;
-
 		public AppStoreForumAction()
 		{
 			Name = "RWS Community AppStore Forum";
 		}
+
+		public override string Category => string.Format(PluginResources.TellMe_Provider_Results, PluginResources.Plugin_Name);
+		public override Icon Icon => PluginResources.Forum;
+		public override bool IsAvailable => true;
 
 		public override void Execute()
 		{
