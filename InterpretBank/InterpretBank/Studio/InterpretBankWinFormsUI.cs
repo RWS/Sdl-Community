@@ -21,8 +21,7 @@ namespace InterpretBank.Studio
         {
             var settingsUi = InterpretBankSettingsScope.Resolve<SettingsMain>();
 
-            if (!(settingsUi.ShowDialog() ?? false))
-                return null;
+            if (!(settingsUi.ShowDialog() ?? false)) return null;
 
             var settings = settingsUi.Settings;
 

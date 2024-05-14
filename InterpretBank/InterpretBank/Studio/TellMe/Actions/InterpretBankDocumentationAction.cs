@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Drawing;
 
-namespace InterpretBank.Studio.TellMe
+namespace InterpretBank.Studio.TellMe.Actions
 {
     public class InterpretBankDocumentationAction : InterpretBankTellMeAction
     {

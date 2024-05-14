@@ -1,13 +1,14 @@
 ﻿using Autofac;
 using InterpretBank.Model;
 using InterpretBank.SettingsService.UI;
+using InterpretBank.Studio.TellMe.WarningWindow;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
-namespace InterpretBank.Studio.TellMe
+namespace InterpretBank.Studio.TellMe.Actions
 {
     public class SettingsAction : InterpretBankTellMeAction
     {
@@ -24,14 +25,23 @@ namespace InterpretBank.Studio.TellMe
         public override void Execute()
         {
             var persistenceService = SettingsActionLifetimeScope.Resolve<PersistenceService.PersistenceService>();
-
-            var settings = persistenceService.GetSettingsForCurrentProject();
-
+            var settings = persistenceService.GetSettingsForSelectedProject();
             var settingsUi = SettingsActionLifetimeScope.Resolve<SettingsMain>();
+
+            if (settings == null)
+            {
+                ShowWarningWindow(); 
+                return;
+            }
+
             settingsUi.Setup(settings);
-            settingsUi.ShowDialog();
+            if (!(settingsUi.ShowDialog() ?? false)) return;
+            settings = settingsUi.Settings;
+            settings.SettingsId = persistenceService.GetSettingsId();
 
             persistenceService.SaveSettings(settingsUi.Settings, settings.SettingsId);
         }
+
+        private void ShowWarningWindow() => new SettingsActionWarning("https://appstore.rws.com/Plugin/243?tab=documentation").ShowDialog();
     }
 }

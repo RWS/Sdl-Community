@@ -101,8 +101,16 @@ namespace InterpretBank.TermbaseViewer.ViewModel
         {
             Entries = null;
 
-            var loadEntriesFromDb = new Task<ObservableCollection<EntryModel>>(() =>
-                TerminologyService.GetEntriesFromDb(Glossaries));
+            //var loadEntriesFromDb = new Task<ObservableCollection<EntryModel>>(() =>
+            //    TerminologyService.GetEntriesFromDb(Glossaries.Any() ? Glossaries : null));
+
+            var loadEntriesFromDb = new Task<ObservableCollection<EntryModel>>
+            (() =>
+                (!Glossaries.Any() && !Tags.Any()) ? TerminologyService.GetEntriesFromDb(null) :
+                UseTags ? TerminologyService.GetEntriesFromDb(TerminologyService.GetTaggedGlossaries(
+                    Tags)) :
+                TerminologyService.GetEntriesFromDb(Glossaries)
+            );
 
             Entries = new NotifyTaskCompletion<ObservableCollection<EntryModel>>(loadEntriesFromDb);
 
@@ -130,15 +138,22 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             LoadTerms();
         }
 
-        public void Setup(Language sourceLanguage, Language targetLanguage, List<string> glossaries, string databaseFilePath)
+        public void Setup(Language sourceLanguage, Language targetLanguage, List<string> glossaries, List<string> tags, bool useTags, string databaseFilePath)
         {
             Glossaries = glossaries;
+            Tags = tags;
+            UseTags = useTags;
+
             SetLanguagePair(sourceLanguage, targetLanguage);
 
             TerminologyService.Setup(databaseFilePath);
 
             LoadTerms();
         }
+
+        public bool UseTags { get; set; }
+
+        public List<string> Tags { get; set; }
 
         private void AddTerm(string source, string target, string glossaryName)
         {
@@ -178,6 +193,9 @@ namespace InterpretBank.TermbaseViewer.ViewModel
         {
             foreach (var entry in entries)
                 InitializeEntry(entry);
+
+            Entries = new NotifyTaskCompletion<ObservableCollection<EntryModel>>(
+                Task.FromResult(new ObservableCollection<EntryModel>(Entries.Result.OrderBy(entry => entry.Name))));
         }
 
         private bool IsActionSuccessful<T>(ActionResult<T> actionResult)
@@ -205,12 +223,13 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
         private void RemoveSelectedEntry(object obj)
         {
-            var confirmation = UserInteractionService.Confirm("Are you sure you want to delete this entry?");
+            if (obj is not EntryModel entry) return;
+            var confirmation = UserInteractionService.Confirm($"Are you sure you want to delete entry {entry.Name}(and all of its terms in all of the languages)?");
 
             if (!confirmation) return;
 
-            TerminologyService.RemoveTerm(SelectedEntry);
-            Entries.Result.Remove(SelectedEntry);
+            TerminologyService.RemoveTerm(entry);
+            Entries.Result.Remove(entry);
         }
 
         private void SetLanguagePair(Language sourceLanguage, Language targetLanguage)

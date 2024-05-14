@@ -105,6 +105,8 @@ namespace InterpretBank.Studio
                     SourceLanguage,
                     TargetLanguage,
                     InterpretBankProvider.Settings.Glossaries,
+                    InterpretBankProvider.Settings.Tags,
+                    InterpretBankProvider.Settings.UseTags,
                     InterpretBankProvider.Settings.DatabaseFilepath);
 
         private void OnDbChanged(DbChangedEvent dbChangedEvent)

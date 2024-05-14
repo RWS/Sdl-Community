@@ -124,7 +124,7 @@ public class InterpretBankDataContext : IInterpretBankDataContext
             {
                 GlossaryName = dbGlossary.Tag1,
                 SubGlossaryName = dbGlossary.Tag2,
-                Languages = new ObservableCollection<LanguageModel>(languages),
+                Languages = new ObservableCollection<object>(languages),
                 //Tags = new ObservableCollection<TagModel>(currentGlossaryLinks),
                 Id = dbGlossary.Id
             });

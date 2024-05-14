@@ -149,6 +149,16 @@ namespace InterpretBank {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Information {
+            get {
+                object obj = ResourceManager.GetObject("Information", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This glossary already exists.
         /// </summary>
         public static string Message_GlossaryAlreadyExists {
@@ -258,6 +268,56 @@ namespace InterpretBank {
             get {
                 object obj = ResourceManager.GetObject("Settings", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For more information,.
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_1 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to click here.
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_2 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to for documentation..
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_3 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We couldn&apos;t find an instance of InterpretBank Terminology Provider for the current project selected. To add it to your project, follow these steps:
+        ///
+        ///1. Open Project Settings
+        ///2. Go to Termbases
+        ///3. Select Use
+        ///4. Via the dropdown menu locate InterpretBank.
+        /// </summary>
+        public static string SettingsAction_OpenOptionsText {
+            get {
+                return ResourceManager.GetString("SettingsAction_OpenOptionsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configuring Terminology Provider in Project Settings.
+        /// </summary>
+        public static string SettingsAction_Title {
+            get {
+                return ResourceManager.GetString("SettingsAction_Title", resourceCulture);
             }
         }
         
