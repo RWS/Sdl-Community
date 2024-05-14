@@ -243,6 +243,7 @@
     <AdditionalFiles Include="Thirdparty\Trados.Interop.SettingsManager.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AdditionalFiles>
+    <None Include="Resources\QuestionForum.ico" />
     <None Include="Resources\TellmeDocumentation.ico" />
     <None Include="Resources\SourceCode.ico" />
     <None Include="Resources\Settings.ico" />
