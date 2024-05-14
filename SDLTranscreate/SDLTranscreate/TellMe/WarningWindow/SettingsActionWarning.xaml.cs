@@ -14,12 +14,11 @@ public partial class SettingsActionWarning : Window
 
     public SettingsActionWarning(string text, int size)
     {
-        Width = Size == 0 ? 400 : 550;
+        Width = size == 0 ? 400 : 550;
         InitializeComponent();
         Text = text;
     }
 
-    public int Size { get; }
 
     public string Text
     {

@@ -12,7 +12,7 @@ namespace Trados.Transcreate.TellMe.Actions
 		}
 
 		public override string Category => $"{PluginResources.Plugin_Name} results";
-		public override Icon Icon => PluginResources.ForumIcon;
+		public override Icon Icon => PluginResources.Forum;
 		public override bool IsAvailable => true;
 
 		public override void Execute()
