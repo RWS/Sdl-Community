@@ -12,13 +12,11 @@ public partial class SettingsActionWarning : Window
     public static readonly DependencyProperty TextProperty = DependencyProperty.Register(nameof(Text), typeof(string), typeof(SettingsActionWarning), new PropertyMetadata(default(string)));
     private readonly string _url = "https://appstore.rws.com/Plugin/42?tab=documentation";
 
-    public SettingsActionWarning(string text, int size)
+    public SettingsActionWarning(string text)
     {
-        Width = size == 0 ? 400 : 550;
         InitializeComponent();
         Text = text;
     }
-
 
     public string Text
     {
@@ -45,6 +43,12 @@ public partial class SettingsActionWarning : Window
         }
     }
 
+    private void SettingsActionWarning_OnLoaded(object sender, RoutedEventArgs e)
+    {
+        Top = (SystemParameters.PrimaryScreenHeight - ActualHeight) / 2;
+        Left = (SystemParameters.PrimaryScreenWidth - ActualWidth) / 2;
+    }
+
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Escape)
@@ -55,9 +59,13 @@ public partial class SettingsActionWarning : Window
 
     private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        if (IsFocused && GetWindow(this) is Window window)
+        try
         {
-            window.DragMove();
+            if (GetWindow(this) is Window window)
+            {
+                window.DragMove();
+            }
         }
+        catch { }
     }
 }
