@@ -144,13 +144,6 @@
   <data name="Description" xml:space="preserve">
     <value>The default settings will anonymize the project across all language pairs. If you wish to use different values for each language pair uncheck "Use settings from All Language Pairs" and enter the values under each specific language pair in the project.</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Download.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\ForumIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="GeneralTooltip" xml:space="preserve">
     <value>If this box is checked, the values for anonymization will be taken from the settings under All Language Pairs</value>
   </data>
@@ -171,9 +164,6 @@
   </data>
   <data name="ProviderNameToolTip" xml:space="preserve">
     <value>This allows you to specify the name of the Translation Memory used. It will be applied to Machine Translation or Translation Memory results depending on the options selected in the Anonymizer settings</value>
-  </data>
-  <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="RemoveMT" xml:space="preserve">
     <value>Remove/change MT Provider</value>
@@ -227,9 +217,29 @@
     <value>RWS AppStore</value>
   </data>
   <data name="LogMessage_BatchTaskStarted" xml:space="preserve">
-	  <value>Batch task started...</value>
+    <value>Batch task started...</value>
   </data>
   <data name="LogMessage_BackingUpProject" xml:space="preserve">
-	  <value>Backing up project...</value>
+    <value>Backing up project...</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="TellMe_Documentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_Documentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe_Forum" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_Forum.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe_Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_Settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe_SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe_ActionWarning" xml:space="preserve">
+    <value>To engage with Trados Studio Target Renamer, follow these steps
+ 
+1. In the Files View, select your files
+2. Under Home Tab find File Actions Group
+3. Use the Batch Tasks dropdown menu</value>
   </data>
 </root>
