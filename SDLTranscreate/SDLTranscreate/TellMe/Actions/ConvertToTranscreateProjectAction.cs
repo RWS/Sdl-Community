@@ -1,5 +1,4 @@
 ﻿using Sdl.ProjectAutomation.Core;
-using Sdl.ProjectAutomation.FileBased;
 using Sdl.TellMe.ProviderApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System.Drawing;
@@ -22,47 +21,57 @@ namespace Trados.Transcreate.TellMe.Actions
         public override string Category => $"{PluginResources.Plugin_Name} results";
         public override Icon Icon => PluginResources.Icon;
 
-        public override bool IsAvailable
-        {
-            get
-            {
-                var selectedProject = GetSelectedProject(out _);
-                return selectedProject.GetProjectInfo().ProjectType != ProjectType.InLanguageCloud &&
-                       (selectedProject == null || selectedProject.GetProjectInfo().ProjectOrigin !=
-                           Constants.ProjectOrigin_TranscreateProject);
-            }
-        }
+        public override bool IsAvailable => true;
 
         private ProjectsController ProjectsController =>
             _projectsController ??= SdlTradosStudio.Application.GetController<ProjectsController>();
 
         public override void Execute()
         {
-            GetSelectedProject(out var projectsTotal);
+            var projectsTotal = GetSelectedProjectsTotal();
 
-            switch (projectsTotal)
+            if (projectsTotal > 1)
             {
-                case > 1:
-                    new SettingsActionWarning(PluginResources.SettingsAction_ConvertToTranscreate_MoreThanOneFileSelected,
-                        1).ShowDialog();
-                    return;
+                new SettingsActionWarning(PluginResources.SettingsAction_ConvertToTranscreate_MoreThanOneFileSelected)
+                    .ShowDialog();
+                return;
+            }
 
-                case 0:
-                    new SettingsActionWarning(PluginResources.SettingsAction_ConvertToTranscreate_NoFileSelected, 0).ShowDialog();
-                    return;
+            if (projectsTotal == 0)
+            {
+                new SettingsActionWarning(PluginResources.SettingsAction_ConvertToTranscreate_NoFileSelected)
+                    .ShowDialog();
+                return;
+            }
+
+            var selectedProject = ApplicationInstance.GetSelectedProject();
+            var selectedProjectInfo = selectedProject.GetProjectInfo();
+
+            if (selectedProjectInfo.ProjectOrigin == Constants.ProjectOrigin_TranscreateProject)
+            {
+                new SettingsActionWarning(PluginResources.SettingsAction_ProjectAlreadyTranscreate)
+                    .ShowDialog();
+                return;
+            }
+
+            if (selectedProjectInfo.ProjectType == ProjectType.InLanguageCloud)
+            {
+                new SettingsActionWarning(PluginResources.SettingsAction_ProjectIsInLC)
+                    .ShowDialog();
+                return;
             }
 
             SdlTradosStudio.Application.ExecuteAction<ConvertProjectAction>();
         }
 
-        public FileBasedProject GetSelectedProject(out int projectsTotal)
+        public int GetSelectedProjectsTotal()
         {
             var currentProject = ProjectsController.CurrentProject;
 
-            projectsTotal = ProjectsController.SelectedProjects.Count();
+            var projectsTotal = ProjectsController.SelectedProjects.Count();
             if (projectsTotal == 0 && currentProject != null) projectsTotal = 1;
 
-            return projectsTotal is > 1 or 0 ? null : ProjectsController.SelectedProjects.FirstOrDefault() ?? currentProject;
+            return projectsTotal;
         }
     }
 }

@@ -75,7 +75,7 @@ namespace Trados.Transcreate.Actions
             if (documents != null && documents.Count > 0)
             {
                 var documentProjectIds = documents.Select(a => a.Project.GetProjectInfo().Id.ToString()).Distinct();
-				if (documentProjectIds.Any(a => a == selectedProject.GetProjectInfo().Id.ToString()))
+                if (documentProjectIds.Any(a => a == selectedProject.GetProjectInfo().Id.ToString()))
                 {
                     MessageBox.Show(PluginResources.Wanring_Message_CloseAllProjectDocumentBeforeProceeding, PluginResources.TranscreateManager_Name, MessageBoxButton.OK, MessageBoxImage.Information);
                     return;
@@ -130,7 +130,7 @@ namespace Trados.Transcreate.Actions
 
         public override void Initialize()
         {
-            Controllers.TranscreateController.Initialize();
+            ApplicationInstance.InitializeTranscreateViewController();
 
             Enabled = false;
 
@@ -179,11 +179,12 @@ namespace Trados.Transcreate.Actions
                 return;
             }
 
-            var selectedProject = Controllers.ProjectsController.SelectedProjects.FirstOrDefault();
+            var selectedProject = ApplicationInstance.GetSelectedProject();
+            var selectedProjectInfo = selectedProject?.GetProjectInfo();
 
-            var projectType = selectedProject?.GetProjectInfo().ProjectType;
-            Enabled = selectedProject?.GetProjectInfo().ProjectOrigin != Constants.ProjectOrigin_TranscreateProject &&
-                      projectType != ProjectType.InLanguageCloud;
+            Enabled = selectedProjectInfo != null &&
+                      selectedProjectInfo.ProjectOrigin != Constants.ProjectOrigin_TranscreateProject &&
+                      selectedProjectInfo.ProjectType != ProjectType.InLanguageCloud;
         }
     }
 }

@@ -823,4 +823,24 @@ Via the Projects view:
   <data name="Forum" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Forum.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="SettingsAction_ProjectIsInLC" xml:space="preserve">
+    <value>Only Language Cloud Projects that have a status of “In Progress” is supported.
+To Download Cloud Projects, follow these steps:
+ 
+1. Via the Project view
+2. Select the Cloud Project
+3. Either use the Home Tab, locate the Cloud Projects group or right click on the project
+to access the dropdown context menu
+ 
+Note: Access to Language Cloud Project file(s) is dependent on roles &amp; permissions</value>
+  </data>
+  <data name="SettingsAction_ProjectAlreadyTranscreate" xml:space="preserve">
+    <value>The project you have selected has already been converted into a Transcreation Project.
+Either select a different project to convert or to continue further either:
+ 
+1. Open the Transcreated Project's file(s) in the Editor View.
+2. Or, in the Transcreate View, select the Project's file(s) and export them into an MS Word document
+
+Tip: You can filter across all projects based on Type, in the Projects View</value>
+  </data>
 </root>

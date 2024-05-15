@@ -22,7 +22,7 @@ namespace Sdl.Community.Qualitivity {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class PluginResources {
+    public class PluginResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Sdl.Community.Qualitivity {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.Qualitivity.PluginResources", typeof(PluginResources).Assembly);
@@ -51,7 +51,7 @@ namespace Sdl.Community.Qualitivity {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to , Author: .
         /// </summary>
-        internal static string ___Author__ {
+        public static string ___Author__ {
             get {
                 return ResourceManager.GetString("___Author__", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to , Comment: .
         /// </summary>
-        internal static string ___Comment__ {
+        public static string ___Comment__ {
             get {
                 return ResourceManager.GetString("___Comment__", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to  (default percentages).
         /// </summary>
-        internal static string ___default_percentages_ {
+        public static string ___default_percentages_ {
             get {
                 return ResourceManager.GetString("___default_percentages_", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to  (Edit).
         /// </summary>
-        internal static string ___Edit_ {
+        public static string ___Edit_ {
             get {
                 return ResourceManager.GetString("___Edit_", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to  (Merge).
         /// </summary>
-        internal static string ___Merge_ {
+        public static string ___Merge_ {
             get {
                 return ResourceManager.GetString("___Merge_", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to  (New).
         /// </summary>
-        internal static string ___New_ {
+        public static string ___New_ {
             get {
                 return ResourceManager.GetString("___New_", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to , Severity: .
         /// </summary>
-        internal static string ___Severity__ {
+        public static string ___Severity__ {
             get {
                 return ResourceManager.GetString("___Severity__", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to {0} entries processed.
         /// </summary>
-        internal static string @__0__entries_processed {
+        public static string @__0__entries_processed {
             get {
                 return ResourceManager.GetString("__0__entries_processed", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to {0} entries processed.
         /// </summary>
-        internal static string _0_entries_processed {
+        public static string _0_entries_processed {
             get {
                 return ResourceManager.GetString("_0_entries_processed", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to , Author: .
         /// </summary>
-        internal static string _Author_ {
+        public static string _Author_ {
             get {
                 return ResourceManager.GetString("_Author_", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to , Comment: .
         /// </summary>
-        internal static string _Comment_ {
+        public static string _Comment_ {
             get {
                 return ResourceManager.GetString("_Comment_", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to , Severity: .
         /// </summary>
-        internal static string _Severity_ {
+        public static string _Severity_ {
             get {
                 return ResourceManager.GetString("_Severity_", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to About Qualitivity for Trados Studio 2021.
         /// </summary>
-        internal static string About_Qualitivity_for_SDL_Trados_Studio_2019 {
+        public static string About_Qualitivity_for_SDL_Trados_Studio_2019 {
             get {
                 return ResourceManager.GetString("About_Qualitivity_for_SDL_Trados_Studio_2019", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure that you want to continue merging these records?.
         /// </summary>
-        internal static string Are_you_sure_that_you_want_to_continue_merging_these_records {
+        public static string Are_you_sure_that_you_want_to_continue_merging_these_records {
             get {
                 return ResourceManager.GetString("Are_you_sure_that_you_want_to_continue_merging_these_records", resourceCulture);
             }
@@ -189,7 +189,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure that you want to remove the selected client profile?.
         /// </summary>
-        internal static string Are_you_sure_that_you_want_to_remove_the_selected_client_profile_ {
+        public static string Are_you_sure_that_you_want_to_remove_the_selected_client_profile_ {
             get {
                 return ResourceManager.GetString("Are_you_sure_that_you_want_to_remove_the_selected_client_profile_", resourceCulture);
             }
@@ -198,7 +198,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure that you want to remove the selected project activities?.
         /// </summary>
-        internal static string Are_you_sure_that_you_want_to_remove_the_selected_project_activities {
+        public static string Are_you_sure_that_you_want_to_remove_the_selected_project_activities {
             get {
                 return ResourceManager.GetString("Are_you_sure_that_you_want_to_remove_the_selected_project_activities", resourceCulture);
             }
@@ -207,7 +207,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure that you want to remove this project and all its data?.
         /// </summary>
-        internal static string Are_you_sure_that_you_want_to_remove_this_project_and_all_its_data {
+        public static string Are_you_sure_that_you_want_to_remove_this_project_and_all_its_data {
             get {
                 return ResourceManager.GetString("Are_you_sure_that_you_want_to_remove_this_project_and_all_its_data", resourceCulture);
             }
@@ -216,7 +216,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Backup was successful!.
         /// </summary>
-        internal static string Backup_was_successful_ {
+        public static string Backup_was_successful_ {
             get {
                 return ResourceManager.GetString("Backup_was_successful_", resourceCulture);
             }
@@ -225,7 +225,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to By: .
         /// </summary>
-        internal static string By_ {
+        public static string By_ {
             get {
                 return ResourceManager.GetString("By_", resourceCulture);
             }
@@ -234,7 +234,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to CAT Tool:	.
         /// </summary>
-        internal static string CAT_Tool_ {
+        public static string CAT_Tool_ {
             get {
                 return ResourceManager.GetString("CAT_Tool_", resourceCulture);
             }
@@ -243,7 +243,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Click &apos;No&apos; to cancel.
         /// </summary>
-        internal static string Click__No__to_cancel {
+        public static string Click__No__to_cancel {
             get {
                 return ResourceManager.GetString("Click__No__to_cancel", resourceCulture);
             }
@@ -252,7 +252,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Click &apos;Yes&apos; to continue and remove the client profile.
         /// </summary>
-        internal static string Click__Yes__to_continue_and_remove_the_client_profile {
+        public static string Click__Yes__to_continue_and_remove_the_client_profile {
             get {
                 return ResourceManager.GetString("Click__Yes__to_continue_and_remove_the_client_profile", resourceCulture);
             }
@@ -261,7 +261,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Click &apos;Yes&apos; to delete the selected item.
         /// </summary>
-        internal static string Click__Yes__to_delete_the_selected_item {
+        public static string Click__Yes__to_delete_the_selected_item {
             get {
                 return ResourceManager.GetString("Click__Yes__to_delete_the_selected_item", resourceCulture);
             }
@@ -270,7 +270,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Click &apos;No&apos; to cancel.
         /// </summary>
-        internal static string Click_Click_No_to_cancel {
+        public static string Click_Click_No_to_cancel {
             get {
                 return ResourceManager.GetString("Click_Click_No_to_cancel", resourceCulture);
             }
@@ -279,7 +279,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Click &apos;Yes&apos; to continue.
         /// </summary>
-        internal static string Click_Click_Yes_to_continue {
+        public static string Click_Click_Yes_to_continue {
             get {
                 return ResourceManager.GetString("Click_Click_Yes_to_continue", resourceCulture);
             }
@@ -288,7 +288,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Click &apos;No&apos; to cancel.
         /// </summary>
-        internal static string Click_No_to_cancel {
+        public static string Click_No_to_cancel {
             get {
                 return ResourceManager.GetString("Click_No_to_cancel", resourceCulture);
             }
@@ -297,7 +297,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Click &apos;No&apos; to exclude the duplicated word counts.
         /// </summary>
-        internal static string Click_No_to_exclude_the_duplicated_word_counts {
+        public static string Click_No_to_exclude_the_duplicated_word_counts {
             get {
                 return ResourceManager.GetString("Click_No_to_exclude_the_duplicated_word_counts", resourceCulture);
             }
@@ -306,7 +306,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Save an XML report file.
         /// </summary>
-        internal static string Click_Save_an_XML_report_file {
+        public static string Click_Save_an_XML_report_file {
             get {
                 return ResourceManager.GetString("Click_Save_an_XML_report_file", resourceCulture);
             }
@@ -315,7 +315,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Click &apos;Yes&apos; to accumulate the word counts.
         /// </summary>
-        internal static string Click_Yes_to_accumulate_the_word_counts {
+        public static string Click_Yes_to_accumulate_the_word_counts {
             get {
                 return ResourceManager.GetString("Click_Yes_to_accumulate_the_word_counts", resourceCulture);
             }
@@ -324,7 +324,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Click &apos;Yes&apos; to continue.
         /// </summary>
-        internal static string Click_Yes_to_continue {
+        public static string Click_Yes_to_continue {
             get {
                 return ResourceManager.GetString("Click_Yes_to_continue", resourceCulture);
             }
@@ -333,7 +333,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Click &apos;Yes&apos; to continue and remove the project.
         /// </summary>
-        internal static string Click_Yes_to_continue_and_remove_the_project {
+        public static string Click_Yes_to_continue_and_remove_the_project {
             get {
                 return ResourceManager.GetString("Click_Yes_to_continue_and_remove_the_project", resourceCulture);
             }
@@ -342,7 +342,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Click &apos;Yes&apos; to continue and remove the project activities.
         /// </summary>
-        internal static string Click_Yes_to_continue_and_remove_the_project_activities {
+        public static string Click_Yes_to_continue_and_remove_the_project_activities {
             get {
                 return ResourceManager.GetString("Click_Yes_to_continue_and_remove_the_project_activities", resourceCulture);
             }
@@ -351,7 +351,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Client: {0}.
         /// </summary>
-        internal static string Client_0 {
+        public static string Client_0 {
             get {
                 return ResourceManager.GetString("Client_0", resourceCulture);
             }
@@ -360,7 +360,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Content Type:	.
         /// </summary>
-        internal static string Content_Type {
+        public static string Content_Type {
             get {
                 return ResourceManager.GetString("Content_Type", resourceCulture);
             }
@@ -369,7 +369,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Content Type:	.
         /// </summary>
-        internal static string Content_Type_ {
+        public static string Content_Type_ {
             get {
                 return ResourceManager.GetString("Content_Type_", resourceCulture);
             }
@@ -379,7 +379,7 @@ namespace Sdl.Community.Qualitivity {
         ///   Looks up a localized string similar to Creating a new project activity; the activity records are being saved to the database.
         ///Please wait until processing has completed..
         /// </summary>
-        internal static string Create_New_Document_Activity_Message {
+        public static string Create_New_Document_Activity_Message {
             get {
                 return ResourceManager.GetString("Create_New_Document_Activity_Message", resourceCulture);
             }
@@ -388,7 +388,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Created:		.
         /// </summary>
-        internal static string Created {
+        public static string Created {
             get {
                 return ResourceManager.GetString("Created", resourceCulture);
             }
@@ -397,7 +397,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Created: .
         /// </summary>
-        internal static string Created_ {
+        public static string Created_ {
             get {
                 return ResourceManager.GetString("Created_", resourceCulture);
             }
@@ -406,7 +406,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Created:		.
         /// </summary>
-        internal static string Created__ {
+        public static string Created__ {
             get {
                 return ResourceManager.GetString("Created__", resourceCulture);
             }
@@ -415,7 +415,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Do you want to accumulate the word count from the duplicated segments?.
         /// </summary>
-        internal static string Do_you_want_to_accumulate_the_word_count_from_the_duplicated_segments {
+        public static string Do_you_want_to_accumulate_the_word_count_from_the_duplicated_segments {
             get {
                 return ResourceManager.GetString("Do_you_want_to_accumulate_the_word_count_from_the_duplicated_segments", resourceCulture);
             }
@@ -424,7 +424,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Do you want to backup your settings now?.
         /// </summary>
-        internal static string Do_you_want_to_backup_your_settings_now {
+        public static string Do_you_want_to_backup_your_settings_now {
             get {
                 return ResourceManager.GetString("Do_you_want_to_backup_your_settings_now", resourceCulture);
             }
@@ -433,7 +433,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Do you want to delete the selected PRM Rate?.
         /// </summary>
-        internal static string Do_you_want_to_delete_the_selected_PRM_Rate_ {
+        public static string Do_you_want_to_delete_the_selected_PRM_Rate_ {
             get {
                 return ResourceManager.GetString("Do_you_want_to_delete_the_selected_PRM_Rate_", resourceCulture);
             }
@@ -442,7 +442,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Do you want to delete the selected Quality Metric Group?.
         /// </summary>
-        internal static string Do_you_want_to_delete_the_selected_Quality_Metric_Group_ {
+        public static string Do_you_want_to_delete_the_selected_Quality_Metric_Group_ {
             get {
                 return ResourceManager.GetString("Do_you_want_to_delete_the_selected_Quality_Metric_Group_", resourceCulture);
             }
@@ -451,7 +451,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Document Activities: {0}.
         /// </summary>
-        internal static string Document_Activities___0_ {
+        public static string Document_Activities___0_ {
             get {
                 return ResourceManager.GetString("Document_Activities___0_", resourceCulture);
             }
@@ -460,7 +460,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Document Name:	.
         /// </summary>
-        internal static string Document_Name_ {
+        public static string Document_Name_ {
             get {
                 return ResourceManager.GetString("Document_Name_", resourceCulture);
             }
@@ -469,7 +469,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Download {
+        public static System.Drawing.Icon Download {
             get {
                 object obj = ResourceManager.GetObject("Download", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -479,7 +479,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Error while reading the xml file!.
         /// </summary>
-        internal static string Error_while_reading_the_xml_file_ {
+        public static string Error_while_reading_the_xml_file_ {
             get {
                 return ResourceManager.GetString("Error_while_reading_the_xml_file_", resourceCulture);
             }
@@ -488,7 +488,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Error while writing the xml file!.
         /// </summary>
-        internal static string Error_while_writing_the_xml_file_ {
+        public static string Error_while_writing_the_xml_file_ {
             get {
                 return ResourceManager.GetString("Error_while_writing_the_xml_file_", resourceCulture);
             }
@@ -497,7 +497,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Get_tracker_project_from_document .
         /// </summary>
-        internal static string ErrorMessage_Get_tracker_project_from_document_0 {
+        public static string ErrorMessage_Get_tracker_project_from_document_0 {
             get {
                 return ResourceManager.GetString("ErrorMessage_Get_tracker_project_from_document_0", resourceCulture);
             }
@@ -506,7 +506,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Expand all companyProfiles.
         /// </summary>
-        internal static string Expand_all_companyProfiles {
+        public static string Expand_all_companyProfiles {
             get {
                 return ResourceManager.GetString("Expand_all_companyProfiles", resourceCulture);
             }
@@ -515,7 +515,17 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon ForumIcon {
+        public static System.Drawing.Icon Forum {
+            get {
+                object obj = ResourceManager.GetObject("Forum", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon ForumIcon {
             get {
                 object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -525,7 +535,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Import Failed!.
         /// </summary>
-        internal static string Import_Failed_ {
+        public static string Import_Failed_ {
             get {
                 return ResourceManager.GetString("Import_Failed_", resourceCulture);
             }
@@ -534,7 +544,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Industry:		.
         /// </summary>
-        internal static string Industry {
+        public static string Industry {
             get {
                 return ResourceManager.GetString("Industry", resourceCulture);
             }
@@ -543,7 +553,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Industry:		.
         /// </summary>
-        internal static string Industry__ {
+        public static string Industry__ {
             get {
                 return ResourceManager.GetString("Industry__", resourceCulture);
             }
@@ -552,7 +562,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Invalid directory!.
         /// </summary>
-        internal static string Invalid_directory_ {
+        public static string Invalid_directory_ {
             get {
                 return ResourceManager.GetString("Invalid_directory_", resourceCulture);
             }
@@ -561,7 +571,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Item name already exists in the list!.
         /// </summary>
-        internal static string Item_name_already_exists_in_the_list_ {
+        public static string Item_name_already_exists_in_the_list_ {
             get {
                 return ResourceManager.GetString("Item_name_already_exists_in_the_list_", resourceCulture);
             }
@@ -570,7 +580,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Items: .
         /// </summary>
-        internal static string Items_ {
+        public static string Items_ {
             get {
                 return ResourceManager.GetString("Items_", resourceCulture);
             }
@@ -579,7 +589,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Items: {0} .
         /// </summary>
-        internal static string Items___0__ {
+        public static string Items___0__ {
             get {
                 return ResourceManager.GetString("Items___0__", resourceCulture);
             }
@@ -588,7 +598,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to , Comment: .
         /// </summary>
-        internal static string l___Comment__ {
+        public static string l___Comment__ {
             get {
                 return ResourceManager.GetString("l___Comment__", resourceCulture);
             }
@@ -597,7 +607,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Located multiple activity types from the selected records.
         /// </summary>
-        internal static string Located_multiple_activity_types_from_the_selected_records {
+        public static string Located_multiple_activity_types_from_the_selected_records {
             get {
                 return ResourceManager.GetString("Located_multiple_activity_types_from_the_selected_records", resourceCulture);
             }
@@ -606,7 +616,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Modified: .
         /// </summary>
-        internal static string Modified_ {
+        public static string Modified_ {
             get {
                 return ResourceManager.GetString("Modified_", resourceCulture);
             }
@@ -615,7 +625,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Month: {0}.
         /// </summary>
-        internal static string Month_0 {
+        public static string Month_0 {
             get {
                 return ResourceManager.GetString("Month_0", resourceCulture);
             }
@@ -624,7 +634,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to New Company.
         /// </summary>
-        internal static string New_Company {
+        public static string New_Company {
             get {
                 return ResourceManager.GetString("New_Company", resourceCulture);
             }
@@ -633,7 +643,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to New Language Rate Group.
         /// </summary>
-        internal static string New_Language_Rate_Group {
+        public static string New_Language_Rate_Group {
             get {
                 return ResourceManager.GetString("New_Language_Rate_Group", resourceCulture);
             }
@@ -642,7 +652,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to no help file found!.
         /// </summary>
-        internal static string no_help_file_found_ {
+        public static string no_help_file_found_ {
             get {
                 return ResourceManager.GetString("no_help_file_found_", resourceCulture);
             }
@@ -651,7 +661,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to no help found!.
         /// </summary>
-        internal static string no_help_found {
+        public static string no_help_found {
             get {
                 return ResourceManager.GetString("no_help_found", resourceCulture);
             }
@@ -660,7 +670,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to no help found!.
         /// </summary>
-        internal static string no_help_found_ {
+        public static string no_help_found_ {
             get {
                 return ResourceManager.GetString("no_help_found_", resourceCulture);
             }
@@ -669,7 +679,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to No new Trados Studio Project available!.
         /// </summary>
-        internal static string No_new_SDL_Studio_Project_available_ {
+        public static string No_new_SDL_Studio_Project_available_ {
             get {
                 return ResourceManager.GetString("No_new_SDL_Studio_Project_available_", resourceCulture);
             }
@@ -678,7 +688,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Note: All Studio Projects are currently listed in the navigation area.
         /// </summary>
-        internal static string Note__All_Studio_Projects_are_currently_listed_in_the_navigation_area {
+        public static string Note__All_Studio_Projects_are_currently_listed_in_the_navigation_area {
             get {
                 return ResourceManager.GetString("Note__All_Studio_Projects_are_currently_listed_in_the_navigation_area", resourceCulture);
             }
@@ -687,7 +697,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Note: it is made reference to from the project &apos;{0}&apos;.
         /// </summary>
-        internal static string Note__it_is_made_reference_to_from_the_project___0__ {
+        public static string Note__it_is_made_reference_to_from_the_project___0__ {
             get {
                 return ResourceManager.GetString("Note__it_is_made_reference_to_from_the_project___0__", resourceCulture);
             }
@@ -696,7 +706,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Note: you will not be able to recover this data if you continue!.
         /// </summary>
-        internal static string Note__you_will_not_be_able_to_recover_this_data_if_you_continue {
+        public static string Note__you_will_not_be_able_to_recover_this_data_if_you_continue {
             get {
                 return ResourceManager.GetString("Note__you_will_not_be_able_to_recover_this_data_if_you_continue", resourceCulture);
             }
@@ -705,7 +715,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Note: you will not be able to recover this data if you continue!.
         /// </summary>
-        internal static string Note__you_will_not_be_able_to_recover_this_data_if_you_continue_ {
+        public static string Note__you_will_not_be_able_to_recover_this_data_if_you_continue_ {
             get {
                 return ResourceManager.GetString("Note__you_will_not_be_able_to_recover_this_data_if_you_continue_", resourceCulture);
             }
@@ -714,7 +724,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Note: you will not be able to recover this information.
         /// </summary>
-        internal static string Note__you_will_not_be_able_to_recover_this_information {
+        public static string Note__you_will_not_be_able_to_recover_this_information {
             get {
                 return ResourceManager.GetString("Note__you_will_not_be_able_to_recover_this_information", resourceCulture);
             }
@@ -723,7 +733,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Note: The current change will be ignored..
         /// </summary>
-        internal static string Note_The_current_change_will_be_ignored {
+        public static string Note_The_current_change_will_be_ignored {
             get {
                 return ResourceManager.GetString("Note_The_current_change_will_be_ignored", resourceCulture);
             }
@@ -732,7 +742,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Note: This might cuase a discrepancy with the word count total if you are accumulating word counts from segments that exist in multiple documents.
         /// </summary>
-        internal static string Note_This_might_cuase_a_discrepancy_with_the_word_count_total_if_you_are_accumulating_word_counts_from_ {
+        public static string Note_This_might_cuase_a_discrepancy_with_the_word_count_total_if_you_are_accumulating_word_counts_from_ {
             get {
                 return ResourceManager.GetString("Note_This_might_cuase_a_discrepancy_with_the_word_count_total_if_you_are_accumula" +
                         "ting_word_counts_from_", resourceCulture);
@@ -742,7 +752,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Note: you will not be able to recover this data if you continue!.
         /// </summary>
-        internal static string Note_you_will_not_be_able_to_recover_this_data_if_you_continue {
+        public static string Note_you_will_not_be_able_to_recover_this_data_if_you_continue {
             get {
                 return ResourceManager.GetString("Note_you_will_not_be_able_to_recover_this_data_if_you_continue", resourceCulture);
             }
@@ -751,7 +761,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Open the Qualitity Metrics Group file.
         /// </summary>
-        internal static string Open_the_Qualitity_Metrics_Group_file {
+        public static string Open_the_Qualitity_Metrics_Group_file {
             get {
                 return ResourceManager.GetString("Open_the_Qualitity_Metrics_Group_file", resourceCulture);
             }
@@ -760,7 +770,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Paused the activity timer at: {0}.
         /// </summary>
-        internal static string Paused_the_activity_timer_at_0 {
+        public static string Paused_the_activity_timer_at_0 {
             get {
                 return ResourceManager.GetString("Paused_the_activity_timer_at_0", resourceCulture);
             }
@@ -769,7 +779,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Qualitivity.
         /// </summary>
-        internal static string Plugin_Name {
+        public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
             }
@@ -778,7 +788,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Process:		.
         /// </summary>
-        internal static string Process {
+        public static string Process {
             get {
                 return ResourceManager.GetString("Process", resourceCulture);
             }
@@ -787,7 +797,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Process:		.
         /// </summary>
-        internal static string Process__ {
+        public static string Process__ {
             get {
                 return ResourceManager.GetString("Process__", resourceCulture);
             }
@@ -796,7 +806,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Project: {0}.
         /// </summary>
-        internal static string Project_0 {
+        public static string Project_0 {
             get {
                 return ResourceManager.GetString("Project_0", resourceCulture);
             }
@@ -805,7 +815,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Project Created:	.
         /// </summary>
-        internal static string Project_Created_ {
+        public static string Project_Created_ {
             get {
                 return ResourceManager.GetString("Project_Created_", resourceCulture);
             }
@@ -814,7 +824,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Project ID:	.
         /// </summary>
-        internal static string Project_ID {
+        public static string Project_ID {
             get {
                 return ResourceManager.GetString("Project_ID", resourceCulture);
             }
@@ -823,7 +833,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Project ID:	.
         /// </summary>
-        internal static string Project_ID_ {
+        public static string Project_ID_ {
             get {
                 return ResourceManager.GetString("Project_ID_", resourceCulture);
             }
@@ -832,7 +842,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Project Key:	.
         /// </summary>
-        internal static string Project_Key {
+        public static string Project_Key {
             get {
                 return ResourceManager.GetString("Project_Key", resourceCulture);
             }
@@ -841,7 +851,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Project Key:	.
         /// </summary>
-        internal static string Project_Key_ {
+        public static string Project_Key_ {
             get {
                 return ResourceManager.GetString("Project_Key_", resourceCulture);
             }
@@ -850,7 +860,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Project Name:	.
         /// </summary>
-        internal static string Project_Name {
+        public static string Project_Name {
             get {
                 return ResourceManager.GetString("Project_Name", resourceCulture);
             }
@@ -859,7 +869,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Project Name:	.
         /// </summary>
-        internal static string Project_Name_ {
+        public static string Project_Name_ {
             get {
                 return ResourceManager.GetString("Project_Name_", resourceCulture);
             }
@@ -868,7 +878,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Qualitivity.
         /// </summary>
-        internal static string Qualitivity {
+        public static string Qualitivity {
             get {
                 return ResourceManager.GetString("Qualitivity", resourceCulture);
             }
@@ -877,7 +887,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Qualitivity - Activity Report Task - Step 1 of 3.
         /// </summary>
-        internal static string Qualitivity___Activity_Report_Task___Step_1_of_3 {
+        public static string Qualitivity___Activity_Report_Task___Step_1_of_3 {
             get {
                 return ResourceManager.GetString("Qualitivity___Activity_Report_Task___Step_1_of_3", resourceCulture);
             }
@@ -886,7 +896,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Qualitivity - Activity Report Task - Step 2 of 3.
         /// </summary>
-        internal static string Qualitivity___Activity_Report_Task___Step_2_of_3 {
+        public static string Qualitivity___Activity_Report_Task___Step_2_of_3 {
             get {
                 return ResourceManager.GetString("Qualitivity___Activity_Report_Task___Step_2_of_3", resourceCulture);
             }
@@ -895,7 +905,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Qualitivity - Activity Report Task - Step 3 of 3.
         /// </summary>
-        internal static string Qualitivity___Activity_Report_Task___Step_3_of_3 {
+        public static string Qualitivity___Activity_Report_Task___Step_3_of_3 {
             get {
                 return ResourceManager.GetString("Qualitivity___Activity_Report_Task___Step_3_of_3", resourceCulture);
             }
@@ -904,7 +914,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Qualitivity - Activity Report Wizard.
         /// </summary>
-        internal static string Qualitivity___Activity_Report_Wizard {
+        public static string Qualitivity___Activity_Report_Wizard {
             get {
                 return ResourceManager.GetString("Qualitivity___Activity_Report_Wizard", resourceCulture);
             }
@@ -913,7 +923,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Qualitivity - Version {0}.
         /// </summary>
-        internal static string Qualitivity___Version__0_ {
+        public static string Qualitivity___Version__0_ {
             get {
                 return ResourceManager.GetString("Qualitivity___Version__0_", resourceCulture);
             }
@@ -922,7 +932,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityAbout_Icon {
+        public static System.Drawing.Icon QualitivityAbout_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityAbout_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -932,7 +942,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityApp_Icon {
+        public static System.Drawing.Icon QualitivityApp_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityApp_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -942,7 +952,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Application Settings.
         /// </summary>
-        internal static string QualitivityConfiguration_Description {
+        public static string QualitivityConfiguration_Description {
             get {
                 return ResourceManager.GetString("QualitivityConfiguration_Description", resourceCulture);
             }
@@ -951,7 +961,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Application Settings.
         /// </summary>
-        internal static string QualitivityConfiguration_Name {
+        public static string QualitivityConfiguration_Name {
             get {
                 return ResourceManager.GetString("QualitivityConfiguration_Name", resourceCulture);
             }
@@ -960,7 +970,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Clients.
         /// </summary>
-        internal static string QualitivityConfigurationClients_Description {
+        public static string QualitivityConfigurationClients_Description {
             get {
                 return ResourceManager.GetString("QualitivityConfigurationClients_Description", resourceCulture);
             }
@@ -969,7 +979,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityConfigurationClients_Icon {
+        public static System.Drawing.Icon QualitivityConfigurationClients_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityConfigurationClients_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -979,7 +989,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Clients.
         /// </summary>
-        internal static string QualitivityConfigurationClients_Name {
+        public static string QualitivityConfigurationClients_Name {
             get {
                 return ResourceManager.GetString("QualitivityConfigurationClients_Name", resourceCulture);
             }
@@ -988,7 +998,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to My Details.
         /// </summary>
-        internal static string QualitivityConfigurationMyInfo_Description {
+        public static string QualitivityConfigurationMyInfo_Description {
             get {
                 return ResourceManager.GetString("QualitivityConfigurationMyInfo_Description", resourceCulture);
             }
@@ -997,7 +1007,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityConfigurationMyInfo_Icon {
+        public static System.Drawing.Icon QualitivityConfigurationMyInfo_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityConfigurationMyInfo_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1007,7 +1017,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to My Details.
         /// </summary>
-        internal static string QualitivityConfigurationMyInfo_Name {
+        public static string QualitivityConfigurationMyInfo_Name {
             get {
                 return ResourceManager.GetString("QualitivityConfigurationMyInfo_Name", resourceCulture);
             }
@@ -1016,7 +1026,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Language Rates.
         /// </summary>
-        internal static string QualitivityConfigurationPEMRates_Description {
+        public static string QualitivityConfigurationPEMRates_Description {
             get {
                 return ResourceManager.GetString("QualitivityConfigurationPEMRates_Description", resourceCulture);
             }
@@ -1025,7 +1035,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityConfigurationPEMRates_Icon {
+        public static System.Drawing.Icon QualitivityConfigurationPEMRates_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityConfigurationPEMRates_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1035,7 +1045,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Language Rates.
         /// </summary>
-        internal static string QualitivityConfigurationPEMRates_Name {
+        public static string QualitivityConfigurationPEMRates_Name {
             get {
                 return ResourceManager.GetString("QualitivityConfigurationPEMRates_Name", resourceCulture);
             }
@@ -1044,7 +1054,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Configuration.
         /// </summary>
-        internal static string QualitivityConfigurationRibbonGroup_Name {
+        public static string QualitivityConfigurationRibbonGroup_Name {
             get {
                 return ResourceManager.GetString("QualitivityConfigurationRibbonGroup_Name", resourceCulture);
             }
@@ -1053,7 +1063,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Information.
         /// </summary>
-        internal static string QualitivityContactRibbonGroup_Name {
+        public static string QualitivityContactRibbonGroup_Name {
             get {
                 return ResourceManager.GetString("QualitivityContactRibbonGroup_Name", resourceCulture);
             }
@@ -1062,7 +1072,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to About.
         /// </summary>
-        internal static string QualitivityContactRibbonGroupAbout_Description {
+        public static string QualitivityContactRibbonGroupAbout_Description {
             get {
                 return ResourceManager.GetString("QualitivityContactRibbonGroupAbout_Description", resourceCulture);
             }
@@ -1071,7 +1081,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to About.
         /// </summary>
-        internal static string QualitivityContactRibbonGroupAbout_Name {
+        public static string QualitivityContactRibbonGroupAbout_Name {
             get {
                 return ResourceManager.GetString("QualitivityContactRibbonGroupAbout_Name", resourceCulture);
             }
@@ -1080,7 +1090,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Online Help.
         /// </summary>
-        internal static string QualitivityContactRibbonGroupHelp_Description {
+        public static string QualitivityContactRibbonGroupHelp_Description {
             get {
                 return ResourceManager.GetString("QualitivityContactRibbonGroupHelp_Description", resourceCulture);
             }
@@ -1089,7 +1099,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Online Help.
         /// </summary>
-        internal static string QualitivityContactRibbonGroupHelp_Name {
+        public static string QualitivityContactRibbonGroupHelp_Name {
             get {
                 return ResourceManager.GetString("QualitivityContactRibbonGroupHelp_Name", resourceCulture);
             }
@@ -1098,7 +1108,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to License Manager.
         /// </summary>
-        internal static string QualitivityContactRibbonGroupLicense_Description {
+        public static string QualitivityContactRibbonGroupLicense_Description {
             get {
                 return ResourceManager.GetString("QualitivityContactRibbonGroupLicense_Description", resourceCulture);
             }
@@ -1107,7 +1117,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityContactRibbonGroupLicense_Icon {
+        public static System.Drawing.Icon QualitivityContactRibbonGroupLicense_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityContactRibbonGroupLicense_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1117,7 +1127,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to License Manager.
         /// </summary>
-        internal static string QualitivityContactRibbonGroupLicense_Name {
+        public static string QualitivityContactRibbonGroupLicense_Name {
             get {
                 return ResourceManager.GetString("QualitivityContactRibbonGroupLicense_Name", resourceCulture);
             }
@@ -1126,7 +1136,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityContactRibbonViewCompanyLicenses_Icon {
+        public static System.Drawing.Icon QualitivityContactRibbonViewCompanyLicenses_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityContactRibbonViewCompanyLicenses_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1136,7 +1146,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Create a new Qualitivity Project.
         /// </summary>
-        internal static string QualitivityCreateProjectAction_Description {
+        public static string QualitivityCreateProjectAction_Description {
             get {
                 return ResourceManager.GetString("QualitivityCreateProjectAction_Description", resourceCulture);
             }
@@ -1145,7 +1155,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityCreateProjectAction_Icon {
+        public static System.Drawing.Icon QualitivityCreateProjectAction_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityCreateProjectAction_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1155,7 +1165,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to New Qualitivity Project.
         /// </summary>
-        internal static string QualitivityCreateProjectAction_Name {
+        public static string QualitivityCreateProjectAction_Name {
             get {
                 return ResourceManager.GetString("QualitivityCreateProjectAction_Name", resourceCulture);
             }
@@ -1164,7 +1174,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Create a new Project Activity.
         /// </summary>
-        internal static string QualitivityCreateProjectTaskAction_Description {
+        public static string QualitivityCreateProjectTaskAction_Description {
             get {
                 return ResourceManager.GetString("QualitivityCreateProjectTaskAction_Description", resourceCulture);
             }
@@ -1173,7 +1183,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityCreateProjectTaskAction_Icon {
+        public static System.Drawing.Icon QualitivityCreateProjectTaskAction_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityCreateProjectTaskAction_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1183,7 +1193,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to New Project Activity.
         /// </summary>
-        internal static string QualitivityCreateProjectTaskAction_Name {
+        public static string QualitivityCreateProjectTaskAction_Name {
             get {
                 return ResourceManager.GetString("QualitivityCreateProjectTaskAction_Name", resourceCulture);
             }
@@ -1192,7 +1202,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Edit Qualitivity Project.
         /// </summary>
-        internal static string QualitivityEditProjectAction_Description {
+        public static string QualitivityEditProjectAction_Description {
             get {
                 return ResourceManager.GetString("QualitivityEditProjectAction_Description", resourceCulture);
             }
@@ -1201,7 +1211,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityEditProjectAction_Icon {
+        public static System.Drawing.Icon QualitivityEditProjectAction_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityEditProjectAction_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1211,7 +1221,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Edit Project.
         /// </summary>
-        internal static string QualitivityEditProjectAction_Name {
+        public static string QualitivityEditProjectAction_Name {
             get {
                 return ResourceManager.GetString("QualitivityEditProjectAction_Name", resourceCulture);
             }
@@ -1220,7 +1230,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Edit Project Activity.
         /// </summary>
-        internal static string QualitivityEditProjectTaskAction_Description {
+        public static string QualitivityEditProjectTaskAction_Description {
             get {
                 return ResourceManager.GetString("QualitivityEditProjectTaskAction_Description", resourceCulture);
             }
@@ -1229,7 +1239,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityEditProjectTaskAction_Icon {
+        public static System.Drawing.Icon QualitivityEditProjectTaskAction_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityEditProjectTaskAction_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1239,7 +1249,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Edit Activity.
         /// </summary>
-        internal static string QualitivityEditProjectTaskAction_Name {
+        public static string QualitivityEditProjectTaskAction_Name {
             get {
                 return ResourceManager.GetString("QualitivityEditProjectTaskAction_Name", resourceCulture);
             }
@@ -1248,7 +1258,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityHelp_Icon {
+        public static System.Drawing.Icon QualitivityHelp_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityHelp_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1258,7 +1268,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Merge Project Activities.
         /// </summary>
-        internal static string QualitivityMergeProjectTaskAction_Description {
+        public static string QualitivityMergeProjectTaskAction_Description {
             get {
                 return ResourceManager.GetString("QualitivityMergeProjectTaskAction_Description", resourceCulture);
             }
@@ -1267,7 +1277,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityMergeProjectTaskAction_Icon {
+        public static System.Drawing.Icon QualitivityMergeProjectTaskAction_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityMergeProjectTaskAction_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1277,7 +1287,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Merge Activities.
         /// </summary>
-        internal static string QualitivityMergeProjectTaskAction_Name {
+        public static string QualitivityMergeProjectTaskAction_Name {
             get {
                 return ResourceManager.GetString("QualitivityMergeProjectTaskAction_Name", resourceCulture);
             }
@@ -1286,7 +1296,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Qualitivity.
         /// </summary>
-        internal static string QualitivityProfessionalMainProjectRibbonGroup_Name {
+        public static string QualitivityProfessionalMainProjectRibbonGroup_Name {
             get {
                 return ResourceManager.GetString("QualitivityProfessionalMainProjectRibbonGroup_Name", resourceCulture);
             }
@@ -1295,7 +1305,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Qualitivity Projects.
         /// </summary>
-        internal static string QualitivityProjectsRibbonGroup_Name {
+        public static string QualitivityProjectsRibbonGroup_Name {
             get {
                 return ResourceManager.GetString("QualitivityProjectsRibbonGroup_Name", resourceCulture);
             }
@@ -1304,7 +1314,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Project Activities.
         /// </summary>
-        internal static string QualitivityProjectTasksRibbonGroup_Name {
+        public static string QualitivityProjectTasksRibbonGroup_Name {
             get {
                 return ResourceManager.GetString("QualitivityProjectTasksRibbonGroup_Name", resourceCulture);
             }
@@ -1313,7 +1323,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityPropertiesController_Icon {
+        public static System.Drawing.Icon QualitivityPropertiesController_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityPropertiesController_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1323,7 +1333,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Remove Qualitivity Project.
         /// </summary>
-        internal static string QualitivityRemoveProjectAction_Description {
+        public static string QualitivityRemoveProjectAction_Description {
             get {
                 return ResourceManager.GetString("QualitivityRemoveProjectAction_Description", resourceCulture);
             }
@@ -1332,7 +1342,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityRemoveProjectAction_Icon {
+        public static System.Drawing.Icon QualitivityRemoveProjectAction_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityRemoveProjectAction_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1342,7 +1352,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Remove Project.
         /// </summary>
-        internal static string QualitivityRemoveProjectAction_Name {
+        public static string QualitivityRemoveProjectAction_Name {
             get {
                 return ResourceManager.GetString("QualitivityRemoveProjectAction_Name", resourceCulture);
             }
@@ -1351,7 +1361,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Remove Project Activity.
         /// </summary>
-        internal static string QualitivityRemoveProjectTaskAction_Description {
+        public static string QualitivityRemoveProjectTaskAction_Description {
             get {
                 return ResourceManager.GetString("QualitivityRemoveProjectTaskAction_Description", resourceCulture);
             }
@@ -1360,7 +1370,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityRemoveProjectTaskAction_Icon {
+        public static System.Drawing.Icon QualitivityRemoveProjectTaskAction_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityRemoveProjectTaskAction_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1370,7 +1380,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Remove Activity.
         /// </summary>
-        internal static string QualitivityRemoveProjectTaskAction_Name {
+        public static string QualitivityRemoveProjectTaskAction_Name {
             get {
                 return ResourceManager.GetString("QualitivityRemoveProjectTaskAction_Name", resourceCulture);
             }
@@ -1379,7 +1389,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityReportsController_Icon {
+        public static System.Drawing.Icon QualitivityReportsController_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityReportsController_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1389,7 +1399,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityRevisionController_Icon {
+        public static System.Drawing.Icon QualitivityRevisionController_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityRevisionController_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1399,7 +1409,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivitySettings_Icon {
+        public static System.Drawing.Icon QualitivitySettings_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivitySettings_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1409,7 +1419,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Start Activity Tracking.
         /// </summary>
-        internal static string QualitivityStartTimer_Description {
+        public static string QualitivityStartTimer_Description {
             get {
                 return ResourceManager.GetString("QualitivityStartTimer_Description", resourceCulture);
             }
@@ -1418,7 +1428,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityStartTimer_Icon {
+        public static System.Drawing.Icon QualitivityStartTimer_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityStartTimer_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1428,7 +1438,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Start Activity Tracking.
         /// </summary>
-        internal static string QualitivityStartTimer_Name {
+        public static string QualitivityStartTimer_Name {
             get {
                 return ResourceManager.GetString("QualitivityStartTimer_Name", resourceCulture);
             }
@@ -1437,7 +1447,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Stop Activity Tracking.
         /// </summary>
-        internal static string QualitivityStopTimer_Description {
+        public static string QualitivityStopTimer_Description {
             get {
                 return ResourceManager.GetString("QualitivityStopTimer_Description", resourceCulture);
             }
@@ -1446,7 +1456,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityStopTimer_Icon {
+        public static System.Drawing.Icon QualitivityStopTimer_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityStopTimer_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1456,7 +1466,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Stop Activity Tracking.
         /// </summary>
-        internal static string QualitivityStopTimer_Name {
+        public static string QualitivityStopTimer_Name {
             get {
                 return ResourceManager.GetString("QualitivityStopTimer_Name", resourceCulture);
             }
@@ -1465,7 +1475,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityTimerController_Icon {
+        public static System.Drawing.Icon QualitivityTimerController_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityTimerController_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1475,7 +1485,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Activity Tracking.
         /// </summary>
-        internal static string QualitivityTimeTrackingRibbonGroup_Name {
+        public static string QualitivityTimeTrackingRibbonGroup_Name {
             get {
                 return ResourceManager.GetString("QualitivityTimeTrackingRibbonGroup_Name", resourceCulture);
             }
@@ -1484,7 +1494,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Tools.
         /// </summary>
-        internal static string QualitivityToolsRibbonGroup_Name {
+        public static string QualitivityToolsRibbonGroup_Name {
             get {
                 return ResourceManager.GetString("QualitivityToolsRibbonGroup_Name", resourceCulture);
             }
@@ -1493,7 +1503,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Create Activities Report.
         /// </summary>
-        internal static string QualitivityToolsRibbonGroupCreateActivitiesReport_Description {
+        public static string QualitivityToolsRibbonGroupCreateActivitiesReport_Description {
             get {
                 return ResourceManager.GetString("QualitivityToolsRibbonGroupCreateActivitiesReport_Description", resourceCulture);
             }
@@ -1502,7 +1512,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityToolsRibbonGroupCreateActivitiesReport_Icon {
+        public static System.Drawing.Icon QualitivityToolsRibbonGroupCreateActivitiesReport_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityToolsRibbonGroupCreateActivitiesReport_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1512,7 +1522,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Create Activities Report.
         /// </summary>
-        internal static string QualitivityToolsRibbonGroupCreateActivitiesReport_Name {
+        public static string QualitivityToolsRibbonGroupCreateActivitiesReport_Name {
             get {
                 return ResourceManager.GetString("QualitivityToolsRibbonGroupCreateActivitiesReport_Name", resourceCulture);
             }
@@ -1521,7 +1531,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Export Activities.
         /// </summary>
-        internal static string QualitivityToolsRibbonGroupExoprtActivitiesToExcel_Description {
+        public static string QualitivityToolsRibbonGroupExoprtActivitiesToExcel_Description {
             get {
                 return ResourceManager.GetString("QualitivityToolsRibbonGroupExoprtActivitiesToExcel_Description", resourceCulture);
             }
@@ -1530,7 +1540,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityToolsRibbonGroupExoprtActivitiesToExcel_Icon {
+        public static System.Drawing.Icon QualitivityToolsRibbonGroupExoprtActivitiesToExcel_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityToolsRibbonGroupExoprtActivitiesToExcel_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1540,7 +1550,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Export Activities.
         /// </summary>
-        internal static string QualitivityToolsRibbonGroupExoprtActivitiesToExcel_Name {
+        public static string QualitivityToolsRibbonGroupExoprtActivitiesToExcel_Name {
             get {
                 return ResourceManager.GetString("QualitivityToolsRibbonGroupExoprtActivitiesToExcel_Name", resourceCulture);
             }
@@ -1549,7 +1559,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityTrackChangesController_Icon {
+        public static System.Drawing.Icon QualitivityTrackChangesController_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityTrackChangesController_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1559,7 +1569,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityTrackChangesEditorController_Icon {
+        public static System.Drawing.Icon QualitivityTrackChangesEditorController_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityTrackChangesEditorController_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1569,7 +1579,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon QualitivityViewActivityRecordsController_Icon {
+        public static System.Drawing.Icon QualitivityViewActivityRecordsController_Icon {
             get {
                 object obj = ResourceManager.GetObject("QualitivityViewActivityRecordsController_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1579,7 +1589,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Quality Level:	.
         /// </summary>
-        internal static string Quality_Level {
+        public static string Quality_Level {
             get {
                 return ResourceManager.GetString("Quality_Level", resourceCulture);
             }
@@ -1588,7 +1598,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Quality Level:	.
         /// </summary>
-        internal static string Quality_Level_ {
+        public static string Quality_Level_ {
             get {
                 return ResourceManager.GetString("Quality_Level_", resourceCulture);
             }
@@ -1597,7 +1607,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Question {
+        public static System.Drawing.Icon Question {
             get {
                 object obj = ResourceManager.GetObject("Question", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -1607,7 +1617,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Record Progress.
         /// </summary>
-        internal static string Record_Progress {
+        public static string Record_Progress {
             get {
                 return ResourceManager.GetString("Record_Progress", resourceCulture);
             }
@@ -1616,7 +1626,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Save an Excel report file.
         /// </summary>
-        internal static string Save_an_Excel_report_file {
+        public static string Save_an_Excel_report_file {
             get {
                 return ResourceManager.GetString("Save_an_Excel_report_file", resourceCulture);
             }
@@ -1625,7 +1635,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Save the Qualitity Metrics Group to file.
         /// </summary>
-        internal static string Save_the_Qualitity_Metrics_Group_to_file {
+        public static string Save_the_Qualitity_Metrics_Group_to_file {
             get {
                 return ResourceManager.GetString("Save_the_Qualitity_Metrics_Group_to_file", resourceCulture);
             }
@@ -1634,7 +1644,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Search project name.
         /// </summary>
-        internal static string Search_project_name {
+        public static string Search_project_name {
             get {
                 return ResourceManager.GetString("Search_project_name", resourceCulture);
             }
@@ -1643,7 +1653,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Select a language rate.
         /// </summary>
-        internal static string Select_a_language_rate {
+        public static string Select_a_language_rate {
             get {
                 return ResourceManager.GetString("Select_a_language_rate", resourceCulture);
             }
@@ -1652,7 +1662,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Select Backup Folder.
         /// </summary>
-        internal static string Select_Backup_Folder {
+        public static string Select_Backup_Folder {
             get {
                 return ResourceManager.GetString("Select_Backup_Folder", resourceCulture);
             }
@@ -1661,7 +1671,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Select &apos;No&apos; to ignore this message..
         /// </summary>
-        internal static string Select_No_to_ignore_this_message {
+        public static string Select_No_to_ignore_this_message {
             get {
                 return ResourceManager.GetString("Select_No_to_ignore_this_message", resourceCulture);
             }
@@ -1670,7 +1680,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Select Reports Folder.
         /// </summary>
-        internal static string Select_Reports_Folder {
+        public static string Select_Reports_Folder {
             get {
                 return ResourceManager.GetString("Select_Reports_Folder", resourceCulture);
             }
@@ -1679,7 +1689,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Select &apos;Yes&apos; to backup your setting now..
         /// </summary>
-        internal static string Select_Yes_to_backup_your_setting_now {
+        public static string Select_Yes_to_backup_your_setting_now {
             get {
                 return ResourceManager.GetString("Select_Yes_to_backup_your_setting_now", resourceCulture);
             }
@@ -1688,16 +1698,84 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Backup was successful!.
         /// </summary>
-        internal static string Settings_linkLabel_create_a_backup_now_LinkClicked_Backup_was_successful_ {
+        public static string Settings_linkLabel_create_a_backup_now_LinkClicked_Backup_was_successful_ {
             get {
                 return ResourceManager.GetString("Settings_linkLabel_create_a_backup_now_LinkClicked_Backup_was_successful_", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Settings2 {
+            get {
+                object obj = ResourceManager.GetObject("Settings2", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For more information,.
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_1 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to click here.
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_2 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to for documentation..
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_3 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No qualitivity project selected..
+        /// </summary>
+        public static string SettingsAction_NoQualitivityProjectSelected {
+            get {
+                return ResourceManager.GetString("SettingsAction_NoQualitivityProjectSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The project you have selected has already been converted into a Qualitivity Project.
+        ///Either select a different project to convert or to continue further either:
+        /// 
+        ///1. Open the Qualitivity Project&apos;s file(s) in the Editor View.
+        ///2. Or, in the Qualitivity View, select the Project&apos;s file(s) and export them into an MS Word document.
+        /// </summary>
+        public static string SettingsAction_ProjectAlreadyQualitivity {
+            get {
+                return ResourceManager.GetString("SettingsAction_ProjectAlreadyQualitivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Qualitivity Project.
+        /// </summary>
+        public static string SettingsAction_Title_NewQualitivityProject {
+            get {
+                return ResourceManager.GetString("SettingsAction_Title_NewQualitivityProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Severity Weight - Add.
         /// </summary>
-        internal static string Severity_Weight___Add {
+        public static string Severity_Weight___Add {
             get {
                 return ResourceManager.GetString("Severity_Weight___Add", resourceCulture);
             }
@@ -1706,7 +1784,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Severity Weight - Edit.
         /// </summary>
-        internal static string Severity_Weight___Edit {
+        public static string Severity_Weight___Edit {
             get {
                 return ResourceManager.GetString("Severity_Weight___Edit", resourceCulture);
             }
@@ -1715,7 +1793,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Source Language:	.
         /// </summary>
-        internal static string Source_Language {
+        public static string Source_Language {
             get {
                 return ResourceManager.GetString("Source_Language", resourceCulture);
             }
@@ -1724,16 +1802,26 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Source Language:	.
         /// </summary>
-        internal static string Source_Language_ {
+        public static string Source_Language_ {
             get {
                 return ResourceManager.GetString("Source_Language_", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon SourceCode {
+            get {
+                object obj = ResourceManager.GetObject("SourceCode", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Specify a custom rate.
         /// </summary>
-        internal static string Specify_a_custom_rate {
+        public static string Specify_a_custom_rate {
             get {
                 return ResourceManager.GetString("Specify_a_custom_rate", resourceCulture);
             }
@@ -1742,7 +1830,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Specify an hourly rate.
         /// </summary>
-        internal static string Specify_an_hourly_rate {
+        public static string Specify_an_hourly_rate {
             get {
                 return ResourceManager.GetString("Specify_an_hourly_rate", resourceCulture);
             }
@@ -1751,7 +1839,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Target Language:	.
         /// </summary>
-        internal static string Target_Language_ {
+        public static string Target_Language_ {
             get {
                 return ResourceManager.GetString("Target_Language_", resourceCulture);
             }
@@ -1760,7 +1848,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Task ID:		.
         /// </summary>
-        internal static string Task_ID__ {
+        public static string Task_ID__ {
             get {
                 return ResourceManager.GetString("Task_ID__", resourceCulture);
             }
@@ -1769,7 +1857,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Task Uploaded:	.
         /// </summary>
-        internal static string Task_Uploaded_ {
+        public static string Task_Uploaded_ {
             get {
                 return ResourceManager.GetString("Task_Uploaded_", resourceCulture);
             }
@@ -1778,7 +1866,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to {0} TellMe provider.
         /// </summary>
-        internal static string TellMe_Provider {
+        public static string TellMe_Provider {
             get {
                 return ResourceManager.GetString("TellMe_Provider", resourceCulture);
             }
@@ -1787,16 +1875,26 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to {0} results.
         /// </summary>
-        internal static string TellMe_Provider_Results {
+        public static string TellMe_Provider_Results {
             get {
                 return ResourceManager.GetString("TellMe_Provider_Results", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellmeDocumentation {
+            get {
+                object obj = ResourceManager.GetObject("TellmeDocumentation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The activity end date cannot precede the started date!.
         /// </summary>
-        internal static string The_activity_end_date_cannot_precede_the_started_date_ {
+        public static string The_activity_end_date_cannot_precede_the_started_date_ {
             get {
                 return ResourceManager.GetString("The_activity_end_date_cannot_precede_the_started_date_", resourceCulture);
             }
@@ -1805,7 +1903,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to The activity end date cannot supersede the project due date!.
         /// </summary>
-        internal static string The_activity_end_date_cannot_supersede_the_project_due_date_ {
+        public static string The_activity_end_date_cannot_supersede_the_project_due_date_ {
             get {
                 return ResourceManager.GetString("The_activity_end_date_cannot_supersede_the_project_due_date_", resourceCulture);
             }
@@ -1814,7 +1912,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to The activity name cannot be empty!.
         /// </summary>
-        internal static string The_activity_name_cannot_be_empty_ {
+        public static string The_activity_name_cannot_be_empty_ {
             get {
                 return ResourceManager.GetString("The_activity_name_cannot_be_empty_", resourceCulture);
             }
@@ -1823,7 +1921,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to The activity started date cannot supersede the project due date!.
         /// </summary>
-        internal static string The_activity_started_date_cannot_supersede_the_project_due_date_ {
+        public static string The_activity_started_date_cannot_supersede_the_project_due_date_ {
             get {
                 return ResourceManager.GetString("The_activity_started_date_cannot_supersede_the_project_due_date_", resourceCulture);
             }
@@ -1832,7 +1930,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to The activity tracker is not running, do you want to start the activity tracker now?.
         /// </summary>
-        internal static string The_activity_tracker_is_not_running_ {
+        public static string The_activity_tracker_is_not_running_ {
             get {
                 return ResourceManager.GetString("The_activity_tracker_is_not_running_", resourceCulture);
             }
@@ -1841,7 +1939,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to The company name already exists!.
         /// </summary>
-        internal static string The_company_name_already_exists_ {
+        public static string The_company_name_already_exists_ {
             get {
                 return ResourceManager.GetString("The_company_name_already_exists_", resourceCulture);
             }
@@ -1850,7 +1948,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to The company name cannot be null!.
         /// </summary>
-        internal static string The_company_name_cannot_be_null_ {
+        public static string The_company_name_cannot_be_null_ {
             get {
                 return ResourceManager.GetString("The_company_name_cannot_be_null_", resourceCulture);
             }
@@ -1859,7 +1957,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to The last backup for Qualitivity was performed {0} days ago, on the {1}.
         /// </summary>
-        internal static string The_last_backup_for_Qualitivity_was_performed_0_days_ago_on_the_1_ {
+        public static string The_last_backup_for_Qualitivity_was_performed_0_days_ago_on_the_1_ {
             get {
                 return ResourceManager.GetString("The_last_backup_for_Qualitivity_was_performed_0_days_ago_on_the_1_", resourceCulture);
             }
@@ -1868,7 +1966,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to The maximum penalty value applied cannot be greater than the number of words in the quality metrics settings!.
         /// </summary>
-        internal static string The_maximum_penalty_value_applied_cannot_be_greater_than_the_number_of_words_ {
+        public static string The_maximum_penalty_value_applied_cannot_be_greater_than_the_number_of_words_ {
             get {
                 return ResourceManager.GetString("The_maximum_penalty_value_applied_cannot_be_greater_than_the_number_of_words_", resourceCulture);
             }
@@ -1877,7 +1975,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to The maximum penalty value applied cannot be less than the number of words in the quality metrics settings!.
         /// </summary>
-        internal static string The_maximum_penalty_value_applied_cannot_be_less_than_the_number_ {
+        public static string The_maximum_penalty_value_applied_cannot_be_less_than_the_number_ {
             get {
                 return ResourceManager.GetString("The_maximum_penalty_value_applied_cannot_be_less_than_the_number_", resourceCulture);
             }
@@ -1886,7 +1984,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to The price &apos;Context Match&apos; cannot be greater than the base price.
         /// </summary>
-        internal static string The_price__Context_Match__cannot_be_greater_than_the_base_price {
+        public static string The_price__Context_Match__cannot_be_greater_than_the_base_price {
             get {
                 return ResourceManager.GetString("The_price__Context_Match__cannot_be_greater_than_the_base_price", resourceCulture);
             }
@@ -1895,7 +1993,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to The price &apos;Exact Match&apos; cannot be greater than the base price.
         /// </summary>
-        internal static string The_price__Exact_Match__cannot_be_greater_than_the_base_price {
+        public static string The_price__Exact_Match__cannot_be_greater_than_the_base_price {
             get {
                 return ResourceManager.GetString("The_price__Exact_Match__cannot_be_greater_than_the_base_price", resourceCulture);
             }
@@ -1904,7 +2002,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to The price &apos;Perfect Match&apos; cannot be greater than the base price.
         /// </summary>
-        internal static string The_price__Perfect_Match__cannot_be_greater_than_the_base_price {
+        public static string The_price__Perfect_Match__cannot_be_greater_than_the_base_price {
             get {
                 return ResourceManager.GetString("The_price__Perfect_Match__cannot_be_greater_than_the_base_price", resourceCulture);
             }
@@ -1913,7 +2011,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to The price &apos;Repetitions&apos; cannot be greater than the base price.
         /// </summary>
-        internal static string The_price__Repetitions__cannot_be_greater_than_the_base_price {
+        public static string The_price__Repetitions__cannot_be_greater_than_the_base_price {
             get {
                 return ResourceManager.GetString("The_price__Repetitions__cannot_be_greater_than_the_base_price", resourceCulture);
             }
@@ -1922,7 +2020,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to The project completed date cannot precede the project creation date!.
         /// </summary>
-        internal static string The_project_completed_date_cannot_precede_the_project_creation_date_ {
+        public static string The_project_completed_date_cannot_precede_the_project_creation_date_ {
             get {
                 return ResourceManager.GetString("The_project_completed_date_cannot_precede_the_project_creation_date_", resourceCulture);
             }
@@ -1931,7 +2029,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to The project due date cannot precede the project creation date!.
         /// </summary>
-        internal static string The_project_due_date_cannot_precede_the_project_creation_date_ {
+        public static string The_project_due_date_cannot_precede_the_project_creation_date_ {
             get {
                 return ResourceManager.GetString("The_project_due_date_cannot_precede_the_project_creation_date_", resourceCulture);
             }
@@ -1940,7 +2038,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to The project name already exists!.
         /// </summary>
-        internal static string The_project_name_already_exists_ {
+        public static string The_project_name_already_exists_ {
             get {
                 return ResourceManager.GetString("The_project_name_already_exists_", resourceCulture);
             }
@@ -1949,7 +2047,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to The project name cannot be empty!.
         /// </summary>
-        internal static string The_project_name_cannot_be_empty_ {
+        public static string The_project_name_cannot_be_empty_ {
             get {
                 return ResourceManager.GetString("The_project_name_cannot_be_empty_", resourceCulture);
             }
@@ -1958,7 +2056,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to The Quality Metric Group name already exists in the list!.
         /// </summary>
-        internal static string The_Quality_Metric_Group_name_already_exists_in_the_list_ {
+        public static string The_Quality_Metric_Group_name_already_exists_in_the_list_ {
             get {
                 return ResourceManager.GetString("The_Quality_Metric_Group_name_already_exists_in_the_list_", resourceCulture);
             }
@@ -1967,7 +2065,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to This is an example of deleted &lt;tag/&gt; formatting..
         /// </summary>
-        internal static string This_is_an_example_of_deleted__tag___formatting_ {
+        public static string This_is_an_example_of_deleted__tag___formatting_ {
             get {
                 return ResourceManager.GetString("This_is_an_example_of_deleted__tag___formatting_", resourceCulture);
             }
@@ -1976,7 +2074,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to This is an example of deleted text formatting..
         /// </summary>
-        internal static string This_is_an_example_of_deleted_text_formatting_ {
+        public static string This_is_an_example_of_deleted_text_formatting_ {
             get {
                 return ResourceManager.GetString("This_is_an_example_of_deleted_text_formatting_", resourceCulture);
             }
@@ -1985,7 +2083,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to This is an example of inserted &lt;tag/&gt; formatting..
         /// </summary>
-        internal static string This_is_an_example_of_inserted__tag___formatting_ {
+        public static string This_is_an_example_of_inserted__tag___formatting_ {
             get {
                 return ResourceManager.GetString("This_is_an_example_of_inserted__tag___formatting_", resourceCulture);
             }
@@ -1994,7 +2092,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to This is an example of inserted text formatting..
         /// </summary>
-        internal static string This_is_an_example_of_inserted_text_formatting_ {
+        public static string This_is_an_example_of_inserted_text_formatting_ {
             get {
                 return ResourceManager.GetString("This_is_an_example_of_inserted_text_formatting_", resourceCulture);
             }
@@ -2003,7 +2101,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to This is some sample text.
         /// </summary>
-        internal static string This_is_some_sample_text {
+        public static string This_is_some_sample_text {
             get {
                 return ResourceManager.GetString("This_is_some_sample_text", resourceCulture);
             }
@@ -2012,7 +2110,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Qualitivity.
         /// </summary>
-        internal static string Title_Qualitivity {
+        public static string Title_Qualitivity {
             get {
                 return ResourceManager.GetString("Title_Qualitivity", resourceCulture);
             }
@@ -2021,7 +2119,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Total Activities {0}; Selected {1}.
         /// </summary>
-        internal static string Total_Activities__0___Selected__1_ {
+        public static string Total_Activities__0___Selected__1_ {
             get {
                 return ResourceManager.GetString("Total_Activities__0___Selected__1_", resourceCulture);
             }
@@ -2030,7 +2128,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Total Progress.
         /// </summary>
-        internal static string Total_Progress {
+        public static string Total_Progress {
             get {
                 return ResourceManager.GetString("Total_Progress", resourceCulture);
             }
@@ -2039,7 +2137,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Total Tasks:	.
         /// </summary>
-        internal static string Total_Tasks {
+        public static string Total_Tasks {
             get {
                 return ResourceManager.GetString("Total_Tasks", resourceCulture);
             }
@@ -2048,7 +2146,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Total Tasks:	.
         /// </summary>
-        internal static string Total_Tasks_ {
+        public static string Total_Tasks_ {
             get {
                 return ResourceManager.GetString("Total_Tasks_", resourceCulture);
             }
@@ -2057,7 +2155,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Translator Key:	.
         /// </summary>
-        internal static string Translator_Key_ {
+        public static string Translator_Key_ {
             get {
                 return ResourceManager.GetString("Translator_Key_", resourceCulture);
             }
@@ -2066,7 +2164,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Unable to delete the client &apos;{0}&apos;.
         /// </summary>
-        internal static string Unable_to_delete_the_client___0__ {
+        public static string Unable_to_delete_the_client___0__ {
             get {
                 return ResourceManager.GetString("Unable_to_delete_the_client___0__", resourceCulture);
             }
@@ -2075,7 +2173,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Unable to initialize the timer; the active file in the document = null!.
         /// </summary>
-        internal static string Unable_To_Initialize_Timer {
+        public static string Unable_To_Initialize_Timer {
             get {
                 return ResourceManager.GetString("Unable_To_Initialize_Timer", resourceCulture);
             }
@@ -2084,7 +2182,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Unable to merge activities that belong to different projects!.
         /// </summary>
-        internal static string Unable_to_merge_activities_that_belong_to_different_projects {
+        public static string Unable_to_merge_activities_that_belong_to_different_projects {
             get {
                 return ResourceManager.GetString("Unable_to_merge_activities_that_belong_to_different_projects", resourceCulture);
             }
@@ -2093,7 +2191,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Unable to merge activities with different language combinations!.
         /// </summary>
-        internal static string Unable_to_merge_activities_with_different_language_combinations {
+        public static string Unable_to_merge_activities_with_different_language_combinations {
             get {
                 return ResourceManager.GetString("Unable_to_merge_activities_with_different_language_combinations", resourceCulture);
             }
@@ -2103,7 +2201,7 @@ namespace Sdl.Community.Qualitivity {
         ///   Looks up a localized string similar to Unable to remove the selected Quality Metric Group while is 
         ///still associated with the client profile &apos;{0}&apos;.
         /// </summary>
-        internal static string Unable_to_remove_the_selected_Quality_Metric_Group {
+        public static string Unable_to_remove_the_selected_Quality_Metric_Group {
             get {
                 return ResourceManager.GetString("Unable_to_remove_the_selected_Quality_Metric_Group", resourceCulture);
             }
@@ -2112,7 +2210,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Unable to save group settings; the updated name is already used!.
         /// </summary>
-        internal static string Unable_to_save_group_settings__the_updated_name_is_already_used_ {
+        public static string Unable_to_save_group_settings__the_updated_name_is_already_used_ {
             get {
                 return ResourceManager.GetString("Unable_to_save_group_settings__the_updated_name_is_already_used_", resourceCulture);
             }
@@ -2121,7 +2219,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Unable to save settings; unable to locate the backup folder specified!.
         /// </summary>
-        internal static string Unable_to_save_settings__unable_to_locate_the_backup_folder_specified_ {
+        public static string Unable_to_save_settings__unable_to_locate_the_backup_folder_specified_ {
             get {
                 return ResourceManager.GetString("Unable_to_save_settings__unable_to_locate_the_backup_folder_specified_", resourceCulture);
             }
@@ -2130,7 +2228,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Unable to save the company profile &apos;{0}&apos;; the company name already exists!.
         /// </summary>
-        internal static string Unable_to_save_the_company_profile___0____ {
+        public static string Unable_to_save_the_company_profile___0____ {
             get {
                 return ResourceManager.GetString("Unable_to_save_the_company_profile___0____", resourceCulture);
             }
@@ -2139,7 +2237,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Unable to save the company profile; the company name cannot be null!.
         /// </summary>
-        internal static string Unable_to_save_the_company_profile__the_company_name_cannot_be_null_ {
+        public static string Unable_to_save_the_company_profile__the_company_name_cannot_be_null_ {
             get {
                 return ResourceManager.GetString("Unable_to_save_the_company_profile__the_company_name_cannot_be_null_", resourceCulture);
             }
@@ -2149,7 +2247,7 @@ namespace Sdl.Community.Qualitivity {
         ///   Looks up a localized string similar to Updating project activities; the activity records are being saved to the database.
         ///Please wait until processing has completed..
         /// </summary>
-        internal static string Update_Document_Activity_Message {
+        public static string Update_Document_Activity_Message {
             get {
                 return ResourceManager.GetString("Update_Document_Activity_Message", resourceCulture);
             }
@@ -2158,7 +2256,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Updating {0} of {1} documents....
         /// </summary>
-        internal static string Updating_0_of_1_documents {
+        public static string Updating_0_of_1_documents {
             get {
                 return ResourceManager.GetString("Updating_0_of_1_documents", resourceCulture);
             }
@@ -2167,7 +2265,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Warning: You are merging activities with tracking information where the same segments exist in multiple documents!.
         /// </summary>
-        internal static string Warning_You_are_merging_activities_with_tracking_information_where_the_same_segments_exist_in_multiple_documents_ {
+        public static string Warning_You_are_merging_activities_with_tracking_information_where_the_same_segments_exist_in_multiple_documents_ {
             get {
                 return ResourceManager.GetString("Warning_You_are_merging_activities_with_tracking_information_where_the_same_segme" +
                         "nts_exist_in_multiple_documents_", resourceCulture);
@@ -2177,7 +2275,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Year: {0}.
         /// </summary>
-        internal static string Year_0 {
+        public static string Year_0 {
             get {
                 return ResourceManager.GetString("Year_0", resourceCulture);
             }
@@ -2186,7 +2284,7 @@ namespace Sdl.Community.Qualitivity {
         /// <summary>
         ///   Looks up a localized string similar to Year: {0}, .
         /// </summary>
-        internal static string Year_0_ {
+        public static string Year_0_ {
             get {
                 return ResourceManager.GetString("Year_0_", resourceCulture);
             }

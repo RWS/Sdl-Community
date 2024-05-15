@@ -238,6 +238,15 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 
 
 		private bool IsActive { get; set; }
+
+		public void Initialize()
+		{
+			if (IsInitialized) return;
+			Initialize(null);
+		}
+
+		public bool IsInitialized { get; set; }
+
 		protected override void Initialize(IViewContext context)
 		{
 			ActivationChanged += StudioTimeTrackerViewController_ActivationChanged;
@@ -384,10 +393,10 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 			CheckBackupStatus();
 
 			ProjectsController.SelectedProjectsChanged += projectsController_SelectedProjectsChanged;
-
+			IsInitialized = true;
 		}
 
-	
+
 		private void projectsController_SelectedProjectsChanged(object sender, EventArgs e)
 		{
 
@@ -397,7 +406,7 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 			}
 			else if (ProjectsController.SelectedProjects.FirstOrDefault() != null)
 			{
-				CurrentSelectedProject = ProjectsController.SelectedProjects.FirstOrDefault();
+				CurrentSelectedProject = ApplicationContext.GetSelectedProject();
 				if (CurrentSelectedProject != null)
 					CurrentProjectInfo = CurrentSelectedProject.GetProjectInfo();
 
