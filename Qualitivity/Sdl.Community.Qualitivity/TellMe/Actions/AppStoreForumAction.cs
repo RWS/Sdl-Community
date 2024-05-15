@@ -2,7 +2,7 @@
 using System.Drawing;
 using Sdl.TellMe.ProviderApi;
 
-namespace Sdl.Community.Qualitivity.TellMe
+namespace Sdl.Community.Qualitivity.TellMe.Actions
 {
 	public class AppStoreForumAction : AbstractTellMeAction
 	{
@@ -10,7 +10,7 @@ namespace Sdl.Community.Qualitivity.TellMe
 
 		public override string Category => string.Format(PluginResources.TellMe_Provider_Results, PluginResources.Plugin_Name);
 
-		public override Icon Icon => PluginResources.ForumIcon;
+		public override Icon Icon => PluginResources.Forum;
 
 		public AppStoreForumAction()
 		{

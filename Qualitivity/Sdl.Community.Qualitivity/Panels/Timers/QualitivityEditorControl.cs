@@ -117,25 +117,28 @@ namespace Sdl.Community.Qualitivity.Panels.Timers
 
         private void toolStripButton_stop_Click(object sender, EventArgs e)
         {
-            try
-            {
-                Tracked.HandlerPartent = HandlerParent;
+	        StopTracking();
+        }
 
-                toolStripButton_start.Enabled = true;
-                toolStripButton_pause.Enabled = false;
-                toolStripButton_stop.Enabled = false;
-                toolStripButton_delete.Enabled = false;
-                toolStripButton_pause.Image = imageList2.Images["pause"];
-                toolStripButton_pause.Text = @"Pause";
-                toolStripButton_pause.ToolTipText = @"Pause Activity Tracking";
-            }
-            finally
-            {
+        public void StopTracking()
+        {
+	        try
+	        {
+		        Tracked.HandlerPartent = HandlerParent;
 
-                TrackedActions.stop_tracking(GetEditorController(), Timer4DocumentEditorArea);
-            }
+		        toolStripButton_start.Enabled = true;
+		        toolStripButton_pause.Enabled = false;
+		        toolStripButton_stop.Enabled = false;
+		        toolStripButton_delete.Enabled = false;
+		        toolStripButton_pause.Image = imageList2.Images["pause"];
+		        toolStripButton_pause.Text = @"Pause";
+		        toolStripButton_pause.ToolTipText = @"Pause Activity Tracking";
+	        }
+	        finally
+	        {
 
-
+		        TrackedActions.stop_tracking(GetEditorController(), Timer4DocumentEditorArea);
+	        }
         }
 
         private void toolStripButton_delete_Click(object sender, EventArgs e)
@@ -304,7 +307,6 @@ namespace Sdl.Community.Qualitivity.Panels.Timers
         }
 
 
-
-
-    }
+       
+	}
 }
