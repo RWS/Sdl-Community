@@ -9,7 +9,7 @@ using Trados.TargetRenamer.Services;
 
 namespace Trados.TargetRenamer.ViewModel
 {
-	public class TargetRenamerSettingsViewModel : BaseModel, ISettingsAware<TargetRenamerSettings>
+	public class TargetRenamerSettingsViewModel : BaseViewModel, ISettingsAware<TargetRenamerSettings>
     {
         private const string AppendPrefixText = "Append As Prefix";
         private const string AppendSuffixText = "Append As Suffix";

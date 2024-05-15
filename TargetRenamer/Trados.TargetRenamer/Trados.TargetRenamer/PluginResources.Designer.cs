@@ -97,31 +97,11 @@ namespace Trados.TargetRenamer {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon Download {
-            get {
-                object obj = ResourceManager.GetObject("Download", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Path is empty..
         /// </summary>
         public static string EmptyPath {
             get {
                 return ResourceManager.GetString("EmptyPath", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon ForumIcon {
-            get {
-                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -171,16 +151,6 @@ namespace Trados.TargetRenamer {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon Question {
-            get {
-                object obj = ResourceManager.GetObject("Question", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Replace with:.
         /// </summary>
         public static string ReplaceWith {
@@ -204,15 +174,6 @@ namespace Trados.TargetRenamer {
         public static string Reset {
             get {
                 return ResourceManager.GetString("Reset", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Trados AppStore.
-        /// </summary>
-        public static string RWSAppStoreTeam {
-            get {
-                return ResourceManager.GetString("RWSAppStoreTeam", resourceCulture);
             }
         }
         
@@ -289,11 +250,36 @@ namespace Trados.TargetRenamer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Trados Studio Target Renamer.
+        ///   Looks up a localized string similar to To engage with Trados Studio Target Renamer, follow these steps
+        /// 
+        ///1. In the Files View, select your files
+        ///2. Under Home Tab find File Actions Group
+        ///3. Use the Batch Tasks dropdown menu
+        ///.
         /// </summary>
-        public static string TargetRenamer_Name {
+        public static string TellMe_ActionWarning {
             get {
-                return ResourceManager.GetString("TargetRenamer_Name", resourceCulture);
+                return ResourceManager.GetString("TellMe_ActionWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_Documentation {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_Documentation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_Forum {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_Forum", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -303,6 +289,26 @@ namespace Trados.TargetRenamer {
         public static string TellMe_Provider_Results {
             get {
                 return ResourceManager.GetString("TellMe_Provider_Results", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_Settings {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_Settings", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_SourceCode {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_SourceCode", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
     }

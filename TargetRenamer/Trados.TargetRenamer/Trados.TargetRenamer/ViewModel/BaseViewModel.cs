@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace Trados.TargetRenamer.Model
 {
-	public class BaseModel : INotifyPropertyChanged
+	public class BaseViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
