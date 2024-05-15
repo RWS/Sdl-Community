@@ -366,7 +366,7 @@
                     Height="30"
                     Click="HelpButton_OnClick"
                     HorizontalAlignment="Left"
-                    Style="{StaticResource Sdl.Button.GeneralStyle}"
+                    Style="{StaticResource Sdl.Button.SecondaryStyle}"
                     DockPanel.Dock="Left"
                     Margin="10 0 10 10" />
 

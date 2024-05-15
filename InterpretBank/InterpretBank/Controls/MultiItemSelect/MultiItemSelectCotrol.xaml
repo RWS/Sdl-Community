@@ -145,13 +145,13 @@
                     <Style TargetType="Button"
                            BasedOn="{StaticResource DropDownButtonStyle}">
                         <Setter Property="Content"
-                                Value="►" />
+                                Value="▾" />
 
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ShowDropdown, ElementName=Root}"
                                          Value="True">
                                 <Setter Property="Content"
-                                        Value="◄" />
+                                        Value="▴" />
                             </DataTrigger>
                         </Style.Triggers>
 
