@@ -9,23 +9,24 @@ using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
 using Trados.TargetRenamer.BatchTask;
+using Trados.TargetRenamer.Helpers;
 using Trados.TargetRenamer.Services;
 
-namespace Trados.TargetRenamer
+namespace Trados.TargetRenamer.Studio.BatchTask
 {
-	[AutomaticTask("TargetRenamer_Name",
-		"TargetRenamer_Name",
-        "TargetRenamer_Description",
-        GeneratedFileType = AutomaticTaskFileType.BilingualTarget)]
-    [AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
-    [RequiresSettings(typeof(TargetRenamerSettings), typeof(TargetRenamerSettingsPage))]
-    public class TargetRenamer : AbstractFileContentProcessingAutomaticTask
-    {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private List<ProjectFile> _projectFiles;
-        private Dictionary<(ProjectFile, LanguageDirection), Tuple<string, string>> _renamedFiles;
-        private ReportCreatorService _reportCreator;
-        private TargetRenamerSettings _settings;
+	[AutomaticTask(Constants.PluginName,
+		Constants.PluginName,
+		"TargetRenamer_Description",
+		GeneratedFileType = AutomaticTaskFileType.BilingualTarget)]
+	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
+	[RequiresSettings(typeof(TargetRenamerSettings), typeof(TargetRenamerSettingsPage))]
+	public class TargetRenamer : AbstractFileContentProcessingAutomaticTask
+	{
+		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private List<ProjectFile> _projectFiles;
+		private Dictionary<(ProjectFile, LanguageDirection), Tuple<string, string>> _renamedFiles;
+		private ReportCreatorService _reportCreator;
+		private TargetRenamerSettings _settings;
 
 		public override void TaskComplete()
 		{
@@ -157,7 +158,7 @@ namespace Trados.TargetRenamer
 			{
 				_settings = Project.GetSettings(languageDirection.TargetLanguage).GetSettingsGroup<TargetRenamerSettings>();
 				var reportName =
-					$"{PluginResources.TargetRenamer_Name}_{languageDirection.SourceLanguage.IsoAbbreviation}_{languageDirection.TargetLanguage.IsoAbbreviation}";
+					$"{Constants.PluginName}_{languageDirection.SourceLanguage.IsoAbbreviation}_{languageDirection.TargetLanguage.IsoAbbreviation}";
 
 				var projectFiles = _projectFiles
 					.Where(x => Equals(x.GetLanguageDirection().TargetLanguage, languageDirection.TargetLanguage)).ToList();

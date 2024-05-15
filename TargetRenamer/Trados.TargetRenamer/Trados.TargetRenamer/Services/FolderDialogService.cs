@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Windows.Forms;
+using Microsoft.Win32;
 using Trados.TargetRenamer.Helpers;
 using Trados.TargetRenamer.Interfaces;
 
@@ -64,27 +64,27 @@ namespace Trados.TargetRenamer.Services
                 uint num = 0;
                 var type = reflector.GetType("FileDialogNative.IFileDialog");
                 var obj = reflector.Call(_ofd, "CreateVistaDialog");
-                object[] objArray = { obj };
+				object[] objArray = [obj];
                 reflector.Call(_ofd, "OnBeforeVistaDialog", objArray);
                 var @enum = (uint)reflector.CallAs(typeof(FileDialog), _ofd, "GetOptions");
-                @enum = @enum | (uint)reflector.GetEnum("FileDialogNative.FOS", "FOS_PICKFOLDERS");
-                object[] objArray1 = { @enum };
+                @enum |= (uint)reflector.GetEnum("FileDialogNative.FOS", "FOS_PICKFOLDERS");
+				object[] objArray1 = [@enum];
                 reflector.CallAs(type, obj, "SetOptions", objArray1);
-                object[] objArray2 = { _ofd };
+				object[] objArray2 = [_ofd];
                 var obj1 = reflector.New("FileDialog.VistaDialogEvents", objArray2);
-                object[] objArray3 = { obj1, num };
+                object[] objArray3 = [obj1, num];
                 var objArray4 = objArray3;
                 reflector.CallAs2(type, obj, "Advise", objArray4);
                 num = (uint)objArray4[1];
                 try
                 {
-                    object[] objArray5 = { hWndOwner };
+                    object[] objArray5 = [hWndOwner];
                     var num1 = (int)reflector.CallAs(type, obj, "Show", objArray5);
                     flag = 0 == num1;
                 }
                 finally
                 {
-                    object[] objArray6 = { num };
+                    object[] objArray6 = [num];
                     reflector.CallAs(type, obj, "Unadvise", objArray6);
                     GC.KeepAlive(obj1);
                 }
