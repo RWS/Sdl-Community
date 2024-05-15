@@ -139,17 +139,11 @@
   <data name="ErrorTooManyParagraphs" xml:space="preserve">
     <value>Multiple paragraphs detected in segment #{0}.</value>
   </data>
-  <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\ForumIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="LayoutTypeNotFound" xml:space="preserve">
     <value>The document layout cannot be identified.</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>TestTask</value>
-  </data>
-  <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>Export to Excel</value>
   </data>
   <data name="RejectedSignOff" xml:space="preserve">
     <value>Sign-off Rejected</value>
@@ -159,6 +153,25 @@
   </data>
   <data name="SideBySideLayout" xml:space="preserve">
     <value>Side-by-side</value>
+  </data>
+  <data name="TellMe_ActionWarning" xml:space="preserve">
+    <value>To engage with Export to Excel, follow these steps
+ 
+1. In the Files View, select your files
+2. Under Home Tab find File Actions Group
+3. Use the Batch Tasks dropdown menu</value>
+  </data>
+  <data name="TellMe_Documentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_Documentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe_Forum" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_Forum.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe_Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_Settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe_SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="TopDownLayout" xml:space="preserve">
     <value>Top-down</value>
