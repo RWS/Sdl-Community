@@ -1,26 +1,15 @@
-﻿using System.Diagnostics;
-using System.Drawing;
-using Sdl.TellMe.ProviderApi;
+﻿using System.Drawing;
 
 namespace Sdl.Community.ExportToExcel.TellMe
 {
-	public class CommunityForumAction : AbstractTellMeAction
-	{
-		public CommunityForumAction()
-		{
-			Name = "RWS Community AppStore forum";
-		}
+    public class CommunityForumAction : TellMeAction
+    {
+        private static readonly string[] _helpKeywords = { "community", "support", "forum" };
+        private static readonly string _actionName = Constants.TellMe_Forum_Name;
+        private static readonly string _url = Constants.TellMe_Forum_Url;
+        private static readonly Icon _icon = PluginResources.TellMe_Forum;
+        private static readonly bool _isAvailable = true;
 
-		public override void Execute()
-		{
-			Process.Start(
-				"https://community.rws.com/product-groups/trados-portfolio/rws-appstore/f");
-		}
-
-		public override bool IsAvailable => true;
-
-		public override string Category => "Export to excel results";
-
-		public override Icon Icon => PluginResources.ForumIcon;
-	}
+        public CommunityForumAction() : base(_actionName, _icon, _helpKeywords, _isAvailable, url: _url) { }
+    }
 }

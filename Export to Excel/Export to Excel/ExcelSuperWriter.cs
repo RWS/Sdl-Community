@@ -515,11 +515,7 @@ namespace Sdl.Community.ExportToExcel
             ExcelStyleSheet.Save();
             ExcelSharedStringsTable.SharedStringTable.Save();
             ExcelWorkSheetPart.Worksheet.Save();
-
-            if (ExcelDocument != null)
-            {
-                ExcelDocument.Close();
-            }
+            ExcelDocument?.Close();
         }
     }
 }
