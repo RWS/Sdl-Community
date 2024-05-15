@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Windows;
-using NLog;
+﻿using NLog;
 using Sdl.Community.SDLBatchAnonymize.BatchTask;
 using Sdl.Community.SDLBatchAnonymize.Service;
 using Sdl.Core.Globalization;
@@ -11,12 +9,14 @@ using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using System.Linq;
+using System.Windows;
 
 
 namespace Sdl.Community.SDLBatchAnonymize
 {
 
-	[AutomaticTask("Trados Batch Anonymizer",
+    [AutomaticTask("Trados Batch Anonymizer",
 		"Trados Batch Anonymizer",
 		"Provides various options for anonymizing the files in a Studio project.",
 		GeneratedFileType = AutomaticTaskFileType.BilingualTarget)]
