@@ -5,7 +5,6 @@
     <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
-    <UseWPF>true</UseWPF>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -17,11 +16,8 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
-    <TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio18</TradosFolder>
+    <TradosFolder>C:\Code\SDL\Trados\Bin\Mixed Platforms\Debug</TradosFolder>
   </PropertyGroup>
-  <ItemGroup>
-    <None Remove="Resources\Information.png" />
-  </ItemGroup>
   <ItemGroup>
     <Reference Include="Interop.antido32Lib">
       <HintPath>..\3rd party\Interop.antido32Lib.dll</HintPath>
@@ -79,44 +75,27 @@
     <Content Include="Resources\dictionary.ico" />
     <Content Include="Resources\Download.ico" />
     <Content Include="Resources\Druide.ico" />
+    <Content Include="Resources\ForumIcon.ico" />
     <Content Include="Resources\guide.ico" />
     <Content Include="Resources\Question.ico" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
     <PackageReference Include="Sdl.Core.PluginFramework">
-      <Version>2.1.0</Version>
+      <Version>1.8.0</Version>
     </PackageReference>
     <PackageReference Include="Sdl.Core.PluginFramework.Build">
-      <Version>18.0.1</Version>
+      <Version>17.0.0</Version>
     </PackageReference>
     <PackageReference Include="Serilog">
-      <Version>3.1.1</Version>
+      <Version>2.12.0</Version>
     </PackageReference>
     <PackageReference Include="Serilog.Sinks.RollingFile">
       <Version>3.3.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Information.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="PluginResources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>PluginResources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="PluginResources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="TellMe\WarningWindow\SettingsActionWarning.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
+    <Folder Include="TellMe\NewFolder\" />
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
@@ -129,6 +108,5 @@
   </PropertyGroup>
   <PropertyGroup>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
-    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 </Project>

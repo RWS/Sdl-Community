@@ -1,4 +1,5 @@
-﻿using Sdl.TellMe.ProviderApi;
+﻿using Sdl.Community.AntidoteVerifier.TellMe.Actions;
+using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.AntidoteVerifier.TellMe
 {
@@ -7,24 +8,28 @@ namespace Sdl.Community.AntidoteVerifier.TellMe
 	{
 		public string Name => string.Format(PluginResources.TellMe_Provider, PluginResources.Plugin_Name);
 
-		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
-		{
-			new AppStoreForumAction
+		public AbstractTellMeAction[] ProviderActions =>
+        [
+            new AppStoreForumAction
 			{
-				Keywords = new[] { "antidote", "verifier", "support", "forum" }
-			},
-			new AppStoreDownloadAction
+				Keywords = ["antidote", "verifier", "support", "forum"]
+            },new SourceCodeAction
 			{
-				Keywords = new[] { "antidote", "verifier", "store", "download", "appstore" }
+				Keywords = ["antidote", "verifier", "community", "source code", "github"]
 
-			},new SourceCodeAction
+            },new DocumentationAction
 			{
-				Keywords = new[] { "antidote", "verifier", "community", "source code", "github" }
-
-			},new DocumentationAction
-			{
-				Keywords = new[] { "antidote", "verifier", "help", "documentation"}
-			}
-		};
+				Keywords = ["antidote", "verifier", "help", "documentation"]
+            },new CorrectorAction
+            {
+				Keywords = ["antidote", "verifier", "corrector"]
+            },new DictionaryAction
+            {
+				Keywords = ["antidote", "verifier", "dictionary"]
+            },new GuidesAction
+            {
+				Keywords = ["antidote", "verifier", "guides"]
+            }
+        ];
 	}
 }
