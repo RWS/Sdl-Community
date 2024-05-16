@@ -139,7 +139,7 @@
                     FontSize="20"
                     AutomationProperties.Name="Open items list"
                     x:Name="DropdownButton"
-                    VerticalAlignment="Stretch"
+                    VerticalAlignment="Center"
                     HorizontalAlignment="Right">
                 <Button.Style>
                     <Style TargetType="Button"
@@ -162,32 +162,43 @@
 
             <Popup IsOpen="{Binding ShowDropdown, ElementName=Root, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                    PopupAnimation="Slide"
+                   Grid.Column="1"
+                   Grid.Row="1"
                    HorizontalAlignment="Stretch"
                    MinWidth="{Binding ActualWidth, ElementName=Root}"
                    x:Name="Popup"
                    Focusable="True"
                    AllowsTransparency="True"
                    StaysOpen="False"
-                   Placement="Left"
+                   Placement="Bottom"
                    PlacementTarget="{Binding ElementName=DropdownButton}">
-                <StackPanel>
-                    <TextBlock x:Name="AllItemsTextBlock"
-                               Text="Items"
-                               Focusable="True" />
-                    <!--<Button Content="Select all" Click="SelectAllItemsButton_OnClick"/>-->
-                    <ListBox x:Name="AllItemsListBox"
-                             SelectionMode="Multiple"
-                             SelectionChanged="AllItemsListBox_OnSelectionChanged"
-                             TabIndex="1"
-                             Visibility="{Binding ShowDropdown, ElementName=Root, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"
-                             ItemsSource="{Binding ItemsSource, ElementName=Root}">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <ContentPresenter ContentTemplate="{Binding ItemTemplate, ElementName=Root}" />
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </StackPanel>
+                <Border Padding="10">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="5"
+                                          Color="Black"
+                                          Direction="315"
+                                          ShadowDepth="5"
+                                          Opacity="0.7" />
+                    </Border.Effect>
+                    <StackPanel>
+                        <!--<TextBlock x:Name="AllItemsTextBlock"
+                                   Focusable="True" />-->
+                        <!--<Button Content="Select all" Click="SelectAllItemsButton_OnClick"/>-->
+                        <!--Background="#F6F6F6"-->
+                        <ListBox x:Name="AllItemsListBox"
+                                 SelectionMode="Multiple"
+                                 SelectionChanged="AllItemsListBox_OnSelectionChanged"
+                                 TabIndex="1"
+                                 Visibility="{Binding ShowDropdown, ElementName=Root, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                 ItemsSource="{Binding ItemsSource, ElementName=Root}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <ContentPresenter ContentTemplate="{Binding ItemTemplate, ElementName=Root}" />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </Border>
             </Popup>
         </Grid>
     </Border>
