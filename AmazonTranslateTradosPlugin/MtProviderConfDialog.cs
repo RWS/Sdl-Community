@@ -12,13 +12,14 @@
    See the License for the specific language governing permissions and
    limitations under the License.*/
 
+using Sdl.Community.AmazonTranslateProvider;
+using Sdl.Community.AmazonTranslateTradosPlugin.Model;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Serialization;
-using Sdl.Community.AmazonTranslateProvider;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.AmazonTranslateTradosPlugin
 {
@@ -29,7 +30,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
         Uri uriAmz;
         TranslationProviderCredential amzCred;
 
-        public MtProviderConfDialog(MtTranslationOptions options, ITranslationProviderCredentialStore credentialStore)
+        public MtProviderConfDialog(TranslationOptions options, ITranslationProviderCredentialStore credentialStore)
         {
             this.credstore = credentialStore;
             uriAmz = new Uri("amazontranslateprovider:///");
@@ -38,7 +39,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
             UpdateDialog();
         }
 
-        public MtProviderConfDialog(MtTranslationOptions options, string caption, ITranslationProviderCredentialStore credentialStore)
+        public MtProviderConfDialog(TranslationOptions options, string caption, ITranslationProviderCredentialStore credentialStore)
         {
             this.credstore = credentialStore;
             uriAmz = new Uri("amazontranslateprovider:///");
@@ -66,7 +67,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
 
         }
 
-        public MtTranslationOptions Options
+        public TranslationOptions Options
         {
             get;
             set;
@@ -81,7 +82,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
             txtAWSProfileName.Text = Options.ProfileName;
             chkSaveCred.Checked = Options.PersistAWSCreds;
             chkPlainTextOnly.Checked = Options.SendPlainTextOnly;
-            comboAuthType.Text = MtTranslationOptions.GetAuthTypeDescription(Options.SelectedAuthType);
+            comboAuthType.Text = TranslationOptions.GetAuthTypeDescription(Options.SelectedAuthType);
             chkResendDrafts.Checked = Options.ResendDrafts;
             chkUsePreEdit.Checked = Options.UsePreEdit;
             chkUsePostEdit.Checked = Options.UsePostEdit;
@@ -195,7 +196,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
             Options.ProfileName = txtAWSProfileName.Text;
             Options.PersistAWSCreds = chkSaveCred.Checked;
             Options.SendPlainTextOnly = chkPlainTextOnly.Checked;
-            Options.SelectedAuthType = comboAuthType.SelectedIndex == 1 ? MtTranslationOptions.AWSAuthType.AccessKeys : MtTranslationOptions.AWSAuthType.Profile;
+            Options.SelectedAuthType = comboAuthType.SelectedIndex == 1 ? TranslationOptions.AWSAuthType.AccessKeys : TranslationOptions.AWSAuthType.Profile;
             Options.ResendDrafts = chkResendDrafts.Checked;
             Options.UsePreEdit = chkUsePreEdit.Checked;
             Options.UsePostEdit = chkUsePostEdit.Checked;
@@ -253,7 +254,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
                 prompt += newLine + MtProviderConfDialogResources.validationMessageNoProvider;
                 result = false;
             }
-            if (Options.SelectedAuthType == MtTranslationOptions.AWSAuthType.AccessKeys
+            if (Options.SelectedAuthType == TranslationOptions.AWSAuthType.AccessKeys
                 && (txtAccessKey.Text == string.Empty 
                 || txtSecretKey.Text == string.Empty
                 || txtRegion.Text == string.Empty))
@@ -261,7 +262,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
                 prompt += newLine + MtProviderConfDialogResources.validationMessageNoKey;
                 result = false;
             }
-            if (Options.SelectedAuthType == MtTranslationOptions.AWSAuthType.Profile //these strings should not be localized and are therefore hard-coded
+            if (Options.SelectedAuthType == TranslationOptions.AWSAuthType.Profile //these strings should not be localized and are therefore hard-coded
                 && txtAWSProfileName.Text == string.Empty)
             {
                 prompt += newLine + MtProviderConfDialogResources.validationMessageNoProfileName;
