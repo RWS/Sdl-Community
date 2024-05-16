@@ -1,19 +1,21 @@
 using System.Drawing;
-using Sdl.TellMe.ProviderApi;
+using System.Media;
 
 namespace Sdl.Community.SdlDataProtectionSuite.TellMe
 {
-	internal class SettingsAction : AbstractTellMeAction
-	{
-		public SettingsAction()
-		{
-			Name = string.Format("{0} - TM Anonymizer Settings", PluginResources.Plugin_Name);
-		}
+    internal class SettingsAction : TellMeAction
+    {
+        private static readonly string[] _helpKeywords = ["settings"];
+        private static readonly string _actionName = TellMeConstants.TellMe_Settings_Name;
+        private static readonly Icon _icon = PluginResources.TellMe_Settings;
+        private static readonly bool _isAvailable = true;
 
-		public override string Category => string.Format(PluginResources.TellMe_Provider_Results, PluginResources.Plugin_Name);
-		public override Icon Icon => PluginResources.TellmeDocumentation;
-		public override bool IsAvailable => true;
+        public SettingsAction() : base(_actionName, _icon, _helpKeywords, _isAvailable, customAction: ShowDialog) { }
 
-		public override void Execute() => ApplicationContext.ShowSettingsWindow();
-	}
+        private static void ShowDialog()
+        {
+            SystemSounds.Beep.Play();
+            ApplicationContext.ShowSettingsWindow();
+        }
+    }
 }
