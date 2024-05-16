@@ -182,7 +182,7 @@
   <data name="Lock" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        EAAACxABrSO9dQAACBBJREFUeF7tnd+LJNUVx9eXxEQjIkHXHzEoChJiFI0YUJKAmJj3XU3czc4w091V
+        DgAACw4BQL7hQQAACBBJREFUeF7tnd+LJNUVx9eXxEQjIkHXHzEoChJiFI0YUJKAmJj3XU3czc4w091V
         997qrqqJRhL9E/JDTQjBp+D6i/gUVMzPlySCCSiYVyFkEX+AKKKoyegm3jP7rY7sfut2T03P1r295wMf
         GGbq3D7nVHdV3eqaqj2KoiiKoiiKoiiKoiiKoiiKoijLgLX2TGvrW3Jb3mNM+aB11d+MLY+4cf2mG29s
         HrN+U3639Te/jHHl3XlefvPgwYNnYBglJYbD4fm2qL/nV+gzfsV+4Ffy/zq6aVz1F1tU9fr6+nkYXomU
@@ -261,5 +261,27 @@ were ignored by the parser because they were not in the correct format (.sdlxlif
   </data>
   <data name="SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe_Documentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_Documentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe_Forum" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_Forum.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe_Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_Settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe_SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMeView" xml:space="preserve">
+    <value>Trados Data Protection Suite can either be applied against project files or Translation Memory data.
+
+To apply Trados Data Protection settings against project files, please follow these steps:
+    1. Select Project
+    2. Access Batch Task
+    3. Run Protect Data followed by Unprotect Data if needed
+
+To apply Trados Data Protection settings against a Translation Memory, please go to the TradosTMAnonymizer view located at the bottom left of Trados Studio</value>
   </data>
 </root>

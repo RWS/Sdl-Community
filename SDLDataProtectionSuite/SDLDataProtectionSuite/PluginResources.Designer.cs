@@ -340,6 +340,26 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_Documentation {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_Documentation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_Forum {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_Forum", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} TellMe provider.
         /// </summary>
         public static string TellMe_Provider {
@@ -360,12 +380,46 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-
+        public static System.Drawing.Icon TellMe_Settings {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_Settings", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_SourceCode {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_SourceCode", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         public static System.Drawing.Icon TellmeDocumentation {
             get {
                 object obj = ResourceManager.GetObject("TellmeDocumentation", resourceCulture);
-
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trados Data Protection Suite can either be applied against project files or Translation Memory data.
+        ///
+        ///To apply Trados Data Protection settings against project files, please follow these steps:
+        ///    1. Select Project
+        ///    2. Access Batch Task
+        ///    3. Run Protect Data followed by Unprotect Data if needed
+        ///
+        ///To apply Trados Data Protection settings against a Translation Memory, please go to the TradosTMAnonymizer view located at the bottom left of Trados Studio.
+        /// </summary>
+        public static string TellMeView {
+            get {
+                return ResourceManager.GetString("TellMeView", resourceCulture);
             }
         }
         

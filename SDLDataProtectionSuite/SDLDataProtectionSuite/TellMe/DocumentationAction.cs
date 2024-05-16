@@ -1,25 +1,15 @@
-using System.Diagnostics;
 using System.Drawing;
-using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.SdlDataProtectionSuite.TellMe
 {
-	public class DocumentationAction : AbstractTellMeAction
-	{
-		public override bool IsAvailable => true;
+    internal class DocumentationAction : TellMeAction
+    {
+        private static readonly string[] _helpKeywords = ["help", "guide"];
+        private static readonly string _actionName = TellMeConstants.TellMe_Documentation_Name;
+        private static readonly string _url = TellMeConstants.TellMe_Documentation_Url;
+        private static readonly Icon _icon = PluginResources.TellMe_Documentation;
+        private static readonly bool _isAvailable = true;
 
-		public override string Category => string.Format(PluginResources.TellMe_Provider_Results, PluginResources.Plugin_Name);
-
-		public override Icon Icon => PluginResources.TellmeDocumentation;
-
-		public DocumentationAction()
-		{
-			Name = string.Format("{0} Documentation", PluginResources.Plugin_Name);
-		}
-
-		public override void Execute()
-		{
-			Process.Start("https://appstore.rws.com/Plugin/39?tab=documentation");
-		}
-	}
+        public DocumentationAction() : base(_actionName, _icon, _helpKeywords, _isAvailable, url: _url) { }
+    }
 }
