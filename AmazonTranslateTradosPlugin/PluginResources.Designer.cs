@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sdl.Community.AmazonTranslateProvider {
+namespace Sdl.Community.AmazonTranslateTradosPlugin {
     using System;
     
     
@@ -19,7 +19,7 @@ namespace Sdl.Community.AmazonTranslateProvider {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -108,16 +108,6 @@ namespace Sdl.Community.AmazonTranslateProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon Download {
-            get {
-                object obj = ResourceManager.GetObject("Download", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Edit settings error.
         /// </summary>
         public static string EditSettingsErrorCaption {
@@ -141,16 +131,6 @@ namespace Sdl.Community.AmazonTranslateProvider {
         public static string EditSettingsXmlErrorMessage {
             get {
                 return ResourceManager.GetString("EditSettingsXmlErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon ForumIcon {
-            get {
-                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -200,11 +180,82 @@ namespace Sdl.Community.AmazonTranslateProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For more information,.
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_1 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to click here.
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_2 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to for documentation..
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_3 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We couldn&apos;t find an instance of Amazon Translate Trados Plugin for the current project selected. To add it to your project, follow these steps:
+        ///
+        ///1. Open Project Settings;
+        ///2. Go to Translation Memory and Automated Translation;
+        ///3. Select Use;
+        ///4. Via the dropdown menu locate Amazon Translate Trados Plugin..
+        /// </summary>
+        public static string SettingsAction_NoProviderAvailable {
+            get {
+                return ResourceManager.GetString("SettingsAction_NoProviderAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon question {
+        public static System.Drawing.Icon TellMe_Documentation {
             get {
-                object obj = ResourceManager.GetObject("question", resourceCulture);
+                object obj = ResourceManager.GetObject("TellMe_Documentation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_Forum {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_Forum", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_Settings {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_Settings", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_SourceCode {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_SourceCode", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
