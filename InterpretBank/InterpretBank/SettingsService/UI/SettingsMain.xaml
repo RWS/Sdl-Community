@@ -6,15 +6,12 @@
         xmlns:viewModel="clr-namespace:InterpretBank.SettingsService.ViewModel"
         WindowStyle="None"
         xmlns:controls="clr-namespace:InterpretBank.Controls"
-        xmlns:multiItemSelect="clr-namespace:InterpretBank.Controls.MultiItemSelect"
-        xmlns:converters="clr-namespace:InterpretBank.Converters"
-        xmlns:model="clr-namespace:InterpretBank.SettingsService.Model"
         MouseDown="Window_MouseDown"
         mc:Ignorable="d"
         x:Name="Root"
         d:DataContext="{d:DesignInstance viewModel:SettingsService}"
         Title="InterpretBank settings"
-        SizeToContent="Height"
+        SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterScreen"
         Height="Auto"
         MinWidth="533"
@@ -37,8 +34,6 @@
                         Value="10" />
             </Style>
 
-            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-
         </ResourceDictionary>
     </Window.Resources>
 
@@ -49,7 +44,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
 
         <Image Grid.Row="0"
                Height="50"
@@ -83,7 +77,7 @@
                     Height="30"
                     Click="HelpButton_OnClick"
                     HorizontalAlignment="Left"
-                    Style="{StaticResource Sdl.Button.GeneralStyle}"
+                    Style="{StaticResource Sdl.Button.SecondaryStyle}"
                     DockPanel.Dock="Left"
                     Margin="10 0 10 10" />
 
