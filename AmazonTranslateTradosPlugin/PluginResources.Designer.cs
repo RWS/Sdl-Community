@@ -207,7 +207,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to We couldn&apos;t find an instance of Amazon Translate Trados Plugin for the current project selected. To add it to your project, follow these steps:
+        ///   Looks up a localized string similar to We couldn&apos;t find an instance of Amazon Translate MT provider for the current project selected. To add it to your project, follow these steps:
         ///
         ///1. Open Project Settings;
         ///2. Go to Translation Memory and Automated Translation;

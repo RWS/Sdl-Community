@@ -185,7 +185,7 @@
     <value>for documentation.</value>
   </data>
   <data name="SettingsAction_NoProviderAvailable" xml:space="preserve">
-    <value>We couldn't find an instance of Amazon Translate Trados Plugin for the current project selected. To add it to your project, follow these steps:
+    <value>We couldn't find an instance of Amazon Translate MT provider for the current project selected. To add it to your project, follow these steps:
 
 1. Open Project Settings;
 2. Go to Translation Memory and Automated Translation;
