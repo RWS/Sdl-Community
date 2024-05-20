@@ -367,6 +367,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
+    <Resource Include="Resources\information-48.png" />
     <Content Include="Resources\Settings.ico" />
     <Content Include="Resources\SourceCode.ico" />
     <Content Include="Resources\TellmeDocumentation.ico" />

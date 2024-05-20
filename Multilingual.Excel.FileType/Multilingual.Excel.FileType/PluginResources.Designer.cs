@@ -751,7 +751,7 @@ namespace Multilingual.Excel.FileType {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to for documentation..
+        ///   Looks up a localized string similar to to view the documentation..
         /// </summary>
         public static string SettingsAction_ExternalHelp_3 {
             get {

@@ -40,7 +40,7 @@
 
 			<Image Grid.Row="0"
 				   Grid.Column="0"
-                   Source="/Multilingual.Excel.FileType;component/Resources/Warning2.png"
+                   Source="/Multilingual.Excel.FileType;component/Resources/information-48.png"
                    Height="40"
 				   Width="40"
 				   RenderOptions.BitmapScalingMode="HighQuality"
