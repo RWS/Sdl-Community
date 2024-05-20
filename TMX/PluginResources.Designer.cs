@@ -22,7 +22,7 @@ namespace Sdl.Community.FileType.TMX {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class PluginResources {
+    public class PluginResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Sdl.Community.FileType.TMX {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.FileType.TMX.PluginResources", typeof(PluginResources).Assembly);
@@ -51,7 +51,7 @@ namespace Sdl.Community.FileType.TMX {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Sdl.Community.FileType.TMX {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon bil {
+        public static System.Drawing.Icon bil {
             get {
                 object obj = ResourceManager.GetObject("bil", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -71,40 +71,38 @@ namespace Sdl.Community.FileType.TMX {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon Download {
-            get {
-                object obj = ResourceManager.GetObject("Download", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon ForumIcon {
-            get {
-                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to TMX File Type.
         /// </summary>
-        internal static string Plugin_Name {
+        public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To configure this file type, you need to have it installed and listed.
+        ///Follow these steps:
+        ///
+        ///1. File - Options
+        ///2. File Types - click on : &quot;Additional installed File Types exist&quot;
+        ///3. Select File Type
+        ///4. OK to confirm
+        ///
+        ///Once listed, select the file type from the list top configure as needed.
+        ///Note: File Types need to be configured prior to project creation.
+        /// </summary>
+        public static string SettingsWarning {
+            get {
+                return ResourceManager.GetString("SettingsWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Question {
+        public static System.Drawing.Icon TellMe_Documentation {
             get {
-                object obj = ResourceManager.GetObject("Question", resourceCulture);
+                object obj = ResourceManager.GetObject("TellMe_Documentation", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -112,16 +110,46 @@ namespace Sdl.Community.FileType.TMX {
         /// <summary>
         ///   Looks up a localized string similar to Download {0} from the AppStore.
         /// </summary>
-        internal static string TellMe_Download_Plugin_From_AppStore {
+        public static string TellMe_Download_Plugin_From_AppStore {
             get {
                 return ResourceManager.GetString("TellMe_Download_Plugin_From_AppStore", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_Forum {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_Forum", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_Settings {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_Settings", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_SourceCode {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_SourceCode", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} results.
         /// </summary>
-        internal static string TellMe_String_Results {
+        public static string TellMe_String_Results {
             get {
                 return ResourceManager.GetString("TellMe_String_Results", resourceCulture);
             }
@@ -130,7 +158,7 @@ namespace Sdl.Community.FileType.TMX {
         /// <summary>
         ///   Looks up a localized string similar to {0} TellMe provider.
         /// </summary>
-        internal static string TellMe_String_TellMe_Provider {
+        public static string TellMe_String_TellMe_Provider {
             get {
                 return ResourceManager.GetString("TellMe_String_TellMe_Provider", resourceCulture);
             }
@@ -139,7 +167,7 @@ namespace Sdl.Community.FileType.TMX {
         /// <summary>
         ///   Looks up a localized string similar to Bil Filter Component Builder.
         /// </summary>
-        internal static string TMX_FilterComponentBuilderExtension_Description {
+        public static string TMX_FilterComponentBuilderExtension_Description {
             get {
                 return ResourceManager.GetString("TMX_FilterComponentBuilderExtension_Description", resourceCulture);
             }
@@ -148,7 +176,7 @@ namespace Sdl.Community.FileType.TMX {
         /// <summary>
         ///   Looks up a localized string similar to Bil Filter Component Builder.
         /// </summary>
-        internal static string TMX_FilterComponentBuilderExtension_Name {
+        public static string TMX_FilterComponentBuilderExtension_Name {
             get {
                 return ResourceManager.GetString("TMX_FilterComponentBuilderExtension_Name", resourceCulture);
             }
@@ -157,7 +185,7 @@ namespace Sdl.Community.FileType.TMX {
         /// <summary>
         ///   Looks up a localized string similar to Writer Settings.
         /// </summary>
-        internal static string TMX_WriterPage_Description {
+        public static string TMX_WriterPage_Description {
             get {
                 return ResourceManager.GetString("TMX_WriterPage_Description", resourceCulture);
             }
@@ -166,7 +194,7 @@ namespace Sdl.Community.FileType.TMX {
         /// <summary>
         ///   Looks up a localized string similar to Writer.
         /// </summary>
-        internal static string TMX_WriterPage_Name {
+        public static string TMX_WriterPage_Name {
             get {
                 return ResourceManager.GetString("TMX_WriterPage_Name", resourceCulture);
             }
