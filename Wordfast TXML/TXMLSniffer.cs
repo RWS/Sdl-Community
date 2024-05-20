@@ -1,7 +1,7 @@
-﻿using System.Xml;
-using Sdl.Core.Globalization;
+﻿using Sdl.Core.Globalization;
 using Sdl.Core.Settings;
 using Sdl.FileTypeSupport.Framework.NativeApi;
+using System.Xml;
 
 namespace Sdl.Community.FileTypeSupport.TXML
 {
