@@ -6,7 +6,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
 {
     public static class Constants
     {
-        public const string PluginName = "Amazon Translate Trados Plugin";
+        public const string PluginName = "Amazon Translate MT provider";
         public const string BaseTranslationScheme = "amazontranslateprovider";
 
 
