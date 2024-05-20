@@ -41,15 +41,7 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 					{
 						var workSheetPart = GetWorksheetPartByName(spreadsheetDocument, excelSheet.Name);
 
-						var hyperlinks = workSheetPart.Worksheet.Descendants<Hyperlinks>().FirstOrDefault();
-						if (hyperlinks == null)
-						{
-							hyperlinks = new Hyperlinks();
-							var pm = workSheetPart.Worksheet.Descendants<PageMargins>().First();
-							workSheetPart.Worksheet.InsertBefore(hyperlinks, pm);
-						}
-
-						var hyperlinkList = hyperlinks.Cast<Hyperlink>().ToList();
+						
 
 						foreach (var excelRow in excelSheet.Rows)
 						{
@@ -70,9 +62,9 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 										styleIndex = cellStyleIndex;
 									}
 
-									var hyperlink = hyperlinkList.SingleOrDefault(i => i.Reference?.Value == cell.CellReference?.Value);
-									excelDocument.SetHyperlink(hyperlinks, hyperlink, workSheetPart, excelCell.Hyperlink);
 									
+									excelDocument.SetHyperlink(workSheetPart, excelCell.Hyperlink, cell);
+
 									cell.StyleIndex = Convert.ToUInt32(styleIndex);
 								}
 							}

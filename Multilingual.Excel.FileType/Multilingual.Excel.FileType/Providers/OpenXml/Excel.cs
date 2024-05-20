@@ -318,7 +318,7 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 		}
 
 
-		public void SetHyperlink(Hyperlinks hyperlinks, Hyperlink hyperlink, WorksheetPart workSheetPart, Models.Hyperlink updatedHyperlink)
+		public void SetHyperlink(WorksheetPart workSheetPart, Models.Hyperlink updatedHyperlink, Cell cell)
 		{
 			if (updatedHyperlink == null)
 			{
@@ -326,6 +326,18 @@ namespace Multilingual.Excel.FileType.Providers.OpenXml
 			}
 
 			string id = null;
+
+			var hyperlinks = workSheetPart.Worksheet.Descendants<Hyperlinks>().FirstOrDefault();
+			if (hyperlinks == null)
+			{
+				hyperlinks = new Hyperlinks();
+				var pm = workSheetPart.Worksheet.Descendants<PageMargins>().First();
+				workSheetPart.Worksheet.InsertBefore(hyperlinks, pm);
+			}
+
+			var hyperlinkList = hyperlinks.Cast<Hyperlink>().ToList();
+
+			var hyperlink = hyperlinkList.SingleOrDefault(i => i.Reference?.Value == cell.CellReference?.Value);
 
 			if (IsValidURL(updatedHyperlink.Url))
 			{
