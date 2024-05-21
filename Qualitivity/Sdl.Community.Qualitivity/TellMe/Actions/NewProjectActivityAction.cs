@@ -33,7 +33,7 @@ namespace Sdl.Community.Qualitivity.TellMe.Actions
 		{
 			var infoWindow =
 				new SettingsActionWarning(PluginResources.SettingsAction_NoQualitivityProjectSelected,
-					"New Qualitivity Project Activity");
+					PluginResources.Qualitivity_NewProjectActivityTitle);
 			infoWindow.ShowDialog();
 		}
 	}
