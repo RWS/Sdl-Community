@@ -19,10 +19,10 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class PluginResources {
+    public class PluginResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.FileTypeSupport.MXLIFF.PluginResources", typeof(PluginResources).Assembly);
@@ -51,7 +51,7 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon bil {
+        public static System.Drawing.Icon bil {
             get {
                 object obj = ResourceManager.GetObject("bil", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -73,7 +73,7 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF {
         /// <summary>
         ///   Looks up a localized string similar to Bil Filter Component Builder.
         /// </summary>
-        internal static string BilFilterComponentBuilderExtensionDescription {
+        public static string BilFilterComponentBuilderExtensionDescription {
             get {
                 return ResourceManager.GetString("BilFilterComponentBuilderExtensionDescription", resourceCulture);
             }
@@ -82,47 +82,75 @@ namespace Sdl.Community.FileTypeSupport.MXLIFF {
         /// <summary>
         ///   Looks up a localized string similar to Bil Filter Component Builder.
         /// </summary>
-        internal static string BilFilterComponentBuilderExtensionName {
+        public static string BilFilterComponentBuilderExtensionName {
             get {
                 return ResourceManager.GetString("BilFilterComponentBuilderExtensionName", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon Download {
-            get {
-                object obj = ResourceManager.GetObject("Download", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon ForumIcon {
-            get {
-                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to MXLIFF File Type.
         /// </summary>
-        internal static string PluginName {
+        public static string PluginName {
             get {
                 return ResourceManager.GetString("PluginName", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To configure this file type, you need to have it installed and listed.
+        ///Follow these steps:
+        ///
+        ///1. File - Options
+        ///2. File Types - click on : &quot;Additional installed File Types exist&quot;
+        ///3. Select File Type
+        ///4. OK to confirm
+        ///
+        ///Once listed, select the file type from the list top configure as needed.
+        ///Note: File Types need to be configured prior to project creation.
+        /// </summary>
+        public static string SettingsWarning {
+            get {
+                return ResourceManager.GetString("SettingsWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Question {
+        public static System.Drawing.Icon TellMe_Documentation {
             get {
-                object obj = ResourceManager.GetObject("Question", resourceCulture);
+                object obj = ResourceManager.GetObject("TellMe_Documentation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_Forum {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_Forum", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_Settings {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_Settings", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_SourceCode {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_SourceCode", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
