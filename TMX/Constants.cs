@@ -1,13 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sdl.Community.FileType.TMX
+﻿namespace Sdl.Community.FileType.TMX
 {
-	internal static class Constants
+    internal static class Constants
 	{
 		public const string WriterId = "TMX_WriterPage_Id";
-	}
+        public const string PluginName = "TMX File Type";
+
+        // Tell Me
+        public static readonly string TellMe_Provider_Name = $"{PluginName} Tell Me";
+        public static readonly string TellMe_Forum_Name = $"RWS Community AppStore Forum";
+        public static readonly string TellMe_Forum_Url = "https://community.rws.com/product-groups/trados-portfolio/rws-appstore/f";
+        public static readonly string TellMe_SourceCode_Name = $"{PluginName} Source Code";
+        public static readonly string TellMe_SourceCode_Url = "https://github.com/RWS/Sdl-Community/tree/master/TMX";
+        public static readonly string TellMe_Documentation_Name = $"{PluginName} Documentation";
+        public static readonly string TellMe_Documentation_Url = "https://appstore.rws.com/Plugin/61?tab=documentation";
+        public static readonly string TellMe_Settings_Name = $"{PluginName} Settings";
+    }
 }
