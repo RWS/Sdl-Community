@@ -236,7 +236,7 @@
     <value>Resources\TellMe_SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="TellMe_ActionWarning" xml:space="preserve">
-    <value>To engage with Trados Studio Target Renamer, follow these steps
+    <value>To engage with Trados Batch Anonymizer, follow these steps
  
 1. In the Files View, select your files
 2. Under Home Tab find File Actions Group

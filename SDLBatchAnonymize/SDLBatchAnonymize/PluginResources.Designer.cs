@@ -322,7 +322,7 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To engage with Trados Studio Target Renamer, follow these steps
+        ///   Looks up a localized string similar to To engage with Trados Batch Anonymizer, follow these steps
         /// 
         ///1. In the Files View, select your files
         ///2. Under Home Tab find File Actions Group
