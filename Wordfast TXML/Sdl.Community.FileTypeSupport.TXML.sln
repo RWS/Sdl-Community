@@ -1,20 +1,8 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34601.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.FileTypeSupport.TXML", "Sdl.Community.FileTypeSupport.TXML.csproj", "{5617D5CC-88D8-44D0-9431-CF963A39DCEE}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample Files", "Sample Files", "{9017DB20-B1E7-49FC-BFC8-33AA3C078828}"
-	ProjectSection(SolutionItems) = preProject
-		Sample Files1\#1_wordfast_test.docx.txml = Sample Files1\#1_wordfast_test.docx.txml
-		Sample Files1\01.txml = Sample Files1\01.txml
-		Sample Files1\answering_machine.pptx.txml = Sample Files1\answering_machine.pptx.txml
-		Sample Files1\Configuration.docx.txml = Sample Files1\Configuration.docx.txml
-		Sample Files1\Language_Support.docx.txml = Sample Files1\Language_Support.docx.txml
-		Sample Files1\New_Features.pptx.txml = Sample Files1\New_Features.pptx.txml
-		Sample Files1\paul.txml = Sample Files1\paul.txml
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdl.Community.FileTypeSupport.TXML", "Sdl.Community.FileTypeSupport.TXML.csproj", "{5617D5CC-88D8-44D0-9431-CF963A39DCEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
