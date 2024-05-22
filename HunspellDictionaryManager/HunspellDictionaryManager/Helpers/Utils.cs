@@ -22,20 +22,20 @@ namespace Sdl.Community.HunspellDictionaryManager.Helpers
 		}
 
         /// <summary>
-        /// Get installed version for Studio 2021
+        /// Get installed version for Studio 2024
         /// </summary>
         /// <returns></returns>
         public static string GetInstalledStudioPath()
         {
 			try
 			{
-				var studio = new StudioVersionService().GetInstalledStudioVersions()?.Where(v => v.Version.Equals("Studio17")).FirstOrDefault();
+				var studio = new StudioVersionService().GetInstalledStudioVersions()?.Where(v => v.Version.Equals("Studio18")).FirstOrDefault();
 				if (studio != null)
 				{
 					return studio.InstallPath;
 				}
 
-				MessageBox.Show(Constants.Studio2022ErrorMessage, Constants.InformativeMessage, MessageBoxButton.OK, MessageBoxImage.Error);
+				MessageBox.Show(Constants.Studio2024ErrorMessage, Constants.InformativeMessage, MessageBoxButton.OK, MessageBoxImage.Error);
 			}
 			catch (Exception ex)
 			{
