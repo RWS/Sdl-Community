@@ -97,7 +97,7 @@
                         Content="OK"
                         Visibility="Collapsed"
                         Style="{StaticResource Sdl.Button.PrimaryStyle}"
-                        Click="CloseWindow_Click"
+                        Click="OkButton_OnClick"
                         HorizontalAlignment="Right"
                         Margin="5 30 5 5" /></StackPanel>
         </Grid>

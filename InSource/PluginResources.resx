@@ -252,4 +252,7 @@
  
 A project request listed in the InSource View needs to be selected before creating projects.</value>
   </data>
+  <data name="MessageBoxService_AskForConfirmation_Question" xml:space="preserve">
+    <value>Question</value>
+  </data>
 </root>

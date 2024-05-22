@@ -29,6 +29,8 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Resources\Information.png" />
+    <None Remove="Resources\Question.png" />
+    <None Remove="Resources\Warning.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
@@ -119,6 +121,8 @@
     <Content Include="Resources\CheckForProjects.ico" />
     <Content Include="Resources\CreateProjects.ico" />
     <Resource Include="Resources\money_bill.ico" />
+    <Resource Include="Resources\Question.png" />
+    <Resource Include="Resources\Warning.png" />
     <Content Include="Resources\opensourceimage.ico" />
     <EmbeddedResource Include="Resources\TellMe1.ico" />
     <Content Include="Resources\Wikipedia.ico" />

@@ -239,6 +239,15 @@ namespace Sdl.Community.InSource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Question.
+        /// </summary>
+        public static string MessageBoxService_AskForConfirmation_Question {
+            get {
+                return ResourceManager.GetString("MessageBoxService_AskForConfirmation_Question", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Missing project template.
         /// </summary>
         public static string MissingProjectTemplate_Message {

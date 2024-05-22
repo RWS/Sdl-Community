@@ -8,8 +8,8 @@ namespace Sdl.Community.InSource.Service
     {
         public bool AskForConfirmation(string message)
         {
-            var result = MessageBox.Show(message, string.Empty, MessageBoxButton.OKCancel, MessageBoxImage.Question);
-            return result.HasFlag(MessageBoxResult.OK);
+            var result = GetWindow(message, PluginResources.MessageBoxService_AskForConfirmation_Question, MessageBoxButton.OKCancel, MessageBoxImage.Question).ShowDialog();
+            return result == true;
         }
 
         public void ShowInformation(string text, string header)
@@ -19,7 +19,7 @@ namespace Sdl.Community.InSource.Service
 
         public void ShowWarningMessage(string text, string header)
         {
-            MessageBox.Show(text, header, MessageBoxButton.OK, MessageBoxImage.Warning);
+            GetWindow(text, header, MessageBoxButton.OK, MessageBoxImage.Warning).ShowDialog();
         }
 
         private SettingsActionWarning GetWindow(string text, string header, MessageBoxButton messageBoxButton = MessageBoxButton.OK, MessageBoxImage messageBoxImage = MessageBoxImage.None)
