@@ -1,7 +1,7 @@
 
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Trados Studio InQuote</PlugInName>
-  <Version>4.0.1.0</Version>
+  <Version>5.0.0.0</Version>
   <Description>This plugin takes an analysis from any Trados Studio Project and creates a quote which can be created in MS Word, MS Excel or copied to your clipboard.</Description>
   <Author>Trados AppStore Team</Author>
   <RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />

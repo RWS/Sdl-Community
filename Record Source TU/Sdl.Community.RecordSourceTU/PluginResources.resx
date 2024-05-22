@@ -128,9 +128,52 @@
     <value>resources\forumicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>Sdl.Community.RecordSourceTU</value>
+    <value>Record Source TU</value>
   </data>
   <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Settings2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Settings2.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SettingsAction_ExternalHelp_1" xml:space="preserve">
+    <value>For more information,</value>
+  </data>
+  <data name="SettingsAction_ExternalHelp_2" xml:space="preserve">
+    <value>click here</value>
+  </data>
+  <data name="SettingsAction_ExternalHelp_3" xml:space="preserve">
+    <value>for documentation.</value>
+  </data>
+  <data name="SettingsAction_NoProjectSelected" xml:space="preserve">
+    <value>No project was selected.
+ 
+A project listed in the Projects View needs to be selected and have Record Source TU added to it before you can access its settings.
+To add it, follow these steps:
+ 
+1. Open Project Settings
+2. Go to Translation Memory and Automated Translation
+3. Select "Use" to access the dropdown menu
+4. Select Record Source TU from the list</value>
+  </data>
+  <data name="SettingsAction_RecordSourceNotConfigured" xml:space="preserve">
+    <value>Record Source TU was not configured on this project.
+ 
+A project listed in the Projects View needs to be selected and have Record Source TU added to it before you can access its settings.
+To add it, follow these steps:
+ 
+1. Open Project Settings
+2. Go to Translation Memory and Automated Translation
+3. Select "Use" to access the dropdown menu
+4. Select Record Source TU from the list</value>
+  </data>
+  <data name="SettingsAction_Title" xml:space="preserve">
+    <value>Configuring Record Source TU in Project Settings</value>
+  </data>
+  <data name="SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellmeDocumentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellmeDocumentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

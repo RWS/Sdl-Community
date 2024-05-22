@@ -1,7 +1,7 @@
 
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>#YourProductivity</PlugInName>
-  <Version>3.0.1.0</Version>
+  <Version>4.0.0.0</Version>
   <Description>Check your efficiency percentage in all of your translation projects.</Description>
   <Author>Trados AppStore Team</Author>
   <RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />

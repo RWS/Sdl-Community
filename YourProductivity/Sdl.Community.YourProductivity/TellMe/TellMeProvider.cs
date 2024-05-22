@@ -1,6 +1,7 @@
-﻿using Sdl.TellMe.ProviderApi;
+﻿using Sdl.Community.YourProductivity.TellMe.Actions;
+using Sdl.TellMe.ProviderApi;
 
-namespace Sdl.Community.YourProductivity
+namespace Sdl.Community.YourProductivity.TellMe
 {
 	[TellMeProvider]
 	public class TellMeProvider: ITellMeProvider
@@ -9,17 +10,21 @@ namespace Sdl.Community.YourProductivity
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new CommunityWikiAction
+			new DocumentationAction
 			{
-				Keywords = new[] { "your", "productivity", "community", "support", "wiki" }
+				Keywords = new[] { "your", "productivity", "community", "support", "documentation", "wiki" }
 			},
 			new CommunityAppStoreForumAction
 			{
 				Keywords = new[] { "your", "productivity", "support", "forum" }
 			},
-			new CommunityAppStoreAction
+			new SourceCodeAction
 			{
-				Keywords = new[] { "your", "productivity", "store", "download", "appstore" }
+				Keywords = new[] { "your", "productivity", "source code" }
+			},
+			new ProductivityAction
+			{
+				Keywords = new[] { "your", "productivity" }
 			}
 		};
 	}

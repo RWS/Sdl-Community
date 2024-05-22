@@ -185,7 +185,7 @@ namespace Sdl.Community.InSource
 			{
 				if (e.Error != null)
 				{
-					_messageBoxService.ShowMessage(e.Error.ToString(), string.Empty);
+					_messageBoxService.ShowInformation(e.Error.ToString(), string.Empty);
 				}
 				else
 				{
@@ -198,7 +198,7 @@ namespace Sdl.Community.InSource
 
 						OnProjectRequestsChanged();
 						waitWindow.Close();
-						_messageBoxService.ShowMessage(string.Format(PluginResources.ProjectSuccessfullyCreated_Message, projectRequest.Name), string.Empty);
+						_messageBoxService.ShowInformation(string.Format(PluginResources.ProjectSuccessfullyCreated_Message, projectRequest.Name), string.Empty);
 					}
 					waitWindow.Close();
 					_worker.Dispose();
@@ -223,9 +223,10 @@ namespace Sdl.Community.InSource
 				InitializeBackgroundWorker();
 
 				if (SelectedProjects == null || SelectedProjects.Count == 0)
-				{
-					_messageBoxService.ShowMessage(PluginResources.ProjectSelection_Message, string.Empty);
-				}
+                {
+                    _messageBoxService.ShowInformation(PluginResources.ProjectSelection_Message,
+                        PluginResources.InSourceViewController_CreateProjects_Create_Projects);
+                }
 				else
 				{
 					if (SelectedProjects != null && SelectedProjects.Count != 0)
@@ -262,7 +263,7 @@ namespace Sdl.Community.InSource
 
 									if (e.Error != null)
 									{
-										_messageBoxService.ShowMessage(e.Error.ToString(), string.Empty);
+										_messageBoxService.ShowInformation(e.Error.ToString(), PluginResources.InSourceViewController_CreateProjects_Create_Projects);
 									}
 									else if(creator != null)
 									{
@@ -291,13 +292,13 @@ namespace Sdl.Community.InSource
 						}
 						else
 						{
-							_messageBoxService.ShowMessage(PluginResources.CustomTemplateSelection_Message, string.Empty);
+							_messageBoxService.ShowInformation(PluginResources.CustomTemplateSelection_Message, PluginResources.InSourceViewController_CreateProjects_Create_Projects);
 							_hasTemplateList.Clear();
 						}
 					}
 					else
 					{
-						_messageBoxService.ShowMessage(PluginResources.WatchFoldersSelection_Message, string.Empty);
+						_messageBoxService.ShowInformation(PluginResources.WatchFoldersSelection_Message, PluginResources.InSourceViewController_CreateProjects_Create_Projects);
 						_hasFiles.Clear();
 					}
 				}

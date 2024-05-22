@@ -1,13 +1,11 @@
 ﻿namespace Sdl.Community.InSource.Interfaces
 {
-	public interface IMessageBoxService
-	{
-		void ShowMessage(string text, string header);
+    public interface IMessageBoxService
+    {
+        bool AskForConfirmation(string message);
 
-		void ShowWarningMessage(string text, string header);
+        void ShowInformation(string text, string header);
 
-		void ShowInformationMessage(string text, string header);
-
-		bool AskForConfirmation(string message);
-	}
+        void ShowWarningMessage(string text, string header);
+    }
 }
