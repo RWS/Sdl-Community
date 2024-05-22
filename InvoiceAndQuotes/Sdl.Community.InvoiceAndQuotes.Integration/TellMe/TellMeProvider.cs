@@ -1,4 +1,5 @@
-﻿using Sdl.TellMe.ProviderApi;
+﻿using Sdl.Community.InvoiceAndQuotes.Integration.TellMe.Actions;
+using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.InvoiceAndQuotes.Integration.TellMe
 {
@@ -9,7 +10,7 @@ namespace Sdl.Community.InvoiceAndQuotes.Integration.TellMe
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new CommunityWikiAction
+			new DocumentationAction
 			{
 				Keywords = new[] {"invoice", "quote", "inquote", "invoiceandquote", "community", "support", "wiki" }
 			},
@@ -17,9 +18,14 @@ namespace Sdl.Community.InvoiceAndQuotes.Integration.TellMe
 			{
 				Keywords = new[] { "invoice", "quote", "inquote", "invoiceandquote", "support", "forum" }
 			},
-			new AppStoreDownloadAction
+			new SourceCodeAction
 			{
-				Keywords = new[] { "invoice", "quote", "inquote", "invoiceandquote", "store", "download", "appstore" }}
+				Keywords = new[] { "invoice", "quote", "inquote", "invoiceandquote", "source code" }
+			},
+			new InQuoteAction
+			{
+				Keywords = new[] { "invoice", "quote", "inquote", "invoiceandquote" }
+			}
 		};
 	}
 }
