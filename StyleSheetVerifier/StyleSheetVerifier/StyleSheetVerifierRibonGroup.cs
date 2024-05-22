@@ -26,7 +26,7 @@ namespace Sdl.Community.StyleSheetVerifier
 	{
 		protected override void Execute()
 		{
-			System.Diagnostics.Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3170/stylesheet-verifier");
+			System.Diagnostics.Process.Start("https://appstore.rws.com/Plugin/47?tab=documentation");
 		}
 	}
 }
