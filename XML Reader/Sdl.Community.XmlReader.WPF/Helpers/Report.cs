@@ -56,15 +56,18 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 
 			_xmlReportingAssembly = Assembly.LoadFrom(Path.Combine(Constants.StudioLocation, Constants.XmlReportingDll));
 
-			var reportingType = _xmlReportingAssembly.GetType(Constants.ExcelReportRendererType);
-			var reportingConstructor = reportingType.GetConstructor(
-				BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-				null, Type.EmptyTypes, null);
+            var xmlReportingHelperType = _xmlReportingAssembly.GetType(Constants.XmlReportingHelperType);
+            var xmlReportingHelper = Activator.CreateInstance(xmlReportingHelperType);
 
-			if (reportingConstructor != null)
+            var asposeLicenseLoaderType = _xmlReportingAssembly.GetType(Constants.AsposeLicenseLoader);
+            var asposeLicenseLoader = Activator.CreateInstance(asposeLicenseLoaderType);
+
+            var reportingType = _xmlReportingAssembly.GetType(Constants.ExcelReportRendererType);
+            object[] arguments = [xmlReportingHelper, asposeLicenseLoader];
+
+            _excelRenderer = Activator.CreateInstance(reportingType, arguments);
+            if (_excelRenderer != null)
 			{
-				_excelRenderer = reportingConstructor.Invoke(new object[] { });
-
 				var reportFormat = _excelRenderer.ReportFormats[0];
 				var renderMethod = reportingType.GetMethod(Constants.RenderReportMethod);
 				foreach (var item in selectedItems)

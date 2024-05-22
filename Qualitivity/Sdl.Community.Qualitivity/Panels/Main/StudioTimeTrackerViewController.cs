@@ -31,6 +31,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Sdl.Community.Qualitivity.WarningWindow;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using Activity = Sdl.Community.Structures.Projects.Activities.Activity;
 using DocumentActivities = Sdl.Community.Structures.Projects.Activities.DocumentActivities;
@@ -2376,9 +2377,10 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 					CheckEnabledObjectsEvent(this, EventArgs.Empty);
 			}
 			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message);
-			}
+            {
+                new SettingsActionWarning(PluginResources.SettingsAction_NoTrackingFound,
+                    PluginResources.Qualitivity_StopTrackingTitle).ShowDialog();
+            }
 			finally
 			{
 				TrackedActions.stop_tracking(GetEditorController(), Timer4ProjectArea);

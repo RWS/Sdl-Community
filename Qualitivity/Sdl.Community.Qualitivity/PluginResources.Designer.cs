@@ -930,6 +930,24 @@ namespace Sdl.Community.Qualitivity {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New Qualitivity Project Activity.
+        /// </summary>
+        public static string Qualitivity_NewProjectActivityTitle {
+            get {
+                return ResourceManager.GetString("Qualitivity_NewProjectActivityTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Qualitivity Stop Tracking.
+        /// </summary>
+        public static string Qualitivity_StopTrackingTitle {
+            get {
+                return ResourceManager.GetString("Qualitivity_StopTrackingTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon QualitivityAbout_Icon {
@@ -1742,7 +1760,17 @@ namespace Sdl.Community.Qualitivity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No qualitivity project selected..
+        ///   Looks up a localized string similar to No Qualitivity project was selected.
+        /// 
+        ///A project listed in the Projects View needs to be enabled for Qualitivity before you can track Project Activity.
+        ///If your project is enabled, you can initiate the tracking of Project Activity by following these steps:
+        /// 
+        ///1. Select your project in the Project view
+        ///2. From the Files View select your file(s) and select &quot;Open For Translation&quot;
+        ///3. In the Editor View, under the View Tab find the Information Group
+        ///4. Locate Activity Tracker
+        /// 
+        ///Tip: You can review which  [rest of string was truncated]&quot;;.
         /// </summary>
         public static string SettingsAction_NoQualitivityProjectSelected {
             get {
@@ -1751,11 +1779,34 @@ namespace Sdl.Community.Qualitivity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The project you have selected has already been converted into a Qualitivity Project.
-        ///Either select a different project to convert or to continue further either:
+        ///   Looks up a localized string similar to No Active Tracking for your selected  project was found. 
         /// 
-        ///1. Open the Qualitivity Project&apos;s file(s) in the Editor View.
-        ///2. Or, in the Qualitivity View, select the Project&apos;s file(s) and export them into an MS Word document.
+        ///You can initiate the tracking of Project Activity by following these steps:
+        /// 
+        ///1. Select your project in the Project view
+        ///2. From the Files View select your file(s) and select &quot;Open For Translation&quot;
+        ///3. In the Editor View, under the View Tab find the Information Group
+        ///4. Locate Activity Tracker
+        /// 
+        ///Tip: To check if an Activity Tracker is running for any of your Qualitivity projects, go to the Qualitivity View and look for the Activity Tracker. [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string SettingsAction_NoTrackingFound {
+            get {
+                return ResourceManager.GetString("SettingsAction_NoTrackingFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The selected project is already enabled for as a Qualitivity Project.
+        /// 
+        ///Either start Activity Tracker via the Editor View , within the Information Group under the View Tab. 
+        ///Or if you need to enable a different project for Qualitivity, follow these steps:
+        /// 
+        ///1. Select a project in the Project  View
+        ///2. Under the Home Tab, locate the Qualitivity Group
+        ///3. Select “New Qualitivity Project”
+        /// 
+        ///Tip: You can assign shortcuts via; File – Options – Keyboard Shortcuts – Qualitivity.
         /// </summary>
         public static string SettingsAction_ProjectAlreadyQualitivity {
             get {

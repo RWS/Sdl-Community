@@ -845,13 +845,47 @@ still associated with the client profile '{0}'</value>
     <value>New Qualitivity Project</value>
   </data>
   <data name="SettingsAction_ProjectAlreadyQualitivity" xml:space="preserve">
-    <value>The project you have selected has already been converted into a Qualitivity Project.
-Either select a different project to convert or to continue further either:
+    <value>The selected project is already enabled for as a Qualitivity Project.
  
-1. Open the Qualitivity Project's file(s) in the Editor View.
-2. Or, in the Qualitivity View, select the Project's file(s) and export them into an MS Word document</value>
+Either start Activity Tracker via the Editor View , within the Information Group under the View Tab. 
+Or if you need to enable a different project for Qualitivity, follow these steps:
+ 
+1. Select a project in the Project  View
+2. Under the Home Tab, locate the Qualitivity Group
+3. Select “New Qualitivity Project”
+ 
+Tip: You can assign shortcuts via; File – Options – Keyboard Shortcuts – Qualitivity</value>
   </data>
   <data name="SettingsAction_NoQualitivityProjectSelected" xml:space="preserve">
-	  <value>No qualitivity project selected.</value>
+    <value>No Qualitivity project was selected.
+ 
+A project listed in the Projects View needs to be enabled for Qualitivity before you can track Project Activity.
+If your project is enabled, you can initiate the tracking of Project Activity by following these steps:
+ 
+1. Select your project in the Project view
+2. From the Files View select your file(s) and select "Open For Translation"
+3. In the Editor View, under the View Tab find the Information Group
+4. Locate Activity Tracker
+ 
+Tip: You can review which projects are enabled for Qualitivity directly from the Projects View. Check the state of the New Qualitivity Project State feature, under the Home Tab or assess if your project is listed within the Qualitivity View.
+</value>
+  </data>
+  <data name="SettingsAction_NoTrackingFound" xml:space="preserve">
+    <value>No Active Tracking for your selected  project was found. 
+ 
+You can initiate the tracking of Project Activity by following these steps:
+ 
+1. Select your project in the Project view
+2. From the Files View select your file(s) and select "Open For Translation"
+3. In the Editor View, under the View Tab find the Information Group
+4. Locate Activity Tracker
+ 
+Tip: To check if an Activity Tracker is running for any of your Qualitivity projects, go to the Qualitivity View and look for the Activity Tracker. If it's not visible, find it under the View Tab in the Information Group.</value>
+  </data>
+  <data name="Qualitivity_StopTrackingTitle" xml:space="preserve">
+    <value>Qualitivity Stop Tracking</value>
+  </data>
+  <data name="Qualitivity_NewProjectActivityTitle" xml:space="preserve">
+    <value>New Qualitivity Project Activity</value>
   </data>
 </root>
