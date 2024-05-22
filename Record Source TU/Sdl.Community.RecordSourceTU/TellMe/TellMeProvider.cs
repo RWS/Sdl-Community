@@ -1,4 +1,5 @@
-﻿using Sdl.TellMe.ProviderApi;
+﻿using Sdl.Community.RecordSourceTU.TellMe.Actions;
+using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.RecordSourceTU.TellMe
 {
@@ -9,9 +10,10 @@ namespace Sdl.Community.RecordSourceTU.TellMe
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new CommunitySupportAction() {Keywords = new[] {"record source tu", "support", "forum"}},
+			new DocumentationAction() {Keywords = new[] {"record source tu", "support", "forum"}},
 			new HelpAction{Keywords = new []{"record source tu help guide"}},
-			new StoreAction{Keywords = new []{"record source tu store download"}}
+			new SourceCodeAction{Keywords = new []{"record source tu source code"}},
+			new SettingsAction{Keywords = new []{"record source tu settings"}},
 		};
 	}
 }
