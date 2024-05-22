@@ -226,4 +226,30 @@
   <data name="trash_alt" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\trash-alt.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Forum" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Forum.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SettingsAction_ExternalHelp_1" xml:space="preserve">
+    <value>For more information,</value>
+  </data>
+  <data name="SettingsAction_ExternalHelp_2" xml:space="preserve">
+    <value>click here</value>
+  </data>
+  <data name="SettingsAction_ExternalHelp_3" xml:space="preserve">
+    <value>for documentation.</value>
+  </data>
+  <data name="SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellmeDocumentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellmeDocumentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="InSourceViewController_CreateProjects_Create_Projects" xml:space="preserve">
+    <value>Create Projects</value>
+  </data>
+  <data name="CreateProjectsTellMeAction_Execute_There_are_no_project_requests_" xml:space="preserve">
+    <value>No project requests exist.
+ 
+A project request listed in the InSource View needs to be selected before creating projects.</value>
+  </data>
 </root>

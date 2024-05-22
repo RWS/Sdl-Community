@@ -19,10 +19,10 @@ namespace Sdl.Community.InSource {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class PluginResources {
+    public class PluginResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Sdl.Community.InSource {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.InSource.PluginResources", typeof(PluginResources).Assembly);
@@ -51,7 +51,7 @@ namespace Sdl.Community.InSource {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon CheckForProjects {
+        public static System.Drawing.Icon CheckForProjects {
             get {
                 object obj = ResourceManager.GetObject("CheckForProjects", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -73,7 +73,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized string similar to Check for new project requests.
         /// </summary>
-        internal static string CheckForProjects_Description {
+        public static string CheckForProjects_Description {
             get {
                 return ResourceManager.GetString("CheckForProjects_Description", resourceCulture);
             }
@@ -82,7 +82,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized string similar to Check Project Requests.
         /// </summary>
-        internal static string CheckForProjects_Name {
+        public static string CheckForProjects_Name {
             get {
                 return ResourceManager.GetString("CheckForProjects_Name", resourceCulture);
             }
@@ -91,7 +91,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized string similar to Content Connector.
         /// </summary>
-        internal static string ConnectorViewRibbonGroup_Name {
+        public static string ConnectorViewRibbonGroup_Name {
             get {
                 return ResourceManager.GetString("ConnectorViewRibbonGroup_Name", resourceCulture);
             }
@@ -100,7 +100,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized string similar to Contribute to project.
         /// </summary>
-        internal static string ContributeToProject_Description {
+        public static string ContributeToProject_Description {
             get {
                 return ResourceManager.GetString("ContributeToProject_Description", resourceCulture);
             }
@@ -109,7 +109,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized string similar to Contribute to project.
         /// </summary>
-        internal static string ContributeToProject_Name {
+        public static string ContributeToProject_Name {
             get {
                 return ResourceManager.GetString("ContributeToProject_Name", resourceCulture);
             }
@@ -118,7 +118,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized string similar to Create new project.
         /// </summary>
-        internal static string CreateNewProjectText {
+        public static string CreateNewProjectText {
             get {
                 return ResourceManager.GetString("CreateNewProjectText", resourceCulture);
             }
@@ -127,7 +127,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized string similar to Create projects for all the new project requests.
         /// </summary>
-        internal static string CreateProjects_Description {
+        public static string CreateProjects_Description {
             get {
                 return ResourceManager.GetString("CreateProjects_Description", resourceCulture);
             }
@@ -136,7 +136,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon CreateProjects_Icon {
+        public static System.Drawing.Icon CreateProjects_Icon {
             get {
                 object obj = ResourceManager.GetObject("CreateProjects_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -146,16 +146,27 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized string similar to Create Projects.
         /// </summary>
-        internal static string CreateProjects_Name {
+        public static string CreateProjects_Name {
             get {
                 return ResourceManager.GetString("CreateProjects_Name", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No project requests exist.
+        /// 
+        ///A project request listed in the InSource View needs to be selected before creating projects..
+        /// </summary>
+        public static string CreateProjectsTellMeAction_Execute_There_are_no_project_requests_ {
+            get {
+                return ResourceManager.GetString("CreateProjectsTellMeAction_Execute_There_are_no_project_requests_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create project.
         /// </summary>
-        internal static string CreateProjectText {
+        public static string CreateProjectText {
             get {
                 return ResourceManager.GetString("CreateProjectText", resourceCulture);
             }
@@ -164,7 +175,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized string similar to Please choose a custom template!.
         /// </summary>
-        internal static string CustomTemplateSelection_Message {
+        public static string CustomTemplateSelection_Message {
             get {
                 return ResourceManager.GetString("CustomTemplateSelection_Message", resourceCulture);
             }
@@ -173,7 +184,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized string similar to Timer is disabled.
         /// </summary>
-        internal static string DisabledTimer_Message {
+        public static string DisabledTimer_Message {
             get {
                 return ResourceManager.GetString("DisabledTimer_Message", resourceCulture);
             }
@@ -182,7 +193,17 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon ForumIcon {
+        public static System.Drawing.Icon Forum {
+            get {
+                object obj = ResourceManager.GetObject("Forum", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon ForumIcon {
             get {
                 object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -192,7 +213,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized string similar to Please import a custom project template within Studio before configuring the Watch folder!.
         /// </summary>
-        internal static string ImportCustomTemplate_Message {
+        public static string ImportCustomTemplate_Message {
             get {
                 return ResourceManager.GetString("ImportCustomTemplate_Message", resourceCulture);
             }
@@ -201,7 +222,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon InSource_large {
+        public static System.Drawing.Icon InSource_large {
             get {
                 object obj = ResourceManager.GetObject("InSource_large", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -209,9 +230,18 @@ namespace Sdl.Community.InSource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create Projects.
+        /// </summary>
+        public static string InSourceViewController_CreateProjects_Create_Projects {
+            get {
+                return ResourceManager.GetString("InSourceViewController_CreateProjects_Create_Projects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Missing project template.
         /// </summary>
-        internal static string MissingProjectTemplate_Message {
+        public static string MissingProjectTemplate_Message {
             get {
                 return ResourceManager.GetString("MissingProjectTemplate_Message", resourceCulture);
             }
@@ -220,7 +250,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon opensourceimage {
+        public static System.Drawing.Icon opensourceimage {
             get {
                 object obj = ResourceManager.GetObject("opensourceimage", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -230,7 +260,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized string similar to Trados InSource!.
         /// </summary>
-        internal static string Plugin_Name {
+        public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
             }
@@ -239,7 +269,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon ProjectQuote_Icon {
+        public static System.Drawing.Icon ProjectQuote_Icon {
             get {
                 object obj = ResourceManager.GetObject("ProjectQuote_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -249,7 +279,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized string similar to Please select a project!.
         /// </summary>
-        internal static string ProjectSelection_Message {
+        public static string ProjectSelection_Message {
             get {
                 return ResourceManager.GetString("ProjectSelection_Message", resourceCulture);
             }
@@ -258,7 +288,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized string similar to Project &apos;{0}&apos; was successfully created..
         /// </summary>
-        internal static string ProjectSuccessfullyCreated_Message {
+        public static string ProjectSuccessfullyCreated_Message {
             get {
                 return ResourceManager.GetString("ProjectSuccessfullyCreated_Message", resourceCulture);
             }
@@ -267,7 +297,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized string similar to Please configure the Language Pairs for the custom template &apos;{0}&apos; from File -&gt; Setup -&gt; Project Templates -&gt; select the custom template - &gt; Edit -&gt; Language Pairs -&gt; Add. The custom template is set for the Watch Folder &apos;{1}&apos;..
         /// </summary>
-        internal static string ProjectTemplateLanguagePairs_Message {
+        public static string ProjectTemplateLanguagePairs_Message {
             get {
                 return ResourceManager.GetString("ProjectTemplateLanguagePairs_Message", resourceCulture);
             }
@@ -276,7 +306,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized string similar to Please configure the Project Location within the custom template &apos;{0}&apos; from File -&gt; Setup -&gt; Project Templates! The custom template is set for the Watch Folder &apos;{1}&apos;..
         /// </summary>
-        internal static string ProjectTemplateLocation_Message {
+        public static string ProjectTemplateLocation_Message {
             get {
                 return ResourceManager.GetString("ProjectTemplateLocation_Message", resourceCulture);
             }
@@ -285,7 +315,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized string similar to Please select a project template from the InSource view!.
         /// </summary>
-        internal static string ProjectTemplateSelection_Message {
+        public static string ProjectTemplateSelection_Message {
             get {
                 return ResourceManager.GetString("ProjectTemplateSelection_Message", resourceCulture);
             }
@@ -294,7 +324,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized string similar to Please go to File -&gt; Setup -&gt; Project templates -&gt; Select a template -&gt; Edit -&gt; Default Task Sequence -&gt; Ok after that run again Content connector.
         /// </summary>
-        internal static string ProjectTemplateSequenceSelection_Message {
+        public static string ProjectTemplateSequenceSelection_Message {
             get {
                 return ResourceManager.GetString("ProjectTemplateSequenceSelection_Message", resourceCulture);
             }
@@ -303,7 +333,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon question {
+        public static System.Drawing.Icon question {
             get {
                 object obj = ResourceManager.GetObject("question", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -313,7 +343,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized string similar to  minutes until project request is checked..
         /// </summary>
-        internal static string RemainingMinutes_Message {
+        public static string RemainingMinutes_Message {
             get {
                 return ResourceManager.GetString("RemainingMinutes_Message", resourceCulture);
             }
@@ -322,16 +352,53 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to remove this watch folder path?.
         /// </summary>
-        internal static string RemoveWatchFolder_Message {
+        public static string RemoveWatchFolder_Message {
             get {
                 return ResourceManager.GetString("RemoveWatchFolder_Message", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For more information,.
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_1 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to click here.
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_2 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to for documentation..
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_3 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon TellMe1 {
+        public static System.Drawing.Icon SourceCode {
+            get {
+                object obj = ResourceManager.GetObject("SourceCode", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe1 {
             get {
                 object obj = ResourceManager.GetObject("TellMe1", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -339,9 +406,19 @@ namespace Sdl.Community.InSource {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellmeDocumentation {
+            get {
+                object obj = ResourceManager.GetObject("TellmeDocumentation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please set a number for the timer!.
         /// </summary>
-        internal static string TimerNumberSetup_Message {
+        public static string TimerNumberSetup_Message {
             get {
                 return ResourceManager.GetString("TimerNumberSetup_Message", resourceCulture);
             }
@@ -350,7 +427,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap trash_alt {
+        public static System.Drawing.Bitmap trash_alt {
             get {
                 object obj = ResourceManager.GetObject("trash_alt", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -360,7 +437,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized string similar to Watch folders should contain only folders, please put the files in a directory, and click afterwards, the &apos;CHECK PROJECT REQUESTS&apos; button.
         /// </summary>
-        internal static string WatchFoldersSelection_Message {
+        public static string WatchFoldersSelection_Message {
             get {
                 return ResourceManager.GetString("WatchFoldersSelection_Message", resourceCulture);
             }
@@ -369,7 +446,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Wikipedia_Icon {
+        public static System.Drawing.Icon Wikipedia_Icon {
             get {
                 object obj = ResourceManager.GetObject("Wikipedia_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -379,7 +456,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized string similar to Search Wikipedia with current selection.
         /// </summary>
-        internal static string WikipediaSearchAction_Description {
+        public static string WikipediaSearchAction_Description {
             get {
                 return ResourceManager.GetString("WikipediaSearchAction_Description", resourceCulture);
             }
@@ -388,7 +465,7 @@ namespace Sdl.Community.InSource {
         /// <summary>
         ///   Looks up a localized string similar to Search Wikipedia.
         /// </summary>
-        internal static string WikipediaSearchAction_Name {
+        public static string WikipediaSearchAction_Name {
             get {
                 return ResourceManager.GetString("WikipediaSearchAction_Name", resourceCulture);
             }
