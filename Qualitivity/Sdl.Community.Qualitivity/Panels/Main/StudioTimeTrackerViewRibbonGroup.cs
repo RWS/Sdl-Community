@@ -131,15 +131,7 @@ namespace Sdl.Community.Qualitivity.Panels.Main
     //    }
     //}
 
-    [Action("QualitivityContactRibbonGroupHelp", typeof(QualitivityViewController), Name = "QualitivityContactRibbonGroupHelp_Name", Description = "QualitivityContactRibbonGroupHelp_Description", Icon = "QualitivityHelp_Icon")]
-    [ActionLayout(typeof(QualitivityContactRibbonGroup), ZIndex = 3, DisplayType = DisplayType.Normal)]
-    public class QualitivityContactHelp : AbstractViewControllerAction<QualitivityViewController>
-    {
-        protected override void Execute()
-        {
-            Controller.ViewOnlineHelp();
-        }
-    }
+    
 	
 
     [RibbonGroup("QualitivityToolsRibbonGroup", "QualitivityToolsRibbonGroup_Name")]
