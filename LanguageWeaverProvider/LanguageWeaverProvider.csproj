@@ -57,6 +57,7 @@
 	<ItemGroup>
 	  <None Remove="Resources\Feedback_Default.png" />
 	  <None Remove="Resources\Feedback_Notification.png" />
+	  <None Remove="Resources\Information.png" />
 	  <None Remove="Resources\lwHeader_Cloud.png" />
 	  <None Remove="Resources\lwHeader_Edge.png" />
 	  <None Remove="Resources\lwHeader_Main.png" />
@@ -70,7 +71,6 @@
 	  <None Remove="Resources\lwLogo_Main16.png" />
 	  <None Remove="Resources\lwLogo_Main32.png" />
 	  <None Remove="Resources\Report.xsl" />
-	  <None Remove="Resources\Warning.png" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -183,6 +183,7 @@
 	  <EmbeddedResource Include="Resources\Report.xsl" />
 	  <Resource Include="Resources\Feedback_Default.png" />
 	  <Resource Include="Resources\Feedback_Notification.png" />
+	  <Resource Include="Resources\Information.png" />
 	  <Resource Include="Resources\lwHeader_Cloud.png" />
 	  <Resource Include="Resources\lwHeader_Edge.png" />
 	  <Resource Include="Resources\lwHeader_Main.png" />
@@ -195,7 +196,6 @@
 	  <Resource Include="Resources\lwLogo_Main.png" />
 	  <Resource Include="Resources\lwLogo_Main16.png" />
 	  <Resource Include="Resources\lwLogo_Main32.png" />
-	  <Resource Include="Resources\Warning.png" />
 	  <Resource Include="Style\Buttons.xaml" />
 	</ItemGroup>
 

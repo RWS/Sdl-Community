@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Services;
@@ -14,7 +15,7 @@ namespace LanguageWeaverProvider
 	{
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
 		{
-			ApplicationInitializer.CredentialStore = credentialStore;
+            ApplicationInitializer.CredentialStore = credentialStore;
 
 			var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
 			CredentialManager.GetCredentials(options, true);
