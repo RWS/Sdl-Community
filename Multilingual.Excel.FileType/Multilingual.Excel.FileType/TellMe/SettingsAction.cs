@@ -20,6 +20,6 @@ namespace Multilingual.Excel.FileType.TellMe
 		public SettingsActionWarning SettingsWindow => _settingsWindow ??=
 			new SettingsActionWarning("https://appstore.rws.com/Plugin/17?tab=documentation");
 
-		public override void Execute() => SettingsWindow.Show();
-	}
+        public override void Execute() => SettingsWindow.ShowDialog();
+    }
 }

@@ -367,6 +367,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
+    <Resource Include="Resources\TellMe\TellMeAppStoreForum.ico" />
+    <Resource Include="Resources\TellMe\TellMeDocumentation.ico" />
+    <Resource Include="Resources\TellMe\TellMeDocumentation.png" />
+    <Resource Include="Resources\TellMe\TellMeForum.ico" />
+    <Resource Include="Resources\TellMe\TellMeSettings.ico" />
+    <Resource Include="Resources\TellMe\TellMeSourceCode.ico" />
     <Resource Include="Resources\information-48.png" />
     <Content Include="Resources\Settings.ico" />
     <Content Include="Resources\SourceCode.ico" />
