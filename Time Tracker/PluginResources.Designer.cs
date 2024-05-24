@@ -22,7 +22,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class PluginResources {
+    public class PluginResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.Studio.Time.Tracker.PluginResources", typeof(PluginResources).Assembly);
@@ -51,7 +51,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,48 +61,18 @@ namespace Sdl.Community.Studio.Time.Tracker {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon Download {
-            get {
-                object obj = ResourceManager.GetObject("Download", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon ForumIcon {
-            get {
-                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Studio Time Tracker.
         /// </summary>
-        internal static string Plugin_Name {
+        public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon Question {
-            get {
-                object obj = ResourceManager.GetObject("Question", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to New Time Tracker Project.
         /// </summary>
-        internal static string StudioTimeTrackeCreateProjectAction_Description {
+        public static string StudioTimeTrackeCreateProjectAction_Description {
             get {
                 return ResourceManager.GetString("StudioTimeTrackeCreateProjectAction_Description", resourceCulture);
             }
@@ -111,7 +81,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon StudioTimeTrackeCreateProjectAction_Icon {
+        public static System.Drawing.Icon StudioTimeTrackeCreateProjectAction_Icon {
             get {
                 object obj = ResourceManager.GetObject("StudioTimeTrackeCreateProjectAction_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -121,7 +91,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to New Time Tracker Project.
         /// </summary>
-        internal static string StudioTimeTrackeCreateProjectAction_Name {
+        public static string StudioTimeTrackeCreateProjectAction_Name {
             get {
                 return ResourceManager.GetString("StudioTimeTrackeCreateProjectAction_Name", resourceCulture);
             }
@@ -130,7 +100,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to New Project Activity.
         /// </summary>
-        internal static string StudioTimeTrackeCreateProjectTaskAction_Description {
+        public static string StudioTimeTrackeCreateProjectTaskAction_Description {
             get {
                 return ResourceManager.GetString("StudioTimeTrackeCreateProjectTaskAction_Description", resourceCulture);
             }
@@ -139,7 +109,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon StudioTimeTrackeCreateProjectTaskAction_Icon {
+        public static System.Drawing.Icon StudioTimeTrackeCreateProjectTaskAction_Icon {
             get {
                 object obj = ResourceManager.GetObject("StudioTimeTrackeCreateProjectTaskAction_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -149,7 +119,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to New Project Activity.
         /// </summary>
-        internal static string StudioTimeTrackeCreateProjectTaskAction_Name {
+        public static string StudioTimeTrackeCreateProjectTaskAction_Name {
             get {
                 return ResourceManager.GetString("StudioTimeTrackeCreateProjectTaskAction_Name", resourceCulture);
             }
@@ -158,7 +128,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Edit Time Tracker Project.
         /// </summary>
-        internal static string StudioTimeTrackeEditProjectAction_Description {
+        public static string StudioTimeTrackeEditProjectAction_Description {
             get {
                 return ResourceManager.GetString("StudioTimeTrackeEditProjectAction_Description", resourceCulture);
             }
@@ -167,7 +137,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon StudioTimeTrackeEditProjectAction_Icon {
+        public static System.Drawing.Icon StudioTimeTrackeEditProjectAction_Icon {
             get {
                 object obj = ResourceManager.GetObject("StudioTimeTrackeEditProjectAction_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -177,7 +147,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Edit Time Tracker Project.
         /// </summary>
-        internal static string StudioTimeTrackeEditProjectAction_Name {
+        public static string StudioTimeTrackeEditProjectAction_Name {
             get {
                 return ResourceManager.GetString("StudioTimeTrackeEditProjectAction_Name", resourceCulture);
             }
@@ -186,7 +156,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Edit Project Activity.
         /// </summary>
-        internal static string StudioTimeTrackeEditProjectTaskAction_Description {
+        public static string StudioTimeTrackeEditProjectTaskAction_Description {
             get {
                 return ResourceManager.GetString("StudioTimeTrackeEditProjectTaskAction_Description", resourceCulture);
             }
@@ -195,7 +165,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon StudioTimeTrackeEditProjectTaskAction_Icon {
+        public static System.Drawing.Icon StudioTimeTrackeEditProjectTaskAction_Icon {
             get {
                 object obj = ResourceManager.GetObject("StudioTimeTrackeEditProjectTaskAction_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -205,7 +175,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Edit Project Activity.
         /// </summary>
-        internal static string StudioTimeTrackeEditProjectTaskAction_Name {
+        public static string StudioTimeTrackeEditProjectTaskAction_Name {
             get {
                 return ResourceManager.GetString("StudioTimeTrackeEditProjectTaskAction_Name", resourceCulture);
             }
@@ -214,7 +184,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Merge Project Activities.
         /// </summary>
-        internal static string StudioTimeTrackeMergeProjectTaskAction_Description {
+        public static string StudioTimeTrackeMergeProjectTaskAction_Description {
             get {
                 return ResourceManager.GetString("StudioTimeTrackeMergeProjectTaskAction_Description", resourceCulture);
             }
@@ -223,7 +193,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon StudioTimeTrackeMergeProjectTaskAction_Icon {
+        public static System.Drawing.Icon StudioTimeTrackeMergeProjectTaskAction_Icon {
             get {
                 object obj = ResourceManager.GetObject("StudioTimeTrackeMergeProjectTaskAction_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -233,7 +203,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Merge Project Activities.
         /// </summary>
-        internal static string StudioTimeTrackeMergeProjectTaskAction_Name {
+        public static string StudioTimeTrackeMergeProjectTaskAction_Name {
             get {
                 return ResourceManager.GetString("StudioTimeTrackeMergeProjectTaskAction_Name", resourceCulture);
             }
@@ -242,7 +212,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon StudioTimeTrackerAbout_Icon {
+        public static System.Drawing.Icon StudioTimeTrackerAbout_Icon {
             get {
                 object obj = ResourceManager.GetObject("StudioTimeTrackerAbout_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -252,7 +222,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon StudioTimeTrackerApp_Icon {
+        public static System.Drawing.Icon StudioTimeTrackerApp_Icon {
             get {
                 object obj = ResourceManager.GetObject("StudioTimeTrackerApp_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -262,7 +232,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Application Settings.
         /// </summary>
-        internal static string StudioTimeTrackerConfiguration_Description {
+        public static string StudioTimeTrackerConfiguration_Description {
             get {
                 return ResourceManager.GetString("StudioTimeTrackerConfiguration_Description", resourceCulture);
             }
@@ -271,7 +241,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Application Settings.
         /// </summary>
-        internal static string StudioTimeTrackerConfiguration_Name {
+        public static string StudioTimeTrackerConfiguration_Name {
             get {
                 return ResourceManager.GetString("StudioTimeTrackerConfiguration_Name", resourceCulture);
             }
@@ -280,7 +250,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Activity Types.
         /// </summary>
-        internal static string StudioTimeTrackerConfigurationActivityTypes_Description {
+        public static string StudioTimeTrackerConfigurationActivityTypes_Description {
             get {
                 return ResourceManager.GetString("StudioTimeTrackerConfigurationActivityTypes_Description", resourceCulture);
             }
@@ -289,7 +259,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon StudioTimeTrackerConfigurationActivityTypes_Icon {
+        public static System.Drawing.Icon StudioTimeTrackerConfigurationActivityTypes_Icon {
             get {
                 object obj = ResourceManager.GetObject("StudioTimeTrackerConfigurationActivityTypes_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -299,7 +269,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Activity Types.
         /// </summary>
-        internal static string StudioTimeTrackerConfigurationActivityTypes_Name {
+        public static string StudioTimeTrackerConfigurationActivityTypes_Name {
             get {
                 return ResourceManager.GetString("StudioTimeTrackerConfigurationActivityTypes_Name", resourceCulture);
             }
@@ -308,7 +278,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Client Rates.
         /// </summary>
-        internal static string StudioTimeTrackerConfigurationClientRates_Description {
+        public static string StudioTimeTrackerConfigurationClientRates_Description {
             get {
                 return ResourceManager.GetString("StudioTimeTrackerConfigurationClientRates_Description", resourceCulture);
             }
@@ -317,7 +287,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon StudioTimeTrackerConfigurationClientRates_Icon {
+        public static System.Drawing.Icon StudioTimeTrackerConfigurationClientRates_Icon {
             get {
                 object obj = ResourceManager.GetObject("StudioTimeTrackerConfigurationClientRates_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -327,7 +297,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Client Rates.
         /// </summary>
-        internal static string StudioTimeTrackerConfigurationClientRates_Name {
+        public static string StudioTimeTrackerConfigurationClientRates_Name {
             get {
                 return ResourceManager.GetString("StudioTimeTrackerConfigurationClientRates_Name", resourceCulture);
             }
@@ -336,7 +306,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to My Details.
         /// </summary>
-        internal static string StudioTimeTrackerConfigurationMyInfo_Description {
+        public static string StudioTimeTrackerConfigurationMyInfo_Description {
             get {
                 return ResourceManager.GetString("StudioTimeTrackerConfigurationMyInfo_Description", resourceCulture);
             }
@@ -345,7 +315,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon StudioTimeTrackerConfigurationMyInfo_Icon {
+        public static System.Drawing.Icon StudioTimeTrackerConfigurationMyInfo_Icon {
             get {
                 object obj = ResourceManager.GetObject("StudioTimeTrackerConfigurationMyInfo_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -355,7 +325,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to My Details.
         /// </summary>
-        internal static string StudioTimeTrackerConfigurationMyInfo_Name {
+        public static string StudioTimeTrackerConfigurationMyInfo_Name {
             get {
                 return ResourceManager.GetString("StudioTimeTrackerConfigurationMyInfo_Name", resourceCulture);
             }
@@ -364,7 +334,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Configuration.
         /// </summary>
-        internal static string StudioTimeTrackerConfigurationRibbonGroup_Name {
+        public static string StudioTimeTrackerConfigurationRibbonGroup_Name {
             get {
                 return ResourceManager.GetString("StudioTimeTrackerConfigurationRibbonGroup_Name", resourceCulture);
             }
@@ -373,7 +343,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Remove Time Tracker Project.
         /// </summary>
-        internal static string StudioTimeTrackeRemoveProjectAction_Description {
+        public static string StudioTimeTrackeRemoveProjectAction_Description {
             get {
                 return ResourceManager.GetString("StudioTimeTrackeRemoveProjectAction_Description", resourceCulture);
             }
@@ -382,7 +352,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon StudioTimeTrackeRemoveProjectAction_Icon {
+        public static System.Drawing.Icon StudioTimeTrackeRemoveProjectAction_Icon {
             get {
                 object obj = ResourceManager.GetObject("StudioTimeTrackeRemoveProjectAction_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -392,7 +362,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Remove Time Tracker Project.
         /// </summary>
-        internal static string StudioTimeTrackeRemoveProjectAction_Name {
+        public static string StudioTimeTrackeRemoveProjectAction_Name {
             get {
                 return ResourceManager.GetString("StudioTimeTrackeRemoveProjectAction_Name", resourceCulture);
             }
@@ -401,7 +371,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Remove Project Activity.
         /// </summary>
-        internal static string StudioTimeTrackeRemoveProjectTaskAction_Description {
+        public static string StudioTimeTrackeRemoveProjectTaskAction_Description {
             get {
                 return ResourceManager.GetString("StudioTimeTrackeRemoveProjectTaskAction_Description", resourceCulture);
             }
@@ -410,7 +380,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon StudioTimeTrackeRemoveProjectTaskAction_Icon {
+        public static System.Drawing.Icon StudioTimeTrackeRemoveProjectTaskAction_Icon {
             get {
                 object obj = ResourceManager.GetObject("StudioTimeTrackeRemoveProjectTaskAction_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -420,7 +390,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Remove Project Activity.
         /// </summary>
-        internal static string StudioTimeTrackeRemoveProjectTaskAction_Name {
+        public static string StudioTimeTrackeRemoveProjectTaskAction_Name {
             get {
                 return ResourceManager.GetString("StudioTimeTrackeRemoveProjectTaskAction_Name", resourceCulture);
             }
@@ -429,7 +399,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon StudioTimeTrackerHelp_Icon {
+        public static System.Drawing.Icon StudioTimeTrackerHelp_Icon {
             get {
                 object obj = ResourceManager.GetObject("StudioTimeTrackerHelp_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -439,7 +409,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Time Tracker Projects.
         /// </summary>
-        internal static string StudioTimeTrackerProjectsRibbonGroup_Name {
+        public static string StudioTimeTrackerProjectsRibbonGroup_Name {
             get {
                 return ResourceManager.GetString("StudioTimeTrackerProjectsRibbonGroup_Name", resourceCulture);
             }
@@ -448,7 +418,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Project Activities.
         /// </summary>
-        internal static string StudioTimeTrackerProjectTasksRibbonGroup_Name {
+        public static string StudioTimeTrackerProjectTasksRibbonGroup_Name {
             get {
                 return ResourceManager.GetString("StudioTimeTrackerProjectTasksRibbonGroup_Name", resourceCulture);
             }
@@ -457,7 +427,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon StudioTimeTrackerPropertiesController_Icon {
+        public static System.Drawing.Icon StudioTimeTrackerPropertiesController_Icon {
             get {
                 object obj = ResourceManager.GetObject("StudioTimeTrackerPropertiesController_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -467,7 +437,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon StudioTimeTrackerSettings_Icon {
+        public static System.Drawing.Icon StudioTimeTrackerSettings_Icon {
             get {
                 object obj = ResourceManager.GetObject("StudioTimeTrackerSettings_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -477,7 +447,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon StudioTimeTrackerTimerController_Icon {
+        public static System.Drawing.Icon StudioTimeTrackerTimerController_Icon {
             get {
                 object obj = ResourceManager.GetObject("StudioTimeTrackerTimerController_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -487,7 +457,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Activity Tracking.
         /// </summary>
-        internal static string StudioTimeTrackerTimeTrackingRibbonGroup_Name {
+        public static string StudioTimeTrackerTimeTrackingRibbonGroup_Name {
             get {
                 return ResourceManager.GetString("StudioTimeTrackerTimeTrackingRibbonGroup_Name", resourceCulture);
             }
@@ -496,7 +466,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Tools.
         /// </summary>
-        internal static string StudioTimeTrackerToolsRibbonGroup_Name {
+        public static string StudioTimeTrackerToolsRibbonGroup_Name {
             get {
                 return ResourceManager.GetString("StudioTimeTrackerToolsRibbonGroup_Name", resourceCulture);
             }
@@ -505,7 +475,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Create Activites Report.
         /// </summary>
-        internal static string StudioTimeTrackerToolsRibbonGroupCreateActivitiesReport_Description {
+        public static string StudioTimeTrackerToolsRibbonGroupCreateActivitiesReport_Description {
             get {
                 return ResourceManager.GetString("StudioTimeTrackerToolsRibbonGroupCreateActivitiesReport_Description", resourceCulture);
             }
@@ -514,7 +484,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon StudioTimeTrackerToolsRibbonGroupCreateActivitiesReport_Icon {
+        public static System.Drawing.Icon StudioTimeTrackerToolsRibbonGroupCreateActivitiesReport_Icon {
             get {
                 object obj = ResourceManager.GetObject("StudioTimeTrackerToolsRibbonGroupCreateActivitiesReport_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -524,7 +494,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Create Activites Report.
         /// </summary>
-        internal static string StudioTimeTrackerToolsRibbonGroupCreateActivitiesReport_Name {
+        public static string StudioTimeTrackerToolsRibbonGroupCreateActivitiesReport_Name {
             get {
                 return ResourceManager.GetString("StudioTimeTrackerToolsRibbonGroupCreateActivitiesReport_Name", resourceCulture);
             }
@@ -533,7 +503,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Export Activites to Excel format.
         /// </summary>
-        internal static string StudioTimeTrackerToolsRibbonGroupExoprtActivitiesToExcel_Description {
+        public static string StudioTimeTrackerToolsRibbonGroupExoprtActivitiesToExcel_Description {
             get {
                 return ResourceManager.GetString("StudioTimeTrackerToolsRibbonGroupExoprtActivitiesToExcel_Description", resourceCulture);
             }
@@ -542,7 +512,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon StudioTimeTrackerToolsRibbonGroupExoprtActivitiesToExcel_Icon {
+        public static System.Drawing.Icon StudioTimeTrackerToolsRibbonGroupExoprtActivitiesToExcel_Icon {
             get {
                 object obj = ResourceManager.GetObject("StudioTimeTrackerToolsRibbonGroupExoprtActivitiesToExcel_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -552,7 +522,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Export Activites to Excel format.
         /// </summary>
-        internal static string StudioTimeTrackerToolsRibbonGroupExoprtActivitiesToExcel_Name {
+        public static string StudioTimeTrackerToolsRibbonGroupExoprtActivitiesToExcel_Name {
             get {
                 return ResourceManager.GetString("StudioTimeTrackerToolsRibbonGroupExoprtActivitiesToExcel_Name", resourceCulture);
             }
@@ -561,7 +531,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Start Activity Tracking.
         /// </summary>
-        internal static string StudioTimeTrackeStartTimer_Description {
+        public static string StudioTimeTrackeStartTimer_Description {
             get {
                 return ResourceManager.GetString("StudioTimeTrackeStartTimer_Description", resourceCulture);
             }
@@ -570,7 +540,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon StudioTimeTrackeStartTimer_Icon {
+        public static System.Drawing.Icon StudioTimeTrackeStartTimer_Icon {
             get {
                 object obj = ResourceManager.GetObject("StudioTimeTrackeStartTimer_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -580,7 +550,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Start Activity Tracking.
         /// </summary>
-        internal static string StudioTimeTrackeStartTimer_Name {
+        public static string StudioTimeTrackeStartTimer_Name {
             get {
                 return ResourceManager.GetString("StudioTimeTrackeStartTimer_Name", resourceCulture);
             }
@@ -589,7 +559,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Stop Activity Tracking.
         /// </summary>
-        internal static string StudioTimeTrackeStopTimer_Description {
+        public static string StudioTimeTrackeStopTimer_Description {
             get {
                 return ResourceManager.GetString("StudioTimeTrackeStopTimer_Description", resourceCulture);
             }
@@ -598,7 +568,7 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon StudioTimeTrackeStopTimer_Icon {
+        public static System.Drawing.Icon StudioTimeTrackeStopTimer_Icon {
             get {
                 object obj = ResourceManager.GetObject("StudioTimeTrackeStopTimer_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -608,16 +578,36 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to Stop Activity Tracking.
         /// </summary>
-        internal static string StudioTimeTrackeStopTimer_Name {
+        public static string StudioTimeTrackeStopTimer_Name {
             get {
                 return ResourceManager.GetString("StudioTimeTrackeStopTimer_Name", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_Documentation {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_Documentation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_Forum {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_Forum", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} TellMe provider.
         /// </summary>
-        internal static string TellMe_Provider {
+        public static string TellMe_Provider {
             get {
                 return ResourceManager.GetString("TellMe_Provider", resourceCulture);
             }
@@ -626,9 +616,29 @@ namespace Sdl.Community.Studio.Time.Tracker {
         /// <summary>
         ///   Looks up a localized string similar to {0} results.
         /// </summary>
-        internal static string TellMe_Provider_Results {
+        public static string TellMe_Provider_Results {
             get {
                 return ResourceManager.GetString("TellMe_Provider_Results", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_Settings {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_Settings", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_SourceCode {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_SourceCode", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
     }

@@ -1,25 +1,33 @@
-﻿using Sdl.TellMe.ProviderApi;
+﻿using Sdl.Community.Studio.Time.Tracker.Panels.Main;
+using Sdl.TellMe.ProviderApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.Studio.Time.Tracker.TellMe
 {
-	[TellMeProvider]
-	public class TellMeProvider: ITellMeProvider
-	{
-		public string Name => string.Format(PluginResources.TellMe_Provider, PluginResources.Plugin_Name);
+    [TellMeProvider]
+    public class TellMeProvider : ITellMeProvider
+    {
+        public TellMeProvider()
+        {
+            ProviderActions = GetProviderActions();
+        }
 
-		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
-		{
-			new CommunityWikiAction
-			{
-				Keywords = new[] { "time", "tracker", "timetracker", "community", "support", "wiki" }
-			},
-			new AppStoreForumAction
-			{
-				Keywords = new[] { "time", "tracker", "timetracker", "support", "forum" }
-			},
-			new AppStoreDownloadAction
-			{
-				Keywords = new[] { "time", "tracker", "timetracker", "store", "download", "appstore" }}
-		};
-	}
+        public string Name => $"{Constants.TellMe_Provider_Name}";
+
+        public AbstractTellMeAction[] ProviderActions { get; }
+
+        private AbstractTellMeAction[] GetProviderActions()
+        {
+            var forumAction = new CommunityForumAction();
+            var helpAction = new DocumentationAction();
+            var sourceCodeAction = new SourceCodeAction();
+            var settingsAction = new SettingsAction();
+            var timeTrackerAction = new TimeTrackerAction();
+            var newTrackerAction = new NewTrackerAction();
+            var newActivityAction = new NewActivityAction();
+
+            var providerActions = new AbstractTellMeAction[] { forumAction, helpAction, sourceCodeAction, settingsAction, timeTrackerAction, newTrackerAction, newActivityAction  };
+            return providerActions;
+        }
+    }
 }
