@@ -762,8 +762,8 @@ namespace Multilingual.Excel.FileType {
         /// <summary>
         ///   Looks up a localized string similar to The default settings for the File Type can be configured from the Options window.  To locate the default File Type settings, follow these steps:
         ///
-        ///1. Open &apos;File &gt; Options &gt; File Types&apos;
-        ///2. Select the File Type from the list
+        ///    1. Open &apos;File &gt; Options &gt; File Types&apos;
+        ///    2. Select the File Type from the list
         ///
         ///Tip: If you are adding a new File Type to an existing project, you should first select the link &quot;Additional installed File Types exist&quot; from &apos;Project Settings &gt; File Types&apos;.
         /// </summary>
