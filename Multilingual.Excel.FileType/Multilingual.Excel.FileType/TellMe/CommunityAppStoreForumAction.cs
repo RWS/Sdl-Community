@@ -10,7 +10,7 @@ namespace Multilingual.Excel.FileType.TellMe
 
 		public override string Category => string.Format(PluginResources.TellMe_String_Results, PluginResources.Plugin_Name);
 
-		public override Icon Icon => PluginResources.ForumIcon;
+		public override Icon Icon => PluginResources.TellMeAppStoreForum;
 
 		public CommunityAppStoreForumAction()
 		{

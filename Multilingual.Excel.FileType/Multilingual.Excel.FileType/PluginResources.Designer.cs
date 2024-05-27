@@ -705,16 +705,6 @@ namespace Multilingual.Excel.FileType {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon Question {
-            get {
-                object obj = ResourceManager.GetObject("Question", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to reset all entities in this set to default values?.
         /// </summary>
         public static string ResetEntitySet {
@@ -729,6 +719,76 @@ namespace Multilingual.Excel.FileType {
         public static string ResetEntitySetTitle {
             get {
                 return ResourceManager.GetString("ResetEntitySetTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Settings {
+            get {
+                object obj = ResourceManager.GetObject("Settings", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For more information,.
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_1 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to click here.
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_2 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to to view the documentation..
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_3 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default settings for the File Type can be configured from the Options window.  To locate the default File Type settings, follow these steps:
+        ///
+        ///    1. Open &apos;File &gt; Options &gt; File Types&apos;
+        ///    2. Select the File Type from the list
+        ///
+        ///Tip: If you are adding a new File Type to an existing project, you should first select the link &quot;Additional installed File Types exist&quot; from &apos;Project Settings &gt; File Types&apos;.
+        /// </summary>
+        public static string SettingsAction_OpenOptionsText {
+            get {
+                return ResourceManager.GetString("SettingsAction_OpenOptionsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configure File Type in Options.
+        /// </summary>
+        public static string SettingsAction_Title {
+            get {
+                return ResourceManager.GetString("SettingsAction_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon SourceCode {
+            get {
+                object obj = ResourceManager.GetObject("SourceCode", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -756,6 +816,26 @@ namespace Multilingual.Excel.FileType {
         public static string TellMe_String_TellMe_Provider {
             get {
                 return ResourceManager.GetString("TellMe_String_TellMe_Provider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMeAppStoreForum {
+            get {
+                object obj = ResourceManager.GetObject("TellMeAppStoreForum", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellmeDocumentation {
+            get {
+                object obj = ResourceManager.GetObject("TellmeDocumentation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
