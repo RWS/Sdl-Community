@@ -1,8 +1,9 @@
-﻿using System;
-using Sdl.Core.Globalization;
+﻿using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.ProjectAutomation.Settings;
+using System;
+using StandAloneConsoleApp_PretranslateUsingProvider.LC;
 
 namespace StandAloneConsoleApp_PretranslateUsingProvider
 {
@@ -50,7 +51,11 @@ namespace StandAloneConsoleApp_PretranslateUsingProvider
                 project.AddFiles(
                     new[] { @"filepaths" });
 
-	        //var projFiles = project.AddFolderWithFiles(@"", true);
+            //var projFiles = project.AddFolderWithFiles(@"", true);
+
+            //Login to LC for projects with Translation Engine providers 
+            //var lcService = new LCService();
+            //lcService.LoginToLC();
 
             project.RunAutomaticTasks(projFiles.GetIds(), new[]
             {

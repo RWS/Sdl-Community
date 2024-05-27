@@ -31,6 +31,12 @@
 		<Reference Include="Sdl.ProjectAutomation.Settings">
 			<HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Settings.dll</HintPath>
 		</Reference>
+    <Reference Include="Sdl.LanguageCloud.IdentityApi">
+      <HintPath>$(TradosFolder)\Sdl.LanguageCloud.IdentityApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(TradosFolder)\Newtonsoft.Json.dll</HintPath>
+    </Reference>
 		<Reference Include="System" />
 		<Reference Include="System.Core" />
 		<Reference Include="System.Xml.Linq" />
