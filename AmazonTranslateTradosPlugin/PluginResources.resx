@@ -182,14 +182,14 @@
     <value>click here</value>
   </data>
   <data name="SettingsAction_ExternalHelp_3" xml:space="preserve">
-    <value>for documentation.</value>
+    <value>to view the documentation.</value>
   </data>
   <data name="SettingsAction_NoProviderAvailable" xml:space="preserve">
-    <value>We couldn't find an instance of Amazon Translate MT provider for the current project selected. To add it to your project, follow these steps:
+    <value>Unable to locate 'Amazon Translate Trados Plugin' in your current project. To add it to your project, follow these steps:
 
-1. Open Project Settings
-2. Go to Translation Memory and Automated Translation
-3. Select Use
-4. Via the dropdown menu locate Amazon Translate Trados Plugin</value>
+    1. Open Project Settings
+    2. Go to 'Translation Memory and Automated Translation'
+    3. Select 'Amazon Translate Trados Plugin' from the 'Use...' dropdown button menu
+    4. Save &amp; close the Project Settings</value>
   </data>
 </root>

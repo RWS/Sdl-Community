@@ -1,7 +1,7 @@
 
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Amazon Translate MT provider</PlugInName>
-  <Version>5.0.0.2</Version>
+  <Version>5.0.0.3</Version>
   <Description>This plugin provides machine translation from the Amazon Translate Service AWS.</Description>
   <Author>Trados AppStore Team</Author>
 	<Include>

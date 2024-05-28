@@ -29,7 +29,6 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -65,12 +64,13 @@
                        TextWrapping="Wrap"
                        Margin="24 8 24 0" />
 
-            <TextBlock Grid.Row="2"
+            <TextBlock Grid.Row="3"
                        Grid.ColumnSpan="2"
                        Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
                        HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
                        Focusable="True"
-                       Margin="24 12 24 0"
+                       Margin="24 0 24 0"
                        KeyDown="OpenUrl_KeyPressed">
 				<Run Text="{x:Static root:PluginResources.SettingsAction_ExternalHelp_1}" />
 				<Run Text="{x:Static root:PluginResources.SettingsAction_ExternalHelp_2}"
