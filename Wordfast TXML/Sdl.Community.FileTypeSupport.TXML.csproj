@@ -41,9 +41,13 @@
 		<SignAssembly>true</SignAssembly>
 	</PropertyGroup>
 	<ItemGroup>
+	  <None Remove="Resources\Information.png" />
+	</ItemGroup>
+	<ItemGroup>
 		<Content Include="pluginpackage.manifest.xml" />
 		<Resource Include="Resources\Download.ico" />
 		<Resource Include="Resources\ForumIcon.ico" />
+		<Resource Include="Resources\Information.png" />
 		<Resource Include="Resources\Question.ico" />
 	</ItemGroup>
 	<ItemGroup>

@@ -80,16 +80,12 @@ namespace Sdl.Community.FileType.TMX {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To configure this file type, you need to have it installed and listed.
-        ///Follow these steps:
+        ///   Looks up a localized string similar to The default settings for the File Type can be configured from the Options window. To locate the default File Type settings, follow these steps:
         ///
-        ///1. File - Options
-        ///2. File Types - click on : &quot;Additional installed File Types exist&quot;
-        ///3. Select File Type
-        ///4. OK to confirm
+        ///    1. Open &apos;File &gt; Options &gt; File Types&apos;
+        ///    2. Select the File Type from the list
         ///
-        ///Once listed, select the file type from the list top configure as needed.
-        ///Note: File Types need to be configured prior to project creation.
+        ///Tip: If you are adding a new File Type to an existing project, you should first select the link &quot;Additional installed File Types exist&quot; from &apos;Project Settings &gt; File Types&apos;..
         /// </summary>
         public static string SettingsWarning {
             get {

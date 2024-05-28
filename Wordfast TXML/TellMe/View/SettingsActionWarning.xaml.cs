@@ -20,7 +20,7 @@ namespace Sdl.Community.FileTypeSupport.TXML.TellMe.View
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (IsFocused && GetWindow(this) is Window window)
+            if (GetWindow(this) is Window window)
             {
                 window.DragMove();
             }
