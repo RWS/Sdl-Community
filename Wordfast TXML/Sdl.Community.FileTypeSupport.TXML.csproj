@@ -27,8 +27,8 @@
 		<IsWebBootstrapper>false</IsWebBootstrapper>
 		<UseApplicationTrust>false</UseApplicationTrust>
 		<BootstrapperEnabled>true</BootstrapperEnabled>
-		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
-		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18Beta\Plugins</PluginDeploymentPath>
+		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18Beta</TradosFolder>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<UseWindowsForms>true</UseWindowsForms>
 		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
@@ -41,9 +41,13 @@
 		<SignAssembly>true</SignAssembly>
 	</PropertyGroup>
 	<ItemGroup>
+	  <None Remove="Resources\Information.png" />
+	</ItemGroup>
+	<ItemGroup>
 		<Content Include="pluginpackage.manifest.xml" />
 		<Resource Include="Resources\Download.ico" />
 		<Resource Include="Resources\ForumIcon.ico" />
+		<Resource Include="Resources\Information.png" />
 		<Resource Include="Resources\Question.ico" />
 	</ItemGroup>
 	<ItemGroup>
