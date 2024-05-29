@@ -1,4 +1,5 @@
-﻿using Sdl.TellMe.ProviderApi;
+﻿using Multilingual.XML.FileType.TellMe;
+using Sdl.TellMe.ProviderApi;
 
 namespace Multilingual.XML.FileType
 {
@@ -17,10 +18,13 @@ namespace Multilingual.XML.FileType
 			{
 				Keywords = new[] { "multi", "multilingual", "xml", "filetype", "file", "type", "support", "forum" }
 			},
-			new CommunityAppStoreAction
+			new SourceCodeAction
 			{
-				Keywords = new[] { "multi", "multilingual", "xml", "filetype", "file", "type", "store", "download", "appstore" }
-
+				Keywords = new[] { "multi", "multilingual", "xml", "filetype", "file", "type", "support", "forum" }
+			},
+			new SettingsAction
+			{
+				Keywords = new[] { "multi", "multilingual", "xml", "filetype", "file", "type", "support", "settings" }
 			}
 		};
 	}

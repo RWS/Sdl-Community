@@ -152,7 +152,7 @@ namespace Multilingual.XML.FileType.FileType.Preview
 		private string ReplaceParagraphUnit(Match match)
 		{
 			var fspan = match.Groups["fspan"].Value;
-			var paragraphId = match.Groups["paragraph_id"].Value;
+			var paragraphId = match.Groups["pid"].Value;
 			var content = match.Groups["content"].Value;
 			var espan = match.Groups["espan"].Value;
 
