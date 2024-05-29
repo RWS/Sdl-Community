@@ -96,7 +96,8 @@
 
             <Button Grid.Row="2"
                     Grid.ColumnSpan="2" Grid.Column="0"
-                    Content="Close"
+                    Content="OK"
+                    Style="{StaticResource Sdl.Button.PrimaryStyle}"
                     Click="CloseWindow_Click"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
