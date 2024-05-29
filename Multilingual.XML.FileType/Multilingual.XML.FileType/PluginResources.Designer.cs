@@ -779,7 +779,7 @@ namespace Multilingual.XML.FileType {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to for documentation..
+        ///   Looks up a localized string similar to to view the documentation..
         /// </summary>
         public static string SettingsAction_ExternalHelp_3 {
             get {
@@ -788,15 +788,12 @@ namespace Multilingual.XML.FileType {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To configure this file type you need have it installed and listed. Follow these steps:
+        ///   Looks up a localized string similar to The default settings for the File Type can be configured from the Options window.  To locate the default File Type settings, follow these steps:
         ///
-        ///1. File - Options
-        ///2. File Types - click on:  &quot;Additional installed File Types exist&quot;
-        ///3. Select File Type
-        ///4. OK to confirm
+        ///    1. Open &apos;File &gt; Options &gt; File Types&apos;
+        ///    2. Select the File Type from the list
         ///
-        ///Once listed select the file type from the list to configure as needed.
-        ///Note: File types need to be configured prior to project creation.
+        ///Tip: If you are adding a new File Type to an existing project, you should first select the link &quot;Additional installed File Types exist&quot; from &apos;Project Settings &gt; File Types&apos;.
         /// </summary>
         public static string SettingsAction_OpenOptionsText {
             get {
@@ -847,6 +844,16 @@ namespace Multilingual.XML.FileType {
         public static string TellMe_String_TellMe_Provider {
             get {
                 return ResourceManager.GetString("TellMe_String_TellMe_Provider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMeAppStoreForum {
+            get {
+                object obj = ResourceManager.GetObject("TellMeAppStoreForum", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         

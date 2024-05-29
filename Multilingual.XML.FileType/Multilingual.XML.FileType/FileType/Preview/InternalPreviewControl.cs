@@ -20,7 +20,7 @@ namespace Multilingual.XML.FileType.FileType.Preview
 
 		public event PreviewControlHandler WindowSelectionChanged;
 
-		[DebuggerHidden]
+		//[DebuggerHidden]
 		public InternalPreviewControl()
 		{
 			InitializeComponent();
@@ -53,7 +53,7 @@ namespace Multilingual.XML.FileType.FileType.Preview
 		/// which is returned when user clicks the corresponding segment in the preview control
 		/// </summary>
 		/// <returns></returns>
-		[DebuggerHidden]
+		//[DebuggerHidden]
 		public SegmentReference GetSelectedSegment()
 		{
 			if (!string.IsNullOrEmpty(_jumpSegmentId))
@@ -68,7 +68,7 @@ namespace Multilingual.XML.FileType.FileType.Preview
 		/// open file for preview
 		/// </summary>
 		/// <param name="fileName"></param>
-		[DebuggerHidden]
+		//[DebuggerHidden]
 		public void OpenTarget(string fileName)
 		{
 			if (InvokeRequired)
@@ -86,7 +86,7 @@ namespace Multilingual.XML.FileType.FileType.Preview
 		/// scroll to and highlight active segment in the preview control
 		/// </summary>
 		/// <param name="segment"></param>
-		[DebuggerHidden]
+		//[DebuggerHidden]
 		public void ScrollToSegment(SegmentReference segment)
 		{
 			if (InvokeRequired)
@@ -141,7 +141,7 @@ namespace Multilingual.XML.FileType.FileType.Preview
 		/// public method that is called from the preview control 
 		/// when a segment has been selected
 		/// </summary>
-		[DebuggerHidden]
+		//[DebuggerHidden]
 		public void SelectSegment(string paragraphUnitId, string segmentId)
 		{
 			// set global variables for jumping into clicked segment
@@ -152,7 +152,7 @@ namespace Multilingual.XML.FileType.FileType.Preview
 			FireWindowSelectionChanged();
 		}
 
-		[DebuggerHidden]
+		//[DebuggerHidden]
 		protected void FireWindowSelectionChanged()
 		{
 			WindowSelectionChanged?.Invoke(null);
@@ -175,7 +175,7 @@ namespace Multilingual.XML.FileType.FileType.Preview
 		}
 
 
-		[DebuggerHidden]
+		//[DebuggerHidden]
 		private void ScrollAndJumpToActiveElement()
 		{
 			if (InvokeRequired)
@@ -206,7 +206,7 @@ namespace Multilingual.XML.FileType.FileType.Preview
 		/// scroll to the active segment inside the control
 		/// </summary>
 		/// <param name="elemName"></param>
-		[DebuggerHidden]
+		//[DebuggerHidden]
 		private void ScrollToElement(string elemName)
 		{
 			if (webBrowserControl.Document != null)
@@ -226,7 +226,7 @@ namespace Multilingual.XML.FileType.FileType.Preview
 			}
 		}
 
-		[DebuggerHidden]
+		//[DebuggerHidden]
 		private static void ScrollBy(int scrollBy, WebBrowser toScroll)
 		{
 			if (toScroll?.Document?.Body == null || toScroll.Document.Body.ScrollTop < 5)

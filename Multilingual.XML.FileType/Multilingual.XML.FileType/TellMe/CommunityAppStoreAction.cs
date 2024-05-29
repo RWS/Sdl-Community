@@ -4,22 +4,22 @@ using Sdl.TellMe.ProviderApi;
 
 namespace Multilingual.XML.FileType
 {
-	public class CommunityAppStoreForumAction : AbstractTellMeAction
+	public class CommunityAppStoreAction : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
 
 		public override string Category => string.Format(PluginResources.TellMe_String_Results, PluginResources.Plugin_Name);
 
-		public override Icon Icon => PluginResources.TellMeAppStoreForum;
+		public override Icon Icon => PluginResources.Download;
 
-		public CommunityAppStoreForumAction()
+		public CommunityAppStoreAction()
 		{
-			Name = "RWS Community AppStore Forum";
+			Name = string.Format(PluginResources.TellMe_Download_Plugin_From_AppStore, PluginResources.Plugin_Name); 
 		}
 
 		public override void Execute()
-		{
-			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/");
+		{			
+			Process.Start("https://appstore.rws.com/Plugin/13");
 		}
 	}
 }
