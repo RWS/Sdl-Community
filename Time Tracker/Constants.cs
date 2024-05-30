@@ -19,6 +19,7 @@
         public static readonly string TellMe_View_Name = $"{PluginName} View";
         public static readonly string TellMe_NewTrackerAction_Name = $"{PluginName} New Time Tracker Project";
         public static readonly string TellMe_NewActivityAction_Name = $"{PluginName} New Project Activity";
-
+        public static readonly string TellMe_StartActivityAction_Name = $"{PluginName} Start Activity Tracking";
+        public static readonly string TellMe_StopActivityAction_Name = $"{PluginName} Stop Activity Tracking";
     }
 }

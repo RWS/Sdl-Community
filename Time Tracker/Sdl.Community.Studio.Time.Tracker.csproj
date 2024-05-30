@@ -38,8 +38,8 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18Beta\Plugins</PluginDeploymentPath>
-    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18Beta</TradosFolder>
+    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
+    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -113,6 +113,8 @@
     <Compile Include="TellMe\NewTrackerAction.cs" />
     <Compile Include="TellMe\SettingsAction.cs" />
     <Compile Include="TellMe\SourceCodeAction.cs" />
+    <Compile Include="TellMe\StartActivityTrackingAction.cs" />
+    <Compile Include="TellMe\StopActivityTrackingAction.cs" />
     <Compile Include="TellMe\TellMeAction.cs" />
     <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="TellMe\TimeTrackerAction.cs" />
@@ -278,6 +280,7 @@
     <Content Include="Resources\Timer.ico" />
     <Content Include="Resources\Timetable.ico" />
     <Content Include="Resources\Users-simple.ico" />
+    <Resource Include="Resources\Information.png" />
     <Content Include="Studio.Time.Tracker.ico" />
     <EmbeddedResource Include="Dialogs\ExportActivitesToExcel.resx">
       <DependentUpon>ExportActivitesToExcel.cs</DependentUpon>

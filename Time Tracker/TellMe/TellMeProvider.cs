@@ -18,6 +18,7 @@ namespace Sdl.Community.Studio.Time.Tracker.TellMe
 
         private AbstractTellMeAction[] GetProviderActions()
         {
+            new StudioTimeTrackerViewController().Initialize();
             var forumAction = new CommunityForumAction();
             var helpAction = new DocumentationAction();
             var sourceCodeAction = new SourceCodeAction();
@@ -25,8 +26,10 @@ namespace Sdl.Community.Studio.Time.Tracker.TellMe
             var timeTrackerAction = new TimeTrackerAction();
             var newTrackerAction = new NewTrackerAction();
             var newActivityAction = new NewActivityAction();
+            var startActivityAction = new StartActivityTrackingAction();
+            var stopActivityAction = new StopActivityTrackingAction();
 
-            var providerActions = new AbstractTellMeAction[] { forumAction, helpAction, sourceCodeAction, settingsAction, timeTrackerAction, newTrackerAction, newActivityAction  };
+            var providerActions = new AbstractTellMeAction[] { forumAction, helpAction, sourceCodeAction, settingsAction, timeTrackerAction, newTrackerAction, newActivityAction, startActivityAction, stopActivityAction };
             return providerActions;
         }
     }
