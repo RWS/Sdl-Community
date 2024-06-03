@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="TellMe_BaseTitle" xml:space="preserve">
+    <value>Access '[Plugin Name]'</value>
+  </data>
+  <data name="TellMe_BatchTask_Message" xml:space="preserve">
+    <value>To run '[BatchTask Name]' on your project, select the 'Batch Tasks' button from the 'Home' ribbon.
+
+If you want to run a custom Task Sequence, follow these steps:
+
+    1. Select 'Custom' from the dropdown menu
+    2. From the 'Batch Processing' dialog, select the batch tasks in the order they should be run</value>
+    <comment>For some Batch Tasks, the user must be in a specific view (e.g., Editor, Project).
+Some Batch Tasks allow changes to settings.
+However, it may not always be necessary to mention these details.</comment>
+  </data>
+  <data name="TellMe_BatchTask_Title" xml:space="preserve">
+    <value>Running '[BatchTask Name]'</value>
+  </data>
+  <data name="TellMe_CreateShortcut" xml:space="preserve">
+    <value>Tip: You can create new shortcuts from 'File &gt; Options &gt; Keyboard Shortcuts &gt; [Plugin Name]'</value>
+    <comment>(!!!) Shortcuts are not available for every plugin.</comment>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="TellMe_Documentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_Documentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe_FileType_Message" xml:space="preserve">
+    <value>The default settings for the File Type can be configured from the Options window. To locate the default File Type settings, follow these steps:
+
+    1. Open 'File &gt; Options &gt; File Types'
+    2. Select the File Type from the list
+
+Tip: If you are adding a new File Type to an existing project, you should first select the link "Additional Installed File Types exist" from 'Project Settings &gt; File Types'</value>
+  </data>
+  <data name="TellMe_FileType_Title" xml:space="preserve">
+    <value>Configure File Type in Options</value>
+  </data>
+  <data name="TellMe_Forum" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_Forum.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe_NoProviderAvailable_Message" xml:space="preserve">
+    <value>Unable to locate '[PluginName]' in your current project. To add it to your project, follow these steps:
+
+    1. Open Project Settings
+    2. Go to 'Translation Memory and Automated Translation'
+    3. Select '[Plugin Name]' from the 'Use...' dropdown button menu
+    4. Save &amp; close the Project Settings</value>
+  </data>
+  <data name="TellMe_NoProviderAvailable_Title" xml:space="preserve">
+    <value>Configure Translation Provider in Project Settings</value>
+  </data>
+  <data name="TellMe_OkButton" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="TellMe_Ribbon" xml:space="preserve">
+    <value>To work with '[Plugin Name]', follow these steps:
+
+    1. Access '[View Name] &gt; [Tab Name] &gt; [Group Name]'
+    2. Click on the item '[Option Name]'</value>
+    <comment>This might be different depending on many factors, this example was created by looking at the DSI Viewer app.</comment>
+  </data>
+  <data name="TellMe_SelectProvider_Message" xml:space="preserve">
+    <value>Multiple instances of the '[Plugin Name]' have been detected in the current project. Please select one from the list:</value>
+  </data>
+  <data name="TellMe_Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_Settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe_SignIn" xml:space="preserve">
+    <value>To work with '[Plugin Name]' features, you must first be signed in. To sign in, follow these steps:
+
+    1. Load the '[Plugin Name]' view
+    2. -</value>
+  </data>
+  <data name="TellMe_SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe_ViewDocumentation_1" xml:space="preserve">
+    <value>For more information,</value>
+    <comment>Plain text</comment>
+  </data>
+  <data name="TellMe_ViewDocumentation_2" xml:space="preserve">
+    <value>click here</value>
+    <comment>Text that acts as a button</comment>
+  </data>
+  <data name="TellMe_ViewDocumentation_3" xml:space="preserve">
+    <value>to view the documentation</value>
+    <comment>Plain text</comment>
+  </data>
+</root>
