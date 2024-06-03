@@ -193,6 +193,11 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
 
         private bool IsActive { get; set; }
 
+        public void Initialize()
+        {
+            Initialize(null);
+        }
+
         protected override void Initialize(IViewContext context)
         {
             ActivationChanged += StudioTimeTrackerViewController_ActivationChanged;
@@ -270,7 +275,6 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
             Timer4ProjectArea = new Timer { Interval = 1000 };
             Timer4ProjectArea.Tick += Timer4ProjectArea_Tick;
             Timer4ProjectArea.Start();
-
 
             IsLoading = false;
         }
