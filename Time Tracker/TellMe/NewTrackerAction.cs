@@ -6,7 +6,7 @@ namespace Sdl.Community.Studio.Time.Tracker.TellMe
 {
     internal class NewTrackerAction : TellMeAction
     {
-        private static readonly string[] _helpKeywords = { "New", "Time", "Tracker", "Project" };
+        private static readonly string[] _helpKeywords = { "new", "time", "tracker", "project" };
         private static readonly string _actionName = Constants.TellMe_NewTrackerAction_Name;
         private static readonly Icon _icon = PluginResources.StudioTimeTrackeCreateProjectAction_Icon;
         private static readonly bool _isAvailable = true;
