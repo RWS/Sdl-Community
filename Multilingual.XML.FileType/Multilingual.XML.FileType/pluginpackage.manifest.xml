@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Multilingual XML FileType</PlugInName>
-	<Version>2.2.0.1</Version>
+	<Version>2.2.1.0</Version>
 	<Description>Multilingual XML File Type</Description>
 	<Author>Trados AppStore Team</Author>
 	<RequiredProduct name="TradosStudio" minversion="17.2" maxversion="17.9"/>
