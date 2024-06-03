@@ -475,8 +475,8 @@ namespace Multilingual.XML.FileType.Services
 
                 var textValue = ProtextSoftReturns(text);
 
-                textValue = textValue.Replace(EntityConstants.BeginSdlEntityRefEscape, EntityConstants.BeginEntityRef)
-                    .Replace(EntityConstants.EndSdlEntityRefEscape, EntityConstants.EndEntityRef);
+                textValue = textValue?.Replace(EntityConstants.BeginSdlEntityRefEscape, EntityConstants.BeginEntityRef)
+                    ?.Replace(EntityConstants.EndSdlEntityRefEscape, EntityConstants.EndEntityRef);
 
                 content.Append(textValue);
 
