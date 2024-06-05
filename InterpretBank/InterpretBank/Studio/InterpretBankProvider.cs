@@ -142,6 +142,8 @@ namespace InterpretBank.Studio
                     throw new ArgumentOutOfRangeException(nameof(mode));
             }
 
+            if (results == null) return null;
+
             var searchResults = results.OrderByDescending(r => r.Score).ThenBy(r => r.Text.Length);
             var scored = searchResults.Take(maxResultsCount).ToList();
 
@@ -217,6 +219,7 @@ namespace InterpretBank.Studio
         {
             var termsDictionary =
                 TermSearchService.GetFuzzyTerms(words, source.Name, destination.Name, Settings.Glossaries, minScore);
+            if (termsDictionary == null) return null;
 
             var results = new List<SearchResult>();
             var studioTermEntries = termsDictionary.SelectMany(termsEntry => termsEntry.Value);

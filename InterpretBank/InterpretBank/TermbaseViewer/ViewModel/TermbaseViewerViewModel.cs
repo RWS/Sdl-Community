@@ -240,8 +240,8 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             SourceLanguageName = sourceLanguage.GetInterpretBankLanguageName();
             TargetLanguageName = targetLanguage.GetInterpretBankLanguageName();
 
-            SourceLanguageFlag = sourceLanguage.GetFlagImage();
-            TargetLanguageFlag = targetLanguage.GetFlagImage();
+            SourceLanguageFlag = sourceLanguage?.GetFlagImage();
+            TargetLanguageFlag = targetLanguage?.GetFlagImage();
         }
 
         private void SetSelectedEntry(EntryModel term)
