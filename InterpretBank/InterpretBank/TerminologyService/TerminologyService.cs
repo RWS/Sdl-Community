@@ -83,6 +83,7 @@ public class TerminologyService : ITerminologyService
         string targetLanguage, List<string> glossaries, int minScore)
     {
         var allEntries = GetSourceAndTargetTerms(sourceLanguage, targetLanguage, glossaries);
+        if (allEntries == null) return null;
 
         var termsDictionary = new ConcurrentDictionary<string, List<StudioTermEntry>>();
         Parallel.ForEach(words, word =>
@@ -116,10 +117,10 @@ public class TerminologyService : ITerminologyService
     public int GetLanguageIndex(string interpretBankLanguage)
     {
         if (LanguageDictionary is not null) return LanguageDictionary[interpretBankLanguage].Index;
-
         LanguageDictionary = GetLanguages().ToDictionary(l => l.Name, l => l);
 
-        return LanguageDictionary[interpretBankLanguage].Index;
+        if (!LanguageDictionary.TryGetValue(interpretBankLanguage, out var value)) return -1;
+        return value.Index;
     }
 
     public List<LanguageModel> GetLanguages()
@@ -186,9 +187,15 @@ public class TerminologyService : ITerminologyService
 
         var targetLanguageIndex = GetLanguageIndex(targetLanguage);
         var sourceLanguageIndex = GetLanguageIndex(sourceLanguage);
-        var entries = glossaryService.GetTerms(null, [sourceLanguageIndex, targetLanguageIndex], glossaries, null).Cast<TermEntry>();
 
-        var allEntries = entries.Select(t =>
+        var indices = new List<int>();
+
+        if (targetLanguageIndex > -1) indices.Add(targetLanguageIndex);
+        if (sourceLanguageIndex > -1) indices.Add(sourceLanguageIndex);
+
+        var entries = glossaryService.GetTerms(null, indices, glossaries, null)?.Cast<TermEntry>();
+
+        var allEntries = entries?.Select(t =>
         {
             var sourceLe =
                 t.LanguageEquivalents.FirstOrDefault(le => le.LanguageIndex == sourceLanguageIndex);
