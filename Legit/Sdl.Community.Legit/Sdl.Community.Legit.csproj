@@ -78,6 +78,7 @@
     <StartupObject />
   </PropertyGroup>
   <PropertyGroup>
+	  <LangVersion>latest</LangVersion>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
   <ItemGroup>
