@@ -167,6 +167,7 @@
     <Compile Include="TellMe\DocumentationAction.cs" />
     <Compile Include="TellMe\SettingsAction.cs" />
     <Compile Include="TellMe\SourceCodeAction.cs" />
+    <Compile Include="TellMe\TellMeConstants.cs" />
     <Compile Include="TellMe\TellMeProvider.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
