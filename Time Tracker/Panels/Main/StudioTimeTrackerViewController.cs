@@ -305,7 +305,10 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
                         #region  |  Cache.tracking_is_dirty_c0  |
                         Tracked.TrackingIsDirtyC0 = false;
 
-                        _viewContent.Value.Parent.Cursor = Cursors.Default;
+                        if (_viewContent.Value?.Parent != null)
+                        {
+                            _viewContent.Value.Parent.Cursor = Cursors.Default;
+                        }
 
                         if (Tracked.TrackingState == Tracked.TimerState.None
                             || Tracked.TrackingState == Tracked.TimerState.Stopped
@@ -1680,7 +1683,10 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
                 Tracked.HandlerPartent = 0;
                 Tracked.TrackingState = Tracked.TimerState.Started;
 
-                _viewContent.Value.Parent.Cursor = Cursors.Default;
+                if (_viewContent.Value?.Parent != null)
+                {
+                    _viewContent.Value.Parent.Cursor = Cursors.Default;
+                }
 
 
                 ProjectActivityStartTrackerEnabled = false;

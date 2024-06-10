@@ -15,7 +15,7 @@ namespace Sdl.Community.Studio.Time.Tracker
             Structures.TrackerProject trackerProject = null;
             try
             {
-                var projectInfo = doc.Project.GetProjectInfo();
+                var projectInfo = doc?.Project.GetProjectInfo();
                 if (projectInfo != null)
                 {
                     foreach (var project in Tracked.Preferences.TrackerProjects)

@@ -73,8 +73,7 @@
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
       <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Desktop.Platform.Styles, Version=18.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Sdl.Desktop.Platform.Styles">
       <HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Styles.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
@@ -86,8 +85,7 @@
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
-    <Reference Include="Studio.Time.Tracker.ObjectListView, Version=2.7.0.33772, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Studio.Time.Tracker.ObjectListView">
       <HintPath>ThirdParty\objectListView\Studio.Time.Tracker.ObjectListView.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TellMe.ProviderApi">
