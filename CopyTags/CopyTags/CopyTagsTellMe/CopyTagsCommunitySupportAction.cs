@@ -8,7 +8,7 @@ namespace SDLCopyTags.CopyTagsTellMe
 	{
 		public CopyTagsCommunitySupportAction()
 		{
-			Name = "RWS Community AppStore forum";
+			Name = "RWS Community AppStore Forum";
 		}
 		public override void Execute()
 		{
@@ -17,6 +17,6 @@ namespace SDLCopyTags.CopyTagsTellMe
 
 		public override bool IsAvailable => true;
 		public override string Category => "TradosCopyTags results";
-		public override Icon Icon => PluginResources.ForumIcon;
+		public override Icon Icon => PluginResources.Question;
 	}
 }

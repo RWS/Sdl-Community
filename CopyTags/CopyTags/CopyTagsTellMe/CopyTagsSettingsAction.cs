@@ -4,11 +4,11 @@ using Sdl.TellMe.ProviderApi;
 
 namespace SDLCopyTags.CopyTagsTellMe
 {
-	public class CopyTagsStoreAction : AbstractTellMeAction
+	public class CopyTagsSettingsAction : AbstractTellMeAction
 	{
-		public CopyTagsStoreAction()
+		public CopyTagsSettingsAction()
 		{
-			Name = "Download TradosCopyTags from AppStore";
+			Name = "Trados CopyTags Settings";
 		}
 
 		public override void Execute()
@@ -18,6 +18,6 @@ namespace SDLCopyTags.CopyTagsTellMe
 
 		public override bool IsAvailable => true;
 		public override string Category => "TradosCopyTags results";
-		public override Icon Icon => PluginResources.Download;
+		public override Icon Icon => PluginResources.TellMe_Settings;
 	}
 }
