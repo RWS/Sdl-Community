@@ -8,7 +8,7 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
     {
         public DeepLContactAction()
         {
-            Name = "Contact DeepL";
+            Name = "DeepL Official Website";
         }
 
         public override string Category => $"{PluginResources.Plugin_Name} results";
