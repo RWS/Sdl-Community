@@ -7,7 +7,7 @@
 		mc:Ignorable="d"
 		Title="TellMe Warning"
 		Width="370"
-		Height="225"
+		Height="210"
 		ResizeMode="NoResize"
 		WindowStyle="None"
 		WindowStartupLocation="CenterScreen"
@@ -48,11 +48,11 @@
 
             <TextBlock
 			   Grid.Column="1"
-			   Text="Trados Copy Tags"
+			   Text="Access Trados Copy Tags"
 	           Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"
 			   FontSize="16"
 			   HorizontalAlignment="Left"
-			   Margin="67,0,0,0" RenderTransformOrigin="0.485,0.534" />
+			   Margin="40,0,0,0" RenderTransformOrigin="0.485,0.534" />
 
             <TextBlock Grid.Row="1"
 			   Grid.ColumnSpan="3"
@@ -68,7 +68,7 @@
 			   TextWrapping="Wrap"
 			   Focusable="True"
 			   KeyDown="OpenUrl_KeyPressed"
-			   Margin="15,10,0,0">
+			   Margin="20,10,0,0">
 		<Run Text="For more information," />
 		<Run Text="click here"
 			 Cursor="Hand"
