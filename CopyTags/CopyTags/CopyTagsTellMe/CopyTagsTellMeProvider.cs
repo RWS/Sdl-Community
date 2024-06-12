@@ -9,18 +9,22 @@ namespace SDLCopyTags.CopyTagsTellMe
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
+			new CopyTagsDocumentationAction
+			{
+				Keywords = new []{ "tradoscopytags", "copy", "tags", "documentation", "information" }
+			},
 			new CopyTagsCommunitySupportAction
-			{
-				Keywords = new []{ "tradoscopytags", "trados copy tags", "copy tags", "copy tags community", "copy tags support", "tradoscopytags community", "tradoscopytags support" }
+            {
+				Keywords = new []{ "tradoscopytags", "copy", "tags", "help", "community", "forum" }
 			},
-			new CopyTagsHelpAction
-			{
-				Keywords = new []{ "tradoscopytags", "trados copy tags", "copy tags", "copy tags help", "copy tags guide", "tradoscopytags help", "tradoscopytags guide" }
+			new CommunitySourceCodeAction
+            {
+				Keywords = new []{ "tradoscopytags", "copy", "tags", "source code" }
 			},
-			new CopyTagsStoreAction
-			{
-				Keywords = new []{ "tradoscopytags", "trados copy tags", "copy tags", "copy tags store", "copy tags download", "tradoscopytags store", "tradoscopytags download" }
-			}
-		};
+            new CopyTagsSettingsAction
+            {
+                Keywords = new []{ "tradoscopytags", "copy", "tags", "settings" }
+            }
+        };
 	}
 }
