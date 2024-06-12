@@ -16,7 +16,7 @@ namespace SDLCopyTags.CopyTagsTellMe
 		}
 
 		public override bool IsAvailable => true;
-		public override string Category => "TradosCopyTags results";
+		public override string Category => string.Format(PluginResources.TellMe_Provider_Results, PluginResources.Plugin_Name);
 		public override Icon Icon => PluginResources.Question;
 	}
 }

@@ -91,6 +91,16 @@ namespace SDLCopyTags {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Information {
+            get {
+                object obj = ResourceManager.GetObject("Information", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Trados Copy Tags.
         /// </summary>
         public static string Plugin_Name {
@@ -145,6 +155,20 @@ namespace SDLCopyTags {
             get {
                 object obj = ResourceManager.GetObject("TellMe_SourceCode", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To engage with Trados Copy Tags follow these steps:
+        ///
+        ///Access Trados Copy Tags
+        ///1. Open a file in Editor
+        ///2. Right click inside the segment which contains tags
+        ///3. Selecte &quot;Copy Tags to Target&quot;.
+        /// </summary>
+        public static string TellMe_WarningMessage {
+            get {
+                return ResourceManager.GetString("TellMe_WarningMessage", resourceCulture);
             }
         }
     }

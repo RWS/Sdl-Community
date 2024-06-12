@@ -3,11 +3,19 @@
 	<PropertyGroup>
 		<TargetFramework>net48</TargetFramework>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18Beta\Plugins</PluginDeploymentPath>
-		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18Beta</TradosFolder>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
+		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
 		<CreatePluginPackage>true</CreatePluginPackage>
+		<LangVersion>latest</LangVersion>
+		<UseWPF>true</UseWPF>
 	</PropertyGroup>
+	<ItemGroup>
+	  <None Remove="Resources\Information.png" />
+	</ItemGroup>
   <ItemGroup>
+	<Reference Include="PresentationCore" />
+	<Reference Include="PresentationFramework" />
+	<Reference Include="PresentationFramework.Aero" />
     <Reference Include="NLog">
       <HintPath>$(TradosFolder)\NLog.dll</HintPath>
     </Reference>
@@ -16,6 +24,12 @@
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
       <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
+	<Reference Include="Sdl.Desktop.Platform.Controls">
+      <HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Controls.dll</HintPath>
+	</Reference>
+    <Reference Include="Sdl.Desktop.Platform.Styles">
+      <HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Styles.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
       <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
@@ -47,11 +61,17 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+	<Reference Include="System.IO.Compression" />
+	<Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>4.5.2</RequiredTargetFramework>
     </Reference>
+	<Reference Include="System.Xaml" />
+	<Reference Include="System.XML" />
+	<Reference Include="WindowsBase" />
+	<Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml">
@@ -70,6 +90,9 @@
     <PackageReference Include="Sdl.Core.PluginFramework.Build">
       <Version>18.0.1</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Information.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="PluginResources.Designer.cs">
