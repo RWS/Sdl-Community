@@ -151,9 +151,8 @@
   <data name="TellMe_WarningMessage" xml:space="preserve">
     <value>To engage with Trados Copy Tags follow these steps:
 
-Access Trados Copy Tags
-1. Open a file in Editor
-2. Right click inside the segment which contains tags
-3. Selecte "Copy Tags to Target"</value>
+   1. Open a file in Editor
+   2. Right click inside the segment which contains tags
+   3. Selecte "Copy Tags to Target"</value>
   </data>
 </root>

@@ -161,10 +161,9 @@ namespace SDLCopyTags {
         /// <summary>
         ///   Looks up a localized string similar to To engage with Trados Copy Tags follow these steps:
         ///
-        ///Access Trados Copy Tags
-        ///1. Open a file in Editor
-        ///2. Right click inside the segment which contains tags
-        ///3. Selecte &quot;Copy Tags to Target&quot;.
+        ///   1. Open a file in Editor
+        ///   2. Right click inside the segment which contains tags
+        ///   3. Selecte &quot;Copy Tags to Target&quot;.
         /// </summary>
         public static string TellMe_WarningMessage {
             get {
