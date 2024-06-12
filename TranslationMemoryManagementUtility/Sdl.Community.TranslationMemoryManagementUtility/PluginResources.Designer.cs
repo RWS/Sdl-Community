@@ -253,11 +253,41 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_Documentation {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_Documentation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download {0} from the AppStore.
         /// </summary>
         public static string TellMe_Download_Plugin_From_AppStore {
             get {
                 return ResourceManager.GetString("TellMe_Download_Plugin_From_AppStore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_Settings {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_Settings", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_SourceCode {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_SourceCode", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
