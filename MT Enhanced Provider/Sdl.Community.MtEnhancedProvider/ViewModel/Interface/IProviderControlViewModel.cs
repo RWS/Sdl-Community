@@ -37,7 +37,9 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel.Interface
 		string CatId { get; set; }
 		
 		string ApiKey { get; set; } //Google
-		
+	
+		string PeUrl { get; set;  } // Microsoft private endpoint url
+
 		string ClientId { get; set; } //Microsoft
 
 		SubscriptionRegion Region { get; set; }
