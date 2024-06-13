@@ -8,16 +8,16 @@ using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.ApplyTMTemplate.TellMe
 {
-	public class ApplyTmTemplateAction : AbstractTellMeAction
+	public class ApplyTMSettingsAction : AbstractTellMeAction
 	{
-		public ApplyTmTemplateAction()
+		public ApplyTMSettingsAction()
 		{
-			Name = "Start Apply TM Template";
+			Name = "Apply TM Template Settings";
 		}
 
 		public override string Category => "Apply TM Template results";
 
-		public override Icon Icon => PluginResources.ATTA;
+		public override Icon Icon => PluginResources.TellMe_Settings;
 
 		public override bool IsAvailable => true;
 
