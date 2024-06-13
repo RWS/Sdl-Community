@@ -10,7 +10,7 @@ namespace SDLCopyTags.CopyTagsTellMe
 	{
 		public CopyTagsSettingsAction()
 		{
-			Name = "Trados CopyTags Settings";
+			Name = "Trados Copy Tags Settings";
 		}
 
         private static void ShowDialog()
