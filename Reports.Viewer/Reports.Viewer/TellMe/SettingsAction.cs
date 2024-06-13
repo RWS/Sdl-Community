@@ -9,7 +9,7 @@ namespace Reports.Viewer.Plus.TellMe
 	{
 		public SettingsAction()
 		{
-			Name = $"{PluginResources.Plugin_Name} settings";
+			Name = $"{PluginResources.Plugin_Name} Settings";
 		}
 
 		public override string Category => string.Format(PluginResources.TellMe_Provider_Results, PluginResources.Plugin_Name);
