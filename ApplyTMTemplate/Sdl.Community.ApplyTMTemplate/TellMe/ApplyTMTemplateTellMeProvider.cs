@@ -9,22 +9,22 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new ApplyTMTemplateStoreAction
-			{
-				Keywords = new[] {  "ApplyTm", "applytm","apply", "tm", "template", "apply tm template", "apply tm store", "apply tm download"}
+			new ApplyTMDocumentationAction
+            {
+				Keywords = new[] {  "ApplyTm", "applytm","apply", "tm", "template", "apply tm template", "apply tm documentation", "documentation"}
 			},
 			new ApplyTMCommunitySupportAction
 			{
 				Keywords = new[] { "ApplyTm", "applytm", "apply", "tm", "template", "apply tm template","forum", "community", "support"}
 			},
-			new ApplyTmTemplateAction
+            new ApplyTMSourceCodeAction()
+            {
+                Keywords = new []{ "ApplyTm", "applytm", "apply", "tm", "template", "apply tm template", "wiki", "help"}
+            },
+            new ApplyTMSettingsAction
 			{
-				Keywords = new[] { "ApplyTm", "applytm", "apply", "tm", "template", "apply tm template", "start"}
-			},
-			new ApplyTMTemplateHelpAction()
-			{
-				Keywords = new []{ "ApplyTm", "applytm", "apply", "tm", "template", "apply tm template", "wiki", "help"}
+				Keywords = new[] { "ApplyTm", "applytm", "apply", "tm", "template", "apply tm template", "settings"}
 			}
-		};
+        };
 	}
 }
