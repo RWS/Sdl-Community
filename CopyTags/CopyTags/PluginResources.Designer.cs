@@ -163,7 +163,7 @@ namespace SDLCopyTags {
         ///
         ///   1. Open a file in Editor
         ///   2. Right click inside the segment which contains tags
-        ///   3. Selecte &quot;Copy Tags to Target&quot;.
+        ///   3. Select &quot;Copy Tags to Target&quot;.
         /// </summary>
         public static string TellMe_WarningMessage {
             get {
