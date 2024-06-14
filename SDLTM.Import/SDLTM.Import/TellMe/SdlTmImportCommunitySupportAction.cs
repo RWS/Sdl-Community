@@ -8,7 +8,7 @@ namespace SDLTM.Import.TellMe
 	{
 		public SdlTmImportCommunitySupportAction()
 		{
-			Name = "SDLTM Import Plus AppStore forum";
+			Name = "SDLTM Import Plus AppStore Forum";
 		}
 		public override void Execute()
 		{
@@ -18,6 +18,6 @@ namespace SDLTM.Import.TellMe
 		public override bool IsAvailable => true;
 		public override string Category => "SDLTM Import Plus results";
 
-		public override Icon Icon => PluginResources.ForumIcon;
+		public override Icon Icon => PluginResources.Question;
 	}
 }

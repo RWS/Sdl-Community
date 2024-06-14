@@ -9,18 +9,22 @@ namespace SDLTM.Import.TellMe
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new SdlTmImportCommunitySupportAction
+            new SdlTmImportDocumentationAction
+            {
+                Keywords = new[] {"sdltm import plus", "sdltmimport", "documentation" }
+            },
+            new SdlTmImportCommunitySupportAction
 			{
-				Keywords = new[] {"sdltm import plus", "sdltmimport plus", "sdltm import plus community", "sdltmimport plus support" }
+				Keywords = new[] {"sdltm import plus", "sdltmimport plus", "sdltm import plus community", "sdltmimport plus support", "forum" }
 			},
-			new SdlTmImportHelpAction
+			new SdlTmImportSourceCodeAction
 			{
-				Keywords = new[] {"sdltm import plus", "sdltmimport help", "sdltm import plus wiki", "sdltmimport plus wiki" }
+				Keywords = new[] {"sdltm import plus", "sdltmimport", "source", "code" }
 			},
-			new SdlTmImportStoreAction
-			{
-				Keywords = new[] {"sdltm import plus", "sdltmimport download", "sdltm import plus download", "sdltmimport plus download" }
-			}
-		};
+            new SdlTmImportSettingsAction
+            {
+                Keywords = new[] {"sdltm import plus", "sdltmimport", "settings" }
+            }
+        };
 	}
 }
