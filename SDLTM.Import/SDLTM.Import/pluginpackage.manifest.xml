@@ -1,7 +1,7 @@
 
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>SDLTM Import Plus</PlugInName>
-  <Version>3.1.1.0</Version>
+  <Version>4.0.0.0</Version>
   <Description>SDLTM Import Plus supports the import of multiple SDLXLIFF and/or TMX files to multiple SDLTMs with the additional ability to populate fields with the filename and/or segment number.</Description>
   <Author>Trados AppStore Team</Author>
   <RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9"/>
