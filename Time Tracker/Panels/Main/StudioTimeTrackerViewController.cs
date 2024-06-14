@@ -335,7 +335,9 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
                         }
 
                         if (Tracked.HandlerPartent != 0)
+                        {
                             treeView_navigation_AfterSelect(null, null);
+                        }
 
                         #endregion
                     }
@@ -423,12 +425,17 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
         private static void CheckStartTracker()
         {
             if (Tracked.TrackingState != Tracked.TimerState.Started || Tracked.TrackerDocumentId.Trim() != string.Empty)
+            {
                 return;
+            }
+
             try
             {
                 var doc = GetEditorController().ActiveDocument;
                 if (doc == null)
+                {
                     return;
+                }
 
                 var trackerProject = Helper.GetTrackerProjectFromDocument(doc);
                 var clientProfileInfo = Common.GetClientFromId(trackerProject.ClientId);
@@ -1675,9 +1682,17 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
 
         public void StartTimeTracking()
         {
+            var doc = GetEditorController()?.ActiveDocument;
+            if (doc == null)
+            {
+                MessageBox.Show(PluginResources.InformationMessage_openDocumentInEditor,
+                    PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
 
             try
             {
+
                 Timer4ProjectArea.Stop();
 
                 Tracked.HandlerPartent = 0;

@@ -19,7 +19,10 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
     {
     }
 
-    [Action("StudioTimeTrackerToolsRibbonGroupCreateActivitiesReport", typeof(StudioTimeTrackerViewController), Name = "StudioTimeTrackerToolsRibbonGroupCreateActivitiesReport_Name", Description = "StudioTimeTrackerToolsRibbonGroupCreateActivitiesReport_Description", Icon = "StudioTimeTrackerToolsRibbonGroupCreateActivitiesReport_Icon")]
+    [Action("StudioTimeTrackerToolsRibbonGroupCreateActivitiesReport", typeof(StudioTimeTrackerViewController), 
+        Name = "StudioTimeTrackerToolsRibbonGroupCreateActivitiesReport_Name", 
+        Description = "StudioTimeTrackerToolsRibbonGroupCreateActivitiesReport_Description", 
+        Icon = "StudioTimeTrackerToolsRibbonGroupCreateActivitiesReport_Icon")]
     [ActionLayout(typeof(StudioTimeTrackerToolsRibbonGroup), ZIndex = 2, DisplayType = DisplayType.Large)]
     public class StudioTimeTrackerToolsRibbonGroupCreateActivitiesReport : AbstractViewControllerAction<StudioTimeTrackerViewController>
     {
@@ -40,7 +43,10 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
       
     }
 
-    [Action("StudioTimeTrackerToolsRibbonGroupExoprtActivitiesToExcel", typeof(StudioTimeTrackerViewController), Name = "StudioTimeTrackerToolsRibbonGroupExoprtActivitiesToExcel_Name", Description = "StudioTimeTrackerToolsRibbonGroupExoprtActivitiesToExcel_Description", Icon = "StudioTimeTrackerToolsRibbonGroupExoprtActivitiesToExcel_Icon")]
+    [Action("StudioTimeTrackerToolsRibbonGroupExoprtActivitiesToExcel", typeof(StudioTimeTrackerViewController), 
+        Name = "StudioTimeTrackerToolsRibbonGroupExoprtActivitiesToExcel_Name",
+        Description = "StudioTimeTrackerToolsRibbonGroupExoprtActivitiesToExcel_Description", 
+        Icon = "StudioTimeTrackerToolsRibbonGroupExoprtActivitiesToExcel_Icon")]
     [ActionLayout(typeof(StudioTimeTrackerToolsRibbonGroup), ZIndex = 1, DisplayType = DisplayType.Large)]
     public class StudioTimeTrackerToolsRibbonGroupExoprtActivitiesToExcel : AbstractViewControllerAction<StudioTimeTrackerViewController>
     {
@@ -73,9 +79,12 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
     }
 
 
-    [Action("StudioTimeTrackeStartTimer", typeof(StudioTimeTrackerViewController), Name = "StudioTimeTrackeStartTimer_Name", Description = "StudioTimeTrackeStartTimer_Description", Icon = "StudioTimeTrackeStartTimer_Icon")]
+    [Action("StudioTimeTrackerStartTimer", typeof(StudioTimeTrackerViewController),
+        Name = "StudioTimeTrackerStartTimer_Name", 
+        Description = "StudioTimeTrackerStartTimer_Description", 
+        Icon = "StudioTimeTrackerStartTimer_Icon")]
     [ActionLayout(typeof(StudioTimeTrackerTimeTrackingRibbonGroup), ZIndex = 1, DisplayType = DisplayType.Large)]
-    public class StudioTimeTrackeStartTimer : AbstractViewControllerAction<StudioTimeTrackerViewController>
+    public class StudioTimeTrackerStartTimer : AbstractViewControllerAction<StudioTimeTrackerViewController>
     {
 
         public override void Initialize()
@@ -96,9 +105,12 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
     }
 
 
-    [Action("StudioTimeTrackeStopTimer", typeof(StudioTimeTrackerViewController), Name = "StudioTimeTrackeStopTimer_Name", Description = "StudioTimeTrackeStopTimer_Description", Icon = "StudioTimeTrackeStopTimer_Icon")]
+    [Action("StudioTimeTrackerStopTimer", typeof(StudioTimeTrackerViewController), 
+        Name = "StudioTimeTrackerStopTimer_Name", 
+        Description = "StudioTimeTrackerStopTimer_Description",
+        Icon = "StudioTimeTrackerStopTimer_Icon")]
     [ActionLayout(typeof(StudioTimeTrackerTimeTrackingRibbonGroup), ZIndex = 0, DisplayType = DisplayType.Large)]
-    public class StudioTimeTrackeStopTimer : AbstractViewControllerAction<StudioTimeTrackerViewController>
+    public class StudioTimeTrackerStopTimer : AbstractViewControllerAction<StudioTimeTrackerViewController>
     {
 
         public override void Initialize()
@@ -131,9 +143,12 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
     }
 
 
-    [Action("StudioTimeTrackeCreateProjectTaskAction", typeof(StudioTimeTrackerViewController), Name = "StudioTimeTrackeCreateProjectTaskAction_Name", Description = "StudioTimeTrackeCreateProjectTaskAction_Description", Icon = "StudioTimeTrackeCreateProjectTaskAction_Icon")]
+    [Action("StudioTimeTrackerCreateProjectTaskAction", typeof(StudioTimeTrackerViewController), 
+        Name = "StudioTimeTrackerCreateProjectTaskAction_Name", 
+        Description = "StudioTimeTrackerCreateProjectTaskAction_Description", 
+        Icon = "StudioTimeTrackerCreateProjectTaskAction_Icon")]
     [ActionLayout(typeof(StudioTimeTrackerProjectTasksRibbonGroup), ZIndex = 5, DisplayType = DisplayType.Large)]
-    public class StudioTimeTrackeCreateProjectTaskAction : AbstractViewControllerAction<StudioTimeTrackerViewController>
+    public class StudioTimeTrackerCreateProjectTaskAction : AbstractViewControllerAction<StudioTimeTrackerViewController>
     {
 
         public override void Initialize()
@@ -153,9 +168,12 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
      
     }
 
-    [Action("StudioTimeTrackeEditProjectTaskAction", typeof(StudioTimeTrackerViewController), Name = "StudioTimeTrackeEditProjectTaskAction_Name", Description = "StudioTimeTrackeEditProjectTaskAction_Description", Icon = "StudioTimeTrackeEditProjectTaskAction_Icon")]
+    [Action("StudioTimeTrackerEditProjectTaskAction", typeof(StudioTimeTrackerViewController), 
+        Name = "StudioTimeTrackerEditProjectTaskAction_Name", 
+        Description = "StudioTimeTrackerEditProjectTaskAction_Description", 
+        Icon = "StudioTimeTrackerEditProjectTaskAction_Icon")]
     [ActionLayout(typeof(StudioTimeTrackerProjectTasksRibbonGroup), ZIndex = 4, DisplayType = DisplayType.Normal)]
-    public class StudioTimeTrackeEditProjectTaskAction : AbstractViewControllerAction<StudioTimeTrackerViewController>
+    public class StudioTimeTrackerEditProjectTaskAction : AbstractViewControllerAction<StudioTimeTrackerViewController>
     {
         public override void Initialize()
         {
@@ -175,9 +193,12 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
     }
 
 
-    [Action("StudioTimeTrackeRemoveProjectTaskAction", typeof(StudioTimeTrackerViewController), Name = "StudioTimeTrackeRemoveProjectTaskAction_Name", Description = "StudioTimeTrackeRemoveProjectTaskAction_Description", Icon = "StudioTimeTrackeRemoveProjectTaskAction_Icon")]
+    [Action("StudioTimeTrackerRemoveProjectTaskAction", typeof(StudioTimeTrackerViewController), 
+        Name = "StudioTimeTrackerRemoveProjectTaskAction_Name", 
+        Description = "StudioTimeTrackerRemoveProjectTaskAction_Description", 
+        Icon = "StudioTimeTrackerRemoveProjectTaskAction_Icon")]
     [ActionLayout(typeof(StudioTimeTrackerProjectTasksRibbonGroup), ZIndex = 3, DisplayType = DisplayType.Normal)]
-    public class StudioTimeTrackeRemoveProjectTaskAction : AbstractViewControllerAction<StudioTimeTrackerViewController>
+    public class StudioTimeTrackerRemoveProjectTaskAction : AbstractViewControllerAction<StudioTimeTrackerViewController>
     {
         public override void Initialize()
         {
@@ -196,9 +217,12 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
         
     }
 
-    [Action("StudioTimeTrackeMergeProjectTaskAction", typeof(StudioTimeTrackerViewController), Name = "StudioTimeTrackeMergeProjectTaskAction_Name", Description = "StudioTimeTrackeMergeProjectTaskAction_Description", Icon = "StudioTimeTrackeMergeProjectTaskAction_Icon")]
+    [Action("StudioTimeTrackerMergeProjectTaskAction", typeof(StudioTimeTrackerViewController), 
+        Name = "StudioTimeTrackerMergeProjectTaskAction_Name", 
+        Description = "StudioTimeTrackerMergeProjectTaskAction_Description", 
+        Icon = "StudioTimeTrackerMergeProjectTaskAction_Icon")]
     [ActionLayout(typeof(StudioTimeTrackerProjectTasksRibbonGroup), ZIndex = 2, DisplayType = DisplayType.Normal)]
-    public class StudioTimeTrackeMergeProjectTaskAction : AbstractViewControllerAction<StudioTimeTrackerViewController>
+    public class StudioTimeTrackerMergeProjectTaskAction : AbstractViewControllerAction<StudioTimeTrackerViewController>
     {
         public override void Initialize()
         {
@@ -231,11 +255,13 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
     }
 
 
-    [Action("StudioTimeTrackeCreateProjectAction", typeof(StudioTimeTrackerViewController), Name = "StudioTimeTrackeCreateProjectAction_Name", Description = "StudioTimeTrackeCreateProjectAction_Description", Icon = "StudioTimeTrackeCreateProjectAction_Icon")]
+    [Action("StudioTimeTrackerCreateProjectAction", typeof(StudioTimeTrackerViewController), 
+        Name = "StudioTimeTrackerCreateProjectAction_Name", 
+        Description = "StudioTimeTrackerCreateProjectAction_Description", 
+        Icon = "StudioTimeTrackerCreateProjectAction_Icon")]
     [ActionLayout(typeof(StudioTimeTrackerProjectsRibbonGroup), ZIndex = 4, DisplayType = DisplayType.Large)]
     public class CreateProject : AbstractViewControllerAction<StudioTimeTrackerViewController>
     {
-
         public override void Initialize()
         {
             Enabled = true;
@@ -253,9 +279,12 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
 
     }
 
-    [Action("StudioTimeTrackeEditProjectAction", typeof(StudioTimeTrackerViewController), Name = "StudioTimeTrackeEditProjectAction_Name", Description = "StudioTimeTrackeEditProjectAction_Description", Icon = "StudioTimeTrackeEditProjectAction_Icon")]
+    [Action("StudioTimeTrackerEditProjectAction", typeof(StudioTimeTrackerViewController), 
+        Name = "StudioTimeTrackerEditProjectAction_Name",
+        Description = "StudioTimeTrackerEditProjectAction_Description", 
+        Icon = "StudioTimeTrackerEditProjectAction_Icon")]
     [ActionLayout(typeof(StudioTimeTrackerProjectsRibbonGroup), ZIndex = 3, DisplayType = DisplayType.Normal)]
-    public class EditProject : AbstractViewControllerAction<StudioTimeTrackerViewController>
+    public class StudioTimeTrackerEditProject : AbstractViewControllerAction<StudioTimeTrackerViewController>
     {
         public override void Initialize()
         {
@@ -275,9 +304,12 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
     }
 
 
-    [Action("StudioTimeTrackeRemoveProjectAction", typeof(StudioTimeTrackerViewController), Name = "StudioTimeTrackeRemoveProjectAction_Name", Description = "StudioTimeTrackeRemoveProjectAction_Description", Icon = "StudioTimeTrackeRemoveProjectAction_Icon")]
+    [Action("StudioTimeTrackerRemoveProjectAction", typeof(StudioTimeTrackerViewController),
+        Name = "StudioTimeTrackerRemoveProjectAction_Name", 
+        Description = "StudioTimeTrackerRemoveProjectAction_Description",
+        Icon = "StudioTimeTrackerRemoveProjectAction_Icon")]
     [ActionLayout(typeof(StudioTimeTrackerProjectsRibbonGroup), ZIndex = 2, DisplayType = DisplayType.Normal)]
-    public class RemoveProject : AbstractViewControllerAction<StudioTimeTrackerViewController>
+    public class StudioTimeTrackerRemoveProject : AbstractViewControllerAction<StudioTimeTrackerViewController>
     {
         public override void Initialize()
         {
@@ -312,7 +344,10 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
 
 
 
-    [Action("StudioTimeTrackerConfiguration", typeof(StudioTimeTrackerViewController), Name = "StudioTimeTrackerConfiguration_Name", Description = "StudioTimeTrackerConfiguration_Description", Icon = "StudioTimeTrackerSettings_Icon")]
+    [Action("StudioTimeTrackerConfiguration", typeof(StudioTimeTrackerViewController), 
+        Name = "StudioTimeTrackerConfiguration_Name", 
+        Description = "StudioTimeTrackerConfiguration_Description", 
+        Icon = "StudioTimeTrackerSettings_Icon")]
     [ActionLayout(typeof(StudioTimeTrackerConfigurationRibbonGroup), 4, DisplayType.Large)]
     public class StudioTimeTrackerConfiguration : AbstractViewControllerAction<StudioTimeTrackerViewController>
     {
@@ -323,7 +358,10 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
     }
 
 
-    [Action("StudioTimeTrackerConfigurationActivityTypes", typeof(StudioTimeTrackerViewController), Name = "StudioTimeTrackerConfigurationActivityTypes_Name", Description = "StudioTimeTrackerConfigurationActivityTypes_Description", Icon = "StudioTimeTrackerConfigurationActivityTypes_Icon")]
+    [Action("StudioTimeTrackerConfigurationActivityTypes", typeof(StudioTimeTrackerViewController), 
+        Name = "StudioTimeTrackerConfigurationActivityTypes_Name", 
+        Description = "StudioTimeTrackerConfigurationActivityTypes_Description", 
+        Icon = "StudioTimeTrackerConfigurationActivityTypes_Icon")]
     [ActionLayout(typeof(StudioTimeTrackerConfigurationRibbonGroup), ZIndex = 3, DisplayType = DisplayType.Normal)]
     public class StudioTimeTrackerConfigurationActivityTypes : AbstractViewControllerAction<StudioTimeTrackerViewController>
     {
@@ -340,7 +378,10 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
     }
 
 
-    [Action("StudioTimeTrackerConfigurationClientRates", typeof(StudioTimeTrackerViewController), Name = "StudioTimeTrackerConfigurationClientRates_Name", Description = "StudioTimeTrackerConfigurationClientRates_Description", Icon = "StudioTimeTrackerConfigurationClientRates_Icon")]
+    [Action("StudioTimeTrackerConfigurationClientRates", typeof(StudioTimeTrackerViewController), 
+        Name = "StudioTimeTrackerConfigurationClientRates_Name", 
+        Description = "StudioTimeTrackerConfigurationClientRates_Description", 
+        Icon = "StudioTimeTrackerConfigurationClientRates_Icon")]
     [ActionLayout(typeof(StudioTimeTrackerConfigurationRibbonGroup), ZIndex = 2, DisplayType = DisplayType.Normal)]
     public class StudioTimeTrackerConfigurationClientRates : AbstractViewControllerAction<StudioTimeTrackerViewController>
     {
@@ -354,12 +395,13 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
         {
             Controller.LoadSettings(2);
         }
-
     }
 
 
-
-    [Action("StudioTimeTrackerConfigurationMyInfo", typeof(StudioTimeTrackerViewController), Name = "StudioTimeTrackerConfigurationMyInfo_Name", Description = "StudioTimeTrackerConfigurationMyInfo_Description", Icon = "StudioTimeTrackerConfigurationMyInfo_Icon")]
+    [Action("StudioTimeTrackerConfigurationMyInfo", typeof(StudioTimeTrackerViewController), 
+        Name = "StudioTimeTrackerConfigurationMyInfo_Name", 
+        Description = "StudioTimeTrackerConfigurationMyInfo_Description", 
+        Icon = "StudioTimeTrackerConfigurationMyInfo_Icon")]
     [ActionLayout(typeof(StudioTimeTrackerConfigurationRibbonGroup), ZIndex = 1, DisplayType = DisplayType.Normal)]
     public class StudioTimeTrackerConfigurationMyInfo : AbstractViewControllerAction<StudioTimeTrackerViewController>
     {

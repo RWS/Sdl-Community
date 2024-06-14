@@ -24,12 +24,21 @@ namespace Sdl.Community.Studio.Time.Tracker.TellMe
             var sourceCodeAction = new SourceCodeAction();
             var settingsAction = new SettingsAction();
             var timeTrackerAction = new TimeTrackerAction();
-            //var newTrackerAction = new NewTrackerAction();
-            //var newActivityAction = new NewActivityAction();
-            //var startActivityAction = new StartActivityTrackingAction();
-            //var stopActivityAction = new StopActivityTrackingAction();
+            var newTrackerAction = new NewTrackerAction();
+            var newActivityAction = new NewActivityAction();
+            var startActivityAction = new StartActivityTrackingAction();
+            var stopActivityAction = new StopActivityTrackingAction();
 
-            var providerActions = new AbstractTellMeAction[] { forumAction, helpAction, sourceCodeAction, settingsAction, timeTrackerAction };
+            var providerActions = new AbstractTellMeAction[] { forumAction, 
+                helpAction, 
+                sourceCodeAction, 
+                settingsAction, 
+                timeTrackerAction, 
+                newTrackerAction,
+                newActivityAction,
+                startActivityAction,
+                stopActivityAction
+            };
             return providerActions;
         }
     }
