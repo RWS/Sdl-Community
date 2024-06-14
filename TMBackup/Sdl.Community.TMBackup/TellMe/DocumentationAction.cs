@@ -14,7 +14,7 @@ namespace Sdl.Community.TMBackup.TellMe
 
 		public DocumentationAction()
         {
-            Name = string.Format("{0} documentation", PluginResources.Plugin_Name);
+            Name = string.Format("{0} Documentation", PluginResources.Plugin_Name);
         }
 
 		public override void Execute()
