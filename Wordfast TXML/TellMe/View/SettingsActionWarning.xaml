@@ -44,13 +44,13 @@
                    Height="40"
                    Width="40"
                    RenderOptions.BitmapScalingMode="HighQuality"
-                   Margin="32 16 16 0" />
+                   Margin="16 16 0 0" />
 
             <TextBlock Grid.Row="0"
                        Grid.Column="1"
                        Text="Configure File Type in Options"
                        Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"
-                       FontSize="16"
+                       FontSize="18"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"
                        Margin="8 16 0 0" />
@@ -62,7 +62,7 @@
                        Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
                        MaxWidth="9999"
                        TextWrapping="Wrap"
-                       Margin="24 8 24 0" />
+                       Margin="24 16 24 0" />
 
             <TextBlock Grid.Row="3"
                        Grid.ColumnSpan="2"
@@ -97,11 +97,11 @@
 
             <Button Grid.Row="4"
                     Grid.ColumnSpan="2"
-                    Content="Close"
-                    Style="{StaticResource Sdl.Button.SecondaryStyle}"
+                    Content="OK"
+                    Style="{StaticResource Sdl.Button.PrimaryStyle}"
                     Click="CloseWindow_Click"
                     HorizontalAlignment="Right"
-                    Width="120"
+                    Width="80"
                     Margin="16" />
         </Grid>
     </Border>
