@@ -37,6 +37,7 @@
   <PropertyGroup />
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
+  <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>
@@ -44,7 +45,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NLog">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\NLog.dll</HintPath>
+      <HintPath>$(TradosFolder)\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
