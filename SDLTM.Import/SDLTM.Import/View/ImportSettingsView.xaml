@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="SDLTM.Import.View.ImportSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewModel="clr-namespace:SDLTM.Import.ViewModel"
+             xmlns:converters ="clr-namespace:SDLTM.Import.Converter"
+             xmlns:resx="clr-namespace:SDLTM.Import"
+			 xmlns:translationMemory="clr-namespace:Sdl.LanguagePlatform.TranslationMemory;assembly=Sdl.LanguagePlatform.TranslationMemory"
+			 mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:ImportSettingsViewModel}"
+             d:DesignHeight="450" d:DesignWidth="800">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/checkboxresources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/GroupboxResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/RadioButtonResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/textblockresources.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+			<converters:ComparisonConverter x:Key="ComparisonConverter"/>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<TextBlock  Grid.Row ="0" Style="{StaticResource Sdl.TextBlock.SubtitleStyle}" Margin="10" Text="{x:Static resx:PluginResources.SettingsView_Description}"/>
+		<CheckBox Grid.Row ="1" Style="{StaticResource Sdl.Checkbox.GenericStyle}" IsChecked="{Binding ImportPlain,UpdateSourceTrigger=PropertyChanged}" Content="{x:Static resx:PluginResources.ImportAsPlain}" Margin="10,0,0,10"/>
+		<CheckBox Grid.Row ="2" Style="{StaticResource Sdl.Checkbox.GenericStyle}" IsChecked="{Binding ExcludeVariantsForXliff,UpdateSourceTrigger=PropertyChanged}" Content="{x:Static resx:PluginResources.ExcludeXliff_Variants}" Margin="10,0,0,10"/>
+		<CheckBox Grid.Row ="3" Style="{StaticResource Sdl.Checkbox.GenericStyle}" IsChecked="{Binding ExcludeVariantsForTmx,UpdateSourceTrigger=PropertyChanged}" Content="{x:Static resx:PluginResources.ExcludeTmx_Variants}" Margin="10,0,0,10"/>
+		<CheckBox Grid.Row ="4" Style="{StaticResource Sdl.Checkbox.GenericStyle}" IsChecked="{Binding UseBilingualInfo,UpdateSourceTrigger=PropertyChanged}" Content="{x:Static resx:PluginResources.UseBilingual}"
+				  Margin="10,0,0,10"/>
+		<GroupBox  Grid.Row="5" Style="{DynamicResource Sdl.GroupBox.SingleLineStyle}" Header="{x:Static resx:PluginResources.TargetDiffer_Descr}" Width="500" HorizontalAlignment="Left" Margin="10">
+			<StackPanel>
+				<RadioButton Style="{DynamicResource Sdl.RadioButton.GenericStyle}" GroupName="{x:Static resx:PluginResources.Settings}" Content="{x:Static resx:PluginResources.AddNew_Tu}" Margin="5,15,0,5"
+				             IsChecked="{Binding TuUpdateMode, Converter={StaticResource ComparisonConverter},ConverterParameter={x:Static translationMemory:ImportSettings+TUUpdateMode.AddNew}}"/>
+				<RadioButton Style="{DynamicResource Sdl.RadioButton.GenericStyle}" GroupName="{x:Static resx:PluginResources.Settings}" Content="{x:Static resx:PluginResources.Overwrite_Tu}" Margin="5"
+				             IsChecked="{Binding TuUpdateMode, Converter={StaticResource ComparisonConverter},ConverterParameter={x:Static translationMemory:ImportSettings+TUUpdateMode.Overwrite}}"/>
+				<RadioButton Style="{DynamicResource Sdl.RadioButton.GenericStyle}" GroupName="{x:Static resx:PluginResources.Settings}" Content="{x:Static resx:PluginResources.Leave_Tu}" Margin="5"
+				             IsChecked="{Binding TuUpdateMode, Converter={StaticResource ComparisonConverter},ConverterParameter={x:Static translationMemory:ImportSettings+TUUpdateMode.LeaveUnchanged}}"/>
+				<RadioButton Style="{DynamicResource Sdl.RadioButton.GenericStyle}" GroupName="{x:Static resx:PluginResources.Settings}" Content="{x:Static resx:PluginResources.Keep_Tu}" Margin="5"
+				             IsChecked="{Binding TuUpdateMode, Converter={StaticResource ComparisonConverter},ConverterParameter={x:Static translationMemory:ImportSettings+TUUpdateMode.KeepMostRecent}}"/>
+			</StackPanel>
+		</GroupBox>
+	</Grid>
+</UserControl>

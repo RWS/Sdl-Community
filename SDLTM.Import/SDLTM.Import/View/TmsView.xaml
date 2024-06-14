@@ -1,0 +1,241 @@
+﻿<UserControl x:Class="SDLTM.Import.View.TmsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:behaviour="clr-namespace:SDLTM.Import.Behavior"
+			 xmlns:converters ="clr-namespace:SDLTM.Import.Converter"
+			 xmlns:viewModel="clr-namespace:SDLTM.Import.ViewModel"
+			 xmlns:helpers="clr-namespace:SDLTM.Import.Helpers"
+			 xmlns:resx="clr-namespace:SDLTM.Import"
+			 mc:Ignorable="d"  d:DataContext="{d:DesignInstance viewModel:TmViewModel}"
+             d:DesignHeight="450" d:DesignWidth="800">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml"/>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/checkboxresources.xaml"/>
+				<ResourceDictionary Source="../Ui/General.xaml"/>
+				<ResourceDictionary Source="../Ui/DataGridStyle2.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+			<converters:IntToVisibilityConverter x:Key="IntToVisibilityConverter"/>
+			<converters:ImageToBitmapImageConverter x:Key="ImageConverter"/>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid MinHeight="300"  Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type HeaderedContentControl}}}">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+
+		<CheckBox Grid.Row="0" Style="{StaticResource Sdl.Checkbox.GenericStyle}"  Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ActualWidth}" Content="Include sub-folders" IsChecked="{Binding IncludeSubfolders,UpdateSourceTrigger=PropertyChanged}"/>
+
+		<StackPanel Grid.Column="0" Grid.Row="1" Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}}">
+			<Border BorderThickness="1" Background="#eeeeee" MinHeight="50"  Height="350" HorizontalAlignment="Stretch"
+					Visibility="{Binding TmsList.Count,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntToVisibilityConverter},ConverterParameter=Inverted}"
+			        Margin="10" AllowDrop="True" behaviour:DropBehavior.PreviewDropCommand="{Binding DragEnterCommand}" >
+				<Border.BorderBrush>
+					<VisualBrush>
+						<VisualBrush.Visual>
+							<Rectangle StrokeDashArray="4 2" Stroke="DarkGray" StrokeThickness="1"
+							           Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+							           Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
+						</VisualBrush.Visual>
+					</VisualBrush>
+				</Border.BorderBrush>
+
+				<StackPanel  Background="#eeeeee" VerticalAlignment="Center" >
+					<StackPanel HorizontalAlignment="Center">
+						<Image Source="../Resources/upload1.png" Width="100" Height="100" VerticalAlignment="Center" />
+						<Button  Style="{DynamicResource Sdl.Button.SecondaryStyle}" Width="170" Content="{x:Static resx:PluginResources.ChooseFolder_Btn}" 
+								 Command="{Binding AddFilesCommand}" CommandParameter="{x:Static helpers:AddOptions.OpenFolderTGrid}" />
+						<TextBlock Text="{x:Static resx:PluginResources.TmsGrid_Descr}"/>
+					</StackPanel>
+				</StackPanel>
+			</Border>
+			<DataGrid 
+					Name="TmsGrid"
+			        ItemsSource="{Binding TmsList,UpdateSourceTrigger=PropertyChanged}"
+			        SelectionMode="Extended"
+					Margin="10"
+			        Padding="5"
+					Visibility="{Binding TmsList.Count,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource IntToVisibilityConverter}}"
+			        Style="{StaticResource FilesGridStyle}"
+			        GridLinesVisibility="None"
+			        VerticalScrollBarVisibility="Auto"
+					Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type DockPanel}}, Path=ActualWidth}"
+					MinHeight="{Binding Path=ActualHeight,ElementName=FilesGrid}"
+			        MaxHeight="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type HeaderedContentControl}}}"
+			        IsReadOnly="True"
+			        VerticalContentAlignment="Center">
+				<DataGrid.ContextMenu>
+					<ContextMenu>
+						<MenuItem Header="{x:Static resx:PluginResources.RemoveTmBtn}" Cursor="Hand" Command="{Binding RemoveFilesCommand}" 
+						          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}, Path=PlacementTarget.SelectedItems}">
+							<MenuItem.Icon>
+								<Image Source="../Resources/Remove.ico"/>
+							</MenuItem.Icon>
+						</MenuItem>
+						<MenuItem Header="{x:Static resx:PluginResources.AddNewTm}" Command="{Binding AddFilesCommand}" CommandParameter="{x:Static helpers:AddOptions.ChooseTmTGrid}" Cursor="Hand">
+							<MenuItem.Icon>
+								<Image Source="../Resources/Import.ico"/>
+							</MenuItem.Icon>
+						</MenuItem>
+					</ContextMenu>
+				</DataGrid.ContextMenu>
+				<DataGrid.InputBindings>
+					<KeyBinding Key="Delete" Command="{Binding RemoveFilesCommand}" CommandParameter="{Binding ElementName=TmsGrid, Path=SelectedItems}"/>
+				</DataGrid.InputBindings>
+				<DataGrid.RowStyle>
+					<Style TargetType="DataGridRow">
+						<Setter Property="ToolTip">
+							<Setter.Value>
+								<ToolTip Style="{StaticResource ToolTipStyle}">
+									<TextBlock Text="{Binding Path}"/>
+								</ToolTip>
+							</Setter.Value>
+						</Setter>
+					</Style>
+				</DataGrid.RowStyle>
+				<DataGrid.Columns>
+					<DataGridTemplateColumn  Header="{x:Static resx:PluginResources.Name}" SortMemberPath="Name" Width="3*">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<StackPanel Orientation="Horizontal" >
+									<Image Source="../Resources/TranslationMemory.ico" Width="25" Height="25" />
+									<TextBlock Text="{Binding Name}" Margin="5"  VerticalAlignment="Center"/>
+								</StackPanel>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+
+					<DataGridTemplateColumn Width="*" Header="{x:Static resx:PluginResources.LanguagePair}">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<DockPanel LastChildFill="false">
+									<Image DockPanel.Dock="Left" Source="{Binding Path=SourceFlag, Converter={StaticResource ImageConverter}}" Width="24" Height="24" />
+									<Image Source="../Resources/arrow_right_blue.png" Width="12" Margin="5,0,5,0" Height="15"/>
+									<Image Source="{Binding Path=TargetFlag, Converter={StaticResource ImageConverter}}" Width="24" Height="24" />
+								</DockPanel>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+				</DataGrid.Columns>
+			</DataGrid>
+		</StackPanel>
+
+
+		<StackPanel Grid.Column="1" Grid.Row="1" Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}}">
+			<Border BorderThickness="1" Background="#eeeeee" Margin="10" AllowDrop="True" Height="350"
+			        Visibility="{Binding FilesList.Count,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntToVisibilityConverter},ConverterParameter=Inverted}"
+					behaviour:DropBehavior.PreviewDropCommand="{Binding DragEnterCommand}">
+				<Border.BorderBrush>
+					<VisualBrush>
+						<VisualBrush.Visual>
+							<Rectangle StrokeDashArray="4 2" Stroke="DarkGray" StrokeThickness="1"
+							           Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+							           Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
+						</VisualBrush.Visual>
+					</VisualBrush>
+				</Border.BorderBrush>
+
+				<StackPanel  Background="#eeeeee" VerticalAlignment="Center">
+					<StackPanel  HorizontalAlignment="Center">
+						<Image Source="../Resources/upload1.png" Width="100" Height="100" VerticalAlignment="Center" />
+						<Button  Style="{DynamicResource Sdl.Button.SecondaryStyle}" Width="170" Content="{x:Static resx:PluginResources.ChooseFolder_Btn}" Command="{Binding AddFilesCommand}" CommandParameter="{x:Static helpers:AddOptions.OpenFolderFGrid}"/>
+						<TextBlock Text="{x:Static resx:PluginResources.FilesGrid_Description}" />
+					</StackPanel>
+				</StackPanel>
+			</Border>
+
+			<DataGrid 
+					Name="FilesGrid"
+			        ItemsSource="{Binding FilesList,UpdateSourceTrigger=PropertyChanged}"
+			        SelectionMode="Extended"
+					Margin="10"
+			        Padding="5"
+					Visibility="{Binding FilesList.Count,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource IntToVisibilityConverter}}"
+			        Style="{StaticResource FilesGridStyle}"
+			        GridLinesVisibility="None"
+			        VerticalScrollBarVisibility="Auto"
+					Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type DockPanel}}, Path=ActualWidth}"
+					MinHeight="{Binding Path=ActualHeight,ElementName=TmsGrid}"
+			        MaxHeight="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type HeaderedContentControl}}}"
+			        IsReadOnly="True"
+			        VerticalContentAlignment="Center">
+				<DataGrid.ContextMenu>
+					<ContextMenu>
+						<MenuItem Header="{x:Static resx:PluginResources.RemoveFiles}" Cursor="Hand" Command="{Binding RemoveFilesCommand}" 
+						          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}, Path=PlacementTarget.SelectedItems}">
+							<MenuItem.Icon>
+								<Image Source="../Resources/document_delete.png"/>
+							</MenuItem.Icon>
+						</MenuItem>
+						<MenuItem Header="{x:Static resx:PluginResources.AddNewFile}" Command="{Binding AddFilesCommand}" CommandParameter="{x:Static helpers:AddOptions.ChooseFilesFGrid}" Cursor="Hand">
+							<MenuItem.Icon>
+								<Image Source="../Resources/document_add.png"/>
+							</MenuItem.Icon>
+						</MenuItem>
+					</ContextMenu>
+				</DataGrid.ContextMenu>
+				<DataGrid.InputBindings>
+					<KeyBinding Key="Delete" Command="{Binding RemoveFilesCommand}" CommandParameter="{Binding ElementName=FilesGrid, Path=SelectedItems}"/>
+				</DataGrid.InputBindings>
+				<DataGrid.RowStyle>
+					<Style TargetType="DataGridRow">
+						<Setter Property="ToolTip">
+							<Setter.Value>
+								<ToolTip Style="{StaticResource ToolTipStyle}"> 
+									<TextBlock Text="{Binding Path}"/>
+								</ToolTip>
+							</Setter.Value>
+						</Setter>
+					</Style>
+				</DataGrid.RowStyle>
+				<DataGrid.Columns>
+					<DataGridTemplateColumn  Header="{x:Static resx:PluginResources.Name}" SortMemberPath="Name" Width="3*">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<StackPanel Orientation="Horizontal" >
+									<Image Width="25" Height="25">
+										<Image.Style>
+											<Style TargetType="Image">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding FileType}" Value="{x:Static helpers:FileTypes.Xliff}">
+														<Setter Property="Source" Value="../Resources/ShowPreviewAction.ico"/>
+													</DataTrigger>
+													<DataTrigger Binding="{Binding FileType}" Value="{x:Static helpers:FileTypes.Tmx}">
+														<Setter Property="Source" Value="../Resources/extension_tmx.ico" />
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</Image.Style>
+									</Image>
+									<TextBlock Text="{Binding Name}" Margin="5"  VerticalAlignment="Center"/>
+								</StackPanel>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+
+					<DataGridTemplateColumn Width="*" Header="{x:Static resx:PluginResources.LanguagePair}">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<DockPanel LastChildFill="false">
+									<Image DockPanel.Dock="Left" Source="{Binding Path=SourceFlag, Converter={StaticResource ImageConverter}}" Width="24" Height="24" />
+									<Image Source="../Resources/arrow_right_blue.png" Width="12" Margin="5,0,5,0" Height="15"/>
+									<Image Source="{Binding Path=TargetFlag, Converter={StaticResource ImageConverter}}" Width="24" Height="24" />
+								</DockPanel>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+				</DataGrid.Columns>
+			</DataGrid>
+		</StackPanel>
+		
+	</Grid>
+</UserControl>
+
