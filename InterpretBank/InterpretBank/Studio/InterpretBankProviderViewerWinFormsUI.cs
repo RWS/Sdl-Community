@@ -79,6 +79,7 @@ namespace InterpretBank.Studio
             SourceLanguage = currentProject.GetProjectInfo().SourceLanguage;
 
             StudioContext.EventAggregator.GetEvent<DbChangedEvent>().Subscribe(OnDbChanged);
+            //LoadTerms();
         }
 
         public void JumpToTerm(Entry entry)
