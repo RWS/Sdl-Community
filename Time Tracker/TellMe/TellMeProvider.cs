@@ -26,7 +26,7 @@ namespace Sdl.Community.Studio.Time.Tracker.TellMe
             var timeTrackerAction = new TimeTrackerAction();
             var newTrackerAction = new NewTrackerAction();
             var newActivityAction = new NewActivityAction();
-            var startActivityAction = new StartActivityTrackingAction();
+            //var startActivityAction = new StartActivityTrackingAction();
             var stopActivityAction = new StopActivityTrackingAction();
 
             var providerActions = new AbstractTellMeAction[] { forumAction, 
@@ -36,7 +36,7 @@ namespace Sdl.Community.Studio.Time.Tracker.TellMe
                 timeTrackerAction, 
                 newTrackerAction,
                 newActivityAction,
-                startActivityAction,
+                //startActivityAction,
                 stopActivityAction
             };
             return providerActions;
