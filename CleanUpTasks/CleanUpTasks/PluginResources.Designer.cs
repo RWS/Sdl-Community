@@ -71,6 +71,16 @@ namespace SDLCommunityCleanUpTasks {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Information {
+            get {
+                object obj = ResourceManager.GetObject("Information", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cleanup Source.
         /// </summary>
         public static string Plugin_Name {
@@ -116,6 +126,15 @@ namespace SDLCommunityCleanUpTasks {
             get {
                 object obj = ResourceManager.GetObject("TellMe_SourceCode", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to something.
+        /// </summary>
+        public static string TellMe_WarningMessage {
+            get {
+                return ResourceManager.GetString("TellMe_WarningMessage", resourceCulture);
             }
         }
         

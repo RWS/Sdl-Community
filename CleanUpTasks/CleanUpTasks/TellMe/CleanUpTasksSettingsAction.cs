@@ -1,5 +1,7 @@
-﻿using Sdl.TellMe.ProviderApi;
+﻿using Sdl.Community.CleanUpTasks.TellMe.View;
+using Sdl.TellMe.ProviderApi;
 using System.Drawing;
+using System.Media;
 
 namespace SDLCommunityCleanUpTasks.TellMe
 {
@@ -10,13 +12,19 @@ namespace SDLCommunityCleanUpTasks.TellMe
             Name = "CleanUpTasks Settings";
         }
 
-        public override bool IsAvailable => true;
-        public override string Category => "CleanUpTasks results";
-        public override Icon Icon => PluginResources.TellMe_Settings;
+        private static void ShowDialog()
+        {
+            SystemSounds.Beep.Play();
+            new WarningSettingsView("https://appstore.rws.com/Plugin/26?tab=documentation").ShowDialog();
+        }
 
         public override void Execute()
         {
-            throw new System.NotImplementedException();
+            ShowDialog();
         }
+
+        public override bool IsAvailable => true;
+        public override string Category => "CleanUpTasks results";
+        public override Icon Icon => PluginResources.TellMe_Settings;
     }
 }
