@@ -58,14 +58,4 @@ namespace Sdl.Community.WordCloud.Plugin
 			wc.GenerateWordCloud();
 		}
 	}
-
-	[Action("CodingBreeze.WordCloud.Help", Name = "Help", Icon = "help_icon", Description = "Help")]
-	[ActionLayout(typeof(WordCloudRibbonGroup), 20, DisplayType.Large)]
-	class HelpLinkAction : AbstractAction
-	{
-		protected override void Execute()
-		{
-			System.Diagnostics.Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3289/trados-studio-word-cloud");
-		}
-	}
 }

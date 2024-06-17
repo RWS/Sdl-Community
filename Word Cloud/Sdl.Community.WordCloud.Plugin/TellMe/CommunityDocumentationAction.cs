@@ -4,22 +4,22 @@ using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.WordCloud.Plugin
 {
-	public class CommunityAppStoreAction : AbstractTellMeAction
+	public class CommunityDocumentationAction : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
 
 		public override string Category => string.Format(PluginResources.TellMe_String_Results, PluginResources.Plugin_Name);
 
-		public override Icon Icon => PluginResources.Download;
+		public override Icon Icon => PluginResources.TellMe_Documentation;
 
-		public CommunityAppStoreAction()
+		public CommunityDocumentationAction()
 		{
-			Name = string.Format(PluginResources.TellMe_Download_Plugin_From_AppStore, PluginResources.Plugin_Name); 
+			Name = string.Format("{0} Documentation", PluginResources.Plugin_Name);
 		}
 
 		public override void Execute()
-		{			
-			Process.Start("https://appstore.rws.com/Plugin/80");
+		{
+			Process.Start("https://appstore.rws.com/Plugin/80?tab=documentation");
 		}
 	}
 }
