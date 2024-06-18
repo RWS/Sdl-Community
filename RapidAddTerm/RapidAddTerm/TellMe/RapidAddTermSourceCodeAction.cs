@@ -4,18 +4,18 @@ using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.RapidAddTerm.TellMe
 {
-	public class RapidAddTermStoreAction : AbstractTellMeAction
+	public class RapidAddTermSourceCodeAction:AbstractTellMeAction
 	{
-		public RapidAddTermStoreAction()
+		public RapidAddTermSourceCodeAction()
 		{
-			Name = "Download Rapid Add Term from AppStore";
+			Name = "Rapid Add Term Source Code";
 		}
 		public override void Execute()
 		{
-			Process.Start("https://appstore.rws.com/Plugin/35");
+			Process.Start("https://github.com/RWS/Sdl-Community/tree/master/RapidAddTerm");
 		}
 		public override bool IsAvailable => true;
 		public override string Category => "Rapid Add Terms results";
-		public override Icon Icon => PluginResources.TellMe1;
+		public override Icon Icon => PluginResources.TellMe_SourceCode;
 	}
 }
