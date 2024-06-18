@@ -130,7 +130,16 @@ namespace SDLCommunityCleanUpTasks {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to something.
+        ///   Looks up a localized string similar to CleanUp Tasks assist users by either, CleanUp Source or CleanUp Target
+        ///To engage with either of these tasks , follow these steps:
+        ///
+        ///1.     In the Files View, select your file(s)
+        ///2.     Under Home Tab find File Actions Group
+        ///3.     Use the Batch Tasks dropdown menu
+        ///4.     Selecteither of the 2 supported tasks
+        ///
+        ///Note: Batch Tasks can also be found in the Projects and Editor View
+        ///Tip: CleanUp Source needs to be run as a separate task, before you apply any target translation or run the Pre-Translate task..
         /// </summary>
         public static string TellMe_WarningMessage {
             get {

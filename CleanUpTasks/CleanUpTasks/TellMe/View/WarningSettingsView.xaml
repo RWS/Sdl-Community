@@ -1,13 +1,13 @@
 ﻿<Window x:Class="Sdl.Community.CleanUpTasks.TellMe.View.WarningSettingsView"
-		xmlns:root="clr-namespace:Sdl.Community.CleanUpTasks"
+		xmlns:root="clr-namespace:SDLCommunityCleanUpTasks"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 		mc:Ignorable="d"
 		Title="TellMe Warning"
-		Width="370"
-		Height="210"
+		Width="490"
+		Height="305"
 		ResizeMode="NoResize"
 		WindowStyle="None"
 		WindowStartupLocation="CenterScreen"
@@ -40,19 +40,19 @@
 
             <Image Grid.Row="0"
 	               Grid.Column="0"
-	               Source="/Sdl.Community.CleanUpTasks;component/Resources/Information.png"
-	               Height="40"
-	               Width="40"
+	               Source="/SDLCommunityCleanUpTasks;component/Resources/Information.png"
+	               Height="45"
+	               Width="45"
 	               RenderOptions.BitmapScalingMode="HighQuality"
 	               Margin="15,8,0,8" />
 
             <TextBlock
 			   Grid.Column="1"
-			   Text="Access Trados Copy Tags"
+			   Text="Access CleanUp Tasks"
 	           Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"
-			   FontSize="16"
+			   FontSize="20"
 			   HorizontalAlignment="Left"
-			   Margin="40,0,0,0" RenderTransformOrigin="0.485,0.534" />
+			   Margin="60,0,0,0" RenderTransformOrigin="0.485,0.534" />
 
             <TextBlock Grid.Row="1"
 			   Grid.ColumnSpan="3"
@@ -89,7 +89,7 @@
 				</Style>
 			</Run.Style>
 		</Run>
-		<Run Text="to review documentation" />
+		<Run Text="for documentation" />
             </TextBlock>
 
             <Button Grid.Row="4"

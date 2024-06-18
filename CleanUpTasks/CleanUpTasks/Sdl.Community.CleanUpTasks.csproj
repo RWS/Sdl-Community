@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}</ProjectGuid>
@@ -128,11 +131,10 @@
   </PropertyGroup>
   <PropertyGroup>
     <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18Beta</TradosFolder>
-    <UseWPF>True</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-	  <Reference Include="PresentationCore" />
-	  <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="DocumentFormat.OpenXml">
       <HintPath>$(TradosFolder)\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
@@ -144,7 +146,7 @@
       <HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization.Async">
-      <HintPath>C:\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.Async.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Settings">
       <HintPath>$(TradosFolder)\Sdl.Core.Settings.dll</HintPath>
@@ -157,6 +159,9 @@
     </Reference>
     <Reference Include="Sdl.Desktop.Platform.Styles">
       <HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Styles.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.Platform.Controls">
+      <HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Controls.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
       <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
@@ -287,8 +292,8 @@
     <Compile Include="Models\VbStrConvHolder.cs" />
     <Compile Include="NonTranslatableHandler.cs" />
     <Compile Include="PluginResources.Designer.cs">
-      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
       <DependentUpon>PluginResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\PluginProperties.cs" />
