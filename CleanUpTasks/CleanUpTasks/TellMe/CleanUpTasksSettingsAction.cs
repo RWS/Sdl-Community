@@ -7,7 +7,7 @@ namespace SDLCommunityCleanUpTasks.TellMe
 {
     public class CleanUpTasksSettingsAction : AbstractTellMeAction
     {
-        CleanUpTasksSettingsAction()
+        public CleanUpTasksSettingsAction()
         {
             Name = "CleanUpTasks Settings";
         }
@@ -15,7 +15,7 @@ namespace SDLCommunityCleanUpTasks.TellMe
         private static void ShowDialog()
         {
             SystemSounds.Beep.Play();
-            new WarningSettingsView("https://appstore.rws.com/Plugin/26?tab=documentation").ShowDialog();
+            new WarningSettingsView("https://appstore.rws.com/Plugin/23?tab=documentation").ShowDialog();
         }
 
         public override void Execute()
