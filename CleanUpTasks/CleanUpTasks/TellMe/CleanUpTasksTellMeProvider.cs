@@ -9,17 +9,22 @@ namespace SDLCommunityCleanUpTasks.TellMe
 
         public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
         {
-            new CleanUpTasksStoreAction
+            new CleanUpTasksDocumentationAction
             {
-                Keywords = new []{ "cleanup", "cleanUpTasks store", "cleanUpTasks download" }
+                Keywords = new []{ "cleanup", "tasks", "cleanUpTasks", "documentation" }
             },
             new CleanUpTasksSupportAction
             {
-                Keywords = new []{ "cleanup", "cleanUpTasks community", "cleanUpTasks support" }
+                Keywords = new []{ "cleanup", "tasks", "cleanUpTasks community", "cleanUpTasks support", "forum" }
             },
-            new CleanUpTasksHelpAction
+            new CleanUpTasksSourceCodeAction
             {
-                Keywords = new[] { "cleanup", "cleanUpTasks help", "cleanUpTasks guide" }
+                Keywords = new[] { "cleanup", "tasks", "cleanUpTasks", "source", "code" }
+            }
+            ,
+            new CleanUpTasksSettingsAction
+            {
+                Keywords = new[] { "cleanup", "tasks", "cleanUpTasks", "settings" }
             }
         };
     }

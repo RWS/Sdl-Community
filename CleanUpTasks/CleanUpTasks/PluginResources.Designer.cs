@@ -19,7 +19,7 @@ namespace SDLCommunityCleanUpTasks {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -71,6 +71,16 @@ namespace SDLCommunityCleanUpTasks {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Information {
+            get {
+                object obj = ResourceManager.GetObject("Information", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cleanup Source.
         /// </summary>
         public static string Plugin_Name {
@@ -86,6 +96,54 @@ namespace SDLCommunityCleanUpTasks {
             get {
                 object obj = ResourceManager.GetObject("Question", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_Documentation {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_Documentation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_Settings {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_Settings", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_SourceCode {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_SourceCode", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CleanUp Tasks assist users by either, CleanUp Source or CleanUp Target
+        ///To engage with either of these tasks , follow these steps:
+        ///
+        ///1.     In the Files View, select your file(s)
+        ///2.     Under Home Tab find File Actions Group
+        ///3.     Use the Batch Tasks dropdown menu
+        ///4.     Selecteither of the 2 supported tasks
+        ///
+        ///Note: Batch Tasks can also be found in the Projects and Editor View
+        ///Tip: CleanUp Source needs to be run as a separate task, before you apply any target translation or run the Pre-Translate task..
+        /// </summary>
+        public static string TellMe_WarningMessage {
+            get {
+                return ResourceManager.GetString("TellMe_WarningMessage", resourceCulture);
             }
         }
         

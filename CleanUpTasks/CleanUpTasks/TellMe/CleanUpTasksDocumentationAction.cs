@@ -4,20 +4,20 @@ using Sdl.TellMe.ProviderApi;
 
 namespace SDLCommunityCleanUpTasks.TellMe
 {
-	public class CleanUpTasksStoreAction : AbstractTellMeAction
+	public class CleanUpTasksDocumentationAction : AbstractTellMeAction
     {
-        public CleanUpTasksStoreAction()
+        public CleanUpTasksDocumentationAction()
         {
-            Name = "Download CleanUpTasks from AppStore";
+            Name = "CleanUpTasks Documentation";
         }
 
         public override void Execute()
         {
-            Process.Start("https://appstore.rws.com/Plugin/23");
+            Process.Start("https://appstore.rws.com/Plugin/23?tab=documentation");
         }
 
 		public override bool IsAvailable => true;
 		public override string Category => "CleanUpTasks results";
-		public override Icon Icon => PluginResources.TellMe1;
+		public override Icon Icon => PluginResources.TellMe_Documentation;
 	}
 }
