@@ -163,6 +163,16 @@ namespace Sdl.Community.DsiViewer {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Information {
+            get {
+                object obj = ResourceManager.GetObject("Information", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Model.
         /// </summary>
         public static string Label_Model {
@@ -254,7 +264,7 @@ namespace Sdl.Community.DsiViewer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to for documentation..
+        ///   Looks up a localized string similar to to view the documentation..
         /// </summary>
         public static string SettingsAction_ExternalHelp_3 {
             get {
@@ -263,10 +273,10 @@ namespace Sdl.Community.DsiViewer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To engage with the app, follow these steps:
+        ///   Looks up a localized string similar to To engage with DSI Viewer, follow these steps:
         ///
-        ///1. In Edition view, go to View tab
-        ///2. Under the Information group, find DSI Viewer.
+        ///   1. In Edition view, go to View tab
+        ///   2. Under the Information group, find DSI Viewer.
         /// </summary>
         public static string SettingsAction_OpenOptionsText {
             get {
@@ -335,6 +345,16 @@ namespace Sdl.Community.DsiViewer {
         public static string StructureContextInfo_MetaValue_chars {
             get {
                 return ResourceManager.GetString("StructureContextInfo_MetaValue_chars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_Forum {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_Forum", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
