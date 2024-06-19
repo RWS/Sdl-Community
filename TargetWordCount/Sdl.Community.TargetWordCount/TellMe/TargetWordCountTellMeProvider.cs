@@ -16,13 +16,15 @@ namespace Sdl.Community.TargetWordCount.TellMe
 			new TargetWordCountCommunityForumAction
 			{
 				Keywords = new[] { "target word count", "target word count community", "target word count support", "target word count forum" }
-			},new SettingsAction
-			{
-				Keywords = new[] { "target word count", "target word count community", "target word count support", "settings" }
-			},new SourceCodeAction
+			},
+			new SourceCodeAction
 			{
 				Keywords = new[] { "target word count", "target word count community", "target word count support", "source code" }
-			}
-		};
+			},
+            new SettingsAction
+            {
+                Keywords = new[] { "target word count", "target word count community", "target word count support", "settings" }
+            }
+        };
 	}
 }
