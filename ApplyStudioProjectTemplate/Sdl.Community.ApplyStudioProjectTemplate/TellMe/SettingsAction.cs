@@ -15,7 +15,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 
 		public SettingsAction()
 		{
-			Name = $"{PluginResources.Plugin_Name} settings";
+			Name = $"{PluginResources.Plugin_Name} Settings";
 		}
 
 		public override void Execute()

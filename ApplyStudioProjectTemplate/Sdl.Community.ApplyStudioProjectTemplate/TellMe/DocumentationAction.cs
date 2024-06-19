@@ -14,7 +14,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 
 		public DocumentationAction()
 		{
-			Name = $"{PluginResources.Plugin_Name} documentation"; 
+			Name = $"{PluginResources.Plugin_Name} Documentation"; 
 		}
 
 		public override void Execute()
