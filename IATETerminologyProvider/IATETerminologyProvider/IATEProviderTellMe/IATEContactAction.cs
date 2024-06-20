@@ -8,11 +8,11 @@ namespace Sdl.Community.IATETerminologyProvider.IATEProviderTellMe
 	{
 		public IATEContactAction()
 		{
-			Name = "IATE Official Web Site Terminology";
+			Name = "IATE Official Website Terminology";
 		}
 
 		public override string Category => "IATE results";
-		public override Icon Icon => PluginResources.Iate_logo;
+		public override Icon Icon => PluginResources.Logo;
 		public override bool IsAvailable => true;
 
 		public override void Execute()

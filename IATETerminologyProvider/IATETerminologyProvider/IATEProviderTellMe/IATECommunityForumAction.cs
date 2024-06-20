@@ -8,11 +8,11 @@ namespace Sdl.Community.IATETerminologyProvider.IATEProviderTellMe
 	{
 		public override bool IsAvailable => true;
 		public override string Category => "IATE results";
-		public override Icon Icon => PluginResources.Forum;
+		public override Icon Icon => PluginResources.Question;
 
 		public IATECommunityForumAction()
 		{
-			Name = "RWS Community AppStore forum";
+			Name = "RWS Community AppStore Forum";
 		}
 
 		public override void Execute()
