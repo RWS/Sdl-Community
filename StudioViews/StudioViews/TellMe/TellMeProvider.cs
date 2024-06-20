@@ -11,7 +11,7 @@ namespace Sdl.Community.StudioViews.TellMe
 		{
 			new DocumentationAction
 			{
-				Keywords = new[] {"studio", "views", "studioviews", "community", "support", "wiki" }
+				Keywords = new[] {"studio", "views", "studioviews", "community", "support", "wiki", "documentation" }
 			},
 			new CommunityAppStoreForumAction
 			{

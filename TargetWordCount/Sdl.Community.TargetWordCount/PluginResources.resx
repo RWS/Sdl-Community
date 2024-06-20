@@ -124,6 +124,9 @@
   <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\ForumIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Information" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Information.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Plugin_Name" xml:space="preserve">
     <value>Target Word Count</value>
   </data>
@@ -137,15 +140,15 @@
     <value>click here</value>
   </data>
   <data name="SettingsAction_ExternalHelp_3" xml:space="preserve">
-    <value>for documentation.</value>
+    <value>to view the documentation.</value>
   </data>
   <data name="SettingsAction_OpenOptionsText" xml:space="preserve">
     <value>To configure this batch task, follow these steps:
 
-1. Select a project/file(s)
-2. Click on Batch Tasks
-3. Select Target Word Count 
-4. Follow the batch task wizard steps</value>
+   1. Select a project/file(s)
+   2. Click on Batch Tasks
+   3. Select Target Word Count 
+   4. Follow the batch task wizard steps</value>
   </data>
   <data name="SettingsAction_Title" xml:space="preserve">
     <value>Target Word Count Settings</value>
@@ -155,5 +158,8 @@
   </data>
   <data name="TellmeDocumentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\TellmeDocumentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellMe_Forum" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMe_Forum.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

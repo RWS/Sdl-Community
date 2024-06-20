@@ -12,7 +12,7 @@ namespace Sdl.Community.NumberVerifier.TellMe
 		}
 
 		public override string Category => $"{PluginResources.Plugin_Name} results";
-		public override Icon Icon => PluginResources.SourceCode;
+		public override Icon Icon => PluginResources.Settings;
 		public override bool IsAvailable => true;
 
 		public override void Execute()

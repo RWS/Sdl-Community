@@ -10,7 +10,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 
 		public override string Category => string.Format(PluginResources.TellMe_String_Results, PluginResources.Plugin_Name);
 
-		public override Icon Icon => PluginResources.ForumIcon;
+		public override Icon Icon => PluginResources.QuestionIcon;
 
 		public CommunityAppStoreForumAction()
 		{

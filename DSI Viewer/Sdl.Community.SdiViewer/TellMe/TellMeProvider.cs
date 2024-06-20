@@ -9,13 +9,13 @@ namespace Sdl.Community.DsiViewer.TellMe
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new CommunitySupportAction
+            new HelpAction
+            {
+                Keywords = new []{ "dsi", "viewer", "metadata", "community", "support", "help", "documentation" }
+            },
+            new CommunitySupportAction
 			{
 				Keywords = new []{ "dsi", "viewer", "metadata", "community", "support" }
-			},
-			new HelpAction
-			{
-				Keywords = new []{ "dsi", "viewer", "metadata", "community", "support", "help" }
 			},
 			new SourceCodeAction()
 			{

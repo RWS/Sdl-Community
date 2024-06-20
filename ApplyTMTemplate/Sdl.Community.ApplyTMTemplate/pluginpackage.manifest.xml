@@ -1,7 +1,7 @@
 
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>applyTM Template</PlugInName>
-  <Version>4.0.0.0</Version>
+  <Version>4.0.0.1</Version>
   <Description>This plugin adds support for managing and applying the settings in a Language Resource Template to multiple translation memories in one go.</Description>
   <Author>Trados AppStore Team</Author>
   <Include>

@@ -99,6 +99,16 @@ namespace Sdl.Community.TermExcelerator {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Information {
+            get {
+                object obj = ResourceManager.GetObject("Information", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TermExcelerator.
         /// </summary>
         public static string Plugin_Name {
@@ -128,7 +138,7 @@ namespace Sdl.Community.TermExcelerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For more information,.
+        ///   Looks up a localized string similar to  For more information,.
         /// </summary>
         public static string SettingsAction_ExternalHelp_1 {
             get {
@@ -146,7 +156,7 @@ namespace Sdl.Community.TermExcelerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to for documentation..
+        ///   Looks up a localized string similar to to view the documentation..
         /// </summary>
         public static string SettingsAction_ExternalHelp_3 {
             get {
@@ -155,12 +165,13 @@ namespace Sdl.Community.TermExcelerator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to We couldn&apos;t find an instance of Term Excelerator Provider for the current project selected. To add it to your project, follow these steps:
+        ///   Looks up a localized string similar to  We couldn&apos;t find an instance of Term Excelerator Provider for the current project selected. 
+        /// To add it, follow these steps:
         ///
-        ///1. Open Project Settings
-        ///2. Go to Termbases
-        ///3. Select Use
-        ///4. Via the dropdown menu locate Term Excelerator Provider.
+        ///   1. Open Project Settings
+        ///   2. Go to Termbases
+        ///   3. Select Use
+        ///   4. Via the dropdown menu locate Term Excelerator Provider.
         /// </summary>
         public static string SettingsAction_OpenOptionsText {
             get {

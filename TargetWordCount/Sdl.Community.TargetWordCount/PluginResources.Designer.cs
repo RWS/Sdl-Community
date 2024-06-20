@@ -81,6 +81,16 @@ namespace Sdl.Community.TargetWordCount {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Information {
+            get {
+                object obj = ResourceManager.GetObject("Information", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Target Word Count.
         /// </summary>
         public static string Plugin_Name {
@@ -118,7 +128,7 @@ namespace Sdl.Community.TargetWordCount {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to for documentation..
+        ///   Looks up a localized string similar to to view the documentation..
         /// </summary>
         public static string SettingsAction_ExternalHelp_3 {
             get {
@@ -129,10 +139,10 @@ namespace Sdl.Community.TargetWordCount {
         /// <summary>
         ///   Looks up a localized string similar to To configure this batch task, follow these steps:
         ///
-        ///1. Select a project/file(s)
-        ///2. Click on Batch Tasks
-        ///3. Select Target Word Count 
-        ///4. Follow the batch task wizard steps.
+        ///   1. Select a project/file(s)
+        ///   2. Click on Batch Tasks
+        ///   3. Select Target Word Count 
+        ///   4. Follow the batch task wizard steps.
         /// </summary>
         public static string SettingsAction_OpenOptionsText {
             get {
@@ -155,6 +165,16 @@ namespace Sdl.Community.TargetWordCount {
         public static System.Drawing.Icon SourceCode {
             get {
                 object obj = ResourceManager.GetObject("SourceCode", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMe_Forum {
+            get {
+                object obj = ResourceManager.GetObject("TellMe_Forum", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

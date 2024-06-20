@@ -8,7 +8,7 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 	{
 		public ApplyTMDocumentationAction()
 		{
-			Name = "Apply TM Template Documentation";
+			Name = "applyTM Template Documentation";
 		}
 
 		public override void Execute()
@@ -18,7 +18,7 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 
 		public override bool IsAvailable => true;
 
-		public override string Category => "Apply TM Template results";
+		public override string Category => "applyTM Template results";
 
 		public override Icon Icon => PluginResources.TellMe_Documentation;
 	}
