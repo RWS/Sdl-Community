@@ -12,10 +12,10 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 	{
 		public ApplyTMSettingsAction()
 		{
-			Name = "Apply TM Template Settings";
+			Name = "applyTM Template Settings";
 		}
 
-		public override string Category => "Apply TM Template results";
+		public override string Category => "applyTM Template results";
 
 		public override Icon Icon => PluginResources.TellMe_Settings;
 
