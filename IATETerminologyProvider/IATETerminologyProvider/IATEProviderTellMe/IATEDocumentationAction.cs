@@ -8,7 +8,7 @@ namespace Sdl.Community.IATETerminologyProvider.IATEProviderTellMe
 	{
 		public override bool IsAvailable => true;
 		public override string Category => "IATE results";
-		public override Icon Icon => PluginResources.Question;
+		public override Icon Icon => PluginResources.TellMe_Documentation;
 
 		public IATEDocumentationAction()
 		{
