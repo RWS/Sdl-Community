@@ -171,7 +171,7 @@ namespace Sdl.Community.TMBackup
 				txt_Description.Text = backupModel.Description;
 			}
 
-			if (result.BackupDetailsModelList != null)
+			if (result?.BackupDetailsModelList != null)
 			{
 				var backupDetailsList = result.BackupDetailsModelList.Where(b => b.BackupName.Equals(txt_BackupName.Text)).ToList();
 				string res = string.Empty;
