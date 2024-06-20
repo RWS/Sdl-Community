@@ -8,7 +8,7 @@ namespace Sdl.Community.TermExcelerator.TellMe
 	{
 		public override bool IsAvailable => true;
 		public override string Category => $"{PluginResources.Plugin_Name} results";
-		public override Icon Icon => PluginResources.ForumIcon;
+		public override Icon Icon => PluginResources.Question;
 
 		public ExcelTermCommunityForumAction()
 		{
