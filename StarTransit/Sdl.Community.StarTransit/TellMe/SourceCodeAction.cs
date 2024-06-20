@@ -8,7 +8,7 @@ namespace Sdl.Community.StarTransit.TellMe
 	{
 		public SourceCodeAction()
 		{
-			Name = "StarTransit source code";
+			Name = "StarTransit Source Code";
 		}
 
 		public override void Execute()

@@ -304,6 +304,16 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Information {
+            get {
+                object obj = ResourceManager.GetObject("Information", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon open_package {
@@ -565,10 +575,12 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To engage with this plugin, follow these steps:
+        ///   Looks up a localized string similar to To engage with StarTransit, follow these steps:
         ///
-        ///    1. In Projects view, go to Home tab
-        ///    2. Locate the StarTransit Group.
+        ///1.    Via the Projects View, go to Home tab
+        ///2.    Locate the StarTransit Group
+        ///
+        ///Tip: You can assign shortcuts via; File - Options - Keyboard Shortcuts - StarTransit.
         /// </summary>
         public static string TellMe_WarningMessage {
             get {

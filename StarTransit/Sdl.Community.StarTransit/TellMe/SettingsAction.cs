@@ -1,7 +1,6 @@
 ﻿using System.Drawing;
 using System.Media;
 using Sdl.Community.StarTransit.TellMe.View;
-using Sdl.Community.StarTransit;
 using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.StarTransit.TellMe
@@ -16,7 +15,7 @@ namespace Sdl.Community.StarTransit.TellMe
 
 		public SettingsAction()
 		{
-			Name = string.Format("{0} settings", PluginResources.Plugin_Name);
+			Name = string.Format("{0} Settings", PluginResources.Plugin_Name);
 		}
 
 		private static void ShowDialog()
