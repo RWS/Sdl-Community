@@ -145,6 +145,9 @@
   <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\forumicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Information" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Information.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Plugin_Name" xml:space="preserve">
     <value>Segment Status Switcher</value>
   </data>
@@ -167,9 +170,12 @@
     <value>{0} results</value>
   </data>
   <data name="TellMe_WarningMessage" xml:space="preserve">
-    <value>To engage with the app, follow these steps:
+    <value>To engage with Segment Status Switcher, follow these steps:
 
-    1.In Editor view, go to Add-Ins
-    2.With the cursor on an active segment, click on the status options in the app</value>
+1.   Via the Editor view, go to Add-Ins
+2.   Locate Segment Status Switcher group
+
+Apply by placing cursor on an active segment then select from any of the available options.
+Tip: Ypu can assign shortcuts via; File - Options - Keyboard Shortcuts - Segment Status Switcher</value>
   </data>
 </root>

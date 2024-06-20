@@ -14,7 +14,7 @@ namespace Sdl.Community.SegmentStatusSwitcher.TellMe
 
 		public CommunitySourceCodeAction()
 		{
-			Name = string.Format("{0} source code", PluginResources.Plugin_Name);
+			Name = string.Format("{0} Source Code", PluginResources.Plugin_Name);
 		}
 
 		public override void Execute()

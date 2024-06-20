@@ -151,6 +151,16 @@ namespace Sdl.Community.SegmentStatusSwitcher {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Information {
+            get {
+                object obj = ResourceManager.GetObject("Information", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Segment Status Switcher.
         /// </summary>
         public static string Plugin_Name {
@@ -208,10 +218,13 @@ namespace Sdl.Community.SegmentStatusSwitcher {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To engage with the app, follow these steps:
+        ///   Looks up a localized string similar to To engage with Segment Status Switcher, follow these steps:
         ///
-        ///    1.In Editor view, go to Add-Ins
-        ///    2.With the cursor on an active segment, click on the status options in the app.
+        ///1.   Via the Editor view, go to Add-Ins
+        ///2.   Locate Segment Status Switcher group
+        ///
+        ///Apply by placing cursor on an active segment then select from any of the available options.
+        ///Tip: Ypu can assign shortcuts via; File - Options - Keyboard Shortcuts - Segment Status Switcher.
         /// </summary>
         public static string TellMe_WarningMessage {
             get {

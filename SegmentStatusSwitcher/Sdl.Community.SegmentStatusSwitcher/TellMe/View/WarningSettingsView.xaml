@@ -6,8 +6,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 		mc:Ignorable="d"
 		Title="TellMe Warning"
-		Width="600"
-		Height="233"
+		Width="540"
+		Height="255"
 		ResizeMode="NoResize"
 		WindowStyle="None"
 		WindowStartupLocation="CenterScreen"
@@ -23,8 +23,8 @@
     </Window.Resources>
 
     <Border BorderBrush="#000000"
-			BorderThickness="1" Margin="0,0,131,0">
-        <Grid Margin="0,0,9,-1">
+			BorderThickness="1" Margin="0,0,0,0">
+        <Grid Margin="0,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -40,7 +40,7 @@
 
             <Image Grid.Row="0"
 	               Grid.Column="0"
-	               Source="/Sdl.Community.SegmentStatusSwitcher;component/TellMe/View/Warning.png"
+	               Source="/Sdl.Community.SegmentStatusSwitcher;component/Resources/Information.png"
 	               Height="40"
 	               Width="40"
 	               RenderOptions.BitmapScalingMode="HighQuality"
@@ -50,7 +50,7 @@
 			   Grid.Column="1"
 			   Text="Access Segment Status Switcher"
 	           Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"
-			   FontSize="16"
+			   FontSize="18"
 			   HorizontalAlignment="Left"
 			   Margin="37,0,0,0" RenderTransformOrigin="0.485,0.534" />
 
@@ -68,7 +68,7 @@
 			   TextWrapping="Wrap"
 			   Focusable="True"
 			   KeyDown="OpenUrl_KeyPressed"
-			   Margin="16,19,0,20">
+			   Margin="16,19,0,0">
 		<Run Text="For more information," />
 		<Run Text="click here"
 			 Cursor="Hand"
@@ -89,7 +89,7 @@
 				</Style>
 			</Run.Style>
 		</Run>
-		<Run Text="to review documentation" />
+		<Run Text="to view the documentation" />
             </TextBlock>
 
             <Button Grid.Row="4"
@@ -98,8 +98,8 @@
 		    Style="{StaticResource Sdl.Button.SecondaryStyle}"
 			Click="CloseWindow_Click"
 			HorizontalAlignment="Right"
-			Width="120" 
-			Margin="0 16 16 16"/>
+			Width="100" 
+			Margin="0 0 16 16"/>
         </Grid>
     </Border>
 

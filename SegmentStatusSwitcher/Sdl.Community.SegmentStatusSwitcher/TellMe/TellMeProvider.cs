@@ -23,7 +23,7 @@ namespace Sdl.Community.SegmentStatusSwitcher.TellMe
 			},
 			new SettingsAction()
 			{
-				Keywords = new[] { "segment", "status", "switcher", "settings" }
+				Keywords = new[] { "segment", "status", "switcher" }
 			}
 		};
 	}
