@@ -839,7 +839,7 @@ still associated with the client profile '{0}'</value>
     <value>click here</value>
   </data>
   <data name="SettingsAction_ExternalHelp_3" xml:space="preserve">
-    <value>to vie the documentation.</value>
+    <value>to view the documentation.</value>
   </data>
   <data name="SettingsAction_Title_NewQualitivityProject" xml:space="preserve">
     <value>New Qualitivity Project</value>
