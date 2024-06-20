@@ -7,7 +7,7 @@
 		mc:Ignorable="d"
 		Title="TellMe Warning"
 		Width="550"
-		Height="300"
+		Height="250"
 		ResizeMode="NoResize"
 		WindowStyle="None"
 		WindowStartupLocation="CenterScreen"
@@ -40,11 +40,11 @@
 
 			<Image Grid.Row="0"
 				   Grid.Column="0"
-				   Source="/Sdl.Community.TermExcelerator;component/Resources/Warning.png"
+				   Source="/Sdl.Community.TermExcelerator;component/Resources/Information.png"
 				   Height="40"
 				   Width="40"
 				   RenderOptions.BitmapScalingMode="HighQuality"
-				   Margin="32 16 16 0" />
+				   Margin="18 16 16 0" />
 
 			<TextBlock Grid.Row="0"
 					   Grid.Column="1"
