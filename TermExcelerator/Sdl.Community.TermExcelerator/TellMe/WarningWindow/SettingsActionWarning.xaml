@@ -44,7 +44,7 @@
 				   Height="40"
 				   Width="40"
 				   RenderOptions.BitmapScalingMode="HighQuality"
-				   Margin="18 16 16 0" />
+				   Margin="18 16 10 0" />
 
 			<TextBlock Grid.Row="0"
 					   Grid.Column="1"
@@ -53,7 +53,7 @@
 					   FontSize="16"
 					   HorizontalAlignment="Left"
 					   VerticalAlignment="Center"
-					   Margin="8 16 0 0" />
+					   Margin="0 16 0 0" />
 
 			<TextBlock Grid.Row="1"
 					   Grid.ColumnSpan="2"

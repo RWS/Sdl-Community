@@ -133,7 +133,7 @@ namespace Sdl.Community.TermExcelerator
 			{
 				IsBidirectional = true,
 				Locale = ProviderSettings.TargetLanguage,
-				Name = ProviderSettings.TargetLanguage.EnglishName,
+				Name = ProviderSettings.TargetLanguage?.EnglishName,
 				TargetOnly = false
 			};
 
