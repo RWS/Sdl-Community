@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:ui="http://schemas.microsoft.com/wix/UIExtension">
-	<Product Id="*" Name="Trados Freshstart" Language="1033" Version="2.0.0.0" Manufacturer="Trados AppStore Team" UpgradeCode="bcee5a2b-8710-4d13-8ba8-2f7faa5d9407">
+	<Product Id="*" Name="Trados Freshstart" Language="1033" Version="2.0.0.1" Manufacturer="Trados AppStore Team" UpgradeCode="bcee5a2b-8710-4d13-8ba8-2f7faa5d9407">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<Icon Id="icon.ico" SourceFile="$(var.ProjectDir)Icon.ico" />
@@ -69,9 +69,9 @@
 				<File Id="System.Windows.Interactivity.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\System.Windows.Interactivity.dll"></File>
 			</Component>
 
-			<Component Id="Sdl.Community.Toolkit.Core.dll" Guid="*">
+			<!--<Component Id="Sdl.Community.Toolkit.Core.dll" Guid="*">
 				<File Id="Trados.Community.Toolkit.Core.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\Trados.Community.Toolkit.Core.dll"></File>
-			</Component>
+			</Component>-->
 
 			<Component Id="NLog.dll" Guid="*">
 				<File Id="NLog.dll" KeyPath="yes" Source="$(var.BuildOutputPath)\NLog.dll"></File>
