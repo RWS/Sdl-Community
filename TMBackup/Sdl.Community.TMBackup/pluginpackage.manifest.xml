@@ -1,7 +1,7 @@
 
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Trados TMBackup</PlugInName>
-  <Version>5.0.0.2</Version>
+  <Version>5.0.0.3</Version>
   <Description>This application provides a simple way to back up your Translation Memories and Termbases on a regular basis.</Description>
   <Author>Trados AppStore Team</Author>
   <Include>

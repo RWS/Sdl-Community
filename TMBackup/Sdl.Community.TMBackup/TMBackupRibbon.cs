@@ -46,7 +46,15 @@ namespace Sdl.Community.TMBackup
 
 		private static void MoveBackupFilesAppToDirectory()
 		{
-			var pluginExePath = GetUnpackedFolder();
+            var executableVersion = new StudioVersionService().GetStudioVersion()?.ExecutableVersion?.Major.ToString();
+            var executableBetaVersion = new StudioVersionService().GetStudioVersion()?.ExecutableVersion?.Major+"Beta";
+
+            var pluginExePath = GetUnpackedFolder(executableVersion);
+            if (string.IsNullOrEmpty(pluginExePath))
+            {
+                pluginExePath = GetUnpackedFolder(executableBetaVersion);
+            }
+
 			if (!string.IsNullOrEmpty(pluginExePath))
 			{
 				var path = Path.Combine(Constants.DeployPath, "Sdl.Community.BackupFiles.exe");
@@ -74,9 +82,8 @@ namespace Sdl.Community.TMBackup
 		}
 
 		// Get the Sdl.Community.TMBackup.exe path from the Unpacked folder when plugin is loaded in Studio
-		private static string GetUnpackedFolder()
+		private static string GetUnpackedFolder(string executableVersion)
 		{
-			var executableVersion = new StudioVersionService().GetStudioVersion()?.ExecutableVersion?.Major;
 			foreach (var pluginFolderLocation in _pluginFolderLocations)
 			{
 				var devUnpackedFolder = $@"{Environment.GetFolderPath(pluginFolderLocation)}\Trados\Trados Studio\{executableVersion}\Plugins\Unpacked\Sdl.Community.TMBackup";
