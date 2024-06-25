@@ -839,7 +839,7 @@ still associated with the client profile '{0}'</value>
     <value>click here</value>
   </data>
   <data name="SettingsAction_ExternalHelp_3" xml:space="preserve">
-    <value>for documentation.</value>
+    <value>to view the documentation.</value>
   </data>
   <data name="SettingsAction_Title_NewQualitivityProject" xml:space="preserve">
     <value>New Qualitivity Project</value>
@@ -867,7 +867,9 @@ If your project is enabled, you can initiate the tracking of Project Activity by
 3. In the Editor View, under the View Tab find the Information Group
 4. Locate Activity Tracker
  
-Tip: You can review which projects are enabled for Qualitivity directly from the Projects View. Check the state of the New Qualitivity Project State feature, under the Home Tab or assess if your project is listed within the Qualitivity View.
+Tip: You can review which projects are enabled for Qualitivity directly from the Projects View.
+Check the state of the New Qualitivity Project State feature, under the Home Tab or assess 
+if your project is listed within the Qualitivity View.
 </value>
   </data>
   <data name="SettingsAction_NoTrackingFound" xml:space="preserve">

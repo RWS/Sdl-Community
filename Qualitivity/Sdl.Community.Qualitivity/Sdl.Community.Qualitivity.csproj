@@ -43,6 +43,10 @@
     <TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio18</TradosFolder>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Resources\Information-32.png" />
+    <None Remove="Resources\Information.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="Accessibility" />
     <Reference Include="DocumentFormat.OpenXml">
       <HintPath>$(TradosFolder)\DocumentFormat.OpenXml.dll</HintPath>
@@ -159,6 +163,10 @@
     <PackageReference Include="Trados.Community.Toolkit.LanguagePlatform">
       <Version>5.0.1</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Information-32.png" />
+    <Resource Include="Resources\Information.png" />
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
