@@ -2,6 +2,7 @@
 using InterpretBank.Events;
 using InterpretBank.TermbaseViewer.UI;
 using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.Terminology.TerminologyProvider.Core;
 using System;
 using System.Globalization;
@@ -72,14 +73,10 @@ namespace InterpretBank.Studio
             InterpretBankProvider.ProviderSettingsChanged -= InterpretBankProvider_ProviderSettingsChanged;
             InterpretBankProvider.ProviderSettingsChanged += InterpretBankProvider_ProviderSettingsChanged;
 
-            var currentProject = StudioContext.ProjectsController.CurrentProject;
-            var targetLanguages = currentProject.GetTargetLanguageFiles().Select(p => p.Language);
+            TargetLanguage = LanguageRegistryApi.Instance.GetLanguage(target);
+            SourceLanguage = LanguageRegistryApi.Instance.GetLanguage(target);
 
-            TargetLanguage = targetLanguages.FirstOrDefault(l => l.CultureInfo.IetfLanguageTag.Equals(target.Name));
-            SourceLanguage = currentProject.GetProjectInfo().SourceLanguage;
-
-            StudioContext.EventAggregator.GetEvent<DbChangedEvent>().Subscribe(OnDbChanged);
-            //LoadTerms();
+          StudioContext.EventAggregator.GetEvent<DbChangedEvent>().Subscribe(OnDbChanged);
         }
 
         public void JumpToTerm(Entry entry)

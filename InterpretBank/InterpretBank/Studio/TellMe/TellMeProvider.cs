@@ -13,7 +13,8 @@ namespace InterpretBank.Studio.TellMe
             new InterpretBankDocumentationAction(),
             new RwsCommunityAppStoreForumAction(),
             new SourceCodeAction(),
-            new SettingsAction()
+            new SettingsAction(),
+            new InterpretBankContactAction()
         ];
     }
 }
