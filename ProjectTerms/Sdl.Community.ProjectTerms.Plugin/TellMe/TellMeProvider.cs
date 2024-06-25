@@ -9,17 +9,22 @@ namespace Sdl.Community.ProjectTerms.Plugin.TellMe
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new CommunityWikiAction
+			new CommunityDocumentationAction
 			{
-				Keywords = new[] { "project", "term", "extract", "community", "support", "wiki" }
+				Keywords = new[] { "project", "term", "extract", "documentation" }
 			},
 			new AppStoreForumAction
 			{
 				Keywords = new[] { "project", "term", "extract", "support", "forum" }
 			},
-			new AppStoreDownloadAction
+			new AppStoreSourceCodeAction
 			{
-				Keywords = new[] { "project", "term", "extract", "store", "download", "appstore" }}
-		};
+				Keywords = new[] { "project", "term", "extract", "source", "code" }
+			},
+            new SettingsAction
+            {
+                Keywords = new[] { "project", "term", "extract", "settings" }
+            }
+        };
 	}
 }
