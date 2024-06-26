@@ -59,7 +59,7 @@ namespace InterpretBank.CommonServices
             ChooseGlossaryWindow.Show();
         }
 
-        public void WarnUser(string message) => MessageBox.Show(message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        public void WarnUser(string message) => MessageBox.Show(message, $"{PluginResources.Plugin_Name} Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
         private void ChooseGlossaryWindow_Closed(object sender, EventArgs e)
         {

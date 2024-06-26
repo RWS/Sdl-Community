@@ -42,7 +42,8 @@ namespace Sdl.Community.SdlFreshstart.Model
 			var x when x.Contains("2019") => 15,
 			var x when x.Contains("2021") => 16,
 			var x when x.Contains("2022") => 17,
-			_ => 0
+            var x when x.Contains("2024") => 18,
+            _ => 0
 		};
 
 		public Version ExecutableVersion { get; set; }

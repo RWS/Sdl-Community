@@ -11,19 +11,19 @@ namespace Sdl.Community.ProjectTerms.Plugin.TellMe
 		{
 			new CommunityDocumentationAction
 			{
-				Keywords = new[] { "project", "term", "extract", "documentation" }
+				Keywords = new[] {  "projecttermextract", "projectterm", "termextract","project", "term", "extract", "documentation" }
 			},
 			new AppStoreForumAction
 			{
-				Keywords = new[] { "project", "term", "extract", "support", "forum" }
+				Keywords = new[] {  "projecttermextract", "projectterm", "termextract","project", "term", "extract", "support", "forum" }
 			},
 			new AppStoreSourceCodeAction
 			{
-				Keywords = new[] { "project", "term", "extract", "source", "code" }
+				Keywords = new[] { "projecttermextract", "projectterm", "termextract", "project", "term", "extract", "source", "code" }
 			},
             new SettingsAction
             {
-                Keywords = new[] { "project", "term", "extract", "settings" }
+                Keywords = new[] {  "projecttermextract", "projectterm", "termextract","project", "term", "extract", "settings" }
             }
         };
 	}

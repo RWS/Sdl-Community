@@ -141,13 +141,13 @@ public class InterpretBankDataContext : IInterpretBankDataContext
         return GetLanguageNames(settings);
     }
 
-    public List<DbGlossaryEntry> GetItems(List<string> glossaries, int skipCount, int takeCount) =>
-    [
-        .. glossaries != null
-            ? GetRows<DbGlossaryEntry>()
-                .Where(dbTerm => glossaries.Contains(dbTerm.Tag1))
-            : GetRows<DbGlossaryEntry>().Skip(skipCount).Take(takeCount)
-    ];
+    //public List<DbGlossaryEntry> GetItems(List<string> glossaries, int skipCount, int takeCount) =>
+    //[
+    //    .. glossaries != null
+    //        ? GetRows<DbGlossaryEntry>() 
+    //            .Where(dbTerm => glossaries.Contains(dbTerm.Tag1))
+    //        : GetRows<DbGlossaryEntry>().Skip(skipCount).Take(takeCount)
+    //];
 
     public List<TagLinkModel> GetLinks() => GetRows<DbTagLink>()
             .Select(t => new TagLinkModel { GlossaryId = t.GlossaryId, TagName = t.TagName, TagId = t.Id }).ToList();
@@ -338,24 +338,20 @@ public class InterpretBankDataContext : IInterpretBankDataContext
 
     public void UpdateEntry(TermChange termChange)
     {
-        using var dataContext = GetDataContext();
+        var sqlGlossaryService = GetSqlGlossaryService();
 
-        var languageIndex = GetLanguageIndex(termChange.LanguageName);
-        var dbTerms = dataContext.GetTable<DbGlossaryEntry>();
+        var entries = sqlGlossaryService.GetTerms(null, null, null, null).Cast<TermEntry>();
+        var updateTerm = entries.FirstOrDefault(e => e.ID == termChange.EntryId);
 
-        DbGlossaryEntry updateTerm = null;
-        foreach (var term in dbTerms)
-        {
-            if (term.Id == termChange.EntryId) updateTerm = term;
-        }
+        var term = updateTerm?.LanguageEquivalents.FirstOrDefault(le =>
+            le.LanguageIndex == GetLanguageIndex(termChange.LanguageName));
+        if (term is null) return;
 
-        if (updateTerm is null) return;
+        term.Term = termChange.Term;
+        term.Commenta = termChange.FirstComment;
+        term.Commentb = termChange.SecondComment;
 
-        updateTerm[$"Term{languageIndex}"] = termChange.Term;
-        updateTerm[$"Comment{languageIndex}a"] = termChange.FirstComment;
-        updateTerm[$"Comment{languageIndex}b"] = termChange.SecondComment;
-
-        dataContext.SubmitChanges();
+        sqlGlossaryService.UpdateContent(updateTerm);
     }
 
     private (List<string> contained, List<string> notContained) CheckLanguages(List<string> newTerms)

@@ -62,7 +62,7 @@ public class TerminologyService : ITerminologyService
         List<string> glossaries)
     {
         var allEntries = GetSourceAndTargetTerms(sourceLanguage, targetLanguage, glossaries);
-        var filteredTerms = allEntries.Where(t => t.Source.ToLower().Equals(searchText.ToLower()));
+        var filteredTerms = allEntries.Where(t => t.Source.ToLower().StartsWith(searchText.ToLower()));
 
         var localStudioTerms = filteredTerms
             .Select(term => new StudioTermEntry

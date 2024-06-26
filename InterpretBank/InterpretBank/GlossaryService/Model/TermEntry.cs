@@ -1,106 +1,110 @@
-﻿using System;
+﻿using InterpretBank.GlossaryService.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using InterpretBank.GlossaryService.Interface;
 
 namespace InterpretBank.GlossaryService.Model
 {
-	public class TermEntry : IGlossaryEntry
-	{
-		private static PropertyInfo[] _properties;
-		public string CommentAll { get; set; }
-		public int ID { get; set; }
-		public List<LanguageEquivalent> LanguageEquivalents { get; set; } = new(10);
-		public string RecordCreation { get; set; } = "CURRENT_DATE";
-		public string Tag1 { get; set; }
-		public string Tag2 { get; set; }
-		private static PropertyInfo[] Properties => _properties ??= typeof(TermEntry).GetProperties();
+    public class TermEntry : IGlossaryEntry
+    {
+        private static PropertyInfo[] _properties;
+        public string CommentAll { get; set; }
+        public int ID { get; set; }
+        public List<LanguageEquivalent> LanguageEquivalents { get; set; } = new(10);
 
-		public string this[string property]
-		{
-			get
-			{
-				var propertyInfo = GetType().GetProperty(property);
-				return propertyInfo?.GetValue(this, null).ToString();
-			}
-			set
-			{
-				var propertyInfo = GetType().GetProperty(property);
+        //public string RecordCreation { get; set; } = "CURRENT_DATE";
+        public string Tag1 { get; set; }
 
-				if (propertyInfo is null)
-				{
-					var indexAsString = Regex.Match(property, "\\d+").Value;
+        public string Tag2 { get; set; }
+        private static PropertyInfo[] Properties => _properties ??= typeof(TermEntry).GetProperties();
 
-					if (!int.TryParse(indexAsString, out var index)) return;
+        public string this[string property]
+        {
+            get
+            {
+                var propertyInfo = GetType().GetProperty(property);
+                return propertyInfo?.GetValue(this, null).ToString();
+            }
+            set
+            {
+                var propertyInfo = GetType().GetProperty(property);
 
-					var propertyWithoutIndex = Regex.Replace(property, "\\d+", "");
-					var type = typeof(LanguageEquivalent);
-					var subProperty = type.GetProperty(propertyWithoutIndex);
+                if (propertyInfo is null)
+                {
+                    var indexAsString = Regex.Match(property, "\\d+").Value;
 
-					if (subProperty is null) return;
+                    if (!int.TryParse(indexAsString, out var index)) return;
 
-					var subPropertyType = subProperty.PropertyType;
-					var correspondingElement = LanguageEquivalents.FirstOrDefault(le => le.LanguageIndex == index);
+                    var propertyWithoutIndex = Regex.Replace(property, "\\d+", "");
+                    var type = typeof(LanguageEquivalent);
+                    var subProperty = type.GetProperty(propertyWithoutIndex);
 
-					if (correspondingElement is null)
-					{
-						correspondingElement = new LanguageEquivalent { LanguageIndex = index };
-						LanguageEquivalents.Add(correspondingElement);
-					}
+                    if (subProperty is null) return;
 
-					subProperty.SetValue(correspondingElement, Convert.ChangeType(value, subPropertyType));
-				}
-				else
-				{
-					var propertyType = propertyInfo.PropertyType;
-					propertyInfo.SetValue(this, Convert.ChangeType(value, propertyType));
-				}
-			}
-		}
+                    var subPropertyType = subProperty.PropertyType;
+                    var correspondingElement = LanguageEquivalents.FirstOrDefault(le => le.LanguageIndex == index);
 
-		public static List<string> GetColumns(List<int> languageIndices, bool withLocation = true, bool isRead = false)
-		{
-			var columns = new List<string> { "CommentAll" };
+                    if (correspondingElement is null)
+                    {
+                        correspondingElement = new LanguageEquivalent { LanguageIndex = index };
+                        LanguageEquivalents.Add(correspondingElement);
+                    }
 
-			if (withLocation)
-			{
-				columns.Insert(0, "Tag2");
-				columns.Insert(0, "Tag1");
-				if (isRead) columns.Insert(0, "ID");
-			}
+                    subProperty.SetValue(correspondingElement, Convert.ChangeType(value, subPropertyType));
+                }
+                else
+                {
+                    var propertyType = propertyInfo.PropertyType;
+                    propertyInfo.SetValue(this, Convert.ChangeType(value, propertyType));
+                }
+            }
+        }
 
-			foreach (var le in languageIndices)
-			{
-				columns.AddRange(LanguageEquivalent.GetColumns(le));
-			}
+        public static List<string> GetColumns(List<int> languageIndices, bool withLocation = true, bool isRead = false)
+        {
+            var columns = new List<string> { "CommentAll" };
 
-			return columns;
-		}
+            if (withLocation)
+            {
+                columns.Insert(0, "Tag2");
+                columns.Insert(0, "Tag1");
+                if (isRead) columns.Insert(0, "ID");
+            }
 
-		public List<string> GetColumns(bool includeId = false)
-		{
-			var columns = Properties
-				.Select(propertyInfo => propertyInfo.Name)
-				.Where(propertyName => propertyName != "Item" && propertyName != nameof(LanguageEquivalents) && (propertyName != nameof(ID) || includeId))
-				.ToList();
+            foreach (var le in languageIndices)
+            {
+                columns.AddRange(LanguageEquivalent.GetColumns(le));
+            }
 
-			LanguageEquivalents.ForEach(le => columns.AddRange(le.GetColumns()));
+            return columns;
+        }
 
-			return columns;
-		}
+        public List<string> GetColumns(bool includeId = false)
+        {
+            var columns = Properties
+                .Select(propertyInfo => propertyInfo.Name)
+                .Where(propertyName => propertyName != "Item" && propertyName != nameof(LanguageEquivalents) && (propertyName != nameof(ID) || includeId))
+                .ToList();
 
-		public List<object> GetValues()
-		{
-			var values = GetColumns()
-				.Select(column => GetType().GetProperty(column))
-				.Select(propertyInfo => propertyInfo?.GetValue(this, null))
-				.ToList();
+            LanguageEquivalents.ForEach(le => columns.AddRange(le.GetColumns()));
 
-			LanguageEquivalents.ForEach(le => values.AddRange(le.GetValues()));
+            return columns;
+        }
 
-			return values;
-		}
-	}
+        public List<object> GetValues()
+        {
+            var values = GetColumns()
+                .Select(column => GetType().GetProperty(column))
+                .Select(propertyInfo => propertyInfo?.GetValue(this, null))
+                .ToList();
+
+            values = values.Take(3).ToList();
+
+            LanguageEquivalents.ForEach(le => values.AddRange(le.GetValues()));
+
+            return values;
+        }
+    }
 }

@@ -5,13 +5,10 @@ using System.IO;
 using System.Linq;
 using NLog;
 using Sdl.Community.SdlFreshstart.Model;
-using Trados.Community.Toolkit.Core.Services;
-using StudioVersion = Sdl.Community.SdlFreshstart.Model.StudioVersion;
-using StudioVersionService = Sdl.Versioning.StudioVersionService;
 
 namespace Sdl.Community.SdlFreshstart.Services
 {
-    public class VersionService
+    public class StudioVersionService
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly string _packageCacheSdl = @"C:\ProgramData\Package Cache\SDL";
@@ -19,7 +16,7 @@ namespace Sdl.Community.SdlFreshstart.Services
         private readonly List<string> _possiblePackageCacheFolderName;
         private List<StudioVersion> _installedVersions;
 
-        public VersionService()
+        public StudioVersionService()
         {
             _logger.Info("Version service initialized");
             _possiblePackageCacheFolderName = new List<string>
@@ -39,7 +36,7 @@ namespace Sdl.Community.SdlFreshstart.Services
         {
             if (_installedVersions != null) return _installedVersions;
 
-            var studioVersionService = new StudioVersionService();
+            var studioVersionService = new Versioning.StudioVersionService();
             var installedStudioVersions = studioVersionService.GetInstalledStudioVersions();
             _logger.Info("Installed Trados Studio Versions");
 

@@ -69,6 +69,8 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             set => SetField(ref _sourceLanguageName, value);
         }
 
+        public List<string> Tags { get; set; }
+
         public Image TargetLanguageFlag
         {
             get => _targetLanguageFlag;
@@ -83,6 +85,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
         public IUserInteractionService UserInteractionService { get; set; } = userInteractionService;
 
+        public bool UseTags { get; set; }
         private List<string> Glossaries { get; set; }
 
         private Language SourceLanguage { get; set; }
@@ -95,6 +98,12 @@ namespace InterpretBank.TermbaseViewer.ViewModel
         {
             entryModel.Name =
                 entryModel.Terms.FirstOrDefault(t => t.LanguageName == SourceLanguageName)?.Term;
+        }
+
+        public void JumpToTerm(Entry entry)
+        {
+            var jumpEntry = Entries.Result.FirstOrDefault(e => e.Id == entry.Id);
+            SetSelectedEntry(jumpEntry);
         }
 
         public void LoadTerms()
@@ -151,10 +160,6 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             LoadTerms();
         }
 
-        public bool UseTags { get; set; }
-
-        public List<string> Tags { get; set; }
-
         private void AddTerm(string source, string target, string glossaryName)
         {
             UserInteractionService.GotTermDetailsEvent -= AddTerm;
@@ -168,6 +173,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             newEntryModel.GlossaryName = glossaryName;
 
             InitializeEntry(newEntryModel);
+            MoveSourceAndTargetTermsFirst(newEntryModel);
             Entries.Result.Add(newEntryModel);
         }
 
@@ -185,7 +191,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
             var previousTerm = SelectedEntry;
             InitializeEntries(Entries.Result);
-            MoveSourceAndTargetTermsFirst();
+            MoveAllSourceAndTargetTermsFirst();
             SetSelectedEntry(previousTerm);
         }
 
@@ -206,19 +212,22 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             return false;
         }
 
-        private void MoveSourceAndTargetTermsFirst()
+        private void MoveAllSourceAndTargetTermsFirst()
         {
             foreach (var entryModel in Entries.Result)
-            {
-                var sourceTerm = entryModel.Terms.FirstOrDefault(t => t.LanguageName == SourceLanguageName);
-                var targetTerm = entryModel.Terms.FirstOrDefault(t => t.LanguageName == TargetLanguageName);
+                MoveSourceAndTargetTermsFirst(entryModel);
+        }
 
-                entryModel.Terms.Remove(sourceTerm);
-                entryModel.Terms.Insert(0, sourceTerm);
+        private void MoveSourceAndTargetTermsFirst(EntryModel entryModel)
+        {
+            var sourceTerm = entryModel.Terms.FirstOrDefault(t => t.LanguageName == SourceLanguageName);
+            var targetTerm = entryModel.Terms.FirstOrDefault(t => t.LanguageName == TargetLanguageName);
 
-                entryModel.Terms.Remove(targetTerm);
-                entryModel.Terms.Insert(1, targetTerm);
-            }
+            entryModel.Terms.Remove(sourceTerm);
+            entryModel.Terms.Insert(0, sourceTerm);
+
+            entryModel.Terms.Remove(targetTerm);
+            entryModel.Terms.Insert(1, targetTerm);
         }
 
         private void RemoveSelectedEntry(object obj)
@@ -283,12 +292,6 @@ namespace InterpretBank.TermbaseViewer.ViewModel
                     });
                     break;
             }
-        }
-
-        public void JumpToTerm(Entry entry)
-        {
-          var jumpEntry =  Entries.Result.FirstOrDefault(e => e.Id == entry.Id);
-          SetSelectedEntry(jumpEntry);
         }
     }
 }

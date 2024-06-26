@@ -214,7 +214,7 @@ namespace InterpretBank {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to InterpretBank description.
+        ///   Looks up a localized string similar to InterpretBank Terminology Provider.
         /// </summary>
         public static string Plugin_Description {
             get {
@@ -223,7 +223,7 @@ namespace InterpretBank {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to InterpretBank.
+        ///   Looks up a localized string similar to InterpretBank Terminology Provider.
         /// </summary>
         public static string Plugin_Name {
             get {
