@@ -8,7 +8,7 @@ namespace Sdl.Community.FailSafeTask.TellMe
 	{
 		public override bool IsAvailable => true;
 		public override string Category => "Fail Safe Task results";
-		public override Icon Icon => PluginResources.ForumIcon;
+		public override Icon Icon => PluginResources.Question;
 
 		public FailSafeTaskCommunityForumAction()
 		{
