@@ -135,7 +135,7 @@ namespace InterpretBank.Studio
                     break;
 
                 case SearchMode.Normal:
-                    results = GetExactTerms2(source, destination, text);
+                    results = GetExactTerms(source, destination, text);
                     break;
 
                 default:
@@ -205,7 +205,7 @@ namespace InterpretBank.Studio
             return entry;
         }
 
-        private List<SearchResult> GetExactTerms2(ILanguage source, ILanguage destination, string words)
+        private List<SearchResult> GetExactTerms(ILanguage source, ILanguage destination, string words)
         {
             var terms = TermSearchService.GetExactTerms(words, source.Name, destination.Name, Settings.Glossaries);
 

@@ -17,10 +17,6 @@
     <CollectSQLiteInteropFiles>false</CollectSQLiteInteropFiles>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="TermbaseViewer\Converters\**" />
-    <EmbeddedResource Remove="TermbaseViewer\Converters\**" />
-    <None Remove="TermbaseViewer\Converters\**" />
-    <Page Remove="TermbaseViewer\Converters\**" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Resources\299033_microphone_icon.png" />
@@ -174,9 +170,6 @@
     <Resource Include="Resources\Remove2.ico" />
     <Resource Include="Resources\RemoveClick.ico" />
     <Resource Include="Resources\Tag.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="TermbaseViewer\UI\Controls\Resources\" />
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>

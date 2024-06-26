@@ -1,11 +1,11 @@
 ﻿using Autofac;
+using InterpretBank.CommonServices;
 using InterpretBank.Events;
 using InterpretBank.TermbaseViewer.UI;
 using Sdl.Core.Globalization;
+using Sdl.Core.Globalization.LanguageRegistry;
 using Sdl.Terminology.TerminologyProvider.Core;
 using System;
-using System.Globalization;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace InterpretBank.Studio
@@ -25,12 +25,19 @@ namespace InterpretBank.Studio
         {
             get
             {
+                if (!Initialized) return null;
+                    //new UserInteractionService().WarnUser("Not all project languages have been mapped. Please go to termbase settings and map them.");
                 SetupTermbaseControl();
                 return _termbaseControl;
             }
         }
 
-        public bool Initialized => true;
+        public bool Initialized
+        {
+            get;
+            set;
+        }
+
         public bool IsEditing => false;
         public Entry SelectedTerm { get; set; }
 
@@ -72,14 +79,11 @@ namespace InterpretBank.Studio
             InterpretBankProvider.ProviderSettingsChanged -= InterpretBankProvider_ProviderSettingsChanged;
             InterpretBankProvider.ProviderSettingsChanged += InterpretBankProvider_ProviderSettingsChanged;
 
-            var currentProject = StudioContext.ProjectsController.CurrentProject;
-            var targetLanguages = currentProject.GetTargetLanguageFiles().Select(p => p.Language);
-
-            TargetLanguage = targetLanguages.FirstOrDefault(l => l.CultureInfo.IetfLanguageTag.Equals(target.Name));
-            SourceLanguage = currentProject.GetProjectInfo().SourceLanguage;
+            TargetLanguage = LanguageRegistryApi.Instance.GetLanguage(target);
+            SourceLanguage = LanguageRegistryApi.Instance.GetLanguage(source);
 
             StudioContext.EventAggregator.GetEvent<DbChangedEvent>().Subscribe(OnDbChanged);
-            //LoadTerms();
+            Initialized = true;
         }
 
         public void JumpToTerm(Entry entry)
@@ -100,7 +104,9 @@ namespace InterpretBank.Studio
 
         private void InterpretBankProvider_ProviderSettingsChanged() => LoadTerms();
 
-        private void LoadTerms() =>
+        private void LoadTerms()
+        {
+            if (!Initialized) return;
             _termbaseControl
                 .LoadTerms(
                     SourceLanguage,
@@ -109,6 +115,7 @@ namespace InterpretBank.Studio
                     InterpretBankProvider.Settings.Tags,
                     InterpretBankProvider.Settings.UseTags,
                     InterpretBankProvider.Settings.DatabaseFilepath);
+        }
 
         private void OnDbChanged(DbChangedEvent dbChangedEvent)
         {

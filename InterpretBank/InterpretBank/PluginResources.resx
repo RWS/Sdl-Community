@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>InterpretBank</value>
+    <value>InterpretBank Terminology Provider</value>
   </data>
   <data name="GlossaryExchangeServiceManager_CreateFileReader_The_file_type__0__is_not_supported" xml:space="preserve">
     <value>The file type {0} is not supported</value>
   </data>
   <data name="Plugin_Description" xml:space="preserve">
-    <value>InterpretBank description</value>
+    <value>InterpretBank Terminology Provider</value>
   </data>
   <data name="SettingsWindow_GroupBox_Header" xml:space="preserve">
     <value>Interpret Bank Settings</value>

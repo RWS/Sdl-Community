@@ -18,7 +18,7 @@ namespace InterpretBank.GlossaryService.Model
 
 		public List<string> GetColumns() => new()
 		{
-			$"TermEntry{LanguageIndex}",
+			$"Term{LanguageIndex}",
 			$"Comment{LanguageIndex}a",
 			$"Comment{LanguageIndex}b"
 		};
