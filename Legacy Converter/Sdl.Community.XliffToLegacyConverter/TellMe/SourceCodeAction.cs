@@ -4,22 +4,22 @@ using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.XliffToLegacyConverter.TellMe
 {
-	public class AppStoreDownloadAction : AbstractTellMeAction
+	public class SourceCodeAction : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
 
 		public override string Category => string.Format(PluginResources.TellMe_Provider_Results, PluginResources.Plugin_Name);
 
-		public override Icon Icon => PluginResources.Download;
+		public override Icon Icon => PluginResources.TellMe_SourceCode;
 
-		public AppStoreDownloadAction()
+		public SourceCodeAction()
         {
-            Name = string.Format("Download {0} from the AppStore", PluginResources.Plugin_Name);
+            Name = string.Format("{0} Source Code", PluginResources.Plugin_Name);
         }
 
 		public override void Execute()
 		{
-			Process.Start("https://appstore.rws.com/Plugin/56");
+			Process.Start("https://github.com/RWS/Sdl-Community/tree/master/Legacy%20Converter");
 		}
 	}
 }

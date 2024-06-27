@@ -9,17 +9,22 @@ namespace Sdl.Community.XliffToLegacyConverter.TellMe
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new CommunityWikiAction
+			new DocumentationAction
 			{
-				Keywords = new[] { "sdlxliff", "legacy", "converter", "legacy converter", "community", "support", "wiki" }
+				Keywords = new[] { "sdlxliff", "legacy", "converter", "legacy converter", "documentation" }
 			},
 			new AppStoreForumAction
 			{
 				Keywords = new[] { "sdlxliff", "legacy", "converter", "legacy converter", "support", "forum" }
 			},
-			new AppStoreDownloadAction
+			new SourceCodeAction
 			{
-				Keywords = new[] {"sdlxliff", "legacy", "converter", "legacy converter", "store", "download", "appstore" }}
-		};
+				Keywords = new[] {"sdlxliff", "legacy", "converter", "legacy converter", "source", "code" }
+			},
+            new SettingsAction
+            {
+                Keywords = new[] {"sdlxliff", "legacy", "converter", "legacy converter", "settings" }
+            }
+        };
 	}
 }
