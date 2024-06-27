@@ -67,14 +67,4 @@ namespace Sdl.Community.AhkPlugin
 			mainWindow.ShowDialog();
 		}
 	}
-	[Action("Sdl.Community.HelpAhkAction", Name = "AutoHotKey scripts help", Icon = "question", Description = "An wiki page will be opened in browser uith user documentation")]
-	[ActionLayout(typeof(AhkRibbonGroup), 250, DisplayType.Large)]
-	public class AhkHelpAction : AbstractAction
-	{
-		protected override void Execute()
-		{
-			System.Diagnostics.Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3171/autohotkey-manager-ahk");
-
-		}
-	}
 }
