@@ -9,17 +9,22 @@ namespace Sdl.Community.TMOptimizer.Integration.TellMe
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new CommunityWikiAction
+			new DocumentationAction
 			{
-				Keywords = new[] { "tm", "optimizer", "community", "support", "wiki" }
+				Keywords = new[] { "tm", "optimizer", "documentation" }
 			},
 			new AppStoreForumAction
 			{
 				Keywords = new[] { "tm", "optimizer", "support", "forum" }
 			},
-			new AppStoreDownloadAction
+			new SourceCodeAction
 			{
-				Keywords = new[] { "tm", "optimizer", "store", "download", "appstore" }}
-		};
+				Keywords = new[] { "tm", "optimizer", "source", "code" }
+			},
+            new SettingsAction
+            {
+                Keywords = new[] { "tm", "optimizer", "settings" }
+            }
+        };
 	}
 }

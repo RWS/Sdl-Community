@@ -16,6 +16,7 @@
                  Finish="Wizard_Finish"
                  Cancel="Wizard_Cancel"
                  Help="Wizard_Help"
+                 HelpButtonVisibility="Collapsed"
                  CanFinish="{Binding CanFinish}" Margin="1,0,-1.421,-0.093">
         <xctk:WizardPage x:Name="IntroPage" 
                                    Title="TM Optimizer"
