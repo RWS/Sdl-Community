@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -71,22 +71,29 @@
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>false</SignManifests>
+    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Sdl.Core.Globalization.Async">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.Core.Globalization.Async.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.Desktop.IntegrationApi.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TellMe.ProviderApi">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18\Sdl.TellMe.ProviderApi.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
+	  <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
+		  <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
+		  <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
+	  </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -127,9 +134,10 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TellMe\AppStoreDownloadAction.cs" />
+    <Compile Include="TellMe\SettingsAction.cs" />
+    <Compile Include="TellMe\SourceCodeAction.cs" />
     <Compile Include="TellMe\AppStoreForumAction.cs" />
-    <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\DocumentationAction.cs" />
     <Compile Include="TellMe\TellMeProvider.cs" />
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
@@ -202,6 +210,9 @@
     <Content Include="Resources\Download.ico" />
     <Content Include="Resources\ForumIcon.ico" />
     <Content Include="Resources\Question.ico" />
+    <None Include="Resources\TellMe_Documentation.ico" />
+    <None Include="Resources\TellMe_Settings.ico" />
+    <None Include="Resources\TellMe_SourceCode.ico" />
     <Content Include="SdlXliffToLegacyConverter.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -209,7 +220,7 @@
       <Version>2.1.0</Version>
     </PackageReference>
     <PackageReference Include="Sdl.Core.PluginFramework.Build">
-      <Version>17.0.0</Version>
+      <Version>18.0.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup />
