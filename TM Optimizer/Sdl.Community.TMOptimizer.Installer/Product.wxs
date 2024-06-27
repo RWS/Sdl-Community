@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
 	xmlns:ui="http://schemas.microsoft.com/wix/UIExtension">
-	<Product Id="*" Name="TMOptimizer 2022" Language="1033" Version="4.0.0.1" Manufacturer="Trados AppStore Team" UpgradeCode="306085c5-c154-40d3-9865-66fb11f6e4de">
+	<Product Id="*" Name="TMOptimizer 2024" Language="1033" Version="5.0.0.0" Manufacturer="Trados AppStore Team" UpgradeCode="306085c5-c154-40d3-9865-66fb11f6e4de">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<Icon Id="product.ico" SourceFile="$(var.ProjectDir)product.ico" />
@@ -43,20 +43,20 @@
 	<Fragment>
 		<DirectoryRef Id="DesktopFolder">
 			<Component Id="ApplicationShortcutDesktop" Guid="07bd2eb0-4658-4fed-b1d1-a93fe7581f68">
-				<Shortcut Id="ApplicationDesktopShortcut" Name="TMOptimizer2022" Icon="product.ico" Description="TMOptimizer2022" Target="[TMOPTIMIZER]Sdl.Community.TMOptimizer.exe" WorkingDirectory="TMOPTIMIZER" />
+				<Shortcut Id="ApplicationDesktopShortcut" Name="TMOptimizer2024" Icon="product.ico" Description="TMOptimizer2024" Target="[TMOPTIMIZER]Sdl.Community.TMOptimizer.exe" WorkingDirectory="TMOPTIMIZER" />
 				<RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
 				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.TMOptimizer" Name="installed" Type="integer" Value="1" KeyPath="yes" />
 			</Component>
 		</DirectoryRef>
 	</Fragment>
 
-	<!-- Create shortcut to the TradosStudio2022Apps directory. Use .exe from the INSTALLFOLDER where the application together with all 
+	<!-- Create shortcut to the TradosStudio2024Apps directory. Use .exe from the INSTALLFOLDER where the application together with all 
 	.dll dependecies will be installed. INSTALLFOLDER is the location provided by user when running .msi file -->
 	<Fragment>
-		<DirectoryRef Id="TradosStudio2022Apps">
+		<DirectoryRef Id="TradosStudio2024Apps">
 			<Component Id="ApplicationProgramDataShortcut" Guid="1fa73f50-a0d8-43fc-8894-5c222a142545">
-				<Shortcut Id="ApplicationProgDataShortcut" Name="TMOptimizer2022" Icon="product.ico" Description="TMOptimizer2022" Target="[TMOPTIMIZER]\Sdl.Community.TMOptimizer.exe" WorkingDirectory="TMOPTIMIZER" />
-				<RemoveFolder Id="RemoveTradosStudio2022Apps" Directory="TradosStudio2022Apps" On="uninstall" />
+				<Shortcut Id="ApplicationProgDataShortcut" Name="TMOptimizer2024" Icon="product.ico" Description="TMOptimizer2024" Target="[TMOPTIMIZER]\Sdl.Community.TMOptimizer.exe" WorkingDirectory="TMOPTIMIZER" />
+				<RemoveFolder Id="RemoveTradosStudio2024Apps" Directory="TradosStudio2024Apps" On="uninstall" />
 				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Communities.TMOptimizerShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes" />
 			</Component>
 		</DirectoryRef>
@@ -68,15 +68,15 @@
 			<Directory Id="ProgramFilesFolder">
 				<Directory Id="Trados" Name="Trados" >
 					<Directory Id="TradosStudio" Name="Trados Studio">
-						<Directory Id="TMOPTIMIZER" Name="Studio17"/>
+						<Directory Id="TMOPTIMIZER" Name="Studio18"/>
 					</Directory>
 				</Directory>
 			</Directory>
 
-			<!-- Define location where the shortcut will be added: in our case, folder TradosStudio2022Apps is defined to C:\ProgramData\Microsoft\Windows\Start Menu\Programs\ path.
+			<!-- Define location where the shortcut will be added: in our case, folder TradosStudio2024Apps is defined to C:\ProgramData\Microsoft\Windows\Start Menu\Programs\ path.
 			 Way to construct the path where the shortcut will be added -->
 			<Directory Id="ProgramMenuFolder"  Name="All Programs folder">
-				<Directory Id="TradosStudio2022Apps" Name="Trados Studio 2022 Apps" />
+				<Directory Id="TradosStudio2024Apps" Name="Trados Studio 2024 Apps" />
 			</Directory>
 
 			<!-- Define location where the shortcut will be added: in our case: Desktop -->
