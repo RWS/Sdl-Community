@@ -42,6 +42,9 @@
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
       <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="NLog">
+      <HintPath>$(TradosFolder)\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
@@ -76,12 +79,6 @@
     </PackageReference>
     <PackageReference Include="Sdl.Core.PluginFramework.Build">
       <Version>18.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="Serilog">
-      <Version>3.1.1</Version>
-    </PackageReference>
-    <PackageReference Include="Serilog.Sinks.RollingFile">
-      <Version>3.3.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

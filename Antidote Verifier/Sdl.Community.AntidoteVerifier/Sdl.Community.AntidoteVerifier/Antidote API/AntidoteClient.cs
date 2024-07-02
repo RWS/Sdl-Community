@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿
+using NLog;
 using System.Runtime.InteropServices;
 
 namespace Sdl.Community.AntidoteVerifier.Antidote_API
@@ -10,6 +11,7 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
     {
         private readonly IEditorService _editorService;
         private readonly bool _spellChecking;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public AntidoteClient(IEditorService editorService, bool spellChecking)
         {
@@ -42,7 +44,7 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
         public int DonneIdDocumentCourant()
         {
             var documentId = _editorService.GetDocumentId();
-            Log.Verbose("Sending document with id {@documentId} to Antidote.",
+            _logger.Info("Sending document with id {@documentId} to Antidote.",
                 documentId);
             return documentId;
         }
@@ -58,7 +60,7 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
         public int DonneIdZoneDeTexte(int id, int index)
         {
             var segmentId = _editorService.GetCurrentSegmentId(index);
-            Log.Verbose("Prepare to send segment {@segmentId} from document with id {@id} to Antidote", segmentId, id);
+            _logger.Info("Prepare to send segment {@segmentId} from document with id {@id} to Antidote", segmentId, id);
 
             return segmentId;
         }
@@ -72,8 +74,8 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
         public int DonneIdZoneDeTexteCourante(int index)
         {
             if(_spellChecking) return 0;
-            var segmentId = _editorService.GetActiveSegmentId(); 
-            Log.Verbose("Prepare to send segment {@segmentId} for index {@index} to Antidote", segmentId, index);
+            var segmentId = _editorService.GetActiveSegmentId();
+            _logger.Info("Prepare to send segment {@segmentId} for index {@index} to Antidote", segmentId, index);
 
             return segmentId;
         }
@@ -90,8 +92,8 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
             //else
             //{
             text = _editorService.GetSegmentText(idZone).Substring(leDebut, laFin - leDebut);
-           // }
-            Log.Verbose("Sending {@text} corresponding to segment {@idZone} from document with id {@id} to Antidote", text,idZone, idDoc);
+            // }
+            _logger.Info("Sending {@text} corresponding to segment {@idZone} from document with id {@id} to Antidote", text,idZone, idDoc);
             return text;
         }
 
@@ -113,8 +115,8 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
             //else
             //{
                 length = _editorService.GetSegmentText(idZone).Length;
-           // }
-            Log.Verbose("Prepare to send segment {@idZone} with length {@length} from document with id {@id} to Antidote", idZone, length, idDoc);
+            // }
+            _logger.Info("Prepare to send segment {@idZone} with length {@length} from document with id {@id} to Antidote", idZone, length, idDoc);
 
             return length;
         }
@@ -128,7 +130,7 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
 	    public int DonneNbZonesDeTexte(int id)
 	    {
 		    var numberOfSegments = _editorService.GetDocumentNoOfSegments();
-		    Log.Verbose("Sending document with id {@id} to Antidote having {@numberOfSegments} number of segments.",
+            _logger.Info("Sending document with id {@id} to Antidote having {@numberOfSegments} number of segments.",
 			    id, numberOfSegments);
 		    return numberOfSegments;
 	    }
@@ -141,7 +143,7 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
         public string DonneTitreDocCourant()
         {
             var documentName = _editorService.GetDocumentName();
-            Log.Verbose("Prepare to send document {@documentName} to Antidote", documentName);
+            _logger.Info("Prepare to send document {@documentName} to Antidote", documentName);
             return documentName;
 
         }

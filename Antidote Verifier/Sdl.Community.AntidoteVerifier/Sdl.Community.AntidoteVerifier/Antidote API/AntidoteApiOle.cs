@@ -1,6 +1,6 @@
 ﻿using antido32Lib;
 using Microsoft.Win32;
-using Serilog;
+using NLog;
 using System;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -10,12 +10,15 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
 {
     sealed public class AntidoteApiOle
     {
+
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern IntPtr FindWindow(string strClassName, string strWindowName);
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern void SetForegroundWindow(IntPtr hwnd);
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern void BringWindowToTop(IntPtr hwnd);
+
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         private readonly IAntidoteClient _antidoteClient;
 
@@ -38,7 +41,7 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
 	            api?.LanceOutilDispatch(_antidoteClient, (string)parameter);
             }catch(Exception ex)
             {
-                Log.Error(ex, "An error appeared while starting antidote!");
+                _logger.Error(ex, "An error appeared while starting antidote!");
                 MessageBox.Show(ex.Message, PluginResources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
         }
@@ -98,7 +101,7 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
 		    }
 		    catch (Exception ex)
 		    {
-			    Log.Error(ex, "An error appeared while starting antidote!");
+			    _logger.Error(ex, "An error appeared while starting antidote!");
 			    MessageBox.Show(ex.Message, PluginResources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return false;
 		    }
