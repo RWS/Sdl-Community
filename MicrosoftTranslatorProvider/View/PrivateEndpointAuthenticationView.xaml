@@ -70,13 +70,14 @@
 				 Style="{StaticResource WatermarkTextBox}"
 				 controls:WatermarkTextBox.WatermarkText="Private Endpoint"
 				 controls:WatermarkTextBox.ButtonCommand="{Binding ClearCommand}"
-				 controls:WatermarkTextBox.ButtonCommandParameter="{controls:NameOf Member=Endpoint, Type={x:Type viewModels:PrivateEndpointAuthenticationViewModel}}"
+				 controls:WatermarkTextBox.ButtonCommandParameter="{controls:NameOf Member=Endpoint, 
+            Type={x:Type viewModels:PrivateEndpointAuthenticationViewModel}}"
 				 BorderThickness="1"
 				 Margin="0 8" />
 
 		<Button Grid.Row="5"
-				Grid.ColumnSpan="2"
-				Content="Sign in"
+				Grid.ColumnSpan="2" Grid.Column="0"
+                Content="Sign in"
 				Command="{Binding SignInCommand}"
 				Style="{StaticResource Sdl.Button.PrimaryStyle}"
 				Cursor="Hand"

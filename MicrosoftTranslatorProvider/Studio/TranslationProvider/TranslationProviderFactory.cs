@@ -15,8 +15,10 @@ namespace MicrosoftTranslatorProvider
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
 		{
 			ApplicationInitializer.CredentialStore = credentialStore;
+
 			var translationOptions = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
 			CredentialsManager.GetCredentials(translationOptions);
+			CredentialsManager.GetProxySettings(translationOptions);
 			if (translationOptions.AuthenticationType == AuthenticationType.Microsoft)
 			{
 				_ = Task.Run(async () => await MicrosoftService.AuthenticateUser(translationOptions.MicrosoftCredentials)).Result;

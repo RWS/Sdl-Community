@@ -5,7 +5,7 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:converters="clr-namespace:MicrosoftTranslatorProvider.Converters"
 			 xmlns:behaviours="clr-namespace:MicrosoftTranslatorProvider.Behaviours"
-			 xmlns:Controls="clr-namespace:MicrosoftTranslatorProvider.Controls"
+			 xmlns:controls="clr-namespace:MicrosoftTranslatorProvider.Controls"
 			 xmlns:viewModels="clr-namespace:MicrosoftTranslatorProvider.ViewModel"
 			 d:DataContext="{d:DesignInstance viewModels:PrivateEndpointViewModel}"
 			 mc:Ignorable="d">
@@ -46,9 +46,9 @@
 					   Margin="0" />
 			<TextBox Text="{Binding Endpoint, UpdateSourceTrigger=PropertyChanged}"
 					 Style="{StaticResource WatermarkTextBox}"
-					 Controls:WatermarkTextBox.ButtonCommand="{Binding ClearCommand}"
-					 Controls:WatermarkTextBox.ButtonCommandParameter="url"
-					 Controls:WatermarkTextBox.WatermarkText="Private endpoint"
+					 controls:WatermarkTextBox.ButtonCommand="{Binding ClearCommand}"
+					 controls:WatermarkTextBox.ButtonCommandParameter="url"
+					 controls:WatermarkTextBox.WatermarkText="Private endpoint"
 					 HorizontalAlignment="Stretch" />
 		</StackPanel>
 
@@ -66,9 +66,9 @@
 									 Style="{StaticResource WatermarkTextBox}"
 									 behaviours:TextBoxCommandBehavior.Command="{Binding DataContext.SelectedItemChangedCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
 									 behaviours:TextBoxCommandBehavior.CommandParameter="{Binding}"
-									 Controls:WatermarkTextBox.ButtonCommand="{Binding ClearCommand}"
-									 Controls:WatermarkTextBox.ButtonCommandParameter="key"
-									 Controls:WatermarkTextBox.WatermarkText="Header key"
+									 controls:WatermarkTextBox.ButtonCommand="{Binding ClearCommand}"
+									 controls:WatermarkTextBox.ButtonCommandParameter="key"
+									 controls:WatermarkTextBox.WatermarkText="Header key"
 									 Width="350"
 									 Margin="0 0 5 0" />
 
@@ -76,9 +76,9 @@
 									 Style="{StaticResource WatermarkTextBox}"
 									 behaviours:TextBoxCommandBehavior.Command="{Binding DataContext.SelectedItemChangedCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
 									 behaviours:TextBoxCommandBehavior.CommandParameter="{Binding}"
-									 Controls:WatermarkTextBox.ButtonCommand="{Binding ClearCommand}"
-									 Controls:WatermarkTextBox.ButtonCommandParameter="value"
-									 Controls:WatermarkTextBox.WatermarkText="Header value"
+									 controls:WatermarkTextBox.ButtonCommand="{Binding ClearCommand}"
+									 controls:WatermarkTextBox.ButtonCommandParameter="value"
+									 controls:WatermarkTextBox.WatermarkText="Header value"
 									 Width="350"
 									 Margin="0 0 5 0" />
 
@@ -117,9 +117,9 @@
 									 Style="{StaticResource WatermarkTextBox}"
 									 behaviours:TextBoxCommandBehavior.Command="{Binding DataContext.SelectedItemChangedCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
 									 behaviours:TextBoxCommandBehavior.CommandParameter="{Binding}"
-									 Controls:WatermarkTextBox.ButtonCommand="{Binding ClearCommand}"
-									 Controls:WatermarkTextBox.ButtonCommandParameter="key"
-									 Controls:WatermarkTextBox.WatermarkText="Parameter key"
+									 controls:WatermarkTextBox.ButtonCommand="{Binding ClearCommand}"
+									 controls:WatermarkTextBox.ButtonCommandParameter="key"
+									 controls:WatermarkTextBox.WatermarkText="Parameter key"
 									 IsReadOnly="{Binding IsReadOnly}"
 									 Width="350"
 									 Margin="0 0 5 0" />
@@ -127,9 +127,9 @@
 									 Style="{StaticResource WatermarkTextBox}"
 									 behaviours:TextBoxCommandBehavior.Command="{Binding DataContext.SelectedItemChangedCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
 									 behaviours:TextBoxCommandBehavior.CommandParameter="{Binding}"
-									 Controls:WatermarkTextBox.ButtonCommand="{Binding ClearCommand}"
-									 Controls:WatermarkTextBox.ButtonCommandParameter="value"
-									 Controls:WatermarkTextBox.WatermarkText="Parameter value"
+									 controls:WatermarkTextBox.ButtonCommand="{Binding ClearCommand}"
+									 controls:WatermarkTextBox.ButtonCommandParameter="value"
+									 controls:WatermarkTextBox.WatermarkText="Parameter value"
 									 IsReadOnly="{Binding IsReadOnly}"
 									 Width="350"
 									 Margin="0 0 5 0" />

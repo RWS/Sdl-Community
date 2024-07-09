@@ -102,6 +102,9 @@
 		<Reference Include="System.Xml" />
 		<Reference Include="System.Xml.Linq" />
 		<Reference Include="System.Core" />
+		<Reference Include="TradosProxySettings">
+		  <HintPath>Thirdparty\TradosProxySettings.dll</HintPath>
+		</Reference>
 		<Reference Include="WindowsBase" />
 	</ItemGroup>
 	<ItemGroup>
@@ -160,6 +163,9 @@
 	  <Resource Include="Resources\Settings.ico">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Resource>
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Thirdparty\" />
 	</ItemGroup>
 	<PropertyGroup>
 		<CreatePluginPackage>True</CreatePluginPackage>

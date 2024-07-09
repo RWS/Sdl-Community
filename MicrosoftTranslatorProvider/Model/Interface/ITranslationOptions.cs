@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using MicrosoftTranslatorProvider.Model;
+using TradosProxySettings.Model;
 
 namespace MicrosoftTranslatorProvider.Interfaces
 {
@@ -25,5 +26,8 @@ namespace MicrosoftTranslatorProvider.Interfaces
 		ProviderSettings ProviderSettings { get; set; }
 
 		PrivateEndpoint PrivateEndpoint { get; set; }
+
+		ProxySettings ProxySettings { get; set; }
+
 	}
 }

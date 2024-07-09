@@ -229,7 +229,7 @@ namespace MicrosoftTranslatorProvider
 			var translation = _translationOptions.AuthenticationType switch
 			{
 				AuthenticationType.Microsoft => MicrosoftService.TranslateAsync(pairMapped, sourcetext, _translationOptions.MicrosoftCredentials).Result,
-				AuthenticationType.PrivateEndpoint => PrivateEndpointService.Translate(_translationOptions.PrivateEndpoint, pairMapped, sourcetext)
+				AuthenticationType.PrivateEndpoint => PrivateEndpointService.Translate(_translationOptions.PrivateEndpoint, _translationOptions.ProxySettings, pairMapped, sourcetext)
 			};
 
 			return translation;

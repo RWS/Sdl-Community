@@ -2,6 +2,7 @@ using MicrosoftTranslatorProvider.Interfaces;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using TradosProxySettings.Model;
 
 namespace MicrosoftTranslatorProvider.Model
 {
@@ -33,12 +34,15 @@ namespace MicrosoftTranslatorProvider.Model
 
 		public  AuthenticationType AuthenticationType { get; set; }
 
-		public ProviderSettings ProviderSettings { get; set; }
+        public ProviderSettings ProviderSettings { get; set; }
 
-		[JsonIgnore]
-		public PrivateEndpoint PrivateEndpoint { get; set; }
+        [JsonIgnore]
+        public PrivateEndpoint PrivateEndpoint { get; set; }
 
-		internal void UpdateUri()
+        [JsonIgnore]
+        public ProxySettings ProxySettings { get; set; }
+
+        internal void UpdateUri()
 		{
 			var uri = AuthenticationType == AuthenticationType.PrivateEndpoint
 					? Constants.MicrosoftProviderPrivateEndpointFullScheme

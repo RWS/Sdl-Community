@@ -10,5 +10,6 @@
 		<File>LanguageMappingProvider.dll</File>
 		<File>Dapper.StrongName.dll</File>
 		<File>System.IdentityModel.Tokens.Jwt.dll</File>
+    <File>TradosProxySettings.dll</File>
 	</Include>
 </PluginPackage>

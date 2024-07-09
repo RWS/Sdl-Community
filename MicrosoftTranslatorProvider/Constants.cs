@@ -13,8 +13,10 @@ namespace MicrosoftTranslatorProvider
 		public const string MicrosoftProviderFullScheme = "microsofttranslatorprovider:///";
 		public const string MicrosoftProviderPrivateEndpointScheme = "microsofttranslatorproviderprivateendpoint";
 		public const string MicrosoftProviderPrivateEndpointFullScheme = "microsofttranslatorproviderprivateendpoint:///";
+        public const string MicrosoftProviderProxySettingsFullScheme = "microsofttranslatorproviderproxysettingsendpoint:///";
 
-		public const string MicrosoftNaming_FullName = "Microsoft Translator Provider";
+
+        public const string MicrosoftNaming_FullName = "Microsoft Translator Provider";
 		public const string MicrosoftTranslatorString = "Microsoft Translator";
 		public const string OcpApimSubscriptionKeyHeader = "Ocp-Apim-Subscription-Key";
 

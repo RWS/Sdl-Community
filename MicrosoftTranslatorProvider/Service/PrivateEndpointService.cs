@@ -9,6 +9,8 @@ using MicrosoftTranslatorProvider.Helpers;
 using MicrosoftTranslatorProvider.Model;
 using MicrosoftTranslatorProvider.Service.Model;
 using Newtonsoft.Json;
+using TradosProxySettings;
+using TradosProxySettings.Model;
 
 namespace MicrosoftTranslatorProvider.Service
 {
@@ -35,11 +37,11 @@ namespace MicrosoftTranslatorProvider.Service
 			return url.EndsWith("?") ? url : url.Substring(0, url.Length - 1);
 		}
 
-		public static string Translate(PrivateEndpoint privateEndpoint, PairModel pairMapping, string textToTranslate)
+		public static string Translate(PrivateEndpoint privateEndpoint, ProxySettings proxySettings, PairModel pairMapping, string textToTranslate)
 		{
 			try
 			{
-				return TryTranslate(privateEndpoint, pairMapping, textToTranslate);
+                return TryTranslate(privateEndpoint, proxySettings, pairMapping, textToTranslate);
 			}
 			catch (WebException exception)
 			{
@@ -48,7 +50,7 @@ namespace MicrosoftTranslatorProvider.Service
 			}
 		}
 
-		private static string TryTranslate(PrivateEndpoint privateEndpoint, PairModel pairMapping, string textToTranslate)
+		private static string TryTranslate(PrivateEndpoint privateEndpoint, ProxySettings proxySettings, PairModel pairMapping, string textToTranslate)
 		{
 			const string RegexPattern = @"(\<\w+[üäåëöøßşÿÄÅÆĞ]*[^\d\W\\/\\]+\>)";
 			var words = new Regex(RegexPattern).Matches(textToTranslate); //search for words like this: <example> 
@@ -57,14 +59,14 @@ namespace MicrosoftTranslatorProvider.Service
 				textToTranslate = textToTranslate.ReplaceCharacters(words);
 			}
 
-			return RequestTranslation(privateEndpoint, pairMapping, textToTranslate);
+			return RequestTranslation(privateEndpoint, proxySettings, pairMapping, textToTranslate);
 		}
 
-		private static string RequestTranslation(PrivateEndpoint privateEndpoint, PairModel pairMapping, string textToTranslate)
+		private static string RequestTranslation(PrivateEndpoint privateEndpoint, ProxySettings proxySettings, PairModel pairMapping, string textToTranslate)
 		{
 			try
 			{
-				return TryRequestTranslation(privateEndpoint, pairMapping, textToTranslate);
+				return TryRequestTranslation(privateEndpoint, proxySettings, pairMapping, textToTranslate);
 			}
 			catch (Exception ex)
 			{
@@ -73,7 +75,7 @@ namespace MicrosoftTranslatorProvider.Service
 			}
 		}
 
-		private static string TryRequestTranslation(PrivateEndpoint privateEndpoint, PairModel pairMapping, string textToTranslate)
+		private static string TryRequestTranslation(PrivateEndpoint privateEndpoint, ProxySettings proxySettings, PairModel pairMapping, string textToTranslate)
 		{
 			var body = new object[] { new { Text = textToTranslate } };
 			var requestBody = JsonConvert.SerializeObject(body);
@@ -89,8 +91,9 @@ namespace MicrosoftTranslatorProvider.Service
 				httpRequest.Headers.Add(header.Key, header.Value);
 			}
 
-			var httpClient = new HttpClient();
-			var response = httpClient.SendAsync(httpRequest).Result;
+            var httpClientHandler = ProxyHelper.GetHttpClientHandler(CredentialsManager.GetProxySettings());
+            using var httpClient = new HttpClient(httpClientHandler);
+            var response = httpClient.SendAsync(httpRequest).Result;
 			var responseBody = response.Content.ReadAsStringAsync().Result;
 			if (!response.IsSuccessStatusCode)
 			{

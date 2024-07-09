@@ -7,7 +7,11 @@ using MicrosoftTranslatorProvider.LanguageMappingProvider.ViewModel;
 using MicrosoftTranslatorProvider.View;
 using Sdl.LanguagePlatform.Core;
 using System;
+using System.Linq;
 using System.Windows.Input;
+using MicrosoftTranslatorProvider.Service;
+using TradosProxySettings.View;
+using TradosProxySettings.ViewModel;
 
 namespace MicrosoftTranslatorProvider.ViewModel
 {
@@ -38,7 +42,9 @@ namespace MicrosoftTranslatorProvider.ViewModel
         public ICommand ManageChangesCommand { get; private set; }
 		public ICommand OpenLanguageMappingCommand { get; private set; }
 		public ICommand OpenProviderSettingsCommand { get; private set; }
-		public ICommand ResetAndIdentifyPairsCommand { get; private set; }
+		public ICommand OpenProxySettingsCommand { get; private set; }
+
+        public ICommand ResetAndIdentifyPairsCommand { get; private set; }
 
 		public delegate void CloseWindowEventRaiser();
 
@@ -49,7 +55,8 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			ManageChangesCommand = new RelayCommand(ManageChanges);
 			OpenLanguageMappingCommand = new RelayCommand(OpenLanguageMapping);
 			OpenProviderSettingsCommand = new RelayCommand(OpenProviderSettings);
-		}
+            OpenProxySettingsCommand = new RelayCommand(OpenProxySettings);
+        }
 
 		private void InitializeInternalView()
 		{
@@ -86,7 +93,17 @@ namespace MicrosoftTranslatorProvider.ViewModel
 			settingsView.ShowDialog();
 		}
 
-		private void ManageChanges(object parameter)
+        private void OpenProxySettings(object parameter)
+        {
+            var view = new ProxySettingsWindow();
+            var viewModel = new ProxySettingsViewModel(view, _translationOptions.ProxySettings);
+            view.DataContext = viewModel;
+            view.ShowDialog();
+            _translationOptions.ProxySettings = viewModel.ProxySettings;
+            CredentialsManager.UpdateProxySettings(_translationOptions.ProxySettings);
+        }
+
+        private void ManageChanges(object parameter)
 		{
 			if (!bool.TryParse(parameter as string, out var saveChanges))
 			{
@@ -100,6 +117,9 @@ namespace MicrosoftTranslatorProvider.ViewModel
 					break;
 				case AuthenticationType.PrivateEndpoint:
                     _translationOptions.PairModels = [.. PrivateEndpointConfigurationViewModel.PairMappings];
+                    _translationOptions.PrivateEndpoint.Headers =
+                        PrivateEndpointConfigurationViewModel.Headers.ToList();
+					_translationOptions.PrivateEndpoint.Parameters = PrivateEndpointConfigurationViewModel.Parameters.ToList();
                     break;
 			}
 

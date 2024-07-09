@@ -4,6 +4,9 @@ using System.Windows.Input;
 using MicrosoftTranslatorProvider.Commands;
 using MicrosoftTranslatorProvider.Interface;
 using MicrosoftTranslatorProvider.Interfaces;
+using MicrosoftTranslatorProvider.Service;
+using TradosProxySettings.View;
+using TradosProxySettings.ViewModel;
 
 namespace MicrosoftTranslatorProvider.ViewModel
 {
@@ -13,6 +16,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 		
 		AuthenticationType _authenticationType;
 		Dictionary<AuthenticationType, IAuthenticationView> _authenticationViews;
+
 
 		public AuthenticationViewModel(ITranslationOptions translationOptions)
 		{
@@ -44,17 +48,31 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 		public ICommand ExitApplicationCommand { get; private set; }
 
-		public delegate void CloseWindowEventRaiser();
+        public ICommand OpenProxySettingsCommand { get; private set; }
+
+        public delegate void CloseWindowEventRaiser();
 
 		public event CloseWindowEventRaiser CloseEventRaised;
+
 
 		private void InitializeCommands()
 		{
 			SelectMicrosoftServiceCommand = new RelayCommand(SelectMicrosoftService);
 			ExitApplicationCommand = new RelayCommand(ExitApplication);
-		}
+            OpenProxySettingsCommand = new RelayCommand(OpenProxySettings);
+        }
 
-		private void InitializeUserControls()
+        private void OpenProxySettings(object parameter)
+        {
+            var view = new ProxySettingsWindow();
+            var viewModel = new ProxySettingsViewModel(view, _translationOptions.ProxySettings);
+            view.DataContext = viewModel;
+            view.ShowDialog();
+            _translationOptions.ProxySettings = viewModel.ProxySettings;
+            CredentialsManager.UpdateProxySettings(_translationOptions.ProxySettings);
+        }
+
+        private void InitializeUserControls()
 		{
 			var microsoftAuthenticationViewModel = new MicrosoftAuthenticationViewModel(_translationOptions);
 			microsoftAuthenticationViewModel.CloseRequested += CloseCredentialsViewRequest;

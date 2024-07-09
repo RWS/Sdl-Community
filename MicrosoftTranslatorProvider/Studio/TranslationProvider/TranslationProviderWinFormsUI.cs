@@ -30,8 +30,9 @@ namespace MicrosoftTranslatorProvider.Studio
 
 			var translationOptions = new TranslationOptions(true);
 			CredentialsManager.GetCredentials(translationOptions);
+            CredentialsManager.GetProxySettings(translationOptions);
 
-			var authenticationViewModel = new AuthenticationViewModel(translationOptions);
+            var authenticationViewModel = new AuthenticationViewModel(translationOptions);
 			var authenticationView = new AuthenticationView()
 			{
 				DataContext = authenticationViewModel,
@@ -40,6 +41,7 @@ namespace MicrosoftTranslatorProvider.Studio
 			{
 				translationOptions.UpdateUri();
 				CredentialsManager.UpdateCredentials(translationOptions);
+				CredentialsManager.UpdateProxySettings(translationOptions);
 				authenticationView.Close();
 			};
 
@@ -82,7 +84,12 @@ namespace MicrosoftTranslatorProvider.Studio
 
 			ProviderConfigurationView.ShowDialog();
 
-			return ProviderConfigurationViewModel.SaveChanges;
+            if (ProviderConfigurationViewModel.SaveChanges)
+            {
+                CredentialsManager.UpdateProxySettings(editProvider.TranslationOptions);
+            }
+
+            return ProviderConfigurationViewModel.SaveChanges;
 		}
 
 		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
