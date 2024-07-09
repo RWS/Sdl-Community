@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MicrosoftTranslatorProvider")]
-[assembly: AssemblyProduct("MicrosoftTranslatorProvider")]
+[assembly: AssemblyTitle("Trados Proxy Settings")]
+[assembly: AssemblyProduct("Trados Proxy Settings")]
 [assembly: AssemblyCompany("SDL Limited as part of the RWS Holdings Plc group of companies")]
 [assembly: AssemblyCopyright("Copyright © 2011 - 2023 SDL Limited as part of the RWS Holdings Plc group of companies (\"RWS Group\").")]
 
