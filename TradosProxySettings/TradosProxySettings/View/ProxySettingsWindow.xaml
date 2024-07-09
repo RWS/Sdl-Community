@@ -1,0 +1,264 @@
+﻿<Window x:Class="TradosProxySettings.View.ProxySettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:tradosProxySettings="clr-namespace:TradosProxySettings"
+        xmlns:viewModel="clr-namespace:TradosProxySettings.ViewModel"
+        xmlns:view="clr-namespace:TradosProxySettings.View"
+        mc:Ignorable="d"
+        WindowStyle="ThreeDBorderWindow"
+        ShowInTaskbar="True"
+        WindowStartupLocation="CenterScreen"
+        AllowsTransparency="False" 
+        ResizeMode="NoResize"
+        Title="Proxy Settings" 
+        SizeToContent="WidthAndHeight"
+        MinWidth="550" MinHeight="350"
+        d:DataContext="{d:DesignInstance viewModel:ProxySettingsViewModel}">
+
+    <Grid Margin="20" FocusManager.FocusedElement="{Binding ElementName=UseProxyCheckbox}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <CheckBox
+                AutomationProperties.AutomationId="ProxySettings_UseProxyCheckbox"
+                Name="UseProxyCheckbox"
+                AutomationProperties.Name="Use Proxy"
+                Grid.Row="0" Grid.Column="0"
+                      Grid.ColumnSpan="5"
+                      Margin="0,0,0,10"
+                      Content="Use Proxy"
+                      VerticalContentAlignment="Center"
+                      IsChecked="{Binding IsEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Label 
+                AutomationProperties.AutomationId="ProxySettings_ProxyServerLabel"
+                Name="ProxyServerLabel"
+                AutomationProperties.Name="Proxy Server"
+                Target="{Binding ElementName=ProxyServerTextBox}"
+                Grid.Column="0" 
+                   Grid.Row="1" 
+                   VerticalAlignment="Center"
+                   Margin="0,5,5,5" 
+                   IsEnabled="False"
+                   HorizontalContentAlignment="Left">
+                <TextBlock>
+                    <Run Text="Proxy Server"/>
+                    <Run Text=":"/>
+                </TextBlock>
+            </Label>
+
+            <TextBox
+                AutomationProperties.AutomationId="ProxySettings_ProxyServerTextBox"
+                Name="ProxyServerTextBox"
+                AutomationProperties.LabeledBy="{Binding ElementName=ProxyServerLabel}"
+                Grid.Column="1" 
+                Grid.Row="1" 
+                IsEnabled="{Binding IsEnabled}"
+                Text="{Binding Address, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                Height="26"
+                Margin="0,5,5,5" 
+                VerticalAlignment="Center" 
+                VerticalContentAlignment="Center" />
+
+            <Label 
+                AutomationProperties.AutomationId="ProxySettings_PortLabel"
+                Name="PortLabel"
+                AutomationProperties.Name="Port"
+                Target="{Binding ElementName=PortTextBox}"
+                Grid.Column="3" 
+                   Grid.Row="1" 
+                   VerticalAlignment="Center"
+                   Margin="0,5,5,5" 
+                   IsEnabled="False"
+                   HorizontalContentAlignment="Left">
+                <TextBlock>
+                    <Run Text="Port"/>
+                    <Run Text=":"/>
+                </TextBlock>
+            </Label>
+
+            <TextBox
+                AutomationProperties.AutomationId="ProxySettings_PortTextBox"
+                Name="PortTextBox"
+                AutomationProperties.LabeledBy="{Binding ElementName=PortLabel}"
+                Grid.Column="4" 
+                Grid.Row="1" 
+                IsEnabled="{Binding IsEnabled}"
+                Text="{Binding Port, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                Height="26"
+                Margin="0,5,0,5" 
+                VerticalAlignment="Center" 
+                VerticalContentAlignment="Center" />
+
+            <CheckBox
+                AutomationProperties.AutomationId="ProxySettings_BypassProxyServerCheckbox"
+                Name="BypassProxyServerCheckbox"
+                AutomationProperties.Name="Bypass proxy server for local address"
+                Grid.Column="1" 
+                Grid.Row="2" 
+                Margin="0,5,5,5" 
+                Grid.ColumnSpan="4"
+                Content="Bypass proxy server for local address"
+                IsEnabled="{Binding IsEnabled}"
+                IsChecked="{Binding BypassProxyOnLocal}" />
+
+            <CheckBox
+                AutomationProperties.AutomationId="ProxySettings_UseDefaultCredentialsCheckbox"
+                Name="UseDefaultCredentialsCheckbox"
+                AutomationProperties.Name="Use Default Credentials"
+                Grid.Column="0" 
+                Grid.Row="3" 
+                Margin="5,20,5,5" 
+                Grid.ColumnSpan="5"
+                Content="Use Default Credentials"
+                IsEnabled="{Binding IsEnabled}"
+                IsChecked="{Binding UseDefaultCredentials}" />
+
+
+            <Label 
+                AutomationProperties.AutomationId="ProxySettings_UserNameLabel"
+                Name="UserNameLabel"
+                AutomationProperties.Name="User Name"
+                Target="{Binding ElementName=UserNameTextBox}"
+                Grid.Column="0" 
+                   Grid.Row="4" 
+                   VerticalAlignment="Center"
+                   Margin="0,5,5,5" 
+                   IsEnabled="False"
+                   HorizontalContentAlignment="Left">
+                <TextBlock>
+                    <Run Text="User Name"/>
+                    <Run Text=":"/>
+                </TextBlock>
+            </Label>
+
+            <TextBox
+                AutomationProperties.AutomationId="ProxySettings_UserNameTextBox"
+                Name="UserNameTextBox"
+                AutomationProperties.LabeledBy="{Binding ElementName=UserNameLabel}"
+                Grid.Column="1" 
+                Grid.Row="4" 
+                Grid.ColumnSpan="4"
+                Text="{Binding Username, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                IsEnabled="{Binding IsEnabledAndDontUseDefaultCredentials}"
+                Height="26"
+                Margin="0,5,0,5" 
+                VerticalAlignment="Center" 
+                VerticalContentAlignment="Center" />
+
+            <Label
+                AutomationProperties.AutomationId="ProxySettings_PasswordLabel"
+                Name="PasswordLabel"
+                AutomationProperties.Name="Password"
+                Target="{Binding ElementName=PasswordTextBox}"
+                Grid.Column="0" 
+                   Grid.Row="5" 
+                   VerticalAlignment="Center"
+                   Margin="0,5,5,5" 
+                   IsEnabled="False"
+                   HorizontalContentAlignment="Left">
+                <TextBlock>
+                    <Run Text="Password"/>
+                    <Run Text=":"/>
+                </TextBlock>
+            </Label>
+
+            <PasswordBox
+                AutomationProperties.AutomationId="ProxySettings_PasswordTextBox"
+                Name="PasswordTextBox"
+                AutomationProperties.LabeledBy="{Binding ElementName=PasswordLabel}"
+                Grid.Column="1" 
+                Grid.Row="5" 
+                Grid.ColumnSpan="4"
+                Height="26"
+                Margin="0,5,0,5"
+                view:PasswordBoxHelper.BindPassword="True" 
+                view:PasswordBoxHelper.BoundPassword="{Binding Password, Mode=TwoWay}"
+                IsEnabled="{Binding IsEnabledAndDontUseDefaultCredentials}" />
+
+
+            <Label 
+                AutomationProperties.AutomationId="ProxySettings_DomainLabel"
+                Name="DomainLabel"
+                AutomationProperties.Name="Domain"
+                Target="{Binding ElementName=DomainTextBox}"
+                Grid.Column="0" 
+                   Grid.Row="6" 
+                   VerticalAlignment="Center"
+                   Margin="0,5,5,5" 
+                   IsEnabled="False"
+                   HorizontalContentAlignment="Left">
+                <TextBlock>
+                    <Run Text="Domain"/>
+                    <Run Text=":"/>
+                </TextBlock>
+            </Label>
+
+            <TextBox
+                AutomationProperties.AutomationId="ProxySettings_DomainTextBox"
+                Name="DomainTextBox"
+                AutomationProperties.LabeledBy="{Binding ElementName=DomainLabel}"
+                Grid.Column="1" 
+                Grid.Row="6" 
+                Grid.ColumnSpan="4"
+                Text="{Binding Domain, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                IsEnabled="{Binding IsEnabledAndDontUseDefaultCredentials}"
+                Height="26"
+                Margin="0,5,0,5" 
+                VerticalAlignment="Center" 
+                VerticalContentAlignment="Center" />
+
+        </Grid>
+
+        <StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Bottom" 
+                    Orientation="Vertical" 
+                    Margin="0,20,0,0" Height="28">
+            <Grid Height="28">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                    <Button 
+                        AutomationProperties.AutomationId="ProxySettings_OKButton"
+                        Name="OKButton"
+                        AutomationProperties.Name="OK"
+                        Margin="0,0,10, 0" Width="90"
+                        Content="OK"
+                        IsEnabled="{Binding IsValid, Mode=OneWay}"
+                        Command="{Binding SaveCommand}" 
+                        IsDefault="True">
+                    </Button>
+                    <Button 
+                        AutomationProperties.AutomationId="ProxySettings_CancelButton"
+                        Name="CancelButton"
+                        AutomationProperties.Name="Cancel"
+                        Margin="0" Width="90" IsCancel="True"
+                        Content="Cancel">
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </Grid>
+
+</Window>
