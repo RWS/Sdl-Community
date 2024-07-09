@@ -76,23 +76,27 @@ namespace MicrosoftTranslatorProvider.Studio
 			}
 
 			var ProviderConfigurationViewModel = new ProviderConfigurationViewModel(editProvider.TranslationOptions, languagePairs);
-			var ProviderConfigurationView = new ProviderConfigurationView()
-			{
-				DataContext = ProviderConfigurationViewModel,
-			};
+			var ProviderConfigurationView = new ProviderConfigurationView() { DataContext = ProviderConfigurationViewModel };
 			ProviderConfigurationViewModel.CloseEventRaised += ProviderConfigurationView.Close;
-
 			ProviderConfigurationView.ShowDialog();
 
             if (ProviderConfigurationViewModel.SaveChanges)
             {
-                CredentialsManager.UpdateProxySettings(editProvider.TranslationOptions);
+                SaveEditChanges(editProvider);
             }
 
             return ProviderConfigurationViewModel.SaveChanges;
 		}
 
-		public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
+        private static void SaveEditChanges(TranslationProvider editProvider)
+        {
+            var translationOptions = editProvider.TranslationOptions;
+            CredentialsManager.UpdateProxySettings(translationOptions);
+            CredentialsManager.UpdateCredentials(translationOptions);
+            ApplicationInitializer.TranslationOptions[translationOptions.Id] = translationOptions;
+        }
+
+        public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
 		{
 			if (translationProviderState is null)
 			{

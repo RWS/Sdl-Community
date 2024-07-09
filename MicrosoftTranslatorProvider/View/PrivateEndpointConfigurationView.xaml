@@ -25,8 +25,9 @@
             </ResourceDictionary.MergedDictionaries>
 
             <converters:EvenIndexToBooleanConverter x:Key="EvenIndexToBooleanConverter" />
-            <converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
+            <converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter" />
             <converters:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter" />
+            <converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
 
         </ResourceDictionary>
     </UserControl.Resources>
@@ -343,7 +344,7 @@
 
                     <StackPanel Grid.Row="1"
                                 Orientation="Horizontal"
-                                Margin="0 0 0 16"
+                                Margin="0 4"
                                 HorizontalAlignment="Center">
                         <TextBox Text="{Binding ParameterKey, UpdateSourceTrigger=PropertyChanged}"
                                  Style="{StaticResource WatermarkTextBox}"
@@ -408,7 +409,7 @@
                                             Style="{StaticResource Sdl.Button.DialogStyle}"
                                             Command="{Binding DataContext.DeletePairCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                             CommandParameter="{Binding}"
-                                            Visibility="{Binding IsReadOnly, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+                                            IsEnabled="{Binding IsReadOnly, Converter={StaticResource InvertableBoolEnabledConverter}, ConverterParameter=Inverted}"
                                             Width="88"
                                             Cursor="Hand"
                                             Margin="8 0" />

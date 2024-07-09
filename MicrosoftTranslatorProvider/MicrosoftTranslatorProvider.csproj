@@ -22,8 +22,6 @@
 	  <None Remove="Styles\General.xaml" />
 	  <None Remove="Styles\WindowsBorder.xaml" />
 	  <None Remove="Styles\WindowsControl.xaml" />
-	  <None Remove="View\ProviderControl.xaml" />
-	  <None Remove="View\SettingsControl.xaml" />
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="Microsoft.IdentityModel.Tokens">

@@ -104,27 +104,29 @@ namespace MicrosoftTranslatorProvider.ViewModel
         }
 
         private void ManageChanges(object parameter)
-		{
-			if (!bool.TryParse(parameter as string, out var saveChanges))
-			{
-				return;
-			}
+        {
+            if (!bool.TryParse(parameter as string, out bool saveChanges))
+            {
+                return;
+            }
 
-			switch (AuthenticationType)
-			{
-				case AuthenticationType.Microsoft:
-					_translationOptions.PairModels = [.. MicrosoftConfigurationViewModel.PairModels];
-					break;
-				case AuthenticationType.PrivateEndpoint:
-                    _translationOptions.PairModels = [.. PrivateEndpointConfigurationViewModel.PairMappings];
-                    _translationOptions.PrivateEndpoint.Headers =
-                        PrivateEndpointConfigurationViewModel.Headers.ToList();
-					_translationOptions.PrivateEndpoint.Parameters = PrivateEndpointConfigurationViewModel.Parameters.ToList();
-                    break;
-			}
+            if (saveChanges)
+            {
+				_translationOptions.PairModels = AuthenticationType switch
+				{
+					AuthenticationType.Microsoft => [.. MicrosoftConfigurationViewModel.PairModels],
+					AuthenticationType.PrivateEndpoint => [.. PrivateEndpointConfigurationViewModel.PairMappings]
+				};
 
-			SaveChanges = saveChanges;
-			CloseEventRaised.Invoke();
-		}
-	}
+				if (AuthenticationType == AuthenticationType.PrivateEndpoint)
+				{
+					_translationOptions.PrivateEndpoint.Headers = [.. PrivateEndpointConfigurationViewModel.Headers];
+					_translationOptions.PrivateEndpoint.Parameters = [.. PrivateEndpointConfigurationViewModel.Parameters];
+				}
+            }
+
+            SaveChanges = saveChanges;
+            CloseEventRaised.Invoke();
+        }
+    }
 }

@@ -28,6 +28,5 @@ namespace MicrosoftTranslatorProvider.Interfaces
 		PrivateEndpoint PrivateEndpoint { get; set; }
 
 		ProxySettings ProxySettings { get; set; }
-
 	}
 }
