@@ -51,20 +51,23 @@ namespace MicrosoftTranslatorProvider.Studio
 				return null;
 			}
 
-			var ProviderConfigurationViewModel = new ProviderConfigurationViewModel(translationOptions, languagePairs);
-			var ProviderConfigurationView = new ProviderConfigurationView()
+			var providerConfigurationViewModel = new ProviderConfigurationViewModel(translationOptions, languagePairs);
+			var providerConfigurationView = new ProviderConfigurationView
 			{
-				DataContext = ProviderConfigurationViewModel,
+				DataContext = providerConfigurationViewModel,
 			};
-			ProviderConfigurationViewModel.CloseEventRaised += ProviderConfigurationView.Close;
+			providerConfigurationViewModel.CloseEventRaised += providerConfigurationView.Close;
 
-			ProviderConfigurationView.ShowDialog();
-			if (!ProviderConfigurationViewModel.SaveChanges)
+			providerConfigurationView.ShowDialog();
+			if (!providerConfigurationViewModel.SaveChanges)
 			{
 				return null;
 			}
 
-			return [new TranslationProvider(translationOptions)];
+            var provider = new TranslationProvider(translationOptions);
+            SaveEditChanges(provider);
+            
+            return [provider];
 		}
 
 		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
@@ -75,17 +78,17 @@ namespace MicrosoftTranslatorProvider.Studio
 				return false;
 			}
 
-			var ProviderConfigurationViewModel = new ProviderConfigurationViewModel(editProvider.TranslationOptions, languagePairs);
-			var ProviderConfigurationView = new ProviderConfigurationView() { DataContext = ProviderConfigurationViewModel };
-			ProviderConfigurationViewModel.CloseEventRaised += ProviderConfigurationView.Close;
-			ProviderConfigurationView.ShowDialog();
+			var providerConfigurationViewModel = new ProviderConfigurationViewModel(editProvider.TranslationOptions, languagePairs);
+			var providerConfigurationView = new ProviderConfigurationView { DataContext = providerConfigurationViewModel };
+			providerConfigurationViewModel.CloseEventRaised += providerConfigurationView.Close;
+			providerConfigurationView.ShowDialog();
 
-            if (ProviderConfigurationViewModel.SaveChanges)
+            if (providerConfigurationViewModel.SaveChanges)
             {
                 SaveEditChanges(editProvider);
             }
 
-            return ProviderConfigurationViewModel.SaveChanges;
+            return providerConfigurationViewModel.SaveChanges;
 		}
 
         private static void SaveEditChanges(TranslationProvider editProvider)
