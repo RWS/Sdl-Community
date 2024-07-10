@@ -29,7 +29,7 @@ namespace MicrosoftTranslatorProvider.Service
             var uri = new Uri(uriString);
             try
             {
-                var httpClientHandler = ProxyHelper.GetHttpClientHandler(CredentialsManager.GetProxySettings());
+                var httpClientHandler = ProxyHelper.GetHttpClientHandler(CredentialsManager.GetProxySettings(), true);
                 using var httpClient = new HttpClient(httpClientHandler);
                 using var request = new HttpRequestMessage();
                 request.Method = HttpMethod.Post;
@@ -52,7 +52,7 @@ namespace MicrosoftTranslatorProvider.Service
 
         public async static Task<List<TranslationLanguage>> GetSupportedLanguages()
         {
-            var httpClientHandler = ProxyHelper.GetHttpClientHandler(CredentialsManager.GetProxySettings());
+            var httpClientHandler = ProxyHelper.GetHttpClientHandler(CredentialsManager.GetProxySettings(), true);
             var httpClient = new HttpClient(httpClientHandler);
 
             var url = "https://api.cognitive.microsofttranslator.com/languages?api-version=3.0";
@@ -106,7 +106,7 @@ namespace MicrosoftTranslatorProvider.Service
             };
             httpRequest.Headers.Add("Authorization", microsoftCredentials.AccessToken);
 
-            var httpClientHandler = ProxyHelper.GetHttpClientHandler(CredentialsManager.GetProxySettings());
+            var httpClientHandler = ProxyHelper.GetHttpClientHandler(CredentialsManager.GetProxySettings(), true);
             using var httpClient = new HttpClient(httpClientHandler);
             var response = await httpClient.SendAsync(httpRequest);
             response.EnsureSuccessStatusCode();

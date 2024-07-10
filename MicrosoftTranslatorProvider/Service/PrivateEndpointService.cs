@@ -91,7 +91,7 @@ namespace MicrosoftTranslatorProvider.Service
 				httpRequest.Headers.Add(header.Key, header.Value);
 			}
 
-            var httpClientHandler = ProxyHelper.GetHttpClientHandler(CredentialsManager.GetProxySettings());
+            var httpClientHandler = ProxyHelper.GetHttpClientHandler(CredentialsManager.GetProxySettings(), true);
             using var httpClient = new HttpClient(httpClientHandler);
             var response = httpClient.SendAsync(httpRequest).Result;
 			var responseBody = response.Content.ReadAsStringAsync().Result;
