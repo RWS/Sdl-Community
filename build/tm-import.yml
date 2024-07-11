@@ -24,7 +24,7 @@ variables:
   value : 'SDLTM.Import\SDLTM.Import\bin\Release\SDLTM.Import.sdlplugin'
 
 - name: StudioBranch
-  value : refs/heads/Release/18.0
+  value : refs/heads/Release/18.0.0
 
 - name: StudioProductIdentifier 
   value : Studio18
