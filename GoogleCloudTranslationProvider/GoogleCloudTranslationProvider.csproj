@@ -114,11 +114,11 @@
     <None Include="pluginpackage.manifest.xml" />
   </ItemGroup>
   <ItemGroup>
-  	<PackageReference Include="Google.Cloud.AutoML.V1" Version="2.4.0" />
-  	<PackageReference Include="Google.Cloud.Translate.V3" Version="2.4.0" />
+  	<PackageReference Include="Google.Cloud.AutoML.V1" Version="3.4.0" />
+  	<PackageReference Include="Google.Cloud.Translate.V3" Version="3.7.0" />
   	<PackageReference Include="LanguageMappingProvider" Version="1.0.92" />
 		<PackageReference Include="Sdl.Core.PluginFramework" Version="2.1.0" />
-		<PackageReference Include="Sdl.Core.PluginFramework.Build" Version="17.0.0" />
+		<PackageReference Include="Sdl.Core.PluginFramework.Build" Version="18.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\$this.Icon.ico" />

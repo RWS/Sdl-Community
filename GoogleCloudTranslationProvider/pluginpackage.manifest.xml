@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Google Cloud Translation Provider</PlugInName>
-  <Version>1.1.8.0</Version>
+  <Version>2.0.0.0</Version>
   <Description>Google Cloud Translation Provider</Description>
   <Author>Trados AppStore Team</Author>
   <RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />
 		<Include>
 			<File>Dapper.StrongName.dll</File>
-			<File>Google.Api.CommonProtos</File>
+			<File>Google.Api.CommonProtos.dll</File>
 			<File>Google.Api.Gax.dll</File>
+      <File>Grpc.Net.Client.dll</File>
+      <File>Grpc.Net.Common.dll</File>
 			<File>Google.Api.Gax.Grpc.dll</File>
 			<File>Google.Api.Gax.Grpc.GrpcCore.dll</File>
 			<File>Google.Api.Gax.Rest.dll</File>
