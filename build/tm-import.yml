@@ -21,7 +21,7 @@ variables:
   value : 'Release'
 
 - name: pathToPublish
-  value : 'SDLTM.Import\SDLTM.Import\bin\Release\SDLTM.Import.sdlplugin'
+  value : 'SDLTM.Import\SDLTM.Import\bin\Release\net48\SDLTM.Import.sdlplugin'
 
 - name: StudioBranch
   value : refs/heads/Release/18.0.0
