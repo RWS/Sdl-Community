@@ -23,6 +23,9 @@ variables:
 - name: pathToPublish
   value : 'SDLTM.Import\SDLTM.Import\bin\Release\net48\SDLTM.Import.sdlplugin'
 
+- name: outputpath
+  value: '$(Build.Repository.LocalPath)\SDLTM.Import\SDLTM.Import\bin\$(buildConfiguration)\net48'
+
 - name: StudioBranch
   value : refs/heads/Release/18.0.0
 
@@ -55,7 +58,7 @@ steps:
 
 - template: jobs/build-sdlplugin.yml
 
-- template: tasks/sign-artifacts/sign-plugin.yml
+- template: tasks/sign-artifacts/sign-single-artifact.yml
   parameters:
     fileToSign: '$(pathToPublish)'
 
