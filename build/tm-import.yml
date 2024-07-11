@@ -59,7 +59,5 @@ steps:
   parameters:
     fileToSign: '$(pathToPublish)'
 
-- template: tasks/sign-artifacts/pfx-cleanup.yml
-
 - template: jobs/publish-build-artifact-task.yml
 
