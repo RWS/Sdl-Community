@@ -1,0 +1,65 @@
+trigger:
+ branches:
+  include:
+    - master
+ paths:
+    include:
+      - SDLTM.Import/*
+pool:
+  vmImage : windows-latest
+
+variables:
+
+- group: 'RWS AppStore Keyvault'
+- name: solution
+  value : '**/SDLTM.Import.sln'
+
+- name: buildPlatform
+  value : 'Any CPU'
+
+- name: buildConfiguration
+  value : 'Release'
+
+- name: pathToPublish
+  value : 'SDLTM.Import\SDLTM.Import\bin\Release\SDLTM.Import.sdlplugin'
+
+- name: StudioBranch
+  value : refs/heads/Release/18.0
+
+- name: StudioProductIdentifier 
+  value : Studio18
+
+steps:
+- powershell: echo "##vso[task.setvariable variable=appdata]$env:appdata"
+
+- task: PowerShell@2
+  displayName: 'set x86path'
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "##vso[task.setvariable variable=x86path;]${Env:ProgramFiles(x86)}"
+
+- task: DownloadPipelineArtifact@2
+  displayName: 'Download Trados Studio Binaries Pipeline Artifact'
+  inputs:
+    buildType: 'specific'
+    project: 'TradosStudio'
+    definition: '1258'
+    artifactName: 'binaries'
+    buildVersionToDownload: 'latestFromBranch'
+    targetPath: '$(X86PATH)\Trados\Trados Studio\$(StudioProductIdentifier)'
+    runBranch: '$(StudioBranch)'
+    tags: 'Package'
+
+- template: tasks/sign-artifacts/prepare-plugin-signing.yml
+
+- template: jobs/build-sdlplugin.yml
+
+- template: tasks/sign-artifacts/sign-plugin.yml
+  parameters:
+    fileToSign: '$(pathToPublish)'
+
+- template: tasks/sign-artifacts/pfx-cleanup.yml
+
+- template: jobs/publish-build-artifact-task.yml
+
