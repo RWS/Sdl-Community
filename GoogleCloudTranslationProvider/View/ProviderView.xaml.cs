@@ -1,7 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-
-namespace GoogleCloudTranslationProvider.Views
+﻿namespace GoogleCloudTranslationProvider.Views
 {
 	/// <summary>
 	/// Interaction logic for ProviderView.xaml

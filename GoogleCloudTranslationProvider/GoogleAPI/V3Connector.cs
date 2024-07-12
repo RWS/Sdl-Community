@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Web.UI.WebControls;
 using Google.Api.Gax.ResourceNames;
 using Google.Cloud.AutoML.V1;
 using Google.Cloud.Translate.V3;
@@ -12,7 +11,6 @@ using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
 using NLog;
 using Sdl.Core.Globalization;
-using Sdl.LanguagePlatform.Core;
 
 namespace GoogleCloudTranslationProvider.GoogleAPI
 {
@@ -184,7 +182,8 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 			var locationName = LocationName.FromProjectLocation(_options.ProjectId, location ?? _options.ProjectLocation);
 			var glossariesRequest = new ListGlossariesRequest { ParentAsLocationName = locationName };
 
-			return _translationServiceClient.ListGlossaries(glossariesRequest).ToList();
+            var list = _translationServiceClient.ListGlossaries(glossariesRequest).ToList();
+			return list;
 		}
 
 		private TranslateTextGlossaryConfig SetGlossary(CultureInfo sourceLanguage, CultureInfo targetLanguage)
@@ -207,18 +206,24 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 				IgnoreCase = true
 			};
 		}
-		#endregion
 
-		#region AutoML
-		public List<Model> GetProjectCustomModels()
+        #endregion
+        #region AutoML
+        public List<Model> GetProjectCustomModels()
 		{
-			var request = new ListModelsRequest
-			{
-				ParentAsLocationName = new LocationName(_options.ProjectId, _options.ProjectLocation)
-			};
+            AutoMlClient client = AutoMlClient.Create();
+            LocationName parent = new LocationName(_options.ProjectId, _options.ProjectLocation);
 
-			// var dataset = AutoMlClient.Create().ListDatasets(new ListDatasetsRequest() {  ParentAsLocationName = new LocationName(_options.ProjectId, _options.ProjectLocation) } ).ToList();
-			return AutoMlClient.Create().ListModels(request).ToList();
+            // List models
+            var models = client.ListModels(parent);
+            //foreach (var model in models)
+            //{
+            //    Console.WriteLine($"Model name: {model.Name}");
+            //    Console.WriteLine($"Model id: {model.DatasetId}");
+            //    Console.WriteLine($"Model display name: {model.DisplayName}");
+            //}
+
+            return models.ToList();
 		}
 
 		private string SetCustomModel(CultureInfo sourceLanguage, CultureInfo targetLanguage)
