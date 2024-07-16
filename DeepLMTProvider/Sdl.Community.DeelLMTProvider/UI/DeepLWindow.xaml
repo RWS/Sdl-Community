@@ -7,6 +7,7 @@
         xmlns:uiHelpers="clr-namespace:Sdl.Community.DeepLMTProvider.UI.UiHelpers"
         xmlns:viewModel="clr-namespace:Sdl.Community.DeepLMTProvider.ViewModel"
         xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
+        xmlns:deepLmtProvider="clr-namespace:Sdl.Community.DeepLMTProvider"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewModel:DeepLWindowViewModel}"
         Icon="../Resources/deepLIcon.ico"
@@ -110,11 +111,9 @@
                        Text="Translation options"
                        Margin="10 0 0 5" />-->
 
-            <GroupBox Header="Translation options" Margin="10 0 10 5">
+            <GroupBox Header="Translation options"
+                      Margin="10 0 10 5">
                 <StackPanel Margin="0 5 0 5">
-                    <TextBlock Text="Before translation processing"
-                               Style="{StaticResource Sdl.TextBlock.SubtitleStyle}"
-                               Margin="10 0 0 5" />
 
                     <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
                               VerticalContentAlignment="Center"
@@ -122,8 +121,16 @@
                               IsChecked="{Binding SendPlainText}"
                               Content="Send source as plain text"
                               Margin="15,0,0,5" />
-                    
-                </StackPanel></GroupBox>
+                    <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+                              VerticalContentAlignment="Center"
+                              Margin="15,0,0,5"
+                              x:Name="PreserveFormatting"
+                              ToolTip="{x:Static deepLmtProvider:PluginResources.PreserveFormatting_Tooltip}"
+                              IsChecked="{Binding PreserveFormatting}"
+                              Content="Preserve formatting" />
+
+                </StackPanel>
+            </GroupBox>
         </StackPanel>
 
         <DataGrid ItemsSource="{Binding LanguagePairOptions, Mode=TwoWay}"

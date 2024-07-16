@@ -94,7 +94,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
             return !string.IsNullOrEmpty(supportedSourceLanguage) && !string.IsNullOrEmpty(supportedTargetLanguage);
         }
 
-        public string Translate(LanguagePair languageDirection, string sourceText, Formality formality, string glossaryId)
+        public string Translate(LanguagePair languageDirection, string sourceText, Formality formality, string glossaryId, bool preserveFormatting = true)
         {
             formality = GetFormality(languageDirection, formality);
 
@@ -112,7 +112,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
                     Formality = formality.ToString().ToLower(),
                     GlossaryId = glossaryId,
                     TagHandling = "xml",
-                    PreserveFormatting = true
+                    PreserveFormatting = preserveFormatting
                 };
                 var content = new StringContent(JsonConvert.SerializeObject(
                     deeplRequestParameters,

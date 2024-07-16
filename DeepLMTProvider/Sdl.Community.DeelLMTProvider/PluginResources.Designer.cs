@@ -203,6 +203,19 @@ namespace Sdl.Community.DeepLMTProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sets whether the translation engine should respect the original formatting, even if it would usually correct some aspects.
+        ///
+        ///The formatting aspects affected by this setting include:
+        ///  Punctuation at the beginning and end of the sentence
+        ///  Upper/lower case at the beginning of the sentence.
+        /// </summary>
+        public static string PreserveFormatting_Tooltip {
+            get {
+                return ResourceManager.GetString("PreserveFormatting_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Question {
