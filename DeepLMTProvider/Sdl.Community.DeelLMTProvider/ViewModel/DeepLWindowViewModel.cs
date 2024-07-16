@@ -214,7 +214,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             Options.SendPlainText = SendPlainText;
             Options.ApiKey = ApiKey;
-            Options.LanguagePairOptions = new List<LanguagePairOptions>(LanguagePairOptions);
+            Options.LanguagePairOptions = [..LanguagePairOptions];
 
             DetachEvents();
 

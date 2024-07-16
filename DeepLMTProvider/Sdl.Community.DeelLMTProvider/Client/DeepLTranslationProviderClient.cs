@@ -104,17 +104,18 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
             try
             {
+                var deeplRequestParameters = new DeeplRequestParameters
+                {
+                    Text = [sourceText],
+                    SourceLanguage = sourceLanguage,
+                    TargetLanguage = targetLanguage,
+                    Formality = formality.ToString().ToLower(),
+                    GlossaryId = glossaryId,
+                    TagHandling = "xml",
+                    PreserveFormatting = true
+                };
                 var content = new StringContent(JsonConvert.SerializeObject(
-                    new DeeplRequestParameters
-                    {
-                        Text = new List<string> { sourceText },
-                        SourceLanguage = sourceLanguage,
-                        TargetLanguage = targetLanguage,
-                        Formality = formality.ToString().ToLower(),
-                        GlossaryId = glossaryId,
-                        TagHandling = "xml",
-                        PreserveFormatting = true
-                    },
+                    deeplRequestParameters,
                     new JsonSerializerSettings
                     {
                         NullValueHandling = NullValueHandling.Ignore,
@@ -165,16 +166,6 @@ namespace Sdl.Community.DeepLMTProvider.Client
             response.EnsureSuccessStatusCode();
 
             return response.Content?.ReadAsStringAsync().Result;
-        }
-
-        private static bool IsLanguageCompatible(CultureInfo targetLanguage)
-        {
-            if (!SupportedTargetLanguagesAndFormalities.TryGetValue(targetLanguage.ToString().ToUpper(), out var supportsFormality))
-            {
-                SupportedTargetLanguagesAndFormalities.TryGetValue(targetLanguage.TwoLetterISOLanguageName.ToUpper(), out supportsFormality);
-            }
-
-            return supportsFormality;
         }
 
         private static HttpResponseMessage IsValidApiKey(string apiKey)
