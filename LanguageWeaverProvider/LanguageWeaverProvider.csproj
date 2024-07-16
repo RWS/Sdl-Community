@@ -176,7 +176,7 @@
 		<PackageReference Include="Sdl.Core.PluginFramework.Build">
 			<Version>18.0.1</Version>
 		</PackageReference>
-		<PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
+		<PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
