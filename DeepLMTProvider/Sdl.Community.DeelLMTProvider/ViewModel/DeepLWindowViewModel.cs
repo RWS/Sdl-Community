@@ -23,6 +23,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private string _apiKey;
         private string _apiKeyValidationMessage;
         private ObservableCollection<LanguagePairOptions> _languagePairSettings = new();
+        private bool _preserveFormatting;
         private bool _removeLockedContent;
         private bool _sendPlainText;
 
@@ -51,6 +52,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             IsTellMeAction = false;
 
             SendPlainText = deepLTranslationOptions.SendPlainText;
+            PreserveFormatting = deepLTranslationOptions.PreserveFormatting;
             Options = deepLTranslationOptions;
 
             PasswordChangedTimer.Elapsed += OnPasswordChanged;
@@ -94,6 +96,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         public ICommand OkCommand => new ParameterlessCommand(Save, () => ApiKeyValidationMessage == null);
 
         public DeepLTranslationOptions Options { get; set; }
+
+        public bool PreserveFormatting
+        {
+            get => _preserveFormatting;
+            set => SetField(ref _preserveFormatting, value);
+        }
 
         public bool SendPlainText
         {
@@ -193,8 +201,14 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             }
         }
 
+        private void DetachEvents()
+        {
+            PasswordChangedTimer.Elapsed -= OnPasswordChanged;
+            DeepLTranslationProviderClient.ApiKeyChanged += Dispatcher_LoadLanguagePairSettings;
+        }
+
         private void Dispatcher_LoadLanguagePairSettings() =>
-            Application.Current.Dispatcher.Invoke(LoadLanguagePairSettings);
+                    Application.Current.Dispatcher.Invoke(LoadLanguagePairSettings);
 
         private void HandleError(string message, [CallerMemberName] string failingMethod = null)
         {
@@ -214,7 +228,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             Options.SendPlainText = SendPlainText;
             Options.ApiKey = ApiKey;
-            Options.LanguagePairOptions = new List<LanguagePairOptions>(LanguagePairOptions);
+            Options.LanguagePairOptions = [.. LanguagePairOptions];
+            Options.PreserveFormatting = PreserveFormatting;
 
             DetachEvents();
 
@@ -222,12 +237,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             {
                 AskUserToRestart();
             }
-        }
-
-        private void DetachEvents()
-        {
-            PasswordChangedTimer.Elapsed -= OnPasswordChanged;
-            DeepLTranslationProviderClient.ApiKeyChanged += Dispatcher_LoadLanguagePairSettings;
         }
 
         private void SetApiKeyValidityLabel()
