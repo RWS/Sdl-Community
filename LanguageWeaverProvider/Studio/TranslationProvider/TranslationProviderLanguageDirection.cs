@@ -95,7 +95,7 @@ namespace LanguageWeaverProvider
 			var searchResults = new SearchResults[mask.Length];
 			var segmentsInput = translationUnits.Select(x => x.SourceSegment).ToList();
 			var translatableSegments = ExtractTranslatableSegments(translationUnits, mask, searchResults, segmentsInput);
-   
+
 			if (!translatableSegments.Any())
 			{
 				ManageBatchTaskWindow();
@@ -124,7 +124,8 @@ namespace LanguageWeaverProvider
 				translatedSegments = ModifySegmentsOnLookup(_postLookupEditor, translatedSegments);
 			}
 
-			var fileName = _batchTaskWindow is null ? string.Empty : System.IO.Path.GetFileName(translationUnits.First().DocumentProperties.LastOpenedAsPath);
+			var fileName = _batchTaskWindow is null ? string.Empty : GetFilePath(translationUnits);
+
 			var translatedSegmentsIndex = 0;
 			for (var i = 0; i < mask.Length; i++)
 			{
@@ -145,6 +146,12 @@ namespace LanguageWeaverProvider
 
 			ManageBatchTaskWindow();
 			return searchResults;
+		}
+
+		private string GetFilePath(IEnumerable<TranslationUnit> translationUnits)
+		{
+			var translationUnit = translationUnits?.FirstOrDefault(a => a.DocumentProperties?.LastOpenedAsPath != null);
+			return translationUnit?.DocumentProperties?.LastOpenedAsPath;
 		}
 
 		private List<Segment> ModifySegmentsOnLookup(LWSegmentEditor segmentEditor, List<Segment> segments)
@@ -290,7 +297,11 @@ namespace LanguageWeaverProvider
 				AutosendFeedback = _translationOptions.ProviderSettings.AutosendFeedback
 			};
 
-			var existingSegment = ApplicationInitializer.RatedSegments.FirstOrDefault(x => x.SegmentId.Id.Equals(ratedSegment.SegmentId.Id) && x.FileName.Equals(fileName) && x.ModelName.Equals(ratedSegment.ModelName));
+			var existingSegment = ApplicationInitializer.RatedSegments.FirstOrDefault(x => 
+				x.SegmentId.Id.Equals(ratedSegment.SegmentId.Id) &&
+				x.FileName.Equals(fileName) && 
+				x.ModelName.Equals(ratedSegment.ModelName));
+
 			if (existingSegment is null)
 			{
 				ApplicationInitializer.RatedSegments.Add(ratedSegment);
