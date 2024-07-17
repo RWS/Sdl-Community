@@ -26,6 +26,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private bool _preserveFormatting;
         private bool _removeLockedContent;
         private bool _sendPlainText;
+        private bool _tagHandling;
+        private TagFormat _tagType;
 
         public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, IMessageService messageService)
         {
@@ -38,6 +40,9 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             LanguagePairs = deepLTranslationOptions.LanguagePairOptions.Select(lpo => lpo.LanguagePair).ToArray();
             SendPlainText = deepLTranslationOptions.SendPlainText;
+            TagType = deepLTranslationOptions.TagHandling;
+            PreserveFormatting = deepLTranslationOptions.PreserveFormatting;
+
             Options = deepLTranslationOptions;
 
             SetSettingsOnWindow(null);
@@ -53,6 +58,8 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             SendPlainText = deepLTranslationOptions.SendPlainText;
             PreserveFormatting = deepLTranslationOptions.PreserveFormatting;
+            TagType = deepLTranslationOptions.TagHandling;
+
             Options = deepLTranslationOptions;
 
             PasswordChangedTimer.Elapsed += OnPasswordChanged;
@@ -107,6 +114,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         {
             get => _sendPlainText;
             set => SetField(ref _sendPlainText, value);
+        }
+
+        public TagFormat TagType
+        {
+            get => _tagType;
+            set => SetField(ref _tagType, value);
         }
 
         public string Title { get; set; } = "DeepL Translation Provider";
@@ -230,6 +243,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             Options.ApiKey = ApiKey;
             Options.LanguagePairOptions = [.. LanguagePairOptions];
             Options.PreserveFormatting = PreserveFormatting;
+            Options.TagHandling = TagType;
 
             DetachEvents();
 

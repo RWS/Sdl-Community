@@ -29,8 +29,9 @@ namespace Sdl.Community.DeepLMTProvider.Model
             LanguagesSupported = JsonConvert
                 .DeserializeObject<Dictionary<string, string>>(stateObject?["LanguagesSupported"]?.ToString());
 
-            SendPlainTextParameter = stateObject?["SendPlainTextParameter"]?.ToString();
-            PreserveFormattingParameter = stateObject?["PreserveFormattingParameter"]?.ToString();
+            SendPlainTextParameter = stateObject?[nameof(SendPlainTextParameter)]?.ToString();
+            PreserveFormattingParameter = stateObject?[nameof(PreserveFormattingParameter)]?.ToString();
+            TagHandlingParameter = stateObject?[nameof(TagHandlingParameter)]?.ToString();
 
             LanguagePairOptions =
                 JsonConvert.DeserializeObject<List<LanguagePairOptions>>(stateObject?["LanguagePairOptions"]?.ToString());
@@ -59,6 +60,15 @@ namespace Sdl.Community.DeepLMTProvider.Model
         }
 
         public string SendPlainTextParameter { get; set; }
+
+        [JsonIgnore]
+        public TagFormat TagHandling
+        {
+            get => Enum.TryParse<TagFormat>(TagHandlingParameter, out var tagHandling) ? tagHandling : TagFormat.None;
+            set => TagHandlingParameter = value.ToString();
+        }
+
+        public string TagHandlingParameter { get; set; }
 
         [JsonIgnore]
         public Uri Uri => _uriBuilder.Uri;
