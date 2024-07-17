@@ -94,7 +94,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
             return !string.IsNullOrEmpty(supportedSourceLanguage) && !string.IsNullOrEmpty(supportedTargetLanguage);
         }
 
-        public string Translate(LanguagePair languageDirection, string sourceText, Formality formality, string glossaryId, bool preserveFormatting = true)
+        public string Translate(LanguagePair languageDirection, string sourceText, Formality formality,
+            string glossaryId, TagFormat tagHandling, bool preserveFormatting = true)
         {
             formality = GetFormality(languageDirection, formality);
 
@@ -111,16 +112,19 @@ namespace Sdl.Community.DeepLMTProvider.Client
                     TargetLanguage = targetLanguage,
                     Formality = formality.ToString().ToLower(),
                     GlossaryId = glossaryId,
-                    TagHandling = "xml",
-                    PreserveFormatting = preserveFormatting
+                    PreserveFormatting = preserveFormatting,
+                    TagHandling = tagHandling == TagFormat.None ? null : tagHandling.ToString().ToLower()
                 };
-                var content = new StringContent(JsonConvert.SerializeObject(
+
+                var requestJson = JsonConvert.SerializeObject(
                     deeplRequestParameters,
                     new JsonSerializerSettings
                     {
                         NullValueHandling = NullValueHandling.Ignore,
                         ContractResolver = new CamelCasePropertyNamesContractResolver()
-                    }), Encoding.UTF8, "application/json");
+                    });
+
+                var content = new StringContent(requestJson, Encoding.UTF8, "application/json");
 
                 var request = new HttpRequestMessage
                 {

@@ -8,6 +8,7 @@
         xmlns:viewModel="clr-namespace:Sdl.Community.DeepLMTProvider.ViewModel"
         xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
         xmlns:deepLmtProvider="clr-namespace:Sdl.Community.DeepLMTProvider"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewModel:DeepLWindowViewModel}"
         Icon="../Resources/deepLIcon.ico"
@@ -32,6 +33,14 @@
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
+            <ObjectDataProvider MethodName="GetValues"
+                                ObjectType="{x:Type model:TagFormat}"
+                                x:Key="TagTypeProvider">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="model:TagFormat" />
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
 
             <Style TargetType="Image">
                 <Setter Property="RenderOptions.BitmapScalingMode"
@@ -113,22 +122,35 @@
 
             <GroupBox Header="Translation options"
                       Margin="10 0 10 5">
-                <StackPanel Margin="0 5 0 5">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Margin="0 5 0 5">
 
-                    <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-                              VerticalContentAlignment="Center"
-                              Name="PlainText"
-                              IsChecked="{Binding SendPlainText}"
-                              Content="Send source as plain text"
-                              Margin="15,0,0,5" />
-                    <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-                              VerticalContentAlignment="Center"
-                              Margin="15,0,0,5"
-                              x:Name="PreserveFormatting"
-                              ToolTip="{x:Static deepLmtProvider:PluginResources.PreserveFormatting_Tooltip}"
-                              IsChecked="{Binding PreserveFormatting}"
-                              Content="Preserve formatting" />
+                        <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+                                  VerticalContentAlignment="Center"
+                                  Name="PlainText"
+                                  IsChecked="{Binding SendPlainText}"
+                                  Content="Send source as plain text"
+                                  Margin="15,0,0,5" />
+                        <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+                                  VerticalContentAlignment="Center"
+                                  Margin="15,0,0,5"
+                                  x:Name="PreserveFormatting"
+                                  ToolTip="{x:Static deepLmtProvider:PluginResources.PreserveFormatting_Tooltip}"
+                                  IsChecked="{Binding PreserveFormatting}"
+                                  Content="Preserve formatting" />
 
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Tag handling" Margin="15 0 0 5"/>
+                            <ComboBox Margin="5 0 0 0"
+                                      Height="20"
+                                      SelectedItem="{Binding TagType}"
+                                      ItemsSource="{Binding Source={StaticResource TagTypeProvider}}" />
+                        </StackPanel>
+
+                    </StackPanel>
+                    <StackPanel Margin="5 5 0 5">
+
+                    </StackPanel>
                 </StackPanel>
             </GroupBox>
         </StackPanel>
