@@ -54,7 +54,7 @@ namespace Sdl.Community.DeepLMTProvider.Service
 
         private void EditGlossaryWindow_ImportEntriesRequested()
         {
-            GlossaryBrowserService.OpenImportEntriesDialog(out var glossariesAndDelimiters);
+            if (!GlossaryBrowserService.OpenImportEntriesDialog(out var glossariesAndDelimiters)) return;
 
             foreach (var glossaryAndDelimiter in glossariesAndDelimiters)
             {
