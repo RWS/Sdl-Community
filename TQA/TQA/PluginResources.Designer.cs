@@ -345,9 +345,9 @@ namespace Sdl.Community.TQA {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] RWS_5_401_F002_MQM_QE_Form_XXX_XXXXXX_XXX {
+        public static byte[] RWS_5_401_F002_MQM_QE_Form_CLIENT_MMM_YY_LL {
             get {
-                object obj = ResourceManager.GetObject("RWS_5_401_F002_MQM_QE_Form_XXX_XXXXXX_XXX", resourceCulture);
+                object obj = ResourceManager.GetObject("RWS-5-401-F002-MQM QE Form-CLIENT_MMM_YY_LL", resourceCulture);
                 return ((byte[])(obj));
             }
         }
