@@ -1,16 +1,23 @@
-﻿namespace Sdl.Community.DeepLMTProvider.Model
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+
+namespace Sdl.Community.DeepLMTProvider.Model
 {
-    public class GlossaryEntry : ViewModel.ViewModel
+    public class GlossaryEntry : ViewModel.ViewModel, IDataErrorInfo
     {
         private string _sourceTerm;
         private string _targetTerm;
 
+        [Required(ErrorMessage = "Source term required.")]
         public string SourceTerm
         {
             get => _sourceTerm;
             set => SetField(ref _sourceTerm, value);
         }
 
+        [Required(ErrorMessage = "Target term required.")]
         public string TargetTerm
         {
             get => _targetTerm;
@@ -22,7 +29,10 @@
             SourceTerm = "";
             TargetTerm = "";
         }
-
+        public bool IsDuplicate(GlossaryEntry other)
+        {
+            return SourceTerm == other.SourceTerm && TargetTerm == other.TargetTerm;
+        }
         public bool IsDummyTerm() => SourceTerm == "new entry" && TargetTerm == "new entry";
 
         public bool IsEmpty() => string.IsNullOrWhiteSpace(SourceTerm) && string.IsNullOrWhiteSpace(TargetTerm);
@@ -35,6 +45,23 @@
         {
             SourceTerm = SourceTerm.Trim();
             TargetTerm = TargetTerm.Trim();
+        }
+
+        public string Error => null;
+
+        public string this[string columnName]
+        {
+            get
+            {
+                var validationContext = new ValidationContext(this) { MemberName = columnName };
+                var results = new List<ValidationResult>();
+                var isValid = Validator.TryValidateProperty(
+                    GetType().GetProperty(columnName).GetValue(this),
+                    validationContext,
+                    results
+                );
+                return results.Count > 0 ? results.First().ErrorMessage : null;
+            }
         }
     }
 }

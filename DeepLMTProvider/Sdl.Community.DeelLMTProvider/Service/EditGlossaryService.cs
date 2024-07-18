@@ -9,33 +9,27 @@ using System.Runtime.CompilerServices;
 
 namespace Sdl.Community.DeepLMTProvider.Service
 {
-    public class EditGlossaryService : IEditGlossaryService
+    public class EditGlossaryService(
+        IGlossaryReaderWriterService glossaryReaderWriterService,
+        IUserInteractionService glossaryBrowserService,
+        IMessageService messageService)
+        : IEditGlossaryService
     {
-        public EditGlossaryService(
-            IGlossaryReaderWriterService glossaryReaderWriterService,
-            IUserInteractionService glossaryBrowserService,
-            IMessageService messageService)
-        {
-            GlossaryReaderWriterService = glossaryReaderWriterService;
-            GlossaryBrowserService = glossaryBrowserService;
-            MessageService = messageService;
-        }
-
         public List<GlossaryEntry> GlossaryEntries
         {
             get
             {
                 var entries = EditGlossaryWindow.GlossaryEntries;
                 entries.ForEach(e => e.Trim());
-                return new(entries);
+                return [..entries];
             }
         }
 
         public string GlossaryName => EditGlossaryWindow.GlossaryName.Trim();
         private EditGlossaryWindow EditGlossaryWindow { get; set; }
-        private IUserInteractionService GlossaryBrowserService { get; }
-        private IGlossaryReaderWriterService GlossaryReaderWriterService { get; }
-        private IMessageService MessageService { get; }
+        private IUserInteractionService GlossaryBrowserService { get; } = glossaryBrowserService;
+        private IGlossaryReaderWriterService GlossaryReaderWriterService { get; } = glossaryReaderWriterService;
+        private IMessageService MessageService { get; } = messageService;
 
         public bool EditGlossary(List<GlossaryEntry> glossaryEntries, string glossaryName)
         {

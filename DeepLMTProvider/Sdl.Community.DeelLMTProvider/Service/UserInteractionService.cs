@@ -54,7 +54,7 @@ namespace Sdl.Community.DeepLMTProvider.Service
             var importEntriesWindow = new ImportEntriesWindow(glossaryDelimiters);
             glossaryDelimiterItems = importEntriesWindow.Glossaries;
 
-            return !(importEntriesWindow.ShowDialog() ?? false);
+            return importEntriesWindow.ShowDialog() ?? false;
         }
 
         public bool OpenNewGlossaryDialog(List<string> existingGlossaryNames, List<string> supportedLanguages, out GlossaryItem glossary)

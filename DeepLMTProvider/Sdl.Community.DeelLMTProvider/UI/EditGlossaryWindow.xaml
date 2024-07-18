@@ -8,7 +8,7 @@
         xmlns:uiHelpers="clr-namespace:Sdl.Community.DeepLMTProvider.UI.UiHelpers"
         mc:Ignorable="d"
         MaxWidth="600"
-        MaxHeight="900"
+        MaxHeight="600"
         MinHeight="600"
         Icon="../Resources/deepL_logo_new.png"
         WindowStartupLocation="CenterScreen"
@@ -111,6 +111,11 @@
                   Style="{StaticResource Sdl.DataGrid.GenericStyle}"
                   IsReadOnly="False"
                   ItemsSource="{Binding GlossaryEntries, ElementName=EditGlossary_Window}">
+            <DataGrid.Resources>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="ToolTip" Value="{Binding (Validation.Errors).CurrentItem.ErrorContent, RelativeSource={RelativeSource Self}}" />
+                </Style>
+            </DataGrid.Resources>
 
             <DataGrid.InputBindings>
                 <KeyBinding Key="Enter"
@@ -124,7 +129,7 @@
                                         Header="Source terms">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <controls:EditableTextBlock Text="{Binding SourceTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            <controls:EditableTextBlock Text="{Binding SourceTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                                         IsEditing="{Binding IsEditing, ElementName=EditGlossary_Window}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -133,7 +138,7 @@
                                         Header="Target terms">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <controls:EditableTextBlock Text="{Binding TargetTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            <controls:EditableTextBlock Text="{Binding TargetTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                                         IsEditing="{Binding IsEditing, ElementName=EditGlossary_Window}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -155,6 +160,7 @@
             <Button DockPanel.Dock="Right"
                     Margin="0 5 0 0"
                     Name="Apply_Button"
+                    ToolTipService.ShowOnDisabled="True"
                     IsDefault="True"
                     Click="ApplyButton_Click"
                     Style="{StaticResource Sdl.Button.PrimaryStyle}"

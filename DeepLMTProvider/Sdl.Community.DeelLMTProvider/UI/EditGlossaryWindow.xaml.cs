@@ -2,6 +2,7 @@
 using Sdl.Community.DeepLMTProvider.Extensions;
 using Sdl.Community.DeepLMTProvider.Helpers;
 using Sdl.Community.DeepLMTProvider.Model;
+using Sdl.Community.DeepLMTProvider.UI.Converters;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,6 +17,7 @@ using System.Windows.Input;
 namespace Sdl.Community.DeepLMTProvider.UI
 {
     public partial class EditGlossaryWindow : INotifyPropertyChanged
+
     {
         private string _filterQuery;
         private ObservableCollection<GlossaryEntry> _glossaryEntries;
@@ -29,6 +31,9 @@ namespace Sdl.Community.DeepLMTProvider.UI
             GlossaryEntries = new ObservableCollection<GlossaryEntry>(glossaryEntries);
 
             InitializeComponent();
+
+            //var duplicateRowHighlightConverter = (DuplicateRowHighlightConverter)Resources["DuplicateRowHighlightConverter"];
+            //duplicateRowHighlightConverter.GlossaryEntries = GlossaryEntries;
         }
 
         public event Action ImportEntriesRequested;
@@ -214,12 +219,16 @@ namespace Sdl.Community.DeepLMTProvider.UI
                 ((GlossaryEntry)e.NewItems[0]).PropertyChanged +=
                     (_, _) => GlossaryEntries_CollectionChanged(null, null);
 
-            var termsToBeRemoved = GlossaryEntries.Where(glossaryEntry =>
-                glossaryEntry.IsInvalid()).ToList();
+            var termsToBeRemoved = GlossaryEntries.Where(glossaryEntry => glossaryEntry.IsInvalid()).ToList();
 
-            if (Apply_Button is not null)
-                Apply_Button.IsEnabled = !termsToBeRemoved.Any() && !GlossaryEntries
-                    .GetDuplicates().Any() && GlossaryEntries.Any();
+            var duplicates = GlossaryEntries.GetDuplicates();
+
+            if (Apply_Button is null) return;
+
+            Apply_Button.ToolTip = "";
+            Apply_Button.IsEnabled = !termsToBeRemoved.Any() && !duplicates.Any() && GlossaryEntries.Any();
+
+            if (!Apply_Button.IsEnabled) Apply_Button.ToolTip = "Invalid state";
         }
 
         private void ImportButton_Click(object sender, RoutedEventArgs e) => ImportEntriesRequested?.Invoke();
