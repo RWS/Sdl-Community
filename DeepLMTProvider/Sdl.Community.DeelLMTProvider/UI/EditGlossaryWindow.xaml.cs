@@ -2,7 +2,6 @@
 using Sdl.Community.DeepLMTProvider.Extensions;
 using Sdl.Community.DeepLMTProvider.Helpers;
 using Sdl.Community.DeepLMTProvider.Model;
-using Sdl.Community.DeepLMTProvider.UI.Converters;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,6 +9,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -31,9 +31,6 @@ namespace Sdl.Community.DeepLMTProvider.UI
             GlossaryEntries = new ObservableCollection<GlossaryEntry>(glossaryEntries);
 
             InitializeComponent();
-
-            //var duplicateRowHighlightConverter = (DuplicateRowHighlightConverter)Resources["DuplicateRowHighlightConverter"];
-            //duplicateRowHighlightConverter.GlossaryEntries = GlossaryEntries;
         }
 
         public event Action ImportEntriesRequested;
@@ -91,6 +88,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
         }
 
         public ICommand KeyboardCommand => new CommandWithParameter(ExecuteKeyboardShortcut);
+        public ICommand ValidateCommand => new ParameterlessCommand(ValidateEntries);
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
@@ -232,5 +230,37 @@ namespace Sdl.Community.DeepLMTProvider.UI
         }
 
         private void ImportButton_Click(object sender, RoutedEventArgs e) => ImportEntriesRequested?.Invoke();
+
+        private void TryRefreshDataGrid()
+        {
+            Task.Run(() =>
+            {
+                while (true)
+                {
+                    if (Entries_DataGrid.IsInEditMode()) continue;
+                    Entries_DataGrid.Dispatcher.Invoke(() => Entries_DataGrid.Items.Refresh());
+                    return;
+                }
+            });
+        }
+
+        private void ValidateEntries()
+        {
+            var duplicates = GlossaryEntries
+                .GroupBy(e => new { e.SourceTerm, e.TargetTerm })
+                .Where(g => g.Count() > 1)
+                .SelectMany(g => g);
+
+            foreach (var entry in GlossaryEntries)
+            {
+                entry.Validate();
+                if (duplicates.Contains(entry))
+                {
+                    entry.AddValidationError("Duplicate", "Duplicate entry found.");
+                }
+            }
+
+            TryRefreshDataGrid();
+        }
     }
 }

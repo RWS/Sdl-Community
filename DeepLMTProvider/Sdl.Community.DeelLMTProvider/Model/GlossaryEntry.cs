@@ -1,16 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace Sdl.Community.DeepLMTProvider.Model
 {
     public class GlossaryEntry : ViewModel.ViewModel, IDataErrorInfo
     {
+        private readonly Dictionary<string, string> _validationErrors = new();
         private string _sourceTerm;
         private string _targetTerm;
 
-        public string Error => null;
+        public string Error => _validationErrors.Count > 0 ? string.Join("\n", _validationErrors.Values) : null;
+
+        public bool HasErrors => _validationErrors.Count > 0;
 
         [Required(ErrorMessage = "Source term required.")]
         public string SourceTerm
@@ -19,7 +21,6 @@ namespace Sdl.Community.DeepLMTProvider.Model
             set
             {
                 SetField(ref _sourceTerm, value);
-
             }
         }
 
@@ -34,16 +35,16 @@ namespace Sdl.Community.DeepLMTProvider.Model
         {
             get
             {
-                var validationContext = new ValidationContext(this) { MemberName = columnName };
-                var results = new List<ValidationResult>();
-                var isValid = Validator.TryValidateProperty(
-                    GetType().GetProperty(columnName).GetValue(this),
-                    validationContext,
-                    results
-                );
-
-                return results.Count > 0 ? results.First().ErrorMessage : null;
+                _validationErrors.TryGetValue(columnName, out var error);
+                return error;
             }
+        }
+
+        public void AddValidationError(string propertyName, string errorMessage)
+        {
+            _validationErrors[propertyName] = errorMessage;
+            OnPropertyChanged(nameof(HasErrors));
+            OnPropertyChanged(nameof(Error));
         }
 
         public void CleanTerm()
@@ -69,6 +70,28 @@ namespace Sdl.Community.DeepLMTProvider.Model
         {
             SourceTerm = SourceTerm.Trim();
             TargetTerm = TargetTerm.Trim();
+        }
+
+        public bool Validate()
+        {
+            _validationErrors.Clear();
+            var context = new ValidationContext(this, null, null);
+            var results = new List<ValidationResult>();
+
+            var isValid = Validator.TryValidateObject(this, context, results, true);
+
+            foreach (var result in results)
+            {
+                foreach (var memberName in result.MemberNames)
+                {
+                    _validationErrors[memberName] = result.ErrorMessage;
+                }
+            }
+
+            OnPropertyChanged(nameof(HasErrors));
+            OnPropertyChanged(nameof(Error));
+
+            return isValid;
         }
     }
 }

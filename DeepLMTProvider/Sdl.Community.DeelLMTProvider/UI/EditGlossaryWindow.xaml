@@ -97,7 +97,7 @@
 
             <controls:ClearButtonTextBox x:Name="ClearButtonTextBox"
                                          Text="{Binding FilterQuery, ElementName=EditGlossary_Window, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                         HorizontalAlignment="Right"/>
+                                         HorizontalAlignment="Right" />
         </DockPanel>
 
         <DataGrid Grid.Row="2"
@@ -111,11 +111,32 @@
                   Style="{StaticResource Sdl.DataGrid.GenericStyle}"
                   IsReadOnly="False"
                   ItemsSource="{Binding GlossaryEntries, ElementName=EditGlossary_Window}">
-            <DataGrid.Resources>
+            <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
-                    <Setter Property="ToolTip" Value="{Binding (Validation.Errors).CurrentItem.ErrorContent, RelativeSource={RelativeSource Self}}" />
+                    <Setter Property="DataContext"
+                            Value="{Binding}" />
+                    <Style.Triggers>
+                        <!-- Highlight duplicate rows -->
+                        <DataTrigger Binding="{Binding HasErrors}"
+                                     Value="True">
+                            <Setter Property="Background"
+                                    Value="Yellow" />
+                        </DataTrigger>
+                        <!-- Show tooltips for validation errors -->
+                        <Trigger Property="Validation.HasError"
+                                 Value="True">
+                            <Setter Property="ToolTip"
+                                    Value="{Binding Error}" />
+                            <Setter Property="Background"
+                                    Value="LightPink" />
+                            <Setter Property="BorderBrush"
+                                    Value="Red" />
+                            <Setter Property="BorderThickness"
+                                    Value="2" />
+                        </Trigger>
+                    </Style.Triggers>
                 </Style>
-            </DataGrid.Resources>
+            </DataGrid.RowStyle>
 
             <DataGrid.InputBindings>
                 <KeyBinding Key="Enter"
@@ -129,7 +150,7 @@
                                         Header="Source terms">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <controls:EditableTextBlock Text="{Binding SourceTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                            <controls:EditableTextBlock Text="{Binding SourceTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True, ValidatesOnDataErrors=True}"
                                                         IsEditing="{Binding IsEditing, ElementName=EditGlossary_Window}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -138,7 +159,7 @@
                                         Header="Target terms">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <controls:EditableTextBlock Text="{Binding TargetTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                            <controls:EditableTextBlock Text="{Binding TargetTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True, ValidatesOnDataErrors=True}"
                                                         IsEditing="{Binding IsEditing, ElementName=EditGlossary_Window}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -180,8 +201,17 @@
                     VerticalAlignment="Bottom"
                     HorizontalAlignment="Center"
                     ToolTip="Import entries from another glossary (Alt+Q)">
-                <Image Source="../Resources/deepl_Importentries.ico" Height="16"/>
+                <Image Source="../Resources/deepl_Importentries.ico"
+                       Height="16" />
             </Button>
+            <Button DockPanel.Dock="Right"
+                    x:Name="ValidateButton"
+                    Command="{Binding ValidateCommand, ElementName=EditGlossary_Window}"
+                    ToolTipService.ShowOnDisabled="True"
+                    IsDefault="True"
+                    Margin="0 5 5 0"
+                    Style="{StaticResource Sdl.Button.GeneralStyle}"
+                    Content="Validate data" />
         </DockPanel>
     </Grid>
 </Window>
