@@ -78,6 +78,8 @@ namespace Sdl.Community.DeepLMTProvider.UI
                 ApplyEditModeUiChanges(value);
 
                 if (value) return;
+
+                ValidateEntries();
                 foreach (var glossaryEntry in GlossaryEntries)
                 {
                     if (!glossaryEntry.IsEmpty()) continue;
@@ -135,7 +137,11 @@ namespace Sdl.Community.DeepLMTProvider.UI
             Close();
         }
 
-        private void DeleteEntry(object glossaryEntry) => GlossaryEntries.Remove((GlossaryEntry)glossaryEntry);
+        private void DeleteEntry(object glossaryEntry)
+        {
+            GlossaryEntries.Remove((GlossaryEntry)glossaryEntry);
+            ValidateEntries();
+        }
 
         private void Entries_DataGrid_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -223,20 +229,26 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
             if (Apply_Button is null) return;
 
-            Apply_Button.ToolTip = "";
+            Apply_Button.ToolTip = null;
             Apply_Button.IsEnabled = !termsToBeRemoved.Any() && !duplicates.Any() && GlossaryEntries.Any();
 
-            if (!Apply_Button.IsEnabled) Apply_Button.ToolTip = "Invalid state";
+            if (!Apply_Button.IsEnabled) Apply_Button.ToolTip = "Invalid state. Cannot apply to glossary because DeepL would delete it on save.";
         }
 
-        private void ImportButton_Click(object sender, RoutedEventArgs e) => ImportEntriesRequested?.Invoke();
+        private void ImportButton_Click(object sender, RoutedEventArgs e)
+        {
+            ImportEntriesRequested?.Invoke();
+            ValidateEntries();
+        }
 
         private void TryRefreshDataGrid()
         {
             Task.Run(() =>
             {
-                while (true)
+                var count = 0;
+                while (count < 10)
                 {
+                    count++;
                     if (Entries_DataGrid.IsInEditMode()) continue;
                     Entries_DataGrid.Dispatcher.Invoke(() => Entries_DataGrid.Items.Refresh());
                     return;
@@ -246,10 +258,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
 
         private void ValidateEntries()
         {
-            var duplicates = GlossaryEntries
-                .GroupBy(e => new { e.SourceTerm, e.TargetTerm })
-                .Where(g => g.Count() > 1)
-                .SelectMany(g => g);
+            var duplicates = GlossaryEntries.GetDuplicates();
 
             foreach (var entry in GlossaryEntries)
             {

@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Sdl.Community.DeepLMTProvider.UI"
         xmlns:controls="clr-namespace:Sdl.Community.DeepLMTProvider.UI.Controls"
         xmlns:uiHelpers="clr-namespace:Sdl.Community.DeepLMTProvider.UI.UiHelpers"
+        xmlns:deepLmtProvider="clr-namespace:Sdl.Community.DeepLMTProvider"
         mc:Ignorable="d"
         MaxWidth="600"
         MaxHeight="600"
@@ -207,11 +208,11 @@
             <Button DockPanel.Dock="Right"
                     x:Name="ValidateButton"
                     Command="{Binding ValidateCommand, ElementName=EditGlossary_Window}"
-                    ToolTipService.ShowOnDisabled="True"
                     IsDefault="True"
+                    ToolTip="{x:Static deepLmtProvider:PluginResources.ValidateButton_ToolTip}"
                     Margin="0 5 5 0"
                     Style="{StaticResource Sdl.Button.GeneralStyle}"
-                    Content="Validate data" />
+                    Content="Highlight issues" />
         </DockPanel>
     </Grid>
 </Window>

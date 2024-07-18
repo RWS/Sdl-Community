@@ -333,6 +333,15 @@ namespace Sdl.Community.DeepLMTProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Highlight terms that are missing source or target text, or are duplicated..
+        /// </summary>
+        public static string ValidateButton_ToolTip {
+            get {
+                return ResourceManager.GetString("ValidateButton.ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string WindowsControl_Close {

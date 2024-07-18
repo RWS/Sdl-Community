@@ -218,4 +218,7 @@ The formatting aspects affected by this setting include:
   Punctuation at the beginning and end of the sentence
   Upper/lower case at the beginning of the sentence</value>
   </data>
+  <data name="ValidateButton.ToolTip" xml:space="preserve">
+    <value>Highlight terms that are missing source or target text, or are duplicated.</value>
+  </data>
 </root>
