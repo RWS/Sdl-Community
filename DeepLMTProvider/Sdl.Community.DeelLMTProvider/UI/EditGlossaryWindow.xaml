@@ -120,6 +120,8 @@
                         <!-- Highlight duplicate rows -->
                         <DataTrigger Binding="{Binding HasErrors}"
                                      Value="True">
+                            <Setter Property="ToolTip"
+                                    Value="{Binding Error}" />
                             <Setter Property="Background"
                                     Value="Yellow" />
                         </DataTrigger>
