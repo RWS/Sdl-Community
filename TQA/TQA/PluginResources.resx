@@ -241,7 +241,7 @@
   <data name="Message_Invalid" xml:space="preserve">
     <value>Invalid TQA Profile: {0}</value>
   </data>
-  <data name="RWS-5-401-F002-MQM QE Form-XXX_XXXXXX_XXX" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\RWS-5-401-F002-MQM QE Form-XXX_XXXXXX_XXX.xlsm;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="RWS-5-401-F002-MQM QE Form-CLIENT_MMM_YY_LL" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\RWS-5-401-F002-MQM QE Form-CLIENT_MMM_YY_LL.xlsm;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>
