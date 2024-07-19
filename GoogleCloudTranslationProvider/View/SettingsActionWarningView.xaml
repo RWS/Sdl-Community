@@ -17,72 +17,100 @@
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+                <ResourceDictionary Source="../Styles/General.xaml"/>
+                <ResourceDictionary Source="../Styles/Buttons.xaml"/>
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
 				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
 			</ResourceDictionary.MergedDictionaries>
-		</ResourceDictionary>
+
+            <Style TargetType="{x:Type Window}">
+                <Setter Property="FontFamily" Value="Segoe UI" />
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Foreground" Value="#1E1E1E"/>
+            </Style>
+        </ResourceDictionary>
 	</Window.Resources>
 
-	<Border BorderThickness="1"
-			BorderBrush="#d4d4d4">
-		<Grid>
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="*" />
-				<RowDefinition Height="Auto" />
-			</Grid.RowDefinitions>
+    <Border BorderThickness="1"
+		BorderBrush="#d4d4d4">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto" />
-				<ColumnDefinition Width="*" />
-			</Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-			<Image Grid.Row="0"
-				   Grid.Column="0"
-				   Source="../Resources/warning.png"
-				   Height="40"
-				   Width="40"
-				   RenderOptions.BitmapScalingMode="HighQuality"
-				   Margin="32 16 16 0" />
+            <Image Grid.Row="0"
+			   Grid.Column="0"
+			   Source="../Resources/information-48.png"
+			   Height="48"
+			   Width="48"
+			   ToolTip="Information"
+			   RenderOptions.BitmapScalingMode="HighQuality"
+			   Margin="12 16 10 0" />
 
-			<TextBlock Grid.Row="0"
-					   Grid.Column="1"
-					   Text="Configuring Translation Provider in Project Settings"
-					   Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"
-					   FontSize="16"
-					   HorizontalAlignment="Left"
-					   VerticalAlignment="Center"
-					   Margin="8 16 0 0"/>
+            <TextBlock Grid.Row="0"
+				   Grid.Column="1"
+				   Text="Configure Translation Provider in Project Settings"
+                   Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}" 
+				   FontSize="18"
+				   HorizontalAlignment="Left"
+				   VerticalAlignment="Center"
+				   Margin="0 16 0 0"/>
 
-			<TextBlock Grid.Row="1"
-					   Grid.ColumnSpan="2"
-					   Text="{x:Static root:PluginResources.HowToAddProviderInfo}"
-					   Focusable="True"
-					   FontWeight="DemiBold"
-					   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
-					   MaxWidth="9999"
-					   TextWrapping="Wrap"
-					   FontSize="11"
-					   Margin="24 8 24 0" />
+            <TextBlock Grid.Row="1"
+				   Grid.ColumnSpan="2" 
+                   Grid.Column="0"
+				   Padding="0,5,15,0"
+                   Text="Unable to locate 'Google Cloud Translation Provider' in your current project. To add it to your project, follow these steps:&#xA;&#xA;     1. Open Project Settings&#xA;     2. Go to 'Translation Memory and Automated Translation'&#xA;     3. Select 'OpenAI provider for Trados' from the 'Use...' dropdown button menu&#xA;     4. Save &amp; close the Project Settings"
+				   Focusable="True"
+                   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}" 
+				   TextAlignment="Left"
+				   TextWrapping="Wrap"
+				   HorizontalAlignment="Left"
+				   Margin="24,8,0,0" Width="574"  />
 
-			<Button Grid.Row="2"
-					Grid.ColumnSpan="2"
-					Content="For further information, please review the documentation by clicking here."
-					Style="{StaticResource Sdl.Button.HyperLinkStyle}"
-					Click="OpenUrl_ButtonClicked"
-					HorizontalAlignment="Left"
-					Margin="24 8 24 0" />
 
-			<Button Grid.Row="4"
-					Grid.ColumnSpan="2"
-					Content="Close"
-					Style="{StaticResource Sdl.Button.SecondaryStyle}"
-					Click="CloseWindow_Click"
-					HorizontalAlignment="Right"
-					Width="120"
-					Margin="16" />
-		</Grid>
-	</Border>
+            <StackPanel Grid.Row="2" Orientation="Horizontal"
+                    Grid.ColumnSpan="2" Grid.Column="0"
+                    VerticalAlignment="Center" 
+                    Margin="24,0,0,0">
+
+                <TextBlock  Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
+						Margin="0"
+						VerticalAlignment="Center"
+                        Text="For more information,"/>
+                <Button 
+                    Content="click here"
+					Margin="2,0,4,0"
+					VerticalAlignment="Center"
+					VerticalContentAlignment="Center"
+                    Style="{StaticResource LinkButton}"
+                    FontFamily="Segoe UI"
+                    Click="OpenUrl_ButtonClicked"
+                    HorizontalAlignment="Left"/>
+                <TextBlock VerticalAlignment="Center"
+                       Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
+                       Margin="0"
+                       Text="to view the documentation"/>
+            </StackPanel>
+
+
+            <Button Grid.Row="2"
+				Grid.ColumnSpan="2" Grid.Column="0"
+                Content="OK"
+                Style="{StaticResource Sdl.Button.PrimaryStyle}"
+				Click="CloseWindow_Click"
+				HorizontalAlignment="Right"
+				VerticalAlignment="Center"
+				VerticalContentAlignment="Center"
+				Height="28" Width="90" 
+				Margin="16" />
+        </Grid>
+    </Border>
 </Window>

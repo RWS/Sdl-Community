@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -35,7 +36,7 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 			{
 				Environment.SetEnvironmentVariable(Constants.GoogleApiEnvironmentVariableName, _options.JsonFilePath);
 				_translationServiceClient = TranslationServiceClient.Create();
-			}
+            }
 			catch (Exception e)
 			{
 				_logger.Error($"{MethodBase.GetCurrentMethod().Name}: {e}");
@@ -216,14 +217,14 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
 
             // List models
             var models = client.ListModels(parent);
-            //foreach (var model in models)
-            //{
-            //    Console.WriteLine($"Model name: {model.Name}");
-            //    Console.WriteLine($"Model id: {model.DatasetId}");
-            //    Console.WriteLine($"Model display name: {model.DisplayName}");
-            //}
+			//foreach (var model in models)
+			//{
+			//	Trace.WriteLine($"Model name: {model.Name}");
+            //  Trace.WriteLine($"Model id: {model.DatasetId}");
+            //  Trace.WriteLine($"Model display name: {model.DisplayName}");
+			//}
 
-            return models.ToList();
+			return models.ToList();
 		}
 
 		private string SetCustomModel(CultureInfo sourceLanguage, CultureInfo targetLanguage)

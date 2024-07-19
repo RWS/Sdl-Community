@@ -15,7 +15,7 @@ namespace GoogleCloudTranslationProvider.TellMe
 {
 	class SettingsAction : TellMeAction
 	{
-		private static readonly string[] _helpKeywords = { "project", "settings" };
+		private static readonly string[] _helpKeywords = {"project", "settings" };
 		private static readonly bool _isAvailable = true;
 
 		public SettingsAction() : base($"{PluginResources.Plugin_Name} Settings", PluginResources.Settings, _helpKeywords, _isAvailable, customAction: ShowDialog) { }

@@ -19,6 +19,9 @@
     <None Remove="Resources\Folder.png" />
     <None Remove="Resources\ForumIcon.ico" />
     <None Remove="Resources\gctpLogo.png" />
+    <None Remove="Resources\GoogleCloud.ico" />
+    <None Remove="Resources\GoogleCloud.png" />
+    <None Remove="Resources\information-48.png" />
     <None Remove="Resources\Information.png" />
     <None Remove="Resources\my_icon.ico" />
     <None Remove="Resources\my_image.png" />
@@ -26,6 +29,12 @@
     <None Remove="Resources\rwslmplogo.png" />
     <None Remove="Resources\Search.png" />
     <None Remove="Resources\Settings.ico" />
+    <None Remove="Resources\TellMe\TellMeAppStoreForum.ico" />
+    <None Remove="Resources\TellMe\TellMeDocumentation.ico" />
+    <None Remove="Resources\TellMe\TellMeDocumentation.png" />
+    <None Remove="Resources\TellMe\TellMeForum.ico" />
+    <None Remove="Resources\TellMe\TellMeSettings.ico" />
+    <None Remove="Resources\TellMe\TellMeSourceCode.ico" />
     <None Remove="Resources\warning.png" />
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +139,8 @@
     <Resource Include="Resources\Folder.png" />
     <Resource Include="Resources\ForumIcon.ico" />
     <Resource Include="Resources\gctpLogo.png" />
+    <Resource Include="Resources\GoogleCloud.ico" />
+    <Resource Include="Resources\information-48.png" />
     <Resource Include="Resources\Information.png" />
     <Resource Include="Resources\my_icon.ico" />
     <Resource Include="Resources\my_image.png" />
@@ -137,6 +148,12 @@
     <Resource Include="Resources\rwslmplogo.png" />
     <Resource Include="Resources\Search.png" />
     <Resource Include="Resources\Settings.ico" />
+    <Resource Include="Resources\TellMe\TellMeAppStoreForum.ico" />
+    <Resource Include="Resources\TellMe\TellMeDocumentation.ico" />
+    <Resource Include="Resources\TellMe\TellMeDocumentation.png" />
+    <Resource Include="Resources\TellMe\TellMeForum.ico" />
+    <Resource Include="Resources\TellMe\TellMeSettings.ico" />
+    <Resource Include="Resources\TellMe\TellMeSourceCode.ico" />
     <Resource Include="Resources\warning.png" />
   </ItemGroup>
   <ItemGroup>

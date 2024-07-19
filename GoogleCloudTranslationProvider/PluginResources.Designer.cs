@@ -237,6 +237,26 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap google_cloud_256x206 {
+            get {
+                object obj = ResourceManager.GetObject("google_cloud_256x206", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap google_cloud_512x412 {
+            get {
+                object obj = ResourceManager.GetObject("google_cloud_512x412", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Google Translate - V3 Advanced Translation.
         /// </summary>
         public static string GoogleAdvanced {
@@ -278,6 +298,16 @@ namespace GoogleCloudTranslationProvider {
         public static string GoogleBasic {
             get {
                 return ResourceManager.GetString("GoogleBasic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon GoogleCloud {
+            get {
+                object obj = ResourceManager.GetObject("GoogleCloud", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -336,6 +366,16 @@ namespace GoogleCloudTranslationProvider {
         public static string HowToAddProviderInfo {
             get {
                 return ResourceManager.GetString("HowToAddProviderInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap information_48 {
+            get {
+                object obj = ResourceManager.GetObject("information_48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -1182,6 +1222,66 @@ namespace GoogleCloudTranslationProvider {
         public static System.Drawing.Icon sourceCode {
             get {
                 object obj = ResourceManager.GetObject("sourceCode", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMeAppStoreForum {
+            get {
+                object obj = ResourceManager.GetObject("TellMeAppStoreForum", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMeDocumentation {
+            get {
+                object obj = ResourceManager.GetObject("TellMeDocumentation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap TellMeDocumentation1 {
+            get {
+                object obj = ResourceManager.GetObject("TellMeDocumentation1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMeForum {
+            get {
+                object obj = ResourceManager.GetObject("TellMeForum", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMeSettings {
+            get {
+                object obj = ResourceManager.GetObject("TellMeSettings", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMeSourceCode {
+            get {
+                object obj = ResourceManager.GetObject("TellMeSourceCode", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
