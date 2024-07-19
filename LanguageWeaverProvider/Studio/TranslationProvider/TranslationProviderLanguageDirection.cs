@@ -95,7 +95,7 @@ namespace LanguageWeaverProvider
 			var searchResults = new SearchResults[mask.Length];
 			var segmentsInput = translationUnits.Select(x => x.SourceSegment).ToList();
 			var translatableSegments = ExtractTranslatableSegments(translationUnits, mask, searchResults, segmentsInput);
-
+   
 			if (!translatableSegments.Any())
 			{
 				ManageBatchTaskWindow();
@@ -124,9 +124,9 @@ namespace LanguageWeaverProvider
 				translatedSegments = ModifySegmentsOnLookup(_postLookupEditor, translatedSegments);
 			}
 
-			var fileName = _batchTaskWindow is null ? string.Empty : GetFilePath(translationUnits);
+            var fileName = _batchTaskWindow is null ? string.Empty : GetFilePath(translationUnits);
 
-			var translatedSegmentsIndex = 0;
+            var translatedSegmentsIndex = 0;
 			for (var i = 0; i < mask.Length; i++)
 			{
 				if (ShouldSkipSearchResult(searchResults[i], mask[i], segmentsInput[i]))
@@ -141,20 +141,20 @@ namespace LanguageWeaverProvider
 
 				searchResults[i] = new SearchResults { SourceSegment = currentSegment.Duplicate() };
 				searchResults[i].Add(CreateSearchResult(currentSegment, translatedSegment));
-				SetMetadataOnSegment(evaluatedSegment, mappedPair, fileName);
+                SetMetadataOnSegment(evaluatedSegment, mappedPair, fileName);
 			}
 
 			ManageBatchTaskWindow();
 			return searchResults;
 		}
 
-		private string GetFilePath(IEnumerable<TranslationUnit> translationUnits)
-		{
-			var translationUnit = translationUnits?.FirstOrDefault(a => a.DocumentProperties?.LastOpenedAsPath != null);
-			return translationUnit?.DocumentProperties?.LastOpenedAsPath;
-		}
+        private string GetFilePath(IEnumerable<TranslationUnit> translationUnits)
+        {
+            var translationUnit = translationUnits?.FirstOrDefault(a => a.DocumentProperties?.LastOpenedAsPath != null);
+            return translationUnit?.DocumentProperties?.LastOpenedAsPath;
+        }
 
-		private List<Segment> ModifySegmentsOnLookup(LWSegmentEditor segmentEditor, List<Segment> segments)
+        private List<Segment> ModifySegmentsOnLookup(LWSegmentEditor segmentEditor, List<Segment> segments)
 		{
 			var editedSegments = new List<Segment>();
 			foreach (var inSegment in segments)
@@ -202,11 +202,9 @@ namespace LanguageWeaverProvider
 
 		private void ManageBatchTaskWindow(bool initialize = false)
 		{
-			_batchTaskWindow = initialize ? Application.Current.Dispatcher.Invoke(ApplicationInitializer.GetBatchTaskWindow) : null;
-			if (_batchTaskWindow is null)
-			{
-				return;
-			}
+			_batchTaskWindow = initialize 
+                ? Application.Current.Dispatcher.Invoke(ApplicationInitializer.GetBatchTaskWindow) 
+                : null;
 		}
 
 		private bool ShouldSkipSearchResult(SearchResults searchResult, bool isMasked, Segment segment)
@@ -280,12 +278,12 @@ namespace LanguageWeaverProvider
 			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_ShortModelName, pairMapping.SelectedModel.Model);
 			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_Translation, evaluatedSegment.Segment.ToString());
 			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_Feedback, _translationOptions.ProviderSettings.AutosendFeedback.ToString());
-			editorController.ActiveDocument.UpdateSegmentPairProperties(currentSegmentPair, currentSegmentPair.Properties);
+            editorController.ActiveDocument.UpdateSegmentPairProperties(currentSegmentPair, currentSegmentPair.Properties);
 		}
 
 		private void StoreSegmentMetadata(EvaluatedSegment evaluatedSegment, PairMapping pairMapping, string fileName)
 		{
-			var ratedSegment = new RatedSegment()
+			var ratedSegment = new RatedSegment
 			{
 				Model = pairMapping.SelectedModel.Model,
 				ModelName = pairMapping.SelectedModel.Name,
@@ -297,12 +295,14 @@ namespace LanguageWeaverProvider
 				AutosendFeedback = _translationOptions.ProviderSettings.AutosendFeedback
 			};
 
-			var existingSegment = ApplicationInitializer.RatedSegments.FirstOrDefault(x => 
-				x.SegmentId.Id.Equals(ratedSegment.SegmentId.Id) &&
-				x.FileName.Equals(fileName) && 
-				x.ModelName.Equals(ratedSegment.ModelName));
+            //TODO: Developer named variable FileName, but it stores the FilePath; needs to be revised to avoid confusion
+            var fileNameNormalized = System.IO.Path.GetFileName(fileName);
 
-			if (existingSegment is null)
+            var existingSegment = ApplicationInitializer.RatedSegments.FirstOrDefault(x =>
+                x.SegmentId.Id.Equals(ratedSegment.SegmentId.Id) &&
+                System.IO.Path.GetFileName(x.FileName).Equals(fileNameNormalized) &&
+                                                              x.ModelName.Equals(ratedSegment.ModelName));
+            if (existingSegment is null)
 			{
 				ApplicationInitializer.RatedSegments.Add(ratedSegment);
 			}

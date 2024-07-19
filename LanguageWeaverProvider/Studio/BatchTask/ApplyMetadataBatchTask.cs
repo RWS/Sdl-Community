@@ -32,19 +32,22 @@ namespace LanguageWeaverProvider.BatchTask
 				return;
 			}
 
-			_ratedSegments = ApplicationInitializer.RatedSegments.Where(seg => seg.TargetLanguageCode == languageCode && seg.FileName.Equals(fileName));
+            //TODO: Developer named variable FileName, but it stores the FilePath; needs to be revised to avoid confusion
+            _ratedSegments = ApplicationInitializer.RatedSegments.Where(seg =>
+                seg.TargetLanguageCode == languageCode && 
+                System.IO.Path.GetFileName(seg.FileName).Equals(fileName)).ToList();
 			if (!_ratedSegments.Any())
 			{
 				return;
 			}
 
-			var translationOriginData = new TranslationOriginData()
+			var translationOriginData = new TranslationOriginData
 			{
 				Model = _ratedSegments.First().Model,
 				RatedSegments = _ratedSegments.ToDictionary(ratedSegment => ratedSegment.SegmentId)
 			};
 
-			var metadataTransferObject = new MetadataTransferObject()
+			var metadataTransferObject = new MetadataTransferObject
 			{
 				TargetLanguage = languageCode,
 				FilePath = filePath,
@@ -52,7 +55,10 @@ namespace LanguageWeaverProvider.BatchTask
 				TranslationOriginData = translationOriginData
 			};
 
-			var metadataTransferObjectList = new List<MetadataTransferObject>() { metadataTransferObject };
+			var metadataTransferObjectList = new List<MetadataTransferObject>
+            {
+                metadataTransferObject
+            };
 
 			var processor = new ApplyMetadataProcessor(metadataTransferObjectList);
 			var processorHandler = new BilingualContentHandlerAdapter(processor);
