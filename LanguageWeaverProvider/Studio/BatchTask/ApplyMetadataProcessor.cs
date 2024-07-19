@@ -27,11 +27,10 @@ namespace LanguageWeaverProvider.BatchTask
 
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
-			base.ProcessParagraphUnit(paragraphUnit);
-
-			if (paragraphUnit.IsStructure)
+			if (paragraphUnit.IsStructure || !paragraphUnit.SegmentPairs.Any())
 			{
-				return;
+                base.ProcessParagraphUnit(paragraphUnit);
+                return;
 			}
 
 			var segmentPairsRemaining = paragraphUnit.SegmentPairs.Count();
@@ -69,7 +68,9 @@ namespace LanguageWeaverProvider.BatchTask
 				}
 			}
 
-			TranslationData = TranslationData.Except(markedForRemoval).ToList();
-		}
+            base.ProcessParagraphUnit(paragraphUnit);
+
+            TranslationData = TranslationData.Except(markedForRemoval).ToList();
+        }
 	}
 }

@@ -13,8 +13,8 @@ namespace LanguageWeaverProvider
 	[ApplicationInitializer]
 	public class ApplicationInitializer : IApplicationInitializer
 	{
-		const string BatchProcessing = "batch processing";
-		const string CreateNewProject = "create a new project";
+        private const string BatchProcessingWizardAutomationId = "Wizard_Window_BatchProcessingWizard";
+        private const string ProjectWizardAutomationId = "Wizard_Window_ProjectWizard";
 
 		public static string CurrentAppVersion { get; private set; }
 
@@ -31,15 +31,22 @@ namespace LanguageWeaverProvider
 			CurrentAppVersion = GetAssemblyFileVersion();
 		}
 
-		public static Window GetBatchTaskWindow()
-		{
-			return Application
-				.Current
-				.Windows
-				.Cast<Window>()
-				.FirstOrDefault(window => window.Title.ToLower() == BatchProcessing
-									   || window.Title.ToLower().Contains(CreateNewProject));
-		}
+        public static Window GetBatchTaskWindow()
+        {
+            // Get the list of current windows
+            var windows = Application.Current.Windows.Cast<Window>().ToList();
+
+            // Find the first window with the specified automation IDs
+            var targetWindow = windows.FirstOrDefault(window =>
+            {
+                var automationId = window.GetValue(System.Windows.Automation.AutomationProperties.AutomationIdProperty) as string;
+                return automationId == BatchProcessingWizardAutomationId ||
+                       automationId == ProjectWizardAutomationId;
+            });
+
+            return targetWindow;
+        }
+
 
         private static string GetAssemblyFileVersion()
         {

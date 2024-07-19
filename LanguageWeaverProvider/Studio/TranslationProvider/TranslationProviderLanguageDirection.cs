@@ -141,7 +141,7 @@ namespace LanguageWeaverProvider
 
 				searchResults[i] = new SearchResults { SourceSegment = currentSegment.Duplicate() };
 				searchResults[i].Add(CreateSearchResult(currentSegment, translatedSegment));
-				SetMetadataOnSegment(evaluatedSegment, mappedPair, fileName);
+                SetMetadataOnSegment(evaluatedSegment, mappedPair, fileName);
 			}
 
 			ManageBatchTaskWindow();
@@ -202,11 +202,9 @@ namespace LanguageWeaverProvider
 
 		private void ManageBatchTaskWindow(bool initialize = false)
 		{
-			_batchTaskWindow = initialize ? Application.Current.Dispatcher.Invoke(ApplicationInitializer.GetBatchTaskWindow) : null;
-			if (_batchTaskWindow is null)
-			{
-				return;
-			}
+			_batchTaskWindow = initialize 
+                ? Application.Current.Dispatcher.Invoke(ApplicationInitializer.GetBatchTaskWindow) 
+                : null;
 		}
 
 		private bool ShouldSkipSearchResult(SearchResults searchResult, bool isMasked, Segment segment)
@@ -280,12 +278,12 @@ namespace LanguageWeaverProvider
 			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_ShortModelName, pairMapping.SelectedModel.Model);
 			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_Translation, evaluatedSegment.Segment.ToString());
 			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_Feedback, _translationOptions.ProviderSettings.AutosendFeedback.ToString());
-			editorController.ActiveDocument.UpdateSegmentPairProperties(currentSegmentPair, currentSegmentPair.Properties);
+            editorController.ActiveDocument.UpdateSegmentPairProperties(currentSegmentPair, currentSegmentPair.Properties);
 		}
 
 		private void StoreSegmentMetadata(EvaluatedSegment evaluatedSegment, PairMapping pairMapping, string fileName)
 		{
-			var ratedSegment = new RatedSegment()
+			var ratedSegment = new RatedSegment
 			{
 				Model = pairMapping.SelectedModel.Model,
 				ModelName = pairMapping.SelectedModel.Name,
@@ -297,10 +295,13 @@ namespace LanguageWeaverProvider
 				AutosendFeedback = _translationOptions.ProviderSettings.AutosendFeedback
 			};
 
+            //TODO: Developer named variable FileName, but it stores the FilePath; needs to be revised to avoid confusion
+            var fileNameNormalized = System.IO.Path.GetFileName(fileName);
+
             var existingSegment = ApplicationInitializer.RatedSegments.FirstOrDefault(x =>
                 x.SegmentId.Id.Equals(ratedSegment.SegmentId.Id) &&
-                x.FileName.Equals(fileName) &&
-                x.ModelName.Equals(ratedSegment.ModelName));
+                System.IO.Path.GetFileName(x.FileName).Equals(fileNameNormalized) &&
+                                                              x.ModelName.Equals(ratedSegment.ModelName));
             if (existingSegment is null)
 			{
 				ApplicationInitializer.RatedSegments.Add(ratedSegment);

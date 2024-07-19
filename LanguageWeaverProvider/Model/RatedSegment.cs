@@ -18,6 +18,7 @@ namespace LanguageWeaverProvider.Model
 
 		public string TargetLanguageCode { get; set; }
 
-		public string FileName { get; set; }
+        //TODO: Developer named variable FileName, but it stores the FilePath; needs to be revised to avoid confusion
+        public string FileName { get; set; }
 	}
 }
