@@ -237,26 +237,6 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap google_cloud_256x206 {
-            get {
-                object obj = ResourceManager.GetObject("google_cloud_256x206", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap google_cloud_512x412 {
-            get {
-                object obj = ResourceManager.GetObject("google_cloud_512x412", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Google Translate - V3 Advanced Translation.
         /// </summary>
         public static string GoogleAdvanced {

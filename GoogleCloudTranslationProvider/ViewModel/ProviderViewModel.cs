@@ -475,7 +475,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			return (true, null);
 		}
 
-		private void GetProjectResources()
+		private async void GetProjectResources()
 		{
 			if (string.IsNullOrEmpty(_projectLocation) || _projectLocation.Equals(DummyLocation))
 			{
@@ -493,7 +493,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
 			CreateV3Database(tempOptions);
 			var availableGlossaries = V3ResourceManager.GetGlossaries(tempOptions);
-			var availableCustomModels = V3ResourceManager.GetCustomModels(tempOptions);
+			var availableCustomModels = await V3ResourceManager.GetCustomModelsAsync(tempOptions);
 			for (var i = 0; i < _languagePairs.Count(); i++)
 			{
 				var currentPair = _languagePairs.ElementAt(i);

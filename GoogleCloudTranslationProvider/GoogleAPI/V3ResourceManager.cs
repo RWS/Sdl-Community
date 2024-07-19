@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
+using NLog;
 using Sdl.LanguagePlatform.Core;
 
 namespace GoogleCloudTranslationProvider.GoogleAPI
 {
     public class V3ResourceManager
     {
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static readonly string DummyLocation = "gctp-sdl";
 
         public static List<string> GetLocations(ITranslationOptions tempOptions)
@@ -66,26 +69,29 @@ namespace GoogleCloudTranslationProvider.GoogleAPI
             return output;
         }
 
-        public static List<RetrievedCustomModel> GetCustomModels(TranslationOptions translationOptions)
+        public static async Task<List<RetrievedCustomModel>> GetCustomModelsAsync(TranslationOptions translationOptions)
         {
             var output = new List<RetrievedCustomModel>();
 
             try
             {
                 var v3Connector = new V3Connector(translationOptions);
-                output.Add(new(new()));
+                output.Add(new RetrievedCustomModel(new CombinedModel())); // Assuming you want an initial entry
 
-                var models = v3Connector.GetProjectCustomModels();
+                var models = await v3Connector.GetProjectCustomModels();
+
+                // Populate the output based on the retrieved models
                 foreach (var model in models)
                 {
                     var customModel = new RetrievedCustomModel(model);
                     output.Add(customModel);
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.Error(ex);
                 output.Clear();
-                output.Add(new(null));
+                output.Add(new RetrievedCustomModel(new CombinedModel()));
             }
 
             return output;
