@@ -74,6 +74,7 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
                             translationProvider.MainTranslationProvider.State = JsonConvert.SerializeObject(options);
                             currentProject.UpdateTranslationProviderConfiguration(settings);
                         }
+
                     }
                 }
             }

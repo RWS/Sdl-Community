@@ -24,9 +24,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private string _apiKeyValidationMessage;
         private ObservableCollection<LanguagePairOptions> _languagePairSettings = new();
         private bool _preserveFormatting;
-        private bool _removeLockedContent;
         private bool _sendPlainText;
-        private bool _tagHandling;
         private TagFormat _tagType;
 
         public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, IMessageService messageService)
@@ -101,6 +99,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         public ICommand ManageGlossariesCommand => new ParameterlessCommand(() => ManageGlossaries?.Invoke());
 
         public ICommand OkCommand => new ParameterlessCommand(Save, () => ApiKeyValidationMessage == null);
+        public ICommand CancelCommand => new ParameterlessCommand(DetachEvents);
 
         public DeepLTranslationOptions Options { get; set; }
 
@@ -144,7 +143,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             if (!success)
             {
                 HandleError(message);
-                glossaries = new List<GlossaryInfo>();
+                glossaries = [];
             }
 
             glossaries?.Add(GlossaryInfo.NoGlossary);
@@ -169,8 +168,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
                 var oldLanguagePairOption = LanguagePairOptions.FirstOrDefault(lpo => lpo.LanguagePair.Equals(languagePair));
 
-                RestorePreviouslySelectedGlossaryIfThereIsOne(oldLanguagePairOption, newLanguagePairOptions);
-
                 LanguagePairOptions.Remove(oldLanguagePairOption);
                 LanguagePairOptions.Add(newLanguagePairOptions);
             }
@@ -178,28 +175,13 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         private static GlossaryInfo GetSelectedGlossaryFromSavedSetting(List<GlossaryInfo> glossaries, LanguagePairOptions languageSavedOptions, string sourceLangCode, string targetLangCode)
         {
-            if (languageSavedOptions == null)
-                return GlossaryInfo.NoGlossary;
+            var glossaryId = languageSavedOptions == null
+                ? GlobalSettings.GetLastUsedGlossaryId((sourceLangCode, targetLangCode))
+                : languageSavedOptions.SelectedGlossary.Id;
 
-            if (languageSavedOptions.SelectedGlossary.Name == PluginResources.NoGlossary)
-                return languageSavedOptions.SelectedGlossary;
-
-            if ((glossaries?.Contains(languageSavedOptions.SelectedGlossary) ?? false)
-                    && languageSavedOptions.SelectedGlossary.SourceLanguage == sourceLangCode
-                    && languageSavedOptions.SelectedGlossary.TargetLanguage == targetLangCode)
-                return languageSavedOptions.SelectedGlossary;
-
-            return GlossaryInfo.NoGlossary;
-        }
-
-        private static void RestorePreviouslySelectedGlossaryIfThereIsOne(LanguagePairOptions oldLanguagePairOption,
-                    LanguagePairOptions newLanguagePairOptions)
-        {
-            if (oldLanguagePairOption != null && (newLanguagePairOptions.Glossaries?.Select(g => g.Name)
-                    .Contains(oldLanguagePairOption.SelectedGlossary.Name) ?? false))
-                newLanguagePairOptions.SelectedGlossary =
-                    newLanguagePairOptions.Glossaries.FirstOrDefault(g =>
-                        g.Name == oldLanguagePairOption.SelectedGlossary.Name);
+            return string.IsNullOrWhiteSpace(glossaryId)
+                ? glossaries.FirstOrDefault(g => g.Name == PluginResources.NoGlossary)
+                : glossaries.FirstOrDefault(g => g.Id == glossaryId);
         }
 
         private void AskUserToRestart()
@@ -217,7 +199,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private void DetachEvents()
         {
             PasswordChangedTimer.Elapsed -= OnPasswordChanged;
-            DeepLTranslationProviderClient.ApiKeyChanged += Dispatcher_LoadLanguagePairSettings;
+            DeepLTranslationProviderClient.ApiKeyChanged -= Dispatcher_LoadLanguagePairSettings;
         }
 
         private void Dispatcher_LoadLanguagePairSettings() =>
@@ -238,12 +220,17 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         {
             DeepLTranslationProviderClient.ApiKey = ApiKey;
             SetApiKeyValidityLabel();
-
+            
             Options.SendPlainText = SendPlainText;
             Options.ApiKey = ApiKey;
             Options.LanguagePairOptions = [.. LanguagePairOptions];
             Options.PreserveFormatting = PreserveFormatting;
             Options.TagHandling = TagType;
+
+            var glossaryIds = Options.LanguagePairOptions.ToDictionary(
+                lpo => (lpo.LanguagePair.GetSourceLanguageCode(), lpo.LanguagePair.GetTargetLanguageCode()),
+                lpo => lpo.SelectedGlossary.Id);
+            GlobalSettings.SetLastUsedGlossaryIds(glossaryIds);
 
             DetachEvents();
 
@@ -291,5 +278,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         {
             ApiKeyValidationMessage = message;
         }
+
+        
     }
 }

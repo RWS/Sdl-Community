@@ -264,6 +264,8 @@
             <Button Style="{StaticResource Sdl.Button.SecondaryStyle}"
                     IsCancel="True"
                     Content="Cancel"
+                    Click="Cancel_Click"
+                    Command="{Binding CancelCommand}"
                     DockPanel.Dock="Right"
                     Margin="5,0,0,0"
                     Cursor="Hand" />
