@@ -323,12 +323,12 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			}
 
 			var providerUri = new Uri(Constants.GoogleTranslationFullScheme);
-			if (_credentialStore.GetCredential(providerUri) is null)
+			if (_credentialStore?.GetCredential(providerUri) is null)
 			{
 				return;
 			}
 
-			_credentialStore.RemoveCredential(providerUri);
+			_credentialStore?.RemoveCredential(providerUri);
 		}
 
 		private void SwitchView(object o)
