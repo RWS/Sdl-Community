@@ -7,7 +7,7 @@
 		mc:Ignorable="d"
 		Icon="../Resources/Settings.ico"
 		Width="600"
-		Height="240"
+		Height="260"
 		ResizeMode="NoResize"
 		WindowStyle="None"
 		WindowStartupLocation="CenterScreen"
@@ -19,9 +19,9 @@
 			<ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../Styles/General.xaml"/>
                 <ResourceDictionary Source="../Styles/Buttons.xaml"/>
+                <ResourceDictionary Source="../Styles/TextBlockResources.xaml"/>
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
-			</ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary.MergedDictionaries>
 
             <Style TargetType="{x:Type Window}">
                 <Setter Property="FontFamily" Value="Segoe UI" />
@@ -73,7 +73,7 @@
 				   TextAlignment="Left"
 				   TextWrapping="Wrap"
 				   HorizontalAlignment="Left"
-				   Margin="24,8,0,0" Width="574"  />
+				   Margin="24,8,10,0"   />
 
 
             <StackPanel Grid.Row="2" Orientation="Horizontal"
