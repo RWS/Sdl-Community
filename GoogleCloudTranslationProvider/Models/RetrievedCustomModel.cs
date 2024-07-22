@@ -4,24 +4,22 @@ namespace GoogleCloudTranslationProvider.Models
 {
 	public class RetrievedCustomModel
 	{
-		public RetrievedCustomModel(Model model)
+		public RetrievedCustomModel(CombinedModel model)
 		{
-			Model = model;
-			if (Model is null || string.IsNullOrEmpty(Model?.DatasetId))
+			if (model is null || string.IsNullOrEmpty(model?.Dataset))
 			{
-				DisplayName = Model is null ? PluginResources.RetrievedResources_NotAvailable
+				DisplayName = model is null ? PluginResources.RetrievedResources_NotAvailable
 											: PluginResources.RetrievedResources_CustomModels_Unselected;
 				return;
 			}
 
-			DatasetId = Model.DatasetId;
-			DisplayName = Model.DisplayName;
-			ModelPath = Model.ModelName.ToString();
-			SourceLanguage = Model.TranslationModelMetadata?.SourceLanguageCode;
-			TargetLanguage = Model.TranslationModelMetadata?.TargetLanguageCode;
+			DatasetId = model.Dataset;
+			DisplayName = model.DisplayName;
+			ModelPath = model.Name;
+			SourceLanguage = model.SourceLanguageCode;
+			TargetLanguage = model.TargetLanguageCode;
 		}
 
-		public Model Model { get; set;  }
 		public string DatasetId { get; set; }
 		public string DisplayName { get; set; }
 		public string ModelPath { get; set; }

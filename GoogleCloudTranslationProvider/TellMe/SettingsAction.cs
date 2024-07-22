@@ -15,7 +15,7 @@ namespace GoogleCloudTranslationProvider.TellMe
 {
 	class SettingsAction : TellMeAction
 	{
-		private static readonly string[] _helpKeywords = { "project", "settings" };
+		private static readonly string[] _helpKeywords = {"project", "settings" };
 		private static readonly bool _isAvailable = true;
 
 		public SettingsAction() : base($"{PluginResources.Plugin_Name} Settings", PluginResources.Settings, _helpKeywords, _isAvailable, customAction: ShowDialog) { }
@@ -91,14 +91,35 @@ namespace GoogleCloudTranslationProvider.TellMe
 			foreach (var entry in translationProviderConfiguration.Entries)
 			{
 				var translationProviderReference = entry.MainTranslationProvider;
-				if (!IsGoogleCloudProvider(translationProviderReference)
-				 || !TryExtractTranslationOptions(translationProviderReference.State, out var translationOptions)
-				 || !AppInitializer.TranslationOptions.ContainsKey(translationOptions.Id))
-				{
-					continue;
-				}
 
-				yield return AppInitializer.TranslationOptions[translationOptions.Id];
+				// check if the provider is a google cloud provider
+                var isGoogleProvider = IsGoogleCloudProvider(translationProviderReference);
+                if (!isGoogleProvider)
+                {
+					continue;
+                }
+
+				// check if the state is serializable into translationOptions
+				var hasOptions = TryExtractTranslationOptions(translationProviderReference.State, out var translationOptions);
+                if (!hasOptions)
+                {
+					continue;
+                }
+
+                // if the provider is clearly added to the project, but not yet loaded by the factory, then 
+                // simply add it to the AppInitializer.TranslationOptions cache
+                if (AppInitializer.TranslationOptions.Count == 0)
+                {
+                    AppInitializer.TranslationOptions[translationOptions.Id] = translationOptions;
+                }
+
+                var containsKey = AppInitializer.TranslationOptions.ContainsKey(translationOptions.Id);
+                if (!containsKey)
+                {
+					continue;
+                }
+
+                yield return AppInitializer.TranslationOptions[translationOptions.Id];
 			}
 		}
 
@@ -123,9 +144,10 @@ namespace GoogleCloudTranslationProvider.TellMe
 		}
 
 		private static bool IsGoogleCloudProvider(TranslationProviderReference translationProviderReference)
-		{
-			return translationProviderReference is not null
-				&& translationProviderReference.Uri.Scheme.EndsWith(Constants.GoogleTranslationScheme);
-		}
+        {
+            return translationProviderReference is not null
+                   && translationProviderReference.Uri.Scheme.Contains(Constants.GoogleTranslationScheme);
+
+        }
 	}
 }

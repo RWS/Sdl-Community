@@ -1,5 +1,4 @@
 ﻿using System;
-using Google.Protobuf.WellKnownTypes;
 using GoogleCloudTranslationProvider.Extensions;
 using GoogleCloudTranslationProvider.GoogleAPI;
 using GoogleCloudTranslationProvider.Helpers;

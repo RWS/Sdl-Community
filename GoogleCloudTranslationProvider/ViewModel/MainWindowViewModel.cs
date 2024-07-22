@@ -6,9 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Google.Protobuf.WellKnownTypes;
 using GoogleCloudTranslationProvider.Commands;
-using GoogleCloudTranslationProvider.Extensions;
 using GoogleCloudTranslationProvider.GoogleAPI;
 using GoogleCloudTranslationProvider.Helpers;
 using GoogleCloudTranslationProvider.Interfaces;
@@ -325,7 +323,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			}
 
 			var providerUri = new Uri(Constants.GoogleTranslationFullScheme);
-			if (_credentialStore.GetCredential(providerUri) is null)
+			if (_credentialStore?.GetCredential(providerUri) is null)
 			{
 				return;
 			}

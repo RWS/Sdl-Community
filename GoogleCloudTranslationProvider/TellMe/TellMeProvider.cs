@@ -16,12 +16,18 @@ namespace GoogleCloudTranslationProvider.TellMe
 
 		private AbstractTellMeAction[] GetProviderActions()
 		{
-			var forumAction = new CommunityForumAction();
+			var forumAction = new AppStoreForumAction();
 			var helpAction = new DocumentationAction();
 			var sourceCodeAction = new SourceCodeAction();
 			var settingsAction = new SettingsAction();
+            var webSiteAction = new GoogleWebSiteAction();
 
-			var providerActions = new AbstractTellMeAction[] { forumAction, helpAction, sourceCodeAction, settingsAction };
+
+            var providerActions = new AbstractTellMeAction[] { forumAction, 
+                helpAction, 
+                sourceCodeAction,
+                settingsAction,
+                webSiteAction };
 
 			return providerActions;
 		}
