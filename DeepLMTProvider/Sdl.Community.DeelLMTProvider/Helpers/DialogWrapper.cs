@@ -1,6 +1,4 @@
-﻿using Microsoft.Win32;
-using Sdl.Community.DeepLMTProvider.Interface;
-using System.Windows.Forms;
+﻿using Sdl.Community.DeepLMTProvider.Interface;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace Sdl.Community.DeepLMTProvider.Helpers
@@ -9,7 +7,7 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
     {
         public string[] FileNames { get; set; }
 
-        private string LastPath { get; set; } = @"C:\";
+        private string LastPath { get; } = @"C:\";
 
         public bool ShowDialog()
         {
@@ -28,13 +26,10 @@ namespace Sdl.Community.DeepLMTProvider.Helpers
 
         public string ShowSaveDialog()
         {
-            using var folderDialog = new FolderBrowserDialog();
-            folderDialog.SelectedPath = LastPath;
-
-            var result = folderDialog.ShowDialog();
-            LastPath = folderDialog.SelectedPath;
-
-            return result == DialogResult.OK ? folderDialog.SelectedPath : null;
+            var saveFileDialog = new FolderSelectDialog { InitialDirectory = LastPath };
+            return saveFileDialog.ShowDialog()
+                ? saveFileDialog.FileName
+                : null;
         }
     }
 }
