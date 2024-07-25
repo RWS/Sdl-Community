@@ -1,3 +1,1 @@
-﻿using Sdl.Core.PluginFramework;
-
-[assembly: Plugin("studioViews")]
+﻿[assembly: Plugin("studioViews")]

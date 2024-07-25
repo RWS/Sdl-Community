@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using Sdl.Community.StudioViews.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
-using Sdl.Versioning;
 
 namespace Sdl.Community.StudioViews.Services
 {

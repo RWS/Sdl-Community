@@ -6,7 +6,6 @@ using Sdl.Community.StudioViews.Providers;
 using Sdl.Community.StudioViews.Services;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using UnitTests.Utils;
-using Xunit;
 
 namespace UnitTests.Providers
 {
