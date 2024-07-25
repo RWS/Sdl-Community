@@ -835,9 +835,6 @@ namespace Sdl.Community.StudioViews.ViewModel
 				InputFiles = new List<string>(projectFiles.Select(a => a.LocalFilePath))
 			};
 
-			var sourceLanguage = projectFiles.FirstOrDefault()?.SourceFile.Language.CultureInfo;
-			var targetLanguage = projectFiles.FirstOrDefault()?.Language.CultureInfo;
-
 			foreach (var documentFile in projectFiles)
 			{
 				var filePathInput = documentFile.LocalFilePath;
