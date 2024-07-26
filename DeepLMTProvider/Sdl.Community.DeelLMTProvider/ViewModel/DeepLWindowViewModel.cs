@@ -177,7 +177,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         {
             var glossaryId = languageSavedOptions == null
                 ? GlobalSettings.GetLastUsedGlossaryId((sourceLangCode, targetLangCode))
-                : languageSavedOptions.SelectedGlossary.Id;
+                : languageSavedOptions.SelectedGlossary?.Id;
 
             return string.IsNullOrWhiteSpace(glossaryId)
                 ? glossaries.FirstOrDefault(g => g.Name == PluginResources.NoGlossary)
@@ -229,7 +229,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             var glossaryIds = Options.LanguagePairOptions.ToDictionary(
                 lpo => (lpo.LanguagePair.GetSourceLanguageCode(), lpo.LanguagePair.GetTargetLanguageCode()),
-                lpo => lpo.SelectedGlossary.Id);
+                lpo => lpo.SelectedGlossary?.Id);
             GlobalSettings.SetLastUsedGlossaryIds(glossaryIds);
 
             DetachEvents();

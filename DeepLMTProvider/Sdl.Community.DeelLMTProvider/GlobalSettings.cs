@@ -42,6 +42,8 @@ namespace Sdl.Community.DeepLMTProvider
             {
                 var keyValuePair = line.Split(':');
 
+                if (keyValuePair.Length < 2) return glossaryIds;
+
                 var lpSplit = keyValuePair[0].TrimStart(@"{""(".ToCharArray()).TrimEnd(@")""".ToCharArray()).Split(',');
                 var source = lpSplit[0];
                 var target = lpSplit[1].Trim();
