@@ -9,10 +9,6 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 
         public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
         {
-            new DeepLStoreAction
-            {
-                Keywords = new[] {"deepL", "deepl store", "deepl download"}
-            },
             new DeepLContactAction
             {
                 Keywords = new[] {"deepL", "deepl contact", "deepl trial"}
@@ -28,6 +24,10 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
             new DeepLSettingsAction
             {
                 Keywords = new[] {"deepL", "deepl settings", "settings"}
+            },
+            new DeepLSourceCodeAction
+            {
+                Keywords = new[] {"deepl", "source", "code"}
             }
         };
     }

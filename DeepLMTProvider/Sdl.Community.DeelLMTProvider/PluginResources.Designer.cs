@@ -166,6 +166,16 @@ namespace Sdl.Community.DeepLMTProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Information {
+            get {
+                object obj = ResourceManager.GetObject("Information", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No glossary.
         /// </summary>
         public static string NoGlossary {
@@ -175,7 +185,7 @@ namespace Sdl.Community.DeepLMTProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sdl.Community.DeepLMTProvider.
+        ///   Looks up a localized string similar to DeepL Translation Provider.
         /// </summary>
         public static string Plugin_Name {
             get {
@@ -189,6 +199,19 @@ namespace Sdl.Community.DeepLMTProvider {
         public static string Plugin_NiceName {
             get {
                 return ResourceManager.GetString("Plugin_NiceName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sets whether the translation engine should respect the original formatting, even if it would usually correct some aspects.
+        ///
+        ///The formatting aspects affected by this setting include:
+        ///  Punctuation at the beginning and end of the sentence
+        ///  Upper/lower case at the beginning of the sentence.
+        /// </summary>
+        public static string PreserveFormatting_Tooltip {
+            get {
+                return ResourceManager.GetString("PreserveFormatting_Tooltip", resourceCulture);
             }
         }
         
@@ -222,6 +245,56 @@ namespace Sdl.Community.DeepLMTProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For more information,.
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_1 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to click here.
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_2 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to for documentation..
+        /// </summary>
+        public static string SettingsAction_ExternalHelp_3 {
+            get {
+                return ResourceManager.GetString("SettingsAction_ExternalHelp_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We couldn&apos;t find an instance of DeepL Translation Provider for the current project selected. To add it to your project, follow these steps:
+        ///
+        ///1. Open Project Settings
+        ///2. Go to Translation Memory and Automated Translation
+        ///3. Select Use
+        ///4. Via the dropdown menu locate DeepL Translation Provider.
+        /// </summary>
+        public static string SettingsAction_OpenOptionsText {
+            get {
+                return ResourceManager.GetString("SettingsAction_OpenOptionsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configuring Translation Provider in Project Settings.
+        /// </summary>
+        public static string SettingsAction_Title {
+            get {
+                return ResourceManager.GetString("SettingsAction_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings Updated.
         /// </summary>
         public static string SettingsUpdated {
@@ -236,6 +309,35 @@ namespace Sdl.Community.DeepLMTProvider {
         public static string SettingsUpdated_ReopenFilesForEditing {
             get {
                 return ResourceManager.GetString("SettingsUpdated_ReopenFilesForEditing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon SourceCode {
+            get {
+                object obj = ResourceManager.GetObject("SourceCode", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellmeDocumentation {
+            get {
+                object obj = ResourceManager.GetObject("TellmeDocumentation", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Highlight terms that are missing source or target text, or are duplicated..
+        /// </summary>
+        public static string ValidateButton_ToolTip {
+            get {
+                return ResourceManager.GetString("ValidateButton.ToolTip", resourceCulture);
             }
         }
         

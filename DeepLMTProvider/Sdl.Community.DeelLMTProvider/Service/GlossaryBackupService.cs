@@ -63,11 +63,9 @@ namespace Sdl.Community.DeepLMTProvider.Service
             if (!success) messageService.ShowWarning("Backup service could not be initialized.\nUse glossary manager carefully!", "Manage glossaries");
 
             var backupPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "Trados AppStore",
-                $@"DeepLLogs\Backup");
+                Constants.DeepLDataPath, "Backup");
 
-            var backupPathInfo
-                = new DirectoryInfo(backupPath);
+            var backupPathInfo = new DirectoryInfo(backupPath);
 
             if (!backupPathInfo.Exists) backupPathInfo.Create();
 

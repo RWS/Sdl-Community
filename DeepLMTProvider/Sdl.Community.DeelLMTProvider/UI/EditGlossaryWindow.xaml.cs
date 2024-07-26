@@ -9,6 +9,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -16,6 +17,7 @@ using System.Windows.Input;
 namespace Sdl.Community.DeepLMTProvider.UI
 {
     public partial class EditGlossaryWindow : INotifyPropertyChanged
+
     {
         private string _filterQuery;
         private ObservableCollection<GlossaryEntry> _glossaryEntries;
@@ -76,6 +78,8 @@ namespace Sdl.Community.DeepLMTProvider.UI
                 ApplyEditModeUiChanges(value);
 
                 if (value) return;
+
+                ValidateEntries();
                 foreach (var glossaryEntry in GlossaryEntries)
                 {
                     if (!glossaryEntry.IsEmpty()) continue;
@@ -86,6 +90,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
         }
 
         public ICommand KeyboardCommand => new CommandWithParameter(ExecuteKeyboardShortcut);
+        public ICommand ValidateCommand => new ParameterlessCommand(ValidateEntries);
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
@@ -132,7 +137,11 @@ namespace Sdl.Community.DeepLMTProvider.UI
             Close();
         }
 
-        private void DeleteEntry(object glossaryEntry) => GlossaryEntries.Remove((GlossaryEntry)glossaryEntry);
+        private void DeleteEntry(object glossaryEntry)
+        {
+            GlossaryEntries.Remove((GlossaryEntry)glossaryEntry);
+            ValidateEntries();
+        }
 
         private void Entries_DataGrid_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -214,14 +223,53 @@ namespace Sdl.Community.DeepLMTProvider.UI
                 ((GlossaryEntry)e.NewItems[0]).PropertyChanged +=
                     (_, _) => GlossaryEntries_CollectionChanged(null, null);
 
-            var termsToBeRemoved = GlossaryEntries.Where(glossaryEntry =>
-                glossaryEntry.IsInvalid()).ToList();
+            var termsToBeRemoved = GlossaryEntries.Where(glossaryEntry => glossaryEntry.IsInvalid()).ToList();
 
-            if (Apply_Button is not null)
-                Apply_Button.IsEnabled = !termsToBeRemoved.Any() && !GlossaryEntries
-                    .GetDuplicates().Any() && GlossaryEntries.Any();
+            var duplicates = GlossaryEntries.GetDuplicates();
+
+            if (Apply_Button is null) return;
+
+            Apply_Button.ToolTip = null;
+            Apply_Button.IsEnabled = !termsToBeRemoved.Any() && !duplicates.Any() && GlossaryEntries.Any();
+
+            if (!Apply_Button.IsEnabled) Apply_Button.ToolTip = "Invalid state. Cannot apply to glossary because DeepL would delete it on save.";
         }
 
-        private void ImportButton_Click(object sender, RoutedEventArgs e) => ImportEntriesRequested?.Invoke();
+        private void ImportButton_Click(object sender, RoutedEventArgs e)
+        {
+            ImportEntriesRequested?.Invoke();
+            ValidateEntries();
+        }
+
+        private void TryRefreshDataGrid()
+        {
+            Task.Run(() =>
+            {
+                var count = 0;
+                while (count < 10)
+                {
+                    count++;
+                    if (Entries_DataGrid.IsInEditMode()) continue;
+                    Entries_DataGrid.Dispatcher.Invoke(() => Entries_DataGrid.Items.Refresh());
+                    return;
+                }
+            });
+        }
+
+        private void ValidateEntries()
+        {
+            var duplicates = GlossaryEntries.GetDuplicates();
+
+            foreach (var entry in GlossaryEntries)
+            {
+                entry.Validate();
+                if (duplicates.Contains(entry))
+                {
+                    entry.AddValidationError("Duplicate", "Duplicate entry found.");
+                }
+            }
+
+            TryRefreshDataGrid();
+        }
     }
 }

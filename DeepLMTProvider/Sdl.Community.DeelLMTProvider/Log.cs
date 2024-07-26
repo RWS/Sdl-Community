@@ -25,8 +25,8 @@ namespace Sdl.Community.DeepLMTProvider
             }
             var config = LogManager.Configuration;
 
-            var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Trados AppStore",
-                "DeepLLogs");
+            var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                Constants.DeepLDataPath, "DeepLLogs");
             Directory.CreateDirectory(logDirectoryPath);
 
             var target = new FileTarget

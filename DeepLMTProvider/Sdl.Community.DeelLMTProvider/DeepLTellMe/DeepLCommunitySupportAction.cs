@@ -8,12 +8,12 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
 	{
 		public DeepLCommunitySupportAction()
 		{
-			Name = "RWS Community AppStore forum";
+			Name = "RWS Community AppStore Forum";
 		}
 
-		public override string Category => "DeepL results";
+		public override string Category => $"{PluginResources.Plugin_Name} results";
 
-		public override Icon Icon => PluginResources.ForumIcon;
+		public override Icon Icon => PluginResources.Question;
 
 		public override bool IsAvailable => true;
 
