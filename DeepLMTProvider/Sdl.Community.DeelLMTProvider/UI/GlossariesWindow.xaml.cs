@@ -7,6 +7,7 @@ namespace Sdl.Community.DeepLMTProvider.UI
 {
     public partial class GlossariesWindow
     {
+
         public GlossariesWindow()
         {
             InitializeComponent();
@@ -16,6 +17,8 @@ namespace Sdl.Community.DeepLMTProvider.UI
         public ICommand EscapeCommand => new ParameterlessCommand(EscapePressed);
 
         public ICommand ExportCommand => new ParameterlessCommand(() => ExportButton_Click(null, null));
+
+        
 
         private void CloseWindow()
         {

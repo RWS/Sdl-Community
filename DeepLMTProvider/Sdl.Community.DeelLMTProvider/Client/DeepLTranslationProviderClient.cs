@@ -94,9 +94,9 @@ namespace Sdl.Community.DeepLMTProvider.Client
             return !string.IsNullOrEmpty(supportedSourceLanguage) && !string.IsNullOrEmpty(supportedTargetLanguage);
         }
 
-        public string Translate(LanguagePair languageDirection, string sourceText, Formality formality, string glossaryId)
+        public string Translate(LanguagePair languageDirection, string sourceText, DeepLSettings deepLSettings)
         {
-            formality = GetFormality(languageDirection, formality);
+            deepLSettings.Formality = GetFormality(languageDirection, deepLSettings.Formality);
 
             var targetLanguage = GetLanguage(languageDirection.TargetCulture, SupportedTargetLanguages);
             var sourceLanguage = GetLanguage(languageDirection.SourceCulture, SupportedSourceLanguages);
@@ -104,22 +104,26 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
             try
             {
-                var content = new StringContent(JsonConvert.SerializeObject(
-                    new DeeplRequestParameters
-                    {
-                        Text = new List<string> { sourceText },
-                        SourceLanguage = sourceLanguage,
-                        TargetLanguage = targetLanguage,
-                        Formality = formality.ToString().ToLower(),
-                        GlossaryId = glossaryId,
-                        TagHandling = "xml",
-                        PreserveFormatting = true
-                    },
+                var deeplRequestParameters = new DeeplRequestParameters
+                {
+                    Text = [sourceText],
+                    SourceLanguage = sourceLanguage,
+                    TargetLanguage = targetLanguage,
+                    Formality = deepLSettings.Formality.ToString().ToLower(),
+                    GlossaryId = deepLSettings.GlossaryId,
+                    PreserveFormatting = deepLSettings.PreserveFormatting,
+                    TagHandling = deepLSettings.TagHandling == TagFormat.None ? null : deepLSettings.TagHandling.ToString().ToLower()
+                };
+
+                var requestJson = JsonConvert.SerializeObject(
+                    deeplRequestParameters,
                     new JsonSerializerSettings
                     {
                         NullValueHandling = NullValueHandling.Ignore,
                         ContractResolver = new CamelCasePropertyNamesContractResolver()
-                    }), Encoding.UTF8, "application/json");
+                    });
+
+                var content = new StringContent(requestJson, Encoding.UTF8, "application/json");
 
                 var request = new HttpRequestMessage
                 {
@@ -165,16 +169,6 @@ namespace Sdl.Community.DeepLMTProvider.Client
             response.EnsureSuccessStatusCode();
 
             return response.Content?.ReadAsStringAsync().Result;
-        }
-
-        private static bool IsLanguageCompatible(CultureInfo targetLanguage)
-        {
-            if (!SupportedTargetLanguagesAndFormalities.TryGetValue(targetLanguage.ToString().ToUpper(), out var supportsFormality))
-            {
-                SupportedTargetLanguagesAndFormalities.TryGetValue(targetLanguage.TwoLetterISOLanguageName.ToUpper(), out supportsFormality);
-            }
-
-            return supportsFormality;
         }
 
         private static HttpResponseMessage IsValidApiKey(string apiKey)

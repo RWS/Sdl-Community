@@ -120,15 +120,11 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         private IEditGlossaryService EditGlossaryService { get; }
 
-        private IUserInteractionService UserInteractionService { get; }
-
         private IGlossaryReaderWriterService GlossaryReaderWriterService { get; }
-
         private IMessageService MessageService { get; }
-
         private IProcessStarter ProcessStarter { get; }
-
         private List<GlossaryInfo> SelectedGlossaries => Glossaries.Where(g => g.IsChecked).ToList();
+        private IUserInteractionService UserInteractionService { get; }
 
         private async Task AddNewGlossary()
         {
@@ -327,7 +323,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 return;
             }
 
-            if (UserInteractionService.OpenImportEntriesDialog(out var glossariesAndDelimiters)) return;
+            if (!UserInteractionService.OpenImportEntriesDialog(out var glossariesAndDelimiters)) return;
             foreach (var glossaryDelimiter in glossariesAndDelimiters)
             {
                 var (success, glossary, message) = GlossaryReaderWriterService.ReadGlossary(glossaryDelimiter.Filepath, glossaryDelimiter.Delimiter);

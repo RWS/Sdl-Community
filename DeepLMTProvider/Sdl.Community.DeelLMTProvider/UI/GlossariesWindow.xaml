@@ -3,11 +3,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:tradosControls="http://schemas.trados.com/xaml"
+        
         xmlns:controls="clr-namespace:Sdl.Community.DeepLMTProvider.UI.Controls"
         xmlns:converters="clr-namespace:Sdl.Community.DeepLMTProvider.UI.Converters"
         xmlns:uiHelpers="clr-namespace:Sdl.Community.DeepLMTProvider.UI.UiHelpers"
         xmlns:viewModel="clr-namespace:Sdl.Community.DeepLMTProvider.ViewModel"
+        xmlns:tradosControls="http://schemas.trados.com/xaml"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewModel:GlossariesWindowViewModel}"
         d:DesignHeight="450"
