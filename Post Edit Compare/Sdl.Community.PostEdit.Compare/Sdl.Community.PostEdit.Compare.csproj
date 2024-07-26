@@ -79,9 +79,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Build\SolutionInfo.cs">
-      <Link>Properties\SolutionInfo.cs</Link>
-    </Compile>
     <Compile Include="Automation\AutomationComunicationSettings.cs" />
     <Compile Include="Automation\SettingsSerializer.cs" />
     <Compile Include="ComboboxItem.cs" />

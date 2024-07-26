@@ -9,22 +9,18 @@ namespace Sdl.Community.FailSafeTask.TellMe
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new FailSafeTaskDocumantationAction
+			new FailSafeTaskCommunityWikiAction
 			{
-				Keywords = new[] { "fail safe task", "fail safe task documentation", "documentation" }
+				Keywords = new[] { "fail safe task", "fail safe task community", "fail safe task support", "fail safe task wiki" }
 			},
 			new FailSafeTaskCommunityForumAction
 			{
 				Keywords = new[] { "fail safe task", "fail safe task community", "fail safe task support", "fail safe task forum" }
 			},
-			new FailSafeTaskSourceCodeAction
+			new FailSafeTaskStoreAction
 			{
-				Keywords = new[] { "fail safe task", "fail safe task source code", "source", "code" }
-			},
-            new FailSafeTaskSettingsAction
-            {
-                Keywords = new[] { "fail safe task", "fail safe task settings", "settings" }
-            }
-        };
+				Keywords = new[] { "fail safe task", "fail safe task store", "fail safe task download", "fail safe task appstore" }
+			}
+		};
 	}
 }

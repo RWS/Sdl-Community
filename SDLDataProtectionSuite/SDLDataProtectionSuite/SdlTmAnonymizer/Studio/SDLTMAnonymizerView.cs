@@ -38,7 +38,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 
 		protected override void Initialize(IViewContext context)
 		{
-			SettingsService = ApplicationContext.SettingsService;
+			SettingsService = new SettingsService(new PathInfo());
 
 			Model = new MainViewModel(SettingsService, this, new GroupshareCredentialManager());
 			Model.PropertyChanged += Model_PropertyChanged;

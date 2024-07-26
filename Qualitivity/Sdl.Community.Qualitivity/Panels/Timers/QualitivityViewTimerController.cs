@@ -23,18 +23,11 @@ namespace Sdl.Community.Qualitivity.Panels.Timers
             return Control.Value;
         }
 
-        public void InitializeController() => Initialize();
-
         protected override void Initialize()
         {
             
         }
 
         public Lazy<QualitivityViewTimerControl> Control = new Lazy<QualitivityViewTimerControl>(() => new QualitivityViewTimerControl());
-
-        public void StopTracking()
-        {
-	        Control.Value.StopTracking();
-        }
     }
 }

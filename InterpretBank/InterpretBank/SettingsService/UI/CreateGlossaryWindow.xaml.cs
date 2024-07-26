@@ -20,14 +20,7 @@ namespace InterpretBank.SettingsService.UI
             set => SetValue(TextProperty, value);
         }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            DialogResult = true;
-        }
 
-        private void CloseWindowCommandHandler(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e) => Close();
     }
 }

@@ -7,8 +7,8 @@ namespace Sdl.Community.TermExcelerator.TellMe
 	public class ExcelTermCommunityForumAction : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
-		public override string Category => $"{PluginResources.Plugin_Name} results";
-		public override Icon Icon => PluginResources.Question;
+		public override string Category => "Term Excelerator results";
+		public override Icon Icon => PluginResources.ForumIcon;
 
 		public ExcelTermCommunityForumAction()
 		{

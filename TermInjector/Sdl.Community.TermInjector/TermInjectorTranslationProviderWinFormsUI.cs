@@ -31,14 +31,15 @@ namespace Sdl.Community.TermInjector
         #region "Browse"
         public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
         {
-            var defaultTranslationOptions = new TermInjectorTranslationOptions
-            {
-	            //These are the default advanced settings, they can be changed in the dialog
-	            TokenBoundaryCharacters = " .,!?\"'-;:(){}<>|", TermAdditionSeparator = "¤", Delimiter = "Tab",
-	            UseBoundaryCharacters = "true"
-            };
+            TermInjectorTranslationOptions defaultTranslationOptions = new TermInjectorTranslationOptions();
 
-            var dialog = new TermInjectorTranslationProviderConfDialog(defaultTranslationOptions, owner);
+            //These are the default advanced settings, they can be changed in the dialog
+            defaultTranslationOptions.TokenBoundaryCharacters = " .,!?\"'-;:(){}<>|";
+            defaultTranslationOptions.TermAdditionSeparator = "¤";
+            defaultTranslationOptions.Delimiter = "Tab";
+            defaultTranslationOptions.UseBoundaryCharacters = "true";
+
+            TermInjectorTranslationProviderConfDialog dialog = new TermInjectorTranslationProviderConfDialog(defaultTranslationOptions, owner);
             if (dialog.ShowDialog(owner) == DialogResult.OK)
             {
                 if (dialog.Options.TMFileName == "")
@@ -62,7 +63,7 @@ namespace Sdl.Community.TermInjector
                 //Assign GUID to prevent duplicate instances
                 dialog.Options.InstanceGUID = Guid.NewGuid().ToString();
 
-                var testProvider = new TermInjectorTranslationProvider(dialog.Options);
+                TermInjectorTranslationProvider testProvider = new TermInjectorTranslationProvider(dialog.Options);
 
                 if (!testProvider.FileTM.SupportsLanguageDirection(languagePairs[0]))
                 {
@@ -107,19 +108,19 @@ namespace Sdl.Community.TermInjector
         #region "Edit"
         public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
         {
-            var editProvider = translationProvider as TermInjectorTranslationProvider;
+            TermInjectorTranslationProvider editProvider = translationProvider as TermInjectorTranslationProvider;
             if (editProvider == null)
             {
                 return false;
             }
 
-            var oldFileName = editProvider.Options.GlossaryFileName;
-            var oldRegexFileName = editProvider.Options.RegexFileName;
-            var oldMatchCase = editProvider.Options.MatchCase;
-            var oldDelimiter = editProvider.Options.Delimiter;
-            var oldTMName = editProvider.Options.TMFileName;
+            string oldFileName = editProvider.Options.GlossaryFileName;
+            string oldRegexFileName = editProvider.Options.RegexFileName;
+            string oldMatchCase = editProvider.Options.MatchCase;
+            string oldDelimiter = editProvider.Options.Delimiter;
+            string oldTMName = editProvider.Options.TMFileName;
 
-            var dialog = new TermInjectorTranslationProviderConfDialog(editProvider.Options, editProvider, owner);
+            TermInjectorTranslationProviderConfDialog dialog = new TermInjectorTranslationProviderConfDialog(editProvider.Options, editProvider, owner);
             if (dialog.ShowDialog(owner) == DialogResult.OK)
             {
                 if (dialog.Options.TMFileName == "")
@@ -203,7 +204,7 @@ namespace Sdl.Community.TermInjector
         #region "GetDisplayInfo"
         public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
         {
-            var info = new TranslationProviderDisplayInfo();
+            TranslationProviderDisplayInfo info = new TranslationProviderDisplayInfo();
             info.Name = PluginResources.Plugin_NiceName;
             info.TranslationProviderIcon = PluginResources.band_aid_icon;
             info.TooltipText = PluginResources.Plugin_Tooltip;

@@ -19,7 +19,7 @@ namespace Sdl.Community.RapidAddTerm {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -71,16 +71,6 @@ namespace Sdl.Community.RapidAddTerm {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Information {
-            get {
-                object obj = ResourceManager.GetObject("Information", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to RapidAddTerm.
         /// </summary>
         public static string Plugin_Name {
@@ -106,50 +96,6 @@ namespace Sdl.Community.RapidAddTerm {
             get {
                 object obj = ResourceManager.GetObject("RAT1", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon TellMe_Documentation {
-            get {
-                object obj = ResourceManager.GetObject("TellMe_Documentation", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon TellMe_Settings {
-            get {
-                object obj = ResourceManager.GetObject("TellMe_Settings", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon TellMe_SourceCode {
-            get {
-                object obj = ResourceManager.GetObject("TellMe_SourceCode", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To engage with RAT, follow these steps:
-        ///
-        ///   1. In Editor view, select source and target term
-        ///   2. Right-click and select “Rapid Add Term”
-        ///
-        ///Tip: You can assign shortcuts via : File-Options-Keyboard shortcuts-Rapid Add Term..
-        /// </summary>
-        public static string TellMe_WarningMessage {
-            get {
-                return ResourceManager.GetString("TellMe_WarningMessage", resourceCulture);
             }
         }
         

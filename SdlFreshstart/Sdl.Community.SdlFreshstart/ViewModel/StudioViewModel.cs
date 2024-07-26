@@ -25,7 +25,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		private readonly IRegistryHelper _registryHelper;
 		private readonly string _packageCache = @"C:\ProgramData\Package Cache\SDL";
 		private readonly Persistence _persistenceSettings;
-		private readonly StudioVersionService _versionService;
+		private readonly VersionService _versionService;
 		private bool _checkAll;
 		private ObservableCollection<StudioLocationListItem> _locations = new ObservableCollection<StudioLocationListItem>();
 		private bool _isRemoveEnabled;
@@ -44,7 +44,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		private bool _registryKeyChecked;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		public StudioViewModel(MainWindow mainWindow, StudioVersionService versionService, IMessageService messageService, IRegistryHelper registryHelper)
+		public StudioViewModel(MainWindow mainWindow, VersionService versionService, IMessageService messageService, IRegistryHelper registryHelper)
 		{
 			_versionService = versionService;
 			_messageService = messageService;

@@ -6,14 +6,13 @@
 		xmlns:root="clr-namespace:LanguageWeaverProvider"
 		mc:Ignorable="d"
 		Title="TellMe Warning"
-		Width="560"
-		Height="240"
+		Width="600"
+		Height="256"
 		ResizeMode="NoResize"
 		WindowStyle="None"
 		WindowStartupLocation="CenterScreen"
 		MouseLeftButtonDown="Window_MouseLeftButtonDown"
 		KeyDown="Window_KeyDown">
-    
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -28,8 +27,9 @@
 		<Grid>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="*" />
 				<RowDefinition Height="Auto" />
 			</Grid.RowDefinitions>
 
@@ -40,17 +40,17 @@
 
 			<Image Grid.Row="0"
 				   Grid.Column="0"
-				   Source="pack://application:,,,/LanguageWeaverProvider;component/Resources/Information.png"
+				   Source="pack://application:,,,/LanguageWeaverProvider;component/Resources/Warning.png"
 				   Height="40"
 				   Width="40"
 				   RenderOptions.BitmapScalingMode="HighQuality"
-				   Margin="24 16 0 0" />
+				   Margin="32 16 16 0" />
 
 			<TextBlock Grid.Row="0"
 					   Grid.Column="1"
 					   Text="Configuring Translation Provider in Project Settings"
 					   Style="{StaticResource Sdl.TextBlock.InformationTitleStyle}"
-					   FontSize="18"
+					   FontSize="16"
 					   HorizontalAlignment="Left"
 					   VerticalAlignment="Center"
 					   Margin="8 16 0 0" />
@@ -59,18 +59,18 @@
 					   Grid.ColumnSpan="2"
 					   Text="{x:Static root:PluginResources.SettingsAction_NoProviderAvailable}"
 					   Focusable="True"
+					   FontWeight="DemiBold"
 					   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
 					   MaxWidth="9999"
 					   TextWrapping="Wrap"
 					   Margin="24 8 24 0" />
 
-			<TextBlock Grid.Row="3"
-                       Grid.ColumnSpan="2"
+			<TextBlock Grid.Row="2"
+					   Grid.ColumnSpan="2"
 					   Style="{StaticResource Sdl.TextBlock.InformationTextStyle}"
 					   HorizontalAlignment="Left"
-                       VerticalAlignment="Center"
 					   Focusable="True"
-					   Margin="24 0"
+					   Margin="24 12 24 0"
 					   KeyDown="OpenUrl_KeyPressed">
 				<Run Text="{x:Static root:PluginResources.SettingsAction_ExternalHelp_1}" />
 				<Run Text="{x:Static root:PluginResources.SettingsAction_ExternalHelp_2}"
@@ -95,7 +95,7 @@
 				<Run Text="{x:Static root:PluginResources.SettingsAction_ExternalHelp_3}" />
 			</TextBlock>
 
-			<Button Grid.Row="3"
+			<Button Grid.Row="4"
 					Grid.ColumnSpan="2"
 					Content="Close"
 					Style="{StaticResource Sdl.Button.SecondaryStyle}"

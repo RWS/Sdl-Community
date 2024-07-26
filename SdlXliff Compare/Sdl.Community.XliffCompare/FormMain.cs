@@ -167,7 +167,7 @@ namespace Sdl.Community.XliffCompare
             Processor.SaveSettings();
         }
 
-        public void LoadSettingsDialog()
+        private void LoadSettingsDialog()
         {
             var f = new FormSettings
             {

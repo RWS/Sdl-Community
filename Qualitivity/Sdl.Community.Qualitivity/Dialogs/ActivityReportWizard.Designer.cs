@@ -40,6 +40,7 @@ namespace Sdl.Community.Qualitivity.Dialogs
             this.button_wizard_finish = new System.Windows.Forms.Button();
             this.button_wizard_next = new System.Windows.Forms.Button();
             this.button_wizard_back = new System.Windows.Forms.Button();
+            this.button_wizard_help = new System.Windows.Forms.Button();
             this.panel_leftbar = new System.Windows.Forms.Panel();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.panel_welcome = new System.Windows.Forms.Panel();
@@ -150,6 +151,7 @@ namespace Sdl.Community.Qualitivity.Dialogs
             // panel_button_control
             // 
             this.panel_button_control.Controls.Add(this.panel33);
+            this.panel_button_control.Controls.Add(this.button_wizard_help);
             this.panel_button_control.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel_button_control.Location = new System.Drawing.Point(0, 480);
             this.panel_button_control.Name = "panel_button_control";
@@ -207,6 +209,16 @@ namespace Sdl.Community.Qualitivity.Dialogs
             this.button_wizard_back.Text = "< &Back";
             this.button_wizard_back.UseVisualStyleBackColor = true;
             this.button_wizard_back.Click += new System.EventHandler(this.button_wizard_back_Click);
+            // 
+            // button_wizard_help
+            // 
+            this.button_wizard_help.Location = new System.Drawing.Point(22, 9);
+            this.button_wizard_help.Name = "button_wizard_help";
+            this.button_wizard_help.Size = new System.Drawing.Size(75, 23);
+            this.button_wizard_help.TabIndex = 0;
+            this.button_wizard_help.Text = "&Help";
+            this.button_wizard_help.UseVisualStyleBackColor = true;
+            this.button_wizard_help.Click += new System.EventHandler(this.button_wizard_help_Click);
             // 
             // panel_leftbar
             // 
@@ -1287,6 +1299,7 @@ namespace Sdl.Community.Qualitivity.Dialogs
         private Button button_wizard_finish;
         private Button button_wizard_next;
         private Button button_wizard_back;
+        private Button button_wizard_help;
         private Panel panel_leftbar;
         private PictureBox pictureBox2;
         private Panel panel_welcome;

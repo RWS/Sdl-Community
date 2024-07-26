@@ -330,36 +330,6 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon SourceCode {
-            get {
-                object obj = ResourceManager.GetObject("SourceCode", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon TellMe_Documentation {
-            get {
-                object obj = ResourceManager.GetObject("TellMe_Documentation", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon TellMe_Forum {
-            get {
-                object obj = ResourceManager.GetObject("TellMe_Forum", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0} TellMe provider.
         /// </summary>
         public static string TellMe_Provider {
@@ -380,9 +350,9 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon TellMe_Settings {
+        public static System.Drawing.Icon TellMeDoc {
             get {
-                object obj = ResourceManager.GetObject("TellMe_Settings", resourceCulture);
+                object obj = ResourceManager.GetObject("TellMeDoc", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -390,9 +360,9 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon TellMe_SourceCode {
+        public static System.Drawing.Icon TellmeForum {
             get {
-                object obj = ResourceManager.GetObject("TellMe_SourceCode", resourceCulture);
+                object obj = ResourceManager.GetObject("TellmeForum", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -400,9 +370,19 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon TellmeDocumentation {
+        public static System.Drawing.Icon TellMeSettings {
             get {
-                object obj = ResourceManager.GetObject("TellmeDocumentation", resourceCulture);
+                object obj = ResourceManager.GetObject("TellMeSettings", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TellMeSourceCode {
+            get {
+                object obj = ResourceManager.GetObject("TellMeSourceCode", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -413,7 +393,7 @@ namespace Sdl.Community.SdlDataProtectionSuite {
         ///To apply Trados Data Protection settings against project files, please follow these steps:
         ///    1. Select Project
         ///    2. Access Batch Task
-        ///    3. Run Protect Data followed by Unprotect Data if needed
+        ///    3. Run Protect Data followed by Unprotect Data if needed  
         ///
         ///To apply Trados Data Protection settings against a Translation Memory, please go to the TradosTMAnonymizer view located at the bottom left of Trados Studio.
         /// </summary>

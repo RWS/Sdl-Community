@@ -1,9 +1,7 @@
-﻿using Sdl.Community.IATETerminologyProvider.Interface;
-
-namespace Sdl.Community.IATETerminologyProvider.Model
+﻿namespace Sdl.Community.IATETerminologyProvider.Model
 {
-	public class CollectionModel : ViewModelBase, IModel
-    {
+	public class CollectionModel : ViewModelBase
+	{
 		private bool _isSelected;
 		public string Code { get; set; }
 		public string Name { get; set; }

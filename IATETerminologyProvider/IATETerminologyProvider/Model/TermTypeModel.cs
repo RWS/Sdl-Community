@@ -1,8 +1,6 @@
-﻿using Sdl.Community.IATETerminologyProvider.Interface;
-
-namespace Sdl.Community.IATETerminologyProvider.Model
+﻿namespace Sdl.Community.IATETerminologyProvider.Model
 {
-	public class TermTypeModel : ViewModelBase, IModel
+	public class TermTypeModel : ViewModelBase
     {
 		private bool _isSelected;
 		public int Code { get; set; }

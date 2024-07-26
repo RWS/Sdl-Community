@@ -3,6 +3,7 @@ using InterpretBank.SettingsService.UI;
 using InterpretBank.TermbaseViewer.UI;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 
@@ -31,17 +32,8 @@ namespace InterpretBank.CommonServices
             return showDialog.HasValue && showDialog.Value;
         }
 
-        public bool GetInfoFromUser(out string info, string request)
-        {
-            var createGlossaryWindow = new CreateGlossaryWindow { Text = request };
-            var result = createGlossaryWindow.ShowDialog();
-
-            info = createGlossaryWindow.InputTextBox.Text;
-            return result ?? false;
-        }
-
         public void GetNewTermDetailsFromUser(List<string> glossaries, string sourceLanguage, string targetLanguage,
-                    string sourceTerm, string targetTerm)
+            string sourceTerm, string targetTerm)
         {
             ChooseGlossaryWindow = new AddTermPopup
             {
@@ -59,7 +51,13 @@ namespace InterpretBank.CommonServices
             ChooseGlossaryWindow.Show();
         }
 
-        public void WarnUser(string message) => MessageBox.Show(message, $"{PluginResources.Plugin_Name} Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        public string GetInfoFromUser(string text)
+        {
+            var createGlossaryWindow = new CreateGlossaryWindow{Text = text};
+            createGlossaryWindow.ShowDialog();
+
+            return createGlossaryWindow.InputTextBox.Text;
+        }
 
         private void ChooseGlossaryWindow_Closed(object sender, EventArgs e)
         {
@@ -71,5 +69,7 @@ namespace InterpretBank.CommonServices
 
             ChooseGlossaryWindow = null;
         }
+
+        public void WarnUser(string message) => MessageBox.Show(message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
     }
 }

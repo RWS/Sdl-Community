@@ -133,15 +133,6 @@
   <data name="SDLXLIFFCompare" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>sdlxliffcompare.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TellmeDocumentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellmeDocumentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="TellMe_Provider" xml:space="preserve">
     <value>{0} TellMe provider</value>
   </data>

@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
-using InterpretBank.GlossaryService;
+﻿using InterpretBank.GlossaryService;
 using InterpretBank.GlossaryService.DAL;
 using InterpretBank.GlossaryService.Model;
 using InterpretBank.Helpers;
@@ -53,16 +52,19 @@ public class TerminologyService : ITerminologyService
     public ObservableCollection<EntryModel> GetEntriesFromDb(List<string> glossaries)
     {
         using var glossaryService = GetGlossaryService();
-        var entries = glossaryService.GetTerms(null, null, glossaries, null)?.Cast<TermEntry>();
+        var terms = glossaryService.GetTerms(null, null, glossaries, null)?.Cast<TermEntry>();
 
-        return GetInitializedEntries(entries);
+        var entryModels = new ObservableCollection<EntryModel>();
+
+        InitializeEntries(terms, entryModels);
+        return entryModels;
     }
 
     public List<StudioTermEntry> GetExactTerms(string searchText, string sourceLanguage, string targetLanguage,
         List<string> glossaries)
     {
         var allEntries = GetSourceAndTargetTerms(sourceLanguage, targetLanguage, glossaries);
-        var filteredTerms = allEntries.Where(t => t.Source.ToLower().StartsWith(searchText.ToLower()));
+        var filteredTerms = allEntries.Where(t => t.Source.ToLower().Equals(searchText.ToLower()));
 
         var localStudioTerms = filteredTerms
             .Select(term => new StudioTermEntry
@@ -83,7 +85,6 @@ public class TerminologyService : ITerminologyService
         string targetLanguage, List<string> glossaries, int minScore)
     {
         var allEntries = GetSourceAndTargetTerms(sourceLanguage, targetLanguage, glossaries);
-        if (allEntries == null) return null;
 
         var termsDictionary = new ConcurrentDictionary<string, List<StudioTermEntry>>();
         Parallel.ForEach(words, word =>
@@ -117,10 +118,10 @@ public class TerminologyService : ITerminologyService
     public int GetLanguageIndex(string interpretBankLanguage)
     {
         if (LanguageDictionary is not null) return LanguageDictionary[interpretBankLanguage].Index;
+
         LanguageDictionary = GetLanguages().ToDictionary(l => l.Name, l => l);
 
-        if (!LanguageDictionary.TryGetValue(interpretBankLanguage, out var value)) return -1;
-        return value.Index;
+        return LanguageDictionary[interpretBankLanguage].Index;
     }
 
     public List<LanguageModel> GetLanguages()
@@ -187,15 +188,9 @@ public class TerminologyService : ITerminologyService
 
         var targetLanguageIndex = GetLanguageIndex(targetLanguage);
         var sourceLanguageIndex = GetLanguageIndex(sourceLanguage);
+        var entries = glossaryService.GetTerms(null, [sourceLanguageIndex, targetLanguageIndex], glossaries, null).Cast<TermEntry>();
 
-        var indices = new List<int>();
-
-        if (targetLanguageIndex > -1) indices.Add(targetLanguageIndex);
-        if (sourceLanguageIndex > -1) indices.Add(sourceLanguageIndex);
-
-        var entries = glossaryService.GetTerms(null, indices, glossaries, null)?.Cast<TermEntry>();
-
-        var allEntries = entries?.Select(t =>
+        var allEntries = entries.Select(t =>
         {
             var sourceLe =
                 t.LanguageEquivalents.FirstOrDefault(le => le.LanguageIndex == sourceLanguageIndex);
@@ -214,9 +209,8 @@ public class TerminologyService : ITerminologyService
         return allEntries;
     }
 
-    private ObservableCollection<EntryModel> GetInitializedEntries(IEnumerable<TermEntry> dbEntries)
+    private void InitializeEntries(IEnumerable<TermEntry> dbEntries, ObservableCollection<EntryModel> entryModels)
     {
-        var entries = new ObservableCollection<EntryModel>();
         try
         {
             foreach (var dbEntry in dbEntries)
@@ -241,16 +235,12 @@ public class TerminologyService : ITerminologyService
                     });
                 }
 
-                entries.Add(entryModel);
+                entryModels.Add(entryModel);
             }
-
-            return entries;
         }
         catch
         {
         }
-
-        return [];
     }
 
     private void InitializeEntryModelTerms(EntryModel entryModel, DbGlossaryEntry t)

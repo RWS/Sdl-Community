@@ -1,7 +1,7 @@
 
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Trados TMBackup</PlugInName>
-  <Version>5.0.0.3</Version>
+  <Version>4.0.2.0</Version>
   <Description>This application provides a simple way to back up your Translation Memories and Termbases on a regular basis.</Description>
   <Author>Trados AppStore Team</Author>
   <Include>
@@ -9,5 +9,5 @@
     <File>Microsoft.Win32.TaskScheduler.dll</File>
 	<File>Sdl.Community.BackupFiles.exe</File>
   </Include>
-  <RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />
+  <RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9" />
 </PluginPackage>

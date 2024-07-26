@@ -92,9 +92,7 @@ namespace Trados.Transcreate.Actions
 
 		public override void Initialize()
 		{
-            ApplicationInstance.InitializeTranscreateViewController();
-
-            _controllers = SdlTradosStudio.Application.GetController<TranscreateViewController>().Controllers;
+			_controllers = SdlTradosStudio.Application.GetController<TranscreateViewController>().Controllers;
 			SetupTranscreateController();
 			_customerProvider = new CustomerProvider();
 			_pathInfo = new PathInfo();

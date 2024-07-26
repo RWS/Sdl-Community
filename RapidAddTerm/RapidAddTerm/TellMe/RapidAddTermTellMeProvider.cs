@@ -9,23 +9,18 @@ namespace Sdl.Community.RapidAddTerm.TellMe
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new RapidAddTermDocumentationAction
+			new RapidAddTermStoreAction
 			{
-				Keywords = new[] {"rat", "rapid add term", "rapid add term documentation", "documentation"}
+				Keywords = new[] {"rapid add term", "rapid add term store", "rapid add term download"}
 			},
 			new RapidAddTermCommunitySupportAction
 			{
-				Keywords = new[] {"rat", "rapid add term", "rapid add term community", "rapid add term support", "forum"}
+				Keywords = new[] {"rapid add term", "rapid add term community", "rapid add term support"}
 			},
-			new RapidAddTermSourceCodeAction
+			new RapidAddTermHelpAction
 			{
-				Keywords = new[] {"rat", "rapid add term", "rapid add term source code", "source", "code" }
+				Keywords = new[] {"rapid add term", "rapid add term help", "rapid add term guide", "rapid add term wiki" }
 			}
-            ,
-            new RapiAddTermSettingsAction
-            {
-                Keywords = new[] {"rat", "rapid add term", "rapid add term settings", "settings" }
-            }
-        };
+		};
 	}
 }

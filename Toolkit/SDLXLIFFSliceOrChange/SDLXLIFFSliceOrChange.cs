@@ -27,7 +27,7 @@ using SDLXLIFFSliceOrChange.ResourceManager;
 
 namespace SDLXLIFFSliceOrChange
 {
-	public partial class SdlxliffSliceOrChange : UserControl,IUIControl
+	public partial class SDLXLIFFSliceOrChange : UserControl,IUIControl
 	{ 
 		private bool _checkedChangedBeforeClick;
 		private bool _doUpdateStatus;
@@ -45,7 +45,7 @@ namespace SDLXLIFFSliceOrChange
 		private List<StructureInformationType> _structureInformationTypes = new List<StructureInformationType>();
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		public SdlxliffSliceOrChange()
+		public SDLXLIFFSliceOrChange()
 		{
 			InitializeComponent();
 			SliceManager = new SliceManager(this);

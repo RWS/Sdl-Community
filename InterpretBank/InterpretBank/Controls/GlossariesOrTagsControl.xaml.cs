@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace InterpretBank.Controls
 {
@@ -11,11 +10,6 @@ namespace InterpretBank.Controls
         public GlossariesOrTagsControl()
         {
             InitializeComponent();
-        }
-
-        private void UseGlossariesButton_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            (sender as RadioButton).IsChecked = true;
         }
     }
 }

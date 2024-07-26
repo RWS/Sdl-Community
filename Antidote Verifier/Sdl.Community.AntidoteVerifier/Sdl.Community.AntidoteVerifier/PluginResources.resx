@@ -130,6 +130,9 @@
   <data name="Druide" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Druide.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\forumicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="guide" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\guide.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -146,39 +149,12 @@
     <value>{0} results</value>
   </data>
   <data name="AntidoteRegistryKeyNotFound_Error" xml:space="preserve">
-    <value>Registry key not found. Make sure you install the 'Antidote' app before trying to use the plug-in</value>
+	  <value>Registry key not found. Make sure you install the 'Antidote' app before trying to use the plug-in</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Error</value>
+	  <value>Error</value>
   </data>
   <data name="AntidoteCannotBeStarted_Error" xml:space="preserve">
-    <value>Antidote cannot be started.</value>
-  </data>
-  <data name="SettingsAction_ExternalHelp_1" xml:space="preserve">
-    <value>For more information,</value>
-  </data>
-  <data name="SettingsAction_ExternalHelp_2" xml:space="preserve">
-    <value>click here</value>
-  </data>
-  <data name="SettingsAction_ExternalHelp_3" xml:space="preserve">
-    <value>for documentation.</value>
-  </data>
-  <data name="SettingsAction_Title" xml:space="preserve">
-    <value>Antidote</value>
-  </data>
-  <data name="Forum" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Forum.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Settings2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Settings2.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TellmeDocumentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellmeDocumentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="CorrectorAction_NoFileOpened" xml:space="preserve">
-    <value>Please open a file in the editor before running this action.</value>
+	  <value>Antidote cannot be started.</value>
   </data>
 </root>

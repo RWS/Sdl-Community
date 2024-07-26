@@ -54,6 +54,10 @@ namespace LanguageWeaverProvider.Studio.TellMe.View
 			}
 		}
 
+		private void OpenUrl_ButtonClicked(object sender, RoutedEventArgs e)
+		{
+		}
+
 		private void CloseWindow_Click(object sender, RoutedEventArgs e)
 		{
 			Close();

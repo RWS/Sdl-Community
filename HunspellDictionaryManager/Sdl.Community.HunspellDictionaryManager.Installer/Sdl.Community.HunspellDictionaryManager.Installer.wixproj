@@ -7,19 +7,19 @@
     <ProjectGuid>BA98AC17-29F3-4664-BAD9-A02C569BC558</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputName>Sdl.Community.HunspellDictionaryManager.Installer</OutputName>
-	<Name>Sdl.Community.HunspellDictionaryManager.Installer</Name>
-	<DefineConstants>BuildOutputPath=..\HunspellDictionaryManager\bin\$(Configuration)</DefineConstants>
     <OutputType>Package</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>BuildOutputPath=..\HunspellDictionaryManager\bin\$(Configuration)</DefineConstants>
+    <DefineConstants>Debug;Version=3.0.1.6;BuildOutputPath=..\HunspellDictionaryManager\bin\$(Configuration)</DefineConstants>
+    <SuppressAllWarnings>False</SuppressAllWarnings>
+    <Pedantic>True</Pedantic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>BuildOutputPath=..\HunspellDictionaryManager\bin\$(Configuration)</DefineConstants>
+    <DefineConstants>Version=3.0.1.6;BuildOutputPath=..\HunspellDictionaryManager\bin\$(Configuration)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="defines.wxi" />

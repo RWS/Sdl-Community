@@ -1,105 +1,88 @@
 ﻿<Window x:Class="Sdl.Community.IATETerminologyProvider.View.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewModel="clr-namespace:Sdl.Community.IATETerminologyProvider.ViewModel"
-        xmlns:view="clr-namespace:Sdl.Community.IATETerminologyProvider.View"
-        xmlns:resx="clr-namespace:Sdl.Community.IATETerminologyProvider"
-        xmlns:helpers="clr-namespace:Sdl.Community.IATETerminologyProvider.Helpers"
-        mc:Ignorable="d"
-        Icon="../Resources/IATE_settings.ico"
-        WindowStyle="None"
-        AllowsTransparency="True"
-        Title="IATE Real-time Terminology"
-        ResizeMode="CanResizeWithGrip"
-        WindowStartupLocation="CenterScreen"
-        MinHeight="597"
-        MinWidth="735"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:viewModel="clr-namespace:Sdl.Community.IATETerminologyProvider.ViewModel"
+		xmlns:view="clr-namespace:Sdl.Community.IATETerminologyProvider.View"
+		xmlns:resx="clr-namespace:Sdl.Community.IATETerminologyProvider"
+		xmlns:helpers="clr-namespace:Sdl.Community.IATETerminologyProvider.Helpers"
+		mc:Ignorable="d"
+		Icon="../Resources/IATE_settings.ico" WindowStyle="None" AllowsTransparency="True"
+		Title="IATE Real-time Terminology"
+		ResizeMode="CanResizeWithGrip"
+		WindowStartupLocation="CenterScreen"
+		MinHeight="597"
+		MinWidth="735"
         d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel}"
-        Height="597"
-        Width="943">
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
-                <ResourceDictionary Source="../UI Helpers/CustomProgressRing.xaml" />
-                <ResourceDictionary Source="../Styles/WindowsBorder.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
+        Height="597" Width="943">
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+				<ResourceDictionary Source="../UI Helpers/CustomProgressRing.xaml" />
+				<ResourceDictionary Source="../Styles/WindowsBorder.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Window.Resources>
 
-    <Border Style="{DynamicResource WindowControlBorderStyle}">
-        <DockPanel>
-            <view:WindowsControl DockPanel.Dock="Top"
-                                 Margin="0,0,0,5" />
+	<Border Style="{DynamicResource WindowControlBorderStyle}">
+		<DockPanel>
+			<view:WindowsControl DockPanel.Dock="Top" Margin="0,0,0,5" />
 
-            <Border BorderThickness="0,0.2,0,0"
-                    BorderBrush="#ABB0B3"
-                    DockPanel.Dock="Bottom">
-                <DockPanel>
-                    <Button DockPanel.Dock="Left"
-                            ToolTip="{x:Static resx:PluginResources.Reset_Tooltip}"
-                            Margin="10"
-                            Cursor="Hand"
-                            Command="{Binding ResetToDefault}"
-                            Style="{DynamicResource Sdl.Button.SecondaryStyle}"
-                            MaxWidth="150"
-                            Content="Reset to default" />
-                    <Button DockPanel.Dock="Left"
-                            Margin="10"
-                            Cursor="Hand"
-                            Command="{Binding SaveTemplateCommand}"
-                            Style="{DynamicResource Sdl.Button.EmmbeddedAddButtonStyle}"
-                            VerticalAlignment="Center"
-                            MaxWidth="150"
-                            Content="Export settings" />
-                    <Button DockPanel.Dock="Left"
-                            Margin="10"
-                            Cursor="Hand"
-                            Command="{Binding ImportSettingsTemplateCommand}"
-                            Style="{DynamicResource Sdl.Button.EmmbeddedAddButtonStyle}"
-                            VerticalAlignment="Center"
-                            MaxWidth="150"
-                            Content="Import settings" />
-                    <Button DockPanel.Dock="Left"
-                            Margin="10"
-                            Cursor="Hand"
-                            VerticalAlignment="Center"
-                            Command="{Binding ClearCache}"
-                            Style="{DynamicResource Sdl.Button.EmmbeddedAddButtonStyle}"
-                            MaxWidth="150"
-                            Content="{x:Static resx:PluginResources.ClearCache}" />
-                    <Button Style="{DynamicResource Sdl.Button.SecondaryStyle}"
-                            DockPanel.Dock="Right"
-                            IsCancel="True"
-                            Cursor="Hand"
-                            Margin="5,10,10,10"
-                            HorizontalAlignment="Right"
-                            Content="Cancel">
-                    </Button>
-                    <Button Style="{DynamicResource Sdl.Button.PrimaryStyle}"
-                            Cursor="Hand"
-                            IsDefault="True"
-                            Margin="10,10,5,10"
-                            DockPanel.Dock="Right"
-                            Click="OkButton_Click"
-                            Command="{Binding SaveSettingsCommand}"
-                            HorizontalAlignment="Right"
-                            Content="OK">
-                    </Button>
-                </DockPanel>
-            </Border>
+			<Border BorderThickness="0,0.2,0,0" BorderBrush="#ABB0B3" DockPanel.Dock="Bottom">
+				<DockPanel>
+					<Button DockPanel.Dock="Left" 
+					        Margin="10" Cursor="Hand" 
+					        Command="{Binding ResetToDefault}"
+					        Style="{DynamicResource Sdl.Button.SecondaryStyle}" MaxWidth="150" Content="Reset to default" />
+					<Button DockPanel.Dock="Left" 
+					        Margin="10" Cursor="Hand" 
+					        Command="{Binding SaveTemplateCommand}"
+					        Style="{DynamicResource Sdl.Button.EmmbeddedAddButtonStyle}" VerticalAlignment="Center" MaxWidth="150" Content="Export settings" />
+					<Button DockPanel.Dock="Left" 
+					        Margin="10" Cursor="Hand" 
+					        Command="{Binding ImportSettingsTemplateCommand}"
+					        Style="{DynamicResource Sdl.Button.EmmbeddedAddButtonStyle}" VerticalAlignment="Center" MaxWidth="150" Content="Import settings" />
+					<Button DockPanel.Dock="Left" 
+					        Margin="10" 
+					        Cursor="Hand" 
+					        VerticalAlignment="Center"
+					        Command="{Binding ClearCache}"
+					        Style="{DynamicResource Sdl.Button.EmmbeddedAddButtonStyle}" 
+					        MaxWidth="150"
+					        Content="{x:Static resx:PluginResources.ClearCache}" />
+					<Button Style="{DynamicResource Sdl.Button.SecondaryStyle}" 
+					        DockPanel.Dock="Right"
+					        ToolTip="{x:Static resx:PluginResources.Reset_Tooltip}"
+					        IsCancel="True"
+					        Cursor="Hand"
+					        Margin="5,10,10,10"
+					        HorizontalAlignment="Right"
+					        Content="Cancel">
+					</Button>
+					<Button Style="{DynamicResource Sdl.Button.PrimaryStyle}"
+					        Cursor="Hand" 
+							IsDefault="True"
+					        Margin="10,10,5,10" 
+					        DockPanel.Dock="Right"
+							Click="OkButton_Click"
+					        Command="{Binding SaveSettingsCommand}"
+					        HorizontalAlignment="Right"
+					        Content="OK">
+					</Button>
+				</DockPanel>
+			</Border>
 
-            <TabControl DockPanel.Dock="Top">
-                <TabItem Header="Domains and term types">
-                    <view:DomainsAndTermTypes DataContext="{Binding ViewModels[0]}" />
-                </TabItem>
-                <TabItem Header="Fine-grained filter">
-                    <view:FineGrainedFilter DataContext="{Binding ViewModels[1]}" />
-                </TabItem>
-            </TabControl>
+			<TabControl DockPanel.Dock="Top">
+				<TabItem Header="Domains and term types">
+					<view:DomainsAndTermTypes DataContext="{Binding ViewModels[0]}" />
+				</TabItem>
+				<TabItem Header="Fine-grained filter">
+					<view:FineGrainedFilter DataContext="{Binding ViewModels[1]}" />
+				</TabItem>
+			</TabControl>
 
-        </DockPanel>
-    </Border>
+		</DockPanel>
+	</Border>
 </Window>

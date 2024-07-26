@@ -12,13 +12,9 @@ namespace Sdl.Community.TermExcelerator.Ui
 	{
 		private ProviderSettings _providerSettings;
 
-		public Settings(bool isForTellMeAction = false)
+		public Settings()
 		{
 			InitializeComponent();
-			if (!isForTellMeAction) return;
-
-			pathTextBox.Enabled = false;
-			browseBtn.Enabled = false;
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -136,7 +132,7 @@ namespace Sdl.Community.TermExcelerator.Ui
 			sourceLanguageComboBox.ValueMember = "Name";
 			sourceLanguageComboBox.SelectedItem = sourceCulture;
 
-			targetLanguageComboBox.DataSource = cultureNames.ToList();
+			targetLanguageComboBox.DataSource = cultureNames;
 			targetLanguageComboBox.DisplayMember = "DisplayName";
 			targetLanguageComboBox.ValueMember = "Name";
 			targetLanguageComboBox.SelectedItem = targetCulture;

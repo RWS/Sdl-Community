@@ -5,11 +5,11 @@ namespace Sdl.Community.TargetWordCount.TellMe
 	[TellMeProvider]
 	public class TargetWordCountTellMeProvider : ITellMeProvider
 	{
-		public string Name => PluginResources.Plugin_Name;
+		public string Name => "Target word count";
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new TargetWordCountDocumentationAction
+			new TargetWordCountWikiAction
 			{
 				Keywords = new[] { "target word count", "target word count community", "target word count support", "target word count wiki" }
 			},
@@ -17,14 +17,10 @@ namespace Sdl.Community.TargetWordCount.TellMe
 			{
 				Keywords = new[] { "target word count", "target word count community", "target word count support", "target word count forum" }
 			},
-			new SourceCodeAction
+			new TargetWordCountStoreAction
 			{
-				Keywords = new[] { "target word count", "target word count community", "target word count support", "source code" }
-			},
-            new SettingsAction
-            {
-                Keywords = new[] { "target word count", "target word count community", "target word count support", "settings" }
-            }
-        };
+				Keywords = new[] { "target word count", "target word count store", "target word count download", "target word count appstore" }
+			}
+		};
 	}
 }

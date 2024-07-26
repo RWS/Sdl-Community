@@ -1,9 +1,9 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.902
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdl.Community.SDLBatchAnonymize", "SDLBatchAnonymize\Sdl.Community.SDLBatchAnonymize.csproj", "{93053541-043F-46EE-A8F8-167F78C13792}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.SDLBatchAnonymize", "SDLBatchAnonymize\Sdl.Community.SDLBatchAnonymize.csproj", "{93053541-043F-46EE-A8F8-167F78C13792}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.SDLBatchAnonymizeUT", "Sdl.Community.SDLBatchAnonymizeUT\Sdl.Community.SDLBatchAnonymizeUT.csproj", "{DE030B92-4A81-4120-9583-018188AB8A90}"
 EndProject

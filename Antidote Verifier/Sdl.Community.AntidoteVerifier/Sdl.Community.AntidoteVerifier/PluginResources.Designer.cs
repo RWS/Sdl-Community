@@ -89,15 +89,6 @@ namespace Sdl.Community.AntidoteVerifier {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please open a file in the editor before running this action..
-        /// </summary>
-        public static string CorrectorAction_NoFileOpened {
-            get {
-                return ResourceManager.GetString("CorrectorAction_NoFileOpened", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon dictionary {
@@ -139,9 +130,9 @@ namespace Sdl.Community.AntidoteVerifier {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon Forum {
+        public static System.Drawing.Icon ForumIcon {
             get {
-                object obj = ResourceManager.GetObject("Forum", resourceCulture);
+                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -176,62 +167,6 @@ namespace Sdl.Community.AntidoteVerifier {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon Settings2 {
-            get {
-                object obj = ResourceManager.GetObject("Settings2", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to For more information,.
-        /// </summary>
-        public static string SettingsAction_ExternalHelp_1 {
-            get {
-                return ResourceManager.GetString("SettingsAction_ExternalHelp_1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to click here.
-        /// </summary>
-        public static string SettingsAction_ExternalHelp_2 {
-            get {
-                return ResourceManager.GetString("SettingsAction_ExternalHelp_2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to for documentation..
-        /// </summary>
-        public static string SettingsAction_ExternalHelp_3 {
-            get {
-                return ResourceManager.GetString("SettingsAction_ExternalHelp_3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Antidote.
-        /// </summary>
-        public static string SettingsAction_Title {
-            get {
-                return ResourceManager.GetString("SettingsAction_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon SourceCode {
-            get {
-                object obj = ResourceManager.GetObject("SourceCode", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0} TellMe provider.
         /// </summary>
         public static string TellMe_Provider {
@@ -246,16 +181,6 @@ namespace Sdl.Community.AntidoteVerifier {
         public static string TellMe_Provider_Results {
             get {
                 return ResourceManager.GetString("TellMe_Provider_Results", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon TellmeDocumentation {
-            get {
-                object obj = ResourceManager.GetObject("TellmeDocumentation", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
     }

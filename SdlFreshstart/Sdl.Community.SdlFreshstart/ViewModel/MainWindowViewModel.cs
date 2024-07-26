@@ -7,7 +7,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 	{
 		public MainWindowViewModel(MainWindow mainWindow)
 		{
-			var versionService = new StudioVersionService();
+			var versionService = new VersionService();
 			var messageService = new MessageService();
 			var registryHelper = new RegistryHelper();
 			StudioViewModel = new StudioViewModel(mainWindow, versionService, messageService, registryHelper);

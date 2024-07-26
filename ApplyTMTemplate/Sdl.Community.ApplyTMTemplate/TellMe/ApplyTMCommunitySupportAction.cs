@@ -8,7 +8,7 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 	{
 		public ApplyTMCommunitySupportAction()
 		{
-			Name = "RWS Community AppStore Forum";
+			Name = "RWS Community AppStore forum";
 		}
 
 		public override void Execute()
@@ -18,8 +18,8 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 
 		public override bool IsAvailable => true;
 
-		public override string Category => "applyTM Template results";
+		public override string Category => "Apply TM Template results";
 
-		public override Icon Icon => PluginResources.Question;
+		public override Icon Icon => PluginResources.ForumIcon;
 	}
 }

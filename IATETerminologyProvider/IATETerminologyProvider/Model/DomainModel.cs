@@ -1,8 +1,6 @@
-﻿using Sdl.Community.IATETerminologyProvider.Interface;
-
-namespace Sdl.Community.IATETerminologyProvider.Model
+﻿namespace Sdl.Community.IATETerminologyProvider.Model
 {
-	public class DomainModel : ViewModelBase, IModel
+	public class DomainModel : ViewModelBase
 	{		
 		private bool _isSelected;
 	

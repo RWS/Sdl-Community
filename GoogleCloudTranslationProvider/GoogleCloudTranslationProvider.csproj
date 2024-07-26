@@ -4,8 +4,8 @@
 		<SignAssembly>True</SignAssembly>
 		<TargetFramework>net48</TargetFramework>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
-		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
+		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17</TradosFolder>
 		<LangVersion>latest</LangVersion>
 		<UseWPF>true</UseWPF>
   </PropertyGroup>
@@ -127,7 +127,7 @@
   	<PackageReference Include="Google.Cloud.Translate.V3" Version="3.7.0" />
   	<PackageReference Include="LanguageMappingProvider" Version="1.0.92" />
 		<PackageReference Include="Sdl.Core.PluginFramework" Version="2.1.0" />
-		<PackageReference Include="Sdl.Core.PluginFramework.Build" Version="18.0.1" />
+		<PackageReference Include="Sdl.Core.PluginFramework.Build" Version="17.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\$this.Icon.ico" />

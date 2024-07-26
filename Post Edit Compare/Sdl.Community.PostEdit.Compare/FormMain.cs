@@ -918,6 +918,7 @@ namespace PostEdit.Compare
         }
 
        
+
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             toolStripButton_settings_Click(sender, e);
@@ -928,7 +929,10 @@ namespace PostEdit.Compare
             toolStripButton_Activate_Filters_Click(sender, e);
         }
 
-       
+        private void helpToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3190/post-edit-compare");
+        }
 
         private void toolStripComboBox_fileFilters_KeyPress(object sender, KeyPressEventArgs e)
         {

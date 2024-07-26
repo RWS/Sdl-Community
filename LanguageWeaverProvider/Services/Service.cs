@@ -89,7 +89,7 @@ namespace LanguageWeaverProvider.Services
 		{
 			var httpClient = new HttpClient();
 			httpClient.DefaultRequestHeaders.Add(Constants.TraceAppKey, Constants.TraceAppValue);
-			httpClient.DefaultRequestHeaders.Add(Constants.TraceAppVersionKey, ApplicationInitializer.CurrentAppVersion);
+			httpClient.DefaultRequestHeaders.Add(Constants.TraceAppVersionKey, Constants.TraceAppVersionValue);
 			return httpClient;
 		}
 	}

@@ -694,20 +694,6 @@ namespace MicrosoftTranslatorProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to We couldn&apos;t find an instance of Microsoft Translator Provider for the current project selected. To add it to your project, follow these steps:
-        ///
-        ///    1. Open Project Settings
-        ///    2. Go to Translation Memory and Automated Translation
-        ///    3. Select Use
-        ///    4. Via the dropdown menu locate Microsoft Translator Provider.
-        /// </summary>
-        public static string SettingsAction_NoProviderAvailable {
-            get {
-                return ResourceManager.GetString("SettingsAction_NoProviderAvailable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Advanced settings.
         /// </summary>
         public static string SettingsText {
@@ -731,56 +717,6 @@ namespace MicrosoftTranslatorProvider {
         public static string SettingsViewTitle {
             get {
                 return ResourceManager.GetString("SettingsViewTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon TellMe_CommunityForum {
-            get {
-                object obj = ResourceManager.GetObject("TellMe_CommunityForum", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon TellMe_Documentation {
-            get {
-                object obj = ResourceManager.GetObject("TellMe_Documentation", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon TellMe_Settings {
-            get {
-                object obj = ResourceManager.GetObject("TellMe_Settings", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon TellMe_SourceCode {
-            get {
-                object obj = ResourceManager.GetObject("TellMe_SourceCode", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon TellMe_ThirdParty {
-            get {
-                object obj = ResourceManager.GetObject("TellMe_ThirdParty", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         

@@ -19,10 +19,10 @@ namespace Sdl.Community.AhkPlugin {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class PluginResources {
+    internal class PluginResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Sdl.Community.AhkPlugin {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.AhkPlugin.PluginResources", typeof(PluginResources).Assembly);
@@ -51,7 +51,7 @@ namespace Sdl.Community.AhkPlugin {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Sdl.Community.AhkPlugin {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon icon {
+        internal static System.Drawing.Icon icon {
             get {
                 object obj = ResourceManager.GetObject("icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -73,7 +73,7 @@ namespace Sdl.Community.AhkPlugin {
         /// <summary>
         ///   Looks up a localized string similar to AutoHotKey Manager.
         /// </summary>
-        public static string Plugin_Name {
+        internal static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
             }
@@ -82,7 +82,7 @@ namespace Sdl.Community.AhkPlugin {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon question {
+        internal static System.Drawing.Icon question {
             get {
                 object obj = ResourceManager.GetObject("question", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -107,74 +107,16 @@ namespace Sdl.Community.AhkPlugin {
         ///
         ///.
         /// </summary>
-        public static string reload {
+        internal static string reload {
             get {
                 return ResourceManager.GetString("reload", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon TellMe_Documentation {
-            get {
-                object obj = ResourceManager.GetObject("TellMe_Documentation", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon TellMe_Forum {
-            get {
-                object obj = ResourceManager.GetObject("TellMe_Forum", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} TellMe provider.
-        /// </summary>
-        public static string TellMe_Provider {
-            get {
-                return ResourceManager.GetString("TellMe_Provider", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} results.
-        /// </summary>
-        public static string TellMe_Provider_Results {
-            get {
-                return ResourceManager.GetString("TellMe_Provider_Results", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon TellMe_Settings {
-            get {
-                object obj = ResourceManager.GetObject("TellMe_Settings", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon TellMe_SourceCode {
-            get {
-                object obj = ResourceManager.GetObject("TellMe_SourceCode", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
-        public static string WindowsControl_Close {
+        internal static string WindowsControl_Close {
             get {
                 return ResourceManager.GetString("WindowsControl_Close", resourceCulture);
             }
@@ -183,7 +125,7 @@ namespace Sdl.Community.AhkPlugin {
         /// <summary>
         ///   Looks up a localized string similar to Maximize.
         /// </summary>
-        public static string WindowsControl_Maximize {
+        internal static string WindowsControl_Maximize {
             get {
                 return ResourceManager.GetString("WindowsControl_Maximize", resourceCulture);
             }
@@ -192,7 +134,7 @@ namespace Sdl.Community.AhkPlugin {
         /// <summary>
         ///   Looks up a localized string similar to Minimize.
         /// </summary>
-        public static string WindowsControl_Minimize {
+        internal static string WindowsControl_Minimize {
             get {
                 return ResourceManager.GetString("WindowsControl_Minimize", resourceCulture);
             }
@@ -201,7 +143,7 @@ namespace Sdl.Community.AhkPlugin {
         /// <summary>
         ///   Looks up a localized string similar to Restore.
         /// </summary>
-        public static string WindowsControl_Restore {
+        internal static string WindowsControl_Restore {
             get {
                 return ResourceManager.GetString("WindowsControl_Restore", resourceCulture);
             }

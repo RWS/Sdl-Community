@@ -126,7 +126,7 @@ namespace Sdl.Community.AntidoteVerifier
 			_segmentMetadata.Clear();
 
 			var index = 1;
-			for (var i = 0; i < _document?.FilteredSegmentPairsCount; i++)
+			for (var i = 0; i < _document.FilteredSegmentPairsCount; i++)
 			{
 				var segmentPair = _document.FilteredSegmentPairs.ToList()[i];
 				var paragraphUnitId = segmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id;

@@ -8,7 +8,7 @@ namespace SDLCommunityCleanUpTasks.TellMe
     {
         public CleanUpTasksSupportAction()
         {
-            Name = "RWS Community AppStore Forum";
+            Name = "RWS Community AppStore forum";
         }
 
         public override void Execute()
@@ -19,6 +19,6 @@ namespace SDLCommunityCleanUpTasks.TellMe
 		public override bool IsAvailable => true;
 		public override string Category => "CleanUpTasks results";
 
-		public override Icon Icon => PluginResources.Question;
+		public override Icon Icon => PluginResources.ForumIcon;
 	}
 }

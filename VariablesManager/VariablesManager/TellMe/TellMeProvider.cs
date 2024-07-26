@@ -1,29 +1,26 @@
 ﻿using Sdl.TellMe.ProviderApi;
 
-namespace VariablesManager.TellMe
+namespace VariablesManager
 {
 	[TellMeProvider]
 	public class TellMeProvider: ITellMeProvider
 	{
-		public string Name => string.Format(PluginResources.TellMe_Provider, PluginResources.Plugin_Name);
+		public string Name => string.Format(PluginResources.TellMe_String_TellMe_Provider, PluginResources.Plugin_Name);
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new DocumentationAction
+			new CommunityWikiAction
 			{
-				Keywords = new[] { "variables", "manager", "documentation" }
+				Keywords = new[] { "variables", "manager", "community", "support", "wiki" }
 			},
-			new AppStoreForumAction
+			new CommunityAppStoreForumAction
 			{
 				Keywords = new[] { "variables", "manager", "support", "forum" }
 			},
-			new SourceCodeAction
+			new CommunityAppStoreAction
 			{
-				Keywords = new[] { "variables", "manager", "source", "code" }
-			},
-			new SettingsAction
-			{
-				Keywords = new[] { "variables", "manager", "settings" }
+				Keywords = new[] { "variables", "manager", "store", "download", "appstore" }
+
 			}
 		};
 	}

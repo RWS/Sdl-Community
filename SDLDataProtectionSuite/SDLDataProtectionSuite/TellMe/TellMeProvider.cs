@@ -10,7 +10,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.TellMe
 			ProviderActions = GetProviderActions();
 		}
 
-		public string Name => $"{TellMeConstants.TellMe_Provider_Name}";
+		public string Name => PluginResources.Plugin_Name;
 
 		public AbstractTellMeAction[] ProviderActions { get; }
 

@@ -35,10 +35,10 @@ namespace InterpretBank.TermbaseViewer.UI
 
         public void JumpToTerm(Entry entry) => DataContext.JumpToTerm(entry);
 
-        public void LoadTerms(Language sourceLanguage, Language targetLanguage, List<string> glossaries, List<string> tags, bool useTags, string databaseFilepath)
+        public void LoadTerms(Language sourceLanguage, Language targetLanguage, List<string> glossaries, string databaseFilepath)
         {
             LoadedDatabaseFilepath = databaseFilepath;
-            TermbaseViewer.LoadTerms(sourceLanguage, targetLanguage, glossaries, tags, useTags, databaseFilepath);
+            TermbaseViewer.LoadTerms(sourceLanguage, targetLanguage, glossaries, databaseFilepath);
         }
 
         public void ReloadDb(string filepath)

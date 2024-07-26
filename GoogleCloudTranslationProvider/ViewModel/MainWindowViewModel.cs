@@ -328,7 +328,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 				return;
 			}
 
-			_credentialStore?.RemoveCredential(providerUri);
+			_credentialStore.RemoveCredential(providerUri);
 		}
 
 		private void SwitchView(object o)

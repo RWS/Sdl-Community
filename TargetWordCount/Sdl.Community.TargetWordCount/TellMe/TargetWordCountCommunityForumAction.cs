@@ -7,8 +7,8 @@ namespace Sdl.Community.TargetWordCount.TellMe
 	public class TargetWordCountCommunityForumAction : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
-		public override string Category => $"{PluginResources.Plugin_Name} results";
-		public override Icon Icon => PluginResources.TellMe_Forum;
+		public override string Category => "Target word count results";
+		public override Icon Icon => PluginResources.ForumIcon;
 
 		public TargetWordCountCommunityForumAction()
 		{

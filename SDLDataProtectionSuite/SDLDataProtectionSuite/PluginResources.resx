@@ -256,23 +256,17 @@ were ignored by the parser because they were not in the correct format (.sdlxlif
   <data name="GroupShareCredentialManager_TryGetCredentialsWithoutUserInput_Credentials_invalid_" xml:space="preserve">
     <value>Credentials invalid!</value>
   </data>
-  <data name="TellmeDocumentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellmeDocumentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="TellmeForum" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellmeForum.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="TellMeSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMeSettings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="TellMe_Documentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_Documentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="TellMeSourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMeSourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="TellMe_Forum" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_Forum.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TellMe_Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_Settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TellMe_SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="TellMeDoc" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellMeDoc.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="TellMeView" xml:space="preserve">
     <value>Trados Data Protection Suite can either be applied against project files or Translation Memory data.
@@ -280,7 +274,7 @@ were ignored by the parser because they were not in the correct format (.sdlxlif
 To apply Trados Data Protection settings against project files, please follow these steps:
     1. Select Project
     2. Access Batch Task
-    3. Run Protect Data followed by Unprotect Data if needed
+    3. Run Protect Data followed by Unprotect Data if needed  
 
 To apply Trados Data Protection settings against a Translation Memory, please go to the TradosTMAnonymizer view located at the bottom left of Trados Studio</value>
   </data>

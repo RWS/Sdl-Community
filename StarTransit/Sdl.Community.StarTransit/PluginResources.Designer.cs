@@ -304,16 +304,6 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Information {
-            get {
-                object obj = ResourceManager.GetObject("Information", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon open_package {
@@ -528,39 +518,9 @@ namespace Sdl.Community.StarTransit {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon Settings {
-            get {
-                object obj = ResourceManager.GetObject("Settings", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
         public static System.Drawing.Icon ShowPreviewAction {
             get {
                 object obj = ResourceManager.GetObject("ShowPreviewAction", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon SourceCode {
-            get {
-                object obj = ResourceManager.GetObject("SourceCode", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon starTs_oficialWebSite {
-            get {
-                object obj = ResourceManager.GetObject("starTs_oficialWebSite", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -571,30 +531,6 @@ namespace Sdl.Community.StarTransit {
         public static string TellMe_Provider_Results {
             get {
                 return ResourceManager.GetString("TellMe_Provider_Results", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To engage with StarTransit, follow these steps:
-        ///
-        ///1.    Via the Projects View, go to Home tab
-        ///2.    Locate the StarTransit Group
-        ///
-        ///Tip: You can assign shortcuts via; File - Options - Keyboard Shortcuts - StarTransit.
-        /// </summary>
-        public static string TellMe_WarningMessage {
-            get {
-                return ResourceManager.GetString("TellMe_WarningMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon TellmeDocumentation {
-            get {
-                object obj = ResourceManager.GetObject("TellmeDocumentation", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         

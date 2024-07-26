@@ -112,16 +112,6 @@ namespace Reports.Viewer.Plus {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Forum {
-            get {
-                object obj = ResourceManager.GetObject("Forum", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
         internal static System.Drawing.Icon ForumIcon {
             get {
                 object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
@@ -562,16 +552,6 @@ namespace Reports.Viewer.Plus {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon SourceCode {
-            get {
-                object obj = ResourceManager.GetObject("SourceCode", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Files: {0}, Selected: {1}.
         /// </summary>
         internal static string StatusLabel_FileSelected {
@@ -604,16 +584,6 @@ namespace Reports.Viewer.Plus {
         internal static string TellMe_Provider_Results {
             get {
                 return ResourceManager.GetString("TellMe_Provider_Results", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon TellmeDocumentation {
-            get {
-                object obj = ResourceManager.GetObject("TellmeDocumentation", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         

@@ -27,7 +27,6 @@ namespace Trados.TargetRenamer.View
 
         public void Dispose()
         {
-
         }
 
         public bool ValidateChildren()

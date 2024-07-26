@@ -6,9 +6,9 @@ using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.SdlDataProtectionSuite.TellMe
 {
-	internal abstract class TellMeAction : AbstractTellMeAction
+	public abstract class TellMeAction : AbstractTellMeAction
 	{
-		readonly string[] _helpKeywords = ["data", "protection", "suite", "dps", "plugin", "batch", "task"];
+		readonly string[] _helpKeywords = { "data", "protection", "suite", "dps", "plugin" };
 
 		readonly string _url;
 		readonly Action _customAction;
@@ -21,7 +21,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.TellMe
 			Name = name;
 			Icon = icon;
 			IsAvailable = isAvailable;
-			Keywords = [.. _helpKeywords, .. helpKeywords];
+			Keywords = _helpKeywords.Concat(helpKeywords).ToArray();
 		}
 
 		public override bool IsAvailable { get; }

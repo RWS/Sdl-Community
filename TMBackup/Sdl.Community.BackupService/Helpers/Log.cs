@@ -18,7 +18,7 @@ namespace Sdl.Community.BackupService.Helpers
 			var config = LogManager.Configuration;
 
 			var logDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Trados AppStore",
-				"Trados TM Backup");
+				"TradosTMBackup");
 
 			Directory.CreateDirectory(logDirectoryPath);
 

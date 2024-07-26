@@ -1,5 +1,4 @@
-﻿using Sdl.Community.InSource.Tellme.Actions;
-using Sdl.TellMe.ProviderApi;
+﻿using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.InSource.Tellme
 {
@@ -10,29 +9,17 @@ namespace Sdl.Community.InSource.Tellme
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new ForumAction
+			new InSourceCommunitySupportAction
 			{
-				Keywords = new[] {"insource", "insource community", "documentation docs"}
+				Keywords = new[] {"insource", "insource community", "insource support"}
 			},
-			new DocumentationAction
+			new InSourceHelpAction
 			{
 				Keywords = new[] {"insource", "insource help", "insource guide"}
 			},
-			new SourceCodeAction
+			new InSourceStoreAction
 			{
-				Keywords = new[] {"insource", "insource help", "source code"}
-			},
-			new InSourceViewAction
-			{
-				Keywords = new[] {"insource", "insource view"}
-			},
-			new CheckProjectRequestsAction
-			{
-				Keywords = new[] {"insource", "check project requests"}
-			},
-			new CreateProjectsTellMeAction
-			{
-				Keywords = new[] {"insource", "create projects"}
+				Keywords = new[] {"insource", "insource store", "insource download"}
 			}
 		};
 	}

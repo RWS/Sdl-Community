@@ -19,13 +19,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 		private const string BatchProcessing = "batch processing";
 		private const string CreateNewProject = "create a new project";
 		private static ProjectsController _projectsController;
-		private static CurrentViewDetector currentViewDetector;
-
-		public static CurrentViewDetector CurrentViewDetector
-		{
-			get => currentViewDetector ??= new CurrentViewDetector();
-			set => currentViewDetector = value;
-		}
+		public static CurrentViewDetector CurrentViewDetector { get; set; }
 
 		private static ProjectsController ProjectsController
 					=> _projectsController ??= SdlTradosStudio.Application?.GetController<ProjectsController>();
@@ -35,10 +29,8 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 
 		public static FileBasedProject GetProjectInProcessing()
 		{
-			if (SdlTradosStudio.Application is null)
-				return null;
-			if (GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false)
-				return null;
+			if (SdlTradosStudio.Application is null) return null;
+			if (GetCurrentWindow()?.Title.ToLower().Contains(CreateNewProject) ?? false) return null;
 
 			var projectInProcessing = CurrentViewDetector.View
 				switch
@@ -97,7 +89,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 					File.Delete(filePath);
 				}
 			}
-			catch
+			catch 
 			{
 				return GetAvailableFileName(filePath.Insert(filePath.IndexOf(".xlsx", StringComparison.Ordinal), "(new)"));
 			}
@@ -126,6 +118,7 @@ namespace Sdl.Community.IATETerminologyProvider.Service
 
 		public void Execute()
 		{
+			CurrentViewDetector = new CurrentViewDetector();
 		}
 	}
 }

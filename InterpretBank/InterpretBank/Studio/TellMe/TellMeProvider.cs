@@ -1,5 +1,4 @@
-﻿using InterpretBank.Studio.TellMe.Actions;
-using Sdl.TellMe.ProviderApi;
+﻿using Sdl.TellMe.ProviderApi;
 
 namespace InterpretBank.Studio.TellMe
 {
@@ -13,8 +12,7 @@ namespace InterpretBank.Studio.TellMe
             new InterpretBankDocumentationAction(),
             new RwsCommunityAppStoreForumAction(),
             new SourceCodeAction(),
-            new SettingsAction(),
-            new InterpretBankContactAction()
+            new SettingsAction()
         ];
     }
 }

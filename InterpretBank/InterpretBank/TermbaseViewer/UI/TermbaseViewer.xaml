@@ -10,10 +10,6 @@
              x:Name="TermbaseViewerControl"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance viewModel:TermbaseViewerViewModel}">
-    <UserControl.CommandBindings>
-        <CommandBinding Command="Delete"
-                        Executed="DeleteCommandHandler" />
-    </UserControl.CommandBindings>
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -41,6 +37,21 @@
                     Height="Auto">
                 <WrapPanel Orientation="Horizontal"
                            DockPanel.Dock="Top">
+
+                    <Button ToolTip="Remove entry"
+                            DockPanel.Dock="Left"
+                            AutomationProperties.Name="Remove entry"
+                            Command="{Binding RemoveSelectedEntryCommand}"
+                            Style="{StaticResource GlyphButtonStyle2}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🗑"
+                                       VerticalAlignment="Center"
+                                       FontSize="15" />
+                            <AccessText Text="_Remove entry"
+                                        Foreground="Black"
+                                        VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
 
                     <Button ToolTip="Add entry"
                             DockPanel.Dock="Right"
@@ -72,42 +83,12 @@
                      AutomationProperties.Name="Entries"
                      FontSize="14"
                      x:Name="EntriesList"
+                     DisplayMemberPath="Name"
                      DockPanel.Dock="Top"
                      VirtualizingStackPanel.VirtualizationMode="Recycling"
                      VirtualizingStackPanel.IsVirtualizing="True"
                      FontWeight="Light"
-                     SelectedItem="{Binding SelectedEntry}">
-
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="AutomationProperties.Name"
-                                Value="{Binding Name, StringFormat={}{0} Press DELETE to delete entry}" />
-                    </Style>
-                </ListBox.ItemContainerStyle>
-                <ListBox.ItemTemplate>
-                    <DataTemplate DataType="{x:Type model:EntryModel}">
-                        <StackPanel Orientation="Horizontal"
-                                    Focusable="False">
-                            <Button Content="❌"
-                                    FontSize="10"
-                                    AutomationProperties.Name="Hello"
-                                    Focusable="False"
-                                    VerticalContentAlignment="Center"
-                                    Style="{StaticResource Sdl.Button.EmbeddedStyle}"
-                                    Command="{Binding DataContext.RemoveSelectedEntryCommand, ElementName=TermbaseViewerControl}"
-                                    CommandParameter="{Binding .}">
-
-                                <Button.InputBindings>
-                                    <KeyBinding Key="Delete"
-                                                Command="{Binding DataContext.RemoveSelectedEntryCommand, ElementName=TermbaseViewerControl}"
-                                                CommandParameter="{Binding .}" />
-                                </Button.InputBindings>
-                            </Button>
-                            <TextBlock Text="{Binding Name}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                     SelectedItem="{Binding SelectedEntry}" />
         </DockPanel>
 
         <GridSplitter Grid.Column="0"

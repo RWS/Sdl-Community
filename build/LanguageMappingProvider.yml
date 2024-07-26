@@ -66,7 +66,7 @@ steps:
     definition: '1258'
     artifactName: 'binaries'
     buildVersionToDownload: 'latestFromBranch'
-    targetPath: '$(X86PATH)\Trados\Trados Studio\Studio18'
+    targetPath: '$(X86PATH)\Trados\Trados Studio\Studio17'
     runBranch: 'refs/heads/master'
     tags: 'Package'
 

@@ -7,7 +7,6 @@
              xmlns:sdl="http://schemas.sdl.com/xaml"
              xmlns:interpretBank="clr-namespace:InterpretBank"
              xmlns:converters="clr-namespace:InterpretBank.Converters"
-             xmlns:multiItemSelect="clr-namespace:InterpretBank.Controls.MultiItemSelect"
              x:Name="Root"
              mc:Ignorable="d"
              d:DesignHeight="450"
@@ -33,38 +32,30 @@
         <DockPanel LastChildFill="False"
                    HorizontalAlignment="Stretch">
 
-            <StackPanel KeyboardNavigation.DirectionalNavigation="Cycle"
-                        KeyboardNavigation.TabNavigation="Once">
-                <RadioButton Content="By glossary names"
+            <StackPanel>
+                <RadioButton Content="Use glossaries"
                              x:Name="UseGlossariesButton"
-                             AutomationProperties.PositionInSet="1"
-                             AutomationProperties.SizeOfSet="2"
-                             GroupName="Use glossaries or tags">
+                             GroupName="Use glossaries or tags" >
                     <RadioButton.Style>
                         <Style TargetType="RadioButton">
-                            <Setter Property="IsChecked"
-                                    Value="True" />
+                            <Setter Property="IsChecked" Value="True"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ElementName=UseTagsButton, Path=IsChecked}"
-                                             Value="True">
-                                    <Setter Property="IsChecked"
-                                            Value="False" />
+                                <DataTrigger Binding="{Binding ElementName=UseTagsButton, Path=IsChecked}" Value="True">
+                                    <Setter Property="IsChecked" Value="False"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </RadioButton.Style>
                 </RadioButton>
-                <RadioButton Content="By tags"
+                <RadioButton Content="Use tags"
                              x:Name="UseTagsButton"
-                             AutomationProperties.PositionInSet="2"
-                             AutomationProperties.SizeOfSet="2"
                              IsChecked="{Binding UseTags}"
                              GroupName="Use glossaries or tags" />
             </StackPanel>
-
+           
         </DockPanel>
 
-        <!--<TextBlock Foreground="Red"
+        <TextBlock Foreground="Red"
                    Margin="0"
                    x:Name="HelpText"
                    Grid.Row="1">
@@ -89,28 +80,21 @@
                     </Style.Triggers>
                 </Style>
             </TextBlock.Style>
-        </TextBlock>-->
+        </TextBlock>
 
 
-        
-
-        <multiItemSelect:MultiItemSelectControl Grid.Row="2"
-                                                x:Name="TagsMultiselectCombobox"
-                                                Height="{Binding ActualHeight, ElementName=Root, Converter={StaticResource RatioConverter}, ConverterParameter=0.75}"
-                                                Margin="0 5 0 0"
-                                                IsTabStop="True"
-                                                Focusable="True"
-                                                IsEnabled="{Binding IsDbValid}"
-                                                ItemsSource="{Binding DataContext.Tags, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}"
-                                                Visibility="{Binding IsChecked, ElementName=UseTagsButton, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=True}"
-                                                CornerRadius="0"
-                                                SelectedItems="{Binding SelectedTags, Mode=TwoWay, ValidatesOnDataErrors=True}"
-                                                SelectedItemTemplate="{StaticResource TagTemplate}"
-                                                ItemTemplate="{StaticResource TagTemplate}"
-                                                HorizontalAlignment="Stretch"
-                                                BorderBrush="#c0c0c0"
-                                                BorderBackground="White"
-                                                VerticalAlignment="Top" />
+        <sdl:MultiSelectComboBox Margin="0 5 0 0"
+                                 Grid.Row="2"
+                                 x:Name="TagsMultiselectCombobox"
+                                 AutomationProperties.Name="TagsMultiselectCombobox"
+                                 OpenDropDownListAlsoWhenNotInEditMode="True"
+                                 IsEnabled="{Binding IsDbValid}"
+                                 Height="{Binding ActualHeight, ElementName=Root, Converter={StaticResource RatioConverter}, ConverterParameter=0.75}"
+                                 SelectedItems="{Binding SelectedTags, Mode=TwoWay, ValidatesOnDataErrors=True}"
+                                 Visibility="{Binding IsChecked, ElementName=UseTagsButton, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=True}"
+                                 ItemsSource="{Binding Tags, UpdateSourceTrigger=PropertyChanged}"
+                                 DropdownItemTemplate="{StaticResource TagTemplate}"
+                                 SelectedItemTemplate="{StaticResource TagTemplate}" />
 
 
 

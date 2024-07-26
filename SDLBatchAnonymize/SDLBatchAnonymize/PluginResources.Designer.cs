@@ -151,6 +151,26 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Download {
+            get {
+                object obj = ResourceManager.GetObject("Download", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon ForumIcon {
+            get {
+                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If this box is checked, the values for anonymization will be taken from the settings under All Language Pairs.
         /// </summary>
         public static string GeneralTooltip {
@@ -241,6 +261,16 @@ namespace Sdl.Community.SDLBatchAnonymize {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon Question {
+            get {
+                object obj = ResourceManager.GetObject("Question", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove/change MT Provider.
         /// </summary>
         public static string RemoveMT {
@@ -318,59 +348,6 @@ namespace Sdl.Community.SDLBatchAnonymize {
         public static string SpecificResToolTip {
             get {
                 return ResourceManager.GetString("SpecificResToolTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To engage with Trados Batch Anonymizer, follow these steps
-        /// 
-        ///1. In the Files View, select your files
-        ///2. Under Home Tab find File Actions Group
-        ///3. Use the Batch Tasks dropdown menu.
-        /// </summary>
-        public static string TellMe_ActionWarning {
-            get {
-                return ResourceManager.GetString("TellMe_ActionWarning", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon TellMe_Documentation {
-            get {
-                object obj = ResourceManager.GetObject("TellMe_Documentation", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon TellMe_Forum {
-            get {
-                object obj = ResourceManager.GetObject("TellMe_Forum", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon TellMe_Settings {
-            get {
-                object obj = ResourceManager.GetObject("TellMe_Settings", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon TellMe_SourceCode {
-            get {
-                object obj = ResourceManager.GetObject("TellMe_SourceCode", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         

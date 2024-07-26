@@ -7,17 +7,30 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.ExportAnalysisReports
 {
+	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
+	[RibbonGroup("ExportAnalysisReports", Name = "", Description = "Trados Export Analysis Reports")]
+	public class ReportExporterRibbon : AbstractRibbonGroup
+	{
+	}
+
+	[Action("ExportAnalysisReports", Name = "Trados Export Analysis Reports (all projects)", Icon = "folder2_blue", Description = "Open Trados Export Analysis Reports for all analysed projects")]
+	[ActionLayout(typeof(ReportExporterRibbon), 20, DisplayType.Large)]
+	class ReportExporterViewPartAction : AbstractExportReportAction
+	{
+	}
+
+	[Action("ExportAnalysisReports.Button", Name = "Trados Export Analysis Reports (selected projects)", Description = "Open Trados Export Analysis Reports based on analysed projects selection", Icon = "folder2_blue")]
+	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 2, DisplayType.Default, "", true)]
+	public class ReportExporter : AbstractExportReportAction
+	{
+	}
+
 	public class AbstractExportReportAction : AbstractAction
 	{
-		public void ExecuteAction()
-		{
-			Execute();
-		}
-
 		public override void Initialize()
 		{
 			base.Initialize();
-			Text = PluginResources.Plugin_Name;
+			Text = "Trados Export Analysis Reports";
 		}
 
 		protected override void Execute()
@@ -27,7 +40,7 @@ namespace Sdl.Community.ExportAnalysisReports
 			var projectService = new ProjectService();
 			var messageBoxService = new MessageBoxService();
 			var reportService = new ReportService(messageBoxService, projectService, settingsService);
-
+			
 			var studioProjectsPaths = new List<string>();
 			var selectedProjects = projectService.GetSelectedStudioProjects();
 			if (selectedProjects != null)
@@ -38,23 +51,5 @@ namespace Sdl.Community.ExportAnalysisReports
 			var dialog = new ReportExporterControl(studioProjectsPaths, settingsService, projectService, messageBoxService, reportService);
 			dialog.ShowDialog();
 		}
-	}
-
-	[Action("ExportAnalysisReports.Button", Name = "Trados Export Analysis Reports (selected projects)", Description = "Open Trados Export Analysis Reports based on analysed projects selection", Icon = "folder2_blue")]
-	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 2, DisplayType.Default, "", true)]
-	public class ReportExporter : AbstractExportReportAction
-	{
-	}
-
-	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
-	[RibbonGroup("ExportAnalysisReports", Name = "", Description = "Trados Export Analysis Reports")]
-	public class ReportExporterRibbon : AbstractRibbonGroup
-	{
-	}
-
-	[Action("ExportAnalysisReports", Name = "Trados Export Analysis Reports (all projects)", Icon = "folder2_blue", Description = "Open Trados Export Analysis Reports for all analysed projects")]
-	[ActionLayout(typeof(ReportExporterRibbon), 20, DisplayType.Large)]
-	internal class ReportExporterViewPartAction : AbstractExportReportAction
-	{
 	}
 }

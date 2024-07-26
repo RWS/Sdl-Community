@@ -13,15 +13,6 @@ namespace Sdl.Community.Studio.Time.Tracker.Tracking
 
             try
             {
-                var doc = editorController.ActiveDocument;
-                if (doc == null)
-                {
-                    MessageBox.Show(PluginResources.InformationMessage_openDocumentInEditor,
-                        PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
-
-
                 timer.Stop();
 
                 if (reset)
@@ -45,17 +36,12 @@ namespace Sdl.Community.Studio.Time.Tracker.Tracking
 
                 try
                 {
-                    
-
+                    var doc = editorController.ActiveDocument;
                     try
                     {
                         if ((Tracked.TrackingState != Tracked.TimerState.Started &&
                              Tracked.TrackingState != Tracked.TimerState.Unpaused) ||
-                            Tracked.TrackerDocumentId != string.Empty)
-                        {
-                            return;
-                        }
-
+                            Tracked.TrackerDocumentId != string.Empty) return;
                         var trackerProject = Helper.GetTrackerProjectFromDocument(doc);
                         var clientProfileInfo = Structures.Common.GetClientFromId(trackerProject.ClientId);
 

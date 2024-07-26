@@ -170,27 +170,18 @@
     <value>Please select at least one language to export the report!</value>
   </data>
   <data name="InformationMessage_The_selected_projects_cannot_be_exported" xml:space="preserve">
-    <value>The selected projects cannot be exported; please run the 'Analyze Files' batch task for these projects, otherwise they will be excluded from the export analysis reports procedure.</value>
+	  <value>The selected projects cannot be exported; please run the 'Analyze Files' batch task for these projects, otherwise they will be excluded from the export analysis reports procedure.</value>
   </data>
   <data name="InformationMessage_Don_t_show_this_again" xml:space="preserve">
-    <value>Don't show this again.</value>
+	  <value>Don't show this again.</value>
   </data>
   <data name="InformationMessage_Projects_without_analysis_reports" xml:space="preserve">
-    <value>Projects without analysis reports</value>
+	  <value>Projects without analysis reports</value>
   </data>
   <data name="InformationMessage_OK" xml:space="preserve">
-    <value>OK</value>
+	  <value>OK</value>
   </data>
   <data name="InformationMessage_Cancel" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
-  <data name="TellmeDocumentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellmeDocumentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+	  <value>Cancel</value>
   </data>
 </root>

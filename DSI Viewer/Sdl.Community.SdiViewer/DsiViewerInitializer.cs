@@ -7,13 +7,11 @@ namespace Sdl.Community.DsiViewer
 	[ApplicationInitializer]
 	public class DsiViewerInitializer : IApplicationInitializer
 	{
-		private static EditorController _editorController;
-
-		public static EditorController EditorController => _editorController ??= SdlTradosStudio.Application.GetController<EditorController>();
+		public static EditorController EditorController { get; private set; }
 
 		public void Execute()
 		{
-
+			EditorController = SdlTradosStudio.Application.GetController<EditorController>();
 		}
 	}
 }

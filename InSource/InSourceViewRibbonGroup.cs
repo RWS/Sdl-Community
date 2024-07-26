@@ -66,6 +66,22 @@ namespace Sdl.Community.InSource
 		}
 	}
 
-    
-	
+    [Action("ContributeToProjectAction", typeof(InSourceViewController), Name = "ContributeToProject_Name", Description = "ContributeToProject_Description", Icon = "opensourceimage")]
+    [ActionLayout(typeof(InSourceViewRibbonGroup), 0, DisplayType.Large)]
+    public class ContributeToProjectAction : AbstractViewControllerAction<InSourceViewController>
+    {
+        protected override void Execute()
+        {
+            Controller.Contribute();
+        }
+    }
+	[Action("InSourceHelpAction", typeof(InSourceViewController), Name = "Help", Description = "An wiki page will be opened in browser uith user guide", Icon = "question")]
+	[ActionLayout(typeof(InSourceViewRibbonGroup), 0, DisplayType.Large)]
+	public class HelpAction : AbstractViewControllerAction<InSourceViewController>
+	{
+		protected override void Execute()
+		{
+			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/w/wiki/3267.trados-insource");
+		}
+	}
 }

@@ -9,7 +9,7 @@ namespace Sdl.Community.XLIFF.Manager.TellMe
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new DocumentationAction
+			new CommunityWikiAction
 			{
 				Keywords = new[] { "xliff", "manager", "xliffmanager", "community", "support", "wiki" }
 			},
@@ -17,13 +17,9 @@ namespace Sdl.Community.XLIFF.Manager.TellMe
 			{
 				Keywords = new[] { "xliff", "manager", "xliffmanager", "support", "forum" }
 			},
-			new SettingsAction()
+			new AppStoreDownloadAction
 			{
-				Keywords = new[] { "xliff", "manager", "xliffmanager", "settings" }
-			},new SourceCodeAction()
-			{
-				Keywords = new[] { "xliff", "manager", "xliffmanager", "source", "code" }
-			},
+				Keywords = new[] { "xliff", "manager", "xliffmanager", "store", "download", "appstore" }}
 		};
 	}
 }

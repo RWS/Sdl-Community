@@ -44,15 +44,23 @@
     </Style>
     <DataTemplate x:Key="TagTemplate"
                   DataType="{x:Type model:TagModel}">
-
-        <TextBlock Text="{Binding TagName}"
-                   FontSize="10"
-                   VerticalAlignment="Center" />
+        <DockPanel>
+            <Image Source="../../Resources/Tag.png"
+                   DockPanel.Dock="Left"
+                   Height="17" />
+            <TextBlock Text="{Binding TagName}"
+                       FontSize="10"
+                       VerticalAlignment="Center"
+                       DockPanel.Dock="Right" />
+        </DockPanel>
     </DataTemplate>
 
     <DataTemplate x:Key="GlossaryTemplate"
                   DataType="{x:Type model:GlossaryModel}">
-         
+        <DockPanel>
+            <Image Source="../../Resources/Glossary.png"
+                   DockPanel.Dock="Left"
+                   Height="17" />
             <TextBlock FontSize="10"
                        VerticalAlignment="Center"
                        DockPanel.Dock="Right">
@@ -63,6 +71,7 @@
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
+        </DockPanel>
     </DataTemplate>
 
     <DataTemplate x:Key="LanguageTemplate"

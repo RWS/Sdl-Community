@@ -17,9 +17,7 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 	[ActionLayout(typeof(SDLTMAnonymizerSettingsRibbonGroup), 7, DisplayType.Large)]
 	public class SDLTMAnonymizerRibbonGroupSettingsAction : AbstractViewControllerAction<SDLTMAnonymizerView>
 	{
-		protected override void Execute() => ShowSettingsWindow();
-
-		private void ShowSettingsWindow()
+		protected override void Execute()
 		{
 			var settingsWindow = new SettingsView();
 			var settingsViewModel = new SettingsViewModel(settingsWindow, Controller.SettingsService);

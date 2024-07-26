@@ -9,25 +9,20 @@ namespace Sdl.Community.TermExcelerator.TellMe
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new ExcelTermDocumentationAction
+			new ExcelTermCommunityWikiAction
 			{
 				Keywords = new[] {"excel terminology", "excel terminology community", "excel terminology support", "excel terminology wiki",
-								  "term excelerator", "term excelerator community", "term excelerator support", "term excelerator wiki", "termexcelerator"}
+								  "term excelerator", "term excelerator community", "term excelerator support", "term excelerator wiki"}
 			},
 			new ExcelTermCommunityForumAction
 			{
 				Keywords = new[] { "excel terminology", "excel terminology community", "excel terminology support", "excel terminology forum",
-								   "term excelerator", "term excelerator community", "term excelerator support", "term excelerator forum", "termexcelerator"}
+								   "term excelerator", "term excelerator community", "term excelerator support", "term excelerator forum"}
 			},
-			new SettingsAction
+			new ExcelTermStoreAction
 			{
-				Keywords = new[] { "excel terminology", "excel terminology community", "excel terminology support", "excel terminology forum",
-								   "term excelerator", "term excelerator community", "settings", "termexcelerator"}
-			},
-			new SourceCodeAction
-			{
-				Keywords = new[] { "excel terminology", "excel terminology community", "excel terminology support", "excel terminology forum",
-								   "term excelerator", "term excelerator community", "source code", "termexcelerator"}
+				Keywords = new[] { "excel terminology", "excel terminology store", "excel terminology download", "excel terminology appstore",
+								   "term excelerator", "term excelerator store", "term excelerator download", "term excelerator appstore"}
 			}
 		};
 	}

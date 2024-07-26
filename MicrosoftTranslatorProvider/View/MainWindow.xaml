@@ -1,0 +1,121 @@
+<Window x:Class="MicrosoftTranslatorProvider.View.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:root="clr-namespace:MicrosoftTranslatorProvider"
+		xmlns:ui="clr-namespace:MicrosoftTranslatorProvider.View"
+		xmlns:styles="clr-namespace:MicrosoftTranslatorProvider.Styles"
+		xmlns:viewModels="clr-namespace:MicrosoftTranslatorProvider.ViewModel"
+		xmlns:converters="clr-namespace:MicrosoftTranslatorProvider.Converters"
+		xmlns:behaviours="clr-namespace:MicrosoftTranslatorProvider.Behaviours"
+		mc:Ignorable="d"
+		WindowStartupLocation="CenterScreen"
+		d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
+		WindowStyle="None"
+		ResizeMode="CanResize"
+		Title="Microsoft Translator Provider"
+		Height="600"
+		Width="1000"
+		MinHeight="500"
+		MinWidth="900"
+		d:DesignHeight="600"
+		d:DesignWidth="1000">
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../Styles/Buttons.xaml" />
+				<ResourceDictionary Source="../Styles/GroupBox.xaml" />
+				<ResourceDictionary Source="../Styles/WindowsBorder.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ComboBoxResources.xaml" />
+				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/TextBlockResources.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+			<converters:EmptyToVisibility x:Key="EmptyToVisibilityConverter" />
+			<converters:InvertableBooleanToVisibilityConverter x:Key="InvertableBooleanToVisibilityConverter" />
+			<converters:InvertableBoolEnabledConverter x:Key="InvertableBoolEnabledConverter" />
+
+			<DataTemplate DataType="{x:Type viewModels:ProviderViewModel}">
+				<ui:ProviderControl />
+			</DataTemplate>
+
+			<DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
+				<ui:SettingsControl />
+			</DataTemplate>
+
+			<DataTemplate DataType="{x:Type viewModels:PrivateEndpointViewModel}">
+				<ui:PrivateEndpointView />
+			</DataTemplate>
+		</ResourceDictionary>
+
+	</Window.Resources>
+
+	<Border Style="{StaticResource WindowControlBorderStyle}">
+		<Grid Margin="0,0,0,0">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="auto" />
+				<RowDefinition Height="auto" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="auto" />
+			</Grid.RowDefinitions>
+			<!-- BORDER CONTROL -->
+			<styles:WindowsControl Grid.Row="0"
+								   Background="Transparent" />
+
+			<StackPanel Grid.Row="2"
+						Margin="24 48 24 0">
+				<GroupBox Header="Authentication type"
+						  Style="{StaticResource DefaultGroupBox}"
+						  Visibility="{Binding CanSwitchProvider, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertableBooleanToVisibilityConverter}, ConverterParameter=Inverted}">
+					<ComboBox ItemsSource="{Binding Endpoints}"
+							  SelectedItem="{Binding SelectedEndpoint}"
+							  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+							  Margin="12" />
+				</GroupBox>
+				<ContentControl Content="{Binding SelectedView.ViewModel}" />
+			</StackPanel>
+
+			<StackPanel Grid.Row="3"
+						Orientation="Horizontal"
+						HorizontalAlignment="Left"
+						Margin="24">
+				<Button Content="Help"
+						Style="{StaticResource Sdl.Button.SecondaryStyle}"
+						Command="{Binding NavigateToCommand}"
+						CommandParameter="{x:Static root:Constants.TellMe_HelpUrl}"
+						Cursor="Hand"
+						Width="120"
+						Height="30" />
+				
+				<Button Content="Language Mapping"
+						Style="{StaticResource Sdl.Button.SecondaryStyle}"
+						Command="{Binding OpenLanguageMappingProviderCommand}"
+						IsEnabled="{Binding CanAccessLanguageMappingProvider}"
+						Cursor="Hand"
+						Margin="8 0 0 0"/>
+			</StackPanel>
+
+			<StackPanel HorizontalAlignment="Right"
+						Orientation="Horizontal"
+						Grid.Row="3"
+						Margin="24">
+
+				<Button Content="{Binding MultiButtonContent}"
+						Style="{StaticResource Sdl.Button.SecondaryStyle}"
+						Command="{Binding SwitchViewCommand}"
+						Cursor="Hand"
+						Width="120" 
+						Height="30"/>
+
+				<Button Content="Confirm"
+						Style="{StaticResource Sdl.Button.PrimaryStyle}"
+						Command="{Binding SaveCommand}"
+						IsDefault="True"
+						Cursor="Hand"
+						Width="120"
+						Height="30"
+						Margin="8 0 0 0" />
+			</StackPanel>
+		</Grid>
+	</Border>
+</Window>

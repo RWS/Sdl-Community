@@ -31,7 +31,7 @@ namespace Trados.TargetRenamer.Services
             using (var writer = XmlWriter.Create(tempFile, settings))
             {
                 writer.WriteStartElement("task");
-                writer.WriteAttributeString("name", Constants.PluginName);
+                writer.WriteAttributeString("name", PluginResources.TargetRenamer_Name);
                 writer.WriteAttributeString("created",
                     project.GetProjectInfo().CreatedAt.ToString("MM/dd/yyyy hh:mm tt"));
                 var location = project.GetProjectInfo().LocalProjectFolder;

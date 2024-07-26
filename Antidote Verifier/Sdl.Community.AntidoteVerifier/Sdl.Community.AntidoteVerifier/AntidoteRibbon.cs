@@ -1,9 +1,10 @@
-﻿using NLog;
-using Sdl.Community.AntidoteVerifier.Antidote_API;
+﻿using Sdl.Community.AntidoteVerifier.Antidote_API;
+using Sdl.Community.AntidoteVerifier.Utils;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using Serilog;
 
 namespace Sdl.Community.AntidoteVerifier
 {
@@ -23,14 +24,15 @@ namespace Sdl.Community.AntidoteVerifier
     
     public class AntidoteCorrectorAction: AbstractAction
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+       
         protected override void Execute()
         {
+            Logger.IntializeLogger();
             var editorController = SdlTradosStudio.Application.GetController<EditorController>();
             var editorService = new EditorService(editorController.ActiveDocument);
 			var antidotedClient = new AntidoteClient(editorService,true);
 			var antidoteApiOle = new AntidoteApiOle(antidotedClient);
-            _logger.Info("Starting Antidote for correction!");
+            Log.Information("Starting Antidote for correction!");
             antidoteApiOle.CallAntidote(ConstantsUtils.Corrector);
         }
     }
@@ -44,15 +46,16 @@ namespace Sdl.Community.AntidoteVerifier
         IsSeparator = false)]
     public class AntidoteDictionaryAction : AbstractAction
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
         protected override void Execute()
         {
+            Logger.IntializeLogger();
 
 			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
 			var editorService = new EditorService(editorController.ActiveDocument);
             var antidotedClient = new AntidoteClient(editorService,false);
 			var antidoteApiOle = new AntidoteApiOle(antidotedClient);
-            _logger.Info("Starting Antidote for dictionary!");
+            Log.Information("Starting Antidote for dictionary!");
 
             antidoteApiOle.CallAntidote(ConstantsUtils.LastSelectedDictionary);
         }
@@ -66,17 +69,16 @@ namespace Sdl.Community.AntidoteVerifier
         IsSeparator = false)]
     public class AntidoteGuideAction : AbstractAction
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-
         protected override void Execute()
         {
+            Logger.IntializeLogger();
 
             var editorController = SdlTradosStudio.Application.GetController<EditorController>();
             var editorService = new EditorService(editorController.ActiveDocument);
 
             var antidotedClient = new AntidoteClient(editorService,false);
             var antidoteApiOle = new AntidoteApiOle(antidotedClient);
-            _logger.Info("Starting Antidote for guide!");
+            Log.Information("Starting Antidote for guide!");
 
             antidoteApiOle.CallAntidote(ConstantsUtils.LastSelectedGuide);
         }

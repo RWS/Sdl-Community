@@ -130,23 +130,14 @@
   <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TellmeDocumentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellmeDocumentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="TellMe_Download_Plugin_From_AppStore" xml:space="preserve">
     <value>Download {0} from the AppStore</value>
   </data>
-  <data name="TellMe_Provider" xml:space="preserve">
-    <value>{0} TellMe provider</value>
-  </data>
-  <data name="TellMe_Provider_Results" xml:space="preserve">
+  <data name="TellMe_String_Results" xml:space="preserve">
     <value>{0} results</value>
+  </data>
+  <data name="TellMe_String_TellMe_Provider" xml:space="preserve">
+    <value>{0} TellMe provider</value>
   </data>
   <data name="variables_manager___128" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\variables manager - 128.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

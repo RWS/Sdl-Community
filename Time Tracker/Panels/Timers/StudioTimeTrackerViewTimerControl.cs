@@ -52,13 +52,6 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Timers
 
         private void toolStripButton_start_Click(object sender, EventArgs e)
         {
-            var doc = GetEditorController()?.ActiveDocument;
-            if (doc == null)
-            {
-                MessageBox.Show(PluginResources.InformationMessage_openDocumentInEditor,
-                    PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
 
             try
             {

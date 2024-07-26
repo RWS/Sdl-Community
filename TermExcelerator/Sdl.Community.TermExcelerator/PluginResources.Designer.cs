@@ -19,10 +19,10 @@ namespace Sdl.Community.TermExcelerator {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class PluginResources {
+    internal class PluginResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Sdl.Community.TermExcelerator {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.TermExcelerator.PluginResources", typeof(PluginResources).Assembly);
@@ -51,7 +51,7 @@ namespace Sdl.Community.TermExcelerator {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Sdl.Community.TermExcelerator {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon Download {
+        internal static System.Drawing.Icon Download {
             get {
                 object obj = ResourceManager.GetObject("Download", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -73,7 +73,7 @@ namespace Sdl.Community.TermExcelerator {
         /// <summary>
         ///   Looks up a localized string similar to Terminology provider based on excel files..
         /// </summary>
-        public static string ExcelTerminologyProviderDescription {
+        internal static string ExcelTerminologyProviderDescription {
             get {
                 return ResourceManager.GetString("ExcelTerminologyProviderDescription", resourceCulture);
             }
@@ -82,7 +82,7 @@ namespace Sdl.Community.TermExcelerator {
         /// <summary>
         ///   Looks up a localized string similar to TermExcelerator Terminology Provider ....
         /// </summary>
-        public static string ExcelTerminologyProviderName {
+        internal static string ExcelTerminologyProviderName {
             get {
                 return ResourceManager.GetString("ExcelTerminologyProviderName", resourceCulture);
             }
@@ -91,7 +91,7 @@ namespace Sdl.Community.TermExcelerator {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon ForumIcon {
+        internal static System.Drawing.Icon ForumIcon {
             get {
                 object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -99,19 +99,9 @@ namespace Sdl.Community.TermExcelerator {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Information {
-            get {
-                object obj = ResourceManager.GetObject("Information", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to TermExcelerator.
         /// </summary>
-        public static string Plugin_Name {
+        internal static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
             }
@@ -120,90 +110,9 @@ namespace Sdl.Community.TermExcelerator {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon Question {
+        internal static System.Drawing.Icon Question {
             get {
                 object obj = ResourceManager.GetObject("Question", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon Settings {
-            get {
-                object obj = ResourceManager.GetObject("Settings", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to  For more information,.
-        /// </summary>
-        public static string SettingsAction_ExternalHelp_1 {
-            get {
-                return ResourceManager.GetString("SettingsAction_ExternalHelp_1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to click here.
-        /// </summary>
-        public static string SettingsAction_ExternalHelp_2 {
-            get {
-                return ResourceManager.GetString("SettingsAction_ExternalHelp_2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to to view the documentation..
-        /// </summary>
-        public static string SettingsAction_ExternalHelp_3 {
-            get {
-                return ResourceManager.GetString("SettingsAction_ExternalHelp_3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to  We couldn&apos;t find an instance of Term Excelerator Provider for the current project selected. 
-        /// To add it, follow these steps:
-        ///
-        ///   1. Open Project Settings
-        ///   2. Go to Termbases
-        ///   3. Select Use
-        ///   4. Via the dropdown menu locate Term Excelerator Provider.
-        /// </summary>
-        public static string SettingsAction_OpenOptionsText {
-            get {
-                return ResourceManager.GetString("SettingsAction_OpenOptionsText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Configuring Terminology Provider in Project Settings.
-        /// </summary>
-        public static string SettingsAction_Title {
-            get {
-                return ResourceManager.GetString("SettingsAction_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon SourceCode {
-            get {
-                object obj = ResourceManager.GetObject("SourceCode", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon TellmeDocumentation {
-            get {
-                object obj = ResourceManager.GetObject("TellmeDocumentation", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

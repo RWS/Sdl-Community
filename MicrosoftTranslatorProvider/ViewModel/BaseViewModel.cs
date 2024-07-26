@@ -1,15 +1,6 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
-namespace MicrosoftTranslatorProvider.ViewModel
+﻿namespace MicrosoftTranslatorProvider.ViewModel
 {
-	public class BaseViewModel : INotifyPropertyChanged
+	public class BaseViewModel
 	{
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		}
 	}
 }

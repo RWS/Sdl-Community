@@ -1,5 +1,5 @@
 ﻿using System.Windows.Input;
-using MicrosoftTranslatorProvider.ViewModel;
+using MicrosoftTranslatorProvider.Model;
 
 namespace MicrosoftTranslatorProvider.Interfaces
 {
@@ -23,7 +23,7 @@ namespace MicrosoftTranslatorProvider.Interfaces
 
 		bool UseCustomProviderName { get; set; }
 
-		BaseViewModel ViewModel { get; }
+		BaseModel ViewModel { get; }
 
 		ICommand ShowMainWindowCommand { get; set; }
 

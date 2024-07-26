@@ -142,7 +142,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
                 _telemetryTracker.StartTrackRequest("Termbase settings");
                 _telemetryTracker.TrackEvent("Termbase settings", null);
 
-                _project = StudioContext.ProjectsController.CurrentProject;
+                _project = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
                 _selectedFile = SdlTradosStudio.Application.GetController<FilesController>().SelectedFiles.FirstOrDefault();
                 _termbasePath = Path.Combine(Path.GetTempPath() + "\\Tb", Path.GetFileNameWithoutExtension(_selectedFile?.LocalFilePath) + ".sdltb");
                 CreateDirectory();

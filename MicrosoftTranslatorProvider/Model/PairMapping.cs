@@ -1,11 +1,10 @@
 ﻿using System.Windows.Input;
 using MicrosoftTranslatorProvider.Commands;
-using MicrosoftTranslatorProvider.ViewModel;
 using Sdl.LanguagePlatform.Core;
 
 namespace MicrosoftTranslatorProvider.Model
 {
-	public class PairMapping : BaseViewModel
+	public class PairMapping : BaseModel
 	{
 		private string _categoryId;
 		private ICommand _clearCommand;
@@ -25,11 +24,6 @@ namespace MicrosoftTranslatorProvider.Model
 		}
 
 		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
-
-		public PairMapping Clone()
-		{
-			return MemberwiseClone() as PairMapping;
-		}
 
 		private void Clear(object parameter)
 		{

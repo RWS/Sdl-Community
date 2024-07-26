@@ -121,9 +121,6 @@
   <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\ForumIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Information" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Information.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Plugin_Name" xml:space="preserve">
     <value>RapidAddTerm</value>
   </data>
@@ -135,22 +132,5 @@
   </data>
   <data name="TellMe1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\TellMe1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TellMe_Documentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_Documentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TellMe_Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_Settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TellMe_SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TellMe_WarningMessage" xml:space="preserve">
-    <value>To engage with RAT, follow these steps:
-
-   1. In Editor view, select source and target term
-   2. Right-click and select “Rapid Add Term”
-
-Tip: You can assign shortcuts via : File-Options-Keyboard shortcuts-Rapid Add Term.</value>
   </data>
 </root>

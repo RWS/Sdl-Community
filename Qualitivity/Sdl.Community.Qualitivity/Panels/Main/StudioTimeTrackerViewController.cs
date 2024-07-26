@@ -31,7 +31,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Sdl.Community.Qualitivity.WarningWindow;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using Activity = Sdl.Community.Structures.Projects.Activities.Activity;
 using DocumentActivities = Sdl.Community.Structures.Projects.Activities.DocumentActivities;
@@ -239,15 +238,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 
 
 		private bool IsActive { get; set; }
-
-		public void Initialize()
-		{
-			if (IsInitialized) return;
-			Initialize(null);
-		}
-
-		public bool IsInitialized { get; set; }
-
 		protected override void Initialize(IViewContext context)
 		{
 			ActivationChanged += StudioTimeTrackerViewController_ActivationChanged;
@@ -394,10 +384,10 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 			CheckBackupStatus();
 
 			ProjectsController.SelectedProjectsChanged += projectsController_SelectedProjectsChanged;
-			IsInitialized = true;
+
 		}
 
-
+	
 		private void projectsController_SelectedProjectsChanged(object sender, EventArgs e)
 		{
 
@@ -407,7 +397,7 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 			}
 			else if (ProjectsController.SelectedProjects.FirstOrDefault() != null)
 			{
-				CurrentSelectedProject = ApplicationContext.GetSelectedProject();
+				CurrentSelectedProject = ProjectsController.SelectedProjects.FirstOrDefault();
 				if (CurrentSelectedProject != null)
 					CurrentProjectInfo = CurrentSelectedProject.GetProjectInfo();
 
@@ -2377,10 +2367,9 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 					CheckEnabledObjectsEvent(this, EventArgs.Empty);
 			}
 			catch (Exception ex)
-            {
-                new SettingsActionWarning(PluginResources.SettingsAction_NoTrackingFound,
-                    PluginResources.Qualitivity_StopTrackingTitle).ShowDialog();
-            }
+			{
+				MessageBox.Show(ex.Message);
+			}
 			finally
 			{
 				TrackedActions.stop_tracking(GetEditorController(), Timer4ProjectArea);

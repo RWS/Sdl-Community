@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Application = System.Windows.Application;
 
 namespace Sdl.Community.StudioViews
@@ -10,18 +9,10 @@ namespace Sdl.Community.StudioViews
 	[ApplicationInitializer]
 	internal class ApplicationInstance : IApplicationInitializer
 	{
-		private static FilesController _filesController;
-		private static EditorController _editorController;
-		private static ProjectsController _projectsController;
-
 		public void Execute()
 		{
 			SetApplicationShutdownMode();
 		}
-
-		public static FilesController FilesController => _filesController ??= SdlTradosStudio.Application.GetController<FilesController>();
-		public static EditorController EditorController => _editorController ??= SdlTradosStudio.Application.GetController<EditorController>();
-		public static ProjectsController ProjectsController => _projectsController ??= SdlTradosStudio.Application.GetController<ProjectsController>();
 
 		public static Form GetActiveForm()
 		{

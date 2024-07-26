@@ -11,28 +11,15 @@ namespace Sdl.Community.PostEdit.Versions.TellMe
 		{
 			new CommunityWikiAction
 			{
-				Keywords = new[] {"post", "eidt", "post-edit", "compare", "community", "support", "wiki" }
+				Keywords = new[] {"post edit","post-edit", "post edit compare", "community", "support", "wiki" }
 			},
 			new AppStoreForumAction
 			{
-				Keywords = new[] { "post", "eidt", "post-edit", "compare", "support", "forum" }
+				Keywords = new[] { "post edit", "post-edit", "post edit compare", "support", "forum" }
 			},
-			new SourceCodeAction
+			new AppStoreDownloadAction
 			{
-				Keywords = new[] { "post", "eidt", "post-edit", "compare", "source", "code" }
-			},
-			new SettingsAction
-			{
-				Keywords = new[] { "post", "eidt", "post-edit", "compare", "settings" }
-			},
-            new PluginViewAction
-            {
-                Keywords = new[] { "post", "eidt", "post-edit", "compare", "view", "controller" }
-            },
-            new NewProjectVersionAction
-            {
-                Keywords = new[] { "post", "eidt", "post-edit", "compare", "new", "project", "version" }
-            }
-        };
+				Keywords = new[] { "post edit", "post-edit", "post edit compare", "store", "download", "appstore" }}
+		};
 	}
 }

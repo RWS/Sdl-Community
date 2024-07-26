@@ -23,22 +23,5 @@ namespace InterpretBank.Helpers
                 return new(false, default, GetFailureMessage(e.Message, failingMethod));
             }
         }
-
-        /// <summary>
-        /// Provides a static utility for wrapping functions in a try-catch block
-        /// and returning the success status and failure message.
-        /// </summary>
-        public static ActionResult WrapTryCatch(Action function, [CallerMemberName] string failingMethod = null)
-        {
-            try
-            {
-                function();
-                return new(true, null);
-            }
-            catch (Exception e)
-            {
-                return new(false, GetFailureMessage(e.Message, failingMethod));
-            }
-        }
     }
 }

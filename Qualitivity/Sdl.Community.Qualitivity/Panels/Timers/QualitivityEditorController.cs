@@ -28,11 +28,6 @@ namespace Sdl.Community.Qualitivity.Panels.Timers
    
         }
 
-        public void StopTracking()
-        {
-	        Control.Value.StopTracking();
-        }
-
 
 
         private static readonly Lazy<QualitivityEditorControl> Control = new Lazy<QualitivityEditorControl>(() => new QualitivityEditorControl());      

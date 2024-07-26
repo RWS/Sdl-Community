@@ -35,7 +35,7 @@ namespace Sdl.Community.TermExcelerator
 			return true;
 		}
 
-		public string Name => $"{PluginResources.Plugin_Name}: {Uri.Host}";
+		public string Name => Path.GetFileName(ProviderSettings.TermFilePath);
 		public string Description => PluginResources.ExcelTerminologyProviderDescription;
 		public string Id { get; } = Guid.NewGuid().ToString();
 		public Uri Uri => new Uri((ExcelUriTemplate + Path.GetFileName(ProviderSettings.TermFilePath)).RemoveUriForbiddenCharacters());
@@ -50,8 +50,9 @@ namespace Sdl.Community.TermExcelerator
 			Terms.Clear();
 		}
 
-		public TerminologyProviderExcel(ProviderSettings providerSettings, ITermSearchService termSearchService) : this(providerSettings)
+		public TerminologyProviderExcel(ProviderSettings providerSettings, ITermSearchService termSearchService)
 		{
+			ProviderSettings = providerSettings ?? throw new ArgumentNullException(nameof(providerSettings));
 			Terms = new List<ExcelEntry>();
 			_termSearchService = termSearchService ?? throw new ArgumentNullException(nameof(termSearchService));
 		}
@@ -59,14 +60,6 @@ namespace Sdl.Community.TermExcelerator
 		public TerminologyProviderExcel(ProviderSettings providerSettings)
 		{
 			ProviderSettings = providerSettings;
-			ApplicationContext.SettingsChangedFromTellMeAction -= ApplicationContext_SettingsChangedFromTellMeAction;
-			ApplicationContext.SettingsChangedFromTellMeAction += ApplicationContext_SettingsChangedFromTellMeAction;
-
-		}
-
-		private void ApplicationContext_SettingsChangedFromTellMeAction()
-		{
-			ProviderSettings = ApplicationContext.PersistenceService.Load(Uri);
 		}
 
 		public async Task LoadEntries()
@@ -133,7 +126,7 @@ namespace Sdl.Community.TermExcelerator
 			{
 				IsBidirectional = true,
 				Locale = ProviderSettings.TargetLanguage,
-				Name = ProviderSettings.TargetLanguage?.EnglishName,
+				Name = ProviderSettings.TargetLanguage.EnglishName,
 				TargetOnly = false
 			};
 

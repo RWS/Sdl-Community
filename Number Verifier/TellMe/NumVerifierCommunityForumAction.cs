@@ -7,8 +7,8 @@ namespace Sdl.Community.NumberVerifier.TellMe
 	public class NumVerifierCommunityForumAction : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
-		public override string Category => $"{PluginResources.Plugin_Name} results";
-		public override Icon Icon => PluginResources.Question;
+		public override string Category => "Number Verifier results";
+		public override Icon Icon => PluginResources.ForumIcon;
 
 		public NumVerifierCommunityForumAction()
 		{

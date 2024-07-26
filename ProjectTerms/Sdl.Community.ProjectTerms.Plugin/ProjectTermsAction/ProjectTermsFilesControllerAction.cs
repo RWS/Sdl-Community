@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Sdl.Community.ProjectTerms.Plugin.Views;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
@@ -20,13 +21,12 @@ namespace Sdl.Community.ProjectTerms.Plugin.ProjectTermsAction
 		    base.Initialize();
 		    Text = "Extract Project Terms";			
 			_filesController = SdlTradosStudio.Application.GetController<FilesController>();
-            _filesController.SelectedFilesChanged += _filesController_SelectedFilesChanged;
+			_filesController.SelectedFilesChanged += _filesController_SelectedFilesChanged;
 		}
 				
 		protected override void Execute()
         {
-	        StudioContext.RaiseControllersAvailableEvent();
-			if (Utils.Utils.VerifySingleFileProjectType())
+            if (Utils.Utils.VerifySingleFileProjectType())
             {
                 MessageBox.Show(PluginResources.Error_SingleFileProject, PluginResources.MessageType_Info);
                 return;

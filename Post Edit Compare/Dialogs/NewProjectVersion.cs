@@ -145,7 +145,7 @@ namespace Sdl.Community.PostEdit.Versions.Dialogs
 
 
 
-                ProjectVersion.location = Helper.CreateDatetimePath(textBox_location.Text, ProjectVersion.createdAt);
+                ProjectVersion.location = Path.Combine(textBox_location.Text, ProjectVersion.createdAt);
                 if (!Directory.Exists(ProjectVersion.location))
                     Directory.CreateDirectory(ProjectVersion.location);
 
@@ -335,6 +335,16 @@ namespace Sdl.Community.PostEdit.Versions.Dialogs
                 button_wizard_cancel.Enabled = false;
                 button_wizard_help.Enabled = false;
             }
+        }
+
+        public string GetStringFromDateTime(DateTime dateTime)
+        {
+            return dateTime.Year
+                + "-" + dateTime.Month.ToString().PadLeft(2, '0')
+                + "-" + dateTime.Day.ToString().PadLeft(2, '0')
+                + "T" + dateTime.Hour.ToString().PadLeft(2, '0')
+                + "." + dateTime.Minute.ToString().PadLeft(2, '0')
+                + "." + dateTime.Second.ToString().PadLeft(2, '0');
         }
 
         public void CountAll(DirectoryInfo source, string searchPattern)

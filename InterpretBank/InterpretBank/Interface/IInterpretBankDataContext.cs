@@ -61,6 +61,6 @@ public interface IInterpretBankDataContext : IDisposable
 
     void UpdateEntry(TermChange termChange);
     void RemoveTerm(EntryModel selectedEntry);
-    //List<DbGlossaryEntry> GetItems(List<string> glossaries, int skipCount, int takeCount);
+    List<DbGlossaryEntry> GetItems(List<string> glossaries, int skipCount, int takeCount);
     void UpdateEntry(EntryChange entryChange);
 }

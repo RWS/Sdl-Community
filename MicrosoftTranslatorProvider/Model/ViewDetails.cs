@@ -1,11 +1,9 @@
-﻿using MicrosoftTranslatorProvider.ViewModel;
-
-namespace MicrosoftTranslatorProvider.Model
+﻿namespace MicrosoftTranslatorProvider.Model
 {
 	public class ViewDetails
 	{
 		public string Name { get; set; }
 
-		public BaseViewModel ViewModel { get; set; }
+		public BaseModel ViewModel { get; set; }
 	}
 }

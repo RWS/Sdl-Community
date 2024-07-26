@@ -3,7 +3,7 @@ using System.IO;
 
 namespace LanguageMappingProvider
 {
-	internal static class Constants
+	public static class Constants
     {
         private const string DatabaseFileName = "{0}data.sqlite3";
         public static string PluginAppDataLocation = $@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\Trados AppStore\Language Mapping Provider";
@@ -17,7 +17,5 @@ namespace LanguageMappingProvider
         public const string SQL_SelectDefaultData = "select * from defaultdata";
         public const string SQL_UpdateData = "UPDATE languagemapping SET {0} = '{1}' WHERE `Index` = {2}";
         public const string SQL_DropTable = "DROP TABLE languagemapping";
-
-		public const string UndefinedLanguageCode = "n/a";
-	}
+    }
 }

@@ -22,7 +22,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 	{
 		private readonly MainWindow _mainWindow;
 		private readonly IMessageService _messageService;
-		private readonly StudioVersionService _versionService;
+		private readonly VersionService _versionService;
 		private readonly RegistryHelper _registryHelper;
 		private readonly Persistence _persistence;
 		private readonly string _userName;
@@ -44,7 +44,7 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		private MultiTermLocationListItem _selectedLocation;
 		private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-		public MultiTermViewModel(MainWindow mainWindow, IMessageService messageService, StudioVersionService versionService, RegistryHelper registryHelper)
+		public MultiTermViewModel(MainWindow mainWindow, IMessageService messageService, VersionService versionService, RegistryHelper registryHelper)
 		{
 			_mainWindow = mainWindow;
 			_messageService = messageService;

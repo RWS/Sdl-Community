@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MicrosoftTranslatorProvider.Model;
-using MicrosoftTranslatorProvider.ViewModel;
 using Newtonsoft.Json;
 
 namespace MicrosoftTranslatorProvider.Interfaces
@@ -15,11 +14,11 @@ namespace MicrosoftTranslatorProvider.Interfaces
 
 		bool PersistMicrosoftKey { get; set; }
 
-		BaseViewModel ViewModel { get; }
+		BaseModel ViewModel { get; }
 		
-		AccountRegion SelectedRegion { get; set; }
+		RegionSubscription SelectedRegion { get; set; }
 
-		List<AccountRegion> Regions { get; set; }
+		List<RegionSubscription> Regions { get; set; }
 
 		List<PairMapping> LanguageMappings { get; set; }
 	}

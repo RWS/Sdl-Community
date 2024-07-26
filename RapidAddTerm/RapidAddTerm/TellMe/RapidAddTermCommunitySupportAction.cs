@@ -8,7 +8,7 @@ namespace Sdl.Community.RapidAddTerm.TellMe
 	{
 		public RapidAddTermCommunitySupportAction()
 		{
-			Name = "RWS Community AppStore Forum";
+			Name = "RWS Community AppStore forum";
 		}
 		public override void Execute()
 		{
@@ -18,6 +18,6 @@ namespace Sdl.Community.RapidAddTerm.TellMe
 		public override bool IsAvailable => true;
 		public override string Category => "Rapid Add Terms results";
 
-		public override Icon Icon => PluginResources.Question;
+		public override Icon Icon => PluginResources.ForumIcon;
 	}
 }

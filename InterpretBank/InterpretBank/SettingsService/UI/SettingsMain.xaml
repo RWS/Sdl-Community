@@ -4,18 +4,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModel="clr-namespace:InterpretBank.SettingsService.ViewModel"
-        WindowStyle="None"
+        xmlns:styles="clr-namespace:InterpretBank.Styles"
+        xmlns:interpretBank="clr-namespace:InterpretBank"
+        xmlns:converters="clr-namespace:InterpretBank.SettingsService.Converters"
         xmlns:controls="clr-namespace:InterpretBank.Controls"
+        xmlns:converters1="clr-namespace:InterpretBank.Converters"
         MouseDown="Window_MouseDown"
         mc:Ignorable="d"
         x:Name="Root"
         d:DataContext="{d:DesignInstance viewModel:SettingsService}"
         Title="InterpretBank settings"
-        SizeToContent="WidthAndHeight"
+        SizeToContent="Height"
         WindowStartupLocation="CenterScreen"
         Height="Auto"
-        MinWidth="533"
-        MinHeight="450"
+        MinWidth="300"
+        MinHeight="490"
         Width="600">
     <Window.Resources>
         <ResourceDictionary>
@@ -26,14 +29,9 @@
                 <ResourceDictionary Source="/InterpretBank;component/SettingsService/Styles/SettingsMainResources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Controls;component/Controls/WatermarkTextBox/WatermarkTextBoxResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <Style TargetType="GroupBox"
-                   BasedOn="{StaticResource {x:Type GroupBox}}">
-                <Setter Property="Margin"
-                        Value="10" />
-                <Setter Property="Padding"
-                        Value="10" />
-            </Style>
 
+            <converters:NullStringToVisibilityConverter x:Key="NullToVisibilityConverter" />
+            <converters1:RatioConverter x:Key="RatioConverter" />
         </ResourceDictionary>
     </Window.Resources>
 
@@ -45,42 +43,38 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+
         <Image Grid.Row="0"
                Height="50"
-               Margin="0 25 0 20"
                Source="../../Resources/logo.png" />
 
-        <GroupBox Grid.Row="1"
-                  Padding="0"
-                  HorizontalAlignment="Left"
-                  Header="Locate database">
-            <DockPanel HorizontalAlignment="Stretch"
-                       VerticalAlignment="Top">
-
-                <controls:ChooseFilepathControl Filepath="{Binding Filepath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-
-            </DockPanel>
-        </GroupBox>
-
-        <GroupBox Grid.Row="2"
-                  Header="Select glossaries">
-            <controls:GlossariesOrTagsControl2 Margin="0 5" />
-        </GroupBox>
-
-        <DockPanel Grid.Row="3"
-                   LastChildFill="False"
+        <!--Filepath field-->
+        <DockPanel Grid.Row="1"
                    HorizontalAlignment="Stretch"
-                   VerticalAlignment="Bottom">
-            <Button Content="Help"
-                    Cursor="Hand"
-                    Width="120"
-                    Height="30"
-                    Click="HelpButton_OnClick"
-                    HorizontalAlignment="Left"
-                    Style="{StaticResource Sdl.Button.SecondaryStyle}"
-                    DockPanel.Dock="Left"
-                    Margin="10 0 10 10" />
+                   Margin="10 10 10 5"
+                   VerticalAlignment="Top">
 
+            <TextBlock Text="{x:Static interpretBank:PluginResources.SettingsWindow_TextBlock_DBFilepath}"
+                       DockPanel.Dock="Top" />
+
+
+
+            <controls:ChooseFilepathControl Filepath="{Binding Filepath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+        </DockPanel>
+
+        <controls:GlossariesOrTagsControl Grid.Row="2"
+                                          Height="Auto"
+                                          x:Name="SettingsUi"
+                                          Margin="10 10 10 5"
+                                          DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}"
+                                          Visibility="{Binding Filepath, Converter={StaticResource NullToVisibilityConverter}}" />
+
+        <StackPanel Grid.Row="3"
+                    Orientation="Horizontal"
+                    Margin="0 50 0 0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom">
             <Button Content="Cancel"
                     Cursor="Hand"
                     Width="120"
@@ -93,13 +87,12 @@
             <Button Content="OK"
                     Cursor="Hand"
                     Width="120"
-                    IsDefault="True"
                     Command="{Binding SaveCommand}"
                     Click="ButtonBase_OnClick"
                     Height="30"
                     Style="{StaticResource Sdl.Button.PrimaryStyle}"
                     DockPanel.Dock="Right"
                     Margin="0 0 10 10" />
-        </DockPanel>
+        </StackPanel>
     </Grid>
 </Window>

@@ -4,13 +4,13 @@ namespace InterpretBank.SettingsService.Model
 {
     public class GlossaryModel : InterpretBank.Model.NotifyChangeModel
     {
-        private ObservableCollection<object> _languages = new();
+        private ObservableCollection<LanguageModel> _languages = new();
 		private ObservableCollection<TagModel> _tags = new();
 		public string GlossaryName { get; set; }
 		public string SubGlossaryName { get; set; }
 		public int Id { get; set; }
 
-		public ObservableCollection<object> Languages
+		public ObservableCollection<LanguageModel> Languages
 		{
 			get => _languages;
 			set => SetField(ref _languages, value);

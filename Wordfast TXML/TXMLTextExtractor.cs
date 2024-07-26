@@ -1,6 +1,6 @@
-﻿using Sdl.FileTypeSupport.Framework.BilingualApi;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
+using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace Sdl.Community.FileTypeSupport.TXML
 {

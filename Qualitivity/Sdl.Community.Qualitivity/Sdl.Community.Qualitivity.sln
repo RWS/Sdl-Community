@@ -1,23 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.10.34825.169
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdl.Community.Qualitivity", "Sdl.Community.Qualitivity.csproj", "{AC39EA6C-DDDE-4C47-8E9C-10796087CE32}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.Qualitivity", "Sdl.Community.Qualitivity.csproj", "{AC39EA6C-DDDE-4C47-8E9C-10796087CE32}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdl.Community.Comparison", "..\Sdl.Community.Qualitivity.Comparison\Sdl.Community.Comparison.csproj", "{455EA006-C9E9-46F9-87BA-4482ECBEC69F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.Comparison", "..\Sdl.Community.Qualitivity.Comparison\Sdl.Community.Comparison.csproj", "{455EA006-C9E9-46F9-87BA-4482ECBEC69F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdl.Community.Hooks", "..\Sdl.Community.Qualitivity.Hooks\Sdl.Community.Hooks.csproj", "{82679AF5-C839-4F26-B84E-9970A0C5665B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.Hooks", "..\Sdl.Community.Qualitivity.Hooks\Sdl.Community.Hooks.csproj", "{82679AF5-C839-4F26-B84E-9970A0C5665B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdl.Community.Models", "..\Sdl.Community.Qualitivity.Models\Sdl.Community.Models.csproj", "{7AD662AF-2D85-4874-8B69-42CB5ACE2EC3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.Models", "..\Sdl.Community.Qualitivity.Models\Sdl.Community.Models.csproj", "{7AD662AF-2D85-4874-8B69-42CB5ACE2EC3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdl.Community.Parser", "..\Sdl.Community.Qualitivity.Parser\Sdl.Community.Parser.csproj", "{0D4E6FEF-56DD-485A-9B5B-4743F40403E3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.Parser", "..\Sdl.Community.Qualitivity.Parser\Sdl.Community.Parser.csproj", "{0D4E6FEF-56DD-485A-9B5B-4743F40403E3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdl.Community.Report", "..\Sdl.Community.Qualitivity.Report\Sdl.Community.Report.csproj", "{2B1D6C21-CB8B-4C24-8128-54E911C03E08}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.Report", "..\Sdl.Community.Qualitivity.Report\Sdl.Community.Report.csproj", "{2B1D6C21-CB8B-4C24-8128-54E911C03E08}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdl.Community.TM", "..\Sdl.Community.Qualitivity.TM\Sdl.Community.TM.csproj", "{65C5F510-7B16-4201-A238-668D14ED0801}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.TM", "..\Sdl.Community.Qualitivity.TM\Sdl.Community.TM.csproj", "{65C5F510-7B16-4201-A238-668D14ED0801}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sdl.Community.WPFListView", "..\Sdl.Community.Qualitivity.WPFListView\Sdl.Community.WPFListView.csproj", "{FBACB9DD-95D2-457A-BE82-0F81BBE32C98}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.WPFListView", "..\Sdl.Community.Qualitivity.WPFListView\Sdl.Community.WPFListView.csproj", "{FBACB9DD-95D2-457A-BE82-0F81BBE32C98}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{80CF1D1C-788C-4BA4-83E5-03BE12EC32FD}"
 	ProjectSection(SolutionItems) = preProject

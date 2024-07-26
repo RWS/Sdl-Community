@@ -1,7 +1,6 @@
 ﻿using InterpretBank.Commands;
 using InterpretBank.Interface;
 using InterpretBank.SettingsService.Model;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -18,8 +17,8 @@ public class SettingsService(IInterpretBankDataContext interpretBankDataContext)
     private string _filepath;
     private List<GlossaryModel> _glossaries;
     private ICommand _saveCommand;
-    private ObservableCollection<object> _selectedGlossaries = new();
-    private ObservableCollection<object> _selectedTags = new();
+    private ObservableCollection<GlossaryModel> _selectedGlossaries = new();
+    private ObservableCollection<TagModel> _selectedTags = new();
     private List<TagModel> _tags;
     private bool _useTags;
 
@@ -41,9 +40,17 @@ public class SettingsService(IInterpretBankDataContext interpretBankDataContext)
         set => SetField(ref _glossaries, value);
     }
 
-    public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save);
+    public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save, o =>
+    {
+        var enabled =
+            !string.IsNullOrWhiteSpace(Filepath); /*&& this["SelectedTags"] == "" && this["SelectedGlossaries"] == "";*/
 
-    public ObservableCollection<object> SelectedGlossaries
+        enabled &= UseTags ? this["SelectedTags"] == "" : this["SelectedGlossaries"] == "";
+
+        return enabled;
+    });
+
+    public ObservableCollection<GlossaryModel> SelectedGlossaries
     {
         get => _selectedGlossaries;
         set
@@ -57,7 +64,7 @@ public class SettingsService(IInterpretBankDataContext interpretBankDataContext)
         }
     }
 
-    public ObservableCollection<object> SelectedTags
+    public ObservableCollection<TagModel> SelectedTags
     {
         get => _selectedTags;
         set
@@ -72,9 +79,6 @@ public class SettingsService(IInterpretBankDataContext interpretBankDataContext)
         }
     }
 
-
-
-
     public Settings Settings
     {
         set
@@ -84,18 +88,18 @@ public class SettingsService(IInterpretBankDataContext interpretBankDataContext)
             UseTags = value.UseTags;
 
             if (value.Glossaries is not null)
-                SelectedGlossaries = new ObservableCollection<object>(Glossaries?.Where(g => value.Glossaries.Contains(g.GlossaryName)));
+                SelectedGlossaries = new ObservableCollection<GlossaryModel>(Glossaries?.Where(g => value.Glossaries.Contains(g.GlossaryName)));
 
             if (value.Tags is not null)
-                SelectedTags = new ObservableCollection<object>(Tags?.Where(t => value.Tags.Contains(t.TagName)));
+                SelectedTags = new ObservableCollection<TagModel>(Tags?.Where(t => value.Tags.Contains(t.TagName)));
         }
         get =>
             new()
             {
                 SettingsId = SettingsId,
                 DatabaseFilepath = Filepath,
-                Glossaries = SelectedGlossaries?.Cast<GlossaryModel>().Select(g => g.GlossaryName).ToList(),
-                Tags = SelectedTags?.Cast<TagModel>().Select(t => t.TagName).ToList(),
+                Glossaries = SelectedGlossaries?.Select(g => g.GlossaryName).ToList(),
+                Tags = SelectedTags?.Select(t => t.TagName).ToList(),
                 UseTags = UseTags
             };
     }
@@ -123,26 +127,14 @@ public class SettingsService(IInterpretBankDataContext interpretBankDataContext)
 
     private IInterpretBankDataContext InterpretBankDataContext { get; set; } = interpretBankDataContext;
 
-    public string this[string columnName]
-    {
-        get
-        {
-            var message = "";
-            switch (columnName)
-            {
-                case nameof(SelectedTags):
-                    if (SelectedTags is null || !SelectedTags.Any())
-                        message = "Please select some tags or glossaries";
-                    break;
-                case nameof(SelectedGlossaries) when !SelectedGlossaries.Any():
-                    return "Please select some glossaries";
-                default:
-                    return string.Empty;
-            }
 
-            return message;
-        }
-    }
+    public string this[string columnName] =>
+        columnName switch
+        {
+            nameof(SelectedTags) when !SelectedTags.Any() => "Please select some tags or glossaries",
+            nameof(SelectedGlossaries) when !SelectedGlossaries.Any() => "Please select some glossaries",
+            _ => string.Empty
+        };
 
     public void Dispose()
     {
@@ -172,8 +164,8 @@ public class SettingsService(IInterpretBankDataContext interpretBankDataContext)
         if (!string.IsNullOrWhiteSpace(_filepath))
         {
             InterpretBankDataContext.Setup(Filepath);
-            Tags = [.. InterpretBankDataContext.GetTags().Distinct().OrderBy(t => t.TagName)];
-            Glossaries = [.. InterpretBankDataContext.GetGlossaries().OrderBy(g => g.GlossaryName).ThenBy(g=>g.SubGlossaryName)];
+            Tags = InterpretBankDataContext.GetTags().Distinct().ToList();
+            Glossaries = InterpretBankDataContext.GetGlossaries();
         }
         else
         {

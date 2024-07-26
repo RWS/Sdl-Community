@@ -202,13 +202,4 @@
   <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\forumicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="TellMe_Documentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_Documentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TellMe_Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_Settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TellMe_SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
 </root>

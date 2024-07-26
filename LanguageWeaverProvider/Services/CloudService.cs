@@ -235,7 +235,6 @@ namespace LanguageWeaverProvider.Services
 		{
 			var requestUri = $"{accessToken.BaseUri}v4/mt/translations/async/{requestId}/{endpoint}";
 			var translationStatusReponse = await Service.SendRequest(HttpMethod.Get, requestUri, accessToken);
-			var x = await translationStatusReponse.Content.ReadAsStringAsync();
 			var translationStatus = await Service.DeserializeResponse<T>(translationStatusReponse);
 			return translationStatus;
 		}
@@ -281,7 +280,7 @@ namespace LanguageWeaverProvider.Services
 		{
 			var httpClient = new HttpClient();
 			httpClient.DefaultRequestHeaders.Add(Constants.TraceAppKey, Constants.TraceAppValue);
-			httpClient.DefaultRequestHeaders.Add(Constants.TraceAppVersionKey, ApplicationInitializer.CurrentAppVersion);
+			httpClient.DefaultRequestHeaders.Add(Constants.TraceAppVersionKey, Constants.TraceAppVersionValue);
 			return httpClient;
 		}
 

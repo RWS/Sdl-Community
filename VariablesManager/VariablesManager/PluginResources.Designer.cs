@@ -100,26 +100,6 @@ namespace VariablesManager {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon Settings {
-            get {
-                object obj = ResourceManager.GetObject("Settings", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon SourceCode {
-            get {
-                object obj = ResourceManager.GetObject("SourceCode", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Download {0} from the AppStore.
         /// </summary>
         internal static string TellMe_Download_Plugin_From_AppStore {
@@ -129,30 +109,20 @@ namespace VariablesManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} TellMe provider.
-        /// </summary>
-        internal static string TellMe_Provider {
-            get {
-                return ResourceManager.GetString("TellMe_Provider", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0} results.
         /// </summary>
-        internal static string TellMe_Provider_Results {
+        internal static string TellMe_String_Results {
             get {
-                return ResourceManager.GetString("TellMe_Provider_Results", resourceCulture);
+                return ResourceManager.GetString("TellMe_String_Results", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        ///   Looks up a localized string similar to {0} TellMe provider.
         /// </summary>
-        internal static System.Drawing.Icon TellmeDocumentation {
+        internal static string TellMe_String_TellMe_Provider {
             get {
-                object obj = ResourceManager.GetObject("TellmeDocumentation", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
+                return ResourceManager.GetString("TellMe_String_TellMe_Provider", resourceCulture);
             }
         }
         

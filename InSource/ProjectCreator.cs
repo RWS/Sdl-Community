@@ -153,7 +153,7 @@ namespace Sdl.Community.InSource
 			catch (Exception ex)
 			{
 				_logger.Error($"ExecuteTaskSequence method: {ex.Message}\n {ex.StackTrace}");
-				_messageBoxService.ShowInformation(PluginResources.ProjectTemplateSequenceSelection_Message, string.Empty);
+				_messageBoxService.ShowMessage(PluginResources.ProjectTemplateSequenceSelection_Message, string.Empty);
 			}
 		}
 

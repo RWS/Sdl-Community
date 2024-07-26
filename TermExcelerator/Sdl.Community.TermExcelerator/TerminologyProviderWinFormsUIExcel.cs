@@ -8,19 +8,17 @@ using Sdl.Terminology.TerminologyProvider.Core;
 namespace Sdl.Community.TermExcelerator
 {
 	[TerminologyProviderWinFormsUI]
-	public class TerminologyProviderWinFormsUIExcel : ITerminologyProviderWinFormsUIWithEdit
+	public class TerminologyProviderWinFormsUIExcel : ITerminologyProviderWinFormsUI
 	{
 		public string TypeName => PluginResources.ExcelTerminologyProviderName;
 		public string TypeDescription => PluginResources.ExcelTerminologyProviderDescription;
+		public bool SupportsEditing => true;
 		public static readonly Log Log = Log.Instance;
-		private PersistenceService _persistenceService;
 
 		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
 		{
 			return terminologyProviderUri.Scheme == "excelglossary";
 		}
-
-		public PersistenceService PersistenceService => _persistenceService ??= new PersistenceService();
 
 		public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
 		{
@@ -35,15 +33,16 @@ namespace Sdl.Community.TermExcelerator
 				{
 					var settings = settingsDialog.GetSettings();
 
+					var persistenceService = new PersistenceService();
+
 					var provider = new TerminologyProviderExcel(settings);
 					settings.Uri = provider.Uri;
-					PersistenceService.AddSettings(settings);
-					var providerSettings = PersistenceService.Load(provider.Uri);
+					persistenceService.AddSettings(settings);
+					var providerSettings = persistenceService.Load(provider.Uri);
 					var termSearchService = new NormalTermSeachService(providerSettings);
 
 					var excelProvider = new TerminologyProviderExcel(providerSettings, termSearchService);
 
-					
 					result.Add(excelProvider);
 				}
 			}
@@ -62,19 +61,13 @@ namespace Sdl.Community.TermExcelerator
 				return false;
 			}
 
-			var currentSettings = provider.ProviderSettings;
 			var settingsDialog = new Settings();
-			settingsDialog.SetSettings(currentSettings);
+			settingsDialog.SetSettings(provider.ProviderSettings);
 			var dialogResult = settingsDialog.ShowDialog();
-
 			if (dialogResult == DialogResult.OK ||
 				dialogResult == DialogResult.Yes)
 			{
-				var settings = settingsDialog.GetSettings();
-				settings.Uri = provider.Uri;
-
-				PersistenceService.AddSettings(settings);
-				provider.ProviderSettings = settings;
+				provider.ProviderSettings = settingsDialog.GetSettings();
 			}
 
 			return true;
@@ -82,10 +75,10 @@ namespace Sdl.Community.TermExcelerator
 
 		public TerminologyProviderDisplayInfo GetDisplayInfo(Uri terminologyProviderUri)
 		{
-			var name = terminologyProviderUri.Host;
+			var name = terminologyProviderUri.AbsolutePath.Replace(TerminologyProviderExcel.ExcelUriTemplate, "").Replace("/", "");
 			return new TerminologyProviderDisplayInfo
 			{
-				Name = $"{PluginResources.Plugin_Name}: {name}",
+				Name = name,
 				TooltipText = name
 			};
 		}

@@ -130,6 +130,15 @@
   <data name="icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\icon.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\download.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\forumicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="TellMe_Download_Plugin_From_AppStore" xml:space="preserve">
     <value>Download {0} from the AppStore</value>
   </data>
@@ -138,25 +147,5 @@
   </data>
   <data name="TellMe_String_TellMe_Provider" xml:space="preserve">
     <value>{0} TellMe provider</value>
-  </data>
-  <data name="TellMe_Documentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_Documentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TellMe_Forum" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_Forum.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TellMe_Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_Settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TellMe_SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="SettingsWarning" xml:space="preserve">
-    <value>The default settings for the File Type can be configured from the Options window. To locate the default File Type settings, follow these steps:
-
-    1. Open 'File &gt; Options &gt; File Types'
-    2. Select the File Type from the list
-
-Tip: If you are adding a new File Type to an existing project, you should first select the link "Additional installed File Types exist" from 'Project Settings &gt; File Types'</value>
   </data>
 </root>

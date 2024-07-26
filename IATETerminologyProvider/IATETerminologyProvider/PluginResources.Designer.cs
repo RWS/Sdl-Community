@@ -99,9 +99,19 @@ namespace Sdl.Community.IATETerminologyProvider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon Forum {
+        public static System.Drawing.Icon Download {
             get {
-                object obj = ResourceManager.GetObject("Forum", resourceCulture);
+                object obj = ResourceManager.GetObject("Download", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon ForumIcon {
+            get {
+                object obj = ResourceManager.GetObject("ForumIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -113,16 +123,6 @@ namespace Sdl.Community.IATETerminologyProvider {
             get {
                 object obj = ResourceManager.GetObject("Iate_logo", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap IATE_logo_cropped_1_ {
-            get {
-                object obj = ResourceManager.GetObject("IATE_logo_cropped_1_", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -150,16 +150,6 @@ namespace Sdl.Community.IATETerminologyProvider {
         public static string Label_MaximumEntries {
             get {
                 return ResourceManager.GetString("Label_MaximumEntries", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon Logo {
-            get {
-                object obj = ResourceManager.GetObject("Logo", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -219,31 +209,11 @@ namespace Sdl.Community.IATETerminologyProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon Settings {
-            get {
-                object obj = ResourceManager.GetObject("Settings", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Terminology provider settings.
         /// </summary>
         public static string Settings_Descr {
             get {
                 return ResourceManager.GetString("Settings_Descr", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon SourceCode {
-            get {
-                object obj = ResourceManager.GetObject("SourceCode", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -263,16 +233,6 @@ namespace Sdl.Community.IATETerminologyProvider {
         public static string Subdomains_Tooltip {
             get {
                 return ResourceManager.GetString("Subdomains_Tooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon TellMe_Documentation {
-            get {
-                object obj = ResourceManager.GetObject("TellMe_Documentation", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         

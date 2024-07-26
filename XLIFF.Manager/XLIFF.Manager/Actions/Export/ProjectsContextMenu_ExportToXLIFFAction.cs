@@ -33,7 +33,6 @@ namespace Sdl.Community.XLIFF.Manager.Actions.Export
 
 		protected override void Execute()
 		{
-			ApplicationInstance.Initialize();
 			var wizardService = new WizardService(Enumerators.Action.Export, _pathInfo, _customerProvider,
 				_imageService, _controllers, _segmentBuilder, GetSettings(), _dialogService, _languageProvider);
 

@@ -14,6 +14,7 @@ namespace Sdl.Community.IATETerminologyProvider.View
 		public BrowserWindow()
 		{
 			InitializeComponent();
+			InitializeWebView();
 		}
 
 		public async Task InitializeWebView()
@@ -29,11 +30,8 @@ namespace Sdl.Community.IATETerminologyProvider.View
 			}
 		}
 
-		public async void Navigate(string url)
+		public void Navigate(string url)
 		{
-			await InitializeWebView();
-			if (!SearchResultsViewerController.IsInitialized)
-				return;
 			WebView2.CoreWebView2.Navigate(url);
 		}
 	}

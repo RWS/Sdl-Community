@@ -9,24 +9,19 @@ namespace Sdl.Community.TranslationMemoryManagementUtility
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-            new DocumentationAction
-            {
-                Keywords = new[] { "translation", "memory", "management", "utility", "documentation" }
-
-            },
+			new CommunityWikiAction
+			{
+				Keywords = new[] { "translation", "memory", "management", "utility", "translation memory management utility", "community", "support", "wiki" }
+			},
 			new CommunityAppStoreForumAction
 			{
-				Keywords = new[] { "translation", "memory", "management", "utility", "support", "forum" }
+				Keywords = new[] { "translation", "memory", "management", "utility", "translation memory management utility", "support", "forum" }
 			},
-            new SourceCodeAction
-            {
-                Keywords = new[] { "translation", "memory", "management", "utility", "source", "code" }
-            },
-            new SettingsAction
-            {
-                Keywords = new[] { "translation", "memory", "management", "utility", "settings" }
+			new CommunityAppStoreAction
+			{
+				Keywords = new[] { "translation", "memory", "management", "utility", "translation memory management utility", "store", "download", "appstore" }
 
-            }
-        };
+			}
+		};
 	}
 }

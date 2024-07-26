@@ -1,12 +1,26 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>11.0.3344.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{AC39EA6C-DDDE-4C47-8E9C-10796087CE32}</ProjectGuid>
     <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sdl.Community.Qualitivity</RootNamespace>
     <AssemblyName>Qualitivity</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
     <SccProjectName />
     <SccLocalPath />
     <SccAuxPath />
     <SccProvider />
+    <TargetFrameworkProfile />
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -21,94 +35,463 @@
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
-    <EmbeddedResourceUseDependentUponConvention>true</EmbeddedResourceUseDependentUponConvention>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <UseWindowsForms>true</UseWindowsForms>
-    <UseWPF>true</UseWPF>
-    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <LangVersion>latest</LangVersion>
+    <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup>
-    <TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio18</TradosFolder>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Remove="Resources\Information-32.png" />
-    <None Remove="Resources\Information.png" />
-  </ItemGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
     <Reference Include="DocumentFormat.OpenXml">
-      <HintPath>$(TradosFolder)\DocumentFormat.OpenXml.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="Qualitivity.ObjectListView">
       <HintPath>..\ThirdParty\ObjectListView\Qualitivity.ObjectListView.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization">
-      <HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization.Async">
-      <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
+	    <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.Async.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.Settings">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
-      <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-      <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Desktop.Platform.Styles">
-      <HintPath>$(TradosFolder)\Sdl.Desktop.Platform.Styles.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
-      <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
-      <HintPath>$(TradosFolder)\Sdl.LanguagePlatform.Core.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
-      <HintPath>$(TradosFolder)\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
-      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Core.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
-      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.Settings">
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-      <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TellMe.ProviderApi">
-      <HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite">
-      <HintPath>$(TradosFolder)\System.Data.SQLite.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
-    <Reference Include="System.Reactive">
-      <HintPath>$(TradosFolder)\System.Reactive.dll</HintPath>
-    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
-  
-  
+  <ItemGroup>
+    <Compile Include="..\Build\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
+    <Compile Include="Custom\Accordion.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TellMe\AppStoreDownloadAction.cs" />
+    <Compile Include="TellMe\AppStoreForumAction.cs" />
+    <Compile Include="TellMe\CommunityWikiAction.cs" />
+    <Compile Include="TellMe\TellMeProvider.cs" />
+    <Compile Include="Tracking\TrackedActions.cs" />
+    <Compile Include="Tracking\Tracked.cs" />
+    <Compile Include="Tracking\TrackedDocumentEvents.cs" />
+    <Compile Include="Tracking\TrackedEditorEvents.cs" />
+    <Compile Include="Tracking\TrackedSegment.cs" />
+    <Compile Include="Tracking\TrackedDocuments.cs" />
+    <Compile Include="Tracking\TrackedDocument.cs" />
+    <Compile Include="Tracking\TrackedController.cs" />
+    <Compile Include="Custom\ComboboxItem.cs" />
+    <Compile Include="Custom\UpDownControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ActivityReportWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ActivityReportWizard.Designer.cs">
+      <DependentUpon>ActivityReportWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Export\ExportToFile.cs" />
+    <Compile Include="Dialogs\Export\XmlDocumentActivity.cs" />
+    <Compile Include="Panels\Activity Records\QualitivityViewActivityRecordsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Panels\Activity Records\QualitivityViewActivityRecordsControl.Designer.cs">
+      <DependentUpon>QualitivityViewActivityRecordsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Activity Records\QualitivityViewActivityRecordsController.cs" />
+    <Compile Include="Progress\ProgressDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Progress\ProgressDialog.Designer.cs">
+      <DependentUpon>ProgressDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\QualityMetrics\QualityMetricGroup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\QualityMetrics\QualityMetricGroup.Designer.cs">
+      <DependentUpon>QualityMetricGroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\QualityMetrics\QualityMetricWeightsAppend.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\QualityMetrics\QualityMetricWeightsAppend.designer.cs">
+      <DependentUpon>QualityMetricWeightsAppend.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditDistance.cs" />
+    <Compile Include="Dialogs\AddressDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\AddressDetails.Designer.cs">
+      <DependentUpon>AddressDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\LanguageRate\AppendAnlaysisBand.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\LanguageRate\AppendAnlaysisBand.designer.cs">
+      <DependentUpon>AppendAnlaysisBand.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\LanguageRate\AppendMultipleRates.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\LanguageRate\AppendMultipleRates.Designer.cs">
+      <DependentUpon>AppendMultipleRates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\DifferenceFormatting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\DifferenceFormatting.Designer.cs">
+      <DependentUpon>DifferenceFormatting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Export\ExportActivities.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\Export\ExportActivities.Designer.cs">
+      <DependentUpon>ExportActivities.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\FolderSelectDialog.cs" />
+    <Compile Include="Dialogs\LanguageRate\LanguageRate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\LanguageRate\LanguageRate.designer.cs">
+      <DependentUpon>LanguageRate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\LanguageRate\LanguageRateGroup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\LanguageRate\LanguageRateGroup.Designer.cs">
+      <DependentUpon>LanguageRateGroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\QualityMetrics\QualityMetric.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\QualityMetrics\QualityMetric.Designer.cs">
+      <DependentUpon>QualityMetric.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\QualityMetrics\QualityMetricItem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\QualityMetrics\QualityMetricItem.Designer.cs">
+      <DependentUpon>QualityMetricItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\Settings.Designer.cs">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\QualitivityProject.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\QualitivityProject.Designer.cs">
+      <DependentUpon>QualitivityProject.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\TrackProjectActivity.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\TrackProjectActivity.Designer.cs">
+      <DependentUpon>TrackProjectActivity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Helper.cs" />
+    <Compile Include="Custom\ListViewSortManager.cs" />
+    <Compile Include="Custom\OpenXmlExcel.cs" />
+    <Compile Include="Panels\QualityMetrics\QualitivityRevisionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Panels\QualityMetrics\QualitivityRevisionControl.Designer.cs">
+      <DependentUpon>QualitivityRevisionControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\QualityMetrics\QualitivityRevisionController.cs" />
+    <Compile Include="Panels\Document Reports\QualitivityViewTrackChangesController.cs" />
+    <Compile Include="Panels\Document Reports\QualitivityViewTrackChangesControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Panels\Document Reports\QualitivityViewTrackChangesControl.Designer.cs">
+      <DependentUpon>QualitivityViewTrackChangesControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Timers\QualitivityViewTimerController.cs" />
+    <Compile Include="Panels\Timers\QualitivityViewTimerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Panels\Timers\QualitivityViewTimerControl.Designer.cs">
+      <DependentUpon>QualitivityViewTimerControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PluginResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PluginResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Timers\QualitivityEditorController.cs" />
+    <Compile Include="Panels\Properties\QualitivityViewPropertiesController.cs" />
+    <Compile Include="Panels\Properties\QualitivityViewPropertiesControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Panels\Properties\QualitivityViewPropertiesControl.Designer.cs">
+      <DependentUpon>QualitivityViewPropertiesControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Main\StudioTimeTrackerNavigationControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Panels\Main\StudioTimeTrackerNavigationControl.Designer.cs">
+      <DependentUpon>StudioTimeTrackerNavigationControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Main\StudioTimeTrackerViewRibbonGroup.cs" />
+    <Compile Include="Panels\Main\StudioTimeTrackerViewController.cs" />
+    <Compile Include="Panels\Main\StudioTimeTrackerViewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Panels\Main\StudioTimeTrackerViewControl.Designer.cs">
+      <DependentUpon>StudioTimeTrackerViewControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Progress\ProgressObject.cs" />
+    <Compile Include="Progress\ProgressWindow.cs" />
+    <Compile Include="Progress\ProgressWindowHandlers.cs" />
+    <Compile Include="Properties\PluginProperties.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Panels\Timers\QualitivityEditorControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Panels\Timers\QualitivityEditorControl.Designer.cs">
+      <DependentUpon>QualitivityEditorControl.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Bar-Chart.ico" />
+    <Content Include="Resources\bar_chart.ico" />
+    <Content Include="Resources\Coins.ico" />
+    <Content Include="Resources\Document-Export.ico" />
+    <Content Include="Resources\Document-Import.ico" />
+    <Content Include="Resources\Download.ico" />
+    <Content Include="Resources\Edit-Yes.ico" />
+    <Content Include="Resources\Export.ico" />
+    <Content Include="Resources\ForumIcon.ico" />
+    <Content Include="Resources\Gnome-Bookmark-New.ico" />
+    <Content Include="Resources\Ldap-Browser-Pgp.ico" />
+    <Content Include="Resources\License.ico" />
+    <Content Include="Resources\Question-type-drag-drop.ico" />
+    <Content Include="Resources\Question.ico" />
+    <Content Include="Resources\Save-download.ico" />
+    <Content Include="Resources\Tasks.ico" />
+    <Content Include="Resources\tausdata_1tE_icon.ico" />
+    <Content Include="Resources\Time-Machine.ico" />
+    <Content Include="Qualitivity.ico" />
+    <Content Include="Resources\Activities.ico" />
+    <Content Include="Resources\AddEvent.ico" />
+    <Content Include="Resources\Add.ico" />
+    <Content Include="Resources\Android-Calender.ico" />
+    <Content Include="Resources\Arrow-join-left.ico" />
+    <Content Include="Resources\Button-Check-blue.ico" />
+    <Content Include="Resources\Button-Cross-red.ico" />
+    <Content Include="Resources\Button-End-green.ico" />
+    <Content Include="Resources\Button-Pause-yellow.ico" />
+    <Content Include="Resources\Button-Stop-blue.ico" />
+    <Content Include="Resources\Chart-Bar-Document.ico" />
+    <Content Include="Resources\Edit-Diff.ico" />
+    <Content Include="Resources\Excel.ico" />
+    <Content Include="Resources\Ms-Excel.ico" />
+    <Content Include="Resources\StartTimer.ico" />
+    <Content Include="Resources\StopTimer.ico" />
+    <Content Include="Resources\Book-Add.ico" />
+    <Content Include="Resources\Book-Delete.ico" />
+    <Content Include="Resources\Book-Edit.ico" />
+    <Content Include="Resources\Calendar-Add.ico" />
+    <Content Include="Resources\Calendar-Delete.ico" />
+    <Content Include="Resources\Calendar-Edit.ico" />
+    <Content Include="Resources\DataAdd.ico" />
+    <Content Include="Resources\Edit.ico" />
+    <Content Include="Resources\EditEvent.ico" />
+    <Content Include="Resources\Help.ico" />
+    <Content Include="Resources\Info.ico" />
+    <Content Include="Resources\Details.ico" />
+    <Content Include="Resources\Information.ico" />
+    <Content Include="Resources\MyDetails.ico" />
+    <Content Include="Resources\RemoveEvent.ico" />
+    <Content Include="Resources\Remove.ico" />
+    <Content Include="Resources\ReportAdd.ico" />
+    <Content Include="Resources\Sandclock.ico" />
+    <Content Include="Resources\Settings.ico" />
+    <Content Include="Resources\SymbolAdd.ico" />
+    <Content Include="Resources\Timer.ico" />
+    <Content Include="Resources\Timetable.ico" />
+    <Content Include="Resources\Users-simple.ico" />
+    <EmbeddedResource Include="Dialogs\ActivityReportWizard.resx">
+      <DependentUpon>ActivityReportWizard.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Activity Records\QualitivityViewActivityRecordsControl.resx">
+      <DependentUpon>QualitivityViewActivityRecordsControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Progress\ProgressDialog.resx">
+      <DependentUpon>ProgressDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\AddressDetails.resx">
+      <DependentUpon>AddressDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\LanguageRate\AppendAnlaysisBand.resx">
+      <DependentUpon>AppendAnlaysisBand.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\LanguageRate\AppendMultipleRates.resx">
+      <DependentUpon>AppendMultipleRates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\DifferenceFormatting.resx">
+      <DependentUpon>DifferenceFormatting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\Export\ExportActivities.resx">
+      <DependentUpon>ExportActivities.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\LanguageRate\LanguageRate.resx">
+      <DependentUpon>LanguageRate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\LanguageRate\LanguageRateGroup.resx">
+      <DependentUpon>LanguageRateGroup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\QualityMetrics\QualityMetric.resx">
+      <DependentUpon>QualityMetric.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\QualityMetrics\QualityMetricGroup.resx">
+      <DependentUpon>QualityMetricGroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\QualityMetrics\QualityMetricItem.resx">
+      <DependentUpon>QualityMetricItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\QualityMetrics\QualityMetricWeightsAppend.resx">
+      <DependentUpon>QualityMetricWeightsAppend.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\Settings.resx">
+      <DependentUpon>Settings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\QualitivityProject.resx">
+      <DependentUpon>QualitivityProject.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\TrackProjectActivity.resx">
+      <DependentUpon>TrackProjectActivity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\QualityMetrics\QualitivityRevisionControl.resx">
+      <DependentUpon>QualitivityRevisionControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Document Reports\QualitivityViewTrackChangesControl.resx">
+      <DependentUpon>QualitivityViewTrackChangesControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Timers\QualitivityViewTimerControl.resx">
+      <DependentUpon>QualitivityViewTimerControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Properties\QualitivityViewPropertiesControl.resx">
+      <DependentUpon>QualitivityViewPropertiesControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Main\StudioTimeTrackerNavigationControl.resx">
+      <DependentUpon>StudioTimeTrackerNavigationControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PluginResources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Content Include="pluginpackage.manifest.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <EmbeddedResource Include="Panels\Timers\QualitivityEditorControl.resx">
+      <DependentUpon>QualitivityEditorControl.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Panels\Main\StudioTimeTrackerViewControl.resx">
+      <DependentUpon>StudioTimeTrackerViewControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
       <Visible>False</Visible>
@@ -132,41 +515,57 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sdl.Community.Qualitivity.Comparison\Sdl.Community.Comparison.csproj" />
-    <ProjectReference Include="..\Sdl.Community.Qualitivity.Hooks\Sdl.Community.Hooks.csproj" />
-    <ProjectReference Include="..\Sdl.Community.Qualitivity.Models\Sdl.Community.Models.csproj" />
-    <ProjectReference Include="..\Sdl.Community.Qualitivity.Parser\Sdl.Community.Parser.csproj" />
-    <ProjectReference Include="..\Sdl.Community.Qualitivity.Report\Sdl.Community.Report.csproj" />
-    <ProjectReference Include="..\Sdl.Community.Qualitivity.TM\Sdl.Community.TM.csproj" />
-    <ProjectReference Include="..\Sdl.Community.Qualitivity.WPFListView\Sdl.Community.WPFListView.csproj" />
+    <ProjectReference Include="..\Sdl.Community.Qualitivity.Comparison\Sdl.Community.Comparison.csproj">
+      <Project>{455ea006-c9e9-46f9-87ba-4482ecbec69f}</Project>
+      <Name>Sdl.Community.Comparison</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sdl.Community.Qualitivity.Hooks\Sdl.Community.Hooks.csproj">
+      <Project>{82679af5-c839-4f26-b84e-9970a0c5665b}</Project>
+      <Name>Sdl.Community.Hooks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sdl.Community.Qualitivity.Models\Sdl.Community.Models.csproj">
+      <Project>{7ad662af-2d85-4874-8b69-42cb5ace2ec3}</Project>
+      <Name>Sdl.Community.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sdl.Community.Qualitivity.Parser\Sdl.Community.Parser.csproj">
+      <Project>{0d4e6fef-56dd-485a-9b5b-4743f40403e3}</Project>
+      <Name>Sdl.Community.Parser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sdl.Community.Qualitivity.Report\Sdl.Community.Report.csproj">
+      <Project>{2b1d6c21-cb8b-4c24-8128-54e911c03e08}</Project>
+      <Name>Sdl.Community.Report</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sdl.Community.Qualitivity.TM\Sdl.Community.TM.csproj">
+      <Project>{65c5f510-7b16-4201-a238-668d14ed0801}</Project>
+      <Name>Sdl.Community.TM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sdl.Community.Qualitivity.WPFListView\Sdl.Community.WPFListView.csproj">
+      <Project>{fbacb9dd-95d2-457a-be82-0f81bbe32c98}</Project>
+      <Name>Sdl.Community.WPFListView</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\SdlCommunity.snk">
       <Link>SdlCommunity.snk</Link>
     </None>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Sdl.Core.PluginFramework">
       <Version>2.1.0</Version>
     </PackageReference>
     <PackageReference Include="Sdl.Core.PluginFramework.Build">
-      <Version>18.0.1</Version>
+      <Version>17.0.0</Version>
     </PackageReference>
-    <PackageReference Include="System.Management" Version="8.0.0" />
     <PackageReference Include="Trados.Community.Toolkit.Core">
-      <Version>5.0.1</Version>
+      <Version>4.1.1</Version>
     </PackageReference>
     <PackageReference Include="Trados.Community.Toolkit.LanguagePlatform">
-      <Version>5.0.1</Version>
+      <Version>4.1.1</Version>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Information-32.png" />
-    <Resource Include="Resources\Information.png" />
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
@@ -183,4 +582,5 @@
   <PropertyGroup>
     <ApplicationIcon>Qualitivity.ico</ApplicationIcon>
   </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

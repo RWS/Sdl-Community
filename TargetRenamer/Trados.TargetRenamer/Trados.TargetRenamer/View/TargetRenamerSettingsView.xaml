@@ -9,7 +9,7 @@
 			 xmlns:helpers="clr-namespace:Trados.TargetRenamer.Helpers"
 			 xmlns:viewModel="clr-namespace:Trados.TargetRenamer.ViewModel"
 			 mc:Ignorable="d"
-			 d:DataContext="{d:DesignInstance viewModel:TargetRenamerSettingsViewModel}">
+             d:DataContext="{d:DesignInstance viewModel:TargetRenamerSettingsViewModel}">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -26,10 +26,9 @@
 			<converters2:BooleanToVisibilityConditionalConverter x:Key="ConditionalConverter" />
 			<Style TargetType="{x:Type TextBox}">
 				<Style.Triggers>
-					<Trigger Property="Validation.HasError"
-							 Value="true">
+					<Trigger Property="Validation.HasError" Value="true">
 						<Setter Property="ToolTip"
-								Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+              Value="{Binding RelativeSource={x:Static RelativeSource.Self},
                               Path=(Validation.Errors)[0].ErrorContent}" />
 					</Trigger>
 				</Style.Triggers>
@@ -37,46 +36,41 @@
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<DockPanel>
-		<TextBlock Text="{x:Static resx:Constants.PluginName}"
-				   Style="{StaticResource Sdl.TextBlock.TitleStyle}"
+		<TextBlock Text="{x:Static resx:PluginResources.TargetRenamer_Name}"
+		           Style="{StaticResource Sdl.TextBlock.TitleStyle}"
 				   FontSize="15"
-				   DockPanel.Dock="Top" />
+		           DockPanel.Dock="Top" />
 		<TextBlock Text="{x:Static resx:PluginResources.TargetRenamer_LongDescription}"
 				   Margin="0 5 0 0"
-				   Style="{StaticResource Sdl.TextBlock.SubtitleStyle}"
-				   DockPanel.Dock="Top" />
-		<GroupBox Header="Location"
-				  Style="{StaticResource Sdl.GroupBox.SingleLineStyle}"
+			   Style="{StaticResource Sdl.TextBlock.SubtitleStyle}"
+		       DockPanel.Dock="Top" />
+		<GroupBox Header="Location" Style="{StaticResource Sdl.GroupBox.SingleLineStyle}"
 				  DockPanel.Dock="Top"
 				  Margin="0 10 0 0"
-				  Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=UserControl}}">
+		          Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=UserControl}}">
 			<Grid>
 				<Grid.RowDefinitions>
 					<RowDefinition />
 					<RowDefinition />
 				</Grid.RowDefinitions>
 
-				<CheckBox Grid.Row="0"
-						  Grid.Column="0"
-						  Margin="5 5 0 5"
-						  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-						  Content="{x:Static resx:PluginResources.CustomLocation}"
-						  ToolTip="{x:Static resx:PluginResources.CustomLocationTooltip}"
-						  IsChecked="{Binding UseCustomLocation}" />
-				<WrapPanel Grid.Column="0"
-						   Grid.Row="1">
+				<CheckBox Grid.Row="0" Grid.Column="0"
+				          Margin="5 5 0 5"
+				          Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+				          Content="{x:Static resx:PluginResources.CustomLocation}"
+				          ToolTip="{x:Static resx:PluginResources.CustomLocationTooltip}"
+				          IsChecked="{Binding UseCustomLocation}" />
+				<WrapPanel Grid.Column="0" Grid.Row="1">
 					<TextBox Margin="5"
 							 Name="CustomLocation"
-							 VerticalAlignment="Center"
-							 HorizontalAlignment="Left"
-							 Width="300"
-							 VerticalContentAlignment="Center"
-							 Height="24"
-							 IsEnabled="{Binding UseCustomLocation}">
+					         VerticalAlignment="Center"
+					         HorizontalAlignment="Left"
+					         Width="300"
+					         VerticalContentAlignment="Center"
+					         Height="{Binding ActualHeight, ElementName=ComboBox}"
+					         IsEnabled="{Binding UseCustomLocation}">
 						<TextBox.Text>
-							<Binding Path="CustomLocation"
-									 UpdateSourceTrigger="PropertyChanged"
-									 Mode="TwoWay">
+							<Binding Path="CustomLocation" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
 								<Binding.ValidationRules>
 									<helpers:PathValidationRule />
 								</Binding.ValidationRules>
@@ -84,12 +78,10 @@
 						</TextBox.Text>
 					</TextBox>
 					<Button Margin="5"
-							Command="{Binding SelectTargetFolder}"
-							Style="{StaticResource Sdl.Button.SecondaryStyle}"
-							Content="Browse"
-                            Height="24"
-                            Padding="0"
-                            IsEnabled="{Binding UseCustomLocation}" />
+					        Command="{Binding SelectTargetFolder}"
+					        Style="{StaticResource Sdl.Button.GeneralStyle}"
+					        Content="Browse"
+					        IsEnabled="{Binding UseCustomLocation}" />
 				</WrapPanel>
 			</Grid>
 		</GroupBox>
@@ -108,59 +100,49 @@
 					<ColumnDefinition Width="*" />
 				</Grid.ColumnDefinitions>
 
-				<WrapPanel Grid.Row="0"
-						   Grid.ColumnSpan="2"
-						   Grid.Column="0">
-					<Label FontWeight="Bold"
-						   Width="95"
-						   Content="{x:Static resx:PluginResources.SelectAction}" />
+				<WrapPanel Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0">
+					<Label FontWeight="Bold" Width="95" Content="{x:Static resx:PluginResources.SelectAction}" />
 					<ComboBox x:Name="ComboBox"
-							  Margin="5 5 0 5"
-							  HorizontalContentAlignment="Center"
-							  HorizontalAlignment="Left"
-							  Width="150"
-							  Style="{StaticResource Sdl.ComboBox.Generic.Style}"
-							  ItemsSource="{Binding ComboBoxItems}"
-							  SelectedItem="{Binding SelectedComboBoxItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+					          Margin="5 5 0 5"
+					          HorizontalContentAlignment="Center"
+					          HorizontalAlignment="Left"
+					          Width="150"
+					          Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+					          ItemsSource="{Binding ComboBoxItems}"
+					          SelectedItem="{Binding SelectedComboBoxItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 				</WrapPanel>
 
-				<WrapPanel Grid.Row="1"
-						   Grid.Column="0"
-						   Grid.ColumnSpan="2">
+				<WrapPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
 					<Label Content="{x:Static resx:PluginResources.SearchFor}"
-						   HorizontalAlignment="Center"
-						   VerticalAlignment="Center"
+					       HorizontalAlignment="Center"
+					       VerticalAlignment="Center"
 						   Width="100"
-						   Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}" />
+					       Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}" />
 					<TextBox VerticalAlignment="Center"
-							 HorizontalAlignment="Center"
-							 MinWidth="200"
-							 VerticalContentAlignment="Center"
-							 Height="{Binding ActualHeight, ElementName=ComboBox}"
-							 Text="{Binding RegularExpressionSearchFor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-							 Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}" />
+					         HorizontalAlignment="Center"
+					         MinWidth="200"
+					         VerticalContentAlignment="Center"
+					         Height="{Binding ActualHeight, ElementName=ComboBox}"
+					         Text="{Binding RegularExpressionSearchFor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+					         Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}" />
 				</WrapPanel>
 
-				<WrapPanel Grid.Row="2"
-						   Grid.Column="0"
-						   Grid.ColumnSpan="2">
+				<WrapPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
 					<Label Content="{x:Static resx:PluginResources.ReplaceWith}"
-						   HorizontalAlignment="Left"
+					       HorizontalAlignment="Left"
 						   Width="100"
-						   VerticalAlignment="Center"
-						   Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}" />
+					       VerticalAlignment="Center"
+					       Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}" />
 					<TextBox VerticalAlignment="Center"
-							 HorizontalAlignment="Center"
-							 Name="RegexReplaceWith"
-							 Width="Auto"
-							 MinWidth="200"
-							 VerticalContentAlignment="Center"
-							 Height="{Binding ActualHeight, ElementName=ComboBox}"
-							 Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}">
+					         HorizontalAlignment="Center"
+					         Name="RegexReplaceWith"
+					         Width="Auto"
+					         MinWidth="200"
+					         VerticalContentAlignment="Center"
+					         Height="{Binding ActualHeight, ElementName=ComboBox}"
+					         Visibility="{Binding UseRegularExpression, Converter={StaticResource BooleanToVisibilityConverter}}">
 						<TextBox.Text>
-							<Binding Path="RegularExpressionReplaceWith"
-									 UpdateSourceTrigger="PropertyChanged"
-									 Mode="TwoWay">
+							<Binding Path="RegularExpressionReplaceWith" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
 								<Binding.ValidationRules>
 									<helpers:FileNameValidationRule />
 								</Binding.ValidationRules>
@@ -168,15 +150,13 @@
 						</TextBox.Text>
 					</TextBox>
 				</WrapPanel>
-				<RadioButton Grid.Row="1"
-							 Grid.Column="0"
-							 GroupName="Radios"
-							 Content="{x:Static resx:PluginResources.TargetLanguage}"
-							 HorizontalAlignment="Left"
-							 Margin="5"
-							 VerticalAlignment="Center"
-							 Style="{StaticResource Sdl.RadioButton.GenericStyle}"
-							 IsChecked="{Binding AppendTargetLanguage, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+				<RadioButton Grid.Row="1" Grid.Column="0" GroupName="Radios"
+				             Content="{x:Static resx:PluginResources.TargetLanguage}"
+				             HorizontalAlignment="Left"
+				             Margin="5"
+				             VerticalAlignment="Center"
+				             Style="{StaticResource Sdl.RadioButton.GenericStyle}"
+				             IsChecked="{Binding AppendTargetLanguage, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
 					<RadioButton.Visibility>
 						<MultiBinding Converter="{StaticResource ConditionalConverter}">
 							<Binding Path="AppendAsPrefix" />
@@ -184,25 +164,22 @@
 						</MultiBinding>
 					</RadioButton.Visibility>
 				</RadioButton>
-				<CheckBox Grid.Row="1"
-						  Grid.Column="1"
-						  Margin="0 5 0 5"
-						  HorizontalAlignment="Left"
-						  Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-						  Content="{x:Static resx:PluginResources.ShortLocales}"
-						  ToolTip="{x:Static resx:PluginResources.ShortLocalesTooltip}"
-						  IsChecked="{Binding UseShortLocales}"
-						  Visibility="{Binding AppendTargetLanguage, Converter={StaticResource BooleanToVisibilityConverter}}">
+				<CheckBox Grid.Row="1" Grid.Column="1"
+				          Margin="0 5 0 5"
+				          HorizontalAlignment="Left"
+				          Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+				          Content="{x:Static resx:PluginResources.ShortLocales}"
+				          ToolTip="{x:Static resx:PluginResources.ShortLocalesTooltip}"
+				          IsChecked="{Binding UseShortLocales}"
+				          Visibility="{Binding AppendTargetLanguage, Converter={StaticResource BooleanToVisibilityConverter}}">
 				</CheckBox>
-				<RadioButton Grid.Row="2"
-							 Grid.Column="0"
-							 GroupName="Radios"
-							 Content="{x:Static resx:PluginResources.AppendCustomString}"
-							 HorizontalAlignment="Left"
-							 Margin="5"
-							 VerticalAlignment="Center"
-							 Style="{StaticResource Sdl.RadioButton.GenericStyle}"
-							 IsChecked="{Binding AppendCustomString, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+				<RadioButton Grid.Row="2" Grid.Column="0" GroupName="Radios"
+				             Content="{x:Static resx:PluginResources.AppendCustomString}"
+				             HorizontalAlignment="Left"
+				             Margin="5"
+				             VerticalAlignment="Center"
+				             Style="{StaticResource Sdl.RadioButton.GenericStyle}"
+				             IsChecked="{Binding AppendCustomString, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
 					<RadioButton.Visibility>
 						<MultiBinding Converter="{StaticResource ConditionalConverter}">
 							<Binding Path="AppendAsPrefix" />
@@ -210,35 +187,29 @@
 						</MultiBinding>
 					</RadioButton.Visibility>
 				</RadioButton>
-				<TextBox Grid.Row="2"
-						 Grid.Column="1"
-						 x:Name="CustomString"
-						 VerticalAlignment="Center"
-						 HorizontalAlignment="Left"
-						 Width="Auto"
-						 MinWidth="200"
-						 VerticalContentAlignment="Center"
-						 Height="{Binding ActualHeight, ElementName=ComboBox}"
-						 Visibility="{Binding AppendCustomString, Converter={StaticResource BooleanToVisibilityConverter}}">
+				<TextBox Grid.Row="2" Grid.Column="1"
+				         x:Name="CustomString"
+				         VerticalAlignment="Center"
+				         HorizontalAlignment="Left"
+				         Width="Auto"
+				         MinWidth="200"
+				         VerticalContentAlignment="Center"
+				         Height="{Binding ActualHeight, ElementName=ComboBox}"
+				         Visibility="{Binding AppendCustomString, Converter={StaticResource BooleanToVisibilityConverter}}">
 					<TextBox.Text>
-						<Binding Path="CustomString"
-								 UpdateSourceTrigger="PropertyChanged"
-								 Mode="TwoWay">
+						<Binding Path="CustomString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
 							<Binding.ValidationRules>
 								<helpers:FileNameValidationRule />
 							</Binding.ValidationRules>
 						</Binding>
 					</TextBox.Text>
 				</TextBox>
-				<WrapPanel Grid.Row="3"
-						   Grid.Column="0"
-						   Grid.ColumnSpan="2"
-						   Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=UserControl}}">
+				<WrapPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=UserControl}}">
 					<Label  Content="{x:Static resx:PluginResources.Delimiter}"
-							Margin="0"
-							FontWeight="Bold"
-							HorizontalAlignment="Left"
-							VerticalAlignment="Center">
+					       Margin="0"
+					       FontWeight="Bold"
+					       HorizontalAlignment="Left"
+					       VerticalAlignment="Center">
 						<Label.Visibility>
 							<MultiBinding Converter="{StaticResource ConditionalConverter}">
 								<Binding Path="AppendAsPrefix" />
@@ -248,11 +219,11 @@
 					</Label>
 					<TextBox VerticalAlignment="Center"
 							 Name="Delimiter"
-							 HorizontalAlignment="Left"
-							 Width="Auto"
-							 MinWidth="200"
-							 VerticalContentAlignment="Center"
-							 Height="{Binding ActualHeight, ElementName=ComboBox}">
+					         HorizontalAlignment="Left"
+					         Width="Auto"
+					         MinWidth="200"
+					         VerticalContentAlignment="Center"
+					         Height="{Binding ActualHeight, ElementName=ComboBox}">
 						<TextBox.Visibility>
 							<MultiBinding Converter="{StaticResource ConditionalConverter}">
 								<Binding Path="AppendAsPrefix" />
@@ -260,9 +231,7 @@
 							</MultiBinding>
 						</TextBox.Visibility>
 						<TextBox.Text>
-							<Binding Path="Delimiter"
-									 UpdateSourceTrigger="PropertyChanged"
-									 Mode="TwoWay">
+							<Binding Path="Delimiter" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
 								<Binding.ValidationRules>
 									<helpers:FileNameValidationRule />
 								</Binding.ValidationRules>
@@ -270,16 +239,14 @@
 						</TextBox.Text>
 					</TextBox>
 				</WrapPanel>
-				<Button Grid.Row="4"
-						Grid.ColumnSpan="2"
-						Grid.Column="0"
-						Margin="5"
-						VerticalAlignment="Bottom"
-						HorizontalAlignment="Right"
-						Content="{x:Static resx:PluginResources.Reset}"
-						Style="{StaticResource Sdl.Button.SecondaryStyle}"
-						CommandParameter="{Binding}"
-						Command="{Binding ResetToDefault}">
+				<Button Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="0"
+				        Margin="5"
+				        VerticalAlignment="Bottom"
+				        HorizontalAlignment="Right"
+				        Content="{x:Static resx:PluginResources.Reset}"
+				        Style="{StaticResource Sdl.Button.GeneralStyle}"
+				        CommandParameter="{Binding}"
+				        Command="{Binding ResetToDefault}">
 				</Button>
 			</Grid>
 		</GroupBox>

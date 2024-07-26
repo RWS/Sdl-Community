@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio18</TradosFolder>
+		<TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio17</TradosFolder>
 		<TargetFramework>net48</TargetFramework>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
+		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
 		<CreatePluginPackage>true</CreatePluginPackage>
 		<UseWPF>true</UseWPF>
-		<LangVersion>preview</LangVersion>
+		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
   <PropertyGroup>
     <ContentSQLiteInteropFiles>true</ContentSQLiteInteropFiles>
@@ -17,6 +17,10 @@
     <CollectSQLiteInteropFiles>false</CollectSQLiteInteropFiles>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="TermbaseViewer\Converters\**" />
+    <EmbeddedResource Remove="TermbaseViewer\Converters\**" />
+    <None Remove="TermbaseViewer\Converters\**" />
+    <Page Remove="TermbaseViewer\Converters\**" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Resources\299033_microphone_icon.png" />
@@ -33,7 +37,6 @@
     <None Remove="Resources\Flag.png" />
     <None Remove="Resources\Glossary.png" />
     <None Remove="Resources\IB.ico" />
-    <None Remove="Resources\Information.png" />
     <None Remove="Resources\logo.png" />
     <None Remove="Resources\RejectEdit.png" />
     <None Remove="Resources\Remove.ico" />
@@ -91,7 +94,7 @@
       <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TellMe.ProviderApi">
-      <HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Terminology.TerminologyProvider.Core">
       <HintPath>$(TradosFolder)\Sdl.Terminology.TerminologyProvider.Core.dll</HintPath>
@@ -131,7 +134,7 @@
       <Version>2.1.0</Version>
     </PackageReference>
     <PackageReference Include="Sdl.Core.PluginFramework.Build">
-      <Version>18.0.1</Version>
+      <Version>17.0.0</Version>
     </PackageReference>
     <PackageReference Include="Sdl.MultiSelectComboBox" Version="1.0.77" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.115" />
@@ -163,13 +166,15 @@
     <Resource Include="Resources\Flag.png" />
     <Resource Include="Resources\Glossary.png" />
     <Resource Include="Resources\IB.ico" />
-    <Resource Include="Resources\Information.png" />
     <Resource Include="Resources\logo.png" />
     <Resource Include="Resources\RejectEdit.png" />
     <Resource Include="Resources\Remove.ico" />
     <Resource Include="Resources\Remove2.ico" />
     <Resource Include="Resources\RemoveClick.ico" />
     <Resource Include="Resources\Tag.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TermbaseViewer\UI\Controls\Resources\" />
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>

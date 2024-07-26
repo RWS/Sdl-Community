@@ -135,14 +135,12 @@ namespace InterpretBank.Studio
                     break;
 
                 case SearchMode.Normal:
-                    results = GetExactTerms(source, destination, text);
+                    results = GetExactTerms2(source, destination, text);
                     break;
 
                 default:
                     throw new ArgumentOutOfRangeException(nameof(mode));
             }
-
-            if (results == null) return null;
 
             var searchResults = results.OrderByDescending(r => r.Score).ThenBy(r => r.Text.Length);
             var scored = searchResults.Take(maxResultsCount).ToList();
@@ -205,7 +203,7 @@ namespace InterpretBank.Studio
             return entry;
         }
 
-        private List<SearchResult> GetExactTerms(ILanguage source, ILanguage destination, string words)
+        private List<SearchResult> GetExactTerms2(ILanguage source, ILanguage destination, string words)
         {
             var terms = TermSearchService.GetExactTerms(words, source.Name, destination.Name, Settings.Glossaries);
 
@@ -219,7 +217,6 @@ namespace InterpretBank.Studio
         {
             var termsDictionary =
                 TermSearchService.GetFuzzyTerms(words, source.Name, destination.Name, Settings.Glossaries, minScore);
-            if (termsDictionary == null) return null;
 
             var results = new List<SearchResult>();
             var studioTermEntries = termsDictionary.SelectMany(termsEntry => termsEntry.Value);

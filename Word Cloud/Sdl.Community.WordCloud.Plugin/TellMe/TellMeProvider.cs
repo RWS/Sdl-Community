@@ -1,5 +1,4 @@
-﻿using Sdl.Community.WordCloud.Plugin.TellMe;
-using Sdl.TellMe.ProviderApi;
+﻿using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.WordCloud.Plugin
 {
@@ -10,22 +9,18 @@ namespace Sdl.Community.WordCloud.Plugin
 
 		public AbstractTellMeAction[] ProviderActions => new AbstractTellMeAction[]
 		{
-			new CommunityDocumentationAction
+			new CommunityWikiAction
 			{
-				Keywords = new[] { "trados","studio" ,"word", "cloud", "documentation" }
+				Keywords = new[] { "trados","studio" ,"word", "cloud", "community", "support", "wiki" }
 			},
 			new CommunityAppStoreForumAction
 			{
 				Keywords = new[] { "trados", "studio", "word", "cloud", "support", "forum" }
 			},
-			new CommunitySourceCodeAction
+			new CommunityAppStoreAction
 			{
-				Keywords = new[] { "trados", "studio", "word", "cloud", "source", "code" }
-			},
-            new SettingsAction
-            {
-                Keywords = new[] { "trados", "studio", "word", "cloud", "settings" }
-            }
-        };
+				Keywords = new[] { "trados", "studio", "word", "cloud", "store", "download", "appstore" }
+			}
+		};
 	}
 }

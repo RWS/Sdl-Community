@@ -39,19 +39,21 @@
             this.IntervalCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolTip_Informative = new System.Windows.Forms.ToolTip(this.components);
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripDropDownButton_File = new System.Windows.Forms.ToolStripDropDownButton();
             this.createNewBackupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startManualTasksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startDisabledTasksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.refreshViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowsTaskSchedulerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_CreateTask = new System.Windows.Forms.ToolStripButton();
             this.btn_RunManuallyTasks = new System.Windows.Forms.ToolStripButton();
             this.btn_RunDisabledTasks = new System.Windows.Forms.ToolStripButton();
             this.btn_RefreshView = new System.Windows.Forms.ToolStripButton();
             this.btn_OpenWindowsTaskScheduler = new System.Windows.Forms.ToolStripButton();
+            this.btn_Help = new System.Windows.Forms.ToolStripButton();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -138,26 +140,13 @@
             this.btn_RunManuallyTasks,
             this.btn_RunDisabledTasks,
             this.btn_RefreshView,
-            this.btn_OpenWindowsTaskScheduler});
+            this.btn_OpenWindowsTaskScheduler,
+            this.btn_Help});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(887, 25);
             this.toolStrip1.TabIndex = 8;
             this.toolStrip1.Text = "toolStrip1";
-            // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.deleteToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(108, 26);
-            this.contextMenuStrip1.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
-            // 
-            // deleteToolStripMenuItem
-            // 
-            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
-            this.deleteToolStripMenuItem.Text = "Delete";
             // 
             // toolStripDropDownButton_File
             // 
@@ -167,7 +156,8 @@
             this.startManualTasksToolStripMenuItem,
             this.startDisabledTasksToolStripMenuItem,
             this.refreshViewToolStripMenuItem,
-            this.windowsTaskSchedulerToolStripMenuItem});
+            this.windowsTaskSchedulerToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.toolStripDropDownButton_File.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.toolStripDropDownButton_File.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton_File.Name = "toolStripDropDownButton_File";
@@ -178,7 +168,7 @@
             // 
             this.createNewBackupToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.createNewBackupToolStripMenuItem.Name = "createNewBackupToolStripMenuItem";
-            this.createNewBackupToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.createNewBackupToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.createNewBackupToolStripMenuItem.Text = "Create New Backup";
             this.createNewBackupToolStripMenuItem.Click += new System.EventHandler(this.btn_CreateTask_Click);
             // 
@@ -186,7 +176,7 @@
             // 
             this.startManualTasksToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.startManualTasksToolStripMenuItem.Name = "startManualTasksToolStripMenuItem";
-            this.startManualTasksToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.startManualTasksToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.startManualTasksToolStripMenuItem.Text = "Start Manual Tasks";
             this.startManualTasksToolStripMenuItem.Click += new System.EventHandler(this.btn_RunManuallyTasks_Click);
             // 
@@ -194,7 +184,7 @@
             // 
             this.startDisabledTasksToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.startDisabledTasksToolStripMenuItem.Name = "startDisabledTasksToolStripMenuItem";
-            this.startDisabledTasksToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.startDisabledTasksToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.startDisabledTasksToolStripMenuItem.Text = "Start Disabled Tasks";
             this.startDisabledTasksToolStripMenuItem.Click += new System.EventHandler(this.btn_RunDisabledTasks_Click);
             // 
@@ -202,7 +192,7 @@
             // 
             this.refreshViewToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.refreshViewToolStripMenuItem.Name = "refreshViewToolStripMenuItem";
-            this.refreshViewToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.refreshViewToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.refreshViewToolStripMenuItem.Text = "Refresh View";
             this.refreshViewToolStripMenuItem.Click += new System.EventHandler(this.btn_RefreshView_Click);
             // 
@@ -210,9 +200,17 @@
             // 
             this.windowsTaskSchedulerToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.windowsTaskSchedulerToolStripMenuItem.Name = "windowsTaskSchedulerToolStripMenuItem";
-            this.windowsTaskSchedulerToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.windowsTaskSchedulerToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.windowsTaskSchedulerToolStripMenuItem.Text = "Windows Task Scheduler";
             this.windowsTaskSchedulerToolStripMenuItem.Click += new System.EventHandler(this.btn_OpenWindowsTaskScheduler_Click);
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.helpToolStripMenuItem.Text = "Help";
+            this.helpToolStripMenuItem.Click += new System.EventHandler(this.btn_Help_Click);
             // 
             // btn_CreateTask
             // 
@@ -269,6 +267,31 @@
             this.btn_OpenWindowsTaskScheduler.Text = "Open Windows Task Scheduler";
             this.btn_OpenWindowsTaskScheduler.Click += new System.EventHandler(this.btn_OpenWindowsTaskScheduler_Click);
             // 
+            // btn_Help
+            // 
+            this.btn_Help.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btn_Help.Image = ((System.Drawing.Image)(resources.GetObject("btn_Help.Image")));
+            this.btn_Help.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btn_Help.Name = "btn_Help";
+            this.btn_Help.Padding = new System.Windows.Forms.Padding(0, 0, 12, 0);
+            this.btn_Help.Size = new System.Drawing.Size(32, 22);
+            this.btn_Help.Text = "Help";
+            this.btn_Help.Click += new System.EventHandler(this.btn_Help_Click);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.deleteToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 48);
+            this.contextMenuStrip1.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+            // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.deleteToolStripMenuItem.Text = "Delete";
+            // 
             // TMBackupTasksForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -304,12 +327,14 @@
 		private System.Windows.Forms.ToolStripButton btn_RunDisabledTasks;
 		private System.Windows.Forms.ToolStripButton btn_RefreshView;
 		private System.Windows.Forms.ToolStripButton btn_OpenWindowsTaskScheduler;
+		private System.Windows.Forms.ToolStripButton btn_Help;
 		private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton_File;
 		private System.Windows.Forms.ToolStripMenuItem createNewBackupToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem startManualTasksToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem startDisabledTasksToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem refreshViewToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem windowsTaskSchedulerToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
 	}

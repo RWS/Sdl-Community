@@ -127,27 +127,16 @@
   <data name="BilFilterComponentBuilderExtensionName" xml:space="preserve">
     <value>Bil Filter Component Builder</value>
   </data>
+  <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Download.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ForumIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="PluginName" xml:space="preserve">
     <value>MXLIFF File Type</value>
   </data>
-  <data name="SettingsWarning" xml:space="preserve">
-    <value>The default settings for the File Type can be configured from the Options window. To locate the default File Type settings, follow these steps:
-
-    1. Open 'File &gt; Options &gt; File Types'
-    2. Select the File Type from the list
-
-Tip: If you are adding a new File Type to an existing project, you should first select the link "Additional installed File Types exist" from 'Project Settings &gt; File Types'.</value>
-  </data>
-  <data name="TellMe_Documentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_Documentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TellMe_Forum" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_Forum.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TellMe_Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_Settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TellMe_SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

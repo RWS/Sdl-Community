@@ -1,5 +1,4 @@
-﻿using System.Security.Policy;
-using System.Windows;
+﻿using System.Windows;
 using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.View;
 using Sdl.Desktop.IntegrationApi;
@@ -63,7 +62,9 @@ namespace Sdl.Community.IATETerminologyProvider
 		private static void ShowBrowserResults(string url)
 		{
 			var searchResultsController = GetSearchResultsController();
-			searchResultsController.NavigateTo(url);
+			var browser = searchResultsController.Browser;
+			browser.Navigate(url);
+			searchResultsController.Show();
 		}
 
 		[Action("IATESearchAllAction", Name = "Search IATE (all)", Icon = "Iate_logo")]

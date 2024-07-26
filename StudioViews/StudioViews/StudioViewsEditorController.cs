@@ -21,15 +21,19 @@ namespace Sdl.Community.StudioViews
 	public class StudioViewsEditorController : AbstractViewPartController
 	{
 		private StudioViewsEditorView _control;
+		private EditorController _editorController;
+		private ProjectsController _projectsController;
 		private StudioVersionService _studioVersionService;
 
 		protected override void Initialize()
 		{
+			_editorController = SdlTradosStudio.Application.GetController<EditorController>();
+			_projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			_studioVersionService = new StudioVersionService();
 
 			var commonService = new ProjectFileService();
-			var projectHelper = new ProjectService(ApplicationInstance.ProjectsController, _studioVersionService);
-			var analysisBands = projectHelper.GetAnalysisBands(ApplicationInstance.ProjectsController.CurrentProject ?? ApplicationInstance.ProjectsController.SelectedProjects.FirstOrDefault());
+			var projectHelper = new ProjectService(_projectsController, _studioVersionService);
+			var analysisBands = projectHelper.GetAnalysisBands(_projectsController.CurrentProject ?? _projectsController.SelectedProjects.FirstOrDefault());
 			var filterItemService = new FilterItemService(analysisBands);
 			var sdlxliffMerger = new SdlxliffMerger();
 			var segmentBuilder = new SegmentBuilder();
@@ -40,7 +44,7 @@ namespace Sdl.Community.StudioViews
 			var displayFilter = new DisplayFilter();
 			var wordCountProvider = new WordCountProvider();
 
-			var model = new StudioViewsEditorViewModel(ApplicationInstance.EditorController, filterItemService,
+			var model = new StudioViewsEditorViewModel(_editorController, filterItemService,
 				commonService, sdlxliffMerger, sdlxliffExporter, sdlXliffReader, paragraphUnitProvider, displayFilter, wordCountProvider);
 
 			_control = new StudioViewsEditorView { DataContext = model };

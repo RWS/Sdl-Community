@@ -35,9 +35,9 @@ variables:
   value : 4.0.1.0
 
 steps:
-  - task: SonarCloudPrepare@2
+  - task: SonarCloudPrepare@1
     inputs:
-      SonarCloud: 'AppStorePlugins-ServiceConnection'
+      SonarCloud: 'SonarCloud'
       organization: 'sdl'
       scannerMode: 'MSBuild'
       projectKey: $(SonarId)
@@ -45,10 +45,10 @@ steps:
       projectVersion: $(ProjectVersion)
 
   - template: jobs/build-sdlplugin.yml
-  - task: SonarCloudAnalyze@2
+  - task: SonarCloudAnalyze@1
     displayName: 'Run Code Analysis'
 
-  - task: SonarCloudPublish@2
+  - task: SonarCloudPublish@1
     inputs:
       pollingTimeoutSec: '300'
     displayName: 'Publish Quality Gate Result'

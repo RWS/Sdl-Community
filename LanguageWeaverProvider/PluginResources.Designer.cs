@@ -1080,7 +1080,7 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to to view the documentation..
+        ///   Looks up a localized string similar to for documentation..
         /// </summary>
         public static string SettingsAction_ExternalHelp_3 {
             get {
@@ -1089,12 +1089,12 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to locate &apos;Language Weaver Provider&apos; in your current project. To add it to your project, follow these steps:
+        ///   Looks up a localized string similar to We couldn&apos;t find an instance of Language Weaver Provider for the current project selected. To add it to your project, follow these steps:
         ///
-        ///1. Open Project Settings
-        ///2. Go to ‘Translation Memory and Automated Translation’
-        ///3. Select &apos;Language Weaver Provider&apos; from the ‘Use…’ dropdown button menu
-        ///4. Save &amp; close the Project Settings.
+        ///1. Open Project Settings;
+        ///2. Go to Translation Memory and Automated Translation;
+        ///3. Select Use;
+        ///4. Via the dropdown menu locate Language Weaver Provider..
         /// </summary>
         public static string SettingsAction_NoProviderAvailable {
             get {
@@ -1141,9 +1141,9 @@ namespace LanguageWeaverProvider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon TellMe_Documentation {
+        public static System.Drawing.Icon TellMeDoc {
             get {
-                object obj = ResourceManager.GetObject("TellMe_Documentation", resourceCulture);
+                object obj = ResourceManager.GetObject("TellMeDoc", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -1151,9 +1151,9 @@ namespace LanguageWeaverProvider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon TellMe_Forum {
+        public static System.Drawing.Icon TellMeForum {
             get {
-                object obj = ResourceManager.GetObject("TellMe_Forum", resourceCulture);
+                object obj = ResourceManager.GetObject("TellMeForum", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -1161,9 +1161,9 @@ namespace LanguageWeaverProvider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon TellMe_Settings {
+        public static System.Drawing.Icon TellMeSettings {
             get {
-                object obj = ResourceManager.GetObject("TellMe_Settings", resourceCulture);
+                object obj = ResourceManager.GetObject("TellMeSettings", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -1171,9 +1171,9 @@ namespace LanguageWeaverProvider {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon TellMe_SourceCode {
+        public static System.Drawing.Icon TellMeSourceCode {
             get {
-                object obj = ResourceManager.GetObject("TellMe_SourceCode", resourceCulture);
+                object obj = ResourceManager.GetObject("TellMeSourceCode", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

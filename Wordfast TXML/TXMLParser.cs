@@ -1,13 +1,13 @@
-﻿using Sdl.Core.Globalization;
-using Sdl.FileTypeSupport.Framework.BilingualApi;
-using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
-using Sdl.FileTypeSupport.Framework.IntegrationApi;
-using Sdl.FileTypeSupport.Framework.NativeApi;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Xml;
+using Sdl.Core.Globalization;
+using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
+using Sdl.FileTypeSupport.Framework.IntegrationApi;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace Sdl.Community.FileTypeSupport.TXML
 {

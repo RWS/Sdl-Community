@@ -77,7 +77,7 @@ namespace InterpretBank.SqlBuilder
 					{
 						if (!string.IsNullOrWhiteSpace(UpdateValues[index]) &&
 							!string.IsNullOrWhiteSpace(ColumnNames[index]))
-							pairs.Add($@"{ColumnNames[index]} = {UpdateValues[index]}");
+							pairs.Add($@"{ColumnNames[index]} = ""{UpdateValues[index]}""");
 					}
 
 					var set = $" SET {string.Join(", ", pairs)}";

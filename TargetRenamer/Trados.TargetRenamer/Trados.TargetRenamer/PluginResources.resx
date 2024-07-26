@@ -129,8 +129,15 @@
   <data name="Delimiter" xml:space="preserve">
     <value>Delimiter:</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\download.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="EmptyPath" xml:space="preserve">
     <value>Path is empty.</value>
+  </data>
+  <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\forumicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="InvalidChars" xml:space="preserve">
     <value>Please do not use invalid characters.</value>
@@ -147,6 +154,9 @@
   <data name="OverwriteTargetFilesTooltip" xml:space="preserve">
     <value>Overwrites the generated target files if selected.</value>
   </data>
+  <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="ReplaceWith" xml:space="preserve">
     <value>Replace with:</value>
   </data>
@@ -155,6 +165,9 @@
   </data>
   <data name="Reset" xml:space="preserve">
     <value>Reset to default</value>
+  </data>
+  <data name="RWSAppStoreTeam" xml:space="preserve">
+    <value>Trados AppStore</value>
   </data>
   <data name="SearchFor" xml:space="preserve">
     <value>Search for:</value>
@@ -180,28 +193,10 @@
   <data name="TargetRenamer_LongDescription" xml:space="preserve">
     <value>Trados Studio Target Renamer is a batch tasks plugin that allows the user to save the target files with various options for custom naming.</value>
   </data>
-  <data name="TellMe_ActionWarning" xml:space="preserve">
-    <value>To engage with Trados Studio Target Renamer, follow these steps
- 
-1. In the Files View, select your files
-2. Under Home Tab find File Actions Group
-3. Use the Batch Tasks dropdown menu
-</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="TellMe_Documentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_Documentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TellMe_Forum" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_Forum.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="TargetRenamer_Name" xml:space="preserve">
+    <value>Trados Studio Target Renamer</value>
   </data>
   <data name="TellMe_Provider_Results" xml:space="preserve">
     <value>{0} results</value>
-  </data>
-  <data name="TellMe_Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_Settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TellMe_SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

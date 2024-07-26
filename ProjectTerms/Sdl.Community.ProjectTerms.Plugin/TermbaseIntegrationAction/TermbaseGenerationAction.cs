@@ -47,7 +47,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 		        }
 		        termbaseCreator.PopulateTermbase(termbase);
 
-		        var termbaseDirectoryPath = Path.Combine(Path.GetDirectoryName(StudioContext.ProjectsController?.CurrentProject?.FilePath), "Tb");
+		        var termbaseDirectoryPath = Path.Combine(Path.GetDirectoryName(SdlTradosStudio.Application.GetController<ProjectsController>()?.CurrentProject?.FilePath), "Tb");
 
 		        if (!string.IsNullOrEmpty(termbaseDirectoryPath) && !Directory.Exists(termbaseDirectoryPath))
 		        {
@@ -121,7 +121,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
                 telemetryTracker.StartTrackRequest("Including the termbase into Trados Studio");
                 telemetryTracker.TrackEvent("Including the termbase into Trados Studio");
 
-                var project = StudioContext.ProjectsController.CurrentProject;
+                var project = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
                 var termbaseConfig = project.GetTermbaseConfiguration();
 
                 var studioTermbase = new LocalTermbase(termbasePath);

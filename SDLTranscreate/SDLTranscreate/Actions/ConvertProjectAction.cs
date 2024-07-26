@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,7 +6,6 @@ using System.Windows;
 using Newtonsoft.Json;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 using Sdl.Versioning;
@@ -17,174 +15,147 @@ using Trados.Transcreate.Interfaces;
 using Trados.Transcreate.Model;
 using Trados.Transcreate.Service;
 using MessageBox = System.Windows.MessageBox;
-using Settings = Trados.Transcreate.Model.Settings;
 
 namespace Trados.Transcreate.Actions
 {
-    [Action("TranscreateManager_ConvertProject_Action",
-        Name = "TranscreateManager_ConvertProject_Name",
-        Description = "TranscreateManager_ConvertProject_Description",
-        ContextByType = typeof(ProjectsController),
-        Icon = "Icon"
-        )]
-    [ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 5, DisplayType.Default, "", true)]
-    public class ConvertProjectAction : AbstractAction
-    {
-        private Controllers _controllers;
-        private CustomerProvider _customerProvider;
-        private PathInfo _pathInfo;
-        private ImageService _imageService;
-        private IDialogService _dialogService;
-        private SegmentBuilder _segmentBuilder;
-        private ProjectAutomationService _projectAutomationService;
-        private ProjectSettingsService _projectSettingsService;
-        private StudioVersionService _studioVersionService;
+	[Action("TranscreateManager_ConvertProject_Action", 
+		Name = "TranscreateManager_ConvertProject_Name",
+		Description = "TranscreateManager_ConvertProject_Description",
+		ContextByType = typeof(ProjectsController),
+		Icon = "Icon"
+		)]
+	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 5, DisplayType.Default, "", true)]
+	public class ConvertProjectAction : AbstractAction
+	{
+		private Controllers _controllers;
+		private CustomerProvider _customerProvider;
+		private PathInfo _pathInfo;
+		private ImageService _imageService;
+		private IDialogService _dialogService;
+		private SegmentBuilder _segmentBuilder;
+		private ProjectAutomationService _projectAutomationService;
+		private ProjectSettingsService _projectSettingsService;
+		private StudioVersionService _studioVersionService;
 
-        public Controllers Controllers
-        {
-            get
-            {
+		protected override void Execute()
+		{
+			var selectedProject = _controllers.ProjectsController.SelectedProjects.FirstOrDefault();
+			if (selectedProject == null)
+			{
+				return;
+			}
+			
+			var documents = _controllers.EditorController.GetDocuments()?.ToList();
+			if (documents != null && documents.Count > 0)
+			{
+				var documentProjectIds = documents.Select(a => a.Project.GetProjectInfo().Id.ToString()).Distinct();
+				if (documentProjectIds.Any(a => a == selectedProject.GetProjectInfo().Id.ToString()))
+				{
+					MessageBox.Show(PluginResources.Wanring_Message_CloseAllProjectDocumentBeforeProceeding, PluginResources.TranscreateManager_Name, MessageBoxButton.OK, MessageBoxImage.Information);
+					return;
+				}
+			}
 
-                if (_controllers == null)
-                {
-                    var fileController = SdlTradosStudio.Application.GetController<FilesController>();
-                    var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-                    var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-                    var transcreateViewController = SdlTradosStudio.Application.GetController<TranscreateViewController>();
-                    _controllers = new Controllers(projectsController, fileController, editorController, transcreateViewController);
+			// set the default settings for creating the xliff from the sdlxliff
+			// these should not be taken from the users settings
+			var settings = GetSettings();
+			settings.ExportOptions.CopySourceToTarget = false;
+			settings.ExportOptions.IncludeTranslations = true;
+			settings.ExportOptions.ExcludeFilterIds = new List<string>();
 
-                    SetProjectsController();
-                }
+			settings.ImportOptions.StatusTranslationUpdatedId = string.Empty;
+			settings.ImportOptions.StatusSegmentNotImportedId = string.Empty;
+			settings.ImportOptions.StatusTranslationNotUpdatedId = string.Empty;
+			settings.ImportOptions.OverwriteTranslations = true;
 
+			var action = Enumerators.Action.Convert;
+			var workFlow = Enumerators.WorkFlow.Internal;
 
-                return _controllers;
-            }
-        }
+			
+			var newProjectLocalFolder = selectedProject.GetProjectInfo().LocalProjectFolder + "-T";
+			if (Directory.Exists(newProjectLocalFolder))
+			{
+				MessageBox.Show(PluginResources.Warning_Message_ProjectFolderAlreadyExists + Environment.NewLine + Environment.NewLine + newProjectLocalFolder, 
+					PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Information);
+				return;
+			}
 
-        protected override void Execute()
-        {
-            var selectedProject = Controllers.ProjectsController.SelectedProjects.FirstOrDefault();
-            if (selectedProject == null)
-            {
-                selectedProject = Controllers.ProjectsController.CurrentProject;
-                if (selectedProject == null)
-                    return;
-            }
+			if (selectedProject.GetProjectInfo().ProjectOrigin == Constants.ProjectOrigin_TranscreateProject)
+			{
+				MessageBox.Show(PluginResources.Warning_Message_ProjectAlreadyTranscreateProject,
+					PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Information);
+				return;
+			}
 
-            var documents = Controllers.EditorController.GetDocuments()?.ToList();
-            if (documents != null && documents.Count > 0)
-            {
-                var documentProjectIds = documents.Select(a => a.Project.GetProjectInfo().Id.ToString()).Distinct();
-                if (documentProjectIds.Any(a => a == selectedProject.GetProjectInfo().Id.ToString()))
-                {
-                    MessageBox.Show(PluginResources.Wanring_Message_CloseAllProjectDocumentBeforeProceeding, PluginResources.TranscreateManager_Name, MessageBoxButton.OK, MessageBoxImage.Information);
-                    return;
-                }
-            }
+			var wizardService = new WizardService(action, workFlow, _pathInfo, _customerProvider,
+				_imageService, _controllers, _segmentBuilder, settings, _dialogService, 
+				_projectAutomationService, _projectSettingsService);
 
-            // set the default settings for creating the xliff from the sdlxliff
-            // these should not be taken from the users settings
-            var settings = GetSettings();
-            settings.ExportOptions.CopySourceToTarget = false;
-            settings.ExportOptions.IncludeTranslations = true;
-            settings.ExportOptions.ExcludeFilterIds = new List<string>();
+			var taskContext = wizardService.ShowWizard(_controllers.ProjectsController, out var message);
+			if (taskContext == null && !string.IsNullOrEmpty(message))
+			{
+				MessageBox.Show(message, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Information);
+				return;
+			}
+		
+			_controllers.TranscreateController.UpdateProjectData(taskContext);
+		}
+	
 
-            settings.ImportOptions.StatusTranslationUpdatedId = string.Empty;
-            settings.ImportOptions.StatusSegmentNotImportedId = string.Empty;
-            settings.ImportOptions.StatusTranslationNotUpdatedId = string.Empty;
-            settings.ImportOptions.OverwriteTranslations = true;
+		public override void Initialize()
+		{
+			Enabled = false;
 
-            var action = Enumerators.Action.Convert;
-            var workFlow = Enumerators.WorkFlow.Internal;
+			_controllers = SdlTradosStudio.Application.GetController<TranscreateViewController>().Controllers;
+			SetProjectsController();
+			_customerProvider = new CustomerProvider();
+			_pathInfo = new PathInfo();
+			_imageService = new ImageService();
+			_dialogService = new DialogService();
+			_segmentBuilder = new SegmentBuilder();
+			_studioVersionService = new StudioVersionService();
+			_projectAutomationService = new ProjectAutomationService(
+				_imageService, _controllers.TranscreateController, _controllers.ProjectsController, _customerProvider, _studioVersionService);
+			_projectSettingsService = new ProjectSettingsService();
+			
+			SetEnabled();
+		}
 
+		private Settings GetSettings()
+		{
+			if (File.Exists(_pathInfo.SettingsFilePath))
+			{
+				var json = File.ReadAllText(_pathInfo.SettingsFilePath);
+				return JsonConvert.DeserializeObject<Settings>(json);
+			}
 
-            var newProjectLocalFolder = selectedProject.GetProjectInfo().LocalProjectFolder + "-T";
-            if (Directory.Exists(newProjectLocalFolder))
-            {
-                MessageBox.Show(PluginResources.Warning_Message_ProjectFolderAlreadyExists + Environment.NewLine + Environment.NewLine + newProjectLocalFolder,
-                    PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
+			return new Settings();
+		}
 
-            if (selectedProject.GetProjectInfo().ProjectOrigin == Constants.ProjectOrigin_TranscreateProject)
-            {
-                MessageBox.Show(PluginResources.Warning_Message_ProjectAlreadyTranscreateProject,
-                    PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
+		private void SetProjectsController()
+		{
+			if (_controllers.ProjectsController != null)
+			{
+				_controllers.ProjectsController.SelectedProjectsChanged += ProjectsController_SelectedProjectsChanged;
+			}
+		}
 
-            var wizardService = new WizardService(action, workFlow, _pathInfo, _customerProvider,
-                _imageService, Controllers, _segmentBuilder, settings, _dialogService,
-                _projectAutomationService, _projectSettingsService);
+		private void ProjectsController_SelectedProjectsChanged(object sender, System.EventArgs e)
+		{
+			SetEnabled();
+		}
 
-            var taskContext = wizardService.ShowWizard(Controllers.ProjectsController, out var message);
-            if (taskContext == null && !string.IsNullOrEmpty(message))
-            {
-                MessageBox.Show(message, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
+		private void SetEnabled()
+		{
+			if (_controllers.ProjectsController.SelectedProjects.Count() != 1)
+			{
+				Enabled = false;
+				return;
+			}
+			
+			var selectedProject = _controllers.ProjectsController.SelectedProjects.FirstOrDefault();
 
-            Controllers.TranscreateController.UpdateProjectData(taskContext);
-        }
-
-
-        public override void Initialize()
-        {
-            ApplicationInstance.InitializeTranscreateViewController();
-
-            Enabled = false;
-
-            _customerProvider = new CustomerProvider();
-            _pathInfo = new PathInfo();
-            _imageService = new ImageService();
-            _dialogService = new DialogService();
-            _segmentBuilder = new SegmentBuilder();
-            _studioVersionService = new StudioVersionService();
-            _projectAutomationService = new ProjectAutomationService(
-                _imageService, Controllers.TranscreateController, Controllers.ProjectsController, _customerProvider, _studioVersionService);
-            _projectSettingsService = new ProjectSettingsService();
-
-            SetEnabled();
-        }
-
-        private Settings GetSettings()
-        {
-            if (File.Exists(_pathInfo.SettingsFilePath))
-            {
-                var json = File.ReadAllText(_pathInfo.SettingsFilePath);
-                return JsonConvert.DeserializeObject<Settings>(json);
-            }
-
-            return new Settings();
-        }
-
-        private void SetProjectsController()
-        {
-            if (Controllers.ProjectsController != null)
-            {
-                Controllers.ProjectsController.SelectedProjectsChanged += ProjectsController_SelectedProjectsChanged;
-            }
-        }
-
-        private void ProjectsController_SelectedProjectsChanged(object sender, System.EventArgs e)
-        {
-            SetEnabled();
-        }
-
-        private void SetEnabled()
-        {
-            if (Controllers.ProjectsController.SelectedProjects.Count() != 1 && Controllers.ProjectsController.CurrentProject == null)
-            {
-                Enabled = false;
-                return;
-            }
-
-            var selectedProject = ApplicationInstance.GetSelectedProject();
-            var selectedProjectInfo = selectedProject?.GetProjectInfo();
-
-            Enabled = selectedProjectInfo != null &&
-                      selectedProjectInfo.ProjectOrigin != Constants.ProjectOrigin_TranscreateProject &&
-                      selectedProjectInfo.ProjectType != ProjectType.InLanguageCloud;
-        }
-    }
+			Enabled = selectedProject?.GetProjectInfo().ProjectOrigin != Constants.ProjectOrigin_TranscreateProject;
+		}
+	}
 }

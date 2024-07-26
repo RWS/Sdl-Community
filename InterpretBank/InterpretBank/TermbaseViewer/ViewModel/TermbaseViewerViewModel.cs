@@ -69,8 +69,6 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             set => SetField(ref _sourceLanguageName, value);
         }
 
-        public List<string> Tags { get; set; }
-
         public Image TargetLanguageFlag
         {
             get => _targetLanguageFlag;
@@ -85,7 +83,6 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
         public IUserInteractionService UserInteractionService { get; set; } = userInteractionService;
 
-        public bool UseTags { get; set; }
         private List<string> Glossaries { get; set; }
 
         private Language SourceLanguage { get; set; }
@@ -100,26 +97,12 @@ namespace InterpretBank.TermbaseViewer.ViewModel
                 entryModel.Terms.FirstOrDefault(t => t.LanguageName == SourceLanguageName)?.Term;
         }
 
-        public void JumpToTerm(Entry entry)
-        {
-            var jumpEntry = Entries.Result.FirstOrDefault(e => e.Id == entry.Id);
-            SetSelectedEntry(jumpEntry);
-        }
-
         public void LoadTerms()
         {
             Entries = null;
 
-            //var loadEntriesFromDb = new Task<ObservableCollection<EntryModel>>(() =>
-            //    TerminologyService.GetEntriesFromDb(Glossaries.Any() ? Glossaries : null));
-
-            var loadEntriesFromDb = new Task<ObservableCollection<EntryModel>>
-            (() =>
-                (!Glossaries.Any() && !Tags.Any()) ? TerminologyService.GetEntriesFromDb(null) :
-                UseTags ? TerminologyService.GetEntriesFromDb(TerminologyService.GetTaggedGlossaries(
-                    Tags)) :
-                TerminologyService.GetEntriesFromDb(Glossaries)
-            );
+            var loadEntriesFromDb = new Task<ObservableCollection<EntryModel>>(() =>
+                TerminologyService.GetEntriesFromDb(Glossaries));
 
             Entries = new NotifyTaskCompletion<ObservableCollection<EntryModel>>(loadEntriesFromDb);
 
@@ -147,12 +130,9 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             LoadTerms();
         }
 
-        public void Setup(Language sourceLanguage, Language targetLanguage, List<string> glossaries, List<string> tags, bool useTags, string databaseFilePath)
+        public void Setup(Language sourceLanguage, Language targetLanguage, List<string> glossaries, string databaseFilePath)
         {
             Glossaries = glossaries;
-            Tags = tags;
-            UseTags = useTags;
-
             SetLanguagePair(sourceLanguage, targetLanguage);
 
             TerminologyService.Setup(databaseFilePath);
@@ -173,7 +153,6 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             newEntryModel.GlossaryName = glossaryName;
 
             InitializeEntry(newEntryModel);
-            MoveSourceAndTargetTermsFirst(newEntryModel);
             Entries.Result.Add(newEntryModel);
         }
 
@@ -191,7 +170,7 @@ namespace InterpretBank.TermbaseViewer.ViewModel
 
             var previousTerm = SelectedEntry;
             InitializeEntries(Entries.Result);
-            MoveAllSourceAndTargetTermsFirst();
+            MoveSourceAndTargetTermsFirst();
             SetSelectedEntry(previousTerm);
         }
 
@@ -199,9 +178,6 @@ namespace InterpretBank.TermbaseViewer.ViewModel
         {
             foreach (var entry in entries)
                 InitializeEntry(entry);
-
-            Entries = new NotifyTaskCompletion<ObservableCollection<EntryModel>>(
-                Task.FromResult(new ObservableCollection<EntryModel>(Entries.Result.OrderBy(entry => entry.Name))));
         }
 
         private bool IsActionSuccessful<T>(ActionResult<T> actionResult)
@@ -212,33 +188,29 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             return false;
         }
 
-        private void MoveAllSourceAndTargetTermsFirst()
+        private void MoveSourceAndTargetTermsFirst()
         {
             foreach (var entryModel in Entries.Result)
-                MoveSourceAndTargetTermsFirst(entryModel);
-        }
+            {
+                var sourceTerm = entryModel.Terms.FirstOrDefault(t => t.LanguageName == SourceLanguageName);
+                var targetTerm = entryModel.Terms.FirstOrDefault(t => t.LanguageName == TargetLanguageName);
 
-        private void MoveSourceAndTargetTermsFirst(EntryModel entryModel)
-        {
-            var sourceTerm = entryModel.Terms.FirstOrDefault(t => t.LanguageName == SourceLanguageName);
-            var targetTerm = entryModel.Terms.FirstOrDefault(t => t.LanguageName == TargetLanguageName);
+                entryModel.Terms.Remove(sourceTerm);
+                entryModel.Terms.Insert(0, sourceTerm);
 
-            entryModel.Terms.Remove(sourceTerm);
-            entryModel.Terms.Insert(0, sourceTerm);
-
-            entryModel.Terms.Remove(targetTerm);
-            entryModel.Terms.Insert(1, targetTerm);
+                entryModel.Terms.Remove(targetTerm);
+                entryModel.Terms.Insert(1, targetTerm);
+            }
         }
 
         private void RemoveSelectedEntry(object obj)
         {
-            if (obj is not EntryModel entry) return;
-            var confirmation = UserInteractionService.Confirm($"Are you sure you want to delete entry {entry.Name}(and all of its terms in all of the languages)?");
+            var confirmation = UserInteractionService.Confirm("Are you sure you want to delete this entry?");
 
             if (!confirmation) return;
 
-            TerminologyService.RemoveTerm(entry);
-            Entries.Result.Remove(entry);
+            TerminologyService.RemoveTerm(SelectedEntry);
+            Entries.Result.Remove(SelectedEntry);
         }
 
         private void SetLanguagePair(Language sourceLanguage, Language targetLanguage)
@@ -249,8 +221,8 @@ namespace InterpretBank.TermbaseViewer.ViewModel
             SourceLanguageName = sourceLanguage.GetInterpretBankLanguageName();
             TargetLanguageName = targetLanguage.GetInterpretBankLanguageName();
 
-            SourceLanguageFlag = sourceLanguage?.GetFlagImage();
-            TargetLanguageFlag = targetLanguage?.GetFlagImage();
+            SourceLanguageFlag = sourceLanguage.GetFlagImage();
+            TargetLanguageFlag = targetLanguage.GetFlagImage();
         }
 
         private void SetSelectedEntry(EntryModel term)
@@ -292,6 +264,12 @@ namespace InterpretBank.TermbaseViewer.ViewModel
                     });
                     break;
             }
+        }
+
+        public void JumpToTerm(Entry entry)
+        {
+          var jumpEntry =  Entries.Result.FirstOrDefault(e => e.Id == entry.Id);
+          SetSelectedEntry(jumpEntry);
         }
     }
 }

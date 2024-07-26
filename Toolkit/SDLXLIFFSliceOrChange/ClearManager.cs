@@ -12,7 +12,7 @@ namespace SDLXLIFFSliceOrChange
 	public class ClearManager
     {
 	    private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        public static void ClearFile(SliceInfo sliceInfo, SdlxliffSliceOrChange form)
+        public static void ClearFile(SliceInfo sliceInfo, SDLXLIFFSliceOrChange form)
         {
             try
             {
@@ -132,7 +132,7 @@ namespace SDLXLIFFSliceOrChange
             }
         }
 
-        public static void CopyFile(SliceInfo sliceInfo, SdlxliffSliceOrChange form)
+        public static void CopyFile(SliceInfo sliceInfo, SDLXLIFFSliceOrChange form)
         {
             try
             {

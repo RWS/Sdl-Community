@@ -124,28 +124,28 @@
   <data name="StudioTimeTrackerHelp_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Help.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="StudioTimerTrackerAbout_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="StudioTimeTrackerAbout_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Info.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StudioTimeTrackerSettings_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Settings.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="StudioTimeTrackerCreateProjectTaskAction_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="StudioTimeTrackeCreateProjectTaskAction_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Calendar-Add.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="StudioTimeTrackerEditProjectTaskAction_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="StudioTimeTrackeEditProjectTaskAction_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Calendar-Edit.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="StudioTimeTrackerRemoveProjectTaskAction_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="StudioTimeTrackeRemoveProjectTaskAction_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Calendar-Delete.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="StudioTimeTrackerCreateProjectAction_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="StudioTimeTrackeCreateProjectAction_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Book-Add.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="StudioTimeTrackerEditProjectAction_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="StudioTimeTrackeEditProjectAction_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Book-Edit.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="StudioTimeTrackerRemoveProjectAction_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="StudioTimeTrackeRemoveProjectAction_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Book-Delete.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StudioTimeTrackerConfigurationActivityTypes_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -163,10 +163,10 @@
   <data name="StudioTimeTrackerPropertiesController_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Information.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="StudioTimeTrackerStartTimer_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="StudioTimeTrackeStartTimer_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Button-End-green.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="StudioTimeTrackerStopTimer_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="StudioTimeTrackeStopTimer_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Button-Stop-blue.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StudioTimeTrackerToolsRibbonGroupCreateActivitiesReport_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -175,7 +175,7 @@
   <data name="StudioTimeTrackerToolsRibbonGroupExoprtActivitiesToExcel_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Excel.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="StudioTimeTrackerMergeProjectTaskAction_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="StudioTimeTrackeMergeProjectTaskAction_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Arrow-join-left.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
@@ -190,40 +190,40 @@
   <data name="StudioTimeTrackerConfiguration_Name" xml:space="preserve">
     <value>Application Settings</value>
   </data>
-  <data name="StudioTimeTrackerCreateProjectTaskAction_Description" xml:space="preserve">
+  <data name="StudioTimeTrackeCreateProjectTaskAction_Description" xml:space="preserve">
     <value>New Project Activity</value>
   </data>
-  <data name="StudioTimeTrackerCreateProjectTaskAction_Name" xml:space="preserve">
+  <data name="StudioTimeTrackeCreateProjectTaskAction_Name" xml:space="preserve">
     <value>New Project Activity</value>
   </data>
-  <data name="StudioTimeTrackerEditProjectTaskAction_Description" xml:space="preserve">
+  <data name="StudioTimeTrackeEditProjectTaskAction_Description" xml:space="preserve">
     <value>Edit Project Activity</value>
   </data>
-  <data name="StudioTimeTrackerEditProjectTaskAction_Name" xml:space="preserve">
+  <data name="StudioTimeTrackeEditProjectTaskAction_Name" xml:space="preserve">
     <value>Edit Project Activity</value>
   </data>
-  <data name="StudioTimeTrackerRemoveProjectTaskAction_Name" xml:space="preserve">
+  <data name="StudioTimeTrackeRemoveProjectTaskAction_Name" xml:space="preserve">
     <value>Remove Project Activity</value>
   </data>
-  <data name="StudioTimeTrackerRemoveProjectTaskAction_Description" xml:space="preserve">
+  <data name="StudioTimeTrackeRemoveProjectTaskAction_Description" xml:space="preserve">
     <value>Remove Project Activity</value>
   </data>
-  <data name="StudioTimeTrackerCreateProjectAction_Description" xml:space="preserve">
+  <data name="StudioTimeTrackeCreateProjectAction_Description" xml:space="preserve">
     <value>New Time Tracker Project</value>
   </data>
-  <data name="StudioTimeTrackerCreateProjectAction_Name" xml:space="preserve">
+  <data name="StudioTimeTrackeCreateProjectAction_Name" xml:space="preserve">
     <value>New Time Tracker Project</value>
   </data>
-  <data name="StudioTimeTrackerEditProjectAction_Description" xml:space="preserve">
+  <data name="StudioTimeTrackeEditProjectAction_Description" xml:space="preserve">
     <value>Edit Time Tracker Project</value>
   </data>
-  <data name="StudioTimeTrackerEditProjectAction_Name" xml:space="preserve">
+  <data name="StudioTimeTrackeEditProjectAction_Name" xml:space="preserve">
     <value>Edit Time Tracker Project</value>
   </data>
-  <data name="StudioTimeTrackerRemoveProjectAction_Description" xml:space="preserve">
+  <data name="StudioTimeTrackeRemoveProjectAction_Description" xml:space="preserve">
     <value>Remove Time Tracker Project</value>
   </data>
-  <data name="StudioTimeTrackerRemoveProjectAction_Name" xml:space="preserve">
+  <data name="StudioTimeTrackeRemoveProjectAction_Name" xml:space="preserve">
     <value>Remove Time Tracker Project</value>
   </data>
   <data name="StudioTimeTrackerProjectsRibbonGroup_Name" xml:space="preserve">
@@ -250,16 +250,16 @@
   <data name="StudioTimeTrackerConfigurationMyInfo_Name" xml:space="preserve">
     <value>My Details</value>
   </data>
-  <data name="StudioTimeTrackerStartTimer_Description" xml:space="preserve">
+  <data name="StudioTimeTrackeStartTimer_Description" xml:space="preserve">
     <value>Start Activity Tracking</value>
   </data>
-  <data name="StudioTimeTrackerStartTimer_Name" xml:space="preserve">
+  <data name="StudioTimeTrackeStartTimer_Name" xml:space="preserve">
     <value>Start Activity Tracking</value>
   </data>
-  <data name="StudioTimeTrackerStopTimer_Description" xml:space="preserve">
+  <data name="StudioTimeTrackeStopTimer_Description" xml:space="preserve">
     <value>Stop Activity Tracking</value>
   </data>
-  <data name="StudioTimeTrackerStopTimer_Name" xml:space="preserve">
+  <data name="StudioTimeTrackeStopTimer_Name" xml:space="preserve">
     <value>Stop Activity Tracking</value>
   </data>
   <data name="StudioTimeTrackerToolsRibbonGroupCreateActivitiesReport_Description" xml:space="preserve">
@@ -277,34 +277,28 @@
   <data name="StudioTimeTrackerToolsRibbonGroup_Name" xml:space="preserve">
     <value>Tools</value>
   </data>
-  <data name="StudioTimeTrackerMergeProjectTaskAction_Description" xml:space="preserve">
+  <data name="StudioTimeTrackeMergeProjectTaskAction_Description" xml:space="preserve">
     <value>Merge Project Activities</value>
   </data>
-  <data name="StudioTimeTrackerMergeProjectTaskAction_Name" xml:space="preserve">
+  <data name="StudioTimeTrackeMergeProjectTaskAction_Name" xml:space="preserve">
     <value>Merge Project Activities</value>
   </data>
   <data name="StudioTimeTrackerTimeTrackingRibbonGroup_Name" xml:space="preserve">
     <value>Activity Tracking</value>
+  </data>
+  <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\download.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ForumIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\forumicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Question" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\question.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="TellMe_Provider" xml:space="preserve">
     <value>{0} TellMe provider</value>
   </data>
   <data name="TellMe_Provider_Results" xml:space="preserve">
     <value>{0} results</value>
-  </data>
-  <data name="TellMe_Documentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_Documentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TellMe_Forum" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_Forum.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TellMe_Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_Settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TellMe_SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\TellMe_SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="InformationMessage_openDocumentInEditor" xml:space="preserve">
-    <value>To start the timer, you'll first need to open a document in the Studio Editor.</value>
   </data>
 </root>

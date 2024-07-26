@@ -1,5 +1,4 @@
-﻿using Sdl.Community.ExportAnalysisReports.TellMe.Actions;
-using Sdl.TellMe.ProviderApi;
+﻿using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.ExportAnalysisReports.TellMe
 {
@@ -19,13 +18,10 @@ namespace Sdl.Community.ExportAnalysisReports.TellMe
 				Keywords = new []{ "exportanalysisreports", "export analysis reports", "exportanalysisreports help", "exportanalysisreports guide", "export analysis reports help",
 					"export analysis reports guide", "report exporter", "report exporter guide", "report exporter help", "reportexporter", "reportexporter help", "reportexporter guide" }
 			},
-			new ExportAnalysisReportAction
+			new StoreAction
 			{
-				Keywords = new []{ "exportanalysisreports", "export analysis reports", "settings"  }
-			},
-			new SourceCodeAction
-			{
-				Keywords = new []{ "exportanalysisreports", "export analysis reports", "source code"  }
+				Keywords = new []{ "exportanalysisreports", "export analysis reports", "exportanalysisreports store", "exportanalysisreports download", "export analysis reports store",
+					"export analysis reports download", "report exporter", "reportexporter", "reportexporter store", "reportexporter download", "report exporter store", "report exporter download"  }
 			}
 		};
 	}

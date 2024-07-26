@@ -111,16 +111,6 @@ namespace InterpretBank {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon Forum {
-            get {
-                object obj = ResourceManager.GetObject("Forum", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The file type {0} is not supported.
         /// </summary>
         public static string GlossaryExchangeServiceManager_CreateFileReader_The_file_type__0__is_not_supported {
@@ -155,16 +145,6 @@ namespace InterpretBank {
         public static string ImportEntriesIntoSelectedGlossary {
             get {
                 return ResourceManager.GetString("ImportEntriesIntoSelectedGlossary", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Information {
-            get {
-                object obj = ResourceManager.GetObject("Information", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -214,7 +194,7 @@ namespace InterpretBank {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to InterpretBank Terminology Provider.
+        ///   Looks up a localized string similar to InterpretBank description.
         /// </summary>
         public static string Plugin_Description {
             get {
@@ -223,7 +203,7 @@ namespace InterpretBank {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to InterpretBank Terminology Provider.
+        ///   Looks up a localized string similar to InterpretBank.
         /// </summary>
         public static string Plugin_Name {
             get {
@@ -278,56 +258,6 @@ namespace InterpretBank {
             get {
                 object obj = ResourceManager.GetObject("Settings", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to For more information,.
-        /// </summary>
-        public static string SettingsAction_ExternalHelp_1 {
-            get {
-                return ResourceManager.GetString("SettingsAction_ExternalHelp_1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to click here.
-        /// </summary>
-        public static string SettingsAction_ExternalHelp_2 {
-            get {
-                return ResourceManager.GetString("SettingsAction_ExternalHelp_2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to for documentation..
-        /// </summary>
-        public static string SettingsAction_ExternalHelp_3 {
-            get {
-                return ResourceManager.GetString("SettingsAction_ExternalHelp_3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to We couldn&apos;t find an instance of InterpretBank Terminology Provider for the current project selected. To add it to your project, follow these steps:
-        ///
-        ///1. Open Project Settings
-        ///2. Go to Termbases
-        ///3. Select Use
-        ///4. Via the dropdown menu locate InterpretBank.
-        /// </summary>
-        public static string SettingsAction_OpenOptionsText {
-            get {
-                return ResourceManager.GetString("SettingsAction_OpenOptionsText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Configuring Terminology Provider in Project Settings.
-        /// </summary>
-        public static string SettingsAction_Title {
-            get {
-                return ResourceManager.GetString("SettingsAction_Title", resourceCulture);
             }
         }
         

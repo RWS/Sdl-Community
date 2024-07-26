@@ -12,7 +12,7 @@
              xmlns:behaviours="clr-namespace:Reports.Viewer.Plus.Behaviours"
              xmlns:model1="clr-namespace:Reports.Viewer.Plus.Model"
              xmlns:viewModel="clr-namespace:Reports.Viewer.Plus.ViewModel"
-			 xmlns:dpc="http://schemas.trados.com/xaml/platform/controls"
+			 xmlns:dpc="http://schemas.trados.com/xaml"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="250" d:DataContext="{d:DesignInstance viewModel:ReportsNavigationViewModel}">
 	<UserControl.Resources>

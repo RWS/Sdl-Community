@@ -1,15 +1,11 @@
 ﻿using MicrosoftTranslatorProvider.Commands;
-using MicrosoftTranslatorProvider.ViewModel;
 using System.Windows.Input;
 
 namespace MicrosoftTranslatorProvider.Model
 {
-	public class UrlMetadata : BaseViewModel
+	public class UrlMetadata : BaseModel
 	{
-		public UrlMetadata()
-		{
-			ClearCommand = new RelayCommand(Clear);
-		}
+		private ICommand _clearCommand;
 
 		public string Key { get; set; }
 
@@ -19,7 +15,7 @@ namespace MicrosoftTranslatorProvider.Model
 
 		public bool IsReadOnly { get; set; }
 
-		public ICommand ClearCommand { get; private set; }
+		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
 
 		private void Clear(object parameter)
 		{

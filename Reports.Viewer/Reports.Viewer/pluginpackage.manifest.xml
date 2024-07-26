@@ -1,34 +1,34 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-	<PlugInName>Reports Viewer Plus</PlugInName>
-	<Version>4.0.1.0</Version>
-	<Description>Reports Viewer Plus</Description>
-	<Author>Trados AppStore Team</Author>
-	<RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9"/>
-	<Include>
+		<PlugInName>Reports Viewer Plus</PlugInName>
+		<Version>3.1.1.0</Version>
+		<Description>Reports Viewer Plus</Description>
+		<Author>Trados AppStore Team</Author>
+		<RequiredProduct name="TradosStudio" minversion="17.1" maxversion="17.9"/>
+		<Include>
 
-		<File>Reports.Viewer.Api.dll</File>
-		<File>Microsoft.Office.Interop.Excel.dll</File>
+				<File>Reports.Viewer.Api.dll</File>
+				<File>Microsoft.Office.Interop.Excel.dll</File>
 
-		<File>CefSharp.Wpf.dll</File>
-		<File>CefSharp.Core.dll</File>
+				<File>CefSharp.Wpf.dll</File>
+				<File>CefSharp.Core.dll</File>
 
-		<File>x86\CefSharp.dll</File>
-		<File>x86\CefSharp.Core.Runtime.dll</File>
-		<File>x86\CefSharp.BrowserSubprocess.Core.dll</File>
-		<File>x86\CefSharp.BrowserSubprocess.exe</File>
+				<File>x86\CefSharp.dll</File>
+				<File>x86\CefSharp.Core.Runtime.dll</File>
+				<File>x86\CefSharp.BrowserSubprocess.Core.dll</File>
+				<File>x86\CefSharp.BrowserSubprocess.exe</File>
 
-		<File>x86\chrome_elf.dll</File>
-		<File>x86\libcef.dll</File>
-		<File>x86\icudtl.dat</File>
-		<File>x86\libEGL.dll</File>
-		<File>x86\libGLESv2.dll</File>
+				<File>x86\chrome_elf.dll</File>
+				<File>x86\libcef.dll</File>
+				<File>x86\icudtl.dat</File>
+				<File>x86\libEGL.dll</File>
+				<File>x86\libGLESv2.dll</File>
 
-		<File>x86\chrome_100_percent.pak</File>
-		<File>x86\chrome_200_percent.pak</File>
-		<File>x86\resources.pak</File>
+				<File>x86\chrome_100_percent.pak</File>
+				<File>x86\chrome_200_percent.pak</File>
+				<File>x86\resources.pak</File>
 
-		<File>x86\snapshot_blob.bin</File>
-		<File>x86\v8_context_snapshot.bin</File>
-	</Include>
+				<File>x86\snapshot_blob.bin</File>
+				<File>x86\v8_context_snapshot.bin</File>
+		</Include>
 </PluginPackage>

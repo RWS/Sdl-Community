@@ -163,16 +163,6 @@ namespace Sdl.Community.DsiViewer {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Information {
-            get {
-                object obj = ResourceManager.GetObject("Information", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Model.
         /// </summary>
         public static string Label_Model {
@@ -238,67 +228,9 @@ namespace Sdl.Community.DsiViewer {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon Settings {
+        public static System.Drawing.Icon Question {
             get {
-                object obj = ResourceManager.GetObject("Settings", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to For more information,.
-        /// </summary>
-        public static string SettingsAction_ExternalHelp_1 {
-            get {
-                return ResourceManager.GetString("SettingsAction_ExternalHelp_1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to click here.
-        /// </summary>
-        public static string SettingsAction_ExternalHelp_2 {
-            get {
-                return ResourceManager.GetString("SettingsAction_ExternalHelp_2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to to view the documentation..
-        /// </summary>
-        public static string SettingsAction_ExternalHelp_3 {
-            get {
-                return ResourceManager.GetString("SettingsAction_ExternalHelp_3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To engage with DSI Viewer, follow these steps:
-        ///
-        ///   1. In Edition view, go to View tab
-        ///   2. Under the Information group, find DSI Viewer.
-        /// </summary>
-        public static string SettingsAction_OpenOptionsText {
-            get {
-                return ResourceManager.GetString("SettingsAction_OpenOptionsText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Access DSI Viewer.
-        /// </summary>
-        public static string SettingsAction_Title {
-            get {
-                return ResourceManager.GetString("SettingsAction_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon SourceCode {
-            get {
-                object obj = ResourceManager.GetObject("SourceCode", resourceCulture);
+                object obj = ResourceManager.GetObject("Question", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -351,30 +283,10 @@ namespace Sdl.Community.DsiViewer {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon TellMe_Forum {
+        public static System.Drawing.Icon TellMe {
             get {
-                object obj = ResourceManager.GetObject("TellMe_Forum", resourceCulture);
+                object obj = ResourceManager.GetObject("TellMe", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon TellmeDocumentation {
-            get {
-                object obj = ResourceManager.GetObject("TellmeDocumentation", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Warning2 {
-            get {
-                object obj = ResourceManager.GetObject("Warning2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

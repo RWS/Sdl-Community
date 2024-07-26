@@ -47,7 +47,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
 			extractor = new ProjectTermsExtractor();
 			cache = new ProjectTermsCache();
 
-			ProjectsController = StudioContext.ProjectsController;
+			ProjectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			ProjectsController.SelectedProjectsChanged += ProjectsController_SelectedProjectsChanged;
 			OnSelectedProjectsChanged();
 
@@ -100,12 +100,12 @@ namespace Sdl.Community.ProjectTerms.Plugin
 		{
 			List<ProjectFile> sourceFilesToProcessed = new List<ProjectFile>();
 
-			var projectSourceFiles = StudioContext.ProjectsController.CurrentProject.GetSourceLanguageFiles();
+			var projectSourceFiles = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject.GetSourceLanguageFiles();
 			if (ProjectSelected)
 			{
 				foreach (var file in projectSourceFiles)
 				{
-					if (!file.Name.Contains(StudioContext.ProjectsController.CurrentProject.GetProjectInfo().Name))
+					if (!file.Name.Contains(SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject.GetProjectInfo().Name))
 					{
 						sourceFilesToProcessed.Add(file);
 					}
