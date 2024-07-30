@@ -741,25 +741,8 @@ namespace Sdl.Community.StudioViews.ViewModel
 				}));
 
 
-			var sourceLanguage = _selectedFiles.FirstOrDefault()?.SourceFile.Language.CultureInfo;
-			var targetLanguage = _selectedFiles.FirstOrDefault()?.Language.CultureInfo;
-
-			//var counter = 0;
-			//Parallel.For(0, segmentPairs.Count, 
-			//	new ParallelOptions { MaxDegreeOfParallelism = 5 }, index =>
-			//{
-
-			//	_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
-			//		new Action(delegate
-			//		{
-			//			var segmentPairInfo = segmentPairs[index];
-			//			segmentPairInfo.SourceWordCounts = segmentWordCountService.GetWordCounts(segmentPairInfo.SegmentPair);
-
-			//			counter++;
-			//			ProcessingProgressMessage = "Generating segment word counts";
-			//			ProcessingCurrentProgress = GetPercentageValue(counter, segmentPairs.Count);
-			//		}));
-			//});
+			var sourceLanguage = _selectedFiles.FirstOrDefault()?.SourceFile?.Language?.CultureInfo
+			                     ?? _project.GetProjectInfo().SourceLanguage.CultureInfo;
 
 			var max = segmentPairs.Count;
 			var lastProgress = 0;
