@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.32228.343
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.PostEdit.Versions", "Sdl.Community.PostEdit.Versions.csproj", "{AC39EA6C-DDDE-4C47-8E9C-10796087CE32}"
 EndProject
@@ -10,6 +10,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.PostEdit.Compare.Core", "Sdl.Community.PostEdit.Compare.Core\Sdl.Community.PostEdit.Compare.Core.csproj", "{46538E68-8AA6-4EDC-B291-CB2003E929D0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.PostEdit.Compare.DAL", "Sdl.Community.PostEdit.Compare.DAL\Sdl.Community.PostEdit.Compare.DAL.csproj", "{D772940C-6DDD-4468-AD06-9CD07B9E1F05}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{4F54AEA6-6573-4DAD-963F-C17CB260B291}"
+	ProjectSection(SolutionItems) = preProject
+		Build\SolutionInfo.cs = Build\SolutionInfo.cs
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

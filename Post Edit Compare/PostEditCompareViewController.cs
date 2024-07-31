@@ -14,6 +14,7 @@ using Sdl.Community.PostEdit.Versions.Structures;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
+using Sdl.Desktop.IntegrationApi.Notifications.Events;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -37,6 +38,9 @@ namespace Sdl.Community.PostEdit.Versions
         private readonly Lazy<PostEditCompareViewControl> _viewContent = new Lazy<PostEditCompareViewControl>();
         private readonly Lazy<PostEditCompareNavigationControl> _viewNavigation = new Lazy<PostEditCompareNavigationControl>();
 
+
+        public bool IsInitialized { get; set; }
+
         public ProjectsController ProjectsController { get; set; }
         public FileBasedProject CurrentSelectedProject { get; set; }
         public ProjectInfo CurrentProjectInfo { get; set; }
@@ -58,10 +62,14 @@ namespace Sdl.Community.PostEdit.Versions
 
         protected override void Initialize(IViewContext context)
         {
+            IsInitialized = true;
+            Initialize();
+        }
+       
 
+        public void Initialize()
+        {
             IsUpdatingNavigationView = false;
-
-
             IsEnabledCompare = false;
             IsEnabledCreateNewProjectVersion = false;
             IsEnabledEditProjectVersion = false;
@@ -73,8 +81,6 @@ namespace Sdl.Community.PostEdit.Versions
             Settings = SettingsSerializer.ReadSettings();
 
             ProjectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-
-
             ProjectsController.SelectedProjectsChanged += projectsController_SelectedProjectsChanged;
 
 
@@ -117,7 +123,6 @@ namespace Sdl.Community.PostEdit.Versions
             {
                 SelectedProjectChanged();
             }
-
         }
 
         private void restoreProjectVersionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1269,7 +1274,7 @@ namespace Sdl.Community.PostEdit.Versions
         {
             try
             {
-
+                ProjectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
                 CurrentSelectedProject = ProjectsController.SelectedProjects.FirstOrDefault() ??
                                          ProjectsController.CurrentProject;
 

@@ -33,6 +33,10 @@ namespace Sdl.Community.PostEdit.Versions
     [Shortcut(Keys.Control | Keys.Alt | Keys.V)]
     public class CreateProjectVersionMainProject : AbstractViewControllerAction<PostEditCompareViewController>
     {
+        public void Run()
+        {
+            Execute();
+        }
 
         public override void Initialize()
         {
@@ -45,6 +49,11 @@ namespace Sdl.Community.PostEdit.Versions
         }
         protected override void Execute()
         {
+            if (!Controller.IsInitialized)
+            {
+                Controller.Initialize();
+            }
+
             Controller.CreateNewProjectVersion(true);
         }
     }
@@ -68,6 +77,11 @@ namespace Sdl.Community.PostEdit.Versions
         }
         protected override void Execute()
         {
+            if (!Controller.IsInitialized)
+            {
+                Controller.Initialize();
+            }
+
             Controller.CreateNewProjectVersion(true);
         }
     }
@@ -82,7 +96,12 @@ namespace Sdl.Community.PostEdit.Versions
 	{
 		protected override void Execute()
 		{
-			IModel mModel = new Model();
+            if (!Controller.IsInitialized)
+            {
+                Controller.Initialize();
+            }
+
+            IModel mModel = new Model();
 			var postEditCompare = new FormMain(mModel);
 
 			var skipWindow = new SkipSettingsWindow();
@@ -228,33 +247,6 @@ namespace Sdl.Community.PostEdit.Versions
         }
     }
 
-    [RibbonGroup("PostEditCompareViewContactRibbonGroup", "PostEditCompareViewContactRibbonGroup_Name")]
-    [RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation), ZIndex =1)]
-    internal class PostEditCompareViewContactRibbonGroup : AbstractRibbonGroup
-    {
-    }
-
-	//SDLCOM-3582 Valentin - We hide the about section until eill be clarified the copyright information
-
-    //[Action("PostEditCompareContactAbout", typeof(PostEditCompareViewController), Name = "PostEditCompareContactAbout_Name", Description = "PostEditCompareContactAbout_Description", Icon = "PostEditCompareContactAbout_Icon")]
-    //[ActionLayout(typeof(PostEditCompareViewContactRibbonGroup), ZIndex = 2, DisplayType = DisplayType.Large)]
-    //public class PostEditCompareContactAbout : AbstractViewControllerAction<PostEditCompareViewController>
-    //{
-    //    protected override void Execute()
-    //    {
-    //        Controller.ViewAboutInfo();
-    //    }
-    //}
-
-    [Action("PostEditCompareContactHelp", typeof(PostEditCompareViewController), Name = "PostEditCompareContactHelp_Name", Description = "PostEditCompareContactHelp_Description", Icon = "PostEditCompareContactHelp_Icon")]
-    [ActionLayout(typeof(PostEditCompareViewContactRibbonGroup), ZIndex = 1, DisplayType = DisplayType.Normal)]
-    public class PostEditCompareContactHelp : AbstractViewControllerAction<PostEditCompareViewController>
-    {
-        protected override void Execute()
-        {
-            Controller.ViewOnlineHelp();
-        }
-    }
 
 
     [RibbonGroup("PostEditCompareViewRibbonGroup", "PostEditCompareViewRibbonGroup_Name")]
@@ -366,6 +358,10 @@ namespace Sdl.Community.PostEdit.Versions
     [ActionLayout(typeof(PostEditCompareViewConfigurationRibbonGroup), 1, DisplayType.Large)]
     public class PostEditCompareActionsConfiguration : AbstractViewControllerAction<PostEditCompareViewController>
     {
+	    public void Run()
+	    {
+			Execute();
+	    }
         protected override void Execute()
         {
             Controller.LoadConfigurationSettings();

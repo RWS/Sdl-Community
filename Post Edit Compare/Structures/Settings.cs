@@ -14,15 +14,24 @@ namespace Sdl.Community.PostEdit.Versions.Structures
         public bool create_subfolder_projects { get; set; }
 
         public List<Project> projects { get; set; }
-
+        public string AppStorePathName { get; set; }
         public string ApplicationSettingsPath { get; set; }
         public string ApplicationSettingsFullPath { get; set; }
 
         public Settings()
         {
-            ApplicationSettingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PostEdit.Compare");
+            AppStorePathName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Trados AppStore");
+            if (!Directory.Exists(AppStorePathName))
+            {
+                Directory.CreateDirectory(AppStorePathName);
+            }
+
+            ApplicationSettingsPath = Path.Combine(AppStorePathName, "PostEdit.Compare");
             if (!Directory.Exists(ApplicationSettingsPath))
+            {
                 Directory.CreateDirectory(ApplicationSettingsPath);
+            }
+
             ApplicationSettingsFullPath = Path.Combine(ApplicationSettingsPath, "PostEdit.Versions.settings.xml");
 
 
