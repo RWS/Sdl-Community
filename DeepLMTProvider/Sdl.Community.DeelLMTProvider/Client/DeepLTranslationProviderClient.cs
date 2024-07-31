@@ -23,8 +23,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
         public DeepLTranslationProviderClient(string key)
         {
-            ServicePointManager.SecurityProtocol |=
-                SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
             ApiKey = key;
         }
 
