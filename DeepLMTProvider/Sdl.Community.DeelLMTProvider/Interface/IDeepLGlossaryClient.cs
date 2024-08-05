@@ -18,5 +18,6 @@ namespace Sdl.Community.DeepLMTProvider.Interface
         Task<ActionResult<List<GlossaryEntry>>> RetrieveGlossaryEntries(string glossaryId, string apiKey);
 
         Task<ActionResult<GlossaryInfo>> UpdateGlossary(Glossary glossary, string glossaryId, string apiKey);
+        ApiVersion ApiVersion { get; set; }
     }
 }

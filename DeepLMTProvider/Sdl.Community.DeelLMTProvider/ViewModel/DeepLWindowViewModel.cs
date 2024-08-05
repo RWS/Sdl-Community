@@ -26,6 +26,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private bool _preserveFormatting;
         private bool _sendPlainText;
         private TagFormat _tagType;
+        private ApiVersion _apiVersion;
 
         public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, IMessageService messageService)
         {
@@ -40,6 +41,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             SendPlainText = deepLTranslationOptions.SendPlainText;
             TagType = deepLTranslationOptions.TagHandling;
             PreserveFormatting = deepLTranslationOptions.PreserveFormatting;
+            ApiVersion = deepLTranslationOptions.ApiVersion;
 
             Options = deepLTranslationOptions;
 
@@ -54,16 +56,18 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             GlossaryClient = glossaryClient;
             IsTellMeAction = false;
 
+            Options = deepLTranslationOptions;
+
             SendPlainText = deepLTranslationOptions.SendPlainText;
             PreserveFormatting = deepLTranslationOptions.PreserveFormatting;
             TagType = deepLTranslationOptions.TagHandling;
+            ApiVersion = deepLTranslationOptions.ApiVersion;
 
-            Options = deepLTranslationOptions;
 
             PasswordChangedTimer.Elapsed += OnPasswordChanged;
 
             SetSettingsOnWindow(credentialStore);
-            DeepLTranslationProviderClient.ApiKeyChanged += Dispatcher_LoadLanguagePairSettings;
+            //DeepLTranslationProviderClient.ApiKeyChanged += Dispatcher_LoadLanguagePairSettings;
         }
 
         public event Action ManageGlossaries;
@@ -96,7 +100,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             set => SetField(ref _languagePairSettings, value);
         }
 
-        public ICommand ManageGlossariesCommand => new ParameterlessCommand(() => ManageGlossaries?.Invoke());
+        public ICommand ManageGlossariesCommand => new ParameterlessCommand(() => ManageGlossaries?.Invoke(), () => ApiKeyValidationMessage == null);
 
         public ICommand OkCommand => new ParameterlessCommand(Save, () => ApiKeyValidationMessage == null);
         public ICommand CancelCommand => new ParameterlessCommand(DetachEvents);
@@ -139,11 +143,13 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         public async void LoadLanguagePairSettings()
         {
-            var (success, glossaries, message) = await GlossaryClient.GetGlossaries(DeepLTranslationProviderClient.ApiKey);
-            if (!success)
+            List<GlossaryInfo> glossaries = [];
+
+            if (DeepLTranslationProviderClient.IsApiKeyValidResponse.IsSuccessStatusCode)
             {
-                HandleError(message);
-                glossaries = [];
+                (var success, glossaries, var message) =
+                    await GlossaryClient.GetGlossaries(DeepLTranslationProviderClient.ApiKey);
+                if (!success) HandleError(message);
             }
 
             glossaries?.Add(GlossaryInfo.NoGlossary);
@@ -199,7 +205,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private void DetachEvents()
         {
             PasswordChangedTimer.Elapsed -= OnPasswordChanged;
-            DeepLTranslationProviderClient.ApiKeyChanged -= Dispatcher_LoadLanguagePairSettings;
+            //DeepLTranslationProviderClient.ApiKeyChanged -= Dispatcher_LoadLanguagePairSettings;
         }
 
         private void Dispatcher_LoadLanguagePairSettings() =>
@@ -212,12 +218,17 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         private void OnPasswordChanged(object sender, EventArgs e)
         {
+            DeepLTranslationProviderClient.ApiVersion = ApiVersion;
             DeepLTranslationProviderClient.ApiKey = ApiKey;
+            GlossaryClient.ApiVersion = ApiVersion;
+
             SetApiKeyValidityLabel();
+            Dispatcher_LoadLanguagePairSettings();
         }
 
         private void Save()
         {
+            DeepLTranslationProviderClient.ApiVersion = ApiVersion;
             DeepLTranslationProviderClient.ApiKey = ApiKey;
             SetApiKeyValidityLabel();
             
@@ -226,6 +237,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             Options.LanguagePairOptions = [.. LanguagePairOptions];
             Options.PreserveFormatting = PreserveFormatting;
             Options.TagHandling = TagType;
+            Options.ApiVersion = ApiVersion;
 
             var glossaryIds = Options.LanguagePairOptions.ToDictionary(
                 lpo => (lpo.LanguagePair.GetSourceLanguageCode(), lpo.LanguagePair.GetTargetLanguageCode()),
@@ -237,6 +249,16 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             if (IsTellMeAction)
             {
                 AskUserToRestart();
+            }
+        }
+
+        public ApiVersion ApiVersion
+        {
+            get => _apiVersion;
+            set
+            {
+                SetField(ref _apiVersion, value);
+                OnPasswordChanged(null, null);
             }
         }
 

@@ -32,6 +32,7 @@ namespace Sdl.Community.DeepLMTProvider.Model
             SendPlainTextParameter = stateObject?[nameof(SendPlainTextParameter)]?.ToString();
             PreserveFormattingParameter = stateObject?[nameof(PreserveFormattingParameter)]?.ToString();
             TagHandlingParameter = stateObject?[nameof(TagHandlingParameter)]?.ToString();
+            ApiVersionParameter = stateObject?[nameof(ApiVersionParameter)]?.ToString();
 
             LanguagePairOptions =
                 JsonConvert.DeserializeObject<List<LanguagePairOptions>>(stateObject?["LanguagePairOptions"]?.ToString());
@@ -72,6 +73,15 @@ namespace Sdl.Community.DeepLMTProvider.Model
 
         [JsonIgnore]
         public Uri Uri => _uriBuilder.Uri;
+
+        public string ApiVersionParameter { get; set; }
+
+        [JsonIgnore]
+        public ApiVersion ApiVersion 
+        {
+            get => Enum.TryParse<ApiVersion>(ApiVersionParameter, out var apiVersion) ? apiVersion : ApiVersion.V1;
+            set => ApiVersionParameter = value.ToString();
+        }
 
         private bool TryParseJson(string state, out JObject jObject)
         {
