@@ -42,6 +42,14 @@
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
 
+            <ObjectDataProvider MethodName="GetValues"
+                                ObjectType="{x:Type model:ApiVersion}"
+                                x:Key="ApiVersionProvider">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="model:ApiVersion" />
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
             <Style TargetType="Image">
                 <Setter Property="RenderOptions.BitmapScalingMode"
                         Value="HighQuality" />
@@ -120,39 +128,54 @@
                        Text="Translation options"
                        Margin="10 0 0 5" />-->
 
-            <GroupBox Header="Translation options"
-                      Margin="10 0 10 5">
-                <StackPanel Orientation="Horizontal">
-                    <StackPanel Margin="0 5 0 5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <GroupBox Header="Translation options"
+                          Margin="10 0 0 5">
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Margin="0 5 0 5">
 
-                        <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-                                  VerticalContentAlignment="Center"
-                                  Name="PlainText"
-                                  IsChecked="{Binding SendPlainText}"
-                                  Content="Send source as plain text"
-                                  Margin="15,0,0,5" />
-                        <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
-                                  VerticalContentAlignment="Center"
-                                  Margin="15,0,0,5"
-                                  x:Name="PreserveFormatting"
-                                  ToolTip="{x:Static deepLmtProvider:PluginResources.PreserveFormatting_Tooltip}"
-                                  IsChecked="{Binding PreserveFormatting}"
-                                  Content="Preserve formatting" />
+                            <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+                                      VerticalContentAlignment="Center"
+                                      Name="PlainText"
+                                      IsChecked="{Binding SendPlainText}"
+                                      Content="Send source as plain text"
+                                      Margin="15,0,0,5" />
+                            <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+                                      VerticalContentAlignment="Center"
+                                      Margin="15,0,0,5"
+                                      x:Name="PreserveFormatting"
+                                      ToolTip="{x:Static deepLmtProvider:PluginResources.PreserveFormatting_Tooltip}"
+                                      IsChecked="{Binding PreserveFormatting}"
+                                      Content="Preserve formatting" />
 
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="Tag handling" Margin="15 0 0 5"/>
-                            <ComboBox Margin="5 0 0 0"
-                                      Height="20"
-                                      SelectedItem="{Binding TagType}"
-                                      ItemsSource="{Binding Source={StaticResource TagTypeProvider}}" />
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Tag handling"
+                                       Margin="15 0 0 5" />
+                                <ComboBox Margin="5 0 0 0"
+                                          Height="20"
+                                          SelectedItem="{Binding TagType}"
+                                          ItemsSource="{Binding Source={StaticResource TagTypeProvider}}" />
+                            </StackPanel>
+
                         </StackPanel>
+                        <StackPanel Margin="5 5 0 5">
 
+                        </StackPanel>
                     </StackPanel>
-                    <StackPanel Margin="5 5 0 5">
-
-                    </StackPanel>
-                </StackPanel>
-            </GroupBox>
+                </GroupBox>
+                <GroupBox Header="API Version"
+                          Grid.Column="1"
+                          Margin="5 0 10 5">
+                    <ComboBox VerticalAlignment="Center"
+                              SelectedItem="{Binding ApiVersion}"
+                              HorizontalContentAlignment="Center"
+                              ItemsSource="{Binding Source={StaticResource ApiVersionProvider}}" />
+                </GroupBox>
+            </Grid>
         </StackPanel>
 
         <DataGrid ItemsSource="{Binding LanguagePairOptions, Mode=TwoWay}"

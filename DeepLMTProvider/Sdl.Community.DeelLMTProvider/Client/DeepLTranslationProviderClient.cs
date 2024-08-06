@@ -39,12 +39,14 @@ namespace Sdl.Community.DeepLMTProvider.Client
             }
         }
 
+        public static ApiVersion ApiVersion { get; set; }
         public static HttpResponseMessage IsApiKeyValidResponse { get; private set; }
+        private static string ChosenBaseUrl => ApiVersion == ApiVersion.V1 ? Constants.BaseUrlV1 : Constants.BaseUrlV2;
         private static List<string> SupportedTargetLanguages { get; set; }
         private static Dictionary<string, bool> SupportedTargetLanguagesAndFormalities { get; set; }
 
         private List<string> SupportedSourceLanguages =>
-            _supportedSourceLanguages ??= GetSupportedSourceLanguages(ApiKey);
+                    _supportedSourceLanguages ??= GetSupportedSourceLanguages(ApiKey);
 
         public static List<string> GetSupportedSourceLanguages(string apiKey)
         {
@@ -128,7 +130,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 {
                     Content = content,
                     Method = HttpMethod.Post,
-                    RequestUri = new Uri("https://api.deepl.com/v1/translate")
+                    RequestUri = new Uri($"{ChosenBaseUrl}/translate")
                 };
                 request.Headers.Authorization = new AuthenticationHeaderValue("DeepL-Auth-Key", ApiKey);
 
@@ -164,7 +166,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
             var content = new StringContent($"type={type}" + $"&auth_key={apiKey}", Encoding.UTF8,
                 "application/x-www-form-urlencoded");
 
-            var response = AppInitializer.Client.PostAsync("https://api.deepl.com/v1/languages", content).Result;
+            var response = AppInitializer.Client.PostAsync($"{ChosenBaseUrl}/languages", content).Result;
             response.EnsureSuccessStatusCode();
 
             return response.Content?.ReadAsStringAsync().Result;
@@ -172,7 +174,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
         private static HttpResponseMessage IsValidApiKey(string apiKey)
         {
-            return AppInitializer.Client.GetAsync($"https://api.deepl.com/v1/usage?auth_key={apiKey}").Result;
+            return AppInitializer.Client.GetAsync($"{ChosenBaseUrl}/usage?auth_key={apiKey}").Result;
         }
 
         private static void OnApiKeyChanged()

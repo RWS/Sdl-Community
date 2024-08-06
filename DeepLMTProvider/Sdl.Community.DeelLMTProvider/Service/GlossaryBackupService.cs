@@ -48,11 +48,10 @@ namespace Sdl.Community.DeepLMTProvider.Service
             var messageService = new MessageService();
             var glossaryImportExportService = new UserInteractionService(new DialogWrapper());
             var glossaryReaderWriterService = new GlossaryReaderWriterService(glossaryReaderWriterFactory);
-            var deepLGlossaryClient = new DeepLGlossaryClient();
 
             var glossariesWindowViewModel =
                 new GlossariesWindowViewModel(
-                    deepLGlossaryClient,
+                    DeepLGlossaryClient,
                     messageService,
                     glossaryImportExportService,
                     glossaryReaderWriterService,
@@ -83,5 +82,7 @@ namespace Sdl.Community.DeepLMTProvider.Service
             var glossariesWindow = new GlossariesWindow { DataContext = glossariesWindowViewModel };
             glossariesWindow.ShowDialog();
         }
+
+        public static DeepLGlossaryClient DeepLGlossaryClient { get; set; }
     }
 }

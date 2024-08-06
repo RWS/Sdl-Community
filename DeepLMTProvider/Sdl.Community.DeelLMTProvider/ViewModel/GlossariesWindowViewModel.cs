@@ -32,7 +32,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             IProcessStarter processStarter,
             IEditGlossaryService editGlossaryService)
         {
-            //TODO: remove peripheral dependencies -> use events to handle those interactions instead
             DeepLGlossaryClient = deepLGlossaryClient;
             MessageService = messageService;
             UserInteractionService = glossaryBrowserService;

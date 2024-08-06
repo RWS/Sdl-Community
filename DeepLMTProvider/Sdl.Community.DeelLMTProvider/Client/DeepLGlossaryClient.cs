@@ -14,14 +14,14 @@ namespace Sdl.Community.DeepLMTProvider.Client
 {
     public class DeepLGlossaryClient : IDeepLGlossaryClient
     {
-        public const string BaseUrl = "https://api.deepl.com/v1";
+        
 
         public async Task<ActionResult<GlossaryInfo>> DeleteGlossary(string apiKey, string glossaryId)
         {
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Delete,
-                RequestUri = new Uri($"{BaseUrl}/glossaries/{glossaryId}"),
+                RequestUri = new Uri($"{ChosenBaseUrl}/glossaries/{glossaryId}"),
                 Headers =
                 {
                     { "Authorization", $"DeepL-Auth-Key {apiKey}" },
@@ -40,7 +40,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri("https://api.deepl.com/v1/glossaries"),
+                RequestUri = new Uri($"{ChosenBaseUrl}/glossaries"),
                 Headers =
                 {
                     { "Authorization", $"DeepL-Auth-Key {apiKey}" },
@@ -62,7 +62,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"{BaseUrl}/glossary-language-pairs"),
+                RequestUri = new Uri($"{ChosenBaseUrl}/glossary-language-pairs"),
                 Headers =
                 {
                     { "Authorization", $"DeepL-Auth-Key {apiKey}" },
@@ -97,7 +97,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
-                RequestUri = new Uri($"{BaseUrl}/glossaries"),
+                RequestUri = new Uri($"{ChosenBaseUrl}/glossaries"),
                 Headers =
                 {
                     { "Authorization", $"DeepL-Auth-Key {apiKey}" },
@@ -121,12 +121,14 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 () => JObject.Parse(serializedCreatedGlossary).ToObject<GlossaryInfo>());
         }
 
+        private string ChosenBaseUrl => ApiVersion == ApiVersion.V1 ? Constants.BaseUrlV1 : Constants.BaseUrlV2;
+
         public async Task<ActionResult<List<GlossaryEntry>>> RetrieveGlossaryEntries(string glossaryId, string apiKey)
         {
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"{BaseUrl}/glossaries/{glossaryId}/entries"),
+                RequestUri = new Uri($"{ChosenBaseUrl}/glossaries/{glossaryId}/entries"),
                 Headers =
                 {
                     { "Authorization", $"DeepL-Auth-Key {apiKey}" },
@@ -163,5 +165,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
             return await ImportGlossary(glossary, apiKey);
         }
+
+        public ApiVersion ApiVersion { get; set; }
     }
 }
