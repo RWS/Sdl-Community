@@ -1,26 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>11.0.3344.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{AC39EA6C-DDDE-4C47-8E9C-10796087CE32}</ProjectGuid>
+    <TargetFramework>net48</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.Community.PostEdit.Versions</RootNamespace>
-    <AssemblyName>Sdl.Community.PostEdit.Versions</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <OldToolsVersion>2.0</OldToolsVersion>
     <SccProjectName />
     <SccLocalPath />
     <SccAuxPath />
     <SccProvider />
-    <TargetFrameworkProfile />
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -29,6 +14,7 @@
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
@@ -36,48 +22,32 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup>
     <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
     <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PostEdit.Compare.WinFormsUI.Docking">
       <HintPath>Sdl.Community.PostEdit.Compare\3rd party\PostEdit.Compare.WinFormsUI.Docking.dll</HintPath>
     </Reference>
-    <Reference Include="PresentationCore" />
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization.Async">
       <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Core.Settings">
-      <HintPath>$(TradosFolder)\Sdl.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
@@ -97,9 +67,6 @@
     <Reference Include="Sdl.ProjectAutomation.FileBased">
       <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.ProjectAutomation.Settings">
-      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Settings.dll</HintPath>
-    </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
@@ -109,96 +76,20 @@
     <Reference Include="System.Reactive">
       <HintPath>$(TradosFolder)\System.Reactive.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
     <Reference Include="System.configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.XML" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Automation\AutomationComunicationSettings.cs" />
-    <Compile Include="Automation\SettingsSerializer.cs" />
-    <Compile Include="Build\SolutionInfo.cs" />
-    <Compile Include="ComboboxItem.cs" />
-    <Compile Include="Dialogs\RestoreProjectVersion.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\RestoreProjectVersion.Designer.cs">
-      <DependentUpon>RestoreProjectVersion.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\EditProjectVersion.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\EditProjectVersion.Designer.cs">
-      <DependentUpon>EditProjectVersion.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Helper.cs" />
-    <Compile Include="PluginResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PluginResources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="PostEditCompareViewPartController.cs" />
-    <Compile Include="PostEditCompareViewPartControl.cs">
+    <Compile Update="PostEditCompareViewPartControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="PostEditCompareViewPartControl.Designer.cs">
-      <DependentUpon>PostEditCompareViewPartControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PostEditCompareNavigationControl.cs">
+    <Compile Update="PostEditCompareNavigationControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="PostEditCompareNavigationControl.Designer.cs">
-      <DependentUpon>PostEditCompareNavigationControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\FolderSelectDialog.cs" />
-    <Compile Include="Dialogs\NewProjectVersion.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\NewProjectVersion.Designer.cs">
-      <DependentUpon>NewProjectVersion.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\DefaultSettings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\DefaultSettings.Designer.cs">
-      <DependentUpon>DefaultSettings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PostEditCompareViewRibbonGroup.cs" />
-    <Compile Include="PostEditCompareViewController.cs" />
-    <Compile Include="PostEditCompareViewControl.cs">
+    <Compile Update="PostEditCompareViewControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="PostEditCompareViewControl.Designer.cs">
-      <DependentUpon>PostEditCompareViewControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ProjectVersionDetails.cs" />
-    <Compile Include="Properties\PluginProperties.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Structures\SettingsSerializer.cs" />
-    <Compile Include="Structures\FileProperty.cs" />
-    <Compile Include="Structures\LanguageProperty.cs" />
-    <Compile Include="Structures\Project.cs" />
-    <Compile Include="Structures\ProjectVersion.cs" />
-    <Compile Include="Structures\Settings.cs" />
-    <Compile Include="Structures\VersionDetails.cs" />
-    <Compile Include="TellMe\AppStoreForumAction.cs" />
-    <Compile Include="TellMe\CommunityWikiAction.cs" />
-    <Compile Include="TellMe\NewProjectVersionAction.cs" />
-    <Compile Include="TellMe\PluginViewAction.cs" />
-    <Compile Include="TellMe\SettingsAction.cs" />
-    <Compile Include="TellMe\SourceCodeAction.cs" />
-    <Compile Include="TellMe\TellMeProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Add.ico" />
@@ -219,53 +110,13 @@
     <Content Include="Resources\Settings2.ico" />
     <Content Include="Resources\SourceCode.ico" />
     <Content Include="Resources\TellmeDocumentation.ico" />
-    <EmbeddedResource Include="Dialogs\RestoreProjectVersion.resx">
-      <DependentUpon>RestoreProjectVersion.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\EditProjectVersion.resx">
-      <DependentUpon>EditProjectVersion.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PostEditCompareViewPartControl.resx">
-      <DependentUpon>PostEditCompareViewPartControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PostEditCompareNavigationControl.resx">
-      <DependentUpon>PostEditCompareNavigationControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\NewProjectVersion.resx">
-      <DependentUpon>NewProjectVersion.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\DefaultSettings.resx">
-      <DependentUpon>DefaultSettings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PluginResources.resx">
-      <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PostEditCompareViewControl.resx">
-      <DependentUpon>PostEditCompareViewControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="SdlCommunity.snk" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Sdl.Community.PostEdit.Compare.Core\Sdl.Community.PostEdit.Compare.Core.csproj">
-      <Project>{46538e68-8aa6-4edc-b291-cb2003e929d0}</Project>
-      <Name>Sdl.Community.PostEdit.Compare.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="Sdl.Community.PostEdit.Compare\Sdl.Community.PostEdit.Compare.csproj">
-      <Project>{b9aa109e-e936-4e92-a0af-7297902270cd}</Project>
-      <Name>Sdl.Community.PostEdit.Compare</Name>
-    </ProjectReference>
+    <ProjectReference Include="Sdl.Community.PostEdit.Compare.Core\Sdl.Community.PostEdit.Compare.Core.csproj" />
+    <ProjectReference Include="Sdl.Community.PostEdit.Compare\Sdl.Community.PostEdit.Compare.csproj" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
@@ -276,7 +127,156 @@
       <Version>18.0.1</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\Comparison\Comparer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\Comparison\ComparisonFileUnit.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\Comparison\ComparisonParagraphUnit.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\Comparison\ComparisonSegmentUnit.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\Comparison\PairedFiles.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\Comparison\Text\ComparisionTextUnit.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\Comparison\Text\TextComparer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\Helper\Capitalization.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\Helper\ExcelReportHelper.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\Helper\PemExcelReportHelper.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\Helper\TerpExcelReportHelper.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\obj\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\Processor.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\Properties\AssemblyInfo.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\Reports\FileInformationExcelReport.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\Reports\PemExcelReport.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\Reports\Report.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\Reports\ReportUtils.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\Reports\TerpExcelReport.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\SDLXLIFF\Comment.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\SDLXLIFF\ContentGenerator.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\SDLXLIFF\ContentProcessor.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\SDLXLIFF\ContentWriter.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\SDLXLIFF\ParagraphUnit.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\SDLXLIFF\Parser.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\SDLXLIFF\RevisionMarker.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\SDLXLIFF\SegmentPair.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\SDLXLIFF\SegmentSection.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\SDLXLIFF\TagUnit.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\SDLXLIFF\TagUnitWarning.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\SDLXLIFF\TranslationOrigin.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\Settings.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.Core\Terp.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.DAL\ExcelTableModel\Constants.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.DAL\PostEditModificationsAnalysis\FilesInformationModel.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.DAL\PostEditModificationsAnalysis\PEMModel.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.DAL\PostEditModificationsAnalysis\PEMTotalCost.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.DAL\PostEditModificationsAnalysis\TERpModel.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.DAL\PostEditModificationsAnalysis\TERpTotalValues.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.DAL\PostEditModificationsAnalysis\VersionDetails.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare.DAL\Properties\AssemblyInfo.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Automation\AutomationComunicationSettings.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Automation\SettingsSerializer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Cache\Application.Cache.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\ComboboxItem.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Common.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\DataGridViewRichTextBox\DataGridViewRichTextBoxColumn.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\DataGridViewRichTextBox\RichTextBoxPrinter.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\FolderSelectDialog.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\FormMain.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\FormMain.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\AppendAnlaysisBand.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\AppendAnlaysisBand.designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\AppendMultiplePrices.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\AppendMultiplePrices.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\ComparisonProject.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\ComparisonProject.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\ComparisonProjectFileAlignment.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\ComparisonProjectFileAlignment.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\CopyFiles.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\CopyFiles.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\CopyFilesToFolder.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\CopyFilesToFolder.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\DeleteFiles.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\DeleteFiles.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\FileViewer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\FileViewer.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\FilterAppend.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\FilterAppend.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\FormSettingsFormatting.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\FormSettingsFormatting.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\MoveFiles.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\MoveFiles.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\PriceAppend.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\PriceAppend.designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\PriceGroupsGroup.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\PriceGroupsGroup.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\ReportViewer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\ReportViewer.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\ReportWizard.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\ReportWizard.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\Settings.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Forms\Settings.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\ListViewSortManager\ListViewSortManager.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Model\DataNode.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Model\FileType.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Model\IModel.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Model\Model.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\obj\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\PanelManager\FormMain.PanelManager.CompareList.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\PanelManager\Panel_CompareLog.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\PanelManager\Panel_CompareLog.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\PanelManager\Panel_CompareProject.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\PanelManager\Panel_CompareProject.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\PanelManager\Panel_ComparisonProjects.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\PanelManager\Panel_ComparisonProjects.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\PanelManager\Panel_FileViewer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\PanelManager\Panel_FileViewer.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\PanelManager\Panel_FileViewerComments.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\PanelManager\Panel_FileViewerComments.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\PanelManager\Panel_ReportViewer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\PanelManager\Panel_ReportViewer.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\PanelManager\Panel_ReportViewerNavigation.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\PanelManager\Panel_ReportViewerNavigation.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Program.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\ProgressCore.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\ProgressDialog.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\ProgressDialog.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\ProgressObject.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Properties\AssemblyInfo.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Properties\Resources.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Properties\Settings.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\Settings.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\SkipSettingsWindow.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\SkipSettingsWindow.Designer.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\WaitingDialog.cs" />
+    <Compile Remove="Sdl.Community.PostEdit.Compare\WaitingDialog.Designer.cs" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\FormMain.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\Forms\AppendAnlaysisBand.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\Forms\AppendMultiplePrices.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\Forms\ComparisonProject.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\Forms\ComparisonProjectFileAlignment.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\Forms\CopyFiles.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\Forms\CopyFilesToFolder.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\Forms\DeleteFiles.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\Forms\FileViewer.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\Forms\FilterAppend.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\Forms\FormSettingsFormatting.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\Forms\MoveFiles.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\Forms\PriceAppend.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\Forms\PriceGroupsGroup.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\Forms\ReportViewer.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\Forms\ReportWizard.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\Forms\Settings.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\PanelManager\Panel_CompareLog.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\PanelManager\Panel_CompareProject.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\PanelManager\Panel_ComparisonProjects.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\PanelManager\Panel_FileViewer.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\PanelManager\Panel_FileViewerComments.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\PanelManager\Panel_ReportViewer.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\PanelManager\Panel_ReportViewerNavigation.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\ProgressDialog.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\Properties\Resources.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\SkipSettingsWindow.resx" />
+    <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\WaitingDialog.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Sdl.Community.PostEdit.Compare.DAL\" />
+  </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
@@ -286,5 +286,4 @@
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
