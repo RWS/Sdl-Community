@@ -121,7 +121,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
                 () => JObject.Parse(serializedCreatedGlossary).ToObject<GlossaryInfo>());
         }
 
-        private string ChosenBaseUrl => ApiVersion == ApiVersion.V1 ? Constants.BaseUrlV1 : Constants.BaseUrlV2;
+        private string ChosenBaseUrl => ApiVersion?.Contains("V1") ?? true ? Constants.BaseUrlV1 : Constants.BaseUrlV2;
 
         public async Task<ActionResult<List<GlossaryEntry>>> RetrieveGlossaryEntries(string glossaryId, string apiKey)
         {
@@ -166,6 +166,6 @@ namespace Sdl.Community.DeepLMTProvider.Client
             return await ImportGlossary(glossary, apiKey);
         }
 
-        public ApiVersion ApiVersion { get; set; }
+        public string ApiVersion { get; set; }
     }
 }

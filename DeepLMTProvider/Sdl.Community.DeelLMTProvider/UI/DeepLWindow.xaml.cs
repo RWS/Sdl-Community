@@ -11,6 +11,12 @@ namespace Sdl.Community.DeepLMTProvider.UI
         {
             InitializeComponent();
             DataContext = viewModel;
+            Loaded += DeepLWindow_Loaded;
+        }
+
+        private void DeepLWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            ApiVersionCombobox.SelectedIndex = 0;
         }
 
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
