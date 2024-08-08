@@ -26,7 +26,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private bool _preserveFormatting;
         private bool _sendPlainText;
         private TagFormat _tagType;
-        private ApiVersion _apiVersion;
+        private string _apiVersion;
 
         public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, IMessageService messageService)
         {
@@ -252,7 +252,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             }
         }
 
-        public ApiVersion ApiVersion
+        public string ApiVersion
         {
             get => _apiVersion;
             set

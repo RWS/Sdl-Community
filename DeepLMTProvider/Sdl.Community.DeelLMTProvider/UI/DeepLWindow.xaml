@@ -9,11 +9,13 @@
         xmlns:controls="clr-namespace:Sdl.Desktop.Platform.Controls.Controls;assembly=Sdl.Desktop.Platform.Controls"
         xmlns:deepLmtProvider="clr-namespace:Sdl.Community.DeepLMTProvider"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:converters="clr-namespace:Sdl.Community.DeepLMTProvider.UI.Converters"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewModel:DeepLWindowViewModel}"
         Icon="../Resources/deepLIcon.ico"
         WindowStyle="None"
-        MaxWidth="600"
+        Width="610"
+        MaxWidth="610"
         MaxHeight="600"
         AllowsTransparency="False"
         WindowStartupLocation="CenterScreen"
@@ -39,14 +41,6 @@
                                 x:Key="TagTypeProvider">
                 <ObjectDataProvider.MethodParameters>
                     <x:Type TypeName="model:TagFormat" />
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
-
-            <ObjectDataProvider MethodName="GetValues"
-                                ObjectType="{x:Type model:ApiVersion}"
-                                x:Key="ApiVersionProvider">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="model:ApiVersion" />
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
 
@@ -171,9 +165,13 @@
                           Grid.Column="1"
                           Margin="5 0 10 5">
                     <ComboBox VerticalAlignment="Center"
-                              SelectedItem="{Binding ApiVersion}"
-                              HorizontalContentAlignment="Center"
-                              ItemsSource="{Binding Source={StaticResource ApiVersionProvider}}" />
+                              Name="ApiVersionCombobox"
+                              SelectedValue="{Binding ApiVersion}"
+                              SelectedValuePath="Content"
+                              HorizontalContentAlignment="Center">
+                        <ComboBoxItem Content="V1 (DeepL Advanced or Ultimate subscription)" />
+                        <ComboBoxItem Content="V2 (DeepL Pro API subscription)" />
+                    </ComboBox>
                 </GroupBox>
             </Grid>
         </StackPanel>

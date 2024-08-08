@@ -39,9 +39,9 @@ namespace Sdl.Community.DeepLMTProvider.Client
             }
         }
 
-        public static ApiVersion ApiVersion { get; set; }
+        public static string ApiVersion { get; set; }
         public static HttpResponseMessage IsApiKeyValidResponse { get; private set; }
-        private static string ChosenBaseUrl => ApiVersion == ApiVersion.V1 ? Constants.BaseUrlV1 : Constants.BaseUrlV2;
+        private static string ChosenBaseUrl => ApiVersion?.Contains("V1") ?? true ? Constants.BaseUrlV1 : Constants.BaseUrlV2;
         private static List<string> SupportedTargetLanguages { get; set; }
         private static Dictionary<string, bool> SupportedTargetLanguagesAndFormalities { get; set; }
 
