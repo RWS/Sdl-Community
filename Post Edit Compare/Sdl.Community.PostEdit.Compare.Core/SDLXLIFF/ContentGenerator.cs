@@ -320,6 +320,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
 
         public void VisitText(IText text)
         {
+            PlainText.Append(text.Properties.Text);
             if (SegmentSections.Count > 0 && SegmentSections[(SegmentSections.Count - 1)].Type == SegmentSection.ContentType.Text)
             {
                 if (IsRevisionMarker)
@@ -344,11 +345,9 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
                     : new SegmentSection(SegmentSection.ContentType.Text, string.Empty, text.Properties.Text));
             }
 
-            if (!IsRevisionMarker || RevisionMarker.Type == RevisionMarker.RevisionType.Delete) 
-                return;
+            if (!IsRevisionMarker || RevisionMarker.Type == RevisionMarker.RevisionType.Delete) return;
 
             Segment.Add(text.Properties.Text);
-            PlainText.Append(text.Properties.Text);
         }
 
         #endregion
