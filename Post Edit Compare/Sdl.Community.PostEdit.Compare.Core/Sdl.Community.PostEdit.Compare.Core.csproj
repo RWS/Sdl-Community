@@ -1,20 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{46538E68-8AA6-4EDC-B291-CB2003E929D0}</ProjectGuid>
+    <TargetFramework>net48</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.Community.PostEdit.Compare.Core</RootNamespace>
-    <AssemblyName>Sdl.Community.PostEdit.Compare.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -29,30 +17,16 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <UseWPF>true</UseWPF>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup>
     <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17</TradosFolder>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -61,15 +35,11 @@
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PresentationCore" />
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization.Async">
       <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Core.Settings">
-      <HintPath>$(TradosFolder)\Sdl.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Bilingual.SdlXliff">
       <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Bilingual.SdlXliff.dll</HintPath>
@@ -101,53 +71,13 @@
     <Reference Include="Sdl.ProjectAutomation.FileBased">
       <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
     <Reference Include="System.configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Security" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Build\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="Comparison\Comparer.cs" />
-    <Compile Include="Comparison\ComparisonFileUnit.cs" />
-    <Compile Include="Comparison\ComparisonParagraphUnit.cs" />
-    <Compile Include="Comparison\ComparisonSegmentUnit.cs" />
-    <Compile Include="Comparison\Text\ComparisionTextUnit.cs" />
-    <Compile Include="Comparison\Text\TextComparer.cs" />
-    <Compile Include="Comparison\PairedFiles.cs" />
-    <Compile Include="Helper\Capitalization.cs" />
-    <Compile Include="Helper\ExcelReportHelper.cs" />
-    <Compile Include="Helper\PemExcelReportHelper.cs" />
-    <Compile Include="Helper\TerpExcelReportHelper.cs" />
-    <Compile Include="Processor.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reports\FileInformationExcelReport.cs" />
-    <Compile Include="Reports\PemExcelReport.cs" />
-    <Compile Include="Reports\Report.cs" />
-    <Compile Include="Reports\ReportUtils.cs" />
-    <Compile Include="Reports\TerpExcelReport.cs" />
-    <Compile Include="SDLXLIFF\ContentGenerator.cs" />
-    <Compile Include="SDLXLIFF\ContentProcessor.cs" />
-    <Compile Include="SDLXLIFF\ContentWriter.cs" />
-    <Compile Include="SDLXLIFF\Parser.cs" />
-    <Compile Include="SDLXLIFF\Comment.cs" />
-    <Compile Include="SDLXLIFF\ParagraphUnit.cs" />
-    <Compile Include="SDLXLIFF\RevisionMarker.cs" />
-    <Compile Include="SDLXLIFF\SegmentPair.cs" />
-    <Compile Include="SDLXLIFF\SegmentSection.cs" />
-    <Compile Include="SDLXLIFF\TagUnit.cs" />
-    <Compile Include="SDLXLIFF\TagUnitWarning.cs" />
-    <Compile Include="SDLXLIFF\TranslationOrigin.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="TERp.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Reports\PostEdit.Compare.Report.01.xslt">
@@ -174,12 +104,10 @@
     <Content Include="Images\Translation_Rejected_Removed.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SdlCommunity.snk" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="EPPlus">
       <Version>4.5.3.3</Version>
     </PackageReference>
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="Trados.Community.Toolkit.Core">
       <Version>4.1.1</Version>
     </PackageReference>
@@ -188,10 +116,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sdl.Community.PostEdit.Compare.DAL\Sdl.Community.PostEdit.Compare.DAL.csproj">
-      <Project>{d772940c-6ddd-4468-ad06-9cd07b9e1f05}</Project>
-      <Name>Sdl.Community.PostEdit.Compare.DAL</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\Sdl.Community.PostEdit.Compare.DAL\Sdl.Community.PostEdit.Compare.DAL.csproj" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
