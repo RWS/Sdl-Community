@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34818.151
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugin_ModifyAutoSubstitutionSettings", "Plugin_ModifyAutoSubstitutionSettings.csproj", "{48C50522-16ED-4748-8220-3F3A2B7CC93E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{48C50522-16ED-4748-8220-3F3A2B7CC93E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48C50522-16ED-4748-8220-3F3A2B7CC93E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48C50522-16ED-4748-8220-3F3A2B7CC93E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48C50522-16ED-4748-8220-3F3A2B7CC93E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8ED7BE0D-89AB-43D9-A473-807A742849E4}
+	EndGlobalSection
+EndGlobal
