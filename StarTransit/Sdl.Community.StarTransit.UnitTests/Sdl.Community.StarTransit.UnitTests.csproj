@@ -1,140 +1,91 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8BDDA3E2-7F0E-464E-BE8F-084F8CB84316}</ProjectGuid>
+    <TargetFramework>net48</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.Community.StarTransit.UnitTests</RootNamespace>
-    <AssemblyName>Sdl.Community.StarTransit.UnitTests</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <ReferencePath>$(MSBuildProgramFiles32)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
-    <IsCodedUITest>False</IsCodedUITest>
-    <TestProjectType>UnitTest</TestProjectType>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17</TradosFolder>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Sdl.Core.Globalization">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization.Async">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Core.Globalization.Async.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.Core.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.LanguagePlatform.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.Core.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+      <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FilesServiceUnitTests.cs" />
-    <Compile Include="StarTransitConfiguration.cs" />
-    <Compile Include="PackageServiceUnitTests.cs" />
-    <Compile Include="ProjectServiceUnitTests.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StudioServiceUnitTests.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="TestingFiles\693203001_Trumpf_ID_IND.PPF">
+    <None Update="TestingFiles\693203001_Trumpf_ID_IND.PPF">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="TestingFiles\766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_J00265435.ppf">
+    <None Update="TestingFiles\766ec607-508b-4c45-92f2-15c58d1eff53_ENU_00_J00265435.ppf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="TestingFiles\Default.sdltpl">
+    <None Update="TestingFiles\Default.sdltpl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="TestingFiles\FnrTranslationTat_Amplexor_FB_TRANSLAT_IDN.DEU">
+    <None Update="TestingFiles\FnrTranslationTat_Amplexor_FB_TRANSLAT_IDN.DEU">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="TestingFiles\MultilingualNoOptions.sdltpl">
+    <None Update="TestingFiles\MultilingualNoOptions.sdltpl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="TestingFiles\Test Multilingual Package Trados Plugin.PPF">
+    <None Update="TestingFiles\Test Multilingual Package Trados Plugin.PPF">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="TestingFiles\TestTransitTM.sdltm">
+    <None Update="TestingFiles\TestTransitTM.sdltm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="TestingFiles\TransitMultilingualPenaltiesOptions.sdltpl">
+    <None Update="TestingFiles\TransitMultilingualPenaltiesOptions.sdltpl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="TestingFiles\TransitMultilingualTemplate.sdltpl">
+    <None Update="TestingFiles\TransitMultilingualTemplate.sdltpl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="TestingFiles\_AEXTR_1.DEU">
+    <None Update="TestingFiles\_AEXTR_1.DEU">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sdl.Community.StarTransit.Shared\Sdl.Community.StarTransit.Shared.csproj">
-      <Project>{80113c78-7889-4d14-a233-48de24de11a2}</Project>
-      <Name>Sdl.Community.StarTransit.Shared</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sdl.Community.StarTransit\Sdl.Community.StarTransit.csproj">
-      <Project>{1cbf7231-a95e-43a5-942e-49d3a9c99d4a}</Project>
-      <Name>Sdl.Community.StarTransit</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\Sdl.Community.StarTransit.Shared\Sdl.Community.StarTransit.Shared.csproj" />
+    <ProjectReference Include="..\Sdl.Community.StarTransit\Sdl.Community.StarTransit.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Moq">
       <Version>4.13.1</Version>
     </PackageReference>
@@ -164,6 +115,4 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

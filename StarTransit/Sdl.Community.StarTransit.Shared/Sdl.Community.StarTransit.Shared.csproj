@@ -1,34 +1,13 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{80113C78-7889-4D14-A233-48DE24DE11A2}</ProjectGuid>
+    <TargetFramework>net48</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.Community.StarTransit.Shared</RootNamespace>
-    <AssemblyName>Sdl.Community.StarTransit.Shared</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
     <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\17\Plugins</PluginDeploymentPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17</TradosFolder>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -37,7 +16,6 @@
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="NLog">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\NLog.dll</HintPath>
     </Reference>
@@ -92,88 +70,21 @@
     <Reference Include="Sdl.Versioning">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.Versioning.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Reactive">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\System.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Windows" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.XML" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Sdl.Community.StarTransit\VersionInfo.cs">
       <Link>VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="Events\CreateStudioProject.cs" />
-    <Compile Include="Events\Error.cs" />
-    <Compile Include="Events\OpenReturnPackageLocation.cs" />
-    <Compile Include="Events\ProjectCreated.cs" />
-    <Compile Include="Events\ProjectCreationProgress.cs" />
-    <Compile Include="Events\TmFilesProgress.cs" />
-    <Compile Include="Events\XliffCreationProgress.cs" />
-    <Compile Include="Import\TransitTmImporter.cs" />
-    <Compile Include="Import\TransitParser.cs" />
-    <Compile Include="Import\TransitSniffer.cs" />
-    <Compile Include="Import\TransitTextExtractor.cs" />
-    <Compile Include="Import\TransitWriter.cs" />
-    <Compile Include="Events\TuImportStatistics.cs" />
-    <Compile Include="Models\MetadataFileInfo.cs" />
-    <Compile Include="Models\ReturnFileDetails.cs" />
-    <Compile Include="Services\Interfaces\IEventAggregatorService.cs" />
-    <Compile Include="Interfaces\IMessageBoxService.cs" />
-    <Compile Include="Models\BaseViewModel.cs" />
-    <Compile Include="Models\Customer.cs" />
-    <Compile Include="Models\LanguagePair.cs" />
-    <Compile Include="Models\MessageModel.cs" />
-    <Compile Include="Models\Metadata.cs" />
-    <Compile Include="Models\PackageModel.cs" />
-    <Compile Include="Models\ReturnPackage.cs" />
-    <Compile Include="Models\StarTranslationMemoryMetadata.cs" />
-    <Compile Include="Models\TranslationMemoriesPenaltiesModel.cs" />
-    <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Services\EventAggregatorService.cs" />
-    <Compile Include="Services\FileService.cs" />
-    <Compile Include="Services\Interfaces\IFileService.cs" />
-    <Compile Include="Services\Interfaces\IReturnPackage.cs" />
-    <Compile Include="Services\Interfaces\IPackageService.cs" />
-    <Compile Include="Services\Interfaces\IProjectsControllerService.cs" />
-    <Compile Include="Services\Interfaces\IProjectService.cs" />
-    <Compile Include="Services\Interfaces\IReturnPackageService.cs" />
-    <Compile Include="Services\Interfaces\ProjectsControllerService.cs" />
-    <Compile Include="Services\MessageBoxService.cs" />
-    <Compile Include="Services\PackageService.cs" />
-    <Compile Include="Services\ProjectService.cs" />
-    <Compile Include="Services\ReturnPackageService.cs" />
-    <Compile Include="Utils\CustomDateTime.cs" />
-    <Compile Include="Utils\Extensions.cs" />
-    <Compile Include="Utils\Log.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SdlCommunity.snk" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="System.Threading.Tasks.Extensions">
       <Version>4.5.3</Version>
     </PackageReference>
@@ -181,8 +92,4 @@
       <Version>4.5.0</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\transit.ico" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
