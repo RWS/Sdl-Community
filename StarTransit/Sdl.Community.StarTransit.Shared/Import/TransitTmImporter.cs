@@ -16,159 +16,168 @@ using Sdl.ProjectAutomation.FileBased;
 
 namespace Sdl.Community.StarTransit.Shared.Import
 {
-	public class TransitTmImporter
-	{
-		private readonly Logger _logger = NLog.LogManager.GetCurrentClassLogger();
-		private readonly FileBasedTranslationMemory _translationMemory;
-		private readonly IEventAggregatorService _eventAggregator;
+    public class TransitTmImporter
+    {
+        private readonly Logger _logger = NLog.LogManager.GetCurrentClassLogger();
+        private readonly FileBasedTranslationMemory _translationMemory;
+        private readonly IEventAggregatorService _eventAggregator;
 
-		public TransitTmImporter(LanguagePair languagePair, string description, string tmPath,IEventAggregatorService eventAggregator)
-		{
-			_eventAggregator = eventAggregator;
-			_translationMemory = new FileBasedTranslationMemory(
-				tmPath,
-				description,
-				languagePair.SourceLanguage,
-				languagePair.TargetLanguage,
-				FuzzyIndexes.SourceCharacterBased | FuzzyIndexes.SourceWordBased | FuzzyIndexes.TargetCharacterBased |
-				FuzzyIndexes.TargetWordBased,
-				BuiltinRecognizers.RecognizeAll,
-				TokenizerFlags.DefaultFlags,
-				WordCountFlags.BreakOnTag | WordCountFlags.BreakOnDash | WordCountFlags.BreakOnApostrophe);
+        public TransitTmImporter(LanguagePair languagePair, string description, string tmPath, IEventAggregatorService eventAggregator)
+        {
+            _eventAggregator = eventAggregator;
+            _translationMemory =
 
-			_translationMemory.Save();
-		}
+                languagePair.ChoseExistingTm
+                    ? new FileBasedTranslationMemory(tmPath)
+                    : new FileBasedTranslationMemory(
+                        tmPath,
+                        description,
+                        languagePair.SourceLanguage,
+                        languagePair.TargetLanguage,
+                        FuzzyIndexes.SourceCharacterBased | FuzzyIndexes.SourceWordBased |
+                        FuzzyIndexes.TargetCharacterBased |
+                        FuzzyIndexes.TargetWordBased,
+                        BuiltinRecognizers.RecognizeAll,
+                        TokenizerFlags.DefaultFlags,
+                        WordCountFlags.BreakOnTag | WordCountFlags.BreakOnDash | WordCountFlags.BreakOnApostrophe);
 
-		public void ImportStarTransitTm(List<string>sourceTmFiles,List<string>targetTmFiles, CultureInfo targetLanguage, PackageModel package)
-		{
-			var sdlXliffFolderFullPath = CreateTemporarySdlXliffs(sourceTmFiles, targetTmFiles, targetLanguage,package);
-			ImportSdlXliffsIntoTm(sdlXliffFolderFullPath, targetLanguage);
-		}
+            _translationMemory?.Save();
+        }
 
-		public TranslationProviderReference GetTranslationProviderReference()
-		{
-			return new TranslationProviderReference(_translationMemory.FilePath, true);
-		}
+        public void ImportStarTransitTm(List<string> sourceTmFiles, List<string> targetTmFiles, CultureInfo targetLanguage, PackageModel package)
+        {
+            var sdlXliffFolderFullPath = CreateTemporarySdlXliffs(sourceTmFiles, targetTmFiles, targetLanguage, package);
+            ImportSdlXliffsIntoTm(sdlXliffFolderFullPath, targetLanguage);
+        }
 
-		private void ImportSdlXliffsIntoTm(string sdlXliffFolderPath,CultureInfo targetLanguage)
-		{
-			try
-			{
-				ConfirmationLevel[] levels = { ConfirmationLevel.ApprovedTranslation, ConfirmationLevel.Translated, ConfirmationLevel.ApprovedSignOff };
+        public TranslationProviderReference GetTranslationProviderReference()
+        {
+            return new TranslationProviderReference(_translationMemory.FilePath, true);
+        }
 
-				var importSettings = new ImportSettings
-				{
-					IsDocumentImport = true,
-					CheckMatchingSublanguages = false,
-					IncrementUsageCount = true,
-					NewFields = ImportSettings.NewFieldsOption.AddToSetup,
-					PlainText = false,
-					ExistingTUsUpdateMode = ImportSettings.TUUpdateMode.AddNew,
-					ConfirmationLevels = levels
-				};
-				var tmImporter = new TranslationMemoryImporter(_translationMemory.LanguageDirection)
-				{
-					ImportSettings = importSettings
-				};
+        private void ImportSdlXliffsIntoTm(string sdlXliffFolderPath, CultureInfo targetLanguage)
+        {
+            try
+            {
+                ConfirmationLevel[] levels = { ConfirmationLevel.ApprovedTranslation, ConfirmationLevel.Translated, ConfirmationLevel.ApprovedSignOff };
 
-				var folderPath = Path.Combine(sdlXliffFolderPath, targetLanguage.Name);
-				if (!Directory.Exists(folderPath)) return;
-				var xliffFiles = Directory.GetFiles(folderPath);
-				var tmFileProgress = new TmFilesProgress
-				{
-					TotalFilesNumber = xliffFiles.Length,
-					TargetLanguage = targetLanguage
-				};
+                var importSettings = new ImportSettings
+                {
+                    IsDocumentImport = true,
+                    CheckMatchingSublanguages = false,
+                    IncrementUsageCount = true,
+                    NewFields = ImportSettings.NewFieldsOption.AddToSetup,
+                    PlainText = false,
+                    ExistingTUsUpdateMode = ImportSettings.TUUpdateMode.AddNew,
+                    ConfirmationLevels = levels
+                };
+                var tmImporter = new TranslationMemoryImporter(_translationMemory.LanguageDirection)
+                {
+                    ImportSettings = importSettings
+                };
 
-				foreach (var xliffFile in xliffFiles)
-				{
-					tmFileProgress.ProcessingFileNumber++;
-					tmImporter.Import(xliffFile);
-					_eventAggregator?.PublishEvent(tmFileProgress);
-				}
-			}
-			catch (Exception ex)
-			{
-				_logger.Error(ex);
-			}
-		}
+                var folderPath = Path.Combine(sdlXliffFolderPath, targetLanguage.Name);
+                if (!Directory.Exists(folderPath))
+                    return;
+                var xliffFiles = Directory.GetFiles(folderPath);
+                var tmFileProgress = new TmFilesProgress
+                {
+                    TotalFilesNumber = xliffFiles.Length,
+                    TargetLanguage = targetLanguage
+                };
 
-		/// <summary>
-		/// Create temporary bilingual files (sdlxliff) used to import the information in Studio translation memories
-		/// </summary>
-		private string CreateTemporarySdlXliffs(List<string> sourceTmFiles, List<string> targetTmFiles, CultureInfo targetCultureInfo, PackageModel package)
-		{
-			var pathToExtractFolder = CreateFolderToExtract(Path.GetDirectoryName(targetTmFiles[0]));
-			var targetLang = LanguageRegistryApi.Instance.GetLanguage(targetCultureInfo.Name);
-			var projectInfo = new ProjectInfo
-			{
-				Name = $"TMExtractProject_{Guid.NewGuid()}",
-				LocalProjectFolder = pathToExtractFolder,
-				SourceLanguage = LanguageRegistryApi.Instance.GetLanguage(package.LanguagePairs[0].SourceLanguage.Name),
-				TargetLanguages = new[] {targetLang} 
-			};
+                foreach (var xliffFile in xliffFiles)
+                {
+                    tmFileProgress.ProcessingFileNumber++;
+                    tmImporter.Import(xliffFile);
+                    _eventAggregator?.PublishEvent(tmFileProgress);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
+        }
 
-			var newProject =
-				new FileBasedProject(projectInfo, new ProjectTemplateReference(package.ProjectTemplate.Uri));
-			newProject.AddFiles(sourceTmFiles.ToArray());
-			var sourceFilesIds = newProject.GetSourceLanguageFiles().GetIds();
-			newProject.SetFileRole(sourceFilesIds, FileRole.Translatable);
+        /// <summary>
+        /// Create temporary bilingual files (sdlxliff) used to import the information in Studio translation memories
+        /// </summary>
+        private string CreateTemporarySdlXliffs(List<string> sourceTmFiles, List<string> targetTmFiles, CultureInfo targetCultureInfo, PackageModel package)
+        {
+            var pathToExtractFolder = CreateFolderToExtract(Path.GetDirectoryName(targetTmFiles[0]));
+            var targetLang = LanguageRegistryApi.Instance.GetLanguage(targetCultureInfo.Name);
+            var projectInfo = new ProjectInfo
+            {
+                Name = $"TMExtractProject_{Guid.NewGuid()}",
+                LocalProjectFolder = pathToExtractFolder,
+                SourceLanguage = LanguageRegistryApi.Instance.GetLanguage(package.LanguagePairs[0].SourceLanguage.Name),
+                TargetLanguages = new[] { targetLang }
+            };
 
-			var targetTms = newProject.AddFiles(targetTmFiles.ToArray());
-			newProject.RunAutomaticTask(targetTms?.GetIds(), AutomaticTaskTemplateIds.Scan);
+            var newProject =
+                new FileBasedProject(projectInfo, new ProjectTemplateReference(package.ProjectTemplate.Uri));
+            newProject.AddFiles(sourceTmFiles.ToArray());
+            var sourceFilesIds = newProject.GetSourceLanguageFiles().GetIds();
+            newProject.SetFileRole(sourceFilesIds, FileRole.Translatable);
 
-			var xliffCreationProgress = new XliffCreationProgress
-			{
-				BatchTaskIds = new List<string>(), TargetLanguage = targetLang.CultureInfo,TotalFileNumber = sourceTmFiles.Count
-			};
+            var targetTms = newProject.AddFiles(targetTmFiles.ToArray());
+            newProject.RunAutomaticTask(targetTms?.GetIds(), AutomaticTaskTemplateIds.Scan);
 
-			var taskSequence = newProject.RunAutomaticTasks(targetTms?.GetIds(),
-				new[]
-				{
-					AutomaticTaskTemplateIds.ConvertToTranslatableFormat,
-					AutomaticTaskTemplateIds.CopyToTargetLanguages
-				}, (sender, args) =>
-				{
-					xliffCreationProgress.BatchTaskIds.Clear();
-					xliffCreationProgress.BatchTaskIds.AddRange(args.TaskTemplateIds);
-					xliffCreationProgress.Progress = args.PercentComplete;
-					_eventAggregator.PublishEvent(xliffCreationProgress);
-				}, (sender, args) => { });
+            var xliffCreationProgress = new XliffCreationProgress
+            {
+                BatchTaskIds = new List<string>(),
+                TargetLanguage = targetLang.CultureInfo,
+                TotalFileNumber = sourceTmFiles.Count
+            };
 
-			if (taskSequence.Status != TaskStatus.Failed) return pathToExtractFolder;
+            var taskSequence = newProject.RunAutomaticTasks(targetTms?.GetIds(),
+                new[]
+                {
+                    AutomaticTaskTemplateIds.ConvertToTranslatableFormat,
+                    AutomaticTaskTemplateIds.CopyToTargetLanguages
+                }, (sender, args) =>
+                {
+                    xliffCreationProgress.BatchTaskIds.Clear();
+                    xliffCreationProgress.BatchTaskIds.AddRange(args.TaskTemplateIds);
+                    xliffCreationProgress.Progress = args.PercentComplete;
+                    _eventAggregator.PublishEvent(xliffCreationProgress);
+                }, (sender, args) => { });
 
-			foreach (var subTask in taskSequence.SubTasks)
-			{
-				_logger.Error($"Name:{subTask.Name}");
+            if (taskSequence.Status != TaskStatus.Failed)
+                return pathToExtractFolder;
 
-				foreach (var messages in subTask.Messages)
-				{
-					_logger.Error($"Exception: {messages?.Exception}");
-					_logger.Error($"Message: {messages?.Message}");
-				}
-			}
+            foreach (var subTask in taskSequence.SubTasks)
+            {
+                _logger.Error($"Name:{subTask.Name}");
 
-			return string.Empty;
-		}
+                foreach (var messages in subTask.Messages)
+                {
+                    _logger.Error($"Exception: {messages?.Exception}");
+                    _logger.Error($"Message: {messages?.Message}");
+                }
+            }
 
-		/// <summary>
-		/// Create temporary folder for TM import
-		/// </summary>
-		private string CreateFolderToExtract(string pathToTemp)
-		{
-			var pathToExtractFolder = Path.Combine(pathToTemp, "TmExtract",Guid.NewGuid().ToString());
+            return string.Empty;
+        }
 
-			try
-			{
-				Directory.CreateDirectory(pathToExtractFolder);
-			}
-			catch (Exception e)
-			{
-				_logger.Error(e);
-			}
-			_logger.Info($"--> Temp Path folder for Studio project where we extract the tms: {pathToExtractFolder}");
+        /// <summary>
+        /// Create temporary folder for TM import
+        /// </summary>
+        private string CreateFolderToExtract(string pathToTemp)
+        {
+            var pathToExtractFolder = Path.Combine(pathToTemp, "TmExtract", Guid.NewGuid().ToString());
 
-			return pathToExtractFolder;
-		}
-	}
+            try
+            {
+                Directory.CreateDirectory(pathToExtractFolder);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+            }
+            _logger.Info($"--> Temp Path folder for Studio project where we extract the tms: {pathToExtractFolder}");
+
+            return pathToExtractFolder;
+        }
+    }
 }
