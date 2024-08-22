@@ -1,46 +1,23 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>11.0.3344.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}</ProjectGuid>
+    <TargetFramework>net48</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.Community.StarTransit</RootNamespace>
-    <AssemblyName>Sdl.Community.StarTransit</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <OldToolsVersion>2.0</OldToolsVersion>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup>
     <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
     <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
     <OutputPath>bin\debug</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
     <OutputPath>bin\release</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
@@ -50,17 +27,12 @@
     <Reference Include="NLog">
       <HintPath>$(TradosFolder)\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization.Async">
       <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Core.Settings">
-      <HintPath>$(TradosFolder)\Sdl.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
@@ -104,136 +76,28 @@
     <Reference Include="Sdl.ProjectAutomation.FileBased">
       <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.ProjectAutomation.Settings">
-      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Settings.dll</HintPath>
-    </Reference>
     <Reference Include="Sdl.Versioning">
       <HintPath>$(TradosFolder)\Sdl.Versioning.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
-    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Reactive">
       <HintPath>$(TradosFolder)\System.Reactive.dll</HintPath>
     </Reference>
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>4.5.2</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.XML" />
-    <Reference Include="WindowsBase" />
-    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Behaviours\MouseDownBehaviour.cs" />
-    <Compile Include="Command\AwaitableCommand.cs" />
-    <Compile Include="Command\CommandHandler.cs" />
-    <Compile Include="Command\DelegateCommand.cs" />
-    <Compile Include="Command\MouseDownCommand.cs" />
-    <Compile Include="Command\RelayCommand.cs" />
-    <Compile Include="Converter\ImageToBitmapImageConverter.cs" />
-    <Compile Include="Converter\InvertableBooleanToVisibilityConverter.cs" />
-    <Compile Include="Converter\NullVisibilityConverter.cs" />
-    <Compile Include="Extension\EventsExtensions.cs" />
-    <Compile Include="FileType\FiletypeDetails.cs" />
-    <Compile Include="FileType\TransitFilterComponentBuilder.cs" />
-    <Compile Include="Helpers\FolderSelectDialog.cs" />
-    <Compile Include="Helpers\Reflector.cs" />
-    <Compile Include="Helpers\SelectedPageEventArgs.cs" />
-    <Compile Include="Interface\IAsyncCommand.cs" />
-    <Compile Include="Interface\IDialogService.cs" />
-    <Compile Include="Interface\IProgressHeader.cs" />
-    <Compile Include="Interface\IProgressHeaderItem.cs" />
-    <Compile Include="Interface\IRaiseCanExecuteChanged.cs" />
-    <Compile Include="Interface\IStudioService.cs" />
-    <Compile Include="Interface\IWizardModel.cs" />
-    <Compile Include="Model\BaseModel.cs" />
-    <Compile Include="Model\TemplateOptions.cs" />
-    <Compile Include="Model\TemplateTmDetails.cs" />
-    <Compile Include="Model\TmSummaryOptions.cs" />
-    <Compile Include="Model\WizardModel.cs" />
-    <Compile Include="PluginResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PluginResources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\PluginProperties.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service\AsyncTaskWatcherService.cs" />
-    <Compile Include="Service\DialogService.cs" />
-    <Compile Include="Service\StudioService.cs" />
-    <Compile Include="StarTransitRibbon.cs" />
-    <Compile Include="TellMe\DocumentationAction.cs" />
-    <Compile Include="TellMe\CommunitySupportAction.cs" />
-    <Compile Include="TellMe\OfficialWebSiteAction.cs" />
-    <Compile Include="TellMe\SettingsAction.cs" />
-    <Compile Include="TellMe\SourceCodeAction.cs" />
-    <Compile Include="TellMe\TellMeProvider.cs" />
-    <Compile Include="TellMe\View\WarningSettingsView.xaml.cs">
-      <DependentUpon>WarningSettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="TransitApplicationInitializer.cs" />
-    <Compile Include="UiHelpers\WindowsControl.xaml.cs">
-      <DependentUpon>WindowsControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UiHelpers\WizardProgressHeader.xaml.cs">
-      <DependentUpon>WizardProgressHeader.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="VersionInfo.cs" />
-    <Compile Include="ViewModel\CreateProjectViewModel.cs" />
-    <Compile Include="ViewModel\PackageDetailsViewModel.cs" />
-    <Compile Include="ViewModel\ReturnPackageWindowViewModel.cs" />
-    <Compile Include="ViewModel\TmsViewModel.cs" />
-    <Compile Include="ViewModel\WizardViewModel.cs" />
-    <Compile Include="ViewModel\WizardViewModelBase.cs" />
-    <Compile Include="View\CreateProject.xaml.cs">
-      <DependentUpon>CreateProject.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\ImportWizard.xaml.cs">
-      <DependentUpon>ImportWizard.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\PackageDetails.xaml.cs">
-      <DependentUpon>PackageDetails.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\ReturnPackageWindow.xaml.cs">
-      <DependentUpon>ReturnPackageWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Tms.xaml.cs">
-      <DependentUpon>Tms.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\StarTransit.ico" />
-    <None Include="Resources\TellmeDocumentation.ico" />
-    <None Include="Resources\SourceCode.ico" />
-    <None Include="Resources\Settings.ico" />
     <Resource Include="Resources\ShowPreviewAction.ico" />
     <Resource Include="Resources\trash-alt.png" />
     <Resource Include="Resources\translationmemory.ico" />
     <Resource Include="Resources\user.ico" />
-    <None Include="Resources\help_icon.ico" />
-    <None Include="Resources\Download.ico" />
-    <None Include="Resources\ForumIcon.ico" />
     <Resource Include="Resources\arrow_right_blue.png" />
     <Resource Include="Resources\AutomatedTranslation.ico" />
     <Content Include="Resources\CreateProjectPackage_Icon.ico" />
     <Resource Include="Resources\delete.ico" />
     <Resource Include="Resources\open_package.ico" />
-    <None Include="Resources\Question.ico" />
     <Resource Include="Resources\ProjectTemplates.ico" />
     <Resource Include="Resources\Information.png" />
     <Content Include="Resources\return.ico" />
     <Resource Include="Resources\return_package.ico" />
-    <None Include="Resources\opensourceimage.ico" />
-    <EmbeddedResource Include="PluginResources.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -241,9 +105,6 @@
     <Resource Include="Resources\icon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="key.snk" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Sdl.Core.PluginFramework">
@@ -254,57 +115,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sdl.Community.StarTransit.Shared\Sdl.Community.StarTransit.Shared.csproj">
-      <Project>{80113c78-7889-4d14-a233-48de24de11a2}</Project>
-      <Name>Sdl.Community.StarTransit.Shared</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <Page Include="TellMe\View\WarningSettingsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UiHelpers\Buttons.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UiHelpers\General.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UiHelpers\WindowsBorder.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UiHelpers\WindowsControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UiHelpers\WizardProgressHeader.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\CreateProject.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\ImportWizard.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\PackageDetails.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\ReturnPackageWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Tms.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <ProjectReference Include="..\Sdl.Community.StarTransit.Shared\Sdl.Community.StarTransit.Shared.csproj" />
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
@@ -315,5 +126,4 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
