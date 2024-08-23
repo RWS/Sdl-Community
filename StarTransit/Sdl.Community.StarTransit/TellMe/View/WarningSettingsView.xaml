@@ -7,7 +7,7 @@
 		mc:Ignorable="d"
 		Title="TellMe Warning"
 		Width="470"
-		Height="240"
+		Height="280"
 		ResizeMode="NoResize"
 		WindowStyle="None"
 		WindowStartupLocation="CenterScreen"

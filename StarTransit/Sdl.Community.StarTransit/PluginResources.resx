@@ -371,10 +371,13 @@ The selected Transit package doesn't contain any Translation Memories.</value>
   <data name="TellMe_WarningMessage" xml:space="preserve">
     <value>To engage with StarTransit, follow these steps:
 
-1.    Via the Projects View, go to Home tab
-2.    Locate the StarTransit Group
+1.Via the Projects View, go to Home tab
+2.Locate the StarTransit Group
 
-Tip: You can assign shortcuts via; File - Options - Keyboard Shortcuts - StarTransit</value>
+Note: Ensure the Transit File Type has been installed by going to:
+File – Options – File Types – click on: “Additional installed File Types exist”
+
+Tip: You can assign shortcuts via: File – Options – Keyboard Shortcuts – StarTransit</value>
   </data>
   <data name="Information" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Information.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
