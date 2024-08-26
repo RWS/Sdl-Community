@@ -44,6 +44,20 @@
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
 
+            <Style TargetType="TextBlock"
+                   x:Key="ValidationTextBlockStyle"
+                   BasedOn="{StaticResource Sdl.TextBlock.ErrorTitleStyle}">
+                <Setter Property="Visibility"
+                        Value="Visible" />
+                <Style.Triggers>
+                    <Trigger Property="Text"
+                             Value="{x:Null}">
+                        <Setter Property="Visibility"
+                                Value="Collapsed" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
             <Style TargetType="Image">
                 <Setter Property="RenderOptions.BitmapScalingMode"
                         Value="HighQuality" />
@@ -91,22 +105,8 @@
             <TextBlock Name="ApiKeyValidationBlock"
                        VerticalAlignment="Center"
                        Margin="10,0,0,0"
-                       Text="{Binding ApiKeyValidationMessage, Mode=TwoWay}">
-                <TextBlock.Style>
-                    <Style TargetType="TextBlock"
-                           BasedOn="{StaticResource Sdl.TextBlock.ErrorTitleStyle}">
-                        <Setter Property="Visibility"
-                                Value="Visible" />
-                        <Style.Triggers>
-                            <Trigger Property="Text"
-                                     Value="{x:Null}">
-                                <Setter Property="Visibility"
-                                        Value="Collapsed" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
+                       Style="{StaticResource ValidationTextBlockStyle}"
+                       Text="{Binding ApiKeyValidationMessage, Mode=TwoWay}"/>
             <TextBlock Margin="10,0,0,5"
                        Visibility="{Binding ApiKeyBoxEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
                        FontSize="12"> This API Key will then be used in all projects where you will be using the DeepL plug-in.</TextBlock>
@@ -272,7 +272,7 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <DockPanel LastChildFill="False"
+        <DockPanel LastChildFill="True"
                    Grid.Row="4"
                    DockPanel.Dock="Bottom"
                    Margin="10 5 10 5">
@@ -296,6 +296,11 @@
                     Click="Ok_Click"
                     DockPanel.Dock="Right"
                     Cursor="Hand" />
+            <TextBlock Text="{Binding ValidationMessages, Mode=TwoWay}"
+                       HorizontalAlignment="Center"
+                       TextWrapping="Wrap"
+                       Style="{StaticResource ValidationTextBlockStyle}"
+                       DockPanel.Dock="Left" />
         </DockPanel>
     </Grid>
 </Window>
