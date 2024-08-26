@@ -6,9 +6,11 @@ namespace Sdl.Community.DeepLMTProvider.Model
 {
 	public enum Formality
 	{
-		Default = 0,
-		Less = 1,
-		More = 2,
+		Default,
+		Less,
+		More,
+        Prefer_Less,
+        Prefer_More
 	}
 
 	public static class FormalityEnumHelper

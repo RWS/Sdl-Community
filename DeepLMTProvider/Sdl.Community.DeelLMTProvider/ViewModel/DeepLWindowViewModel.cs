@@ -149,7 +149,11 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             {
                 (var success, glossaries, var message) =
                     await GlossaryClient.GetGlossaries(DeepLTranslationProviderClient.ApiKey);
-                if (!success) HandleError(message);
+                if (!success)
+                {
+                    HandleError(message);
+                    glossaries = [];
+                }
             }
 
             glossaries?.Add(GlossaryInfo.NoGlossary);
