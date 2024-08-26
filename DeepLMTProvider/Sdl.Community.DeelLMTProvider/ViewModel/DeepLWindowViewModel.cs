@@ -27,6 +27,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private bool _sendPlainText;
         private TagFormat _tagType;
         private string _apiVersion;
+        private string _validationMessages;
 
         public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, IMessageService messageService)
         {
@@ -143,13 +144,18 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         public async void LoadLanguagePairSettings()
         {
+            ValidationMessages = null;
             List<GlossaryInfo> glossaries = [];
 
             if (DeepLTranslationProviderClient.IsApiKeyValidResponse.IsSuccessStatusCode)
             {
                 (var success, glossaries, var message) =
                     await GlossaryClient.GetGlossaries(DeepLTranslationProviderClient.ApiKey);
-                if (!success) HandleError(message);
+                if (!success)
+                {
+                    HandleError(message);
+                    glossaries = [];
+                }
             }
 
             glossaries?.Add(GlossaryInfo.NoGlossary);
@@ -213,7 +219,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         private void HandleError(string message, [CallerMemberName] string failingMethod = null)
         {
-            MessageService.ShowWarning(message, failingMethod);
+            ValidationMessages = message;
         }
 
         private void OnPasswordChanged(object sender, EventArgs e)
@@ -260,6 +266,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
                 SetField(ref _apiVersion, value);
                 OnPasswordChanged(null, null);
             }
+        }
+
+        public string ValidationMessages
+        {
+            get => _validationMessages;
+            set => SetField(ref _validationMessages, value);
         }
 
         private void SetApiKeyValidityLabel()
