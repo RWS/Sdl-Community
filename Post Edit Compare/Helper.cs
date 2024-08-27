@@ -36,7 +36,9 @@ namespace Sdl.Community.PostEdit.Versions
         public static string GetStringFromDateTime(DateTime dateTime) => dateTime.ToString(CultureInfo.InvariantCulture);
 
         public static DateTime GetDateTimeFromString(string strDateTime) =>
-            DateTime.TryParse(strDateTime, out var dateTime) ? dateTime : Common.DateNull;
+            DateTime.TryParse(strDateTime, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dateTime)
+                ? dateTime
+                : Common.DateNull;
 
         public static List<PairedFiles.PairedFile> GetPairedFiles(VersionDetails versionDetails,Project project)
 		{

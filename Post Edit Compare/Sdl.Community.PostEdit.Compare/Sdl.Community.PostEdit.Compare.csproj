@@ -42,6 +42,11 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="WinFormsUI\**" />
+    <EmbeddedResource Remove="WinFormsUI\**" />
+    <None Remove="WinFormsUI\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="PostEdit.Compare.WinFormsUI.Docking, Version=2.3.1.25349, Culture=neutral, PublicKeyToken=8e8d386f68ddc844, processorArchitecture=MSIL">
       <HintPath>3rd party\PostEdit.Compare.WinFormsUI.Docking.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
@@ -58,7 +63,6 @@
   <ItemGroup>
     <Content Include="3rd party\PostEdit.Compare.WinFormsUI.Docking.dll" />
     <Content Include="PostEdit.Compare.ico" />
-    <Content Include="WinFormsUI\PostEdit.Compare.WinFormsUI.Docking.dll" />
     <EmbeddedResource Include="Reports\EventLog.StyleSheet.01.xslt">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
