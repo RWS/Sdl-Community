@@ -20,6 +20,7 @@ using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.ProjectAutomation.FileBased.Reports.Operations;
+using Application = System.Windows.Application;
 using MessageBox = System.Windows.MessageBox;
 using Task = System.Threading.Tasks.Task;
 
@@ -69,7 +70,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 		private bool _cancelIsVisible;
 
 		public StudioViewsFilesSplitViewModel(Window owner, FileBasedProject project, List<ProjectFile> selectedFiles, ProjectFileService projectFileService,
-			FilterItemService filterItemService, SdlxliffMerger sdlxliffMerger, SdlxliffExporter sdlxliffExporter, 
+			FilterItemService filterItemService, SdlxliffMerger sdlxliffMerger, SdlxliffExporter sdlxliffExporter,
 			SdlxliffReader sdlxliffReader, WordCountProvider wordCountProvider)
 		{
 			_owner = owner;
@@ -504,38 +505,27 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 			try
 			{
-				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
-					new Action(delegate
-					{
-						ProgressIsVisible = true;
-					}));
+
+				ProgressIsVisible = true;
 
 
 				ProcessingDateTime = DateTime.Now;
 				var logFileName = "StudioViews_" + "Split" + "_" + _projectFileService.GetDateTimeToFilePartString(ProcessingDateTime) + ".log";
 				LogFilePath = Path.Combine(ExportPath, logFileName);
 
-				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
-					new Action(delegate
-					{
-						ProcessingMessage = "Identify segmentation markers...";
-						ProcessingFile = "...";
-						ProcessingProgressMessage = "...";
-						ProcessingCurrentProgress = 0;
-						ProcessingIsIndeterminate = true;
-					}));
+				ProcessingMessage = "Identify segmentation markers...";
+				ProcessingFile = "...";
+				ProcessingProgressMessage = "...";
+				ProcessingCurrentProgress = 0;
+				ProcessingIsIndeterminate = true;
 
 				if (!HasSegmentationMarkers())
 				{
-					_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
-						new Action(delegate
-						{
-							ProcessingMessage = "Applying segmentation markers...";
-							ProcessingFile = "...";
-							ProcessingProgressMessage = "...";
-							ProcessingCurrentProgress = 0;
-							ProcessingIsIndeterminate = true;
-						}));
+					ProcessingMessage = "Applying segmentation markers...";
+					ProcessingFile = "...";
+					ProcessingProgressMessage = "...";
+					ProcessingCurrentProgress = 0;
+					ProcessingIsIndeterminate = true;
 
 					// needed to add segmentation markers to the files
 					RunPretranslateWithEmptyTm(_project, _selectedFiles.FirstOrDefault()?.Language);
@@ -558,11 +548,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 			{
 				DialogResult = DialogResult.Abort;
 
-				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
-					new Action(delegate
-					{
-						ProgressIsVisible = false;
-					}));
+				ProgressIsVisible = false;
 
 				MessageBox.Show(e.Message, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Error);
 			}
@@ -622,43 +608,39 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 		private void WriteLogFile(ExportResult exportResult, string logFilePath)
 		{
-			_owner.Dispatcher.Invoke(
-				delegate
+			using (var sr = new StreamWriter(logFilePath, false, Encoding.UTF8))
+			{
+				sr.WriteLine(PluginResources.Plugin_Name);
+				sr.WriteLine(PluginResources.LogFile_Title_Task_Split_Files);
+				sr.WriteLine(PluginResources.LogFile_Label_Start_Processing, _projectFileService.GetDateTimeToString(ProcessingDateTime));
+
+				sr.WriteLine(string.Empty);
+				sr.WriteLine(PluginResources.LogFile_Tab_Label_Input_Files_Number, exportResult.InputFiles.Count);
+				var fileIndex = 0;
+				foreach (var filePath in exportResult.InputFiles)
 				{
-					using (var sr = new StreamWriter(logFilePath, false, Encoding.UTF8))
-					{
-						sr.WriteLine(PluginResources.Plugin_Name);
-						sr.WriteLine(PluginResources.LogFile_Title_Task_Split_Files);
-						sr.WriteLine(PluginResources.LogFile_Label_Start_Processing, _projectFileService.GetDateTimeToString(ProcessingDateTime));
+					fileIndex++;
+					sr.WriteLine(PluginResources.LogFile_Tab_Label_File_Number_Path, fileIndex, filePath);
+				}
 
-						sr.WriteLine(string.Empty);
-						sr.WriteLine(PluginResources.LogFile_Tab_Label_Input_Files_Number, exportResult.InputFiles.Count);
-						var fileIndex = 0;
-						foreach (var filePath in exportResult.InputFiles)
-						{
-							fileIndex++;
-							sr.WriteLine(PluginResources.LogFile_Tab_Label_File_Number_Path, fileIndex, filePath);
-						}
+				sr.WriteLine(string.Empty);
+				sr.WriteLine(PluginResources.LogFile_Label_Output_Files_Number, exportResult.OutputFiles.Count);
+				fileIndex = 0;
+				foreach (var file in exportResult.OutputFiles)
+				{
+					fileIndex++;
+					sr.WriteLine(PluginResources.LogFile_Tab_Label_File_Number_Path, fileIndex, file.FilePath);
+					sr.WriteLine(PluginResources.Message_Tab_Tab_Segments_Number, file.SegmentCount);
+					sr.WriteLine(PluginResources.Message_Tab_Tab_Words_Number, file.WordCount);
+					sr.WriteLine(string.Empty);
+				}
 
-						sr.WriteLine(string.Empty);
-						sr.WriteLine(PluginResources.LogFile_Label_Output_Files_Number, exportResult.OutputFiles.Count);
-						fileIndex = 0;
-						foreach (var file in exportResult.OutputFiles)
-						{
-							fileIndex++;
-							sr.WriteLine(PluginResources.LogFile_Tab_Label_File_Number_Path, fileIndex, file.FilePath);
-							sr.WriteLine(PluginResources.Message_Tab_Tab_Segments_Number, file.SegmentCount);
-							sr.WriteLine(PluginResources.Message_Tab_Tab_Words_Number, file.WordCount);
-							sr.WriteLine(string.Empty);
-						}
+				sr.WriteLine(string.Empty);
+				sr.WriteLine(PluginResources.LogFile_Label_End_Processing, _projectFileService.GetDateTimeToString(DateTime.Now));
 
-						sr.WriteLine(string.Empty);
-						sr.WriteLine(PluginResources.LogFile_Label_End_Processing, _projectFileService.GetDateTimeToString(DateTime.Now));
-
-						sr.Flush();
-						sr.Close();
-					}
-				});
+				sr.Flush();
+				sr.Close();
+			}
 		}
 
 		private void Reset(object paramter)
@@ -693,15 +675,11 @@ namespace Sdl.Community.StudioViews.ViewModel
 				var filePathOutput =
 					_projectFileService.GetUniqueFileName(Path.Combine(fileDirectory, "StudioViewsFile.sdlxliff"), string.Empty);
 
-				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
-					new Action(delegate
-					{
-						ProcessingMessage = "Merging selected files...";
-						ProcessingFile = Path.GetFileName(filePathOutput);
-						ProcessingProgressMessage = "...";
-						ProcessingCurrentProgress = 0;
-						ProcessingIsIndeterminate = false;
-					}));
+				ProcessingMessage = "Merging selected files...";
+				ProcessingFile = Path.GetFileName(filePathOutput);
+				ProcessingProgressMessage = "...";
+				ProcessingCurrentProgress = 0;
+				ProcessingIsIndeterminate = false;
 
 				var mergedFile = _sdlxliffMerger.MergeFiles(files, filePathOutput, false, ProgressLogger);
 				if (mergedFile)
@@ -717,32 +695,24 @@ namespace Sdl.Community.StudioViews.ViewModel
 			}
 
 
-			_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
-				new Action(delegate
-				{
-					ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, 1, 1);
-					ProcessingFile = Path.GetFileName(filePathInput);
-					ProcessingProgressMessage = "Reading segments";
-					ProcessingCurrentProgress = 0;
-					ProcessingIsIndeterminate = true;
-				}));
+			ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, 1, 1);
+			ProcessingFile = Path.GetFileName(filePathInput);
+			ProcessingProgressMessage = "Reading segments";
+			ProcessingCurrentProgress = 0;
+			ProcessingIsIndeterminate = true;
 
 
 			var segmentPairs = _sdlxliffReader.GetSegmentPairs(filePathInput);
 
-			_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
-				new Action(delegate
-				{
-					ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, 1, 1);
-					ProcessingFile = Path.GetFileName(filePathInput);
-					ProcessingProgressMessage = "Generating segment word counts";
-					ProcessingCurrentProgress = 0;
-					ProcessingIsIndeterminate = false;
-				}));
+			ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, 1, 1);
+			ProcessingFile = Path.GetFileName(filePathInput);
+			ProcessingProgressMessage = "Generating segment word counts";
+			ProcessingCurrentProgress = 0;
+			ProcessingIsIndeterminate = false;
 
 
 			var sourceLanguage = _selectedFiles.FirstOrDefault()?.SourceFile?.Language?.CultureInfo
-			                     ?? _project.GetProjectInfo().SourceLanguage.CultureInfo;
+								 ?? _project.GetProjectInfo().SourceLanguage.CultureInfo;
 
 			var max = segmentPairs.Count;
 			var lastProgress = 0;
@@ -754,12 +724,8 @@ namespace Sdl.Community.StudioViews.ViewModel
 				var currentProgress = (int)((double)index / max * 100); // Calculate current progress percentage
 				if (currentProgress >= lastProgress + 1)
 				{
-					_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
-						new Action(delegate
-						{
-							ProcessingProgressMessage = "Generating segment word counts";
-							ProcessingCurrentProgress = currentProgress;
-						}));
+					ProcessingProgressMessage = "Generating segment word counts";
+					ProcessingCurrentProgress = currentProgress;
 					lastProgress = currentProgress; // Update lastProgress
 				}
 			}
@@ -779,15 +745,11 @@ namespace Sdl.Community.StudioViews.ViewModel
 				fileIndex++;
 				var filePathOutput = GetFilePathOutput(FileName, ExportPath, fileIndex);
 
-				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
-				new Action(delegate
-				{
-					ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, fileIndex, segmentPairSplits.Count());
-					ProcessingFile = Path.GetFileName(filePathOutput);
-					ProcessingProgressMessage = "Exporting segments...";
-					ProcessingCurrentProgress = 0;
-					ProcessingIsIndeterminate = false;
-				}));
+				ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, fileIndex, segmentPairSplits.Count());
+				ProcessingFile = Path.GetFileName(filePathOutput);
+				ProcessingProgressMessage = "Exporting segments...";
+				ProcessingCurrentProgress = 0;
+				ProcessingIsIndeterminate = false;
 
 				var outputFile = _sdlxliffExporter.ExportFile(segmentPairSplit, filePathInput, filePathOutput,
 					_wordCountProvider, ProgressLogger);
@@ -810,11 +772,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 				exportResult.OutputFiles.Sum(a => a.SegmentCount), fileIndex);
 
 
-			_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
-				new Action(delegate
-				{
-					ProgressIsVisible = false;
-				}));
+			ProgressIsVisible = false;
 
 			return await Task.FromResult(exportResult);
 		}
@@ -910,26 +868,13 @@ namespace Sdl.Community.StudioViews.ViewModel
 			var currentProgress = (int)((double)min / max * 100);
 			if (currentProgress > ProcessingCurrentProgress)
 			{
-				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
-					new Action(delegate
-					{
-						ProcessingIsIndeterminate = false;
-						ProcessingProgressMessage = message;
-						ProcessingCurrentProgress = currentProgress;
-					}));
+				ProcessingIsIndeterminate = false;
+				ProcessingProgressMessage = message;
+				ProcessingCurrentProgress = currentProgress;
 			}
 		}
 
-		//private int GetPercentageValue(int index, int total)
-		//{
-		//	var currentProgress = (int)((double)index / max * 100);
-		//	var currentIndex = Convert.ToDouble(index);
-		//	var totalItems = Convert.ToDouble(total);
-		//	var percentage = currentIndex / totalItems * 100;
 
-		//	var percentageValue = int.Parse(Math.Truncate(percentage).ToString(CultureInfo.InvariantCulture));
-		//	return percentageValue;
-		//}
 
 		private void AttemptToCloseWindow()
 		{

@@ -348,18 +348,15 @@ namespace Sdl.Community.StudioViews.ViewModel
 		{
 			try
 			{
-				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
-					new Action(delegate
-					{
-						ProgressIsVisible = true;
-					}));
+
+				ProgressIsVisible = true;
 
 				ProcessingDateTime = DateTime.Now;
 				var task = Task.Run(ImportFiles);
 				task.ContinueWith(t =>
 				{
 					ExportPath = Path.GetDirectoryName(task.Result.FirstOrDefault()?.FilePath);
-					
+
 					var logFileName = "StudioViews_" + "Import" + "_" + _projectFileService.GetDateTimeToFilePartString(ProcessingDateTime) + ".log";
 					LogFilePath = Path.Combine(ExportPath, logFileName);
 
@@ -415,11 +412,8 @@ namespace Sdl.Community.StudioViews.ViewModel
 			{
 				DialogResult = DialogResult.Abort;
 
-				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
-					new Action(delegate
-					{
-						ProgressIsVisible = false;
-					}));
+
+				ProgressIsVisible = false;
 
 				MessageBox.Show(e.Message, PluginResources.Plugin_Name, MessageBoxButton.OK, MessageBoxImage.Error);
 			}
@@ -427,63 +421,60 @@ namespace Sdl.Community.StudioViews.ViewModel
 
 		private void WriteLogFile(IReadOnlyCollection<ImportResult> importResults, List<SystemFileInfo> files, string logFilePath)
 		{
-			_owner.Dispatcher.Invoke(
-				delegate
+
+			using (var sr = new StreamWriter(logFilePath, false, Encoding.UTF8))
+			{
+				sr.WriteLine(PluginResources.Plugin_Name);
+				sr.WriteLine(PluginResources.LogFile_Title_Task_Import_Files);
+				sr.WriteLine(PluginResources.LogFile_Label_Start_Processing, _projectFileService.GetDateTimeToString(ProcessingDateTime));
+
+				if (SelectedExcludeFilterItems.Count > 0)
 				{
-					using (var sr = new StreamWriter(logFilePath, false, Encoding.UTF8))
+					sr.WriteLine(string.Empty);
+					var filterItems = _filterItemService.GetFilterItemsText(SelectedExcludeFilterItems.ToList());
+					sr.WriteLine(PluginResources.LogFile_Label_Exclude_Filters + filterItems);
+				}
+
+				sr.WriteLine(string.Empty);
+				sr.WriteLine(PluginResources.LogFile_Label_Import_Files, files.Count);
+				var fileIndex = 0;
+				foreach (var fileInfo in files)
+				{
+					fileIndex++;
+					sr.WriteLine(PluginResources.LogFile_Tab_Label_File_Number_Path, fileIndex, fileInfo.FullPath);
+				}
+
+				sr.WriteLine(string.Empty);
+				sr.WriteLine(PluginResources.LogFile_Label_Updated_Files, importResults.Count(a => a.UpdatedSegments > 0));
+				sr.WriteLine(PluginResources.LogFile_Label_Updated_Segments, importResults.Sum(importResult => importResult.UpdatedSegments));
+				sr.WriteLine(string.Empty);
+
+				sr.WriteLine(PluginResources.LogFile_Label_Selected_Files, importResults.Count);
+				fileIndex = 0;
+				foreach (var result in importResults)
+				{
+					fileIndex++;
+					sr.WriteLine(PluginResources.LogFile_Label_File_Number_Path, fileIndex, result.FilePath);
+					sr.WriteLine(PluginResources.LogFile_Label_Tab_Success + result.Success);
+					sr.WriteLine(PluginResources.LogFile_Label_Tab_Updated + (result.UpdatedSegments > 0
+						? PluginResources.Label_True : PluginResources.Label_False));
+					if (result.UpdatedSegments > 0)
 					{
-						sr.WriteLine(PluginResources.Plugin_Name);
-						sr.WriteLine(PluginResources.LogFile_Title_Task_Import_Files);
-						sr.WriteLine(PluginResources.LogFile_Label_Start_Processing, _projectFileService.GetDateTimeToString(ProcessingDateTime));
-
-						if (SelectedExcludeFilterItems.Count > 0)
-						{
-							sr.WriteLine(string.Empty);
-							var filterItems = _filterItemService.GetFilterItemsText(SelectedExcludeFilterItems.ToList());
-							sr.WriteLine(PluginResources.LogFile_Label_Exclude_Filters + filterItems);
-						}
-
-						sr.WriteLine(string.Empty);
-						sr.WriteLine(PluginResources.LogFile_Label_Import_Files, files.Count);
-						var fileIndex = 0;
-						foreach (var fileInfo in files)
-						{
-							fileIndex++;
-							sr.WriteLine(PluginResources.LogFile_Tab_Label_File_Number_Path, fileIndex, fileInfo.FullPath);
-						}
-
-						sr.WriteLine(string.Empty);
-						sr.WriteLine(PluginResources.LogFile_Label_Updated_Files, importResults.Count(a => a.UpdatedSegments > 0));
-						sr.WriteLine(PluginResources.LogFile_Label_Updated_Segments, importResults.Sum(importResult => importResult.UpdatedSegments));
-						sr.WriteLine(string.Empty);
-
-						sr.WriteLine(PluginResources.LogFile_Label_Selected_Files, importResults.Count);
-						fileIndex = 0;
-						foreach (var result in importResults)
-						{
-							fileIndex++;
-							sr.WriteLine(PluginResources.LogFile_Label_File_Number_Path, fileIndex, result.FilePath);
-							sr.WriteLine(PluginResources.LogFile_Label_Tab_Success + result.Success);
-							sr.WriteLine(PluginResources.LogFile_Label_Tab_Updated + (result.UpdatedSegments > 0
-								? PluginResources.Label_True : PluginResources.Label_False));
-							if (result.UpdatedSegments > 0)
-							{
-								sr.WriteLine(PluginResources.LogFile_Label_Tab_Backup + result.BackupFilePath);
-							}
-							sr.WriteLine(PluginResources.Message_Tab_Segments);
-							sr.WriteLine(PluginResources.Message_Tab_Tab_Updated, result.UpdatedSegments);
-							sr.WriteLine(PluginResources.Message_Tab_Tab_Excluded, result.ExcludedSegments);
-
-							sr.WriteLine(string.Empty);
-						}
-
-						sr.WriteLine(string.Empty);
-						sr.WriteLine(PluginResources.LogFile_Label_End_Processing, _projectFileService.GetDateTimeToString(DateTime.Now));
-
-						sr.Flush();
-						sr.Close();
+						sr.WriteLine(PluginResources.LogFile_Label_Tab_Backup + result.BackupFilePath);
 					}
-				});
+					sr.WriteLine(PluginResources.Message_Tab_Segments);
+					sr.WriteLine(PluginResources.Message_Tab_Tab_Updated, result.UpdatedSegments);
+					sr.WriteLine(PluginResources.Message_Tab_Tab_Excluded, result.ExcludedSegments);
+
+					sr.WriteLine(string.Empty);
+				}
+
+				sr.WriteLine(string.Empty);
+				sr.WriteLine(PluginResources.LogFile_Label_End_Processing, _projectFileService.GetDateTimeToString(DateTime.Now));
+
+				sr.Flush();
+				sr.Close();
+			}
 		}
 
 		private void Reset(object paramter)
@@ -643,15 +634,12 @@ namespace Sdl.Community.StudioViews.ViewModel
 			{
 				fileIndex++;
 
-				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
-					new Action(delegate
-					{
-						ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, fileIndex, projectFiles.Count());
-						ProcessingFile = Path.GetFileName(selectedFile.LocalFilePath);
-						ProcessingProgressMessage = "Updating segments...";
-						ProcessingCurrentProgress = 0;
-						ProcessingIsIndeterminate = true;
-					}));
+
+				ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, fileIndex, projectFiles.Count());
+				ProcessingFile = Path.GetFileName(selectedFile.LocalFilePath);
+				ProcessingProgressMessage = "Updating segments...";
+				ProcessingCurrentProgress = 0;
+				ProcessingIsIndeterminate = true;
 
 				var updatedFilePath = Path.GetTempFileName();
 				var importResult = _sdlxliffImporter.UpdateFile(updatedSegmentPairs, excludeFilterIds,
@@ -659,16 +647,13 @@ namespace Sdl.Community.StudioViews.ViewModel
 				importResults.Add(importResult);
 			}
 
-			_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
-				new Action(delegate
-				{
-					ProgressIsVisible = false;
-				}));
+
+			ProgressIsVisible = false;
 
 			return await Task.FromResult(new List<ImportResult>(importResults));
 		}
 
-		private IEnumerable<ProjectFile> GetProjectFiles(IReadOnlyCollection<SegmentPairInfo> updatedSegmentPairs, 
+		private IEnumerable<ProjectFile> GetProjectFiles(IReadOnlyCollection<SegmentPairInfo> updatedSegmentPairs,
 			SdlxliffReader sdlXliffReader)
 		{
 			var projectFiles = new List<ProjectFile>();
@@ -680,15 +665,12 @@ namespace Sdl.Community.StudioViews.ViewModel
 			{
 				fileIndex++;
 
-				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
-					new Action(delegate
-					{
-						ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, fileIndex, targetLanguageFiles.Length);
-						ProcessingFile = Path.GetFileName(targetLanguageFile.LocalFilePath);
-						ProcessingProgressMessage = "Loading project files...";
-						ProcessingCurrentProgress = 0;
-						ProcessingIsIndeterminate = true;
-					}));
+
+				ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, fileIndex, targetLanguageFiles.Length);
+				ProcessingFile = Path.GetFileName(targetLanguageFile.LocalFilePath);
+				ProcessingProgressMessage = "Loading project files...";
+				ProcessingCurrentProgress = 0;
+				ProcessingIsIndeterminate = true;
 
 				if (targetLanguageFile.Role != FileRole.Translatable)
 				{
@@ -701,7 +683,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 					projectFiles.Add(targetLanguageFile);
 				}
 			}
-			
+
 			return projectFiles;
 		}
 
@@ -713,15 +695,12 @@ namespace Sdl.Community.StudioViews.ViewModel
 			foreach (var importFile in importFiles)
 			{
 				fileIndex++;
-				_owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
-					new Action(delegate
-					{
-						ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, fileIndex, importFiles.Count());
-						ProcessingFile = Path.GetFileName(importFile);
-						ProcessingProgressMessage = "Reading segments...";
-						ProcessingCurrentProgress = 0;
-						ProcessingIsIndeterminate = true;
-					}));
+
+				ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, fileIndex, importFiles.Count());
+				ProcessingFile = Path.GetFileName(importFile);
+				ProcessingProgressMessage = "Reading segments...";
+				ProcessingCurrentProgress = 0;
+				ProcessingIsIndeterminate = true;
 
 				var segmentPairs = sdlXliffReader.GetSegmentPairs(importFile);
 				foreach (var segmentPair in segmentPairs)
