@@ -108,7 +108,7 @@
 							<DataTemplate>
 								<DockPanel>
 									<Image Width="15" Height="15" Source="../Resources/ShowPreviewAction.ico"/>
-									<TextBlock Text="{Binding FileName}" ToolTip="{Binding Path}" Margin="5" VerticalAlignment="Center" TextTrimming="WordEllipsis" />
+									<TextBlock Text="{Binding Path}" ToolTip="{Binding Path}" Margin="5" VerticalAlignment="Center" TextTrimming="WordEllipsis" />
 								</DockPanel>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
