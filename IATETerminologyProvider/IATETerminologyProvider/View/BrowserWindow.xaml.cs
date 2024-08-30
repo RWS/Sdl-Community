@@ -30,9 +30,9 @@ namespace Sdl.Community.IATETerminologyProvider.View
 			}
 		}
 
-		public void Navigate(string url)
+		public async void Navigate(string url)
         {
-            if (WebView2.CoreWebView2 is null) InitializeWebView().Wait();
+            if (WebView2.CoreWebView2 is null) await InitializeWebView();
 			Dispatcher.BeginInvoke(() => { WebView2.CoreWebView2?.Navigate(url); });
 		}
 	}
