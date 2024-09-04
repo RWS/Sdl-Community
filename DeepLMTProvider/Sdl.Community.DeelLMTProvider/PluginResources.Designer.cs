@@ -166,6 +166,25 @@ namespace Sdl.Community.DeepLMTProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Global settings.
+        /// </summary>
+        public static string GlobalSettings_LoadGlossaryIds_Global_settings {
+            get {
+                return ResourceManager.GetString("GlobalSettings_LoadGlossaryIds_Global_settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Global settings deserialization failed. Settings were reset to default..
+        /// </summary>
+        public static string GlobalSettings_LoadGlossaryIds_Global_settings_deserialization_failed__Settings_were_reset_to_default_ {
+            get {
+                return ResourceManager.GetString("GlobalSettings_LoadGlossaryIds_Global_settings_deserialization_failed__Settings_w" +
+                        "ere_reset_to_default_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap Information {

@@ -4,6 +4,7 @@ using Sdl.Community.DeepLMTProvider.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows;
 
 namespace Sdl.Community.DeepLMTProvider
 {
@@ -31,8 +32,22 @@ namespace Sdl.Community.DeepLMTProvider
         private static Dictionary<(string, string), string> LoadGlossaryIds()
         {
             if (!File.Exists(FileName)) return new();
-            var globalSettingsSerialized = File.ReadAllLines(FileName);
-            return DeserializeGlossaryIds(globalSettingsSerialized);
+
+            try
+            {
+                var globalSettingsSerialized = File.ReadAllLines(FileName);
+                return DeserializeGlossaryIds(globalSettingsSerialized);
+            }
+            catch
+            {
+                File.Delete(FileName);
+                MessageBox.Show(
+                    PluginResources
+                        .GlobalSettings_LoadGlossaryIds_Global_settings_deserialization_failed__Settings_were_reset_to_default_,
+                    PluginResources.GlobalSettings_LoadGlossaryIds_Global_settings, MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return new Dictionary<(string, string), string>();
+            }
         }
 
         private static Dictionary<(string, string), string> DeserializeGlossaryIds(string[] globalSettingsSerialized)
