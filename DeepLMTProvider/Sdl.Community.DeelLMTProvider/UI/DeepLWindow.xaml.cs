@@ -14,9 +14,14 @@ namespace Sdl.Community.DeepLMTProvider.UI
             Loaded += DeepLWindow_Loaded;
         }
 
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
         private void DeepLWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            ApiVersionCombobox.SelectedIndex = 0;
+            if (ApiVersionCombobox.SelectedIndex == -1) ApiVersionCombobox.SelectedIndex = 0;
         }
 
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
@@ -27,11 +32,6 @@ namespace Sdl.Community.DeepLMTProvider.UI
         private void Ok_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = true;
-            Close();
-        }
-
-        private void Cancel_Click(object sender, RoutedEventArgs e)
-        {
             Close();
         }
     }
