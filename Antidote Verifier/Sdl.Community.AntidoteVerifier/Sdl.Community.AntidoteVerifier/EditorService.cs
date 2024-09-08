@@ -4,6 +4,7 @@ using Sdl.Community.AntidoteVerifier.Extensions;
 using Sdl.Community.AntidoteVerifier.Utils;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi.Extensions;
 
 namespace Sdl.Community.AntidoteVerifier
 {
@@ -85,9 +86,9 @@ namespace Sdl.Community.AntidoteVerifier
 		}
 
 		public string GetSelection()
-		{
-			return _document.Selection.Target.ToString();
-		}
+        {
+            return _document.Selection.Target.ToString();
+        }
 
 		public void ReplaceTextInSegment(int segmentId, int startPosition, int endPosition, string replacementText)
 		{
