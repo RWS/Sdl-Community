@@ -148,14 +148,14 @@ namespace Sdl.Community.AntidoteVerifier
         }
 
         //check if "theAncestor" is an ancestor of "theMarkupData"  
-        private bool IsAncestorOfMarkup(IAbstractMarkupData theMarkupData, ISegment theAncestor)
+        private bool IsDescendantOfMarkup(IAbstractMarkupData theMarkupData, ISegment theAncestor)
         {
-            var ret = false;
-	        if (theMarkupData == null || theAncestor == null) return ret;
+	        if (theMarkupData == null || theAncestor == null) return false;
+
 	        var parent = theMarkupData.Parent;
-	        if (parent == null) return ret;
-	        ret = parent.Equals(theAncestor) || theAncestor.Contains(theMarkupData);
-	        return ret;
+	        if (parent == null) return false;
+
+	        return parent.Equals(theAncestor) || theAncestor.Contains(theMarkupData);
         }
 
         //check if the markup is in the list of the markups visited
@@ -163,13 +163,15 @@ namespace Sdl.Community.AntidoteVerifier
         {
             var contains = false;
             //Why isn't the text in a PlaceHolder in the segment?
-            var newItemLocation = IsAncestorOfMarkup(theMarkupData, _segment) ? new Location(_segment, theMarkupData) : new Location(theMarkupData.Parent, theMarkupData);
+            var newItemLocation = IsDescendantOfMarkup(theMarkupData, _segment)
+                ? new Location(_segment, theMarkupData)
+                : new Location(theMarkupData.Parent, theMarkupData);
 
             foreach (var item in _markupsListVisited)
             {
                 if (item.Equals(theMarkupData))
                 {
-                    var itemLocation = IsAncestorOfMarkup(theMarkupData, _segment) ? new Location(_segment, item) : new Location(item.Parent, item);
+                    var itemLocation = IsDescendantOfMarkup(theMarkupData, _segment) ? new Location(_segment, item) : new Location(item.Parent, item);
 	                contains = itemLocation.Equals(newItemLocation);
                 }
             }
