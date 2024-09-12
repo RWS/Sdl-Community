@@ -93,6 +93,13 @@ namespace Sdl.Community.AntidoteVerifier.Extensions
 
                         break;
                     }
+
+                    if (currentIndex <= startIndex && currentIndex + elementLength == endPosition)
+                    {
+                        var beforeText = textElement.Properties.Text.Substring(0, startIndex - currentIndex);
+                        textElement.Properties.Text = beforeText + replacementText;
+                    }
+
                     currentIndex += elementLength;
                 }
                 else
