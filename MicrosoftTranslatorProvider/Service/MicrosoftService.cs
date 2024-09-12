@@ -39,7 +39,6 @@ namespace MicrosoftTranslatorProvider.Service
                 var response = await httpClient.SendAsync(request);
                 response.EnsureSuccessStatusCode();
                 var tokenString = await response.Content.ReadAsStringAsync();
-                var token = ReadToken(tokenString);
                 credentials.AccessToken = "Bearer " + tokenString;
                 return true;
             }
@@ -50,7 +49,7 @@ namespace MicrosoftTranslatorProvider.Service
             }
         }
 
-        public async static Task<List<TranslationLanguage>> GetSupportedLanguages()
+        public static async Task<List<TranslationLanguage>> GetSupportedLanguages()
         {
             var httpClientHandler = ProxyHelper.GetHttpClientHandler(CredentialsManager.GetProxySettings(), true);
             var httpClient = new HttpClient(httpClientHandler);
@@ -70,19 +69,11 @@ namespace MicrosoftTranslatorProvider.Service
             return output;
         }
 
-        public async static Task<HashSet<string>> GetSupportedLanguageCodes()
+        public static async Task<HashSet<string>> GetSupportedLanguageCodes()
         {
             var supportedLanguages = await GetSupportedLanguages();
             var supportedCodes = new HashSet<string>(supportedLanguages.Select(x => x.LanguageCode));
             return supportedCodes;
-        }
-
-        private static JwtSecurityToken ReadToken(string token)
-        {
-            var jwtHandler = new JwtSecurityTokenHandler();
-            var readableToken = jwtHandler.CanReadToken(token);
-            return readableToken ? jwtHandler.ReadJwtToken(token)
-                                 : null;
         }
 
         public static async Task<string> TranslateAsync(PairModel pairModel, string textToTranslate, MicrosoftCredentials microsoftCredentials)
