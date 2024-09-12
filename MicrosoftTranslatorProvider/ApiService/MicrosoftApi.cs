@@ -274,7 +274,6 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 				var response = await client.SendAsync(request);
 				response.EnsureSuccessStatusCode();
 				var tokenString = await response.Content.ReadAsStringAsync();
-				var token = ReadToken(tokenString);
 				_authToken = "Bearer " + tokenString;
 			}
 			catch (Exception ex)
@@ -284,25 +283,6 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 			}
 
 			return _authToken;
-		}
-
-		private JwtSecurityToken ReadToken(string token)
-		{
-			if (string.IsNullOrEmpty(token))
-			{
-				return null;
-			}
-
-			try
-			{
-				var jwtHandler = new JwtSecurityTokenHandler();
-				var readableToken = jwtHandler.CanReadToken(token);
-				return readableToken ? jwtHandler.ReadJwtToken(token)
-									 : null;
-			}
-			catch { }
-
-			return null;
 		}
 
 		private string ConvertLanguageCode(string languageCode)
