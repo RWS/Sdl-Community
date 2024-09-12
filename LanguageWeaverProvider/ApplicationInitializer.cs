@@ -25,11 +25,12 @@ namespace LanguageWeaverProvider
 		public static IDictionary<string, ITranslationOptions> TranslationOptions { get; set; }
 
 		public void Execute()
-		{
+        {
 			RatedSegments = new List<RatedSegment>();
 			TranslationOptions = new Dictionary<string, ITranslationOptions>();
 			CurrentAppVersion = GetAssemblyFileVersion();
-		}
+            Log.Setup();
+        }
 
         public static Window GetBatchTaskWindow()
         {
