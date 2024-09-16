@@ -97,7 +97,7 @@ namespace Sdl.Community.DeepLMTProvider.Client
         {
             deepLSettings.Formality = GetFormality(languageDirection, deepLSettings.Formality);
 
-            var targetLanguage = GetLanguage(languageDirection.TargetCulture, SupportedTargetLanguages);
+            var targetLanguage = GetLanguage(languageDirection.TargetCulture, SupportedTargetLanguages, true);
             var sourceLanguage = GetLanguage(languageDirection.SourceCulture, SupportedSourceLanguages);
             var translatedText = string.Empty;
 
@@ -210,14 +210,17 @@ namespace Sdl.Community.DeepLMTProvider.Client
 
         // Get the target language based on availability in DeepL; if we have a flavour use that, otherwise use general culture of that flavour (two letter iso) if available, otherwise return null
         // (e.g. for Portuguese, the leftLanguageTag (pt-PT or pt-BR) should be used, so the translations will correspond to the specific language flavor)
-        private string GetLanguage(CultureInfo culture, List<string> languageList)
+        private string GetLanguage(CultureInfo culture, List<string> languageList, bool isTarget = false)
         {
+            var ietfLanguageTag = culture.IetfLanguageTag.ToUpperInvariant();
+            if (isTarget && ietfLanguageTag.Contains("ZH")) return ietfLanguageTag.Contains("HANS") ? "ZH-HANS" : "ZH-HANT";
+
             if (languageList != null && languageList.Any())
             {
-                var leftLangTag = culture.IetfLanguageTag.ToUpperInvariant();
+                
                 var twoLetterIso = culture.TwoLetterISOLanguageName.ToUpperInvariant();
 
-                var selectedTargetLanguage = languageList.FirstOrDefault(tl => tl == leftLangTag) ?? languageList.FirstOrDefault(tl => tl == twoLetterIso);
+                var selectedTargetLanguage = languageList.FirstOrDefault(tl => tl == ietfLanguageTag) ?? languageList.FirstOrDefault(tl => tl == twoLetterIso);
 
                 return selectedTargetLanguage ?? (languageList.Any(tl => tl.Contains(twoLetterIso)) ? twoLetterIso : null);
             }
