@@ -1,15 +1,11 @@
-﻿using Sdl.Community.AntidoteVerifier.Utils;
-using Sdl.FileTypeSupport.Framework.BilingualApi;
-using System;
+﻿using Sdl.FileTypeSupport.Framework.BilingualApi;
+using System.Collections.Generic;
 
 namespace Sdl.Community.AntidoteVerifier.Extensions
 {
     public static class SegmentExtensions
     {
-	    public static string GetString(this ISegment segment, bool includeSegments = false) =>
-		    segment.ToString();
-
-        //displayLanguage = language of the message or the explication 
+        //displayLanguage = language of the message or the explication
         public static bool CanReplace(this ISegment segment, int startIndex, int endPosition, string origString, string displayLanguage, ref string message, ref string explication)
         {
             bool ret;
@@ -27,7 +23,6 @@ namespace Sdl.Community.AntidoteVerifier.Extensions
                     message = "Antidote cannot proceed with the correction because the segment is read-only.";
                     explication = "";
                 }
-
             }
             else
             {
@@ -68,42 +63,38 @@ namespace Sdl.Community.AntidoteVerifier.Extensions
             return ret;
         }
 
+        public static string GetString(this ISegment segment, bool includeSegments = false)
+        {
+            var textVisitor = new CustomTextCollectionVisitor(segment);
+
+            foreach (var item in segment)
+            {
+                item.AcceptVisitor(textVisitor);
+            }
+
+            return textVisitor.CollectedText;
+        }
+
         public static void Replace(this ISegment segment, int startIndex, int endPosition, string replacementText)
         {
-            if (segment == null)
-                throw new ArgumentNullException(nameof(segment));
+            var textVisitor = new CustomTextCollectionVisitor(segment, startIndex, endPosition);
+            foreach (var item in segment)
+                item.AcceptVisitor(textVisitor);
 
-            var currentIndex = 0;
+            textVisitor.ReplaceText(replacementText);
+        }
 
+        private static IEnumerable<IAbstractMarkupData> GetFlattenedElements(this ISegment segment)
+        {
             foreach (var element in segment)
             {
-                if (element is IText textElement)
-                {
-                    var elementLength = textElement.Properties.Text.Length;
-
-                    // Check if the replacement range falls within this text element
-                    if (currentIndex <= startIndex && currentIndex + elementLength > endPosition)
+                if (element is IAbstractMarkupDataContainer container)
+                    foreach (var subElement in container)
                     {
-                        // Split the text within this element
-                        var beforeText = textElement.Properties.Text.Substring(0, startIndex - currentIndex);
-                        var afterText = textElement.Properties.Text.Substring(endPosition - currentIndex);
-
-                        // Set the new text with the replacement
-                        textElement.Properties.Text = beforeText + replacementText + afterText;
-
-                        break;
+                        yield return subElement;
                     }
-
-                    if (currentIndex <= startIndex && currentIndex + elementLength == endPosition)
-                    {
-                        var beforeText = textElement.Properties.Text.Substring(0, startIndex - currentIndex);
-                        textElement.Properties.Text = beforeText + replacementText;
-                    }
-
-                    currentIndex += elementLength;
-                }
                 else
-                    currentIndex += element.ToString().Length;
+                    yield return element;
             }
         }
     }
