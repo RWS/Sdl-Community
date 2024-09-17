@@ -23,18 +23,17 @@ namespace Sdl.Community.TQA.Providers
 		tqsOther
 	}
 
-	public class ReportProvider
-	{
-		const string TQS_J2450_ReportFileName = "SDL-5-401-F001 QE Form_XXX_XXXXXX_XXX_XX";
-		const string TQS_MQM_ReportFileName = "RWS-5-401-F002-MQM QE Form-XXX_XXXXXX_XXX";
-		const string TQS_J2450_ReportTemplate = "SDL-5-401-F001-QE Form_XXX_XXXXXX_XXX_XX.XLSM";
-		const string TQS_MQM_ReportTemplate = "RWS-5-401-F002-MQM QE Form-XXX_XXXXXX_XXX.XLSM";
-		const string DefaultReportRelativePath = "Reports\\TQAReports";
-		const string reportingFileExtension = ".xlsm";
-
-		private static readonly string ProtectionPassword = "Thames";
-		private readonly string _reportRelativePath;
-		private readonly Logger _logger;
+    public class ReportProvider
+    {
+        private const string DefaultReportRelativePath = "Reports\\TQAReports";
+        private const string reportingFileExtension = ".xlsm";
+        private const string TQS_J2450_ReportFileName = "SDL-5-401-F001 QE Form_XXX_XXXXXX_XXX_XX";
+        private const string TQS_J2450_ReportTemplate = "SDL-5-401-F001-QE Form_XXX_XXXXXX_XXX_XX.XLSM";
+        private const string TQS_MQM_ReportFileName = "RWS-5-401-F002-MQM QE Form-CLIENT_MMM_YY_LL";
+        private const string TQS_MQM_ReportTemplate = "RWS-5-401-F002-MQM QE Form-CLIENT_MMM_YY_LL.XLSM";
+        private static readonly string ProtectionPassword = "Thames";
+        private readonly Logger _logger;
+        private readonly string _reportRelativePath;
 
 		public ReportProvider(Logger logger, string reportRelativePath = null)
 		{
