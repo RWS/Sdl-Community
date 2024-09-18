@@ -76,7 +76,7 @@ Get-Content $inputFile | ForEach-Object {
     if ($processing) {
         if (-not $processedLine -and $line -ne "") {
             # Process the first non-empty line
-            $line = $line -replace "C:\\agent\\_work\\2\\s\\", "~"
+            $line = $line -replace "D:\\a\\1\\s\\", "~"
 
             # Truncate at the first backslash
             if ($line -match "\\") {
