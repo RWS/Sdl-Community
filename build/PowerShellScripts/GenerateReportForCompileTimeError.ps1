@@ -202,12 +202,13 @@ Get-Content $input5 | ForEach-Object {
     $line = $_
 
     # If the line contains "(s)", replace it with an empty line
-    if ($line -match "\(s\)") {
-        Add-Content -Path $output5 -Value ""
-    } else {
-        # Otherwise, write the line as it is
-        Add-Content -Path $output5 -Value $line
-    }
+    if ($line -match "Warning\(s\)|Error\(s\)") {
+    Add-Content -Path $output5 -Value ""
+} else {
+    # Otherwise, write the line as it is
+    Add-Content -Path $output5 -Value $line
+}
+
 }
 
 # Define file paths
