@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Sdl.LanguageCloud.IdentityApi;
+using System.Collections.Generic;
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,34 +12,38 @@ namespace StandAloneConsoleApp_PretranslateUsingProvider.LC
 {
     internal class LCService
     {
+
         public bool LoginToLC()
         {
-            var configXMLFile = XDocument.Load("SDLTradosStudio.exe.config");
-            var audience = configXMLFile.XPathSelectElement("//auth0/setting[@name='audience']").Attribute("value").Value.ToString();
-
-            return LoginAsync(new AuthenticationRequestModel
+            // Populate the `ClientId`, `ClientSecret`, and `TenantId` fields with actual values.
+            // These can be retrieved from the Language Cloud web interface:
+            //
+            // Navigate to: Users -> Integrations -> Applications -> 
+            // Select an application with API access -> API Access tab.
+            // Copy the `ClientId` and `ClientSecret` from the selected application.
+            //
+            // For the TenantID, navigate to: Users -> Manage Account.
+            // Copy the 'Trados Account ID' from the web UI.
+            var result = LoginAsync(new AuthenticationRequestModel()
             {
-                ClientSecret = "",
-                ClientId = "",
-                GrantType = "http://auth0.com/oauth/grant-type/password-realm",
-                Scope = "openid email profile offline_access",
-                Realm = "oos",
-                Audience = audience,
-                Password = "",
-                Username = "",
-                TenantId = ""
-            }).Result;
+                ClientId = "", // Paste the actual ClientId
+                ClientSecret = "", // Paste the actual ClientSecret
+                Audience = "https://api.sdl.com", // Do not change the value
+                GrantType = "client_credentials", // Do not change the value
+                TenantId = "" // Paste the actual TenantID
+            });
+
+            return result.Result;
         }
 
         private async Task<bool> LoginAsync(AuthenticationRequestModel model)
         {
             var lcInstance = LanguageCloudIdentityApi.Instance;
+
             var authData = await GetAuthToken(model);
             var loginData = new LoginData
             {
-                AccessToken = authData.Access_token,
-                RefreshToken = authData.Refresh_token,
-                IdToken = authData.Id_token,
+                AccessToken = authData.AccessToken,
                 TenantId = model.TenantId
             };
 
@@ -46,35 +52,48 @@ namespace StandAloneConsoleApp_PretranslateUsingProvider.LC
 
         private async Task<AuthenticationResponseModel> GetAuthToken(AuthenticationRequestModel model)
         {
-            var payload = new AuthenticationRequestModel
+            var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Post, "https://sdl-prod.eu.auth0.com/oauth/token");
+
+            // Prepare form data as KeyValuePairs for the request content
+            var collection = new List<KeyValuePair<string, string>>
             {
-                Audience = model.Audience,
-                GrantType = "http://auth0.com/oauth/grant-type/password-realm",
-                Scope = "openid email profile offline_access",
-                Realm = "oos",
-                ClientSecret = model.ClientSecret,
-                ClientId = model.ClientId,
-                Username = model.Username,
-                Password = model.Password
+                new KeyValuePair<string, string>("client_id", model.ClientId),
+                new KeyValuePair<string, string>("client_secret", model.ClientSecret),
+                new KeyValuePair<string, string>("grant_type", model.GrantType),
+                new KeyValuePair<string, string>("audience", model.Audience)
             };
 
-            using (var client = new HttpClient())
+            var content = new FormUrlEncodedContent(collection);
+            request.Content = content;
+
+            try
             {
-                var json = JsonConvert.SerializeObject(payload);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                HttpResponseMessage bearerResponse;
-                if (payload.Audience.ToLower().Contains("preprod"))
-                {
-                    bearerResponse = await client.PostAsync("https://sdl-preprod.eu.auth0.com:443/oauth/token", content);
-                }
-                else
-                {
-                    bearerResponse = await client.PostAsync("https://sdl-preprod.eu.auth0.com", content);
-                }
+                var response = await client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
 
-                var responseContent = await bearerResponse.Content.ReadAsStringAsync();
+                var jsonResponse = await response.Content.ReadAsStringAsync();
 
-                return JsonConvert.DeserializeObject<AuthenticationResponseModel>(responseContent);
+                // Use Newtonsoft.Json to deserialize the JSON response
+                var authToken = JsonConvert.DeserializeObject<AuthenticationResponseModel>(jsonResponse);
+
+                Console.WriteLine($"Access Token: {authToken.AccessToken}");
+                return authToken;
+            }
+            catch (HttpRequestException httpEx)
+            {
+                Console.WriteLine($"HTTP Request error: {httpEx.Message}");
+                return null; // Handle as appropriate
+            }
+            catch (JsonException jsonEx)
+            {
+                Console.WriteLine($"JSON Deserialization error: {jsonEx.Message}");
+                return null; // Handle as appropriate
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error: {ex.Message}");
+                return null; // Handle as appropriate
             }
         }
     }
