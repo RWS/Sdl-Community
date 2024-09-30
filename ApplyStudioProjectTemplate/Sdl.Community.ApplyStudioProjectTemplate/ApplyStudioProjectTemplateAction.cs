@@ -579,8 +579,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 							Controller.RefreshProjects();
 							applyTemplateForm.SaveProjectTemplates();
 							Controller.RefreshProjects();
-							MessageBox.Show(projectsList.ToString(), PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
-							return;
+							//MessageBox.Show(projectsList.ToString(), PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
+							continue;
 						}
 
 						var project = fieldInfo.GetValue(targetProject);
