@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>TQA Reporting</PlugInName>
-  <Version>4.2.1.1</Version>
+  <Version>4.2.1.2</Version>
   <Description>Translation Quality Assessment Reporting</Description>
   <Author>Trados AppStore Team</Author>
   <RequiredProduct name="TradosStudio" minversion="17.2" maxversion="17.9"/>
