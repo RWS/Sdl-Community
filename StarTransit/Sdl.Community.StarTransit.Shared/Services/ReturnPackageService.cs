@@ -124,7 +124,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
         private static void AddFileToArchive(int encodingCode, ProjectFile targetFile, ZipArchive archive)
         {
-            archive.CreateEntry(targetFile.Folder);
+            if (!string.IsNullOrEmpty(targetFile.Folder))
+                archive.CreateEntry(targetFile.Folder);
 
             var pathToTargetFileFolder = Path.GetDirectoryName(targetFile.LocalFilePath);
             var fileName = Path.GetFileNameWithoutExtension(targetFile.LocalFilePath);
