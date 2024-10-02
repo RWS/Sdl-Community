@@ -2,6 +2,7 @@
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using NLog;
+using Sdl.Community.TQA.Extensions;
 using Sdl.Community.TQA.Model;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
@@ -404,12 +405,7 @@ namespace Sdl.Community.TQA.Providers
             wb.CalculateMode = XLCalculateMode.Auto;
             wb.Save();
 
-            var spreadsheet = SpreadsheetDocument.Open(path, true);
-            //colors took from webpart stylesheet
-            AddGradient(spreadsheet, "B6B6B6", "FFE16E73", "FFBDED0A");
-            AddGradient(spreadsheet, "B6B6B7", "FFBDED0A", "FF008080");
-            spreadsheet.Save();
-            spreadsheet.Close();
+            FormatSpreadsheet(path);
         }
 
         private void AddGradient(SpreadsheetDocument spreadSheet, string dummyColorCode, string firstColorCode, string secondColorCode)
@@ -453,6 +449,25 @@ namespace Sdl.Community.TQA.Providers
             wsReport.Cell("G33").Style.Fill.SetBackgroundColor(XLColor.FromHtml("#B6B6B7")); // use some unique color
 
             wsReport.Cell("D33").Style.Border.SetRightBorderColor(XLColor.White);
+        }
+
+        private void FormatSpreadsheet(string path)
+        {
+            using var spreadsheet = SpreadsheetDocument.Open(path, true);
+            //colors took from webpart stylesheet
+            AddGradient(spreadsheet, "B6B6B6", "FFE16E73", "FFBDED0A");
+            AddGradient(spreadsheet, "B6B6B7", "FFBDED0A", "FF008080");
+
+            var checklistSheetName = "Checklist";
+            spreadsheet.RemoveGridLinesFromSheet(checklistSheetName);
+            spreadsheet.SetRangeBackgroundColorWhite(checklistSheetName, "C9", "H9");
+
+            var versionHistorySheetName = "Version History";
+            spreadsheet.RemoveGridLinesFromSheet(versionHistorySheetName);
+            spreadsheet.ResizeImageInExcel(versionHistorySheetName, 160, 73);
+            spreadsheet.RepositionImageInCell(versionHistorySheetName, "G1", 5, 26);
+
+            spreadsheet.Save();
         }
 
         private void GenerateFinalReportSheet(XLWorkbook wb)
