@@ -1,11 +1,12 @@
 ﻿using System;
+using LanguageWeaverProvider.Model.Interface;
 using Sdl.LanguagePlatform.Core;
 
 namespace LanguageWeaverProvider.XliffConverter.Model
 {
 	public class EvaluatedSegment
 	{
-		public Segment Segment { get; set; }
+		public Segment Translation { get; set; }
 
 		public string QualityEstimation { get; set; }
 

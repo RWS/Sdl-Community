@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using LanguageWeaverProvider.Command;
 using LanguageWeaverProvider.Extensions;
+using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Services;
@@ -20,7 +21,7 @@ namespace LanguageWeaverProvider.Studio.FeedbackController.ViewModel
 {
 	public class FeedbackViewModel : BaseViewModel
 	{
-		readonly EditorController _editController;
+        readonly EditorController _editController;
 		ITranslationOptions _selectedProvider;
 		TranslationErrors _translationErrors;
 
@@ -39,7 +40,7 @@ namespace LanguageWeaverProvider.Studio.FeedbackController.ViewModel
 
 		public FeedbackViewModel()
 		{
-			_editController = SdlTradosStudio.Application.GetController<EditorController>();
+            _editController = SdlTradosStudio.Application.GetController<EditorController>();
 			_editController.ActiveDocumentChanged += ActiveDocumentChanged;
 			SendFeedbackCommand = new RelayCommand(SendFeedback);
 
@@ -326,15 +327,20 @@ namespace LanguageWeaverProvider.Studio.FeedbackController.ViewModel
 			if (documentSegmentPair is null || ratedSegment is null)
 			{
 				return;
-			}
+            }
 
-			documentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_QE, ratedSegment.QualityEstimation);
-			documentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_LongModelName, ratedSegment.ModelName);
-			documentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_ShortModelName, ratedSegment.Model);
-			documentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_Translation, ratedSegment.Translation);
-			documentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_Feedback, ratedSegment.AutosendFeedback.ToString());
-			_editController.ActiveDocument.UpdateSegmentPairProperties(documentSegmentPair, documentSegmentPair.Properties);
+            var translationOrigin = documentSegmentPair.Properties.TranslationOrigin;
+            var translationData = new TranslationData
+            {
+                QualityEstimation = ratedSegment.QualityEstimation,
+                Translation = ratedSegment.Translation,
+                ModelName = ratedSegment.ModelName,
+                AutoSendFeedback = ratedSegment.AutosendFeedback,
+                Index = translationOrigin.GetLastTqeIndex()
+            };
 
+            translationOrigin.SetMetaData(translationData);
+            _editController.ActiveDocument.UpdateSegmentPairProperties(documentSegmentPair, documentSegmentPair.Properties);
 			ApplicationInitializer.RatedSegments.Remove(ratedSegment);
 		}
 

@@ -183,12 +183,11 @@ namespace LanguageWeaverProvider.Services
         {
             try
             {
-                var translationRequest = await SendTranslationRequest(accessToken, mappedPair, sourceXliff);
-                await WaitForTranslationCompletion(accessToken, translationRequest.RequestId);
-                var translation = await GetTranslationInfo<CloudTranslationResponse>(accessToken, translationRequest.RequestId, "content");
+                var translationResponse = await SendTranslationRequest(accessToken, mappedPair, sourceXliff);
+                await WaitForTranslationCompletion(accessToken, translationResponse.RequestId);
+                var translation = await GetTranslationInfo<CloudTranslationResponse>(accessToken, translationResponse.RequestId, "content");
                 var translatedSegment = translation.Translation.First();
-                var translatedXliffSegment = Converter.ParseXliffString(translatedSegment);
-                return translatedXliffSegment;
+                return Converter.ParseXliffString(translatedSegment);
             }
             catch (Exception ex)
             {
@@ -249,8 +248,7 @@ namespace LanguageWeaverProvider.Services
         {
             var requestUri = $"{accessToken.BaseUri}v4/mt/translations/async/{requestId}/{endpoint}";
             var translationStatusReponse = await Service.SendRequest(HttpMethod.Get, requestUri, accessToken);
-            var x = await translationStatusReponse.Content.ReadAsStringAsync();
-            var translationStatus = await Service.DeserializeResponse<T>(translationStatusReponse);
+            var translationStatus = await translationStatusReponse.DeserializeResponse<T>();
             return translationStatus;
         }
 

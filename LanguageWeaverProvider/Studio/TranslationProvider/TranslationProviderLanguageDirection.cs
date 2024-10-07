@@ -11,6 +11,7 @@ using LanguageWeaverProvider.Services;
 using LanguageWeaverProvider.XliffConverter.Converter;
 using LanguageWeaverProvider.XliffConverter.Model;
 using Sdl.Core.Globalization;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -32,7 +33,7 @@ namespace LanguageWeaverProvider
 		public TranslationProviderLanguageDirection(ITranslationProvider translationProvider, ITranslationOptions translationOptions, LanguagePair languagePair)
 		{
 			TranslationProvider = translationProvider;
-			_translationOptions = translationOptions;
+            _translationOptions = translationOptions;
 			_languagePair = languagePair;
 			CredentialManager.GetCredentials(translationOptions, true);
 
@@ -49,7 +50,7 @@ namespace LanguageWeaverProvider
 
 		public ITranslationProvider TranslationProvider { get; private set; }
 
-		public CultureCode SourceLanguage => _languagePair.SourceCulture;
+        public CultureCode SourceLanguage => _languagePair.SourceCulture;
 
 		public CultureCode TargetLanguage => _languagePair.TargetCulture;
 
@@ -113,7 +114,7 @@ namespace LanguageWeaverProvider
 			var xliffFile = CreateXliffFile(Segments);
 			var translation = GetTranslation(mappedPair, xliffFile);
 			var evaluatedSegments = translation.GetTargetSegments();
-			var translatedSegments = evaluatedSegments.Select(seg => seg.Segment).ToList();
+			var translatedSegments = evaluatedSegments.Select(seg => seg.Translation).ToList();
 			if (Emojis.Any())
 			{
 				ReconstructBaseSegments(translatedSegments, Emojis);
@@ -141,7 +142,7 @@ namespace LanguageWeaverProvider
 
 				searchResults[i] = new SearchResults { SourceSegment = currentSegment.Duplicate() };
 				searchResults[i].Add(CreateSearchResult(currentSegment, translatedSegment));
-                SetMetadataOnSegment(evaluatedSegment, mappedPair, fileName);
+                SetMetadataOnSegment(evaluatedSegment, mappedPair, fileName, _currentTranslationUnit.DocumentSegmentPair.Properties.TranslationOrigin.GetLastTqeIndex() + 1);
 			}
 
 			ManageBatchTaskWindow();
@@ -225,8 +226,8 @@ namespace LanguageWeaverProvider
 			var mappedPair = GetMappedPair();
 			var translation = CloudService.Translate(_translationOptions.AccessToken, mappedPair, xliff).Result;
 			var translatedSegment = translation.GetTargetSegments().First();
-			var searchResult = CreateSearchResult(segment, translatedSegment.Segment);
-			SetMetadataOnSegment(translatedSegment, mappedPair, null);
+			var searchResult = CreateSearchResult(segment, translatedSegment.Translation);
+			SetMetadataOnSegment(translatedSegment, mappedPair, null, 1);
 
 			return searchResult;
 		}
@@ -255,7 +256,7 @@ namespace LanguageWeaverProvider
 			return xliffDocument;
 		}
 
-		private void SetMetadataOnSegment(EvaluatedSegment evaluatedSegment, PairMapping pairMapping, string fileName)
+        private void SetMetadataOnSegment(EvaluatedSegment evaluatedSegment, PairMapping pairMapping, string fileName, int index)
 		{
 			if (_batchTaskWindow is not null
 			 || _currentTranslationUnit.ConfirmationLevel == ConfirmationLevel.Draft)
@@ -273,21 +274,31 @@ namespace LanguageWeaverProvider
 			var currentSegmentId = _currentTranslationUnit.DocumentSegmentPair.Properties.Id;
 			var currentSegmentPair = editorController.ActiveDocument.SegmentPairs.First(p => p.Properties.Id == currentSegmentId);
 
-			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_QE, evaluatedSegment.QualityEstimation);
-			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_LongModelName, pairMapping.SelectedModel.Name);
-			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_ShortModelName, pairMapping.SelectedModel.Model);
-			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_Translation, evaluatedSegment.Segment.ToString());
-			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_Feedback, _translationOptions.ProviderSettings.AutosendFeedback.ToString());
+            var translationData = new TranslationData
+            {
+                QualityEstimation = evaluatedSegment.QualityEstimation,
+                Translation = evaluatedSegment.Translation.ToString(),
+                ModelName = pairMapping.SelectedModel.Name,
+                AutoSendFeedback = _translationOptions.ProviderSettings.AutosendFeedback,
+                Index = index
+            };
+            var translationOrigin = currentSegmentPair.Properties.TranslationOrigin;
+            translationOrigin.SetMetaData(translationData);
+
             editorController.ActiveDocument.UpdateSegmentPairProperties(currentSegmentPair, currentSegmentPair.Properties);
 		}
 
-		private void StoreSegmentMetadata(EvaluatedSegment evaluatedSegment, PairMapping pairMapping, string fileName)
+
+      
+
+
+        private void StoreSegmentMetadata(EvaluatedSegment evaluatedSegment, PairMapping pairMapping, string fileName)
 		{
 			var ratedSegment = new RatedSegment
 			{
 				Model = pairMapping.SelectedModel.Model,
 				ModelName = pairMapping.SelectedModel.Name,
-				Translation = evaluatedSegment.Segment.ToString(),
+				Translation = evaluatedSegment.Translation.ToString(),
 				QualityEstimation = evaluatedSegment.QualityEstimation,
 				SegmentId = _currentTranslationUnit.DocumentSegmentPair.Properties.Id,
 				TargetLanguageCode = pairMapping.TargetCode,
