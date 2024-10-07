@@ -279,6 +279,7 @@ namespace LanguageWeaverProvider
                 QualityEstimation = evaluatedSegment.QualityEstimation,
                 Translation = evaluatedSegment.Translation.ToString(),
                 ModelName = pairMapping.SelectedModel.Name,
+				Model = pairMapping.SelectedModel.Model,
                 AutoSendFeedback = _translationOptions.ProviderSettings.AutosendFeedback,
                 Index = index
             };
