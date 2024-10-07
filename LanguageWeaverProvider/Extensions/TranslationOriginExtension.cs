@@ -28,13 +28,20 @@ namespace LanguageWeaverProvider.Extensions
         {
             var evaluationTime = DateTime.Now.ToUniversalTime();
 
-            translationOrigin.StoreTQEDataInMetaData(translationData.Index, Constants.METADATA_EVALUATED_AT_PREFIX, evaluationTime.ToString(Constants.METADATA_EVALUATED_AT_FORMAT));
-            translationOrigin.StoreTQEDataInMetaData(translationData.Index, Constants.METADATA_SYSTEM_PREFIX, Constants.METADATA_SYSTEM_NAME);
-            translationOrigin.StoreTQEDataInMetaData(translationData.Index, Constants.METADATA_SCORE_PREFIX, GetScoreFromQE(translationData.QualityEstimation));
-            translationOrigin.StoreTQEDataInMetaData(translationData.Index, Constants.METADATA_MODEL_PREFIX, translationData.ModelName);
-            translationOrigin.StoreTQEDataInMetaData(translationData.Index, Constants.METADATA_DESCRIPTION_PREFIX,
-                string.Format(Constants.METADATA_DESCRIPTION, Constants.METADATA_SYSTEM_NAME,
-            translationData.ModelName));
+            if (!string.IsNullOrWhiteSpace(translationData.QualityEstimation))
+            {
+                translationOrigin.StoreTQEDataInMetaData(translationData.Index, Constants.METADATA_EVALUATED_AT_PREFIX,
+                    evaluationTime.ToString(Constants.METADATA_EVALUATED_AT_FORMAT));
+                translationOrigin.StoreTQEDataInMetaData(translationData.Index, Constants.METADATA_SYSTEM_PREFIX,
+                    Constants.METADATA_SYSTEM_NAME);
+                translationOrigin.StoreTQEDataInMetaData(translationData.Index, Constants.METADATA_SCORE_PREFIX,
+                    GetScoreFromQE(translationData.QualityEstimation));
+                translationOrigin.StoreTQEDataInMetaData(translationData.Index, Constants.METADATA_MODEL_PREFIX,
+                    translationData.ModelName);
+                translationOrigin.StoreTQEDataInMetaData(translationData.Index, Constants.METADATA_DESCRIPTION_PREFIX,
+                    string.Format(Constants.METADATA_DESCRIPTION, Constants.METADATA_SYSTEM_NAME,
+                        translationData.ModelName));
+            }
 
             translationOrigin.SetMetaData(Constants.SegmentMetadata_QE, translationData.QualityEstimation);
             translationOrigin.SetMetaData(Constants.SegmentMetadata_LongModelName, translationData.ModelName);
