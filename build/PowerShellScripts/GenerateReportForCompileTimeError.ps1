@@ -56,9 +56,7 @@ Get-Content $logFile | ForEach-Object {
         $inBuildFailedSection = $false
     }
 }
-if (Test-Path $reportFile) {
-     $fileContent = Get-Content $reportFile
-     if ($fileContent.Length -gt 0) {
+
 # Define file paths
 $inputFile = "$directoryPath\DemoReport.txt"   # Path to the input file
 $outputFile = "$directoryPath\DemoReportWithTitle.txt"  # Path to the output file
@@ -71,7 +69,7 @@ $processedLine = $false
 Clear-Content -Path $outputFile -ErrorAction Ignore
 
 
-
+if (Test-Path $inputFile) {
 # Read the input file line by line
 Get-Content $inputFile | ForEach-Object {
     $line = $_
@@ -206,7 +204,7 @@ Get-Content $input5 | ForEach-Object {
     $line = $_
 
     # If the line contains "(s)", replace it with an empty line
-    if ($line -match "Warning\(s\)|Error\(s\)|MSB3822") {
+    if ($line -match "Warning\(s\)|Error\(s\)") {
     Add-Content -Path $output5 -Value ""
 } else {
     # Otherwise, write the line as it is
@@ -235,5 +233,8 @@ Get-Content $input6 | ForEach-Object {
     # Write the modified or original line to the output file
     Add-Content -Path $output6 -Value $line
 }
-}
+}else{
+    $output6 = "$resultPath" + "$reportName"
+    Clear-Content -Path $output6 -ErrorAction Ignore
+    Add-Content -Path $output6 -Value "No error Found"
 }
