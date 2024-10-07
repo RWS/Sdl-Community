@@ -10,7 +10,7 @@ resources:
     type: github
     name: RWS/Sdl-Community
     ref: master_Yml
-    endpoint: GitHub_PublicRepo
+    endpoint: GitHubServiceConnection
   pipelines:
   - pipeline: TradosStudio_Resource
     project: TradosStudio
