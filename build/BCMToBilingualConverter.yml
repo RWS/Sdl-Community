@@ -1,0 +1,77 @@
+parameters: 
+- name : binariesPath
+  displayName: Binaries path (e.g Studio18 or Studio18Beta)
+  type: string
+  default: 'Studio18'
+
+resources:
+  repositories:
+  - repository: SdlCommunity
+    type: github
+    name: RWS/Sdl-Community
+    ref: master_Yml
+    endpoint: GitHub_PublicRepo
+  pipelines:
+  - pipeline: TradosStudio_Resource
+    project: TradosStudio
+    source: TradosStudio
+  - pipeline: Trigger_cte
+    source: TriggerCTE
+    trigger: true
+
+trigger:
+- none
+
+variables: 
+  - name: Solution
+    value: '**/BCMToBilingualConverter.sln'
+  - name:  OutputFolder
+    value: 'C:\Program Files (x86)\Trados\Trados Studio\${{ parameters.binariesPath }}'
+
+pool:
+  vmImage: windows latest
+
+  workspace:
+    clean: all
+
+steps:
+- checkout: SdlCommunity
+
+- template: /build/DownloadBinariesForStudio.yml
+
+- task: MSBuild@1
+  displayName: Build GitHub solutions using MSBuild
+  inputs:
+    solution: '$(Solution)'
+    msbuildArguments: '/p:Configuration=Debug /p:Platform="Any CPU" /flp:logfile=$(System.DefaultWorkingDirectory)/GitHubLogs/MyLog.log;append=true'
+  continueOnError: true
+
+- template: build/PowerShellScripts/GenerateReport_ForCompileTimeError.yml
+  parameters:
+    directoryPath: '$(System.DefaultWorkingDirectory)\GitHubLogs'
+    resultPath: '$(System.DefaultWorkingDirectory)\GitHubResult'
+    reportName: '\AzureReport.txt'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(System.DefaultWorkingDirectory)\GitHubResult\'
+    Contents: '*.txt'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\GitHubReport'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)\GitHubReport'
+    artifact: 'PrivateRepoCompileTimeErrorReport'
+    publishLocation: 'pipeline'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(System.DefaultWorkingDirectory)\GitHubLogs\'
+    Contents: 'MyLog.log'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\GitHubReport'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)\GitHubReport'
+    artifact: 'MyLogFile'
+    publishLocation: 'pipeline'
