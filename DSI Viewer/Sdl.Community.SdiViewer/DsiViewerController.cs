@@ -1,4 +1,5 @@
-﻿using Sdl.Community.DsiViewer.View;
+﻿using Sdl.Community.DsiViewer.Services;
+using Sdl.Community.DsiViewer.View;
 using Sdl.Community.DsiViewer.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
@@ -24,7 +25,7 @@ namespace Sdl.Community.DsiViewer
 
         protected override void Initialize()
         {
-            var dataContext = new DsiViewerViewModel();
+            var dataContext = new DsiViewerViewModel(new TqeReader());
             _control.DataContext = dataContext;
         }
     }
