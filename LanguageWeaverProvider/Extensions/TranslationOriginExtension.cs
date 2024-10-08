@@ -16,7 +16,7 @@ namespace LanguageWeaverProvider.Extensions
 
         public static int GetLastTqeIndex(this ITranslationOrigin translationOrigin)
         {
-            var lastIndex = 0;
+            var lastIndex = 1;
             while (translationOrigin.MetaDataContainsKey(Constants.METADATA_EVALUATED_AT_PREFIX + (lastIndex + 1)))
             {
                 lastIndex++;
