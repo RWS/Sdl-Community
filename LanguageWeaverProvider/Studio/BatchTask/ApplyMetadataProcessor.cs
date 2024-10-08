@@ -60,6 +60,7 @@ namespace LanguageWeaverProvider.BatchTask
                         QualityEstimation = ratedSegment.QualityEstimation,
                         Translation = ratedSegment.Translation,
                         ModelName = ratedSegment.ModelName,
+                        Model = ratedSegment.Model,
                         AutoSendFeedback = ratedSegment.AutosendFeedback,
                         Index = translationOrigin.GetLastTqeIndex()
                     };
