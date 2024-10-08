@@ -142,7 +142,12 @@ namespace LanguageWeaverProvider
 
 				searchResults[i] = new SearchResults { SourceSegment = currentSegment.Duplicate() };
 				searchResults[i].Add(CreateSearchResult(currentSegment, translatedSegment));
-                SetMetadataOnSegment(evaluatedSegment, mappedPair, fileName, _currentTranslationUnit.DocumentSegmentPair.Properties.TranslationOrigin.GetLastTqeIndex() + 1);
+
+                var translationOrigin = _currentTranslationUnit.DocumentSegmentPair.Properties.TranslationOrigin;
+                var lastTqeIndex = translationOrigin is not null ? translationOrigin
+                    .GetLastTqeIndex() + 1 : 1;
+
+                SetMetadataOnSegment(evaluatedSegment, mappedPair, fileName, lastTqeIndex);
 			}
 
 			ManageBatchTaskWindow();
