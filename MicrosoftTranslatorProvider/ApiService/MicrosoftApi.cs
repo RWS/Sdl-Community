@@ -270,6 +270,7 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 				request.Method = HttpMethod.Post;
 				request.RequestUri = uri;
 				request.Headers.TryAddWithoutValidation(Constants.OcpApimSubscriptionKeyHeader, _subscriptionKey);
+				request.Headers.TryAddWithoutValidation(Constants.OcpApimSubscriptionRegionHeader, region);
 
 				var response = await client.SendAsync(request);
 				response.EnsureSuccessStatusCode();
