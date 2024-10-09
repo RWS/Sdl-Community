@@ -219,11 +219,20 @@ namespace LanguageWeaverProvider
 		}
 
 		private Xliff GetTranslation(PairMapping mappedPair, Xliff xliffFile)
-		{
-			return _translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
-				 ? CloudService.Translate(_translationOptions.AccessToken, mappedPair, xliffFile).Result
-				 : EdgeService.Translate(_translationOptions.AccessToken, mappedPair, xliffFile).Result;
-		}
+        {
+            try
+            {
+                var translation = _translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
+                    ? CloudService.Translate(_translationOptions.AccessToken, mappedPair, xliffFile).Result
+                    : EdgeService.Translate(_translationOptions.AccessToken, mappedPair, xliffFile).Result;
+                return translation;
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException is null) throw;
+                throw ex.InnerException;
+            }
+        }
 
 		private SearchResult TranslateSegment(Segment segment, Segment sourceSegment)
 		{

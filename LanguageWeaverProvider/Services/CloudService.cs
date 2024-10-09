@@ -248,6 +248,9 @@ namespace LanguageWeaverProvider.Services
         {
             var requestUri = $"{accessToken.BaseUri}v4/mt/translations/async/{requestId}/{endpoint}";
             var translationStatusReponse = await Service.SendRequest(HttpMethod.Get, requestUri, accessToken);
+
+            translationStatusReponse.EnsureSuccessStatusCode();
+
             var translationStatus = await translationStatusReponse.DeserializeResponse<T>();
             return translationStatus;
         }
