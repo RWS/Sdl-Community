@@ -35,6 +35,7 @@ namespace MicrosoftTranslatorProvider.Service
                 request.Method = HttpMethod.Post;
                 request.RequestUri = uri;
                 request.Headers.TryAddWithoutValidation(Constants.OcpApimSubscriptionKeyHeader, credentials.APIKey);
+                request.Headers.TryAddWithoutValidation(Constants.OcpApimSubscriptionRegionHeader, credentials.Region);
 
                 var response = await httpClient.SendAsync(request);
                 response.EnsureSuccessStatusCode();
