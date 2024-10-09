@@ -258,8 +258,21 @@ namespace Sdl.Community.DsiViewer.ViewModel
             }
         }
 
-        public bool ProjectHasLanguageWeaverSource => _activeDocument?.SegmentPairs?.Any(x => x.Properties?.TranslationOrigin?.MetaDataContainsKey("quality_estimation") ?? false) ?? false;
-        public bool SegmentHasLanguageWeaverSource => _activeDocument?.ActiveSegmentPair?.Properties?.TranslationOrigin?.MetaDataContainsKey("quality_estimation") ?? false;
+        public bool ProjectHasQualityEstimation =>
+            _activeDocument?.SegmentPairs?.Any(x => TqeReader.HasTqeData(x.Properties?.TranslationOrigin)) ??
+            false;
+        public bool SegmentHasQualityEstimation =>
+            TqeReader.HasTqeData(
+                _activeDocument?.ActiveSegmentPair?.Properties?.TranslationOrigin);
+        
+        public bool SegmentHasPreviousQualityEstimation =>
+            TqeReader.HasPreviousTqeData(
+                _activeDocument?.ActiveSegmentPair?.Properties?.TranslationOrigin);
+
+        public bool SegmentHasCurrentQualityEstimation =>
+            TqeReader.HasCurrentTqeData(
+                _activeDocument?.ActiveSegmentPair?.Properties?.TranslationOrigin);
+
 
         public List<DSITagModel> SegmentTags
         {
@@ -323,7 +336,15 @@ namespace Sdl.Community.DsiViewer.ViewModel
             UpdateComments();
             UpdateTranslationOriginInformation();
             UpdateTags();
-            OnPropertyChanged(nameof(SegmentHasLanguageWeaverSource));
+
+            QualityEstimationChanged();
+        }
+
+        private void QualityEstimationChanged()
+        {
+            OnPropertyChanged(nameof(SegmentHasQualityEstimation));
+            OnPropertyChanged(nameof(SegmentHasCurrentQualityEstimation));
+            OnPropertyChanged(nameof(SegmentHasPreviousQualityEstimation));
         }
 
         private void ActiveDocument_ContentChanged(object sender, DocumentContentEventArgs e)
@@ -335,8 +356,8 @@ namespace Sdl.Community.DsiViewer.ViewModel
         {
             UpdateTranslationOriginInformation();
             UpdateTags();
-            OnPropertyChanged(nameof(SegmentHasLanguageWeaverSource));
-            OnPropertyChanged(nameof(ProjectHasLanguageWeaverSource));
+
+            QualityEstimationChanged();
         }
 
         private void AddComments(ISegment segment)
@@ -405,8 +426,8 @@ namespace Sdl.Community.DsiViewer.ViewModel
         private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
         {
             SetActiveDocument(e.Document);
-            OnPropertyChanged(nameof(SegmentHasLanguageWeaverSource));
-            OnPropertyChanged(nameof(ProjectHasLanguageWeaverSource));
+            QualityEstimationChanged();
+            OnPropertyChanged(nameof(ProjectHasQualityEstimation));
         }
 
         private void ExtractPlaceholderTagProperties(IPlaceholderTag tag, List<DSITagModel> tags)
@@ -636,7 +657,8 @@ namespace Sdl.Community.DsiViewer.ViewModel
 
             var currentTqe = TqeReader.GetCurrentTqe(translationOrigin);
             TranslationOriginData = currentTqe;
-            TranslationOriginData2 = new List<TranslationOriginData> { currentTqe };
+
+            TranslationOriginData2 = TqeReader.GetPreviousTqeData(translationOrigin);
         }
     }
 }

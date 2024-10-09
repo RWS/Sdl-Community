@@ -354,7 +354,7 @@
             </StackPanel>
 
             <DockPanel Grid.Row="9"
-                       Visibility="{Binding SegmentHasLanguageWeaverSource, Converter={StaticResource BooleanToVisibilityConverter}}"
+                       Visibility="{Binding SegmentHasQualityEstimation, Converter={StaticResource BooleanToVisibilityConverter}}"
                        PreviewKeyDown="TabKeyNavigation"
                        Margin="16 0">
 
@@ -376,14 +376,15 @@
 
             <StackPanel Grid.Row="10">
 
-                <Border Grid.Row="10"
-                        BorderThickness="1 1 2 2"
+                <Border BorderThickness="1 1 2 2"
                         BorderBrush="#D3D3D3"
-                        Margin="18">
+                        Margin="18 5">
                     <Border.Visibility>
-                        <MultiBinding Converter="{StaticResource MultiBooleanToVisibilityConverter}">
+                        <MultiBinding Converter="{StaticResource MultiBooleanToVisibilityConverter}"
+                                      Mode="TwoWay"
+                                      UpdateSourceTrigger="PropertyChanged">
                             <Binding Path="IsQualityEstimationVisible" />
-                            <Binding Path="SegmentHasLanguageWeaverSource" />
+                            <Binding Path="SegmentHasCurrentQualityEstimation" />
                         </MultiBinding>
                     </Border.Visibility>
                     <Grid Grid.Row="10">
@@ -468,33 +469,28 @@
 
                     </Grid>
                 </Border>
-                <Expander Visibility="{Binding IsQualityEstimationVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Expander>
+                    <Expander.Visibility>
+                        <MultiBinding Converter="{StaticResource MultiBooleanToVisibilityConverter}">
+                            <Binding Path="IsQualityEstimationVisible" />
+                            <Binding Path="SegmentHasPreviousQualityEstimation" />
+                        </MultiBinding>
+                    </Expander.Visibility>
                     <Expander.Header>
                         <TextBlock Text="Previous estimations"
                                    FontWeight="DemiBold" />
                     </Expander.Header>
 
+                    <ItemsControl HorizontalAlignment="Stretch"
+                                  ItemsSource="{Binding TranslationOriginData2}"
+                                  HorizontalContentAlignment="Stretch">
 
+                        <ItemsControl.ItemTemplate>
 
-                    <Border BorderThickness="1 1 2 2"
-                            BorderBrush="#D3D3D3"
-                            Margin="18">
-                        <Border.Visibility>
-                            <MultiBinding Converter="{StaticResource MultiBooleanToVisibilityConverter}">
-                                <Binding Path="IsQualityEstimationVisible" />
-                                <Binding Path="SegmentHasLanguageWeaverSource" />
-                            </MultiBinding>
-                        </Border.Visibility>
-
-
-
-                        <ItemsControl HorizontalAlignment="Stretch"
-                                      ItemsSource="{Binding TranslationOriginData2}"
-                                      HorizontalContentAlignment="Stretch">
-
-                            <ItemsControl.ItemTemplate>
-
-                                <DataTemplate>
+                            <DataTemplate>
+                                <Border BorderThickness="1 1 2 2"
+                                        BorderBrush="#D3D3D3"
+                                        Margin="18 5">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
@@ -572,18 +568,18 @@
 
                                     </Grid>
 
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
 
-                        </ItemsControl>
-                    </Border>
+                    </ItemsControl>
 
 
                 </Expander>
             </StackPanel>
 
             <Separator Grid.Row="11"
-                       Visibility="{Binding SegmentHasLanguageWeaverSource, Converter={StaticResource BooleanToVisibilityConverter}}"
+                       Visibility="{Binding SegmentHasQualityEstimation, Converter={StaticResource BooleanToVisibilityConverter}}"
                        Margin="0 16 0 8" />
 
             <DockPanel Grid.Row="12"
@@ -627,14 +623,14 @@
 
                     <Label Grid.Row="0"
                            Grid.Column="0"
-                           Visibility="{Binding ProjectHasLanguageWeaverSource, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverted}"
+                           Visibility="{Binding ProjectHasQualityEstimation, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverted}"
                            Target="{Binding ElementName=FilterQEStackPanel}"
                            Content="by Quality Estimation" />
 
                     <GroupBox Grid.Row="0"
                               Grid.Column="1"
                               BorderThickness="0"
-                              Visibility="{Binding ProjectHasLanguageWeaverSource, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              Visibility="{Binding ProjectHasQualityEstimation, Converter={StaticResource BooleanToVisibilityConverter}}"
                               PreviewKeyDown="TabKeyNavigation">
                         <GroupBox.Header>
                             <TextBlock Text="By Quality Estimation"

@@ -7,6 +7,9 @@ namespace Sdl.Community.DsiViewer.Interface
     public interface ITqeReader
     {
         TranslationOriginData GetCurrentTqe(ITranslationOrigin translationOrigin);
-        List<TranslationOriginData> GetPreviousTqeData();
+        List<TranslationOriginData> GetPreviousTqeData(ITranslationOrigin translationOrigin);
+        bool HasTqeData(ITranslationOrigin translationOrigin);
+        bool HasCurrentTqeData(ITranslationOrigin translationOrigin);
+        bool HasPreviousTqeData(ITranslationOrigin translationOrigin);
     }
 }

@@ -16,7 +16,9 @@ namespace Sdl.Community.DsiViewer.Converters
 				return Visibility.Collapsed;
 			}
 
-			return (textBoxVisible && isChecked) ? Visibility.Visible : Visibility.Collapsed;
+            var visibility = (textBoxVisible && isChecked) ? Visibility.Visible : Visibility.Collapsed;
+
+            return visibility;
 		}
 
 		public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
