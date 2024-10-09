@@ -1,46 +1,18 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{35B4E386-002D-41BF-8B20-43E758B8250A}</ProjectGuid>
+    <TargetFramework>net48</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.Community.DsiViewer</RootNamespace>
-    <AssemblyName>Sdl.Community.DsiViewer</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <LangVersion>latest</LangVersion>
-    <FileAlignment>512</FileAlignment>
-    <XamlDebuggingInformation>True</XamlDebuggingInformation>
     <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup>
     <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
@@ -69,9 +41,6 @@
     <Reference Include="Sdl.ProjectAutomation.FileBased">
       <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.ProjectAutomation.Settings">
-      <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.Settings.dll</HintPath>
-    </Reference>
     <Reference Include="Sdl.TellMe.ProviderApi">
       <HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
@@ -81,57 +50,9 @@
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
       <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
-    <Reference Include="WindowsFormsIntegration" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Commands\CommandHandler.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="Controls\SortAwareDataGrid.cs" />
-    <Compile Include="Converters\MultiBooleanToVisibilityConverter.cs" />
-    <Compile Include="DsiViewerInitializer.cs" />
-    <Compile Include="Model\DSITagModel.cs" />
-    <Compile Include="Model\SdlMtCloudFilterSettings.cs" />
-    <Compile Include="Model\TranslationOriginData.cs" />
-    <Compile Include="PluginResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PluginResources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Services\SegmentVisitor.cs" />
-    <Compile Include="Service\FilterApplier.cs" />
-    <Compile Include="Studio\DisplayFilters\SdlMtCloudDisplayFilter.cs" />
-    <Compile Include="TellMe\CommunitySupportAction.cs" />
-    <Compile Include="TellMe\DsiViewerTellMeAction.cs" />
-    <Compile Include="TellMe\SettingsAction.cs" />
-    <Compile Include="TellMe\SourceCodeAction.cs" />
-    <Compile Include="TellMe\TellMeProvider.cs" />
-    <Compile Include="TellMe\HelpAction.cs" />
-    <Compile Include="TellMe\WarningWindow\SettingsActionWarning.xaml.cs">
-      <DependentUpon>SettingsActionWarning.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModel\DsiViewerViewModel.cs" />
-    <Compile Include="Model\ModelBase.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\PluginProperties.cs" />
-    <Compile Include="Model\DsiModel.cs" />
-    <Compile Include="DsiViewerController.cs" />
-    <Compile Include="View\DsiViewerView.xaml.cs">
-      <DependentUpon>DsiViewerView.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Forum.ico" />
-    <None Include="Resources\TellMe_Forum.ico" />
     <Resource Include="Resources\Information.png" />
     <Content Include="Resources\Settings.ico" />
     <Content Include="Resources\SourceCode.ico" />
@@ -143,31 +64,12 @@
     <Resource Include="Resources\error.png" />
     <Resource Include="Resources\warning.png" />
     <EmbeddedResource Include="Resources\ds.ico" />
-    <EmbeddedResource Include="PluginResources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <SubType>Designer</SubType>
-      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <Content Include="pluginpackage.manifest.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\SdlCommunity.snk">
       <Link>SdlCommunity.snk</Link>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Styles\DataGridStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="TellMe\WarningWindow\SettingsActionWarning.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\DsiViewerView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
@@ -180,7 +82,9 @@
       <Version>18.0.1</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Remove="SdiControlViewModel.cs" />
+  </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
@@ -190,5 +94,4 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
