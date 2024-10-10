@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Segment Status Switcher</PlugInName>
-  <Version>4.0.1.0</Version>
+  <Version>4.0.2.0</Version>
   <Description>Keyboard shortcuts for changing segments status</Description>
   <Author>Trados AppStore Team</Author>
   <RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9"/>

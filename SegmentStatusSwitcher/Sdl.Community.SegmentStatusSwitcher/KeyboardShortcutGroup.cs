@@ -28,8 +28,7 @@ namespace Sdl.Community.SegmentStatusSwitcher
 
 	        foreach (var segmentPair in selectedSegmentPairs)
 	        {
-		        segmentPair.Properties.ConfirmationLevel = confirmationLevel;
-		        activeDocument.UpdateSegmentPairProperties(segmentPair, segmentPair.Properties);
+				activeDocument.ChangeConfirmationLevelOnSegment(segmentPair, confirmationLevel);
 	        }
         }
 
