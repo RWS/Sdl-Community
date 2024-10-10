@@ -29,6 +29,7 @@ namespace Sdl.Community.DsiViewer.Services
                 System = GetTQEDataInMetaData(translationOrigin, currentIndex, Constants.METADATA_SYSTEM_PREFIX),
                 Description = GetTQEDataInMetaData(translationOrigin, currentIndex, Constants.METADATA_DESCRIPTION_PREFIX),
                 Model = GetTQEDataInMetaData(translationOrigin, currentIndex, Constants.METADATA_MODEL_PREFIX),
+                Score = GetTQEDataInMetaData(translationOrigin, currentIndex, Constants.METADATA_SCORE_PREFIX),
                 QualityEstimation = translationOrigin.GetMetaData(Constants.QualityEstimation)
             };
         }
@@ -49,10 +50,12 @@ namespace Sdl.Community.DsiViewer.Services
 
                 var currentData = GetCurrentTqe(translationOrigin);
 
-                if (currentData is null || string.IsNullOrWhiteSpace(currentData.System)
+                if (currentData is null 
+                    || string.IsNullOrWhiteSpace(currentData.System)
                     && string.IsNullOrWhiteSpace(currentData.Description)
                     && string.IsNullOrWhiteSpace(currentData.Model)
-                    && string.IsNullOrWhiteSpace(currentData.QualityEstimation))
+                    && string.IsNullOrWhiteSpace(currentData.QualityEstimation)
+                    && string.IsNullOrWhiteSpace(currentData.Score))
                 {
                     continue;
                 }
