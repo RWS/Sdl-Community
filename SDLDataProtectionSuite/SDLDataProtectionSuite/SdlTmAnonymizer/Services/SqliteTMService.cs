@@ -770,13 +770,13 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Services
 
 		private static string GetConnectionString(string databasePath, string password)
 		{
-			if (!string.IsNullOrEmpty(password))
-			{
-				return "Data Source=\"" + databasePath + "\";Version=3;New=False;Password" + password;
-			}
+            if (!string.IsNullOrEmpty(password))
+            {
+                return "Data Source=\"" + databasePath + "\";Version=3;New=False;DateTimeFormat=CurrentCulture;Password" + password;
+            }
 
-			return "Data Source=\"" + databasePath + "\";Version=3;New=False";
-		}
+            return "Data Source=\"" + databasePath + "\";Version=3;New=False;DateTimeFormat=CurrentCulture";
+        }
 
 		private static TranslationMemory CreateTranslationMemory(IDataRecord rdrSelect)
 		{
