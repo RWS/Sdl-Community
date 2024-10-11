@@ -1,7 +1,7 @@
 
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Trados Data Protection Suite</PlugInName>
-  <Version>4.0.0.1</Version>
+  <Version>4.0.1.0</Version>
   <Description>The Trados Data Protection Suite combines two existing applications - project Anonymizer and TradosTM Anonymizer, giving you control over how sensitive data is managed. Using plain text, or regular expressions, you can pseudonomize, or anonymize the data in your translation projects and translation memories.</Description>
   <Author>Trados AppStore Team</Author>
 	<Include>
