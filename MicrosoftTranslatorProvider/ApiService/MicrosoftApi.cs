@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 using LanguageMappingProvider.Model;
 using MicrosoftTranslatorProvider.Extensions;
 using MicrosoftTranslatorProvider.Helpers;
@@ -183,6 +184,9 @@ namespace MicrosoftTranslatorProvider.Studio.TranslationProvider
 			request.AddParameter("scope", "translation");
 
 			var languageResponse = client.ExecuteAsync(request).Result;
+			if (!languageResponse.IsSuccessful)
+				throw new HttpException($"Error: {languageResponse.StatusCode}, {languageResponse.StatusDescription}");
+
 			var languages = JsonConvert.DeserializeObject<LanguageResponse>(languageResponse.Content)?.Translation?.Distinct();
 
 			var output = new List<LanguageMapping>();
