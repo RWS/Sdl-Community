@@ -401,7 +401,7 @@
                     </Expander.Header>
 
                     <ItemsControl HorizontalAlignment="Stretch"
-                                  ItemsSource="{Binding TranslationOriginData2}"
+                                  ItemsSource="{Binding PreviousTranslationOriginData}"
                                   HorizontalContentAlignment="Stretch">
 
                         <ItemsControl.ItemTemplate>

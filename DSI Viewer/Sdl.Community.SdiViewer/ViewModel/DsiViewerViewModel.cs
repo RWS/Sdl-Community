@@ -42,7 +42,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
         private bool _isTagsVisible;
         private List<DSITagModel> _segmentTags;
         private TranslationOriginData _translationOriginData;
-        private List<TranslationOriginData> _translationOriginData2;
+        private List<TranslationOriginData> _previousTranslationOriginData;
 
         public DsiViewerViewModel(ITqeReader tqeReader)
         {
@@ -296,12 +296,12 @@ namespace Sdl.Community.DsiViewer.ViewModel
             }
         }
 
-        public List<TranslationOriginData> TranslationOriginData2
+        public List<TranslationOriginData> PreviousTranslationOriginData
         {
-            get => _translationOriginData2;
+            get => _previousTranslationOriginData;
             set
             {
-                _translationOriginData2 = value;
+                _previousTranslationOriginData = value;
                 OnPropertyChanged();
             }
         }
@@ -658,7 +658,7 @@ namespace Sdl.Community.DsiViewer.ViewModel
             var currentTqe = TqeReader.GetCurrentTqe(translationOrigin);
             TranslationOriginData = currentTqe;
 
-            TranslationOriginData2 = TqeReader.GetPreviousTqeData(translationOrigin);
+            PreviousTranslationOriginData = TqeReader.GetPreviousTqeData(translationOrigin);
         }
     }
 }
