@@ -59,6 +59,10 @@ namespace MicrosoftTranslatorProvider.Service
 
             var response = await httpClient.GetAsync(url);
             var responseBody = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+                throw new Exception($"Error: {response.StatusCode}, {responseBody}");
+
             var languagesResponse = JsonConvert.DeserializeObject<LanguagesResponse>(responseBody);
 
             var output = languagesResponse.Translation.Select(x => new TranslationLanguage()
