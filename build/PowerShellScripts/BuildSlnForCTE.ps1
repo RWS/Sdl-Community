@@ -48,7 +48,7 @@ Set-Alias MSBuild -Value $msbuildLocation;
 
 $feedName = 'SDLNuget'
 $nugetRestoreArguments = "/p:RestoreSources=https://pkgs.dev.azure.com/sdl/_packaging/$feedName/nuget/v3/index.json"
-$msbuildArguments = "/flp:logfile=$defaultWorkingDirectory/AzureLogs/MyLog.log;append=true"
+$msbuildArguments = "/flp:logfile=$defaultWorkingDirectory/GitHubLogs/MyLog.log;append=true"
 
 foreach ($project in $csprojFiles) {
         if (Test-Path -Path $folderPath) {
