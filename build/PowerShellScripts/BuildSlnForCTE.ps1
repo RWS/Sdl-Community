@@ -17,8 +17,8 @@ $csprojFiles = Get-ChildItem -Path $defaultWorkingDirectory -Recurse -Filter *.s
 function Get-MSBuildLocation {
     # Array of possible paths where MSBuild might be located
     $possiblePaths = @(
-        "$env:ProgramFiles(x86)\Microsoft Visual Studio\2019\*\MSBuild\Current\Bin\MSBuild.exe",
         "$env:ProgramFiles(x86)\Microsoft Visual Studio\2022\*\MSBuild\Current\Bin\MSBuild.exe",
+        "$env:ProgramFiles(x86)\Microsoft Visual Studio\2019\*\MSBuild\Current\Bin\MSBuild.exe",
         "$env:ProgramFiles(x86)\Microsoft Visual Studio\2017\*\MSBuild\15.0\Bin\MSBuild.exe",
         "$env:ProgramFiles\Microsoft Visual Studio\2022\*\MSBuild\Current\Bin\MSBuild.exe",
         "$env:ProgramFiles\Microsoft Visual Studio\2019\*\MSBuild\Current\Bin\MSBuild.exe",
@@ -48,7 +48,7 @@ Set-Alias MSBuild -Value $msbuildLocation;
 
 $feedName = 'SDLNuget'
 $nugetRestoreArguments = "/p:RestoreSources=https://pkgs.dev.azure.com/sdl/_packaging/$feedName/nuget/v3/index.json"
-$msbuildArguments = "/flp:logfile=$defaultWorkingDirectory/AzureLogs/MyLog.log;append=true"
+$msbuildArguments = "/flp:logfile=$defaultWorkingDirectory/GitHubLogs/MyLog.log;append=true"
 
 foreach ($project in $csprojFiles) {
         if (Test-Path -Path $folderPath) {
@@ -61,8 +61,9 @@ foreach ($project in $csprojFiles) {
     if (! $?) {  write-Host "msbuild failed" -ForegroundColor Red ; }
 
     $itemFolder = $project -split '\\'
-    $joinedString = ($itemFolder[0..(3)] -join '\')
-    if (Test-Path -Path $folderPath) {
+    $joinedString = ($itemFolder[0..(4)] -join '\')
+    if (Test-Path -Path $joinedString) {
+    Write-Host "~~~  Following will be deleted: $joinedString"
     Remove-Item -Path $joinedString -Recurse -Force
     }
 }
