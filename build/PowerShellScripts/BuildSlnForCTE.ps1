@@ -61,7 +61,7 @@ foreach ($project in $csprojFiles) {
     if (! $?) {  write-Host "msbuild failed" -ForegroundColor Red ; }
 
     $itemFolder = $project -split '\\'
-    $joinedString = ($itemFolder[0..(3)] -join '\')
+    $joinedString = ($itemFolder[0..(4)] -join '\')
     if (Test-Path -Path $folderPath) {
     Remove-Item -Path $joinedString -Recurse -Force
     }
