@@ -1,16 +1,17 @@
-﻿param(
-[string]$directoryPath = ""
-)
-
-if (-not $directoryPath) {
-    $directoryPath = $env:SYSTEM_DEFAULTWORKINGDIRECTORY
-}
-
 # Define the root directory of your repository
 $repoPath = "D:\a\1\s\"
 
+# Define the folder name you want to delete
+$folderName = "NuGet"
+
+# Get the path to the AppData directory
+$appDataPath = [System.Environment]::GetFolderPath('ApplicationData')
+
+# Combine the AppData path with the folder name
+$folderPath = Join-Path -Path $appDataPath -ChildPath $folderName
+
 # Get all .csproj files in the repository
-$csprojFiles = Get-ChildItem -Path $repoPath -Recurse -Filter *.sln | Select-Object -ExpandProperty FullName
+$csprojFiles = Get-ChildItem -Path $repoPath -Recurse -Filter *.csproj | Select-Object -ExpandProperty FullName
 
 # Function to find MSBuild location by checking common paths
 function Get-MSBuildLocation {
@@ -44,14 +45,15 @@ $msbuildLocation = Get-MSBuildLocation
 
 Set-Alias MSBuild -Value $msbuildLocation;
 
-
-$feedName = 'Multitrans'
-$nugetRestoreArguments = "/p:RestoreSources=https://pkgs.dev.azure.com/sdl/_packaging/$feedName/nuget/v3/index.json"
-$msbuildArguments = "/flp:logfile=$directoryPath/AzureLogs/MyLog.log;append=true"
+$feedName = 'SDLNuget'
+$nugetRestoreArguments = "/p:nugetInteractive=true /p:RestoreSources=https://pkgs.dev.azure.com/sdl/_packaging/$feedName/nuget/v3/index.json"
+$msbuildArguments = '/p:Configuration=Release /p:Platform="Any CPU" /flp:logfile=$(System.DefaultWorkingDirectory)/AzureLogs/MyLog.log;append=true'
 
 foreach ($project in $csprojFiles) {
-  #  MSBuild "/bl" -m "$project" "/t:Restore" /p:nugetInteractive=true $nugetRestoreArguments
-    MSBuild "/bl" -m "$project" "/t:Restore" $nugetRestoreArguments
-    MSBuild  -m "$project" "/t:Rebuild" $msbuildArguments
+    if (Test-Path -Path $folderPath) {
+    Remove-Item -Path $folderPath -Recurse -Force
+    }
+    MSBuild "/bl" -m "$project" "/t:Restore" /p:nugetInteractive=true $nugetRestoreArguments
+    MSBuild "/bl" -m "$project" "/t:Rebuild" $msbuildArguments
     if (! $?) {  write-Host "msbuild failed" -ForegroundColor Red ; }
 }
