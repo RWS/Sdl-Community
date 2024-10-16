@@ -1,20 +1,17 @@
 ﻿param(
-[string]$directoryPath = ""
+[string]$defaultWorkingDirectory = ""
 )
 
-if (-not $directoryPath) {
-    $directoryPath = $env:SYSTEM_DEFAULTWORKINGDIRECTORY
+if (-not $defaultWorkingDirectory) {
+    $defaultWorkingDirectory = $env:SYSTEM_DEFAULTWORKINGDIRECTORY
 }
 
 $folderName = "NuGet"
 $appDataPath = [System.Environment]::GetFolderPath('ApplicationData')
 $folderPath = Join-Path -Path $appDataPath -ChildPath $folderName
 
-# Define the root directory of your repository
-$repoPath = "D:\a\1\s\"
-
 # Get all .csproj files in the repository
-$csprojFiles = Get-ChildItem -Path $repoPath -Recurse -Filter *.sln | Select-Object -ExpandProperty FullName
+$csprojFiles = Get-ChildItem -Path $defaultWorkingDirectory -Recurse -Filter *.sln | Select-Object -ExpandProperty FullName
 
 # Function to find MSBuild location by checking common paths
 function Get-MSBuildLocation {
@@ -51,7 +48,7 @@ Set-Alias MSBuild -Value $msbuildLocation;
 
 $feedName = 'SDLNuget'
 $nugetRestoreArguments = "/p:RestoreSources=https://pkgs.dev.azure.com/sdl/_packaging/$feedName/nuget/v3/index.json"
-$msbuildArguments = "/flp:logfile=$directoryPath/AzureLogs/MyLog.log;append=true"
+$msbuildArguments = "/flp:logfile=$defaultWorkingDirectory/AzureLogs/MyLog.log;append=true"
 
 foreach ($project in $csprojFiles) {
         if (Test-Path -Path $folderPath) {
@@ -60,5 +57,12 @@ foreach ($project in $csprojFiles) {
   #  MSBuild "/bl" -m "$project" "/t:Restore" /p:nugetInteractive=true $nugetRestoreArguments
     MSBuild "/bl" -m "$project" "/t:Restore" $nugetRestoreArguments -p:RestorePackagesConfig=true
     MSBuild  -m "$project" "/t:Rebuild" $msbuildArguments
+    
     if (! $?) {  write-Host "msbuild failed" -ForegroundColor Red ; }
+
+    $itemFolder = $project -split '\\'
+    $joinedString = ($itemFolder[0..(3)] -join '\')
+    if (Test-Path -Path $folderPath) {
+    Remove-Item -Path $joinedString -Recurse -Force
+    }
 }
