@@ -17,8 +17,8 @@ $csprojFiles = Get-ChildItem -Path $defaultWorkingDirectory -Recurse -Filter *.s
 function Get-MSBuildLocation {
     # Array of possible paths where MSBuild might be located
     $possiblePaths = @(
-        "$env:ProgramFiles(x86)\Microsoft Visual Studio\2019\*\MSBuild\Current\Bin\MSBuild.exe",
         "$env:ProgramFiles(x86)\Microsoft Visual Studio\2022\*\MSBuild\Current\Bin\MSBuild.exe",
+        "$env:ProgramFiles(x86)\Microsoft Visual Studio\2019\*\MSBuild\Current\Bin\MSBuild.exe",
         "$env:ProgramFiles(x86)\Microsoft Visual Studio\2017\*\MSBuild\15.0\Bin\MSBuild.exe",
         "$env:ProgramFiles\Microsoft Visual Studio\2022\*\MSBuild\Current\Bin\MSBuild.exe",
         "$env:ProgramFiles\Microsoft Visual Studio\2019\*\MSBuild\Current\Bin\MSBuild.exe",
