@@ -62,7 +62,8 @@ foreach ($project in $csprojFiles) {
 
     $itemFolder = $project -split '\\'
     $joinedString = ($itemFolder[0..(4)] -join '\')
-    if (Test-Path -Path $folderPath) {
+    if (Test-Path -Path $joinedString) {
+    Write-Host "~~~  Following will be deleted: $joinedString"
     Remove-Item -Path $joinedString -Recurse -Force
     }
 }
