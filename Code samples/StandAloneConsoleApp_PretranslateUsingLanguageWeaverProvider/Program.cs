@@ -60,10 +60,8 @@ namespace StandAloneConsoleApp_PretranslateUsingLanguageWeaverProvider
 
         private static void Main(string[] args)
         {
-            var projectsDirectory = @"C:\Test";
-            //var templatePath = @"C:\Users\ealbu\Documents\Studio 2024\Project Templates\Test.sdltpl";
-            var templatePath = @"C:\Users\ealbu\Documents\Studio 2024\Project Templates\EdgeTest.sdltpl";
-            //var templatePath = "";
+            var projectsDirectory = @"";
+            var templatePath = @"";
 
             var sourceLanguage = "en-US";
             var targetLanguage = "de-DE";
@@ -81,25 +79,23 @@ namespace StandAloneConsoleApp_PretranslateUsingLanguageWeaverProvider
             var cloudCredentials = new
             {
                 AccountRegion = "eu",
-                ClientID = "FGU2gzQphBAShHpwBiH0zlLTjbXTqTcI",
-                ClientSecret = "g5C0WVqJPj15NuAjj66CUAezfzTXEyotKw5pqcFkDOCLP0qLohBRkZNpqTmawu5M"
+                ClientID = "",
+                ClientSecret = ""
             };
             
             var edgeCredentials = new
             {
                 AccountRegion = "eu",
-                Host = "https://mt01.edge.languageweaver.com",
-                ApiKey = "u_ealbu@sdl.com_3JU5QAJ98FFg"
+                Host = "",
+                ApiKey = ""
             };
 
 
             project.Credentials.AddCredential(new Uri(tpUriString), JsonConvert.SerializeObject(edgeCredentials));
             
-            //UpdateTranslationProviderState(project);
-
             project.Save();
 
-            AddFilesToProject(project, @"C:\Test Files"); // Paste the source files path
+            AddFilesToProject(project, @""); 
 
             RunTasks(project, targetLanguage);
 
@@ -198,41 +194,6 @@ namespace StandAloneConsoleApp_PretranslateUsingLanguageWeaverProvider
             RunScanTaskFiles(project);
             RunAnalyzeTaskFiles(project, targetLanguage);
             RunPreTranslateFiles(project, targetLanguage);
-        }
-
-        private static void UpdateTranslationProviderState(FileBasedProject project)
-        {
-            var translationProviderConfiguration = project.GetTranslationProviderConfiguration();
-
-            var state = translationProviderConfiguration.Entries?[0]?.MainTranslationProvider?.State;
-
-            JObject options;
-
-            var cloudCredentials = new JObject
-            {
-                ["AccountRegion"] = "eu",
-                ["ClientID"] = "FGU2gzQphBAShHpwBiH0zlLTjbXTqTcI",
-                ["ClientSecret"] = "g5C0WVqJPj15NuAjj66CUAezfzTXEyotKw5pqcFkDOCLP0qLohBRkZNpqTmawu5M"
-            };
-
-            if (state is null)
-            {
-                options = new JObject
-                {
-                    ["CloudCredentials"] = cloudCredentials
-                };
-            }
-            else
-            {
-                options = JsonConvert.DeserializeObject<JObject>(state);
-                options["CloudCredentials"] = cloudCredentials;
-            }
-
-
-            var optionsSerialized = JsonConvert.SerializeObject(options);
-            translationProviderConfiguration.Entries[0].MainTranslationProvider.State = optionsSerialized;
-
-            project.UpdateTranslationProviderConfiguration(translationProviderConfiguration);
         }
 
         private static void UpdateTranslationConfiguration(FileBasedProject project)
