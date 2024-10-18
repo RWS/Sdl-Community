@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LanguageWeaverProvider.BatchTask.Model;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -17,6 +18,7 @@ using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using TranslationUnit = Sdl.LanguagePlatform.TranslationMemory.TranslationUnit;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
 
 namespace LanguageWeaverProvider
 {
@@ -144,8 +146,7 @@ namespace LanguageWeaverProvider
 				searchResults[i].Add(CreateSearchResult(currentSegment, translatedSegment));
 
                 var translationOrigin = _currentTranslationUnit.DocumentSegmentPair.Properties.TranslationOrigin;
-                var lastTqeIndex = translationOrigin is not null ? translationOrigin
-                    .GetLastTqeIndex() + 1 : 1;
+                var lastTqeIndex = translationOrigin is not null ? translationOrigin.GetLastTqeIndex() + 1 : 1;
 
                 SetMetadataOnSegment(evaluatedSegment, mappedPair, fileName, lastTqeIndex);
 			}
@@ -207,11 +208,12 @@ namespace LanguageWeaverProvider
 		}
 
 		private void ManageBatchTaskWindow(bool initialize = false)
-		{
-			_batchTaskWindow = initialize 
-                ? Application.Current.Dispatcher.Invoke(ApplicationInitializer.GetBatchTaskWindow) 
+        {
+            var application = Application.Current;
+            _batchTaskWindow = initialize 
+                ? application?.Dispatcher.Invoke(ApplicationInitializer.GetBatchTaskWindow) 
                 : null;
-		}
+        }
 
 		private bool ShouldSkipSearchResult(SearchResults searchResult, bool isMasked, Segment segment)
 		{
@@ -272,21 +274,13 @@ namespace LanguageWeaverProvider
 
         private void SetMetadataOnSegment(EvaluatedSegment evaluatedSegment, PairMapping pairMapping, string fileName, int index)
 		{
-			if (_batchTaskWindow is not null
-			 || _currentTranslationUnit.ConfirmationLevel == ConfirmationLevel.Draft)
+            if (ApplicationInitializer.IsStandalone) return;
+
+			if (_batchTaskWindow is not null || _currentTranslationUnit.ConfirmationLevel == ConfirmationLevel.Draft)
 			{
 				StoreSegmentMetadata(evaluatedSegment, pairMapping, fileName);
-				return;
-			}
-
-			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-			if (editorController.ActiveDocument is null)
-			{
-				return;
-			}
-
-			var currentSegmentId = _currentTranslationUnit.DocumentSegmentPair.Properties.Id;
-			var currentSegmentPair = editorController.ActiveDocument.SegmentPairs.First(p => p.Properties.Id == currentSegmentId);
+                return;
+            }
 
             var translationData = new TranslationData
             {
@@ -297,15 +291,18 @@ namespace LanguageWeaverProvider
                 AutoSendFeedback = _translationOptions.ProviderSettings.AutosendFeedback,
                 Index = index
             };
+
+			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
+            if (editorController.ActiveDocument is null) return;
+
+			var currentSegmentId = _currentTranslationUnit.DocumentSegmentPair.Properties.Id;
+			var currentSegmentPair = editorController.ActiveDocument.SegmentPairs.First(p => p.Properties.Id == currentSegmentId);
+
             var translationOrigin = currentSegmentPair.Properties.TranslationOrigin;
             translationOrigin.SetMetaData(translationData);
 
             editorController.ActiveDocument.UpdateSegmentPairProperties(currentSegmentPair, currentSegmentPair.Properties);
 		}
-
-
-      
-
 
         private void StoreSegmentMetadata(EvaluatedSegment evaluatedSegment, PairMapping pairMapping, string fileName)
 		{
