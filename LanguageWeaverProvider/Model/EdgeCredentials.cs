@@ -1,9 +1,11 @@
-﻿using System;
+﻿using LanguageWeaverProvider.Model.Interface;
+using System;
 
 namespace LanguageWeaverProvider.Model
 {
 	public class EdgeCredentials
     {
+        public EdgeCredentials(){}
 		public EdgeCredentials(string uri)
 		{
 			Host = uri;

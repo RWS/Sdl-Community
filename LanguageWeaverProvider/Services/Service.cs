@@ -37,7 +37,9 @@ namespace LanguageWeaverProvider.Services
 		}
 
 		public static async void ValidateToken(ITranslationOptions translationOptions)
-		{
+        {
+            if (translationOptions.AccessToken is null) return;
+
 			if (translationOptions.AuthenticationType == AuthenticationType.CloudSSO
 			 && IsTimestampExpired(translationOptions.AccessToken.ExpiresAt))
 			{
