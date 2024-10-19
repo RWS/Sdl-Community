@@ -29,9 +29,6 @@ namespace LanguageWeaverProvider.Extensions
         {
             var evaluationTime = DateTime.Now.ToUniversalTime();
 
-            
-
-
             if (!string.IsNullOrWhiteSpace(translationData.QualityEstimation))
             {
                 translationOrigin.StoreTQEDataInMetaData(translationData.Index, Constants.METADATA_EVALUATED_AT_PREFIX,
@@ -54,7 +51,7 @@ namespace LanguageWeaverProvider.Extensions
             translationOrigin.SetMetaData(Constants.SegmentMetadata_Feedback, translationData.AutoSendFeedback.ToString());
         }
 
-        public static void StoreTQEDataInMetaData(this ITranslationOrigin translationOrigin, int index, string prefix, string value)
+        private static void StoreTQEDataInMetaData(this ITranslationOrigin translationOrigin, int index, string prefix, string value)
         {
             translationOrigin.SetMetaData(prefix + index, value);
         }

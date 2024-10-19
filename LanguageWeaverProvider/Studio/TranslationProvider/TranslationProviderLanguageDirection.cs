@@ -35,8 +35,9 @@ namespace LanguageWeaverProvider
 		private Window _batchTaskWindow;
 
 		public TranslationProviderLanguageDirection(ITranslationProvider translationProvider, ITranslationOptions translationOptions, LanguagePair languagePair)
-		{
-			TranslationProvider = translationProvider;
+        {
+            ItemFactory = DefaultDocumentItemFactory.CreateInstance();
+            TranslationProvider = translationProvider;
             _translationOptions = translationOptions;
 			_languagePair = languagePair;
 			CredentialManager.GetCredentials(translationOptions, true);
@@ -52,7 +53,9 @@ namespace LanguageWeaverProvider
 			}
 		}
 
-		public ITranslationProvider TranslationProvider { get; private set; }
+        private IDocumentItemFactory ItemFactory { get; }
+
+        public ITranslationProvider TranslationProvider { get; private set; }
 
         public CultureCode SourceLanguage => _languagePair.SourceCulture;
 
@@ -380,11 +383,8 @@ namespace LanguageWeaverProvider
                 TargetSegment = translation
 			};
 
-            var itemFactory = DefaultDocumentItemFactory.CreateInstance();
-            //var propertyFactory = DefaultPropertiesFactory.CreateInstance();
-
             translationUnit.DocumentSegmentPair = _currentTranslationUnit.DocumentSegmentPair;
-            translationUnit.DocumentSegmentPair.Properties.TranslationOrigin ??= itemFactory.CreateTranslationOrigin();
+            translationUnit.DocumentSegmentPair.Properties.TranslationOrigin ??= ItemFactory.CreateTranslationOrigin();
             translationUnit.ResourceId = new PersistentObjectToken(translationUnit.GetHashCode(), Guid.Empty);
 
             return translationUnit;
