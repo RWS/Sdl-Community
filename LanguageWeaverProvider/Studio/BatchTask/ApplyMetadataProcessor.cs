@@ -62,7 +62,7 @@ namespace LanguageWeaverProvider.BatchTask
                         ModelName = ratedSegment.ModelName,
                         Model = ratedSegment.Model,
                         AutoSendFeedback = ratedSegment.AutosendFeedback,
-                        Index = translationOrigin.GetLastTqeIndex()
+                        Index = translationOrigin.GetLastTqeIndex() + 1
                     };
 
                     translationOrigin.SetMetaData(translationData);

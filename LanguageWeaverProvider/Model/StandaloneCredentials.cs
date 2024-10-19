@@ -33,18 +33,24 @@ namespace LanguageWeaverProvider.Model
                 if (IsCloudCredential)
                 {
                     if (CloudCredentials.ClientID is not null) authenticationType = AuthenticationType.CloudAPI;
-                    if (CloudCredentials.UserPassword is not null) authenticationType = AuthenticationType.CloudCredentials;
-                    if (CloudCredentials.ConnectionCode is not null) authenticationType = AuthenticationType.CloudSSO;
+                    else if (CloudCredentials.UserPassword is not null) authenticationType = AuthenticationType.CloudCredentials;
+                    else if (CloudCredentials.ConnectionCode is not null) authenticationType = AuthenticationType.CloudSSO;
 
-                    if (authenticationType != AuthenticationType.None) EdgeCredentials = null;
+                    if (authenticationType != AuthenticationType.None)
+                    {
+                        EdgeCredentials = null;
+                        return authenticationType;
+                    }
                 }
-
+                
                 CloudCredentials = null;
 
-                if (EdgeCredentials?.Host is not null) return AuthenticationType.EdgeApiKey;
-                if (EdgeCredentials?.Password is not null) return AuthenticationType.EdgeCredentials;
+                if (EdgeCredentials?.Host is not null) authenticationType = AuthenticationType.EdgeApiKey;
+                else if (EdgeCredentials?.Password is not null) authenticationType = AuthenticationType.EdgeCredentials;
                 //if (EdgeCredentials is not null) return AuthenticationType.EdgeSSO;
-                return AuthenticationType.None;
+
+                if (authenticationType == AuthenticationType.None) EdgeCredentials = null;
+                return authenticationType;
             }
         }
 

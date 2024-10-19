@@ -336,7 +336,7 @@ namespace LanguageWeaverProvider.Studio.FeedbackController.ViewModel
                 Translation = ratedSegment.Translation,
                 ModelName = ratedSegment.ModelName,
                 AutoSendFeedback = ratedSegment.AutosendFeedback,
-                Index = translationOrigin.GetLastTqeIndex()
+                Index = translationOrigin.GetLastTqeIndex() + 1
             };
 
             translationOrigin.SetMetaData(translationData);

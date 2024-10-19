@@ -1,4 +1,5 @@
 ﻿using LanguageWeaverProvider.Model;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace LanguageWeaverProvider.Extensions
 
         public static int GetLastTqeIndex(this ITranslationOrigin translationOrigin)
         {
-            var lastIndex = 1;
+            var lastIndex = 0;
             while (translationOrigin.MetaDataContainsKey(Constants.METADATA_EVALUATED_AT_PREFIX + (lastIndex + 1)))
             {
                 lastIndex++;
@@ -27,6 +28,9 @@ namespace LanguageWeaverProvider.Extensions
         public static void SetMetaData(this ITranslationOrigin translationOrigin, TranslationData translationData)
         {
             var evaluationTime = DateTime.Now.ToUniversalTime();
+
+            
+
 
             if (!string.IsNullOrWhiteSpace(translationData.QualityEstimation))
             {

@@ -54,7 +54,7 @@ namespace LanguageWeaverProvider.Extensions
         {
             var credentialStore = ApplicationInitializer.CredentialStore;
 
-            if (standaloneCredentials is not null)
+            if (ApplicationInitializer.IsStandalone && standaloneCredentials is not null && standaloneCredentials.AuthenticationType != AuthenticationType.None)
             {
                 translationOptions.PluginVersion = standaloneCredentials.IsCloudCredential
                     ? PluginVersion.LanguageWeaverCloud
