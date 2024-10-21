@@ -1,16 +1,14 @@
-﻿using System;
+﻿using MicrosoftTranslatorProvider.Helpers;
+using MicrosoftTranslatorProvider.Model;
+using MicrosoftTranslatorProvider.Service.Model;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using MicrosoftTranslatorProvider.Helpers;
-using MicrosoftTranslatorProvider.Model;
-using MicrosoftTranslatorProvider.Service.Model;
-using Newtonsoft.Json;
 using TradosProxySettings;
 
 namespace MicrosoftTranslatorProvider.Service
@@ -19,28 +17,9 @@ namespace MicrosoftTranslatorProvider.Service
     {
         public static async Task<bool> AuthenticateUser(MicrosoftCredentials credentials)
         {
-            var region = credentials.Region;
-            if (!string.IsNullOrEmpty(region))
-            {
-                region += ".";
-            }
-
-            var uriString = $"https://{region}{Constants.MicrosoftProviderServiceUriBase}/sts/v1.0/issueToken";
-            var uri = new Uri(uriString);
             try
             {
-                var httpClientHandler = ProxyHelper.GetHttpClientHandler(CredentialsManager.GetProxySettings(), true);
-                using var httpClient = new HttpClient(httpClientHandler);
-                using var request = new HttpRequestMessage();
-                request.Method = HttpMethod.Post;
-                request.RequestUri = uri;
-                request.Headers.TryAddWithoutValidation(Constants.OcpApimSubscriptionKeyHeader, credentials.APIKey);
-                request.Headers.TryAddWithoutValidation(Constants.OcpApimSubscriptionRegionHeader, credentials.Region);
-
-                var response = await httpClient.SendAsync(request);
-                response.EnsureSuccessStatusCode();
-                var tokenString = await response.Content.ReadAsStringAsync();
-                credentials.AccessToken = "Bearer " + tokenString;
+                await TestTranslate(credentials);
                 return true;
             }
             catch (Exception ex)
@@ -48,6 +27,12 @@ namespace MicrosoftTranslatorProvider.Service
                 ErrorHandler.HandleError(ex);
                 return false;
             }
+        }
+        public static async Task<HashSet<string>> GetSupportedLanguageCodes()
+        {
+            var supportedLanguages = await GetSupportedLanguages();
+            var supportedCodes = new HashSet<string>(supportedLanguages.Select(x => x.LanguageCode));
+            return supportedCodes;
         }
 
         public static async Task<List<TranslationLanguage>> GetSupportedLanguages()
@@ -74,13 +59,6 @@ namespace MicrosoftTranslatorProvider.Service
             return output;
         }
 
-        public static async Task<HashSet<string>> GetSupportedLanguageCodes()
-        {
-            var supportedLanguages = await GetSupportedLanguages();
-            var supportedCodes = new HashSet<string>(supportedLanguages.Select(x => x.LanguageCode));
-            return supportedCodes;
-        }
-
         public static async Task<string> TranslateAsync(PairModel pairModel, string textToTranslate, MicrosoftCredentials microsoftCredentials)
         {
             var sourceLanguage = pairModel.SourceLanguageCode;
@@ -100,7 +78,9 @@ namespace MicrosoftTranslatorProvider.Service
                 Content = new StringContent(requestBody, Encoding.UTF8, "application/json"),
                 RequestUri = new Uri(BuildTranslationUri(sourceLanguage, targetLanguage, categoryId))
             };
-            httpRequest.Headers.Add("Authorization", microsoftCredentials.AccessToken);
+
+            httpRequest.Headers.Add("Ocp-Apim-Subscription-Key", microsoftCredentials.APIKey);
+            httpRequest.Headers.Add("Ocp-Apim-Subscription-Region", microsoftCredentials.Region);
 
             var httpClientHandler = ProxyHelper.GetHttpClientHandler(CredentialsManager.GetProxySettings(), true);
             using var httpClient = new HttpClient(httpClientHandler);
@@ -110,6 +90,15 @@ namespace MicrosoftTranslatorProvider.Service
             var responseTranslation = JsonConvert.DeserializeObject<List<TranslationResponse>>(responseBody);
             var translation = new HtmlUtil().HtmlDecode(responseTranslation[0]?.Translations[0]?.Text);
             return translation;
+        }
+
+        private static string BuildTranslationUri(string sourceLanguage, string targetLanguage, string category)
+        {
+            const string uri = $@"https://{Constants.MicrosoftProviderUriBase}";
+            const string path = "/translate?api-version=3.0";
+            var languageParams = $"&from={sourceLanguage}&to={targetLanguage}&textType=html&category={category}";
+
+            return string.Concat(uri, path, languageParams);
         }
 
         private static string ReplaceCharacters(string text, MatchCollection words)
@@ -122,13 +111,26 @@ namespace MicrosoftTranslatorProvider.Service
             return text;
         }
 
-        private static string BuildTranslationUri(string sourceLanguage, string targetLanguage, string category)
+        private static async Task TestTranslate(MicrosoftCredentials credentials)
         {
-            const string uri = $@"https://{Constants.MicrosoftProviderUriBase}";
-            const string path = "/translate?api-version=3.0";
-            var languageParams = $"&from={sourceLanguage}&to={targetLanguage}&textType=html&category={category}";
+            var sourceLanguage = "en";
+            var targetLanguage = "de";
 
-            return string.Concat(uri, path, languageParams);
+            var requestBody = JsonConvert.SerializeObject(new[] { new { Text = "test" } });
+            var httpRequest = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                Content = new StringContent(requestBody, Encoding.UTF8, "application/json"),
+                RequestUri = new Uri(BuildTranslationUri(sourceLanguage, targetLanguage, "general"))
+            };
+
+            httpRequest.Headers.Add("Ocp-Apim-Subscription-Key", credentials.APIKey);
+            httpRequest.Headers.Add("Ocp-Apim-Subscription-Region", credentials.Region);
+
+            var httpClientHandler = ProxyHelper.GetHttpClientHandler(CredentialsManager.GetProxySettings(), true);
+            using var httpClient = new HttpClient(httpClientHandler);
+            var response = await httpClient.SendAsync(httpRequest);
+            response.EnsureSuccessStatusCode();
         }
     }
 }
