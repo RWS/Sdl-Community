@@ -272,7 +272,6 @@ namespace MicrosoftTranslatorProvider.ViewModel
 				}
 
 				var apiConnecter = new MicrosoftApi(_providerControlViewModel.ApiKey, _providerControlViewModel.SelectedRegion?.Key);
-				apiConnecter.RefreshAuthToken();
 				return true;
 			}
 			catch (Exception e)
