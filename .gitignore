@@ -269,3 +269,4 @@ TMX_TranslationProvider/TMX_TranslationProviderWithUITest.sln
 /Jobs/Sdl.Community.Jobs/Properties/launchSettings.json
 StarTransit/.editorconfig
 DSI Viewer/.editorconfig
+MicrosoftTranslatorProvider/.editorconfig

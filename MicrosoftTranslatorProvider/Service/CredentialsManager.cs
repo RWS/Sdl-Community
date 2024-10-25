@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Policy;
 using MicrosoftTranslatorProvider.Interfaces;
 using MicrosoftTranslatorProvider.Model;
 using Newtonsoft.Json;
@@ -32,24 +33,19 @@ namespace MicrosoftTranslatorProvider.Service
         private static void GetAndAssignCredentials<T>(ITranslationOptions translationOptions, string scheme)
         {
             var credentialStore = ApplicationInitializer.CredentialStore;
-            if (credentialStore is null)
-            {
-                return;
-            }
 
-            var uri = new Uri(scheme);
-            var translationProviderCredential = credentialStore.GetCredential(uri);
-            if (translationProviderCredential is null
-                || translationProviderCredential.Credential is not string persistedCredentials)
-            {
-                return;
-            }
-
+            var translationProviderCredential = credentialStore?.GetCredential(new Uri(scheme));
+            if (translationProviderCredential?.Credential is not string persistedCredentials) return;
             try
             {
-                var parsedObject = JObject.Parse(persistedCredentials);
-                var credentials = parsedObject[CredentialsKey].ToString();
-                AssignCredentials<T>(translationOptions, parsedObject[CredentialsKey].ToString());
+                string credentials;
+                if (ApplicationInitializer.IsStandalone) credentials = translationProviderCredential.Credential;
+                else
+                {
+                    var parsedObject = JObject.Parse(persistedCredentials);
+                    credentials = parsedObject[CredentialsKey].ToString();
+                }
+                AssignCredentials<T>(translationOptions, credentials);
             }
             catch
             {
