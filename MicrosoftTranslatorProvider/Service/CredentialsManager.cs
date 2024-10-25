@@ -61,12 +61,12 @@ namespace MicrosoftTranslatorProvider.Service
             var tType = typeof(T);
             if (tType == typeof(MicrosoftCredentials))
             {
-                translationOptions.MicrosoftCredentials = DeserializeAndCast<T>(credentials) as MicrosoftCredentials;
+                translationOptions.MicrosoftCredentials = DeserializeAndCast<MicrosoftCredentials>(credentials);
             }
             else if (tType == typeof(PrivateEndpoint))
             {
                 translationOptions.PrivateEndpoint =
-                    DeserializeAndCast<PrivateEndpoint>(credentials) as PrivateEndpoint;
+                    DeserializeAndCast<PrivateEndpoint>(credentials);
             }
         }
 

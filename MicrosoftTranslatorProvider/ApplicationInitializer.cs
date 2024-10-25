@@ -13,13 +13,12 @@ namespace MicrosoftTranslatorProvider
 	{
 		public static ITranslationProviderCredentialStore CredentialStore { get; set; }
 
-		public static IDictionary<string, ITranslationOptions> TranslationOptions { get; set; }
+		public static IDictionary<string, ITranslationOptions> TranslationOptions { get; set; } = new Dictionary<string, ITranslationOptions>();
 
-		public void Execute()
+        public void Execute()
 		{
 			Log.Setup();
 			AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolver.CurrentDomain_AssemblyResolve;
-			TranslationOptions = new Dictionary<string, ITranslationOptions>();
 		}
 	}
 }
