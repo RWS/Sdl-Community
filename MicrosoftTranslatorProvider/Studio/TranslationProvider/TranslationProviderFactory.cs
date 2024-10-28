@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using MicrosoftTranslatorProvider.Model;
 using MicrosoftTranslatorProvider.Service;
@@ -14,7 +15,9 @@ namespace MicrosoftTranslatorProvider
 	{
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
 		{
-			ApplicationInitializer.CredentialStore = credentialStore;
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
+
+            ApplicationInitializer.CredentialStore = credentialStore;
 
 			var translationOptions = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
 			CredentialsManager.GetCredentials(translationOptions);
