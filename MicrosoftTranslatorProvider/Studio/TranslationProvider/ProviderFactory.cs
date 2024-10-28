@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using MicrosoftTranslatorProvider.Model;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -18,7 +19,9 @@ namespace MicrosoftTranslatorProvider
 				throw new Exception(PluginResources.UriNotSupportedMessage);
 			}
 
-			var credential = credentialStore.GetCredential(new Uri(Constants.MicrosoftProviderFullScheme)) ?? throw new TranslationProviderAuthenticationException();
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
+
+            var credential = credentialStore.GetCredential(new Uri(Constants.MicrosoftProviderFullScheme)) ?? throw new TranslationProviderAuthenticationException();
 			var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
 			var privateHeaders = new List<UrlMetadata>();
 			try
