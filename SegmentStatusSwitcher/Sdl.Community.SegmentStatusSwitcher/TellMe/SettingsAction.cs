@@ -15,7 +15,7 @@ namespace Sdl.Community.SegmentStatusSwitcher.TellMe
 
 		public SettingsAction()
 		{
-			Name = string.Format("{0}", PluginResources.Plugin_Name);
+			Name = string.Format("{0} Settings", PluginResources.Plugin_Name);
 		}
 
 		private static void ShowDialog()
