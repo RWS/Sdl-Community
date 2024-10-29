@@ -18,6 +18,7 @@ namespace GoogleCloudTranslationProvider.Studio
 			}
 
  			var translationOptions = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
+
 			if (translationOptions.SelectedGoogleVersion is not ApiVersion.V2)
 			{
                 AppInitializer.TranslationOptions[translationOptions.Id] = translationOptions;
