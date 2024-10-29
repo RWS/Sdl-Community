@@ -3,7 +3,7 @@
 		<TargetFramework>net48</TargetFramework>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<CreatePluginPackage>true</CreatePluginPackage>
-		<AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+		<AssemblyOriginatorKeyFile>..\..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<EmbeddedResourceUseDependentUponConvention>true</EmbeddedResourceUseDependentUponConvention>
 		<SignAssembly>true</SignAssembly>
