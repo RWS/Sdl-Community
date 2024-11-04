@@ -72,12 +72,11 @@ namespace StandAloneConsoleApp_PretranslateUsingMicrosoftTranslationProvider
             UpdateProjectProviderSettings(project);
 
             var tpUriString = "microsofttranslatorprovider:///"; // Paste URI here
-            var apiKey = ""; // Paste the API Key here
 
             var credentials = new
             {
-                APIKey = apiKey,
-                Region = ""
+                APIKey = "", // Paste the Api Key here
+                Region = "" // Paste the Region here
             };
 
             if (string.IsNullOrEmpty(templatePath))
