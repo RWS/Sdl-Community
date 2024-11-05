@@ -61,8 +61,8 @@ namespace StandAloneConsoleApp_PretranslateUsingLanguageWeaverProvider
 
         private static void Main(string[] args)
         {
-            var projectsDirectory = @"C:\Users\aflorescu\Code\Projects";
-            var templatePath = @"C:\Users\aflorescu\Documents\Studio 2024\Project Templates\sd.sdltpl";
+            var projectsDirectory = @"";
+            var templatePath = @"";
 
             var sourceLanguage = "en-US";
             var targetLanguage = "de-DE";
@@ -80,15 +80,15 @@ namespace StandAloneConsoleApp_PretranslateUsingLanguageWeaverProvider
             var cloudCredentials = new
             {
                 AccountRegion = "eu",
-                ClientID = "hBvfs1IHVaQJsaUKaae1QHdyTILP0x8G",
-                ClientSecret = "OETWWIPgP3moklQJr_xaH8yIVZpI9tkVcAjC2rrAb2mnU-6zioNI1f8stofTydbF"
+                ClientID = "",
+                ClientSecret = ""
             };
             
             var edgeCredentials = new
             {
                 AccountRegion = "eu",
-                Host = "https://mt01.edge.languageweaver.com",
-                ApiKey = "u_aflorescu@sdl.com_S02dwVDr8RuaB7"
+                Host = "",
+                ApiKey = ""
             };
 
 
@@ -96,7 +96,7 @@ namespace StandAloneConsoleApp_PretranslateUsingLanguageWeaverProvider
             
             project.Save();
 
-            AddFilesToProject(project, @"C:\Users\aflorescu\Code\Samples\SampleFiles\Translatable"); 
+            AddFilesToProject(project, @""); 
 
             RunTasks(project, targetLanguage);
 
