@@ -3,7 +3,6 @@ using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.ProjectAutomation.Settings;
 using System;
-using StandAloneConsoleApp_PretranslateUsingProvider.LC;
 using System.IO;
 
 namespace StandAloneConsoleApp_PretranslateUsingProvider
@@ -40,7 +39,7 @@ namespace StandAloneConsoleApp_PretranslateUsingProvider
             // Change the path with the actual directory where projects should be saved...
             var projectsDirectory = @"";
 
-            // Change the path with the actual project template path
+            // Specify the path to the project template that contains the Language Cloud Translation Engine...
             var templatePath = @"";
 
             if (!Directory.Exists(projectsDirectory))
@@ -64,7 +63,6 @@ namespace StandAloneConsoleApp_PretranslateUsingProvider
                 LocalProjectFolder = projectDirectory
             };
 
-
             FileBasedProject project;
             if (!string.IsNullOrEmpty(templatePath))
             {
@@ -77,27 +75,19 @@ namespace StandAloneConsoleApp_PretranslateUsingProvider
 
             UpdateProjectProviderSettings(project);
 
-            // Update this variable with the actual URI of the translation provider.
-            // You can retrieve this value from an existing project or project template (.sdlproj/.sdltpl).
-            // To do this, open the project file in a text editor of your choice.
-            // Look for the XML element <CascadeEntryProvider> and its child elements.
-            // These elements should contain the URI for the translation provider.
+            // Update this variable with the actual URI of the translation provider if available.
+            // This URI can be retrieved from an existing project or project template (.sdlproj/.sdltpl).
+            // To locate it, open the project/template file in a text editor and search for the <MainTranslationProviderItem> XML element.
+            // Copy the value of its "uri" property, as this contains the URI for the translation provider.
             //
-            // For example:
+            // Note:
+            // - If a project template is provided, this parameter can be left as an empty string.
             // - URIs starting with "languagecloud.translation.https://" indicate a Translation Engine.
             //
             // Copy the complete URI from the project/template file and assign it to the variable below.
-            //
-            // Example URI: 
-            // If a project template is used, you would typically need to map the URI from the project template file to the actual URI.
-            // For the sake of this example, change this value with the actual tpUri string.
-            // This is because, when the project automation api is used, the credentials need to be provided explicitly as it works outside the context of Trados Studio.
+            // Remember: When using the project automation API, credentials must be provided explicitly 
+            //           since the API operates outside the context of Trados Studio.
             var tpUriString = @""; // Paste URI here
-
-            // The API key can be obtained from the Language Cloud web interface.
-            // Navigate to: Users -> Integrations -> API Keys.
-            // Copy the API key from this section.
-            var apiKey = ""; // Paste the API Key here
 
             if (string.IsNullOrEmpty(templatePath))
             {
@@ -109,17 +99,11 @@ namespace StandAloneConsoleApp_PretranslateUsingProvider
                 project.UpdateTranslationProviderConfiguration(tpConfig);
             }
 
-            project.Credentials.AddCredential(new Uri(tpUriString), apiKey);
-
             project.Save();
 
             // Update the second parameter with the actual path to the source files.
             // Example: @"C:\Path\To\SourceFiles"
             AddFilesToProject(project, @""); // Paste the source files path
-
-            //Login to LC for projects with Translation Engine providers 
-            var lcService = new LCService();
-            lcService.LoginToLC();
 
             RunScanTaskFiles(project);
             RunAnalyzeTaskFiles(project, targetLanguage);

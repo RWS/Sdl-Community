@@ -3,7 +3,7 @@
 		<TargetFramework>net48</TargetFramework>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<CreatePluginPackage>true</CreatePluginPackage>
-		<AssemblyOriginatorKeyFile>C:\Users\aflorescu\Code\SamplesRepo\Sdl-Community\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+		<AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<EmbeddedResourceUseDependentUponConvention>true</EmbeddedResourceUseDependentUponConvention>
 		<SignAssembly>true</SignAssembly>
@@ -42,6 +42,9 @@
     </Reference>
 		<Reference Include="System" />
 		<Reference Include="System.Core" />
+		<Reference Include="System.Text.Json">
+		  <HintPath>$(TradosFolder)\System.Text.Json.dll</HintPath>
+		</Reference>
 		<Reference Include="System.Xml.Linq" />
 		<Reference Include="System.Data.DataSetExtensions" />
 		<Reference Include="Microsoft.CSharp" />
