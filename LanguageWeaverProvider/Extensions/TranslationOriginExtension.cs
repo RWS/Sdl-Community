@@ -25,6 +25,14 @@ namespace LanguageWeaverProvider.Extensions
             return lastIndex;
         }
 
+        public static PluginVersion ToPluginVersion(this Uri translationProviderUri)
+        => translationProviderUri.AbsoluteUri switch
+        {
+            Constants.CloudFullScheme => PluginVersion.LanguageWeaverCloud,
+            Constants.EdgeFullScheme => PluginVersion.LanguageWeaverEdge,
+            _ => PluginVersion.None,
+        };
+
         public static void SetMetaData(this ITranslationOrigin translationOrigin, TranslationData translationData)
         {
             var evaluationTime = DateTime.Now.ToUniversalTime();

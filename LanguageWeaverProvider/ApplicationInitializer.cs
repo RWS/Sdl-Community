@@ -22,6 +22,8 @@ namespace LanguageWeaverProvider
 
 		public static ITranslationProviderCredentialStore CredentialStore { get; set; }
 
+        public static PluginVersion PluginVersion { get; set; } = PluginVersion.None;
+
 		public static IDictionary<string, ITranslationOptions> TranslationOptions { get; set; } = new Dictionary<string, ITranslationOptions>();
         public static bool IsStandalone { get; set; }
 

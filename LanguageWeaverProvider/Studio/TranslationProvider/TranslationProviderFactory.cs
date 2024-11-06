@@ -16,6 +16,8 @@ namespace LanguageWeaverProvider
         public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
         {
             ApplicationInitializer.CredentialStore = credentialStore;
+            ApplicationInitializer.PluginVersion = translationProviderUri.ToPluginVersion();
+
             if (translationProviderState is null) return new TranslationProvider(new TranslationOptions());
 
             var serializedCredentials = credentialStore.GetCredential(translationProviderUri).Credential;
@@ -47,6 +49,13 @@ namespace LanguageWeaverProvider
 
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)
         {
+            var providerVersion = translationProviderUri.ToPluginVersion();
+            if (providerVersion != PluginVersion.None && 
+                providerVersion != ApplicationInitializer.PluginVersion)
+            {
+                ApplicationInitializer.CredentialStore = null;
+            }
+
             if (ApplicationInitializer.CredentialStore is not null && !CredentialManager.CredentialsArePersisted(translationProviderUri))
             {
                 return false;

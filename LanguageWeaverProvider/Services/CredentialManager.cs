@@ -29,12 +29,7 @@ namespace LanguageWeaverProvider.Extensions
                 return false;
             }
 
-            var pluginVersion = translationProviderUri.AbsoluteUri switch
-            {
-                Constants.CloudFullScheme => PluginVersion.LanguageWeaverCloud,
-                Constants.EdgeFullScheme => PluginVersion.LanguageWeaverEdge,
-                _ => PluginVersion.None
-            };
+            var pluginVersion = translationProviderUri.ToPluginVersion();
 
             if (pluginVersion == PluginVersion.None)
             {
