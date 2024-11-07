@@ -209,7 +209,7 @@
                                             Height="24"
                                             Padding="4 0"
                                             Margin="0 0 1 0">
-                                        <TextBlock Text="Target"
+                                        <TextBlock Text="Source"
                                                    VerticalAlignment="Center"
                                                    FontWeight="DemiBold"
                                                    FontSize="11" />
@@ -221,7 +221,7 @@
                                             BorderThickness="0 1 1 0"
                                             Height="24"
                                             Padding="4 0">
-                                        <TextBlock Text="Source"
+                                        <TextBlock Text="Target"
                                                    VerticalAlignment="Center"
                                                    FontWeight="DemiBold"
                                                    FontSize="11" />
@@ -296,7 +296,7 @@
                                              AutomationProperties.Name="Header Key"
                                              Style="{StaticResource Sdl.TextBox.ReadOnlyStyle}"
                                              VerticalContentAlignment="Center"
-                                             IsReadOnly="True"
+                                             IsReadOnly="False"
                                              Width="160"
                                              Height="32"
                                              Margin="4 0"
