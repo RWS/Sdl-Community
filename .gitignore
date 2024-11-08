@@ -1032,3 +1032,9 @@ IATETerminologyProvider/IATETerminologyProvider/pluginpackage.manifest_LOCAL_178
 /MT Enhanced Provider/Sdl.Community.MtEnhancedProvider.Tests/Properties/launchSettings.json
 /GoogleTranslatorProvider/GoogleTranslatorProvider/Properties/launchSettings.json
 /SDLMTEdge.Provider/SDLMTEdgeTranslationProvider/Properties/launchSettings.json
+Code samples/StandAloneConsoleApp_PretranslateUsingLanguageWeaverProvider/Properties/launchSettings.json
+Code samples/StandAloneConsoleApp_PretranslateUsingMicrosoftTranslationProvider/Properties/launchSettings.json
+DeepLMTProvider/Sdl.Community.DeelLMTProvider/Properties/launchSettings.json
+DSI Viewer/Sdl.Community.SdiViewer/Properties/launchSettings.json
+LanguageWeaverProvider/Properties/launchSettings.json
+MicrosoftTranslatorProvider/Properties/launchSettings.json
