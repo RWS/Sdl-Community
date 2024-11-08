@@ -439,7 +439,11 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                     if (fileUnitProperties.TotalNotTranslatedUpdated > fileUnitProperties.TotalNotTranslatedOriginal)
                         filesTotalNotTranslatedChangesPercentage = Math.Round((fileUnitProperties.TotalNotTranslatedUpdated - fileUnitProperties.TotalNotTranslatedOriginal) / filesTotalStatusChangesUpdated * 100, 2);
                     else if (fileUnitProperties.TotalNotTranslatedOriginal > 0)
-                        filesTotalNotTranslatedChangesPercentage = Convert.ToDecimal("-" + Math.Round((fileUnitProperties.TotalNotTranslatedOriginal - fileUnitProperties.TotalNotTranslatedUpdated) / filesTotalStatusChangesUpdated * 100, 2).ToString(CultureInfo.InvariantCulture));
+                    {
+	                    var value = "-" + Math.Round((fileUnitProperties.TotalNotTranslatedOriginal - fileUnitProperties.TotalNotTranslatedUpdated) / filesTotalStatusChangesUpdated * 100, 2).ToString(CultureInfo.InvariantCulture);
+	                    filesTotalNotTranslatedChangesPercentage =
+		                    Convert.ToDecimal(value, CultureInfo.InvariantCulture);
+                    }
 
 
                     if (fileUnitProperties.TotalDraftUpdated > fileUnitProperties.TotalDraftOriginal)
@@ -1441,7 +1445,10 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                 if (filesTotalNotTranslatedUpdated > filesTotalNotTranslatedOriginal)
                     totalNotTranslatedChangesPercentage = Math.Round((filesTotalNotTranslatedUpdated - filesTotalNotTranslatedOriginal) / totalStatusChangesUpdated * 100, 2);
                 else if (filesTotalNotTranslatedOriginal > 0)
-                    totalNotTranslatedChangesPercentage = Convert.ToDecimal("-" + Math.Round((filesTotalNotTranslatedOriginal - filesTotalNotTranslatedUpdated) / totalStatusChangesUpdated * 100, 2).ToString(CultureInfo.InvariantCulture));
+                {
+	                var value = "-" + Math.Round((filesTotalNotTranslatedOriginal - filesTotalNotTranslatedUpdated) / totalStatusChangesUpdated * 100, 2).ToString(CultureInfo.InvariantCulture);
+	                totalNotTranslatedChangesPercentage = Convert.ToDecimal(value, CultureInfo.InvariantCulture);
+                }
 
 
                 if (filesTotalDraftUpdated > filesTotalDraftOriginal)
