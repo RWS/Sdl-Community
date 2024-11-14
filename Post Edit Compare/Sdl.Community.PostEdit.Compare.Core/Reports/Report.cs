@@ -11,6 +11,7 @@ using Sdl.Community.PostEdit.Compare.Core.Helper;
 using Sdl.Community.PostEdit.Compare.Core.SDLXLIFF;
 using Sdl.Community.PostEdit.Compare.DAL.ExcelTableModel;
 using Sdl.Community.PostEdit.Compare.DAL.PostEditModificationsAnalysis;
+using Convert = Sdl.Community.PostEdit.Compare.Core.Helper.Convert;
 
 namespace Sdl.Community.PostEdit.Compare.Core.Reports
 {
@@ -442,7 +443,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                     {
 	                    var value = "-" + Math.Round((fileUnitProperties.TotalNotTranslatedOriginal - fileUnitProperties.TotalNotTranslatedUpdated) / filesTotalStatusChangesUpdated * 100, 2).ToString(CultureInfo.InvariantCulture);
 	                    filesTotalNotTranslatedChangesPercentage =
-		                    Convert.ToDecimal(value, CultureInfo.InvariantCulture);
+		                    Convert.ToDecimal(value);
                     }
 
 
@@ -1447,7 +1448,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                 else if (filesTotalNotTranslatedOriginal > 0)
                 {
 	                var value = "-" + Math.Round((filesTotalNotTranslatedOriginal - filesTotalNotTranslatedUpdated) / totalStatusChangesUpdated * 100, 2).ToString(CultureInfo.InvariantCulture);
-	                totalNotTranslatedChangesPercentage = Convert.ToDecimal(value, CultureInfo.InvariantCulture);
+	                totalNotTranslatedChangesPercentage = Convert.ToDecimal(value);
                 }
 
 

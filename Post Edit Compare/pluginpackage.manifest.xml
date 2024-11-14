@@ -1,7 +1,7 @@
 
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Post-Edit Compare</PlugInName>
-	<Version>7.7.2.1</Version>
+	<Version>7.7.2.2</Version>
 	<Description>Post-Edit Compare</Description>
 	<Author>Trados AppStore Team</Author>
 	<RequiredProduct name="TradosStudio" minversion="17.2" maxversion="17.9" />
