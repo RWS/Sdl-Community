@@ -25,6 +25,7 @@ using Settings = Sdl.Community.PostEdit.Compare.Core.Settings;
 using Timer = System.Timers.Timer;
 using Sdl.Community.PostEdit.Compare.Properties;
 using Sdl.Community.PostEdit.Compare.Core.Helper;
+using Convert = Sdl.Community.PostEdit.Compare.Core.Helper.Convert;
 
 namespace PostEdit.Compare
 {
