@@ -121,7 +121,7 @@ Set-Alias MSBuild -Value $msbuildLocation;
 
 $feedName = 'SDLNuget'
 $nugetRestoreArguments = "/p:RestoreSources=https://pkgs.dev.azure.com/sdl/_packaging/$feedName/nuget/v3/index.json"
-$msbuildArguments = "/flp:logfile=$defaultWorkingDirectory/AzureLogs/MyLog.log;append=true"
+$msbuildArguments = "/flp:logfile=$defaultWorkingDirectory/Logs/MyLog.log;append=true"
 
 Write-Host ">>>>>>> : $poolName, $index"
 
