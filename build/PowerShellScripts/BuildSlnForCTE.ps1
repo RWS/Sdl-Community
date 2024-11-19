@@ -130,23 +130,26 @@ foreach ($project in $csprojFiles) {
     Remove-Item -Path $folderPath -Recurse -Force
     }
 
-    MSBuild "/bl" -m "$project" "/t:Restore" $nugetRestoreArguments -p:RestorePackagesConfig=true
-    MSBuild  -m "$project" "/t:Rebuild" $msbuildArguments
+    if (Test-Path -Path $project) {
 
-    if (! $?) {  write-Host "msbuild failed" -ForegroundColor Red ; }
+        MSBuild "/bl" -m "$project" "/t:Restore" $nugetRestoreArguments -p:RestorePackagesConfig=true
+        MSBuild  -m "$project" "/t:Rebuild" $msbuildArguments
 
-    $itemFolder = $project -split '\\'
-    $joinedString = ($itemFolder[0..($index)] -join '\')
+        if (! $?) {  write-Host "msbuild failed" -ForegroundColor Red ; }
 
-    $unitTestExists = UnitTestsExists -solutionPath $joinedString
+        $itemFolder = $project -split '\\'
+        $joinedString = ($itemFolder[0..($index)] -join '\')
 
-    if ($unitTestExists){
-        BuildUnitTests -solutionPath $joinedString
-    }
+        $unitTestExists = UnitTestsExists -solutionPath $joinedString
 
-    if (Test-Path -Path $joinedString) {
-    Write-Host "~~~  Following will be deleted: $joinedString"
-    Remove-Item -Path $joinedString -Recurse -Force
+        if ($unitTestExists){
+            BuildUnitTests -solutionPath $joinedString
+        }
+
+        if (Test-Path -Path $joinedString) {
+            Write-Host "~~~  Following will be deleted: $joinedString"
+            Remove-Item -Path $joinedString -Recurse -Force
+        }
     }
 
 }
