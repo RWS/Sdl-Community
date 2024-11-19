@@ -1,9 +1,7 @@
 ﻿param(
-[string]$defaultWorkingDirectory = "",
-[string]$poolname = ""
+[string]$defaultWorkingDirectory = ""
 )
 
-$index
 
 if (-not $defaultWorkingDirectory) {
     $defaultWorkingDirectory = $env:SYSTEM_DEFAULTWORKINGDIRECTORY
@@ -11,12 +9,6 @@ if (-not $defaultWorkingDirectory) {
 
 if (-not $poolname) {
     $poolname = $env:SYSTEM_DEFAULTWORKINGDIRECTORY
-}
-
-if ($poolName -eq "FlaviusPool") {
-    $index = 5
-} elseif ($poolName -eq "Azure Pipelines") {
-    $index = 4
 }
 
 $folderName = "NuGet"
@@ -50,14 +42,9 @@ function BuildUnitTests {
     $testAssemblie = Get-ChildItem -Path $solutionPath -Recurse -Include "*UnitTests.dll" | Where-Object { $_.FullName -notlike "*TestAdapter.dll" -and $_.FullName -notlike "*\obj\*" }
 
     if ($testAssemblie.Count -ne 0) {
-
         
         & "$vsTestPath" "$testAssemblie" /Logger:"Console;Verbosity=normal" `
-    | Tee-Object -FilePath "$defaultWorkingDirectory\AzureLogs\UnitTestsLog.txt" -Append
-        
-
-     #    & "$vsTestPath" "$testAssemblie" `
-     #   /Logger:"Console;Verbosity=normal" ` | Tee-Object -FilePath "$defaultWorkingDirectory/AzureLogs/MyLog.log" -Appen
+        | Tee-Object -FilePath "$defaultWorkingDirectory\Logs\UnitTestsLog.txt" -Append
        
     }
 
