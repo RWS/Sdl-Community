@@ -138,7 +138,7 @@ foreach ($project in $csprojFiles) {
         if (! $?) {  write-Host "msbuild failed" -ForegroundColor Red ; }
 
         $itemFolder = $project -split '\\'
-        $joinedString = ($itemFolder[0..($index)] -join '\')
+        $joinedString = ($itemFolder[0..($itemFolder.Count - 2)] -join '\')
 
         $unitTestExists = UnitTestsExists -solutionPath $joinedString
 
