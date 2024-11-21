@@ -1,0 +1,13 @@
+German,de-DE;English (United Kingdom),en-GB
+1;Fotodrucker;photo printer;Peripheral device used to create hardcopies of images
+2;Computermaus;computer mouse;Pointing device that detects two-dimensional motion relative to a surface
+3;Webbrowser;web browser;Software used to access information on the World Wide Web
+4;Festplatte;hard drive;Data storage device used for storing and retrieving digital information
+5;Betriebssystem;operating system;Software that manages computer hardware and software resources
+6;Tastatur;keyboard;Input device used to type characters and functions into a computer
+7;Smartphone;smartphone;Handheld device that combines mobile phone capabilities with computing functions
+8;USB-Stick;USB drive;Portable storage device that uses flash memory and connects via USB
+9;Cloud-Computing;cloud computing;Use of remote servers to store, manage, and process data over the internet
+10;Grafikkarte;graphic card;Expansion card responsible for rendering images to a computer screen
+11;Beispieltext;example text;used as placeholder or filler
+12;Weg;road;place
