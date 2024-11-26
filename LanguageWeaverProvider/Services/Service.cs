@@ -38,6 +38,8 @@ namespace LanguageWeaverProvider.Services
 
 		public static async void ValidateToken(ITranslationOptions translationOptions)
 		{
+			if (translationOptions.AccessToken is null) return;
+
 			if (translationOptions.AuthenticationType == AuthenticationType.CloudSSO
 			 && IsTimestampExpired(translationOptions.AccessToken.ExpiresAt))
 			{
@@ -89,7 +91,7 @@ namespace LanguageWeaverProvider.Services
 		{
 			var httpClient = new HttpClient();
 			httpClient.DefaultRequestHeaders.Add(Constants.TraceAppKey, Constants.TraceAppValue);
-			httpClient.DefaultRequestHeaders.Add(Constants.TraceAppVersionKey, Constants.TraceAppVersionValue);
+			httpClient.DefaultRequestHeaders.Add(Constants.TraceAppVersionKey, ApplicationInitializer.CurrentAppVersion);
 			return httpClient;
 		}
 	}

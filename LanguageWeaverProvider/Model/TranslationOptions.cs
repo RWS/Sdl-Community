@@ -18,6 +18,11 @@ namespace LanguageWeaverProvider.Model.Options
 			}
 		}
 
+		public void AssignId()
+		{
+			Id = Guid.NewGuid().ToString();
+		}
+
 		[JsonIgnore]
 		public AccessToken AccessToken { get; set; }
 

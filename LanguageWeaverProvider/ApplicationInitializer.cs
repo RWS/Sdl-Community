@@ -22,12 +22,15 @@ namespace LanguageWeaverProvider
 
 		public static ITranslationProviderCredentialStore CredentialStore { get; set; }
 
-		public static IDictionary<string, ITranslationOptions> TranslationOptions { get; set; }
+		public static PluginVersion PluginVersion { get; set; } = PluginVersion.None;
+
+		public static IDictionary<string, ITranslationOptions> TranslationOptions { get; set; } = new Dictionary<string, ITranslationOptions>();
+
+		public static bool IsStandAlone { get; set; }
 
 		public void Execute()
         {
 			RatedSegments = new List<RatedSegment>();
-			TranslationOptions = new Dictionary<string, ITranslationOptions>();
 			CurrentAppVersion = GetAssemblyFileVersion();
             Log.Setup();
         }

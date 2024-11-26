@@ -1,9 +1,10 @@
-﻿using System;
-using LanguageWeaverProvider.Extensions;
+﻿using LanguageWeaverProvider.Extensions;
+using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Services;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using System;
 
 namespace LanguageWeaverProvider
 {
@@ -15,12 +16,21 @@ namespace LanguageWeaverProvider
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
 		{
 			ApplicationInitializer.CredentialStore = credentialStore;
+			ApplicationInitializer.PluginVersion = translationProviderUri.ToPluginVersion();
 
-			var options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
-			CredentialManager.GetCredentials(options, true);
+			if (translationProviderState is null) return new TranslationProvider(new TranslationOptions());
+
+			var serializedCredentials = credentialStore.GetCredential(translationProviderUri).Credential;
+			var standaloneCredentials = new StandaloneCredentials(serializedCredentials);
+
+			ApplicationInitializer.IsStandAlone = standaloneCredentials.AuthenticationType != AuthenticationType.None;
+
+			var options = GetOptions(translationProviderState);
+			CredentialManager.GetCredentials(options, true, standaloneCredentials);
+
 			Service.ValidateToken(options);
-
 			ApplicationInitializer.TranslationOptions[options.Id] = options;
+
 			return new TranslationProvider(options);
 		}
 
@@ -39,6 +49,13 @@ namespace LanguageWeaverProvider
 
 		public bool SupportsTranslationProviderUri(Uri translationProviderUri)
 		{
+			var providerVersion = translationProviderUri.ToPluginVersion();
+			if (providerVersion != PluginVersion.None &&
+				providerVersion != ApplicationInitializer.PluginVersion)
+			{
+				ApplicationInitializer.CredentialStore = null;
+			}
+
 			if (ApplicationInitializer.CredentialStore is not null && !CredentialManager.CredentialsArePersisted(translationProviderUri))
 			{
 				return false;
@@ -49,6 +66,22 @@ namespace LanguageWeaverProvider
 				null => throw new ArgumentNullException("Unsuported"),
 				_ => translationProviderUri.Scheme.StartsWith(Constants.BaseTranslationScheme)
 			};
+		}
+
+		private static TranslationOptions GetOptions(string translationProviderState)
+		{
+			TranslationOptions options;
+			try
+			{
+				options = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
+			}
+			catch
+			{
+				options = new TranslationOptions();
+			}
+			if (options.Id is null) options.AssignId();
+
+			return options;
 		}
 	}
 }

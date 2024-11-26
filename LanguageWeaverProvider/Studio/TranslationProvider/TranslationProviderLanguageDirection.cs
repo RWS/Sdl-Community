@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LanguageWeaverProvider.BatchTask.Model;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -11,11 +12,15 @@ using LanguageWeaverProvider.Services;
 using LanguageWeaverProvider.XliffConverter.Converter;
 using LanguageWeaverProvider.XliffConverter.Model;
 using Sdl.Core.Globalization;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using TranslationUnit = Sdl.LanguagePlatform.TranslationMemory.TranslationUnit;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
+using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace LanguageWeaverProvider
 {
@@ -31,6 +36,7 @@ namespace LanguageWeaverProvider
 
 		public TranslationProviderLanguageDirection(ITranslationProvider translationProvider, ITranslationOptions translationOptions, LanguagePair languagePair)
 		{
+			ItemFactory = DefaultDocumentItemFactory.CreateInstance();
 			TranslationProvider = translationProvider;
 			_translationOptions = translationOptions;
 			_languagePair = languagePair;
@@ -46,6 +52,8 @@ namespace LanguageWeaverProvider
 				_postLookupEditor = new(_translationOptions.ProviderSettings.PostLookupFilePath);
 			}
 		}
+
+		private IDocumentItemFactory ItemFactory { get; }
 
 		public ITranslationProvider TranslationProvider { get; private set; }
 
@@ -95,7 +103,7 @@ namespace LanguageWeaverProvider
 			var searchResults = new SearchResults[mask.Length];
 			var segmentsInput = translationUnits.Select(x => x.SourceSegment).ToList();
 			var translatableSegments = ExtractTranslatableSegments(translationUnits, mask, searchResults, segmentsInput);
-   
+
 			if (!translatableSegments.Any())
 			{
 				ManageBatchTaskWindow();
@@ -124,9 +132,9 @@ namespace LanguageWeaverProvider
 				translatedSegments = ModifySegmentsOnLookup(_postLookupEditor, translatedSegments);
 			}
 
-            var fileName = _batchTaskWindow is null ? string.Empty : GetFilePath(translationUnits);
+			var fileName = _batchTaskWindow is null ? string.Empty : GetFilePath(translationUnits);
 
-            var translatedSegmentsIndex = 0;
+			var translatedSegmentsIndex = 0;
 			for (var i = 0; i < mask.Length; i++)
 			{
 				if (ShouldSkipSearchResult(searchResults[i], mask[i], segmentsInput[i]))
@@ -140,21 +148,32 @@ namespace LanguageWeaverProvider
 				var translatedSegment = translatedSegments[translatedSegmentsIndex++];
 
 				searchResults[i] = new SearchResults { SourceSegment = currentSegment.Duplicate() };
-				searchResults[i].Add(CreateSearchResult(currentSegment, translatedSegment));
-                SetMetadataOnSegment(evaluatedSegment, mappedPair, fileName);
+
+				var tuSearchResult = CreateTuSearchResult(currentSegment, translatedSegment);
+
+				var translationOrigin = tuSearchResult.DocumentSegmentPair.Properties.TranslationOrigin;
+				var lastTqeIndex = translationOrigin is not null ? translationOrigin.GetLastTqeIndex() + 1 : 1;
+
+				SetMetadataOnSegment(evaluatedSegment, mappedPair, fileName, lastTqeIndex, translationOrigin);
+
+				searchResults[i].Add(new SearchResult(tuSearchResult)
+				{
+					ScoringResult = new ScoringResult { BaseScore = 0 },
+					TranslationProposal = new TranslationUnit(tuSearchResult)
+				});
 			}
 
 			ManageBatchTaskWindow();
 			return searchResults;
 		}
 
-        private string GetFilePath(IEnumerable<TranslationUnit> translationUnits)
-        {
-            var translationUnit = translationUnits?.FirstOrDefault(a => a.DocumentProperties?.LastOpenedAsPath != null);
-            return translationUnit?.DocumentProperties?.LastOpenedAsPath;
-        }
+		private string GetFilePath(IEnumerable<TranslationUnit> translationUnits)
+		{
+			var translationUnit = translationUnits?.FirstOrDefault(a => a.DocumentProperties?.LastOpenedAsPath != null);
+			return translationUnit?.DocumentProperties?.LastOpenedAsPath;
+		}
 
-        private List<Segment> ModifySegmentsOnLookup(LWSegmentEditor segmentEditor, List<Segment> segments)
+		private List<Segment> ModifySegmentsOnLookup(LWSegmentEditor segmentEditor, List<Segment> segments)
 		{
 			var editedSegments = new List<Segment>();
 			foreach (var inSegment in segments)
@@ -189,7 +208,14 @@ namespace LanguageWeaverProvider
 			targetSegment.Add(PluginResources.TranslationDraftNotResent);
 
 			var searchResults = new SearchResults { SourceSegment = segment.Duplicate() };
-			searchResults.Add(CreateSearchResult(segment, targetSegment));
+			var tuSearchResult = CreateTuSearchResult(segment, targetSegment);
+
+			searchResults.Add(new SearchResult(tuSearchResult)
+			{
+				ScoringResult = new ScoringResult { BaseScore = 0 },
+				TranslationProposal = new TranslationUnit(tuSearchResult)
+			});
+
 			return searchResults;
 		}
 
@@ -202,9 +228,10 @@ namespace LanguageWeaverProvider
 
 		private void ManageBatchTaskWindow(bool initialize = false)
 		{
-			_batchTaskWindow = initialize 
-                ? Application.Current.Dispatcher.Invoke(ApplicationInitializer.GetBatchTaskWindow) 
-                : null;
+			var application = Application.Current;
+			_batchTaskWindow = initialize
+				? application?.Dispatcher.Invoke(ApplicationInitializer.GetBatchTaskWindow)
+				: null;
 		}
 
 		private bool ShouldSkipSearchResult(SearchResults searchResult, bool isMasked, Segment segment)
@@ -214,9 +241,18 @@ namespace LanguageWeaverProvider
 
 		private Xliff GetTranslation(PairMapping mappedPair, Xliff xliffFile)
 		{
-			return _translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
-				 ? CloudService.Translate(_translationOptions.AccessToken, mappedPair, xliffFile).Result
-				 : EdgeService.Translate(_translationOptions.AccessToken, mappedPair, xliffFile).Result;
+			try
+			{
+				var translation = _translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud
+					? CloudService.Translate(_translationOptions.AccessToken, mappedPair, xliffFile).Result
+					: EdgeService.Translate(_translationOptions.AccessToken, mappedPair, xliffFile).Result;
+				return translation;
+			}
+			catch (Exception ex)
+			{
+				if (ex.InnerException is null) throw;
+				throw ex.InnerException;
+			}
 		}
 
 		private SearchResult TranslateSegment(Segment segment, Segment sourceSegment)
@@ -225,10 +261,15 @@ namespace LanguageWeaverProvider
 			var mappedPair = GetMappedPair();
 			var translation = CloudService.Translate(_translationOptions.AccessToken, mappedPair, xliff).Result;
 			var translatedSegment = translation.GetTargetSegments().First();
-			var searchResult = CreateSearchResult(segment, translatedSegment.Segment);
-			SetMetadataOnSegment(translatedSegment, mappedPair, null);
+			var tuSearchResult = CreateTuSearchResult(segment, translatedSegment.Segment);
 
-			return searchResult;
+			SetMetadataOnSegment(translatedSegment, mappedPair, null, 1, tuSearchResult.DocumentSegmentPair.Properties.TranslationOrigin);
+
+			return new SearchResult(tuSearchResult)
+			{
+				ScoringResult = new ScoringResult { BaseScore = 0 },
+				TranslationProposal = new TranslationUnit(tuSearchResult)
+			};
 		}
 
 		private Xliff CreateXliffFile(IEnumerable<Segment> segments)
@@ -255,30 +296,26 @@ namespace LanguageWeaverProvider
 			return xliffDocument;
 		}
 
-		private void SetMetadataOnSegment(EvaluatedSegment evaluatedSegment, PairMapping pairMapping, string fileName)
+		private void SetMetadataOnSegment(EvaluatedSegment evaluatedSegment, PairMapping pairMapping, string fileName,
+			int index, ITranslationOrigin translationOrigin)
 		{
-			if (_batchTaskWindow is not null
-			 || _currentTranslationUnit.ConfirmationLevel == ConfirmationLevel.Draft)
+			if (_batchTaskWindow is not null || _currentTranslationUnit.ConfirmationLevel == ConfirmationLevel.Draft)
 			{
 				StoreSegmentMetadata(evaluatedSegment, pairMapping, fileName);
 				return;
 			}
 
-			var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-			if (editorController.ActiveDocument is null)
+			var translationData = new TranslationData
 			{
-				return;
-			}
+				QualityEstimation = evaluatedSegment.QualityEstimation,
+				Translation = evaluatedSegment.Segment.ToString(),
+				ModelName = pairMapping.SelectedModel.Name,
+				Model = pairMapping.SelectedModel.Model,
+				AutoSendFeedback = _translationOptions.ProviderSettings.AutosendFeedback,
+				Index = index
+			};
 
-			var currentSegmentId = _currentTranslationUnit.DocumentSegmentPair.Properties.Id;
-			var currentSegmentPair = editorController.ActiveDocument.SegmentPairs.First(p => p.Properties.Id == currentSegmentId);
-
-			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_QE, evaluatedSegment.QualityEstimation);
-			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_LongModelName, pairMapping.SelectedModel.Name);
-			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_ShortModelName, pairMapping.SelectedModel.Model);
-			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_Translation, evaluatedSegment.Segment.ToString());
-			currentSegmentPair.Properties.TranslationOrigin.SetMetaData(Constants.SegmentMetadata_Feedback, _translationOptions.ProviderSettings.AutosendFeedback.ToString());
-            editorController.ActiveDocument.UpdateSegmentPairProperties(currentSegmentPair, currentSegmentPair.Properties);
+			translationOrigin.SetMetaData(translationData);
 		}
 
 		private void StoreSegmentMetadata(EvaluatedSegment evaluatedSegment, PairMapping pairMapping, string fileName)
@@ -295,14 +332,14 @@ namespace LanguageWeaverProvider
 				AutosendFeedback = _translationOptions.ProviderSettings.AutosendFeedback
 			};
 
-            //TODO: Developer named variable FileName, but it stores the FilePath; needs to be revised to avoid confusion
-            var fileNameNormalized = System.IO.Path.GetFileName(fileName);
+			//TODO: Developer named variable FileName, but it stores the FilePath; needs to be revised to avoid confusion
+			var fileNameNormalized = System.IO.Path.GetFileName(fileName);
 
-            var existingSegment = ApplicationInitializer.RatedSegments.FirstOrDefault(x =>
-                x.SegmentId.Id.Equals(ratedSegment.SegmentId.Id) &&
-                System.IO.Path.GetFileName(x.FileName).Equals(fileNameNormalized) &&
-                                                              x.ModelName.Equals(ratedSegment.ModelName));
-            if (existingSegment is null)
+			var existingSegment = ApplicationInitializer.RatedSegments.FirstOrDefault(x =>
+				x.SegmentId.Id.Equals(ratedSegment.SegmentId.Id) &&
+				System.IO.Path.GetFileName(x.FileName).Equals(fileNameNormalized) &&
+															  x.ModelName.Equals(ratedSegment.ModelName));
+			if (existingSegment is null)
 			{
 				ApplicationInitializer.RatedSegments.Add(ratedSegment);
 			}
@@ -336,7 +373,7 @@ namespace LanguageWeaverProvider
 									 && x.LanguagePair.TargetCultureName.Equals(TargetLanguage.Name));
 		}
 
-		private SearchResult CreateSearchResult(Segment searchSegment, Segment translation)
+		private TranslationUnit CreateTuSearchResult(Segment searchSegment, Segment translation)
 		{
 			var translationUnit = new TranslationUnit
 			{
@@ -346,12 +383,12 @@ namespace LanguageWeaverProvider
 				TargetSegment = translation
 			};
 
+			translationUnit.DocumentSegmentPair = _currentTranslationUnit.DocumentSegmentPair;
+			translationUnit.DocumentSegmentPair.Properties.TranslationOrigin ??= ItemFactory.CreateTranslationOrigin();
 			translationUnit.ResourceId = new PersistentObjectToken(translationUnit.GetHashCode(), Guid.Empty);
-			return new SearchResult(translationUnit)
-			{
-				ScoringResult = new ScoringResult { BaseScore = 0 },
-				TranslationProposal = new TranslationUnit(translationUnit)
-			};
+
+			return translationUnit;
+
 		}
 
 		#region To finish

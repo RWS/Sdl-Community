@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Net;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
+using LanguageWeaverProvider.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -27,12 +29,7 @@ namespace LanguageWeaverProvider.Extensions
 				return false;
 			}
 
-			var pluginVersion = translationProviderUri.AbsoluteUri switch
-			{
-				Constants.CloudFullScheme => PluginVersion.LanguageWeaverCloud,
-				Constants.EdgeFullScheme => PluginVersion.LanguageWeaverEdge,
-				_ => PluginVersion.None
-			};
+			var pluginVersion = translationProviderUri.ToPluginVersion();
 
 			if (pluginVersion == PluginVersion.None)
 			{
@@ -47,15 +44,55 @@ namespace LanguageWeaverProvider.Extensions
 
 		}
 
-		public static void GetCredentials(ITranslationOptions translationOptions, bool assignAccessToken = false)
+		public static void GetCredentials(ITranslationOptions translationOptions, bool assignAccessToken = false,
+			StandaloneCredentials standaloneCredentials = null)
 		{
 			var credentialStore = ApplicationInitializer.CredentialStore;
 
-			var getCloudToken = assignAccessToken && translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud;
-			var getEdgeToken = assignAccessToken && translationOptions.PluginVersion == PluginVersion.LanguageWeaverEdge;
+			if (ApplicationInitializer.IsStandAlone && standaloneCredentials is not null && standaloneCredentials.AuthenticationType != AuthenticationType.None)
+			{
+				translationOptions.PluginVersion = standaloneCredentials.IsCloudCredential
+					? PluginVersion.LanguageWeaverCloud
+					: PluginVersion.LanguageWeaverEdge;
 
-			GetAndAssignCredentials<CloudCredentials>(credentialStore, translationOptions, Constants.CloudFullScheme, getCloudToken);
-			GetAndAssignCredentials<EdgeCredentials>(credentialStore, translationOptions, Constants.EdgeFullScheme, getEdgeToken);
+				var authenticationType = standaloneCredentials.AuthenticationType;
+				translationOptions.AuthenticationType = authenticationType;
+
+				if (standaloneCredentials.IsCloudCredential)
+				{
+					translationOptions.CloudCredentials = standaloneCredentials.CloudCredentials;
+					CloudService.AuthenticateUser(translationOptions, authenticationType).Wait();
+				}
+				else
+				{
+					translationOptions.EdgeCredentials = standaloneCredentials.EdgeCredentials;
+
+					switch (authenticationType)
+					{
+						case AuthenticationType.EdgeCredentials:
+							EdgeService.AuthenticateUser(translationOptions.EdgeCredentials, translationOptions).Wait();
+							break;
+
+						case AuthenticationType.EdgeApiKey:
+							EdgeService.VerifyAPI(translationOptions.EdgeCredentials, translationOptions).Wait();
+							break;
+					}
+				}
+
+				UpdateCredentials(credentialStore, translationOptions);
+			}
+			else
+			{
+				var getCloudToken = assignAccessToken &&
+									translationOptions.PluginVersion == PluginVersion.LanguageWeaverCloud;
+				var getEdgeToken = assignAccessToken &&
+								   translationOptions.PluginVersion == PluginVersion.LanguageWeaverEdge;
+
+				GetAndAssignCredentials<CloudCredentials>(credentialStore, translationOptions,
+					Constants.CloudFullScheme, getCloudToken);
+				GetAndAssignCredentials<EdgeCredentials>(credentialStore, translationOptions, Constants.EdgeFullScheme,
+					getEdgeToken);
+			}
 		}
 
 		public static void GetAndAssignCredentials<T>(ITranslationProviderCredentialStore credentialStore, ITranslationOptions translationOptions, string scheme, bool assignAccessToken = false)
@@ -75,9 +112,10 @@ namespace LanguageWeaverProvider.Extensions
 
 			try
 			{
+
 				var parsedObject = JObject.Parse(persistedCredentials);
 				var credentials = parsedObject[CredentialsKey].ToString();
-				AssignCredentials<T>(translationOptions, parsedObject[CredentialsKey].ToString());
+				AssignCredentials<T>(translationOptions, credentials);
 
 				if (assignAccessToken)
 				{
@@ -87,6 +125,8 @@ namespace LanguageWeaverProvider.Extensions
 			}
 			catch { }
 		}
+
+
 
 		private static void AssignAccessToken(ITranslationOptions translationOptions, string json)
 		{

@@ -24,37 +24,37 @@ namespace LanguageWeaverProvider
 		public TranslationMethod TranslationMethod => TranslationMethod.MachineTranslation;
 
 		public bool SupportsSearchForTranslationUnits => true;
-		
+
 		public bool SupportsTaggedInput => true;
-		
+
 		public bool SupportsTranslation => true;
-		
+
 		public bool SupportsPenalties => true;
-		
+
 		public bool SupportsScoring => true;
-		
+
 		public bool IsReadOnly => true;
-		
+
 		public bool SupportsConcordanceSearch => false;
-		
+
 		public bool SupportsDocumentSearches => false;
-		
+
 		public bool SupportsSourceConcordanceSearch => false;
-		
+
 		public bool SupportsTargetConcordanceSearch => false;
-		
+
 		public bool SupportsStructureContext => false;
-		
+
 		public bool SupportsMultipleResults => false;
-		
+
 		public bool SupportsFuzzySearch => false;
-		
+
 		public bool SupportsPlaceables => false;
-		
+
 		public bool SupportsWordCounts => false;
-		
+
 		public bool SupportsFilters => false;
-		
+
 		public bool SupportsUpdate => false;
 
 		public ProviderStatusInfo StatusInfo => new(true, Constants.PluginName);

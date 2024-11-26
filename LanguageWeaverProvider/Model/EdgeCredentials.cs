@@ -4,6 +4,8 @@ namespace LanguageWeaverProvider.Model
 {
 	public class EdgeCredentials
     {
+		public EdgeCredentials() { }
+
 		public EdgeCredentials(string uri)
 		{
 			Host = uri;
