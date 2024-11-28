@@ -5,7 +5,7 @@
 		<PluginDeploymentPath>$(AppData)\Sdl\Sdl Trados Studio\15\Plugins</PluginDeploymentPath>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<UseWindowsForms>true</UseWindowsForms>
-		<TradosFolder>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio15</TradosFolder>
+		<TradosFolder>$(MSBuildProgramFiles32)\SDL\SDL Trados Studio\Studio15Beta</TradosFolder>
 		<UseWPF>true</UseWPF>
 		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
 	</PropertyGroup>
@@ -68,6 +68,11 @@
 		<Compile Update="BatchTask\TQAReportingSettingsControl.cs">
 			<SubType>UserControl</SubType>
 		</Compile>
+		<Compile Update="PluginResources.Designer.cs">
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
+		  <DependentUpon>PluginResources.resx</DependentUpon>
+		</Compile>
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="..\..\SdlCommunity.snk">
@@ -107,6 +112,12 @@
 		<PackageReference Include="System.IO.Packaging">
 			<Version>4.5.0</Version>
 		</PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Update="PluginResources.resx">
+	    <Generator>PublicResXFileCodeGenerator</Generator>
+	    <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
 	</ItemGroup>
 	<PropertyGroup>
 		<CreatePluginPackage>true</CreatePluginPackage>
