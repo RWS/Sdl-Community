@@ -1,16 +1,16 @@
-﻿using System;
+﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
+using NLog;
+using Sdl.Community.TQA.Extensions;
+using Sdl.Community.TQA.Model;
+using Sdl.ProjectAutomation.Core;
+using Sdl.ProjectAutomation.FileBased;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Spreadsheet;
-using NLog;
-using Sdl.Community.TQA.Model;
-using Sdl.ProjectAutomation.Core;
-using Sdl.ProjectAutomation.FileBased;
-//using Sdl.ProjectAutomation.FileBased.Reports.Operations;
 using Color = DocumentFormat.OpenXml.Spreadsheet.Color;
 
 namespace Sdl.Community.TQA.Providers
@@ -23,17 +23,17 @@ namespace Sdl.Community.TQA.Providers
 		tqsOther
 	}
 
-    public class ReportProvider
-    {
-        private const string DefaultReportRelativePath = "Reports\\TQAReports";
-        private const string reportingFileExtension = ".xlsm";
-        private const string TQS_J2450_ReportFileName = "SDL-5-401-F001 QE Form_XXX_XXXXXX_XXX_XX";
-        private const string TQS_J2450_ReportTemplate = "SDL-5-401-F001-QE Form_XXX_XXXXXX_XXX_XX.XLSM";
-        private const string TQS_MQM_ReportFileName = "RWS-5-401-F002-MQM QE Form-CLIENT_MMM_YY";
-        private const string TQS_MQM_ReportTemplate = "RWS-5-401-F002-MQM QE Form-CLIENT_MMM_YY_LL.XLSM";
-        private static readonly string ProtectionPassword = "Thames";
-        private readonly Logger _logger;
-        private readonly string _reportRelativePath;
+	public class ReportProvider
+	{
+		private const string DefaultReportRelativePath = "Reports\\TQAReports";
+		private const string reportingFileExtension = ".xlsm";
+		private const string TQS_J2450_ReportFileName = "SDL-5-401-F001 QE Form_XXX_XXXXXX_XXX_XX";
+		private const string TQS_J2450_ReportTemplate = "SDL-5-401-F001-QE Form_XXX_XXXXXX_XXX_XX.XLSM";
+		private const string TQS_MQM_ReportFileName = "RWS-5-401-F002-MQM QE Form-CLIENT_MMM_YY";
+		private const string TQS_MQM_ReportTemplate = "RWS-5-401-F002-MQM QE Form-CLIENT_MMM_YY_LL.XLSM";
+		private static readonly string ProtectionPassword = "Thames";
+		private readonly Logger _logger;
+		private readonly string _reportRelativePath;
 
 		public ReportProvider(Logger logger, string reportRelativePath = null)
 		{
@@ -43,111 +43,6 @@ namespace Sdl.Community.TQA.Providers
 				_reportRelativePath = DefaultReportRelativePath;
 			}
 		}
-
-		public string GetReportDirectory(string projectRootPath)
-		{
-			if (!Directory.Exists(projectRootPath))
-			{
-				throw new DirectoryNotFoundException("Param: ProjectRootPath " + projectRootPath);
-			}
-
-			var tqaReportsDirectory = Path.Combine(projectRootPath.TrimEnd('\\'), _reportRelativePath);
-
-			if (!Directory.Exists(tqaReportsDirectory))
-			{
-				Directory.CreateDirectory(tqaReportsDirectory);
-			}
-
-			return tqaReportsDirectory;
-		}
-
-		public string GetDefaultReportFileFullPath(string reportsDirectory, string defaultReportFileName, string languageId)
-		{
-			if (string.IsNullOrEmpty(reportsDirectory) || !Directory.Exists(reportsDirectory))
-			{
-				throw new DirectoryNotFoundException("Param: ReportsDirectory " + reportsDirectory);
-			}
-
-			if (string.IsNullOrEmpty(defaultReportFileName))
-			{
-				throw new ArgumentNullException(defaultReportFileName);
-			}
-
-			if (string.IsNullOrEmpty(languageId))
-			{
-				throw new ArgumentNullException(defaultReportFileName);
-			}
-
-			var reportFileName = string.Concat(defaultReportFileName, "_", languageId, reportingFileExtension);
-			var reportFilePath = Path.Combine(reportsDirectory, reportFileName);
-
-			var index = 1;
-			while (File.Exists(reportFilePath))
-			{
-				reportFileName = string.Concat(defaultReportFileName, "_", languageId, " (" + index + ")" + reportingFileExtension);
-				reportFilePath = Path.Combine(reportsDirectory, reportFileName);
-				index++;
-			}
-
-			return reportFilePath;
-		}
-
-		public string GetProfileTypeName(TQAProfileType tqaStandardType)
-		{
-			switch (tqaStandardType)
-			{
-				case TQAProfileType.tqsEmpty:
-					return PluginResources.Label_Empty;
-				case TQAProfileType.tqsJ2450:
-					return PluginResources.Label_J2450Standard;
-				case TQAProfileType.tqsMQM:
-					return PluginResources.Label_MQMStandard;
-				case TQAProfileType.tqsOther:
-					return PluginResources.Label_NotCompatible;
-				default:
-					throw new NotSupportedException(string.Format(PluginResources.MsgTQAProfileStandardNotSupported, tqaStandardType));
-			}
-		}
-
-		public string GetReportTemplateFileForTQAStandard(TQAProfileType tqaStandardType)
-		{
-			switch (tqaStandardType)
-			{
-				case TQAProfileType.tqsJ2450:
-					return TQS_J2450_ReportTemplate;
-				case TQAProfileType.tqsMQM:
-					return TQS_MQM_ReportTemplate;
-				default:
-					throw new NotSupportedException(string.Format(PluginResources.MsgTQAProfileStandardNotSupported, tqaStandardType));
-			}
-		}
-
-		public byte[] GetReportTemplateForTQAStandard(TQAProfileType tqaStandardType)
-		{
-			switch (tqaStandardType)
-			{
-				case TQAProfileType.tqsJ2450:
-					return PluginResources.SDL_5_401_F001_QE_Form_XXX_XXXXXX_XXX_XX;
-				case TQAProfileType.tqsMQM:
-					return PluginResources.RWS_5_401_F002_MQM_QE_Form_XXX_XXXXXX_XXX;
-				default:
-					throw new NotSupportedException(string.Format(PluginResources.MsgTQAProfileStandardNotSupported, tqaStandardType));
-			}
-		}
-
-		public string GetReportDefaultOutputFilename(TQAProfileType tqaStandardType)
-		{
-			switch (tqaStandardType)
-			{
-				case TQAProfileType.tqsJ2450:
-					return TQS_J2450_ReportFileName;
-				case TQAProfileType.tqsMQM:
-					return TQS_MQM_ReportFileName;
-				default:
-					throw new NotSupportedException(string.Format(PluginResources.MsgTQAProfileStandardNotSupported, tqaStandardType));
-			}
-		}
-
 
 		public ReportResults ExtractFromXml(string path, string qualityLevel)
 		{
@@ -186,6 +81,7 @@ namespace Sdl.Community.TQA.Providers
 								case "":
 									sourceContentText.Add(new Tuple<string, TextType>(group.Attribute("content").Value, TextType.Regular));
 									break;
+
 								case "FeedbackAdded":
 									if (sourceContent.Elements().Contains(group))
 									{
@@ -196,6 +92,7 @@ namespace Sdl.Community.TQA.Providers
 										sourceContentText.Add(new Tuple<string, TextType>(group.Attribute("content").Value, TextType.Regular));
 									}
 									break;
+
 								case "FeedbackDeleted":
 									if (sourceContent.Elements().Contains(group))
 									{
@@ -206,6 +103,7 @@ namespace Sdl.Community.TQA.Providers
 										sourceContentText.Add(new Tuple<string, TextType>(group.Attribute("content").Value, TextType.Regular));
 									}
 									break;
+
 								case "FeedbackComment":
 									sourceContentText.Add(new Tuple<string, TextType>(group.Attribute("content").Value, TextType.Comment));
 									break;
@@ -236,6 +134,7 @@ namespace Sdl.Community.TQA.Providers
 										revisedTranslationText.Add(
 											new Tuple<string, TextType>(rTrans.Attribute("content").Value, TextType.Regular));
 										break;
+
 									case "FeedbackAdded":
 										if (revisedTranslation.Elements().Contains(rTrans))
 										{
@@ -248,6 +147,7 @@ namespace Sdl.Community.TQA.Providers
 												new Tuple<string, TextType>(rTrans.Attribute("content").Value, TextType.Regular));
 										}
 										break;
+
 									case "FeedbackDeleted":
 										if (revisedTranslation.Elements().Contains(rTrans))
 										{
@@ -260,6 +160,7 @@ namespace Sdl.Community.TQA.Providers
 												new Tuple<string, TextType>(rTrans.Attribute("content").Value, TextType.Regular));
 										}
 										break;
+
 									case "FeedbackComment":
 										{
 											revisedTranslationText.Add(
@@ -277,93 +178,6 @@ namespace Sdl.Community.TQA.Providers
 				}
 			}
 			return reportResults;
-		}
-
-		public void WriteExcel(string path, ReportResults reportResults, TQAProfileType tqaStandard)
-		{
-			using (var fs = new FileStream(path, FileMode.Create))
-			{
-				var template = GetReportTemplateForTQAStandard(tqaStandard);
-				fs.Write(template, 0, template.Length);
-			}
-
-			var rows = reportResults.Entries;
-			var rowsArray = rows.ToArray();
-			var rowsCollection = rows.Select(r => r.GetArray(tqaStandard)).ToArray();
-			var wb = new XLWorkbook(path);
-
-			var ws = wb.Worksheet("Evaluation details_input");
-
-			for (var i = 0; i < rows.Count; i++)
-			{
-				for (var j = 0; j < rowsCollection[i].Length; j++)
-				{
-					ws.Row(i + 4).Cell(j + 1).Value = rowsCollection[i][j];
-				}
-				var cell = ws.Cell(i + 4, 5);
-
-				var entry = rowsArray[i].RevisedTranslation;
-
-				for (var k = 0; k < entry.Count; k++)
-				{
-					cell.GetRichText().AddText(entry[k].Item1);
-					switch (entry[k].Item2)
-					{
-						case TextType.Added:
-							cell.GetRichText().ToArray()[k].SetFontColor(XLColor.GreenPigment);
-							cell.GetRichText().ToArray()[k].SetUnderline();
-							break;
-						case TextType.Deleted:
-							cell.GetRichText().ToArray()[k].SetFontColor(XLColor.Red);
-							cell.GetRichText().ToArray()[k].SetStrikethrough(true);
-							break;
-						case TextType.Regular:
-							continue;
-						case TextType.Comment:
-							cell.GetRichText().ToArray()[k].SetFontColor(XLColor.Blue);
-							cell.GetRichText().ToArray()[k].SetBold();
-							break;
-					}
-				}
-
-				cell = ws.Cell(i + 4, 3);
-
-				entry = rowsArray[i].SourceContent;
-				for (var k = 0; k < entry.Count; k++)
-				{
-					cell.GetRichText().AddText(entry[k].Item1);
-					switch (entry[k].Item2)
-					{
-						case TextType.Added:
-							cell.GetRichText().ToArray()[k].SetFontColor(XLColor.GreenPigment);
-							cell.GetRichText().ToArray()[k].SetUnderline();
-							break;
-						case TextType.Deleted:
-							cell.GetRichText().ToArray()[k].SetFontColor(XLColor.Red);
-							cell.GetRichText().ToArray()[k].SetStrikethrough(true);
-							break;
-						case TextType.Regular:
-							continue;
-						case TextType.Comment:
-							cell.GetRichText().ToArray()[k].SetFontColor(XLColor.Blue);
-							cell.GetRichText().ToArray()[k].SetBold();
-							break;
-					}
-				}
-			}
-
-			GenerateInitialReportSheet(reportResults, wb);
-			GenerateFinalReportSheet(wb);
-
-			wb.CalculateMode = XLCalculateMode.Auto;
-			wb.Save();
-
-			var spreadsheet = SpreadsheetDocument.Open(path, true);
-			//colors took from webpart stylesheet
-			AddGradient(spreadsheet, "B6B6B6", "FFE16E73", "FFBDED0A");
-			AddGradient(spreadsheet, "B6B6B7", "FFBDED0A", "FF008080");
-			spreadsheet.Save();
-			spreadsheet.Close();
 		}
 
 		public bool GenerateReport(FileBasedProject project, AutomaticTask automaticTask, TQAProfileType tqaProfileType, string reportFilePath, string quality)
@@ -408,6 +222,253 @@ namespace Sdl.Community.TQA.Providers
 			return true;
 		}
 
+		public string GetDefaultReportFileFullPath(string reportsDirectory, string defaultReportFileName, string languageId)
+		{
+			if (string.IsNullOrEmpty(reportsDirectory) || !Directory.Exists(reportsDirectory))
+			{
+				throw new DirectoryNotFoundException("Param: ReportsDirectory " + reportsDirectory);
+			}
+
+			if (string.IsNullOrEmpty(defaultReportFileName))
+			{
+				throw new ArgumentNullException(defaultReportFileName);
+			}
+
+			if (string.IsNullOrEmpty(languageId))
+			{
+				throw new ArgumentNullException(defaultReportFileName);
+			}
+
+			var reportFileName = string.Concat(defaultReportFileName, "_", languageId, reportingFileExtension);
+			var reportFilePath = Path.Combine(reportsDirectory, reportFileName);
+
+			var index = 1;
+			while (File.Exists(reportFilePath))
+			{
+				reportFileName = string.Concat(defaultReportFileName, "_", languageId, " (" + index + ")" + reportingFileExtension);
+				reportFilePath = Path.Combine(reportsDirectory, reportFileName);
+				index++;
+			}
+
+			return reportFilePath;
+		}
+
+		public string GetProfileTypeName(TQAProfileType tqaStandardType)
+		{
+			switch (tqaStandardType)
+			{
+				case TQAProfileType.tqsEmpty:
+					return PluginResources.Label_Empty;
+
+				case TQAProfileType.tqsJ2450:
+					return PluginResources.Label_J2450Standard;
+
+				case TQAProfileType.tqsMQM:
+					return PluginResources.Label_MQMStandard;
+
+				case TQAProfileType.tqsOther:
+					return PluginResources.Label_NotCompatible;
+
+				default:
+					throw new NotSupportedException(string.Format(PluginResources.MsgTQAProfileStandardNotSupported, tqaStandardType));
+			}
+		}
+
+		public string GetReportDefaultOutputFilename(TQAProfileType tqaStandardType)
+		{
+			switch (tqaStandardType)
+			{
+				case TQAProfileType.tqsJ2450:
+					return TQS_J2450_ReportFileName;
+
+				case TQAProfileType.tqsMQM:
+					return TQS_MQM_ReportFileName;
+
+				default:
+					throw new NotSupportedException(string.Format(PluginResources.MsgTQAProfileStandardNotSupported, tqaStandardType));
+			}
+		}
+
+		public string GetReportDirectory(string projectRootPath)
+		{
+			if (!Directory.Exists(projectRootPath))
+			{
+				throw new DirectoryNotFoundException("Param: ProjectRootPath " + projectRootPath);
+			}
+
+			var tqaReportsDirectory = Path.Combine(projectRootPath.TrimEnd('\\'), _reportRelativePath);
+
+			if (!Directory.Exists(tqaReportsDirectory))
+			{
+				Directory.CreateDirectory(tqaReportsDirectory);
+			}
+
+			return tqaReportsDirectory;
+		}
+
+		public byte[] GetReportTemplateForTQAStandard(TQAProfileType tqaStandardType)
+		{
+			switch (tqaStandardType)
+			{
+				case TQAProfileType.tqsJ2450:
+					return PluginResources.SDL_5_401_F001_QE_Form_XXX_XXXXXX_XXX_XX;
+
+				case TQAProfileType.tqsMQM:
+					return PluginResources.RWS_5_401_F002_MQM_QE_Form_CLIENT_MMM_YY_LL;
+
+				default:
+					throw new NotSupportedException(string.Format(PluginResources.MsgTQAProfileStandardNotSupported, tqaStandardType));
+			}
+		}
+
+		public void WriteExcel(string path, ReportResults reportResults, TQAProfileType tqaStandard)
+		{
+			using (var fs = new FileStream(path, FileMode.Create))
+			{
+				var template = GetReportTemplateForTQAStandard(tqaStandard);
+				fs.Write(template, 0, template.Length);
+			}
+
+			var rows = reportResults.Entries;
+			var rowsArray = rows.ToArray();
+			var rowsCollection = rows.Select(r => r.GetArray(tqaStandard)).ToArray();
+			var wb = new XLWorkbook(path);
+
+			var ws = wb.Worksheet("Evaluation details_input");
+
+			for (var i = 0; i < rows.Count; i++)
+			{
+				for (var j = 0; j < rowsCollection[i].Length; j++)
+				{
+					ws.Row(i + 4).Cell(j + 1).Value = rowsCollection[i][j];
+				}
+				var cell = ws.Cell(i + 4, 5);
+
+				var entry = rowsArray[i].RevisedTranslation;
+
+				for (var k = 0; k < entry.Count; k++)
+				{
+					cell.GetRichText().AddText(entry[k].Item1);
+					switch (entry[k].Item2)
+					{
+						case TextType.Added:
+							cell.GetRichText().ToArray()[k].SetFontColor(XLColor.GreenPigment);
+							cell.GetRichText().ToArray()[k].SetUnderline();
+							break;
+
+						case TextType.Deleted:
+							cell.GetRichText().ToArray()[k].SetFontColor(XLColor.Red);
+							cell.GetRichText().ToArray()[k].SetStrikethrough(true);
+							break;
+
+						case TextType.Regular:
+							continue;
+						case TextType.Comment:
+							cell.GetRichText().ToArray()[k].SetFontColor(XLColor.Blue);
+							cell.GetRichText().ToArray()[k].SetBold();
+							break;
+					}
+				}
+
+				cell = ws.Cell(i + 4, 3);
+
+				entry = rowsArray[i].SourceContent;
+				for (var k = 0; k < entry.Count; k++)
+				{
+					cell.GetRichText().AddText(entry[k].Item1);
+					switch (entry[k].Item2)
+					{
+						case TextType.Added:
+							cell.GetRichText().ToArray()[k].SetFontColor(XLColor.GreenPigment);
+							cell.GetRichText().ToArray()[k].SetUnderline();
+							break;
+
+						case TextType.Deleted:
+							cell.GetRichText().ToArray()[k].SetFontColor(XLColor.Red);
+							cell.GetRichText().ToArray()[k].SetStrikethrough(true);
+							break;
+
+						case TextType.Regular:
+							continue;
+						case TextType.Comment:
+							cell.GetRichText().ToArray()[k].SetFontColor(XLColor.Blue);
+							cell.GetRichText().ToArray()[k].SetBold();
+							break;
+					}
+				}
+			}
+
+			GenerateInitialReportSheet(reportResults, wb);
+			GenerateFinalReportSheet(wb);
+
+			wb.CalculateMode = XLCalculateMode.Auto;
+			wb.Save();
+
+			FormatSpreadsheet(path);
+		}
+
+		private void AddGradient(SpreadsheetDocument spreadSheet, string dummyColorCode, string firstColorCode, string secondColorCode)
+		{
+			var wbPart = spreadSheet.GetPartsOfType<WorkbookPart>().FirstOrDefault();
+			var wbStylePart = wbPart?.GetPartsOfType<WorkbookStylesPart>().FirstOrDefault();
+			var stylesheet = wbStylePart?.Stylesheet;
+
+			var oldFill =
+				stylesheet?.Fills.FirstOrDefault(f => f.OuterXml.Contains(dummyColorCode)); // find the fill that uses your unique color
+			if (oldFill == null)
+				return;
+			var gradientFill = new GradientFill { Degree = 0 };
+			gradientFill.Append(new GradientStop { Position = 0D, Color = new Color { Rgb = firstColorCode } });
+			gradientFill.Append(new GradientStop { Position = 1D, Color = new Color { Rgb = secondColorCode } });
+			oldFill.ReplaceChild(gradientFill, oldFill.FirstChild); // inside the fill replace the patternFill with your gradientFill
+		}
+
+		private void AjustCommentSize(IXLWorksheet wsReport)
+		{
+			wsReport.Cell("C4").GetComment()?.Style.Size.SetAutomaticSize();
+			wsReport.Cell("C5").GetComment()?.Style.Size.SetAutomaticSize();
+			wsReport.Cell("C6").GetComment()?.Style.Size.SetAutomaticSize();
+			wsReport.Cell("C7").GetComment()?.Style.Size.SetAutomaticSize();
+			wsReport.Cell("C10").GetComment()?.Style.Size.SetAutomaticSize();
+			wsReport.Cell("M8").GetComment()?.Style.Size.SetAutomaticSize();
+			wsReport.Cell("M9").GetComment()?.Style.Size.SetAutomaticSize();
+			wsReport.Cell("M10").GetComment()?.Style.Size.SetAutomaticSize();
+		}
+
+		private void ChangeStyleForEvaluationReport(IXLWorksheet wsReport)
+		{
+			//Remove border which crosses the logo from first table
+			wsReport.Range("A1:Q1").Style.Border.BottomBorder = XLBorderStyleValues.None;
+			wsReport.Range("A2:Q2").Style.Border.TopBorder = XLBorderStyleValues.None;
+			//   var sdlGreen = XLColor.FromHtml("#00A89F");
+			//wsReport.Style.Border.SetOutsideBorderColor(sdlGreen);
+
+			//Dummy collor used later to replace with gradient
+			wsReport.Cell("D33").Style.Fill.SetBackgroundColor(XLColor.FromHtml("#B6B6B6")); // use some unique color
+			wsReport.Cell("G33").Style.Fill.SetBackgroundColor(XLColor.FromHtml("#B6B6B7")); // use some unique color
+
+			wsReport.Cell("D33").Style.Border.SetRightBorderColor(XLColor.White);
+		}
+
+		private void FormatSpreadsheet(string path)
+		{
+			using (var spreadsheet = SpreadsheetDocument.Open(path, true))
+			{
+				//colors took from webpart stylesheet
+				AddGradient(spreadsheet, "B6B6B6", "FFE16E73", "FFBDED0A");
+				AddGradient(spreadsheet, "B6B6B7", "FFBDED0A", "FF008080");
+
+				var checklistSheetName = "Checklist";
+				spreadsheet.RemoveGridLinesFromSheet(checklistSheetName);
+				spreadsheet.SetRangeBackgroundColorWhite(checklistSheetName, "C9", "H9");
+
+				var versionHistorySheetName = "Version History";
+				spreadsheet.RemoveGridLinesFromSheet(versionHistorySheetName);
+				spreadsheet.ResizeImageInExcel(versionHistorySheetName, 160, 73);
+				spreadsheet.RepositionImageInCell(versionHistorySheetName, "G1", 5, 26);
+			}
+		}
+
 		private void GenerateFinalReportSheet(XLWorkbook wb)
 		{
 			var wsFinalResult = wb.Worksheet("Evaluation Report_Final Result");
@@ -445,48 +506,6 @@ namespace Sdl.Community.TQA.Providers
 			{
 				wsReport.Row(i + 42).Cell(1).Value = reportResults.EvaluationComments[i];
 			}
-		}
-
-		private void AjustCommentSize(IXLWorksheet wsReport)
-		{
-			wsReport.Cell("C4").GetComment()?.Style.Size.SetAutomaticSize();
-			wsReport.Cell("C5").GetComment()?.Style.Size.SetAutomaticSize();
-			wsReport.Cell("C6").GetComment()?.Style.Size.SetAutomaticSize();
-			wsReport.Cell("C7").GetComment()?.Style.Size.SetAutomaticSize();
-			wsReport.Cell("C10").GetComment()?.Style.Size.SetAutomaticSize();
-			wsReport.Cell("M8").GetComment()?.Style.Size.SetAutomaticSize();
-			wsReport.Cell("M9").GetComment()?.Style.Size.SetAutomaticSize();
-			wsReport.Cell("M10").GetComment()?.Style.Size.SetAutomaticSize();
-		}
-
-		private void AddGradient(SpreadsheetDocument spreadSheet, string dummyColorCode, string firstColorCode, string secondColorCode)
-		{
-			var wbPart = spreadSheet.GetPartsOfType<WorkbookPart>().FirstOrDefault();
-			var wbStylePart = wbPart?.GetPartsOfType<WorkbookStylesPart>().FirstOrDefault();
-			var stylesheet = wbStylePart?.Stylesheet;
-
-			var oldFill =
-				stylesheet?.Fills.FirstOrDefault(f => f.OuterXml.Contains(dummyColorCode)); // find the fill that uses your unique color
-			if (oldFill == null) return;
-			var gradientFill = new GradientFill { Degree = 0 };
-			gradientFill.Append(new GradientStop { Position = 0D, Color = new Color { Rgb = firstColorCode } });
-			gradientFill.Append(new GradientStop { Position = 1D, Color = new Color { Rgb = secondColorCode } });
-			oldFill.ReplaceChild(gradientFill, oldFill.FirstChild); // inside the fill replace the patternFill with your gradientFill
-		}
-
-		private void ChangeStyleForEvaluationReport(IXLWorksheet wsReport)
-		{
-			//Remove border which crosses the logo from first table
-			wsReport.Range("A1:Q1").Style.Border.BottomBorder = XLBorderStyleValues.None;
-			wsReport.Range("A2:Q2").Style.Border.TopBorder = XLBorderStyleValues.None;
-			//   var sdlGreen = XLColor.FromHtml("#00A89F");
-			//wsReport.Style.Border.SetOutsideBorderColor(sdlGreen);
-
-			//Dummy collor used later to replace with gradient
-			wsReport.Cell("D33").Style.Fill.SetBackgroundColor(XLColor.FromHtml("#B6B6B6")); // use some unique color
-			wsReport.Cell("G33").Style.Fill.SetBackgroundColor(XLColor.FromHtml("#B6B6B7")); // use some unique color
-
-			wsReport.Cell("D33").Style.Border.SetRightBorderColor(XLColor.White);
 		}
 	}
 }
