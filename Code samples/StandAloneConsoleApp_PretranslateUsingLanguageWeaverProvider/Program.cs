@@ -87,8 +87,8 @@ namespace StandAloneConsoleApp_PretranslateUsingLanguageWeaverProvider
             var edgeCredentials = new
             {
                 AccountRegion = "eu",
-                Host = "https://mt01.edge.languageweaver.com",
-                ApiKey = "u_aflorescu@sdl.com_6wFrCx71NVm6"
+                Host = "",
+                ApiKey = ""
             };
 
 
