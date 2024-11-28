@@ -61,8 +61,8 @@ namespace StandAloneConsoleApp_PretranslateUsingLanguageWeaverProvider
 
         private static void Main(string[] args)
         {
-            var projectsDirectory = @"C:\Users\aflorescu\Code\Projects";
-            var templatePath = @"C:\Users\aflorescu\Documents\Studio 2022\Project Templates\Studio22LWEdge.sdltpl";
+            var projectsDirectory = @"";
+            var templatePath = @"";
 
             var sourceLanguage = "en-US";
             var targetLanguage = "de-DE";
@@ -96,7 +96,7 @@ namespace StandAloneConsoleApp_PretranslateUsingLanguageWeaverProvider
 
             project.Save();
 
-            AddFilesToProject(project, @"C:\Users\aflorescu\Code\Samples\SampleFiles\Translatable");
+            AddFilesToProject(project, @"");
 
             RunTasks(project, targetLanguage);
 
