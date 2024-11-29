@@ -246,7 +246,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             Options.ApiVersion = ApiVersion;
 
             var glossaryIds = Options.LanguagePairOptions.ToDictionary(
-                lpo => (lpo.LanguagePair.GetSourceLanguageCode(), lpo.LanguagePair.GetTargetLanguageCode()),
+                lpo => (lpo.LanguagePair.SourceCulture.Name, lpo.LanguagePair.TargetCulture.Name),
                 lpo => lpo.SelectedGlossary?.Id);
             GlobalSettings.SetLastUsedGlossaryIds(glossaryIds);
 
