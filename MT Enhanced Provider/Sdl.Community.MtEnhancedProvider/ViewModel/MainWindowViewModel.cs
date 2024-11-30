@@ -155,6 +155,9 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				case MtTranslationOptions.ProviderType.MicrosoftTranslator:
 					if (!ValidMicrosoftOptions()) return false;
 					break;
+				case MtTranslationOptions.ProviderType.MicrosoftTranslatorWithPe:
+					if (!ValidMicrosoftOptions()) return false;
+					break;
 				case MtTranslationOptions.ProviderType.GoogleTranslate:
 					if (!ValidGoogleOptions()) return false;
 					break;
@@ -228,6 +231,13 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 
 		private bool ValidMicrosoftOptions()
 		{
+			if (_providerControlViewModel.SelectedTranslationOption.ProviderType == MtTranslationOptions.ProviderType.MicrosoftTranslatorWithPe
+				&& string.IsNullOrEmpty(_providerControlViewModel.PeUrl))
+			{
+				ErrorMessage = PluginResources.PeUrlError;
+				return false;
+			}
+
 			if (string.IsNullOrEmpty(_providerControlViewModel.ClientId))
 			{
 				ErrorMessage = PluginResources.ApiKeyError;
@@ -285,6 +295,11 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 				RemoveCredentialsFromStore(new Uri(PluginResources.UriMs));
 			}
 			if (_providerControlViewModel.SelectedTranslationOption.ProviderType ==
+				MtTranslationOptions.ProviderType.MicrosoftTranslatorWithPe && !Options.PersistMicrosoftCreds)
+			{
+				RemoveCredentialsFromStore(new Uri(PluginResources.UriMs));
+			}
+			if (_providerControlViewModel.SelectedTranslationOption.ProviderType ==
 				MtTranslationOptions.ProviderType.GoogleTranslate && !Options.PersistGoogleKey)
 			{
 				RemoveCredentialsFromStore(new Uri(PluginResources.UriGt));
@@ -304,19 +319,33 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		{
 			try
 			{
-				var apiConnecter = new ApiConnecter(
-					_providerControlViewModel.ClientId, _providerControlViewModel.Region?.Key, _htmlUtil);
-
-				if (!string.IsNullOrEmpty(Options?.ClientId))
+				if (_providerControlViewModel.SelectedTranslationOption.ProviderType == MtTranslationOptions.ProviderType.MicrosoftTranslatorWithPe)
 				{
-					if (!Options.ClientId.Equals(_providerControlViewModel.ClientId))
+					var apiConnecter = new ApiConnecterWithPe(_providerControlViewModel.PeUrl,
+						_providerControlViewModel.ClientId, _providerControlViewModel.Region?.Key, _htmlUtil);
+
+					if (!string.IsNullOrEmpty(Options?.PeUrl) && !string.IsNullOrEmpty(Options?.ClientId))
 					{
-						apiConnecter.RefreshAuthToken();
+						apiConnecter.EnsureConnectivity();
 					}
+
+					return true;
 				}
+				else if(_providerControlViewModel.SelectedTranslationOption.ProviderType == MtTranslationOptions.ProviderType.MicrosoftTranslator)
+				{
+					var apiConnecter = new ApiConnecter(
+						_providerControlViewModel.ClientId, _providerControlViewModel.Region?.Key, _htmlUtil);
 
-				return true;
+					if (!string.IsNullOrEmpty(Options?.ClientId))
+					{
+						if (!Options.ClientId.Equals(_providerControlViewModel.ClientId))
+						{
+							apiConnecter.RefreshAuthToken();
+						}
+					}
 
+					return true;
+				}
 			}
 			catch (Exception e)
 			{
@@ -428,6 +457,7 @@ namespace Sdl.Community.MtEnhancedProvider.ViewModel
 		private void SetMicrosoftProviderOptions()
 		{
 			Options.ClientId = _providerControlViewModel.ClientId;
+			Options.PeUrl = _providerControlViewModel.PeUrl;
 			Options.Region = _providerControlViewModel.Region.Key;
 			Options.UseCatID = _providerControlViewModel.UseCatId;
 			Options.CatId = _providerControlViewModel.CatId;

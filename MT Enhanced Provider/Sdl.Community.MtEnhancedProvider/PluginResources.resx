@@ -405,4 +405,13 @@
   <data name="GoogleApiKeyDescription" xml:space="preserve">
     <value>Please enter your Google Translate API Key</value>
   </data>
+  <data name="MicrosoftWithPe" xml:space="preserve">
+    <value>Microsoft Translator with Private Endpoint</value>
+  </data>
+  <data name="MicrosoftPeDescription" xml:space="preserve">
+    <value>Microsoft Private Endpoint Url</value>
+  </data>
+  <data name="PeUrlError" xml:space="preserve">
+    <value>Private Endpont Url not valid</value>
+  </data>
 </root>

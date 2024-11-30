@@ -34,6 +34,7 @@ namespace Sdl.Community.MtEnhancedProvider
 		private MtTranslationProviderGTApiConnecter _gtConnect;
 		private GoogleV3Connecter _googleV3Connecter;
 		private ApiConnecter _mstConnect;
+		private ApiConnecterWithPe _mstConnectWithPe;
 		private readonly HtmlUtil _htmlUtil;
 
 		public MtTranslationProvider(IMtTranslationOptions options, RegionsProvider regionProvider, HtmlUtil htmlUtil)
@@ -141,6 +142,16 @@ namespace Sdl.Community.MtEnhancedProvider
 				}
 
 				return _mstConnect.IsSupportedLangPair(languageDirection.SourceCulture.Name, languageDirection.TargetCulture.Name);
+			}
+
+			if (Options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslatorWithPe)
+			{
+				if (_mstConnectWithPe == null) //construct ApiConnecter if necessary 
+				{
+					_mstConnectWithPe = new ApiConnecterWithPe(Options.PeUrl, Options.ClientId, Options.Region, _htmlUtil);
+				}
+
+				return _mstConnectWithPe.IsSupportedLangPair(languageDirection.SourceCulture.Name, languageDirection.TargetCulture.Name);
 			}
 
 			if (Options.SelectedGoogleVersion == Enums.GoogleApiVersion.V2)

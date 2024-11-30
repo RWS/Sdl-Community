@@ -130,7 +130,8 @@ namespace Sdl.Community.MtEnhancedProvider
 				}
 				info.SearchResultImage = PluginResources.my_image;
 			}
-			else if (options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
+			else if (options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator
+					|| options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslatorWithPe)
 			{
 				info.Name = PluginResources.Microsoft_NiceName;
 				info.TooltipText = PluginResources.Microsoft_Tooltip;
@@ -192,6 +193,11 @@ namespace Sdl.Community.MtEnhancedProvider
 						options.PersistGoogleKey);
 					break;
 				case MtTranslationOptions.ProviderType.MicrosoftTranslator:
+					//set mst cred
+					SetCredentialsOnCredentialStore(credentialStore, PluginResources.UriMs, options.ClientId,
+						options.PersistMicrosoftCreds);
+					break;
+				case MtTranslationOptions.ProviderType.MicrosoftTranslatorWithPe:
 					//set mst cred
 					SetCredentialsOnCredentialStore(credentialStore, PluginResources.UriMs, options.ClientId,
 						options.PersistMicrosoftCreds);
