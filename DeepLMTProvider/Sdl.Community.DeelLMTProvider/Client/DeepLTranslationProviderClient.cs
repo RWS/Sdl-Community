@@ -40,8 +40,16 @@ namespace Sdl.Community.DeepLMTProvider.Client
         }
 
         public static HttpResponseMessage IsApiKeyValidResponse { get; private set; }
+
         private static List<string> SupportedTargetLanguages { get; set; }
+
         private static Dictionary<string, bool> SupportedTargetLanguagesAndFormalities { get; set; }
+
+        private Dictionary<string, List<string>> ChineseMappings { get; set; } = new()
+        {
+            ["ZH-HANS"] = new List<string> { "ZH-CN", "ZH-SG", "ZH-HANS-HK", "ZH-HANS-MO" },
+            ["ZH-HANT"] = new List<string> { "ZH-TW", "ZH-HK", "ZH-MO" }
+        };
 
         private List<string> SupportedSourceLanguages =>
             _supportedSourceLanguages ??= GetSupportedSourceLanguages(ApiKey);
@@ -194,6 +202,11 @@ namespace Sdl.Community.DeepLMTProvider.Client
             ApiKeyChanged?.Invoke();
         }
 
+        private string GetChineseFlavour(string languageName)
+        {
+            return ChineseMappings.FirstOrDefault(m => m.Value.Contains(languageName)).Key;
+        }
+
         private Formality GetFormality(LanguagePair languageDirection, Formality formality)
         {
             if (!SupportedTargetLanguagesAndFormalities.TryGetValue(
@@ -213,11 +226,10 @@ namespace Sdl.Community.DeepLMTProvider.Client
         private string GetLanguage(CultureInfo culture, List<string> languageList, bool isTarget = false)
         {
             var ietfLanguageTag = culture.IetfLanguageTag.ToUpperInvariant();
-            if (isTarget && ietfLanguageTag.Contains("ZH")) return ietfLanguageTag.Contains("HANS") ? "ZH-HANS" : "ZH-HANT";
+            if (isTarget && ietfLanguageTag.Contains("ZH")) return GetChineseFlavour(ietfLanguageTag);
 
             if (languageList != null && languageList.Any())
             {
-                
                 var twoLetterIso = culture.TwoLetterISOLanguageName.ToUpperInvariant();
 
                 var selectedTargetLanguage = languageList.FirstOrDefault(tl => tl == ietfLanguageTag) ?? languageList.FirstOrDefault(tl => tl == twoLetterIso);
