@@ -187,7 +187,7 @@ namespace SDLXLIFFSliceOrChange
 		// and it should be the same for a correct replacement (ex: words which contains symbols)
 		private static void ReplaceRegexText(ReplaceSettings settings, RegexOptions options, string segmentHtml, XmlElement child, bool inSource)
 		{
-			if (inSource && !string.IsNullOrEmpty(settings.SourceSearchText) && !string.IsNullOrEmpty(settings.SourceReplaceText))
+			if (inSource && !string.IsNullOrEmpty(settings.SourceSearchText))
 			{
 				var sourceRg = new Regex(settings.SourceSearchText, options);
 				var replacedText = sourceRg.Replace(WebUtility.HtmlEncode(segmentHtml), settings.SourceReplaceText);
