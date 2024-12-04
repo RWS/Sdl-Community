@@ -1,18 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3C48001C-AA88-4799-B622-4FDC93AA70D6}</ProjectGuid>
+    <TargetFramework>net48</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SDLXLIFFSliceOrChange</RootNamespace>
-    <AssemblyName>SDLXLIFFSliceOrChange</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -31,30 +21,14 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
     <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+    <Configurations>CD_ROM;Debug;DVD-5;Release;SingleImage</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>toolkit- 128.ico</ApplicationIcon>
@@ -67,17 +41,14 @@
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
-	  <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
-	</PropertyGroup>
+    <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="NLog">
       <HintPath>$(TradosFolder)\NLog.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(TradosFolder)\Sdl.Core.Globalization.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Core.Settings">
-      <HintPath>$(TradosFolder)\Sdl.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
@@ -90,9 +61,6 @@
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Settings">
-      <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
       <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
@@ -115,153 +83,46 @@
     <Reference Include="Sdl.Versioning">
       <HintPath>$(TradosFolder)\Sdl.Versioning.dll</HintPath>
     </Reference>
-    <Reference Include="System">
+    <Reference Update="System">
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Core">
+    <Reference Update="System.Core">
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Xml.Linq">
+    <Reference Update="System.Xml.Linq">
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
+    <Reference Update="System.Data">
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Data">
+    <Reference Update="System.Drawing">
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Deployment">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Drawing">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Windows.Forms">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Xml">
+    <Reference Update="System.Xml">
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClearManager.cs" />
-    <Compile Include="ExpressionEvaluator\CompiledExpression.cs" />
-    <Compile Include="ExpressionEvaluator\ExpressionCompiler.cs" />
-    <Compile Include="ExpressionEvaluator\HelperMethods.cs" />
-    <Compile Include="ExpressionEvaluator\Operators\BinaryOperator.cs" />
-    <Compile Include="ExpressionEvaluator\Operators\IndexOperator.cs" />
-    <Compile Include="ExpressionEvaluator\Operators\IOperator.cs" />
-    <Compile Include="ExpressionEvaluator\Operators\MethodOperator.cs" />
-    <Compile Include="ExpressionEvaluator\Operators\Operator.cs" />
-    <Compile Include="ExpressionEvaluator\Operators\OperatorCollection.cs" />
-    <Compile Include="ExpressionEvaluator\Operators\OperatorCustomExpressions.cs" />
-    <Compile Include="ExpressionEvaluator\Operators\OpFuncArgs.cs" />
-    <Compile Include="ExpressionEvaluator\Operators\OpFuncServiceLocator.cs" />
-    <Compile Include="ExpressionEvaluator\Operators\OpFuncServiceProviders.cs" />
-    <Compile Include="ExpressionEvaluator\Operators\TypeOperator.cs" />
-    <Compile Include="ExpressionEvaluator\Operators\UnaryOperator.cs" />
-    <Compile Include="ExpressionEvaluator\Parser.cs" />
-    <Compile Include="ExpressionEvaluator\Tokens\MemberToken.cs" />
-    <Compile Include="ExpressionEvaluator\Tokens\OpToken.cs" />
-    <Compile Include="ExpressionEvaluator\Tokens\Token.cs" />
-    <Compile Include="ExpressionEvaluator\TypeConversion.cs" />
-    <Compile Include="ExpressionEvaluator\TypeRegistry.cs" />
-    <Compile Include="FileDataManager.cs" />
-    <Compile Include="FolderSelect\FolderSelect.cs" />
-    <Compile Include="FolderSelect\Utils.cs">
+    <Compile Update="FolderSelect\Utils.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ReplaceManager.cs" />
-    <Compile Include="ReplaceSettings.cs" />
-    <Compile Include="SDLXLIFF.en-US.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SDLXLIFF.en-US.resx</DependentUpon>
-    </Compile>
-    <Compile Include="SDLXLIFF.fr-FR.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SDLXLIFF.fr-FR.resx</DependentUpon>
-    </Compile>
-    <Compile Include="SdlxliffSliceOrChange.cs">
+    <Compile Update="SdlxliffSliceOrChange.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SdlxliffSliceOrChange.Designer.cs">
-      <DependentUpon>SdlxliffSliceOrChange.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResourceManager\UIResources.cs" />
-    <Compile Include="SearchResults.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SearchResults.Designer.cs">
-      <DependentUpon>SearchResults.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Settings.cs" />
-    <Compile Include="SliceInfo.cs" />
-    <Compile Include="SliceManager.cs" />
-    <Compile Include="StructureInformationType.cs" />
-    <Compile Include="UpdateManager.cs" />
-    <Compile Include="User Controls\NoLabelTextBox.cs">
+    <Compile Update="User Controls\NoLabelTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="User Controls\NoLabelTextBox.Designer.cs">
-      <DependentUpon>NoLabelTextBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Data\XLIFFFiles.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>XLIFFFiles.xsd</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <EmbeddedResource Include="SDLXLIFF.en-US.resx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>SDLXLIFF.en-US.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SDLXLIFF.fr-FR.resx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>SDLXLIFF.fr-FR.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SdlxliffSliceOrChange.resx">
-      <DependentUpon>SdlxliffSliceOrChange.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SearchResults.resx">
-      <DependentUpon>SearchResults.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="app.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <None Include="Data\XLIFFFiles.xsc">
+    <None Update="Data\XLIFFFiles.xsc">
       <DependentUpon>XLIFFFiles.xsd</DependentUpon>
     </None>
-    <None Include="Data\XLIFFFiles.xsd">
+    <None Update="Data\XLIFFFiles.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>XLIFFFiles.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Data\XLIFFFiles.xss">
+    <None Update="Data\XLIFFFiles.xss">
       <DependentUpon>XLIFFFiles.xsd</DependentUpon>
     </None>
-    <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="SDLXLIFF toolkit.xml">
@@ -284,10 +145,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SdlXliff.Toolkit.Integration\SdlXliff.Toolkit.Integration.csproj">
-      <Project>{01c27390-6448-4b3f-a955-2e8915a7aca5}</Project>
-      <Name>SdlXliff.Toolkit.Integration</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\SdlXliff.Toolkit.Integration\SdlXliff.Toolkit.Integration.csproj" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+  </ItemGroup>
 </Project>
