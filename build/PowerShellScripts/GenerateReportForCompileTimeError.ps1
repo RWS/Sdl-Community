@@ -1,8 +1,11 @@
 param(
 [string]$directoryPath = "",
 [string]$resultPath = "",
-[string]$reportName = ""
+[string]$reportName = "",
+[string]$poolName = ""
 )
+
+$agentDirectory
 
 if (-not $directoryPath) {
     $directoryPath = $env:SYSTEM_DEFAULTWORKINGDIRECTORY
@@ -10,6 +13,10 @@ if (-not $directoryPath) {
 
 if (-not $resultPath) {
     $resultPath = $env:SYSTEM_DEFAULTWORKINGDIRECTORY
+}
+
+if (-not $poolName) {
+    $poolName = $env:SYSTEM_DEFAULTWORKINGDIRECTORY
 }
 
 if (-not $reportName) {
@@ -31,7 +38,7 @@ $reportFile = "$directoryPath\DemoReport.txt" # Path to your output report file
 
 # Initialize flags and data
 $inBuildFailedSection = $false
-$buildFailedFound = $false
+$inTestFailedSection = $false
 
 # Clear the report file if it already exists
 Clear-Content -Path $reportFile -ErrorAction Ignore
@@ -43,7 +50,6 @@ Get-Content $logFile | ForEach-Object {
     # Check if the line contains "Build FAILED."
     if ($line -match "Build FAILED.") {
         $inBuildFailedSection = $true
-        $buildFailedFound = $true
     }
 
     # If we're in the failed build section, append the line to the report file
@@ -55,6 +61,19 @@ Get-Content $logFile | ForEach-Object {
     if ($line -match "Time Elapsed") {
         $inBuildFailedSection = $false
     }
+
+    if ($line -match "Starting test execution, please wait...") {
+        $inTestFailedSection = $true
+    }
+
+    if ($inTestFailedSection) {
+        Add-Content -Path $reportFile -Value $line
+    }
+
+    if ($line -match "Total time:") {
+        $inTestFailedSection = $false
+    }
+
 }
 
 # Define file paths
@@ -68,7 +87,6 @@ $processedLine = $false
 # Clear the output file if it already exists
 Clear-Content -Path $outputFile -ErrorAction Ignore
 
-
 if (Test-Path $inputFile) {
 # Read the input file line by line
 Get-Content $inputFile | ForEach-Object {
@@ -77,8 +95,12 @@ Get-Content $inputFile | ForEach-Object {
     # Check if we are processing a section
     if ($processing) {
         if (-not $processedLine -and $line -ne "") {
-            # Process the first non-empty line
-            $line = $line -replace "D:\\a\\1\\s\\", "~"
+
+            if ($poolName -eq "FlaviusPool") {
+                $line = $line -replace "C:\\agent\\_work\\11\\s\\", "~" 
+            } elseif ($poolName -eq "Azure Pipelines") {
+                $line = $line -replace "D:\\a\\1\\s\\", "~" 
+            }
 
             # Truncate at the first backslash
             if ($line -match "\\") {
@@ -130,10 +152,24 @@ Get-Content $input1 | ForEach-Object {
     $line = $_
 
     # Check if the line does NOT contain the word 'warning'
-    if ($line -notmatch "warning") {
+    if ($line -notmatch "warning" -and $inTestFailedSection -eq $false) {
         # Write the line to the output file
         Add-Content -Path $output1 -Value $line
     }
+
+    if ($line -match "Failed ") {
+        Add-Content -Path $output1 -Value $line
+        $inTestFailedSection = $true
+    }
+
+    if ($inTestFailedSection) {
+        Add-Content -Path $output1 -Value $line
+    }
+
+    if ($line -match "Stack Trace:") {
+        $inTestFailedSection = $false
+    }
+
 }
 
 # Define file paths
@@ -199,7 +235,6 @@ $output5 = "$directoryPath\ReplaceString.txt"  # Path to the output file
 # Clear the output file if it already exists
 Clear-Content -Path $output5 -ErrorAction Ignore
 
-# Read the input file line by line
 Get-Content $input5 | ForEach-Object {
     $line = $_
 

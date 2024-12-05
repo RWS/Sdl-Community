@@ -2,16 +2,76 @@
 [string]$defaultWorkingDirectory = ""
 )
 
+
 if (-not $defaultWorkingDirectory) {
     $defaultWorkingDirectory = $env:SYSTEM_DEFAULTWORKINGDIRECTORY
+}
+
+if (-not $poolname) {
+    $poolname = $env:SYSTEM_DEFAULTWORKINGDIRECTORY
 }
 
 $folderName = "NuGet"
 $appDataPath = [System.Environment]::GetFolderPath('ApplicationData')
 $folderPath = Join-Path -Path $appDataPath -ChildPath $folderName
 
+
 # Get all .csproj files in the repository
 $csprojFiles = Get-ChildItem -Path $defaultWorkingDirectory -Recurse -Filter *.sln | Select-Object -ExpandProperty FullName
+
+
+function UnitTestsExists {
+    param (
+        [string]$solutionPath
+    )
+
+     $testAssemblie = Get-ChildItem -Path $solutionPath -Recurse -Include "*UnitTests.dll" | Where-Object { $_.FullName -notlike "*TestAdapter.dll" -and $_.FullName -notlike "*\obj\*" }
+
+     if ($testAssemblie.Count -ne 0) {
+       return $true
+    }
+
+    return $false
+}
+
+function BuildUnitTests {
+    param (
+        [string]$solutionPath
+    )
+
+    $testAssemblie = Get-ChildItem -Path $solutionPath -Recurse -Include "*UnitTests.dll" | Where-Object { $_.FullName -notlike "*TestAdapter.dll" -and $_.FullName -notlike "*\obj\*" }
+
+    if ($testAssemblie.Count -ne 0) {
+        
+        & "$vsTestPath" "$testAssemblie" /Logger:"Console;Verbosity=normal" `
+        | Tee-Object -FilePath "$defaultWorkingDirectory\Logs\UnitTestsLog.txt" -Append
+       
+    }
+
+}
+
+function Get-VSTestConsolePath {
+    $possibleLocations = @(
+        "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\Extensions\TestPlatform\vstest.console.exe",
+        "C:\Program Files\Microsoft Visual Studio\2022\Professional\Common7\IDE\Extensions\TestPlatform\vstest.console.exe",
+        "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\TestPlatform\vstest.console.exe",
+        "C:\Program Files\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\Extensions\TestPlatform\vstest.console.exe",
+        "C:\Program Files\Microsoft Visual Studio\2019\Professional\Common7\IDE\Extensions\TestPlatform\vstest.console.exe",
+        "C:\Program Files\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\vstest.console.exe",
+        "C:\Program Files\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\TestPlatform\vstest.console.exe"
+    )
+
+    foreach ($location in $possibleLocations) {
+        if (Test-Path $location) {
+            return $location
+        }
+    }
+
+    Write-Host "VSTest.Console.exe not found in the standard locations." -ForegroundColor Red
+    return $null
+}
+
+$vsTestPath = Get-VSTestConsolePath
 
 # Function to find MSBuild location by checking common paths
 function Get-MSBuildLocation {
@@ -48,22 +108,35 @@ Set-Alias MSBuild -Value $msbuildLocation;
 
 $feedName = 'SDLNuget'
 $nugetRestoreArguments = "/p:RestoreSources=https://pkgs.dev.azure.com/sdl/_packaging/$feedName/nuget/v3/index.json"
-$msbuildArguments = "/flp:logfile=$defaultWorkingDirectory/GitHubLogs/MyLog.log;append=true"
+$msbuildArguments = "/flp:logfile=$defaultWorkingDirectory/Logs/MyLog.log;append=true"
+
+Write-Host ">>>>>>> : $poolName, $index"
 
 foreach ($project in $csprojFiles) {
         if (Test-Path -Path $folderPath) {
     Remove-Item -Path $folderPath -Recurse -Force
     }
-  #  MSBuild "/bl" -m "$project" "/t:Restore" /p:nugetInteractive=true $nugetRestoreArguments
-    MSBuild "/bl" -m "$project" "/t:Restore" $nugetRestoreArguments -p:RestorePackagesConfig=true
-    MSBuild  -m "$project" "/t:Rebuild" $msbuildArguments
-    
-    if (! $?) {  write-Host "msbuild failed" -ForegroundColor Red ; }
 
-    $itemFolder = $project -split '\\'
-    $joinedString = ($itemFolder[0..(4)] -join '\')
-    if (Test-Path -Path $joinedString) {
-    Write-Host "~~~  Following will be deleted: $joinedString"
-    Remove-Item -Path $joinedString -Recurse -Force
+    if (Test-Path -Path $project) {
+
+        MSBuild "/bl" -m "$project" "/t:Restore" $nugetRestoreArguments -p:RestorePackagesConfig=true
+        MSBuild  -m "$project" "/t:Rebuild" $msbuildArguments
+
+        if (! $?) {  write-Host "msbuild failed" -ForegroundColor Red ; }
+
+        $itemFolder = $project -split '\\'
+        $joinedString = ($itemFolder[0..($itemFolder.Count - 2)] -join '\')
+
+        $unitTestExists = UnitTestsExists -solutionPath $joinedString
+
+        if ($unitTestExists){
+            BuildUnitTests -solutionPath $joinedString
+        }
+
+        if (Test-Path -Path $joinedString) {
+            Write-Host "~~~  Following will be deleted: $joinedString"
+            Remove-Item -Path $joinedString -Recurse -Force
+        }
     }
+
 }
