@@ -58,7 +58,7 @@ namespace SdlXliff.Toolkit.Integration.File
 					var targetLContent = _dataExtractor.LockedContent;
 
 					// perform search
-					if (_searcher.CheckSegment(item.Properties.IsLocked, item.Properties.ConfirmationLevel))
+					if (_searcher.ShouldBeProcessed(item.Properties.IsLocked, item.Properties.ConfirmationLevel))
 					{
 						if (_searchSettings.SearchInSource && (sourceText.Length > 0 || sourceTags.Count > 0))
 						{

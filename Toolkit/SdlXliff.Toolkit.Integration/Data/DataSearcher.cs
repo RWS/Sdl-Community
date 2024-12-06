@@ -39,7 +39,7 @@ namespace SdlXliff.Toolkit.Integration.Data
         /// <param name="isLocked">true - locked</param>
         /// <param name="status">segment status</param>
         /// <returns>true - process</returns>
-        public bool CheckSegment(bool isLocked, ConfirmationLevel status)
+        public bool ShouldBeProcessed(bool isLocked, ConfirmationLevel status)
         {
 	        if (_settings != null)
 	        {
