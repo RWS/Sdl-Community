@@ -242,7 +242,16 @@ namespace Sdl.Community.StudioViews.Services
 
 			try
 			{
-				var xml = XDocument.Load(filePath, LoadOptions.PreserveWhitespace);
+				//var xml = XDocument.Load(filePath, LoadOptions.PreserveWhitespace);
+				XDocument xml = null;
+				// avoid System.Xml.XmlException Message: '?', hexadecimal value 0x1C, 0x1E, ... is an invalid character.
+				XmlReaderSettings xmlReaderSettings = new XmlReaderSettings { CheckCharacters = false };
+				using (XmlReader xmlReader = XmlReader.Create(filePath, xmlReaderSettings))
+				{
+					xmlReader.MoveToContent();
+					xml = XDocument.Load(xmlReader, LoadOptions.PreserveWhitespace);
+				}
+				
 				var xliff = xml.Root;
 				if (xliff != null &&
 					string.Compare(xliff.Name.LocalName, "xliff", StringComparison.InvariantCultureIgnoreCase) == 0)
