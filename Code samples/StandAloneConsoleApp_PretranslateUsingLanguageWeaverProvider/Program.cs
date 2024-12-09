@@ -58,11 +58,10 @@ namespace StandAloneConsoleApp_PretranslateUsingLanguageWeaverProvider
             return projectDirectory;
         }
 
-
         private static void Main(string[] args)
         {
             var projectsDirectory = @"";
-            var templatePath = @"";
+            var templatePath = @""; 
 
             var sourceLanguage = "en-US";
             var targetLanguage = "de-DE";
@@ -77,26 +76,27 @@ namespace StandAloneConsoleApp_PretranslateUsingLanguageWeaverProvider
             var tpUriString = "languageweaveredge:///";
             if (string.IsNullOrWhiteSpace(templatePath)) AddTranslationProviderToProject(templatePath, project, tpUriString);
 
-            var cloudCredentials = new
-            {
-                AccountRegion = "eu",
-                ClientID = "",
-                ClientSecret = ""
-            };
-            
-            var edgeCredentials = new
+            // Uncomment this section when using Language Weaver Cloud
+            //var userCredentials = new
+            //{
+            //    AccountRegion = "eu",
+            //    ClientID = "",
+            //    ClientSecret = ""
+            //};
+
+            var apiKeyCredentials = new
             {
                 AccountRegion = "eu",
                 Host = "",
                 ApiKey = ""
             };
 
+            //project.Credentials.AddCredential(new Uri(tpUriString), JsonConvert.SerializeObject(userCredentials));
+            project.Credentials.AddCredential(new Uri(tpUriString), JsonConvert.SerializeObject(apiKeyCredentials));
 
-            project.Credentials.AddCredential(new Uri(tpUriString), JsonConvert.SerializeObject(edgeCredentials));
-            
             project.Save();
 
-            AddFilesToProject(project, @""); 
+            AddFilesToProject(project, @"");
 
             RunTasks(project, targetLanguage);
 
@@ -112,8 +112,6 @@ namespace StandAloneConsoleApp_PretranslateUsingLanguageWeaverProvider
             var tpCascadeEntry = new TranslationProviderCascadeEntry(tpReference, true, true, false);
             tpConfig.Entries.Add(tpCascadeEntry);
             project.UpdateTranslationProviderConfiguration(tpConfig);
-
-            
         }
 
         private static FileBasedProject CreateProject(string projectsDirectory, string sourceLanguage, string targetLanguage,
