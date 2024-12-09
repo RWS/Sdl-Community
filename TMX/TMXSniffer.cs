@@ -67,33 +67,22 @@ namespace Sdl.Community.FileType.TMX
         // from the file header
         private void GetFileLanguages(ref SniffInfo info, string nativeFilePath)
         {
-            XmlDocument doc = new XmlDocument();
+			XmlDocument doc = new XmlDocument();
 
 			doc.Load(nativeFilePath);
-            string tmxSource = doc.SelectSingleNode("tmx/header/@srclang").InnerText;
-			CultureInfo sourceLanguage;
-			try // currently LegacySdlxLanguage initialization fails first time
-			{
-				sourceLanguage = LegacySdlxLanguage.GetCultureInfoFromIsoCode(tmxSource);
-			}
-			catch
-			{
-				sourceLanguage = LegacySdlxLanguage.GetCultureInfoFromIsoCode(tmxSource);
-			}
+			string tmxSource = doc.SelectSingleNode("tmx/header/@srclang").InnerText;
 
 			info.DetectedSourceLanguage =
-                new Sdl.FileTypeSupport.Framework.Pair<Language, DetectionLevel>(new Language(sourceLanguage), DetectionLevel.Certain); 
+				new Sdl.FileTypeSupport.Framework.Pair<Language, DetectionLevel>(new Language(tmxSource), DetectionLevel.Certain);
 
-            if (doc.SelectSingleNode("tmx/body/tu[1]/tuv[2]").Attributes[0] != null && 
-                doc.SelectSingleNode("tmx/body/tu[1]/tuv[2]").Attributes[0].InnerText.Length==5)
-            {
-                string tmxTarget = doc.SelectSingleNode("tmx/body/tu[1]/tuv[2]").Attributes[0].InnerText;
-				var targetLanguage = LegacySdlxLanguage.GetCultureInfoFromIsoCode(tmxTarget);
-
-				info.DetectedTargetLanguage = new Sdl.FileTypeSupport.Framework.Pair<Language, DetectionLevel>(new Language(targetLanguage), 
-                    DetectionLevel.Certain);
-            }
-        }
+			if (doc.SelectSingleNode("tmx/body/tu[1]/tuv[2]").Attributes[0] != null &&
+				doc.SelectSingleNode("tmx/body/tu[1]/tuv[2]").Attributes[0].InnerText.Length == 5)
+			{
+				string tmxTarget = doc.SelectSingleNode("tmx/body/tu[1]/tuv[2]").Attributes[0].InnerText;
+				info.DetectedTargetLanguage = new Sdl.FileTypeSupport.Framework.Pair<Language, DetectionLevel>(new Language(tmxTarget),
+					DetectionLevel.Certain);
+			}
+		}
 
     }
 }
