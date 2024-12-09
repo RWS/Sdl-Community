@@ -2207,7 +2207,7 @@ namespace SDLXLIFFSliceOrChange
                     sw.Write(fileText);
                     sw.Write(xliffEndText);
                 }
-                splitedFiles.Add(filePath, fileName);
+                splitedFiles[filePath] =  fileName;
             }
             fileList = null;
             xDoc = null;
