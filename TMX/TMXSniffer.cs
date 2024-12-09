@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.IO;
 using System.Xml;
 using Sdl.Core.Globalization;
 using Sdl.Core.Settings;
@@ -8,32 +9,22 @@ namespace Sdl.Community.FileType.TMX
 {
 	class TMXSniffer : INativeFileSniffer
     {
-
         static string _BilingualDocument = "tmx";
-
 
         public SniffInfo Sniff(string nativeFilePath, Language suggestedSourceLanguage, 
             Codepage suggestedCodepage, INativeTextLocationMessageReporter messageReporter, 
             ISettingsGroup settingsGroup)
         {
             SniffInfo info = new SniffInfo();
-
-            if (System.IO.File.Exists(nativeFilePath))
+            info.IsSupported = false;
+            if (File.Exists(nativeFilePath))
             {
-                // call method to check if file is supported
                 info.IsSupported = IsFileSupported(nativeFilePath);
-                // call method to determine the file language pair
                 GetFileLanguages(ref info, nativeFilePath);
-            }
-            else
-            {
-                info.IsSupported = false;
             }
 
             return info;
         }
-
-
 
         // determine whether a given file is supported based on the
         // root element
@@ -61,8 +52,6 @@ namespace Sdl.Community.FileType.TMX
             return result;
         }
 
-
-
         // retrieve the source and target language
         // from the file header
         private void GetFileLanguages(ref SniffInfo info, string nativeFilePath)
@@ -71,26 +60,18 @@ namespace Sdl.Community.FileType.TMX
 
 			doc.Load(nativeFilePath);
             string tmxSource = doc.SelectSingleNode("tmx/header/@srclang").InnerText;
-			CultureInfo sourceLanguage;
-			try // currently LegacySdlxLanguage initialization fails first time
-			{
-				sourceLanguage = LegacySdlxLanguage.GetCultureInfoFromIsoCode(tmxSource);
-			}
-			catch
-			{
-				sourceLanguage = LegacySdlxLanguage.GetCultureInfoFromIsoCode(tmxSource);
-			}
+            var sourceLanguage = new Language(tmxSource);
 
 			info.DetectedSourceLanguage =
-                new Sdl.FileTypeSupport.Framework.Pair<Language, DetectionLevel>(new Language(sourceLanguage), DetectionLevel.Certain); 
+                new Sdl.FileTypeSupport.Framework.Pair<Language, DetectionLevel>(sourceLanguage, DetectionLevel.Certain);
 
-            if (doc.SelectSingleNode("tmx/body/tu[1]/tuv[2]").Attributes[0] != null && 
-                doc.SelectSingleNode("tmx/body/tu[1]/tuv[2]").Attributes[0].InnerText.Length==5)
+            if (doc.SelectSingleNode("tmx/body/tu[1]/tuv[2]").Attributes[0] != null &&
+                doc.SelectSingleNode("tmx/body/tu[1]/tuv[2]").Attributes[0].InnerText.Length == 5)
             {
                 string tmxTarget = doc.SelectSingleNode("tmx/body/tu[1]/tuv[2]").Attributes[0].InnerText;
-				var targetLanguage = LegacySdlxLanguage.GetCultureInfoFromIsoCode(tmxTarget);
+                var targetLanguage = new Language(tmxTarget);
 
-				info.DetectedTargetLanguage = new Sdl.FileTypeSupport.Framework.Pair<Language, DetectionLevel>(new Language(targetLanguage), 
+                info.DetectedTargetLanguage = new Sdl.FileTypeSupport.Framework.Pair<Language, DetectionLevel>(targetLanguage,
                     DetectionLevel.Certain);
             }
         }
