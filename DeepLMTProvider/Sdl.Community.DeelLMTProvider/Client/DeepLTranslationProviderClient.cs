@@ -124,7 +124,8 @@ namespace Sdl.Community.DeepLMTProvider.Client
                     Formality = deepLSettings.Formality.ToString().ToLower(),
                     GlossaryId = deepLSettings.GlossaryId,
                     PreserveFormatting = deepLSettings.PreserveFormatting,
-                    TagHandling = deepLSettings.TagHandling == TagFormat.None ? null : deepLSettings.TagHandling.ToString().ToLower()
+                    TagHandling = deepLSettings.TagHandling == TagFormat.None ? null : deepLSettings.TagHandling.ToString().ToLower(),
+                    IgnoreTags = deepLSettings.IgnoreTags
                 };
 
                 var requestJson = JsonConvert.SerializeObject(

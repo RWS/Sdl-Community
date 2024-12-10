@@ -8,7 +8,7 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.DeepLMTProvider.Studio
 {
-	public class DeepLMtTranslationProvider : ITranslationProvider
+    public class DeepLMtTranslationProvider : ITranslationProvider
     {
         public static readonly string ListTranslationProviderScheme = "deepltranslationprovider";
         private readonly Logger _logger = Log.GetLogger(nameof(Client.DeepLTranslationProviderClient));
@@ -64,14 +64,9 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             Options = JsonConvert.DeserializeObject<DeepLTranslationOptions>(translationProviderState);
         }
 
-        public void RefreshStatusInfo()
-        {
-        }
+        public void RefreshStatusInfo() {}
 
-        public string SerializeState()
-        {
-            return JsonConvert.SerializeObject(Options);
-        }
+        public string SerializeState() => JsonConvert.SerializeObject(Options);
 
         public bool SupportsLanguageDirection(LanguagePair languageDirection)
         {

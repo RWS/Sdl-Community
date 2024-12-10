@@ -26,8 +26,10 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
         public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
         {
-            var options = new DeepLTranslationOptions();
-
+            var options = new DeepLTranslationOptions
+            {
+                Uri = new Uri(PluginResources.DeeplTranslationProviderScheme)
+            };
             var credentials = credentialStore.GetCredentials(PluginResources.DeeplTranslationProviderScheme);
 
             var dialog = SetupDeepL(languagePairs, options, credentials);

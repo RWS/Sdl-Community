@@ -23,5 +23,8 @@ namespace Sdl.Community.DeepLMTProvider.Model
 
         [JsonProperty("preserve_formatting")]
         public bool PreserveFormatting { get; set; }
+
+        [JsonProperty("ignore_tags")]
+        public List<string> IgnoreTags { get; set; }
     }
 }

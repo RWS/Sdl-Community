@@ -22,11 +22,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
     {
         private string _apiKey;
         private string _apiKeyValidationMessage;
+        private string _apiVersion;
+        private List<string> _ignoreTags;
         private ObservableCollection<LanguagePairOptions> _languagePairSettings = new();
         private bool _preserveFormatting;
         private bool _sendPlainText;
         private TagFormat _tagType;
-        private string _apiVersion;
         private string _validationMessages;
 
         public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, IMessageService messageService)
@@ -43,6 +44,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             TagType = deepLTranslationOptions.TagHandling;
             PreserveFormatting = deepLTranslationOptions.PreserveFormatting;
             ApiVersion = deepLTranslationOptions.ApiVersion;
+            IgnoreTags = deepLTranslationOptions.IgnoreTagsParameter;
 
             Options = deepLTranslationOptions;
 
@@ -63,7 +65,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             PreserveFormatting = deepLTranslationOptions.PreserveFormatting;
             TagType = deepLTranslationOptions.TagHandling;
             ApiVersion = deepLTranslationOptions.ApiVersion;
-
+            IgnoreTags = deepLTranslationOptions.IgnoreTagsParameter;
 
             PasswordChangedTimer.Elapsed += OnPasswordChanged;
 
@@ -95,6 +97,24 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             }
         }
 
+        public string ApiVersion
+        {
+            get => _apiVersion;
+            set
+            {
+                SetField(ref _apiVersion, value);
+                OnPasswordChanged(null, null);
+            }
+        }
+
+        public ICommand CancelCommand => new ParameterlessCommand(DetachEvents);
+
+        public List<string> IgnoreTags
+        {
+            get => _ignoreTags;
+            set => SetField(ref _ignoreTags, value);
+        }
+
         public ObservableCollection<LanguagePairOptions> LanguagePairOptions
         {
             get => _languagePairSettings;
@@ -104,8 +124,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         public ICommand ManageGlossariesCommand => new ParameterlessCommand(() => ManageGlossaries?.Invoke(), () => ApiKeyValidationMessage == null);
 
         public ICommand OkCommand => new ParameterlessCommand(Save, () => ApiKeyValidationMessage == null);
-        public ICommand CancelCommand => new ParameterlessCommand(DetachEvents);
-
         public DeepLTranslationOptions Options { get; set; }
 
         public bool PreserveFormatting
@@ -127,6 +145,12 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         }
 
         public string Title { get; set; } = "DeepL Translation Provider";
+
+        public string ValidationMessages
+        {
+            get => _validationMessages;
+            set => SetField(ref _validationMessages, value);
+        }
 
         private IDeepLGlossaryClient GlossaryClient { get; set; }
 
@@ -237,13 +261,14 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             DeepLTranslationProviderClient.ApiVersion = ApiVersion;
             DeepLTranslationProviderClient.ApiKey = ApiKey;
             SetApiKeyValidityLabel();
-            
+
             Options.SendPlainText = SendPlainText;
             Options.ApiKey = ApiKey;
             Options.LanguagePairOptions = [.. LanguagePairOptions];
             Options.PreserveFormatting = PreserveFormatting;
             Options.TagHandling = TagType;
             Options.ApiVersion = ApiVersion;
+            Options.IgnoreTagsParameter = IgnoreTags;
 
             var glossaryIds = Options.LanguagePairOptions.ToDictionary(
                 lpo => (lpo.LanguagePair.SourceCulture.Name, lpo.LanguagePair.TargetCulture.Name),
@@ -256,22 +281,6 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             {
                 AskUserToRestart();
             }
-        }
-
-        public string ApiVersion
-        {
-            get => _apiVersion;
-            set
-            {
-                SetField(ref _apiVersion, value);
-                OnPasswordChanged(null, null);
-            }
-        }
-
-        public string ValidationMessages
-        {
-            get => _validationMessages;
-            set => SetField(ref _validationMessages, value);
         }
 
         private void SetApiKeyValidityLabel()
@@ -312,7 +321,5 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         {
             ApiKeyValidationMessage = message;
         }
-
-        
     }
 }

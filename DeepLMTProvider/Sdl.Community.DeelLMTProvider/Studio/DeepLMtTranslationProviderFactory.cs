@@ -1,6 +1,7 @@
 ﻿using System;
 using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Model;
+using Sdl.Community.DeepLMTProvider.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.DeepLMTProvider.Studio
@@ -12,8 +13,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
     {
         public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
         {
-            //var originalUri = new Uri(PluginResources.DeeplTranslationProviderScheme);
-            var options = new DeepLTranslationOptions(translationProviderUri, translationProviderState);
+            var options = new OptionsProvider().GetTranslationOptions(translationProviderUri, translationProviderState);
 
             if (credentialStore.GetCredential(translationProviderUri) == null)
                 return new DeepLMtTranslationProvider(options, new DeepLTranslationProviderClient(options.ApiKey));

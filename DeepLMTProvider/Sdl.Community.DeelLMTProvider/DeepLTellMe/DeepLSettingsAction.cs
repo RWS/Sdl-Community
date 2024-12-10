@@ -7,7 +7,6 @@ using Sdl.Community.DeepLMTProvider.UI;
 using Sdl.Community.DeepLMTProvider.ViewModel;
 using Sdl.TellMe.ProviderApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -19,14 +18,13 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
         public DeepLSettingsAction()
         {
             Name = $"{PluginResources.Plugin_Name} Settings";
+            OptionsProvider = new OptionsProvider();
         }
 
         public override string Category => $"{PluginResources.Plugin_Name} results";
-
         public override Icon Icon => PluginResources.Settings;
-
         public override bool IsAvailable => true;
-
+        private OptionsProvider OptionsProvider { get; set; }
         private DeepLWindowViewModel ViewModel { get; set; }
 
         public override void Execute()
@@ -55,9 +53,8 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
                         entry.MainTranslationProvider.Uri.OriginalString.Contains("deepltranslationprovider"));
                     if (translationProvider != null)
                     {
-                        var uri = translationProvider.MainTranslationProvider.Uri;
                         var state = translationProvider.MainTranslationProvider.State;
-                        var options = new DeepLTranslationOptions(uri, state);
+                        var options = OptionsProvider.GetTranslationOptions(translationProvider.MainTranslationProvider.Uri, state);
 
                         ViewModel = new DeepLWindowViewModel(options, new DeepLGlossaryClient(), new MessageService());
                         ViewModel.ManageGlossaries += ViewModel_ManageGlossaries;
@@ -74,7 +71,6 @@ namespace Sdl.Community.DeepLMTProvider.DeepLTellMe
                             translationProvider.MainTranslationProvider.State = JsonConvert.SerializeObject(options);
                             currentProject.UpdateTranslationProviderConfiguration(settings);
                         }
-
                     }
                 }
             }

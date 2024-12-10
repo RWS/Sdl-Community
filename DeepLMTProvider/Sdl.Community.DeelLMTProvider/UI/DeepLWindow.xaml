@@ -10,6 +10,7 @@
         xmlns:deepLmtProvider="clr-namespace:Sdl.Community.DeepLMTProvider"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:converters="clr-namespace:Sdl.Community.DeepLMTProvider.UI.Converters"
+        xmlns:converters1="clr-namespace:Sdl.Community.DeepLMTProvider.Converters"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewModel:DeepLWindowViewModel}"
         Icon="../Resources/deepLIcon.ico"
@@ -35,6 +36,7 @@
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converters1:ListToStringConverter x:Key="ListToStringConverter"/>
 
             <ObjectDataProvider MethodName="GetValues"
                                 ObjectType="{x:Type model:TagFormat}"
@@ -106,7 +108,7 @@
                        VerticalAlignment="Center"
                        Margin="10,0,0,0"
                        Style="{StaticResource ValidationTextBlockStyle}"
-                       Text="{Binding ApiKeyValidationMessage, Mode=TwoWay}"/>
+                       Text="{Binding ApiKeyValidationMessage, Mode=TwoWay}" />
             <TextBlock Margin="10,0,0,5"
                        Visibility="{Binding ApiKeyBoxEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
                        FontSize="12"> This API Key will then be used in all projects where you will be using the DeepL plug-in.</TextBlock>
@@ -131,7 +133,6 @@
                           Margin="10 0 0 5">
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Margin="0 5 0 5">
-
                             <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
                                       VerticalContentAlignment="Center"
                                       Name="PlainText"
@@ -148,13 +149,20 @@
 
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Tag handling"
-                                       Margin="15 0 0 5" />
+                                       Margin="12 0 0 5" />
                                 <ComboBox Margin="5 0 0 0"
                                           Height="20"
                                           SelectedItem="{Binding TagType}"
                                           ItemsSource="{Binding Source={StaticResource TagTypeProvider}}" />
                             </StackPanel>
-
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Ignore tags"
+                                       Margin="12 0 0 5" />
+                                <TextBox MinWidth="190"
+                                         Height="20"
+                                         Text="{Binding IgnoreTags, Converter={StaticResource ListToStringConverter}}"
+                                         HorizontalAlignment="Right" />
+                            </StackPanel>
                         </StackPanel>
                         <StackPanel Margin="5 5 0 5">
 

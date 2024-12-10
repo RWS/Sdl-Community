@@ -154,13 +154,12 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             throw new NotImplementedException();
         }
 
-        private string ApplyBeforeTranslationSettings(Segment newSeg, DeepLTranslationProviderTagPlacer tagPlacer)
+        private string ApplyBeforeTranslationSettings(Segment newSeg)
         {
-            if (newSeg.HasTags && !_options.SendPlainText)
-                return tagPlacer.PreparedSourceText;
+            if (_options.SendPlainText) return newSeg.ToPlain().RemoveTags();
 
-            newSeg.ToPlain().RemoveTags(out var plainText);
-            return plainText;
+            var tagPlacer = new DeepLTranslationProviderTagPlacer(newSeg);
+            return tagPlacer.PreparedSourceText;
         }
 
         private SearchResult CreateSearchResult(Segment segment, Segment translation)
@@ -230,7 +229,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         private string LookupDeepL(string sourceText) =>
             _connecter.Translate(_languageDirection, sourceText,
                 new(_languagePairOptions?.Formality ?? Formality.Default, _languagePairOptions?.SelectedGlossary.Id,
-                    _options.TagHandling, _options.PreserveFormatting));
+                    _options.TagHandling, _options.PreserveFormatting, _options.IgnoreTagsParameter));
 
         private List<PreTranslateSegment> TranslateSegments(List<PreTranslateSegment> preTranslateSegments)
         {
@@ -239,9 +238,8 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 foreach (var segment in preTranslateSegments.Where(segment => segment != null))
                 {
                     var newSeg = segment.TranslationUnit.SourceSegment.Duplicate();
-                    var tagPlacer = new DeepLTranslationProviderTagPlacer(newSeg);
 
-                    var sourceText = ApplyBeforeTranslationSettings(newSeg, tagPlacer);
+                    var sourceText = ApplyBeforeTranslationSettings(newSeg);
 
                     segment.SourceText = sourceText;
                 }

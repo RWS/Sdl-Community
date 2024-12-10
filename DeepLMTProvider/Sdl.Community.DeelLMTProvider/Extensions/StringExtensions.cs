@@ -13,10 +13,10 @@ namespace Sdl.Community.DeepLMTProvider.Extensions
             decoded = encoded;
         }
 
-        public static void RemoveTags(this string input, out string output)
+        public static string RemoveTags(this string input)
         {
             var pattern = "<.*?>"; // This regular expression matches any HTML or XML tag
-            output = Regex.Replace(input, pattern, string.Empty);
+            return Regex.Replace(input, pattern, string.Empty);
         }
     }
 }
