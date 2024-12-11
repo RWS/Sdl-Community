@@ -18,388 +18,396 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace GoogleCloudTranslationProvider.ViewModels
 {
-	public class MainWindowViewModel : BaseViewModel
-	{
-		private const string ViewDetails_Provider = nameof(ProviderViewModel);
-		private const string ViewDetails_Settings = nameof(SettingsViewModel);
+    public class MainWindowViewModel : BaseViewModel
+    {
+        private const string ViewDetails_Provider = nameof(ProviderViewModel);
+        private const string ViewDetails_Settings = nameof(SettingsViewModel);
 
-		private readonly ITranslationProviderCredentialStore _credentialStore;
-		private readonly IEnumerable<LanguagePair> _languagePairs;
-		private readonly HtmlUtil _htmlUtil;
+        private readonly ITranslationProviderCredentialStore _credentialStore;
+        private readonly IEnumerable<LanguagePair> _languagePairs;
+        private readonly HtmlUtil _htmlUtil;
 
-		private ViewDetails _selectedView;
-		private List<ViewDetails> _availableViews;
-		private IProviderControlViewModel _providerViewModel;
-		private ISettingsControlViewModel _settingsViewModel;
-		private bool _isLanguageMappingProviderEnabled;
+        private ViewDetails _selectedView;
+        private List<ViewDetails> _availableViews;
+        private IProviderControlViewModel _providerViewModel;
+        private ISettingsControlViewModel _settingsViewModel;
+        private bool _isLanguageMappingProviderEnabled;
 
-		private string _translatorErrorResponse;
-		private string _multiButtonContent;
-		private bool _dialogResult;
-		private bool _isProviderViewSelected;
-		private bool _isSettingsViewSelected;
-		private bool _editProvider;
-		private bool _showMultiButton;
+        private string _translatorErrorResponse;
+        private string _multiButtonContent;
+        private bool _dialogResult;
+        private bool _isProviderViewSelected;
+        private bool _isSettingsViewSelected;
+        private bool _editProvider;
+        private bool _showMultiButton;
 
-		private string _jsonFilePath;
-		private string _projectId;
-		private string _projectLocation;
+        private string _jsonFilePath;
+        private string _projectId;
+        private string _projectLocation;
 
-		private ICommand _navigateToCommand;
-		private ICommand _switchViewCommand;
-		private ICommand _saveCommand;
-		private ICommand _openLanguageMappingCommand;
+        private ICommand _navigateToCommand;
+        private ICommand _switchViewCommand;
+        private ICommand _saveCommand;
+        private ICommand _openLanguageMappingCommand;
 
-		public MainWindowViewModel(ITranslationOptions options,
-								   ITranslationProviderCredentialStore credentialStore,
-								   IEnumerable<LanguagePair> languagePairs,
-								   bool editProvider = false)
-		{
-			TranslationOptions = options;
-			EditProvider = editProvider;
-			ShowMultiButton = !(EditProvider && TranslationOptions.SelectedGoogleVersion == ApiVersion.V2);
-			_credentialStore = credentialStore;
-			_languagePairs = languagePairs;
-			_htmlUtil = new HtmlUtil();
-			InitializeViews();
-			SwitchView(ShowMultiButton ? ViewDetails_Provider : ViewDetails_Settings);
-		}
+        public MainWindowViewModel(ITranslationOptions options,
+                                   ITranslationProviderCredentialStore credentialStore,
+                                   IEnumerable<LanguagePair> languagePairs,
+                                   bool editProvider = false)
+        {
+            TranslationOptions = options;
+            EditProvider = editProvider;
+            ShowMultiButton = !(EditProvider && TranslationOptions.SelectedGoogleVersion == ApiVersion.V2);
+            _credentialStore = credentialStore;
+            _languagePairs = languagePairs;
+            _htmlUtil = new HtmlUtil();
+            InitializeViews();
+            SwitchView(ShowMultiButton ? ViewDetails_Provider : ViewDetails_Settings);
+        }
 
-		public string JsonFilePath
-		{
-			get => _jsonFilePath;
-			set
-			{
-				if (_jsonFilePath == value) return;
-				_jsonFilePath = value;
-				OnPropertyChanged(nameof(JsonFilePath));
-			}
-		}
-		public string ProjectId
-		{
-			get => _projectId;
-			set
-			{
-				if (_projectId == value) return;
-				_projectId = value;
-				OnPropertyChanged(nameof(ProjectId));
-			}
-		}
+        public string JsonFilePath
+        {
+            get => _jsonFilePath;
+            set
+            {
+                if (_jsonFilePath == value) return;
+                _jsonFilePath = value;
+                OnPropertyChanged();
+            }
+        }
+        public string ProjectId
+        {
+            get => _projectId;
+            set
+            {
+                if (_projectId == value) return;
+                _projectId = value;
+                OnPropertyChanged();
+            }
+        }
 
-		public string ProjectLocation
-		{
-			get => _projectLocation;
-			set
-			{
-				if (_projectLocation == value) return;
-				_projectLocation = value;
-				OnPropertyChanged(nameof(ProjectLocation));
-			}
-		}
+        public string ProjectLocation
+        {
+            get => _projectLocation;
+            set
+            {
+                if (_projectLocation == value) return;
+                _projectLocation = value;
+                OnPropertyChanged();
+            }
+        }
 
-		public bool EditProvider
-		{
-			get => _editProvider;
-			set
-			{
-				if (_editProvider == value) return;
-				_editProvider = value;
-				OnPropertyChanged(nameof(EditProvider));
-			}
-		}
+        public bool EditProvider
+        {
+            get => _editProvider;
+            set
+            {
+                if (_editProvider == value) return;
+                _editProvider = value;
+                OnPropertyChanged();
+            }
+        }
 
-		public ITranslationOptions TranslationOptions { get; set; }
+        public ITranslationOptions TranslationOptions { get; set; }
 
-		public ViewDetails SelectedView
-		{
-			get => _selectedView;
-			set
-			{
-				if (_selectedView == value) return;
-				_selectedView = value;
-				OnPropertyChanged(nameof(SelectedView));
-			}
-		}
+        public ViewDetails SelectedView
+        {
+            get => _selectedView;
+            set
+            {
+                if (_selectedView == value) return;
+                _selectedView = value;
+                OnPropertyChanged();
+            }
+        }
 
-		public bool IsLanguageMappingProviderEnabled
-		{
-			get => _isLanguageMappingProviderEnabled;
-			set
-			{
-				if (_isLanguageMappingProviderEnabled == value) return;
-				_isLanguageMappingProviderEnabled = value;
-				OnPropertyChanged();
-			}
-		}
+        public bool IsLanguageMappingProviderEnabled
+        {
+            get => _isLanguageMappingProviderEnabled;
+            set
+            {
+                if (_isLanguageMappingProviderEnabled == value) return;
+                _isLanguageMappingProviderEnabled = value;
+                OnPropertyChanged();
+            }
+        }
 
-		public bool DialogResult
-		{
-			get => _dialogResult;
-			set
-			{
-				if (_dialogResult == value) return;
-				_dialogResult = value;
-				OnPropertyChanged(nameof(DialogResult));
-			}
-		}
+        public bool DialogResult
+        {
+            get => _dialogResult;
+            set
+            {
+                if (_dialogResult == value) return;
+                _dialogResult = value;
+                OnPropertyChanged();
+            }
+        }
 
-		public string MultiButtonContent
-		{
-			get => _multiButtonContent;
-			set
-			{
-				if (_multiButtonContent == value) return;
-				_multiButtonContent = value;
-				OnPropertyChanged(nameof(MultiButtonContent));
-			}
-		}
+        public string MultiButtonContent
+        {
+            get => _multiButtonContent;
+            set
+            {
+                if (_multiButtonContent == value) return;
+                _multiButtonContent = value;
+                OnPropertyChanged();
+            }
+        }
 
-		public bool IsSettingsViewSelected
-		{
-			get => _isSettingsViewSelected;
-			set
-			{
-				if (_isSettingsViewSelected == value) return;
-				_isSettingsViewSelected = value;
-				OnPropertyChanged(nameof(IsSettingsViewSelected));
-			}
-		}
+        public bool IsSettingsViewSelected
+        {
+            get => _isSettingsViewSelected;
+            set
+            {
+                if (_isSettingsViewSelected == value) return;
+                _isSettingsViewSelected = value;
+                OnPropertyChanged();
+            }
+        }
 
-		public bool IsProviderViewSelected
-		{
-			get => _isProviderViewSelected;
-			set
-			{
-				if (_isProviderViewSelected == value) return;
-				_isProviderViewSelected = value;
-				OnPropertyChanged(nameof(IsProviderViewSelected));
-			}
-		}
+        public bool IsProviderViewSelected
+        {
+            get => _isProviderViewSelected;
+            set
+            {
+                if (_isProviderViewSelected == value) return;
+                _isProviderViewSelected = value;
+                OnPropertyChanged();
+            }
+        }
 
-		public string TranslatorErrorResponse
-		{
-			get => _translatorErrorResponse;
-			set
-			{
-				if (_translatorErrorResponse == value) return;
-				_translatorErrorResponse = value;
-				OnPropertyChanged(nameof(TranslatorErrorResponse));
-			}
-		}
+        public string TranslatorErrorResponse
+        {
+            get => _translatorErrorResponse;
+            set
+            {
+                if (_translatorErrorResponse == value) return;
+                _translatorErrorResponse = value;
+                OnPropertyChanged();
+            }
+        }
 
-		public bool ShowMultiButton
-		{
-			get => _showMultiButton;
-			set
-			{
-				if (_showMultiButton == value) return;
-				_showMultiButton = value;
-				OnPropertyChanged(nameof(ShowMultiButton));
-			}
-		}
+        public bool ShowMultiButton
+        {
+            get => _showMultiButton;
+            set
+            {
+                if (_showMultiButton == value) return;
+                _showMultiButton = value;
+                OnPropertyChanged();
+            }
+        }
 
 
-		public ICommand SwitchViewCommand => _switchViewCommand ??= new RelayCommand(SwitchView);
+        public ICommand SwitchViewCommand => _switchViewCommand ??= new RelayCommand(SwitchView);
 
-		public ICommand NavigateToCommand => _navigateToCommand ??= new RelayCommand(NavigateTo);
+        public ICommand NavigateToCommand => _navigateToCommand ??= new RelayCommand(NavigateTo);
 
-		public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save);
+        public ICommand SaveCommand => _saveCommand ??= new RelayCommand(Save, IsSaveEnabled);
 
-		public ICommand OpenLanguageMappingCommand => _openLanguageMappingCommand ??= new RelayCommand(OpenLanguageMapping);
+        private bool IsSaveEnabled(object obj)
+        {
+            if (SelectedView.ViewModel is not ProviderViewModel providerViewModel) return false;
+            if (!providerViewModel.IsV3Checked) return !string.IsNullOrWhiteSpace(providerViewModel.ApiKey);
 
-		public delegate void CloseWindowEventRaiser();
+            return providerViewModel.ProjectResourcesLoaded;
+        }
 
-		public event CloseWindowEventRaiser CloseEventRaised;
+        public ICommand OpenLanguageMappingCommand => _openLanguageMappingCommand ??= new RelayCommand(OpenLanguageMapping);
 
-		private void InitializeViews()
-		{
-			_providerViewModel = new ProviderViewModel(TranslationOptions, _languagePairs?.ToList(), _editProvider)
-			{
-				SwitchViewExternal = new RelayCommand(SwitchView)
-			};
-			_providerViewModel.LanguageMappingLoaded += LanguageMappingLoaded;
+        public delegate void CloseWindowEventRaiser();
 
-			_settingsViewModel = new SettingsViewModel(TranslationOptions);
-			_availableViews = new List<ViewDetails>
-			{
-				new ViewDetails
-				{
-					Name = ViewDetails_Provider,
-					ViewModel = _providerViewModel.ViewModel
-				},
-				new ViewDetails
-				{
-					Name = ViewDetails_Settings,
-					ViewModel = _settingsViewModel.ViewModel
-				}
-			};
-		}
+        public event CloseWindowEventRaiser CloseEventRaised;
 
-		public bool IsWindowValid()
-		{
-			return ValidGoogleOptions().Result && _settingsViewModel.SettingsAreValid();
-		}
+        private void InitializeViews()
+        {
+            _providerViewModel = new ProviderViewModel(TranslationOptions, _languagePairs?.ToList(), _editProvider)
+            {
+                SwitchViewExternal = new RelayCommand(SwitchView)
+            };
+            _providerViewModel.LanguageMappingLoaded += LanguageMappingLoaded;
 
-		private async Task<bool> ValidGoogleOptions()
-		{
-			return _providerViewModel.IsV2Checked ? await _providerViewModel.CanConnectToGoogleV2(_htmlUtil)
-												  : _providerViewModel.CanConnectToGoogleV3(_languagePairs);
-		}
+            _settingsViewModel = new SettingsViewModel(TranslationOptions);
+            _availableViews = new List<ViewDetails>
+            {
+                new ViewDetails
+                {
+                    Name = ViewDetails_Provider,
+                    ViewModel = _providerViewModel.ViewModel
+                },
+                new ViewDetails
+                {
+                    Name = ViewDetails_Settings,
+                    ViewModel = _settingsViewModel.ViewModel
+                }
+            };
+        }
 
-		private void Save(object o)
-		{
-			if (!IsWindowValid())
-			{
-				return;
-			}
+        public bool IsWindowValid()
+        {
+            return ValidGoogleOptions().Result && _settingsViewModel.SettingsAreValid();
+        }
 
-			SetGoogleProviderOptions();
-			SetGeneralProviderOptions();
-			DeleteCredentialsIfNecessary();
-			DialogResult = true;
-			CloseEventRaised?.Invoke();
-		}
+        private async Task<bool> ValidGoogleOptions()
+        {
+            return _providerViewModel.IsV2Checked ? await _providerViewModel.CanConnectToGoogleV2(_htmlUtil)
+                                                  : _providerViewModel.CanConnectToGoogleV3(_languagePairs);
+        }
 
-		private void SetGoogleProviderOptions()
-		{
-			TranslationOptions.ApiKey = _providerViewModel.ApiKey;
-			TranslationOptions.PersistGoogleKey = _providerViewModel.PersistGoogleKey;
-			TranslationOptions.SelectedGoogleVersion = _providerViewModel.SelectedGoogleApiVersion.Version;
-			TranslationOptions.JsonFilePath = _providerViewModel.JsonFilePath;
-			TranslationOptions.ProjectId = _providerViewModel.ProjectId;
-			TranslationOptions.ProjectLocation = _providerViewModel.ProjectLocation;
-			TranslationOptions.LanguageMappingPairs = _providerViewModel.LanguageMappingPairs;
-		}
+        private void Save(object o)
+        {
+            if (!IsWindowValid())
+            {
+                return;
+            }
 
-		private void SetGeneralProviderOptions()
-		{
-			if (_settingsViewModel is not null)
-			{
-				var providerName = _settingsViewModel.CustomProviderName;
-				providerName = providerName is null ? null : Regex.Replace(providerName.Trim(), @"\s+", " ");
-				TranslationOptions.SendPlainTextOnly = _settingsViewModel.SendPlainText;
-				TranslationOptions.ResendDrafts = _settingsViewModel.ReSendDraft;
-				TranslationOptions.UsePreEdit = _settingsViewModel.DoPreLookup;
-				TranslationOptions.PreLookupFilename = _settingsViewModel.PreLookupFileName;
-				TranslationOptions.UsePostEdit = _settingsViewModel.DoPostLookup;
-				TranslationOptions.PostLookupFilename = _settingsViewModel.PostLookupFileName;
-				TranslationOptions.CustomProviderName = providerName;
-				TranslationOptions.UseCustomProviderName = _settingsViewModel.UseCustomProviderName && !string.IsNullOrEmpty(TranslationOptions.CustomProviderName);
-			}
+            SetGoogleProviderOptions();
+            SetGeneralProviderOptions();
+            DeleteCredentialsIfNecessary();
+            DialogResult = true;
+            CloseEventRaised?.Invoke();
+        }
 
-			if (TranslationOptions is not null && TranslationOptions.LanguagesSupported is null)
-			{
-				TranslationOptions.LanguagesSupported = new();
-			}
+        private void SetGoogleProviderOptions()
+        {
+            TranslationOptions.ApiKey = _providerViewModel.ApiKey;
+            TranslationOptions.PersistGoogleKey = _providerViewModel.PersistGoogleKey;
+            TranslationOptions.SelectedGoogleVersion = _providerViewModel.SelectedGoogleApiVersion.Version;
+            TranslationOptions.JsonFilePath = _providerViewModel.JsonFilePath;
+            TranslationOptions.ProjectId = _providerViewModel.ProjectId;
+            TranslationOptions.ProjectLocation = _providerViewModel.ProjectLocation;
+            TranslationOptions.LanguageMappingPairs = _providerViewModel.LanguageMappingPairs;
+        }
 
-			if (_languagePairs is null)
-			{
-				return;
-			}
+        private void SetGeneralProviderOptions()
+        {
+            if (_settingsViewModel is not null)
+            {
+                var providerName = _settingsViewModel.CustomProviderName;
+                providerName = providerName is null ? null : Regex.Replace(providerName.Trim(), @"\s+", " ");
+                TranslationOptions.SendPlainTextOnly = _settingsViewModel.SendPlainText;
+                TranslationOptions.ResendDrafts = _settingsViewModel.ReSendDraft;
+                TranslationOptions.UsePreEdit = _settingsViewModel.DoPreLookup;
+                TranslationOptions.PreLookupFilename = _settingsViewModel.PreLookupFileName;
+                TranslationOptions.UsePostEdit = _settingsViewModel.DoPostLookup;
+                TranslationOptions.PostLookupFilename = _settingsViewModel.PostLookupFileName;
+                TranslationOptions.CustomProviderName = providerName;
+                TranslationOptions.UseCustomProviderName = _settingsViewModel.UseCustomProviderName && !string.IsNullOrEmpty(TranslationOptions.CustomProviderName);
+            }
 
-			foreach (var languagePair in _languagePairs)
-			{
-				if (TranslationOptions.LanguagesSupported.Contains(languagePair.TargetCultureName))
-				{
-					continue;
-				}
+            if (TranslationOptions is not null && TranslationOptions.LanguagesSupported is null)
+            {
+                TranslationOptions.LanguagesSupported = new();
+            }
 
-				TranslationOptions.LanguagesSupported.Add(languagePair.TargetCultureName);
-			}
+            if (_languagePairs is null)
+            {
+                return;
+            }
 
-			if (TranslationOptions.SelectedGoogleVersion.Equals(ApiVersion.V3)
-			 && (TranslationOptions.V3SupportedLanguages is null || !TranslationOptions.V3SupportedLanguages.Any()))
-			{
-				var v3Connector = new V3Connector(TranslationOptions);
-				TranslationOptions.V3SupportedLanguages = v3Connector.GetLanguages();
-			}
-		}
+            foreach (var languagePair in _languagePairs)
+            {
+                if (TranslationOptions.LanguagesSupported.Contains(languagePair.TargetCultureName))
+                {
+                    continue;
+                }
 
-		private void DeleteCredentialsIfNecessary()
-		{
-			if (TranslationOptions.PersistGoogleKey)
-			{
-				return;
-			}
+                TranslationOptions.LanguagesSupported.Add(languagePair.TargetCultureName);
+            }
 
-			var providerUri = new Uri(Constants.GoogleTranslationFullScheme);
-			if (_credentialStore?.GetCredential(providerUri) is null)
-			{
-				return;
-			}
+            if (TranslationOptions.SelectedGoogleVersion.Equals(ApiVersion.V3)
+             && (TranslationOptions.V3SupportedLanguages is null || !TranslationOptions.V3SupportedLanguages.Any()))
+            {
+                var v3Connector = new V3Connector(TranslationOptions);
+                TranslationOptions.V3SupportedLanguages = v3Connector.GetLanguages();
+            }
+        }
 
-			_credentialStore?.RemoveCredential(providerUri);
-		}
+        private void DeleteCredentialsIfNecessary()
+        {
+            if (TranslationOptions.PersistGoogleKey)
+            {
+                return;
+            }
 
-		private void SwitchView(object o)
-		{
-			try
-			{
-				var destination = IsProviderViewSelected ? ViewDetails_Settings
-														 : ViewDetails_Provider;
-				TrySwitchView(o as string ?? destination);
-				UpdateLanguageMappingButton();
-			}
-			catch (Exception e)
-			{
-				ErrorHandler.HandleError(e);
-			}
-		}
+            var providerUri = new Uri(Constants.GoogleTranslationFullScheme);
+            if (_credentialStore?.GetCredential(providerUri) is null)
+            {
+                return;
+            }
 
-		private void TrySwitchView(string requestedType)
-		{
-			SelectedView = _availableViews.FirstOrDefault(x => x.Name == requestedType);
-			UpdateLayout(requestedType);
-		}
+            _credentialStore?.RemoveCredential(providerUri);
+        }
 
-		private void UpdateLayout(string selectedViewType)
-		{
-			IsProviderViewSelected = selectedViewType == ViewDetails_Provider;
-			IsSettingsViewSelected = selectedViewType == ViewDetails_Settings;
-			MultiButtonContent = IsProviderViewSelected ? PluginResources.MultiButton_Settings
-														: PluginResources.MultiButton_Provider;
-		}
+        private void SwitchView(object o)
+        {
+            try
+            {
+                var destination = IsProviderViewSelected ? ViewDetails_Settings
+                                                         : ViewDetails_Provider;
+                TrySwitchView(o as string ?? destination);
+                UpdateLanguageMappingButton();
+            }
+            catch (Exception e)
+            {
+                ErrorHandler.HandleError(e);
+            }
+        }
 
-		private void UpdateLanguageMappingButton()
-		{
-			IsLanguageMappingProviderEnabled = _providerViewModel.IsV2Checked
-											 ? File.Exists(string.Format(Constants.DatabaseFilePath, PluginResources.Database_PluginName_V2))
-											 : File.Exists(string.Format(Constants.DatabaseFilePath, PluginResources.Database_PluginName_V3));
-		}
+        private void TrySwitchView(string requestedType)
+        {
+            SelectedView = _availableViews.FirstOrDefault(x => x.Name == requestedType);
+            UpdateLayout(requestedType);
+        }
 
-		private void NavigateTo(object o)
-		{
-			var currentVersion = _providerViewModel?.SelectedGoogleApiVersion?.Version;
-			var uriTarget = currentVersion switch
-			{
-				ApiVersion.V3 => Constants.V3Documentation,
-				_ => Constants.FullDocumentation,
-			};
+        private void UpdateLayout(string selectedViewType)
+        {
+            IsProviderViewSelected = selectedViewType == ViewDetails_Provider;
+            IsSettingsViewSelected = selectedViewType == ViewDetails_Settings;
+            MultiButtonContent = IsProviderViewSelected ? PluginResources.MultiButton_Settings
+                                                        : PluginResources.MultiButton_Provider;
+        }
 
-			Process.Start(uriTarget);
-		}
+        private void UpdateLanguageMappingButton()
+        {
+            IsLanguageMappingProviderEnabled = _providerViewModel.IsV2Checked
+                                             ? File.Exists(string.Format(Constants.DatabaseFilePath, PluginResources.Database_PluginName_V2))
+                                             : File.Exists(string.Format(Constants.DatabaseFilePath, PluginResources.Database_PluginName_V3));
+        }
 
-		private void OpenLanguageMapping(object parameter)
-		{
-			TranslationOptions.SelectedGoogleVersion = _providerViewModel.IsV2Checked ? ApiVersion.V2 : ApiVersion.V3;
+        private void NavigateTo(object o)
+        {
+            var currentVersion = _providerViewModel?.SelectedGoogleApiVersion?.Version;
+            var uriTarget = currentVersion switch
+            {
+                ApiVersion.V3 => Constants.V3Documentation,
+                _ => Constants.FullDocumentation,
+            };
 
-			var lmpViewModel = new LanguageMappingProviderViewModel(TranslationOptions, EditProvider);
-			lmpViewModel.LanguageMappingUpdated += LanguageMappingUpdated;
+            Process.Start(uriTarget);
+        }
 
-			var lmpView = new LanguageMappingProviderView() { DataContext = lmpViewModel };
-			lmpViewModel.CloseEventRaised += lmpView.Close;
+        private void OpenLanguageMapping(object parameter)
+        {
+            TranslationOptions.SelectedGoogleVersion = _providerViewModel.IsV2Checked ? ApiVersion.V2 : ApiVersion.V3;
 
-			var dialog = lmpView.ShowDialog();
-		}
+            var lmpViewModel = new LanguageMappingProviderViewModel(TranslationOptions, EditProvider);
+            lmpViewModel.LanguageMappingUpdated += LanguageMappingUpdated;
 
-		private void LanguageMappingUpdated(object sender, EventArgs e)
-		{
-			_providerViewModel.UpdateLanguageMapping();
-		}
+            var lmpView = new LanguageMappingProviderView() { DataContext = lmpViewModel };
+            lmpViewModel.CloseEventRaised += lmpView.Close;
 
-		private void LanguageMappingLoaded(object sender, EventArgs e)
-		{
-			UpdateLanguageMappingButton();
-		}
-	}
+            var dialog = lmpView.ShowDialog();
+        }
+
+        private void LanguageMappingUpdated(object sender, EventArgs e)
+        {
+            _providerViewModel.UpdateLanguageMapping();
+        }
+
+        private void LanguageMappingLoaded(object sender, EventArgs e)
+        {
+            UpdateLanguageMappingButton();
+        }
+    }
 }

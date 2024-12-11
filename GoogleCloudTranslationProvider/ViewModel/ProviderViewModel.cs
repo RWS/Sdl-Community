@@ -56,7 +56,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		private ICommand _clearCommand;
 
 		public ProviderViewModel(ITranslationOptions options, List<LanguagePair> languagePairs, bool editProvider)
-		{
+        {
 			ViewModel = this;
 			UseLocalPath = true;
 			_editProvider = editProvider;
@@ -312,11 +312,9 @@ namespace GoogleCloudTranslationProvider.ViewModels
 		public bool CanConnectToGoogleV3(IEnumerable<LanguagePair> languagePairs)
 		{
 			var optionsAreSet = GoogleV3OptionsAreSet();
-			if (!optionsAreSet)
-			{
-				return optionsAreSet;
-			}
+			if (!optionsAreSet) return false;
 
+            if (!LanguageMappingPairs.Any()) return true;
 			foreach (var languagePair in LanguageMappingPairs)
 			{
 				if (string.IsNullOrEmpty(languagePair.SourceLanguageCode)
