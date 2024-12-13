@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Trados Studio – Export Analysis Reports</PlugInName>
-  <Version>6.0.0.1</Version>
+  <Version>6.0.1.0</Version>
   <Description>Plugin which exports Trados Studio analysis report to CSV</Description>
   <Author>Trados AppStore Team</Author>
 	<Include>

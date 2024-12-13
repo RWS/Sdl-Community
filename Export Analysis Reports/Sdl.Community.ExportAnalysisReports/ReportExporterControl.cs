@@ -920,6 +920,7 @@ namespace Sdl.Community.ExportAnalysisReports
 				IncludePerfectMatch = perfectMatch.Checked
 			};
 		}
+
 		private void SetProjectDataSource()
 		{
 			projListbox.DataSource = _projectsDataSource;

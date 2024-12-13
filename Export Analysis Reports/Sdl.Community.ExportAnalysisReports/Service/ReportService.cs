@@ -428,8 +428,7 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				if (Directory.Exists(reportFolderPath))
 				{
 					var files = Directory.GetFiles(reportFolderPath);
-					return files.Any(file => new FileInfo(file).Name.Contains("Analyze Files") &&
-											 file.EndsWith(".xml", StringComparison.CurrentCultureIgnoreCase));
+					return files.Any(file => IsAnalyzeFileReport(file));
 				}
 
 				if (!string.IsNullOrEmpty(fileName) && fileName.Contains("ProjectFiles") && Directory.Exists(reportFolderPath))
@@ -445,6 +444,30 @@ namespace Sdl.Community.ExportAnalysisReports.Service
 				_logger.Error($"ReportFileExist method: {ex.Message}\n {ex.StackTrace}");
 			}
 			return false;
+		}
+
+		private bool IsAnalyzeFileReport(string filePath)
+		{
+			try
+			{
+				if (!filePath.EndsWith(".xml"))
+				{
+					return false;
+				}
+
+                var firstLine = File.ReadLines(filePath).FirstOrDefault();
+
+                if (firstLine != null && firstLine.Trim().StartsWith("<task name=\"analyse\">"))
+                {
+                    return true;
+                }
+
+				return false;
+            }
+			catch (Exception _)
+			{
+				return false;
+			}
 		}
 
 		// Configure the details used in the exported report
