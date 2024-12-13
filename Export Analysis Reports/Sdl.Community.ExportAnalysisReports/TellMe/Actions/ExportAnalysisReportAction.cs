@@ -10,7 +10,7 @@ namespace Sdl.Community.ExportAnalysisReports.TellMe.Actions
 			Name = PluginResources.Plugin_Name;
 		}
 
-		public override Icon Icon => PluginResources.folder2_blue;
+		public override Icon Icon => PluginResources.Settings;
 
 		public override void Execute() => SdlTradosStudio.Application?.GetAction<ReportExporter>().ExecuteAction();
 	}
