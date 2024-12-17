@@ -17,7 +17,7 @@ namespace Sdl.Community.DsiViewer.Studio.DisplayFilters
 
 			if (Settings.ByModel)
 			{
-				shouldDisplayRow = translationOrigin?.GetMetaData("model") == Settings.Model;
+				shouldDisplayRow = translationOrigin?.GetMetaData("nmt_model") == Settings.Model;
 			}
 
 			if (Settings.ByQualityEstimation)
