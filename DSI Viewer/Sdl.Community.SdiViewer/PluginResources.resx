@@ -211,7 +211,7 @@
   <data name="SettingsAction_OpenOptionsText" xml:space="preserve">
     <value>To engage with DSI Viewer, follow these steps:
 
-   1. In Edition view, go to View tab
+   1. In Editor view, go to View tab
    2. Under the Information group, find DSI Viewer</value>
   </data>
   <data name="SettingsAction_Title" xml:space="preserve">
