@@ -993,7 +993,7 @@ namespace SDLXLIFFSliceOrChange
             if (selectedTab == 1)
             {
                 _doUpdateStatus = false;
-                FindInFiles(doOR, filesToBeSliced.Values.ToList());
+                FindInFiles(doOR, filesToBeSliced.Select(kvp => kvp.Value).ToList());
 
                 _segmentsToBeSliced.Clear();
                 foreach (var searchResult in _searchResults)
@@ -1039,7 +1039,7 @@ namespace SDLXLIFFSliceOrChange
             StepProcess("Slice files ...", false);
             SliceFiles(doMerge);
 
-            var folder = Path.GetDirectoryName(filesToBeSliced.Values.ToList()[0]);
+            var folder = Path.GetDirectoryName(filesToBeSliced.Select(kvp => kvp.Value).ToList()[0]);
             if (folder != null) Directory.Delete(folder, true);
 
             StepProcess("Files were successfully sliced.", true);
@@ -1695,9 +1695,9 @@ namespace SDLXLIFFSliceOrChange
             StepProcess("Post processing completed.");
         }
 
-        private void ProcessFileBasedOnStatuses(IEnumerable<int> indexes, bool forSlice = false, Dictionary<string, string> filesToBeSliced = null)
+        private void ProcessFileBasedOnStatuses(IEnumerable<int> indexes, bool forSlice = false, List<KeyValuePair<string, string>> filesToBeSliced = null)
         {
-            var files = filesToBeSliced != null ? filesToBeSliced.Values.ToList() : (from DataGridViewRow row in gridXLIFFFiles.SelectedRows select row.Cells[0].Value.ToString()).ToList();
+            var files = filesToBeSliced != null ? filesToBeSliced.Select(kvp => kvp.Value).ToList() : (from DataGridViewRow row in gridXLIFFFiles.SelectedRows select row.Cells[0].Value.ToString()).ToList();
             var threads = new List<Thread>();
             foreach (var file in files)
             {
@@ -1711,7 +1711,7 @@ namespace SDLXLIFFSliceOrChange
             }
         }
 
-        private void ProcessOneFileBasedOnStatuses(bool forSlice, string file, IEnumerable<int> DSSelectedIndexes, Dictionary<string, string> filesToBeSliced)
+        private void ProcessOneFileBasedOnStatuses(bool forSlice, string file, IEnumerable<int> DSSelectedIndexes, List<KeyValuePair<string, string>> filesToBeSliced)
         {
             StepProcess("Processing file: " + Path.GetFileName(file) + ". ", false);
             var xDoc = new XmlDocument();
@@ -2172,9 +2172,9 @@ namespace SDLXLIFFSliceOrChange
             Directory.Delete(tempFolderForSlicedFiles, true);
         }
 
-        private Dictionary<string, string> SplitMergedXliffFile(string filePath, string folder)
+        private List<KeyValuePair<string, string>> SplitMergedXliffFile(string filePath, string folder)
         {
-            var splitedFiles = new Dictionary<string, string>();
+            var splitFiles = new List<KeyValuePair<string, string>>();
             var xDoc = new XmlDocument();
             xDoc.PreserveWhitespace = true;
             xDoc.Load(filePath);
@@ -2207,25 +2207,21 @@ namespace SDLXLIFFSliceOrChange
                     sw.Write(fileText);
                     sw.Write(xliffEndText);
                 }
-                splitedFiles[filePath] =  fileName;
+                splitFiles.Add(new KeyValuePair<string, string>(filePath, fileName));
             }
-            fileList = null;
-            xDoc = null;
-            return splitedFiles;
+            return splitFiles;
         }
 
-        private Dictionary<string, string> SplitMergedXliffFiles()
+        private List<KeyValuePair<string, string>> SplitMergedXliffFiles()
         {
             var files = (from DataGridViewRow row in gridXLIFFFiles.SelectedRows select row.Cells[0].Value.ToString()).ToList();
-            var splitedFiles = new Dictionary<String, String>();
+            var splitFiles = new List<KeyValuePair<string, string>>();
             var folder = Path.Combine(_folderForSlicedFiles, Guid.NewGuid().ToString());
-            foreach (var file in files)
-            {
-                var result = SplitMergedXliffFile(file, folder);
-                foreach (var key in result.Keys) splitedFiles.Add(key, result[key]);
-            }
 
-            return splitedFiles;
+            foreach (var result in files.Select(file => SplitMergedXliffFile(file, folder)))
+                splitFiles.AddRange(result);
+
+            return splitFiles;
         }
 
         private void StartFind(bool updateStatus, bool doOR)
