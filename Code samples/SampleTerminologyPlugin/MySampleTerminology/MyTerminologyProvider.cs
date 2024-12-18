@@ -10,224 +10,238 @@ using System.Threading.Tasks;
 
 namespace MySampleTerminology
 {
-    internal class MyTerminologyProvider : ITerminologyProvider
-    {
-        public readonly string _fileName;
-        private List<Entry> _entry = new List<Entry>();
+	internal class MyTerminologyProvider : ITerminologyProvider
+	{
+		public readonly string _fileName;
+		private List<Entry> _entry = new List<Entry>();
+		private FilterDefinition _activeFilter = null;
 
-        public Definition Definition
-        {
-            get
-            {
-                return new Definition(GetDescriptiveFields(), GetLanguages().Cast<DefinitionLanguage>());
-            }
-        }
+		public Definition Definition
+		{
+			get
+			{
+				return new Definition(GetDescriptiveFields(), GetLanguages().Cast<DefinitionLanguage>());
+			}
+		}
 
-        public string Description => PluginResources.My_Terminology_Provider_Description;
+		public string Description => PluginResources.My_Terminology_Provider_Description;
 
-        public string Name => PluginResources.My_Terminology_Provider_Name;
+		public string Name => PluginResources.My_Terminology_Provider_Name;
 
-        public Uri Uri => new Uri(this._fileName);
+		public Uri Uri => new Uri(this._fileName);
 
-        public string Id => "id";
+		public string Id => "id";
 
-        public TerminologyProviderType Type => TerminologyProviderType.Custom;
+		public TerminologyProviderType Type => TerminologyProviderType.Custom;
 
-        public bool IsReadOnly => false;
+		public bool IsReadOnly => false;
 
-        public bool SearchEnabled => true;
+		public bool SearchEnabled => true;
 
-        public FilterDefinition ActiveFilter 
-        { 
-            get => null;
-            set => value = new FilterDefinition(); 
-        }
+		public FilterDefinition ActiveFilter
+		{
+			get => _activeFilter;
+			set => _activeFilter = value;
+		}
 
-        public bool IsInitialized => true;
+		public bool IsInitialized => true;
 
-        public MyTerminologyProvider(string providerSettings)
-        {
-            _fileName = providerSettings;
-        }
-        
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
+		public MyTerminologyProvider(string providerSettings)
+		{
+			_fileName = providerSettings;
+		}
 
-        public Entry GetEntry(int id)
-        {
-            return _entry.FirstOrDefault(_entry => _entry.Id == id);
-        }
+		public void Dispose()
+		{
+			throw new NotImplementedException();
+		}
 
-        public Entry GetEntry(int id, IEnumerable<ILanguage> languages)
-        {
-            return _entry.FirstOrDefault(_entry => _entry.Id == id);
-        }
+		public Entry GetEntry(int id)
+		{
+			return _entry.FirstOrDefault(_entry => _entry.Id == id);
+		}
 
-        public IList<FilterDefinition> GetFilters() => new List<FilterDefinition>();    
+		public Entry GetEntry(int id, IEnumerable<ILanguage> languages)
+		{
+			return _entry.FirstOrDefault(_entry => _entry.Id == id);
+		}
 
-        public IList<ILanguage> GetLanguages()
-        {
-            StreamReader _inFile = new StreamReader(_fileName.Replace("file:///", ""));
-            string[] languages = _inFile.ReadLine().Split(';');
-            string srgLanguage = languages[0], trgLanguage = languages[1];
-            string srcLabel = srgLanguage.Split(',')[0], srcLocale = srgLanguage.Split(',')[1];
-            string trgLabel = trgLanguage.Split(',')[0], trgLocale = trgLanguage.Split(',')[1];
-            _inFile.Close();
+		public IList<FilterDefinition> GetFilters() => new List<FilterDefinition>() {
 
-            var result = new List<DefinitionLanguage>();
+			new FilterDefinition()
+			{
+				ID = 1,
+				Name = "Should not start with 'a'"
+			}
+		};
 
-            var sourceLanguage = new Language(srcLocale);
-            var tbSrcLanguage = new DefinitionLanguage
-            {
-                IsBidirectional = true,
-                Locale = sourceLanguage.CultureInfo,
-                Name = sourceLanguage.DisplayName,
-                TargetOnly = false
-            };
+		public IList<ILanguage> GetLanguages()
+		{
+			StreamReader _inFile = new StreamReader(_fileName.Replace("file:///", ""));
+			string[] languages = _inFile.ReadLine().Split(';');
+			string srgLanguage = languages[0], trgLanguage = languages[1];
+			string srcLabel = srgLanguage.Split(',')[0], srcLocale = srgLanguage.Split(',')[1];
+			string trgLabel = trgLanguage.Split(',')[0], trgLocale = trgLanguage.Split(',')[1];
+			_inFile.Close();
 
-            var targetLanguage = new Language(trgLocale);
-            var tbTrgLanguage = new DefinitionLanguage
-            {
-                IsBidirectional = true,
-                Locale = targetLanguage.CultureInfo,
-                Name = targetLanguage.DisplayName,
-                TargetOnly = false
-            };
+			var result = new List<DefinitionLanguage>();
+
+			var sourceLanguage = new Language(srcLocale);
+			var tbSrcLanguage = new DefinitionLanguage
+			{
+				IsBidirectional = true,
+				Locale = sourceLanguage.CultureInfo,
+				Name = sourceLanguage.DisplayName,
+				TargetOnly = false
+			};
+
+			var targetLanguage = new Language(trgLocale);
+			var tbTrgLanguage = new DefinitionLanguage
+			{
+				IsBidirectional = true,
+				Locale = targetLanguage.CultureInfo,
+				Name = targetLanguage.DisplayName,
+				TargetOnly = false
+			};
 
 
-            result.Add(tbSrcLanguage);
-            result.Add(tbTrgLanguage);
+			result.Add(tbSrcLanguage);
+			result.Add(tbTrgLanguage);
 
-            return result.Cast<ILanguage>().ToList();
-        }
+			return result.Cast<ILanguage>().ToList();
+		}
 
-        public bool Initialize() => true;
+		public bool Initialize() => true;
 
-        public bool Initialize(TerminologyProviderCredential credential) => true;
+		public bool Initialize(TerminologyProviderCredential credential) => true;
 
-        public bool IsProviderUpToDate() => true;
+		public bool IsProviderUpToDate() => true;
 
-        public IList<SearchResult> Search(string text, ILanguage source, ILanguage destination, int maxResultsCount, SearchMode mode, bool targetRequired)
-        {
-            string[] chunks;
-            List<string> hits = new List<string>();
+		public IList<SearchResult> Search(string text, ILanguage source, ILanguage destination, int maxResultsCount, SearchMode mode, bool targetRequired)
+		{
+			string[] chunks;
+			List<string> hits = new List<string>();
 
-            // open the glossary text file
-            using (StreamReader glossary = new StreamReader(_fileName.Replace("file:///", "")))
-            {
-                // skip the first line, as it contains only the language settings
-                glossary.ReadLine();
+			// open the glossary text file
+			using (StreamReader glossary = new StreamReader(_fileName.Replace("file:///", "")))
+			{
+				// skip the first line, as it contains only the language settings
+				glossary.ReadLine();
 
-                while (!glossary.EndOfStream)
-                {
-                    string thisLine = glossary.ReadLine();
-                    if (thisLine.Trim() == "")
-                        continue;
-                    chunks = thisLine.Split(';');
-                    string sourceTerm = chunks[1].ToLower();
+				while (!glossary.EndOfStream)
+				{
+					string thisLine = glossary.ReadLine();
+					if (thisLine.Trim() == "")
+						continue;
+					chunks = thisLine.Split(';');
+					string sourceTerm = chunks[1].ToLower();
 
-                    // normal search (triggered from the Termbase Search window)
-                    if (mode.ToString() == "Normal" && sourceTerm.StartsWith(text.ToLower()))
-                        hits.Add(thisLine);
+					// normal search (triggered from the Termbase Search window)
+					if (mode.ToString() == "Normal" && sourceTerm.StartsWith(text.ToLower()))
+						hits.Add(thisLine);
 
-                    // fuzzy search (corresponds to the Terminology Eecognition)
-                    if (mode.ToString() == "Fuzzy" && text.ToLower().Contains(sourceTerm))
-                        hits.Add(thisLine);
-                }
-            }
+					// fuzzy search (corresponds to the Terminology Eecognition)
+					if (mode.ToString() == "Fuzzy" && text.ToLower().Contains(sourceTerm))
+						hits.Add(thisLine);
+				}
+			}
 
-            // Create search results object (hitlist)
-            var results = new List<SearchResult>();
+			// Create search results object (hitlist)
+			var results = new List<SearchResult>();
 
-            for (int i = 0; i < hits.Count; i++)
-            {
-                chunks = hits[i].Split(';');
-                // We create the search result object based on the source term
-                // found in the glossary, we assign the id, which associates the search
-                // result to the correspoinding entry, and we assume that the search score 
-                // is always 100%.
-                SearchResult result = new SearchResult
-                {
-                    Text = chunks[1], // source term
-                    Score = 100,
-                    Id = Convert.ToInt32(chunks[0]) // entry id
-                };
+			for (int i = 0; i < hits.Count; i++)
+			{
+				chunks = hits[i].Split(';');
+				var targetTerm = chunks[2];
+				if (ActiveFilter is not null && ActiveFilter.ID == 1)
+				{
+					if (targetTerm.ToLower().StartsWith("a"))
+						continue;
+				}
+				// We create the search result object based on the source term
+				// found in the glossary, we assign the id, which associates the search
+				// result to the correspoinding entry, and we assume that the search score 
+				// is always 100%.
+				SearchResult result = new SearchResult
+				{
+					Text = chunks[1], // source term
+					Score = 100,
+					Id = Convert.ToInt32(chunks[0]) // entry id
+				};
 
-                // Construct the entry object for the current search result
-                _entry.Add(CreateEntry(chunks[0], chunks[1], chunks[2], chunks[3], destination.Name));
+				// Construct the entry object for the current search result
+				_entry.Add(CreateEntry(chunks[0], chunks[1], chunks[2], chunks[3], destination.Name));
 
-                results.Add(result);
-            }
+				results.Add(result);
+			}
 
-            return results;
-        }
+			return results;
+		}
 
-        public void SetDefault(bool value)
-        {
-        }
+		public void SetDefault(bool value)
+		{
+		}
 
-        public bool Uninitialize()
-        {
-            throw new NotImplementedException();
-        }
+		public bool Uninitialize()
+		{
+			throw new NotImplementedException();
+		}
 
-        public IList<DescriptiveField> GetDescriptiveFields()
-        {
-            var result = new List<DescriptiveField>();
+		public IList<DescriptiveField> GetDescriptiveFields()
+		{
+			var result = new List<DescriptiveField>();
 
-            var definitionField = new DescriptiveField
-            {
-                Label = "Definition",
-                Level = FieldLevel.EntryLevel,
-                Type = FieldType.String
-            };
-            result.Add(definitionField);
+			var definitionField = new DescriptiveField
+			{
+				Label = "Definition",
+				Level = FieldLevel.EntryLevel,
+				Type = FieldType.String
+			};
+			result.Add(definitionField);
 
-            return result;
-        }
+			return result;
+		}
 
-        private Entry CreateEntry(string id, string sourceTerm, string targetTerm, string definitionText, string targetLanguage)
-        {
-            // Assign the entry id
-            Entry thisEntry = new Entry
-            {
-                Id = Convert.ToInt32(id)
-            };
+		private Entry CreateEntry(string id, string sourceTerm, string targetTerm, string definitionText, string targetLanguage)
+		{
+			// Assign the entry id
+			Entry thisEntry = new Entry
+			{
+				Id = Convert.ToInt32(id)
+			};
 
-            // Add the target language
-            EntryLanguage trgLanguage = new EntryLanguage
-            {
-                Name = targetLanguage
-            };
+			// Add the target language
+			EntryLanguage trgLanguage = new EntryLanguage
+			{
+				Name = targetLanguage
+			};
 
-            // Create the target term
-            EntryTerm _term = new EntryTerm
-            {
-                Value = targetTerm
-            };
-            trgLanguage.Terms.Add(_term);
-            thisEntry.Languages.Add(trgLanguage);
+			// Create the target term
+			EntryTerm _term = new EntryTerm
+			{
+				Value = targetTerm
+			};
+			trgLanguage.Terms.Add(_term);
+			thisEntry.Languages.Add(trgLanguage);
 
-            // Also add the definition (if available)
-            if (definitionText != "")
-            {
-                EntryField _definition = new EntryField
-                {
-                    Name = "Definition",
-                    Value = definitionText
-                };
-                thisEntry.Fields.Add(_definition);
-            }
+			// Also add the definition (if available)
+			if (definitionText != "")
+			{
+				EntryField _definition = new EntryField
+				{
+					Name = "Definition",
+					Value = definitionText
+				};
+				thisEntry.Fields.Add(_definition);
+			}
 
-            return thisEntry;
-        }
+			return thisEntry;
+		}
 
-        private Entry CreateEntry(SearchResult searchResult, ILanguage sourceLanguage, IList<ILanguage> languages)
-        {
+		private Entry CreateEntry(SearchResult searchResult, ILanguage sourceLanguage, IList<ILanguage> languages)
+		{
 
-            throw new NotImplementedException();
-        }
-    }
+			throw new NotImplementedException();
+		}
+	}
 }

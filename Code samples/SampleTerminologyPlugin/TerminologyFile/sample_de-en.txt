@@ -11,3 +11,5 @@ German,de-DE;English (United Kingdom),en-GB
 10;Grafikkarte;graphic card;Expansion card responsible for rendering images to a computer screen
 11;Beispieltext;example text;used as placeholder or filler
 12;Weg;road;place
+13;Apparat;appliance;Device or equipment designed to perform a specific task
+14;Apparat;machine;A piece of equipment with moving parts that performs a specific task
