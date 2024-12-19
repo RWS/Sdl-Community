@@ -271,12 +271,6 @@ namespace Sdl.Community.FileType.TMX
 			startTagProperties.DisplayText = item.Name;
 			startTagProperties.CanHide = false;
 
-			var id = GetAttribute(item, "type");
-			if (int.TryParse(id, out _))
-			{
-				startTagProperties.TagId = new TagId(id);
-			}
-
 			return ItemFactory.CreateTagPair(startTagProperties, PropertiesFactory.CreateEndTagProperties(END_TAG));
 		}
 
