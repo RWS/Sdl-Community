@@ -29,6 +29,7 @@ namespace LanguageWeaverProvider.XliffConverter.Converter
 				return null;
 			}
 
+			text = text.Replace("\\r", "").Replace("\\n", "");
 			var sourceText = Regex.Matches(text, SourceTextRegex, RegexOptions.Singleline);
 			text = Regex.Replace(text, SourceTextRegex, EmptySourceTextRegex, RegexOptions.Singleline);
 
@@ -57,7 +58,7 @@ namespace LanguageWeaverProvider.XliffConverter.Converter
 		public static string PrintXliff(Xliff xliff)
 		{
 			using var writer = new StringWriter();
-			using (var tw = XmlWriter.Create(writer, new XmlWriterSettings { Indent = true }))
+			using (var tw = XmlWriter.Create(writer, new XmlWriterSettings { Indent = true, CheckCharacters = false }))
 			{
 				Serializer.Serialize(tw, xliff);
 			}
