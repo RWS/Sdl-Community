@@ -200,6 +200,9 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
 
         protected override void Initialize(IViewContext context)
         {
+            if (Initialized) return;
+            Initialized = true;
+
             ActivationChanged += StudioTimeTrackerViewController_ActivationChanged;
 
             IsLoading = true;
@@ -278,6 +281,8 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
 
             IsLoading = false;
         }
+
+        public bool Initialized { get; set; }
 
         private void StudioTimeTrackerViewController_ActivationChanged(object sender, ActivationChangedEventArgs e)
         {

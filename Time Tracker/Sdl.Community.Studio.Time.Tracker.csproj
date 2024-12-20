@@ -1,26 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>11.0.3344.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{AC39EA6C-DDDE-4C47-8E9C-10796087CE32}</ProjectGuid>
+    <TargetFramework>net48</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.Community.Studio.Time.Tracker</RootNamespace>
-    <AssemblyName>Sdl.Community.Studio.Time.Tracker</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <OldToolsVersion>2.0</OldToolsVersion>
     <SccProjectName />
     <SccLocalPath />
     <SccAuxPath />
     <SccProvider />
-    <TargetFrameworkProfile />
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -36,32 +21,19 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
     <PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
     <TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DocumentFormat.OpenXml">
@@ -91,150 +63,27 @@
     <Reference Include="Sdl.TellMe.ProviderApi">
       <HintPath>$(TradosFolder)\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    <Reference Include="System.Reactive">
+      <HintPath>$(TradosFolder)\System.Reactive.dll</HintPath>
     </Reference>
-    <Reference Include="System.XML" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
-    <Compile Include="TellMe\CommunityForumAction.cs" />
-    <Compile Include="TellMe\DocumentationAction.cs" />
-    <Compile Include="TellMe\NewActivityAction.cs" />
-    <Compile Include="TellMe\NewTrackerAction.cs" />
-    <Compile Include="TellMe\SettingsAction.cs" />
-    <Compile Include="TellMe\SourceCodeAction.cs" />
-    <Compile Include="TellMe\StartActivityTrackingAction.cs" />
-    <Compile Include="TellMe\StopActivityTrackingAction.cs" />
-    <Compile Include="TellMe\TellMeAction.cs" />
-    <Compile Include="TellMe\TellMeProvider.cs" />
-    <Compile Include="TellMe\TimeTrackerAction.cs" />
-    <Compile Include="Tracking\Tracked.cs" />
-    <Compile Include="Custom\ComboboxItem.cs" />
-    <Compile Include="Dialogs\ExportActivitesToExcel.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\ExportActivitesToExcel.Designer.cs">
-      <DependentUpon>ExportActivitesToExcel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\Message.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\Message.Designer.cs">
-      <DependentUpon>Message.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ExcelPowerTools\PtOpenXmlDocument.cs" />
-    <Compile Include="ExcelPowerTools\PtOpenXmlUtil.cs" />
-    <Compile Include="ExcelPowerTools\PtUtil.cs" />
-    <Compile Include="Structures\ActivityPropertiesView.cs" />
-    <Compile Include="Structures\ClientPropertiesView.cs" />
-    <Compile Include="Structures\ClientProjectPropertiesView.cs" />
-    <Compile Include="Structures\ProjectPropertiesView.cs" />
-    <Compile Include="Panels\Timers\StudioTimeTrackerViewTimerController.cs" />
-    <Compile Include="Panels\Timers\StudioTimeTrackerViewTimerControl.cs">
+    <Compile Update="Panels\Timers\StudioTimeTrackerViewTimerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Panels\Timers\StudioTimeTrackerViewTimerControl.Designer.cs">
-      <DependentUpon>StudioTimeTrackerViewTimerControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\ActivityType.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\ActivityType.Designer.cs">
-      <DependentUpon>ActivityType.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\AddressDetails.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\AddressDetails.designer.cs">
-      <DependentUpon>AddressDetails.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\ClientProfile.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\ClientProfile.Designer.cs">
-      <DependentUpon>ClientProfile.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\ClientActivityRate.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\ClientActivityRate.Designer.cs">
-      <DependentUpon>ClientActivityRate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\TrackProjectActivity.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\TrackProjectActivity.Designer.cs">
-      <DependentUpon>TrackProjectActivity.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\TimeTrackerProject.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\TimeTrackerProject.Designer.cs">
-      <DependentUpon>TimeTrackerProject.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\Settings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\Settings.Designer.cs">
-      <DependentUpon>Settings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Helper.cs" />
-    <Compile Include="PluginResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PluginResources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Structures\ActivityType.cs" />
-    <Compile Include="Structures\Common.cs" />
-    <Compile Include="Structures\ClientProfileInfo.cs" />
-    <Compile Include="Structures\ClientActivityType.cs" />
-    <Compile Include="Structures\Currency.cs" />
-    <Compile Include="Structures\TrackerProjectActivity.cs" />
-    <Compile Include="Structures\TrackerProject.cs" />
-    <Compile Include="Panels\Timers\StudioTimeTrackerEditorController.cs" />
-    <Compile Include="Panels\Properties\StudioTimeTrackerViewPropertiesController.cs" />
-    <Compile Include="Panels\Properties\StudioTimeTrackerViewPropertiesControl.cs">
+    <Compile Update="Panels\Properties\StudioTimeTrackerViewPropertiesControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Panels\Properties\StudioTimeTrackerViewPropertiesControl.Designer.cs">
-      <DependentUpon>StudioTimeTrackerViewPropertiesControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Panels\Main\StudioTimeTrackerNavigationControl.cs">
+    <Compile Update="Panels\Main\StudioTimeTrackerNavigationControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Panels\Main\StudioTimeTrackerNavigationControl.Designer.cs">
-      <DependentUpon>StudioTimeTrackerNavigationControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Custom\FolderSelectDialog.cs" />
-    <Compile Include="Panels\Main\StudioTimeTrackerViewRibbonGroup.cs" />
-    <Compile Include="Panels\Main\StudioTimeTrackerViewController.cs" />
-    <Compile Include="Panels\Main\StudioTimeTrackerViewControl.cs">
+    <Compile Update="Panels\Main\StudioTimeTrackerViewControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Panels\Main\StudioTimeTrackerViewControl.Designer.cs">
-      <DependentUpon>StudioTimeTrackerViewControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\PluginProperties.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Structures\SettingsSerializer.cs" />
-    <Compile Include="Structures\UserProfileInfo.cs" />
-    <Compile Include="Structures\Settings.cs" />
-    <Compile Include="Panels\Timers\StudioTimeTrackerEditorControl.cs">
+    <Compile Update="Panels\Timers\StudioTimeTrackerEditorControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Panels\Timers\StudioTimeTrackerEditorControl.Designer.cs">
-      <DependentUpon>StudioTimeTrackerEditorControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tracking\TrackedActions.cs" />
-    <Compile Include="Tracking\TrackedEditorEvents.cs" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Activities.ico" />
@@ -280,62 +129,9 @@
     <Resource Include="Resources\Users-simple.ico" />
     <Resource Include="Resources\Information.png" />
     <Content Include="Studio.Time.Tracker.ico" />
-    <EmbeddedResource Include="Dialogs\ExportActivitesToExcel.resx">
-      <DependentUpon>ExportActivitesToExcel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\Message.resx">
-      <DependentUpon>Message.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Panels\Timers\StudioTimeTrackerViewTimerControl.resx">
-      <DependentUpon>StudioTimeTrackerViewTimerControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\ActivityType.resx">
-      <DependentUpon>ActivityType.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\AddressDetails.resx">
-      <DependentUpon>AddressDetails.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\ClientProfile.resx">
-      <DependentUpon>ClientProfile.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\ClientActivityRate.resx">
-      <DependentUpon>ClientActivityRate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\TrackProjectActivity.resx">
-      <DependentUpon>TrackProjectActivity.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\TimeTrackerProject.resx">
-      <DependentUpon>TimeTrackerProject.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\Settings.resx">
-      <DependentUpon>Settings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Panels\Properties\StudioTimeTrackerViewPropertiesControl.resx">
-      <DependentUpon>StudioTimeTrackerViewPropertiesControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Panels\Main\StudioTimeTrackerNavigationControl.resx">
-      <DependentUpon>StudioTimeTrackerNavigationControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PluginResources.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
-    <EmbeddedResource Include="Panels\Timers\StudioTimeTrackerEditorControl.resx">
-      <DependentUpon>StudioTimeTrackerEditorControl.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Panels\Main\StudioTimeTrackerViewControl.resx">
-      <DependentUpon>StudioTimeTrackerViewControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
@@ -375,6 +171,9 @@
       <Version>18.0.1</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Dialogs\RestoreProjectVersion.resx" />
+  </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
@@ -389,6 +188,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Studio.Time.Tracker.ico</ApplicationIcon>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
