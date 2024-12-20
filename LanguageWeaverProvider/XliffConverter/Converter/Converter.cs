@@ -29,7 +29,8 @@ namespace LanguageWeaverProvider.XliffConverter.Converter
 				return null;
 			}
 
-			var sourceText = Regex.Matches(text, SourceTextRegex, RegexOptions.Singleline);
+            text = text.Replace("\\r", "").Replace("\\n", "");
+            var sourceText = Regex.Matches(text, SourceTextRegex, RegexOptions.Singleline);
 			text = Regex.Replace(text, SourceTextRegex, EmptySourceTextRegex, RegexOptions.Singleline);
 
 			var targetText = Regex.Matches(text, TargetTextRegex, RegexOptions.Singleline);
