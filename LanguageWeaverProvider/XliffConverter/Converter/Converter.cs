@@ -57,7 +57,7 @@ namespace LanguageWeaverProvider.XliffConverter.Converter
 		public static string PrintXliff(Xliff xliff)
 		{
 			using var writer = new StringWriter();
-			using (var tw = XmlWriter.Create(writer, new XmlWriterSettings { Indent = true }))
+			using (var tw = XmlWriter.Create(writer, new XmlWriterSettings { Indent = true, CheckCharacters = false }))
 			{
 				Serializer.Serialize(tw, xliff);
 			}
