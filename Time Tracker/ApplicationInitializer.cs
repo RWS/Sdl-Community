@@ -4,6 +4,7 @@ using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.Desktop.IntegrationApi.Notifications.Events;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi.Internal;
 using System;
 
 namespace Sdl.Community.Studio.Time.Tracker
@@ -13,11 +14,13 @@ namespace Sdl.Community.Studio.Time.Tracker
     {
         private static StudioTimeTrackerViewController _studioTimeTrackerViewController;
 
+        private SdlTradosStudioApplication SdlTradosStudioApplication => SdlTradosStudio.Application;
+
         private StudioTimeTrackerViewController StudioTimeTrackerViewController => _studioTimeTrackerViewController ??=
-                    SdlTradosStudio.Application.GetController<StudioTimeTrackerViewController>();
+                            SdlTradosStudioApplication.GetController<StudioTimeTrackerViewController>();
 
         public void Execute() =>
-            SdlTradosStudio.Application.GetService<IStudioEventAggregator>()
+            SdlTradosStudioApplication.GetService<IStudioEventAggregator>()
                 .GetEvent<StudioWindowCreatedNotificationEvent>().Subscribe(OnStudioWindowCreated);
 
         private void OnStudioWindowCreated(StudioWindowCreatedNotificationEvent @event) => StudioTimeTrackerViewController.Initialize();
