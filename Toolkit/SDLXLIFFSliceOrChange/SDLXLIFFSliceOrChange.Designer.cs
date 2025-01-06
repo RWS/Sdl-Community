@@ -1,4 +1,5 @@
 ﻿using SDLXLIFFSliceOrChange.Data;
+using System.Windows.Forms;
 
 namespace SDLXLIFFSliceOrChange
 {
@@ -26,6 +27,9 @@ namespace SDLXLIFFSliceOrChange
         /// </summary>
         public void InitializeComponent()
         {
+            this.scrollablePanel = new Panel();
+            
+
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SdlxliffSliceOrChange));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -148,6 +152,9 @@ namespace SDLXLIFFSliceOrChange
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.xLIFFFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.filesBindingSource)).BeginInit();
+
+            this.scrollablePanel.SuspendLayout();
+
             this.tabControl1.SuspendLayout();
             this.pageStatuses.SuspendLayout();
             this.groupDocumentStructure.SuspendLayout();
@@ -183,6 +190,10 @@ namespace SDLXLIFFSliceOrChange
             this.panelStatus.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
+
+            this.scrollablePanel.Dock = DockStyle.Fill;
+            this.scrollablePanel.AutoScroll = true;
+
             // 
             // xLIFFFiles
             // 
@@ -1556,7 +1567,21 @@ namespace SDLXLIFFSliceOrChange
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
             this.AutoSize = true;
-            this.Controls.Add(this.mainTableLayoutPanel);
+            //this.Controls.Add(this.mainTableLayoutPanel);
+
+            
+
+            // Add the TableLayoutPanel to the Panel
+            scrollablePanel.Controls.Add(mainTableLayoutPanel);
+
+            // Adjust TableLayoutPanel settings
+            mainTableLayoutPanel.Dock = DockStyle.Top;
+            mainTableLayoutPanel.AutoSize = true;
+            mainTableLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+
+            // Add the Panel to the UserControl
+            this.Controls.Add(scrollablePanel);
+
             this.Name = "SdlxliffSliceOrChange";
             this.Size = new System.Drawing.Size(820, 1059);
             this.Load += new System.EventHandler(this.SDLXLIFFSliceOrChange_Load);
@@ -1612,6 +1637,7 @@ namespace SDLXLIFFSliceOrChange
             this.mainTableLayoutPanel.ResumeLayout(false);
             this.panelStatus.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            this.scrollablePanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1732,6 +1758,7 @@ namespace SDLXLIFFSliceOrChange
         private System.Windows.Forms.DataGridViewTextBoxColumn colDate;
         private System.Windows.Forms.Label browseLabel;
         private System.Windows.Forms.TableLayoutPanel mainTableLayoutPanel;
+        private System.Windows.Forms.Panel scrollablePanel;
         private System.Windows.Forms.Panel panelStatus;
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.ErrorProvider errorProvider1;
