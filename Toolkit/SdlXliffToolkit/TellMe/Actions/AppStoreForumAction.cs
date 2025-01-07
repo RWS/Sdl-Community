@@ -10,7 +10,7 @@ namespace SdlXliffToolkit.TellMe.Actions
 			Name = "RWS Community AppStore Forum";
 		}
 
-		public override Icon Icon => PluginResources.ForumIcon;
+		public override Icon Icon => PluginResources.Question;
 
 		public override void Execute()
 		{
