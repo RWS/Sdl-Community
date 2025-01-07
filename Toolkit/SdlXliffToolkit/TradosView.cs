@@ -4,6 +4,7 @@
 	{
 		ProjectsView,
 		FilesView,
-		EditorView
-	}
+		EditorView,
+        OtherView
+    }
 }
