@@ -25,12 +25,16 @@ namespace SDLXLIFFSliceOrChange
             _sdlxliffSliceOrChange = sdlxliffSliceOrChange;
         }
 
-        public void MergeSplitFiles(List<KeyValuePair<string, List<string>>> filesPerLanguage)
+        public void MergeSplitFiles(List<KeyValuePair<string, List<string>>> filesPerLanguage, CancellationToken cancellationToken)
         {
-           var threads = new List<Thread>();
+            CancellationToken = cancellationToken;
+            var threads = new List<Thread>();
             foreach (var keyValuePair in filesPerLanguage)
             {
-	            var language = keyValuePair.Key;
+                if (CancellationToken.IsCancellationRequested)
+                    break;
+
+                var language = keyValuePair.Key;
                 var files = keyValuePair.Value;
                 var t = new Thread(() => MergeSplitFilesPerLanguage(language, files));
                 t.Start();
@@ -64,13 +68,26 @@ namespace SDLXLIFFSliceOrChange
 			        var fileList = xFinalDoc.DocumentElement.GetElementsByTagName("file");
 			        foreach (var finalDocFileElement in fileList.OfType<XmlElement>())
 			        {
-				        var finalDocHeaderElement = (XmlElement)finalDocFileElement.GetElementsByTagName("header")[0];
+                        if (CancellationToken.IsCancellationRequested)
+                            break;
+
+                        var finalDocHeaderElement = (XmlElement)finalDocFileElement.GetElementsByTagName("header")[0];
 				        var referencesNodes = finalDocHeaderElement.GetElementsByTagName("reference");
 				        var referencesToBeRemoved = new List<XmlNode>();
 				        foreach (var referencesNode in referencesNodes.OfType<XmlElement>())
-					        referencesToBeRemoved.Add(referencesNode);
+                        {
+                            if (CancellationToken.IsCancellationRequested)
+                                break;
+
+                            referencesToBeRemoved.Add(referencesNode);
+                        }
 				        foreach (var referenceToBeRemoved in referencesToBeRemoved.OfType<XmlElement>())
-					        finalDocHeaderElement.RemoveChild(referenceToBeRemoved);
+                        {
+                            if (CancellationToken.IsCancellationRequested)
+                                break;
+
+                            finalDocHeaderElement.RemoveChild(referenceToBeRemoved);
+                        }
 				        referencesToBeRemoved.Clear();
 			        }
 
@@ -113,7 +130,10 @@ namespace SDLXLIFFSliceOrChange
             {
 	            foreach (var sourceDocFileElement in fileList.OfType<XmlElement>())
 	            {
-		            var sourceDocBodyElement = (XmlElement) sourceDocFileElement.GetElementsByTagName("body")[0];
+                    if (CancellationToken.IsCancellationRequested)
+                        break;
+
+                    var sourceDocBodyElement = (XmlElement) sourceDocFileElement.GetElementsByTagName("body")[0];
 		            var sourceDocHeaderElement = (XmlElement) sourceDocFileElement.GetElementsByTagName("header")[0];
 
 					// fmts
@@ -139,29 +159,32 @@ namespace SDLXLIFFSliceOrChange
 					t3.Start();
 
 					//get all SegmentIds from finalDoc
-					_sdlxliffSliceOrChange.StepProcess("Geting segments ... ");
+					_sdlxliffSliceOrChange.StepProcess();
 
 		            var segmentIds = GetSegmentIds(finalFile);
 
-		            _sdlxliffSliceOrChange.StepProcess("Geting segments, done. ");
+		            _sdlxliffSliceOrChange.StepProcess();
 
 		            t2.Join();
 		            t3.Join();
 		            sourceDocHeaderElement = null;
-		            _sdlxliffSliceOrChange.StepProcess("Merging body ... ");
+		            _sdlxliffSliceOrChange.StepProcess();
 					
 		            //body - segments
 		            var sourceGroups = sourceDocBodyElement.GetElementsByTagName("group");
-		            _sdlxliffSliceOrChange.StepProcess(sourceGroups.Count.ToString() + " groups to process ... ");
+		            _sdlxliffSliceOrChange.StepProcess();
 
 		            var itemsProcessed = 0;
 		            var itemsResetCounts = 1;
 		            foreach (var sourceGroup in sourceGroups.OfType<XmlElement>())
 		            {
-			            itemsProcessed++;
+                        if (CancellationToken.IsCancellationRequested)
+                            break;
+
+                        itemsProcessed++;
 			            if (itemsProcessed == 5000)
 			            {
-				            _sdlxliffSliceOrChange.StepProcess(sourceGroups.Count - (itemsResetCounts * itemsProcessed) + " groups to process ... ");
+				            _sdlxliffSliceOrChange.StepProcess();
 				            itemsProcessed = 0;
 				            itemsResetCounts++;
 			            }
@@ -180,13 +203,13 @@ namespace SDLXLIFFSliceOrChange
 
 					 // update tags (x an g elements)
 					UpdateTagsElements(sourceDocBodyElement, newTagsIDs, ref segmentIds);
-		            _sdlxliffSliceOrChange.StepProcess("Merging body, done. ");
+		            _sdlxliffSliceOrChange.StepProcess();
 	            }
             }
 
-            _sdlxliffSliceOrChange.StepProcess("Finnishing merge ... ");
+            _sdlxliffSliceOrChange.StepProcess();
             AddingElementsToFinalFile(finalFile);
-            _sdlxliffSliceOrChange.StepProcess("Merging files, done. ");
+            _sdlxliffSliceOrChange.StepProcess();
         }
 
 		private List<string> GetSegmentIds(string finalFile)
@@ -229,7 +252,10 @@ namespace SDLXLIFFSliceOrChange
 		        var cxtElements = cxts.GetElementsByTagName("sdl:cxt");
 		        foreach (var cxtElement in cxtElements.OfType<XmlElement>())
 		        {
-			        var id = cxtElement.Attributes["id"].Value;
+                    if (CancellationToken.IsCancellationRequested)
+                        break;
+
+                    var id = cxtElement.Attributes["id"].Value;
 			        if (Enumerable.Contains(newCxtsIDs.Keys, id))
 				        cxtElement.SetAttribute("id", newCxtsIDs[id]);
 		        }
@@ -238,7 +264,10 @@ namespace SDLXLIFFSliceOrChange
 		        var nodeElements = cxts.GetElementsByTagName("sdl:node");
 		        foreach (var nodeElement in nodeElements.OfType<XmlElement>())
 		        {
-			        var id = nodeElement.Attributes["id"].Value;
+                    if (CancellationToken.IsCancellationRequested)
+                        break;
+
+                    var id = nodeElement.Attributes["id"].Value;
 			        if (Enumerable.Contains(newNodesIDs.Keys, id))
 				        nodeElement.SetAttribute("id", newNodesIDs[id]);
 		        }
@@ -252,27 +281,42 @@ namespace SDLXLIFFSliceOrChange
 	        {
 		        foreach (var transUnitElement in transUnitElements.OfType<XmlElement>())
 		        {
-			        var sourceElements = transUnitElement.GetElementsByTagName("source");
+                    if (CancellationToken.IsCancellationRequested)
+                        break;
+
+                    var sourceElements = transUnitElement.GetElementsByTagName("source");
 			        foreach (var sourceElement in sourceElements.OfType<XmlElement>())
 			        {
-				        UpdateGandX(sourceElement, newTagsIDs);
+                        if (CancellationToken.IsCancellationRequested)
+                            break;
+
+                        UpdateGandX(sourceElement, newTagsIDs);
 			        }
 			        var segSourceElements = transUnitElement.GetElementsByTagName("seg-source");
 			        foreach (var segSourceElement in segSourceElements.OfType<XmlElement>())
 			        {
-				        UpdateGandX(segSourceElement, newTagsIDs);
+                        if (CancellationToken.IsCancellationRequested)
+                            break;
+
+                        UpdateGandX(segSourceElement, newTagsIDs);
 			        }
 
 			        var targetElements = transUnitElement.GetElementsByTagName("target");
 			        foreach (var targetElement in targetElements.OfType<XmlElement>())
 			        {
-				        UpdateGandX(targetElement, newTagsIDs);
+                        if (CancellationToken.IsCancellationRequested)
+                            break;
+
+                        UpdateGandX(targetElement, newTagsIDs);
 			        }
 
 			        var segTargetElements = transUnitElement.GetElementsByTagName("seg-target");
 			        foreach (var segTargetElement in segTargetElements.OfType<XmlElement>())
 			        {
-				        UpdateGandX(segTargetElement, newTagsIDs);
+                        if (CancellationToken.IsCancellationRequested)
+                            break;
+
+                        UpdateGandX(segTargetElement, newTagsIDs);
 			        }
 
 			        UpdateSegmentsIDs(transUnitElement, ref segmentIds);
@@ -287,12 +331,18 @@ namespace SDLXLIFFSliceOrChange
 	        {
 		        foreach (var cxts in cxtsElementsInBody.OfType<XmlElement>())
 		        {
-			        if (cxts.Name != "sdl:cxts") continue;
+                    if (CancellationToken.IsCancellationRequested)
+                        break;
+
+                    if (cxts.Name != "sdl:cxts") continue;
 
 			        var cxtElements = cxts.GetElementsByTagName("sdl:cxt");
 			        foreach (var cxtElement in cxtElements.OfType<XmlElement>())
 			        {
-				        var id = cxtElement.Attributes["id"].Value;
+                        if (CancellationToken.IsCancellationRequested)
+                            break;
+
+                        var id = cxtElement.Attributes["id"].Value;
 				        if (Enumerable.Contains(newCxtsIDs.Keys, id))
 					        cxtElement.SetAttribute("id", newCxtsIDs[id]);
 			        }
@@ -301,7 +351,10 @@ namespace SDLXLIFFSliceOrChange
 			        var nodeElements = cxts.GetElementsByTagName("sdl:node");
 			        foreach (var nodeElement in nodeElements.OfType<XmlElement>())
 			        {
-				        var id = nodeElement.Attributes["id"].Value;
+                        if (CancellationToken.IsCancellationRequested)
+                            break;
+
+                        var id = nodeElement.Attributes["id"].Value;
 				        if (Enumerable.Contains(newNodesIDs.Keys, id))
 					        nodeElement.SetAttribute("id", newNodesIDs[id]);
 			        }
@@ -316,30 +369,45 @@ namespace SDLXLIFFSliceOrChange
 	        {
 		        foreach (var transUnitElement in transUnitElementsInBody.OfType<XmlElement>())
 		        {
-			        if (transUnitElement.Name != "trans-unit")
+                    if (CancellationToken.IsCancellationRequested)
+                        break;
+
+                    if (transUnitElement.Name != "trans-unit")
 				        continue;
 			        var sourceElements = transUnitElement.GetElementsByTagName("source");
 			        foreach (var sourceElement in sourceElements.OfType<XmlElement>())
 			        {
-				        UpdateGandX(sourceElement, newTagsIDs);
+                        if (CancellationToken.IsCancellationRequested)
+                            break;
+
+                        UpdateGandX(sourceElement, newTagsIDs);
 			        }
 
 			        var segSourceElements = transUnitElement.GetElementsByTagName("seg-source");
 			        foreach (var segSourceElement in segSourceElements.OfType<XmlElement>())
 			        {
-				        UpdateGandX(segSourceElement, newTagsIDs);
+                        if (CancellationToken.IsCancellationRequested)
+                            break;
+
+                        UpdateGandX(segSourceElement, newTagsIDs);
 			        }
 
 			        var targetElements = transUnitElement.GetElementsByTagName("target");
 			        foreach (var targetElement in targetElements.OfType<XmlElement>())
 			        {
-				        UpdateGandX(targetElement, newTagsIDs);
+                        if (CancellationToken.IsCancellationRequested)
+                            break;
+
+                        UpdateGandX(targetElement, newTagsIDs);
 			        }
 
 			        var segTargetElements = transUnitElement.GetElementsByTagName("seg-target");
 			        foreach (var segTargetElement in segTargetElements.OfType<XmlElement>())
 			        {
-				        UpdateGandX(segTargetElement, newTagsIDs);
+                        if (CancellationToken.IsCancellationRequested)
+                            break;
+
+                        UpdateGandX(segTargetElement, newTagsIDs);
 			        }
 			        UpdateSegmentsIDs(transUnitElement, ref segmentIds);
 			        _groupsToBeAdded.Add(transUnitElement.OuterXml);
@@ -430,7 +498,10 @@ namespace SDLXLIFFSliceOrChange
 		        var segments = segDefs.GetElementsByTagName("sdl:seg");
 		        foreach (var segment in segments.OfType<XmlElement>())
 		        {
-			        var segmentId = segment.Attributes["id"].Value;
+                    if (CancellationToken.IsCancellationRequested)
+                        break;
+
+                    var segmentId = segment.Attributes["id"].Value;
 			        if (segmentIds.Contains(segmentId))
 			        {
 				        segmentIds.Add(newId);
@@ -439,25 +510,37 @@ namespace SDLXLIFFSliceOrChange
 				        var sourceElements = transUnitElement.GetElementsByTagName("source");
 				        foreach (var sourceElement in sourceElements.OfType<XmlElement>())
 				        {
-					        UpdateMrkMID(sourceElement, segmentId, newId);
+                            if (CancellationToken.IsCancellationRequested)
+                                break;
+
+                            UpdateMrkMID(sourceElement, segmentId, newId);
 				        }
 
 				        var segSourceElements = transUnitElement.GetElementsByTagName("seg-source");
 				        foreach (var segSourceElement in segSourceElements.OfType<XmlElement>())
 				        {
-					        UpdateMrkMID(segSourceElement, segmentId, newId);
+                            if (CancellationToken.IsCancellationRequested)
+                                break;
+
+                            UpdateMrkMID(segSourceElement, segmentId, newId);
 				        }
 
 				        var targetElements = transUnitElement.GetElementsByTagName("target");
 				        foreach (var targetElement in targetElements.OfType<XmlElement>())
 				        {
-					        UpdateMrkMID(targetElement, segmentId, newId);
+                            if (CancellationToken.IsCancellationRequested)
+                                break;
+
+                            UpdateMrkMID(targetElement, segmentId, newId);
 				        }
 
 				        var segTargetElements = transUnitElement.GetElementsByTagName("seg-target");
 				        foreach (var segTargetElement in segTargetElements.OfType<XmlElement>())
 				        {
-					        UpdateMrkMID(segTargetElement, segmentId, newId);
+                            if (CancellationToken.IsCancellationRequested)
+                                break;
+
+                            UpdateMrkMID(segTargetElement, segmentId, newId);
 				        }
 			        }
 		        }
@@ -469,6 +552,9 @@ namespace SDLXLIFFSliceOrChange
             var mrks = element.GetElementsByTagName("mrk");
             foreach (var mrk in mrks.OfType<XmlElement>())
             {
+                if (CancellationToken.IsCancellationRequested)
+                    break;
+
                 if (mrk.HasAttribute("mtype") && mrk.Attributes["mtype"].Value == "seg" && mrk.HasAttribute("mid"))
                 {
 	                var mId = mrk.Attributes["mid"].Value;
@@ -485,12 +571,18 @@ namespace SDLXLIFFSliceOrChange
             var xList = element.GetElementsByTagName("x");
             foreach (var x in xList.OfType<XmlElement>())
             {
+                if (CancellationToken.IsCancellationRequested)
+                    break;
+
                 if (x.HasAttribute("id") && newTagsIDs.Keys.Contains(x.Attributes["id"].Value))
                     x.SetAttribute("id", newTagsIDs[x.Attributes["id"].Value]);
             }
             var gList = element.GetElementsByTagName("g");
             foreach (var g in gList.OfType<XmlElement>())
             {
+                if (CancellationToken.IsCancellationRequested)
+                    break;
+
                 if (g.HasAttribute("id") && newTagsIDs.Keys.Contains(g.Attributes["id"].Value))
                     g.SetAttribute("id", newTagsIDs[g.Attributes["id"].Value]);
             }
@@ -498,7 +590,7 @@ namespace SDLXLIFFSliceOrChange
 
         private Dictionary<string, string> MergeNodes(string finalFile, XmlElement sourceDocHeaderElement, Dictionary<string, string> newCxtsIDs)
         {
-            _sdlxliffSliceOrChange.StepProcess("Merging Nodes ... ");
+            _sdlxliffSliceOrChange.StepProcess();
             var newNodeIDs = new Dictionary<string, string>();
 
             var nodeDefinitions = sourceDocHeaderElement.GetElementsByTagName("node-defs");
@@ -536,7 +628,7 @@ namespace SDLXLIFFSliceOrChange
             }
 
             var sourceNodes = sourceNodeDefs.GetElementsByTagName("node-def");
-            _sdlxliffSliceOrChange.StepProcess(sourceNodes.Count.ToString() + " nodes to process ... ");
+            _sdlxliffSliceOrChange.StepProcess();
             
             int itemsProcessed = 0;
             int itemsResetCounts = 1;
@@ -545,7 +637,7 @@ namespace SDLXLIFFSliceOrChange
                 itemsProcessed++;
                 if (itemsProcessed == 5000)
                 {
-                    _sdlxliffSliceOrChange.StepProcess(sourceNodes.Count - (itemsResetCounts * itemsProcessed) + " nodes to process ... ", false);
+                    _sdlxliffSliceOrChange.StepProcess(false);
                     itemsProcessed = 0;
                     itemsResetCounts++;
                 }
@@ -592,7 +684,7 @@ namespace SDLXLIFFSliceOrChange
                     }
                 }
             }
-            _sdlxliffSliceOrChange.StepProcess("Merging Nodes, done. ", false);
+            _sdlxliffSliceOrChange.StepProcess(false);
 
             return newNodeIDs;
         }
@@ -619,7 +711,7 @@ namespace SDLXLIFFSliceOrChange
 
         private Dictionary<string, string> MergeTags(string finalFile, XmlElement sourceDocHeaderElement, Dictionary<string, string> newFmtIDs)
         {
-            _sdlxliffSliceOrChange.StepProcess("Merging tags ... ", false);
+            _sdlxliffSliceOrChange.StepProcess(false);
             var newTagIDs = new Dictionary<string, string>();
 
             var tagDefinitions = sourceDocHeaderElement.GetElementsByTagName("tag-defs");
@@ -659,7 +751,7 @@ namespace SDLXLIFFSliceOrChange
             }
 
             var sourceTags = sourceTagsDefs.GetElementsByTagName("tag");
-            _sdlxliffSliceOrChange.StepProcess(sourceTags.Count.ToString() + " tags to process ... ");
+            _sdlxliffSliceOrChange.StepProcess();
             int itemsProcessed = 0;
             int itemsResetCounts = 1;
             foreach (var sourceTag in sourceTags.OfType<XmlElement>())
@@ -667,7 +759,7 @@ namespace SDLXLIFFSliceOrChange
                 itemsProcessed++;
                 if (itemsProcessed == 5000)
                 {
-                    _sdlxliffSliceOrChange.StepProcess(sourceTags.Count - (itemsResetCounts * itemsProcessed) + " tags to process ... ", false);
+                    _sdlxliffSliceOrChange.StepProcess(false);
                     itemsProcessed = 0;
                     itemsResetCounts++;
                 }
@@ -703,7 +795,7 @@ namespace SDLXLIFFSliceOrChange
                     _tagsToBeAdded.Add(sourceTag.OuterXml);
                 }
             }
-            _sdlxliffSliceOrChange.StepProcess("Merging tags, done. ");
+            _sdlxliffSliceOrChange.StepProcess();
             return newTagIDs;
         }
 
@@ -756,7 +848,7 @@ namespace SDLXLIFFSliceOrChange
 
         private Dictionary<string, string> MergeCxt(string finalFile, XmlElement sourceDocHeaderElement, Dictionary<string, string> newFmtIDs)
         {
-            _sdlxliffSliceOrChange.StepProcess("Merging Cxt ... ");
+            _sdlxliffSliceOrChange.StepProcess();
             var newCxtIDs = new Dictionary<string, string>();
 
             var cxtDefinitions = sourceDocHeaderElement.GetElementsByTagName("cxt-defs");
@@ -796,7 +888,7 @@ namespace SDLXLIFFSliceOrChange
                 }
             }
             var sourceCxts = sourceCxtDefs.GetElementsByTagName("cxt-def");
-            _sdlxliffSliceOrChange.StepProcess(sourceCxts.Count.ToString() + " cxts to process ... ", false);
+            _sdlxliffSliceOrChange.StepProcess(false);
 
             int itemsProcessed = 0;
             int itemsResetCounts = 1;
@@ -805,7 +897,7 @@ namespace SDLXLIFFSliceOrChange
                 itemsProcessed++;
                 if (itemsProcessed == 5000)
                 {
-                    _sdlxliffSliceOrChange.StepProcess(sourceCxts.Count - (itemsResetCounts * itemsProcessed) + " cxts to process ... ", false);
+                    _sdlxliffSliceOrChange.StepProcess(false);
                     itemsProcessed = 0;
                     itemsResetCounts++;
                 }
@@ -842,7 +934,7 @@ namespace SDLXLIFFSliceOrChange
                     _cxtsToBeAdded.Add(sourceCxt.OuterXml);
                 }
             }
-            _sdlxliffSliceOrChange.StepProcess("Merging Cxt, done. ");
+            _sdlxliffSliceOrChange.StepProcess();
             return newCxtIDs;
         }
 
@@ -879,7 +971,7 @@ namespace SDLXLIFFSliceOrChange
 
         private Dictionary<string, string> MergeFmts(string finalFile, XmlElement sourceDocHeaderElement)
         {
-            _sdlxliffSliceOrChange.StepProcess("Merging fonts ... ");
+            _sdlxliffSliceOrChange.StepProcess();
             var newFmtIDs = new Dictionary<string, string>();
 
             var fmtDefinitions = sourceDocHeaderElement.GetElementsByTagName("fmt-defs");
@@ -894,11 +986,11 @@ namespace SDLXLIFFSliceOrChange
 			ProcessFinalFile(finalFile, finalFmtIDs,finalFmtFormats);
 
             var sourceFmts = sourceFmtDefs.GetElementsByTagName("fmt-def");
-            _sdlxliffSliceOrChange.StepProcess(sourceFmts.Count.ToString() + " fmts to process ... ");
+            _sdlxliffSliceOrChange.StepProcess();
             
             GenerateFormat(sourceFmts, finalFmtFormats, newFmtIDs, finalFmtIDs);
 		
-			_sdlxliffSliceOrChange.StepProcess("Merging fonts, done! ");
+			_sdlxliffSliceOrChange.StepProcess();
 
             return newFmtIDs;
         }
@@ -913,7 +1005,7 @@ namespace SDLXLIFFSliceOrChange
 		        itemsProcessed++;
 		        if (itemsProcessed == 5000)
 		        {
-			        _sdlxliffSliceOrChange.StepProcess(sourceFmts.Count - (itemsResetCounts * itemsProcessed) + " fmts to process ... ");
+			        _sdlxliffSliceOrChange.StepProcess();
 			        itemsProcessed = 0;
 			        itemsResetCounts++;
 		        }
@@ -991,11 +1083,13 @@ namespace SDLXLIFFSliceOrChange
             return sb.ToString();
         }
 
-        public void SliceFile(string file, SliceInfo sliceInfo)
+        public void SliceFile(string file, SliceInfo sliceInfo, CancellationToken cancellationToken)
         {
+            CancellationToken = cancellationToken;
+
 	        try
 	        {
-		        _sdlxliffSliceOrChange.StepProcess("Sliceing file: " + Path.GetFileName(file) + ".", false);
+		        _sdlxliffSliceOrChange.StepProcess(false);
 
 		        var xDoc = new XmlDocument {PreserveWhitespace = true};
 		        xDoc.Load(file);
@@ -1013,18 +1107,26 @@ namespace SDLXLIFFSliceOrChange
 		        if (fileList != null)
 		        {
 			        foreach (var fileElement in fileList.OfType<XmlElement>())
-			        {
+                    {
+                        if (CancellationToken.IsCancellationRequested) break;
+
 				        var bodyElement = (XmlElement) (fileElement.GetElementsByTagName("body")[0]);
 				        var groupElements = bodyElement.GetElementsByTagName("group");
 
 				        var removedGroups = new List<XmlNode>();
 				        foreach (var groupElement in groupElements.OfType<XmlElement>())
 				        {
-					        SliceInBody(sliceInfo, groupElement, removedGroups);
+                            if (CancellationToken.IsCancellationRequested)
+                                break;
+                            SliceInBody(sliceInfo, groupElement, removedGroups);
 				        }
 
 				        foreach (var xmlNode in removedGroups.OfType<XmlElement>())
-					        bodyElement.RemoveChild(xmlNode);
+                        {
+                            if (CancellationToken.IsCancellationRequested)
+                                break;
+                            bodyElement.RemoveChild(xmlNode);
+                        }
 
 				        SliceInBody(sliceInfo, bodyElement, null);
 			        }
@@ -1044,6 +1146,8 @@ namespace SDLXLIFFSliceOrChange
 	        }
         }
 
+        private static CancellationToken CancellationToken { get; set; }
+
         private static void SliceInBody(SliceInfo sliceInfo, object groupElement, List<XmlNode> removedGroups)
         {
 			// look in the segments
@@ -1054,6 +1158,8 @@ namespace SDLXLIFFSliceOrChange
 
             foreach (var transUnit in transUnits)
             {
+                if (CancellationToken.IsCancellationRequested)
+                    break;
                 // Skip structure translation units.
                 if (transUnit.GetAttribute("translate") == "no")
                 {
@@ -1069,26 +1175,38 @@ namespace SDLXLIFFSliceOrChange
                 var removedSegDefs = new List<XmlNode>();
                 foreach (var segDef in segDefs.OfType<XmlElement>())
                 {
-	                var segments = segDef.GetElementsByTagName("sdl:seg");
+                    if (CancellationToken.IsCancellationRequested)
+                        break;
+                    var segments = segDef.GetElementsByTagName("sdl:seg");
 	                var segmentsCount = segments.Count;
 	                var removedSegments = new List<XmlNode>();
                     foreach (var segment in segments.OfType<XmlElement>())
                     {
-	                    var segmentId = segment.Attributes["id"].Value;
+                        if (CancellationToken.IsCancellationRequested)
+                            break;
+                        var segmentId = segment.Attributes["id"].Value;
 
                         if (removeAllSegments ||
                             !sliceInfo.Segments.Any(seg => seg.Key == transUnitID && seg.Value.Contains(segmentId)))
                             removedSegments.Add((XmlNode) segment);
                     }
                     foreach (var xmlNode in removedSegments.OfType<XmlElement>())
+                    {
+                        if (CancellationToken.IsCancellationRequested)
+                            break;
                         segDef.RemoveChild(xmlNode);
+                    }
                     if (segmentsCount == removedSegments.Count)
                         removedSegDefs.Add(segDef);
                     removedSegments.Clear();
                 }
 
                 foreach (var xmlNode in removedSegDefs.OfType<XmlElement>())
+                {
+                    if (CancellationToken.IsCancellationRequested)
+                        break;
                     transUnit.RemoveChild(xmlNode);
+                }
                 if (segDefsCount == removedSegDefs.Count)
                 {
                     removedTransUnits.Add(transUnit);
@@ -1105,6 +1223,8 @@ namespace SDLXLIFFSliceOrChange
 
             foreach (var xmlNode in removedTransUnits.OfType<XmlElement>())
             {
+                if (CancellationToken.IsCancellationRequested)
+                    break;
                 ((XmlElement) groupElement).RemoveChild(xmlNode);
             }
 

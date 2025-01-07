@@ -16,6 +16,7 @@ using FolderSelect;
 using NLog;
 using Sdl.Core.Globalization;
 using Sdl.Desktop.IntegrationApi.Interfaces;
+using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.Versioning;
 using SdlXliff.Toolkit.Integration;
@@ -24,6 +25,7 @@ using SdlXliff.Toolkit.Integration.Data;
 using SdlXliff.Toolkit.Integration.File;
 using SDLXLIFFSliceOrChange.Data;
 using SDLXLIFFSliceOrChange.ResourceManager;
+using Task = System.Threading.Tasks.Task;
 
 namespace SDLXLIFFSliceOrChange
 {
@@ -52,6 +54,8 @@ namespace SDLXLIFFSliceOrChange
             UpdateManager = new UpdateManager(this);
             _errorProvider = new ErrorProvider();
         }
+
+        private CancellationTokenSource CancellationTokenSource { get; set; }
 
         public SliceManager SliceManager { get; }
 
@@ -86,7 +90,7 @@ namespace SDLXLIFFSliceOrChange
             _setFormSizeChanged = true;
         }
 
-        public void StepProcess(string message, bool lastStep = false)
+        public void StepProcess(bool lastStep = false)
         {
             Invoke((MethodInvoker)delegate
                {
@@ -135,6 +139,8 @@ namespace SDLXLIFFSliceOrChange
         {
             foreach (var targetSegment in targetSegments)
             {
+                if (CancellationTokenSource.Token.IsCancellationRequested) break;
+
                 if (sourceSegments.All(segment => segment.SegmentId != targetSegment.SegmentId))
                 {
                     var maxSID = sourceSegments.Count == 0 ? -1 : sourceSegments.Select(segData => segData.Sid).Max();
@@ -259,7 +265,7 @@ namespace SDLXLIFFSliceOrChange
             var indexes = listDocumentStructure.SelectedIndices.Cast<int>().ToList();
             var doCopySourceToTarget = ckCopySourceToTarget.Checked;
             var doOR = cmbOperator.SelectedIndex == 0;
-            StepProcess("Changing files based on selected options...");
+            StepProcess();
             var t = new Thread(() => DoChangeNow(selectedTabIndex, indexes, doCopySourceToTarget, doOR));
             t.Start();
         }
@@ -274,7 +280,7 @@ namespace SDLXLIFFSliceOrChange
                 return;
             }
             ShowProcess();
-            StepProcess("Clearing target segments from selected files ...");
+            StepProcess();
             var selectedTabIndex = tabControl1.SelectedIndex;
             var selectedDSIndexes = listDocumentStructure.SelectedIndices.Cast<int>().ToList();
             var doOR = cmbOperator.SelectedIndex == 0;
@@ -367,7 +373,7 @@ namespace SDLXLIFFSliceOrChange
                 (String.IsNullOrEmpty(txtSourceSearch.Text) && String.IsNullOrEmpty(txtTargetSearch.Text)))
                 return;
             ShowProcess();
-            StepProcess("Finding in files ...");
+            StepProcess();
             var doOR = cmbOperator.SelectedIndex == 0;
             var t = new Thread(() => DoFindNow(doOR));
             t.Start();
@@ -382,7 +388,7 @@ namespace SDLXLIFFSliceOrChange
 
             _doUpdateStatus = false;
             ShowProcess();
-            StepProcess("Finding in files before replace ...");
+            StepProcess();
 
             var sourceSettings = String.IsNullOrEmpty(txtReplaceSourceSearch.Text)
                                      ? null
@@ -433,13 +439,12 @@ namespace SDLXLIFFSliceOrChange
             var files =
                 (from DataGridViewRow row in gridXLIFFFiles.SelectedRows select row.Cells[0].Value.ToString()).ToList();
             _structureInformationTypes.Clear();
-            StepProcess("Reading Document Structure information from files...", false);
+            StepProcess(false);
             var trd = new Thread(() =>
                 {
                     foreach (var file in files)
                     {
-                        StepProcess(
-                            "Reading Document Structure information from file: " + Path.GetFileName(file) + ".", false);
+                        StepProcess(false);
                         using (var reader = XmlReader.Create(file))
                         {
                             while (reader.Read())
@@ -496,7 +501,7 @@ namespace SDLXLIFFSliceOrChange
                             }
                         }
                     }
-                    StepProcess("Displaying Document Structure information ...", true);
+                    StepProcess(true);
                     DisplayDSI();
                 });
             trd.Start();
@@ -511,13 +516,13 @@ namespace SDLXLIFFSliceOrChange
 
             _doUpdateStatus = false;
             ShowProcess();
-            StepProcess("Generating replace preview ...");
+            StepProcess();
             var t = new Thread(() =>
                 {
                     DoReplacePreviewOperation();
 
                     BindReplaceResults();
-                    StepProcess("Preview generated.", true);
+                    StepProcess(true);
                 });
             t.Start();
         }
@@ -529,7 +534,7 @@ namespace SDLXLIFFSliceOrChange
             if (!files.Any())
                 return;
             ShowProcess();
-            StepProcess("Replacing in files ...");
+            StepProcess();
             var t = new Thread(() => DoReplaceNow(files));
             t.Start();
         }
@@ -651,14 +656,15 @@ namespace SDLXLIFFSliceOrChange
                     return;
                 }
                 ShowProcess();
-                StepProcess("Sliceing files ...", false);
+                StepProcess(false);
 
                 var selectedTabIndex = tabControl1.SelectedIndex;
                 var selectedDSIndexes = listDocumentStructure.SelectedIndices.Cast<int>().ToList();
                 var doMerge = ckMerge.Checked;
                 var doOR = cmbOperator.SelectedIndex == 0;
-                var t = new Thread(() => DoSliceNow(selectedTabIndex, selectedDSIndexes, doMerge, doOR));
-                t.Start();
+
+                CancellationTokenSource = new CancellationTokenSource();
+                Task.Run(() => DoSliceNow(selectedTabIndex, selectedDSIndexes, doMerge, doOR), CancellationTokenSource.Token);
             }
         }
 
@@ -706,7 +712,7 @@ namespace SDLXLIFFSliceOrChange
             var threads = new List<Thread>();
             foreach (var sliceInfo in _segmentsToBeSliced)
             {
-                StepProcess("Clearing file: " + Path.GetFileName(sliceInfo.File) + ".");
+                StepProcess();
 
                 var t = new Thread(() => ClearManager.ClearFile(sliceInfo, this));
                 t.Start();
@@ -742,7 +748,7 @@ namespace SDLXLIFFSliceOrChange
             var threads = new List<Thread>();
             foreach (var sliceInfo in _segmentsToBeSliced)
             {
-                StepProcess("Copying in file: " + Path.GetFileName(sliceInfo.File) + ".");
+                StepProcess();
 
                 var t = new Thread(() => ClearManager.CopyFile(sliceInfo, this));
                 t.Start();
@@ -755,12 +761,20 @@ namespace SDLXLIFFSliceOrChange
         private void CopyFilesFromTempFolder(List<KeyValuePair<string, List<string>>> filesPerLanguage)
         {
             foreach (var keyValuePair in filesPerLanguage)
+            {
+                if (CancellationTokenSource.Token.IsCancellationRequested)
+                    break;
+
                 foreach (var file in keyValuePair.Value)
                 {
+                    if (CancellationTokenSource.Token.IsCancellationRequested)
+                        break;
+
                     File.Copy(file,
-                              Path.Combine(_folderForSlicedFiles,
-                                           Path.GetFileName(file).Replace(".sdlxliff", "_sliced.sdlxliff")));
+                        Path.Combine(_folderForSlicedFiles,
+                            Path.GetFileName(file).Replace(".sdlxliff", "_sliced.sdlxliff")));
                 }
+            }
         }
 
         private void DisplayDSI()
@@ -786,16 +800,16 @@ namespace SDLXLIFFSliceOrChange
 
             if (doCopySourceToTarget)
             {
-                StepProcess("Copying source to target in selected files ...");
+                StepProcess();
                 DoCopySourceNow(selectedTabIndex, indexes, doOR);
             }
 
-            StepProcess("Files are changed based on selected options.", true);
+            StepProcess(true);
         }
 
         private void DoClearDow(int selectedTabIndex, List<int> selectedDSIndexes, bool doOR)
         {
-            StepProcess("Processing files ...");
+            StepProcess();
             if (selectedTabIndex == 1)
             {
                 _doUpdateStatus = false;
@@ -849,14 +863,14 @@ namespace SDLXLIFFSliceOrChange
                 _segmentsToBeSliced.Clear();
                 ProcessFileBasedOnStatuses(selectedDSIndexes, true);
             }
-            StepProcess("Clearing files ...");
+            StepProcess();
             ClearFiles();
-            StepProcess("Target segments from selected files are clear.", true);
+            StepProcess(true);
         }
 
         private void DoCopySourceNow(int selectedTabIndex, IEnumerable<int> selectedDSIndexes, bool doOR)
         {
-            StepProcess("Processing files ...");
+            StepProcess();
             if (selectedTabIndex == 1)
             {
                 _doUpdateStatus = false;
@@ -910,9 +924,9 @@ namespace SDLXLIFFSliceOrChange
                 _segmentsToBeSliced.Clear();
                 ProcessFileBasedOnStatuses(selectedDSIndexes, true);
             }
-            StepProcess("Copying source to target ...");
+            StepProcess();
             CopyFiles();
-            StepProcess("Source segments from selected files are copied to target.", true);
+            StepProcess(true);
         }
 
         private void DoFindForReplaceNow(SearchSettings sourceSettings, SearchSettings targetSettings)
@@ -920,13 +934,13 @@ namespace SDLXLIFFSliceOrChange
             FindInFilesForReplace(sourceSettings, targetSettings);
 
             BindReplaceResults();
-            StepProcess("Find before replace completed.", true);
+            StepProcess(true);
         }
 
         private void DoFindNow(bool doOR)
         {
             StartFind(false, doOR);
-            StepProcess("Find completed.", true);
+            StepProcess(true);
         }
 
         private void DoReplaceNow(IEnumerable<string> files)
@@ -935,12 +949,12 @@ namespace SDLXLIFFSliceOrChange
                 DoReplacePreviewOperation();
             ChangeInFiles(files);
             BindReplaceResults();
-            StepProcess("Replace completed.", true);
+            StepProcess(true);
         }
 
         private void DoReplacePreviewOperation()
         {
-            StepProcess("Preparing files for replace operation ...");
+            StepProcess();
             var sourceSettings = string.IsNullOrEmpty(txtReplaceSourceSearch.Text)
                                      ? null
                                      : new SearchSettings()
@@ -987,7 +1001,7 @@ namespace SDLXLIFFSliceOrChange
 
         private void DoSliceNow(int selectedTab, IEnumerable<int> indexes, bool doMerge, bool doOR)
         {
-            StepProcess("Processing files based on slice information ...", false);
+            StepProcess(false);
             var filesToBeSliced = SplitMergedXliffFiles();
             if (!filesToBeSliced.Any()) return;
             if (selectedTab == 1)
@@ -998,8 +1012,14 @@ namespace SDLXLIFFSliceOrChange
                 _segmentsToBeSliced.Clear();
                 foreach (var searchResult in _searchResults)
                 {
+                    if (CancellationTokenSource.Token.IsCancellationRequested)
+                        break;
+
                     foreach (var searchSourceResult in searchResult.SearchSourceResults)
                     {
+                        if (CancellationTokenSource.Token.IsCancellationRequested)
+                            break;
+
                         var SegmentId = searchSourceResult.Value.SegmentId.ToString(CultureInfo.InvariantCulture);
                         var transUnitID = searchSourceResult.Value.SegmentContent.ParentParagraphUnit.Properties.ParagraphUnitId.Id;
                         var file = searchResult.FilePath;
@@ -1036,13 +1056,13 @@ namespace SDLXLIFFSliceOrChange
                 ProcessFileBasedOnStatuses(indexes, true, filesToBeSliced);
             }
 
-            StepProcess("Slice files ...", false);
+            StepProcess(false);
             SliceFiles(doMerge);
 
             var folder = Path.GetDirectoryName(filesToBeSliced.Select(kvp => kvp.Value).ToList()[0]);
             if (folder != null) Directory.Delete(folder, true);
 
-            StepProcess("Files were successfully sliced.", true);
+            StepProcess(true);
         }
 
         private void EnsureUIBasedOnCultureInfo(string culture)
@@ -1147,7 +1167,7 @@ namespace SDLXLIFFSliceOrChange
             var files = filesToBeSliced ?? (from DataGridViewRow row in gridXLIFFFiles.SelectedRows select row.Cells[0].Value.ToString()).ToList();
             if (_searchResults != null)
                 _searchResults.Clear();
-            StepProcess("Looking in source segments ...");
+            StepProcess();
             var settings = new SearchSettings()
             {
                 SearchText = txtSourceSearch.Text,
@@ -1184,7 +1204,7 @@ namespace SDLXLIFFSliceOrChange
             SearchSettings targetSettings = null;
             if (searchInTarget)
             {
-                StepProcess("Looking in target segments ...");
+                StepProcess();
                 settings.SearchText = txtTargetSearch.Text;
                 settings.ReplaceText = txtTargetSearch.Text;
                 settings.SearchInSource = false;
@@ -1200,11 +1220,13 @@ namespace SDLXLIFFSliceOrChange
                     _searchResults = targetResult;
                 else
                 {
-                    StepProcess("Merging source and target segments ...");
+                    StepProcess();
                     var fileDataToBeAdded = new List<FileData>();
                     var fileDataToBeRemoved = new List<FileData>();
                     foreach (var fileData in _searchResults)
                     {
+                        if (CancellationTokenSource.Token.IsCancellationRequested) break;
+
                         var file = fileData.FilePath;
                         var targetFileData = targetResult.FirstOrDefault(data => data.FilePath == file);
                         if (targetFileData != null)
@@ -1222,6 +1244,9 @@ namespace SDLXLIFFSliceOrChange
                     var lenghtOfFilesToBeAdded = fileDataToBeAdded.Count;
                     for (var i = 0; i < fileDataToBeRemoved.Count; i++)
                     {
+                        if (CancellationTokenSource.Token.IsCancellationRequested)
+                            break;
+
                         _searchResults.Remove(fileDataToBeRemoved[i]);
                         if (i < lenghtOfFilesToBeAdded)
                             _searchResults.Insert(i, fileDataToBeAdded[i]);
@@ -1247,7 +1272,7 @@ namespace SDLXLIFFSliceOrChange
                 (from DataGridViewRow row in gridXLIFFFiles.SelectedRows select row.Cells[0].Value.ToString()).ToList();
             if (_replaceResults != null)
                 _replaceResults.Clear();
-            StepProcess("Processing source segments ...");
+            StepProcess();
 
             if (sourceSettings != null && !String.IsNullOrEmpty(sourceSettings.SearchText))
             {
@@ -1259,7 +1284,7 @@ namespace SDLXLIFFSliceOrChange
             searchInTarget = targeSettings != null && !String.IsNullOrEmpty(targeSettings.SearchText);
             if (searchInTarget)
             {
-                StepProcess("Processing target segments ...");
+                StepProcess();
                 var analyzer = new FilesAnalyzer(files);
                 analyzer.SearchInFiles(targeSettings);
                 var targetResult = analyzer.FileResults;
@@ -1537,6 +1562,9 @@ namespace SDLXLIFFSliceOrChange
             var checkBoxes = groupBox.Controls.OfType<CheckBox>();
             foreach (var checkBox in checkBoxes)
             {
+                if (CancellationTokenSource.Token.IsCancellationRequested)
+                    break;
+
                 if (checkBox.Checked)
                     return true;
             }
@@ -1593,20 +1621,29 @@ namespace SDLXLIFFSliceOrChange
 
         private void PostProcessSearchResult(IEnumerable<FileData> results, SearchSettings sourceSettings = null, SearchSettings targetSettings = null)
         {
-            StepProcess("Post processing search result ...");
+            StepProcess();
 
             if (results is null || !results.Any()) return;
 
             foreach (var fileData in results)
             {
-                StepProcess("Post processing search result for file: " + Path.GetFileName(fileData.FilePath) + " ...");
+                if (CancellationTokenSource.Token.IsCancellationRequested)
+                    break;
+
+                StepProcess();
                 if (sourceSettings != null && sourceSettings.SearchInTag && fileData.SearchSourceResults.Any(ssr => ssr.Value.Tags.Count > 0))
                 {
                     var sResults = fileData.SearchSourceResults.Where(ssr => ssr.Value.Tags.Count > 0);
                     foreach (var sResult in sResults)
                     {
+                        if (CancellationTokenSource.Token.IsCancellationRequested)
+                            break;
+
                         for (var i = 0; i < sResult.Value.Tags.Count; i++)
                         {
+                            if (CancellationTokenSource.Token.IsCancellationRequested)
+                                break;
+
                             var tag = sResult.Value.Tags[i];
                             if (tag.TagText.StartsWith("</"))
                                 continue;
@@ -1626,14 +1663,20 @@ namespace SDLXLIFFSliceOrChange
                 if (sourceSettings != null && sourceSettings.UseRegex &&
                     fileData.SearchSourceResults.Any(sr => sr.Value.MatchesCount > 0))
                 {
-                    StepProcess("Post processing source result ...");
+                    StepProcess();
                     var sResults = fileData.SearchSourceResults.Where(sr => sr.Value.MatchesCount > 0);
                     foreach (var sResult in sResults)
                     {
+                        if (CancellationTokenSource.Token.IsCancellationRequested)
+                            break;
+
                         var sResultText = sResult.Value.SegmentText;
                         var searchResultsToRemove = new List<IndexData>();
                         foreach (var searchResult in sResult.Value.SearchResults)
                         {
+                            if (CancellationTokenSource.Token.IsCancellationRequested)
+                                break;
+
                             if (!Regex.IsMatch(sResultText, sourceSettings.SearchText, !sourceSettings.MatchCase ? RegexOptions.IgnoreCase : RegexOptions.None))
                             {
                                 searchResultsToRemove.Add(searchResult);
@@ -1642,6 +1685,9 @@ namespace SDLXLIFFSliceOrChange
 
                         foreach (var indexData in searchResultsToRemove)
                         {
+                            if (CancellationTokenSource.Token.IsCancellationRequested)
+                                break;
+
                             sResult.Value.SearchResults.Remove(indexData);
                         }
                     }
@@ -1652,6 +1698,8 @@ namespace SDLXLIFFSliceOrChange
                     var sResults = fileData.SearchTargetResults.Where(ssr => ssr.Value.Tags.Count > 0);
                     foreach (var sResult in sResults)
                     {
+                        if (CancellationTokenSource.Token.IsCancellationRequested)
+                            break;
                         for (var i = 0; i < sResult.Value.Tags.Count; i++)
                         {
                             var tag = sResult.Value.Tags[i];
@@ -1671,14 +1719,20 @@ namespace SDLXLIFFSliceOrChange
                 if (targetSettings != null && targetSettings.UseRegex &&
                     fileData.SearchTargetResults.Any(sr => sr.Value.MatchesCount > 0))
                 {
-                    StepProcess("Post processing target result ...");
+                    StepProcess();
                     var sResults = fileData.SearchTargetResults.Where(sr => sr.Value.MatchesCount > 0);
                     foreach (var sResult in sResults)
                     {
+                        if (CancellationTokenSource.Token.IsCancellationRequested)
+                            break;
+
                         var tResultText = sResult.Value.SegmentText;
                         var searchResultsToRemove = new List<IndexData>();
                         foreach (var searchResult in sResult.Value.SearchResults)
                         {
+                            if (CancellationTokenSource.Token.IsCancellationRequested)
+                                break;
+
                             if (!Regex.IsMatch(tResultText, targetSettings.SearchText, !targetSettings.MatchCase ? RegexOptions.IgnoreCase : RegexOptions.None))
                             {
                                 searchResultsToRemove.Add(searchResult);
@@ -1687,12 +1741,15 @@ namespace SDLXLIFFSliceOrChange
 
                         foreach (var indexData in searchResultsToRemove)
                         {
+                            if (CancellationTokenSource.Token.IsCancellationRequested)
+                                break;
+
                             sResult.Value.SearchResults.Remove(indexData);
                         }
                     }
                 }
             }
-            StepProcess("Post processing completed.");
+            StepProcess();
         }
 
         private void ProcessFileBasedOnStatuses(IEnumerable<int> indexes, bool forSlice = false, List<KeyValuePair<string, string>> filesToBeSliced = null)
@@ -1701,6 +1758,9 @@ namespace SDLXLIFFSliceOrChange
             var threads = new List<Thread>();
             foreach (var file in files)
             {
+                if (CancellationTokenSource.Token.IsCancellationRequested)
+                    break;
+
                 var t = new Thread(() => ProcessOneFileBasedOnStatuses(forSlice, file, indexes, filesToBeSliced));
                 t.Start();
                 threads.Add(t);
@@ -1713,7 +1773,7 @@ namespace SDLXLIFFSliceOrChange
 
         private void ProcessOneFileBasedOnStatuses(bool forSlice, string file, IEnumerable<int> DSSelectedIndexes, List<KeyValuePair<string, string>> filesToBeSliced)
         {
-            StepProcess("Processing file: " + Path.GetFileName(file) + ". ", false);
+            StepProcess(false);
             var xDoc = new XmlDocument();
             xDoc.PreserveWhitespace = true;
 
@@ -1744,10 +1804,16 @@ namespace SDLXLIFFSliceOrChange
                 {
                     foreach (var fileElement in fileList.OfType<XmlElement>())
                     {
+                        if (CancellationTokenSource.Token.IsCancellationRequested)
+                            break;
+
                         var bodyElement = (XmlElement)(fileElement.GetElementsByTagName("body")[0]);
                         var groupElements = bodyElement.GetElementsByTagName("group");
                         foreach (var groupElement in groupElements.OfType<XmlElement>())
                         {
+                            if (CancellationTokenSource.Token.IsCancellationRequested)
+                                break;
+
                             ProcessOnFileBasedOnStatusesInBody(forSlice, file, DSSelectedIndexes, originalFile, groupElement);
                         }
                         ProcessOnFileBasedOnStatusesInBody(forSlice, file, DSSelectedIndexes, originalFile, bodyElement);
@@ -1782,6 +1848,9 @@ namespace SDLXLIFFSliceOrChange
                     var selectedIDs = new List<string>();
                     foreach (var index in DSSelectedIndexes)
                     {
+                        if (CancellationTokenSource.Token.IsCancellationRequested)
+                            break;
+
                         if (_structureInformationTypes[index].IDs.Any(f => f.Key == originalFile))
                         {
                             var fileIDs = _structureInformationTypes[index].IDs.FirstOrDefault(f => f.Key == originalFile);
@@ -1791,12 +1860,18 @@ namespace SDLXLIFFSliceOrChange
                     var cxtDefs = ((XmlNode)groupElement).ChildNodes;
                     foreach (var cxtDef in cxtDefs.OfType<XmlElement>())
                     {
+                        if (CancellationTokenSource.Token.IsCancellationRequested)
+                            break;
+
                         if (cxtDef.Name != "sdl:cxts")
                             continue;
 
                         var cxts = cxtDef.ChildNodes;
                         foreach (var cxt in cxts.OfType<XmlElement>())
                         {
+                            if (CancellationTokenSource.Token.IsCancellationRequested)
+                                break;
+
                             if (cxt.Name != "sdl:cxt")
                                 continue;
 
@@ -1822,6 +1897,9 @@ namespace SDLXLIFFSliceOrChange
                 var transUnits = ((XmlElement)groupElement).ChildNodes; ;
                 foreach (var transUnit in transUnits.OfType<XmlElement>())
                 {
+                    if (CancellationTokenSource.Token.IsCancellationRequested)
+                        break;
+
                     if ((transUnit).Name != "trans-unit")
                         continue;
 
@@ -1830,6 +1908,9 @@ namespace SDLXLIFFSliceOrChange
                     var segDefs = (transUnit).ChildNodes;
                     foreach (var segDef in segDefs.OfType<XmlElement>())
                     {
+                        if (CancellationTokenSource.Token.IsCancellationRequested)
+                            break;
+
                         if ((segDef).Name != "sdl:seg-defs")
                             continue;
 
@@ -1839,6 +1920,9 @@ namespace SDLXLIFFSliceOrChange
 
                         foreach (var segment in segments.OfType<XmlElement>())
                         {
+                            if (CancellationTokenSource.Token.IsCancellationRequested)
+                                break;
+
                             if (segment.Name != "sdl:seg")
                                 continue;
 
@@ -1936,12 +2020,17 @@ namespace SDLXLIFFSliceOrChange
             var segmentsToBeRemoved = new List<SegmentData>();
             foreach (var sourceSegment in sourceSegments)
             {
+                if (CancellationTokenSource.Token.IsCancellationRequested) break;
+
                 if (targetSegments.Any(segment => segment.SegmentId == sourceSegment.SegmentId))
                     continue;
                 segmentsToBeRemoved.Add(sourceSegment);
             }
             foreach (var segmentData in segmentsToBeRemoved)
+            {
+                if (CancellationTokenSource.Token.IsCancellationRequested) break;
                 sourceSegments.Remove(segmentData);
+            }
 
             return sourceSegments;
         }
@@ -1955,7 +2044,7 @@ namespace SDLXLIFFSliceOrChange
 
             foreach (var fileData in _replaceResults)
             {
-                StepProcess("Preparing replace information for file:" + Path.GetFileName(fileData.FilePath) + " ...");
+                StepProcess();
                 var sourceSegments = new List<SegmentData>();
                 var targetSegments = new List<SegmentData>();
                 foreach (var sourceSegment in fileData.SearchSourceResults)
@@ -2015,10 +2104,10 @@ namespace SDLXLIFFSliceOrChange
 
                 fileDataToBeAdded.Add(fileToBeAdded);
                 fileDataToBeRemoved.Add(fileData);
-                StepProcess("File:" + Path.GetFileName(fileData.FilePath) + " ready.");
+                StepProcess();
             }
 
-            StepProcess("Preparing the view ...");
+            StepProcess();
             var lenghtOfFilesToBeAdded = fileDataToBeAdded.Count;
             for (var i = 0; i < fileDataToBeRemoved.Count; i++)
             {
@@ -2133,10 +2222,17 @@ namespace SDLXLIFFSliceOrChange
             var filesPerLanguage = new List<KeyValuePair<string, List<string>>>();
             foreach (var sliceInfo in _segmentsToBeSliced)
             {
+                if (CancellationTokenSource.Token.IsCancellationRequested)
+                    break;
+
                 var destinationDirectory = Path.Combine(tempFolderForSlicedFiles, Path.GetFileName(Path.GetDirectoryName(sliceInfo.File)));
                 if (!Directory.Exists(destinationDirectory))
                     Directory.CreateDirectory(destinationDirectory);
                 var destinationFile = Path.Combine(destinationDirectory, Path.GetFileName(sliceInfo.File));
+
+                if (CancellationTokenSource.Token.IsCancellationRequested)
+                    break;
+
                 File.Copy(sliceInfo.File, destinationFile, true);
 
                 var language = string.Empty;
@@ -2157,13 +2253,13 @@ namespace SDLXLIFFSliceOrChange
                 else
                     filesPerLanguage.Add(new KeyValuePair<string, List<string>>(language, new List<string> { destinationFile }));
 
-                SliceManager.SliceFile(destinationFile, sliceInfo);
+                SliceManager.SliceFile(destinationFile, sliceInfo, CancellationTokenSource.Token);
             }
 
             if (doMerge)
             {
-                StepProcess("Merging sliced files ...", false);
-                SliceManager.MergeSplitFiles(filesPerLanguage);
+                StepProcess(false);
+                SliceManager.MergeSplitFiles(filesPerLanguage, CancellationTokenSource.Token);
             }
             else
             {
@@ -2184,6 +2280,7 @@ namespace SDLXLIFFSliceOrChange
             {
                 foreach (var docInfo in docInfos.OfType<XmlElement>())
                 {
+                    if (CancellationTokenSource.Token.IsCancellationRequested) break;
                     docInfoText += docInfo.OuterXml;
                 }
             }
@@ -2198,6 +2295,9 @@ namespace SDLXLIFFSliceOrChange
             var fileNameTemplate = Path.Combine(folder, string.Format("{0}{1}.{2}", Path.GetFileNameWithoutExtension(filePath), "_{0}", Path.GetExtension(filePath)));
             foreach (var file in fileList.OfType<XmlElement>())
             {
+                if (CancellationTokenSource.Token.IsCancellationRequested)
+                    break;
+
                 var fileText = file.OuterXml;
                 var fileName = string.Format(fileNameTemplate, Guid.NewGuid().ToString());
                 using (var sw = new StreamWriter(fileName, false))
@@ -2219,7 +2319,10 @@ namespace SDLXLIFFSliceOrChange
             var folder = Path.Combine(_folderForSlicedFiles, Guid.NewGuid().ToString());
 
             foreach (var result in files.Select(file => SplitMergedXliffFile(file, folder)))
+            {
+                if (CancellationTokenSource.Token.IsCancellationRequested) break;
                 splitFiles.AddRange(result);
+            }
 
             return splitFiles;
         }
@@ -2323,7 +2426,10 @@ namespace SDLXLIFFSliceOrChange
         {
             foreach (var fileData in searchResult)
             {
-                StepProcess("Updating file: " + Path.GetFileName(fileData.FilePath) + " ...");
+                if (CancellationTokenSource.Token.IsCancellationRequested)
+                    break;
+
+                StepProcess();
 
                 if (fileData.SearchSourceResults.Count == 0)
                     continue;
@@ -2345,10 +2451,16 @@ namespace SDLXLIFFSliceOrChange
                     var fileList = xDoc.DocumentElement.GetElementsByTagName("file");
                     foreach (var fileElement in fileList.OfType<XmlElement>())
                     {
+                        if (CancellationTokenSource.Token.IsCancellationRequested)
+                            break;
+
                         var bodyElement = (XmlElement)(fileElement.GetElementsByTagName("body")[0]);
                         var groupElements = bodyElement.GetElementsByTagName("group");
                         foreach (var groupElement in groupElements.OfType<XmlElement>())
                         {
+                            if (CancellationTokenSource.Token.IsCancellationRequested)
+                                break;
+
                             UpdateFileBasedOnResultsInBody(groupElement, fileData);
                         }
 
@@ -2363,7 +2475,7 @@ namespace SDLXLIFFSliceOrChange
                         xDoc.Save(writer);
                     }
 
-                    StepProcess("File: " + Path.GetFileName(fileData.FilePath) + " was updated.");
+                    StepProcess();
                 }
 
                 catch (Exception ex)
@@ -2378,6 +2490,9 @@ namespace SDLXLIFFSliceOrChange
             var elements = ((XmlElement)groupElement).ChildNodes;
             foreach (var element in elements.OfType<XmlElement>())
             {
+                if (CancellationTokenSource.Token.IsCancellationRequested)
+                    break;
+
                 try
                 {
                     if (!element.HasAttribute("id")) continue;
@@ -2392,10 +2507,16 @@ namespace SDLXLIFFSliceOrChange
                         var segDefs = element.ChildNodes;
                         foreach (var segDef in segDefs.OfType<XmlElement>())
                         {
+                            if (CancellationTokenSource.Token.IsCancellationRequested)
+                                break;
+
                             if (segDef.Name != "sdl:seg-defs") continue;
                             var segments = segDef.ChildNodes;
                             foreach (var segment in segments.OfType<XmlElement>())
                             {
+                                if (CancellationTokenSource.Token.IsCancellationRequested)
+                                    break;
+
                                 if (segment.Name != "sdl:seg") continue;
 
                                 if (Convert.ToInt32(segment.Attributes["id"].Value) == segmentId)
@@ -2466,6 +2587,8 @@ namespace SDLXLIFFSliceOrChange
 
             foreach (var targetSegment in targetSegments)
             {
+                if (CancellationTokenSource.Token.IsCancellationRequested)
+                    break;
                 var sourceSegment =
                     sourceSegments.FirstOrDefault(seg => seg.SegmentId == targetSegment.SegmentId);
                 if (sourceSegment == null)
@@ -2483,6 +2606,12 @@ namespace SDLXLIFFSliceOrChange
             }
 
             return segments;
+        }
+
+        private void CancelButton_Click(object sender, EventArgs e)
+        {
+            CancellationTokenSource.Cancel();
+            HideProcess();
         }
     }
 }

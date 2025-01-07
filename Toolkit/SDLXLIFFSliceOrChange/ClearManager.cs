@@ -67,7 +67,7 @@ namespace SDLXLIFFSliceOrChange
                 {
                     xDoc.Save(writer);
                 }
-                form.StepProcess("Target segments from file: " + Path.GetFileName(sliceInfo.File) + " are empty.");
+                form.StepProcess();
             }
             catch(Exception ex)
             {
@@ -185,7 +185,7 @@ namespace SDLXLIFFSliceOrChange
                 {
                     xDoc.Save(writer);
                 }
-                form.StepProcess("Source segments from file: " + Path.GetFileName(sliceInfo.File) + " are copied.");
+                form.StepProcess();
             }
             catch (Exception ex)
             {
