@@ -139,7 +139,7 @@ namespace SDLXLIFFSliceOrChange
         {
             foreach (var targetSegment in targetSegments)
             {
-                if (CancellationTokenSource.Token.IsCancellationRequested) break;
+                if (IsCancellationRequested()) break;
 
                 if (sourceSegments.All(segment => segment.SegmentId != targetSegment.SegmentId))
                 {
@@ -253,6 +253,8 @@ namespace SDLXLIFFSliceOrChange
 
         private void btnChangeit_Click(object sender, EventArgs e)
         {
+            RenewCancellationTokenSource();
+
             var resources = new UIResources(Settings.GetSavedCulture());
             if (gridXLIFFFiles.SelectedRows.Count == 0)
             {
@@ -272,6 +274,8 @@ namespace SDLXLIFFSliceOrChange
 
         private void btnClearit_Click(object sender, EventArgs e)
         {
+            RenewCancellationTokenSource();
+
             var resources = new UIResources(Settings.GetSavedCulture());
             if (gridXLIFFFiles.SelectedRows.Count == 0)
             {
@@ -369,6 +373,8 @@ namespace SDLXLIFFSliceOrChange
 
         private void btnFindAll_Click(object sender, EventArgs e)
         {
+            RenewCancellationTokenSource();
+
             if (gridXLIFFFiles.SelectedRows.Count == 0 ||
                 (String.IsNullOrEmpty(txtSourceSearch.Text) && String.IsNullOrEmpty(txtTargetSearch.Text)))
                 return;
@@ -381,6 +387,8 @@ namespace SDLXLIFFSliceOrChange
 
         private void btnFindAllInReplace_Click(object sender, EventArgs e)
         {
+            RenewCancellationTokenSource();
+
             if (gridXLIFFFiles.SelectedRows.Count == 0)
                 return;
             if (String.IsNullOrEmpty(txtReplaceSourceSearch.Text) && String.IsNullOrEmpty(txtReplaceTargetSearch.Text))
@@ -431,6 +439,11 @@ namespace SDLXLIFFSliceOrChange
                                      };
             var t = new Thread(() => DoFindForReplaceNow(sourceSettings, targetSettings));
             t.Start();
+        }
+
+        private void RenewCancellationTokenSource()
+        {
+            CancellationTokenSource = new CancellationTokenSource();
         }
 
         private void btnGenerateDSI_Click(object sender, EventArgs e)
@@ -509,6 +522,8 @@ namespace SDLXLIFFSliceOrChange
 
         private void btnPreview_Click(object sender, EventArgs e)
         {
+            RenewCancellationTokenSource();
+
             if (gridXLIFFFiles.SelectedRows.Count == 0)
                 return;
             if (string.IsNullOrEmpty(txtReplaceSourceSearch.Text) && String.IsNullOrEmpty(txtReplaceTargetSearch.Text))
@@ -529,6 +544,8 @@ namespace SDLXLIFFSliceOrChange
 
         private void btnReplace_Click(object sender, EventArgs e)
         {
+            RenewCancellationTokenSource();
+
             var files =
                 (from DataGridViewRow row in gridXLIFFFiles.SelectedRows select row.Cells[0].Value.ToString());
             if (!files.Any())
@@ -663,7 +680,7 @@ namespace SDLXLIFFSliceOrChange
                 var doMerge = ckMerge.Checked;
                 var doOR = cmbOperator.SelectedIndex == 0;
 
-                CancellationTokenSource = new CancellationTokenSource();
+                RenewCancellationTokenSource();
                 Task.Run(() => DoSliceNow(selectedTabIndex, selectedDSIndexes, doMerge, doOR), CancellationTokenSource.Token);
             }
         }
@@ -762,12 +779,12 @@ namespace SDLXLIFFSliceOrChange
         {
             foreach (var keyValuePair in filesPerLanguage)
             {
-                if (CancellationTokenSource.Token.IsCancellationRequested)
+                if (IsCancellationRequested())
                     break;
 
                 foreach (var file in keyValuePair.Value)
                 {
-                    if (CancellationTokenSource.Token.IsCancellationRequested)
+                    if (IsCancellationRequested())
                         break;
 
                     File.Copy(file,
@@ -776,6 +793,8 @@ namespace SDLXLIFFSliceOrChange
                 }
             }
         }
+
+        private bool IsCancellationRequested() => CancellationTokenSource.Token.IsCancellationRequested;
 
         private void DisplayDSI()
         {
@@ -1012,12 +1031,12 @@ namespace SDLXLIFFSliceOrChange
                 _segmentsToBeSliced.Clear();
                 foreach (var searchResult in _searchResults)
                 {
-                    if (CancellationTokenSource.Token.IsCancellationRequested)
+                    if (IsCancellationRequested())
                         break;
 
                     foreach (var searchSourceResult in searchResult.SearchSourceResults)
                     {
-                        if (CancellationTokenSource.Token.IsCancellationRequested)
+                        if (IsCancellationRequested())
                             break;
 
                         var SegmentId = searchSourceResult.Value.SegmentId.ToString(CultureInfo.InvariantCulture);
@@ -1225,7 +1244,7 @@ namespace SDLXLIFFSliceOrChange
                     var fileDataToBeRemoved = new List<FileData>();
                     foreach (var fileData in _searchResults)
                     {
-                        if (CancellationTokenSource.Token.IsCancellationRequested) break;
+                        if (IsCancellationRequested()) break;
 
                         var file = fileData.FilePath;
                         var targetFileData = targetResult.FirstOrDefault(data => data.FilePath == file);
@@ -1244,7 +1263,7 @@ namespace SDLXLIFFSliceOrChange
                     var lenghtOfFilesToBeAdded = fileDataToBeAdded.Count;
                     for (var i = 0; i < fileDataToBeRemoved.Count; i++)
                     {
-                        if (CancellationTokenSource.Token.IsCancellationRequested)
+                        if (IsCancellationRequested())
                             break;
 
                         _searchResults.Remove(fileDataToBeRemoved[i]);
@@ -1562,7 +1581,7 @@ namespace SDLXLIFFSliceOrChange
             var checkBoxes = groupBox.Controls.OfType<CheckBox>();
             foreach (var checkBox in checkBoxes)
             {
-                if (CancellationTokenSource.Token.IsCancellationRequested)
+                if (IsCancellationRequested())
                     break;
 
                 if (checkBox.Checked)
@@ -1627,7 +1646,7 @@ namespace SDLXLIFFSliceOrChange
 
             foreach (var fileData in results)
             {
-                if (CancellationTokenSource.Token.IsCancellationRequested)
+                if (IsCancellationRequested())
                     break;
 
                 StepProcess();
@@ -1636,12 +1655,12 @@ namespace SDLXLIFFSliceOrChange
                     var sResults = fileData.SearchSourceResults.Where(ssr => ssr.Value.Tags.Count > 0);
                     foreach (var sResult in sResults)
                     {
-                        if (CancellationTokenSource.Token.IsCancellationRequested)
+                        if (IsCancellationRequested())
                             break;
 
                         for (var i = 0; i < sResult.Value.Tags.Count; i++)
                         {
-                            if (CancellationTokenSource.Token.IsCancellationRequested)
+                            if (IsCancellationRequested())
                                 break;
 
                             var tag = sResult.Value.Tags[i];
@@ -1667,14 +1686,14 @@ namespace SDLXLIFFSliceOrChange
                     var sResults = fileData.SearchSourceResults.Where(sr => sr.Value.MatchesCount > 0);
                     foreach (var sResult in sResults)
                     {
-                        if (CancellationTokenSource.Token.IsCancellationRequested)
+                        if (IsCancellationRequested())
                             break;
 
                         var sResultText = sResult.Value.SegmentText;
                         var searchResultsToRemove = new List<IndexData>();
                         foreach (var searchResult in sResult.Value.SearchResults)
                         {
-                            if (CancellationTokenSource.Token.IsCancellationRequested)
+                            if (IsCancellationRequested())
                                 break;
 
                             if (!Regex.IsMatch(sResultText, sourceSettings.SearchText, !sourceSettings.MatchCase ? RegexOptions.IgnoreCase : RegexOptions.None))
@@ -1685,7 +1704,7 @@ namespace SDLXLIFFSliceOrChange
 
                         foreach (var indexData in searchResultsToRemove)
                         {
-                            if (CancellationTokenSource.Token.IsCancellationRequested)
+                            if (IsCancellationRequested())
                                 break;
 
                             sResult.Value.SearchResults.Remove(indexData);
@@ -1698,7 +1717,7 @@ namespace SDLXLIFFSliceOrChange
                     var sResults = fileData.SearchTargetResults.Where(ssr => ssr.Value.Tags.Count > 0);
                     foreach (var sResult in sResults)
                     {
-                        if (CancellationTokenSource.Token.IsCancellationRequested)
+                        if (IsCancellationRequested())
                             break;
                         for (var i = 0; i < sResult.Value.Tags.Count; i++)
                         {
@@ -1723,14 +1742,14 @@ namespace SDLXLIFFSliceOrChange
                     var sResults = fileData.SearchTargetResults.Where(sr => sr.Value.MatchesCount > 0);
                     foreach (var sResult in sResults)
                     {
-                        if (CancellationTokenSource.Token.IsCancellationRequested)
+                        if (IsCancellationRequested())
                             break;
 
                         var tResultText = sResult.Value.SegmentText;
                         var searchResultsToRemove = new List<IndexData>();
                         foreach (var searchResult in sResult.Value.SearchResults)
                         {
-                            if (CancellationTokenSource.Token.IsCancellationRequested)
+                            if (IsCancellationRequested())
                                 break;
 
                             if (!Regex.IsMatch(tResultText, targetSettings.SearchText, !targetSettings.MatchCase ? RegexOptions.IgnoreCase : RegexOptions.None))
@@ -1741,7 +1760,7 @@ namespace SDLXLIFFSliceOrChange
 
                         foreach (var indexData in searchResultsToRemove)
                         {
-                            if (CancellationTokenSource.Token.IsCancellationRequested)
+                            if (IsCancellationRequested())
                                 break;
 
                             sResult.Value.SearchResults.Remove(indexData);
@@ -1758,7 +1777,7 @@ namespace SDLXLIFFSliceOrChange
             var threads = new List<Thread>();
             foreach (var file in files)
             {
-                if (CancellationTokenSource.Token.IsCancellationRequested)
+                if (IsCancellationRequested())
                     break;
 
                 var t = new Thread(() => ProcessOneFileBasedOnStatuses(forSlice, file, indexes, filesToBeSliced));
@@ -1804,14 +1823,14 @@ namespace SDLXLIFFSliceOrChange
                 {
                     foreach (var fileElement in fileList.OfType<XmlElement>())
                     {
-                        if (CancellationTokenSource.Token.IsCancellationRequested)
+                        if (IsCancellationRequested())
                             break;
 
                         var bodyElement = (XmlElement)(fileElement.GetElementsByTagName("body")[0]);
                         var groupElements = bodyElement.GetElementsByTagName("group");
                         foreach (var groupElement in groupElements.OfType<XmlElement>())
                         {
-                            if (CancellationTokenSource.Token.IsCancellationRequested)
+                            if (IsCancellationRequested())
                                 break;
 
                             ProcessOnFileBasedOnStatusesInBody(forSlice, file, DSSelectedIndexes, originalFile, groupElement);
@@ -1848,7 +1867,7 @@ namespace SDLXLIFFSliceOrChange
                     var selectedIDs = new List<string>();
                     foreach (var index in DSSelectedIndexes)
                     {
-                        if (CancellationTokenSource.Token.IsCancellationRequested)
+                        if (IsCancellationRequested())
                             break;
 
                         if (_structureInformationTypes[index].IDs.Any(f => f.Key == originalFile))
@@ -1860,7 +1879,7 @@ namespace SDLXLIFFSliceOrChange
                     var cxtDefs = ((XmlNode)groupElement).ChildNodes;
                     foreach (var cxtDef in cxtDefs.OfType<XmlElement>())
                     {
-                        if (CancellationTokenSource.Token.IsCancellationRequested)
+                        if (IsCancellationRequested())
                             break;
 
                         if (cxtDef.Name != "sdl:cxts")
@@ -1869,7 +1888,7 @@ namespace SDLXLIFFSliceOrChange
                         var cxts = cxtDef.ChildNodes;
                         foreach (var cxt in cxts.OfType<XmlElement>())
                         {
-                            if (CancellationTokenSource.Token.IsCancellationRequested)
+                            if (IsCancellationRequested())
                                 break;
 
                             if (cxt.Name != "sdl:cxt")
@@ -1897,7 +1916,7 @@ namespace SDLXLIFFSliceOrChange
                 var transUnits = ((XmlElement)groupElement).ChildNodes; ;
                 foreach (var transUnit in transUnits.OfType<XmlElement>())
                 {
-                    if (CancellationTokenSource.Token.IsCancellationRequested)
+                    if (IsCancellationRequested())
                         break;
 
                     if ((transUnit).Name != "trans-unit")
@@ -1908,7 +1927,7 @@ namespace SDLXLIFFSliceOrChange
                     var segDefs = (transUnit).ChildNodes;
                     foreach (var segDef in segDefs.OfType<XmlElement>())
                     {
-                        if (CancellationTokenSource.Token.IsCancellationRequested)
+                        if (IsCancellationRequested())
                             break;
 
                         if ((segDef).Name != "sdl:seg-defs")
@@ -1920,7 +1939,7 @@ namespace SDLXLIFFSliceOrChange
 
                         foreach (var segment in segments.OfType<XmlElement>())
                         {
-                            if (CancellationTokenSource.Token.IsCancellationRequested)
+                            if (IsCancellationRequested())
                                 break;
 
                             if (segment.Name != "sdl:seg")
@@ -2020,7 +2039,7 @@ namespace SDLXLIFFSliceOrChange
             var segmentsToBeRemoved = new List<SegmentData>();
             foreach (var sourceSegment in sourceSegments)
             {
-                if (CancellationTokenSource.Token.IsCancellationRequested) break;
+                if (IsCancellationRequested()) break;
 
                 if (targetSegments.Any(segment => segment.SegmentId == sourceSegment.SegmentId))
                     continue;
@@ -2028,7 +2047,7 @@ namespace SDLXLIFFSliceOrChange
             }
             foreach (var segmentData in segmentsToBeRemoved)
             {
-                if (CancellationTokenSource.Token.IsCancellationRequested) break;
+                if (IsCancellationRequested()) break;
                 sourceSegments.Remove(segmentData);
             }
 
@@ -2222,7 +2241,7 @@ namespace SDLXLIFFSliceOrChange
             var filesPerLanguage = new List<KeyValuePair<string, List<string>>>();
             foreach (var sliceInfo in _segmentsToBeSliced)
             {
-                if (CancellationTokenSource.Token.IsCancellationRequested)
+                if (IsCancellationRequested())
                     break;
 
                 var destinationDirectory = Path.Combine(tempFolderForSlicedFiles, Path.GetFileName(Path.GetDirectoryName(sliceInfo.File)));
@@ -2230,7 +2249,7 @@ namespace SDLXLIFFSliceOrChange
                     Directory.CreateDirectory(destinationDirectory);
                 var destinationFile = Path.Combine(destinationDirectory, Path.GetFileName(sliceInfo.File));
 
-                if (CancellationTokenSource.Token.IsCancellationRequested)
+                if (IsCancellationRequested())
                     break;
 
                 File.Copy(sliceInfo.File, destinationFile, true);
@@ -2280,7 +2299,7 @@ namespace SDLXLIFFSliceOrChange
             {
                 foreach (var docInfo in docInfos.OfType<XmlElement>())
                 {
-                    if (CancellationTokenSource.Token.IsCancellationRequested) break;
+                    if (IsCancellationRequested()) break;
                     docInfoText += docInfo.OuterXml;
                 }
             }
@@ -2295,7 +2314,7 @@ namespace SDLXLIFFSliceOrChange
             var fileNameTemplate = Path.Combine(folder, string.Format("{0}{1}.{2}", Path.GetFileNameWithoutExtension(filePath), "_{0}", Path.GetExtension(filePath)));
             foreach (var file in fileList.OfType<XmlElement>())
             {
-                if (CancellationTokenSource.Token.IsCancellationRequested)
+                if (IsCancellationRequested())
                     break;
 
                 var fileText = file.OuterXml;
@@ -2320,7 +2339,7 @@ namespace SDLXLIFFSliceOrChange
 
             foreach (var result in files.Select(file => SplitMergedXliffFile(file, folder)))
             {
-                if (CancellationTokenSource.Token.IsCancellationRequested) break;
+                if (IsCancellationRequested()) break;
                 splitFiles.AddRange(result);
             }
 
@@ -2426,7 +2445,7 @@ namespace SDLXLIFFSliceOrChange
         {
             foreach (var fileData in searchResult)
             {
-                if (CancellationTokenSource.Token.IsCancellationRequested)
+                if (IsCancellationRequested())
                     break;
 
                 StepProcess();
@@ -2451,14 +2470,14 @@ namespace SDLXLIFFSliceOrChange
                     var fileList = xDoc.DocumentElement.GetElementsByTagName("file");
                     foreach (var fileElement in fileList.OfType<XmlElement>())
                     {
-                        if (CancellationTokenSource.Token.IsCancellationRequested)
+                        if (IsCancellationRequested())
                             break;
 
                         var bodyElement = (XmlElement)(fileElement.GetElementsByTagName("body")[0]);
                         var groupElements = bodyElement.GetElementsByTagName("group");
                         foreach (var groupElement in groupElements.OfType<XmlElement>())
                         {
-                            if (CancellationTokenSource.Token.IsCancellationRequested)
+                            if (IsCancellationRequested())
                                 break;
 
                             UpdateFileBasedOnResultsInBody(groupElement, fileData);
@@ -2490,7 +2509,7 @@ namespace SDLXLIFFSliceOrChange
             var elements = ((XmlElement)groupElement).ChildNodes;
             foreach (var element in elements.OfType<XmlElement>())
             {
-                if (CancellationTokenSource.Token.IsCancellationRequested)
+                if (IsCancellationRequested())
                     break;
 
                 try
@@ -2507,14 +2526,14 @@ namespace SDLXLIFFSliceOrChange
                         var segDefs = element.ChildNodes;
                         foreach (var segDef in segDefs.OfType<XmlElement>())
                         {
-                            if (CancellationTokenSource.Token.IsCancellationRequested)
+                            if (IsCancellationRequested())
                                 break;
 
                             if (segDef.Name != "sdl:seg-defs") continue;
                             var segments = segDef.ChildNodes;
                             foreach (var segment in segments.OfType<XmlElement>())
                             {
-                                if (CancellationTokenSource.Token.IsCancellationRequested)
+                                if (IsCancellationRequested())
                                     break;
 
                                 if (segment.Name != "sdl:seg") continue;
@@ -2587,7 +2606,7 @@ namespace SDLXLIFFSliceOrChange
 
             foreach (var targetSegment in targetSegments)
             {
-                if (CancellationTokenSource.Token.IsCancellationRequested)
+                if (IsCancellationRequested())
                     break;
                 var sourceSegment =
                     sourceSegments.FirstOrDefault(seg => seg.SegmentId == targetSegment.SegmentId);
