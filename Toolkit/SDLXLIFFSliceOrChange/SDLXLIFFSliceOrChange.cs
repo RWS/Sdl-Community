@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -25,6 +26,7 @@ using SdlXliff.Toolkit.Integration.Data;
 using SdlXliff.Toolkit.Integration.File;
 using SDLXLIFFSliceOrChange.Data;
 using SDLXLIFFSliceOrChange.ResourceManager;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using Task = System.Threading.Tasks.Task;
 
 namespace SDLXLIFFSliceOrChange
@@ -46,6 +48,11 @@ namespace SDLXLIFFSliceOrChange
         private List<SliceInfo> _segmentsToBeSliced = new List<SliceInfo>();
         private List<StructureInformationType> _structureInformationTypes = new List<StructureInformationType>();
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private SearchResults _statsForm;
+
+        private const string SearchResultsColumnName = "Search Results";
+        private const string SourceMatchesColumnName = "Matches in Source";
+        private const string TargetMatchesColumnName = "Matches in Target";
 
         public SdlxliffSliceOrChange()
         {
@@ -53,6 +60,34 @@ namespace SDLXLIFFSliceOrChange
             SliceManager = new SliceManager(this);
             UpdateManager = new UpdateManager(this);
             _errorProvider = new ErrorProvider();
+
+            FormatGrid(statsDataGridView);
+        }
+
+        private void InitializeStatsGrid(DataGridView grid)
+        {
+            grid.DataSource = null;
+
+            grid.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                HeaderText = SearchResultsColumnName,
+                DataPropertyName = SearchResultsColumnName,
+                //Width = 335
+            });
+            grid.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                HeaderText = SourceMatchesColumnName,
+                DataPropertyName = SourceMatchesColumnName,
+                ValueType = typeof(int),
+                //Width = 335
+            });
+            grid.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                HeaderText = SearchResultsColumnName,
+                DataPropertyName = TargetMatchesColumnName,
+                ValueType = typeof(int),
+                //Width = 335
+            });
         }
 
         private CancellationTokenSource CancellationTokenSource { get; set; }
@@ -65,13 +100,20 @@ namespace SDLXLIFFSliceOrChange
         {
             var statuses = new List<string>();
 
-            if (ckNotTranslated.Checked) statuses.Add(ConfirmationLevel.Unspecified.ToString());
-            if (ckDraft.Checked) statuses.Add(ConfirmationLevel.Draft.ToString());
-            if (ckTranslated.Checked) statuses.Add(ConfirmationLevel.Translated.ToString());
-            if (ckTranslationRejected.Checked) statuses.Add(ConfirmationLevel.RejectedTranslation.ToString());
-            if (ckTranslationApproved.Checked) statuses.Add(ConfirmationLevel.ApprovedTranslation.ToString());
-            if (ckSignOffRejected.Checked) statuses.Add(ConfirmationLevel.RejectedSignOff.ToString());
-            if (ckSignedOff.Checked) statuses.Add(ConfirmationLevel.ApprovedSignOff.ToString());
+            if (ckNotTranslated.Checked)
+                statuses.Add(ConfirmationLevel.Unspecified.ToString());
+            if (ckDraft.Checked)
+                statuses.Add(ConfirmationLevel.Draft.ToString());
+            if (ckTranslated.Checked)
+                statuses.Add(ConfirmationLevel.Translated.ToString());
+            if (ckTranslationRejected.Checked)
+                statuses.Add(ConfirmationLevel.RejectedTranslation.ToString());
+            if (ckTranslationApproved.Checked)
+                statuses.Add(ConfirmationLevel.ApprovedTranslation.ToString());
+            if (ckSignOffRejected.Checked)
+                statuses.Add(ConfirmationLevel.RejectedSignOff.ToString());
+            if (ckSignedOff.Checked)
+                statuses.Add(ConfirmationLevel.ApprovedSignOff.ToString());
 
             return statuses;
         }
@@ -139,7 +181,8 @@ namespace SDLXLIFFSliceOrChange
         {
             foreach (var targetSegment in targetSegments)
             {
-                if (IsCancellationRequested()) break;
+                if (IsCancellationRequested())
+                    break;
 
                 if (sourceSegments.All(segment => segment.SegmentId != targetSegment.SegmentId))
                 {
@@ -212,6 +255,52 @@ namespace SDLXLIFFSliceOrChange
                });
         }
 
+        private void FormatGrid(DataGridView grid)
+        {
+            grid.AllowUserToAddRows = false;
+            grid.AllowUserToResizeRows = false;
+            grid.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            grid.BackgroundColor = SystemColors.Window;
+            grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            grid.Location = new Point(3, 3);
+            grid.Name = "grid";
+            grid.ReadOnly = true;
+            grid.RowHeadersWidth = 72;
+            grid.RowTemplate.Height = 31;
+            grid.Size = new Size(1079, 241);
+            grid.TabIndex = 0;
+        }
+
+        private void BindStatistics(DataGridView grid)
+        {
+            InitializeStatsGrid(grid);
+
+            var statsTable = new DataTable();
+            statsTable.Columns.Add(SearchResultsColumnName, typeof(string));
+            statsTable.Columns.Add(SourceMatchesColumnName, typeof(int));
+            statsTable.Columns.Add(TargetMatchesColumnName, typeof(int));
+
+            var fileData = _searchDataManager.DetailFilteredData.GroupBy(s => s.FileName);
+            if (!fileData.Any())
+                return;
+
+            grid.RowCount = fileData.Count();
+            foreach (var file in fileData)
+            {
+                var sourceMatches = 0;
+                var targetMatches = 0;
+                foreach (var data in file)
+                {
+                    sourceMatches += data.Source.MatchIndexes.Count;
+                    targetMatches += data.Target.MatchIndexes.Count;
+                }
+                statsTable.Rows.Add(file.Key, sourceMatches, targetMatches);
+            }
+
+            grid.DataSource = statsTable;
+        }
+
         private void BindSearchResults(DataGridView grView)
         {
             grView.ReadOnly = true;
@@ -242,6 +331,7 @@ namespace SDLXLIFFSliceOrChange
                        if (!_searchDataManager.IsSearchResultEmpty())
                        {
                            BindSearchResults(gridSearchResults);
+                           BindStatistics(statsDataGridView);
                            if (_searchResultsForm != null && !_searchResultsForm.IsDisposed)
                            {
                                BindSearchResults(_searchResultsForm.SearchResultsGrid);
@@ -1022,7 +1112,8 @@ namespace SDLXLIFFSliceOrChange
         {
             StepProcess(false);
             var filesToBeSliced = SplitMergedXliffFiles();
-            if (!filesToBeSliced.Any()) return;
+            if (!filesToBeSliced.Any())
+                return;
             if (selectedTab == 1)
             {
                 _doUpdateStatus = false;
@@ -1079,7 +1170,8 @@ namespace SDLXLIFFSliceOrChange
             SliceFiles(doMerge);
 
             var folder = Path.GetDirectoryName(filesToBeSliced.Select(kvp => kvp.Value).ToList()[0]);
-            if (folder != null) Directory.Delete(folder, true);
+            if (folder != null)
+                Directory.Delete(folder, true);
 
             StepProcess(true);
         }
@@ -1244,7 +1336,8 @@ namespace SDLXLIFFSliceOrChange
                     var fileDataToBeRemoved = new List<FileData>();
                     foreach (var fileData in _searchResults)
                     {
-                        if (IsCancellationRequested()) break;
+                        if (IsCancellationRequested())
+                            break;
 
                         var file = fileData.FilePath;
                         var targetFileData = targetResult.FirstOrDefault(data => data.FilePath == file);
@@ -1428,7 +1521,8 @@ namespace SDLXLIFFSliceOrChange
 
         private ConfirmationLevel? GetTranslationStatus()
         {
-            if (!GroupHasCheckedRadioButtons(groupChangeTranslationStatus)) return null;
+            if (!GroupHasCheckedRadioButtons(groupChangeTranslationStatus))
+                return null;
             return ckChangeToNotTranslated.Checked ? ConfirmationLevel.Unspecified : ckChangeToDraft.Checked
                              ? ConfirmationLevel.Draft : ckChangeToTranslated.Checked
                                    ? ConfirmationLevel.Translated : ckChangeToTranslationRejected.Checked
@@ -1642,7 +1736,8 @@ namespace SDLXLIFFSliceOrChange
         {
             StepProcess();
 
-            if (results is null || !results.Any()) return;
+            if (results is null || !results.Any())
+                return;
 
             foreach (var fileData in results)
             {
@@ -1673,7 +1768,8 @@ namespace SDLXLIFFSliceOrChange
                             if (i + 1 < sResult.Value.Tags.Count)
                                 nextTag = sResult.Value.Tags[i + 1];
 
-                            if (sResult.Value.SearchResults == null) sResult.Value.SearchResults = new List<IndexData>();
+                            if (sResult.Value.SearchResults == null)
+                                sResult.Value.SearchResults = new List<IndexData>();
                             sResult.Value.SearchResults.Add(new IndexData(tag.TagPosition, nextTag.TagPosition - tag.TagPosition));
                         }
                     }
@@ -1729,7 +1825,8 @@ namespace SDLXLIFFSliceOrChange
 
                             var nextTag = sResult.Value.Tags[i + 1];
 
-                            if (sResult.Value.SearchResults == null) sResult.Value.SearchResults = new List<IndexData>();
+                            if (sResult.Value.SearchResults == null)
+                                sResult.Value.SearchResults = new List<IndexData>();
                             sResult.Value.SearchResults.Add(new IndexData(tag.TagPosition, nextTag.TagPosition - tag.TagPosition));
                         }
                     }
@@ -1913,7 +2010,8 @@ namespace SDLXLIFFSliceOrChange
                     return;
 
                 //look in segments
-                var transUnits = ((XmlElement)groupElement).ChildNodes; ;
+                var transUnits = ((XmlElement)groupElement).ChildNodes;
+                
                 foreach (var transUnit in transUnits.OfType<XmlElement>())
                 {
                     if (IsCancellationRequested())
@@ -2039,7 +2137,8 @@ namespace SDLXLIFFSliceOrChange
             var segmentsToBeRemoved = new List<SegmentData>();
             foreach (var sourceSegment in sourceSegments)
             {
-                if (IsCancellationRequested()) break;
+                if (IsCancellationRequested())
+                    break;
 
                 if (targetSegments.Any(segment => segment.SegmentId == sourceSegment.SegmentId))
                     continue;
@@ -2047,7 +2146,8 @@ namespace SDLXLIFFSliceOrChange
             }
             foreach (var segmentData in segmentsToBeRemoved)
             {
-                if (IsCancellationRequested()) break;
+                if (IsCancellationRequested())
+                    break;
                 sourceSegments.Remove(segmentData);
             }
 
@@ -2059,7 +2159,8 @@ namespace SDLXLIFFSliceOrChange
             var fileDataToBeAdded = new List<FileData>();
             var fileDataToBeRemoved = new List<FileData>();
 
-            if (_replaceResults is null || !_replaceResults.Any()) return;
+            if (_replaceResults is null || !_replaceResults.Any())
+                return;
 
             foreach (var fileData in _replaceResults)
             {
@@ -2299,7 +2400,8 @@ namespace SDLXLIFFSliceOrChange
             {
                 foreach (var docInfo in docInfos.OfType<XmlElement>())
                 {
-                    if (IsCancellationRequested()) break;
+                    if (IsCancellationRequested())
+                        break;
                     docInfoText += docInfo.OuterXml;
                 }
             }
@@ -2339,7 +2441,8 @@ namespace SDLXLIFFSliceOrChange
 
             foreach (var result in files.Select(file => SplitMergedXliffFile(file, folder)))
             {
-                if (IsCancellationRequested()) break;
+                if (IsCancellationRequested())
+                    break;
                 splitFiles.AddRange(result);
             }
 
@@ -2514,7 +2617,8 @@ namespace SDLXLIFFSliceOrChange
 
                 try
                 {
-                    if (!element.HasAttribute("id")) continue;
+                    if (!element.HasAttribute("id"))
+                        continue;
 
                     var id = element.Attributes["id"].Value;
                     var segmentData = fileData.SearchSourceResults
@@ -2529,14 +2633,16 @@ namespace SDLXLIFFSliceOrChange
                             if (IsCancellationRequested())
                                 break;
 
-                            if (segDef.Name != "sdl:seg-defs") continue;
+                            if (segDef.Name != "sdl:seg-defs")
+                                continue;
                             var segments = segDef.ChildNodes;
                             foreach (var segment in segments.OfType<XmlElement>())
                             {
                                 if (IsCancellationRequested())
                                     break;
 
-                                if (segment.Name != "sdl:seg") continue;
+                                if (segment.Name != "sdl:seg")
+                                    continue;
 
                                 if (Convert.ToInt32(segment.Attributes["id"].Value) == segmentId)
                                 {
@@ -2631,6 +2737,33 @@ namespace SDLXLIFFSliceOrChange
         {
             CancellationTokenSource.Cancel();
             HideProcess();
+        }
+
+        private void btnExpandStats_Click(object sender, EventArgs e)
+        {
+            var grView = new DataGridView();
+
+            FormatGrid(grView);
+            BindStatistics(grView);
+
+            var location = new Point();
+            var size = new Size();
+            var setSizeAndLocation = false;
+            if (_statsForm is { IsDisposed: false })
+            {
+                location = _statsForm.Location;
+                size = _statsForm.Size;
+                setSizeAndLocation = true;
+                _statsForm.Close();
+            }
+
+            _statsForm = new SearchResults(grView);
+            if (setSizeAndLocation)
+            {
+                _statsForm.Location = location;
+                _statsForm.Size = size;
+            }
+            _statsForm.Show();
         }
     }
 }
