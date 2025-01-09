@@ -29,7 +29,7 @@ namespace SDLXLIFFSliceOrChange
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SdlxliffSliceOrChange));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.scrollablePanel = new System.Windows.Forms.Panel();
             this.mainTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.panelCommands = new System.Windows.Forms.Panel();
@@ -97,9 +97,14 @@ namespace SDLXLIFFSliceOrChange
             this.ckDraft = new System.Windows.Forms.CheckBox();
             this.ckNotTranslated = new System.Windows.Forms.CheckBox();
             this.pageSearch = new System.Windows.Forms.TabPage();
+            this.tabControl2 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
             this.btnExpandSearchResults = new System.Windows.Forms.Button();
-            this.btnFindAll = new System.Windows.Forms.Button();
             this.gridSearchResults = new System.Windows.Forms.DataGridView();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.btnExpandStats = new System.Windows.Forms.Button();
+            this.statsDataGridView = new System.Windows.Forms.DataGridView();
+            this.btnFindAll = new System.Windows.Forms.Button();
             this.groupOptions = new System.Windows.Forms.GroupBox();
             this.ckSearchInTags = new System.Windows.Forms.CheckBox();
             this.ckSearchRegEx = new System.Windows.Forms.CheckBox();
@@ -172,7 +177,11 @@ namespace SDLXLIFFSliceOrChange
             this.groupStatusesLocked.SuspendLayout();
             this.groupStatusesTranslationStatus.SuspendLayout();
             this.pageSearch.SuspendLayout();
+            this.tabControl2.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridSearchResults)).BeginInit();
+            this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.statsDataGridView)).BeginInit();
             this.groupOptions.SuspendLayout();
             this.groupSearch.SuspendLayout();
             this.pageReplace.SuspendLayout();
@@ -1079,9 +1088,8 @@ namespace SDLXLIFFSliceOrChange
             // 
             // pageSearch
             // 
-            this.pageSearch.Controls.Add(this.btnExpandSearchResults);
+            this.pageSearch.Controls.Add(this.tabControl2);
             this.pageSearch.Controls.Add(this.btnFindAll);
-            this.pageSearch.Controls.Add(this.gridSearchResults);
             this.pageSearch.Controls.Add(this.groupOptions);
             this.pageSearch.Controls.Add(this.groupSearch);
             this.pageSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1095,16 +1103,84 @@ namespace SDLXLIFFSliceOrChange
             this.pageSearch.Text = "Search";
             this.pageSearch.UseVisualStyleBackColor = true;
             // 
+            // tabControl2
+            // 
+            this.tabControl2.Controls.Add(this.tabPage1);
+            this.tabControl2.Controls.Add(this.tabPage2);
+            this.tabControl2.Location = new System.Drawing.Point(296, 163);
+            this.tabControl2.Name = "tabControl2";
+            this.tabControl2.SelectedIndex = 0;
+            this.tabControl2.Size = new System.Drawing.Size(1093, 284);
+            this.tabControl2.TabIndex = 10;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.btnExpandSearchResults);
+            this.tabPage1.Controls.Add(this.gridSearchResults);
+            this.tabPage1.Location = new System.Drawing.Point(4, 33);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(1085, 247);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Search Results";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
             // btnExpandSearchResults
             // 
             this.btnExpandSearchResults.Image = ((System.Drawing.Image)(resources.GetObject("btnExpandSearchResults.Image")));
-            this.btnExpandSearchResults.Location = new System.Drawing.Point(1304, 168);
+            this.btnExpandSearchResults.Location = new System.Drawing.Point(1028, 8);
             this.btnExpandSearchResults.Margin = new System.Windows.Forms.Padding(5);
             this.btnExpandSearchResults.Name = "btnExpandSearchResults";
             this.btnExpandSearchResults.Size = new System.Drawing.Size(52, 47);
-            this.btnExpandSearchResults.TabIndex = 9;
+            this.btnExpandSearchResults.TabIndex = 10;
             this.btnExpandSearchResults.UseVisualStyleBackColor = true;
             this.btnExpandSearchResults.Click += new System.EventHandler(this.btnExpandSearchResults_Click);
+            // 
+            // gridSearchResults
+            // 
+            this.gridSearchResults.AllowUserToAddRows = false;
+            this.gridSearchResults.AllowUserToDeleteRows = false;
+            this.gridSearchResults.AllowUserToResizeRows = false;
+            this.gridSearchResults.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.gridSearchResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gridSearchResults.GridColor = System.Drawing.SystemColors.Control;
+            this.gridSearchResults.Location = new System.Drawing.Point(8, 4);
+            this.gridSearchResults.Margin = new System.Windows.Forms.Padding(5);
+            this.gridSearchResults.Name = "gridSearchResults";
+            this.gridSearchResults.RowHeadersVisible = false;
+            this.gridSearchResults.RowHeadersWidth = 72;
+            this.gridSearchResults.Size = new System.Drawing.Size(1081, 238);
+            this.gridSearchResults.TabIndex = 7;
+            this.gridSearchResults.VirtualMode = true;
+            this.gridSearchResults.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.gridSearchResults_CellValueNeeded);
+            this.gridSearchResults.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.gridSearchResults_DataBindingComplete);
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.btnExpandStats);
+            this.tabPage2.Controls.Add(this.statsDataGridView);
+            this.tabPage2.Location = new System.Drawing.Point(4, 33);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(1085, 247);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Statistics";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // btnExpandStats
+            // 
+            this.btnExpandStats.Image = ((System.Drawing.Image)(resources.GetObject("btnExpandStats.Image")));
+            this.btnExpandStats.Location = new System.Drawing.Point(1025, 8);
+            this.btnExpandStats.Margin = new System.Windows.Forms.Padding(5);
+            this.btnExpandStats.Name = "btnExpandStats";
+            this.btnExpandStats.Size = new System.Drawing.Size(52, 47);
+            this.btnExpandStats.TabIndex = 11;
+            this.btnExpandStats.UseVisualStyleBackColor = true;
+            this.btnExpandStats.Click += new System.EventHandler(this.btnExpandStats_Click);
+            // 
+            // statsDataGridView
+            // 
+            
             // 
             // btnFindAll
             // 
@@ -1118,25 +1194,6 @@ namespace SDLXLIFFSliceOrChange
             this.btnFindAll.Text = "Find All";
             this.btnFindAll.UseVisualStyleBackColor = false;
             this.btnFindAll.Click += new System.EventHandler(this.btnFindAll_Click);
-            // 
-            // gridSearchResults
-            // 
-            this.gridSearchResults.AllowUserToAddRows = false;
-            this.gridSearchResults.AllowUserToDeleteRows = false;
-            this.gridSearchResults.AllowUserToResizeRows = false;
-            this.gridSearchResults.BackgroundColor = System.Drawing.SystemColors.Window;
-            this.gridSearchResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.gridSearchResults.GridColor = System.Drawing.SystemColors.Control;
-            this.gridSearchResults.Location = new System.Drawing.Point(285, 168);
-            this.gridSearchResults.Margin = new System.Windows.Forms.Padding(5);
-            this.gridSearchResults.Name = "gridSearchResults";
-            this.gridSearchResults.RowHeadersVisible = false;
-            this.gridSearchResults.RowHeadersWidth = 72;
-            this.gridSearchResults.Size = new System.Drawing.Size(1071, 264);
-            this.gridSearchResults.TabIndex = 7;
-            this.gridSearchResults.VirtualMode = true;
-            this.gridSearchResults.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.gridSearchResults_CellValueNeeded);
-            this.gridSearchResults.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.gridSearchResults_DataBindingComplete);
             // 
             // groupOptions
             // 
@@ -1682,8 +1739,8 @@ namespace SDLXLIFFSliceOrChange
             // colSize
             // 
             this.colSize.DataPropertyName = "Size";
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.colSize.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.colSize.DefaultCellStyle = dataGridViewCellStyle2;
             this.colSize.HeaderText = "Size";
             this.colSize.MinimumWidth = 9;
             this.colSize.Name = "colSize";
@@ -1757,7 +1814,11 @@ namespace SDLXLIFFSliceOrChange
             this.groupStatusesTranslationStatus.ResumeLayout(false);
             this.groupStatusesTranslationStatus.PerformLayout();
             this.pageSearch.ResumeLayout(false);
+            this.tabControl2.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridSearchResults)).EndInit();
+            this.tabPage2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.statsDataGridView)).EndInit();
             this.groupOptions.ResumeLayout(false);
             this.groupOptions.PerformLayout();
             this.groupSearch.ResumeLayout(false);
@@ -1821,7 +1882,6 @@ namespace SDLXLIFFSliceOrChange
         public System.Windows.Forms.CheckBox ckDraft;
         public System.Windows.Forms.CheckBox ckNotTranslated;
         public System.Windows.Forms.TabPage pageSearch;
-        public System.Windows.Forms.Button btnExpandSearchResults;
         public System.Windows.Forms.Button btnFindAll;
         public System.Windows.Forms.DataGridView gridSearchResults;
         public System.Windows.Forms.GroupBox groupOptions;
@@ -1902,6 +1962,12 @@ namespace SDLXLIFFSliceOrChange
         private System.Windows.Forms.ErrorProvider errorProvider1;
 		public System.Windows.Forms.CheckBox ckNeuralMachineTranslation;
         public Button CancelButton;
+        private TabControl tabControl2;
+        private TabPage tabPage1;
+        private TabPage tabPage2;
+        public Button btnExpandSearchResults;
+        private DataGridView statsDataGridView;
+        public Button btnExpandStats;
     }
 }
 
