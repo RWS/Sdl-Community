@@ -27,10 +27,10 @@ namespace SDLXLIFFSliceOrChange
         /// </summary>
         public void InitializeComponent()
         {
+            this.scrollablePanel = new System.Windows.Forms.Panel();
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SdlxliffSliceOrChange));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.scrollablePanel = new System.Windows.Forms.Panel();
             this.mainTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.panelCommands = new System.Windows.Forms.Panel();
             this.groupClear = new System.Windows.Forms.GroupBox();
@@ -154,8 +154,12 @@ namespace SDLXLIFFSliceOrChange
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.xLIFFFiles = new SDLXLIFFSliceOrChange.Data.XLIFFFiles();
             this.filesBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.scrollablePanel.SuspendLayout();
             this.mainTableLayoutPanel.SuspendLayout();
+            this.scrollablePanel.SuspendLayout();
+
+            this.scrollablePanel.Dock = DockStyle.Fill;
+            this.scrollablePanel.AutoScroll = true;
+
             this.panelCommands.SuspendLayout();
             this.groupClear.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -197,17 +201,6 @@ namespace SDLXLIFFSliceOrChange
             ((System.ComponentModel.ISupportInitialize)(this.filesBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
-            // scrollablePanel
-            // 
-            this.scrollablePanel.AutoScroll = true;
-            this.scrollablePanel.Controls.Add(this.mainTableLayoutPanel);
-            this.scrollablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.scrollablePanel.Location = new System.Drawing.Point(0, 0);
-            this.scrollablePanel.Margin = new System.Windows.Forms.Padding(5);
-            this.scrollablePanel.Name = "scrollablePanel";
-            this.scrollablePanel.Size = new System.Drawing.Size(1435, 1853);
-            this.scrollablePanel.TabIndex = 0;
-            // 
             // mainTableLayoutPanel
             // 
             this.mainTableLayoutPanel.AutoSize = true;
@@ -229,6 +222,16 @@ namespace SDLXLIFFSliceOrChange
             this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.mainTableLayoutPanel.Size = new System.Drawing.Size(1435, 1853);
             this.mainTableLayoutPanel.TabIndex = 11;
+            // 
+            // scrollablePanel
+            // 
+            this.scrollablePanel.Controls.Add(this.mainTableLayoutPanel);
+
+            mainTableLayoutPanel.Dock = DockStyle.Top;
+            mainTableLayoutPanel.AutoSize = true;
+            mainTableLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+
+            this.Controls.Add(scrollablePanel);
             // 
             // panelCommands
             // 
@@ -1775,7 +1778,6 @@ namespace SDLXLIFFSliceOrChange
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
             this.AutoSize = true;
-            this.Controls.Add(this.scrollablePanel);
             this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "SdlxliffSliceOrChange";
             this.Size = new System.Drawing.Size(1435, 1853);
