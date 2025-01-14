@@ -227,9 +227,8 @@ namespace SDLXLIFFSliceOrChange
             // 
             this.scrollablePanel.Controls.Add(this.mainTableLayoutPanel);
 
-            mainTableLayoutPanel.Dock = DockStyle.Top;
+            mainTableLayoutPanel.Dock = DockStyle.None;
             mainTableLayoutPanel.AutoSize = true;
-            mainTableLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
 
             this.Controls.Add(scrollablePanel);
             // 
