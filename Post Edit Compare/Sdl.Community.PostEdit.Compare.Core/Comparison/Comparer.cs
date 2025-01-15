@@ -323,9 +323,11 @@ namespace Sdl.Community.PostEdit.Compare.Core.Comparison
             if (segmentPairOriginal.TranslationOrigin != null)
                 comparisonSegmentUnit.TranslationOriginTypeOriginal = segmentPairOriginal.TranslationOrigin.OriginType;
             if (segmentPairUpdated.TranslationOrigin != null)
+            {
                 comparisonSegmentUnit.TranslationOriginTypeUpdated = segmentPairUpdated.TranslationOrigin.OriginType;
-
-
+                comparisonSegmentUnit.TmName = segmentPairUpdated.TranslationOrigin.OriginSystem;
+                comparisonSegmentUnit.TmTranslationUnit = segmentPairUpdated.TranslationOrigin.OriginalTu;
+            }
 
             if (string.CompareOrdinal(segmentPairOriginal.Target, segmentPairUpdated.Target) != 0)
             {
@@ -335,7 +337,6 @@ namespace Sdl.Community.PostEdit.Compare.Core.Comparison
                 comparisonParagraphUnit.ParagraphIsUpdated = true;   
             }
 
-
             comparisonSegmentUnit.SourceWordsOriginal = segmentPairOriginal.SourceWords;
             comparisonSegmentUnit.SourceCharsOriginal = segmentPairOriginal.SourceChars;
             comparisonSegmentUnit.SourceTagsOriginal = segmentPairOriginal.SourceTags;
@@ -343,7 +344,6 @@ namespace Sdl.Community.PostEdit.Compare.Core.Comparison
             comparisonSegmentUnit.SourceWordsUpdated = segmentPairUpdated.SourceWords;
             comparisonSegmentUnit.SourceCharsUpdated = segmentPairUpdated.SourceChars;
             comparisonSegmentUnit.SourceTagsUpdated = segmentPairUpdated.SourceTags;
-
 
             if (string.Compare(comparisonSegmentUnit.SegmentStatusOriginal, comparisonSegmentUnit.SegmentStatusUpdated, StringComparison.OrdinalIgnoreCase) != 0)
             {

@@ -222,6 +222,12 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
 					pair.TranslationOrigin.OriginType = segmentPair.Properties.TranslationOrigin.OriginType;
 					pair.TranslationOrigin.RepetitionTableId = segmentPair.Properties.TranslationOrigin.RepetitionTableId.Id;
 					pair.TranslationOrigin.TextContextMatchLevel = segmentPair.Properties.TranslationOrigin.TextContextMatchLevel.ToString();
+
+                    if (segmentPair.Properties.TranslationOrigin.MetaDataContainsKey("original_tu"))
+                    {
+                        pair.TranslationOrigin.OriginalTu =
+                            segmentPair.Properties.TranslationOrigin.GetMetaData("original_tu");
+                    }
 				}
 
 				#region  |  add the SegmentPair to the xParagraphs dictionary  |
@@ -253,7 +259,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
 		{
 			if (cultureInfo.CultureTypes.HasFlag(CultureTypes.NeutralCultures))
 			{
-				var specificCultures = System.Globalization.CultureInfo.GetCultures(System.Globalization.CultureTypes.SpecificCultures);
+				var specificCultures = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
 				foreach (var specificCulture in specificCultures)
 				{
 					if (cultureInfo.Name == specificCulture.Parent?.Name)

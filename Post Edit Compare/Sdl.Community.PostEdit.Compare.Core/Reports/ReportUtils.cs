@@ -877,32 +877,20 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
             if (reportFilePath == null) return;
             var filePathXslt = Path.Combine(Path.GetDirectoryName(reportFilePath), DefaultXsltName);
 
-
-
             var xsltSetting = new XsltSettings();
             xsltSetting.EnableDocumentFunction = true;
             xsltSetting.EnableScript = true;
 
-
             var myXPathDoc = new XPathDocument(reportFilePath);
-
-
-
-
 
             var myXslTrans = new XslCompiledTransform();
             myXslTrans.Load(filePathXslt, xsltSetting, null);
 
-
-
             var myWriter = new XmlTextWriter(reportFilePath + ".html", Encoding.UTF8);
             myXslTrans.Transform(myXPathDoc, null, myWriter);
 
-
             myWriter.Flush();
             myWriter.Close();
-
-
 
             var xmlData = new StringBuilder();
             using (var reader = new StreamReader(reportFilePath, Encoding.UTF8))
@@ -919,34 +907,6 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                 writer.Flush();
                 writer.Close();
             }
-
-			//var myXslTrans1 = new XslCompiledTransform();
-			//myXslTrans1.Load(filePathXslt, xsltSetting, null);
-			//var myWriter1 = new XmlTextWriter(reportFilePath + ".csv", Encoding.UTF8);
-			//myXslTrans1.Transform(myXPathDoc, null, myWriter1);
-
-
-			//myWriter1.Flush();
-			//myWriter1.Close();
-
-
-
-			//var xmlData1 = new StringBuilder();
-			//using (var reader = new StreamReader(reportFilePath, Encoding.UTF8))
-			//{
-			//	xmlData1.Append(reader.ReadToEnd());
-			//	reader.Close();
-			//}
-			//var styleSheetVarialbe1 = String.Format(@"<?xml-stylesheet type='text/xsl' href='{0}'?>", DefaultXsltName);
-			//xmlData1.Replace(styleSheetVarialbe1, "");
-
-			//using (var writer1 = new StreamWriter(reportFilePath))
-			//{
-			//	writer1.Write(xmlData);
-			//	writer1.Flush();
-			//	writer1.Close();
-			//}
-
 
 			File.Delete(filePathXslt);
         }

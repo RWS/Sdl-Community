@@ -8,6 +8,7 @@
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
+    <LangVersion>latest</LangVersion>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
@@ -33,6 +34,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Sdl.Core.Globalization">
@@ -40,6 +42,15 @@
     </Reference>
     <Reference Include="Sdl.Core.Globalization.Async">
       <HintPath>$(TradosFolder)\Sdl.Core.Globalization.Async.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.PluginFramework">
+      <HintPath>$(TradosFolder)\Sdl.Core.PluginFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.IntegrationApi">
+      <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
+      <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Bilingual.SdlXliff">
       <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Bilingual.SdlXliff.dll</HintPath>
@@ -71,7 +82,13 @@
     <Reference Include="Sdl.ProjectAutomation.FileBased">
       <HintPath>$(TradosFolder)\Sdl.ProjectAutomation.FileBased.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
+      <HintPath>$(TradosFolder)\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+    </Reference>
     <Reference Include="System.configuration" />
+    <Reference Include="System.Reactive">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio18\System.Reactive.dll</HintPath>
+    </Reference>
     <Reference Include="System.Security" />
   </ItemGroup>
   <ItemGroup>
