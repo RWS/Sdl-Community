@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Sdl.LanguagePlatform.TranslationMemory;
+using System.Collections.Generic;
 
 namespace Sdl.Community.PostEdit.Compare.Core.Comparison
 {
@@ -6,49 +7,6 @@ namespace Sdl.Community.PostEdit.Compare.Core.Comparison
     {
         public class ComparisonSegmentUnit
         {
-            public string SegmentId { get; set; }
-            public List<ComparisonTextUnit> ComparisonTextUnits { get; set; }
-
-            public List<SDLXLIFF.SegmentSection> Source { get; set; }
-
-            public List<SDLXLIFF.SegmentSection> TargetOriginal { get; set; }
-            public List<SDLXLIFF.SegmentSection> TargetUpdated { get; set; }
-
-            public List<SDLXLIFF.SegmentSection> TargetOriginalRevisionMarkers { get; set; }
-            public List<SDLXLIFF.SegmentSection> TargetUpdatedRevisionMarkers { get; set; }
-
-
-            public string SegmentStatusOriginal { get; set; }
-            public string SegmentStatusUpdated { get; set; }
-
-            public string TranslationStatusOriginal { get; set; }
-            public string TranslationStatusUpdated { get; set; }
-
-            public string TranslationOriginTypeOriginal { get; set; }
-            public string TranslationOriginTypeUpdated { get; set; }
-
-
-            public int SourceWordsOriginal { get; set; }
-            public int SourceCharsOriginal { get; set; }
-            public int SourceTagsOriginal { get; set; }
-            public int SourcePlaceablesOriginal { get; set; }
-
-            public int SourceWordsUpdated { get; set; }
-            public int SourceCharsUpdated { get; set; }
-            public int SourceTagsUpdated { get; set; }
-            public int SourcePlaceablesUpdated { get; set; }
-
-            public bool SegmentIsLocked { get; set; }
-
-
-            public List<SDLXLIFF.Comment> Comments { get; set; }
-
-            public bool SegmentTextUpdated { get; set; }
-            public bool SegmentSegmentStatusUpdated { get; set; }
-            public bool SegmentHasComments { get; set; }
-
-
-
             public ComparisonSegmentUnit(string segmentId, List<SDLXLIFF.SegmentSection> source, List<SDLXLIFF.SegmentSection> targetOriginal, List<SDLXLIFF.SegmentSection> targetUpdated, bool segmentIsLocked)
             {
                 SourceWordsOriginal = 0;
@@ -85,6 +43,37 @@ namespace Sdl.Community.PostEdit.Compare.Core.Comparison
 
                 SegmentIsLocked = segmentIsLocked;
             }
+
+            public List<SDLXLIFF.Comment> Comments { get; set; }
+            public List<ComparisonTextUnit> ComparisonTextUnits { get; set; }
+            public bool SegmentHasComments { get; set; }
+            public string SegmentId { get; set; }
+            public bool SegmentIsLocked { get; set; }
+            public bool SegmentSegmentStatusUpdated { get; set; }
+            public string SegmentStatusOriginal { get; set; }
+            public string SegmentStatusUpdated { get; set; }
+            public bool SegmentTextUpdated { get; set; }
+            public List<SDLXLIFF.SegmentSection> Source { get; set; }
+
+            public int SourceCharsOriginal { get; set; }
+            public int SourceCharsUpdated { get; set; }
+            public int SourcePlaceablesOriginal { get; set; }
+            public int SourcePlaceablesUpdated { get; set; }
+            public int SourceTagsOriginal { get; set; }
+            public int SourceTagsUpdated { get; set; }
+            public int SourceWordsOriginal { get; set; }
+            public int SourceWordsUpdated { get; set; }
+            public List<SDLXLIFF.SegmentSection> TargetOriginal { get; set; }
+            public List<SDLXLIFF.SegmentSection> TargetOriginalRevisionMarkers { get; set; }
+            public List<SDLXLIFF.SegmentSection> TargetUpdated { get; set; }
+            public List<SDLXLIFF.SegmentSection> TargetUpdatedRevisionMarkers { get; set; }
+            public string TmName { get; set; }
+
+            public string TmTranslationUnit { get; set; }
+            public string TranslationOriginTypeOriginal { get; set; }
+            public string TranslationOriginTypeUpdated { get; set; }
+            public string TranslationStatusOriginal { get; set; }
+            public string TranslationStatusUpdated { get; set; }
         }
     }
 }

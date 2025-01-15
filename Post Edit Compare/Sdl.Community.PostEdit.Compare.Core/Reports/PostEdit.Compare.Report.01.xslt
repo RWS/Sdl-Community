@@ -782,6 +782,8 @@
             <table border="1" cellpadding="3"  cellspacing="0" width="100%">
               <tr>
                 <th>ID</th>
+                <th>TM</th>
+                <th>TU</th>
                 <xsl:if test="$showSegmentLocked = 'True'">
                   <th>Lock</th>
                 </xsl:if>
@@ -824,6 +826,7 @@
 
                 <xsl:if test="@showInnerFileName = 'true'">
                   <tr>
+
                     <td colspan="12" class="innerFileName">
                       <a>
                         <xsl:attribute name="name">
@@ -836,6 +839,8 @@
                         (filtered: <xsl:value-of select="@filteredSegmentCount"/>)
                       </span>
                     </td>
+
+
                   </tr>
                 </xsl:if>
                 <xsl:apply-templates select="paragraphs">
@@ -937,8 +942,8 @@
           <xsl:with-param name="Del" select="terpAnalysis/@terp00Del"/>
           <xsl:with-param name="Sub" select="terpAnalysis/@terp00Sub"/>
           <xsl:with-param name="Shft" select="terpAnalysis/@terp00Shft"/>
-	      <xsl:with-param name="Cap" select="terpAnalysis/@terp00Cap"/>
-			
+          <xsl:with-param name="Cap" select="terpAnalysis/@terp00Cap"/>
+
         </xsl:call-template>
 
         <xsl:call-template name="ConfirmationStatisticsTableValues">
@@ -982,7 +987,7 @@
           <xsl:with-param name="Del" select="terpAnalysis/@terp01Del"/>
           <xsl:with-param name="Sub" select="terpAnalysis/@terp01Sub"/>
           <xsl:with-param name="Shft" select="terpAnalysis/@terp01Shft"/>
-	      <xsl:with-param name="Cap" select="terpAnalysis/@terp01Cap"/>
+          <xsl:with-param name="Cap" select="terpAnalysis/@terp01Cap"/>
         </xsl:call-template>
 
 
@@ -1029,7 +1034,7 @@
           <xsl:with-param name="Del" select="terpAnalysis/@terp06Del"/>
           <xsl:with-param name="Sub" select="terpAnalysis/@terp06Sub"/>
           <xsl:with-param name="Shft" select="terpAnalysis/@terp06Shft"/>
-	      <xsl:with-param name="Cap" select="terpAnalysis/@terp06Cap"/>
+          <xsl:with-param name="Cap" select="terpAnalysis/@terp06Cap"/>
         </xsl:call-template>
 
 
@@ -1076,7 +1081,7 @@
           <xsl:with-param name="Del" select="terpAnalysis/@terp10Del"/>
           <xsl:with-param name="Sub" select="terpAnalysis/@terp10Sub"/>
           <xsl:with-param name="Shft" select="terpAnalysis/@terp10Shft"/>
-	      <xsl:with-param name="Cap" select="terpAnalysis/@terp10Cap"/>
+          <xsl:with-param name="Cap" select="terpAnalysis/@terp10Cap"/>
         </xsl:call-template>
 
 
@@ -1124,7 +1129,7 @@
           <xsl:with-param name="Del" select="terpAnalysis/@terp20Del"/>
           <xsl:with-param name="Sub" select="terpAnalysis/@terp20Sub"/>
           <xsl:with-param name="Shft" select="terpAnalysis/@terp20Shft"/>
-	      <xsl:with-param name="Cap" select="terpAnalysis/@terp20Cap"/>
+          <xsl:with-param name="Cap" select="terpAnalysis/@terp20Cap"/>
         </xsl:call-template>
 
         <xsl:call-template name="ConfirmationStatisticsTableValues">
@@ -1170,7 +1175,7 @@
           <xsl:with-param name="Del" select="terpAnalysis/@terp30Del"/>
           <xsl:with-param name="Sub" select="terpAnalysis/@terp30Sub"/>
           <xsl:with-param name="Shft" select="terpAnalysis/@terp30Shft"/>
-	      <xsl:with-param name="Cap" select="terpAnalysis/@terp30Cap"/>
+          <xsl:with-param name="Cap" select="terpAnalysis/@terp30Cap"/>
         </xsl:call-template>
 
         <xsl:call-template name="ConfirmationStatisticsTableValues">
@@ -1216,7 +1221,7 @@
           <xsl:with-param name="Del" select="terpAnalysis/@terp40Del"/>
           <xsl:with-param name="Sub" select="terpAnalysis/@terp40Sub"/>
           <xsl:with-param name="Shft" select="terpAnalysis/@terp40Shft"/>
-	      <xsl:with-param name="Cap" select="terpAnalysis/@terp40Cap"/>
+          <xsl:with-param name="Cap" select="terpAnalysis/@terp40Cap"/>
         </xsl:call-template>
 
 
@@ -1261,7 +1266,7 @@
           <xsl:with-param name="Del" select="terpAnalysis/@terp50Del"/>
           <xsl:with-param name="Sub" select="terpAnalysis/@terp50Sub"/>
           <xsl:with-param name="Shft" select="terpAnalysis/@terp50Shft"/>
-	      <xsl:with-param name="Cap" select="terpAnalysis/@terp50Cap"/>
+          <xsl:with-param name="Cap" select="terpAnalysis/@terp50Cap"/>
         </xsl:call-template>
 
         <xsl:call-template name="ConfirmationStatisticsTableValues">
@@ -1305,7 +1310,7 @@
           <xsl:with-param name="Del" select='""'/>
           <xsl:with-param name="Sub" select='""'/>
           <xsl:with-param name="Shft" select='""'/>
-	      <xsl:with-param name="Cap" select='""'/>
+          <xsl:with-param name="Cap" select='""'/>
         </xsl:call-template>
 
         <xsl:call-template name="ConfirmationStatisticsTableValues">
@@ -1350,7 +1355,7 @@
           <xsl:with-param name="Del" select='""'/>
           <xsl:with-param name="Sub" select='""'/>
           <xsl:with-param name="Shft" select='""'/>
-	      <xsl:with-param name="Cap" select='""'/>
+          <xsl:with-param name="Cap" select='""'/>
         </xsl:call-template>
 
         <xsl:call-template name="ConfirmationStatisticsTableValues">
@@ -1396,7 +1401,7 @@
           <xsl:with-param name="Del" select="terpAnalysis/@terp00Del + terpAnalysis/@terp01Del + terpAnalysis/@terp06Del + terpAnalysis/@terp10Del + terpAnalysis/@terp20Del + terpAnalysis/@terp30Del + terpAnalysis/@terp40Del + terpAnalysis/@terp50Del"/>
           <xsl:with-param name="Sub" select="terpAnalysis/@terp00Sub + terpAnalysis/@terp01Sub + terpAnalysis/@terp06Sub + terpAnalysis/@terp10Sub + terpAnalysis/@terp20Sub + terpAnalysis/@terp30Sub + terpAnalysis/@terp40Sub + terpAnalysis/@terp50Sub"/>
           <xsl:with-param name="Shft" select="terpAnalysis/@terp00Shft + terpAnalysis/@terp01Shft + terpAnalysis/@terp06Shft + terpAnalysis/@terp10Shft + terpAnalysis/@terp20Shft + terpAnalysis/@terp30Shft + terpAnalysis/@terp40Shft + terpAnalysis/@terp50Shft"/>
-	      <xsl:with-param name="Cap" select="terpAnalysis/@terp00Cap + terpAnalysis/@terp01Cap + terpAnalysis/@terp06Cap + terpAnalysis/@terp10Cap + terpAnalysis/@terp20Cap + terpAnalysis/@terp30Cap + terpAnalysis/@terp40Cap + terpAnalysis/@terp50Cap"/>
+          <xsl:with-param name="Cap" select="terpAnalysis/@terp00Cap + terpAnalysis/@terp01Cap + terpAnalysis/@terp06Cap + terpAnalysis/@terp10Cap + terpAnalysis/@terp20Cap + terpAnalysis/@terp30Cap + terpAnalysis/@terp40Cap + terpAnalysis/@terp50Cap"/>
         </xsl:call-template>
 
         <xsl:call-template name="ConfirmationStatisticsTotals">
@@ -1517,7 +1522,7 @@
           <xsl:with-param name="Del" select="terpAnalysis/@terp00Del"/>
           <xsl:with-param name="Sub" select="terpAnalysis/@terp00Sub"/>
           <xsl:with-param name="Shft" select="terpAnalysis/@terp00Shft"/>
-	      <xsl:with-param name="Cap" select="terpAnalysis/@terp00Cap"/>
+          <xsl:with-param name="Cap" select="terpAnalysis/@terp00Cap"/>
         </xsl:call-template>
 
         <xsl:call-template name="ConfirmationStatisticsTableValues">
@@ -1561,7 +1566,7 @@
           <xsl:with-param name="Del" select="terpAnalysis/@terp01Del"/>
           <xsl:with-param name="Sub" select="terpAnalysis/@terp01Sub"/>
           <xsl:with-param name="Shft" select="terpAnalysis/@terp01Shft"/>
-	      <xsl:with-param name="Cap" select="terpAnalysis/@terp01Cap"/>
+          <xsl:with-param name="Cap" select="terpAnalysis/@terp01Cap"/>
         </xsl:call-template>
 
 
@@ -1608,7 +1613,7 @@
           <xsl:with-param name="Del" select="terpAnalysis/@terp06Del"/>
           <xsl:with-param name="Sub" select="terpAnalysis/@terp06Sub"/>
           <xsl:with-param name="Shft" select="terpAnalysis/@terp06Shft"/>
-	      <xsl:with-param name="Cap" select="terpAnalysis/@terp06Cap"/>
+          <xsl:with-param name="Cap" select="terpAnalysis/@terp06Cap"/>
         </xsl:call-template>
 
 
@@ -1653,7 +1658,7 @@
           <xsl:with-param name="Del" select="terpAnalysis/@terp10Del"/>
           <xsl:with-param name="Sub" select="terpAnalysis/@terp10Sub"/>
           <xsl:with-param name="Shft" select="terpAnalysis/@terp10Shft"/>
-	      <xsl:with-param name="Cap" select="terpAnalysis/@terp10Cap"/>
+          <xsl:with-param name="Cap" select="terpAnalysis/@terp10Cap"/>
         </xsl:call-template>
 
 
@@ -1701,7 +1706,7 @@
           <xsl:with-param name="Del" select="terpAnalysis/@terp20Del"/>
           <xsl:with-param name="Sub" select="terpAnalysis/@terp20Sub"/>
           <xsl:with-param name="Shft" select="terpAnalysis/@terp20Shft"/>
-	      <xsl:with-param name="Cap" select="terpAnalysis/@terp20Cap"/>
+          <xsl:with-param name="Cap" select="terpAnalysis/@terp20Cap"/>
         </xsl:call-template>
 
         <xsl:call-template name="ConfirmationStatisticsTableValues">
@@ -1747,7 +1752,7 @@
           <xsl:with-param name="Del" select="terpAnalysis/@terp30Del"/>
           <xsl:with-param name="Sub" select="terpAnalysis/@terp30Sub"/>
           <xsl:with-param name="Shft" select="terpAnalysis/@terp30Shft"/>
-	      <xsl:with-param name="Cap" select="terpAnalysis/@terp30Cap"/>
+          <xsl:with-param name="Cap" select="terpAnalysis/@terp30Cap"/>
         </xsl:call-template>
 
         <xsl:call-template name="ConfirmationStatisticsTableValues">
@@ -1793,7 +1798,7 @@
           <xsl:with-param name="Del" select="terpAnalysis/@terp40Del"/>
           <xsl:with-param name="Sub" select="terpAnalysis/@terp40Sub"/>
           <xsl:with-param name="Shft" select="terpAnalysis/@terp40Shft"/>
-	      <xsl:with-param name="Cap" select="terpAnalysis/@terp40Cap"/>
+          <xsl:with-param name="Cap" select="terpAnalysis/@terp40Cap"/>
         </xsl:call-template>
 
 
@@ -1838,7 +1843,7 @@
           <xsl:with-param name="Del" select="terpAnalysis/@terp50Del"/>
           <xsl:with-param name="Sub" select="terpAnalysis/@terp50Sub"/>
           <xsl:with-param name="Shft" select="terpAnalysis/@terp50Shft"/>
-	      <xsl:with-param name="Cap" select="terpAnalysis/@terp50Cap"/>
+          <xsl:with-param name="Cap" select="terpAnalysis/@terp50Cap"/>
         </xsl:call-template>
 
         <xsl:call-template name="ConfirmationStatisticsTableValues">
@@ -1882,7 +1887,7 @@
           <xsl:with-param name="Del" select='""'/>
           <xsl:with-param name="Sub" select='""'/>
           <xsl:with-param name="Shft" select='""'/>
-	        <xsl:with-param name="Cap" select='""'/>
+          <xsl:with-param name="Cap" select='""'/>
         </xsl:call-template>
 
         <xsl:call-template name="ConfirmationStatisticsTableValues">
@@ -1928,7 +1933,7 @@
           <xsl:with-param name="Del" select='""'/>
           <xsl:with-param name="Sub" select='""'/>
           <xsl:with-param name="Shft" select='""'/>
-	      <xsl:with-param name="Cap" select='""'/>
+          <xsl:with-param name="Cap" select='""'/>
         </xsl:call-template>
 
         <xsl:call-template name="ConfirmationStatisticsTableValues">
@@ -1976,7 +1981,7 @@
           <xsl:with-param name="Del" select="terpAnalysis/@terp00Del + terpAnalysis/@terp01Del + terpAnalysis/@terp06Del + terpAnalysis/@terp10Del + terpAnalysis/@terp20Del + terpAnalysis/@terp30Del + terpAnalysis/@terp40Del + terpAnalysis/@terp50Del"/>
           <xsl:with-param name="Sub" select="terpAnalysis/@terp00Sub + terpAnalysis/@terp01Sub + terpAnalysis/@terp06Sub + terpAnalysis/@terp10Sub + terpAnalysis/@terp20Sub + terpAnalysis/@terp30Sub + terpAnalysis/@terp40Sub + terpAnalysis/@terp50Sub"/>
           <xsl:with-param name="Shft" select="terpAnalysis/@terp00Shft + terpAnalysis/@terp01Shft + terpAnalysis/@terp06Shft + terpAnalysis/@terp10Shft + terpAnalysis/@terp20Shft + terpAnalysis/@terp30Shft + terpAnalysis/@terp40Shft + terpAnalysis/@terp50Shft"/>
-	      <xsl:with-param name="Cap" select="terpAnalysis/@terp00Cap + terpAnalysis/@terp01Cap + terpAnalysis/@terp06Cap + terpAnalysis/@terp10Cap + terpAnalysis/@terp20Cap + terpAnalysis/@terp30Cap + terpAnalysis/@terp40Cap + terpAnalysis/@terp50Cap"/>
+          <xsl:with-param name="Cap" select="terpAnalysis/@terp00Cap + terpAnalysis/@terp01Cap + terpAnalysis/@terp06Cap + terpAnalysis/@terp10Cap + terpAnalysis/@terp20Cap + terpAnalysis/@terp30Cap + terpAnalysis/@terp40Cap + terpAnalysis/@terp50Cap"/>
         </xsl:call-template>
 
         <xsl:call-template name="ConfirmationStatisticsTotals">
@@ -2363,9 +2368,9 @@
     <td class="TableCellsBorderTopBottom DefaultCellsSubHeaderColorsRight">
       Shft
     </td>
-	  <td class="TableCellsBorderTopRightBottom DefaultCellsSubHeaderColorsRight">
-		  Cap
-	  </td>
+    <td class="TableCellsBorderTopRightBottom DefaultCellsSubHeaderColorsRight">
+      Cap
+    </td>
 
 
     <td class="TableCellsNoBorder DefaultCellsColorsWhite">
@@ -2383,7 +2388,7 @@
     <xsl:param name="Del" />
     <xsl:param name="Sub" />
     <xsl:param name="Shft" />
-	<xsl:param name="Cap" />
+    <xsl:param name="Cap" />
 
     <td class="TableCellsBorderLeft DefaultCellsTitleColumnColors" nowrap="nowrap">
       <xsl:value-of select="$Title"/>
@@ -2412,9 +2417,9 @@
     <td class="TableCellsNoBorder DefaultCellsColorsWhite">
       <xsl:value-of select="$Shft"/>
     </td>
-	  <td class="TableCellsBorderRight DefaultCellsColorsWhite">
-		  <xsl:value-of select="$Cap"/>
-	  </td>
+    <td class="TableCellsBorderRight DefaultCellsColorsWhite">
+      <xsl:value-of select="$Cap"/>
+    </td>
     <td class="TableCellsNoBorder DefaultCellsColorsWhite">
       &#160;
     </td>
@@ -2430,7 +2435,7 @@
     <xsl:param name="Del" />
     <xsl:param name="Sub" />
     <xsl:param name="Shft" />
-	<xsl:param name="Cap" />
+    <xsl:param name="Cap" />
 
     <td class="TableCellsBorderTopBottomLeft DefaultCellsTitleColumnColors" nowrap="nowrap" >
       <xsl:value-of select="$Title"/>
@@ -2459,9 +2464,9 @@
     <td class="TableCellsBorderTopBottom DefaultCellsTotalsColorsRight"  >
       <xsl:value-of select="$Shft"/>
     </td>
-	  <td class="TableCellsBorderTopRightBottom DefaultCellsTotalsColorsRight" nowrap="nowrap">
-		  <xsl:value-of select="$Cap"/>
-	  </td>
+    <td class="TableCellsBorderTopRightBottom DefaultCellsTotalsColorsRight" nowrap="nowrap">
+      <xsl:value-of select="$Cap"/>
+    </td>
 
     <td class="TableCellsNoBorder DefaultCellsColorsWhite">
       &#160;
@@ -2592,6 +2597,13 @@
     <tr>
       <td class="segmentId">
         <xsl:value-of select="@segmentId"/>
+      </td>
+
+      <td>
+        <xsl:value-of select="@tmName"/>
+      </td>
+      <td>
+        <xsl:value-of select="@tmTranslationUnit"/>
       </td>
 
       <xsl:if test="$showSegmentLocked = 'True'">

@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
     <OutputType>Library</OutputType>
+    <LangVersion>latest</LangVersion>
     <SccProjectName />
     <SccLocalPath />
     <SccAuxPath />

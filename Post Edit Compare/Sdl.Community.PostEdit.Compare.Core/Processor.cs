@@ -53,7 +53,7 @@ namespace Sdl.Community.PostEdit.Compare.Core
 
         #region  |  process files  |
 
-        public Dictionary<Comparison.Comparer.FileUnitProperties, Dictionary<string, Dictionary<string, Comparison.Comparer.ComparisonParagraphUnit>>>
+        public Dictionary<Comparer.FileUnitProperties, Dictionary<string, Dictionary<string, Comparer.ComparisonParagraphUnit>>>
             ProcessFiles(List<PairedFiles.PairedFile> pairedFiles)
         {
             ComparisonTotalFiles = 0;
@@ -62,9 +62,9 @@ namespace Sdl.Community.PostEdit.Compare.Core
             ComparisonTotalStatusChanges = 0;
             ComparisonTotalComments = 0;
 
-            var fileComparisonParagraphUnits = new Dictionary<Comparison.Comparer.FileUnitProperties, Dictionary<string, Dictionary<string, Comparison.Comparer.ComparisonParagraphUnit>>>();
+            var fileComparisonParagraphUnits = new Dictionary<Comparer.FileUnitProperties, Dictionary<string, Dictionary<string, Comparer.ComparisonParagraphUnit>>>();
 
-            var comparer = new Comparison.Comparer();
+            var comparer = new Comparer();
             try
             {
                 comparer.Progress += comparer_Progress;
@@ -96,7 +96,7 @@ namespace Sdl.Community.PostEdit.Compare.Core
                                         comparer.GetComparisonParagraphUnits(sdlXliffParser.FileParagraphUnitsOriginal, sdlXliffParser.FileParagraphUnitsUpdated);
 
 
-                                    fileComparisonParagraphUnits.Add(new Comparison.Comparer.FileUnitProperties(pairedFile.OriginalFilePath.FullName, pairedFile.UpdatedFilePath.FullName
+                                    fileComparisonParagraphUnits.Add(new Comparer.FileUnitProperties(pairedFile.OriginalFilePath.FullName, pairedFile.UpdatedFilePath.FullName
                                             , sdlXliffParser.GetSegmentCount(sdlXliffParser.FileParagraphUnitsOriginal)
                                             , sdlXliffParser.GetSegmentCount(sdlXliffParser.FileParagraphUnitsUpdated)
                                             , comparisonParagraphUnits, sdlXliffParser.SourceLanguageIdOriginal, sdlXliffParser.TargetLanguageIdOriginal, sdlXliffParser.SourceLanguageIdUpdated, sdlXliffParser.TargetLanguageIdUpdated)
@@ -114,11 +114,11 @@ namespace Sdl.Community.PostEdit.Compare.Core
                         {
                             fileComparisonParagraphUnits.Add(
                                 pairedFile.OriginalFilePath != null
-                                    ? new Comparison.Comparer.FileUnitProperties(pairedFile.OriginalFilePath.FullName, string.Empty,
+                                    ? new Comparer.FileUnitProperties(pairedFile.OriginalFilePath.FullName, string.Empty,
                                         0, 0, null, sdlXliffParser.SourceLanguageIdOriginal,
                                         sdlXliffParser.TargetLanguageIdOriginal, sdlXliffParser.SourceLanguageIdUpdated,
                                         sdlXliffParser.TargetLanguageIdUpdated)
-                                    : new Comparison.Comparer.FileUnitProperties(string.Empty, pairedFile.UpdatedFilePath.FullName,
+                                    : new Comparer.FileUnitProperties(string.Empty, pairedFile.UpdatedFilePath.FullName,
                                         0, 0, null, sdlXliffParser.SourceLanguageIdOriginal,
                                         sdlXliffParser.TargetLanguageIdOriginal, sdlXliffParser.SourceLanguageIdUpdated,
                                         sdlXliffParser.TargetLanguageIdUpdated), null);
@@ -139,12 +139,7 @@ namespace Sdl.Community.PostEdit.Compare.Core
                 comparer.Progress -= comparer_Progress;
             }
 
-
-
             SetTotalCounters(fileComparisonParagraphUnits);
-
-
-
             return fileComparisonParagraphUnits;
         }
 
