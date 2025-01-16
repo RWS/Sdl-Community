@@ -1,4 +1,5 @@
-﻿using Sdl.Community.PostEdit.Compare.Core.Helper;
+﻿using Sdl.Community.PostEdit.Compare.Core.ActionsFromReport;
+using Sdl.Community.PostEdit.Compare.Core.TrackChanges;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
@@ -11,7 +12,13 @@ namespace Sdl.Community.PostEdit.Compare.Core
     [ApplicationInitializer]
     public class AppInitializer : IApplicationInitializer
     {
-        public void Execute() => SdlTradosStudio.Application.GetService<IStudioEventAggregator>().GetEvent<StudioWindowCreatedNotificationEvent>().Subscribe(OnStudioWindowCreated);
+        public void Execute()
+        {
+            SdlTradosStudio.Application.GetService<IStudioEventAggregator>()
+                .GetEvent<StudioWindowCreatedNotificationEvent>().Subscribe(OnStudioWindowCreated);
+
+            Listener.StartHttpListener();
+        }
 
         private void OnStudioWindowCreated(StudioWindowCreatedNotificationEvent obj) => ChangeTracker.TrackChosenTUsFromTMs();
     }

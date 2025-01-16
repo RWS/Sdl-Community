@@ -1,11 +1,11 @@
-﻿using Sdl.TranslationStudioAutomation.IntegrationApi;
+﻿using Sdl.Community.PostEdit.Compare.DAL.ExcelTableModel;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System;
 
-namespace Sdl.Community.PostEdit.Compare.Core.Helper
+namespace Sdl.Community.PostEdit.Compare.Core.TrackChanges
 {
     public static class ChangeTracker
     {
-        private const string OriginalTuKey = "original_tu";
 
         private static EditorController _editorController;
         private static EditorController EditorController => _editorController ??= SdlTradosStudio.Application.GetController<EditorController>();
@@ -20,9 +20,9 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
             if (activeSegmentTranslationOrigin is null) return;
 
             if (activeSegmentTranslationOrigin.OriginType?.ToUpperInvariant() != "TM" ||
-                activeSegmentTranslationOrigin.MetaDataContainsKey(OriginalTuKey)) return;
+                activeSegmentTranslationOrigin.MetaDataContainsKey(Constants.OriginalTuKey)) return;
 
-            activeSegmentTranslationOrigin.SetMetaData(OriginalTuKey, activeSegmentPair.Target.ToString());
+            activeSegmentTranslationOrigin.SetMetaData(Constants.OriginalTuKey, activeSegmentPair.Target.ToString());
             EditorController.ActiveDocument.UpdateSegmentPairProperties(activeSegmentPair,
                 activeSegmentPair.Properties);
         }

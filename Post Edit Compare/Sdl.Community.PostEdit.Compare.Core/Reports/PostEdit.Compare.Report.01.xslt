@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/2000/svg">
-  <xsl:output method="html" indent="yes"/>
+  <xsl:output method="html" indent="yes" encoding="UTF-8"/>
 
   <xsl:template match="/">
 
@@ -432,13 +432,37 @@
           google.load('visualization', '1', {packages: ['corechart']});
 
         </script>
-        <script type="text/javascript">
-          <!--google.setOnLoadCallback(drawVisualization);-->
-        </script>
+
+
 
       </head>
       <body>
         <xsl:apply-templates select="files"/>
+        <script type="text/javascript">
+          <!--google.setOnLoadCallback(drawVisualization);-->
+        </script>
+        <script type="text/javascript">
+          <xsl:text disable-output-escaping="yes">
+        function navigateToSegment(segmentId) {
+          console.log(`Calling navigate with segmentId: ${segmentId}`);
+          fetch('http://localhost:5000/navigate', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ segmentId }),
+          })
+            .then(response => {
+              if (response.ok) {
+                console.log(`Navigated to segment: ${segmentId}`);
+              } else {
+                console.error(`Failed to navigate: ${response.statusText}`);
+              }
+            })
+            .catch(error => console.error('Error navigating to segment:', error));
+        }
+          </xsl:text>
+        </script>
       </body>
     </html>
 
@@ -2595,9 +2619,13 @@
     <xsl:param name="showSegmentPemp" />
 
     <tr>
+
       <td class="segmentId">
-        <xsl:value-of select="@segmentId"/>
+        <a href="#" onclick="navigateToSegment('{@segmentId}'); return false;">
+          <xsl:value-of select="@segmentId"/>
+        </a>
       </td>
+
 
       <td>
         <xsl:value-of select="@tmName"/>
