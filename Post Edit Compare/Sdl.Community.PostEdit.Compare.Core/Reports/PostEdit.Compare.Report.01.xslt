@@ -443,14 +443,14 @@
         </script>
         <script type="text/javascript">
           <xsl:text disable-output-escaping="yes">
-        function navigateToSegment(segmentId) {
+        function navigateToSegment(segmentId,fileId,projectId) {
           console.log(`Calling navigate with segmentId: ${segmentId}`);
           fetch('http://localhost:5000/navigate', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ segmentId }),
+            body: JSON.stringify({ segmentId,fileId,projectId }),
           })
             .then(response => {
               if (response.ok) {
@@ -2621,7 +2621,7 @@
     <tr>
 
       <td class="segmentId">
-        <a href="#" onclick="navigateToSegment('{@segmentId}'); return false;">
+        <a href="#" onclick="navigateToSegment('{@segmentId}','{@fileId}','{@projectId}'); return false;">
           <xsl:value-of select="@segmentId"/>
         </a>
       </td>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sdl.Community.PostEdit.Compare.Core.ActionsFromReport;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -11,8 +12,6 @@ using Sdl.Community.PostEdit.Compare.Core.Helper;
 using Sdl.Community.PostEdit.Compare.Core.SDLXLIFF;
 using Sdl.Community.PostEdit.Compare.DAL.ExcelTableModel;
 using Sdl.Community.PostEdit.Compare.DAL.PostEditModificationsAnalysis;
-using Sdl.LanguagePlatform.Core;
-using Sdl.LanguagePlatform.TranslationMemory;
 using Convert = Sdl.Community.PostEdit.Compare.Core.Helper.Convert;
 
 namespace Sdl.Community.PostEdit.Compare.Core.Reports
@@ -2538,8 +2537,15 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
             xmlTxtWriter.WriteStartElement("segment");
             xmlTxtWriter.WriteAttributeString("segmentId", comparisonSegmentUnit.SegmentId);
 
-            
+            var originalProjectId = FileIdentifier.GetProjectId(fileComparisonFileUnitProperties.FilePathOriginal);
 
+            if (fileComparisonFileUnitProperties.FilePathOriginal is not null)
+            {
+                var fileInfo = FileIdentifier.GetFileInfo(fileComparisonFileUnitProperties.FilePathOriginal);
+                xmlTxtWriter.WriteAttributeString("fileId", fileInfo);
+            }
+
+            xmlTxtWriter.WriteAttributeString("projectId", originalProjectId);
             xmlTxtWriter.WriteAttributeString("tmName", comparisonSegmentUnit.TmName);
             xmlTxtWriter.WriteAttributeString("tmTranslationUnit", comparisonSegmentUnit.TmTranslationUnit);
 
