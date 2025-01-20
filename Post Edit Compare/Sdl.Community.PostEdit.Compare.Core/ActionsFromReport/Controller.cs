@@ -1,45 +1,72 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Sdl.Community.PostEdit.Compare.DAL.ExcelTableModel;
 using System;
-using System.IO;
 using System.Net;
 
 namespace Sdl.Community.PostEdit.Compare.Core.ActionsFromReport
 {
     public class Controller
     {
+        public const string ProjectId = "projectId";
+        public const string FileId = "fileId";
+        public const string SegmentId = "segmentId";
+        public const string Status = "status";
+
+        private DataHandler DataHandler { get; } = new();
         private StudioHelper Studio { get; } = new();
 
-        public static void WriteResponse(HttpListenerResponse response, int statusCode, string message)
-        {
-            response.StatusCode = statusCode;
-            using var writer = new StreamWriter(response.OutputStream);
-            writer.Write(message);
-        }
-
-        public void HandleNavigateRequest(HttpListenerRequest request, HttpListenerResponse response)
+        public void NavigateToSegment(HttpListenerRequest request, HttpListenerResponse response)
         {
             try
             {
-                using var reader = new StreamReader(request.InputStream);
-                var requestBody = reader.ReadToEnd();
-                var data = JObject.Parse(requestBody);
-                var segmentId = data["segmentId"]?.ToString();
-                var projectId = data["projectId"]?.ToString();
-                var fileId = data["fileId"]?.ToString();
+                var data = DataHandler.GetData(request.InputStream);
+                var segmentId = data[SegmentId]?.ToString();
+                var projectId = data[ProjectId]?.ToString();
+                var fileId = data[FileId]?.ToString();
 
                 if (!string.IsNullOrEmpty(segmentId)) Studio.NavigateToSegment(segmentId, fileId, projectId);
 
-                WriteResponse(response, 200, "OK");
+                DataHandler.WriteResponse(response, 200, "OK");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error in HandleNavigateRequest: {ex.Message}");
-                WriteResponse(response, 500, "Internal Server Error");
+                DataHandler.WriteResponse(response, 500, "Internal Server Error");
             }
         }
 
-        public void HandleNotFound(HttpListenerResponse response) => WriteResponse(response, 404, "Not Found");
+        public void NotFound(HttpListenerResponse response)
+        {
+            DataHandler.WriteResponse(response, 404, "Not Found");
+        }
 
-        public void HandleOptionsRequest(HttpListenerResponse response) => response.StatusCode = 204;
+        public void Options(HttpListenerResponse response)
+        {
+            response.StatusCode = 204;
+        }
+
+        public void UpdateStatus(HttpListenerRequest request, HttpListenerResponse response)
+        {
+            try
+            {
+                var data = DataHandler.GetData(request.InputStream);
+                var status = data[Status]?.ToString();
+                var segmentId = data[SegmentId]?.ToString();
+                var fileId = data[FileId]?.ToString();
+                var projectId = data[ProjectId]?.ToString();
+
+                if (!string.IsNullOrEmpty(status))
+                    Studio.ChangeStatusOfSegment(status,
+                        segmentId,
+                        fileId,
+                        projectId);
+
+                DataHandler.WriteResponse(response, 200, "OK");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in HandleNavigateRequest: {ex.Message}");
+                DataHandler.WriteResponse(response, 500, "Internal Server Error");
+            }
+        }
     }
 }

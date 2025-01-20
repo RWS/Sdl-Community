@@ -1,4 +1,5 @@
-﻿using Sdl.ProjectAutomation.FileBased;
+﻿using Sdl.Core.Globalization;
+using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System;
 using System.Linq;
@@ -8,6 +9,38 @@ namespace Sdl.Community.PostEdit.Compare.Core.ActionsFromReport
 {
     public class StudioHelper
     {
+        private EditorController _editorController;
+        private ProjectsController _projectsController;
+
+        private EditorController EditorController =>
+            _editorController ??= SdlTradosStudio.Application.GetController<EditorController>();
+
+        private ProjectsController ProjectsController =>
+            _projectsController ??= SdlTradosStudio.Application.GetController<ProjectsController>();
+
+        public void ChangeStatusOfSegment(string status, string segmentId, string fileId, string projectId)
+        {
+            try
+            {
+                NavigateToSegment(segmentId, fileId, projectId);
+
+                var segmentPair = EditorController.ActiveDocument.GetActiveSegmentPair();
+                if (segmentPair is null)
+                    throw new Exception(
+                        "The segment pair was not found in the active document.");
+
+                var segment = segmentPair.Target;
+                var confirmationStatus = (ConfirmationLevel)Enum.Parse(typeof(ConfirmationLevel), status);
+                var segmentPairProperties = segment.Properties;
+                segmentPairProperties.ConfirmationLevel = confirmationStatus;
+                EditorController.ActiveDocument.UpdateSegmentPairProperties(segmentPair, segmentPairProperties);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
         public void NavigateToSegment(string segmentId, string fileId, string projectId)
         {
             try
@@ -22,28 +55,22 @@ namespace Sdl.Community.PostEdit.Compare.Core.ActionsFromReport
             }
         }
 
-        private static void InvokeAction(Action action)
+        private void InvokeAction(Action action)
         {
             Application.Current.Dispatcher.Invoke(action);
         }
 
-        private static void NavigateToSegment(string segmentId)
+        private void NavigateToSegment(string segmentId)
         {
-            var editorController = SdlTradosStudio.Application.GetController<EditorController>();
             InvokeAction(() =>
-                editorController.ActiveDocument.SetActiveSegmentPair(editorController.ActiveDocument.Files.First(),
+                EditorController.ActiveDocument.SetActiveSegmentPair(EditorController.ActiveDocument.Files.First(),
                     segmentId, true));
         }
 
-        private static void OpenFile(string fileInfo, FileBasedProject project)
+        private void OpenFile(string fileInfo, FileBasedProject project)
         {
-            var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-            if (editorController is null)
-                throw new Exception(
-                    "EditorController is null. Please go at least once to Editor View and then retry the action.");
-
-            if (editorController.ActiveDocument is not null &&
-                editorController.ActiveDocument.ActiveFile.LocalFilePath == fileInfo) return;
+            if (EditorController.ActiveDocument is not null &&
+                EditorController.ActiveDocument.ActiveFile.LocalFilePath == fileInfo) return;
 
             var projectFile = project.GetTargetLanguageFiles().FirstOrDefault(file =>
             {
@@ -55,24 +82,23 @@ namespace Sdl.Community.PostEdit.Compare.Core.ActionsFromReport
                 throw new Exception(
                     "The project file was not found in the project.");
 
-            InvokeAction(() => editorController.Open(projectFile, EditingMode.Translation));
+            InvokeAction(() => EditorController.Open(projectFile, EditingMode.Translation));
         }
 
-        private static FileBasedProject OpenProject(string projectId)
+        private FileBasedProject OpenProject(string projectId)
         {
-            var projectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-            if (projectsController is null)
+            if (ProjectsController is null)
                 throw new Exception(
                     "ProjectsController is null. Please go at least once to Projects View and then retry the action.");
 
-            var currentProject = projectsController.CurrentProject;
+            var currentProject = ProjectsController.CurrentProject;
             if (currentProject.GetProjectInfo().Id.ToString() == projectId) return currentProject;
 
-            var projects = projectsController.GetAllProjects();
+            var projects = ProjectsController.GetAllProjects();
             foreach (var fileBasedProject in projects)
             {
                 if (fileBasedProject.GetProjectInfo().Id.ToString() != projectId) continue;
-                InvokeAction(() => projectsController.Open(fileBasedProject));
+                InvokeAction(() => ProjectsController.Open(fileBasedProject));
                 return fileBasedProject;
             }
 

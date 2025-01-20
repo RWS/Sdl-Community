@@ -461,7 +461,27 @@
             })
             .catch(error => console.error('Error navigating to segment:', error));
         }
-          </xsl:text>
+              function updateStatus(dropdown,segmentId,fileId,projectId) {
+              const status = dropdown.value;
+              if (status) {
+              fetch('http://localhost:5000/updateStatus', {
+              method: 'POST',
+              headers: {
+              'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ status,segmentId,fileId,projectId }),
+              })
+              .then(response => {
+              if (response.ok) {
+              console.log(`Status updated to: ${status}`);
+              } else {
+              console.error(`Failed to update status: ${response.statusText}`);
+              }
+              })
+              .catch(error => console.error('Error updating status:', error));
+              }
+              }
+              </xsl:text>
         </script>
       </body>
     </html>
@@ -2672,7 +2692,20 @@
       </xsl:if>
       <xsl:if test="$showSegmentStatus = 'True'">
         <td>
+
+          <select onchange="updateStatus(this, '{@segmentId}','{@fileId}','{@projectId}')">
+            <option value="">Change status</option>
+            <option value="Unspecified">Not Translated</option>
+            <option value="Draft">Draft</option>
+            <option value="Translated">Translated</option>
+            <option value="RejectedTranslation">Translation Rejected</option>
+            <option value="ApprovedTranslation">Translation Approved</option>
+            <option value="RejectedSignOff">Sign-off Rejected</option>
+            <option value="ApprovedSignOff">Signed Off</option>
+          </select>
+          <br/>
           <xsl:apply-templates select="segmentStatus/token"/>
+
         </td>
       </xsl:if>
       <xsl:if test="$showSegmentMatch = 'True'">

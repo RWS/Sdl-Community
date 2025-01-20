@@ -32,15 +32,19 @@ namespace Sdl.Community.PostEdit.Compare.Core.ActionsFromReport
                 switch (request.HttpMethod)
                 {
                     case "POST" when request.Url.AbsolutePath == "/navigate":
-                        Controller.HandleNavigateRequest(request, response);
+                        Controller.NavigateToSegment(request, response);
+                        break;
+                    
+                    case "POST" when request.Url.AbsolutePath == "/updateStatus":
+                        Controller.UpdateStatus(request, response);
                         break;
 
                     case "OPTIONS":
-                        Controller.HandleOptionsRequest(response);
+                        Controller.Options(response);
                         break;
 
                     default:
-                        Controller.HandleNotFound(response);
+                        Controller.NotFound(response);
                         break;
                 }
 
