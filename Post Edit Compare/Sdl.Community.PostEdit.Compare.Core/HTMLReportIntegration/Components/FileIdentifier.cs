@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Xml;
 
-namespace Sdl.Community.PostEdit.Compare.Core.ActionsFromReport
+namespace Sdl.Community.PostEdit.Compare.Core.HTMLReportIntegration.Components
 {
     public static class FileIdentifier
     {

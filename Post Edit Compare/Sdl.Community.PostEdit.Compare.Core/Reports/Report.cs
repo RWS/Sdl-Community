@@ -1,4 +1,4 @@
-﻿using Sdl.Community.PostEdit.Compare.Core.ActionsFromReport;
+﻿using Sdl.Community.PostEdit.Compare.Core.HTMLReportIntegration;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,6 +13,7 @@ using Sdl.Community.PostEdit.Compare.Core.SDLXLIFF;
 using Sdl.Community.PostEdit.Compare.DAL.ExcelTableModel;
 using Sdl.Community.PostEdit.Compare.DAL.PostEditModificationsAnalysis;
 using Convert = Sdl.Community.PostEdit.Compare.Core.Helper.Convert;
+using Sdl.Community.PostEdit.Compare.Core.HTMLReportIntegration.Components;
 
 namespace Sdl.Community.PostEdit.Compare.Core.Reports
 {

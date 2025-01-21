@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Net;
 
-namespace Sdl.Community.PostEdit.Compare.Core.ActionsFromReport
+namespace Sdl.Community.PostEdit.Compare.Core.HTMLReportIntegration.Components
 {
-    public static class Listener
+    public static class ReportInteractionListener
     {
-        private static Controller Controller { get; } = new();
+        private static ReportToStudioInteractionService Controller { get; } = new();
         private static HttpListener HttpListener { get; } = new();
 
-        public static void StartHttpListener()
+        public static void StartListening()
         {
             HttpListener.Prefixes.Add("http://localhost:5000/");
             HttpListener.Start();

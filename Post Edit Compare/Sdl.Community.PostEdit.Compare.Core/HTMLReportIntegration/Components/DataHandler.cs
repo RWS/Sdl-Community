@@ -2,7 +2,7 @@
 using System.IO;
 using System.Net;
 
-namespace Sdl.Community.PostEdit.Compare.Core.ActionsFromReport
+namespace Sdl.Community.PostEdit.Compare.Core.HTMLReportIntegration.Components
 {
     public class DataHandler
     {

@@ -1,18 +1,18 @@
-﻿using Sdl.Community.PostEdit.Compare.DAL.ExcelTableModel;
+﻿using Sdl.Community.PostEdit.Compare.Core.HTMLReportIntegration.Components;
 using System;
 using System.Net;
 
-namespace Sdl.Community.PostEdit.Compare.Core.ActionsFromReport
+namespace Sdl.Community.PostEdit.Compare.Core.HTMLReportIntegration
 {
-    public class Controller
+    public class ReportToStudioInteractionService
     {
-        public const string ProjectId = "projectId";
         public const string FileId = "fileId";
+        public const string ProjectId = "projectId";
         public const string SegmentId = "segmentId";
         public const string Status = "status";
 
         private DataHandler DataHandler { get; } = new();
-        private StudioHelper Studio { get; } = new();
+        private StudioCommunicator StudioCommunicator { get; } = new();
 
         public void NavigateToSegment(HttpListenerRequest request, HttpListenerResponse response)
         {
@@ -23,7 +23,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.ActionsFromReport
                 var projectId = data[ProjectId]?.ToString();
                 var fileId = data[FileId]?.ToString();
 
-                if (!string.IsNullOrEmpty(segmentId)) Studio.NavigateToSegment(segmentId, fileId, projectId);
+                if (!string.IsNullOrEmpty(segmentId)) StudioCommunicator.NavigateToSegment(segmentId, fileId, projectId);
 
                 DataHandler.WriteResponse(response, 200, "OK");
             }
@@ -55,7 +55,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.ActionsFromReport
                 var projectId = data[ProjectId]?.ToString();
 
                 if (!string.IsNullOrEmpty(status))
-                    Studio.ChangeStatusOfSegment(status,
+                    StudioCommunicator.ChangeStatusOfSegment(status,
                         segmentId,
                         fileId,
                         projectId);

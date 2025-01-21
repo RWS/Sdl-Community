@@ -2,7 +2,7 @@
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System;
 
-namespace Sdl.Community.PostEdit.Compare.Core.TrackChanges
+namespace Sdl.Community.PostEdit.Compare.Core.TrackChangesForReportGeneration
 {
     public static class ChangeTracker
     {

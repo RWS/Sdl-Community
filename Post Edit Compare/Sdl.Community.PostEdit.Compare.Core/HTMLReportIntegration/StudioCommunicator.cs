@@ -1,13 +1,14 @@
-﻿using Sdl.Core.Globalization;
+﻿using Sdl.Community.PostEdit.Compare.Core.HTMLReportIntegration.Components;
+using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System;
 using System.Linq;
 using System.Windows;
 
-namespace Sdl.Community.PostEdit.Compare.Core.ActionsFromReport
+namespace Sdl.Community.PostEdit.Compare.Core.HTMLReportIntegration
 {
-    public class StudioHelper
+    public class StudioCommunicator
     {
         private EditorController _editorController;
         private ProjectsController _projectsController;
