@@ -41,6 +41,12 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Web.WebView2.Core">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio18\Microsoft.Web.WebView2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.Wpf">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio18\Microsoft.Web.WebView2.WPF.dll</HintPath>
+    </Reference>
     <Reference Include="PostEdit.Compare.WinFormsUI.Docking">
       <HintPath>Sdl.Community.PostEdit.Compare\3rd party\PostEdit.Compare.WinFormsUI.Docking.dll</HintPath>
     </Reference>
@@ -276,7 +282,13 @@
     <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\WaitingDialog.resx" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Resources\Report.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Sdl.Community.PostEdit.Compare.DAL\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Report.png" />
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>

@@ -66,37 +66,41 @@ namespace Sdl.Community.PostEdit.Versions
             this.panel_top.Controls.Add(this.textBox_view);
             this.panel_top.Controls.Add(this.panel2);
             this.panel_top.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_top.Location = new System.Drawing.Point(5, 5);
+            this.panel_top.Location = new System.Drawing.Point(9, 9);
+            this.panel_top.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.panel_top.Name = "panel_top";
-            this.panel_top.Padding = new System.Windows.Forms.Padding(0, 3, 5, 0);
-            this.panel_top.Size = new System.Drawing.Size(327, 34);
+            this.panel_top.Padding = new System.Windows.Forms.Padding(0, 6, 9, 0);
+            this.panel_top.Size = new System.Drawing.Size(600, 63);
             this.panel_top.TabIndex = 0;
             // 
             // textBox_view
             // 
             this.textBox_view.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox_view.Location = new System.Drawing.Point(36, 3);
+            this.textBox_view.Location = new System.Drawing.Point(66, 6);
+            this.textBox_view.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.textBox_view.Name = "textBox_view";
-            this.textBox_view.Size = new System.Drawing.Size(286, 20);
+            this.textBox_view.Size = new System.Drawing.Size(525, 29);
             this.textBox_view.TabIndex = 1;
             // 
             // panel2
             // 
             this.panel2.Controls.Add(this.label1);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel2.Location = new System.Drawing.Point(0, 3);
+            this.panel2.Location = new System.Drawing.Point(0, 6);
+            this.panel2.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.panel2.Name = "panel2";
-            this.panel2.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-            this.panel2.Size = new System.Drawing.Size(36, 31);
+            this.panel2.Padding = new System.Windows.Forms.Padding(0, 6, 0, 0);
+            this.panel2.Size = new System.Drawing.Size(66, 57);
             this.panel2.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.label1.Location = new System.Drawing.Point(0, 3);
+            this.label1.Location = new System.Drawing.Point(0, 6);
+            this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(36, 13);
+            this.label1.Size = new System.Drawing.Size(66, 25);
             this.label1.TabIndex = 0;
             this.label1.Text = "View: ";
             // 
@@ -105,10 +109,11 @@ namespace Sdl.Community.PostEdit.Versions
             this.panel_bottom.Controls.Add(this.linkLabel_removeProjectVersions);
             this.panel_bottom.Controls.Add(this.label_NAVIGATION_MESSAGE);
             this.panel_bottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel_bottom.Location = new System.Drawing.Point(5, 197);
+            this.panel_bottom.Location = new System.Drawing.Point(9, 364);
+            this.panel_bottom.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.panel_bottom.Name = "panel_bottom";
-            this.panel_bottom.Padding = new System.Windows.Forms.Padding(3);
-            this.panel_bottom.Size = new System.Drawing.Size(327, 27);
+            this.panel_bottom.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panel_bottom.Size = new System.Drawing.Size(600, 50);
             this.panel_bottom.TabIndex = 1;
             // 
             // linkLabel_removeProjectVersions
@@ -117,9 +122,10 @@ namespace Sdl.Community.PostEdit.Versions
             this.linkLabel_removeProjectVersions.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.linkLabel_removeProjectVersions.ImageIndex = 0;
             this.linkLabel_removeProjectVersions.ImageList = this.imageList2;
-            this.linkLabel_removeProjectVersions.Location = new System.Drawing.Point(259, 3);
+            this.linkLabel_removeProjectVersions.Location = new System.Drawing.Point(475, 6);
+            this.linkLabel_removeProjectVersions.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.linkLabel_removeProjectVersions.Name = "linkLabel_removeProjectVersions";
-            this.linkLabel_removeProjectVersions.Size = new System.Drawing.Size(65, 21);
+            this.linkLabel_removeProjectVersions.Size = new System.Drawing.Size(119, 38);
             this.linkLabel_removeProjectVersions.TabIndex = 1;
             this.linkLabel_removeProjectVersions.TabStop = true;
             this.linkLabel_removeProjectVersions.Text = "Remove";
@@ -134,9 +140,10 @@ namespace Sdl.Community.PostEdit.Versions
             // label_NAVIGATION_MESSAGE
             // 
             this.label_NAVIGATION_MESSAGE.AutoSize = true;
-            this.label_NAVIGATION_MESSAGE.Location = new System.Drawing.Point(4, 8);
+            this.label_NAVIGATION_MESSAGE.Location = new System.Drawing.Point(7, 15);
+            this.label_NAVIGATION_MESSAGE.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label_NAVIGATION_MESSAGE.Name = "label_NAVIGATION_MESSAGE";
-            this.label_NAVIGATION_MESSAGE.Size = new System.Drawing.Size(137, 13);
+            this.label_NAVIGATION_MESSAGE.Size = new System.Drawing.Size(259, 25);
             this.label_NAVIGATION_MESSAGE.TabIndex = 0;
             this.label_NAVIGATION_MESSAGE.Text = "[NAVIGATION_MESSAGE]";
             this.label_NAVIGATION_MESSAGE.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -145,10 +152,11 @@ namespace Sdl.Community.PostEdit.Versions
             // 
             this.panel_middle.Controls.Add(this.treeView_navigation);
             this.panel_middle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_middle.Location = new System.Drawing.Point(5, 39);
+            this.panel_middle.Location = new System.Drawing.Point(9, 72);
+            this.panel_middle.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.panel_middle.Name = "panel_middle";
-            this.panel_middle.Padding = new System.Windows.Forms.Padding(3);
-            this.panel_middle.Size = new System.Drawing.Size(327, 158);
+            this.panel_middle.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panel_middle.Size = new System.Drawing.Size(600, 292);
             this.panel_middle.TabIndex = 2;
             // 
             // treeView_navigation
@@ -159,16 +167,18 @@ namespace Sdl.Community.PostEdit.Versions
             this.treeView_navigation.HideSelection = false;
             this.treeView_navigation.ImageIndex = 0;
             this.treeView_navigation.ImageList = this.imageList1;
-            this.treeView_navigation.Location = new System.Drawing.Point(3, 3);
+            this.treeView_navigation.Location = new System.Drawing.Point(6, 6);
+            this.treeView_navigation.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.treeView_navigation.Name = "treeView_navigation";
             this.treeView_navigation.SelectedImageIndex = 0;
             this.treeView_navigation.ShowPlusMinus = false;
             this.treeView_navigation.ShowRootLines = false;
-            this.treeView_navigation.Size = new System.Drawing.Size(321, 152);
+            this.treeView_navigation.Size = new System.Drawing.Size(588, 280);
             this.treeView_navigation.TabIndex = 0;
             // 
             // contextMenuStrip_navControl
             // 
+            this.contextMenuStrip_navControl.ImageScalingSize = new System.Drawing.Size(28, 28);
             this.contextMenuStrip_navControl.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.createNewProjectVersionToolStripMenuItem,
             this.toolStripSeparator2,
@@ -176,50 +186,51 @@ namespace Sdl.Community.PostEdit.Versions
             this.toolStripSeparator1,
             this.viewProjectInWindowsExplorerToolStripMenuItem});
             this.contextMenuStrip_navControl.Name = "contextMenuStrip1";
-            this.contextMenuStrip_navControl.Size = new System.Drawing.Size(250, 82);
+            this.contextMenuStrip_navControl.Size = new System.Drawing.Size(408, 124);
             // 
             // createNewProjectVersionToolStripMenuItem
             // 
             this.createNewProjectVersionToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("createNewProjectVersionToolStripMenuItem.Image")));
             this.createNewProjectVersionToolStripMenuItem.Name = "createNewProjectVersionToolStripMenuItem";
-            this.createNewProjectVersionToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.createNewProjectVersionToolStripMenuItem.Size = new System.Drawing.Size(407, 36);
             this.createNewProjectVersionToolStripMenuItem.Text = "New Project Version";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(246, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(404, 6);
             // 
             // removeAllVersionsForTheSelectedProjectToolStripMenuItem
             // 
             this.removeAllVersionsForTheSelectedProjectToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("removeAllVersionsForTheSelectedProjectToolStripMenuItem.Image")));
             this.removeAllVersionsForTheSelectedProjectToolStripMenuItem.Name = "removeAllVersionsForTheSelectedProjectToolStripMenuItem";
-            this.removeAllVersionsForTheSelectedProjectToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.removeAllVersionsForTheSelectedProjectToolStripMenuItem.Size = new System.Drawing.Size(407, 36);
             this.removeAllVersionsForTheSelectedProjectToolStripMenuItem.Text = "Remove Project Versions";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(246, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(404, 6);
             // 
             // viewProjectInWindowsExplorerToolStripMenuItem
             // 
             this.viewProjectInWindowsExplorerToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("viewProjectInWindowsExplorerToolStripMenuItem.Image")));
             this.viewProjectInWindowsExplorerToolStripMenuItem.Name = "viewProjectInWindowsExplorerToolStripMenuItem";
-            this.viewProjectInWindowsExplorerToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.viewProjectInWindowsExplorerToolStripMenuItem.Size = new System.Drawing.Size(407, 36);
             this.viewProjectInWindowsExplorerToolStripMenuItem.Text = "View Project in Windows Explorer";
             // 
             // PostEditCompareNavigationControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.Controls.Add(this.panel_middle);
             this.Controls.Add(this.panel_bottom);
             this.Controls.Add(this.panel_top);
+            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.Name = "PostEditCompareNavigationControl";
-            this.Padding = new System.Windows.Forms.Padding(5);
-            this.Size = new System.Drawing.Size(337, 229);
+            this.Padding = new System.Windows.Forms.Padding(9, 9, 9, 9);
+            this.Size = new System.Drawing.Size(618, 423);
             this.panel_top.ResumeLayout(false);
             this.panel_top.PerformLayout();
             this.panel2.ResumeLayout(false);
