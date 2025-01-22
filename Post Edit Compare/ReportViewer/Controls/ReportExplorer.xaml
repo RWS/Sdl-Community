@@ -4,25 +4,64 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:model="clr-namespace:Sdl.Community.PostEdit.Versions.ReportViewer.Model"
-             DataContext="{Binding ElementName=Root}"
+             xmlns:viewModel="clr-namespace:Sdl.Community.PostEdit.Versions.ReportViewer.ViewModel"
              Name="Root"
+             d:DataContext="{d:DesignInstance viewModel:ReportExplorerViewModel}"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
-    <ListBox ItemsSource="{Binding Reports}"
-             SelectionChanged="Selector_OnSelectionChanged"
-             SelectedItem="{Binding SelectedReport}">
-        <ListBox.ItemTemplate>
-            <DataTemplate DataType="{x:Type model:ReportInfo}">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="../../Resources/Report.png"
-                           Width="16"
-                           Height="16"
-                           Margin="0,0,5,0" />
-                    <TextBlock Text="{Binding ReportName}"
-                               VerticalAlignment="Center" />
-                </StackPanel>
-            </DataTemplate>
-        </ListBox.ItemTemplate>
-    </ListBox>
+
+    <UserControl.Resources>
+        <Style TargetType="MenuItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="MenuItem">
+                        <TextBlock Text="&#x21BB;"
+                                   FontSize="25"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="Black" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver"
+                                                 Value="True">
+                                            <Setter Property="Foreground"
+                                                    Value="LightSeaGreen" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <DockPanel LastChildFill="True">
+
+        <Menu DockPanel.Dock="Bottom" HorizontalAlignment="Right">
+            <MenuItem Command="{Binding RefreshCommand}" />
+        </Menu>
+        <ListBox ItemsSource="{Binding Reports}"
+                 SelectionChanged="Selector_OnSelectionChanged"
+                 SelectedItem="{Binding SelectedReport}">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type model:ReportInfo}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="../../Resources/Report.png"
+                               Width="16"
+                               Height="16"
+                               Margin="0,0,5,0" />
+                        <TextBlock Text="{Binding ReportName}"
+                                   Margin="0 0 0 0"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+    </DockPanel>
 </UserControl>

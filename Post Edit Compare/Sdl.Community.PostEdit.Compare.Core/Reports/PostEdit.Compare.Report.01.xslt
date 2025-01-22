@@ -443,24 +443,15 @@
         </script>
         <script type="text/javascript">
           <xsl:text disable-output-escaping="yes">
-        function navigateToSegment(segmentId,fileId,projectId) {
-          console.log(`Calling navigate with segmentId: ${segmentId}`);
-          fetch('http://localhost:5000/navigate', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ segmentId,fileId,projectId }),
-          })
-            .then(response => {
-              if (response.ok) {
-                console.log(`Navigated to segment: ${segmentId}`);
-              } else {
-                console.error(`Failed to navigate: ${response.statusText}`);
-              }
-            })
-            .catch(error => console.error('Error navigating to segment:', error));
-        }
+            function navigateToSegment(segmentId, fileId, projectId) {
+            const payload = {
+            action: "navigate",
+            segmentId: segmentId,
+            fileId: fileId,
+            projectId: projectId
+            };
+            window.chrome.webview.postMessage(payload);
+            }
               function updateStatus(dropdown,segmentId,fileId,projectId) {
               const status = dropdown.value;
               if (status) {

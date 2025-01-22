@@ -24,9 +24,25 @@ namespace Sdl.Community.PostEdit.Versions.ReportViewer.Controls
         {
         }
 
-        public void Navigate(string path) => WebView2Browser.CoreWebView2?.Navigate(path);
+        public void Navigate(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                var htmlContent = "<html><body><div style='display:flex;justify-content:center;align-items:center;height:100vh;font-size:24px;'>Please select a report</div></body></html>";
+                WebView2Browser.CoreWebView2?.NavigateToString(htmlContent);
+            }
+            else
+            {
+                WebView2Browser.CoreWebView2?.Navigate(path);
+            }
+        }
 
-        private async Task InitializeWebView(string uri)
+        private void CoreWebView2_WebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs e)
+        {
+
+        }
+
+        private async Task InitializeWebView()
         {
             if (WebView2Browser.CoreWebView2 is null)
             {
@@ -44,21 +60,14 @@ namespace Sdl.Community.PostEdit.Versions.ReportViewer.Controls
             }
 
             WebView2Browser.CoreWebView2.WebMessageReceived += CoreWebView2_WebMessageReceived;
-
-            Navigate(uri);
-        }
-
-        private void CoreWebView2_WebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs e)
-        {
-            
+            Navigate(null);
         }
 
         private async void WebView2Browser_OnLoaded(object sender, RoutedEventArgs e)
         {
             try
             {
-                await InitializeWebView(@"C:\Users\ealbu\Documents\PostEdit.Compare\Reports\2025-01\Reports.20250121T101910.html");
-
+                await InitializeWebView();
             }
             catch (Exception ex)
             {

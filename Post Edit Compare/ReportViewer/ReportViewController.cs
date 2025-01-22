@@ -1,9 +1,9 @@
 ﻿using Sdl.Community.PostEdit.Versions.ReportViewer.Controls;
+using Sdl.Community.PostEdit.Versions.ReportViewer.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
-using System;
 
 namespace Sdl.Community.PostEdit.Versions.ReportViewer
 {
@@ -16,26 +16,32 @@ namespace Sdl.Community.PostEdit.Versions.ReportViewer
     )]
     public class ReportViewController : AbstractViewController
     {
-        private readonly Lazy<Report> _report = new();
-        private readonly Lazy<ReportExplorer> _reportExplorer = new();
+        private ReportExplorer Explorer { get; set; }
+        private Report Report { get; set; }
+
+        private ReportExplorerViewModel ReportExplorerViewModel { get; set; }
 
         protected override IUIControl GetContentControl()
         {
-            return _report.Value;
+            Report ??= new Report();
+            return Report;
         }
 
         protected override IUIControl GetExplorerBarControl()
         {
-            _reportExplorer.Value.SelectedReportChanged += () =>
+            Explorer ??= new ReportExplorer { DataContext = ReportExplorerViewModel };
+
+            Explorer.SelectedReportChanged += () =>
             {
-                _report.Value.Navigate(_reportExplorer.Value.SelectedReport.ReportPath);
+                Report.Navigate(ReportExplorerViewModel.SelectedReport?.ReportPath);
             };
 
-            return _reportExplorer.Value;
+            return Explorer;
         }
 
         protected override void Initialize(IViewContext context)
         {
+            ReportExplorerViewModel = new ReportExplorerViewModel();
         }
     }
 }
