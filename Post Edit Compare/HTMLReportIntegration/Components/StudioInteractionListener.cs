@@ -1,6 +1,7 @@
-﻿using Sdl.TranslationStudioAutomation.IntegrationApi;
+﻿using Sdl.Community.PostEdit.Compare.Core;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace Sdl.Community.PostEdit.Compare.Core.HTMLReportIntegration.Components
+namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Components
 {
     public static class StudioInteractionListener
     {

@@ -1,6 +1,6 @@
-﻿using Sdl.Community.PostEdit.Compare.Core.HTMLReportIntegration.Components;
+﻿using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Components;
 
-namespace Sdl.Community.PostEdit.Compare.Core.HTMLReportIntegration
+namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
 {
     public class StudioToReportInteractionService
     {

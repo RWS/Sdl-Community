@@ -20,6 +20,8 @@ namespace Sdl.Community.PostEdit.Versions.ReportViewer.Controls
             InitializeComponent();
         }
 
+        public event Action<object, CoreWebView2WebMessageReceivedEventArgs> WebMessageReceived;
+
         public void Dispose()
         {
         }
@@ -39,7 +41,7 @@ namespace Sdl.Community.PostEdit.Versions.ReportViewer.Controls
 
         private void CoreWebView2_WebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs e)
         {
-
+            WebMessageReceived?.Invoke(sender, e);
         }
 
         private async Task InitializeWebView()
@@ -59,7 +61,6 @@ namespace Sdl.Community.PostEdit.Versions.ReportViewer.Controls
                 //await WebView2Browser.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(BrowserScript);
             }
 
-            WebView2Browser.CoreWebView2.WebMessageReceived += CoreWebView2_WebMessageReceived;
             Navigate(null);
         }
 

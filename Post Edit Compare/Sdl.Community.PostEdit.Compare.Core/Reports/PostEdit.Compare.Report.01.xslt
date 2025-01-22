@@ -452,26 +452,18 @@
             };
             window.chrome.webview.postMessage(payload);
             }
-              function updateStatus(dropdown,segmentId,fileId,projectId) {
-              const status = dropdown.value;
-              if (status) {
-              fetch('http://localhost:5000/updateStatus', {
-              method: 'POST',
-              headers: {
-              'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ status,segmentId,fileId,projectId }),
-              })
-              .then(response => {
-              if (response.ok) {
-              console.log(`Status updated to: ${status}`);
-              } else {
-              console.error(`Failed to update status: ${response.statusText}`);
-              }
-              })
-              .catch(error => console.error('Error updating status:', error));
-              }
-              }
+
+            function updateStatus(dropdown,segmentId,fileId,projectId) {
+            const status = dropdown.value;
+            const payload = {
+            action: "updateStatus",
+            segmentId: segmentId,
+            fileId: fileId,
+            projectId: projectId,
+            status: status
+            };
+            window.chrome.webview.postMessage(payload);
+            }
               </xsl:text>
         </script>
       </body>

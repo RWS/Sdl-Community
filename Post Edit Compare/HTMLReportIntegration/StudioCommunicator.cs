@@ -1,4 +1,4 @@
-﻿using Sdl.Community.PostEdit.Compare.Core.HTMLReportIntegration.Components;
+﻿using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Components;
 using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 using System.Windows;
 
-namespace Sdl.Community.PostEdit.Compare.Core.HTMLReportIntegration
+namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
 {
     public class StudioCommunicator
     {
