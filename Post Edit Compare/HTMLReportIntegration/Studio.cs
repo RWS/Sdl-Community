@@ -1,4 +1,5 @@
-﻿using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Components;
+﻿using Sdl.Community.PostEdit.Compare.Core.Helper;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Components;
 using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -8,7 +9,7 @@ using System.Windows;
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
 {
-    public class StudioCommunicator
+    public class Studio
     {
         private EditorController _editorController;
         private ProjectsController _projectsController;

@@ -2,14 +2,14 @@
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
 {
-    public class ReportToStudioInteractionService
+    public class StudioController
     {
         public const string FileId = "fileId";
         public const string ProjectId = "projectId";
         public const string SegmentId = "segmentId";
         public const string Status = "status";
 
-        private StudioCommunicator StudioCommunicator { get; } = new();
+        private Studio Studio { get; } = new();
 
         public void NavigateToSegment(JObject jsonMessage)
         {
@@ -17,7 +17,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
             var fileId = jsonMessage[FileId]?.ToString();
             var projectId = jsonMessage[ProjectId]?.ToString();
 
-            StudioCommunicator.NavigateToSegment(segmentId, fileId, projectId);
+            Studio.NavigateToSegment(segmentId, fileId, projectId);
         }
 
         public void UpdateStatus(JObject jsonMessage)
@@ -27,7 +27,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
             var fileId = jsonMessage[FileId]?.ToString();
             var projectId = jsonMessage[ProjectId]?.ToString();
 
-            StudioCommunicator.ChangeStatusOfSegment(status,
+            Studio.ChangeStatusOfSegment(status,
                 segmentId,
                 fileId,
                 projectId);

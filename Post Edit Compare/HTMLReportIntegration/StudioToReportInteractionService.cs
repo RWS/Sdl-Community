@@ -6,7 +6,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
     {
         private void AddCommentToReport(string segmentId, string comment)
         {
-            ReportEditor.AddComment(segmentId, comment);
+            //ReportController.ReplaceComments(segmentId, comment);
         }
     }
 }

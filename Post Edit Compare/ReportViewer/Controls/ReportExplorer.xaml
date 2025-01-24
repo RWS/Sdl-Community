@@ -16,7 +16,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="MenuItem">
-                        <TextBlock Text="&#x21BB;"
+                        <TextBlock Text="{TemplateBinding Header}"
                                    FontSize="25"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center">
@@ -42,8 +42,14 @@
 
     <DockPanel LastChildFill="True">
 
-        <Menu DockPanel.Dock="Bottom" HorizontalAlignment="Right">
-            <MenuItem Command="{Binding RefreshCommand}" />
+        <Menu DockPanel.Dock="Bottom"
+              HorizontalAlignment="Right">
+            <MenuItem Command="{Binding RefreshCommand}"
+                      Header="&#x21BB;" />
+            <MenuItem x:Name="SyncTriggerButton"
+                      Header="&#x21C6;"
+                      Click="SyncTriggerButton_OnClick"
+                      IsCheckable="True" />
         </Menu>
         <ListBox ItemsSource="{Binding Reports}"
                  SelectionChanged="Selector_OnSelectionChanged"

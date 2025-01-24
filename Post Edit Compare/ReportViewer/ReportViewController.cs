@@ -1,10 +1,15 @@
-﻿using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Components;
+﻿using Newtonsoft.Json;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Components;
 using Sdl.Community.PostEdit.Versions.ReportViewer.Controls;
+using Sdl.Community.PostEdit.Versions.ReportViewer.Model;
 using Sdl.Community.PostEdit.Versions.ReportViewer.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using System;
+using System.Collections.Generic;
+using System.Windows;
 
 namespace Sdl.Community.PostEdit.Versions.ReportViewer
 {
@@ -20,7 +25,8 @@ namespace Sdl.Community.PostEdit.Versions.ReportViewer
         private Report Report { get; set; }
         private ReportExplorer ReportExplorer { get; set; }
         private ReportExplorerViewModel ReportExplorerViewModel { get; set; }
-        
+        private ReportInteractionHandler ReportInteractionHandler { get; } = new();
+        private StudioInteractionListener StudioInteractionListener { get; } = new();
 
         protected override IUIControl GetContentControl()
         {
@@ -42,6 +48,7 @@ namespace Sdl.Community.PostEdit.Versions.ReportViewer
         {
             ReportExplorer.SelectedReportChanged += ExplorerOnSelectedReportChanged;
             Report.WebMessageReceived += WebView2Browser_WebMessageReceived;
+            ReportExplorer.SyncTriggered += ReportExplorer_SyncTriggered;
         }
 
         private void ExplorerOnSelectedReportChanged()
@@ -60,9 +67,44 @@ namespace Sdl.Community.PostEdit.Versions.ReportViewer
             };
         }
 
+        private void ReportExplorer_SyncTriggered(bool syncEnabled)
+        {
+            if (syncEnabled)
+            {
+                StudioInteractionListener.StartListening();
+                StudioInteractionListener.CommentsChanged += StudioInteractionListener_CommentsChanged;
+            }
+            else
+            {
+                StudioInteractionListener.StopListening();
+                StudioInteractionListener.CommentsChanged -= StudioInteractionListener_CommentsChanged;
+            }
+        }
+
+        private void StudioInteractionListener_CommentsChanged(List<CommentInfo> comments, string segmentId)
+        {
+            var commentsJson = JsonConvert.SerializeObject(comments, new JsonSerializerSettings
+            {
+                ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
+            });
+            var script = $"replaceCommentsForSegment('{segmentId}', {commentsJson});";
+
+            try
+            {
+                Report.WebView2Browser.Dispatcher.Invoke(async () =>
+                {
+                    Report.WebView2Browser.ExecuteScriptAsync(script);
+                });
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        }
+
         private void WebView2Browser_WebMessageReceived(object sender, Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e)
         {
-            ReportInteractionListener.HandleRequest(e);
+            ReportInteractionHandler.HandleHtmlInteraction(e);
         }
     }
 }

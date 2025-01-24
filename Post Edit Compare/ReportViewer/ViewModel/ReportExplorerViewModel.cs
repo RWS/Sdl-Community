@@ -34,6 +34,7 @@ public class ReportExplorerViewModel : ViewModelBase
 
     public ICommand RefreshCommand => _refreshCommand ??= new RelayCommand(RefreshReportList);
 
+
     private void Initialize()
     {
         RefreshReportList();
