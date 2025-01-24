@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Sdl.Community.PostEdit.Versions.ReportViewer.ViewModel
+namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.ViewModel
 {
     public class ViewModelBase : INotifyPropertyChanged
     {

@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.PostEdit.Versions.ReportViewer.Model
+﻿namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model
 {
     public class ReportInfo
     {

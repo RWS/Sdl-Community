@@ -1,6 +1,6 @@
 ﻿using Sdl.Community.PostEdit.Compare.Core;
-using Sdl.Community.PostEdit.Versions.ReportViewer.Model;
-using Sdl.Community.PostEdit.Versions.ReportViewer.Utilities;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -9,28 +9,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 
-namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Components
+namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Components
 {
-    public class StudioInteractionListener
+    public class EditorEventListener
     {
         public event Action<List<CommentInfo>, string> CommentsChanged;
 
         public (List<IComment> Comments, ISegmentPair ActiveSegmentPair) CurrentComments { get; set; }
-        public EditorController EditorController => AppInitializer.EditorController;
 
         private IStudioDocument ActiveDocument { get; set; }
 
-        private Timer PollingTimer { get; set; } = new(500);
+        private Timer PollingTimer { get; } = new(500);
 
         public void StartListening()
         {
-            EditorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
+            AppInitializer.EditorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
             SetUpActiveDocument();
         }
 
         public void StopListening()
         {
-            EditorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
+            AppInitializer.EditorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
             StopListeningPreviousDocument();
         }
 
@@ -53,8 +52,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Components
 
             var comments = ActiveDocument.GetCommentsFromSegment(activeSegmentPair)?.ToList();
 
-            if (CurrentComments.Comments == null && comments == null || (CurrentComments.Comments != null &&
-                 CurrentComments.Comments.SequenceEqual(comments, new CommentComparer()))) return;
+            if (CurrentComments.Comments == null && comments == null || CurrentComments.Comments != null &&
+                 CurrentComments.Comments.SequenceEqual(comments, new CommentComparer())) return;
 
             CurrentComments = (comments, activeSegmentPair);
 
@@ -82,16 +81,14 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Components
 
         private void StartListeningCurrentDocument()
         {
-            if (EditorController.ActiveDocument is null) return;
-            ActiveDocument = EditorController.ActiveDocument;
+            if (AppInitializer.EditorController.ActiveDocument is null) return;
+            ActiveDocument = AppInitializer.EditorController.ActiveDocument;
 
             ActiveDocument.ActiveSegmentChanged += ActiveDocument_ActiveSegmentChanged;
             ActiveDocument_ActiveSegmentChanged(null, null);
 
             PollingTimer.Elapsed += PollingTimer_Elapsed;
         }
-
-        
 
         private void StopListeningPreviousDocument()
         {

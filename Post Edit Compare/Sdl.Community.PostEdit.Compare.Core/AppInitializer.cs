@@ -1,10 +1,9 @@
-﻿using Sdl.Community.PostEdit.Compare.Core.TrackChangesForReportGeneration;
+﻿using Sdl.Community.PostEdit.Compare.Core.Helper;
+using Sdl.Community.PostEdit.Compare.Core.TrackChangesForReportGeneration;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.Desktop.IntegrationApi.Notifications.Events;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using System;
 
 namespace Sdl.Community.PostEdit.Compare.Core
 {
@@ -15,17 +14,13 @@ namespace Sdl.Community.PostEdit.Compare.Core
 
         public void Execute()
         {
-            SdlTradosStudio.Application.GetService<IStudioEventAggregator>()
-                .GetEvent<StudioWindowCreatedNotificationEvent>().Subscribe(OnStudioWindowCreated);
-
-            //ReportInteractionListener.StartListening();
+            EventAggregator.Subscribe<StudioWindowCreatedNotificationEvent>(OnStudioWindowCreated);
         }
 
         private void OnStudioWindowCreated(StudioWindowCreatedNotificationEvent obj)
         {
             EditorController = SdlTradosStudio.Application.GetController<EditorController>();
             ChangeTracker.TrackChosenTUsFromTMs();
-            //StudioInteractionListener.StartListening();
         }
     }
 }

@@ -1,12 +1,12 @@
 ﻿using Sdl.Community.PostEdit.Versions.Commands;
-using Sdl.Community.PostEdit.Versions.ReportViewer.Model;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
 
-namespace Sdl.Community.PostEdit.Versions.ReportViewer.ViewModel;
+namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.ViewModel;
 
 public class ReportExplorerViewModel : ViewModelBase
 {

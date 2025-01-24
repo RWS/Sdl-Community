@@ -1,9 +1,8 @@
-﻿using Newtonsoft.Json.Converters;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Sdl.FileTypeSupport.Framework.NativeApi;
-using System;
 
-namespace Sdl.Community.PostEdit.Versions.ReportViewer.Model
+namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model
 {
     public class CommentInfo
     {

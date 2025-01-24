@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.Web.WebView2.Core;
+using Newtonsoft.Json.Linq;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Components;
 
-namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
+namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio
 {
     public class StudioController
     {
@@ -9,7 +11,24 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
         public const string SegmentId = "segmentId";
         public const string Status = "status";
 
-        private Studio Studio { get; } = new();
+        private StudioActionExecutor Studio { get; } = new();
+
+        public void HandleReportRequest(string jsonMessage)
+        {
+            var messageObject = JObject.Parse(jsonMessage);
+            var action = messageObject["action"]?.ToString();
+
+            switch (action)
+            {
+                case "navigate":
+                    NavigateToSegment(messageObject);
+                    break;
+
+                case "updateStatus":
+                    UpdateStatus(messageObject);
+                    break;
+            }
+        }
 
         public void NavigateToSegment(JObject jsonMessage)
         {

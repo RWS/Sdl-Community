@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Sdl.Community.PostEdit.Versions.ReportViewer.Utilities
+namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Utilities
 {
     public class CommentComparer : IEqualityComparer<IComment>
     {

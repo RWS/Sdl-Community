@@ -1,5 +1,5 @@
 ﻿using Sdl.Community.PostEdit.Compare.Core.Helper;
-using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Components;
+using Sdl.Community.PostEdit.Compare.Core;
 using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -7,15 +7,11 @@ using System;
 using System.Linq;
 using System.Windows;
 
-namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
+namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Components
 {
-    public class Studio
+    public class StudioActionExecutor
     {
-        private EditorController _editorController;
         private ProjectsController _projectsController;
-
-        private EditorController EditorController =>
-            _editorController ??= SdlTradosStudio.Application.GetController<EditorController>();
 
         private ProjectsController ProjectsController =>
             _projectsController ??= SdlTradosStudio.Application.GetController<ProjectsController>();
@@ -26,7 +22,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
             {
                 NavigateToSegment(segmentId, fileId, projectId);
 
-                var segmentPair = EditorController.ActiveDocument.GetActiveSegmentPair();
+                var segmentPair = AppInitializer.EditorController.ActiveDocument.GetActiveSegmentPair();
                 if (segmentPair is null)
                     throw new Exception(
                         "The segment pair was not found in the active document.");
@@ -35,7 +31,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
                 var confirmationStatus = (ConfirmationLevel)Enum.Parse(typeof(ConfirmationLevel), status);
                 var segmentPairProperties = segment.Properties;
                 segmentPairProperties.ConfirmationLevel = confirmationStatus;
-                EditorController.ActiveDocument.UpdateSegmentPairProperties(segmentPair, segmentPairProperties);
+                AppInitializer.EditorController.ActiveDocument.UpdateSegmentPairProperties(segmentPair, segmentPairProperties);
             }
             catch (Exception ex)
             {
@@ -65,14 +61,14 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
         private void NavigateToSegment(string segmentId)
         {
             InvokeAction(() =>
-                EditorController.ActiveDocument.SetActiveSegmentPair(EditorController.ActiveDocument.Files.First(),
+                AppInitializer.EditorController.ActiveDocument.SetActiveSegmentPair(AppInitializer.EditorController.ActiveDocument.Files.First(),
                     segmentId, true));
         }
 
         private void OpenFile(string fileInfo, FileBasedProject project)
         {
-            if (EditorController.ActiveDocument is not null &&
-                EditorController.ActiveDocument.ActiveFile.LocalFilePath == fileInfo) return;
+            if (AppInitializer.EditorController.ActiveDocument is not null &&
+                AppInitializer.EditorController.ActiveDocument.ActiveFile.LocalFilePath == fileInfo) return;
 
             var projectFile = project.GetTargetLanguageFiles().FirstOrDefault(file =>
             {
@@ -84,7 +80,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
                 throw new Exception(
                     "The project file was not found in the project.");
 
-            InvokeAction(() => EditorController.Open(projectFile, EditingMode.Translation));
+            InvokeAction(() => AppInitializer.EditorController.Open(projectFile, EditingMode.Translation));
         }
 
         private FileBasedProject OpenProject(string projectId)

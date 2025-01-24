@@ -8,17 +8,19 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Sdl.Community.PostEdit.Versions.ReportViewer.Controls
+namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Controls
 {
     /// <summary>
     /// Interaction logic for ReportExplorer.xaml
     /// </summary>
-    public partial class Report : UserControl, IUIControl
+    public partial class ReportViewer : UserControl, IUIControl
     {
-        public Report()
+        public ReportViewer()
         {
             InitializeComponent();
         }
+
+        public event Action<bool> SyncTriggered;
 
         public event Action<object, CoreWebView2WebMessageReceivedEventArgs> WebMessageReceived;
 
@@ -58,10 +60,14 @@ namespace Sdl.Community.PostEdit.Versions.ReportViewer.Controls
                 };
 
                 await WebView2Browser.EnsureCoreWebView2Async(environment);
-                //await WebView2Browser.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(BrowserScript);
             }
 
             Navigate(null);
+        }
+
+        private void SyncTriggerButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            SyncTriggered?.Invoke(SyncTriggerButton.IsChecked);
         }
 
         private async void WebView2Browser_OnLoaded(object sender, RoutedEventArgs e)
