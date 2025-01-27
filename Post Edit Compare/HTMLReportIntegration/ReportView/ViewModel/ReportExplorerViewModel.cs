@@ -56,7 +56,5 @@ public class ReportExplorerViewModel : ViewModelBase
                 ReportPath = report
             });
         }
-
-        SelectedReport = Reports[0];
     }
 }

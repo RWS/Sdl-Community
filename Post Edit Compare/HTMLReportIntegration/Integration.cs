@@ -32,10 +32,9 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
             }
         }
 
-        private static void EditorEventListener_CommentsChanged(List<CommentInfo> comments, string segmentId)
+        private static void EditorEventListener_CommentsChanged(List<CommentInfo> comments, string segmentId, string fileId)
         {
-            ReportViewController.UpdateComments(comments, segmentId);
-            
+            ReportViewController.UpdateComments(comments, segmentId, fileId);
         }
     }
 }

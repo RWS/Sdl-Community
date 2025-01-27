@@ -26,13 +26,13 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
         private ReportExplorerViewModel ReportExplorerViewModel { get; set; }
         private ReportViewer ReportViewer { get; set; }
 
-        public void UpdateComments(List<CommentInfo> comments, string segmentId)
+        public void UpdateComments(List<CommentInfo> comments, string segmentId, string fileId)
         {
             var commentsJson = JsonConvert.SerializeObject(comments, new JsonSerializerSettings
             {
                 ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
             });
-            var script = $"replaceCommentsForSegment('{segmentId}', {commentsJson});";
+            var script = $"replaceCommentsForSegment('{segmentId}', {commentsJson}, '{fileId}');";
 
             try
             {

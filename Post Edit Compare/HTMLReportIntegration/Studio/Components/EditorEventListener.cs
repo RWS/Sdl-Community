@@ -1,4 +1,5 @@
 ﻿using Sdl.Community.PostEdit.Compare.Core;
+using Sdl.Community.PostEdit.Compare.Core.Helper;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -13,7 +14,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
 {
     public class EditorEventListener
     {
-        public event Action<List<CommentInfo>, string> CommentsChanged;
+        public event Action<List<CommentInfo>, string, string> CommentsChanged;
 
         public (List<IComment> Comments, ISegmentPair ActiveSegmentPair) CurrentComments { get; set; }
 
@@ -65,7 +66,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
                 Severity = c.Severity
             }).ToList();
 
-            CommentsChanged?.Invoke(commentInfo, activeSegmentPair.Properties.Id.ToString());
+            var fileId =FileIdentifier.GetFileInfo(ActiveDocument.ActiveFile.LocalFilePath);
+            CommentsChanged?.Invoke(commentInfo, activeSegmentPair.Properties.Id.ToString(), fileId);
         }
 
         private void PollingTimer_Elapsed(object sender, ElapsedEventArgs e)
