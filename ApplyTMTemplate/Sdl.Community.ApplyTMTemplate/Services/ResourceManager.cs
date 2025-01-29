@@ -49,14 +49,21 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 				var targetLang = translationMemory.LanguageDirection.TargetLanguage;
 
 				var lrContainer = languageResourcesContainer.LanguageResourceBundles;
-
 				//take just the bundles the TM supports
 				var newBundles = new List<LanguageResourceBundle> { lrContainer[sourceLang], lrContainer[targetLang] };
 
 				if (newBundles.All(bundle => bundle == null)) return;
 
 				ExcludeWhatIsNotNeeded(settings, newBundles);
+				ExcludeWhatIsNotNeeded(settings, translationMemory.LanguageResourceBundles, true);
+
 				AddNewBundles(newBundles, translationMemory);
+				AddGlobalSettings(
+					translationMemory,
+					settings.RecognizersChecked,
+					languageResourcesContainer.Recognizers,
+					settings.WordCountFlagsChecked,
+					languageResourcesContainer.WordCountFlags, true);
 
 				translationMemory.Save();
 			}
@@ -72,7 +79,15 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 		public void ImportResourcesFromExcel(string excelFilePath, ILanguageResourcesContainer languageResourcesContainer, Settings settings)
 		{
 			var newLanguageResourceBundles = _excelResourceManager.GetResourceBundlesFromExcel(excelFilePath);
+			var newBundlesLanguageCodes = newLanguageResourceBundles.Select(bundle => bundle.LanguageCode);
 			ExcludeWhatIsNotNeeded(settings, newLanguageResourceBundles);
+
+			ExcludeWhatIsNotNeeded(
+				settings,
+				languageResourcesContainer?.LanguageResourceBundles
+					.Where(bundle => newBundlesLanguageCodes.Contains(bundle.LanguageCode)),
+				true);
+
 			AddNewBundles(newLanguageResourceBundles, languageResourcesContainer);
 
 			var (recognizers, wordCountFlags) = _excelResourceManager.GetTemplateGlobalSettings(excelFilePath, settings);
@@ -84,13 +99,27 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 		public void ImportResourcesFromSdltm(List<TranslationMemory> translationMemories, ILanguageResourcesContainer languageResourcesContainer, Settings settings)
 		{
 			var newLanguageResourceBundles = GetResourcesFromTMs(translationMemories);
+			var newBundlesLanguageCodes = newLanguageResourceBundles.Select(bundle => bundle.LanguageCode);
 			if (newLanguageResourceBundles.Count == 0)
 			{
 				_messageService.ShowWarningMessage(PluginResources.Warning, PluginResources.No_Resources_in_TMs);
 			}
 
 			ExcludeWhatIsNotNeeded(settings, newLanguageResourceBundles);
+
+			ExcludeWhatIsNotNeeded(
+				settings,
+				languageResourcesContainer?.LanguageResourceBundles
+					.Where(bundle => newBundlesLanguageCodes.Contains(bundle.LanguageCode)),
+				true);
+
 			AddNewBundles(newLanguageResourceBundles, languageResourcesContainer);
+			foreach (var tm in translationMemories)
+			{
+				AddGlobalSettings(
+					languageResourcesContainer, settings.RecognizersChecked, tm.Recognizers,
+					settings.WordCountFlagsChecked, tm.WordCountFlags, false);
+			}
 
 			SaveTemplate(languageResourcesContainer);
 		}
@@ -158,12 +187,14 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 			{
 				if (newBundle == null) continue;
 
-				var correspondingBundleInTemplate = languageResourcesContainer.LanguageResourceBundles[newBundle.Language];
-				if (correspondingBundleInTemplate == null)
-				{
-					correspondingBundleInTemplate = new LanguageResourceBundle(newBundle.Language);
-					languageResourcesContainer.LanguageResourceBundles.Add(correspondingBundleInTemplate);
-				}
+				var currentBundle = languageResourcesContainer.LanguageResourceBundles[newBundle.Language];
+				var correspondingBundleInTemplate = currentBundle is null
+					? new LanguageResourceBundle(newBundle.Language)
+					: currentBundle.Clone();
+
+				languageResourcesContainer.LanguageResourceBundles.Remove(currentBundle);
+				languageResourcesContainer.LanguageResourceBundles.Add(correspondingBundleInTemplate);
+
 				//to be able to deal with all the resources uniformly and easily, we must ensure that none are null
 				InitializeBundle(correspondingBundleInTemplate);
 
@@ -271,6 +302,48 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 						propertyInfo.SetValue(correspondingBundleInTemplate, Activator.CreateInstance(propertyInfo.PropertyType));
 				}
 			}
+		}
+
+		private void ExcludeWhatIsNotNeeded(Settings settings, IEnumerable<LanguageResourceBundle> languageResourceBundles, bool overwrite)
+		{
+			foreach (var languageResourceBundle in languageResourceBundles)
+			{
+				if (languageResourceBundle is null) continue;
+				foreach (var propertyInfo in typeof(Settings).GetProperties())
+				{
+					if (propertyInfo.CanWrite)
+					{
+						if (((bool)propertyInfo.GetValue(settings) && overwrite))
+						{
+							var property = languageResourceBundle.GetType().GetProperties()
+								.Where(prop => prop.Name.Contains(propertyInfo.Name.Substring(0, 4)));
+							property.ToList().ForEach(bundleProp => bundleProp?.SetValue(languageResourceBundle, null));
+						}
+					}
+				}
+			}
+		}
+
+		private void AddGlobalSettings(
+			ILanguageResourcesContainer languageResourceContainer,
+			bool updateRecognizers,
+			BuiltinRecognizers recognizers,
+			bool updateWordCountFlags,
+			WordCountFlags wordCountFlags,
+			bool overwrite)
+		{
+			if (updateRecognizers)
+			{
+				if (overwrite) languageResourceContainer.Recognizers = recognizers;
+				else languageResourceContainer.Recognizers |= recognizers;
+			}
+
+			if (updateWordCountFlags)
+			{
+				if (overwrite) languageResourceContainer.WordCountFlags = wordCountFlags;
+				else languageResourceContainer.WordCountFlags |= wordCountFlags;
+			}
+
 		}
 
 		private void SaveTemplate(ILanguageResourcesContainer languageResourcesContainer)
