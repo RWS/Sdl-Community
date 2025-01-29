@@ -15,7 +15,7 @@ namespace Sdl.Community.ApplyTMTemplate.Studio
 		protected override void Execute()
 		{
 			var timedTextBox = new ViewModels.TimedTextBox();
-			var mainWindowViewModel = new MainWindowViewModel(new LanguageResourcesAdapter(), new ResourceManager(new ExcelResourceManager(), new MessageService()), new TmLoader(), new MessageService(), timedTextBox, new FilePathDialogService());
+			var mainWindowViewModel = new MainWindowViewModel(new LanguageResourcesAdapter(), new ResourceManager(new ExcelResourceManager(), new MessageService()), new TmLoader(), new MessageService(), timedTextBox, new FilePathDialogService(), new ApplyTMSettingsManager());
 
 			var mainWindow = new MainWindow
 			{

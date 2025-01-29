@@ -107,6 +107,42 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to My Settings.
+        /// </summary>
+        public static string ApplyTM_fileName {
+            get {
+                return ResourceManager.GetString("ApplyTM_fileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Apply TM Settings.
+        /// </summary>
+        public static string ApplyTMSettings_ButtonTitle {
+            get {
+                return ResourceManager.GetString("ApplyTMSettings_ButtonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Translation Memories Found.
+        /// </summary>
+        public static string ApplyTMSettings_InvalidTMs {
+            get {
+                return ResourceManager.GetString("ApplyTMSettings_InvalidTMs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Missing Translation Memories Found.
+        /// </summary>
+        public static string ApplyTMSettings_MissingTMs {
+            get {
+                return ResourceManager.GetString("ApplyTMSettings_MissingTMs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon ATTA {
@@ -131,6 +167,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         public static string Choose_Template {
             get {
                 return ResourceManager.GetString("Choose_Template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Apply TM Settings.
+        /// </summary>
+        public static string Create_ApplyTMSettings {
+            get {
+                return ResourceManager.GetString("Create_ApplyTMSettings", resourceCulture);
             }
         }
         
@@ -387,6 +432,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid Apply TM Settings file.
+        /// </summary>
+        public static string InvalidApplyTMSettings {
+            get {
+                return ResourceManager.GetString("InvalidApplyTMSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon LanguageResourceTemplate {
@@ -505,6 +559,16 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] ProjectTemplate {
+            get {
+                object obj = ResourceManager.GetObject("ProjectTemplate", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Question {
@@ -548,6 +612,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         public static string Resources_Imported_Successfully {
             get {
                 return ResourceManager.GetString("Resources_Imported_Successfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Apply TM Settings.
+        /// </summary>
+        public static string SaveApplyTMPreferences {
+            get {
+                return ResourceManager.GetString("SaveApplyTMPreferences", resourceCulture);
             }
         }
         
@@ -751,6 +824,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         public static string TmCorruptedMarker {
             get {
                 return ResourceManager.GetString("TmCorruptedMarker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The configuration was generated successfully.
+        /// </summary>
+        public static string TMSettings_Created {
+            get {
+                return ResourceManager.GetString("TMSettings_Created", resourceCulture);
             }
         }
         

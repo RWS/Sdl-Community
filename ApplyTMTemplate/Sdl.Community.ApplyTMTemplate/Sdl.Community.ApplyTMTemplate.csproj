@@ -7,6 +7,9 @@
 		<PluginDeploymentPath>$(AppData)\Trados\Trados Studio\18\Plugins</PluginDeploymentPath>
 		<TradosFolder>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio18</TradosFolder>
 	</PropertyGroup>
+	<ItemGroup>
+	  <None Remove="Resources\ProjectTemplate.ico" />
+	</ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -78,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Checked.png" />
+    <Resource Include="Resources\ProjectTemplate.ico" />
     <Resource Include="Resources\Unchecked.ico" />
     <Resource Include="Resources\AddFolder.png" />
     <Resource Include="Resources\TM.ico" />

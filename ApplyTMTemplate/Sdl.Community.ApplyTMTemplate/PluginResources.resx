@@ -367,4 +367,31 @@
   <data name="TellMe_SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\TellMe_SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="TMSettings_Created" xml:space="preserve">
+    <value>The configuration was generated successfully</value>
+  </data>
+  <data name="SaveApplyTMPreferences" xml:space="preserve">
+    <value>Save Apply TM Settings</value>
+  </data>
+  <data name="Create_ApplyTMSettings" xml:space="preserve">
+    <value>Create Apply TM Settings</value>
+  </data>
+  <data name="ApplyTM_fileName" xml:space="preserve">
+    <value>My Settings</value>
+  </data>
+  <data name="InvalidApplyTMSettings" xml:space="preserve">
+    <value>Invalid Apply TM Settings file</value>
+  </data>
+  <data name="ApplyTMSettings_MissingTMs" xml:space="preserve">
+    <value>Missing Translation Memories Found</value>
+  </data>
+  <data name="ApplyTMSettings_InvalidTMs" xml:space="preserve">
+    <value>Invalid Translation Memories Found</value>
+  </data>
+  <data name="ApplyTMSettings_ButtonTitle" xml:space="preserve">
+    <value>Use Apply TM Settings</value>
+  </data>
+  <data name="ProjectTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ProjectTemplate.ico;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

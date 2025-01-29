@@ -24,7 +24,7 @@ namespace Sdl.Community.ApplyTMTemplate.TellMe
 		public override void Execute()
 		{
 			var timedTextBoxViewModel = new ViewModels.TimedTextBox();
-			var mainWindowViewModel = new MainWindowViewModel(new LanguageResourcesAdapter(), new ResourceManager(new ExcelResourceManager(), new MessageService()), new TmLoader(), new MessageService(), timedTextBoxViewModel, new FilePathDialogService());
+			var mainWindowViewModel = new MainWindowViewModel(new LanguageResourcesAdapter(), new ResourceManager(new ExcelResourceManager(), new MessageService()), new TmLoader(), new MessageService(), timedTextBoxViewModel, new FilePathDialogService(), new ApplyTMSettingsManager());
 
 			var mainWindow = new MainWindow
 			{

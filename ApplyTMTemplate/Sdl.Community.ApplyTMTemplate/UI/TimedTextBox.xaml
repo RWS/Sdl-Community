@@ -98,9 +98,19 @@
 										<Image Source="../Resources/LanguageResourceTemplate.ico"/>
 										<TextBlock Style="{StaticResource TextBlockStyle}"
 										           Text="{x:Static applyTmTemplate:PluginResources.Choose_Template}" />
-										
 									</StackPanel>
 								</Button>
+
+                                <Button Style="{StaticResource MenuButtonStyle}"
+                                        Command="{Binding AddTMSettingsCommand}"
+								        CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                                        HorizontalContentAlignment="Left">
+                                    <StackPanel Style="{StaticResource StackPanelStyle}" Orientation="Horizontal">
+                                        <Image Source="../Resources/ProjectTemplate.ico"/>
+                                        <TextBlock Style="{StaticResource TextBlockStyle}"
+                                                   Text="{x:Static applyTmTemplate:PluginResources.ApplyTMSettings_ButtonTitle}"/>
+                                    </StackPanel>
+                                </Button>
 
 								<Button Style="{StaticResource MenuButtonStyle}"
 								        Name="ImportFromTms"

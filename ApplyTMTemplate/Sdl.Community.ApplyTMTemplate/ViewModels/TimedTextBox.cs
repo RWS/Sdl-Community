@@ -44,6 +44,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		//property needed for dynamic accessing of command it holds since the property of the command itself is rerouted
 		public ICommand BrowseField { get; set; } 
+		public ICommand BrowseApplyTMSettingsField { get; set; }
 		public ICommand ImportFromExcelField { get; set; }
 		public ICommand ExportField { get; set; }
 
@@ -53,6 +54,13 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			get => new RelayCommand(s => CommandHandlerMethod(s, nameof(BrowseField)));
 			set => BrowseField = value;
 		}
+
+		public ICommand AddTMSettingsCommand
+		{
+			get => new RelayCommand(s => CommandHandlerMethod(s, nameof(BrowseApplyTMSettingsField)));
+			set => BrowseApplyTMSettingsField = value;
+		}
+
 		public ICommand ImportCommand // This command imports from Excel or from TMs depending on the CommandParameter sent by the control which triggers it
 		{
 			get => new RelayCommand(s => CommandHandlerMethod(s, nameof(ImportFromExcelField)));
