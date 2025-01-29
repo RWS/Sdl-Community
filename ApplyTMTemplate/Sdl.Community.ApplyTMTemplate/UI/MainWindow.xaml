@@ -37,8 +37,9 @@
 
 			<converters:ImageToBitmapImageConverter x:Key="ImageToBitmapImageConverter"/>
 			<converters:NullableBooleanToVisibilityConverter x:Key="NullableBooleanToVisibilityConverter"/>
+            <converters:EnumToStringConverter x:Key="EnumToStringConverter"/>
 
-			<Style TargetType="Button" x:Key="SdlWizardStyleButtonGreen" BasedOn="{StaticResource SdlPrimaryButtonStyle}">
+            <Style TargetType="Button" x:Key="SdlWizardStyleButtonGreen" BasedOn="{StaticResource SdlPrimaryButtonStyle}">
 				<Setter Property="MinWidth" Value="70"></Setter>
 				<Setter Property="Height" Value="34"></Setter>
 				<Setter Property="Margin" Value="5,9,5,11"/>
@@ -92,29 +93,54 @@
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="*" />
+                <RowDefinition Height="*" />
 				<RowDefinition Height="Auto" />
 			</Grid.RowDefinitions>
 
 			<uiHelpers:WindowsControl Grid.Row="0" Grid.ColumnSpan="2"/>
+            
 			<TextBlock Grid.Column="0" FontSize="13" FontWeight="Bold" Grid.Row="1" Style="{StaticResource TextBlockStyle}" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Select the template to be used: " VerticalAlignment="Top" Margin="5,10,0,0"  Grid.ColumnSpan="2" />
 
-			<ui:TimedTextBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Height="32" Content="{Binding TimedTextBoxViewModel}" Margin="5,0,10,0"/>
-
-			<StackPanel Grid.Column="0" Orientation="Horizontal" Grid.Row="3" Margin="0,5,0,0">
+            <ui:TimedTextBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Height="32" Content="{Binding TimedTextBoxViewModel}" Margin="5,0,10,0"/>
+            <StackPanel Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Left">
+                <TextBlock Text="Select data handling method:" FontSize="13" Style="{StaticResource TextBlockStyle}" />
+                <ComboBox 
+                    HorizontalAlignment="Left"
+					HorizontalContentAlignment="Left" 
+					Width="150" 
+					Margin="5" 
+					FontSize="14" 
+					Padding="5" 
+					BorderBrush="Gray" 
+					BorderThickness="1" 
+					Background="White" 
+                    SelectedItem="{Binding SettingsSelectedMethod, Mode=TwoWay}"
+                    ItemsSource="{Binding SettingsMethods}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumToStringConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                
+            </StackPanel>
+            
+            
+			<StackPanel Grid.Column="0" Orientation="Horizontal" Grid.Row="4" Margin="0,5,0,0">
 				<TextBlock Text="What to apply:" FontSize="13" Style="{StaticResource TextBlockStyle}" />
-			</StackPanel>
+            </StackPanel>
 
-			<CheckBox Grid.Row="4" Grid.Column="0" 
+			<CheckBox Grid.Row="5" Grid.Column="0" 
 			          Name="SelectAll" Content="Select all..." 
 			          Style="{StaticResource CheckBoxStyle}"
 					  HorizontalAlignment="Right"
 			          IsChecked="{Binding SelectAllChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="0,0,30,0" />
-			<DockPanel Grid.Row="4" Grid.Column="1" >
+			<DockPanel Grid.Row="5" Grid.Column="1" >
 				<StackPanel DockPanel.Dock="Top" Orientation="Horizontal"  Margin="10,10,0,0">
 					<CheckBox Content="Variables" 
 					          IsChecked="{Binding Settings.VariablesChecked}" 
@@ -143,7 +169,7 @@
 				</StackPanel>
 			</DockPanel>
 
-			<StackPanel Margin="5,20,0,5" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+			<StackPanel Margin="5,20,0,5" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
 				<Button HorizontalContentAlignment="Left" Command="{Binding AddFolderCommand}" Style="{StaticResource TmActionButtonStyle}">
 					<StackPanel Orientation="Horizontal">
 						<Image Source="../Resources/AddFolder.png" Style="{StaticResource TmActionImageStyle}"/>
@@ -166,7 +192,7 @@
 				</Button>
 			</StackPanel>
 
-			<DataGrid  Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding TmCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			<DataGrid  Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding TmCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 		               IsReadOnly="True"
 				       Style="{StaticResource FilesGridStyle}"
 		               SelectionMode="Extended"
@@ -175,7 +201,6 @@
 		               Margin="5,0,10,10"
 				       VerticalScrollBarVisibility="Auto"
 		               AllowDrop="True"
-		               utilities:DropBehavior.PreviewDropCommand="{Binding DragEnterCommand}"
 		               GridLinesVisibility="None"
 		               d:DataContext="{d:DesignInstance models:TranslationMemory}">
 				<DataGrid.RowStyle>
@@ -265,14 +290,16 @@
 
 				</DataGrid.Columns>
 			</DataGrid>
-			<StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+			<StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
 				<generic:CustomProgressRing  Style="{StaticResource Sdl.CustomProgressRing.Normal}"
 				                             Visibility="{Binding ProgressVisibility}"
 				                             Width="Auto"
 				                             Height="Auto"
 				                             VerticalAlignment="Center"
 				                             VerticalContentAlignment="Center"/>
-				<Button Style="{StaticResource Sdl.Button.PrimaryStyle}" HorizontalAlignment="Right" Margin="10" Command="{Binding ApplyTemplateCommand}" Content="Apply" ToolTip="{x:Static applyTmTemplate:PluginResources.Apply_button_Tooltip}" />
+
+                <Button Style="{StaticResource Sdl.Button.PrimaryStyle}" HorizontalAlignment="Right" Margin="10" Command="{Binding SavePreferencesCommand}" Content="Save Settings" ToolTip="{x:Static applyTmTemplate:PluginResources.Apply_button_Tooltip}" />
+                <Button Style="{StaticResource Sdl.Button.PrimaryStyle}" HorizontalAlignment="Right" Margin="10" Command="{Binding ApplyTemplateCommand}" Content="Apply" ToolTip="{x:Static applyTmTemplate:PluginResources.Apply_button_Tooltip}" />
 			</StackPanel>
 		</Grid>
 	</Border>

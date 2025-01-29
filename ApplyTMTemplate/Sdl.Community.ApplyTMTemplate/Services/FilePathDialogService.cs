@@ -51,7 +51,7 @@ namespace Sdl.Community.ApplyTMTemplate.Services
 			{
 				return null;
 			}
-
+			
 			return Directory.GetFiles(dlg.FileName);
 		}
 

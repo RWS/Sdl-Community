@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using Sdl.Community.ApplyTMTemplate.Commands;
 using Sdl.Community.ApplyTMTemplate.Models;
@@ -28,6 +29,8 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private ICommand _addTmsCommand;
 		private ICommand _applyTemplateCommand;
 		private ICommand _browseCommand;
+		private ICommand _savePreferencesCommand;
+		private ICommand _addTMSettingsCommand;
 		private bool _datesChecked;
 		private ICommand _dragEnterCommand;
 		private string _excelSheetPath;
@@ -37,10 +40,14 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private ICommand _removeTMsCommand;
 		private TimedTextBox _timedTextBoxViewModel;
 		private ObservableCollection<TranslationMemory> _tmCollection;
+		private ApplyTMSettingsManager _applyTMSettingsManager;
 		private string _tmPath;
+		private string _applyTMSettingsPath;
+		private ApplyTMMethod _settingsSelectedMethod;
 
 		public MainWindowViewModel(ILanguageResourcesAdapter languageResourcesAdapter, IResourceManager resourceManager, TmLoader tmLoader,
-			IMessageService messageService, TimedTextBox timedTextBoxViewModel, FilePathDialogService filePathDialogService)
+			IMessageService messageService, TimedTextBox timedTextBoxViewModel, FilePathDialogService filePathDialogService,
+            ApplyTMSettingsManager applyTMSettingsManager)
 		{
 			_languageResourcesAdapter = languageResourcesAdapter;
 			_resourceManager = resourceManager;
@@ -57,18 +64,34 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				Versions.StudioDocumentsFolderName);
 
 			_tmPath = ResourceTemplatePath;
-			_excelSheetPath = ResourceTemplatePath;
+            _applyTMSettingsPath = _tmPath;
+            _excelSheetPath = ResourceTemplatePath;
 
-			_progressVisibility = "Collapsed";
-
+			_progressVisibility = "Collapsed"; // Don't forged to change this below
+			_applyTMSettingsManager = applyTMSettingsManager;
 			_tmCollection = new ObservableCollection<TranslationMemory>();
+			_settingsSelectedMethod = ApplyTMMethod.Merge;
+
+			AddTMSettings(_applyTMSettingsManager.CachedLocation);
 		}
 
 		public ICommand AddFolderCommand => _addFolderCommand ??= new CommandHandler(AddFolder, true);
 
 		public ICommand AddTmCommand => _addTmsCommand ??= new CommandHandler(AddTms, true);
 
-		public bool AllTmsChecked
+        public ApplyTMMethod SettingsSelectedMethod
+		{
+			get => _settingsSelectedMethod;
+			set
+			{
+				_settingsSelectedMethod = value;
+				OnPropertyChanged(nameof(SettingsSelectedMethod));
+			}
+		}
+
+        public IEnumerable<ApplyTMMethod> SettingsMethods => Enum.GetValues(typeof(ApplyTMMethod)).Cast<ApplyTMMethod>();
+
+        public bool AllTmsChecked
 		{
 			get => AreAllTmsSelected();
 			set
@@ -81,6 +104,12 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		public ICommand ApplyTemplateCommand => _applyTemplateCommand ??= new RelayCommand(
 			a => ApplyTmTemplate(),
 			p => SelectedTmsList.Count > 0);
+
+
+		public ICommand AddTMSettingsCommand => _addTMSettingsCommand ??= new RelayCommand(
+			a => AddTMSettings(null),
+			p => true
+            );
 
 		public bool DatesChecked
 		{
@@ -97,6 +126,10 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		public ICommand ExportCommand => _exportCommand ??= new CommandHandler(ExportToExcel, true);
 
 		public ICommand ImportCommand => _importCommand ??= new RelayCommand(Import);
+
+		public ICommand SavePreferencesCommand => _savePreferencesCommand ??= new RelayCommand(
+			a => SavePreferences(),
+			p => TmCollection.Count > 0);
 
 		public string ProgressVisibility
 		{
@@ -148,6 +181,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			{
 				_timedTextBoxViewModel = value;
 				_timedTextBoxViewModel.BrowseCommand = BrowseCommand;
+				_timedTextBoxViewModel.AddTMSettingsCommand = AddTMSettingsCommand;
 				_timedTextBoxViewModel.ImportCommand = ImportCommand;
 				_timedTextBoxViewModel.ExportCommand = ExportCommand;
 			}
@@ -186,13 +220,15 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			return true;
 		}
 
+		private bool Overwrite => SettingsSelectedMethod == ApplyTMMethod.Overwrite;
+
 		private void AddFolder()
 		{
 			var filesPaths =
 				_filePathDialogService.GetFilesFromFolderInputByUser(
 					PluginResources.Please_select_the_folder_containing_the_TMs, _tmPath);
 
-			if (filesPaths == null) return;
+            if (filesPaths is null || !filesPaths.Any()) return;
 
 			_tmPath = filesPaths[0];
 			AddRangeOfTms(_tmLoader.GetTms(filesPaths, TmCollection));
@@ -210,7 +246,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private void AddTms()
 		{
 			var filePaths = _filePathDialogService.GetFilePathInputFromUser(filter: "Translation Memories|*.sdltm", initialDirectory: _tmPath, multiselect: true);
-			if (filePaths == null) return;
+			if (filePaths is null || !filePaths.Any()) return;
 			_tmPath = filePaths[0];
 			AddRangeOfTms(_tmLoader.GetTms(filePaths, TmCollection));
 		}
@@ -227,9 +263,77 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			}
 
 			ProgressVisibility = "Visible";
-			await Task.Run(() => _resourceManager.ApplyTemplateToTms(_languageResourcesAdapter, SelectedTmsList, Settings));
+			await Task.Run(() => _resourceManager.ApplyTemplateToTms(_languageResourcesAdapter, SelectedTmsList, Settings, Overwrite));
 			ProgressVisibility = "Collapsed";
 		}
+
+		private void AddTMSettings(string location)
+		{
+			var filePaths = location is null
+				? _filePathDialogService.GetFilePathInputFromUser(filter: "Apply TM Settings|*.applyTMSettings", initialDirectory: _applyTMSettingsPath)
+				:  [location];
+
+			if (filePaths is null || !filePaths.Any()) return;
+
+			_applyTMSettingsPath = filePaths[0];
+			var preferences = _applyTMSettingsManager.LoadSettings(filePaths[0]); 
+			if (preferences is null)
+			{
+				if (location is null)
+					_messageService.ShowErrorMessage(PluginResources.Warning,
+						PluginResources.InvalidApplyTMSettings);
+				return;
+			}
+
+			if (preferences.LanguageResourcePath is not null)
+				ResourceTemplatePath = preferences.LanguageResourcePath;
+			 
+			if (preferences.TMPathCollection is not null)
+			{
+                var validTMs = FilterInvalidTMs(preferences.TMPathCollection);
+	            AddRangeOfTms(_tmLoader.GetTms(validTMs, TmCollection)); 
+			}
+
+			if (preferences.Settings is not null) ApplyNewSettings(preferences.Settings);
+		}
+
+		private IEnumerable<string> GetMissingTMs(IEnumerable<string> filePaths)
+		{
+			return filePaths.Where(filePath => !File.Exists(filePath));
+		}
+
+		private IEnumerable<string> GetInvalidTMs(IEnumerable<string> filePaths)
+		{
+			return filePaths.Where(file => Path.GetExtension(file).ToLower() != ".sdltm");
+		}
+
+		private List<string> FilterInvalidTMs(IEnumerable<string> filePaths)
+		{
+			var missingTMs = GetMissingTMs(filePaths);
+			if (missingTMs.Any())
+				_messageService.ShowWarningMessage(PluginResources.Warning, PluginResources.ApplyTMSettings_MissingTMs);
+
+			var invalidTMs = GetInvalidTMs(filePaths);
+			if (invalidTMs.Any())
+				_messageService.ShowWarningMessage(PluginResources.Warning, PluginResources.ApplyTMSettings_InvalidTMs);
+
+            return filePaths.Where(path => !missingTMs.Contains(path) && !invalidTMs.Contains(path)).ToList();
+		}
+
+		private void ApplyNewSettings(Settings newSettings)
+		{
+            Settings.AbbreviationsChecked = newSettings.AbbreviationsChecked;
+            Settings.CurrenciesChecked = newSettings.CurrenciesChecked;
+            Settings.NumbersChecked = newSettings.NumbersChecked;
+            Settings.DatesChecked = newSettings.DatesChecked;
+            Settings.VariablesChecked = newSettings.VariablesChecked;
+            Settings.MeasurementsChecked = newSettings.MeasurementsChecked;
+            Settings.OrdinalFollowersChecked = newSettings.OrdinalFollowersChecked;
+            Settings.RecognizersChecked = newSettings.RecognizersChecked;
+            Settings.SegmentationRulesChecked = newSettings.SegmentationRulesChecked;
+            Settings.TimesChecked = newSettings.TimesChecked;
+            Settings.WordCountFlagsChecked = newSettings.WordCountFlagsChecked;
+        }
 
 		private bool AreAllOptionsChecked() => Settings.GetType().GetProperties().All(propertyInfo => !propertyInfo.CanWrite || (bool)propertyInfo.GetValue(Settings));
 
@@ -245,11 +349,38 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			ResourceTemplatePath = resourceTemplatePath[0];
 		}
 
+        private async void SavePreferences()
+		{
+			var preferences = new ApplyTMSettings()
+			{
+				TMPathCollection = TmCollection.Select(tm => tm.FilePath).ToList(),
+				LanguageResourcePath = ResourceTemplatePath,
+				Settings = Settings
+			};
+
+			var saveLocation = GetSaveLocation(
+				PluginResources.Create_ApplyTMSettings,
+				"Apply TM Settings |*.applyTMsettings",
+				PluginResources.ApplyTM_fileName);
+            if (saveLocation == null) return;
+            
+			ProgressVisibility = "Visible";
+			
+			await Task.Run(() => _applyTMSettingsManager.SaveSettings(saveLocation, preferences));
+            _messageService.ShowMessage(PluginResources.Success_Window_Title, PluginResources.TMSettings_Created);
+            
+			ProgressVisibility = "Collapsed";
+        }
+
 		private async void ExportToExcel()
 		{
 			if (!IsTemplatePathValid()) return;
 
-			var saveLocation = GetSaveLocation();
+            var saveLocation = GetSaveLocation(
+				PluginResources.Export_language_resources, 
+				"Excel |*.xlsx", 
+				PluginResources.Exported_filename);
+
 			if (saveLocation == null) return;
 
 			ProgressVisibility = "Visible";
@@ -264,22 +395,22 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			ProgressVisibility = "Collapsed";
 		}
 
-		private string GetSaveLocation()
+		private string GetSaveLocation(string title, string extension, string fileName)
 		{
-			var saveLocation = "";
-			try
-			{
-				_filePathDialogService.GetSaveLocationInputFromUser(out saveLocation,
-					PluginResources.Export_language_resources, "Excel |*.xlsx", PluginResources.Exported_filename);
-			}
-			catch (Exception e)
-			{
-				_messageService.ShowWarningMessage(PluginResources.Warning,
-					$"{e.Message}\n\n{PluginResources.A_new_file_created}: {saveLocation}");
-			}
+            var saveLocation = "";
+            try
+            {
+                _filePathDialogService.GetSaveLocationInputFromUser(out saveLocation,
+                    title, extension, fileName);
+            }
+            catch (Exception e)
+            {
+                _messageService.ShowWarningMessage(PluginResources.Warning,
+                    $"{e.Message}\n\n{PluginResources.A_new_file_created}: {saveLocation}");
+            }
 
-			return saveLocation;
-		}
+            return saveLocation;
+        }
 
 		private void HandlePreviewDrop(object droppedFile)
 		{
@@ -330,7 +461,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			{
 				if (fileName[0].Contains(".xlsx"))
 				{
-					_resourceManager.ImportResourcesFromExcel(fileName[0], _languageResourcesAdapter, Settings);
+					_resourceManager.ImportResourcesFromExcel(fileName[0], _languageResourcesAdapter, Settings, Overwrite);
 				}
 			});
 			_messageService.ShowMessage(PluginResources.Success_Window_Title, PluginResources.Resources_Imported_Successfully);
@@ -339,7 +470,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 		private async Task ImportResourcesFromSdltm()
 		{
-			await Task.Run(() => { _resourceManager.ImportResourcesFromSdltm(SelectedTmsList, _languageResourcesAdapter, Settings); });
+			await Task.Run(() => { _resourceManager.ImportResourcesFromSdltm(SelectedTmsList, _languageResourcesAdapter, Settings, Overwrite); });
 			_messageService.ShowMessage(PluginResources.Success_Window_Title, PluginResources.Resources_Imported_Successfully);
 		}
 
