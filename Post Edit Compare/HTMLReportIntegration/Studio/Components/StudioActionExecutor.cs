@@ -1,11 +1,12 @@
-﻿using Sdl.Community.PostEdit.Compare.Core.Helper;
-using Sdl.Community.PostEdit.Compare.Core;
+﻿using Sdl.Community.PostEdit.Compare.Core;
+using Sdl.Community.PostEdit.Compare.Core.Helper;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 
@@ -13,11 +14,12 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
 {
     public class StudioActionExecutor
     {
-        private EditorController EditorController => SdlTradosStudio.Application.GetController<EditorController>();
         private ProjectsController _projectsController;
+        private EditorController EditorController => SdlTradosStudio.Application.GetController<EditorController>();
+        private Dictionary<string, ConfirmationLevel> OriginalStatuses { get; set; } = new();
 
         private ProjectsController ProjectsController =>
-            _projectsController ??= SdlTradosStudio.Application.GetController<ProjectsController>();
+                    _projectsController ??= SdlTradosStudio.Application.GetController<ProjectsController>();
 
         public void ChangeStatusOfSegment(string status, string segmentId, string fileId, string projectId)
         {
@@ -32,33 +34,11 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
             }
         }
 
-        private ISegmentPair GetSegmentPair(string segmentId, string fileId, string projectId)
-        {
-            EditorController.ActiveDocument.SetActiveSegmentPair(OpenFile(fileId, projectId), segmentId);
-
-            var segmentPair = EditorController.ActiveDocument.GetActiveSegmentPair();
-
-            if (segmentPair is null)
-                throw new Exception(
-                    "The segment pair was not found in the active document.");
-
-            return segmentPair;
-        }
-
-        private void ChangeStatusOfSegment(string status, ISegmentPair segmentPair)
-        {
-            var segment = segmentPair.Target;
-            var confirmationStatus = (ConfirmationLevel)Enum.Parse(typeof(ConfirmationLevel), status);
-            var segmentPairProperties = segment.Properties;
-            segmentPairProperties.ConfirmationLevel = confirmationStatus;
-            EditorController.ActiveDocument.UpdateSegmentPairProperties(segmentPair, segmentPairProperties);
-        }
-
         public void NavigateToSegment(string segmentId, string fileId, string projectId)
         {
             try
             {
-                OpenFile(fileId, projectId);
+                OpenFile(fileId, projectId, true);
                 NavigateToSegment(segmentId);
             }
             catch (Exception ex)
@@ -67,11 +47,36 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
             }
         }
 
-        private ProjectFile OpenFile(string fileId, string projectId)
+        private void ChangeStatusOfSegment(string statusString, ISegmentPair segmentPair)
         {
-            var fileBasedProject = OpenProject(projectId);
-            var projectFile = OpenFile(fileId, fileBasedProject);
-            return projectFile;
+            if (!Enum.TryParse<ConfirmationLevel>(statusString, out var confirmationStatus))
+                confirmationStatus = OriginalStatuses[segmentPair.Properties.Id.Id];
+
+            if (!OriginalStatuses.ContainsKey(segmentPair.Properties.Id.Id))
+                OriginalStatuses[segmentPair.Properties.Id.Id] = confirmationStatus;
+
+            var segmentPairProperties = segmentPair.Target.Properties;
+            segmentPairProperties.ConfirmationLevel = confirmationStatus;
+            EditorController.ActiveDocument.UpdateSegmentPairProperties(segmentPair, segmentPairProperties);
+        }
+
+        private ISegmentPair GetSegmentPair(string segmentId, string fileId, string projectId)
+        {
+            ISegmentPair segmentPair = null;
+            try
+            {
+                EditorController.ActiveDocument.SetActiveSegmentPair(OpenFile(fileId, projectId), segmentId);
+                segmentPair = EditorController.ActiveDocument.GetActiveSegmentPair();
+            }
+            catch { }
+
+            segmentPair ??= EditorController.ActiveDocument.SegmentPairs.FirstOrDefault(sp => sp.Properties.Id.Id == segmentId);
+
+            if (segmentPair is null)
+                throw new Exception(
+                    "The segment pair was not found in the active document.");
+
+            return segmentPair;
         }
 
         private void InvokeAction(Action action) => Application.Current.Dispatcher.Invoke(action);
@@ -83,9 +88,16 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
                     segmentId, true));
         }
 
-        private ProjectFile OpenFile(string fileId, FileBasedProject project)
+        private ProjectFile OpenFile(string fileId, string projectId, bool forceOpen = false)
         {
-            if (EditorController.ActiveDocument is not null &&
+            var fileBasedProject = OpenProject(projectId);
+            var projectFile = OpenFile(fileId, fileBasedProject, forceOpen);
+            return projectFile;
+        }
+
+        private ProjectFile OpenFile(string fileId, FileBasedProject project, bool forceOpen = false)
+        {
+            if (!forceOpen && EditorController.ActiveDocument is not null &&
                 AppInitializer.GetActiveFileId() == fileId)
                 return EditorController.ActiveDocument.ActiveFile;
 

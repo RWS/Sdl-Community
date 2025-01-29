@@ -102,6 +102,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="HTMLReportIntegration\ReportView\Controls\Scripts.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Add.ico" />
     <Content Include="Resources\Compare.ico" />
     <Content Include="Resources\Download.ico" />
@@ -285,6 +288,7 @@
     <EmbeddedResource Remove="Sdl.Community.PostEdit.Compare\WaitingDialog.resx" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="HTMLReportIntegration\ReportView\Controls\Scripts.js" />
     <None Remove="Resources\Report.png" />
   </ItemGroup>
   <ItemGroup>

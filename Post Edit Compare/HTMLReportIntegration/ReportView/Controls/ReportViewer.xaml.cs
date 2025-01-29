@@ -58,6 +58,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
                 };
 
                 await WebView2Browser.EnsureCoreWebView2Async(environment);
+                await WebView2Browser.ExecuteScriptAsync(File.ReadAllText(
+                    @"C:\Code\SDL\GitHub repos\RWS Community\Post Edit Compare\bin\Debug\net48\HTMLReportIntegration\ReportView\Controls\scripts.js"));
             }
 
             Navigate(null);
