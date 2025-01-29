@@ -22,6 +22,25 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 			_targetStatusToolTip = PluginResources.Nothing_processed_yet;
 			_isSelected = false;
 			LanguageResourceBundles.CollectionChanged += LanguageResourceBundles_CollectionChanged;
+
+			var bundles = this.LanguageResourceBundles;
+
+			// Method used to make sure the bundle properties are populated
+			// Might remove it when initializing the TM works
+			foreach (var bundle in bundles)
+			{
+				_ = bundle.Abbreviations;
+				_ = bundle.CurrencyFormats;
+				_ = bundle.LongDateFormats;
+				_ = bundle.LongTimeFormats;
+				_ = bundle.MeasurementUnits;
+				_ = bundle.NumbersSeparators;
+				_ = bundle.OrdinalFollowers;
+				_ = bundle.SegmentationRules;
+				_ = bundle.ShortDateFormats;
+				_ = bundle.ShortTimeFormats;
+				_ = bundle.Variables;
+			}
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

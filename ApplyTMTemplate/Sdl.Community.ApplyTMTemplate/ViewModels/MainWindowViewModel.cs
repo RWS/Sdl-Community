@@ -192,7 +192,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				_filePathDialogService.GetFilesFromFolderInputByUser(
 					PluginResources.Please_select_the_folder_containing_the_TMs, _tmPath);
 
-			if (filesPaths == null) return;
+			if (filesPaths is null || !filesPaths.Any()) return;
 
 			_tmPath = filesPaths[0];
 			AddRangeOfTms(_tmLoader.GetTms(filesPaths, TmCollection));
@@ -210,7 +210,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		private void AddTms()
 		{
 			var filePaths = _filePathDialogService.GetFilePathInputFromUser(filter: "Translation Memories|*.sdltm", initialDirectory: _tmPath, multiselect: true);
-			if (filePaths == null) return;
+			if (filePaths is null || !filePaths.Any()) return;
 			_tmPath = filePaths[0];
 			AddRangeOfTms(_tmLoader.GetTms(filePaths, TmCollection));
 		}
