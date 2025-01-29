@@ -5,6 +5,7 @@ using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Utilities
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.DesktopEditor.EditorApi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
     public class EditorEventListener
     {
         public event Action<List<CommentInfo>, string, string> CommentsChanged;
+        public event Action<string, string, string> StatusChanged;
+        private EditorController EditorController => SdlTradosStudio.Application.GetController<EditorController>();
 
         public (List<IComment> Comments, ISegmentPair ActiveSegmentPair) CurrentComments { get; set; }
 
@@ -24,13 +27,13 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
 
         public void StartListening()
         {
-            AppInitializer.EditorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
+            EditorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
             SetUpActiveDocument();
         }
 
         public void StopListening()
         {
-            AppInitializer.EditorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
+            EditorController.ActiveDocumentChanged -= EditorController_ActiveDocumentChanged;
             StopListeningPreviousDocument();
         }
 
@@ -66,9 +69,10 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
                 Severity = c.Severity
             }).ToList();
 
-            var fileId =FileIdentifier.GetFileInfo(ActiveDocument.ActiveFile.LocalFilePath);
-            CommentsChanged?.Invoke(commentInfo, activeSegmentPair.Properties.Id.ToString(), fileId);
+            CommentsChanged?.Invoke(commentInfo, activeSegmentPair.Properties.Id.ToString(), AppInitializer.GetActiveFileId());
         }
+
+        
 
         private void PollingTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
@@ -83,18 +87,30 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
 
         private void StartListeningCurrentDocument()
         {
-            if (AppInitializer.EditorController.ActiveDocument is null) return;
-            ActiveDocument = AppInitializer.EditorController.ActiveDocument;
+            if (EditorController.ActiveDocument is null) return;
+            ActiveDocument = EditorController.ActiveDocument;
 
             ActiveDocument.ActiveSegmentChanged += ActiveDocument_ActiveSegmentChanged;
+            ActiveDocument.SegmentsConfirmationLevelChanged += ActiveDocument_SegmentsConfirmationLevelChanged;
             ActiveDocument_ActiveSegmentChanged(null, null);
 
             PollingTimer.Elapsed += PollingTimer_Elapsed;
         }
 
+        private void ActiveDocument_SegmentsConfirmationLevelChanged(object sender, EventArgs e)
+        {
+            if (sender is not ISegmentContainerNode segment) return;
+            StatusChanged?.Invoke(segment.Segment.Properties.ConfirmationLevel.ToString(),
+                segment.Segment.Properties.Id.Id, AppInitializer.GetActiveFileId());
+        }
+
         private void StopListeningPreviousDocument()
         {
             if (ActiveDocument is null) return;
+
+            ActiveDocument.ActiveSegmentChanged -= ActiveDocument_ActiveSegmentChanged;
+            ActiveDocument.SegmentsConfirmationLevelChanged -= ActiveDocument_SegmentsConfirmationLevelChanged;
+
             PollingTimer.Elapsed -= PollingTimer_Elapsed;
             PollingTimer.Stop();
         }

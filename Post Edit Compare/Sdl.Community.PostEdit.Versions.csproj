@@ -42,10 +42,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Web.WebView2.Core">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio18\Microsoft.Web.WebView2.Core.dll</HintPath>
+      <HintPath>$(TradosFolder)\Microsoft.Web.WebView2.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.WebView2.Wpf">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio18\Microsoft.Web.WebView2.WPF.dll</HintPath>
+      <HintPath>$(TradosFolder)\Microsoft.Web.WebView2.WPF.dll</HintPath>
     </Reference>
     <Reference Include="PostEdit.Compare.WinFormsUI.Docking">
       <HintPath>Sdl.Community.PostEdit.Compare\3rd party\PostEdit.Compare.WinFormsUI.Docking.dll</HintPath>
@@ -61,6 +61,9 @@
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
       <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.DesktopEditor.EditorApi">
+      <HintPath>$(TradosFolder)\Sdl.DesktopEditor.EditorApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>

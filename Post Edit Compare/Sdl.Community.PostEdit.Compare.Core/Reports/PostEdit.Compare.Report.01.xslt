@@ -522,8 +522,16 @@
           // Locate the status cell
           const statusCell = row.querySelector('td:nth-child(6)');
           if (statusCell) {
+          const newStatusElement = statusCell.querySelector('.new-status');
+          if (newStatusElement)
+          {
+            newStatusElement.innerHTML = newStatus;
+          }
+          else
+          {
           const statusHtml = '          <div class="new-status">' + newStatus + '</div>';
           statusCell.innerHTML = statusHtml + statusCell.innerHTML;
+          }
           } else {
           console.error('Status column not found in segment row: ' + segmentId);
           }

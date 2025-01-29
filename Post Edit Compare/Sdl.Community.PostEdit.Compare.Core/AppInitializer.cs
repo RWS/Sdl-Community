@@ -10,7 +10,10 @@ namespace Sdl.Community.PostEdit.Compare.Core
     [ApplicationInitializer]
     public class AppInitializer : IApplicationInitializer
     {
-        public static EditorController EditorController { get; set; }
+        private static EditorController EditorController { get; set; }
+
+        public static string GetActiveFileId() =>
+            FileIdentifier.GetFileInfo(EditorController.ActiveDocument.ActiveFile.LocalFilePath);
 
         public void Execute()
         {

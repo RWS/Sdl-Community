@@ -5,6 +5,7 @@ using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.ViewModel
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,29 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
             });
             var script = $"replaceCommentsForSegment('{segmentId}', {commentsJson}, '{fileId}');";
 
+            TryExecuteScript(script);
+        }
+
+        private void TryExecuteFunction(string functionName, params object[] parameters)
+        {
+            var serializedParams = new List<string>();
+            foreach (var param in parameters)
+            {
+                var paramJson = JsonConvert.SerializeObject(param, new JsonSerializerSettings
+                {
+                    ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
+                });
+                serializedParams.Add(paramJson);
+            }
+
+            var paramsJoined = string.Join(", ", serializedParams);
+            var script = $"{functionName}({paramsJoined});";
+
+            TryExecuteScript(script);
+        }
+
+        private void TryExecuteScript(string script)
+        {
             try
             {
                 ReportViewer.WebView2Browser.Dispatcher.Invoke(async () =>
@@ -81,5 +105,10 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
         private void WebView2Browser_WebMessageReceived(object sender,
             Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e) =>
             Integration.HandleReportRequest(e.WebMessageAsJson);
+
+        public void UpdateStatus(string newStatus, string segmentId, string fileId)
+        {
+            TryExecuteFunction("updateSegmentStatus", segmentId, fileId, newStatus);
+        }
     }
 }

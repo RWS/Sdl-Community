@@ -24,12 +24,19 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
             {
                 EditorEventListener.StartListening();
                 EditorEventListener.CommentsChanged += EditorEventListener_CommentsChanged;
+                EditorEventListener.StatusChanged += EditorEventListener_StatusChanged;
             }
             else
             {
                 EditorEventListener.StopListening();
                 EditorEventListener.CommentsChanged -= EditorEventListener_CommentsChanged;
+                EditorEventListener.StatusChanged -= EditorEventListener_StatusChanged;
             }
+        }
+
+        private static void EditorEventListener_StatusChanged(string newStatus, string segmentId, string fileId)
+        {
+            ReportViewController.UpdateStatus(newStatus, segmentId, fileId);
         }
 
         private static void EditorEventListener_CommentsChanged(List<CommentInfo> comments, string segmentId, string fileId)
