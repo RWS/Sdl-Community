@@ -11,6 +11,35 @@
 
 
         <style type="text/css">
+
+          .new-status {
+          border: 1px solid gray; /* Softer border */
+          background-color: #ffffcc; /* Light yellow, more subtle */
+          padding: 2px 5px;
+          margin-bottom: 2px;
+          font-weight: bold;
+          display: inline-block;
+          }
+
+          .status-cell {
+          position: relative;
+          padding-top: 17px;
+          }
+
+          .status-dropdown {
+          position: absolute;
+          top: 2px;
+          right: 2px;
+          font-size: 10px;
+          width: 17px;
+          padding: 1px;
+          }
+
+          .status-dropdown:focus {
+          font-size: 12px;
+          width: auto; /* Expand width dynamically */
+          }
+
           body
           {
           background: #FFFFFF;
@@ -471,6 +500,44 @@
 
         <script type="text/javascript">
 
+          function updateSegmentStatus(segmentId, fileId, newStatus) {
+
+          console.info('UpdateSegmentStatus');
+          const rows = document.querySelectorAll('table tr');
+
+
+          rows.forEach(function(row) {
+          const fileIdRow = row.getAttribute('data-file-id'); // Get the fileId attribute
+          const segmentCell = row.querySelector('td:first-child'); // Get the first cell in the row
+
+
+          if (segmentCell) {
+          const cellContent = segmentCell.textContent.trim();
+          if (cellContent === segmentId)
+          console.info('SegmentId found');
+          if (fileIdRow === fileId) {
+          console.info('FileId found');
+
+
+          // Locate the status cell
+          const statusCell = row.querySelector('td:nth-child(6)');
+          if (statusCell) {
+          const statusHtml = '          <div class="new-status">' + newStatus + '</div>';
+          statusCell.innerHTML = statusHtml + statusCell.innerHTML;
+          } else {
+          console.error('Status column not found in segment row: ' + segmentId);
+          }
+
+          }
+          }
+          });
+
+
+          }
+        </script>
+
+        <script type="text/javascript">
+
           function replaceCommentsForSegment(segmentId, comments, fileId) {
           const rows = document.querySelectorAll('table tr');
           let found = false;
@@ -492,34 +559,36 @@
           let severityHtml;
           if (comment.severity === 'High') {
           severityHtml = '<span style="padding: 3px; color: red; font-weight: bold;">' + comment.severity + '</span>';
-                } else {
-                severityHtml = '<span style="padding: 3px; font-weight: bold;">' + comment.severity + '</span>';
-                }
-
-                const commentHtml = `
-                <div style="border-style: solid solid dashed solid; border-width: thin; border-color: #C0C0C0 #C0C0C0 #000000 #C0C0C0; margin: 1px 0px 0px 1px; padding: 0; text-align: left;">
-                  <div style="white-space: nowrap; background-color: #DFDFFF; text-align: left; color: Black; margin-bottom: 1px;">
-                    ${severityHtml}
-                    <span style="padding: 3px; font-style: italic;">${comment.date}</span>
-                    <br/>
-                    <span style="padding: 3px;">${comment.author}</span>
-                  </div>
-                  <p style="margin: 0px; padding: 3;">${comment.text}</p>
-                </div>
-                `;
-                commentsCell.innerHTML += commentHtml;
-                });
-                } else {
-            console.error('Last column not found in segment row: ' + segmentId);
-            }
-            }
-            }
-            });
-
-            if (!found) {
-            console.error('Segment not found: ' + segmentId);
-            }
+          } else {
+          severityHtml = '<span style="padding: 3px; font-weight: bold;">' + comment.severity + '</span>';
           }
+
+          const commentHtml = `
+          <div style="border-style: solid solid dashed solid; border-width: thin; border-color: #C0C0C0 #C0C0C0 #000000 #C0C0C0; margin: 1px 0px 0px 1px; padding: 0; text-align: left;">
+            <div style="white-space: nowrap; background-color: #DFDFFF; text-align: left; color: Black; margin-bottom: 1px;">
+              ${severityHtml}
+              <span style="padding: 3px; font-style: italic;">${comment.date}</span>
+              <br/>
+              <span style="padding: 3px;">${comment.author}</span>
+            </div>
+            <p style="margin: 0px; padding: 3;">${comment.text}</p>
+          </div>
+          `;
+          commentsCell.innerHTML += commentHtml;
+          });
+          } else {
+          console.error('Last column not found in segment row: ' + segmentId);
+          }
+          }
+          }
+          });
+
+          if (!found) {
+          console.error('Segment not found: ' + segmentId);
+          }
+          }
+
+
         </script>
 
 
@@ -2737,9 +2806,9 @@
 
       </xsl:if>
       <xsl:if test="$showSegmentStatus = 'True'">
-        <td>
+        <td class="status-cell">
 
-          <select onchange="updateStatus(this, '{@segmentId}','{@fileId}','{@projectId}')">
+          <select class="status-dropdown" onchange="updateStatus(this, '{@segmentId}','{@fileId}','{@projectId}')">
             <option value="">Change status</option>
             <option value="Unspecified">Not Translated</option>
             <option value="Draft">Draft</option>

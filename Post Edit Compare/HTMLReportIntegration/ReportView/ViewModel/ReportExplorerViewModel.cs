@@ -2,6 +2,7 @@
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
@@ -10,7 +11,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.ViewM
 
 public class ReportExplorerViewModel : ViewModelBase
 {
-    private List<ReportInfo> _reports;
+    private ObservableCollection<ReportInfo> _reports;
     private ReportInfo _selectedReport;
     private ICommand _refreshCommand;
 
@@ -20,7 +21,7 @@ public class ReportExplorerViewModel : ViewModelBase
         Initialize();
     }
 
-    public List<ReportInfo> Reports
+    public ObservableCollection<ReportInfo> Reports
     {
         get => _reports;
         set => SetField(ref _reports, value);

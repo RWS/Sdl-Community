@@ -17,12 +17,6 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Menu Grid.Row="0">
-            <MenuItem x:Name="SyncTriggerButton"
-                      Header="&#x21C6;"
-                      Click="SyncTriggerButton_OnClick"
-                      IsCheckable="True" />
-        </Menu>
         <wpf:WebView2 Grid.Row="1"
                       Name="WebView2Browser"
                       WebMessageReceived="CoreWebView2_WebMessageReceived"

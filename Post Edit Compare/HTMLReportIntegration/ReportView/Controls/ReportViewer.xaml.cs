@@ -20,8 +20,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             InitializeComponent();
         }
 
-        public event Action<bool> SyncTriggered;
-
         public event Action<object, CoreWebView2WebMessageReceivedEventArgs> WebMessageReceived;
 
         public void Dispose()
@@ -63,11 +61,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             }
 
             Navigate(null);
-        }
-
-        private void SyncTriggerButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            SyncTriggered?.Invoke(SyncTriggerButton.IsChecked);
         }
 
         private async void WebView2Browser_OnLoaded(object sender, RoutedEventArgs e)

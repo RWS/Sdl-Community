@@ -62,7 +62,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
         {
             ReportExplorer.SelectedReportChanged += ExplorerOnSelectedReportChanged;
             ReportViewer.WebMessageReceived += WebView2Browser_WebMessageReceived;
-            ReportViewer.SyncTriggered += ReportExplorer_SyncTriggered;
         }
 
         private void ExplorerOnSelectedReportChanged() =>
@@ -78,8 +77,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
                 DataContext = ReportExplorerViewModel
             };
         }
-
-        private void ReportExplorer_SyncTriggered(bool syncEnabled) => Integration.ToggleSync(syncEnabled);
 
         private void WebView2Browser_WebMessageReceived(object sender,
             Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e) =>

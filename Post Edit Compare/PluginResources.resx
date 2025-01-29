@@ -494,4 +494,10 @@ Select 'No' to cancel this action
   <data name="TellmeDocumentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\TellmeDocumentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="StartSync" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\StartSync.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="StopSync" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\StopSync.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

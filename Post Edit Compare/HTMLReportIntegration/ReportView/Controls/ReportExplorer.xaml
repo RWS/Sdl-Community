@@ -23,13 +23,13 @@
                       Header="&#x21BB;" />
             
         </Menu>
-        <ListBox ItemsSource="{Binding Reports}"
+        <ListBox ItemsSource="{Binding Reports,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  SelectionChanged="Selector_OnSelectionChanged"
                  SelectedItem="{Binding SelectedReport}">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type model:ReportInfo}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="../../Resources/Report.png"
+                        <Image Source="../../../Resources/Report.png"
                                Width="16"
                                Height="16"
                                Margin="0,0,5,0" />
