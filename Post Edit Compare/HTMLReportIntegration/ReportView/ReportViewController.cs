@@ -110,5 +110,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
         {
             TryExecuteFunction("updateSegmentStatus", segmentId, fileId, newStatus);
         }
+
+        public void ToggleReportSelection() => ReportExplorer.ToggleOnOff();
     }
 }

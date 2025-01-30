@@ -20,6 +20,7 @@
         <Menu DockPanel.Dock="Bottom"
               HorizontalAlignment="Right">
             <MenuItem Command="{Binding RefreshCommand}"
+                      ToolTip="Refresh report list"
                       Header="&#x21BB;" />
             
         </Menu>

@@ -16,13 +16,12 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
 
         public event Action SelectedReportChanged;
 
+        public void ToggleOnOff() => IsEnabled = !IsEnabled;
 
         public void Dispose()
         {
             Root?.Dispose();
         }
-
-        
 
         private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {

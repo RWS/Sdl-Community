@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Controls;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Components;
@@ -28,6 +29,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
         public static void ToggleSync(bool syncEnabled)
         {
             SyncOn = syncEnabled;
+            ReportViewController.ToggleReportSelection();
 
             if (syncEnabled)
             {
