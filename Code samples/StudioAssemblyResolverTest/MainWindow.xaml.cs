@@ -18,12 +18,12 @@ namespace StudioAssemblyResolverTest
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             AssemblyResolver
-                .WithPathResolver(new List<IPathResolver> { new RegistryStudio2021PathResolver() })
+                .WithPathResolver(new List<IPathResolver> { new RegistryStudio2022PathResolver() })
                 .Resolve();
             Registry.Text = AssemblyResolver.StudioPath;
 
             AssemblyResolver
-                .WithPathResolver(new List<IPathResolver> { new Studio2021PathResolver() })
+                .WithPathResolver(new List<IPathResolver> { new Studio2022PathResolver() })
                 .Resolve();
             Filepath.Text = AssemblyResolver.StudioPath;
 
