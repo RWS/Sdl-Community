@@ -8,6 +8,27 @@
     window.chrome.webview.postMessage(payload);
 }
 
+function submitComment(input, severity, segmentId, fileId, projectId) {
+    const commentText = input.value.trim();
+    if (!commentText) return;
+
+    const payload = {
+        action: "addComment",
+        severity: severity,
+        segmentId: segmentId,
+        fileId: fileId,
+        projectId: projectId,
+        comment: commentText
+    };
+
+    window.chrome.webview.postMessage(payload);
+
+    // Reset input field
+    input.value = "";
+    input.placeholder = "Add comment";
+}
+
+
 function updateStatus(dropdown, segmentId, fileId, projectId) {
     const status = dropdown.value;
     const payload = {
@@ -26,7 +47,7 @@ function updateSegmentStatus(segmentId, fileId, newStatus) {
     const rows = document.querySelectorAll('table tr');
 
 
-    rows.forEach(function (row) {
+    rows.forEach(function(row) {
         const fileIdRow = row.getAttribute('data-file-id'); // Get the fileId attribute
         const segmentCell = row.querySelector('td:first-child'); // Get the first cell in the row
 
@@ -42,23 +63,34 @@ function updateSegmentStatus(segmentId, fileId, newStatus) {
                 // Locate the status cell
                 const statusCell = row.querySelector('td:nth-child(6)');
                 if (statusCell) {
+
+                    const originalStatusElement = statusCell.querySelector('span');
+                    const originalStatus = originalStatusElement ? originalStatusElement.textContent.trim() : null;
+
+                    const isOriginal = newStatus === originalStatus;
+
+                    console.info('newStatus ' + newStatus + '.\n' + 'original status ' + originalStatus + '.\n');
+                    console.info('is original' + isOriginal + '.\n');
+
+
                     const newStatusElement = statusCell.querySelector('.new-status');
-                    if (newStatusElement) {
-                        newStatusElement.innerHTML = newStatus;
-                    }
-                    else {
-                        const statusHtml = '          <div class="new-status">' + newStatus + '</div>';
-                        statusCell.innerHTML = statusHtml + statusCell.innerHTML;
+
+                    if (!isOriginal) {
+                        if (newStatusElement) {
+                            newStatusElement.innerHTML = newStatus;
+                        } else {
+                            const statusHtml = '          <div class="new-status">' + newStatus + '</div>';
+                            statusCell.innerHTML = statusHtml + statusCell.innerHTML;
+                        }
+                    } else if (newStatusElement) {
+                        statusCell.removeChild(newStatusElement);
                     }
                 } else {
                     console.error('Status column not found in segment row: ' + segmentId);
                 }
-
             }
         }
     });
-
-
 }
 
 function replaceCommentsForSegment(segmentId, comments, fileId) {
@@ -75,8 +107,9 @@ function replaceCommentsForSegment(segmentId, comments, fileId) {
                 if (rowDataFileId === fileId) {
                     found = true;
                     const commentsCell = row.querySelector('td:last-child');
-                    if (commentsCell) {
-                        commentsCell.innerHTML = '';
+                    const commentsDiv = commentsCell.querySelector('.comments');
+                    if (commentsDiv) {
+                        commentsDiv.innerHTML = '';
 
                         comments.forEach(function (comment) {
                             let severityHtml;
@@ -97,7 +130,7 @@ function replaceCommentsForSegment(segmentId, comments, fileId) {
             <p style="margin: 0px; padding: 3;">${comment.text}</p>
           </div>
           `;
-                            commentsCell.innerHTML += commentHtml;
+                            commentsDiv.innerHTML += commentHtml;
                         });
                     } else {
                         console.error('Last column not found in segment row: ' + segmentId);

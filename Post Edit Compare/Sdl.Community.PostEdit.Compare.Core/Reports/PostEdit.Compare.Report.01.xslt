@@ -12,9 +12,19 @@
 
         <style type="text/css">
 
+          .addComment {
+          display: grid;
+          grid-template-columns: 1fr auto; /* Two columns: one for the input, one for the dropdown */
+          gap: 10px; /* Space between input and dropdown */
+          }
+
+          .severity-dropdown {
+          width: 100%; /* Ensure it takes up the remaining space */
+          }
+
           .new-status {
-          border: 1px solid gray; /* Softer border */
-          background-color: #ffffcc; /* Light yellow, more subtle */
+          border: 1px solid gray;
+          background-color: #ffffcc;
           padding: 2px 5px;
           margin-bottom: 2px;
           font-weight: bold;
@@ -2832,9 +2842,22 @@
 
       <xsl:if test="$showSegmentComments = 'True'">
         <td>
-          <xsl:for-each select="comments">
-            <xsl:apply-templates select="comment"/>
-          </xsl:for-each>
+          <div class="addComment">
+            <input type="text" name="commentInput" placeholder="Add comment"
+                   onkeydown="if (event.key === 'Enter') submitComment(this, this.closest('.addComment').querySelector('.severity-dropdown').value, '{@segmentId}', '{@fileId}', '{@projectId}')"/>
+
+            <select class="severity-dropdown" id="severityDropdown">
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+
+          </div>
+          <div class="comments">
+            <xsl:for-each select="comments">
+              <xsl:apply-templates select="comment" />
+            </xsl:for-each>
+          </div>
         </td>
       </xsl:if>
     </tr>

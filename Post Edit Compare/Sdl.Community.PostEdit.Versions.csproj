@@ -103,7 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="HTMLReportIntegration\ReportView\Controls\Scripts.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Add.ico" />
     <Content Include="Resources\Compare.ico" />

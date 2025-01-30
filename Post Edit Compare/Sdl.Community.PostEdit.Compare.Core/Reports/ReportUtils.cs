@@ -825,7 +825,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
             return strList;
         }
 
-        internal static string GetVisualSegmentStatus(string segmentStatusId)
+        public static string GetVisualSegmentStatus(string segmentStatusId)
         {
             switch (segmentStatusId)
             {

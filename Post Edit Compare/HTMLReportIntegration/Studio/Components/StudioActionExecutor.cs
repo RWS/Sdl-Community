@@ -2,6 +2,7 @@
 using Sdl.Community.PostEdit.Compare.Core.Helper;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -21,11 +22,30 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
         private ProjectsController ProjectsController =>
                     _projectsController ??= SdlTradosStudio.Application.GetController<ProjectsController>();
 
+        public void AddComment(string comment, string severityString, string segmentId, string fileId, string projectId)
+        {
+            try
+            {
+                var fileBasedProject = OpenProject(projectId);
+                var projectFile = OpenFile(fileId, fileBasedProject);
+                var segmentPair = GetSegmentPair(segmentId, projectFile);
+
+                if (Enum.TryParse<Severity>(severityString, out var severity))
+                    EditorController.ActiveDocument.AddCommentOnSegment(segmentPair, comment, severity);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
         public void ChangeStatusOfSegment(string status, string segmentId, string fileId, string projectId)
         {
             try
             {
-                var segmentPair = GetSegmentPair(segmentId, fileId, projectId);
+                var fileBasedProject = OpenProject(projectId);
+                var projectFile = OpenFile(fileId, fileBasedProject);
+                var segmentPair = GetSegmentPair(segmentId, projectFile);
                 ChangeStatusOfSegment(status, segmentPair);
             }
             catch (Exception ex)
@@ -38,7 +58,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
         {
             try
             {
-                OpenFile(fileId, projectId, true);
+                var fileBasedProject = OpenProject(projectId);
+                OpenFile(fileId, fileBasedProject, true);
                 NavigateToSegment(segmentId);
             }
             catch (Exception ex)
@@ -60,12 +81,12 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
             EditorController.ActiveDocument.UpdateSegmentPairProperties(segmentPair, segmentPairProperties);
         }
 
-        private ISegmentPair GetSegmentPair(string segmentId, string fileId, string projectId)
+        private ISegmentPair GetSegmentPair(string segmentId, ProjectFile projectFile)
         {
             ISegmentPair segmentPair = null;
             try
             {
-                EditorController.ActiveDocument.SetActiveSegmentPair(OpenFile(fileId, projectId), segmentId);
+                EditorController.ActiveDocument.SetActiveSegmentPair(projectFile, segmentId);
                 segmentPair = EditorController.ActiveDocument.GetActiveSegmentPair();
             }
             catch { }
@@ -88,12 +109,12 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
                     segmentId, true));
         }
 
-        private ProjectFile OpenFile(string fileId, string projectId, bool forceOpen = false)
-        {
-            var fileBasedProject = OpenProject(projectId);
-            var projectFile = OpenFile(fileId, fileBasedProject, forceOpen);
-            return projectFile;
-        }
+        //private ProjectFile OpenFile(string fileId, FileBasedProject fileBasedProject, bool forceOpen = false)
+        //{
+        //    //var fileBasedProject = OpenProject(projectId);
+        //    var projectFile = OpenFile(fileId, fileBasedProject, forceOpen);
+        //    return projectFile;
+        //}
 
         private ProjectFile OpenFile(string fileId, FileBasedProject project, bool forceOpen = false)
         {
@@ -101,11 +122,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
                 AppInitializer.GetActiveFileId() == fileId)
                 return EditorController.ActiveDocument.ActiveFile;
 
-            var projectFile = project.GetTargetLanguageFiles().FirstOrDefault(file =>
-            {
-                var projFileInfo = FileIdentifier.GetFileInfo(file.LocalFilePath);
-                return projFileInfo == fileId;
-            });
+            var projectFile = project.GetTargetLanguageFiles()
+                .FirstOrDefault(file => FileIdentifier.GetFileInfo(file.LocalFilePath) == fileId);
 
             if (projectFile is null)
                 throw new Exception(

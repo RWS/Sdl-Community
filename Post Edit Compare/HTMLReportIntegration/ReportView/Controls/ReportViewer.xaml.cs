@@ -26,7 +26,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
         {
         }
 
-        public void Navigate(string path)
+        public async Task Navigate(string path)
         {
             if (string.IsNullOrWhiteSpace(path))
             {
@@ -35,6 +35,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             }
             else
             {
+                await LoadScripts();
                 WebView2Browser.CoreWebView2?.Navigate(path);
             }
         }
@@ -58,11 +59,23 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
                 };
 
                 await WebView2Browser.EnsureCoreWebView2Async(environment);
-                await WebView2Browser.ExecuteScriptAsync(File.ReadAllText(
-                    @"C:\Code\SDL\GitHub repos\RWS Community\Post Edit Compare\bin\Debug\net48\HTMLReportIntegration\ReportView\Controls\scripts.js"));
             }
 
             Navigate(null);
+        }
+
+        private async Task LoadScripts()
+        {
+            var scripts = File.ReadAllText(
+                @"C:\Code\SDL\GitHub repos\RWS Community\Post Edit Compare\bin\Debug\net48\HTMLReportIntegration\ReportView\Controls\scripts.js");
+            try
+            {
+                var result = await WebView2Browser.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(scripts);
+            }
+            catch
+            {
+                MessageBox.Show("Failed to load scripts", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private async void WebView2Browser_OnLoaded(object sender, RoutedEventArgs e)

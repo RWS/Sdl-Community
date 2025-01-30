@@ -1,5 +1,4 @@
-﻿using Microsoft.Web.WebView2.Core;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Components;
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio
@@ -10,16 +9,19 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio
         public const string ProjectId = "projectId";
         public const string SegmentId = "segmentId";
         public const string Status = "status";
+        public const string Comment = "comment";
+        public const string Severity = "severity";
 
         private StudioActionExecutor Studio { get; } = new();
 
-        public void HandleReportRequest(string jsonMessage)
+        public void HandleReportRequest(JObject messageObject)
         {
-            var messageObject = JObject.Parse(jsonMessage);
-            var action = messageObject["action"]?.ToString();
-
-            switch (action)
+            switch (messageObject["action"].ToString())
             {
+                case "addComment":
+                    AddComment(messageObject);
+                    break;
+
                 case "navigate":
                     NavigateToSegment(messageObject);
                     break;
@@ -50,6 +52,17 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio
                 segmentId,
                 fileId,
                 projectId);
+        }
+
+        private void AddComment(JObject jsonMessage)
+        {
+            var segmentId = jsonMessage[SegmentId]?.ToString();
+            var fileId = jsonMessage[FileId]?.ToString();
+            var projectId = jsonMessage[ProjectId]?.ToString();
+            var comment = jsonMessage[Comment]?.ToString();
+            var severity = jsonMessage[Severity]?.ToString();
+
+            Studio.AddComment(comment, severity, segmentId, fileId, projectId);
         }
     }
 }

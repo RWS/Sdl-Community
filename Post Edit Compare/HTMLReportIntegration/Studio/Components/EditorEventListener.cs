@@ -1,5 +1,6 @@
 ﻿using Sdl.Community.PostEdit.Compare.Core;
 using Sdl.Community.PostEdit.Compare.Core.Helper;
+using Sdl.Community.PostEdit.Compare.Core.Reports;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -100,8 +101,12 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
         private void ActiveDocument_SegmentsConfirmationLevelChanged(object sender, EventArgs e)
         {
             if (sender is not ISegmentContainerNode segment) return;
-            StatusChanged?.Invoke(segment.Segment.Properties.ConfirmationLevel.ToString(),
-                segment.Segment.Properties.Id.Id, AppInitializer.GetActiveFileId());
+
+            var segmentStatusFriendly =
+                ReportUtils.GetVisualSegmentStatus(segment.Segment.Properties.ConfirmationLevel.ToString());
+            var activeFileId = AppInitializer.GetActiveFileId();
+
+            StatusChanged?.Invoke(segmentStatusFriendly, segment.Segment.Properties.Id.Id, activeFileId);
         }
 
         private void StopListeningPreviousDocument()
