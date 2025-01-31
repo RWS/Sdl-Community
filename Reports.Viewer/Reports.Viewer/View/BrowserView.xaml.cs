@@ -1,32 +1,52 @@
 ﻿using System.Windows.Controls;
+using System.Windows.Input;
+using CefSharp.Wpf;
+using CefSharp;
+using Reports.Viewer.Plus.ViewModel;
 
 namespace Reports.Viewer.Plus.View
 {
-	/// <summary>
-	/// Interaction logic for ProjectFilesView.xaml
-	/// </summary>
-	public partial class BrowserView : UserControl
-	{	
-		//private readonly BrowserViewModel _viewModel;
+    /// <summary>
+    /// Interaction logic for ProjectFilesView.xaml
+    /// </summary>
+    public partial class BrowserView : UserControl
+    {
+        private readonly BrowserViewModel _viewModel;
 
-		public BrowserView()
-		{
-			InitializeComponent();
+        public BrowserView(BrowserViewModel viewModel)
+        {
+            InitializeComponent();
+            _viewModel = viewModel;
+            DataContext = _viewModel;
+            WebBrowser.LoadingStateChanged += WebBrowser_LoadingStateChanged;
+        }
 
-			//_viewModel = viewModel;
-			//Loaded += BrowserView_Loaded;
-		}
+        private void WebBrowser_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var browser = sender as ChromiumWebBrowser;
+            if (browser != null)
+            {
+                e.Handled = true;
 
-		///// <summary>
-		///// We need to wait for the view to be fully loaded before binding the view model
-		///// Ensure Loaded is called only once; unsubscribe to the Loaded event
-		///// </summary>
-		///// <param name="sender"></param>
-		///// <param name="e"></param>
-		//private void BrowserView_Loaded(object sender, RoutedEventArgs e)
-		//{
-		//	Loaded -= BrowserView_Loaded;
-		//	DataContext = _viewModel;
-		//}
-	}
+                ContextMenu contextMenu = this.Resources["CustomContextMenu"] as ContextMenu;
+                if (contextMenu != null)
+                {
+                    // Show the context menu at the mouse position
+                    contextMenu.PlacementTarget = browser;
+                    contextMenu.IsOpen = true;
+                }
+            }
+        }
+
+        private void WebBrowser_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if (DataContext is BrowserViewModel viewModel)
+                {
+                    viewModel.IsLoading = e.IsLoading;
+                }
+            });
+        }
+    }
 }

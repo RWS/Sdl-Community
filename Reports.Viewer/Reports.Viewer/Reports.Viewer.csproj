@@ -117,7 +117,9 @@
     <Compile Include="TellMe\SourceCodeAction.cs" />
     <Compile Include="TellMe\TellMeProvider.cs" />
     <Compile Include="ViewModel\AppendTemplateViewModel.cs" />
+    <Compile Include="ViewModel\BrowserViewModel.cs" />
     <Compile Include="ViewModel\DataViewModel.cs" />
+    <Compile Include="ViewModel\ReportsViewModelBase.cs" />
     <Compile Include="ViewModel\ReportViewModel.cs" />
     <Compile Include="ViewModel\ReportsNavigationViewModel.cs" />
     <Compile Include="ViewModel\AppendReportViewModel.cs" />
