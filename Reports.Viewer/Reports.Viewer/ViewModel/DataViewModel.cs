@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using Reports.Viewer.Api.Model;
@@ -15,7 +14,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Reports.Viewer.Plus.ViewModel
 {
-	public class DataViewModel : INotifyPropertyChanged, IDisposable
+	public class DataViewModel : ReportsViewModelBase, INotifyPropertyChanged, IDisposable
 	{
 		private string _windowTitle;
 		private ObservableCollection<Report> _reports;
@@ -23,27 +22,12 @@ namespace Reports.Viewer.Plus.ViewModel
 		private IList _selectedReports;
 		private string _projectLocalFolder;
 		private ICommand _clearSelectionCommand;
-		private ICommand _editReportCommand;
-		private ICommand _removeReportCommand;
-		private ICommand _openFolderCommand;
-		private ICommand _printReportCommand;
-		private ICommand _saveAsCommand;
 		private ICommand _dragDropCommand;
 		private ICommand _mouseDoubleClick;
 
 		public event EventHandler<ReportSelectionChangedEventArgs> ReportSelectionChanged;
 
 		public ICommand ClearSelectionCommand => _clearSelectionCommand ?? (_clearSelectionCommand = new CommandHandler(ClearSelection));
-
-		public ICommand EditReportCommand => _editReportCommand ?? (_editReportCommand = new CommandHandler(EditReport));
-
-		public ICommand RemoveReportCommand => _removeReportCommand ?? (_removeReportCommand = new CommandHandler(RemoveReport));
-
-		public ICommand OpenFolderCommand => _openFolderCommand ?? (_openFolderCommand = new CommandHandler(OpenFolder));
-
-		public ICommand PrintReportCommand => _printReportCommand ?? (_printReportCommand = new CommandHandler(PrintReport));
-
-		public ICommand SaveAsCommand => _saveAsCommand ?? (_saveAsCommand = new CommandHandler(SaveAs));
 
 		public ICommand DragDropCommand => _dragDropCommand ?? (_dragDropCommand = new CommandHandler(DragDrop));
 
@@ -59,7 +43,7 @@ namespace Reports.Viewer.Plus.ViewModel
 			}
 		}
 
-		public string ProjectLocalFolder
+		public override string ProjectLocalFolder
 		{
 			get => _projectLocalFolder;
 			set
@@ -89,7 +73,7 @@ namespace Reports.Viewer.Plus.ViewModel
 
 		public bool IsReportSelected => SelectedReports?.Cast<Report>().ToList().Count == 1;
 
-		public Report SelectedReport
+		public override Report SelectedReport
 		{
 			get => _selectedReport;
 			set
@@ -138,47 +122,6 @@ namespace Reports.Viewer.Plus.ViewModel
 					_selectedReports?.Count ?? 0);
 				return message;
 			}
-		}
-
-		private void EditReport(object parameter)
-		{
-			var action = SdlTradosStudio.Application.GetAction<EditReportAction>();
-			action.Run();
-		}
-
-		private void RemoveReport(object parameter)
-		{
-			var action = SdlTradosStudio.Application.GetAction<RemoveReportAction>();
-			action.Run();
-		}
-
-		private void OpenFolder(object parameter)
-		{
-			if (SelectedReport?.Path == null || string.IsNullOrEmpty(ProjectLocalFolder)
-											 || !Directory.Exists(ProjectLocalFolder))
-			{
-				return;
-			}
-
-			var path = Path.Combine(ProjectLocalFolder, SelectedReport.Path.Trim('\\'));
-
-			if (File.Exists(path))
-			{
-				System.Diagnostics.Process.Start("explorer.exe", Path.GetDirectoryName(path));
-			}
-		}
-
-		private void PrintReport(object parameter)
-		{
-			var action = SdlTradosStudio.Application.GetAction<PrintReportAction>();
-			action.Run();
-		}
-
-
-		private void SaveAs(object parameter)
-		{
-			var action = SdlTradosStudio.Application.GetAction<SaveAsReportAction>();
-			action.Run();
 		}
 
 		private void DragDrop(object parameter)
@@ -232,17 +175,6 @@ namespace Reports.Viewer.Plus.ViewModel
 		{
 			SelectedReports?.Clear();
 			SelectedReport = null;
-		}
-
-		public void Dispose()
-		{
-		}
-
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }

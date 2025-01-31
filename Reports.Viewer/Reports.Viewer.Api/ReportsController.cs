@@ -373,6 +373,7 @@ namespace Reports.Viewer.Api
 					if (xmlPath.EndsWith(".xml", StringComparison.InvariantCultureIgnoreCase))
 					{
 						var reportData = File.ReadAllText(xmlPath);
+						_projectReportsOperations.UpdateReport(existingReport.Id, Guid.NewGuid().ToString(), existingReport.Description, reportData);
 						_projectReportsOperations.UpdateReport(existingReport.Id, existingReport.Name,
 							existingReport.Description, reportData);
 					}

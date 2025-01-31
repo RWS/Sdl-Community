@@ -20,7 +20,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace Reports.Viewer.Plus.ViewModel
 {
-	public class ReportsNavigationViewModel : INotifyPropertyChanged, IDisposable
+	public class ReportsNavigationViewModel : ReportsViewModelBase, INotifyPropertyChanged, IDisposable
 	{
 		private readonly PathInfo _pathInfo;
 		private List<Report> _reports;
@@ -40,13 +40,8 @@ namespace Reports.Viewer.Plus.ViewModel
 		private ICommand _clearFilterCommand;
 		private ICommand _selectedItemChangedCommand;
 		private ICommand _dragDropCommand;
-		private ICommand _editReportCommand;
-		private ICommand _removeReportCommand;
-		private ICommand _openFolderCommand;
-		private ICommand _printReportCommand;
 		private ICommand _printPreviewCommand;
 		private ICommand _pageSetupCommand;
-		private ICommand _saveAsCommand;
 		private ICommand _mouseDoubleClick;
 
 		public ReportsNavigationViewModel(List<Report> reports, Settings settings, PathInfo pathInfo, IProject selectedProject)
@@ -77,19 +72,9 @@ namespace Reports.Viewer.Plus.ViewModel
 
 		public ICommand DragDropCommand => _dragDropCommand ?? (_dragDropCommand = new CommandHandler(DragDrop));
 
-		public ICommand EditReportCommand => _editReportCommand ?? (_editReportCommand = new CommandHandler(EditReport));
-
-		public ICommand RemoveReportCommand => _removeReportCommand ?? (_removeReportCommand = new CommandHandler(RemoveReport));
-
-		public ICommand OpenFolderCommand => _openFolderCommand ?? (_openFolderCommand = new CommandHandler(OpenFolder));
-
-		public ICommand PrintReportCommand => _printReportCommand ?? (_printReportCommand = new CommandHandler(PrintReport));
-
 		public ICommand PrintPreviewCommand => _printPreviewCommand ?? (_printPreviewCommand = new CommandHandler(PrintPreview));
 
 		public ICommand PageSetupCommand => _pageSetupCommand ?? (_pageSetupCommand = new CommandHandler(PageSetup));
-
-		public ICommand SaveAsCommand => _saveAsCommand ?? (_saveAsCommand = new CommandHandler(SaveAs));
 
 		public ICommand MouseDoubleClickCommand => _mouseDoubleClick ?? (_mouseDoubleClick = new CommandHandler(MouseDoubleClick));
 
@@ -177,7 +162,7 @@ namespace Reports.Viewer.Plus.ViewModel
 			}
 		}
 
-		public string ProjectLocalFolder
+		public override string ProjectLocalFolder
 		{
 			get => _projectLocalFolder;
 			set
@@ -264,7 +249,7 @@ namespace Reports.Viewer.Plus.ViewModel
 			}
 		}
 
-		public Report SelectedReport
+		public override Report SelectedReport
 		{
 			get => _selectedReport;
 			set
@@ -667,40 +652,6 @@ namespace Reports.Viewer.Plus.ViewModel
 			}
 		}
 
-		private void EditReport(object parameter)
-		{
-			var action = SdlTradosStudio.Application.GetAction<EditReportAction>();
-			action.Run();
-		}
-
-		private void RemoveReport(object parameter)
-		{
-			var action = SdlTradosStudio.Application.GetAction<RemoveReportAction>();
-			action.Run();
-		}
-
-		private void OpenFolder(object parameter)
-		{
-			if (SelectedReport?.Path == null || string.IsNullOrEmpty(ProjectLocalFolder)
-				|| !Directory.Exists(ProjectLocalFolder))
-			{
-				return;
-			}
-
-			var path = Path.Combine(ProjectLocalFolder, SelectedReport.Path.Trim('\\'));
-
-			if (File.Exists(path))
-			{
-				System.Diagnostics.Process.Start("explorer.exe", Path.GetDirectoryName(path));
-			}
-		}
-
-		private void PrintReport(object parameter)
-		{
-			var action = SdlTradosStudio.Application.GetAction<PrintReportAction>();
-			action.Run();
-		}
-
 		private void PrintPreview(object parameter)
 		{
 			//var action = SdlTradosStudio.Application.GetAction<PrintPreviewReportAction>();
@@ -711,12 +662,6 @@ namespace Reports.Viewer.Plus.ViewModel
 		{
 			//var action = SdlTradosStudio.Application.GetAction<PageSetupAction>();
 			//action.Run();
-		}
-
-		private void SaveAs(object parameter)
-		{
-			var action = SdlTradosStudio.Application.GetAction<SaveAsReportAction>();
-			action.Run();
 		}
 
 		private void DragDrop(object parameter)
@@ -764,17 +709,6 @@ namespace Reports.Viewer.Plus.ViewModel
 				var action = SdlTradosStudio.Application.GetAction<EditReportAction>();
 				action.Run();
 			}
-		}
-
-		public void Dispose()
-		{
-		}
-
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
 		protected virtual void OnReportSelectionChanged(ReportSelectionChangedEventArgs e)
