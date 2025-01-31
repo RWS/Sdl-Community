@@ -39,6 +39,7 @@ namespace Reports.Viewer.Plus
 		private ReportsNavigationView _reportsNavigationView;
 		private DataView _dataView;
 		private BrowserView _browserView;
+		private BrowserViewModel _browserViewModel;
 		private DataViewModel _dataViewModel;
 		private PathInfo _pathInfo;
 		private ReportsController _reportsController;
@@ -260,7 +261,8 @@ namespace Reports.Viewer.Plus
 
 		private void InitializeViews()
 		{
-			_browserView = new BrowserView();
+			_browserViewModel = new BrowserViewModel();
+			_browserView = new BrowserView(_browserViewModel);
 			_dataViewModel = new DataViewModel();
 			_dataViewModel.ReportSelectionChanged += OnReportSelectionChanged;
 			_dataView = new DataView
@@ -268,7 +270,7 @@ namespace Reports.Viewer.Plus
 				DataContext = _dataViewModel
 			};
 
-			_reportViewModel = new ReportViewModel(_browserView, _dataViewModel, _dataView, GetSelectedProject());
+			_reportViewModel = new ReportViewModel(_browserViewModel, _browserView, _dataViewModel, _dataView, GetSelectedProject());
 			_reportView = new ReportView
 			{
 				DataContext = _reportViewModel

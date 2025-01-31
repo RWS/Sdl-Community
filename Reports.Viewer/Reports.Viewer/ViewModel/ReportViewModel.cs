@@ -7,9 +7,11 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using CefSharp;
 using Microsoft.Win32;
 using Reports.Viewer.Api.Model;
+using Reports.Viewer.Plus.Commands;
 using Reports.Viewer.Plus.View;
 using Sdl.ProjectAutomation.Core;
 
@@ -19,6 +21,7 @@ namespace Reports.Viewer.Plus.ViewModel
 	{
 		private string _windowTitle;
 		private readonly BrowserView _browserView;
+		private readonly BrowserViewModel _browserViewModel;
 		private readonly DataView _dataView;
 		private readonly DataViewModel _dataViewModel;
 		private string _projectLocalFolder;
@@ -26,9 +29,14 @@ namespace Reports.Viewer.Plus.ViewModel
 		private string _address;
 		private Report _currentReport;
 
-		public ReportViewModel(BrowserView browserView,
-			DataViewModel dataViewModel, DataView dataView, IProject selectedProject)
+		public ReportViewModel(
+			BrowserViewModel browserViewModel,
+			BrowserView browserView,
+			DataViewModel dataViewModel, 
+			DataView dataView, 
+			IProject selectedProject)
 		{
+			_browserViewModel = browserViewModel;
 			_browserView = browserView;
 			_dataViewModel = dataViewModel;
 			_dataView = dataView;
@@ -50,6 +58,8 @@ namespace Reports.Viewer.Plus.ViewModel
 
 				_address = value;
 				OnPropertyChanged(nameof(Address));
+
+				if (_browserViewModel != null) _browserViewModel.Address = _address;
 			}
 		}
 
@@ -81,6 +91,11 @@ namespace Reports.Viewer.Plus.ViewModel
 				if (_dataViewModel != null)
 				{
 					_dataViewModel.ProjectLocalFolder = _projectLocalFolder;
+				}
+
+				if (_browserViewModel != null)
+				{
+					_browserViewModel.ProjectLocalFolder = _projectLocalFolder;
 				}
 			}
 		}
@@ -174,7 +189,9 @@ namespace Reports.Viewer.Plus.ViewModel
 		public void UpdateReport(Report report)
 		{
 			CurrentView = _browserView;
+			
 			WebBrowserNavigateToReport(report);
+			if (_browserViewModel != null) _browserViewModel.SelectedReport = report;
 		}
 
 		public void UpdateData(List<Report> reports)
