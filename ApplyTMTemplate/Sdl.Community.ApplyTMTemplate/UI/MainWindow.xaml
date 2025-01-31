@@ -298,7 +298,7 @@
 				                             VerticalAlignment="Center"
 				                             VerticalContentAlignment="Center"/>
 
-                <Button Style="{StaticResource Sdl.Button.PrimaryStyle}" HorizontalAlignment="Right" Margin="10" Command="{Binding SavePreferencesCommand}" Content="Save Settings" ToolTip="{x:Static applyTmTemplate:PluginResources.Apply_button_Tooltip}" />
+                <Button Style="{StaticResource Sdl.Button.PrimaryStyle}" HorizontalAlignment="Right" Margin="10" Command="{Binding SavePreferencesCommand}" Content="Save Settings" ToolTip="{x:Static applyTmTemplate:PluginResources.ApplyTMTemplate_SaveSettingsTooltip}" />
                 <Button Style="{StaticResource Sdl.Button.PrimaryStyle}" HorizontalAlignment="Right" Margin="10" Command="{Binding ApplyTemplateCommand}" Content="Apply" ToolTip="{x:Static applyTmTemplate:PluginResources.Apply_button_Tooltip}" />
 			</StackPanel>
 		</Grid>

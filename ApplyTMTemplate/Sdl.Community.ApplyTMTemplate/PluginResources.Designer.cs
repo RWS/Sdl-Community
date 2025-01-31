@@ -143,6 +143,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save current settings.
+        /// </summary>
+        public static string ApplyTMTemplate_SaveSettingsTooltip {
+            get {
+                return ResourceManager.GetString("ApplyTMTemplate_SaveSettingsTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon ATTA {

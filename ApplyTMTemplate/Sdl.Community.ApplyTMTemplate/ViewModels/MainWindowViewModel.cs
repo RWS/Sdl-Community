@@ -290,7 +290,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			 
 			if (preferences.TMPathCollection is not null)
 			{
-                var validTMs = FilterInvalidTMs(preferences.TMPathCollection);
+                var validTMs = FilterInvalidTMs(preferences.TMPathCollection, location);
 	            AddRangeOfTms(_tmLoader.GetTms(validTMs, TmCollection)); 
 			}
 
@@ -307,14 +307,14 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 			return filePaths.Where(file => Path.GetExtension(file).ToLower() != ".sdltm");
 		}
 
-		private List<string> FilterInvalidTMs(IEnumerable<string> filePaths)
+		private List<string> FilterInvalidTMs(IEnumerable<string> filePaths, string location)
 		{
 			var missingTMs = GetMissingTMs(filePaths);
-			if (missingTMs.Any())
+			if (missingTMs.Any() && location is null)
 				_messageService.ShowWarningMessage(PluginResources.Warning, PluginResources.ApplyTMSettings_MissingTMs);
 
 			var invalidTMs = GetInvalidTMs(filePaths);
-			if (invalidTMs.Any())
+			if (invalidTMs.Any() && location is null)
 				_messageService.ShowWarningMessage(PluginResources.Warning, PluginResources.ApplyTMSettings_InvalidTMs);
 
             return filePaths.Where(path => !missingTMs.Contains(path) && !invalidTMs.Contains(path)).ToList();
@@ -364,12 +364,8 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				PluginResources.ApplyTM_fileName);
             if (saveLocation == null) return;
             
-			ProgressVisibility = "Visible";
-			
 			await Task.Run(() => _applyTMSettingsManager.SaveSettings(saveLocation, preferences));
-            _messageService.ShowMessage(PluginResources.Success_Window_Title, PluginResources.TMSettings_Created);
-            
-			ProgressVisibility = "Collapsed";
+            _messageService.ShowMessage(PluginResources.Success_Window_Title, PluginResources.TMSettings_Created));
         }
 
 		private async void ExportToExcel()

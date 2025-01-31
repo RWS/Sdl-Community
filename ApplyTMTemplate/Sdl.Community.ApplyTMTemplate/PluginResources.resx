@@ -394,4 +394,7 @@
   <data name="ProjectTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\ProjectTemplate.ico;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="ApplyTMTemplate_SaveSettingsTooltip" xml:space="preserve">
+    <value>Save current settings</value>
+  </data>
 </root>
