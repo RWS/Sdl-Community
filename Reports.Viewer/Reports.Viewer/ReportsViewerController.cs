@@ -33,6 +33,7 @@ namespace Reports.Viewer.Plus
 	{
 		private BaseReportAction _addReportAction;
 		private BrowserView _browserView;
+        private BrowserViewModel _browserViewModel;
 		private DataView _dataView;
 		private DataViewModel _dataViewModel;
 		private BaseReportAction _editReportAction;
@@ -339,7 +340,8 @@ namespace Reports.Viewer.Plus
 
 		private void InitializeViews()
 		{
-			_browserView = new BrowserView();
+			_browserViewModel = new BrowserViewModel();
+			_browserView = new BrowserView(_browserViewModel);
 			_dataViewModel = new DataViewModel();
 			_dataViewModel.ReportSelectionChanged += OnReportSelectionChanged;
 			_dataView = new DataView
@@ -347,7 +349,7 @@ namespace Reports.Viewer.Plus
 				DataContext = _dataViewModel
 			};
 
-			_reportViewModel = new ReportViewModel(_browserView, _dataViewModel, _dataView, GetSelectedProject());
+			_reportViewModel = new ReportViewModel(_browserViewModel, _browserView, _dataViewModel, _dataView, GetSelectedProject());
 			_reportView = new ReportView
 			{
 				DataContext = _reportViewModel
