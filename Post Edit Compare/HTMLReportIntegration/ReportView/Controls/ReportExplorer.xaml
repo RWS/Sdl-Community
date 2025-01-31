@@ -11,19 +11,8 @@
              d:DesignHeight="450"
              d:DesignWidth="800">
 
-    <UserControl.Resources>
-        <ResourceDictionary Source="General.xaml"/>
-    </UserControl.Resources>
-
     <DockPanel LastChildFill="True">
 
-        <Menu DockPanel.Dock="Bottom"
-              HorizontalAlignment="Right">
-            <MenuItem Command="{Binding RefreshCommand}"
-                      ToolTip="Refresh report list"
-                      Header="&#x21BB;" />
-            
-        </Menu>
         <ListBox ItemsSource="{Binding Reports,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  SelectionChanged="Selector_OnSelectionChanged"
                  SelectedItem="{Binding SelectedReport}">

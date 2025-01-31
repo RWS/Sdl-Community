@@ -117,7 +117,8 @@
     <Content Include="Resources\PostEdit.Compare.ico" />
     <Content Include="Resources\PostEdit.Versions.ico" />
     <Content Include="Resources\Question.ico" />
-    <Content Include="Resources\Remove.ico" />
+    <Resource Include="Resources\RefreshReportList.ico" />
+    <Resource Include="Resources\Remove.ico" />
     <Content Include="Resources\Restore.ico" />
     <Content Include="Resources\Settings.ico" />
     <Content Include="Resources\Settings2.ico" />
@@ -289,12 +290,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="HTMLReportIntegration\ReportView\Controls\Scripts.js" />
+    <None Remove="Resources\OpenReportFolder.ico" />
+    <None Remove="Resources\RefreshReportList.ico" />
     <None Remove="Resources\Report.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Sdl.Community.PostEdit.Compare.DAL\" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\OpenReportFolder.ico" />
     <Resource Include="Resources\Report.png" />
   </ItemGroup>
   <PropertyGroup>

@@ -500,4 +500,16 @@ Select 'No' to cancel this action
   <data name="StopSync" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\StopSync.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="SaveReport" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\SaveReport.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ExportReport" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Export.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="OpenReportFolder" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\OpenReportFolder.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RefreshReportList" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\RefreshReportList.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

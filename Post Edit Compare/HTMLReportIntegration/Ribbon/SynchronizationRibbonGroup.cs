@@ -6,17 +6,17 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
 {
-    [RibbonGroup("PostEditCompareReportRibbonGroup", "Synchronization")]
+    [RibbonGroup(nameof(SynchronizationRibbonGroup), "Synchronization")]
     [RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
-    public class PostEditCompareReportRibbonGroup : AbstractRibbonGroup
+    public class SynchronizationRibbonGroup : AbstractRibbonGroup
     {
     }
 
     [Action(nameof(SyncReportProjectOff),
         typeof(ReportViewController),
-        Icon = "StopSync", Name = "Sync Off",
+        Icon = "StopSync", Name = "Synchronization Off",
         Description = "Stop synchronizing report with project")]
-    [ActionLayout(typeof(PostEditCompareReportRibbonGroup), 10, DisplayType.Large)]
+    [ActionLayout(typeof(SynchronizationRibbonGroup), 10, DisplayType.Large)]
     public class SyncReportProjectOff : AbstractAction
     {
         public SyncReportProjectOff()
@@ -34,9 +34,9 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
 
     [Action(nameof(SyncReportProjectOn),
             typeof(ReportViewController),
-        Icon = "StartSync", Name = "Sync On",
+        Icon = "StartSync", Name = "Synchronization On",
         Description = "Start synchronizing report with project")]
-    [ActionLayout(typeof(PostEditCompareReportRibbonGroup), 10, DisplayType.Large)]
+    [ActionLayout(typeof(SynchronizationRibbonGroup), 10, DisplayType.Large)]
     public class SyncReportProjectOn : AbstractAction
     {
         protected override void Execute()

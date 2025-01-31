@@ -1,7 +1,6 @@
 ﻿using Sdl.Community.PostEdit.Versions.Commands;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -11,15 +10,16 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.ViewM
 
 public class ReportExplorerViewModel : ViewModelBase
 {
+    private ICommand _refreshCommand;
     private ObservableCollection<ReportInfo> _reports;
     private ReportInfo _selectedReport;
-    private ICommand _refreshCommand;
-
 
     public ReportExplorerViewModel()
     {
         Initialize();
     }
+
+    public ICommand RefreshCommand => _refreshCommand ??= new RelayCommand(RefreshReportList);
 
     public ObservableCollection<ReportInfo> Reports
     {
@@ -33,15 +33,12 @@ public class ReportExplorerViewModel : ViewModelBase
         set => SetField(ref _selectedReport, value);
     }
 
-    public ICommand RefreshCommand => _refreshCommand ??= new RelayCommand(RefreshReportList);
-
-
     private void Initialize()
     {
         RefreshReportList();
     }
 
-    private void RefreshReportList()
+    public void RefreshReportList()
     {
         var myDocPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         var reportList = Directory.GetFiles(Path.Combine(myDocPath, "PostEdit.Compare", "Reports"), "*.html", SearchOption.AllDirectories).ToList();

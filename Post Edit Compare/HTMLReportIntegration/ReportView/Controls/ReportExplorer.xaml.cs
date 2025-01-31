@@ -1,4 +1,5 @@
-﻿using Sdl.Desktop.IntegrationApi.Interfaces;
+﻿using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using System;
 using System.Windows.Controls;
 
