@@ -5749,55 +5749,6 @@ namespace PostEdit.Compare
             return reportNameAutoSave;
         }
 
-        private void toolStripButton_viewSegmentsWithNoChanges_Click(object sender, EventArgs e)
-        {
-            //ReportDialog.ViewSegmentsWithNoChanges = !ReportDialog.ViewSegmentsWithNoChanges;
-            //ReportDialog.toolStripButton_viewSegmentsWithNoChanges.CheckState = ReportDialog.ViewSegmentsWithNoChanges ? CheckState.Checked : CheckState.Unchecked;
-            //Processor.Settings.ReportFilterSegmentsWithNoChanges = ReportDialog.ViewSegmentsWithNoChanges;
-
-            //ReQueryReport();
-
-        }
-
-        private void toolStripButton_viewSegmentsWithTranslationChanges_Click(object sender, EventArgs e)
-        {
-            //ReportDialog.ViewSegmentsWithTranslationChanges = !ReportDialog.ViewSegmentsWithTranslationChanges;
-            //ReportDialog.toolStripButton_viewSegmentsWithTranslationChanges.CheckState = ReportDialog.ViewSegmentsWithTranslationChanges ? CheckState.Checked : CheckState.Unchecked;
-            //Processor.Settings.ReportFilterChangedTargetContent = ReportDialog.ViewSegmentsWithTranslationChanges;
-
-            //ReQueryReport();
-
-        }
-
-        private void toolStripButton_viewSegmentsWithStatusChanges_Click(object sender, EventArgs e)
-        {
-            //ReportDialog.ViewSegmentsWithStatusChanges = !ReportDialog.ViewSegmentsWithStatusChanges;
-            //ReportDialog.toolStripButton_viewSegmentsWithStatusChanges.CheckState = ReportDialog.ViewSegmentsWithStatusChanges ? CheckState.Checked : CheckState.Unchecked;
-            //Processor.Settings.ReportFilterSegmentStatusChanged = ReportDialog.ViewSegmentsWithStatusChanges;
-
-            //ReQueryReport();
-
-        }
-
-        private void toolStripButton_viewSegmentsWithComments_Click(object sender, EventArgs e)
-        {
-            //ReportDialog.ViewSegmentsWithComments = !ReportDialog.ViewSegmentsWithComments;
-            //ReportDialog.toolStripButton_viewSegmentsWithComments.CheckState = ReportDialog.ViewSegmentsWithComments ? CheckState.Checked : CheckState.Unchecked;
-            //Processor.Settings.ReportFilterSegmentsContainingComments = ReportDialog.ViewSegmentsWithComments;
-
-            //ReQueryReport();
-        }
-
-        private void toolStripButton_viewFilesWithNoDifferences_Click(object sender, EventArgs e)
-        {
-            //ReportDialog.ViewFilesWithNoDifferences = !ReportDialog.ViewFilesWithNoDifferences;
-            //ReportDialog.toolStripButton_viewFilesWithNoDifferences.CheckState = ReportDialog.ViewFilesWithNoDifferences ? CheckState.Checked : CheckState.Unchecked;
-            //Processor.Settings.ReportFilterFilesWithNoRecordsFiltered = ReportDialog.ViewFilesWithNoDifferences;
-
-            //ReQueryReport();
-
-        }
-
         private List<PairedFiles.PairedFile> GetPairedFiles(ReportWizard reportWizard, ListView filesListView)
         {
             var pairedFiles = new List<PairedFiles.PairedFile>();
