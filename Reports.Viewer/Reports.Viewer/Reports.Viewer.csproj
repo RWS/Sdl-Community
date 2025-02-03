@@ -123,6 +123,7 @@
     <Compile Include="ViewModel\ReportViewModel.cs" />
     <Compile Include="ViewModel\ReportsNavigationViewModel.cs" />
     <Compile Include="ViewModel\AppendReportViewModel.cs" />
+    <Compile Include="ViewModel\SaveMultipleReportsViewModel.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
     <Compile Include="View\AppendTemplateWindow.xaml.cs">
       <DependentUpon>AppendTemplateWindow.xaml</DependentUpon>
@@ -141,6 +142,9 @@
     </Compile>
     <Compile Include="View\AppendReportWindow.xaml.cs">
       <DependentUpon>AppendReportWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SaveMultipleReportsWindow.xaml.cs">
+      <DependentUpon>SaveMultipleReportsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
@@ -370,6 +374,9 @@
     <Page Include="View\AppendReportWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\SaveMultipleReportsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SettingsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

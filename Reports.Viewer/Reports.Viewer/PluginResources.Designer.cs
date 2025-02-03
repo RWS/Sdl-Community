@@ -681,6 +681,15 @@ namespace Reports.Viewer.Plus {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save Project Reports.
+        /// </summary>
+        internal static string WindowTitle_SaveProjectReports {
+            get {
+                return ResourceManager.GetString("WindowTitle_SaveProjectReports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select the {0} file.
         /// </summary>
         internal static string WindowTitle_SelectReportFile {

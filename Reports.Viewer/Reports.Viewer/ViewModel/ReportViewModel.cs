@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -107,16 +109,18 @@ namespace Reports.Viewer.Plus.ViewModel
 
         public void SaveReport()
         {
-            var report = CurrentView.GetType() == typeof(BrowserView)
-                ? _currentReport
-                : _dataViewModel.SelectedReport;
+            var reports = CurrentView.GetType() == typeof(BrowserView)
+                ? new List<Report> { _currentReport }
+                : _dataViewModel.SelectedReports.Cast<Report>().ToList();
 
             var projectInfo = SelectedProject.GetProjectInfo();
             var projectPath = projectInfo.LocalProjectFolder;
-            var filter = GetFileDialogFilter(report);
 
-            try
+            if (reports.Count == 1)
             {
+                Report report = reports[0];
+                var filter = GetFileDialogFilter(report);
+
                 var dialog = new SaveFileDialog
                 {
                     FileName = report.Name,
@@ -129,60 +133,22 @@ namespace Reports.Viewer.Plus.ViewModel
 
                 if (dialog.ShowDialog() == true)
                 {
-                    var extension =
-                        dialog.FileName.Substring(dialog.FileName.LastIndexOf(".", StringComparison.Ordinal) + 1);
-                    switch (extension.ToLower())
-                    {
-                        case "xlsx":
-                            {
-                                if (report.IsStudioReport)
-                                {
-                                    SelectedProject.SaveTaskReportAs(report.Id, dialog.FileName, ReportFormat.Excel);
-                                }
-                                else
-                                {
-                                    SaveReportsAsXlsx(report, dialog);
-                                }
-
-                                break;
-                            }
-                        case "html":
-                            {
-                                if (report.IsStudioReport)
-                                {
-                                    SelectedProject.SaveTaskReportAs(report.Id, dialog.FileName, ReportFormat.Html);
-                                }
-                                else
-                                {
-                                    SaveReportAsHtml(report, dialog);
-                                }
-
-                                break;
-                            }
-                        case "mht":
-                            {
-                                SelectedProject.SaveTaskReportAs(report.Id, dialog.FileName, ReportFormat.Mht);
-                                break;
-                            }
-                        case "xml":
-                            {
-                                if (report.IsStudioReport)
-                                {
-                                    SelectedProject.SaveTaskReportAs(report.Id, dialog.FileName, ReportFormat.Xml);
-                                }
-                                else
-                                {
-                                    SaveReportAsXml(report, dialog);
-                                }
-
-                                break;
-                            }
-                    }
+                    SaveSingleReport(report, dialog.FileName);
                 }
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show(ex.Message);
+                var saveMultipleReportsViewModel = new SaveMultipleReportsViewModel(SelectedProject, new Service.DialogService());
+                var saveMultipleReports = new SaveMultipleReportsWindow(saveMultipleReportsViewModel);
+                if (saveMultipleReports.ShowDialog() == true)
+                {
+                    foreach (var r in reports)
+                    {
+                        var fullPath = CreateReportFileName(r, saveMultipleReportsViewModel.Path, saveMultipleReportsViewModel.SelectedFormat, saveMultipleReportsViewModel.CreateSubFolders);
+                        SaveSingleReport(r, fullPath);
+                    }
+                }
+                
             }
         }
 
@@ -209,6 +175,90 @@ namespace Reports.Viewer.Plus.ViewModel
                 _windowTitle = value;
                 OnPropertyChanged(nameof(WindowTitle));
             }
+        }
+
+        private void SaveSingleReport(Report report, string fileName)
+        {
+            try
+            {
+                var extension = fileName.Substring(fileName.LastIndexOf(".", StringComparison.Ordinal) + 1);
+                switch (extension.ToLower())
+                {
+                    case "xlsx":
+                        {
+                            if (report.IsStudioReport)
+                            {
+                                SelectedProject.SaveTaskReportAs(report.Id, fileName, ReportFormat.Excel);
+                            }
+                            else
+                            {
+                                SaveReportsAsXlsx(report, fileName);
+                            }
+
+                            break;
+                        }
+                    case "html":
+                        {
+                            if (report.IsStudioReport)
+                            {
+                                SelectedProject.SaveTaskReportAs(report.Id, fileName, ReportFormat.Html);
+                            }
+                            else
+                            {
+                                SaveReportAsHtml(report, fileName);
+                            }
+
+                            break;
+                        }
+                    case "mht":
+                        {
+                            SelectedProject.SaveTaskReportAs(report.Id, fileName, ReportFormat.Mht);
+                            break;
+                        }
+                    case "xml":
+                        {
+                            if (report.IsStudioReport)
+                            {
+                                SelectedProject.SaveTaskReportAs(report.Id, fileName, ReportFormat.Xml);
+                            }
+                            else
+                            {
+                                SaveReportAsXml(report, fileName);
+                            }
+
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+
+        private string CreateReportFileName(Report report, string path, string format, bool createSubFolders)
+        {
+            string baseFileName = $"{report.Name} - {report.Group} - {report.Language}.{format}";
+
+            string folderPath = path;
+            if (createSubFolders)
+            {
+                folderPath = Path.Combine(path, report.Group, report.Language);
+                Directory.CreateDirectory(folderPath);  // Create subfolders if they don't exist
+            }
+
+            string fullPath = Path.Combine(folderPath, baseFileName);
+            int counter = 1;
+
+            while (File.Exists(fullPath))
+            {
+                string newFileName = $"{report.Name} - {report.Group} - {report.Language} ({counter}).{format}";
+                fullPath = Path.Combine(folderPath, newFileName);
+                counter++;
+            }
+
+            return fullPath;
         }
 
         private string GetFileDialogFilter(Report report)
@@ -259,22 +309,22 @@ namespace Reports.Viewer.Plus.ViewModel
             Address = file != null ? "file://" + file : null;
         }
 
-        private void SaveReportAsHtml(Report report, FileDialog dialog)
+        private void SaveReportAsHtml(Report report, string fileName)
         {
-            if (File.Exists(dialog.FileName))
+            if (File.Exists(fileName))
             {
-                File.Delete(dialog.FileName);
+                File.Delete(fileName);
             }
 
             var fullFilePath = Path.Combine(ProjectLocalFolder, report.Path);
-            File.Copy(fullFilePath, dialog.FileName);
+            File.Copy(fullFilePath, fileName);
         }
 
-        private void SaveReportAsXml(Report report, FileDialog dialog)
+        private void SaveReportAsXml(Report report, string fileName)
         {
-            if (File.Exists(dialog.FileName))
+            if (File.Exists(fileName))
             {
-                File.Delete(dialog.FileName);
+                File.Delete(fileName);
             }
 
             var xmlFile = report.Path.Substring(0,
@@ -285,18 +335,18 @@ namespace Reports.Viewer.Plus.ViewModel
                 throw new Exception(string.Format(PluginResources.ErrorMessage_UnableToLocateXmlFile, fullFilePath));
             }
 
-            File.Copy(fullFilePath, dialog.FileName);
+            File.Copy(fullFilePath, fileName);
         }
 
-        private void SaveReportsAsXlsx(Report report, FileDialog dialog)
+        private void SaveReportsAsXlsx(Report report, string fileName)
         {
             var xlApp = new Microsoft.Office.Interop.Excel.Application();
 
             try
             {
-                if (File.Exists(dialog.FileName))
+                if (File.Exists(fileName))
                 {
-                    File.Delete(dialog.FileName);
+                    File.Delete(fileName);
                 }
 
                 xlApp.Visible = false;
@@ -304,7 +354,7 @@ namespace Reports.Viewer.Plus.ViewModel
 
                 var fullFilePath = Path.Combine(ProjectLocalFolder, report.Path);
                 var xlWorkbook = xlApp.Workbooks.Open(fullFilePath);
-                xlWorkbook.SaveAs(dialog.FileName, format);
+                xlWorkbook.SaveAs(fileName, format);
 
                 GC.Collect();
                 GC.WaitForPendingFinalizers();

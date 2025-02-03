@@ -235,7 +235,7 @@
 						</MenuItem.Icon>
 					</MenuItem>-->
 					<MenuItem Header="Save As" 
-					          IsEnabled="{Binding IsReportSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+					          IsEnabled="{Binding IsReportsSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
 					          Command="{Binding SaveAsCommand}"
 					          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
 						<MenuItem.Icon>
