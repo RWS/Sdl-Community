@@ -20,10 +20,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
     [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Large)]
     public class SaveReport : AbstractAction
     {
-        protected override void Execute()
-        {
-            Integration.SaveReport();
-        }
+        protected override void Execute() => Integration.SaveReport();
     }
 
     [Action(nameof(RefreshReportList),

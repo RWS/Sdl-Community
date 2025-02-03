@@ -29,6 +29,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 
         public async Task<string> GetLoadedReport() => await ReportViewer.GetLoadedReport();
 
+        public async Task<string> GetNonInteractiveReport() => await ReportViewer.GetNonInteractiveReport();
+
         public void ToggleReportSelection() => ReportExplorer.ToggleOnOff();
 
         public void UpdateComments(List<CommentInfo> comments, string segmentId, string fileId)

@@ -19,7 +19,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
 
         public static async Task ExportReport()
         {
-            var report = await ReportViewController.GetLoadedReport();
+            var report = await ReportViewController.GetNonInteractiveReport();
             ReportManager.ExportReport(report);
         }
 

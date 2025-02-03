@@ -1,7 +1,6 @@
 ﻿using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
 using Newtonsoft.Json;
-using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using System;
 using System.IO;
@@ -26,6 +25,37 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
 
         public void Dispose()
         {
+        }
+
+        public async Task<string> GetLoadedReport()
+        {
+            try
+            {
+                var script = "document.documentElement.outerHTML;";
+                var result = await WebView2Browser.ExecuteScriptAsync(script);
+
+                // The returned string is JSON-encoded, so we need to decode it
+                return JsonConvert.DeserializeObject<string>(result);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error retrieving updated HTML: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+        }
+
+        public async Task<string> GetNonInteractiveReport()
+        {
+            try
+            {
+                var result = await WebView2Browser.ExecuteScriptAsync("getCleanedHTMLForExport();");
+                return JsonConvert.DeserializeObject<string>(result);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error retrieving updated HTML: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
         }
 
         public async Task Navigate(string path)
@@ -89,23 +119,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-            }
-        }
-
-        public async Task<string> GetLoadedReport()
-        {
-            try
-            {
-                var script = "document.documentElement.outerHTML;";
-                var result = await WebView2Browser.ExecuteScriptAsync(script);
-
-                // The returned string is JSON-encoded, so we need to decode it
-                return JsonConvert.DeserializeObject<string>(result);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error retrieving updated HTML: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
             }
         }
     }

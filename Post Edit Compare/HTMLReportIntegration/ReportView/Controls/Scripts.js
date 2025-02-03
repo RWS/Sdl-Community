@@ -1,4 +1,24 @@
-﻿function navigateToSegment(segmentId, fileId, projectId) {
+﻿function getCleanedHTMLForExport() {
+    console.log("Cleaning exportable HTML...");
+
+    // Clone the document to avoid modifying the live page
+    let clonedDocument = document.documentElement.cloneNode(true);
+
+    // Remove dropdowns for selecting status
+    clonedDocument.querySelectorAll('.status-dropdown').forEach(el => el.remove());
+
+    // Remove comment input fields
+    clonedDocument.querySelectorAll('input[name="commentInput"]').forEach(el => el.remove());
+
+    // Remove severity dropdowns
+    clonedDocument.querySelectorAll('.severity-dropdown').forEach(el => el.remove());
+
+    console.log("HTML cleaned. Returning exported HTML.");
+    return clonedDocument.outerHTML;
+}
+
+
+function navigateToSegment(segmentId, fileId, projectId) {
     const payload = {
         action: "navigate",
         segmentId: segmentId,
