@@ -42,7 +42,7 @@ namespace Reports.Viewer.Plus.Actions
 
 		private void ReportsViewerController_ReportSelectionChanged(object sender, CustomEventArgs.ReportSelectionChangedEventArgs e)
 		{
-			_canEnable = e.SelectedReports?.Count == 1;
+			_canEnable = e.SelectedReports?.Count > 0;
 			SetEnabled();
 		}
 
