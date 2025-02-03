@@ -32,5 +32,25 @@ namespace Sdl.Community.ApplyTMTemplate.Utilities
 
 			return newTmsCollection;
 		}
+
+		public ObservableCollection<TranslationMemory> GetTMsAndApplySelection(IEnumerable<TranslationMemoryEntry> tmEntries, ObservableCollection<TranslationMemory> tmCollection)
+		{
+            var newTmsCollection = new ObservableCollection<TranslationMemory>();
+
+            foreach (var entry in tmEntries)
+            {
+                if (IsValid(entry.Path)) continue;
+
+                var fileBasedTm = new TranslationMemory(entry.Path);
+				fileBasedTm.IsSelected = entry.IsSelected;
+
+                if (tmCollection.All(tm => tm.Name != fileBasedTm.Name))
+                {
+                    newTmsCollection.Add(fileBasedTm);
+                }
+            }
+
+            return newTmsCollection;
+        }
 	}
 }

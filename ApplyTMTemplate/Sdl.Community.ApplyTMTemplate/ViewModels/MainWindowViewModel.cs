@@ -275,6 +275,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
 			if (filePaths is null || !filePaths.Any()) return;
 
+			TmCollection.Clear();
 			_applyTMSettingsPath = filePaths[0];
 			var preferences = _applyTMSettingsManager.LoadSettings(filePaths[0]); 
 			if (preferences is null)
@@ -285,39 +286,41 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 				return;
 			}
 
+			SettingsSelectedMethod = preferences.SelectedMethod;
+
 			if (preferences.LanguageResourcePath is not null)
 				ResourceTemplatePath = preferences.LanguageResourcePath;
 			 
 			if (preferences.TMPathCollection is not null)
 			{
                 var validTMs = FilterInvalidTMs(preferences.TMPathCollection, location);
-	            AddRangeOfTms(_tmLoader.GetTms(validTMs, TmCollection)); 
+	            AddRangeOfTms(_tmLoader.GetTMsAndApplySelection(validTMs, TmCollection)); 
 			}
 
 			if (preferences.Settings is not null) ApplyNewSettings(preferences.Settings);
 		}
 
-		private IEnumerable<string> GetMissingTMs(IEnumerable<string> filePaths)
+		private IEnumerable<TranslationMemoryEntry> GetMissingTMs(IEnumerable<TranslationMemoryEntry> tms)
 		{
-			return filePaths.Where(filePath => !File.Exists(filePath));
+			return tms.Where(tm => !File.Exists(tm.Path));
 		}
 
-		private IEnumerable<string> GetInvalidTMs(IEnumerable<string> filePaths)
+		private IEnumerable<TranslationMemoryEntry> GetInvalidTMs(IEnumerable<TranslationMemoryEntry> tms)
 		{
-			return filePaths.Where(file => Path.GetExtension(file).ToLower() != ".sdltm");
+			return tms.Where(tm => Path.GetExtension(tm.Path).ToLower() != ".sdltm");
 		}
 
-		private List<string> FilterInvalidTMs(IEnumerable<string> filePaths, string location)
+		private IEnumerable<TranslationMemoryEntry> FilterInvalidTMs(IEnumerable<TranslationMemoryEntry> tms, string location)
 		{
-			var missingTMs = GetMissingTMs(filePaths);
+			var missingTMs = GetMissingTMs(tms);
 			if (missingTMs.Any() && location is null)
 				_messageService.ShowWarningMessage(PluginResources.Warning, PluginResources.ApplyTMSettings_MissingTMs);
 
-			var invalidTMs = GetInvalidTMs(filePaths);
+			var invalidTMs = GetInvalidTMs(tms);
 			if (invalidTMs.Any() && location is null)
 				_messageService.ShowWarningMessage(PluginResources.Warning, PluginResources.ApplyTMSettings_InvalidTMs);
 
-            return filePaths.Where(path => !missingTMs.Contains(path) && !invalidTMs.Contains(path)).ToList();
+            return tms.Where(tm => !missingTMs.Contains(tm) && !invalidTMs.Contains(tm)).ToList();
 		}
 
 		private void ApplyNewSettings(Settings newSettings)
@@ -353,9 +356,15 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 		{
 			var preferences = new ApplyTMSettings()
 			{
-				TMPathCollection = TmCollection.Select(tm => tm.FilePath).ToList(),
+				TMPathCollection = TmCollection.Select(
+					tm => new TranslationMemoryEntry() 
+						{
+							IsSelected = tm.IsSelected,
+							Path = tm.FilePath
+						}).ToList(),
 				LanguageResourcePath = ResourceTemplatePath,
-				Settings = Settings
+				Settings = Settings,
+				SelectedMethod = SettingsSelectedMethod
 			};
 
 			var saveLocation = GetSaveLocation(
@@ -365,7 +374,7 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
             if (saveLocation == null) return;
             
 			await Task.Run(() => _applyTMSettingsManager.SaveSettings(saveLocation, preferences));
-            _messageService.ShowMessage(PluginResources.Success_Window_Title, PluginResources.TMSettings_Created));
+            _messageService.ShowMessage(PluginResources.Success_Window_Title, PluginResources.TMSettings_Created);
         }
 
 		private async void ExportToExcel()

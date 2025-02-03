@@ -10,7 +10,9 @@ namespace Sdl.Community.ApplyTMTemplate.Models
     {
         public string LanguageResourcePath { get; set; } = string.Empty;
 
-        public List<string> TMPathCollection { get; set; } = new();
+        public List<TranslationMemoryEntry> TMPathCollection { get; set; } = new();
+
+        public ApplyTMMethod SelectedMethod { get; set; }
 
         public Settings Settings { get; set; } = new Settings();
     }
