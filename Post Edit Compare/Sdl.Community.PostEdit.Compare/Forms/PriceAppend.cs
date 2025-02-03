@@ -1042,8 +1042,8 @@ namespace PostEdit.Compare.Forms
 
                 if (numericUpDown_pricePerfect.Value <= numericUpDown_priceBase.Value)
                     numericUpDown_percentagePerfect.Value = (numericUpDown_pricePerfect.Value / numericUpDown_priceBase.Value) * 100;
-                else if (numericUpDown_pricePerfect.Value > numericUpDown_priceBase.Value)
-                    ;
+                else if (numericUpDown_pricePerfect.Value > numericUpDown_priceBase.Value) ;
+                    
 
             }
             finally
