@@ -5755,7 +5755,7 @@ namespace PostEdit.Compare
             //ReportDialog.toolStripButton_viewSegmentsWithNoChanges.CheckState = ReportDialog.ViewSegmentsWithNoChanges ? CheckState.Checked : CheckState.Unchecked;
             //Processor.Settings.ReportFilterSegmentsWithNoChanges = ReportDialog.ViewSegmentsWithNoChanges;
 
-            ReQueryReport();
+            //ReQueryReport();
 
         }
 
@@ -5765,7 +5765,7 @@ namespace PostEdit.Compare
             //ReportDialog.toolStripButton_viewSegmentsWithTranslationChanges.CheckState = ReportDialog.ViewSegmentsWithTranslationChanges ? CheckState.Checked : CheckState.Unchecked;
             //Processor.Settings.ReportFilterChangedTargetContent = ReportDialog.ViewSegmentsWithTranslationChanges;
 
-            ReQueryReport();
+            //ReQueryReport();
 
         }
 
@@ -5775,7 +5775,7 @@ namespace PostEdit.Compare
             //ReportDialog.toolStripButton_viewSegmentsWithStatusChanges.CheckState = ReportDialog.ViewSegmentsWithStatusChanges ? CheckState.Checked : CheckState.Unchecked;
             //Processor.Settings.ReportFilterSegmentStatusChanged = ReportDialog.ViewSegmentsWithStatusChanges;
 
-            ReQueryReport();
+            //ReQueryReport();
 
         }
 
@@ -5785,7 +5785,7 @@ namespace PostEdit.Compare
             //ReportDialog.toolStripButton_viewSegmentsWithComments.CheckState = ReportDialog.ViewSegmentsWithComments ? CheckState.Checked : CheckState.Unchecked;
             //Processor.Settings.ReportFilterSegmentsContainingComments = ReportDialog.ViewSegmentsWithComments;
 
-            ReQueryReport();
+            //ReQueryReport();
         }
 
         private void toolStripButton_viewFilesWithNoDifferences_Click(object sender, EventArgs e)
@@ -5794,24 +5794,24 @@ namespace PostEdit.Compare
             //ReportDialog.toolStripButton_viewFilesWithNoDifferences.CheckState = ReportDialog.ViewFilesWithNoDifferences ? CheckState.Checked : CheckState.Unchecked;
             //Processor.Settings.ReportFilterFilesWithNoRecordsFiltered = ReportDialog.ViewFilesWithNoDifferences;
 
-            ReQueryReport();
+            //ReQueryReport();
 
         }
 
-        private List<PairedFiles.PairedFile> GetPairedFiles(ReportWizard f, ListView lv)
+        private List<PairedFiles.PairedFile> GetPairedFiles(ReportWizard reportWizard, ListView filesListView)
         {
             var pairedFiles = new List<PairedFiles.PairedFile>();
-            if (f.radioButton_compareSelectedFiles.Checked && lv.SelectedIndices.Count > 0)
+            if (reportWizard.radioButton_compareSelectedFiles.Checked && filesListView.SelectedIndices.Count > 0)
             {
                 #region  |  selected files  |
 
                 var singleLeftPath = string.Empty;
                 var singleRightPath = string.Empty;
 
-                if (lv.SelectedIndices.Count == 2 && f.checkBox_extendedSelection.Checked == false)
+                if (filesListView.SelectedIndices.Count == 2 && reportWizard.checkBox_extendedSelection.Checked == false)
                 {
-                    var lvi01 = _panelCompare.listView_main.Items[lv.SelectedIndices[0]];
-                    var lvi02 = _panelCompare.listView_main.Items[lv.SelectedIndices[1]];
+                    var lvi01 = _panelCompare.listView_main.Items[filesListView.SelectedIndices[0]];
+                    var lvi02 = _panelCompare.listView_main.Items[filesListView.SelectedIndices[1]];
 
                     var dn01 = (DataNode)lvi01.Tag;
                     var dn02 = (DataNode)lvi02.Tag;
@@ -6130,55 +6130,6 @@ namespace PostEdit.Compare
             return objects;
         }
 
-
-
-        private void ReQueryReport()
-        {
-            try
-            {
-                Cursor = Cursors.WaitCursor;
-
-
-                var comparer = new Processor();
-
-                var fileComparisonParagraphUnits = new Dictionary<Comparer.FileUnitProperties, Dictionary<string, Dictionary<string, Comparer.ComparisonParagraphUnit>>>();
-                foreach (var fileComparisonFileParagraphUnit in FileComparisonParagraphUnits)
-                {
-                    var fileProperties = fileComparisonFileParagraphUnit.Key;
-                    if (fileComparisonFileParagraphUnit.Value != null)
-                        fileProperties = new Comparer.FileUnitProperties(fileComparisonFileParagraphUnit.Key, fileComparisonFileParagraphUnit.Value);
-
-                    fileComparisonParagraphUnits.Add(fileProperties, fileComparisonFileParagraphUnit.Value);
-                }
-
-                List<TERp.DocumentResult> terpResults;
-                //comparer.CreateReport(ReportDialog.ReportFileFullPath, string.Empty, string.Empty, fileComparisonParagraphUnits, RateGroup, out terpResults);
-
-                //ReportDialog.PanelReportViewer.webBrowserReport.Url = new Uri(Path.Combine("file://", ReportDialog.ReportFileFullPath + ".html"));
-                //System.Windows.Forms.Application.DoEvents();
-                //ReportDialog.PanelReportViewer.webBrowserReport.Focus();
-                //ReportDialog.PanelReportViewer.webBrowserReport.Refresh();
-
-                //if (terpResults == null)
-                //    return;
-                //foreach (var documentResult in terpResults)
-                //{
-                //    if (!File.Exists(documentResult.HtmlPath))
-                //        continue;
-
-                //    File.Delete(documentResult.HtmlPath);
-                //}
-            }
-            catch (Exception ex)
-            {
-                Cursor = Cursors.Default;
-                MessageBox.Show(this, ex.Message, System.Windows.Forms.Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            finally
-            {
-                Cursor = Cursors.Default;
-            }
-        }
 
 
         private void toolStripButton_createReport_Click(object sender, EventArgs e)
