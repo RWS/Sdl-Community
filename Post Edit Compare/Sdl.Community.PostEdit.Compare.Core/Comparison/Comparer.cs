@@ -1,13 +1,12 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using Sdl.Community.PostEdit.Compare.Core.Comparison.Text;
+using Sdl.Community.PostEdit.Compare.Core.Helper;
 using Sdl.Community.PostEdit.Compare.Core.Reports;
 using Sdl.Community.PostEdit.Compare.Core.SDLXLIFF;
+using Convert = System.Convert;
 
 namespace Sdl.Community.PostEdit.Compare.Core.Comparison
 {
@@ -316,28 +315,15 @@ namespace Sdl.Community.PostEdit.Compare.Core.Comparison
          , SegmentPair segmentPairOriginal
          , SegmentPair segmentPairUpdated)
         {
-
-
             comparisonSegmentUnit.SegmentStatusOriginal = segmentPairOriginal.SegmentStatus;
             comparisonSegmentUnit.SegmentStatusUpdated = segmentPairUpdated.SegmentStatus;
 
-            if (Processor.Settings.ReportFilterTranslationMatchValuesOriginal == SharedStrings.FuzzyMatch
-                || Processor.Settings.ReportFilterTranslationMatchValuesUpdated == SharedStrings.FuzzyMatch)
-            {
 
-                
+            if (Processor.Settings.ReportFilterTranslationMatchValuesOriginal == SharedStrings.FuzzyMatch)
+                if (!FuzzyRange.IsInFuzzyRange(segmentPairOriginal.TranslationOrigin.MatchPercentage, Processor.Settings.FuzzyMatchValuesOriginal)) return;
 
-                //if segmentPairOriginal has fuzzy match value as Processor.Settings.FuzzyMatchValueOriginal, add to comparison
-                //else don't add to comparison
-
-                //if (segmentPairOriginal.TranslationOrigin.MatchPercentage in range)
-
-
-                //if segmentPairUpdated also has fuzzy match value as Processor.Settings.FuzzyMatchValueUpdated, add to comparison
-                //else don't add to comparison
-                
-
-            }
+            if (Processor.Settings.ReportFilterTranslationMatchValuesUpdated == SharedStrings.FuzzyMatch)
+                if (!FuzzyRange.IsInFuzzyRange(segmentPairUpdated.TranslationOrigin.MatchPercentage, Processor.Settings.FuzzyMatchValuesUpdated)) return;
 
             comparisonSegmentUnit.TranslationStatusOriginal = GetTranslationStatus(segmentPairOriginal);
             comparisonSegmentUnit.TranslationStatusUpdated = GetTranslationStatus(segmentPairUpdated);
@@ -401,7 +387,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Comparison
             comparisonParagraphUnit.ComparisonSegmentUnits.Add(comparisonSegmentUnit);
         }
 
-
+        
         private static string GetTranslationStatus(SegmentPair segmentPair)
         {
             var match = string.Empty;

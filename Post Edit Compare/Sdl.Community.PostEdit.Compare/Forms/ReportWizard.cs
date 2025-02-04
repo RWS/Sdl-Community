@@ -1,12 +1,9 @@
-﻿using Sdl.Community.PostEdit.Compare.ExtendReportWizardSettings;
-using Sdl.ProjectAutomation.FileBased;
+﻿using Sdl.Community.PostEdit.Compare.Core.Helper;
+using Sdl.Community.PostEdit.Compare.ExtendReportWizardSettings;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace PostEdit.Compare.Forms
 {
@@ -35,8 +32,10 @@ namespace PostEdit.Compare.Forms
             textBox_javaExecutablePath_TextChanged(null, null);
 
             var analysisBands = ProjectSettingsProvider.GetProjectAnalysisBands(OriginalProjectPath);
-            fuzzyBandsOriginal.Items.AddRange([.. analysisBands]);
-            fuzzyBandsUpdated.Items.AddRange([.. analysisBands]);
+            var ranges = FuzzyRange.GetFuzzyRanges(analysisBands);
+
+            fuzzyBandsOriginal.Items.AddRange([.. ranges]);
+            fuzzyBandsUpdated.Items.AddRange([.. ranges]);
         }
 
         public void switch_Panel(Control panel)

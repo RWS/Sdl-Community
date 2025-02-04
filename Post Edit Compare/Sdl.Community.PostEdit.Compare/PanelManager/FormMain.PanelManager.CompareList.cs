@@ -5428,7 +5428,7 @@ namespace PostEdit.Compare
                 Processor.Settings.FuzzyMatchValuesOriginal = f.fuzzyBandsOriginal.SelectedItem.ToString();
 
             if (matchValueUpdated == SharedStrings.FuzzyMatch)
-                Processor.Settings.FuzzyMatchValuesUpdated = matchValueUpdated;
+                Processor.Settings.FuzzyMatchValuesUpdated = f.fuzzyBandsUpdated.SelectedItem.ToString();
 
             Processor.Settings.ReportFilterTranslationMatchValuesOriginal = matchValueOriginal;
             Processor.Settings.ReportFilterTranslationMatchValuesUpdated = matchValueUpdated;
