@@ -5271,6 +5271,8 @@ namespace PostEdit.Compare
             return processor;
         }
 
+        public string OriginalProjectPath { get; set; }
+
         //create report
         public void CreateReport()
         {
@@ -5278,6 +5280,7 @@ namespace PostEdit.Compare
             var comparer = CreateProcessor();
 
             var dialog = GetDialog(lv);
+            dialog.OriginalProjectPath = OriginalProjectPath;
             dialog.ShowDialog();
             if (!dialog.Saved) return;
 
@@ -5418,8 +5421,19 @@ namespace PostEdit.Compare
             Processor.Settings.ReportFilterSegmentsContainingComments = f.checkBox_viewSegmentsWithComments.Checked;
             Processor.Settings.ReportFilterLockedSegments = f.checkBox_viewLockedSegments.Checked;
 
-            Processor.Settings.ReportFilterTranslationMatchValuesOriginal = f.comboBox_segments_match_value_original.SelectedItem.ToString();
-            Processor.Settings.ReportFilterTranslationMatchValuesUpdated = f.comboBox_segments_match_value_updated.SelectedItem.ToString();
+            var matchValueOriginal = f.comboBox_segments_match_value_original.SelectedItem.ToString();
+            var matchValueUpdated = f.comboBox_segments_match_value_updated.SelectedItem.ToString();
+
+            if (matchValueOriginal == SharedStrings.FuzzyMatch)
+                Processor.Settings.FuzzyMatchValuesOriginal = f.fuzzyBandsOriginal.SelectedItem.ToString();
+
+            if (matchValueUpdated == SharedStrings.FuzzyMatch)
+                Processor.Settings.FuzzyMatchValuesUpdated = matchValueUpdated;
+
+            Processor.Settings.ReportFilterTranslationMatchValuesOriginal = matchValueOriginal;
+            Processor.Settings.ReportFilterTranslationMatchValuesUpdated = matchValueUpdated;
+
+
             Processor.Settings.TagVisualStyle = (Settings.TagVisual)Enum.Parse(typeof(Settings.TagVisual), f.tagVisualizationComboBox.SelectedItem.ToString(), true);
 
             Processor.Settings.ShowOriginalSourceSegment = f.checkBox_showOriginalSourceSegment.Checked;
@@ -5814,9 +5828,9 @@ namespace PostEdit.Compare
                 }
                 else
                 {
-                    for (var i = 0; i < lv.SelectedIndices.Count; i++)
+                    for (var i = 0; i < filesListView.SelectedIndices.Count; i++)
                     {
-                        var lvi = _panelCompare.listView_main.Items[lv.SelectedIndices[i]];
+                        var lvi = _panelCompare.listView_main.Items[filesListView.SelectedIndices[i]];
                         var dn = (DataNode)lvi.Tag;
 
                         #region   |  if (dn.Type == DataNode.ItemType.file)  |
@@ -5863,7 +5877,7 @@ namespace PostEdit.Compare
             }
             else
             {
-                if (f.checkBox_includeAllSubfolders.Checked)
+                if (reportWizard.checkBox_includeAllSubfolders.Checked)
                 {
                     #region  |  include all subfolders   |
 

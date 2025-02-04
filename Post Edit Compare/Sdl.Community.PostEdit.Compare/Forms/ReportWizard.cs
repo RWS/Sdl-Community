@@ -1,46 +1,46 @@
-﻿using System;
+﻿using Sdl.Community.PostEdit.Compare.ExtendReportWizardSettings;
+using Sdl.ProjectAutomation.FileBased;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace PostEdit.Compare.Forms
 {
     public partial class ReportWizard : Form
     {
         private int _indexCurrentPanel;
-		public bool IsFromProjectsViewCall { get; set; }
-		public bool Saved { get; set; }
+        public bool IsFromProjectsViewCall { get; set; }
+        public bool Saved { get; set; }
+
+        public string OriginalProjectPath { get; set; }
 
         public ReportWizard()
         {
             InitializeComponent();
             Saved = false;
-			IsFromProjectsViewCall = false;
-
-		}
+            IsFromProjectsViewCall = false;
+        }
 
         private void ReportWizard_Load(object sender, EventArgs e)
-        {          
-		
+        {
             panel_action.Dock = DockStyle.Fill;
             panel_options.Dock = DockStyle.Fill;
-			if (IsFromProjectsViewCall)
-			{
-				switch_Panel(panel_options);
-			}
-			else
-			{
-				switch_Panel(panel_action);
-			}
-            
 
+            switch_Panel(IsFromProjectsViewCall ? panel_options : panel_action);
             radioButton_compareSelectedFiles_CheckedChanged(null, null);
-
             textBox_javaExecutablePath_TextChanged(null, null);
+
+            var analysisBands = ProjectSettingsProvider.GetProjectAnalysisBands(OriginalProjectPath);
+            fuzzyBandsOriginal.Items.AddRange([.. analysisBands]);
+            fuzzyBandsUpdated.Items.AddRange([.. analysisBands]);
         }
 
         public void switch_Panel(Control panel)
-        {          
+        {
             switch (panel.Name)
             {
                 case "panel_action":
@@ -49,7 +49,7 @@ namespace PostEdit.Compare.Forms
                         label_titlebar_description.Text = "Select the report action and optionally choose the rate group";
                         label_titlebar_note.Text = "";
 
-                        panel_action.BringToFront(); 
+                        panel_action.BringToFront();
 
                         button_wizard_help.Enabled = false;
 
@@ -62,24 +62,24 @@ namespace PostEdit.Compare.Forms
                     }
                 case "panel_options":
                     {
-						if (IsFromProjectsViewCall)
-						{
-							label_titleBar_title.Text = "Report Options - Step 1 of 1";
-							button_wizard_back.Enabled = false;
-						}
-						else
-						{
-							label_titleBar_title.Text = "Report Options - Step 2 of 2";
-							button_wizard_back.Enabled = true;
-						}
-                        
+                        if (IsFromProjectsViewCall)
+                        {
+                            label_titleBar_title.Text = "Report Options - Step 1 of 1";
+                            button_wizard_back.Enabled = false;
+                        }
+                        else
+                        {
+                            label_titleBar_title.Text = "Report Options - Step 2 of 2";
+                            button_wizard_back.Enabled = true;
+                        }
+
                         label_titlebar_description.Text = "Choose the report options";
                         label_titlebar_note.Text = "Note: changing the settings here will override the general report settings that are saved with the application";
 
                         panel_options.BringToFront();
 
                         button_wizard_help.Enabled = false;
-						                       
+
                         button_wizard_next.Enabled = false;
 
                         button_wizard_finish.Enabled = true;
@@ -194,6 +194,16 @@ namespace PostEdit.Compare.Forms
         private void javaWebsiteLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start("http://www.oracle.com/technetwork/java/javase/downloads/index.html");
+        }
+
+        private void comboBox_segments_match_value_original_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            fuzzyBandsOriginal.Visible = comboBox_segments_match_value_original.SelectedIndex == 5;
+        }
+
+        private void comboBox_segments_match_value_updated_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            fuzzyBandsUpdated.Visible = comboBox_segments_match_value_updated.SelectedIndex == 5;
         }
     }
 }

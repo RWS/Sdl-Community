@@ -13,6 +13,7 @@ using Sdl.Community.PostEdit.Compare;
 using Application = PostEdit.Compare.Cache.Application;
 using System.IO;
 using Sdl.Community.PostEdit.Compare.Core.Helper;
+using Sdl.Community.PostEdit.Compare.ExtendReportWizardSettings;
 
 namespace Sdl.Community.PostEdit.Versions
 {
@@ -95,7 +96,8 @@ namespace Sdl.Community.PostEdit.Versions
 	public class CreateProjectReport : AbstractViewControllerAction<PostEditCompareViewController>
 	{
 		protected override void Execute()
-		{
+        {
+
             if (!Controller.IsInitialized)
             {
                 Controller.Initialize();
@@ -107,8 +109,10 @@ namespace Sdl.Community.PostEdit.Versions
 			var skipWindow = new SkipSettingsWindow();
 			skipWindow.ShowDialog();
 
-			var reportWizard = new ReportWizard();
-			postEditCompare.InitializeReportWizard(reportWizard);
+            var reportWizard = new ReportWizard();
+            reportWizard.OriginalProjectPath = Controller.CurrentSelectedProject.FilePath;
+
+            postEditCompare.InitializeReportWizard(reportWizard);
 
 			if (skipWindow.CustomizeSettings)
 			{
@@ -223,7 +227,6 @@ namespace Sdl.Community.PostEdit.Versions
         }
         protected override void Execute()
         {
-
             Controller.CompareProjectVersions();
         }
     }

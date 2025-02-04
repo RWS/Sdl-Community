@@ -443,6 +443,7 @@ namespace Sdl.Community.PostEdit.Versions
                 Automation.SettingsSerializer.SaveSettings(settings);
                 IModel mModel = new Model();
                 var postEditCompare = new FormMain(mModel);
+                postEditCompare.OriginalProjectPath = CurrentSelectedProject?.FilePath;
                 postEditCompare.ShowDialog();
    }
             catch (Exception ex)

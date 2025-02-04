@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -84,9 +85,9 @@ namespace Sdl.Community.PostEdit.Compare.Core.Comparison
                 }
 
                 var fileParagraphUnitUpdated = xFileParagraphUnitsUpdated[fileParagraphUnitOriginal.Key];
-                if ((from paragraphUnitOriginalPair in fileParagraphUnitOriginal.Value 
-                     select paragraphUnitOriginalPair.Value into paragraphUnitOriginal 
-                     let paragraphUnitUpdated = new ParagraphUnit(paragraphUnitOriginal.ParagraphUnitId, new List<SegmentPair>()) 
+                if ((from paragraphUnitOriginalPair in fileParagraphUnitOriginal.Value
+                     select paragraphUnitOriginalPair.Value into paragraphUnitOriginal
+                     let paragraphUnitUpdated = new ParagraphUnit(paragraphUnitOriginal.ParagraphUnitId, new List<SegmentPair>())
                      select paragraphUnitOriginal).Any(paragraphUnitOriginal => !fileParagraphUnitUpdated.ContainsKey(paragraphUnitOriginal.ParagraphUnitId)))
                 {
                     errorMatchingParagraphLevel = true;
@@ -115,8 +116,9 @@ namespace Sdl.Community.PostEdit.Compare.Core.Comparison
 
 
                     var nameOriginal = Path.GetFileName(fileParagraphUnitOriginal.Key);
-                    var fileParagraphUnitUpdated = (from kvp in xFileParagraphUnitsUpdated let fileNameUpdated = Path.GetFileName(kvp.Key) 
-                                                    where string.Compare(nameOriginal, fileNameUpdated, StringComparison.OrdinalIgnoreCase) == 0 
+                    var fileParagraphUnitUpdated = (from kvp in xFileParagraphUnitsUpdated
+                                                    let fileNameUpdated = Path.GetFileName(kvp.Key)
+                                                    where string.Compare(nameOriginal, fileNameUpdated, StringComparison.OrdinalIgnoreCase) == 0
                                                     select kvp.Value).FirstOrDefault();
 
                     if (fileParagraphUnitUpdated == null)
@@ -308,14 +310,34 @@ namespace Sdl.Community.PostEdit.Compare.Core.Comparison
 
             return comparisonFileParagraphUnits;
         }
-      
+
         private void AddToComparision(ref ComparisonParagraphUnit comparisonParagraphUnit
          , ComparisonSegmentUnit comparisonSegmentUnit
          , SegmentPair segmentPairOriginal
          , SegmentPair segmentPairUpdated)
         {
+
+
             comparisonSegmentUnit.SegmentStatusOriginal = segmentPairOriginal.SegmentStatus;
             comparisonSegmentUnit.SegmentStatusUpdated = segmentPairUpdated.SegmentStatus;
+
+            if (Processor.Settings.ReportFilterTranslationMatchValuesOriginal == SharedStrings.FuzzyMatch
+                || Processor.Settings.ReportFilterTranslationMatchValuesUpdated == SharedStrings.FuzzyMatch)
+            {
+
+                
+
+                //if segmentPairOriginal has fuzzy match value as Processor.Settings.FuzzyMatchValueOriginal, add to comparison
+                //else don't add to comparison
+
+                //if (segmentPairOriginal.TranslationOrigin.MatchPercentage in range)
+
+
+                //if segmentPairUpdated also has fuzzy match value as Processor.Settings.FuzzyMatchValueUpdated, add to comparison
+                //else don't add to comparison
+                
+
+            }
 
             comparisonSegmentUnit.TranslationStatusOriginal = GetTranslationStatus(segmentPairOriginal);
             comparisonSegmentUnit.TranslationStatusUpdated = GetTranslationStatus(segmentPairUpdated);
@@ -334,7 +356,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Comparison
                 comparisonSegmentUnit.ComparisonTextUnits = GetComparisonTextUnits(segmentPairOriginal.TargetSections, segmentPairUpdated.TargetSections);
 
                 comparisonSegmentUnit.SegmentTextUpdated = true;
-                comparisonParagraphUnit.ParagraphIsUpdated = true;   
+                comparisonParagraphUnit.ParagraphIsUpdated = true;
             }
 
             comparisonSegmentUnit.SourceWordsOriginal = segmentPairOriginal.SourceWords;
@@ -395,24 +417,24 @@ namespace Sdl.Community.PostEdit.Compare.Core.Comparison
                     match = "CM";
                 }
                 else if (string.Compare(segmentPair.TranslationOrigin.OriginType, "mt", StringComparison.OrdinalIgnoreCase) == 0
-					|| string.Compare(segmentPair.TranslationOrigin.OriginType, "nmt", StringComparison.OrdinalIgnoreCase) == 0
-					|| string.Compare(segmentPair.TranslationOrigin.OriginType, "amt", StringComparison.OrdinalIgnoreCase) == 0)
+                    || string.Compare(segmentPair.TranslationOrigin.OriginType, "nmt", StringComparison.OrdinalIgnoreCase) == 0
+                    || string.Compare(segmentPair.TranslationOrigin.OriginType, "amt", StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     match = "AT";
                 }
-              
-				else
+
+                else
                 {
                     match = segmentPair.TranslationOrigin.MatchPercentage + "%";
                 }
             }
             else if (string.Compare(segmentPair.TranslationOrigin.OriginType, "mt", StringComparison.OrdinalIgnoreCase) == 0
-				|| string.Compare(segmentPair.TranslationOrigin.OriginType, "nmt", StringComparison.OrdinalIgnoreCase) == 0
-				|| string.Compare(segmentPair.TranslationOrigin.OriginType, "amt", StringComparison.OrdinalIgnoreCase) == 0)
+                || string.Compare(segmentPair.TranslationOrigin.OriginType, "nmt", StringComparison.OrdinalIgnoreCase) == 0
+                || string.Compare(segmentPair.TranslationOrigin.OriginType, "amt", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 match = "AT";
-            }            
-			else if (segmentPair.TranslationOrigin.MatchPercentage > 0)
+            }
+            else if (segmentPair.TranslationOrigin.MatchPercentage > 0)
             {
                 match = segmentPair.TranslationOrigin.MatchPercentage + "%";
             }
@@ -509,24 +531,24 @@ namespace Sdl.Community.PostEdit.Compare.Core.Comparison
                 }
             }
             return items;
-            
+
         }
         internal static int DamerauLevenshteinDistanceFromObject(List<SegmentSection> source, List<SegmentSection> target)
         {
 
             var sourceLen = 0;
             var sourceItems = GetSectionsList(source, ref sourceLen);
-          
+
             var targetLen = 0;
             var targetItems = GetSectionsList(target, ref targetLen);
-           
 
-            if (sourceLen == 0)            
+
+            if (sourceLen == 0)
                 return targetLen == 0 ? 0 : targetLen;
-            
-            if (targetLen == 0)            
+
+            if (targetLen == 0)
                 return sourceLen;
-            
+
 
             var score = new int[sourceLen + 2, targetLen + 2];
 
