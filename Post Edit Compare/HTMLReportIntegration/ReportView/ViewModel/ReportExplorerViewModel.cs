@@ -1,16 +1,13 @@
-﻿using Sdl.Community.PostEdit.Versions.Commands;
-using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
+﻿using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Windows.Input;
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.ViewModel;
 
 public class ReportExplorerViewModel : ViewModelBase
 {
-    private ICommand _refreshCommand;
     private ObservableCollection<ReportInfo> _reports;
     private ReportInfo _selectedReport;
 
@@ -18,8 +15,6 @@ public class ReportExplorerViewModel : ViewModelBase
     {
         Initialize();
     }
-
-    public ICommand RefreshCommand => _refreshCommand ??= new RelayCommand(RefreshReportList);
 
     public ObservableCollection<ReportInfo> Reports
     {
@@ -31,11 +26,6 @@ public class ReportExplorerViewModel : ViewModelBase
     {
         get => _selectedReport;
         set => SetField(ref _selectedReport, value);
-    }
-
-    private void Initialize()
-    {
-        RefreshReportList();
     }
 
     public void RefreshReportList()
@@ -54,5 +44,10 @@ public class ReportExplorerViewModel : ViewModelBase
                 ReportPath = report
             });
         }
+    }
+
+    private void Initialize()
+    {
+        RefreshReportList();
     }
 }

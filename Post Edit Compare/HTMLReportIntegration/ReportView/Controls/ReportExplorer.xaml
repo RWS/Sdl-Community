@@ -13,7 +13,7 @@
 
     <DockPanel LastChildFill="True">
 
-        <ListBox ItemsSource="{Binding Reports,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        <ListBox ItemsSource="{Binding Reports}"
                  SelectionChanged="Selector_OnSelectionChanged"
                  SelectedItem="{Binding SelectedReport}">
             <ListBox.ItemTemplate>

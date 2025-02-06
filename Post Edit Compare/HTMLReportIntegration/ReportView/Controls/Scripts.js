@@ -1,4 +1,27 @@
-﻿function getCleanedHTMLForExport() {
+﻿function collectSegmentsDataFromHTML() {
+    const segments = [];
+
+    document.querySelectorAll('table tr[data-file-id]').forEach(row => {
+        const segmentId = row.querySelector('td:first-child')?.textContent.trim();
+        const fileId = row.getAttribute('data-file-id');
+        const status = row.querySelector('td:nth-child(6)')?.textContent.trim(); // Adjust column index if needed
+        //const comment = row.querySelector('input[name="commentInput"]')?.value.trim() || '';
+
+        if (segmentId) {
+            segments.push({
+                segmentId,
+                fileId,
+                status
+                //comment
+            });
+        }
+    });
+
+    window.chrome.webview.postMessage({ type: "SegmentData", data: segments });
+}
+
+
+function getCleanedHTMLForExport() {
     console.log("Cleaning exportable HTML...");
 
     // Clone the document to avoid modifying the live page

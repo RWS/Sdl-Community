@@ -18,6 +18,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
         Name = "Post-Edit Report Viewer",
         Description = "Post-Edit Report Viewer",
         Icon = "PostEditVersions_Icon",
+        AllowViewParts = true,
         LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation)
     )]
     public class ReportViewController : AbstractViewController
@@ -30,6 +31,13 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
         public async Task<string> GetLoadedReport() => await ReportViewer.GetLoadedReport();
 
         public async Task<string> GetNonInteractiveReport() => await ReportViewer.GetNonInteractiveReport();
+
+        public ReportInfo GetSelectedReport()
+        {
+            return ReportExplorerViewModel.SelectedReport;
+        }
+
+        public void RefreshReportList() => ReportExplorerViewModel.RefreshReportList();
 
         public void ToggleReportSelection() => ReportExplorer.ToggleOnOff();
 
@@ -116,12 +124,5 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
         private void WebView2Browser_WebMessageReceived(object sender,
             Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e) =>
             Integration.HandleReportRequest(e.WebMessageAsJson);
-
-        public ReportInfo GetSelectedReport()
-        {
-            return ReportExplorerViewModel.SelectedReport;
-        }
-
-        public void RefreshReportList() => ReportExplorerViewModel.RefreshReportList();
     }
 }

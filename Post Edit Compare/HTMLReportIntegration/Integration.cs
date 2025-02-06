@@ -14,6 +14,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
         private static EditorEventListener EditorEventListener { get; } = new();
         private static ReportManager ReportManager { get; set; } = new();
         private static ReportViewController ReportViewController => ReportViewController.Instance;
+        private static ReportViewFilterController ReportView => ReportViewFilterController.Instance;
         private static StudioController StudioController { get; } = new();
         private static bool SyncOn { get; set; }
 
