@@ -4,9 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.ViewModel"
+             xmlns:converters="clr-namespace:Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Converters"
+             xmlns:local="clr-namespace:Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model"
+             xmlns:globalization="clr-namespace:Sdl.Core.Globalization;assembly=Sdl.Core.Globalization"
              x:Name="Root"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance viewModel:ReportViewFilterViewModel}"
              d:DesignHeight="450"
              d:DesignWidth="800">
     <UserControl.Resources>
@@ -42,6 +44,8 @@
                 <Setter Property="FontWeight"
                         Value="Bold" />
             </Style>
+
+            <converters:EnumToListConverter x:Key="EnumConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -52,7 +56,8 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <DockPanel Grid.Row="0"
+        <DockPanel x:Name="FilterMenu"
+                   Grid.Row="0"
                    LastChildFill="False">
 
             <Button Margin="5"
@@ -60,12 +65,13 @@
                     Style="{StaticResource Sdl.Button.PrimaryStyle}"
                     Click="ApplyFilterButton_OnClick"
                     Content="Apply" />
-            <Button Margin="5"
+            <Button Margin="0 5 5 5"
                     x:Name="ResetFilterButton"
-                    Style="{StaticResource Sdl.Button.PrimaryStyle}"
+                    Style="{StaticResource Sdl.Button.SecondaryStyle}"
                     Click="ResetFilterButton_OnClick"
-                    Content="Apply" />
-            <ComboBox SelectedIndex="0"
+                    Content="Reset" />
+            <ComboBox x:Name="OperatorComboBox"
+                      SelectedIndex="0"
                       BorderBrush="Transparent"
                       Style="{StaticResource Sdl.ComboBox.Generic.Style}"
                       HorizontalContentAlignment="Center"
@@ -83,7 +89,9 @@
                 <Expander.Header>
                     <TextBlock Text="Statuses" />
                 </Expander.Header>
-                <ListBox ItemsSource="{Binding Status}" />
+                <ListBox x:Name="StatusesListBox"
+                         ItemsSource="{Binding Converter={StaticResource EnumConverter}, ConverterParameter={x:Type local:Statuses}}"
+                         SelectionMode="Multiple" />
             </Expander>
         </Border>
 
@@ -93,7 +101,9 @@
                 <Expander.Header>
                     <TextBlock Text="Match Types" />
                 </Expander.Header>
-                <ListBox ItemsSource="{Binding MatchTypes}" />
+                <ListBox x:Name="MatchTypesListBox"
+                         ItemsSource="{Binding Converter={StaticResource EnumConverter}, ConverterParameter={x:Type local:MatchTypes}}"
+                         SelectionMode="Multiple" />
             </Expander>
         </Border>
     </Grid>

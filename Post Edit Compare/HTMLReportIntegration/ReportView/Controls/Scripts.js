@@ -1,23 +1,57 @@
-﻿function collectSegmentsDataFromHTML() {
+﻿function showSegments(segmentList) {
+    segmentList.forEach(seg => {
+        console.info('Segment: ' + seg.segmentId + ', ' + seg.fileId + '\n');
+    });
+    document.querySelectorAll('table tr[data-file-id]').forEach(row => {
+        const segmentCell = row.querySelector('td:first-child'); // Assuming segment ID is in the first column
+        const fileId = row.getAttribute('data-file-id');
+
+        console.info('Current file ID: ' + fileId + '\n');
+
+        if (segmentCell) {
+            const segmentId = segmentCell.textContent.trim();
+            const match = segmentList.some(item => item.segmentId === segmentId && item.fileId === fileId);
+
+
+
+            row.style.display = match ? '' : 'none';
+        }
+    });
+}
+
+function showAllSegments() {
+    document.querySelectorAll('table tr[data-file-id]').forEach(row => {
+        row.style.display = '';
+    });
+}
+
+function collectSegmentsDataFromHTML() {
     const segments = [];
 
     document.querySelectorAll('table tr[data-file-id]').forEach(row => {
         const segmentId = row.querySelector('td:first-child')?.textContent.trim();
         const fileId = row.getAttribute('data-file-id');
-        const status = row.querySelector('td:nth-child(6)')?.textContent.trim(); // Adjust column index if needed
+        const statusColumn = row.querySelector('td:nth-child(6)');
+        const matchType = row.querySelector('td:nth-child(7)')?.textContent.trim();
+
+        const status = statusColumn.querySelector('span')?.textContent.trim();
+        //const statusOriginal = status.querySelector('span:nth-child(2)')?.textContent.trim();
+
         //const comment = row.querySelector('input[name="commentInput"]')?.value.trim() || '';
 
         if (segmentId) {
             segments.push({
                 segmentId,
                 fileId,
-                status
+                status,
+                //statusOriginal,
+                matchType
                 //comment
             });
         }
     });
 
-    window.chrome.webview.postMessage({ type: "SegmentData", data: segments });
+    return segments;
 }
 
 
@@ -90,7 +124,7 @@ function updateSegmentStatus(segmentId, fileId, newStatus) {
     const rows = document.querySelectorAll('table tr');
 
 
-    rows.forEach(function(row) {
+    rows.forEach(function (row) {
         const fileIdRow = row.getAttribute('data-file-id'); // Get the fileId attribute
         const segmentCell = row.querySelector('td:first-child'); // Get the first cell in the row
 

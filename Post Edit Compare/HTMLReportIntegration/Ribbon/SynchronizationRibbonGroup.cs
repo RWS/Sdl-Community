@@ -28,7 +28,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
         {
             SdlTradosStudio.Application.GetAction<SyncReportProjectOn>().Enabled = true;
             Enabled = false;
-            Integration.ToggleSync(false);
+            Integration.ToggleReportProjectSync(false);
         }
     }
 
@@ -43,7 +43,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
         {
             SdlTradosStudio.Application.GetAction<SyncReportProjectOff>().Enabled = true;
             Enabled = false;
-            Integration.ToggleSync(true);
+            Integration.ToggleReportProjectSync(true);
         }
     }
 }

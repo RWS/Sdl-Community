@@ -112,6 +112,7 @@
     <Content Include="Resources\Compare.ico" />
     <Content Include="Resources\Download.ico" />
     <Content Include="Resources\Edit.ico" />
+    <Content Include="Resources\Filter.ico" />
     <Content Include="Resources\ForumIcon.ico" />
     <Content Include="Resources\Help.ico" />
     <Content Include="Resources\Info.ico" />
@@ -293,6 +294,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="HTMLReportIntegration\ReportView\Controls\Scripts.js" />
+    <None Remove="Resources\Filter.ico" />
     <None Remove="Resources\OpenReportFolder.ico" />
     <None Remove="Resources\RefreshReportList.ico" />
     <None Remove="Resources\Report.png" />

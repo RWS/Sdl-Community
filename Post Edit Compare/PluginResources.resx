@@ -512,4 +512,7 @@ Select 'No' to cancel this action
   <data name="RefreshReportList" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\RefreshReportList.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Filter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Filter.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

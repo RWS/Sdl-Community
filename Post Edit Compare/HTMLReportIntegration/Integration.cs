@@ -12,9 +12,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
     public class Integration
     {
         private static EditorEventListener EditorEventListener { get; } = new();
-        private static ReportManager ReportManager { get; set; } = new();
+        private static ReportManager ReportManager { get; } = new();
         private static ReportViewController ReportViewController => ReportViewController.Instance;
-        private static ReportViewFilterController ReportView => ReportViewFilterController.Instance;
         private static StudioController StudioController { get; } = new();
         private static bool SyncOn { get; set; }
 
@@ -33,6 +32,10 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
             StudioController.HandleReportRequest(messageObject);
         }
 
+        public static void OpenReportFolder() => ReportManager.OpenReportFolder();
+
+        public static void RefreshReportList() => ReportViewController.RefreshReportList();
+
         public static async Task SaveReport()
         {
             var reportFromMemory = await ReportViewController.GetLoadedReport();
@@ -41,43 +44,38 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
             ReportManager.SaveReport(reportFromMemory, selectedReport.ReportPath);
         }
 
-        public static void ToggleSync(bool syncEnabled)
+        public static void ToggleReportProjectSync(bool syncEnabled)
         {
             SyncOn = syncEnabled;
-            ReportViewController.ToggleReportSelection();
+            ReportViewController.ToggleReportExplorer();
 
             if (syncEnabled)
-            {
-                EditorEventListener.StartListening();
-                EditorEventListener.CommentsChanged += EditorEventListener_CommentsChanged;
-                EditorEventListener.StatusChanged += EditorEventListener_StatusChanged;
-            }
+                ConnectEditorListener();
             else
-            {
-                EditorEventListener.StopListening();
-                EditorEventListener.CommentsChanged -= EditorEventListener_CommentsChanged;
-                EditorEventListener.StatusChanged -= EditorEventListener_StatusChanged;
-            }
+                DisconnectEditorListener();
         }
 
-        private static void EditorEventListener_CommentsChanged(List<CommentInfo> comments, string segmentId, string fileId)
+        private static void ConnectEditorListener()
         {
-            ReportViewController.UpdateComments(comments, segmentId, fileId);
+            EditorEventListener.StartListening();
+            EditorEventListener.CommentsChanged += EditorEventListener_CommentsChanged;
+            EditorEventListener.StatusChanged += EditorEventListener_StatusChanged;
         }
 
-        private static void EditorEventListener_StatusChanged(string newStatus, string segmentId, string fileId)
+        private static void DisconnectEditorListener()
         {
+            EditorEventListener.StopListening();
+            EditorEventListener.CommentsChanged -= EditorEventListener_CommentsChanged;
+            EditorEventListener.StatusChanged -= EditorEventListener_StatusChanged;
+        }
+
+        private static void EditorEventListener_CommentsChanged(List<CommentInfo> comments, string segmentId,
+            string fileId) => ReportViewController.UpdateComments(comments, segmentId, fileId);
+
+        private static void EditorEventListener_StatusChanged(string newStatus, string segmentId, string fileId) =>
             ReportViewController.UpdateStatus(newStatus, segmentId, fileId);
-        }
 
-        public static void OpenReportFolder()
-        {
-            ReportManager.OpenReportFolder();
-        }
-
-        public static void RefreshReportList()
-        {
-            ReportViewController.RefreshReportList();
-        }
+        public static void FilterSegments(SegmentFilter segmentFilter) =>
+            ReportViewController.ToggleFilter(segmentFilter);
     }
 }

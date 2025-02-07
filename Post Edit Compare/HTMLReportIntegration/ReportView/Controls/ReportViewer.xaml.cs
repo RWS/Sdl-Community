@@ -1,8 +1,10 @@
 ﻿using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
 using Newtonsoft.Json;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -25,6 +27,21 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
 
         public void Dispose()
         {
+        }
+
+        public async Task<List<ReportSegment>> GetAllSegments()
+        {
+            try
+            {
+                var result = await WebView2Browser.ExecuteScriptAsync("collectSegmentsDataFromHTML();");
+                var reportSegments = JsonConvert.DeserializeObject<List<ReportSegment>>(result);
+                return reportSegments;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error retrieving the segments of the HTML report: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
         }
 
         public async Task<string> GetLoadedReport()
@@ -58,6 +75,18 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             }
         }
 
+        public async Task HideAllSegments()
+        {
+            try
+            {
+                await WebView2Browser.ExecuteScriptAsync("hideAllSegments();");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error hiding the segments of the HTML report: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         public async Task Navigate(string path)
         {
             if (string.IsNullOrWhiteSpace(path))
@@ -69,6 +98,35 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             {
                 await LoadScripts();
                 WebView2Browser.CoreWebView2?.Navigate(path);
+            }
+        }
+
+        public async Task ShowAllSegments()
+        {
+            try
+            {
+                await WebView2Browser.ExecuteScriptAsync("showAllSegments();");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error showing the requested segments of the HTML report: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public async Task ShowSegments(List<(string, string)> segmentAndFileIds)
+        {
+            try
+            {
+                List<dynamic> segments = [];
+                foreach (var segmentAndFileId in segmentAndFileIds)
+                    segments.Add(new { segmentId = segmentAndFileId.Item1, fileId = segmentAndFileId.Item2 });
+
+                var segmentsJson = JsonConvert.SerializeObject(segments);
+                await WebView2Browser.ExecuteScriptAsync($"showSegments({segmentsJson});");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error showing the requested segments of the HTML report: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

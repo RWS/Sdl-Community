@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Controls;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Utilities;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
@@ -8,6 +9,7 @@ using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -39,7 +41,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 
         public void RefreshReportList() => ReportExplorerViewModel.RefreshReportList();
 
-        public void ToggleReportSelection() => ReportExplorer.ToggleOnOff();
+        public void ToggleReportExplorer() => ReportExplorer.ToggleOnOff();
 
         public void UpdateComments(List<CommentInfo> comments, string segmentId, string fileId)
         {
@@ -124,5 +126,22 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
         private void WebView2Browser_WebMessageReceived(object sender,
             Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e) =>
             Integration.HandleReportRequest(e.WebMessageAsJson);
+
+        public async Task ToggleFilter(SegmentFilter segmentFilter)
+        {
+            if (!segmentFilter.IsEmpty)
+            {
+                ReportExplorer.IsEnabled = false;
+
+                var segments = await ReportViewer.GetAllSegments();
+                var matchingSegments = SegmentMatcher.GetAllMatchingSegments(segments, segmentFilter);
+                await ReportViewer.ShowSegments(matchingSegments.Select(seg => (seg.SegmentId, seg.FileId)).ToList());
+            }
+            else
+            {
+                ReportExplorer.IsEnabled = true;
+                await ReportViewer.ShowAllSegments();
+            }
+        }
     }
 }
