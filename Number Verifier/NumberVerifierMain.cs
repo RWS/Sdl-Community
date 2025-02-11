@@ -51,26 +51,6 @@ namespace Sdl.Community.NumberVerifier
 			_numberValidator = new NumberValidator();
 		}
 
-		public bool Enabled
-		{
-			get
-			{
-				if (_enabled.HasValue) return _enabled.Value;
-				var settingBundle = _sharedObjects.GetSharedObject<ISettingsBundle>("SettingsBundle");
-				if (settingBundle == null)
-				{
-					_enabled = false;
-				}
-				else
-				{
-					var settingGroup = settingBundle.GetSettingsGroup(SettingsId);
-					_enabled = settingGroup.GetSetting<bool>("Enabled");
-				}
-
-				return _enabled != null && _enabled.Value;
-			}
-		}
-
 		/// <summary>
 		/// Initializes the settings bundle object from which to retrieve the setting(s)
 		/// to be used in the verification logic, e.g. the context display code to
@@ -188,11 +168,8 @@ namespace Sdl.Community.NumberVerifier
 
 		public void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
-			if (Enabled)
-			{
-				// Apply the verification logic.
-				CheckParagraphUnit(paragraphUnit);
-			}
+			// Apply the verification logic.
+			CheckParagraphUnit(paragraphUnit);
 		}
 
 		public INumberVerifier GenericNumberVerifier

@@ -47,7 +47,7 @@ namespace Sdl.Community.NumberVerifier.Processors
 
 		private ErrorLevel GetNumbersErrorLevel(INumberResults numberResults)
 		{
-			switch (numberResults.Settings.RemovedNumbersErrorType)
+			switch (numberResults.Settings.ModifiedAlphanumericsErrorType)
 			{
 				case "Error":
 					return ErrorLevel.Error;

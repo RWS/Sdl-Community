@@ -37,6 +37,7 @@ namespace Sdl.Community.NumberVerifier
                 _Control = new NumberVerifierUI();
             }
 
+			OnActivate();
             return _Control;
         }
         #endregion
@@ -297,6 +298,7 @@ namespace Sdl.Community.NumberVerifier
 			_ControlSettings.ModifiedNumbersErrorType = _Control.ModifiedNumbersErrorType;
 			_ControlSettings.ModifiedAlphanumericsErrorType = _Control.ModifiedAlphanumericsErrorType;
 			_ControlSettings.NumberFormatErrorType = _Control.NumberFormatErrorType;
+			_ControlSettings.CheckInOrder = _Control.CheckInOrder;
 			_ControlSettings.CustomsSeparatorsAlphanumerics = _Control.CustomsSeparatorsAlphanumerics;
 
 			_ControlSettings.ReportAddedNumbers = _Control.ReportAddedNumbers;

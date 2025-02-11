@@ -523,10 +523,10 @@
             this.ttlabel8.Size = new System.Drawing.Size(55, 13);
             this.ttlabel8.TabIndex = 42;
             this.ttlabel8.Text = "1-000-300";
-            // 
-            // customTBox
-            // 
-            this.customTBox.Location = new System.Drawing.Point(20, 204);
+			// 
+			// customTBox
+			// 
+			this.customTBox.Location = new System.Drawing.Point(20, 204);
             this.customTBox.Name = "customTBox";
             this.customTBox.Size = new System.Drawing.Size(100, 20);
             this.customTBox.TabIndex = 34;
@@ -1071,10 +1071,11 @@
             this.cb_SourceNoSeparator.TabIndex = 26;
             this.cb_SourceNoSeparator.Text = "No Separator";
             this.cb_SourceNoSeparator.UseVisualStyleBackColor = true;
-            // 
-            // cb_SourceThousandsPeriod
-            // 
-            this.cb_SourceThousandsPeriod.AutoSize = true;
+			this.cb_SourceNoSeparator.CheckedChanged += new System.EventHandler(this.CheckedChanged);
+			// 
+			// cb_SourceThousandsPeriod
+			// 
+			this.cb_SourceThousandsPeriod.AutoSize = true;
             this.cb_SourceThousandsPeriod.Checked = true;
             this.cb_SourceThousandsPeriod.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cb_SourceThousandsPeriod.Location = new System.Drawing.Point(17, 134);
