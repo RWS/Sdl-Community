@@ -168,6 +168,9 @@
     <Compile Include="Reporter\IMessageFilter.cs" />
     <Compile Include="Reporter\MessageFilter.cs" />
     <Compile Include="Services\FilePathDialogService.cs" />
+    <Compile Include="Services\NumberVerifierProfileManager.cs" />
+    <Compile Include="Services\NumberVerifierSettingsExporter.cs" />
+    <Compile Include="Services\NumberVerifierSettingsImporter.cs" />
     <Compile Include="TellMe\SettingsAction.cs" />
     <Compile Include="Validator\NumberComparisonExtension.cs" />
     <Compile Include="Validator\ComparisonConstants.cs" />

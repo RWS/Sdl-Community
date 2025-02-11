@@ -269,4 +269,28 @@ Finally, you can select the \b\i Extended\b0  \i0 option for \b\i Messages \b0\i
   <data name="TellmeDocumentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\TellmeDocumentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="NumberVerifierProfile_Import_ConfirmationMessage" xml:space="preserve">
+    <value>Importing settings will overwrite existing configurations. Do you want to continue?</value>
+  </data>
+  <data name="NumberVerifierProfile_QuestionTitle" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="NumberVerifierProfile_ImportOnInvalid" xml:space="preserve">
+    <value>Invalid settings file.</value>
+  </data>
+  <data name="NumberVerifierProfile_ImportOnSuccess" xml:space="preserve">
+    <value>Number Verifier QA profile imported successfully.</value>
+  </data>
+  <data name="NumberVerifierProfile_Export_OnSuccess" xml:space="preserve">
+    <value>Number Verifier QA profile exported successfully</value>
+  </data>
+  <data name="NumberVerifierProfile_ExportDialogTitle" xml:space="preserve">
+    <value>Export Settings</value>
+  </data>
+  <data name="NumberVerifierProfile_OperationSuccessTitle" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="NumberVerifierProfile_OperationErrorTitle" xml:space="preserve">
+    <value>Error</value>
+  </data>
 </root>

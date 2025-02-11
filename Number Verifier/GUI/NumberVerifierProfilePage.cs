@@ -1,4 +1,5 @@
-﻿using Sdl.Core.Settings;
+﻿using Sdl.Community.NumberVerifier.Services;
+using Sdl.Core.Settings;
 using Sdl.Verification.Api;
 
 namespace Sdl.Community.NumberVerifier.GUI
@@ -23,7 +24,11 @@ namespace Sdl.Community.NumberVerifier.GUI
             _ControlSettings = ((ISettingsBundle)DataSource).GetSettingsGroup<NumberVerifierSettings>();
             _ControlSettings.BeginEdit();
 
-            _Control ??= new NumberVerifierProfile(new Services.FilePathDialogService(), _ControlSettings);
+            var profileManager = new NumberVerifierProfileManager(
+                new NumberVerifierSettingsImporter(),
+                new NumberVerifierSettingsExporter());
+
+            _Control = new NumberVerifierProfile(new Services.FilePathDialogService(), _ControlSettings, profileManager);
 
             return _Control;
         }

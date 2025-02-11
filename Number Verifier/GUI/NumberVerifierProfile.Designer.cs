@@ -15,6 +15,7 @@ namespace Sdl.Community.NumberVerifier.GUI
         private Button buttonExportSettings;
         private System.Windows.Forms.Label labelCurrentProfile;
         private System.Windows.Forms.Label labelProfilePath;
+        private System.Windows.Forms.Label labelProfileMismatchMessage;
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -38,6 +39,7 @@ namespace Sdl.Community.NumberVerifier.GUI
             this.labelProfilePath = new System.Windows.Forms.Label();
             this.buttonImportSettings = new System.Windows.Forms.Button();
             this.buttonExportSettings = new System.Windows.Forms.Button();
+            this.labelProfileMismatchMessage = new System.Windows.Forms.Label();
             this.SuspendLayout();
 
             // 
@@ -109,16 +111,31 @@ namespace Sdl.Community.NumberVerifier.GUI
             this.buttonExportSettings.Text = "Export Settings...";
             this.buttonExportSettings.UseVisualStyleBackColor = true;
             this.buttonExportSettings.Click += new System.EventHandler(this.button2_ExportSettings_Click);
-
+            //
+            // labelProfileMismatchMessage
+            //
+            this.labelProfileMismatchMessage.AutoSize = true;
+            this.labelProfileMismatchMessage.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular);
+            this.labelProfileMismatchMessage.ForeColor = System.Drawing.Color.DarkRed;
+            this.labelProfileMismatchMessage.Location = new System.Drawing.Point(20, 140);
+            this.labelProfileMismatchMessage.Name = "labelProfileMismatchMessage";
+            this.labelProfileMismatchMessage.Size = new System.Drawing.Size(500, 40);
+            this.labelProfileMismatchMessage.TabIndex = 8;
+            this.labelProfileMismatchMessage.Text = "The current settings do not match the selected profile (" + _profilePath + ").\n" +
+            "If you wish to save these settings, you can:\n\n" +
+            "\t1. Export the profile.\n" +
+            "\t2. Import the profile.";
+            this.labelProfileMismatchMessage.Visible = false;
             // 
             // NumberVerifierProfile
             // 
             this.Controls.Add(this.labelHeader);
             this.Controls.Add(this.labelDescription);
-            this.Controls.Add(this.labelCurrentProfile); // Add this before buttons
+            this.Controls.Add(this.labelCurrentProfile);
             this.Controls.Add(this.labelProfilePath);
             this.Controls.Add(this.buttonImportSettings);
             this.Controls.Add(this.buttonExportSettings);
+            this.Controls.Add(this.labelProfileMismatchMessage);
             this.Name = "NumberVerifierProfile";
             this.Size = new System.Drawing.Size(782, 560);
             this.ResumeLayout(false);
