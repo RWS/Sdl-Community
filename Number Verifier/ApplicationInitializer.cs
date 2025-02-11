@@ -7,7 +7,11 @@ namespace Sdl.Community.NumberVerifier
 	[ApplicationInitializer]
 	public class ApplicationInitializer : IApplicationInitializer
 	{
-		public void Execute()
+        public static NumberVerifierSettings NumberVerifierSettings { get; set; }
+
+		public static bool IsNumberVerifierView { get; set; } = false;
+
+        public void Execute()
 		{
 			Log.Setup();
 		}

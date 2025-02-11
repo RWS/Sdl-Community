@@ -134,7 +134,7 @@
             // 
             // panelNumberVerifierUI
             // 
-            this.panelNumberVerifierUI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.panelNumberVerifierUI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelNumberVerifierUI.AutoScroll = true;
             this.panelNumberVerifierUI.Controls.Add(this.groupBox1);
@@ -1071,6 +1071,7 @@
             this.cb_SourceNoSeparator.TabIndex = 26;
             this.cb_SourceNoSeparator.Text = "No Separator";
             this.cb_SourceNoSeparator.UseVisualStyleBackColor = true;
+            this.cb_SourceNoSeparator.CheckedChanged += new System.EventHandler(this.CheckedChanged);
             // 
             // cb_SourceThousandsPeriod
             // 
@@ -1337,35 +1338,35 @@
         private System.Windows.Forms.GroupBox targetMisBox;
         private System.Windows.Forms.CheckBox targetOmitZero;
         private System.Windows.Forms.CheckBox sourceOmitZero;
-		private System.Windows.Forms.CheckBox cb_customSeparators;
-		private System.Windows.Forms.TextBox tb_customsSeparators;
-		private System.Windows.Forms.ComboBox combo_NumberFormatErrorType;
-		private System.Windows.Forms.CheckBox cb_ReportNumberFormatErrors;
-		private System.Windows.Forms.Label ttlabel8;
-		private System.Windows.Forms.Label ttlabel7;
-		private System.Windows.Forms.Label ttlabel6;
-		private System.Windows.Forms.Label ttlabel5;
-		private System.Windows.Forms.Label ttlabel4;
-		private System.Windows.Forms.Label ttlabel3;
-		private System.Windows.Forms.Label ttlabel1;
-		private System.Windows.Forms.Label ttlabel2;
-		private System.Windows.Forms.Label tdlabel1;
-		private System.Windows.Forms.Label tdlabel3;
-		private System.Windows.Forms.Label tdlabel2;
-		private System.Windows.Forms.Label dlabel1;
-		private System.Windows.Forms.Label dlabel3;
-		private System.Windows.Forms.Label dlabel2;
-		private System.Windows.Forms.Label tLabel8;
-		private System.Windows.Forms.Label tLabel7;
-		private System.Windows.Forms.Label tLabel6;
-		private System.Windows.Forms.Label tLabel5;
-		private System.Windows.Forms.Label tLabel4;
-		private System.Windows.Forms.Label tLabel3;
-		private System.Windows.Forms.Label tLabel1;
-		private System.Windows.Forms.Label tLabel2;
-		private System.Windows.Forms.Label targetOmitLeadingZeroLabel;
-		private System.Windows.Forms.Label sourceOmitLeadingZeroLabel;
-		private System.Windows.Forms.CheckBox cb_InOrder;
-		private System.Windows.Forms.Button button1;
-	}
+        private System.Windows.Forms.CheckBox cb_customSeparators;
+        private System.Windows.Forms.TextBox tb_customsSeparators;
+        private System.Windows.Forms.ComboBox combo_NumberFormatErrorType;
+        private System.Windows.Forms.CheckBox cb_ReportNumberFormatErrors;
+        private System.Windows.Forms.Label ttlabel8;
+        private System.Windows.Forms.Label ttlabel7;
+        private System.Windows.Forms.Label ttlabel6;
+        private System.Windows.Forms.Label ttlabel5;
+        private System.Windows.Forms.Label ttlabel4;
+        private System.Windows.Forms.Label ttlabel3;
+        private System.Windows.Forms.Label ttlabel1;
+        private System.Windows.Forms.Label ttlabel2;
+        private System.Windows.Forms.Label tdlabel1;
+        private System.Windows.Forms.Label tdlabel3;
+        private System.Windows.Forms.Label tdlabel2;
+        private System.Windows.Forms.Label dlabel1;
+        private System.Windows.Forms.Label dlabel3;
+        private System.Windows.Forms.Label dlabel2;
+        private System.Windows.Forms.Label tLabel8;
+        private System.Windows.Forms.Label tLabel7;
+        private System.Windows.Forms.Label tLabel6;
+        private System.Windows.Forms.Label tLabel5;
+        private System.Windows.Forms.Label tLabel4;
+        private System.Windows.Forms.Label tLabel3;
+        private System.Windows.Forms.Label tLabel1;
+        private System.Windows.Forms.Label tLabel2;
+        private System.Windows.Forms.Label targetOmitLeadingZeroLabel;
+        private System.Windows.Forms.Label sourceOmitLeadingZeroLabel;
+        private System.Windows.Forms.CheckBox cb_InOrder;
+        private System.Windows.Forms.Button button1;
+    }
 }

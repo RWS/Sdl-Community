@@ -17,10 +17,16 @@ namespace Sdl.Community.NumberVerifier
 	/// </summary>
 	public class NumberVerifierSettings : SettingsGroup, INumberVerifierSettings
 	{
-		#region "setting"
+        #region "setting"
 
-		// Return the value of the setting.
-		public bool CheckInOrder
+        // Return the value of the setting.
+        public string ProfilePath 
+		{ 
+			set => GetSetting<string>(nameof(ProfilePath)).Value = value;
+			get => GetSetting<string>(nameof(ProfilePath)).Value;
+		}
+
+        public bool CheckInOrder
 		{
 			set => GetSetting<bool>(nameof(CheckInOrder)).Value = value;
 			get => GetSetting<bool>(nameof(CheckInOrder)).Value;
