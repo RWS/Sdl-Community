@@ -221,7 +221,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
         private async Task LoadScripts()
         {
             var scripts = File.ReadAllText(
-                @"C:\Code\SDL\GitHub repos\RWS Community\Post Edit Compare\bin\Debug\net48\HTMLReportIntegration\ReportView\Controls\scripts.js");
+                @"..\..\HTMLReportIntegration\ReportView\Controls\scripts.js");
             try
             {
                 var result = await WebView2Browser.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(scripts);
