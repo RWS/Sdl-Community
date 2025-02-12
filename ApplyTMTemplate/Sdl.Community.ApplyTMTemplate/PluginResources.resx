@@ -397,4 +397,7 @@
   <data name="ApplyTMTemplate_SaveSettingsTooltip" xml:space="preserve">
     <value>Save current settings</value>
   </data>
+  <data name="ApplyTMTemplatePathDeletedMessage" xml:space="preserve">
+    <value>You are currently using cached settings. Please save the file to ensure these settings are not lost.</value>
+  </data>
 </root>

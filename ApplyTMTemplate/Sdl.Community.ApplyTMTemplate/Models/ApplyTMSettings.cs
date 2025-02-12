@@ -8,6 +8,8 @@ namespace Sdl.Community.ApplyTMTemplate.Models
 {
     public class ApplyTMSettings
     {
+        public string TMSettingsFilePath { get; set; }
+
         public string LanguageResourcePath { get; set; } = string.Empty;
 
         public List<TranslationMemoryEntry> TMPathCollection { get; set; } = new();

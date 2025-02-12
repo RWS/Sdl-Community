@@ -152,6 +152,15 @@ namespace Sdl.Community.ApplyTMTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You are currently using cached settings. Please save the file to ensure these settings are not lost..
+        /// </summary>
+        public static string ApplyTMTemplatePathDeletedMessage {
+            get {
+                return ResourceManager.GetString("ApplyTMTemplatePathDeletedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon ATTA {
