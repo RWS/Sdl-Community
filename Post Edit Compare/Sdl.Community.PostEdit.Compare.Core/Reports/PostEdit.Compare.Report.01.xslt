@@ -2634,7 +2634,7 @@
     <xsl:param name="showSegmentTerp" />
     <xsl:param name="showSegmentPemp" />
 
-    <tr data-file-id='{@fileId}'>
+    <tr data-file-id='{@fileId}' data-project-id='{@projectId}'>
 
       <td class="segmentId">
         <a href="#" onclick="navigateToSegment('{@segmentId}','{@fileId}','{@projectId}'); return false;">

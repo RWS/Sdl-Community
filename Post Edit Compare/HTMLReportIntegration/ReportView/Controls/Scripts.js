@@ -1,4 +1,16 @@
-﻿function showSegments(segmentList) {
+﻿function getProjectId() {
+    const row = document.querySelector('table tr[data-project-id]');
+
+    if (row) {
+        const projectId = row.getAttribute('data-project-id');
+        console.info('ProjectId: ' + projectId + '\n');
+        return projectId;
+    }
+
+    return null;
+}
+
+function showSegments(segmentList) {
     segmentList.forEach(seg => {
         console.info('Segment: ' + seg.segmentId + ', ' + seg.fileId + '\n');
     });
@@ -11,8 +23,6 @@
         if (segmentCell) {
             const segmentId = segmentCell.textContent.trim();
             const match = segmentList.some(item => item.segmentId === segmentId && item.fileId === fileId);
-
-
 
             row.style.display = match ? '' : 'none';
         }
@@ -54,7 +64,6 @@ function collectSegmentsDataFromHTML() {
     return segments;
 }
 
-
 function getCleanedHTMLForExport() {
     console.log("Cleaning exportable HTML...");
 
@@ -73,7 +82,6 @@ function getCleanedHTMLForExport() {
     console.log("HTML cleaned. Returning exported HTML.");
     return clonedDocument.outerHTML;
 }
-
 
 function navigateToSegment(segmentId, fileId, projectId) {
     const payload = {
@@ -105,7 +113,6 @@ function submitComment(input, severity, segmentId, fileId, projectId) {
     input.placeholder = "Add comment";
 }
 
-
 function updateStatus(dropdown, segmentId, fileId, projectId) {
     const status = dropdown.value;
     const payload = {
@@ -119,15 +126,12 @@ function updateStatus(dropdown, segmentId, fileId, projectId) {
 }
 
 function updateSegmentStatus(segmentId, fileId, newStatus) {
-
     console.info('UpdateSegmentStatus');
     const rows = document.querySelectorAll('table tr');
-
 
     rows.forEach(function (row) {
         const fileIdRow = row.getAttribute('data-file-id'); // Get the fileId attribute
         const segmentCell = row.querySelector('td:first-child'); // Get the first cell in the row
-
 
         if (segmentCell) {
             const cellContent = segmentCell.textContent.trim();
@@ -136,11 +140,9 @@ function updateSegmentStatus(segmentId, fileId, newStatus) {
             if (fileIdRow === fileId) {
                 console.info('FileId found');
 
-
                 // Locate the status cell
                 const statusCell = row.querySelector('td:nth-child(6)');
                 if (statusCell) {
-
                     const originalStatusElement = statusCell.querySelector('span');
                     const originalStatus = originalStatusElement ? originalStatusElement.textContent.trim() : null;
 
@@ -148,7 +150,6 @@ function updateSegmentStatus(segmentId, fileId, newStatus) {
 
                     console.info('newStatus ' + newStatus + '.\n' + 'original status ' + originalStatus + '.\n');
                     console.info('is original' + isOriginal + '.\n');
-
 
                     const newStatusElement = statusCell.querySelector('.new-status');
 

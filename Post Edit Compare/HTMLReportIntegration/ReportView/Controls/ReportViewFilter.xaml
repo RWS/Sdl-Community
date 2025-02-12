@@ -9,6 +9,7 @@
              xmlns:globalization="clr-namespace:Sdl.Core.Globalization;assembly=Sdl.Core.Globalization"
              x:Name="Root"
              mc:Ignorable="d"
+             DataContext="{Binding ElementName=Root}"
              d:DesignHeight="450"
              d:DesignWidth="800">
     <UserControl.Resources>
@@ -90,8 +91,7 @@
                     <TextBlock Text="Statuses" />
                 </Expander.Header>
                 <ListBox x:Name="StatusesListBox"
-                         ItemsSource="{Binding Converter={StaticResource EnumConverter}, ConverterParameter={x:Type local:Statuses}}"
-                         SelectionMode="Multiple" />
+                         ItemsSource="{Binding Converter={StaticResource EnumConverter}, ConverterParameter={x:Type local:Statuses}}" />
             </Expander>
         </Border>
 
@@ -101,9 +101,24 @@
                 <Expander.Header>
                     <TextBlock Text="Match Types" />
                 </Expander.Header>
-                <ListBox x:Name="MatchTypesListBox"
-                         ItemsSource="{Binding Converter={StaticResource EnumConverter}, ConverterParameter={x:Type local:MatchTypes}}"
-                         SelectionMode="Multiple" />
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <ListBox Grid.Column="0"
+                             x:Name="MatchTypesListBox"
+                             ItemsSource="{Binding Converter={StaticResource EnumConverter}, ConverterParameter={x:Type local:MatchTypes}}"
+                             SelectionChanged="MatchTypesListBox_OnSelectionChanged" />
+
+                    <ListBox Grid.Column="1"
+                             VerticalAlignment="Center"
+                             ItemsSource="{Binding FuzzyBands}"
+                             Visibility="Collapsed"
+                             x:Name="FuzzyMatchPercentageListBox"/>
+                </Grid>
             </Expander>
         </Border>
     </Grid>

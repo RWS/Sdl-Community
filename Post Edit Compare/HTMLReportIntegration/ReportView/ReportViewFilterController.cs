@@ -3,6 +3,7 @@ using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
+using System.Collections.Generic;
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 {
@@ -17,6 +18,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
     {
         public ReportViewFilter ReportViewFilter { get; set; }
 
+        public void InitializeReportFilter(List<string> ranges) => ReportViewFilter.FuzzyBands = ranges;
+
         protected override IUIControl GetContentControl() => ReportViewFilter;
 
         protected override void Initialize()
@@ -25,9 +28,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
             ReportViewFilter.FilterChanged += ReportViewFilter_FilterChanged;
         }
 
-        private void ReportViewFilter_FilterChanged(SegmentFilter segmentFilter)
-        {
+        private void ReportViewFilter_FilterChanged(SegmentFilter segmentFilter) =>
             Integration.FilterSegments(segmentFilter);
-        }
     }
 }

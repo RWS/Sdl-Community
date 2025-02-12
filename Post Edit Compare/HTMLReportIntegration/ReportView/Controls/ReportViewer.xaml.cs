@@ -75,6 +75,20 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             }
         }
 
+        public async Task<string> GetProjectId()
+        {
+            try
+            {
+                var result = await WebView2Browser.ExecuteScriptAsync("getProjectId();");
+                return JsonConvert.DeserializeObject<string>(result);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error getting the project ID from the HTML report: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+        }
+
         public async Task HideAllSegments()
         {
             try

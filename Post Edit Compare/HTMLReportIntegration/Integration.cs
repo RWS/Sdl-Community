@@ -1,10 +1,14 @@
 ﻿using Newtonsoft.Json.Linq;
+using Sdl.Community.PostEdit.Compare.Core.Helper;
+using Sdl.Community.PostEdit.Compare.ExtendReportWizardSettings;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Components;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
@@ -23,6 +27,9 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
             ReportManager.ExportReport(report);
         }
 
+        public static void FilterSegments(SegmentFilter segmentFilter) =>
+            ReportViewController.ToggleFilter(segmentFilter);
+
         public static void HandleReportRequest(string jsonMessage)
         {
             var messageObject = JObject.Parse(jsonMessage);
@@ -30,6 +37,16 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
 
             if (!SyncOn && action != "navigate") return;
             StudioController.HandleReportRequest(messageObject);
+        }
+
+        public static void InitializeReportFilter(string projectId)
+        {
+            var analysisBands = ProjectSettingsProvider.GetProjectAnalysisBandsFromId(projectId);
+            var ranges = FuzzyRange.GetFuzzyRanges(analysisBands);
+
+            var reportFilter = SdlTradosStudio.Application.GetController<ReportViewFilterController>();
+            reportFilter.Activate();
+            reportFilter.InitializeReportFilter(ranges);
         }
 
         public static void OpenReportFolder() => ReportManager.OpenReportFolder();
@@ -74,8 +91,5 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
 
         private static void EditorEventListener_StatusChanged(string newStatus, string segmentId, string fileId) =>
             ReportViewController.UpdateStatus(newStatus, segmentId, fileId);
-
-        public static void FilterSegments(SegmentFilter segmentFilter) =>
-            ReportViewController.ToggleFilter(segmentFilter);
     }
 }

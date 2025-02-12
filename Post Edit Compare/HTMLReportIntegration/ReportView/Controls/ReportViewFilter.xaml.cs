@@ -2,6 +2,8 @@
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -12,9 +14,18 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
     /// </summary>
     public partial class ReportViewFilter : UserControl, IUIControl
     {
+        public static readonly DependencyProperty FuzzyBandsProperty = DependencyProperty.Register(nameof(FuzzyBands),
+            typeof(List<string>), typeof(ReportViewFilter), new PropertyMetadata(default(List<string>)));
+
         public ReportViewFilter() => InitializeComponent();
 
         public event Action<SegmentFilter> FilterChanged;
+
+        public List<string> FuzzyBands
+        {
+            get => (List<string>)GetValue(FuzzyBandsProperty);
+            set => SetValue(FuzzyBandsProperty, value);
+        }
 
         public void Dispose() => Root?.Dispose();
 
@@ -41,6 +52,17 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
                 Statuses = statuses,
                 MatchTypes = matchTypes
             };
+        }
+
+        private void MatchTypesListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (MatchTypesListBox.SelectedItems.Cast<object>().Any(selectedItem => selectedItem.ToString().Contains("Fuzzy")))
+            {
+                FuzzyMatchPercentageListBox.Visibility = Visibility.Visible;
+                return;
+            }
+
+            FuzzyMatchPercentageListBox.Visibility = Visibility.Collapsed;
         }
 
         private void ResetFilterButton_OnClick(object sender, RoutedEventArgs e)

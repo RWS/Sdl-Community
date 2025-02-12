@@ -41,6 +41,23 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 
         public void RefreshReportList() => ReportExplorerViewModel.RefreshReportList();
 
+        public async Task ToggleFilter(SegmentFilter segmentFilter)
+        {
+            if (!segmentFilter.IsEmpty)
+            {
+                ReportExplorer.IsEnabled = false;
+
+                var segments = await ReportViewer.GetAllSegments();
+                var matchingSegments = SegmentMatcher.GetAllMatchingSegments(segments, segmentFilter);
+                await ReportViewer.ShowSegments(matchingSegments.Select(seg => (seg.SegmentId, seg.FileId)).ToList());
+            }
+            else
+            {
+                ReportExplorer.IsEnabled = true;
+                await ReportViewer.ShowAllSegments();
+            }
+        }
+
         public void ToggleReportExplorer() => ReportExplorer.ToggleOnOff();
 
         public void UpdateComments(List<CommentInfo> comments, string segmentId, string fileId)
@@ -76,8 +93,16 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
             ReportViewer.WebMessageReceived += WebView2Browser_WebMessageReceived;
         }
 
-        private void ExplorerOnSelectedReportChanged() =>
-            ReportViewer.Navigate(ReportExplorerViewModel.SelectedReport?.ReportPath);
+        private async void ExplorerOnSelectedReportChanged()
+        {
+            await ReportViewer.Navigate(ReportExplorerViewModel.SelectedReport?.ReportPath);
+            await Task.Delay(500);
+
+            var projectId = await ReportViewer.GetProjectId();
+            if (projectId == null) return;
+
+            Integration.InitializeReportFilter(projectId);
+        }
 
         private void InitializeControls()
         {
@@ -126,22 +151,5 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
         private void WebView2Browser_WebMessageReceived(object sender,
             Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e) =>
             Integration.HandleReportRequest(e.WebMessageAsJson);
-
-        public async Task ToggleFilter(SegmentFilter segmentFilter)
-        {
-            if (!segmentFilter.IsEmpty)
-            {
-                ReportExplorer.IsEnabled = false;
-
-                var segments = await ReportViewer.GetAllSegments();
-                var matchingSegments = SegmentMatcher.GetAllMatchingSegments(segments, segmentFilter);
-                await ReportViewer.ShowSegments(matchingSegments.Select(seg => (seg.SegmentId, seg.FileId)).ToList());
-            }
-            else
-            {
-                ReportExplorer.IsEnabled = true;
-                await ReportViewer.ShowAllSegments();
-            }
-        }
     }
 }

@@ -31,7 +31,7 @@ namespace PostEdit.Compare.Forms
             radioButton_compareSelectedFiles_CheckedChanged(null, null);
             textBox_javaExecutablePath_TextChanged(null, null);
 
-            var analysisBands = ProjectSettingsProvider.GetProjectAnalysisBands(OriginalProjectPath);
+            var analysisBands = ProjectSettingsProvider.GetProjectAnalysisBandsFromProjectPath(OriginalProjectPath);
             var ranges = FuzzyRange.GetFuzzyRanges(analysisBands);
 
             fuzzyBandsOriginal.Items.AddRange([.. ranges]);
