@@ -85,7 +85,7 @@ namespace Sdl.Community.NumberVerifier.Reporter
 				case Range.Source:
 					errorReportInfo.Message = sourceNumberTexts[i].Errors[NumberText.ErrorLevel.SegmentPairLevel].FirstOrDefault()?.Message;
 
-					if (!ShouldReport(errorReportInfo.Message)) return null;
+					if (!string.IsNullOrEmpty(errorReportInfo.Message) && !ShouldReport(errorReportInfo.Message)) return null;
 
 					errorReportInfo.Report = new AlignmentErrorExtendedData
 					{
@@ -93,7 +93,7 @@ namespace Sdl.Community.NumberVerifier.Reporter
 						TargetIssues = "-",
 						MessageType = "Segment-pair level errors"
 					};
-					errorReportInfo.ErrorLevel = GetNumbersErrorLevel(Settings.AddedNumbersErrorType);
+					errorReportInfo.ErrorLevel = GetNumbersErrorLevel(Settings.RemovedNumbersErrorType);
 
 					errorReportInfo.Report.SourceRange.StartIndex = sourceNumberTexts[i].StartIndex;
 					errorReportInfo.Report.SourceRange.Length = sourceNumberTexts[i].Length;
@@ -101,6 +101,8 @@ namespace Sdl.Community.NumberVerifier.Reporter
 
 				case Range.Both:
 					errorReportInfo.Message = targetNumberTexts[i].Errors[NumberText.ErrorLevel.SegmentPairLevel].FirstOrDefault()?.Message;
+
+					if (!string.IsNullOrEmpty(errorReportInfo.Message) && !ShouldReport(errorReportInfo.Message)) return null;
 
 					errorReportInfo.Report = new AlignmentErrorExtendedData
 					{
@@ -120,6 +122,8 @@ namespace Sdl.Community.NumberVerifier.Reporter
 
 				case Range.Target:
 					errorReportInfo.Message = targetNumberTexts[i].Errors[NumberText.ErrorLevel.SegmentPairLevel].FirstOrDefault()?.Message;
+
+					if (!string.IsNullOrEmpty(errorReportInfo.Message) && !ShouldReport(errorReportInfo.Message)) return null;
 
 					errorReportInfo.Report = new AlignmentErrorExtendedData
 					{

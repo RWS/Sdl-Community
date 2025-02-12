@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Trados Number Verifier</PlugInName>
-  <Version>4.0.2.0</Version>
+  <Version>4.0.3.0</Version>
   <Description>Verifies that numbers have not been changed during translation/editing.</Description>
   <Author>Trados AppStore Team</Author>
   <RequiredProduct name="TradosStudio" minversion="17.0" maxversion="17.9"/>
