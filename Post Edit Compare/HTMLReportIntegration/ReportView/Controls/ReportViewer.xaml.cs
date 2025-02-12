@@ -144,6 +144,56 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             }
         }
 
+        public void UpdateComments(List<CommentInfo> comments, string segmentId, string fileId)
+        {
+            var commentsJson = JsonConvert.SerializeObject(comments, new JsonSerializerSettings
+            {
+                ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
+            });
+            var script = $"replaceCommentsForSegment('{segmentId}', {commentsJson}, '{fileId}');";
+
+            try
+            {
+                WebView2Browser.Dispatcher.Invoke(async () =>
+                {
+                    WebView2Browser.ExecuteScriptAsync(script);
+                });
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        }
+
+        public void UpdateStatus(string newStatus, string segmentId, string fileId)
+        {
+            object[] parameters = new[] { segmentId, fileId, newStatus };
+            var serializedParams = new List<string>();
+            foreach (var param in parameters)
+            {
+                var paramJson = JsonConvert.SerializeObject(param, new JsonSerializerSettings
+                {
+                    ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
+                });
+                serializedParams.Add(paramJson);
+            }
+
+            var paramsJoined = string.Join(", ", serializedParams);
+            var script = $"{"updateSegmentStatus"}({paramsJoined});";
+
+            try
+            {
+                WebView2Browser.Dispatcher.Invoke(async () =>
+                {
+                    WebView2Browser.ExecuteScriptAsync(script);
+                });
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        }
+
         private void CoreWebView2_WebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs e)
         {
             WebMessageReceived?.Invoke(sender, e);

@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Controls;
+﻿using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Controls;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Utilities;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.ViewModel;
@@ -7,11 +6,9 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 {
@@ -60,21 +57,11 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 
         public void ToggleReportExplorer() => ReportExplorer.ToggleOnOff();
 
-        public void UpdateComments(List<CommentInfo> comments, string segmentId, string fileId)
-        {
-            var commentsJson = JsonConvert.SerializeObject(comments, new JsonSerializerSettings
-            {
-                ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
-            });
-            var script = $"replaceCommentsForSegment('{segmentId}', {commentsJson}, '{fileId}');";
+        public void UpdateComments(List<CommentInfo> comments, string segmentId, string fileId) =>
+            ReportViewer.UpdateComments(comments, segmentId, fileId);
 
-            TryExecuteScript(script);
-        }
-
-        public void UpdateStatus(string newStatus, string segmentId, string fileId)
-        {
-            TryExecuteFunction("updateSegmentStatus", segmentId, fileId, newStatus);
-        }
+        public void UpdateStatus(string newStatus, string segmentId, string fileId) =>
+            ReportViewer.UpdateStatus(newStatus, segmentId, fileId);
 
         protected override IUIControl GetContentControl() => ReportViewer;
 
@@ -113,39 +100,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
             {
                 DataContext = ReportExplorerViewModel
             };
-        }
-
-        private void TryExecuteFunction(string functionName, params object[] parameters)
-        {
-            var serializedParams = new List<string>();
-            foreach (var param in parameters)
-            {
-                var paramJson = JsonConvert.SerializeObject(param, new JsonSerializerSettings
-                {
-                    ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
-                });
-                serializedParams.Add(paramJson);
-            }
-
-            var paramsJoined = string.Join(", ", serializedParams);
-            var script = $"{functionName}({paramsJoined});";
-
-            TryExecuteScript(script);
-        }
-
-        private void TryExecuteScript(string script)
-        {
-            try
-            {
-                ReportViewer.WebView2Browser.Dispatcher.Invoke(async () =>
-                {
-                    ReportViewer.WebView2Browser.ExecuteScriptAsync(script);
-                });
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
         }
 
         private void WebView2Browser_WebMessageReceived(object sender,
