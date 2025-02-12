@@ -101,6 +101,15 @@
     <Compile Include="Composers\NumberErrorComposer.cs" />
     <Compile Include="Composers\SourceErrorMessageComposer.cs" />
     <Compile Include="Composers\TargetErrorMessageComposer.cs" />
+    <Compile Include="DTOs\NumberVerifierSettingsDTO.cs" />
+    <Compile Include="Extensions\NumberVerifierExtensions.cs" />
+    <Compile Include="GUI\NumberVerifierProfile.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\NumberVerifierProfile.Designer.cs">
+      <DependentUpon>NumberVerifierProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\NumberVerifierProfilePage.cs" />
     <Compile Include="GUI\TellMeSettingsActionWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -158,6 +167,10 @@
     <Compile Include="Model\ComparisonItem.cs" />
     <Compile Include="Reporter\IMessageFilter.cs" />
     <Compile Include="Reporter\MessageFilter.cs" />
+    <Compile Include="Services\FilePathDialogService.cs" />
+    <Compile Include="Services\NumberVerifierProfileManager.cs" />
+    <Compile Include="Services\NumberVerifierSettingsExporter.cs" />
+    <Compile Include="Services\NumberVerifierSettingsImporter.cs" />
     <Compile Include="TellMe\SettingsAction.cs" />
     <Compile Include="Validator\NumberComparisonExtension.cs" />
     <Compile Include="Validator\ComparisonConstants.cs" />

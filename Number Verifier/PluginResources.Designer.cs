@@ -318,6 +318,78 @@ namespace Sdl.Community.NumberVerifier {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Number Verifier QA profile exported successfully.
+        /// </summary>
+        public static string NumberVerifierProfile_Export_OnSuccess {
+            get {
+                return ResourceManager.GetString("NumberVerifierProfile_Export_OnSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Settings.
+        /// </summary>
+        public static string NumberVerifierProfile_ExportDialogTitle {
+            get {
+                return ResourceManager.GetString("NumberVerifierProfile_ExportDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Importing settings will overwrite existing configurations. Do you want to continue?.
+        /// </summary>
+        public static string NumberVerifierProfile_Import_ConfirmationMessage {
+            get {
+                return ResourceManager.GetString("NumberVerifierProfile_Import_ConfirmationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid settings file..
+        /// </summary>
+        public static string NumberVerifierProfile_ImportOnInvalid {
+            get {
+                return ResourceManager.GetString("NumberVerifierProfile_ImportOnInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number Verifier QA profile imported successfully..
+        /// </summary>
+        public static string NumberVerifierProfile_ImportOnSuccess {
+            get {
+                return ResourceManager.GetString("NumberVerifierProfile_ImportOnSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string NumberVerifierProfile_OperationErrorTitle {
+            get {
+                return ResourceManager.GetString("NumberVerifierProfile_OperationErrorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Success.
+        /// </summary>
+        public static string NumberVerifierProfile_OperationSuccessTitle {
+            get {
+                return ResourceManager.GetString("NumberVerifierProfile_OperationSuccessTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question.
+        /// </summary>
+        public static string NumberVerifierProfile_QuestionTitle {
+            get {
+                return ResourceManager.GetString("NumberVerifierProfile_QuestionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pattern not valid.
         /// </summary>
         public static string Pattern_not_valid {
