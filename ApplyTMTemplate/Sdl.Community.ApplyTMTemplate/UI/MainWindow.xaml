@@ -19,92 +19,92 @@
 					  d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
 					  FontFamily="Calibri"
 					  Title="Apply TM Template" Width="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}, Converter={converters:RatioConverter}, ConverterParameter='0.48'}" Height="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={converters:RatioConverter}, ConverterParameter='0.7'}" MinWidth="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}, Converter={converters:RatioConverter}, ConverterParameter='0.48'}" MinHeight="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={converters:RatioConverter}, ConverterParameter='0.61'}">
-	<Window.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml" />
-				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml" />
-				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml" />
-				<ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml" />
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/CheckboxResources.xaml" />
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml" />
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Buttonresources.xaml" />
-				<ResourceDictionary Source="../UiHelpers/DataGridStyle2.xaml"/>
-				<ResourceDictionary Source="../UiHelpers/Buttons.xaml" />
-				<ResourceDictionary Source="../UiHelpers/CustomProgressRing.xaml" />
-			</ResourceDictionary.MergedDictionaries>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml" />
+                <ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml" />
+                <ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml" />
+                <ResourceDictionary Source="../UiHelpers/WindowsBorder.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/ButtonResources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/CheckboxResources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/DataGridResources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/Buttonresources.xaml" />
+                <ResourceDictionary Source="../UiHelpers/DataGridStyle2.xaml"/>
+                <ResourceDictionary Source="../UiHelpers/Buttons.xaml" />
+                <ResourceDictionary Source="../UiHelpers/CustomProgressRing.xaml" />
+            </ResourceDictionary.MergedDictionaries>
 
-			<converters:ImageToBitmapImageConverter x:Key="ImageToBitmapImageConverter"/>
-			<converters:NullableBooleanToVisibilityConverter x:Key="NullableBooleanToVisibilityConverter"/>
+            <converters:ImageToBitmapImageConverter x:Key="ImageToBitmapImageConverter"/>
+            <converters:NullableBooleanToVisibilityConverter x:Key="NullableBooleanToVisibilityConverter"/>
             <converters:EnumToStringConverter x:Key="EnumToStringConverter"/>
 
             <Style TargetType="Button" x:Key="SdlWizardStyleButtonGreen" BasedOn="{StaticResource SdlPrimaryButtonStyle}">
-				<Setter Property="MinWidth" Value="70"></Setter>
-				<Setter Property="Height" Value="34"></Setter>
-				<Setter Property="Margin" Value="5,9,5,11"/>
-			</Style>
-			<Style x:Key="TextBlockStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
-				<Setter Property="FontSize" Value="12"/>
-				<Setter Property="FontFamily" Value="Calibri"/>
-				<Setter Property="Margin" Value="5,5,0,0"/>
-			</Style>
-			<Style x:Key="CheckBoxStyle" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource Sdl.Checkbox.NoHighlightStyle}">
-				<Setter Property="Margin" Value="10 0 0 0"/>
-				<Setter Property="HorizontalAlignment" Value="Center"/>
-				<Setter Property="VerticalAlignment" Value="Center"/>
-				<Setter Property="VerticalContentAlignment" Value="Center"/>
-				<Setter Property="FontFamily" Value="Calibri"/>
-			</Style>
-			<Style x:Key="ImageStyle" TargetType="Image">
-				<Setter Property="Width" Value="15"/>
-				<Setter Property="Height" Value="15"/>
-				<Setter Property="HorizontalAlignment" Value="Right"/>
-			</Style>
+                <Setter Property="MinWidth" Value="70"></Setter>
+                <Setter Property="Height" Value="34"></Setter>
+                <Setter Property="Margin" Value="5,9,5,11"/>
+            </Style>
+            <Style x:Key="TextBlockStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="FontFamily" Value="Calibri"/>
+                <Setter Property="Margin" Value="5,5,0,0"/>
+            </Style>
+            <Style x:Key="CheckBoxStyle" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource Sdl.Checkbox.NoHighlightStyle}">
+                <Setter Property="Margin" Value="10 0 0 0"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="FontFamily" Value="Calibri"/>
+            </Style>
+            <Style x:Key="ImageStyle" TargetType="Image">
+                <Setter Property="Width" Value="15"/>
+                <Setter Property="Height" Value="15"/>
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+            </Style>
 
-			<Style x:Key="TmActionTextBlock" TargetType="TextBlock">
-				<Setter Property="Margin" Value="3 3 0 0"/>
-			</Style>
+            <Style x:Key="TmActionTextBlock" TargetType="TextBlock">
+                <Setter Property="Margin" Value="3 3 0 0"/>
+            </Style>
 
-			<Style x:Key="TmActionImageStyle" TargetType="Image">
-				<Setter Property="Width" Value="20"/>
-				<Setter Property="Height" Value="20"/>
-			</Style>
+            <Style x:Key="TmActionImageStyle" TargetType="Image">
+                <Setter Property="Width" Value="20"/>
+                <Setter Property="Height" Value="20"/>
+            </Style>
 
-			<Style x:Key="OptionsCheckBoxes" BasedOn="{StaticResource CheckBoxStyle}" TargetType="CheckBox">
-				<Setter Property="Width" Value="130"/>
-				<Setter Property="Margin" Value="0"/>
-			</Style>
+            <Style x:Key="OptionsCheckBoxes" BasedOn="{StaticResource CheckBoxStyle}" TargetType="CheckBox">
+                <Setter Property="Width" Value="130"/>
+                <Setter Property="Margin" Value="0"/>
+            </Style>
 
-			<DataTemplate DataType="{x:Type viewModels:TimedTextBox}">
-				<ui:TimedTextBox />
-			</DataTemplate>
-		</ResourceDictionary>
-	</Window.Resources>
+            <DataTemplate DataType="{x:Type viewModels:TimedTextBox}">
+                <ui:TimedTextBox />
+            </DataTemplate>
+        </ResourceDictionary>
+    </Window.Resources>
 
-	<Border x:Uid="Border_1"
+    <Border x:Uid="Border_1"
 	        Style="{StaticResource WindowControlBorderStyle}">
-		<Grid>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition  Width="8*"/>
-			</Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition  Width="8*"/>
+            </Grid.ColumnDefinitions>
 
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto" />
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-				<RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
-				<RowDefinition Height="Auto" />
-			</Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-			<uiHelpers:WindowsControl Grid.Row="0" Grid.ColumnSpan="2"/>
-            
-			<TextBlock Grid.Column="0" FontSize="13" FontWeight="Bold" Grid.Row="1" Style="{StaticResource TextBlockStyle}" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Select the template to be used: " VerticalAlignment="Top" Margin="5,10,0,0"  Grid.ColumnSpan="2" />
+            <uiHelpers:WindowsControl Grid.Row="0" Grid.ColumnSpan="2"/>
+
+            <TextBlock Grid.Column="0" FontSize="13" FontWeight="Bold" Grid.Row="1" Style="{StaticResource TextBlockStyle}" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Select the template to be used: " VerticalAlignment="Top" Margin="5,10,0,0"  Grid.ColumnSpan="2" />
 
             <ui:TimedTextBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Height="32" Content="{Binding TimedTextBoxViewModel}" Margin="5,0,10,0"/>
             <StackPanel Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Left">
@@ -127,72 +127,72 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                
-            </StackPanel>
-            
-            
-			<StackPanel Grid.Column="0" Orientation="Horizontal" Grid.Row="4" Margin="0,5,0,0">
-				<TextBlock Text="What to apply:" FontSize="13" Style="{StaticResource TextBlockStyle}" />
+
             </StackPanel>
 
-			<CheckBox Grid.Row="5" Grid.Column="0" 
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal" Grid.Row="4" Margin="0,5,0,0">
+                <TextBlock Text="What to apply:" FontSize="13" Style="{StaticResource TextBlockStyle}" />
+            </StackPanel>
+
+            <CheckBox Grid.Row="5" Grid.Column="0" 
 			          Name="SelectAll" Content="Select all..." 
 			          Style="{StaticResource CheckBoxStyle}"
 					  HorizontalAlignment="Right"
 			          IsChecked="{Binding SelectAllChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="0,0,30,0" />
-			<DockPanel Grid.Row="5" Grid.Column="1" >
-				<StackPanel DockPanel.Dock="Top" Orientation="Horizontal"  Margin="10,10,0,0">
-					<CheckBox Content="Variables" 
+            <DockPanel Grid.Row="5" Grid.Column="1" >
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal"  Margin="10,10,0,0">
+                    <CheckBox Content="Variables" 
 					          IsChecked="{Binding Settings.VariablesChecked}" 
 					          Style="{StaticResource OptionsCheckBoxes}"/>
-					<CheckBox Content="Abbreviations" Style="{StaticResource OptionsCheckBoxes}"
+                    <CheckBox Content="Abbreviations" Style="{StaticResource OptionsCheckBoxes}"
 					          IsChecked="{Binding Settings.AbbreviationsChecked}" />
-					<CheckBox Content="Ordinal followers" Style="{StaticResource OptionsCheckBoxes}"
+                    <CheckBox Content="Ordinal followers" Style="{StaticResource OptionsCheckBoxes}"
 					          IsChecked="{Binding Settings.OrdinalFollowersChecked}" />
-					<CheckBox Content="Segmentation rules" Style="{StaticResource OptionsCheckBoxes}"
+                    <CheckBox Content="Segmentation rules" Style="{StaticResource OptionsCheckBoxes}"
 					          IsChecked="{Binding Settings.SegmentationRulesChecked}" />
-					<CheckBox Content="Dates" Style="{StaticResource OptionsCheckBoxes}" IsChecked="{Binding Settings.DatesChecked}" />
-				</StackPanel>
-				<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"  Margin="10,5,0,0">
-					<CheckBox Content="Times" Style="{StaticResource OptionsCheckBoxes}"
+                    <CheckBox Content="Dates" Style="{StaticResource OptionsCheckBoxes}" IsChecked="{Binding Settings.DatesChecked}" />
+                </StackPanel>
+                <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"  Margin="10,5,0,0">
+                    <CheckBox Content="Times" Style="{StaticResource OptionsCheckBoxes}"
 					          IsChecked="{Binding Settings.TimesChecked}" />
-					<CheckBox Content="Numbers" Style="{StaticResource OptionsCheckBoxes}"
+                    <CheckBox Content="Numbers" Style="{StaticResource OptionsCheckBoxes}"
 					          IsChecked="{Binding Settings.NumbersChecked}" />
-					<CheckBox Content="Measurements" Style="{StaticResource OptionsCheckBoxes}"
+                    <CheckBox Content="Measurements" Style="{StaticResource OptionsCheckBoxes}"
 					          IsChecked="{Binding Settings.MeasurementsChecked}" />
-					<CheckBox Content="Currencies" Style="{StaticResource OptionsCheckBoxes}"
+                    <CheckBox Content="Currencies" Style="{StaticResource OptionsCheckBoxes}"
 					          IsChecked="{Binding Settings.CurrenciesChecked}" />
-					<CheckBox Content="Recognizers" Style="{StaticResource OptionsCheckBoxes}" 
+                    <CheckBox Content="Recognizers" Style="{StaticResource OptionsCheckBoxes}" 
 					          IsChecked="{Binding Settings.RecognizersChecked}" />
-					<CheckBox Content="Word count flags" Style="{StaticResource OptionsCheckBoxes}" 
+                    <CheckBox Content="Word count flags" Style="{StaticResource OptionsCheckBoxes}" 
 					          IsChecked="{Binding Settings.WordCountFlagsChecked}" />
-				</StackPanel>
-			</DockPanel>
+                </StackPanel>
+            </DockPanel>
 
-			<StackPanel Margin="5,20,0,5" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-				<Button HorizontalContentAlignment="Left" Command="{Binding AddFolderCommand}" Style="{StaticResource TmActionButtonStyle}">
-					<StackPanel Orientation="Horizontal">
-						<Image Source="../Resources/AddFolder.png" Style="{StaticResource TmActionImageStyle}"/>
-						<TextBlock Text="AddFolder" Style="{StaticResource TmActionTextBlock}"/>
-					</StackPanel>
-				</Button>
+            <StackPanel Margin="5,20,0,5" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+                <Button HorizontalContentAlignment="Left" Command="{Binding AddFolderCommand}" Style="{StaticResource TmActionButtonStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="../Resources/AddFolder.png" Style="{StaticResource TmActionImageStyle}"/>
+                        <TextBlock Text="AddFolder" Style="{StaticResource TmActionTextBlock}"/>
+                    </StackPanel>
+                </Button>
 
-				<Button HorizontalContentAlignment="Left" Command="{Binding AddTmCommand}" Style="{StaticResource TmActionButtonStyle}">
-					<StackPanel Orientation="Horizontal">
-						<Image Source="../Resources/TM.ico" Style="{StaticResource TmActionImageStyle}"/>
-						<TextBlock Style="{StaticResource TmActionTextBlock}" Text="AddTMs"/>
-					</StackPanel>
-				</Button>
+                <Button HorizontalContentAlignment="Left" Command="{Binding AddTmCommand}" Style="{StaticResource TmActionButtonStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="../Resources/TM.ico" Style="{StaticResource TmActionImageStyle}"/>
+                        <TextBlock Style="{StaticResource TmActionTextBlock}" Text="AddTMs"/>
+                    </StackPanel>
+                </Button>
 
-				<Button HorizontalContentAlignment="Left" Command="{Binding RemoveTMsCommand}" Style="{StaticResource TmActionButtonStyle}">
-					<StackPanel Orientation="Horizontal">
-						<Image Source="../Resources/Remove.ico" Style="{StaticResource TmActionImageStyle}"/>
-						<TextBlock Style="{StaticResource TmActionTextBlock}" Text="RemoveTMs"/>
-					</StackPanel>
-				</Button>
-			</StackPanel>
+                <Button HorizontalContentAlignment="Left" Command="{Binding RemoveTMsCommand}" Style="{StaticResource TmActionButtonStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="../Resources/Remove.ico" Style="{StaticResource TmActionImageStyle}"/>
+                        <TextBlock Style="{StaticResource TmActionTextBlock}" Text="RemoveTMs"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
 
-			<DataGrid  Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding TmCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            <DataGrid  Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding TmCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 		               IsReadOnly="True"
 				       Style="{StaticResource FilesGridStyle}"
 		               SelectionMode="Extended"
@@ -203,104 +203,128 @@
 		               AllowDrop="True"
 		               GridLinesVisibility="None"
 		               d:DataContext="{d:DesignInstance models:TranslationMemory}">
-				<DataGrid.RowStyle>
-					<Style TargetType="DataGridRow" BasedOn="{StaticResource DgrStyle}" />
-				</DataGrid.RowStyle>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow" BasedOn="{StaticResource DgrStyle}" />
+                </DataGrid.RowStyle>
 
-				<DataGrid.Columns>
-					<DataGridTemplateColumn Width="Auto" MinWidth="50">
-						<DataGridTemplateColumn.Header>
-							<CheckBox IsChecked="{Binding Path=DataContext.AllTmsChecked, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Width="Auto" MinWidth="50">
+                        <DataGridTemplateColumn.Header>
+                            <CheckBox IsChecked="{Binding Path=DataContext.AllTmsChecked, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 										  Style="{StaticResource CheckBoxStyle}" />
-						</DataGridTemplateColumn.Header>
+                        </DataGridTemplateColumn.Header>
 
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate>
-								<CheckBox Style="{StaticResource CheckBoxStyle}" 
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Style="{StaticResource CheckBoxStyle}" 
 							          IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-					<DataGridTemplateColumn Width="*" Header="TM Name" SortMemberPath="Name">
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate>
-								<StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-									<Image Source="../Resources/FileBasedTM.ico"  Width="25" Height="25" HorizontalAlignment="Center" />
-									<TextBlock Text="{Binding Name}" Margin="5" HorizontalAlignment="Left" />
-								</StackPanel>
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="*" Header="TM Name" SortMemberPath="Name">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <Image Source="../Resources/FileBasedTM.ico"  Width="25" Height="25" HorizontalAlignment="Center" />
+                                    <TextBlock Text="{Binding Name}" Margin="5" HorizontalAlignment="Left" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-					<DataGridTemplateColumn Width="0.2*" Header="Source language" SortMemberPath="SourceLanguage">
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate>
-								<DockPanel>
-									<Image DockPanel.Dock="Left" Source="{Binding SourceLanguageFlag, Converter={StaticResource ImageToBitmapImageConverter}}" Width="25" Height="25"/>
-									<TextBlock DockPanel.Dock="Left" Text="{Binding SourceLanguage}" Margin="5" />
-									<Image DockPanel.Dock="Right" 
+                    <DataGridTemplateColumn Width="0.2*" Header="Source language" SortMemberPath="SourceLanguage">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <DockPanel>
+                                    <Image DockPanel.Dock="Left" Source="{Binding SourceLanguageFlag, Converter={StaticResource ImageToBitmapImageConverter}}" Width="25" Height="25"/>
+                                    <TextBlock DockPanel.Dock="Left" Text="{Binding SourceLanguage}" Margin="5" />
+                                    <Image DockPanel.Dock="Right" 
 									       ToolTip="{Binding SourceStatusToolTip}"
 									       Visibility="{Binding SourceModified, Converter={StaticResource NullableBooleanToVisibilityConverter}}">
-										<Image.Style>
-											<Style BasedOn="{StaticResource ImageStyle}" TargetType="Image">
-												<Style.Triggers>
-													<DataTrigger Binding="{Binding SourceModified, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
-														<Setter Property="Source" Value="../Resources/Checked.png"/>
-													</DataTrigger>
-													<DataTrigger Binding="{Binding SourceModified, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
-														<Setter Property="Source" Value="../Resources/Unchecked.ico"/>
-													</DataTrigger>
-												</Style.Triggers>
-											</Style>
-										</Image.Style>
-									</Image>
+                                        <Image.Style>
+                                            <Style BasedOn="{StaticResource ImageStyle}" TargetType="Image">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding SourceModified, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                                        <Setter Property="Source" Value="../Resources/Checked.png"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding SourceModified, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                                        <Setter Property="Source" Value="../Resources/Unchecked.ico"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
 
-								</DockPanel>
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
+                                </DockPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-					<DataGridTemplateColumn Width="0.2*" Header="Target language" SortMemberPath="TargetLanguage">
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate>
-								<DockPanel>
-									<Image DockPanel.Dock="Left" Source="{Binding TargetLanguageFlag, Converter={StaticResource ImageToBitmapImageConverter}}" Width="25" Height="25" />
-									<TextBlock DockPanel.Dock="Left" Text="{Binding TargetLanguage}" Margin="5"  />
-									<Image DockPanel.Dock="Right" 
+                    <DataGridTemplateColumn Width="0.2*" Header="Target language" SortMemberPath="TargetLanguage">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <DockPanel>
+                                    <Image DockPanel.Dock="Left" Source="{Binding TargetLanguageFlag, Converter={StaticResource ImageToBitmapImageConverter}}" Width="25" Height="25" />
+                                    <TextBlock DockPanel.Dock="Left" Text="{Binding TargetLanguage}" Margin="5"  />
+                                    <Image DockPanel.Dock="Right" 
 										   ToolTip="{Binding TargetStatusToolTip}" 
 										   Visibility="{Binding TargetModified, Converter={StaticResource NullableBooleanToVisibilityConverter}}">
-										<Image.Style>
-											<Style BasedOn="{StaticResource ImageStyle}" TargetType="Image">
-												<Style.Triggers>
-													<DataTrigger Binding="{Binding TargetModified, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
-														<Setter Property="Source" Value="../Resources/Checked.png"/>
-													</DataTrigger>
-													<DataTrigger Binding="{Binding TargetModified, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
-														<Setter Property="Source" Value="../Resources/Unchecked.ico"/>
-													</DataTrigger>
-												</Style.Triggers>
-											</Style>
-										</Image.Style>
-									</Image>
-								</DockPanel>
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
+                                        <Image.Style>
+                                            <Style BasedOn="{StaticResource ImageStyle}" TargetType="Image">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding TargetModified, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                                        <Setter Property="Source" Value="../Resources/Checked.png"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding TargetModified, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                                        <Setter Property="Source" Value="../Resources/Unchecked.ico"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                </DockPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-				</DataGrid.Columns>
-			</DataGrid>
-			<StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-				<generic:CustomProgressRing  Style="{StaticResource Sdl.CustomProgressRing.Normal}"
-				                             Visibility="{Binding ProgressVisibility}"
-				                             Width="Auto"
-				                             Height="Auto"
-				                             VerticalAlignment="Center"
-				                             VerticalContentAlignment="Center"/>
+                </DataGrid.Columns>
+            </DataGrid>
 
-                <Button Style="{StaticResource Sdl.Button.PrimaryStyle}" HorizontalAlignment="Right" Margin="10" Command="{Binding SavePreferencesCommand}" Content="Save Settings" ToolTip="{x:Static applyTmTemplate:PluginResources.ApplyTMTemplate_SaveSettingsTooltip}" />
-                <Button Style="{StaticResource Sdl.Button.PrimaryStyle}" HorizontalAlignment="Right" Margin="10" Command="{Binding ApplyTemplateCommand}" Content="Apply" ToolTip="{x:Static applyTmTemplate:PluginResources.Apply_button_Tooltip}" />
-			</StackPanel>
-		</Grid>
-	</Border>
+            <Grid Grid.Row="8" Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Text="{Binding CurrentApplyTMMessage}" 
+                   Foreground="{Binding CurrentApplyTMMessageColor}"
+				   HorizontalAlignment="Left" 
+				   VerticalAlignment="Center"
+				   Margin="10,0,20,0"/>
+
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" 
+                HorizontalAlignment="Right">
+                    <generic:CustomProgressRing Style="{StaticResource Sdl.CustomProgressRing.Normal}"
+                                    Visibility="{Binding ProgressVisibility}"
+                                    Width="Auto"
+                                    Height="Auto"
+                                    VerticalAlignment="Center"/>
+
+                    <Button Style="{StaticResource Sdl.Button.PrimaryStyle}" 
+                Margin="10" 
+                Command="{Binding SavePreferencesCommand}" 
+                Content="Save Settings" 
+                ToolTip="{x:Static applyTmTemplate:PluginResources.ApplyTMTemplate_SaveSettingsTooltip}" />
+
+                    <Button Style="{StaticResource Sdl.Button.PrimaryStyle}" 
+                Margin="10" 
+                Command="{Binding ApplyTemplateCommand}" 
+                Content="Apply" 
+                ToolTip="{x:Static applyTmTemplate:PluginResources.Apply_button_Tooltip}" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Border>
 </Window>
