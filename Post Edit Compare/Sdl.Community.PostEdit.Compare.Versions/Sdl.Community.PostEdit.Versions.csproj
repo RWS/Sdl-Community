@@ -103,11 +103,16 @@
     <Compile Update="PostEditCompareViewControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="PostEditResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PostEditResources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="HTMLReportIntegration\ReportView\Controls\Scripts.js">
+    <Content Include="HTMLReportIntegration\ReportView\Controls\Scripts.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    </Content>
     <Content Include="Resources\Add.ico" />
     <Content Include="Resources\Compare.ico" />
     <Content Include="Resources\Download.ico" />
@@ -155,6 +160,12 @@
   <ItemGroup>
     <Resource Include="Resources\OpenReportFolder.ico" />
     <Resource Include="Resources\Report.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="PostEditResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PostEditResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>

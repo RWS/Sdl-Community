@@ -13,7 +13,6 @@ using Sdl.Community.PostEdit.Compare;
 using Application = PostEdit.Compare.Cache.Application;
 using System.IO;
 using Sdl.Community.PostEdit.Compare.Core.Helper;
-using Sdl.Community.PostEdit.Compare.ExtendReportWizardSettings;
 
 namespace Sdl.Community.PostEdit.Versions
 {
@@ -246,6 +245,7 @@ namespace Sdl.Community.PostEdit.Versions
 
             IModel mModel = new Model();
             var postEditCompare = new FormMain(mModel);
+            postEditCompare.OriginalProjectPath = Controller.CurrentSelectedProject.FilePath;
             postEditCompare.ShowDialog();
         }
     }

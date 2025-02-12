@@ -1,5 +1,4 @@
 ﻿using Sdl.Community.PostEdit.Compare.Core.Helper;
-using Sdl.Community.PostEdit.Compare.ExtendReportWizardSettings;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -31,11 +30,13 @@ namespace PostEdit.Compare.Forms
             radioButton_compareSelectedFiles_CheckedChanged(null, null);
             textBox_javaExecutablePath_TextChanged(null, null);
 
-            var analysisBands = ProjectSettingsProvider.GetProjectAnalysisBandsFromProjectPath(OriginalProjectPath);
-            var ranges = FuzzyRange.GetFuzzyRanges(analysisBands);
+            var ranges = FuzzyRange.GetFuzzyRangesFromProjectPath(OriginalProjectPath);
 
             fuzzyBandsOriginal.Items.AddRange([.. ranges]);
+            fuzzyBandsOriginal.SelectedIndex = 0;
+
             fuzzyBandsUpdated.Items.AddRange([.. ranges]);
+            fuzzyBandsUpdated.SelectedIndex = 0;
         }
 
         public void switch_Panel(Control panel)

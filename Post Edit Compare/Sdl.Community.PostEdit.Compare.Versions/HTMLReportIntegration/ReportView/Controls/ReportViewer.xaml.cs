@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -220,11 +221,12 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
 
         private async Task LoadScripts()
         {
-            var scripts = File.ReadAllText(
-                @"..\..\HTMLReportIntegration\ReportView\Controls\scripts.js");
+            var scriptsBytes = PostEditResources.Scripts;
+            var scripts = Encoding.UTF8.GetString(scriptsBytes);
+
             try
             {
-                var result = await WebView2Browser.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(scripts);
+                await WebView2Browser.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(scripts);
             }
             catch
             {
