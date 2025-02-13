@@ -25,6 +25,12 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model
         NoMatch = 32
     }
 
+    public enum Operator
+    {
+        Or,
+        And
+    }
+
     public class EnumHelper
     {
         public static bool TryGetStatus(string enumValue, out Statuses status) 

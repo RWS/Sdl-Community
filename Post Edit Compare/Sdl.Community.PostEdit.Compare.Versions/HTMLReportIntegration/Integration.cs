@@ -43,6 +43,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
             reportFilter.Activate();
 
             var ranges = FuzzyRange.GetFuzzyRangesFromProjectId(projectId);
+            ranges.Remove("All");
             reportFilter.InitializeReportFilter(ranges);
         }
 

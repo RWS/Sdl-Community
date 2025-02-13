@@ -86,7 +86,7 @@
         </DockPanel>
 
         <Border Grid.Row="1">
-            <Expander>
+            <Expander x:Name="StatusesExpander">
                 <Expander.Header>
                     <TextBlock Text="Statuses" />
                 </Expander.Header>
@@ -96,7 +96,7 @@
         </Border>
 
         <Border Grid.Row="2">
-            <Expander>
+            <Expander x:Name="MatchTypesExpander">
 
                 <Expander.Header>
                     <TextBlock Text="Match Types" />

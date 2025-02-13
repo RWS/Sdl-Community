@@ -20,7 +20,7 @@ public class FuzzyRange
         }
 
         var analysisBands = GetProjectAnalysisBandsFromId(projectId);
-        ranges.AddRange(FuzzyRange.GetFuzzyRanges(analysisBands));
+        ranges.AddRange(GetFuzzyRanges(analysisBands));
 
         return ranges;
     }
@@ -37,7 +37,7 @@ public class FuzzyRange
         }
 
         var analysisBands = GetProjectAnalysisBandsFromProjectPath(originalProjectPath);
-        ranges.AddRange(FuzzyRange.GetFuzzyRanges(analysisBands));
+        ranges.AddRange(GetFuzzyRanges(analysisBands));
 
         return ranges;
     }
@@ -56,6 +56,9 @@ public class FuzzyRange
             max = int.Parse(limits[1].Trim());
         }
     }
+
+    public static bool IsInFuzzyRanges(int segmentPercentage, List<string> fuzzyRanges) =>
+        fuzzyRanges.Any(fuzzyRange => IsInFuzzyRange(segmentPercentage, fuzzyRange));
 
     public static bool IsInFuzzyRange(int segmentPercentage, string fuzzyRange)
     {

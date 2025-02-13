@@ -33,16 +33,18 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
         {
             ApplyFilterButton.IsEnabled = false;
             OperatorComboBox.IsEnabled = false;
-            StatusesListBox.IsEnabled = false;
-            MatchTypesListBox.IsEnabled = false;
+            StatusesExpander.IsEnabled = false;
+            MatchTypesExpander.IsEnabled = false;
 
-            FilterChanged?.Invoke(GetSegmentFilter());
+            var segmentFilter = GetSegmentFilter();
+            FilterChanged?.Invoke(segmentFilter);
         }
 
         private SegmentFilter GetSegmentFilter()
         {
             var selectedStatuses = StatusesListBox.SelectedItems;
             var selectedMatchTypes = MatchTypesListBox.SelectedItems;
+            var selectedFuzzyPercentages = FuzzyMatchPercentageListBox.SelectedItems.Cast<string>().ToList();
 
             var statuses = EnumToListConverter.ConvertStringsToFlagEnum<Statuses>(selectedStatuses);
             var matchTypes = EnumToListConverter.ConvertStringsToFlagEnum<MatchTypes>(selectedMatchTypes);
@@ -50,7 +52,9 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             return new SegmentFilter
             {
                 Statuses = statuses,
-                MatchTypes = matchTypes
+                MatchTypes = matchTypes,
+                FuzzyPercentage = selectedFuzzyPercentages,
+                Operator = (Operator)OperatorComboBox.SelectedIndex
             };
         }
 
@@ -69,8 +73,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
         {
             ApplyFilterButton.IsEnabled = true;
             OperatorComboBox.IsEnabled = true;
-            StatusesListBox.IsEnabled = true;
-            MatchTypesListBox.IsEnabled = true;
+            StatusesExpander.IsEnabled = true;
+            MatchTypesExpander.IsEnabled = true;
 
             StatusesListBox.SelectedItems.Clear();
             MatchTypesListBox.SelectedItems.Clear();
