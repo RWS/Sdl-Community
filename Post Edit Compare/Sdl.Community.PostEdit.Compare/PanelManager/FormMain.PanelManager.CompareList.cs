@@ -27,6 +27,7 @@ using Sdl.Community.PostEdit.Compare.Properties;
 using Sdl.Community.PostEdit.Compare.Core.Helper;
 using System.Diagnostics;
 using Convert = Sdl.Community.PostEdit.Compare.Core.Helper.Convert;
+using Sdl.Community.PostEdit.Compare.Helpers;
 
 namespace PostEdit.Compare
 {
@@ -5296,13 +5297,12 @@ namespace PostEdit.Compare
                     CreateComparisonReport(hitCancel, comparer);
                 }
                 else
-                    MessageBox.Show(this, Resources.FormMain_CreateReport_Empty_file_comparison_list,
-                        System.Windows.Forms.Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ErrorHandler.ShowError(Resources.FormMain_CreateReport_Empty_file_comparison_list, this);
             }
             catch (Exception ex)
             {
                 Cursor = Cursors.Default;
-                MessageBox.Show(ex.Message, System.Windows.Forms.Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ErrorHandler.ShowError(ex, this);
             }
             finally
             {
@@ -5549,8 +5549,7 @@ namespace PostEdit.Compare
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, ex.Message, System.Windows.Forms.Application.ProductName, MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                ErrorHandler.ShowError(ex, this);
             }
             finally
             {
@@ -5705,9 +5704,7 @@ namespace PostEdit.Compare
                         catch (Exception ex)
                         {
                             Cursor = Cursors.Default;
-                            MessageBox.Show(this, ex.Message, System.Windows.Forms.Application.ProductName,
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
+                            ErrorHandler.ShowError(ex, this);
                         }
                         finally
                         {
