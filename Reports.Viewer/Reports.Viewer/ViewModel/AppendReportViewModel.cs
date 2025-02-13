@@ -194,25 +194,28 @@ namespace Reports.Viewer.Plus.ViewModel
 			}
 		}
 
-		private string GetReportTemplateId()
-		{
-			if (_path != null && File.Exists(_path) && _path.ToLower().EndsWith(".xml"))
-			{
-				var doc = XDocument.Load(_path);
-				if (doc.Root?.Name.LocalName == "task")
-				{
-					var reportType = doc.Root.Attributes().FirstOrDefault(
-						a => a.Name.LocalName == "name")?.Value;
-					var reportTemplateId = _taskTemplateIdProvider.GetTaskTemplateId(reportType);
+        private string GetReportTemplateId()
+        {
+            if (_path != null && File.Exists(_path) && _path.ToLower().EndsWith(".xml"))
+            {
+                using (var reader = new StreamReader(_path, detectEncodingFromByteOrderMarks: true))
+                {
+                    var doc = XDocument.Load(reader);
+                    if (doc.Root?.Name.LocalName == "task")
+                    {
+                        var reportType = doc.Root.Attributes().FirstOrDefault(
+                            a => a.Name.LocalName == "name")?.Value;
+                        var reportTemplateId = _taskTemplateIdProvider.GetTaskTemplateId(reportType);
 
-					return reportTemplateId;
-				}
-			}
+                        return reportTemplateId;
+                    }
+                }
+            }
 
-			return null;
-		}
+            return null;
+        }
 
-		public string Description
+        public string Description
 		{
 			get => _description;
 			set
