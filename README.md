@@ -11,13 +11,13 @@
 
 ## Intro
 
-This repository contains around 80 plugins developed for [Trados Studio](http://www.sdl.com/solution/language/translation-productivity/trados-studio/). Most of the plugins were developed by SDL, but you might also find a few of them which were initially developed by someone else. For all these plugins we now have full source code ownership according to our [License agreement](https://github.com/sdl/Sdl-Community/blob/master/License.md). You can find the complete list of plugins [here](#list-of-plugins).
+This repository contains around 70 plugins developed for [Trados Studio](https://www.trados.com/product/studio/). A lot of the plugins were developed by Trados Appstore team, but you might also find a few of them which were initially developed by someone else. For all these plugins we now have full source code ownership according to our [License agreement](https://github.com/RWS/Sdl-Community/blob/master/LICENSE). You can find the complete list of plugins [here](#list-of-plugins).
 
 We encourage everyone who is interested to contribute, either by fixing some issues, implementing new features or improving the documentation. To contribute, clone this repository, make the changes and send us a [pull request](http://www.codenewbie.org/blogs/how-to-make-a-pull-request) with your changes.
 
 You can also use this repository for learning by reading and tinkering with real Trados Studio plugins. Please find the documentation [here](http://appstore.sdl.com/developers/sdk.html).
 
-If you have any questions, don't hesitate to ask on the [Sdl Language Developer Community](https://community.sdl.com/developers/language-developers/).
+If you have any questions, don't hesitate to ask on the [Language Developer Community](https://community.rws.com/archive/language-developers).
 
 ## Getting started
 
@@ -27,7 +27,7 @@ To get started with this repository, install the following tools:
 1. **SDL Trados Studio 2021**. These libraries are built on top of SDL Trados Studio APIs and thus using them also requires having it installed.
 2. **Developer licence**. If you don't have a licence please send an email to app-signing@sdl.com.
 3. **.NET 4.8**
-4. **Microsoft Visual Studio 2013/2015/2017 or higher**. If you don't have Microsoft Visual Studio you can install the community edition  for free [here](https://www.visualstudio.com/).
+4. **Microsoft Visual Studio 2022 or higher**. If you don't have Microsoft Visual Studio you can install the community edition  for free [here](https://www.visualstudio.com/).
 5. **Git**. Find more details on installing git [here](https://www.atlassian.com/git/tutorials/install-git#windows). If you prefer a more visual approach you can either use the [github extension for Microsoft Visual Studio](https://visualstudio.github.com/), [Github Desktop](https://desktop.github.com/) or [SourceTree](https://www.sourcetreeapp.com/).
 
 Once you have installed the tools, follow the steps below:
@@ -56,142 +56,120 @@ The following table shows all the plugins available in the repository.
 
 By clicking on each plugin name in the table, you'll be redirected to the plugin's download page in SDL App Store. Documentation column will redirect to the source code for the selected plugin.
 
-## Batch Task Api
+
+## Translation Memory Api
 
 | Plugin Name | Description |
 | --- | --- |
-| [Export to Excel](http://appstore.sdl.com/app/export-to-excel/532/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Export%20to%20Excel/)|
-|  Project Anonymizer | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Anonymizer)|
-| [CleanUp Tasks](https://appstore.sdl.com/language/app/cleanup-tasks/963/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/CleanUpTasks)|
-| [Fail Safe Task](https://appstore.sdl.com/language/app/fail-safe-task/964/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/FailSafeTask)|
-| [Target Word Count](https://appstore.sdl.com/language/app/target-word-count/965/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TargetWordCount)|
-| [SDL Batch Anonymizer](https://appstore.sdl.com/language/app/sdl-batch-anonymizer/1072/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SDLBatchAnonymize)|
+| [Amazon Translate MT provider](https://appstore.rws.com/Plugin/18) | [Documentation](https://github.com/RWS/Sdl-Community/tree/master/AmazonTranslateTradosPlugin)|
+| [ApplyTM Template](https://appstore.rws.com/Plugin/21) | [Documentation](https://github.com/RWS/Sdl-Community/tree/master/ApplyTMTemplate)|
+| [DeepL Translation Provider](https://appstore.rws.com/Plugin/24) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/DeepLMTProvider)|
+| [Google Cloud Translation Provider](https://appstore.rws.com/Plugin/174) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/GoogleApiValidator)|
+| [Language Weaver Provider](https://appstore.rws.com/Plugin/240) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/LanguageWeaverProvider)|
+| [Microsoft Translator Provider](https://appstore.rws.com/Plugin/179) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/MicrosoftTranslatorProvider)|
+| [SDLTM Import Plus](https://appstore.rws.com/Plugin/89) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/SDLTM.Import)|
+| [SDLTM Repair](https://appstore.rws.com/Plugin/41) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/SDLTMRepair)|
+| [TM Lifting](https://appstore.rws.com/Plugin/72) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/TMLifting)|
+| TMX Translation Provider |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/TMX_TranslationProvider)|
+| [TermInjector](http://appstore.sdl.com/app/terminjector/97/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TermInjector)|
+| [Trados Translation Memory Management Utility](https://appstore.rws.com/Plugin/78) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/TranslationMemoryManagementUtility)|
+| [TuToTm](https://appstore.rws.com/Plugin/79) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/TuToTm)|
+| memoQ Translation Memory Provider |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/memoQ%20TM%20Provider)|
 
-
-## Core Api
-
-| Plugin Name | Description |
-| --- | --- |
-| [Apply Studio Project Template](http://appstore.sdl.com/app/apply-studio-project-template/391/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ApplyStudioProjectTemplate)|
-| [Export to Excel](http://appstore.sdl.com/app/export-to-excel/532/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Export%20to%20Excel/)|
-| [Legacy Converter](http://appstore.sdl.com/app/sdlxliff-to-legacy-converter/134/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Legacy%20Converter)|
-| [Number verifier](http://appstore.sdl.com/app/sdl-number-verifier/440/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Number%20Verifier)|
-| [Post Edit Compare](https://appstore.sdl.com/language/app/post-edit-compare/610/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Post%20Edit%20Compare)|
-| [Segment Status Switcher](http://appstore.sdl.com/app/segment-status-switcher/754/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SegmentStatusSwitcher)|
-| [Star Transit](http://appstore.sdl.com/app/transitpackage-handler/573/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/StarTransit)|
-| [SDL TM Anonymizer]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TmAnonymizer)|
-
-
-## Project Automation Api
-
-| Plugin Name | Description |
-| --- | --- |
-| [Apply Studio Project Template](http://appstore.sdl.com/app/apply-studio-project-template/391/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ApplyStudioProjectTemplate)|
-| [Post Edit Compare](https://appstore.sdl.com/language/app/post-edit-compare/610/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Post%20Edit%20Compare)|
-| [Project Anonymizer](https://appstore.sdl.com/language/app/projectanonymizer/895/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Anonymizer)|
-| [InSource](http://appstore.sdl.com/app/sdl-insource/548/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InSource)|
-| [Project Terms](https://appstore.sdl.com/language/app/projecttermextract/817/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ProjectTerms)|
-| [Record Source TU](http://appstore.sdl.com/app/record-source-tu/504/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Record%20Source%20TU)|
-| [Export Analysis Reports](https://appstore.sdl.com/language/app/sdl-trados-studio-export-analysis-reports/3/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Export%20Analysis%20Reports)|
-| [Studio Migration Utility](http://appstore.sdl.com/app/studio-migration-utility/481/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Studio%20Migration%20Utility)|
-
-## Global Verifiers Api
-
-| Plugin Name | Description |
-| --- | --- |
-| [Number verifier](http://appstore.sdl.com/app/sdl-number-verifier/440/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Number%20Verifier)|
 
 
 ## Terminology Provider Api
 
 | Plugin Name | Description |
 | --- | --- |
-| [Excel Termonology](https://appstore.sdl.com/language/app/termexcelerator/534/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Sdl.Community.ExcelTerminology)|
-| [IATE Termonology Provider](https://appstore.sdl.com/language/app/iate-terminology/950/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/IATETerminologyProvider)|
+| [IATE Real-time Terminology](https://appstore.rws.com/Plugin/30) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/IATETerminologyProvider)|
+| [InterpretBank Terminology Provider](https://appstore.rws.com/Plugin/243) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/InterpretBank)|
+| [Trados Studio InQuote](https://appstore.rws.com/Plugin/55/) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/InvoiceAndQuotes)|
+| [TermExcelerator](https://appstore.rws.com/Plugin/75) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/TermInjector)|
 
-
-## Translation Memory Api
-
-| Plugin Name | Description |
-| --- | --- |
-|  SDL TM Anonymizer |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TmAnonymizer)|
-| [Record Source TU](http://appstore.sdl.com/app/record-source-tu/504/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Record%20Source%20TU)|
-| [DeepL Translation Provider](https://appstore.sdl.com/language/app/deepl-translation-provider/847/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/DeepLMTProvider)|
-| [MT Enhanced Provider](http://appstore.sdl.com/app/mt-enhanced-plugin-for-trados-studio/604/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/MT%20Enhanced%20Provider)|
-| [Term Injector](http://appstore.sdl.com/app/terminjector/97/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TermInjector)|
-| [Record Source TU](http://appstore.sdl.com/app/record-source-tu/504/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Record%20Source%20TU)|
-| [TM Optimizer](http://appstore.sdl.com/app/tm-optimizer/347/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TM%20Optimizer)|
-| [TM Lifting](http://appstore.sdl.com/app/tm-lifting/419/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TMLifting)|
-| [SDL Machine Translation Cloud Provider](https://appstore.sdl.com/language/app/sdl-beglobal-nmt/941/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SDLMTCloud.Provider)|
-| [Amazon Translate](https://appstore.sdl.com/language/app/amazon-translate-mt-provider/925/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AmazonTranslateTradosPlugin)|
-| [SDL Machine Translation Edge Provider](https://appstore.sdl.com/language/app/sdl-ets/843/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SDLMTEdge.Provider)|
-| [ApplyTM Template](https://appstore.sdl.com/language/app/applytm-template/966/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ApplyTMTemplate)|
-| [SDLTM Repair](https://appstore.sdl.com/language/app/sdltm-repair/298/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SDLTMRepair)|
-| [TAUS Search](https://appstore.sdl.com/language/app/taus-search/164/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TAUS%20Data%20Search)|
-| [SDL TMBackup](https://appstore.sdl.com/language/app/sdl-tmbackup/869/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TMBackup)|
-| [SDL Translation Memory Management Utility](https://appstore.sdl.com/language/app/sdl-translation-memory-management-utility/131/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TranslationMemoryManagementUtility)|
-| [TuToTm](https://appstore.sdl.com/language/app/tutotm/998/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TuToTm)|
 
 ## Integration Api
 
 | Plugin Name | Description |
 | --- | --- |
-| [RapidAddTerm](https://appstore.sdl.com/language/app/rapid-add-term/1050/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/RapidAddTerm)
-| [Apply Studio Project Template](http://appstore.sdl.com/app/apply-studio-project-template/391/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ApplyStudioProjectTemplate)|
-| [Export to Excel](http://appstore.sdl.com/app/export-to-excel/532/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Export%20to%20Excel/)|
-| [Post Edit Compare](https://appstore.sdl.com/language/app/post-edit-compare/610/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Post%20Edit%20Compare)|
-| [Segment Status Switcher](http://appstore.sdl.com/app/segment-status-switcher/754/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SegmentStatusSwitcher)|
-| [InSource](http://appstore.sdl.com/app/sdl-insource/548/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InSource)|
-| [Record Source TU](http://appstore.sdl.com/app/record-source-tu/504/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Record%20Source%20TU)|
-| [Community Advanced Display Filter](https://appstore.sdl.com/language/app/community-advanced-display-filter/849/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AdvancedDisplayFilter) |
-| [AutoHotKey Manager](https://appstore.sdl.com/language/app/autohotkey-manager/893/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AHK%20plugin) |
-| [Qualitivity](http://appstore.sdl.com/app/qualitivity/612/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Qualitivity)|
-| [DSI Viewer](https://appstore.sdl.com/language/app/dsi-viewer/995/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/DSI%20Viewer)|
-| [GrpupShare Version Fetch](https://appstore.sdl.com/language/app/groupshare-version-fetch/993/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/GroupShare%20VersionFetch)|
-| [SDL Studio InQuote](https://appstore.sdl.com/language/app/sdl-studio-inquote/295/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/InvoiceAndQuotes)|
-| [Jobs](https://appstore.sdl.com/language/app/jobs/463/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Jobs)|
-| [Legit](https://appstore.sdl.com/language/app/sdl-legit/299/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Legit)|
-| [SDL Data Protection Suite](https://appstore.sdl.com/language/app/sdl-data-protection-suite/936/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SDLDataProtectionSuite)|
-| [SDL Fresh Start](https://appstore.sdl.com/language/app/sdl-freshstart/876/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SdlFreshstart)|
-| [Stylesheet Verifier](https://appstore.sdl.com/language/app/stylesheet-verifier/870/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/StyleSheetVerifier)|
-| [Time Tracker](https://appstore.sdl.com/language/app/studio-time-tracker/361/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Time%20Tracker)|
-| [Variables Manager](https://appstore.sdl.com/language/app/variables-manager-for-sdl-trados-studio/297/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/VariablesManager)|
-| [#YourProductivity](https://appstore.sdl.com/language/app/yourproductivity/491/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/YourProductivity)|
-| [CopyTags](https://appstore.sdl.com/language/app/sdl-copy-tags/1070/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/CopyTags)|
-|  SpotCheck | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SpotCheck)|
-| [TermExcelerator](https://appstore.sdl.com/language/app/termexcelerator/534/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TermExcelerator)|
-| [TermInjector](https://appstore.sdl.com/language/app/terminjector/759/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TermInjector)|
+| [AutoHotKey Manager](https://appstore.rws.com/Plugin/22) | [Documentation](https://github.com/RWS/Sdl-Community/tree/master/AHK%20plugin)|
+| [Trados Copy Tags](https://appstore.rws.com/Plugin/23) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/CopyTags)|
+| [DSI Viewer](https://appstore.rws.com/Plugin/25) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/DSI%20Viewer)|
+| [Trados InSource!](https://appstore.rws.com/Plugin/31) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/InSource)|
+| [Trados Jobs](https://appstore.rws.com/Plugin/32) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/Jobs)|
+| [Trados Legit!](https://appstore.rws.com/Plugin/57) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/Legit)|
+| [Post-Edit Compare](https://appstore.rws.com/Plugin/15) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/Post%20Edit%20Compare)|
+| [projectTermExtract](https://appstore.rws.com/Plugin/34) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/ProjectTerms)|
+| [Qualitivity](https://appstore.rws.com/Plugin/16) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/Qualitivity)|
+| [Rapid Add Term](https://appstore.rws.com/Plugin/35) | [Documentation](https://github.com/RWS/Sdl-Community/tree/master/RapidAddTerm)|
+| [Record Source TU](https://appstore.rws.com/Plugin/36) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/Record%20Source%20TU)|
+| [Reports Viewer Plus](https://appstore.rws.com/Plugin/37) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/Reports.Viewer)|
+| [Trados Data Protection Suite](https://appstore.rws.com/Plugin/39) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/SDLDataProtectionSuite)|
+| [Trados Transcreate](https://appstore.rws.com/Plugin/42) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/SDLTranscreate)|
+| [Segment Status Switcher](https://appstore.rws.com/Plugin/44) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/SegmentStatusSwitcher)|
+| [TransitPackage Handler](https://appstore.rws.com/Plugin/45) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/StarTransit)|
+| [studioViews](https://appstore.rws.com/Plugin/12) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/StudioViews)|
+| [Stylesheet Verifier](https://appstore.rws.com/Plugin/47) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/StyleSheetVerifier)|
+| [Time Tracker](https://appstore.rws.com/Plugin/76) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/Time%20Tracker)|
+| [SDLXLIFF Toolkit](https://appstore.rws.com/Plugin/77) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/Toolkit)|
+| [Variables Manager](https://appstore.rws.com/Plugin/180) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/VariablesManager)|
+| [Trados Word Cloud](https://appstore.rws.com/Plugin/80) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/Word%20Cloud)|
+| [XLIFF Manager for Trados Studio](https://appstore.rws.com/Plugin/67) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/XLIFF.Manager)|
+| [XML Reader](https://appstore.rws.com/Plugin/81) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/XML%20Reader)|
+| [YourProductivity](https://appstore.rws.com/Plugin/82) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/YourProductivity)|
+
 
 ## FileType Support API
 
 | Plugin Name | Description |
 | --- | --- |
-| [Export to Excel](http://appstore.sdl.com/app/export-to-excel/532/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Export%20to%20Excel/)|
-| [Legacy Converter](http://appstore.sdl.com/app/sdlxliff-to-legacy-converter/134/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Legacy%20Converter)|
-| [Number verifier](http://appstore.sdl.com/app/sdl-number-verifier/440/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Number%20Verifier)|
-| [Post Edit Compare](https://appstore.sdl.com/language/app/post-edit-compare/610/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Post%20Edit%20Compare)|
-| [Star Transit](http://appstore.sdl.com/app/transitpackage-handler/573/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/StarTransit)|
-| [Project Anonymizer](https://appstore.sdl.com/language/app/projectanonymizer/895/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Anonymizer)|
-| [Project Term Extract](https://appstore.sdl.com/language/app/projecttermextract/817/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ProjectTerms)|
-| [Qualitivity](http://appstore.sdl.com/app/qualitivity/612/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Qualitivity)|
-| [Community Advenced Display Filter](https://appstore.sdl.com/language/app/community-advanced-display-filter/849/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AdvancedDisplayFilter) |
-| [Antidote Verifier](http://appstore.sdl.com/app/antidote-verifier/583/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Antidote%20Verifier) |
-| [SDLXLIFF Compare](https://appstore.sdl.com/language/app/sdlxliff-compare/89/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SdlXliff%20Compare) |
-| [SDLXLIFF Split/Merge](https://appstore.sdl.com/language/app/sdlxliff-split-merge/20/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SDLXLIFFSplitMerge) |
-| [File type definition for TMX](https://appstore.sdl.com/language/app/file-type-definition-for-tmx/317/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TMX) |
-| [SDLXLIFF Toolkit](http://appstore.sdl.com/app/sdlxliff-toolkit/296/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Toolkit)|
-| [Wordfast TXML](http://appstore.sdl.com/app/file-type-definition-for-wordfast-txml/247/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Wordfast%20TXML)|
-| [Word Cloud](http://appstore.sdl.com/app/sdl-trados-studio-word-cloud/402/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Word%20Cloud)|
-| [MXLIFF File Type](https://appstore.sdl.com/language/app/mxliff-file-type/962/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/FileTypeSupport.MXLIFF)|
-| [XML Reader](https://appstore.sdl.com/language/app/xml-reader/845/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/XML%20Reader)|
-| [XLIFF Manager](https://appstore.sdl.com/language/app/sdl-xliff-manager-for-sdl-trados-studio/1099/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/XLIFF.Manager)|
+| [MXLIFF File Type](https://appstore.rws.com/Plugin/29) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/FileTypeSupport.MXLIFF)|
+| [Multilingual Excel FileType](https://appstore.rws.com/Plugin/17) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/Multilingual.Excel.FileType)|
+| [Multilingual XML FileType](https://appstore.rws.com/Plugin/13) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/Multilingual.XML.FileType)|
+| [File type definition for TMX](https://appstore.rws.com/Plugin/61) | [Documentation](https://github.com/RWS/Sdl-Community/tree/master/TMX) |
+| [Filetype for Wordfast TXML](https://appstore.rws.com/Plugin/62) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/Wordfast%20TXML)|
 
-		
-## Other plugins
+
+## Verification API
 
 | Plugin Name | Description |
 | --- | --- |
-| [Hunspell Dictionary Manager](https://appstore.sdl.com/language/app/hunspell-dictionary-manager/928/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/HunspellDictionaryManager)|
+| [Antidote Verifier](https://appstore.rws.com/Plugin/3) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/Antidote%20Verifier)|
+| [Trados Number Verifier](https://appstore.rws.com/Plugin/33) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/Number%20Verifier)|
+
+
+## Batch Task Api
+
+| Plugin Name | Description |
+| --- | --- |
+| [CleanUp Tasks](https://appstore.rws.com/Plugin/23) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/CleanUpTasks)|
+| [Export to Excel](https://appstore.rws.com/Plugin/27) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/Export%20to%20Excel)|
+| [Fail Safe Task](https://appstore.rws.com/Plugin/28) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/FailSafeTask)|
+| [Trados Batch Anonymizer](https://appstore.rws.com/Plugin/38) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/SDLBatchAnonymize)|
+| TQA Reporting |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/TQA)|
+| [Trados Studio Target Renamer](https://appstore.rws.com/Plugin/73) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/TargetRenamer)|
+| [Target Word Count](https://appstore.rws.com/Plugin/74) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/TargetWordCount)|
+
+
+## Project Automation Api
+
+| Plugin Name | Description |
+| --- | --- |
+| [Apply Studio Project Template](https://appstore.rws.com/Plugin/20) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/ApplyStudioProjectTemplate)|
+| [Trados Studio – Export Analysis Reports](https://appstore.rws.com/Plugin/92) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/Export%20Analysis%20Reports)|
+
+	
+## Standalone Application Api
+
+| Plugin Name | Description |
+| --- | --- |
+| [Google API Validator](https://appstore.rws.com/Plugin/53) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/GoogleApiValidator)|
+| [Hunspell Dictionary Manager](https://appstore.rws.com/Plugin/54) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/HunspellDictionaryManager)|
+| [SDLXLIFF to Legacy Converter](https://appstore.rws.com/Plugin/56) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/Legacy%20Converter)|
+| [Language Mapping Provider](https://www.nuget.org/packages/LanguageMappingProvider/) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/LanguageMappingProvider)|
+| [Trados Freshstart](https://appstore.rws.com/Plugin/107) |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/SdlFreshstart)|
+| Trados Proxy Settings |  [Documentation](https://github.com/RWS/Sdl-Community/tree/master/TradosProxySettings)|
+
 
 
 ## We want your feedback
