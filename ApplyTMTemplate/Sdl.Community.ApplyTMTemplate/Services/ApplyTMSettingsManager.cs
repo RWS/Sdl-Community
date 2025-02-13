@@ -18,12 +18,8 @@ namespace Sdl.Community.ApplyTMTemplate.Services
         public void SaveSettings(string location, ApplyTMSettings applyTMsettings)
         {
             XmlSerializer serializer = new (typeof(ApplyTMSettings));
-            using (StreamWriter writer = new (location))
-            {
-                serializer.Serialize(writer, applyTMsettings);
-            }
-
-            if (applyTMsettings is not null) SaveCachedSettings(applyTMsettings);
+            using StreamWriter writer = new(location);
+            serializer.Serialize(writer, applyTMsettings);
         }
 
         public ApplyTMSettings LoadSettings(string location)
@@ -38,7 +34,7 @@ namespace Sdl.Community.ApplyTMTemplate.Services
                 {   
                     settings = (ApplyTMSettings)serializer.Deserialize(reader);
                 }
-                if (settings is not null) SaveCachedSettings(settings);
+
                 return settings;
             }
             catch (Exception _)
@@ -47,7 +43,7 @@ namespace Sdl.Community.ApplyTMTemplate.Services
             }
         }
 
-        public async void SaveCachedSettings(ApplyTMSettings applyTMsettings)
+        public async Task SaveCachedSettings(ApplyTMSettings applyTMsettings)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(ApplyTMSettings));
             using StreamWriter writer = new StreamWriter(CachedLocation);

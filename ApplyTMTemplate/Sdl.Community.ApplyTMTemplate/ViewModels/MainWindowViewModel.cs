@@ -76,6 +76,8 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
             _tmCollection = new ObservableCollection<TranslationMemory>();
             _settingsSelectedMethod = ApplyTMMethod.Merge;
 
+
+            // Use Cached
             AddTMSettings(_applyTMSettingsManager.CachedLocation);
         }
 
@@ -301,31 +303,44 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
 
             TmCollection.Clear();
             _applyTMSettingsPath = filePaths[0];
-            var preferences = _applyTMSettingsManager.LoadSettings(filePaths[0]);
+
+            var preferences = _applyTMSettingsManager.LoadSettings(_applyTMSettingsPath);
             if (preferences is null)
             {
                 if (location is null)
-                    _messageService.ShowErrorMessage(PluginResources.Warning,
-                        PluginResources.InvalidApplyTMSettings);
+                {
+                    _messageService.ShowErrorMessage(PluginResources.Warning, PluginResources.InvalidApplyTMSettings);
+                }
                 return;
             }
 
-            if (preferences.TMSettingsFilePath is not null && !string.IsNullOrEmpty(preferences.TMSettingsFilePath))
+            if (!string.IsNullOrEmpty(preferences.TMSettingsFilePath))
             {
-                if (File.Exists(preferences.TMSettingsFilePath))
-                {
-                    CurrentApplyTMMessage = GetValidApplyTMMessage(preferences.TMSettingsFilePath);
-                    CurrentApplyTMMessageColor = System.Windows.Media.Brushes.Black;
-                }
-                else
-                {
-                    CurrentApplyTMMessage = PluginResources.ApplyTMTemplatePathDeletedMessage;
-                    CurrentApplyTMMessageColor = System.Windows.Media.Brushes.Red;
-                }
+                _applyTMSettingsPath = preferences.TMSettingsFilePath;
+            }
+
+            bool fileExists = File.Exists(_applyTMSettingsPath);
+            if (fileExists)
+            {
+                CurrentApplyTMMessage = GetValidApplyTMMessage(_applyTMSettingsPath);
+                CurrentApplyTMMessageColor = System.Windows.Media.Brushes.Black;
+            }
+            else
+            {
+                CurrentApplyTMMessage = PluginResources.ApplyTMTemplatePathDeletedMessage;
+                CurrentApplyTMMessageColor = System.Windows.Media.Brushes.Red;
+            }
+
+            if (location is null)
+            {
+                preferences.TMSettingsFilePath = _applyTMSettingsPath;
+                Task.Run(() => _applyTMSettingsManager.SaveCachedSettings(preferences));
             }
 
             if (preferences.LanguageResourcePath is not null)
+            {
                 ResourceTemplatePath = preferences.LanguageResourcePath;
+            }
 
             if (preferences.TMPathCollection is not null)
             {
@@ -333,7 +348,10 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
                 AddRangeOfTms(_tmLoader.GetTMsAndApplySelection(validTMs, TmCollection));
             }
 
-            if (preferences.Settings is not null) ApplyNewSettings(preferences.Settings);
+            if (preferences.Settings is not null)
+            {
+                ApplyNewSettings(preferences.Settings);
+            }
         }
 
         private IEnumerable<TranslationMemoryEntry> GetMissingTMs(IEnumerable<TranslationMemoryEntry> tms)
@@ -409,12 +427,8 @@ namespace Sdl.Community.ApplyTMTemplate.ViewModels
                 PluginResources.ApplyTM_fileName);
             if (saveLocation == null) return;
 
-            preferences.TMSettingsFilePath = saveLocation;
-
             await Task.Run(() => _applyTMSettingsManager.SaveSettings(saveLocation, preferences));
             _messageService.ShowMessage(PluginResources.Success_Window_Title, PluginResources.TMSettings_Created);
-
-            AddTMSettings(saveLocation);
         }
 
         private async void ExportToExcel()
