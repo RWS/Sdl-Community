@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.Components;
+using System;
 using System.Diagnostics;
 using System.IO;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
@@ -21,7 +22,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
                 switch (saveFileDialog.FilterIndex)
                 {
                     case 1:
-                        ExcelConverter.ConvertHtmlTableToExcel(report, saveFileDialog.FileName);
+                        ExcelConverter.WriteExcelSpreadsheet(report, saveFileDialog.FileName);
                         break;
 
                     case 2:
