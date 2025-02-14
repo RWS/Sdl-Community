@@ -7,6 +7,9 @@
 	<RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />
 	<Include>
 		<File>Sdl.Community.PostEdit.Compare.dll</File>
+		<File>DocumentFormat.OpenXml.dll</File>
+		<File>HtmlAgilityPack.dll</File>
+		<File>DocumentFormat.OpenXml.Framework.dll</File>
 		<File>Sdl.Community.PostEdit.Compare.DAL.dll</File>
 		<File>Sdl.Community.PostEdit.Compare.Core.dll</File>		
 		<File>PostEdit.Compare.WinFormsUI.Docking.dll</File>

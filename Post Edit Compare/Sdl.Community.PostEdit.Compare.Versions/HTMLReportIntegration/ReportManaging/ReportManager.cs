@@ -11,19 +11,31 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
         {
             var saveFileDialog = new SaveFileDialog
             {
-                Filter = "HTML files (*.html)|*.html",
-                DefaultExt = ".html",
+                Filter = "Excel files (*.xlsx)|*.xlsx|HTML files (*.html)|*.html",
+                DefaultExt = ".xlsx",
                 AddExtension = true
             };
 
-            if (saveFileDialog.ShowDialog() == true) File.WriteAllText(saveFileDialog.FileName, report);
-        }
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                switch (saveFileDialog.FilterIndex)
+                {
+                    case 1:
+                        ExcelConverter.ConvertHtmlTableToExcel(report, saveFileDialog.FileName);
+                        break;
 
-        public void SaveReport(string reportFromMemory, string selectedReportReportPath) =>
-            File.WriteAllText(selectedReportReportPath, reportFromMemory);
+                    case 2:
+                        File.WriteAllText(saveFileDialog.FileName, report);
+                        break;
+                }
+            }
+        }
 
         public void OpenReportFolder() =>
             Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                 "PostEdit.Compare", "Reports"));
+
+        public void SaveReport(string reportFromMemory, string selectedReportReportPath) =>
+                    File.WriteAllText(selectedReportReportPath, reportFromMemory);
     }
 }
