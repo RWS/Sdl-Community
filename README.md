@@ -15,8 +15,6 @@ This repository contains around 70 plugins developed for [Trados Studio](https:/
 
 We encourage everyone who is interested to contribute, either by fixing some issues, implementing new features or improving the documentation. To contribute, clone this repository, make the changes and send us a [pull request](http://www.codenewbie.org/blogs/how-to-make-a-pull-request) with your changes.
 
-You can also use this repository for learning by reading and tinkering with real Trados Studio plugins. Please find the documentation [here](http://appstore.sdl.com/developers/sdk.html).
-
 If you have any questions, don't hesitate to ask on the [Language Developer Community](https://community.rws.com/archive/language-developers).
 
 ## Getting started
@@ -25,7 +23,7 @@ If you have any questions, don't hesitate to ask on the [Language Developer Comm
 #### Required Tools
 To get started with this repository, install the following tools:
 1. **Trados Studio 2024**. These libraries are built on top of Trados Studio APIs and thus using them also requires having it installed.
-2. **Developer licence**. If you don't have a licence please send an email to app-signing@sdl.com.
+2. **Developer licence**. If you don't have a licence please send an email to App Signing <app-signing@rws.com>.
 3. **.NET 4.8**
 4. **Microsoft Visual Studio 2022 or higher**. If you don't have Microsoft Visual Studio you can install the community edition  for free [here](https://www.visualstudio.com/).
 5. **Git**. Find more details on installing git [here](https://www.atlassian.com/git/tutorials/install-git#windows). If you prefer a more visual approach you can either use the [github extension for Microsoft Visual Studio](https://visualstudio.github.com/), [Github Desktop](https://desktop.github.com/) or [SourceTree](https://www.sourcetreeapp.com/).
