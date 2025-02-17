@@ -14,23 +14,70 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
     {
         public static void WriteExcelSpreadsheet(string htmlReport, string outputPath)
         {
-            var table = ExtractTableWithId(htmlReport);
-            SaveTableToExcel(table, outputPath);
+            var tables = ExtractTableWithId(htmlReport);
+            SaveTableToExcel(tables, outputPath);
         }
 
-        private static string ExtractTableWithId(string html)
+        private static void AddRows(List<HtmlNode> rows, SheetData sheetData)
+        {
+            foreach (var row in rows)
+            {
+                var cells = row.Descendants("th").Concat(row.Descendants("td"));
+                var excelRow = new Row();
+
+                foreach (var cell in cells)
+                {
+                    var excelCell = CreateCell(cell);
+                    excelRow.AppendChild(excelCell);
+                }
+
+                sheetData?.AppendChild(excelRow);
+            }
+        }
+
+        private static Cell CreateCell(HtmlNode cell)
+        {
+            var cellText = HttpUtility.HtmlDecode(cell.InnerText.Trim());
+            var cellFormatting = GetCellFormating(cellText);
+            Cell excelCell;
+
+            if (cellFormatting == CellValues.Number && cellText.Contains('%'))
+            {
+                var percentage = double.Parse(cellText.TrimEnd('%'), NumberStyles.Any,
+                    CultureInfo.InvariantCulture) / 100;
+                excelCell = new Cell
+                {
+                    CellValue = new CellValue(percentage.ToString(CultureInfo.InvariantCulture)),
+                    StyleIndex = 10,
+                    DataType = CellValues.Number
+                };
+            }
+            else
+            {
+                excelCell = new Cell { CellValue = new CellValue(cellText) };
+                if (cellFormatting == CellValues.String)
+                    excelCell.DataType = CellValues.String;
+            }
+
+            if (cell.Name.Equals("th", StringComparison.OrdinalIgnoreCase))
+                excelCell.StyleIndex = 11; // Apply header (green) style
+            return excelCell;
+        }
+
+        private static List<string> ExtractTableWithId(string html)
         {
             var doc = new HtmlDocument();
             doc.LoadHtml(html);  // HtmlAgilityPack handles malformed HTML
 
             // Find the table containing a <th> element with the text "ID"
-            var table = doc.DocumentNode.Descendants("table")
-                .FirstOrDefault(t => t.Descendants("tr")
+            var tables = doc.DocumentNode.Descendants("table")
+                .Where(t => t.Descendants("tr")
                     .Any(tr => tr.Descendants("th")
                         .Any(th => th.InnerText.Trim() == "ID")));
 
+            var tablesHtml = tables.Select(t => t.OuterHtml).ToList();
             // Return the outer HTML of the table, or null if not found
-            return table?.OuterHtml;
+            return tablesHtml;
         }
 
         // Updated GenerateStylesheet with a green header fill style (StyleIndex = 11)
@@ -87,17 +134,11 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
             return fileName?.Split('.')[0];
         }
 
-        private static void SaveTableToExcel(string tableHtml, string filePath)
+        private static void SaveTableToExcel(List<string> tableHtmls, string filePath)
         {
-            var doc = new HtmlDocument();
-            doc.LoadHtml(tableHtml);
-
             using var spreadsheetDocument = SpreadsheetDocument.Create(filePath, SpreadsheetDocumentType.Workbook);
             var workbookPart = spreadsheetDocument.AddWorkbookPart();
             workbookPart.Workbook = new Workbook();
-
-            var worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
-            worksheetPart.Worksheet = new Worksheet(new SheetData());
 
             // Add styles with percentage formatting (StyleIndex = 10)
             var stylesPart = workbookPart.AddNewPart<WorkbookStylesPart>();
@@ -105,56 +146,35 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
             stylesPart.Stylesheet.Save();
 
             var sheets = workbookPart.Workbook.AppendChild(new Sheets());
-            sheets.AppendChild(new Sheet
+            uint sheetId = 1; // Ensure each sheet gets a unique ID
+
+            foreach (var tableHtml in tableHtmls)
             {
-                Id = workbookPart.GetIdOfPart(worksheetPart),
-                SheetId = 1,
-                Name = GetFilename(doc.DocumentNode.Descendants("tr")?.ToList())
-            });
+                var doc = new HtmlDocument();
+                doc.LoadHtml(tableHtml);
 
-            var sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>();
-            var rows = doc.DocumentNode.Descendants("tr")?.ToList();
-            if (rows is null) return;
+                var worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
+                worksheetPart.Worksheet = new Worksheet(new SheetData());
 
-            rows = rows.Where((_, index) => index != 1).ToList();
-            foreach (var row in rows)
-            {
-                var cells = row.Descendants("th").Concat(row.Descendants("td"));
-                var excelRow = new Row();
-
-                foreach (var cell in cells)
+                // Ensure unique SheetId
+                var sheet = new Sheet
                 {
-                    var cellText = HttpUtility.HtmlDecode(cell.InnerText.Trim());
-                    var cellFormatting = GetCellFormating(cellText);
-                    Cell excelCell;
+                    Id = workbookPart.GetIdOfPart(worksheetPart),
+                    SheetId = sheetId++, // Increment SheetId for each sheet
+                    Name = GetFilename(doc.DocumentNode.Descendants("tr")?.ToList())
+                };
 
-                    if (cellFormatting == CellValues.Number && cellText.Contains('%'))
-                    {
-                        var percentage = double.Parse(cellText.TrimEnd('%'), NumberStyles.Any, CultureInfo.InvariantCulture) / 100;
-                        excelCell = new Cell
-                        {
-                            CellValue = new CellValue(percentage.ToString(CultureInfo.InvariantCulture)),
-                            StyleIndex = 10,
-                            DataType = CellValues.Number
-                        };
-                    }
-                    else
-                    {
-                        excelCell = new Cell { CellValue = new CellValue(cellText) };
-                        if (cellFormatting == CellValues.String)
-                            excelCell.DataType = CellValues.String;
-                    }
+                sheets.Append(sheet); // Append the new sheet to the Sheets collection
 
-                    if (cell.Name.Equals("th", StringComparison.OrdinalIgnoreCase))
-                        excelCell.StyleIndex = 11; // Apply header (green) style
+                var sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>();
+                var rows = doc.DocumentNode.Descendants("tr")?.ToList();
 
-                    excelRow.AppendChild(excelCell);
-                }
+                if (rows == null || !rows.Any()) continue; // Skip empty or missing rows
 
-                sheetData?.AppendChild(excelRow);
+                AddRows(rows, sheetData); // Add rows to the sheet
             }
 
-            workbookPart.Workbook.Save();
+            workbookPart.Workbook.Save(); // Ensure workbook saves after all sheets are added
         }
     }
 }
