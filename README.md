@@ -113,12 +113,12 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Target Word Count](https://appstore.rws.com/Plugin/74) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/TargetWordCount) | Batch Task API |
 | [Apply Studio Project Template](https://appstore.rws.com/Plugin/20) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/ApplyStudioProjectTemplate) | Project Automation API |
 | [Trados Studio Export Analysis Reports](https://appstore.rws.com/Plugin/92) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Export%20Analysis%20Reports) | Project Automation API |
-| [Google API Validator](https://appstore.rws.com/Plugin/53) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/GoogleApiValidator) | Standalone Application API |
-| [Hunspell Dictionary Manager](https://appstore.rws.com/Plugin/54) | [Source Code](https://github.com/sdl/Sdl-Community/tree/master/HunspellDictionaryManager) | Standalone Application API |
-| [SDLXLIFF to Legacy Converter](https://appstore.rws.com/Plugin/56) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Legacy%20Converter) | Standalone Application API |
-| [Language Mapping Provider](https://www.nuget.org/packages/LanguageMappingProvider/) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/LanguageMappingProvider) | Standalone Application API |
-| [Trados Freshstart](https://appstore.rws.com/Plugin/107) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/SdlFreshstart) | Standalone Application API |
-| Trados Proxy Settings | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/TradosProxySettings) | Standalone Application API |
+| [Google API Validator](https://appstore.rws.com/Plugin/53) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/GoogleApiValidator) | Standalone Application |
+| [Hunspell Dictionary Manager](https://appstore.rws.com/Plugin/54) | [Source Code](https://github.com/sdl/Sdl-Community/tree/master/HunspellDictionaryManager) | Standalone Application |
+| [SDLXLIFF to Legacy Converter](https://appstore.rws.com/Plugin/56) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Legacy%20Converter) | Standalone Application |
+| [Language Mapping Provider](https://www.nuget.org/packages/LanguageMappingProvider/) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/LanguageMappingProvider) | Standalone Application |
+| [Trados Freshstart](https://appstore.rws.com/Plugin/107) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/SdlFreshstart) | Standalone Application |
+| Trados Proxy Settings | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/TradosProxySettings) | Standalone Application |
 
 
 
