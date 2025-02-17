@@ -24,7 +24,7 @@ If you have any questions, don't hesitate to ask on the [Language Developer Comm
 
 #### Required Tools
 To get started with this repository, install the following tools:
-1. **SDL Trados Studio 2021**. These libraries are built on top of SDL Trados Studio APIs and thus using them also requires having it installed.
+1. **Trados Studio 2024**. These libraries are built on top of Trados Studio APIs and thus using them also requires having it installed.
 2. **Developer licence**. If you don't have a licence please send an email to app-signing@sdl.com.
 3. **.NET 4.8**
 4. **Microsoft Visual Studio 2022 or higher**. If you don't have Microsoft Visual Studio you can install the community edition  for free [here](https://www.visualstudio.com/).
@@ -32,22 +32,19 @@ To get started with this repository, install the following tools:
 
 Once you have installed the tools, follow the steps below:
 
-1. Clone this repository (more details [here](https://help.github.com/articles/cloning-a-repository/)). In order to clone the repository using Source Tree, from menu select "Clone/New". In the Source Path paste this path: "https://github.com/sdl/Sdl-Community.git". In the Destination Path, select a path where you want to store the repository on your local drive:
-[](https://raw.githubusercontent.com/sdl/Sdl-Community/master/cloneRepository.png)
+1. Clone this repository (more details [here](https://help.github.com/articles/cloning-a-repository/)). In order to clone the repository using Source Tree, from menu select "Clone/New". In the Source Path paste this path: "https://github.com/RWS/Sdl-Community.git". In the Destination Path, select a path where you want to store the repository on your local drive.
 
 2. After the repository was cloned, navigate to the repository path you've specified when cloning the repository. Each plugin has a dedicated folder. All you need to do is to find the plugin you're looking for, enter the folder and open the solution file using Microsoft Visual Studio.
 
-3. Build the solution. After the build has succeeded, open SDL Trados Studio 2021. Click "Yes" when the warning message appears. After Studio loads, the built plugin will be available in Studio.
-
- ![](https://raw.githubusercontent.com/sdl/Sdl-Community/gh-pages/unsignedPlugin.png)
+3. Build the solution. After the build has succeeded, open Trados Studio 2024. Click "Yes" when the warning message appears. After Studio loads, the built plugin will be available in Studio.
 
 
 
-#### Visual Studio SDL templates extensions
+#### Visual Studio Trados Studio templates extensions
 
-Starting with Visual Studio 2017, the Trados Studio plugin templates are provided through Visual Studio extension which can be downloaded from [Marketplace](https://marketplace.visualstudio.com/items?itemName=sdl.project-templates-for-trados-studio-2021) for both **Visual Studio 2017 and Visual Studio 2019**. The extension allow developers to create plugins for Studio 2021 using the predefined templates.
+Starting with Visual Studio 2017, the Trados Studio plugin templates are provided through Visual Studio extension which can be downloaded from [Marketplace](https://marketplace.visualstudio.com/items?itemName=sdl.tradosstudio18) for **Visual Studio 2022**. The extension allow developers to create plugins for Trados Studio 2024 using the predefined templates.
 
-The Github source code for Visual Studio templates extension, can be downloaded from the [Github](https://github.com/sdl/trados-studio-vs-extension) repository.
+The Github source code for Visual Studio templates extension, can be downloaded from the [Github](https://github.com/RWS/trados-studio-vs-extension) repository.
 
 
 ## List of plugins
@@ -174,4 +171,4 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 
 ## We want your feedback
 
-If you have any suggestions or find any issues please go [here](https://github.com/sdl/SDL-Community/issues) and let us know.
+If you have any suggestions or find any issues please go [here](https://github.com/RWS/Sdl-Community/issues) and let us know.
