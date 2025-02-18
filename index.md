@@ -108,7 +108,6 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Export to Excel](https://appstore.rws.com/Plugin/27) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Export%20to%20Excel) | Batch Task API |
 | [Fail Safe Task](https://appstore.rws.com/Plugin/28) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/FailSafeTask) | Batch Task API |
 | [Trados Batch Anonymizer](https://appstore.rws.com/Plugin/38) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/SDLBatchAnonymize) | Batch Task API |
-| TQA Reporting | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/TQA) | Batch Task API |
 | [Trados Studio Target Renamer](https://appstore.rws.com/Plugin/73) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/TargetRenamer) | Batch Task API |
 | [Target Word Count](https://appstore.rws.com/Plugin/74) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/TargetWordCount) | Batch Task API |
 | [Apply Studio Project Template](https://appstore.rws.com/Plugin/20) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/ApplyStudioProjectTemplate) | Project Automation API |
