@@ -135,7 +135,7 @@ function updateSegmentStatus(segmentId, fileId, newStatus) {
 
         if (segmentCell) {
             const cellContent = segmentCell.textContent.trim();
-            if (cellContent === segmentId)
+            if (cellContent === segmentId){
                 console.info('SegmentId found');
             if (fileIdRow === fileId) {
                 console.info('FileId found');
@@ -168,6 +168,7 @@ function updateSegmentStatus(segmentId, fileId, newStatus) {
                 }
             }
         }
+    }
     });
 }
 

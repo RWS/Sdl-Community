@@ -5277,16 +5277,18 @@ namespace PostEdit.Compare
         //create report
         public void CreateReport()
         {
-            var lv = _panelCompare.listView_main;
-            var comparer = CreateProcessor();
-
-            var dialog = GetDialog(lv);
-            dialog.OriginalProjectPath = OriginalProjectPath;
-            dialog.ShowDialog();
-            if (!dialog.Saved) return;
-
             try
             {
+                var lv = _panelCompare.listView_main;
+
+                var comparer = CreateProcessor();
+                var dialog = GetDialog(lv);
+
+                dialog.OriginalProjectPath = OriginalProjectPath;
+
+                dialog.ShowDialog();
+                if (!dialog.Saved) return;
+
                 SetPriceGroup(dialog);
 
                 var pairedFiles = GetPairedFiles(dialog, lv);
@@ -5301,7 +5303,6 @@ namespace PostEdit.Compare
             }
             catch (Exception ex)
             {
-                Cursor = Cursors.Default;
                 ErrorHandler.ShowError(ex, this);
             }
             finally
@@ -5499,60 +5500,50 @@ namespace PostEdit.Compare
         {
             try
             {
-                if (RateGroup == null)
-                {
-                    RateGroup = new Settings.PriceGroup();
-                }
+                if (RateGroup == null) RateGroup = new Settings.PriceGroup();
+
                 comparer.ProgressComparer += ComparerProgress;
                 comparer.ProgressParser += ParserProgress;
                 comparer.ProgressFiles += FilesProgress;
 
-
                 ProgressWindow.ProgressDialog = new ProgressDialog();
-                try
+                ProgressWindow.ProgressDialogWorker = new BackgroundWorker();
+
+                ProgressWindow.ProgressDialogWorker.WorkerReportsProgress = true;
+
+                Exception exParsing = null;
+                var arguments = new List<object> { comparer, pairedFiles, exParsing };
+
+                ProgressWindow.ProgressDialogWorker.DoWork += (sender, e) =>
+                    arguments = worker_CreateReport_DoWork(null, new DoWorkEventArgs(arguments));
+                ProgressWindow.ProgressDialogWorker.RunWorkerCompleted +=
+                    ProgressWindowHandlers.progressWorker_RunWorkerCompleted;
+                ProgressWindow.ProgressDialogWorker.ProgressChanged +=
+                    ProgressWindowHandlers.progressWorker_ProgressChanged;
+
+                ProgressWindow.ProgressDialogWorker.RunWorkerAsync();
+
+                ProgressWindow.ProgressDialog.DialogResult = DialogResult.OK;
+                ProgressWindow.ProgressDialog.ShowDialog();
+
+                if (ProgressWindow.ProgressDialog.HitCancel)
                 {
-                    ProgressWindow.ProgressDialogWorker = new BackgroundWorker();
+                    hitCancel = true;
 
-                    ProgressWindow.ProgressDialogWorker.WorkerReportsProgress = true;
-
-                    Exception exParsing = null;
-                    var arguments = new List<object> { comparer, pairedFiles, exParsing };
-
-                    ProgressWindow.ProgressDialogWorker.DoWork +=
-                        (sender, e) => arguments = worker_CreateReport_DoWork(null, new DoWorkEventArgs(arguments));
-                    ProgressWindow.ProgressDialogWorker.RunWorkerCompleted +=
+                    ProgressWindow.ProgressDialogWorker.ProgressChanged -=
+                        ProgressWindowHandlers.progressWorker_ProgressChanged;
+                    ProgressWindow.ProgressDialogWorker.RunWorkerCompleted -=
                         ProgressWindowHandlers.progressWorker_RunWorkerCompleted;
-                    ProgressWindow.ProgressDialogWorker.ProgressChanged += ProgressWindowHandlers.progressWorker_ProgressChanged;
-
-                    ProgressWindow.ProgressDialogWorker.RunWorkerAsync();
-                    ProgressWindow.ProgressDialog.DialogResult = DialogResult.OK;
-                    ProgressWindow.ProgressDialog.ShowDialog();
-                    if (ProgressWindow.ProgressDialog.HitCancel)
-                    {
-                        hitCancel = true;
-
-                        ProgressWindow.ProgressDialogWorker.ProgressChanged -=
-                            ProgressWindowHandlers.progressWorker_ProgressChanged;
-                        ProgressWindow.ProgressDialogWorker.RunWorkerCompleted -=
-                            ProgressWindowHandlers.progressWorker_RunWorkerCompleted;
-                        ProgressWindow.ProgressDialogWorker.DoWork -=
-                            (sender, e) => arguments = worker_CreateReport_DoWork(null, new DoWorkEventArgs(arguments));
-                    }
-                    exParsing = (Exception)arguments[2];
-                    if (exParsing != null)
-                        throw exParsing;
+                    ProgressWindow.ProgressDialogWorker.DoWork -=
+                        (sender, e) => arguments = worker_CreateReport_DoWork(null, new DoWorkEventArgs(arguments));
                 }
-                finally
-                {
-                    ProgressWindow.ProgressDialog.Dispose();
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrorHandler.ShowError(ex, this);
+
+                exParsing = (Exception)arguments[2];
+                if (exParsing != null) throw exParsing;
             }
             finally
             {
+                ProgressWindow.ProgressDialog.Dispose();
                 comparer.ProgressComparer -= ComparerProgress;
                 comparer.ProgressParser -= ParserProgress;
                 comparer.ProgressFiles -= FilesProgress;
@@ -5603,7 +5594,7 @@ namespace PostEdit.Compare
                             terpResults,
                             exParsing,
                             _excelReportPathAutoSave,
-                            _sheetName
+                            _sheetName,
                         };
 
                         ProgressWindow.ProgressDialogWorker.DoWork +=
@@ -5630,7 +5621,11 @@ namespace PostEdit.Compare
                         terpResults = (List<TERp.DocumentResult>)arguments[5];
                         exParsing = (Exception)arguments[6];
                         if (exParsing != null)
+                        {
+                            MessageBox.Show(this, $"{exParsing.Message}.5693", nameof(CreateComparisonReport), MessageBoxButtons.OK, MessageBoxIcon.Error);
                             throw exParsing;
+
+                        }
                     }
                     finally
                     {
@@ -5664,7 +5659,6 @@ namespace PostEdit.Compare
                                 reportNameAutoSave.Substring(reportNameAutoSave.LastIndexOf(@"\") + 1));
 
                             File.Copy(reportFileName + ".html", reportFullPathAutoSave + ".html", true);
-
                             File.Copy(reportFileName, reportFullPathAutoSave + ".xml", true);
                             File.Delete(reportFileName);
 
@@ -5712,7 +5706,10 @@ namespace PostEdit.Compare
                         }
                     }
                 }
-                else Process.Start(reportFileName + ".html");
+                else
+                {
+                    Process.Start(reportFileName + ".html");
+                }
 
                 //clear excel report path
                 _excelReportPathAutoSave = string.Empty;
@@ -5765,10 +5762,13 @@ namespace PostEdit.Compare
             var pairedFiles = new List<PairedFiles.PairedFile>();
             if (reportWizard.radioButton_compareSelectedFiles.Checked && filesListView.SelectedIndices.Count > 0)
             {
+
                 #region  |  selected files  |
 
                 var singleLeftPath = string.Empty;
                 var singleRightPath = string.Empty;
+
+
 
                 if (filesListView.SelectedIndices.Count == 2 && reportWizard.checkBox_extendedSelection.Checked == false)
                 {
@@ -5793,6 +5793,8 @@ namespace PostEdit.Compare
                             }
                             break;
                     }
+
+
 
                     switch (dn02.SelectionType)
                     {
@@ -5980,15 +5982,6 @@ namespace PostEdit.Compare
             return pairedFiles;
         }
 
-        //private static void WebBrowserReportDocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
-        //{
-        //    //if (ReportDialog.PanelReportViewer.webBrowserReport.ReadyState == WebBrowserReadyState.Complete)
-        //    //{
-        //    //    //ReportDialog.PanelReportViewer.Invalidate();
-        //    //}
-        //}
-
-
         private void ComparerProgressReport(int filesMax, int filesCurrent, string fileNameCurrent, int fileMaximum, int fileCurrent, int filePercent, string message)
         {
             #region  |  progressObject  |
@@ -6004,14 +5997,22 @@ namespace PostEdit.Compare
 
 
 
-            var fileProgressValue = Convert.ToDecimal(fileMaximum) > 0 ? Convert.ToInt32(Convert.ToDecimal(fileCurrent) / Convert.ToDecimal(fileMaximum) * Convert.ToDecimal(100)) : 0;
+            var fileProgressValue = Convert.ToDecimal(fileMaximum) > 0
+                ? Convert.ToInt32(Convert.ToDecimal(fileCurrent) / Convert.ToDecimal(fileMaximum) *
+                                  Convert.ToDecimal(100))
+                : 0;
             ProgressObject.CurrentProgressValue = fileProgressValue;
             ProgressObject.CurrentProgressValueMessage = message;
 
 
 
-            var totalProgressValueMessage = string.Format(Resources.FormMain_ComparerProgressReport_Processing_file_0_of_1_files, filesCurrent, filesMax);
-            var totalProgressValue = Convert.ToDecimal(filesMax) > 0 ? Convert.ToInt32(Convert.ToDecimal(filesCurrent) / Convert.ToDecimal(filesMax) * Convert.ToDecimal(100)) : 0;
+            var totalProgressValueMessage =
+                string.Format(Resources.FormMain_ComparerProgressReport_Processing_file_0_of_1_files, filesCurrent,
+                    filesMax);
+            var totalProgressValue = Convert.ToDecimal(filesMax) > 0
+                ? Convert.ToInt32(Convert.ToDecimal(filesCurrent) / Convert.ToDecimal(filesMax) *
+                                  Convert.ToDecimal(100))
+                : 0;
             ProgressObject.TotalProgressValue = totalProgressValue;
 
             ProgressObject.TotalProgressValueMessage = totalProgressValueMessage;
@@ -6038,12 +6039,13 @@ namespace PostEdit.Compare
 
             try
             {
+
                 FileComparisonParagraphUnits = comparer.ProcessFiles(pairedFiles);
             }
             catch (Exception ex)
             {
                 var exParsing = ex;
-                objects[2] = exParsing;
+                MessageBox.Show($"worker_CreateReport_DoWork: {exParsing.Message}");
             }
 
             return objects;
@@ -6067,11 +6069,21 @@ namespace PostEdit.Compare
                 //create the excel report
                 if (string.IsNullOrEmpty(excelReportFilePath))
                 {
-                    var projectSettingsPath = Application.Settings.ApplicationSettingsPath;
+                    var projectSettingsPath = Application.Settings?.ApplicationSettingsPath;
+
+                    if (string.IsNullOrWhiteSpace(projectSettingsPath))
+                    {
+                        var errorMessage = $"{nameof(worker_CreateReport2_DoWork)}: projectSettingsPath is null or empty";
+                        MessageBox.Show(errorMessage);
+                        throw new ArgumentNullException(errorMessage);
+                    }
+
                     var excelReportName = Guid.NewGuid().ToString() + ".xlsx";
                     var excelReportFullPath = Path.Combine(projectSettingsPath, excelReportName);
+
                     _excelReportPathAutoSave = excelReportFullPath;
                     excelReportFilePath = excelReportFullPath;
+
                     sheetName = "Sheet1";
                     // create excel report
                     ExcelReportHelper.CreateExcelReport(excelReportFilePath, sheetName);
@@ -6128,7 +6140,6 @@ namespace PostEdit.Compare
 
 
             CreateEntriesLogReport();
-
         }
 
         private void CreateEntriesLogReport()

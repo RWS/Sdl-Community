@@ -65,7 +65,10 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
             ReportViewController.ToggleReportExplorer();
 
             if (syncEnabled)
+            {
+                ReportManager.BackUpReport(ReportViewController.GetSelectedReport());
                 ConnectEditorListener();
+            }
             else
                 DisconnectEditorListener();
         }
@@ -89,5 +92,11 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
 
         private static void EditorEventListener_StatusChanged(string newStatus, string segmentId, string fileId) =>
             ReportViewController.UpdateStatus(newStatus, segmentId, fileId);
+
+        public static void OpenReportBackupFolder()
+        {
+            var selectedReport = ReportViewController.GetSelectedReport();
+            ReportManager.OpenReportBackupFolder(selectedReport);
+        }
     }
 }

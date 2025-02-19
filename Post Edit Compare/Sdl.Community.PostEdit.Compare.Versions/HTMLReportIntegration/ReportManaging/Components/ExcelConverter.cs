@@ -20,24 +20,51 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
 
         private static void AddRows(List<HtmlNode> rows, SheetData sheetData)
         {
-            foreach (var row in rows)
+            foreach (var (row, index) in rows.Select((row, index) => (row, index)))
             {
                 var cells = row.Descendants("th").Concat(row.Descendants("td"));
                 var excelRow = new Row();
 
+                // Check if this is the second row (index 1)
+                bool isSecondRow = index == 1;
+
                 foreach (var cell in cells)
                 {
-                    var excelCell = CreateCell(cell);
+                    var excelCell = CreateCell(cell, isSecondRow);
+
+                    // Apply center alignment to the second row
+                    if (isSecondRow)
+                    {
+                        excelCell.StyleIndex = 12; // Assuming 12 is the style index for centered text
+                    }
+
                     excelRow.AppendChild(excelCell);
                 }
 
                 sheetData?.AppendChild(excelRow);
+
+                // Apply column width for the second row to make it centered horizontally
+                if (isSecondRow)
+                {
+                    var columns = sheetData.Elements<Row>().FirstOrDefault()?.Elements<Cell>().ToList();
+                    if (columns != null)
+                    {
+                        foreach (var column in columns)
+                        {
+                            // Set column width for the second row (e.g., setting a fixed width of 15)
+                            var columnWidth = new Column { Min = 1, Max = (uint)columns.Count, Width = 15, CustomWidth = true };
+                            sheetData.InsertAt(new Columns(columnWidth), 0); // Insert at the beginning of the sheet
+                        }
+                    }
+                }
             }
         }
 
-        private static Cell CreateCell(HtmlNode cell)
+
+
+        private static Cell CreateCell(HtmlNode cell, bool isSecondRow)
         {
-            var cellText = HttpUtility.HtmlDecode(cell.InnerText.Trim());
+            var cellText = HttpUtility.HtmlDecode(isSecondRow ? cell.InnerText.Replace("\n", "") : cell.InnerText.Trim());
             var cellFormatting = GetCellFormating(cellText);
             Cell excelCell;
 
@@ -113,8 +140,15 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
             // index 11: header style with green fill
             cellFormats.Append(new CellFormat { FillId = 2, ApplyFill = true });
 
+            // index 12: centered text style (apply horizontal alignment)
+            cellFormats.Append(new CellFormat
+            {
+                Alignment = new Alignment { Horizontal = HorizontalAlignmentValues.Center }
+            });
+
             return new Stylesheet(numberingFormats, fonts, fills, borders, cellStyleFormats, cellFormats);
         }
+
 
         private static CellValues GetCellFormating(string cellText)
         {

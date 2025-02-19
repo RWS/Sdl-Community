@@ -32,7 +32,17 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
     {
         protected override void Execute() => Integration.RefreshReportList();
     }
-    
+
+    [Action(nameof(OpenReportBackupFolder),
+        typeof(ReportViewController),
+        Icon = "OpenReportFolder", Name = "Open Report Backup Folder",
+        Description = "Open Report Backup Folder")]
+    [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Default)]
+    public class OpenReportBackupFolder : AbstractAction
+    {
+        protected override void Execute() => Integration.OpenReportBackupFolder();
+    }
+
     [Action(nameof(OpenReport),
         typeof(ReportViewController),
         Icon = "OpenReportFolder", Name = "Open Report Folder",

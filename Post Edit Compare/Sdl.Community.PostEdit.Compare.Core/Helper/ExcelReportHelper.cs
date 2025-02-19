@@ -45,20 +45,27 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
 
 		public static void CreateExcelReport(string filePath,string sheetName)	
 		{
-			var newFile = new FileInfo(filePath);
-			if (newFile.Exists)
-			{
-				newFile.Delete();  // ensures we create a new workbook
-				newFile = new FileInfo(filePath);
-			}
-			using (var package = new ExcelPackage(newFile))
-			{
-				// Add a new worksheet to the empty workbook
-				var worksheet = package.Workbook.Worksheets.Add(NormalizeWorksheetName(sheetName));
-				package.Save();
-			}
+            try
+            {
+                var newFile = new FileInfo(filePath);
+                if (newFile.Exists)
+                {
+                    newFile.Delete(); // ensures we create a new workbook
+                    newFile = new FileInfo(filePath);
+                }
 
-		}
+                using (var package = new ExcelPackage(newFile))
+                {
+                    // Add a new worksheet to the empty workbook
+                    var worksheet = package.Workbook.Worksheets.Add(NormalizeWorksheetName(sheetName));
+                    package.Save();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{nameof(CreateExcelReport)}: An error occurred while creating the Excel report", ex);
+            }
+        }
 
 		public static string NormalizeWorksheetName(string sheetName)
 		{

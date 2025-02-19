@@ -1,24 +1,23 @@
 ﻿using System;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 
 namespace Sdl.Community.PostEdit.Compare.Helpers
 {
     public class ErrorHandler
     {
-        public static void ShowError(Exception ex, IWin32Window owner)
+        public static void ShowError(Exception ex, IWin32Window owner, [CallerMemberName] string callingMethod = "")
         {
-            MessageBox.Show(owner, $"{ex.Message}. ({ex.InnerException?.Message}) - {Environment.StackTrace}.",
-                System.Windows.Forms.Application.ProductName,
+            MessageBox.Show(owner, $"{ex.Message}. ({ex.InnerException?.Message}) - {ex.StackTrace}.",
+                callingMethod,
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
         }
-        
-        public static void ShowError(string ex, IWin32Window owner)
-        {
-            MessageBox.Show(owner, $"{ex}) - {Environment.StackTrace}.",
-                System.Windows.Forms.Application.ProductName,
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error);
-        }
+
+        public static void ShowError(string message, IWin32Window owner, [CallerMemberName] string callingMethod = "") => MessageBox.Show(owner, 
+            message,
+            callingMethod,
+            MessageBoxButtons.OK, MessageBoxIcon.Error);
     }
 }

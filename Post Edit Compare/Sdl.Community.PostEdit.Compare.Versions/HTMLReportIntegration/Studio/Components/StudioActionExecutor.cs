@@ -109,13 +109,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
                     segmentId, true));
         }
 
-        //private ProjectFile OpenFile(string fileId, FileBasedProject fileBasedProject, bool forceOpen = false)
-        //{
-        //    //var fileBasedProject = OpenProject(projectId);
-        //    var projectFile = OpenFile(fileId, fileBasedProject, forceOpen);
-        //    return projectFile;
-        //}
-
         private ProjectFile OpenFile(string fileId, FileBasedProject project, bool forceOpen = false)
         {
             if (!forceOpen && EditorController.ActiveDocument is not null &&
