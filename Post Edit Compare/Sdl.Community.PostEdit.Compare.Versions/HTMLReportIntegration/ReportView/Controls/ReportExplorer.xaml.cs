@@ -28,5 +28,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
         {
             SelectedReportChanged?.Invoke();
         }
+
+        public void SelectLatestReport() => ReportList.SelectedIndex = ReportList.Items.Count - 1;
     }
 }

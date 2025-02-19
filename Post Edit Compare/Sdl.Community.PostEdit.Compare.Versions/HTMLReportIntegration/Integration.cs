@@ -98,5 +98,14 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
             var selectedReport = ReportViewController.GetSelectedReport();
             ReportManager.OpenReportBackupFolder(selectedReport);
         }
+
+        public static void ShowReportsView() => ReportViewController.Activate();
+
+        public static void ShowLatestReport()
+        {
+            ReportViewController.RefreshReportList();
+            ReportViewController.Activate();
+            ReportViewController.SelectLatestReport();
+        }
     }
 }

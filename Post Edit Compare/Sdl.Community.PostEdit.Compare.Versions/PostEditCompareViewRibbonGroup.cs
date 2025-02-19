@@ -13,6 +13,7 @@ using Sdl.Community.PostEdit.Compare;
 using Application = PostEdit.Compare.Cache.Application;
 using System.IO;
 using Sdl.Community.PostEdit.Compare.Core.Helper;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration;
 
 namespace Sdl.Community.PostEdit.Versions
 {
@@ -227,6 +228,7 @@ namespace Sdl.Community.PostEdit.Versions
         protected override void Execute()
         {
             Controller.CompareProjectVersions();
+            Integration.ShowLatestReport();
         }
     }
 

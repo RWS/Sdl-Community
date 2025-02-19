@@ -14,6 +14,7 @@
     <DockPanel LastChildFill="True">
 
         <ListBox ItemsSource="{Binding Reports}"
+                 x:Name="ReportList"
                  SelectionChanged="Selector_OnSelectionChanged"
                  SelectedItem="{Binding SelectedReport}">
             <ListBox.ItemTemplate>

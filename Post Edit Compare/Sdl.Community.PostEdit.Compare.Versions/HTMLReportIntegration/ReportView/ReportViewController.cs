@@ -105,5 +105,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
         private void WebView2Browser_WebMessageReceived(object sender,
             Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e) =>
             Integration.HandleReportRequest(e.WebMessageAsJson);
+
+        public void SelectLatestReport() => ReportExplorer.SelectLatestReport();
     }
 }

@@ -28,6 +28,7 @@ using Sdl.Community.PostEdit.Compare.Core.Helper;
 using System.Diagnostics;
 using Convert = Sdl.Community.PostEdit.Compare.Core.Helper.Convert;
 using Sdl.Community.PostEdit.Compare.Helpers;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace PostEdit.Compare
 {
@@ -5297,6 +5298,7 @@ namespace PostEdit.Compare
                     var hitCancel = false;
                     ParseContentFromFiles(comparer, pairedFiles, ref hitCancel);
                     CreateComparisonReport(hitCancel, comparer);
+                    Close();
                 }
                 else
                     ErrorHandler.ShowError(Resources.FormMain_CreateReport_Empty_file_comparison_list, this);
