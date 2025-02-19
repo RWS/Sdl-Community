@@ -62,10 +62,16 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
         public void SaveReport(string reportFromMemory, string selectedReportReportPath) =>
                     File.WriteAllText(selectedReportReportPath, reportFromMemory);
 
-        public void OpenReportBackupFolder(ReportInfo selectedReport) =>
-            Process.Start(selectedReport is null
-                ? Constants.PostEditCompareBackupFolder
-                : Path.Combine(Constants.PostEditCompareBackupFolder,
-                    Path.GetFileNameWithoutExtension(selectedReport.ReportPath)));
+        public void OpenReportBackupFolder(ReportInfo selectedReport)
+        {
+            if (selectedReport is not null)
+            {
+                var reportBackupFolder = Path.Combine(Constants.PostEditCompareBackupFolder,
+                    Path.GetFileNameWithoutExtension(selectedReport.ReportPath));
+
+                if (Directory.Exists(reportBackupFolder)) { Process.Start(reportBackupFolder); return; }
+            }
+            Process.Start(Constants.PostEditCompareBackupFolder);
+        }
     }
 }

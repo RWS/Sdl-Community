@@ -5274,7 +5274,7 @@ namespace PostEdit.Compare
         }
 
         public string OriginalProjectPath { get; set; }
-
+        public bool Saved { get; set; }
         //create report
         public void CreateReport()
         {
@@ -5298,6 +5298,7 @@ namespace PostEdit.Compare
                     var hitCancel = false;
                     ParseContentFromFiles(comparer, pairedFiles, ref hitCancel);
                     CreateComparisonReport(hitCancel, comparer);
+                    Saved = true;
                     Close();
                 }
                 else

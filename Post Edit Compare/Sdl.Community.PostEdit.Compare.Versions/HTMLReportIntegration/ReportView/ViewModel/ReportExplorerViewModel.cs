@@ -38,7 +38,7 @@ public class ReportExplorerViewModel : ViewModelBase
         foreach (var report in reportList)
         {
             var directoryName = new DirectoryInfo(Path.GetDirectoryName(report) ?? string.Empty).Name;
-            Reports.Add(new ReportInfo
+            Reports.Insert(0, new ReportInfo
             {
                 ReportName = $@"{directoryName}\\{Path.GetFileName(report)}",
                 ReportPath = report

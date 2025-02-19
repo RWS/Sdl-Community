@@ -227,8 +227,7 @@ namespace Sdl.Community.PostEdit.Versions
         }
         protected override void Execute()
         {
-            Controller.CompareProjectVersions();
-            Integration.ShowLatestReport();
+            if (Controller.CompareProjectVersions()) Integration.ShowLatestReport();
         }
     }
 

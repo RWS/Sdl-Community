@@ -24,11 +24,13 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             Root?.Dispose();
         }
 
-        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e) =>
             SelectedReportChanged?.Invoke();
-        }
 
-        public void SelectLatestReport() => ReportList.SelectedIndex = ReportList.Items.Count - 1;
+        public void SelectLatestReport()
+        {
+            ReportList.SelectedIndex = 0;
+            ReportList.ScrollIntoView(ReportList.SelectedItem);
+        }
     }
 }

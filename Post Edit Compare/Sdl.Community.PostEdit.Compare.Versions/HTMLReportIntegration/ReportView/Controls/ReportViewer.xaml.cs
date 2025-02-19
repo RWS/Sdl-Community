@@ -26,6 +26,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
 
         public event Action<object, CoreWebView2WebMessageReceivedEventArgs> WebMessageReceived;
 
+        private CoreWebView2Environment Environment { get; set; }
+
         public void Dispose()
         {
         }
@@ -206,14 +208,14 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             {
                 var userDataFolder = Path.Combine(Path.GetTempPath(), Assembly.GetExecutingAssembly().GetName().Name);
                 var options = new CoreWebView2EnvironmentOptions { AllowSingleSignOnUsingOSPrimaryAccount = true };
-                var environment = await CoreWebView2Environment.CreateAsync(null, userDataFolder, options);
+                Environment = await CoreWebView2Environment.CreateAsync(null, userDataFolder, options);
 
                 WebView2Browser.CreationProperties = new CoreWebView2CreationProperties
                 {
                     UserDataFolder = userDataFolder
                 };
 
-                await WebView2Browser.EnsureCoreWebView2Async(environment);
+                await EnsureBrowserIsLoaded();
             }
 
             Navigate(null);
@@ -226,12 +228,18 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
 
             try
             {
+                await EnsureBrowserIsLoaded();
                 await WebView2Browser.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(scripts);
             }
             catch
             {
                 MessageBox.Show("Failed to load scripts", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private async Task EnsureBrowserIsLoaded()
+        {
+            await WebView2Browser.EnsureCoreWebView2Async(Environment);
         }
 
         private async void WebView2Browser_OnLoaded(object sender, RoutedEventArgs e)

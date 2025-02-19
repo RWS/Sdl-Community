@@ -8,16 +8,20 @@ using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Components;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
 {
     public class Integration
     {
+        private static ReportViewController _reportViewController;
+        public static bool SyncOn { get; set; }
         private static EditorEventListener EditorEventListener { get; } = new();
         private static ReportManager ReportManager { get; } = new();
-        private static ReportViewController ReportViewController => ReportViewController.Instance;
+
+        private static ReportViewController ReportViewController => _reportViewController ??=
+            SdlTradosStudio.Application.GetController<ReportViewController>();
         private static StudioController StudioController { get; } = new();
-        private static bool SyncOn { get; set; }
 
         public static async Task ExportReport()
         {
@@ -47,6 +51,12 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
             reportFilter.InitializeReportFilter(ranges);
         }
 
+        public static void OpenReportBackupFolder()
+        {
+            var selectedReport = ReportViewController.GetSelectedReport();
+            ReportManager.OpenReportBackupFolder(selectedReport);
+        }
+
         public static void OpenReportFolder() => ReportManager.OpenReportFolder();
 
         public static void RefreshReportList() => ReportViewController.RefreshReportList();
@@ -58,6 +68,24 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
 
             ReportManager.SaveReport(reportFromMemory, selectedReport.ReportPath);
         }
+
+        public static void ShowLatestReport()
+        {
+            var dialogResult = MessageBox.Show(
+                "Would you like to navigate to the newly created report? This will stop the current project-report synchronization.",
+                "Report Created",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+            if (dialogResult == DialogResult.No) return;
+
+            ReportViewController.Activate();
+
+            ToggleReportProjectSync(false);
+
+            ReportViewController.RefreshReportList();
+            ReportViewController.SelectLatestReport();
+        }
+
+        public static void ShowReportsView() => ReportViewController.Activate();
 
         public static void ToggleReportProjectSync(bool syncEnabled)
         {
@@ -92,20 +120,5 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
 
         private static void EditorEventListener_StatusChanged(string newStatus, string segmentId, string fileId) =>
             ReportViewController.UpdateStatus(newStatus, segmentId, fileId);
-
-        public static void OpenReportBackupFolder()
-        {
-            var selectedReport = ReportViewController.GetSelectedReport();
-            ReportManager.OpenReportBackupFolder(selectedReport);
-        }
-
-        public static void ShowReportsView() => ReportViewController.Activate();
-
-        public static void ShowLatestReport()
-        {
-            ReportViewController.RefreshReportList();
-            ReportViewController.Activate();
-            ReportViewController.SelectLatestReport();
-        }
     }
 }

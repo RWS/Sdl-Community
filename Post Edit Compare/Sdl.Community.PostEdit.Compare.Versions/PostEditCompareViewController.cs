@@ -8,17 +8,19 @@ using System.Linq;
 using System.Windows.Forms;
 using PostEdit.Compare;
 using PostEdit.Compare.Model;
+using Sdl.Community.PostEdit.Compare.Helpers;
 using Sdl.Community.PostEdit.Versions.Automation;
 using Sdl.Community.PostEdit.Versions.Dialogs;
 using Sdl.Community.PostEdit.Versions.Structures;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
-using Sdl.Desktop.IntegrationApi.Notifications.Events;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using Application = System.Windows.Forms.Application;
+using MessageBox = System.Windows.Forms.MessageBox;
 using SettingsSerializer = Sdl.Community.PostEdit.Versions.Structures.SettingsSerializer;
 
 namespace Sdl.Community.PostEdit.Versions
@@ -65,7 +67,7 @@ namespace Sdl.Community.PostEdit.Versions
             IsInitialized = true;
             Initialize();
         }
-       
+
 
         public void Initialize()
         {
@@ -403,7 +405,7 @@ namespace Sdl.Community.PostEdit.Versions
 
 
         }
-        public void CompareProjectVersions()
+        public bool CompareProjectVersions()
         {
 
             if (CurrentSelectedProject == null || CurrentProjectInfo == null)
@@ -411,7 +413,7 @@ namespace Sdl.Community.PostEdit.Versions
                 SelectedProjectChanged();
             }
 
-            if (_viewContent.Value.listView_postEditCompareProjectVersions.SelectedIndices.Count != 2) return;
+            if (_viewContent.Value.listView_postEditCompareProjectVersions.SelectedIndices.Count != 2) return false;
             try
             {
                 var selectedItem01 = _viewContent.Value.listView_postEditCompareProjectVersions.SelectedItems[0];
@@ -422,8 +424,6 @@ namespace Sdl.Community.PostEdit.Versions
 
                 var dateTimeCreated01 = Helper.GetDateTimeFromString(projectVersion01.createdAt);
                 var dateTimeCreated02 = Helper.GetDateTimeFromString(projectVersion02.createdAt);
-
-
 
                 var settings = new AutomationComunicationSettings();
 
@@ -445,10 +445,12 @@ namespace Sdl.Community.PostEdit.Versions
                 var postEditCompare = new FormMain(mModel);
                 postEditCompare.OriginalProjectPath = CurrentSelectedProject?.FilePath;
                 postEditCompare.ShowDialog();
-   }
+                return postEditCompare.Saved;
+            }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ErrorHandler.ShowError(ex.Message, null);
+                return false;
             }
         }
         public void CreateNewProjectVersion(bool fromSdlProjectSelection)
@@ -587,7 +589,7 @@ namespace Sdl.Community.PostEdit.Versions
         }
         public void ViewProjectVersionInWindowsExplorer()
         {
-            if (CurrentSelectedProject == null) 
+            if (CurrentSelectedProject == null)
                 return;
 
             if (_viewContent.Value.listView_postEditCompareProjectVersions.SelectedIndices.Count <= 0) return;
@@ -631,10 +633,10 @@ namespace Sdl.Community.PostEdit.Versions
         }
         public void EditProjectVersion()
         {
-            if (CurrentSelectedProject == null) 
+            if (CurrentSelectedProject == null)
                 return;
 
-            if (_viewContent.Value.listView_postEditCompareProjectVersions.SelectedIndices.Count <= 0) 
+            if (_viewContent.Value.listView_postEditCompareProjectVersions.SelectedIndices.Count <= 0)
                 return;
 
             try
@@ -683,10 +685,10 @@ namespace Sdl.Community.PostEdit.Versions
         }
         public void RemoveProjectVersions()
         {
-            if (CurrentSelectedProject == null) 
+            if (CurrentSelectedProject == null)
                 return;
 
-            if (_viewContent.Value.listView_postEditCompareProjectVersions.SelectedIndices.Count <= 0) 
+            if (_viewContent.Value.listView_postEditCompareProjectVersions.SelectedIndices.Count <= 0)
                 return;
 
             var dialogResult = MessageBox.Show(
@@ -787,14 +789,14 @@ namespace Sdl.Community.PostEdit.Versions
             if (CurrentSelectedProject == null)
                 return;
 
-            if (_viewNavigation.Value.treeView_navigation.SelectedNode == null) 
+            if (_viewNavigation.Value.treeView_navigation.SelectedNode == null)
                 return;
 
             var dr = MessageBox.Show(
                 PluginResources.RemoveAllProjectVersions
                 , Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            if (dr != DialogResult.Yes) 
+            if (dr != DialogResult.Yes)
                 return;
 
             if (CurrentProjectInfo == null)
@@ -813,7 +815,7 @@ namespace Sdl.Community.PostEdit.Versions
                 for (var i = 0; i < Settings.projects.Count; i++)
                 {
                     var settingsProject = Settings.projects[i];
-                    if (string.Compare(project.id, settingsProject.id, StringComparison.OrdinalIgnoreCase) != 0) 
+                    if (string.Compare(project.id, settingsProject.id, StringComparison.OrdinalIgnoreCase) != 0)
                         continue;
 
                     foreach (var projectVersion in settingsProject.projectVersions)
@@ -896,7 +898,7 @@ namespace Sdl.Community.PostEdit.Versions
 
 
                 #region  |  get settings project reference  |
-                
+
                 var currentProject = Settings.projects.FirstOrDefault(project => string.Compare(project.id, partentProjectId, StringComparison.OrdinalIgnoreCase) == 0);
 
                 #endregion
@@ -919,10 +921,10 @@ namespace Sdl.Community.PostEdit.Versions
 
                 restoreProjectVersion.ShowDialog();
 
-                if (!restoreProjectVersion.Saved) 
+                if (!restoreProjectVersion.Saved)
                     return;
 
-                if (currentProject == null) 
+                if (currentProject == null)
                     return;
 
                 currentProject.projectVersions.Add(restoreProjectVersion.ProjectVersionNew);
@@ -1095,56 +1097,56 @@ namespace Sdl.Community.PostEdit.Versions
                     _viewContent.Value.label_TOTAL_PROJECT_VERSIONS_SELECTED.Text = "0";
                     _viewContent.Value.listView_postEditCompareProjectVersions.Items.Clear();
 
-					#region  |  add project versions to list  |
-					AddProjectVersionsToList(project.projectVersions);
-					//foreach (var projectVersion in project.projectVersions)
-					//{
-					//    var item = _viewContent.Value.listView_postEditCompareProjectVersions.Items.Add(projectVersion.id);
-					//    item.SubItems.Add(projectVersion.name);
-					//    item.SubItems.Add(projectVersion.description);
-					//    item.SubItems.Add(projectVersion.createdAt);
+                    #region  |  add project versions to list  |
+                    AddProjectVersionsToList(project.projectVersions);
+                    //foreach (var projectVersion in project.projectVersions)
+                    //{
+                    //    var item = _viewContent.Value.listView_postEditCompareProjectVersions.Items.Add(projectVersion.id);
+                    //    item.SubItems.Add(projectVersion.name);
+                    //    item.SubItems.Add(projectVersion.description);
+                    //    item.SubItems.Add(projectVersion.createdAt);
 
-					//    var sourceLanguage = projectVersion.sourceLanguage.name;
-					//    var targetLanguages = projectVersion.targetLanguages.Aggregate(string.Empty, (current, language) => current + (current.Trim() != string.Empty ? ", " : string.Empty) + language.name);
+                    //    var sourceLanguage = projectVersion.sourceLanguage.name;
+                    //    var targetLanguages = projectVersion.targetLanguages.Aggregate(string.Empty, (current, language) => current + (current.Trim() != string.Empty ? ", " : string.Empty) + language.name);
 
-					//    item.SubItems.Add(sourceLanguage);
-					//    item.SubItems.Add(targetLanguages);
-					//    item.SubItems.Add(projectVersion.filesCopiedCount.ToString());
-					//    item.SubItems.Add(projectVersion.shallowCopy.ToString());
+                    //    item.SubItems.Add(sourceLanguage);
+                    //    item.SubItems.Add(targetLanguages);
+                    //    item.SubItems.Add(projectVersion.filesCopiedCount.ToString());
+                    //    item.SubItems.Add(projectVersion.shallowCopy.ToString());
 
-					//    var fileCount = string.Format(PluginResources._0_translatable_1_reference, projectVersion.translatableCount, projectVersion.referenceCount);
-					//    item.SubItems.Add(fileCount);
-
-
-					//    item.SubItems.Add(projectVersion.location);
-					//    item.Tag = projectVersion;
+                    //    var fileCount = string.Format(PluginResources._0_translatable_1_reference, projectVersion.translatableCount, projectVersion.referenceCount);
+                    //    item.SubItems.Add(fileCount);
 
 
-					//    if (Directory.Exists(projectVersion.location))
-					//    {
-					//        if (projectVersion.filesCopiedCount == 0)
-					//        {
-					//            item.ImageKey = @"Warning";
-					//        }
-					//        else if (projectVersion.translatableCount > 0)
-					//        {
-					//            item.ImageKey = projectVersion.shallowCopy ? "Blue" : "Green";
-					//        }
-					//        else
-					//        {
-					//            item.ImageKey = @"Yellow";
-					//        }
-					//    }
-					//    else
-					//    {
-					//        item.ImageKey = @"Red";
-					//    }
+                    //    item.SubItems.Add(projectVersion.location);
+                    //    item.Tag = projectVersion;
 
 
-					//}
-					#endregion
+                    //    if (Directory.Exists(projectVersion.location))
+                    //    {
+                    //        if (projectVersion.filesCopiedCount == 0)
+                    //        {
+                    //            item.ImageKey = @"Warning";
+                    //        }
+                    //        else if (projectVersion.translatableCount > 0)
+                    //        {
+                    //            item.ImageKey = projectVersion.shallowCopy ? "Blue" : "Green";
+                    //        }
+                    //        else
+                    //        {
+                    //            item.ImageKey = @"Yellow";
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+                    //        item.ImageKey = @"Red";
+                    //    }
 
-					_viewContent.Value.label_TOTAL_PROJECT_VERSIONS.Text = _viewContent.Value.listView_postEditCompareProjectVersions.Items.Count.ToString();
+
+                    //}
+                    #endregion
+
+                    _viewContent.Value.label_TOTAL_PROJECT_VERSIONS.Text = _viewContent.Value.listView_postEditCompareProjectVersions.Items.Count.ToString();
 
 
                 }
@@ -1160,54 +1162,54 @@ namespace Sdl.Community.PostEdit.Versions
         }
 
 
-		 public void AddProjectVersionsToList(List<ProjectVersion> projectVersions)
-		{
-			foreach (var projectVersion in projectVersions)
-			{
-				var item = _viewContent.Value.listView_postEditCompareProjectVersions.Items.Add(projectVersion.id);
-				item.SubItems.Add(projectVersion.name);
-				item.SubItems.Add(projectVersion.description);
-				item.SubItems.Add(projectVersion.createdAt);
+        public void AddProjectVersionsToList(List<ProjectVersion> projectVersions)
+        {
+            foreach (var projectVersion in projectVersions)
+            {
+                var item = _viewContent.Value.listView_postEditCompareProjectVersions.Items.Add(projectVersion.id);
+                item.SubItems.Add(projectVersion.name);
+                item.SubItems.Add(projectVersion.description);
+                item.SubItems.Add(projectVersion.createdAt);
 
-				var sourceLanguage = projectVersion.sourceLanguage.name;
-				var targetLanguages = projectVersion.targetLanguages.Aggregate(string.Empty, (current, language) => current + (current.Trim() != string.Empty ? ", " : string.Empty) + language.name);
+                var sourceLanguage = projectVersion.sourceLanguage.name;
+                var targetLanguages = projectVersion.targetLanguages.Aggregate(string.Empty, (current, language) => current + (current.Trim() != string.Empty ? ", " : string.Empty) + language.name);
 
-				item.SubItems.Add(sourceLanguage);
-				item.SubItems.Add(targetLanguages);
-				item.SubItems.Add(projectVersion.filesCopiedCount.ToString());
-				item.SubItems.Add(projectVersion.shallowCopy.ToString());
+                item.SubItems.Add(sourceLanguage);
+                item.SubItems.Add(targetLanguages);
+                item.SubItems.Add(projectVersion.filesCopiedCount.ToString());
+                item.SubItems.Add(projectVersion.shallowCopy.ToString());
 
-				var fileCount = string.Format(PluginResources._0_translatable_1_reference, projectVersion.translatableCount, projectVersion.referenceCount);
-				item.SubItems.Add(fileCount);
-
-
-				item.SubItems.Add(projectVersion.location);
-				item.Tag = projectVersion;
+                var fileCount = string.Format(PluginResources._0_translatable_1_reference, projectVersion.translatableCount, projectVersion.referenceCount);
+                item.SubItems.Add(fileCount);
 
 
-				if (Directory.Exists(projectVersion.location))
-				{
-					if (projectVersion.filesCopiedCount == 0)
-					{
-						item.ImageKey = @"Warning";
-					}
-					else if (projectVersion.translatableCount > 0)
-					{
-						item.ImageKey = projectVersion.shallowCopy ? "Blue" : "Green";
-					}
-					else
-					{
-						item.ImageKey = @"Yellow";
-					}
-				}
-				else
-				{
-					item.ImageKey = @"Red";
-				}
+                item.SubItems.Add(projectVersion.location);
+                item.Tag = projectVersion;
 
 
-			}
-		}
+                if (Directory.Exists(projectVersion.location))
+                {
+                    if (projectVersion.filesCopiedCount == 0)
+                    {
+                        item.ImageKey = @"Warning";
+                    }
+                    else if (projectVersion.translatableCount > 0)
+                    {
+                        item.ImageKey = projectVersion.shallowCopy ? "Blue" : "Green";
+                    }
+                    else
+                    {
+                        item.ImageKey = @"Yellow";
+                    }
+                }
+                else
+                {
+                    item.ImageKey = @"Red";
+                }
+
+
+            }
+        }
         private void ViewControlAdd(ProjectVersion projectVersion)
         {
             try

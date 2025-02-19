@@ -1,14 +1,19 @@
-﻿using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Controls;
+﻿using Sdl.Community.PostEdit.Compare.Helpers;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Controls;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Utilities;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi.Internal;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 {
@@ -22,7 +27,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
     )]
     public class ReportViewController : AbstractViewController
     {
-        public static ReportViewController Instance { get; set; }
         private ReportExplorer ReportExplorer { get; set; }
         private ReportExplorerViewModel ReportExplorerViewModel { get; set; }
         private ReportViewer ReportViewer { get; set; }
@@ -31,12 +35,11 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 
         public async Task<string> GetNonInteractiveReport() => await ReportViewer.GetNonInteractiveReport();
 
-        public ReportInfo GetSelectedReport()
-        {
-            return ReportExplorerViewModel.SelectedReport;
-        }
+        public ReportInfo GetSelectedReport() => ReportExplorerViewModel.SelectedReport;
 
         public void RefreshReportList() => ReportExplorerViewModel.RefreshReportList();
+
+        public void SelectLatestReport() => ReportExplorer.SelectLatestReport();
 
         public async Task ToggleFilter(SegmentFilter segmentFilter)
         {
@@ -50,7 +53,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
             }
             else
             {
-                ReportExplorer.IsEnabled = true;
+                if (!Integration.SyncOn) ReportExplorer.IsEnabled = true;
                 await ReportViewer.ShowAllSegments();
             }
         }
@@ -71,7 +74,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
         {
             InitializeControls();
             AttachEvents();
-            Instance = this;
         }
 
         private void AttachEvents()
@@ -82,13 +84,20 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 
         private async void ExplorerOnSelectedReportChanged()
         {
-            await ReportViewer.Navigate(ReportExplorerViewModel.SelectedReport?.ReportPath);
-            await Task.Delay(500);
+            try
+            {
+                await ReportViewer.Navigate(ReportExplorerViewModel.SelectedReport?.ReportPath);
+                await Task.Delay(500);
+                var projectId = await ReportViewer.GetProjectId();
+                if (projectId == null) return;
 
-            var projectId = await ReportViewer.GetProjectId();
-            if (projectId == null) return;
-
-            Integration.InitializeReportFilter(projectId);
+                Integration.InitializeReportFilter(projectId);
+            }
+            catch (Exception e)
+            {
+                ReportExplorerViewModel.SelectedReport = null;
+                ErrorHandler.ShowError($"Error loading the selected report: {e.Message}", null);
+            }
         }
 
         private void InitializeControls()
@@ -105,7 +114,5 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
         private void WebView2Browser_WebMessageReceived(object sender,
             Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e) =>
             Integration.HandleReportRequest(e.WebMessageAsJson);
-
-        public void SelectLatestReport() => ReportExplorer.SelectLatestReport();
     }
 }
