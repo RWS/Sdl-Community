@@ -39,6 +39,11 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
     [ActionLayout(typeof(SynchronizationRibbonGroup), 10, DisplayType.Large)]
     public class SyncReportProjectOn : AbstractAction
     {
+        public SyncReportProjectOn()
+        {
+            Enabled = false;
+        }
+
         protected override void Execute()
         {
             SdlTradosStudio.Application.GetAction<SyncReportProjectOff>().Enabled = true;

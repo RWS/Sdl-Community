@@ -79,18 +79,31 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
 
         private static void AddRowToWorksheet(ExcelWorksheet ws, HtmlNodeCollection cells, int excelRow)
         {
-            var excelCol = 1;
+            int excelCol = 1;
             foreach (var cell in cells)
             {
                 var cellText = HttpUtility.HtmlDecode(cell.InnerText.Trim());
                 var cellRef = ws.Cells[excelRow, excelCol];
 
-                if (cellText.EndsWith("%") && double.TryParse(cellText.TrimEnd('%'), NumberStyles.Any, CultureInfo.InvariantCulture, out var percentageValue))
+                if (excelRow > 1 && excelCol == 6)
+                {
+                    // Extract inner HTML and parse it to get text content from <span> elements
+                    var innerHtml = cell.InnerHtml;
+                    var doc = new HtmlDocument();
+                    doc.LoadHtml(innerHtml);
+                    var statusParts = doc.DocumentNode.SelectNodes("//span")
+                                                      .Select(span => HttpUtility.HtmlDecode(span.InnerText.Trim()))
+                                                      .Where(part => !string.IsNullOrWhiteSpace(part))
+                                                      .ToArray();
+                    cellText = string.Join("\n", statusParts);
+                }
+
+                if (cellText.EndsWith("%") && double.TryParse(cellText.TrimEnd('%'), NumberStyles.Any, CultureInfo.InvariantCulture, out double percentageValue))
                 {
                     cellRef.Value = percentageValue / 100;
                     cellRef.Style.Numberformat.Format = "0.00%";
                 }
-                else if (double.TryParse(cellText, NumberStyles.Any, CultureInfo.InvariantCulture, out var numericValue))
+                else if (double.TryParse(cellText, NumberStyles.Any, CultureInfo.InvariantCulture, out double numericValue))
                 {
                     cellRef.Value = numericValue;
                     cellRef.Style.Numberformat.Format = "#,##0.00";

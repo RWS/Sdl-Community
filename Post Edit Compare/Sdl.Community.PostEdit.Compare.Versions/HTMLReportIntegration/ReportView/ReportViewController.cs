@@ -78,25 +78,27 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 
         private void AttachEvents()
         {
-            ReportExplorer.SelectedReportChanged += ExplorerOnSelectedReportChanged;
+            ReportExplorer.SelectedReportChanged += Explorer_SelectedReportChanged;
             ReportViewer.WebMessageReceived += WebView2Browser_WebMessageReceived;
         }
 
-        private async void ExplorerOnSelectedReportChanged()
+        private async void Explorer_SelectedReportChanged()
         {
             try
             {
+                var selectedReport = GetSelectedReport();
+                Integration.ToggleSyncRibbon(selectedReport is not null);
+
                 await ReportViewer.Navigate(ReportExplorerViewModel.SelectedReport?.ReportPath);
                 await Task.Delay(500);
-                var projectId = await ReportViewer.GetProjectId();
-                if (projectId == null) return;
 
+                var projectId = await ReportViewer.GetProjectId();
                 Integration.InitializeReportFilter(projectId);
             }
             catch (Exception e)
             {
                 ReportExplorerViewModel.SelectedReport = null;
-                ErrorHandler.ShowError($"Error loading the selected report: {e.Message}", null);
+                ErrorHandler.ShowError($"Error loading the selected report: {e.Message}");
             }
         }
 

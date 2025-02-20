@@ -4,6 +4,7 @@ using Sdl.Community.PostEdit.Compare.Helpers;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Components;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -23,6 +24,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
 
         private static ReportViewController ReportViewController => _reportViewController ??=
             SdlTradosStudio.Application.GetController<ReportViewController>();
+
         private static StudioController StudioController { get; } = new();
 
         public static async Task ExportReport()
@@ -61,6 +63,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
 
         public static void InitializeReportFilter(string projectId)
         {
+            if (projectId == null) return;
+
             var reportFilter = SdlTradosStudio.Application.GetController<ReportViewFilterController>();
             reportFilter.Activate();
 
@@ -138,5 +142,10 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
 
         private static void EditorEventListener_StatusChanged(string newStatus, string segmentId, string fileId) =>
             ReportViewController.UpdateStatus(newStatus, segmentId, fileId);
+
+        public static void ToggleSyncRibbon(bool state)
+        {
+            SdlTradosStudio.Application.GetAction<SyncReportProjectOn>().Enabled = state;
+        }
     }
 }
