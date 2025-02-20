@@ -12,84 +12,138 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
 {
     public class ExcelConverter
     {
+        private static string ColumnIndexToLetter(int colIndex)
+        {
+            // Convert 1-based column index to Excel column letters
+            string col = "";
+            while (colIndex > 0)
+            {
+                int remainder = (colIndex - 1) % 26;
+                col = (char)(65 + remainder) + col;
+                colIndex = (colIndex - 1) / 26;
+            }
+            return col;
+        }
+
+
+
         public static void WriteExcelSpreadsheet(string htmlReport, string outputPath)
         {
             var tables = ExtractTableWithId(htmlReport);
             SaveTableToExcel(tables, outputPath);
         }
 
-        private static void AddRows(List<HtmlNode> rows, SheetData sheetData)
+        private static void AddRows(List<HtmlNode> rows, SheetData sheetData, WorksheetPart worksheetPart)
         {
-            foreach (var (row, index) in rows.Select((row, index) => (row, index)))
+            // Determine how many columns exist by checking the first row (header).
+            var headerCells = rows[0].Descendants("th").Concat(rows[0].Descendants("td")).Count();
+            string lastColRef = ColumnIndexToLetter(headerCells); // For merging (e.g., A2:F2)
+
+            // Ensure <MergeCells> exists in the worksheet for merging
+            var mergeCells = worksheetPart.Worksheet.GetFirstChild<MergeCells>();
+            if (mergeCells == null)
             {
-                var cells = row.Descendants("th").Concat(row.Descendants("td"));
+                mergeCells = new MergeCells();
+                worksheetPart.Worksheet.InsertAfter(mergeCells, worksheetPart.Worksheet.GetFirstChild<SheetData>());
+            }
+
+            for (int index = 0; index < rows.Count; index++)
+            {
+                var rowNode = rows[index];
+                var cells = rowNode.Descendants("th").Concat(rowNode.Descendants("td")).ToList();
                 var excelRow = new Row();
 
-                // Check if this is the second row (index 1)
-                bool isSecondRow = index == 1;
-
-                foreach (var cell in cells)
+                // If this is the second row (index == 1), merge across all columns
+                if (index == 1 && headerCells > 1)
                 {
-                    var excelCell = CreateCell(cell, isSecondRow);
+                    // Combine all cell text into one
+                    string mergedText = string.Join(" ", cells.Select(c => c.InnerText.Trim()));
 
-                    // Apply center alignment to the second row
-                    if (isSecondRow)
-                    {
-                        excelCell.StyleIndex = 12; // Assuming 12 is the style index for centered text
-                    }
+                    // Create one wide cell
+                    var mergedCell = CreateCellInternal(mergedText, true /* isSecondRow */, isMerged: true);
+                    excelRow.AppendChild(mergedCell);
 
-                    excelRow.AppendChild(excelCell);
+                    // Merge from A2 to [lastColRef]2
+                    string mergeRef = $"A2:{lastColRef}2";
+                    mergeCells.AppendChild(new MergeCell { Reference = mergeRef });
                 }
-
-                sheetData?.AppendChild(excelRow);
-
-                // Apply column width for the second row to make it centered horizontally
-                if (isSecondRow)
+                else
                 {
-                    var columns = sheetData.Elements<Row>().FirstOrDefault()?.Elements<Cell>().ToList();
-                    if (columns != null)
+                    // Normal row handling
+                    bool isSecondRow = (index == 1);
+                    foreach (var cell in cells)
                     {
-                        foreach (var column in columns)
-                        {
-                            // Set column width for the second row (e.g., setting a fixed width of 15)
-                            var columnWidth = new Column { Min = 1, Max = (uint)columns.Count, Width = 15, CustomWidth = true };
-                            sheetData.InsertAt(new Columns(columnWidth), 0); // Insert at the beginning of the sheet
-                        }
+                        var excelCell = CreateCell(cell, isSecondRow);
+                        excelRow.AppendChild(excelCell);
                     }
                 }
+
+                sheetData.AppendChild(excelRow);
             }
         }
+
+
 
 
 
         private static Cell CreateCell(HtmlNode cell, bool isSecondRow)
         {
-            var cellText = HttpUtility.HtmlDecode(isSecondRow ? cell.InnerText.Replace("\n", "") : cell.InnerText.Trim());
-            var cellFormatting = GetCellFormating(cellText);
-            Cell excelCell;
+            // Original logic to handle text vs. percent
+            string rawText = HttpUtility.HtmlDecode(cell.InnerText.Trim());
+            bool isNumeric = double.TryParse(rawText.Replace("%", "").Trim(),
+                NumberStyles.Any,
+                CultureInfo.InvariantCulture,
+                out double numValue);
 
-            if (cellFormatting == CellValues.Number && cellText.Contains('%'))
+            // Build the new cell
+            var excelCell = new Cell();
+
+            // If numeric, store as number
+            if (isNumeric && !rawText.Contains('%'))
             {
-                var percentage = double.Parse(cellText.TrimEnd('%'), NumberStyles.Any,
-                    CultureInfo.InvariantCulture) / 100;
-                excelCell = new Cell
-                {
-                    CellValue = new CellValue(percentage.ToString(CultureInfo.InvariantCulture)),
-                    StyleIndex = 10,
-                    DataType = CellValues.Number
-                };
+                excelCell.DataType = CellValues.Number;
+                excelCell.CellValue = new CellValue(numValue.ToString(CultureInfo.InvariantCulture));
+            }
+            // If numeric with %, treat as fraction
+            else if (isNumeric && rawText.Contains('%'))
+            {
+                double fraction = numValue / 100.0;
+                excelCell.DataType = CellValues.Number;
+                excelCell.CellValue = new CellValue(fraction.ToString(CultureInfo.InvariantCulture));
+                excelCell.StyleIndex = 10; // e.g., custom percent style
             }
             else
             {
-                excelCell = new Cell { CellValue = new CellValue(cellText) };
-                if (cellFormatting == CellValues.String)
-                    excelCell.DataType = CellValues.String;
+                // Default to string
+                excelCell.DataType = CellValues.String;
+                excelCell.CellValue = new CellValue(rawText);
             }
 
+            // If it's a header cell (th), apply header style (e.g., index = 11)
             if (cell.Name.Equals("th", StringComparison.OrdinalIgnoreCase))
-                excelCell.StyleIndex = 11; // Apply header (green) style
+                excelCell.StyleIndex = 11;
+
+            // If it's the second row (file name row), we want it centered
+            // but only if not merged. Merged logic is handled in AddRows.
+            if (isSecondRow && excelCell.StyleIndex == 0)
+                excelCell.StyleIndex = 12; // Centered text style
+
             return excelCell;
         }
+        private static Cell CreateCellInternal(string text, bool isSecondRow, bool isMerged)
+        {
+            var cell = new Cell();
+            cell.DataType = CellValues.String;
+            cell.CellValue = new CellValue(text);
+
+            // If second row, center horizontally
+            if (isSecondRow)
+                cell.StyleIndex = 12;
+
+            // If merged, there's only one cell in that row, so no numeric detection needed
+            return cell;
+        }
+
 
         private static List<string> ExtractTableWithId(string html)
         {
@@ -205,7 +259,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
 
                 if (rows == null || !rows.Any()) continue; // Skip empty or missing rows
 
-                AddRows(rows, sheetData); // Add rows to the sheet
+                AddRows(rows, sheetData, worksheetPart); // Add rows to the sheet
             }
 
             workbookPart.Workbook.Save(); // Ensure workbook saves after all sheets are added
