@@ -21,7 +21,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
 
         private static List<HtmlNode> ExtractTableWithId(string html)
         {
-            if (string.IsNullOrWhiteSpace(html)) throw new ArgumentNullException("HTML cannot be null. Please select a report");
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
 
@@ -30,7 +29,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
                     .Any(th => th.InnerText.Trim().Equals("ID", StringComparison.OrdinalIgnoreCase)) ?? false)
                 .ToList();
 
-            if (!tables.Any()) throw new ArgumentNullException("HTML cannot be null. Please select a report");
             return tables;
         }
 

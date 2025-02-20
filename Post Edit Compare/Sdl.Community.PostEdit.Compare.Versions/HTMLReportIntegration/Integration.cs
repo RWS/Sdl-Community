@@ -1,11 +1,13 @@
 ﻿using Newtonsoft.Json.Linq;
 using Sdl.Community.PostEdit.Compare.Core.Helper;
+using Sdl.Community.PostEdit.Compare.Helpers;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Components;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -25,8 +27,24 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration
 
         public static async Task ExportReport()
         {
-            var report = await ReportViewController.GetNonInteractiveReport();
-            ReportManager.ExportReport(report);
+            try
+            {
+                if (ReportViewController.GetSelectedReport() == null) throw new ArgumentNullException();
+                var report = await ReportViewController.GetNonInteractiveReport();
+                ReportManager.ExportReport(report);
+            }
+            catch (ArgumentException _)
+            {
+                ErrorHandler.ShowError("Please select a report");
+            }
+            catch (InvalidOperationException _)
+            {
+                ErrorHandler.ShowError("Please select a report with at least one change");
+            }
+            catch (Exception ex)
+            {
+                ErrorHandler.ShowError(ex);
+            }
         }
 
         public static void FilterSegments(SegmentFilter segmentFilter) =>
