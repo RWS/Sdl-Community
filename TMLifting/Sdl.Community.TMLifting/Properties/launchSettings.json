@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "TS24Beta": {
-      "commandName": "Executable",
-      "executablePath": "C:\\Program Files (x86)\\Trados\\Trados Studio\\Studio18Beta\\SDLTradosStudio.exe"
-    }
-  }
-}
