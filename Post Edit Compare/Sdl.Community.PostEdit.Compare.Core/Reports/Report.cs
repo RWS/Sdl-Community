@@ -11,9 +11,9 @@ using Sdl.Community.PostEdit.Compare.Core.Helper;
 using Sdl.Community.PostEdit.Compare.Core.SDLXLIFF;
 using Sdl.Community.PostEdit.Compare.DAL.ExcelTableModel;
 using Sdl.Community.PostEdit.Compare.DAL.PostEditModificationsAnalysis;
-using Sdl.LanguagePlatform.Core;
-using Sdl.LanguagePlatform.TranslationMemory;
 using Convert = Sdl.Community.PostEdit.Compare.Core.Helper.Convert;
+using Sdl.ProjectAutomation.FileBased;
+using System.Windows;
 
 namespace Sdl.Community.PostEdit.Compare.Core.Reports
 {
@@ -36,6 +36,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
             Dictionary<Comparer.FileUnitProperties, Dictionary<string, Dictionary<string, Comparer.ComparisonParagraphUnit>>> fileComparisonFileParagraphUnits,
             bool transformReport, Settings.PriceGroup priceGroup, out List<TERp.DocumentResult> terpResults)
         {
+            var error = "";
+
             terpResults = new List<TERp.DocumentResult>();
             if (Processor.Settings.ShowSegmentTerp && File.Exists(Processor.Settings.JavaExecutablePath))
                 terpResults = TERp.Process(reportFilePath
@@ -1373,6 +1375,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                             xmlTxtWriter.WriteStartElement("segments");
                             xmlTxtWriter.WriteAttributeString("count", paragraphFilteredSegmentCount.ToString());
 
+                            
                             foreach (var comparisonSegmentUnit in comparisonParagraphUnit.ComparisonSegmentUnits)
                             {
                                 if (((!comparisonSegmentUnit.SegmentIsLocked || !Processor.Settings.ReportFilterLockedSegments) && comparisonSegmentUnit.SegmentIsLocked)
@@ -1393,7 +1396,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                                     , progressCurrentMessage);
 
 
-                                WriteSegment(xmlTxtWriter
+                                error = WriteSegment(xmlTxtWriter
                                     , fileComparisonFileParagraphUnit.Key
                                     , comparisonParagraphUnit
                                     , comparisonSegmentUnit, pempDict
@@ -1965,6 +1968,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                 ReportUtils.TransformXmlReport(reportFilePath);
             }
 
+            if (!string.IsNullOrWhiteSpace(error))
+                MessageBox.Show(error, nameof(CreateXmlReport), MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
         private static void InnerFileFilteredParagraphCount(Dictionary<string, Comparer.ComparisonParagraphUnit> comparisonParagraphUnits, out int innerFileFilteredParagraphCount, out int innerFileFilteredSegmentCount)
@@ -2524,7 +2529,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
         }
 
 
-        private static void WriteSegment(XmlWriter xmlTxtWriter
+        private static string WriteSegment(XmlWriter xmlTxtWriter
             , Comparer.FileUnitProperties fileComparisonFileUnitProperties
             , Comparer.ComparisonParagraphUnit comparisonParagraphUnit
             , Comparer.ComparisonSegmentUnit comparisonSegmentUnit
@@ -2534,11 +2539,39 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
             if (comparisonSegmentUnit.SegmentTextUpdated && string.Compare(comparisonSegmentUnit.TranslationOriginTypeUpdated, "interactive", StringComparison.OrdinalIgnoreCase) == 0)
                 comparisonSegmentUnit.TranslationStatusUpdated = string.Empty;
 
-
             xmlTxtWriter.WriteStartElement("segment");
             xmlTxtWriter.WriteAttributeString("segmentId", comparisonSegmentUnit.SegmentId);
 
-            
+            var projectFilePath = fileComparisonFileUnitProperties.FilePathOriginal;
+            if (string.IsNullOrWhiteSpace(projectFilePath))
+            {
+                var fileUnitProperties = fileComparisonFileUnitProperties.ComparisonFileParagraphUnits;
+                if (fileUnitProperties.Any())
+                {
+                    var filePathOriginal = fileUnitProperties.Keys.FirstOrDefault();
+                    filePathOriginal = filePathOriginal?.Replace(
+                        fileComparisonFileUnitProperties.SourceLanguageIdOriginal,
+                        fileComparisonFileUnitProperties.TargetLanguageIdOriginal);
+
+                    filePathOriginal = $"{filePathOriginal}.sdlxliff";
+                    fileComparisonFileUnitProperties.FilePathOriginal = filePathOriginal;
+                }
+            }
+
+            var error = "";
+            if (!string.IsNullOrWhiteSpace(projectFilePath))
+            {
+                var originalProjectId = FileIdentifier.GetProjectId(projectFilePath);
+                var fileInfo = FileIdentifier.GetFileInfo(projectFilePath);
+
+                if (string.IsNullOrWhiteSpace(originalProjectId) || string.IsNullOrWhiteSpace(fileInfo))
+                    error = "Original files could not be identified. Synchronization features in the report will not be available.";
+                else
+                {
+                    xmlTxtWriter.WriteAttributeString("fileId", fileInfo);
+                    xmlTxtWriter.WriteAttributeString("projectId", originalProjectId);
+                }
+            }
 
             xmlTxtWriter.WriteAttributeString("tmName", comparisonSegmentUnit.TmName);
             xmlTxtWriter.WriteAttributeString("tmTranslationUnit", comparisonSegmentUnit.TmTranslationUnit);
@@ -3094,7 +3127,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
             var trgu = ReportUtils.GetCompiledSegmentText(comparisonSegmentUnit.TargetUpdated, true);
 
             TERp.SegmentData terpSegmentData = null;
-            var terpResult = terpResults.SingleOrDefault(a => a.OriginalDocumentPath == fileComparisonFileUnitProperties.FilePathOriginal && a.UpdatedDocumentPath == fileComparisonFileUnitProperties.FilePathUpdated);
+            var terpResult = terpResults.SingleOrDefault(a => a.OriginalDocumentPath == projectFilePath && a.UpdatedDocumentPath == fileComparisonFileUnitProperties.FilePathUpdated);
 
             if (terpResult != null)
                 terpSegmentData = terpResult.SegmentDatas.SingleOrDefault(a => a.ParagraphId == comparisonParagraphUnit.ParagraphId && a.SegmentId == comparisonSegmentUnit.SegmentId);
@@ -3190,8 +3223,10 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 
             xmlTxtWriter.WriteEndElement();//segment
 
-
+            return error;
         }
+
+
 
 
         private class PEMp

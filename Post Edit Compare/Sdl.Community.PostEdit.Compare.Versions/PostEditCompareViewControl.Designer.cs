@@ -73,9 +73,10 @@ namespace Sdl.Community.PostEdit.Versions
             this.panel1.Controls.Add(this.label_SELECTED_PROJECT_NAME);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.panel1.Name = "panel1";
-            this.panel1.Padding = new System.Windows.Forms.Padding(3, 5, 5, 0);
-            this.panel1.Size = new System.Drawing.Size(1190, 27);
+            this.panel1.Padding = new System.Windows.Forms.Padding(6, 9, 9, 0);
+            this.panel1.Size = new System.Drawing.Size(2182, 50);
             this.panel1.TabIndex = 0;
             // 
             // label_SELECTED_PROJECT_NAME
@@ -83,10 +84,10 @@ namespace Sdl.Community.PostEdit.Versions
             this.label_SELECTED_PROJECT_NAME.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label_SELECTED_PROJECT_NAME.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_SELECTED_PROJECT_NAME.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label_SELECTED_PROJECT_NAME.Location = new System.Drawing.Point(3, 5);
-            this.label_SELECTED_PROJECT_NAME.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.label_SELECTED_PROJECT_NAME.Location = new System.Drawing.Point(6, 9);
+            this.label_SELECTED_PROJECT_NAME.Margin = new System.Windows.Forms.Padding(0, 0, 6, 0);
             this.label_SELECTED_PROJECT_NAME.Name = "label_SELECTED_PROJECT_NAME";
-            this.label_SELECTED_PROJECT_NAME.Size = new System.Drawing.Size(1182, 22);
+            this.label_SELECTED_PROJECT_NAME.Size = new System.Drawing.Size(2167, 41);
             this.label_SELECTED_PROJECT_NAME.TabIndex = 4;
             this.label_SELECTED_PROJECT_NAME.Text = "[SELECTED_PROJECT_NAME]";
             this.label_SELECTED_PROJECT_NAME.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -100,10 +101,11 @@ namespace Sdl.Community.PostEdit.Versions
             this.panel2.Controls.Add(this.pictureBox1);
             this.panel2.Controls.Add(this.label_TOTAL_PROJECT_VERSIONS_SELECTED);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 374);
+            this.panel2.Location = new System.Drawing.Point(0, 690);
+            this.panel2.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.panel2.Name = "panel2";
-            this.panel2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 3);
-            this.panel2.Size = new System.Drawing.Size(1190, 21);
+            this.panel2.Padding = new System.Windows.Forms.Padding(6, 7, 6, 6);
+            this.panel2.Size = new System.Drawing.Size(2182, 39);
             this.panel2.TabIndex = 1;
             // 
             // label7
@@ -111,10 +113,10 @@ namespace Sdl.Community.PostEdit.Versions
             this.label7.AutoSize = true;
             this.label7.Dock = System.Windows.Forms.DockStyle.Right;
             this.label7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label7.Location = new System.Drawing.Point(668, 4);
+            this.label7.Location = new System.Drawing.Point(1200, 7);
             this.label7.Margin = new System.Windows.Forms.Padding(0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(77, 13);
+            this.label7.Size = new System.Drawing.Size(144, 25);
             this.label7.TabIndex = 6;
             this.label7.Text = "Total Versions:";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -124,10 +126,10 @@ namespace Sdl.Community.PostEdit.Versions
             this.label_TOTAL_PROJECT_VERSIONS.AutoSize = true;
             this.label_TOTAL_PROJECT_VERSIONS.Dock = System.Windows.Forms.DockStyle.Right;
             this.label_TOTAL_PROJECT_VERSIONS.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label_TOTAL_PROJECT_VERSIONS.Location = new System.Drawing.Point(745, 4);
+            this.label_TOTAL_PROJECT_VERSIONS.Location = new System.Drawing.Point(1344, 7);
             this.label_TOTAL_PROJECT_VERSIONS.Margin = new System.Windows.Forms.Padding(0);
             this.label_TOTAL_PROJECT_VERSIONS.Name = "label_TOTAL_PROJECT_VERSIONS";
-            this.label_TOTAL_PROJECT_VERSIONS.Size = new System.Drawing.Size(164, 13);
+            this.label_TOTAL_PROJECT_VERSIONS.Size = new System.Drawing.Size(310, 25);
             this.label_TOTAL_PROJECT_VERSIONS.TabIndex = 5;
             this.label_TOTAL_PROJECT_VERSIONS.Text = "[TOTAL_PROJECT_VERSIONS]";
             this.label_TOTAL_PROJECT_VERSIONS.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -137,10 +139,10 @@ namespace Sdl.Community.PostEdit.Versions
             this.label5.AutoSize = true;
             this.label5.Dock = System.Windows.Forms.DockStyle.Right;
             this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label5.Location = new System.Drawing.Point(909, 4);
+            this.label5.Location = new System.Drawing.Point(1654, 7);
             this.label5.Margin = new System.Windows.Forms.Padding(0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(52, 13);
+            this.label5.Size = new System.Drawing.Size(95, 25);
             this.label5.TabIndex = 4;
             this.label5.Text = "Selected:";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -151,10 +153,10 @@ namespace Sdl.Community.PostEdit.Versions
             this.label_PROJECT_VERSIONS_MESSAGE.Dock = System.Windows.Forms.DockStyle.Left;
             this.label_PROJECT_VERSIONS_MESSAGE.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_PROJECT_VERSIONS_MESSAGE.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label_PROJECT_VERSIONS_MESSAGE.Location = new System.Drawing.Point(21, 4);
-            this.label_PROJECT_VERSIONS_MESSAGE.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.label_PROJECT_VERSIONS_MESSAGE.Location = new System.Drawing.Point(39, 7);
+            this.label_PROJECT_VERSIONS_MESSAGE.Margin = new System.Windows.Forms.Padding(0, 0, 6, 0);
             this.label_PROJECT_VERSIONS_MESSAGE.Name = "label_PROJECT_VERSIONS_MESSAGE";
-            this.label_PROJECT_VERSIONS_MESSAGE.Size = new System.Drawing.Size(181, 13);
+            this.label_PROJECT_VERSIONS_MESSAGE.Size = new System.Drawing.Size(343, 25);
             this.label_PROJECT_VERSIONS_MESSAGE.TabIndex = 3;
             this.label_PROJECT_VERSIONS_MESSAGE.Text = "[PROJECT_VERSIONS_MESSAGE]";
             this.label_PROJECT_VERSIONS_MESSAGE.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -163,10 +165,10 @@ namespace Sdl.Community.PostEdit.Versions
             // 
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Left;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(3, 4);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
+            this.pictureBox1.Location = new System.Drawing.Point(6, 7);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(6, 6, 0, 6);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(18, 14);
+            this.pictureBox1.Size = new System.Drawing.Size(33, 26);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
@@ -176,10 +178,10 @@ namespace Sdl.Community.PostEdit.Versions
             this.label_TOTAL_PROJECT_VERSIONS_SELECTED.AutoSize = true;
             this.label_TOTAL_PROJECT_VERSIONS_SELECTED.Dock = System.Windows.Forms.DockStyle.Right;
             this.label_TOTAL_PROJECT_VERSIONS_SELECTED.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label_TOTAL_PROJECT_VERSIONS_SELECTED.Location = new System.Drawing.Point(961, 4);
+            this.label_TOTAL_PROJECT_VERSIONS_SELECTED.Location = new System.Drawing.Point(1749, 7);
             this.label_TOTAL_PROJECT_VERSIONS_SELECTED.Margin = new System.Windows.Forms.Padding(0);
             this.label_TOTAL_PROJECT_VERSIONS_SELECTED.Name = "label_TOTAL_PROJECT_VERSIONS_SELECTED";
-            this.label_TOTAL_PROJECT_VERSIONS_SELECTED.Size = new System.Drawing.Size(226, 13);
+            this.label_TOTAL_PROJECT_VERSIONS_SELECTED.Size = new System.Drawing.Size(427, 25);
             this.label_TOTAL_PROJECT_VERSIONS_SELECTED.TabIndex = 1;
             this.label_TOTAL_PROJECT_VERSIONS_SELECTED.Text = "[TOTAL_PROJECT_VERSIONS_SELECTED]";
             this.label_TOTAL_PROJECT_VERSIONS_SELECTED.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -188,9 +190,10 @@ namespace Sdl.Community.PostEdit.Versions
             // 
             this.panel3.Controls.Add(this.listView_postEditCompareProjectVersions);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(0, 27);
+            this.panel3.Location = new System.Drawing.Point(0, 50);
+            this.panel3.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1190, 347);
+            this.panel3.Size = new System.Drawing.Size(2182, 640);
             this.panel3.TabIndex = 2;
             // 
             // listView_postEditCompareProjectVersions
@@ -211,8 +214,9 @@ namespace Sdl.Community.PostEdit.Versions
             this.listView_postEditCompareProjectVersions.FullRowSelect = true;
             this.listView_postEditCompareProjectVersions.HideSelection = false;
             this.listView_postEditCompareProjectVersions.Location = new System.Drawing.Point(0, 0);
+            this.listView_postEditCompareProjectVersions.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.listView_postEditCompareProjectVersions.Name = "listView_postEditCompareProjectVersions";
-            this.listView_postEditCompareProjectVersions.Size = new System.Drawing.Size(1190, 347);
+            this.listView_postEditCompareProjectVersions.Size = new System.Drawing.Size(2182, 640);
             this.listView_postEditCompareProjectVersions.SmallImageList = this.imageList1;
             this.listView_postEditCompareProjectVersions.TabIndex = 0;
             this.listView_postEditCompareProjectVersions.UseCompatibleStateImageBehavior = false;
@@ -269,6 +273,7 @@ namespace Sdl.Community.PostEdit.Versions
             // 
             // contextMenuStrip1
             // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(28, 28);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveNewProjectVersionToolStripMenuItem,
             this.editSelectedProjectVersionToolStripMenuItem,
@@ -279,59 +284,59 @@ namespace Sdl.Community.PostEdit.Versions
             this.toolStripSeparator2,
             this.viewProjectVersionInWindowsExplorerToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(292, 148);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(482, 232);
             // 
             // saveNewProjectVersionToolStripMenuItem
             // 
             this.saveNewProjectVersionToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveNewProjectVersionToolStripMenuItem.Image")));
             this.saveNewProjectVersionToolStripMenuItem.Name = "saveNewProjectVersionToolStripMenuItem";
-            this.saveNewProjectVersionToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
+            this.saveNewProjectVersionToolStripMenuItem.Size = new System.Drawing.Size(481, 36);
             this.saveNewProjectVersionToolStripMenuItem.Text = "New Project Version";
             // 
             // editSelectedProjectVersionToolStripMenuItem
             // 
             this.editSelectedProjectVersionToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("editSelectedProjectVersionToolStripMenuItem.Image")));
             this.editSelectedProjectVersionToolStripMenuItem.Name = "editSelectedProjectVersionToolStripMenuItem";
-            this.editSelectedProjectVersionToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
+            this.editSelectedProjectVersionToolStripMenuItem.Size = new System.Drawing.Size(481, 36);
             this.editSelectedProjectVersionToolStripMenuItem.Text = "Edit Project Version";
             // 
             // removeSelectedProjectVersionsToolStripMenuItem
             // 
             this.removeSelectedProjectVersionsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("removeSelectedProjectVersionsToolStripMenuItem.Image")));
             this.removeSelectedProjectVersionsToolStripMenuItem.Name = "removeSelectedProjectVersionsToolStripMenuItem";
-            this.removeSelectedProjectVersionsToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
+            this.removeSelectedProjectVersionsToolStripMenuItem.Size = new System.Drawing.Size(481, 36);
             this.removeSelectedProjectVersionsToolStripMenuItem.Text = "Remove Project Version";
             // 
             // restoreProjectVersionToolStripMenuItem
             // 
             this.restoreProjectVersionToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("restoreProjectVersionToolStripMenuItem.Image")));
             this.restoreProjectVersionToolStripMenuItem.Name = "restoreProjectVersionToolStripMenuItem";
-            this.restoreProjectVersionToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
+            this.restoreProjectVersionToolStripMenuItem.Size = new System.Drawing.Size(481, 36);
             this.restoreProjectVersionToolStripMenuItem.Text = "Restore Project Version";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(288, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(478, 6);
             // 
             // compareWithPostEditCompareToolStripMenuItem
             // 
             this.compareWithPostEditCompareToolStripMenuItem.Enabled = false;
             this.compareWithPostEditCompareToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("compareWithPostEditCompareToolStripMenuItem.Image")));
             this.compareWithPostEditCompareToolStripMenuItem.Name = "compareWithPostEditCompareToolStripMenuItem";
-            this.compareWithPostEditCompareToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
+            this.compareWithPostEditCompareToolStripMenuItem.Size = new System.Drawing.Size(481, 36);
             this.compareWithPostEditCompareToolStripMenuItem.Text = "Compare with \'Post-Edit Compare\'";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(288, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(478, 6);
             // 
             // viewProjectVersionInWindowsExplorerToolStripMenuItem
             // 
             this.viewProjectVersionInWindowsExplorerToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("viewProjectVersionInWindowsExplorerToolStripMenuItem.Image")));
             this.viewProjectVersionInWindowsExplorerToolStripMenuItem.Name = "viewProjectVersionInWindowsExplorerToolStripMenuItem";
-            this.viewProjectVersionInWindowsExplorerToolStripMenuItem.Size = new System.Drawing.Size(291, 22);
+            this.viewProjectVersionInWindowsExplorerToolStripMenuItem.Size = new System.Drawing.Size(481, 36);
             this.viewProjectVersionInWindowsExplorerToolStripMenuItem.Text = "View Project Version in Windows Explorer";
             // 
             // imageList1
@@ -346,13 +351,14 @@ namespace Sdl.Community.PostEdit.Versions
             // 
             // PostEditCompareViewControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
+            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.Name = "PostEditCompareViewControl";
-            this.Size = new System.Drawing.Size(1190, 395);
+            this.Size = new System.Drawing.Size(2182, 729);
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();

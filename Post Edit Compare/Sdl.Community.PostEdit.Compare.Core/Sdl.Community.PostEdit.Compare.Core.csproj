@@ -87,7 +87,7 @@
     </Reference>
     <Reference Include="System.configuration" />
     <Reference Include="System.Reactive">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio18\System.Reactive.dll</HintPath>
+      <HintPath>$(TradosFolder)\System.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Security" />
   </ItemGroup>
@@ -124,6 +124,7 @@
     <PackageReference Include="EPPlus">
       <Version>4.5.3.3</Version>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="Trados.Community.Toolkit.Core">
       <Version>5.0.1</Version>

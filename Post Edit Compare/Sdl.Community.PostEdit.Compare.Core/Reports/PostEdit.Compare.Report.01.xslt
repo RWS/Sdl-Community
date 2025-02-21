@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/2000/svg">
-  <xsl:output method="html" indent="yes"/>
+  <xsl:output method="html" indent="yes" encoding="UTF-8"/>
 
   <xsl:template match="/">
 
@@ -11,6 +11,45 @@
 
 
         <style type="text/css">
+
+          .addComment {
+          display: grid;
+          grid-template-columns: 1fr auto; /* Two columns: one for the input, one for the dropdown */
+          gap: 10px; /* Space between input and dropdown */
+          }
+
+          .severity-dropdown {
+          width: 100%; /* Ensure it takes up the remaining space */
+          }
+
+          .new-status {
+          border: 1px solid gray;
+          background-color: #ffffcc;
+          padding: 2px 5px;
+          margin-bottom: 2px;
+          font-weight: bold;
+          display: inline-block;
+          }
+
+          .status-cell {
+          position: relative;
+          padding-top: 17px;
+          }
+
+          .status-dropdown {
+          position: absolute;
+          top: 2px;
+          right: 2px;
+          font-size: 10px;
+          width: 17px;
+          padding: 1px;
+          }
+
+          .status-dropdown:focus {
+          font-size: 12px;
+          width: auto; /* Expand width dynamically */
+          }
+
           body
           {
           background: #FFFFFF;
@@ -432,13 +471,14 @@
           google.load('visualization', '1', {packages: ['corechart']});
 
         </script>
-        <script type="text/javascript">
-          <!--google.setOnLoadCallback(drawVisualization);-->
-        </script>
 
       </head>
       <body>
         <xsl:apply-templates select="files"/>
+        <script type="text/javascript">
+          <!--google.setOnLoadCallback(drawVisualization);-->
+        </script>
+
       </body>
     </html>
 
@@ -2594,10 +2634,14 @@
     <xsl:param name="showSegmentTerp" />
     <xsl:param name="showSegmentPemp" />
 
-    <tr>
+    <tr data-file-id='{@fileId}' data-project-id='{@projectId}'>
+
       <td class="segmentId">
-        <xsl:value-of select="@segmentId"/>
+        <a href="#" onclick="navigateToSegment('{@segmentId}','{@fileId}','{@projectId}'); return false;">
+          <xsl:value-of select="@segmentId"/>
+        </a>
       </td>
+
 
       <td>
         <xsl:value-of select="@tmName"/>
@@ -2643,8 +2687,21 @@
 
       </xsl:if>
       <xsl:if test="$showSegmentStatus = 'True'">
-        <td>
+        <td class="status-cell">
+
+          <select class="status-dropdown" onchange="updateStatus(this, '{@segmentId}','{@fileId}','{@projectId}')">
+            <option value="">Change status</option>
+            <option value="Unspecified">Not Translated</option>
+            <option value="Draft">Draft</option>
+            <option value="Translated">Translated</option>
+            <option value="RejectedTranslation">Translation Rejected</option>
+            <option value="ApprovedTranslation">Translation Approved</option>
+            <option value="RejectedSignOff">Sign-off Rejected</option>
+            <option value="ApprovedSignOff">Signed Off</option>
+          </select>
+          <br/>
           <xsl:apply-templates select="segmentStatus/token"/>
+
         </td>
       </xsl:if>
       <xsl:if test="$showSegmentMatch = 'True'">
@@ -2785,9 +2842,22 @@
 
       <xsl:if test="$showSegmentComments = 'True'">
         <td>
-          <xsl:for-each select="comments">
-            <xsl:apply-templates select="comment"/>
-          </xsl:for-each>
+          <div class="addComment">
+            <input type="text" name="commentInput" placeholder="Add comment"
+                   onkeydown="if (event.key === 'Enter') submitComment(this, this.closest('.addComment').querySelector('.severity-dropdown').value, '{@segmentId}', '{@fileId}', '{@projectId}')"/>
+
+            <select class="severity-dropdown" id="severityDropdown">
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+
+          </div>
+          <div class="comments">
+            <xsl:for-each select="comments">
+              <xsl:apply-templates select="comment" />
+            </xsl:for-each>
+          </div>
         </td>
       </xsl:if>
     </tr>

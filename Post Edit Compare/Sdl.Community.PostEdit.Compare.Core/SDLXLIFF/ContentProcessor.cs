@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sdl.Community.PostEdit.Compare.DAL.ExcelTableModel;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -223,12 +224,10 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
 					pair.TranslationOrigin.RepetitionTableId = segmentPair.Properties.TranslationOrigin.RepetitionTableId.Id;
 					pair.TranslationOrigin.TextContextMatchLevel = segmentPair.Properties.TranslationOrigin.TextContextMatchLevel.ToString();
 
-                    if (segmentPair.Properties.TranslationOrigin.MetaDataContainsKey("original_tu"))
-                    {
+                    if (segmentPair.Properties.TranslationOrigin.MetaDataContainsKey(Constants.OriginalTuKey))
                         pair.TranslationOrigin.OriginalTu =
-                            segmentPair.Properties.TranslationOrigin.GetMetaData("original_tu");
-                    }
-				}
+                            segmentPair.Properties.TranslationOrigin.GetMetaData(Constants.OriginalTuKey);
+                }
 
 				#region  |  add the SegmentPair to the xParagraphs dictionary  |
 

@@ -8,9 +8,12 @@ namespace Sdl.Community.PostEdit.Compare.DAL.ExcelTableModel
 {
 	public static class Constants
 	{
-		#region Post edit modifications analysis table
-		public static string ExactMatch { get { return "100%"; } }
-		public static string Segments { get { return "Segments"; } }
+        #region Post edit modifications analysis table
+        
+        public static string ExactMatch { get { return "100%"; } }
+        public static string OriginalTuKey = "original_tu";
+
+        public static string Segments { get { return "Segments"; } }
 		public static string Words { get { return "Words"; } }
 		public static string Characters { get { return "Characters"; } }
 		public static string Percent { get { return "Percent"; } }

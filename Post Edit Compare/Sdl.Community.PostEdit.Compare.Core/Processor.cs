@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml.Serialization;
 using Sdl.Community.PostEdit.Compare.Core.Comparison;
 using Sdl.Community.PostEdit.Compare.Core.SDLXLIFF;
+using System.Windows;
 
 namespace Sdl.Community.PostEdit.Compare.Core
 {
@@ -164,37 +165,29 @@ namespace Sdl.Community.PostEdit.Compare.Core
         #region |  create report  |
 
 
-        public void CreateReport(string reportFilePath,string excelReportFilePath,string sheetName,
+        public void CreateReport(string reportFilePath, string excelReportFilePath, string sheetName,
             Dictionary<Comparison.Comparer.FileUnitProperties, Dictionary<string, Dictionary<string, Comparison.Comparer.ComparisonParagraphUnit>>> fileComparisonParagraphUnits
             , Settings.PriceGroup priceGroup, out List<TERp.DocumentResult> terpResults)
         {
-            try
+
+            var report = new Reports.Report();
+
+            report.ProgressReport += Report_Progress_report;
+            var transformXmlReport = (Settings.reportFormat == Settings.ReportFormat.Html ? true : false);
+
+
+            report.CreateXmlReport(reportFilePath, excelReportFilePath, sheetName, fileComparisonParagraphUnits, transformXmlReport, priceGroup, out terpResults);
+
+
+            if (Settings.ViewReportWhenFinishedProcessing)
             {
-                var report = new Reports.Report();
+                if (transformXmlReport)
+                    reportFilePath += ".html";
 
-                report.ProgressReport += Report_Progress_report;
-                var transformXmlReport = (Settings.reportFormat == Settings.ReportFormat.Html ? true : false);
-
-
-                report.CreateXmlReport(reportFilePath, excelReportFilePath, sheetName,fileComparisonParagraphUnits, transformXmlReport, priceGroup, out terpResults);
-
-
-                if (Settings.ViewReportWhenFinishedProcessing)
-                {
-                    if (transformXmlReport)
-                        reportFilePath += ".html";
-
-                    System.Diagnostics.Process.Start(reportFilePath);
-                }
+                System.Diagnostics.Process.Start(reportFilePath);
             }
 
-            catch (Exception ex)
-            {
-                throw ex;
-            }
         }
-
-
 
         #endregion
 
@@ -250,7 +243,7 @@ namespace Sdl.Community.PostEdit.Compare.Core
                 var serializer = new XmlSerializer(typeof(Settings));
                 stream = new FileStream(SettingsFilePath, FileMode.Create, FileAccess.Write);
                 serializer.Serialize(stream, Settings);
-            }           
+            }
             finally
             {
                 if (stream != null)

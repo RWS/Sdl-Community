@@ -133,7 +133,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Comparison
             public decimal TotalSourceFuzzy74Tags { get; set; }
             public decimal TotalSourceNewTags { get; set; }
 
-            private Dictionary<string, Dictionary<string, ComparisonParagraphUnit>> ComparisonFileParagraphUnits { get; set; }
+            public Dictionary<string, Dictionary<string, ComparisonParagraphUnit>> ComparisonFileParagraphUnits { get; set; }
             public FileUnitProperties(FileUnitProperties fileUnitProperties, Dictionary<string, Dictionary<string, ComparisonParagraphUnit>> comparisonFileParagraphUnits)
             {
                 SourceLanguageIdOriginal = fileUnitProperties.SourceLanguageIdOriginal;

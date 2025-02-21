@@ -169,6 +169,9 @@ namespace Sdl.Community.PostEdit.Compare.Core
         public string ReportFilterTranslationMatchValuesOriginal { get; set; }
         public string ReportFilterTranslationMatchValuesUpdated { get; set; }
 
+        public string FuzzyMatchValuesOriginal { get; set; }
+        public string FuzzyMatchValuesUpdated { get; set; }
+
         public string ChangedTranslationStatus { get; set; }
         public string NotChangedTranslationStatus { get; set; }
         public string NotImportedTranslationStatus { get; set; }
@@ -233,10 +236,7 @@ namespace Sdl.Community.PostEdit.Compare.Core
 
         public bool UseCustomStyleSheet { get; set; }
         public string FilePathCustomStyleSheet { get; set; }
-
-
-
-
+       
 
         [Serializable]
         public class DifferencesFormatting

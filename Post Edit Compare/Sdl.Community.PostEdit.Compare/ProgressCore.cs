@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using Sdl.Community.PostEdit.Compare.Helpers;
+using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace PostEdit.Compare
 {
@@ -21,11 +23,7 @@ namespace PostEdit.Compare
         {
             ProgressWindow.ProgressDialog.Close();
         }
-
-        
     }
-
-
 
     public class WaitingWindow
     {
