@@ -84,7 +84,7 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Rapid Add Term](https://appstore.rws.com/Plugin/35) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Rapid%20Add%20Term) | Integration API |
 | [Record Source TU](https://appstore.rws.com/Plugin/36) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Record%20Source%20TU) | Integration API |
 | [Reports Viewer Plus](https://appstore.rws.com/Plugin/37) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Reports%20Viewer%20Plus) | Integration API |
-| [Trados Data Protection Suite](https://appstore.rws.com/Plugin/39) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Data%20Protection	Suite) | Integration API |
+| [Trados Data Protection Suite](https://appstore.rws.com/Plugin/39) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Data%20Protection%20Suite) | Integration API |
 | [Trados Transcreate](https://appstore.rws.com/Plugin/42) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Transcreate) | Integration API |
 | [Segment Status Switcher](https://appstore.rws.com/Plugin/44) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Segment%20Status%20Switcher) | Integration API |
 | [TransitPackage Handler](https://appstore.rws.com/Plugin/45) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/TransitPackage%20Handler) | Integration API |
