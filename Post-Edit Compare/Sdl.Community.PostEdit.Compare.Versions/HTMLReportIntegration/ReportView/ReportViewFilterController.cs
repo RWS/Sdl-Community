@@ -9,8 +9,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 {
     [ViewPart(
         Id = "ReportViewFilterController",
-        Name = "Report Filter",
-        Description = "Report Filter",
+        Name = "Report Segment Filter",
+        Description = "Report Segment Filter",
         Icon = "Filter"
     )]
     [ViewPartLayout(typeof(ReportViewController), Dock = DockType.Right)]

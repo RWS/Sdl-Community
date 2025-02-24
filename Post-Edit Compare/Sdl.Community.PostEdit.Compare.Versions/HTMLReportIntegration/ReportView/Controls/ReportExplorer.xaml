@@ -7,7 +7,6 @@
              xmlns:viewModel="clr-namespace:Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.ViewModel"
              xmlns:controls="clr-namespace:Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Controls"
              xmlns:core="clr-namespace:Sdl.ProjectAutomation.Core;assembly=Sdl.ProjectAutomation.Core"
-             xmlns:converters="clr-namespace:Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Converters"
              Name="Root"
              d:DataContext="{d:DesignInstance viewModel:ReportExplorerViewModel}"
              mc:Ignorable="d"
@@ -41,13 +40,16 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <controls:MultiItemSelect Margin="0 10 -2 10"
-                                  HorizontalAlignment="Stretch"
-                                  HorizontalContentAlignment="Stretch"
-                                  SelectedItems="{Binding SelectedProjects, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  ItemsSource="{Binding Projects}"
-                                  ItemTemplate="{StaticResource FilterTemplate}"
-                                  SelectedItemTemplate="{StaticResource FilterTemplate}" />
+        <Expander Header="Report Filter"
+                  FontWeight="Bold"
+                  Margin="0 10 -2 10">
+            <controls:MultiItemSelect HorizontalAlignment="Stretch"
+                                      HorizontalContentAlignment="Stretch"
+                                      SelectedItems="{Binding SelectedProjects, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      ItemsSource="{Binding Projects}"
+                                      ItemTemplate="{StaticResource FilterTemplate}"
+                                      SelectedItemTemplate="{StaticResource FilterTemplate}" />
+        </Expander>
 
         <ListBox Grid.Row="1"
                  ItemsSource="{Binding Reports}"
