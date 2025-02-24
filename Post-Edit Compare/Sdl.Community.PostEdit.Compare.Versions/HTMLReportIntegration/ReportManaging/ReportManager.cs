@@ -1,17 +1,52 @@
-﻿using HtmlAgilityPack;
-using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.Components;
+﻿using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.Components;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
+using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
 {
     public class ReportManager
     {
+        public ReportManager()
+        {
+            if (File.Exists(SettingsFile))
+            {
+                foreach (var line in File.ReadAllLines(SettingsFile))
+                    if (!string.IsNullOrEmpty(line) && Directory.Exists(line))
+                        ReportFolders.Add(line);
+            }
+            else
+            {
+                File.Create(SettingsFile).Close();
+                var myDocPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                var defaultReportFolder = Path.Combine(myDocPath, "PostEdit.Compare", "Reports");
+                AddReportFolder(defaultReportFolder);
+            }
+        }
+
+        private List<string> ReportFolders { get; } = [];
+
+        private string SettingsFile { get; } =
+                            $"{Path.Combine(Constants.PostEditCompareSettingsFolder, "ReportFolders")}.txt";
+
+        public void AddNewReportFolder()
+        {
+            using var dialog = new OpenFileDialog();
+
+            dialog.CheckFileExists = false;
+            dialog.CheckPathExists = true;
+            dialog.ValidateNames = false; // Allows selecting folders
+            dialog.FileName = "Select this folder"; // Dummy filename to allow folder selection
+
+            if (dialog.ShowDialog() == DialogResult.OK) AddReportFolder(Path.GetDirectoryName(dialog.FileName));
+        }
+
         public void BackUpReport(ReportInfo selectedReport)
         {
             if (selectedReport is null) return;
@@ -60,12 +95,12 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
 
         public List<ReportInfo> GetReports()
         {
-            var myDocPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var reportList = Directory.GetFiles(Path.Combine(myDocPath, "PostEdit.Compare", "Reports"), "*.html",
-                SearchOption.AllDirectories).ToList();
+            List<string> reportList = [];
 
-            //take project ID from inside the report files, which is an HTML with a table that contains the projectID as an attribute of each
-            //row from the second one forth; the projectId attribute is named data-project-id
+            if (ReportFolders.Any())
+                foreach (var reportFolder in ReportFolders)
+                    reportList.AddRange(Directory.GetFiles(reportFolder, "*.html", SearchOption.AllDirectories).ToList());
+
             List<ReportInfo> reports = [];
             foreach (var report in reportList)
             {
@@ -82,18 +117,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
             }
 
             return reports;
-        }
-
-        private string ExtractProjectIdFromHtml(string htmlFilepath)
-        {
-            var doc = new HtmlDocument();
-            doc.Load(htmlFilepath);
-
-            var rows = doc.DocumentNode.SelectSingleNode("//tr[@data-project-id]");
-            if (rows == null) return string.Empty;
-
-            var projectIdAttribute = rows.Attributes["data-project-id"];
-            return projectIdAttribute != null ? projectIdAttribute.Value : string.Empty;
         }
 
         public void OpenReportBackupFolder(ReportInfo selectedReport)
@@ -114,5 +137,24 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
 
         public void SaveReport(string reportFromMemory, string selectedReportReportPath) =>
                     File.WriteAllText(selectedReportReportPath, reportFromMemory);
+
+        private static string ExtractProjectIdFromHtml(string htmlFilepath)
+        {
+            var doc = new HtmlDocument();
+            doc.Load(htmlFilepath);
+
+            var rows = doc.DocumentNode.SelectSingleNode("//tr[@data-project-id]");
+            if (rows == null) return string.Empty;
+
+            var projectIdAttribute = rows.Attributes["data-project-id"];
+            return projectIdAttribute != null ? projectIdAttribute.Value : string.Empty;
+        }
+
+        private void AddReportFolder(string reportFolder)
+        {
+            if (ReportFolders.Contains(reportFolder)) return;
+            ReportFolders.Add(reportFolder);
+            File.WriteAllLines(SettingsFile, ReportFolders);
+        }
     }
 }

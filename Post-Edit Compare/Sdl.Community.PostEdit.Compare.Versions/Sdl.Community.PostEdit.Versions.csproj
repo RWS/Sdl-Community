@@ -114,7 +114,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Add.ico" />
-    <Content Include="Resources\Compare.ico" />
+    <Resource Include="Resources\AddReportFolder.ico" />
+    <Resource Include="Resources\Compare.ico" />
     <Content Include="Resources\Download.ico" />
     <Content Include="Resources\Edit.ico" />
     <Content Include="Resources\Filter.ico" />
@@ -153,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="HTMLReportIntegration\ReportView\Controls\Scripts.js" />
+    <None Remove="Resources\AddReportFolder.ico" />
     <None Remove="Resources\Filter.ico" />
     <None Remove="Resources\OpenReportFolder.ico" />
     <None Remove="Resources\Project.png" />
@@ -177,7 +179,7 @@
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>C:\Code\SDL\GitHub repos\RWS Community\Post Edit Compare\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>C:\Code\SDL\GitHub repos\RWS Community\Post-Edit Compare\SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>

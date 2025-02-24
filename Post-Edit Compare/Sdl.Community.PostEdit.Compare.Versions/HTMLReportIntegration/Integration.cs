@@ -34,6 +34,13 @@ public class Integration
 
     private static StudioController StudioController { get; } = new();
 
+    public static void AddReportFolder()
+    {
+        ReportManager.AddNewReportFolder();
+        var reports = ReportManager.GetReports();
+        ReportViewController.RefreshReportsList(reports);
+    }
+
     public static async Task ExportReport()
     {
         try
@@ -105,7 +112,7 @@ public class Integration
     {
         var reports = ReportManager.GetReports();
         var projects = ProjectsController.GetAllProjects().Select(p => p.GetProjectInfo()).ToList();
-        ReportViewController.RefreshReportsList(projects, reports);
+        ReportViewController.RefreshLists(projects, reports);
     }
 
     public static void ShowLatestReport()

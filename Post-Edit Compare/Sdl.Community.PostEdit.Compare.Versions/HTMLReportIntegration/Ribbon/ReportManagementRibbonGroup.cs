@@ -42,6 +42,16 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
     {
         protected override void Execute() => Integration.OpenReportBackupFolder();
     }
+    
+    [Action(nameof(AddNewReportFolder),
+        typeof(ReportViewController),
+        Icon = "AddReportFolder", Name = "Add New Report Folder",
+        Description = "Add New Report Folder")]
+    [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Default)]
+    public class AddNewReportFolder : AbstractAction
+    {
+        protected override void Execute() => Integration.AddReportFolder();
+    }
 
     [Action(nameof(OpenReport),
         typeof(ReportViewController),

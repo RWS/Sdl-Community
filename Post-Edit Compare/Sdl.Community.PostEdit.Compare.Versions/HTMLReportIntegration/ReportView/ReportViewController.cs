@@ -36,9 +36,14 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 
         public ReportInfo GetSelectedReport() => ReportExplorerViewModel.SelectedReport;
 
-        public void RefreshReportsList(List<ProjectInfo> projects, List<ReportInfo> reports)
+        public void RefreshLists(List<ProjectInfo> projects, List<ReportInfo> reports)
         {
-            ReportExplorerViewModel.SetProjectsList(projects);
+            RefreshProjectList(projects);
+            RefreshReportsList(reports);
+        }
+
+        public void RefreshReportsList(List<ReportInfo> reports)
+        {
             ReportExplorerViewModel.SetReportsList(reports);
         }
 
@@ -113,6 +118,11 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
             {
                 DataContext = ReportExplorerViewModel
             };
+        }
+
+        private void RefreshProjectList(List<ProjectInfo> projects)
+        {
+            ReportExplorerViewModel.SetProjectsList(projects);
         }
 
         private void WebView2Browser_WebMessageReceived(object sender,

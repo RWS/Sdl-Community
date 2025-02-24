@@ -34,7 +34,7 @@
             Background="{Binding BorderBackground, ElementName=Root}"
             BorderThickness="{Binding BorderThickness, ElementName=Root}">
 
-        <Grid MaxWidth="{Binding ActualWidth, ElementName=Root}">
+        <Grid MaxWidth="{Binding ActualWidth, ElementName=Root}" Background="Transparent">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition />
