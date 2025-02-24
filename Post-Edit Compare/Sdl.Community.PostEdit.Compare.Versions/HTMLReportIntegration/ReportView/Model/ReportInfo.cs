@@ -4,5 +4,6 @@
     {
         public string ReportName { get; set; }
         public string ReportPath { get; set; }
+        public string ProjectId { get; set; }
     }
 }

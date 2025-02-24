@@ -6,14 +6,13 @@ using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.ViewModel
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
-using Sdl.TranslationStudioAutomation.IntegrationApi.Internal;
+using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
+using Task = System.Threading.Tasks.Task;
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 {
@@ -37,7 +36,11 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 
         public ReportInfo GetSelectedReport() => ReportExplorerViewModel.SelectedReport;
 
-        public void RefreshReportList() => ReportExplorerViewModel.RefreshReportList();
+        public void RefreshReportsList(List<ProjectInfo> projects, List<ReportInfo> reports)
+        {
+            ReportExplorerViewModel.SetProjectsList(projects);
+            ReportExplorerViewModel.SetReportsList(reports);
+        }
 
         public void SelectLatestReport() => ReportExplorer.SelectLatestReport();
 
@@ -105,7 +108,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
         private void InitializeControls()
         {
             ReportViewer = new ReportViewer();
-
             ReportExplorerViewModel = new ReportExplorerViewModel();
             ReportExplorer = new ReportExplorer
             {

@@ -1,5 +1,4 @@
-﻿using Sdl.Community.PostEdit.Compare.Core.Helper;
-using Sdl.Community.PostEdit.Compare.DAL.ExcelTableModel;
+﻿using Sdl.Community.PostEdit.Compare.DAL.ExcelTableModel;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System;
 

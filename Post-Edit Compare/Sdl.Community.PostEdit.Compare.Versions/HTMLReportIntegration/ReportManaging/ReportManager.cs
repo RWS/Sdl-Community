@@ -1,8 +1,11 @@
-﻿using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.Components;
+﻿using HtmlAgilityPack;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.Components;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
@@ -55,12 +58,43 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
             }
         }
 
-        public void OpenReportFolder() =>
-            Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                "PostEdit.Compare", "Reports"));
+        public List<ReportInfo> GetReports()
+        {
+            var myDocPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var reportList = Directory.GetFiles(Path.Combine(myDocPath, "PostEdit.Compare", "Reports"), "*.html",
+                SearchOption.AllDirectories).ToList();
 
-        public void SaveReport(string reportFromMemory, string selectedReportReportPath) =>
-                    File.WriteAllText(selectedReportReportPath, reportFromMemory);
+            //take project ID from inside the report files, which is an HTML with a table that contains the projectID as an attribute of each
+            //row from the second one forth; the projectId attribute is named data-project-id
+            List<ReportInfo> reports = [];
+            foreach (var report in reportList)
+            {
+                var projectId = ExtractProjectIdFromHtml(report);
+
+                var directoryName = new DirectoryInfo(Path.GetDirectoryName(report) ?? string.Empty).Name;
+                reports.Insert(0,
+                    new ReportInfo
+                    {
+                        ReportName = $@"{directoryName}\\{Path.GetFileName(report)}",
+                        ReportPath = report,
+                        ProjectId = projectId
+                    });
+            }
+
+            return reports;
+        }
+
+        private string ExtractProjectIdFromHtml(string htmlFilepath)
+        {
+            var doc = new HtmlDocument();
+            doc.Load(htmlFilepath);
+
+            var rows = doc.DocumentNode.SelectSingleNode("//tr[@data-project-id]");
+            if (rows == null) return string.Empty;
+
+            var projectIdAttribute = rows.Attributes["data-project-id"];
+            return projectIdAttribute != null ? projectIdAttribute.Value : string.Empty;
+        }
 
         public void OpenReportBackupFolder(ReportInfo selectedReport)
         {
@@ -73,5 +107,12 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
             }
             Process.Start(Constants.PostEditCompareBackupFolder);
         }
+
+        public void OpenReportFolder() =>
+                    Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                "PostEdit.Compare", "Reports"));
+
+        public void SaveReport(string reportFromMemory, string selectedReportReportPath) =>
+                    File.WriteAllText(selectedReportReportPath, reportFromMemory);
     }
 }

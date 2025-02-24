@@ -125,6 +125,9 @@
     <Content Include="Resources\License.ico" />
     <Content Include="Resources\PostEdit.Compare.ico" />
     <Content Include="Resources\PostEdit.Versions.ico" />
+    <Resource Include="Resources\Project.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Resources\Question.ico" />
     <Resource Include="Resources\RefreshReportList.ico" />
     <Resource Include="Resources\Remove.ico" />
@@ -152,6 +155,7 @@
     <None Remove="HTMLReportIntegration\ReportView\Controls\Scripts.js" />
     <None Remove="Resources\Filter.ico" />
     <None Remove="Resources\OpenReportFolder.ico" />
+    <None Remove="Resources\Project.png" />
     <None Remove="Resources\RefreshReportList.ico" />
     <None Remove="Resources\Report.png" />
   </ItemGroup>

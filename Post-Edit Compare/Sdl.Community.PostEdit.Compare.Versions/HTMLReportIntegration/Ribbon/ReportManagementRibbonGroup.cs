@@ -30,7 +30,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
     [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Default)]
     public class RefreshReportList : AbstractAction
     {
-        protected override void Execute() => Integration.RefreshReportList();
+        protected override void Execute() => Integration.SetUpReportExplorer();
     }
 
     [Action(nameof(OpenReportBackupFolder),
