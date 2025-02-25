@@ -54,7 +54,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
                 if (rows == null || rows.Count < 2)
                     continue;
 
-                var sheetName = GenerateSheetName(rows[1]);
+                var sheetName = GenerateSheetName(rows[2]); 
                 var ws = package.Workbook.Worksheets.Add(sheetName);
 
                 AddTitle(ws, projectName);
@@ -98,8 +98,26 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
 
         private static string GenerateSheetName(HtmlNode row)
         {
-            var secondRowCells = row.SelectNodes("td|th");
-            return string.Join(" ", secondRowCells.Select(c => HttpUtility.HtmlDecode(c.InnerText.Trim())));
+            var dataFileIdAttribute = row.Attributes["data-file-id"];
+            return dataFileIdAttribute != null ? dataFileIdAttribute.Value : "Unknown";
+        }
+
+        private static string FormatComments(string html)
+        {
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+
+            var severityNode = doc.DocumentNode.SelectSingleNode("//div[@style='white-space: nowrap; background-color: #DFDFFF; text-align: left; color: Black;margin-bottom: 1px;']/span[1]");
+            var dateNode = doc.DocumentNode.SelectSingleNode("//div[@style='white-space: nowrap; background-color: #DFDFFF; text-align: left; color: Black;margin-bottom: 1px;']/span[2]");
+            var authorNode = doc.DocumentNode.SelectSingleNode("//div[@style='white-space: nowrap; background-color: #DFDFFF; text-align: left; color: Black;margin-bottom: 1px;']/span[3]");
+            var commentNode = doc.DocumentNode.SelectSingleNode("//p[@style='margin: 0px; padding: 3;']");
+
+            var severity = severityNode != null ? HttpUtility.HtmlDecode(severityNode.InnerText.Trim()) : string.Empty;
+            var date = dateNode != null ? HttpUtility.HtmlDecode(dateNode.InnerText.Trim()) : string.Empty;
+            var author = authorNode != null ? HttpUtility.HtmlDecode(authorNode.InnerText.Trim()) : string.Empty;
+            var comment = commentNode != null ? HttpUtility.HtmlDecode(commentNode.InnerText.Trim()) : string.Empty;
+
+            return $"{comment}\n{severity}\n{date}\n{author}";
         }
 
         private static void AddTitle(ExcelWorksheet ws, string projectName)
@@ -153,6 +171,11 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
                     cellText = ExtractStatusText(cell);
                 }
 
+                if (excelRow > 4 && excelCol == 11) // "Comments" is the 11th column
+                {
+                    cellText = FormatComments(cell.InnerHtml);
+                }
+
                 if (cellText.EndsWith("%") && double.TryParse(cellText.TrimEnd('%'), NumberStyles.Any, CultureInfo.InvariantCulture, out double percentageValue))
                 {
                     cellRef.Value = percentageValue / 100;
@@ -167,6 +190,16 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
                 {
                     cellRef.Value = cellText;
                 }
+
+                // Set border style and color
+                cellRef.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                cellRef.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                cellRef.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                cellRef.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                cellRef.Style.Border.Top.Color.SetColor(Color.Black);
+                cellRef.Style.Border.Bottom.Color.SetColor(Color.Black);
+                cellRef.Style.Border.Left.Color.SetColor(Color.Black);
+                cellRef.Style.Border.Right.Color.SetColor(Color.Black);
 
                 if (excelRow == 1)
                 {
