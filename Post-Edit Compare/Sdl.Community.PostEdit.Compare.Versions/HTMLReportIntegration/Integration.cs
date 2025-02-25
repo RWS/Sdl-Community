@@ -174,9 +174,30 @@ public class Integration
         EditorEventListener.StatusChanged -= EditorEventListener_StatusChanged;
     }
 
-    private static void EditorEventListener_CommentsChanged(List<CommentInfo> comments, string segmentId,
-        string fileId) => ReportViewController.UpdateComments(comments, segmentId, fileId);
+    private static async void EditorEventListener_CommentsChanged(List<CommentInfo> comments, string segmentId,
+        string fileId)
+    {
+        try
+        {
+            await ReportViewController.UpdateComments(comments, segmentId, fileId);
+            await SaveReport();
+        }
+        catch (Exception e)
+        {
+            ErrorHandler.ShowError(e);
+        }
+    }
 
-    private static void EditorEventListener_StatusChanged(string newStatus, string segmentId, string fileId) =>
-        ReportViewController.UpdateStatus(newStatus, segmentId, fileId);
+    private static async void EditorEventListener_StatusChanged(string newStatus, string segmentId, string fileId)
+    {
+        try
+        {
+            await ReportViewController.UpdateStatus(newStatus, segmentId, fileId);
+            await SaveReport();
+        }
+        catch (Exception e)
+        {
+            ErrorHandler.ShowError(e);
+        }
+    }
 }

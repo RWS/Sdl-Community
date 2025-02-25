@@ -2,6 +2,7 @@
 using Microsoft.Web.WebView2.Wpf;
 using Newtonsoft.Json;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Utilities;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -52,7 +53,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             try
             {
                 var script = "document.documentElement.outerHTML;";
-                var result = await WebView2Browser.ExecuteScriptAsync(script);
+                var result = await WebView2Browser.RunScript(script);
 
                 // The returned string is JSON-encoded, so we need to decode it
                 return JsonConvert.DeserializeObject<string>(result);
@@ -147,7 +148,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             }
         }
 
-        public void UpdateComments(List<CommentInfo> comments, string segmentId, string fileId)
+        public async Task UpdateComments(List<CommentInfo> comments, string segmentId, string fileId)
         {
             var commentsJson = JsonConvert.SerializeObject(comments, new JsonSerializerSettings
             {
@@ -157,9 +158,9 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
 
             try
             {
-                WebView2Browser.Dispatcher.Invoke(async () =>
+                await WebView2Browser.Dispatcher.Invoke(async () =>
                 {
-                    WebView2Browser.ExecuteScriptAsync(script);
+                    await WebView2Browser.ExecuteScriptAsync(script);
                 });
             }
             catch (Exception e)
@@ -168,7 +169,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             }
         }
 
-        public void UpdateStatus(string newStatus, string segmentId, string fileId)
+        public async Task UpdateStatus(string newStatus, string segmentId, string fileId)
         {
             object[] parameters = new[] { segmentId, fileId, newStatus };
             var serializedParams = new List<string>();
@@ -186,7 +187,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
 
             try
             {
-                WebView2Browser.Dispatcher.Invoke(async () =>
+                await WebView2Browser.Dispatcher.Invoke(async () =>
                 {
                     WebView2Browser.ExecuteScriptAsync(script);
                 });

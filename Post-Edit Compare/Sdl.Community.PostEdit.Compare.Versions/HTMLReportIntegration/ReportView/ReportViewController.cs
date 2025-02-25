@@ -68,11 +68,11 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 
         public void ToggleReportExplorer() => ReportExplorer.ToggleOnOff();
 
-        public void UpdateComments(List<CommentInfo> comments, string segmentId, string fileId) =>
-            ReportViewer.UpdateComments(comments, segmentId, fileId);
+        public async Task UpdateComments(List<CommentInfo> comments, string segmentId, string fileId) =>
+            await ReportViewer.UpdateComments(comments, segmentId, fileId);
 
-        public void UpdateStatus(string newStatus, string segmentId, string fileId) =>
-            ReportViewer.UpdateStatus(newStatus, segmentId, fileId);
+        public async Task UpdateStatus(string newStatus, string segmentId, string fileId) =>
+            await ReportViewer.UpdateStatus(newStatus, segmentId, fileId);
 
         protected override IUIControl GetContentControl() => ReportViewer;
 

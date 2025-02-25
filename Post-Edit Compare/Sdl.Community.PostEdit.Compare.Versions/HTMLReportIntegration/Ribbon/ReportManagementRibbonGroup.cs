@@ -13,21 +13,11 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
     {
     }
 
-    [Action(nameof(SaveReport),
-        typeof(ReportViewController),
-        Icon = "SaveReport", Name = "Save Report",
-        Description = "Save Report")]
-    [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Large)]
-    public class SaveReport : AbstractAction
-    {
-        protected override void Execute() => Integration.SaveReport();
-    }
-
     [Action(nameof(RefreshReportList),
         typeof(ReportViewController),
         Icon = "RefreshReportList", Name = "Refresh Report List",
         Description = "Refresh Report List")]
-    [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Default)]
+    [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Large)]
     public class RefreshReportList : AbstractAction
     {
         protected override void Execute() => Integration.SetUpReportExplorer();
@@ -67,7 +57,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
         typeof(ReportViewController),
         Icon = "ExportReport", Name = "Export Report",
         Description = "Export Report")]
-    [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Default)]
+    [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Large)]
     public class ExportReport : AbstractAction
     {
         protected override void Execute() => Integration.ExportReport();
