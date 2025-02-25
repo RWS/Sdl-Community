@@ -4,20 +4,20 @@ using Sdl.TellMe.ProviderApi;
 
 namespace Sdl.Community.NumberVerifier.TellMe
 {
-	public class NumVerifierCommunityForumAction : AbstractTellMeAction
+	public class NumVerifierCommunityDocumentation : AbstractTellMeAction
 	{
 		public override bool IsAvailable => true;
 		public override string Category => $"{PluginResources.Plugin_Name} results";
-		public override Icon Icon => PluginResources.Question;
+		public override Icon Icon => PluginResources.TellmeDocumentation;
 
-		public NumVerifierCommunityForumAction()
+		public NumVerifierCommunityDocumentation()
 		{
-			Name = "RWS Community AppStore Forum";
+			Name = "Trados Number Verifier Documentation";
 		}
 
 		public override void Execute()
 		{
-			Process.Start("https://community.rws.com/product-groups/trados-portfolio/rws-appstore/f");
+			Process.Start("https://appstore.rws.com/Plugin/33?tab=documentation");
 		}
 	}
 }

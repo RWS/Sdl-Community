@@ -240,24 +240,33 @@ Finally, you can select the \b\i Extended\b0  \i0 option for \b\i Messages \b0\i
     <value>Decimal separator not valid</value>
   </data>
   <data name="Error_ThousandSeparatorNotValid" xml:space="preserve">
-	  <value>Thousand separator not valid</value>
+    <value>Thousand separator not valid</value>
   </data>
   <data name="SeparatorNotValid" xml:space="preserve">
-	  <value>Separator not valid</value>
+    <value>Separator not valid</value>
   </data>
   <data name="SeparatorAfterDecimal" xml:space="preserve">
-	  <value>Separator after decimal</value>
+    <value>Separator after decimal</value>
   </data>
   <data name="Error_MissingSourceSeparators" xml:space="preserve">
-	  <value>Missing source separators</value>
+    <value>Missing source separators</value>
   </data>
   <data name="Pattern_not_valid" xml:space="preserve">
-	  <value>Pattern not valid</value>
+    <value>Pattern not valid</value>
   </data>
   <data name="Please_select_the_files_you_want_to_import" xml:space="preserve">
-	  <value>Please select the files you want to import.</value>
+    <value>Please select the files you want to import.</value>
   </data>
   <data name="Export_selected_expressions" xml:space="preserve">
-	  <value>Export selected expressions</value>
+    <value>Export selected expressions</value>
+  </data>
+  <data name="Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Settings.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SourceCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\SourceCode.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TellmeDocumentation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TellmeDocumentation.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
