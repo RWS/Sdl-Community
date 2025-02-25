@@ -18,7 +18,7 @@ namespace Sdl.Community.NumberVerifier.TellMe
 
 		public override void Execute()
 		{
-			Process.Start("https://github.com/RWS/Sdl-Community/tree/master/Number%20Verifier");
+			Process.Start("https://github.com/RWS/Sdl-Community/tree/master/Trados%20Number%20Verifier");
 		}
 	}
 }
