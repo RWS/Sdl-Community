@@ -54,8 +54,13 @@ public class Integration
         try
         {
             if (ReportViewController.GetSelectedReport() == null) throw new ArgumentNullException();
+            var projectId = ReportViewController.GetSelectedReport().ProjectId;
+
+            var projectName = ProjectsController.GetAllProjects()
+                .FirstOrDefault(p => p.GetProjectInfo().Id.ToString() == projectId)?.GetProjectInfo().Name;
+
             var report = await ReportViewController.GetNonInteractiveReport();
-            ReportManager.ExportReport(report);
+            ReportManager.ExportReport(report, projectName);
         }
         catch (ArgumentException _)
         {

@@ -58,7 +58,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
             }
         }
 
-        public void ExportReport(string report)
+        public void ExportReport(string report, string projectName)
         {
             var saveFileDialog = new SaveFileDialog
             {
@@ -72,7 +72,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
             switch (saveFileDialog.FilterIndex)
             {
                 case 1:
-                    ExcelConverter.WriteExcelSpreadsheet(report, saveFileDialog.FileName);
+                    ExcelConverter.WriteExcelSpreadsheet(report, saveFileDialog.FileName, projectName);
                     break;
 
                 case 2:

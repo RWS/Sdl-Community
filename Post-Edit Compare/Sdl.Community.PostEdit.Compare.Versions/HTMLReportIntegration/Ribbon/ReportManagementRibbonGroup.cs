@@ -57,7 +57,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
         typeof(ReportViewController),
         Icon = "ExportReport", Name = "Export Report",
         Description = "Export Report")]
-    [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Large)]
+    [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Default)]
     public class ExportReport : AbstractAction
     {
         protected override void Execute() => Integration.ExportReport();
