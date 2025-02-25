@@ -68,6 +68,10 @@
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.ProjectAutomation.FileBased, Version=17.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.TellMe.ProviderApi">
       <HintPath>$(MSBuildProgramFiles32)\Trados\Trados Studio\Studio17\Sdl.TellMe.ProviderApi.dll</HintPath>
     </Reference>
@@ -147,6 +151,16 @@
     <Compile Include="Model\ComparisonItem.cs" />
     <Compile Include="Reporter\IMessageFilter.cs" />
     <Compile Include="Reporter\MessageFilter.cs" />
+    <Compile Include="GUI\TellMeSettingsActionWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\TellMeSettingsActionWindow.Designer.cs">
+      <DependentUpon>TellMeSettingsActionWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TellMe\NumVerifierCommunityDocumentation.cs" />
+    <Compile Include="TellMe\NumVerifierCommunityForumAction.cs" />
+    <Compile Include="TellMe\NumVerifierSourceCodeAction.cs" />
+    <Compile Include="TellMe\SettingsAction.cs" />
     <Compile Include="Validator\NumberComparisonExtension.cs" />
     <Compile Include="Validator\ComparisonConstants.cs" />
     <Compile Include="Validator\Comparer.cs" />
@@ -225,9 +239,6 @@
     <Compile Include="Specifications\LocalizationSpecification\RequireLocalizationSpecification.cs" />
     <Compile Include="Specifications\SkipTheDashSpecification.cs" />
     <Compile Include="TellMe\NumberVerifierTellMeProvider.cs" />
-    <Compile Include="TellMe\NumVerifierCommunityForumAction.cs" />
-    <Compile Include="TellMe\NumVerifierCommunityWikiAction.cs" />
-    <Compile Include="TellMe\NumVerifierStoreAction.cs" />
     <Compile Include="TextGenerator.cs" />
     <Compile Include="Processors\NumberFormatVerifier.cs" />
   </ItemGroup>
@@ -262,6 +273,9 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+    <None Include="Resources\TellmeDocumentation.ico" />
+    <None Include="Resources\SourceCode.ico" />
+    <None Include="Resources\Settings.ico" />
     <None Include="Resources\Question.ico" />
     <None Include="Resources\ForumIcon.ico" />
     <None Include="Resources\Download.ico" />
