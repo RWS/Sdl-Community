@@ -3,6 +3,7 @@ using Sdl.Community.PostEdit.Compare.Core.Helper;
 using Sdl.Community.PostEdit.Compare.Helpers;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Controls;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio;
@@ -10,6 +11,7 @@ using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Components;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -27,6 +29,7 @@ public class Integration
     private static ProjectsController ProjectsController =>
         SdlTradosStudio.Application.GetController<ProjectsController>();
 
+    private static ReportFolderExplorer ReportFolderExplorer { get; set; }
     private static ReportManager ReportManager { get; } = new();
 
     private static ReportViewController ReportViewController => _reportViewController ??=
@@ -34,9 +37,14 @@ public class Integration
 
     private static StudioController StudioController { get; } = new();
 
-    public static void AddReportFolder()
+    public static void EditReportFolderList()
     {
-        ReportManager.AddNewReportFolder();
+        ReportFolderExplorer = new ReportFolderExplorer { ReportFolders = new ObservableCollection<string>(ReportManager.ReportFolders) };
+
+        var result = ReportFolderExplorer.ShowDialog();
+        if (!result) return;
+
+        ReportManager.ReportFolders = ReportFolderExplorer.ReportFolders.ToList();
         var reports = ReportManager.GetReports();
         ReportViewController.RefreshReportsList(reports);
     }

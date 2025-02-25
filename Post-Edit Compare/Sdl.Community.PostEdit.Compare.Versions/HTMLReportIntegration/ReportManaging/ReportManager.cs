@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
@@ -13,39 +12,28 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
 {
     public class ReportManager
     {
+        private List<string> _reportFolders = [];
+
         public ReportManager()
         {
             if (File.Exists(SettingsFile))
-            {
-                foreach (var line in File.ReadAllLines(SettingsFile))
-                    if (!string.IsNullOrEmpty(line) && Directory.Exists(line))
-                        ReportFolders.Add(line);
-            }
+                LoadReportFoldersList();
             else
-            {
-                File.Create(SettingsFile).Close();
-                var myDocPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                var defaultReportFolder = Path.Combine(myDocPath, "PostEdit.Compare", "Reports");
-                AddReportFolder(defaultReportFolder);
-            }
+                CreateDefaultFoldersList();
         }
 
-        private List<string> ReportFolders { get; } = [];
+        public List<string> ReportFolders
+        {
+            get => _reportFolders;
+            set
+            {
+                _reportFolders = value;
+                SaveReportFoldersList();
+            }
+        }
 
         private string SettingsFile { get; } =
                             $"{Path.Combine(Constants.PostEditCompareSettingsFolder, "ReportFolders")}.txt";
-
-        public void AddNewReportFolder()
-        {
-            using var dialog = new OpenFileDialog();
-
-            dialog.CheckFileExists = false;
-            dialog.CheckPathExists = true;
-            dialog.ValidateNames = false; // Allows selecting folders
-            dialog.FileName = "Select this folder"; // Dummy filename to allow folder selection
-
-            if (dialog.ShowDialog() == DialogResult.OK) AddReportFolder(Path.GetDirectoryName(dialog.FileName));
-        }
 
         public void BackUpReport(ReportInfo selectedReport)
         {
@@ -150,11 +138,20 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
             return projectIdAttribute != null ? projectIdAttribute.Value : string.Empty;
         }
 
-        private void AddReportFolder(string reportFolder)
+        private void CreateDefaultFoldersList()
         {
-            if (ReportFolders.Contains(reportFolder)) return;
-            ReportFolders.Add(reportFolder);
+            File.Create(SettingsFile).Close();
+            ReportFolders = [Constants.PostEditCompareDefaultReportsFolder];
             File.WriteAllLines(SettingsFile, ReportFolders);
         }
+
+        private void LoadReportFoldersList()
+        {
+            foreach (var line in File.ReadAllLines(SettingsFile))
+                if (!string.IsNullOrEmpty(line) && Directory.Exists(line))
+                    ReportFolders.Add(line);
+        }
+
+        private void SaveReportFoldersList() => File.WriteAllLines(SettingsFile, ReportFolders);
     }
 }

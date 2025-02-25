@@ -45,12 +45,12 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
     
     [Action(nameof(AddNewReportFolder),
         typeof(ReportViewController),
-        Icon = "AddReportFolder", Name = "Add New Report Folder",
-        Description = "Add New Report Folder")]
+        Icon = "AddReportFolder", Name = "Add/Remove Report Folders",
+        Description = "Add/Remove Report Folders")]
     [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Default)]
     public class AddNewReportFolder : AbstractAction
     {
-        protected override void Execute() => Integration.AddReportFolder();
+        protected override void Execute() => Integration.EditReportFolderList();
     }
 
     [Action(nameof(OpenReport),
