@@ -17,7 +17,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
 
         public event Action SelectedReportChanged;
 
-        public void ToggleOnOff() => IsEnabled = !IsEnabled;
+        public void ToggleOnOff(bool enabled) => IsEnabled = enabled;
 
         public void Dispose()
         {

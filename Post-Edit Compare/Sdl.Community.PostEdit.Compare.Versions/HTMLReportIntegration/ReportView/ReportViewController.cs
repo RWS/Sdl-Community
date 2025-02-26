@@ -66,7 +66,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
             }
         }
 
-        public void ToggleReportExplorer() => ReportExplorer.ToggleOnOff();
+        public void ToggleReportExplorer(bool enabled) => ReportExplorer.ToggleOnOff(enabled);
 
         public async Task UpdateComments(List<CommentInfo> comments, string segmentId, string fileId) =>
             await ReportViewer.UpdateComments(comments, segmentId, fileId);

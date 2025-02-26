@@ -12,6 +12,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -151,7 +152,7 @@ public class Integration
     public static void ToggleReportProjectSync(bool syncEnabled)
     {
         SyncOn = syncEnabled;
-        ReportViewController.ToggleReportExplorer();
+        ReportViewController.ToggleReportExplorer(!syncEnabled);
 
         if (syncEnabled)
         {
