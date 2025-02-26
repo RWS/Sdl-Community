@@ -44,6 +44,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 
         public void RefreshReportsList(List<ReportInfo> reports)
         {
+            if (reports is null) return;
             ReportExplorerViewModel.SetReportsList(reports);
         }
 
@@ -82,6 +83,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
         {
             InitializeControls();
             AttachEvents();
+            Integration.Initialize();
         }
 
         private void AttachEvents()
@@ -122,6 +124,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 
         private void RefreshProjectList(List<ProjectInfo> projects)
         {
+            if (projects is null) return;
             ReportExplorerViewModel.SetProjectsList(projects);
         }
 
