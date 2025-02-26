@@ -97,14 +97,6 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin.Studio.TranslationProvider
                 SourceSegment = segment.Duplicate()
             };
 
-            if (!_options.ResendDrafts && _inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified) //i.e. if it's status is other than untranslated
-            { //don't do the lookup, b/c we don't need to pay google to translate text already translated if we edit a segment
-                translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
-                //later get these strings from resource file
-                results.Add(CreateSearchResult(segment, translation, segment.ToString()));
-                return results;
-            }
-
             // Look up the currently selected segment in the collection (normal segment lookup).
 
             string translatedText;
@@ -228,9 +220,12 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin.Studio.TranslationProvider
             tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
 
             var score = 0; //score to 0...change if needed to support scoring
-            tu.Origin = TranslationUnitOrigin.MachineTranslation;
-            var searchResult = new SearchResult(tu);
-            searchResult.ScoringResult = new ScoringResult();
+            tu.Origin = TranslationUnitOrigin.Nmt;
+            var searchResult = new SearchResult(tu)
+            {
+                TranslationProposal = new TranslationUnit(tu),
+                ScoringResult = new ScoringResult(),
+            };
             searchResult.ScoringResult.BaseScore = score;
             tu.ConfirmationLevel = ConfirmationLevel.Draft;
 

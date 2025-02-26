@@ -73,7 +73,7 @@
 	
 	<ItemGroup>
 		<Content Include="Resources\%24this.Icon.ico" />
-		<EntityDeploy Include="Resources\AmazonTranslate.ico" />
+		<None Include="Resources\AmazonTranslate.ico" />
 		<None Include="Resources\Question.ico" />
 		<None Include="Resources\ForumIcon.ico" />
 		<None Include="Resources\Download.ico" />
