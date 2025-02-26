@@ -90,13 +90,15 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
                 foreach (var reportFolder in ReportFolders)
                     reportList.AddRange(Directory.GetFiles(reportFolder, "*.html", SearchOption.AllDirectories).ToList());
 
+            reportList = reportList.OrderByDescending(File.GetCreationTime).ToList();
+
             List<ReportInfo> reports = [];
             foreach (var report in reportList)
             {
                 var projectId = ExtractProjectIdFromHtml(report);
 
                 var directoryName = new DirectoryInfo(Path.GetDirectoryName(report) ?? string.Empty).Name;
-                reports.Insert(0,
+                reports.Add(
                     new ReportInfo
                     {
                         ReportName = $@"{directoryName}\\{Path.GetFileName(report)}",
