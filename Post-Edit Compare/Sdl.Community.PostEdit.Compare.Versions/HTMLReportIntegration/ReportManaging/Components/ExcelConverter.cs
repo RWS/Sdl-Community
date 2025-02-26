@@ -59,7 +59,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
 
                 AddTitle(ws, projectName);
                 AddAdditionalInfo(ws, additionalInfo);
-                HighlightRow(ws, 3, Color.FromArgb(220, 230, 241), true);
+                //HighlightRow(ws, 3, Color.FromArgb(220, 230, 241), true);
 
                 var excelRow = 3;
                 foreach (var row in rows)
@@ -74,7 +74,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
                     if (excelRow == 3)
                     {
                         AddRowToWorksheet(ws, cells, excelRow);
-                        HighlightRow(ws, excelRow, Color.FromArgb(255, 155, 198, 199), true);
+                        HighlightRow(ws, 3, Color.FromArgb(255, 155, 198, 199), true);
                     }
                     else if (excelRow == 4)
                     {
@@ -129,7 +129,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
             ws.Cells[1, 1].Style.Font.Bold = true;
             ws.Cells[1, 1].Style.Font.Size = 20;
             ws.Cells[1, 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            ws.Cells[1, 1].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 155, 198, 199));
+            ws.Cells[1, 1].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(220, 230, 241));
             ws.Cells[1, 1].Style.Font.Color.SetColor(Color.Black);
             ws.Cells[1, 1].Style.WrapText = true;
             ws.Row(1).Height = 30;
@@ -145,6 +145,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
             ws.Cells[2, 1].Style.Font.Italic = true;
             ws.Cells[2, 1].Style.Font.Size = 12;
             ws.Cells[2, 1].Style.Font.Color.SetColor(Color.Gray);
+            ws.Cells[2, 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
+            ws.Cells[2, 1].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(220, 230, 241));
             ws.Cells[2, 1].Style.WrapText = true;
         }
 

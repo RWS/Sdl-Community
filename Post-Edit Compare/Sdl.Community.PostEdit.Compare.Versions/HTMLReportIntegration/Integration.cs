@@ -53,14 +53,16 @@ public class Integration
     {
         try
         {
-            if (ReportViewController.GetSelectedReport() == null) throw new ArgumentNullException();
-            var projectId = ReportViewController.GetSelectedReport().ProjectId;
+            var selectedReport = ReportViewController.GetSelectedReport();
+            if (selectedReport == null) throw new ArgumentNullException();
 
+            var projectId = selectedReport.ProjectId;
             var projectName = ProjectsController.GetAllProjects()
                 .FirstOrDefault(p => p.GetProjectInfo().Id.ToString() == projectId)?.GetProjectInfo().Name;
 
+            var excelReportProposedName = Path.GetFileNameWithoutExtension(selectedReport.ReportName);
             var report = await ReportViewController.GetNonInteractiveReport();
-            ReportManager.ExportReport(report, projectName);
+            ReportManager.ExportReport(report, projectName, excelReportProposedName);
         }
         catch (ArgumentException _)
         {

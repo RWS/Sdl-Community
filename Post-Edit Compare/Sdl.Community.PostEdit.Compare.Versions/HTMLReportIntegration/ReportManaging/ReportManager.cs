@@ -58,12 +58,13 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
             }
         }
 
-        public void ExportReport(string report, string projectName)
+        public void ExportReport(string report, string projectName, string selectedReportName)
         {
             var saveFileDialog = new SaveFileDialog
             {
                 Filter = "Excel files (*.xlsx)|*.xlsx|HTML files (*.html)|*.html",
                 DefaultExt = ".xlsx",
+                FileName = selectedReportName,
                 AddExtension = true
             };
 
