@@ -1,13 +1,13 @@
-﻿using OfficeOpenXml;
+﻿using HtmlAgilityPack;
+using OfficeOpenXml;
 using OfficeOpenXml.Style;
-using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
-using System.Drawing;
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.Components
 {
@@ -20,108 +20,10 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
             SaveTableToExcel(projectName, additionalInfo, tables, outputPath);
         }
 
-        private static (string Processed, string Compared, string Errors) ExtractAdditionalInfoFromHtml(string htmlReport)
-        {
-            var doc = new HtmlDocument();
-            doc.LoadHtml(htmlReport);
-            return (
-                GetNodeText(doc, "//tr[1]/td/span[2]/span[1]", "Processed: 0"),
-                GetNodeText(doc, "//tr[1]/td/span[2]/span[3]", "Compared: 0"),
-                GetNodeText(doc, "//tr[1]/td/span[2]/span[5]", "Errors: 0")
-            );
-        }
-
-        private static string GetNodeText(HtmlDocument doc, string xpath, string defaultValue)
-        {
-            var node = doc.DocumentNode.SelectSingleNode(xpath);
-            return node != null ? HttpUtility.HtmlDecode(node.InnerText.Trim()) : defaultValue;
-        }
-
-        private static List<HtmlNode> ExtractTableWithId(string html)
-        {
-            var doc = new HtmlDocument();
-            doc.LoadHtml(html);
-            return doc.DocumentNode.Descendants("table")
-                .Where(t => t.Descendants("tr").FirstOrDefault()?.Descendants("th")
-                    .Any(th => th.InnerText.Trim().Equals("ID", StringComparison.OrdinalIgnoreCase)) ?? false)
-                .ToList();
-        }
-
-        private static void SaveTableToExcel(string projectName, (string Processed, string Compared, string Errors) additionalInfo, List<HtmlNode> tableNodes, string filePath)
-        {
-            using var package = new ExcelPackage();
-            foreach (var tableNode in tableNodes)
-            {
-                var rows = tableNode.SelectNodes(".//tr");
-                if (rows == null || rows.Count < 2)
-                    continue;
-
-                var sheetName = GenerateSheetName(rows[2]);
-                var ws = package.Workbook.Worksheets.Add(sheetName);
-
-                AddTitle(ws, projectName);
-                AddAdditionalInfo(ws, additionalInfo);
-
-                var excelRow = 3;
-                foreach (var row in rows)
-                {
-                    var cells = row.SelectNodes("td|th");
-                    if (cells == null)
-                    {
-                        excelRow++;
-                        continue;
-                    }
-
-                    if (excelRow == 3)
-                    {
-                        AddRowToWorksheet(ws, cells, excelRow, rows.First());
-                        HighlightRow(ws, 3, Color.FromArgb(255, 155, 198, 199), true);
-                    }
-                    else if (excelRow == 4)
-                    {
-                        MergeAndStyleRow(ws, cells, excelRow, Color.FromArgb(255, 155, 198, 199));
-                        HighlightRow(ws, excelRow, Color.FromArgb(230, 230, 230));
-                    }
-                    else
-                    {
-                        AddRowToWorksheet(ws, cells, excelRow, rows.First());
-                    }
-
-                    excelRow++;
-                }
-
-                AutoFitColumns(ws);
-                ws.View.FreezePanes(4, 1);
-            }
-
-            package.SaveAs(new FileInfo(filePath));
-        }
-
-        private static string GenerateSheetName(HtmlNode row)
-        {
-            var dataFileIdAttribute = row.Attributes["data-file-id"];
-            return dataFileIdAttribute != null ? dataFileIdAttribute.Value : "Unknown";
-        }
-
-        private static void AddTitle(ExcelWorksheet ws, string projectName)
-        {
-            ws.Cells[1, 1, 1, 11].Merge = true;
-            ws.Cells[1, 1].Value = $"Post-Edit Comparison Report - {projectName}";
-            ws.Cells[1, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            ws.Cells[1, 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            ws.Cells[1, 1].Style.Font.Bold = true;
-            ws.Cells[1, 1].Style.Font.Size = 20;
-            ws.Cells[1, 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            ws.Cells[1, 1].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(220, 230, 241));
-            ws.Cells[1, 1].Style.Font.Color.SetColor(Color.Black);
-            ws.Cells[1, 1].Style.WrapText = true;
-            ws.Row(1).Height = 30;
-        }
-
-        private static void AddAdditionalInfo(ExcelWorksheet ws, (string Processed, string Compared, string Errors) additionalInfo)
+        private static void AddAdditionalInfo(ExcelWorksheet ws, (string Processed, string Compared, string Errors) additionalInfo, int columnCount)
         {
             var additionalInfoFormatted = $"{additionalInfo.Processed}, {additionalInfo.Compared}, {additionalInfo.Errors}";
-            ws.Cells[2, 1, 2, 11].Merge = true;
+            ws.Cells[2, 1, 2, columnCount].Merge = true;
             ws.Cells[2, 1].Value = additionalInfoFormatted;
             ws.Cells[2, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             ws.Cells[2, 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
@@ -131,16 +33,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
             ws.Cells[2, 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
             ws.Cells[2, 1].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(220, 230, 241));
             ws.Cells[2, 1].Style.WrapText = true;
-        }
-
-        private static void HighlightRow(ExcelWorksheet ws, int row, Color color, bool bold = false)
-        {
-            foreach (var cell in ws.Cells[row, 1, row, 11])
-            {
-                cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                cell.Style.Fill.BackgroundColor.SetColor(color);
-                cell.Style.Font.Bold = bold;
-            }
         }
 
         private static void AddRowToWorksheet(ExcelWorksheet ws, HtmlNodeCollection cells, int excelRow, HtmlNode headerRow)
@@ -180,32 +72,19 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
             }
         }
 
-        private static bool TryParsePercentage(string text, out double value)
+        private static void AddTitle(ExcelWorksheet ws, string projectName, int columnCount)
         {
-            if (text.EndsWith("%") && double.TryParse(text.TrimEnd('%'), NumberStyles.Any, CultureInfo.InvariantCulture, out value))
-            {
-                value /= 100;
-                return true;
-            }
-            value = 0;
-            return false;
-        }
-
-        private static void SetPercentage(ExcelRange cellRef, double value)
-        {
-            cellRef.Value = value;
-            cellRef.Style.Numberformat.Format = "0.00%";
-        }
-
-        private static bool TryParseNumeric(string text, out double value)
-        {
-            return double.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out value);
-        }
-
-        private static void SetNumeric(ExcelRange cellRef, double value, int excelCol)
-        {
-            cellRef.Value = value;
-            cellRef.Style.Numberformat.Format = excelCol == 1 || excelCol == 5 ? "0" : "#,##0.00";
+            ws.Cells[1, 1, 1, columnCount].Merge = true;
+            ws.Cells[1, 1].Value = $"Post-Edit Comparison Report - {projectName}";
+            ws.Cells[1, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            ws.Cells[1, 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            ws.Cells[1, 1].Style.Font.Bold = true;
+            ws.Cells[1, 1].Style.Font.Size = 20;
+            ws.Cells[1, 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
+            ws.Cells[1, 1].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(220, 230, 241));
+            ws.Cells[1, 1].Style.Font.Color.SetColor(Color.Black);
+            ws.Cells[1, 1].Style.WrapText = true;
+            ws.Row(1).Height = 30;
         }
 
         private static void ApplyBorders(ExcelRange cellRef)
@@ -220,40 +99,15 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
             cellRef.Style.Border.Right.Color.SetColor(Color.Black);
         }
 
-        private static int GetColumnIndex(string columnName, HtmlNode headerRow) =>
-            headerRow.SelectNodes("th").ToList().FindIndex(th =>
-                th.InnerText.Trim().Equals(columnName, StringComparison.OrdinalIgnoreCase)) + 1;
-
-        private static string ExtractStatusText(HtmlNode cell)
+        private static void ApplyRichTextFormatting(ExcelRange cellRef, string htmlContent)
         {
             var doc = new HtmlDocument();
-            doc.LoadHtml(cell.InnerHtml);
-            var statusParts = doc.DocumentNode.SelectNodes("//span")?
-                .Select(span => HttpUtility.HtmlDecode(span.InnerText.Trim()))
-                .Where(part => !string.IsNullOrWhiteSpace(part))
-                .ToArray();
-            return statusParts != null ? string.Join("\n", statusParts) : string.Empty;
-        }
+            doc.LoadHtml(htmlContent);
 
-        private static void MergeAndStyleRow(ExcelWorksheet ws, HtmlNodeCollection cells, int excelRow, Color color)
-        {
-            ws.Cells[excelRow, 1, excelRow, 11].Merge = true;
-            ws.Cells[excelRow, 1].Value = string.Join(" ", cells.Select(c => HttpUtility.HtmlDecode(c.InnerText.Trim())));
-            ws.Cells[excelRow, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            ws.Cells[excelRow, 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            ws.Cells[excelRow, 1].Style.Font.Bold = true;
-            ws.Cells[excelRow, 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            ws.Cells[excelRow, 1].Style.Fill.BackgroundColor.SetColor(color);
-            ws.Cells[excelRow, 1].Style.Font.Color.SetColor(Color.Black);
-        }
+            cellRef.Value = null; // Clear default value
+            cellRef.RichText.Clear(); // Clear any existing rich text formatting
 
-        private static void StyleHeaderCell(ExcelRange cellRef)
-        {
-            cellRef.Style.Font.Bold = true;
-            cellRef.Style.Fill.PatternType = ExcelFillStyle.Solid;
-            cellRef.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 155, 198, 199));
-            cellRef.Style.Font.Color.SetColor(Color.White);
-            cellRef.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            ProcessHtmlNodes(doc.DocumentNode, cellRef);
         }
 
         private static void AutoFitColumns(ExcelWorksheet ws)
@@ -271,54 +125,36 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
             }
         }
 
-        private static void ApplyRichTextFormatting(ExcelRange cellRef, string htmlContent)
+        private static (string Processed, string Compared, string Errors) ExtractAdditionalInfoFromHtml(string htmlReport)
         {
             var doc = new HtmlDocument();
-            doc.LoadHtml(htmlContent);
-
-            cellRef.Value = null; // Clear default value
-            cellRef.RichText.Clear(); // Clear any existing rich text formatting
-
-            ProcessHtmlNodes(doc.DocumentNode, cellRef);
+            doc.LoadHtml(htmlReport);
+            return (
+                GetNodeText(doc, "//tr[1]/td/span[2]/span[1]", "Processed: 0"),
+                GetNodeText(doc, "//tr[1]/td/span[2]/span[3]", "Compared: 0"),
+                GetNodeText(doc, "//tr[1]/td/span[2]/span[5]", "Errors: 0")
+            );
         }
 
-        private static void ProcessHtmlNodes(HtmlNode node, ExcelRange cellRef)
+        private static string ExtractStatusText(HtmlNode cell)
         {
-            foreach (var child in node.ChildNodes)
-            {
-                if (child.NodeType == HtmlNodeType.Text)
-                    cellRef.RichText.Add(child.InnerText);
+            var doc = new HtmlDocument();
+            doc.LoadHtml(cell.InnerHtml);
+            var statusParts = doc.DocumentNode.SelectNodes("//span")?
+                .Select(span => HttpUtility.HtmlDecode(span.InnerText.Trim()))
+                .Where(part => !string.IsNullOrWhiteSpace(part))
+                .ToArray();
+            return statusParts != null ? string.Join("\n", statusParts) : string.Empty;
+        }
 
-                else if (child.Name == "span")
-                {
-                    var classAttr = child.GetAttributeValue("class", "");
-                    var richText = cellRef.RichText.Add(child.InnerText);
-
-                    switch (classAttr)
-                    {
-                        case "textNew":
-                            richText.Color = Color.Green;
-                            break;
-                        case "textRemoved":
-                            richText.Color = Color.Red;
-                            richText.Strike = true;
-                            break;
-                        case "tagNew":
-                            richText.Color = Color.Blue;
-                            break;
-                        case "tagRemoved":
-                            richText.Color = Color.Gray;
-                            richText.Strike = true;
-                            break;
-                        case "tag":
-                            richText.Color = Color.Purple;
-                            break;
-                        default:
-                            richText.Color = Color.Black;
-                            break;
-                    }
-                }
-            }
+        private static List<HtmlNode> ExtractTableWithId(string html)
+        {
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            return doc.DocumentNode.Descendants("table")
+                .Where(t => t.Descendants("tr").FirstOrDefault()?.Descendants("th")
+                    .Any(th => th.InnerText.Trim().Equals("ID", StringComparison.OrdinalIgnoreCase)) ?? false)
+                .ToList();
         }
 
         private static string FormatComments(string html)
@@ -337,6 +173,175 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
             var comment = commentNode != null ? HttpUtility.HtmlDecode(commentNode.InnerText.Trim()) : string.Empty;
 
             return $"{comment}\n{severity}\n{date}\n{author}";
+        }
+
+        private static string GenerateSheetName(HtmlNode row)
+        {
+            var dataFileIdAttribute = row.Attributes["data-file-id"];
+            return dataFileIdAttribute != null ? dataFileIdAttribute.Value : "Unknown";
+        }
+
+        private static int GetColumnIndex(string columnName, HtmlNode headerRow) =>
+            headerRow.SelectNodes("th").ToList().FindIndex(th =>
+                th.InnerText.Trim().Equals(columnName, StringComparison.OrdinalIgnoreCase)) + 1;
+
+        private static string GetNodeText(HtmlDocument doc, string xpath, string defaultValue)
+        {
+            var node = doc.DocumentNode.SelectSingleNode(xpath);
+            return node != null ? HttpUtility.HtmlDecode(node.InnerText.Trim()) : defaultValue;
+        }
+
+        private static void HighlightRow(ExcelWorksheet ws, int row, Color color, bool bold, int columnCount)
+        {
+            foreach (var cell in ws.Cells[row, 1, row, columnCount])
+            {
+                cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                cell.Style.Fill.BackgroundColor.SetColor(color);
+                cell.Style.Font.Bold = bold;
+            }
+        }
+
+        private static void MergeAndStyleRow(ExcelWorksheet ws, HtmlNodeCollection cells, int excelRow, Color color, int columnCount)
+        {
+            ws.Cells[excelRow, 1, excelRow, columnCount].Merge = true;
+            ws.Cells[excelRow, 1].Value = string.Join(" ", cells.Select(c => HttpUtility.HtmlDecode(c.InnerText.Trim())));
+            ws.Cells[excelRow, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            ws.Cells[excelRow, 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            ws.Cells[excelRow, 1].Style.Font.Bold = true;
+            ws.Cells[excelRow, 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
+            ws.Cells[excelRow, 1].Style.Fill.BackgroundColor.SetColor(color);
+            ws.Cells[excelRow, 1].Style.Font.Color.SetColor(Color.Black);
+        }
+
+        private static void ProcessHtmlNodes(HtmlNode node, ExcelRange cellRef)
+        {
+            foreach (var child in node.ChildNodes)
+            {
+                if (child.NodeType == HtmlNodeType.Text)
+                    cellRef.RichText.Add(child.InnerText);
+                else if (child.Name == "span")
+                {
+                    var classAttr = child.GetAttributeValue("class", "");
+                    var richText = cellRef.RichText.Add(child.InnerText);
+
+                    switch (classAttr)
+                    {
+                        case "textNew":
+                            richText.Color = Color.Green;
+                            break;
+
+                        case "textRemoved":
+                            richText.Color = Color.Red;
+                            richText.Strike = true;
+                            break;
+
+                        case "tagNew":
+                            richText.Color = Color.Blue;
+                            break;
+
+                        case "tagRemoved":
+                            richText.Color = Color.Gray;
+                            richText.Strike = true;
+                            break;
+
+                        case "tag":
+                            richText.Color = Color.Purple;
+                            break;
+
+                        default:
+                            richText.Color = Color.Black;
+                            break;
+                    }
+                }
+            }
+        }
+
+        private static void SaveTableToExcel(string projectName, (string Processed, string Compared, string Errors) additionalInfo, List<HtmlNode> tableNodes, string filePath)
+        {
+            using var package = new ExcelPackage();
+            foreach (var tableNode in tableNodes)
+            {
+                var rows = tableNode.SelectNodes(".//tr");
+                if (rows == null || rows.Count < 2) continue;
+
+                var sheetName = GenerateSheetName(rows[2]);
+                var ws = package.Workbook.Worksheets.Add(sheetName);
+
+                var columnCount = rows.First().SelectNodes("th|td").Count;
+
+                AddTitle(ws, projectName, columnCount);
+                AddAdditionalInfo(ws, additionalInfo, columnCount);
+
+                var excelRow = 3;
+                foreach (var row in rows)
+                {
+                    var cells = row.SelectNodes("td|th");
+                    if (cells == null)
+                    {
+                        excelRow++;
+                        continue;
+                    }
+
+                    if (excelRow == 3)
+                    {
+                        AddRowToWorksheet(ws, cells, excelRow, rows.First());
+                        HighlightRow(ws, 3, Color.FromArgb(255, 155, 198, 199), true, columnCount);
+                    }
+                    else if (excelRow == 4)
+                    {
+                        MergeAndStyleRow(ws, cells, excelRow, Color.FromArgb(255, 155, 198, 199), columnCount);
+                        HighlightRow(ws, excelRow, Color.FromArgb(230, 230, 230), false, columnCount);
+                    }
+                    else
+                    {
+                        AddRowToWorksheet(ws, cells, excelRow, rows.First());
+                    }
+
+                    excelRow++;
+                }
+
+                AutoFitColumns(ws);
+                ws.View.FreezePanes(4, 1);
+            }
+
+            package.SaveAs(new FileInfo(filePath));
+        }
+
+        private static void SetNumeric(ExcelRange cellRef, double value, int excelCol)
+        {
+            cellRef.Value = value;
+            cellRef.Style.Numberformat.Format = excelCol == 1 || excelCol == 5 ? "0" : "#,##0.00";
+        }
+
+        private static void SetPercentage(ExcelRange cellRef, double value)
+        {
+            cellRef.Value = value;
+            cellRef.Style.Numberformat.Format = "0.00%";
+        }
+
+        private static void StyleHeaderCell(ExcelRange cellRef)
+        {
+            cellRef.Style.Font.Bold = true;
+            cellRef.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            cellRef.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 155, 198, 199));
+            cellRef.Style.Font.Color.SetColor(Color.White);
+            cellRef.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+        }
+
+        private static bool TryParseNumeric(string text, out double value)
+        {
+            return double.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out value);
+        }
+
+        private static bool TryParsePercentage(string text, out double value)
+        {
+            if (text.EndsWith("%") && double.TryParse(text.TrimEnd('%'), NumberStyles.Any, CultureInfo.InvariantCulture, out value))
+            {
+                value /= 100;
+                return true;
+            }
+            value = 0;
+            return false;
         }
     }
 }
