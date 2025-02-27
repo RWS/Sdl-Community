@@ -24,15 +24,17 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
         {
             var doc = new HtmlDocument();
             doc.LoadHtml(htmlReport);
-            var processedNode = doc.DocumentNode.SelectSingleNode("//tr[1]/td/span[2]/span[1]");
-            var comparedNode = doc.DocumentNode.SelectSingleNode("//tr[1]/td/span[2]/span[3]");
-            var errorsNode = doc.DocumentNode.SelectSingleNode("//tr[1]/td/span[2]/span[5]");
-
             return (
-                processedNode != null ? HttpUtility.HtmlDecode(processedNode.InnerText.Trim()) : "Processed: 0",
-                comparedNode != null ? HttpUtility.HtmlDecode(comparedNode.InnerText.Trim()) : "Compared: 0",
-                errorsNode != null ? HttpUtility.HtmlDecode(errorsNode.InnerText.Trim()) : "Errors: 0"
+                GetNodeText(doc, "//tr[1]/td/span[2]/span[1]", "Processed: 0"),
+                GetNodeText(doc, "//tr[1]/td/span[2]/span[3]", "Compared: 0"),
+                GetNodeText(doc, "//tr[1]/td/span[2]/span[5]", "Errors: 0")
             );
+        }
+
+        private static string GetNodeText(HtmlDocument doc, string xpath, string defaultValue)
+        {
+            var node = doc.DocumentNode.SelectSingleNode(xpath);
+            return node != null ? HttpUtility.HtmlDecode(node.InnerText.Trim()) : defaultValue;
         }
 
         private static List<HtmlNode> ExtractTableWithId(string html)
@@ -51,8 +53,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
             foreach (var tableNode in tableNodes)
             {
                 var rows = tableNode.SelectNodes(".//tr");
-                var headerRow = rows.FirstOrDefault();
-
                 if (rows == null || rows.Count < 2)
                     continue;
 
@@ -61,7 +61,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
 
                 AddTitle(ws, projectName);
                 AddAdditionalInfo(ws, additionalInfo);
-                //HighlightRow(ws, 3, Color.FromArgb(220, 230, 241), true);
 
                 var excelRow = 3;
                 foreach (var row in rows)
@@ -75,7 +74,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
 
                     if (excelRow == 3)
                     {
-                        AddRowToWorksheet(ws, cells, excelRow, headerRow);
+                        AddRowToWorksheet(ws, cells, excelRow, rows.First());
                         HighlightRow(ws, 3, Color.FromArgb(255, 155, 198, 199), true);
                     }
                     else if (excelRow == 4)
@@ -85,7 +84,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
                     }
                     else
                     {
-                        AddRowToWorksheet(ws, cells, excelRow, headerRow);
+                        AddRowToWorksheet(ws, cells, excelRow, rows.First());
                     }
 
                     excelRow++;
@@ -102,24 +101,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
         {
             var dataFileIdAttribute = row.Attributes["data-file-id"];
             return dataFileIdAttribute != null ? dataFileIdAttribute.Value : "Unknown";
-        }
-
-        private static string FormatComments(string html)
-        {
-            var doc = new HtmlDocument();
-            doc.LoadHtml(html);
-
-            var severityNode = doc.DocumentNode.SelectSingleNode("//div[@style='white-space: nowrap; background-color: #DFDFFF; text-align: left; color: Black;margin-bottom: 1px;']/span[1]");
-            var dateNode = doc.DocumentNode.SelectSingleNode("//div[@style='white-space: nowrap; background-color: #DFDFFF; text-align: left; color: Black;margin-bottom: 1px;']/span[2]");
-            var authorNode = doc.DocumentNode.SelectSingleNode("//div[@style='white-space: nowrap; background-color: #DFDFFF; text-align: left; color: Black;margin-bottom: 1px;']/span[3]");
-            var commentNode = doc.DocumentNode.SelectSingleNode("//p[@style='margin: 0px; padding: 3;']");
-
-            var severity = severityNode != null ? HttpUtility.HtmlDecode(severityNode.InnerText.Trim()) : string.Empty;
-            var date = dateNode != null ? HttpUtility.HtmlDecode(dateNode.InnerText.Trim()) : string.Empty;
-            var author = authorNode != null ? HttpUtility.HtmlDecode(authorNode.InnerText.Trim()) : string.Empty;
-            var comment = commentNode != null ? HttpUtility.HtmlDecode(commentNode.InnerText.Trim()) : string.Empty;
-
-            return $"{comment}\n{severity}\n{date}\n{author}";
         }
 
         private static void AddTitle(ExcelWorksheet ws, string projectName)
@@ -175,40 +156,68 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
                 var cellRef = ws.Cells[excelRow, excelCol];
 
                 if (excelRow > 4 && excelCol == targetComparisonColumnIndex)
-                    cellText = cell.InnerHtml;
-
-                if (excelRow > 3 && excelCol == statusColumnIndex) cellText = ExtractStatusText(cell);
-
-                if (excelRow > 4 && excelCol == commentsColumnIndex)
-                    cellText = FormatComments(cell.InnerHtml);
-
-                if (cellText.EndsWith("%") && double.TryParse(cellText.TrimEnd('%'), NumberStyles.Any, CultureInfo.InvariantCulture, out double percentageValue))
-                {
-                    cellRef.Value = percentageValue / 100;
-                    cellRef.Style.Numberformat.Format = "0.00%";
-                }
-                else if (double.TryParse(cellText, NumberStyles.Any, CultureInfo.InvariantCulture, out double numericValue))
-                {
-                    cellRef.Value = numericValue;
-                    cellRef.Style.Numberformat.Format = (excelCol == 1 || excelCol == 5) ? "0" : "#,##0.00";
-                }
+                    ApplyRichTextFormatting(cellRef, cell.InnerHtml);
                 else
-                    cellRef.Value = cellText;
+                {
+                    if (excelRow > 3 && excelCol == statusColumnIndex)
+                        cellRef.Value = ExtractStatusText(cell);
+                    else if (excelRow > 4 && excelCol == commentsColumnIndex)
+                        cellRef.Value = FormatComments(cell.InnerHtml);
+                    else if (TryParsePercentage(cellText, out double percentage))
+                        SetPercentage(cellRef, percentage);
+                    else if (TryParseNumeric(cellText, out double numericValue))
+                        SetNumeric(cellRef, numericValue, excelCol);
+                    else
+                        cellRef.Value = cellText;
+                }
 
-                // Set border style and color
-                cellRef.Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                cellRef.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                cellRef.Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                cellRef.Style.Border.Right.Style = ExcelBorderStyle.Thin;
-                cellRef.Style.Border.Top.Color.SetColor(Color.Black);
-                cellRef.Style.Border.Bottom.Color.SetColor(Color.Black);
-                cellRef.Style.Border.Left.Color.SetColor(Color.Black);
-                cellRef.Style.Border.Right.Color.SetColor(Color.Black);
+                ApplyBorders(cellRef);
 
-                if (excelRow == 1) StyleHeaderCell(cellRef);
+                if (excelRow == 1)
+                    StyleHeaderCell(cellRef);
 
                 excelCol++;
             }
+        }
+
+        private static bool TryParsePercentage(string text, out double value)
+        {
+            if (text.EndsWith("%") && double.TryParse(text.TrimEnd('%'), NumberStyles.Any, CultureInfo.InvariantCulture, out value))
+            {
+                value /= 100;
+                return true;
+            }
+            value = 0;
+            return false;
+        }
+
+        private static void SetPercentage(ExcelRange cellRef, double value)
+        {
+            cellRef.Value = value;
+            cellRef.Style.Numberformat.Format = "0.00%";
+        }
+
+        private static bool TryParseNumeric(string text, out double value)
+        {
+            return double.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out value);
+        }
+
+        private static void SetNumeric(ExcelRange cellRef, double value, int excelCol)
+        {
+            cellRef.Value = value;
+            cellRef.Style.Numberformat.Format = excelCol == 1 || excelCol == 5 ? "0" : "#,##0.00";
+        }
+
+        private static void ApplyBorders(ExcelRange cellRef)
+        {
+            cellRef.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+            cellRef.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+            cellRef.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+            cellRef.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+            cellRef.Style.Border.Top.Color.SetColor(Color.Black);
+            cellRef.Style.Border.Bottom.Color.SetColor(Color.Black);
+            cellRef.Style.Border.Left.Color.SetColor(Color.Black);
+            cellRef.Style.Border.Right.Color.SetColor(Color.Black);
         }
 
         private static int GetColumnIndex(string columnName, HtmlNode headerRow) =>
@@ -260,6 +269,74 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
                     }
                 }
             }
+        }
+
+        private static void ApplyRichTextFormatting(ExcelRange cellRef, string htmlContent)
+        {
+            var doc = new HtmlDocument();
+            doc.LoadHtml(htmlContent);
+
+            cellRef.Value = null; // Clear default value
+            cellRef.RichText.Clear(); // Clear any existing rich text formatting
+
+            ProcessHtmlNodes(doc.DocumentNode, cellRef);
+        }
+
+        private static void ProcessHtmlNodes(HtmlNode node, ExcelRange cellRef)
+        {
+            foreach (var child in node.ChildNodes)
+            {
+                if (child.NodeType == HtmlNodeType.Text)
+                    cellRef.RichText.Add(child.InnerText);
+
+                else if (child.Name == "span")
+                {
+                    var classAttr = child.GetAttributeValue("class", "");
+                    var richText = cellRef.RichText.Add(child.InnerText);
+
+                    switch (classAttr)
+                    {
+                        case "textNew":
+                            richText.Color = Color.Green;
+                            break;
+                        case "textRemoved":
+                            richText.Color = Color.Red;
+                            richText.Strike = true;
+                            break;
+                        case "tagNew":
+                            richText.Color = Color.Blue;
+                            break;
+                        case "tagRemoved":
+                            richText.Color = Color.Gray;
+                            richText.Strike = true;
+                            break;
+                        case "tag":
+                            richText.Color = Color.Purple;
+                            break;
+                        default:
+                            richText.Color = Color.Black;
+                            break;
+                    }
+                }
+            }
+        }
+
+        private static string FormatComments(string html)
+        {
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+
+            var severityNode = doc.DocumentNode.SelectSingleNode("//div[@style='white-space: nowrap; background-color: #DFDFFF; text-align: left; color: Black;margin-bottom: 1px;']/span[1]");
+            var dateNode = doc.DocumentNode.SelectSingleNode("//div[@style='white-space: nowrap; background-color: #DFDFFF; text-align: left; color: Black;margin-bottom: 1px;']/span[2]");
+            var authorNode = doc.DocumentNode.SelectSingleNode("//div[@style='white-space: nowrap; background-color: #DFDFFF; text-align: left; color: Black;margin-bottom: 1px;']/span[3]");
+            var commentNode = doc.DocumentNode.SelectSingleNode("//p[@style='margin: 0px; padding: 3;']");
+
+            var severity = severityNode != null ? HttpUtility.HtmlDecode(severityNode.InnerText.Trim()) : string.Empty;
+            var date = dateNode != null ? HttpUtility.HtmlDecode(dateNode.InnerText.Trim()) : string.Empty;
+            var author = authorNode != null ? HttpUtility.HtmlDecode(authorNode.InnerText.Trim()) : string.Empty;
+            var comment = commentNode != null ? HttpUtility.HtmlDecode(commentNode.InnerText.Trim()) : string.Empty;
+
+            return $"{comment}\n{severity}\n{date}\n{author}";
         }
     }
 }
