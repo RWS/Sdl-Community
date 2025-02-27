@@ -72,7 +72,6 @@ function getColumnIndexFromTable(columnName) {
 function collectSegmentsDataFromHTML() {
     const segments = [];
 
-
     const statusColumnIndex = getColumnIndexFromTable('Status');
     const matchTypeColumnIndex = getColumnIndexFromTable('Match');
 
@@ -82,20 +81,15 @@ function collectSegmentsDataFromHTML() {
         const statusColumn = getCellFromRow(row, statusColumnIndex);
         const matchType = getCellFromRow(row, matchTypeColumnIndex)?.textContent.trim();
 
-        const status = statusColumn.querySelector('span')?.textContent.trim();
-        
-        //const statusOriginal = status.querySelector('span:nth-child(2)')?.textContent.trim();
-
-        //const comment = row.querySelector('input[name="commentInput"]')?.value.trim() || '';
+        const statuses = statusColumn.querySelectorAll('span');
+        const status = statuses[statuses.length - 1]?.textContent.trim();
 
         if (segmentId) {
             segments.push({
                 segmentId,
                 fileId,
                 status,
-                //statusOriginal,
                 matchType
-                //comment
             });
         }
     });
