@@ -35,40 +35,73 @@ function showAllSegments() {
     });
 }
 
+function getCellFromRow(row, cellIndex) {
+    const cell = row.cells[cellIndex];
+    if (cell) {
+        return cell;
+    } else {
+        console.error('Cell not found at index: ' + cellIndex);
+        return null;
+    }
+}
+
+//method for extracting a column index from a table
+function getColumnIndexFromTable(columnName) {
+
+    const table = document.querySelector('table tr[data-file-id]').closest('table');
+    const headers = table.querySelectorAll('th');
+
+    let columnIndex = -1;
+
+    headers.forEach((header, index) => {
+        if (header.textContent.trim() === columnName) {
+            columnIndex = index;
+        }
+    });
+
+    if (columnIndex !== -1) {
+        console.info('Status column found at index: ' + columnIndex);
+    } else {
+        console.error('Status column not found');
+    }
+
+    return columnIndex;
+}
+
+
 function collectSegmentsDataFromHTML() {
     const segments = [];
-    const table = document.querySelector('table');
 
-    if (!table) return segments;
 
-    // Get header cells and find index of "Status" and "Match" columns
-    const headers = Array.from(table.querySelectorAll('thead tr th'));
-    const statusIndex = headers.findIndex(th => th.textContent.trim().toLowerCase() === "status") + 1;
-    const matchIndex = headers.findIndex(th => th.textContent.trim().toLowerCase() === "match") + 1;
-
-    if (statusIndex === 0 || matchIndex === 0) return segments; // Ensure columns exist
+    const statusColumnIndex = getColumnIndexFromTable('Status');
+    const matchTypeColumnIndex = getColumnIndexFromTable('Match');
 
     document.querySelectorAll('table tr[data-file-id]').forEach(row => {
         const segmentId = row.querySelector('td:first-child')?.textContent.trim();
         const fileId = row.getAttribute('data-file-id');
-        const statusColumn = row.querySelector(`td:nth-child(${statusIndex})`);
-        const matchType = row.querySelector(`td:nth-child(${matchIndex})`)?.textContent.trim();
+        const statusColumn = getCellFromRow(row, statusColumnIndex);
+        const matchType = getCellFromRow(row, matchTypeColumnIndex)?.textContent.trim();
 
-        const status = statusColumn?.querySelector('span')?.textContent.trim();
+        const status = statusColumn.querySelector('span')?.textContent.trim();
+        
+        //const statusOriginal = status.querySelector('span:nth-child(2)')?.textContent.trim();
+
+        //const comment = row.querySelector('input[name="commentInput"]')?.value.trim() || '';
 
         if (segmentId) {
             segments.push({
                 segmentId,
                 fileId,
                 status,
+                //statusOriginal,
                 matchType
+                //comment
             });
         }
     });
 
     return segments;
 }
-
 
 function getCleanedHTMLForExport() {
     console.log("Cleaning exportable HTML...");
