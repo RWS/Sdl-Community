@@ -37,32 +37,38 @@ function showAllSegments() {
 
 function collectSegmentsDataFromHTML() {
     const segments = [];
+    const table = document.querySelector('table');
+
+    if (!table) return segments;
+
+    // Get header cells and find index of "Status" and "Match" columns
+    const headers = Array.from(table.querySelectorAll('thead tr th'));
+    const statusIndex = headers.findIndex(th => th.textContent.trim().toLowerCase() === "status") + 1;
+    const matchIndex = headers.findIndex(th => th.textContent.trim().toLowerCase() === "match") + 1;
+
+    if (statusIndex === 0 || matchIndex === 0) return segments; // Ensure columns exist
 
     document.querySelectorAll('table tr[data-file-id]').forEach(row => {
         const segmentId = row.querySelector('td:first-child')?.textContent.trim();
         const fileId = row.getAttribute('data-file-id');
-        const statusColumn = row.querySelector('td:nth-child(6)');
-        const matchType = row.querySelector('td:nth-child(7)')?.textContent.trim();
+        const statusColumn = row.querySelector(`td:nth-child(${statusIndex})`);
+        const matchType = row.querySelector(`td:nth-child(${matchIndex})`)?.textContent.trim();
 
-        const status = statusColumn.querySelector('span')?.textContent.trim();
-        //const statusOriginal = status.querySelector('span:nth-child(2)')?.textContent.trim();
-
-        //const comment = row.querySelector('input[name="commentInput"]')?.value.trim() || '';
+        const status = statusColumn?.querySelector('span')?.textContent.trim();
 
         if (segmentId) {
             segments.push({
                 segmentId,
                 fileId,
                 status,
-                //statusOriginal,
                 matchType
-                //comment
             });
         }
     });
 
     return segments;
 }
+
 
 function getCleanedHTMLForExport() {
     console.log("Cleaning exportable HTML...");
