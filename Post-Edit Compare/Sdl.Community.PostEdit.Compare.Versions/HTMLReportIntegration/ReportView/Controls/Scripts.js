@@ -47,7 +47,6 @@ function getCellFromRow(row, cellIndex) {
 
 //method for extracting a column index from a table
 function getColumnIndexFromTable(columnName) {
-
     const table = document.querySelector('table tr[data-file-id]').closest('table');
     const headers = table.querySelectorAll('th');
 
@@ -67,7 +66,6 @@ function getColumnIndexFromTable(columnName) {
 
     return columnIndex;
 }
-
 
 function collectSegmentsDataFromHTML() {
     const segments = [];
@@ -168,40 +166,40 @@ function updateSegmentStatus(segmentId, fileId, newStatus) {
 
         if (segmentCell) {
             const cellContent = segmentCell.textContent.trim();
-            if (cellContent === segmentId){
+            if (cellContent === segmentId) {
                 console.info('SegmentId found');
-            if (fileIdRow === fileId) {
-                console.info('FileId found');
+                if (fileIdRow === fileId) {
+                    console.info('FileId found');
 
-                // Locate the status cell
-                const statusCell = row.querySelector('td:nth-child(6)');
-                if (statusCell) {
-                    const originalStatusElement = statusCell.querySelector('span');
-                    const originalStatus = originalStatusElement ? originalStatusElement.textContent.trim() : null;
+                    // Locate the status cell
+                    const statusCell = row.querySelector('td:nth-child(6)');
+                    if (statusCell) {
+                        const originalStatusElement = statusCell.querySelector('span');
+                        const originalStatus = originalStatusElement ? originalStatusElement.textContent.trim() : null;
 
-                    const isOriginal = newStatus === originalStatus;
+                        const isOriginal = newStatus === originalStatus;
 
-                    console.info('newStatus ' + newStatus + '.\n' + 'original status ' + originalStatus + '.\n');
-                    console.info('is original' + isOriginal + '.\n');
+                        console.info('newStatus ' + newStatus + '.\n' + 'original status ' + originalStatus + '.\n');
+                        console.info('is original' + isOriginal + '.\n');
 
-                    const newStatusElement = statusCell.querySelector('.new-status');
+                        const newStatusElement = statusCell.querySelector('.new-status');
 
-                    if (!isOriginal) {
-                        if (newStatusElement) {
-                            newStatusElement.innerHTML = newStatus;
-                        } else {
-                            const statusHtml = '          <div class="new-status">' + newStatus + '</div>';
-                            statusCell.innerHTML = statusHtml + statusCell.innerHTML;
+                        if (!isOriginal) {
+                            if (newStatusElement) {
+                                newStatusElement.innerHTML = newStatus;
+                            } else {
+                                const statusHtml = '          <div class="new-status">' + newStatus + '</div>';
+                                statusCell.innerHTML = statusHtml + statusCell.innerHTML;
+                            }
+                        } else if (newStatusElement) {
+                            statusCell.removeChild(newStatusElement);
                         }
-                    } else if (newStatusElement) {
-                        statusCell.removeChild(newStatusElement);
+                    } else {
+                        console.error('Status column not found in segment row: ' + segmentId);
                     }
-                } else {
-                    console.error('Status column not found in segment row: ' + segmentId);
                 }
             }
         }
-    }
     });
 }
 

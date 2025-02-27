@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
@@ -74,10 +75,16 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
             {
                 case 1:
                     ExcelConverter.WriteExcelSpreadsheet(report, saveFileDialog.FileName, projectName);
+                    if (MessageBox.Show("Would you like to open the newly created report?", "New Report Created",
+                            MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                        Process.Start(saveFileDialog.FileName);
                     break;
 
                 case 2:
                     File.WriteAllText(saveFileDialog.FileName, report);
+                    if (MessageBox.Show("Would you like to open the newly created report?", "New Report Created",
+                            MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                        Process.Start(saveFileDialog.FileName);
                     break;
             }
         }

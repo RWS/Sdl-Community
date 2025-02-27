@@ -51,10 +51,12 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
             foreach (var tableNode in tableNodes)
             {
                 var rows = tableNode.SelectNodes(".//tr");
+                var headerRow = rows.FirstOrDefault();
+
                 if (rows == null || rows.Count < 2)
                     continue;
 
-                var sheetName = GenerateSheetName(rows[2]); 
+                var sheetName = GenerateSheetName(rows[2]);
                 var ws = package.Workbook.Worksheets.Add(sheetName);
 
                 AddTitle(ws, projectName);
@@ -73,7 +75,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
 
                     if (excelRow == 3)
                     {
-                        AddRowToWorksheet(ws, cells, excelRow);
+                        AddRowToWorksheet(ws, cells, excelRow, headerRow);
                         HighlightRow(ws, 3, Color.FromArgb(255, 155, 198, 199), true);
                     }
                     else if (excelRow == 4)
@@ -83,7 +85,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
                     }
                     else
                     {
-                        AddRowToWorksheet(ws, cells, excelRow);
+                        AddRowToWorksheet(ws, cells, excelRow, headerRow);
                     }
 
                     excelRow++;
@@ -160,23 +162,25 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
             }
         }
 
-        private static void AddRowToWorksheet(ExcelWorksheet ws, HtmlNodeCollection cells, int excelRow)
+        private static void AddRowToWorksheet(ExcelWorksheet ws, HtmlNodeCollection cells, int excelRow, HtmlNode headerRow)
         {
-            int excelCol = 1;
+            var commentsColumnIndex = GetColumnIndex("Comments", headerRow);
+            var statusColumnIndex = GetColumnIndex("Status", headerRow);
+            var targetComparisonColumnIndex = GetColumnIndex("Target (Comparison)", headerRow);
+
+            var excelCol = 1;
             foreach (var cell in cells)
             {
                 var cellText = HttpUtility.HtmlDecode(cell.InnerText.Trim());
                 var cellRef = ws.Cells[excelRow, excelCol];
 
-                if (excelRow > 1 && excelCol == 6)
-                {
-                    cellText = ExtractStatusText(cell);
-                }
+                if (excelRow > 4 && excelCol == targetComparisonColumnIndex)
+                    cellText = cell.InnerHtml;
 
-                if (excelRow > 4 && excelCol == 11) // "Comments" is the 11th column
-                {
+                if (excelRow > 3 && excelCol == statusColumnIndex) cellText = ExtractStatusText(cell);
+
+                if (excelRow > 4 && excelCol == commentsColumnIndex)
                     cellText = FormatComments(cell.InnerHtml);
-                }
 
                 if (cellText.EndsWith("%") && double.TryParse(cellText.TrimEnd('%'), NumberStyles.Any, CultureInfo.InvariantCulture, out double percentageValue))
                 {
@@ -189,9 +193,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
                     cellRef.Style.Numberformat.Format = (excelCol == 1 || excelCol == 5) ? "0" : "#,##0.00";
                 }
                 else
-                {
                     cellRef.Value = cellText;
-                }
 
                 // Set border style and color
                 cellRef.Style.Border.Top.Style = ExcelBorderStyle.Thin;
@@ -203,14 +205,15 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
                 cellRef.Style.Border.Left.Color.SetColor(Color.Black);
                 cellRef.Style.Border.Right.Color.SetColor(Color.Black);
 
-                if (excelRow == 1)
-                {
-                    StyleHeaderCell(cellRef);
-                }
+                if (excelRow == 1) StyleHeaderCell(cellRef);
 
                 excelCol++;
             }
         }
+
+        private static int GetColumnIndex(string columnName, HtmlNode headerRow) =>
+            headerRow.SelectNodes("th").ToList().FindIndex(th =>
+                th.InnerText.Trim().Equals(columnName, StringComparison.OrdinalIgnoreCase)) + 1;
 
         private static string ExtractStatusText(HtmlNode cell)
         {
