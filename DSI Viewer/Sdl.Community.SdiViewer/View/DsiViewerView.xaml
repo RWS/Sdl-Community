@@ -97,9 +97,6 @@
 			</DockPanel>
 
 			<DataGrid Grid.Row="1"
-                      SelectionMode="Extended"
-				      SelectionUnit="CellOrRowHeader"
-					  ClipboardCopyMode="ExcludeHeader"
 					  Name="DSITabel"
 					  ItemsSource="{Binding DocumentStructureInformation}"
 					  Style="{StaticResource Sdl.DataGrid.GenericStyle}"
@@ -216,9 +213,6 @@
 			</DockPanel>
 
 			<DataGrid Grid.Row="4"
-                      SelectionMode="Extended"
-					  SelectionUnit="CellOrRowHeader"
-					  ClipboardCopyMode="ExcludeHeader"
 					  Name="CommentsTable"
 					  ItemsSource="{Binding Comments}"
 					  AutomationProperties.Name="Comments"
@@ -387,32 +381,89 @@
 				</DataGrid.Visibility>
 
 				<DataGrid.Columns>
-					<DataGridTextColumn Header="Tag ID"
-										Binding="{Binding Id}"
-										ElementStyle="{StaticResource DataGridTextColumnStyle}"
-										IsReadOnly="True" />
+                    <DataGridTemplateColumn Header="Tag ID"
+											 IsReadOnly="True" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Id}"
+										  Background="Transparent"
+										  BorderThickness="0"
+										  VerticalAlignment="Center" 
+										  IsReadOnly="True"
+										  TextWrapping="Wrap"
+										  IsHitTestVisible="True"
+										  IsReadOnlyCaretVisible="True" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-					<DataGridTextColumn Header="Start tag"
-										Binding="{Binding StartTag}"
-										ElementStyle="{StaticResource DataGridTextColumnStyle}"
-										IsReadOnly="True" />
+                    <DataGridTemplateColumn Header="Start tag"
+									      IsReadOnly="True" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding StartTag}"
+										  Background="Transparent"
+										  BorderThickness="0"
+										  VerticalAlignment="Center" 
+										  IsReadOnly="True"
+										  TextWrapping="Wrap"
+										  IsHitTestVisible="True"
+										  IsReadOnlyCaretVisible="True" />	
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-					<DataGridTextColumn Header="End tag"
-										Binding="{Binding EndTag}"
-										ElementStyle="{StaticResource DataGridTextColumnStyle}"
-										IsReadOnly="True" />
+                    <DataGridTemplateColumn Header="End tag"
+											IsReadOnly="True" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding EndTag}"
+										   Background="Transparent"
+										   BorderThickness="0"
+										   VerticalAlignment="Center" 
+										   IsReadOnly="True"
+										   TextWrapping="Wrap"
+										   IsHitTestVisible="True"
+										   IsReadOnlyCaretVisible="True" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-					<DataGridTextColumn Header="Tag Attributes"
-										Binding="{Binding Attributes}"
-										ElementStyle="{StaticResource DataGridTextColumnStyle}"
-										IsReadOnly="True" />
 
-					<DataGridTextColumn Header="Tag Content"
-										Binding="{Binding Content}"
-										ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                    <DataGridTemplateColumn Header="Tag Attributes"
+											 IsReadOnly="True" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Attributes}"
+										Background="Transparent"
+										BorderThickness="0"
+										VerticalAlignment="Center" 
 										IsReadOnly="True"
-										Width="*" />
-				</DataGrid.Columns>
+										TextWrapping="Wrap"
+										IsHitTestVisible="True"
+										IsReadOnlyCaretVisible="True" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Header="Tag Content"
+										  IsReadOnly="True"
+										  Width="*" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Content}"
+										 Background="Transparent"
+										 BorderThickness="0"
+										 VerticalAlignment="Center" 
+										 IsReadOnly="True"
+										 TextWrapping="Wrap"
+										 IsHitTestVisible="True"
+										 IsReadOnlyCaretVisible="True" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
 			</DataGrid>
 
 			<Separator Grid.Row="8"
@@ -472,20 +523,30 @@
 					<AccessText>_Model:</AccessText>
 				</Label>
 
-				<TextBlock Grid.Row="0"
+                <TextBox Grid.Row="0"
 						   Grid.Column="1"
 						   Name="QECurrentValue"
 						   Text="{Binding TranslationOriginData.QualityEstimation}"
 						   AutomationProperties.Name="{Binding TranslationOriginData.AccessibilityQELabel}"
 						   Focusable="True"
+                           IsHitTestVisible="True"
+						   Background="Transparent"
+                           IsReadOnly="True"
+						   BorderThickness="0"
+						   IsReadOnlyCaretVisible="True"
 						   HorizontalAlignment="Left"
 						   VerticalAlignment="Center" />
 
-				<TextBlock Grid.Row="1"
+				<TextBox Grid.Row="1"
 						   Grid.Column="1"
 						   Name="ModelCurrentValue"
 						   Text="{Binding TranslationOriginData.Model}"
 						   AutomationProperties.Name="{Binding TranslationOriginData.AccessibilityModelLabel}"
+						   IsHitTestVisible="True"
+						   Background="Transparent"
+						   BorderThickness="0"
+                           IsReadOnly="True"
+						   IsReadOnlyCaretVisible="True"
 						   Focusable="True"
 						   HorizontalAlignment="Left"
 						   VerticalAlignment="Center" />
