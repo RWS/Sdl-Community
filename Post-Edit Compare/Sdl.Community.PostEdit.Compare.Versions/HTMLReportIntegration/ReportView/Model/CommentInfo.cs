@@ -9,8 +9,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model
         public string Author { get; set; }
         public string Date { get; set; }
 
-        [JsonConverter(typeof(StringEnumConverter))]
-        public Severity Severity { get; set; }
+        //[JsonConverter(typeof(StringEnumConverter))]
+        public string Severity { get; set; }
         public string Text { get; set; }
     }
 }

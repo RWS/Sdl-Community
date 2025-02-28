@@ -1,5 +1,4 @@
-﻿using Sdl.Community.PostEdit.Compare.Core;
-using Sdl.Community.PostEdit.Compare.Core.Helper;
+﻿using Sdl.Community.PostEdit.Compare.Core.Helper;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
@@ -67,6 +66,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
                 MessageBox.Show(ex.Message, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
+
+        public void SaveProject() => ProjectsController.CurrentProject.Save();
 
         private void ChangeStatusOfSegment(string statusString, ISegmentPair segmentPair)
         {

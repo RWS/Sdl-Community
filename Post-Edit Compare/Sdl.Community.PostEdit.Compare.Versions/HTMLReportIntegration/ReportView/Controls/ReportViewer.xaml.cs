@@ -148,13 +148,18 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             }
         }
 
-        public async Task UpdateComments(List<CommentInfo> comments, string segmentId, string fileId)
+        public async Task UpdateComments(List<CommentInfo> comments, string segmentId, string fileId, AddReplace addReplace = AddReplace.Replace)
         {
             var commentsJson = JsonConvert.SerializeObject(comments, new JsonSerializerSettings
             {
                 ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
             });
-            var script = $"replaceCommentsForSegment('{segmentId}', {commentsJson}, '{fileId}');";
+
+            var functionName = addReplace.HasFlag(AddReplace.Replace)
+                ? "replaceCommentsForSegment"
+                : "addCommentsForSegment";
+
+            var script = $"{functionName}('{segmentId}', {commentsJson}, '{fileId}');";
 
             try
             {
@@ -203,6 +208,11 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             WebMessageReceived?.Invoke(sender, e);
         }
 
+        private async Task EnsureBrowserIsLoaded()
+        {
+            await WebView2Browser.EnsureCoreWebView2Async(Environment);
+        }
+
         private async Task InitializeWebView()
         {
             if (WebView2Browser.CoreWebView2 is null)
@@ -236,11 +246,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             {
                 MessageBox.Show("Failed to load scripts", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        private async Task EnsureBrowserIsLoaded()
-        {
-            await WebView2Browser.EnsureCoreWebView2Async(Environment);
         }
 
         private async void WebView2Browser_OnLoaded(object sender, RoutedEventArgs e)

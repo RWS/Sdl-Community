@@ -1,6 +1,7 @@
 ﻿using Sdl.Community.PostEdit.Compare.Core;
 using Sdl.Community.PostEdit.Compare.Core.Helper;
 using Sdl.Community.PostEdit.Compare.Core.Reports;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Messaging;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -65,12 +66,13 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
             var commentInfo = comments?.Select(c => new CommentInfo
             {
                 Author = c.Author,
-                Date = c.Date.ToString("yyyy-MMM-dd"),
+                Date = c.Date.ToString(MessagingConstants.DateFormat),
                 Text = c.Text,
-                Severity = c.Severity
+                Severity = c.Severity.ToString()
             }).ToList();
 
-            CommentsChanged?.Invoke(commentInfo, activeSegmentPair.Properties.Id.ToString(), AppInitializer.GetActiveFileId());
+            CommentsChanged?.Invoke(commentInfo, activeSegmentPair.Properties.Id.ToString(),
+                AppInitializer.GetActiveFileId());
         }
 
         

@@ -1,4 +1,6 @@
-﻿using Sdl.Community.PostEdit.Compare.Helpers;
+﻿using Newtonsoft.Json.Linq;
+using Sdl.Community.PostEdit.Compare.Helpers;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Messaging;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Controls;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Utilities;
@@ -35,6 +37,23 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
         public async Task<string> GetNonInteractiveReport() => await ReportViewer.GetNonInteractiveReport();
 
         public ReportInfo GetSelectedReport() => ReportExplorerViewModel.SelectedReport;
+
+        public async Task HandleReportRequestWithoutSync(JObject messageObject)
+        {
+            var syncMessage = SyncMessage.Create(messageObject);
+            switch (syncMessage)
+            {
+                case UpdateStatusMessage updateStatusMessage:
+                    await UpdateStatus(updateStatusMessage.NewStatus, updateStatusMessage.SegmentId,
+                        updateStatusMessage.FileId);
+                    break;
+
+                case UpdateCommentsMessage updateCommentsMessage:
+                    UpdateComment(updateCommentsMessage.Comment, updateCommentsMessage.Severity,
+                        updateCommentsMessage.SegmentId, updateCommentsMessage.FileId);
+                    break;
+            }
+        }
 
         public void RefreshLists(List<ProjectInfo> projects, List<ReportInfo> reports)
         {
@@ -126,6 +145,16 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
         {
             if (projects is null) return;
             ReportExplorerViewModel.SetProjectsList(projects);
+        }
+
+        private async Task UpdateComment(string comment, string severity, string segmentId, string fileId)
+        {
+            await ReportViewer.UpdateComments([new CommentInfo
+                {
+                    Date = DateTime.Now.ToString(MessagingConstants.DateFormat),
+                    Text = comment,
+                    Severity = severity
+                }], segmentId, fileId, AddReplace.Add);
         }
 
         private void WebView2Browser_WebMessageReceived(object sender,

@@ -82,13 +82,17 @@ public class Integration
     public static void FilterSegments(SegmentFilter segmentFilter) =>
         ReportViewController.ToggleFilter(segmentFilter);
 
-    public static void HandleReportRequest(string jsonMessage)
+    public static async Task HandleReportRequest(string jsonMessage)
     {
         var messageObject = JObject.Parse(jsonMessage);
         var action = messageObject["action"]?.ToString();
 
-        if (!SyncOn && action != "navigate") return;
-        StudioController.HandleReportRequest(messageObject);
+        if (!SyncOn && action != "navigate")
+        {
+            await ReportViewController.HandleReportRequestWithoutSync(messageObject);
+            await SaveReport();
+        }
+        else StudioController.HandleReportRequest(messageObject);
     }
 
     public static void Initialize()

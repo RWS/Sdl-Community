@@ -31,6 +31,12 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model
         And
     }
 
+    public enum AddReplace
+    {
+        Add,
+        Replace
+    }
+
     public class EnumHelper
     {
         public static bool TryGetStatus(string enumValue, out Statuses status) 
