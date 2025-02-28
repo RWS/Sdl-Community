@@ -129,9 +129,16 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
             Process.Start(Constants.PostEditCompareBackupFolder);
         }
 
-        public void OpenReportFolder() =>
-                    Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                "PostEdit.Compare", "Reports"));
+        public void OpenReportFolder(string reportPath)
+        {
+            var defaultReportPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                "PostEdit.Compare", "Reports");
+
+            if (string.IsNullOrWhiteSpace(reportPath))
+                Process.Start(defaultReportPath);
+
+            Process.Start("explorer.exe", $"/select,\"{reportPath}\"");
+        }
 
         public void SaveReport(string reportFromMemory, string selectedReportReportPath) =>
                     File.WriteAllText(selectedReportReportPath, reportFromMemory);

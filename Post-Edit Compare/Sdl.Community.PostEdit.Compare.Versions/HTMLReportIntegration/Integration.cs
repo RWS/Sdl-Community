@@ -118,7 +118,11 @@ public class Integration
         ReportManager.OpenReportBackupFolder(selectedReport);
     }
 
-    public static void OpenReportFolder() => ReportManager.OpenReportFolder();
+    public static void OpenReportFolder()
+    {
+        var selectedReport = ReportViewController.GetSelectedReport();
+        ReportManager.OpenReportFolder(selectedReport.ReportPath);
+    }
 
     public static async Task SaveReport()
     {

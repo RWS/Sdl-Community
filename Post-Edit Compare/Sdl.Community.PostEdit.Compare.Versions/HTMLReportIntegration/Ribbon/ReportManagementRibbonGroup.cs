@@ -23,6 +23,16 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
         protected override void Execute() => Integration.SetUpReportExplorer();
     }
 
+    [Action(nameof(AddNewReportFolder),
+        typeof(ReportViewController),
+        Icon = "AddReportFolder", Name = "Add/Remove Report Folders",
+        Description = "Add/Remove Report Folders")]
+    [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Default)]
+    public class AddNewReportFolder : AbstractAction
+    {
+        protected override void Execute() => Integration.EditReportFolderList();
+    }
+
     [Action(nameof(OpenReportBackupFolder),
         typeof(ReportViewController),
         Icon = "OpenReportFolder", Name = "Open Report Backup Folder",
@@ -33,15 +43,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
         protected override void Execute() => Integration.OpenReportBackupFolder();
     }
     
-    [Action(nameof(AddNewReportFolder),
-        typeof(ReportViewController),
-        Icon = "AddReportFolder", Name = "Add/Remove Report Folders",
-        Description = "Add/Remove Report Folders")]
-    [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Default)]
-    public class AddNewReportFolder : AbstractAction
-    {
-        protected override void Execute() => Integration.EditReportFolderList();
-    }
 
     [Action(nameof(OpenReport),
         typeof(ReportViewController),
