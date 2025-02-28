@@ -98,9 +98,6 @@
             </DockPanel>
 
             <DataGrid Grid.Row="1"
-                      SelectionMode="Extended"
-                      SelectionUnit="CellOrRowHeader"
-                      ClipboardCopyMode="ExcludeHeader"
                       Name="DSITabel"
                       ItemsSource="{Binding DocumentStructureInformation}"
                       Style="{StaticResource Sdl.DataGrid.GenericStyle}"
@@ -199,9 +196,6 @@
             </DockPanel>
 
             <DataGrid Grid.Row="4"
-                    SelectionMode="Extended"
-                    SelectionUnit="CellOrRowHeader"
-                    ClipboardCopyMode="ExcludeHeader"
                     Name="CommentsTable"
                     ItemsSource="{Binding Comments}"
                     AutomationProperties.Name="Comments"
@@ -373,31 +367,88 @@
                 </DataGrid.Visibility>
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Tag ID"
-                                        Binding="{Binding Id}"
-                                        ElementStyle="{StaticResource DataGridTextColumnStyle}"
-                                        IsReadOnly="True" />
+                    <DataGridTemplateColumn Header="Tag ID"
+                                        IsReadOnly="True" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Id}"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         VerticalAlignment="Center" 
+                                         IsReadOnly="True"
+                                         TextWrapping="Wrap"
+                                         IsHitTestVisible="True"
+                                         IsReadOnlyCaretVisible="True" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                    <DataGridTextColumn Header="Start tag"
-                                        Binding="{Binding StartTag}"
-                                        ElementStyle="{StaticResource DataGridTextColumnStyle}"
-                                        IsReadOnly="True" />
+                    <DataGridTemplateColumn Header="Start tag"
+                                        IsReadOnly="True" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding StartTag}"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         VerticalAlignment="Center" 
+                                         IsReadOnly="True"
+                                         TextWrapping="Wrap"
+                                         IsHitTestVisible="True"
+                                         IsReadOnlyCaretVisible="True" />   
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                    <DataGridTextColumn Header="End tag"
-                                        Binding="{Binding EndTag}"
-                                        ElementStyle="{StaticResource DataGridTextColumnStyle}"
-                                        IsReadOnly="True" />
+                    <DataGridTemplateColumn Header="End tag"
+                                        IsReadOnly="True" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding EndTag}"
+                                          Background="Transparent"
+                                          BorderThickness="0"
+                                          VerticalAlignment="Center" 
+                                          IsReadOnly="True"
+                                          TextWrapping="Wrap"
+                                          IsHitTestVisible="True"
+                                          IsReadOnlyCaretVisible="True" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                    <DataGridTextColumn Header="Tag Attributes"
-                                        Binding="{Binding Attributes}"
-                                        ElementStyle="{StaticResource DataGridTextColumnStyle}"
-                                        IsReadOnly="True" />
+                    <DataGridTemplateColumn Header="Tag Attributes"
+                                        IsReadOnly="True" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Attributes}"
+                                          Background="Transparent"
+                                          BorderThickness="0"
+                                          VerticalAlignment="Center" 
+                                          IsReadOnly="True"
+                                          TextWrapping="Wrap"
+                                          IsHitTestVisible="True"
+                                          IsReadOnlyCaretVisible="True" />  
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
 
-                    <DataGridTextColumn Header="Tag Content"
-                                        Binding="{Binding Content}"
-                                        ElementStyle="{StaticResource DataGridTextColumnStyle}"
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Header="Tag Content"
                                         IsReadOnly="True"
-                                        Width="*" />
+                                        Width="*" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Content}"
+                                           Background="Transparent"
+                                           BorderThickness="0"
+                                           VerticalAlignment="Center" 
+                                           IsReadOnly="True"
+                                           TextWrapping="Wrap"
+                                           IsHitTestVisible="True"
+                                           IsReadOnlyCaretVisible="True" /> 
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
 

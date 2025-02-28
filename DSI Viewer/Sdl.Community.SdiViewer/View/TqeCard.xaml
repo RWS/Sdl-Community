@@ -50,10 +50,15 @@
             </Label>
 
 
-            <TextBlock Grid.Row="0"
+            <TextBox Grid.Row="0"
                        Grid.Column="0"
                        Grid.ColumnSpan="2"
                        TextWrapping="Wrap"
+                       IsHitTestVisible="True"
+                       Background="Transparent"
+                       BorderThickness="0"
+                       IsReadOnlyCaretVisible="True"
+                       IsReadOnly="True"
                        Text="{Binding TqeData.Description, ElementName=Root}"
                        Focusable="True"
                        Margin="5 0 5 0"
@@ -63,17 +68,27 @@
                        Grid.Column="0"
                        Grid.ColumnSpan="2" />
 
-            <TextBlock Grid.Row="2"
+            <TextBox Grid.Row="2"
                        Grid.Column="1"
+                       IsHitTestVisible="True"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        IsReadOnlyCaretVisible="True"
                        Name="QESystem"
+                       IsReadOnly="True"
                        Text="{Binding TqeData.System, ElementName=Root}"
                        Focusable="True"
                        HorizontalAlignment="Right"
                        Margin="0 0 5 0"
                        VerticalAlignment="Center" />
 
-            <TextBlock Grid.Row="3"
+            <TextBox Grid.Row="3"
                        Grid.Column="1"
+                       IsReadOnly="True"
+                       IsHitTestVisible="True"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        IsReadOnlyCaretVisible="True"
                        Name="QECurrentValue"
                        Text="{Binding TqeData.QualityEstimation, ElementName=Root}"
                        AutomationProperties.Name="{Binding AccessibilityQELabel}"
@@ -82,8 +97,13 @@
                        HorizontalAlignment="Right"
                        VerticalAlignment="Center" />
 
-            <TextBlock Grid.Row="4"
+            <TextBox Grid.Row="4"
                        Grid.Column="1"
+                       IsHitTestVisible="True"
+                       Background="Transparent"
+                       BorderThickness="0"
+                       IsReadOnlyCaretVisible="True"
+                       IsReadOnly="True"
                        Name="ModelCurrentValue"
                        Text="{Binding TqeData.Model, ElementName=Root}"
                        AutomationProperties.Name="{Binding AccessibilityModelLabel}"
