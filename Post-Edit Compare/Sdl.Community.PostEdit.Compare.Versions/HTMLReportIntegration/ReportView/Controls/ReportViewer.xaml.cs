@@ -1,9 +1,11 @@
 ﻿using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
 using Newtonsoft.Json;
+using Sdl.Community.PostEdit.Compare.Core.Reports;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Utilities;
 using Sdl.Desktop.IntegrationApi.Interfaces;
+using Sdl.FileTypeSupport.Framework.Bilingual;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -176,7 +178,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
 
         public async Task UpdateStatus(string newStatus, string segmentId, string fileId)
         {
-            object[] parameters = new[] { segmentId, fileId, newStatus };
+            object[] parameters = [segmentId, fileId, newStatus];
             var serializedParams = new List<string>();
             foreach (var param in parameters)
             {
@@ -194,7 +196,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             {
                 await WebView2Browser.Dispatcher.Invoke(async () =>
                 {
-                    WebView2Browser.ExecuteScriptAsync(script);
+                    await WebView2Browser.ExecuteScriptAsync(script);
                 });
             }
             catch (Exception e)

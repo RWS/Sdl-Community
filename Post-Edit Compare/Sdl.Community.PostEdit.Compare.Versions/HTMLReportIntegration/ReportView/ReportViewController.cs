@@ -49,7 +49,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
                     break;
 
                 case UpdateCommentsMessage updateCommentsMessage:
-                    UpdateComment(updateCommentsMessage.Comment, updateCommentsMessage.Severity,
+                    await UpdateComment(updateCommentsMessage.Comment, updateCommentsMessage.Severity,
                         updateCommentsMessage.SegmentId, updateCommentsMessage.FileId);
                     break;
             }
@@ -91,8 +91,12 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
         public async Task UpdateComments(List<CommentInfo> comments, string segmentId, string fileId) =>
             await ReportViewer.UpdateComments(comments, segmentId, fileId);
 
-        public async Task UpdateStatus(string newStatus, string segmentId, string fileId) =>
+        public async Task UpdateStatus(string newStatus, string segmentId, string fileId)
+        {
+            newStatus = EnumHelper.GetFriendlyStatusString(newStatus);
+            if (newStatus == "Unknown") return;
             await ReportViewer.UpdateStatus(newStatus, segmentId, fileId);
+        }
 
         protected override IUIControl GetContentControl() => ReportViewer;
 

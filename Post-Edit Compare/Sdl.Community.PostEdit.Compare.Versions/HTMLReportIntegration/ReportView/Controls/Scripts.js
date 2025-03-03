@@ -172,28 +172,27 @@ function updateSegmentStatus(segmentId, fileId, newStatus) {
                     console.info('FileId found');
 
                     // Locate the status cell
-                    const statusCell = row.querySelector('td:nth-child(6)');
+                    const statusColumnIndex = getColumnIndexFromTable('Status');
+                    const statusCell = getCellFromRow(row, statusColumnIndex);
                     if (statusCell) {
-                        const originalStatusElement = statusCell.querySelector('span');
-                        const originalStatus = originalStatusElement ? originalStatusElement.textContent.trim() : null;
+                        const spans = statusCell.querySelectorAll('span');
+                        const lastSpan = spans.length ? spans[spans.length - 1] : null;
 
-                        const isOriginal = newStatus === originalStatus;
-
-                        console.info('newStatus ' + newStatus + '.\n' + 'original status ' + originalStatus + '.\n');
-                        console.info('is original' + isOriginal + '.\n');
-
-                        const newStatusElement = statusCell.querySelector('.new-status');
-
-                        if (!isOriginal) {
-                            if (newStatusElement) {
-                                newStatusElement.innerHTML = newStatus;
-                            } else {
-                                const statusHtml = '          <div class="new-status">' + newStatus + '</div>';
-                                statusCell.innerHTML = statusHtml + statusCell.innerHTML;
-                            }
-                        } else if (newStatusElement) {
-                            statusCell.removeChild(newStatusElement);
+                        if (lastSpan) {
+                            statusCell.appendChild(document.createElement('br')); // Add line break
                         }
+
+                        // Create a new span with the same style as the last one
+                        const newSpan = document.createElement('span');
+                        newSpan.innerText = newStatus;
+                        if (lastSpan) {
+                            newSpan.style.cssText = lastSpan.style.cssText; // Copy styles
+                            newSpan.className = lastSpan.className; // Copy classes
+                            lastSpan.style.cssText = ''; // Remove styling
+                            lastSpan.className = ''; // Remove classes
+                        }
+
+                        statusCell.appendChild(newSpan); // Append new span to the cell
                     } else {
                         console.error('Status column not found in segment row: ' + segmentId);
                     }
@@ -202,6 +201,8 @@ function updateSegmentStatus(segmentId, fileId, newStatus) {
         }
     });
 }
+
+
 
 function addCommentsForSegment(segmentId, comments, fileId) {
     const rows = document.querySelectorAll('table tr');

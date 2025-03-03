@@ -104,11 +104,10 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
         {
             if (sender is not ISegmentContainerNode segment) return;
 
-            var segmentStatusFriendly =
-                ReportUtils.GetVisualSegmentStatus(segment.Segment.Properties.ConfirmationLevel.ToString());
+            var segmentStatus = segment.Segment.Properties.ConfirmationLevel.ToString();
             var activeFileId = AppInitializer.GetActiveFileId();
 
-            StatusChanged?.Invoke(segmentStatusFriendly, segment.Segment.Properties.Id.Id, activeFileId);
+            StatusChanged?.Invoke(segmentStatus, segment.Segment.Properties.Id.Id, activeFileId);
         }
 
         private void StopListeningPreviousDocument()

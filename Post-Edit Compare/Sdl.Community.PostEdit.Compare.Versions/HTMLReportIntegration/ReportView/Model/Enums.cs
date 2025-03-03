@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sdl.Community.PostEdit.Compare.Core.Reports;
+using System;
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model
 {
@@ -44,5 +45,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model
             enumValue = enumValue.Replace(" ", "").Replace("-", "");
             return Enum.TryParse(enumValue, true, out status);
         }
+
+        public static string GetFriendlyStatusString(string statusString) =>
+            ReportUtils.GetVisualSegmentStatus(statusString);
     }
 }
