@@ -172,6 +172,9 @@
   <data name="PostEditCompareViewRibbonGroup_Name" xml:space="preserve">
     <value>Actions</value>
   </data>
+  <data name="RefreshReportExplorer_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\RefreshReportList.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="RemoveProjectVersion_Description" xml:space="preserve">
     <value>Remove the selected versions of the project</value>
   </data>
@@ -503,19 +506,16 @@ Select 'No' to cancel this action
   <data name="SaveReport" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\SaveReport.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ExportReport" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Export.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="OpenReportFolder" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\OpenReportFolder.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="RefreshReportList" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\RefreshReportList.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Filter" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Filter.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="AddReportFolder" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\AddReportFolder.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Export" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Export.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

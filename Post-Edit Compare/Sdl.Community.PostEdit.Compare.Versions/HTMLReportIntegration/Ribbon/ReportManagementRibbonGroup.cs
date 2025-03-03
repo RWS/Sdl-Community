@@ -15,7 +15,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
 
     [Action(nameof(RefreshReportList),
         typeof(ReportViewController),
-        Icon = "RefreshReportList", Name = "Refresh Report List",
+        Icon = "RefreshReportExplorer_Icon", Name = "Refresh Report List",
         Description = "Refresh Report List")]
     [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Large)]
     public class RefreshReportList : AbstractAction
@@ -25,8 +25,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
 
     [Action(nameof(AddNewReportFolder),
         typeof(ReportViewController),
-        Icon = "AddReportFolder", Name = "Add/Remove Report Folders",
-        Description = "Add/Remove Report Folders")]
+        Icon = "Settings2", Name = "Report Locations",
+        Description = "Report Locations")]
     [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Default)]
     public class AddNewReportFolder : AbstractAction
     {
@@ -56,7 +56,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
     
     [Action(nameof(ExportReport),
         typeof(ReportViewController),
-        Icon = "ExportReport", Name = "Export Report",
+        Icon = "Export", Name = "Export Report",
         Description = "Export Report")]
     [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Default)]
     public class ExportReport : AbstractAction

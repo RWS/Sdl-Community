@@ -130,7 +130,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Content Include="Resources\Question.ico" />
-    <Resource Include="Resources\RefreshReportList.ico" />
     <Resource Include="Resources\Remove.ico" />
     <Content Include="Resources\Restore.ico" />
     <Content Include="Resources\Settings.ico" />
@@ -158,7 +157,6 @@
     <None Remove="Resources\Filter.ico" />
     <None Remove="Resources\OpenReportFolder.ico" />
     <None Remove="Resources\Project.png" />
-    <None Remove="Resources\RefreshReportList.ico" />
     <None Remove="Resources\Report.png" />
   </ItemGroup>
   <ItemGroup>
