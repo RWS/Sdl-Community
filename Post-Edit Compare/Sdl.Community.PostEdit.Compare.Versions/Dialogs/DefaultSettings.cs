@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sdl.Community.PostEdit.Versions.HTMLReportIntegration;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
@@ -82,6 +83,7 @@ namespace Sdl.Community.PostEdit.Versions.Dialogs
                 VersionsFolderFullPath = textBox_projectVersionsFolder.Text;
                 CreateSubFolderProject = checkBox_createSubFolderProject.Checked;
                 CreateShallowCopy = checkBox_createShallowCopy.Checked;
+                Integration.ReportManager.PostEditCompareBackupFolder = textBox_reportBackupFolder.Text;
 
                 Close();
             }
@@ -103,6 +105,7 @@ namespace Sdl.Community.PostEdit.Versions.Dialogs
         {
             Saved = false;
             textBox_projectVersionsFolder.Text = VersionsFolderFullPath;
+            textBox_reportBackupFolder.Text = Integration.ReportManager.PostEditCompareBackupFolder;
             checkBox_createSubFolderProject.Checked = CreateSubFolderProject;
             checkBox_createShallowCopy.Checked = CreateShallowCopy;
 
@@ -111,7 +114,7 @@ namespace Sdl.Community.PostEdit.Versions.Dialogs
 
         private void textBox_projectVersionsFolder_TextChanged(object sender, EventArgs e)
         {
-            button_save.Enabled = Directory.Exists(textBox_projectVersionsFolder.Text);
+            button_save.Enabled = Directory.Exists(textBox_projectVersionsFolder.Text); 
         }
 
         private void linkLabel_viewFoldersInWindowsExplorer_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -145,6 +148,88 @@ namespace Sdl.Community.PostEdit.Versions.Dialogs
             {
                 MessageBox.Show(this, ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }           
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var sPath = textBox_reportBackupFolder.Text;
+
+                if (!Directory.Exists(sPath))
+                {
+                    while (sPath.Contains("\\"))
+                    {
+                        sPath = sPath.Substring(0, sPath.LastIndexOf("\\", StringComparison.Ordinal));
+                        if (Directory.Exists(sPath))
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                var fsd = new FolderSelectDialog
+                {
+                    Title = "Select Reports' Backup Folder",
+                    InitialDirectory = sPath
+                };
+                if (!fsd.ShowDialog(IntPtr.Zero))
+                    return;
+
+                if (fsd.FileName.Trim() == string.Empty)
+                    return;
+
+                sPath = fsd.FileName;
+
+
+                textBox_reportBackupFolder.Text = sPath;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+            finally
+            {
+                textBox_projectVersionsFolder_TextChanged(null, null);
+            }
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                var sPath = textBox_reportBackupFolder.Text;
+
+                if (!Directory.Exists(sPath))
+                {
+                    while (sPath.Contains("\\"))
+                    {
+                        sPath = sPath.Substring(0, sPath.LastIndexOf("\\", StringComparison.Ordinal));
+                        if (Directory.Exists(sPath))
+                        {
+                            break;
+                        }
+                    }
+                }
+                if (Directory.Exists(sPath))
+                {
+                    Process.Start(sPath);
+                }
+                else
+                {
+                    MessageBox.Show(this, PluginResources.Invalid_directory, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+        }
+
+        private void textBox_reportBackupFolder_TextChanged(object sender, EventArgs e)
+        {
+            button_save.Enabled = Directory.Exists(textBox_reportBackupFolder.Text);
         }
     }
 }

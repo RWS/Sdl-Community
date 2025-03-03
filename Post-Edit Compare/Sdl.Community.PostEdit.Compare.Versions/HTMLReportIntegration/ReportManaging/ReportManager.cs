@@ -1,4 +1,6 @@
-﻿using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.Components;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.Components;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
 {
     public class ReportManager
     {
+        private static string _postEditCompareBackupFolder;
         private List<string> _reportFolders = [];
 
         public ReportManager()
@@ -29,7 +32,17 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
             set
             {
                 _reportFolders = value;
-                SaveReportFoldersList();
+                SaveSettings();
+            }
+        }
+
+        public string PostEditCompareBackupFolder
+        {
+            get => _postEditCompareBackupFolder;
+            set
+            {
+                _postEditCompareBackupFolder = value;
+                SaveSettings();
             }
         }
 
@@ -46,7 +59,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
                 var datetime = DateTime.Now.ToString("yyyyMMdd_HHmmss");
 
                 var destinationFile =
-                    $"{Path.Combine(Constants.PostEditCompareBackupFolder, reportName, datetime)}.html";
+                    $"{Path.Combine(PostEditCompareBackupFolder, reportName, datetime)}.html";
 
                 var destinationDirectory = Path.GetDirectoryName(destinationFile);
 
@@ -121,12 +134,12 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
         {
             if (selectedReport is not null)
             {
-                var reportBackupFolder = Path.Combine(Constants.PostEditCompareBackupFolder,
+                var reportBackupFolder = Path.Combine(PostEditCompareBackupFolder,
                     Path.GetFileNameWithoutExtension(selectedReport.ReportPath));
 
                 if (Directory.Exists(reportBackupFolder)) { Process.Start(reportBackupFolder); return; }
             }
-            Process.Start(Constants.PostEditCompareBackupFolder);
+            Process.Start(PostEditCompareBackupFolder);
         }
 
         public void OpenReportFolder(string reportPath)
@@ -159,16 +172,30 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
         {
             File.Create(SettingsFile).Close();
             ReportFolders = [Constants.PostEditCompareDefaultReportsFolder];
-            File.WriteAllLines(SettingsFile, ReportFolders);
+            PostEditCompareBackupFolder = Constants.PostEditCompareBackupFolder;
+
+            SaveSettings();
         }
 
         private void LoadReportFoldersList()
         {
-            foreach (var line in File.ReadAllLines(SettingsFile))
-                if (!string.IsNullOrEmpty(line) && Directory.Exists(line))
-                    ReportFolders.Add(line);
+            dynamic settings = JsonConvert.DeserializeObject(File.ReadAllText(SettingsFile));
+            if (settings == null) return;
+
+            foreach (var line in settings.ReportFolders)
+            {
+                var reportFolder = line.ToString();
+                if (!string.IsNullOrEmpty(reportFolder.ToString()) && Directory.Exists(reportFolder))
+                    ReportFolders.Add(reportFolder);
+            }
+
+            PostEditCompareBackupFolder = settings.PostEditCompareBackupFolder;
         }
 
-        private void SaveReportFoldersList() => File.WriteAllLines(SettingsFile, ReportFolders);
+        private void SaveSettings()
+        {
+            var settings = new { ReportFolders = ReportFolders, PostEditCompareBackupFolder = PostEditCompareBackupFolder };
+            File.WriteAllText(SettingsFile, JsonConvert.SerializeObject(settings));
+        }
     }
 }

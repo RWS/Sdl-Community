@@ -31,7 +31,7 @@ public class Integration
         SdlTradosStudio.Application.GetController<ProjectsController>();
 
     private static ReportFolderExplorer ReportFolderExplorer { get; set; }
-    private static ReportManager ReportManager { get; } = new();
+    public static ReportManager ReportManager { get; } = new();
 
     private static ReportViewController ReportViewController => _reportViewController ??=
         SdlTradosStudio.Application.GetController<ReportViewController>();
