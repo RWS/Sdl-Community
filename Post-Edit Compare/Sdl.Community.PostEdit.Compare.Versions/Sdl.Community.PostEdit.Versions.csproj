@@ -159,6 +159,7 @@
     <None Remove="Resources\Filter.ico" />
     <None Remove="Resources\OpenReportFolder.ico" />
     <None Remove="Resources\Project.png" />
+    <None Remove="Resources\Report.ico" />
     <None Remove="Resources\Report.png" />
   </ItemGroup>
   <ItemGroup>
@@ -167,6 +168,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\OpenReportFolder.ico" />
+    <Resource Include="Resources\Report.ico" />
     <Resource Include="Resources\Report.png" />
   </ItemGroup>
   <ItemGroup>

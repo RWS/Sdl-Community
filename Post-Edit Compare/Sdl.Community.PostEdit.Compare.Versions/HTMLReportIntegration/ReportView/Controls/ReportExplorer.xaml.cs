@@ -8,7 +8,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
     /// <summary>
     /// Interaction logic for ReportExplorer.xaml
     /// </summary>
-    public partial class ReportExplorer : UserControl, IUIControl
+    public partial class ReportExplorer : IUIControl
     {
         public ReportExplorer()
         {
@@ -27,10 +27,11 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
         private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e) =>
             SelectedReportChanged?.Invoke();
 
+        //TODO: Show latest report
         public void SelectLatestReport()
         {
-            ReportList.SelectedIndex = 0;
-            ReportList.ScrollIntoView(ReportList.SelectedItem);
+            //ReportList.SelectedIndex = 0;
+            //ReportList.ScrollIntoView(ReportList.SelectedItem);
         }
     }
 }

@@ -157,8 +157,8 @@ public class Integration
         ReportViewController.Activate();
 
         ToggleReportProjectSync(false);
-
         SetUpReportExplorer();
+
         ReportViewController.SelectLatestReport();
     }
 

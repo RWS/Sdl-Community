@@ -14,23 +14,26 @@
              d:DesignWidth="800">
 
     <UserControl.Resources>
+        <ResourceDictionary>
 
-        <DataTemplate DataType="{x:Type core:ProjectInfo}"
-                      x:Key="FilterTemplate">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Image Grid.Column="0"
-                       Source="../../../Resources/Project.png"
-                       Width="15" />
-                <TextBlock Grid.Column="1"
-                           Margin="5 0 0 0"
-                           Text="{Binding Name}"
-                           DockPanel.Dock="Right" />
-            </Grid>
-        </DataTemplate>
+            <DataTemplate DataType="{x:Type core:ProjectInfo}"
+                          x:Key="FilterTemplate">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.Column="0"
+                           Source="../../../Resources/Project.png"
+                           Width="15" />
+                    <TextBlock Grid.Column="1"
+                               Margin="5 0 0 0"
+                               Text="{Binding Name}"
+                               DockPanel.Dock="Right" />
+                </Grid>
+            </DataTemplate>
+
+        </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid Margin="10">
@@ -39,6 +42,8 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+
+     
 
         <Grid Margin="0,0,0,2"
               Grid.Column="0"
@@ -118,7 +123,7 @@
             </Button>
         </Grid>
 
-        <ListBox Grid.Row="1"
+        <!--<ListBox Grid.Row="1"
                  ItemsSource="{Binding Reports}"
                  x:Name="ReportList"
                  SelectionChanged="Selector_OnSelectionChanged"
@@ -136,6 +141,29 @@
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
-        </ListBox>
+        </ListBox>-->
+
+        <TreeView Grid.Row="1"
+                  ItemsSource="{Binding ReportGroups}">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Reports}">
+                    <TextBlock Text="{Binding ProjectName}" />
+                    <HierarchicalDataTemplate.ItemTemplate>
+                        <DataTemplate DataType="{x:Type model:ReportInfo}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="../../../Resources/Report.ico"
+                                       Width="16"
+                                       Height="16"
+                                       Margin="0,0,5,0" />
+                                <TextBlock Text="{Binding ReportName}"
+                                           Margin="0 0 0 0"
+                                           VerticalAlignment="Center" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </HierarchicalDataTemplate.ItemTemplate>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+
     </Grid>
 </UserControl>
