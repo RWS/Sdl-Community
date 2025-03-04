@@ -84,15 +84,22 @@ public class Integration
 
     public static async Task HandleReportRequest(string jsonMessage)
     {
-        var messageObject = JObject.Parse(jsonMessage);
-        var action = messageObject["action"]?.ToString();
-
-        if (!SyncOn && action != "navigate")
+        try
         {
-            await ReportViewController.HandleReportRequestWithoutSync(messageObject);
-            await SaveReport();
+            var messageObject = JObject.Parse(jsonMessage);
+            var action = messageObject["action"]?.ToString();
+
+            if (!SyncOn && action != "navigate")
+            {
+                await ReportViewController.HandleReportRequestWithoutSync(messageObject);
+                await SaveReport();
+            }
+            else StudioController.HandleReportRequest(messageObject);
         }
-        else StudioController.HandleReportRequest(messageObject);
+        catch (Exception ex)
+        {
+            ErrorHandler.ShowError(ex);
+        }
     }
 
     public static void Initialize()
@@ -157,8 +164,10 @@ public class Integration
 
     public static void ShowReportsView() => ReportViewController.Activate();
 
-    public static void ToggleReportProjectSync(bool syncEnabled)
+    public static bool ToggleReportProjectSync(bool syncEnabled)
     {
+        if (ReportViewController.GetSelectedReport() == null) return false;
+
         SyncOn = syncEnabled;
         ReportViewController.ToggleReportExplorer(!syncEnabled);
 
@@ -169,6 +178,8 @@ public class Integration
         }
         else
             DisconnectEditorListener();
+
+        return true;
     }
 
     public static void ToggleSyncRibbon(bool state)

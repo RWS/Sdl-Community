@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Sdl.Community.PostEdit.Compare.Helpers;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.Components;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using System;
@@ -53,22 +54,22 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
         {
             if (selectedReport is null) return;
 
+            var destinationFile = "";
             try
             {
                 var reportName = Path.GetFileNameWithoutExtension(selectedReport.ReportPath);
                 var datetime = DateTime.Now.ToString("yyyyMMdd_HHmmss");
 
-                var destinationFile =
-                    $"{Path.Combine(PostEditCompareBackupFolder, reportName, datetime)}.html";
+                destinationFile = $"{Path.Combine(PostEditCompareBackupFolder, reportName, datetime)}.html";
 
                 var destinationDirectory = Path.GetDirectoryName(destinationFile);
 
                 if (!Directory.Exists(destinationDirectory)) Directory.CreateDirectory(destinationDirectory);
                 File.Copy(selectedReport.ReportPath, destinationFile);
             }
-            catch (Exception ex)
+            catch (IOException ex)
             {
-                throw new Exception("Error while backing up the report", ex);
+                if (ex.Message != $"The file '{destinationFile}' already exists.") throw;
             }
         }
 

@@ -179,20 +179,22 @@ function updateSegmentStatus(segmentId, fileId, newStatus) {
                         const lastSpan = spans.length ? spans[spans.length - 1] : null;
 
                         if (lastSpan) {
-                            statusCell.appendChild(document.createElement('br')); // Add line break
+                            if (spans.length < 3) {
+                                statusCell.appendChild(document.createElement('br'));
+
+                                const newSpan = document.createElement('span');
+                                newSpan.innerText = newStatus;
+                                newSpan.style.cssText = lastSpan.style.cssText;
+                                newSpan.className = lastSpan.className;
+
+                                lastSpan.style.cssText = '';
+                                lastSpan.className = '';
+                                statusCell.appendChild(newSpan);
+                            } else {
+                                lastSpan.innerText = newStatus;
+                            }
                         }
 
-                        // Create a new span with the same style as the last one
-                        const newSpan = document.createElement('span');
-                        newSpan.innerText = newStatus;
-                        if (lastSpan) {
-                            newSpan.style.cssText = lastSpan.style.cssText; // Copy styles
-                            newSpan.className = lastSpan.className; // Copy classes
-                            lastSpan.style.cssText = ''; // Remove styling
-                            lastSpan.className = ''; // Remove classes
-                        }
-
-                        statusCell.appendChild(newSpan); // Append new span to the cell
                     } else {
                         console.error('Status column not found in segment row: ' + segmentId);
                     }

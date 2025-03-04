@@ -1,6 +1,7 @@
 ﻿using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Extensions.Internal;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 using System;
 using System.Threading.Tasks;
