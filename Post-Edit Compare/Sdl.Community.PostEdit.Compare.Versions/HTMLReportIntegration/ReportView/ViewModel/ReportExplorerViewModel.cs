@@ -1,23 +1,32 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
+﻿using Sdl.Community.PostEdit.Versions.Commands;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.ProjectAutomation.Core;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.ViewModel;
 
 public class ReportExplorerViewModel : ViewModelBase
 {
+    private ICommand _clearCommand;
+    private string _filterString = "";
     private ObservableCollection<ProjectInfo> _projects;
     private ObservableCollection<ReportInfo> _reports;
-    private ObservableCollection<object> _selectedProjects = [];
     private ReportInfo _selectedReport;
+    public ICommand ClearFilterCommand => _clearCommand ??= new RelayCommand(ClearFilter);
 
-    public ReportExplorerViewModel() => SelectedProjects.CollectionChanged += SelectedProjects_CollectionChanged;
-
+    public string FilterString
+    {
+        get => _filterString;
+        set
+        {
+            SetField(ref _filterString, value);
+            ApplyFilter();
+        }
+    }
 
     public ObservableCollection<ProjectInfo> Projects
     {
@@ -31,12 +40,6 @@ public class ReportExplorerViewModel : ViewModelBase
         set => SetField(ref _reports, value);
     }
 
-    public ObservableCollection<object> SelectedProjects
-    {
-        get => _selectedProjects;
-        set => SetField(ref _selectedProjects, value);
-    }
-
     public ReportInfo SelectedReport
     {
         get => _selectedReport;
@@ -48,17 +51,20 @@ public class ReportExplorerViewModel : ViewModelBase
 
     public void SetReportsList(List<ReportInfo> reports) => Reports = new ObservableCollection<ReportInfo>(reports);
 
-    private void FilterProjects()
+    private void ApplyFilter()
     {
         var reports = CollectionViewSource.GetDefaultView(Reports);
-        reports.Filter = !SelectedProjects.Any() || SelectedProjects.Count == 0
-            ? null
-            : report => report is ReportInfo reportInfo && SelectedProjects.Cast<ProjectInfo>()
-                .Select(sp => sp.Id.ToString())
-                .ToList()
-                .Contains(reportInfo.ProjectId);
+
+        if (FilterString == "") reports.Filter = null;
+        else
+        {
+            var projectIds = Projects.Where(p => p.Name.Contains(FilterString)).Select(p => p.Id.ToString());
+            reports.Filter = r => r is ReportInfo report && projectIds.Contains(report.ProjectId);
+        }
     }
 
-    private void SelectedProjects_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) =>
-        FilterProjects();
+    private void ClearFilter()
+    {
+        FilterString = "";
+    }
 }

@@ -1,359 +1,479 @@
 ﻿<UserControl x:Class="Reports.Viewer.Plus.View.ReportsNavigationView"
-			 x:Name="ReportsNavigationControl"
+             x:Name="ReportsNavigationControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-			 xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-			 xmlns:controls1="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:controls1="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:models="clr-namespace:Sdl.ProjectAutomation.FileBased.Reports.Models;assembly=Sdl.ProjectAutomation.FileBased"
              xmlns:model="clr-namespace:Reports.Viewer.Api.Model;assembly=Reports.Viewer.Api"
              xmlns:converters="clr-namespace:Reports.Viewer.Plus.Converters"
              xmlns:behaviours="clr-namespace:Reports.Viewer.Plus.Behaviours"
              xmlns:model1="clr-namespace:Reports.Viewer.Plus.Model"
              xmlns:viewModel="clr-namespace:Reports.Viewer.Plus.ViewModel"
-			 xmlns:dpc="http://schemas.trados.com/xaml/platform/controls"
-             mc:Ignorable="d" 
-             d:DesignHeight="150" d:DesignWidth="250" d:DataContext="{d:DesignInstance viewModel:ReportsNavigationViewModel}">
-	<UserControl.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/General.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/WindowsBorder.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/TreeView.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/Buttons.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/ButtonsStyle.xaml"/>
-				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/ComboboStyle.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/WindowsBorder.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/WindowsBorder.xaml" />
-				<ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/CustomProgressRingStyle.xaml" />
-			</ResourceDictionary.MergedDictionaries>
+             xmlns:dpc="http://schemas.trados.com/xaml/platform/controls"
+             mc:Ignorable="d"
+             d:DesignHeight="150"
+             d:DesignWidth="250"
+             d:DataContext="{d:DesignInstance viewModel:ReportsNavigationViewModel}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/General.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/WindowsBorder.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/TreeView.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/Buttons.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/ButtonsStyle.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/ComboboStyle.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/WindowsBorder.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/WindowsBorder.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/CustomProgressRingStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
 
-			<converters:CultureInfoNameToImageConverter x:Key="CultureInfoNameToImageConverter"/>
-			<converters:CultureInfoNameToDisplayNameConverter x:Key="CultureInfoNameToDisplayNameConverter"/>
+            <converters:CultureInfoNameToImageConverter x:Key="CultureInfoNameToImageConverter" />
+            <converters:CultureInfoNameToDisplayNameConverter x:Key="CultureInfoNameToDisplayNameConverter" />
 
-			<CollectionViewSource x:Key="ReportGroups" Source="{Binding ReportGroups}"/>
+            <CollectionViewSource x:Key="ReportGroups"
+                                  Source="{Binding ReportGroups}" />
 
-			<Style TargetType="{x:Type UserControl}">
-				<Setter Property="FontFamily" Value="Segoe UI" />
-				<Setter Property="FontSize" Value="12"/>
-				<Setter Property="Foreground" Value="{StaticResource WindowsControl.Control.Text}"/>
-			</Style>
+            <Style TargetType="{x:Type UserControl}">
+                <Setter Property="FontFamily"
+                        Value="Segoe UI" />
+                <Setter Property="FontSize"
+                        Value="12" />
+                <Setter Property="Foreground"
+                        Value="{StaticResource WindowsControl.Control.Text}" />
+            </Style>
 
-			<Style x:Key="DefaultTextBlock" TargetType="TextBlock">
-				<Setter Property="FontFamily" Value="Segoe UI" />
-				<Setter Property="FontSize" Value="12"/>
-				<Setter Property="Foreground" Value="{StaticResource WindowsControl.Control.Text}"/>
-				<Setter Property="VerticalAlignment" Value="Center"/>
-			</Style>
+            <Style x:Key="DefaultTextBlock"
+                   TargetType="TextBlock">
+                <Setter Property="FontFamily"
+                        Value="Segoe UI" />
+                <Setter Property="FontSize"
+                        Value="12" />
+                <Setter Property="Foreground"
+                        Value="{StaticResource WindowsControl.Control.Text}" />
+                <Setter Property="VerticalAlignment"
+                        Value="Center" />
+            </Style>
 
-			<Style x:Key="BoldTextBlock" TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlock}">
-				<Setter Property="FontWeight" Value="Bold"/>
-				<Setter Property="Foreground" Value="#575656"/>
-			</Style>
+            <Style x:Key="BoldTextBlock"
+                   TargetType="TextBlock"
+                   BasedOn="{StaticResource DefaultTextBlock}">
+                <Setter Property="FontWeight"
+                        Value="Bold" />
+                <Setter Property="Foreground"
+                        Value="#575656" />
+            </Style>
 
-			<Style x:Key="FadedTextBlock" TargetType="TextBlock" BasedOn="{StaticResource DefaultTextBlock}">
-				<Setter Property="Foreground" Value="#828080"/>
-			</Style>
+            <Style x:Key="FadedTextBlock"
+                   TargetType="TextBlock"
+                   BasedOn="{StaticResource DefaultTextBlock}">
+                <Setter Property="Foreground"
+                        Value="#828080" />
+            </Style>
 
-			<DataTemplate x:Key="LanguageNodeLevel1" DataType="model1:ReportGroup">
-				<DockPanel>
+            <DataTemplate x:Key="LanguageNodeLevel1"
+                          DataType="model1:ReportGroup">
+                <DockPanel>
 
-					<Image Focusable="False"
-				       Stretch="UniformToFill"
-				       RenderOptions.BitmapScalingMode="HighQuality" 
-				       RenderOptions.EdgeMode="Aliased"
-				       HorizontalAlignment="Center"
-				       VerticalAlignment="Center"
-				       Source="{Binding Path=Name, Converter={StaticResource CultureInfoNameToImageConverter}, ConverterParameter='Source', Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-						<Image.Style>
-							<Style TargetType="Image">
-								<Setter Property="Width" Value="22"/>
-								<Setter Property="Margin" Value="0,0,2,0"/>
-								<Style.Triggers>
-									<DataTrigger Binding="{Binding Name}" Value="">
-										<Setter Property="Width" Value="0"/>
-										<Setter Property="Margin" Value="0"/>
-									</DataTrigger>
-									<DataTrigger Binding="{Binding Name}" Value="{x:Null}">
-										<Setter Property="Width" Value="0"/>
-										<Setter Property="Margin" Value="0"/>
-									</DataTrigger>
-								</Style.Triggers>
-							</Style>
-						</Image.Style>
-					</Image>
+                    <Image Focusable="False"
+                           Stretch="UniformToFill"
+                           RenderOptions.BitmapScalingMode="HighQuality"
+                           RenderOptions.EdgeMode="Aliased"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Source="{Binding Path=Name, Converter={StaticResource CultureInfoNameToImageConverter}, ConverterParameter='Source', Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <Image.Style>
+                            <Style TargetType="Image">
+                                <Setter Property="Width"
+                                        Value="22" />
+                                <Setter Property="Margin"
+                                        Value="0,0,2,0" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Name}"
+                                                 Value="">
+                                        <Setter Property="Width"
+                                                Value="0" />
+                                        <Setter Property="Margin"
+                                                Value="0" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Name}"
+                                                 Value="{x:Null}">
+                                        <Setter Property="Width"
+                                                Value="0" />
+                                        <Setter Property="Margin"
+                                                Value="0" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
 
-					<TextBlock Style="{StaticResource BoldTextBlock}" 
-					           Text="{Binding Path=Name, Converter={StaticResource CultureInfoNameToDisplayNameConverter}, ConverterParameter='Source', Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-					           Margin="2,0,2,0"/>
-					<TextBlock Style="{StaticResource FadedTextBlock}" Text=" [" />
-					<TextBlock>
-						<TextBlock.Style>
-							<Style TargetType="TextBlock" BasedOn="{StaticResource FadedTextBlock}">
-								<Setter Property="Text" Value="groups: "/>
-								<Style.Triggers>
-									<DataTrigger Binding="{Binding DataContext.GroupType.Type, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Value="Group">
-										<Setter Property="Text" Value="languages: "/>
-									</DataTrigger>
-								</Style.Triggers>
-							</Style>
-						</TextBlock.Style>
-					</TextBlock>
-					<TextBlock Style="{StaticResource FadedTextBlock}" Text="{Binding GroupItems.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-					<TextBlock Style="{StaticResource FadedTextBlock}" Text="]"/>
-				</DockPanel>
-			</DataTemplate>
+                    <TextBlock Style="{StaticResource BoldTextBlock}"
+                               Text="{Binding Path=Name, Converter={StaticResource CultureInfoNameToDisplayNameConverter}, ConverterParameter='Source', Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                               Margin="2,0,2,0" />
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text=" [" />
+                    <TextBlock>
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock"
+                                   BasedOn="{StaticResource FadedTextBlock}">
+                                <Setter Property="Text"
+                                        Value="groups: " />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding DataContext.GroupType.Type, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                 Value="Group">
+                                        <Setter Property="Text"
+                                                Value="languages: " />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text="{Binding GroupItems.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text="]" />
+                </DockPanel>
+            </DataTemplate>
 
-			<DataTemplate x:Key="GroupNodeLevel1" DataType="model1:ReportGroup">
-				<DockPanel>
-					<TextBlock>
-						<TextBlock.Style>
-							<Style TargetType="TextBlock">
-								<Setter Property="Text" Value="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-								<Setter Property="VerticalAlignment" Value="Center"/>
-								<Setter Property="FontWeight" Value="Bold"/>
-								<Setter Property="Foreground" Value="#575656"/>
-								<Setter Property="FontFamily" Value="Segoe UI" />
-								<Setter Property="FontSize" Value="12"/>
-								<Style.Triggers>
-									<DataTrigger Binding="{Binding Name}" Value="">
-										<Setter Property="Text" Value="No Group"/>
-									</DataTrigger>
-									<DataTrigger Binding="{Binding Name}" Value="{x:Null}">
-										<Setter Property="Text" Value="No Group"/>
-									</DataTrigger>
-								</Style.Triggers>
-							</Style>
-						</TextBlock.Style>
-					</TextBlock>
-					<TextBlock Style="{StaticResource FadedTextBlock}" Text=" [" />
-					<TextBlock>
-						<TextBlock.Style>
-							<Style TargetType="TextBlock" BasedOn="{StaticResource FadedTextBlock}">
-								<Setter Property="Text" Value="groups: "/>
-								<Style.Triggers>
-									<DataTrigger Binding="{Binding DataContext.GroupType.Type, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Value="Group">
-										<Setter Property="Text" Value="languages: "/>
-									</DataTrigger>
-								</Style.Triggers>
-							</Style>
-						</TextBlock.Style>
-					</TextBlock>
-					<TextBlock Style="{StaticResource FadedTextBlock}" Text="{Binding GroupItems.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged }" />
-					<TextBlock Style="{StaticResource FadedTextBlock}" Text="]" />
-				</DockPanel>
-			</DataTemplate>
+            <DataTemplate x:Key="GroupNodeLevel1"
+                          DataType="model1:ReportGroup">
+                <DockPanel>
+                    <TextBlock>
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Text"
+                                        Value="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <Setter Property="VerticalAlignment"
+                                        Value="Center" />
+                                <Setter Property="FontWeight"
+                                        Value="Bold" />
+                                <Setter Property="Foreground"
+                                        Value="#575656" />
+                                <Setter Property="FontFamily"
+                                        Value="Segoe UI" />
+                                <Setter Property="FontSize"
+                                        Value="12" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Name}"
+                                                 Value="">
+                                        <Setter Property="Text"
+                                                Value="No Group" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Name}"
+                                                 Value="{x:Null}">
+                                        <Setter Property="Text"
+                                                Value="No Group" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text=" [" />
+                    <TextBlock>
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock"
+                                   BasedOn="{StaticResource FadedTextBlock}">
+                                <Setter Property="Text"
+                                        Value="groups: " />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding DataContext.GroupType.Type, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                 Value="Group">
+                                        <Setter Property="Text"
+                                                Value="languages: " />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text="{Binding GroupItems.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged }" />
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text="]" />
+                </DockPanel>
+            </DataTemplate>
 
-			<DataTemplate x:Key="LanguageNodeLevel2" DataType="model1:GroupItem">
-				<DockPanel>
-					<Image Focusable="False"
-				       Stretch="UniformToFill"
-				       RenderOptions.BitmapScalingMode="HighQuality" 
-				       RenderOptions.EdgeMode="Aliased"
-				       HorizontalAlignment="Center"
-				       VerticalAlignment="Center"
-				       Source="{Binding Path=Name, Converter={StaticResource CultureInfoNameToImageConverter}, 
-						ConverterParameter='Source', Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
-						<Image.Style>
-							<Style TargetType="Image">
-								<Setter Property="Width" Value="22"/>
-								<Setter Property="Margin" Value="0,0,2,0"/>
-								<Style.Triggers>
-									<DataTrigger Binding="{Binding Name}" Value="">
-										<Setter Property="Width" Value="0"/>
-										<Setter Property="Margin" Value="0"/>
-									</DataTrigger>
-									<DataTrigger Binding="{Binding Name}" Value="{x:Null}">
-										<Setter Property="Width" Value="0"/>
-										<Setter Property="Margin" Value="0"/>
-									</DataTrigger>
-								</Style.Triggers>
-							</Style>
-						</Image.Style>
-					</Image>
+            <DataTemplate x:Key="LanguageNodeLevel2"
+                          DataType="model1:GroupItem">
+                <DockPanel>
+                    <Image Focusable="False"
+                           Stretch="UniformToFill"
+                           RenderOptions.BitmapScalingMode="HighQuality"
+                           RenderOptions.EdgeMode="Aliased"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Source="{Binding Path=Name, Converter={StaticResource CultureInfoNameToImageConverter}, 
+						ConverterParameter='Source', Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <Image.Style>
+                            <Style TargetType="Image">
+                                <Setter Property="Width"
+                                        Value="22" />
+                                <Setter Property="Margin"
+                                        Value="0,0,2,0" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Name}"
+                                                 Value="">
+                                        <Setter Property="Width"
+                                                Value="0" />
+                                        <Setter Property="Margin"
+                                                Value="0" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Name}"
+                                                 Value="{x:Null}">
+                                        <Setter Property="Width"
+                                                Value="0" />
+                                        <Setter Property="Margin"
+                                                Value="0" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
 
-					<TextBlock Style="{StaticResource BoldTextBlock}"
-					           Text="{Binding Path=Name, Converter={StaticResource CultureInfoNameToDisplayNameConverter}, ConverterParameter='Source', Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-					           Margin="2,0,2,0" />
-					<TextBlock Style="{StaticResource FadedTextBlock}" Text=" [" />
-					<TextBlock Style="{StaticResource FadedTextBlock}" Text="reports: "/>
-					<TextBlock Style="{StaticResource FadedTextBlock}" Text="{Binding Reports.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-					<TextBlock Style="{StaticResource FadedTextBlock}" Text="]"/>
-				</DockPanel>
-			</DataTemplate>
+                    <TextBlock Style="{StaticResource BoldTextBlock}"
+                               Text="{Binding Path=Name, Converter={StaticResource CultureInfoNameToDisplayNameConverter}, ConverterParameter='Source', Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                               Margin="2,0,2,0" />
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text=" [" />
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text="reports: " />
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text="{Binding Reports.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text="]" />
+                </DockPanel>
+            </DataTemplate>
 
-			<DataTemplate x:Key="GroupNodeLevel2" DataType="model1:GroupItem">
-				<DockPanel>
-					<TextBlock>
-						<TextBlock.Style>
-							<Style TargetType="TextBlock">
-								<Setter Property="Text" Value="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-								<Setter Property="VerticalAlignment" Value="Center"/>
-								<Setter Property="FontWeight" Value="Bold"/>
-								<Setter Property="Foreground" Value="#575656"/>
-								<Setter Property="FontFamily" Value="Segoe UI" />
-								<Setter Property="FontSize" Value="12"/>
-								<Style.Triggers>
-									<DataTrigger Binding="{Binding Name}" Value="">
-										<Setter Property="Text" Value="No Group"/>
-									</DataTrigger>
-									<DataTrigger Binding="{Binding Name}" Value="{x:Null}">
-										<Setter Property="Text" Value="No Group"/>
-									</DataTrigger>
-								</Style.Triggers>
-							</Style>
-						</TextBlock.Style>
-					</TextBlock>
-					<TextBlock Style="{StaticResource FadedTextBlock}" Text=" [" />
-					<TextBlock Style="{StaticResource FadedTextBlock}" Text="reports: "/>
-					<TextBlock Style="{StaticResource FadedTextBlock}" Text="{Binding Reports.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
-					<TextBlock Style="{StaticResource FadedTextBlock}" Text="]" />
-				</DockPanel>
-			</DataTemplate>
+            <DataTemplate x:Key="GroupNodeLevel2"
+                          DataType="model1:GroupItem">
+                <DockPanel>
+                    <TextBlock>
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Text"
+                                        Value="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <Setter Property="VerticalAlignment"
+                                        Value="Center" />
+                                <Setter Property="FontWeight"
+                                        Value="Bold" />
+                                <Setter Property="Foreground"
+                                        Value="#575656" />
+                                <Setter Property="FontFamily"
+                                        Value="Segoe UI" />
+                                <Setter Property="FontSize"
+                                        Value="12" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Name}"
+                                                 Value="">
+                                        <Setter Property="Text"
+                                                Value="No Group" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Name}"
+                                                 Value="{x:Null}">
+                                        <Setter Property="Text"
+                                                Value="No Group" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text=" [" />
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text="reports: " />
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text="{Binding Reports.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text="]" />
+                </DockPanel>
+            </DataTemplate>
 
-		</ResourceDictionary>
+        </ResourceDictionary>
 
-	</UserControl.Resources>
-	<Border BorderBrush="Gainsboro" BorderThickness="1" Background="White">
-		<Grid>
-			<Grid Margin="2">
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="*"/>
-					<RowDefinition Height="Auto"/>
-				</Grid.RowDefinitions>
+    </UserControl.Resources>
+    <Border BorderBrush="Gainsboro"
+            BorderThickness="1"
+            Background="White">
+        <Grid>
+            <Grid Margin="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-				<Grid Margin="0,0,0,2" Grid.Column="0" Grid.Row="0" Height="24">
-					<TextBox Padding="0,0,20,0" Text="{Binding FilterString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-				         VerticalContentAlignment="Center"
-				         IsEnabled="True"/>
-					<TextBlock IsHitTestVisible="False" Padding="0,0,20,0" Text="Filter report name" VerticalAlignment="Center" HorizontalAlignment="Left" 
-				           Margin="5,0,0,0" Foreground="DarkGray">
-						<TextBlock.Style>
-							<Style TargetType="{x:Type TextBlock}">
-								<Setter Property="Visibility" Value="Collapsed" />
-								<Style.Triggers>
-									<MultiDataTrigger>
-										<MultiDataTrigger.Conditions>
-											<Condition Binding="{Binding FilterString}" Value="" />
-										</MultiDataTrigger.Conditions>
-										<MultiDataTrigger.Setters>
-											<Setter Property="Visibility" Value="Visible" />
-										</MultiDataTrigger.Setters>
-									</MultiDataTrigger>
-								</Style.Triggers>
-							</Style>
-						</TextBlock.Style>
-					</TextBlock>
-					<Button Command="{Binding ClearFilterCommand}" Cursor="Hand" ToolTip="Clear filter"
-					HorizontalAlignment="Right" Margin="0,0,0,0" Width="20" VerticalContentAlignment="Center">
-						<Button.Style>
-							<Style TargetType="{x:Type Button}">
-								<Setter Property="Visibility" Value="Visible" />
-								<Setter Property="Template">
-									<Setter.Value>
-										<ControlTemplate TargetType="Button">
-											<Border Background="Transparent">
-												<ContentPresenter/>
-											</Border>
-										</ControlTemplate>
-									</Setter.Value>
-								</Setter>
-								<Style.Triggers>
-									<MultiDataTrigger>
-										<MultiDataTrigger.Conditions>
-											<Condition Binding="{Binding FilterString}" Value="" />
-										</MultiDataTrigger.Conditions>
-										<MultiDataTrigger.Setters>
-											<Setter Property="Visibility" Value="Collapsed" />
-										</MultiDataTrigger.Setters>
-									</MultiDataTrigger>
-								</Style.Triggers>
+                <Grid Margin="0,0,0,2"
+                      Grid.Column="0"
+                      Grid.Row="0"
+                      Height="24">
+                    <TextBox Padding="0,0,20,0"
+                             Text="{Binding FilterString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             VerticalContentAlignment="Center"
+                             IsEnabled="True" />
+                    <TextBlock IsHitTestVisible="False"
+                               Padding="0,0,20,0"
+                               Text="Filter report name"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="5,0,0,0"
+                               Foreground="DarkGray">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility"
+                                        Value="Collapsed" />
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding FilterString}"
+                                                       Value="" />
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+                                            <Setter Property="Visibility"
+                                                    Value="Visible" />
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <Button Command="{Binding ClearFilterCommand}"
+                            Cursor="Hand"
+                            ToolTip="Clear filter"
+                            HorizontalAlignment="Right"
+                            Margin="0,0,0,0"
+                            Width="20"
+                            VerticalContentAlignment="Center">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Visibility"
+                                        Value="Visible" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="Transparent">
+                                                <ContentPresenter />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding FilterString}"
+                                                       Value="" />
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+                                            <Setter Property="Visibility"
+                                                    Value="Collapsed" />
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
 
-							</Style>
-						</Button.Style>
-						<Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="../Resources/Close.png" Height="10" 
-					       RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased" />
-					</Button>
-				</Grid>
+                            </Style>
+                        </Button.Style>
+                        <Image HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Source="../Resources/Close.png"
+                               Height="10"
+                               RenderOptions.BitmapScalingMode="HighQuality"
+                               RenderOptions.EdgeMode="Aliased" />
+                    </Button>
+                </Grid>
 
-				<TreeView x:Name="TreeView" Grid.Row="1" Grid.Column="0" Padding="2,5,2,2" 
-						  AllowDrop="True"
-				          ItemsSource="{Binding ReportGroups, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-				          behaviours:DragDropBehaviour.DragDrop="{Binding DragDropCommand}"				
-			              behaviours:SelectedItemBehaviour.SelectedItemChangedEvent="{Binding SelectedItemChangedCommand}"
-				          behaviours:MouseDoubleClickBehaviour.MouseDoubleClick="{Binding MouseDoubleClickCommand}"
-				          PreviewKeyDown="TreeView_OnPreviewKeyDown">
-					<TreeView.ItemContainerStyle>
-						<Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource  Sdl.TreeViewItem.GenericStyle}">
-							<Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-							<Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-							<EventSetter Event="PreviewMouseRightButtonDown"
-						             Handler="TreeViewItem_PreviewMouseRightButtonDown"/>
-						</Style>
-					</TreeView.ItemContainerStyle>
-					<TreeView.ItemTemplate >
-						<HierarchicalDataTemplate 
-							ItemsSource="{Binding GroupItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-							DataType="{x:Type model1:ReportGroup}">
-							<ContentControl Content="{Binding}" Margin="0,1,0,1" Focusable="False">
-								<ContentControl.Style>
-									<Style TargetType="ContentControl">
-										<Setter Property="ContentTemplate" Value="{StaticResource GroupNodeLevel1}"/>
-										<Style.Triggers>
-											<DataTrigger Binding="{Binding DataContext.GroupType.Type, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Value="Language">
-												<Setter Property="ContentTemplate" Value="{StaticResource LanguageNodeLevel1}"/>
-											</DataTrigger>
-										</Style.Triggers>
-									</Style>
-								</ContentControl.Style>
-							</ContentControl>
-							<HierarchicalDataTemplate.ItemTemplate>
-								<HierarchicalDataTemplate 
-									 ItemsSource="{Binding Reports, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-							         DataType="{x:Type model1:GroupItem}">
-									<ContentControl Content="{Binding}" Margin="0,1,0,1" Focusable="False">
-										<ContentControl.Style>
-											<Style TargetType="ContentControl">
-												<Setter Property="ContentTemplate" Value="{StaticResource LanguageNodeLevel2}"/>
-												<Style.Triggers>
-													<DataTrigger Binding="{Binding DataContext.GroupType.Type, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Value="Language">
-														<Setter Property="ContentTemplate" Value="{StaticResource GroupNodeLevel2}"/>
-													</DataTrigger>
-												</Style.Triggers>
-											</Style>
-										</ContentControl.Style>
-									</ContentControl>
+                <TreeView x:Name="TreeView"
+                          Grid.Row="1"
+                          Grid.Column="0"
+                          Padding="2,5,2,2"
+                          AllowDrop="True"
+                          ItemsSource="{Binding ReportGroups, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                          behaviours:DragDropBehaviour.DragDrop="{Binding DragDropCommand}"
+                          behaviours:SelectedItemBehaviour.SelectedItemChangedEvent="{Binding SelectedItemChangedCommand}"
+                          behaviours:MouseDoubleClickBehaviour.MouseDoubleClick="{Binding MouseDoubleClickCommand}"
+                          PreviewKeyDown="TreeView_OnPreviewKeyDown">
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="{x:Type TreeViewItem}"
+                               BasedOn="{StaticResource  Sdl.TreeViewItem.GenericStyle}">
+                            <Setter Property="IsSelected"
+                                    Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Setter Property="IsExpanded"
+                                    Value="{Binding IsExpanded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <EventSetter Event="PreviewMouseRightButtonDown"
+                                         Handler="TreeViewItem_PreviewMouseRightButtonDown" />
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding GroupItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                  DataType="{x:Type model1:ReportGroup}">
+                            <ContentControl Content="{Binding}"
+                                            Margin="0,1,0,1"
+                                            Focusable="False">
+                                <ContentControl.Style>
+                                    <Style TargetType="ContentControl">
+                                        <Setter Property="ContentTemplate"
+                                                Value="{StaticResource GroupNodeLevel1}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding DataContext.GroupType.Type, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                         Value="Language">
+                                                <Setter Property="ContentTemplate"
+                                                        Value="{StaticResource LanguageNodeLevel1}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ContentControl.Style>
+                            </ContentControl>
+                            <HierarchicalDataTemplate.ItemTemplate>
+                                <HierarchicalDataTemplate ItemsSource="{Binding Reports, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                          DataType="{x:Type model1:GroupItem}">
+                                    <ContentControl Content="{Binding}"
+                                                    Margin="0,1,0,1"
+                                                    Focusable="False">
+                                        <ContentControl.Style>
+                                            <Style TargetType="ContentControl">
+                                                <Setter Property="ContentTemplate"
+                                                        Value="{StaticResource LanguageNodeLevel2}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding DataContext.GroupType.Type, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                                 Value="Language">
+                                                        <Setter Property="ContentTemplate"
+                                                                Value="{StaticResource GroupNodeLevel2}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ContentControl.Style>
+                                    </ContentControl>
 
-									<HierarchicalDataTemplate.ItemTemplate>
-										<DataTemplate DataType="{x:Type model:Report}" >
-											<DockPanel Tag="{Binding ElementName=ReportsNavigationControl, Path=DataContext}">
-												<DockPanel.ContextMenu>
-													<ContextMenu DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
-														<MenuItem Header="Edit report properties" 
-													          Command="{Binding EditReportCommand}"
-													          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
-															<MenuItem.Icon>
-																<Image Source="../Resources/Edit.ico"/>
-															</MenuItem.Icon>
-														</MenuItem>
-														<MenuItem Header="Remove report from project" 
-													          Command="{Binding RemoveReportCommand}"
-													          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
-															<MenuItem.Icon>
-																<Image Source="../Resources/Delete.ico"/>
-															</MenuItem.Icon>
-														</MenuItem>
-														<Separator/>
-														<MenuItem Header="Print Report" 														          
-														          Command="{Binding PrintReportCommand}"
-														          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
-															<MenuItem.Icon>
-																<Image Source="../Resources/Print.ico"/>
-															</MenuItem.Icon>
-														</MenuItem>
-														<!--<MenuItem Header="Print Preview" 
+                                    <HierarchicalDataTemplate.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type model:Report}">
+                                            <DockPanel Tag="{Binding ElementName=ReportsNavigationControl, Path=DataContext}">
+                                                <DockPanel.ContextMenu>
+                                                    <ContextMenu DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                                                        <MenuItem Header="Edit report properties"
+                                                                  Command="{Binding EditReportCommand}"
+                                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+                                                            <MenuItem.Icon>
+                                                                <Image Source="../Resources/Edit.ico" />
+                                                            </MenuItem.Icon>
+                                                        </MenuItem>
+                                                        <MenuItem Header="Remove report from project"
+                                                                  Command="{Binding RemoveReportCommand}"
+                                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+                                                            <MenuItem.Icon>
+                                                                <Image Source="../Resources/Delete.ico" />
+                                                            </MenuItem.Icon>
+                                                        </MenuItem>
+                                                        <Separator />
+                                                        <MenuItem Header="Print Report"
+                                                                  Command="{Binding PrintReportCommand}"
+                                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+                                                            <MenuItem.Icon>
+                                                                <Image Source="../Resources/Print.ico" />
+                                                            </MenuItem.Icon>
+                                                        </MenuItem>
+                                                        <!--<MenuItem Header="Print Preview" 
 														          IsEnabled="False"
 														          Command="{Binding PrintPreviewCommand}"
 														          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
@@ -369,94 +489,123 @@
 																<Image Source="../Resources/PageSetup.ico"/>
 															</MenuItem.Icon>
 														</MenuItem>-->
-														<MenuItem Header="Save As" 		
-																  IsEnabled="True"
-														          Command="{Binding SaveAsCommand}"
-														          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
-															<MenuItem.Icon>
-																<Image Source="../Resources/Save.ico"/>
-															</MenuItem.Icon>
-														</MenuItem>
-														<Separator/>
-														<MenuItem Header="Open folder in explorer" 
-													          Command="{Binding OpenFolderCommand}"
-													          CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
-															<MenuItem.Icon>
-																<Image Source="../Resources/Folder.png"/>
-															</MenuItem.Icon>
-														</MenuItem>
-													</ContextMenu>
-												</DockPanel.ContextMenu>
-												<Image Focusable="False"
-													Stretch="UniformToFill"
-													RenderOptions.BitmapScalingMode="HighQuality" 
-													RenderOptions.EdgeMode="Aliased"
-													HorizontalAlignment="Center"
-													VerticalAlignment="Center"		
-													Width="17"
-													Margin="0,0,2,0">
-													<Image.Style>
-														<Style TargetType="Image">
-															<Setter Property="Source" Value="../Resources/StudioReport.ico"/>
-															<Style.Triggers>
-																<DataTrigger Binding="{Binding IsStudioReport}" Value="True">
-																	<Setter Property="Source" Value="../Resources/Report.png"/>
-																</DataTrigger>
-															</Style.Triggers>
-														</Style>
-													</Image.Style>
-												</Image>
+                                                        <MenuItem Header="Save As"
+                                                                  IsEnabled="True"
+                                                                  Command="{Binding SaveAsCommand}"
+                                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+                                                            <MenuItem.Icon>
+                                                                <Image Source="../Resources/Save.ico" />
+                                                            </MenuItem.Icon>
+                                                        </MenuItem>
+                                                        <Separator />
+                                                        <MenuItem Header="Open folder in explorer"
+                                                                  Command="{Binding OpenFolderCommand}"
+                                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+                                                            <MenuItem.Icon>
+                                                                <Image Source="../Resources/Folder.png" />
+                                                            </MenuItem.Icon>
+                                                        </MenuItem>
+                                                    </ContextMenu>
+                                                </DockPanel.ContextMenu>
+                                                <Image Focusable="False"
+                                                       Stretch="UniformToFill"
+                                                       RenderOptions.BitmapScalingMode="HighQuality"
+                                                       RenderOptions.EdgeMode="Aliased"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       Width="17"
+                                                       Margin="0,0,2,0">
+                                                    <Image.Style>
+                                                        <Style TargetType="Image">
+                                                            <Setter Property="Source"
+                                                                    Value="../Resources/StudioReport.ico" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsStudioReport}"
+                                                                             Value="True">
+                                                                    <Setter Property="Source"
+                                                                            Value="../Resources/Report.png" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Image.Style>
+                                                </Image>
 
-												<TextBlock Style="{StaticResource DefaultTextBlock}" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-												           Margin="2,1,0,1"/>
+                                                <TextBlock Style="{StaticResource DefaultTextBlock}"
+                                                           Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                           Margin="2,1,0,1" />
 
-												<StackPanel Orientation="Horizontal" 
-											            Visibility="{Binding DataContext.Settings.DisplayDateSuffixWithReportName, 															
+                                                <StackPanel Orientation="Horizontal"
+                                                            Visibility="{Binding DataContext.Settings.DisplayDateSuffixWithReportName, 															
 															Mode=OneWay, UpdateSourceTrigger=PropertyChanged,
 															RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, 
 													Converter={StaticResource BooleanToVisibilityConverter}}">
-													<TextBlock Style="{StaticResource FadedTextBlock}" Text=" [" />
-													<TextBlock Style="{StaticResource FadedTextBlock}" Text="{Binding DateToShortString, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
-													<TextBlock Style="{StaticResource FadedTextBlock}" Text="]" />
-												</StackPanel>
-											</DockPanel>
-										</DataTemplate>
-									</HierarchicalDataTemplate.ItemTemplate>
-								</HierarchicalDataTemplate>
-							</HierarchicalDataTemplate.ItemTemplate>
-						</HierarchicalDataTemplate>
-					</TreeView.ItemTemplate>
-				</TreeView>
+                                                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                                                               Text=" [" />
+                                                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                                                               Text="{Binding DateToShortString, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                                                               Text="]" />
+                                                </StackPanel>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </HierarchicalDataTemplate.ItemTemplate>
+                                </HierarchicalDataTemplate>
+                            </HierarchicalDataTemplate.ItemTemplate>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
 
-				<Border Grid.Row="2" Margin="0,2,0,2" BorderThickness="1" BorderBrush="#C2C0C0" Grid.Column="0">
-					<DockPanel  Dock="Left" Margin="2,0,2,0">
-						<DockPanel HorizontalAlignment="Left">
-							<Button Background="Transparent" BorderThickness="0" FontSize="16" FontWeight="Bold" Foreground="#464646" Content="+" Width="15"  ToolTip="Expand All"
-					        Command="{Binding ExpandAllCommand}"/>
-							<Label Content="/" VerticalAlignment="Center" Padding="0"/>
-							<Button Background="Transparent" BorderThickness="0"  FontSize="16" FontWeight="Bold" Foreground="#464646" Content="-" Width="15" ToolTip="Collapse All"
-					        Command="{Binding CollapseAllCommand}"/>
-						</DockPanel>
-						<DockPanel HorizontalAlignment="Right" Dock="Right">
-							<Label Content="Group by:"/>
-							<ComboBox Style="{StaticResource Sdl.ComboBox.Generic.Style}"
-							MinWidth="95"									  
-							HorizontalAlignment="Left"
-							VerticalAlignment="Center"
-							ItemsSource="{Binding GroupTypes}"
-							SelectedItem="{Binding GroupType, Mode=TwoWay}"/>
-						</DockPanel>
-					</DockPanel>
-				</Border>
-			</Grid>
+                <Border Grid.Row="2"
+                        Margin="0,2,0,2"
+                        BorderThickness="1"
+                        BorderBrush="#C2C0C0"
+                        Grid.Column="0">
+                    <DockPanel  Dock="Left"
+                                Margin="2,0,2,0">
+                        <DockPanel HorizontalAlignment="Left">
+                            <Button Background="Transparent"
+                                    BorderThickness="0"
+                                    FontSize="16"
+                                    FontWeight="Bold"
+                                    Foreground="#464646"
+                                    Content="+"
+                                    Width="15"
+                                    ToolTip="Expand All"
+                                    Command="{Binding ExpandAllCommand}" />
+                            <Label Content="/"
+                                   VerticalAlignment="Center"
+                                   Padding="0" />
+                            <Button Background="Transparent"
+                                    BorderThickness="0"
+                                    FontSize="16"
+                                    FontWeight="Bold"
+                                    Foreground="#464646"
+                                    Content="-"
+                                    Width="15"
+                                    ToolTip="Collapse All"
+                                    Command="{Binding CollapseAllCommand}" />
+                        </DockPanel>
+                        <DockPanel HorizontalAlignment="Right"
+                                   Dock="Right">
+                            <Label Content="Group by:" />
+                            <ComboBox Style="{StaticResource Sdl.ComboBox.Generic.Style}"
+                                      MinWidth="95"
+                                      HorizontalAlignment="Left"
+                                      VerticalAlignment="Center"
+                                      ItemsSource="{Binding GroupTypes}"
+                                      SelectedItem="{Binding GroupType, Mode=TwoWay}" />
+                        </DockPanel>
+                    </DockPanel>
+                </Border>
+            </Grid>
 
-			<dpc:CustomProgressRing Style="{StaticResource Sdl.CustomProgressRing.Normal}"
-			                        Height="80"
-			                        Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter},
-									Mode=OneWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=False}"		    
-			                        Canvas.ZIndex="110" 
-			                        DockPanel.Dock="Top"
-			                        Margin="20"/>
-		</Grid>
-	</Border>
+            <dpc:CustomProgressRing Style="{StaticResource Sdl.CustomProgressRing.Normal}"
+                                    Height="80"
+                                    Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter},
+									Mode=OneWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=False}"
+                                    Canvas.ZIndex="110"
+                                    DockPanel.Dock="Top"
+                                    Margin="20" />
+        </Grid>
+    </Border>
 </UserControl>

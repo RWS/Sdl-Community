@@ -40,16 +40,83 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Expander Header="Report Filter"
-                  FontWeight="Bold"
-                  Margin="0 10 -2 10">
-            <controls:MultiItemSelect HorizontalAlignment="Stretch"
-                                      HorizontalContentAlignment="Stretch"
-                                      SelectedItems="{Binding SelectedProjects, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                      ItemsSource="{Binding Projects}"
-                                      ItemTemplate="{StaticResource FilterTemplate}"
-                                      SelectedItemTemplate="{StaticResource FilterTemplate}" />
-        </Expander>
+        <Grid Margin="0,0,0,2"
+              Grid.Column="0"
+              Grid.Row="0"
+              Height="24">
+            <TextBox Padding="0,0,20,0"
+                     Text="{Binding FilterString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     VerticalContentAlignment="Center"
+                     IsEnabled="True" />
+            <TextBlock IsHitTestVisible="False"
+                       Padding="0,0,20,0"
+                       Text="Filter by project name"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       Margin="5,0,0,0"
+                       Foreground="DarkGray">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Visibility"
+                                Value="Collapsed" />
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding FilterString}"
+                                               Value="" />
+                                </MultiDataTrigger.Conditions>
+                                <MultiDataTrigger.Setters>
+                                    <Setter Property="Visibility"
+                                            Value="Visible" />
+                                </MultiDataTrigger.Setters>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <Button Command="{Binding ClearFilterCommand}"
+                    Cursor="Hand"
+                    ToolTip="Clear filter"
+                    HorizontalAlignment="Right"
+                    Margin="0,0,0,0"
+                    Width="20"
+                    VerticalContentAlignment="Center">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Visibility"
+                                Value="Visible" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="Transparent">
+                                        <ContentPresenter />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding FilterString}"
+                                               Value="" />
+                                </MultiDataTrigger.Conditions>
+                                <MultiDataTrigger.Setters>
+                                    <Setter Property="Visibility"
+                                            Value="Collapsed" />
+                                </MultiDataTrigger.Setters>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+
+                    </Style>
+                </Button.Style>
+                <Image HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Source="../../../Resources/Close.png"
+                       Height="10"
+                       RenderOptions.BitmapScalingMode="HighQuality"
+                       RenderOptions.EdgeMode="Aliased" />
+            </Button>
+        </Grid>
 
         <ListBox Grid.Row="1"
                  ItemsSource="{Binding Reports}"
