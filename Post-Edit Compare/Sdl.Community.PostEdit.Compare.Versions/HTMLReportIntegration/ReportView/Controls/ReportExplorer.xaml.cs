@@ -1,7 +1,7 @@
 ﻿using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using System;
-using System.Windows.Controls;
+using System.Windows;
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Controls
 {
@@ -17,21 +17,19 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
 
         public event Action SelectedReportChanged;
 
-        public void ToggleOnOff(bool enabled) => IsEnabled = enabled;
+        public ReportInfo SelectedReport { get; set; }
 
         public void Dispose()
         {
             Root?.Dispose();
         }
 
-        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e) =>
-            SelectedReportChanged?.Invoke();
+        public void ToggleOnOff(bool enabled) => IsEnabled = enabled;
 
-        //TODO: Show latest report
-        public void SelectLatestReport()
+        private void TreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            //ReportList.SelectedIndex = 0;
-            //ReportList.ScrollIntoView(ReportList.SelectedItem);
+            SelectedReport = (ReportInfo)e.NewValue;
+            SelectedReportChanged?.Invoke();
         }
     }
 }

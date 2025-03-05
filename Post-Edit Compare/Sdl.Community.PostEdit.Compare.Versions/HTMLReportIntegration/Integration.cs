@@ -159,7 +159,9 @@ public class Integration
         ToggleReportProjectSync(false);
         SetUpReportExplorer();
 
-        ReportViewController.SelectLatestReport();
+        var reports = ReportManager.GetReports();
+
+        ReportViewController.SelectLatestReport(reports.FirstOrDefault());
     }
 
     public static void ShowReportsView() => ReportViewController.Activate();

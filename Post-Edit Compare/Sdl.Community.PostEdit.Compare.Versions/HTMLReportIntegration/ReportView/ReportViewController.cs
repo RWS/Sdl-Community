@@ -36,7 +36,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 
         public async Task<string> GetNonInteractiveReport() => await ReportViewer.GetNonInteractiveReport();
 
-        public ReportInfo GetSelectedReport() => ReportExplorerViewModel.SelectedReport;
+        public ReportInfo GetSelectedReport() => ReportExplorer.SelectedReport;
 
         public async Task HandleReportRequestWithoutSync(JObject messageObject)
         {
@@ -67,7 +67,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
             ReportExplorerViewModel.SetReportsList(reports);
         }
 
-        public void SelectLatestReport() => ReportExplorer.SelectLatestReport();
+        public void SelectLatestReport(ReportInfo report) => ReportExplorerViewModel.SetSelectedReport(report);
 
         public async Task ToggleFilter(SegmentFilter segmentFilter)
         {
@@ -122,7 +122,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
                 var selectedReport = GetSelectedReport();
                 Integration.ToggleSyncRibbon(selectedReport is not null);
 
-                await ReportViewer.Navigate(ReportExplorerViewModel.SelectedReport?.ReportPath);
+                await ReportViewer.Navigate(ReportExplorer.SelectedReport?.ReportPath);
                 await Task.Delay(500);
 
                 var projectId = await ReportViewer.GetProjectId();
@@ -130,7 +130,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
             }
             catch (Exception e)
             {
-                ReportExplorerViewModel.SelectedReport = null;
+                ReportExplorer.SelectedReport = null;
                 ErrorHandler.ShowError($"Error loading the selected report: {e.Message}");
             }
         }

@@ -36,17 +36,26 @@ public class ReportExplorerViewModel : ViewModelBase
         set => SetField(ref _projects, value);
     }
 
-    public ReportInfo SelectedReport
-    {
-        get => _selectedReport;
-        set => SetField(ref _selectedReport, value);
-    }
-
     public ObservableCollection<ReportGroup> ReportGroups
     {
         get => _reportGroups;
         set => SetField(ref _reportGroups, value);
     }
+
+    public void SetSelectedReport(ReportInfo report)
+    {
+        foreach (var repGroup in ReportGroups)
+        {
+            foreach (var rep in repGroup.Reports)
+            {
+                if (rep.ProjectId != report.ProjectId) continue;
+                repGroup.IsExpanded = true;
+                rep.IsSelected = true;
+                return;
+            }
+        }
+    }
+
 
     public void SetProjectsList(List<ProjectInfo> projects) =>
         Projects = new ObservableCollection<ProjectInfo>(projects);

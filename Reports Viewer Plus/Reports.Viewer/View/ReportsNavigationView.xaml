@@ -30,268 +30,268 @@
                 <ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/WindowsBorder.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/CustomProgressRingStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
 
-        <converters:CultureInfoNameToImageConverter x:Key="CultureInfoNameToImageConverter" />
-        <converters:CultureInfoNameToDisplayNameConverter x:Key="CultureInfoNameToDisplayNameConverter" />
 
-        <CollectionViewSource x:Key="ReportGroups"
-                              Source="{Binding ReportGroups}" />
+            <converters:CultureInfoNameToImageConverter x:Key="CultureInfoNameToImageConverter" />
+            <converters:CultureInfoNameToDisplayNameConverter x:Key="CultureInfoNameToDisplayNameConverter" />
 
-        <Style TargetType="{x:Type UserControl}">
-            <Setter Property="FontFamily"
-                    Value="Segoe UI" />
-            <Setter Property="FontSize"
-                    Value="12" />
-            <Setter Property="Foreground"
-                    Value="{StaticResource WindowsControl.Control.Text}" />
-        </Style>
+            <CollectionViewSource x:Key="ReportGroups"
+                                  Source="{Binding ReportGroups}" />
 
-        <Style x:Key="DefaultTextBlock"
-               TargetType="TextBlock">
-            <Setter Property="FontFamily"
-                    Value="Segoe UI" />
-            <Setter Property="FontSize"
-                    Value="12" />
-            <Setter Property="Foreground"
-                    Value="{StaticResource WindowsControl.Control.Text}" />
-            <Setter Property="VerticalAlignment"
-                    Value="Center" />
-        </Style>
+            <Style TargetType="{x:Type UserControl}">
+                <Setter Property="FontFamily"
+                        Value="Segoe UI" />
+                <Setter Property="FontSize"
+                        Value="12" />
+                <Setter Property="Foreground"
+                        Value="{StaticResource WindowsControl.Control.Text}" />
+            </Style>
 
-        <Style x:Key="BoldTextBlock"
-               TargetType="TextBlock"
-               BasedOn="{StaticResource DefaultTextBlock}">
-            <Setter Property="FontWeight"
-                    Value="Bold" />
-            <Setter Property="Foreground"
-                    Value="#575656" />
-        </Style>
+            <Style x:Key="DefaultTextBlock"
+                   TargetType="TextBlock">
+                <Setter Property="FontFamily"
+                        Value="Segoe UI" />
+                <Setter Property="FontSize"
+                        Value="12" />
+                <Setter Property="Foreground"
+                        Value="{StaticResource WindowsControl.Control.Text}" />
+                <Setter Property="VerticalAlignment"
+                        Value="Center" />
+            </Style>
 
-        <Style x:Key="FadedTextBlock"
-               TargetType="TextBlock"
-               BasedOn="{StaticResource DefaultTextBlock}">
-            <Setter Property="Foreground"
-                    Value="#828080" />
-        </Style>
+            <Style x:Key="BoldTextBlock"
+                   TargetType="TextBlock"
+                   BasedOn="{StaticResource DefaultTextBlock}">
+                <Setter Property="FontWeight"
+                        Value="Bold" />
+                <Setter Property="Foreground"
+                        Value="#575656" />
+            </Style>
 
-        <DataTemplate x:Key="LanguageNodeLevel1"
-                      DataType="model1:ReportGroup">
-            <DockPanel>
+            <Style x:Key="FadedTextBlock"
+                   TargetType="TextBlock"
+                   BasedOn="{StaticResource DefaultTextBlock}">
+                <Setter Property="Foreground"
+                        Value="#828080" />
+            </Style>
 
-                <Image Focusable="False"
-                       Stretch="UniformToFill"
-                       RenderOptions.BitmapScalingMode="HighQuality"
-                       RenderOptions.EdgeMode="Aliased"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Source="{Binding Path=Name, Converter={StaticResource CultureInfoNameToImageConverter}, ConverterParameter='Source', Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    <Image.Style>
-                        <Style TargetType="Image">
-                            <Setter Property="Width"
-                                    Value="22" />
-                            <Setter Property="Margin"
-                                    Value="0,0,2,0" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Name}"
-                                             Value="">
-                                    <Setter Property="Width"
-                                            Value="0" />
-                                    <Setter Property="Margin"
-                                            Value="0" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Name}"
-                                             Value="{x:Null}">
-                                    <Setter Property="Width"
-                                            Value="0" />
-                                    <Setter Property="Margin"
-                                            Value="0" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Image.Style>
-                </Image>
+            <DataTemplate x:Key="LanguageNodeLevel1"
+                          DataType="model1:ReportGroup">
+                <DockPanel>
 
-                <TextBlock Style="{StaticResource BoldTextBlock}"
-                           Text="{Binding Path=Name, Converter={StaticResource CultureInfoNameToDisplayNameConverter}, ConverterParameter='Source', Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                           Margin="2,0,2,0" />
-                <TextBlock Style="{StaticResource FadedTextBlock}"
-                           Text=" [" />
-                <TextBlock>
-                    <TextBlock.Style>
-                        <Style TargetType="TextBlock"
-                               BasedOn="{StaticResource FadedTextBlock}">
-                            <Setter Property="Text"
-                                    Value="groups: " />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding DataContext.GroupType.Type, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                             Value="Group">
-                                    <Setter Property="Text"
-                                            Value="languages: " />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
-                <TextBlock Style="{StaticResource FadedTextBlock}"
-                           Text="{Binding GroupItems.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-                <TextBlock Style="{StaticResource FadedTextBlock}"
-                           Text="]" />
-            </DockPanel>
-        </DataTemplate>
+                    <Image Focusable="False"
+                           Stretch="UniformToFill"
+                           RenderOptions.BitmapScalingMode="HighQuality"
+                           RenderOptions.EdgeMode="Aliased"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Source="{Binding Path=Name, Converter={StaticResource CultureInfoNameToImageConverter}, ConverterParameter='Source', Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <Image.Style>
+                            <Style TargetType="Image">
+                                <Setter Property="Width"
+                                        Value="22" />
+                                <Setter Property="Margin"
+                                        Value="0,0,2,0" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Name}"
+                                                 Value="">
+                                        <Setter Property="Width"
+                                                Value="0" />
+                                        <Setter Property="Margin"
+                                                Value="0" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Name}"
+                                                 Value="{x:Null}">
+                                        <Setter Property="Width"
+                                                Value="0" />
+                                        <Setter Property="Margin"
+                                                Value="0" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
 
-        <DataTemplate x:Key="GroupNodeLevel1"
-                      DataType="model1:ReportGroup">
-            <DockPanel>
-                <TextBlock>
-                    <TextBlock.Style>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Text"
-                                    Value="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            <Setter Property="VerticalAlignment"
-                                    Value="Center" />
-                            <Setter Property="FontWeight"
-                                    Value="Bold" />
-                            <Setter Property="Foreground"
-                                    Value="#575656" />
-                            <Setter Property="FontFamily"
-                                    Value="Segoe UI" />
-                            <Setter Property="FontSize"
-                                    Value="12" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Name}"
-                                             Value="">
-                                    <Setter Property="Text"
-                                            Value="No Group" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Name}"
-                                             Value="{x:Null}">
-                                    <Setter Property="Text"
-                                            Value="No Group" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
-                <TextBlock Style="{StaticResource FadedTextBlock}"
-                           Text=" [" />
-                <TextBlock>
-                    <TextBlock.Style>
-                        <Style TargetType="TextBlock"
-                               BasedOn="{StaticResource FadedTextBlock}">
-                            <Setter Property="Text"
-                                    Value="groups: " />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding DataContext.GroupType.Type, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                             Value="Group">
-                                    <Setter Property="Text"
-                                            Value="languages: " />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
-                <TextBlock Style="{StaticResource FadedTextBlock}"
-                           Text="{Binding GroupItems.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged }" />
-                <TextBlock Style="{StaticResource FadedTextBlock}"
-                           Text="]" />
-            </DockPanel>
-        </DataTemplate>
+                    <TextBlock Style="{StaticResource BoldTextBlock}"
+                               Text="{Binding Path=Name, Converter={StaticResource CultureInfoNameToDisplayNameConverter}, ConverterParameter='Source', Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                               Margin="2,0,2,0" />
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text=" [" />
+                    <TextBlock>
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock"
+                                   BasedOn="{StaticResource FadedTextBlock}">
+                                <Setter Property="Text"
+                                        Value="groups: " />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding DataContext.GroupType.Type, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                 Value="Group">
+                                        <Setter Property="Text"
+                                                Value="languages: " />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text="{Binding GroupItems.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text="]" />
+                </DockPanel>
+            </DataTemplate>
 
-        <DataTemplate x:Key="LanguageNodeLevel2"
-                      DataType="model1:GroupItem">
-            <DockPanel>
-                <Image Focusable="False"
-                       Stretch="UniformToFill"
-                       RenderOptions.BitmapScalingMode="HighQuality"
-                       RenderOptions.EdgeMode="Aliased"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Source="{Binding Path=Name, Converter={StaticResource CultureInfoNameToImageConverter}, 
+            <DataTemplate x:Key="GroupNodeLevel1"
+                          DataType="model1:ReportGroup">
+                <DockPanel>
+                    <TextBlock>
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Text"
+                                        Value="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <Setter Property="VerticalAlignment"
+                                        Value="Center" />
+                                <Setter Property="FontWeight"
+                                        Value="Bold" />
+                                <Setter Property="Foreground"
+                                        Value="#575656" />
+                                <Setter Property="FontFamily"
+                                        Value="Segoe UI" />
+                                <Setter Property="FontSize"
+                                        Value="12" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Name}"
+                                                 Value="">
+                                        <Setter Property="Text"
+                                                Value="No Group" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Name}"
+                                                 Value="{x:Null}">
+                                        <Setter Property="Text"
+                                                Value="No Group" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text=" [" />
+                    <TextBlock>
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock"
+                                   BasedOn="{StaticResource FadedTextBlock}">
+                                <Setter Property="Text"
+                                        Value="groups: " />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding DataContext.GroupType.Type, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                 Value="Group">
+                                        <Setter Property="Text"
+                                                Value="languages: " />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text="{Binding GroupItems.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged }" />
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text="]" />
+                </DockPanel>
+            </DataTemplate>
+
+            <DataTemplate x:Key="LanguageNodeLevel2"
+                          DataType="model1:GroupItem">
+                <DockPanel>
+                    <Image Focusable="False"
+                           Stretch="UniformToFill"
+                           RenderOptions.BitmapScalingMode="HighQuality"
+                           RenderOptions.EdgeMode="Aliased"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Source="{Binding Path=Name, Converter={StaticResource CultureInfoNameToImageConverter}, 
 						ConverterParameter='Source', Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    <Image.Style>
-                        <Style TargetType="Image">
-                            <Setter Property="Width"
-                                    Value="22" />
-                            <Setter Property="Margin"
-                                    Value="0,0,2,0" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Name}"
-                                             Value="">
-                                    <Setter Property="Width"
-                                            Value="0" />
-                                    <Setter Property="Margin"
-                                            Value="0" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Name}"
-                                             Value="{x:Null}">
-                                    <Setter Property="Width"
-                                            Value="0" />
-                                    <Setter Property="Margin"
-                                            Value="0" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Image.Style>
-                </Image>
+                        <Image.Style>
+                            <Style TargetType="Image">
+                                <Setter Property="Width"
+                                        Value="22" />
+                                <Setter Property="Margin"
+                                        Value="0,0,2,0" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Name}"
+                                                 Value="">
+                                        <Setter Property="Width"
+                                                Value="0" />
+                                        <Setter Property="Margin"
+                                                Value="0" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Name}"
+                                                 Value="{x:Null}">
+                                        <Setter Property="Width"
+                                                Value="0" />
+                                        <Setter Property="Margin"
+                                                Value="0" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
 
-                <TextBlock Style="{StaticResource BoldTextBlock}"
-                           Text="{Binding Path=Name, Converter={StaticResource CultureInfoNameToDisplayNameConverter}, ConverterParameter='Source', Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                           Margin="2,0,2,0" />
-                <TextBlock Style="{StaticResource FadedTextBlock}"
-                           Text=" [" />
-                <TextBlock Style="{StaticResource FadedTextBlock}"
-                           Text="reports: " />
-                <TextBlock Style="{StaticResource FadedTextBlock}"
-                           Text="{Binding Reports.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-                <TextBlock Style="{StaticResource FadedTextBlock}"
-                           Text="]" />
-            </DockPanel>
-        </DataTemplate>
+                    <TextBlock Style="{StaticResource BoldTextBlock}"
+                               Text="{Binding Path=Name, Converter={StaticResource CultureInfoNameToDisplayNameConverter}, ConverterParameter='Source', Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                               Margin="2,0,2,0" />
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text=" [" />
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text="reports: " />
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text="{Binding Reports.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text="]" />
+                </DockPanel>
+            </DataTemplate>
 
-        <DataTemplate x:Key="GroupNodeLevel2"
-                      DataType="model1:GroupItem">
-            <DockPanel>
-                <TextBlock>
-                    <TextBlock.Style>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Text"
-                                    Value="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            <Setter Property="VerticalAlignment"
-                                    Value="Center" />
-                            <Setter Property="FontWeight"
-                                    Value="Bold" />
-                            <Setter Property="Foreground"
-                                    Value="#575656" />
-                            <Setter Property="FontFamily"
-                                    Value="Segoe UI" />
-                            <Setter Property="FontSize"
-                                    Value="12" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Name}"
-                                             Value="">
-                                    <Setter Property="Text"
-                                            Value="No Group" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Name}"
-                                             Value="{x:Null}">
-                                    <Setter Property="Text"
-                                            Value="No Group" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
-                <TextBlock Style="{StaticResource FadedTextBlock}"
-                           Text=" [" />
-                <TextBlock Style="{StaticResource FadedTextBlock}"
-                           Text="reports: " />
-                <TextBlock Style="{StaticResource FadedTextBlock}"
-                           Text="{Binding Reports.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-                <TextBlock Style="{StaticResource FadedTextBlock}"
-                           Text="]" />
-            </DockPanel>
-        </DataTemplate>
+            <DataTemplate x:Key="GroupNodeLevel2"
+                          DataType="model1:GroupItem">
+                <DockPanel>
+                    <TextBlock>
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Text"
+                                        Value="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <Setter Property="VerticalAlignment"
+                                        Value="Center" />
+                                <Setter Property="FontWeight"
+                                        Value="Bold" />
+                                <Setter Property="Foreground"
+                                        Value="#575656" />
+                                <Setter Property="FontFamily"
+                                        Value="Segoe UI" />
+                                <Setter Property="FontSize"
+                                        Value="12" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Name}"
+                                                 Value="">
+                                        <Setter Property="Text"
+                                                Value="No Group" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Name}"
+                                                 Value="{x:Null}">
+                                        <Setter Property="Text"
+                                                Value="No Group" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text=" [" />
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text="reports: " />
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text="{Binding Reports.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock Style="{StaticResource FadedTextBlock}"
+                               Text="]" />
+                </DockPanel>
+            </DataTemplate>
 
         </ResourceDictionary>
 

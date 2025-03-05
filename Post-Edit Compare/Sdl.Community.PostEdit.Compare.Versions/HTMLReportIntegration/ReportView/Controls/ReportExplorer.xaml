@@ -7,6 +7,7 @@
              xmlns:viewModel="clr-namespace:Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.ViewModel"
              xmlns:controls="clr-namespace:Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Controls"
              xmlns:core="clr-namespace:Sdl.ProjectAutomation.Core;assembly=Sdl.ProjectAutomation.Core"
+             xmlns:styleSelectors="clr-namespace:Sdl.Community.PostEdit.Versions.HTMLReportIntegration.StyleSelectors"
              Name="Root"
              d:DataContext="{d:DesignInstance viewModel:ReportExplorerViewModel}"
              mc:Ignorable="d"
@@ -14,8 +15,12 @@
              d:DesignWidth="800">
 
     <UserControl.Resources>
-        <ResourceDictionary>
 
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/treeviewresources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
             <DataTemplate DataType="{x:Type core:ProjectInfo}"
                           x:Key="FilterTemplate">
                 <Grid>
@@ -33,6 +38,28 @@
                 </Grid>
             </DataTemplate>
 
+            <Style TargetType="TreeViewItem"
+                   x:Key="ParentItemStyle"
+                   BasedOn="{StaticResource Sdl.TreeViewItem.GenericStyle}">
+                <Setter Property="IsExpanded"
+                        Value="{Binding DataContext.IsExpanded, RelativeSource={RelativeSource Self}}" />
+                <Setter Property="Focusable"
+                        Value="False" />
+            </Style>
+
+            <!-- Style for child-level items -->
+            <Style x:Key="ChildItemStyle"
+                   BasedOn="{StaticResource Sdl.TreeViewItem.GenericStyle}"
+                   TargetType="TreeViewItem">
+                <Setter Property="IsSelected"
+                        Value="{Binding DataContext.IsSelected, RelativeSource={RelativeSource Self}}" />
+            </Style>
+
+            <!-- Style Selector -->
+            <styleSelectors:TreeViewItemStyleSelector x:Key="TreeViewItemStyleSelector"
+                                                      ParentItemStyle="{StaticResource ParentItemStyle}"
+                                                      ChildItemStyle="{StaticResource ChildItemStyle}" />
+
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -43,7 +70,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-     
+
 
         <Grid Margin="0,0,0,2"
               Grid.Column="0"
@@ -144,12 +171,19 @@
         </ListBox>-->
 
         <TreeView Grid.Row="1"
+                  x:Name="ReportsTreeView"
+                  SelectedItemChanged="TreeView_OnSelectedItemChanged"
+                  ItemContainerStyleSelector="{StaticResource TreeViewItemStyleSelector}"
                   ItemsSource="{Binding ReportGroups}">
             <TreeView.ItemTemplate>
+
                 <HierarchicalDataTemplate ItemsSource="{Binding Reports}">
+
                     <TextBlock Text="{Binding ProjectName}" />
+
                     <HierarchicalDataTemplate.ItemTemplate>
                         <DataTemplate DataType="{x:Type model:ReportInfo}">
+
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="../../../Resources/Report.ico"
                                        Width="16"
@@ -159,11 +193,13 @@
                                            Margin="0 0 0 0"
                                            VerticalAlignment="Center" />
                             </StackPanel>
+
                         </DataTemplate>
                     </HierarchicalDataTemplate.ItemTemplate>
+
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
-        </TreeView>
 
+        </TreeView>
     </Grid>
 </UserControl>
