@@ -12,6 +12,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
+using System.ServiceModel.PeerResolvers;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
@@ -28,6 +29,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private bool _preserveFormatting;
         private bool _sendPlainText;
         private TagFormat _tagType;
+        private SplitSentences _splitSentencesType;
         private string _validationMessages;
 
         public DeepLWindowViewModel(DeepLTranslationOptions deepLTranslationOptions, IDeepLGlossaryClient glossaryClient, IMessageService messageService)
@@ -42,6 +44,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             LanguagePairs = deepLTranslationOptions.LanguagePairOptions.Select(lpo => lpo.LanguagePair).ToArray();
             SendPlainText = deepLTranslationOptions.SendPlainText;
             TagType = deepLTranslationOptions.TagHandling;
+            SplitSentencesType = deepLTranslationOptions.SplitSentencesHandling;
             PreserveFormatting = deepLTranslationOptions.PreserveFormatting;
             ApiVersion = deepLTranslationOptions.ApiVersion;
             IgnoreTags = deepLTranslationOptions.IgnoreTagsParameter;
@@ -64,6 +67,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             SendPlainText = deepLTranslationOptions.SendPlainText;
             PreserveFormatting = deepLTranslationOptions.PreserveFormatting;
             TagType = deepLTranslationOptions.TagHandling;
+            SplitSentencesType = deepLTranslationOptions.SplitSentencesHandling;
             ApiVersion = deepLTranslationOptions.ApiVersion;
             IgnoreTags = deepLTranslationOptions.IgnoreTagsParameter;
 
@@ -140,8 +144,18 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
         public TagFormat TagType
         {
-            get => _tagType;
-            set => SetField(ref _tagType, value);
+            get => _tagType; // Add a method here to update the splitsentencestype
+            set
+            {
+                SetField(ref _tagType, value);
+                SplitSentencesType = GetDefaultSplitSentences(value);
+            }
+        }
+
+        public SplitSentences SplitSentencesType 
+        {
+            get => _splitSentencesType; 
+            set => SetField(ref _splitSentencesType, value); 
         }
 
         public string Title { get; set; } = "DeepL Translation Provider";
@@ -267,6 +281,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             Options.LanguagePairOptions = [.. LanguagePairOptions];
             Options.PreserveFormatting = PreserveFormatting;
             Options.TagHandling = TagType;
+            Options.SplitSentencesHandling = SplitSentencesType;
             Options.ApiVersion = ApiVersion;
             Options.IgnoreTagsParameter = IgnoreTags;
 
@@ -302,6 +317,11 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             SetValidationBlockMessage(PluginResources.ApiKeyIsRequired_ValidationBlockMessage);
         }
+
+        private SplitSentences GetDefaultSplitSentences(TagFormat tagFormat)
+        => tagFormat == TagFormat.None
+            ? SplitSentences.Default
+            : SplitSentences.NoNewlines;
 
         private void SetSettingsOnWindow(TranslationProviderCredential credentialStore)
         {
