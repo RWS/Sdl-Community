@@ -110,7 +110,9 @@ namespace Multilingual.Excel.FileType.Services
 				? _fileProperties.FileConversionProperties.SourceLanguage
 				: DefaultSourceLanguage;
 
-			if (_fileProperties.FileConversionProperties?.SourceLanguage?.CultureInfo == null)
+            _fileProperties.FileConversionProperties.OriginalEncoding = new Codepage(Encoding.UTF8);
+
+            if (_fileProperties.FileConversionProperties?.SourceLanguage?.CultureInfo == null)
 			{
 				throw new Exception("Source language cannot be null!");
 			}

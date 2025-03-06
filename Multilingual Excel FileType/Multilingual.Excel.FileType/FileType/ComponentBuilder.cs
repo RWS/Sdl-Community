@@ -108,7 +108,7 @@ namespace Multilingual.Excel.FileType.FileType
 				excelReader);
 			var extractor = FileTypeManager.BuildFileExtractor(parser, this);
 			extractor.AddBilingualProcessor(new SegmentRenumberingTrigger());
-			//extractor.AddBilingualProcessor(new ParagraphToSegmentProcessor(segmentBuilder));
+			extractor.AddBilingualProcessor(new ParagraphToSegmentProcessor(segmentBuilder));
 			extractor.AddBilingualProcessor(new NormalizeEmbeddedContentContextProcessor(segmentBuilder));
 			extractor.AddBilingualProcessor(new PlaceholdersProcessor(segmentBuilder, parser));
 			//extractor.AddBilingualProcessor(new CommentsProcessor(segmentBuilder, parser));
