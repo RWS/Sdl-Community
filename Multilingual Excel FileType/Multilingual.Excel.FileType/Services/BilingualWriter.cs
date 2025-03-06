@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using Multilingual.Excel.FileType.Constants;
 using Multilingual.Excel.FileType.FileType.Settings;
@@ -10,6 +11,7 @@ using Multilingual.Excel.FileType.Models;
 using Multilingual.Excel.FileType.Providers.OpenXml;
 using Multilingual.Excel.FileType.Providers.OpenXml.Model;
 using Multilingual.Excel.FileType.Services.Entities;
+using Sdl.Core.Globalization;
 using Sdl.Core.Settings;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
@@ -190,7 +192,8 @@ namespace Multilingual.Excel.FileType.Services
 		public void SetFileProperties(IFileProperties fileInfo)
 		{
 			_originalFileProperties = fileInfo.FileConversionProperties;
-			_originalFileProperties.OriginalFilePath = GetOriginalFilePath(_originalFileProperties);
+            _originalFileProperties.OriginalEncoding = new Codepage(Encoding.UTF8);
+            _originalFileProperties.OriginalFilePath = GetOriginalFilePath(_originalFileProperties);
 		}
 
 		private List<ExcelColumn> GetExcelColumns()
@@ -323,7 +326,7 @@ namespace Multilingual.Excel.FileType.Services
 		private string GetTargetSubContent(Stream subContentStream)
 		{
 			string subContent;
-			using (var reader = new StreamReader(subContentStream, _nativeFileProperties.Encoding.Encoding))
+			using (var reader = new StreamReader(subContentStream, Encoding.UTF8))
 			{
 				subContent = reader.ReadToEnd();
 			}
