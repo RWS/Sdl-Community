@@ -1,15 +1,13 @@
-﻿using System;
-using System.Windows.Forms;
-using NLog;
+﻿using NLog;
 using Sdl.Community.IATETerminologyProvider.Helpers;
-using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.Community.IATETerminologyProvider.View;
 using Sdl.Terminology.TerminologyProvider.Core;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
+using System;
+using System.Windows.Forms;
 
 namespace Sdl.Community.IATETerminologyProvider
 {
-	[TerminologyProviderWinFormsUI]
+    [TerminologyProviderWinFormsUI]
     public class IATETerminologyProviderWinFormsUI : ITerminologyProviderWinFormsUIWithEdit
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
@@ -20,25 +18,12 @@ namespace Sdl.Community.IATETerminologyProvider
 
         public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
         {
-			_mainWindow = IATEApplication.GetMainWindow();
-            if (_mainWindow != null)
-            {
-				_mainWindow.ShowDialog();
-				if (!_mainWindow?.DialogResult ?? true)
-                {
-                    return null;
-                }
+            return Browse();
+        }
 
-                var provider = new IATETerminologyProvider(_mainWindow.ProviderSettings, IATEApplication.ConnectionProvider,
-                    IATEApplication.InventoriesProvider, IATEApplication.CacheProvider,IATEApplication.EUProvider);
-
-                return new ITerminologyProvider[] { provider };
-            }
-
-            var exception = new Exception("Failed login!");
-            _logger.Error(exception);
-
-            throw exception;
+        public ITerminologyProvider[] Browse(IWin32Window owner)
+        {
+            return Browse();
         }
 
         public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
@@ -81,6 +66,29 @@ namespace Sdl.Community.IATETerminologyProvider
         public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
         {
             return terminologyProviderUri.Scheme == Constants.IATEGlossary;
+        }
+
+        private ITerminologyProvider[] Browse()
+        {
+            _mainWindow = IATEApplication.GetMainWindow();
+            if (_mainWindow != null)
+            {
+                _mainWindow.ShowDialog();
+                if (!_mainWindow?.DialogResult ?? true)
+                {
+                    return null;
+                }
+
+                var provider = new IATETerminologyProvider(_mainWindow.ProviderSettings, IATEApplication.ConnectionProvider,
+                    IATEApplication.InventoriesProvider, IATEApplication.CacheProvider, IATEApplication.EUProvider);
+
+                return new ITerminologyProvider[] { provider };
+            }
+
+            var exception = new Exception("Failed login!");
+            _logger.Error(exception);
+
+            throw exception;
         }
     }
 }
