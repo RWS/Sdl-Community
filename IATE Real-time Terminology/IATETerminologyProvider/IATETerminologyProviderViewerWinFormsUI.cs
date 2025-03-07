@@ -1,108 +1,112 @@
-﻿using System;
-using System.Drawing;
-using System.Globalization;
-using System.Windows.Forms;
-using Sdl.Community.IATETerminologyProvider.Helpers;
+﻿using Sdl.Community.IATETerminologyProvider.Helpers;
 using Sdl.Community.IATETerminologyProvider.Service;
 using Sdl.Community.IATETerminologyProvider.View;
 using Sdl.Core.Globalization;
 using Sdl.Terminology.TerminologyProvider.Core;
+using System;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace Sdl.Community.IATETerminologyProvider
 {
-	[TerminologyProviderViewerWinFormsUI]
-	internal class IATETerminologyProviderViewerWinFormsUI : ITerminologyProviderViewerWinFormsUI
-	{
-		private IATETerminologyProvider _iateTerminologyProvider;
-		private IATETermsControl _control;
-		private DocumentStateService _documentStateService;
+    [TerminologyProviderViewerWinFormsUI]
+    internal class IATETerminologyProviderViewerWinFormsUI : ITerminologyProviderViewerWinFormsUI
+    {
+        private IATETerminologyProvider _iateTerminologyProvider;
+        private IATETermsControl _control;
+        private DocumentStateService _documentStateService;
 
-		public event EventHandler TermChanged;
-		public event EventHandler<EntryEventArgs> SelectedTermChanged;
-		public event Action<Entry> JumpToTermAction;
-		public event Action<string, string> AddTermAction;
+        public event EventHandler TermChanged;
+        public event EventHandler<EntryEventArgs> SelectedTermChanged;
+        public event Action<Entry> JumpToTermAction;
+        public event Action<string, string> AddTermAction;
 
-		public Control Control
-		{
-			get
-			{
-				_control = new IATETermsControl(_iateTerminologyProvider)
-				{
-					Text = @"IATETerminologyProviderViewerWinFormsUI",
-					BackColor = Color.White					
-				};
+        public Control Control
+        {
+            get
+            {
+                _control = new IATETermsControl(_iateTerminologyProvider)
+                {
+                    Text = @"IATETerminologyProviderViewerWinFormsUI",
+                    BackColor = Color.White
+                };
 
-				JumpToTermAction += _control.JumpToTerm;
+                JumpToTermAction += _control.JumpToTerm;
 
-				if (_documentStateService == null)
-				{
-					_documentStateService = new DocumentStateService();
-				}
+                if (_documentStateService == null)
+                {
+                    _documentStateService = new DocumentStateService();
+                }
 
-				_documentStateService.UpdateDocumentEntriesState(_control);
+                _documentStateService.UpdateDocumentEntriesState(_control);
 
-				return _control;
-			}
-		}				
+                return _control;
+            }
+        }
 
-		public bool Initialized => true;
+        public bool Initialized => true;
 
-		public Entry SelectedTerm { get; set; }
+        public Entry SelectedTerm { get; set; }
 
-		bool ITerminologyProviderViewerWinFormsUI.CanAddTerm => false;
+        bool ITerminologyProviderViewerWinFormsUI.CanAddTerm => false;
 
-		public bool IsEditing => false;
+        public bool IsEditing => false;
 
-		public void AddAndEditTerm(Entry term, string source, string target)
-		{
-		}
+        public void AddAndEditTerm(Entry term, string source, string target)
+        {
+        }
 
-		public void AddTerm(string source, string target)
-		{			
-			AddTermAction?.Invoke(source, target);
-		}
+        public void AddTerm(string source, string target)
+        {
+            AddTermAction?.Invoke(source, target);
+        }
 
-		public void EditTerm(Entry term)
-		{
-		}
+        public void EditTerm(Entry term)
+        {
+        }
 
-		public void Initialize(ITerminologyProvider terminologyProvider, CultureCode source, CultureCode target)
-		{
-			_iateTerminologyProvider = (IATETerminologyProvider)terminologyProvider;
-		}
+        public void Initialize(ITerminologyProvider terminologyProvider, CultureCode source, CultureCode target)
+        {
+            _iateTerminologyProvider = (IATETerminologyProvider)terminologyProvider;
+        }
 
-		public void JumpToTerm(Entry entry)
-		{
-			JumpToTermAction?.Invoke(entry);
-		}
+        public void JumpToTerm(Entry entry)
+        {
+            JumpToTermAction?.Invoke(entry);
+        }
 
-		public void Release()
-		{
-			if (JumpToTermAction != null)
-			{
-				JumpToTermAction -= _control.JumpToTerm;
-			}
+        public void Release()
+        {
+            if (_control == null)
+            {
+                return;
+            }
 
-			_documentStateService.SaveDocumentEntriesState(_control);
+            if (JumpToTermAction != null)
+            {
+                JumpToTermAction -= _control.JumpToTerm;
+            }
 
-			_control?.ReleaseSubscribers();
-		}		
+            _documentStateService.SaveDocumentEntriesState(_control);
 
-		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
-		{
-			return terminologyProviderUri.Scheme == Constants.IATEGlossary;
-		}
+            _control?.ReleaseSubscribers();
+        }
 
-		public bool CanAddTerm() => true;
+        public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
+        {
+            return terminologyProviderUri.Scheme == Constants.IATEGlossary;
+        }
 
-		public void CancelTerm()
-		{
-			
-		}
+        public bool CanAddTerm() => true;
 
-		public void SaveTerm()
-		{
-			
-		}
-	}
+        public void CancelTerm()
+        {
+
+        }
+
+        public void SaveTerm()
+        {
+
+        }
+    }
 }
