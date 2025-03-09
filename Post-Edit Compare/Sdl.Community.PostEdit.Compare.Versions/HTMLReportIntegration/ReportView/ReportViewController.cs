@@ -81,7 +81,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
             }
             else
             {
-                if (!Integration.SyncOn) ReportExplorer.IsEnabled = true;
+                if (!Integration.IsSyncOn) ReportExplorer.IsEnabled = true;
                 await ReportViewer.ShowAllSegments();
             }
         }

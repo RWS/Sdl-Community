@@ -23,7 +23,7 @@ public class Integration
 {
     private static ReportViewController _reportViewController;
 
-    public static bool SyncOn { get; set; }
+    public static bool IsSyncOn => SdlTradosStudio.Application.GetAction<SyncReportProjectOn>().Checked;
 
     private static EditorEventListener EditorEventListener { get; } = new();
 
@@ -89,7 +89,7 @@ public class Integration
             var messageObject = JObject.Parse(jsonMessage);
             var action = messageObject["action"]?.ToString();
 
-            if (!SyncOn && action != "navigate")
+            if (!IsSyncOn && action != "navigate")
             {
                 await ReportViewController.HandleReportRequestWithoutSync(messageObject);
                 await SaveReport();
@@ -160,18 +160,14 @@ public class Integration
         SetUpReportExplorer();
 
         var reports = ReportManager.GetReports();
-
         ReportViewController.SelectLatestReport(reports.FirstOrDefault());
     }
 
     public static void ShowReportsView() => ReportViewController.Activate();
 
-    public static bool ToggleReportProjectSync(bool syncEnabled)
+    public static void ToggleReportProjectSync(bool syncEnabled)
     {
-        if (ReportViewController.GetSelectedReport() == null) return false;
-
-        SyncOn = syncEnabled;
-        ReportViewController.ToggleReportExplorer(!syncEnabled);
+        if (ReportViewController.GetSelectedReport() == null) return;
 
         if (syncEnabled)
         {
@@ -181,7 +177,7 @@ public class Integration
         else
             DisconnectEditorListener();
 
-        return true;
+        ReportViewController.ToggleReportExplorer(!syncEnabled);
     }
 
     public static void ToggleSyncRibbon(bool state)

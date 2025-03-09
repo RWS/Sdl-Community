@@ -2576,6 +2576,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
             xmlTxtWriter.WriteAttributeString("tmName", comparisonSegmentUnit.TmName);
             xmlTxtWriter.WriteAttributeString("tmTranslationUnit", comparisonSegmentUnit.TmTranslationUnit);
 
+
+
             #region  |  segmentTextUpdated  |
             xmlTxtWriter.WriteStartElement("segmentTextUpdated");
             xmlTxtWriter.WriteString(comparisonSegmentUnit.SegmentTextUpdated.ToString());

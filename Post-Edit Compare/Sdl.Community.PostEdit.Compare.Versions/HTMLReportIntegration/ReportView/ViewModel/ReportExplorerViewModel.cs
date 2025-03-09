@@ -14,10 +14,7 @@ public class ReportExplorerViewModel : ViewModelBase
     private ICommand _clearCommand;
     private string _filterString = "";
     private ObservableCollection<ProjectInfo> _projects;
-    private ObservableCollection<ReportInfo> _reports;
-    private ReportInfo _selectedReport;
     private ObservableCollection<ReportGroup> _reportGroups = [];
-    private bool _isLoading;
     public ICommand ClearFilterCommand => _clearCommand ??= new RelayCommand(ClearFilter);
 
     public string FilterString

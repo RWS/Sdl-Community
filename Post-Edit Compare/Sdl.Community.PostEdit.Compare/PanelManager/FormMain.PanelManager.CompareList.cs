@@ -5625,7 +5625,7 @@ namespace PostEdit.Compare
                         exParsing = (Exception)arguments[6];
                         if (exParsing != null)
                         {
-                            MessageBox.Show(this, $"{exParsing.Message}.5693", nameof(CreateComparisonReport), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(this, $"{exParsing.Message}", nameof(CreateComparisonReport), MessageBoxButtons.OK, MessageBoxIcon.Error);
                             throw exParsing;
 
                         }

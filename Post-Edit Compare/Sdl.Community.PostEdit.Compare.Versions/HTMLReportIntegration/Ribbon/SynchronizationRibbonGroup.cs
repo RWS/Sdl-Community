@@ -4,6 +4,10 @@ using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Extensions.Internal;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
 {
@@ -15,7 +19,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
 
     [Action(nameof(SyncReportProjectOn),
             typeof(ReportViewController),
-        Icon = "StartSync", Name = "Synchronize",
+        Icon = "Sync", Name = "Synchronize",
         Description = "Toggle synchronizing report with project")]
     [ActionLayout(typeof(SynchronizationRibbonGroup), 10, DisplayType.Large)]
     public class SyncReportProjectOn : AbstractAction
@@ -25,9 +29,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
             Style = ActionStyle.ToggleButton;
         }
 
-        protected override void Execute()
-        {
-            if (!Integration.ToggleReportProjectSync(Checked)) Checked = !Checked;
-        }
+        protected override void Execute() => Integration.ToggleReportProjectSync(Checked);
     }
 }

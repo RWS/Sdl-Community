@@ -46,6 +46,9 @@
     <Reference Include="Sdl.Core.PluginFramework">
       <HintPath>$(TradosFolder)\Sdl.Core.PluginFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.Core.Settings">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio18\Sdl.Core.Settings.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>

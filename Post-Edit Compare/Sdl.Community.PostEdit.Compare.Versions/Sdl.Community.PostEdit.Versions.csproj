@@ -161,6 +161,7 @@
     <None Remove="Resources\Project.png" />
     <None Remove="Resources\Report.ico" />
     <None Remove="Resources\Report.png" />
+    <None Remove="Resources\Sync.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sdl.Community.PostEdit.Compare.Core\Sdl.Community.PostEdit.Compare.Core.csproj" />
@@ -170,6 +171,7 @@
     <Resource Include="Resources\OpenReportFolder.ico" />
     <Resource Include="Resources\Report.ico" />
     <Resource Include="Resources\Report.png" />
+    <Resource Include="Resources\Sync.ico" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="PostEditResources.resx">
