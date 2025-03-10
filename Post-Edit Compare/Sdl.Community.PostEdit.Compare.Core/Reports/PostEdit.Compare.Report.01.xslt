@@ -2647,7 +2647,8 @@
         <xsl:value-of select="@tmName"/>
       </td>
       <td><!--TODO: revisit TU source to bilingual source difference display-->
-        <xsl:value-of select="@tmTranslationUnit"/>
+        <!--<xsl:value-of select="@tmTranslationUnit"/>-->
+        <xsl:apply-templates select="tmTranslationUnit/token"/>
       </td>
 
       <xsl:if test="$showSegmentLocked = 'True'">

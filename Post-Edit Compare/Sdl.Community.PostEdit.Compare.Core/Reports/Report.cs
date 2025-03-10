@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -9,11 +10,13 @@ using System.Xml;
 using Sdl.Community.PostEdit.Compare.Core.Comparison;
 using Sdl.Community.PostEdit.Compare.Core.Helper;
 using Sdl.Community.PostEdit.Compare.Core.SDLXLIFF;
+using Sdl.Community.PostEdit.Compare.Core.TrackChangesForReportGeneration;
 using Sdl.Community.PostEdit.Compare.DAL.ExcelTableModel;
 using Sdl.Community.PostEdit.Compare.DAL.PostEditModificationsAnalysis;
 using Convert = Sdl.Community.PostEdit.Compare.Core.Helper.Convert;
 using Sdl.ProjectAutomation.FileBased;
 using System.Windows;
+using Formatting = System.Xml.Formatting;
 
 namespace Sdl.Community.PostEdit.Compare.Core.Reports
 {
@@ -1375,7 +1378,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                             xmlTxtWriter.WriteStartElement("segments");
                             xmlTxtWriter.WriteAttributeString("count", paragraphFilteredSegmentCount.ToString());
 
-                            
+
                             foreach (var comparisonSegmentUnit in comparisonParagraphUnit.ComparisonSegmentUnits)
                             {
                                 if (((!comparisonSegmentUnit.SegmentIsLocked || !Processor.Settings.ReportFilterLockedSegments) && comparisonSegmentUnit.SegmentIsLocked)
@@ -2574,9 +2577,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
             }
 
             xmlTxtWriter.WriteAttributeString("tmName", comparisonSegmentUnit.TmName);
-            xmlTxtWriter.WriteAttributeString("tmTranslationUnit", comparisonSegmentUnit.TmTranslationUnit);
 
-
+            WriteTmTu(comparisonSegmentUnit.TmTranslationUnit, xmlTxtWriter);
 
             #region  |  segmentTextUpdated  |
             xmlTxtWriter.WriteStartElement("segmentTextUpdated");
@@ -3228,7 +3230,22 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
             return error;
         }
 
+        private static void WriteTmTu(string tmTranslationUnit, XmlWriter xmlTxtWriter)
+        {
+            var list = JsonConvert.DeserializeObject<List<DiffSegment>>(tmTranslationUnit);
 
+            xmlTxtWriter.WriteStartElement("tmTranslationUnit");
+
+            foreach (var diffSegment in list)
+            {
+                xmlTxtWriter.WriteStartElement("token");
+                xmlTxtWriter.WriteAttributeString("type", diffSegment.Type);
+                xmlTxtWriter.WriteString(diffSegment.Content);
+                xmlTxtWriter.WriteEndElement();
+            }
+
+            xmlTxtWriter.WriteEndElement();//tmTranslationUnit
+        }
 
 
         private class PEMp
