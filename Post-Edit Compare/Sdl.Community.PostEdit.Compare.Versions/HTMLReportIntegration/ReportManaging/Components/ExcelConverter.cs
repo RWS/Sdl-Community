@@ -40,6 +40,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
             var commentsColumnIndex = GetColumnIndex("Comments", headerRow);
             var statusColumnIndex = GetColumnIndex("Status", headerRow);
             var targetComparisonColumnIndex = GetColumnIndex("Target (Comparison)", headerRow);
+            var tuSourceColumnIndex = GetColumnIndex("TU", headerRow);
 
             var excelCol = 1;
             foreach (var cell in cells)
@@ -47,7 +48,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
                 var cellText = HttpUtility.HtmlDecode(cell.InnerText.Trim());
                 var cellRef = ws.Cells[excelRow, excelCol];
 
-                if (excelRow > 4 && excelCol == targetComparisonColumnIndex)
+                if (excelRow > 4 && excelCol == tuSourceColumnIndex || excelCol == targetComparisonColumnIndex)
                     ApplyRichTextFormatting(cellRef, cell.InnerHtml);
                 else
                 {
