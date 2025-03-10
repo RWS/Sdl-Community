@@ -228,8 +228,13 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
         private string LookupDeepL(string sourceText) =>
             _connecter.Translate(_languageDirection, sourceText,
-                new(_languagePairOptions?.Formality ?? Formality.Default, _languagePairOptions?.SelectedGlossary.Id,
-                    _options.TagHandling, _options.PreserveFormatting, _options.IgnoreTagsParameter));
+                new(
+                    _languagePairOptions?.Formality ?? Formality.Default, 
+                    _languagePairOptions?.SelectedGlossary.Id,
+                    _options.TagHandling, 
+                    _options.SplitSentencesHandling,
+                    _options.PreserveFormatting, 
+                    _options.IgnoreTagsParameter));
 
         private List<PreTranslateSegment> TranslateSegments(List<PreTranslateSegment> preTranslateSegments)
         {
