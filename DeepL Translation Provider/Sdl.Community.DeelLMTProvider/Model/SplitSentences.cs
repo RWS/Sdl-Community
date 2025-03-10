@@ -15,7 +15,7 @@ namespace Sdl.Community.DeepLMTProvider.Model
         Default = 1,
 
         [Description("No Newlines")]
-        [ApiValue("no_newline")]
+        [ApiValue("nonewlines")]
         NoNewlines = 2
     }
 
