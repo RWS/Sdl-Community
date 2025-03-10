@@ -21,6 +21,9 @@ namespace Sdl.Community.DeepLMTProvider.Model
         [JsonProperty("tag_handling")]
         public string TagHandling { get; set; }
 
+        [JsonProperty("split_sentences")]
+        public string SplittingSentenceHandling { get; set; }
+
         [JsonProperty("preserve_formatting")]
         public bool PreserveFormatting { get; set; }
 

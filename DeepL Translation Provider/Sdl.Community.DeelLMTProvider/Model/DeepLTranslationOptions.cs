@@ -39,7 +39,17 @@ namespace Sdl.Community.DeepLMTProvider.Model
             set => TagHandlingParameter = value.ToString();
         }
 
+        [JsonIgnore]
+        public SplitSentences SplitSentencesHandling 
+        {
+            get => Enum.TryParse<SplitSentences>(SplitSentenceHandlingParameter, out var splitSentencesHandling) ? splitSentencesHandling : SplitSentences.Default;
+            set => SplitSentenceHandlingParameter = value.ToString(); 
+        }
+
         public string TagHandlingParameter { get; set; }
+
+        public string SplitSentenceHandlingParameter { get; set; }
+
         public Uri Uri { get; set; }
     }
 }
