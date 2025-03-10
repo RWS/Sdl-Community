@@ -97,6 +97,12 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin.Studio.TranslationProvider
                 SourceSegment = segment.Duplicate()
             };
 
+            if (!_options.ResendDrafts && _inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified) //i.e. if it's status is other than untranslated
+            { 
+                //don't do the lookup, b/c we don't need to pay google to translate text already translated if we edit a segment
+                return results;
+            }
+
             // Look up the currently selected segment in the collection (normal segment lookup).
 
             string translatedText;
