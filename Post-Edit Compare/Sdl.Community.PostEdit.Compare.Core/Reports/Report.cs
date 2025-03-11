@@ -16,7 +16,9 @@ using Sdl.Community.PostEdit.Compare.DAL.PostEditModificationsAnalysis;
 using Convert = Sdl.Community.PostEdit.Compare.Core.Helper.Convert;
 using Sdl.ProjectAutomation.FileBased;
 using System.Windows;
+using System.Windows.Forms;
 using Formatting = System.Xml.Formatting;
+using MessageBox = System.Windows.MessageBox;
 
 namespace Sdl.Community.PostEdit.Compare.Core.Reports
 {
@@ -837,7 +839,21 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                         },
 
                     };
-                    FileInformationExcelReport.CreateFileTable(currentPackage, currentWorksheet, filesInfo);
+
+                    try
+                    {
+                        FileInformationExcelReport.CreateFileTable(currentPackage, currentWorksheet, filesInfo);
+                    }
+                    catch (Exception ex)
+                    {
+                        var variableValues = new List<string>();
+                        variableValues.AddVariable(nameof(currentPackage), currentPackage.ToString());
+                        variableValues.AddVariable(nameof(currentWorksheet), currentWorksheet.ToString());
+
+                        ErrorHandler.ShowError(ex, variableValues: variableValues);
+
+                        throw;
+                    }
 
                     //create  pem table
                     var pemExcelModel = PemExcelReportHelper.CreatePemExcelDataModels(pempAnalysisData);
@@ -3232,7 +3248,18 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 
         private static void WriteTmTu(string tmTranslationUnit, XmlWriter xmlTxtWriter)
         {
-            var list = JsonConvert.DeserializeObject<List<DiffSegment>>(tmTranslationUnit);
+            var list = new List<DiffSegment>();
+            var variableValues = new List<string>();
+            try
+            {
+                tmTranslationUnit = null;
+                variableValues.AddVariable(nameof(tmTranslationUnit), tmTranslationUnit);
+                list = JsonConvert.DeserializeObject<List<DiffSegment>>(tmTranslationUnit);
+            }
+            catch (Exception ex)
+            {
+                ErrorHandler.LogError(ex, variableValues);
+            }
 
             xmlTxtWriter.WriteStartElement("tmTranslationUnit");
 

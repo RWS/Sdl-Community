@@ -47,7 +47,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.TrackChangesForReportGeneration
         {
             var searchResults = GetTmMatches(segmentPair, translationOrigin);
             var searchResult = GetMostProbableMatch(searchResults, segmentPair, translationOrigin);
-            return GetTuWithTrackedChanges(searchResult, segmentPair);
+            return searchResult == null ? [] : GetTuWithTrackedChanges(searchResult, segmentPair);
         }
 
 

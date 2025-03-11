@@ -35,6 +35,7 @@
             this.button_save = new System.Windows.Forms.Button();
             this.button_cancel = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox_reportBackupFolder = new System.Windows.Forms.TextBox();
@@ -44,7 +45,7 @@
             this.button_browseProjectVersionsFolder = new System.Windows.Forms.Button();
             this.textBox_projectVersionsFolder = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.checkBox_explicitErrors = new System.Windows.Forms.CheckBox();
             this.panel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_header_image)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -91,7 +92,7 @@
             // 
             // button_save
             // 
-            this.button_save.Location = new System.Drawing.Point(783, 569);
+            this.button_save.Location = new System.Drawing.Point(783, 609);
             this.button_save.Margin = new System.Windows.Forms.Padding(6);
             this.button_save.Name = "button_save";
             this.button_save.Size = new System.Drawing.Size(150, 44);
@@ -102,7 +103,7 @@
             // 
             // button_cancel
             // 
-            this.button_cancel.Location = new System.Drawing.Point(945, 569);
+            this.button_cancel.Location = new System.Drawing.Point(945, 609);
             this.button_cancel.Margin = new System.Windows.Forms.Padding(6);
             this.button_cancel.Name = "button_cancel";
             this.button_cancel.Size = new System.Drawing.Size(150, 44);
@@ -113,6 +114,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.checkBox_explicitErrors);
             this.groupBox1.Controls.Add(this.linkLabel1);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.button1);
@@ -127,10 +129,22 @@
             this.groupBox1.Margin = new System.Windows.Forms.Padding(6);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(6);
-            this.groupBox1.Size = new System.Drawing.Size(1072, 420);
+            this.groupBox1.Size = new System.Drawing.Size(1072, 460);
             this.groupBox1.TabIndex = 66;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Properties";
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(33, 261);
+            this.linkLabel1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(313, 25);
+            this.linkLabel1.TabIndex = 12;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "View folder in windows explorer";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // label2
             // 
@@ -231,23 +245,21 @@
             this.label1.TabIndex = 4;
             this.label1.Text = "Project versions root folder:";
             // 
-            // linkLabel1
+            // checkBox_explicitErrors
             // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(33, 261);
-            this.linkLabel1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(313, 25);
-            this.linkLabel1.TabIndex = 12;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "View folder in windows explorer";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            this.checkBox_explicitErrors.AutoSize = true;
+            this.checkBox_explicitErrors.Location = new System.Drawing.Point(38, 422);
+            this.checkBox_explicitErrors.Name = "checkBox_explicitErrors";
+            this.checkBox_explicitErrors.Size = new System.Drawing.Size(321, 29);
+            this.checkBox_explicitErrors.TabIndex = 13;
+            this.checkBox_explicitErrors.Text = "More explicit error messages";
+            this.checkBox_explicitErrors.UseVisualStyleBackColor = true;
             // 
             // DefaultSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1122, 628);
+            this.ClientSize = new System.Drawing.Size(1122, 668);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button_save);
             this.Controls.Add(this.button_cancel);
@@ -288,5 +300,6 @@
         private System.Windows.Forms.Button button1;
         public System.Windows.Forms.TextBox textBox_reportBackupFolder;
         private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.CheckBox checkBox_explicitErrors;
     }
 }

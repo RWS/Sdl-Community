@@ -8,7 +8,7 @@ using System.Linq;
 using System.Windows.Forms;
 using PostEdit.Compare;
 using PostEdit.Compare.Model;
-using Sdl.Community.PostEdit.Compare.Helpers;
+using Sdl.Community.PostEdit.Compare.Core.Helper;
 using Sdl.Community.PostEdit.Versions.Automation;
 using Sdl.Community.PostEdit.Versions.Dialogs;
 using Sdl.Community.PostEdit.Versions.Structures;
@@ -369,12 +369,15 @@ namespace Sdl.Community.PostEdit.Versions
                 SelectedProjectChanged();
             }
 
+            var errorHandlerSettings = ErrorHandlerSettingsSerializer.ReadSettings();
+
             var defaultSettings = new DefaultSettings
             {
                 Saved = false,
                 CreateSubFolderProject = Settings.create_subfolder_projects,
                 CreateShallowCopy = Settings.create_shallow_copy,
-                VersionsFolderFullPath = Settings.versions_folder_path
+                VersionsFolderFullPath = Settings.versions_folder_path,
+                ExplicitErrors = errorHandlerSettings.ExplicitErrors
             };
 
             defaultSettings.ShowDialog();
@@ -387,6 +390,9 @@ namespace Sdl.Community.PostEdit.Versions
             Settings.versions_folder_path = defaultSettings.VersionsFolderFullPath;
 
             SettingsSerializer.SaveSettings(Settings);
+
+            errorHandlerSettings.ExplicitErrors = defaultSettings.ExplicitErrors;
+            ErrorHandlerSettingsSerializer.WriteSettings(errorHandlerSettings);
         }
 
 

@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using Sdl.Community.PostEdit.Compare.Core.Helper;
-using Sdl.Community.PostEdit.Compare.Helpers;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Controls;

@@ -1,5 +1,4 @@
-﻿using Sdl.Community.PostEdit.Compare.Helpers;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace PostEdit.Compare

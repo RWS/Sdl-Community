@@ -1,6 +1,5 @@
 ﻿using Sdl.Community.PostEdit.Compare.Core.Helper;
 using Sdl.Community.PostEdit.Compare.Core.TrackChangesForReportGeneration;
-using Sdl.Community.PostEdit.Compare.Helpers;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;

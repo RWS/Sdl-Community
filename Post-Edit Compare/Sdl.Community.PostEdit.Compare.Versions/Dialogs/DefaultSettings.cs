@@ -84,6 +84,7 @@ namespace Sdl.Community.PostEdit.Versions.Dialogs
                 CreateSubFolderProject = checkBox_createSubFolderProject.Checked;
                 CreateShallowCopy = checkBox_createShallowCopy.Checked;
                 Integration.ReportManager.PostEditCompareBackupFolder = textBox_reportBackupFolder.Text;
+                ExplicitErrors = checkBox_explicitErrors.Checked;
 
                 Close();
             }
@@ -94,6 +95,8 @@ namespace Sdl.Community.PostEdit.Versions.Dialogs
             
 
         }
+
+        public bool ExplicitErrors { get; set; }
 
         private void button_cancel_Click(object sender, EventArgs e)
         {
@@ -108,6 +111,7 @@ namespace Sdl.Community.PostEdit.Versions.Dialogs
             textBox_reportBackupFolder.Text = Integration.ReportManager.PostEditCompareBackupFolder;
             checkBox_createSubFolderProject.Checked = CreateSubFolderProject;
             checkBox_createShallowCopy.Checked = CreateShallowCopy;
+            checkBox_explicitErrors.Checked = ExplicitErrors;
 
             textBox_projectVersionsFolder_TextChanged(null, null);
         }

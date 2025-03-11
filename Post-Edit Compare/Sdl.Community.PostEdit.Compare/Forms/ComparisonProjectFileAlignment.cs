@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sdl.Community.PostEdit.Compare;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;

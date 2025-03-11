@@ -96,6 +96,7 @@
       <HintPath>$(TradosFolder)\System.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Build\SolutionInfo.cs">
