@@ -73,8 +73,9 @@ namespace Multilingual.Excel.FileType.BatchTasks
 
 			_settings = GetSetting<MultilingualExcelImportSettings>();
 
-			_filetypeManager = DefaultFileTypeManager.CreateInstance(true);
-			_filetypeManager.SettingsBundle = Project.GetSettings();
+			//_filetypeManager = DefaultFileTypeManager.CreateInstance(true);
+            _filetypeManager = Project.GetFileTypeConfiguration().FilterManager;
+            _filetypeManager.SettingsBundle = Project.GetSettings();
 
 			base.OnInitializeTask();
 		}
