@@ -127,6 +127,8 @@
     <Content Include="Resources\License.ico" />
     <Content Include="Resources\PostEdit.Compare.ico" />
     <Content Include="Resources\PostEdit.Versions.ico" />
+    <Resource Include="Resources\filter-apply.ico" />
+    <Resource Include="Resources\filter-remove.ico" />
     <Resource Include="Resources\Project.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -156,11 +158,14 @@
     <None Remove="HTMLReportIntegration\ReportView\Controls\Scripts.js" />
     <None Remove="Resources\AddReportFolder.ico" />
     <None Remove="Resources\Close.png" />
+    <None Remove="Resources\filter-apply.ico" />
+    <None Remove="Resources\filter-remove.ico" />
     <None Remove="Resources\Filter.ico" />
     <None Remove="Resources\OpenReportFolder.ico" />
     <None Remove="Resources\Project.png" />
     <None Remove="Resources\Report.ico" />
     <None Remove="Resources\Report.png" />
+    <None Remove="Resources\reverse_filter.ico" />
     <None Remove="Resources\Sync.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -171,6 +176,7 @@
     <Resource Include="Resources\OpenReportFolder.ico" />
     <Resource Include="Resources\Report.ico" />
     <Resource Include="Resources\Report.png" />
+    <Resource Include="Resources\reverse_filter.ico" />
     <Resource Include="Resources\Sync.ico" />
   </ItemGroup>
   <ItemGroup>

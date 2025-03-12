@@ -3252,7 +3252,6 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
             var variableValues = new List<string>();
             try
             {
-                tmTranslationUnit = null;
                 variableValues.AddVariable(nameof(tmTranslationUnit), tmTranslationUnit);
                 list = JsonConvert.DeserializeObject<List<DiffSegment>>(tmTranslationUnit);
             }

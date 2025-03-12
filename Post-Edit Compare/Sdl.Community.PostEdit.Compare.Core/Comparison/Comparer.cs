@@ -329,11 +329,13 @@ namespace Sdl.Community.PostEdit.Compare.Core.Comparison
             comparisonSegmentUnit.TranslationStatusUpdated = GetTranslationStatus(segmentPairUpdated);
 
             if (segmentPairOriginal.TranslationOrigin != null)
+            {
                 comparisonSegmentUnit.TranslationOriginTypeOriginal = segmentPairOriginal.TranslationOrigin.OriginType;
+                comparisonSegmentUnit.TmName = segmentPairOriginal.TranslationOrigin.OriginSystem;
+            }
             if (segmentPairUpdated.TranslationOrigin != null)
             {
                 comparisonSegmentUnit.TranslationOriginTypeUpdated = segmentPairUpdated.TranslationOrigin.OriginType;
-                comparisonSegmentUnit.TmName = segmentPairUpdated.TranslationOrigin.OriginSystem;
                 comparisonSegmentUnit.TmTranslationUnit = segmentPairUpdated.TranslationOrigin.OriginalTu;
             }
 

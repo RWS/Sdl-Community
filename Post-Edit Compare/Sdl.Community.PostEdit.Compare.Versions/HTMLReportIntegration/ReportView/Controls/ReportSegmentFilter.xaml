@@ -7,6 +7,15 @@
              d:DesignHeight="450"
              d:DesignWidth="800">
 
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="GroupedItems"
+                              Source="{Binding Items}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Group" />
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+    </UserControl.Resources>
+
 
     <Grid>
 
@@ -16,9 +25,8 @@
         </Grid.ColumnDefinitions>
 
         <ListView x:Name="AvailableFilterItems"
+                  ItemsSource="{Binding Source={StaticResource GroupedItems}}"
                   Grid.Column="0">
-
-
         </ListView>
 
         <StackPanel Grid.Column="1">
