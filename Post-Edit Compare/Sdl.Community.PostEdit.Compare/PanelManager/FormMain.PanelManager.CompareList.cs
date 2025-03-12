@@ -17,6 +17,7 @@ using System.Xml.Xsl;
 using PostEdit.Compare.Forms;
 using PostEdit.Compare.Model;
 using Sdl.Community.PostEdit.Compare.Core;
+using Sdl.Community.PostEdit.Compare;
 using Sdl.Community.PostEdit.Compare.Core.Comparison;
 using WeifenLuo.WinFormsUI.Docking;
 using Application = PostEdit.Compare.Cache.Application;
@@ -27,7 +28,6 @@ using Sdl.Community.PostEdit.Compare.Properties;
 using Sdl.Community.PostEdit.Compare.Core.Helper;
 using System.Diagnostics;
 using Convert = Sdl.Community.PostEdit.Compare.Core.Helper.Convert;
-using Sdl.Community.PostEdit.Compare.Helpers;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace PostEdit.Compare
@@ -5625,7 +5625,7 @@ namespace PostEdit.Compare
                         exParsing = (Exception)arguments[6];
                         if (exParsing != null)
                         {
-                            MessageBox.Show(this, $"{exParsing.Message}", nameof(CreateComparisonReport), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            ErrorHandler.ShowError(exParsing, this);
                             throw exParsing;
 
                         }
@@ -6048,7 +6048,7 @@ namespace PostEdit.Compare
             catch (Exception ex)
             {
                 var exParsing = ex;
-                MessageBox.Show($"worker_CreateReport_DoWork: {exParsing.Message}");
+                ErrorHandler.ShowError(ex, this);
             }
 
             return objects;
@@ -6066,6 +6066,7 @@ namespace PostEdit.Compare
             var excelReportFilePath = (string)objects[7];
             var sheetName = (string)objects[8];
 
+            List<string> variableValues = [];
             try
             {
                 //that means the report is generaded from the pec application not from ribbon action
@@ -6073,6 +6074,7 @@ namespace PostEdit.Compare
                 if (string.IsNullOrEmpty(excelReportFilePath))
                 {
                     var projectSettingsPath = Application.Settings?.ApplicationSettingsPath;
+                    variableValues.AddVariable(nameof(projectSettingsPath), projectSettingsPath);
 
                     if (string.IsNullOrWhiteSpace(projectSettingsPath))
                     {
@@ -6084,8 +6086,13 @@ namespace PostEdit.Compare
                     var excelReportName = Guid.NewGuid().ToString() + ".xlsx";
                     var excelReportFullPath = Path.Combine(projectSettingsPath, excelReportName);
 
+                    variableValues.AddVariable(nameof(excelReportName), excelReportName);
+                    variableValues.AddVariable(nameof(excelReportFullPath), excelReportFullPath);
+
                     _excelReportPathAutoSave = excelReportFullPath;
                     excelReportFilePath = excelReportFullPath;
+
+                    variableValues.AddVariable(nameof(excelReportFilePath), excelReportFilePath);
 
                     sheetName = "Sheet1";
                     // create excel report
@@ -6102,6 +6109,7 @@ namespace PostEdit.Compare
             {
                 exParsing = ex;
                 objects[6] = exParsing;
+                ErrorHandler.ShowError(ex, variableValues: variableValues);
             }
 
             return objects;

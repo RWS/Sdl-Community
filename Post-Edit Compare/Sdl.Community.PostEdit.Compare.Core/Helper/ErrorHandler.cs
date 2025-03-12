@@ -41,28 +41,48 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
             return variablesString;
         }
 
+
         private static string LogFilePath => Path.Combine(SharedStrings.PostEditCompareSettingsFolder, "ErrorLog.txt");
 
         public static void LogError(Exception exception, List<string> variableValues = null)
         {
-            var errorMessage = $"{Environment.NewLine}{DateTime.Now} ERROR: ";
+            File.AppendAllText(LogFilePath, "");
+
+            var alreadyExisting = File.ReadAllText(LogFilePath);
+
+            var errorMessage = $"<{DateTime.Now} ERROR>";
             errorMessage += Environment.NewLine +
                           $"{exception.Message}. " +
                           Environment.NewLine +
                           $"{exception.InnerException?.Message}" +
                           Environment.NewLine +
+                          $"{exception.StackTrace}" +
+                          Environment.NewLine +
                           $"{GetVariablesString(variableValues)}";
-            File.AppendAllText(LogFilePath, errorMessage);
+            errorMessage += "<\\ERROR>" +
+                            Environment.NewLine +
+                            Environment.NewLine;
+
+
+            File.WriteAllText(LogFilePath, errorMessage + alreadyExisting);
         }
         
         public static void Log(string message, List<string> variableValues = null)
         {
-            var infoMessage = $"{Environment.NewLine}{DateTime.Now} INFO: ";
+            File.AppendAllText(LogFilePath, "");
+
+            var alreadyExisting = File.ReadAllText(LogFilePath);
+
+            var infoMessage = $"<{DateTime.Now} INFO>";
             infoMessage += Environment.NewLine +
                           $"{message}. " +
                           Environment.NewLine +
                           $"{GetVariablesString(variableValues)}";
-            File.AppendAllText(LogFilePath, infoMessage);
+            infoMessage += $"<\\INFO>" +
+                           Environment.NewLine +
+                           Environment.NewLine;
+
+            File.WriteAllText(LogFilePath, infoMessage + alreadyExisting);
         }
     }
 }
