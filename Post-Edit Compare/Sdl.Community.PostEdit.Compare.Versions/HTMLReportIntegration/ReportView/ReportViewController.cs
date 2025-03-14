@@ -9,6 +9,7 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.ProjectAutomation.Core;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
     {
         private ReportExplorer ReportExplorer { get; set; }
         private ReportExplorerViewModel ReportExplorerViewModel { get; set; }
+        private ReportViewFilterController ReportViewFilterController =>
+            SdlTradosStudio.Application.GetController<ReportViewFilterController>();
         private ReportViewer ReportViewer { get; set; }
 
         public async Task<string> GetLoadedReport() => await ReportViewer.GetLoadedReport();
@@ -120,7 +123,17 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
             try
             {
                 var selectedReport = GetSelectedReport();
-                Integration.ToggleSyncRibbon(selectedReport is not null);
+
+                if (selectedReport is not null)
+                {
+                    Integration.ToggleSyncRibbon(true);
+                    ReportViewFilterController.ReportViewFilter.IsEnabled = true;
+                }
+                else
+                {
+                    Integration.ToggleSyncRibbon(false);
+                    ReportViewFilterController.ReportViewFilter.IsEnabled = false;
+                }
 
                 await ReportViewer.Navigate(ReportExplorer.SelectedReport?.ReportPath);
                 await Task.Delay(500);

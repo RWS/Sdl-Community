@@ -2646,8 +2646,7 @@
       <td>
         <xsl:value-of select="@tmName"/>
       </td>
-      <td><!--TODO: revisit TU source to bilingual source difference display-->
-        <!--<xsl:value-of select="@tmTranslationUnit"/>-->
+      <td>
         <xsl:apply-templates select="tmTranslationUnit/token"/>
       </td>
 

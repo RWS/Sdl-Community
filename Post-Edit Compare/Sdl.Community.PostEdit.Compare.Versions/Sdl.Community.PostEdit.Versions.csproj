@@ -129,6 +129,7 @@
     <Content Include="Resources\PostEdit.Versions.ico" />
     <Resource Include="Resources\filter-apply.ico" />
     <Resource Include="Resources\filter-remove.ico" />
+    <Resource Include="Resources\OkValidationIcon.ico" />
     <Resource Include="Resources\Project.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -161,6 +162,7 @@
     <None Remove="Resources\filter-apply.ico" />
     <None Remove="Resources\filter-remove.ico" />
     <None Remove="Resources\Filter.ico" />
+    <None Remove="Resources\OkValidationIcon.ico" />
     <None Remove="Resources\OpenReportFolder.ico" />
     <None Remove="Resources\Project.png" />
     <None Remove="Resources\Report.ico" />
