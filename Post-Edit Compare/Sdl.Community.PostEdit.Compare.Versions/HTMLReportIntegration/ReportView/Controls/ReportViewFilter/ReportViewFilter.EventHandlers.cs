@@ -44,37 +44,20 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
         {
             List<string> expressions = [];
 
-            if (SelectedStatuses.Any())
-            {
-                expressions.Add($"Status: ({string.Join("|", SelectedStatuses)})");
-            }
-
-            if (SelectedMatchTypes.Any())
-            {
-                expressions.Add($"Origin: ({string.Join("|", SelectedMatchTypes)})");
-            }
+            if (SelectedStatuses.Any()) expressions.Add($"Status: ({string.Join("|", SelectedStatuses)})");
+            if (SelectedMatchTypes.Any()) expressions.Add($"Origin: ({string.Join("|", SelectedMatchTypes)})");
 
             var separator = ((ComboBoxItem)OperatorCombobox.SelectedItem).Content.ToString();
             FilterExpression_TextBox.Text = string.Join($" {separator}{Environment.NewLine}", expressions);
 
-            ApplyFilter();
-        }
-
-        private void ApplyFilterButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            //ApplyFilterButton.IsEnabled = false;
-            //OperatorComboBox.IsEnabled = false;
-            StatusesExpander.IsEnabled = false;
-            MatchTypesExpander.IsEnabled = false;
-
             var segmentFilter = GetSegmentFilter();
-            FilterChanged?.Invoke(segmentFilter);
+            ApplyFilter(segmentFilter);
         }
 
         private void ClearFilterButton_Clicked(object sender, RoutedEventArgs e)
         {
             FilterExpression_TextBox.Text = "";
-            ApplyFilter();
+            ApplyFilter(new SegmentFilter());
         }
 
         private void FuzzyBandsListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -94,9 +77,11 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
         {
             Statuses.AddRange(SelectedStatuses.ToList());
             MatchTypes.AddRange(SelectedMatchTypes.ToList());
+            FuzzyBands.AddRange(SelectedFuzzyBands.ToList());
 
             SelectedStatuses.Clear();
             SelectedMatchTypes.Clear();
+            SelectedFuzzyBands.Clear();
         }
 
         private void RemoveFilterButton_Clicked(object sender, RoutedEventArgs e)
@@ -123,20 +108,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
                 SelectedFuzzyBands.RemoveRange(highlightedFuzzyBands);
                 if (!SelectedFuzzyBands.Any()) SelectedMatchTypes.Remove(FuzzyBandsString);
             }
-        }
-
-        //TODO Fix fuzzy matches
-        private void ResetFilterButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            //ApplyFilterButton.IsEnabled = true;
-            //OperatorComboBox.IsEnabled = true;
-            StatusesExpander.IsEnabled = true;
-            MatchTypesExpander.IsEnabled = true;
-
-            StatusesListBox.SelectedItems.Clear();
-            MatchTypesListBox.SelectedItems.Clear();
-
-            FilterChanged?.Invoke(SegmentFilter.Empty);
         }
 
         private void SelectedFuzzyBandsListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)

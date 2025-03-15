@@ -25,10 +25,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             SelectedStatusesListBox.ItemsSource = SelectedStatuses;
             SelectedMatchTypesListBox.ItemsSource = SelectedMatchTypes;
             SelectedFuzzyBandsListBox.ItemsSource = SelectedFuzzyBands;
-
-            //TODO For testing purposes
-            FilteredSegmentCount = 3;
-            SegmentCount = 11;
         }
 
         public event Action<SegmentFilter> FilterChanged;
@@ -51,25 +47,21 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
 
         public void Dispose() => Root?.Dispose();
 
-        private void ApplyFilter()
+        private void ApplyFilter(SegmentFilter segmentFilter)
         {
-            //TODO Add functionality
+            FilterChanged?.Invoke(segmentFilter);
         }
 
         private SegmentFilter GetSegmentFilter()
         {
-            var selectedStatuses = SelectedStatusesListBox.SelectedItems;
-            var selectedMatchTypes = SelectedMatchTypesListBox.SelectedItems;
-            var selectedFuzzyPercentages = FuzzyBandsListBox.SelectedItems.Cast<string>().ToList();
-
-            var statuses = EnumToListConverter.ConvertStringsToFlagEnum<Statuses>(selectedStatuses);
-            var matchTypes = EnumToListConverter.ConvertStringsToFlagEnum<MatchTypes>(selectedMatchTypes);
+            var statuses = EnumToListConverter.ConvertStringsToFlagEnum<Statuses>(SelectedStatuses);
+            var matchTypes = EnumToListConverter.ConvertStringsToFlagEnum<MatchTypes>(SelectedMatchTypes);
 
             return new SegmentFilter
             {
                 Statuses = statuses,
                 MatchTypes = matchTypes,
-                FuzzyPercentage = selectedFuzzyPercentages,
+                FuzzyPercentage = SelectedFuzzyBands.ToList(),
                 Operator = (Operator)OperatorCombobox.SelectedIndex
             };
         }

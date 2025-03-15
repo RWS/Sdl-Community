@@ -74,17 +74,19 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 
         public async Task ToggleFilter(SegmentFilter segmentFilter)
         {
+            var segments = await ReportViewer.GetAllSegments();
             if (!segmentFilter.IsEmpty)
             {
                 ReportExplorer.IsEnabled = false;
 
-                var segments = await ReportViewer.GetAllSegments();
                 var matchingSegments = SegmentMatcher.GetAllMatchingSegments(segments, segmentFilter);
+                ReportViewFilterController.SetFilteringResultCount(matchingSegments.Count, segments.Count);
                 await ReportViewer.ShowSegments(matchingSegments.Select(seg => (seg.SegmentId, seg.FileId)).ToList());
             }
             else
             {
                 if (!Integration.IsSyncOn) ReportExplorer.IsEnabled = true;
+                ReportViewFilterController.SetFilteringResultCount(segments.Count, segments.Count);
                 await ReportViewer.ShowAllSegments();
             }
         }
@@ -127,6 +129,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
                 if (selectedReport is not null)
                 {
                     Integration.ToggleSyncRibbon(true);
+                    ReportViewFilterController.Activate();
                     ReportViewFilterController.ReportViewFilter.IsEnabled = true;
                 }
                 else

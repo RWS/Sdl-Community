@@ -32,5 +32,11 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 
         private void ReportViewFilter_FilterChanged(SegmentFilter segmentFilter) =>
             Integration.FilterSegments(segmentFilter);
+
+        public void SetFilteringResultCount(int matchingSegmentsCount, int segmentsCount)
+        {
+            ReportViewFilter.FilteredSegmentCount = matchingSegmentsCount;
+            ReportViewFilter.SegmentCount = segmentsCount;
+        }
     }
 }

@@ -707,6 +707,7 @@
                     Grid.Row="1">
                 <StackPanel>
                     <Expander Header="Statuses"
+                              IsExpanded="True"
                               Visibility="{Binding ElementName=StatusesListBox, Path=Items.Count, Converter={StaticResource ItemsCountToVisibilityConverter}}"
                               Template="{StaticResource FilterTypeExpanderTemplate}"
                               x:Name="StatusesExpander">
@@ -715,6 +716,7 @@
                     </Expander>
 
                     <Expander x:Name="MatchTypesExpander"
+                              IsExpanded="True"
                               Visibility="{Binding ElementName=MatchTypesListBox, Path=Items.Count, Converter={StaticResource ItemsCountToVisibilityConverter}}"
                               Header="Match Types"
                               Template="{StaticResource FilterTypeExpanderTemplate}">
@@ -798,7 +800,6 @@
                                     </Grid.ColumnDefinitions>
 
                                     <ListBox Grid.Column="0"
-                                             SelectionChanged="MatchTypesListBox_OnSelectionChanged"
                                              x:Name="SelectedMatchTypesListBox" />
 
                                     <ListBox Grid.Column="1"

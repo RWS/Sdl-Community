@@ -28,7 +28,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
 
         private void TreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            SelectedReport = (ReportInfo)e.NewValue;
+            SelectedReport = e.NewValue as ReportInfo;
             SelectedReportChanged?.Invoke();
         }
     }
