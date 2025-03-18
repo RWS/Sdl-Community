@@ -21,7 +21,12 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.AmazonTranslateTradosPlugin
 {
-    public class MtTranslationProvider : ITranslationProvider
+	public interface ITranslationProviderExtension
+	{
+		Dictionary<string, string> LanguagesSupported { get; set; }
+	}
+
+	public class MtTranslationProvider : ITranslationProvider, ITranslationProviderExtension
     {
         ///<summary>
         /// This string needs to be a unique value.
@@ -128,6 +133,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
 
         public Uri Uri => Options.Uri;
 
-    }
+		public Dictionary<string, string> LanguagesSupported { get; set; } = new Dictionary<string, string>();
+	}
 }
 

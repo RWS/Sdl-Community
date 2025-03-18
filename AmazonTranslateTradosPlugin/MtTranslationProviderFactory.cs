@@ -14,6 +14,7 @@
 
 using System;
 using Sdl.Community.AmazonTranslateProvider;
+using Sdl.Community.AmazonTranslateTradosPlugin.Helpers;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.AmazonTranslateTradosPlugin
@@ -57,8 +58,11 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
             }
             //construct new provider with options..these options are going to include the cred.credential and the cred.persists
             var tp = new MtTranslationProvider(loadOptions);
-
-            return tp;
+			if (OptionsHelper.TryGetLanguagesSupported(translationProviderState, out var languages))
+			{
+				tp.LanguagesSupported = languages;
+			}
+			return tp;
         }
 
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)
