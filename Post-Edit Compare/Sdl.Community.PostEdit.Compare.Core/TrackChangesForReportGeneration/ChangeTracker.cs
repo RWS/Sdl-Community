@@ -1,17 +1,11 @@
 ﻿using Newtonsoft.Json;
-using Sdl.Community.PostEdit.Compare.Core.SDLXLIFF;
+using Sdl.Community.PostEdit.Compare.Core.TrackChangesForReportGeneration.Components;
 using Sdl.Community.PostEdit.Compare.DAL.ExcelTableModel;
-using Sdl.Core.Globalization;
-using Sdl.Core.Settings;
-using Sdl.FileTypeSupport.Framework.Bilingual;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
-using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,14 +14,25 @@ namespace Sdl.Community.PostEdit.Compare.Core.TrackChangesForReportGeneration
 {
     public static class ChangeTracker
     {
-        private static EditorController EditorController => SdlTradosStudio.Application.GetController<EditorController>();
+        private static EditorEventListener EditorEventListener { get; set; } = new();
 
-        public static void TrackChosenTUsFromTMs() =>
-            EditorController.TranslationResultsController.TranslationFinished += OnSegmentsConfirmationLevelChanged;
-
-        private static void OnSegmentsConfirmationLevelChanged(object sender, EventArgs e)
+        public static void TrackChosenTUsFromTMs()
         {
-            var activeDocument = EditorController.ActiveDocument;
+            EditorEventListener.ActiveSegmentChanged += ActiveDocument_ActiveSegmentChanged;
+            EditorEventListener.ActiveSegmentConfirmationLevelChanged += ActiveDocument_ActiveSegmentConfirmationLevelChanged;
+            EditorEventListener.StartListening();
+        }
+
+        /// <summary>
+        /// Scenario: After pretranslation, when the user opens a segment to edit, we must record its data first.
+        /// </summary>
+        private static void ActiveDocument_ActiveSegmentChanged() => AddChosenTuToMetadata();
+
+        private static void ActiveDocument_ActiveSegmentConfirmationLevelChanged() => AddChosenTuToMetadata();
+
+        private static void AddChosenTuToMetadata()
+        {
+            var activeDocument = EditorEventListener.ActiveDocument;
 
             var activeSegmentPair = activeDocument.GetActiveSegmentPair();
             var translationOrigin = activeSegmentPair?.Properties.TranslationOrigin;
@@ -36,75 +41,31 @@ namespace Sdl.Community.PostEdit.Compare.Core.TrackChangesForReportGeneration
             if (translationOrigin.OriginType?.ToUpperInvariant() != "TM" ||
                 translationOrigin.MetaDataContainsKey(Constants.OriginalTuKey)) return;
 
-            var difference = GetTuSourceDocSourceDifference(activeSegmentPair, translationOrigin);
+            var projController = SdlTradosStudio.Application.GetController<ProjectsController>();
+            var currentProject = projController.CurrentProject;
+
+            var tmPath = FileBasedTmHelper.GetTmPath(translationOrigin.OriginSystem, currentProject);
+            var difference = GetTuSourceDocSourceDifference(activeSegmentPair, translationOrigin.MatchPercent, tmPath, currentProject);
 
             translationOrigin.SetMetaData(Constants.OriginalTuKey, JsonConvert.SerializeObject(difference));
             activeDocument.UpdateSegmentPairProperties(activeSegmentPair,
                 activeSegmentPair.Properties);
         }
 
-        private static List<DiffSegment> GetTuSourceDocSourceDifference(ISegmentPair segmentPair, ITranslationOrigin translationOrigin)
+
+
+        
+
+        private static List<DiffSegment> GetTuSourceDocSourceDifference(ISegmentPair segmentPair, int matchPercent,
+            string tmPath, FileBasedProject currentProject)
         {
-            var searchResults = GetTmMatches(segmentPair, translationOrigin);
-            var searchResult = GetMostProbableMatch(searchResults, segmentPair, translationOrigin);
-            return searchResult == null ? [] : GetTuWithTrackedChanges(searchResult, segmentPair);
+            var searchResults = FileBasedTmHelper.GetTmMatches(segmentPair.Source.ToString(),
+                segmentPair.GetProjectFile().Language, tmPath, currentProject);
+            var searchResult =
+                FileBasedTmHelper.GetMostProbableMatch(searchResults, segmentPair.Target.ToString(), matchPercent);
+            return searchResult == null ? [] : FileBasedTmHelper.GetTuWithTrackedChanges(searchResult, segmentPair.Source.ToString());
         }
 
-
-        //Since we cannot access the TM Results windows, we must infer what the user chose by redoing the search on the same TM and comparing the results
-        private static SearchResult GetMostProbableMatch(SearchResults searchResults, ISegmentPair segmentPair, ITranslationOrigin translationOrigin)
-        {
-            foreach (var searchResult in searchResults)
-            {
-                if (searchResult.MemoryTranslationUnit.TargetSegment.ToString() !=
-                    segmentPair.Target.ToString()) continue;
-
-                if (translationOrigin.MatchPercent == searchResult.ScoringResult.Match)
-                    return  searchResult;
-            }
-
-            return null;
-        }
-
-        private static SearchResults GetTmMatches(ISegmentPair segmentPair,
-            ITranslationOrigin activeSegmentTranslationOrigin)
-        {
-            var projController = SdlTradosStudio.Application.GetController<ProjectsController>();
-            var currentProject = projController.CurrentProject;
-
-            var sourceLanguage = currentProject.GetProjectInfo().SourceLanguage;
-            var targetLanguage = segmentPair.GetProjectFile().Language;
-
-            var tmLangDir = GetLanguageDirection(activeSegmentTranslationOrigin, currentProject, sourceLanguage, targetLanguage);
-            var minimumScore = GetSettings(currentProject, targetLanguage);
-
-            return tmLangDir.SearchText(new SearchSettings {MinScore = int.Parse(minimumScore.Value)}, segmentPair.Source.ToString());
-        }
-
-        private static List<DiffSegment> GetTuWithTrackedChanges(SearchResult searchResult, ISegmentPair pair) =>
-            DiffMerger.MergeSegments(searchResult.MemoryTranslationUnit.SourceSegment.ToString(),
-                pair.Source.ToString());
-
-        private static ITranslationMemoryLanguageDirection GetLanguageDirection(
-            ITranslationOrigin activeSegmentTranslationOrigin, FileBasedProject currentProject, Language sourceLanguage,
-            Language targetLanguage)
-        {
-            var segTransOrigName = activeSegmentTranslationOrigin.OriginSystem;
-            var translationProviderCascadeEntries = currentProject.GetTranslationProviderConfiguration().Entries;
-            var tms = translationProviderCascadeEntries.Select(tm => tm.MainTranslationProvider.Uri.LocalPath).ToList();
-            var tmPath = tms.FirstOrDefault(tm => Path.GetFileNameWithoutExtension(tm) == segTransOrigName);
-
-            var tm = new FileBasedTranslationMemory(tmPath);
-            var tmLangDir = tm.GetLanguageDirection(new LanguagePair(sourceLanguage, targetLanguage));
-            return tmLangDir;
-        }
-
-        private static Setting<string> GetSettings(FileBasedProject currentProject, Language targetLanguage)
-        {
-            var settings = currentProject.GetSettings(targetLanguage);
-            var searchSettings = settings.GetSettingsGroup("TranslationMemorySettings");
-            var minimumScore = searchSettings.GetSetting<string>("TranslationMinimumMatchValue");
-            return minimumScore;
-        }
+        
     }
 }

@@ -12,7 +12,7 @@
 
         public string RepetitionTableId { get; set; }
         public string TextContextMatchLevel { get; set; }
-        public string OriginalTu { get; set; }
+        public string ChosenTu { get; set; }
 
         public TranslationOrigin()
         {

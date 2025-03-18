@@ -143,4 +143,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Sdl.Community.PostEdit.Compare.DAL\Sdl.Community.PostEdit.Compare.DAL.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NewFolder\" />
+  </ItemGroup>
 </Project>

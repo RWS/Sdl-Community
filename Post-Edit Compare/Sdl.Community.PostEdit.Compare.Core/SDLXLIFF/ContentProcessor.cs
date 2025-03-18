@@ -225,7 +225,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
 					pair.TranslationOrigin.TextContextMatchLevel = segmentPair.Properties.TranslationOrigin.TextContextMatchLevel.ToString();
 
                     if (segmentPair.Properties.TranslationOrigin.MetaDataContainsKey(Constants.OriginalTuKey))
-                        pair.TranslationOrigin.OriginalTu =
+                        pair.TranslationOrigin.ChosenTu =
                             segmentPair.Properties.TranslationOrigin.GetMetaData(Constants.OriginalTuKey);
                 }
 
