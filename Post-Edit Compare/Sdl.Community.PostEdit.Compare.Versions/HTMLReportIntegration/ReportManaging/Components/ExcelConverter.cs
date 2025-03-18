@@ -55,7 +55,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
                     if (excelRow > 3 && excelCol == statusColumnIndex)
                         cellRef.Value = ExtractStatusText(cell);
                     else if (excelRow > 4 && excelCol == commentsColumnIndex)
-                        cellRef.Value = FormatComments(cell.InnerHtml);
+                        ApplyFormattedComments(cellRef, cell.InnerHtml);
                     else if (TryParsePercentage(cellText, out double percentage))
                         SetPercentage(cellRef, percentage);
                     else if (TryParseNumeric(cellText, out double numericValue))
@@ -98,6 +98,78 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
             cellRef.Style.Border.Bottom.Color.SetColor(Color.Black);
             cellRef.Style.Border.Left.Color.SetColor(Color.Black);
             cellRef.Style.Border.Right.Color.SetColor(Color.Black);
+        }
+
+        private static void ApplyFormattedComments(ExcelRange cellRef, string html)
+        {
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+
+            var divNodes = doc.DocumentNode.SelectNodes("//div[starts-with(@style, 'border-style: solid')]");
+            if (divNodes is null) return;
+
+            cellRef.Value = null;
+            cellRef.RichText.Clear();
+
+            foreach (var divNode in divNodes)
+            {
+                var severityNode = divNode.SelectSingleNode(".//span[1]");
+                var dateNode = divNode.SelectSingleNode(".//span[2]");
+                var authorNode = divNode.SelectSingleNode(".//span[3]");
+                var commentNode = divNode.SelectSingleNode(".//p[@style='margin: 0px; padding: 3;']");
+
+                // Add comment text (first line)
+                if (commentNode != null)
+                {
+                    var commentText = HttpUtility.HtmlDecode(commentNode.InnerText.Trim());
+                    var rt = cellRef.RichText.Add(commentText);
+                    rt.Color = Color.Black;
+                    rt.Bold = true;
+                }
+
+                cellRef.RichText.Add("\n");
+
+                // Add severity (second line) with inline styling
+                if (severityNode != null)
+                {
+                    var severityText = HttpUtility.HtmlDecode(severityNode.InnerText.Trim());
+                    var rt = cellRef.RichText.Add(severityText);
+                    var style = severityNode.GetAttributeValue("style", "").ToLower();
+                    rt.Color = style.Contains("color: red") ? Color.Red : Color.Black;
+                    //rt.Bold = style.Contains("font-weight: bold");
+                    rt.Bold = false;
+                }
+
+                cellRef.RichText.Add("\n");
+
+                // Add date (third line) with italic styling if specified
+                if (dateNode != null)
+                {
+                    var dateText = HttpUtility.HtmlDecode(dateNode.InnerText.Trim());
+                    var rt = cellRef.RichText.Add(dateText);
+                    if (dateNode.GetAttributeValue("style", "").ToLower().Contains("font-style: italic"))
+                        rt.Italic = true;
+                    rt.Color = Color.Black;
+                }
+
+                cellRef.RichText.Add("\n");
+
+                // Add author (fourth line)
+                if (authorNode != null && authorNode.InnerText.Trim() != "null")
+                {
+                    var authorText = HttpUtility.HtmlDecode(authorNode.InnerText.Trim());
+                    var rt = cellRef.RichText.Add(authorText);
+                    rt.Color = Color.Black;
+                }
+
+                cellRef.RichText.Add("\n");
+
+                // Add a line between comments
+                var separator = new string('-', 30);  // You can adjust the length as needed
+                var line = cellRef.RichText.Add(separator);
+                line.Color = Color.Gray;
+                cellRef.RichText.Add("\n");
+            }
         }
 
         private static void ApplyRichTextFormatting(ExcelRange cellRef, string htmlContent)
@@ -145,7 +217,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
                 .Select(span => HttpUtility.HtmlDecode(span.InnerText.Trim()))
                 .Where(part => !string.IsNullOrWhiteSpace(part))
                 .ToArray();
-            return statusParts != null ? string.Join("\n", statusParts) : string.Empty;
+            return statusParts != null ? string.Join(" \n", statusParts) : string.Empty;
         }
 
         private static List<HtmlNode> ExtractTableWithId(string html)
@@ -156,24 +228,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.C
                 .Where(t => t.Descendants("tr").FirstOrDefault()?.Descendants("th")
                     .Any(th => th.InnerText.Trim().Equals("ID", StringComparison.OrdinalIgnoreCase)) ?? false)
                 .ToList();
-        }
-
-        private static string FormatComments(string html)
-        {
-            var doc = new HtmlDocument();
-            doc.LoadHtml(html);
-
-            var severityNode = doc.DocumentNode.SelectSingleNode("//div[@style='white-space: nowrap; background-color: #DFDFFF; text-align: left; color: Black;margin-bottom: 1px;']/span[1]");
-            var dateNode = doc.DocumentNode.SelectSingleNode("//div[@style='white-space: nowrap; background-color: #DFDFFF; text-align: left; color: Black;margin-bottom: 1px;']/span[2]");
-            var authorNode = doc.DocumentNode.SelectSingleNode("//div[@style='white-space: nowrap; background-color: #DFDFFF; text-align: left; color: Black;margin-bottom: 1px;']/span[3]");
-            var commentNode = doc.DocumentNode.SelectSingleNode("//p[@style='margin: 0px; padding: 3;']");
-
-            var severity = severityNode != null ? HttpUtility.HtmlDecode(severityNode.InnerText.Trim()) : string.Empty;
-            var date = dateNode != null ? HttpUtility.HtmlDecode(dateNode.InnerText.Trim()) : string.Empty;
-            var author = authorNode != null ? HttpUtility.HtmlDecode(authorNode.InnerText.Trim()) : string.Empty;
-            var comment = commentNode != null ? HttpUtility.HtmlDecode(commentNode.InnerText.Trim()) : string.Empty;
-
-            return $"{comment}\n{severity}\n{date}\n{author}";
         }
 
         private static string GenerateSheetName(HtmlNode row)
