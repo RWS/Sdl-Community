@@ -166,7 +166,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         {
             var tu = new TranslationUnit
             {
-                SourceSegment = segment.Duplicate(),//this makes the original source segment, with tags, appear in the search window
+                SourceSegment = segment.Duplicate(),
                 TargetSegment = translation
             };
 
@@ -244,8 +244,14 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 {
                     var newSeg = segment.TranslationUnit.SourceSegment.Duplicate();
 
-                    var sourceText = ApplyBeforeTranslationSettings(newSeg);
+                    if (segment.TranslationUnit.TargetSegment != null)
+                    {
+                        var tarSeg = segment.TranslationUnit.TargetSegment.Duplicate();
+                        var targetText = ApplyBeforeTranslationSettings(tarSeg);
+                        segment.PlainTranslation = targetText;
+                    }
 
+                    var sourceText = ApplyBeforeTranslationSettings(newSeg);
                     segment.SourceText = sourceText;
                 }
 
@@ -253,8 +259,11 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 {
                     if (segment == null) return;
 
-                    var plainTranslation = LookupDeepL(segment.SourceText);
-                    segment.PlainTranslation = plainTranslation;
+                    if (segment.TranslationUnit.ConfirmationLevel == ConfirmationLevel.Unspecified)
+                    {
+                        var plainTranslation = LookupDeepL(segment.SourceText);
+                        segment.PlainTranslation = plainTranslation;
+                    }
                 });
 
                 return preTranslateSegments;

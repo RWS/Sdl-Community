@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using NLog;
+using Sdl.Community.DeepLMTProvider.Interface;
 using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.LanguagePlatform.Core;
@@ -8,7 +10,7 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.DeepLMTProvider.Studio
 {
-    public class DeepLMtTranslationProvider : ITranslationProvider
+    public class DeepLMtTranslationProvider : ITranslationProvider, ITranslationProviderExtension
     {
         public static readonly string ListTranslationProviderScheme = "deepltranslationprovider";
         private readonly Logger _logger = Log.GetLogger(nameof(Client.DeepLTranslationProviderClient));
@@ -22,6 +24,8 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             {
                 GetSupportedTargetLanguages(languagePairs);
             }
+
+            LanguagesSupported = Options.LanguagesSupported;
         }
 
         public bool IsReadOnly => true;
@@ -53,6 +57,8 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         public TranslationMethod TranslationMethod => TranslationMethod.MachineTranslation;
         public Uri Uri => Options.Uri;
         public DeepLTranslationProviderClient DeepLTranslationProviderConnecter { get; }
+
+        public Dictionary<string, string> LanguagesSupported { get; set; } = new Dictionary<string, string>();
 
         public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
         {
