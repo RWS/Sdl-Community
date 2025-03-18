@@ -414,6 +414,15 @@ namespace GoogleCloudTranslationProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Google Translate.
+        /// </summary>
+        public static string LanguageSupported_ShortName {
+            get {
+                return ResourceManager.GetString("LanguageSupported_ShortName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apply.
         /// </summary>
         public static string LMP_Button_ApplyChanges {
