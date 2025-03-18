@@ -227,4 +227,7 @@ The formatting aspects affected by this setting include:
   <data name="GlobalSettings_LoadGlossaryIds_Global_settings" xml:space="preserve">
     <value>Global settings</value>
   </data>
+  <data name="ResendDraft_Tooltip" xml:space="preserve">
+    <value>Determines whether the translation engine resends previously translated but unconfirmed segments for translation whenever you revisit them.</value>
+  </data>
 </root>

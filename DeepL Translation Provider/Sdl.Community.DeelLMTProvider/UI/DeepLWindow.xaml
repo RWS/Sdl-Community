@@ -156,6 +156,13 @@
                                       ToolTip="{x:Static deepLmtProvider:PluginResources.PreserveFormatting_Tooltip}"
                                       IsChecked="{Binding PreserveFormatting}"
                                       Content="Preserve formatting" />
+                            <CheckBox Style="{StaticResource Sdl.Checkbox.GenericStyle}"
+                                      VerticalContentAlignment="Center"
+                                      Margin="15,0,0,5"
+                                      x:Name="ResendDraft"
+                                      ToolTip="{x:Static deepLmtProvider:PluginResources.ResendDraft_Tooltip}"
+                                      IsChecked="{Binding ResendDraft}"
+                                      Content="Resend Draft" />
 
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Tag handling"

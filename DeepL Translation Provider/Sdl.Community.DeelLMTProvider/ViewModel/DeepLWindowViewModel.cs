@@ -28,6 +28,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
         private ObservableCollection<LanguagePairOptions> _languagePairSettings = new();
         private bool _preserveFormatting;
         private bool _sendPlainText;
+        private bool _resendDraft;
         private TagFormat _tagType;
         private SplitSentences _splitSentencesType;
         private string _validationMessages;
@@ -43,6 +44,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
 
             LanguagePairs = deepLTranslationOptions.LanguagePairOptions.Select(lpo => lpo.LanguagePair).ToArray();
             SendPlainText = deepLTranslationOptions.SendPlainText;
+            ResendDraft = deepLTranslationOptions.ResendDraft;
             TagType = deepLTranslationOptions.TagHandling;
             SplitSentencesType = deepLTranslationOptions.SplitSentencesHandling;
             PreserveFormatting = deepLTranslationOptions.PreserveFormatting;
@@ -65,6 +67,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             Options = deepLTranslationOptions;
 
             SendPlainText = deepLTranslationOptions.SendPlainText;
+            ResendDraft = deepLTranslationOptions.ResendDraft;
             PreserveFormatting = deepLTranslationOptions.PreserveFormatting;
             TagType = deepLTranslationOptions.TagHandling;
             SplitSentencesType = deepLTranslationOptions.SplitSentencesHandling;
@@ -141,6 +144,16 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             get => _sendPlainText;
             set => SetField(ref _sendPlainText, value);
         }
+
+        public bool ResendDraft 
+        {
+            get => _resendDraft;
+            set
+            {
+                SetField(ref _resendDraft, value);
+            } 
+        }
+
 
         public TagFormat TagType
         {
@@ -277,6 +290,7 @@ namespace Sdl.Community.DeepLMTProvider.ViewModel
             SetApiKeyValidityLabel();
 
             Options.SendPlainText = SendPlainText;
+            Options.ResendDraft = ResendDraft;
             Options.ApiKey = ApiKey;
             Options.LanguagePairOptions = [.. LanguagePairOptions];
             Options.PreserveFormatting = PreserveFormatting;

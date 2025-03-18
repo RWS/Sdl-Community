@@ -30,7 +30,16 @@ namespace Sdl.Community.DeepLMTProvider.Model
             set => SendPlainTextParameter = value.ToString();
         }
 
+        [JsonIgnore]
+        public bool ResendDraft 
+        {
+            get => ResendDraftParameter != null && Convert.ToBoolean(ResendDraftParameter);
+            set => ResendDraftParameter = value.ToString(); 
+        }
+
         public string SendPlainTextParameter { get; set; }
+
+        public string ResendDraftParameter { get; set; }
 
         [JsonIgnore]
         public TagFormat TagHandling
