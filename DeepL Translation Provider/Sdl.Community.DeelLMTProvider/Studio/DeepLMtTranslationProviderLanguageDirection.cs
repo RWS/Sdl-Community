@@ -22,6 +22,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         private readonly LanguagePairOptions _languagePairOptions;
         private readonly Logger _logger = Log.GetLogger(nameof(DeepLMtTranslationProviderLanguageDirection));
         private readonly DeepLTranslationOptions _options;
+        private static List<DeepLCachedResult> _cachedResults = new List<DeepLCachedResult>();
 
         public DeepLMtTranslationProviderLanguageDirection(DeepLMtTranslationProvider deepLMtTranslationProvider, LanguagePair languageDirection, DeepLTranslationProviderClient connecter)
         {
@@ -166,7 +167,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         {
             var tu = new TranslationUnit
             {
-                SourceSegment = segment.Duplicate(),
+                SourceSegment = segment.Duplicate(),//this makes the original source segment, with tags, appear in the search window
                 TargetSegment = translation
             };
 
@@ -229,11 +230,11 @@ namespace Sdl.Community.DeepLMTProvider.Studio
         private string LookupDeepL(string sourceText) =>
             _connecter.Translate(_languageDirection, sourceText,
                 new(
-                    _languagePairOptions?.Formality ?? Formality.Default, 
+                    _languagePairOptions?.Formality ?? Formality.Default,
                     _languagePairOptions?.SelectedGlossary.Id,
-                    _options.TagHandling, 
+                    _options.TagHandling,
                     _options.SplitSentencesHandling,
-                    _options.PreserveFormatting, 
+                    _options.PreserveFormatting,
                     _options.IgnoreTagsParameter));
 
         private List<PreTranslateSegment> TranslateSegments(List<PreTranslateSegment> preTranslateSegments)
@@ -244,26 +245,27 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                 {
                     var newSeg = segment.TranslationUnit.SourceSegment.Duplicate();
 
-                    if (segment.TranslationUnit.TargetSegment != null)
-                    {
-                        var tarSeg = segment.TranslationUnit.TargetSegment.Duplicate();
-                        var targetText = ApplyBeforeTranslationSettings(tarSeg);
-                        segment.PlainTranslation = targetText;
-                    }
-
                     var sourceText = ApplyBeforeTranslationSettings(newSeg);
+
                     segment.SourceText = sourceText;
                 }
 
                 Parallel.ForEach(preTranslateSegments, segment =>
                 {
                     if (segment == null) return;
-
-                    if (segment.TranslationUnit.ConfirmationLevel == ConfirmationLevel.Unspecified)
+                    var plainTranslation = string.Empty;
+                    if (segment.TranslationUnit.ConfirmationLevel != ConfirmationLevel.Unspecified
+                        && GetCachedResult(segment.SourceText, out var cached))
                     {
-                        var plainTranslation = LookupDeepL(segment.SourceText);
-                        segment.PlainTranslation = plainTranslation;
+                        plainTranslation = cached.TargetText;
                     }
+                    else
+                    {
+                        plainTranslation = LookupDeepL(segment.SourceText);
+                        AddCachedResult(segment.SourceText, plainTranslation);
+                    }
+
+                    segment.PlainTranslation = plainTranslation;
                 });
 
                 return preTranslateSegments;
@@ -274,6 +276,36 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             }
 
             return preTranslateSegments;
+        }
+
+        private void AddCachedResult(string source, string target)
+        {
+            if (GetCachedResult(source, out var result))
+            {
+                result.TargetText = target;
+            }
+            else
+            {
+                _cachedResults.Add(new DeepLCachedResult()
+                {
+                    SourceText = source,
+                    TargetText = target,
+                    SourceLanguage = _languageDirection.SourceCulture,
+                    TargetLanguage = _languageDirection.TargetCulture
+                });
+            }
+
+        }
+
+        private bool GetCachedResult(string sourceText, out DeepLCachedResult result)
+        {
+            result = _cachedResults.FirstOrDefault(
+                    cR => cR.SourceText == sourceText && cR.SourceLanguage == _languageDirection.SourceCulture
+                            && cR.TargetLanguage == _languageDirection.TargetCulture
+                );
+
+
+            return result != null;
         }
     }
 }
