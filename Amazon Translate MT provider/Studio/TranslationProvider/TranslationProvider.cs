@@ -1,12 +1,19 @@
 using Newtonsoft.Json;
 using Sdl.Community.AmazonTranslateTradosPlugin.Model;
+using Sdl.Community.AmazonTranslateTradosPlugin.Service;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
+using System.Collections.Generic;
 
 namespace Sdl.Community.AmazonTranslateTradosPlugin.Studio.TranslationProvider
 {
-    public class TranslationProvider : ITranslationProvider
+    public interface ITranslationProviderExtension
+    {
+        Dictionary<string, string> LanguagesSupported { get; set; }
+    }
+
+    public class TranslationProvider : ITranslationProvider, ITranslationProviderExtension
     {
         ///<summary>
         /// This string needs to be a unique value.
@@ -93,5 +100,7 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin.Studio.TranslationProvider
         public TranslationMethod TranslationMethod => TranslationOptions.ProviderTranslationMethod;
 
         public Uri Uri => TranslationOptions.Uri;
+
+        public Dictionary<string, string> LanguagesSupported { get; set; } = new Dictionary<string, string>();
     }
 }
