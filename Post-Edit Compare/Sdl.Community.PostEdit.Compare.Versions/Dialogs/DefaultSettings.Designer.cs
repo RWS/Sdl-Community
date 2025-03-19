@@ -35,6 +35,7 @@
             this.button_save = new System.Windows.Forms.Button();
             this.button_cancel = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.checkBox_explicitErrors = new System.Windows.Forms.CheckBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
@@ -45,7 +46,6 @@
             this.button_browseProjectVersionsFolder = new System.Windows.Forms.Button();
             this.textBox_projectVersionsFolder = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.checkBox_explicitErrors = new System.Windows.Forms.CheckBox();
             this.panel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_header_image)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -134,6 +134,16 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Properties";
             // 
+            // checkBox_explicitErrors
+            // 
+            this.checkBox_explicitErrors.AutoSize = true;
+            this.checkBox_explicitErrors.Location = new System.Drawing.Point(38, 422);
+            this.checkBox_explicitErrors.Name = "checkBox_explicitErrors";
+            this.checkBox_explicitErrors.Size = new System.Drawing.Size(321, 29);
+            this.checkBox_explicitErrors.TabIndex = 13;
+            this.checkBox_explicitErrors.Text = "More explicit error messages";
+            this.checkBox_explicitErrors.UseVisualStyleBackColor = true;
+            // 
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
@@ -149,7 +159,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(42, 196);
+            this.label2.Location = new System.Drawing.Point(33, 193);
             this.label2.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(233, 25);
@@ -238,22 +248,12 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(42, 65);
+            this.label1.Location = new System.Drawing.Point(33, 65);
             this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(275, 25);
             this.label1.TabIndex = 4;
             this.label1.Text = "Project versions root folder:";
-            // 
-            // checkBox_explicitErrors
-            // 
-            this.checkBox_explicitErrors.AutoSize = true;
-            this.checkBox_explicitErrors.Location = new System.Drawing.Point(38, 422);
-            this.checkBox_explicitErrors.Name = "checkBox_explicitErrors";
-            this.checkBox_explicitErrors.Size = new System.Drawing.Size(321, 29);
-            this.checkBox_explicitErrors.TabIndex = 13;
-            this.checkBox_explicitErrors.Text = "More explicit error messages";
-            this.checkBox_explicitErrors.UseVisualStyleBackColor = true;
             // 
             // DefaultSettings
             // 

@@ -51,8 +51,7 @@ namespace PostEdit.Compare.Forms
 
                         panel_action.BringToFront();
 
-                        button_wizard_help.Enabled = false;
-
+                        
                         button_wizard_back.Enabled = false;
                         button_wizard_next.Enabled = true;
 
@@ -78,8 +77,7 @@ namespace PostEdit.Compare.Forms
 
                         panel_options.BringToFront();
 
-                        button_wizard_help.Enabled = false;
-
+                        
                         button_wizard_next.Enabled = false;
 
                         button_wizard_finish.Enabled = true;
@@ -120,11 +118,6 @@ namespace PostEdit.Compare.Forms
             }
 
             switch_Panel(_indexCurrentPanel == 0 ? panel_action : panel_options);
-        }
-
-        private void button_wizard_help_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void radioButton_compareSelectedFiles_CheckedChanged(object sender, EventArgs e)
