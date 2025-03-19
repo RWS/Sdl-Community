@@ -205,7 +205,7 @@ namespace GoogleCloudTranslationProvider.ViewModels
 			}
 		}
 
-		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
+        public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
 
 		public ICommand BrowseFileCommand => _browseFileCommand ??= new RelayCommand(BrowseFile);
 
