@@ -20,6 +20,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
             var credentials = credentialStore.GetCredential(translationProviderUri);
             options.ApiKey = credentials.Credential;
+            DeepLTranslationProviderClient.ApiVersion = options.ApiVersion;
             DeepLTranslationProviderClient.ApiKey = credentials.Credential;
 
             return new DeepLMtTranslationProvider(options, new DeepLTranslationProviderClient(options.ApiKey));

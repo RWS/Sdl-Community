@@ -245,6 +245,15 @@ namespace Sdl.Community.DeepLMTProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Determines whether the translation engine resends previously translated but unconfirmed segments for translation whenever you revisit them..
+        /// </summary>
+        public static string ResendDraft_Tooltip {
+            get {
+                return ResourceManager.GetString("ResendDraft_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The DeepL provider is returning a &apos;{0}&apos; status. This means is a problem on accessing the services you have requested. Please check you have a valid API key and also the internet connectivity..
         /// </summary>
         public static string ServerGeneralResponse_Message {
