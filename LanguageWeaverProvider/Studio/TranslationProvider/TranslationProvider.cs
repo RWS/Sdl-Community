@@ -100,8 +100,8 @@ namespace LanguageWeaverProvider
 			var options = TranslationOptions;
 			var mappings = options.PairMappings;
 			var name = options.PluginVersion == PluginVersion.LanguageWeaverEdge
-				? "Language Weaver Edge"
-				: "Language Weaver Cloud";
+				? PluginResources.MainView_Buttons_LWEdge
+				: PluginResources.MainView_Buttons_LWEdge;
 
 			foreach (var mapping in mappings)
 			{
