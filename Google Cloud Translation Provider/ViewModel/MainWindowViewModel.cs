@@ -207,6 +207,8 @@ namespace GoogleCloudTranslationProvider.ViewModels
 
         private bool IsSaveEnabled(object obj)
         {
+            if (SelectedView.ViewModel is SettingsViewModel) return true;
+
             if (SelectedView.ViewModel is not ProviderViewModel providerViewModel) return false;
             if (!providerViewModel.IsV3Checked) return !string.IsNullOrWhiteSpace(providerViewModel.ApiKey);
 

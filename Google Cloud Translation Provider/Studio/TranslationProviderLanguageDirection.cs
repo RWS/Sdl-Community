@@ -69,17 +69,10 @@ namespace GoogleCloudTranslationProvider.Studio
             var searchResults = new SearchResults { SourceSegment = segment.Duplicate() };
 
 
-            if (TryGetCachedTranslation(_currentTranslationUnit, out var cachedResult))
+            if (!_translationOptions.ResendDrafts && _currentTranslationUnit.ConfirmationLevel != ConfirmationLevel.Unspecified)
             {
-                return cachedResult;
+                return searchResults;
             }
-
-            //if (!_translationOptions.ResendDrafts && _currentTranslationUnit.ConfirmationLevel != ConfirmationLevel.Unspecified)
-            //{
-            //	translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
-            //	searchResults.Add(CreateSearchResult(segment, translation));
-            //	return searchResults;
-            //}
 
             var newSegment = segment.Duplicate();
             if (_translationOptions.SendPlainTextOnly || !newSegment.HasTags)
@@ -251,29 +244,6 @@ namespace GoogleCloudTranslationProvider.Studio
 
 			return _googleV2Api.Translate(_languageDirection, sourcetext, format);
 		}
-
-        private bool TryGetCachedTranslation(TranslationUnit translationUnit, out SearchResults result)
-        {
-            result = new SearchResults()
-            {
-                SourceSegment = translationUnit.SourceSegment
-            };
-            if (!_translationOptions.ResendDrafts &&
-                translationUnit.ConfirmationLevel != ConfirmationLevel.Unspecified)
-            {
-                var segmentPair = translationUnit.DocumentSegmentPair;
-                var translationOrigin = segmentPair.Properties.TranslationOrigin;
-                if (translationOrigin.OriginSystem == _provider.Name)
-                {
-                    result.Add(CreateSearchResult(translationUnit.SourceSegment.Duplicate(), translationUnit.TargetSegment.Duplicate()));
-                    return true;
-                }
-
-                return false;
-            }
-
-            return false;
-        }
         #region Unused
         /// <summary>
         /// Not required for this implementation.
