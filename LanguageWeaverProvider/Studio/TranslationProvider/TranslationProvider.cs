@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using LanguageWeaverProvider.LanguageMappingProvider;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
@@ -9,14 +10,20 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace LanguageWeaverProvider
 {
-	internal class TranslationProvider : ITranslationProvider
+	public interface ITranslationProviderExtension
+	{
+		Dictionary<string, string> LanguagesSupported { get; set; }
+	}
+
+	internal class TranslationProvider : ITranslationProvider, ITranslationProviderExtension
 	{
 		public TranslationProvider(ITranslationOptions translationOptions)
 		{
 			TranslationOptions = translationOptions;
 			_ = DatabaseControl.InitializeDatabase();
+			SetSupportedLanguages();
 		}
-
+		
 		public string Name => TranslationOptions.ProviderName;
 
 		public ITranslationOptions TranslationOptions { get; set; }
@@ -61,6 +68,8 @@ namespace LanguageWeaverProvider
 
 		public Uri Uri => TranslationOptions.Uri;
 
+		public Dictionary<string, string> LanguagesSupported { get; set; } = new();
+
 		public void LoadState(string translationProviderState)
 		{
 			var translationOptions = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
@@ -85,5 +94,28 @@ namespace LanguageWeaverProvider
 		}
 
 		public void RefreshStatusInfo() { }
+
+		private void SetSupportedLanguages()
+		{
+			var options = TranslationOptions;
+			var mappings = options.PairMappings;
+			var name = options.PluginVersion == PluginVersion.LanguageWeaverEdge
+				? PluginResources.MainView_Buttons_LWEdge
+				: PluginResources.MainView_Buttons_LWEdge;
+
+			foreach (var mapping in mappings)
+			{
+				var languagePair = mapping.LanguagePair;
+				var targetLanguage = languagePair.TargetCulture.RegionNeutralName.ToUpper();
+				if (!LanguagesSupported.ContainsKey(targetLanguage))
+				{
+					if (!LanguagesSupported.ContainsKey(languagePair.TargetCultureName))
+					{
+						LanguagesSupported.Add(languagePair.TargetCultureName, name);
+					}
+				}
+			}
+
+		}
 	}
 }
