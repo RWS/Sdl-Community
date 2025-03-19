@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using LanguageWeaverProvider.LanguageMappingProvider;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
@@ -9,12 +10,18 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace LanguageWeaverProvider
 {
-	internal class TranslationProvider : ITranslationProvider
+    public interface ITranslationProviderExtension
+    {
+        public Dictionary<string, string> LanguagesSupported { get; set; }
+    }
+
+    internal class TranslationProvider : ITranslationProvider, ITranslationProviderExtension
 	{
 		public TranslationProvider(ITranslationOptions translationOptions)
 		{
 			TranslationOptions = translationOptions;
 			_ = DatabaseControl.InitializeDatabase();
+            SetSupportedLanguages();
 		}
 
 		public string Name => TranslationOptions.ProviderName;
@@ -61,7 +68,9 @@ namespace LanguageWeaverProvider
 
 		public Uri Uri => TranslationOptions.Uri;
 
-		public void LoadState(string translationProviderState)
+        public Dictionary<string, string> LanguagesSupported { get; set; } = new();
+
+        public void LoadState(string translationProviderState)
 		{
 			var translationOptions = JsonConvert.DeserializeObject<TranslationOptions>(translationProviderState);
 			TranslationOptions = translationOptions;
@@ -83,6 +92,29 @@ namespace LanguageWeaverProvider
 		{
 			return new TranslationProviderLanguageDirection(this, TranslationOptions, languageDirection);
 		}
+
+        public void SetSupportedLanguages()
+        {
+            var options = TranslationOptions;
+            var mappings = options.PairMappings;
+            var name = options.PluginVersion == PluginVersion.LanguageWeaverEdge
+                ? PluginResources.LCEdge_ShortName
+                : PluginResources.LCCloud_ShortName;
+
+            foreach (var mapping in mappings)
+            {
+                var languagePair = mapping.LanguagePair;
+                var targetLanguage = languagePair.TargetCulture.RegionNeutralName.ToUpper();
+                if (!LanguagesSupported.ContainsKey(targetLanguage))
+                {
+                    if (!LanguagesSupported.ContainsKey(languagePair.TargetCultureName))
+                    {
+                        LanguagesSupported.Add(languagePair.TargetCultureName, name);
+                    }
+                }
+            }
+
+        }
 
 		public void RefreshStatusInfo() { }
 	}

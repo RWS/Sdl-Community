@@ -520,6 +520,24 @@ namespace LanguageWeaverProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Language Weaver Cloud.
+        /// </summary>
+        public static string LCCloud_ShortName {
+            get {
+                return ResourceManager.GetString("LCCloud_ShortName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language Weaver Edge.
+        /// </summary>
+        public static string LCEdge_ShortName {
+            get {
+                return ResourceManager.GetString("LCEdge_ShortName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apply.
         /// </summary>
         public static string LMPView_Buttons_ApplyChanges {

@@ -270,6 +270,12 @@
   <data name="FeedbackView_Title" xml:space="preserve">
     <value>Give feedback!</value>
   </data>
+  <data name="LCCloud_ShortName" xml:space="preserve">
+    <value>Language Weaver Cloud</value>
+  </data>
+  <data name="LCEdge_ShortName" xml:space="preserve">
+    <value>Language Weaver Edge</value>
+  </data>
   <data name="LMPViewModel_ResetTitle" xml:space="preserve">
     <value>Reset to default</value>
   </data>
