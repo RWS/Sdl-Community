@@ -1,4 +1,6 @@
+using Sdl.Community.AmazonTranslateTradosPlugin.Helpers;
 using Sdl.Community.AmazonTranslateTradosPlugin.Model;
+using Sdl.Community.AmazonTranslateTradosPlugin.Service;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
 using System.Collections.Generic;
@@ -25,7 +27,6 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin.Studio.TranslationProvider
 
             //create options class based on URI passed to the method
             var loadOptions = new TranslationOptions(translationProviderUri);
-
             ApplicationInitializer.TranslationOptions ??= new Dictionary<string, TranslationOptions>();
             ApplicationInitializer.TranslationOptions[loadOptions.Id] = loadOptions;
 
@@ -44,6 +45,10 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin.Studio.TranslationProvider
             }
             //construct new provider with options..these options are going to include the cred.credential and the cred.persists
             var tp = new TranslationProvider(loadOptions);
+            if (OptionsHelper.TryGetLanguagesSupported(translationProviderState, out var languages))
+            {
+                tp.LanguagesSupported = languages;
+            }
 
             return tp;
         }
