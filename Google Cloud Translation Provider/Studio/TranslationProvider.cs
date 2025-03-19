@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using GoogleCloudTranslationProvider.Extensions;
 using GoogleCloudTranslationProvider.GoogleAPI;
 using GoogleCloudTranslationProvider.Helpers;
+using GoogleCloudTranslationProvider.Interface;
 using GoogleCloudTranslationProvider.Interfaces;
 using GoogleCloudTranslationProvider.Models;
 using Newtonsoft.Json;
@@ -10,7 +13,7 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace GoogleCloudTranslationProvider.Studio
 {
-	public class TranslationProvider : ITranslationProvider
+    public class TranslationProvider : ITranslationProvider, ITranslationProviderExtension
 	{
 		private readonly HtmlUtil _htmlUtil;
 
@@ -21,7 +24,8 @@ namespace GoogleCloudTranslationProvider.Studio
 		{
 			Options = options;
 			_htmlUtil = new HtmlUtil();
-		}
+            LanguagesSupported = Options.LanguagesSupported.ToDictionary(lang => lang, lang => PluginResources.LanguageSupported_ShortName);
+        }
 
 		public ITranslationOptions Options { get; set; }
 
@@ -67,7 +71,9 @@ namespace GoogleCloudTranslationProvider.Studio
 
 		public Uri Uri => Options.Uri;
 
-		public bool SupportsLanguageDirection(LanguagePair languageDirection)
+        public Dictionary<string, string> LanguagesSupported { get; set; }
+
+        public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
 			DatabaseExtensions.CreateDatabase(Options);
 			if (Options.SelectedGoogleVersion is not ApiVersion.V2)

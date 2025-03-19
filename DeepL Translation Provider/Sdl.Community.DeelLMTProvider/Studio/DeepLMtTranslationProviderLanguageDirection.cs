@@ -1,4 +1,4 @@
-﻿using NLog;
+using NLog;
 using Sdl.Community.DeepLMTProvider.Client;
 using Sdl.Community.DeepLMTProvider.Extensions;
 using Sdl.Community.DeepLMTProvider.Helpers;
