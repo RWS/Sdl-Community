@@ -205,18 +205,19 @@ namespace LanguageWeaverProvider
 		private SearchResults CreateDraftNotResentSearchResults(Segment segment)
 		{
 			var targetSegment = new Segment(_languagePair.TargetCulture);
-			targetSegment.Add(PluginResources.TranslationDraftNotResent);
 
 			var searchResults = new SearchResults { SourceSegment = segment.Duplicate() };
-            var tuSearchResult = CreateTuSearchResult(segment, targetSegment);
+            return searchResults;
+			//targetSegment.Add(PluginResources.TranslationDraftNotResent);
+   //         var tuSearchResult = CreateTuSearchResult(segment, targetSegment);
 
-            searchResults.Add(new SearchResult(tuSearchResult)
-            {
-                ScoringResult = new ScoringResult { BaseScore = 0 },
-                TranslationProposal = new TranslationUnit(tuSearchResult)
-            });
+   //         searchResults.Add(new SearchResult(tuSearchResult)
+   //         {
+   //             ScoringResult = new ScoringResult { BaseScore = 0 },
+   //             TranslationProposal = new TranslationUnit(tuSearchResult)
+   //         });
 
-			return searchResults;
+			//return searchResults;
 		}
 
 		private Segment GetSourceSegment(Segment segment)
