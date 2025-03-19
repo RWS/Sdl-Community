@@ -55,53 +55,60 @@ namespace GoogleCloudTranslationProvider.Studio
 			return searchResults;
 		}
 
-		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
-		{
-			AppInitializer.TranslationOptions ??= new Dictionary<string, ITranslationOptions>();
-			if (AppInitializer.TranslationOptions.TryGetValue(_translationOptions.Id, out var currentOptions))
-			{
-				_translationOptions = currentOptions;
-			}
+        public SearchResults SearchSegment(SearchSettings settings, Segment segment)
+        {
+            AppInitializer.TranslationOptions ??= new Dictionary<string, ITranslationOptions>();
+            if (AppInitializer.TranslationOptions.TryGetValue(_translationOptions.Id, out var currentOptions))
+            {
+                _translationOptions = currentOptions;
+            }
 
-			DatabaseExtensions.CreateDatabase(_translationOptions);
+            DatabaseExtensions.CreateDatabase(_translationOptions);
 
-			var translation = new Segment(_languageDirection.TargetCulture);
-			var searchResults = new SearchResults { SourceSegment = segment.Duplicate() };
-			if (!_translationOptions.ResendDrafts && _currentTranslationUnit.ConfirmationLevel != ConfirmationLevel.Unspecified)
-			{
-				translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
-				searchResults.Add(CreateSearchResult(segment, translation));
-				return searchResults;
-			}
+            var translation = new Segment(_languageDirection.TargetCulture);
+            var searchResults = new SearchResults { SourceSegment = segment.Duplicate() };
 
-			var newSegment = segment.Duplicate();
-			if (_translationOptions.SendPlainTextOnly || !newSegment.HasTags)
-			{
-				translation.Add(SearchSegmentOnTextOnly(newSegment));
-				searchResults.Add(CreateSearchResult(newSegment, translation));
-				return searchResults;
-			}
 
-			if (_translationOptions.UsePreEdit)
-			{
-				_preLookupSegmentEditor ??= new GoogleSegmentEditor(_translationOptions.PreLookupFilename);
-				newSegment = GetEditedSegment(_preLookupSegmentEditor, newSegment);
-			}
+            if (TryGetCachedTranslation(_currentTranslationUnit, out var cachedResult))
+            {
+                return cachedResult;
+            }
 
-			var tagplacer = new TagPlacer(newSegment, _htmlUtil);
-			var translatedText = Lookup(tagplacer.PreparedSourceText, _translationOptions, "html");
-			translation = tagplacer.GetTaggedSegment(translatedText).Duplicate();
-			if (_translationOptions.UsePostEdit)
-			{
-				_postLookupSegmentEditor ??= new GoogleSegmentEditor(_translationOptions.PostLookupFilename);
-				translation = GetEditedSegment(_postLookupSegmentEditor, translation);
-			}
+            //if (!_translationOptions.ResendDrafts && _currentTranslationUnit.ConfirmationLevel != ConfirmationLevel.Unspecified)
+            //{
+            //	translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
+            //	searchResults.Add(CreateSearchResult(segment, translation));
+            //	return searchResults;
+            //}
 
-			searchResults.Add(CreateSearchResult(newSegment, translation));
-			return searchResults;
-		}
+            var newSegment = segment.Duplicate();
+            if (_translationOptions.SendPlainTextOnly || !newSegment.HasTags)
+            {
+                translation.Add(SearchSegmentOnTextOnly(newSegment));
+                searchResults.Add(CreateSearchResult(newSegment, translation));
+                return searchResults;
+            }
 
-		public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
+            if (_translationOptions.UsePreEdit)
+            {
+                _preLookupSegmentEditor ??= new GoogleSegmentEditor(_translationOptions.PreLookupFilename);
+                newSegment = GetEditedSegment(_preLookupSegmentEditor, newSegment);
+            }
+
+            var tagplacer = new TagPlacer(newSegment, _htmlUtil);
+            var translatedText = Lookup(tagplacer.PreparedSourceText, _translationOptions, "html");
+            translation = tagplacer.GetTaggedSegment(translatedText).Duplicate();
+            if (_translationOptions.UsePostEdit)
+            {
+                _postLookupSegmentEditor ??= new GoogleSegmentEditor(_translationOptions.PostLookupFilename);
+                translation = GetEditedSegment(_postLookupSegmentEditor, translation);
+            }
+
+            searchResults.Add(CreateSearchResult(newSegment, translation));
+            return searchResults;
+        }
+
+        public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
 		{
 			if (segments is null || mask is null)
 			{
@@ -245,12 +252,33 @@ namespace GoogleCloudTranslationProvider.Studio
 			return _googleV2Api.Translate(_languageDirection, sourcetext, format);
 		}
 
+        private bool TryGetCachedTranslation(TranslationUnit translationUnit, out SearchResults result)
+        {
+            result = new SearchResults()
+            {
+                SourceSegment = translationUnit.SourceSegment
+            };
+            if (!_translationOptions.ResendDrafts &&
+                translationUnit.ConfirmationLevel != ConfirmationLevel.Unspecified)
+            {
+                var segmentPair = translationUnit.DocumentSegmentPair;
+                var translationOrigin = segmentPair.Properties.TranslationOrigin;
+                if (translationOrigin.OriginSystem == _provider.Name)
+                {
+                    result.Add(CreateSearchResult(translationUnit.SourceSegment.Duplicate(), translationUnit.TargetSegment.Duplicate()));
+                    return true;
+                }
 
-		#region Unused
-		/// <summary>
-		/// Not required for this implementation.
-		/// </summary>
-		public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
+                return false;
+            }
+
+            return false;
+        }
+        #region Unused
+        /// <summary>
+        /// Not required for this implementation.
+        /// </summary>
+        public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
 		{
 			throw new NotImplementedException();
 		}
