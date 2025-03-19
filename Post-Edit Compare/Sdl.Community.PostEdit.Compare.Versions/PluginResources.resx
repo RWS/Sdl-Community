@@ -167,7 +167,7 @@
     <value>Edit Project Version</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>Post-Edit Versions</value>
+    <value>Post-Edit Compare</value>
   </data>
   <data name="PostEditCompareViewRibbonGroup_Name" xml:space="preserve">
     <value>Actions</value>
