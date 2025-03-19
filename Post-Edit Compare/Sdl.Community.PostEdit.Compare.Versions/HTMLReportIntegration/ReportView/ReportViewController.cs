@@ -171,6 +171,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
         {
             await ReportViewer.UpdateComments([new CommentInfo
                 {
+                    Author = Environment.UserName,
                     Date = DateTime.Now.ToString(MessagingConstants.DateFormat),
                     Text = comment,
                     Severity = severity
