@@ -87,19 +87,7 @@ namespace Sdl.Community.DeepLMTProvider.Studio
 
         public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
         {
-            if (TryGetCachedTranslation(translationUnit, out var result))
-            {
-                return result;
-            }
-
-            var preTranslate = new PreTranslateSegment()
-            {
-                TranslationUnit = translationUnit,
-                SearchSettings = settings
-            };
-            var translated = TranslateSegment(preTranslate);
-            var updated = GetPreTranslationSearchResult(translated);
-            return updated;
+            throw new NotImplementedException();
         }
 
         public SearchResults[] SearchTranslationUnits(SearchSettings settings, TranslationUnit[] translationUnits)
@@ -111,47 +99,49 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             bool[] mask)
         {
             // bug LG-15128 where mask parameters are true for both CM and the actual TU to be updated which cause an unnecessary call for CM segment
-            var results = new List<SearchResults>();
-            var i = 0;
+            var noOfResults = mask.Length;
+
+            var results = new List<SearchResults>(noOfResults);
+            var preTranslateList = new List<PreTranslateSegment>(noOfResults);
+
+            int i;
+            for (i = 0; i < noOfResults; i++)
+            {
+                results.Add(null);
+                preTranslateList.Add(null);
+            }
+
+            i = 0;
             foreach (var tu in translationUnits)
             {
-                if (mask == null || mask[i])
+                if (mask[i])
                 {
-                    var result = SearchTranslationUnit(settings, tu);
-                    results.Add(result);
+                    var preTranslate = new PreTranslateSegment
+                    {
+                        SearchSettings = settings,
+                        TranslationUnit = tu
+                    };
+                    preTranslateList.RemoveAt(i);
+                    preTranslateList.Insert(i, preTranslate);
                 }
-                else
-                {
-                    results.Add(null);
-                }
-
                 i++;
             }
 
-            return results.ToArray();
-        }
+            if (preTranslateList.Count <= 0) return results.ToArray();
 
-        private bool TryGetCachedTranslation(TranslationUnit translationUnit, out SearchResults result)
-        {
-            result = new SearchResults()
-            {
-                SourceSegment = translationUnit.SourceSegment
-            };
-            if (!_options.ResendDraft &&
-                translationUnit.ConfirmationLevel != ConfirmationLevel.Unspecified)
-            {
-                var segmentPair = translationUnit.DocumentSegmentPair;
-                var translationOrigin = segmentPair.Properties.TranslationOrigin;
-                if (translationOrigin.OriginSystem == _deepLMtTranslationProvider.Name)
-                {
-                    result.Add(CreateSearchResult(translationUnit.SourceSegment.Duplicate(), translationUnit.TargetSegment.Duplicate()));
-                    return true;
-                }
+            var translatedSegments = TranslateSegments(preTranslateList);
+            var preTranslateSearchResults = GetPreTranslationSearchResults(translatedSegments);
 
-                return false;
+            foreach (var result in preTranslateSearchResults)
+            {
+                if (result == null) continue;
+
+                var index = preTranslateSearchResults.IndexOf(result);
+                results.RemoveAt(index);
+                results.Insert(index, result);
             }
 
-            return false;
+            return results.ToArray();
         }
 
         public ImportResult UpdateTranslationUnit(TranslationUnit translationUnit)
@@ -199,80 +189,42 @@ namespace Sdl.Community.DeepLMTProvider.Studio
             return searchResult;
         }
 
-        private PreTranslateSegment TranslateSegment(PreTranslateSegment segment)
+        private List<SearchResults> GetPreTranslationSearchResults(List<PreTranslateSegment> preTranslateList)
         {
-            var newSeg = segment.TranslationUnit.SourceSegment.Duplicate();
+            var resultsList = new List<SearchResults>(preTranslateList.Capacity);
 
-            var sourceText = ApplyBeforeTranslationSettings(newSeg);
-            segment.SourceText = sourceText;
+            for (var i = 0; i < resultsList.Capacity; i++) resultsList.Add(null);
 
-            var plainTranslation = LookupDeepL(segment.SourceText);
-            segment.PlainTranslation = plainTranslation;
-            return segment;
-        }
-
-        private SearchResults GetPreTranslationSearchResult(PreTranslateSegment preTranslate)
-        {
-            var searchResults = new SearchResults();
-            var plainTranslation = preTranslate.PlainTranslation;
-            if (plainTranslation == null) return searchResults;
-
-            var translation = new Segment(_languageDirection.TargetCulture);
-            var sourceSegment = preTranslate.TranslationUnit.SourceSegment.Duplicate();
-
-            if (sourceSegment.HasTags && !_options.SendPlainText)
+            foreach (var preTranslate in preTranslateList.Where(preTranslate => preTranslate != null))
             {
-                var tagPlacer = new DeepLTranslationProviderTagPlacer(sourceSegment);
-                translation = tagPlacer.GetTaggedSegment(plainTranslation);
-                preTranslate.TranslationSegment = translation;
+                var plainTranslation = preTranslate.PlainTranslation;
+                if (plainTranslation == null) continue;
+
+                var translation = new Segment(_languageDirection.TargetCulture);
+                var sourceSegment = preTranslate.TranslationUnit.SourceSegment.Duplicate();
+
+                if (sourceSegment.HasTags && !_options.SendPlainText)
+                {
+                    var tagPlacer = new DeepLTranslationProviderTagPlacer(sourceSegment);
+                    translation = tagPlacer.GetTaggedSegment(plainTranslation);
+                    preTranslate.TranslationSegment = translation;
+                }
+                else translation.Add(plainTranslation);
+
+                var searchResult = CreateSearchResult(sourceSegment, translation);
+                var results = new SearchResults
+                {
+                    SourceSegment = sourceSegment
+                };
+                results.Add(searchResult);
+
+                var index = preTranslateList.IndexOf(preTranslate);
+                resultsList.RemoveAt(index);
+                resultsList.Insert(index, results);
             }
-            else translation.Add(plainTranslation);
 
-            var searchResult = CreateSearchResult(sourceSegment, translation);
-            var results = new SearchResults
-            {
-                SourceSegment = sourceSegment
-            };
-            results.Add(searchResult);
-            return results;
+            return resultsList;
         }
-
-        //private List<SearchResults> GetPreTranslationSearchResults(List<PreTranslateSegment> preTranslateList)
-        //{
-        //    var resultsList = new List<SearchResults>(preTranslateList.Capacity);
-
-        //    for (var i = 0; i < resultsList.Capacity; i++) resultsList.Add(null);
-
-        //    foreach (var preTranslate in preTranslateList.Where(preTranslate => preTranslate != null))
-        //    {
-        //        var plainTranslation = preTranslate.PlainTranslation;
-        //        if (plainTranslation == null) continue;
-
-        //        var translation = new Segment(_languageDirection.TargetCulture);
-        //        var sourceSegment = preTranslate.TranslationUnit.SourceSegment.Duplicate();
-
-        //        if (sourceSegment.HasTags && !_options.SendPlainText)
-        //        {
-        //            var tagPlacer = new DeepLTranslationProviderTagPlacer(sourceSegment);
-        //            translation = tagPlacer.GetTaggedSegment(plainTranslation);
-        //            preTranslate.TranslationSegment = translation;
-        //        }
-        //        else translation.Add(plainTranslation);
-
-        //        var searchResult = CreateSearchResult(sourceSegment, translation);
-        //        var results = new SearchResults
-        //        {
-        //            SourceSegment = sourceSegment
-        //        };
-        //        results.Add(searchResult);
-
-        //        var index = preTranslateList.IndexOf(preTranslate);
-        //        resultsList.RemoveAt(index);
-        //        resultsList.Insert(index, results);
-        //    }
-
-        //    return resultsList;
-        //}
 
         private string LookupDeepL(string sourceText) =>
             _connecter.Translate(_languageDirection, sourceText,
@@ -284,50 +236,37 @@ namespace Sdl.Community.DeepLMTProvider.Studio
                     _options.PreserveFormatting,
                     _options.IgnoreTagsParameter));
 
-        //private List<PreTranslateSegment> TranslateSegments(List<PreTranslateSegment> preTranslateSegments)
-        //{
-        //    try
-        //    {
-        //        foreach (var segment in preTranslateSegments.Where(segment => segment != null))
-        //        {
-        //            var newSeg = segment.TranslationUnit.SourceSegment.Duplicate();
+        private List<PreTranslateSegment> TranslateSegments(List<PreTranslateSegment> preTranslateSegments)
+        {
+            try
+            {
+                foreach (var segment in preTranslateSegments.Where(segment => segment != null))
+                {
+                    var newSeg = segment.TranslationUnit.SourceSegment.Duplicate();
 
-        //            var sourceText = ApplyBeforeTranslationSettings(newSeg);
-        //            segment.SourceText = sourceText;
-        //        }
+                    var sourceText = ApplyBeforeTranslationSettings(newSeg);
 
-        //        Parallel.ForEach(preTranslateSegments, segment =>
-        //        {
-        //            if (segment == null) return;
-        //            var plainTranslation = string.Empty;
-        //            if (
-        //             !_options.ResendDraft &&
-        //             segment.TranslationUnit.ConfirmationLevel != ConfirmationLevel.Unspecified)
-        //            {
-        //                var segmentPair = segment.TranslationUnit.DocumentSegmentPair;
-        //                var translationOrigin = segmentPair.Properties.TranslationOrigin;
-        //                if (translationOrigin.OriginSystem == _deepLMtTranslationProvider.Name)
-        //                {
-        //                    plainTranslation = segment.TranslationUnit.TargetSegment.ToPlain();
-        //                }
-        //                var origin = translationOrigin.OriginSystem;
-        //            }
-        //            else
-        //            {
-        //                plainTranslation = LookupDeepL(segment.SourceText);
-        //            }
+                    segment.SourceText = sourceText;
+                }
 
-        //            segment.PlainTranslation = plainTranslation;
-        //        });
+                Parallel.ForEach(preTranslateSegments, segment =>
+                {
+                    if (segment == null) return;
 
-        //        return preTranslateSegments;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        _logger.Error($"{e.Message}\n {e.StackTrace}");
-        //    }
+                    if (_options.ResendDraft || segment.TranslationUnit.ConfirmationLevel == ConfirmationLevel.Unspecified)
+                    {
+                        segment.PlainTranslation = LookupDeepL(segment.SourceText);
+                    }
+                });
 
-        //    return preTranslateSegments;
-        //}
+                return preTranslateSegments;
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"{e.Message}\n {e.StackTrace}");
+            }
+
+            return preTranslateSegments;
+        }
     }
 }
