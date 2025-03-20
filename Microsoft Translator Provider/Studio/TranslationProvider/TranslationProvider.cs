@@ -6,15 +6,16 @@ using MicrosoftTranslatorProvider.Model;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using MicrosoftTranslatorProvider.Interface;
 
 namespace MicrosoftTranslatorProvider
 {
-	public class TranslationProvider : ITranslationProvider
+    public class TranslationProvider : ITranslationProvider, ITranslationProviderExtension
 	{
-
-		public TranslationProvider(ITranslationOptions translationOptions)
+        public TranslationProvider(ITranslationOptions translationOptions)
 		{
 			TranslationOptions = translationOptions;
+			SetSupportedLanguages();
 		}
 
 		public string Name => TranslationOptions.ProviderName;
@@ -63,7 +64,9 @@ namespace MicrosoftTranslatorProvider
 
 		public bool SupportsWordCounts => false;
 
-		public bool SupportsLanguageDirection(LanguagePair languageDirection)
+        public Dictionary<string, string> LanguagesSupported { get; set; } = new Dictionary<string, string>();
+
+        public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
 			if (TranslationOptions.AuthenticationType == AuthenticationType.PrivateEndpoint)
 			{
@@ -98,5 +101,25 @@ namespace MicrosoftTranslatorProvider
 		}
 
 		public void RefreshStatusInfo() { }
+
+		private void SetSupportedLanguages()
+		{
+			var options = TranslationOptions;
+			var pairModels = options.PairModels;
+			var name = PluginResources.Microsoft_ShortName;
+
+            foreach (var pairModel in pairModels)
+            {
+				var languagePair = pairModel.TradosLanguagePair;
+                var targetLanguage = languagePair.TargetCulture.RegionNeutralName.ToUpper();
+                if (!LanguagesSupported.ContainsKey(targetLanguage))
+                {
+                    if (!LanguagesSupported.ContainsKey(languagePair.TargetCultureName))
+                    {
+                        LanguagesSupported.Add(languagePair.TargetCultureName, name);
+                    }
+                }
+            }
+        }
 	}
 }

@@ -73,7 +73,7 @@
 								<Button Content="Update"
 										Style="{StaticResource TransparentButtonStyle}"
 										Command="{Binding ResetAndIdentifyPairsCommand}"
-                                        IsEnabled="{Binding ConfigureLanguages}"
+                                        IsEnabled="{Binding TranslationOptions.ProviderSettings.ConfigureLanguages}"
                                         CommandParameter="Update"
                                         Foreground="#FF008080"
 										FontWeight="DemiBold"
@@ -88,7 +88,7 @@
 								<Button Content="Reset to default"
 										Style="{StaticResource TransparentButtonStyle}"
 										Command="{Binding ResetAndIdentifyPairsCommand}"
-                                        IsEnabled="{Binding ConfigureLanguages}"
+                                        IsEnabled="{Binding TranslationOptions.ProviderSettings.ConfigureLanguages}"
                                         CommandParameter="Reset to default"
                                         Foreground="#FF008080"
 										FontWeight="DemiBold"
@@ -103,7 +103,7 @@
 								  ItemsSource="{Binding PairModels}"
 								  Background="#ffffff"
 								  AlternationCount="2"
-                                  IsEnabled="{Binding ConfigureLanguages}"
+                                  IsEnabled="{Binding TranslationOptions.ProviderSettings.ConfigureLanguages}"
                                   Focusable="False">
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
@@ -167,7 +167,7 @@
 													 AutomationProperties.Name="Category ID"
 													 Text="{Binding Model, UpdateSourceTrigger=PropertyChanged}"
 													 Style="{StaticResource WatermarkTextBox}"
-                                                     IsEnabled="{Binding ConfigureLanguages}"
+                                                     IsEnabled="{Binding TranslationOptions.ProviderSettings.ConfigureLanguages}"
                                                      controls:WatermarkTextBox.WatermarkText="Category ID..."
 													 controls:WatermarkTextBox.ButtonCommand="{Binding ClearCommand}"
 													 controls:WatermarkTextBox.ButtonCommandParameter="{controls:NameOf Member=Model, Type={x:Type models:PairModel}}"
@@ -234,7 +234,7 @@
 										BorderThickness="0 1 1 0"
 										Height="24"
 										Padding="4 0">
-									<TextBlock Text="Target"
+									<TextBlock Text="Source"
 											   VerticalAlignment="Center"
 											   FontWeight="DemiBold"
 											   FontSize="11" />
@@ -246,7 +246,7 @@
 										BorderThickness="0 1 1 0"
 										Height="24"
 										Padding="4 0">
-									<TextBlock Text="Source"
+									<TextBlock Text="Target"
 											   VerticalAlignment="Center"
 											   FontWeight="DemiBold"
 											   FontSize="11" />
