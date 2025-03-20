@@ -308,6 +308,15 @@ namespace MicrosoftTranslatorProvider {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Microsoft Translator.
+        /// </summary>
+        public static string Microsoft_ShortName {
+            get {
+                return ResourceManager.GetString("Microsoft_ShortName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Microsoft Translator Provider.
         /// </summary>
         public static string Microsoft_Tooltip {

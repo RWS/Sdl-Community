@@ -1,25 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MicrosoftTranslatorProvider.Extensions;
 using MicrosoftTranslatorProvider.Interfaces;
 using MicrosoftTranslatorProvider.Model;
 using MicrosoftTranslatorProvider.Studio.TranslationProvider;
+using MicrosoftTranslatorProvider.Interface;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace MicrosoftTranslatorProvider
 {
-	public class Provider : ITranslationProvider
+    public class Provider : ITranslationProvider, ITranslationProviderExtension
 	{
 		private MicrosoftApi _providerConnector;
 
 		public Provider(ITranslationOptions options)
 		{
 			Options = options;
-		}
+            LanguagesSupported = Options.LanguagesSupported.ToDictionary(lang => lang, lang => PluginResources.Microsoft_ShortName);
+        }
 
-		public string Name
+        public string Name
 		{
 			get
 			{
@@ -76,7 +79,9 @@ namespace MicrosoftTranslatorProvider
 
 		public bool SupportsWordCounts => false;
 
-		public bool SupportsLanguageDirection(LanguagePair languageDirection)
+        public Dictionary<string, string> LanguagesSupported { get; set; } = new Dictionary<string, string>();
+
+        public bool SupportsLanguageDirection(LanguagePair languageDirection)
 		{
 			if (Options.UsePrivateEndpoint)
 			{

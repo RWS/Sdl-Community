@@ -359,4 +359,7 @@ It must be the same region you selected when you signed up for your multi-servic
   <data name="mstp_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\mstp-icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Microsoft_ShortName" xml:space="preserve">
+    <value>Microsoft Translator</value>
+  </data>
 </root>
