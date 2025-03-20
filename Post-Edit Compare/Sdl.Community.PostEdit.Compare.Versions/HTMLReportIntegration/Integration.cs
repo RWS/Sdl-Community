@@ -37,16 +37,19 @@ public class Integration
 
     private static StudioActionExecutor StudioActionExecutor { get; } = new();
 
-    public static void EditReportFolderList()
+    public static async Task EditReportFolderList()
     {
+        ReportViewController.ShowLoadingScreen();
         ReportFolderExplorer = new ReportFolderExplorer { ReportFolders = new ObservableCollection<string>(ReportManager.ReportFolders) };
 
         var result = ReportFolderExplorer.ShowDialog();
         if (!result) return;
 
         ReportManager.ReportFolders = ReportFolderExplorer.ReportFolders.ToList();
-        var reports = ReportManager.GetReports();
+        var reports = await ReportManager.GetReports();
+
         ReportViewController.RefreshReportsList(reports);
+        ReportViewController.HideLoadingScreen();
     }
 
     public static async Task ExportReport()
@@ -157,14 +160,16 @@ public class Integration
         ReportManager.SaveReport(reportFromMemory, selectedReport.ReportPath);
     }
 
-    public static void SetUpReportExplorer()
+    public static async Task SetUpReportExplorer()
     {
-        var reports = ReportManager.GetReports();
+        ReportViewController.ShowLoadingScreen();
+        var reports = await ReportManager.GetReports();
         var projects = ProjectsController.GetAllProjects().Select(p => p.GetProjectInfo()).ToList();
         ReportViewController.RefreshLists(projects, reports);
+        ReportViewController.HideLoadingScreen();
     }
 
-    public static void ShowLatestReport()
+    public static async Task ShowLatestReport()
     {
         var dialogResult = MessageBox.Show(
             "Would you like to navigate to the newly created report? This will stop the current project-report synchronization.",
@@ -173,12 +178,17 @@ public class Integration
         if (dialogResult == DialogResult.No) return;
 
         ReportViewController.Activate();
+        ReportViewController.ShowLoadingScreen();
 
-        ToggleReportProjectSync(false);
-        SetUpReportExplorer();
+        //await Task.Delay(100);
 
-        var reports = ReportManager.GetReports();
-        ReportViewController.SelectLatestReport(reports.FirstOrDefault());
+        await ToggleReportProjectSync(false);
+        await SetUpReportExplorer();
+
+        var reports = await ReportManager.GetReports();
+
+        await ReportViewController.SelectLatestReport(reports.FirstOrDefault());
+        ReportViewController.HideLoadingScreen();
     }
 
     public static void ShowReportsView() => ReportViewController.Activate();
@@ -189,7 +199,7 @@ public class Integration
 
         if (syncEnabled)
         {
-            ReportManager.BackUpReport(ReportViewController.GetSelectedReport());
+            await ReportManager.BackUpReport(ReportViewController.GetSelectedReport());
             await RetroSync();
             ConnectEditorListener();
         }

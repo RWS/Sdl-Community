@@ -76,6 +76,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
             }
         }
 
+        public void HideLoadingScreen() => ReportExplorer.HideLoadingScreen();
+
         public void RefreshLists(List<ProjectInfo> projects, List<ReportInfo> reports)
         {
             RefreshProjectList(projects);
@@ -88,7 +90,9 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
             ReportExplorerViewModel.SetReportsList(reports);
         }
 
-        public void SelectLatestReport(ReportInfo report) => ReportExplorerViewModel.SetSelectedReport(report);
+        public async Task SelectLatestReport(ReportInfo report) => await ReportExplorerViewModel.SetSelectedReport(report);
+
+        public void ShowLoadingScreen() => ReportExplorer.ShowLoadingScreen();
 
         public async Task ToggleFilter(SegmentFilter segmentFilter)
         {

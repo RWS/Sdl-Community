@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
+using Task = System.Threading.Tasks.Task;
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.ViewModel;
 
@@ -39,18 +40,21 @@ public class ReportExplorerViewModel : ViewModelBase
         set => SetField(ref _reportGroups, value);
     }
 
-    public void SetSelectedReport(ReportInfo report)
+    public async Task SetSelectedReport(ReportInfo report)
     {
-        foreach (var repGroup in ReportGroups)
+        await Task.Run(() =>
         {
-            foreach (var rep in repGroup.Reports)
+            foreach (var repGroup in ReportGroups)
             {
-                if (rep.ProjectId != report.ProjectId) continue;
-                repGroup.IsExpanded = true;
-                rep.IsSelected = true;
-                return;
+                foreach (var rep in repGroup.Reports)
+                {
+                    if (rep.ProjectId != report.ProjectId) continue;
+                    repGroup.IsExpanded = true;
+                    rep.IsSelected = true;
+                    return;
+                }
             }
-        }
+        });
     }
 
 

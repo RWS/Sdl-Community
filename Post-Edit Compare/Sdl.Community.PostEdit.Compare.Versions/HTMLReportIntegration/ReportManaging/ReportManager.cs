@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DocumentFormat.OpenXml.Office2013.PowerPoint;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging.Components;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
@@ -49,7 +51,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
         private string SettingsFile { get; } =
                             $"{Path.Combine(Constants.PostEditCompareSettingsFolder, "ReportFolders")}.txt";
 
-        public void BackUpReport(ReportInfo selectedReport)
+        public async Task BackUpReport(ReportInfo selectedReport)
         {
             if (selectedReport is null) return;
 
@@ -64,7 +66,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
                 var destinationDirectory = Path.GetDirectoryName(destinationFile);
 
                 if (!Directory.Exists(destinationDirectory)) Directory.CreateDirectory(destinationDirectory);
-                File.Copy(selectedReport.ReportPath, destinationFile);
+                await Task.Run(() => File.Copy(selectedReport.ReportPath, destinationFile));
             }
             catch (IOException ex)
             {
@@ -102,30 +104,35 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
             }
         }
 
-        public List<ReportInfo> GetReports()
+        public async Task<List<ReportInfo>> GetReports()
         {
-            List<string> reportList = [];
-
-            if (ReportFolders.Any())
-                foreach (var reportFolder in ReportFolders)
-                    reportList.AddRange(Directory.GetFiles(reportFolder, "*.html", SearchOption.AllDirectories).ToList());
-
-            reportList = reportList.OrderByDescending(File.GetCreationTime).ToList();
-
             List<ReportInfo> reports = [];
-            foreach (var report in reportList)
+            await Task.Run(() =>
             {
-                var projectId = ExtractProjectIdFromHtml(report);
+                List<string> reportList = [];
 
-                var directoryName = new DirectoryInfo(Path.GetDirectoryName(report) ?? string.Empty).Name;
-                reports.Add(
-                    new ReportInfo
-                    {
-                        ReportName = $@"{directoryName}\\{Path.GetFileName(report)}",
-                        ReportPath = report,
-                        ProjectId = projectId
-                    });
-            }
+                if (ReportFolders.Any())
+                    foreach (var reportFolder in ReportFolders)
+                        reportList.AddRange(Directory.GetFiles(reportFolder, "*.html", SearchOption.AllDirectories)
+                            .ToList());
+
+                reportList = reportList.OrderByDescending(File.GetCreationTime).ToList();
+
+                reports = [];
+                foreach (var report in reportList)
+                {
+                    var projectId = ExtractProjectIdFromHtml(report);
+
+                    var directoryName = new DirectoryInfo(Path.GetDirectoryName(report) ?? string.Empty).Name;
+                    reports.Add(
+                        new ReportInfo
+                        {
+                            ReportName = $@"{directoryName}\\{Path.GetFileName(report)}",
+                            ReportPath = report,
+                            ProjectId = projectId
+                        });
+                }
+            });
 
             return reports;
         }

@@ -24,7 +24,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/WindowsBorder.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/TreeView.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/Buttons.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/ButtonsStyle.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/ButtonsStyle.xaml" />pr
                 <ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/ComboboStyle.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/WindowsBorder.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Reports.Viewer.Plus;component/Styles/WindowsBorder.xaml" />

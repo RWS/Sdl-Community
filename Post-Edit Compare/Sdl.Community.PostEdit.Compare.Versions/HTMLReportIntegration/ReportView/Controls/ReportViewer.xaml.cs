@@ -171,7 +171,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             {
                 ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
             });
-            //TODO add ID to segments
+
             var functionName = addReplace.HasFlag(AddReplace.Replace)
                 ? "replaceCommentsForSegment"
                 : "addCommentsForSegment";
