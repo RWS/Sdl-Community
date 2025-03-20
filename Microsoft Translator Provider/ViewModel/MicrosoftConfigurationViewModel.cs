@@ -31,7 +31,7 @@ namespace MicrosoftTranslatorProvider.ViewModel
 
 		public ITranslationOptions TranslationOptions { get; private set; }
 
-        public ObservableCollection<PairModel> PairModels { get; private set; }
+        public ObservableCollection<PairModel> PairModels { get; private set; } = new ObservableCollection<PairModel>();
 
 		public string LoadingAction
 		{

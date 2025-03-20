@@ -8,7 +8,7 @@ namespace MicrosoftTranslatorProvider.Model
 {
 	public class PairModel : BaseViewModel
     {
-		ICommand _clearCommand;
+		//ICommand _clearCommand;
 
 		string _sourceLanguageCode;
 		string _targetLanguageCode;
@@ -54,7 +54,7 @@ namespace MicrosoftTranslatorProvider.Model
 			}
 		}
 
-		public ICommand ClearCommand => _clearCommand ??= new RelayCommand(Clear);
+		public ICommand ClearCommand => new RelayCommand(Clear);
 
 		public PairModel Clone()
 		{

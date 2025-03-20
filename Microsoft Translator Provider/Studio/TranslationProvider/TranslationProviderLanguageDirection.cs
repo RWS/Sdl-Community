@@ -54,8 +54,6 @@ namespace MicrosoftTranslatorProvider
 			var searchResults = new SearchResults { SourceSegment = segment.Duplicate() };
 			if (!_translationOptions.ProviderSettings.ResendDrafts && _currentTranslationUnit.ConfirmationLevel != ConfirmationLevel.Unspecified)
 			{
-				translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
-				searchResults.Add(CreateSearchResult(segment, translation));
 				return searchResults;
 			}
 
