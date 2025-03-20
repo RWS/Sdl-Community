@@ -1,4 +1,56 @@
-﻿function getProjectId() {
+﻿function getComments() {
+    const segments = [];
+
+    const rows = document.querySelectorAll('table tr[data-file-id]');
+
+    rows.forEach(row => {
+        const segmentId = row.querySelector('td:first-child')?.textContent.trim();
+        const fileId = row.getAttribute('data-file-id');
+        const projectId = row.getAttribute('data-project-id');
+
+        const comments = [];
+
+        const commentCell = row.querySelector('td:nth-last-child(1)');
+        if (commentCell) {
+            const commentDivs = commentCell.querySelectorAll(':scope > div');
+
+            commentDivs.forEach(div => {
+                const infoDiv = div.querySelector('div');
+                const spans = infoDiv?.querySelectorAll('span') || [];
+
+                const severity = spans[0]?.textContent.trim() || '';
+                const date = spans[1]?.textContent.trim() || '';
+                const author = spans[2]?.textContent.trim() || '';
+                const text = div.querySelector('p')?.textContent.trim() || '';
+
+                if (severity || date || author || text) {
+                    comments.push({
+                        severity,
+                        date,
+                        author,
+                        text
+                    });
+                }
+            });
+        }
+
+        if (segmentId) {
+            segments.push({
+                segmentId,
+                fileId,
+                projectId,
+                comments
+            });
+        }
+    });
+
+    return segments;
+}
+
+
+
+
+function getProjectId() {
     const row = document.querySelector('table tr[data-project-id]');
 
     if (row) {

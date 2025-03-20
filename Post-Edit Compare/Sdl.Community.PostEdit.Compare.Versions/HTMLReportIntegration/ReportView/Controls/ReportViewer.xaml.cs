@@ -1,6 +1,7 @@
 ﻿using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Sdl.Community.PostEdit.Compare.Core.Reports;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Utilities;
@@ -35,6 +36,20 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
         {
         }
 
+        public async Task<List<SegmentComments>> GetAllComments()
+        {
+            try
+            {
+                var result = await WebView2Browser.ExecuteScriptAsync("getComments();");
+                var reportSegments = JsonConvert.DeserializeObject<List<SegmentComments>>(result);
+                return reportSegments;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error retrieving the comments from the HTML report: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+        }
         public async Task<List<ReportSegment>> GetAllSegments()
         {
             try
@@ -45,7 +60,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error retrieving the segments of the HTML report: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error retrieving the segments from the HTML report: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
         }
@@ -156,7 +171,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             {
                 ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
             });
-
+            //TODO add ID to segments
             var functionName = addReplace.HasFlag(AddReplace.Replace)
                 ? "replaceCommentsForSegment"
                 : "addCommentsForSegment";
@@ -261,5 +276,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
                 MessageBox.Show(ex.Message);
             }
         }
+
+        
     }
 }

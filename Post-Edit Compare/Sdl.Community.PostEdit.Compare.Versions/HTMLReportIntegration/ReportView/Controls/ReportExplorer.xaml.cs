@@ -12,6 +12,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
     {
         public ReportExplorer()
         {
+            //TODO Progress ring while loading. Improve loading speed
             InitializeComponent();
         }
 

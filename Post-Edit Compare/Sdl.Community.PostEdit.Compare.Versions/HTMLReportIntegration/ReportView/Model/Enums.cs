@@ -1,20 +1,15 @@
 ﻿using Sdl.Community.PostEdit.Compare.Core.Reports;
+using Sdl.Core.Globalization;
 using System;
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model
 {
-    [Flags]
-    public enum Statuses
+    public enum AddReplace
     {
-        NotTranslated = 1,
-        Draft = 2,
-        Translated = 4,
-        TranslationRejected = 8,
-        TranslationApproved = 16,
-        SignOffRejected = 32,
-        SignedOff = 64
+        Add,
+        Replace
     }
-    
+
     [Flags]
     public enum MatchTypes
     {
@@ -32,21 +27,36 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model
         And
     }
 
-    public enum AddReplace
+    [Flags]
+    public enum Statuses
     {
-        Add,
-        Replace
+        NotTranslated = 1,
+        Draft = 2,
+        Translated = 4,
+        TranslationRejected = 8,
+        TranslationApproved = 16,
+        SignOffRejected = 32,
+        SignedOff = 64
     }
 
     public class EnumHelper
     {
-        public static bool TryGetStatus(string enumValue, out Statuses status) 
+        public static string GetFriendlyStatusString(string statusString) =>
+            ReportUtils.GetVisualSegmentStatus(statusString);
+
+        public static bool TryGetConfirmationLevel(string friendlyStatus, out ConfirmationLevel confirmationLevel)
+        {
+            if (Enum.TryParse(friendlyStatus, out confirmationLevel)) return true;
+            if (!TryGetStatus(friendlyStatus, out var status)) return false;
+
+            confirmationLevel = (ConfirmationLevel)Math.Log((double)status, 2);
+            return true;
+        }
+
+        public static bool TryGetStatus(string enumValue, out Statuses status)
         {
             enumValue = enumValue.Replace(" ", "").Replace("-", "");
             return Enum.TryParse(enumValue, true, out status);
         }
-
-        public static string GetFriendlyStatusString(string statusString) =>
-            ReportUtils.GetVisualSegmentStatus(statusString);
     }
 }

@@ -19,6 +19,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 {
+    //TODO Investigate taking the window out and moving it on the screen (maybe just the WPF window itself could do that)
     [View(
         Id = "PostEdit.ReportViewer",
         Name = "Post-Edit Report Viewer",
@@ -31,9 +32,26 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
     {
         private ReportExplorer ReportExplorer { get; set; }
         private ReportExplorerViewModel ReportExplorerViewModel { get; set; }
-        private ReportViewFilterController ReportViewFilterController =>
-            SdlTradosStudio.Application.GetController<ReportViewFilterController>();
         private ReportViewer ReportViewer { get; set; }
+
+        private ReportViewFilterController ReportViewFilterController =>
+                    SdlTradosStudio.Application.GetController<ReportViewFilterController>();
+
+        public async Task<List<SegmentComments>> GetAllComments() => await ReportViewer.GetAllComments();
+
+        public async Task<List<StatusInfo>> GetAllStatuses()
+        {
+            var projectId = await GetProjectId();
+            var segments = await GetAllSegments();
+
+            return segments.Select(seg => new StatusInfo
+            {
+                FileId = seg.FileId,
+                ProjectId = projectId,
+                SegmentId = seg.SegmentId,
+                Status = seg.Status
+            }).ToList();
+        }
 
         public async Task<string> GetLoadedReport() => await ReportViewer.GetLoadedReport();
 
@@ -52,7 +70,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
                     break;
 
                 case UpdateCommentsMessage updateCommentsMessage:
-                    await UpdateComment(updateCommentsMessage.Comment, updateCommentsMessage.Severity,
+                    await UpdateCommentWoSync(updateCommentsMessage.Comment, updateCommentsMessage.Severity,
                         updateCommentsMessage.SegmentId, updateCommentsMessage.FileId);
                     break;
             }
@@ -74,7 +92,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 
         public async Task ToggleFilter(SegmentFilter segmentFilter)
         {
-            var segments = await ReportViewer.GetAllSegments();
+            var segments = await GetAllSegments();
             if (!segmentFilter.IsEmpty)
             {
                 ReportExplorer.IsEnabled = false;
@@ -141,7 +159,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
                 await ReportViewer.Navigate(ReportExplorer.SelectedReport?.ReportPath);
                 await Task.Delay(500);
 
-                var projectId = await ReportViewer.GetProjectId();
+                var projectId = await GetProjectId();
                 Integration.InitializeReportFilter(projectId);
             }
             catch (Exception e)
@@ -150,6 +168,10 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
                 ErrorHandler.ShowError($"Error loading the selected report: {e.Message}");
             }
         }
+
+        private async Task<List<ReportSegment>> GetAllSegments() => await ReportViewer.GetAllSegments();
+
+        private async Task<string> GetProjectId() => await ReportViewer.GetProjectId();
 
         private void InitializeControls()
         {
@@ -167,7 +189,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
             ReportExplorerViewModel.SetProjectsList(projects);
         }
 
-        private async Task UpdateComment(string comment, string severity, string segmentId, string fileId)
+        private async Task UpdateCommentWoSync(string comment, string severity, string segmentId, string fileId)
         {
             await ReportViewer.UpdateComments([new CommentInfo
                 {

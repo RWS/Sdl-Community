@@ -1,4 +1,5 @@
-﻿using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Messaging;
+﻿using Sdl.Community.PostEdit.Versions.Extension;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Messaging;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Utilities;
 using Sdl.DesktopEditor.EditorApi;
@@ -70,13 +71,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
 
             CurrentComments = (comments, activeSegmentPair);
 
-            var commentInfo = comments?.Select(c => new CommentInfo
-            {
-                Author = c.Author,
-                Date = c.Date.ToString(MessagingConstants.DateFormat),
-                Text = c.Text,
-                Severity = c.Severity.ToString()
-            }).ToList();
+            var commentInfo = comments.ToCommentInfoList();
 
             CommentsChanged?.Invoke(commentInfo, activeSegmentPair.Properties.Id.ToString(),
                 AppInitializer.GetActiveFileId());

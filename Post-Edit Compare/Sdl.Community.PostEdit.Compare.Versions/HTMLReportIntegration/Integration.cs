@@ -1,11 +1,12 @@
 ﻿using Newtonsoft.Json.Linq;
 using Sdl.Community.PostEdit.Compare.Core.Helper;
+using Sdl.Community.PostEdit.Versions.Comparer;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Messaging;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Controls;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon;
-using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Components;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System;
@@ -23,19 +24,18 @@ public class Integration
     private static ReportViewController _reportViewController;
 
     public static bool IsSyncOn => SdlTradosStudio.Application.GetAction<SyncReportProjectOn>().Checked;
-
+    public static ReportManager ReportManager { get; } = new();
     private static EditorEventListener EditorEventListener { get; } = new();
 
     private static ProjectsController ProjectsController =>
         SdlTradosStudio.Application.GetController<ProjectsController>();
 
     private static ReportFolderExplorer ReportFolderExplorer { get; set; }
-    public static ReportManager ReportManager { get; } = new();
 
     private static ReportViewController ReportViewController => _reportViewController ??=
         SdlTradosStudio.Application.GetController<ReportViewController>();
 
-    private static StudioController StudioController { get; } = new();
+    private static StudioActionExecutor StudioActionExecutor { get; } = new();
 
     public static void EditReportFolderList()
     {
@@ -93,11 +93,30 @@ public class Integration
                 await ReportViewController.HandleReportRequestWithoutSync(messageObject);
                 await SaveReport();
             }
-            else StudioController.HandleReportRequest(messageObject);
+            else HandleReportRequest(messageObject);
         }
         catch (Exception ex)
         {
             ErrorHandler.ShowError(ex);
+        }
+    }
+
+    public static void HandleReportRequest(JObject messageObject)
+    {
+        var message = SyncMessage.Create(messageObject);
+        switch (message)
+        {
+            case NavigateMessage navigateMessage:
+                StudioActionExecutor.NavigateToSegment(navigateMessage.SegmentId, navigateMessage.FileId, navigateMessage.ProjectId);
+                break;
+
+            case UpdateStatusMessage updateStatusMessage:
+                StudioActionExecutor.ChangeStatusOfSegment(updateStatusMessage.NewStatus, updateStatusMessage.SegmentId, updateStatusMessage.FileId, updateStatusMessage.ProjectId);
+                break;
+
+            case UpdateCommentsMessage updateCommentsMessage:
+                StudioActionExecutor.AddComment(updateCommentsMessage.Comment, updateCommentsMessage.Severity, updateCommentsMessage.SegmentId, updateCommentsMessage.FileId, updateCommentsMessage.ProjectId);
+                break;
         }
     }
 
@@ -164,13 +183,14 @@ public class Integration
 
     public static void ShowReportsView() => ReportViewController.Activate();
 
-    public static void ToggleReportProjectSync(bool syncEnabled)
+    public static async Task ToggleReportProjectSync(bool syncEnabled)
     {
         if (ReportViewController.GetSelectedReport() == null) return;
 
         if (syncEnabled)
         {
             ReportManager.BackUpReport(ReportViewController.GetSelectedReport());
+            await RetroSync();
             ConnectEditorListener();
         }
         else
@@ -223,5 +243,46 @@ public class Integration
         {
             ErrorHandler.ShowError(e);
         }
+    }
+
+    private static async Task RetroSync()
+    {
+        await RetroSyncComments();
+        await RetroSyncStatuses();
+    }
+
+    private static async Task RetroSyncComments()
+    {
+        var commentTextComparer = new CommentTextComparer();
+        var htmlComments = await ReportViewController.GetAllComments();
+        var htmlFileGroupedComments = htmlComments.GroupBy(c => c.FileId);
+        foreach (var htmlFileComments in htmlFileGroupedComments)
+        {
+            foreach (var htmlSegmentComments in htmlFileComments)
+            {
+                var editorComments = StudioActionExecutor.GetEditorComments(htmlSegmentComments.SegmentId, htmlSegmentComments.FileId,
+                    htmlSegmentComments.ProjectId);
+
+                var notInEditorComments = htmlSegmentComments.Comments.Except(editorComments, commentTextComparer);
+
+                StudioActionExecutor.AddCommentsToEditorSegment(notInEditorComments, htmlSegmentComments.SegmentId, htmlSegmentComments.FileId,
+                    htmlSegmentComments.ProjectId);
+
+                var notInHtmlReportComments =
+                    editorComments.Except(htmlSegmentComments.Comments, commentTextComparer);
+
+                htmlSegmentComments.Comments = htmlSegmentComments.Comments
+                    .Union(notInHtmlReportComments, commentTextComparer).ToList();
+
+                await ReportViewController.UpdateComments(htmlSegmentComments.Comments, htmlSegmentComments.SegmentId,
+                    htmlSegmentComments.FileId);
+            }
+        }
+    }
+
+    private static async Task RetroSyncStatuses()
+    {
+        var statuses = await ReportViewController.GetAllStatuses();
+        StudioActionExecutor.ChangeStatusOfEditorSegments(statuses);
     }
 }

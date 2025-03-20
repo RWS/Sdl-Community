@@ -1,4 +1,6 @@
 ﻿using Sdl.Community.PostEdit.Compare.Core.Helper;
+using Sdl.Community.PostEdit.Versions.Extension;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
@@ -38,6 +40,21 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
             }
         }
 
+        public void AddCommentsToEditorSegment(IEnumerable<CommentInfo> comments, string segmentId,
+                    string fileId, string projectId)
+        {
+            foreach (var comment in comments)
+                AddComment(comment.Text, comment.Severity,
+                    segmentId, fileId, projectId);
+        }
+
+        public void ChangeStatusOfEditorSegments(List<StatusInfo> statuses)
+        {
+            foreach (var status in statuses)
+                ChangeStatusOfSegment(status.Status, status.SegmentId,
+                    status.FileId, status.ProjectId);
+        }
+
         public void ChangeStatusOfSegment(string status, string segmentId, string fileId, string projectId)
         {
             try
@@ -51,6 +68,29 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
             {
                 MessageBox.Show(ex.Message, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+        }
+
+        public List<CommentInfo> GetEditorComments(string segmentId, string fileId, string projectId)
+        {
+            IEnumerable<IComment> comments = [];
+            try
+            {
+                var fileBasedProject = OpenProject(projectId);
+                var projectFile = OpenFile(fileId, fileBasedProject);
+                EditorController.ActiveDocument.SetActiveSegmentPair(projectFile, segmentId);
+
+                var segmentPair = EditorController.ActiveDocument.GetActiveSegmentPair();
+                segmentPair ??=
+                    EditorController.ActiveDocument.SegmentPairs.FirstOrDefault(sp => sp.Properties.Id.Id == segmentId);
+
+                comments = EditorController.ActiveDocument.GetCommentsFromSegment(segmentPair) ?? [];
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
+            return comments.ToCommentInfoList();
         }
 
         public void NavigateToSegment(string segmentId, string fileId, string projectId)
@@ -71,7 +111,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
 
         private void ChangeStatusOfSegment(string statusString, ISegmentPair segmentPair)
         {
-            if (!Enum.TryParse<ConfirmationLevel>(statusString, out var confirmationStatus))
+            if (!EnumHelper.TryGetConfirmationLevel(statusString, out var confirmationStatus))
                 confirmationStatus = OriginalStatuses[segmentPair.Properties.Id.Id];
 
             if (!OriginalStatuses.ContainsKey(segmentPair.Properties.Id.Id))
