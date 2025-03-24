@@ -12,11 +12,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
     {
         public static readonly DependencyProperty IsLoadingProperty = DependencyProperty.Register(nameof(IsLoading), typeof(bool), typeof(ReportExplorer), new PropertyMetadata(false));
 
-        public ReportExplorer()
-        {
-            //TODO Progress ring while loading. Improve loading speed
-            InitializeComponent();
-        }
+        public ReportExplorer() => InitializeComponent();
 
         public event Action SelectedReportChanged;
 

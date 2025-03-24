@@ -2,12 +2,8 @@
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Extensions.Internal;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 using System;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
 {
@@ -24,10 +20,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
     [ActionLayout(typeof(SynchronizationRibbonGroup), 10, DisplayType.Large)]
     public class SyncReportProjectOn : AbstractAction
     {
-        public SyncReportProjectOn()
-        {
-            Style = ActionStyle.ToggleButton;
-        }
+        public SyncReportProjectOn() => Style = ActionStyle.ToggleButton;
 
         protected override void Execute() => Integration.ToggleReportProjectSync(Checked);
     }

@@ -2,9 +2,11 @@
 using Sdl.Community.PostEdit.Compare.Core.Helper;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Messaging;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Controls;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Controls.Interface;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Utilities;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.ViewModel;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
@@ -15,11 +17,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using Task = System.Threading.Tasks.Task;
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 {
-    //TODO Investigate taking the window out and moving it on the screen (maybe just the WPF window itself could do that)
     [View(
         Id = "PostEdit.ReportViewer",
         Name = "Post-Edit Report Viewer",
@@ -30,14 +32,18 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
     )]
     public class ReportViewController : AbstractViewController
     {
+        public bool IsDocked => ReportViewer.Visibility == Visibility.Visible;
         private ReportExplorer ReportExplorer { get; set; }
         private ReportExplorerViewModel ReportExplorerViewModel { get; set; }
-        private ReportViewer ReportViewer { get; set; }
+        private IReportViewer CurrentReportViewer => IsDocked ? ReportViewer : ReportViewerWindow;
+        public ReportViewer ReportViewer { get; set; }
+
+        private ReportViewerWindow ReportViewerWindow { get; set; }
 
         private ReportViewFilterController ReportViewFilterController =>
-                    SdlTradosStudio.Application.GetController<ReportViewFilterController>();
+                            SdlTradosStudio.Application.GetController<ReportViewFilterController>();
 
-        public async Task<List<SegmentComments>> GetAllComments() => await ReportViewer.GetAllComments();
+        public async Task<List<SegmentComments>> GetAllComments() => await CurrentReportViewer.GetAllComments();
 
         public async Task<List<StatusInfo>> GetAllStatuses()
         {
@@ -53,9 +59,9 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
             }).ToList();
         }
 
-        public async Task<string> GetLoadedReport() => await ReportViewer.GetLoadedReport();
+        public async Task<string> GetLoadedReport() => await CurrentReportViewer.GetLoadedReport();
 
-        public async Task<string> GetNonInteractiveReport() => await ReportViewer.GetNonInteractiveReport();
+        public async Task<string> GetNonInteractiveReport() => await CurrentReportViewer.GetNonInteractiveReport();
 
         public ReportInfo GetSelectedReport() => ReportExplorer.SelectedReport;
 
@@ -103,29 +109,40 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
 
                 var matchingSegments = SegmentMatcher.GetAllMatchingSegments(segments, segmentFilter);
                 ReportViewFilterController.SetFilteringResultCount(matchingSegments.Count, segments.Count);
-                await ReportViewer.ShowSegments(matchingSegments.Select(seg => (seg.SegmentId, seg.FileId)).ToList());
+                await CurrentReportViewer.ShowSegments(matchingSegments.Select(seg => (seg.SegmentId, seg.FileId)).ToList());
             }
             else
             {
                 if (!Integration.IsSyncOn) ReportExplorer.IsEnabled = true;
                 ReportViewFilterController.SetFilteringResultCount(segments.Count, segments.Count);
-                await ReportViewer.ShowAllSegments();
+                await CurrentReportViewer.ShowAllSegments();
             }
         }
 
         public void ToggleReportExplorer(bool enabled) => ReportExplorer.ToggleOnOff(enabled);
 
+        public async Task UndockReportViewer()
+        {
+            ReportExplorer.IsEnabled = false;
+            CurrentReportViewer.Visibility = Visibility.Collapsed;
+
+            ReportViewerWindow.Show();
+
+            var selectedReport = GetSelectedReport();
+            await ReportViewerWindow.Navigate(selectedReport?.ReportPath);
+        }
+
         public async Task UpdateComments(List<CommentInfo> comments, string segmentId, string fileId) =>
-            await ReportViewer.UpdateComments(comments, segmentId, fileId);
+                    await CurrentReportViewer.UpdateComments(comments, segmentId, fileId);
 
         public async Task UpdateStatus(string newStatus, string segmentId, string fileId)
         {
             newStatus = EnumHelper.GetFriendlyStatusString(newStatus);
             if (newStatus == "Unknown") return;
-            await ReportViewer.UpdateStatus(newStatus, segmentId, fileId);
+            await CurrentReportViewer.UpdateStatus(newStatus, segmentId, fileId);
         }
 
-        protected override IUIControl GetContentControl() => ReportViewer;
+        protected override IUIControl GetContentControl() => CurrentReportViewer;
 
         protected override IUIControl GetExplorerBarControl() => ReportExplorer;
 
@@ -140,6 +157,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
         {
             ReportExplorer.SelectedReportChanged += Explorer_SelectedReportChanged;
             ReportViewer.WebMessageReceived += WebView2Browser_WebMessageReceived;
+            ReportViewerWindow.WebMessageReceived += WebView2Browser_WebMessageReceived;
+            ReportViewerWindow.Hidden += ReportViewerWindow_Closed;
         }
 
         private async void Explorer_SelectedReportChanged()
@@ -160,7 +179,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
                     ReportViewFilterController.ReportViewFilter.IsEnabled = false;
                 }
 
-                await ReportViewer.Navigate(ReportExplorer.SelectedReport?.ReportPath);
+                await CurrentReportViewer.Navigate(ReportExplorer.SelectedReport?.ReportPath);
                 await Task.Delay(500);
 
                 var projectId = await GetProjectId();
@@ -173,18 +192,17 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
             }
         }
 
-        private async Task<List<ReportSegment>> GetAllSegments() => await ReportViewer.GetAllSegments();
+        private async Task<List<ReportSegment>> GetAllSegments() => await CurrentReportViewer.GetAllSegments();
 
-        private async Task<string> GetProjectId() => await ReportViewer.GetProjectId();
+        private async Task<string> GetProjectId() => await CurrentReportViewer.GetProjectId();
 
         private void InitializeControls()
         {
             ReportViewer = new ReportViewer();
+            ReportViewerWindow = new ReportViewerWindow();
+
             ReportExplorerViewModel = new ReportExplorerViewModel();
-            ReportExplorer = new ReportExplorer
-            {
-                DataContext = ReportExplorerViewModel
-            };
+            ReportExplorer = new ReportExplorer { DataContext = ReportExplorerViewModel };
         }
 
         private void RefreshProjectList(List<ProjectInfo> projects)
@@ -193,9 +211,17 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
             ReportExplorerViewModel.SetProjectsList(projects);
         }
 
+        private async void ReportViewerWindow_Closed()
+        {
+            ReportViewer.Visibility = Visibility.Visible;
+            await CurrentReportViewer.Navigate(ReportExplorer.SelectedReport?.ReportPath);
+            ReportExplorer.IsEnabled = true;
+            SdlTradosStudio.Application.GetAction<UndockReportViewer>().Enabled = true;
+        }
+
         private async Task UpdateCommentWoSync(string comment, string severity, string segmentId, string fileId)
         {
-            await ReportViewer.UpdateComments([new CommentInfo
+            await CurrentReportViewer.UpdateComments([new CommentInfo
                 {
                     Author = Environment.UserName,
                     Date = DateTime.Now.ToString(MessagingConstants.DateFormat),

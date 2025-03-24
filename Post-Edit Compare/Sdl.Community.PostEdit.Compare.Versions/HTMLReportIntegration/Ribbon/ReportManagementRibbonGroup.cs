@@ -24,6 +24,21 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
         protected override void Execute() => Integration.SetUpReportExplorer();
     }
 
+    [Action(nameof(UndockReportViewer),
+        typeof(ReportViewController),
+        Icon = "Undock", Name = "Undock Report Viewer",
+        Description = "Undock Report Viewer")]
+    [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Large)]
+    public class UndockReportViewer : AbstractAction
+    {
+
+        protected override void Execute()
+        {
+            Integration.UndockReportViewer();
+            Enabled = false;
+        }
+    }
+
     [Action(nameof(AddNewReportFolder),
         typeof(ReportViewController),
         Icon = "Settings2", Name = "Report Locations",

@@ -3,6 +3,7 @@ using Microsoft.Web.WebView2.Wpf;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Sdl.Community.PostEdit.Compare.Core.Reports;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Controls.Interface;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Utilities;
 using Sdl.Desktop.IntegrationApi.Interfaces;
@@ -21,7 +22,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
     /// <summary>
     /// Interaction logic for ReportExplorer.xaml
     /// </summary>
-    public partial class ReportViewer : UserControl, IUIControl
+    public partial class ReportViewer : UserControl, IUIControl, IReportViewer
     {
         public ReportViewer()
         {
@@ -225,7 +226,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             WebMessageReceived?.Invoke(sender, e);
         }
 
-        private async Task EnsureBrowserIsLoaded()
+        public async Task EnsureBrowserIsLoaded()
         {
             await WebView2Browser.EnsureCoreWebView2Async(Environment);
         }

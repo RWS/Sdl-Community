@@ -209,10 +209,10 @@ public class Integration
         ReportViewController.ToggleReportExplorer(!syncEnabled);
     }
 
-    public static void ToggleSyncRibbon(bool state)
-    {
+    public static void ToggleSyncRibbon(bool state) =>
         SdlTradosStudio.Application.GetAction<SyncReportProjectOn>().Enabled = state;
-    }
+
+    public static async Task UndockReportViewer() => await ReportViewController.UndockReportViewer();
 
     private static void ConnectEditorListener()
     {
