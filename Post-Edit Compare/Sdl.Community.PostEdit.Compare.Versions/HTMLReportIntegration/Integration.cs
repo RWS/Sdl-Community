@@ -94,9 +94,10 @@ public class Integration
             if (!IsSyncOn && action != "navigate")
             {
                 await ReportViewController.HandleReportRequestWithoutSync(messageObject);
-                await SaveReport();
             }
             else HandleReportRequest(messageObject);
+
+            await SaveReport();
         }
         catch (Exception ex)
         {

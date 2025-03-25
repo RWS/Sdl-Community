@@ -3,6 +3,7 @@ using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Messaging;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Utilities;
 using Sdl.DesktopEditor.EditorApi;
+using Sdl.FileTypeSupport.Framework.Bilingual;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -20,7 +21,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
 
         public event Action<string, string, string> StatusChanged;
 
-        public (List<IComment> Comments, ISegmentPair ActiveSegmentPair) CurrentComments { get; set; }
+        public (List<IComment> Comments, ISegmentPair ActiveSegmentPair) CurrentComments { get; set; } = ([], null);
         private IStudioDocument ActiveDocument { get; set; }
         private EditorController EditorController => SdlTradosStudio.Application.GetController<EditorController>();
         private Timer PollingTimer { get; } = new(500);
@@ -64,10 +65,17 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Studio.Component
             var activeSegmentPair = ActiveDocument.GetActiveSegmentPair();
             if (activeSegmentPair is null) return;
 
-            var comments = ActiveDocument.GetCommentsFromSegment(activeSegmentPair)?.ToList();
+            var comments = ActiveDocument.GetCommentsFromSegment(activeSegmentPair)?.ToList() ?? [];
 
-            if (CurrentComments.Comments == null && comments == null || CurrentComments.Comments != null &&
-                 CurrentComments.Comments.SequenceEqual(comments, new CommentComparer())) return;
+            if (activeSegmentPair.Properties.Id != CurrentComments.ActiveSegmentPair?.Properties.Id)
+            {
+                CurrentComments = (comments, activeSegmentPair);
+                return;
+            }
+
+            if (CurrentComments.Comments == null && comments == null ||
+                CurrentComments.Comments != null &&
+                CurrentComments.Comments.SequenceEqual(comments, new CommentComparer())) return;
 
             CurrentComments = (comments, activeSegmentPair);
 

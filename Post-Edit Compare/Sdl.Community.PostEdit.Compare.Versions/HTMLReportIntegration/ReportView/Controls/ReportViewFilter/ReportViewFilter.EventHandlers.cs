@@ -56,6 +56,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
 
         private void ClearFilterButton_Clicked(object sender, RoutedEventArgs e)
         {
+            RemoveAllFilters();
             FilterExpression_TextBox.Text = "";
             ApplyFilter(new SegmentFilter());
         }
@@ -73,16 +74,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
                 : Visibility.Collapsed;
         }
 
-        private void RemoveAllFiltersButton_Clicked(object sender, RoutedEventArgs e)
-        {
-            Statuses.AddRange(SelectedStatuses.ToList());
-            MatchTypes.AddRange(SelectedMatchTypes.ToList());
-            FuzzyBands.AddRange(SelectedFuzzyBands.ToList());
-
-            SelectedStatuses.Clear();
-            SelectedMatchTypes.Clear();
-            SelectedFuzzyBands.Clear();
-        }
+        private void RemoveAllFiltersButton_Clicked(object sender, RoutedEventArgs e) => RemoveAllFilters();
 
         private void RemoveFilterButton_Clicked(object sender, RoutedEventArgs e)
         {

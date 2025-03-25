@@ -1,4 +1,5 @@
 ﻿using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Converters;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Extension;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using System;
@@ -64,6 +65,17 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
                 FuzzyPercentage = SelectedFuzzyBands.ToList(),
                 Operator = (Operator)OperatorCombobox.SelectedIndex
             };
+        }
+
+        private void RemoveAllFilters()
+        {
+            Statuses.AddRange(SelectedStatuses.ToList());
+            MatchTypes.AddRange(SelectedMatchTypes.ToList());
+            FuzzyBands.AddRange(SelectedFuzzyBands.ToList());
+
+            SelectedStatuses.Clear();
+            SelectedMatchTypes.Clear();
+            SelectedFuzzyBands.Clear();
         }
     }
 }

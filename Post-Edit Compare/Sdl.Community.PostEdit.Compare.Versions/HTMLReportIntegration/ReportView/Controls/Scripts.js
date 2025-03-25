@@ -12,8 +12,7 @@
 
         const commentCell = row.querySelector('td:nth-last-child(1)');
         if (commentCell) {
-            const commentDivs = commentCell.querySelectorAll(':scope > div');
-
+            const commentDivs = commentCell.querySelectorAll('div.comments > div');
             commentDivs.forEach(div => {
                 const infoDiv = div.querySelector('div');
                 const spans = infoDiv?.querySelectorAll('span') || [];

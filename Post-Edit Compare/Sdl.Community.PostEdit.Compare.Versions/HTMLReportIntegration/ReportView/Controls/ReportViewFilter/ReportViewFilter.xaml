@@ -706,7 +706,7 @@
             <Border Grid.Column="0"
                     Grid.Row="1">
                 <StackPanel>
-                    <Expander Header="Statuses"
+                    <Expander Header="Status"
                               IsExpanded="True"
                               Visibility="{Binding ElementName=StatusesListBox, Path=Items.Count, Converter={StaticResource ItemsCountToVisibilityConverter}}"
                               Template="{StaticResource FilterTypeExpanderTemplate}"

@@ -1,7 +1,5 @@
 ﻿using Sdl.Core.Globalization;
 using Sdl.Core.Settings;
-using Sdl.FileTypeSupport.Framework.BilingualApi;
-using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -15,9 +13,6 @@ namespace Sdl.Community.PostEdit.Compare.Core.TrackChangesForReportGeneration.Co
 {
     public static class FileBasedTmHelper
     {
-        public static List<DiffSegment> GetTuWithTrackedChanges(SearchResult searchResult, string source) =>
-            DiffMerger.MergeSegments(searchResult.MemoryTranslationUnit.SourceSegment.ToString(),
-                source);
         public static SearchResult GetMostProbableMatch(SearchResults searchResults, string target, int matchPercent)
         {
             if (searchResults.Count == 0) return null;
@@ -47,8 +42,22 @@ namespace Sdl.Community.PostEdit.Compare.Core.TrackChangesForReportGeneration.Co
             var tmLangDir = GetLanguageDirection(tmPath, sourceLanguage, targetLanguage);
             var minimumScore = GetSettings(currentProject, targetLanguage);
 
-            return tmLangDir.SearchText(new SearchSettings { MinScore = int.Parse(minimumScore.Value) }, source);
+            var hasScore = int.TryParse(minimumScore.Value, out var minScore);
+            return tmLangDir.SearchText(new SearchSettings { MinScore = hasScore ? minScore : 70 }, source);
         }
+
+        public static string GetTmPath(string originSystem, FileBasedProject currentProject)
+        {
+            var segTransOrigName = originSystem;
+            var translationProviderCascadeEntries = currentProject.GetTranslationProviderConfiguration().Entries;
+            var tms = translationProviderCascadeEntries.Select(tm => tm.MainTranslationProvider.Uri.LocalPath).ToList();
+            var tmPath = tms.FirstOrDefault(tm => Path.GetFileNameWithoutExtension(tm) == segTransOrigName);
+            return tmPath;
+        }
+
+        public static List<DiffSegment> GetTuWithTrackedChanges(SearchResult searchResult, string source) =>
+                                    DiffMerger.MergeSegments(searchResult.MemoryTranslationUnit.SourceSegment.ToString(),
+                source);
 
         private static ITranslationMemoryLanguageDirection GetLanguageDirection(string tmPath, Language sourceLanguage,
                             Language targetLanguage)
@@ -64,15 +73,6 @@ namespace Sdl.Community.PostEdit.Compare.Core.TrackChangesForReportGeneration.Co
             var searchSettings = settings.GetSettingsGroup("TranslationMemorySettings");
             var minimumScore = searchSettings.GetSetting<string>("TranslationMinimumMatchValue");
             return minimumScore;
-        }
-
-        public static string GetTmPath(string originSystem, FileBasedProject currentProject)
-        {
-            var segTransOrigName = originSystem;
-            var translationProviderCascadeEntries = currentProject.GetTranslationProviderConfiguration().Entries;
-            var tms = translationProviderCascadeEntries.Select(tm => tm.MainTranslationProvider.Uri.LocalPath).ToList();
-            var tmPath = tms.FirstOrDefault(tm => Path.GetFileNameWithoutExtension(tm) == segTransOrigName);
-            return tmPath;
         }
     }
 }
