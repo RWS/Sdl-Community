@@ -2,9 +2,10 @@
 {
     public class ReportSegment
     {
+        public string FileId { get; set; }
         public string MatchType { get; set; }
+        public string ProjectId { get; set; }
         public string SegmentId { get; set; }
         public string Status { get; set; }
-        public string FileId { get; set; }
     }
 }

@@ -33,17 +33,18 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
     public class ReportViewController : AbstractViewController
     {
         public bool IsDocked => ReportViewer.Visibility == Visibility.Visible;
+        public ReportViewer ReportViewer { get; set; }
+        private IReportViewer CurrentReportViewer => IsDocked ? ReportViewer : ReportViewerWindow;
         private ReportExplorer ReportExplorer { get; set; }
         private ReportExplorerViewModel ReportExplorerViewModel { get; set; }
-        private IReportViewer CurrentReportViewer => IsDocked ? ReportViewer : ReportViewerWindow;
-        public ReportViewer ReportViewer { get; set; }
-
         private ReportViewerWindow ReportViewerWindow { get; set; }
 
         private ReportViewFilterController ReportViewFilterController =>
                             SdlTradosStudio.Application.GetController<ReportViewFilterController>();
 
         public async Task<List<SegmentComments>> GetAllComments() => await CurrentReportViewer.GetAllComments();
+
+        public async Task<List<ReportSegment>> GetAllSegmentsCurrentlyVisible() => await ReportViewer.GetAllSegmentsCurrentlyVisible();
 
         public async Task<List<StatusInfo>> GetAllStatuses()
         {

@@ -28,7 +28,10 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView
         {
             ReportViewFilter = new ReportViewFilter();
             ReportViewFilter.FilterChanged += ReportViewFilter_FilterChanged;
+            ReportViewFilter.ChangeStatusRequested += ReportViewFilter_ChangeStatusRequested;
         }
+
+        private void ReportViewFilter_ChangeStatusRequested(string newStatus) => Integration.ChangeStatusOfVisibleSegments(newStatus);
 
         private void ReportViewFilter_FilterChanged(SegmentFilter segmentFilter) =>
             Integration.FilterSegments(segmentFilter);

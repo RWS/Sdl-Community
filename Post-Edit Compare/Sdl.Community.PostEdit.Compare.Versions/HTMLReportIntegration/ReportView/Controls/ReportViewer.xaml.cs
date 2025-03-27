@@ -1,13 +1,10 @@
 ﻿using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Sdl.Community.PostEdit.Compare.Core.Reports;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Controls.Interface;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Utilities;
 using Sdl.Desktop.IntegrationApi.Interfaces;
-using Sdl.FileTypeSupport.Framework.Bilingual;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -37,6 +34,11 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
         {
         }
 
+        public async Task EnsureBrowserIsLoaded()
+        {
+            await WebView2Browser.EnsureCoreWebView2Async(Environment);
+        }
+
         public async Task<List<SegmentComments>> GetAllComments()
         {
             try
@@ -51,11 +53,27 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
                 return null;
             }
         }
+
         public async Task<List<ReportSegment>> GetAllSegments()
         {
             try
             {
                 var result = await WebView2Browser.ExecuteScriptAsync("collectSegmentsDataFromHTML();");
+                var reportSegments = JsonConvert.DeserializeObject<List<ReportSegment>>(result);
+                return reportSegments;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error retrieving the segments from the HTML report: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+        }
+
+        public async Task<List<ReportSegment>> GetAllSegmentsCurrentlyVisible()
+        {
+            try
+            {
+                var result = await WebView2Browser.ExecuteScriptAsync("getAllSegmentsCurrentlyVisible();");
                 var reportSegments = JsonConvert.DeserializeObject<List<ReportSegment>>(result);
                 return reportSegments;
             }
@@ -226,11 +244,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             WebMessageReceived?.Invoke(sender, e);
         }
 
-        public async Task EnsureBrowserIsLoaded()
-        {
-            await WebView2Browser.EnsureCoreWebView2Async(Environment);
-        }
-
         private async Task InitializeWebView()
         {
             if (WebView2Browser.CoreWebView2 is null)
@@ -277,7 +290,5 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
                 MessageBox.Show(ex.Message);
             }
         }
-
-        
     }
 }

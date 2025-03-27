@@ -1,6 +1,7 @@
 ﻿using Sdl.Community.PostEdit.Compare.Core.Reports;
 using Sdl.Core.Globalization;
 using System;
+using System.Text.RegularExpressions;
 
 namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model
 {
@@ -41,8 +42,16 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model
 
     public class EnumHelper
     {
-        public static string GetFriendlyStatusString(string statusString) =>
-            ReportUtils.GetVisualSegmentStatus(statusString);
+        private static string SplitPascalCase(string input) => string.Join(" ", Regex.Split(input, @"(?<!^)(?=[A-Z])"));
+
+        public static string GetFriendlyStatusString(string statusString)
+        {
+            var friendlyStatus = ReportUtils.GetVisualSegmentStatus(statusString);
+            if (friendlyStatus != "Unknown") return friendlyStatus;
+
+            if (Enum.TryParse<Statuses>(statusString, out var statuses)) return SplitPascalCase(statuses.ToString());
+            throw new ArgumentException($"Unknown status string: {statusString}");
+        }
 
         public static bool TryGetConfirmationLevel(string friendlyStatus, out ConfirmationLevel confirmationLevel)
         {

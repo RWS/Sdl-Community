@@ -14,6 +14,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/comboboxresources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/groupboxresources.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
@@ -642,6 +643,11 @@
             </ControlTemplate>
             <converters:StringNotEmptyToVisibilityConverter x:Key="StringNotEmptyToVisibilityConverter" />
             <converters:ItemsCountToVisibilityConverter x:Key="ItemsCountToVisibilityConverter" />
+            <SolidColorBrush x:Key="ListBox.Disabled.Background"
+                             Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="ListBox.Disabled.Border"
+                             Color="#FFD9D9D9" />
+
 
         </ResourceDictionary>
     </UserControl.Resources>
@@ -729,7 +735,7 @@
 
                             <ListBox Grid.Column="0"
                                      SelectionChanged="MatchTypesListBox_OnSelectionChanged"
-                                     x:Name="MatchTypesListBox"/>
+                                     x:Name="MatchTypesListBox" />
 
                             <ListBox Grid.Column="1"
                                      VerticalAlignment="Center"
@@ -882,6 +888,87 @@
                 </DockPanel>
             </Border>
 
+        </Grid>
+        <Grid Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Actions to Perform"
+                       Margin="5"
+                       FontWeight="UltraBold"
+                       FontSize="15" />
+            <GroupBox Grid.Row="1"
+                      Style="{StaticResource Sdl.GroupBox.SingleLineStyle}"
+                      Grid.Column="0"
+                      Header="Change status to">
+                <GroupBox.Resources>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border Background="{TemplateBinding Background}">
+                                        <ContentPresenter />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
+                    <DataTemplate x:Key="ChangeStatusListBoxItemTemplate">
+                        <RadioButton Margin="1.5"
+                                     GroupName="Status"
+                                     Checked="NewStatusRadioButton_OnChecked"
+                                     Content="{Binding .}" />
+                    </DataTemplate>
+                </GroupBox.Resources>
+                <ListBox Margin="2.3 2 2 2"
+                         BorderBrush="Transparent"
+                         x:Name="ChangeStatusListBox"
+                         ItemTemplate="{StaticResource ChangeStatusListBoxItemTemplate}"
+                         Style="{x:Null}"
+                         ItemsSource="{Binding Items, ElementName=StatusesListBox}" />
+            </GroupBox>
+            <Button Grid.Row="1"
+                    Grid.Column="1"
+                    VerticalAlignment="Bottom"
+                    Height="30"
+                    Padding="5"
+                    Click="PerformActionButton_OnClick"
+                    HorizontalAlignment="Right"
+                    BorderThickness="1"
+                    Style="{StaticResource MenuButtonStyle}"
+                    Content="Perform Action" />
+            <Border Grid.Row="3"
+                    x:Name="UpdatedSegmentsNotification"
+                    Margin="0 10 0 5"
+                    Visibility="Collapsed"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2">
+                <DockPanel HorizontalAlignment="Stretch">
+                    <TextBlock FontWeight="Light"
+                               Margin="5">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}Updated {0} of {1} segments">
+                                <Binding Path="FilteredSegmentCount" />
+                                <Binding Path="SegmentCount" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                    <Image Width="16"
+                           Margin="0 0 5 0"
+                           HorizontalAlignment="Right"
+                           Height="16"
+                           Source="../../../../Resources/OkValidationIcon.ico" />
+                </DockPanel>
+            </Border>
         </Grid>
     </StackPanel>
 

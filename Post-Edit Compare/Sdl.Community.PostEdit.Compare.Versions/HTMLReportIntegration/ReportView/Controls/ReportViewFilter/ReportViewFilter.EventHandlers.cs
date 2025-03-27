@@ -12,6 +12,10 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
     {
         private const string FuzzyBandsString = "FuzzyMatch";
 
+        public event Action<string> ChangeStatusRequested;
+
+        private string NewStatus { get; set; }
+
         private void AddFiltersButton_Clicked(object sender, RoutedEventArgs e)
         {
             var highlightedItems = StatusesListBox.SelectedItems.Cast<string>().ToList();
@@ -59,6 +63,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             RemoveAllFilters();
             FilterExpression_TextBox.Text = "";
             ApplyFilter(new SegmentFilter());
+            UpdatedSegmentsNotification.Visibility = Visibility.Collapsed;
         }
 
         private void FuzzyBandsListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -72,6 +77,19 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             FuzzyBandsListBox.Visibility = MatchTypesListBox.SelectedItems.Contains("FuzzyMatch")
                 ? Visibility.Visible
                 : Visibility.Collapsed;
+        }
+
+        private void NewStatusRadioButton_OnChecked(object sender, RoutedEventArgs e)
+        {
+            if (sender is not RadioButton newStatus) return;
+            NewStatus = newStatus.Content.ToString();
+        }
+
+        private void PerformActionButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(NewStatus)) return;
+            UpdatedSegmentsNotification.Visibility = Visibility.Visible;
+            ChangeStatusRequested?.Invoke(NewStatus);
         }
 
         private void RemoveAllFiltersButton_Clicked(object sender, RoutedEventArgs e) => RemoveAllFilters();

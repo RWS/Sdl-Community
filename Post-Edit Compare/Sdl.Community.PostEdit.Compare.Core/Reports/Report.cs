@@ -20,6 +20,7 @@ using System.Windows;
 using Formatting = System.Xml.Formatting;
 using MessageBox = System.Windows.MessageBox;
 using Sdl.Community.PostEdit.Compare.Core.TrackChangesForReportGeneration.Components;
+using Sdl.FileTypeSupport.Framework.Native;
 
 namespace Sdl.Community.PostEdit.Compare.Core.Reports
 {
@@ -3276,7 +3277,21 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
             var project = SdlTradosStudio.Application.GetController<ProjectsController>().GetProjects()
                 .FirstOrDefault(p => p.GetProjectInfo().Id.ToString() == originalProjectId);
 
+            if (project is null)
+            {
+                ErrorHandler.Log("Original project not found -> TU colum will be empty for this file",
+                    [$"File: {fileComparisonFileUnitProperties.FilePathOriginal}"]);
+                return [];
+            }
+
             var tmPath = FileBasedTmHelper.GetTmPath(comparisonSegmentUnit.TmName, project);
+            if (tmPath is null)
+            {
+                List<string> variables = [];
+                variables.AddVariable("Current Project", project.FilePath);
+                ErrorHandler.Log("TM Path is null", variables);
+                return [];
+            }
 
             var source = comparisonSegmentUnit.Source.ToPlain();
             var searchResults = FileBasedTmHelper.GetTmMatches(source,

@@ -37,6 +37,20 @@ public class Integration
 
     private static StudioActionExecutor StudioActionExecutor { get; } = new();
 
+    public static async Task ChangeStatusOfVisibleSegments(string newStatus)
+    {
+        var visibleSegments = await ReportViewController.GetAllSegmentsCurrentlyVisible();
+        if (IsSyncOn)
+            foreach (var visibleSegment in visibleSegments)
+                StudioActionExecutor.ChangeStatusOfSegment(newStatus, visibleSegment.SegmentId, visibleSegment.FileId,
+                    visibleSegment.ProjectId);
+        else
+            foreach (var visibleSegment in visibleSegments)
+                await ReportViewController.UpdateStatus(newStatus, visibleSegment.SegmentId, visibleSegment.FileId);
+
+        await SaveReport();
+    }
+
     public static async Task EditReportFolderList()
     {
         ReportViewController.ShowLoadingScreen();

@@ -1,4 +1,5 @@
-﻿using Sdl.Core.Globalization;
+﻿using Sdl.Community.PostEdit.Compare.Core.Helper;
+using Sdl.Core.Globalization;
 using Sdl.Core.Settings;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
@@ -39,10 +40,10 @@ namespace Sdl.Community.PostEdit.Compare.Core.TrackChangesForReportGeneration.Co
         {
             var sourceLanguage = currentProject.GetProjectInfo().SourceLanguage;
 
-            var tmLangDir = GetLanguageDirection(tmPath, sourceLanguage, targetLanguage);
             var minimumScore = GetSettings(currentProject, targetLanguage);
-
             var hasScore = int.TryParse(minimumScore.Value, out var minScore);
+
+            var tmLangDir = GetLanguageDirection(tmPath, sourceLanguage, targetLanguage);
             return tmLangDir.SearchText(new SearchSettings { MinScore = hasScore ? minScore : 70 }, source);
         }
 
@@ -52,6 +53,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.TrackChangesForReportGeneration.Co
             var translationProviderCascadeEntries = currentProject.GetTranslationProviderConfiguration().Entries;
             var tms = translationProviderCascadeEntries.Select(tm => tm.MainTranslationProvider.Uri.LocalPath).ToList();
             var tmPath = tms.FirstOrDefault(tm => Path.GetFileNameWithoutExtension(tm) == segTransOrigName);
+            ErrorHandler.Log("TMs: ", tms);
             return tmPath;
         }
 

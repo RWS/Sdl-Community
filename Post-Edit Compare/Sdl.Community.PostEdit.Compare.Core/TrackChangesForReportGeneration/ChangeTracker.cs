@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Sdl.Community.PostEdit.Compare.Core.Helper;
 using Sdl.Community.PostEdit.Compare.Core.TrackChangesForReportGeneration.Components;
 using Sdl.Community.PostEdit.Compare.DAL.ExcelTableModel;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -28,6 +29,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.TrackChangesForReportGeneration
         /// </summary>
         private static void ActiveDocument_ActiveSegmentChanged() => AddChosenTuToMetadata();
 
+
+
         private static void ActiveDocument_ActiveSegmentConfirmationLevelChanged() => AddChosenTuToMetadata();
 
         private static void AddChosenTuToMetadata()
@@ -45,6 +48,15 @@ namespace Sdl.Community.PostEdit.Compare.Core.TrackChangesForReportGeneration
             var currentProject = projController.CurrentProject;
 
             var tmPath = FileBasedTmHelper.GetTmPath(translationOrigin.OriginSystem, currentProject);
+            if (tmPath is null)
+            {
+                List<string> variables = [];
+                variables.AddVariable("Origin System", translationOrigin.OriginSystem);
+                variables.AddVariable("Current Project", currentProject.FilePath);
+                ErrorHandler.Log("TM Path is null", []);
+                return;
+            }
+
             var difference = GetTuSourceDocSourceDifference(activeSegmentPair, translationOrigin.MatchPercent, tmPath, currentProject);
 
             translationOrigin.SetMetaData(Constants.OriginalTuKey, JsonConvert.SerializeObject(difference));

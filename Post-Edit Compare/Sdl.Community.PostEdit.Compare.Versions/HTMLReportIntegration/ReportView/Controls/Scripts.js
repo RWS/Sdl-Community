@@ -146,6 +146,30 @@ function collectSegmentsDataFromHTML() {
     return segments;
 }
 
+function getAllSegmentsCurrentlyVisible() {
+    const segments = [];
+
+    const visibleSegments = Array.from(document.querySelectorAll('table tr[data-file-id]'))
+        .filter(row => row.style.display !== 'none');
+
+    visibleSegments.forEach(row => {
+
+        const segmentId = row.querySelector('td:first-child')?.textContent.trim();
+        const fileId = row.getAttribute('data-file-id');
+        const projectId = row.getAttribute('data-project-id');
+
+        if (segmentId) {
+            segments.push({
+                segmentId,
+                fileId,
+                projectId
+            });
+        }
+    });
+
+    return segments;
+}
+
 function getCleanedHTMLForExport() {
     console.log("Cleaning exportable HTML...");
 

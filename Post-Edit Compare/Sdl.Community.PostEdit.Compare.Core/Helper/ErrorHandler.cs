@@ -9,8 +9,12 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
 {
     public static class ErrorHandler
     {
-        public static void AddVariable(this List<string> variableList, string name, string value) =>
-            variableList.Add($"{name}: {value}\r\n");
+        public static void AddVariable(this List<string> variableList, string name = "", string value = "")
+        {
+            List<string> kvp = [name, value];
+            kvp = kvp.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+            variableList.Add($"{string.Join(": ", kvp)}\r\n");
+        }
 
         public static void ShowError(Exception ex, IWin32Window owner = null, List<string> variableValues = null,
             [CallerMemberName] string callingMethod = "") =>
@@ -73,9 +77,10 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
 
             var alreadyExisting = File.ReadAllText(LogFilePath);
 
+            message = string.IsNullOrWhiteSpace(message) ? "" : $"{message}.";
             var infoMessage = $"<{DateTime.Now} INFO>";
             infoMessage += Environment.NewLine +
-                          $"{message}. " +
+                          $"{message} " +
                           Environment.NewLine +
                           $"{GetVariablesString(variableValues)}";
             infoMessage += $"<\\INFO>" +
