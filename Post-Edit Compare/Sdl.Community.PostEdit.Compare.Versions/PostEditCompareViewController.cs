@@ -363,12 +363,6 @@ namespace Sdl.Community.PostEdit.Versions
 
         public void LoadConfigurationSettings()
         {
-
-            if (CurrentSelectedProject == null || CurrentProjectInfo == null)
-            {
-                SelectedProjectChanged();
-            }
-
             var errorHandlerSettings = ErrorHandlerSettingsSerializer.ReadSettings();
 
             var defaultSettings = new DefaultSettings
@@ -411,14 +405,22 @@ namespace Sdl.Community.PostEdit.Versions
 
 
         }
+
+        public void SetOriginalProjectAsCurrentInProjectsController()
+        {
+            var tn = _viewNavigation.Value.treeView_navigation.SelectedNode;
+            var project = (Project)tn.Tag;
+
+            if (CurrentSelectedProject != null &&
+                project.id == CurrentSelectedProject.GetProjectInfo().Id.ToString()) return;
+
+            var fileBasedProject = new FileBasedProject($"{Path.Combine(project.location, project.projectFileName)}");
+            ProjectsController.ActivateProject(fileBasedProject);
+            SelectedProjectChanged(fileBasedProject);
+        }
+
         public bool CompareProjectVersions()
         {
-
-            if (CurrentSelectedProject == null || CurrentProjectInfo == null)
-            {
-                SelectedProjectChanged();
-            }
-
             if (_viewContent.Value.listView_postEditCompareProjectVersions.SelectedIndices.Count != 2) return false;
             try
             {
@@ -966,8 +968,7 @@ namespace Sdl.Community.PostEdit.Versions
 
         private void CheckEnabledObjects()
         {
-            CurrentSelectedProject = ProjectsController.SelectedProjects.FirstOrDefault() ??
-                                     ProjectsController.CurrentProject;
+            SetOriginalProjectAsCurrentInProjectsController();
 
             if (CurrentSelectedProject != null)
             {
@@ -1279,13 +1280,16 @@ namespace Sdl.Community.PostEdit.Versions
 
         }
 
-        public void SelectedProjectChanged()
+        public void SelectedProjectChanged(FileBasedProject currentProject = null)
         {
             try
             {
                 ProjectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-                CurrentSelectedProject = ProjectsController.SelectedProjects.FirstOrDefault() ??
-                                         ProjectsController.CurrentProject;
+                if (currentProject is null)
+                    CurrentSelectedProject = ProjectsController.SelectedProjects.FirstOrDefault() ??
+                                             ProjectsController.CurrentProject;
+                else
+                    CurrentSelectedProject = ProjectsController.CurrentProject;
 
                 if (CurrentSelectedProject != null)
                 {
