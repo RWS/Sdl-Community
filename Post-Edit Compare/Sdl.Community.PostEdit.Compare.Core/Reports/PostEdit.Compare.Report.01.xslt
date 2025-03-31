@@ -2690,14 +2690,15 @@
         <td class="status-cell">
 
           <select class="status-dropdown" onchange="updateStatus(this, '{@segmentId}','{@fileId}','{@projectId}')">
-            <option value="">Change status</option>
-            <option value="Unspecified">Not Translated</option>
-            <option value="Draft">Draft</option>
-            <option value="Translated">Translated</option>
-            <option value="RejectedTranslation">Translation Rejected</option>
-            <option value="ApprovedTranslation">Translation Approved</option>
-            <option value="RejectedSignOff">Sign-off Rejected</option>
-            <option value="ApprovedSignOff">Signed Off</option>
+            <optgroup label="Change status">
+              <option value="Unspecified">Not Translated</option>
+              <option value="Draft">Draft</option>
+              <option value="Translated">Translated</option>
+              <option value="RejectedTranslation">Translation Rejected</option>
+              <option value="ApprovedTranslation">Translation Approved</option>
+              <option value="RejectedSignOff">Sign-off Rejected</option>
+              <option value="ApprovedSignOff">Signed Off</option>
+            </optgroup>
           </select>
           <br/>
           <xsl:apply-templates select="segmentStatus/token"/>

@@ -254,18 +254,29 @@ function updateSegmentStatus(segmentId, fileId, newStatus) {
                         const lastSpan = spans.length ? spans[spans.length - 1] : null;
 
                         if (lastSpan) {
-                            if (spans.length < 3) {
-                                statusCell.appendChild(document.createElement('br'));
+                            if (spans.length === 1) {
+                                if (lastSpan.innerText === newStatus) return;
 
+                                statusCell.appendChild(document.createElement('br'));
+                                 
                                 const newSpan = document.createElement('span');
                                 newSpan.innerText = newStatus;
-                                newSpan.style.cssText = lastSpan.style.cssText;
-                                newSpan.className = lastSpan.className;
+                                newSpan.classList.add('textNew');
 
                                 lastSpan.style.cssText = '';
-                                lastSpan.className = '';
+                                lastSpan.classList.add('textRemoved');
+                                
                                 statusCell.appendChild(newSpan);
                             } else {
+                                if (spans[0].innerText === newStatus) {
+                                    const previousSibling = lastSpan.previousSibling;
+                                    if (previousSibling && previousSibling.nodeName === "BR") {
+                                        previousSibling.remove();
+                                    }
+                                    spans[0].classList.remove('textRemoved');
+                                    lastSpan.remove();
+                                    return;
+                                }
                                 lastSpan.innerText = newStatus;
                             }
                         }
@@ -340,7 +351,7 @@ function replaceCommentsForSegment(segmentId, comments, fileId) {
         if (firstCell) {
             const cellText = firstCell.textContent.trim();
             const rowDataFileId = row.getAttribute('data-file-id');
-            
+
             if (cellText === segmentId)
                 if (rowDataFileId === fileId) {
                     found = true;
