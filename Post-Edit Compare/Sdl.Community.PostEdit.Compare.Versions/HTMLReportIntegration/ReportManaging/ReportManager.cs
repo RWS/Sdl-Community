@@ -156,8 +156,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
 
             if (string.IsNullOrWhiteSpace(reportPath))
                 Process.Start(defaultReportPath);
-
-            Process.Start("explorer.exe", $"/select,\"{reportPath}\"");
+            else Process.Start("explorer.exe", $"/select,\"{reportPath}\"");
         }
 
         public void SaveReport(string reportFromMemory, string selectedReportReportPath) =>

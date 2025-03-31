@@ -164,7 +164,7 @@ public class Integration
     public static void OpenReportFolder()
     {
         var selectedReport = ReportViewController.GetSelectedReport();
-        ReportManager.OpenReportFolder(selectedReport.ReportPath);
+        ReportManager.OpenReportFolder(selectedReport?.ReportPath);
     }
 
     public static async Task SaveReport()

@@ -33,7 +33,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
                 return null;
             }
 
-            var projectFolderPath = Directory.GetParent(Path.GetDirectoryName(projectFilePath));
+            var projectFolderPath = Directory.GetParent(projectFilePath);
             while (projectFolderPath is not null)
             {
                 var sdlProjFiles = Directory.GetFiles(projectFolderPath.FullName, "*.sdlproj",

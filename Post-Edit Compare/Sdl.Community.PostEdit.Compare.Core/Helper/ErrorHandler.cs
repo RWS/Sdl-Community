@@ -16,6 +16,9 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
             variableList.Add($"{string.Join(": ", kvp)}\r\n");
         }
 
+        public static string GetFailureMessage(string failureReason = null, [CallerMemberName] string failingMethod = null) =>
+            $@"""{failingMethod}"" failed: {failureReason}";
+
         public static void ShowError(Exception ex, IWin32Window owner = null, List<string> variableValues = null,
             [CallerMemberName] string callingMethod = "") =>
             MessageBox.Show(owner,

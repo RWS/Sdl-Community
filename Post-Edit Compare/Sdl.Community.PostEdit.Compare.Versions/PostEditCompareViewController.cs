@@ -414,7 +414,13 @@ namespace Sdl.Community.PostEdit.Versions
             if (CurrentSelectedProject != null &&
                 project.id == CurrentSelectedProject.GetProjectInfo().Id.ToString()) return;
 
-            var fileBasedProject = new FileBasedProject($"{Path.Combine(project.location, project.projectFileName)}");
+            var projectLocation = project.location.Contains(".ProjectFiles")
+                ? Path.GetDirectoryName(project.location)
+                : project.location;
+
+            if (!Directory.Exists(projectLocation)) return;
+
+            FileBasedProject fileBasedProject = new($"{Path.Combine(projectLocation, project.projectFileName)}");
             ProjectsController.ActivateProject(fileBasedProject);
             SelectedProjectChanged(fileBasedProject);
         }
@@ -464,16 +470,29 @@ namespace Sdl.Community.PostEdit.Versions
         public void CreateNewProjectVersion(bool fromSdlProjectSelection)
         {
 
-            if (CurrentSelectedProject == null || CurrentProjectInfo == null)
-            {
-                SelectedProjectChanged();
-            }
+            if (CurrentSelectedProject == null || CurrentProjectInfo == null) SelectedProjectChanged();
 
             try
             {
                 var newProjectVersion = new NewProjectVersion { ProjectsController = ProjectsController };
 
-                if (CurrentProjectInfo != null) newProjectVersion.SelectedProjectId = CurrentProjectInfo.Id.ToString();
+                if (CurrentProjectInfo != null)
+                {
+                    newProjectVersion.SelectedProjectId = CurrentProjectInfo.Id.ToString();
+                    if (CurrentProjectInfo.ProjectType == ProjectType.SingleFile)
+                    {
+                        var targetLanguageFile = CurrentSelectedProject?.GetTargetLanguageFiles()?[0];
+                        if (targetLanguageFile == null) return;
+                        if (!IsProjectFileSaved(targetLanguageFile))
+                        {
+                            MessageBox.Show(
+                                "Please save the file before attempting to create a new version.",
+                                "Project file not saved", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                            return;
+                        }
+                    }
+                }
                 if (!fromSdlProjectSelection)
                 {
 
@@ -550,6 +569,12 @@ namespace Sdl.Community.PostEdit.Versions
             }
 
 
+        }
+
+        private bool IsProjectFileSaved(ProjectFile targetLanguageFile)
+        {
+            var localFilePath = targetLanguageFile.LocalFilePath;
+            return Path.GetExtension(localFilePath).ToLower() == ".sdlxliff";
         }
 
         public void ViewProjectInWindowsExplorer()
