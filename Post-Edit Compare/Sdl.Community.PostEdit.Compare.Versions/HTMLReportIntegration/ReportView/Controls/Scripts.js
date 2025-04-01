@@ -1,4 +1,49 @@
-﻿function getComments() {
+﻿document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".custom-dropdown").forEach(dropdown => {
+        const button = dropdown.querySelector(".dropdown-btn");
+        const menu = dropdown.querySelector(".dropdown-content");
+
+        button.addEventListener("click", function (event) {
+            event.stopPropagation(); // Prevent immediate closing
+
+            // Reset styles before measuring
+            menu.style.top = "auto";
+            menu.style.bottom = "auto";
+            menu.style.display = "block";
+
+            // Get element positions
+            const rect = button.getBoundingClientRect();
+            const spaceBelow = window.innerHeight - rect.bottom;
+            const spaceAbove = rect.top;
+            const menuHeight = menu.offsetHeight;
+
+            // Adjust position based on available space
+            if (spaceBelow < menuHeight && spaceAbove > menuHeight) {
+                // Open above
+                menu.style.bottom = `${button.offsetHeight}px`;
+                menu.style.top = "auto";
+            } else {
+                // Open below (default)
+                menu.style.top = `${button.offsetHeight}px`;
+                menu.style.bottom = "auto";
+            }
+
+            menu.classList.toggle("show");
+        });
+
+        // Close dropdown on click outside
+        document.addEventListener("click", function (event) {
+            if (!dropdown.contains(event.target)) {
+                menu.classList.remove("show");
+                menu.style.display = "none";
+            }
+        });
+    });
+});
+
+
+
+function getComments() {
     const segments = [];
 
     const rows = document.querySelectorAll('table tr[data-file-id]');
@@ -219,8 +264,8 @@ function submitComment(input, severity, segmentId, fileId, projectId) {
     input.placeholder = "Add comment";
 }
 
-function updateStatus(dropdown, segmentId, fileId, projectId) {
-    const status = dropdown.value;
+function updateStatus(option, segmentId, fileId, projectId) {
+    const status = option.getAttribute("data-value");
     const payload = {
         action: "updateStatus",
         segmentId: segmentId,
@@ -230,6 +275,7 @@ function updateStatus(dropdown, segmentId, fileId, projectId) {
     };
     window.chrome.webview.postMessage(payload);
 }
+
 
 function updateSegmentStatus(segmentId, fileId, newStatus) {
     console.info('UpdateSegmentStatus');
