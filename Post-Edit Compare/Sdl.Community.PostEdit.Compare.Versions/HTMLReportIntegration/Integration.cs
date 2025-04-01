@@ -175,13 +175,13 @@ public class Integration
         ReportManager.SaveReport(reportFromMemory, selectedReport.ReportPath);
     }
 
-    public static async Task SetUpReportExplorer()
+    public static async Task SetUpReportExplorer(bool displayLoadingScreen = true)
     {
-        ReportViewController.ShowLoadingScreen();
+        if (displayLoadingScreen) ReportViewController.ShowLoadingScreen();
         var reports = await ReportManager.GetReports();
         var projects = ProjectsController.GetAllProjects().Select(p => p.GetProjectInfo()).ToList();
         ReportViewController.RefreshLists(projects, reports);
-        ReportViewController.HideLoadingScreen();
+        if (displayLoadingScreen) ReportViewController.HideLoadingScreen();
     }
 
     public static async Task ShowLatestReport()
@@ -198,7 +198,7 @@ public class Integration
         //await Task.Delay(100);
 
         await ToggleReportProjectSync(false);
-        await SetUpReportExplorer();
+        await SetUpReportExplorer(false);
 
         var reports = await ReportManager.GetReports();
 
