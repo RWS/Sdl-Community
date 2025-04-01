@@ -8,7 +8,7 @@ using System.Linq;
 using System.Windows.Forms;
 using PostEdit.Compare;
 using PostEdit.Compare.Model;
-using Sdl.Community.PostEdit.Compare.Helpers;
+using Sdl.Community.PostEdit.Compare.Core.Helper;
 using Sdl.Community.PostEdit.Versions.Automation;
 using Sdl.Community.PostEdit.Versions.Dialogs;
 using Sdl.Community.PostEdit.Versions.Structures;
@@ -363,18 +363,15 @@ namespace Sdl.Community.PostEdit.Versions
 
         public void LoadConfigurationSettings()
         {
-
-            if (CurrentSelectedProject == null || CurrentProjectInfo == null)
-            {
-                SelectedProjectChanged();
-            }
+            var errorHandlerSettings = ErrorHandlerSettingsSerializer.ReadSettings();
 
             var defaultSettings = new DefaultSettings
             {
                 Saved = false,
                 CreateSubFolderProject = Settings.create_subfolder_projects,
                 CreateShallowCopy = Settings.create_shallow_copy,
-                VersionsFolderFullPath = Settings.versions_folder_path
+                VersionsFolderFullPath = Settings.versions_folder_path,
+                ExplicitErrors = errorHandlerSettings.ExplicitErrors
             };
 
             defaultSettings.ShowDialog();
@@ -387,6 +384,9 @@ namespace Sdl.Community.PostEdit.Versions
             Settings.versions_folder_path = defaultSettings.VersionsFolderFullPath;
 
             SettingsSerializer.SaveSettings(Settings);
+
+            errorHandlerSettings.ExplicitErrors = defaultSettings.ExplicitErrors;
+            ErrorHandlerSettingsSerializer.WriteSettings(errorHandlerSettings);
         }
 
 
@@ -405,14 +405,29 @@ namespace Sdl.Community.PostEdit.Versions
 
 
         }
+
+        public void SetOriginalProjectAsCurrentInProjectsController()
+        {
+            var tn = _viewNavigation.Value.treeView_navigation.SelectedNode;
+            var project = (Project)tn?.Tag;
+            if (project is null) return;
+
+            if (CurrentSelectedProject != null &&
+                project.id == CurrentSelectedProject.GetProjectInfo().Id.ToString()) return;
+
+            var projectLocation = project.location.Contains(".ProjectFiles")
+                ? Path.GetDirectoryName(project.location)
+                : project.location;
+
+            if (!Directory.Exists(projectLocation)) return;
+
+            FileBasedProject fileBasedProject = new($"{Path.Combine(projectLocation, project.projectFileName)}");
+            ProjectsController.ActivateProject(fileBasedProject);
+            SelectedProjectChanged(fileBasedProject);
+        }
+
         public bool CompareProjectVersions()
         {
-
-            if (CurrentSelectedProject == null || CurrentProjectInfo == null)
-            {
-                SelectedProjectChanged();
-            }
-
             if (_viewContent.Value.listView_postEditCompareProjectVersions.SelectedIndices.Count != 2) return false;
             try
             {
@@ -456,16 +471,29 @@ namespace Sdl.Community.PostEdit.Versions
         public void CreateNewProjectVersion(bool fromSdlProjectSelection)
         {
 
-            if (CurrentSelectedProject == null || CurrentProjectInfo == null)
-            {
-                SelectedProjectChanged();
-            }
+            if (CurrentSelectedProject == null || CurrentProjectInfo == null) SelectedProjectChanged();
 
             try
             {
                 var newProjectVersion = new NewProjectVersion { ProjectsController = ProjectsController };
 
-                if (CurrentProjectInfo != null) newProjectVersion.SelectedProjectId = CurrentProjectInfo.Id.ToString();
+                if (CurrentProjectInfo != null)
+                {
+                    newProjectVersion.SelectedProjectId = CurrentProjectInfo.Id.ToString();
+                    if (CurrentProjectInfo.ProjectType == ProjectType.SingleFile)
+                    {
+                        var targetLanguageFile = CurrentSelectedProject?.GetTargetLanguageFiles()?[0];
+                        if (targetLanguageFile == null) return;
+                        if (!IsProjectFileSaved(targetLanguageFile))
+                        {
+                            MessageBox.Show(
+                                "Please save the file before attempting to create a new version.",
+                                "Project file not saved", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                            return;
+                        }
+                    }
+                }
                 if (!fromSdlProjectSelection)
                 {
 
@@ -542,6 +570,12 @@ namespace Sdl.Community.PostEdit.Versions
             }
 
 
+        }
+
+        private bool IsProjectFileSaved(ProjectFile targetLanguageFile)
+        {
+            var localFilePath = targetLanguageFile.LocalFilePath;
+            return Path.GetExtension(localFilePath).ToLower() == ".sdlxliff";
         }
 
         public void ViewProjectInWindowsExplorer()
@@ -960,8 +994,7 @@ namespace Sdl.Community.PostEdit.Versions
 
         private void CheckEnabledObjects()
         {
-            CurrentSelectedProject = ProjectsController.SelectedProjects.FirstOrDefault() ??
-                                     ProjectsController.CurrentProject;
+            SetOriginalProjectAsCurrentInProjectsController();
 
             if (CurrentSelectedProject != null)
             {
@@ -1273,13 +1306,16 @@ namespace Sdl.Community.PostEdit.Versions
 
         }
 
-        public void SelectedProjectChanged()
+        public void SelectedProjectChanged(FileBasedProject currentProject = null)
         {
             try
             {
                 ProjectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
-                CurrentSelectedProject = ProjectsController.SelectedProjects.FirstOrDefault() ??
-                                         ProjectsController.CurrentProject;
+                if (currentProject is null)
+                    CurrentSelectedProject = ProjectsController.SelectedProjects.FirstOrDefault() ??
+                                             ProjectsController.CurrentProject;
+                else
+                    CurrentSelectedProject = ProjectsController.CurrentProject;
 
                 if (CurrentSelectedProject != null)
                 {

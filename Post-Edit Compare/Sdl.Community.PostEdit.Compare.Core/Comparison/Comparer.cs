@@ -6,6 +6,7 @@ using Sdl.Community.PostEdit.Compare.Core.Comparison.Text;
 using Sdl.Community.PostEdit.Compare.Core.Helper;
 using Sdl.Community.PostEdit.Compare.Core.Reports;
 using Sdl.Community.PostEdit.Compare.Core.SDLXLIFF;
+using static Sdl.Community.PostEdit.Compare.Core.Comparison.Comparer;
 using Convert = System.Convert;
 
 namespace Sdl.Community.PostEdit.Compare.Core.Comparison
@@ -310,6 +311,17 @@ namespace Sdl.Community.PostEdit.Compare.Core.Comparison
             return comparisonFileParagraphUnits;
         }
 
+        private static void AddTmTuMetadata(ComparisonSegmentUnit comparisonSegment, SegmentPair original, SegmentPair updated)
+        {
+            var firstTu = original.TranslationOrigin.ChosenTu;
+            var secondTu = updated.TranslationOrigin.ChosenTu;
+            comparisonSegment.TmTranslationUnit = !string.IsNullOrWhiteSpace(secondTu) ? secondTu : firstTu;
+
+            var originalSystem = original.TranslationOrigin.OriginSystem;
+            var updatedSystem = updated.TranslationOrigin.OriginSystem;
+            comparisonSegment.TmName = !string.IsNullOrWhiteSpace(updatedSystem) ? updatedSystem : originalSystem;
+        }
+
         private void AddToComparision(ref ComparisonParagraphUnit comparisonParagraphUnit
          , ComparisonSegmentUnit comparisonSegmentUnit
          , SegmentPair segmentPairOriginal
@@ -330,12 +342,11 @@ namespace Sdl.Community.PostEdit.Compare.Core.Comparison
 
             if (segmentPairOriginal.TranslationOrigin != null)
                 comparisonSegmentUnit.TranslationOriginTypeOriginal = segmentPairOriginal.TranslationOrigin.OriginType;
+
             if (segmentPairUpdated.TranslationOrigin != null)
-            {
                 comparisonSegmentUnit.TranslationOriginTypeUpdated = segmentPairUpdated.TranslationOrigin.OriginType;
-                comparisonSegmentUnit.TmName = segmentPairUpdated.TranslationOrigin.OriginSystem;
-                comparisonSegmentUnit.TmTranslationUnit = segmentPairUpdated.TranslationOrigin.OriginalTu;
-            }
+
+            AddTmTuMetadata(comparisonSegmentUnit, segmentPairOriginal, segmentPairUpdated);
 
             if (string.CompareOrdinal(segmentPairOriginal.Target, segmentPairUpdated.Target) != 0)
             {
@@ -387,7 +398,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Comparison
             comparisonParagraphUnit.ComparisonSegmentUnits.Add(comparisonSegmentUnit);
         }
 
-        
+
         private static string GetTranslationStatus(SegmentPair segmentPair)
         {
             var match = string.Empty;

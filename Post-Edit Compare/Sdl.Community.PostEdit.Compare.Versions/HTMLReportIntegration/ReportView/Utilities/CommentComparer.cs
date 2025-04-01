@@ -8,18 +8,16 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Utili
     {
         public bool Equals(IComment x, IComment y)
         {
-            if (x == null && y == null)
-                return true;
-            if (x == null || y == null)
-                return false;
-            return x.Text == y.Text && x.Author == y.Author && x.Date == y.Date;
+            if (ReferenceEquals(x, y)) return true;
+            if (x is null || y is null) return false;
+
+            return x.Text == y.Text &&
+                   x.Author == y.Author &&
+                   x.Date == y.Date;
         }
 
         public int GetHashCode(IComment obj)
         {
-            if (obj == null)
-                throw new ArgumentNullException(nameof(obj));
-
             unchecked
             {
                 var hash = 17;
