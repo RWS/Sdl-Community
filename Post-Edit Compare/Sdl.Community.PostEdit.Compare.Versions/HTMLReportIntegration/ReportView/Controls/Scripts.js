@@ -1,45 +1,98 @@
-﻿document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".custom-dropdown").forEach(dropdown => {
-        const button = dropdown.querySelector(".dropdown-btn");
-        const menu = dropdown.querySelector(".dropdown-content");
+﻿let currentSegmentData = {};
 
-        button.addEventListener("click", function (event) {
-            event.stopPropagation(); // Prevent immediate closing
+let currentDropdown = null;
 
-            // Reset styles before measuring
-            menu.style.top = "auto";
-            menu.style.bottom = "auto";
-            menu.style.display = "block";
+document.addEventListener('contextmenu', function (e) {
+   
+    // Only trigger if right-clicking on an element with class 'status-cell' (or inside one)
+    let cell = e.target.closest('.status-cell');
 
-            // Get element positions
-            const rect = button.getBoundingClientRect();
-            const spaceBelow = window.innerHeight - rect.bottom;
-            const spaceAbove = rect.top;
-            const menuHeight = menu.offsetHeight;
+    if (currentDropdown && currentDropdown !== cell) {
+        closeDropdown();
+    }
 
-            // Adjust position based on available space
-            if (spaceBelow < menuHeight && spaceAbove > menuHeight) {
-                // Open above
-                menu.style.bottom = `${button.offsetHeight}px`;
-                menu.style.top = "auto";
-            } else {
-                // Open below (default)
-                menu.style.top = `${button.offsetHeight}px`;
-                menu.style.bottom = "auto";
-            }
+    if (cell) {
+        e.preventDefault();
 
-            menu.classList.toggle("show");
-        });
+        // Get the parent row (assumed to have segment data attributes)
+        let row = cell.closest('tr');
+        if (row) {
+            currentSegmentData = {
+                segmentId: row.getAttribute('data-segment-id'),
+                fileId: row.getAttribute('data-file-id'),
+                projectId: row.getAttribute('data-project-id')
+            };
+        }
 
-        // Close dropdown on click outside
-        document.addEventListener("click", function (event) {
-            if (!dropdown.contains(event.target)) {
-                menu.classList.remove("show");
-                menu.style.display = "none";
-            }
-        });
+        // Find the dropdown within this status cell
+        const dropdown = cell.querySelector('.custom-dropdown');
+        if (dropdown) {
+            // First, hide any open dropdown in this cell
+            dropdown.style.display = 'block'; // Temporarily show to calculate if needed
+            // For a cell-local menu, we'll simply position it relative to the cell:
+            // For example, place it at the bottom-right of the cell:
+            dropdown.style.top = cell.offsetHeight + 'px';
+            dropdown.style.right = '0px';
+
+            // Show the dropdown
+            dropdown.style.opacity = '1';
+            dropdown.style.visibility = 'visible';
+
+            currentDropdown = dropdown;
+        }
+    }
+});
+
+function closeDropdown() {
+    if (currentDropdown) {
+        currentDropdown.style.display = 'none';
+        currentDropdown.style.opacity = 0;
+        currentDropdown.style.visibility = 'hidden';
+    }
+    currentDropdown = null;  // Reset the current dropdown
+}
+
+// Hide the dropdown when clicking outside of any status cell
+document.addEventListener('click', function (e) {
+    // Look for all dropdowns and hide those that are open
+    document.querySelectorAll('.custom-dropdown').forEach(function (dropdown) {
+        if (!dropdown.contains(e.target)) {
+            dropdown.style.opacity = '0';
+            dropdown.style.visibility = 'hidden';
+            // Use a timeout to hide display after transition if desired:
+            setTimeout(() => { dropdown.style.display = 'none'; }, 200);
+        }
     });
 });
+
+// Called when an option in the dropdown is clicked
+function updateStatus(option) {
+    const status = option.getAttribute('data-value');
+
+    const payload = {
+        action: 'updateStatus',
+        segmentId: currentSegmentData.segmentId,
+        fileId: currentSegmentData.fileId,
+        projectId: currentSegmentData.projectId,
+        status: status
+    };
+
+    console.log('Payload:', payload);
+    window.chrome.webview.postMessage(payload);
+
+    // Hide the dropdown in the current status cell
+    const dropdown = option.closest('.custom-dropdown');
+    if (dropdown) {
+        dropdown.style.opacity = '0';
+        dropdown.style.visibility = 'hidden';
+        setTimeout(() => { dropdown.style.display = 'none'; }, 200);
+    }
+}
+
+
+
+
+
 
 
 
@@ -264,17 +317,17 @@ function submitComment(input, severity, segmentId, fileId, projectId) {
     input.placeholder = "Add comment";
 }
 
-function updateStatus(option, segmentId, fileId, projectId) {
-    const status = option.getAttribute("data-value");
-    const payload = {
-        action: "updateStatus",
-        segmentId: segmentId,
-        fileId: fileId,
-        projectId: projectId,
-        status: status
-    };
-    window.chrome.webview.postMessage(payload);
-}
+//function updateStatus(option, segmentId, fileId, projectId) {
+//    const status = option.getAttribute("data-value");
+//    const payload = {
+//        action: "updateStatus",
+//        segmentId: segmentId,
+//        fileId: fileId,
+//        projectId: projectId,
+//        status: status
+//    };
+//    window.chrome.webview.postMessage(payload);
+//}
 
 
 function updateSegmentStatus(segmentId, fileId, newStatus) {
@@ -304,14 +357,14 @@ function updateSegmentStatus(segmentId, fileId, newStatus) {
                                 if (lastSpan.innerText === newStatus) return;
 
                                 statusCell.appendChild(document.createElement('br'));
-                                 
+
                                 const newSpan = document.createElement('span');
                                 newSpan.innerText = newStatus;
                                 newSpan.classList.add('textNew');
 
                                 lastSpan.style.cssText = '';
                                 lastSpan.classList.add('textRemoved');
-                                
+
                                 statusCell.appendChild(newSpan);
                             } else {
                                 if (spans[0].innerText === newStatus) {
