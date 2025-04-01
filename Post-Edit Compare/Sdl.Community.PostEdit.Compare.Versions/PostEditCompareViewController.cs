@@ -409,7 +409,8 @@ namespace Sdl.Community.PostEdit.Versions
         public void SetOriginalProjectAsCurrentInProjectsController()
         {
             var tn = _viewNavigation.Value.treeView_navigation.SelectedNode;
-            var project = (Project)tn.Tag;
+            var project = (Project)tn?.Tag;
+            if (project is null) return;
 
             if (CurrentSelectedProject != null &&
                 project.id == CurrentSelectedProject.GetProjectInfo().Id.ToString()) return;
