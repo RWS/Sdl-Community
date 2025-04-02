@@ -66,6 +66,7 @@ namespace Sdl.Community.PostEdit.Versions
     [Shortcut(Keys.Control | Keys.Alt | Keys.V)]
     public class ContextCreateProjectVersionAction : AbstractViewControllerAction<PostEditCompareViewController>
     {
+
         public override void Initialize()
         {
             Enabled = false;
@@ -95,8 +96,20 @@ namespace Sdl.Community.PostEdit.Versions
 	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 2, DisplayType.Default, "", true)]
 	public class CreateProjectReport : AbstractViewControllerAction<PostEditCompareViewController>
 	{
-		protected override void Execute()
+        private void Controller_CheckEnabledObjectsEvent(object sender, EventArgs e)
         {
+            Enabled = Controller.IsEnabledCompare;
+        }
+
+        public override void Initialize()
+        {
+            Enabled = false;
+            Controller.CheckEnabledObjectsEvent += Controller_CheckEnabledObjectsEvent;
+        }
+
+        protected override void Execute()
+        {
+
 
             if (!Controller.IsInitialized)
             {

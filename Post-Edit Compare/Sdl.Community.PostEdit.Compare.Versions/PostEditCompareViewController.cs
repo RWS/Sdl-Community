@@ -422,8 +422,12 @@ namespace Sdl.Community.PostEdit.Versions
             if (!Directory.Exists(projectLocation)) return;
 
             FileBasedProject fileBasedProject = new($"{Path.Combine(projectLocation, project.projectFileName)}");
-            ProjectsController.ActivateProject(fileBasedProject);
-            SelectedProjectChanged(fileBasedProject);
+            try
+            {
+                ProjectsController.ActivateProject(fileBasedProject);
+                SelectedProjectChanged(fileBasedProject);
+            }
+            catch{}
         }
 
         public bool CompareProjectVersions()
