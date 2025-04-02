@@ -194,7 +194,7 @@
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>C:\Code\SDL\GitHub repos\RWS Community\Post-Edit Compare\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>../SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
