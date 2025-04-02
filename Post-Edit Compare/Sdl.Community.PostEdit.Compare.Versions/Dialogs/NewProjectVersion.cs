@@ -399,7 +399,8 @@ namespace Sdl.Community.PostEdit.Versions.Dialogs
             FileBasedProject currentSelectedProject = null;
 
             var selectedItem = (ComboboxItem)comboBox_projects.SelectedItem;
-            var projectInfo = (ProjectInfo)selectedItem.Value;
+            var projectInfo = (ProjectInfo)selectedItem?.Value;
+            if (projectInfo is null) return;
 
             var projects = ProjectsController.GetProjects().ToList();
             foreach (var proj in projects)

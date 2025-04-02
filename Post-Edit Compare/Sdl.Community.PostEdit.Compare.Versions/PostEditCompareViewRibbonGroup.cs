@@ -103,7 +103,6 @@ namespace Sdl.Community.PostEdit.Versions
 
         public override void Initialize()
         {
-            Enabled = false;
             Controller.CheckEnabledObjectsEvent += Controller_CheckEnabledObjectsEvent;
         }
 

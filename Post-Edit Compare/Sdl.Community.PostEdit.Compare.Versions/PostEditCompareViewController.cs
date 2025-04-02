@@ -421,13 +421,14 @@ namespace Sdl.Community.PostEdit.Versions
 
             if (!Directory.Exists(projectLocation)) return;
 
-            FileBasedProject fileBasedProject = new($"{Path.Combine(projectLocation, project.projectFileName)}");
             try
             {
-                ProjectsController.ActivateProject(fileBasedProject);
-                SelectedProjectChanged(fileBasedProject);
+                var originalProject = ProjectsController.GetProjects()
+                    .FirstOrDefault(p => p.GetProjectInfo().Id.ToString() == project.id);
+                ProjectsController.ActivateProject(originalProject);
+                SelectedProjectChanged(originalProject);
             }
-            catch{}
+            catch { }
         }
 
         public bool CompareProjectVersions()
@@ -996,7 +997,7 @@ namespace Sdl.Community.PostEdit.Versions
         public bool IsEnabledRestoreProjectVersion { get; set; }
 
 
-        private void CheckEnabledObjects()
+        public void CheckEnabledObjects()
         {
             SetOriginalProjectAsCurrentInProjectsController();
 

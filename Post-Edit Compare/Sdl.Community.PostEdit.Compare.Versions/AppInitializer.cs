@@ -25,6 +25,8 @@ namespace Sdl.Community.PostEdit.Versions
             {
                 EditorController = SdlTradosStudio.Application.GetController<EditorController>();
                 ChangeTracker.TrackChosenTUsFromTMs();
+                SdlTradosStudio.Application.GetController<PostEditCompareViewController>().Initialize();
+                SdlTradosStudio.Application.GetController<PostEditCompareViewController>().CheckEnabledObjects();
             }
             catch (Exception ex)
             {
