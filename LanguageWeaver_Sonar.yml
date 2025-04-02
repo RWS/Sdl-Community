@@ -15,12 +15,7 @@ pr:
      - Language Weaver Provider/*
 
 variables: 
-#- template: AppStoreApplications/jobs/branch-variables.yml
 - group: 'LanguageWeaver Version'
-- name: buildPlatform 
-  value: 'Any CPU'
-- name: buildConfiguration
-  value: 'Release'
 - name: solution
   value: '**/LanguageWeaverProvider.sln'
 - name : SonarID
@@ -33,11 +28,7 @@ variables:
 pool:
   vmImage: '$(DefaultBuildVm)'
 
-  workspace:
-    clean: all
-
 steps:
-#  - checkout: SdlCommunity
   - task: SonarCloudPrepare@3
     inputs:
       SonarCloud: 'AppStorePlugins-ServiceConnection'
