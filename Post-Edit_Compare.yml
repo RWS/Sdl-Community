@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: 'Post-Edit Compare\bin\Release\net48\LanguageWeaverProvider.sdlplugin'
+  value: 'Post-Edit Compare\Sdl.Community.PostEdit.Compare.Versions\bin\Release\net48\Sdl.Community.PostEdit.Versions.sdlplugin'
 - name: solution
   value: '**/Sdl.Community.PostEdit.Versions.sln'
 - name : SonarID
