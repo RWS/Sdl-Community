@@ -15,7 +15,7 @@ pr:
      - Language Weaver Provider/*
 
 variables: 
-- template: jobs/branch-variables.yml
+#- template: AppStoreApplications/jobs/branch-variables.yml
 - group: 'LanguageWeaver Version'
 - name: buildPlatform 
   value: 'Any CPU'
@@ -37,7 +37,7 @@ pool:
     clean: all
 
 steps:
-  - checkout: SdlCommunity
+#  - checkout: SdlCommunity
   - task: SonarCloudPrepare@3
     inputs:
       SonarCloud: 'AppStorePlugins-ServiceConnection'
