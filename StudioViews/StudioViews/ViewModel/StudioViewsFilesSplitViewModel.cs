@@ -89,17 +89,17 @@ namespace Sdl.Community.StudioViews.ViewModel
             _wordCountProvider = wordCountProvider;
         }
 
-        public ICommand ClearFiltersCommand => _clearFiltersCommand ?? (_clearFiltersCommand = new CommandHandler(ClearFilters));
+        public ICommand ClearFiltersCommand => _clearFiltersCommand ??= new CommandHandler(ClearFilters);
 
-        public ICommand SelectedItemsChangedCommand => _selectedItemsChangedCommand ?? (_selectedItemsChangedCommand = new CommandHandler(SelectedItemsChanged));
+        public ICommand SelectedItemsChangedCommand => _selectedItemsChangedCommand ??= new CommandHandler(SelectedItemsChanged);
 
-        public ICommand OpenFolderInExplorerCommand => _openFolderInExplorerCommand ?? (_openFolderInExplorerCommand = new CommandHandler(OpenFolderInExplorer));
+        public ICommand OpenFolderInExplorerCommand => _openFolderInExplorerCommand ??= new CommandHandler(OpenFolderInExplorer);
 
-        public ICommand ExportPathBrowseCommand => _exportPathBrowseCommand ?? (_exportPathBrowseCommand = new CommandHandler(ExportPathBrowse));
+        public ICommand ExportPathBrowseCommand => _exportPathBrowseCommand ??= new CommandHandler(ExportPathBrowse);
 
-        public ICommand OkCommand => _okCommand ?? (_okCommand = new CommandHandler(Ok));
+        public ICommand OkCommand => _okCommand ??= new CommandHandler(Ok);
 
-        public ICommand ResetCommand => _resetCommand ?? (_resetCommand = new CommandHandler(Reset));
+        public ICommand ResetCommand => _resetCommand ??= new CommandHandler(Reset);
 
         public string WindowTitle { get; set; }
 
@@ -345,7 +345,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 
         public ObservableCollection<FilterItem> SelectedExcludeFilterItems
         {
-            get => _selectedExcludeFilterItems ?? (_selectedExcludeFilterItems = new ObservableCollection<FilterItem>());
+            get => _selectedExcludeFilterItems ??= new ObservableCollection<FilterItem>();
             set
             {
                 if (_selectedExcludeFilterItems == value)
@@ -506,7 +506,7 @@ namespace Sdl.Community.StudioViews.ViewModel
             try
             {
 
-                _owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+                _owner.Dispatcher.Invoke(
                     new Action(delegate
                     {
                         ProgressIsVisible = true;
@@ -517,7 +517,7 @@ namespace Sdl.Community.StudioViews.ViewModel
                 var logFileName = "StudioViews_" + "Split" + "_" + _projectFileService.GetDateTimeToFilePartString(ProcessingDateTime) + ".log";
                 LogFilePath = Path.Combine(ExportPath, logFileName);
 
-                _owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+                _owner.Dispatcher.Invoke(
                     new Action(delegate
                     {
                         ProcessingMessage = "Identify segmentation markers...";
@@ -529,8 +529,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 
                 if (!HasSegmentationMarkers())
                 {
-                    _owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
-                        new Action(delegate
+                    _owner.Dispatcher.Invoke(new Action(delegate
                         {
                             ProcessingMessage = "Applying segmentation markers...";
                             ProcessingFile = "...";
@@ -560,7 +559,7 @@ namespace Sdl.Community.StudioViews.ViewModel
             {
                 DialogResult = DialogResult.Abort;
 
-                _owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+                _owner.Dispatcher.Invoke(
                     new Action(delegate
                     {
                         ProgressIsVisible = false;
@@ -691,7 +690,7 @@ namespace Sdl.Community.StudioViews.ViewModel
                 var filePathOutput =
                     _projectFileService.GetUniqueFileName(Path.Combine(fileDirectory, "StudioViewsFile.sdlxliff"), string.Empty);
 
-                _owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+                _owner.Dispatcher.Invoke(
                     new Action(delegate
                     {
                         ProcessingMessage = "Merging selected files...";
@@ -715,7 +714,7 @@ namespace Sdl.Community.StudioViews.ViewModel
             }
 
 
-            _owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+            _owner.Dispatcher.Invoke(
                 new Action(delegate
                 {
                     ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, 1, 1);
@@ -728,7 +727,7 @@ namespace Sdl.Community.StudioViews.ViewModel
 
             var segmentPairs = _sdlxliffReader.GetSegmentPairs(filePathInput);
 
-            _owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+            _owner.Dispatcher.Invoke(
                 new Action(delegate
                 {
                     ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, 1, 1);
@@ -752,7 +751,7 @@ namespace Sdl.Community.StudioViews.ViewModel
                 var currentProgress = (int)((double)index / max * 100); // Calculate current progress percentage
                 if (currentProgress >= lastProgress + 1)
                 {
-                    _owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+                    _owner.Dispatcher.Invoke(
                         new Action(delegate
                         {
                             ProcessingProgressMessage = "Generating segment word counts";
@@ -777,7 +776,7 @@ namespace Sdl.Community.StudioViews.ViewModel
                 fileIndex++;
                 var filePathOutput = GetFilePathOutput(FileName, ExportPath, fileIndex);
 
-                _owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+                _owner.Dispatcher.Invoke(
                     new Action(delegate
                     {
                         ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, fileIndex, segmentPairSplits.Count());
@@ -808,7 +807,7 @@ namespace Sdl.Community.StudioViews.ViewModel
                 exportResult.OutputFiles.Sum(a => a.SegmentCount), fileIndex);
 
 
-            _owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+            _owner.Dispatcher.Invoke(
                 new Action(delegate
                 {
                     ProgressIsVisible = false;
@@ -908,7 +907,7 @@ namespace Sdl.Community.StudioViews.ViewModel
             var currentProgress = (int)((double)min / max * 100);
             if (currentProgress > ProcessingCurrentProgress)
             {
-                _owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+                _owner.Dispatcher.Invoke(
                     new Action(delegate
                     {
                         ProcessingIsIndeterminate = false;
