@@ -349,7 +349,7 @@ namespace Sdl.Community.StudioViews.ViewModel
             try
             {
 
-                _owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+                _owner.Dispatcher.Invoke(
                     new Action(delegate
                     {
                         ProgressIsVisible = true;
@@ -417,7 +417,7 @@ namespace Sdl.Community.StudioViews.ViewModel
                 DialogResult = DialogResult.Abort;
 
 
-                _owner.Dispatcher.Invoke(DispatcherPriority.ContextIdle,
+                _owner.Dispatcher.Invoke(
                     new Action(delegate
                     {
                         ProgressIsVisible = false;
@@ -646,11 +646,16 @@ namespace Sdl.Community.StudioViews.ViewModel
                 fileIndex++;
 
 
-                ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, fileIndex, projectFiles.Count());
-                ProcessingFile = Path.GetFileName(selectedFile.LocalFilePath);
-                ProcessingProgressMessage = "Updating segments...";
-                ProcessingCurrentProgress = 0;
-                ProcessingIsIndeterminate = true;
+                _owner.Dispatcher.Invoke(
+                    new Action(delegate
+                    {
+                        ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files,
+                            fileIndex, projectFiles.Count());
+                        ProcessingFile = Path.GetFileName(selectedFile.LocalFilePath);
+                        ProcessingProgressMessage = "Updating segments...";
+                        ProcessingCurrentProgress = 0;
+                        ProcessingIsIndeterminate = true;
+                    }));
 
                 var updatedFilePath = Path.GetTempFileName();
                 var importResult = _sdlxliffImporter.UpdateFile(updatedSegmentPairs, excludeFilterIds,
@@ -659,7 +664,11 @@ namespace Sdl.Community.StudioViews.ViewModel
             }
 
 
-            ProgressIsVisible = false;
+            _owner.Dispatcher.Invoke(
+                new Action(delegate
+                {
+                    ProgressIsVisible = false;
+                }));
 
             return await Task.FromResult(new List<ImportResult>(importResults));
         }
@@ -676,12 +685,15 @@ namespace Sdl.Community.StudioViews.ViewModel
             {
                 fileIndex++;
 
-
-                ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, fileIndex, targetLanguageFiles.Length);
-                ProcessingFile = Path.GetFileName(targetLanguageFile.LocalFilePath);
-                ProcessingProgressMessage = "Loading project files...";
-                ProcessingCurrentProgress = 0;
-                ProcessingIsIndeterminate = true;
+                _owner.Dispatcher.Invoke(
+                    new Action(delegate
+                    {
+                        ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, fileIndex, targetLanguageFiles.Length);
+                        ProcessingFile = Path.GetFileName(targetLanguageFile.LocalFilePath);
+                        ProcessingProgressMessage = "Loading project files...";
+                        ProcessingCurrentProgress = 0;
+                        ProcessingIsIndeterminate = true;
+                    }));
 
                 if (targetLanguageFile.Role != FileRole.Translatable)
                 {
@@ -707,11 +719,15 @@ namespace Sdl.Community.StudioViews.ViewModel
             {
                 fileIndex++;
 
-                ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, fileIndex, importFiles.Count());
-                ProcessingFile = Path.GetFileName(importFile);
-                ProcessingProgressMessage = "Reading segments...";
-                ProcessingCurrentProgress = 0;
-                ProcessingIsIndeterminate = true;
+                _owner.Dispatcher.Invoke(
+                    new Action(delegate
+                    {
+                        ProcessingMessage = string.Format(PluginResources.Progress_Processing_0_of_1_files, fileIndex, importFiles.Count());
+                        ProcessingFile = Path.GetFileName(importFile);
+                        ProcessingProgressMessage = "Reading segments...";
+                        ProcessingCurrentProgress = 0;
+                        ProcessingIsIndeterminate = true;
+                    }));
 
                 var segmentPairs = sdlXliffReader.GetSegmentPairs(importFile);
                 foreach (var segmentPair in segmentPairs)
