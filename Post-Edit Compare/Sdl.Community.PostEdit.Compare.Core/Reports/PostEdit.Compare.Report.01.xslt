@@ -12,6 +12,48 @@
 
         <style type="text/css">
 
+          .custom-dropdown {
+          position: absolute;
+          display: none;
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 0.2s ease-in-out;
+          background: white;
+          border: 1px solid #ccc;
+          border-radius: 6px;
+          padding: 4px 0;
+          box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+          z-index: 1000;
+          min-width: 140px;
+          font-family: Arial, sans-serif;
+          font-size: 12px;
+          }
+
+          .dropdown-content div {
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          padding: 2px 10px;
+          white-space: nowrap; /* Prevents text wrapping */
+          }
+
+          .dropdown-content div:hover {
+          background-color: #f0f0f0;
+          }
+
+          .dropdown-content div img {
+          width: 14px;
+          height: 14px;
+          margin-right: 6px;
+          opacity: 0.8;
+          }
+
+          /* Optional: Slightly highlight the selected item */
+          .dropdown-content div:active {
+          background-color: #e0e0e0;
+          }
+
+
           .addComment {
           display: grid;
           grid-template-columns: 1fr auto; /* Two columns: one for the input, one for the dropdown */
@@ -2634,7 +2676,7 @@
     <xsl:param name="showSegmentTerp" />
     <xsl:param name="showSegmentPemp" />
 
-    <tr data-file-id='{@fileId}' data-project-id='{@projectId}'>
+    <tr data-file-id='{@fileId}' data-project-id='{@projectId}' data-segment-id='{@segmentId}'>
 
       <td class="segmentId">
         <a href="#" onclick="navigateToSegment('{@segmentId}','{@fileId}','{@projectId}'); return false;">
@@ -2647,7 +2689,7 @@
         <xsl:value-of select="@tmName"/>
       </td>
       <td>
-        <xsl:value-of select="@tmTranslationUnit"/>
+        <xsl:apply-templates select="tmTranslationUnit/token"/>
       </td>
 
       <xsl:if test="$showSegmentLocked = 'True'">
@@ -2689,16 +2731,32 @@
       <xsl:if test="$showSegmentStatus = 'True'">
         <td class="status-cell">
 
-          <select class="status-dropdown" onchange="updateStatus(this, '{@segmentId}','{@fileId}','{@projectId}')">
-            <option value="">Change status</option>
-            <option value="Unspecified">Not Translated</option>
-            <option value="Draft">Draft</option>
-            <option value="Translated">Translated</option>
-            <option value="RejectedTranslation">Translation Rejected</option>
-            <option value="ApprovedTranslation">Translation Approved</option>
-            <option value="RejectedSignOff">Sign-off Rejected</option>
-            <option value="ApprovedSignOff">Signed Off</option>
-          </select>
+          <div class="custom-dropdown">
+            <div class="dropdown-content">
+              <div onclick="updateStatus(this)" data-value="Unspecified">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAMAAAD04JH5AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAABOUExURf///01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS/////Ly8q2srF1cW+vr601MS4iIh01MS01MS////1+nF4kAAAAYdFJOUwAA/fTctXwx0V0CzS/3Y3+Ahabrh36/3dYJUqEAAAABYktHRACIBR1IAAAAB3RJTUUH6QMfDy8h52yy/QAAAP1JREFUeNrt19kOgjAURVFHUBAojvf/v1QTYyzjA4Z7NO793mYl7ctZLIiIWtmnrdabbZIuh5of8Gy3z7QAs/wgBlhRigFmiRpglRrwELxvlgCsmgwIE6qPpxGBAyCE84jABRCOw6/gA6h7/sHFExBe568dgTMgdATegI7AHdAW+ANaAgGgKVAAegTOgIYgUQAaglIBiAXFQQGIBXmmAMSCvR+gv50aYKkakKgBWzXgpgas1YCVGmCzA/qK94IEEO8FEeC9F1SAWg0IAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH4PMFcAAAD4fgAR/V13kW70v3T5JcsAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjUtMDMtMzFUMTU6NDc6MzMrMDA6MDB08/puAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDI1LTAzLTMxVDE1OjQ3OjMzKzAwOjAwBa5C0gAAACh0RVh0ZGF0ZTp0aW1lc3RhbXAAMjAyNS0wMy0zMVQxNTo0NzozMyswMDowMFK7Yw0AAAAASUVORK5CYII=" alt=""/> Not Translated
+              </div>
+              <div onclick="updateStatus(this)" data-value="Draft">
+                <img src="data:image/png;base64,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" alt=""/> Draft
+              </div>
+              <div onclick="updateStatus(this)" data-value="Translated">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAF0UExURf///wAAAMFJPMFJPMFJPMFJPMFJPMFJPMFJPMFJPMFJPMFJPM1sYcZXS92ak/////nt7MRRRMFJPMFJPOSwq8ZXS8FJPA6WYQuUXuCln8ZYTNyZktB0asFJPAyUXlGzi8FJPMFJPMJLPsFJPOCkncFJPBKXYYLIrMjn2zanelOzjQ+SXAyVXpjSupvUvU+yicFJPFy4kwyUXQuUXRCZXRKWYJfQuQyXX124lAyUXQyVXhCUWpbQuV24kw2UXQyVXgyVXV65lQuUXovMswmWXACqVAuVXRCWYPn8+guVXBycac7q4Fa1jwyVXhubZ+Lz6y2jcwmWXA2UXVa1j+n28QyUXr3i0w2UXSqicg6TW3PCoiyicwyUXuTz7R2caACRbQ2UXlm2kcHj1lm2kBycaAuTX+f073bCpQ6UXw2VXgyUXQuUXgyVXg2UXg2UXgiYWw2VXQyVXQuUXg2UXg2UXAyVXgyVXgqTXACMU8FJPA2VXv///xSz42MAAAB5dFJOUwAAILX121wi4f1u99fusYCG9U76o+1ZIXuq7LHP1eDG7Kv9Gqoc+quQ2sYg36KgyR3Ad9wd+6MfwN7dHqO/dNh/v36oQQXb/YFP747Dr/KI4RX5xIZwlNDjMbPikYfvBurDksLxUoax/vqzU7L41Bi+7u2WNvK3VwhzExL0AAAAAWJLR0QAiAUdSAAAAAd0SU1FB+kDHw8uFkbKJrMAAAHISURBVEjHxdXlXwIxGMBxTsXWKdjdBXagIDgRO0Ds7u6W/fXudsXuth28cu/28PvyuYJzOP57ZWRmObPT6HNyE4lEXn56fRpC7gsKi1IW5PuLQUlpqsLlxqAMgHL5qCqMucRelVWgGoua2jpyHvXKlA8qG1AjEepqsgG4R5RoFgPSE9Gi9M5WIVB7WbQR4WyXREDuOzq7urHoIULv2cDjxX0vAH1IEW6jZwKtB/1IEa4BSQT0flA9j6HkT63A0g+PCIHcj45xewvw2fRmoPfjnN4EfBOm3m/uaWDtA5IIkH4S90F+nwzs+tBUiAJ2PcQjmAQCWj/N7xEK6yDgx9sZux6hiApm5/BmfsHoJ3zMXgeLaAnvgssrNr1+SKtr0RgyFr9XwXp8A2zGUulVsIW2gSFEvQp2dvH10QTulXvE6hWwh/YBEQd47vVp94jVK+AwHiUAHB0jr0cKkwAyewJOTtGZnJ9fXCK/R4qoCWT1BFzhwdn1Tez27v7hRNIBjqw9AY/y6Ak9h16UWVjLXq09AW949P7xaQx1Ye0JgF/fP7/UpacFlEzA+rOiBNVz/+4hp+e/UCC7F7yyILMXAOoBSQlQjyAF0lt/y0gtHCRsMqAAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjUtMDMtMzFUMTU6NDY6MjIrMDA6MDDx7Jp6AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDI1LTAzLTMxVDE1OjQ2OjIyKzAwOjAwgLEixgAAACh0RVh0ZGF0ZTp0aW1lc3RhbXAAMjAyNS0wMy0zMVQxNTo0NjoyMiswMDowMNekAxkAAAAASUVORK5CYII=" alt=""/> Translated
+              </div>
+              <div onclick="updateStatus(this)" data-value="RejectedTranslation">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAGVUExURf///01MS01MS01MS01MS01MS01MS01MS01MS////01MS01MS01MS01MS01MS01MS01MS1xbW01MS01MS01MS01MS1BPTlVUU2tqaXx7eoGBgHp6eWppaVRTUk1MS01MS01MS3Z1dU9OTb29vf7+/v////z8/Li4uHJxcE5NTE1MS01MS3V1dGRjYs3NzcbGxmFgX46Njfn5+ff393V0c////01MS09OTXx7ek1MS2VlZPv7+01MS9LR0f///01MS3p5eE1MS01MS1hXVk1MS1VUU01MS3Fwb01MS4OCgXp6eU1MS4qJiE1MS4ODgk1MS1pZWE1MS01MS8vLy1NSUU1MS359fE1MS1BQT9nY2E1MS2ppaH18fGhnZk5NTE1MS01MS01MS01MS////01MS+7t7fLY1cpjWMZZTcFJPMFJPICAgE1MS01MS8VWSvHW08NPQsFJPICAgE1MS05NTP///////+3Lx8FKPoCAgE1MS////8dZTv///////9mQiICAgICAgICAgE1MS8FJPICAgP///+Ferr0AAACDdFJOUwAAJE5nb2ZNIRcyl+Xiki0qyP2vI3L89NvLxsvc9vVoA9D9nYCAgZ/T/pMB0OKUmOa6goPRFS78yr3hgTqSAqDMke3xL+pb1XXEzH6/dsRd7gTwleylyUH7j8Xcyd/8tzX7GEp/ho/g0sAfQTD874vl3n5i91x/bOB/JxnTcUkzdNfYBp6aCAAAAAFiS0dEAIgFHUgAAAAHdElNRQfpAx8PMB0FWcDkAAACFUlEQVRIx7XU6VfTQBTG4YRVCioKssvagRaFsom7iKCIuG/IolWUQlNEGzfqWnyT/5tJk7Rj5o7NOR7vp0n7e0ppbqtp/zq6MBWVVdU1tYfCgbpIfQPcOXzkaHnQeAzCHG9qLgNOtDhda1t7R2fXSefY3fM30NvHk/6+gShzZnAoFufXw6fU4DR/fmSUlSYx5gglGOfPdk4wcSan+GM9Z2gwfRY4xwIT5aK7mQbngQsXg4BN8nfVRIJLQMtlJk8ijjh1P67MAFcZNTFglgC914AECYaAOQLMA9fJng3yO0js1Q1ggQasC6iVwU1gUQFuATUyWAJuK0AHUC2DO8BdBWgHqmRwD4gpQBtQKYMIcJ/uo61AhQwePAQekWAAeEytxhPgKQn40tdTYBl4tkL0o/1AhNzWVWAtKvUT689fJOn1fvlKce+0DRroSf7tWpT/xmtNo8Gbwi/L2iZjqa2tlJ+nttMGkWcy+s7bAuCfVGrXsnY98e69ZWVlYdq2qX/gIvnxU6H3xOcve85ZEjmbT46LJf2r9u27Zbnix89fWfecJnpH7Og6v0y7kbVnGF4fAKbtjeleF7Ns8WCQvW1nAqJc74OAUPdm8VFRhOlFEa5XgRD9H0Lsc6peEPlwfUnsl+uDNy5P98XVyEqrYZK9D5yXNQLLZ1K9V7lvQzz7exrs3cpvxHPh//id1+Qx0qWvpXj+v3MAqBuNJulpN/cAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjUtMDMtMzFUMTU6NDg6MjgrMDA6MDBLVfWHAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDI1LTAzLTMxVDE1OjQ4OjI4KzAwOjAwOghNOwAAACh0RVh0ZGF0ZTp0aW1lc3RhbXAAMjAyNS0wMy0zMVQxNTo0ODoyOSswMDowMMtqZ1AAAAAASUVORK5CYII=" alt=""/> Translation Rejected
+              </div>
+              <div onclick="updateStatus(this)" data-value="ApprovedTranslation">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAGeUExURf///wAAAE1MS+3CX01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS1VUU2tqaXx7eoGBgHp6eWppaVRTUk1MS01MS01MS01MS09OTXZ1db29vf7+/v////z8/Li4uHJxcE5NTE1MS01MS01MS2RjYs3NzcbGxmFgX01MS/n5+ff393V0c01MS01MS3x7ek1MS2VlZPv7+01MS1BPTtLR0Xp5eE1MS01MS01MS1lYV01MS3Fwb01MS4OCgXp6eU1MS4qJiIODgk1MS1pZWE1MS01MS8vLy01MS359fHV1dFlYV01MS1BQT9nY2PHx8dTT052cm1xbWk1MS2ppaP///////01MS01MS2i8miGebEmuhV24kwyVXU1MSwuUXu3CX01MS01MSwmWXO3CX01MS3Rzc+3CX2loZ1q3kWdmZf///////zioeu3CX01MS+3CXw2UXQyVXu3CX+3CX+3CX+3CX+3CXw2VXe3CX+3CX+3CX01MSw2VXu3CX////2OyovIAAACGdFJOUwAAAAAkTmdvZk0hMpfl4pItKrf9ryNy+PTby8bL3Pb1aAOg/dCdgICBn9P+kwGh4pSY5naCg9Eu+cq94YE6/JLMke0v8FvVdcTMfr/EXe4E8JWlydCiQfuPh5Gw18XceCY1+7rsmr9/f35BMPxBfmLSf9272mdSm2JcunTYu/gmvHy+dNfYxgTBoAAAAAFiS0dEAIgFHUgAAAAHdElNRQfpAx8PMSBEKr20AAACY0lEQVRIx5WUV1vUQBSGSUJfUaQoVUBlBxbbith7wZUuKCAKCpYIyOraFfvql/xsZ5JMMsmcXPBd7c5532cmc5JTUbHzGFRMkcqq6praunrTj7eeJvB6ZlcD/Oze0xgqtMBre5ugpLmlNTBIgVf27RdcW3tHZ1f3AfGzp9c3KME0+w5y5NDh/iwTGRjMDfH/R44KgxD46jFeP36CRcmfFAYt8MVhXu06xdSMnOZrvZTA186cBc6xRLLc6GnVBbHreeDCxaTARvipWkjhEnD5CtOTH0JzIyXwG7rKqOSAa4TQdx3Ik8Ig7zkh3ABukjwb4B2s14VbwCgtsG6gThduA4UU4Q5QqwtjwHiK0AnU6AJv80SK0AFU68IkkEsR2oEqXcgAUzSfbQMqdWF6BrhLCv1AA9XpWWCOFO4B96m3dR5YWCT4B0sPH2XI72EZWMlSWzx+Qn7T5uoa2bunz57HpoblxdtCDIxCco8XjuPYimBZ0jBfepNlZVHjHWc9FCS/sWFsvvJn0cKcvN0lyTvOViBIvui6ReM1N5rWhDOVmxgvjL6JeClIvuTylLgxZq4uy6n3lrF3kg+OFOOFsSlmwfzsjODff/j4KeJjQtEN8tmf3eZ0ZnL4i2nYCq8KIf/VikaOmeAVQeW3v22HfYzzkRDy3y2PsWk+FEL+x09j3QNskvcElXd/GVsBYlN8IES8InBI531B4d3fRnAknj867wllhS+JKw0NnfeEvwk+adiGkbZDwMeNGB9/hpBXrifBx26ppBZsmpd9KCV5aSR5KVjlf+Vkyab4ULAsrRR7BWPCzvIf00WJav2SQ7MAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjUtMDMtMzFUMTU6NDk6MzIrMDA6MDDMTcFpAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDI1LTAzLTMxVDE1OjQ5OjMyKzAwOjAwvRB51QAAACh0RVh0ZGF0ZTp0aW1lc3RhbXAAMjAyNS0wMy0zMVQxNTo0OTozMiswMDowMOoFWAoAAAAASUVORK5CYII=" alt=""/> Translation Approved
+              </div>
+              <div onclick="updateStatus(this)" data-value="RejectedSignOff">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAC3UExURf///01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS01MS8FJPMFJPE1MS01MS8FJPE1MS01MS01MS01MS01MS01MS3JxcP///+m9ucJNQU1MS01MS2hnZv///8pjWE1MS01MS09OTfLY1cVWSk1MS359fE1MS5SUk01MS4iIh8DAv4CAgLOzs01MS8FJPICAgP///+wgpGoAAAA5dFJOUwAVV3kWn/kt5TcMihP0o1YhBAlEFwLCH8ANqN5Jfn+AnuyeQFbjNf3fgOCXBv2P707Jfbc/v5t/tw62VmwAAAABYktHRACIBR1IAAAAB3RJTUUH6QMfDzIYRwVW6QAAAURJREFUSMfdk9lWwjAQhoeWBpAdhBaqQMUtLriLie//XkaHtJQm6fQcvfG/yun5vmYmmQD8s9Q83/dqZLweMKHCgjqNbzTFLs0G6f8prwzKHoHYS0Dol+0LrLxzT+TilQp+XvB/X6hcUuWmKx9r9YuDVloUax1RBGhroU3CATpd5LsdogA9FHpUHvoo9MnCAIUBWRiiMCQLIxRGZGGMwviYyE+mKEwn+ksYRaFpjZnN9cXNZzsmljIOi2s4OV0slqskm6VktTxbr88vpNTUN58al1eimGvOb6TUFPJSRj/CrXAKytA8CneJSbjnfPOgjVhmmwE8CmOeOOfayPHwbBbEy6GhD+n1zZJ3ZcRFHrgrabsZD9tPWz4qCorfmEraOnhj0/aEsfFYy/mDi7MmsoxGmVAcPndJhvF2GsYHZDecT/Sv8gWL5aSqR4SZAgAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyNS0wMy0zMVQxNTo1MDoyMyswMDowMJsLPkkAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjUtMDMtMzFUMTU6NTA6MjMrMDA6MDDqVob1AAAAKHRFWHRkYXRlOnRpbWVzdGFtcAAyMDI1LTAzLTMxVDE1OjUwOjI0KzAwOjAweOSZpAAAAABJRU5ErkJggg==" alt=""/> Sign-off Rejected
+              </div>
+              <div onclick="updateStatus(this)" data-value="ApprovedSignOff">
+                <img src="data:image/png;base64,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" alt=""/> Signed Off
+              </div>
+            </div>
+          </div>
+
           <br/>
           <xsl:apply-templates select="segmentStatus/token"/>
 

@@ -94,8 +94,7 @@ namespace Sdl.Community.PostEdit.Versions.Dialogs
 
                         panel_details.BringToFront();
 
-                        button_wizard_help.Enabled = false;
-
+                        
                         button_wizard_continue.Text = PluginResources.Continue;
                         button_wizard_continue.Enabled = true;
                         button_wizard_cancel.Enabled = true;
@@ -109,8 +108,7 @@ namespace Sdl.Community.PostEdit.Versions.Dialogs
 
                         panel_progress.BringToFront();
 
-                        button_wizard_help.Enabled = false;
-
+                        
                         button_wizard_continue.Text = PluginResources.Close;
                         button_wizard_continue.Enabled = true;
                         button_wizard_cancel.Enabled = false;
@@ -135,8 +133,6 @@ namespace Sdl.Community.PostEdit.Versions.Dialogs
 
                 button_wizard_continue.Enabled = false;
                 button_wizard_cancel.Enabled = false;
-                button_wizard_help.Enabled = false;
-
 
 
                 ProjectVersion.name = textBox_name.Text;
@@ -333,8 +329,7 @@ namespace Sdl.Community.PostEdit.Versions.Dialogs
                 Cursor = Cursors.Default;
                 button_wizard_continue.Enabled = true;
                 button_wizard_cancel.Enabled = false;
-                button_wizard_help.Enabled = false;
-            }
+                            }
         }
 
         public void CountAll(DirectoryInfo source, string searchPattern)
@@ -404,7 +399,8 @@ namespace Sdl.Community.PostEdit.Versions.Dialogs
             FileBasedProject currentSelectedProject = null;
 
             var selectedItem = (ComboboxItem)comboBox_projects.SelectedItem;
-            var projectInfo = (ProjectInfo)selectedItem.Value;
+            var projectInfo = (ProjectInfo)selectedItem?.Value;
+            if (projectInfo is null) return;
 
             var projects = ProjectsController.GetProjects().ToList();
             foreach (var proj in projects)
@@ -624,11 +620,6 @@ namespace Sdl.Community.PostEdit.Versions.Dialogs
             {
                 button_wizard_continue.Enabled = false;
             }
-        }
-
-        private void button_wizard_help_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(this, PluginResources.No_help_file_found, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void button_wizard_continue_Click(object sender, EventArgs e)

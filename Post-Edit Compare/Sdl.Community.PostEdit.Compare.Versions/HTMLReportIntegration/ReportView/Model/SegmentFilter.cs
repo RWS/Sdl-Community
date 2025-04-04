@@ -25,30 +25,27 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model
                     throw new ArgumentException("Invalid confirmation status");
                 if (!Statuses.HasFlag(confirmationStatus))
                 {
-                    if (Operator == Operator.And)
-                        return false;
+                    if (Operator == Operator.And || MatchTypes == 0) return false;
                 }
                 else if (Operator == Operator.Or) return true;
             }
 
-            if (MatchTypes != 0)
-            {
-                if (string.IsNullOrWhiteSpace(segment.MatchType)) return MatchTypes.HasFlag(MatchTypes.NoMatch);
+            if (MatchTypes == 0) return true;
 
-                if (!Enum.TryParse<MatchTypes>(segment.MatchType, out var matchType))
-                    if (!segment.MatchType.Contains("%")) throw new ArgumentException("Invalid match type");
-                    else
-                    {
-                        if (!int.TryParse(segment.MatchType.Split('%')[0], out var fuzzyPercentage))
-                            throw new ArgumentException("Invalid fuzzy percentage");
-                        if (!FuzzyRange.IsInFuzzyRanges(fuzzyPercentage, FuzzyPercentage))
-                            return !FuzzyPercentage.Any();
-                        if (Operator == Operator.Or) return true;
-                    }
-                else if (!MatchTypes.HasFlag(matchType)) return false;
-            }
+            if (string.IsNullOrWhiteSpace(segment.MatchType)) return MatchTypes.HasFlag(MatchTypes.NoMatch);
 
-            return Operator == Operator.And;
+            if (!Enum.TryParse<MatchTypes>(segment.MatchType, out var matchType))
+                if (!segment.MatchType.Contains("%")) throw new ArgumentException("Invalid match type");
+                else
+                {
+                    if (!int.TryParse(segment.MatchType.Split('%')[0], out var fuzzyPercentage))
+                        throw new ArgumentException("Invalid fuzzy percentage");
+                    if (!FuzzyRange.IsInFuzzyRanges(fuzzyPercentage, FuzzyPercentage))
+                        return !FuzzyPercentage.Any() && MatchTypes.HasFlag(MatchTypes.FuzzyMatch);
+                }
+            else return MatchTypes.HasFlag(matchType);
+
+            return true;
         }
     }
 }

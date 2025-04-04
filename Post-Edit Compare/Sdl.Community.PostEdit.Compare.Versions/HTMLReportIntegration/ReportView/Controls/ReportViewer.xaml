@@ -9,13 +9,8 @@
              d:DesignWidth="800">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
 
-        <wpf:WebView2 Grid.Row="1"
-                      Name="WebView2Browser"
+        <wpf:WebView2 Name="WebView2Browser"
                       WebMessageReceived="CoreWebView2_WebMessageReceived"
                       Loaded="WebView2Browser_OnLoaded" />
     </Grid>

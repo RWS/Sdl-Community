@@ -46,6 +46,9 @@
     <Reference Include="Sdl.Core.PluginFramework">
       <HintPath>$(TradosFolder)\Sdl.Core.PluginFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.Core.Settings">
+      <HintPath>$(TradosFolder)\Sdl.Core.Settings.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(TradosFolder)\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
@@ -63,6 +66,9 @@
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
       <HintPath>$(TradosFolder)\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Trados\Trados Studio\Studio18\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
       <HintPath>$(TradosFolder)\Sdl.LanguagePlatform.Core.dll</HintPath>
@@ -90,6 +96,7 @@
       <HintPath>$(TradosFolder)\System.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Build\SolutionInfo.cs">
@@ -135,5 +142,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sdl.Community.PostEdit.Compare.DAL\Sdl.Community.PostEdit.Compare.DAL.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NewFolder\" />
   </ItemGroup>
 </Project>

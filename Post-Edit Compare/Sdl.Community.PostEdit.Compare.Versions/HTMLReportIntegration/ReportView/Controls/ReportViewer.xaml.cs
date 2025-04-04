@@ -1,7 +1,9 @@
 ﻿using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
 using Newtonsoft.Json;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Controls.Interface;
 using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Model;
+using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Utilities;
 using Sdl.Desktop.IntegrationApi.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -17,7 +19,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
     /// <summary>
     /// Interaction logic for ReportExplorer.xaml
     /// </summary>
-    public partial class ReportViewer : UserControl, IUIControl
+    public partial class ReportViewer : UserControl, IUIControl, IReportViewer
     {
         public ReportViewer()
         {
@@ -32,6 +34,26 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
         {
         }
 
+        public async Task EnsureBrowserIsLoaded()
+        {
+            await WebView2Browser.EnsureCoreWebView2Async(Environment);
+        }
+
+        public async Task<List<SegmentComments>> GetAllComments()
+        {
+            try
+            {
+                var result = await WebView2Browser.ExecuteScriptAsync("getComments();");
+                var reportSegments = JsonConvert.DeserializeObject<List<SegmentComments>>(result);
+                return reportSegments;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error retrieving the comments from the HTML report: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+        }
+
         public async Task<List<ReportSegment>> GetAllSegments()
         {
             try
@@ -42,7 +64,22 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error retrieving the segments of the HTML report: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error retrieving the segments from the HTML report: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+        }
+
+        public async Task<List<ReportSegment>> GetAllSegmentsCurrentlyVisible()
+        {
+            try
+            {
+                var result = await WebView2Browser.ExecuteScriptAsync("getAllSegmentsCurrentlyVisible();");
+                var reportSegments = JsonConvert.DeserializeObject<List<ReportSegment>>(result);
+                return reportSegments;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error retrieving the segments from the HTML report: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
         }
@@ -52,7 +89,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             try
             {
                 var script = "document.documentElement.outerHTML;";
-                var result = await WebView2Browser.ExecuteScriptAsync(script);
+                var result = await WebView2Browser.RunScript(script);
 
                 // The returned string is JSON-encoded, so we need to decode it
                 return JsonConvert.DeserializeObject<string>(result);
@@ -147,19 +184,24 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             }
         }
 
-        public void UpdateComments(List<CommentInfo> comments, string segmentId, string fileId)
+        public async Task UpdateComments(List<CommentInfo> comments, string segmentId, string fileId, AddReplace addReplace = AddReplace.Replace)
         {
             var commentsJson = JsonConvert.SerializeObject(comments, new JsonSerializerSettings
             {
                 ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
             });
-            var script = $"replaceCommentsForSegment('{segmentId}', {commentsJson}, '{fileId}');";
+
+            var functionName = addReplace.HasFlag(AddReplace.Replace)
+                ? "replaceCommentsForSegment"
+                : "addCommentsForSegment";
+
+            var script = $"{functionName}('{segmentId}', {commentsJson}, '{fileId}');";
 
             try
             {
-                WebView2Browser.Dispatcher.Invoke(async () =>
+                await WebView2Browser.Dispatcher.Invoke(async () =>
                 {
-                    WebView2Browser.ExecuteScriptAsync(script);
+                    await WebView2Browser.ExecuteScriptAsync(script);
                 });
             }
             catch (Exception e)
@@ -168,9 +210,9 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             }
         }
 
-        public void UpdateStatus(string newStatus, string segmentId, string fileId)
+        public async Task UpdateStatus(string newStatus, string segmentId, string fileId)
         {
-            object[] parameters = new[] { segmentId, fileId, newStatus };
+            object[] parameters = [segmentId, fileId, newStatus];
             var serializedParams = new List<string>();
             foreach (var param in parameters)
             {
@@ -186,9 +228,9 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
 
             try
             {
-                WebView2Browser.Dispatcher.Invoke(async () =>
+                await WebView2Browser.Dispatcher.Invoke(async () =>
                 {
-                    WebView2Browser.ExecuteScriptAsync(script);
+                    await WebView2Browser.ExecuteScriptAsync(script);
                 });
             }
             catch (Exception e)
@@ -235,11 +277,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
             {
                 MessageBox.Show("Failed to load scripts", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        private async Task EnsureBrowserIsLoaded()
-        {
-            await WebView2Browser.EnsureCoreWebView2Async(Environment);
         }
 
         private async void WebView2Browser_OnLoaded(object sender, RoutedEventArgs e)

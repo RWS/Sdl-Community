@@ -56,7 +56,6 @@
             this.button_wizard_finish = new System.Windows.Forms.Button();
             this.button_wizard_next = new System.Windows.Forms.Button();
             this.button_wizard_back = new System.Windows.Forms.Button();
-            this.button_wizard_help = new System.Windows.Forms.Button();
             this.panel_action = new System.Windows.Forms.Panel();
             this.panel8 = new System.Windows.Forms.Panel();
             this.panel6 = new System.Windows.Forms.Panel();
@@ -364,7 +363,6 @@
             // panel9
             // 
             this.panel9.Controls.Add(this.panel33);
-            this.panel9.Controls.Add(this.button_wizard_help);
             this.panel9.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel9.Location = new System.Drawing.Point(0, 930);
             this.panel9.Margin = new System.Windows.Forms.Padding(6);
@@ -428,18 +426,6 @@
             this.button_wizard_back.Text = "< &Back";
             this.button_wizard_back.UseVisualStyleBackColor = true;
             this.button_wizard_back.Click += new System.EventHandler(this.button_wizard_back_Click);
-            // 
-            // button_wizard_help
-            // 
-            this.button_wizard_help.Enabled = false;
-            this.button_wizard_help.Location = new System.Drawing.Point(44, 17);
-            this.button_wizard_help.Margin = new System.Windows.Forms.Padding(6);
-            this.button_wizard_help.Name = "button_wizard_help";
-            this.button_wizard_help.Size = new System.Drawing.Size(150, 44);
-            this.button_wizard_help.TabIndex = 0;
-            this.button_wizard_help.Text = "&Help";
-            this.button_wizard_help.UseVisualStyleBackColor = true;
-            this.button_wizard_help.Click += new System.EventHandler(this.button_wizard_help_Click);
             // 
             // panel_action
             // 
@@ -838,7 +824,6 @@
             // 
             this.fuzzyBandsOriginal.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.fuzzyBandsOriginal.FormattingEnabled = true;
-            
             this.fuzzyBandsOriginal.Location = new System.Drawing.Point(864, 342);
             this.fuzzyBandsOriginal.Margin = new System.Windows.Forms.Padding(6);
             this.fuzzyBandsOriginal.Name = "fuzzyBandsOriginal";
@@ -1067,7 +1052,6 @@
         private System.Windows.Forms.Button button_wizard_finish;
         private System.Windows.Forms.Button button_wizard_next;
         private System.Windows.Forms.Button button_wizard_back;
-        private System.Windows.Forms.Button button_wizard_help;
         private System.Windows.Forms.Panel panel_action;
         private System.Windows.Forms.Panel panel_options;
         private System.Windows.Forms.TabControl tabControl1;

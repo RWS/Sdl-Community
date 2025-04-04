@@ -1,6 +1,7 @@
 ﻿using Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Extensions.Internal;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 using System;
 using System.Threading.Tasks;
@@ -13,24 +14,39 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
     {
     }
 
-    [Action(nameof(SaveReport),
-        typeof(ReportViewController),
-        Icon = "SaveReport", Name = "Save Report",
-        Description = "Save Report")]
-    [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Large)]
-    public class SaveReport : AbstractAction
-    {
-        protected override void Execute() => Integration.SaveReport();
-    }
-
     [Action(nameof(RefreshReportList),
         typeof(ReportViewController),
-        Icon = "RefreshReportList", Name = "Refresh Report List",
+        Icon = "RefreshReportExplorer_Icon", Name = "Refresh Report List",
         Description = "Refresh Report List")]
-    [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Default)]
+    [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Large)]
     public class RefreshReportList : AbstractAction
     {
-        protected override void Execute() => Integration.RefreshReportList();
+        protected override void Execute() => Integration.SetUpReportExplorer();
+    }
+
+    [Action(nameof(UndockReportViewer),
+        typeof(ReportViewController),
+        Icon = "Undock", Name = "Undock Report Viewer",
+        Description = "Undock Report Viewer")]
+    [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Large)]
+    public class UndockReportViewer : AbstractAction
+    {
+
+        protected override void Execute()
+        {
+            Integration.UndockReportViewer();
+            Enabled = false;
+        }
+    }
+
+    [Action(nameof(AddNewReportFolder),
+        typeof(ReportViewController),
+        Icon = "Settings2", Name = "Report Locations",
+        Description = "Report Locations")]
+    [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Default)]
+    public class AddNewReportFolder : AbstractAction
+    {
+        protected override void Execute() => Integration.EditReportFolderList();
     }
 
     [Action(nameof(OpenReportBackupFolder),
@@ -42,6 +58,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
     {
         protected override void Execute() => Integration.OpenReportBackupFolder();
     }
+    
 
     [Action(nameof(OpenReport),
         typeof(ReportViewController),
@@ -55,7 +72,7 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.Ribbon
     
     [Action(nameof(ExportReport),
         typeof(ReportViewController),
-        Icon = "ExportReport", Name = "Export Report",
+        Icon = "Export", Name = "Export Report",
         Description = "Export Report")]
     [ActionLayout(typeof(ReportManagementRibbonGroup), 10, DisplayType.Default)]
     public class ExportReport : AbstractAction

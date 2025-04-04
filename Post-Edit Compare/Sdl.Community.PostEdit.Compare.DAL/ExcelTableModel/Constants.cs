@@ -58,5 +58,5 @@ namespace Sdl.Community.PostEdit.Compare.DAL.ExcelTableModel
 		#endregion
 		public static string SignOffRejected { get { return "Sign-Off Rejected"; } }
 		public static string SignedOff { get { return "Signed Off "; } }
-	}
+    }
 }

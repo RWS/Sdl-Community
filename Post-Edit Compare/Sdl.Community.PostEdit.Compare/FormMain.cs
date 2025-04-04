@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using PostEdit.Compare.Model;
+using Sdl.Community.PostEdit.Compare;
 using System.Windows.Forms;
 using System.Reflection;
 using System.IO;
@@ -69,6 +70,7 @@ namespace PostEdit.Compare
             try
             {
                 Cache.Application.Settings = SettingsSerializer.ReadSettings();
+
             }
             catch (Exception ex)
             {
