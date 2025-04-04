@@ -64,13 +64,15 @@ namespace Sdl.Community.PostEdit.Versions
 
         protected override void Initialize(IViewContext context)
         {
-            IsInitialized = true;
-            Initialize();
+             Initialize();
         }
 
 
         public void Initialize()
         {
+            if (IsInitialized) return;
+            IsInitialized = true;
+
             IsUpdatingNavigationView = false;
             IsEnabledCompare = false;
             IsEnabledCreateNewProjectVersion = false;
@@ -273,7 +275,11 @@ namespace Sdl.Community.PostEdit.Versions
                     InitializeViewControl(project);
 
                     if (_viewContent.Value.listView_postEditCompareProjectVersions.Items.Count > 0)
-                        _viewContent.Value.listView_postEditCompareProjectVersions.Items[0].Selected = true;
+                        try
+                        {
+                            _viewContent.Value.listView_postEditCompareProjectVersions.Items[0].Selected = true;
+                        }
+                        catch { }
                 }
             }
 
@@ -1355,10 +1361,10 @@ namespace Sdl.Community.PostEdit.Versions
                 }
 
 
-                if (tnSelected == null && _viewNavigation.Value.treeView_navigation.Nodes.Count > 0)
-                {
-                    tnSelected = _viewNavigation.Value.treeView_navigation.Nodes[0];
-                }
+                //if (tnSelected == null && _viewNavigation.Value.treeView_navigation.Nodes.Count > 0)
+                //{
+                //    tnSelected = _viewNavigation.Value.treeView_navigation.Nodes[0];
+                //}
 
 
                 _viewNavigation.Value.treeView_navigation.SelectedNode = tnSelected;

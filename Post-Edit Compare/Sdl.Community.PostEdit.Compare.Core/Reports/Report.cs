@@ -20,7 +20,6 @@ using System.Windows;
 using Formatting = System.Xml.Formatting;
 using MessageBox = System.Windows.MessageBox;
 using Sdl.Community.PostEdit.Compare.Core.TrackChangesForReportGeneration.Components;
-using Sdl.FileTypeSupport.Framework.Native;
 
 namespace Sdl.Community.PostEdit.Compare.Core.Reports
 {
