@@ -8,28 +8,28 @@ namespace ProjectAutomation
 	{
 		static void Main(string[] args)
 		{
-			// TODO: Set location where to find the source files
-			var sourceFilesDirectory = @"c:\temp\source files folder";
+            // TODO: Set location where to find the source files
+            var sourceFilesDirectory = @"c:\temp\source files folder";
 
-			// TODO: Set location for the project output folder... projects will be created here in sub-folders
-			var projectsDirectory = @"c:\temp\projects";
-			if (!Directory.Exists(projectsDirectory))
+            // TODO: Set location for the project output folder... projects will be created here in sub-folders
+            var projectsDirectory = @"c:\temp\projects";
+            if (!Directory.Exists(projectsDirectory))
 			{
 				Directory.CreateDirectory(projectsDirectory);
 			}
 
 			// TODO: Set the source and target language combination
-			var sourceLanguage = "en-US";
-			var targetLanguage = "it-IT";
+			var sourceLanguage = "en-US"; // Change this to match the source language
+			var targetLanguage = "it-IT"; // Change this to match the target language
 
 			// TODO: Set the memory resource
 			var memory = new MemoryResource
 			{
-				Path = @"c:\temp\mytm.sdltm",
-				//Uri = new Uri("sdlmtcloud:///"),
-				//UserNameOrClientId = "TODO: UserName Or ClientID",
-				//UserPasswordOrClientSecret = "TODO: UserPassword Or ClientSecret"
-			};
+                //Example to connect to deepL provider (https://appstore.rws.com/Plugin/24)
+                Uri = new Uri("deepltranslationprovider:///"),
+                UserNameOrClientId = "[your DeepL account e-mail]",
+                Credential = "[your DeepL account API key]"
+            };
 
 			CreateProject(sourceFilesDirectory, projectsDirectory, sourceLanguage, targetLanguage, memory);
 

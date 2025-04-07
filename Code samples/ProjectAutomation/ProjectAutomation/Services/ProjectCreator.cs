@@ -46,39 +46,43 @@ namespace ProjectAutomation.Services
 
 			return false;
 		}
-		
-		private static void AddTranslationProvider(FileBasedProject project, MemoryResource memory)
-		{
-		
-			var provider = GetTranslationProviderReference(memory);
-			if (provider == null)
-			{
-				return;
-			}
 
-			var entry = new TranslationProviderCascadeEntry(provider, false, true, false, 0);
+        private static void AddTranslationProvider(FileBasedProject project, MemoryResource memory)
+        {
 
-			var tpConfig = project.GetTranslationProviderConfiguration();
+            var provider = GetTranslationProviderReference(memory);
+            if (provider == null)
+            {
+                return;
+            }
 
-			// remove any existing entries, if needed!
-			tpConfig.Entries.Clear();
+            var entry = new TranslationProviderCascadeEntry(provider, false, true, false, 0);
 
-			tpConfig.Entries.Add(entry);
-			project.UpdateTranslationProviderConfiguration(tpConfig);
+            var tpConfig = project.GetTranslationProviderConfiguration();
 
-			if (memory.Uri != null && !string.IsNullOrEmpty(memory.UserNameOrClientId) &&
-			    !string.IsNullOrEmpty(memory.UserPasswordOrClientSecret))
-			{
-				project.Credentials.AddCredential(memory.Uri, false,
-					memory.UserNameOrClientId, memory.UserPasswordOrClientSecret);
-			}
+            // remove any existing entries, if needed!
+            tpConfig.Entries.Clear();
 
-			UpdateTranslateSettings(project);
+            tpConfig.Entries.Add(entry);
+            project.UpdateTranslationProviderConfiguration(tpConfig);
 
-			project.Save();
-		}
+            if (memory.Uri != null && !string.IsNullOrEmpty(memory.UserNameOrClientId) &&
+                !string.IsNullOrEmpty(memory.UserPasswordOrClientSecret))
+            {
+                project.Credentials.AddCredential(memory.Uri, memory.IsWindowsUser,
+                    memory.UserNameOrClientId, memory.UserPasswordOrClientSecret);
+            }
+            else if (memory.Uri != null && !string.IsNullOrEmpty(memory.Credential))
+            {
+                project.Credentials.AddCredential(memory.Uri, memory.Credential);
+            }
 
-		private static void UpdateTranslateSettings(FileBasedProject project)
+            UpdateTranslateSettings(project);
+
+            project.Save();
+        }
+
+        private static void UpdateTranslateSettings(FileBasedProject project)
 		{
 			var settings = project.GetSettings();
 			var translateSettings = settings.GetSettingsGroup<TranslateTaskSettings>();
@@ -88,23 +92,24 @@ namespace ProjectAutomation.Services
 			project.UpdateSettings(settings);
 		}
 
-		private static TranslationProviderReference GetTranslationProviderReference(MemoryResource memory)
-		{
-			TranslationProviderReference provider = null;
-			if (!string.IsNullOrEmpty(memory.Path) && File.Exists(memory.Path))
-			{
-				provider = new TranslationProviderReference(memory.Path);
-			}
-			else if (memory.Uri != null && !string.IsNullOrEmpty(memory.UserNameOrClientId) &&
-			         !string.IsNullOrEmpty(memory.UserPasswordOrClientSecret))
-			{
-				provider = new TranslationProviderReference(memory.Uri, null, true);
-			}
+        private static TranslationProviderReference GetTranslationProviderReference(MemoryResource memory)
+        {
+            TranslationProviderReference provider = null;
+            if (!string.IsNullOrEmpty(memory.Path) && File.Exists(memory.Path))
+            {
+                provider = new TranslationProviderReference(memory.Path);
+            }
+            else if (memory.Uri != null && (!string.IsNullOrEmpty(memory.UserNameOrClientId) &&
+                                            !string.IsNullOrEmpty(memory.UserPasswordOrClientSecret)) ||
+                                                !string.IsNullOrEmpty(memory.Credential))
+            {
+                provider = new TranslationProviderReference(memory.Uri, memory.State, true);
+            }
 
-			return provider;
-		}
+            return provider;
+        }
 
-		private void RunAnalyzeTaskFiles(IProject project, string targetLanguage)
+        private void RunAnalyzeTaskFiles(IProject project, string targetLanguage)
 		{
 			var targetFiles = project.GetTargetLanguageFiles(new Language(CultureInfo.GetCultureInfo(targetLanguage)));
 
