@@ -24,7 +24,7 @@ variables:
 - name: pathToPublish
   value: 'Multilingual XML FileType\Multilingual.XML.FileType\bin\Release\Multilingual.XML.FileType.sdlplugin'
 - name: solution
-  value: '**/StudioViews.sln'
+  value: '**/Multilingual.XML.FileType.sln'
 - name : SonarID
   value : Multilingual_XML_File_Type
 - name : SonarName
