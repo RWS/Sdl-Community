@@ -26,9 +26,9 @@ variables:
 - name: solution
   value: '**/Multilingual.Excel.FileType.sln'
 - name : SonarID
-  value : Multilingual_XML_File_Type
+  value : Multilingual_Excel_File_Type
 - name : SonarName
-  value : 'Multilingual_XML_File_Type'
+  value : 'Multilingual_Excel_File_Type'
 - name : ProjectVersion
   value : $[counter(variables['Version.Patch'], 1)]
 
