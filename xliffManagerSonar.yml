@@ -22,7 +22,7 @@ variables:
 - name: buildConfiguration
   value: 'Release'
 - name: pathToPublish
-  value: 'Xliff Manager Sonar Version\XLIFF.Manager\bin\Release\net48\XLIFF.Manager.sdlplugin'
+  value: 'XLIFF Manager for Trados Studio\XLIFF.Manager\bin\Release\Sdl.Community.XLIFF.Manager.sdlplugin'
 - name: solution
   value: '**/XLIFF.Manager.sln'
 - name : SonarID
