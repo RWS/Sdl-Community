@@ -26,7 +26,7 @@ variables:
 - name: solution
   value: '**/StudioViews.sln'
 - name : SonarID
-  value : DeveloperExperience_StudioViews
+  value : StudioViews
 - name : SonarName
   value : 'StudioViews'
 - name : ProjectVersion
