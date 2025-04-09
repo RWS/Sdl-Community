@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
@@ -47,7 +49,6 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
 
         private void AddNewReportFolderButton_Clicked(object sender, RoutedEventArgs e) => AddNewReportFolder();
 
-        private void CloseWindow_Click(object sender, RoutedEventArgs e) => Close();
 
         private void TitleBar_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -56,6 +57,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
 
         private void RemoveFolderButton_Click(object sender, RoutedEventArgs e)
         {
+            var selectedFolder = FolderListGrid.SelectedItem.ToString();
+            if (!string.IsNullOrWhiteSpace(selectedFolder)) ReportFolders.Remove(selectedFolder);
                 //(FolderListGrid.ItemsSource as ObservableCollection<string>)?.Remove(filePath);
             if (sender is Button { DataContext: string filePath }) ReportFolders.Remove(filePath);
         }
@@ -64,6 +67,12 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportView.Contr
         {
             DialogResult = true;
             Close();
+        }
+
+
+        private void ReportFolderExplorer_OnClosing(object sender, EventArgs e)
+        {
+            DialogResult = true;
         }
     }
 }

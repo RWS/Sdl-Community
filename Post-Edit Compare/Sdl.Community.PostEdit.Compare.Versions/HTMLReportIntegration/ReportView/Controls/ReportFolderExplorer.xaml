@@ -4,167 +4,110 @@
         x:Name="Root"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         Title="Reports Folder List"
+        ResizeMode="NoResize"
+        Closing="ReportFolderExplorer_OnClosing"
         Height="400"
+        WindowStyle="SingleBorderWindow"
         Width="600"
-        WindowStartupLocation="CenterScreen"
-        Background="Transparent"
-        WindowStyle="None"
-        AllowsTransparency="True">
+        WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/datagridresources.xaml" />
+                <ResourceDictionary Source="../Styles/Shared.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
         </ResourceDictionary>
     </Window.Resources>
-    <Border Background="White"
-            CornerRadius="12"
-            MouseDown="TitleBar_MouseDown"
-            BorderBrush="#CCC"
-            BorderThickness="1"
-            Padding="0">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="45" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="50" />
-            </Grid.RowDefinitions>
 
-            <!-- Title Bar -->
-            <Border Grid.Row="0"
-                    Background="{StaticResource SdlPrimaryTitle.Foreground}"
-                    Height="45"
-                    CornerRadius="12,12,0,0">
-                <Grid>
-                    <TextBlock Text="Report Folders"
-                               Foreground="White"
-                               FontSize="16"
+    <Grid Background="#f0f0f0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*"
+                           MinHeight="100" />
+            <RowDefinition Height="80" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="0">
+            <Button Style="{StaticResource MenuButtonStyle2}"
+                    HorizontalAlignment="Left"
+                    Click="AddNewReportFolderButton_Clicked">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="../../../Resources/OpenReportFolder.ico"
+                           Width="14"
+                           Height="14" />
+                    <TextBlock Text="Add..."
+                               Margin="5 0" />
+                </StackPanel>
+            </Button>
+            <Button Style="{StaticResource MenuButtonStyle2}"
+                    HorizontalAlignment="Left"
+                    Click="RemoveFolderButton_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="X"
+                               Foreground="Red"
                                FontWeight="Bold"
-                               VerticalAlignment="Center"
-                               Margin="12,0,0,0" />
-                    <Button Content="✖"
-                            Width="30"
-                            Height="30"
-                            HorizontalAlignment="Right"
-                            Margin="0,7,10,0"
-                            Background="Transparent"
-                            Foreground="White"
-                            FontSize="14"
-                            BorderThickness="0"
-                            Cursor="Hand"
-                            ToolTip="Close"
-                            Click="CloseWindow_Click">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Opacity"
-                                        Value="0.7" />
-                                <Setter Property="Foreground"
-                                        Value="White" />
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver"
-                                             Value="True">
-                                        <Setter Property="Opacity"
-                                                Value="1" />
-                                        <Setter Property="Foreground"
-                                                Value="#FF5555" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-                </Grid>
-            </Border>
+                               VerticalAlignment="Top"
+                               Width="14"
+                               Height="14" />
+                    <TextBlock Text="Delete"
+                               Margin="-3 0 0 0" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <Border Grid.Row="1"
+                Margin="3"
+                BorderThickness="1"
+                BorderBrush="LightGray"
+                Background="White">
+            <DataGrid x:Name="FolderListGrid"
+                      AutoGenerateColumns="False"
+                      HeadersVisibility="Column"
+                      CanUserAddRows="False"
+                      IsReadOnly="True"
+                      Style="{StaticResource Sdl.DataGrid.GenericStyle}"
+                      RowHeight="30"
+                      ItemsSource="{Binding ReportFolders}"
+                      BorderThickness="0"
+                      AlternationCount="2">
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridColumnHeader"
+                           BasedOn="{StaticResource Sdl.DataGridColumnHeader.GenericStyle}">
+                        <Setter Property="FontWeight"
+                                Value="Normal" />
+                        <Setter Property="Foreground"
+                                Value="Black" />
+                    </Style>
+                </DataGrid.Resources>
 
-            <!-- Content Section -->
-            <Border Grid.Row="1"
-                    BorderBrush="#DDD"
-                    BorderThickness="1"
-                    CornerRadius="0,0,5,5"
-                    Background="White"
-                    Padding="10"
-                    Margin="10">
-                <DataGrid x:Name="FolderListGrid"
-                          AutoGenerateColumns="False"
-                          HeadersVisibility="Column"
-                          CanUserAddRows="False"
-                          IsReadOnly="True"
-                          Style="{StaticResource Sdl.DataGrid.GenericStyle}"
-                          RowHeight="30"
-                          ItemsSource="{Binding ReportFolders}"
-                          BorderThickness="0"
-                          AlternationCount="2">
-                    <DataGrid.Resources>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
-                                         Color="Transparent" />
-                    </DataGrid.Resources>
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="File Path"
-                                            Binding="{Binding}"
-                                            Width="*" />
-                        <DataGridTemplateColumn Width="40">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Content="✖"
-                                            Width="25"
-                                            Height="25"
-                                            Background="Transparent"
-                                            Foreground="Red"
-                                            BorderThickness="0"
-                                            Cursor="Hand"
-                                            Click="RemoveFolderButton_Click" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Border>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Filepath"
+                                        Binding="{Binding}"
+                                        Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
 
-            <!-- Bottom Button -->
-            <Button Grid.Row="2"
-                    Content="Add New"
-                    Click="AddNewReportFolderButton_Clicked"
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+
+            <Button Content="OK"
+                    Click="OkButton_Click"
                     Padding="10,5"
+                    IsDefault="True"
                     Width="120"
-                    Style="{StaticResource Sdl.Button.WindowControlStyle}"
                     BorderThickness="0"
                     Cursor="Hand"
                     FontSize="14"
+                    VerticalAlignment="Bottom"
                     FontWeight="Bold"
-                    HorizontalAlignment="Left"
-                    Margin="10,10,10,10" />
+                    HorizontalAlignment="Right"
+                    Margin="0,10,10,10" />
 
-            <StackPanel Grid.Row="2"
-                        Orientation="Horizontal"
-                        HorizontalAlignment="Right">
-                <Button Content="Cancel"
-                        Click="OkButton_Click"
-                        Padding="10,5"
-                        IsCancel="True"
-                        Width="120"
-                        Style="{StaticResource Sdl.Button.SecondaryStyle}"
-                        BorderThickness="0"
-                        Cursor="Hand"
-                        FontSize="14"
-                        FontWeight="Bold"
-                        HorizontalAlignment="Right"
-                        Margin="10,10,10,10" />
-
-                <Button Content="OK"
-                        Click="OkButton_Click"
-                        Padding="10,5"
-                        IsDefault="True"
-                        Width="120"
-                        Style="{StaticResource Sdl.Button.PrimaryStyle}"
-                        BorderThickness="0"
-                        Cursor="Hand"
-                        FontSize="14"
-                        FontWeight="Bold"
-                        HorizontalAlignment="Right"
-                        Margin="0,10,10,10" />
-
-            </StackPanel>
-        </Grid>
-    </Border>
+        </StackPanel>
+    </Grid>
 </Window>
