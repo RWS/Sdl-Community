@@ -26,7 +26,7 @@ variables:
 - name: solution
   value: '**/Sdl.Community.IATETerminologyProvider.sln'
 - name : SonarID
-  value : IATE Real time Terminology
+  value : IATERealtimeTerminology
 - name : SonarName
   value : 'IATE Real time Terminology'
 - name : ProjectVersion
