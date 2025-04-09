@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -7,13 +8,18 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using Sdl.Community.PostEdit.Compare.Core.Comparison;
+using Sdl.Community.PostEdit.Compare.Core.Extension;
 using Sdl.Community.PostEdit.Compare.Core.Helper;
 using Sdl.Community.PostEdit.Compare.Core.SDLXLIFF;
 using Sdl.Community.PostEdit.Compare.DAL.ExcelTableModel;
 using Sdl.Community.PostEdit.Compare.DAL.PostEditModificationsAnalysis;
+using Sdl.Core.Globalization;
 using Convert = Sdl.Community.PostEdit.Compare.Core.Helper.Convert;
-using Sdl.ProjectAutomation.FileBased;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System.Windows;
+using Formatting = System.Xml.Formatting;
+using MessageBox = System.Windows.MessageBox;
+using Sdl.Community.PostEdit.Compare.Core.TrackChangesForReportGeneration.Components;
 
 namespace Sdl.Community.PostEdit.Compare.Core.Reports
 {
@@ -834,7 +840,21 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                         },
 
                     };
-                    FileInformationExcelReport.CreateFileTable(currentPackage, currentWorksheet, filesInfo);
+
+                    try
+                    {
+                        FileInformationExcelReport.CreateFileTable(currentPackage, currentWorksheet, filesInfo);
+                    }
+                    catch (Exception ex)
+                    {
+                        var variableValues = new List<string>();
+                        variableValues.AddVariable(nameof(currentPackage), currentPackage.ToString());
+                        variableValues.AddVariable(nameof(currentWorksheet), currentWorksheet.ToString());
+
+                        ErrorHandler.ShowError(ex, variableValues: variableValues);
+
+                        throw;
+                    }
 
                     //create  pem table
                     var pemExcelModel = PemExcelReportHelper.CreatePemExcelDataModels(pempAnalysisData);
@@ -1375,7 +1395,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                             xmlTxtWriter.WriteStartElement("segments");
                             xmlTxtWriter.WriteAttributeString("count", paragraphFilteredSegmentCount.ToString());
 
-                            
+
                             foreach (var comparisonSegmentUnit in comparisonParagraphUnit.ComparisonSegmentUnits)
                             {
                                 if (((!comparisonSegmentUnit.SegmentIsLocked || !Processor.Settings.ReportFilterLockedSegments) && comparisonSegmentUnit.SegmentIsLocked)
@@ -2559,13 +2579,19 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
             }
 
             var error = "";
+            var originalProjectId = "";
             if (!string.IsNullOrWhiteSpace(projectFilePath))
             {
-                var originalProjectId = FileIdentifier.GetProjectId(projectFilePath);
+                originalProjectId = FileIdentifier.GetProjectId(projectFilePath);
                 var fileInfo = FileIdentifier.GetFileInfo(projectFilePath);
 
                 if (string.IsNullOrWhiteSpace(originalProjectId) || string.IsNullOrWhiteSpace(fileInfo))
-                    error = "Original files could not be identified. Synchronization features in the report will not be available.";
+                {
+                    error +=
+                        "Original files could not be identified. Synchronization features in the report will not be available. ";
+                    if (string.IsNullOrWhiteSpace(originalProjectId))
+                        error += "In case of batch pretranslation with TMs, original TUs will not be available.";
+                }
                 else
                 {
                     xmlTxtWriter.WriteAttributeString("fileId", fileInfo);
@@ -2574,7 +2600,23 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
             }
 
             xmlTxtWriter.WriteAttributeString("tmName", comparisonSegmentUnit.TmName);
-            xmlTxtWriter.WriteAttributeString("tmTranslationUnit", comparisonSegmentUnit.TmTranslationUnit);
+
+            if (!string.IsNullOrWhiteSpace(comparisonSegmentUnit.TmTranslationUnit))
+            {
+                List<DiffSegment> tuDiffs = [];
+                if (!string.IsNullOrWhiteSpace(comparisonSegmentUnit.TmTranslationUnit))
+                    tuDiffs = DeserializeDiffSegments(comparisonSegmentUnit.TmTranslationUnit);
+                WriteTmTu(tuDiffs, xmlTxtWriter);
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(originalProjectId))
+                {
+                    var tuDiffs = GetTmTuDiffs(fileComparisonFileUnitProperties, comparisonSegmentUnit,
+                        originalProjectId);
+                    WriteTmTu(tuDiffs, xmlTxtWriter);
+                }
+            }
 
             #region  |  segmentTextUpdated  |
             xmlTxtWriter.WriteStartElement("segmentTextUpdated");
@@ -3226,7 +3268,72 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
             return error;
         }
 
+        private static List<DiffSegment> GetTmTuDiffs(Comparer.FileUnitProperties fileComparisonFileUnitProperties,
+            Comparer.ComparisonSegmentUnit comparisonSegmentUnit, string originalProjectId)
+        {
+            if (comparisonSegmentUnit.TmName is null) return [];
 
+            var project = SdlTradosStudio.Application.GetController<ProjectsController>().GetProjects()
+                .FirstOrDefault(p => p.GetProjectInfo().Id.ToString() == originalProjectId);
+
+            if (project is null)
+            {
+                ErrorHandler.Log("Original project not found -> TU colum will be empty for this file",
+                    [$"File: {fileComparisonFileUnitProperties.FilePathOriginal}"]);
+                return [];
+            }
+
+            var tmPath = FileBasedTmHelper.GetTmPath(comparisonSegmentUnit.TmName, project);
+            if (tmPath is null)
+            {
+                List<string> variables = [];
+                variables.AddVariable("Current Project", project.FilePath);
+                ErrorHandler.Log("TM Path is null", variables);
+                return [];
+            }
+
+            var source = comparisonSegmentUnit.Source.ToPlain();
+            var searchResults = FileBasedTmHelper.GetTmMatches(source,
+                new Language(fileComparisonFileUnitProperties.TargetLanguageIdUpdated), tmPath, project);
+
+            int.TryParse(comparisonSegmentUnit.TranslationStatusUpdated.Trim(['%']), out var matchPercent);
+            var targetUpdated = comparisonSegmentUnit.TargetUpdated.ToPlain();
+            var searchResult = FileBasedTmHelper.GetMostProbableMatch(searchResults, targetUpdated, matchPercent);
+
+            return searchResult == null ? [] : FileBasedTmHelper.GetTuWithTrackedChanges(searchResult, source);
+        }
+
+        private static void WriteTmTu(List<DiffSegment> list, XmlWriter xmlTxtWriter)
+        {
+            xmlTxtWriter.WriteStartElement("tmTranslationUnit");
+
+            foreach (var diffSegment in list)
+            {
+                xmlTxtWriter.WriteStartElement("token");
+                xmlTxtWriter.WriteAttributeString("type", diffSegment.Type);
+                xmlTxtWriter.WriteString(diffSegment.Content);
+                xmlTxtWriter.WriteEndElement();
+            }
+
+            xmlTxtWriter.WriteEndElement();//tmTranslationUnit
+        }
+
+        private static List<DiffSegment> DeserializeDiffSegments(string tmTranslationUnit)
+        {
+            var list = new List<DiffSegment>();
+            var variableValues = new List<string>();
+            try
+            {
+                variableValues.AddVariable(nameof(tmTranslationUnit), tmTranslationUnit);
+                list = JsonConvert.DeserializeObject<List<DiffSegment>>(tmTranslationUnit);
+            }
+            catch (Exception ex)
+            {
+                ErrorHandler.LogError(ex, variableValues);
+            }
+
+            return list;
+        }
 
 
         private class PEMp
