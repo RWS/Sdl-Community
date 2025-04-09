@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net48</TargetFramework>
-		<TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio17</TradosFolder>
+		<TradosFolder>C:\Program Files (x86)\Trados\Trados Studio\Studio18</TradosFolder>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<LangVersion>latest</LangVersion>
@@ -49,9 +49,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\LanguageIndicesFromDB.json" />
-    <Resource Include="Resources\data.json" />
-    <None Include="Resources\datareceived.json" />
     <None Include="Resources\InterpretBankDatabaseV6.db" />
   </ItemGroup>
 </Project>
