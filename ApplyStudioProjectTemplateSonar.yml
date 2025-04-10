@@ -26,7 +26,7 @@ variables:
 - name: solution
   value: '**/Sdl.Community.ApplyStudioProjectTemplate.sln'
 - name : SonarID
-  value : Apply_Studio_Project_Template
+  value : ApplyStudioProjectTemplate
 - name : SonarName
   value : 'Apply Studio Project Template'
 - name : ProjectVersion
