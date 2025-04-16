@@ -153,11 +153,6 @@
 		<Reference Include="System.Core" />
 		<Reference Include="WindowsBase" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="Microsoft.Web.WebView2.Core" />
-		<None Include="Microsoft.Web.WebView2.Wpf" />
-	</ItemGroup>
 	
 	<ItemGroup>
 		<None Include="Studio\TranslationProvider\TranslationProviderWinFormsUI.cs" />

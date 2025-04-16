@@ -43,7 +43,8 @@ namespace LanguageWeaverProvider.XliffConverter.SegmentParser
 				}
 				else if (parsedTag.Type == TagType.End && startingTags.Count == 0)
 				{
-					throw new Exception($"Line does not have matching starting and ending tags: {text}");
+					segment.Add(tag);
+                    continue;
 				}
 				else if (parsedTag.Type == TagType.End)
 				{
