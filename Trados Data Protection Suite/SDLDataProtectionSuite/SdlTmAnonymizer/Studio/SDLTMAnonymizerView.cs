@@ -11,6 +11,8 @@ using Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi.Interfaces;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.Versioning;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 using PathInfo = Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Model.PathInfo;
 using UserControl = System.Windows.Forms.UserControl;
@@ -52,13 +54,16 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 				Model.LogViewModel.IsEnabled = true;
 				_control = new TmAnonymizerViewControl(Model);
 
-				var pathInfo = new RwsAppStore.UsefulTipsService.Model.PathInfo(PluginResources.Plugin_Name, "17");
+
+                var majorStudioVersion = Versions.GetBuildVersion().Split('.').FirstOrDefault();
+
+                var pathInfo = new RwsAppStore.UsefulTipsService.Model.PathInfo(PluginResources.Plugin_Name, majorStudioVersion);
 				var tipsProvider = new TipsProvider(pathInfo);
 				var usefulTipsService = new UsefulTipsService(tipsProvider, SettingsService.PathInfo);
 
 				var pluginTips = usefulTipsService.GetPluginUsefulTips();
-				var studioTips = tipsProvider.GetStudioTips();
 
+                var studioTips = TryGetStudioTips(tipsProvider);
 				AlignLanguageTipIds(studioTips, pluginTips, usefulTipsService);
 
 				var tipsInstalled = TipsInstalled(studioTips, "SDLTMAnonymizerView");
@@ -96,7 +101,20 @@ namespace Sdl.Community.SdlDataProtectionSuite.SdlTmAnonymizer.Studio
 			}
 		}
 
-		private static void AlignLanguageTipIds(IReadOnlyCollection<TipLanguage> studioTips, List<TipLanguage> pluginTips, UsefulTipsService usefulTipsService)
+        private List<TipLanguage> TryGetStudioTips(TipsProvider tipsProvider)
+        {
+            try
+            {
+                var studioTips = tipsProvider.GetStudioTips();
+                return studioTips;
+            }
+            catch
+            {
+                return [];
+            }
+        }
+
+        private static void AlignLanguageTipIds(IReadOnlyCollection<TipLanguage> studioTips, List<TipLanguage> pluginTips, UsefulTipsService usefulTipsService)
 		{
 			if (pluginTips == null || studioTips == null)
 			{
