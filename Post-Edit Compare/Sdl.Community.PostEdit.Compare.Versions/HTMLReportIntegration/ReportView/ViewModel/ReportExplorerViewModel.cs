@@ -76,6 +76,16 @@ public class ReportExplorerViewModel : ViewModelBase
                 Reports = new ObservableCollection<ReportInfo>(reportsInfo.ToList())
             });
         }
+
+        if (ReportGroups.Sum(g => g.Reports.Count) == reports.Count) return;
+
+        var notGroupedReports = reports.Where(r => ReportGroups.All(g => !g.Reports.Contains(r)));
+
+        ReportGroups.Add(new ReportGroup
+        {
+            ProjectName = "Unlinked reports",
+            Reports = new ObservableCollection<ReportInfo>(notGroupedReports)
+        });
     }
 
     private void ApplyFilter()

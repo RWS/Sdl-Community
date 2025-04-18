@@ -168,11 +168,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
             var doc = new HtmlDocument();
             doc.Load(htmlFilepath);
 
-            var rows = doc.DocumentNode.SelectSingleNode("//tr[@data-project-id]");
-            if (rows == null) return string.Empty;
-
-            var projectIdAttribute = rows.Attributes["data-project-id"];
-            return projectIdAttribute != null ? projectIdAttribute.Value : string.Empty;
+            var node = doc.DocumentNode.SelectSingleNode("//a[@data-project-id]");
+            return node?.GetAttributeValue("data-project-id", string.Empty) ?? string.Empty;
         }
 
         private void CreateDefaultFoldersList()
