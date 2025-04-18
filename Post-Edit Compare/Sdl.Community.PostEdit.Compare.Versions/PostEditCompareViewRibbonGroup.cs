@@ -260,6 +260,7 @@ namespace Sdl.Community.PostEdit.Versions
             var postEditCompare = new FormMain(mModel);
             postEditCompare.OriginalProjectPath = Controller.CurrentSelectedProject?.FilePath;
             postEditCompare.ShowDialog();
+            if (postEditCompare.Saved) Integration.ShowLatestReport();
         }
     }
 

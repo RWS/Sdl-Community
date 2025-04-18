@@ -333,6 +333,12 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
             xmlTxtWriter.WriteAttributeString("totalFilesWithErrors", (fileComparisonFileParagraphUnits.Count - progressFilesCompared).ToString());
             xmlTxtWriter.WriteAttributeString("dateCompared", DateTime.Now.ToLongDateString() + ", " + DateTime.Now.ToLongTimeString());
 
+            var projectFilePath = fileComparisonFileParagraphUnits.FirstOrDefault().Key.FilePathOriginal;
+            if (!string.IsNullOrWhiteSpace(projectFilePath))
+            {
+                var originalProjectId = FileIdentifier.GetProjectId(projectFilePath);
+                xmlTxtWriter.WriteAttributeString("projectId", originalProjectId);
+            }
 
             xmlTxtWriter.WriteStartElement("filter");
 

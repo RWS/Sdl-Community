@@ -137,15 +137,16 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
             return reports;
         }
 
-        public void OpenReportBackupFolder(ReportInfo selectedReport)
+        public void OpenReportBackupFolder(string reportPath)
         {
-            if (selectedReport is not null)
+            if (!string.IsNullOrWhiteSpace(reportPath))
             {
                 var reportBackupFolder = Path.Combine(PostEditCompareBackupFolder,
-                    Path.GetFileNameWithoutExtension(selectedReport.ReportPath));
+                    Path.GetFileNameWithoutExtension(reportPath));
 
                 if (Directory.Exists(reportBackupFolder)) { Process.Start(reportBackupFolder); return; }
             }
+
             Process.Start(PostEditCompareBackupFolder);
         }
 
@@ -167,11 +168,8 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
             var doc = new HtmlDocument();
             doc.Load(htmlFilepath);
 
-            var rows = doc.DocumentNode.SelectSingleNode("//tr[@data-project-id]");
-            if (rows == null) return string.Empty;
-
-            var projectIdAttribute = rows.Attributes["data-project-id"];
-            return projectIdAttribute != null ? projectIdAttribute.Value : string.Empty;
+            var node = doc.DocumentNode.SelectSingleNode("//a[@data-project-id]");
+            return node?.GetAttributeValue("data-project-id", string.Empty) ?? string.Empty;
         }
 
         private void CreateDefaultFoldersList()

@@ -348,10 +348,11 @@ namespace Sdl.Community.PostEdit.Compare.Core.Comparison
 
             AddTmTuMetadata(comparisonSegmentUnit, segmentPairOriginal, segmentPairUpdated);
 
-            if (string.CompareOrdinal(segmentPairOriginal.Target, segmentPairUpdated.Target) != 0)
+            if (string.CompareOrdinal(segmentPairOriginal.Target, segmentPairUpdated.Target) != 0 ||
+                !segmentPairOriginal.TargetSections.SequenceEqual(segmentPairUpdated.TargetSections))
             {
-                comparisonSegmentUnit.ComparisonTextUnits = GetComparisonTextUnits(segmentPairOriginal.TargetSections, segmentPairUpdated.TargetSections);
-
+                comparisonSegmentUnit.ComparisonTextUnits = GetComparisonTextUnits(segmentPairOriginal.TargetSections,
+                    segmentPairUpdated.TargetSections);
                 comparisonSegmentUnit.SegmentTextUpdated = true;
                 comparisonParagraphUnit.ParagraphIsUpdated = true;
             }

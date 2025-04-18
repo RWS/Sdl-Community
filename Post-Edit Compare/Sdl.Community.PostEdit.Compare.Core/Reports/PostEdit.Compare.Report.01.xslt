@@ -546,7 +546,7 @@
     <xsl:variable name="showSegmentTerp" select="filter/@showSegmentTerp"/>
     <xsl:variable name="showSegmentPemp" select="filter/@showSegmentPemp"/>
 
-    <a name="filesId_report_header"> </a>
+    <a name="filesId_report_header" data-project-id='{@projectId}'> </a>
 
     <table style="background-color: #CEE3F6" border="1" width="100%">
       <tr>
