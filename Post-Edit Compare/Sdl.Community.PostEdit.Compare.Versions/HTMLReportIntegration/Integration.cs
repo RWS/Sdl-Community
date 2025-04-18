@@ -158,7 +158,7 @@ public class Integration
     public static void OpenReportBackupFolder()
     {
         var selectedReport = ReportViewController.GetSelectedReport();
-        ReportManager.OpenReportBackupFolder(selectedReport);
+        ReportManager.OpenReportBackupFolder(selectedReport?.ReportPath);
     }
 
     public static void OpenReportFolder()

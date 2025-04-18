@@ -137,15 +137,16 @@ namespace Sdl.Community.PostEdit.Versions.HTMLReportIntegration.ReportManaging
             return reports;
         }
 
-        public void OpenReportBackupFolder(ReportInfo selectedReport)
+        public void OpenReportBackupFolder(string reportPath)
         {
-            if (selectedReport is not null)
+            if (!string.IsNullOrWhiteSpace(reportPath))
             {
                 var reportBackupFolder = Path.Combine(PostEditCompareBackupFolder,
-                    Path.GetFileNameWithoutExtension(selectedReport.ReportPath));
+                    Path.GetFileNameWithoutExtension(reportPath));
 
                 if (Directory.Exists(reportBackupFolder)) { Process.Start(reportBackupFolder); return; }
             }
+
             Process.Start(PostEditCompareBackupFolder);
         }
 
