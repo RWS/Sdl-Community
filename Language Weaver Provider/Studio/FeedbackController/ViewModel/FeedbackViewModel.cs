@@ -12,6 +12,7 @@ using LanguageWeaverProvider.Services;
 using LanguageWeaverProvider.Services.Model;
 using LanguageWeaverProvider.Studio.FeedbackController.Model;
 using LanguageWeaverProvider.ViewModel;
+using NLog;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
@@ -25,7 +26,7 @@ namespace LanguageWeaverProvider.Studio.FeedbackController.ViewModel
 		ITranslationOptions _selectedProvider;
 		TranslationErrors _translationErrors;
 
-		ISegmentPair _activeSegment;
+        ISegmentPair _activeSegment;
 		QualityEstimations _originalQE;
 		QualityEstimations _selectedQE;
 		string _previousFeedbackmessage;
@@ -263,7 +264,7 @@ namespace LanguageWeaverProvider.Studio.FeedbackController.ViewModel
 			}
 			else if (SelectedProvider.PluginVersion == PluginVersion.LanguageWeaverEdge)
 			{
-				feedbackSent = await SendEdgeFeedback(currentSegment);
+				feedbackSent = await SendEdgeFeedback(currentSegment, false);
 			}
 			else
 			{
@@ -431,7 +432,7 @@ namespace LanguageWeaverProvider.Studio.FeedbackController.ViewModel
 			return await CloudService.CreateFeedback(SelectedProvider.AccessToken, feedbackRequest);
 		}
 
-		private async Task<bool> SendEdgeFeedback(ISegmentPair segmentPair)
+		private async Task<bool> SendEdgeFeedback(ISegmentPair segmentPair, bool showErrors = true)
 		{
 			if (!IsLanguageWeaverSource(segmentPair?.Properties))
 			{
@@ -454,7 +455,7 @@ namespace LanguageWeaverProvider.Studio.FeedbackController.ViewModel
 				SuggestedTranslation = suggestedTranslation
 			};
 
-			return await EdgeService.SendFeedback(SelectedProvider.AccessToken, feedbackItem);
+			return await EdgeService.SendFeedback(SelectedProvider.AccessToken, feedbackItem, showErrors);
 		}
 
 		private bool IsLanguageWeaverSource(ISegmentPairProperties segmentProperties)
