@@ -21,7 +21,7 @@ namespace LanguageWeaverProvider.Services
 {
     public static class CloudService
     {
-        private static Logger _logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public static async Task<bool> AuthenticateSSOUser(ITranslationOptions translationOptions, CloudAuth0Config auth0Config, Uri uri, string selectedRegion)
         {
@@ -82,7 +82,7 @@ namespace LanguageWeaverProvider.Services
                 var response = await Authenticate(cloudCredentials, authenticationType);
                 if (response.IsSuccessStatusCode)
                 {
-                    _logger.Log(LogLevel.Info, "Authentication successful.");
+                    Logger.Log(LogLevel.Info, "Authentication successful.");
 
                     translationOptions.AccessToken = await response.DeserializeResponse<AccessToken>();
                     translationOptions.AccessToken.BaseUri = new Uri(cloudCredentials.AccountRegion);
@@ -90,7 +90,7 @@ namespace LanguageWeaverProvider.Services
                     return true;
                 }
 
-                _logger.Log(LogLevel.Info, "Authentication unsuccessful.");
+                Logger.Log(LogLevel.Info, "Authentication unsuccessful.");
                 var cloudAccountError = await response.DeserializeResponse<CloudAccountError>("status");
                 ErrorHandling.ShowDialog(null, $"{response.StatusCode} {(int)response.StatusCode}",
                     $"Code: {cloudAccountError.Code}\nMessage: {cloudAccountError.Description}");
@@ -99,7 +99,7 @@ namespace LanguageWeaverProvider.Services
             catch (Exception ex)
             {
                 var message = $"{ex.Message}. {Environment.StackTrace}.";
-                _logger.Log(LogLevel.Error, message);
+                Logger.Log(LogLevel.Error, message);
                 ex.ShowDialog("Authentication failed", message, true);
                 return false;
             }
@@ -124,7 +124,7 @@ namespace LanguageWeaverProvider.Services
 
         private static async Task<HttpResponseMessage> Authenticate(CloudCredentials cloudCredentials, AuthenticationType authenticationType)
         {
-            _logger.Log(LogLevel.Info,
+            Logger.Log(LogLevel.Info,
                 $"[Authenticate] start - CloudCredentials: {cloudCredentials}, AuthenticationType: {authenticationType}");
 
             var requestUri = authenticationType switch
@@ -255,7 +255,7 @@ namespace LanguageWeaverProvider.Services
             return translationStatus;
         }
 
-        public static async Task<bool> CreateFeedback(AccessToken accessToken, FeedbackRequest feedbackRequest)
+        public static async Task<bool> CreateFeedback(AccessToken accessToken, FeedbackRequest feedbackRequest, bool showErrors = true)
         {
             try
             {
@@ -268,7 +268,10 @@ namespace LanguageWeaverProvider.Services
             }
             catch (Exception ex)
             {
-                ErrorHandling.ShowDialog(ex, "Feedback", ex.Message, true);
+                if (showErrors)
+                    ex.ShowDialog("Feedback", ex.Message, true);
+                else
+                    Logger.Log(LogLevel.Warn, ex.Message);
                 return false;
             }
         }

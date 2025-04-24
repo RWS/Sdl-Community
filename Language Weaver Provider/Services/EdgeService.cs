@@ -299,13 +299,9 @@ namespace LanguageWeaverProvider.Services
             catch (Exception ex)
             {
                 if (showErrors)
-                {
                     ex.ShowDialog("Feedback", ex.Message, true);
-                }
                 else
-                {
                     Logger.Log(LogLevel.Warn, ex.Message);
-                }
 
                 return false;
             }
