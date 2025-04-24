@@ -16,7 +16,7 @@ pr:
 
 variables: 
 - group: 'LanguageWeaver Version'
-- template: build/jobs/branch-variables.yml
+- template: jobs/branch-variables.yml
 - name: buildPlatform 
   value: 'Any CPU'
 - name: buildConfiguration
@@ -45,7 +45,7 @@ steps:
       projectName: $(SonarName)
       projectVersion: $(ProjectVersion)
 
-  - template: build/jobs/build-sdlplugin.yml
+  - template: jobs/build-sdlplugin.yml
   - task: SonarCloudAnalyze@3
     displayName: 'Run Code Analysis'
 
@@ -54,4 +54,4 @@ steps:
       pollingTimeoutSec: '300'
     displayName: 'Publish Quality Gate Result'
 
-  - template: build/jobs/publish-build-artifact-task.yml
+  - template: jobs/publish-build-artifact-task.yml
