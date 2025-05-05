@@ -313,7 +313,8 @@ namespace LanguageWeaverProvider
         private void ManageSegmentMetadata(EvaluatedSegment evaluatedSegment, PairMapping pairMapping, string fileName,
             int index, ITranslationOrigin translationOrigin)
         {
-            var isBatchTaskOrDraft = _batchTaskWindow is not null || _currentTranslationUnit.ConfirmationLevel == ConfirmationLevel.Draft;
+            var isBatchTaskOrDraft = _batchTaskWindow is not null ||
+                                     _currentTranslationUnit.ConfirmationLevel == ConfirmationLevel.Draft;
 
             if (isBatchTaskOrDraft) StoreSegmentMetadata(evaluatedSegment, pairMapping, fileName);
             else SetSegmentMetadataWhenPossible(evaluatedSegment, pairMapping, index, translationOrigin);
@@ -343,9 +344,11 @@ namespace LanguageWeaverProvider
 
             translationOrigin.SetMetaData(translationData);
 
-            EditorMetadata[activeSegmentPair.Properties.Id.Id] = translationData;
+            if (activeSegmentPair?.Properties is null) return;
 
-            editorController.ActiveDocument.SegmentsConfirmationLevelChanged += ActiveDocument_SegmentsConfirmationLevelChanged;
+            EditorMetadata[activeSegmentPair.Properties.Id.Id] = translationData;
+            editorController.ActiveDocument.SegmentsConfirmationLevelChanged +=
+                ActiveDocument_SegmentsConfirmationLevelChanged;
         }
 
         private void ActiveDocument_SegmentsConfirmationLevelChanged(object sender, EventArgs e)

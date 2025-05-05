@@ -15,10 +15,14 @@ namespace LanguageWeaverProvider.Services.Model
 			Input = input;
 			DictionaryIds = ExtractDictionaryIds(pairMapping);
 			LinguisticOptions = ExtractLinguisticOptions(pairMapping);
-		}
+            Title = "Trados Studio";
+        }
 
 		[JsonProperty("languagePairId")]
 		public string LanguagePairId { get; }
+        
+        [JsonProperty("title")]
+		public string Title { get; }
 
 		[JsonProperty("input")]
 		public string Input { get;  }

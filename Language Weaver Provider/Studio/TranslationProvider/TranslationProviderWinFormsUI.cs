@@ -23,10 +23,8 @@ namespace LanguageWeaverProvider
 
 		public string TypeDescription => Constants.PluginName;
 
-		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
+		public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore _)
 		{
-			ApplicationInitializer.CredentialStore = credentialStore;
-
 			var translationOptions = new TranslationOptions(true);
 			CredentialManager.GetCredentials(translationOptions);
 
@@ -34,7 +32,7 @@ namespace LanguageWeaverProvider
 			var credentialsMainView = new CredentialsMainView { DataContext = credentialsMainViewModel };
 			credentialsMainViewModel.CloseEventRaised += () =>
 			{
-				CredentialManager.UpdateCredentials(credentialStore, translationOptions);
+				CredentialManager.UpdateCredentials(translationOptions);
 				credentialsMainView.Close();
 			};
 
@@ -54,10 +52,8 @@ namespace LanguageWeaverProvider
 			return [translationProvider];
 		}
 
-		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
+		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore _)
 		{
-			ApplicationInitializer.CredentialStore = credentialStore;
-
 			if (translationProvider is not TranslationProvider editProvider)
 			{
 				return false;

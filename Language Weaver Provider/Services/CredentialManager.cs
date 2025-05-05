@@ -4,6 +4,7 @@ using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Services;
+using LanguageWeaverProvider.WindowsCredentialStore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -47,8 +48,6 @@ namespace LanguageWeaverProvider.Extensions
         public static void GetCredentials(ITranslationOptions translationOptions, bool assignAccessToken = false,
             StandaloneCredentials standaloneCredentials = null)
         {
-            var credentialStore = ApplicationInitializer.CredentialStore;
-
             if (ApplicationInitializer.IsStandalone && standaloneCredentials is not null && standaloneCredentials.AuthenticationType != AuthenticationType.None)
             {
                 translationOptions.PluginVersion = standaloneCredentials.IsCloudCredential
@@ -79,7 +78,7 @@ namespace LanguageWeaverProvider.Extensions
                     }
                 }
 
-                UpdateCredentials(credentialStore, translationOptions);
+                UpdateCredentials(translationOptions);
             }
             else
             {
@@ -88,24 +87,18 @@ namespace LanguageWeaverProvider.Extensions
                 var getEdgeToken = assignAccessToken &&
                                    translationOptions.PluginVersion == PluginVersion.LanguageWeaverEdge;
 
-                GetAndAssignCredentials<CloudCredentials>(credentialStore, translationOptions,
+                GetAndAssignCredentials<CloudCredentials>(translationOptions,
                     Constants.CloudFullScheme, getCloudToken);
-                GetAndAssignCredentials<EdgeCredentials>(credentialStore, translationOptions, Constants.EdgeFullScheme,
+                GetAndAssignCredentials<EdgeCredentials>(translationOptions, Constants.EdgeFullScheme,
                     getEdgeToken);
             }
         }
 
-        public static void GetAndAssignCredentials<T>(ITranslationProviderCredentialStore credentialStore, ITranslationOptions translationOptions, string scheme, bool assignAccessToken = false)
+        public static void GetAndAssignCredentials<T>(ITranslationOptions translationOptions, string scheme, bool assignAccessToken = false)
         {
-            if (credentialStore is null)
-            {
-                return;
-            }
-
             var uri = new Uri(scheme);
-            var translationProviderCredential = credentialStore.GetCredential(uri);
-            if (translationProviderCredential is null
-             || translationProviderCredential.Credential is not string persistedCredentials)
+            var translationProviderCredential = CredentialStore.Load(uri.ToString());
+            if (string.IsNullOrWhiteSpace(translationProviderCredential))
             {
                 return;
             }
@@ -113,7 +106,7 @@ namespace LanguageWeaverProvider.Extensions
             try
             {
                 
-                var parsedObject = JObject.Parse(persistedCredentials);
+                var parsedObject = JObject.Parse(translationProviderCredential);
                 var credentials = parsedObject[CredentialsKey].ToString();
                 AssignCredentials<T>(translationOptions, credentials);
 
@@ -151,7 +144,7 @@ namespace LanguageWeaverProvider.Extensions
             return JsonConvert.DeserializeObject<T>(json);
         }
 
-        public static void UpdateCredentials(ITranslationProviderCredentialStore credentialStore, ITranslationOptions translationOptions)
+        public static void UpdateCredentials(ITranslationOptions translationOptions)
         {
             if (translationOptions.PluginVersion == PluginVersion.None)
             {
@@ -169,9 +162,10 @@ namespace LanguageWeaverProvider.Extensions
                 new JProperty(TokenKey, JToken.Parse(accessToken))
             ).ToString();
 
-            var translationProviderCredential = new TranslationProviderCredential(jsonStructure, true);
-            credentialStore.RemoveCredential(translationOptions.Uri);
-            credentialStore.AddCredential(translationOptions.Uri, translationProviderCredential);
+            var key = translationOptions.Uri.ToString();
+
+            CredentialStore.Delete(key);
+            CredentialStore.Save(key, jsonStructure);
         }
     }
 }
