@@ -13,7 +13,7 @@ namespace LanguageWeaverProvider.Studio.BatchTask.Send_Feedback
 {
     public class SendFeedbackProcessor : AbstractBilingualContentProcessor
     {
-        public List<SendFeedbackError> Errors { get; set; } = new();
+        public List<SegmentError> Errors { get; set; } = new();
 
         public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
         {
@@ -91,10 +91,11 @@ namespace LanguageWeaverProvider.Studio.BatchTask.Send_Feedback
             }
             catch (Exception ex)
             {
-                Errors.Add(new SendFeedbackError
+                Errors.Add(new SegmentError
                 {
                     Error = ex.InnerException?.Message,
-                    SourceSegment = feedback.Translation.SourceText
+                    SourceSegment = feedback.Translation.SourceText,
+                    Id = segmentPair.Properties.Id.Id
                 });
             }
         }
@@ -125,10 +126,11 @@ namespace LanguageWeaverProvider.Studio.BatchTask.Send_Feedback
             }
             catch (Exception ex)
             {
-                Errors.Add(new SendFeedbackError
+                Errors.Add(new SegmentError
                 {
                     Error = ex.InnerException?.Message,
-                    SourceSegment = feedbackItem.SourceText
+                    SourceSegment = feedbackItem.SourceText,
+                    Id = segmentPair.Properties.Id.Id
                 });
             }
 

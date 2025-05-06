@@ -1,10 +1,13 @@
-﻿using Sdl.FileTypeSupport.Framework.IntegrationApi;
+﻿using LanguageWeaverProvider.Studio.BatchTask.Send_Feedback.Controls;
+using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Windows;
 using System.Windows.Forms;
+using Application = System.Windows.Application;
 
 namespace LanguageWeaverProvider.Studio.BatchTask.Send_Feedback
 {
@@ -17,28 +20,31 @@ namespace LanguageWeaverProvider.Studio.BatchTask.Send_Feedback
     public class SendFeedbackBatchTask : AbstractFileContentProcessingAutomaticTask
     {
 
-        public Dictionary<string, List<SendFeedbackError>> Errors { get; set; } = new();
+        public List<FileErrors> Errors { get; set; } = new();
 
         public override void TaskComplete()
         {
-            var report = "";
-            foreach (var key in Errors)
+            var currentApp = Application.Current;
+            currentApp?.Dispatcher.Invoke(() =>
             {
-                report += key.Key + "\r\n\r\n";
-                report = key.Value.Aggregate(report, (current, error) => current + $"{error.SourceSegment} - {error.Error}");
-            }
-
-            Application.OpenForms[0]?.Invoke((MethodInvoker)(() =>
-            {
-                MessageBox.Show(report);
-            }));
+                var batchProcessingWindow = ApplicationInitializer.GetBatchTaskWindow();
+                var errorWindow = new ErrorWindow(Errors)
+                {
+                    Owner = batchProcessingWindow
+                };
+                errorWindow.ShowDialog();
+            });
         }
 
         protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
         {
             var processor = new SendFeedbackProcessor();
             multiFileConverter.AddBilingualProcessor(processor);
-            Errors[$"{projectFile.Language}\\{projectFile.Name}"] = processor.Errors;
+
+            Errors.Add(new FileErrors
+            {
+                Filename = $"{projectFile.Language}\\{projectFile.Name}", SegmentErrors = processor.Errors
+            });
         }
     }
 }

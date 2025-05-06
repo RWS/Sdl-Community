@@ -255,14 +255,32 @@ namespace LanguageWeaverProvider.Services
             return translationStatus;
         }
 
-        public static async Task<bool> SendFeedback(AccessToken accessToken, FeedbackRequest feedbackRequest)
+        public static async Task<bool> UpdateFeedback(AccessToken accessToken, string feedbackId, FeedbackRequest feedbackRequest)
+        {
+            var requestUri = $"{accessToken.BaseUri}v4/accounts/{accessToken.AccountId}/feedback/translations/{feedbackId}";
+            var payload = JsonConvert.SerializeObject(feedbackRequest);
+            using var content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+            var response = await Service.SendRequest(HttpMethod.Put, requestUri, accessToken, content);
+            if (response.IsSuccessStatusCode)
+                return true;
+
+            var error = await response.DeserializeResponse<CloudFeedbackErrorDetail>("errors", 0);
+            throw new Exception($"Code {error.Code}: {error.Description}.");
+        }
+
+
+        public static async Task<string> SendFeedback(AccessToken accessToken, FeedbackRequest feedbackRequest)
         {
             var requestUri = $"{accessToken.BaseUri}v4/accounts/{accessToken.AccountId}/feedback/translations";
             var feedbackRequestJson = JsonConvert.SerializeObject(feedbackRequest);
             var content = new StringContent(feedbackRequestJson, new UTF8Encoding(), "application/json");
             var response = await Service.SendRequest(HttpMethod.Post, requestUri, accessToken, content);
 
-            if (response.IsSuccessStatusCode) return true;
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
 
             var error = await response.DeserializeResponse<CloudFeedbackErrorDetail>("errors", 0);
             throw new Exception($"Code {error.Code}: {error.Description}.");
