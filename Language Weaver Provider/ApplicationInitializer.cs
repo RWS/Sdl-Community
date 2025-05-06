@@ -6,7 +6,6 @@ using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace LanguageWeaverProvider
 {
@@ -19,8 +18,6 @@ namespace LanguageWeaverProvider
 		public static string CurrentAppVersion { get; private set; }
 
 		public static IList<RatedSegment> RatedSegments { get; set; }
-
-		public static ITranslationProviderCredentialStore CredentialStore { get; set; }
 
         public static PluginVersion PluginVersion { get; set; } = PluginVersion.None;
 

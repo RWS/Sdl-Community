@@ -11,14 +11,11 @@ using LanguageWeaverProvider.Services.Model;
 using LanguageWeaverProvider.XliffConverter.Converter;
 using Microsoft.Web.WebView2.Wpf;
 using Newtonsoft.Json;
-using NLog;
 
 namespace LanguageWeaverProvider.Services
 {
     public static class EdgeService
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         public static async Task<bool> AuthenticateUser(EdgeCredentials edgeCredentials, ITranslationOptions translationOptions)
         {
             try
@@ -38,13 +35,13 @@ namespace LanguageWeaverProvider.Services
                 {
                     var token = await response.Content.ReadAsStringAsync();
                     SetAccessToken(translationOptions, token, "Bearer", edgeCredentials.Uri);
-                    return isSuccessStatusCode;
+                    return true;
                 }
 
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var errorResponse = JsonConvert.DeserializeObject<EdgeFeedbackError>(responseContent).Error;
                 ErrorHandling.ShowDialog(null, $"Authentication failed: {errorResponse.Code}", errorResponse.Message, false);
-                return isSuccessStatusCode;
+                return false;
             }
             catch (Exception ex)
             {
@@ -65,14 +62,11 @@ namespace LanguageWeaverProvider.Services
 
                 var response = await Service.SendRequest(HttpMethod.Get, requestUri, temporaryAccessToken);
                 var isSuccessStatusCode = response.IsSuccessStatusCode;
-                if (isSuccessStatusCode)
-                {
-                    return isSuccessStatusCode;
-                }
+                if (isSuccessStatusCode) return true;
 
                 var responseContent = await response.Content.ReadAsStringAsync();
                 ErrorHandling.ShowDialog(null, "Authentication failed", responseContent, true);
-                return isSuccessStatusCode;
+                return false;
             }
             catch (Exception ex)
             {
@@ -106,10 +100,9 @@ namespace LanguageWeaverProvider.Services
                 httpRequest = new HttpRequestMessage(HttpMethod.Get, $"{uri3}?secret={secret}");
                 response = await httpClient.SendAsync(httpRequest);
 
-                string token;
                 if (response.IsSuccessStatusCode)
                 {
-                    token = await response.Content.ReadAsStringAsync();
+                    var token = await response.Content.ReadAsStringAsync();
                     SetAccessToken(translationOptions, token, "Bearer", edgeCredentials.Uri);
                 }
 
@@ -133,7 +126,7 @@ namespace LanguageWeaverProvider.Services
                 var requestUri = $"{accessToken.BaseUri}api/v2/language-pairs";
 
                 var response = await Service.SendRequest(HttpMethod.Get, requestUri, accessToken);
-                var languagePairs = await Service.DeserializeResponse<EdgeLanguagePairResult>(response);
+                var languagePairs = await response.DeserializeResponse<EdgeLanguagePairResult>();
 
                 var pairModels = languagePairs.LanguagePairs.Select(lp => new PairModel()
                 {
@@ -166,7 +159,7 @@ namespace LanguageWeaverProvider.Services
                 var requestUri = $"{accessToken.BaseUri}api/v2/dictionaries";
                 var response = await Service.SendRequest(HttpMethod.Get, requestUri, accessToken);
 
-                var dictionaries = await Service.DeserializeResponse<EdgeDictionariesResponse>(response);
+                var dictionaries = await response.DeserializeResponse<EdgeDictionariesResponse>();
 
                 var pairDictionaries = dictionaries.Dictionaries.Select(dictionary => new PairDictionary()
                 {
@@ -192,15 +185,11 @@ namespace LanguageWeaverProvider.Services
             var encodedContent = new FormUrlEncodedContent(content);
 
             var response = await Service.SendRequest(HttpMethod.Post, requestUri, accessToken, encodedContent);
-            var isSuccessStatusCode = response.IsSuccessStatusCode;
-            if (isSuccessStatusCode)
-            {
-                return isSuccessStatusCode;
-            }
+            if (response.IsSuccessStatusCode) return true;
 
             var result = await response.Content.ReadAsStringAsync();
             ErrorHandling.ShowDialog(null, PluginResources.Dictionary_NewTerm_Unsuccessfully, result);
-            return isSuccessStatusCode;
+            return false;
         }
 
         public static async Task<Xliff> Translate(AccessToken accessToken, PairMapping pairMapping, Xliff sourceXliff)
@@ -237,7 +226,7 @@ namespace LanguageWeaverProvider.Services
             var content = new FormUrlEncodedContent(edgeTranslationRequestContent.ToKeyValuePairDictionary());
 
             var response = await Service.SendRequest(HttpMethod.Post, requestUri, accessToken, content);
-            var translationRequestResponse = await Service.DeserializeResponse<EdgeTranslationRequestResponse>(response);
+            var translationRequestResponse = await response.DeserializeResponse<EdgeTranslationRequestResponse>();
 
             return translationRequestResponse;
         }
@@ -258,17 +247,16 @@ namespace LanguageWeaverProvider.Services
             var response = await Service.SendRequest(HttpMethod.Get, requestUri, accessToken);
             response.EnsureSuccessStatusCode();
 
-            var translationStatus = await Service.DeserializeResponse<EdgeTranslationStatus>(response);
+            var translationStatus = await response.DeserializeResponse<EdgeTranslationStatus>();
             return translationStatus;
         }
 
         private static async Task WaitForTranslationCompletion(AccessToken accessToken, string translationId)
         {
-            EdgeTranslationStatus translationStatus;
             bool isWaiting;
             do
             {
-                translationStatus = await GetTranslationStatus(accessToken, translationId);
+                var translationStatus = await GetTranslationStatus(accessToken, translationId);
                 isWaiting = translationStatus.State != "done";
                 if (isWaiting)
                 {
@@ -277,34 +265,18 @@ namespace LanguageWeaverProvider.Services
             } while (isWaiting);
         }
 
-        public static async Task<bool> SendFeedback(AccessToken accessToken, EdgeFeedbackItem feedbackItem, bool showErrors = true)
+        public static async Task<bool> SendFeedback(AccessToken accessToken, EdgeFeedbackItem feedbackItem)
         {
-            try
-            {
-                var requestUri = $"{accessToken.BaseUri}api/v2/feedback";
+            var requestUri = $"{accessToken.BaseUri}api/v2/feedback";
 
-                var feedback = feedbackItem.ToKeyValuePairDictionary();
-                var content = new FormUrlEncodedContent(feedback);
+            var feedback = feedbackItem.ToKeyValuePairDictionary();
+            var content = new FormUrlEncodedContent(feedback);
 
-                var response = await Service.SendRequest(HttpMethod.Post, requestUri, accessToken, content);
-                var isSuccessStatusCode = response.IsSuccessStatusCode;
-                if (isSuccessStatusCode)
-                {
-                    return isSuccessStatusCode;
-                }
+            var response = await Service.SendRequest(HttpMethod.Post, requestUri, accessToken, content);
+            if (response.IsSuccessStatusCode) return true;
 
-                var error = await Service.DeserializeResponse<EdgeFeedbackError>(response);
-                throw new Exception($"Code {error.Error.Code}: {error.Error.Message}. Details: {error.Error.Details}");
-            }
-            catch (Exception ex)
-            {
-                if (showErrors)
-                    ex.ShowDialog("Feedback", ex.Message, true);
-                else
-                    Logger.Log(LogLevel.Warn, ex.Message);
-
-                return false;
-            }
+            var error = await response.DeserializeResponse<EdgeFeedbackError>();
+            throw new Exception($"Code {error.Error.Code}: {error.Error.Message}. Details: {error.Error.Details}.");
         }
 
         private static string Base64Encode(this string text)

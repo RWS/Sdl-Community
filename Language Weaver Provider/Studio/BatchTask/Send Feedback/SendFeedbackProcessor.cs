@@ -6,12 +6,15 @@ using LanguageWeaverProvider.Services.Model;
 using LanguageWeaverProvider.Studio.FeedbackController.Model;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
-using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
 
-namespace LanguageWeaverProvider.Studio.BatchTask.ViewModel
+namespace LanguageWeaverProvider.Studio.BatchTask.Send_Feedback
 {
     public class SendFeedbackProcessor : AbstractBilingualContentProcessor
     {
+        public List<SendFeedbackError> Errors { get; set; } = new();
+
         public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
         {
             base.ProcessParagraphUnit(paragraphUnit);
@@ -45,6 +48,7 @@ namespace LanguageWeaverProvider.Studio.BatchTask.ViewModel
                 PluginVersion = pluginVersion
             };
             CredentialManager.GetCredentials(translationOptions, true);
+            Service.ValidateToken(translationOptions);
             var accessToken = translationOptions.AccessToken;
             return accessToken;
         }
@@ -80,7 +84,19 @@ namespace LanguageWeaverProvider.Studio.BatchTask.ViewModel
             };
 
             var accessToken = GetAccessToken(PluginVersion.LanguageWeaverCloud);
-            CloudService.CreateFeedback(accessToken, feedback, false).Wait();
+
+            try
+            {
+                CloudService.SendFeedback(accessToken, feedback).Wait();
+            }
+            catch (Exception ex)
+            {
+                Errors.Add(new SendFeedbackError
+                {
+                    Error = ex.InnerException?.Message,
+                    SourceSegment = feedback.Translation.SourceText
+                });
+            }
         }
 
         private void SendLwEdgeFeedback(ISegmentPair segmentPair)
@@ -102,7 +118,20 @@ namespace LanguageWeaverProvider.Studio.BatchTask.ViewModel
             };
 
             var accessToken = GetAccessToken(PluginVersion.LanguageWeaverEdge);
-            EdgeService.SendFeedback(accessToken, feedbackItem, false).Wait();
+
+            try
+            {
+                EdgeService.SendFeedback(accessToken, feedbackItem).Wait();
+            }
+            catch (Exception ex)
+            {
+                Errors.Add(new SendFeedbackError
+                {
+                    Error = ex.InnerException?.Message,
+                    SourceSegment = feedbackItem.SourceText
+                });
+            }
+
         }
     }
 }
