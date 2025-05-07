@@ -48,6 +48,7 @@
 		public static string CloudUSUrl = "https://us.api.languageweaver.com/";
 
 		// Segment metadata
+		public const string SegmentMetadata_FeedbackId = "feedback_id";
 		public const string SegmentMetadata_QE = "quality_estimation";
 		public const string SegmentMetadata_ShortModelName = "model";
 		public const string SegmentMetadata_LongModelName = "nmt_model";

@@ -1,9 +1,8 @@
 ﻿using LanguageWeaverProvider.Extensions;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Options;
+using LanguageWeaverProvider.Send_feedback;
 using LanguageWeaverProvider.Services;
-using LanguageWeaverProvider.Services.Model;
-using LanguageWeaverProvider.Studio.FeedbackController.Model;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using System;
@@ -64,37 +63,20 @@ namespace LanguageWeaverProvider.Studio.BatchTask.Send_Feedback
 
         private void SendLwCloudFeedback(ISegmentPair segmentPair)
         {
-            var translationOrigin = segmentPair.Properties.TranslationOrigin;
-            var modelName = translationOrigin.GetMetaData(Constants.SegmentMetadata_LongModelName);
-            var sourceCode = modelName.Substring(0, 3);
-            var targetCode = modelName.Substring(3, 3);
-
-            var feedback = new FeedbackRequest
-            {
-                Translation = new Translation
-                {
-                    SourceLanguageId = sourceCode,
-                    TargetLanguageId = targetCode,
-                    Model = translationOrigin.GetMetaData(Constants.SegmentMetadata_ShortModelName),
-                    SourceText = segmentPair.Source.ToString(),
-                    TargetMTText = translationOrigin.GetMetaData(Constants.SegmentMetadata_Translation),
-                    QualityEstimationMT = translationOrigin.GetMetaData(Constants.SegmentMetadata_QE)
-                },
-                Improvement = new Improvement(segmentPair.Target.ToString())
-            };
-
             var accessToken = GetAccessToken(PluginVersion.LanguageWeaverCloud);
 
             try
             {
-                CloudService.SendFeedback(accessToken, feedback).Wait();
+                var feedback = new CloudFeedback(segmentPair);
+                feedback.Send(accessToken).Wait();
             }
             catch (Exception ex)
             {
                 Errors.Add(new SegmentError
                 {
+                    Provider = Constants.CloudService,
                     Error = ex.InnerException?.Message,
-                    SourceSegment = feedback.Translation.SourceText,
+                    SourceSegment = segmentPair.Source.ToString(),
                     Id = segmentPair.Properties.Id.Id
                 });
             }
@@ -102,38 +84,23 @@ namespace LanguageWeaverProvider.Studio.BatchTask.Send_Feedback
 
         private void SendLwEdgeFeedback(ISegmentPair segmentPair)
         {
-            var sourceText = segmentPair.Source.ToString();
-            var languagePairId = segmentPair.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_ShortModelName);
-            var originalTranslation = segmentPair.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_Translation);
-
-            var targetText = segmentPair.Target.ToString();
-            var suggestedTranslation = !originalTranslation.Equals(targetText) ? targetText : null;
-
-            var feedbackItem = new EdgeFeedbackItem
-            {
-                SourceText = sourceText,
-                LanguagePairId = languagePairId,
-                MachineTranslation = originalTranslation,
-                Comment = null,
-                SuggestedTranslation = suggestedTranslation
-            };
-
             var accessToken = GetAccessToken(PluginVersion.LanguageWeaverEdge);
 
             try
             {
-                EdgeService.SendFeedback(accessToken, feedbackItem).Wait();
+                var feedback = new EdgeFeedback(segmentPair);
+                feedback.Send(accessToken).Wait();
             }
             catch (Exception ex)
             {
                 Errors.Add(new SegmentError
                 {
+                    Provider = Constants.EdgeService,
                     Error = ex.InnerException?.Message,
-                    SourceSegment = feedbackItem.SourceText,
+                    SourceSegment = segmentPair.Source.ToString(),
                     Id = segmentPair.Properties.Id.Id
                 });
             }
-
         }
     }
 }

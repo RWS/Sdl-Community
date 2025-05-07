@@ -4,9 +4,6 @@ using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Windows;
-using System.Windows.Forms;
 using Application = System.Windows.Application;
 
 namespace LanguageWeaverProvider.Studio.BatchTask.Send_Feedback
@@ -19,11 +16,24 @@ namespace LanguageWeaverProvider.Studio.BatchTask.Send_Feedback
     [AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
     public class SendFeedbackBatchTask : AbstractFileContentProcessingAutomaticTask
     {
-
         public List<FileErrors> Errors { get; set; } = new();
+
+        public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
+        {
+            var processor = multiFileConverter.GetBilingualProcessors().FirstOrDefault(p => p.GetType().Name.Contains(nameof(SendFeedbackProcessor))) as SendFeedbackProcessor;
+
+            if (processor.Errors.Any())
+                Errors.Add(new FileErrors
+                {
+                    Filename = $"{projectFile.Language}\\{projectFile.Name}", SegmentErrors = processor.Errors
+                });
+
+            return base.OnFileComplete(projectFile, multiFileConverter);
+        }
 
         public override void TaskComplete()
         {
+            if (!Errors.Any()) return;
             var currentApp = Application.Current;
             currentApp?.Dispatcher.Invoke(() =>
             {
@@ -40,11 +50,6 @@ namespace LanguageWeaverProvider.Studio.BatchTask.Send_Feedback
         {
             var processor = new SendFeedbackProcessor();
             multiFileConverter.AddBilingualProcessor(processor);
-
-            Errors.Add(new FileErrors
-            {
-                Filename = $"{projectFile.Language}\\{projectFile.Name}", SegmentErrors = processor.Errors
-            });
         }
     }
 }

@@ -15,6 +15,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/buttonresources.xaml" />
                 <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/datagridresources.xaml" />
+                <ResourceDictionary Source="/Sdl.Desktop.Platform.Styles;component/textblockresources.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
         </ResourceDictionary>
@@ -22,13 +23,18 @@
 
     <Grid Background="#f0f0f0">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*"
                            MinHeight="100" />
             <RowDefinition Height="80" />
         </Grid.RowDefinitions>
 
+        <TextBlock Text="Feedback was not sent for the following segments:"
+                   Margin="5 10"
+                   Style="{StaticResource Sdl.TextBlock.FormSmallerStyle}" />
+
         <Border Margin="5 10 5 5"
-                Grid.Row="0"
+                Grid.Row="1"
                 BorderThickness="1"
                 BorderBrush="LightGray"
                 Background="White">
@@ -67,6 +73,9 @@
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Id"
                                                         Binding="{Binding Id}" />
+                                    <DataGridTextColumn Header="Provider"
+                                                        Binding="{Binding Provider}"
+                                                        Width="*" />
                                     <DataGridTextColumn Header="Source segment"
                                                         Binding="{Binding SourceSegment}"
                                                         Width="*" />
@@ -80,7 +89,7 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Border>
-        <StackPanel Grid.Row="1"
+        <StackPanel Grid.Row="2"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right">
 

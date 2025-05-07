@@ -16,6 +16,7 @@ using LanguageWeaverProvider.XliffConverter.Converter;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using System.Net.Mime;
 
 namespace LanguageWeaverProvider.Services
 {
@@ -255,7 +256,7 @@ namespace LanguageWeaverProvider.Services
             return translationStatus;
         }
 
-        public static async Task<bool> UpdateFeedback(AccessToken accessToken, string feedbackId, FeedbackRequest feedbackRequest)
+        public static async Task UpdateFeedback(AccessToken accessToken, string feedbackId, CloudFeedbackItem feedbackRequest)
         {
             var requestUri = $"{accessToken.BaseUri}v4/accounts/{accessToken.AccountId}/feedback/translations/{feedbackId}";
             var payload = JsonConvert.SerializeObject(feedbackRequest);
@@ -263,14 +264,14 @@ namespace LanguageWeaverProvider.Services
 
             var response = await Service.SendRequest(HttpMethod.Put, requestUri, accessToken, content);
             if (response.IsSuccessStatusCode)
-                return true;
+                return;
 
             var error = await response.DeserializeResponse<CloudFeedbackErrorDetail>("errors", 0);
             throw new Exception($"Code {error.Code}: {error.Description}.");
         }
 
 
-        public static async Task<string> SendFeedback(AccessToken accessToken, FeedbackRequest feedbackRequest)
+        public static async Task<string> SendFeedback(AccessToken accessToken, CloudFeedbackItem feedbackRequest)
         {
             var requestUri = $"{accessToken.BaseUri}v4/accounts/{accessToken.AccountId}/feedback/translations";
             var feedbackRequestJson = JsonConvert.SerializeObject(feedbackRequest);
@@ -278,9 +279,7 @@ namespace LanguageWeaverProvider.Services
             var response = await Service.SendRequest(HttpMethod.Post, requestUri, accessToken, content);
 
             if (response.IsSuccessStatusCode)
-            {
-                return true;
-            }
+                return JObject.Parse(await response.Content.ReadAsStringAsync())["feedbackId"]?.ToString();
 
             var error = await response.DeserializeResponse<CloudFeedbackErrorDetail>("errors", 0);
             throw new Exception($"Code {error.Code}: {error.Description}.");

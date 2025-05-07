@@ -356,7 +356,7 @@ namespace LanguageWeaverProvider.Studio.FeedbackController.ViewModel
                 return;
             }
 
-            var translationOptions = new TranslationOptions() { PluginVersion = pluginVersion };
+            var translationOptions = new TranslationOptions { PluginVersion = pluginVersion };
             CredentialManager.GetCredentials(translationOptions, true);
             SelectedProvider = translationOptions;
         }
@@ -399,40 +399,22 @@ namespace LanguageWeaverProvider.Studio.FeedbackController.ViewModel
 
         private async Task<bool> SendCloudFeedback(ISegmentPair segmentPair, bool showErrors = true)
         {
-            if (!IsLanguageWeaverSource(segmentPair?.Properties))
-            {
-                return false;
-            }
+            if (!IsLanguageWeaverSource(segmentPair?.Properties)) return false;
 
-            var modelName = segmentPair.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_LongModelName);
-            var sourceCode = modelName.Substring(0, 3);
-            var targetCode = modelName.Substring(3, 3);
-
-            var translation = new Translation()
-            {
-                SourceLanguageId = sourceCode,
-                TargetLanguageId = targetCode,
-                Model = segmentPair.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_ShortModelName),
-                SourceText = segmentPair.Source.ToString(),
-                TargetMTText = segmentPair.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_Translation),
-                QualityEstimationMT = IsQeEnabled ? OriginalQE.ToString() : null
-            };
-
-            var feedbackMessage = string.IsNullOrEmpty(FeedbackMessage) ? _previousFeedbackmessage : FeedbackMessage;
-            var isAdapted = IsAdapted(segmentPair.Properties);
-            var improvement = new Improvement(segmentPair.Target.ToString());
-            var rating = new Rating(feedbackMessage, TranslationErrors);
-            var feedbackRequest = new FeedbackRequest
-            {
-                Translation = translation,
-                Improvement = isAdapted ? improvement : null,
-                Rating = rating,
-                QualityEstimation = IsQeEnabled ? SelectedQE.ToString() : null
-            };
+            var translationOrigin = segmentPair.Properties.TranslationOrigin;
+            var feedbackRequest = GetFeedbackRequest(segmentPair, translationOrigin);
 
             try
             {
-                return await CloudService.SendFeedback(SelectedProvider.AccessToken, feedbackRequest);
+                var feedbackId = translationOrigin.GetMetaData(Constants.SegmentMetadata_FeedbackId);
+                if (!string.IsNullOrWhiteSpace(feedbackId))
+                    await CloudService.UpdateFeedback(SelectedProvider.AccessToken, feedbackId, feedbackRequest);
+                else
+                {
+                    feedbackId = await CloudService.SendFeedback(SelectedProvider.AccessToken, feedbackRequest);
+                    SetFeedbackIdInMetaData(segmentPair, translationOrigin, feedbackId);
+                }
+                return true;
             }
             catch (Exception ex)
             {
@@ -443,21 +425,80 @@ namespace LanguageWeaverProvider.Studio.FeedbackController.ViewModel
             }
         }
 
+        private void SetFeedbackIdInMetaData(ISegmentPair segmentPair, ITranslationOrigin translationOrigin, string feedbackId)
+        {
+            translationOrigin.SetMetaData(Constants.SegmentMetadata_FeedbackId, feedbackId);
+            _editController.ActiveDocument.UpdateSegmentPairProperties(segmentPair, segmentPair.Properties);
+        }
+
+        private CloudFeedbackItem GetFeedbackRequest(ISegmentPair segmentPair, ITranslationOrigin translationOrigin)
+        {
+            var modelName = translationOrigin.GetMetaData(Constants.SegmentMetadata_LongModelName);
+            var sourceCode = modelName.Substring(0, 3);
+            var targetCode = modelName.Substring(3, 3);
+
+            var translation = new Translation
+            {
+                SourceLanguageId = sourceCode,
+                TargetLanguageId = targetCode,
+                Model = translationOrigin.GetMetaData(Constants.SegmentMetadata_ShortModelName),
+                SourceText = segmentPair.Source.ToString(),
+                TargetMTText = translationOrigin.GetMetaData(Constants.SegmentMetadata_Translation),
+                QualityEstimationMT = IsQeEnabled ? OriginalQE.ToString() : null
+            };
+
+            var feedbackMessage = string.IsNullOrEmpty(FeedbackMessage) ? _previousFeedbackmessage : FeedbackMessage;
+            var isAdapted = IsAdapted(segmentPair.Properties);
+            var improvement = new Improvement(segmentPair.Target.ToString());
+            var rating = new Rating(feedbackMessage, TranslationErrors);
+            var feedbackRequest = new CloudFeedbackItem
+            {
+                Translation = translation,
+                Improvement = isAdapted ? improvement : null,
+                Rating = rating,
+                QualityEstimation = IsQeEnabled ? SelectedQE.ToString() : null
+            };
+            return feedbackRequest;
+        }
+
         private async Task<bool> SendEdgeFeedback(ISegmentPair segmentPair, bool showErrors = true)
         {
-            if (!IsLanguageWeaverSource(segmentPair?.Properties))
+            if (!IsLanguageWeaverSource(segmentPair?.Properties)) return false;
+
+            var translationOrigin = segmentPair.Properties.TranslationOrigin;
+            var feedbackItem = GetEdgeFeedbackItem(segmentPair, translationOrigin);
+
+            try
             {
+                var feedbackId = translationOrigin.GetMetaData(Constants.SegmentMetadata_FeedbackId);
+                if (!string.IsNullOrWhiteSpace(feedbackId))
+                    await EdgeService.UpdateFeedback(SelectedProvider.AccessToken, feedbackId, feedbackItem);
+                else
+                {
+                    feedbackId = await EdgeService.SendFeedback(SelectedProvider.AccessToken, feedbackItem);
+                    SetFeedbackIdInMetaData(segmentPair, translationOrigin, feedbackId);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                var message = $"{ex.Message} Segment: {feedbackItem.SourceText}.";
+                if (showErrors) ex.ShowDialog("Feedback", message, true);
+                Logger.Log(LogLevel.Warn, message);
                 return false;
             }
+        }
 
+        private EdgeFeedbackItem GetEdgeFeedbackItem(ISegmentPair segmentPair, ITranslationOrigin translationOrigin)
+        {
             var sourceText = segmentPair.Source.ToString();
-            var languagePairId = segmentPair.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_ShortModelName);
-            var originalTranslation = segmentPair.Properties.TranslationOrigin.GetMetaData(Constants.SegmentMetadata_Translation);
+            var languagePairId = translationOrigin.GetMetaData(Constants.SegmentMetadata_ShortModelName);
+            var originalTranslation = translationOrigin.GetMetaData(Constants.SegmentMetadata_Translation);
             var comment = !string.IsNullOrEmpty(_previousFeedbackmessage) ? _previousFeedbackmessage : !string.IsNullOrEmpty(FeedbackMessage) ? FeedbackMessage : default;
             var targetText = segmentPair.Target.ToString();
             var suggestedTranslation = IsAdapted(segmentPair.Properties) && !originalTranslation.Equals(targetText) ? targetText : default;
 
-            var feedbackItem = new EdgeFeedbackItem()
+            var feedbackItem = new EdgeFeedbackItem
             {
                 SourceText = sourceText,
                 LanguagePairId = languagePairId,
@@ -465,19 +506,7 @@ namespace LanguageWeaverProvider.Studio.FeedbackController.ViewModel
                 Comment = comment,
                 SuggestedTranslation = suggestedTranslation
             };
-
-            try
-            {
-                return await EdgeService.SendFeedback(SelectedProvider.AccessToken, feedbackItem);
-            }
-            catch (Exception ex)
-            {
-                var message = $"{ex.Message} Segment: {feedbackItem.SourceText}.";
-                if (showErrors) ex.ShowDialog("Feedback", message, true);
-
-                Logger.Log(LogLevel.Warn, message);
-                return false;
-            }
+            return feedbackItem;
         }
 
         private bool IsLanguageWeaverSource(ISegmentPairProperties segmentProperties)
