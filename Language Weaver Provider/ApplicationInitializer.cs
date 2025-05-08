@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Windows;
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Interface;
+using Newtonsoft.Json;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 
@@ -29,6 +30,10 @@ namespace LanguageWeaverProvider
 			RatedSegments = new List<RatedSegment>();
 			CurrentAppVersion = GetAssemblyFileVersion();
             Log.Setup();
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            };
         }
 
         public static Window GetBatchTaskWindow()

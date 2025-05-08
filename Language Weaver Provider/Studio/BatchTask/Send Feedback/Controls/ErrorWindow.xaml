@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LanguageWeaverProvider.Studio.BatchTask.Send_Feedback.Controls"
         mc:Ignorable="d"
-        Title="ErrorWindow"
+        Title="Feedback errors"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         Height="450"
         Width="800">

@@ -20,7 +20,7 @@ namespace LanguageWeaverProvider.Services
             }
 
             var httpClient = GetHttpClient();
-            var response = await httpClient.SendAsync(request);
+            var response = await httpClient.SendAsync(request).ConfigureAwait(false);
             return response;
         }
 
@@ -39,7 +39,7 @@ namespace LanguageWeaverProvider.Services
             return deserializedObject;
         }
 
-        public static async void ValidateToken(ITranslationOptions translationOptions)
+        public static async void ValidateToken(ITranslationOptions translationOptions, bool showErrors = true)
         {
             if (translationOptions.AccessToken is null) return;
 
@@ -54,7 +54,7 @@ namespace LanguageWeaverProvider.Services
              && translationOptions.AuthenticationType != AuthenticationType.CloudSSO
              && IsTimestampExpired(translationOptions.AccessToken?.ExpiresAt))
             {
-                await CloudService.AuthenticateUser(translationOptions, translationOptions.AuthenticationType);
+                await CloudService.AuthenticateUser(translationOptions, translationOptions.AuthenticationType, showErrors);
                 return;
             }
         }

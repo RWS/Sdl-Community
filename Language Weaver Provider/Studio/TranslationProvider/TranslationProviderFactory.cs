@@ -49,14 +49,7 @@ namespace LanguageWeaverProvider
 
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)
         {
-            //var providerVersion = translationProviderUri.ToPluginVersion();
-            //if (providerVersion != PluginVersion.None && 
-            //    providerVersion != ApplicationInitializer.PluginVersion)
-            //{
-            //    ApplicationInitializer.CredentialStore = null;
-            //}
-
-            if (/*ApplicationInitializer.CredentialStore is not null &&*/ !CredentialManager.CredentialsArePersisted(translationProviderUri))
+            if (!CredentialManager.CredentialsArePersisted(translationProviderUri))
             {
                 return false;
             }

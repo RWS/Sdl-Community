@@ -1,5 +1,4 @@
-﻿using LanguageWeaverProvider.Model;
-using LanguageWeaverProvider.Services;
+﻿using LanguageWeaverProvider.Services;
 using LanguageWeaverProvider.Services.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
@@ -7,10 +6,15 @@ using System.Threading.Tasks;
 
 namespace LanguageWeaverProvider.Send_feedback
 {
-    public class EdgeFeedback(ISegmentPair segmentPair)
+    public class EdgeFeedback(ISegmentPair segmentPair) : LanguageWeaverFeedback
     {
-        public async Task Send(AccessToken accessToken)
+        public string Comment { get; set; }
+
+        public override async Task<bool> Send()
         {
+            var accessToken = GetAccessToken(Constants.EdgeFullScheme);
+            if (accessToken is null) return false;
+
             var translationOrigin = segmentPair.Properties.TranslationOrigin;
             var feedbackItem = GetFeedbackItem(translationOrigin);
             var feedbackId = translationOrigin.GetMetaData(Constants.SegmentMetadata_FeedbackId);
@@ -22,6 +26,8 @@ namespace LanguageWeaverProvider.Send_feedback
                 feedbackId = await EdgeService.SendFeedback(accessToken, feedbackItem);
                 translationOrigin.SetMetaData(Constants.SegmentMetadata_FeedbackId, feedbackId);
             }
+
+            return true;
         }
 
         private EdgeFeedbackItem GetFeedbackItem(ITranslationOrigin translationOrigin)
@@ -38,7 +44,7 @@ namespace LanguageWeaverProvider.Send_feedback
                 SourceText = sourceText,
                 LanguagePairId = languagePairId,
                 MachineTranslation = originalTranslation,
-                Comment = null,
+                Comment = Comment,
                 SuggestedTranslation = suggestedTranslation
             };
             return feedbackItem;

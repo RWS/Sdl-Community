@@ -75,7 +75,7 @@ namespace LanguageWeaverProvider.Services
             }
         }
 
-        public static async Task<bool> AuthenticateUser(ITranslationOptions translationOptions, AuthenticationType authenticationType)
+        public static async Task<bool> AuthenticateUser(ITranslationOptions translationOptions, AuthenticationType authenticationType, bool showErrors = true)
         {
             try
             {
@@ -101,7 +101,7 @@ namespace LanguageWeaverProvider.Services
             {
                 var message = $"{ex.Message}. {Environment.StackTrace}.";
                 Logger.Log(LogLevel.Error, message);
-                ex.ShowDialog("Authentication failed", message, true);
+                if (showErrors) ex.ShowDialog("Authentication failed", message, true);
                 return false;
             }
         }
@@ -262,7 +262,7 @@ namespace LanguageWeaverProvider.Services
             var payload = JsonConvert.SerializeObject(feedbackRequest);
             using var content = new StringContent(payload, Encoding.UTF8, "application/json");
 
-            var response = await Service.SendRequest(HttpMethod.Put, requestUri, accessToken, content);
+            var response = await Service.SendRequest(HttpMethod.Put, requestUri, accessToken, content).ConfigureAwait(false);
             if (response.IsSuccessStatusCode)
                 return;
 
@@ -276,7 +276,7 @@ namespace LanguageWeaverProvider.Services
             var requestUri = $"{accessToken.BaseUri}v4/accounts/{accessToken.AccountId}/feedback/translations";
             var feedbackRequestJson = JsonConvert.SerializeObject(feedbackRequest);
             var content = new StringContent(feedbackRequestJson, new UTF8Encoding(), "application/json");
-            var response = await Service.SendRequest(HttpMethod.Post, requestUri, accessToken, content);
+            var response = await Service.SendRequest(HttpMethod.Post, requestUri, accessToken, content).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
                 return JObject.Parse(await response.Content.ReadAsStringAsync())["feedbackId"]?.ToString();
