@@ -20,10 +20,10 @@ namespace LanguageWeaverProvider.Send_feedback
             var feedbackId = translationOrigin.GetMetaData(Constants.SegmentMetadata_FeedbackId);
 
             if (!string.IsNullOrWhiteSpace(feedbackId))
-                await EdgeService.UpdateFeedback(accessToken, feedbackId, feedbackItem);
+                await EdgeService.UpdateFeedback(accessToken, feedbackId, feedbackItem).ConfigureAwait(false);
             else
             {
-                feedbackId = await EdgeService.SendFeedback(accessToken, feedbackItem);
+                feedbackId = await EdgeService.SendFeedback(accessToken, feedbackItem).ConfigureAwait(false);
                 translationOrigin.SetMetaData(Constants.SegmentMetadata_FeedbackId, feedbackId);
             }
 
@@ -35,9 +35,6 @@ namespace LanguageWeaverProvider.Send_feedback
             var languagePairId = translationOrigin.GetMetaData(Constants.SegmentMetadata_ShortModelName);
             var originalTranslation = translationOrigin.GetMetaData(Constants.SegmentMetadata_Translation);
 
-            var targetText = segmentPair.Target.ToString();
-            var suggestedTranslation = !originalTranslation.Equals(targetText) ? targetText : null;
-
             var sourceText = segmentPair.Source.ToString();
             var feedbackItem = new EdgeFeedbackItem
             {
@@ -45,7 +42,7 @@ namespace LanguageWeaverProvider.Send_feedback
                 LanguagePairId = languagePairId,
                 MachineTranslation = originalTranslation,
                 Comment = Comment,
-                SuggestedTranslation = suggestedTranslation
+                SuggestedTranslation = segmentPair.Target.ToString()
             };
             return feedbackItem;
         }

@@ -131,7 +131,7 @@ namespace LanguageWeaverProvider.Services
             var feedback = feedbackItem.ToKeyValuePairDictionary();
             var content = new FormUrlEncodedContent(feedback);
 
-            var response = await Service.SendRequest(HttpMethod.Post, requestUri, accessToken, content);
+            var response = await Service.SendRequest(HttpMethod.Post, requestUri, accessToken, content).ConfigureAwait(false);
             if (response.IsSuccessStatusCode)
                 return JObject.Parse(await response.Content.ReadAsStringAsync())["feedbackId"]?.ToString();
 
@@ -210,7 +210,7 @@ namespace LanguageWeaverProvider.Services
             var feedback = feedbackItem.ToKeyValuePairDictionary();
             var content = new FormUrlEncodedContent(feedback);
 
-            var response = await Service.SendRequest(HttpMethod.Put, requestUri, accessToken, content);
+            var response = await Service.SendRequest(HttpMethod.Put, requestUri, accessToken, content).ConfigureAwait(false);
             if (response.IsSuccessStatusCode) return;
 
             await HandleError(response);
