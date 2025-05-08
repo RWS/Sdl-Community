@@ -18,13 +18,7 @@ namespace LanguageWeaverProvider.Extensions
 
         public static bool CredentialsArePersisted(Uri translationProviderUri)
         {
-            var credentialStore = ApplicationInitializer.CredentialStore;
-            if (credentialStore is null)
-            {
-                return false;
-            }
-
-            var credentials = credentialStore.GetCredential(translationProviderUri);
+            var credentials = CredentialStore.Load(translationProviderUri.ToString());
             if (credentials is null)
             {
                 return false;

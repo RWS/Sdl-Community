@@ -50,7 +50,6 @@ public static class CredentialStore
         CredDelete(Target, Generic, 0);
     }
 
-    // ---- internals hidden ----
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     private struct CREDENTIAL
     {

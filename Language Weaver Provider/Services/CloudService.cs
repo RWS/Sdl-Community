@@ -16,6 +16,7 @@ using LanguageWeaverProvider.XliffConverter.Converter;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using System.Net.Mime;
 
 namespace LanguageWeaverProvider.Services
 {
@@ -74,7 +75,7 @@ namespace LanguageWeaverProvider.Services
             }
         }
 
-        public static async Task<bool> AuthenticateUser(ITranslationOptions translationOptions, AuthenticationType authenticationType)
+        public static async Task<bool> AuthenticateUser(ITranslationOptions translationOptions, AuthenticationType authenticationType, bool showErrors = true)
         {
             try
             {
@@ -100,7 +101,7 @@ namespace LanguageWeaverProvider.Services
             {
                 var message = $"{ex.Message}. {Environment.StackTrace}.";
                 Logger.Log(LogLevel.Error, message);
-                ex.ShowDialog("Authentication failed", message, true);
+                if (showErrors) ex.ShowDialog("Authentication failed", message, true);
                 return false;
             }
         }
@@ -133,7 +134,7 @@ namespace LanguageWeaverProvider.Services
                 AuthenticationType.CloudAPI => $"{cloudCredentials.AccountRegion}v4/token",
                 _ => throw new ArgumentOutOfRangeException(nameof(authenticationType), authenticationType, "Unsupported authentication type.")
             };
-                                                         
+
             var content = GetAuthenticationContent(cloudCredentials, authenticationType);
             var stringContent = new StringContent(content, null, "application/json");
 
@@ -255,25 +256,33 @@ namespace LanguageWeaverProvider.Services
             return translationStatus;
         }
 
-        public static async Task<bool> CreateFeedback(AccessToken accessToken, FeedbackRequest feedbackRequest, bool showErrors = true)
+        public static async Task UpdateFeedback(AccessToken accessToken, string feedbackId, CloudFeedbackItem feedbackRequest)
         {
-            try
-            {
-                var requestUri = $"{accessToken.BaseUri}v4/accounts/{accessToken.AccountId}/feedback/translations";
-                var feedbackRequestJson = JsonConvert.SerializeObject(feedbackRequest);
-                var content = new StringContent(feedbackRequestJson, new UTF8Encoding(), "application/json");
-                var response = await Service.SendRequest(HttpMethod.Post, requestUri, accessToken, content);
-                response.EnsureSuccessStatusCode();
-                return response.IsSuccessStatusCode;
-            }
-            catch (Exception ex)
-            {
-                if (showErrors)
-                    ex.ShowDialog("Feedback", ex.Message, true);
-                else
-                    Logger.Log(LogLevel.Warn, ex.Message);
-                return false;
-            }
+            var requestUri = $"{accessToken.BaseUri}v4/accounts/{accessToken.AccountId}/feedback/translations/{feedbackId}";
+            var payload = JsonConvert.SerializeObject(feedbackRequest);
+            using var content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+            var response = await Service.SendRequest(HttpMethod.Put, requestUri, accessToken, content).ConfigureAwait(false);
+            if (response.IsSuccessStatusCode)
+                return;
+
+            var error = await response.DeserializeResponse<CloudFeedbackErrorDetail>("errors", 0);
+            throw new Exception($"Code {error.Code}: {error.Description}.");
+        }
+
+
+        public static async Task<string> SendFeedback(AccessToken accessToken, CloudFeedbackItem feedbackRequest)
+        {
+            var requestUri = $"{accessToken.BaseUri}v4/accounts/{accessToken.AccountId}/feedback/translations";
+            var feedbackRequestJson = JsonConvert.SerializeObject(feedbackRequest);
+            var content = new StringContent(feedbackRequestJson, new UTF8Encoding(), "application/json");
+            var response = await Service.SendRequest(HttpMethod.Post, requestUri, accessToken, content).ConfigureAwait(false);
+
+            if (response.IsSuccessStatusCode)
+                return JObject.Parse(await response.Content.ReadAsStringAsync())["feedbackId"]?.ToString();
+
+            var error = await response.DeserializeResponse<CloudFeedbackErrorDetail>("errors", 0);
+            throw new Exception($"Code {error.Code}: {error.Description}.");
         }
 
         public static async Task<bool> CreateDictionaryTerm(AccessToken accessToken, PairDictionary pairDictionary, DictionaryTerm newDictionaryTerm)
@@ -284,15 +293,13 @@ namespace LanguageWeaverProvider.Services
 
             var response = await Service.SendRequest(HttpMethod.Post, requestUri, accessToken, stringContent);
             var isSuccessStatusCode = response.IsSuccessStatusCode;
-            if (isSuccessStatusCode)
-            {
-                return isSuccessStatusCode;
-            }
+            if (isSuccessStatusCode) return true;
 
-            var errors = await Service.DeserializeResponse<CloudAccountErrors>(response);
+            var errors = await response.DeserializeResponse<CloudAccountErrors>();
             var error = errors.Errors.FirstOrDefault();
             ErrorHandling.ShowDialog(null, $"Code {error?.Code}", error?.Description);
-            return isSuccessStatusCode;
+
+            return false;
         }
 
         public static HttpClient GetHttpClient()

@@ -2,6 +2,7 @@
 using LanguageWeaverProvider.Model;
 using LanguageWeaverProvider.Model.Options;
 using LanguageWeaverProvider.Services;
+using LanguageWeaverProvider.WindowsCredentialStore;
 using Newtonsoft.Json;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
@@ -13,14 +14,13 @@ namespace LanguageWeaverProvider
                                 Description = Constants.Provider_TranslationProviderFactory)]
     internal class TranslationProviderFactory : ITranslationProviderFactory
     {
-        public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
+        public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore _)
         {
-            ApplicationInitializer.CredentialStore = credentialStore;
             ApplicationInitializer.PluginVersion = translationProviderUri.ToPluginVersion();
 
             if (translationProviderState is null) return new TranslationProvider(new TranslationOptions());
 
-            var serializedCredentials = credentialStore.GetCredential(translationProviderUri).Credential;
+            var serializedCredentials = CredentialStore.Load(translationProviderUri.ToString());
             var standaloneCredentials = new StandaloneCredentials(serializedCredentials);
 
             ApplicationInitializer.IsStandalone = standaloneCredentials.AuthenticationType != AuthenticationType.None;
@@ -49,14 +49,7 @@ namespace LanguageWeaverProvider
 
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)
         {
-            var providerVersion = translationProviderUri.ToPluginVersion();
-            if (providerVersion != PluginVersion.None && 
-                providerVersion != ApplicationInitializer.PluginVersion)
-            {
-                ApplicationInitializer.CredentialStore = null;
-            }
-
-            if (ApplicationInitializer.CredentialStore is not null && !CredentialManager.CredentialsArePersisted(translationProviderUri))
+            if (!CredentialManager.CredentialsArePersisted(translationProviderUri))
             {
                 return false;
             }

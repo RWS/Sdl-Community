@@ -2,7 +2,7 @@
 
 namespace LanguageWeaverProvider.Studio.FeedbackController.Model
 {
-	public class FeedbackRequest
+	public class CloudFeedbackItem
 	{
 		[JsonProperty("translation")]
 		public Translation Translation { get; set; }
