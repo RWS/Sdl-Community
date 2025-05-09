@@ -1,0 +1,19 @@
+
+<PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
+  <PlugInName>Trados QuickInfo</PlugInName>
+  <Version>4.0.0.1</Version>
+  <Description>Provides various information like units conversion, math calculation, airport codes, Unicode description and more.</Description>
+  <Author>Trados AppStore Team</Author>
+  <RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />
+  <Include>
+    <File>GuiLabs.MathParser.dll</File>
+    <File>Microsoft.Extensions.Caching.Abstractions.dll</File>
+    <File>Microsoft.Extensions.Caching.Memory.dll</File>
+    <File>Microsoft.Extensions.DependencyInjection.Abstractions.dll</File>
+    <File>Microsoft.Extensions.Options.dll</File>
+    <File>Microsoft.Extensions.Primitives.dll</File>
+    <File>Microsoft.Win32.Primitives.dll</File>
+    <File>QuickInfo.dll</File>
+    <File>UnicodeInformation.dll</File>
+  </Include>
+</PluginPackage>

@@ -1,0 +1,11 @@
+
+<PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
+  <PlugInName>GroupShare Version Fetch</PlugInName>
+  <Version>4.0.1.0</Version>
+  <Description>The GroupShare Version Fetch application is a plugin to Studio which supports downloading as many versions for as many files in as many projects across as many organisations as you like.</Description>
+  <Author>Trados AppStore Team</Author>
+  <RequiredProduct name="TradosStudio" minversion="18.0" maxversion="18.9" />
+  <Include>
+	<File>System.Net.Http.dll</File>
+  </Include>
+</PluginPackage>
