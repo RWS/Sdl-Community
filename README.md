@@ -97,6 +97,8 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [XLIFF Manager for Trados Studio](https://appstore.rws.com/Plugin/67) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/XLIFF%20Manager%20for%20Trados%20Studio) | Integration API |
 | [XML Reader](https://appstore.rws.com/Plugin/81) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/XML%20Reader) | Integration API |
 | [YourProductivity](https://appstore.rws.com/Plugin/82) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/YourProductivity) | Integration API |
+| [GroupShare Version Fetch](https://appstore.rws.com/Plugin/66) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/GroupShare%20VersionFetch) | Integration API |
+| [Trados QuickInfo](https://appstore.rws.com/Plugin/91) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20QuickInfo) | Integration API |
 | [MXLIFF File Type](https://appstore.rws.com/Plugin/29) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/MXLIFF%20File%20Type) | FileType Support API |
 | [Multilingual Excel FileType](https://appstore.rws.com/Plugin/17) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Multilingual%20Excel%20FileType) | FileType Support API |
 | [Multilingual XML FileType](https://appstore.rws.com/Plugin/13) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Multilingual%20XML%20FileType) | FileType Support API |
@@ -117,6 +119,7 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [SDLXLIFF to Legacy Converter](https://appstore.rws.com/Plugin/56) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/SDLXLIFF%20to%20Legacy%20Converter) | Standalone Application |
 | [Language Mapping Provider](https://www.nuget.org/packages/LanguageMappingProvider/) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Language%20Mapping%20Provider) | Standalone Application |
 | [Trados Freshstart](https://appstore.rws.com/Plugin/107) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Freshstart) | Standalone Application |
+| [Excel4GroupShare](https://appstore.rws.com/Plugin/48) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Excel4GroupShare) | Standalone Application |
 | Trados Proxy Settings | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Proxy%20Settings) | Standalone Application |
 
 
