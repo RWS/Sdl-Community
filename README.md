@@ -54,73 +54,73 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 %20
 | Plugin | Source Code | API Integration(s) |
 | --- | --- | --- |
-| [Amazon Translate MT provider](https://appstore.rws.com/Plugin/18) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Amazon%20Translate%20MT%20provider) | Translation Memory API |
-| [ApplyTM Template](https://appstore.rws.com/Plugin/21) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/ApplyTM%20Template) | Translation Memory API |
-| [DeepL Translation Provider](https://appstore.rws.com/Plugin/24) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/DeepL%20ranslation%20Provider) | Translation Memory API |
-| [Google Cloud Translation Provider](https://appstore.rws.com/Plugin/174) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Google%20Cloud%20Translation%20Provider) | Translation Memory API |
-| [Language Weaver Provider](https://appstore.rws.com/Plugin/240) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Language%20Weaver%20Provider) | Translation Memory API |
-| [Microsoft Translator Provider](https://appstore.rws.com/Plugin/179) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Microsoft%20Translator%20Provider) | Translation Memory API |
-| [SDLTM Import Plus](https://appstore.rws.com/Plugin/89) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/SDLTM%20Import%20Plus) | Translation Memory API |
-| [SDLTM Repair](https://appstore.rws.com/Plugin/41) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/SDLTM%20Repair) | Translation Memory API |
-| [TM Lifting](https://appstore.rws.com/Plugin/72) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/TM%20Lifting) | Translation Memory API |
-| TMX Translation Provider | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/TMX%20Translation%20Provider) | Translation Memory API |
-| [TermInjector](http://appstore.sdl.com/app/terminjector/97/) | [Source Code](https://github.com/sdl/Sdl-Community/tree/master/TermInjector) | Translation Memory API |
-| [Trados Translation Memory Management Utility](https://appstore.rws.com/Plugin/78) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Translation%20Memory%20Management%20Utility) | Translation Memory API |
-| [TuToTm](https://appstore.rws.com/Plugin/79) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/TuToTm) | Translation Memory API |
-| memoQ Translation Memory Provider | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/memoQ%20Translation%20Memory%20Provider) | Translation Memory API |
-| [IATE Real-time Terminology](https://appstore.rws.com/Plugin/30) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/IATE%20Real-time%20Terminology) | Terminology Provider API |
-| [InterpretBank Terminology Provider](https://appstore.rws.com/Plugin/243) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/InterpretBank%20Terminology%20Provider) | Terminology Provider API |
-| [Trados Studio InQuote](https://appstore.rws.com/Plugin/55/) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Studio%20InQuote) | Terminology Provider API |
-| [TermExcelerator](https://appstore.rws.com/Plugin/75) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/TermExcelerator) | Terminology Provider API |
-| [AutoHotKey Manager](https://appstore.rws.com/Plugin/22) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/AutoHotKey%20Manager) | Integration API |
-| [Trados Copy Tags](https://appstore.rws.com/Plugin/23) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Copy%20Tags) | Integration API |
-| [DSI Viewer](https://appstore.rws.com/Plugin/25) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/DSI%20Viewer) | Integration API |
-| [Trados InSource!](https://appstore.rws.com/Plugin/31) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20InSource!) | Integration API |
-| [Trados Jobs](https://appstore.rws.com/Plugin/32) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Jobs) | Integration API |
-| [Trados Legit!](https://appstore.rws.com/Plugin/57) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Legit!) | Integration API |
-| [Post-Edit Compare](https://appstore.rws.com/Plugin/15) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Post-Edit%20Compare) | Integration API |
-| [projectTermExtract](https://appstore.rws.com/Plugin/34) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/ProjectTermExtract) | Integration API |
-| [Qualitivity](https://appstore.rws.com/Plugin/16) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Qualitivity) | Integration API |
-| [Rapid Add Term](https://appstore.rws.com/Plugin/35) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Rapid%20Add%20Term) | Integration API |
-| [Record Source TU](https://appstore.rws.com/Plugin/36) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Record%20Source%20TU) | Integration API |
-| [Reports Viewer Plus](https://appstore.rws.com/Plugin/37) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Reports%20Viewer%20Plus) | Integration API |
-| [Trados Data Protection Suite](https://appstore.rws.com/Plugin/39) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Data%20Protection%20Suite) | Integration API |
-| [Trados Transcreate](https://appstore.rws.com/Plugin/42) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Transcreate) | Integration API |
-| [Segment Status Switcher](https://appstore.rws.com/Plugin/44) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Segment%20Status%20Switcher) | Integration API |
-| [TransitPackage Handler](https://appstore.rws.com/Plugin/45) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/TransitPackage%20Handler) | Integration API |
-| [studioViews](https://appstore.rws.com/Plugin/12) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/StudioViews) | Integration API |
-| [Stylesheet Verifier](https://appstore.rws.com/Plugin/47) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Stylesheet%20Verifier) | Integration API |
-| [Time Tracker](https://appstore.rws.com/Plugin/76) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Time%20Tracker) | Integration API |
-| [SDLXLIFF Toolkit](https://appstore.rws.com/Plugin/77) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/SDLXLIFF%20Toolkit) | Integration API |
-| [Variables Manager](https://appstore.rws.com/Plugin/180) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Variables%20Manager) | Integration API |
-| [Trados Word Cloud](https://appstore.rws.com/Plugin/80) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Word%20Cloud) | Integration API |
-| [XLIFF Manager for Trados Studio](https://appstore.rws.com/Plugin/67) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/XLIFF%20Manager%20for%20Trados%20Studio) | Integration API |
-| [XML Reader](https://appstore.rws.com/Plugin/81) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/XML%20Reader) | Integration API |
-| [YourProductivity](https://appstore.rws.com/Plugin/82) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/YourProductivity) | Integration API |
-| [GroupShare Version Fetch](https://appstore.rws.com/Plugin/66) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/GroupShare%20VersionFetch) | Integration API |
-| [Trados QuickInfo](https://appstore.rws.com/Plugin/91) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20QuickInfo) | Integration API |
-| [MXLIFF File Type](https://appstore.rws.com/Plugin/29) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/MXLIFF%20File%20Type) | FileType Support API |
-| [Multilingual Excel FileType](https://appstore.rws.com/Plugin/17) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Multilingual%20Excel%20FileType) | FileType Support API |
-| [Multilingual XML FileType](https://appstore.rws.com/Plugin/13) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Multilingual%20XML%20FileType) | FileType Support API |
-| [File type definition for TMX](https://appstore.rws.com/Plugin/61) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/File%20type%20definition%20for%20TMX) | FileType Support API |
-| [Filetype for Wordfast TXML](https://appstore.rws.com/Plugin/62) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Filetype%20for%20Wordfast%20TXML) | FileType Support API |
-| [Antidote Verifier](https://appstore.rws.com/Plugin/3) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Antidote%20Verifier) | Verification API |
-| [Trados Number Verifier](https://appstore.rws.com/Plugin/33) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Number%20Verifier) | Verification API |
-| [CleanUp Tasks](https://appstore.rws.com/Plugin/23) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/CleanUp%20Tasks) | Batch Task API |
-| [Export to Excel](https://appstore.rws.com/Plugin/27) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Export%20to%20Excel) | Batch Task API |
-| [Fail Safe Task](https://appstore.rws.com/Plugin/28) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Fail%20Safe%20Task) | Batch Task API |
-| [Trados Batch Anonymizer](https://appstore.rws.com/Plugin/38) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Batch%20Anonymizer) | Batch Task API |
-| [Trados Studio Target Renamer](https://appstore.rws.com/Plugin/73) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Studio%20Target%20Renamer) | Batch Task API |
-| [Target Word Count](https://appstore.rws.com/Plugin/74) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Target%20Word%20Count) | Batch Task API |
-| [Apply Studio Project Template](https://appstore.rws.com/Plugin/20) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Apply%20Studio%20Project%20Template) | Project Automation API |
-| [Trados Studio Export Analysis Reports](https://appstore.rws.com/Plugin/92) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Studio%20Export%20Analysis%20Reports) | Project Automation API |
-| [Google API Validator](https://appstore.rws.com/Plugin/53) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Google%20API%20Validator) | Standalone Application |
-| [Hunspell Dictionary Manager](https://appstore.rws.com/Plugin/54) | [Source Code](https://github.com/sdl/Sdl-Community/tree/master/Hunspell%20Dictionary%20Manager) | Standalone Application |
-| [SDLXLIFF to Legacy Converter](https://appstore.rws.com/Plugin/56) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/SDLXLIFF%20to%20Legacy%20Converter) | Standalone Application |
-| [Language Mapping Provider](https://www.nuget.org/packages/LanguageMappingProvider/) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Language%20Mapping%20Provider) | Standalone Application |
-| [Trados Freshstart](https://appstore.rws.com/Plugin/107) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Freshstart) | Standalone Application |
-| [Excel4GroupShare](https://appstore.rws.com/Plugin/48) | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Excel4GroupShare) | Standalone Application |
-| Trados Proxy Settings | [Source Code](https://github.com/RWS/Sdl-Community/tree/master/Trados%20Proxy%20Settings) | Standalone Application |
+| [Amazon Translate MT provider](https://appstore.rws.com/Plugin/18) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Amazon%20Translate%20MT%20provider) | Translation Memory API |
+| [ApplyTM Template](https://appstore.rws.com/Plugin/21) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/ApplyTM%20Template) | Translation Memory API |
+| [DeepL Translation Provider](https://appstore.rws.com/Plugin/24) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/DeepL%20ranslation%20Provider) | Translation Memory API |
+| [Google Cloud Translation Provider](https://appstore.rws.com/Plugin/174) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Google%20Cloud%20Translation%20Provider) | Translation Memory API |
+| [Language Weaver Provider](https://appstore.rws.com/Plugin/240) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Language%20Weaver%20Provider) | Translation Memory API |
+| [Microsoft Translator Provider](https://appstore.rws.com/Plugin/179) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Microsoft%20Translator%20Provider) | Translation Memory API |
+| [SDLTM Import Plus](https://appstore.rws.com/Plugin/89) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/SDLTM%20Import%20Plus) | Translation Memory API |
+| [SDLTM Repair](https://appstore.rws.com/Plugin/41) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/SDLTM%20Repair) | Translation Memory API |
+| [TM Lifting](https://appstore.rws.com/Plugin/72) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/TM%20Lifting) | Translation Memory API |
+| TMX Translation Provider | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/TMX%20Translation%20Provider) | Translation Memory API |
+| [TermInjector](http://appstore.sdl.com/app/terminjector/97/) | [Source Code](https://github.com/sdl/Sdl-Community/tree/Studio_2024/TermInjector) | Translation Memory API |
+| [Trados Translation Memory Management Utility](https://appstore.rws.com/Plugin/78) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Trados%20Translation%20Memory%20Management%20Utility) | Translation Memory API |
+| [TuToTm](https://appstore.rws.com/Plugin/79) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/TuToTm) | Translation Memory API |
+| memoQ Translation Memory Provider | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/memoQ%20Translation%20Memory%20Provider) | Translation Memory API |
+| [IATE Real-time Terminology](https://appstore.rws.com/Plugin/30) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/IATE%20Real-time%20Terminology) | Terminology Provider API |
+| [InterpretBank Terminology Provider](https://appstore.rws.com/Plugin/243) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/InterpretBank%20Terminology%20Provider) | Terminology Provider API |
+| [Trados Studio InQuote](https://appstore.rws.com/Plugin/55/) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Trados%20Studio%20InQuote) | Terminology Provider API |
+| [TermExcelerator](https://appstore.rws.com/Plugin/75) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/TermExcelerator) | Terminology Provider API |
+| [AutoHotKey Manager](https://appstore.rws.com/Plugin/22) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/AutoHotKey%20Manager) | Integration API |
+| [Trados Copy Tags](https://appstore.rws.com/Plugin/23) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Trados%20Copy%20Tags) | Integration API |
+| [DSI Viewer](https://appstore.rws.com/Plugin/25) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/DSI%20Viewer) | Integration API |
+| [Trados InSource!](https://appstore.rws.com/Plugin/31) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Trados%20InSource!) | Integration API |
+| [Trados Jobs](https://appstore.rws.com/Plugin/32) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Trados%20Jobs) | Integration API |
+| [Trados Legit!](https://appstore.rws.com/Plugin/57) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Trados%20Legit!) | Integration API |
+| [Post-Edit Compare](https://appstore.rws.com/Plugin/15) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Post-Edit%20Compare) | Integration API |
+| [projectTermExtract](https://appstore.rws.com/Plugin/34) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/ProjectTermExtract) | Integration API |
+| [Qualitivity](https://appstore.rws.com/Plugin/16) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Qualitivity) | Integration API |
+| [Rapid Add Term](https://appstore.rws.com/Plugin/35) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Rapid%20Add%20Term) | Integration API |
+| [Record Source TU](https://appstore.rws.com/Plugin/36) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Record%20Source%20TU) | Integration API |
+| [Reports Viewer Plus](https://appstore.rws.com/Plugin/37) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Reports%20Viewer%20Plus) | Integration API |
+| [Trados Data Protection Suite](https://appstore.rws.com/Plugin/39) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Trados%20Data%20Protection%20Suite) | Integration API |
+| [Trados Transcreate](https://appstore.rws.com/Plugin/42) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Trados%20Transcreate) | Integration API |
+| [Segment Status Switcher](https://appstore.rws.com/Plugin/44) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Segment%20Status%20Switcher) | Integration API |
+| [TransitPackage Handler](https://appstore.rws.com/Plugin/45) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/TransitPackage%20Handler) | Integration API |
+| [studioViews](https://appstore.rws.com/Plugin/12) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/StudioViews) | Integration API |
+| [Stylesheet Verifier](https://appstore.rws.com/Plugin/47) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Stylesheet%20Verifier) | Integration API |
+| [Time Tracker](https://appstore.rws.com/Plugin/76) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Time%20Tracker) | Integration API |
+| [SDLXLIFF Toolkit](https://appstore.rws.com/Plugin/77) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/SDLXLIFF%20Toolkit) | Integration API |
+| [Variables Manager](https://appstore.rws.com/Plugin/180) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Variables%20Manager) | Integration API |
+| [Trados Word Cloud](https://appstore.rws.com/Plugin/80) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Trados%20Word%20Cloud) | Integration API |
+| [XLIFF Manager for Trados Studio](https://appstore.rws.com/Plugin/67) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/XLIFF%20Manager%20for%20Trados%20Studio) | Integration API |
+| [XML Reader](https://appstore.rws.com/Plugin/81) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/XML%20Reader) | Integration API |
+| [YourProductivity](https://appstore.rws.com/Plugin/82) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/YourProductivity) | Integration API |
+| [GroupShare Version Fetch](https://appstore.rws.com/Plugin/66) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/GroupShare%20VersionFetch) | Integration API |
+| [Trados QuickInfo](https://appstore.rws.com/Plugin/91) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Trados%20QuickInfo) | Integration API |
+| [MXLIFF File Type](https://appstore.rws.com/Plugin/29) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/MXLIFF%20File%20Type) | FileType Support API |
+| [Multilingual Excel FileType](https://appstore.rws.com/Plugin/17) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Multilingual%20Excel%20FileType) | FileType Support API |
+| [Multilingual XML FileType](https://appstore.rws.com/Plugin/13) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Multilingual%20XML%20FileType) | FileType Support API |
+| [File type definition for TMX](https://appstore.rws.com/Plugin/61) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/File%20type%20definition%20for%20TMX) | FileType Support API |
+| [Filetype for Wordfast TXML](https://appstore.rws.com/Plugin/62) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Filetype%20for%20Wordfast%20TXML) | FileType Support API |
+| [Antidote Verifier](https://appstore.rws.com/Plugin/3) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Antidote%20Verifier) | Verification API |
+| [Trados Number Verifier](https://appstore.rws.com/Plugin/33) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Trados%20Number%20Verifier) | Verification API |
+| [CleanUp Tasks](https://appstore.rws.com/Plugin/23) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/CleanUp%20Tasks) | Batch Task API |
+| [Export to Excel](https://appstore.rws.com/Plugin/27) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Export%20to%20Excel) | Batch Task API |
+| [Fail Safe Task](https://appstore.rws.com/Plugin/28) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Fail%20Safe%20Task) | Batch Task API |
+| [Trados Batch Anonymizer](https://appstore.rws.com/Plugin/38) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Trados%20Batch%20Anonymizer) | Batch Task API |
+| [Trados Studio Target Renamer](https://appstore.rws.com/Plugin/73) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Trados%20Studio%20Target%20Renamer) | Batch Task API |
+| [Target Word Count](https://appstore.rws.com/Plugin/74) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Target%20Word%20Count) | Batch Task API |
+| [Apply Studio Project Template](https://appstore.rws.com/Plugin/20) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Apply%20Studio%20Project%20Template) | Project Automation API |
+| [Trados Studio Export Analysis Reports](https://appstore.rws.com/Plugin/92) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Trados%20Studio%20Export%20Analysis%20Reports) | Project Automation API |
+| [Google API Validator](https://appstore.rws.com/Plugin/53) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Google%20API%20Validator) | Standalone Application |
+| [Hunspell Dictionary Manager](https://appstore.rws.com/Plugin/54) | [Source Code](https://github.com/sdl/Sdl-Community/tree/Studio_2024/Hunspell%20Dictionary%20Manager) | Standalone Application |
+| [SDLXLIFF to Legacy Converter](https://appstore.rws.com/Plugin/56) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/SDLXLIFF%20to%20Legacy%20Converter) | Standalone Application |
+| [Language Mapping Provider](https://www.nuget.org/packages/LanguageMappingProvider/) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Language%20Mapping%20Provider) | Standalone Application |
+| [Trados Freshstart](https://appstore.rws.com/Plugin/107) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Trados%20Freshstart) | Standalone Application |
+| [Excel4GroupShare](https://appstore.rws.com/Plugin/48) | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Excel4GroupShare) | Standalone Application |
+| Trados Proxy Settings | [Source Code](https://github.com/RWS/Sdl-Community/tree/Studio_2024/Trados%20Proxy%20Settings) | Standalone Application |
 
 
 
