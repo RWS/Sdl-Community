@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "Profile 1": {
-      "commandName": "Executable",
-      "executablePath": "C:\\Code\\SDL\\Trados\\Bin\\Mixed Platforms\\Debug\\SDLTradosStudio.exe"
-    }
-  }
-}
